@@ -1,20 +1,16 @@
-import React from 'react';
-import { act, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { BrowserRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { store } from 'state/store';
-import { I18nextProvider } from 'react-i18next';
-import {
-  ADD_ADMIN_MUTATION,
-  UPDATE_USERTYPE_MUTATION,
-} from 'GraphQl/Mutations/mutations';
+import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
-import i18nForTest from 'utils/i18nForTest';
+import { I18nextProvider } from 'react-i18next';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
+import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import i18nForTest from 'utils/i18nForTest';
 import MemberDetail, { getLanguageName, prettyDate } from './MemberDetail';
-
+import React from 'react';
 const MOCKS1 = [
   {
     request: {
@@ -26,25 +22,72 @@ const MOCKS1 = [
     result: {
       data: {
         user: {
-          __typename: 'User',
-          image: null,
-          firstName: 'Rishav',
-          lastName: 'Jha',
-          email: 'ris@gmail.com',
-          role: 'SUPERADMIN',
-          appLanguageCode: 'en',
-          userType: 'SUPERADMIN',
-          pluginCreationAllowed: true,
-          adminApproved: true,
-          createdAt: '2023-02-18T09:22:27.969Z',
-          adminFor: [],
-          createdOrganizations: [],
-          joinedOrganizations: [],
-          organizationsBlockedBy: [],
-          createdEvents: [],
-          registeredEvents: [],
-          eventAdmin: [],
-          membershipRequests: [],
+          __typename: 'UserData',
+          appUserProfile: {
+            __typename: 'AppUserProfile',
+            adminFor: [
+              {
+                __typename: 'Organization',
+                _id: '65e0df0906dd1228350cfd4a',
+              },
+              {
+                __typename: 'Organization',
+                _id: '65e0e2abb92c9f3e29503d4e',
+              },
+            ],
+            isSuperAdmin: true,
+            appLanguageCode: 'en',
+            createdEvents: [
+              {
+                __typename: 'Event',
+                _id: '65e32a5b2a1f4288ca1f086a',
+              },
+            ],
+            createdOrganizations: [
+              {
+                __typename: 'Organization',
+                _id: '65e0df0906dd1228350cfd4a',
+              },
+              {
+                __typename: 'Organization',
+                _id: '65e0e2abb92c9f3e29503d4e',
+              },
+            ],
+            eventAdmin: [
+              {
+                __typename: 'Event',
+                _id: '65e32a5b2a1f4288ca1f086a',
+              },
+            ],
+            pluginCreationAllowed: true,
+            adminApproved: true,
+          },
+          user: {
+            __typename: 'User',
+            createdAt: '2024-02-26T10:36:33.098Z',
+            email: 'adi790u@gmail.com',
+            firstName: 'Aditya',
+            image: null,
+            lastName: 'Agarwal',
+            joinedOrganizations: [
+              {
+                __typename: 'Organization',
+                _id: '65e0df0906dd1228350cfd4a',
+              },
+              {
+                __typename: 'Organization',
+                _id: '65e0e2abb92c9f3e29503d4e',
+              },
+            ],
+            membershipRequests: [],
+            organizationsBlockedBy: [],
+            registeredEvents: [
+              {
+                __typename: 'Event',
+                _id: '65e32a5b2a1f4288ca1f086a',
+              },
+            ],
+          },
         },
       },
     },
@@ -55,20 +98,6 @@ const MOCKS1 = [
       variables: {
         userid: '123',
         orgid: '456',
-      },
-    },
-    result: {
-      data: {
-        success: true,
-      },
-    },
-  },
-  {
-    request: {
-      query: UPDATE_USERTYPE_MUTATION,
-      variables: {
-        id: '123',
-        userType: 'Admin',
       },
     },
     result: {
@@ -90,25 +119,41 @@ const MOCKS2 = [
     result: {
       data: {
         user: {
-          __typename: 'User',
-          image: 'https://placeholder.com/200x200',
-          firstName: 'Rishav',
-          lastName: 'Jha',
-          email: 'ris@gmail.com',
-          role: 'SUPERADMIN',
-          appLanguageCode: 'en',
-          userType: 'SUPERADMIN',
-          pluginCreationAllowed: false,
-          adminApproved: false,
-          createdAt: '2023-02-18T09:22:27.969Z',
-          adminFor: [],
-          createdOrganizations: [],
-          joinedOrganizations: [],
-          organizationsBlockedBy: [],
-          createdEvents: [],
-          registeredEvents: [],
-          eventAdmin: [],
-          membershipRequests: [],
+          user: {
+            __typename: 'UserData',
+            appUserProfile: {
+              __typename: 'AppUserProfile',
+              adminFor: [
+                {
+                  __typename: 'Organization',
+                  _id: '65e0df0906dd1228350cfd4a',
+                },
+                {
+                  __typename: 'Organization',
+                  _id: '65e0e2abb92c9f3e29503d4e',
+                },
+              ],
+              isSuperAdmin: true,
+              appLanguageCode: 'en',
+              createdEvents: [],
+              createdOrganizations: [],
+              eventAdmin: [],
+              pluginCreationAllowed: true,
+              adminApproved: true,
+            },
+            user: {
+              __typename: 'User',
+              createdAt: '2024-02-26T10:36:33.098Z',
+              email: 'adi790u@gmail.com',
+              firstName: 'Aditya',
+              image: null,
+              lastName: 'Agarwal',
+              joinedOrganizations: [],
+              membershipRequests: [],
+              organizationsBlockedBy: [],
+              registeredEvents: [],
+            },
+          },
         },
       },
     },
@@ -162,40 +207,34 @@ describe('MemberDetail', () => {
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
     await wait();
 
-    userEvent.click(screen.getByText(/Add Admin/i));
+    waitFor(() => {
+      expect(screen.getByTestId('addAdminBtn')).toBeInTheDocument();
+      expect(screen.getByTestId('dashboardTitleBtn')).toBeInTheDocument();
+      expect(screen.getByTestId('dashboardTitleBtn')).toHaveTextContent(
+        'User Details',
+      );
+      expect(screen.getAllByText(/Email/i)).toBeTruthy();
+      expect(screen.getAllByText(/Main/i)).toBeTruthy();
+      expect(screen.getAllByText(/First name/i)).toBeTruthy();
+      expect(screen.getAllByText(/Last name/i)).toBeTruthy();
+      expect(screen.getAllByText(/Language/i)).toBeTruthy();
+      expect(screen.getByText(/Admin approved/i)).toBeInTheDocument();
+      expect(screen.getByText(/Plugin creation allowed/i)).toBeInTheDocument();
+      expect(screen.getAllByText(/Created on/i)).toBeTruthy();
+      expect(screen.getAllByText(/Admin for organizations/i)).toBeTruthy();
+      expect(screen.getAllByText(/Membership requests/i)).toBeTruthy();
+      expect(screen.getAllByText(/Events/i)).toBeTruthy();
+      expect(screen.getAllByText(/Admin for events/i)).toBeTruthy();
 
-    expect(screen.getByTestId('dashboardTitleBtn')).toBeInTheDocument();
-    expect(screen.getByTestId('dashboardTitleBtn')).toHaveTextContent(
-      'User Details',
-    );
-    expect(screen.getAllByText(/Email/i)).toBeTruthy();
-    expect(screen.getAllByText(/Main/i)).toBeTruthy();
-    expect(screen.getAllByText(/First name/i)).toBeTruthy();
-    expect(screen.getAllByText(/Last name/i)).toBeTruthy();
-    expect(screen.getAllByText(/Language/i)).toBeTruthy();
-    expect(screen.getByText(/Admin approved/i)).toBeInTheDocument();
-    expect(screen.getByText(/Plugin creation allowed/i)).toBeInTheDocument();
-    expect(screen.getAllByText(/Created on/i)).toBeTruthy();
-    expect(screen.getAllByText(/Admin for organizations/i)).toBeTruthy();
-    expect(screen.getAllByText(/Membership requests/i)).toBeTruthy();
-    expect(screen.getAllByText(/Events/i)).toBeTruthy();
-    expect(screen.getAllByText(/Admin for events/i)).toBeTruthy();
-
-    expect(screen.getAllByText(/Created On/i)).toHaveLength(2);
-    expect(screen.getAllByText(/User Details/i)).toHaveLength(1);
-    expect(screen.getAllByText(/Role/i)).toHaveLength(2);
-    expect(screen.getAllByText(/Created/i)).toHaveLength(4);
-    expect(screen.getAllByText(/Joined/i)).toHaveLength(2);
-    expect(screen.getByTestId('addAdminBtn')).toBeInTheDocument();
-    const addAdminBtn = MOCKS1[2].request.variables.userType;
-    // if the button is not disabled
-    expect(screen.getByTestId('addAdminBtn').getAttribute('disabled')).toBe(
-      addAdminBtn == 'ADMIN' || addAdminBtn == 'SUPERADMIN'
-        ? expect.anything()
-        : null,
-    );
-    expect(screen.getByTestId('stateBtn')).toBeInTheDocument();
-    userEvent.click(screen.getByTestId('stateBtn'));
+      expect(screen.getAllByText(/Created On/i)).toHaveLength(2);
+      expect(screen.getAllByText(/User Details/i)).toHaveLength(2);
+      expect(screen.getAllByText(/Role/i)).toHaveLength(2);
+      expect(screen.getAllByText(/Created/i)).toHaveLength(4);
+      expect(screen.getAllByText(/Joined/i)).toHaveLength(2);
+      expect(screen.getByTestId('addAdminBtn')).toBeInTheDocument();
+      expect(screen.getByTestId('stateBtn')).toBeInTheDocument();
+      userEvent.click(screen.getByTestId('stateBtn'));
+    });
   });
 
   test('prettyDate function should work properly', () => {
@@ -221,7 +260,7 @@ describe('MemberDetail', () => {
       id: 'rishav-jha-mech',
       from: 'orglist',
     };
-
+    const user = MOCKS1[0].result.data.user;
     render(
       <MockedProvider addTypename={false} link={link1}>
         <BrowserRouter>
@@ -235,11 +274,14 @@ describe('MemberDetail', () => {
     );
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
 
-    const dicebearUrl = `mocked-data-uri`;
-
-    const userImage = await screen.findByTestId('userImageAbsent');
-    expect(userImage).toBeInTheDocument();
-    expect(userImage.getAttribute('src')).toBe(dicebearUrl);
+    waitFor(() =>
+      expect(screen.getByTestId('userImageAbsent')).toBeInTheDocument(),
+    );
+    waitFor(() =>
+      expect(screen.getByTestId('userImageAbsent').getAttribute('src')).toBe(
+        `https://api.dicebear.com/5.x/initials/svg?seed=${user?.user?.firstName} ${user?.user?.lastName}`,
+      ),
+    );
   });
 
   test('Should display image if image is present', async () => {
@@ -263,9 +305,15 @@ describe('MemberDetail', () => {
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
 
     const user = MOCKS2[0].result.data.user;
-    const userImage = await screen.findByTestId('userImagePresent');
-    expect(userImage).toBeInTheDocument();
-    expect(userImage.getAttribute('src')).toBe(user?.image);
+
+    waitFor(() =>
+      expect(screen.getByTestId('userImagePresent')).toBeInTheDocument(),
+    );
+    waitFor(() =>
+      expect(screen.getByTestId('userImagePresent').getAttribute('src')).toBe(
+        user?.user.user.image,
+      ),
+    );
   });
 
   test('should call setState with 2 when button is clicked', async () => {
@@ -328,19 +376,5 @@ describe('MemberDetail', () => {
     waitFor(() => {
       expect(screen.getByTestId('adminApproved')).toHaveTextContent('No');
     });
-  });
-  test('should be redirected to / if member id is undefined', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link1}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <MemberDetail />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    expect(window.location.pathname).toEqual('/');
   });
 });

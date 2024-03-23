@@ -331,6 +331,15 @@
     "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。",
     "searchEventName": "搜索活动名称",
     "eventType": "活动类型"
+    "customRecurrence": "自定义重复",
+    "repeatsEvery": "重复每",
+    "repeatsOn": "重复于",
+    "ends": "结束",
+    "never": "永不",
+    "on": "于",
+    "after": "之后",
+    "occurences": "次数",
+    "done": "完成"
   },
   "organizationActionItems": {
     "actionItemCategory": "行动项目类别",

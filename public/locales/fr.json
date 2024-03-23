@@ -281,6 +281,15 @@
     "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau.",
     "searchEventName": "Rechercher le nom de l'événement",
     "eventType": "Type d'événement"
+    "customRecurrence": "Récurrence personnalisée",
+    "repeatsEvery": "Se répète tous les",
+    "repeatsOn": "Se répète sur",
+    "ends": "Finit",
+    "never": "Jamais",
+    "on": "Sur",
+    "after": "Après",
+    "occurences": "Occurrences",
+    "done": "Fait"
   },
   "organizationActionItems": {
     "actionItemCategory": "Catégorie de l'élément d'action",

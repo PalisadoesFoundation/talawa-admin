@@ -1,5 +1,5 @@
 import React from 'react';
-import { act, render, waitFor, screen } from '@testing-library/react';
+import { act, render, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 
@@ -22,7 +22,7 @@ async function wait(ms = 100): Promise<void> {
 
 let props = {
   id: '1',
-  media: '',
+  image: '',
   title: 'Test Post',
 };
 
@@ -46,10 +46,10 @@ describe('Testing PromotedPost Test', () => {
   test('Component should be rendered properly if prop image is not undefined', async () => {
     props = {
       ...props,
-      media: 'data:image/png;base64,bWVkaWEgY29udGVudA==',
+      image: 'promotedPostImage',
     };
 
-    const { queryByRole } = render(
+    render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
@@ -61,13 +61,7 @@ describe('Testing PromotedPost Test', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      const image = queryByRole('img');
-      expect(image).toHaveAttribute(
-        'src',
-        'data:image/png;base64,bWVkaWEgY29udGVudA==',
-      );
-    });
+    await wait();
   });
 });
 
@@ -109,12 +103,12 @@ test('Component should display the text correctly', async () => {
   });
 });
 
-test('Component should display the media correctly', async () => {
+test('Component should display the image correctly', async () => {
   props = {
     ...props,
-    media: 'data:videos',
+    image: 'promotedPostImage',
   };
-  render(
+  const { queryByRole } = render(
     <MockedProvider addTypename={false} link={link}>
       <BrowserRouter>
         <Provider store={store}>
@@ -126,8 +120,8 @@ test('Component should display the media correctly', async () => {
     </MockedProvider>,
   );
 
-  await waitFor(async () => {
-    const media = await screen.findByTestId('media');
-    expect(media).toBeInTheDocument();
+  await waitFor(() => {
+    const image = queryByRole('img');
+    expect(image).toHaveAttribute('src', 'promotedPostImage');
   });
 });
