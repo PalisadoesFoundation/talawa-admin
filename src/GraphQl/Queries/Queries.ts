@@ -269,8 +269,6 @@ export const EVENT_CHECKINS = gql`
         checkIn {
           _id
           time
-          allotedRoom
-          allotedSeat
         }
       }
     }
