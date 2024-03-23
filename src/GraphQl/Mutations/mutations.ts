@@ -145,12 +145,15 @@ export const LOGIN_MUTATION = gql`
         _id
         firstName
         lastName
+        image
+        email
       }
       appUserProfile {
         adminApproved
         adminFor {
           _id
         }
+        adminApproved
         isSuperAdmin
       }
       accessToken
