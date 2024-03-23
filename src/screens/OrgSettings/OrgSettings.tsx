@@ -37,9 +37,7 @@ function orgSettings(): JSX.Element {
                 <Button
                   key={index}
                   className="me-3 border rounded-3"
-                  variant={
-                    orgSetting === setting ? `success` : `outline-secondary`
-                  }
+                  variant={orgSetting === setting ? `success` : `none`}
                   onClick={() => setOrgSetting(setting)}
                   data-testid={`${setting}Settings`}
                 >

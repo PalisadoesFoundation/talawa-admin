@@ -67,6 +67,10 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
   });
   test('Component should be rendered properly', () => {
     setItem('UserImage', '');
+    setItem('UserImage', '');
+    setItem('SuperAdmin', true);
+    setItem('FirstName', 'John');
+    setItem('LastName', 'Doe');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -104,6 +108,10 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
   });
 
   test('Testing in roles screen', () => {
+    setItem('UserImage', '');
+    setItem('SuperAdmin', true);
+    setItem('FirstName', 'John');
+    setItem('LastName', 'Doe');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
