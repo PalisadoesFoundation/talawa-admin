@@ -33,8 +33,11 @@ const MOCKS = [
         login: {
           user: {
             _id: '1',
-            userType: 'ADMIN',
             adminApproved: true,
+          },
+          appUserProfile: {
+            isSuperAdmin: false,
+            adminFor: ['123', '456'],
           },
           accessToken: 'accessToken',
           refreshToken: 'refreshToken',

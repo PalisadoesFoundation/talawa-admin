@@ -278,7 +278,16 @@
     "enterDescrip": "Entrez la description",
     "eventLocation": "Entrez l'emplacement",
     "eventCreated": "Toutes nos félicitations! L'événement est créé.",
-    "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
+    "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau.",
+    "customRecurrence": "Récurrence personnalisée",
+    "repeatsEvery": "Se répète tous les",
+    "repeatsOn": "Se répète sur",
+    "ends": "Finit",
+    "never": "Jamais",
+    "on": "Sur",
+    "after": "Après",
+    "occurences": "Occurrences",
+    "done": "Fait"
   },
   "organizationActionItems": {
     "actionItemCategory": "Catégorie de l'élément d'action",
@@ -727,9 +736,10 @@
     "allOrganizations": "Toutes les organisations",
     "joinedOrganizations": "Organisations jointes",
     "createdOrganizations": "Organisations créées",
-    "search": "Recherche",
+    "search": "Rechercher des utilisateurs",
     "nothingToShow": "Rien à montrer ici.",
     "selectOrganization": "Sélectionnez une organisation",
+    "filter": "Filtre",
     "organizations": "Organizations",
     "searchByName": "Recherche par nom"
   },

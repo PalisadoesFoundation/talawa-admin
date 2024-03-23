@@ -105,7 +105,6 @@ const orgFundCampaign = (): JSX.Element => {
   ): Promise<void> => {
     e.preventDefault();
     try {
-      console.log(formState);
       await createCampaign({
         variables: {
           name: formState.campaignName,
