@@ -146,6 +146,8 @@ export const LOGIN_MUTATION = gql`
         adminApproved
         firstName
         lastName
+        image
+        email
       }
       appUserProfile {
         adminFor {
