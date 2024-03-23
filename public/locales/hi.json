@@ -296,7 +296,16 @@
     "enterDescrip": "विवरण दर्ज करें",
     "eventLocation": "स्थान दर्ज करें",
     "eventCreated": "बधाई हो! इवेंट बनाया गया है।",
-    "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।"
+    "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।",
+    "customRecurrence": "कस्टम पुनरावृत्ति",
+    "repeatsEvery": "दोहराता है हर",
+    "repeatsOn": "को दोहराएगा",
+    "ends": "समाप्त होता",
+    "never": "कभी नहीं",
+    "on": "पर",
+    "after": "के बाद",
+    "occurences": "'घटित होता है",
+    "done": "समाज-सम्मत"
   },
   "organizationActionItems": {
     "actionItemCategory": "कार्य आइटम श्रेणी",

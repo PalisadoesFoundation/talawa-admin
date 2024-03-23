@@ -346,7 +346,16 @@
     "enterDescrip": "輸入說明",
     "eventLocation": "輸入位置",
     "eventCreated": "恭喜！事件已創建。",
-    "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
+    "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。",
+    "customRecurrence": "自定义重复",
+    "repeatsEvery": "重复每",
+    "repeatsOn": "重复于",
+    "ends": "结束",
+    "never": "永不",
+    "on": "于",
+    "after": "之后",
+    "occurences": "次数",
+    "done": "完成"
   },
   "organizationActionItems": {
     "actionItemCategory": "行动项目类别",

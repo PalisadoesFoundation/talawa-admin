@@ -240,6 +240,9 @@ export const CREATE_EVENT_MUTATION = gql`
     $startTime: Time
     $endTime: Time
     $location: String
+    $frequency: Frequency
+    $weekDays: [WeekDays]
+    $count: Int
   ) {
     createEvent(
       data: {
@@ -255,6 +258,11 @@ export const CREATE_EVENT_MUTATION = gql`
         startTime: $startTime
         endTime: $endTime
         location: $location
+      }
+      recurrenceRuleData: {
+        frequency: $frequency
+        weekDays: $weekDays
+        count: $count
       }
     ) {
       _id
