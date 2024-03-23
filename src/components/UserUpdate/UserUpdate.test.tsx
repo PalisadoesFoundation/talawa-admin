@@ -43,6 +43,7 @@ const MOCKS = [
             pluginCreationAllowed: true,
             appLanguageCode: 'fr',
             isSuperAdmin: true,
+            adminApproved: true,
           },
           user: {
             __typename: 'User',
@@ -52,7 +53,6 @@ const MOCKS = [
             createdAt: '2024-02-26T10:36:33.098Z',
             image: null,
             email: 'adi79@gmail.com',
-            adminApproved: true,
             joinedOrganizations: [
               { __typename: 'Organization', _id: '65e0df0906dd1228350cfd4a' },
               { __typename: 'Organization', _id: '65e0e2abb92c9f3e29503d4e' },

@@ -1,17 +1,17 @@
+import { useMutation } from '@apollo/client';
+import { LockOutlined } from '@mui/icons-material';
+import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import type { ChangeEvent, SetStateAction } from 'react';
 import React from 'react';
 import { Button, Form, InputGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
-import { LockOutlined } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
-import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 
 import { LOGIN_MUTATION } from 'GraphQl/Mutations/mutations';
-import styles from './Login.module.css';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
+import styles from './Login.module.css';
 
 interface InterfaceLoginProps {
   setCurrentMode: React.Dispatch<SetStateAction<string>>;
@@ -48,7 +48,7 @@ export default function login(props: InterfaceLoginProps): JSX.Element {
             password: loginVariables.password,
           },
         });
-
+        console.log(data);
         setItem('token', data.login.accessToken);
         setItem('userId', data.login.user._id);
         navigate('/user/organizations');

@@ -36,6 +36,7 @@ const MOCKS = [
           accessToken: 'accessToken',
           refreshToken: 'refreshToken',
           appUserProfile: {
+            adminApproved: true,
             adminFor: [
               {
                 _id: 'id',
