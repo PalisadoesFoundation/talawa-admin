@@ -40,7 +40,6 @@ function userSidebar(): JSX.Element {
     variables: { userId: userId },
   });
 
-  console.log(data2);
   console.log(error);
 
   /* istanbul ignore next */
