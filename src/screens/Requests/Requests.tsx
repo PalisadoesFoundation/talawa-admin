@@ -33,8 +33,11 @@ const Requests = (): JSX.Element => {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState<string>('');
   const [organizationId, setOrganizationId] = useState<string>('');
-  const userType = getItem('UserType');
-
+  const userType = getItem('SuperAdmin')
+    ? 'SUPERADMIN'
+    : getItem('AdminFor')
+      ? 'ADMIN'
+      : 'USER';
   const {
     data: userData,
     error: errorUser,
@@ -49,16 +52,16 @@ const Requests = (): JSX.Element => {
     },
   });
 
-  useEffect(() => {
-    if (!userData) {
-      return;
-    }
+  // useEffect(() => {
+  //   if (!userData) {
+  //     return;
+  //   }
 
-    const adminFor = userData.user.adminFor;
-    if (adminFor && adminFor.length == 1) {
-      setOrganizationId(adminFor[0]._id);
-    }
-  }, [userData]);
+  //   const adminFor = userData.user.adminFor;
+  //   if (adminFor && adminFor.length == 1) {
+  //     setOrganizationId(adminFor[0]._id);
+  //   }
+  // }, [userData]);
 
   useEffect(() => {
     if (errorUser) {
@@ -262,10 +265,7 @@ const Requests = (): JSX.Element => {
         </div>
       </div>
       {!isLoading &&
-      (orgsData?.organizationsConnection.length === 0 ||
-        (userData &&
-          userData.user.userType === 'ADMIN' &&
-          userData.user.adminFor.length === 0)) ? (
+      (orgsData?.organizationsConnection.length === 0 || userData) ? (
         <div className={styles.notFound}>
           <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
           <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>

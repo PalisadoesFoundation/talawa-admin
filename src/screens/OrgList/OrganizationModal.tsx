@@ -5,6 +5,7 @@ import type { ChangeEvent } from 'react';
 import styles from './OrgList.module.css';
 import type { InterfaceAddress } from 'utils/interfaces';
 import countryOptions from 'utils/countryList';
+import useLocalStorage from 'utils/useLocalstorage';
 
 /**
  * Represents the state of the form in the organization modal.
@@ -27,13 +28,8 @@ interface InterfaceUserType {
     lastName: string;
     image: string | null;
     email: string;
-    userType: string;
-    adminFor: {
-      _id: string;
-      name: string;
-      image: string | null;
-    }[];
   };
+
   // Add more properties if needed
 }
 
@@ -62,10 +58,13 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
   setFormState,
   createOrg,
   t,
-  userData,
   triggerCreateSampleOrg,
 }) => {
   // function to update the state of the parameters inside address.
+  const { getItem } = useLocalStorage();
+  const superAdmin = getItem('SuperAdmin');
+  const adminFor = getItem('AdminFor');
+
   const handleInputChange = (fieldName: string, value: string): void => {
     setFormState((prevState) => ({
       ...prevState,
@@ -300,20 +299,17 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               <hr />
               <span className={styles.orText}>{t('OR')}</span>
             </div>
-            {userData &&
-              ((userData.user.userType === 'ADMIN' &&
-                userData.user.adminFor.length > 0) ||
-                userData.user.userType === 'SUPERADMIN') && (
-                <div className={styles.sampleOrgSection}>
-                  <Button
-                    className={styles.sampleOrgCreationBtn}
-                    onClick={() => triggerCreateSampleOrg()}
-                    data-testid="createSampleOrganizationBtn"
-                  >
-                    {t('createSampleOrganization')}
-                  </Button>
-                </div>
-              )}
+            {(adminFor.length > 0 || superAdmin) && (
+              <div className={styles.sampleOrgSection}>
+                <Button
+                  className={styles.sampleOrgCreationBtn}
+                  onClick={() => triggerCreateSampleOrg()}
+                  data-testid="createSampleOrganizationBtn"
+                >
+                  {t('createSampleOrganization')}
+                </Button>
+              </div>
+            )}
           </Col>
         </Modal.Body>
       </Form>

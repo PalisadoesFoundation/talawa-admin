@@ -69,7 +69,6 @@ const organizationFunds = (): JSX.Element => {
       id: currentUrl,
     },
   });
-  console.log(fundData);
 
   const [createFund] = useMutation(CREATE_FUND_MUTATION);
   const [updateFund] = useMutation(UPDATE_FUND_MUTATION);
@@ -174,7 +173,6 @@ const organizationFunds = (): JSX.Element => {
   };
   const archiveFundHandler = async (): Promise<void> => {
     try {
-      console.log('herere');
       await updateFund({
         variables: {
           id: fund?._id,
