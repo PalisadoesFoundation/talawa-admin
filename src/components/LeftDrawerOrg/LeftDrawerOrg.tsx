@@ -42,7 +42,6 @@ const leftDrawerOrg = ({
   } = useQuery(ORGANIZATIONS_LIST, {
     variables: { id: orgId },
   });
-
   // Set organization data
   useEffect(() => {
     let isMounted = true;

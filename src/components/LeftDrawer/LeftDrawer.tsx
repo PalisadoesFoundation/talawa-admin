@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
@@ -57,7 +58,7 @@ const leftDrawer = ({ hideDrawer }: InterfaceLeftDrawerProps): JSX.Element => {
               </Button>
             )}
           </NavLink>
-          {userType === 'SUPERADMIN' && (
+          {superAdmin && (
             <NavLink to={'/users'}>
               {({ isActive }) => (
                 <Button

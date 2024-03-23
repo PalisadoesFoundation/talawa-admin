@@ -1,32 +1,32 @@
 import { useLazyQuery } from '@apollo/client';
-import dayjs from 'dayjs';
-import React, { useEffect, useState } from 'react';
-import { Link, useLocation, useParams } from 'react-router-dom';
-import { Button, Dropdown, Form } from 'react-bootstrap';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
-import {
-  ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-  USER_LIST,
-} from 'GraphQl/Queries/Queries';
-import NotFound from 'components/NotFound/NotFound';
-import { useTranslation } from 'react-i18next';
-import styles from './OrganizationPeople.module.css';
-import { toast } from 'react-toastify';
 import { Search, Sort } from '@mui/icons-material';
+import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
+import {
+  ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+  USER_LIST,
+} from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
-import UserListCard from 'components/UserListCard/UserListCard';
-import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
+import NotFound from 'components/NotFound/NotFound';
 import OrgAdminListCard from 'components/OrgAdminListCard/OrgAdminListCard';
+import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
+import UserListCard from 'components/UserListCard/UserListCard';
+import dayjs from 'dayjs';
+import React, { useEffect, useState } from 'react';
+import { Button, Dropdown, Form } from 'react-bootstrap';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import { useTranslation } from 'react-i18next';
+import { Link, useLocation, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import AddMember from './AddMember';
+import styles from './OrganizationPeople.module.css';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
