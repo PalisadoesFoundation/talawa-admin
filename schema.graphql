@@ -2,14 +2,83 @@ directive @auth on FIELD_DEFINITION
 
 directive @role(requires: UserType) on FIELD_DEFINITION
 
+type ActionItem {
+  _id: ID!
+  actionItemCategory: ActionItemCategory
+  assignee: User
+  assigner: User
+  assignmentDate: Date!
+  completionDate: Date!
+  createdAt: Date!
+  creator: User
+  dueDate: Date!
+  event: Event
+  isCompleted: Boolean!
+  postCompletionNotes: String
+  preCompletionNotes: String
+  updatedAt: Date!
+}
+
+type ActionItemCategory {
+  _id: ID!
+  createdAt: Date!
+  creator: User
+  isDisabled: Boolean!
+  name: String!
+  organization: Organization
+  updatedAt: Date!
+}
+
+type Address {
+  city: String
+  countryCode: String
+  dependentLocality: String
+  line1: String
+  line2: String
+  postalCode: String
+  sortingCode: String
+  state: String
+}
+
+input AddressInput {
+  city: String
+  countryCode: String
+  dependentLocality: String
+  line1: String
+  line2: String
+  postalCode: String
+  sortingCode: String
+  state: String
+}
+
 type Advertisement {
-  _id: ID
+  _id: ID!
+  createdAt: DateTime!
+  creator: User
   endDate: Date!
   mediaUrl: URL!
   name: String!
-  organization: Organization
+  orgId: ID!
   startDate: Date!
-  type: String!
+  type: AdvertisementType!
+  updatedAt: DateTime!
+}
+
+enum AdvertisementType {
+  BANNER
+  MENU
+  POPUP
+}
+
+type AgendaCategory {
+  _id: ID!
+  createdAt: Date!
+  createdBy: User!
+  description: String
+  name: String!
+  organization: Organization!
+  updatedAt: Date
+  updatedBy: User
 }
 
 type AggregatePost {
@@ -20,18 +89,23 @@ type AggregateUser {
   count: Int!
 }
 
-type AndroidFirebaseOptions {
-  apiKey: String
-  appId: String
-  messagingSenderId: String
-  projectId: String
-  storageBucket: String
+scalar Any
+
+type AppUserProfile {
+  _id: ID!
+  adminFor: [Organization]
+  appLanguageCode: String!
+  createdEvents: [Event]
+  createdOrganizations: [Organization]
+  eventAdmin: [Event]
+  isSuperAdmin: Boolean!
+  pluginCreationAllowed: Boolean!
+  userId: User!
 }
 
 type AuthData {
   accessToken: String!
-  androidFirebaseOptions: AndroidFirebaseOptions!
-  iosFirebaseOptions: IOSFirebaseOptions!
+  appUserProfile: AppUserProfile!
   refreshToken: String!
   user: User!
 }
@@ -40,9 +114,11 @@ type CheckIn {
   _id: ID!
   allotedRoom: String
   allotedSeat: String
+  createdAt: DateTime!
   event: Event!
   feedbackSubmitted: Boolean!
   time: DateTime!
+  updatedAt: DateTime!
   user: User!
 }
 
@@ -60,13 +136,14 @@ type CheckInStatus {
 }
 
 type Comment {
-  _id: ID
-  createdAt: DateTime
-  creator: User!
+  _id: ID!
+  createdAt: DateTime!
+  creator: User
   likeCount: Int
   likedBy: [User]
   post: Post!
   text: String!
+  updatedAt: DateTime!
 }
 
 input CommentInput {
@@ -80,6 +157,21 @@ type ConnectionPageInfo {
   hasNextPage: Boolean!
   hasPreviousPage: Boolean!
   startCursor: String
+}
+
+scalar CountryCode
+
+input CreateActionItemInput {
+  assigneeId: ID!
+  dueDate: Date
+  eventId: ID
+  preCompletionNotes: String
+}
+
+input CreateAgendaCategoryInput {
+  description: String
+  name: String!
+  organizationId: ID!
 }
 
 input CreateUserTagInput {
@@ -104,9 +196,11 @@ type DeletePayload {
 
 type DirectChat {
   _id: ID!
-  creator: User!
+  createdAt: DateTime!
+  creator: User
   messages: [DirectChatMessage]
   organization: Organization!
+  updatedAt: DateTime!
   users: [User!]!
 }
 
@@ -117,15 +211,18 @@ type DirectChatMessage {
   messageContent: String!
   receiver: User!
   sender: User!
+  updatedAt: DateTime!
 }
 
 type Donation {
   _id: ID!
   amount: Float!
+  createdAt: DateTime!
   nameOfOrg: String!
   nameOfUser: String!
   orgId: ID!
   payPalId: String!
+  updatedAt: DateTime!
   userId: ID!
 }
 
@@ -144,7 +241,32 @@ input DonationWhereInput {
   name_of_user_starts_with: String
 }
 
+enum EducationGrade {
+  GRADE_1
+  GRADE_2
+  GRADE_3
+  GRADE_4
+  GRADE_5
+  GRADE_6
+  GRADE_7
+  GRADE_8
+  GRADE_9
+  GRADE_10
+  GRADE_11
+  GRADE_12
+  GRADUATE
+  KG
+  NO_GRADE
+  PRE_KG
+}
+
 scalar EmailAddress
+
+enum EmploymentStatus {
+  FULL_TIME
+  PART_TIME
+  UNEMPLOYED
+}
 
 interface Error {
   message: String!
@@ -152,14 +274,16 @@ interface Error {
 
 type Event {
   _id: ID!
-  admins(adminId: ID): [User]
+  actionItems: [ActionItem]
+  admins(adminId: ID): [User!]
   allDay: Boolean!
-  attendees: [User!]!
+  attendees: [User]
   attendeesCheckInStatus: [CheckInStatus!]!
   averageFeedbackScore: Float
-  creator: User!
+  createdAt: DateTime!
+  creator: User
   description: String!
-  endDate: Date!
+  endDate: Date
   endTime: Time
   feedback: [Feedback!]!
   isPublic: Boolean!
@@ -174,6 +298,7 @@ type Event {
   startTime: Time
   status: Status!
   title: String!
+  updatedAt: DateTime!
 }
 
 input EventAttendeeInput {
@@ -222,7 +347,27 @@ enum EventOrderByInput {
   title_DESC
 }
 
+type EventVolunteer {
+  _id: ID!
+  createdAt: DateTime!
+  creator: User
+  event: Event
+  isAssigned: Boolean
+  isInvited: Boolean
+  response: String
+  updatedAt: DateTime!
+  user: User!
+}
 
+input EventVolunteerInput {
+  eventId: ID!
+  userId: ID!
+}
+
+enum EventVolunteerResponse {
+  NO
+  YES
+}
 
 input EventWhereInput {
   description: String
@@ -259,9 +404,11 @@ type ExtendSession {
 
 type Feedback {
   _id: ID!
+  createdAt: DateTime!
   event: Event!
   rating: Int!
   review: String
+  updatedAt: DateTime!
 }
 
 input FeedbackInput {
@@ -281,20 +428,36 @@ input ForgotPasswordData {
   userOtp: String!
 }
 
+enum Frequency {
+  DAILY
+  MONTHLY
+  WEEKLY
+  YEARLY
+}
+
+enum Gender {
+  FEMALE
+  MALE
+  OTHER
+}
+
 type Group {
-  _id: ID
-  admins: [User]
-  createdAt: DateTime
+  _id: ID!
+  admins: [User!]!
+  createdAt: DateTime!
   description: String
   organization: Organization!
-  title: String
+  title: String!
+  updatedAt: DateTime!
 }
 
 type GroupChat {
   _id: ID!
-  creator: User!
+  createdAt: DateTime!
+  creator: User
   messages: [GroupChatMessage]
   organization: Organization!
+  updatedAt: DateTime!
   users: [User!]!
 }
 
@@ -304,22 +467,15 @@ type GroupChatMessage {
   groupChatMessageBelongsTo: GroupChat!
   messageContent: String!
   sender: User!
-}
-
-type IOSFirebaseOptions {
-  apiKey: String
-  appId: String
-  iosBundleId: String
-  iosClientId: String
-  messagingSenderId: String
-  projectId: String
-  storageBucket: String
+  updatedAt: DateTime!
 }
 
 type InvalidCursor implements FieldError {
   message: String!
   path: [String!]!
 }
+
+scalar JSON
 
 type Language {
   _id: ID!
@@ -351,6 +507,15 @@ input LoginInput {
 
 scalar Longitude
 
+enum MaritalStatus {
+  DIVORCED
+  ENGAGED
+  MARRIED
+  SEPERATED
+  SINGLE
+  WIDOWED
+}
+
 type MaximumLengthError implements FieldError {
   message: String!
   path: [String!]!
@@ -370,10 +535,11 @@ type MembershipRequest {
 
 type Message {
   _id: ID!
-  createdAt: DateTime
+  createdAt: DateTime!
   creator: User
   imageUrl: URL
-  text: String
+  text: String!
+  updatedAt: DateTime!
   videoUrl: URL
 }
 
@@ -384,6 +550,7 @@ type MessageChat {
   message: String!
   receiver: User!
   sender: User!
+  updatedAt: DateTime!
 }
 
 input MessageChatInput {
@@ -427,18 +594,48 @@ type Mutation {
   addEventAttendee(data: EventAttendeeInput!): User!
   addFeedback(data: FeedbackInput!): Feedback!
   addLanguageTranslation(data: LanguageInput!): Language!
+  addOrganizationCustomField(
+    name: String!
+    organizationId: ID!
+    type: String!
+  ): OrganizationCustomField!
   addOrganizationImage(file: String!, organizationId: String!): Organization!
+  addUserCustomData(
+    dataName: String!
+    dataValue: Any!
+    organizationId: ID!
+  ): UserCustomData!
   addUserImage(file: String!): User!
   addUserToGroupChat(chatId: ID!, userId: ID!): GroupChat!
+  addUserToUserFamily(familyId: ID!, userId: ID!): UserFamily!
   adminRemoveEvent(eventId: ID!): Event!
   adminRemoveGroup(groupId: ID!): GroupChat!
   assignUserTag(input: ToggleUserTagAssignInput!): User
-  blockPluginCreationBySuperadmin(blockUser: Boolean!, userId: ID!): User!
+  blockPluginCreationBySuperadmin(
+    blockUser: Boolean!
+    userId: ID!
+  ): AppUserProfile!
   blockUser(organizationId: ID!, userId: ID!): User!
   cancelMembershipRequest(membershipRequestId: ID!): MembershipRequest!
   checkIn(data: CheckInInput!): CheckIn!
-  createAdmin(data: UserAndOrganizationInput!): User!
-  createAdvertisement(input: CreateAdvertisementInput!): CreateAdvertisementPayload
+  createActionItem(
+    actionItemCategoryId: ID!
+    data: CreateActionItemInput!
+  ): ActionItem!
+  createActionItemCategory(
+    name: String!
+    organizationId: ID!
+  ): ActionItemCategory!
+  createAdmin(data: UserAndOrganizationInput!): AppUserProfile!
+  createAdvertisement(
+    endDate: Date!
+    link: String!
+    name: String!
+    orgId: ID!
+    startDate: Date!
+    type: String!
+  ): Advertisement!
+  createAgendaCategory(input: CreateAgendaCategoryInput!): AgendaCategory!
   createComment(data: CommentInput!, postId: ID!): Comment
   createDirectChat(data: createChatInput!): DirectChat!
   createDonation(
@@ -449,7 +646,11 @@ type Mutation {
     payPalId: ID!
     userId: ID!
   ): Donation!
-  createEvent(data: EventInput): Event!
+  createEvent(
+    data: EventInput!
+    recurrenceRuleData: RecurrenceRuleInput
+  ): Event!
+  createEventVolunteer(data: EventVolunteerInput!): EventVolunteer!
   createGroupChat(data: createGroupChatInput!): GroupChat!
   createMember(input: UserAndOrganizationInput!): Organization!
   createMessageChat(data: MessageChatInput!): MessageChat!
@@ -461,8 +662,14 @@ type Mutation {
     uninstalledOrgs: [ID!]
   ): Plugin!
   createPost(data: PostInput!, file: String): Post
+  createSampleOrganization: Boolean!
+  createUserFamily(data: createUserFamilyInput!): UserFamily!
   createUserTag(input: CreateUserTagInput!): UserTag
+<<<<<<< HEAD
   deleteAdvertisement(id: ID!): DeletePayload!
+=======
+  deleteAdvertisementById(id: ID!): DeletePayload!
+  deleteAgendaCategory(id: ID!): ID!
   deleteDonationById(id: ID!): DeletePayload!
   forgotPassword(data: ForgotPasswordData!): Boolean!
   joinPublicOrganization(organizationId: ID!): User!
@@ -477,21 +684,31 @@ type Mutation {
   registerForEvent(id: ID!): Event!
   rejectAdmin(id: ID!): Boolean!
   rejectMembershipRequest(membershipRequestId: ID!): MembershipRequest!
-  removeAdmin(data: UserAndOrganizationInput!): User!
+  removeActionItem(id: ID!): ActionItem!
+  removeAdmin(data: UserAndOrganizationInput!): AppUserProfile!
   removeAdvertisement(id: ID!): Advertisement
   removeComment(id: ID!): Comment
   removeDirectChat(chatId: ID!, organizationId: ID!): DirectChat!
   removeEvent(id: ID!): Event!
   removeEventAttendee(data: EventAttendeeInput!): User!
+  removeEventVolunteer(id: ID!): EventVolunteer!
   removeGroupChat(chatId: ID!): GroupChat!
   removeMember(data: UserAndOrganizationInput!): Organization!
-  removeOrganization(id: ID!): User!
+  removeOrganization(id: ID!): UserData!
+  removeOrganizationCustomField(
+    customFieldId: ID!
+    organizationId: ID!
+  ): OrganizationCustomField!
   removeOrganizationImage(organizationId: String!): Organization!
   removePost(id: ID!): Post
+  removeSampleOrganization: Boolean!
+  removeUserCustomData(organizationId: ID!): UserCustomData!
+  removeUserFamily(familyId: ID!): UserFamily!
   removeUserFromGroupChat(chatId: ID!, userId: ID!): GroupChat!
+  removeUserFromUserFamily(familyId: ID!, userId: ID!): UserFamily!
   removeUserImage: User!
   removeUserTag(id: ID!): UserTag
-  revokeRefreshTokenForUser(userId: String!): Boolean!
+  revokeRefreshTokenForUser: Boolean!
   saveFcmToken(token: String): Boolean!
   sendMembershipRequest(organizationId: ID!): MembershipRequest!
   sendMessageToDirectChat(
@@ -503,13 +720,29 @@ type Mutation {
     messageContent: String!
   ): GroupChatMessage!
   signUp(data: UserInput!, file: String): AuthData!
-  togglePostPin(id: ID!): Post!
+  togglePostPin(id: ID!, title: String): Post!
   unassignUserTag(input: ToggleUserTagAssignInput!): User
   unblockUser(organizationId: ID!, userId: ID!): User!
   unlikeComment(id: ID!): Comment
   unlikePost(id: ID!): Post
   unregisterForEventByUser(id: ID!): Event!
+  updateActionItem(data: UpdateActionItemInput!, id: ID!): ActionItem
+  updateActionItemCategory(
+    data: UpdateActionItemCategoryInput!
+    id: ID!
+  ): ActionItemCategory
+  updateAdvertisement(
+    input: UpdateAdvertisementInput!
+  ): UpdateAdvertisementPayload
+  updateAgendaCategory(
+    id: ID!
+    input: UpdateAgendaCategoryInput!
+  ): AgendaCategory
   updateEvent(data: UpdateEventInput, id: ID!): Event!
+  updateEventVolunteer(
+    data: UpdateEventVolunteerInput
+    id: ID!
+  ): EventVolunteer!
   updateLanguage(languageCode: String!): User!
   updateOrganization(
     data: UpdateOrganizationInput
@@ -518,8 +751,13 @@ type Mutation {
   ): Organization!
   updatePluginStatus(id: ID!, orgId: ID!): Plugin!
   updatePost(data: PostUpdateInput, id: ID!): Post!
-  updateUserPassword(data: UpdateUserPasswordInput!): User!
+  updateUserPassword(data: UpdateUserPasswordInput!): UserData!
   updateUserProfile(data: UpdateUserInput, file: String): User!
+  updateUserRoleInOrganization(
+    organizationId: ID!
+    role: String!
+    userId: ID!
+  ): Organization!
   updateUserTag(input: UpdateUserTagInput!): UserTag
   updateUserType(data: UpdateUserTypeInput!): Boolean!
 }
@@ -530,19 +768,23 @@ input OTPInput {
 
 type Organization {
   _id: ID!
-  admins(adminId: ID): [User]
+  actionItemCategories: [ActionItemCategory]
+  address: Address
+  admins(adminId: ID): [User!]
+  agendaCategories: [AgendaCategory]
   apiUrl: URL!
   blockedUsers: [User]
-  createdAt: DateTime
-  creator: User!
+  createdAt: DateTime!
+  creator: User
+  customFields: [OrganizationCustomField!]!
   description: String!
   image: String
-  userRegistrationRequired: Boolean!
-  location: String
   members: [User]
   membershipRequests: [MembershipRequest]
   name: String!
   pinnedPosts: [Post]
+  updatedAt: DateTime!
+  userRegistrationRequired: Boolean!
   userTags(
     after: String
     before: String
@@ -552,26 +794,33 @@ type Organization {
   visibleInSearch: Boolean!
 }
 
+type OrganizationCustomField {
+  _id: ID!
+  name: String!
+  organizationId: String!
+  type: String!
+}
+
 type OrganizationInfoNode {
   _id: ID!
   apiUrl: URL!
-  creator: User!
+  creator: User
   description: String!
   image: String
-  userRegistrationRequired: Boolean!
   name: String!
+  userRegistrationRequired: Boolean!
   visibleInSearch: Boolean!
 }
 
 input OrganizationInput {
+  address: AddressInput!
   apiUrl: URL
   attendees: String
   description: String!
   image: String
-  userRegistrationRequired: Boolean!
-  location: String
   name: String!
-  visibleInSearch: Boolean!
+  userRegistrationRequired: Boolean
+  visibleInSearch: Boolean
 }
 
 enum OrganizationOrderByInput {
@@ -606,13 +855,13 @@ input OrganizationWhereInput {
   id_not: ID
   id_not_in: [ID!]
   id_starts_with: ID
-  userRegistrationRequired: Boolean
   name: String
   name_contains: String
   name_in: [String!]
   name_not: String
   name_not_in: [String!]
   name_starts_with: String
+  userRegistrationRequired: Boolean
   visibleInSearch: Boolean
 }
 
@@ -652,11 +901,11 @@ type Plugin {
   pluginCreatedBy: String!
   pluginDesc: String!
   pluginName: String!
-  uninstalledOrgs: [ID!]!
+  uninstalledOrgs: [ID!]
 }
 
 type PluginField {
-  createdAt: DateTime
+  createdAt: DateTime!
   key: String!
   status: Status!
   value: String!
@@ -681,8 +930,8 @@ type Post {
   _id: ID
   commentCount: Int
   comments: [Comment]
-  createdAt: DateTime
-  creator: User!
+  createdAt: DateTime!
+  creator: User
   imageUrl: URL
   likeCount: Int
   likedBy: [User]
@@ -690,6 +939,7 @@ type Post {
   pinned: Boolean
   text: String!
   title: String
+  updatedAt: DateTime!
   videoUrl: URL
 }
 
@@ -768,11 +1018,20 @@ input PostWhereInput {
 }
 
 type Query {
+  actionItem(id: ID!): ActionItem
+  actionItemCategoriesByOrganization(organizationId: ID!): [ActionItemCategory]
+  actionItemCategory(id: ID!): ActionItemCategory
+  actionItemsByEvent(eventId: ID!): [ActionItem]
+  actionItemsByOrganization(organizationId: ID!): [ActionItem]
   adminPlugin(orgId: ID!): [Plugin]
+  agendaCategory(id: ID!): AgendaCategory!
   checkAuth: User!
+  customDataByOrganization(organizationId: ID!): [UserCustomData!]!
+  customFieldsByOrganization(id: ID!): [OrganizationCustomField]
   directChatsByUserID(id: ID!): [DirectChat]
   directChatsMessagesByChatID(id: ID!): [DirectChatMessage]
   event(id: ID!): Event
+  eventVolunteersByEvent(id: ID!): [EventVolunteer]
   eventsByOrganization(id: ID, orderBy: EventOrderByInput): [Event]
   eventsByOrganizationConnection(
     first: Int
@@ -792,8 +1051,9 @@ type Query {
   getPlugins: [Plugin]
   getlanguage(lang_code: String!): [Translation]
   hasSubmittedFeedback(eventId: ID!, userId: ID!): Boolean
+  isSampleOrganization(id: ID!): Boolean!
   joinedOrganizations(id: ID): [Organization]
-  me: User!
+  me: UserData!
   myLanguage: String
   organizations(id: ID, orderBy: OrganizationOrderByInput): [Organization]
   organizationsConnection(
@@ -821,15 +1081,21 @@ type Query {
   ): PostConnection
   registeredEventsByUser(id: ID, orderBy: EventOrderByInput): [Event]
   registrantsByEvent(id: ID!): [User]
-  user(id: ID!): User!
+  user(id: ID!): UserData!
   userLanguage(userId: ID!): String
-  users(orderBy: UserOrderByInput, where: UserWhereInput): [User]
+  users(
+    adminApproved: Boolean
+    first: Int
+    orderBy: UserOrderByInput
+    skip: Int
+    where: UserWhereInput
+  ): [UserData]
   usersConnection(
     first: Int
     orderBy: UserOrderByInput
     skip: Int
     where: UserWhereInput
-  ): [User]!
+  ): [UserData]!
 }
 
 input RecaptchaVerification {
@@ -842,6 +1108,12 @@ enum Recurrance {
   ONCE
   WEEKLY
   YEARLY
+}
+
+input RecurrenceRuleInput {
+  count: Int
+  frequency: Frequency
+  weekDays: [WeekDays]
 }
 
 enum Status {
@@ -886,6 +1158,38 @@ type UnauthorizedError implements Error {
   message: String!
 }
 
+input UpdateActionItemCategoryInput {
+  isDisabled: Boolean
+  name: String
+}
+
+input UpdateActionItemInput {
+  assigneeId: ID
+  completionDate: Date
+  dueDate: Date
+  isCompleted: Boolean
+  postCompletionNotes: String
+  preCompletionNotes: String
+}
+
+input UpdateAdvertisementInput {
+  _id: ID!
+  endDate: Date
+  link: String
+  name: String
+  startDate: Date
+  type: AdvertisementType
+}
+
+type UpdateAdvertisementPayload {
+  advertisement: Advertisement
+}
+
+input UpdateAgendaCategoryInput {
+  description: String
+  name: String
+}
+
 input UpdateEventInput {
   allDay: Boolean
   description: String
@@ -903,20 +1207,32 @@ input UpdateEventInput {
   title: String
 }
 
+input UpdateEventVolunteerInput {
+  eventId: ID
+  isAssigned: Boolean
+  isInvited: Boolean
+  response: EventVolunteerResponse
+}
+
 input UpdateOrganizationInput {
+  address: AddressInput
   description: String
-  userRegistrationRequired: Boolean
-  location: String
   name: String
+  userRegistrationRequired: Boolean
   visibleInSearch: Boolean
 }
 
 input UpdateUserInput {
-  id: ID
+  address: AddressInput
+  birthDate: Date
+  educationGrade: EducationGrade
   email: EmailAddress
+  employmentStatus: EmploymentStatus
   firstName: String
+  gender: Gender
   lastName: String
-  applangcode: String
+  maritalStatus: MaritalStatus
+  phone: UserPhoneInput
 }
 
 input UpdateUserPasswordInput {
@@ -939,21 +1255,24 @@ scalar Upload
 
 type User {
   _id: ID!
+  address: Address
   adminApproved: Boolean
-  adminFor: [Organization]
-  appLanguageCode: String!
-  createdAt: DateTime
-  createdEvents: [Event]
-  createdOrganizations: [Organization]
+  appUserProfileId: AppUserProfile
+  birthDate: Date
+  createdAt: DateTime!
+  educationGrade: EducationGrade
   email: EmailAddress!
-  eventAdmin: [Event]
+  employmentStatus: EmploymentStatus
   firstName: String!
+  gender: Gender
   image: String
   joinedOrganizations: [Organization]
   lastName: String!
+  maritalStatus: MaritalStatus
   membershipRequests: [MembershipRequest]
   organizationsBlockedBy: [Organization]
-  pluginCreationAllowed: Boolean
+  phone: UserPhone
+  pluginCreationAllowed: Boolean!
   registeredEvents: [Event]
   tagsAssignedWith(
     after: String
@@ -962,8 +1281,7 @@ type User {
     last: PositiveInt
     organizationId: ID
   ): UserTagsConnection
-  tokenVersion: Int!
-  userType: String
+  updatedAt: DateTime!
 }
 
 input UserAndOrganizationInput {
@@ -977,9 +1295,29 @@ type UserConnection {
   pageInfo: PageInfo!
 }
 
+type UserCustomData {
+  _id: ID!
+  organizationId: ID!
+  userId: ID!
+  values: JSON!
+}
+
+type UserData {
+  appUserProfile: AppUserProfile!
+  user: User!
+}
+
 type UserEdge {
   cursor: String!
   node: User!
+}
+
+type UserFamily {
+  _id: ID!
+  admins: [User!]!
+  creator: User!
+  title: String
+  users: [User!]!
 }
 
 input UserInput {
@@ -992,8 +1330,6 @@ input UserInput {
 }
 
 enum UserOrderByInput {
-  appLanguageCode_ASC
-  appLanguageCode_DESC
   email_ASC
   email_DESC
   firstName_ASC
@@ -1002,6 +1338,18 @@ enum UserOrderByInput {
   id_DESC
   lastName_ASC
   lastName_DESC
+}
+
+type UserPhone {
+  home: PhoneNumber
+  mobile: PhoneNumber
+  work: PhoneNumber
+}
+
+input UserPhoneInput {
+  home: PhoneNumber
+  mobile: PhoneNumber
+  work: PhoneNumber
 }
 
 type UserTag {
@@ -1036,18 +1384,12 @@ type UserTagsConnectionResult {
 
 enum UserType {
   ADMIN
+  NON_USER
   SUPERADMIN
   USER
 }
 
 input UserWhereInput {
-  admin_for: ID
-  appLanguageCode: String
-  appLanguageCode_contains: String
-  appLanguageCode_in: [String!]
-  appLanguageCode_not: String
-  appLanguageCode_not_in: [String!]
-  appLanguageCode_starts_with: String
   email: EmailAddress
   email_contains: EmailAddress
   email_in: [EmailAddress!]
@@ -1091,6 +1433,16 @@ type UsersConnectionResult {
   errors: [ConnectionError!]!
 }
 
+enum WeekDays {
+  FR
+  MO
+  SA
+  SU
+  TH
+  TU
+  WE
+}
+
 input createChatInput {
   organizationId: ID!
   userIds: [ID!]!
@@ -1098,6 +1450,11 @@ input createChatInput {
 
 input createGroupChatInput {
   organizationId: ID!
+  title: String!
+  userIds: [ID!]!
+}
+
+input createUserFamilyInput {
   title: String!
   userIds: [ID!]!
 }
