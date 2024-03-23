@@ -1,55 +1,147 @@
-.cardActions {
+.cardStyle {
+  min-width: 370px;
+  max-width: 370px;
+  height: 470px;
+  margin-bottom: 30px;
+}
+
+.cardAuthorSection {
+  height: 50px;
+  width: 100%;
   display: flex;
-  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
-  gap: 1px;
+  padding: 20px;
 }
 
-.cardActionBtn {
-  background-color: rgba(0, 0, 0, 0);
-  border: none;
-  color: black;
+.profile {
+  width: 28px;
+  height: 28px;
+  margin-right: 12px;
+  font-weight: 600;
+  border-radius: 50%;
 }
 
-.cardActionBtn:hover {
-  background-color: ghostwhite;
-  border: none;
-  color: black !important;
+.profileNotPresent {
+  width: 28px;
+  height: 28px;
+  margin-right: 12px;
+  background-color: rgba(49, 187, 107, 0.12);
+  font-weight: 600;
+  border-radius: 50%;
 }
 
-.imageContainer {
-  max-width: 100%;
-}
-
-.cardHeader {
+.user {
   display: flex;
-  flex-direction: row;
-  gap: 10px;
-  align-items: center;
+  font-weight: 600;
 }
 
-.creatorNameModal {
+.img {
+  width: 100%;
+  min-height: 200px;
+}
+
+.imgNotPresent {
+  background-color: rgba(49, 187, 107, 0.12);
+  width: 100%;
+  min-height: 200px;
+}
+
+.icons {
   display: flex;
-  flex-direction: row;
-  gap: 5px;
-  align-items: center;
-  margin-bottom: 10px;
+  align-items: baseline;
 }
 
-.modalActions {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 1px;
-  margin: 5px 0px;
+.pinIcon {
+  margin-right: 12px;
 }
 
-.textModal {
+.postHeading {
+  font-weight: 600;
+  font-size: 18px;
   margin-top: 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.colorPrimary {
-  background: #31bb6b;
-  color: white;
+.postMessage {
+  margin-top: 5px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.postedOnText {
+  font-size: 18px;
+  color: rgb(128, 128, 128);
+}
+
+.viewPostButton {
+  position: absolute;
+  bottom: 20px;
+  width: 112px;
+  height: 42px;
+}
+
+.buttonContainer {
+  padding: 10px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.postCardContent {
+  padding: 5px 20px;
+}
+
+.menu {
+  position: absolute;
+  background-color: white;
+  width: 150px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 8px;
+  top: calc(10%);
+  left: 55%;
+  z-index: 1;
+}
+
+.menu button {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  border: none;
+  background-color: transparent;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.menu button:hover {
+  background-color: #f5f5f5;
+}
+
+.threeDotButton {
+  border: none;
+  background: none;
+  padding: 0;
+  font: inherit;
   cursor: pointer;
+  outline: inherit;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.threeDotButton:hover {
+  background-color: #31bb6b;
 }

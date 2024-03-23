@@ -1,0 +1,11 @@
+<svg width="20.000000" height="20.000000" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<defs>
+		<clipPath id="clip2_280">
+			<rect id="material-symbols:delete-outline" width="14.000000" height="14.000000" fill="white" fill-opacity="0"/>
+		</clipPath>
+	</defs>
+	<rect id="material-symbols:delete-outline" width="14.000000" height="14.000000" fill="#FFFFFF" fill-opacity="0"/>
+	<g clip-path="url(#clip2_280)">
+		<path id="Vector" d="M4.08337 12.25C3.76254 12.25 3.48779 12.1357 3.25912 11.907C3.03046 11.6783 2.91632 11.4038 2.9167 11.0833L2.9167 3.5L2.33337 3.5L2.33337 2.33333L5.25005 2.33333L5.25005 1.75L8.75005 1.75L8.75005 2.33333L11.6667 2.33333L11.6667 3.5L11.0834 3.5L11.0834 11.0833C11.0834 11.4042 10.969 11.6789 10.7404 11.9076C10.5117 12.1363 10.2372 12.2504 9.9167 12.25L4.08337 12.25ZM9.9167 3.5L4.08337 3.5L4.08337 11.0833L9.9167 11.0833L9.9167 3.5ZM5.25005 9.91667L6.4167 9.91667L6.4167 4.66667L5.25005 4.66667L5.25005 9.91667ZM7.58337 9.91667L8.75005 9.91667L8.75005 4.66667L7.58337 4.66667L7.58337 9.91667Z" fill="#DC3545" fill-opacity="1.000000" fill-rule="nonzero"/>
+	</g>
+</svg>
