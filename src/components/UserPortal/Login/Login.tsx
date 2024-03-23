@@ -48,7 +48,7 @@ export default function login(props: InterfaceLoginProps): JSX.Element {
             password: loginVariables.password,
           },
         });
-        console.log(data);
+
         setItem('token', data.login.accessToken);
         setItem('userId', data.login.user._id);
         navigate('/user/organizations');
