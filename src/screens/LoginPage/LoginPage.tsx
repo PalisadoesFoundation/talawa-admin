@@ -256,7 +256,7 @@ const loginPage = (): JSX.Element => {
         if (
           loginData.login.appUserProfile.isSuperAdmin ||
           (loginData.login.appUserProfile.adminFor.length !== 0 &&
-            loginData.login.user.adminApproved === true)
+            loginData.login.appUserProfile.adminApproved === true)
         ) {
           setItem('FirstName', loginData.login.user.firstName);
           setItem('LastName', loginData.login.user.lastName);
@@ -266,6 +266,7 @@ const loginPage = (): JSX.Element => {
           setItem('IsLoggedIn', 'TRUE');
           setItem('SuperAdmin', loginData.login.appUserProfile.isSuperAdmin);
           setItem('AdminFor', loginData.login.appUserProfile.adminFor);
+          console.log(loginData.login.appUserProfile.adminFor);
           if (getItem('IsLoggedIn') == 'TRUE') {
             navigate(role === 'admin' ? '/orglist' : '/user/organizations');
           }
@@ -274,7 +275,6 @@ const loginPage = (): JSX.Element => {
           setItem('refreshToken', loginData.login.refreshToken);
           setItem('userId', loginData.login.user._id);
           setItem('IsLoggedIn', 'TRUE');
-          setItem('UserType', loginData.login.user.userType);
         }
         setItem(
           'name',
