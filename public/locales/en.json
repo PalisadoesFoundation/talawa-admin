@@ -264,7 +264,6 @@
     "filterByTitle": "Filter by Title",
     "filterByLocation": "Filter by Location",
     "filterByDescription": "Filter by Description",
-    "events": "Events",
     "addEvent": "Add Event",
     "eventDetails": "Event Details",
     "eventTitle": "Title",
@@ -284,7 +283,16 @@
     "enterDescrip": "Enter Description",
     "eventLocation": "Enter Location",
     "eventCreated": "Congratulations! The Event is created.",
-    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too.",
+    "customRecurrence": "Custom Recurrence",
+    "repeatsEvery": "Repeats Every",
+    "repeatsOn": "Repeats On",
+    "ends": "Ends",
+    "never": "Never",
+    "on": "On",
+    "after": "After",
+    "occurences": "occurences",
+    "done": "Done"
   },
   "organizationActionItems": {
     "actionItemCategory": "Action Item Category",
@@ -400,7 +408,7 @@
     "selectCurrency": "Select Currency"
   },
   "orgPost": {
-    "title": "Talawa Posts",
+    "title": "Posts",
     "searchPost": "Search Post",
     "posts": "Posts",
     "createPost": "Create Post",
@@ -469,7 +477,7 @@
     "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
   },
   "blockUnblockUser": {
-    "title": "Talawa Block/Unblock User",
+    "title": "Block/Unblock User",
     "pageName": "Block/Unblock",
     "searchByName": "Search By Name",
     "listOfUsers": "List of Users who spammed",
@@ -535,7 +543,7 @@
     "amount": "Amount"
   },
   "orgSettings": {
-    "title": "Talawa Setting",
+    "title": "Settings",
     "pageName": "Settings",
     "general": "General",
     "actionItemCategories": "Action Item Categories",
@@ -845,7 +853,6 @@
   },
   "advertisement": {
     "title": "Advertisements",
-    "pHeading": "Manage Ads",
     "activeAds": "Active Campaigns",
     "archievedAds": "Completed Campaigns",
     "pMessage": "Ads not present for this campaign.",
