@@ -152,6 +152,7 @@ export const LOGIN_MUTATION = gql`
         adminFor {
           _id
         }
+        adminApproved
         isSuperAdmin
       }
       accessToken
