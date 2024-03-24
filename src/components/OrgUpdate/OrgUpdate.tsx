@@ -17,7 +17,7 @@ import type {
   InterfaceQueryOrganizationsListObject,
   InterfaceAddress,
 } from 'utils/interfaces';
-import countryOptions from 'utils/countryList';
+import { countryOptions } from 'utils/formEnumFields';
 
 interface InterfaceOrgUpdateProps {
   orgId: string;
