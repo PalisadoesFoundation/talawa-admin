@@ -29,7 +29,6 @@ export default function advertisements(): JSX.Element {
       <Row>
         <Col col={8}>
           <div className={styles.justifysp}>
-            <p className={styles.logintitle}>{t('pHeading')}</p>
             <AdvertisementRegister />
             <Tabs
               defaultActiveKey="archievedAds"

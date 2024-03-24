@@ -30,7 +30,7 @@ async function wait(ms = 100): Promise<void> {
 }
 beforeEach(() => {
   setItem('id', '123');
-  setItem('UserType', 'SUPERADMIN');
+  setItem('SuperAdmin', true);
   setItem('FirstName', 'John');
   setItem('LastName', 'Doe');
 });

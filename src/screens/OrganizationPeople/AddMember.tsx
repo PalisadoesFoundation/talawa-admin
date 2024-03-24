@@ -1,33 +1,33 @@
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
-import type { ChangeEvent } from 'react';
-import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { Button, Dropdown, Form, InputGroup, Modal } from 'react-bootstrap';
-import {
-  ORGANIZATIONS_LIST,
-  ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-  USERS_CONNECTION_LIST,
-} from 'GraphQl/Queries/Queries';
-import { useTranslation } from 'react-i18next';
-import styles from './OrganizationPeople.module.css';
-import { toast } from 'react-toastify';
 import { Search } from '@mui/icons-material';
+import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
+import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
-import Loader from 'components/Loader/Loader';
 import {
   ADD_MEMBER_MUTATION,
   SIGNUP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
+import {
+  ORGANIZATIONS_LIST,
+  ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+  USERS_CONNECTION_LIST,
+} from 'GraphQl/Queries/Queries';
+import Loader from 'components/Loader/Loader';
+import type { ChangeEvent } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Button, Dropdown, Form, InputGroup, Modal } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
+import { Link, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
-import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
+import styles from './OrganizationPeople.module.css';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -248,7 +248,10 @@ function AddMember(): JSX.Element {
 
   const handleUserModalSearchChange = (e: any): void => {
     /* istanbul ignore next */
-    if (e.key === 'Enter') {
+    if (
+      (e.key === 'Backspace' && userName === '') ||
+      (e.key === 'Enter' && userName !== '')
+    ) {
       const [firstName, lastName] = userName.split(' ');
 
       const newFilterData = {

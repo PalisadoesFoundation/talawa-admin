@@ -47,16 +47,16 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
     loading: loading,
     error: error,
   } = useQuery(USER_DETAILS, {
-    variables: { id: currentUrl }, // For testing we are sending the id as a prop
+    variables: { userId: currentUrl }, // For testing we are sending the id as a prop
   });
   React.useEffect(() => {
     if (data) {
       setFormState({
         ...formState,
-        firstName: data?.user?.firstName,
-        lastName: data?.user?.lastName,
-        email: data?.user?.email,
-        applangcode: data?.user?.applangcode,
+        firstName: data?.user?.user?.firstName,
+        lastName: data?.user?.user?.lastName,
+        email: data?.user?.user?.email,
+        applangcode: data?.user?.appUserProfile?.appLanguageCode,
       });
     }
   }, [data]);
@@ -75,8 +75,8 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
       const firstName = formState.firstName;
       const lastName = formState.lastName;
       const email = formState.email;
-      const applangcode = formState.applangcode;
       const file = formState.file;
+      const appLangCode = formState.applangcode;
       let toSubmit = true;
       if (firstName.trim().length == 0 || !firstName) {
         toast.warning('First Name cannot be blank!');
@@ -94,16 +94,23 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
       const { data } = await updateUser({
         variables: {
           //Currently on these  fields are supported by the api
-          id: currentUrl,
-          firstName,
-          lastName,
-          email,
-          applangcode,
-          file,
+          data: {
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            appLanguageCode: appLangCode,
+          },
+          file: file,
         },
       });
       /* istanbul ignore next */
       if (data) {
+        if (getItem('id') === currentUrl) {
+          setItem('FirstName', firstName);
+          setItem('LastName', lastName);
+          setItem('Email', email);
+          setItem('UserImage', file);
+        }
         setFormState({
           firstName: '',
           lastName: '',
@@ -113,12 +120,6 @@ const UserUpdate: React.FC<InterfaceUserUpdateProps> = ({
           file: '',
         });
 
-        if (getItem('id') === currentUrl) {
-          setItem('FirstName', firstName);
-          setItem('LastName', lastName);
-          setItem('Email', email);
-          setItem('UserImage', file);
-        }
         toast.success('Successful updated');
 
         navigate(0);
