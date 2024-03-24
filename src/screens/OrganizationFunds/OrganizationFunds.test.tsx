@@ -127,13 +127,12 @@ describe('Testing OrganizationFunds screen', () => {
     });
     await waitFor(() => {
       expect(screen.getAllByTestId('fundtype')[0]).toHaveTextContent(
-        translations.archived,
+        translations.nonArchive,
       );
     });
-
-    await waitFor(() => {
-      expect(screen.getAllByTestId('fundtype')[0]).toBeInTheDocument();
-    });
+    expect(screen.getAllByTestId('fundtype')[1]).toHaveTextContent(
+      translations.archived,
+    );
   });
   it("opens and closes the 'Create Fund' modal", async () => {
     render(

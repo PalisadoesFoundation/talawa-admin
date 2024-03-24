@@ -36,7 +36,7 @@ export const MOCKS = [
             name: 'Funndds',
             refrenceNumber: '1234',
             taxDeductible: true,
-            isArchived: false,
+            isArchived: true,
             isDefault: false,
             createdAt: '2021-07-01T00:00:00.000Z',
             organizationId: 'organizationId1',
