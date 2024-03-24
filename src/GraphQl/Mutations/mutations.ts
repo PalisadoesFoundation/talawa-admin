@@ -83,8 +83,36 @@ export const ADDRESS_DETAILS_FRAGMENT = gql`
 // to update the details of the user
 
 export const UPDATE_USER_MUTATION = gql`
-  mutation Mutation($data: UpdateUserInput, $file: String) {
-    updateUserProfile(data: $data, file: $file) {
+  mutation UpdateUserProfile(
+    $firstName: String
+    $lastName: String
+    $gender: Gender
+    $email: EmailAddress
+    $phoneNumber: PhoneNumber
+    $birthDate: Date
+    $grade: EducationGrade
+    $empStatus: EmploymentStatus
+    $maritalStatus: MaritalStatus
+    $address: String
+    $state: String
+    $country: String
+    $image: String
+  ) {
+    updateUserProfile(
+      data: {
+        firstName: $firstName
+        lastName: $lastName
+        gender: $gender
+        email: $email
+        phone: { mobile: $phoneNumber }
+        birthDate: $birthDate
+        educationGrade: $grade
+        employmentStatus: $empStatus
+        maritalStatus: $maritalStatus
+        address: { line1: $address, state: $state, countryCode: $country }
+      }
+      file: $image
+    ) {
       _id
     }
   }

@@ -10,6 +10,19 @@ export const CHECK_AUTH = gql`
       lastName
       image
       email
+      birthDate
+      educationGrade
+      employmentStatus
+      gender
+      maritalStatus
+      phone {
+        mobile
+      }
+      address {
+        line1
+        state
+        countryCode
+      }
     }
   }
 `;
@@ -269,8 +282,6 @@ export const EVENT_CHECKINS = gql`
         checkIn {
           _id
           time
-          allotedRoom
-          allotedSeat
         }
       }
     }
@@ -419,6 +430,7 @@ export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
         image
         email
         createdAt
+        userType
       }
     }
   }
