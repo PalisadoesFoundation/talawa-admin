@@ -280,7 +280,7 @@
     "eventCreated": "Toutes nos félicitations! L'événement est créé.",
     "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau.",
     "searchEventName": "Rechercher le nom de l'événement",
-    "eventType": "Type d'événement"
+    "eventType": "Type d'événement",
     "customRecurrence": "Récurrence personnalisée",
     "repeatsEvery": "Se répète tous les",
     "repeatsOn": "Se répète sur",

@@ -50,7 +50,7 @@ function organizationEvents(): JSX.Element {
   const [createEventmodalisOpen, setCreateEventmodalisOpen] = useState(false);
   const [customRecurrenceModalIsOpen, setCustomRecurrenceModalIsOpen] =
     useState<boolean>(false);
-  const [startDate, setStartDate] = React.useState<Date | null>(new Date());
+  const [startDate, setStartDate] = React.useState<Date>(new Date());
   const [endDate, setEndDate] = React.useState<Date | null>(new Date());
   const [viewType, setViewType] = useState<ViewType>(ViewType.MONTH);
   const [alldaychecked, setAllDayChecked] = React.useState(true);
@@ -62,7 +62,7 @@ function organizationEvents(): JSX.Element {
   const [recurrenceRuleState, setRecurrenceRuleState] =
     useState<InterfaceRecurrenceRule>({
       frequency: Frequency.WEEKLY,
-      weekDays: [Days[startDate.getDay()]],
+      weekDays: [Days[startDate?.getDay()]],
       count: undefined,
     });
 
@@ -77,7 +77,7 @@ function organizationEvents(): JSX.Element {
   const { orgId: currentUrl } = useParams();
   const navigate = useNavigate();
 
-  const showCreateEventModal = (): void => {
+  const showInviteModal = (): void => {
     setCreateEventmodalisOpen(true);
   };
   const hideCreateEventModal = (): void => {
@@ -478,7 +478,7 @@ function organizationEvents(): JSX.Element {
                       setRecurrenceRuleState({
                         ...recurrenceRuleState,
                         frequency: Frequency.WEEKLY,
-                        weekDays: [Days[startDate.getDay()]],
+                        weekDays: [Days[startDate?.getDay()]],
                       })
                     }
                     data-testid="weeklyRecurrence"
@@ -488,7 +488,7 @@ function organizationEvents(): JSX.Element {
                         {
                           ...recurrenceRuleState,
                           frequency: Frequency.WEEKLY,
-                          weekDays: [Days[startDate.getDay()]],
+                          weekDays: [Days[startDate?.getDay()]],
                         },
                         startDate,
                         endDate,
