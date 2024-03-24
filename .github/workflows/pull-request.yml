@@ -124,7 +124,7 @@ jobs:
           echo "Number of files changed: $CHANGED_FILES_COUNT"
 
       - name: Check if the number of changed files is less than 20
-        if: steps.changed-files.outputs.all_changed_files_count >= 1
+        if: steps.changed-files.outputs.all_changed_files_count > 20
         env: 
           CHANGED_FILES_COUNT: ${{ steps.changed-files.outputs.all_changed_files_count }}
         run: |
