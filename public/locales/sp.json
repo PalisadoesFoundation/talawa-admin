@@ -272,7 +272,7 @@
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
   },
   "organizationEvents": {
-    "title": "Eventos Talawa",
+    "title": "Eventos",
     "filterByTitle": "Filtrar por Título",
     "filterByLocation": "Filtrar por Ubicación",
     "filterByDescription": "Filtrar por descripción",
@@ -296,6 +296,8 @@
     "enterDescrip": "Introduce la descripción",
     "eventLocation": "Introducir ubicación",
     "eventCreated": "¡Felicidades! Se crea el Evento.",
+    "eventType": "Tipo de evento",
+    "searchEventName": "Buscar nombre del evento",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red.",
     "customRecurrence": "Recurrencia personalizada",
     "repeatsEvery": "Se repite cada",

@@ -272,7 +272,7 @@
     "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।"
   },
   "organizationEvents": {
-    "title": "तलावा इवेंट्स",
+    "title": "आयोजन",
     "filterByTitle": "शीर्षक द्वारा फ़िल्टर करें",
     "filterByLocation": "स्थान के अनुसार फ़िल्टर करें",
     "filterByDescription": "विवरण द्वारा फ़िल्टर करें",
@@ -296,6 +296,8 @@
     "enterDescrip": "विवरण दर्ज करें",
     "eventLocation": "स्थान दर्ज करें",
     "eventCreated": "बधाई हो! इवेंट बनाया गया है।",
+    "searchEventName": "ईवेंट नाम खोजें",
+    "eventType": "ईवेंट प्रकार",
     "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।",
     "customRecurrence": "कस्टम पुनरावृत्ति",
     "repeatsEvery": "दोहराता है हर",
