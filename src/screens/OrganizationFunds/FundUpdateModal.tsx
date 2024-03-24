@@ -13,6 +13,7 @@ interface InterfaceFundUpdateModal {
   taxDeductible: boolean;
   setTaxDeductible: (state: React.SetStateAction<boolean>) => void;
   isArchived: boolean;
+  deleteFundHandler: () => Promise<void>;
   setIsArchived: (state: React.SetStateAction<boolean>) => void;
   isDefault: boolean;
   setIsDefault: (state: React.SetStateAction<boolean>) => void;
@@ -28,6 +29,7 @@ const FundUpdateModal: React.FC<InterfaceFundUpdateModal> = ({
   taxDeductible,
   setTaxDeductible,
   isArchived,
+  deleteFundHandler,
   setIsArchived,
   isDefault,
   setIsDefault,
@@ -40,8 +42,8 @@ const FundUpdateModal: React.FC<InterfaceFundUpdateModal> = ({
         show={fundUpdateModalIsOpen}
         onHide={hideUpdateModal}
       >
-        <Modal.Header>
-          <p className={styles.titlemodal}>{t('fundDetails')} </p>
+        <Modal.Header className={styles.modalHeader}>
+          <p className={styles.titlemodal}>{t('manageFund')} </p>
           <Button
             variant="danger"
             onClick={hideUpdateModal}
@@ -53,10 +55,11 @@ const FundUpdateModal: React.FC<InterfaceFundUpdateModal> = ({
         <Modal.Body>
           <Form onSubmitCapture={updateFundHandler}>
             <Form.Group className="mb-3">
-              <Form.Label>{t('fundName')} </Form.Label>
+              <Form.Label className={styles.label}>{t('fundName')} </Form.Label>
               <Form.Control
                 type="text"
                 placeholder={t('enterfundName')}
+                data-testid="fundNameInput"
                 value={formState.fundName}
                 onChange={(e) =>
                   setFormState({
@@ -66,53 +69,83 @@ const FundUpdateModal: React.FC<InterfaceFundUpdateModal> = ({
                 }
               />
             </Form.Group>
-
-            <div className="d-flex justify-content-between">
-              <Form.Group className="mb-3">
-                <div className="d-flex justify-content-end">
-                  <label>{t('taxDeductible')} </label>
-                  <Form.Switch
-                    type="checkbox"
-                    checked={taxDeductible}
-                    data-testid="taxDeductibleSwitch"
-                    className="ms-2"
-                    onChange={() => setTaxDeductible(!taxDeductible)}
-                  />
-                </div>
-              </Form.Group>
-
-              <Form.Group className="mb-3 ">
-                <div className="d-flex justify-content-end">
-                  <label>{t('archived')} </label>
-                  <Form.Switch
-                    type="checkbox"
-                    className="ms-2"
-                    data-testid="archivedSwitch"
-                    checked={isArchived}
-                    onChange={() => setIsArchived(!isArchived)}
-                  />
-                </div>
-              </Form.Group>
-            </div>
             <Form.Group className="mb-3">
-              <div className="d-flex justify-content-end">
-                <label>{t('default')} </label>
-                <Form.Switch
-                  type="checkbox"
-                  className="ms-2"
-                  data-testid="defaultSwitch"
-                  checked={isDefault}
-                  onChange={() => setIsDefault(!isDefault)}
-                />
-              </div>
+              <Form.Label className={styles.label}> {t('fundId')} </Form.Label>
+              <Form.Control
+                type="text"
+                data-testid="fundIdInput"
+                placeholder={t('enterfundId')}
+                value={formState.fundRef}
+                onChange={(e) =>
+                  setFormState({
+                    ...formState,
+                    fundRef: e.target.value,
+                  })
+                }
+              />
             </Form.Group>
-            <Button
-              type="submit"
-              className={styles.greenregbtn}
-              data-testid="editFundFormSubmitBtn"
-            >
-              {t('fundUpdate')}
-            </Button>
+
+            <div className="d-flex mx-3 flex-column">
+              <div className="d-flex mb-3 justify-content-between">
+                <Form.Group>
+                  <div className="d-flex justify-content-end">
+                    <label>{t('taxDeductible')} </label>
+                    <Form.Switch
+                      type="checkbox"
+                      checked={taxDeductible}
+                      className="ms-2"
+                      data-testid="taxDeductibleSwitch"
+                      onChange={() => setTaxDeductible(!taxDeductible)}
+                    />
+                  </div>
+                </Form.Group>
+                <Form.Group className="ms-3">
+                  <div className="d-flex justify-content-end">
+                    <label>{t('default')} </label>
+                    <Form.Switch
+                      type="checkbox"
+                      className="ms-2"
+                      checked={isDefault}
+                      data-testid="defaultSwitch"
+                      onChange={() => setIsDefault(!isDefault)}
+                    />
+                  </div>
+                </Form.Group>
+              </div>
+              <div className="d-flex mb-3 justify-content-between">
+                <Form.Group className="mb-3">
+                  <div className="d-flex justify-content-end">
+                    <label>{t('archived')} </label>
+                    <Form.Switch
+                      type="checkbox"
+                      className="ms-2"
+                      data-testid="archivedSwitch"
+                      checked={isArchived}
+                      onChange={() => setIsArchived(!isArchived)}
+                    />
+                  </div>
+                </Form.Group>
+              </div>
+            </div>
+            <div className="d-flex justify-content-between mb-2">
+              <Button
+                type="submit"
+                variant="success"
+                className={styles.manageBtn}
+                data-testid="updateFormBtn"
+              >
+                {t('fundUpdate')}
+              </Button>
+              <Button
+                type="button"
+                variant="danger"
+                className={styles.manageBtn}
+                onClick={deleteFundHandler}
+                data-testid="fundDeleteModalDeleteBtn"
+              >
+                {t('fundDelete')}
+              </Button>
+            </div>
           </Form>
         </Modal.Body>
       </Modal>

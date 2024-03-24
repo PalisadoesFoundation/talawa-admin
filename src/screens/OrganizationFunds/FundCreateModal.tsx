@@ -36,7 +36,7 @@ const FundCreateModal: React.FC<InterfaceFundCreateModal> = ({
         show={fundCreateModalIsOpen}
         onHide={hideCreateModal}
       >
-        <Modal.Header>
+        <Modal.Header className={styles.modalHeader}>
           <p className={styles.titlemodal}> {t('fundCreate')}</p>
           <Button
             variant="danger"
@@ -49,7 +49,7 @@ const FundCreateModal: React.FC<InterfaceFundCreateModal> = ({
         <Modal.Body>
           <Form onSubmitCapture={createFundHandler}>
             <Form.Group className="mb-3">
-              <Form.Label>{t('fundName')} </Form.Label>
+              <Form.Label className={styles.label}>{t('fundName')} </Form.Label>
               <Form.Control
                 type="text"
                 placeholder={t('enterfundName')}
@@ -63,7 +63,7 @@ const FundCreateModal: React.FC<InterfaceFundCreateModal> = ({
               />
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label> {t('fundId')} </Form.Label>
+              <Form.Label className={styles.label}> {t('fundId')} </Form.Label>
               <Form.Control
                 type="text"
                 placeholder={t('enterfundId')}
@@ -76,24 +76,26 @@ const FundCreateModal: React.FC<InterfaceFundCreateModal> = ({
                 }
               />
             </Form.Group>
-            <div className="d-flex-col ">
-              <Form.Group className="mb-3">
+            <div className="d-flex mb-3">
+              <Form.Group>
                 <div className="d-flex justify-content-end">
                   <label>{t('taxDeductible')} </label>
                   <Form.Switch
                     type="checkbox"
                     checked={taxDeductible}
+                    data-testid="setTaxDeductibleSwitch"
                     className="ms-2"
                     onChange={() => setTaxDeductible(!taxDeductible)}
                   />
                 </div>
               </Form.Group>
-              <Form.Group className="mb-3">
+              <Form.Group className="ms-3">
                 <div className="d-flex justify-content-end">
                   <label>{t('default')} </label>
                   <Form.Switch
                     type="checkbox"
                     className="ms-2"
+                    data-testid="setDefaultSwitch"
                     checked={isDefault}
                     onChange={() => setIsDefault(!isDefault)}
                   />

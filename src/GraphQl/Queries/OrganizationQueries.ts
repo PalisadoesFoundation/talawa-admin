@@ -183,25 +183,3 @@ export const ORGANIZATION_ADMINS_LIST = gql`
     }
   }
 `;
-
-/**
- * GraphQL query to retrieve the list of members for a specific organization.
- *
- * @param id - The ID of the organization for which members are being retrieved.
- * @returns The list of members associated with the organization.
- */
-export const ORGANIZATION_FUNDS = gql`
-  query Organizations($id: ID!) {
-    organizations(id: $id) {
-      funds {
-        _id
-        name
-        refrenceNumber
-        taxDeductible
-        isArchived
-        isDefault
-        createdAt
-      }
-    }
-  }
-`;
