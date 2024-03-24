@@ -79,7 +79,7 @@ jobs:
         uses: tj-actions/changed-files@v40
         with:
           files: |
-            .github/**  
+            .github/**
             env.example
             .node-version
             .husky/**
@@ -95,6 +95,11 @@ jobs:
             CODEOWNERS
             LICENSE
             setup.ts
+
+      - name: Debug
+        run: |
+          echo "Any changed: ${{ steps.changed-unauth-files.outputs.any_changed }}"
+          echo "All changed files: ${{ steps.changed-unauth-files.outputs.all_changed_files }}"
             
       - name: List all changed unauthorized files
         if: steps.changed-unauth-files.outputs.any_changed == 'true'
