@@ -4,12 +4,6 @@ export interface InterfaceUserType {
     lastName: string;
     image: string | null;
     email: string;
-    userType: string;
-    adminFor: {
-      _id: string;
-      name: string;
-      image: string | null;
-    }[];
   };
 }
 
@@ -245,43 +239,53 @@ export interface InterfaceQueryBlockPageMemberListItem {
 }
 
 export interface InterfaceQueryUserListItem {
-  _id: string;
-  firstName: string;
-  lastName: string;
-  image: string | null;
-  email: string;
-  userType: string;
-  adminFor: { _id: string }[];
-  adminApproved: boolean;
-  organizationsBlockedBy: {
+  user: {
     _id: string;
-    name: string;
-    address: InterfaceAddress;
+    firstName: string;
+    lastName: string;
     image: string | null;
-    createdAt: string;
-    creator: {
+    email: string;
+    organizationsBlockedBy: {
       _id: string;
-      firstName: string;
-      lastName: string;
-      email: string;
+      name: string;
       image: string | null;
-    };
-  }[];
-  joinedOrganizations: {
+      address: InterfaceAddress;
+      creator: {
+        _id: string;
+        firstName: string;
+        lastName: string;
+        email: string;
+        image: string | null;
+      };
+      createdAt: string;
+    }[];
+    joinedOrganizations: {
+      _id: string;
+      name: string;
+      address: InterfaceAddress;
+      image: string | null;
+      createdAt: string;
+      creator: {
+        _id: string;
+        firstName: string;
+        lastName: string;
+        email: string;
+        image: string | null;
+      };
+    }[];
+    createdAt: string;
+    registeredEvents: { _id: string }[];
+    membershipRequests: { _id: string }[];
+  };
+  appUserProfile: {
     _id: string;
-    name: string;
-    address: InterfaceAddress;
-    image: string | null;
-    createdAt: string;
-    creator: {
-      _id: string;
-      firstName: string;
-      lastName: string;
-      email: string;
-      image: string | null;
-    };
-  }[];
-  createdAt: string;
+    adminApproved: boolean;
+    adminFor: { _id: string }[];
+    isSuperAdmin: boolean;
+    createdOrganizations: { _id: string }[];
+    createdEvents: { _id: string }[];
+    eventAdmin: { _id: string }[];
+  };
 }
 
 export interface InterfaceQueryRequestListItem {

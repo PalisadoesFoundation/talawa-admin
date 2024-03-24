@@ -37,26 +37,12 @@ export const REMOVE_EVENT_ATTENDEE = gql`
  *
  * @param userId - The ID of the user checking in.
  * @param eventId - The ID of the event at which the user is checking in.
- * @param allotedRoom - The room assigned to the user during check-in (optional).
- * @param allotedSeat - The seat assigned to the user during check-in (optional).
  * @returns The updated event object with the user's check-in information.
  */
 
 export const MARK_CHECKIN = gql`
-  mutation checkIn(
-    $userId: ID!
-    $eventId: ID!
-    $allotedRoom: String
-    $allotedSeat: String
-  ) {
-    checkIn(
-      data: {
-        userId: $userId
-        eventId: $eventId
-        allotedRoom: $allotedRoom
-        allotedSeat: $allotedSeat
-      }
-    ) {
+  mutation checkIn($userId: ID!, $eventId: ID!) {
+    checkIn(data: { userId: $userId, eventId: $eventId }) {
       _id
     }
   }

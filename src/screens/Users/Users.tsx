@@ -34,7 +34,11 @@ const Users = (): JSX.Element => {
   const [searchByName, setSearchByName] = useState('');
   const [sortingOption, setSortingOption] = useState('newest');
   const [filteringOption, setFilteringOption] = useState('cancel');
-  const userType = getItem('UserType');
+  const userType = getItem('SuperAdmin')
+    ? 'SUPERADMIN'
+    : getItem('AdminFor')
+      ? 'ADMIN'
+      : 'USER';
   const loggedInUserId = getItem('id');
 
   const {
@@ -176,8 +180,6 @@ const Users = (): JSX.Element => {
     });
   };
 
-  // console.log(usersData);
-
   const handleSorting = (option: string): void => {
     setSortingOption(option);
   };
@@ -191,13 +193,15 @@ const Users = (): JSX.Element => {
     if (sortingOption === 'newest') {
       sortedUsers.sort(
         (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+          new Date(b.user.createdAt).getTime() -
+          new Date(a.user.createdAt).getTime(),
       );
       return sortedUsers;
     } else {
       sortedUsers.sort(
         (a, b) =>
-          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+          new Date(a.user.createdAt).getTime() -
+          new Date(b.user.createdAt).getTime(),
       );
       return sortedUsers;
     }
@@ -217,17 +221,20 @@ const Users = (): JSX.Element => {
       return filteredUsers;
     } else if (filteringOption === 'user') {
       const output = filteredUsers.filter((user) => {
-        return user.userType === 'USER';
+        return user.appUserProfile.adminApproved === false;
       });
       return output;
     } else if (filteringOption === 'admin') {
       const output = filteredUsers.filter((user) => {
-        return user.userType == 'ADMIN';
+        return (
+          user.appUserProfile.isSuperAdmin === false &&
+          user.appUserProfile.adminApproved === true
+        );
       });
       return output;
     } else {
       const output = filteredUsers.filter((user) => {
-        return user.userType == 'SUPERADMIN';
+        return user.appUserProfile.isSuperAdmin === true;
       });
       return output;
     }
@@ -395,17 +402,21 @@ const Users = (): JSX.Element => {
                 </thead>
                 <tbody>
                   {usersData &&
-                    displayedUsers.map((user, index) => {
-                      return (
-                        <UsersTableItem
-                          key={user._id}
-                          index={index}
-                          resetAndRefetch={resetAndRefetch}
-                          user={user}
-                          loggedInUserId={loggedInUserId ? loggedInUserId : ''}
-                        />
-                      );
-                    })}
+                    displayedUsers.map(
+                      (user: InterfaceQueryUserListItem, index: number) => {
+                        return (
+                          <UsersTableItem
+                            key={user.user._id}
+                            index={index}
+                            resetAndRefetch={resetAndRefetch}
+                            user={user}
+                            loggedInUserId={
+                              loggedInUserId ? loggedInUserId : ''
+                            }
+                          />
+                        );
+                      },
+                    )}
                 </tbody>
               </Table>
             </InfiniteScroll>

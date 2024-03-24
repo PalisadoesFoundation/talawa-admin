@@ -33,8 +33,11 @@ const MOCKS = [
         login: {
           user: {
             _id: '1',
-            userType: 'ADMIN',
             adminApproved: true,
+          },
+          appUserProfile: {
+            isSuperAdmin: false,
+            adminFor: ['123', '456'],
           },
           accessToken: 'accessToken',
           refreshToken: 'refreshToken',
@@ -775,7 +778,7 @@ describe('Testing redirect if already logged in', () => {
   test('Logged in as USER', async () => {
     const { setItem } = useLocalStorage();
     setItem('IsLoggedIn', 'TRUE');
-    setItem('UserType', 'USER');
+    setItem('userId', 'id');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -790,10 +793,10 @@ describe('Testing redirect if already logged in', () => {
     await wait();
     expect(mockNavigate).toHaveBeenCalledWith('/user/organizations');
   });
-  test('Logged as in Admin or SuperAdmin', async () => {
+  test('Logged in as Admin or SuperAdmin', async () => {
     const { setItem } = useLocalStorage();
     setItem('IsLoggedIn', 'TRUE');
-    setItem('UserType', 'ADMIN');
+    setItem('userId', null);
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
