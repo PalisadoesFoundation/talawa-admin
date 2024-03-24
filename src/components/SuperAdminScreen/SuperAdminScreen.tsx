@@ -73,6 +73,7 @@ export default superAdminScreen;
 
 const map: any = {
   orglist: 'orgList',
+  requests: 'requests',
   users: 'users',
   member: 'memberDetail',
 };

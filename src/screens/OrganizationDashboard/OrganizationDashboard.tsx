@@ -103,7 +103,7 @@ function organizationDashboard(): JSX.Element {
 
   useEffect(() => {
     if (errorOrg || errorPost || errorEvent) {
-      console.log('error', errorPost);
+      console.log('error', errorPost?.message);
       navigate('/orglist');
     }
   }, [errorOrg, errorPost, errorEvent]);
@@ -244,6 +244,7 @@ function organizationDashboard(): JSX.Element {
                       (event: InterfaceQueryOrganizationEventListItem) => {
                         return (
                           <CardItem
+                            data-testid="cardItem"
                             type="Event"
                             key={event._id}
                             startdate={event.startDate}

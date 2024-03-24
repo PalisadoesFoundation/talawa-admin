@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import AboutImg from 'assets/images/defaultImg.png';
 import styles from './UserSidebar.module.css';
 import { ListGroup } from 'react-bootstrap';
@@ -13,68 +13,67 @@ import { useTranslation } from 'react-i18next';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import useLocalStorage from 'utils/useLocalstorage';
 
+interface InterfaceOrganization {
+  _id: string;
+  name: string;
+  description: string;
+  image: string | null;
+  __typename: string;
+}
+
 function userSidebar(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userSidebar',
   });
 
-  const [organizations, setOrganizations] = React.useState([]);
-  const [details, setDetails] = React.useState({} as any);
-
   const { getItem } = useLocalStorage();
 
   const userId: string | null = getItem('userId');
 
-  const { data, loading: loadingJoinedOrganizations } = useQuery(
-    USER_JOINED_ORGANIZATIONS,
-    {
-      variables: { id: userId },
-    },
-  );
-
   const {
-    data: data2,
-    loading: loadingUserDetails,
-    error,
-  } = useQuery(USER_DETAILS, {
-    variables: { userId: userId },
+    data: orgsData,
+    loading: loadingOrgs,
+    error: orgsError,
+  } = useQuery(USER_JOINED_ORGANIZATIONS, {
+    variables: { id: userId },
   });
 
-  console.log(error);
+  const {
+    data: userData,
+    loading: loadingUser,
+    error: userError,
+  } = useQuery(USER_DETAILS, {
+    variables: { id: userId },
+  });
 
-  /* istanbul ignore next */
-  React.useEffect(() => {
-    if (data) {
-      setOrganizations(data.users[0].user.joinedOrganizations);
-    }
-  }, [data]);
+  const organizations = orgsData?.users[0]?.user?.joinedOrganizations || [];
+  const userDetails = userData?.user?.user || {};
 
-  /* istanbul ignore next */
-  React.useEffect(() => {
-    if (data2) {
-      setDetails(data2.user.user);
+  useEffect(() => {
+    if (userError || orgsError) {
+      console.log(userError?.message || orgsError?.message);
     }
-  }, [data2]);
+  }, [userError, orgsError]);
 
   return (
     <div className={`${styles.mainContainer} ${styles.boxShadow}`}>
-      {loadingJoinedOrganizations || loadingUserDetails ? (
+      {loadingOrgs || loadingUser ? (
         <>
           <HourglassBottomIcon /> Loading...
         </>
       ) : (
         <>
           <img
-            src={details.image ? details.image : AboutImg}
+            src={userDetails.image || AboutImg}
             className={styles.personImage}
             width="100px"
             height="auto"
           />
           <div className={styles.userDetails}>
             <h6>
-              <b>{`${details.user?.firstName} ${details.user?.lastName}`}</b>
+              <b>{`${userDetails.firstName} ${userDetails.lastName}`}</b>
             </h6>
-            <h6>{details.user?.email}</h6>
+            <h6>{userDetails.email}</h6>
           </div>
           <div className={styles.organizationsConatiner}>
             <div className={styles.heading}>
@@ -82,33 +81,37 @@ function userSidebar(): JSX.Element {
             </div>
             <ListGroup variant="flush">
               {organizations.length ? (
-                organizations.map((organization: any, index) => {
-                  const organizationUrl = `/user/organization/id=${organization._id}`;
+                organizations.map(
+                  (organization: InterfaceOrganization, index: number) => {
+                    const organizationUrl = `/user/organization/id=${organization._id}`;
 
-                  return (
-                    <ListGroup.Item
-                      key={index}
-                      action
-                      className={`${styles.rounded} ${styles.colorLight}`}
-                    >
-                      <Link to={organizationUrl} className={styles.link}>
-                        <div className="d-flex flex-row justify-content-center">
-                          <img
-                            src={
-                              organization.image ? organization.image : AboutImg
-                            }
-                            className={styles.personImage}
-                            width="auto"
-                            height="30px"
-                          />
-                          <div className={styles.orgName}>
-                            {organization.name}
+                    return (
+                      <ListGroup.Item
+                        key={index}
+                        action
+                        className={`${styles.rounded} ${styles.colorLight}`}
+                      >
+                        <Link to={organizationUrl} className={styles.link}>
+                          <div className="d-flex flex-row justify-content-center">
+                            <img
+                              src={
+                                organization.image
+                                  ? organization.image
+                                  : AboutImg
+                              }
+                              className={styles.personImage}
+                              width="auto"
+                              height="30px"
+                            />
+                            <div className={styles.orgName}>
+                              {organization.name}
+                            </div>
                           </div>
-                        </div>
-                      </Link>
-                    </ListGroup.Item>
-                  );
-                })
+                        </Link>
+                      </ListGroup.Item>
+                    );
+                  },
+                )
               ) : (
                 <div className="w-100 text-center">{t('noOrganizations')}</div>
               )}
