@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import AboutImg from 'assets/images/defaultImg.png';
 import styles from './UserSidebar.module.css';
 import { ListGroup } from 'react-bootstrap';
@@ -18,63 +18,54 @@ function userSidebar(): JSX.Element {
     keyPrefix: 'userSidebar',
   });
 
-  const [organizations, setOrganizations] = React.useState([]);
-  const [details, setDetails] = React.useState({} as any);
-
   const { getItem } = useLocalStorage();
 
-  const userId: string | null = getItem('id');
-
-  const { data, loading: loadingJoinedOrganizations } = useQuery(
-    USER_JOINED_ORGANIZATIONS,
-    {
-      variables: { id: userId },
-    },
-  );
+  const userId: string | null = getItem('userId');
 
   const {
-    data: data2,
-    loading: loadingUserDetails,
-    error,
+    data: orgsData,
+    loading: loadingOrgs,
+    error: orgsError,
+  } = useQuery(USER_JOINED_ORGANIZATIONS, {
+    variables: { id: userId },
+  });
+
+  const {
+    data: userData,
+    loading: loadingUser,
+    error: userError,
   } = useQuery(USER_DETAILS, {
     variables: { id: userId },
   });
 
-  console.log(error?.message);
+  const organizations = orgsData?.users[0]?.user?.joinedOrganizations || [];
+  const userDetails = userData?.user?.user || {};
 
-  /* istanbul ignore next */
-  React.useEffect(() => {
-    if (data) {
-      setOrganizations(data.users[0].user.joinedOrganizations);
+  useEffect(() => {
+    if (userError || orgsError) {
+      console.error(userError?.message || orgsError?.message);
     }
-  }, [data]);
-
-  /* istanbul ignore next */
-  React.useEffect(() => {
-    if (data2) {
-      setDetails(data2.user.user);
-    }
-  }, [data2]);
+  }, [userError, orgsError]);
 
   return (
     <div className={`${styles.mainContainer} ${styles.boxShadow}`}>
-      {loadingJoinedOrganizations || loadingUserDetails ? (
+      {loadingOrgs || loadingUser ? (
         <>
           <HourglassBottomIcon /> Loading...
         </>
       ) : (
         <>
           <img
-            src={details.image ? details.image : AboutImg}
+            src={userDetails.image || AboutImg}
             className={styles.personImage}
             width="100px"
             height="auto"
           />
           <div className={styles.userDetails}>
             <h6>
-              <b>{`${details?.firstName} ${details?.lastName}`}</b>
+              <b>{`${userDetails.firstName} ${userDetails.lastName}`}</b>
             </h6>
-            <h6>{details?.email}</h6>
+            <h6>{userDetails.email}</h6>
           </div>
           <div className={styles.organizationsConatiner}>
             <div className={styles.heading}>
@@ -82,7 +73,8 @@ function userSidebar(): JSX.Element {
             </div>
             <ListGroup variant="flush">
               {organizations.length ? (
-                organizations.map((organization: any, index) => {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                organizations.map((organization: any, index: number) => {
                   const organizationUrl = `/user/organization/id=${organization._id}`;
 
                   return (

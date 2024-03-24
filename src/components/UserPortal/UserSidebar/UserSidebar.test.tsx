@@ -1,5 +1,6 @@
 import React from 'react';
-import { act, render } from '@testing-library/react';
+import type { RenderResult } from '@testing-library/react';
+import { act, render, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 
@@ -15,25 +16,24 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import UserSidebar from './UserSidebar';
 import useLocalStorage from 'utils/useLocalstorage';
 
-const { getItem, setItem } = useLocalStorage();
+const { setItem } = useLocalStorage();
 
 const MOCKS = [
   {
     request: {
       query: USER_DETAILS,
       variables: {
-        id: getItem('id'),
+        id: 'properId',
       },
     },
     result: {
       data: {
         user: {
           user: {
-            _id: getItem('id'),
+            _id: 'properId',
             image: null,
             firstName: 'Noble',
             lastName: 'Mittal',
-            adminApproved: true,
             email: 'noble@mittal.com',
             createdAt: '2023-02-18T09:22:27.969Z',
             joinedOrganizations: [],
@@ -41,48 +41,13 @@ const MOCKS = [
             registeredEvents: [],
           },
           appUserProfile: {
-            _id: getItem('id'),
+            _id: 'properId',
+            adminApproved: true,
             adminFor: [],
             createdOrganizations: [],
             createdEvents: [],
             eventAdmin: [],
             isSuperAdmin: true,
-            adminApproved: true,
-          },
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_DETAILS,
-      variables: {
-        id: '2',
-      },
-    },
-    result: {
-      data: {
-        user: {
-          user: {
-            _id: '2',
-            image: 'adssda',
-            firstName: 'Noble',
-            lastName: 'Mittal',
-            email: 'noble@mittal.com',
-            createdAt: '2023-02-18T09:22:27.969Z',
-            adminApproved: true,
-            joinedOrganizations: [],
-            membershipRequests: [],
-            registeredEvents: [],
-          },
-          appUserProfile: {
-            _id: '2',
-            adminFor: [],
-            createdOrganizations: [],
-            createdEvents: [],
-            eventAdmin: [],
-            isSuperAdmin: true,
-            adminApproved: true,
           },
         },
       },
@@ -92,7 +57,7 @@ const MOCKS = [
     request: {
       query: USER_JOINED_ORGANIZATIONS,
       variables: {
-        id: getItem('id'),
+        id: 'properId',
       },
     },
     result: {
@@ -117,9 +82,43 @@ const MOCKS = [
   },
   {
     request: {
+      query: USER_DETAILS,
+      variables: {
+        id: 'imagePresent',
+      },
+    },
+    result: {
+      data: {
+        user: {
+          user: {
+            _id: '2',
+            image: 'adssda',
+            firstName: 'Noble',
+            lastName: 'Mittal',
+            email: 'noble@mittal.com',
+            createdAt: '2023-02-18T09:22:27.969Z',
+            joinedOrganizations: [],
+            membershipRequests: [],
+            registeredEvents: [],
+          },
+          appUserProfile: {
+            _id: '2',
+            adminFor: [],
+            createdOrganizations: [],
+            createdEvents: [],
+            eventAdmin: [],
+            isSuperAdmin: true,
+            adminApproved: true,
+          },
+        },
+      },
+    },
+  },
+  {
+    request: {
       query: USER_JOINED_ORGANIZATIONS,
       variables: {
-        id: '2',
+        id: 'imagePresent',
       },
     },
     result: {
@@ -144,9 +143,43 @@ const MOCKS = [
   },
   {
     request: {
+      query: USER_DETAILS,
+      variables: {
+        id: 'orgEmpty',
+      },
+    },
+    result: {
+      data: {
+        user: {
+          user: {
+            _id: 'orgEmpty',
+            image: null,
+            firstName: 'Noble',
+            lastName: 'Mittal',
+            email: 'noble@mittal.com',
+            createdAt: '2023-02-18T09:22:27.969Z',
+            joinedOrganizations: [],
+            membershipRequests: [],
+            registeredEvents: [],
+          },
+          appUserProfile: {
+            _id: 'orgEmpty',
+            adminApproved: true,
+            adminFor: [],
+            createdOrganizations: [],
+            createdEvents: [],
+            eventAdmin: [],
+            isSuperAdmin: true,
+          },
+        },
+      },
+    },
+  },
+  {
+    request: {
       query: USER_JOINED_ORGANIZATIONS,
       variables: {
-        id: '3',
+        id: 'orgEmpty',
       },
     },
     result: {
@@ -163,7 +196,25 @@ const MOCKS = [
   },
 ];
 
+const MOCKS_ERROR = [
+  {
+    request: {
+      query: USER_JOINED_ORGANIZATIONS,
+      variables: { id: 'errorId' },
+    },
+    error: new Error('Organization query error'),
+  },
+  {
+    request: {
+      query: USER_DETAILS,
+      variables: { id: 'errorId' },
+    },
+    error: new Error('User details query error'),
+  },
+];
+
 const link = new StaticMockLink(MOCKS, true);
+const link2 = new StaticMockLink(MOCKS_ERROR, true);
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -173,91 +224,64 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
+const renderUserSidebar = (
+  userId: string,
+  link: StaticMockLink,
+): RenderResult => {
+  setItem('userId', userId);
+  return render(
+    <MockedProvider addTypename={false} link={link}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <UserSidebar />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+};
+
 describe('Testing UserSidebar Component [User Portal]', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   test('Component should be rendered properly', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <UserSidebar />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
+    renderUserSidebar('properId', link);
     await wait();
   });
 
-  test('Component should be rendered properly when userImage is not undefined', async () => {
-    const beforeid = getItem('id');
-
-    setItem('id', '2');
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <UserSidebar />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
+  test('Component should be rendered properly when userImage is present', async () => {
+    renderUserSidebar('imagePresent', link);
     await wait();
-    if (beforeid) {
-      setItem('id', beforeid);
-    }
   });
 
-  test('Component should be rendered properly when organizationImage is not undefined', async () => {
-    const beforeid = getItem('id');
-
-    setItem('id', '2');
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <UserSidebar />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
+  test('Component should be rendered properly when organizationImage is present', async () => {
+    renderUserSidebar('imagePresent', link);
     await wait();
-
-    if (beforeid) {
-      setItem('id', beforeid);
-    }
   });
 
   test('Component should be rendered properly when joinedOrganizations list is empty', async () => {
-    const beforeid = getItem('id');
-
-    setItem('id', '3');
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <UserSidebar />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
+    renderUserSidebar('orgEmpty', link);
     await wait();
+  });
 
-    if (beforeid) {
-      setItem('id', beforeid);
-    }
+  test('Should log error when either user or organizations query fails', async () => {
+    const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {
+      console.log('Prevent actual console.error from being called');
+    });
+    renderUserSidebar('errorId', link2);
+
+    await waitFor(() => {
+      expect(consoleSpy).toHaveBeenCalledWith(
+        expect.objectContaining({ message: 'Organization query error' }),
+      );
+      expect(consoleSpy).toHaveBeenCalledWith(
+        expect.objectContaining({ message: 'User details query error' }),
+      );
+    });
+
+    consoleSpy.mockRestore();
   });
 });
