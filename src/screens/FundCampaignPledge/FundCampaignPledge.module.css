@@ -1,7 +1,8 @@
-.organizationFundCampaignContainer {
+.pledgeContainer {
   margin: 0.6rem 0;
 }
-.orgFundCampaignButton {
+
+.createPledgeBtn {
   position: absolute;
   top: 1.3rem;
   right: 2rem;
@@ -9,7 +10,8 @@
 .container {
   min-height: 100vh;
 }
-.campaignModal {
+
+.pledgeModal {
   max-width: 80vw;
   margin-top: 2vh;
   margin-left: 13vw;
@@ -41,14 +43,6 @@
     transform 0.2s,
     box-shadow 0.2s;
   width: 100%;
-}
-.campaignNameInfo {
-  font-size: medium;
-  cursor: pointer;
-}
-.campaignNameInfo:hover {
-  color: blue;
-  transform: translateY(-2px);
 }
 .message {
   margin-top: 25%;
