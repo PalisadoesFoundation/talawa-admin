@@ -734,9 +734,10 @@
     "allOrganizations": "所有組織",
     "joinedOrganizations": "加入組織",
     "createdOrganizations": "創建的組織",
-    "search": "搜索",
+    "search": "搜索用户",
     "nothingToShow": "這裡沒有什麼可展示的。",
     "selectOrganization": "選擇組織",
+    "filter": "過濾",
     "organizations": "组织",
     "searchByName": "按名稱搜索"
   },

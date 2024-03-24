@@ -36,9 +36,8 @@
     "eslint-plugin-tsdoc"
   ],
   "rules": {
-    "react/destructuring-assignment": ["off"],
-    // "@typescript-eslint/no-explicit-any": ["off"],
-    "@typescript-eslint/explicit-module-boundary-types": ["off"],
+    "react/destructuring-assignment": "error",
+    "@typescript-eslint/explicit-module-boundary-types": "error",
     "react/no-multi-comp": [
       "error",
       {
@@ -54,7 +53,7 @@
     "import/no-duplicates": "error",
     "tsdoc/syntax": "error",
     "@typescript-eslint/ban-ts-comment": "error",
-    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-explicit-any": "warn",
     "@typescript-eslint/no-inferrable-types": "error",
     "@typescript-eslint/no-non-null-asserted-optional-chain": "error",
     "@typescript-eslint/no-non-null-assertion": "error",
@@ -126,6 +125,7 @@
     // All tests must need not have an assertion
     "jest/expect-expect": 0,
 
+    "react/jsx-indent": ["error", 2],
     "react/jsx-tag-spacing": [
       "warn",
       {

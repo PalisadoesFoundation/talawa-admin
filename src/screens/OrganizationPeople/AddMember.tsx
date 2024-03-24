@@ -248,7 +248,10 @@ function AddMember(): JSX.Element {
 
   const handleUserModalSearchChange = (e: any): void => {
     /* istanbul ignore next */
-    if (e.key === 'Enter') {
+    if (
+      (e.key === 'Backspace' && userName === '') ||
+      (e.key === 'Enter' && userName !== '')
+    ) {
       const [firstName, lastName] = userName.split(' ');
 
       const newFilterData = {
