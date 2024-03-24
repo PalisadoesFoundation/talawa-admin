@@ -37,7 +37,7 @@
   ],
   "rules": {
     "react/destructuring-assignment": "error",
-    "@typescript-eslint/explicit-module-boundary-types": "error",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
     "react/no-multi-comp": [
       "error",
       {
