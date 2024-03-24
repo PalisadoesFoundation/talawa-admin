@@ -25,6 +25,8 @@ let props = {
   name: 'First Last',
   image: '',
   email: 'first@last.com',
+  role: 'Admin',
+  sno: '1',
 };
 
 describe('Testing PeopleCard Component [User Portal]', () => {
