@@ -87,9 +87,11 @@ function AddMember(): JSX.Element {
       memberRefetch({
         orgId: currentUrl,
       });
-    } catch (error: any) {
-      toast.error(error.message);
-      console.log(error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+        console.log(error.message);
+      }
     }
   };
 
@@ -248,7 +250,10 @@ function AddMember(): JSX.Element {
 
   const handleUserModalSearchChange = (e: any): void => {
     /* istanbul ignore next */
-    if (e.key === 'Enter') {
+    if (
+      (e.key === 'Backspace' && userName === '') ||
+      (e.key === 'Enter' && userName !== '')
+    ) {
       const [firstName, lastName] = userName.split(' ');
 
       const newFilterData = {
