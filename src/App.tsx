@@ -36,7 +36,6 @@ import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
 import Advertisements from 'components/Advertisements/Advertisements';
 import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/SecuredRouteForUser';
 import FundCampaignPledge from 'screens/FundCampaignPledge/FundCampaignPledge';
-import React from 'react';
 
 import useLocalStorage from 'utils/useLocalstorage';
 
