@@ -95,11 +95,6 @@ jobs:
             CODEOWNERS
             LICENSE
             setup.ts
-
-      - name: Debug
-        run: |
-          echo "Any changed: ${{ steps.changed-unauth-files.outputs.any_changed }}"
-          echo "All changed files: ${{ steps.changed-unauth-files.outputs.all_changed_files }}"
             
       - name: List all changed unauthorized files
         if: steps.changed-unauth-files.outputs.any_changed == 'true'
@@ -122,16 +117,17 @@ jobs:
         id: changed-files
         uses: tj-actions/changed-files@v40
 
-      - name: Debug
+      - name: Echo number of changed files
+        env: 
+          CHANGED_FILES_COUNT: ${{ steps.changed-files.outputs.all_changed_files_count }}
         run: |
-          echo "Any changed count: ${{ steps.changed-files.outputs.all_changed_files_count }}"
+          echo "Number of files changed: $CHANGED_FILES_COUNT"
 
       - name: Check if the number of changed files is less than 20
         if: steps.changed-files.outputs.all_changed_files_count > 20
         env: 
           CHANGED_FILES_COUNT: ${{ steps.changed-files.outputs.all_changed_files_count }}
         run: |
-          echo "Number of files changed: $CHANGED_FILES_COUNT"
           echo "Error: Too many files (greater than 20) changed in the pull request."
           echo "Possible issues:"
           echo "- Contributor may be merging into an incorrect branch."
