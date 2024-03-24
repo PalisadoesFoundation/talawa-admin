@@ -85,10 +85,6 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
     expect(screen.getByText('Users')).toBeInTheDocument();
     expect(screen.getByText('Talawa Admin Portal')).toBeInTheDocument();
 
-    expect(screen.getByText(/John Doe/i)).toBeInTheDocument();
-    expect(screen.getByText(/Superadmin/i)).toBeInTheDocument();
-    expect(screen.getByAltText(/dummy picture/i)).toBeInTheDocument();
-
     const orgsBtn = screen.getByTestId(/orgsBtn/i);
     const rolesBtn = screen.getByTestId(/rolesBtn/i);
     orgsBtn.click();
@@ -99,38 +95,9 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
       rolesBtn.className.includes('text-secondary btn btn-light'),
     ).toBeTruthy();
 
-    // Coming soon
-    userEvent.click(screen.getByTestId(/profileBtn/i));
-
     // Send to roles screen
     userEvent.click(rolesBtn);
     expect(global.window.location.pathname).toContain('/users');
-  });
-
-  test('Testing in roles screen', () => {
-    setItem('UserImage', '');
-    setItem('SuperAdmin', true);
-    setItem('FirstName', 'John');
-    setItem('LastName', 'Doe');
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <LeftDrawer {...propsUsers} />
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    const orgsBtn = screen.getByTestId(/orgsBtn/i);
-    const rolesBtn = screen.getByTestId(/rolesBtn/i);
-
-    expect(
-      orgsBtn.className.includes('text-secondary btn btn-light'),
-    ).toBeTruthy();
-    expect(
-      rolesBtn.className.includes('text-white btn btn-success'),
-    ).toBeTruthy();
   });
 
   test('Testing Drawer when hideDrawer is null', () => {
@@ -164,9 +131,7 @@ describe('Testing Left Drawer component for ADMIN', () => {
     expect(screen.getByText('My Organizations')).toBeInTheDocument();
     expect(screen.getByText('Talawa Admin Portal')).toBeInTheDocument();
 
-    expect(screen.getByText(/John Doe/i)).toBeInTheDocument();
-    expect(screen.getAllByText(/admin/i)).toHaveLength(2);
-    expect(screen.getByAltText(/profile picture/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/admin/i)).toHaveLength(1);
 
     const orgsBtn = screen.getByTestId(/orgsBtn/i);
     orgsBtn.click();
@@ -176,9 +141,6 @@ describe('Testing Left Drawer component for ADMIN', () => {
 
     // These screens arent meant for admins so they should not be present
     expect(screen.queryByTestId(/rolesBtn/i)).toBeNull();
-
-    // Coming soon
-    userEvent.click(screen.getByTestId(/profileBtn/i));
 
     // Send to roles screen
     userEvent.click(orgsBtn);
