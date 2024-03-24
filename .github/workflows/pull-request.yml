@@ -97,12 +97,12 @@ jobs:
             setup.ts
             
       - name: List all changed unauthorized files
-        if: steps.changed-unauth-files.outputs.any_changed == 'true'
+        if: steps.changed-unauth-files.outputs.any_changed == 'true' || steps.changed-unauth-files.outputs.any_deleted == 'true'
         env: 
           CHANGED_UNAUTH_FILES: ${{ steps.changed-unauth-files.outputs.all_changed_files }}
         run: |
           for file in ${CHANGED_UNAUTH_FILES}; do
-            echo "$file was changed."
+            echo "$file is unauthorized to change/delete"
           done
           exit 1
 
