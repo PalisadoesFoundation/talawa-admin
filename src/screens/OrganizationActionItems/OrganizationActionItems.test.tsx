@@ -25,12 +25,12 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 
 import OrganizationActionItems from './OrganizationActionItems';
 import {
-  MOCKS,
   MOCKS_ERROR_ACTION_ITEM_CATEGORY_LIST_QUERY,
   MOCKS_ERROR_ACTION_ITEM_LIST_QUERY,
   MOCKS_ERROR_MEMBERS_LIST_QUERY,
   MOCKS_ERROR_MUTATIONS,
-} from './OrganizationActionItemMocks';
+} from './OrganizationActionItemsErrorMocks';
+import { MOCKS } from './OrganizationActionItemMocks';
 
 jest.mock('react-toastify', () => ({
   toast: {

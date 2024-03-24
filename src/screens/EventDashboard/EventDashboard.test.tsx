@@ -5,6 +5,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
+import { I18nextProvider } from 'react-i18next';
+import i18nForTest from 'utils/i18nForTest';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { type DefaultOptions } from '@apollo/client';
 import {
@@ -57,8 +59,10 @@ describe('Testing Event Dashboard Screen', () => {
           defaultOptions={defaultOptions}
         >
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <ToastContainer />
-            <EventDashboard />
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <EventDashboard />
+            </I18nextProvider>
           </LocalizationProvider>
         </MockedProvider>
       </BrowserRouter>,

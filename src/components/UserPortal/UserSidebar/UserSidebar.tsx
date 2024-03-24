@@ -23,7 +23,7 @@ function userSidebar(): JSX.Element {
 
   const { getItem } = useLocalStorage();
 
-  const userId: string | null = getItem('userId');
+  const userId: string | null = getItem('id');
 
   const { data, loading: loadingJoinedOrganizations } = useQuery(
     USER_JOINED_ORGANIZATIONS,
@@ -32,22 +32,27 @@ function userSidebar(): JSX.Element {
     },
   );
 
-  const { data: data2, loading: loadingUserDetails } = useQuery(USER_DETAILS, {
+  const {
+    data: data2,
+    loading: loadingUserDetails,
+    error,
+  } = useQuery(USER_DETAILS, {
     variables: { id: userId },
   });
+
+  console.log(error?.message);
 
   /* istanbul ignore next */
   React.useEffect(() => {
     if (data) {
-      setOrganizations(data.users[0].joinedOrganizations);
+      setOrganizations(data.users[0].user.joinedOrganizations);
     }
   }, [data]);
 
   /* istanbul ignore next */
   React.useEffect(() => {
     if (data2) {
-      setDetails(data2.user);
-      console.log(data2, 'user details');
+      setDetails(data2.user.user);
     }
   }, [data2]);
 
@@ -67,9 +72,9 @@ function userSidebar(): JSX.Element {
           />
           <div className={styles.userDetails}>
             <h6>
-              <b>{`${details.firstName} ${details.lastName}`}</b>
+              <b>{`${details?.firstName} ${details?.lastName}`}</b>
             </h6>
-            <h6>{details.email}</h6>
+            <h6>{details?.email}</h6>
           </div>
           <div className={styles.organizationsConatiner}>
             <div className={styles.heading}>

@@ -50,11 +50,13 @@ const leftDrawerOrg = ({
 
   const { getItem } = useLocalStorage();
 
-  const userType = getItem('UserType');
+  const superAdmin = getItem('SuperAdmin');
   const firstName = getItem('FirstName');
   const lastName = getItem('LastName');
   const userImage = getItem('UserImage');
   const navigate = useNavigate();
+
+  const role = superAdmin ? 'SuperAdmin' : 'Admin';
 
   // Set organization data
   useEffect(() => {
@@ -200,7 +202,7 @@ const leftDrawerOrg = ({
                 {firstName} {lastName}
               </span>
               <span className={styles.secondaryText}>
-                {`${userType}`.toLowerCase()}
+                {`${role}`.toLowerCase()}
               </span>
             </div>
             <AngleRightIcon fill={'var(--bs-secondary)'} />

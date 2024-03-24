@@ -18,7 +18,6 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { BACKEND_URL } from 'Constant/constant';
 import useLocalStorage from 'utils/useLocalstorage';
-const { setItem } = useLocalStorage();
 
 const MOCKS = [
   {
@@ -34,8 +33,11 @@ const MOCKS = [
         login: {
           user: {
             _id: '1',
-            userType: 'ADMIN',
             adminApproved: true,
+          },
+          appUserProfile: {
+            isSuperAdmin: false,
+            adminFor: ['123', '456'],
           },
           accessToken: 'accessToken',
           refreshToken: 'refreshToken',
@@ -770,9 +772,31 @@ describe('Testing Login Page Screen', () => {
       expect(recaptchaElement).toHaveValue('test-token2');
     }
   });
+});
 
-  test('should be redirected to orglist if already loggedIn', async () => {
+describe('Testing redirect if already logged in', () => {
+  test('Logged in as USER', async () => {
+    const { setItem } = useLocalStorage();
     setItem('IsLoggedIn', 'TRUE');
+    setItem('userId', 'id');
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+    expect(mockNavigate).toHaveBeenCalledWith('/user/organizations');
+  });
+  test('Logged in as Admin or SuperAdmin', async () => {
+    const { setItem } = useLocalStorage();
+    setItem('IsLoggedIn', 'TRUE');
+    setItem('userId', null);
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -786,7 +810,6 @@ describe('Testing Login Page Screen', () => {
     );
     await wait();
     expect(mockNavigate).toHaveBeenCalledWith('/orglist');
-    localStorage.clear();
   });
 });
 console.log('hey');

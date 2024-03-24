@@ -16,31 +16,53 @@ const MOCKS = [
     request: {
       query: USER_DETAILS,
       variables: {
-        id: '1',
+        userId: '1',
       },
     },
     result: {
       data: {
         user: {
-          __typename: 'User',
-          image: null,
-          firstName: '',
-          lastName: '',
-          email: '',
-          role: 'SUPERADMIN',
-          appLanguageCode: 'en',
-          userType: 'SUPERADMIN',
-          pluginCreationAllowed: true,
-          adminApproved: true,
-          createdAt: '2023-02-18T09:22:27.969Z',
-          adminFor: [],
-          createdOrganizations: [],
-          joinedOrganizations: [],
-          organizationsBlockedBy: [],
-          createdEvents: [],
-          registeredEvents: [],
-          eventAdmin: [],
-          membershipRequests: [],
+          __typename: 'UserData',
+          appUserProfile: {
+            __typename: 'AppUserProfile',
+            _id: '1',
+            adminFor: [
+              { __typename: 'Organization', _id: '65e0df0906dd1228350cfd4a' },
+              { __typename: 'Organization', _id: '65e0e2abb92c9f3e29503d4e' },
+            ],
+            createdEvents: [
+              { __typename: 'Event', _id: '65e32a5b2a1f4288ca1f086a' },
+            ],
+            eventAdmin: [
+              { __typename: 'Event', _id: '65e32a5b2a1f4288ca1f086a' },
+            ],
+            createdOrganizations: [
+              { __typename: 'Organization', _id: '65e0df0906dd1228350cfd4a' },
+              { __typename: 'Organization', _id: '65e0e2abb92c9f3e29503d4e' },
+            ],
+            pluginCreationAllowed: true,
+            appLanguageCode: 'fr',
+            isSuperAdmin: true,
+            adminApproved: true,
+          },
+          user: {
+            __typename: 'User',
+            _id: '1',
+            firstName: 'Aditya',
+            lastName: 'Agarwal',
+            createdAt: '2024-02-26T10:36:33.098Z',
+            image: null,
+            email: 'adi79@gmail.com',
+            joinedOrganizations: [
+              { __typename: 'Organization', _id: '65e0df0906dd1228350cfd4a' },
+              { __typename: 'Organization', _id: '65e0e2abb92c9f3e29503d4e' },
+            ],
+            membershipRequests: [],
+            registeredEvents: [
+              { __typename: 'Event', _id: '65e32a5b2a1f4288ca1f086a' },
+            ],
+            organizationsBlockedBy: [],
+          },
         },
       },
     },
@@ -49,9 +71,13 @@ const MOCKS = [
     request: {
       query: UPDATE_USER_MUTATION,
       variable: {
-        firstName: '',
-        lastName: '',
-        email: '',
+        data: {
+          firstName: 'Adi',
+          lastName: 'Agarwal',
+          email: 'adi79@gmail.com',
+          appLanguageCode: 'en',
+        },
+        file: null,
       },
     },
     result: {
@@ -84,9 +110,9 @@ describe('Testing User Update', () => {
   };
 
   const formData = {
-    firstName: 'Ansh',
-    lastName: 'Goyal',
-    email: 'ansh@gmail.com',
+    firstName: 'Adi',
+    lastName: 'Agarwal',
+    email: 'adi79@gmail.com',
     image: new File(['hello'], 'hello.png', { type: 'image/png' }),
   };
 
@@ -105,14 +131,22 @@ describe('Testing User Update', () => {
 
     await wait();
 
+    userEvent.clear(screen.getByPlaceholderText(/First Name/i));
+
     userEvent.type(
       screen.getByPlaceholderText(/First Name/i),
       formData.firstName,
     );
+
+    userEvent.clear(screen.getByPlaceholderText(/Last Name/i));
+
     userEvent.type(
       screen.getByPlaceholderText(/Last Name/i),
       formData.lastName,
     );
+
+    userEvent.clear(screen.getByPlaceholderText(/Email/i));
+
     userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
     userEvent.selectOptions(screen.getByTestId('applangcode'), 'Français');
     userEvent.upload(screen.getByLabelText(/Display Image:/i), formData.image);
@@ -148,6 +182,10 @@ describe('Testing User Update', () => {
     );
 
     await wait();
+
+    userEvent.clear(screen.getByPlaceholderText(/First Name/i));
+    userEvent.clear(screen.getByPlaceholderText(/Last Name/i));
+    userEvent.clear(screen.getByPlaceholderText(/Email/i));
 
     userEvent.click(screen.getByText(/Save Changes/i));
 

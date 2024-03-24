@@ -22,31 +22,33 @@ const MOCKS = [
     request: {
       query: USER_DETAILS,
       variables: {
-        id: getItem('userId'),
+        id: getItem('id'),
       },
     },
     result: {
       data: {
         user: {
-          __typename: 'User',
-          image: null,
-          firstName: 'Noble',
-          lastName: 'Mittal',
-          email: 'noble@mittal.com',
-          role: 'SUPERADMIN',
-          appLanguageCode: 'en',
-          userType: 'SUPERADMIN',
-          pluginCreationAllowed: true,
-          adminApproved: true,
-          createdAt: '2023-02-18T09:22:27.969Z',
-          adminFor: [],
-          createdOrganizations: [],
-          joinedOrganizations: [],
-          organizationsBlockedBy: [],
-          createdEvents: [],
-          registeredEvents: [],
-          eventAdmin: [],
-          membershipRequests: [],
+          user: {
+            _id: getItem('id'),
+            image: null,
+            firstName: 'Noble',
+            lastName: 'Mittal',
+            adminApproved: true,
+            email: 'noble@mittal.com',
+            createdAt: '2023-02-18T09:22:27.969Z',
+            joinedOrganizations: [],
+            membershipRequests: [],
+            registeredEvents: [],
+          },
+          appUserProfile: {
+            _id: getItem('id'),
+            adminFor: [],
+            createdOrganizations: [],
+            createdEvents: [],
+            eventAdmin: [],
+            isSuperAdmin: true,
+            adminApproved: true,
+          },
         },
       },
     },
@@ -61,25 +63,27 @@ const MOCKS = [
     result: {
       data: {
         user: {
-          __typename: 'User',
-          image: 'adssda',
-          firstName: 'Noble',
-          lastName: 'Mittal',
-          email: 'noble@mittal.com',
-          role: 'SUPERADMIN',
-          appLanguageCode: 'en',
-          userType: 'SUPERADMIN',
-          pluginCreationAllowed: true,
-          adminApproved: true,
-          createdAt: '2023-02-18T09:22:27.969Z',
-          adminFor: [],
-          createdOrganizations: [],
-          joinedOrganizations: [],
-          organizationsBlockedBy: [],
-          createdEvents: [],
-          registeredEvents: [],
-          eventAdmin: [],
-          membershipRequests: [],
+          user: {
+            _id: '2',
+            image: 'adssda',
+            firstName: 'Noble',
+            lastName: 'Mittal',
+            email: 'noble@mittal.com',
+            createdAt: '2023-02-18T09:22:27.969Z',
+            adminApproved: true,
+            joinedOrganizations: [],
+            membershipRequests: [],
+            registeredEvents: [],
+          },
+          appUserProfile: {
+            _id: '2',
+            adminFor: [],
+            createdOrganizations: [],
+            createdEvents: [],
+            eventAdmin: [],
+            isSuperAdmin: true,
+            adminApproved: true,
+          },
         },
       },
     },
@@ -88,22 +92,24 @@ const MOCKS = [
     request: {
       query: USER_JOINED_ORGANIZATIONS,
       variables: {
-        id: getItem('userId'),
+        id: getItem('id'),
       },
     },
     result: {
       data: {
         users: [
           {
-            joinedOrganizations: [
-              {
-                __typename: 'Organization',
-                _id: '6401ff65ce8e8406b8f07af2',
-                name: 'Any Organization',
-                image: '',
-                description: 'New Desc',
-              },
-            ],
+            user: {
+              joinedOrganizations: [
+                {
+                  __typename: 'Organization',
+                  _id: '6401ff65ce8e8406b8f07af2',
+                  name: 'Any Organization',
+                  image: '',
+                  description: 'New Desc',
+                },
+              ],
+            },
           },
         ],
       },
@@ -120,15 +126,17 @@ const MOCKS = [
       data: {
         users: [
           {
-            joinedOrganizations: [
-              {
-                __typename: 'Organization',
-                _id: '6401ff65ce8e8406b8f07af2',
-                name: 'Any Organization',
-                image: 'dadsa',
-                description: 'New Desc',
-              },
-            ],
+            user: {
+              joinedOrganizations: [
+                {
+                  __typename: 'Organization',
+                  _id: '6401ff65ce8e8406b8f07af2',
+                  name: 'Any Organization',
+                  image: 'dadsa',
+                  description: 'New Desc',
+                },
+              ],
+            },
           },
         ],
       },
@@ -145,7 +153,9 @@ const MOCKS = [
       data: {
         users: [
           {
-            joinedOrganizations: [],
+            user: {
+              joinedOrganizations: [],
+            },
           },
         ],
       },
@@ -181,9 +191,9 @@ describe('Testing UserSidebar Component [User Portal]', () => {
   });
 
   test('Component should be rendered properly when userImage is not undefined', async () => {
-    const beforeUserId = getItem('userId');
+    const beforeid = getItem('id');
 
-    setItem('userId', '2');
+    setItem('id', '2');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -198,15 +208,15 @@ describe('Testing UserSidebar Component [User Portal]', () => {
     );
 
     await wait();
-    if (beforeUserId) {
-      setItem('userId', beforeUserId);
+    if (beforeid) {
+      setItem('id', beforeid);
     }
   });
 
   test('Component should be rendered properly when organizationImage is not undefined', async () => {
-    const beforeUserId = getItem('userId');
+    const beforeid = getItem('id');
 
-    setItem('userId', '2');
+    setItem('id', '2');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -222,15 +232,15 @@ describe('Testing UserSidebar Component [User Portal]', () => {
 
     await wait();
 
-    if (beforeUserId) {
-      setItem('userId', beforeUserId);
+    if (beforeid) {
+      setItem('id', beforeid);
     }
   });
 
   test('Component should be rendered properly when joinedOrganizations list is empty', async () => {
-    const beforeUserId = getItem('userId');
+    const beforeid = getItem('id');
 
-    setItem('userId', '3');
+    setItem('id', '3');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -246,8 +256,8 @@ describe('Testing UserSidebar Component [User Portal]', () => {
 
     await wait();
 
-    if (beforeUserId) {
-      setItem('userId', beforeUserId);
+    if (beforeid) {
+      setItem('id', beforeid);
     }
   });
 });

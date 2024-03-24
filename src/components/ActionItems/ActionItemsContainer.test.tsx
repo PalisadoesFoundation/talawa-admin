@@ -62,7 +62,6 @@ describe('Testing Action Item Categories Component', () => {
   const formData = {
     assignee: 'Scott Norris',
     preCompletionNotes: 'pre completion notes edited',
-    postCompletionNotes: 'post completion notes',
     dueDate: '02/14/2024',
     completionDate: '02/21/2024',
   };
@@ -147,7 +146,7 @@ describe('Testing Action Item Categories Component', () => {
     );
   });
 
-  test('opens and closes the delete modal correctly', async () => {
+  test('opens and closes the action item status change modal correctly', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
@@ -166,20 +165,20 @@ describe('Testing Action Item Categories Component', () => {
 
     await waitFor(() => {
       expect(
-        screen.getAllByTestId('deleteActionItemModalBtn')[0],
+        screen.getAllByTestId('actionItemStatusChangeCheckbox')[0],
       ).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('deleteActionItemModalBtn')[0]);
+    userEvent.click(screen.getAllByTestId('actionItemStatusChangeCheckbox')[0]);
 
     await waitFor(() => {
       return expect(
-        screen.findByTestId('actionItemDeleteModalCloseBtn'),
+        screen.findByTestId('actionItemStatusChangeModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('actionItemDeleteModalCloseBtn'));
+    userEvent.click(screen.getByTestId('actionItemStatusChangeModalCloseBtn'));
 
     await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('actionItemDeleteModalCloseBtn'),
+      screen.queryByTestId('actionItemStatusChangeModalCloseBtn'),
     );
   });
 
@@ -325,11 +324,11 @@ describe('Testing Action Item Categories Component', () => {
     fireEvent.change(preCompletionNotes, { target: { value: '' } });
     userEvent.type(preCompletionNotes, formData.preCompletionNotes);
 
-    const postCompletionNotes = screen.getByPlaceholderText(
-      translations.postCompletionNotes,
-    );
-    fireEvent.change(postCompletionNotes, { target: { value: '' } });
-    userEvent.type(postCompletionNotes, formData.postCompletionNotes);
+    // const postCompletionNotes = screen.getByPlaceholderText(
+    //   translations.postCompletionNotes,
+    // );
+    // fireEvent.change(postCompletionNotes, { target: { value: '' } });
+    // userEvent.type(postCompletionNotes, formData.postCompletionNotes);
 
     const dueDatePicker = screen.getByLabelText(translations.dueDate);
     fireEvent.change(dueDatePicker, {
@@ -343,10 +342,10 @@ describe('Testing Action Item Categories Component', () => {
       target: { value: formData.completionDate },
     });
 
-    await waitFor(() => {
-      expect(screen.getByTestId('alldayCheck')).toBeInTheDocument();
-    });
-    userEvent.click(screen.getByTestId('alldayCheck'));
+    // await waitFor(() => {
+    //   expect(screen.getByTestId('alldayCheck')).toBeInTheDocument();
+    // });
+    // userEvent.click(screen.getByTestId('alldayCheck'));
 
     await waitFor(() => {
       expect(screen.getByTestId('editActionItemBtn')).toBeInTheDocument();
@@ -397,11 +396,11 @@ describe('Testing Action Item Categories Component', () => {
     fireEvent.change(preCompletionNotes, { target: { value: '' } });
     userEvent.type(preCompletionNotes, formData.preCompletionNotes);
 
-    const postCompletionNotes = screen.getByPlaceholderText(
-      translations.postCompletionNotes,
-    );
-    fireEvent.change(postCompletionNotes, { target: { value: '' } });
-    userEvent.type(postCompletionNotes, formData.postCompletionNotes);
+    // const postCompletionNotes = screen.getByPlaceholderText(
+    //   translations.postCompletionNotes,
+    // );
+    // fireEvent.change(postCompletionNotes, { target: { value: '' } });
+    // userEvent.type(postCompletionNotes, formData.postCompletionNotes);
 
     const dueDatePicker = screen.getByLabelText(translations.dueDate);
     fireEvent.change(dueDatePicker, {
@@ -415,10 +414,10 @@ describe('Testing Action Item Categories Component', () => {
       target: { value: formData.completionDate },
     });
 
-    await waitFor(() => {
-      expect(screen.getByTestId('alldayCheck')).toBeInTheDocument();
-    });
-    userEvent.click(screen.getByTestId('alldayCheck'));
+    // await waitFor(() => {
+    //   expect(screen.getByTestId('alldayCheck')).toBeInTheDocument();
+    // });
+    // userEvent.click(screen.getByTestId('alldayCheck'));
 
     await waitFor(() => {
       expect(screen.getByTestId('editActionItemBtn')).toBeInTheDocument();
@@ -427,6 +426,90 @@ describe('Testing Action Item Categories Component', () => {
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();
+    });
+  });
+
+  test('updates an action item status through the action item status change modal', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <I18nextProvider i18n={i18nForTest}>
+                <ActionItemsContainer {...props} />
+              </I18nextProvider>
+            </LocalizationProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await waitFor(() => {
+      expect(
+        screen.getAllByTestId('actionItemStatusChangeCheckbox')[0],
+      ).toBeInTheDocument();
+    });
+    userEvent.click(screen.getAllByTestId('actionItemStatusChangeCheckbox')[0]);
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('actionItemsStatusChangeNotes'),
+      ).toBeInTheDocument();
+    });
+
+    const postCompletionNotes = screen.getByTestId(
+      'actionItemsStatusChangeNotes',
+    );
+    fireEvent.change(postCompletionNotes, { target: { value: '' } });
+    userEvent.type(
+      postCompletionNotes,
+      'this action item has been completed successfully',
+    );
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('actionItemStatusChangeSubmitBtn'),
+      ).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('actionItemStatusChangeSubmitBtn'));
+
+    await waitFor(() => {
+      expect(toast.success).toBeCalledWith(translations.successfulUpdation);
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.getAllByTestId('actionItemStatusChangeCheckbox')[1],
+      ).toBeInTheDocument();
+    });
+    userEvent.click(screen.getAllByTestId('actionItemStatusChangeCheckbox')[1]);
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('actionItemsStatusChangeNotes'),
+      ).toBeInTheDocument();
+    });
+
+    const preCompletionNotes = screen.getByTestId(
+      'actionItemsStatusChangeNotes',
+    );
+    fireEvent.change(preCompletionNotes, { target: { value: '' } });
+    userEvent.type(
+      preCompletionNotes,
+      'this action item has been made active again',
+    );
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('actionItemStatusChangeSubmitBtn'),
+      ).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('actionItemStatusChangeSubmitBtn'));
+
+    await waitFor(() => {
+      expect(toast.success).toBeCalledWith(translations.successfulUpdation);
     });
   });
 
@@ -449,16 +532,30 @@ describe('Testing Action Item Categories Component', () => {
 
     await waitFor(() => {
       expect(
-        screen.getAllByTestId('deleteActionItemModalBtn')[0],
+        screen.getAllByTestId('previewActionItemModalBtn')[0],
       ).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('deleteActionItemModalBtn')[0]);
+    userEvent.click(screen.getAllByTestId('previewActionItemModalBtn')[0]);
+
+    await waitFor(() => {
+      return expect(
+        screen.findByTestId('previewActionItemModalCloseBtn'),
+      ).resolves.toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('deleteActionItemPreviewModalBtn'),
+      ).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('deleteActionItemPreviewModalBtn'));
 
     await waitFor(() => {
       return expect(
         screen.findByTestId('actionItemDeleteModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
+
     userEvent.click(screen.getByTestId('deleteActionItemBtn'));
 
     await waitFor(() => {
@@ -485,10 +582,23 @@ describe('Testing Action Item Categories Component', () => {
 
     await waitFor(() => {
       expect(
-        screen.getAllByTestId('deleteActionItemModalBtn')[0],
+        screen.getAllByTestId('previewActionItemModalBtn')[0],
       ).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('deleteActionItemModalBtn')[0]);
+    userEvent.click(screen.getAllByTestId('previewActionItemModalBtn')[0]);
+
+    await waitFor(() => {
+      return expect(
+        screen.findByTestId('previewActionItemModalCloseBtn'),
+      ).resolves.toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('deleteActionItemPreviewModalBtn'),
+      ).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('deleteActionItemPreviewModalBtn'));
 
     await waitFor(() => {
       return expect(
@@ -499,6 +609,62 @@ describe('Testing Action Item Categories Component', () => {
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();
+    });
+  });
+
+  test('shows the overlay text on action item notes', async () => {
+    const { getAllByTestId } = render(
+      <MockedProvider addTypename={false} link={link}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <I18nextProvider i18n={i18nForTest}>
+                <ActionItemsContainer {...props} />
+              </I18nextProvider>
+            </LocalizationProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await waitFor(() => {
+      expect(
+        screen.getAllByTestId('actionItemPreCompletionNotesOverlay')[0],
+      ).toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      fireEvent.mouseEnter(
+        getAllByTestId('actionItemPreCompletionNotesOverlay')[0],
+      );
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('popover-actionItem1')).toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      fireEvent.mouseLeave(
+        getAllByTestId('actionItemPreCompletionNotesOverlay')[0],
+      );
+    });
+
+    await waitFor(() => {
+      fireEvent.mouseEnter(
+        getAllByTestId('actionItemPostCompletionNotesOverlay')[0],
+      );
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('popover-actionItem2')).toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      fireEvent.mouseLeave(
+        getAllByTestId('actionItemPostCompletionNotesOverlay')[0],
+      );
     });
   });
 });

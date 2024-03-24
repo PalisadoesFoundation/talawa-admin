@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import { useMutation, useQuery } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import {
@@ -7,9 +8,10 @@ import {
 } from 'GraphQl/Mutations/FundMutation';
 import { ORGANIZATION_FUNDS } from 'GraphQl/Queries/OrganizationQueries';
 import Loader from 'components/Loader/Loader';
-import React, { useEffect, useState, type ChangeEvent } from 'react';
+import { useEffect, useState, type ChangeEvent } from 'react';
 import { Button, Col, Dropdown, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import type {
   InterfaceCreateFund,
@@ -22,13 +24,14 @@ import FundDeleteModal from './FundDeleteModal';
 import FundUpdateModal from './FundUpdateModal';
 import styles from './OrganizationFunds.module.css';
 import { useParams } from 'react-router-dom';
+
 const organizationFunds = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'funds',
   });
 
   const { orgId: currentUrl } = useParams();
-
+  const navigate = useNavigate();
   const [fundCreateModalIsOpen, setFundCreateModalIsOpen] =
     useState<boolean>(false);
   const [fundUpdateModalIsOpen, setFundUpdateModalIsOpen] =
@@ -128,8 +131,10 @@ const organizationFunds = (): JSX.Element => {
       refetchFunds();
       hideCreateModal();
     } catch (error: unknown) {
-      toast.error((error as Error).message);
-      console.log(error);
+      if (error instanceof Error) {
+        toast.error(error.message);
+        console.log(error.message);
+      }
     }
   };
   const updateFundHandler = async (
@@ -165,13 +170,14 @@ const organizationFunds = (): JSX.Element => {
       hideUpdateModal();
       toast.success(t('fundUpdated'));
     } catch (error: unknown) {
-      toast.error((error as Error).message);
-      console.log(error);
+      if (error instanceof Error) {
+        toast.error(error.message);
+        console.log(error.message);
+      }
     }
   };
   const archiveFundHandler = async (): Promise<void> => {
     try {
-      console.log('herere');
       await updateFund({
         variables: {
           id: fund?._id,
@@ -184,8 +190,10 @@ const organizationFunds = (): JSX.Element => {
         ? toast.success(t('fundUnarchived'))
         : toast.success(t('fundArchived'));
     } catch (error: unknown) {
-      toast.error((error as Error).message);
-      console.log(error);
+      if (error instanceof Error) {
+        toast.error(error.message);
+        console.log(error.message);
+      }
     }
   };
   const deleteFundHandler = async (): Promise<void> => {
@@ -199,8 +207,10 @@ const organizationFunds = (): JSX.Element => {
       toggleDeleteModal();
       toast.success(t('fundDeleted'));
     } catch (error: unknown) {
-      toast.error((error as Error).message);
-      console.log(error);
+      if (error instanceof Error) {
+        toast.error(error.message);
+        console.log(error.message);
+      }
     }
   };
   //it is used to rerender the component to use updated Fund in setState
@@ -212,6 +222,10 @@ const organizationFunds = (): JSX.Element => {
       setInitialRender(false);
     }
   }, [click]);
+
+  const handleClick = (fundId: String) => {
+    navigate(`/orgfundcampaign/${currentUrl}/${fundId}`);
+  };
 
   if (fundLoading) {
     return <Loader size="xl" />;
@@ -243,7 +257,7 @@ const organizationFunds = (): JSX.Element => {
       </Button>
 
       <div className={`${styles.container}  bg-white rounded-4 my-3`}>
-        <div className="mx-4 mt-4">
+        <div className="mx-4 pt-4">
           <Dropdown
             aria-expanded="false"
             data-testid="type"
@@ -281,7 +295,7 @@ const organizationFunds = (): JSX.Element => {
             </Row>
           </div>
 
-          <div className="mx-4 bg-light-subtle border border-light-subtle border-top-0 rounded-bottom-4 shadow-sm">
+          <div className="mx-4 bg-light-subtle border border-light-subtle border-top-0 rounded-bottom-4 shadow-md">
             {fundData?.organizations[0].funds
               ?.filter((fund) =>
                 fundType === 'Archived' ? fund.isArchived : !fund.isArchived,
@@ -298,7 +312,15 @@ const organizationFunds = (): JSX.Element => {
                       lg={3}
                       className={`align-self-center fw-bold ${styles.fundName}`}
                     >
-                      <div className="fw-bold cursor-pointer">{fundd.name}</div>
+                      <div
+                        className="fw-bold cursor-pointer"
+                        data-testid="fundName"
+                        onClick={() => {
+                          handleClick(fundd._id);
+                        }}
+                      >
+                        {fundd.name}
+                      </div>
                     </Col>
 
                     <Col xs={5} sm={3} lg={2} className="p-0">

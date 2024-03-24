@@ -8,6 +8,7 @@ import styles from './LeftDrawerEvent.module.css';
 import IconComponent from 'components/IconComponent/IconComponent';
 import { EventRegistrantsWrapper } from 'components/EventRegistrantsModal/EventRegistrantsWrapper';
 import { CheckInWrapper } from 'components/CheckIn/CheckInWrapper';
+import { ActionItemsWrapper } from 'components/ActionItems/ActionItemsWrapper';
 import { EventStatsWrapper } from 'components/EventStats/EventStatsWrapper';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
@@ -100,6 +101,11 @@ const leftDrawerEvent = ({
           <CheckInWrapper
             eventId={event._id}
             key={`${event?._id || 'loading'}CheckIn`}
+          />
+          <ActionItemsWrapper
+            key={`${event?._id || 'loading'} ActionItems`}
+            orgId={event.organization._id}
+            eventId={event._id}
           />
           <EventStatsWrapper
             eventId={event._id}
