@@ -123,9 +123,11 @@ function organizationActionItems(): JSX.Element {
       actionItemsRefetch();
       hideCreateModal();
       toast.success(t('successfulCreation'));
-    } catch (error: any) {
-      toast.error(error.message);
-      console.log(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+        console.log(error.message);
+      }
     }
   };
 

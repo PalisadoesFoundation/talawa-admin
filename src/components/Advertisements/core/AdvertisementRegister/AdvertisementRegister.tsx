@@ -117,9 +117,11 @@ function advertisementRegister({
         });
         handleClose();
       }
-    } catch (error) {
-      toast.error('An error occured, could not create new advertisement');
-      console.log('error occured', error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+        console.log(error.message);
+      }
     }
   };
   const handleUpdate = async (): Promise<void> => {
@@ -181,8 +183,11 @@ function advertisementRegister({
         refetch();
         handleClose();
       }
-    } catch (error: any) {
-      toast.error(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+        console.log(error.message);
+      }
     }
   };
   return (
