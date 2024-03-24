@@ -402,6 +402,30 @@
     "currency": "Moneda",
     "selectCurrency": "Seleccionar moneda"
   },
+  "pledges": {
+    "title": "Compromisos de Campaña de Financiamiento",
+    "volunteers": "Voluntarios",
+    "startDate": "Fecha de Inicio",
+    "endDate": "Fecha de Finalización",
+    "pledgeAmount": "Monto del Compromiso",
+    "pledgeOptions": "Opciones",
+    "pledgeCreated": "Compromiso creado exitosamente",
+    "pledgeUpdated": "Compromiso actualizado exitosamente",
+    "pledgeDeleted": "Compromiso eliminado exitosamente",
+    "addPledge": "Agregar Compromiso",
+    "createPledge": "Crear Compromiso",
+    "currency": "Moneda",
+    "selectCurrency": "Seleccionar Moneda",
+    "updatePledge": "Actualizar Compromiso",
+    "deletePledge": "Eliminar Compromiso",
+    "amount": "Monto",
+    "editPledge": "Editar Compromiso",
+    "deletePledgeMsg": "¿Estás seguro de que quieres eliminar este compromiso?",
+    "no": "No",
+    "yes": "Sí",
+    "noPledges": "No se encontraron compromisos"
+  },
+
   "orgPost": {
     "title": "Publicaciones de Talawa",
     "searchPost": "Buscar Publicación",

@@ -107,6 +107,7 @@ const map: any = {
   orgpost: 'orgPost',
   orgfunds: 'funds',
   orgfundcampaign: 'fundCampaign',
+  fundCampaignPledge: 'pledges',
   orgsetting: 'orgSettings',
   orgstore: 'addOnStore',
   blockuser: 'blockUnblockUser',
