@@ -119,8 +119,8 @@ function advertisementRegister({
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error(error.message);
-        console.log(error.message);
+        toast.error('An error occured, could not create new advertisement');
+        console.log('error occured', error.message);
       }
     }
   };
@@ -183,11 +183,8 @@ function advertisementRegister({
         refetch();
         handleClose();
       }
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-        console.log(error.message);
-      }
+    } catch (error: any) {
+      toast.error(error.message);
     }
   };
   return (
