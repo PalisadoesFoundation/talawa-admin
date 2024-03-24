@@ -11,6 +11,7 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import MemberDetail, { getLanguageName, prettyDate } from './MemberDetail';
+
 const MOCKS1 = [
   {
     request: {
