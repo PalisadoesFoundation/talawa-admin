@@ -109,6 +109,7 @@ jobs:
           for file in ${CHANGED_UNAUTH_FILES}; do
             echo "$file was changed."
           done
+          exit 1
 
   Count-Changed-Files:
     name: Checks if number of files changed is acceptable
@@ -120,6 +121,10 @@ jobs:
       - name: Get changed files
         id: changed-files
         uses: tj-actions/changed-files@v40
+
+      - name: Debug
+        run: |
+          echo "Any changed count: ${{ steps.changed-files.outputs.all_changed_files_count }}"
 
       - name: Check if the number of changed files is less than 20
         if: steps.changed-files.outputs.all_changed_files_count > 20
