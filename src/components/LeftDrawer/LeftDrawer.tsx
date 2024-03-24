@@ -5,6 +5,7 @@ import { ReactComponent as LogoutIcon } from 'assets/svgs/logout.svg';
 import { ReactComponent as OrganizationsIcon } from 'assets/svgs/organizations.svg';
 import { ReactComponent as RolesIcon } from 'assets/svgs/roles.svg';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
+import { ReactComponent as RequestsIcon } from 'assets/svgs/requests.svg';
 import Avatar from 'components/Avatar/Avatar';
 import React from 'react';
 import Button from 'react-bootstrap/Button';
@@ -74,6 +75,30 @@ const leftDrawer = ({ hideDrawer }: InterfaceLeftDrawerProps): JSX.Element => {
               </Button>
             )}
           </NavLink>
+          {role === 'Admin' && (
+            <NavLink to={'/requests'}>
+              {({ isActive }) => (
+                <Button
+                  variant={isActive === true ? 'success' : 'light'}
+                  className={`${
+                    isActive === true ? 'text-white' : 'text-secondary'
+                  }`}
+                  data-testid="requestsBtn"
+                >
+                  <div className={styles.iconWrapper}>
+                    <RequestsIcon
+                      fill={`${
+                        isActive === true
+                          ? 'var(--bs-white)'
+                          : 'var(--bs-secondary)'
+                      }`}
+                    />
+                  </div>
+                  {t('requests')}
+                </Button>
+              )}
+            </NavLink>
+          )}
           {superAdmin && (
             <NavLink to={'/users'}>
               {({ isActive }) => (

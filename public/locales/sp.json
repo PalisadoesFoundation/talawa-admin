@@ -60,6 +60,7 @@
     "menu": "Menú",
     "my organizations": "Mis Organizaciones",
     "users": "Usuarios",
+    "requests": "Solicitudes",
     "logout": "Cerrar sesión"
   },
   "leftDrawerOrg": {
@@ -133,6 +134,23 @@
   "paginationList": {
     "rowsPerPage": "filas por página",
     "all": "Todos"
+  },
+  "requests": {
+    "title": "Solicitudes",
+    "sl_no": "Núm.",
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "accept": "Aceptar",
+    "reject": "Rechazar",
+    "searchRequests": "Buscar solicitudes",
+    "endOfResults": "Fin de los resultados",
+    "noOrgError": "Organizaciones no encontradas, por favor crea una organización a través del panel",
+    "noResultsFoundFor": "No se encontraron resultados para ",
+    "noRequestsFound": "No se encontraron solicitudes",
+    "acceptedSuccessfully": "Solicitud aceptada exitosamente",
+    "rejectedSuccessfully": "Solicitud rechazada exitosamente",
+    "noOrgErrorTitle": "Organizaciones no encontradas",
+    "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control"
   },
   "users": {
     "title": "Roles Talawa",

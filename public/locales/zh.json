@@ -60,6 +60,7 @@
     "menu": "菜单",
     "my organizations": "我的组织",
     "users": "用户",
+    "requests": "请求",
     "logout": "退出登录"
   },
   "leftDrawerOrg": {
@@ -205,6 +206,23 @@
   "paginationList": {
     "rowsPerPage": "每頁行數",
     "all": "全部"
+  },
+  "requests": {
+    "title": "请求",
+    "sl_no": "序号",
+    "name": "姓名",
+    "email": "电子邮件",
+    "accept": "接受",
+    "reject": "拒绝",
+    "searchRequests": "搜索请求",
+    "endOfResults": "结果结束",
+    "noOrgError": "找不到组织，请通过仪表板创建组织",
+    "noResultsFoundFor": "未找到结果 ",
+    "noRequestsFound": "未找到请求",
+    "acceptedSuccessfully": "请求成功接受",
+    "rejectedSuccessfully": "请求成功拒绝",
+    "noOrgErrorTitle": "找不到组织",
+    "noOrgErrorDescription": "请通过仪表板创建一个组织"
   },
   "users": {
     "title": "塔拉瓦角色",

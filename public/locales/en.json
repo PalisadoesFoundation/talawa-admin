@@ -60,6 +60,7 @@
     "menu": "Menu",
     "my organizations": "My Organizations",
     "users": "Users",
+    "requests": "Requests",
     "logout": "Logout"
   },
   "leftDrawerOrg": {
@@ -138,6 +139,23 @@
   "paginationList": {
     "rowsPerPage": "rows per page",
     "all": "All"
+  },
+  "requests": {
+    "title": "Requests",
+    "sl_no": "Sl. No.",
+    "name": "Name",
+    "email": "Email",
+    "accept": "Accept",
+    "reject": "Reject",
+    "searchRequests": "Search requests",
+    "endOfResults": "End of results",
+    "noOrgError": "Organizations not found, please create an organization through dashboard",
+    "noResultsFoundFor": "No results found for ",
+    "noRequestsFound": "No Request Found",
+    "acceptedSuccessfully": "Request accepted successfully",
+    "rejectedSuccessfully": "Request rejected successfully",
+    "noOrgErrorTitle": "Organizations Not Found",
+    "noOrgErrorDescription": "Please create an organization through dashboard"
   },
   "users": {
     "title": "Talawa Roles",
