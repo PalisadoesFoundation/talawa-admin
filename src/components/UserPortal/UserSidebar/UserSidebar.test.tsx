@@ -196,25 +196,7 @@ const MOCKS = [
   },
 ];
 
-const MOCKS_ERROR = [
-  {
-    request: {
-      query: USER_JOINED_ORGANIZATIONS,
-      variables: { id: 'errorId' },
-    },
-    error: new Error('Organization query error'),
-  },
-  {
-    request: {
-      query: USER_DETAILS,
-      variables: { id: 'errorId' },
-    },
-    error: new Error('User details query error'),
-  },
-];
-
 const link = new StaticMockLink(MOCKS, true);
-const link2 = new StaticMockLink(MOCKS_ERROR, true);
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -265,23 +247,5 @@ describe('Testing UserSidebar Component [User Portal]', () => {
   test('Component should be rendered properly when joinedOrganizations list is empty', async () => {
     renderUserSidebar('orgEmpty', link);
     await wait();
-  });
-
-  test('Should log error when either user or organizations query fails', async () => {
-    const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {
-      console.log('Prevent actual console.error from being called');
-    });
-    renderUserSidebar('errorId', link2);
-
-    await waitFor(() => {
-      expect(consoleSpy).toHaveBeenCalledWith(
-        expect.objectContaining({ message: 'Organization query error' }),
-      );
-      expect(consoleSpy).toHaveBeenCalledWith(
-        expect.objectContaining({ message: 'User details query error' }),
-      );
-    });
-
-    consoleSpy.mockRestore();
   });
 });

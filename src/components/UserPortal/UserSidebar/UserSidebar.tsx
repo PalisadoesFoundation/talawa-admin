@@ -51,7 +51,7 @@ function userSidebar(): JSX.Element {
 
   useEffect(() => {
     if (userError || orgsError) {
-      console.error(userError?.message || orgsError?.message);
+      console.log(userError?.message || orgsError?.message);
     }
   }, [userError, orgsError]);
 
