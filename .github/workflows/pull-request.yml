@@ -97,7 +97,7 @@ jobs:
             setup.ts
             
       - name: List all changed unauthorized files
-        if: steps.changed-unauth-files.outputs.any-changed == 'true'
+        if: steps.changed-unauth-files.outputs.any_changed == 'true'
         env: 
           CHANGED_UNAUTH_FILES: ${{ steps.changed-unauth-files.outputs.all_changed_files }}
         run: |
