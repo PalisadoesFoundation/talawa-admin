@@ -23,6 +23,7 @@ import {
   MOCKS_ERROR_ORGANIZATIONS_FUNDS,
   MOCKS_ERROR_REMOVE_FUND,
   MOCKS_ERROR_UPDATE_FUND,
+  NO_FUNDS,
 } from './OrganizationFundsMocks';
 const mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
@@ -47,6 +48,7 @@ const link2 = new StaticMockLink(MOCKS_ERROR_ORGANIZATIONS_FUNDS, true);
 const link3 = new StaticMockLink(MOCKS_ERROR_CREATE_FUND, true);
 const link4 = new StaticMockLink(MOCKS_ERROR_UPDATE_FUND, true);
 const link5 = new StaticMockLink(MOCKS_ERROR_REMOVE_FUND, true);
+const link6 = new StaticMockLink(NO_FUNDS, true);
 
 const translations = JSON.parse(
   JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.funds),
@@ -161,6 +163,23 @@ describe('Testing OrganizationFunds screen', () => {
     await waitForElementToBeRemoved(() =>
       screen.queryByTestId('createFundModalCloseBtn'),
     );
+  });
+  it('noFunds to be in the document', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link6}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              {<OrganizationFunds />}
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+    await wait();
+    await waitFor(() => {
+      expect(screen.getByText(translations.noFundsFound)).toBeInTheDocument();
+    });
   });
   it('creates a new fund', async () => {
     render(

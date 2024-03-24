@@ -106,6 +106,21 @@ export const MOCKS = [
     },
   },
 ];
+export const NO_FUNDS = [
+  {
+    request: {
+      query: FUND_LIST,
+      variables: {
+        id: undefined,
+      },
+    },
+    result: {
+      data: {
+        fundsByOrganization: [],
+      },
+    },
+  },
+];
 export const MOCKS_ERROR_ORGANIZATIONS_FUNDS = [
   {
     request: {
