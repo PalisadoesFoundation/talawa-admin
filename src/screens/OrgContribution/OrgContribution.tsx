@@ -7,7 +7,6 @@ import ContriStats from 'components/ContriStats/ContriStats';
 import OrgContriCards from 'components/OrgContriCards/OrgContriCards';
 import { Form } from 'react-bootstrap';
 import styles from './OrgContribution.module.css';
-console.log('hey');
 
 function orgContribution(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -73,3 +72,5 @@ function orgContribution(): JSX.Element {
 }
 
 export default orgContribution;
+
+console.log('hey');

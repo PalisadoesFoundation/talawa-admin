@@ -11,8 +11,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Check, Clear } from '@mui/icons-material';
 
-console.log('hey');
-
 import {
   REACT_APP_USE_RECAPTCHA,
   RECAPTCHA_SITE_KEY,
@@ -767,3 +765,4 @@ const loginPage = (): JSX.Element => {
 };
 
 export default loginPage;
+console.log('hey');

@@ -17,7 +17,6 @@ interface InterfaceFormStateType {
   eventId?: string;
   preCompletionNotes: string;
 }
-console.log('hey');
 
 interface InterfaceActionItemCreateModalProps {
   actionItemCreateModalIsOpen: boolean;
@@ -154,3 +153,4 @@ const ActionItemCreateModal: React.FC<InterfaceActionItemCreateModalProps> = ({
 };
 
 export default ActionItemCreateModal;
+console.log('hey');

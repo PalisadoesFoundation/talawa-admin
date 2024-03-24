@@ -42,7 +42,6 @@ const StyledTableRow = styled(TableRow)(() => ({
     border: 0,
   },
 }));
-console.log('hey');
 
 function organizationPeople(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -444,3 +443,4 @@ function organizationPeople(): JSX.Element {
 }
 
 export default organizationPeople;
+console.log('hey');
