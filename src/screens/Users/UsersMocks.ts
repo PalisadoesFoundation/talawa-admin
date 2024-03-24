@@ -99,13 +99,13 @@ export const MOCKS = [
             },
             appUserProfile: {
               _id: 'user1',
+              adminApproved: true,
               adminFor: [
                 {
                   _id: '123',
                 },
               ],
               isSuperAdmin: true,
-              adminApproved: true,
               createdOrganizations: [],
               createdEvents: [],
               eventAdmin: [],

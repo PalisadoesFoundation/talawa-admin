@@ -36,6 +36,7 @@ import { useQuery } from '@apollo/client';
 import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
 import Advertisements from 'components/Advertisements/Advertisements';
 import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/SecuredRouteForUser';
+import FundCampaignPledge from 'screens/FundCampaignPledge/FundCampaignPledge';
 
 import useLocalStorage from 'utils/useLocalstorage';
 
@@ -119,6 +120,10 @@ function app(): JSX.Element {
             <Route
               path="/orgfundcampaign/:orgId/:fundId"
               element={<OrganizaitionFundCampiagn />}
+            />
+            <Route
+              path="/fundCampaignPledge/:orgId/:fundCampaignId"
+              element={<FundCampaignPledge />}
             />
             <Route path="/orgcontribution" element={<OrgContribution />} />
             <Route path="/orgpost/:orgId" element={<OrgPost />} />
