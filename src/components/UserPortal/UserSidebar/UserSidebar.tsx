@@ -40,7 +40,7 @@ function userSidebar(): JSX.Element {
     variables: { id: userId },
   });
 
-  console.log(error);
+  console.log(error?.message);
 
   /* istanbul ignore next */
   React.useEffect(() => {
