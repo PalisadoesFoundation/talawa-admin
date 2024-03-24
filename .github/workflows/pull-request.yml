@@ -123,12 +123,12 @@ jobs:
         run: |
           echo "Number of files changed: $CHANGED_FILES_COUNT"
 
-      - name: Check if the number of changed files is less than 20
-        if: steps.changed-files.outputs.all_changed_files_count > 20
+      - name: Check if the number of changed files is less than 100
+        if: steps.changed-files.outputs.all_changed_files_count > 100
         env: 
           CHANGED_FILES_COUNT: ${{ steps.changed-files.outputs.all_changed_files_count }}
         run: |
-          echo "Error: Too many files (greater than 20) changed in the pull request."
+          echo "Error: Too many files (greater than 100) changed in the pull request."
           echo "Possible issues:"
           echo "- Contributor may be merging into an incorrect branch."
           echo "- Source branch may be incorrect please use develop as source branch."
