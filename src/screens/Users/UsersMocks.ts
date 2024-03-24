@@ -41,7 +41,6 @@ export const MOCKS = [
               lastName: 'Doe',
               image: null,
               email: 'john@example.com',
-              adminApproved: true,
               createdAt: '20/06/2022',
               registeredEvents: [],
               membershipRequests: [],
@@ -100,6 +99,7 @@ export const MOCKS = [
             },
             appUserProfile: {
               _id: 'user1',
+              adminApproved: true,
               adminFor: [
                 {
                   _id: '123',
@@ -118,7 +118,6 @@ export const MOCKS = [
               lastName: 'Doe',
               image: null,
               email: 'john@example.com',
-              adminApproved: true,
               createdAt: '20/06/2022',
               registeredEvents: [],
               membershipRequests: [],
@@ -177,6 +176,7 @@ export const MOCKS = [
             },
             appUserProfile: {
               _id: 'user2',
+              adminApproved: true,
               adminFor: [
                 {
                   _id: '123',
@@ -278,7 +278,6 @@ export const MOCKS2 = [
               lastName: 'Doe',
               image: null,
               email: 'john@example.com',
-              adminApproved: true,
               createdAt: '20/06/2022',
               registeredEvents: [],
               membershipRequests: [],
@@ -337,6 +336,7 @@ export const MOCKS2 = [
             },
             appUserProfile: {
               _id: 'user1',
+              adminApproved: true,
               adminFor: [
                 {
                   _id: '123',
@@ -355,7 +355,6 @@ export const MOCKS2 = [
               lastName: 'Doe',
               image: null,
               email: 'john@example.com',
-              adminApproved: true,
               createdAt: '20/06/2022',
               registeredEvents: [],
               membershipRequests: [],
@@ -414,6 +413,7 @@ export const MOCKS2 = [
             },
             appUserProfile: {
               _id: 'user2',
+              adminApproved: true,
               adminFor: [
                 {
                   _id: '123',
