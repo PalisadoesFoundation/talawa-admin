@@ -347,9 +347,7 @@ const organizationFunds = (): JSX.Element => {
                                 align="center"
                                 data-testid="fundCreatedBy"
                               >
-                                {fund.creator
-                                  ? `${fund.creator.firstName} ${fund.creator.lastName}`
-                                  : 'John Doe'}
+                                {fund.creator.firstName} {fund.creator.lastName}
                               </StyledTableCell>
                               <StyledTableCell
                                 align="center"
