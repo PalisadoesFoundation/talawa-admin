@@ -249,39 +249,37 @@ const loginPage = (): JSX.Element => {
 
       /* istanbul ignore next */
       if (loginData) {
-        if (
-          loginData.login.appUserProfile.isSuperAdmin ||
-          (loginData.login.appUserProfile.adminFor.length !== 0 &&
-            loginData.login.appUserProfile.adminApproved === true)
-        ) {
-          setItem('FirstName', loginData.login.user.firstName);
-          setItem('LastName', loginData.login.user.lastName);
-          setItem('token', loginData.login.accessToken);
-          setItem('refreshToken', loginData.login.refreshToken);
-          setItem('id', loginData.login.user._id);
-          setItem('IsLoggedIn', 'TRUE');
-          setItem('SuperAdmin', loginData.login.appUserProfile.isSuperAdmin);
-          setItem('AdminFor', loginData.login.appUserProfile.adminFor);
-          if (getItem('IsLoggedIn') == 'TRUE') {
-            navigate(role === 'admin' ? '/orglist' : '/user/organizations');
-          }
+        const { login } = loginData;
+        const { user, appUserProfile } = login;
+        const isAdmin: boolean =
+          appUserProfile.isSuperAdmin ||
+          (appUserProfile.adminFor.length !== 0 &&
+            appUserProfile.adminApproved === true);
+
+        if ((role === 'user' && isAdmin) || (role === 'admin' && !isAdmin)) {
+          toast.warn(t('notFound'));
+          return;
+        }
+        const loggedInUserId = user._id;
+
+        setItem('token', login.accessToken);
+        setItem('refreshToken', login.refreshToken);
+        setItem('IsLoggedIn', 'TRUE');
+        setItem('name', `${user.firstName} ${user.lastName}`);
+        setItem('email', user.email);
+        setItem('FirstName', user.firstName);
+        setItem('LastName', user.lastName);
+        setItem('UserImage', user.image);
+
+        if (isAdmin) {
+          setItem('id', loggedInUserId);
+          setItem('SuperAdmin', appUserProfile.isSuperAdmin);
+          setItem('AdminFor', appUserProfile.adminFor);
         } else {
-          setItem('token', loginData.login.accessToken);
-          setItem('refreshToken', loginData.login.refreshToken);
-          setItem('userId', loginData.login.user._id);
-          setItem('IsLoggedIn', 'TRUE');
+          setItem('userId', loggedInUserId);
         }
-        setItem(
-          'name',
-          `${loginData.login.user.firstName} ${loginData.login.user.lastName}`,
-        );
-        setItem('email', loginData.login.user.email);
-        setItem('FirstName', loginData.login.user.firstName);
-        setItem('LastName', loginData.login.user.lastName);
-        setItem('UserImage', loginData.login.user.image);
-        if (getItem('IsLoggedIn') == 'TRUE') {
-          navigate(role === 'admin' ? '/orglist' : '/user/organizations');
-        }
+
+        navigate(isAdmin ? '/orglist' : '/user/organizations');
       } else {
         toast.warn(t('notFound'));
       }
