@@ -513,3 +513,11 @@ input::file-selector-button {
   background-color: black;
   color: white;
 }
+
+.noOutline {
+  outline: none;
+}
+
+.Outline {
+  outline: 1px solid var(--bs-gray-400);
+}

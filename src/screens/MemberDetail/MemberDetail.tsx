@@ -50,21 +50,19 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     lastName: '',
     email: '',
     applangcode: '',
-    file: '',
+    image: '',
     gender: '',
     birthDate: '',
-    educationGrade: '',
-    employmentStatus: '',
+    grade: '',
+    empStatus: '',
     maritalStatus: '',
     phone: {
       home: '',
     },
-    address: {
-      line1: '',
-      countryCode: '',
-      city: '',
-      state: '',
-    },
+    address: '',
+    state: '',
+    city: '',
+    country: '',
     pluginCreationAllowed: false,
     adminApproved: false,
   });
@@ -79,15 +77,17 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   };
   const [updateUser] = useMutation(UPDATE_USER_MUTATION);
   const {
-    data: userData,
+    data: user,
     loading: loading,
     error: error,
   } = useQuery(USER_DETAILS, {
     variables: { id: currentUrl }, // For testing we are sending the id as a prop
   });
+  const userData = user?.user;
 
   useEffect(() => {
     if (userData) {
+      console.log(userData);
       setFormState({
         ...formState,
         firstName: userData?.user?.firstName,
@@ -96,23 +96,26 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         applangcode: userData?.user?.applangcode,
         gender: userData?.user?.gender,
         birthDate: userData?.user?.birthDate,
-        educationGrade: userData?.user?.educationGrade,
-        employmentStatus: userData?.user?.employmentStatus,
+        grade: userData?.user?.educationGrade,
+        empStatus: userData?.user?.employmentStatus,
         maritalStatus: userData?.user?.maritalStatus,
         phone: {
           home: userData?.user?.phone?.home,
         },
-        address: {
-          line1: userData?.user?.address?.line1,
-          countryCode: userData?.user?.address?.countryCode,
-          city: userData?.user?.address?.city,
-          state: userData?.user?.address?.state,
-        },
+        address: userData.user?.address?.line1,
+        state: userData?.user?.address?.state,
+        city: userData?.user?.address?.city,
+        country: userData?.user?.address?.countryCode,
         pluginCreationAllowed: userData?.user?.pluginCreationAllowed,
         adminApproved: userData?.user?.adminApproved,
+        image: userData?.user?.image || '',
       });
     }
-  }, [userData]);
+  }, [userData, user]);
+
+  useEffect(() => {
+    console.log(formState);
+  }, [formState]);
 
   useEffect(() => {
     // check component is mounted or not
@@ -126,20 +129,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     setFormState({
       ...formState,
       [name]: value,
-    });
-    // console.log(formState);
-  };
-
-  const handleAddressChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ): void => {
-    const { name, value } = e.target;
-    setFormState({
-      ...formState,
-      address: {
-        ...formState.address,
-        [name]: value,
-      },
     });
     // console.log(formState);
   };
@@ -172,7 +161,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       const lastName = formState.lastName;
       const email = formState.email;
       // const applangcode = formState.applangcode;
-      const file = formState.file;
+      const image = formState.image;
       // const gender = formState.gender;
       let toSubmit = true;
       if (firstName.trim().length == 0 || !firstName) {
@@ -202,7 +191,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
             setItem('FirstName', firstName);
             setItem('LastName', lastName);
             setItem('Email', email);
-            setItem('UserImage', file);
+            setItem('UserImage', image);
           }
           toast.success('Successful updated');
         }
@@ -224,7 +213,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     navigate(`/orgpeople/${currentUrl}`);
   }
 
-  const sanitizedSrc = sanitizeHtml(formState.file, {
+  const sanitizedSrc = sanitizeHtml(formState.image, {
     allowedTags: ['img'],
     allowedAttributes: {
       img: ['src', 'alt'],
@@ -304,7 +293,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     formState={formState}
                     setFormState={setFormState}
                     fieldOptions={educationGradeEnum} // Pass your options array here
-                    fieldName="educationGrade" // Label for the field
+                    fieldName="grade" // Label for the field
                   />
                 </div>
                 <div>
@@ -313,7 +302,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     formState={formState}
                     setFormState={setFormState}
                     fieldOptions={employmentStatusEnum} // Pass your options array here
-                    fieldName="employmentStatus" // Label for the field
+                    fieldName="empStatus" // Label for the field
                   />
                 </div>
                 <div>
@@ -337,11 +326,11 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                       multiple={false}
                       onChange={async (e: React.ChangeEvent): Promise<void> => {
                         const target = e.target as HTMLInputElement;
-                        const file = target.files && target.files[0];
-                        if (file)
+                        const image = target.files && target.files[0];
+                        if (image)
                           setFormState({
                             ...formState,
-                            file: await convertToBase64(file),
+                            image: await convertToBase64(image),
                           });
                       }}
                       data-testid="organisationImage"
@@ -384,44 +373,44 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 <div className="p-2" style={{ width: `82%` }}>
                   <p className="my-0">{t('address')}</p>
                   <input
-                    value={formState.address.line1}
+                    value={formState.address}
                     className={`w-100 rounded border-0 p-2 ${styles.inputColor}`}
                     type="email"
-                    name="line1"
-                    onChange={handleAddressChange}
+                    name="address"
+                    onChange={handleChange}
                     placeholder={t('address')}
                   />
                 </div>
                 <div className="w-25 p-2">
                   <p className="my-0">{t('countryCode')}</p>
                   <input
-                    value={formState.address.countryCode}
+                    value={formState.country}
                     className={`w-100 rounded border-0 p-2 ${styles.inputColor}`}
                     type="text"
-                    name="countryCode"
-                    onChange={handleAddressChange}
+                    name="country"
+                    onChange={handleChange}
                     placeholder={t('countryCode')}
                   />
                 </div>
                 <div className="w-25 p-2">
                   <p className="my-0">{t('city')}</p>
                   <input
-                    value={formState.address.city}
+                    value={formState.city}
                     className={`w-100 rounded border-0 p-2 ${styles.inputColor}`}
                     type="text"
                     name="city"
-                    onChange={handleAddressChange}
+                    onChange={handleChange}
                     placeholder={t('city')}
                   />
                 </div>
                 <div className="w-25 p-2">
                   <p className="my-0">{t('state')}</p>
                   <input
-                    value={formState.address.state}
+                    value={formState.state}
                     className={`w-100 rounded border-0 p-2 ${styles.inputColor}`}
                     type="text"
                     name="state"
-                    onChange={handleAddressChange}
+                    onChange={handleChange}
                     placeholder={t('state')}
                   />
                 </div>
@@ -440,11 +429,11 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               </div>
               <div className="d-flex flex-row p-4">
                 <div className="d-flex flex-column">
-                  {userData?.user?.image ? (
+                  {formState.image ? (
                     <img
                       className={`rounded-circle mx-auto`}
                       style={{ width: '80px', aspectRatio: '1/1' }}
-                      src={sanitizedSrc || userData?.user?.image}
+                      src={sanitizedSrc}
                       data-testid="userImagePresent"
                     />
                   ) : (
@@ -464,9 +453,15 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   <div
                     className={`p-1 bg-white border border-success text-success text-center rounded mt-1 ${styles.WidthFit}`}
                   >
-                    <p className="p-0 m-0 fs-6">{userData?.user?.userType}</p>
+                    <p className="p-0 m-0 fs-6">
+                      {userData?.appUserProfile?.isSuperAdmin
+                        ? 'Super Admin'
+                        : userData?.appUserProfile?.adminFor.length > 0
+                          ? 'Admin'
+                          : 'User'}
+                    </p>
                   </div>
-                  <p className="my-0">{userData?.user?.email}</p>
+                  <p className="my-0">{formState.email}</p>
                   <p className="my-0">
                     <CalendarIcon />
                     Joined on {prettyDate(userData?.user?.createdAt)}
@@ -488,7 +483,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     <input
                       type="checkbox"
                       name="adminApproved"
-                      className="mx-2"
+                      className={`mx-2 ${styles.noOutline}`}
                       checked={formState.adminApproved}
                       onChange={handleToggleChange} // API not supporting this feature
                       data-testid="adminApproved"
@@ -502,7 +497,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     <input
                       type="checkbox"
                       name="pluginCreationAllowed"
-                      className="mx-2"
+                      className={`mx-2 ${styles.noOutline}`}
                       checked={formState.pluginCreationAllowed}
                       onChange={handleToggleChange} // API not supporting this feature
                       data-testid="pluginCreationAllowed"
@@ -575,7 +570,7 @@ export const prettyDate = (param: string): string => {
   const day = date.getDate();
   const month = date.toLocaleString('default', { month: 'long' });
   const year = date.getFullYear();
-  return `${day}} ${month} ${year}`;
+  return `${day} ${month} ${year}`;
 };
 export const getLanguageName = (code: string): string => {
   let language = 'Unavailable';

@@ -8,4 +8,5 @@
   align-items: center;
   justify-content: space-between;
   min-width: 8rem;
+  outline: 1px solid var(--bs-gray-400);
 }

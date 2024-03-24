@@ -464,6 +464,20 @@ export const USER_DETAILS = gql`
         email
         image
         createdAt
+        birthDate
+        educationGrade
+        employmentStatus
+        gender
+        maritalStatus
+        phone {
+          home
+        }
+        address {
+          line1
+          countryCode
+          city
+          state
+        }
         registeredEvents {
           _id
         }
