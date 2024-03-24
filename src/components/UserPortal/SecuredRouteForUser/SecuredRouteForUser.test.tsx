@@ -62,7 +62,12 @@ describe('SecuredRouteForUser', () => {
   test('renders the route when the user is logged in and userType is ADMIN', () => {
     // Set the 'IsLoggedIn' value to 'TRUE' in localStorage to simulate a logged-in user
     setItem('IsLoggedIn', 'TRUE');
-    setItem('UserType', 'ADMIN');
+    setItem('AdminFor', [
+      {
+        _id: '6537904485008f171cf29924',
+        __typename: 'Organization',
+      },
+    ]);
 
     render(
       <MemoryRouter initialEntries={['/user/organizations']}>

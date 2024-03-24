@@ -7,15 +7,9 @@ const { getItem, setItem } = useLocalStorage();
 
 const SecuredRoute = (): JSX.Element => {
   const isLoggedIn = getItem('IsLoggedIn');
-  const userType = getItem('UserType');
+  const adminFor = getItem('AdminFor');
   return isLoggedIn === 'TRUE' ? (
-    <>
-      {userType == 'ADMIN' || userType == 'SUPERADMIN' ? (
-        <Outlet />
-      ) : (
-        <PageNotFound />
-      )}
-    </>
+    <>{adminFor != null ? <Outlet /> : <PageNotFound />}</>
   ) : (
     <Navigate to="/" replace />
   );

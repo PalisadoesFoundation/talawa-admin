@@ -6,9 +6,9 @@ import useLocalStorage from 'utils/useLocalstorage';
 const SecuredRouteForUser = (): JSX.Element => {
   const { getItem } = useLocalStorage();
   const isLoggedIn = getItem('IsLoggedIn');
-  const userType = getItem('UserType');
+  const adminFor = getItem('AdminFor');
   return isLoggedIn === 'TRUE' ? (
-    <>{userType === 'USER' ? <Outlet /> : <PageNotFound />}</>
+    <>{adminFor == undefined ? <Outlet /> : <PageNotFound />}</>
   ) : (
     <Navigate to="/" replace />
   );

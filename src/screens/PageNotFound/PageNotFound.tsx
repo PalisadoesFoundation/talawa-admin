@@ -14,14 +14,14 @@ const PageNotFound = (): JSX.Element => {
   document.title = t('title');
 
   const { getItem } = useLocalStorage();
-  const userType = getItem('UserType');
+  const adminFor = getItem('AdminFor');
 
   return (
     <section className={styles.notfound}>
       <div className="container text-center">
         <div className="brand">
           <img src={Logo} alt="Logo" className="img-fluid" />
-          {userType === 'ADMIN' || userType === 'SUPERADMIN' ? (
+          {adminFor != undefined ? (
             <h3 className="text-uppercase mt-4">{t('talawaAdmin')}</h3>
           ) : (
             <h3 className="text-uppercase mt-4">{t('talawaUser')}</h3>
@@ -31,8 +31,8 @@ const PageNotFound = (): JSX.Element => {
           <span>{t('404')}</span>
         </h1>
         <p>{t('notFoundMsg')}</p>
-        {userType === 'ADMIN' || userType === 'SUPERADMIN' ? (
-          <Link to="/" className="btn btn-outline-success mt-3">
+        {adminFor != undefined ? (
+          <Link to="/orglist" className="btn btn-outline-success mt-3">
             <i className="fas fa-home"></i> {t('backToHome')}
           </Link>
         ) : (
