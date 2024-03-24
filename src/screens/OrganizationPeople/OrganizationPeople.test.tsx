@@ -21,6 +21,7 @@ const members: any[] = [];
 const admins: any[] = [];
 const users: any[] = [];
 
+console.log('hey');
 for (let i = 0; i < 100; i++) {
   members.push({
     __typename: 'User',

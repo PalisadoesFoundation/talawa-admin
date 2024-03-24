@@ -8,6 +8,7 @@ interface InterfaceFundDeleteModal {
   toggleDeleteModal: () => void;
   t: (key: string) => string;
 }
+console.log('hey');
 const FundDeleteModal: React.FC<InterfaceFundDeleteModal> = ({
   fundDeleteModalIsOpen,
   deleteFundHandler,

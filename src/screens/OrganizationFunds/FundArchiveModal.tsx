@@ -8,6 +8,8 @@ interface InterfaceArchiveFund {
   archiveFundHandler: () => Promise<void>;
   t: (key: string) => string;
 }
+console.log('hey');
+
 const FundArchiveModal: React.FC<InterfaceArchiveFund> = ({
   fundArchiveModalIsOpen,
   toggleArchiveModal,

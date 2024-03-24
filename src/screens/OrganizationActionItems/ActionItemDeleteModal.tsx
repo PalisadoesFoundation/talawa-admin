@@ -9,6 +9,8 @@ interface InterfaceActionItemCreateModalProps {
   t: (key: string) => string;
 }
 
+console.log('hey');
+
 const ActionItemPreviewModal: React.FC<InterfaceActionItemCreateModalProps> = ({
   actionItemDeleteModalIsOpen,
   deleteActionItemHandler,

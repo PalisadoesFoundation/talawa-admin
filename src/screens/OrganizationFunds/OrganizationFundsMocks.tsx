@@ -4,6 +4,7 @@ import {
   UPDATE_FUND_MUTATION,
 } from 'GraphQl/Mutations/FundMutation';
 import { ORGANIZATION_FUNDS } from 'GraphQl/Queries/OrganizationQueries';
+console.log('hey');
 
 export const MOCKS = [
   {

@@ -12,6 +12,7 @@ interface InterfaceFormStateType {
   preCompletionNotes: string;
   postCompletionNotes: string;
 }
+console.log('hey');
 
 interface InterfaceActionItemCreateModalProps {
   actionItemPreviewModalIsOpen: boolean;

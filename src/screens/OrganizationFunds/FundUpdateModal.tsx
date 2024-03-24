@@ -18,6 +18,7 @@ interface InterfaceFundUpdateModal {
   setIsDefault: (state: React.SetStateAction<boolean>) => void;
   t: (key: string) => string;
 }
+console.log('hey');
 
 const FundUpdateModal: React.FC<InterfaceFundUpdateModal> = ({
   fundUpdateModalIsOpen,

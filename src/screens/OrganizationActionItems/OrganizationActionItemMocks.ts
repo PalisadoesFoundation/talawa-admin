@@ -6,6 +6,8 @@ import {
   MEMBERS_LIST,
 } from 'GraphQl/Queries/Queries';
 
+console.log('hey');
+
 export const MOCKS = [
   {
     request: {

@@ -33,6 +33,7 @@ jest.mock('react-toastify', () => ({
     error: jest.fn(),
   },
 }));
+console.log('hey');
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {

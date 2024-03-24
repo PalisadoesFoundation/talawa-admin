@@ -15,6 +15,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import MemberDetail, { getLanguageName, prettyDate } from './MemberDetail';
 
+console.log('hey');
 const MOCKS1 = [
   {
     request: {

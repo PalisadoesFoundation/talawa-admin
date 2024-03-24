@@ -22,7 +22,7 @@ import FundDeleteModal from './FundDeleteModal';
 import FundUpdateModal from './FundUpdateModal';
 import styles from './OrganizationFunds.module.css';
 import { useParams } from 'react-router-dom';
-
+console.log('hey');
 const organizationFunds = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'funds',

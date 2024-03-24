@@ -19,6 +19,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { BACKEND_URL } from 'Constant/constant';
 import useLocalStorage from 'utils/useLocalstorage';
 const { setItem } = useLocalStorage();
+console.log('hey');
 
 const MOCKS = [
   {

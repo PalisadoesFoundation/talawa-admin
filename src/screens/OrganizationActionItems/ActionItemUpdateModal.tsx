@@ -17,6 +17,8 @@ interface InterfaceFormStateType {
   postCompletionNotes: string;
 }
 
+console.log('hey');
+
 interface InterfaceActionItemCreateModalProps {
   actionItemUpdateModalIsOpen: boolean;
   hideUpdateModal: () => void;

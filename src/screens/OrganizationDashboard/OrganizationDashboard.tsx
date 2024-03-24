@@ -28,6 +28,7 @@ import type {
   InterfaceQueryOrganizationsListObject,
 } from 'utils/interfaces';
 import styles from './OrganizationDashboard.module.css';
+console.log('hey');
 
 function organizationDashboard(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'dashboard' });

@@ -3,7 +3,7 @@ import {
   ORGANIZATION_EVENT_CONNECTION_LIST,
   ORGANIZATION_POST_LIST,
 } from 'GraphQl/Queries/Queries';
-
+console.log('hey');
 export const MOCKS = [
   {
     request: {

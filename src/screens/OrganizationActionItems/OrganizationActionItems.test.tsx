@@ -18,6 +18,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { toast } from 'react-toastify';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+console.log('hey');
 
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';

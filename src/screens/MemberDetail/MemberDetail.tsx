@@ -18,7 +18,7 @@ import { errorHandler } from 'utils/errorHandler';
 import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
-
+console.log('hey');
 type MemberDetailProps = {
   id?: string; // This is the userId
 };

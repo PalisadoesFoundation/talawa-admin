@@ -18,7 +18,7 @@ async function wait(ms = 100): Promise<void> {
     });
   });
 }
-
+console.log('hey');
 describe('Organisation Contribution Page', () => {
   test('should render props and text elements test for the screen', async () => {
     window.location.assign('/orglist');

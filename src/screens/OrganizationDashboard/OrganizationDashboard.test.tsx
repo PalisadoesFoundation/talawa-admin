@@ -15,6 +15,7 @@ import OrganizationDashboard from './OrganizationDashboard';
 import { EMPTY_MOCKS, ERROR_MOCKS, MOCKS } from './OrganizationDashboardMocks';
 import React from 'react';
 const { setItem } = useLocalStorage();
+console.log('hey');
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
