@@ -22,14 +22,14 @@ const MOCKS = [
     request: {
       query: USER_DETAILS,
       variables: {
-        id: getItem('userId'),
+        id: getItem('id'),
       },
     },
     result: {
       data: {
         user: {
           user: {
-            _id: getItem('userId'),
+            _id: getItem('id'),
             image: null,
             firstName: 'Noble',
             lastName: 'Mittal',
@@ -41,12 +41,13 @@ const MOCKS = [
             registeredEvents: [],
           },
           appUserProfile: {
-            _id: getItem('userId'),
+            _id: getItem('id'),
             adminFor: [],
             createdOrganizations: [],
             createdEvents: [],
             eventAdmin: [],
             isSuperAdmin: true,
+            adminApproved: true,
           },
         },
       },
@@ -81,6 +82,7 @@ const MOCKS = [
             createdEvents: [],
             eventAdmin: [],
             isSuperAdmin: true,
+            adminApproved: true,
           },
         },
       },
@@ -90,7 +92,7 @@ const MOCKS = [
     request: {
       query: USER_JOINED_ORGANIZATIONS,
       variables: {
-        id: getItem('userId'),
+        id: getItem('id'),
       },
     },
     result: {
@@ -189,9 +191,9 @@ describe('Testing UserSidebar Component [User Portal]', () => {
   });
 
   test('Component should be rendered properly when userImage is not undefined', async () => {
-    const beforeUserId = getItem('userId');
+    const beforeid = getItem('id');
 
-    setItem('userId', '2');
+    setItem('id', '2');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -206,15 +208,15 @@ describe('Testing UserSidebar Component [User Portal]', () => {
     );
 
     await wait();
-    if (beforeUserId) {
-      setItem('userId', beforeUserId);
+    if (beforeid) {
+      setItem('id', beforeid);
     }
   });
 
   test('Component should be rendered properly when organizationImage is not undefined', async () => {
-    const beforeUserId = getItem('userId');
+    const beforeid = getItem('id');
 
-    setItem('userId', '2');
+    setItem('id', '2');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -230,15 +232,15 @@ describe('Testing UserSidebar Component [User Portal]', () => {
 
     await wait();
 
-    if (beforeUserId) {
-      setItem('userId', beforeUserId);
+    if (beforeid) {
+      setItem('id', beforeid);
     }
   });
 
   test('Component should be rendered properly when joinedOrganizations list is empty', async () => {
-    const beforeUserId = getItem('userId');
+    const beforeid = getItem('id');
 
-    setItem('userId', '3');
+    setItem('id', '3');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -254,8 +256,8 @@ describe('Testing UserSidebar Component [User Portal]', () => {
 
     await wait();
 
-    if (beforeUserId) {
-      setItem('userId', beforeUserId);
+    if (beforeid) {
+      setItem('id', beforeid);
     }
   });
 });
