@@ -98,7 +98,6 @@ export const MOCKS = [
               ],
             },
             appUserProfile: {
-              adminApproved: true,
               _id: 'user1',
               adminFor: [
                 {
@@ -176,7 +175,6 @@ export const MOCKS = [
               ],
             },
             appUserProfile: {
-              adminApproved: true,
               _id: 'user2',
               adminFor: [
                 {
@@ -337,7 +335,6 @@ export const MOCKS2 = [
               ],
             },
             appUserProfile: {
-              adminApproved: true,
               _id: 'user1',
               adminFor: [
                 {
@@ -415,7 +412,6 @@ export const MOCKS2 = [
               ],
             },
             appUserProfile: {
-              adminApproved: true,
               _id: 'user2',
               adminFor: [
                 {
