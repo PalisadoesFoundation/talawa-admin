@@ -41,7 +41,6 @@ export const MOCKS = [
               lastName: 'Doe',
               image: null,
               email: 'john@example.com',
-              adminApproved: true,
               createdAt: '20/06/2022',
               registeredEvents: [],
               membershipRequests: [],
@@ -99,6 +98,7 @@ export const MOCKS = [
               ],
             },
             appUserProfile: {
+              adminApproved: true,
               _id: 'user1',
               adminFor: [
                 {
@@ -118,7 +118,6 @@ export const MOCKS = [
               lastName: 'Doe',
               image: null,
               email: 'john@example.com',
-              adminApproved: true,
               createdAt: '20/06/2022',
               registeredEvents: [],
               membershipRequests: [],
@@ -176,6 +175,7 @@ export const MOCKS = [
               ],
             },
             appUserProfile: {
+              adminApproved: true,
               _id: 'user2',
               adminFor: [
                 {
@@ -278,7 +278,6 @@ export const MOCKS2 = [
               lastName: 'Doe',
               image: null,
               email: 'john@example.com',
-              adminApproved: true,
               createdAt: '20/06/2022',
               registeredEvents: [],
               membershipRequests: [],
@@ -336,6 +335,7 @@ export const MOCKS2 = [
               ],
             },
             appUserProfile: {
+              adminApproved: true,
               _id: 'user1',
               adminFor: [
                 {
@@ -355,7 +355,6 @@ export const MOCKS2 = [
               lastName: 'Doe',
               image: null,
               email: 'john@example.com',
-              adminApproved: true,
               createdAt: '20/06/2022',
               registeredEvents: [],
               membershipRequests: [],
@@ -413,6 +412,7 @@ export const MOCKS2 = [
               ],
             },
             appUserProfile: {
+              adminApproved: true,
               _id: 'user2',
               adminFor: [
                 {
