@@ -125,7 +125,7 @@ function organizationActionItems(): JSX.Element {
       toast.success(t('successfulCreation'));
     } catch (error: any) {
       toast.error(error.message);
-      console.log(error);
+      console.log(error.message);
     }
   };
 

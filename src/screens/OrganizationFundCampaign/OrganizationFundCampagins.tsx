@@ -125,8 +125,10 @@ const orgFundCampaign = (): JSX.Element => {
       refetchFundCampaign();
       hideCreateCampaignModal();
     } catch (error: unknown) {
-      toast.error((error as Error).message);
-      console.log(error);
+      if (error instanceof Error) {
+        toast.error(error.message);
+        console.log(error.message);
+      }
     }
   };
 
@@ -172,8 +174,10 @@ const orgFundCampaign = (): JSX.Element => {
       hideUpdateCampaignModal();
       toast.success(t('updatedCampaign'));
     } catch (error: unknown) {
-      toast.error((error as Error).message);
-      console.log(error);
+      if (error instanceof Error) {
+        toast.error(error.message);
+        console.log(error.message);
+      }
     }
   };
 
@@ -188,8 +192,10 @@ const orgFundCampaign = (): JSX.Element => {
       refetchFundCampaign();
       hideDeleteCampaignModal();
     } catch (error: unknown) {
-      toast.error((error as Error).message);
-      console.log(error);
+      if (error instanceof Error) {
+        toast.error(error.message);
+        console.log(error.message);
+      }
     }
   };
   if (fundCampaignLoading) {
