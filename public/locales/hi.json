@@ -404,6 +404,30 @@
     "currency": "मुद्रा",
     "selectCurrency": "मुद्रा चुनें"
   },
+  "pledges": {
+    "title": "फंडकैम्पेन प्रतिज्ञाएं",
+    "volunteers": "स्वयंसेवक",
+    "startDate": "प्रारंभ तिथि",
+    "endDate": "समाप्ति तिथि",
+    "pledgeAmount": "प्रतिज्ञा राशि",
+    "pledgeOptions": "विकल्प",
+    "pledgeCreated": "प्रतिज्ञा सफलतापूर्वक बनाई गई",
+    "pledgeUpdated": "प्रतिज्ञा सफलतापूर्वक अपडेट की गई",
+    "pledgeDeleted": "प्रतिज्ञा सफलतापूर्वक हटा दी गई",
+    "addPledge": "प्रतिज्ञा जोड़ें",
+    "createPledge": "प्रतिज्ञा बनाएं",
+    "currency": "मुद्रा",
+    "selectCurrency": "मुद्रा चुनें",
+    "updatePledge": "प्रतिज्ञा अपडेट करें",
+    "deletePledge": "प्रतिज्ञा हटाएं",
+    "amount": "राशि",
+    "editPledge": "प्रतिज्ञा संपादित करें",
+    "deletePledgeMsg": "क्या आप वाकई इस प्रतिज्ञा को हटाना चाहते हैं?",
+    "no": "नहीं",
+    "yes": "हाँ",
+    "noPledges": "कोई प्रतिज्ञा नहीं मिली"
+  },
+
   "orgPost": {
     "title": "तलवा पोस्ट्स",
     "searchPost": "पोस्ट खोजें",

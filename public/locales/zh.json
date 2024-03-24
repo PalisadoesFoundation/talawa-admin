@@ -135,7 +135,29 @@
     "currency": "货币",
     "selectCurrency": "选择货币"
   },
-
+  "pledges": {
+    "title": "资金筹款承诺",
+    "volunteers": "志愿者",
+    "startDate": "开始日期",
+    "endDate": "结束日期",
+    "pledgeAmount": "承诺金额",
+    "pledgeOptions": "选项",
+    "pledgeCreated": "承诺成功创建",
+    "pledgeUpdated": "承诺成功更新",
+    "pledgeDeleted": "承诺成功删除",
+    "addPledge": "添加承诺",
+    "createPledge": "创建承诺",
+    "currency": "货币",
+    "selectCurrency": "选择货币",
+    "updatePledge": "更新承诺",
+    "deletePledge": "删除承诺",
+    "amount": "数量",
+    "editPledge": "编辑承诺",
+    "deletePledgeMsg": "您确定要删除此承诺吗？",
+    "no": "否",
+    "yes": "是",
+    "noPledges": "未找到承诺"
+  },
   "orgList": {
     "title": "塔拉瓦組織",
     "you": "你",
