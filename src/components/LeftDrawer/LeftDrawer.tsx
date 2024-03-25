@@ -5,6 +5,7 @@ import { NavLink } from 'react-router-dom';
 import { ReactComponent as OrganizationsIcon } from 'assets/svgs/organizations.svg';
 import { ReactComponent as RolesIcon } from 'assets/svgs/roles.svg';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
+import { ReactComponent as RequestsIcon } from 'assets/svgs/requests.svg';
 import styles from './LeftDrawer.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 
@@ -19,6 +20,7 @@ const leftDrawer = ({ hideDrawer }: InterfaceLeftDrawerProps): JSX.Element => {
   const { getItem } = useLocalStorage();
   const userType = getItem('UserType');
   const superAdmin = getItem('SuperAdmin');
+  const role = superAdmin ? 'SuperAdmin' : 'Admin';
 
   return (
     <>
