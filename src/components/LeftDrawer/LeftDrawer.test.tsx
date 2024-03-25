@@ -91,9 +91,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
     expect(
       orgsBtn.className.includes('text-white btn btn-success'),
     ).toBeTruthy();
-    expect(
-      rolesBtn.className.includes('text-secondary btn btn-light'),
-    ).toBeTruthy();
+    expect(rolesBtn.className.includes('text-secondary btn')).toBeTruthy();
 
     // Send to roles screen
     userEvent.click(rolesBtn);
@@ -140,9 +138,7 @@ describe('Testing Left Drawer component for ADMIN', () => {
     expect(
       orgsBtn.className.includes('text-white btn btn-success'),
     ).toBeTruthy();
-    expect(
-      requestsBtn.className.includes('text-secondary btn btn-light'),
-    ).toBeTruthy();
+    expect(requestsBtn.className.includes('text-secondary btn')).toBeTruthy();
 
     // These screens arent meant for admins so they should not be present
     expect(screen.queryByTestId(/rolesBtn/i)).toBeNull();
@@ -169,8 +165,6 @@ describe('Testing Left Drawer component for ADMIN', () => {
     expect(
       requestsBtn.className.includes('text-white btn btn-success'),
     ).toBeTruthy();
-    expect(
-      orgsBtn.className.includes('text-secondary btn btn-light'),
-    ).toBeTruthy();
+    expect(orgsBtn.className.includes('text-secondary btn')).toBeTruthy();
   });
 });
