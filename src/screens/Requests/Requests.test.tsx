@@ -1,6 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import 'jest-localstorage-mock';
 import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
@@ -11,15 +11,25 @@ import userEvent from '@testing-library/user-event';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
-import Users from './Users';
-import { EMPTY_MOCKS, MOCKS, MOCKS2 } from './UsersMocks';
+import Requests from './Requests';
+import {
+  EMPTY_MOCKS,
+  MOCKS_WITH_ERROR,
+  MOCKS,
+  MOCKS2,
+  EMPTY_REQUEST_MOCKS,
+  MOCKS3,
+} from './RequestsMocks';
 import useLocalStorage from 'utils/useLocalstorage';
 
 const { setItem } = useLocalStorage();
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(EMPTY_MOCKS, true);
-const link3 = new StaticMockLink(MOCKS2, true);
+const link3 = new StaticMockLink(EMPTY_REQUEST_MOCKS, true);
+const link4 = new StaticMockLink(MOCKS2, true);
+const link5 = new StaticMockLink(MOCKS_WITH_ERROR, true);
+const link6 = new StaticMockLink(MOCKS3, true);
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -28,25 +38,25 @@ async function wait(ms = 100): Promise<void> {
     });
   });
 }
+
 beforeEach(() => {
-  setItem('id', '123');
-  setItem('SuperAdmin', true);
-  setItem('FirstName', 'John');
-  setItem('LastName', 'Doe');
+  setItem('id', 'user1');
+  setItem('AdminFor', [{ _id: 'org1', __typename: 'Organization' }]);
+  setItem('SuperAdmin', false);
 });
 
 afterEach(() => {
   localStorage.clear();
 });
 
-describe('Testing Users screen', () => {
+describe('Testing Requests screen', () => {
   test('Component should be rendered properly', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <Users />
+              <Requests />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -54,19 +64,19 @@ describe('Testing Users screen', () => {
     );
 
     await wait();
-    expect(screen.getByTestId('testcomp')).toBeInTheDocument();
+    expect(screen.getByTestId('testComp')).toBeInTheDocument();
   });
 
-  test(`Component should be rendered properly when user is not superAdmin
+  test(`Component should be rendered properly when user is not Admin
   and or userId does not exists in localstorage`, async () => {
-    setItem('SuperAdmin', false);
+    setItem('UserType', 'SUPERADMIN');
     setItem('id', '');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <Users />
+              <Requests />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -76,13 +86,13 @@ describe('Testing Users screen', () => {
     await wait();
   });
 
-  test('Component should be rendered properly when user is superAdmin', async () => {
+  test('Component should be rendered properly when user is Admin', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <Users />
+              <Requests />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -92,13 +102,31 @@ describe('Testing Users screen', () => {
     await wait();
   });
 
-  test('Testing seach by name functionality', async () => {
+  test('Redirecting on error', async () => {
+    setItem('SuperAdmin', true);
+    render(
+      <MockedProvider addTypename={false} link={link5}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Requests />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    expect(window.location.href).toEqual('http://localhost/orglist');
+  });
+
+  test('Testing Search requests functionality', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <Users />
+              <Requests />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -130,13 +158,13 @@ describe('Testing Users screen', () => {
     await wait();
   });
 
-  test('testing search not found', async () => {
+  test('Testing search not found', async () => {
     render(
-      <MockedProvider addTypename={false} link={link2}>
+      <MockedProvider addTypename={false} link={link3}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <Users />
+              <Requests />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -151,13 +179,13 @@ describe('Testing Users screen', () => {
     );
   });
 
-  test('Testing User data is not present', async () => {
+  test('Testing Request data is not present', async () => {
     render(
-      <MockedProvider addTypename={false} link={link2}>
+      <MockedProvider addTypename={false} link={link3}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <Users />
+              <Requests />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -165,17 +193,17 @@ describe('Testing Users screen', () => {
     );
 
     await wait();
-    expect(screen.getByText(/No User Found/i)).toBeTruthy();
+    expect(screen.getByText(/No Request Found/i)).toBeTruthy();
   });
 
   test('Should render warning alert when there are no organizations', async () => {
-    const { container } = render(
+    render(
       <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <ToastContainer />
-              <Users />
+              <Requests />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -183,9 +211,10 @@ describe('Testing Users screen', () => {
     );
 
     await wait(200);
-    expect(container.textContent).toMatch(
-      'Organizations not found, please create an organization through dashboard',
-    );
+    expect(screen.queryByText('Organizations Not Found')).toBeInTheDocument();
+    expect(
+      screen.queryByText('Please create an organization through dashboard'),
+    ).toBeInTheDocument();
   });
 
   test('Should not render warning alert when there are organizations present', async () => {
@@ -195,7 +224,7 @@ describe('Testing Users screen', () => {
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <ToastContainer />
-              <Users />
+              <Requests />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -209,100 +238,31 @@ describe('Testing Users screen', () => {
     );
   });
 
-  test('Testing sorting functionality', async () => {
-    await act(async () => {
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <ToastContainer />
-                <Users />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      await wait();
-
-      const searchInput = screen.getByTestId('sort');
-      expect(searchInput).toBeInTheDocument();
-
-      const inputText = screen.getByTestId('sortUsers');
-
-      fireEvent.click(inputText);
-      const toggleText = screen.getByTestId('oldest');
-      fireEvent.click(toggleText);
-
-      expect(searchInput).toBeInTheDocument();
-
-      fireEvent.click(inputText);
-      const toggleTite = screen.getByTestId('newest');
-      fireEvent.click(toggleTite);
-
-      expect(searchInput).toBeInTheDocument();
-    });
-  });
-
-  test('Testing filter functionality', async () => {
-    await act(async () => {
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <ToastContainer />
-                <Users />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      await wait();
-
-      const searchInput = screen.getByTestId('filter');
-      expect(searchInput).toBeInTheDocument();
-
-      const inputText = screen.getByTestId('filterUsers');
-
-      fireEvent.click(inputText);
-      const toggleText = screen.getByTestId('admin');
-      fireEvent.click(toggleText);
-
-      expect(searchInput).toBeInTheDocument();
-
-      fireEvent.click(inputText);
-      let toggleTite = screen.getByTestId('superAdmin');
-      fireEvent.click(toggleTite);
-
-      expect(searchInput).toBeInTheDocument();
-
-      fireEvent.click(inputText);
-      toggleTite = screen.getByTestId('user');
-      fireEvent.click(toggleTite);
-
-      expect(searchInput).toBeInTheDocument();
-
-      fireEvent.click(inputText);
-      toggleTite = screen.getByTestId('cancel');
-      fireEvent.click(toggleTite);
-
-      await wait();
-
-      expect(searchInput).toBeInTheDocument();
-    });
-  });
-
-  test('check for rerendering', async () => {
-    const { rerender } = render(
-      <MockedProvider addTypename={false} link={link3}>
+  test('Should render properly when there are no organizations present in requestsData', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link6}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <ToastContainer />
-              <Users />
+              <Requests />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+  });
+
+  test('check for rerendering', async () => {
+    const { rerender } = render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <Requests />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -311,12 +271,12 @@ describe('Testing Users screen', () => {
 
     await wait();
     rerender(
-      <MockedProvider addTypename={false} link={link3}>
+      <MockedProvider addTypename={false} link={link4}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <ToastContainer />
-              <Users />
+              <Requests />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
