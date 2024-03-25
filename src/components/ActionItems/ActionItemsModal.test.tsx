@@ -96,7 +96,7 @@ describe('Testing Check In Attendees Modal', () => {
     );
 
     await waitFor(() =>
-      expect(screen.queryByText('Event Action Items')).toBeInTheDocument(),
+      expect(screen.queryByTestId('modal-title')).toBeInTheDocument(),
     );
 
     await waitFor(() => {

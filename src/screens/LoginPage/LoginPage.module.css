@@ -2,6 +2,10 @@
   min-height: 100vh;
 }
 
+.communityLogo {
+  object-fit: contain;
+}
+
 .row .left_portion {
   display: flex;
   justify-content: center;
