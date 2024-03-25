@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import { useParams, useLocation, useNavigate } from 'react-router-dom';
+import { useParams, useLocation, Navigate } from 'react-router-dom';
 import UserUpdate from 'components/UserUpdate/UserUpdate';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import styles from './MemberDetail.module.css';
@@ -23,7 +23,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'memberDetail',
   });
-  const navigate = useNavigate();
   const location = useLocation();
 
   const [state, setState] = useState(1);
@@ -67,7 +66,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
 
   /* istanbul ignore next */
   if (error) {
-    navigate(`/orgpeople/${currentUrl}`);
+    return <Navigate to={`/orgpeople/${currentUrl}`} />;
   }
 
   const addAdmin = async (): Promise<void> => {
@@ -86,7 +85,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         }, 2000);
       }
       /* istanbul ignore next */
-    } catch (error: any) {
+    } catch (error: unknown) {
       /* istanbul ignore next */
       errorHandler(t, error);
     }
