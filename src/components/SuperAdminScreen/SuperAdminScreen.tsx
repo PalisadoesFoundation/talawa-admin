@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router-dom';
 import styles from './SuperAdminScreen.module.css';
+import ProfileDropdown from 'components/ProfileDropdown/profileDropdown';
 
 const superAdminScreen = (): JSX.Element => {
   const location = useLocation();
@@ -60,6 +61,7 @@ const superAdminScreen = (): JSX.Element => {
           <div style={{ flex: 1 }}>
             <h2>{t('title')}</h2>
           </div>
+          <ProfileDropdown />
         </div>
         <Outlet />
       </div>
@@ -71,6 +73,7 @@ export default superAdminScreen;
 
 const map: any = {
   orglist: 'orgList',
+  requests: 'requests',
   users: 'users',
   member: 'memberDetail',
 };
