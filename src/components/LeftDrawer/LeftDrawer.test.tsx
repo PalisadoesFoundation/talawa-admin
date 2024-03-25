@@ -102,6 +102,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
     // Send to roles screen
     userEvent.click(rolesBtn);
     expect(global.window.location.pathname).toContain('/users');
+    userEvent.click(communityProfileBtn);
   });
 
   test('Testing Drawer when hideDrawer is null', () => {
@@ -110,6 +111,21 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <LeftDrawer {...propsUsers} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+  });
+  test('Testing Drawer when hideDrawer is false', () => {
+    const tempProps: InterfaceLeftDrawerProps = {
+      ...props,
+      hideDrawer: false,
+    };
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <LeftDrawer {...tempProps} />
           </I18nextProvider>
         </BrowserRouter>
       </MockedProvider>,
