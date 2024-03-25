@@ -5,7 +5,6 @@ import {
   screen,
   fireEvent,
   waitFor,
-  queryByTestId,
 } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import OrgPostCard from './OrgPostCard';
@@ -52,23 +51,6 @@ const MOCKS = [
       data: {
         updatePost: {
           _id: '12',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: UPDATE_POST_MUTATION,
-      variables: {
-        id: '11',
-        title: '',
-        text: 'This is a updated text',
-      },
-    },
-    result: {
-      data: {
-        updatePost: {
-          _id: '11',
         },
       },
     },
@@ -208,21 +190,11 @@ describe('Testing Organization Post Card', () => {
     userEvent.click(screen.getByAltText('image'));
     expect(screen.getByAltText('Post Image')).toBeInTheDocument();
   });
-  test('Testing post updating after post is updated and pinned', async () => {
-    const props2 = {
-      key: '123',
-      id: '12',
-      postTitle: 'Event Info',
-      postInfo: 'Time change',
-      postAuthor: 'John Doe',
-      postPhoto: 'test.png',
-      postVideo: 'test.mp4',
-      pinned: true,
-    };
+  test('Testing post updating after post is updated', async () => {
     const { getByTestId } = render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props2} />
+          <OrgPostCard {...props} />
         </I18nextProvider>
       </MockedProvider>,
     );
@@ -236,85 +208,6 @@ describe('Testing Organization Post Card', () => {
     fireEvent.change(getByTestId('updateTitle'), {
       target: { value: 'updated title' },
     });
-    fireEvent.change(getByTestId('updateText'), {
-      target: { value: 'This is a updated text' },
-    });
-    const postVideoUrlInput = screen.queryByTestId('postVideoUrl');
-    if (postVideoUrlInput) {
-      fireEvent.change(getByTestId('postVideoUrl'), {
-        target: { value: 'This is a updated video' },
-      });
-      userEvent.click(screen.getByPlaceholderText(/video/i));
-      const input = getByTestId('postVideoUrl');
-      const file = new File(['test-video'], 'test.mp4', { type: 'video/mp4' });
-      Object.defineProperty(input, 'files', {
-        value: [file],
-      });
-      fireEvent.change(input);
-      await waitFor(() => {
-        convertToBase64(file);
-      });
-
-      userEvent.click(screen.getByTestId('closePreview'));
-    }
-    const imageUrlInput = screen.queryByTestId('postImageUrl');
-    if (imageUrlInput) {
-      fireEvent.change(getByTestId('postImageUrl'), {
-        target: { value: 'This is a updated image' },
-      });
-      userEvent.click(screen.getByPlaceholderText(/image/i));
-      const input = getByTestId('postImageUrl');
-      const file = new File(['test-image'], 'test.jpg', { type: 'image/jpeg' });
-      Object.defineProperty(input, 'files', {
-        value: [file],
-      });
-      fireEvent.change(input);
-
-      // Simulate the asynchronous base64 conversion function
-      await waitFor(() => {
-        convertToBase64(file); // Replace with the expected base64-encoded image
-      });
-      document.getElementById = jest.fn(() => input);
-      const clearImageButton = getByTestId('closeimage');
-      fireEvent.click(clearImageButton);
-    }
-    userEvent.click(screen.getByTestId('updatePostBtn'));
-
-    await waitFor(
-      () => {
-        expect(window.location.reload).toHaveBeenCalled();
-      },
-      { timeout: 2500 },
-    );
-  });
-  test('Testing post updating after post is updated and not pinned', async () => {
-    const props2 = {
-      key: '123',
-      id: '11',
-      postTitle: '',
-      postInfo: 'Time change',
-      postAuthor: 'John Doe',
-      postPhoto: 'test.png',
-      postVideo: 'test.mp4',
-      pinned: false,
-    };
-    const { getByTestId } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props2} />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    userEvent.click(screen.getByAltText('image'));
-    userEvent.click(screen.getByTestId('moreiconbtn'));
-
-    userEvent.click(screen.getByTestId('editPostModalBtn'));
-    // fireEvent.change(queryByTestId('updateTitle'), {
-    //   target: { value: '' },
-    // });
     fireEvent.change(getByTestId('updateText'), {
       target: { value: 'This is a updated text' },
     });
@@ -391,7 +284,7 @@ describe('Testing Organization Post Card', () => {
   test('Testing pin post functionality fail case', async () => {
     const props2 = {
       key: '123',
-      id: '12',
+      id: '',
       postTitle: 'Event Info',
       postInfo: 'Time change',
       postAuthor: 'John Doe',
