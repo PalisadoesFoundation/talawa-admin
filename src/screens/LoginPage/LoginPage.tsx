@@ -256,7 +256,7 @@ const loginPage = (): JSX.Element => {
           (appUserProfile.adminFor.length !== 0 &&
             appUserProfile.adminApproved === true);
 
-        if ((role === 'user' && isAdmin) || (role === 'admin' && !isAdmin)) {
+        if (role === 'admin' && !isAdmin) {
           toast.warn(t('notFound'));
           return;
         }
@@ -271,7 +271,7 @@ const loginPage = (): JSX.Element => {
         setItem('LastName', user.lastName);
         setItem('UserImage', user.image);
 
-        if (isAdmin) {
+        if (role === 'admin') {
           setItem('id', loggedInUserId);
           setItem('SuperAdmin', appUserProfile.isSuperAdmin);
           setItem('AdminFor', appUserProfile.adminFor);
@@ -279,7 +279,7 @@ const loginPage = (): JSX.Element => {
           setItem('userId', loggedInUserId);
         }
 
-        navigate(isAdmin ? '/orglist' : '/user/organizations');
+        navigate(role === 'admin' ? '/orglist' : '/user/organizations');
       } else {
         toast.warn(t('notFound'));
       }
