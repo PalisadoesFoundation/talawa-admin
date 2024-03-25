@@ -95,9 +95,7 @@ const loginPage = (): JSX.Element => {
   useEffect(() => {
     const isLoggedIn = getItem('IsLoggedIn');
     if (isLoggedIn == 'TRUE') {
-      navigate(
-        getItem('UserType') === 'USER' ? '/user/organizations' : '/orglist',
-      );
+      navigate(getItem('userId') !== null ? '/user/organizations' : '/orglist');
     }
     setComponentLoader(false);
   }, []);
@@ -115,7 +113,7 @@ const loginPage = (): JSX.Element => {
     async function loadResource(): Promise<void> {
       try {
         await fetch(BACKEND_URL as string);
-      } catch (error: any) {
+      } catch (error) {
         /* istanbul ignore next */
         errorHandler(t, error);
       }
@@ -125,7 +123,7 @@ const loginPage = (): JSX.Element => {
   }, []);
 
   const verifyRecaptcha = async (
-    recaptchaToken: any,
+    recaptchaToken: string | null,
   ): Promise<boolean | void> => {
     try {
       /* istanbul ignore next */
@@ -139,7 +137,7 @@ const loginPage = (): JSX.Element => {
       });
 
       return data.recaptcha;
-    } catch (error: any) {
+    } catch (error) {
       /* istanbul ignore next */
       toast.error(t('captchaError'));
     }
@@ -198,9 +196,7 @@ const loginPage = (): JSX.Element => {
           /* istanbul ignore next */
           if (signUpData) {
             toast.success(
-              role === 'admin'
-                ? 'Successfully Registered. Please wait until you will be approved.'
-                : 'Successfully registered. Please wait for admin to approve your request.',
+              t(role === 'admin' ? 'successfullyRegistered' : 'afterRegister'),
             );
             setShowTab('LOGIN');
             setSignFormState({
@@ -211,7 +207,7 @@ const loginPage = (): JSX.Element => {
               cPassword: '',
             });
           }
-        } catch (error: any) {
+        } catch (error) {
           /* istanbul ignore next */
           errorHandler(t, error);
         }
@@ -289,7 +285,7 @@ const loginPage = (): JSX.Element => {
       } else {
         toast.warn(t('notFound'));
       }
-    } catch (error: any) {
+    } catch (error) {
       /* istanbul ignore next */
       errorHandler(t, error);
     }

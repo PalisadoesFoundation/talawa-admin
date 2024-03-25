@@ -195,6 +195,21 @@ export interface InterfaceQueryOrganizationFundCampaigns {
     currency: string;
   }[];
 }
+export interface InterfaceQueryFundCampaignsPledges {
+  startDate: Date;
+  endDate: Date;
+  pledges: {
+    _id: string;
+    amount: number;
+    currency: string;
+    endDate: string;
+    startDate: string;
+    users: {
+      _id: string;
+      firstName: string;
+    }[];
+  }[];
+}
 export interface InterfaceFundInfo {
   _id: string;
   name: string;
@@ -212,6 +227,17 @@ export interface InterfaceCampaignInfo {
   endDate: Date;
   createdAt: string;
   currency: string;
+}
+export interface InterfacePledgeInfo {
+  _id: string;
+  amount: number;
+  currency: string;
+  endDate: string;
+  startDate: string;
+  users: {
+    _id: string;
+    firstName: string;
+  }[];
 }
 export interface InterfaceQueryOrganizationEventListItem {
   _id: string;
@@ -353,4 +379,26 @@ export interface InterfaceCreateCampaign {
   campaignGoal: number;
   campaignStartDate: Date;
   campaignEndDate: Date;
+}
+
+export interface InterfaceCreatePledge {
+  pledgeAmount: number;
+  pledgeCurrency: string;
+  pledgeStartDate: Date;
+  pledgeEndDate: Date;
+}
+
+export interface InterfaceQueryMembershipRequestsListItem {
+  organizations: {
+    _id: string;
+    membershipRequests: {
+      _id: string;
+      user: {
+        _id: string;
+        firstName: string;
+        lastName: string;
+        email: string;
+      };
+    }[];
+  }[];
 }

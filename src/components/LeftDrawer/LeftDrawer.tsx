@@ -58,6 +58,30 @@ const leftDrawer = ({ hideDrawer }: InterfaceLeftDrawerProps): JSX.Element => {
               </Button>
             )}
           </NavLink>
+          {role === 'Admin' && (
+            <NavLink to={'/requests'}>
+              {({ isActive }) => (
+                <Button
+                  variant={isActive === true ? 'success' : 'light'}
+                  className={`${
+                    isActive === true ? 'text-white' : 'text-secondary'
+                  }`}
+                  data-testid="requestsBtn"
+                >
+                  <div className={styles.iconWrapper}>
+                    <RequestsIcon
+                      fill={`${
+                        isActive === true
+                          ? 'var(--bs-white)'
+                          : 'var(--bs-secondary)'
+                      }`}
+                    />
+                  </div>
+                  {t('requests')}
+                </Button>
+              )}
+            </NavLink>
+          )}
           {superAdmin && (
             <NavLink to={'/users'}>
               {({ isActive }) => (

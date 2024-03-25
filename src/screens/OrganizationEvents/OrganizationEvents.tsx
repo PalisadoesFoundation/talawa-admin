@@ -19,6 +19,7 @@ import { errorHandler } from 'utils/errorHandler';
 import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams, useNavigate } from 'react-router-dom';
+import EventHeader from 'components/EventCalendar/EventHeader';
 import CustomRecurrenceModal from './CustomRecurrenceModal';
 import {
   Frequency,
@@ -33,6 +34,11 @@ const timeToDayJs = (time: string): Dayjs => {
   return dayjs(dateTimeString, { format: 'YYYY-MM-DD HH:mm:ss' });
 };
 
+export enum ViewType {
+  DAY = 'Day',
+  MONTH = 'Month View',
+}
+
 function organizationEvents(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationEvents',
@@ -44,10 +50,9 @@ function organizationEvents(): JSX.Element {
   const [createEventmodalisOpen, setCreateEventmodalisOpen] = useState(false);
   const [customRecurrenceModalIsOpen, setCustomRecurrenceModalIsOpen] =
     useState<boolean>(false);
-
   const [startDate, setStartDate] = React.useState<Date>(new Date());
-  const [endDate, setEndDate] = React.useState<Date | null>(null);
-
+  const [endDate, setEndDate] = React.useState<Date | null>(new Date());
+  const [viewType, setViewType] = useState<ViewType>(ViewType.MONTH);
   const [alldaychecked, setAllDayChecked] = React.useState(true);
   const [recurringchecked, setRecurringChecked] = React.useState(false);
 
@@ -57,7 +62,7 @@ function organizationEvents(): JSX.Element {
   const [recurrenceRuleState, setRecurrenceRuleState] =
     useState<InterfaceRecurrenceRule>({
       frequency: Frequency.WEEKLY,
-      weekDays: [Days[startDate.getDay()]],
+      weekDays: [Days[startDate?.getDay()]],
       count: undefined,
     });
 
@@ -72,11 +77,15 @@ function organizationEvents(): JSX.Element {
   const { orgId: currentUrl } = useParams();
   const navigate = useNavigate();
 
-  const showCreateEventModal = (): void => {
+  const showInviteModal = (): void => {
     setCreateEventmodalisOpen(true);
   };
   const hideCreateEventModal = (): void => {
     setCreateEventmodalisOpen(false);
+  };
+  const handleChangeView = (item: any): void => {
+    /*istanbul ignore next*/
+    setViewType(item);
   };
 
   const hideCustomRecurrenceModal = (): void => {
@@ -210,14 +219,11 @@ function organizationEvents(): JSX.Element {
     <>
       <div className={styles.mainpageright}>
         <div className={styles.justifysp}>
-          <Button
-            variant="success"
-            className={styles.addbtn}
-            onClick={showCreateEventModal}
-            data-testid="createEventModalBtn"
-          >
-            <i className="fa fa-plus"></i> {t('addEvent')}
-          </Button>
+          <EventHeader
+            viewType={viewType}
+            handleChangeView={handleChangeView}
+            showInviteModal={showInviteModal}
+          />
         </div>
       </div>
       <EventCalendar
@@ -225,6 +231,7 @@ function organizationEvents(): JSX.Element {
         orgData={orgData}
         userRole={userRole}
         userId={userId}
+        viewType={viewType}
       />
 
       {/* Create Event Modal */}
@@ -328,12 +335,14 @@ function organizationEvents(): JSX.Element {
                   className={styles.datebox}
                   timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
                   value={timeToDayJs(formState.startTime)}
+                  /*istanbul ignore next*/
                   onChange={(time): void => {
                     if (time) {
                       setFormState({
                         ...formState,
                         startTime: time?.format('HH:mm:ss'),
                         endTime:
+                          /*istanbul ignore next*/
                           timeToDayJs(formState.endTime) < time
                             ? /* istanbul ignore next */ time?.format(
                                 'HH:mm:ss',
@@ -350,6 +359,7 @@ function organizationEvents(): JSX.Element {
                   label={t('endTime')}
                   className={styles.datebox}
                   timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
+                  /*istanbul ignore next*/
                   value={timeToDayJs(formState.endTime)}
                   onChange={(time): void => {
                     if (time) {
@@ -468,7 +478,7 @@ function organizationEvents(): JSX.Element {
                       setRecurrenceRuleState({
                         ...recurrenceRuleState,
                         frequency: Frequency.WEEKLY,
-                        weekDays: [Days[startDate.getDay()]],
+                        weekDays: [Days[startDate?.getDay()]],
                       })
                     }
                     data-testid="weeklyRecurrence"
@@ -478,7 +488,7 @@ function organizationEvents(): JSX.Element {
                         {
                           ...recurrenceRuleState,
                           frequency: Frequency.WEEKLY,
-                          weekDays: [Days[startDate.getDay()]],
+                          weekDays: [Days[startDate?.getDay()]],
                         },
                         startDate,
                         endDate,

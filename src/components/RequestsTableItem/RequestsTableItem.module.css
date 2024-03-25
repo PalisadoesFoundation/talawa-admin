@@ -1,0 +1,66 @@
+.tableItem {
+  width: 100%;
+}
+
+.tableItem td {
+  padding: 0.5rem;
+}
+
+.tableItem .index {
+  padding-left: 2.5rem;
+  padding-top: 1rem;
+}
+
+.tableItem .name {
+  padding-left: 1.5rem;
+  padding-top: 1rem;
+}
+
+.tableItem .email {
+  padding-left: 1.5rem;
+  padding-top: 1rem;
+}
+
+.acceptButton {
+  background: #31bb6b;
+  width: 120px;
+  height: 46px;
+  margin-left: -1rem;
+}
+
+.rejectButton {
+  background: #dc3545;
+  width: 120px;
+  height: 46px;
+  margin-left: -1rem;
+}
+
+@media (max-width: 1020px) {
+  .tableItem .index {
+    padding-left: 2rem;
+  }
+
+  .tableItem .name,
+  .tableItem .email {
+    padding-left: 1rem;
+  }
+
+  .acceptButton,
+  .rejectButton {
+    margin-left: -0.25rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .tableItem .index,
+  .tableItem .name,
+  .tableItem .email {
+    padding-left: 1rem;
+  }
+
+  .acceptButton,
+  .rejectButton {
+    margin-left: 0;
+    width: 100%;
+  }
+}
