@@ -244,6 +244,7 @@ function organizationDashboard(): JSX.Element {
                       (event: InterfaceQueryOrganizationEventListItem) => {
                         return (
                           <CardItem
+                            data-testid="cardItem"
                             type="Event"
                             key={event._id}
                             startdate={event.startDate}

@@ -60,6 +60,7 @@
     "menu": "Menu",
     "my organizations": "Mes Organisations",
     "users": "Utilisateurs",
+    "requests": "Demandes",
     "communityProfile": "Profil de la communauté",
     "logout": "Déconnexion"
   },
@@ -134,6 +135,23 @@
   "paginationList": {
     "rowsPerPage": "lignes par page",
     "all": "Tout"
+  },
+  "requests": {
+    "title": "Demandes",
+    "sl_no": "Num.",
+    "name": "Nom",
+    "email": "Email",
+    "accept": "Accepter",
+    "reject": "Rejeter",
+    "searchRequests": "Rechercher des demandes",
+    "endOfResults": "Fin des résultats",
+    "noOrgError": "Organisations introuvables, veuillez créer une organisation via le tableau de bord",
+    "noResultsFoundFor": "Aucun résultat trouvé pour ",
+    "noRequestsFound": "Aucune demande trouvée",
+    "acceptedSuccessfully": "Demande acceptée avec succès",
+    "rejectedSuccessfully": "Demande rejetée avec succès",
+    "noOrgErrorTitle": "Organisations non trouvées",
+    "noOrgErrorDescription": "Veuillez créer une organisation via le tableau de bord"
   },
   "users": {
     "title": "Rôles Talawa",
@@ -267,7 +285,7 @@
     "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "organizationEvents": {
-    "title": "Événements Talawa",
+    "title": "Événements",
     "filterByTitle": "Filtrer par titre",
     "filterByLocation": "Filtrer par l'emplacement",
     "filterByDescription": "Filtrer par Description",
@@ -292,6 +310,8 @@
     "eventLocation": "Entrez l'emplacement",
     "eventCreated": "Toutes nos félicitations! L'événement est créé.",
     "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau.",
+    "searchEventName": "Rechercher le nom de l'événement",
+    "eventType": "Type d'événement",
     "customRecurrence": "Récurrence personnalisée",
     "repeatsEvery": "Se répète tous les",
     "repeatsOn": "Se répète sur",
@@ -414,6 +434,29 @@
     "yes": "Oui",
     "currency": "Devise",
     "selectCurrency": "Sélectionnez la devise"
+  },
+  "pledges": {
+    "title": "Engagements de campagne de financement",
+    "volunteers": "Bénévoles",
+    "startDate": "Date de début",
+    "endDate": "Date de fin",
+    "pledgeAmount": "Montant de l'engagement",
+    "pledgeOptions": "Options",
+    "pledgeCreated": "Engagement créé avec succès",
+    "pledgeUpdated": "Engagement mis à jour avec succès",
+    "pledgeDeleted": "Engagement supprimé avec succès",
+    "addPledge": "Ajouter un engagement",
+    "createPledge": "Créer un engagement",
+    "currency": "Devise",
+    "selectCurrency": "Sélectionner une devise",
+    "updatePledge": "Mettre à jour l'engagement",
+    "deletePledge": "Supprimer l'engagement",
+    "amount": "Montant",
+    "editPledge": "Modifier l'engagement",
+    "deletePledgeMsg": "Êtes-vous sûr de vouloir supprimer cet engagement?",
+    "no": "Non",
+    "yes": "Oui",
+    "noPledges": "Aucun engagement trouvé"
   },
   "orgPost": {
     "title": "Talawa Publications",

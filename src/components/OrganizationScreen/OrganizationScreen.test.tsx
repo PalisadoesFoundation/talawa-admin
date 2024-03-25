@@ -19,6 +19,7 @@ jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useParams: () => ({ orgId: mockID }),
 }));
+
 const MOCKS = [
   {
     request: {
@@ -102,6 +103,7 @@ describe('Testing LeftDrawer in OrganizationScreen', () => {
     clickToggleMenuBtn(toggleButton);
     expect(icon).toHaveClass('fa fa-angle-double-right');
   });
+
   test('should be redirected to / if orgId is undefined', async () => {
     mockID = undefined;
     render(

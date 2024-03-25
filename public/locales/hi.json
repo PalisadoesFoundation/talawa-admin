@@ -60,6 +60,7 @@
     "menu": "मेन्यू",
     "my organizations": "मेरे संगठन",
     "users": "उपयोगकर्ता",
+    "requests": "अनुरोध",
     "communityProfile": "सामुदायिक प्रोफ़ाइल",
     "logout": "लॉग आउट"
   },
@@ -134,6 +135,23 @@
   "paginationList": {
     "rowsPerPage": "प्रति पृष्ठ पंक्तियाँ",
     "all": "सभी"
+  },
+  "requests": {
+    "title": "अनुरोध",
+    "sl_no": "क्रमांक",
+    "name": "नाम",
+    "email": "ईमेल",
+    "accept": "स्वीकार करें",
+    "reject": "अस्वीकार करें",
+    "searchRequests": "अनुरोध खोजें",
+    "endOfResults": "परिणामों का समाप्ति",
+    "noOrgError": "संगठन नहीं मिला, कृपया डैशबोर्ड के माध्यम से एक संगठन बनाएं",
+    "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला ",
+    "noRequestsFound": "कोई अनुरोध नहीं मिला",
+    "acceptedSuccessfully": "अनुरोध सफलतापूर्वक स्वीकार किया गया",
+    "rejectedSuccessfully": "अनुरोध सफलतापूर्वक अस्वीकार किया गया",
+    "noOrgErrorTitle": "संगठन नहीं मिला",
+    "noOrgErrorDescription": "कृपया डैशबोर्ड के माध्यम से एक संगठन बनाएं"
   },
   "users": {
     "title": "तलावा भूमिकाएं",
@@ -267,7 +285,7 @@
     "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।"
   },
   "organizationEvents": {
-    "title": "तलावा इवेंट्स",
+    "title": "आयोजन",
     "filterByTitle": "शीर्षक द्वारा फ़िल्टर करें",
     "filterByLocation": "स्थान के अनुसार फ़िल्टर करें",
     "filterByDescription": "विवरण द्वारा फ़िल्टर करें",
@@ -291,6 +309,8 @@
     "enterDescrip": "विवरण दर्ज करें",
     "eventLocation": "स्थान दर्ज करें",
     "eventCreated": "बधाई हो! इवेंट बनाया गया है।",
+    "searchEventName": "ईवेंट नाम खोजें",
+    "eventType": "ईवेंट प्रकार",
     "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।",
     "customRecurrence": "कस्टम पुनरावृत्ति",
     "repeatsEvery": "दोहराता है हर",
@@ -417,6 +437,30 @@
     "currency": "मुद्रा",
     "selectCurrency": "मुद्रा चुनें"
   },
+  "pledges": {
+    "title": "फंडकैम्पेन प्रतिज्ञाएं",
+    "volunteers": "स्वयंसेवक",
+    "startDate": "प्रारंभ तिथि",
+    "endDate": "समाप्ति तिथि",
+    "pledgeAmount": "प्रतिज्ञा राशि",
+    "pledgeOptions": "विकल्प",
+    "pledgeCreated": "प्रतिज्ञा सफलतापूर्वक बनाई गई",
+    "pledgeUpdated": "प्रतिज्ञा सफलतापूर्वक अपडेट की गई",
+    "pledgeDeleted": "प्रतिज्ञा सफलतापूर्वक हटा दी गई",
+    "addPledge": "प्रतिज्ञा जोड़ें",
+    "createPledge": "प्रतिज्ञा बनाएं",
+    "currency": "मुद्रा",
+    "selectCurrency": "मुद्रा चुनें",
+    "updatePledge": "प्रतिज्ञा अपडेट करें",
+    "deletePledge": "प्रतिज्ञा हटाएं",
+    "amount": "राशि",
+    "editPledge": "प्रतिज्ञा संपादित करें",
+    "deletePledgeMsg": "क्या आप वाकई इस प्रतिज्ञा को हटाना चाहते हैं?",
+    "no": "नहीं",
+    "yes": "हाँ",
+    "noPledges": "कोई प्रतिज्ञा नहीं मिली"
+  },
+
   "orgPost": {
     "title": "तलवा पोस्ट्स",
     "searchPost": "पोस्ट खोजें",
