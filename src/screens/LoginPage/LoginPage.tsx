@@ -308,7 +308,7 @@ const loginPage = (): JSX.Element => {
   }
   const socialIconsList = socialMediaLinks.map(({ href, logo, tag }, index) =>
     data?.getCommunityData ? (
-      data.getCommunityData?.socialMediaUrls?.[tag] ? (
+      data.getCommunityData?.socialMediaUrls?.[tag] && (
         <a
           key={index}
           href={data.getCommunityData?.socialMediaUrls?.[tag]}
@@ -318,8 +318,6 @@ const loginPage = (): JSX.Element => {
         >
           <img src={logo} />
         </a>
-      ) : (
-        <></>
       )
     ) : (
       <a

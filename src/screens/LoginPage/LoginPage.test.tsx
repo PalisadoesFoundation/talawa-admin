@@ -96,42 +96,16 @@ const MOCKS = [
 const MOCKS2 = [
   {
     request: {
-      query: UPDATE_COMMUNITY,
-      variables: {
-        data: {
-          name: 'testName',
-          logo: 'image.png',
-          websiteLink: 'http://link.com',
-          socialMediaUrls: {
-            facebook: 'http://url.com',
-            gitHub: 'http://url.com',
-            youTube: 'http://url.com',
-            instagram: 'http://url.com',
-            linkedIn: 'http://url.com',
-            reddit: 'http://url.com',
-            slack: 'http://url.com',
-            twitter: 'http://url.com',
-          },
-        },
-      },
-    },
-    result: {
-      data: {
-        updateCommunity: true,
-      },
-    },
-  },
-  {
-    request: {
       query: GET_COMMUNITY_DATA,
     },
     result: {
       data: {
         getCommunityData: {
-          _id: '',
+          _id: 'communitId',
           websiteLink: 'http://link.com',
-          name: 'New name1',
+          name: 'testName',
           logoUrl: 'image.png',
+          __typename: 'Community',
           socialMediaUrls: {
             facebook: 'http://url.com',
             gitHub: 'http://url.com',
@@ -140,7 +114,8 @@ const MOCKS2 = [
             linkedIn: 'http://url.com',
             reddit: 'http://url.com',
             slack: 'http://url.com',
-            twitter: 'http://url.com',
+            twitter: null,
+            __typename: 'SocialMediaUrls',
           },
         },
       },
@@ -264,7 +239,7 @@ describe('Testing Login Page Screen', () => {
 
   test('There should be a different values of pre-login data if the queried result is not null', async () => {
     render(
-      <MockedProvider addTypename={false} link={link2}>
+      <MockedProvider addTypename={true} link={link2}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -275,7 +250,6 @@ describe('Testing Login Page Screen', () => {
       </MockedProvider>,
     );
     await wait();
-
     expect(screen.getByTestId('preLoginLogo')).toBeInTheDocument();
     expect(screen.getAllByTestId('preLoginSocialMedia')[0]).toBeInTheDocument();
 

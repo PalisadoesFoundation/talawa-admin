@@ -130,12 +130,48 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
 
     const orgsBtn = screen.getByTestId(/orgsBtn/i);
     const rolesBtn = screen.getByTestId(/rolesBtn/i);
+    const communityProfileBtn = screen.getByTestId(/communityProfileBtn/i);
 
     expect(
       rolesBtn.className.includes('text-white btn btn-success'),
     ).toBeTruthy();
     expect(
       orgsBtn.className.includes('text-secondary btn btn-light'),
+    ).toBeTruthy();
+    expect(
+      communityProfileBtn.className.includes('text-secondary btn btn-light'),
+    ).toBeTruthy();
+  });
+
+  test('Testing in Community Profile screen', () => {
+    setItem('UserImage', '');
+    setItem('SuperAdmin', true);
+    setItem('FirstName', 'John');
+    setItem('LastName', 'Doe');
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <LeftDrawer {...propsUsers} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const orgsBtn = screen.getByTestId(/orgsBtn/i);
+    const rolesBtn = screen.getByTestId(/rolesBtn/i);
+    const communityProfileBtn = screen.getByTestId(/communityProfileBtn/i);
+
+    userEvent.click(communityProfileBtn);
+
+    expect(
+      rolesBtn.className.includes('text-secondary btn btn-light'),
+    ).toBeTruthy();
+    expect(
+      orgsBtn.className.includes('text-secondary btn btn-light'),
+    ).toBeTruthy();
+    expect(
+      communityProfileBtn.className.includes('text-white btn btn-success'),
     ).toBeTruthy();
   });
 
