@@ -20,7 +20,6 @@ import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfacePostForm } from 'utils/interfaces';
 import styles from './OrgPostCard.module.css';
-import { idID } from '@mui/material/locale';
 
 interface InterfaceOrgPostCardProps {
   key: string;
@@ -54,22 +53,17 @@ export default function orgPostCard(
   const [playing, setPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [toggle] = useMutation(TOGGLE_PINNED_POST);
-  const togglePostPin = async (
-    id: string,
-    // title: string,
-    pinned: boolean,
-  ): Promise<void> => {
+  const togglePostPin = async (id: string, pinned: boolean): Promise<void> => {
     try {
       const { data } = await toggle({
         variables: {
           id,
-          // title,
         },
       });
       if (data) {
         setModalVisible(false);
         setMenuVisible(false);
-        toast.success(`${pinned ? 'Post pinned' : 'Post unpinned'}`);
+        toast.success(`${pinned ? 'Post unpinned' : 'Post pinned'}`);
         setTimeout(() => {
           window.location.reload();
         }, 2000);
@@ -155,7 +149,6 @@ export default function orgPostCard(
       ...postformState,
       postphoto: props.postPhoto,
       postvideo: props.postVideo,
-      pinned: props.pinned,
     });
   }
 
@@ -216,16 +209,6 @@ export default function orgPostCard(
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
-    console.log(postformState.pinned);
-    if (postformState.pinned) {
-      togglePostPin(props.id, postformState.pinned);
-    } else {
-      setPostFormState({
-        ...postformState,
-        posttitle: '',
-      });
-      togglePostPin(props.id, postformState.pinned);
-    }
 
     try {
       const { data } = await updatePostMutation({
@@ -239,7 +222,6 @@ export default function orgPostCard(
           ...(postVideoUpdated && {
             videoUrl: postformState.postvideo,
           }),
-          // pinned: postformState.pinned,
         },
       });
 
@@ -250,21 +232,6 @@ export default function orgPostCard(
         }, 2000);
       }
     } catch (error: any) {
-      const { data } = await updatePostMutation({
-        variables: {
-          id: props.id,
-          title: postformState.posttitle,
-          text: postformState.postinfo,
-          ...(postPhotoUpdated && {
-            imageUrl: postformState.postphoto,
-          }),
-          ...(postVideoUpdated && {
-            videoUrl: postformState.postvideo,
-          }),
-        },
-      });
-      console.log(data);
-
       toast.error(error.message);
     }
   };
@@ -523,23 +490,19 @@ export default function orgPostCard(
         </Modal.Header>
         <Form onSubmitCapture={updatePostHandler}>
           <Modal.Body>
-            {postformState.pinned && (
-              <div>
-                <Form.Label htmlFor="posttitle">{t('postTitle')}</Form.Label>
-                <Form.Control
-                  type="text"
-                  id="postTitle"
-                  name="posttitle"
-                  value={postformState.posttitle}
-                  onChange={handleInputEvent}
-                  data-testid="updateTitle"
-                  required
-                  className="mb-3"
-                  placeholder={t('postTitle1')}
-                  autoComplete="off"
-                />
-              </div>
-            )}
+            <Form.Label htmlFor="posttitle">{t('postTitle')}</Form.Label>
+            <Form.Control
+              type="text"
+              id="postTitle"
+              name="posttitle"
+              value={postformState.posttitle}
+              onChange={handleInputEvent}
+              data-testid="updateTitle"
+              required
+              className="mb-3"
+              placeholder={t('postTitle1')}
+              autoComplete="off"
+            />
             <Form.Label htmlFor="postinfo">{t('information')}</Form.Label>
             <Form.Control
               type="descrip"
@@ -649,21 +612,6 @@ export default function orgPostCard(
                 )}
               </>
             )}
-            <Form.Label htmlFor="pinpost" className="mt-3">
-              {t('pinPost')}
-            </Form.Label>
-            <Form.Switch
-              id="pinPost"
-              type="checkbox"
-              data-testid="pinPost"
-              defaultChecked={postformState.pinned}
-              onChange={(): void => {
-                setPostFormState({
-                  ...postformState,
-                  pinned: !postformState.pinned,
-                });
-              }}
-            />
           </Modal.Body>
           <Modal.Footer>
             <Button
