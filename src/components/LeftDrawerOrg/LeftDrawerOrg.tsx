@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
-
+import { ReactComponent as AngleRightIcon } from 'assets/svgs/angleRight.svg';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import styles from './LeftDrawerOrg.module.css';
 import Avatar from 'components/Avatar/Avatar';
@@ -56,7 +56,7 @@ const leftDrawerOrg = ({
   return (
     <>
       <div
-        className={`${styles.leftDrawer} customScroll ${
+        className={`${styles.leftDrawer} ${
           hideDrawer === null
             ? styles.hideElemByDefault
             : hideDrawer
@@ -107,26 +107,26 @@ const leftDrawerOrg = ({
               <div className={styles.profileText}>
                 <span className={styles.primaryText}>{organization.name}</span>
                 <span className={styles.secondaryText}>
-                  {organization.address.city}, {organization.address.state}
-                  <br />
-                  {organization.address.postalCode},{' '}
-                  {organization.address.countryCode}
+                  {organization.address.city}
                 </span>
               </div>
+              <AngleRightIcon fill={'var(--bs-secondary)'} />
             </button>
           )}
         </div>
 
         {/* Options List */}
         <div className={styles.optionList}>
-          <h5 className={styles.titleHeader}>{t('menu')}</h5>
+          <h5 className={`${styles.titleHeader} text-secondary`}>
+            {t('menu')}
+          </h5>
           {targets.map(({ name, url }, index) => {
             return url ? (
               <NavLink to={url} key={name}>
                 {({ isActive }) => (
                   <Button
                     key={name}
-                    variant={isActive === true ? 'success' : 'light'}
+                    variant={isActive === true ? 'success' : ''}
                     className={`${
                       isActive === true ? 'text-white' : 'text-secondary'
                     }`}

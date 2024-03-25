@@ -1,6 +1,5 @@
 import LeftDrawerOrg from 'components/LeftDrawerOrg/LeftDrawerOrg';
 import React, { useEffect, useState } from 'react';
-import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Navigate, Outlet, useLocation, useParams } from 'react-router-dom';
@@ -12,7 +11,7 @@ import ProfileDropdown from 'components/ProfileDropdown/profileDropdown';
 
 const OrganizationScreen = (): JSX.Element => {
   const location = useLocation();
-  const titleKey = map[location.pathname.split('/')[1]];
+  const titleKey: string | undefined = map[location.pathname.split('/')[1]];
   const { t } = useTranslation('translation', { keyPrefix: titleKey });
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
   const { orgId } = useParams();
@@ -51,7 +50,7 @@ const OrganizationScreen = (): JSX.Element => {
 
   return (
     <>
-      <Button
+      <button
         className={
           hideDrawer ? styles.opendrawer : styles.collapseSidebarButton
         }
@@ -64,7 +63,7 @@ const OrganizationScreen = (): JSX.Element => {
           }
           aria-hidden="true"
         ></i>
-      </Button>
+      </button>
       <div className={styles.drawer}>
         <LeftDrawerOrg
           orgId={orgId}
@@ -97,7 +96,11 @@ const OrganizationScreen = (): JSX.Element => {
 
 export default OrganizationScreen;
 
-const map: any = {
+interface InterfaceMapType {
+  [key: string]: string;
+}
+
+const map: InterfaceMapType = {
   orgdash: 'dashboard',
   orgpeople: 'organizationPeople',
   orgads: 'advertisement',

@@ -30,7 +30,7 @@ const collapsibleDropdown = ({
   return (
     <>
       <Button
-        variant={showDropdown ? 'success' : 'light'}
+        variant={showDropdown ? 'success' : ''}
         className={showDropdown ? 'text-white' : 'text-secondary'}
         onClick={(): void => setShowDropdown(!showDropdown)}
         aria-expanded={showDropdown}
