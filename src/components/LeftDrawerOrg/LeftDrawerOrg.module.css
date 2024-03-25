@@ -1,5 +1,6 @@
 .leftDrawer {
   width: calc(300px + 2rem);
+  min-height: 100%;
   position: fixed;
   top: 0;
   bottom: 0;
@@ -9,6 +10,7 @@
   padding: 0.8rem 1rem 0 1rem;
   background-color: var(--bs-white);
   transition: 0.5s;
+  font-family: var(--bs-leftDrawer-font-family);
 }
 
 .activeDrawer {
@@ -36,11 +38,9 @@
 
 .leftDrawer .organizationContainer button {
   position: relative;
-  margin: 1.25rem 0;
+  margin: 0.7rem 0;
   padding: 2.5rem 0.1rem;
-  border-radius: 0.5rem;
-  border: 1px solid var(--bs-gray-300);
-  background-color: var(--bs-gray-100);
+  border-radius: 16px;
 }
 
 .leftDrawer .talawaLogo {
@@ -54,8 +54,19 @@
 }
 
 .leftDrawer .titleHeader {
-  margin-bottom: 1rem;
   font-weight: 600;
+  margin-bottom: 0px;
+}
+
+.leftDrawer .optionList {
+  height: 100%;
+}
+
+.sidebarContent {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .leftDrawer .optionList button {
@@ -63,9 +74,13 @@
   align-items: center;
   width: 100%;
   text-align: start;
-  margin-bottom: 0.8rem;
-  border: 1px solid var(--bs-gray-200);
-  border-radius: 8px;
+  margin-bottom: 0.2rem;
+  border-radius: 16px;
+  font-size: 16px;
+  padding: 0.6rem;
+  padding-left: 0.8rem;
+  outline: none;
+  border: none;
 }
 
 .leftDrawer button .iconWrapper {
@@ -74,6 +89,7 @@
 
 .leftDrawer .optionList .collapseBtn {
   height: 48px;
+  border: none;
 }
 
 .leftDrawer button .iconWrapperSm {
@@ -83,24 +99,30 @@
   align-items: center;
 }
 
+.leftDrawer .organizationContainer .profileContainer {
+  background-color: #31bb6b33;
+  flex: 2;
+  padding-right: 10px;
+}
+
 .leftDrawer .profileContainer {
   border: none;
   width: 100%;
-  margin-top: 5rem;
-  padding: 2.1rem 0.5rem;
   height: 52px;
-  border-radius: 8px;
+  border-radius: 16px;
   display: flex;
   align-items: center;
+  background-color: var(--bs-white);
+  flex: 1;
 }
 
 .leftDrawer .profileContainer:focus {
   outline: none;
-  background-color: var(--bs-gray-100);
 }
 
 .leftDrawer .imageContainer {
   width: 68px;
+  margin-right: 8px;
 }
 
 .leftDrawer .profileContainer img {
@@ -136,6 +158,9 @@
 
 .logout {
   margin-bottom: 50px;
+  margin-top: 8px;
+  background-color: #e8e8e8;
+  border-radius: 16px;
 }
 
 @media (max-width: 1120px) {
@@ -146,6 +171,99 @@
 }
 
 /* For tablets */
+@media (max-height: 900px) {
+  .leftDrawer {
+    padding: 0.6rem 0.8rem 0 0.8rem;
+    width: calc(300px + 0.7rem);
+  }
+  .leftDrawer .talawaLogo {
+    width: 38px;
+    height: 38px;
+    margin-right: 0.4rem;
+  }
+  .leftDrawer .talawaText {
+    font-size: 1rem;
+  }
+  .leftDrawer .organizationContainer button {
+    margin: 0.5rem 0;
+    padding: 2.2rem 0.1rem;
+  }
+  .leftDrawer .titleHeader {
+    font-size: 16px;
+  }
+  .leftDrawer .optionList button {
+    margin-bottom: 0.05rem;
+    font-size: 15px;
+    padding: 0.5rem;
+    padding-left: 0.8rem;
+  }
+  .leftDrawer .profileContainer .profileText .primaryText {
+    font-size: 1rem;
+  }
+  .leftDrawer .profileContainer .profileText .secondaryText {
+    font-size: 0.8rem;
+  }
+  .logout {
+    margin-bottom: 2.5rem;
+  }
+}
+@media (max-height: 650px) {
+  .leftDrawer {
+    padding: 0.2rem 0.6rem 0 0.6rem;
+    width: calc(250px);
+  }
+  .leftDrawer .talawaLogo {
+    width: 30px;
+    height: 30px;
+    margin-right: 0.2rem;
+  }
+  .leftDrawer .talawaText {
+    font-size: 0.8rem;
+  }
+  .leftDrawer .organizationContainer button {
+    margin: 0.2rem 0;
+    padding: 1.6rem 0rem;
+  }
+  .leftDrawer .titleHeader {
+    font-size: 16px;
+  }
+  .leftDrawer .optionList {
+    margin-bottom: 5px;
+  }
+  .leftDrawer .optionList button {
+    margin-bottom: 0.05rem;
+    font-size: 13px;
+    padding: 0.3rem;
+    padding-left: 0.8rem;
+  }
+  .leftDrawer .profileContainer .profileText .primaryText {
+    font-size: 0.8rem;
+  }
+  .leftDrawer .profileContainer .profileText .secondaryText {
+    font-size: 0.6rem;
+  }
+  .leftDrawer .imageContainer {
+    width: 40px;
+    margin-left: 5px;
+    margin-right: 12px;
+  }
+  .leftDrawer .imageContainer img {
+    width: 40px;
+    height: 100%;
+  }
+  .logout {
+    margin-bottom: 2.5rem;
+    padding: 3px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-height: 450px) {
+  .scroll {
+    overflow-y: scroll;
+  }
+}
+
 @media (max-width: 820px) {
   .hideElemByDefault {
     display: none;

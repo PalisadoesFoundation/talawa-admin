@@ -78,7 +78,7 @@ const leftDrawerOrg = ({
   return (
     <>
       <div
-        className={`${styles.leftDrawer} customScroll ${
+        className={`${styles.leftDrawer} ${styles.scroll} ${
           hideDrawer === null
             ? styles.hideElemByDefault
             : hideDrawer
@@ -129,57 +129,57 @@ const leftDrawerOrg = ({
               <div className={styles.profileText}>
                 <span className={styles.primaryText}>{organization.name}</span>
                 <span className={styles.secondaryText}>
-                  {organization.address.city}, {organization.address.state}
-                  <br />
-                  {organization.address.postalCode},{' '}
-                  {organization.address.countryCode}
+                  {organization.address.city}
                 </span>
               </div>
+              <AngleRightIcon fill={'var(--bs-secondary)'} />
             </button>
           )}
         </div>
 
-        {/* Options List */}
-        <div className={styles.optionList}>
-          <h5 className={styles.titleHeader}>{t('menu')}</h5>
-          {targets.map(({ name, url }, index) => {
-            return url ? (
-              <NavLink to={url} key={name}>
-                {({ isActive }) => (
-                  <Button
-                    key={name}
-                    variant={isActive === true ? 'success' : 'light'}
-                    className={`${
-                      isActive === true ? 'text-white' : 'text-secondary'
-                    }`}
-                  >
-                    <div className={styles.iconWrapper}>
-                      <IconComponent
-                        name={name}
-                        fill={
-                          isActive === true
-                            ? 'var(--bs-white)'
-                            : 'var(--bs-secondary)'
-                        }
-                      />
-                    </div>
-                    {name}
-                  </Button>
-                )}
-              </NavLink>
-            ) : (
-              <CollapsibleDropdown
-                key={name}
-                target={targets[index]}
-                showDropdown={showDropdown}
-                setShowDropdown={setShowDropdown}
-              />
-            );
-          })}
-        </div>
+        <div className={styles.sidebarContent}>
+          {/* Options List */}
+          <div className={styles.optionList}>
+            <h5 className={`${styles.titleHeader} text-secondary`}>
+              {t('menu')}
+            </h5>
+            {targets.map(({ name, url }, index) => {
+              return url ? (
+                <NavLink to={url} key={name}>
+                  {({ isActive }) => (
+                    <Button
+                      key={name}
+                      variant={isActive === true ? 'success' : ''}
+                      className={`${
+                        isActive === true ? 'text-white' : 'text-secondary'
+                      }`}
+                    >
+                      <div className={styles.iconWrapper}>
+                        <IconComponent
+                          name={name}
+                          fill={
+                            isActive === true
+                              ? 'var(--bs-white)'
+                              : 'var(--bs-secondary)'
+                          }
+                        />
+                      </div>
+                      {name}
+                    </Button>
+                  )}
+                </NavLink>
+              ) : (
+                <CollapsibleDropdown
+                  key={name}
+                  target={targets[index]}
+                  showDropdown={showDropdown}
+                  setShowDropdown={setShowDropdown}
+                />
+              );
+            })}
+          </div>
 
-        {/* Profile Section & Logout Btn */}
-        <div style={{ marginTop: 'auto' }}>
+          {/* Profile Section & Logout Btn */}
           <button
             className={styles.profileContainer}
             data-testid="profileBtn"
@@ -209,7 +209,7 @@ const leftDrawerOrg = ({
           </button>
           <Button
             variant="light"
-            className={`mt-4 d-flex justify-content-start px-0 w-100 ${styles.logout}`}
+            className={`d-flex justify-content-start px-0 w-100 ${styles.logout}`}
             onClick={(): void => logout()}
             data-testid="logoutBtn"
           >

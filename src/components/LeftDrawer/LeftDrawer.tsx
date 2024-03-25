@@ -40,7 +40,7 @@ const leftDrawer = ({ hideDrawer }: InterfaceLeftDrawerProps): JSX.Element => {
   return (
     <>
       <div
-        className={`${styles.leftDrawer} customScroll ${
+        className={`${styles.leftDrawer} ${
           hideDrawer === null
             ? styles.hideElemByDefault
             : hideDrawer
@@ -51,12 +51,12 @@ const leftDrawer = ({ hideDrawer }: InterfaceLeftDrawerProps): JSX.Element => {
       >
         <TalawaLogo className={styles.talawaLogo} />
         <p className={styles.talawaText}>{t('talawaAdminPortal')}</p>
-        <h5 className={styles.titleHeader}>{t('menu')}</h5>
+        <h5 className={`${styles.titleHeader} text-secondary`}>{t('menu')}</h5>
         <div className={styles.optionList}>
           <NavLink to={'/orglist'}>
             {({ isActive }) => (
               <Button
-                variant={isActive === true ? 'success' : 'light'}
+                variant={isActive === true ? 'success' : ''}
                 className={`${
                   isActive === true ? 'text-white' : 'text-secondary'
                 }`}
@@ -79,7 +79,7 @@ const leftDrawer = ({ hideDrawer }: InterfaceLeftDrawerProps): JSX.Element => {
             <NavLink to={'/requests'}>
               {({ isActive }) => (
                 <Button
-                  variant={isActive === true ? 'success' : 'light'}
+                  variant={isActive === true ? 'success' : ''}
                   className={`${
                     isActive === true ? 'text-white' : 'text-secondary'
                   }`}
@@ -103,7 +103,7 @@ const leftDrawer = ({ hideDrawer }: InterfaceLeftDrawerProps): JSX.Element => {
             <NavLink to={'/users'}>
               {({ isActive }) => (
                 <Button
-                  variant={isActive === true ? 'success' : 'light'}
+                  variant={isActive === true ? 'success' : ''}
                   className={`${
                     isActive === true ? 'text-white' : 'text-secondary'
                   }`}
@@ -155,12 +155,12 @@ const leftDrawer = ({ hideDrawer }: InterfaceLeftDrawerProps): JSX.Element => {
 
           <Button
             variant="light"
-            className={`mt-4 d-flex justify-content-start px-0 w-100 bg-danger text-white  ${styles.logout}`}
+            className={`d-flex justify-content-start px-0 w-100  ${styles.logout}`}
             onClick={(): void => logout()}
             data-testid="logoutBtn"
           >
             <div className={styles.imageContainer}>
-              <LogoutIcon fill={'white'} />
+              <LogoutIcon fill={'var(--bs-secondary)'} />
             </div>
             {t('logout')}
           </Button>

@@ -49,12 +49,43 @@
   color: black;
 }
 
+.opendrawer:hover {
+  transition: background-color 0.5s ease;
+  background-color: var(--bs-primary);
+}
+.collapseSidebarButton:hover {
+  transition: background-color 0.5s ease;
+  background-color: var(--bs-primary);
+}
+
 @media (max-width: 1120px) {
   .contract {
     padding-left: calc(250px + 2rem + 1.5rem);
   }
   .collapseSidebarButton {
     width: calc(250px + 2rem);
+  }
+}
+
+@media (max-height: 900px) {
+  .pageContainer {
+    padding: 1rem 1.5rem 0 calc(300px + 2rem);
+  }
+  .collapseSidebarButton {
+    height: 30px;
+    width: calc(300px + 1rem);
+  }
+}
+@media (max-height: 650px) {
+  .pageContainer {
+    padding: 1rem 1.5rem 0 calc(270px);
+  }
+  .collapseSidebarButton {
+    width: 250px;
+    height: 20px;
+  }
+  .opendrawer {
+    width: 30px;
   }
 }
 

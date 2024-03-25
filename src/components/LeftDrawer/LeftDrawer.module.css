@@ -9,6 +9,7 @@
   padding: 1rem 1rem 0 1rem;
   background-color: var(--bs-white);
   transition: 0.5s;
+  font-family: var(--bs-leftDrawer-font-family);
 }
 
 .activeDrawer {
@@ -34,8 +35,9 @@
 }
 
 .leftDrawer .talawaText {
-  font-size: 1rem;
+  font-size: 20px;
   text-align: center;
+  font-weight: 500;
 }
 
 .leftDrawer .titleHeader {
@@ -49,8 +51,9 @@
   width: 100%;
   text-align: start;
   margin-bottom: 0.8rem;
-  border-radius: 8px;
-  border: 1px solid var(--bs-gray-200);
+  border-radius: 16px;
+  outline: none;
+  border: none;
 }
 
 .leftDrawer .optionList button .iconWrapper {
@@ -62,9 +65,9 @@
   width: 100%;
   padding: 2.1rem 0.5rem;
   height: 52px;
-  border-radius: 8px;
   display: flex;
   align-items: center;
+  background-color: var(--bs-white);
 }
 
 .leftDrawer .profileContainer:focus {
@@ -102,6 +105,9 @@
 
 .logout {
   margin-bottom: 50px;
+  margin-top: 8px;
+  background-color: #e8e8e8;
+  border-radius: 16px;
 }
 
 @media (max-width: 1120px) {

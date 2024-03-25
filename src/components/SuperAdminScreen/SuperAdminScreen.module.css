@@ -50,6 +50,9 @@
 }
 
 @media (max-width: 1120px) {
+  .pageContainer {
+    padding: 1rem 1.5rem 0 calc(300px);
+  }
   .contract {
     padding-left: calc(250px + 2rem + 1.5rem);
   }
@@ -77,6 +80,12 @@
     width: 100%;
     left: 0;
     right: 0;
+  }
+}
+
+@media (max-height: 650px) {
+  .pageContainer {
+    padding: 1rem 1.5rem 0 calc(300px);
   }
 }
 
