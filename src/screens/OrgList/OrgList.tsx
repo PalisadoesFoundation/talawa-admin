@@ -12,13 +12,13 @@ import {
 
 import OrgListCard from 'components/OrgListCard/OrgListCard';
 import type { ChangeEvent } from 'react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Dropdown, Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useTranslation } from 'react-i18next';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import type {
@@ -26,15 +26,16 @@ import type {
   InterfaceOrgConnectionType,
   InterfaceUserType,
 } from 'utils/interfaces';
+import useLocalStorage from 'utils/useLocalstorage';
 import styles from './OrgList.module.css';
 import OrganizationModal from './OrganizationModal';
-import useLocalStorage from 'utils/useLocalstorage';
+import React from 'react';
 
 function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
-  const navigate = useNavigate();
   const [dialogModalisOpen, setdialogModalIsOpen] = useState(false);
   const [dialogRedirectOrgId, setDialogRedirectOrgId] = useState('<ORG_ID>');
+
   function openDialogModal(redirectOrgId: string): void {
     setDialogRedirectOrgId(redirectOrgId);
     // console.log(redirectOrgId, dialogRedirectOrgId);
@@ -42,6 +43,8 @@ function orgList(): JSX.Element {
   }
 
   const { getItem } = useLocalStorage();
+  const superAdmin = getItem('SuperAdmin');
+  const adminFor = getItem('AdminFor');
 
   function closeDialogModal(): void {
     setdialogModalIsOpen(false);
@@ -94,7 +97,7 @@ function orgList(): JSX.Element {
     loading: boolean;
     error?: Error | undefined;
   } = useQuery(USER_ORGANIZATION_LIST, {
-    variables: { id: getItem('id') },
+    variables: { userId: getItem('id') },
     context: {
       headers: { authorization: `Bearer ${getItem('token')}` },
     },
@@ -155,13 +158,13 @@ function orgList(): JSX.Element {
   const isAdminForCurrentOrg = (
     currentOrg: InterfaceOrgConnectionInfoType,
   ): boolean => {
-    if (userData?.user?.adminFor.length === 1) {
+    if (adminFor.length === 1) {
       // If user is admin for one org only then check if that org is current org
-      return userData?.user?.adminFor[0]._id === currentOrg._id;
+      return adminFor[0]._id === currentOrg._id;
     } else {
       // If user is admin for more than one org then check if current org is present in adminFor array
       return (
-        userData?.user?.adminFor.some(
+        adminFor.some(
           (org: { _id: string; name: string; image: string | null }) =>
             org._id === currentOrg._id,
         ) ?? false
@@ -173,7 +176,7 @@ function orgList(): JSX.Element {
     createSampleOrganization()
       .then(() => {
         toast.success(t('sampleOrgSuccess'));
-        navigate(0);
+        window.location.reload();
       })
       .catch(() => {
         toast.error(t('sampleOrgDuplicate'));
@@ -239,11 +242,9 @@ function orgList(): JSX.Element {
   };
 
   /* istanbul ignore next */
-  useEffect(() => {
-    if (errorList || errorUser) {
-      navigate('/');
-    }
-  }, [errorList, errorUser]);
+  if (errorList || errorUser) {
+    window.location.assign('/');
+  }
 
   /* istanbul ignore next */
   const resetAllParams = (): void => {
@@ -392,7 +393,7 @@ function orgList(): JSX.Element {
               </Dropdown.Menu>
             </Dropdown>
           </div>
-          {userData && userData.user.userType === 'SUPERADMIN' && (
+          {superAdmin && (
             <Button
               variant="success"
               onClick={toggleModal}
@@ -408,9 +409,7 @@ function orgList(): JSX.Element {
       {!isLoading &&
       ((orgsData?.organizationsConnection.length === 0 &&
         searchByName.length == 0) ||
-        (userData &&
-          userData.user.userType === 'ADMIN' &&
-          userData.user.adminFor.length === 0)) ? (
+        (userData && adminFor.length === 0)) ? (
         <div className={styles.notFound}>
           <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
           <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>
@@ -461,7 +460,7 @@ function orgList(): JSX.Element {
               </div>
             }
           >
-            {userData && userData.user.userType == 'SUPERADMIN'
+            {userData && superAdmin
               ? orgsData?.organizationsConnection.map((item) => {
                   return (
                     <div key={item._id} className={styles.itemCard}>
@@ -470,8 +469,7 @@ function orgList(): JSX.Element {
                   );
                 })
               : userData &&
-                userData.user.userType == 'ADMIN' &&
-                userData.user.adminFor.length > 0 &&
+                adminFor.length > 0 &&
                 orgsData?.organizationsConnection.map((item) => {
                   if (isAdminForCurrentOrg(item)) {
                     return (

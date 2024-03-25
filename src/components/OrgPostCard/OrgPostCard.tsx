@@ -74,10 +74,12 @@ export default function orgPostCard(
           window.location.reload();
         }, 2000);
       }
-    } catch (error: any) {
-      console.log(error);
-      /* istanbul ignore next */
-      errorHandler(t, error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.log(error.message);
+        /* istanbul ignore next */
+        errorHandler(t, error);
+      }
     }
   };
   const toggleShowEditModal = (): void => {

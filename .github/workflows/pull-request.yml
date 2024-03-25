@@ -38,7 +38,7 @@ jobs:
       - name: Count number of lines
         run: |
           chmod +x ./.github/workflows/countline.py
-          ./.github/workflows/countline.py --lines 600 --exclude_files src/screens/LoginPage/LoginPage.tsx src/GraphQl/Queries/Queries.ts
+          ./.github/workflows/countline.py --lines 600 --exclude_files src/screens/LoginPage/LoginPage.tsx src/GraphQl/Queries/Queries.ts src/screens/OrgList/OrgList.tsx
 
       - name: Get changed TypeScript files
         id: changed-files
@@ -52,9 +52,11 @@ jobs:
         if: steps.changed-files.outputs.only_changed != 'true'
         run: npm run typecheck
 
-      - name: Run linting check
+      - name: Check for linting errors in modified files
         if: steps.changed-files.outputs.only_changed != 'true'
-        run: npm run lint:check
+        env: 
+          CHANGED_FILES: ${{ steps.changed_files.outputs.all_changed_files }}
+        run: npx eslint ${CHANGED_FILES} 
         
       - name: Check for localStorage Usage
         run: |

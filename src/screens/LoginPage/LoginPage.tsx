@@ -1,4 +1,5 @@
 import { useMutation } from '@apollo/client';
+import { Check, Clear } from '@mui/icons-material';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { Form } from 'react-bootstrap';
@@ -9,28 +10,27 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Check, Clear } from '@mui/icons-material';
 
+import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import {
+  BACKEND_URL,
   REACT_APP_USE_RECAPTCHA,
   RECAPTCHA_SITE_KEY,
-  BACKEND_URL,
 } from 'Constant/constant';
 import {
   LOGIN_MUTATION,
   RECAPTCHA_MUTATION,
   SIGNUP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import { ReactComponent as PalisadoesLogo } from 'assets/svgs/palisadoes.svg';
+import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
-import LoginPortalToggle from 'components/LoginPortalToggle/LoginPortalToggle';
 import Loader from 'components/Loader/Loader';
+import LoginPortalToggle from 'components/LoginPortalToggle/LoginPortalToggle';
 import { errorHandler } from 'utils/errorHandler';
-import styles from './LoginPage.module.css';
-import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import useLocalStorage from 'utils/useLocalstorage';
 import { socialMediaLinks } from '../../constants';
+import styles from './LoginPage.module.css';
 
 const loginPage = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
@@ -95,9 +95,7 @@ const loginPage = (): JSX.Element => {
   useEffect(() => {
     const isLoggedIn = getItem('IsLoggedIn');
     if (isLoggedIn == 'TRUE') {
-      navigate(
-        getItem('UserType') === 'USER' ? '/user/organizations' : '/orglist',
-      );
+      navigate(getItem('userId') !== null ? '/user/organizations' : '/orglist');
     }
     setComponentLoader(false);
   }, []);
@@ -115,7 +113,7 @@ const loginPage = (): JSX.Element => {
     async function loadResource(): Promise<void> {
       try {
         await fetch(BACKEND_URL as string);
-      } catch (error: any) {
+      } catch (error) {
         /* istanbul ignore next */
         errorHandler(t, error);
       }
@@ -125,7 +123,7 @@ const loginPage = (): JSX.Element => {
   }, []);
 
   const verifyRecaptcha = async (
-    recaptchaToken: any,
+    recaptchaToken: string | null,
   ): Promise<boolean | void> => {
     try {
       /* istanbul ignore next */
@@ -139,7 +137,7 @@ const loginPage = (): JSX.Element => {
       });
 
       return data.recaptcha;
-    } catch (error: any) {
+    } catch (error) {
       /* istanbul ignore next */
       toast.error(t('captchaError'));
     }
@@ -198,9 +196,7 @@ const loginPage = (): JSX.Element => {
           /* istanbul ignore next */
           if (signUpData) {
             toast.success(
-              role === 'admin'
-                ? 'Successfully Registered. Please wait until you will be approved.'
-                : 'Successfully registered. Please wait for admin to approve your request.',
+              t(role === 'admin' ? 'successfullyRegistered' : 'afterRegister'),
             );
             setShowTab('LOGIN');
             setSignFormState({
@@ -211,7 +207,7 @@ const loginPage = (): JSX.Element => {
               cPassword: '',
             });
           }
-        } catch (error: any) {
+        } catch (error) {
           /* istanbul ignore next */
           errorHandler(t, error);
         }
@@ -253,26 +249,27 @@ const loginPage = (): JSX.Element => {
 
       /* istanbul ignore next */
       if (loginData) {
-        if (role === 'admin') {
-          if (
-            loginData.login.user.userType === 'SUPERADMIN' ||
-            (loginData.login.user.userType === 'ADMIN' &&
-              loginData.login.user.adminApproved === true)
-          ) {
-            setItem('token', loginData.login.accessToken);
-            setItem('refreshToken', loginData.login.refreshToken);
-            setItem('id', loginData.login.user._id);
-            setItem('IsLoggedIn', 'TRUE');
-            setItem('UserType', loginData.login.user.userType);
-          } else {
-            toast.warn(t('notAuthorised'));
+        if (
+          loginData.login.appUserProfile.isSuperAdmin ||
+          (loginData.login.appUserProfile.adminFor.length !== 0 &&
+            loginData.login.appUserProfile.adminApproved === true)
+        ) {
+          setItem('FirstName', loginData.login.user.firstName);
+          setItem('LastName', loginData.login.user.lastName);
+          setItem('token', loginData.login.accessToken);
+          setItem('refreshToken', loginData.login.refreshToken);
+          setItem('id', loginData.login.user._id);
+          setItem('IsLoggedIn', 'TRUE');
+          setItem('SuperAdmin', loginData.login.appUserProfile.isSuperAdmin);
+          setItem('AdminFor', loginData.login.appUserProfile.adminFor);
+          if (getItem('IsLoggedIn') == 'TRUE') {
+            navigate(role === 'admin' ? '/orglist' : '/user/organizations');
           }
         } else {
           setItem('token', loginData.login.accessToken);
           setItem('refreshToken', loginData.login.refreshToken);
           setItem('userId', loginData.login.user._id);
           setItem('IsLoggedIn', 'TRUE');
-          setItem('UserType', loginData.login.user.userType);
         }
         setItem(
           'name',
@@ -288,7 +285,7 @@ const loginPage = (): JSX.Element => {
       } else {
         toast.warn(t('notFound'));
       }
-    } catch (error: any) {
+    } catch (error) {
       /* istanbul ignore next */
       errorHandler(t, error);
     }

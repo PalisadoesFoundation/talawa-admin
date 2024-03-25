@@ -37,8 +37,12 @@ export const ORGANIZATION_POST_LIST = gql`
             }
             createdAt
             likeCount
+            likedBy {
+              _id
+              firstName
+              lastName
+            }
             commentCount
-
             pinned
           }
           cursor
@@ -124,11 +128,13 @@ export const USER_ORGANIZATION_CONNECTION = gql`
 export const USER_JOINED_ORGANIZATIONS = gql`
   query UserJoinedOrganizations($id: ID!) {
     users(where: { id: $id }) {
-      joinedOrganizations {
-        _id
-        name
-        description
-        image
+      user {
+        joinedOrganizations {
+          _id
+          name
+          description
+          image
+        }
       }
     }
   }
@@ -144,11 +150,13 @@ export const USER_JOINED_ORGANIZATIONS = gql`
 export const USER_CREATED_ORGANIZATIONS = gql`
   query UserCreatedOrganizations($id: ID!) {
     users(where: { id: $id }) {
-      createdOrganizations {
-        _id
-        name
-        description
-        image
+      appUserProfile {
+        createdOrganizations {
+          _id
+          name
+          description
+          image
+        }
       }
     }
   }
