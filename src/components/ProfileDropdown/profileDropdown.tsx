@@ -39,9 +39,14 @@ const profileDropdown = (): JSX.Element => {
         <div className={styles.imageContainer}>
           {userImage && userImage !== 'null' ? (
             /*istanbul ignore next*/
-            <img src={userImage} alt={`profile picture`} />
+            <img
+              src={userImage}
+              alt={`profile picture`}
+              data-testid="display-img"
+            />
           ) : (
             <Avatar
+              data-testid="display-img"
               size={45}
               avatarStyle={styles.avatarStyle}
               name={`${firstName} ${lastName}`}
@@ -50,8 +55,10 @@ const profileDropdown = (): JSX.Element => {
           )}
         </div>
         <div className={styles.profileText}>
-          <span className={styles.primaryText}>{displayedName}</span>
-          <span className={styles.secondaryText}>
+          <span className={styles.primaryText} data-testid="display-name">
+            {displayedName}
+          </span>
+          <span className={styles.secondaryText} data-testid="display-type">
             {`${userType}`.toLowerCase()}
           </span>
         </div>
@@ -68,6 +75,7 @@ const profileDropdown = (): JSX.Element => {
       <Dropdown.Menu>
         <Dropdown.Item
           data-testid="profileBtn"
+          /*istanbul ignore next*/
           onClick={() => navigate(`/member/${orgId}`)}
           aria-label="View Profile"
         >
