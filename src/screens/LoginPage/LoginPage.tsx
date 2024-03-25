@@ -257,7 +257,7 @@ const loginPage = (): JSX.Element => {
             appUserProfile.adminApproved === true);
 
         if (role === 'admin' && !isAdmin) {
-          toast.warn(t('notFound'));
+          toast.warn(t('notAuthorised'));
           return;
         }
         const loggedInUserId = user._id;
