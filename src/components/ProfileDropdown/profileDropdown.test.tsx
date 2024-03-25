@@ -14,7 +14,11 @@ const MOCKS = [
     request: {
       query: REVOKE_REFRESH_TOKEN,
     },
-    result: {},
+    result: {
+      data: {
+        revokeRefreshTokenForUser: true,
+      },
+    },
   },
 ];
 
@@ -42,6 +46,7 @@ afterEach(() => {
 });
 afterEach(() => {
   jest.clearAllMocks();
+  localStorage.clear();
 });
 
 describe('ProfileDropdown Component', () => {
@@ -73,5 +78,22 @@ describe('ProfileDropdown Component', () => {
 
     userEvent.click(screen.getByTestId('logoutBtn'));
     expect(global.window.location.pathname).toBe('/');
+  });
+  describe('Member screen routing testing', () => {
+    test('member screen', async () => {
+      render(
+        <MockedProvider mocks={MOCKS} addTypename={false}>
+          <BrowserRouter>
+            <ProfileDropdown />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+      await act(async () => {
+        userEvent.click(screen.getByTestId('togDrop'));
+      });
+
+      userEvent.click(screen.getByTestId('profileBtn'));
+      expect(global.window.location.pathname).toBe('/member/undefined');
+    });
   });
 });
