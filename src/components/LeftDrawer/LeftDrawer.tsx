@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 import { ReactComponent as OrganizationsIcon } from 'assets/svgs/organizations.svg';
 import { ReactComponent as RolesIcon } from 'assets/svgs/roles.svg';
+import { ReactComponent as SettingsIcon } from 'assets/svgs/settings.svg';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import { ReactComponent as RequestsIcon } from 'assets/svgs/requests.svg';
 import styles from './LeftDrawer.module.css';
@@ -85,28 +86,52 @@ const leftDrawer = ({ hideDrawer }: InterfaceLeftDrawerProps): JSX.Element => {
             </NavLink>
           )}
           {superAdmin && (
-            <NavLink to={'/users'}>
-              {({ isActive }) => (
-                <Button
-                  variant={isActive === true ? 'success' : 'light'}
-                  className={`${
-                    isActive === true ? 'text-white' : 'text-secondary'
-                  }`}
-                  data-testid="rolesBtn"
-                >
-                  <div className={styles.iconWrapper}>
-                    <RolesIcon
-                      fill={`${
-                        isActive === true
-                          ? 'var(--bs-white)'
-                          : 'var(--bs-secondary)'
-                      }`}
-                    />
-                  </div>
-                  {t('users')}
-                </Button>
-              )}
-            </NavLink>
+            <>
+              <NavLink to={'/users'}>
+                {({ isActive }) => (
+                  <Button
+                    variant={isActive === true ? 'success' : 'light'}
+                    className={`${
+                      isActive === true ? 'text-white' : 'text-secondary'
+                    }`}
+                    data-testid="rolesBtn"
+                  >
+                    <div className={styles.iconWrapper}>
+                      <RolesIcon
+                        fill={`${
+                          isActive === true
+                            ? 'var(--bs-white)'
+                            : 'var(--bs-secondary)'
+                        }`}
+                      />
+                    </div>
+                    {t('users')}
+                  </Button>
+                )}
+              </NavLink>
+              <NavLink to={'/communityProfile'}>
+                {({ isActive }) => (
+                  <Button
+                    variant={isActive === true ? 'success' : 'light'}
+                    className={`${
+                      isActive === true ? 'text-white' : 'text-secondary'
+                    }`}
+                    data-testid="communityProfileBtn"
+                  >
+                    <div className={styles.iconWrapper}>
+                      <SettingsIcon
+                        stroke={`${
+                          isActive === true
+                            ? 'var(--bs-white)'
+                            : 'var(--bs-secondary)'
+                        }`}
+                      />
+                    </div>
+                    {t('communityProfile')}
+                  </Button>
+                )}
+              </NavLink>
+            </>
           )}
         </div>
       </div>

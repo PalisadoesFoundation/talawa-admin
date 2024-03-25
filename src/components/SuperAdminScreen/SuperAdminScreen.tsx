@@ -76,4 +76,5 @@ const map: any = {
   requests: 'requests',
   users: 'users',
   member: 'memberDetail',
+  communityProfile: 'communityProfile',
 };

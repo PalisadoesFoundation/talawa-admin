@@ -576,13 +576,13 @@ legend + * {
 }
 
 /* rtl:raw:
-[type="tel"],
-[type="url"],
-[type="email"],
-[type="number"] {
-  direction: ltr;
-}
-*/
+   [type="tel"],
+   [type="url"],
+   [type="email"],
+   [type="number"] {
+     direction: ltr;
+   }
+   */
 ::-webkit-search-decoration {
   -webkit-appearance: none;
 }
@@ -6323,13 +6323,13 @@ fieldset:disabled .btn {
 }
 
 /* rtl:options: {
-  "autoRename": true,
-  "stringMap":[ {
-    "name"    : "prev-next",
-    "search"  : "prev",
-    "replace" : "next"
-  } ]
-} */
+     "autoRename": true,
+     "stringMap":[ {
+       "name"    : "prev-next",
+       "search"  : "prev",
+       "replace" : "next"
+     } ]
+   } */
 .carousel-control-prev-icon {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath d='M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z'/%3e%3c/svg%3e");
 }
@@ -12356,25 +12356,25 @@ fieldset:disabled .btn {
   }
 }
 /*
-    TALAWA SCSS
-    -----------
-    This file is used to import all partial scss files in the project.
-    It is used to compile the final CSS file to the CSS folder as main.css .
-
-=========  Table of Contents  =========
-1. Components
-2. Content
-3. Forms
-4. Utilities
-5. General
-6. Colors
-
-*/
+       TALAWA SCSS
+       -----------
+       This file is used to import all partial scss files in the project.
+       It is used to compile the final CSS file to the CSS folder as main.css .
+   
+   =========  Table of Contents  =========
+   1. Components
+   2. Content
+   3. Forms
+   4. Utilities
+   5. General
+   6. Colors
+   
+   */
 /*
-
-    1. COMPONENTS
-
-*/
+   
+       1. COMPONENTS
+   
+   */
 .btn-primary,
 .btn-secondary,
 .btn-success,
@@ -12428,31 +12428,31 @@ fieldset:disabled .btn {
   }
 }
 /*
-
-    2. CONTENT
-
-*/
+   
+       2. CONTENT
+   
+   */
 /*
-    DISPLAY SASS VARIABLES
-*/
+       DISPLAY SASS VARIABLES
+   */
 /*
-    DISPLAY SASS VARIABLES
-*/
+       DISPLAY SASS VARIABLES
+   */
 /*
-
-    3. FORMS
-
-*/
+   
+       3. FORMS
+   
+   */
 /*
-
-    4. UTILITIES
-
-*/
+   
+       4. UTILITIES
+   
+   */
 /*
-
-    5. General
-
-*/
+   
+       5. General
+   
+   */
 :root {
   --bs-body-font-family: Arial, Helvetica, sans-serif;
 }

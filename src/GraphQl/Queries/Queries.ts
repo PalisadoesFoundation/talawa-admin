@@ -686,6 +686,27 @@ export const USERS_CONNECTION_LIST = gql`
   }
 `;
 
+export const GET_COMMUNITY_DATA = gql`
+  query getCommunityData {
+    getCommunityData {
+      _id
+      websiteLink
+      name
+      logoUrl
+      socialMediaUrls {
+        facebook
+        gitHub
+        instagram
+        twitter
+        linkedIn
+        youTube
+        reddit
+        slack
+      }
+    }
+  }
+`;
+
 // get the list of Action Item Categories
 export { ACTION_ITEM_CATEGORY_LIST } from './ActionItemCategoryQueries';
 
