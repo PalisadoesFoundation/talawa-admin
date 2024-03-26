@@ -38,8 +38,6 @@ type AuthData {
 
 type CheckIn {
   _id: ID!
-  allotedRoom: String
-  allotedSeat: String
   event: Event!
   feedbackSubmitted: Boolean!
   time: DateTime!
@@ -47,8 +45,6 @@ type CheckIn {
 }
 
 input CheckInInput {
-  allotedRoom: String
-  allotedSeat: String
   eventId: ID!
   userId: ID!
 }

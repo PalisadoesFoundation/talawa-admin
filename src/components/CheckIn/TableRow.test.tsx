@@ -58,8 +58,6 @@ describe('Testing Table Row for CheckIn Table', () => {
         checkIn: {
           _id: '123',
           time: '12:00:00',
-          allotedRoom: '',
-          allotedSeat: '',
         },
         eventId: `event123`,
       },

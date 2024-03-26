@@ -9,6 +9,7 @@ import IconComponent from 'components/IconComponent/IconComponent';
 import { EventRegistrantsWrapper } from 'components/EventRegistrantsModal/EventRegistrantsWrapper';
 import { CheckInWrapper } from 'components/CheckIn/CheckInWrapper';
 import { ActionItemsWrapper } from 'components/ActionItems/ActionItemsWrapper';
+import { InviteUsersWrapper } from 'components/InviteUsers/InviteUsersWrapper';
 import { EventStatsWrapper } from 'components/EventStats/EventStatsWrapper';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
@@ -125,6 +126,11 @@ const leftDrawerEvent = ({
             </div>
             All Events
           </Button>
+          <InviteUsersWrapper
+            eventId={event._id}
+            orgId={event.organization._id}
+            key={`${event._id || 'loading'}Invite`}
+          />
         </div>
 
         {/* Profile Section & Logout Btn */}

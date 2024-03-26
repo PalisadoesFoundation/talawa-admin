@@ -238,6 +238,14 @@ export const EVENT_ATTENDEES = gql`
   }
 `;
 
+export const GET_EVENT_ATTENDEE = gql`
+  query getEventAttendee($userId: ID!, $eventId: ID!) {
+    getEventAttendee(userId: $userId, eventId: $eventId) {
+      _id
+    }
+  }
+`
+
 export const EVENT_CHECKINS = gql`
   query eventCheckIns($id: ID!) {
     event(id: $id) {
@@ -252,8 +260,6 @@ export const EVENT_CHECKINS = gql`
         checkIn {
           _id
           time
-          allotedRoom
-          allotedSeat
         }
       }
     }
