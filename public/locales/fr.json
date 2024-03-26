@@ -159,7 +159,6 @@
     "users": "Utilisateurs",
     "name": "Nom",
     "email": "E-mail",
-    "roles_userType": "Rôle/Type d'utilisateur",
     "joined_organizations": "Organisations rejointes",
     "blocked_organizations": "Organisations bloquées",
     "endOfResults": "Fin des résultats",
