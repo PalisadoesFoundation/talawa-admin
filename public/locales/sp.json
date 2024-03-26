@@ -61,6 +61,7 @@
     "my organizations": "Mis Organizaciones",
     "users": "Usuarios",
     "requests": "Solicitudes",
+    "communityProfile": "Perfil de la comunidad",
     "logout": "Cerrar sesión"
   },
   "leftDrawerOrg": {
@@ -191,6 +192,18 @@
     "MembershipRequestSent": "Solicitud de membresía enviada exitosamente",
     "AlreadyJoined": "Ya eres miembro de esta organización.",
     "errorOccured": "Se produjo un error. Por favor, inténtalo de nuevo más tarde."
+  },
+  "communityProfile": {
+    "title": "Perfil de la comunidad",
+    "editProfile": "Editar perfil",
+    "communityProfileInfo": "Estos detalles aparecerán en la pantalla de inicio de sesión/registro para usted y los miembros de su comunidad.",
+    "communityName": "Nombre de la comunidad",
+    "wesiteLink": "Enlace de página web",
+    "logo": "Logo",
+    "social": "Enlaces de redes sociales",
+    "url": "Introducir URL",
+    "profileChangedMsg": "Se actualizaron correctamente los detalles del perfil.",
+    "resetData": "Restablezca correctamente los detalles del perfil."
   },
   "dashboard": {
     "title": "Panel de",

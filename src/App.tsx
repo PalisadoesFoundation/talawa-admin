@@ -22,6 +22,7 @@ import OrganizationPeople from 'screens/OrganizationPeople/OrganizationPeople';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import Requests from 'screens/Requests/Requests';
 import Users from 'screens/Users/Users';
+import CommunityProfile from 'screens/CommunityProfile/CommunityProfile';
 import OrganizationVenues from 'screens/OrganizationVenues/OrganizationVenues';
 
 import React, { useEffect } from 'react';
@@ -108,6 +109,7 @@ function app(): JSX.Element {
             <Route path="/member" element={<MemberDetail />} />
             <Route path="/requests" element={<Requests />} />
             <Route path="/users" element={<Users />} />
+            <Route path="/communityProfile" element={<CommunityProfile />} />
           </Route>
           <Route element={<OrganizationScreen />}>
             <Route path="/orgdash/:orgId" element={<OrganizationDashboard />} />

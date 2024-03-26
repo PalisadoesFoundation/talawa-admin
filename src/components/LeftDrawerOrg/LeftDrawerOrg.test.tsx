@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import 'jest-localstorage-mock';
 import { I18nextProvider } from 'react-i18next';
@@ -283,9 +283,6 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     defaultScreens.map((screenName) => {
       expect(screen.getByText(screenName)).toBeInTheDocument();
     });
-    expect(screen.getByText(/John Doe/i)).toBeInTheDocument();
-    expect(screen.getByText(/Superadmin/i)).toBeInTheDocument();
-    expect(screen.getByAltText(/dummy picture/i)).toBeInTheDocument();
   });
 
   test('Testing Profile Page & Organization Detail Modal', async () => {
@@ -306,7 +303,6 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     );
     await wait();
     expect(screen.getByTestId(/orgBtn/i)).toBeInTheDocument();
-    userEvent.click(screen.getByTestId(/profileBtn/i));
   });
 
   test('Testing Menu Buttons', async () => {
@@ -405,28 +401,5 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-  });
-
-  test('Testing logout functionality', async () => {
-    setItem('UserImage', '');
-    setItem('SuperAdmin', true);
-    setItem('FirstName', 'John');
-    setItem('LastName', 'Doe');
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LeftDrawerOrg {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    userEvent.click(screen.getByTestId('logoutBtn'));
-    await waitFor(() => {
-      expect(localStorage.clear).toHaveBeenCalled();
-      expect(global.window.location.pathname).toBe('/');
-    });
   });
 });

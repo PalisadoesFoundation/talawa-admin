@@ -61,6 +61,7 @@
     "my organizations": "Mes Organisations",
     "users": "Utilisateurs",
     "requests": "Demandes",
+    "communityProfile": "Profil de la communauté",
     "logout": "Déconnexion"
   },
   "leftDrawerOrg": {
@@ -191,6 +192,18 @@
     "MembershipRequestSent": "Demande d'adhésion envoyée avec succès",
     "AlreadyJoined": "Vous êtes déjà membre de cette organisation.",
     "errorOccured": "Une erreur s'est produite. Veuillez réessayer plus tard."
+  },
+  "communityProfile": {
+    "title": "Profil de la communauté",
+    "editProfile": "Editer le profil",
+    "communityProfileInfo": "Ces détails apparaîtront sur l'écran de connexion/inscription pour vous et les membres de votre communauté.",
+    "communityName": "Nom de la communauté",
+    "wesiteLink": "Lien de site Web",
+    "logo": "Logo",
+    "social": "Liens vers les réseaux sociaux",
+    "url": "Entrer l'URL",
+    "profileChangedMsg": "Les détails du profil ont été mis à jour avec succès.",
+    "resetData": "Réinitialisez avec succès les détails du profil."
   },
   "dashboard": {
     "title": "Tableau de bord",
