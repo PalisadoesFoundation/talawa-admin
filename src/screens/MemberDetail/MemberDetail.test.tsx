@@ -23,77 +23,6 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import MemberDetail, { getLanguageName, prettyDate } from './MemberDetail';
 import { toast } from 'react-toastify';
 
-const MOCKS = [
-  {
-    request: {
-      query: USER_DETAILS,
-      variables: {
-        id: '1',
-      },
-    },
-    result: {
-      data: {
-        user: {
-          __typename: 'User',
-          image: null,
-          firstName: '',
-          lastName: '',
-          email: '',
-          role: 'SUPERADMIN',
-          appLanguageCode: 'en',
-          userType: 'SUPERADMIN',
-          pluginCreationAllowed: true,
-          adminApproved: true,
-          createdAt: '2023-02-18T09:22:27.969Z',
-          adminFor: [],
-          createdOrganizations: [],
-          joinedOrganizations: [],
-          organizationsBlockedBy: [],
-          createdEvents: [],
-          registeredEvents: [],
-          eventAdmin: [],
-          membershipRequests: [],
-          gender: '',
-          birthDate: '03/28/2023',
-          educationGrade: '',
-          employmentStatus: '',
-          maritalStatus: '',
-          address: {
-            line1: '',
-            countryCode: '',
-            city: '',
-            state: '',
-          },
-          phone: {
-            home: '',
-          },
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: UPDATE_USER_MUTATION,
-      variable: {
-        firstName: '',
-        lastName: '',
-        email: '',
-      },
-    },
-    result: {
-      data: {
-        users: [
-          {
-            _id: '1',
-          },
-        ],
-      },
-    },
-  },
-];
-
-const link = new StaticMockLink(MOCKS, true);
-
 const MOCKS1 = [
   {
     request: {
@@ -105,38 +34,87 @@ const MOCKS1 = [
     result: {
       data: {
         user: {
-          __typename: 'User',
-          image: null,
-          firstName: 'Rishav',
-          lastName: 'Jha',
-          email: 'ris@gmail.com',
-          role: 'SUPERADMIN',
-          appLanguageCode: 'en',
-          userType: 'SUPERADMIN',
-          pluginCreationAllowed: true,
-          adminApproved: true,
-          createdAt: '2023-02-18T09:22:27.969Z',
-          adminFor: [],
-          createdOrganizations: [],
-          joinedOrganizations: [],
-          organizationsBlockedBy: [],
-          createdEvents: [],
-          registeredEvents: [],
-          eventAdmin: [],
-          membershipRequests: [],
-          gender: 'MALE',
-          birthDate: '2023-02-18T09:22:27.969Z',
-          educationGrade: 'GRADE_A',
-          employmentStatus: 'EMPLOYED',
-          maritalStatus: 'SINGLE',
-          address: {
-            line1: 'abc',
-            countryCode: 'IN',
-            city: 'abc',
-            state: 'abc',
+          __typename: 'UserData',
+          appUserProfile: {
+            _id: '1',
+            __typename: 'AppUserProfile',
+            adminFor: [
+              {
+                __typename: 'Organization',
+                _id: '65e0df0906dd1228350cfd4a',
+              },
+              {
+                __typename: 'Organization',
+                _id: '65e0e2abb92c9f3e29503d4e',
+              },
+            ],
+            isSuperAdmin: true,
+            appLanguageCode: 'en',
+            createdEvents: [
+              {
+                __typename: 'Event',
+                _id: '65e32a5b2a1f4288ca1f086a',
+              },
+            ],
+            createdOrganizations: [
+              {
+                __typename: 'Organization',
+                _id: '65e0df0906dd1228350cfd4a',
+              },
+              {
+                __typename: 'Organization',
+                _id: '65e0e2abb92c9f3e29503d4e',
+              },
+            ],
+            eventAdmin: [
+              {
+                __typename: 'Event',
+                _id: '65e32a5b2a1f4288ca1f086a',
+              },
+            ],
+            pluginCreationAllowed: true,
+            adminApproved: true,
           },
-          phone: {
-            home: '1234567890',
+          user: {
+            _id: '1',
+            __typename: 'User',
+            createdAt: '2024-02-26T10:36:33.098Z',
+            email: 'adi790u@gmail.com',
+            firstName: 'Aditya',
+            image: null,
+            lastName: 'Agarwal',
+            gender: '',
+            birthDate: '2024-03-14',
+            educationGrade: '',
+            employmentStatus: '',
+            maritalStatus: '',
+            address: {
+              line1: '',
+              countryCode: '',
+              city: '',
+              state: '',
+            },
+            phone: {
+              mobile: '',
+            },
+            joinedOrganizations: [
+              {
+                __typename: 'Organization',
+                _id: '65e0df0906dd1228350cfd4a',
+              },
+              {
+                __typename: 'Organization',
+                _id: '65e0e2abb92c9f3e29503d4e',
+              },
+            ],
+            membershipRequests: [],
+            organizationsBlockedBy: [],
+            registeredEvents: [
+              {
+                __typename: 'Event',
+                _id: '65e32a5b2a1f4288ca1f086a',
+              },
+            ],
           },
         },
       },
@@ -148,20 +126,6 @@ const MOCKS1 = [
       variables: {
         userid: '123',
         orgid: '456',
-      },
-    },
-    result: {
-      data: {
-        success: true,
-      },
-    },
-  },
-  {
-    request: {
-      query: UPDATE_USERTYPE_MUTATION,
-      variables: {
-        id: '123',
-        userType: 'Admin',
       },
     },
     result: {
@@ -183,38 +147,87 @@ const MOCKS2 = [
     result: {
       data: {
         user: {
-          __typename: 'User',
-          image: 'https://placeholder.com/200x200',
-          firstName: 'Rishav',
-          lastName: 'Jha',
-          email: 'ris@gmail.com',
-          role: 'SUPERADMIN',
-          appLanguageCode: 'en',
-          userType: 'SUPERADMIN',
-          pluginCreationAllowed: false,
-          adminApproved: false,
-          createdAt: '2023-02-18T09:22:27.969Z',
-          adminFor: [],
-          createdOrganizations: [],
-          joinedOrganizations: [],
-          organizationsBlockedBy: [],
-          createdEvents: [],
-          registeredEvents: [],
-          eventAdmin: [],
-          membershipRequests: [],
-          gender: 'MALE',
-          birthDate: '2023-02-18T09:22:27.969Z',
-          educationGrade: 'GRADE_A',
-          employmentStatus: 'EMPLOYED',
-          maritalStatus: 'SINGLE',
-          address: {
-            line1: 'abc',
-            countryCode: 'IN',
-            city: 'abc',
-            state: 'abc',
+          __typename: 'UserData',
+          appUserProfile: {
+            _id: '1',
+            __typename: 'AppUserProfile',
+            adminFor: [
+              {
+                __typename: 'Organization',
+                _id: '65e0df0906dd1228350cfd4a',
+              },
+              {
+                __typename: 'Organization',
+                _id: '65e0e2abb92c9f3e29503d4e',
+              },
+            ],
+            isSuperAdmin: true,
+            appLanguageCode: 'en',
+            createdEvents: [
+              {
+                __typename: 'Event',
+                _id: '65e32a5b2a1f4288ca1f086a',
+              },
+            ],
+            createdOrganizations: [
+              {
+                __typename: 'Organization',
+                _id: '65e0df0906dd1228350cfd4a',
+              },
+              {
+                __typename: 'Organization',
+                _id: '65e0e2abb92c9f3e29503d4e',
+              },
+            ],
+            eventAdmin: [
+              {
+                __typename: 'Event',
+                _id: '65e32a5b2a1f4288ca1f086a',
+              },
+            ],
+            pluginCreationAllowed: true,
+            adminApproved: true,
           },
-          phone: {
-            home: '1234567890',
+          user: {
+            _id: '1',
+            __typename: 'User',
+            createdAt: '2024-02-26T10:36:33.098Z',
+            email: 'adi790u@gmail.com',
+            firstName: 'Aditya',
+            image: 'https://placeholder.com/200x200',
+            lastName: 'Agarwal',
+            gender: '',
+            birthDate: '2024-03-14',
+            educationGrade: '',
+            employmentStatus: '',
+            maritalStatus: '',
+            address: {
+              line1: '',
+              countryCode: '',
+              city: '',
+              state: '',
+            },
+            phone: {
+              mobile: '',
+            },
+            joinedOrganizations: [
+              {
+                __typename: 'Organization',
+                _id: '65e0df0906dd1228350cfd4a',
+              },
+              {
+                __typename: 'Organization',
+                _id: '65e0e2abb92c9f3e29503d4e',
+              },
+            ],
+            membershipRequests: [],
+            organizationsBlockedBy: [],
+            registeredEvents: [
+              {
+                __typename: 'Event',
+                _id: '65e32a5b2a1f4288ca1f086a',
+              },
+            ],
           },
         },
       },
@@ -239,7 +252,7 @@ const MOCKS2 = [
 const link1 = new StaticMockLink(MOCKS1, true);
 const link2 = new StaticMockLink(MOCKS2, true);
 
-async function wait(ms = 2): Promise<void> {
+async function wait(ms = 20): Promise<void> {
   await act(() => new Promise((resolve) => setTimeout(resolve, ms)));
 }
 
@@ -310,9 +323,7 @@ describe('MemberDetail', () => {
 
   test('should render props and text elements test for the page component', async () => {
     const props = {
-      key: '123',
       id: '1',
-      toggleStateValue: jest.fn(),
     };
 
     const formData = {
@@ -324,20 +335,23 @@ describe('MemberDetail', () => {
       countryCode: 'IN',
       state: 'abc',
       city: 'abc',
-      phone: '1234567890',
+      phoneNumber: '1234567890',
       birthDate: '03/28/2022',
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <BrowserRouter>
-            <MemberDetail {...props} />
-          </BrowserRouter>
-        </I18nextProvider>
+      <MockedProvider addTypename={false} link={link2}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <MemberDetail {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
       </MockedProvider>,
     );
-
+    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
     await wait();
+    expect(screen.getAllByText(/Email/i)).toBeTruthy();
     const birthDateDatePicker = screen.getByTestId('birthDate');
     fireEvent.change(birthDateDatePicker, {
       target: { value: formData.birthDate },
@@ -359,7 +373,7 @@ describe('MemberDetail', () => {
     userEvent.type(screen.getByPlaceholderText(/State/i), formData.state);
     userEvent.type(screen.getByPlaceholderText(/City/i), formData.city);
     userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
-    userEvent.type(screen.getByPlaceholderText(/Phone/i), formData.phone);
+    userEvent.type(screen.getByPlaceholderText(/Phone/i), formData.phoneNumber);
     userEvent.click(screen.getByPlaceholderText(/adminApproved/i));
     userEvent.click(screen.getByPlaceholderText(/pluginCreationAllowed/i));
     userEvent.selectOptions(screen.getByTestId('applangcode'), 'Français');
@@ -391,12 +405,14 @@ describe('MemberDetail', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <BrowserRouter>
-            <MemberDetail {...props} />
-          </BrowserRouter>
-        </I18nextProvider>
+      <MockedProvider addTypename={false} link={link2}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <MemberDetail {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
       </MockedProvider>,
     );
 
@@ -455,7 +471,7 @@ describe('MemberDetail', () => {
 
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
 
-    const user = MOCKS2[0].result.data.user;
+    const user = MOCKS2[0].result?.data?.user?.user;
     const userImage = await screen.findByTestId('userImagePresent');
     expect(userImage).toBeInTheDocument();
     expect(userImage.getAttribute('src')).toBe(user?.image);
@@ -466,7 +482,7 @@ describe('MemberDetail', () => {
       id: 'rishav-jha-mech',
     };
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -487,7 +503,7 @@ describe('MemberDetail', () => {
       id: 'rishav-jha-mech',
     };
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -524,7 +540,7 @@ describe('MemberDetail', () => {
   });
   test('should be redirected to / if member id is undefined', async () => {
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

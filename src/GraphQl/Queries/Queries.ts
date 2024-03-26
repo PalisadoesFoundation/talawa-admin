@@ -470,7 +470,7 @@ export const USER_DETAILS = gql`
         gender
         maritalStatus
         phone {
-          home
+          mobile
         }
         address {
           line1
@@ -492,6 +492,8 @@ export const USER_DETAILS = gql`
           _id
         }
         isSuperAdmin
+        appLanguageCode
+        pluginCreationAllowed
         createdOrganizations {
           _id
         }

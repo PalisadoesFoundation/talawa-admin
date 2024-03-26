@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import styles from './MemberDetail.module.css';
 import { languages } from 'utils/languages';
@@ -39,7 +39,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'memberDetail',
   });
-  const navigate = useNavigate();
   const location = useLocation();
   const isMounted = useRef(true);
   const { getItem, setItem } = useLocalStorage();
@@ -49,16 +48,14 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     firstName: '',
     lastName: '',
     email: '',
-    applangcode: '',
+    appLanguageCode: '',
     image: '',
     gender: '',
-    birthDate: '',
+    birthDate: '2024-03-14',
     grade: '',
     empStatus: '',
     maritalStatus: '',
-    phone: {
-      home: '',
-    },
+    phoneNumber: '',
     address: '',
     state: '',
     city: '',
@@ -76,46 +73,36 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     }
   };
   const [updateUser] = useMutation(UPDATE_USER_MUTATION);
-  const {
-    data: user,
-    loading: loading,
-    error: error,
-  } = useQuery(USER_DETAILS, {
+  const { data: user, loading: loading } = useQuery(USER_DETAILS, {
     variables: { id: currentUrl }, // For testing we are sending the id as a prop
   });
   const userData = user?.user;
 
   useEffect(() => {
-    if (userData) {
-      console.log(userData);
+    if (userData && isMounted) {
+      // console.log(userData);
       setFormState({
         ...formState,
         firstName: userData?.user?.firstName,
         lastName: userData?.user?.lastName,
         email: userData?.user?.email,
-        applangcode: userData?.user?.applangcode,
+        appLanguageCode: userData?.appUserProfile?.appLanguageCode,
         gender: userData?.user?.gender,
-        birthDate: userData?.user?.birthDate,
+        birthDate: userData?.user?.birthDate || '2020-03-14',
         grade: userData?.user?.educationGrade,
         empStatus: userData?.user?.employmentStatus,
         maritalStatus: userData?.user?.maritalStatus,
-        phone: {
-          home: userData?.user?.phone?.home,
-        },
+        phoneNumber: userData?.user?.phone?.mobile,
         address: userData.user?.address?.line1,
         state: userData?.user?.address?.state,
         city: userData?.user?.address?.city,
         country: userData?.user?.address?.countryCode,
-        pluginCreationAllowed: userData?.user?.pluginCreationAllowed,
-        adminApproved: userData?.user?.adminApproved,
+        pluginCreationAllowed: userData?.appUserProfile?.pluginCreationAllowed,
+        adminApproved: userData?.appUserProfile?.adminApproved,
         image: userData?.user?.image || '',
       });
     }
   }, [userData, user]);
-
-  useEffect(() => {
-    console.log(formState);
-  }, [formState]);
 
   useEffect(() => {
     // check component is mounted or not
@@ -126,41 +113,47 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
-    setFormState({
-      ...formState,
+    // setFormState({
+    //   ...formState,
+    //   [name]: value,
+    // });
+    // console.log(name, value);
+    setFormState((prevState) => ({
+      ...prevState,
       [name]: value,
-    });
+    }));
     // console.log(formState);
   };
 
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const { name, value } = e.target;
-    setFormState({
-      ...formState,
-      phone: {
-        ...formState.phone,
-        [name]: value,
-      },
-    });
-    // console.log(formState);
-  };
+  // const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  //   const { name, value } = e.target;
+  //   setFormState({
+  //     ...formState,
+  //     phoneNumber: {
+  //       ...formState.phoneNumber,
+  //       [name]: value,
+  //     },
+  //   });
+  //   // console.log(formState);
+  // };
 
   const handleToggleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    console.log(e.target.checked);
+    // console.log(e.target.checked);
     const { name, checked } = e.target;
-    setFormState({
-      ...formState,
+    setFormState((prevState) => ({
+      ...prevState,
       [name]: checked,
-    });
+    }));
     // console.log(formState);
   };
 
   const loginLink = async (): Promise<void> => {
     try {
+      console.log(formState);
       const firstName = formState.firstName;
       const lastName = formState.lastName;
       const email = formState.email;
-      // const applangcode = formState.applangcode;
+      // const appLanguageCode = formState.appLanguageCode;
       const image = formState.image;
       // const gender = formState.gender;
       let toSubmit = true;
@@ -195,22 +188,21 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
           }
           toast.success('Successful updated');
         }
-      } catch (error: any) {
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          errorHandler(t, error);
+        }
+      }
+    } catch (error: unknown) {
+      /* istanbul ignore next */
+      if (error instanceof Error) {
         errorHandler(t, error);
       }
-    } catch (error: any) {
-      /* istanbul ignore next */
-      errorHandler(t, error);
     }
   };
 
   if (loading) {
     return <Loader />;
-  }
-
-  /* istanbul ignore next */
-  if (error) {
-    navigate(`/orgpeople/${currentUrl}`);
   }
 
   const sanitizedSrc = sanitizeHtml(formState.image, {
@@ -350,11 +342,11 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 <div>
                   <p className="my-0 mx-2">{t('phone')}</p>
                   <input
-                    value={formState.phone.home}
+                    value={formState.phoneNumber}
                     className={`rounded border-0 p-2 m-2 ${styles.inputColor}`}
                     type="number"
-                    name="home"
-                    onChange={handlePhoneChange}
+                    name="phoneNumber"
+                    onChange={handleChange}
                     placeholder={t('phone')}
                   />
                 </div>
@@ -520,7 +512,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                           onChange={(e): void => {
                             setFormState({
                               ...formState,
-                              applangcode: e.target.value,
+                              appLanguageCode: e.target.value,
                             });
                           }}
                         >
