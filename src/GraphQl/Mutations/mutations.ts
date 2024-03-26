@@ -133,7 +133,9 @@ export const UPDATE_USER_PASSWORD_MUTATION = gql`
         confirmNewPassword: $confirmNewPassword
       }
     ) {
-      _id
+      user {
+        _id
+      }
     }
   }
 `;
