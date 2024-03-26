@@ -185,7 +185,7 @@ export const MOCKS = [
         startDate: '2022-03-28',
         endDate: '2023-04-15',
         allDay: true,
-        interval: 1,
+        interval: 2,
         frequency: 'MONTHLY',
         weekDays: ['MONDAY'],
         weekDayOccurenceInMonth: 4,

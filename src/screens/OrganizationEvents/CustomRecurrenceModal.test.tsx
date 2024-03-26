@@ -255,6 +255,134 @@ describe('Testing the creaction of recurring events with custom recurrence patte
     });
   });
 
+  test('Selecting different monthly recurrence options from the dropdown menu', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <OrganizationEvents />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument();
+    });
+
+    userEvent.click(screen.getByTestId('createEventModalBtn'));
+
+    const startDatePicker = screen.getByLabelText('Start Date');
+    fireEvent.change(startDatePicker, {
+      target: { value: formData.startDate },
+    });
+
+    const endDatePicker = screen.getByLabelText('End Date');
+    fireEvent.change(endDatePicker, {
+      target: { value: formData.endDate },
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('recurringCheck')).toBeInTheDocument();
+    });
+
+    expect(screen.queryByTestId('recurrenceOptions')).not.toBeInTheDocument();
+
+    userEvent.click(screen.getByTestId('recurringCheck'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('recurrenceOptions')).toBeInTheDocument();
+    });
+
+    userEvent.click(screen.getByTestId('recurrenceOptions'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('customRecurrence')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('customRecurrence'));
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('customRecurrenceFrequencyDropdown'),
+      ).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('customMonthlyRecurrence')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('customMonthlyRecurrence'));
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('customRecurrenceFrequencyDropdown'),
+      ).toHaveTextContent('Month');
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('monthlyRecurrenceOptions')).toHaveTextContent(
+        'Monthly on Fourth Monday, until April 15, 2023',
+      );
+    });
+
+    userEvent.click(screen.getByTestId('monthlyRecurrenceOptions'));
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('monthlyRecurrenceOptionOnThatDay'),
+      ).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('monthlyRecurrenceOptionOnThatDay'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('monthlyRecurrenceOptions')).toHaveTextContent(
+        'Monthly on Day 28, until April 15, 2023',
+      );
+    });
+
+    userEvent.click(screen.getByTestId('monthlyRecurrenceOptions'));
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('monthlyRecurrenceOptionOnLastOccurence'),
+      ).toBeInTheDocument();
+    });
+    userEvent.click(
+      screen.getByTestId('monthlyRecurrenceOptionOnLastOccurence'),
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('monthlyRecurrenceOptions')).toHaveTextContent(
+        'Monthly on Last Monday, until April 15, 2023',
+      );
+    });
+
+    userEvent.click(screen.getByTestId('monthlyRecurrenceOptions'));
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('monthlyRecurrenceOptionOnThatOccurence'),
+      ).toBeInTheDocument();
+    });
+    userEvent.click(
+      screen.getByTestId('monthlyRecurrenceOptionOnThatOccurence'),
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('monthlyRecurrenceOptions')).toHaveTextContent(
+        'Monthly on Fourth Monday, until April 15, 2023',
+      );
+    });
+  });
+
   test('Selecting the "Ends on" option for specifying the end of recurrence', async () => {
     //  i.e. when would the recurring event end: never, on a certain date, or after a certain number of occurences
     render(
@@ -318,7 +446,7 @@ describe('Testing the creaction of recurring events with custom recurrence patte
     });
   });
 
-  test('Creating a monthly recurring event through custom recurrence modal', async () => {
+  test('Creating a bi monthly recurring event through custom recurrence modal', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -411,6 +539,17 @@ describe('Testing the creaction of recurring events with custom recurrence patte
       target: { value: formData.endDate },
     });
 
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('customRecurrenceIntervalInput'),
+      ).toBeInTheDocument();
+    });
+
+    const recurrenceCount = screen.getByTestId('customRecurrenceIntervalInput');
+    fireEvent.change(recurrenceCount, {
+      target: { value: 2 },
+    });
+
     userEvent.click(screen.getByTestId('customRecurrenceSubmitBtn'));
     await waitFor(() => {
       expect(
@@ -419,7 +558,7 @@ describe('Testing the creaction of recurring events with custom recurrence patte
     });
 
     expect(screen.getByTestId('recurrenceOptions')).toHaveTextContent(
-      'Monthly on Fourth Monday, until April 15, 20..',
+      'Every 2 months on Fourth Monday, until April...',
     );
 
     userEvent.click(screen.getByTestId('createEventBtn'));

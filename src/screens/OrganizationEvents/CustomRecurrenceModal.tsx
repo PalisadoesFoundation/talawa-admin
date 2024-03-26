@@ -179,6 +179,9 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
                     setRecurrenceRuleState({
                       ...recurrenceRuleState,
                       frequency: Frequency.MONTHLY,
+                      weekDays: [Days[startDate.getDay()]],
+                      weekDayOccurenceInMonth:
+                        getWeekDayOccurenceInMonth(startDate),
                     })
                   }
                   data-testid="customMonthlyRecurrence"
@@ -244,7 +247,7 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
                         weekDayOccurenceInMonth: undefined,
                       })
                     }
-                    data-testid="monthlyRecurrenceOptionByDay"
+                    data-testid="monthlyRecurrenceOptionOnThatDay"
                   >
                     <span className="fw-semibold text-secondary">
                       {getRecurrenceRuleText(
@@ -270,7 +273,7 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
                             getWeekDayOccurenceInMonth(startDate),
                         })
                       }
-                      data-testid="monthlyRecurrence"
+                      data-testid="monthlyRecurrenceOptionOnThatOccurence"
                     >
                       <span className="fw-semibold text-secondary">
                         {getRecurrenceRuleText(
@@ -297,7 +300,7 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
                           weekDayOccurenceInMonth: -1,
                         })
                       }
-                      data-testid="monthlyRecurrence"
+                      data-testid="monthlyRecurrenceOptionOnLastOccurence"
                     >
                       <span className="fw-semibold text-secondary">
                         {getRecurrenceRuleText(
