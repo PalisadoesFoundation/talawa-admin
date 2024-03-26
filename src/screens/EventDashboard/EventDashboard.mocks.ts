@@ -81,7 +81,7 @@ export const queryMockWithTime = [
           title: 'Event Title',
           description: 'Event Description',
           startDate: '1/1/23',
-          endDate: '2/2/23',
+          endDate: '16/2/23',
           startTime: '08:00:00',
           endTime: '09:00:00',
           allDay: false,
