@@ -158,7 +158,7 @@ export const MOCKS = [
         startTime: '09:00:00Z',
         endTime: '17:00:00Z',
         frequency: 'WEEKLY',
-        weekDays: ['MO', 'TU', 'WE', 'TH', 'FR'],
+        weekDays: ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'],
       },
     },
     result: {

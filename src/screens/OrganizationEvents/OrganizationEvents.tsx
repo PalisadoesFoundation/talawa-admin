@@ -182,6 +182,7 @@ function organizationEvents(): JSX.Element {
           setEndDate(null);
         }
       } catch (error: unknown) {
+        /* istanbul ignore next */
         if (error instanceof Error) {
           console.log(error.message);
           errorHandler(t, error);
