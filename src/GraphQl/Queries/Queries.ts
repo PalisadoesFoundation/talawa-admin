@@ -221,7 +221,6 @@ export const USER_LIST_REQUEST = gql`
         image
         _id
         email
-        adminApproved
         createdAt
       }
       appUserProfile {
@@ -446,7 +445,6 @@ export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
         image
         email
         createdAt
-        userType
       }
     }
   }
@@ -645,9 +643,6 @@ export const USERS_CONNECTION_LIST = gql`
         image
         _id
         email
-        adminFor {
-          _id
-        }
         createdAt
         organizationsBlockedBy {
           _id
