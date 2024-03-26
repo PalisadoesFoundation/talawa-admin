@@ -27,6 +27,7 @@ import {
   getRecurrenceRuleText,
   mondayToFriday,
   getWeekDayOccurenceInMonth,
+  isLastOccurenceOfWeekDay,
 } from 'utils/recurrenceUtils';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
 
@@ -511,32 +512,60 @@ function organizationEvents(): JSX.Element {
                       )}
                     </span>
                   </Dropdown.Item>
-                  <Dropdown.Item
-                    onClick={() =>
-                      setRecurrenceRuleState({
-                        ...recurrenceRuleState,
-                        frequency: Frequency.MONTHLY,
-                        weekDays: [Days[startDate.getDay()]],
-                        weekDayOccurenceInMonth:
-                          getWeekDayOccurenceInMonth(startDate),
-                      })
-                    }
-                    data-testid="monthlyRecurrence"
-                  >
-                    <span className="fw-semibold text-secondary">
-                      {getRecurrenceRuleText(
-                        {
+                  {getWeekDayOccurenceInMonth(startDate) !== 5 && (
+                    <Dropdown.Item
+                      onClick={() =>
+                        setRecurrenceRuleState({
                           ...recurrenceRuleState,
                           frequency: Frequency.MONTHLY,
                           weekDays: [Days[startDate.getDay()]],
                           weekDayOccurenceInMonth:
                             getWeekDayOccurenceInMonth(startDate),
-                        },
-                        startDate,
-                        endDate,
-                      )}
-                    </span>
-                  </Dropdown.Item>
+                        })
+                      }
+                      data-testid="monthlyRecurrence"
+                    >
+                      <span className="fw-semibold text-secondary">
+                        {getRecurrenceRuleText(
+                          {
+                            ...recurrenceRuleState,
+                            frequency: Frequency.MONTHLY,
+                            weekDays: [Days[startDate.getDay()]],
+                            weekDayOccurenceInMonth:
+                              getWeekDayOccurenceInMonth(startDate),
+                          },
+                          startDate,
+                          endDate,
+                        )}
+                      </span>
+                    </Dropdown.Item>
+                  )}
+                  {isLastOccurenceOfWeekDay(startDate) && (
+                    <Dropdown.Item
+                      onClick={() =>
+                        setRecurrenceRuleState({
+                          ...recurrenceRuleState,
+                          frequency: Frequency.MONTHLY,
+                          weekDays: [Days[startDate.getDay()]],
+                          weekDayOccurenceInMonth: -1,
+                        })
+                      }
+                      data-testid="monthlyRecurrence"
+                    >
+                      <span className="fw-semibold text-secondary">
+                        {getRecurrenceRuleText(
+                          {
+                            ...recurrenceRuleState,
+                            frequency: Frequency.MONTHLY,
+                            weekDays: [Days[startDate.getDay()]],
+                            weekDayOccurenceInMonth: -1,
+                          },
+                          startDate,
+                          endDate,
+                        )}
+                      </span>
+                    </Dropdown.Item>
+                  )}
                   <Dropdown.Item
                     onClick={() =>
                       setRecurrenceRuleState({
@@ -610,7 +639,9 @@ function organizationEvents(): JSX.Element {
       {/* Custom Recurrence */}
       <CustomRecurrenceModal
         recurrenceRuleState={recurrenceRuleState}
+        recurrenceRuleText={recurrenceRuleText}
         setRecurrenceRuleState={setRecurrenceRuleState}
+        startDate={startDate}
         endDate={endDate}
         setEndDate={setEndDate}
         customRecurrenceModalIsOpen={customRecurrenceModalIsOpen}
