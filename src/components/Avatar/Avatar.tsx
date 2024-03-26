@@ -8,6 +8,7 @@ interface InterfaceAvatarProps {
   size?: number;
   avatarStyle?: string;
   dataTestId?: string;
+  radius?: number;
 }
 
 const Avatar = ({
@@ -16,11 +17,13 @@ const Avatar = ({
   size,
   avatarStyle,
   dataTestId,
+  radius,
 }: InterfaceAvatarProps): JSX.Element => {
   const avatar = useMemo(() => {
     return createAvatar(initials, {
       size: size || 128,
       seed: name,
+      radius: radius || 0,
     }).toDataUriSync();
   }, [name, size]);
 
