@@ -220,23 +220,6 @@ export const USER_LIST_REQUEST = gql`
         _id
         email
         createdAt
-        appUserProfile {
-          adminApproved
-          _id
-          adminFor {
-            _id
-          }
-          isSuperAdmin
-          createdOrganizations {
-            _id
-          }
-          createdEvents {
-            _id
-          }
-          eventAdmin {
-            _id
-          }
-        }
       }
     }
   }
@@ -500,23 +483,6 @@ export const USER_DETAILS = gql`
           _id
         }
       }
-      appUserProfile {
-        _id
-        adminApproved
-        adminFor {
-          _id
-        }
-        isSuperAdmin
-        createdOrganizations {
-          _id
-        }
-        createdEvents {
-          _id
-        }
-        eventAdmin {
-          _id
-        }
-      }
     }
   }
 `;
@@ -658,51 +624,6 @@ export const USERS_CONNECTION_LIST = gql`
         image
         _id
         email
-        appUserProfile {
-          adminApproved
-          _id
-          adminFor {
-            _id
-          }
-          isSuperAdmin
-          createdOrganizations {
-            _id
-          }
-          createdEvents {
-            _id
-          }
-          eventAdmin {
-            _id
-          }
-        }
-        adminFor {
-          _id
-        }
-        createdAt
-        organizationsBlockedBy {
-          _id
-          name
-          image
-          address {
-            city
-            countryCode
-            dependentLocality
-            line1
-            line2
-            postalCode
-            sortingCode
-            state
-          }
-          createdAt
-          creator {
-            _id
-            firstName
-            lastName
-            image
-            email
-            createdAt
-          }
-        }
         joinedOrganizations {
           _id
           name
