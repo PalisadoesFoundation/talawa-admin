@@ -83,7 +83,7 @@ function organizationEvents(): JSX.Element {
   const hideCreateEventModal = (): void => {
     setCreateEventmodalisOpen(false);
   };
-  const handleChangeView = (item: any): void => {
+  const handleChangeView = (item: ViewType): void => {
     /*istanbul ignore next*/
     setViewType(item);
   };
@@ -141,6 +141,7 @@ function organizationEvents(): JSX.Element {
             isRegisterable: registrablechecked,
             organizationId: currentUrl,
             startDate: dayjs(startDate).format('YYYY-MM-DD'),
+
             endDate: endDate
               ? dayjs(endDate).format('YYYY-MM-DD')
               : /* istanbul ignore next */ recurringchecked
@@ -180,9 +181,11 @@ function organizationEvents(): JSX.Element {
           setStartDate(new Date());
           setEndDate(null);
         }
-      } catch (error: any) {
-        /* istanbul ignore next */
-        errorHandler(t, error);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          console.log(error.message);
+          errorHandler(t, error);
+        }
       }
     }
     if (formState.title.trim().length === 0) {

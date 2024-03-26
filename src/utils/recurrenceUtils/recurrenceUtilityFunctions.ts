@@ -1,12 +1,12 @@
 /*
    Recurrence utility functions
 */
-// function that generates the recurrence rule text to display
 
 import { dayNames, mondayToFriday, monthNames } from './recurrenceConstants';
 import { Frequency } from './recurrenceTypes';
 import type { WeekDays, InterfaceRecurrenceRule } from './recurrenceTypes';
 
+// function that generates the recurrence rule text to display
 // e.g. - 'Weekly on Sunday, until Feburary 23, 2029'
 export const getRecurrenceRuleText = (
   recurrenceRuleState: InterfaceRecurrenceRule,
