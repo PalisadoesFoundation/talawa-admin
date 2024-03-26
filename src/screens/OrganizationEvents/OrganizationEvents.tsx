@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { Dropdown, Form, OverlayTrigger, Popover } from 'react-bootstrap';
+import { Form, Popover } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
@@ -20,16 +20,15 @@ import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams, useNavigate } from 'react-router-dom';
 import EventHeader from 'components/EventCalendar/EventHeader';
-import CustomRecurrenceModal from './CustomRecurrenceModals';
+import CustomRecurrenceModal from 'components/RecurrenceOptions/CustomRecurrenceModal';
 import {
   Frequency,
   Days,
   getRecurrenceRuleText,
-  mondayToFriday,
   getWeekDayOccurenceInMonth,
-  isLastOccurenceOfWeekDay,
 } from 'utils/recurrenceUtils';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
+import RecurrenceOptions from 'components/RecurrenceOptions/RecurrenceOptions';
 
 const timeToDayJs = (time: string): Dayjs => {
   const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
@@ -440,190 +439,19 @@ function organizationEvents(): JSX.Element {
                 />
               </div>
             </div>
-            {recurringchecked && (
-              <Dropdown drop="up" className="mt-2 d-inline-block w-100">
-                <Dropdown.Toggle
-                  variant="outline-secondary"
-                  className="py-2 border border-secondary-subtle rounded-2"
-                  id="dropdown-basic"
-                  data-testid="recurrenceOptions"
-                >
-                  {recurrenceRuleText.length > 45 ? (
-                    <OverlayTrigger
-                      trigger={['hover', 'focus']}
-                      placement="right"
-                      overlay={popover}
-                    >
-                      <span
-                        className="fw-semibold"
-                        data-testid="recurrenceRuleTextOverlay"
-                      >
-                        {`${recurrenceRuleText.substring(0, 45)}...`}
-                      </span>
-                    </OverlayTrigger>
-                  ) : (
-                    <span className="fw-semibold">{recurrenceRuleText}</span>
-                  )}
-                </Dropdown.Toggle>
 
-                <Dropdown.Menu className="mb-2">
-                  <Dropdown.Item
-                    onClick={() =>
-                      setRecurrenceRuleState({
-                        ...recurrenceRuleState,
-                        frequency: Frequency.DAILY,
-                        weekDays: undefined,
-                        weekDayOccurenceInMonth: undefined,
-                      })
-                    }
-                    data-testid="dailyRecurrence"
-                  >
-                    <span className="fw-semibold text-secondary">
-                      {getRecurrenceRuleText(
-                        {
-                          ...recurrenceRuleState,
-                          frequency: Frequency.DAILY,
-                        },
-                        startDate,
-                        endDate,
-                      )}
-                    </span>
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    onClick={() =>
-                      setRecurrenceRuleState({
-                        ...recurrenceRuleState,
-                        frequency: Frequency.WEEKLY,
-                        weekDays: [Days[startDate.getDay()]],
-                        weekDayOccurenceInMonth: undefined,
-                      })
-                    }
-                    data-testid="weeklyRecurrence"
-                  >
-                    <span className="fw-semibold text-secondary">
-                      {getRecurrenceRuleText(
-                        {
-                          ...recurrenceRuleState,
-                          frequency: Frequency.WEEKLY,
-                          weekDays: [Days[startDate.getDay()]],
-                        },
-                        startDate,
-                        endDate,
-                      )}
-                    </span>
-                  </Dropdown.Item>
-                  {getWeekDayOccurenceInMonth(startDate) !== 5 && (
-                    <Dropdown.Item
-                      onClick={() =>
-                        setRecurrenceRuleState({
-                          ...recurrenceRuleState,
-                          frequency: Frequency.MONTHLY,
-                          weekDays: [Days[startDate.getDay()]],
-                          weekDayOccurenceInMonth:
-                            getWeekDayOccurenceInMonth(startDate),
-                        })
-                      }
-                      data-testid="monthlyRecurrenceOnThatOccurence"
-                    >
-                      <span className="fw-semibold text-secondary">
-                        {getRecurrenceRuleText(
-                          {
-                            ...recurrenceRuleState,
-                            frequency: Frequency.MONTHLY,
-                            weekDays: [Days[startDate.getDay()]],
-                            weekDayOccurenceInMonth:
-                              getWeekDayOccurenceInMonth(startDate),
-                          },
-                          startDate,
-                          endDate,
-                        )}
-                      </span>
-                    </Dropdown.Item>
-                  )}
-                  {isLastOccurenceOfWeekDay(startDate) && (
-                    <Dropdown.Item
-                      onClick={() =>
-                        setRecurrenceRuleState({
-                          ...recurrenceRuleState,
-                          frequency: Frequency.MONTHLY,
-                          weekDays: [Days[startDate.getDay()]],
-                          weekDayOccurenceInMonth: -1,
-                        })
-                      }
-                      data-testid="monthlyRecurrenceOnLastOccurence"
-                    >
-                      <span className="fw-semibold text-secondary">
-                        {getRecurrenceRuleText(
-                          {
-                            ...recurrenceRuleState,
-                            frequency: Frequency.MONTHLY,
-                            weekDays: [Days[startDate.getDay()]],
-                            weekDayOccurenceInMonth: -1,
-                          },
-                          startDate,
-                          endDate,
-                        )}
-                      </span>
-                    </Dropdown.Item>
-                  )}
-                  <Dropdown.Item
-                    onClick={() =>
-                      setRecurrenceRuleState({
-                        ...recurrenceRuleState,
-                        frequency: Frequency.YEARLY,
-                        weekDays: undefined,
-                        weekDayOccurenceInMonth: undefined,
-                      })
-                    }
-                    data-testid="yearlyRecurrence"
-                  >
-                    <span className="fw-semibold text-secondary">
-                      {getRecurrenceRuleText(
-                        {
-                          ...recurrenceRuleState,
-                          frequency: Frequency.YEARLY,
-                          weekDays: undefined,
-                          weekDayOccurenceInMonth: undefined,
-                        },
-                        startDate,
-                        endDate,
-                      )}
-                    </span>
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    onClick={() =>
-                      setRecurrenceRuleState({
-                        ...recurrenceRuleState,
-                        frequency: Frequency.WEEKLY,
-                        weekDays: mondayToFriday,
-                        weekDayOccurenceInMonth: undefined,
-                      })
-                    }
-                    data-testid="mondayToFridayRecurrence"
-                  >
-                    <span className="fw-semibold text-secondary">
-                      {getRecurrenceRuleText(
-                        {
-                          ...recurrenceRuleState,
-                          frequency: Frequency.WEEKLY,
-                          weekDays: mondayToFriday,
-                        },
-                        startDate,
-                        endDate,
-                      )}
-                    </span>
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    onClick={() => setCustomRecurrenceModalIsOpen(true)}
-                    data-testid="customRecurrence"
-                  >
-                    <span className="fw-semibold text-body-tertiary">
-                      Custom...
-                    </span>
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
+            {recurringchecked && (
+              <RecurrenceOptions
+                recurrenceRuleState={recurrenceRuleState}
+                recurrenceRuleText={recurrenceRuleText}
+                setRecurrenceRuleState={setRecurrenceRuleState}
+                startDate={startDate}
+                endDate={endDate}
+                setCustomRecurrenceModalIsOpen={setCustomRecurrenceModalIsOpen}
+                popover={popover}
+              />
             )}
+
             <Button
               type="submit"
               className={styles.greenregbtn}
