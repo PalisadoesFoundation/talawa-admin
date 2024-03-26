@@ -204,7 +204,6 @@ export const USER_LIST_REQUEST = gql`
     $lastName_contains: String
     $first: Int
     $skip: Int
-    $userType: String
     $adminApproved: Boolean
   ) {
     users(
@@ -214,7 +213,6 @@ export const USER_LIST_REQUEST = gql`
       }
       skip: $skip
       first: $first
-      userType: $userType
       adminApproved: $adminApproved
     ) {
       firstName

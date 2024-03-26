@@ -270,7 +270,7 @@ export const CREATE_EVENT_MUTATION = gql`
     $location: String
     $frequency: Frequency
     $weekDays: [WeekDays]
-    $count: Int
+    $count: PositiveInt
   ) {
     createEvent(
       data: {
