@@ -2,7 +2,13 @@
    Recurrence utility functions
 */
 
-import { dayNames, mondayToFriday, monthNames } from './recurrenceConstants';
+import {
+  Days,
+  dayNames,
+  mondayToFriday,
+  monthNames,
+  weekDayOccurences,
+} from './recurrenceConstants';
 import { Frequency } from './recurrenceTypes';
 import type { WeekDays, InterfaceRecurrenceRule } from './recurrenceTypes';
 
@@ -14,26 +20,56 @@ export const getRecurrenceRuleText = (
   endDate: Date | null,
 ): string => {
   let recurrenceRuleText = '';
-  const { frequency, weekDays, count } = recurrenceRuleState;
+  const { frequency, weekDays, interval, count, weekDayOccurenceInMonth } =
+    recurrenceRuleState;
 
   switch (frequency) {
     case Frequency.DAILY:
-      recurrenceRuleText = 'Daily';
+      if (interval && interval > 1) {
+        recurrenceRuleText = `Every ${interval} days`;
+      } else {
+        recurrenceRuleText = 'Daily';
+      }
       break;
     case Frequency.WEEKLY:
-      if (isMondayToFriday(weekDays)) {
-        recurrenceRuleText = 'Monday to Friday';
+      if (!weekDays) {
         break;
       }
-      recurrenceRuleText = 'Weekly on ';
+      if (isMondayToFriday(weekDays)) {
+        if (interval && interval > 1) {
+          recurrenceRuleText = `Every ${interval} weeks, `;
+        }
+        recurrenceRuleText += 'Monday to Friday';
+        break;
+      }
+      if (interval && interval > 1) {
+        recurrenceRuleText = `Every ${interval} weeks on `;
+      } else {
+        recurrenceRuleText = 'Weekly on ';
+      }
       recurrenceRuleText += getWeekDaysString(weekDays);
       break;
     case Frequency.MONTHLY:
-      recurrenceRuleText = 'Monthly on ';
-      recurrenceRuleText += `Day ${startDate.getDate()}`;
+      if (interval && interval > 1) {
+        recurrenceRuleText = `Every ${interval} months on `;
+      } else {
+        recurrenceRuleText = 'Monthly on ';
+      }
+
+      if (weekDayOccurenceInMonth) {
+        const getOccurence =
+          weekDayOccurenceInMonth !== -1 ? weekDayOccurenceInMonth - 1 : 4;
+        recurrenceRuleText += `${weekDayOccurences[getOccurence]} ${dayNames[Days[startDate.getDay()]]}`;
+      } else {
+        recurrenceRuleText += `Day ${startDate.getDate()}`;
+      }
       break;
     case Frequency.YEARLY:
-      recurrenceRuleText = 'Annually on ';
+      if (interval && interval > 1) {
+        recurrenceRuleText = `Every ${interval} years on `;
+      } else {
+        recurrenceRuleText = 'Annually on ';
+      }
       recurrenceRuleText += `${monthNames[startDate.getMonth()]} ${startDate.getDate()}`;
       break;
   }
@@ -46,7 +82,7 @@ export const getRecurrenceRuleText = (
   }
 
   if (count) {
-    recurrenceRuleText += `, ${count} times`;
+    recurrenceRuleText += `, ${count} ${count > 1 ? 'times' : 'time'}`;
   }
 
   return recurrenceRuleText;
@@ -73,4 +109,33 @@ const getWeekDaysString = (weekDays: WeekDays[]): string => {
 // function that checks if the array contains all days from Monday to Friday
 const isMondayToFriday = (weekDays: WeekDays[]): boolean => {
   return mondayToFriday.every((day) => weekDays.includes(day));
+};
+
+// function that returns the occurence of the weekday in a month,
+// i.e. First Monday, Second Monday, Last Monday, etc.
+export const getWeekDayOccurenceInMonth = (date: Date): number => {
+  const dayOfMonth = date.getDate();
+
+  // Calculate the current occurrence
+  const occurrence = Math.ceil(dayOfMonth / 7);
+
+  return occurrence;
+};
+
+// function that checks whether it's the last occurence of the weekday in that month
+export const isLastOccurenceOfWeekDay = (date: Date): boolean => {
+  const currentDay = date.getDay();
+
+  const lastOccurenceInMonth = new Date(
+    date.getFullYear(),
+    date.getMonth() + 1,
+    0,
+  );
+
+  // set the lastOccurenceInMonth to that day's last occurence
+  while (lastOccurenceInMonth.getDay() !== currentDay) {
+    lastOccurenceInMonth.setDate(lastOccurenceInMonth.getDate() - 1);
+  }
+
+  return date.getDate() === lastOccurenceInMonth.getDate();
 };

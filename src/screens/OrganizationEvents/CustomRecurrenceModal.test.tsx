@@ -419,7 +419,7 @@ describe('Testing the creaction of recurring events with custom recurrence patte
     });
 
     expect(screen.getByTestId('recurrenceOptions')).toHaveTextContent(
-      'Monthly on Day 28, until April 15, 2023',
+      'Monthly on Fourth Monday, until April 15, 20..',
     );
 
     userEvent.click(screen.getByTestId('createEventBtn'));

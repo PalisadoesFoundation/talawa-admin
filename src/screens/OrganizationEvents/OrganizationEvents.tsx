@@ -26,6 +26,7 @@ import {
   Days,
   getRecurrenceRuleText,
   mondayToFriday,
+  getWeekDayOccurenceInMonth,
 } from 'utils/recurrenceUtils';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
 
@@ -62,8 +63,10 @@ function organizationEvents(): JSX.Element {
   const [recurrenceRuleState, setRecurrenceRuleState] =
     useState<InterfaceRecurrenceRule>({
       frequency: Frequency.WEEKLY,
-      weekDays: [Days[startDate?.getDay()]],
+      weekDays: [Days[startDate.getDay()]],
+      interval: 1,
       count: undefined,
+      weekDayOccurenceInMonth: undefined,
     });
 
   const [formState, setFormState] = useState({
@@ -115,7 +118,8 @@ function organizationEvents(): JSX.Element {
 
   const [create, { loading: loading2 }] = useMutation(CREATE_EVENT_MUTATION);
 
-  const { frequency, weekDays, count } = recurrenceRuleState;
+  const { frequency, weekDays, interval, count, weekDayOccurenceInMonth } =
+    recurrenceRuleState;
   const recurrenceRuleText = getRecurrenceRuleText(
     recurrenceRuleState,
     startDate,
@@ -141,7 +145,6 @@ function organizationEvents(): JSX.Element {
             isRegisterable: registrablechecked,
             organizationId: currentUrl,
             startDate: dayjs(startDate).format('YYYY-MM-DD'),
-
             endDate: endDate
               ? dayjs(endDate).format('YYYY-MM-DD')
               : /* istanbul ignore next */ recurringchecked
@@ -152,11 +155,12 @@ function organizationEvents(): JSX.Element {
             startTime: !alldaychecked ? formState.startTime + 'Z' : undefined,
             endTime: !alldaychecked ? formState.endTime + 'Z' : undefined,
             frequency: recurringchecked ? frequency : undefined,
-            weekDays:
-              recurringchecked && frequency === Frequency.WEEKLY
-                ? weekDays
-                : undefined,
-            count,
+            weekDays: recurringchecked ? weekDays : undefined,
+            interval: recurringchecked ? interval : undefined,
+            count: recurringchecked ? count : undefined,
+            weekDayOccurenceInMonth: recurringchecked
+              ? weekDayOccurenceInMonth
+              : undefined,
           },
         });
 
@@ -176,7 +180,9 @@ function organizationEvents(): JSX.Element {
           setRecurrenceRuleState({
             frequency: Frequency.WEEKLY,
             weekDays: [Days[new Date().getDay()]],
+            interval: 1,
             count: undefined,
+            weekDayOccurenceInMonth: undefined,
           });
           setStartDate(new Date());
           setEndDate(null);
@@ -313,6 +319,9 @@ function organizationEvents(): JSX.Element {
                       setRecurrenceRuleState({
                         ...recurrenceRuleState,
                         weekDays: [Days[date?.toDate().getDay()]],
+                        weekDayOccurenceInMonth: getWeekDayOccurenceInMonth(
+                          date?.toDate(),
+                        ),
                       });
                     }
                   }}
@@ -462,6 +471,8 @@ function organizationEvents(): JSX.Element {
                       setRecurrenceRuleState({
                         ...recurrenceRuleState,
                         frequency: Frequency.DAILY,
+                        weekDays: undefined,
+                        weekDayOccurenceInMonth: undefined,
                       })
                     }
                     data-testid="dailyRecurrence"
@@ -482,7 +493,8 @@ function organizationEvents(): JSX.Element {
                       setRecurrenceRuleState({
                         ...recurrenceRuleState,
                         frequency: Frequency.WEEKLY,
-                        weekDays: [Days[startDate?.getDay()]],
+                        weekDays: [Days[startDate.getDay()]],
+                        weekDayOccurenceInMonth: undefined,
                       })
                     }
                     data-testid="weeklyRecurrence"
@@ -492,7 +504,7 @@ function organizationEvents(): JSX.Element {
                         {
                           ...recurrenceRuleState,
                           frequency: Frequency.WEEKLY,
-                          weekDays: [Days[startDate?.getDay()]],
+                          weekDays: [Days[startDate.getDay()]],
                         },
                         startDate,
                         endDate,
@@ -504,6 +516,9 @@ function organizationEvents(): JSX.Element {
                       setRecurrenceRuleState({
                         ...recurrenceRuleState,
                         frequency: Frequency.MONTHLY,
+                        weekDays: [Days[startDate.getDay()]],
+                        weekDayOccurenceInMonth:
+                          getWeekDayOccurenceInMonth(startDate),
                       })
                     }
                     data-testid="monthlyRecurrence"
@@ -513,6 +528,9 @@ function organizationEvents(): JSX.Element {
                         {
                           ...recurrenceRuleState,
                           frequency: Frequency.MONTHLY,
+                          weekDays: [Days[startDate.getDay()]],
+                          weekDayOccurenceInMonth:
+                            getWeekDayOccurenceInMonth(startDate),
                         },
                         startDate,
                         endDate,
@@ -524,6 +542,8 @@ function organizationEvents(): JSX.Element {
                       setRecurrenceRuleState({
                         ...recurrenceRuleState,
                         frequency: Frequency.YEARLY,
+                        weekDays: undefined,
+                        weekDayOccurenceInMonth: undefined,
                       })
                     }
                     data-testid="yearlyRecurrence"
@@ -533,6 +553,8 @@ function organizationEvents(): JSX.Element {
                         {
                           ...recurrenceRuleState,
                           frequency: Frequency.YEARLY,
+                          weekDays: undefined,
+                          weekDayOccurenceInMonth: undefined,
                         },
                         startDate,
                         endDate,
@@ -545,6 +567,7 @@ function organizationEvents(): JSX.Element {
                         ...recurrenceRuleState,
                         frequency: Frequency.WEEKLY,
                         weekDays: mondayToFriday,
+                        weekDayOccurenceInMonth: undefined,
                       })
                     }
                     data-testid="mondayToFridayRecurrence"

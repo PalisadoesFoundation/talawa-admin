@@ -65,3 +65,6 @@ export const monthNames = [
   'November',
   'December',
 ];
+
+// week day's occurences in month
+export const weekDayOccurences = ['First', 'Second', 'Third', 'Fourth', 'Last'];

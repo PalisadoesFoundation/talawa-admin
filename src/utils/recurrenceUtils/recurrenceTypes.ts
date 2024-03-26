@@ -5,8 +5,10 @@
 // interface for the recurrenceRuleData that we would send to the backend
 export interface InterfaceRecurrenceRule {
   frequency: Frequency;
-  weekDays: WeekDays[];
+  weekDays: WeekDays[] | undefined;
+  interval: number | undefined;
   count: number | undefined;
+  weekDayOccurenceInMonth: number | undefined;
 }
 
 // recurrence frequency
