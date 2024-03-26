@@ -189,7 +189,6 @@ describe('MemberDetail', () => {
   test('should render the elements', async () => {
     const props = {
       id: 'rishav-jha-mech',
-      from: 'orglist',
     };
 
     render(
