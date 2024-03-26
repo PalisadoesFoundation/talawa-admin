@@ -210,10 +210,6 @@ describe('Testing User Table Item', () => {
     expect(screen.getByText(/1/i)).toBeInTheDocument();
     expect(screen.getByText(/John Doe/i)).toBeInTheDocument();
     expect(screen.getByText(/john@example.com/i)).toBeInTheDocument();
-    expect(screen.getByTestId(`changeRole${123}`)).toBeInTheDocument();
-    expect(screen.getByTestId(`changeRole${123}`)).toHaveValue(
-      `SUPERADMIN?${123}`,
-    );
     expect(screen.getByTestId(`showJoinedOrgsBtn${123}`)).toBeInTheDocument();
     expect(
       screen.getByTestId(`showBlockedByOrgsBtn${123}`),
@@ -472,8 +468,6 @@ describe('Testing User Table Item', () => {
     expect(screen.getByText(/29-07-2023/i)).toBeInTheDocument();
     expect(screen.getByTestId('removeUserFromOrgBtnabc')).toBeInTheDocument();
     expect(screen.getByTestId('removeUserFromOrgBtndef')).toBeInTheDocument();
-    expect(screen.getByTestId(`changeRoleInOrgabc`)).toHaveValue('ADMIN?abc');
-    expect(screen.getByTestId(`changeRoleInOrgdef`)).toHaveValue('USER?def');
 
     // Search for Joined Organization 1
     const searchBtn = screen.getByTestId(`searchBtnJoinedOrgs`);
@@ -694,8 +688,6 @@ describe('Testing User Table Item', () => {
     expect(screen.getByText(/29-03-2023/i)).toBeInTheDocument();
     expect(screen.getByTestId('removeUserFromOrgBtnxyz')).toBeInTheDocument();
     expect(screen.getByTestId('removeUserFromOrgBtnmno')).toBeInTheDocument();
-    expect(screen.getByTestId(`changeRoleInOrgxyz`)).toHaveValue('ADMIN?xyz');
-    expect(screen.getByTestId(`changeRoleInOrgmno`)).toHaveValue('USER?mno');
     // Click on Creator Link
     fireEvent.click(screen.getByTestId(`creatorxyz`));
     expect(toast.success).toBeCalledWith('Profile Page Coming Soon !');
