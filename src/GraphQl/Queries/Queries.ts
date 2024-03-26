@@ -204,7 +204,6 @@ export const USER_LIST_REQUEST = gql`
     $lastName_contains: String
     $first: Int
     $skip: Int
-    $adminApproved: Boolean
   ) {
     users(
       where: {
@@ -213,7 +212,6 @@ export const USER_LIST_REQUEST = gql`
       }
       skip: $skip
       first: $first
-      adminApproved: $adminApproved
     ) {
       user {
         firstName
@@ -221,9 +219,24 @@ export const USER_LIST_REQUEST = gql`
         image
         _id
         email
-        userType
-        adminApproved
         createdAt
+        appUserProfile {
+          adminApproved
+          _id
+          adminFor {
+            _id
+          }
+          isSuperAdmin
+          createdOrganizations {
+            _id
+          }
+          createdEvents {
+            _id
+          }
+          eventAdmin {
+            _id
+          }
+        }
       }
     }
   }
@@ -430,7 +443,23 @@ export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
         image
         email
         createdAt
-        userType
+        appUserProfile {
+          adminApproved
+          _id
+          adminFor {
+            _id
+          }
+          isSuperAdmin
+          createdOrganizations {
+            _id
+          }
+          createdEvents {
+            _id
+          }
+          eventAdmin {
+            _id
+          }
+        }
       }
     }
   }
@@ -629,8 +658,23 @@ export const USERS_CONNECTION_LIST = gql`
         image
         _id
         email
-        userType
-        adminApproved
+        appUserProfile {
+          adminApproved
+          _id
+          adminFor {
+            _id
+          }
+          isSuperAdmin
+          createdOrganizations {
+            _id
+          }
+          createdEvents {
+            _id
+          }
+          eventAdmin {
+            _id
+          }
+        }
         adminFor {
           _id
         }
