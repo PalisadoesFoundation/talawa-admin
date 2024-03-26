@@ -149,7 +149,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
 
   const loginLink = async (): Promise<void> => {
     try {
-      console.log(formState);
+      // console.log(formState);
       const firstName = formState.firstName;
       const lastName = formState.lastName;
       const email = formState.email;
