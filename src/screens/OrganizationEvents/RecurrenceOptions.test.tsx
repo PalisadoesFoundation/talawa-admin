@@ -273,10 +273,12 @@ describe('Testing the creaction of recurring events through recurrence options',
     userEvent.click(screen.getByTestId('recurrenceOptions'));
 
     await waitFor(() => {
-      expect(screen.getByTestId('monthlyRecurrence')).toBeInTheDocument();
+      expect(
+        screen.getByTestId('monthlyRecurrenceOnThatOccurence'),
+      ).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('monthlyRecurrence'));
+    userEvent.click(screen.getByTestId('monthlyRecurrenceOnThatOccurence'));
 
     userEvent.click(screen.getByTestId('recurrenceOptions'));
 

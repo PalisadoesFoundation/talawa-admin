@@ -523,7 +523,7 @@ function organizationEvents(): JSX.Element {
                             getWeekDayOccurenceInMonth(startDate),
                         })
                       }
-                      data-testid="monthlyRecurrence"
+                      data-testid="monthlyRecurrenceOnThatOccurence"
                     >
                       <span className="fw-semibold text-secondary">
                         {getRecurrenceRuleText(
@@ -550,7 +550,7 @@ function organizationEvents(): JSX.Element {
                           weekDayOccurenceInMonth: -1,
                         })
                       }
-                      data-testid="monthlyRecurrence"
+                      data-testid="monthlyRecurrenceOnLastOccurence"
                     >
                       <span className="fw-semibold text-secondary">
                         {getRecurrenceRuleText(
