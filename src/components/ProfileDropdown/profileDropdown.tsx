@@ -1,7 +1,7 @@
 import Avatar from 'components/Avatar/Avatar';
 import React from 'react';
 import { ButtonGroup, Dropdown } from 'react-bootstrap';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from './profileDropdown.module.css';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
@@ -10,13 +10,13 @@ import { useMutation } from '@apollo/client';
 const profileDropdown = (): JSX.Element => {
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
   const { getItem } = useLocalStorage();
-  const userType = getItem('UserType');
+  const superAdmin = getItem('SuperAdmin');
   const firstName = getItem('FirstName');
   const lastName = getItem('LastName');
   const userImage = getItem('UserImage');
-  const { orgId } = useParams();
+  const { orgId } = getItem('id');
   const navigate = useNavigate();
-
+  const userType = superAdmin ? 'SuperAdmin' : 'Admin';
   const logout = async (): Promise<void> => {
     try {
       await revokeRefreshToken();
