@@ -295,12 +295,9 @@ const organizationFunds = (): JSX.Element => {
       </Row>
       <div className={styles.mainpageright}>
         <div className={`${styles.list_box}  bg-white rounded-4 my-3`}>
-          <div className={styles.list_box} data-testid="orgFunds">
-            {fundData?.fundsByOrganization.length === 0 ? (
-              <div>
-                <h6 className="text-center text-danger">{t('noFundsFound')}</h6>
-              </div>
-            ) : (
+          {fundData?.fundsByOrganization &&
+          fundData.fundsByOrganization.length > 0 ? (
+            <div className={styles.list_box} data-testid="orgFunds">
               <TableContainer component={Paper} sx={{ minWidth: '820px' }}>
                 <Table aria-label="customized table">
                   <TableHead>
@@ -324,60 +321,63 @@ const organizationFunds = (): JSX.Element => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {fundData?.fundsByOrganization &&
-                      fundData?.fundsByOrganization.map(
-                        (fund: any, index: number) => (
-                          <StyledTableRow key={fund._id}>
-                            <StyledTableCell component="th" scope="row">
-                              {index + 1}
-                            </StyledTableCell>
-                            <StyledTableCell
-                              align="center"
-                              data-testid="fundName"
-                              onClick={() => handleClick(fund._id)}
+                    {fundData.fundsByOrganization.map(
+                      (fund: any, index: number) => (
+                        <StyledTableRow key={fund._id}>
+                          <StyledTableCell component="th" scope="row">
+                            {index + 1}
+                          </StyledTableCell>
+                          <StyledTableCell
+                            align="center"
+                            data-testid="fundName"
+                            onClick={() => handleClick(fund._id)}
+                          >
+                            {fund.name}
+                          </StyledTableCell>
+                          <StyledTableCell
+                            align="center"
+                            data-testid="fundCreatedBy"
+                          >
+                            {fund.creator.firstName} {fund.creator.lastName}
+                          </StyledTableCell>
+                          <StyledTableCell
+                            align="center"
+                            data-testid="fundCreatedAt"
+                          >
+                            {dayjs(fund.createdAt).format('DD/MM/YYYY')}
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            <Button
+                              variant="outline-success"
+                              disabled={true}
+                              data-testid="fundtype"
                             >
-                              {fund.name}
-                            </StyledTableCell>
-                            <StyledTableCell
-                              align="center"
-                              data-testid="fundCreatedBy"
+                              {fund.isArchived
+                                ? t('archived')
+                                : t('nonArchive')}
+                            </Button>
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            <Button
+                              variant="success"
+                              data-testid="editFundBtn"
+                              onClick={() => handleEditClick(fund)}
                             >
-                              {fund.creator.firstName} {fund.creator.lastName}
-                            </StyledTableCell>
-                            <StyledTableCell
-                              align="center"
-                              data-testid="fundCreatedAt"
-                            >
-                              {dayjs(fund.createdAt).format('DD/MM/YYYY')}
-                            </StyledTableCell>
-                            <StyledTableCell align="center">
-                              <Button
-                                variant="outline-success"
-                                disabled={true}
-                                data-testid="fundtype"
-                              >
-                                {fund.isArchived
-                                  ? t('archived')
-                                  : t('nonArchive')}
-                              </Button>
-                            </StyledTableCell>
-                            <StyledTableCell align="center">
-                              <Button
-                                variant="success"
-                                data-testid="editFundBtn"
-                                onClick={() => handleEditClick(fund)}
-                              >
-                                Manage
-                              </Button>
-                            </StyledTableCell>
-                          </StyledTableRow>
-                        ),
-                      )}
+                              Manage
+                            </Button>
+                          </StyledTableCell>
+                        </StyledTableRow>
+                      ),
+                    )}
                   </TableBody>
                 </Table>
               </TableContainer>
-            )}
-          </div>
+            </div>
+          ) : (
+            <div>
+              <h6 className="text-center text-danger">{t('noFundsFound')}</h6>
+            </div>
+          )}
         </div>
         {/* <FundCreateModal*/}
         <FundCreateModal
