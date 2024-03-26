@@ -1,35 +1,36 @@
-import { useMutation, useQuery } from '@apollo/client';
+import React, { useEffect, useRef, useState } from 'react';
+import type { ChangeEvent } from 'react';
+import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
+import styles from './Home.module.css';
+import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
-import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
+import {
+  Button,
+  Form,
+  Col,
+  Container,
+  Image,
+  Row,
+  Modal,
+} from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import getOrganizationId from 'utils/getOrganizationId';
+import PostCard from 'components/UserPortal/PostCard/PostCard';
+import { useMutation, useQuery } from '@apollo/client';
 import {
   ADVERTISEMENTS_GET,
   ORGANIZATION_POST_LIST,
   USER_DETAILS,
 } from 'GraphQl/Queries/Queries';
-import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
-import PostCard from 'components/UserPortal/PostCard/PostCard';
-import PromotedPost from 'components/UserPortal/PromotedPost/PromotedPost';
-import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
-import type { ChangeEvent } from 'react';
-import React, { useEffect, useRef, useState } from 'react';
-import {
-  Button,
-  Col,
-  Container,
-  Form,
-  Image,
-  Modal,
-  Row,
-} from 'react-bootstrap';
-import { useTranslation } from 'react-i18next';
-import { Link, Navigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import convertToBase64 from 'utils/convertToBase64';
+import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
-import useLocalStorage from 'utils/useLocalstorage';
+import { useTranslation } from 'react-i18next';
+import convertToBase64 from 'utils/convertToBase64';
+import { toast } from 'react-toastify';
+import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import PromotedPost from 'components/UserPortal/PromotedPost/PromotedPost';
 import UserDefault from '../../../assets/images/defaultImg.png';
-import styles from './Home.module.css';
+import useLocalStorage from 'utils/useLocalstorage';
 
 interface InterfacePostCardProps {
   id: string;
@@ -69,10 +70,8 @@ interface InterfaceAdContent {
   _id: string;
   name: string;
   type: string;
-  organization: {
-    _id: string;
-  };
-  link: string;
+  organization: { _id: string };
+  mediaUrl: string;
   endDate: string;
   startDate: string;
 }
@@ -82,10 +81,7 @@ export default function home(): JSX.Element {
 
   const { getItem } = useLocalStorage();
 
-  const { orgId: organizationId } = useParams();
-  if (!organizationId) {
-    return <Navigate to={'/user'} />;
-  }
+  const organizationId = getOrganizationId(window.location.href);
   const [posts, setPosts] = React.useState([]);
   const [postContent, setPostContent] = React.useState<string>('');
   const [postImage, setPostImage] = React.useState<string>('');
@@ -93,6 +89,7 @@ export default function home(): JSX.Element {
   const [filteredAd, setFilteredAd] = useState<InterfaceAdContent[]>([]);
   const [showStartPost, setShowStartPost] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const currentOrgId = window.location.href.split('/id=')[1] + '';
 
   const navbarProps = {
     currentPage: 'home',
@@ -103,7 +100,7 @@ export default function home(): JSX.Element {
     refetch,
     loading: loadingPosts,
   } = useQuery(ORGANIZATION_POST_LIST, {
-    variables: { id: organizationId, first: 10 },
+    variables: { id: organizationId },
   });
 
   const userId: string | null = getItem('userId');
@@ -152,7 +149,7 @@ export default function home(): JSX.Element {
 
   React.useEffect(() => {
     if (data) {
-      setPosts(data.organizaitons[0].posts.edges);
+      setPosts(data.organizations[0].posts.edges);
     }
   }, [data]);
 
@@ -160,10 +157,10 @@ export default function home(): JSX.Element {
     if (promotedPostsData) {
       setAdContent(promotedPostsData.advertisementsConnection);
     }
-  }, [promotedPostsData]);
+  }, [data]);
 
   useEffect(() => {
-    setFilteredAd(filterAdContent(adContent, organizationId));
+    setFilteredAd(filterAdContent(adContent, currentOrgId));
   }, [adContent]);
 
   const filterAdContent = (
@@ -173,7 +170,7 @@ export default function home(): JSX.Element {
   ): InterfaceAdContent[] => {
     return adCont.filter(
       (ad: InterfaceAdContent) =>
-        ad.organization._id === organizationId &&
+        ad.organization._id === currentOrgId &&
         new Date(ad.endDate) > currentDate,
     );
   };
@@ -206,7 +203,9 @@ export default function home(): JSX.Element {
             <Row className="d-flex align-items-center justify-content-center">
               <Col xs={2} className={styles.userImage}>
                 <Image
-                  src={userData?.image ? userData?.image : UserDefault}
+                  src={
+                    userData?.user.image ? userData?.user.image : UserDefault
+                  }
                   roundedCircle
                   className="mt-2"
                 />
@@ -315,10 +314,10 @@ export default function home(): JSX.Element {
             <div data-testid="promotedPostsContainer">
               {filteredAd.map((post: any) => (
                 <PromotedPost
-                  key={post._id}
-                  id={post._id}
-                  media={post.mediaUrl}
-                  title={post.name}
+                  key={post.organization._id}
+                  id={post.organization._id}
+                  image={post.organization.mediaUrl}
+                  title={post.organization.name}
                   data-testid="postid"
                 />
               ))}
@@ -409,12 +408,14 @@ export default function home(): JSX.Element {
               <span className="d-flex gap-2 align-items-center">
                 <span className={styles.userImage}>
                   <Image
-                    src={userData?.image ? userData?.image : UserDefault}
+                    src={
+                      userData?.user.image ? userData?.user.image : UserDefault
+                    }
                     roundedCircle
                     className="mt-2"
                   />
                 </span>
-                <span>{`${userData?.user?.firstName} ${userData?.user?.lastName}`}</span>
+                <span>{`${userData?.user.firstName} ${userData?.user.lastName}`}</span>
               </span>
             </Modal.Title>
           </Modal.Header>

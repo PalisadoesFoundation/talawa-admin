@@ -13,11 +13,13 @@ import {
   LOGIN_MUTATION,
   RECAPTCHA_MUTATION,
   SIGNUP_MUTATION,
+  UPDATE_COMMUNITY,
 } from 'GraphQl/Mutations/mutations';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { BACKEND_URL } from 'Constant/constant';
 import useLocalStorage from 'utils/useLocalstorage';
+import { GET_COMMUNITY_DATA } from 'GraphQl/Queries/Queries';
 
 const MOCKS = [
   {
@@ -33,8 +35,11 @@ const MOCKS = [
         login: {
           user: {
             _id: '1',
-            userType: 'ADMIN',
             adminApproved: true,
+          },
+          appUserProfile: {
+            isSuperAdmin: false,
+            adminFor: ['123', '456'],
           },
           accessToken: 'accessToken',
           refreshToken: 'refreshToken',
@@ -77,9 +82,49 @@ const MOCKS = [
       },
     },
   },
+  {
+    request: {
+      query: GET_COMMUNITY_DATA,
+    },
+    result: {
+      data: {
+        getCommunityData: null,
+      },
+    },
+  },
+];
+const MOCKS2 = [
+  {
+    request: {
+      query: GET_COMMUNITY_DATA,
+    },
+    result: {
+      data: {
+        getCommunityData: {
+          _id: 'communitId',
+          websiteLink: 'http://link.com',
+          name: 'testName',
+          logoUrl: 'image.png',
+          __typename: 'Community',
+          socialMediaUrls: {
+            facebook: 'http://url.com',
+            gitHub: 'http://url.com',
+            youTube: 'http://url.com',
+            instagram: 'http://url.com',
+            linkedIn: 'http://url.com',
+            reddit: 'http://url.com',
+            slack: 'http://url.com',
+            twitter: null,
+            __typename: 'SocialMediaUrls',
+          },
+        },
+      },
+    },
+  },
 ];
 
 const link = new StaticMockLink(MOCKS, true);
+const link2 = new StaticMockLink(MOCKS2, true);
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -144,53 +189,6 @@ jest.mock('react-google-recaptcha', () => {
   return recaptcha;
 });
 
-describe('Talawa-API server fetch check', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
-  test('Checks if Talawa-API resource is loaded successfully', async () => {
-    global.fetch = jest.fn(() => Promise.resolve({} as unknown as Response));
-
-    await act(async () => {
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <LoginPage />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-    });
-
-    expect(fetch).toHaveBeenCalledWith(BACKEND_URL);
-  });
-
-  test('displays warning message when resource loading fails', async () => {
-    const mockError = new Error('Network error');
-    global.fetch = jest.fn(() => Promise.reject(mockError));
-
-    await act(async () => {
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <LoginPage />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-    });
-
-    expect(fetch).toHaveBeenCalledWith(BACKEND_URL);
-  });
-});
-
 describe('Testing Login Page Screen', () => {
   test('Component Should be rendered properly', async () => {
     window.location.assign('/orglist');
@@ -213,6 +211,51 @@ describe('Testing Login Page Screen', () => {
     await wait();
     expect(screen.getByText(/Admin/i)).toBeInTheDocument();
     expect(window.location).toBeAt('/orglist');
+  });
+
+  test('There should be default values of pre-login data when queried result is null', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+
+    expect(screen.getByTestId('PalisadoesLogo')).toBeInTheDocument();
+    expect(
+      screen.getAllByTestId('PalisadoesSocialMedia')[0],
+    ).toBeInTheDocument();
+
+    await wait();
+    expect(screen.queryByTestId('preLoginLogo')).not.toBeInTheDocument();
+    expect(screen.queryAllByTestId('preLoginSocialMedia')[0]).toBeUndefined();
+  });
+
+  test('There should be a different values of pre-login data if the queried result is not null', async () => {
+    render(
+      <MockedProvider addTypename={true} link={link2}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+    expect(screen.getByTestId('preLoginLogo')).toBeInTheDocument();
+    expect(screen.getAllByTestId('preLoginSocialMedia')[0]).toBeInTheDocument();
+
+    await wait();
+    expect(screen.queryByTestId('PalisadoesLogo')).not.toBeInTheDocument();
+    expect(screen.queryAllByTestId('PalisadoesSocialMedia')[0]).toBeUndefined();
   });
 
   test('Testing registration functionality', async () => {
@@ -752,6 +795,7 @@ describe('Testing Login Page Screen', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
+    await wait();
 
     const recaptchaElements = screen.getAllByTestId('mock-recaptcha');
 
@@ -775,7 +819,7 @@ describe('Testing redirect if already logged in', () => {
   test('Logged in as USER', async () => {
     const { setItem } = useLocalStorage();
     setItem('IsLoggedIn', 'TRUE');
-    setItem('UserType', 'USER');
+    setItem('userId', 'id');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -790,10 +834,10 @@ describe('Testing redirect if already logged in', () => {
     await wait();
     expect(mockNavigate).toHaveBeenCalledWith('/user/organizations');
   });
-  test('Logged as in Admin or SuperAdmin', async () => {
+  test('Logged in as Admin or SuperAdmin', async () => {
     const { setItem } = useLocalStorage();
     setItem('IsLoggedIn', 'TRUE');
-    setItem('UserType', 'ADMIN');
+    setItem('userId', null);
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -807,5 +851,52 @@ describe('Testing redirect if already logged in', () => {
     );
     await wait();
     expect(mockNavigate).toHaveBeenCalledWith('/orglist');
+  });
+});
+
+describe('Talawa-API server fetch check', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('Checks if Talawa-API resource is loaded successfully', async () => {
+    global.fetch = jest.fn(() => Promise.resolve({} as unknown as Response));
+
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+
+    expect(fetch).toHaveBeenCalledWith(BACKEND_URL);
+  });
+
+  test('displays warning message when resource loading fails', async () => {
+    const mockError = new Error('Network error');
+    global.fetch = jest.fn(() => Promise.reject(mockError));
+
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+
+    expect(fetch).toHaveBeenCalledWith(BACKEND_URL);
   });
 });

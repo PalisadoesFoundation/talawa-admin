@@ -198,4 +198,135 @@ const countryOptions = [
   { value: 'zm', label: 'Zambia' },
   { value: 'zw', label: 'Zimbabwe' },
 ];
-export default countryOptions;
+
+const educationGradeEnum = [
+  {
+    value: 'NO_GRADE',
+    label: 'noGrade',
+  },
+  {
+    value: 'PRE_KG',
+    label: 'preKg',
+  },
+  {
+    value: 'KG',
+    label: 'kg',
+  },
+  {
+    value: 'GRADE_1',
+    label: 'grade1',
+  },
+  {
+    value: 'GRADE_2',
+    label: 'grade2',
+  },
+  {
+    value: 'GRADE_3',
+    label: 'grade3',
+  },
+  {
+    value: 'GRADE_4',
+    label: 'grade4',
+  },
+  {
+    value: 'GRADE_5',
+    label: 'grade5',
+  },
+  {
+    value: 'GRADE_6',
+    label: 'grade6',
+  },
+  {
+    value: 'GRADE_7',
+    label: 'grade7',
+  },
+  {
+    value: 'GRADE_8',
+    label: 'grade8',
+  },
+  {
+    value: 'GRADE_9',
+    label: 'grade9',
+  },
+  {
+    value: 'GRADE_10',
+    label: 'grade10',
+  },
+  {
+    value: 'GRADE_11',
+    label: 'grade11',
+  },
+  {
+    value: 'GRADE_12',
+    label: 'grade12',
+  },
+  {
+    value: 'GRADUATE',
+    label: 'graduate',
+  },
+];
+
+const maritalStatusEnum = [
+  {
+    value: 'SINGLE',
+    label: 'single',
+  },
+  {
+    value: 'ENGAGED',
+    label: 'engaged',
+  },
+  {
+    value: 'MARRIED',
+    label: 'married',
+  },
+  {
+    value: 'DIVORCED',
+    label: 'divorced',
+  },
+  {
+    value: 'WIDOWED',
+    label: 'widowed',
+  },
+  {
+    value: 'SEPARATED',
+    label: 'separated',
+  },
+];
+
+const genderEnum = [
+  {
+    value: 'MALE',
+    label: 'male',
+  },
+  {
+    value: 'FEMALE',
+    label: 'female',
+  },
+  {
+    value: 'OTHER',
+    label: 'other',
+  },
+];
+
+const employmentStatusEnum = [
+  {
+    value: 'FULL_TIME',
+    label: 'fullTime',
+  },
+  {
+    value: 'PART_TIME',
+    label: 'partTime',
+  },
+  {
+    value: 'UNEMPLOYED',
+    label: 'unemployed',
+  },
+];
+
+export {
+  countryOptions,
+  educationGradeEnum,
+  maritalStatusEnum,
+  genderEnum,
+  employmentStatusEnum,
+};

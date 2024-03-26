@@ -69,7 +69,6 @@ const organizationFunds = (): JSX.Element => {
       id: currentUrl,
     },
   });
-  console.log(fundData);
 
   const [createFund] = useMutation(CREATE_FUND_MUTATION);
   const [updateFund] = useMutation(UPDATE_FUND_MUTATION);
@@ -131,8 +130,10 @@ const organizationFunds = (): JSX.Element => {
       refetchFunds();
       hideCreateModal();
     } catch (error: unknown) {
-      toast.error((error as Error).message);
-      console.log(error);
+      if (error instanceof Error) {
+        toast.error(error.message);
+        console.log(error.message);
+      }
     }
   };
   const updateFundHandler = async (
@@ -168,13 +169,14 @@ const organizationFunds = (): JSX.Element => {
       hideUpdateModal();
       toast.success(t('fundUpdated'));
     } catch (error: unknown) {
-      toast.error((error as Error).message);
-      console.log(error);
+      if (error instanceof Error) {
+        toast.error(error.message);
+        console.log(error.message);
+      }
     }
   };
   const archiveFundHandler = async (): Promise<void> => {
     try {
-      console.log('herere');
       await updateFund({
         variables: {
           id: fund?._id,
@@ -187,8 +189,10 @@ const organizationFunds = (): JSX.Element => {
         ? toast.success(t('fundUnarchived'))
         : toast.success(t('fundArchived'));
     } catch (error: unknown) {
-      toast.error((error as Error).message);
-      console.log(error);
+      if (error instanceof Error) {
+        toast.error(error.message);
+        console.log(error.message);
+      }
     }
   };
   const deleteFundHandler = async (): Promise<void> => {
@@ -202,8 +206,10 @@ const organizationFunds = (): JSX.Element => {
       toggleDeleteModal();
       toast.success(t('fundDeleted'));
     } catch (error: unknown) {
-      toast.error((error as Error).message);
-      console.log(error);
+      if (error instanceof Error) {
+        toast.error(error.message);
+        console.log(error.message);
+      }
     }
   };
   //it is used to rerender the component to use updated Fund in setState

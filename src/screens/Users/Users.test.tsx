@@ -30,7 +30,7 @@ async function wait(ms = 100): Promise<void> {
 }
 beforeEach(() => {
   setItem('id', '123');
-  setItem('UserType', 'SUPERADMIN');
+  setItem('SuperAdmin', true);
   setItem('FirstName', 'John');
   setItem('LastName', 'Doe');
 });
@@ -59,7 +59,7 @@ describe('Testing Users screen', () => {
 
   test(`Component should be rendered properly when user is not superAdmin
   and or userId does not exists in localstorage`, async () => {
-    setItem('UserType', 'ADMIN');
+    setItem('SuperAdmin', false);
     setItem('id', '');
     render(
       <MockedProvider addTypename={false} link={link}>

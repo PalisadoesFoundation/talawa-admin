@@ -10,7 +10,19 @@ export const CHECK_AUTH = gql`
       lastName
       image
       email
-      userType
+      birthDate
+      educationGrade
+      employmentStatus
+      gender
+      maritalStatus
+      phone {
+        mobile
+      }
+      address {
+        line1
+        state
+        countryCode
+      }
     }
   }
 `;
@@ -105,63 +117,81 @@ export const USER_LIST = gql`
       skip: $skip
       first: $first
     ) {
-      firstName
-      lastName
-      image
-      _id
-      email
-      userType
-      adminApproved
-      adminFor {
+      user {
         _id
-      }
-      createdAt
-      organizationsBlockedBy {
-        _id
-        name
-        image
-        address {
-          city
-          countryCode
-          dependentLocality
-          line1
-          line2
-          postalCode
-          sortingCode
-          state
-        }
-        createdAt
-        creator {
+        joinedOrganizations {
           _id
-          firstName
-          lastName
+          name
           image
-          email
+          createdAt
+          address {
+            city
+            countryCode
+            dependentLocality
+            line1
+            line2
+            postalCode
+            sortingCode
+            state
+          }
+          creator {
+            _id
+            firstName
+            lastName
+            image
+            email
+          }
+        }
+        firstName
+        lastName
+        email
+        image
+        createdAt
+        registeredEvents {
+          _id
+        }
+        organizationsBlockedBy {
+          _id
+          name
+          image
+          address {
+            city
+            countryCode
+            dependentLocality
+            line1
+            line2
+            postalCode
+            sortingCode
+            state
+          }
+          creator {
+            _id
+            firstName
+            lastName
+            image
+            email
+          }
           createdAt
         }
-      }
-      joinedOrganizations {
-        _id
-        name
-        image
-        address {
-          city
-          countryCode
-          dependentLocality
-          line1
-          line2
-          postalCode
-          sortingCode
-          state
-        }
-        createdAt
-        creator {
+        membershipRequests {
           _id
-          firstName
-          lastName
-          image
-          email
-          createdAt
+        }
+      }
+      appUserProfile {
+        adminApproved
+        _id
+        adminFor {
+          _id
+        }
+        isSuperAdmin
+        createdOrganizations {
+          _id
+        }
+        createdEvents {
+          _id
+        }
+        eventAdmin {
+          _id
         }
       }
     }
@@ -252,8 +282,6 @@ export const EVENT_CHECKINS = gql`
         checkIn {
           _id
           time
-          allotedRoom
-          allotedSeat
         }
       }
     }
@@ -381,7 +409,6 @@ export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
     $orgId: ID!
     $firstName_contains: String
     $lastName_contains: String
-    $admin_for: ID
     $event_title_contains: String
     $first: Int
     $skip: Int
@@ -393,7 +420,6 @@ export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
       where: {
         firstName_contains: $firstName_contains
         lastName_contains: $lastName_contains
-        admin_for: $admin_for
         event_title_contains: $event_title_contains
       }
     ) {
@@ -404,6 +430,7 @@ export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
         image
         email
         createdAt
+        userType
       }
     }
   }
@@ -411,17 +438,13 @@ export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
 
 // To take the list of the oranization joined by a user
 export const USER_ORGANIZATION_LIST = gql`
-  query User($id: ID!) {
-    user(id: $id) {
-      firstName
-      lastName
-      image
-      email
-      userType
-      adminFor {
-        _id
-        name
+  query User($userId: ID!) {
+    user(id: $userId) {
+      user {
+        firstName
+        email
         image
+        lastName
       }
     }
   }
@@ -431,38 +454,39 @@ export const USER_ORGANIZATION_LIST = gql`
 export const USER_DETAILS = gql`
   query User($id: ID!) {
     user(id: $id) {
-      image
-      firstName
-      lastName
-      email
-      appLanguageCode
-      userType
-      pluginCreationAllowed
-      adminApproved
-      createdAt
-      adminFor {
+      user {
         _id
+        joinedOrganizations {
+          _id
+        }
+        firstName
+        lastName
+        email
+        image
+        createdAt
+        registeredEvents {
+          _id
+        }
+        membershipRequests {
+          _id
+        }
       }
-      createdOrganizations {
+      appUserProfile {
         _id
-      }
-      joinedOrganizations {
-        _id
-      }
-      organizationsBlockedBy {
-        _id
-      }
-      createdEvents {
-        _id
-      }
-      registeredEvents {
-        _id
-      }
-      eventAdmin {
-        _id
-      }
-      membershipRequests {
-        _id
+        adminApproved
+        adminFor {
+          _id
+        }
+        isSuperAdmin
+        createdOrganizations {
+          _id
+        }
+        createdEvents {
+          _id
+        }
+        eventAdmin {
+          _id
+        }
       }
     }
   }
@@ -561,10 +585,19 @@ export const ADMIN_LIST = gql`
 
 // to take the membership request
 export const MEMBERSHIP_REQUEST = gql`
-  query Organizations($id: ID!) {
+  query Organizations(
+    $id: ID!
+    $skip: Int
+    $first: Int
+    $firstName_contains: String
+  ) {
     organizations(id: $id) {
       _id
-      membershipRequests {
+      membershipRequests(
+        skip: $skip
+        first: $first
+        where: { user: { firstName_contains: $firstName_contains } }
+      ) {
         _id
         user {
           _id
@@ -572,6 +605,103 @@ export const MEMBERSHIP_REQUEST = gql`
           lastName
           email
         }
+      }
+    }
+  }
+`;
+
+export const USERS_CONNECTION_LIST = gql`
+  query usersConnection(
+    $id_not_in: [ID!]
+    $firstName_contains: String
+    $lastName_contains: String
+  ) {
+    users(
+      where: {
+        id_not_in: $id_not_in
+        firstName_contains: $firstName_contains
+        lastName_contains: $lastName_contains
+      }
+    ) {
+      firstName
+      lastName
+      image
+      _id
+      email
+      userType
+      adminApproved
+      adminFor {
+        _id
+      }
+      createdAt
+      organizationsBlockedBy {
+        _id
+        name
+        image
+        address {
+          city
+          countryCode
+          dependentLocality
+          line1
+          line2
+          postalCode
+          sortingCode
+          state
+        }
+        createdAt
+        creator {
+          _id
+          firstName
+          lastName
+          image
+          email
+          createdAt
+        }
+      }
+      joinedOrganizations {
+        _id
+        name
+        image
+        address {
+          city
+          countryCode
+          dependentLocality
+          line1
+          line2
+          postalCode
+          sortingCode
+          state
+        }
+        createdAt
+        creator {
+          _id
+          firstName
+          lastName
+          image
+          email
+          createdAt
+        }
+      }
+    }
+  }
+`;
+
+export const GET_COMMUNITY_DATA = gql`
+  query getCommunityData {
+    getCommunityData {
+      _id
+      websiteLink
+      name
+      logoUrl
+      socialMediaUrls {
+        facebook
+        gitHub
+        instagram
+        twitter
+        linkedIn
+        youTube
+        reddit
+        slack
       }
     }
   }

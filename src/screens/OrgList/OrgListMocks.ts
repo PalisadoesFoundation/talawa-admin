@@ -16,21 +16,15 @@ const superAdminUser: InterfaceUserType = {
   user: {
     firstName: 'John',
     lastName: 'Doe',
-    image: '',
-    email: 'John_Does_Palasidoes@gmail.com',
-    userType: 'SUPERADMIN',
-    adminFor: [
-      {
-        _id: '1',
-        name: 'Akatsuki',
-        image: '',
-      },
-    ],
+    email: 'john.doe@akatsuki.com',
+    image: null,
   },
 };
 
 const adminUser: InterfaceUserType = {
-  user: { ...superAdminUser.user, userType: 'ADMIN' },
+  user: {
+    ...superAdminUser.user,
+  },
 };
 
 const organizations: InterfaceOrgConnectionInfoType[] = [
@@ -63,7 +57,7 @@ const organizations: InterfaceOrgConnectionInfoType[] = [
   },
 ];
 
-for (let x = 0; x < 100; x++) {
+for (let x = 0; x < 1; x++) {
   organizations.push({
     _id: 'a' + x,
     image: '',

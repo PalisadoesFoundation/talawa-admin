@@ -4,12 +4,6 @@ export interface InterfaceUserType {
     lastName: string;
     image: string | null;
     email: string;
-    userType: string;
-    adminFor: {
-      _id: string;
-      name: string;
-      image: string | null;
-    }[];
   };
 }
 
@@ -201,6 +195,21 @@ export interface InterfaceQueryOrganizationFundCampaigns {
     currency: string;
   }[];
 }
+export interface InterfaceQueryFundCampaignsPledges {
+  startDate: Date;
+  endDate: Date;
+  pledges: {
+    _id: string;
+    amount: number;
+    currency: string;
+    endDate: string;
+    startDate: string;
+    users: {
+      _id: string;
+      firstName: string;
+    }[];
+  }[];
+}
 export interface InterfaceFundInfo {
   _id: string;
   name: string;
@@ -218,6 +227,17 @@ export interface InterfaceCampaignInfo {
   endDate: Date;
   createdAt: string;
   currency: string;
+}
+export interface InterfacePledgeInfo {
+  _id: string;
+  amount: number;
+  currency: string;
+  endDate: string;
+  startDate: string;
+  users: {
+    _id: string;
+    firstName: string;
+  }[];
 }
 export interface InterfaceQueryOrganizationEventListItem {
   _id: string;
@@ -245,43 +265,53 @@ export interface InterfaceQueryBlockPageMemberListItem {
 }
 
 export interface InterfaceQueryUserListItem {
-  _id: string;
-  firstName: string;
-  lastName: string;
-  image: string | null;
-  email: string;
-  userType: string;
-  adminFor: { _id: string }[];
-  adminApproved: boolean;
-  organizationsBlockedBy: {
+  user: {
     _id: string;
-    name: string;
-    address: InterfaceAddress;
+    firstName: string;
+    lastName: string;
     image: string | null;
-    createdAt: string;
-    creator: {
+    email: string;
+    organizationsBlockedBy: {
       _id: string;
-      firstName: string;
-      lastName: string;
-      email: string;
+      name: string;
       image: string | null;
-    };
-  }[];
-  joinedOrganizations: {
+      address: InterfaceAddress;
+      creator: {
+        _id: string;
+        firstName: string;
+        lastName: string;
+        email: string;
+        image: string | null;
+      };
+      createdAt: string;
+    }[];
+    joinedOrganizations: {
+      _id: string;
+      name: string;
+      address: InterfaceAddress;
+      image: string | null;
+      createdAt: string;
+      creator: {
+        _id: string;
+        firstName: string;
+        lastName: string;
+        email: string;
+        image: string | null;
+      };
+    }[];
+    createdAt: string;
+    registeredEvents: { _id: string }[];
+    membershipRequests: { _id: string }[];
+  };
+  appUserProfile: {
     _id: string;
-    name: string;
-    address: InterfaceAddress;
-    image: string | null;
-    createdAt: string;
-    creator: {
-      _id: string;
-      firstName: string;
-      lastName: string;
-      email: string;
-      image: string | null;
-    };
-  }[];
-  createdAt: string;
+    adminApproved: boolean;
+    adminFor: { _id: string }[];
+    isSuperAdmin: boolean;
+    createdOrganizations: { _id: string }[];
+    createdEvents: { _id: string }[];
+    eventAdmin: { _id: string }[];
+  };
 }
 
 export interface InterfaceQueryRequestListItem {
@@ -309,10 +339,66 @@ export interface InterfaceCreateFund {
   fundName: string;
   fundRef: string;
 }
+
+export interface InterfacePostCard {
+  id: string;
+  creator: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    id: string;
+  };
+  image: string;
+  video: string;
+  text: string;
+  title: string;
+  likeCount: number;
+  commentCount: number;
+  comments: {
+    creator: {
+      _id: string;
+      firstName: string;
+      lastName: string;
+      email: string;
+    };
+    likeCount: number;
+    likedBy: {
+      id: string;
+    }[];
+    text: string;
+  }[];
+  likedBy: {
+    firstName: string;
+    lastName: string;
+    id: string;
+  }[];
+}
 export interface InterfaceCreateCampaign {
   campaignName: string;
   campaignCurrency: string;
   campaignGoal: number;
   campaignStartDate: Date;
   campaignEndDate: Date;
+}
+
+export interface InterfaceCreatePledge {
+  pledgeAmount: number;
+  pledgeCurrency: string;
+  pledgeStartDate: Date;
+  pledgeEndDate: Date;
+}
+
+export interface InterfaceQueryMembershipRequestsListItem {
+  organizations: {
+    _id: string;
+    membershipRequests: {
+      _id: string;
+      user: {
+        _id: string;
+        firstName: string;
+        lastName: string;
+        email: string;
+      };
+    }[];
+  }[];
 }

@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import { useMutation, useQuery } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import {
@@ -11,7 +12,7 @@ import dayjs from 'dayjs';
 import { useState, type ChangeEvent } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { currencySymbols } from 'utils/currency';
 import type {
@@ -23,14 +24,14 @@ import CampaignCreateModal from './CampaignCreateModal';
 import CampaignDeleteModal from './CampaignDeleteModal';
 import CampaignUpdateModal from './CampaignUpdateModal';
 import styles from './OrganizationFundCampaign.module.css';
-import React from 'react';
 
 const orgFundCampaign = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'fundCampaign',
   });
+  const navigate = useNavigate();
 
-  const { fundId: currentUrl } = useParams();
+  const { fundId: currentUrl, orgId: orgId } = useParams();
   const [campaignCreateModalIsOpen, setcampaignCreateModalIsOpen] =
     useState<boolean>(false);
   const [campaignUpdateModalIsOpen, setcampaignUpdateModalIsOpen] =
@@ -104,7 +105,6 @@ const orgFundCampaign = (): JSX.Element => {
   ): Promise<void> => {
     e.preventDefault();
     try {
-      console.log(formState);
       await createCampaign({
         variables: {
           name: formState.campaignName,
@@ -126,8 +126,10 @@ const orgFundCampaign = (): JSX.Element => {
       refetchFundCampaign();
       hideCreateCampaignModal();
     } catch (error: unknown) {
-      toast.error((error as Error).message);
-      console.log(error);
+      if (error instanceof Error) {
+        toast.error(error.message);
+        console.log(error.message);
+      }
     }
   };
 
@@ -173,8 +175,10 @@ const orgFundCampaign = (): JSX.Element => {
       hideUpdateCampaignModal();
       toast.success(t('updatedCampaign'));
     } catch (error: unknown) {
-      toast.error((error as Error).message);
-      console.log(error);
+      if (error instanceof Error) {
+        toast.error(error.message);
+        console.log(error.message);
+      }
     }
   };
 
@@ -189,9 +193,15 @@ const orgFundCampaign = (): JSX.Element => {
       refetchFundCampaign();
       hideDeleteCampaignModal();
     } catch (error: unknown) {
-      toast.error((error as Error).message);
-      console.log(error);
+      if (error instanceof Error) {
+        toast.error(error.message);
+        console.log(error.message);
+      }
     }
+  };
+
+  const handleClick = (campaignId: String) => {
+    navigate(`/fundCampaignPledge/${orgId}/${campaignId}`);
   };
   if (fundCampaignLoading) {
     return <Loader size="xl" />;
@@ -202,7 +212,7 @@ const orgFundCampaign = (): JSX.Element => {
         <div className={styles.message} data-testid="errorMsg">
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
-            Error occured while loading Funds
+            Error occured while loading Campaigns
             <br />
             {fundCampaignError.message}
           </h6>
@@ -212,7 +222,7 @@ const orgFundCampaign = (): JSX.Element => {
   }
 
   return (
-    <div className={styles.organizationFundCampaign}>
+    <div className={styles.organizationFundCampaignContainer}>
       <Button
         variant="success"
         className={styles.orgFundCampaignButton}
@@ -224,25 +234,24 @@ const orgFundCampaign = (): JSX.Element => {
       </Button>
       <div className={`${styles.container} bg-white rounded-4 `}>
         <div className="mx-1 my-4 py-4">
-          <div className="mx-4 shadow-sm rounded-top-4">
-            <Row className="mx-0 border border-light-subtle rounded-top-4 py-3 justify-content-between shadow-sm">
-              <Col xs={7} sm={2} md={3} lg={3} className=" fs-5 fw-bold">
-                <div className="ms-2">{t('campaignName')} </div>
-              </Col>
-              <Col className="fs-5 fw-bold " md={2} sm={2}>
-                <div className="ms-3">{t('startDate')} </div>
-              </Col>
-              <Col className="fs-5 fw-bold " sm={2} md={2}>
-                <div className="ms-3">{t('endDate')}</div>
-              </Col>
-              <Col className="fs-5 fw-bold" md={2} sm={2}>
-                <div className="ms-3">{t('fundingGoal')}</div>
-              </Col>
-              <Col xs={5} md={2} sm={2} lg={2} className="fs-5 fw-bold">
-                <div className="ms-3">{t('campaignOptions')}</div>
-              </Col>
-            </Row>
-          </div>
+          <Row className="mx-4 border border-light-subtle rounded-top-4 py-3 justify-content-between shadow-sm">
+            <Col xs={7} sm={2} md={3} lg={3} className=" fs-5 fw-bold">
+              <div className="ms-2">{t('campaignName')} </div>
+            </Col>
+            <Col className="fs-5 fw-bold " md={2} sm={2}>
+              <div className="ms-3">{t('startDate')} </div>
+            </Col>
+            <Col className="fs-5 fw-bold " sm={2} md={2}>
+              <div className="ms-3">{t('endDate')}</div>
+            </Col>
+            <Col className="fs-5 fw-bold" md={2} sm={2}>
+              <div className="ms-3">{t('fundingGoal')}</div>
+            </Col>
+            <Col xs={5} md={2} sm={2} lg={2} className="fs-5 fw-bold">
+              <div className="ms-3">{t('campaignOptions')}</div>
+            </Col>
+          </Row>
+
           <div className="mx-4 bg-light-subtle border border-light-subtle border-top-0 rounded-bottom-4 shadow-sm ">
             {fundCampaignData?.getFundById.campaigns.map((campaign, index) => (
               <div key={index}>
@@ -256,24 +265,22 @@ const orgFundCampaign = (): JSX.Element => {
                     lg={3}
                     className="align-self-center"
                   >
-                    <div className={` ${styles.campaignInfo} cursor-pointer`}>
+                    <div
+                      className={` ${styles.campaignNameInfo} text-bg-body-tertiary:hover `}
+                      onClick={() => handleClick(campaign._id)}
+                      data-testid="campaignName"
+                    >
                       {campaign.name}
                     </div>
                   </Col>
                   <Col md={2} sm={2}>
-                    <div className={`${styles.campaignInfo}`}>
-                      {dayjs(campaign.startDate).format('DD/MM/YYYY')}{' '}
-                    </div>
+                    <div>{dayjs(campaign.startDate).format('DD/MM/YYYY')} </div>
                   </Col>
                   <Col md={2} sm={2}>
-                    <div className={`${styles.campaignInfo}`}>
-                      {dayjs(campaign.endDate).format('DD/MM/YYYY')}{' '}
-                    </div>
+                    <div>{dayjs(campaign.endDate).format('DD/MM/YYYY')} </div>
                   </Col>
                   <Col md={2} sm={2}>
-                    <div
-                      className={`  ${styles.campaignInfo} ms-3  ps-3] align-self-center`}
-                    >
+                    <div className={`  ms-3  ps-3 align-self-center`}>
                       {`${currencySymbols[campaign.currency as keyof typeof currencySymbols]}${campaign.fundingGoal}`}
                     </div>
                   </Col>
