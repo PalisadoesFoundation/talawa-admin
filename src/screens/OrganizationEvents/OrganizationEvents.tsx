@@ -20,7 +20,7 @@ import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams, useNavigate } from 'react-router-dom';
 import EventHeader from 'components/EventCalendar/EventHeader';
-import CustomRecurrenceModal from './CustomRecurrenceModal';
+import CustomRecurrenceModal from './CustomRecurrenceModals';
 import {
   Frequency,
   Days,
