@@ -27,7 +27,6 @@ import userEvent from '@testing-library/user-event';
 import { ADD_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { ToastContainer } from 'react-toastify';
 import useLocalStorage from 'utils/useLocalstorage';
-/* eslint-disable */
 
 const { getItem } = useLocalStorage();
 
@@ -58,7 +57,7 @@ jest.mock('components/AddOn/support/services/Plugin.helper', () => ({
     fetchStore: jest.fn().mockResolvedValue([]),
   })),
 }));
-let mockID: any = undefined;
+let mockID: string | undefined = undefined;
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useParams: () => ({ orgId: mockID }),
