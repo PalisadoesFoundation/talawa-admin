@@ -588,6 +588,14 @@ type CreateAdvertisementPayload {
   advertisement: Advertisement
 }
 
+input EditVenueInput {
+  capacity: Int
+  description: String
+  file: String
+  id: ID!
+  name: String
+}
+
 type Mutation {
   acceptAdmin(id: ID!): Boolean!
   acceptMembershipRequest(membershipRequestId: ID!): MembershipRequest!
@@ -666,11 +674,14 @@ type Mutation {
   createUserFamily(data: createUserFamilyInput!): UserFamily!
   createUserTag(input: CreateUserTagInput!): UserTag
 <<<<<<< HEAD
+  createVenue(data: VenueInput!): Venue
   deleteAdvertisement(id: ID!): DeletePayload!
 =======
   deleteAdvertisementById(id: ID!): DeletePayload!
   deleteAgendaCategory(id: ID!): ID!
   deleteDonationById(id: ID!): DeletePayload!
+  deleteVenue(id: ID!): Venue
+  editVenue(data: EditVenueInput!): Venue
   forgotPassword(data: ForgotPasswordData!): Boolean!
   joinPublicOrganization(organizationId: ID!): User!
   leaveOrganization(organizationId: ID!): User!
@@ -760,6 +771,7 @@ type Mutation {
   ): Organization!
   updateUserTag(input: UpdateUserTagInput!): UserTag
   updateUserType(data: UpdateUserTypeInput!): Boolean!
+  venues: [Venue]
 }
 
 input OTPInput {
@@ -792,6 +804,14 @@ type Organization {
     last: PositiveInt
   ): UserTagsConnection
   visibleInSearch: Boolean!
+  venues: [Venue]
+}
+
+type OrganizationCustomField {
+  _id: ID!
+  name: String!
+  organizationId: String!
+  type: String!
 }
 
 type OrganizationCustomField {
@@ -1055,6 +1075,7 @@ type Query {
   joinedOrganizations(id: ID): [Organization]
   me: UserData!
   myLanguage: String
+  fundsByOrganization(organizationId: ID!, where: FundWhereInput): [Fund]
   organizations(id: ID, orderBy: OrganizationOrderByInput): [Organization]
   organizationsConnection(
     first: Int
@@ -1096,6 +1117,7 @@ type Query {
     skip: Int
     where: UserWhereInput
   ): [UserData]!
+  venue(id:ID!):[Venue]
 }
 
 input RecaptchaVerification {
@@ -1222,6 +1244,57 @@ input UpdateOrganizationInput {
   visibleInSearch: Boolean
 }
 
+input AddressInput {
+  city: String
+  countryCode: String
+  dependentLocality: String
+  line1: String
+  line2: String
+  postalCode: String
+  sortingCode: String
+  state: String
+}
+
+enum EducationGrade {
+  GRADE_1
+  GRADE_2
+  GRADE_3
+  GRADE_4
+  GRADE_5
+  GRADE_6
+  GRADE_7
+  GRADE_8
+  GRADE_9
+  GRADE_10
+  GRADE_11
+  GRADE_12
+  GRADUATE
+  KG
+  NO_GRADE
+  PRE_KG
+}
+
+enum EmploymentStatus {
+  FULL_TIME
+  PART_TIME
+  UNEMPLOYED
+}
+
+enum Gender {
+  FEMALE
+  MALE
+  OTHER
+}
+
+enum MaritalStatus {
+  DIVORCED
+  ENGAGED
+  MARRIED
+  SEPERATED
+  SINGLE
+  WIDOWED
+}
+
 input UpdateUserInput {
   address: AddressInput
   birthDate: Date
@@ -1284,9 +1357,33 @@ type User {
   updatedAt: DateTime!
 }
 
+type Fund {
+  _id: ID!
+  campaigns: [FundraisingCampaign!]
+  createdAt: DateTime!
+  isArchived: Boolean!
+  isDefault: Boolean!
+  name: String!
+  creator: User
+  organizationId: ID!
+  refrenceNumber: String
+  taxDeductible: Boolean!
+  updatedAt: DateTime!
+}
+
+input FundWhereInput {
+  name_contains: String
+}
+
 input UserAndOrganizationInput {
   organizationId: ID!
   userId: ID!
+}
+
+type UserPhone {
+  home: PhoneNumber
+  mobile: PhoneNumber
+  work: PhoneNumber
 }
 
 type UserConnection {
@@ -1452,6 +1549,23 @@ input createGroupChatInput {
   organizationId: ID!
   title: String!
   userIds: [ID!]!
+}
+
+type Venue {
+  _id: ID!
+  capacity: Int!
+  description: String
+  imageUrl: URL
+  name: String!
+  organization: Organization!
+}
+
+input VenueInput {
+  capacity: Int!
+  description: String
+  file: String
+  name: String!
+  organizationId: ID!
 }
 
 input createUserFamilyInput {

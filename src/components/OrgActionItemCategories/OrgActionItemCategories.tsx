@@ -75,9 +75,11 @@ const OrgActionItemCategories = (): any => {
       setModalIsOpen(false);
 
       toast.success(t('successfulCreation'));
-    } catch (error: any) {
-      toast.error(error.message);
-      console.log(error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+        console.log(error.message);
+      }
     }
   };
 
@@ -101,9 +103,11 @@ const OrgActionItemCategories = (): any => {
         setModalIsOpen(false);
 
         toast.success(t('successfulUpdation'));
-      } catch (error: any) {
-        toast.error(error.message);
-        console.log(error);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          toast.error(error.message);
+          console.log(error.message);
+        }
       }
     }
   };
@@ -125,9 +129,11 @@ const OrgActionItemCategories = (): any => {
       toast.success(
         disabledStatus ? t('categoryEnabled') : t('categoryDisabled'),
       );
-    } catch (error: any) {
-      toast.error(error.message);
-      console.log(error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+        console.log(error.message);
+      }
     }
   };
 

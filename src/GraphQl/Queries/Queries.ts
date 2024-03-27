@@ -10,6 +10,19 @@ export const CHECK_AUTH = gql`
       lastName
       image
       email
+      birthDate
+      educationGrade
+      employmentStatus
+      gender
+      maritalStatus
+      phone {
+        mobile
+      }
+      address {
+        line1
+        state
+        countryCode
+      }
     }
   }
 `;
@@ -417,7 +430,6 @@ export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
         image
         email
         createdAt
-        userType
       }
     }
   }
@@ -451,6 +463,20 @@ export const USER_DETAILS = gql`
         email
         image
         createdAt
+        birthDate
+        educationGrade
+        employmentStatus
+        gender
+        maritalStatus
+        phone {
+          mobile
+        }
+        address {
+          line1
+          countryCode
+          city
+          state
+        }
         registeredEvents {
           _id
         }
@@ -465,6 +491,8 @@ export const USER_DETAILS = gql`
           _id
         }
         isSuperAdmin
+        appLanguageCode
+        pluginCreationAllowed
         createdOrganizations {
           _id
         }
@@ -572,10 +600,19 @@ export const ADMIN_LIST = gql`
 
 // to take the membership request
 export const MEMBERSHIP_REQUEST = gql`
-  query Organizations($id: ID!) {
+  query Organizations(
+    $id: ID!
+    $skip: Int
+    $first: Int
+    $firstName_contains: String
+  ) {
     organizations(id: $id) {
       _id
-      membershipRequests {
+      membershipRequests(
+        skip: $skip
+        first: $first
+        where: { user: { firstName_contains: $firstName_contains } }
+      ) {
         _id
         user {
           _id
@@ -659,6 +696,27 @@ export const USERS_CONNECTION_LIST = gql`
           email
           createdAt
         }
+      }
+    }
+  }
+`;
+
+export const GET_COMMUNITY_DATA = gql`
+  query getCommunityData {
+    getCommunityData {
+      _id
+      websiteLink
+      name
+      logoUrl
+      socialMediaUrls {
+        facebook
+        gitHub
+        instagram
+        twitter
+        linkedIn
+        youTube
+        reddit
+        slack
       }
     }
   }

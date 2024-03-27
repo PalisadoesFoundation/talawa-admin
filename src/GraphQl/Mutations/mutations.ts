@@ -83,8 +83,42 @@ export const ADDRESS_DETAILS_FRAGMENT = gql`
 // to update the details of the user
 
 export const UPDATE_USER_MUTATION = gql`
-  mutation Mutation($data: UpdateUserInput, $file: String) {
-    updateUserProfile(data: $data, file: $file) {
+  mutation UpdateUserProfile(
+    $firstName: String
+    $lastName: String
+    $gender: Gender
+    $email: EmailAddress
+    $phoneNumber: PhoneNumber
+    $birthDate: Date
+    $grade: EducationGrade
+    $empStatus: EmploymentStatus
+    $maritalStatus: MaritalStatus
+    $address: String
+    $city: String
+    $state: String
+    $country: String
+    $image: String
+  ) {
+    updateUserProfile(
+      data: {
+        firstName: $firstName
+        lastName: $lastName
+        gender: $gender
+        email: $email
+        phone: { mobile: $phoneNumber }
+        birthDate: $birthDate
+        educationGrade: $grade
+        employmentStatus: $empStatus
+        maritalStatus: $maritalStatus
+        address: {
+          line1: $address
+          state: $state
+          countryCode: $country
+          city: $city
+        }
+      }
+      file: $image
+    ) {
       _id
     }
   }
@@ -242,7 +276,9 @@ export const CREATE_EVENT_MUTATION = gql`
     $location: String
     $frequency: Frequency
     $weekDays: [WeekDays]
-    $count: Int
+    $interval: PositiveInt
+    $count: PositiveInt
+    $weekDayOccurenceInMonth: Int
   ) {
     createEvent(
       data: {
@@ -262,7 +298,9 @@ export const CREATE_EVENT_MUTATION = gql`
       recurrenceRuleData: {
         frequency: $frequency
         weekDays: $weekDays
+        interval: $interval
         count: $count
+        weekDayOccurenceInMonth: $weekDayOccurenceInMonth
       }
     ) {
       _id
@@ -275,6 +313,50 @@ export const CREATE_EVENT_MUTATION = gql`
 export const DELETE_EVENT_MUTATION = gql`
   mutation RemoveEvent($id: ID!) {
     removeEvent(id: $id) {
+      _id
+    }
+  }
+`;
+
+export const CREATE_VENUE_MUTATION = gql`
+  mutation createVenue(
+    $capacity: Int!
+    $description: String
+    $file: String
+    $name: String!
+    $organizationId: ID!
+  ) {
+    createVenue(
+      data: {
+        capacity: $capacity
+        description: $description
+        file: $file
+        name: $name
+        organizationId: $organizationId
+      }
+    ) {
+      _id
+    }
+  }
+`;
+
+export const UPDATE_VENUE_MUTATION = gql`
+  mutation editVenue(
+    $capacity: Int
+    $description: String
+    $file: String
+    $id: ID!
+    $name: String
+  ) {
+    editVenue(
+      data: {
+        capacity: $capacity
+        description: $description
+        file: $file
+        id: $id
+        name: $name
+      }
+    ) {
       _id
     }
   }
@@ -582,6 +664,18 @@ export const REGISTER_EVENT = gql`
     registerForEvent(id: $eventId) {
       _id
     }
+  }
+`;
+
+export const UPDATE_COMMUNITY = gql`
+  mutation updateCommunity($data: UpdateCommunityInput!) {
+    updateCommunity(data: $data)
+  }
+`;
+
+export const RESET_COMMUNITY = gql`
+  mutation resetCommunity {
+    resetCommunity
   }
 `;
 

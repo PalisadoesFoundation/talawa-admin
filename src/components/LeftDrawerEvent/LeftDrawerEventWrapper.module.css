@@ -1,8 +1,13 @@
 .pageContainer {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: calc(100vh - 30px);
   padding: 1rem 1.5rem 0 calc(300px + 2rem + 1.5rem);
+}
+
+.screenTitle {
+  flex: 1;
+  padding-bottom: 1rem;
 }
 
 .expand {
