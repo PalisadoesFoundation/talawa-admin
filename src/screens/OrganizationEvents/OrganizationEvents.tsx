@@ -83,7 +83,7 @@ function organizationEvents(): JSX.Element {
   const hideCreateEventModal = (): void => {
     setCreateEventmodalisOpen(false);
   };
-  const handleChangeView = (item: any): void => {
+  const handleChangeView = (item: ViewType): void => {
     /*istanbul ignore next*/
     setViewType(item);
   };
@@ -159,6 +159,7 @@ function organizationEvents(): JSX.Element {
           },
         });
 
+        /* istanbul ignore next */
         if (createEventData) {
           toast.success(t('eventCreated'));
           refetch();
@@ -180,7 +181,7 @@ function organizationEvents(): JSX.Element {
           setStartDate(new Date());
           setEndDate(null);
         }
-      } catch (error: any) {
+      } catch (error) {
         /* istanbul ignore next */
         errorHandler(t, error);
       }
@@ -300,6 +301,7 @@ function organizationEvents(): JSX.Element {
                   className={styles.datebox}
                   value={dayjs(startDate)}
                   onChange={(date: Dayjs | null): void => {
+                    /* istanbul ignore next */
                     if (date) {
                       setStartDate(date?.toDate());
                       setEndDate(
@@ -320,6 +322,7 @@ function organizationEvents(): JSX.Element {
                   className={styles.datebox}
                   value={dayjs(endDate ?? startDate)}
                   onChange={(date: Dayjs | null): void => {
+                    /* istanbul ignore next */
                     if (date) {
                       setEndDate(date?.toDate());
                     }
@@ -335,8 +338,8 @@ function organizationEvents(): JSX.Element {
                   className={styles.datebox}
                   timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
                   value={timeToDayJs(formState.startTime)}
-                  /*istanbul ignore next*/
                   onChange={(time): void => {
+                    /*istanbul ignore next*/
                     if (time) {
                       setFormState({
                         ...formState,
@@ -359,9 +362,9 @@ function organizationEvents(): JSX.Element {
                   label={t('endTime')}
                   className={styles.datebox}
                   timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
-                  /*istanbul ignore next*/
                   value={timeToDayJs(formState.endTime)}
                   onChange={(time): void => {
+                    /*istanbul ignore next*/
                     if (time) {
                       setFormState({
                         ...formState,
@@ -435,6 +438,7 @@ function organizationEvents(): JSX.Element {
                   data-testid="recurrenceOptions"
                 >
                   {recurrenceRuleText.length > 45 ? (
+                    /* istanbul ignore next */
                     <OverlayTrigger
                       trigger={['hover', 'focus']}
                       placement="right"

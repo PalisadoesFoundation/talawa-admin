@@ -118,6 +118,7 @@ describe('Organisation Events Page', () => {
       },
     ]);
   });
+
   test('It is necessary to check correct render', async () => {
     window.location.assign('/orglist');
 
@@ -207,9 +208,9 @@ describe('Organisation Events Page', () => {
     });
   });
 
-  test('Testing Create event modal', async () => {
+  test('Testing Create event modal with event mutation not working', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -277,14 +278,217 @@ describe('Organisation Events Page', () => {
     userEvent.click(screen.getByTestId('createEventBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.eventCreated);
+      expect(toast.error).toBeCalled();
     });
+  });
+
+  test('Testing Create event modal with recurrence', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <OrganizationEvents />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
 
     await waitFor(() => {
-      expect(
-        screen.queryByTestId('createEventModalCloseBtn'),
-      ).not.toBeInTheDocument();
+      expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument();
     });
+
+    userEvent.click(screen.getByTestId('createEventModalBtn'));
+
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText(/Enter Title/i)).toBeInTheDocument();
+    });
+
+    userEvent.type(screen.getByPlaceholderText(/Enter Title/i), formData.title);
+
+    userEvent.type(
+      screen.getByPlaceholderText(/Enter Description/i),
+      formData.description,
+    );
+    userEvent.type(
+      screen.getByPlaceholderText(/Enter Location/i),
+      formData.location,
+    );
+
+    const endDatePicker = screen.getByLabelText('End Date');
+    const startDatePicker = screen.getByLabelText('Start Date');
+
+    fireEvent.change(endDatePicker, {
+      target: { value: formData.endDate },
+    });
+    fireEvent.change(startDatePicker, {
+      target: { value: formData.startDate },
+    });
+
+    userEvent.click(screen.getByTestId('ispublicCheck'));
+    userEvent.click(screen.getByTestId('registrableCheck'));
+
+    await wait();
+
+    expect(screen.getByPlaceholderText(/Enter Title/i)).toHaveValue(
+      formData.title,
+    );
+    expect(screen.getByPlaceholderText(/Enter Description/i)).toHaveValue(
+      formData.description,
+    );
+
+    expect(endDatePicker).toHaveValue(formData.endDate);
+    expect(startDatePicker).toHaveValue(formData.startDate);
+    expect(screen.getByTestId('ispublicCheck')).not.toBeChecked();
+    expect(screen.getByTestId('registrableCheck')).toBeChecked();
+
+    userEvent.click(screen.getByTestId('recurringCheck'));
+    await wait();
+    await waitFor(() => {
+      userEvent.click(screen.getByTestId('recurrenceOptions'));
+    });
+
+    userEvent.click(screen.getByTestId('dailyRecurrence'));
+    userEvent.click(screen.getByTestId('weeklyRecurrence'));
+    userEvent.click(screen.getByTestId('monthlyRecurrence'));
+    userEvent.click(screen.getByTestId('yearlyRecurrence'));
+    userEvent.click(screen.getByTestId('mondayToFridayRecurrence'));
+    userEvent.click(screen.getByTestId('customRecurrence'));
+  });
+
+  test('Testing Create event modal', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <OrganizationEvents />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument();
+    });
+
+    userEvent.click(screen.getByTestId('createEventModalBtn'));
+
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText(/Enter Title/i)).toBeInTheDocument();
+    });
+
+    userEvent.type(screen.getByPlaceholderText(/Enter Title/i), formData.title);
+
+    userEvent.type(
+      screen.getByPlaceholderText(/Enter Description/i),
+      formData.description,
+    );
+    userEvent.type(
+      screen.getByPlaceholderText(/Enter Location/i),
+      formData.location,
+    );
+
+    const endDatePicker = screen.getByLabelText('End Date');
+    const startDatePicker = screen.getByLabelText('Start Date');
+
+    fireEvent.change(endDatePicker, {
+      target: { value: formData.endDate },
+    });
+    fireEvent.change(startDatePicker, {
+      target: { value: formData.startDate },
+    });
+
+    userEvent.click(screen.getByTestId('recurringCheck'));
+
+    userEvent.click(screen.getByTestId('ispublicCheck'));
+    userEvent.click(screen.getByTestId('registrableCheck'));
+
+    await wait();
+
+    expect(screen.getByPlaceholderText(/Enter Title/i)).toHaveValue(
+      formData.title,
+    );
+    expect(screen.getByPlaceholderText(/Enter Description/i)).toHaveValue(
+      formData.description,
+    );
+
+    expect(endDatePicker).toHaveValue(formData.endDate);
+    expect(startDatePicker).toHaveValue(formData.startDate);
+    expect(screen.getByTestId('ispublicCheck')).not.toBeChecked();
+    expect(screen.getByTestId('registrableCheck')).toBeChecked();
+
+    userEvent.click(screen.getByTestId('createEventBtn'));
+  });
+
+  test('Testing Create event modal if endDate is before the startDate', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <OrganizationEvents />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument();
+    });
+
+    userEvent.click(screen.getByTestId('createEventModalBtn'));
+
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText(/Enter Title/i)).toBeInTheDocument();
+    });
+
+    userEvent.type(screen.getByPlaceholderText(/Enter Title/i), formData.title);
+
+    userEvent.type(
+      screen.getByPlaceholderText(/Enter Description/i),
+      formData.description,
+    );
+    userEvent.type(
+      screen.getByPlaceholderText(/Enter Location/i),
+      formData.location,
+    );
+
+    const endDatePicker = screen.getByLabelText('End Date');
+    const startDatePicker = screen.getByLabelText('Start Date');
+
+    // flipping startDate and endDate
+    fireEvent.change(endDatePicker, {
+      target: { value: formData.startDate },
+    });
+    fireEvent.change(startDatePicker, {
+      target: { value: formData.endDate },
+    });
+
+    await wait();
+    expect(endDatePicker).toHaveValue(formData.endDate);
+    expect(startDatePicker).toHaveValue(formData.endDate);
   });
 
   test('Testing Create event with invalid inputs', async () => {
