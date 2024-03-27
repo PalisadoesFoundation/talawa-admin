@@ -11,7 +11,7 @@ import { useParams } from 'react-router-dom';
 export default function advertisements(): JSX.Element {
   const { data: advertisementsData, loading: loadingAdvertisements } =
     useQuery(ADVERTISEMENTS_GET);
-
+  /* eslint-disable */
   const { orgId: currentOrgId } = useParams();
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   document.title = t('title');
@@ -53,7 +53,6 @@ export default function advertisements(): JSX.Element {
                   .filter((ad: Ad) => ad.organization._id === currentOrgId)
                   .filter((ad: Ad) => new Date(ad.endDate) > new Date())
                   .length === 0 ? (
-                  // eslint-disable-next-line
                   <h4>{t('pMessage')}</h4>
                 ) : (
                   advertisementsData?.advertisementsConnection?.edges
@@ -95,7 +94,6 @@ export default function advertisements(): JSX.Element {
                   .filter((ad: Ad) => ad.organization._id === currentOrgId)
                   .filter((ad: Ad) => new Date(ad.endDate) < new Date())
                   .length === 0 ? (
-                  // eslint-disable-next-line
                   <h4>{t('pMessage')}</h4>
                 ) : (
                   advertisementsData?.advertisementsConnection?.edges
