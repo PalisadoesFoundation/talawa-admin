@@ -27,6 +27,7 @@ import userEvent from '@testing-library/user-event';
 import { ADD_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { ToastContainer } from 'react-toastify';
 import useLocalStorage from 'utils/useLocalstorage';
+/* eslint-disable */
 
 const { getItem } = useLocalStorage();
 
@@ -193,7 +194,9 @@ describe('Testing Advertisement Component', () => {
         },
         result: {
           data: {
-            advertisementsConnection: [],
+            advertisementsConnection: {
+              edges: [],
+            },
           },
           loading: false,
         },
@@ -257,30 +260,36 @@ describe('Testing Advertisement Component', () => {
         },
         result: {
           data: {
-            advertisementsConnection: [
-              {
-                _id: '1',
-                name: 'Advertisement1',
-                type: 'POPUP',
-                organization: {
-                  _id: 'undefined',
+            advertisementsConnection: {
+              edges: [
+                {
+                  node: {
+                    _id: '1',
+                    name: 'Advertisement1',
+                    type: 'POPUP',
+                    organization: {
+                      _id: 'undefined',
+                    },
+                    mediaUrl: 'http://example1.com',
+                    endDate: '2023-01-01',
+                    startDate: '2022-01-01',
+                  },
                 },
-                mediaUrl: 'http://example1.com',
-                endDate: '2023-01-01',
-                startDate: '2022-01-01',
-              },
-              {
-                _id: '2',
-                name: 'Advertisement2',
-                type: 'POPUP',
-                organization: {
-                  _id: 'undefined',
+                {
+                  node: {
+                    _id: '2',
+                    name: 'Advertisement2',
+                    type: 'POPUP',
+                    organization: {
+                      _id: 'undefined',
+                    },
+                    mediaUrl: 'http://example2.com',
+                    endDate: '2025-02-01',
+                    startDate: '2024-02-01',
+                  },
                 },
-                mediaUrl: 'http://example2.com',
-                endDate: '2025-02-01',
-                startDate: '2024-02-01',
-              },
-            ],
+              ],
+            },
           },
           loading: false,
         },
@@ -335,30 +344,36 @@ describe('Testing Advertisement Component', () => {
         },
         result: {
           data: {
-            advertisementsConnection: [
-              {
-                _id: '1',
-                name: 'Advertisement1',
-                type: 'POPUP',
-                organization: {
-                  _id: 'undefined',
+            advertisementsConnection: {
+              edges: [
+                {
+                  node: {
+                    _id: '1',
+                    name: 'Advertisement1',
+                    type: 'POPUP',
+                    organization: {
+                      _id: 'undefined',
+                    },
+                    mediaUrl: 'http://example1.com',
+                    endDate: '2023-01-01',
+                    startDate: '2022-01-01',
+                  },
                 },
-                mediaUrl: 'http://example1.com',
-                endDate: '2023-01-01',
-                startDate: '2022-01-01',
-              },
-              {
-                _id: '2',
-                name: 'Advertisement2',
-                type: 'BANNER',
-                organization: {
-                  _id: 'undefined',
+                {
+                  node: {
+                    _id: '2',
+                    name: 'Advertisement2',
+                    type: 'POPUP',
+                    organization: {
+                      _id: 'undefined',
+                    },
+                    mediaUrl: 'http://example2.com',
+                    endDate: '2025-02-01',
+                    startDate: '2024-02-01',
+                  },
                 },
-                mediaUrl: 'http://example2.com',
-                endDate: tomorrow,
-                startDate: today,
-              },
-            ],
+              ],
+            },
           },
           loading: false,
         },

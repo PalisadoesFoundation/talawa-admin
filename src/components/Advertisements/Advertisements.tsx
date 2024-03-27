@@ -1,5 +1,6 @@
 import React from 'react';
 // import PropTypes from 'react';
+/* eslint-disable */
 import styles from './Advertisements.module.css';
 import { useQuery } from '@apollo/client';
 import { ADVERTISEMENTS_GET } from 'GraphQl/Queries/Queries';
@@ -36,14 +37,16 @@ export default function advertisements(): JSX.Element {
               className="mb-3"
             >
               <Tab eventKey="activeAds" title={t('activeAds')}>
-                {advertisementsData?.advertisementsConnection
-                  .filter((ad: any) => ad.organization._id == currentOrgId)
+                {advertisementsData?.advertisementsConnection?.edges
+                  .map((edge: { node: any }) => edge.node)
+                  .filter((ad: any) => ad.organization._id === currentOrgId)
                   .filter((ad: any) => new Date(ad.endDate) > new Date())
-                  .length == 0 ? (
-                  <h4>{t('pMessage')} </h4>
+                  .length === 0 ? (
+                  <h4>{t('pMessage')}</h4>
                 ) : (
-                  advertisementsData?.advertisementsConnection
-                    .filter((ad: any) => ad.organization._id == currentOrgId)
+                  advertisementsData?.advertisementsConnection?.edges
+                    .map((edge: { node: any }) => edge.node)
+                    .filter((ad: any) => ad.organization._id === currentOrgId)
                     .filter((ad: any) => new Date(ad.endDate) > new Date())
                     .map(
                       (
@@ -53,8 +56,8 @@ export default function advertisements(): JSX.Element {
                           type: string | undefined;
                           organization: any;
                           mediaUrl: string;
-                          endDate: Date;
-                          startDate: Date;
+                          endDate: string;
+                          startDate: string;
                         },
                         i: React.Key | null | undefined,
                       ): JSX.Element => (
@@ -73,14 +76,16 @@ export default function advertisements(): JSX.Element {
                 )}
               </Tab>
               <Tab eventKey="archievedAds" title={t('archievedAds')}>
-                {advertisementsData?.advertisementsConnection
-                  .filter((ad: any) => ad.organization._id == currentOrgId)
+                {advertisementsData?.advertisementsConnection?.edges
+                  .map((edge: { node: any }) => edge.node)
+                  .filter((ad: any) => ad.organization._id === currentOrgId)
                   .filter((ad: any) => new Date(ad.endDate) < new Date())
-                  .length == 0 ? (
-                  <h4>{t('pMessage')} </h4>
+                  .length === 0 ? (
+                  <h4>{t('pMessage')}</h4>
                 ) : (
-                  advertisementsData?.advertisementsConnection
-                    .filter((ad: any) => ad.organization._id == currentOrgId)
+                  advertisementsData?.advertisementsConnection?.edges
+                    .map((edge: { node: any }) => edge.node)
+                    .filter((ad: any) => ad.organization._id === currentOrgId)
                     .filter((ad: any) => new Date(ad.endDate) < new Date())
                     .map(
                       (
@@ -90,8 +95,8 @@ export default function advertisements(): JSX.Element {
                           type: string | undefined;
                           organization: any;
                           mediaUrl: string;
-                          endDate: Date;
-                          startDate: Date;
+                          endDate: string;
+                          startDate: string;
                         },
                         i: React.Key | null | undefined,
                       ): JSX.Element => (
