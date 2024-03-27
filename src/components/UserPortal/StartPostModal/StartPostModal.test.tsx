@@ -66,6 +66,7 @@ const renderStartPostModal = (
     userData: {
       user: {
         __typename: 'User',
+        _id: '123',
         image: image,
         firstName: 'Glen',
         lastName: 'dsza',
@@ -83,6 +84,16 @@ const renderStartPostModal = (
         eventAdmin: [],
         membershipRequests: [],
         organizationsBlockedBy: [],
+      },
+      appUserProfile: {
+        __typename: 'AppUserProfile',
+        _id: '123',
+        adminApproved: true,
+        isSuperAdmin: true,
+        adminFor: [],
+        createdOrganizations: [],
+        createdEvents: [],
+        eventAdmin: [],
       },
     },
     organizationId: '123',

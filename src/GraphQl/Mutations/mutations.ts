@@ -94,6 +94,7 @@ export const UPDATE_USER_MUTATION = gql`
     $empStatus: EmploymentStatus
     $maritalStatus: MaritalStatus
     $address: String
+    $city: String
     $state: String
     $country: String
     $image: String
@@ -109,7 +110,12 @@ export const UPDATE_USER_MUTATION = gql`
         educationGrade: $grade
         employmentStatus: $empStatus
         maritalStatus: $maritalStatus
-        address: { line1: $address, state: $state, countryCode: $country }
+        address: {
+          line1: $address
+          state: $state
+          countryCode: $country
+          city: $city
+        }
       }
       file: $image
     ) {
@@ -270,7 +276,9 @@ export const CREATE_EVENT_MUTATION = gql`
     $location: String
     $frequency: Frequency
     $weekDays: [WeekDays]
-    $count: Int
+    $interval: PositiveInt
+    $count: PositiveInt
+    $weekDayOccurenceInMonth: Int
   ) {
     createEvent(
       data: {
@@ -290,7 +298,9 @@ export const CREATE_EVENT_MUTATION = gql`
       recurrenceRuleData: {
         frequency: $frequency
         weekDays: $weekDays
+        interval: $interval
         count: $count
+        weekDayOccurenceInMonth: $weekDayOccurenceInMonth
       }
     ) {
       _id
@@ -303,6 +313,50 @@ export const CREATE_EVENT_MUTATION = gql`
 export const DELETE_EVENT_MUTATION = gql`
   mutation RemoveEvent($id: ID!) {
     removeEvent(id: $id) {
+      _id
+    }
+  }
+`;
+
+export const CREATE_VENUE_MUTATION = gql`
+  mutation createVenue(
+    $capacity: Int!
+    $description: String
+    $file: String
+    $name: String!
+    $organizationId: ID!
+  ) {
+    createVenue(
+      data: {
+        capacity: $capacity
+        description: $description
+        file: $file
+        name: $name
+        organizationId: $organizationId
+      }
+    ) {
+      _id
+    }
+  }
+`;
+
+export const UPDATE_VENUE_MUTATION = gql`
+  mutation editVenue(
+    $capacity: Int
+    $description: String
+    $file: String
+    $id: ID!
+    $name: String
+  ) {
+    editVenue(
+      data: {
+        capacity: $capacity
+        description: $description
+        file: $file
+        id: $id
+        name: $name
+      }
+    ) {
       _id
     }
   }

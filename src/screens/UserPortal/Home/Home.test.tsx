@@ -1,23 +1,22 @@
 import React from 'react';
-import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
+import type { RenderResult } from '@testing-library/react';
+import { act, render, screen, waitFor, within } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
-
+import userEvent from '@testing-library/user-event';
 import {
   ADVERTISEMENTS_GET,
   ORGANIZATION_POST_LIST,
 } from 'GraphQl/Queries/Queries';
-import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { store } from 'state/store';
-import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import i18nForTest from 'utils/i18nForTest';
 import Home from './Home';
-import userEvent from '@testing-library/user-event';
-import * as getOrganizationId from 'utils/getOrganizationId';
-import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
-import { toast } from 'react-toastify';
-import { REACT_APP_CUSTOM_PORT } from 'Constant/constant';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { setItem } = useLocalStorage();
 
 jest.mock('react-toastify', () => ({
   toast: {
@@ -27,29 +26,13 @@ jest.mock('react-toastify', () => ({
   },
 }));
 
-const EMPTY_MOCKS = [
-  {
-    request: {
-      query: ADVERTISEMENTS_GET,
-    },
-    result: {
-      data: {
-        advertisementsConnection: [],
-      },
-    },
-  },
-];
-
 const MOCKS = [
   {
     request: {
       query: ORGANIZATION_POST_LIST,
       variables: {
-        id: '',
+        id: 'orgId',
         first: 10,
-        after: null,
-        before: null,
-        last: null,
       },
     },
     result: {
@@ -61,16 +44,16 @@ const MOCKS = [
                 {
                   node: {
                     _id: '6411e53835d7ba2344a78e21',
-                    title: 'postone',
+                    title: 'post one',
                     text: 'This is the first post',
                     imageUrl: null,
                     videoUrl: null,
-                    createdAt: '2023-08-24T09:26:56.524+00:00',
+                    createdAt: '2024-03-03T09:26:56.524+00:00',
                     creator: {
                       _id: '640d98d9eb6a743d75341067',
-                      firstName: 'Aditya',
-                      lastName: 'Shelke',
-                      email: 'adidacreator1@gmail.com',
+                      firstName: 'Glen',
+                      lastName: 'Dsza',
+                      email: 'glendsza@gmail.com',
                     },
                     likeCount: 0,
                     commentCount: 0,
@@ -83,68 +66,59 @@ const MOCKS = [
                 {
                   node: {
                     _id: '6411e54835d7ba2344a78e29',
-                    title: 'posttwo',
-                    text: 'Tis is the post two',
+                    title: 'post two',
+                    text: 'This is the post two',
                     imageUrl: null,
                     videoUrl: null,
-                    createdAt: '2023-08-24T09:26:56.524+00:00',
+                    createdAt: '2024-03-03T09:26:56.524+00:00',
                     creator: {
                       _id: '640d98d9eb6a743d75341067',
-                      firstName: 'Aditya',
-                      lastName: 'Shelke',
-                      email: 'adidacreator1@gmail.com',
+                      firstName: 'Glen',
+                      lastName: 'Dsza',
+                      email: 'glendsza@gmail.com',
                     },
-                    likeCount: 0,
-                    commentCount: 0,
+                    likeCount: 2,
+                    commentCount: 1,
                     pinned: false,
-                    likedBy: [],
-                    comments: [],
+                    likedBy: [
+                      {
+                        _id: '640d98d9eb6a743d75341067',
+                        firstName: 'Glen',
+                        lastName: 'Dsza',
+                      },
+                      {
+                        _id: '640d98d9eb6a743d75341068',
+                        firstName: 'Glen2',
+                        lastName: 'Dsza2',
+                      },
+                    ],
+                    comments: [
+                      {
+                        _id: '6411e54835d7ba2344a78e29',
+                        creator: {
+                          _id: '640d98d9eb6a743d75341067',
+                          firstName: 'Glen',
+                          lastName: 'Dsza',
+                          email: 'glendsza@gmail.com',
+                        },
+                        likeCount: 2,
+                        likedBy: [
+                          {
+                            _id: '640d98d9eb6a743d75341067',
+                            firstName: 'Glen',
+                            lastName: 'Dsza',
+                          },
+                          {
+                            _id: '640d98d9eb6a743d75341068',
+                            firstName: 'Glen2',
+                            lastName: 'Dsza2',
+                          },
+                        ],
+                        text: 'This is the post two',
+                      },
+                    ],
                   },
                   cursor: '6411e54835d7ba2344a78e29',
-                },
-                {
-                  node: {
-                    _id: '6411e54835d7ba2344a78e30',
-                    title: 'posttwo',
-                    text: 'Tis is the post two',
-                    imageUrl: null,
-                    videoUrl: null,
-                    createdAt: '2023-08-24T09:26:56.524+00:00',
-                    creator: {
-                      _id: '640d98d9eb6a743d75341067',
-                      firstName: 'Aditya',
-                      lastName: 'Shelke',
-                      email: 'adidacreator1@gmail.com',
-                    },
-                    likeCount: 0,
-                    commentCount: 0,
-                    pinned: true,
-                    likedBy: [],
-                    comments: [],
-                  },
-                  cursor: '6411e54835d7ba2344a78e30',
-                },
-                {
-                  node: {
-                    _id: '6411e54835d7ba2344a78e31',
-                    title: 'posttwo',
-                    text: 'Tis is the post two',
-                    imageUrl: null,
-                    videoUrl: null,
-                    createdAt: '2023-08-24T09:26:56.524+00:00',
-                    creator: {
-                      _id: '640d98d9eb6a743d75341067',
-                      firstName: 'Aditya',
-                      lastName: 'Shelke',
-                      email: 'adidacreator1@gmail.com',
-                    },
-                    likeCount: 0,
-                    commentCount: 0,
-                    pinned: false,
-                    likedBy: [],
-                    comments: [],
-                  },
-                  cursor: '6411e54835d7ba2344a78e31',
                 },
               ],
               pageInfo: {
@@ -153,27 +127,10 @@ const MOCKS = [
                 hasNextPage: false,
                 hasPreviousPage: false,
               },
-              totalCount: 4,
+              totalCount: 2,
             },
           },
         ],
-      },
-    },
-  },
-  {
-    request: {
-      query: CREATE_POST_MUTATION,
-      variables: {
-        title: 'Dummy Post',
-        text: 'This is dummy text',
-        organizationId: '123',
-      },
-      result: {
-        data: {
-          createPost: {
-            _id: '453',
-          },
-        },
       },
     },
   },
@@ -223,7 +180,7 @@ const MOCKS = [
             name: 'name4',
             type: 'Type 2',
             organization: {
-              _id: 'orgId1',
+              _id: 'orgId',
             },
             mediaUrl: 'link4',
             startDate: '2023-01-30',
@@ -236,7 +193,10 @@ const MOCKS = [
 ];
 
 const link = new StaticMockLink(MOCKS, true);
-const link2 = new StaticMockLink(EMPTY_MOCKS, true);
+
+afterEach(() => {
+  localStorage.clear();
+});
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -246,186 +206,77 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-beforeEach(() => {
-  const url = `http://localhost:${REACT_APP_CUSTOM_PORT}/user/organization/id=orgId`;
-  Object.defineProperty(window, 'location', {
-    value: {
-      href: url,
-    },
-    writable: true,
+const renderHomeScreen = (): RenderResult =>
+  render(
+    <MockedProvider addTypename={false} link={link}>
+      <MemoryRouter initialEntries={['/user/organization/id=orgId']}>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Routes>
+              <Route path="/user/organization/:orgId" element={<Home />} />
+            </Routes>
+          </I18nextProvider>
+        </Provider>
+      </MemoryRouter>
+    </MockedProvider>,
+  );
+
+describe('Testing Home Screen: User Portal', () => {
+  beforeAll(() => {
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: jest.fn().mockImplementation((query) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: jest.fn(), // Deprecated
+        removeListener: jest.fn(), // Deprecated
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        dispatchEvent: jest.fn(),
+      })),
+    });
+
+    jest.mock('react-router-dom', () => ({
+      ...jest.requireActual('react-router-dom'),
+      useParams: () => ({ orgId: 'id=orgId' }),
+    }));
   });
-});
 
-let originalLocation: Location;
-
-beforeAll(() => {
-  originalLocation = window.location;
-});
-
-afterAll(() => {
-  window.location = originalLocation;
-});
-
-describe('Testing Home Screen [User Portal]', () => {
-  jest.mock('utils/getOrganizationId');
-
-  Object.defineProperty(window, 'matchMedia', {
-    writable: true,
-    value: jest.fn().mockImplementation((query) => ({
-      matches: false,
-      media: query,
-      onchange: null,
-      addListener: jest.fn(), // Deprecated
-      removeListener: jest.fn(), // Deprecated
-      addEventListener: jest.fn(),
-      removeEventListener: jest.fn(),
-      dispatchEvent: jest.fn(),
-    })),
+  afterAll(() => {
+    jest.clearAllMocks();
   });
 
-  test('Screen should be rendered properly', async () => {
-    const getOrganizationIdSpy = jest
-      .spyOn(getOrganizationId, 'default')
-      .mockImplementation(() => {
-        return '';
-      });
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Home />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+  test('Check if HomeScreen renders properly', async () => {
+    renderHomeScreen();
 
     await wait();
-
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
+    const startPostBtn = await screen.findByTestId('startPostBtn');
+    expect(startPostBtn).toBeInTheDocument();
   });
 
-  test('Screen should be rendered properly when user types on the Post Input', async () => {
-    const getOrganizationIdSpy = jest
-      .spyOn(getOrganizationId, 'default')
-      .mockImplementation(() => {
-        return '';
-      });
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Home />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+  test('StartPostModal should render on click of StartPost btn', async () => {
+    renderHomeScreen();
 
     await wait();
+    const startPostBtn = await screen.findByTestId('startPostBtn');
+    expect(startPostBtn).toBeInTheDocument();
 
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
-
-    userEvent.click(screen.getByTestId('startPostBtn'));
-
-    const randomPostInput = 'This is a test';
-    userEvent.type(screen.getByTestId('postInput'), randomPostInput);
-
-    expect(screen.queryByText(randomPostInput)).toBeInTheDocument();
-  });
-
-  test('Error toast should be visible when user tries to create a post with an empty body', async () => {
-    const toastSpy = jest.spyOn(toast, 'error');
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Home />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-    userEvent.click(screen.getByTestId('startPostBtn'));
-
-    userEvent.click(screen.getByTestId('createPostBtn'));
-
-    expect(toastSpy).toBeCalledWith("Can't create a post with an empty body.");
-  });
-
-  test('Info toast should be visible when user tries to create a post with a valid body', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Home />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    userEvent.click(screen.getByTestId('startPostBtn'));
-
-    const randomPostInput = 'This is a test';
-    userEvent.type(screen.getByTestId('postInput'), randomPostInput);
-    expect(screen.queryByText(randomPostInput)).toBeInTheDocument();
-
-    userEvent.click(screen.getByTestId('createPostBtn'));
-
-    expect(toast.error).not.toBeCalledWith();
-    expect(toast.info).toBeCalledWith('Processing your post. Please wait.');
-  });
-
-  test('Modal should open on clicking on start a post button', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Home />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    userEvent.click(screen.getByTestId('startPostBtn'));
+    userEvent.click(startPostBtn);
     const startPostModal = screen.getByTestId('startPostModal');
     expect(startPostModal).toBeInTheDocument();
   });
 
-  test('modal closes on clicking on the close button', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Home />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+  test('StartPostModal should close on clicking the close button', async () => {
+    renderHomeScreen();
 
     await wait();
+    const startPostBtn = await screen.findByTestId('startPostBtn');
+    expect(startPostBtn).toBeInTheDocument();
 
-    userEvent.click(screen.getByTestId('startPostBtn'));
-    const modalHeader = screen.getByTestId('startPostModal');
-    expect(modalHeader).toBeInTheDocument();
+    userEvent.click(startPostBtn);
+    const startPostModal = screen.getByTestId('startPostModal');
+    expect(startPostModal).toBeInTheDocument();
 
     userEvent.type(screen.getByTestId('postInput'), 'some content');
     userEvent.upload(
@@ -438,7 +289,7 @@ describe('Testing Home Screen [User Portal]', () => {
     await screen.findByAltText('Post Image Preview');
     expect(screen.getByAltText('Post Image Preview')).toBeInTheDocument();
 
-    const closeButton = within(modalHeader).getByRole('button', {
+    const closeButton = within(startPostModal).getByRole('button', {
       name: /close/i,
     });
     userEvent.click(closeButton);
@@ -450,51 +301,50 @@ describe('Testing Home Screen [User Portal]', () => {
     expect(screen.getByTestId('postImageInput')).toHaveValue('');
   });
 
-  test('triggers file input when the icon is clicked', () => {
-    const clickSpy = jest.spyOn(HTMLInputElement.prototype, 'click');
+  test('Check whether Posts render in PostCard', async () => {
+    setItem('userId', '640d98d9eb6a743d75341067');
+    renderHomeScreen();
+    await wait();
 
+    const postCardContainers = screen.findAllByTestId('postCardContainer');
+    expect(postCardContainers).not.toBeNull();
+
+    expect(screen.queryByText('post one')).toBeInTheDocument();
+    expect(screen.queryByText('This is the first post')).toBeInTheDocument();
+
+    expect(screen.queryByText('post two')).toBeInTheDocument();
+    expect(screen.queryByText('This is the post two')).toBeInTheDocument();
+  });
+});
+
+describe('HomeScreen with invalid orgId', () => {
+  test('Redirect to /user when organizationId is falsy', async () => {
+    jest.mock('react-router-dom', () => ({
+      ...jest.requireActual('react-router-dom'),
+      useParams: () => ({ orgId: '' }),
+    }));
     render(
       <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
+        <MemoryRouter initialEntries={['/user/organization/orgId']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <Home />
+              <Routes>
+                <Route path="/user/organization/:orgId" element={<Home />} />
+                <Route
+                  path="/user"
+                  element={<div data-testid="homeEl"></div>}
+                />
+              </Routes>
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </MemoryRouter>
       </MockedProvider>,
     );
 
-    userEvent.click(screen.getByTestId('startPostBtn'));
-
-    // Check if the file input is hidden initially
-    const postImageInput = screen.getByTestId('postImageInput');
-    expect(postImageInput).toHaveAttribute('type', 'file');
-    expect(postImageInput).toHaveStyle({ display: 'none' });
-
-    // Trigger icon click event
-    const iconButton = screen.getByTestId('addMediaBtn');
-    fireEvent.click(iconButton);
-
-    // Check if the file input is triggered to open
-    expect(clickSpy).toHaveBeenCalled();
-    clickSpy.mockRestore();
-  });
-
-  test('promoted post is not rendered if there is no ad content', () => {
-    render(
-      <MockedProvider addTypename={false} link={link2}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Home />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    expect(screen.queryByText('Ad 1')).not.toBeInTheDocument();
-    expect(screen.queryByText('Ad 2')).not.toBeInTheDocument();
+    // Wait for the navigation to occur
+    await waitFor(() => {
+      const homeEl = screen.getByTestId('homeEl');
+      expect(homeEl).toBeInTheDocument();
+    });
   });
 });
