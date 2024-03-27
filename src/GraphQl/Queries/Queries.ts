@@ -430,7 +430,6 @@ export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
         image
         email
         createdAt
-        userType
       }
     }
   }
