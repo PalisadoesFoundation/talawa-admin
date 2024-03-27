@@ -10,12 +10,13 @@ import convertToBase64 from 'utils/convertToBase64';
 import UserDefault from '../../../assets/images/defaultImg.png';
 import styles from './StartPostModal.module.css';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
+import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 
 interface InterfaceStartPostModalProps {
   show: boolean;
   onHide: () => void;
   fetchPosts: () => void;
-  userData: any;
+  userData: InterfaceQueryUserListItem | undefined;
   organizationId: string;
 }
 
@@ -70,7 +71,7 @@ const startPostModal = ({
         fetchPosts();
         handleHide();
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       /* istanbul ignore next */
       errorHandler(t, error);
     }
