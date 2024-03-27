@@ -21,95 +21,21 @@ import {
   SIGNUP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import type { MockedResponse } from '@apollo/client/testing';
-
-interface InterfaceOrganization {
-  _id?: string;
-  image: string | null;
-  creator: InterfaceUser;
-  name: string;
-  description: string;
-  location: string;
-  members: InterfaceUser | null; // Array of users or null
-  admins: InterfaceUser | null; // Array of users or null
-  membershipRequests: {
-    _id?: string;
-    user: InterfaceUser;
-  };
-  blockedUsers: InterfaceUser;
-}
-
-interface InterfaceAddress {
-  city?: string;
-  countryCode?: string;
-  dependentLocality?: string;
-  line1?: string;
-  line2?: string;
-  postalCode?: string;
-  sortingCode?: string;
-  state?: string;
-  __typename?: string;
-}
-
-interface InterfaceUser {
-  _id?: string;
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-  image?: string | null;
-  createdAt?: string;
-  userType?: string;
-  __typename?: string;
-  adminFor?: InterfaceUser[]; // Array of users user admins for
-  organizationsBlockedBy?: InterfaceUser[]; // Array of users who blocked the user
-  joinedOrganizations?: (InterfaceUser & { address?: InterfaceAddress })[]; // Array of organizations the user joined (with address for specific queries)
-  name?: string;
-  creator?: InterfaceUser;
-}
-
-interface InterfaceSignUp {
-  user: {
-    _id: string;
-  };
-  accessToken: string;
-  refreshToken: string;
-}
-
-interface InterfaceMockData {
-  data: {
-    organizations?: InterfaceOrganization[];
-    organizationsMemberConnection?: {
-      __typename: string;
-      edges: InterfaceUser[];
-    };
-    users?: InterfaceUser[];
-    signUp?: InterfaceSignUp;
-    createMember?: InterfaceUser;
-  };
-}
-
-interface InterfaceMockRequest {
-  query: unknown;
-  variables?: {
-    [key: string]: unknown;
-  };
-}
-
-interface InterfaceMock {
-  request: InterfaceMockRequest;
-  result: InterfaceMockData;
-  newData?: () => InterfaceMockData;
-}
+import type {
+  TestInterfaceUser,
+  TestInterfaceMock,
+} from '../../utils/interfaces';
 
 // This loop creates dummy data for members, admin and users
-const members: InterfaceUser[] = [];
-const admins: InterfaceUser[] = [];
-const users: InterfaceUser[] = [];
+const members: TestInterfaceUser[] = [];
+const admins: TestInterfaceUser[] = [];
+const users: TestInterfaceUser[] = [];
 
 const createMemberMock = (
   orgId = '',
   firstNameContains = '',
   lastNameContains = '',
-): InterfaceMock => ({
+): TestInterfaceMock => ({
   request: {
     query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
     variables: {
@@ -163,7 +89,7 @@ const createAdminMock = (
   firstNameContains = '',
   lastNameContains = '',
   adminFor = '',
-): InterfaceMock => ({
+): TestInterfaceMock => ({
   request: {
     query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
     variables: {
@@ -218,7 +144,7 @@ const createAdminMock = (
 const createUserMock = (
   firstNameContains = '',
   lastNameContains = '',
-): InterfaceMock => ({
+): TestInterfaceMock => ({
   request: {
     query: USER_LIST,
     variables: {
@@ -268,7 +194,7 @@ const createUserMock = (
   },
 });
 
-const MOCKS: InterfaceMock[] = [
+const MOCKS: TestInterfaceMock[] = [
   {
     request: {
       query: ORGANIZATIONS_LIST,
@@ -596,7 +522,7 @@ const MOCKS: InterfaceMock[] = [
 ];
 
 const link = new StaticMockLink(
-  MOCKS as MockedResponse<Record<string, any>, Record<string, any>>[],
+  MOCKS as MockedResponse<Record<string, unknown>, Record<string, unknown>>[],
   true,
 );
 async function wait(ms = 2): Promise<void> {
@@ -1283,7 +1209,7 @@ describe('Organization People Page', () => {
     userEvent.type(fullNameInput, searchData.fullNameUser);
     await wait();
     const orgUsers = MOCKS[3]?.result?.data?.users;
-    const orgUserssize = orgUsers?.filter((datas: InterfaceUser) => {
+    const orgUserssize = orgUsers?.filter((datas: TestInterfaceUser) => {
       return datas.joinedOrganizations?.some(
         (org) => org._id === '6401ff65ce8e8406b8f07af2',
       );

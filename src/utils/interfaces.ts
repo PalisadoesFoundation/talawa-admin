@@ -401,3 +401,79 @@ export interface InterfaceQueryMembershipRequestsListItem {
     }[];
   }[];
 }
+
+export interface TestInterfaceOrganization {
+  _id?: string;
+  image: string | null;
+  creator: TestInterfaceUser;
+  name: string;
+  description: string;
+  location: string;
+  members: TestInterfaceUser;
+  admins: TestInterfaceUser;
+  membershipRequests: {
+    _id?: string;
+    user: TestInterfaceUser;
+  };
+  blockedUsers: TestInterfaceUser;
+}
+
+export interface TestInterfaceAddress {
+  city?: string;
+  countryCode?: string;
+  dependentLocality?: string;
+  line1?: string;
+  line2?: string;
+  postalCode?: string;
+  sortingCode?: string;
+  state?: string;
+  __typename?: string;
+}
+
+export interface TestInterfaceUser {
+  _id?: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  image?: string | null;
+  createdAt?: string;
+  userType?: string;
+  __typename?: string;
+  adminFor?: TestInterfaceUser[];
+  organizationsBlockedBy?: TestInterfaceUser[];
+  joinedOrganizations?: (TestInterfaceUser & {
+    address?: TestInterfaceAddress;
+  })[];
+  name?: string;
+  creator?: TestInterfaceUser;
+}
+
+export interface TestInterfaceMockData {
+  data: {
+    organizations?: TestInterfaceOrganization[];
+    organizationsMemberConnection?: {
+      __typename: string;
+      edges: TestInterfaceUser[];
+    };
+    users?: TestInterfaceUser[];
+    signUp?: {
+      user: {
+        _id: string;
+      };
+      accessToken: string;
+      refreshToken: string;
+    };
+    createMember?: TestInterfaceUser;
+  };
+}
+
+export interface TestInterfaceMock {
+  request: {
+    query: unknown;
+    variables?: {
+      [key: string]: unknown;
+    };
+  };
+  result: TestInterfaceMockData;
+  newData?: () => TestInterfaceMockData;
+}
