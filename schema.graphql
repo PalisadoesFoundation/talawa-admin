@@ -1075,6 +1075,7 @@ type Query {
   joinedOrganizations(id: ID): [Organization]
   me: UserData!
   myLanguage: String
+  fundsByOrganization(organizationId: ID!, where: FundWhereInput): [Fund]
   organizations(id: ID, orderBy: OrganizationOrderByInput): [Organization]
   organizationsConnection(
     first: Int
@@ -1354,6 +1355,24 @@ type User {
     organizationId: ID
   ): UserTagsConnection
   updatedAt: DateTime!
+}
+
+type Fund {
+  _id: ID!
+  campaigns: [FundraisingCampaign!]
+  createdAt: DateTime!
+  isArchived: Boolean!
+  isDefault: Boolean!
+  name: String!
+  creator: User
+  organizationId: ID!
+  refrenceNumber: String
+  taxDeductible: Boolean!
+  updatedAt: DateTime!
+}
+
+input FundWhereInput {
+  name_contains: String
 }
 
 input UserAndOrganizationInput {

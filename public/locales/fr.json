@@ -386,7 +386,7 @@
     "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
   },
   "funds": {
-    "title": "Fonds Talawa",
+    "title": "Fonds",
     "createFund": "Créer un fonds",
     "fundName": "Nom du fonds",
     "fundId": "Identifiant du fonds",
@@ -404,6 +404,13 @@
     "fundDelete": "Supprimer le fonds",
     "no": "Non",
     "yes": "Oui",
+    "manageFund": "Gérer le fonds",
+    "searchFullName": "Rechercher par nom",
+    "filter": "Filtre",
+    "noFundsFound": "Aucun fonds trouvé",
+    "createdBy": "Créé par",
+    "createdOn": "Créé le",
+    "status": "Statut",
     "archiveFund": "Archiver le fonds",
     "archiveFundMsg": "Voulez-vous archiver ce fonds ?",
     "fundCreated": "Fonds créé avec succès",

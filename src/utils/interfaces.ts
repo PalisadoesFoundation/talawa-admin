@@ -174,7 +174,7 @@ export interface InterfaceQueryOrganizationPostListItem {
   };
 }
 export interface InterfaceQueryOrganizationFunds {
-  funds: {
+  fundsByOrganization: {
     _id: string;
     name: string;
     refrenceNumber: string;
@@ -182,6 +182,8 @@ export interface InterfaceQueryOrganizationFunds {
     isArchived: boolean;
     isDefault: boolean;
     createdAt: string;
+    organizationId: string;
+    creator: { _id: string; firstName: string; lastName: string };
   }[];
 }
 export interface InterfaceQueryOrganizationFundCampaigns {
