@@ -239,9 +239,113 @@ const MOCKS2 = [
     },
   },
 ];
+const MOCKS3 = [
+  {
+    request: {
+      query: USER_DETAILS,
+      variables: {
+        id: 'rishav-jha-mech',
+      },
+    },
+    result: {
+      data: {
+        user: {
+          __typename: 'UserData',
+          appUserProfile: {
+            _id: '1',
+            __typename: 'AppUserProfile',
+            adminFor: [],
+            isSuperAdmin: true,
+            appLanguageCode: 'en',
+            createdEvents: [
+              {
+                __typename: 'Event',
+                _id: '65e32a5b2a1f4288ca1f086a',
+              },
+            ],
+            createdOrganizations: [
+              {
+                __typename: 'Organization',
+                _id: '65e0df0906dd1228350cfd4a',
+              },
+              {
+                __typename: 'Organization',
+                _id: '65e0e2abb92c9f3e29503d4e',
+              },
+            ],
+            eventAdmin: [
+              {
+                __typename: 'Event',
+                _id: '65e32a5b2a1f4288ca1f086a',
+              },
+            ],
+            pluginCreationAllowed: true,
+            adminApproved: true,
+          },
+          user: {
+            _id: '1',
+            __typename: 'User',
+            createdAt: '2024-02-26T10:36:33.098Z',
+            email: 'adi790u@gmail.com',
+            firstName: 'Aditya',
+            image: 'https://placeholder.com/200x200',
+            lastName: 'Agarwal',
+            gender: '',
+            birthDate: '2024-03-14',
+            educationGrade: '',
+            employmentStatus: '',
+            maritalStatus: '',
+            address: {
+              line1: '',
+              countryCode: '',
+              city: '',
+              state: '',
+            },
+            phone: {
+              mobile: '',
+            },
+            joinedOrganizations: [
+              {
+                __typename: 'Organization',
+                _id: '65e0df0906dd1228350cfd4a',
+              },
+              {
+                __typename: 'Organization',
+                _id: '65e0e2abb92c9f3e29503d4e',
+              },
+            ],
+            membershipRequests: [],
+            organizationsBlockedBy: [],
+            registeredEvents: [
+              {
+                __typename: 'Event',
+                _id: '65e32a5b2a1f4288ca1f086a',
+              },
+            ],
+          },
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: ADD_ADMIN_MUTATION,
+      variables: {
+        userid: '123',
+        orgid: '456',
+      },
+    },
+    result: {
+      data: {
+        success: true,
+      },
+    },
+  },
+];
 
 const link1 = new StaticMockLink(MOCKS1, true);
 const link2 = new StaticMockLink(MOCKS2, true);
+const link3 = new StaticMockLink(MOCKS3, true);
 
 async function wait(ms = 20): Promise<void> {
   await act(() => new Promise((resolve) => setTimeout(resolve, ms)));
@@ -435,6 +539,27 @@ describe('MemberDetail', () => {
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
     await wait();
     expect(screen.getByText('Admin')).toBeInTheDocument();
+  });
+  test('display super admin', async () => {
+    const props = {
+      id: 'rishav-jha-mech',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link3}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <MemberDetail {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
+    await wait();
+    expect(screen.getByText('Super Admin')).toBeInTheDocument();
   });
 
   test('Should display dicebear image if image is null', async () => {
