@@ -588,6 +588,14 @@ type CreateAdvertisementPayload {
   advertisement: Advertisement
 }
 
+input EditVenueInput {
+  capacity: Int
+  description: String
+  file: String
+  id: ID!
+  name: String
+}
+
 type Mutation {
   acceptAdmin(id: ID!): Boolean!
   acceptMembershipRequest(membershipRequestId: ID!): MembershipRequest!
@@ -666,11 +674,14 @@ type Mutation {
   createUserFamily(data: createUserFamilyInput!): UserFamily!
   createUserTag(input: CreateUserTagInput!): UserTag
 <<<<<<< HEAD
+  createVenue(data: VenueInput!): Venue
   deleteAdvertisement(id: ID!): DeletePayload!
 =======
   deleteAdvertisementById(id: ID!): DeletePayload!
   deleteAgendaCategory(id: ID!): ID!
   deleteDonationById(id: ID!): DeletePayload!
+  deleteVenue(id: ID!): Venue
+  editVenue(data: EditVenueInput!): Venue
   forgotPassword(data: ForgotPasswordData!): Boolean!
   joinPublicOrganization(organizationId: ID!): User!
   leaveOrganization(organizationId: ID!): User!
@@ -760,6 +771,7 @@ type Mutation {
   ): Organization!
   updateUserTag(input: UpdateUserTagInput!): UserTag
   updateUserType(data: UpdateUserTypeInput!): Boolean!
+  venues: [Venue]
 }
 
 input OTPInput {
@@ -792,6 +804,14 @@ type Organization {
     last: PositiveInt
   ): UserTagsConnection
   visibleInSearch: Boolean!
+  venues: [Venue]
+}
+
+type OrganizationCustomField {
+  _id: ID!
+  name: String!
+  organizationId: String!
+  type: String!
 }
 
 type OrganizationCustomField {
@@ -1096,6 +1116,7 @@ type Query {
     skip: Int
     where: UserWhereInput
   ): [UserData]!
+  venue(id:ID!):[Venue]
 }
 
 input RecaptchaVerification {
@@ -1509,6 +1530,23 @@ input createGroupChatInput {
   organizationId: ID!
   title: String!
   userIds: [ID!]!
+}
+
+type Venue {
+  _id: ID!
+  capacity: Int!
+  description: String
+  imageUrl: URL
+  name: String!
+  organization: Organization!
+}
+
+input VenueInput {
+  capacity: Int!
+  description: String
+  file: String
+  name: String!
+  organizationId: ID!
 }
 
 input createUserFamilyInput {
