@@ -320,20 +320,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                     {expanded === -100 ? 'View less' : 'View all'}
                   </button>
                 )}
-              {/* {((allDayEventsList != undefined &&
-                allDayEventsList?.length > 2) ||
-                (windowWidth <= 700 &&
-                  allDayEventsList != undefined &&
-                  allDayEventsList?.length > 0)) && (
-                <button
-                  className={styles.btn__more}
-                  onClick={() => {
-                    toggleExpand(-100);
-                  }}
-                >
-                  {expanded === -100 ? 'View less' : 'View all'}
-                </button>
-              )} */}
             </div>
           </div>
         </div>
@@ -406,20 +392,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                       ? timeEventsList
                       : timeEventsList?.slice(0, 1)}
                   </div>
-                  {/* {((timeEventsList != undefined &&
-                    timeEventsList?.length > 1) ||
-                    (windowWidth <= 700 &&
-                      timeEventsList != undefined &&
-                      timeEventsList?.length > 0)) && (
-                    <button
-                      className={styles.btn__more}
-                      onClick={() => {
-                        toggleExpand(index);
-                      }}
-                    >
-                      {expanded === index ? 'View less' : 'View all'}
-                    </button>
-                  )} */}
                   {timeEventsList != undefined &&
                     (timeEventsList.length > 1 ||
                       (windowWidth <= 700 && timeEventsList.length > 0)) && (
