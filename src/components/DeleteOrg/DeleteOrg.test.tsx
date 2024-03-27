@@ -179,7 +179,6 @@ describe('Delete Organization Component', () => {
     await wait();
     screen.getByTestId(/openDeleteModalBtn/i).click();
     screen.getByTestId(/deleteOrganizationBtn/i).click();
-    await wait();
   });
 
   test('Delete organization functionality should work properly for sample org', async () => {
