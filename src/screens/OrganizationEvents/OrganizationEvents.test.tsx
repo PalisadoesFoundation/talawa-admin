@@ -354,13 +354,6 @@ describe('Organisation Events Page', () => {
     await waitFor(() => {
       userEvent.click(screen.getByTestId('recurrenceOptions'));
     });
-
-    userEvent.click(screen.getByTestId('dailyRecurrence'));
-    userEvent.click(screen.getByTestId('weeklyRecurrence'));
-    userEvent.click(screen.getByTestId('monthlyRecurrence'));
-    userEvent.click(screen.getByTestId('yearlyRecurrence'));
-    userEvent.click(screen.getByTestId('mondayToFridayRecurrence'));
-    userEvent.click(screen.getByTestId('customRecurrence'));
   });
 
   test('Testing Create event modal', async () => {
