@@ -90,8 +90,8 @@ export default function home(): JSX.Element {
   const [filteredAd, setFilteredAd] = useState<InterfaceAdContent[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
   const { orgId } = useParams();
-  const organizationId = orgId?.split('=')[1] || null;
-  if (!organizationId) {
+  console.log(typeof orgId, orgId);
+  if (!orgId) {
     return <Navigate to={'/user'} />;
   }
 
@@ -104,7 +104,7 @@ export default function home(): JSX.Element {
     refetch,
     loading: loadingPosts,
   } = useQuery(ORGANIZATION_POST_LIST, {
-    variables: { id: organizationId, first: 10 },
+    variables: { id: orgId, first: 10 },
   });
   const userId: string | null = getItem('userId');
 
@@ -127,7 +127,7 @@ export default function home(): JSX.Element {
   }, [promotedPostsData]);
 
   useEffect(() => {
-    setFilteredAd(filterAdContent(adContent, organizationId));
+    setFilteredAd(filterAdContent(adContent, orgId));
   }, [adContent]);
 
   const filterAdContent = (
@@ -319,7 +319,7 @@ export default function home(): JSX.Element {
           onHide={handleModalClose}
           fetchPosts={refetch}
           userData={user}
-          organizationId={organizationId}
+          organizationId={orgId}
         />
       </div>
     </>

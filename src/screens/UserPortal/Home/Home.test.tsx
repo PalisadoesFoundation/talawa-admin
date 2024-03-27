@@ -209,7 +209,7 @@ async function wait(ms = 100): Promise<void> {
 const renderHomeScreen = (): RenderResult =>
   render(
     <MockedProvider addTypename={false} link={link}>
-      <MemoryRouter initialEntries={['/user/organization/id=orgId']}>
+      <MemoryRouter initialEntries={['/user/organization/orgId']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
             <Routes>
@@ -221,25 +221,25 @@ const renderHomeScreen = (): RenderResult =>
     </MockedProvider>,
   );
 
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: jest.fn().mockImplementation((query) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: jest.fn(), // Deprecated
+    removeListener: jest.fn(), // Deprecated
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+    dispatchEvent: jest.fn(),
+  })),
+});
+
 describe('Testing Home Screen: User Portal', () => {
   beforeAll(() => {
-    Object.defineProperty(window, 'matchMedia', {
-      writable: true,
-      value: jest.fn().mockImplementation((query) => ({
-        matches: false,
-        media: query,
-        onchange: null,
-        addListener: jest.fn(), // Deprecated
-        removeListener: jest.fn(), // Deprecated
-        addEventListener: jest.fn(),
-        removeEventListener: jest.fn(),
-        dispatchEvent: jest.fn(),
-      })),
-    });
-
     jest.mock('react-router-dom', () => ({
       ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: 'id=orgId' }),
+      useParams: () => ({ orgId: 'orgId' }),
     }));
   });
 
@@ -321,15 +321,15 @@ describe('HomeScreen with invalid orgId', () => {
   test('Redirect to /user when organizationId is falsy', async () => {
     jest.mock('react-router-dom', () => ({
       ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: '' }),
+      useParams: () => ({ orgId: undefined }),
     }));
     render(
       <MockedProvider addTypename={false} link={link}>
-        <MemoryRouter initialEntries={['/user/organization/orgId']}>
+        <MemoryRouter initialEntries={['/user/organization/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
-                <Route path="/user/organization/:orgId" element={<Home />} />
+                <Route path="/user/organization/" element={<Home />} />
                 <Route
                   path="/user"
                   element={<div data-testid="homeEl"></div>}
