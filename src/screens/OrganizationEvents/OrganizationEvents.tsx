@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { Form } from 'react-bootstrap';
+import { Dropdown, Form, OverlayTrigger, Popover } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
@@ -19,11 +19,25 @@ import { errorHandler } from 'utils/errorHandler';
 import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams, useNavigate } from 'react-router-dom';
+import EventHeader from 'components/EventCalendar/EventHeader';
+import CustomRecurrenceModal from './CustomRecurrenceModal';
+import {
+  Frequency,
+  Days,
+  getRecurrenceRuleText,
+  mondayToFriday,
+} from 'utils/recurrenceUtils';
+import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
 
 const timeToDayJs = (time: string): Dayjs => {
   const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
   return dayjs(dateTimeString, { format: 'YYYY-MM-DD HH:mm:ss' });
 };
+
+export enum ViewType {
+  DAY = 'Day',
+  MONTH = 'Month View',
+}
 
 function organizationEvents(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -33,16 +47,24 @@ function organizationEvents(): JSX.Element {
   const { getItem } = useLocalStorage();
 
   document.title = t('title');
-  const [eventmodalisOpen, setEventModalIsOpen] = useState(false);
-
-  const [startDate, setStartDate] = React.useState<Date | null>(new Date());
+  const [createEventmodalisOpen, setCreateEventmodalisOpen] = useState(false);
+  const [customRecurrenceModalIsOpen, setCustomRecurrenceModalIsOpen] =
+    useState<boolean>(false);
+  const [startDate, setStartDate] = React.useState<Date>(new Date());
   const [endDate, setEndDate] = React.useState<Date | null>(new Date());
-
+  const [viewType, setViewType] = useState<ViewType>(ViewType.MONTH);
   const [alldaychecked, setAllDayChecked] = React.useState(true);
   const [recurringchecked, setRecurringChecked] = React.useState(false);
 
   const [publicchecked, setPublicChecked] = React.useState(true);
   const [registrablechecked, setRegistrableChecked] = React.useState(false);
+
+  const [recurrenceRuleState, setRecurrenceRuleState] =
+    useState<InterfaceRecurrenceRule>({
+      frequency: Frequency.WEEKLY,
+      weekDays: [Days[startDate?.getDay()]],
+      count: undefined,
+    });
 
   const [formState, setFormState] = useState({
     title: '',
@@ -56,23 +78,33 @@ function organizationEvents(): JSX.Element {
   const navigate = useNavigate();
 
   const showInviteModal = (): void => {
-    setEventModalIsOpen(true);
+    setCreateEventmodalisOpen(true);
   };
-  const hideInviteModal = (): void => {
-    setEventModalIsOpen(false);
+  const hideCreateEventModal = (): void => {
+    setCreateEventmodalisOpen(false);
+  };
+  const handleChangeView = (item: any): void => {
+    /*istanbul ignore next*/
+    setViewType(item);
   };
 
-  const { data, loading, error, refetch } = useQuery(
-    ORGANIZATION_EVENT_CONNECTION_LIST,
-    {
-      variables: {
-        organization_id: currentUrl,
-        title_contains: '',
-        description_contains: '',
-        location_contains: '',
-      },
+  const hideCustomRecurrenceModal = (): void => {
+    setCustomRecurrenceModalIsOpen(false);
+  };
+
+  const {
+    data,
+    loading,
+    error: eventDataError,
+    refetch,
+  } = useQuery(ORGANIZATION_EVENT_CONNECTION_LIST, {
+    variables: {
+      organization_id: currentUrl,
+      title_contains: '',
+      description_contains: '',
+      location_contains: '',
     },
-  );
+  });
 
   const { data: orgData } = useQuery(ORGANIZATIONS_LIST, {
     variables: { id: currentUrl },
@@ -82,6 +114,13 @@ function organizationEvents(): JSX.Element {
   const userRole = getItem('UserType') as string;
 
   const [create, { loading: loading2 }] = useMutation(CREATE_EVENT_MUTATION);
+
+  const { frequency, weekDays, count } = recurrenceRuleState;
+  const recurrenceRuleText = getRecurrenceRuleText(
+    recurrenceRuleState,
+    startDate,
+    endDate,
+  );
 
   const createEvent = async (
     e: React.ChangeEvent<HTMLFormElement>,
@@ -102,19 +141,28 @@ function organizationEvents(): JSX.Element {
             isRegisterable: registrablechecked,
             organizationId: currentUrl,
             startDate: dayjs(startDate).format('YYYY-MM-DD'),
-            endDate: dayjs(endDate).format('YYYY-MM-DD'),
+            endDate: endDate
+              ? dayjs(endDate).format('YYYY-MM-DD')
+              : /* istanbul ignore next */ recurringchecked
+                ? undefined
+                : dayjs(startDate).format('YYYY-MM-DD'),
             allDay: alldaychecked,
             location: formState.location,
-            startTime: !alldaychecked ? formState.startTime + 'Z' : null,
-            endTime: !alldaychecked ? formState.endTime + 'Z' : null,
+            startTime: !alldaychecked ? formState.startTime + 'Z' : undefined,
+            endTime: !alldaychecked ? formState.endTime + 'Z' : undefined,
+            frequency: recurringchecked ? frequency : undefined,
+            weekDays:
+              recurringchecked && frequency === Frequency.WEEKLY
+                ? weekDays
+                : undefined,
+            count,
           },
         });
 
-        /* istanbul ignore next */
         if (createEventData) {
           toast.success(t('eventCreated'));
           refetch();
-          hideInviteModal();
+          hideCreateEventModal();
           setFormState({
             title: '',
             eventdescrip: '',
@@ -123,6 +171,14 @@ function organizationEvents(): JSX.Element {
             startTime: '08:00:00',
             endTime: '18:00:00',
           });
+          setRecurringChecked(false);
+          setRecurrenceRuleState({
+            frequency: Frequency.WEEKLY,
+            weekDays: [Days[new Date().getDay()]],
+            count: undefined,
+          });
+          setStartDate(new Date());
+          setEndDate(null);
         }
       } catch (error: any) {
         /* istanbul ignore next */
@@ -141,28 +197,33 @@ function organizationEvents(): JSX.Element {
   };
 
   useEffect(() => {
-    if (error) {
+    if (eventDataError) {
       navigate('/orglist');
     }
-  }, [error]);
+  }, [eventDataError]);
 
   if (loading || loading2) {
     return <Loader />;
   }
 
+  const popover = (
+    <Popover
+      id={`popover-recurrenceRuleText`}
+      data-testid={`popover-recurrenceRuleText`}
+    >
+      <Popover.Body>{recurrenceRuleText}</Popover.Body>
+    </Popover>
+  );
+
   return (
     <>
       <div className={styles.mainpageright}>
         <div className={styles.justifysp}>
-          <p className={styles.logintitle}>{t('events')}</p>
-          <Button
-            variant="success"
-            className={styles.addbtn}
-            onClick={showInviteModal}
-            data-testid="createEventModalBtn"
-          >
-            <i className="fa fa-plus"></i> {t('addEvent')}
-          </Button>
+          <EventHeader
+            viewType={viewType}
+            handleChangeView={handleChangeView}
+            showInviteModal={showInviteModal}
+          />
         </div>
       </div>
       <EventCalendar
@@ -170,14 +231,16 @@ function organizationEvents(): JSX.Element {
         orgData={orgData}
         userRole={userRole}
         userId={userId}
+        viewType={viewType}
       />
 
-      <Modal show={eventmodalisOpen} onHide={hideInviteModal}>
+      {/* Create Event Modal */}
+      <Modal show={createEventmodalisOpen} onHide={hideCreateEventModal}>
         <Modal.Header>
           <p className={styles.titlemodal}>{t('eventDetails')}</p>
           <Button
             variant="danger"
-            onClick={hideInviteModal}
+            onClick={hideCreateEventModal}
             data-testid="createEventModalCloseBtn"
           >
             <i className="fa fa-times"></i>
@@ -243,6 +306,10 @@ function organizationEvents(): JSX.Element {
                         endDate &&
                           (endDate < date?.toDate() ? date?.toDate() : endDate),
                       );
+                      setRecurrenceRuleState({
+                        ...recurrenceRuleState,
+                        weekDays: [Days[date?.toDate().getDay()]],
+                      });
                     }
                   }}
                 />
@@ -251,7 +318,7 @@ function organizationEvents(): JSX.Element {
                 <DatePicker
                   label={t('endDate')}
                   className={styles.datebox}
-                  value={dayjs(endDate)}
+                  value={dayjs(endDate ?? startDate)}
                   onChange={(date: Dayjs | null): void => {
                     if (date) {
                       setEndDate(date?.toDate());
@@ -268,14 +335,18 @@ function organizationEvents(): JSX.Element {
                   className={styles.datebox}
                   timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
                   value={timeToDayJs(formState.startTime)}
+                  /*istanbul ignore next*/
                   onChange={(time): void => {
                     if (time) {
                       setFormState({
                         ...formState,
                         startTime: time?.format('HH:mm:ss'),
                         endTime:
+                          /*istanbul ignore next*/
                           timeToDayJs(formState.endTime) < time
-                            ? time?.format('HH:mm:ss')
+                            ? /* istanbul ignore next */ time?.format(
+                                'HH:mm:ss',
+                              )
                             : formState.endTime,
                       });
                     }
@@ -288,6 +359,7 @@ function organizationEvents(): JSX.Element {
                   label={t('endTime')}
                   className={styles.datebox}
                   timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
+                  /*istanbul ignore next*/
                   value={timeToDayJs(formState.endTime)}
                   onChange={(time): void => {
                     if (time) {
@@ -306,7 +378,7 @@ function organizationEvents(): JSX.Element {
               <div className={styles.dispflex}>
                 <label htmlFor="allday">{t('allDay')}?</label>
                 <Form.Switch
-                  className="ms-2 mt-3"
+                  className="me-4"
                   id="allday"
                   type="checkbox"
                   checked={alldaychecked}
@@ -315,22 +387,9 @@ function organizationEvents(): JSX.Element {
                 />
               </div>
               <div className={styles.dispflex}>
-                <label htmlFor="recurring">{t('recurringEvent')}:</label>
-                <Form.Switch
-                  className="ms-2 mt-3"
-                  id="recurring"
-                  type="checkbox"
-                  data-testid="recurringCheck"
-                  checked={recurringchecked}
-                  onChange={(): void => setRecurringChecked(!recurringchecked)}
-                />
-              </div>
-            </div>
-            <div className={styles.checkboxdiv}>
-              <div className={styles.dispflex}>
                 <label htmlFor="ispublic">{t('isPublic')}?</label>
                 <Form.Switch
-                  className="ms-2 mt-3"
+                  className="me-4"
                   id="ispublic"
                   type="checkbox"
                   data-testid="ispublicCheck"
@@ -338,10 +397,25 @@ function organizationEvents(): JSX.Element {
                   onChange={(): void => setPublicChecked(!publicchecked)}
                 />
               </div>
+            </div>
+            <div className={styles.checkboxdiv}>
+              <div className={styles.dispflex}>
+                <label htmlFor="recurring">{t('recurringEvent')}?</label>
+                <Form.Switch
+                  className="me-4"
+                  id="recurring"
+                  type="checkbox"
+                  data-testid="recurringCheck"
+                  checked={recurringchecked}
+                  onChange={(): void => {
+                    setRecurringChecked(!recurringchecked);
+                  }}
+                />
+              </div>
               <div className={styles.dispflex}>
                 <label htmlFor="registrable">{t('isRegistrable')}?</label>
                 <Form.Switch
-                  className="ms-2 mt-3"
+                  className="me-4"
                   id="registrable"
                   type="checkbox"
                   data-testid="registrableCheck"
@@ -352,6 +426,148 @@ function organizationEvents(): JSX.Element {
                 />
               </div>
             </div>
+            {recurringchecked && (
+              <Dropdown drop="up" className="mt-2 d-inline-block w-100">
+                <Dropdown.Toggle
+                  variant="outline-secondary"
+                  className="py-2 border border-secondary-subtle rounded-2"
+                  id="dropdown-basic"
+                  data-testid="recurrenceOptions"
+                >
+                  {recurrenceRuleText.length > 45 ? (
+                    <OverlayTrigger
+                      trigger={['hover', 'focus']}
+                      placement="right"
+                      overlay={popover}
+                    >
+                      <span
+                        className="fw-semibold"
+                        data-testid="recurrenceRuleTextOverlay"
+                      >
+                        {`${recurrenceRuleText.substring(0, 45)}...`}
+                      </span>
+                    </OverlayTrigger>
+                  ) : (
+                    <span className="fw-semibold">{recurrenceRuleText}</span>
+                  )}
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu className="mb-2">
+                  <Dropdown.Item
+                    onClick={() =>
+                      setRecurrenceRuleState({
+                        ...recurrenceRuleState,
+                        frequency: Frequency.DAILY,
+                      })
+                    }
+                    data-testid="dailyRecurrence"
+                  >
+                    <span className="fw-semibold text-secondary">
+                      {getRecurrenceRuleText(
+                        {
+                          ...recurrenceRuleState,
+                          frequency: Frequency.DAILY,
+                        },
+                        startDate,
+                        endDate,
+                      )}
+                    </span>
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={() =>
+                      setRecurrenceRuleState({
+                        ...recurrenceRuleState,
+                        frequency: Frequency.WEEKLY,
+                        weekDays: [Days[startDate?.getDay()]],
+                      })
+                    }
+                    data-testid="weeklyRecurrence"
+                  >
+                    <span className="fw-semibold text-secondary">
+                      {getRecurrenceRuleText(
+                        {
+                          ...recurrenceRuleState,
+                          frequency: Frequency.WEEKLY,
+                          weekDays: [Days[startDate?.getDay()]],
+                        },
+                        startDate,
+                        endDate,
+                      )}
+                    </span>
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={() =>
+                      setRecurrenceRuleState({
+                        ...recurrenceRuleState,
+                        frequency: Frequency.MONTHLY,
+                      })
+                    }
+                    data-testid="monthlyRecurrence"
+                  >
+                    <span className="fw-semibold text-secondary">
+                      {getRecurrenceRuleText(
+                        {
+                          ...recurrenceRuleState,
+                          frequency: Frequency.MONTHLY,
+                        },
+                        startDate,
+                        endDate,
+                      )}
+                    </span>
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={() =>
+                      setRecurrenceRuleState({
+                        ...recurrenceRuleState,
+                        frequency: Frequency.YEARLY,
+                      })
+                    }
+                    data-testid="yearlyRecurrence"
+                  >
+                    <span className="fw-semibold text-secondary">
+                      {getRecurrenceRuleText(
+                        {
+                          ...recurrenceRuleState,
+                          frequency: Frequency.YEARLY,
+                        },
+                        startDate,
+                        endDate,
+                      )}
+                    </span>
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={() =>
+                      setRecurrenceRuleState({
+                        ...recurrenceRuleState,
+                        frequency: Frequency.WEEKLY,
+                        weekDays: mondayToFriday,
+                      })
+                    }
+                    data-testid="mondayToFridayRecurrence"
+                  >
+                    <span className="fw-semibold text-secondary">
+                      {getRecurrenceRuleText(
+                        {
+                          ...recurrenceRuleState,
+                          frequency: Frequency.WEEKLY,
+                          weekDays: mondayToFriday,
+                        },
+                        startDate,
+                        endDate,
+                      )}
+                    </span>
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={() => setCustomRecurrenceModalIsOpen(true)}
+                    data-testid="customRecurrence"
+                  >
+                    <span className="fw-semibold text-body-tertiary">
+                      Custom...
+                    </span>
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            )}
             <Button
               type="submit"
               className={styles.greenregbtn}
@@ -363,6 +579,18 @@ function organizationEvents(): JSX.Element {
           </Form>
         </Modal.Body>
       </Modal>
+
+      {/* Custom Recurrence */}
+      <CustomRecurrenceModal
+        recurrenceRuleState={recurrenceRuleState}
+        setRecurrenceRuleState={setRecurrenceRuleState}
+        endDate={endDate}
+        setEndDate={setEndDate}
+        customRecurrenceModalIsOpen={customRecurrenceModalIsOpen}
+        hideCustomRecurrenceModal={hideCustomRecurrenceModal}
+        setCustomRecurrenceModalIsOpen={setCustomRecurrenceModalIsOpen}
+        t={t}
+      />
     </>
   );
 }

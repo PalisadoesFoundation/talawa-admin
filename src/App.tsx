@@ -20,8 +20,10 @@ import OrganizaitionFundCampiagn from 'screens/OrganizationFundCampaign/Organiza
 import OrganizationFunds from 'screens/OrganizationFunds/OrganizationFunds';
 import OrganizationPeople from 'screens/OrganizationPeople/OrganizationPeople';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
+import Requests from 'screens/Requests/Requests';
 import Users from 'screens/Users/Users';
-
+import CommunityProfile from 'screens/CommunityProfile/CommunityProfile';
+import React, { useEffect } from 'react';
 // User Portal Components
 import Donate from 'screens/UserPortal/Donate/Donate';
 import Events from 'screens/UserPortal/Events/Events';
@@ -31,9 +33,15 @@ import People from 'screens/UserPortal/People/People';
 import Settings from 'screens/UserPortal/Settings/Settings';
 // import UserLoginPage from 'screens/UserPortal/UserLoginPage/UserLoginPage';
 // import Chat from 'screens/UserPortal/Chat/Chat';
+import { useQuery } from '@apollo/client';
+import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
 import Advertisements from 'components/Advertisements/Advertisements';
 import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/SecuredRouteForUser';
-import React from 'react';
+import FundCampaignPledge from 'screens/FundCampaignPledge/FundCampaignPledge';
+
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { setItem } = useLocalStorage();
 
 function app(): JSX.Element {
   /*const { updatePluginLinks, updateInstalled } = bindActionCreators(
@@ -61,6 +69,21 @@ function app(): JSX.Element {
 
   // TODO: Fetch Installed plugin extras and store for use within MainContent and Side Panel Components.
 
+  const { data, loading } = useQuery(CHECK_AUTH);
+
+  useEffect(() => {
+    if (data) {
+      setItem('name', `${data.checkAuth.firstName} ${data.checkAuth.lastName}`);
+      setItem('id', data.checkAuth._id);
+      setItem('email', data.checkAuth.email);
+      setItem('IsLoggedIn', 'TRUE');
+      setItem('FirstName', data.checkAuth.firstName);
+      setItem('LastName', data.checkAuth.lastName);
+      setItem('UserImage', data.checkAuth.image);
+      setItem('Email', data.checkAuth.email);
+    }
+  }, [data, loading]);
+
   const extraRoutes = Object.entries(installedPlugins).map(
     (plugin: any, index) => {
       const extraComponent = plugin[1];
@@ -82,7 +105,9 @@ function app(): JSX.Element {
           <Route element={<SuperAdminScreen />}>
             <Route path="/orglist" element={<OrgList />} />
             <Route path="/member" element={<MemberDetail />} />
+            <Route path="/requests" element={<Requests />} />
             <Route path="/users" element={<Users />} />
+            <Route path="/communityProfile" element={<CommunityProfile />} />
           </Route>
           <Route element={<OrganizationScreen />}>
             <Route path="/orgdash/:orgId" element={<OrganizationDashboard />} />
@@ -97,6 +122,10 @@ function app(): JSX.Element {
             <Route
               path="/orgfundcampaign/:orgId/:fundId"
               element={<OrganizaitionFundCampiagn />}
+            />
+            <Route
+              path="/fundCampaignPledge/:orgId/:fundCampaignId"
+              element={<FundCampaignPledge />}
             />
             <Route path="/orgcontribution" element={<OrgContribution />} />
             <Route path="/orgpost/:orgId" element={<OrgPost />} />

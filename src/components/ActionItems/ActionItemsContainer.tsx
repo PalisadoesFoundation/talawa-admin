@@ -111,9 +111,11 @@ function actionItemsContainer({
       actionItemsRefetch();
       hideUpdateModal();
       toast.success(t('successfulUpdation'));
-    } catch (error: any) {
-      toast.error(error.message);
-      console.log(error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+        console.log(error.message);
+      }
     }
   };
 
@@ -129,9 +131,11 @@ function actionItemsContainer({
       actionItemsRefetch();
       toggleDeleteModal();
       toast.success(t('successfulDeletion'));
-    } catch (error: any) {
-      toast.error(error.message);
-      console.log(error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+        console.log(error.message);
+      }
     }
   };
 

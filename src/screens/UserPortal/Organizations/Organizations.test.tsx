@@ -1,22 +1,21 @@
-import React from 'react';
-import { act, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
+import { act, render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 
+import userEvent from '@testing-library/user-event';
 import {
   USER_CREATED_ORGANIZATIONS,
   USER_JOINED_ORGANIZATIONS,
   USER_ORGANIZATION_CONNECTION,
 } from 'GraphQl/Queries/Queries';
-import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
-import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import Organizations from './Organizations';
-import userEvent from '@testing-library/user-event';
+import i18nForTest from 'utils/i18nForTest';
 import useLocalStorage from 'utils/useLocalstorage';
-
+import Organizations from './Organizations';
+import React from 'react';
 const { getItem } = useLocalStorage();
 
 const MOCKS = [
@@ -31,15 +30,17 @@ const MOCKS = [
       data: {
         users: [
           {
-            createdOrganizations: [
-              {
-                __typename: 'Organization',
-                _id: '6401ff65ce8e8406b8f07af2',
-                name: 'createdOrganization',
-                image: '',
-                description: 'New Desc',
-              },
-            ],
+            appUserProfile: {
+              createdOrganizations: [
+                {
+                  __typename: 'Organization',
+                  _id: '6401ff65ce8e8406b8f07af2',
+                  name: 'createdOrganization',
+                  image: '',
+                  description: 'New Desc',
+                },
+              ],
+            },
           },
         ],
       },
@@ -158,16 +159,17 @@ const MOCKS = [
       data: {
         users: [
           {
-            joinedOrganizations: [
-              {
-                __typename: 'Organization',
-                _id: '6401ff65ce8e8406b8f07af2',
-                name: 'joinedOrganization',
-                createdAt: '1234567890',
-                image: '',
-                description: 'New Desc',
-              },
-            ],
+            user: {
+              joinedOrganizations: [
+                {
+                  __typename: 'Organization',
+                  _id: '6401ff65ce8e8406b8f07af2',
+                  name: 'joinedOrganization',
+                  image: '',
+                  description: 'New Desc',
+                },
+              ],
+            },
           },
         ],
       },

@@ -10,8 +10,6 @@ export interface InterfaceAttendeeCheckIn {
   checkIn: null | {
     _id: string;
     time: string;
-    allotedRoom: string;
-    allotedSeat: string;
   };
 }
 
@@ -35,8 +33,6 @@ export interface InterfaceTableCheckIn {
   checkIn: null | {
     _id: string;
     time: string;
-    allotedRoom: string;
-    allotedSeat: string;
   };
   eventId: string;
 }

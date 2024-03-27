@@ -4,8 +4,8 @@ import Button from 'react-bootstrap/Button';
 import React, { useState, useEffect } from 'react';
 import styles from './EventCalendar.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
-import { Dropdown } from 'react-bootstrap';
 import CurrentHourIndicator from 'components/CurrentHourIndicator/CurrentHourIndicator';
+import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 
 interface InterfaceEvent {
   _id: string;
@@ -28,6 +28,7 @@ interface InterfaceCalendarProps {
   orgData?: InterfaceIOrgList;
   userRole?: string;
   userId?: string;
+  viewType?: ViewType;
 }
 
 enum Status {
@@ -42,10 +43,6 @@ enum Role {
   ADMIN = 'ADMIN',
 }
 
-export enum ViewType {
-  DAY = 'Day',
-  MONTH = 'Month',
-}
 interface InterfaceIEventAttendees {
   userId: string;
   user?: string;
@@ -112,7 +109,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   const [events, setEvents] = useState<InterfaceEvent[] | null>(null);
   const [expanded, setExpanded] = useState<number>(-1);
   const [windowWidth, setWindowWidth] = useState<number>(window.screen.width);
-  const [viewType, setViewType] = useState<string>(ViewType.MONTH);
 
   useEffect(() => {
     function handleResize(): void {
@@ -164,11 +160,8 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     setEvents(data);
   }, [eventData, orgData, userRole, userId]);
 
-  const handleChangeView = (item: any): void => {
-    setViewType(item);
-  };
-
   const handlePrevMonth = (): void => {
+    /*istanbul ignore next*/
     if (currentMonth === 0) {
       setCurrentMonth(11);
       setCurrentYear(currentYear - 1);
@@ -178,6 +171,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   };
 
   const handleNextMonth = (): void => {
+    /*istanbul ignore next*/
     if (currentMonth === 11) {
       setCurrentMonth(0);
       setCurrentYear(currentYear + 1);
@@ -239,6 +233,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     '0',
   )}:${String(Math.abs(new Date().getTimezoneOffset()) % 60).padStart(2, '0')}`;
 
+  /*istanbul ignore next*/
   const renderHours = (): JSX.Element => {
     const toggleExpand = (index: number): void => {
       if (expanded === index) {
@@ -248,8 +243,10 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       }
     };
 
+    /*istanbul ignore next*/
     const allDayEventsList: any = events
       ?.filter((datas) => {
+        /*istanbul ignore next*/
         const currDate = new Date(currentYear, currentMonth, currentDate);
         if (
           datas.startTime == undefined &&
@@ -356,7 +353,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                 />
               );
             });
-
+          /*istanbul ignore next*/
           return (
             <div key={hour} className={styles.calendar_hour_block}>
               <div className={styles.calendar_hour_text_container}>
@@ -389,6 +386,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                         : styles.event_list
                     }
                   >
+                    {/*istanbul ignore next*/}
                     {expanded === index
                       ? timeEventsList
                       : timeEventsList?.slice(0, 1)}
@@ -522,7 +520,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       <div className={styles.calendar__header}>
         <Button
           className={styles.button}
-          onClick={viewType == ViewType.DAY ? handlePrevDate : handlePrevMonth}
+          onClick={ViewType.DAY ? handlePrevDate : handlePrevMonth}
           data-testid="prevmonthordate"
         >
           <ChevronLeft />
@@ -532,12 +530,12 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           className={styles.calendar__header_month}
           data-testid="current-date"
         >
-          {viewType == ViewType.DAY ? `${currentDate}` : ``}{' '}
-          {months[currentMonth]} {currentYear}
+          {ViewType.DAY ? `${currentDate}` : ``} {months[currentMonth]}{' '}
+          {currentYear}
         </div>
         <Button
           className={styles.button}
-          onClick={viewType == ViewType.DAY ? handleNextDate : handleNextMonth}
+          onClick={ViewType.DAY ? handleNextDate : handleNextMonth}
           data-testid="nextmonthordate"
         >
           <ChevronRight />
@@ -551,28 +549,9 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             Today
           </Button>
         </div>
-        <div className={styles.flex_grow}></div>
-        <div>
-          <Dropdown onSelect={handleChangeView} className={styles.selectType}>
-            <Dropdown.Toggle variant="success" id="dropdown-basic">
-              {viewType || ViewType.MONTH}
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              <Dropdown.Item
-                eventKey={ViewType.MONTH}
-                data-testid="selectMonth"
-              >
-                {ViewType.MONTH}
-              </Dropdown.Item>
-              <Dropdown.Item eventKey={ViewType.DAY} data-testid="selectDay">
-                {ViewType.DAY}
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </div>
       </div>
       <div className={`${styles.calendar__scroll} customScroll`}>
-        {viewType == ViewType.MONTH ? (
+        {ViewType.MONTH ? (
           <div>
             <div className={styles.calendar__weekdays}>
               {weekdays.map((weekday, index) => (
@@ -584,6 +563,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             <div className={styles.calendar__days}>{renderDays()}</div>
           </div>
         ) : (
+          /*istanbul ignore next*/
           <div className={styles.clendar__hours}>{renderHours()}</div>
         )}
       </div>

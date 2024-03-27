@@ -135,6 +135,7 @@ describe('Organisation Dashboard Page', () => {
       screen.getByText(/No membership requests present/i),
     ).toBeInTheDocument();
     expect(screen.getByText(/No upcoming events/i)).toBeInTheDocument();
+    expect(screen.getByText(/No Posts Present/i)).toBeInTheDocument();
   });
 
   test('Testing error scenario', async () => {

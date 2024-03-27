@@ -10,6 +10,9 @@ import { store } from 'state/store';
 import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
 import i18nForTest from './utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { setItem } = useLocalStorage();
 
 // Mock the modules for PieChart rendering as they require a trasformer being used (which is not done by Jest)
 // These modules are used by the Feedback components
@@ -32,6 +35,19 @@ const MOCKS = [
           lastName: 'Doe',
           image: 'john.jpg',
           email: 'johndoe@gmail.com',
+          birthDate: '1990-01-01',
+          educationGrade: 'NO_GRADE',
+          employmentStatus: 'EMPLOYED',
+          gender: 'MALE',
+          maritalStatus: 'SINGLE',
+          address: {
+            line1: 'line1',
+            state: 'state',
+            countryCode: 'IND',
+          },
+          phone: {
+            mobile: '+8912313112',
+          },
           userType: 'SUPERADMIN',
         },
       },
@@ -52,6 +68,7 @@ async function wait(ms = 100): Promise<void> {
 
 describe('Testing the App Component', () => {
   test('Component should be rendered properly and user is loggedin', async () => {
+    setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>

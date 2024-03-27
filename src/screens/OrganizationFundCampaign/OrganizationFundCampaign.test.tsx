@@ -27,6 +27,12 @@ import {
   MOCK_FUND_CAMPAIGN_ERROR,
 } from './OrganizationFundCampaignMocks';
 import React from 'react';
+
+const mockNavigate = jest.fn();
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigate,
+}));
 jest.mock('react-toastify', () => ({
   toast: {
     success: jest.fn(),
@@ -192,6 +198,7 @@ describe('Testing FundCampaigns Screen', () => {
     fireEvent.change(endDate, {
       target: { value: formData.campaignEndDate },
     });
+
     userEvent.click(screen.getByTestId('createCampaignBtn'));
 
     await waitFor(() => {
@@ -466,6 +473,31 @@ describe('Testing FundCampaigns Screen', () => {
     await wait();
     await waitFor(() => {
       expect(screen.getByText(translations.noCampaigns)).toBeInTheDocument();
+    });
+  });
+  it("redirects to 'FundCampaignPledge' screen", async () => {
+    render(
+      <MockedProvider addTypename={false} link={link1}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <I18nextProvider i18n={i18nForTest}>
+                {<OrganizaitionFundCampiagn />}
+              </I18nextProvider>
+            </LocalizationProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+    await wait();
+    await waitFor(() =>
+      expect(screen.getAllByTestId('campaignName')[0]).toBeInTheDocument(),
+    );
+    userEvent.click(screen.getAllByTestId('campaignName')[0]);
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith(
+        '/fundCampaignPledge/undefined/1',
+      );
     });
   });
 });

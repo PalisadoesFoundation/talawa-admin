@@ -135,28 +135,6 @@ function addOnStore(): JSX.Element {
               onSelect={updateSelectedTab}
             >
               <Tab eventKey="available" title={t('available')}>
-                {console.log(
-                  data.getPlugins.filter(
-                    (val: {
-                      _id: string;
-                      pluginName: string | undefined;
-                      pluginDesc: string | undefined;
-                      pluginCreatedBy: string;
-                      pluginInstallStatus: boolean | undefined;
-                      getInstalledPlugins: () => any;
-                    }) => {
-                      if (searchText == '') {
-                        return val;
-                      } else if (
-                        val.pluginName
-                          ?.toLowerCase()
-                          .includes(searchText.toLowerCase())
-                      ) {
-                        return val;
-                      }
-                    },
-                  ),
-                )}
                 {data.getPlugins.filter(
                   (val: {
                     _id: string;

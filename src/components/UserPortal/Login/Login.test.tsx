@@ -28,8 +28,6 @@ const MOCKS = [
         login: {
           user: {
             _id: '1',
-            userType: 'ADMIN',
-            adminApproved: true,
             firstName: 'firstname',
             lastName: 'secondname',
             email: 'tempemail@example.com',
@@ -37,6 +35,15 @@ const MOCKS = [
           },
           accessToken: 'accessToken',
           refreshToken: 'refreshToken',
+          appUserProfile: {
+            adminApproved: true,
+            adminFor: [
+              {
+                _id: 'id',
+              },
+            ],
+            isSuperAdmin: true,
+          },
         },
       },
     },
