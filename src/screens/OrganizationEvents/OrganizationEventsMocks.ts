@@ -131,6 +131,7 @@ export const MOCKS = [
         startTime: '09:00:00Z',
         endTime: '17:00:00Z',
         frequency: 'DAILY',
+        interval: 1,
       },
     },
     result: {
@@ -158,7 +159,8 @@ export const MOCKS = [
         startTime: '09:00:00Z',
         endTime: '17:00:00Z',
         frequency: 'WEEKLY',
-        weekDays: ['MO', 'TU', 'WE', 'TH', 'FR'],
+        interval: 1,
+        weekDays: ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'],
       },
     },
     result: {
@@ -183,7 +185,10 @@ export const MOCKS = [
         startDate: '2022-03-28',
         endDate: '2023-04-15',
         allDay: true,
+        interval: 2,
         frequency: 'MONTHLY',
+        weekDays: ['MONDAY'],
+        weekDayOccurenceInMonth: 4,
       },
     },
     result: {
@@ -208,6 +213,7 @@ export const MOCKS = [
         startDate: '2022-03-28',
         allDay: true,
         frequency: 'DAILY',
+        interval: 1,
         count: 100,
       },
     },

@@ -91,7 +91,7 @@
   margin-bottom: 20px;
 }
 .justifysp {
-  display: flex;
+  display: block;
   justify-content: space-between;
   margin-top: 20px;
 }

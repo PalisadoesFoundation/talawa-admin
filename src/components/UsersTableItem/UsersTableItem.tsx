@@ -24,7 +24,7 @@ type Props = {
 
 const UsersTableItem = (props: Props): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'users' });
-  const { user, index, loggedInUserId, resetAndRefetch } = props;
+  const { user, index, resetAndRefetch } = props;
 
   const [showJoinedOrganizations, setShowJoinedOrganizations] = useState(false);
   const [showBlockedOrganizations, setShowBlockedOrganizations] =
@@ -160,6 +160,9 @@ const UsersTableItem = (props: Props): JSX.Element => {
       setShowBlockedOrganizations(true);
     }
   }
+
+  const isSuperAdmin = user.appUserProfile.isSuperAdmin;
+
   return (
     <>
       {/* Table Item */}
@@ -167,26 +170,6 @@ const UsersTableItem = (props: Props): JSX.Element => {
         <th scope="row">{index + 1}</th>
         <td>{`${user.user.firstName} ${user.user.lastName}`}</td>
         <td>{user.user.email}</td>
-        <td>
-          <Form.Select
-            name={`role${user.user._id}`}
-            data-testid={`changeRole${user.user._id}`}
-            disabled={user.user._id === loggedInUserId}
-            defaultValue={
-              user.appUserProfile.isSuperAdmin
-                ? 'SUPERADMIN' + `?${user.user._id}`
-                : user.appUserProfile.adminApproved
-                  ? 'ADMIN' + `?${user.user._id}`
-                  : 'USER' + `?${user.user._id}`
-            }
-          >
-            <option value={`ADMIN?${user.user._id}`}>{t('admin')}</option>
-            <option value={`SUPERADMIN?${user.user._id}`}>
-              {t('superAdmin')}
-            </option>
-            <option value={`USER?${user.user._id}`}>{t('user')}</option>
-          </Form.Select>
-        </td>
         <td>
           <Button
             onClick={() => setShowJoinedOrganizations(true)}
@@ -318,14 +301,36 @@ const UsersTableItem = (props: Props): JSX.Element => {
                             {org.creator.firstName} {org.creator.lastName}
                           </Button>
                         </td>
-                        <td>{isAdmin ? 'ADMIN' : 'USER'}</td>
+                        <td>
+                          {isSuperAdmin
+                            ? 'SUPERADMIN'
+                            : isAdmin
+                              ? 'ADMIN'
+                              : 'USER'}
+                        </td>
                         <td>
                           <Form.Select
                             size="sm"
                             onChange={changeRoleInOrg}
                             data-testid={`changeRoleInOrg${org._id}`}
+                            disabled={isSuperAdmin}
+                            defaultValue={
+                              isSuperAdmin
+                                ? `SUPERADMIN`
+                                : isAdmin
+                                  ? `ADMIN?${org._id}`
+                                  : `USER?${org._id}`
+                            }
                           >
-                            {isAdmin ? (
+                            {isSuperAdmin ? (
+                              <>
+                                <option value={`SUPERADMIN`}>SUPERADMIN</option>
+                                <option value={`ADMIN?${org._id}`}>
+                                  ADMIN
+                                </option>
+                                <option value={`USER?${org._id}`}>USER</option>
+                              </>
+                            ) : isAdmin ? (
                               <>
                                 <option value={`ADMIN?${org._id}`}>
                                   ADMIN
@@ -500,8 +505,24 @@ const UsersTableItem = (props: Props): JSX.Element => {
                             size="sm"
                             onChange={changeRoleInOrg}
                             data-testid={`changeRoleInOrg${org._id}`}
+                            disabled={isSuperAdmin}
+                            defaultValue={
+                              isSuperAdmin
+                                ? `SUPERADMIN`
+                                : isAdmin
+                                  ? `ADMIN?${org._id}`
+                                  : `USER?${org._id}`
+                            }
                           >
-                            {isAdmin ? (
+                            {isSuperAdmin ? (
+                              <>
+                                <option value={`SUPERADMIN`}>SUPERADMIN</option>
+                                <option value={`ADMIN?${org._id}`}>
+                                  ADMIN
+                                </option>
+                                <option value={`USER?${org._id}`}>USER</option>
+                              </>
+                            ) : isAdmin ? (
                               <>
                                 <option value={`ADMIN?${org._id}`}>
                                   ADMIN
