@@ -478,6 +478,20 @@ export const USER_DETAILS = gql`
         email
         image
         createdAt
+        birthDate
+        educationGrade
+        employmentStatus
+        gender
+        maritalStatus
+        phone {
+          mobile
+        }
+        address {
+          line1
+          countryCode
+          city
+          state
+        }
         registeredEvents {
           _id
         }
@@ -492,6 +506,8 @@ export const USER_DETAILS = gql`
           _id
         }
         isSuperAdmin
+        appLanguageCode
+        pluginCreationAllowed
         createdOrganizations {
           _id
         }
