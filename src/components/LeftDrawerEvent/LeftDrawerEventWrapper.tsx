@@ -19,6 +19,7 @@ export const LeftDrawerEventWrapper = (
   props: InterfacePropType,
 ): JSX.Element => {
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
+  const { event, children } = props;
   const handleResize = (): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer(!hideDrawer);
@@ -57,7 +58,7 @@ export const LeftDrawerEventWrapper = (
       )}
       <div className={styles.drawer}>
         <LeftDrawerEvent
-          key={`${props.event?._id || 'loading'}EventWrapper`}
+          key={`${event?._id || 'loading'}EventWrapper`}
           hideDrawer={hideDrawer}
           setHideDrawer={setHideDrawer}
           {...props}
@@ -75,11 +76,11 @@ export const LeftDrawerEventWrapper = (
         data-testid="mainpageright"
       >
         <div className="d-flex justify-content-between align-items-center">
-          <div style={{ flex: 1 }}>
+          <div className={styles.screenTitle}>
             <h2>Event Management</h2>
           </div>
         </div>
-        {props.children}
+        {children}
       </div>
     </>
   );
