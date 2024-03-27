@@ -10,7 +10,6 @@ import { useMutation } from '@apollo/client';
 const profileDropdown = (): JSX.Element => {
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
   const { getItem } = useLocalStorage();
-  // const userType = getItem('UserType');
   const superAdmin = getItem('SuperAdmin');
   const adminFor = getItem('AdminFor');
   const userType = superAdmin
