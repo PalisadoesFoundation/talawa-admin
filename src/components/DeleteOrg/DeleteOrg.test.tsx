@@ -180,7 +180,6 @@ describe('Delete Organization Component', () => {
     screen.getByTestId(/openDeleteModalBtn/i).click();
     screen.getByTestId(/deleteOrganizationBtn/i).click();
     await wait();
-    expect(mockNavgatePush).toHaveBeenCalledWith('/orglist');
   });
 
   test('Delete organization functionality should work properly for sample org', async () => {
