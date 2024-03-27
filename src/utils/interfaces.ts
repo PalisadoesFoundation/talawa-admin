@@ -321,7 +321,6 @@ export interface InterfaceQueryRequestListItem {
   image: string;
   email: string;
   userType: string;
-  adminApproved: boolean;
   createdAt: string;
 }
 

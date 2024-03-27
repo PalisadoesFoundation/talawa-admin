@@ -205,7 +205,6 @@ export const USER_LIST_REQUEST = gql`
     $first: Int
     $skip: Int
     $userType: String
-    $adminApproved: Boolean
   ) {
     users(
       where: {
@@ -215,7 +214,6 @@ export const USER_LIST_REQUEST = gql`
       skip: $skip
       first: $first
       userType: $userType
-      adminApproved: $adminApproved
     ) {
       firstName
       lastName
@@ -223,7 +221,6 @@ export const USER_LIST_REQUEST = gql`
       _id
       email
       userType
-      adminApproved
       createdAt
     }
   }
@@ -629,7 +626,6 @@ export const USERS_CONNECTION_LIST = gql`
       _id
       email
       userType
-      adminApproved
       adminFor {
         _id
       }

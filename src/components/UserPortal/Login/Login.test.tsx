@@ -62,7 +62,6 @@ const MOCKS = [
           user: {
             _id: '1',
             userType: 'ADMIN',
-            adminApproved: false,
             firstName: 'firstname',
             lastName: 'secondname',
             email: 'tempemail@example.com',

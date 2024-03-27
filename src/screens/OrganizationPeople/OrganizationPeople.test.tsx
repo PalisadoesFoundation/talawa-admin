@@ -20,17 +20,96 @@ import {
   ADD_MEMBER_MUTATION,
   SIGNUP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
+import type { MockedResponse } from '@apollo/client/testing';
+
+interface InterfaceOrganization {
+  _id?: string;
+  image: string | null;
+  creator: InterfaceUser;
+  name: string;
+  description: string;
+  location: string;
+  members: InterfaceUser | null; // Array of users or null
+  admins: InterfaceUser | null; // Array of users or null
+  membershipRequests: {
+    _id?: string;
+    user: InterfaceUser;
+  };
+  blockedUsers: InterfaceUser;
+}
+
+interface InterfaceAddress {
+  city?: string;
+  countryCode?: string;
+  dependentLocality?: string;
+  line1?: string;
+  line2?: string;
+  postalCode?: string;
+  sortingCode?: string;
+  state?: string;
+  __typename?: string;
+}
+
+interface InterfaceUser {
+  _id?: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  image?: string | null;
+  createdAt?: string;
+  userType?: string;
+  __typename?: string;
+  adminFor?: InterfaceUser[]; // Array of users user admins for
+  organizationsBlockedBy?: InterfaceUser[]; // Array of users who blocked the user
+  joinedOrganizations?: (InterfaceUser & { address?: InterfaceAddress })[]; // Array of organizations the user joined (with address for specific queries)
+  name?: string;
+  creator?: InterfaceUser;
+}
+
+interface InterfaceSignUp {
+  user: {
+    _id: string;
+  };
+  accessToken: string;
+  refreshToken: string;
+}
+
+interface InterfaceMockData {
+  data: {
+    organizations?: InterfaceOrganization[];
+    organizationsMemberConnection?: {
+      __typename: string;
+      edges: InterfaceUser[];
+    };
+    users?: InterfaceUser[];
+    signUp?: InterfaceSignUp;
+    createMember?: InterfaceUser;
+  };
+}
+
+interface InterfaceMockRequest {
+  query: unknown;
+  variables?: {
+    [key: string]: unknown;
+  };
+}
+
+interface InterfaceMock {
+  request: InterfaceMockRequest;
+  result: InterfaceMockData;
+  newData?: () => InterfaceMockData;
+}
 
 // This loop creates dummy data for members, admin and users
-const members: any[] = [];
-const admins: any[] = [];
-const users: any[] = [];
+const members: InterfaceUser[] = [];
+const admins: InterfaceUser[] = [];
+const users: InterfaceUser[] = [];
 
 const createMemberMock = (
   orgId = '',
   firstNameContains = '',
   lastNameContains = '',
-): any => ({
+): InterfaceMock => ({
   request: {
     query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
     variables: {
@@ -84,7 +163,7 @@ const createAdminMock = (
   firstNameContains = '',
   lastNameContains = '',
   adminFor = '',
-): any => ({
+): InterfaceMock => ({
   request: {
     query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
     variables: {
@@ -139,7 +218,7 @@ const createAdminMock = (
 const createUserMock = (
   firstNameContains = '',
   lastNameContains = '',
-): any => ({
+): InterfaceMock => ({
   request: {
     query: USER_LIST,
     variables: {
@@ -158,7 +237,6 @@ const createUserMock = (
           _id: '64001660a711c62d5b4076a2',
           email: 'adidacreator1@gmail.com',
           userType: 'SUPERADMIN',
-          adminApproved: true,
           organizationsBlockedBy: [],
           createdAt: '2023-03-02T03:22:08.101Z',
           joinedOrganizations: [
@@ -176,7 +254,6 @@ const createUserMock = (
           _id: '6402030dce8e8406b8f07b0e',
           email: 'adi1@gmail.com',
           userType: 'USER',
-          adminApproved: true,
           organizationsBlockedBy: [],
           createdAt: '2023-03-03T14:24:13.084Z',
           joinedOrganizations: [
@@ -191,7 +268,7 @@ const createUserMock = (
   },
 });
 
-const MOCKS: any[] = [
+const MOCKS: InterfaceMock[] = [
   {
     request: {
       query: ORGANIZATIONS_LIST,
@@ -371,7 +448,6 @@ const MOCKS: any[] = [
             _id: '64001660a711c62d5b4076a2',
             email: 'adidacreator1@gmail.com',
             userType: 'SUPERADMIN',
-            adminApproved: true,
             organizationsBlockedBy: [],
             createdAt: '2023-03-02T03:22:08.101Z',
             joinedOrganizations: [
@@ -389,7 +465,6 @@ const MOCKS: any[] = [
             _id: '6402030dce8e8406b8f07b0e',
             email: 'adi1@gmail.com',
             userType: 'USER',
-            adminApproved: true,
             organizationsBlockedBy: [],
             createdAt: '2023-03-03T14:24:13.084Z',
             joinedOrganizations: [
@@ -436,7 +511,6 @@ const MOCKS: any[] = [
             _id: '65378abd85008f171cf2990d',
             email: 'testadmin1@example.com',
             userType: 'ADMIN',
-            adminApproved: true,
             adminFor: [
               {
                 _id: '6537904485008f171cf29924',
@@ -521,7 +595,10 @@ const MOCKS: any[] = [
   },
 ];
 
-const link = new StaticMockLink(MOCKS, true);
+const link = new StaticMockLink(
+  MOCKS as MockedResponse<Record<string, any>, Record<string, any>>[],
+  true,
+);
 async function wait(ms = 2): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -595,7 +672,6 @@ describe('Organization People Page', () => {
         _id: '64001660a711c62d5b4076a2',
         email: 'adidacreator1@gmail.com',
         userType: 'SUPERADMIN',
-        adminApproved: true,
         organizationsBlockedBy: [],
         createdAt: '2023-03-02T03:22:08.101Z',
         joinedOrganizations: [
@@ -613,7 +689,6 @@ describe('Organization People Page', () => {
         _id: '6402030dce8e8406b8f07b0e',
         email: 'adi1@gmail.com',
         userType: 'USER',
-        adminApproved: true,
         organizationsBlockedBy: [],
         createdAt: '2023-03-03T14:24:13.084Z',
         joinedOrganizations: [
@@ -1208,24 +1283,11 @@ describe('Organization People Page', () => {
     userEvent.type(fullNameInput, searchData.fullNameUser);
     await wait();
     const orgUsers = MOCKS[3]?.result?.data?.users;
-    const orgUserssize = orgUsers?.filter(
-      (datas: {
-        _id: string;
-        lastName: string;
-        firstName: string;
-        image: string;
-        email: string;
-        createdAt: string;
-        joinedOrganizations: {
-          __typename: string;
-          _id: string;
-        }[];
-      }) => {
-        return datas.joinedOrganizations?.some(
-          (org) => org._id === '6401ff65ce8e8406b8f07af2',
-        );
-      },
-    );
+    const orgUserssize = orgUsers?.filter((datas: InterfaceUser) => {
+      return datas.joinedOrganizations?.some(
+        (org) => org._id === '6401ff65ce8e8406b8f07af2',
+      );
+    });
     await wait();
     expect(orgUserssize?.length).toBe(1);
 

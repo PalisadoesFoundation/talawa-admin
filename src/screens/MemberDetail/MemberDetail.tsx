@@ -42,7 +42,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     error: error,
     refetch: refetch,
   } = useQuery(USER_DETAILS, {
-    variables: { userId: currentUrl }, // For testing we are sending the id as a prop
+    variables: { id: currentUrl }, // For testing we are sending the id as a prop
   });
 
   useEffect(() => {
@@ -86,7 +86,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         }, 2000);
       }
       /* istanbul ignore next */
-    } catch (error: any) {
+    } catch (error) {
       /* istanbul ignore next */
       errorHandler(t, error);
     }
