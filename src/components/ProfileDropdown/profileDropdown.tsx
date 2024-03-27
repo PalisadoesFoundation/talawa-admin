@@ -20,7 +20,7 @@ const profileDropdown = (): JSX.Element => {
   const firstName = getItem('FirstName');
   const lastName = getItem('LastName');
   const userImage = getItem('UserImage');
-  const { orgId } = useParams();
+  const userID = getItem('id');
   const navigate = useNavigate();
 
   const logout = async (): Promise<void> => {
@@ -67,7 +67,7 @@ const profileDropdown = (): JSX.Element => {
             {displayedName}
           </span>
           <span className={styles.secondaryText} data-testid="display-type">
-            {`${userType}`.toLowerCase()}
+            {`${userType}`}
           </span>
         </div>
       </div>
@@ -83,7 +83,7 @@ const profileDropdown = (): JSX.Element => {
       <Dropdown.Menu>
         <Dropdown.Item
           data-testid="profileBtn"
-          onClick={() => navigate(`/member/${orgId}`)}
+          onClick={() => navigate(`/member/${userID}`)}
           aria-label="View Profile"
         >
           View Profile
