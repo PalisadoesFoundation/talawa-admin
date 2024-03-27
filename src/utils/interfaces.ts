@@ -358,8 +358,8 @@ export interface InterfacePostCard {
     email: string;
     id: string;
   };
-  image: string;
-  video: string;
+  image: string | null;
+  video: string | null;
   text: string;
   title: string;
   likeCount: number;
