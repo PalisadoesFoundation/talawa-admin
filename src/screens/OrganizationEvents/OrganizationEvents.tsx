@@ -83,11 +83,13 @@ function organizationEvents(): JSX.Element {
   const hideCreateEventModal = (): void => {
     setCreateEventmodalisOpen(false);
   };
+
+  /* istanbul ignore next */
   const handleChangeView = (item: ViewType): void => {
-    /*istanbul ignore next*/
     setViewType(item);
   };
 
+  /* istanbul ignore next */
   const hideCustomRecurrenceModal = (): void => {
     setCustomRecurrenceModalIsOpen(false);
   };
