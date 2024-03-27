@@ -48,7 +48,7 @@ const MOCKS1 = [
                 _id: '65e0e2abb92c9f3e29503d4e',
               },
             ],
-            isSuperAdmin: true,
+            isSuperAdmin: false,
             appLanguageCode: 'en',
             createdEvents: [
               {
@@ -342,6 +342,7 @@ describe('MemberDetail', () => {
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
     await wait();
     expect(screen.getAllByText(/Email/i)).toBeTruthy();
+    expect(screen.getByText('User')).toBeInTheDocument();
     const birthDateDatePicker = screen.getByTestId('birthDate');
     fireEvent.change(birthDateDatePicker, {
       target: { value: formData.birthDate },
@@ -413,6 +414,27 @@ describe('MemberDetail', () => {
     expect(toast.warning).toHaveBeenCalledWith('First Name cannot be blank!');
     expect(toast.warning).toHaveBeenCalledWith('Last Name cannot be blank!');
     expect(toast.warning).toHaveBeenCalledWith('Email cannot be blank!');
+  });
+  test('display admin', async () => {
+    const props = {
+      id: 'rishav-jha-mech',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link1}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <MemberDetail {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
+    await wait();
+    expect(screen.getByText('Admin')).toBeInTheDocument();
   });
 
   test('Should display dicebear image if image is null', async () => {
