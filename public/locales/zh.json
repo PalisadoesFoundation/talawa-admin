@@ -89,8 +89,8 @@
     "close": "關"
   },
   "funds": {
-    "title": "塔拉瓦基金",
-    "createFund": "创建",
+    "title": "资金",
+    "createFund": "创建基金",
     "fundName": "基金名称",
     "fundId": "基金ID",
     "fundOptions": "选项",
@@ -107,6 +107,13 @@
     "fundDelete": "删除基金",
     "no": "否",
     "yes": "是",
+    "manageFund": "管理基金",
+    "searchFullName": "按姓名搜索",
+    "filter": "筛选",
+    "noFundsFound": "找不到资金",
+    "createdBy": "创建人",
+    "createdOn": "创建日期",
+    "status": "状态",
     "archiveFund": "归档基金",
     "archiveFundMsg": "您是否要归档此基金？",
     "fundCreated": "基金创建成功",
@@ -977,5 +984,23 @@
     "sameNameConflict": "请更改名称以进行更新",
     "categoryEnabled": "已启用措施项类别",
     "categoryDisabled": "措施项类别已禁用"
+  },
+  "organizationVenues": {
+    "venueTitle": "场地",
+    "addVenue": "添加场地",
+    "venueDetails": "场地详情",
+    "venueName": "场地名称",
+    "enterVenueName": "请输入场地名称",
+    "description": "场地描述",
+    "enterVenueDesc": "输入场地描述",
+    "capacity": "容量",
+    "enterVenueCapacity": "输入场地容量",
+    "image": "场地图片",
+    "uploadVenueImage": "上传场地图片",
+    "createVenue": "创建场地",
+    "venueAdded": "场地添加成功",
+    "update": "更新场地详情",
+    "editVenue": "更新地点",
+    "venueUpdated": "场地详细信息更新成功"
   }
 }

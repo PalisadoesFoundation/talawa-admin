@@ -387,7 +387,7 @@
     "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।"
   },
   "funds": {
-    "title": "तलवा फंड्स",
+    "title": "फंड्स",
     "createFund": "फंड बनाएँ",
     "fundName": "फंड का नाम",
     "fundId": "फंड आईडी",
@@ -405,6 +405,13 @@
     "fundDelete": "फंड हटाएं",
     "no": "नहीं",
     "yes": "हाँ",
+    "manageFund": "कोष प्रबंधित करें",
+    "searchFullName": "नाम से खोजें",
+    "filter": "फ़िल्टर",
+    "noFundsFound": "कोई धनराशि नहीं मिली",
+    "createdBy": "द्वारा बनाया गया",
+    "createdOn": "बनाया गया",
+    "status": "स्थिति",
     "archiveFund": "फंड संग्रहीत करें",
     "archiveFundMsg": "क्या आप इस फंड को संग्रहीत करना चाहते हैं?",
     "fundCreated": "फंड सफलतापूर्वक बनाया गया",
@@ -979,5 +986,23 @@
     "sameNameConflict": "अपडेट करने के लिए कृपया नाम बदलें",
     "categoryEnabled": "कार्रवाई आइटम श्रेणी सक्षम",
     "categoryDisabled": "क्रिया आइटम श्रेणी अक्षम की गई"
+  },
+  "organizationVenues": {
+    "venueTitle": "स्थान",
+    "addVenue": "स्थान जोड़ें",
+    "venueDetails": "स्थान विवरण",
+    "venueName": "स्थल का नाम",
+    "enterVenueName": "स्थल का नाम दर्ज करें",
+    "description": "स्थल का विवरण",
+    "enterVenueDesc": "स्थल विवरण दर्ज करें",
+    "capacity": "क्षमता",
+    "enterVenueCapacity": "स्थल की क्षमता दर्ज करें",
+    "image": "स्थल छवि",
+    "uploadVenueImage": "स्थान छवि अपलोड करें",
+    "createVenue": "क्रिएट वेन्यू",
+    "venueAdded": "स्थान सफलतापूर्वक जोड़ा गया",
+    "update": "स्थान विवरण अद्यतन करें",
+    "editVenue": "अपडेट स्थान",
+    "venueUpdated": "स्थल विवरण सफलतापूर्वक अद्यतन किया गया"
   }
 }
