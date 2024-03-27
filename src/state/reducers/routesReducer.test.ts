@@ -14,6 +14,7 @@ describe('Testing Routes reducer', () => {
         { name: 'Dashboard', url: '/orgdash/undefined' },
         { name: 'People', url: '/orgpeople/undefined' },
         { name: 'Events', url: '/orgevents/undefined' },
+        { name: 'Venues', url: '/orgvenues/undefined' },
         { name: 'Action Items', url: '/orgactionitems/undefined' },
         { name: 'Posts', url: '/orgpost/undefined' },
         {
@@ -50,6 +51,11 @@ describe('Testing Routes reducer', () => {
           name: 'Events',
           comp_id: 'orgevents',
           component: 'OrganizationEvents',
+        },
+        {
+          name: 'Venues',
+          comp_id: 'orgvenues',
+          component: 'OrganizationVenues',
         },
         {
           name: 'Action Items',
@@ -99,6 +105,7 @@ describe('Testing Routes reducer', () => {
         { name: 'Dashboard', url: '/orgdash/orgId' },
         { name: 'People', url: '/orgpeople/orgId' },
         { name: 'Events', url: '/orgevents/orgId' },
+        { name: 'Venues', url: '/orgvenues/orgId' },
         { name: 'Action Items', url: '/orgactionitems/orgId' },
         { name: 'Posts', url: '/orgpost/orgId' },
         { name: 'Block/Unblock', url: '/blockuser/orgId' },
@@ -132,6 +139,11 @@ describe('Testing Routes reducer', () => {
           name: 'Events',
           comp_id: 'orgevents',
           component: 'OrganizationEvents',
+        },
+        {
+          name: 'Venues',
+          comp_id: 'orgvenues',
+          component: 'OrganizationVenues',
         },
         {
           name: 'Action Items',
@@ -177,6 +189,7 @@ describe('Testing Routes reducer', () => {
         { name: 'Dashboard', url: '/orgdash/undefined' },
         { name: 'People', url: '/orgpeople/undefined' },
         { name: 'Events', url: '/orgevents/undefined' },
+        { name: 'Venues', url: '/orgvenues/undefined' },
         { name: 'Action Items', url: '/orgactionitems/undefined' },
         { name: 'Posts', url: '/orgpost/undefined' },
         {
@@ -216,6 +229,11 @@ describe('Testing Routes reducer', () => {
           name: 'Events',
           comp_id: 'orgevents',
           component: 'OrganizationEvents',
+        },
+        {
+          name: 'Venues',
+          comp_id: 'orgvenues',
+          component: 'OrganizationVenues',
         },
         {
           name: 'Action Items',
