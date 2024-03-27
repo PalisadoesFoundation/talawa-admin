@@ -90,7 +90,7 @@ export default function home(): JSX.Element {
   const [filteredAd, setFilteredAd] = useState<InterfaceAdContent[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
   const { orgId } = useParams();
-  console.log(typeof orgId, orgId);
+
   if (!orgId) {
     return <Navigate to={'/user'} />;
   }
