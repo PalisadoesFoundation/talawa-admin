@@ -1,7 +1,4 @@
 contact_links:
-    - name: 📃 Blank Issue
-      url: https://github.com/PalisadoesFoundation/talawa-admin/issues/new
-      about: Use this blank issue template which do not fit into any of the other categories.
     - name: 🤔 Questions and Help
       url: https://github.com/PalisadoesFoundation/talawa?tab=readme-ov-file#talawa
       about: This issue tracker is not for support questions. Please refer to the Slack community's help and discussion forums.
