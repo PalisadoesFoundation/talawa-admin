@@ -84,7 +84,7 @@ function organizationEvents(): JSX.Element {
     setCreateEventmodalisOpen(false);
   };
 
-  /* istanbul ignore next */
+  /*istanbul ignore next */
   const handleChangeView = (item: ViewType): void => {
     setViewType(item);
   };

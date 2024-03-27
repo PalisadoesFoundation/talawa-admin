@@ -56,7 +56,7 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "serve": "ESLINT_NO_DEV_ERRORS=true node ./scripts/config-overrides/custom_start.js",
+    "serve": "cross-env ESLINT_NO_DEV_ERRORS=true node ./scripts/config-overrides/custom_start.js",
     "build": "node ./scripts/config-overrides/custom_build.js",
     "test": "cross-env NODE_ENV=test node scripts/test.js --env=./scripts/custom-test-env.js --watchAll --coverage",
     "eject": "react-scripts eject",
