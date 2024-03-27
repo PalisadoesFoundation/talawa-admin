@@ -244,7 +244,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     };
 
     /*istanbul ignore next*/
-    const allDayEventsList: any = events
+    const allDayEventsList = events
       ?.filter((datas) => {
         /*istanbul ignore next*/
         const currDate = new Date(currentYear, currentMonth, currentDate);
@@ -284,7 +284,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           <div className={styles.dummyWidth}></div>
           <div
             className={
-              allDayEventsList.length > 0
+              allDayEventsList != undefined && allDayEventsList.length > 0
                 ? styles.event_list_parent_current
                 : styles.event_list_parent
             }
@@ -308,8 +308,23 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                   ? allDayEventsList
                   : allDayEventsList?.slice(0, 1)}
               </div>
-              {(allDayEventsList?.length > 2 ||
-                (windowWidth <= 700 && allDayEventsList?.length > 0)) && (
+              {allDayEventsList != undefined &&
+                (allDayEventsList.length > 2 ||
+                  (windowWidth <= 700 && allDayEventsList.length > 0)) && (
+                  <button
+                    className={styles.btn__more}
+                    onClick={() => {
+                      toggleExpand(-100);
+                    }}
+                  >
+                    {expanded === -100 ? 'View less' : 'View all'}
+                  </button>
+                )}
+              {/* {((allDayEventsList != undefined &&
+                allDayEventsList?.length > 2) ||
+                (windowWidth <= 700 &&
+                  allDayEventsList != undefined &&
+                  allDayEventsList?.length > 0)) && (
                 <button
                   className={styles.btn__more}
                   onClick={() => {
@@ -318,12 +333,12 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                 >
                   {expanded === -100 ? 'View less' : 'View all'}
                 </button>
-              )}
+              )} */}
             </div>
           </div>
         </div>
         {hours.map((hour, index) => {
-          const timeEventsList: any = events
+          const timeEventsList = events
             ?.filter((datas) => {
               const currDate = new Date(currentYear, currentMonth, currentDate);
 
@@ -362,7 +377,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
               <div className={styles.dummyWidth}></div>
               <div
                 className={
-                  timeEventsList.length > 0
+                  timeEventsList != undefined && timeEventsList.length > 0
                     ? styles.event_list_parent_current
                     : styles.event_list_parent
                 }
@@ -391,8 +406,11 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                       ? timeEventsList
                       : timeEventsList?.slice(0, 1)}
                   </div>
-                  {(timeEventsList?.length > 1 ||
-                    (windowWidth <= 700 && timeEventsList?.length > 0)) && (
+                  {/* {((timeEventsList != undefined &&
+                    timeEventsList?.length > 1) ||
+                    (windowWidth <= 700 &&
+                      timeEventsList != undefined &&
+                      timeEventsList?.length > 0)) && (
                     <button
                       className={styles.btn__more}
                       onClick={() => {
@@ -401,7 +419,19 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                     >
                       {expanded === index ? 'View less' : 'View all'}
                     </button>
-                  )}
+                  )} */}
+                  {timeEventsList != undefined &&
+                    (timeEventsList.length > 1 ||
+                      (windowWidth <= 700 && timeEventsList.length > 0)) && (
+                      <button
+                        className={styles.btn__more}
+                        onClick={() => {
+                          toggleExpand(index);
+                        }}
+                      >
+                        {expanded === index ? 'View less' : 'View all'}
+                      </button>
+                    )}
                 </div>
               </div>
             </div>
@@ -453,7 +483,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         }
       };
 
-      const allEventsList: any = events
+      const allEventsList = events
         ?.filter((datas) => {
           if (datas.startDate == dayjs(date).format('YYYY-MM-DD')) return datas;
         })
@@ -481,7 +511,11 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         <div
           key={index}
           className={
-            className + ' ' + (allEventsList?.length > 0 && styles.day__events)
+            className +
+            ' ' +
+            (allEventsList != undefined &&
+              allEventsList?.length > 0 &&
+              styles.day__events)
           }
           data-testid="day"
         >
@@ -493,13 +527,14 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
               className={
                 expanded === index
                   ? styles.expand_event_list
-                  : styles.event_list
+                  : allEventsList != undefined && allEventsList?.length >= 2
+                    ? styles.event_list
+                    : ''
               }
             >
               {expanded === index ? allEventsList : allEventsList?.slice(0, 2)}
             </div>
-            {(allEventsList?.length > 2 ||
-              (windowWidth <= 700 && allEventsList?.length > 0)) && (
+            {allEventsList != undefined && allEventsList?.length >= 2 && (
               <button
                 className={styles.btn__more}
                 onClick={() => {

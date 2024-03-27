@@ -189,7 +189,7 @@
   border: 0px;
   font-size: 14px;
   background-color: initial;
-  color: #ffffff;
+  color: #31bb6b;
   font-weight: 600;
   transition: all 200ms;
   position: relative;
@@ -231,10 +231,11 @@
   flex-grow: 1;
 }
 
+.event_list {
+  display: none;
+}
+
 @media only screen and (max-width: 700px) {
-  .event_list {
-    display: none;
-  }
   .expand_list_container {
     width: 150px;
     padding: 4px 4px 0px 4px;
