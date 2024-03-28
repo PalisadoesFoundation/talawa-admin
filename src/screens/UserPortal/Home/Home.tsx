@@ -39,6 +39,16 @@ interface InterfaceAdContent {
   startDate: string;
 }
 
+type AdvertisementsConnection = {
+  edges: {
+    node: InterfaceAdContent;
+  }[];
+};
+
+interface InterfaceAdConnection {
+  advertisementsConnection?: AdvertisementsConnection;
+}
+
 type InterfacePostComments = {
   creator: {
     _id: string;
@@ -86,7 +96,7 @@ export default function home(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'home' });
   const { getItem } = useLocalStorage();
   const [posts, setPosts] = useState([]);
-  const [adContent, setAdContent] = useState<InterfaceAdContent[]>([]);
+  const [adContent, setAdContent] = useState<InterfaceAdConnection>({});
   const [filteredAd, setFilteredAd] = useState<InterfaceAdContent[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
   const { orgId } = useParams();
@@ -131,15 +141,31 @@ export default function home(): JSX.Element {
   }, [adContent]);
 
   const filterAdContent = (
-    adCont: InterfaceAdContent[],
+    data: {
+      advertisementsConnection?: {
+        edges: {
+          node: InterfaceAdContent;
+        }[];
+      };
+    },
     currentOrgId: string,
     currentDate: Date = new Date(),
   ): InterfaceAdContent[] => {
-    return adCont.filter(
-      (ad: InterfaceAdContent) =>
-        ad.organization._id === currentOrgId &&
-        new Date(ad.endDate) > currentDate,
-    );
+    const { advertisementsConnection } = data;
+
+    if (advertisementsConnection && advertisementsConnection.edges) {
+      const { edges } = advertisementsConnection;
+
+      return edges
+        .map((edge) => edge.node)
+        .filter(
+          (ad: InterfaceAdContent) =>
+            ad.organization._id === currentOrgId &&
+            new Date(ad.endDate) > currentDate,
+        );
+    }
+
+    return [];
   };
 
   const handlePostButtonClick = (): void => {
