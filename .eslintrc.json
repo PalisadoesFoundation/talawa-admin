@@ -12,6 +12,7 @@
     "plugin:jest/recommended",
     "plugin:prettier/recommended",
     "plugin:@typescript-eslint/recommended",
+    "eslint-config-prettier",
     "prettier"
   ],
   "globals": {
@@ -33,7 +34,8 @@
     "@typescript-eslint",
     "jest",
     "import",
-    "eslint-plugin-tsdoc"
+    "eslint-plugin-tsdoc",
+    "prettier"
   ],
   "rules": {
     "react/destructuring-assignment": "error",
@@ -110,7 +112,11 @@
         "leadingUnderscore": "require"
       },
 
-      { "selector": "variable", "modifiers": ["exported"], "format": null }
+      {
+        "selector": "variable",
+        "modifiers": ["exported"],
+        "format": null
+      }
     ],
     // Ensures that components are always written in PascalCase
     "react/jsx-pascal-case": [
@@ -125,22 +131,13 @@
     // All tests must need not have an assertion
     "jest/expect-expect": 0,
 
-    "react/jsx-indent": ["error", 2],
-    "react/jsx-tag-spacing": [
-      "warn",
-      {
-        "afterOpening": "never",
-        "beforeClosing": "never",
-        "beforeSelfClosing": "always"
-      }
-    ],
-
     // Enforce Strictly functional components
     "react/no-unstable-nested-components": ["error", { "allowAsProps": true }],
     "react/function-component-definition": [
       0,
       { "namedComponents": "function-declaration" }
-    ]
+    ],
+    "prettier/prettier": "error"
   },
 
   // Let ESLint use the react version in the package.json
