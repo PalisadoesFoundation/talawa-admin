@@ -38,6 +38,9 @@ beforeEach(() => {
     'UserImage',
     'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
   );
+  setItem('SuperAdmin', false);
+  setItem('AdminFor', []);
+  setItem('id', '123');
 });
 
 afterEach(() => {
@@ -60,8 +63,33 @@ describe('ProfileDropdown Component', () => {
     );
 
     expect(screen.getByTestId('display-name')).toBeInTheDocument();
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
+    expect(screen.getByText('User')).toBeInTheDocument();
     expect(screen.getByTestId('display-type')).toBeInTheDocument();
     expect(screen.getByAltText('profile picture')).toBeInTheDocument();
+  });
+
+  test('renders Super admin', () => {
+    setItem('SuperAdmin', true);
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <BrowserRouter>
+          <ProfileDropdown />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    expect(screen.getByText('SuperAdmin')).toBeInTheDocument();
+  });
+  test('renders Admin', () => {
+    setItem('AdminFor', ['123']);
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <BrowserRouter>
+          <ProfileDropdown />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    expect(screen.getByText('Admin')).toBeInTheDocument();
   });
 
   test('logout functionality clears local storage and redirects to home', async () => {
@@ -93,7 +121,7 @@ describe('ProfileDropdown Component', () => {
       });
 
       userEvent.click(screen.getByTestId('profileBtn'));
-      expect(global.window.location.pathname).toBe('/member/undefined');
+      expect(global.window.location.pathname).toBe('/member/123');
     });
   });
 });
