@@ -94,7 +94,6 @@ export const UPDATE_USER_MUTATION = gql`
     $empStatus: EmploymentStatus
     $maritalStatus: MaritalStatus
     $address: String
-    $city: String
     $state: String
     $country: String
     $image: String
@@ -110,12 +109,7 @@ export const UPDATE_USER_MUTATION = gql`
         educationGrade: $grade
         employmentStatus: $empStatus
         maritalStatus: $maritalStatus
-        address: {
-          line1: $address
-          state: $state
-          countryCode: $country
-          city: $city
-        }
+        address: { line1: $address, state: $state, countryCode: $country }
       }
       file: $image
     ) {
@@ -139,7 +133,9 @@ export const UPDATE_USER_PASSWORD_MUTATION = gql`
         confirmNewPassword: $confirmNewPassword
       }
     ) {
-      _id
+      user {
+        _id
+      }
     }
   }
 `;
@@ -253,7 +249,9 @@ export const CREATE_ORGANIZATION_MUTATION = gql`
 export const DELETE_ORGANIZATION_MUTATION = gql`
   mutation RemoveOrganization($id: ID!) {
     removeOrganization(id: $id) {
-      _id
+      user {
+        _id
+      }
     }
   }
 `;
@@ -276,8 +274,8 @@ export const CREATE_EVENT_MUTATION = gql`
     $location: String
     $frequency: Frequency
     $weekDays: [WeekDays]
-    $interval: PositiveInt
     $count: PositiveInt
+    $interval: PositiveInt
     $weekDayOccurenceInMonth: Int
   ) {
     createEvent(
