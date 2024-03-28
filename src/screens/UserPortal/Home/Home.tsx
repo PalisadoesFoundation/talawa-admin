@@ -132,7 +132,7 @@ export default function home(): JSX.Element {
 
   useEffect(() => {
     if (promotedPostsData) {
-      setAdContent(promotedPostsData.advertisementsConnection);
+      setAdContent(promotedPostsData);
     }
   }, [promotedPostsData]);
 
