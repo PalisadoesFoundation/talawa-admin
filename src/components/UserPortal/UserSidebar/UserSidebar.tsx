@@ -83,7 +83,7 @@ function userSidebar(): JSX.Element {
               {organizations.length ? (
                 organizations.map(
                   (organization: InterfaceOrganization, index: number) => {
-                    const organizationUrl = `/user/organization/id=${organization._id}`;
+                    const organizationUrl = `/user/organization/${organization._id}`;
 
                     return (
                       <ListGroup.Item
