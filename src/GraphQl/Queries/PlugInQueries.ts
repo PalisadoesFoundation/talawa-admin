@@ -27,15 +27,19 @@ export const PLUGIN_GET = gql`
 export const ADVERTISEMENTS_GET = gql`
   query getAdvertisements {
     advertisementsConnection {
-      _id
-      name
-      type
-      organization {
-        _id
+      edges {
+        node {
+          _id
+          name
+          type
+          organization {
+            _id
+          }
+          mediaUrl
+          endDate
+          startDate
+        }
       }
-      mediaUrl
-      endDate
-      startDate
     }
   }
 `;
