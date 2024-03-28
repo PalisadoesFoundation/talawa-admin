@@ -793,6 +793,7 @@
     "allOrganizations": "All Organizations",
     "joinedOrganizations": "Joined Organizations",
     "createdOrganizations": "Created Organizations",
+    "selectOrganization": "Select an organization",
     "search": "Search users",
     "nothingToShow": "Nothing to show here.",
     "organizations": "Organizations",
