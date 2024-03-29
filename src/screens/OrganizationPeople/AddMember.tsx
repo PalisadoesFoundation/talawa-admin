@@ -361,8 +361,8 @@ function AddMember(): JSX.Element {
                   <TableBody>
                     {allUsersData &&
                       allUsersData.users.length > 0 &&
-                      allUsersData.users.map((user: any, index: number) => (
-                        <StyledTableRow data-testid="user" key={user._id}>
+                      allUsersData.users.map((userDetails: any, index: number) => (
+                        <StyledTableRow data-testid="user" key={userDetails.user._id}>
                           <StyledTableCell component="th" scope="row">
                             {index + 1}
                           </StyledTableCell>
@@ -373,13 +373,13 @@ function AddMember(): JSX.Element {
                                 pathname: `/member/id=${currentUrl}`,
                               }}
                             >
-                              {user.firstName + ' ' + user.lastName}
+                              {userDetails.user.firstName + ' ' + userDetails.user.lastName}
                             </Link>
                           </StyledTableCell>
                           <StyledTableCell align="center">
                             <Button
                               onClick={() => {
-                                createMember(user._id);
+                                createMember(userDetails.user._id);
                               }}
                               data-testid="addBtn"
                             >
