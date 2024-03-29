@@ -40,6 +40,7 @@ export const CREATE_FUND_MUTATION = gql`
  *
  * @param id - The ID of the fund being updated.
  * @param name - The name of the fund.
+ * @param refrenceNumber - The reference number of the fund.
  * @param taxDeductible - Whether the fund is tax deductible.
  * @param isArchived - Whether the fund is archived.
  * @param isDefault - Whether the fund is the default.
@@ -49,6 +50,7 @@ export const UPDATE_FUND_MUTATION = gql`
   mutation UpdateFund(
     $id: ID!
     $name: String
+    $refrenceNumber: String
     $taxDeductible: Boolean
     $isArchived: Boolean
     $isDefault: Boolean
@@ -57,6 +59,7 @@ export const UPDATE_FUND_MUTATION = gql`
       id: $id
       data: {
         name: $name
+        refrenceNumber: $refrenceNumber
         taxDeductible: $taxDeductible
         isArchived: $isArchived
         isDefault: $isDefault

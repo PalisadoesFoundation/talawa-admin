@@ -174,7 +174,7 @@ export interface InterfaceQueryOrganizationPostListItem {
   };
 }
 export interface InterfaceQueryOrganizationFunds {
-  funds: {
+  fundsByOrganization: {
     _id: string;
     name: string;
     refrenceNumber: string;
@@ -182,6 +182,8 @@ export interface InterfaceQueryOrganizationFunds {
     isArchived: boolean;
     isDefault: boolean;
     createdAt: string;
+    organizationId: string;
+    creator: { _id: string; firstName: string; lastName: string };
   }[];
 }
 export interface InterfaceQueryOrganizationFundCampaigns {
@@ -193,6 +195,21 @@ export interface InterfaceQueryOrganizationFundCampaigns {
     endDate: Date;
     createdAt: string;
     currency: string;
+  }[];
+}
+export interface InterfaceQueryFundCampaignsPledges {
+  startDate: Date;
+  endDate: Date;
+  pledges: {
+    _id: string;
+    amount: number;
+    currency: string;
+    endDate: string;
+    startDate: string;
+    users: {
+      _id: string;
+      firstName: string;
+    }[];
   }[];
 }
 export interface InterfaceFundInfo {
@@ -212,6 +229,17 @@ export interface InterfaceCampaignInfo {
   endDate: Date;
   createdAt: string;
   currency: string;
+}
+export interface InterfacePledgeInfo {
+  _id: string;
+  amount: number;
+  currency: string;
+  endDate: string;
+  startDate: string;
+  users: {
+    _id: string;
+    firstName: string;
+  }[];
 }
 export interface InterfaceQueryOrganizationEventListItem {
   _id: string;
@@ -288,6 +316,14 @@ export interface InterfaceQueryUserListItem {
   };
 }
 
+export interface InterfaceQueryVenueListItem {
+  _id: string;
+  name: string;
+  description: string;
+  image: string | null;
+  capacity: string;
+}
+
 export interface InterfaceQueryRequestListItem {
   _id: string;
   firstName: string;
@@ -322,8 +358,8 @@ export interface InterfacePostCard {
     email: string;
     id: string;
   };
-  image: string;
-  video: string;
+  image: string | null;
+  video: string | null;
   text: string;
   title: string;
   likeCount: number;
@@ -353,4 +389,26 @@ export interface InterfaceCreateCampaign {
   campaignGoal: number;
   campaignStartDate: Date;
   campaignEndDate: Date;
+}
+
+export interface InterfaceCreatePledge {
+  pledgeAmount: number;
+  pledgeCurrency: string;
+  pledgeStartDate: Date;
+  pledgeEndDate: Date;
+}
+
+export interface InterfaceQueryMembershipRequestsListItem {
+  organizations: {
+    _id: string;
+    membershipRequests: {
+      _id: string;
+      user: {
+        _id: string;
+        firstName: string;
+        lastName: string;
+        email: string;
+      };
+    }[];
+  }[];
 }

@@ -244,7 +244,6 @@ const Users = (): JSX.Element => {
     '#',
     t('name'),
     t('email'),
-    t('roles_userType'),
     t('joined_organizations'),
     t('blocked_organizations'),
   ];

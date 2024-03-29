@@ -30,43 +30,91 @@ const EventDashboard = (): JSX.Element => {
     return <Loader />;
   }
 
+  function formatTime(timeString: string): string {
+    const [hours, minutes] = timeString.split(':').slice(0, 2);
+    return `${hours}:${minutes}`;
+  }
+
+  function formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const monthIndex = date.getMonth();
+    const year = date.getFullYear();
+
+    const suffixes = ['th', 'st', 'nd', 'rd'];
+    const suffix = suffixes[day % 10] || suffixes[0];
+
+    const monthNames = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+
+    const formattedDate = `${day}${suffix} ${monthNames[monthIndex]} ${year}`;
+    return formattedDate;
+  }
+
   return (
     <LeftDrawerEventWrapper
       event={eventData.event}
       key={`${eventData?.event._id || 'loading'}EventDashboard`}
     >
-      <Row>
-        <Col>
-          <div className={styles.sidebar}>
-            <div className={styles.sidebarsticky}>
-              {/* Side Bar - Static Information about the Event */}
-              <h4 className={styles.titlename}>{eventData.event.title}</h4>
-              <p className={styles.description}>
-                {eventData.event.description}
-              </p>
-              <p className={styles.toporgloc}>
-                <b>Location:</b> {eventData.event.location}
-              </p>
-              <p className={styles.toporgloc}>
-                <b>Start:</b> {eventData.event.startDate}{' '}
-                {eventData.event.startTime !== null
-                  ? `- ${eventData.event.startTime}`
-                  : ``}
-              </p>
-              <p className={styles.toporgloc}>
-                <b>End:</b> {eventData.event.endDate}{' '}
-                {eventData.event.endTime !== null
-                  ? `- ${eventData.event.endTime}`
-                  : ``}
-              </p>
-              <p className={styles.toporgloc}>
-                <b>Registrants:</b> {eventData.event.attendees.length}
-              </p>
-              <br />
+      <div className={styles.content}>
+        <Row>
+          <Col>
+            <div className={styles.eventContainer}>
+              <div className={styles.eventDetailsBox}>
+                {/* Side Bar - Static Information about the Event */}
+                <div className={styles.time}>
+                  <p>
+                    <b className={styles.startTime}>
+                      {eventData.event.startTime !== null
+                        ? `${formatTime(eventData.event.startTime)}`
+                        : ``}
+                    </b>{' '}
+                    <span className={styles.startDate}>
+                      {formatDate(eventData.event.startDate)}{' '}
+                    </span>
+                  </p>
+                  <p className={styles.to}>TO</p>
+                  <p>
+                    <b className={styles.endTime}>
+                      {' '}
+                      {eventData.event.endTime !== null
+                        ? `${formatTime(eventData.event.endTime)}`
+                        : ``}
+                    </b>{' '}
+                    <span className={styles.endDate}>
+                      {formatDate(eventData.event.endDate)}{' '}
+                    </span>
+                  </p>
+                </div>
+                <h4 className={styles.titlename}>{eventData.event.title}</h4>
+                <p className={styles.description}>
+                  {eventData.event.description}
+                </p>
+                <p className={styles.toporgloc}>
+                  <b>Location:</b> <span>{eventData.event.location}</span>
+                </p>
+                <p className={styles.toporgloc}>
+                  <b>Registrants:</b>{' '}
+                  <span>{eventData.event.attendees.length}</span>
+                </p>
+                <br />
+              </div>
             </div>
-          </div>
-        </Col>
-      </Row>
+          </Col>
+        </Row>
+      </div>
     </LeftDrawerEventWrapper>
   );
 };

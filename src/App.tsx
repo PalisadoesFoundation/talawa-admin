@@ -20,7 +20,11 @@ import OrganizaitionFundCampiagn from 'screens/OrganizationFundCampaign/Organiza
 import OrganizationFunds from 'screens/OrganizationFunds/OrganizationFunds';
 import OrganizationPeople from 'screens/OrganizationPeople/OrganizationPeople';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
+import Requests from 'screens/Requests/Requests';
 import Users from 'screens/Users/Users';
+import CommunityProfile from 'screens/CommunityProfile/CommunityProfile';
+import OrganizationVenues from 'screens/OrganizationVenues/OrganizationVenues';
+
 import React, { useEffect } from 'react';
 // User Portal Components
 import Donate from 'screens/UserPortal/Donate/Donate';
@@ -35,6 +39,7 @@ import { useQuery } from '@apollo/client';
 import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
 import Advertisements from 'components/Advertisements/Advertisements';
 import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/SecuredRouteForUser';
+import FundCampaignPledge from 'screens/FundCampaignPledge/FundCampaignPledge';
 
 import useLocalStorage from 'utils/useLocalstorage';
 
@@ -102,7 +107,9 @@ function app(): JSX.Element {
           <Route element={<SuperAdminScreen />}>
             <Route path="/orglist" element={<OrgList />} />
             <Route path="/member" element={<MemberDetail />} />
+            <Route path="/requests" element={<Requests />} />
             <Route path="/users" element={<Users />} />
+            <Route path="/communityProfile" element={<CommunityProfile />} />
           </Route>
           <Route element={<OrganizationScreen />}>
             <Route path="/orgdash/:orgId" element={<OrganizationDashboard />} />
@@ -118,12 +125,17 @@ function app(): JSX.Element {
               path="/orgfundcampaign/:orgId/:fundId"
               element={<OrganizaitionFundCampiagn />}
             />
+            <Route
+              path="/fundCampaignPledge/:orgId/:fundCampaignId"
+              element={<FundCampaignPledge />}
+            />
             <Route path="/orgcontribution" element={<OrgContribution />} />
             <Route path="/orgpost/:orgId" element={<OrgPost />} />
             <Route path="/orgsetting/:orgId" element={<OrgSettings />} />
             <Route path="/orgstore/:orgId" element={<AddOnStore />} />
             <Route path="/orgads/:orgId" element={<Advertisements />} />
             <Route path="/blockuser/:orgId" element={<BlockUser />} />
+            <Route path="/orgvenues/:orgId" element={<OrganizationVenues />} />
             {extraRoutes}
           </Route>
         </Route>

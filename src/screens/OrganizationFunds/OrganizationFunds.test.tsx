@@ -1,3 +1,4 @@
+import React from 'react';
 import { MockedProvider } from '@apollo/client/testing';
 import {
   act,
@@ -18,16 +19,12 @@ import i18nForTest from 'utils/i18nForTest';
 import OrganizationFunds from './OrganizationFunds';
 import {
   MOCKS,
-  MOCKS_ARCHIVED_FUND,
-  MOCKS_ERROR_ARCHIVED_FUND,
   MOCKS_ERROR_CREATE_FUND,
   MOCKS_ERROR_ORGANIZATIONS_FUNDS,
   MOCKS_ERROR_REMOVE_FUND,
-  MOCKS_ERROR_UNARCHIVED_FUND,
   MOCKS_ERROR_UPDATE_FUND,
-  MOCKS_UNARCHIVED_FUND,
+  NO_FUNDS,
 } from './OrganizationFundsMocks';
-import React from 'react';
 const mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -51,10 +48,7 @@ const link2 = new StaticMockLink(MOCKS_ERROR_ORGANIZATIONS_FUNDS, true);
 const link3 = new StaticMockLink(MOCKS_ERROR_CREATE_FUND, true);
 const link4 = new StaticMockLink(MOCKS_ERROR_UPDATE_FUND, true);
 const link5 = new StaticMockLink(MOCKS_ERROR_REMOVE_FUND, true);
-const link6 = new StaticMockLink(MOCKS_ARCHIVED_FUND, true);
-const link7 = new StaticMockLink(MOCKS_ERROR_ARCHIVED_FUND, true);
-const link8 = new StaticMockLink(MOCKS_UNARCHIVED_FUND, true);
-const link9 = new StaticMockLink(MOCKS_ERROR_UNARCHIVED_FUND, true);
+const link6 = new StaticMockLink(NO_FUNDS, true);
 
 const translations = JSON.parse(
   JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.funds),
@@ -129,37 +123,16 @@ describe('Testing OrganizationFunds screen', () => {
     );
     await wait();
     await waitFor(() => {
-      expect(screen.getByTestId('fundtype')).toBeInTheDocument();
+      expect(screen.getAllByTestId('fundtype')[0]).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('fundtype'));
     await waitFor(() => {
-      expect(screen.getByTestId('Archived')).toBeInTheDocument();
-    });
-    userEvent.click(screen.getByTestId('Archived'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('fundtype')).toHaveTextContent(
-        translations.archived,
-      );
-    });
-
-    await waitFor(() => {
-      expect(screen.getByTestId('fundtype')).toBeInTheDocument();
-    });
-
-    userEvent.click(screen.getByTestId('fundtype'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('Non-Archived')).toBeInTheDocument();
-    });
-
-    userEvent.click(screen.getByTestId('Non-Archived'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('fundtype')).toHaveTextContent(
+      expect(screen.getAllByTestId('fundtype')[0]).toHaveTextContent(
         translations.nonArchive,
       );
     });
+    expect(screen.getAllByTestId('fundtype')[1]).toHaveTextContent(
+      translations.archived,
+    );
   });
   it("opens and closes the 'Create Fund' modal", async () => {
     render(
@@ -183,10 +156,29 @@ describe('Testing OrganizationFunds screen', () => {
         screen.findByTestId('createFundModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
+    userEvent.click(screen.getByTestId('setTaxDeductibleSwitch'));
+    userEvent.click(screen.getByTestId('setDefaultSwitch'));
     userEvent.click(screen.getByTestId('createFundModalCloseBtn'));
     await waitForElementToBeRemoved(() =>
       screen.queryByTestId('createFundModalCloseBtn'),
     );
+  });
+  it('noFunds to be in the document', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link6}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              {<OrganizationFunds />}
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+    await wait();
+    await waitFor(() => {
+      expect(screen.getByText(translations.noFundsFound)).toBeInTheDocument();
+    });
   });
   it('creates a new fund', async () => {
     render(
@@ -218,10 +210,48 @@ describe('Testing OrganizationFunds screen', () => {
       screen.getByPlaceholderText(translations.enterfundId),
       formData.fundRef,
     );
+    userEvent.click(screen.getByTestId('setTaxDeductibleSwitch'));
+    userEvent.click(screen.getByTestId('setDefaultSwitch'));
+    userEvent.click(screen.getByTestId('setTaxDeductibleSwitch'));
+    userEvent.click(screen.getByTestId('setDefaultSwitch'));
+    await wait();
     userEvent.click(screen.getByTestId('createFundFormSubmitBtn'));
 
     await waitFor(() => {
       expect(toast.success).toBeCalledWith(translations.fundCreated);
+    });
+  });
+  it('updates fund successfully', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link1}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              {<OrganizationFunds />}
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+    await wait();
+    userEvent.click(screen.getAllByTestId('editFundBtn')[0]);
+    await wait();
+    userEvent.clear(screen.getByTestId('fundNameInput'));
+    userEvent.clear(screen.getByTestId('fundIdInput'));
+    userEvent.type(screen.getByTestId('fundNameInput'), 'Test Fund');
+    userEvent.type(screen.getByTestId('fundIdInput'), '1');
+    expect(screen.getByTestId('taxDeductibleSwitch')).toBeInTheDocument();
+    expect(screen.getByTestId('defaultSwitch')).toBeInTheDocument();
+    expect(screen.getByTestId('archivedSwitch')).toBeInTheDocument();
+    expect(screen.getByTestId('updateFormBtn')).toBeInTheDocument();
+    userEvent.click(screen.getByTestId('taxDeductibleSwitch'));
+    userEvent.click(screen.getByTestId('defaultSwitch'));
+    userEvent.click(screen.getByTestId('archivedSwitch'));
+    await wait();
+    userEvent.click(screen.getByTestId('updateFormBtn'));
+    await wait();
+    await waitFor(() => {
+      expect(toast.success).toBeCalledWith(translations.fundUpdated);
     });
   });
   it('toast error on unsuccessful fund creation', async () => {
@@ -260,72 +290,6 @@ describe('Testing OrganizationFunds screen', () => {
       expect(toast.error).toHaveBeenCalled();
     });
   });
-  it("opens and closes the 'Edit Fund' modal", async () => {
-    render(
-      <MockedProvider addTypename={false} link={link1}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              {<OrganizationFunds />}
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
-    await wait();
-    await waitFor(() => {
-      expect(screen.getAllByTestId('editFundBtn')[0]).toBeInTheDocument();
-    });
-    userEvent.click(screen.getAllByTestId('editFundBtn')[0]);
-    await waitFor(() => {
-      return expect(
-        screen.findByTestId('editFundModalCloseBtn'),
-      ).resolves.toBeInTheDocument();
-    });
-    userEvent.click(screen.getByTestId('editFundModalCloseBtn'));
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('editFundModalCloseBtn'),
-    );
-  });
-  it('updates a fund', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link1}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              {<OrganizationFunds />}
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
-    await wait();
-    await waitFor(() => {
-      expect(screen.getAllByTestId('editFundBtn')[0]).toBeInTheDocument();
-    });
-    userEvent.click(screen.getAllByTestId('editFundBtn')[0]);
-    await waitFor(() => {
-      return expect(
-        screen.findByTestId('editFundModalCloseBtn'),
-      ).resolves.toBeInTheDocument();
-    });
-
-    const fundName = screen.getByPlaceholderText(translations.enterfundName);
-    fireEvent.change(fundName, { target: { value: 'Fund 4' } });
-    const taxSwitch = screen.getByTestId('taxDeductibleSwitch');
-    const archiveSwitch = screen.getByTestId('archivedSwitch');
-    const defaultSwitch = screen.getByTestId('defaultSwitch');
-
-    fireEvent.click(taxSwitch);
-    fireEvent.click(archiveSwitch);
-    fireEvent.click(defaultSwitch);
-
-    userEvent.click(screen.getByTestId('editFundFormSubmitBtn'));
-
-    await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.fundUpdated);
-    });
-  });
   it('toast error on unsuccessful fund update', async () => {
     render(
       <MockedProvider addTypename={false} link={link4}>
@@ -352,247 +316,8 @@ describe('Testing OrganizationFunds screen', () => {
       screen.getByPlaceholderText(translations.enterfundName),
       'Test Fund Updated',
     );
-    userEvent.click(screen.getByTestId('editFundFormSubmitBtn'));
+    userEvent.click(screen.getByTestId('updateFormBtn'));
 
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
-    });
-  });
-  it("opens and closes the 'Delete Fund' modal", async () => {
-    render(
-      <MockedProvider addTypename={false} link={link1}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              {<OrganizationFunds />}
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
-    await wait();
-    await waitFor(() => {
-      expect(screen.getAllByTestId('deleteFundBtn')[0]).toBeInTheDocument();
-    });
-    userEvent.click(screen.getAllByTestId('deleteFundBtn')[0]);
-    await waitFor(() => {
-      return expect(
-        screen.findByTestId('fundDeleteModalCloseBtn'),
-      ).resolves.toBeInTheDocument();
-    });
-    userEvent.click(screen.getByTestId('fundDeleteModalCloseBtn'));
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('fundDeleteModalCloseBtn'),
-    );
-  });
-  it('deletes a fund', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link1}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              {<OrganizationFunds />}
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
-    await wait();
-    await waitFor(() => {
-      expect(screen.getAllByTestId('deleteFundBtn')[0]).toBeInTheDocument();
-    });
-    userEvent.click(screen.getAllByTestId('deleteFundBtn')[0]);
-    await waitFor(() => {
-      return expect(
-        screen.findByTestId('fundDeleteModalCloseBtn'),
-      ).resolves.toBeInTheDocument();
-    });
-    userEvent.click(screen.getByTestId('fundDeleteModalDeleteBtn'));
-
-    await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.fundDeleted);
-    });
-  });
-  it('toast error on unsuccessful fund deletion', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link5}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              {<OrganizationFunds />}
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
-    await wait();
-    await waitFor(() => {
-      expect(screen.getAllByTestId('deleteFundBtn')[0]).toBeInTheDocument();
-    });
-    userEvent.click(screen.getAllByTestId('deleteFundBtn')[0]);
-    await waitFor(() => {
-      return expect(
-        screen.findByTestId('fundDeleteModalCloseBtn'),
-      ).resolves.toBeInTheDocument();
-    });
-    userEvent.click(screen.getByTestId('fundDeleteModalDeleteBtn'));
-
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
-    });
-  });
-  it("opens and closes the 'Archive Fund' modal", async () => {
-    render(
-      <MockedProvider addTypename={false} link={link1}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              {<OrganizationFunds />}
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
-    await wait();
-    await waitFor(() => {
-      expect(screen.getAllByTestId('archiveFundBtn')[0]).toBeInTheDocument();
-    });
-    userEvent.click(screen.getAllByTestId('archiveFundBtn')[0]);
-    await waitFor(() => {
-      return expect(
-        screen.findByTestId('fundArchiveModalCloseBtn'),
-      ).resolves.toBeInTheDocument();
-    });
-    userEvent.click(screen.getByTestId('fundArchiveModalCloseBtn'));
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('fundArchiveModalCloseBtn'),
-    );
-  });
-
-  it('archive the fund', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link6}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              {<OrganizationFunds />}
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
-    await wait();
-    await waitFor(() => {
-      expect(screen.getAllByTestId('archiveFundBtn')[0]).toBeInTheDocument();
-    });
-    userEvent.click(screen.getAllByTestId('archiveFundBtn')[0]);
-    await waitFor(() => {
-      return expect(
-        screen.findByTestId('fundArchiveModalCloseBtn'),
-      ).resolves.toBeInTheDocument();
-    });
-    userEvent.click(screen.getByTestId('fundArchiveModalArchiveBtn'));
-    await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.fundArchived);
-    });
-  });
-  it('toast error on unsuccessful fund archive', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link7}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              {<OrganizationFunds />}
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
-    await wait();
-    await waitFor(() => {
-      expect(screen.getAllByTestId('archiveFundBtn')[0]).toBeInTheDocument();
-    });
-    userEvent.click(screen.getAllByTestId('archiveFundBtn')[0]);
-    await waitFor(() => {
-      return expect(
-        screen.findByTestId('fundArchiveModalCloseBtn'),
-      ).resolves.toBeInTheDocument();
-    });
-    userEvent.click(screen.getByTestId('fundArchiveModalArchiveBtn'));
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
-    });
-  });
-  it('unarchives the fund', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link8}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              {<OrganizationFunds />}
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
-    await wait();
-    await waitFor(() => {
-      expect(screen.getByTestId('fundtype')).toBeInTheDocument();
-    });
-    userEvent.click(screen.getByTestId('fundtype'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('Archived')).toBeInTheDocument();
-    });
-
-    userEvent.click(screen.getByTestId('Archived'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('fundtype')).toHaveTextContent(
-        translations.archived,
-      );
-    });
-    await waitFor(() => {
-      expect(screen.getAllByTestId('archiveFundBtn')[0]).toBeInTheDocument();
-    });
-    userEvent.click(screen.getAllByTestId('archiveFundBtn')[0]);
-    await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.fundUnarchived);
-    });
-  });
-  it('toast error on unsuccessful fund unarchive', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link9}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              {<OrganizationFunds />}
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
-    await wait();
-    await waitFor(() => {
-      expect(screen.getByTestId('fundtype')).toBeInTheDocument();
-    });
-    userEvent.click(screen.getByTestId('fundtype'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('Archived')).toBeInTheDocument();
-    });
-
-    userEvent.click(screen.getByTestId('Archived'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('fundtype')).toHaveTextContent(
-        translations.archived,
-      );
-    });
-    await waitFor(() => {
-      expect(screen.getAllByTestId('archiveFundBtn')[0]).toBeInTheDocument();
-    });
-    userEvent.click(screen.getAllByTestId('archiveFundBtn')[0]);
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();
     });
@@ -617,5 +342,66 @@ describe('Testing OrganizationFunds screen', () => {
     await waitFor(() => {
       expect(mockNavigate).toBeCalledWith('/orgfundcampaign/undefined/1');
     });
+  });
+  it('delete fund succesfully', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link1}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              {<OrganizationFunds />}
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+    await wait();
+    userEvent.click(screen.getAllByTestId('editFundBtn')[0]);
+    await wait();
+    userEvent.click(screen.getByTestId('fundDeleteModalDeleteBtn'));
+    await waitFor(() => {
+      expect(toast.success).toBeCalledWith(translations.fundDeleted);
+    });
+  });
+  it('throws error on unsuccessful fund deletion', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link5}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              {<OrganizationFunds />}
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+    await wait();
+    userEvent.click(screen.getAllByTestId('editFundBtn')[0]);
+    await wait();
+    userEvent.click(screen.getByTestId('fundDeleteModalDeleteBtn'));
+    await waitFor(() => {
+      expect(toast.error).toBeCalled();
+    });
+  });
+  it('search funds by name', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link1}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              {<OrganizationFunds />}
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+    await wait();
+    userEvent.click(screen.getAllByTestId('editFundBtn')[0]);
+    await wait();
+    userEvent.click(screen.getByTestId('editFundModalCloseBtn'));
+    await wait();
+    userEvent.type(screen.getByTestId('searchFullName'), 'Funndds');
+    await wait();
+    userEvent.click(screen.getByTestId('searchBtn'));
   });
 });

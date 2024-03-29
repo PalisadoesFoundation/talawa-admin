@@ -7,11 +7,22 @@
   display: flex;
   margin-bottom: 2rem;
   align-items: center;
+  margin: 0px 10px 0px 10px;
+}
+.input {
+  flex: 1;
+  position: relative;
 }
 .calendar__header_month {
   margin: 0.5rem;
   color: #707070;
   font-weight: bold;
+}
+.space {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
 }
 .button {
   color: #707070;
@@ -121,16 +132,64 @@
   margin-left: 20px;
   border: none;
 }
-.selectType {
+.btnsContainer {
+  display: flex;
+  margin: 2.5rem 0 2.5rem 0;
+}
+
+.btnsContainer .btnsBlock {
+  display: flex;
+}
+
+.btnsContainer .btnsBlock button {
+  margin-left: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dropdown {
+  border-color: #31bb6b;
+  background-color: white;
+  color: #31bb6b;
+  box-shadow: 0px 2px 1px rgba(49, 187, 107, 0.5); /* Added blur effect */
+}
+
+.btnsContainer .input {
+  flex: 1;
+  position: relative;
+}
+
+.btnsContainer input {
+  outline: 1px solid var(--bs-gray-400);
+}
+
+.btnsContainer .input button {
+  width: 52px;
+}
+.searchBtn {
+  margin-bottom: 10px;
+}
+
+.inputField {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: white;
+  box-shadow: 0 1px 1px #31bb6b;
+}
+.inputField > button {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+/* .selectType {
   padding: 16px 10px 16px 10px;
   border-radius: 10px;
-  margin: 0px 5px 0px 5px;
-}
+} */
 .btn__more {
   border: 0px;
   font-size: 14px;
   background-color: initial;
-  color: #31bb6b;
+  color: #ffffff;
   font-weight: 600;
   transition: all 200ms;
   position: relative;

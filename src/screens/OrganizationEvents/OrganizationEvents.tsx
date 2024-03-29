@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { Dropdown, Form, OverlayTrigger, Popover } from 'react-bootstrap';
+import { Form, Popover } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
@@ -19,19 +19,26 @@ import { errorHandler } from 'utils/errorHandler';
 import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams, useNavigate } from 'react-router-dom';
-import CustomRecurrenceModal from './CustomRecurrenceModal';
+import EventHeader from 'components/EventCalendar/EventHeader';
+import CustomRecurrenceModal from 'components/RecurrenceOptions/CustomRecurrenceModal';
 import {
   Frequency,
   Days,
   getRecurrenceRuleText,
-  mondayToFriday,
+  getWeekDayOccurenceInMonth,
 } from 'utils/recurrenceUtils';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
+import RecurrenceOptions from 'components/RecurrenceOptions/RecurrenceOptions';
 
 const timeToDayJs = (time: string): Dayjs => {
   const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
   return dayjs(dateTimeString, { format: 'YYYY-MM-DD HH:mm:ss' });
 };
+
+export enum ViewType {
+  DAY = 'Day',
+  MONTH = 'Month View',
+}
 
 function organizationEvents(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -44,10 +51,9 @@ function organizationEvents(): JSX.Element {
   const [createEventmodalisOpen, setCreateEventmodalisOpen] = useState(false);
   const [customRecurrenceModalIsOpen, setCustomRecurrenceModalIsOpen] =
     useState<boolean>(false);
-
   const [startDate, setStartDate] = React.useState<Date>(new Date());
-  const [endDate, setEndDate] = React.useState<Date | null>(null);
-
+  const [endDate, setEndDate] = React.useState<Date | null>(new Date());
+  const [viewType, setViewType] = useState<ViewType>(ViewType.MONTH);
   const [alldaychecked, setAllDayChecked] = React.useState(true);
   const [recurringchecked, setRecurringChecked] = React.useState(false);
 
@@ -58,7 +64,9 @@ function organizationEvents(): JSX.Element {
     useState<InterfaceRecurrenceRule>({
       frequency: Frequency.WEEKLY,
       weekDays: [Days[startDate.getDay()]],
+      interval: 1,
       count: undefined,
+      weekDayOccurenceInMonth: undefined,
     });
 
   const [formState, setFormState] = useState({
@@ -72,11 +80,15 @@ function organizationEvents(): JSX.Element {
   const { orgId: currentUrl } = useParams();
   const navigate = useNavigate();
 
-  const showCreateEventModal = (): void => {
+  const showInviteModal = (): void => {
     setCreateEventmodalisOpen(true);
   };
   const hideCreateEventModal = (): void => {
     setCreateEventmodalisOpen(false);
+  };
+  const handleChangeView = (item: ViewType): void => {
+    /*istanbul ignore next*/
+    setViewType(item);
   };
 
   const hideCustomRecurrenceModal = (): void => {
@@ -106,7 +118,8 @@ function organizationEvents(): JSX.Element {
 
   const [create, { loading: loading2 }] = useMutation(CREATE_EVENT_MUTATION);
 
-  const { frequency, weekDays, count } = recurrenceRuleState;
+  const { frequency, weekDays, interval, count, weekDayOccurenceInMonth } =
+    recurrenceRuleState;
   const recurrenceRuleText = getRecurrenceRuleText(
     recurrenceRuleState,
     startDate,
@@ -142,11 +155,12 @@ function organizationEvents(): JSX.Element {
             startTime: !alldaychecked ? formState.startTime + 'Z' : undefined,
             endTime: !alldaychecked ? formState.endTime + 'Z' : undefined,
             frequency: recurringchecked ? frequency : undefined,
-            weekDays:
-              recurringchecked && frequency === Frequency.WEEKLY
-                ? weekDays
-                : undefined,
-            count,
+            weekDays: recurringchecked ? weekDays : undefined,
+            interval: recurringchecked ? interval : undefined,
+            count: recurringchecked ? count : undefined,
+            weekDayOccurenceInMonth: recurringchecked
+              ? weekDayOccurenceInMonth
+              : undefined,
           },
         });
 
@@ -166,14 +180,19 @@ function organizationEvents(): JSX.Element {
           setRecurrenceRuleState({
             frequency: Frequency.WEEKLY,
             weekDays: [Days[new Date().getDay()]],
+            interval: 1,
             count: undefined,
+            weekDayOccurenceInMonth: undefined,
           });
           setStartDate(new Date());
           setEndDate(null);
         }
-      } catch (error: any) {
+      } catch (error: unknown) {
         /* istanbul ignore next */
-        errorHandler(t, error);
+        if (error instanceof Error) {
+          console.log(error.message);
+          errorHandler(t, error);
+        }
       }
     }
     if (formState.title.trim().length === 0) {
@@ -210,14 +229,11 @@ function organizationEvents(): JSX.Element {
     <>
       <div className={styles.mainpageright}>
         <div className={styles.justifysp}>
-          <Button
-            variant="success"
-            className={styles.addbtn}
-            onClick={showCreateEventModal}
-            data-testid="createEventModalBtn"
-          >
-            <i className="fa fa-plus"></i> {t('addEvent')}
-          </Button>
+          <EventHeader
+            viewType={viewType}
+            handleChangeView={handleChangeView}
+            showInviteModal={showInviteModal}
+          />
         </div>
       </div>
       <EventCalendar
@@ -225,6 +241,7 @@ function organizationEvents(): JSX.Element {
         orgData={orgData}
         userRole={userRole}
         userId={userId}
+        viewType={viewType}
       />
 
       {/* Create Event Modal */}
@@ -302,6 +319,9 @@ function organizationEvents(): JSX.Element {
                       setRecurrenceRuleState({
                         ...recurrenceRuleState,
                         weekDays: [Days[date?.toDate().getDay()]],
+                        weekDayOccurenceInMonth: getWeekDayOccurenceInMonth(
+                          date?.toDate(),
+                        ),
                       });
                     }
                   }}
@@ -328,12 +348,14 @@ function organizationEvents(): JSX.Element {
                   className={styles.datebox}
                   timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
                   value={timeToDayJs(formState.startTime)}
+                  /*istanbul ignore next*/
                   onChange={(time): void => {
                     if (time) {
                       setFormState({
                         ...formState,
                         startTime: time?.format('HH:mm:ss'),
                         endTime:
+                          /*istanbul ignore next*/
                           timeToDayJs(formState.endTime) < time
                             ? /* istanbul ignore next */ time?.format(
                                 'HH:mm:ss',
@@ -350,6 +372,7 @@ function organizationEvents(): JSX.Element {
                   label={t('endTime')}
                   className={styles.datebox}
                   timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
+                  /*istanbul ignore next*/
                   value={timeToDayJs(formState.endTime)}
                   onChange={(time): void => {
                     if (time) {
@@ -416,148 +439,19 @@ function organizationEvents(): JSX.Element {
                 />
               </div>
             </div>
-            {recurringchecked && (
-              <Dropdown drop="up" className="mt-2 d-inline-block w-100">
-                <Dropdown.Toggle
-                  variant="outline-secondary"
-                  className="py-2 border border-secondary-subtle rounded-2"
-                  id="dropdown-basic"
-                  data-testid="recurrenceOptions"
-                >
-                  {recurrenceRuleText.length > 45 ? (
-                    <OverlayTrigger
-                      trigger={['hover', 'focus']}
-                      placement="right"
-                      overlay={popover}
-                    >
-                      <span
-                        className="fw-semibold"
-                        data-testid="recurrenceRuleTextOverlay"
-                      >
-                        {`${recurrenceRuleText.substring(0, 45)}...`}
-                      </span>
-                    </OverlayTrigger>
-                  ) : (
-                    <span className="fw-semibold">{recurrenceRuleText}</span>
-                  )}
-                </Dropdown.Toggle>
 
-                <Dropdown.Menu className="mb-2">
-                  <Dropdown.Item
-                    onClick={() =>
-                      setRecurrenceRuleState({
-                        ...recurrenceRuleState,
-                        frequency: Frequency.DAILY,
-                      })
-                    }
-                    data-testid="dailyRecurrence"
-                  >
-                    <span className="fw-semibold text-secondary">
-                      {getRecurrenceRuleText(
-                        {
-                          ...recurrenceRuleState,
-                          frequency: Frequency.DAILY,
-                        },
-                        startDate,
-                        endDate,
-                      )}
-                    </span>
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    onClick={() =>
-                      setRecurrenceRuleState({
-                        ...recurrenceRuleState,
-                        frequency: Frequency.WEEKLY,
-                        weekDays: [Days[startDate.getDay()]],
-                      })
-                    }
-                    data-testid="weeklyRecurrence"
-                  >
-                    <span className="fw-semibold text-secondary">
-                      {getRecurrenceRuleText(
-                        {
-                          ...recurrenceRuleState,
-                          frequency: Frequency.WEEKLY,
-                          weekDays: [Days[startDate.getDay()]],
-                        },
-                        startDate,
-                        endDate,
-                      )}
-                    </span>
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    onClick={() =>
-                      setRecurrenceRuleState({
-                        ...recurrenceRuleState,
-                        frequency: Frequency.MONTHLY,
-                      })
-                    }
-                    data-testid="monthlyRecurrence"
-                  >
-                    <span className="fw-semibold text-secondary">
-                      {getRecurrenceRuleText(
-                        {
-                          ...recurrenceRuleState,
-                          frequency: Frequency.MONTHLY,
-                        },
-                        startDate,
-                        endDate,
-                      )}
-                    </span>
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    onClick={() =>
-                      setRecurrenceRuleState({
-                        ...recurrenceRuleState,
-                        frequency: Frequency.YEARLY,
-                      })
-                    }
-                    data-testid="yearlyRecurrence"
-                  >
-                    <span className="fw-semibold text-secondary">
-                      {getRecurrenceRuleText(
-                        {
-                          ...recurrenceRuleState,
-                          frequency: Frequency.YEARLY,
-                        },
-                        startDate,
-                        endDate,
-                      )}
-                    </span>
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    onClick={() =>
-                      setRecurrenceRuleState({
-                        ...recurrenceRuleState,
-                        frequency: Frequency.WEEKLY,
-                        weekDays: mondayToFriday,
-                      })
-                    }
-                    data-testid="mondayToFridayRecurrence"
-                  >
-                    <span className="fw-semibold text-secondary">
-                      {getRecurrenceRuleText(
-                        {
-                          ...recurrenceRuleState,
-                          frequency: Frequency.WEEKLY,
-                          weekDays: mondayToFriday,
-                        },
-                        startDate,
-                        endDate,
-                      )}
-                    </span>
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    onClick={() => setCustomRecurrenceModalIsOpen(true)}
-                    data-testid="customRecurrence"
-                  >
-                    <span className="fw-semibold text-body-tertiary">
-                      Custom...
-                    </span>
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
+            {recurringchecked && (
+              <RecurrenceOptions
+                recurrenceRuleState={recurrenceRuleState}
+                recurrenceRuleText={recurrenceRuleText}
+                setRecurrenceRuleState={setRecurrenceRuleState}
+                startDate={startDate}
+                endDate={endDate}
+                setCustomRecurrenceModalIsOpen={setCustomRecurrenceModalIsOpen}
+                popover={popover}
+              />
             )}
+
             <Button
               type="submit"
               className={styles.greenregbtn}
@@ -573,7 +467,9 @@ function organizationEvents(): JSX.Element {
       {/* Custom Recurrence */}
       <CustomRecurrenceModal
         recurrenceRuleState={recurrenceRuleState}
+        recurrenceRuleText={recurrenceRuleText}
         setRecurrenceRuleState={setRecurrenceRuleState}
+        startDate={startDate}
         endDate={endDate}
         setEndDate={setEndDate}
         customRecurrenceModalIsOpen={customRecurrenceModalIsOpen}

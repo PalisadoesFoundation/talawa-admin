@@ -4,6 +4,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { debug } from 'jest-preview';
 import React from 'react';
+import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 
 import {
   DELETE_EVENT_MUTATION,
@@ -12,7 +13,7 @@ import {
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import styles from './EventCalendar.module.css';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 const eventData = [
   {
@@ -28,6 +29,7 @@ const eventData = [
     recurring: false,
     isPublic: true,
     isRegisterable: true,
+    viewType: ViewType.DAY,
   },
   {
     _id: '2',
@@ -113,12 +115,18 @@ describe('Calendar', () => {
   });
 
   it('should render the current month and year', () => {
-    const { getByText } = render(<Calendar eventData={eventData} />);
+    const { getByTestId } = render(<Calendar eventData={eventData} />);
+
+    // Find the element by its data-testid attribute
+    const currentDateElement = getByTestId('current-date');
+
+    // Assert that the text content of the element matches the current month and year
     const currentMonth = new Date().toLocaleString('default', {
       month: 'long',
     });
     const currentYear = new Date().getFullYear();
-    expect(getByText(`${currentMonth} ${currentYear}`)).toBeInTheDocument();
+    const expectedText = `${new Date().getDate()} ${currentMonth} ${currentYear}`;
+    expect(currentDateElement.textContent).toContain(expectedText);
   });
 
   it('should highlight the selected date when clicked', () => {
@@ -132,11 +140,9 @@ describe('Calendar', () => {
     //testing previous month button
     render(
       <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <Calendar eventData={eventData} />
-          </I18nextProvider>
-        </BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <Calendar eventData={eventData} />
+        </I18nextProvider>
       </MockedProvider>,
     );
     const prevButton = screen.getByTestId('prevmonthordate');
@@ -154,18 +160,14 @@ describe('Calendar', () => {
   });
   it('Should show prev and next date on clicking < & > buttons in the day view', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <Calendar eventData={eventData} />
-        </I18nextProvider>
-      </MockedProvider>,
+      <Router>
+        <MockedProvider addTypename={false} link={link}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Calendar eventData={eventData} />
+          </I18nextProvider>
+        </MockedProvider>
+      </Router>,
     );
-    await act(async () => {
-      fireEvent.click(screen.getByText('Month'));
-    });
-    await act(async () => {
-      fireEvent.click(screen.getByText('Day'));
-    });
     //testing previous date button
     const prevButton = screen.getByTestId('prevmonthordate');
     fireEvent.click(prevButton);
@@ -198,35 +200,38 @@ describe('Calendar', () => {
       },
     ];
     render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
+      <Router>
+        <MockedProvider addTypename={false} link={link}>
           <I18nextProvider i18n={i18nForTest}>
-            <Calendar eventData={currentDayEventMock} />
+            <Calendar eventData={currentDayEventMock} userRole={'SUPERADMIN'} />
           </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
+        </MockedProvider>
+        ,
+      </Router>,
     );
   });
   it('Test for superadmin case', () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
+      <Router>
+        <MockedProvider addTypename={false} link={link}>
           <I18nextProvider i18n={i18nForTest}>
             <Calendar eventData={eventData} userRole={'SUPERADMIN'} />
           </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
+        </MockedProvider>
+        ,
+      </Router>,
     );
   });
   it('Today Cell is having correct styles', () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
+      <Router>
+        <MockedProvider addTypename={false} link={link}>
           <I18nextProvider i18n={i18nForTest}>
             <Calendar eventData={eventData} userRole={'SUPERADMIN'} />
           </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
+        </MockedProvider>
+        ,
+      </Router>,
     );
     // const todayDate = new Date().getDate();
     // const todayElement = screen.getByText(todayDate.toString());
@@ -234,13 +239,14 @@ describe('Calendar', () => {
   });
   it('Today button should show today cell', () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
+      <Router>
+        <MockedProvider addTypename={false} link={link}>
           <I18nextProvider i18n={i18nForTest}>
             <Calendar eventData={eventData} userRole={'SUPERADMIN'} />
           </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
+        </MockedProvider>
+        ,
+      </Router>,
     );
     //Changing the month
     const prevButton = screen.getByTestId('prevmonthordate');
@@ -251,20 +257,6 @@ describe('Calendar', () => {
     fireEvent.click(todayButton);
     // const todayCell = screen.getByText(new Date().getDate().toString());
     // expect(todayCell).toHaveClass(styles.day__today);
-  });
-  it('Should open the day view calendar', async () => {
-    await act(async () => {
-      render(<Calendar eventData={eventData} />);
-    });
-    expect(screen.getByText('Month')).toBeInTheDocument();
-    await act(async () => {
-      fireEvent.click(screen.getByText('Month'));
-    });
-    expect(screen.getByText('Day')).toBeInTheDocument();
-    await act(async () => {
-      fireEvent.click(screen.getByText('Day'));
-    });
-    expect(screen.getByText('12 AM')).toBeInTheDocument();
   });
   it('Should expand and contract when clicked on View all and View less button', () => {
     const multipleEventData = [
@@ -313,13 +305,14 @@ describe('Calendar', () => {
     ];
 
     render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
+      <Router>
+        <MockedProvider addTypename={false} link={link}>
           <I18nextProvider i18n={i18nForTest}>
             <Calendar eventData={multipleEventData} />
           </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
+        </MockedProvider>
+        ,
+      </Router>,
     );
     const moreButton = screen.getByText('View all');
     fireEvent.click(moreButton);
@@ -401,23 +394,17 @@ describe('Calendar', () => {
         isRegisterable: true,
       },
     ];
+
     render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
+      <Router>
+        <MockedProvider addTypename={false} link={link}>
           <I18nextProvider i18n={i18nForTest}>
             <Calendar eventData={multipleEventData} />
           </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
+        </MockedProvider>
+      </Router>,
     );
-    expect(screen.getByText('Month')).toBeInTheDocument();
-    await act(async () => {
-      fireEvent.click(screen.getByText('Month'));
-    });
-    expect(screen.getByText('Day')).toBeInTheDocument();
-    await act(async () => {
-      fireEvent.click(screen.getByText('Day'));
-    });
+
     const moreButtons = screen.getAllByText('View all');
     moreButtons.forEach((moreButton) => {
       fireEvent.click(moreButton);
@@ -445,22 +432,15 @@ describe('Calendar', () => {
       },
     ];
     render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
+      <Router>
+        <MockedProvider addTypename={false} link={link}>
           <I18nextProvider i18n={i18nForTest}>
             <Calendar eventData={multipleEventData} />
           </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
+        </MockedProvider>
+        ,
+      </Router>,
     );
-    expect(screen.getByText('Month')).toBeInTheDocument();
-    await act(async () => {
-      fireEvent.click(screen.getByText('Month'));
-    });
-    expect(screen.getByText('Day')).toBeInTheDocument();
-    await act(async () => {
-      fireEvent.click(screen.getByText('Day'));
-    });
     expect(screen.getByText('Event 1')).toBeInTheDocument();
     debug();
   });
@@ -539,20 +519,15 @@ describe('Calendar', () => {
       },
     ];
     render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
+      <Router>
+        <MockedProvider addTypename={false} link={link}>
           <I18nextProvider i18n={i18nForTest}>
             <Calendar eventData={multipleEventData} />
           </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
+        </MockedProvider>
+        ,
+      </Router>,
     );
-    await act(async () => {
-      fireEvent.click(screen.getByText('Month'));
-    });
-    await act(async () => {
-      fireEvent.click(screen.getByText('Day'));
-    });
     await act(async () => {
       window.innerWidth = 500;
       window.dispatchEvent(new Event('resize'));
@@ -560,13 +535,14 @@ describe('Calendar', () => {
   });
   test('Handles window resize', () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
+      <Router>
+        <MockedProvider addTypename={false} link={link}>
           <I18nextProvider i18n={i18nForTest}>
             <Calendar eventData={eventData} />
           </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
+        </MockedProvider>
+        ,
+      </Router>,
     );
 
     act(() => {

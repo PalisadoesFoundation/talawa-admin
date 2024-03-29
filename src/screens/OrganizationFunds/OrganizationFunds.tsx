@@ -1,15 +1,14 @@
 /*eslint-disable*/
 import { useMutation, useQuery } from '@apollo/client';
-import { WarningAmberRounded } from '@mui/icons-material';
+import { Search, WarningAmberRounded } from '@mui/icons-material';
 import {
   CREATE_FUND_MUTATION,
   REMOVE_FUND_MUTATION,
   UPDATE_FUND_MUTATION,
 } from 'GraphQl/Mutations/FundMutation';
-import { ORGANIZATION_FUNDS } from 'GraphQl/Queries/OrganizationQueries';
 import Loader from 'components/Loader/Loader';
-import { useEffect, useState, type ChangeEvent } from 'react';
-import { Button, Col, Dropdown, Row } from 'react-bootstrap';
+import { useState, type ChangeEvent } from 'react';
+import { Button, Col, Dropdown, Form, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -18,11 +17,39 @@ import type {
   InterfaceFundInfo,
   InterfaceQueryOrganizationFunds,
 } from 'utils/interfaces';
-import FundArchiveModal from './FundArchiveModal';
 import FundCreateModal from './FundCreateModal';
-import FundDeleteModal from './FundDeleteModal';
 import FundUpdateModal from './FundUpdateModal';
+import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import styles from './OrganizationFunds.module.css';
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  styled,
+  tableCellClasses,
+} from '@mui/material';
+import dayjs from 'dayjs';
+import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: ['#31bb6b', '!important'],
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(() => ({
+  '&:last-child td, &:last-child th': {
+    border: 0,
+  },
+}));
 
 const organizationFunds = (): JSX.Element => {
   const { t } = useTranslation('translation', {
@@ -35,18 +62,11 @@ const organizationFunds = (): JSX.Element => {
     useState<boolean>(false);
   const [fundUpdateModalIsOpen, setFundUpdateModalIsOpen] =
     useState<boolean>(false);
-  const [fundDeleteModalIsOpen, setFundDeleteModalIsOpen] =
-    useState<boolean>(false);
-  const [fundArchivedModalIsOpen, setFundArchivedModalIsOpen] =
-    useState<boolean>(false);
 
   const [taxDeductible, setTaxDeductible] = useState<boolean>(true);
   const [isArchived, setIsArchived] = useState<boolean>(false);
   const [isDefault, setIsDefault] = useState<boolean>(false);
   const [fund, setFund] = useState<InterfaceFundInfo | null>(null);
-  const [fundType, setFundType] = useState<string>('Non-Archived');
-  const [click, setClick] = useState<boolean>(false);
-  const [initialRender, setInitialRender] = useState(true);
   const [formState, setFormState] = useState<InterfaceCreateFund>({
     fundName: '',
     fundRef: '',
@@ -59,16 +79,21 @@ const organizationFunds = (): JSX.Element => {
     refetch: refetchFunds,
   }: {
     data?: {
-      organizations: InterfaceQueryOrganizationFunds[];
+      fundsByOrganization: InterfaceQueryOrganizationFunds[];
     };
     loading: boolean;
     error?: Error | undefined;
     refetch: any;
-  } = useQuery(ORGANIZATION_FUNDS, {
+  } = useQuery(FUND_LIST, {
     variables: {
-      id: currentUrl,
+      organizationId: currentUrl,
     },
   });
+
+  const [fullName, setFullName] = useState('');
+  const handleSearch = (): void => {
+    refetchFunds({ organizationId: currentUrl, filter: fullName });
+  };
 
   const [createFund] = useMutation(CREATE_FUND_MUTATION);
   const [updateFund] = useMutation(UPDATE_FUND_MUTATION);
@@ -87,13 +112,7 @@ const organizationFunds = (): JSX.Element => {
     setFundUpdateModalIsOpen(!fundUpdateModalIsOpen);
   };
   const toggleDeleteModal = (): void => {
-    setFundDeleteModalIsOpen(!fundDeleteModalIsOpen);
-  };
-  const toggleArchivedModal = (): void => {
-    setFundArchivedModalIsOpen(!fundArchivedModalIsOpen);
-  };
-  const handleFundType = (type: string): void => {
-    setFundType(type);
+    setFundUpdateModalIsOpen(!fundUpdateModalIsOpen);
   };
   const handleEditClick = (fund: InterfaceFundInfo): void => {
     setFormState({
@@ -145,6 +164,9 @@ const organizationFunds = (): JSX.Element => {
       if (formState.fundName != fund?.name) {
         updatedFields.name = formState.fundName;
       }
+      if (formState.fundRef != fund?.refrenceNumber) {
+        updatedFields.refrenceNumber = formState.fundRef;
+      }
       if (taxDeductible != fund?.taxDeductible) {
         updatedFields.taxDeductible = taxDeductible;
       }
@@ -175,26 +197,6 @@ const organizationFunds = (): JSX.Element => {
       }
     }
   };
-  const archiveFundHandler = async (): Promise<void> => {
-    try {
-      await updateFund({
-        variables: {
-          id: fund?._id,
-          isArchived: !fund?.isArchived,
-        },
-      });
-      if (fundType == 'Non-Archived') toggleArchivedModal();
-      refetchFunds();
-      fund?.isArchived
-        ? toast.success(t('fundUnarchived'))
-        : toast.success(t('fundArchived'));
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-        console.log(error.message);
-      }
-    }
-  };
   const deleteFundHandler = async (): Promise<void> => {
     try {
       await deleteFund({
@@ -212,15 +214,6 @@ const organizationFunds = (): JSX.Element => {
       }
     }
   };
-  //it is used to rerender the component to use updated Fund in setState
-  useEffect(() => {
-    //do not execute it on initial render
-    if (!initialRender) {
-      archiveFundHandler();
-    } else {
-      setInitialRender(false);
-    }
-  }, [click]);
 
   const handleClick = (fundId: String) => {
     navigate(`/orgfundcampaign/${currentUrl}/${fundId}`);
@@ -243,193 +236,181 @@ const organizationFunds = (): JSX.Element => {
       </div>
     );
   }
+
   return (
-    <div className={styles.organizationFundContainer}>
-      <Button
-        variant="success"
-        className={styles.createFundButton}
-        onClick={showCreateModal}
-        data-testid="createFundBtn"
-      >
-        <i className={'fa fa-plus me-2'} />
-        {t('createFund')}
-      </Button>
-
-      <div className={`${styles.container}  bg-white rounded-4 my-3`}>
-        <div className="mx-4 pt-4">
-          <Dropdown
-            aria-expanded="false"
-            data-testid="type"
-            className="d-flex mb-0"
-          >
-            <Dropdown.Toggle variant="outline-success" data-testid="fundtype">
-              {fundType == 'Archived' ? 'Archived' : 'Non-Archived'}
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              <Dropdown.Item
-                onClick={(): void => handleFundType('Archived')}
-                data-testid="Archived"
+    <>
+      <Row>
+        <div className={styles.mainpageright}>
+          <div className={styles.btnsContainer}>
+            <div className={styles.input}>
+              <Form.Control
+                type="name"
+                placeholder={t('searchFullName')}
+                autoComplete="off"
+                required
+                className={styles.inputField}
+                value={fullName}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                  setFullName(e.target.value);
+                }}
+                data-testid="searchFullName"
+              />
+              <Button
+                className={`position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center `}
+                onClick={handleSearch}
+                data-testid="searchBtn"
+                style={{ marginBottom: '10px' }}
               >
-                {t('archived')}
-              </Dropdown.Item>
-              <Dropdown.Item
-                onClick={(): void => handleFundType('Non-Archived')}
-                data-testid="Non-Archived"
-              >
-                {t('nonArchive')}
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </div>
-        <div className="mx-1 my-4">
-          <div className="mx-4 shadow-sm rounded-top-4">
-            <Row className="mx-0 border border-light-subtle rounded-top-4 py-3 justify-content-between">
-              <Col xs={7} sm={4} md={3} lg={3} className=" fs-5 fw-bold">
-                <div className="ms-2">{t('fundName')}</div>
-              </Col>
-
-              <Col xs={5} sm={3} lg={2} className="fs-5 fw-bold">
-                <div className="ms-3">{t('fundOptions')}</div>
-              </Col>
-            </Row>
-          </div>
-
-          <div className="mx-4 bg-light-subtle border border-light-subtle border-top-0 rounded-bottom-4 shadow-md">
-            {fundData?.organizations[0].funds
-              ?.filter((fund) =>
-                fundType === 'Archived' ? fund.isArchived : !fund.isArchived,
-              )
-              .map((fundd, index) => (
-                <div key={index}>
-                  <Row
-                    className={`${index === 0 ? 'pt-3' : ''} mb-3 ms-2 justify-content-between `}
+                <Search />
+              </Button>
+            </div>
+            <div className={styles.btnsBlock}>
+              <div className="d-flex justify-space-between">
+                <Dropdown>
+                  <Dropdown.Toggle
+                    variant="success"
+                    id="dropdown-basic"
+                    className={styles.dropdown}
+                    data-testid="filter"
                   >
-                    <Col
-                      sm={4}
-                      xs={7}
-                      md={3}
-                      lg={3}
-                      className={`align-self-center fw-bold ${styles.fundName}`}
-                    >
-                      <div
-                        className="fw-bold cursor-pointer"
-                        data-testid="fundName"
-                        onClick={() => {
-                          handleClick(fundd._id);
-                        }}
-                      >
-                        {fundd.name}
-                      </div>
-                    </Col>
-
-                    <Col xs={5} sm={3} lg={2} className="p-0">
-                      <Button
-                        data-testid="archiveFundBtn"
-                        className="btn btn-sm me-2"
-                        variant="outline-secondary"
-                        onClick={async () => {
-                          setFund(fundd);
-                          if (fundType === 'Non-Archived') {
-                            toggleArchivedModal();
-                          } else {
-                            setClick(!click);
-                          }
-                        }}
-                      >
-                        <i
-                          className={`${fundType == 'Archived' ? 'fa fa-undo' : 'fa fa-archive'}`}
-                        ></i>
-                      </Button>
-
-                      {fundType === 'Non-Archived' ? (
-                        <Button
-                          size="sm"
-                          data-testid="editFundBtn"
-                          onClick={() => handleEditClick(fundd)}
-                          className="me-2"
-                          variant="success"
-                        >
-                          {' '}
-                          <i className="fas fa-edit"></i>
-                        </Button>
-                      ) : null}
-                      <Button
-                        size="sm"
-                        data-testid="deleteFundBtn"
-                        variant="danger"
-                        onClick={() => {
-                          setFund(fundd);
-                          toggleDeleteModal();
-                        }}
-                      >
-                        {' '}
-                        <i className="fa fa-trash"></i>
-                      </Button>
-                    </Col>
-                  </Row>
-
-                  {fundData?.organizations[0]?.funds &&
-                    index !== fundData.organizations[0].funds.length - 1 && (
-                      <hr className="mx-3" />
-                    )}
-                </div>
-              ))}
-
-            {fundData?.organizations[0].funds?.length === 0 && (
-              <div className="lh-lg text-center fw-semibold text-body-tertiary">
-                {t('noFunds')}
+                    <FilterAltOutlinedIcon className={'me-1'} />
+                    {t('filter')}
+                  </Dropdown.Toggle>
+                </Dropdown>
               </div>
-            )}
+              <div>
+                <Button
+                  variant="success"
+                  onClick={showCreateModal}
+                  data-testid="createFundBtn"
+                  className={styles.createFundBtn}
+                >
+                  <i className={'fa fa-plus me-2'} />
+                  {t('createFund')}
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
+      </Row>
+      <div className={styles.mainpageright}>
+        <div className={`${styles.list_box}  bg-white rounded-4 my-3`}>
+          {fundData?.fundsByOrganization &&
+          fundData.fundsByOrganization.length > 0 ? (
+            <div className={styles.list_box} data-testid="orgFunds">
+              <TableContainer component={Paper} sx={{ minWidth: '820px' }}>
+                <Table aria-label="customized table">
+                  <TableHead>
+                    <TableRow>
+                      <StyledTableCell>#</StyledTableCell>
+                      <StyledTableCell align="center">
+                        {t('fundName')}
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        {t('createdBy')}
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        {t('createdOn')}
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        {t('status')}
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        {t('manageFund')}
+                      </StyledTableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {fundData.fundsByOrganization.map(
+                      (fund: any, index: number) => (
+                        <StyledTableRow key={fund._id}>
+                          <StyledTableCell component="th" scope="row">
+                            {index + 1}
+                          </StyledTableCell>
+                          <StyledTableCell
+                            align="center"
+                            data-testid="fundName"
+                            onClick={() => handleClick(fund._id)}
+                          >
+                            {fund.name}
+                          </StyledTableCell>
+                          <StyledTableCell
+                            align="center"
+                            data-testid="fundCreatedBy"
+                          >
+                            {fund.creator.firstName} {fund.creator.lastName}
+                          </StyledTableCell>
+                          <StyledTableCell
+                            align="center"
+                            data-testid="fundCreatedAt"
+                          >
+                            {dayjs(fund.createdAt).format('DD/MM/YYYY')}
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            <Button
+                              variant="outline-success"
+                              disabled={true}
+                              data-testid="fundtype"
+                            >
+                              {fund.isArchived
+                                ? t('archived')
+                                : t('nonArchive')}
+                            </Button>
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            <Button
+                              variant="success"
+                              data-testid="editFundBtn"
+                              onClick={() => handleEditClick(fund)}
+                            >
+                              Manage
+                            </Button>
+                          </StyledTableCell>
+                        </StyledTableRow>
+                      ),
+                    )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </div>
+          ) : (
+            <div>
+              <h6 className="text-center text-danger">{t('noFundsFound')}</h6>
+            </div>
+          )}
+        </div>
+        {/* <FundCreateModal*/}
+        <FundCreateModal
+          fundCreateModalIsOpen={fundCreateModalIsOpen}
+          hideCreateModal={hideCreateModal}
+          formState={formState}
+          setFormState={setFormState}
+          createFundHandler={createFundHandler}
+          taxDeductible={taxDeductible}
+          setTaxDeductible={setTaxDeductible}
+          isDefault={isDefault}
+          setIsDefault={setIsDefault}
+          t={t}
+        />
+
+        {/* <FundUpdateModal*/}
+        <FundUpdateModal
+          fundUpdateModalIsOpen={fundUpdateModalIsOpen}
+          hideUpdateModal={hideUpdateModal}
+          formState={formState}
+          setFormState={setFormState}
+          updateFundHandler={updateFundHandler}
+          taxDeductible={taxDeductible}
+          setTaxDeductible={setTaxDeductible}
+          isArchived={isArchived}
+          deleteFundHandler={deleteFundHandler}
+          setIsArchived={setIsArchived}
+          isDefault={isDefault}
+          setIsDefault={setIsDefault}
+          t={t}
+        />
       </div>
-
-      {/* <FundCreateModal*/}
-      <FundCreateModal
-        fundCreateModalIsOpen={fundCreateModalIsOpen}
-        hideCreateModal={hideCreateModal}
-        formState={formState}
-        setFormState={setFormState}
-        createFundHandler={createFundHandler}
-        taxDeductible={taxDeductible}
-        setTaxDeductible={setTaxDeductible}
-        isDefault={isDefault}
-        setIsDefault={setIsDefault}
-        t={t}
-      />
-
-      {/* <FundUpdateModal*/}
-      <FundUpdateModal
-        fundUpdateModalIsOpen={fundUpdateModalIsOpen}
-        hideUpdateModal={hideUpdateModal}
-        formState={formState}
-        setFormState={setFormState}
-        updateFundHandler={updateFundHandler}
-        taxDeductible={taxDeductible}
-        setTaxDeductible={setTaxDeductible}
-        isArchived={isArchived}
-        setIsArchived={setIsArchived}
-        isDefault={isDefault}
-        setIsDefault={setIsDefault}
-        t={t}
-      />
-
-      {/* <FundDeleteModal*/}
-      <FundDeleteModal
-        fundDeleteModalIsOpen={fundDeleteModalIsOpen}
-        deleteFundHandler={deleteFundHandler}
-        toggleDeleteModal={toggleDeleteModal}
-        t={t}
-      />
-
-      {/* <FundArchiveModal*/}
-      <FundArchiveModal
-        fundArchiveModalIsOpen={fundArchivedModalIsOpen}
-        archiveFundHandler={archiveFundHandler}
-        toggleArchiveModal={toggleArchivedModal}
-        t={t}
-      />
-    </div>
+    </>
   );
 };
 
