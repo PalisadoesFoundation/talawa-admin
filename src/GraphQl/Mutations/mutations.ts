@@ -187,6 +187,7 @@ export const LOGIN_MUTATION = gql`
         adminFor {
           _id
         }
+        isSuperAdmin
       }
       accessToken
       refreshToken
