@@ -10,11 +10,17 @@ import { useMutation } from '@apollo/client';
 const profileDropdown = (): JSX.Element => {
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
   const { getItem } = useLocalStorage();
-  const userType = getItem('UserType');
+  const superAdmin = getItem('SuperAdmin');
+  const adminFor = getItem('AdminFor');
+  const userType = superAdmin
+    ? 'SuperAdmin'
+    : adminFor?.length > 0
+      ? 'Admin'
+      : 'User';
   const firstName = getItem('FirstName');
   const lastName = getItem('LastName');
   const userImage = getItem('UserImage');
-  const { orgId } = useParams();
+  const userID = getItem('id');
   const navigate = useNavigate();
 
   const logout = async (): Promise<void> => {
@@ -61,7 +67,7 @@ const profileDropdown = (): JSX.Element => {
             {displayedName}
           </span>
           <span className={styles.secondaryText} data-testid="display-type">
-            {`${userType}`.toLowerCase()}
+            {`${userType}`}
           </span>
         </div>
       </div>
@@ -77,7 +83,7 @@ const profileDropdown = (): JSX.Element => {
       <Dropdown.Menu>
         <Dropdown.Item
           data-testid="profileBtn"
-          onClick={() => navigate(`/member/${orgId}`)}
+          onClick={() => navigate(`/member/${userID}`)}
           aria-label="View Profile"
         >
           View Profile
