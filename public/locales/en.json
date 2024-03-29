@@ -859,7 +859,9 @@
     "joined": "Joined"
   },
   "donate": {
-    "donateTo": "Donate to",
+    "donations": "Donations",
+    "searchDonations": "Search donations",
+    "donateForThe": "Donate for the",
     "amount": "Amount",
     "yourPreviousDonations": "Your Previous Donations",
     "donate": "Donate",

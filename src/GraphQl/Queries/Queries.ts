@@ -562,6 +562,7 @@ export const ORGANIZATION_DONATION_CONNECTION_LIST = gql`
       amount
       userId
       payPalId
+      updatedAt
     }
   }
 `;
