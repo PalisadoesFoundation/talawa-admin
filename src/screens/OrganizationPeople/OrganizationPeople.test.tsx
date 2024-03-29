@@ -630,7 +630,7 @@ describe('Organization People Page', () => {
         user: {
           __typename: 'User',
           firstName: 'Aditya',
-          lastName: 'Userguytwo',
+          lastName: 'Userguy2',
           image: null,
           _id: '6402030dce8e8406b8f07b0e',
           email: 'adi1@gmail.com',
