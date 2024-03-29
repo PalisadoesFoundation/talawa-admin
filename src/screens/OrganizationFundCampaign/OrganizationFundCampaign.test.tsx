@@ -282,6 +282,7 @@ describe('Testing FundCampaigns Screen', () => {
       screen.queryByTestId('editCampaignCloseBtn'),
     );
   });
+
   it("updates the Campaign's details", async () => {
     render(
       <MockedProvider addTypename={false} link={link1}>
@@ -321,19 +322,145 @@ describe('Testing FundCampaigns Screen', () => {
     const endDateDatePicker = screen.getByLabelText('End Date');
     const startDateDatePicker = screen.getByLabelText('Start Date');
 
+    const endDate =
+      formData.campaignEndDate < formData.campaignStartDate
+        ? formData.campaignStartDate
+        : formData.campaignEndDate;
+    fireEvent.change(endDateDatePicker, {
+      target: { value: endDate },
+    });
+
     fireEvent.change(startDateDatePicker, {
       target: { value: formData.campaignStartDate },
     });
 
-    fireEvent.change(endDateDatePicker, {
-      target: { value: formData.campaignEndDate },
-    });
     userEvent.click(screen.getByTestId('editCampaignSubmitBtn'));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(translations.updatedCampaign);
     });
   });
+
+  it("updates the Campaign's details when date is null", async () => {
+    render(
+      <MockedProvider addTypename={false} link={link1}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <I18nextProvider i18n={i18nForTest}>
+                {<OrganizaitionFundCampiagn />}
+              </I18nextProvider>
+            </LocalizationProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+    await wait();
+    await waitFor(() =>
+      expect(screen.getAllByTestId('editCampaignBtn')[0]).toBeInTheDocument(),
+    );
+    userEvent.click(screen.getAllByTestId('editCampaignBtn')[0]);
+    await waitFor(() => {
+      return expect(
+        screen.findByTestId('editCampaignCloseBtn'),
+      ).resolves.toBeInTheDocument();
+    });
+    const endDateDatePicker = screen.getByLabelText('End Date');
+    const startDateDatePicker = screen.getByLabelText('Start Date');
+
+    fireEvent.change(endDateDatePicker, {
+      target: { value: null },
+    });
+
+    fireEvent.change(startDateDatePicker, {
+      target: { value: null },
+    });
+
+    expect(startDateDatePicker.getAttribute('value')).toBe('');
+    expect(endDateDatePicker.getAttribute('value')).toBe('');
+  });
+
+  it("updates the Campaign's details when endDate is less than  date", async () => {
+    const formData = {
+      campaignName: 'Campaign 1',
+      campaignCurrency: 'USD',
+      campaignGoal: 100,
+      campaignStartDate: '03/10/2024',
+      campaignEndDate: '03/10/2023',
+    };
+    render(
+      <MockedProvider addTypename={false} link={link1}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <I18nextProvider i18n={i18nForTest}>
+                {<OrganizaitionFundCampiagn />}
+              </I18nextProvider>
+            </LocalizationProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+    await wait();
+    await waitFor(() =>
+      expect(screen.getAllByTestId('editCampaignBtn')[0]).toBeInTheDocument(),
+    );
+    userEvent.click(screen.getAllByTestId('editCampaignBtn')[0]);
+    await waitFor(() => {
+      return expect(
+        screen.findByTestId('editCampaignCloseBtn'),
+      ).resolves.toBeInTheDocument();
+    });
+
+    const endDateDatePicker = screen.getByLabelText('End Date');
+    const startDateDatePicker = screen.getByLabelText('Start Date');
+
+    fireEvent.change(endDateDatePicker, {
+      target: { value: formData.campaignEndDate },
+    });
+
+    fireEvent.change(startDateDatePicker, {
+      target: { value: formData.campaignStartDate },
+    });
+  });
+
+  it("doesn't update when fund field has value less than or equal to 0", async () => {
+    render(
+      <MockedProvider addTypename={false} link={link1}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <I18nextProvider i18n={i18nForTest}>
+                {<OrganizaitionFundCampiagn />}
+              </I18nextProvider>
+            </LocalizationProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+    await wait();
+    await waitFor(() =>
+      expect(screen.getAllByTestId('editCampaignBtn')[0]).toBeInTheDocument(),
+    );
+    userEvent.click(screen.getAllByTestId('editCampaignBtn')[0]);
+    await waitFor(() => {
+      return expect(
+        screen.findByTestId('editCampaignCloseBtn'),
+      ).resolves.toBeInTheDocument();
+    });
+    const fundingGoal = screen.getByPlaceholderText(
+      'Enter Funding Goal',
+    ) as HTMLInputElement;
+
+    const initialValue = fundingGoal.value; //Vakue before updating
+
+    fireEvent.change(fundingGoal, {
+      target: { value: 0 },
+    });
+
+    expect(fundingGoal.value).toBe(initialValue); //Retains previous value
+  });
+
   it('toast an error on unsuccessful campaign update', async () => {
     render(
       <MockedProvider addTypename={false} link={link4}>
