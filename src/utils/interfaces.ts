@@ -174,7 +174,7 @@ export interface InterfaceQueryOrganizationPostListItem {
   };
 }
 export interface InterfaceQueryOrganizationFunds {
-  funds: {
+  fundsByOrganization: {
     _id: string;
     name: string;
     refrenceNumber: string;
@@ -182,6 +182,8 @@ export interface InterfaceQueryOrganizationFunds {
     isArchived: boolean;
     isDefault: boolean;
     createdAt: string;
+    organizationId: string;
+    creator: { _id: string; firstName: string; lastName: string };
   }[];
 }
 export interface InterfaceQueryOrganizationFundCampaigns {
@@ -314,6 +316,14 @@ export interface InterfaceQueryUserListItem {
   };
 }
 
+export interface InterfaceQueryVenueListItem {
+  _id: string;
+  name: string;
+  description: string;
+  image: string | null;
+  capacity: string;
+}
+
 export interface InterfaceQueryRequestListItem {
   _id: string;
   firstName: string;
@@ -347,8 +357,8 @@ export interface InterfacePostCard {
     email: string;
     id: string;
   };
-  image: string;
-  video: string;
+  image: string | null;
+  video: string | null;
   text: string;
   title: string;
   likeCount: number;

@@ -22,6 +22,9 @@ import OrganizationPeople from 'screens/OrganizationPeople/OrganizationPeople';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import Requests from 'screens/Requests/Requests';
 import Users from 'screens/Users/Users';
+import CommunityProfile from 'screens/CommunityProfile/CommunityProfile';
+import OrganizationVenues from 'screens/OrganizationVenues/OrganizationVenues';
+
 import React, { useEffect } from 'react';
 // User Portal Components
 import Donate from 'screens/UserPortal/Donate/Donate';
@@ -106,6 +109,7 @@ function app(): JSX.Element {
             <Route path="/member" element={<MemberDetail />} />
             <Route path="/requests" element={<Requests />} />
             <Route path="/users" element={<Users />} />
+            <Route path="/communityProfile" element={<CommunityProfile />} />
           </Route>
           <Route element={<OrganizationScreen />}>
             <Route path="/orgdash/:orgId" element={<OrganizationDashboard />} />
@@ -131,6 +135,7 @@ function app(): JSX.Element {
             <Route path="/orgstore/:orgId" element={<AddOnStore />} />
             <Route path="/orgads/:orgId" element={<Advertisements />} />
             <Route path="/blockuser/:orgId" element={<BlockUser />} />
+            <Route path="/orgvenues/:orgId" element={<OrganizationVenues />} />
             {extraRoutes}
           </Route>
         </Route>

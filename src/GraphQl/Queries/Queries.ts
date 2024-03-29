@@ -204,7 +204,7 @@ export const USER_LIST_REQUEST = gql`
     $lastName_contains: String
     $first: Int
     $skip: Int
-    $userType: String
+    $adminApproved: Boolean
   ) {
     users(
       where: {
@@ -213,15 +213,33 @@ export const USER_LIST_REQUEST = gql`
       }
       skip: $skip
       first: $first
-      userType: $userType
+      adminApproved: $adminApproved
     ) {
-      firstName
-      lastName
-      image
-      _id
-      email
-      userType
-      createdAt
+      user {
+        firstName
+        lastName
+        image
+        _id
+        email
+        createdAt
+      }
+      appUserProfile {
+        _id
+        adminApproved
+        adminFor {
+          _id
+        }
+        isSuperAdmin
+        createdOrganizations {
+          _id
+        }
+        createdEvents {
+          _id
+        }
+        eventAdmin {
+          _id
+        }
+      }
     }
   }
 `;
@@ -427,7 +445,6 @@ export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
         image
         email
         createdAt
-        userType
       }
     }
   }
@@ -461,6 +478,20 @@ export const USER_DETAILS = gql`
         email
         image
         createdAt
+        birthDate
+        educationGrade
+        employmentStatus
+        gender
+        maritalStatus
+        phone {
+          mobile
+        }
+        address {
+          line1
+          countryCode
+          city
+          state
+        }
         registeredEvents {
           _id
         }
@@ -475,6 +506,8 @@ export const USER_DETAILS = gql`
           _id
         }
         isSuperAdmin
+        appLanguageCode
+        pluginCreationAllowed
         createdOrganizations {
           _id
         }
@@ -620,63 +653,99 @@ export const USERS_CONNECTION_LIST = gql`
         lastName_contains: $lastName_contains
       }
     ) {
-      firstName
-      lastName
-      image
+      user {
+        firstName
+        lastName
+        image
+        _id
+        email
+        createdAt
+        organizationsBlockedBy {
+          _id
+          name
+          image
+          address {
+            city
+            countryCode
+            dependentLocality
+            line1
+            line2
+            postalCode
+            sortingCode
+            state
+          }
+          createdAt
+          creator {
+            _id
+            firstName
+            lastName
+            image
+            email
+            createdAt
+          }
+        }
+        joinedOrganizations {
+          _id
+          name
+          image
+          address {
+            city
+            countryCode
+            dependentLocality
+            line1
+            line2
+            postalCode
+            sortingCode
+            state
+          }
+          createdAt
+          creator {
+            _id
+            firstName
+            lastName
+            image
+            email
+            createdAt
+          }
+        }
+      }
+      appUserProfile {
+        _id
+        adminApproved
+        adminFor {
+          _id
+        }
+        isSuperAdmin
+        createdOrganizations {
+          _id
+        }
+        createdEvents {
+          _id
+        }
+        eventAdmin {
+          _id
+        }
+      }
+    }
+  }
+`;
+
+export const GET_COMMUNITY_DATA = gql`
+  query getCommunityData {
+    getCommunityData {
       _id
-      email
-      userType
-      adminFor {
-        _id
-      }
-      createdAt
-      organizationsBlockedBy {
-        _id
-        name
-        image
-        address {
-          city
-          countryCode
-          dependentLocality
-          line1
-          line2
-          postalCode
-          sortingCode
-          state
-        }
-        createdAt
-        creator {
-          _id
-          firstName
-          lastName
-          image
-          email
-          createdAt
-        }
-      }
-      joinedOrganizations {
-        _id
-        name
-        image
-        address {
-          city
-          countryCode
-          dependentLocality
-          line1
-          line2
-          postalCode
-          sortingCode
-          state
-        }
-        createdAt
-        creator {
-          _id
-          firstName
-          lastName
-          image
-          email
-          createdAt
-        }
+      websiteLink
+      name
+      logoUrl
+      socialMediaUrls {
+        facebook
+        gitHub
+        instagram
+        twitter
+        linkedIn
+        youTube
+        reddit
+        slack
       }
     }
   }

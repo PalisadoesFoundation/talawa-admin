@@ -11,10 +11,22 @@ import { useParams } from 'react-router-dom';
 export default function advertisements(): JSX.Element {
   const { data: advertisementsData, loading: loadingAdvertisements } =
     useQuery(ADVERTISEMENTS_GET);
-
+  /* eslint-disable */
   const { orgId: currentOrgId } = useParams();
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   document.title = t('title');
+
+  type Ad = {
+    _id: string;
+    name: string;
+    type: 'BANNER' | 'MENU' | 'POPUP';
+    organization: {
+      _id: string | undefined;
+    };
+    mediaUrl: string;
+    endDate: string; // Assuming it's a string in the format 'yyyy-MM-dd'
+    startDate: string; // Assuming it's a string in the format 'yyyy-MM-dd'
+  };
 
   if (loadingAdvertisements) {
     return (
@@ -36,25 +48,29 @@ export default function advertisements(): JSX.Element {
               className="mb-3"
             >
               <Tab eventKey="activeAds" title={t('activeAds')}>
-                {advertisementsData?.advertisementsConnection
-                  .filter((ad: any) => ad.organization._id == currentOrgId)
-                  .filter((ad: any) => new Date(ad.endDate) > new Date())
-                  .length == 0 ? (
-                  <h4>{t('pMessage')} </h4>
+                {advertisementsData?.advertisementsConnection?.edges
+                  .map((edge: { node: Ad }) => edge.node)
+                  .filter((ad: Ad) => ad.organization._id === currentOrgId)
+                  .filter((ad: Ad) => new Date(ad.endDate) > new Date())
+                  .length === 0 ? (
+                  <h4>{t('pMessage')}</h4>
                 ) : (
-                  advertisementsData?.advertisementsConnection
-                    .filter((ad: any) => ad.organization._id == currentOrgId)
-                    .filter((ad: any) => new Date(ad.endDate) > new Date())
+                  advertisementsData?.advertisementsConnection?.edges
+                    .map((edge: { node: Ad }) => edge.node)
+                    .filter((ad: Ad) => ad.organization._id === currentOrgId)
+                    .filter((ad: Ad) => new Date(ad.endDate) > new Date())
                     .map(
                       (
                         ad: {
                           _id: string;
                           name: string | undefined;
                           type: string | undefined;
-                          organization: any;
+                          organization: {
+                            _id: string;
+                          };
                           mediaUrl: string;
-                          endDate: Date;
-                          startDate: Date;
+                          endDate: string;
+                          startDate: string;
                         },
                         i: React.Key | null | undefined,
                       ): JSX.Element => (
@@ -73,25 +89,29 @@ export default function advertisements(): JSX.Element {
                 )}
               </Tab>
               <Tab eventKey="archievedAds" title={t('archievedAds')}>
-                {advertisementsData?.advertisementsConnection
-                  .filter((ad: any) => ad.organization._id == currentOrgId)
-                  .filter((ad: any) => new Date(ad.endDate) < new Date())
-                  .length == 0 ? (
-                  <h4>{t('pMessage')} </h4>
+                {advertisementsData?.advertisementsConnection?.edges
+                  .map((edge: { node: Ad }) => edge.node)
+                  .filter((ad: Ad) => ad.organization._id === currentOrgId)
+                  .filter((ad: Ad) => new Date(ad.endDate) < new Date())
+                  .length === 0 ? (
+                  <h4>{t('pMessage')}</h4>
                 ) : (
-                  advertisementsData?.advertisementsConnection
-                    .filter((ad: any) => ad.organization._id == currentOrgId)
-                    .filter((ad: any) => new Date(ad.endDate) < new Date())
+                  advertisementsData?.advertisementsConnection?.edges
+                    .map((edge: { node: Ad }) => edge.node)
+                    .filter((ad: Ad) => ad.organization._id === currentOrgId)
+                    .filter((ad: Ad) => new Date(ad.endDate) < new Date())
                     .map(
                       (
                         ad: {
                           _id: string;
                           name: string | undefined;
                           type: string | undefined;
-                          organization: any;
+                          organization: {
+                            _id: string;
+                          };
                           mediaUrl: string;
-                          endDate: Date;
-                          startDate: Date;
+                          endDate: string;
+                          startDate: string;
                         },
                         i: React.Key | null | undefined,
                       ): JSX.Element => (

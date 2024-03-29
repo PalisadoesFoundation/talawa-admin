@@ -12,7 +12,7 @@ import { BrowserRouter } from 'react-router-dom';
 import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 
-import OrganizationEvents from './OrganizationEvents';
+import OrganizationEvents from '../../screens/OrganizationEvents/OrganizationEvents';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import userEvent from '@testing-library/user-event';
@@ -22,7 +22,7 @@ import { createTheme } from '@mui/material';
 import { ThemeProvider } from 'react-bootstrap';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { MOCKS } from './OrganizationEventsMocks';
+import { MOCKS } from '../../screens/OrganizationEvents/OrganizationEventsMocks';
 
 const theme = createTheme({
   palette: {
@@ -273,10 +273,22 @@ describe('Testing the creaction of recurring events through recurrence options',
     userEvent.click(screen.getByTestId('recurrenceOptions'));
 
     await waitFor(() => {
-      expect(screen.getByTestId('monthlyRecurrence')).toBeInTheDocument();
+      expect(
+        screen.getByTestId('monthlyRecurrenceOnThatOccurence'),
+      ).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('monthlyRecurrence'));
+    userEvent.click(screen.getByTestId('monthlyRecurrenceOnThatOccurence'));
+
+    userEvent.click(screen.getByTestId('recurrenceOptions'));
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('monthlyRecurrenceOnLastOccurence'),
+      ).toBeInTheDocument();
+    });
+
+    userEvent.click(screen.getByTestId('monthlyRecurrenceOnLastOccurence'));
 
     userEvent.click(screen.getByTestId('recurrenceOptions'));
 

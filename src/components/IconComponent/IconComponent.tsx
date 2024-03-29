@@ -12,6 +12,7 @@ import { ReactComponent as PeopleIcon } from 'assets/svgs/people.svg';
 import { ReactComponent as PluginsIcon } from 'assets/svgs/plugins.svg';
 import { ReactComponent as PostsIcon } from 'assets/svgs/posts.svg';
 import { ReactComponent as SettingsIcon } from 'assets/svgs/settings.svg';
+import { ReactComponent as VenueIcon } from 'assets/svgs/venues.svg';
 import React from 'react';
 
 export interface InterfaceIconComponent {
@@ -99,6 +100,10 @@ const iconComponent = (props: InterfaceIconComponent): JSX.Element => {
     case 'Funds':
       return (
         <FundsIcon data-testid="Icon-Component-Funds" stroke={props.fill} />
+      );
+    case 'Venues':
+      return (
+        <VenueIcon data-testid="Icon-Component-Venues" stroke={props.fill} />
       );
     default:
       return (
