@@ -133,7 +133,9 @@ export const UPDATE_USER_PASSWORD_MUTATION = gql`
         confirmNewPassword: $confirmNewPassword
       }
     ) {
-      _id
+      user {
+        _id
+      }
     }
   }
 `;
@@ -247,7 +249,9 @@ export const CREATE_ORGANIZATION_MUTATION = gql`
 export const DELETE_ORGANIZATION_MUTATION = gql`
   mutation RemoveOrganization($id: ID!) {
     removeOrganization(id: $id) {
-      _id
+      user {
+        _id
+      }
     }
   }
 `;
@@ -270,7 +274,9 @@ export const CREATE_EVENT_MUTATION = gql`
     $location: String
     $frequency: Frequency
     $weekDays: [WeekDays]
-    $count: Int
+    $count: PositiveInt
+    $interval: PositiveInt
+    $weekDayOccurenceInMonth: Int
   ) {
     createEvent(
       data: {
@@ -290,7 +296,9 @@ export const CREATE_EVENT_MUTATION = gql`
       recurrenceRuleData: {
         frequency: $frequency
         weekDays: $weekDays
+        interval: $interval
         count: $count
+        weekDayOccurenceInMonth: $weekDayOccurenceInMonth
       }
     ) {
       _id
@@ -303,6 +311,50 @@ export const CREATE_EVENT_MUTATION = gql`
 export const DELETE_EVENT_MUTATION = gql`
   mutation RemoveEvent($id: ID!) {
     removeEvent(id: $id) {
+      _id
+    }
+  }
+`;
+
+export const CREATE_VENUE_MUTATION = gql`
+  mutation createVenue(
+    $capacity: Int!
+    $description: String
+    $file: String
+    $name: String!
+    $organizationId: ID!
+  ) {
+    createVenue(
+      data: {
+        capacity: $capacity
+        description: $description
+        file: $file
+        name: $name
+        organizationId: $organizationId
+      }
+    ) {
+      _id
+    }
+  }
+`;
+
+export const UPDATE_VENUE_MUTATION = gql`
+  mutation editVenue(
+    $capacity: Int
+    $description: String
+    $file: String
+    $id: ID!
+    $name: String
+  ) {
+    editVenue(
+      data: {
+        capacity: $capacity
+        description: $description
+        file: $file
+        id: $id
+        name: $name
+      }
+    ) {
       _id
     }
   }
@@ -610,6 +662,18 @@ export const REGISTER_EVENT = gql`
     registerForEvent(id: $eventId) {
       _id
     }
+  }
+`;
+
+export const UPDATE_COMMUNITY = gql`
+  mutation updateCommunity($data: UpdateCommunityInput!) {
+    updateCommunity(data: $data)
+  }
+`;
+
+export const RESET_COMMUNITY = gql`
+  mutation resetCommunity {
+    resetCommunity
   }
 `;
 
