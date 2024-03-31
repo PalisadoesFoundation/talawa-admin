@@ -12,7 +12,7 @@ const profileDropdown = (): JSX.Element => {
   const { getItem } = useLocalStorage();
   const superAdmin = getItem('SuperAdmin');
   const adminFor = getItem('AdminFor');
-  const userType = superAdmin
+  const userRole = superAdmin
     ? 'SuperAdmin'
     : adminFor?.length > 0
       ? 'Admin'
@@ -67,7 +67,7 @@ const profileDropdown = (): JSX.Element => {
             {displayedName}
           </span>
           <span className={styles.secondaryText} data-testid="display-type">
-            {`${userType}`}
+            {`${userRole}`}
           </span>
         </div>
       </div>
