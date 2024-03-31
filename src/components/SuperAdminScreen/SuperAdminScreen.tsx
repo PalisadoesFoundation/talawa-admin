@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router-dom';
 import styles from './SuperAdminScreen.module.css';
-import ProfileDropdown from 'components/ProfileDropdown/profileDropdown';
+import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 
 const superAdminScreen = (): JSX.Element => {
   const location = useLocation();
