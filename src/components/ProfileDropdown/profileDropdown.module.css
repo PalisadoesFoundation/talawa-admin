@@ -18,6 +18,7 @@
   width: 56px;
   height: 56px;
   border-radius: 100%;
+  margin-right: 10px;
 }
 .imageContainer img {
   width: 100%;
