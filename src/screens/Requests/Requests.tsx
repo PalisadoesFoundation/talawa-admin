@@ -28,7 +28,7 @@ const Requests = (): JSX.Element => {
   const [hasMore, setHasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState<string>('');
-  const userType = getItem('SuperAdmin')
+  const userRole = getItem('SuperAdmin')
     ? 'SUPERADMIN'
     : getItem('AdminFor')
       ? 'ADMIN'
@@ -43,8 +43,8 @@ const Requests = (): JSX.Element => {
   }: {
     data: InterfaceQueryMembershipRequestsListItem | undefined;
     loading: boolean;
-    fetchMore: any;
-    refetch: any;
+    fetchMore: any; // eslint-disable-line
+    refetch: any; // eslint-disable-line
     error?: Error | undefined;
   } = useQuery(MEMBERSHIP_REQUEST, {
     variables: {
@@ -100,7 +100,7 @@ const Requests = (): JSX.Element => {
 
   // Send to orgList page if user is not admin
   useEffect(() => {
-    if (userType != 'ADMIN') {
+    if (userRole != 'ADMIN') {
       window.location.assign('/orglist');
     }
   }, []);
@@ -127,9 +127,11 @@ const Requests = (): JSX.Element => {
     });
   };
 
-  const handleSearchByEnter = (e: any): void => {
+  const handleSearchByEnter = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ): void => {
     if (e.key === 'Enter') {
-      const { value } = e.target;
+      const { value } = e.currentTarget;
       handleSearch(value);
     }
   };
@@ -205,7 +207,7 @@ const Requests = (): JSX.Element => {
           <div
             className={styles.input}
             style={{
-              display: userType === 'ADMIN' ? 'block' : 'none',
+              display: userRole === 'ADMIN' ? 'block' : 'none',
             }}
           >
             <Form.Control
