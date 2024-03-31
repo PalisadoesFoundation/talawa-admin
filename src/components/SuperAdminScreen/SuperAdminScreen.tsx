@@ -71,7 +71,10 @@ const superAdminScreen = (): JSX.Element => {
 
 export default superAdminScreen;
 
-const map: any = {
+const map: Record<
+  string,
+  'orgList' | 'requests' | 'users' | 'memberDetail' | 'communityProfile'
+> = {
   orglist: 'orgList',
   requests: 'requests',
   users: 'users',

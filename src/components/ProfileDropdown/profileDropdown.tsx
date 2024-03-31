@@ -1,9 +1,9 @@
 import Avatar from 'components/Avatar/Avatar';
 import React from 'react';
 import { ButtonGroup, Dropdown } from 'react-bootstrap';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from './profileDropdown.module.css';
+import styles from './ProfileDropdown.module.css';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 
