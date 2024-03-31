@@ -12,7 +12,7 @@ import {
 
 import OrgListCard from 'components/OrgListCard/OrgListCard';
 import type { ChangeEvent } from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dropdown, Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -29,7 +29,6 @@ import type {
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from './OrgList.module.css';
 import OrganizationModal from './OrganizationModal';
-import React from 'react';
 
 function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
