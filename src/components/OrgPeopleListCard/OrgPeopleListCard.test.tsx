@@ -38,7 +38,7 @@ async function wait(ms = 100): Promise<void> {
 
 describe('Testing Organization People List Card', () => {
   const props = {
-    key: 123,
+    toggleRemoveModal: () => true,
     id: '1',
   };
   global.alert = jest.fn();
@@ -58,18 +58,17 @@ describe('Testing Organization People List Card', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId(/removeMemberModalBtn/i));
     userEvent.click(screen.getByTestId(/removeMemberBtn/i));
   });
 
-  test('Should render text elements when props value is not passed', async () => {
+  test('Should not render modal when id is undefined', async () => {
     global.confirm = (): boolean => false;
 
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
-            <OrgPeopleListCard key={123} id="1" />
+            <OrgPeopleListCard id={undefined} toggleRemoveModal={() => true} />
           </I18nextProvider>
         </BrowserRouter>
       </MockedProvider>,
@@ -77,7 +76,6 @@ describe('Testing Organization People List Card', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId(/removeMemberModalBtn/i));
-    userEvent.click(screen.getByTestId(/removeMemberBtn/i));
+    expect(window.location.pathname).toEqual('/orglist');
   });
 });
