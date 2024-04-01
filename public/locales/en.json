@@ -571,6 +571,7 @@
   "pageNotFound": {
     "title": "404 Not Found",
     "talawaAdmin": "Talawa Admin",
+    "talawaUser": "Talawa User",
     "404": "404",
     "notFoundMsg": "Oops! The Page you requested was not found!",
     "backToHome": "Back to Home"
@@ -793,6 +794,7 @@
     "allOrganizations": "All Organizations",
     "joinedOrganizations": "Joined Organizations",
     "createdOrganizations": "Created Organizations",
+    "selectOrganization": "Select an organization",
     "search": "Search users",
     "nothingToShow": "Nothing to show here.",
     "organizations": "Organizations",

@@ -197,6 +197,25 @@ export const USER_LIST = gql`
     }
   }
 `;
+export const USER_LIST_FOR_TABLE = gql`
+  query Users($firstName_contains: String, $lastName_contains: String) {
+    users(
+      where: {
+        firstName_contains: $firstName_contains
+        lastName_contains: $lastName_contains
+      }
+    ) {
+      user {
+        _id
+        firstName
+        lastName
+        email
+        image
+        createdAt
+      }
+    }
+  }
+`;
 
 export const USER_LIST_REQUEST = gql`
   query Users(
@@ -204,7 +223,6 @@ export const USER_LIST_REQUEST = gql`
     $lastName_contains: String
     $first: Int
     $skip: Int
-    $userType: String
     $adminApproved: Boolean
   ) {
     users(
@@ -214,17 +232,33 @@ export const USER_LIST_REQUEST = gql`
       }
       skip: $skip
       first: $first
-      userType: $userType
       adminApproved: $adminApproved
     ) {
-      firstName
-      lastName
-      image
-      _id
-      email
-      userType
-      adminApproved
-      createdAt
+      user {
+        firstName
+        lastName
+        image
+        _id
+        email
+        createdAt
+      }
+      appUserProfile {
+        _id
+        adminApproved
+        adminFor {
+          _id
+        }
+        isSuperAdmin
+        createdOrganizations {
+          _id
+        }
+        createdEvents {
+          _id
+        }
+        eventAdmin {
+          _id
+        }
+      }
     }
   }
 `;
@@ -638,63 +672,77 @@ export const USERS_CONNECTION_LIST = gql`
         lastName_contains: $lastName_contains
       }
     ) {
-      firstName
-      lastName
-      image
-      _id
-      email
-      userType
-      adminApproved
-      adminFor {
-        _id
-      }
-      createdAt
-      organizationsBlockedBy {
-        _id
-        name
+      user {
+        firstName
+        lastName
         image
-        address {
-          city
-          countryCode
-          dependentLocality
-          line1
-          line2
-          postalCode
-          sortingCode
-          state
-        }
+        _id
+        email
         createdAt
-        creator {
+        organizationsBlockedBy {
           _id
-          firstName
-          lastName
+          name
           image
-          email
+          address {
+            city
+            countryCode
+            dependentLocality
+            line1
+            line2
+            postalCode
+            sortingCode
+            state
+          }
           createdAt
+          creator {
+            _id
+            firstName
+            lastName
+            image
+            email
+            createdAt
+          }
+        }
+        joinedOrganizations {
+          _id
+          name
+          image
+          address {
+            city
+            countryCode
+            dependentLocality
+            line1
+            line2
+            postalCode
+            sortingCode
+            state
+          }
+          createdAt
+          creator {
+            _id
+            firstName
+            lastName
+            image
+            email
+            createdAt
+          }
         }
       }
-      joinedOrganizations {
+      appUserProfile {
         _id
-        name
-        image
-        address {
-          city
-          countryCode
-          dependentLocality
-          line1
-          line2
-          postalCode
-          sortingCode
-          state
-        }
-        createdAt
-        creator {
+        adminApproved
+        adminFor {
           _id
-          firstName
-          lastName
-          image
-          email
-          createdAt
+        }
+        isSuperAdmin
+        createdOrganizations {
+          _id
+        }
+        createdEvents {
+          _id
+        }
+        eventAdmin {
+          _id
         }
       }
     }

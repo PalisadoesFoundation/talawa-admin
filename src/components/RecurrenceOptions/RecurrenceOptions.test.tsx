@@ -272,6 +272,17 @@ describe('Testing the creaction of recurring events through recurrence options',
 
     userEvent.click(screen.getByTestId('recurrenceOptions'));
 
+    const startDatePicker = screen.getByLabelText('Start Date');
+    const endDatePicker = screen.getByLabelText('End Date');
+
+    fireEvent.change(startDatePicker, {
+      target: { value: formData.startDate },
+    });
+
+    fireEvent.change(endDatePicker, {
+      target: { value: formData.endDate },
+    });
+
     await waitFor(() => {
       expect(
         screen.getByTestId('monthlyRecurrenceOnThatOccurence'),
