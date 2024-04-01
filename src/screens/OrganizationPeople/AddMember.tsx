@@ -307,6 +307,7 @@ function AddMember(): JSX.Element {
         data-testid="addExistingUserModal"
         show={addUserModalisOpen}
         onHide={toggleDialogModal}
+        contentClassName={styles.modalContent}
       >
         <Modal.Header closeButton data-testid="pluginNotificationHeader">
           <Modal.Title>{t('addMembers')}</Modal.Title>
@@ -380,6 +381,8 @@ function AddMember(): JSX.Element {
                                 {userDetails.user.firstName +
                                   ' ' +
                                   userDetails.user.lastName}
+                                <br />
+                                {userDetails.user.email}
                               </Link>
                             </StyledTableCell>
                             <StyledTableCell align="center">
