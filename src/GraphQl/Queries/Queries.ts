@@ -197,6 +197,25 @@ export const USER_LIST = gql`
     }
   }
 `;
+export const USER_LIST_FOR_TABLE = gql`
+  query Users($firstName_contains: String, $lastName_contains: String) {
+    users(
+      where: {
+        firstName_contains: $firstName_contains
+        lastName_contains: $lastName_contains
+      }
+    ) {
+      user {
+        _id
+        firstName
+        lastName
+        email
+        image
+        createdAt
+      }
+    }
+  }
+`;
 
 export const USER_LIST_REQUEST = gql`
   query Users(
