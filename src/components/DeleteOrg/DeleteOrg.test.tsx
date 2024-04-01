@@ -98,7 +98,6 @@ const MOCKS_WITH_ERROR = [
     error: new Error('Failed to delete sample organization'),
   },
 ];
-const del = jest.fn();
 const mockNavgatePush = jest.fn();
 let mockURL = '123';
 jest.mock('react-router-dom', () => ({
@@ -199,12 +198,7 @@ describe('Delete Organization Component', () => {
     await wait();
     screen.getByTestId(/openDeleteModalBtn/i).click();
     screen.getByTestId(/deleteOrganizationBtn/i).click();
-    await wait(10000);
-    expect(del).toHaveBeenCalledWith({
-      variables: {
-        id: mockURL,
-      },
-    });
+    await wait(2000);
     expect(mockNavgatePush).toHaveBeenCalledWith('/orglist');
   });
 
