@@ -56,7 +56,7 @@ function orgPeopleListCard(
             <i className="fa fa-times"></i>
           </Button>
         </Modal.Header>
-        <Modal.Body>{t('removeMemberMsg')}fff</Modal.Body>
+        <Modal.Body>{t('removeMemberMsg')}</Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={props.toggleRemoveModal}>
             {t('no')}

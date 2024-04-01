@@ -288,7 +288,6 @@ function organizationPeople(): JSX.Element {
               </Form>
             </div>
             <div className={styles.btnsBlock}>
-              yoo
               <Dropdown>
                 <Dropdown.Toggle
                   variant="success"
@@ -398,7 +397,6 @@ function organizationPeople(): JSX.Element {
           />
         </div>
       )}
-      yyyyyyyyy
       {showRemoveModal && selectedMemId && (
         <OrgPeopleListCard
           id={selectedMemId}
@@ -406,13 +404,10 @@ function organizationPeople(): JSX.Element {
         />
       )}
       {showRemoveModal && selectedAdminId && (
-        <>
-          <div>yoo</div>
-          <OrgAdminListCard
-            id={selectedAdminId}
-            toggleRemoveModal={toggleRemoveModal}
-          />{' '}
-        </>
+        <OrgAdminListCard
+          id={selectedAdminId}
+          toggleRemoveModal={toggleRemoveModal}
+        />
       )}
     </>
   );
