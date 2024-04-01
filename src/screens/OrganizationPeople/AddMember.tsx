@@ -26,7 +26,10 @@ import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
-import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
+import type {
+  InterfaceQueryOrganizationsListObject,
+  InterfaceQueryUserListItem,
+} from 'utils/interfaces';
 import styles from './OrganizationPeople.module.css';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -117,7 +120,7 @@ function AddMember(): JSX.Element {
     variables: { id: currentUrl },
   });
 
-  const getMembersId = (): any => {
+  const getMembersId = (): string[] => {
     if (memberData) {
       const ids = memberData?.organizationsMemberConnection.edges.map(
         (member: { _id: string }) => member._id,
@@ -204,7 +207,7 @@ function AddMember(): JSX.Element {
           password: '',
           confirmPassword: '',
         });
-      } catch (error: any) {
+      } catch (error: unknown) {
         /* istanbul ignore next */
         errorHandler(t, error);
       }
@@ -248,23 +251,19 @@ function AddMember(): JSX.Element {
     setCreateUserVariables({ ...createUserVariables, confirmPassword });
   };
 
-  const handleUserModalSearchChange = (e: any): void => {
+  const handleUserModalSearchChange = (e: React.FormEvent): void => {
+    e.preventDefault();
     /* istanbul ignore next */
-    if (
-      (e.key === 'Backspace' && userName === '') ||
-      (e.key === 'Enter' && userName !== '')
-    ) {
-      const [firstName, lastName] = userName.split(' ');
+    const [firstName, lastName] = userName.split(' ');
 
-      const newFilterData = {
-        firstName_contains: firstName ?? '',
-        lastName_contains: lastName ?? '',
-      };
+    const newFilterData = {
+      firstName_contains: firstName || '',
+      lastName_contains: lastName || '',
+    };
 
-      allUsersRefetch({
-        ...newFilterData,
-      });
-    }
+    allUsersRefetch({
+      ...newFilterData,
+    });
   };
 
   return (
@@ -280,7 +279,6 @@ function AddMember(): JSX.Element {
         </Dropdown.Toggle>
         <Dropdown.Menu>
           <Dropdown.Item
-            inline
             id="existingUser"
             value="existingUser"
             name="existingUser"
@@ -292,7 +290,6 @@ function AddMember(): JSX.Element {
             <Form.Label htmlFor="existingUser">{t('existingUser')}</Form.Label>
           </Dropdown.Item>
           <Dropdown.Item
-            inline
             id="newUser"
             value="newUser"
             name="newUser"
@@ -322,28 +319,28 @@ function AddMember(): JSX.Element {
           ) : (
             <>
               <div className={styles.input}>
-                <Form.Control
-                  type="name"
-                  id="searchUser"
-                  data-testid="searchUser"
-                  placeholder={t('searchFullName')}
-                  autoComplete="off"
-                  required
-                  className={styles.inputField}
-                  value={userName}
-                  onChange={(e): void => {
-                    const { value } = e.target;
-                    setUserName(value);
-                    handleUserModalSearchChange(value);
-                  }}
-                  onKeyUp={handleUserModalSearchChange}
-                />
-                <Button
-                  className={`position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center `}
-                  onClick={handleUserModalSearchChange}
-                >
-                  <Search />
-                </Button>
+                <Form onSubmit={handleUserModalSearchChange}>
+                  <Form.Control
+                    type="name"
+                    id="searchUser"
+                    data-testid="searchUser"
+                    placeholder={t('searchFullName')}
+                    autoComplete="off"
+                    className={styles.inputFieldModal}
+                    value={userName}
+                    onChange={(e): void => {
+                      const { value } = e.target;
+                      setUserName(value);
+                    }}
+                  />
+                  <Button
+                    type="submit"
+                    data-testid="submitBtn"
+                    className={`position-absolute z-10 bottom-10 end-0  d-flex justify-content-center align-items-center `}
+                  >
+                    <Search />
+                  </Button>
+                </Form>
               </div>
               <TableContainer component={Paper}>
                 <Table aria-label="customized table">
@@ -362,7 +359,10 @@ function AddMember(): JSX.Element {
                     {allUsersData &&
                       allUsersData.users.length > 0 &&
                       allUsersData.users.map(
-                        (userDetails: any, index: number) => (
+                        (
+                          userDetails: InterfaceQueryUserListItem,
+                          index: number,
+                        ) => (
                           <StyledTableRow
                             data-testid="user"
                             key={userDetails.user._id}
@@ -503,7 +503,7 @@ function AddMember(): JSX.Element {
             <InputGroup className="mt-2 mb-4">
               <Form.Control
                 className={styles.borderNone}
-                value={organizationData?.organizations[0].name}
+                value={organizationData?.organizations[0]?.name}
                 onChange={handlePasswordChange}
                 data-testid=""
                 disabled
@@ -535,3 +535,18 @@ function AddMember(): JSX.Element {
 }
 
 export default AddMember;
+// | typeof ORGANIZATIONS_MEMBER_CONNECTION_LIST
+// | typeof ORGANIZATIONS_LIST
+// | typeof USER_LIST_FOR_TABLE
+// | typeof ADD_MEMBER_MUTATION;
+// {
+//   id?: string;
+//   orgId?: string;
+//   orgid?: string;
+//   fristNameContains?: string;
+//   lastNameContains?: string;
+//   firstName_contains?: string;
+//   lastName_contains?: string;
+//   id_not_in?: string[];
+//   userid?: string;
+// };

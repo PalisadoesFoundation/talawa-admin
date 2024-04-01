@@ -328,10 +328,9 @@ export interface InterfaceQueryRequestListItem {
   _id: string;
   firstName: string;
   lastName: string;
-  image: string;
+  image: string | null;
   email: string;
   userType: string;
-  adminApproved: boolean;
   createdAt: string;
 }
 
