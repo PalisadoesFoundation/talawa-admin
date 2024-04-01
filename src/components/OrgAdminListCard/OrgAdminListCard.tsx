@@ -65,6 +65,8 @@ function orgAdminListCard(props: InterfaceOrgPeopleListCardProps): JSX.Element {
   };
   return (
     <>
+      {' '}
+      yyyyyy
       <Modal show={true} onHide={props.toggleRemoveModal}>
         <Modal.Header>
           <h5 id={`removeAdminModalLabel${props.id}`}>{t('removeAdmin')}</h5>
@@ -72,7 +74,7 @@ function orgAdminListCard(props: InterfaceOrgPeopleListCardProps): JSX.Element {
             <i className="fas fa-times"></i>
           </Button>
         </Modal.Header>
-        <Modal.Body>{t('removeAdminMsg')}</Modal.Body>
+        <Modal.Body>{t('removeAdminMsg')}yyyyybbh kn k</Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={props.toggleRemoveModal}>
             {t('no')}
