@@ -1,28 +1,26 @@
 import React from 'react';
-import styles from './OrgPeopleListCard.module.css';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
-import { useParams } from 'react-router-dom';
+import { useParams, Navigate } from 'react-router-dom';
 import { errorHandler } from 'utils/errorHandler';
 
 interface InterfaceOrgPeopleListCardProps {
-  key: number;
-  id: string;
+  id: string | undefined;
+  toggleRemoveModal: () => void;
 }
 
 function orgPeopleListCard(
   props: InterfaceOrgPeopleListCardProps,
 ): JSX.Element {
   const { orgId: currentUrl } = useParams();
+  if (!props.id) {
+    return <Navigate to={'/orglist'} />;
+  }
   const [remove] = useMutation(REMOVE_MEMBER_MUTATION);
-  const [showRemoveAdminModal, setShowRemoveAdminModal] = React.useState(false);
-
-  const toggleRemoveAdminModal = (): void =>
-    setShowRemoveAdminModal(!showRemoveAdminModal);
 
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgPeopleListCard',
@@ -44,31 +42,23 @@ function orgPeopleListCard(
           window.location.reload();
         }, 2000);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
   return (
     <div>
-      <Button
-        className={styles.memberfontcreatedbtn}
-        data-testid="removeMemberModalBtn"
-        onClick={toggleRemoveAdminModal}
-      >
-        {t('remove')}
-      </Button>
-      <hr></hr>
-      <Modal show={showRemoveAdminModal} onHide={toggleRemoveAdminModal}>
+      <Modal show={true} onHide={props.toggleRemoveModal}>
         <Modal.Header>
           <h5>{t('removeMember')}</h5>
-          <Button variant="danger" onClick={toggleRemoveAdminModal}>
+          <Button variant="danger" onClick={props.toggleRemoveModal}>
             <i className="fa fa-times"></i>
           </Button>
         </Modal.Header>
         <Modal.Body>{t('removeMemberMsg')}</Modal.Body>
         <Modal.Footer>
-          <Button variant="danger" onClick={toggleRemoveAdminModal}>
+          <Button variant="danger" onClick={props.toggleRemoveModal}>
             {t('no')}
           </Button>
           <Button
