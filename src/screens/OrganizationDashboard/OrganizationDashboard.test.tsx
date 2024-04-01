@@ -45,7 +45,6 @@ jest.mock('react-router-dom', () => ({
 beforeEach(() => {
   setItem('FirstName', 'John');
   setItem('LastName', 'Doe');
-  setItem('UserType', 'SUPERADMIN');
   setItem(
     'UserImage',
     'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
@@ -179,7 +178,7 @@ describe('Organisation Dashboard Page', () => {
     const mockSetState = jest.spyOn(React, 'useState');
     jest.doMock('react', () => ({
       ...jest.requireActual('react'),
-      useState: (initial: any) => [initial, mockSetState],
+      useState: (initial: any) => [initial, mockSetState], // eslint-disable-line
     }));
     await act(async () => {
       render(
