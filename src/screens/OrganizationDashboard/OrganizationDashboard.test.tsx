@@ -178,7 +178,7 @@ describe('Organisation Dashboard Page', () => {
     const mockSetState = jest.spyOn(React, 'useState');
     jest.doMock('react', () => ({
       ...jest.requireActual('react'),
-      useState: (initial: any) => [initial, mockSetState], // eslint-disable-line
+      useState: (initial: any) => [initial, mockSetState],
     }));
     await act(async () => {
       render(
