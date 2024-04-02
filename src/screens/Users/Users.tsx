@@ -34,11 +34,9 @@ const Users = (): JSX.Element => {
   const [searchByName, setSearchByName] = useState('');
   const [sortingOption, setSortingOption] = useState('newest');
   const [filteringOption, setFilteringOption] = useState('cancel');
-  const superAdmin = getItem('SuperAdmin');
-  const adminFor = getItem('AdminFor');
-  const userRole = superAdmin
+  const userType = getItem('SuperAdmin')
     ? 'SUPERADMIN'
-    : adminFor?.length > 0
+    : getItem('AdminFor')
       ? 'ADMIN'
       : 'USER';
   const loggedInUserId = getItem('id');
@@ -51,8 +49,8 @@ const Users = (): JSX.Element => {
   }: {
     data?: { users: InterfaceQueryUserListItem[] };
     loading: boolean;
-    fetchMore: any; // eslint-disable-line
-    refetch: any; // eslint-disable-line
+    fetchMore: any;
+    refetch: any;
     error?: ApolloError;
   } = useQuery(USER_LIST, {
     variables: {
@@ -102,7 +100,7 @@ const Users = (): JSX.Element => {
 
   // Send to orgList page if user is not superadmin
   useEffect(() => {
-    if (userRole != 'SUPERADMIN') {
+    if (userType != 'SUPERADMIN') {
       window.location.assign('/orglist');
     }
   }, []);
@@ -129,11 +127,9 @@ const Users = (): JSX.Element => {
     });
   };
 
-  const handleSearchByEnter = (
-    e: React.KeyboardEvent<HTMLInputElement>,
-  ): void => {
+  const handleSearchByEnter = (e: any): void => {
     if (e.key === 'Enter') {
-      const { value } = e.currentTarget;
+      const { value } = e.target;
       handleSearch(value);
     }
   };
@@ -161,6 +157,7 @@ const Users = (): JSX.Element => {
     fetchMore({
       variables: {
         skip: usersData?.users.length || 0,
+        userType: 'ADMIN',
         filter: searchByName,
       },
       updateQuery: (
@@ -259,7 +256,7 @@ const Users = (): JSX.Element => {
           <div
             className={styles.input}
             style={{
-              display: userRole === 'SUPERADMIN' ? 'block' : 'none',
+              display: userType === 'SUPERADMIN' ? 'block' : 'none',
             }}
           >
             <Form.Control

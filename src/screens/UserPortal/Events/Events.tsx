@@ -96,13 +96,7 @@ export default function events(): JSX.Element {
   const [create] = useMutation(CREATE_EVENT_MUTATION);
 
   const userId = getItem('id') as string;
-  const superAdmin = getItem('SuperAdmin');
-  const adminFor = getItem('AdminFor');
-  const userRole = superAdmin
-    ? 'SUPERADMIN'
-    : adminFor?.length > 0
-      ? 'ADMIN'
-      : 'USER';
+  const userRole = getItem('UserType') as string;
 
   const createEvent = async (
     e: ChangeEvent<HTMLFormElement>,
@@ -139,7 +133,7 @@ export default function events(): JSX.Element {
         setEndTime('10:00:00');
       }
       setShowCreateEventModal(false);
-    } catch (error) {
+    } catch (error: any) {
       /* istanbul ignore next */
       errorHandler(t, error);
     }
@@ -172,11 +166,9 @@ export default function events(): JSX.Element {
     });
     setPage(0);
   };
-  const handleSearchByEnter = (
-    e: React.KeyboardEvent<HTMLInputElement>,
-  ): void => {
+  const handleSearchByEnter = (e: any): void => {
     if (e.key === 'Enter') {
-      const { value } = e.currentTarget;
+      const { value } = e.target;
       handleSearch(value);
     }
   };
@@ -297,10 +289,8 @@ export default function events(): JSX.Element {
                         : /* istanbul ignore next */
                           events
                       ).map((event: any) => {
-                        // eslint-disable-line
-                        const attendees: any = []; // eslint-disable-line
+                        const attendees: any = [];
                         event.attendees.forEach((attendee: any) => {
-                          // eslint-disable-line
                           const r = {
                             id: attendee._id,
                           };
@@ -308,7 +298,7 @@ export default function events(): JSX.Element {
                           attendees.push(r);
                         });
 
-                        const creator: any = {}; // eslint-disable-line
+                        const creator: any = {};
                         creator.firstName = event.creator.firstName;
                         creator.lastName = event.creator.lastName;
                         creator.id = event.creator._id;

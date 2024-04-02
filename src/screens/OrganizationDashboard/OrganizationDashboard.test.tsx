@@ -45,6 +45,7 @@ jest.mock('react-router-dom', () => ({
 beforeEach(() => {
   setItem('FirstName', 'John');
   setItem('LastName', 'Doe');
+  setItem('UserType', 'SUPERADMIN');
   setItem(
     'UserImage',
     'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
