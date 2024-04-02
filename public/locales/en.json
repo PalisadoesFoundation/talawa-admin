@@ -1009,5 +1009,27 @@
     "update": "Update Venue Details",
     "editVenue": "Update Venue",
     "venueUpdated": "Venue details updated successfully"
+  },
+  "addMember": {
+    "title": "Add Member",
+    "addMembers": "Add Members",
+    "existingUser": "Existing User",
+    "newUser": "New User",
+    "searchFullName": "Search by Full Name",
+    "firstName": "First Name",
+    "enterFirstName": "Enter First Name",
+    "lastName": "Last Name",
+    "enterLastName": "Enter Last Name",
+    "emailAddress": "Email Address",
+    "enterEmail": "Enter Email",
+    "password": "Password",
+    "enterPassword": "Enter Password",
+    "confirmPassword": "Confirm Password",
+    "enterConfirmPassword": "Enter Confirm Password",
+    "organization": "Organization",
+    "cancel": "Cancel",
+    "create": "Create",
+    "invalidDetailsMessage": "Please provide all required details.",
+    "passwordNotMatch": "Passwords do not match."
   }
 }
