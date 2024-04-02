@@ -348,9 +348,7 @@ function AddMember(): JSX.Element {
                   <TableHead>
                     <TableRow>
                       <StyledTableCell>#</StyledTableCell>
-                      <StyledTableCell align="center">
-                        User Name
-                      </StyledTableCell>
+                      <StyledTableCell align="center">User</StyledTableCell>
                       <StyledTableCell align="center">
                         Add Member
                       </StyledTableCell>
