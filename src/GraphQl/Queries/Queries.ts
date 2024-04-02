@@ -244,7 +244,7 @@ export const GET_EVENT_ATTENDEE = gql`
       _id
     }
   }
-`
+`;
 
 export const EVENT_CHECKINS = gql`
   query eventCheckIns($id: ID!) {
@@ -331,6 +331,15 @@ export const ORGANIZATIONS_LIST = gql`
         lastName
         email
       }
+    }
+  }
+`;
+
+//Query to get all the event invites for an user.
+export const GET_EVENT_INVITES = gql`
+  query ExampleQuery($eventId: ID!) {
+    getEventAttendeesByEventId(eventId: $eventId) {
+      userId
     }
   }
 `;

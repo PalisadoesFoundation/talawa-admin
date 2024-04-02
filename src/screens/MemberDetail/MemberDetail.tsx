@@ -1,14 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
+import { ApolloError, useMutation, useQuery } from '@apollo/client';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import UserUpdate from 'components/UserUpdate/UserUpdate';
-import { USER_DETAILS } from 'GraphQl/Queries/Queries';
+import { GET_EVENT_INVITES, USER_DETAILS } from 'GraphQl/Queries/Queries';
 import styles from './MemberDetail.module.css';
 import { languages } from 'utils/languages';
+import CardItem from 'components/OrganizationDashCards/CardItem';
+import CardItemLoading from 'components/OrganizationDashCards/CardItemLoading';
 import {
   ADD_ADMIN_MUTATION,
   UPDATE_USERTYPE_MUTATION,
@@ -18,10 +20,20 @@ import { errorHandler } from 'utils/errorHandler';
 import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
+import { Card } from 'react-bootstrap';
+import { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
 
 type MemberDetailProps = {
   id?: string; // This is the userId
 };
+
+interface requestType {
+  _id: string;
+  user: {
+    firstName: string;
+    lastName: string;
+  }
+}
 
 const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const { t } = useTranslation('translation', {
@@ -41,6 +53,20 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
 
   const [adda] = useMutation(ADD_ADMIN_MUTATION);
   const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
+
+  const {
+    data,
+    loading: loadingOrgData,
+    error: errorOrg,
+  }: {
+    data?: {
+      organizations: InterfaceQueryOrganizationsListObject[];
+    };
+    loading: boolean;
+    error?: ApolloError;
+  } = useQuery(GET_EVENT_INVITES, {
+    variables: { id: currentUrl },
+  });
 
   useEffect(() => {
     // check component is mounted or not
@@ -311,6 +337,53 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                       </div>
                     </div>
                   </Col>
+                  <Col xl={4}>
+                    <Card border="0" className="rounded-4">
+                       <div className={styles.cardHeader}>
+                          <div className={styles.cardTitle}>{t('membershipRequests')}</div>
+                        </div>       
+                    </Card>
+                  </Col>
+                  <Col xl={4}>
+          <Card border="0" className="rounded-4">
+            <div className={styles.cardHeader}>
+              <div className={styles.cardTitle}>{t('membershipRequests')}</div>
+              <Button
+                size="sm"
+                variant="light"
+                data-testid="viewAllMembershipRequests"
+                onClick={(): void => {
+                  toast.success('Coming soon!');
+                }}
+              >
+                {t('viewAll')}
+              </Button>
+            </div>
+            <Card.Body className={styles.cardBody}>
+              {loadingOrgData ? (
+                [...Array(4)].map((_, index) => {
+                  return <CardItemLoading key={index} />;
+                })
+              ) : data?.organizations[0].membershipRequests.length == 0 ? (
+                <div className={styles.emptyContainer}>
+                  <h6>{t('noMembershipRequests')}</h6>
+                </div>
+              ) : (
+                data?.organizations[0]?.membershipRequests
+                  .slice(0, 8)
+                  .map((request: requestType) => {
+                    return (
+                      <CardItem
+                        type="MembershipRequest"
+                        key={request._id}
+                        title={`${request.user.firstName} ${request.user.lastName}`}
+                      />
+                    );
+                  })
+              )}
+            </Card.Body>
+          </Card>
+        </Col>
                 </Row>
               </section>
             </div>

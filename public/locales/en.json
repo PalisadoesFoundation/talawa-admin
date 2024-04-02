@@ -659,7 +659,9 @@
     "membershipRequests": "Membership requests",
     "adminForEvents": "Admin for events",
     "addedAsAdmin": "User is added as admin.",
-    "talawaApiUnavailable": "Talawa-API service is unavailable. Kindly check your network connection and wait for a while."
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Kindly check your network connection and wait for a while.",
+    "noEventInvites": "No Event Invites Found.",
+    "viewAll":"View All"
   },
   "userLogin": {
     "login": "Login",
