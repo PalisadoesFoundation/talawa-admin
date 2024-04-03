@@ -554,6 +554,14 @@
     "noResultsFoundFor": "No se encontraron resultados para ",
     "noSpammerFound": "No se encontró ningún spammer"
   },
+  "eventManagement": {
+    "title": "Gestión de eventos",
+    "dashboard": "Tablero",
+    "registrants": "Inscritos",
+    "eventActions": "Acciones del evento",
+    "eventStats": "Estadísticas del evento",
+    "to": "A"
+  },
   "forgotPassword": {
     "title": "Talawa olvidó su contraseña",
     "forgotPassword": "Has olvidado tu contraseña",

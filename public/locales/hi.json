@@ -557,6 +557,14 @@
     "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला ",
     "noSpammerFound": "कोई स्पैमर नहीं मिला"
   },
+  "eventManagement": {
+    "title": "इवेंट मैनेजमेंट",
+    "dashboard": "डैशबोर्ड",
+    "registrants": "पंजीकृत श्रेष्ठीकरण",
+    "eventActions": "इवेंट कार्रवाई",
+    "eventStats": "इवेंट स्टैटिस्टिक्स",
+    "to": "से"
+  },
   "forgotPassword": {
     "title": "तलवा पासवर्ड भूल गए",
     "forgotPassword": "पासवर्ड भूल गए",

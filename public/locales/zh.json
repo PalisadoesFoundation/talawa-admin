@@ -555,6 +555,14 @@
     "noResultsFoundFor": "未找到结果 ",
     "noSpammerFound": "未发现垃圾邮件发送者"
   },
+  "eventManagement": {
+    "title": "事件管理",
+    "dashboard": "仪表板",
+    "registrants": "注册参与者",
+    "eventActions": "事件操作",
+    "eventStats": "事件统计",
+    "to": "到"
+  },
   "forgotPassword": {
     "title": "塔拉瓦忘記密碼",
     "forgotPassword": "忘記密碼",

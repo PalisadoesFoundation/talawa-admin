@@ -12,7 +12,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { Form } from 'react-bootstrap';
 import { errorHandler } from 'utils/errorHandler';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { getItem } from 'utils/useLocalstorage';
 
 interface InterfaceEventListCardProps {
@@ -38,9 +38,13 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
   const [alldaychecked, setAllDayChecked] = useState(true);
   const [recurringchecked, setRecurringChecked] = useState(false);
   const [publicchecked, setPublicChecked] = useState(true);
-  const [registrablechecked, setRegistrableChecked] = React.useState(false);
+  const [registrablechecked, setRegistrableChecked] = useState(false);
   const [eventDeleteModalIsOpen, setEventDeleteModalIsOpen] = useState(false);
   const [eventUpdateModalIsOpen, setEventUpdateModalIsOpen] = useState(false);
+  const { orgId } = useParams();
+  if (!orgId) {
+    return <Navigate to={'/'} replace />;
+  }
   const navigate = useNavigate();
   const adminFor = getItem('AdminFor', 'admin');
   const [formState, setFormState] = useState({
@@ -139,7 +143,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
   };
 
   const openEventDashboard = (): void => {
-    navigate(`/event/${props.id}`);
+    navigate(`/event/${orgId}/${props.id}`);
   };
 
   return (
