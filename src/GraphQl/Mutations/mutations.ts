@@ -458,18 +458,6 @@ export const UPDATE_USERTYPE_MUTATION = gql`
   }
 `;
 
-export const ACCEPT_ADMIN_MUTATION = gql`
-  mutation AcceptAdmin($id: ID!) {
-    acceptAdmin(id: $id)
-  }
-`;
-
-export const REJECT_ADMIN_MUTATION = gql`
-  mutation RejectAdmin($id: ID!) {
-    rejectAdmin(id: $id)
-  }
-`;
-
 /**
  * {@label UPDATE_INSTALL_STATUS_PLUGIN_MUTATION}
  * @remarks
