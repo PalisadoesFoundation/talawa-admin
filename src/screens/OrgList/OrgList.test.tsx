@@ -66,7 +66,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
       sortingCode: 'ABC-123',
       state: 'Kingston Parish',
     },
-    image: '',
+    image: new File(['hello'], 'hello.png', { type: 'image/png' }),
   };
 
   test('Testing search functionality by pressing enter', async () => {
@@ -279,7 +279,8 @@ describe('Organisations Page testing as SuperAdmin', () => {
     expect(screen.getByTestId(/userRegistrationRequired/i)).not.toBeChecked();
     expect(screen.getByTestId(/visibleInSearch/i)).toBeChecked();
     expect(screen.getByLabelText(/Display Image/i)).toBeTruthy();
-
+    const displayImage = screen.getByTestId('organisationImage');
+    userEvent.upload(displayImage, formData.image);
     userEvent.click(screen.getByTestId(/submitOrganizationForm/i));
     await waitFor(() => {
       expect(
