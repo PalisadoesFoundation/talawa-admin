@@ -664,6 +664,31 @@ export const RESET_COMMUNITY = gql`
   }
 `;
 
+export const DONATE_TO_ORGANIZATION = gql`
+  mutation donate(
+    $userId: ID!
+    $createDonationOrgId2: ID!
+    $payPalId: ID!
+    $nameOfUser: String!
+    $amount: Float!
+    $nameOfOrg: String!
+  ) {
+    createDonation(
+      userId: $userId
+      orgId: $createDonationOrgId2
+      payPalId: $payPalId
+      nameOfUser: $nameOfUser
+      amount: $amount
+      nameOfOrg: $nameOfOrg
+    ) {
+      _id
+      amount
+      nameOfUser
+      nameOfOrg
+    }
+  }
+`;
+
 // Create and Update Action Item Categories
 export {
   CREATE_ACTION_ITEM_CATEGORY_MUTATION,
