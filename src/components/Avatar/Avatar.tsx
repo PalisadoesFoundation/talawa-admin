@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { createAvatar } from '@dicebear/core';
 import { initials } from '@dicebear/collection';
+import styles from 'components/Avatar/Avatar.module.css';
 
 interface InterfaceAvatarProps {
   name: string;
@@ -30,12 +31,14 @@ const Avatar = ({
   const svg = avatar.toString();
 
   return (
-    <img
-      src={svg}
-      alt={alt}
-      className={avatarStyle ? avatarStyle : ''}
-      data-testid={dataTestId ? dataTestId : ''}
-    />
+    <div className={styles.imageContainer}>
+      <img
+        src={svg}
+        alt={alt}
+        className={avatarStyle ? avatarStyle : ''}
+        data-testid={dataTestId ? dataTestId : ''}
+      />
+    </div>
   );
 };
 

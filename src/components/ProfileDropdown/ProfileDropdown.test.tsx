@@ -2,7 +2,7 @@ import React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
-import ProfileDropdown from './profileDropdown';
+import ProfileDropdown from './ProfileDropdown';
 import 'jest-localstorage-mock';
 import { MockedProvider } from '@apollo/react-testing';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';

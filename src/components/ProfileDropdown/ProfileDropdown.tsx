@@ -1,9 +1,9 @@
 import Avatar from 'components/Avatar/Avatar';
 import React from 'react';
 import { ButtonGroup, Dropdown } from 'react-bootstrap';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from './profileDropdown.module.css';
+import styles from './ProfileDropdown.module.css';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 
@@ -12,7 +12,7 @@ const profileDropdown = (): JSX.Element => {
   const { getItem } = useLocalStorage();
   const superAdmin = getItem('SuperAdmin');
   const adminFor = getItem('AdminFor');
-  const userType = superAdmin
+  const userRole = superAdmin
     ? 'SuperAdmin'
     : adminFor?.length > 0
       ? 'Admin'
@@ -67,7 +67,7 @@ const profileDropdown = (): JSX.Element => {
             {displayedName}
           </span>
           <span className={styles.secondaryText} data-testid="display-type">
-            {`${userType}`}
+            {`${userRole}`}
           </span>
         </div>
       </div>
