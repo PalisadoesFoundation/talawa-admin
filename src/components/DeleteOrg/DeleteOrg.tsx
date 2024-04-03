@@ -21,7 +21,7 @@ function deleteOrg(): JSX.Element {
   const navigate = useNavigate();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const { getItem } = useLocalStorage();
-  const canDelete = getItem('UserType') === 'SUPERADMIN';
+  const canDelete = getItem('SuperAdmin');
   const toggleDeleteModal = (): void => setShowDeleteModal(!showDeleteModal);
 
   const [del] = useMutation(DELETE_ORGANIZATION_MUTATION);
@@ -55,7 +55,7 @@ function deleteOrg(): JSX.Element {
           },
         });
         navigate('/orglist');
-      } catch (error: any) {
+      } catch (error) {
         errorHandler(t, error);
       }
     }
