@@ -28,7 +28,7 @@ import {
   maritalStatusEnum,
   genderEnum,
   employmentStatusEnum,
-} from 'utils/memberFields';
+} from 'utils/formEnumFields';
 import DynamicDropDown from 'components/DynamicDropDown/DynamicDropDown';
 
 type MemberDetailProps = {

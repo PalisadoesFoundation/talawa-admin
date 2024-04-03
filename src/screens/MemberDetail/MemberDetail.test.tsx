@@ -12,11 +12,6 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { I18nextProvider } from 'react-i18next';
-import {
-  ADD_ADMIN_MUTATION,
-  UPDATE_USERTYPE_MUTATION,
-  UPDATE_USER_MUTATION,
-} from 'GraphQl/Mutations/mutations';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -120,20 +115,6 @@ const MOCKS1 = [
       },
     },
   },
-  {
-    request: {
-      query: ADD_ADMIN_MUTATION,
-      variables: {
-        userid: '123',
-        orgid: '456',
-      },
-    },
-    result: {
-      data: {
-        success: true,
-      },
-    },
-  },
 ];
 
 const MOCKS2 = [
@@ -224,20 +205,6 @@ const MOCKS2 = [
       },
     },
   },
-  {
-    request: {
-      query: ADD_ADMIN_MUTATION,
-      variables: {
-        userid: '123',
-        orgid: '456',
-      },
-    },
-    result: {
-      data: {
-        success: true,
-      },
-    },
-  },
 ];
 const MOCKS3 = [
   {
@@ -324,20 +291,6 @@ const MOCKS3 = [
             ],
           },
         },
-      },
-    },
-  },
-  {
-    request: {
-      query: ADD_ADMIN_MUTATION,
-      variables: {
-        userid: '123',
-        orgid: '456',
-      },
-    },
-    result: {
-      data: {
-        success: true,
       },
     },
   },

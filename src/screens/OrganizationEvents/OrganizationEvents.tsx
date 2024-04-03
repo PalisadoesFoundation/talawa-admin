@@ -114,7 +114,13 @@ function organizationEvents(): JSX.Element {
   });
 
   const userId = getItem('id') as string;
-  const userRole = getItem('UserType') as string;
+  const superAdmin = getItem('SuperAdmin');
+  const adminFor = getItem('AdminFor');
+  const userRole = superAdmin
+    ? 'SUPERADMIN'
+    : adminFor?.length > 0
+      ? 'ADMIN'
+      : 'USER';
 
   const [create, { loading: loading2 }] = useMutation(CREATE_EVENT_MUTATION);
 
