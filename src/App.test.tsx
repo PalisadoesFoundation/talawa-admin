@@ -48,7 +48,6 @@ const MOCKS = [
           phone: {
             mobile: '+8912313112',
           },
-          userType: 'SUPERADMIN',
         },
       },
     },

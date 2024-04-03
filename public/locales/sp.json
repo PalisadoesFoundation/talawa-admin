@@ -736,7 +736,6 @@
     "appLanguageCode": "Elegir Idioma",
     "delete": "Eliminar Usuario",
     "saveChanges": "Guardar Cambios",
-    "adminApproved": "Aprobado por el administrador",
     "pluginCreationAllowed": "Permitir creación de complementos",
     "joined": "Unido",
     "created": "Creado",
@@ -891,11 +890,15 @@
     "joined": "Unido"
   },
   "donate": {
+    "donations": "Donaciones",
+    "searchDonations": "Buscar donaciones",
+    "donateForThe": "Donar para el",
     "donateTo": "Donar a",
     "amount": "Cantidad",
     "yourPreviousDonations": "Tus donaciones anteriores",
     "donate": "Donar",
-    "nothingToShow": "Nada que mostrar aquí."
+    "nothingToShow": "Nada que mostrar aquí.",
+    "success": "Donación exitosa"
   },
   "userEvents": {
     "nothingToShow": "No hay nada que mostrar aquí.",

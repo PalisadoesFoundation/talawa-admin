@@ -307,7 +307,6 @@ export interface InterfaceQueryUserListItem {
   };
   appUserProfile: {
     _id: string;
-    adminApproved: boolean;
     adminFor: { _id: string }[];
     isSuperAdmin: boolean;
     createdOrganizations: { _id: string }[];
@@ -322,16 +321,6 @@ export interface InterfaceQueryVenueListItem {
   description: string;
   image: string | null;
   capacity: string;
-}
-
-export interface InterfaceQueryRequestListItem {
-  _id: string;
-  firstName: string;
-  lastName: string;
-  image: string | null;
-  email: string;
-  userType: string;
-  createdAt: string;
 }
 
 export interface InterfaceAddress {

@@ -12,11 +12,6 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { I18nextProvider } from 'react-i18next';
-import {
-  ADD_ADMIN_MUTATION,
-  UPDATE_USERTYPE_MUTATION,
-  UPDATE_USER_MUTATION,
-} from 'GraphQl/Mutations/mutations';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -73,7 +68,6 @@ const MOCKS1 = [
               },
             ],
             pluginCreationAllowed: true,
-            adminApproved: true,
           },
           user: {
             _id: '1',
@@ -120,20 +114,6 @@ const MOCKS1 = [
       },
     },
   },
-  {
-    request: {
-      query: ADD_ADMIN_MUTATION,
-      variables: {
-        userid: '123',
-        orgid: '456',
-      },
-    },
-    result: {
-      data: {
-        success: true,
-      },
-    },
-  },
 ];
 
 const MOCKS2 = [
@@ -177,7 +157,6 @@ const MOCKS2 = [
               },
             ],
             pluginCreationAllowed: true,
-            adminApproved: true,
           },
           user: {
             _id: '1',
@@ -221,20 +200,6 @@ const MOCKS2 = [
             ],
           },
         },
-      },
-    },
-  },
-  {
-    request: {
-      query: ADD_ADMIN_MUTATION,
-      variables: {
-        userid: '123',
-        orgid: '456',
-      },
-    },
-    result: {
-      data: {
-        success: true,
       },
     },
   },
@@ -280,7 +245,6 @@ const MOCKS3 = [
               },
             ],
             pluginCreationAllowed: true,
-            adminApproved: true,
           },
           user: {
             _id: '1',
@@ -324,20 +288,6 @@ const MOCKS3 = [
             ],
           },
         },
-      },
-    },
-  },
-  {
-    request: {
-      query: ADD_ADMIN_MUTATION,
-      variables: {
-        userid: '123',
-        orgid: '456',
-      },
-    },
-    result: {
-      data: {
-        success: true,
       },
     },
   },
@@ -387,7 +337,6 @@ describe('MemberDetail', () => {
     expect(screen.getAllByText(/First name/i)).toBeTruthy();
     expect(screen.getAllByText(/Last name/i)).toBeTruthy();
     expect(screen.getAllByText(/Language/i)).toBeTruthy();
-    expect(screen.getByText(/Admin approved/i)).toBeInTheDocument();
     expect(screen.getByText(/Plugin creation allowed/i)).toBeInTheDocument();
     expect(screen.getAllByText(/Joined on/i)).toBeTruthy();
     expect(screen.getAllByText(/Joined On/i)).toHaveLength(1);
@@ -469,7 +418,6 @@ describe('MemberDetail', () => {
     userEvent.type(screen.getByPlaceholderText(/City/i), formData.city);
     userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
     userEvent.type(screen.getByPlaceholderText(/Phone/i), formData.phoneNumber);
-    userEvent.click(screen.getByPlaceholderText(/adminApproved/i));
     userEvent.click(screen.getByPlaceholderText(/pluginCreationAllowed/i));
     userEvent.selectOptions(screen.getByTestId('applangcode'), 'Français');
     userEvent.upload(screen.getByLabelText(/Display Image:/i), formData.image);
@@ -635,46 +583,6 @@ describe('MemberDetail', () => {
     waitFor(() => userEvent.click(screen.getByText(/Edit Profile/i)));
   });
 
-  test('should show Yes if plugin creation is allowed and admin approved', async () => {
-    const props = {
-      id: 'rishav-jha-mech',
-    };
-    render(
-      <MockedProvider addTypename={false} link={link2}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <MemberDetail {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    waitFor(() =>
-      expect(screen.getByTestId('adminApproved')).toHaveTextContent('Yes'),
-    );
-  });
-
-  test('should show No if plugin creation is not allowed and not admin approved', async () => {
-    const props = {
-      id: 'rishav-jha-mech',
-    };
-    render(
-      <MockedProvider addTypename={false} link={link2}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <MemberDetail {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    waitFor(() => {
-      expect(screen.getByTestId('adminApproved')).toHaveTextContent('No');
-    });
-  });
   test('should be redirected to / if member id is undefined', async () => {
     render(
       <MockedProvider addTypename={false} link={link2}>
