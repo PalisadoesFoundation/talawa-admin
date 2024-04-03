@@ -896,7 +896,8 @@
     "amount": "Amount",
     "yourPreviousDonations": "Your Previous Donations",
     "donate": "Donate",
-    "nothingToShow": "Nothing to show here."
+    "nothingToShow": "Nothing to show here.",
+    "success": "Donation Successful"
   },
   "userEvents": {
     "nothingToShow": "Nothing to show here.",

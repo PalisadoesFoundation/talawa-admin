@@ -14,6 +14,8 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import Donate from './Donate';
 import userEvent from '@testing-library/user-event';
+import useLocalStorage from 'utils/useLocalstorage';
+import { DONATE_TO_ORGANIZATION } from 'GraphQl/Mutations/mutations';
 
 const MOCKS = [
   {
@@ -32,7 +34,7 @@ const MOCKS = [
             amount: 1,
             userId: '6391a15bcb738c181d238952',
             payPalId: 'payPalId',
-            __typename: 'Donation',
+            updatedAt: '2024-04-03T16:43:01.514Z',
           },
         ],
       },
@@ -49,7 +51,6 @@ const MOCKS = [
       data: {
         organizationsConnection: [
           {
-            __typename: 'Organization',
             _id: '6401ff65ce8e8406b8f07af3',
             image: '',
             name: 'anyOrganization2',
@@ -66,7 +67,7 @@ const MOCKS = [
             },
             userRegistrationRequired: true,
             createdAt: '12345678900',
-            creator: { __typename: 'User', firstName: 'John', lastName: 'Doe' },
+            creator: { firstName: 'John', lastName: 'Doe' },
             members: [
               {
                 _id: '56gheqyr7deyfuiwfewifruy8',
@@ -88,6 +89,31 @@ const MOCKS = [
                 },
               },
             ],
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: DONATE_TO_ORGANIZATION,
+      variables: {
+        userId: '123',
+        createDonationOrgId2: '',
+        payPalId: 'paypalId',
+        nameOfUser: 'name',
+        amount: 123,
+        nameOfOrg: 'anyOrganization2',
+      },
+    },
+    result: {
+      data: {
+        createDonation: [
+          {
+            _id: '',
+            amount: 123,
+            nameOfUser: 'name',
+            nameOfOrg: 'anyOrganization2',
           },
         ],
       },
@@ -125,6 +151,10 @@ describe('Testing Donate Screen [User Portal]', () => {
     })),
   });
 
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   test('Screen should be rendered properly', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -139,6 +169,9 @@ describe('Testing Donate Screen [User Portal]', () => {
     );
 
     await wait();
+    expect(screen.getByPlaceholderText('Search donations')).toBeInTheDocument();
+    expect(screen.getByTestId('currency0')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Amount')).toBeInTheDocument();
   });
 
   test('Currency is swtiched to USD', async () => {
@@ -159,8 +192,9 @@ describe('Testing Donate Screen [User Portal]', () => {
     userEvent.click(screen.getByTestId('changeCurrencyBtn'));
 
     userEvent.click(screen.getByTestId('currency0'));
-
     await wait();
+
+    expect(screen.getByTestId('currency0')).toBeInTheDocument();
   });
 
   test('Currency is swtiched to INR', async () => {
@@ -204,6 +238,46 @@ describe('Testing Donate Screen [User Portal]', () => {
 
     userEvent.click(screen.getByTestId('currency2'));
 
+    await wait();
+  });
+
+  test('Checking the existence of Donation Cards', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Donate />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    expect(screen.getAllByTestId('donationCard')[0]).toBeInTheDocument();
+  });
+
+  test('For Donation functionality', async () => {
+    const { setItem } = useLocalStorage();
+    setItem('userId', '123');
+    setItem('name', 'name');
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Donate />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    userEvent.type(screen.getByTestId('donationAmount'), '123');
+    userEvent.click(screen.getByTestId('donateBtn'));
     await wait();
   });
 });

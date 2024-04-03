@@ -17,7 +17,7 @@ function donationCard(props: InterfaceDonationCardProps): JSX.Element {
       <div className={styles.img}></div>
       <div className={styles.personDetails}>
         <span>
-          <b>{props.name}</b>
+          <b data-testid="DonorName">{props.name}</b>
         </span>
         <span>Amount: {props.amount}</span>
         <span>Date: {formattedDate}</span>

@@ -1,24 +1,26 @@
 import React from 'react';
-import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
-import OrganizationSidebar from 'components/UserPortal/OrganizationSidebar/OrganizationSidebar';
-import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
+import { useParams } from 'react-router-dom';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
-import PaginationList from 'components/PaginationList/PaginationList';
+import { toast } from 'react-toastify';
+import { useQuery, useMutation } from '@apollo/client';
+import { Search } from '@mui/icons-material';
+import SendIcon from '@mui/icons-material/Send';
+import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import { useTranslation } from 'react-i18next';
+
 import {
   ORGANIZATION_DONATION_CONNECTION_LIST,
   USER_ORGANIZATION_CONNECTION,
 } from 'GraphQl/Queries/Queries';
 import { DONATE_TO_ORGANIZATION } from 'GraphQl/Mutations/mutations';
-import { useQuery, useMutation } from '@apollo/client';
 import styles from './Donate.module.css';
-import { Search } from '@mui/icons-material';
-import SendIcon from '@mui/icons-material/Send';
-import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import DonationCard from 'components/UserPortal/DonationCard/DonationCard';
-import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
 import { errorHandler } from 'utils/errorHandler';
+import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
+import OrganizationSidebar from 'components/UserPortal/OrganizationSidebar/OrganizationSidebar';
+import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
+import PaginationList from 'components/PaginationList/PaginationList';
 
 export interface InterfaceDonationCardProps {
   id: string;
@@ -55,11 +57,12 @@ export default function donate(): JSX.Element {
   } = useQuery(ORGANIZATION_DONATION_CONNECTION_LIST, {
     variables: { orgId: organizationId },
   });
-  const [donate] = useMutation(DONATE_TO_ORGANIZATION);
 
   const { data } = useQuery(USER_ORGANIZATION_CONNECTION, {
     variables: { id: organizationId },
   });
+
+  const [donate] = useMutation(DONATE_TO_ORGANIZATION);
 
   const navbarProps = {
     currentPage: 'donate',
@@ -101,15 +104,16 @@ export default function donate(): JSX.Element {
         variables: {
           userId,
           createDonationOrgId2: organizationId,
-          payPalId: '123',
+          payPalId: 'paypalId',
           nameOfUser: userName,
           amount: Number(amount),
           nameOfOrg: organizationDetails.name,
         },
       });
-
       refetch();
-    } catch (error) {
+      toast.success(t(`success`));
+    } catch (error: any) {
+      /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
@@ -177,7 +181,7 @@ export default function donate(): JSX.Element {
                 <Form.Control
                   type="text"
                   className={styles.inputArea}
-                  data-testid="searchInput"
+                  data-testid="donationAmount"
                   placeholder={t('amount')}
                   value={amount}
                   onChange={(e) => {
@@ -226,7 +230,11 @@ export default function donate(): JSX.Element {
                           payPalId: donation.payPalId,
                           updatedAt: donation.updatedAt,
                         };
-                        return <DonationCard key={index} {...cardProps} />;
+                        return (
+                          <div key={index} data-testid="donationCard">
+                            <DonationCard {...cardProps} />
+                          </div>
+                        );
                       })
                     ) : (
                       <span>{t('nothingToShow')}</span>

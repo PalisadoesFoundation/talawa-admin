@@ -894,11 +894,15 @@
     "joined": "शामिल हुआ"
   },
   "donate": {
+    "donations": "दान",
+    "searchDonations": "दान खोजें",
+    "donateForThe": "के लिए दान करें",
     "donateTo": "दान दें",
     "amount": "मात्रा",
     "yourPreviousDonations": "आपका पिछला दान",
     "donate": "दान",
-    "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है."
+    "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
+    "success": "दान सफल"
   },
   "userEvents": {
     "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",

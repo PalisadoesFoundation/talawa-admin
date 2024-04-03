@@ -890,11 +890,14 @@
     "joined": "Rejoint"
   },
   "donate": {
-    "donateTo": "Faire un don à",
+    "donations": "Des dons",
+    "searchDonations": "Rechercher des dons",
+    "donateForThe": "Faites un don pour le",
     "amount": "Montante",
     "yourPreviousDonations": "Vos dons précédents",
     "donate": "Donner",
-    "nothingToShow": "Rien à montrer ici."
+    "nothingToShow": "Rien à montrer ici.",
+    "success": "Don réussi"
   },
   "userEvents": {
     "nothingToShow": "Rien à montrer ici.",

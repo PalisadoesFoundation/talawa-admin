@@ -892,11 +892,15 @@
     "joined": "加入"
   },
   "donate": {
+    "donations": "捐款",
+    "searchDonations": "搜索捐款",
+    "donateForThe": "为",
     "donateTo": "捐贈給",
     "amount": "數量",
     "yourPreviousDonations": "您之前的捐款",
     "donate": "捐",
-    "nothingToShow": "這裡沒有什麼可顯示的。"
+    "nothingToShow": "這裡沒有什麼可顯示的。",
+    "success": "捐赠成功"
   },
   "userEvents": {
     "nothingToShow": "這裡沒有什麼可顯示的。",

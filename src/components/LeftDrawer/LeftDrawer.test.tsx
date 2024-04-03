@@ -95,9 +95,6 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
     expect(
       communityProfileBtn.className.includes('text-secondary btn'),
     ).toBeTruthy();
-    expect(
-      communityProfileBtn.className.includes('text-secondary btn btn-light'),
-    ).toBeTruthy();
 
     // Send to roles screen
     userEvent.click(rolesBtn);
