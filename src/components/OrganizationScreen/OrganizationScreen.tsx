@@ -7,7 +7,7 @@ import { updateTargets } from 'state/action-creators';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from './OrganizationScreen.module.css';
-import ProfileDropdown from 'components/ProfileDropdown/profileDropdown';
+import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 
 const OrganizationScreen = (): JSX.Element => {
   const location = useLocation();

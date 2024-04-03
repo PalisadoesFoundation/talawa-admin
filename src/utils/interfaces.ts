@@ -324,17 +324,6 @@ export interface InterfaceQueryVenueListItem {
   capacity: string;
 }
 
-export interface InterfaceQueryRequestListItem {
-  _id: string;
-  firstName: string;
-  lastName: string;
-  image: string;
-  email: string;
-  userType: string;
-  adminApproved: boolean;
-  createdAt: string;
-}
-
 export interface InterfaceAddress {
   city: string;
   countryCode: string;
