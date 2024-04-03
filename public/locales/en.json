@@ -730,7 +730,6 @@
     "appLanguageCode": "Choose Language",
     "delete": "Delete User",
     "saveChanges": "Save Changes",
-    "adminApproved": "Admin approved",
     "pluginCreationAllowed": "Plugin creation allowed",
     "joined": "Joined",
     "created": "Created",
@@ -890,11 +889,14 @@
     "joined": "Joined"
   },
   "donate": {
-    "donateTo": "Donate to",
+    "donations": "Donations",
+    "searchDonations": "Search donations",
+    "donateForThe": "Donate for the",
     "amount": "Amount",
     "yourPreviousDonations": "Your Previous Donations",
     "donate": "Donate",
-    "nothingToShow": "Nothing to show here."
+    "nothingToShow": "Nothing to show here.",
+    "success": "Donation Successful"
   },
   "userEvents": {
     "nothingToShow": "Nothing to show here.",

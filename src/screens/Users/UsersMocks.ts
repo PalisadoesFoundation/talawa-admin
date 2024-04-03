@@ -99,7 +99,6 @@ export const MOCKS = [
             },
             appUserProfile: {
               _id: 'user1',
-              adminApproved: true,
               adminFor: [
                 {
                   _id: '123',
@@ -181,7 +180,6 @@ export const MOCKS = [
                   _id: '123',
                 },
               ],
-              adminApproved: true,
               isSuperAdmin: false,
               createdOrganizations: [],
               createdEvents: [],
@@ -341,7 +339,6 @@ export const MOCKS2 = [
                   _id: '123',
                 },
               ],
-              adminApproved: true,
               isSuperAdmin: true,
               createdOrganizations: [],
               createdEvents: [],
@@ -418,7 +415,6 @@ export const MOCKS2 = [
                   _id: '123',
                 },
               ],
-              adminApproved: true,
               isSuperAdmin: false,
               createdOrganizations: [],
               createdEvents: [],
