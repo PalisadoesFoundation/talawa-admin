@@ -6,6 +6,8 @@ import styles from './EventCalendar.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import CurrentHourIndicator from 'components/CurrentHourIndicator/CurrentHourIndicator';
 import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
+import HolidayCard from '../HolidayCards/HolidayCard';
+import { holidays, hours, months, weekdays } from './constants';
 
 interface InterfaceEvent {
   _id: string;
@@ -58,49 +60,9 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   orgData,
   userRole,
   userId,
+  viewType,
 }) => {
   const [selectedDate] = useState<Date | null>(null);
-  const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
-  const hours = [
-    '12 AM',
-    '01 AM',
-    '02 AM',
-    '03 AM',
-    '04 AM',
-    '05 AM',
-    '06 AM',
-    '07 AM',
-    '08 AM',
-    '09 AM',
-    '10 AM',
-    '11 AM',
-    '12 PM',
-    '01 PM',
-    '02 PM',
-    '03 PM',
-    '04 PM',
-    '05 PM',
-    '06 PM',
-    '07 PM',
-    '08 PM',
-    '09 PM',
-    '10 PM',
-    '11 PM',
-  ];
 
   const today = new Date();
   const [currentDate, setCurrentDate] = useState(today.getDate());
@@ -244,36 +206,37 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     };
 
     /*istanbul ignore next*/
-    const allDayEventsList: any = events
-      ?.filter((datas) => {
-        /*istanbul ignore next*/
-        const currDate = new Date(currentYear, currentMonth, currentDate);
-        if (
-          datas.startTime == undefined &&
-          datas.startDate == dayjs(currDate).format('YYYY-MM-DD')
-        ) {
-          return datas;
-        }
-      })
-      .map((datas: InterfaceEvent) => {
-        return (
-          <EventListCard
-            key={datas._id}
-            id={datas._id}
-            eventLocation={datas.location}
-            eventName={datas.title}
-            eventDescription={datas.description}
-            regDate={datas.startDate}
-            regEndDate={datas.endDate}
-            startTime={datas.startTime}
-            endTime={datas.endTime}
-            allDay={datas.allDay}
-            recurring={datas.recurring}
-            isPublic={datas.isPublic}
-            isRegisterable={datas.isRegisterable}
-          />
-        );
-      });
+    const allDayEventsList: JSX.Element[] =
+      events
+        ?.filter((datas) => {
+          /*istanbul ignore next*/
+          const currDate = new Date(currentYear, currentMonth, currentDate);
+          if (
+            datas.startTime == undefined &&
+            datas.startDate == dayjs(currDate).format('YYYY-MM-DD')
+          ) {
+            return datas;
+          }
+        })
+        .map((datas: InterfaceEvent) => {
+          return (
+            <EventListCard
+              key={datas._id}
+              id={datas._id}
+              eventLocation={datas.location}
+              eventName={datas.title}
+              eventDescription={datas.description}
+              regDate={datas.startDate}
+              regEndDate={datas.endDate}
+              startTime={datas.startTime}
+              endTime={datas.endTime}
+              allDay={datas.allDay}
+              recurring={datas.recurring}
+              isPublic={datas.isPublic}
+              isRegisterable={datas.isRegisterable}
+            />
+          );
+        }) || [];
 
     return (
       <>
@@ -284,7 +247,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           <div className={styles.dummyWidth}></div>
           <div
             className={
-              allDayEventsList.length > 0
+              allDayEventsList?.length > 0
                 ? styles.event_list_parent_current
                 : styles.event_list_parent
             }
@@ -323,36 +286,41 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           </div>
         </div>
         {hours.map((hour, index) => {
-          const timeEventsList: any = events
-            ?.filter((datas) => {
-              const currDate = new Date(currentYear, currentMonth, currentDate);
+          const timeEventsList: JSX.Element[] =
+            events
+              ?.filter((datas) => {
+                const currDate = new Date(
+                  currentYear,
+                  currentMonth,
+                  currentDate,
+                );
 
-              if (
-                datas.startTime?.slice(0, 2) == (index % 24).toString() &&
-                datas.startDate == dayjs(currDate).format('YYYY-MM-DD')
-              ) {
-                return datas;
-              }
-            })
-            .map((datas: InterfaceEvent) => {
-              return (
-                <EventListCard
-                  key={datas._id}
-                  id={datas._id}
-                  eventLocation={datas.location}
-                  eventName={datas.title}
-                  eventDescription={datas.description}
-                  regDate={datas.startDate}
-                  regEndDate={datas.endDate}
-                  startTime={datas.startTime}
-                  endTime={datas.endTime}
-                  allDay={datas.allDay}
-                  recurring={datas.recurring}
-                  isPublic={datas.isPublic}
-                  isRegisterable={datas.isRegisterable}
-                />
-              );
-            });
+                if (
+                  datas.startTime?.slice(0, 2) == (index % 24).toString() &&
+                  datas.startDate == dayjs(currDate).format('YYYY-MM-DD')
+                ) {
+                  return datas;
+                }
+              })
+              .map((datas: InterfaceEvent) => {
+                return (
+                  <EventListCard
+                    key={datas._id}
+                    id={datas._id}
+                    eventLocation={datas.location}
+                    eventName={datas.title}
+                    eventDescription={datas.description}
+                    regDate={datas.startDate}
+                    regEndDate={datas.endDate}
+                    startTime={datas.startTime}
+                    endTime={datas.endTime}
+                    allDay={datas.allDay}
+                    recurring={datas.recurring}
+                    isPublic={datas.isPublic}
+                    isRegisterable={datas.isRegisterable}
+                  />
+                );
+              }) || [];
           /*istanbul ignore next*/
           return (
             <div key={hour} className={styles.calendar_hour_block}>
@@ -362,7 +330,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
               <div className={styles.dummyWidth}></div>
               <div
                 className={
-                  timeEventsList.length > 0
+                  timeEventsList?.length > 0
                     ? styles.event_list_parent_current
                     : styles.event_list_parent
                 }
@@ -437,6 +405,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
 
     return days.map((date, index) => {
       const className = [
+        date.getDay() === 0 || date.getDay() === 6 ? styles.day_weekends : '',
         date.toLocaleDateString() === today.toLocaleDateString() //Styling for today day cell
           ? styles.day__today
           : '',
@@ -444,7 +413,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         selectedDate?.getTime() === date.getTime() ? styles.day__selected : '',
         styles.day,
       ].join(' ');
-
       const toggleExpand = (index: number): void => {
         if (expanded === index) {
           setExpanded(-1);
@@ -453,30 +421,39 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         }
       };
 
-      const allEventsList: any = events
-        ?.filter((datas) => {
-          if (datas.startDate == dayjs(date).format('YYYY-MM-DD')) return datas;
-        })
-        .map((datas: InterfaceEvent) => {
-          return (
-            <EventListCard
-              key={datas._id}
-              id={datas._id}
-              eventLocation={datas.location}
-              eventName={datas.title}
-              eventDescription={datas.description}
-              regDate={datas.startDate}
-              regEndDate={datas.endDate}
-              startTime={datas.startTime}
-              endTime={datas.endTime}
-              allDay={datas.allDay}
-              recurring={datas.recurring}
-              isPublic={datas.isPublic}
-              isRegisterable={datas.isRegisterable}
-            />
-          );
-        });
+      const allEventsList: JSX.Element[] =
+        events
+          ?.filter((datas) => {
+            if (datas.startDate == dayjs(date).format('YYYY-MM-DD'))
+              return datas;
+          })
+          .map((datas: InterfaceEvent) => {
+            return (
+              <EventListCard
+                key={datas._id}
+                id={datas._id}
+                eventLocation={datas.location}
+                eventName={datas.title}
+                eventDescription={datas.description}
+                regDate={datas.startDate}
+                regEndDate={datas.endDate}
+                startTime={datas.startTime}
+                endTime={datas.endTime}
+                allDay={datas.allDay}
+                recurring={datas.recurring}
+                isPublic={datas.isPublic}
+                isRegisterable={datas.isRegisterable}
+              />
+            );
+          }) || [];
 
+      const holidayList: JSX.Element[] = holidays
+        .filter((holiday) => {
+          if (holiday.date == dayjs(date).format('MM-DD')) return holiday;
+        })
+        .map((holiday) => {
+          return <HolidayCard key={holiday.name} holidayName={holiday.name} />;
+        });
       return (
         <div
           key={index}
@@ -486,41 +463,67 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           data-testid="day"
         >
           {date.getDate()}
-          <div
-            className={expanded === index ? styles.expand_list_container : ''}
-          >
+          {date.getMonth() !== currentMonth ? null : (
             <div
-              className={
-                expanded === index
-                  ? styles.expand_event_list
-                  : styles.event_list
-              }
+              className={expanded === index ? styles.expand_list_container : ''}
             >
-              {expanded === index ? allEventsList : allEventsList?.slice(0, 2)}
-            </div>
-            {(allEventsList?.length > 2 ||
-              (windowWidth <= 700 && allEventsList?.length > 0)) && (
-              <button
-                className={styles.btn__more}
-                onClick={() => {
-                  toggleExpand(index);
-                }}
+              <div
+                className={
+                  expanded === index
+                    ? styles.expand_event_list
+                    : styles.event_list
+                }
               >
-                {expanded === index ? 'View less' : 'View all'}
-              </button>
-            )}
-          </div>
+                <div>{holidayList}</div>
+                {expanded === index
+                  ? allEventsList
+                  : holidayList?.length > 0
+                    ? allEventsList?.slice(0, 1)
+                    : allEventsList?.slice(0, 2)}
+              </div>
+              {(allEventsList?.length > 2 ||
+                (windowWidth <= 700 && allEventsList?.length > 0)) && (
+                <button
+                  className={styles.btn__more}
+                  onClick={() => {
+                    toggleExpand(index);
+                  }}
+                >
+                  {expanded === index ? 'View less' : 'View all'}
+                </button>
+              )}
+            </div>
+          )}
         </div>
       );
     });
   };
 
+  // const holidayPerMonth: any = holidays
+  //   .filter((holiday) => {
+  //     if (holiday.month == months[currentMonth]) return holiday;
+  //   })
+  //   .map((holiday) => {
+  //     return (
+  //       <div key={holiday.name} className={styles.holiday__data}>
+  //         <p className={styles.holiday__date}>{holiday.month}</p>
+  //         <p className={styles.holiday__date}>
+  //           {holiday.date
+  //             .substring(holiday.date.indexOf('-') + 1)
+  //             .replace(/^0+/, '')}
+  //         </p>
+  //         <p className={styles.holiday__name}>{holiday.name}</p>
+  //       </div>
+  //     );
+  //   });
+
   return (
     <div className={styles.calendar}>
       <div className={styles.calendar__header}>
         <Button
+          variant="outlined"
           className={styles.button}
-          onClick={ViewType.DAY ? handlePrevDate : handlePrevMonth}
+          onClick={viewType == ViewType.DAY ? handlePrevDate : handlePrevMonth}
           data-testid="prevmonthordate"
         >
           <ChevronLeft />
@@ -530,12 +533,13 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           className={styles.calendar__header_month}
           data-testid="current-date"
         >
-          {ViewType.DAY ? `${currentDate}` : ``} {months[currentMonth]}{' '}
-          {currentYear}
+          {viewType == ViewType.DAY ? `${currentDate}` : ``} {currentYear}{' '}
+          <div>{months[currentMonth]}</div>
         </div>
         <Button
+          variant="outlined"
           className={styles.button}
-          onClick={ViewType.DAY ? handleNextDate : handleNextMonth}
+          onClick={viewType == ViewType.DAY ? handleNextDate : handleNextMonth}
           data-testid="nextmonthordate"
         >
           <ChevronRight />
@@ -551,7 +555,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         </div>
       </div>
       <div className={`${styles.calendar__scroll} customScroll`}>
-        {ViewType.MONTH ? (
+        {viewType == ViewType.MONTH ? (
           <div>
             <div className={styles.calendar__weekdays}>
               {weekdays.map((weekday, index) => (

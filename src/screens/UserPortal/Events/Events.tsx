@@ -25,6 +25,7 @@ import { errorHandler } from 'utils/errorHandler';
 import EventCalendar from 'components/EventCalendar/EventCalendar';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams } from 'react-router-dom';
+import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 
 interface InterfaceEventCardProps {
   id: string;
@@ -47,6 +48,27 @@ interface InterfaceEventCardProps {
   registrants: {
     id: string;
   }[];
+}
+
+interface InterfaceAttendee {
+  _id: string;
+  title: string;
+  description: string;
+  location: string;
+  startDate: string;
+  endDate: string;
+  isRegisterable: boolean;
+  isPublic: boolean;
+  endTime: string;
+  startTime: string;
+  recurring: boolean;
+  allDay: boolean;
+  attendees: { _id: string }[];
+  creator: {
+    firstName: string;
+    lastName: string;
+    _id: string;
+  };
 }
 
 const timeToDayJs = (time: string): Dayjs => {
@@ -77,6 +99,7 @@ export default function events(): JSX.Element {
   const [isAllDay, setIsAllDay] = React.useState(true);
   const [startTime, setStartTime] = React.useState('08:00:00');
   const [endTime, setEndTime] = React.useState('10:00:00');
+  const [viewType] = React.useState<ViewType>(ViewType.MONTH);
 
   const { orgId: organizationId } = useParams();
 
@@ -133,7 +156,7 @@ export default function events(): JSX.Element {
         setEndTime('10:00:00');
       }
       setShowCreateEventModal(false);
-    } catch (error: any) {
+    } catch (error: unknown) {
       /* istanbul ignore next */
       errorHandler(t, error);
     }
@@ -166,9 +189,11 @@ export default function events(): JSX.Element {
     });
     setPage(0);
   };
-  const handleSearchByEnter = (e: any): void => {
+  const handleSearchByEnter = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ): void => {
     if (e.key === 'Enter') {
-      const { value } = e.target;
+      const { value } = e.target as HTMLInputElement;
       handleSearch(value);
     }
   };
@@ -288,9 +313,9 @@ export default function events(): JSX.Element {
                           )
                         : /* istanbul ignore next */
                           events
-                      ).map((event: any) => {
-                        const attendees: any = [];
-                        event.attendees.forEach((attendee: any) => {
+                      ).map((event: InterfaceAttendee) => {
+                        const attendees: { id: string }[] = [];
+                        event.attendees.forEach((attendee: { _id: string }) => {
                           const r = {
                             id: attendee._id,
                           };
@@ -298,10 +323,15 @@ export default function events(): JSX.Element {
                           attendees.push(r);
                         });
 
-                        const creator: any = {};
-                        creator.firstName = event.creator.firstName;
-                        creator.lastName = event.creator.lastName;
-                        creator.id = event.creator._id;
+                        const creator: {
+                          firstName: string;
+                          lastName: string;
+                          id: string;
+                        } = {
+                          firstName: '',
+                          lastName: '',
+                          id: '',
+                        };
 
                         const cardProps: InterfaceEventCardProps = {
                           id: event._id,
@@ -349,6 +379,7 @@ export default function events(): JSX.Element {
           {mode === 1 && (
             <div className="mt-4">
               <EventCalendar
+                viewType={viewType}
                 eventData={events}
                 orgData={orgData}
                 userRole={userRole}
