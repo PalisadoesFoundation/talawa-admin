@@ -665,7 +665,6 @@ export const REGISTER_EVENT = gql`
   }
 `;
 
-
 export const UPDATE_COMMUNITY = gql`
   mutation updateCommunity($data: UpdateCommunityInput!) {
     updateCommunity(data: $data)

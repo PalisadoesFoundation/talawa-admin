@@ -750,7 +750,6 @@ export const USERS_CONNECTION_LIST = gql`
   }
 `;
 
-
 export const GET_COMMUNITY_DATA = gql`
   query getCommunityData {
     getCommunityData {
