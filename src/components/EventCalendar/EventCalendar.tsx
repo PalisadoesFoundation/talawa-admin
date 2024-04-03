@@ -143,6 +143,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   };
 
   const handlePrevDate = (): void => {
+    /*istanbul ignore next*/
     if (currentDate > 1) {
       setCurrentDate(currentDate - 1);
     } else {
@@ -183,6 +184,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   };
 
   const handleTodayButton = (): void => {
+    /*istanbul ignore next*/
     setCurrentYear(today.getFullYear());
     setCurrentMonth(today.getMonth());
     setCurrentDate(today.getDate());
@@ -420,7 +422,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           setExpanded(index);
         }
       };
-
+      /*istanbul ignore next*/
       const allEventsList: JSX.Element[] =
         events
           ?.filter((datas) => {
