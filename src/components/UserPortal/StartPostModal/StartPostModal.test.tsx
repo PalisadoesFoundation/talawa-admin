@@ -72,7 +72,6 @@ const renderStartPostModal = (
         lastName: 'dsza',
         email: 'glen@dsza.com',
         appLanguageCode: 'en',
-        userType: 'USER',
         pluginCreationAllowed: true,
         adminApproved: true,
         createdAt: '2023-02-18T09:22:27.969Z',

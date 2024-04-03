@@ -19,7 +19,6 @@ const leftDrawer = ({ hideDrawer }: InterfaceLeftDrawerProps): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'leftDrawer' });
 
   const { getItem } = useLocalStorage();
-  const userType = getItem('UserType');
   const superAdmin = getItem('SuperAdmin');
   const role = superAdmin ? 'SuperAdmin' : 'Admin';
 

@@ -62,9 +62,6 @@ afterEach(() => {
 });
 
 describe('Testing Left Drawer component for SUPERADMIN', () => {
-  beforeEach(() => {
-    setItem('UserType', 'SUPERADMIN');
-  });
   test('Component should be rendered properly', () => {
     setItem('UserImage', '');
     setItem('UserImage', '');
@@ -137,9 +134,6 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
 });
 
 describe('Testing Left Drawer component for ADMIN', () => {
-  beforeEach(() => {
-    setItem('UserType', 'ADMIN');
-  });
   test('Components should be rendered properly', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
