@@ -70,6 +70,8 @@ describe('Testing Requests screen', () => {
   test(`Component should be rendered properly when user is not Admin
   and or userId does not exists in localstorage`, async () => {
     setItem('id', '');
+    setItem('AdminFor', []);
+    setItem('SuperAdmin', true);
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
