@@ -179,7 +179,6 @@ export const LOGIN_MUTATION = gql`
         email
       }
       appUserProfile {
-        adminApproved
         adminFor {
           _id
         }
@@ -456,18 +455,6 @@ export const FORGOT_PASSWORD_MUTATION = gql`
 export const UPDATE_USERTYPE_MUTATION = gql`
   mutation UpdateUserType($id: ID!, $userType: String!) {
     updateUserType(data: { id: $id, userType: $userType })
-  }
-`;
-
-export const ACCEPT_ADMIN_MUTATION = gql`
-  mutation AcceptAdmin($id: ID!) {
-    acceptAdmin(id: $id)
-  }
-`;
-
-export const REJECT_ADMIN_MUTATION = gql`
-  mutation RejectAdmin($id: ID!) {
-    rejectAdmin(id: $id)
   }
 `;
 
