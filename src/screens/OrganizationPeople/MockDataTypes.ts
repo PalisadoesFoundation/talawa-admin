@@ -8,7 +8,6 @@ type User = {
   _id: string;
   email: string;
   userType: string;
-  adminApproved: boolean;
   createdAt: string;
   joinedOrganizations: {
     __typename: string;

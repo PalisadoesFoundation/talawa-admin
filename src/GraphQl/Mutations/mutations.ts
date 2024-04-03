@@ -179,7 +179,6 @@ export const LOGIN_MUTATION = gql`
         email
       }
       appUserProfile {
-        adminApproved
         adminFor {
           _id
         }

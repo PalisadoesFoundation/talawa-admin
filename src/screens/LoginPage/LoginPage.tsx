@@ -258,9 +258,7 @@ const loginPage = (): JSX.Element => {
         const { login } = loginData;
         const { user, appUserProfile } = login;
         const isAdmin: boolean =
-          appUserProfile.isSuperAdmin ||
-          (appUserProfile.adminFor.length !== 0 &&
-            appUserProfile.adminApproved === true);
+          appUserProfile.isSuperAdmin || appUserProfile.adminFor.length !== 0;
 
         if (role === 'admin' && !isAdmin) {
           toast.warn(t('notAuthorised'));
