@@ -49,11 +49,15 @@ const StyledTableRow = styled(TableRow)(() => ({
 }));
 
 function AddMember(): JSX.Element {
-  const { t } = useTranslation('translation', {
+  const { t: translateOrgPeople } = useTranslation('translation', {
     keyPrefix: 'organizationPeople',
   });
 
-  document.title = t('title');
+  const { t: translateAddMember } = useTranslation('translation', {
+    keyPrefix: 'addMember',
+  });
+
+  document.title = translateOrgPeople('title');
 
   const [addUserModalisOpen, setAddUserModalIsOpen] = useState(false);
 
@@ -178,11 +182,11 @@ function AddMember(): JSX.Element {
         createUserVariables.lastName
       )
     ) {
-      toast.error(t('invalidDetailsMessage'));
+      toast.error(translateOrgPeople('invalidDetailsMessage'));
     } else if (
       createUserVariables.password !== createUserVariables.confirmPassword
     ) {
-      toast.error(t('passwordNotMatch'));
+      toast.error(translateOrgPeople('passwordNotMatch'));
     } else {
       try {
         const registeredUser = await registerMutation({
@@ -209,7 +213,7 @@ function AddMember(): JSX.Element {
         });
       } catch (error: unknown) {
         /* istanbul ignore next */
-        errorHandler(t, error);
+        errorHandler(translateOrgPeople, error);
       }
     }
   };
@@ -275,7 +279,7 @@ function AddMember(): JSX.Element {
           className={styles.dropdown}
           data-testid="addMembers"
         >
-          {t('addMembers')}
+          {translateOrgPeople('addMembers')}
         </Dropdown.Toggle>
         <Dropdown.Menu>
           <Dropdown.Item
@@ -287,7 +291,9 @@ function AddMember(): JSX.Element {
               openAddUserModal();
             }}
           >
-            <Form.Label htmlFor="existingUser">{t('existingUser')}</Form.Label>
+            <Form.Label htmlFor="existingUser">
+              {translateOrgPeople('existingUser')}
+            </Form.Label>
           </Dropdown.Item>
           <Dropdown.Item
             id="newUser"
@@ -298,7 +304,7 @@ function AddMember(): JSX.Element {
               openCreateNewUserModal();
             }}
           >
-            <label htmlFor="memberslist">{t('newUser')}</label>
+            <label htmlFor="memberslist">{translateOrgPeople('newUser')}</label>
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
@@ -310,7 +316,7 @@ function AddMember(): JSX.Element {
         contentClassName={styles.modalContent}
       >
         <Modal.Header closeButton data-testid="pluginNotificationHeader">
-          <Modal.Title>{t('addMembers')}</Modal.Title>
+          <Modal.Title>{translateOrgPeople('addMembers')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {allUsersLoading ? (
@@ -325,7 +331,7 @@ function AddMember(): JSX.Element {
                     type="name"
                     id="searchUser"
                     data-testid="searchUser"
-                    placeholder={t('searchFullName')}
+                    placeholder={translateOrgPeople('searchFullName')}
                     autoComplete="off"
                     className={styles.inputFieldModal}
                     value={userName}
@@ -348,9 +354,11 @@ function AddMember(): JSX.Element {
                   <TableHead>
                     <TableRow>
                       <StyledTableCell>#</StyledTableCell>
-                      <StyledTableCell align="center">User</StyledTableCell>
                       <StyledTableCell align="center">
-                        Add Member
+                        {translateAddMember('user')}
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        {translateAddMember('addMember')}
                       </StyledTableCell>
                     </TableRow>
                   </TableHead>
@@ -416,10 +424,10 @@ function AddMember(): JSX.Element {
           <div className="my-3">
             <div className="row">
               <div className="col-sm-6">
-                <h6>{t('firstName')}</h6>
+                <h6>{translateOrgPeople('firstName')}</h6>
                 <InputGroup className="mt-2 mb-4">
                   <Form.Control
-                    placeholder={t('enterFirstName')}
+                    placeholder={translateOrgPeople('enterFirstName')}
                     className={styles.borderNone}
                     value={createUserVariables.firstName}
                     onChange={handleFirstName}
@@ -428,10 +436,10 @@ function AddMember(): JSX.Element {
                 </InputGroup>
               </div>
               <div className="col-sm-6">
-                <h6>{t('lastName')}</h6>
+                <h6>{translateOrgPeople('lastName')}</h6>
                 <InputGroup className="mt-2 mb-4">
                   <Form.Control
-                    placeholder={t('enterLastName')}
+                    placeholder={translateOrgPeople('enterLastName')}
                     className={styles.borderNone}
                     value={createUserVariables.lastName}
                     onChange={handleLastName}
@@ -440,10 +448,10 @@ function AddMember(): JSX.Element {
                 </InputGroup>
               </div>
             </div>
-            <h6>{t('emailAddress')}</h6>
+            <h6>{translateOrgPeople('emailAddress')}</h6>
             <InputGroup className="mt-2 mb-4">
               <Form.Control
-                placeholder={t('enterEmail')}
+                placeholder={translateOrgPeople('enterEmail')}
                 type="email"
                 className={styles.borderNone}
                 value={createUserVariables.email}
@@ -456,10 +464,10 @@ function AddMember(): JSX.Element {
                 <EmailOutlinedIcon className={`${styles.colorWhite}`} />
               </InputGroup.Text>
             </InputGroup>
-            <h6>{t('password')}</h6>
+            <h6>{translateOrgPeople('password')}</h6>
             <InputGroup className="mt-2 mb-4">
               <Form.Control
-                placeholder={t('enterPassword')}
+                placeholder={translateOrgPeople('enterPassword')}
                 type={showPassword ? 'text' : 'password'}
                 className={styles.borderNone}
                 value={createUserVariables.password}
@@ -478,10 +486,10 @@ function AddMember(): JSX.Element {
                 )}
               </InputGroup.Text>
             </InputGroup>
-            <h6>{t('confirmPassword')}</h6>
+            <h6>{translateOrgPeople('confirmPassword')}</h6>
             <InputGroup className="mt-2 mb-4">
               <Form.Control
-                placeholder={t('enterConfirmPassword')}
+                placeholder={translateOrgPeople('enterConfirmPassword')}
                 type={showConfirmPassword ? 'text' : 'password'}
                 className={styles.borderNone}
                 value={createUserVariables.confirmPassword}
@@ -500,7 +508,7 @@ function AddMember(): JSX.Element {
                 )}
               </InputGroup.Text>
             </InputGroup>
-            <h6>{t('organization')}</h6>
+            <h6>{translateOrgPeople('organization')}</h6>
             <InputGroup className="mt-2 mb-4">
               <Form.Control
                 className={styles.borderNone}
@@ -518,7 +526,7 @@ function AddMember(): JSX.Element {
               onClick={closeCreateNewUserModal}
               data-testid="closeBtn"
             >
-              {t('cancel')}
+              {translateOrgPeople('cancel')}
             </Button>
             <Button
               className={`${styles.colorPrimary} ${styles.borderNone}`}
@@ -526,7 +534,7 @@ function AddMember(): JSX.Element {
               onClick={handleCreateUser}
               data-testid="createBtn"
             >
-              {t('create')}
+              {translateOrgPeople('create')}
             </Button>
           </div>
         </Modal.Body>

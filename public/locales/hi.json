@@ -1029,6 +1029,8 @@
     "cancel": "रद्द करें",
     "create": "सृजन करें",
     "invalidDetailsMessage": "कृपया सभी आवश्यक विवरण प्रदान करें।",
-    "passwordNotMatch": "पासवर्ड मेल नहीं खाते।"
+    "passwordNotMatch": "पासवर्ड मेल नहीं खाते।",
+    "user": "उपयोगकर्ता",
+    "addMember": "सदस्य जोड़ें"
   }
 }

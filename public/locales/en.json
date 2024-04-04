@@ -1032,6 +1032,8 @@
     "cancel": "Cancel",
     "create": "Create",
     "invalidDetailsMessage": "Please provide all required details.",
-    "passwordNotMatch": "Passwords do not match."
+    "passwordNotMatch": "Passwords do not match.",
+    "user": "User",
+    "addMember": "Add Member"
   }
 }

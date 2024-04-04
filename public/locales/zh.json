@@ -1027,6 +1027,8 @@
     "cancel": "取消",
     "create": "创建",
     "invalidDetailsMessage": "请提供所有必需的细节。",
-    "passwordNotMatch": "密码不匹配。"
+    "passwordNotMatch": "密码不匹配。",
+    "user": "用户",
+    "addMember": "添加成员"
   }
 }

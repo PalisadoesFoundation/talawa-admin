@@ -1024,6 +1024,8 @@
     "cancel": "Annuler",
     "create": "Créer",
     "invalidDetailsMessage": "Veuillez fournir tous les détails requis.",
-    "passwordNotMatch": "Les mots de passe ne correspondent pas."
+    "passwordNotMatch": "Les mots de passe ne correspondent pas.",
+    "user": "Utilisateur",
+    "addMember": "Ajouter un membre"
   }
 }
