@@ -737,7 +737,6 @@
     "appLanguageCode": "选择语言",
     "delete": "删除用户",
     "saveChanges": "保存更改",
-    "adminApproved": "管理员已批准",
     "pluginCreationAllowed": "允许创建插件",
     "joined": "加入",
     "created": "创建",
@@ -892,11 +891,15 @@
     "joined": "加入"
   },
   "donate": {
+    "donations": "捐款",
+    "searchDonations": "搜索捐款",
+    "donateForThe": "为",
     "donateTo": "捐贈給",
     "amount": "數量",
     "yourPreviousDonations": "您之前的捐款",
     "donate": "捐",
-    "nothingToShow": "這裡沒有什麼可顯示的。"
+    "nothingToShow": "這裡沒有什麼可顯示的。",
+    "success": "捐赠成功"
   },
   "userEvents": {
     "nothingToShow": "這裡沒有什麼可顯示的。",

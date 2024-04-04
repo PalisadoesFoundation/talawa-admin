@@ -16,17 +16,12 @@
 .btnsContainer .btnsBlock {
   display: flex;
   gap: 10px;
-  margin-top: 17px;
 }
 
 .btnsContainer button {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.clearFiltersBtn {
-  margin-top: 17px;
 }
 
 .container {
@@ -94,10 +89,6 @@
     transform 0.2s,
     box-shadow 0.2s;
   width: 100%;
-}
-
-h2 {
-  margin-top: 0.5rem;
 }
 
 hr {
@@ -173,10 +164,6 @@ hr {
 
   .btnsContainer button {
     width: 100%;
-  }
-
-  .clearFiltersBtn {
-    margin-top: 0;
   }
 
   .createActionItemButton {

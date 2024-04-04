@@ -61,7 +61,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     city: '',
     country: '',
     pluginCreationAllowed: false,
-    adminApproved: false,
   });
   // Handle date change
   const handleDateChange = (date: Dayjs | null): void => {
@@ -98,7 +97,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         city: userData?.user?.address?.city,
         country: userData?.user?.address?.countryCode,
         pluginCreationAllowed: userData?.appUserProfile?.pluginCreationAllowed,
-        adminApproved: userData?.appUserProfile?.adminApproved,
         image: userData?.user?.image || '',
       });
     }
@@ -471,20 +469,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               </div>
               <div className="p-3">
                 <div className="toggles">
-                  <div className="d-flex flex-row">
-                    <input
-                      type="checkbox"
-                      name="adminApproved"
-                      className={`mx-2 ${styles.noOutline}`}
-                      checked={formState.adminApproved}
-                      onChange={handleToggleChange} // API not supporting this feature
-                      data-testid="adminApproved"
-                      placeholder="adminApproved"
-                    />
-                    <p className="p-0 m-0">
-                      {`${t('adminApproved')} (API not supported yet)`}
-                    </p>
-                  </div>
                   <div className="d-flex flex-row">
                     <input
                       type="checkbox"

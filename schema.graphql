@@ -597,7 +597,6 @@ input EditVenueInput {
 }
 
 type Mutation {
-  acceptAdmin(id: ID!): Boolean!
   acceptMembershipRequest(membershipRequestId: ID!): MembershipRequest!
   addEventAttendee(data: EventAttendeeInput!): User!
   addFeedback(data: FeedbackInput!): Feedback!
@@ -673,10 +672,8 @@ type Mutation {
   createSampleOrganization: Boolean!
   createUserFamily(data: createUserFamilyInput!): UserFamily!
   createUserTag(input: CreateUserTagInput!): UserTag
-<<<<<<< HEAD
   createVenue(data: VenueInput!): Venue
   deleteAdvertisement(id: ID!): DeletePayload!
-=======
   deleteAdvertisementById(id: ID!): DeletePayload!
   deleteAgendaCategory(id: ID!): ID!
   deleteDonationById(id: ID!): DeletePayload!
@@ -693,7 +690,6 @@ type Mutation {
   recaptcha(data: RecaptchaVerification!): Boolean!
   refreshToken(refreshToken: String!): ExtendSession!
   registerForEvent(id: ID!): Event!
-  rejectAdmin(id: ID!): Boolean!
   rejectMembershipRequest(membershipRequestId: ID!): MembershipRequest!
   removeActionItem(id: ID!): ActionItem!
   removeAdmin(data: UserAndOrganizationInput!): AppUserProfile!
@@ -1105,7 +1101,6 @@ type Query {
   user(id: ID!): UserData!
   userLanguage(userId: ID!): String
   users(
-    adminApproved: Boolean
     first: Int
     orderBy: UserOrderByInput
     skip: Int
@@ -1329,7 +1324,6 @@ scalar Upload
 type User {
   _id: ID!
   address: Address
-  adminApproved: Boolean
   appUserProfileId: AppUserProfile
   birthDate: Date
   createdAt: DateTime!

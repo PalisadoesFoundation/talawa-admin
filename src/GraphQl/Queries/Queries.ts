@@ -178,7 +178,6 @@ export const USER_LIST = gql`
         }
       }
       appUserProfile {
-        adminApproved
         _id
         adminFor {
           _id
@@ -223,7 +222,6 @@ export const USER_LIST_REQUEST = gql`
     $lastName_contains: String
     $first: Int
     $skip: Int
-    $adminApproved: Boolean
   ) {
     users(
       where: {
@@ -232,7 +230,6 @@ export const USER_LIST_REQUEST = gql`
       }
       skip: $skip
       first: $first
-      adminApproved: $adminApproved
     ) {
       user {
         firstName
@@ -244,7 +241,6 @@ export const USER_LIST_REQUEST = gql`
       }
       appUserProfile {
         _id
-        adminApproved
         adminFor {
           _id
         }
@@ -520,7 +516,6 @@ export const USER_DETAILS = gql`
       }
       appUserProfile {
         _id
-        adminApproved
         adminFor {
           _id
         }
@@ -611,6 +606,7 @@ export const ORGANIZATION_DONATION_CONNECTION_LIST = gql`
       amount
       userId
       payPalId
+      updatedAt
     }
   }
 `;
@@ -730,7 +726,6 @@ export const USERS_CONNECTION_LIST = gql`
       }
       appUserProfile {
         _id
-        adminApproved
         adminFor {
           _id
         }

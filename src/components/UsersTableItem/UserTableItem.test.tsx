@@ -179,7 +179,6 @@ describe('Testing User Table Item', () => {
         },
         appUserProfile: {
           _id: '123',
-          adminApproved: true,
           isSuperAdmin: true,
           createdOrganizations: [],
           createdEvents: [],
@@ -238,7 +237,6 @@ describe('Testing User Table Item', () => {
         },
         appUserProfile: {
           _id: '123',
-          adminApproved: true,
           isSuperAdmin: true,
           createdOrganizations: [],
           createdEvents: [],
@@ -405,7 +403,6 @@ describe('Testing User Table Item', () => {
         },
         appUserProfile: {
           _id: '123',
-          adminApproved: true,
           isSuperAdmin: true,
           createdOrganizations: [],
           createdEvents: [],
@@ -620,7 +617,6 @@ describe('Testing User Table Item', () => {
         },
         appUserProfile: {
           _id: '123',
-          adminApproved: true,
           isSuperAdmin: true,
           createdOrganizations: [],
           createdEvents: [],
@@ -838,7 +834,6 @@ describe('Testing User Table Item', () => {
         },
         appUserProfile: {
           _id: '123',
-          adminApproved: true,
           isSuperAdmin: true,
           createdOrganizations: [],
           createdEvents: [],
@@ -1021,7 +1016,6 @@ describe('Testing User Table Item', () => {
         },
         appUserProfile: {
           _id: '123',
-          adminApproved: true,
           isSuperAdmin: true,
           createdOrganizations: [],
           createdEvents: [],

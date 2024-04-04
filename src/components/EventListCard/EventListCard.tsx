@@ -13,6 +13,7 @@ import {
 import { Form } from 'react-bootstrap';
 import { errorHandler } from 'utils/errorHandler';
 import { useNavigate } from 'react-router-dom';
+import { getItem } from 'utils/useLocalstorage';
 
 interface InterfaceEventListCardProps {
   key: string;
@@ -41,6 +42,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
   const [eventDeleteModalIsOpen, setEventDeleteModalIsOpen] = useState(false);
   const [eventUpdateModalIsOpen, setEventUpdateModalIsOpen] = useState(false);
   const navigate = useNavigate();
+  const adminFor = getItem('AdminFor', 'admin');
   const [formState, setFormState] = useState({
     title: '',
     eventdescrip: '',
@@ -96,7 +98,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
           window.location.reload();
         }, 2000);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       /* istanbul ignore next */
       errorHandler(t, error);
     }
@@ -130,7 +132,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
           window.location.reload();
         }, 2000);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       /* istanbul ignore next */
       errorHandler(t, error);
     }
@@ -142,7 +144,14 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
 
   return (
     <>
-      <div className={styles.cards} onClick={showViewModal} data-testid="card">
+      <div
+        className={styles.cards}
+        style={{
+          backgroundColor: adminFor ? '#a8d5ff' : '#d9d9d9',
+        }}
+        onClick={showViewModal}
+        data-testid="card"
+      >
         <div className={styles.dispflex}>
           <h2 className={styles.eventtitle}>
             {props.eventName ? <>{props.eventName}</> : <>Dogs Care</>}

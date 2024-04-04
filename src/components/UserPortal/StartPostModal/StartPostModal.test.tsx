@@ -73,7 +73,6 @@ const renderStartPostModal = (
         email: 'glen@dsza.com',
         appLanguageCode: 'en',
         pluginCreationAllowed: true,
-        adminApproved: true,
         createdAt: '2023-02-18T09:22:27.969Z',
         adminFor: [],
         createdOrganizations: [],
@@ -87,7 +86,6 @@ const renderStartPostModal = (
       appUserProfile: {
         __typename: 'AppUserProfile',
         _id: '123',
-        adminApproved: true,
         isSuperAdmin: true,
         adminFor: [],
         createdOrganizations: [],
