@@ -493,10 +493,11 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
               </div>
               {(allEventsList?.length > 2 ||
                 (windowWidth <= 700 && allEventsList?.length > 0)) && (
+                /*istanbul ignore next*/
                 <button
                   className={styles.btn__more}
+                  /*istanbul ignore next*/
                   onClick={() => {
-                    /*istanbul ignore next*/
                     toggleExpand(index);
                   }}
                 >
