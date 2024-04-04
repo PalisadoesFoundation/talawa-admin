@@ -739,7 +739,6 @@
     "appLanguageCode": "भाषा चुनें",
     "delete": "उपयोगकर्ता को हटाएं",
     "saveChanges": "परिवर्तन सहेजें",
-    "adminApproved": "व्यवस्थापक द्वारा स्वीकृत",
     "pluginCreationAllowed": "प्लगइन निर्माण अनुमति दी गई",
     "joined": "शामिल हुए",
     "created": "बनाया गया",
@@ -894,11 +893,15 @@
     "joined": "शामिल हुआ"
   },
   "donate": {
+    "donations": "दान",
+    "searchDonations": "दान खोजें",
+    "donateForThe": "के लिए दान करें",
     "donateTo": "दान दें",
     "amount": "मात्रा",
     "yourPreviousDonations": "आपका पिछला दान",
     "donate": "दान",
-    "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है."
+    "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
+    "success": "दान सफल"
   },
   "userEvents": {
     "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",

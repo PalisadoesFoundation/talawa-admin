@@ -307,7 +307,6 @@ export interface InterfaceQueryUserListItem {
   };
   appUserProfile: {
     _id: string;
-    adminApproved: boolean;
     adminFor: { _id: string }[];
     isSuperAdmin: boolean;
     createdOrganizations: { _id: string }[];

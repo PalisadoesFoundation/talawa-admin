@@ -179,7 +179,6 @@ export const LOGIN_MUTATION = gql`
         email
       }
       appUserProfile {
-        adminApproved
         adminFor {
           _id
         }
@@ -459,18 +458,6 @@ export const UPDATE_USERTYPE_MUTATION = gql`
   }
 `;
 
-export const ACCEPT_ADMIN_MUTATION = gql`
-  mutation AcceptAdmin($id: ID!) {
-    acceptAdmin(id: $id)
-  }
-`;
-
-export const REJECT_ADMIN_MUTATION = gql`
-  mutation RejectAdmin($id: ID!) {
-    rejectAdmin(id: $id)
-  }
-`;
-
 /**
  * {@label UPDATE_INSTALL_STATUS_PLUGIN_MUTATION}
  * @remarks
@@ -674,6 +661,31 @@ export const UPDATE_COMMUNITY = gql`
 export const RESET_COMMUNITY = gql`
   mutation resetCommunity {
     resetCommunity
+  }
+`;
+
+export const DONATE_TO_ORGANIZATION = gql`
+  mutation donate(
+    $userId: ID!
+    $createDonationOrgId2: ID!
+    $payPalId: ID!
+    $nameOfUser: String!
+    $amount: Float!
+    $nameOfOrg: String!
+  ) {
+    createDonation(
+      userId: $userId
+      orgId: $createDonationOrgId2
+      payPalId: $payPalId
+      nameOfUser: $nameOfUser
+      amount: $amount
+      nameOfOrg: $nameOfOrg
+    ) {
+      _id
+      amount
+      nameOfUser
+      nameOfOrg
+    }
   }
 `;
 
