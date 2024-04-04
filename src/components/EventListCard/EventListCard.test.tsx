@@ -11,7 +11,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 
@@ -82,32 +82,98 @@ describe('Testing Event List Card', () => {
     isRegisterable: false,
   };
 
+  beforeAll(() => {
+    jest.mock('react-router-dom', () => ({
+      ...jest.requireActual('react-router-dom'),
+      useParams: () => ({ orgId: 'orgId' }),
+    }));
+  });
+
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
+
   global.alert = jest.fn();
   test('Testing for modal', async () => {
+    jest.mock('react-router-dom', () => ({
+      ...jest.requireActual('react-router-dom'),
+      useParams: () => ({ orgId: 'orgId' }),
+    }));
     render(
       <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
+        <MemoryRouter initialEntries={['/orgevents/orgId']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <EventListCard
-                key={''}
-                id={''}
-                eventLocation={''}
-                eventName={''}
-                eventDescription={''}
-                regDate={''}
-                regEndDate={''}
-                startTime={''}
-                endTime={''}
-                allDay={false}
-                recurring={false}
-                isPublic={false}
-                isRegisterable={false}
-              />
+              <Routes>
+                <Route
+                  path="/orgevents/:orgId"
+                  element={
+                    <EventListCard
+                      key={''}
+                      id={''}
+                      eventLocation={''}
+                      eventName={''}
+                      eventDescription={''}
+                      regDate={''}
+                      regEndDate={''}
+                      startTime={''}
+                      endTime={''}
+                      allDay={false}
+                      recurring={false}
+                      isPublic={false}
+                      isRegisterable={false}
+                    />
+                  }
+                />
+                <Route
+                  path="/event/:orgId/"
+                  element={
+                    <EventListCard
+                      key={''}
+                      id={''}
+                      eventLocation={''}
+                      eventName={''}
+                      eventDescription={''}
+                      regDate={''}
+                      regEndDate={''}
+                      startTime={''}
+                      endTime={''}
+                      allDay={false}
+                      recurring={false}
+                      isPublic={false}
+                      isRegisterable={false}
+                    />
+                  }
+                />
+              </Routes>
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </MemoryRouter>
       </MockedProvider>,
+
+      // <MockedProvider addTypename={false} link={link}>
+      //   <BrowserRouter>
+      //     <Provider store={store}>
+      //       <I18nextProvider i18n={i18nForTest}>
+      //         <EventListCard
+      //           key={''}
+      //           id={''}
+      //           eventLocation={''}
+      //           eventName={''}
+      //           eventDescription={''}
+      //           regDate={''}
+      //           regEndDate={''}
+      //           startTime={''}
+      //           endTime={''}
+      //           allDay={false}
+      //           recurring={false}
+      //           isPublic={false}
+      //           isRegisterable={false}
+      //         />
+      //       </I18nextProvider>
+      //     </Provider>
+      //   </BrowserRouter>
+      // </MockedProvider>,
     );
 
     await wait();
