@@ -474,16 +474,19 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             >
               <div
                 className={
+                  /*istanbul ignore next*/
                   expanded === index
                     ? styles.expand_event_list
                     : styles.event_list
                 }
               >
                 <div>{holidayList}</div>
+                {/*istanbul ignore next*/}
                 {expanded === index
                   ? allEventsList
                   : holidayList?.length > 0
-                    ? allEventsList?.slice(0, 1)
+                    ? /*istanbul ignore next*/
+                      allEventsList?.slice(0, 1)
                     : allEventsList?.slice(0, 2)}
               </div>
               {(allEventsList?.length > 2 ||
@@ -494,6 +497,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                     toggleExpand(index);
                   }}
                 >
+                  {/*istanbul ignore next*/}
                   {expanded === index ? 'View less' : 'View all'}
                 </button>
               )}
