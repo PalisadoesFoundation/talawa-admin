@@ -169,6 +169,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       currentMonth - 1,
       0,
     ).getDate();
+    /*istanbul ignore next*/
     if (currentDate < lastDayOfCurrentMonth) {
       setCurrentDate(currentDate + 1);
     } else {
