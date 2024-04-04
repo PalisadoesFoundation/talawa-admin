@@ -22,7 +22,7 @@ import {
 } from './RequestsMocks';
 import useLocalStorage from 'utils/useLocalstorage';
 
-const { setItem } = useLocalStorage();
+const { setItem, removeItem } = useLocalStorage();
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(EMPTY_MOCKS, true);
@@ -70,6 +70,8 @@ describe('Testing Requests screen', () => {
   test(`Component should be rendered properly when user is not Admin
   and or userId does not exists in localstorage`, async () => {
     setItem('id', '');
+    removeItem('AdminFor');
+    removeItem('SuperAdmin');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>

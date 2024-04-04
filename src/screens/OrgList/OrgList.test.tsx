@@ -68,6 +68,29 @@ describe('Organisations Page testing as SuperAdmin', () => {
     },
     image: new File(['hello'], 'hello.png', { type: 'image/png' }),
   };
+  test('Should display organisations for superAdmin even if admin For field is empty', async () => {
+    window.location.assign('/');
+    setItem('id', '123');
+    setItem('SuperAdmin', true);
+    setItem('AdminFor', []);
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgList />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    expect(
+      screen.queryByText('Organizations Not Found'),
+    ).not.toBeInTheDocument();
+  });
 
   test('Testing search functionality by pressing enter', async () => {
     setItem('id', '123');
