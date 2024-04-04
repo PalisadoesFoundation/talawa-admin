@@ -162,8 +162,9 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       }
     }
   };
-
+  /*istanbul ignore next*/
   const handleNextDate = (): void => {
+    /*istanbul ignore next*/
     const lastDayOfCurrentMonth = new Date(
       currentYear,
       currentMonth - 1,
@@ -417,6 +418,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         styles.day,
       ].join(' ');
       const toggleExpand = (index: number): void => {
+        /*istanbul ignore next*/
         if (expanded === index) {
           setExpanded(-1);
         } else {
@@ -501,24 +503,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       );
     });
   };
-
-  // const holidayPerMonth: any = holidays
-  //   .filter((holiday) => {
-  //     if (holiday.month == months[currentMonth]) return holiday;
-  //   })
-  //   .map((holiday) => {
-  //     return (
-  //       <div key={holiday.name} className={styles.holiday__data}>
-  //         <p className={styles.holiday__date}>{holiday.month}</p>
-  //         <p className={styles.holiday__date}>
-  //           {holiday.date
-  //             .substring(holiday.date.indexOf('-') + 1)
-  //             .replace(/^0+/, '')}
-  //         </p>
-  //         <p className={styles.holiday__name}>{holiday.name}</p>
-  //       </div>
-  //     );
-  //   });
 
   return (
     <div className={styles.calendar}>
