@@ -420,10 +420,10 @@ function orgList(): JSX.Element {
         searchByName.length > 0 ? (
         /* istanbul ignore next */
         <div className={styles.notFound} data-testid="noResultFound">
-            <h4 className="m-0">
+          <h4 className="m-0">
             {t('noResultsFoundFor')} &quot;{searchByName}&quot;
           </h4>
-          </div>
+        </div>
       ) : (
         <>
           <InfiniteScroll
