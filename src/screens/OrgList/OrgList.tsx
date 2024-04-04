@@ -406,9 +406,10 @@ function orgList(): JSX.Element {
       </div>
       {/* Text Infos for list */}
       {!isLoading &&
-      ((orgsData?.organizationsConnection.length === 0 &&
-        searchByName.length == 0) ||
-        (userData && adminFor.length === 0)) ? (
+      (!orgsData?.organizationsConnection ||
+        orgsData.organizationsConnection.length === 0) &&
+      searchByName.length === 0 &&
+      (!userData || adminFor.length === 0 || superAdmin) ? (
         <div className={styles.notFound}>
           <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
           <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>
