@@ -2,6 +2,9 @@
   font-family: sans-serif;
   font-size: 1.2rem;
   margin-bottom: 20px;
+  background: rgb(255, 255, 255);
+  border-radius: 10px;
+  padding: 5px;
 }
 .calendar__header {
   display: flex;
@@ -16,7 +19,16 @@
 .calendar__header_month {
   margin: 0.5rem;
   color: #707070;
-  font-weight: bold;
+  font-weight: 800;
+  font-size: 55px;
+  display: flex;
+  gap: 23px;
+  flex-direction: row;
+}
+.calendar__header_month div {
+  font-weight: 400;
+  color: black;
+  font-family: Outfit;
 }
 .space {
   flex: 1;
@@ -25,15 +37,19 @@
   justify-content: space-around;
 }
 .button {
+  border-radius: 100px;
   color: #707070;
-  background-color: rgba(0, 0, 0, 0);
+  background-color: rgba(194, 247, 182, 0);
   font-weight: bold;
   border: 0px;
+  font-size: 20px;
 }
+
 .calendar__weekdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   background-color: black;
+  font-family: Outfit;
   height: 60px;
 }
 .calendar__scroll {
@@ -44,8 +60,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #fff;
-  background-color: #31bb6b;
+  background-color: white;
   font-weight: 600;
 }
 .calendar__days {
@@ -98,16 +113,21 @@
   background-color: #ffffff;
   padding-left: 0.3rem;
   padding-right: 0.3rem;
+  border-radius: 10px;
+  margin: 5px;
   background-color: white;
   border: 1px solid #8d8d8d55;
   color: #4b4b4b;
   font-weight: 600;
-  height: 8rem;
+  height: 9rem;
   position: relative;
 }
+.day_weekends {
+  background-color: rgba(49, 187, 107, 0.2);
+}
 .day__outside {
-  background-color: #eeeded;
-  color: #898989;
+  background-color: white;
+  color: #89898996;
 }
 .day__selected {
   background-color: #007bff;
@@ -120,7 +140,7 @@
   color: #31bb6b;
 }
 .day__events {
-  background-color: #def6e1;
+  background-color: white;
 }
 .btn__today {
   transition: ease-in all 200ms;
@@ -181,15 +201,11 @@
   padding-top: 10px;
   padding-bottom: 10px;
 }
-/* .selectType {
-  padding: 16px 10px 16px 10px;
-  border-radius: 10px;
-} */
 .btn__more {
   border: 0px;
   font-size: 14px;
   background-color: initial;
-  color: #ffffff;
+  color: #262727;
   font-weight: 600;
   transition: all 200ms;
   position: relative;
@@ -197,7 +213,7 @@
   margin: 2px;
 }
 .btn__more:hover {
-  color: #3ce080;
+  color: #454645;
 }
 
 .expand_event_list {
@@ -248,4 +264,79 @@
   .btn__more {
     font-size: 12px;
   }
+}
+
+.calendar__infocards {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 35px;
+}
+.card__holidays {
+  background-color: rgba(246, 242, 229, 1);
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  font-family: Outfit;
+  border-radius: 20px;
+  padding: 30px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.month__holidays {
+  display: flex;
+  flex-direction: column;
+}
+.holiday__data {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+.holiday__date {
+  font-size: 20px;
+  color: rgba(234, 183, 86, 1);
+  font-weight: 700;
+}
+.holiday__name {
+  font-size: 20px;
+  margin-left: 35px;
+}
+.card__events {
+  background-color: rgba(244, 244, 244, 1);
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  font-family: Outfit;
+  border-radius: 20px;
+  padding: 30px;
+}
+.innercard__events {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+}
+.innercard__events p {
+  margin-bottom: 0;
+}
+.orgEvent__color {
+  height: 15px;
+  width: 40px;
+  background-color: rgba(82, 172, 255, 0.5);
+  border-radius: 10px;
+}
+.holidays__color {
+  height: 15px;
+  width: 40px;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+}
+
+.userEvents__color {
+  height: 15px;
+  width: 40px;
+  background: rgba(146, 200, 141, 0.5);
+  border-radius: 10px;
 }

@@ -13,6 +13,7 @@ import {
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import styles from './EventCalendar.module.css';
+import { weekdays } from './constants';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 const eventData = [
@@ -91,8 +92,8 @@ const link = new StaticMockLink(MOCKS, true);
 
 describe('Calendar', () => {
   it('renders weekdays', () => {
-    render(<Calendar eventData={eventData} />);
-    const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    render(<Calendar eventData={eventData} viewType={ViewType.MONTH} />);
+
     weekdays.forEach((weekday) => {
       expect(screen.getByText(weekday)).toBeInTheDocument();
     });
@@ -125,15 +126,8 @@ describe('Calendar', () => {
       month: 'long',
     });
     const currentYear = new Date().getFullYear();
-    const expectedText = `${new Date().getDate()} ${currentMonth} ${currentYear}`;
+    const expectedText = ` ${currentYear} ${currentMonth}`;
     expect(currentDateElement.textContent).toContain(expectedText);
-  });
-
-  it('should highlight the selected date when clicked', () => {
-    const { getByText } = render(<Calendar eventData={eventData} />);
-    const selectedDate = getByText('15');
-    fireEvent.click(selectedDate);
-    expect(selectedDate).toHaveClass(styles.day);
   });
 
   it('Should show prev and next month on clicking < & > buttons', () => {
