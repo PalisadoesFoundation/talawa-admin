@@ -2,7 +2,7 @@
   font-family: sans-serif;
   font-size: 1.2rem;
   margin-bottom: 20px;
-  background-color: white;
+  background: rgb(255, 255, 255);
   border-radius: 10px;
   padding: 5px;
 }
@@ -24,11 +24,11 @@
   display: flex;
   gap: 23px;
   flex-direction: row;
-  div {
-    font-weight: 400;
-    color: black;
-    font-family: Outfit;
-  }
+}
+.calendar__header_month div {
+  font-weight: 400;
+  color: black;
+  font-family: Outfit;
 }
 .space {
   flex: 1;
@@ -42,9 +42,7 @@
   background-color: rgba(194, 247, 182, 0);
   font-weight: bold;
   border: 0px;
-  svg {
-    font-size: 20px;
-  }
+  font-size: 20px;
 }
 
 .calendar__weekdays {
@@ -203,10 +201,6 @@
   padding-top: 10px;
   padding-bottom: 10px;
 }
-/* .selectType {
-  padding: 16px 10px 16px 10px;
-  border-radius: 10px;
-} */
 .btn__more {
   border: 0px;
   font-size: 14px;
@@ -323,9 +317,9 @@
   flex-direction: row;
   align-items: center;
   gap: 1rem;
-  p {
-    margin-bottom: 0;
-  }
+}
+.innercard__events p {
+  margin-bottom: 0;
 }
 .orgEvent__color {
   height: 15px;
