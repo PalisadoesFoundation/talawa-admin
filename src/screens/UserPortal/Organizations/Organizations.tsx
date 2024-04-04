@@ -68,13 +68,19 @@ export default function organizations(): JSX.Element {
     variables: { filter: filterName },
   });
 
-  const { data: data2 } = useQuery(USER_JOINED_ORGANIZATIONS, {
-    variables: { id: userId },
-  });
+  const { data: joinedOrganizationsData } = useQuery(
+    USER_JOINED_ORGANIZATIONS,
+    {
+      variables: { id: userId },
+    },
+  );
 
-  const { data: data3 } = useQuery(USER_CREATED_ORGANIZATIONS, {
-    variables: { id: userId },
-  });
+  const { data: createdOrganizationsData } = useQuery(
+    USER_CREATED_ORGANIZATIONS,
+    {
+      variables: { id: userId },
+    },
+  );
 
   /* istanbul ignore next */
   const handleChangePage = (
@@ -101,6 +107,7 @@ export default function organizations(): JSX.Element {
       filter: value,
     });
   };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSearchByEnter = (e: any): void => {
     if (e.key === 'Enter') {
       const { value } = e.target;
@@ -117,7 +124,27 @@ export default function organizations(): JSX.Element {
   /* istanbul ignore next */
   React.useEffect(() => {
     if (data) {
-      setOrganizations(data.organizationsConnection);
+      const organizations = data.organizationsConnection.map(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (organization: any) => {
+          let membershipRequestStatus = '';
+          if (
+            organization.members.find(
+              (member: { _id: string }) => member._id === userId,
+            )
+          )
+            membershipRequestStatus = 'accepted';
+          else if (
+            organization.membershipRequests.find(
+              (request: { user: { _id: string } }) =>
+                request.user._id === userId,
+            )
+          )
+            membershipRequestStatus = 'pending';
+          return { ...organization, membershipRequestStatus };
+        },
+      );
+      setOrganizations(organizations);
     }
   }, [data]);
 
@@ -125,16 +152,51 @@ export default function organizations(): JSX.Element {
   React.useEffect(() => {
     if (mode == 0) {
       if (data) {
-        setOrganizations(data.organizationsConnection);
+        const organizations = data.organizationsConnection.map(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (organization: any) => {
+            let membershipRequestStatus = '';
+            if (
+              organization.members.find(
+                (member: { _id: string }) => member._id === userId,
+              )
+            )
+              membershipRequestStatus = 'accepted';
+            else if (
+              organization.membershipRequests.find(
+                (request: { user: { _id: string } }) =>
+                  request.user._id === userId,
+              )
+            )
+              membershipRequestStatus = 'pending';
+            return { ...organization, membershipRequestStatus };
+          },
+        );
+        setOrganizations(organizations);
       }
     } else if (mode == 1) {
-      if (data2) {
-        setOrganizations(data2.users[0].user.joinedOrganizations);
+      console.log(joinedOrganizationsData, 'joined', userId);
+      if (joinedOrganizationsData) {
+        const membershipRequestStatus = 'accepted';
+        const organizations =
+          joinedOrganizationsData?.users[0].joinedOrganizations.map(
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (organization: any) => {
+              return { ...organization, membershipRequestStatus };
+            },
+          );
+        setOrganizations(organizations);
       }
     } else if (mode == 2) {
-      if (data3) {
-        setOrganizations(data3.users[0].appUserProfile.createdOrganizations);
-      }
+      const membershipRequestStatus = 'accepted';
+      const organizations =
+        createdOrganizationsData?.users[0].createdOrganizations.map(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (organization: any) => {
+            return { ...organization, membershipRequestStatus };
+          },
+        );
+      setOrganizations(organizations);
     }
   }, [mode]);
 
@@ -212,23 +274,25 @@ export default function organizations(): JSX.Element {
                         )
                       : /* istanbul ignore next */
                         organizations
-                    ).map((organization: any, index) => {
-                      const cardProps: InterfaceOrganizationCardProps = {
-                        name: organization.name,
-                        image: organization.image,
-                        id: organization._id,
-                        description: organization.description,
-                        admins: organization.admins,
-                        members: organization.members,
-                        address: organization.address,
-                        membershipRequestStatus:
-                          organization.membershipRequestStatus,
-                        userRegistrationRequired:
-                          organization.userRegistrationRequired,
-                        membershipRequests: organization.membershipRequests,
-                      };
-                      return <OrganizationCard key={index} {...cardProps} />;
-                    })
+                    )
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                      .map((organization: any, index) => {
+                        const cardProps: InterfaceOrganizationCardProps = {
+                          name: organization.name,
+                          image: organization.image,
+                          id: organization._id,
+                          description: organization.description,
+                          admins: organization.admins,
+                          members: organization.members,
+                          address: organization.address,
+                          membershipRequestStatus:
+                            organization.membershipRequestStatus,
+                          userRegistrationRequired:
+                            organization.userRegistrationRequired,
+                          membershipRequests: organization.membershipRequests,
+                        };
+                        return <OrganizationCard key={index} {...cardProps} />;
+                      })
                   ) : (
                     <span>{t('nothingToShow')}</span>
                   )}
