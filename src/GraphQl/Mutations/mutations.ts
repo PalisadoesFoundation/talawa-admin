@@ -308,8 +308,11 @@ export const CREATE_EVENT_MUTATION = gql`
 // to delete any event by any organization
 
 export const DELETE_EVENT_MUTATION = gql`
-  mutation RemoveEvent($id: ID!) {
-    removeEvent(id: $id) {
+  mutation RemoveEvent(
+    $id: ID!
+    $recurringEventDeleteType: RecurringEventMutationType
+  ) {
+    removeEvent(id: $id, recurringEventDeleteType: $recurringEventDeleteType) {
       _id
     }
   }
