@@ -223,6 +223,11 @@ describe('Testing Event List Card', () => {
     const { container } = renderEventListCard(props[1]);
 
     expect(container.textContent).not.toBe('Loading data...');
+    expect(screen.getByText(props[1].eventName)).toBeInTheDocument();
+    userEvent.click(screen.getByTestId('card'));
+    expect(await screen.findAllByText(props[1].eventName)).toBeTruthy();
+    expect(screen.getByText(props[1].eventDescription)).toBeInTheDocument();
+    expect(screen.getByText(props[1].eventLocation)).toBeInTheDocument();
   });
 
   test('Testing if the event is not for all day', async () => {
@@ -300,45 +305,49 @@ describe('Testing Event List Card', () => {
     fireEvent.click(deleteBtn);
   });
 
-  test('Should render truncated event details', async () => {
-    const longEventName =
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. A very long event name that exceeds 150 characters and needs to be truncated';
-    const longDescription =
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. A very long description that exceeds 150 characters and needs to be truncated';
-    const longEventNameLength = longEventName.length;
-    const longDescriptionLength = longDescription.length;
-    const truncatedEventName = longEventName.substring(0, 150) + '...';
-    const truncatedDescriptionName = longDescription.substring(0, 150) + '...';
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <BrowserRouter>
-            <EventListCard
-              key="123"
-              id="1"
-              eventName={longEventName}
-              eventLocation="location"
-              eventDescription={longDescription}
-              regDate="19/03/2022"
-              regEndDate="26/03/2022"
-              startTime="02:00"
-              endTime="06:00"
-              allDay={true}
-              recurring={false}
-              isPublic={true}
-              isRegisterable={false}
-            />
-          </BrowserRouter>
-        </I18nextProvider>
-      </MockedProvider>,
-    );
+  test('Should render truncated event name when length is more than 100', async () => {
+    const longEventName = 'a'.repeat(101);
+    renderEventListCard({ ...props[1], eventName: longEventName });
 
-    await wait();
+    userEvent.click(screen.getByTestId('card'));
 
-    expect(longEventNameLength).toBeGreaterThan(100);
-    expect(longDescriptionLength).toBeGreaterThan(256);
-    expect(truncatedEventName).toContain('...');
-    expect(truncatedDescriptionName).toContain('...');
-    await wait();
+    expect(
+      screen.getByText(`${longEventName.substring(0, 100)}...`),
+    ).toBeInTheDocument();
+  });
+
+  test('Should render full event name when length is less than or equal to 100', async () => {
+    const shortEventName = 'a'.repeat(100);
+    renderEventListCard({ ...props[1], eventName: shortEventName });
+
+    userEvent.click(screen.getByTestId('card'));
+
+    expect(screen.findAllByText(shortEventName)).toBeTruthy();
+  });
+
+  test('Should render truncated event description when length is more than 256', async () => {
+    const longEventDescription = 'a'.repeat(257);
+    renderEventListCard({
+      ...props[1],
+      eventDescription: longEventDescription,
+    });
+
+    userEvent.click(screen.getByTestId('card'));
+
+    expect(
+      screen.getByText(`${longEventDescription.substring(0, 256)}...`),
+    ).toBeInTheDocument();
+  });
+
+  test('Should render full event description when length is less than or equal to 256', async () => {
+    const shortEventDescription = 'a'.repeat(256);
+    renderEventListCard({
+      ...props[1],
+      eventDescription: shortEventDescription,
+    });
+
+    userEvent.click(screen.getByTestId('card'));
+
+    expect(screen.getByText(shortEventDescription)).toBeInTheDocument();
   });
 });

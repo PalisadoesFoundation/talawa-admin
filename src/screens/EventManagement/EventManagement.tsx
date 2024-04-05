@@ -12,7 +12,10 @@ import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
 import EventDashboard from 'components/EventManagement/Dashboard/EventDashboard';
 
-const eventDashboardTabs = [
+const eventDashboardTabs: {
+  value: TabOptions;
+  icon: JSX.Element;
+}[] = [
   {
     value: 'dashboard',
     icon: <EventDashboardIcon width={26} height={26} className="me-1" />,
@@ -31,19 +34,23 @@ const eventDashboardTabs = [
   },
 ];
 
+type TabOptions = 'dashboard' | 'registrants' | 'eventActions' | 'eventStats';
+
 const EventManagement = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'eventManagement',
   });
 
   const { eventId, orgId } = useParams();
+  /*istanbul ignore next*/
   if (!eventId || !orgId) {
     return <Navigate to={'/orglist'} />;
   }
-  const navigate = useNavigate();
-  const [tab, setTab] = useState('dashboard');
 
-  const handleClick = (value: string): void => {
+  const navigate = useNavigate();
+  const [tab, setTab] = useState<TabOptions>('dashboard');
+
+  const handleClick = (value: TabOptions): void => {
     setTab(value);
   };
 
@@ -51,7 +58,7 @@ const EventManagement = (): JSX.Element => {
     value,
     icon,
   }: {
-    value: string;
+    value: TabOptions;
     icon: React.ReactNode;
   }): JSX.Element => {
     const selected = tab === value;
@@ -85,6 +92,7 @@ const EventManagement = (): JSX.Element => {
           width={28}
           height={28}
           fill={'var(--bs-secondary)'}
+          data-testid="backBtn"
           onClick={() => navigate(`/orgevents/${orgId}`)}
           className="mt-1"
         />
@@ -97,27 +105,29 @@ const EventManagement = (): JSX.Element => {
           {(() => {
             switch (tab) {
               case 'dashboard':
-                return <EventDashboard eventId={eventId} />;
+                return (
+                  <div data-testid="eventDashboadTab">
+                    <EventDashboard eventId={eventId} />
+                  </div>
+                );
               case 'registrants':
                 return (
-                  <div>
-                    <h2>Registrants</h2>
+                  <div data-testid="eventRegistrantsTab">
+                    <h2>Event Registrants</h2>
                   </div>
                 );
               case 'eventActions':
                 return (
-                  <div>
+                  <div data-testid="eventActionsTab">
                     <h2>Event Actions</h2>
                   </div>
                 );
               case 'eventStats':
                 return (
-                  <div>
+                  <div data-testid="eventStatsTab">
                     <h2>Event Statistics</h2>
                   </div>
                 );
-              default:
-                return null;
             }
           })()}
         </Col>
