@@ -1,21 +1,16 @@
 import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 import styles from './EventDashboard.module.css';
-import { Navigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
 import Loader from 'components/Loader/Loader';
 
-const EventDashboard = (): JSX.Element => {
+const EventDashboard = (props: { eventId: string }): JSX.Element => {
+  const { eventId } = props;
   const { t } = useTranslation('translation', {
     keyPrefix: 'eventManagement',
   });
-
-  const { eventId } = useParams();
-  if (!eventId) {
-    return <Navigate to={'/orglist'} />;
-  }
 
   const { data: eventData, loading: eventInfoLoading } = useQuery(
     EVENT_DETAILS,

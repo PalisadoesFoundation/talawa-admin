@@ -10,7 +10,7 @@ import { ReactComponent as EventActionsIcon } from 'assets/svgs/settings.svg';
 import { ReactComponent as EventStatisticsIcon } from 'assets/svgs/eventStats.svg';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
-import EventDashboard from 'components/EventManagement/EventDashboard';
+import EventDashboard from 'components/EventManagement/Dashboard/EventDashboard';
 
 const eventDashboardTabs = [
   {
@@ -97,7 +97,7 @@ const EventManagement = (): JSX.Element => {
           {(() => {
             switch (tab) {
               case 'dashboard':
-                return <EventDashboard />;
+                return <EventDashboard eventId={eventId} />;
               case 'registrants':
                 return (
                   <div>

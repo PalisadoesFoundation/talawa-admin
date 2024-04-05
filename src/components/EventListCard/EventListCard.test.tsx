@@ -4,7 +4,6 @@ import { act, render, screen, fireEvent } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
-
 import type { InterfaceEventListCardProps } from './EventListCard';
 import EventListCard from './EventListCard';
 import {
