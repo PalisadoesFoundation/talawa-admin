@@ -1,6 +1,12 @@
 import React from 'react';
 import type { RenderResult } from '@testing-library/react';
-import { act, render, screen, fireEvent } from '@testing-library/react';
+import {
+  act,
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+} from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
@@ -15,12 +21,26 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
+import { toast } from 'react-toastify';
 
 const MOCKS = [
   {
     request: {
       query: DELETE_EVENT_MUTATION,
-      variable: { id: '123' },
+      variables: { id: '1' },
+    },
+    result: {
+      data: {
+        removeEvent: {
+          _id: '1',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: DELETE_EVENT_MUTATION,
+      variables: { id: '1', recurringEventDeleteType: 'ThisInstance' },
     },
     result: {
       data: {
@@ -71,6 +91,13 @@ const link2 = new StaticMockLink(ERROR_MOCKS, true);
 
 const link = new StaticMockLink(MOCKS, true);
 
+jest.mock('react-toastify', () => ({
+  toast: {
+    success: jest.fn(),
+    error: jest.fn(),
+  },
+}));
+
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -78,6 +105,12 @@ async function wait(ms = 100): Promise<void> {
     });
   });
 }
+
+const translations = JSON.parse(
+  JSON.stringify(
+    i18nForTest.getDataByLanguage('en')?.translation.eventListCard,
+  ),
+);
 
 const props: InterfaceEventListCardProps[] = [
   {
@@ -107,6 +140,21 @@ const props: InterfaceEventListCardProps[] = [
     endTime: '06:00',
     allDay: true,
     recurring: false,
+    isPublic: true,
+    isRegisterable: false,
+  },
+  {
+    key: '123',
+    id: '1',
+    eventLocation: 'India',
+    eventName: 'Shelter for Cats',
+    eventDescription: 'This is shelter for cat event',
+    regDate: '19/03/2022',
+    regEndDate: '26/03/2022',
+    startTime: '2:00',
+    endTime: '6:00',
+    allDay: false,
+    recurring: true,
     isPublic: true,
     isRegisterable: false,
   },
@@ -349,5 +397,22 @@ describe('Testing Event List Card', () => {
     userEvent.click(screen.getByTestId('card'));
 
     expect(screen.getByText(shortEventDescription)).toBeInTheDocument();
+  });
+
+  test('Select different delete options on recurring events & then delete the recurring event', async () => {
+    renderEventListCard(props[2]);
+
+    userEvent.click(screen.getByTestId('card'));
+    userEvent.click(screen.getByTestId('deleteEventModalBtn'));
+
+    userEvent.click(screen.getByTestId('ThisAndFollowingInstances'));
+    userEvent.click(screen.getByTestId('AllInstances'));
+    userEvent.click(screen.getByTestId('ThisInstance'));
+
+    userEvent.click(screen.getByTestId('deleteEventBtn'));
+
+    await waitFor(() => {
+      expect(toast.success).toBeCalledWith(translations.eventDeleted);
+    });
   });
 });
