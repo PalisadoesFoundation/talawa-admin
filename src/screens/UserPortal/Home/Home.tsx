@@ -90,6 +90,9 @@ type InterfacePostNode = {
   title: string;
   videoUrl: string | null;
   _id: string;
+
+  comments: InterfacePostComments;
+  likes: InterfacePostLikes;
 };
 
 export default function home(): JSX.Element {
@@ -271,8 +274,6 @@ export default function home(): JSX.Element {
             <>
               {posts.map(({ node }: { node: InterfacePostNode }) => {
                 const {
-                  // likedBy,
-                  // comments,
                   creator,
                   _id,
                   imageUrl,
@@ -281,41 +282,46 @@ export default function home(): JSX.Element {
                   text,
                   likeCount,
                   commentCount,
+                  likedBy,
+                  comments,
                 } = node;
 
-                // const allLikes: any =
-                //   likedBy && Array.isArray(likedBy)
-                //     ? likedBy.map((value: any) => ({
-                //         firstName: value.firstName,
-                //         lastName: value.lastName,
-                //         id: value._id,
-                //       }))
-                //     : [];
+                const allLikes: any = [];
 
-                const allLikes: InterfacePostLikes = [];
+                likedBy.forEach((value: any) => {
+                  const singleLike = {
+                    firstName: value.firstName,
+                    lastName: value.lastName,
+                    id: value._id,
+                  };
+                  allLikes.push(singleLike);
+                });
 
-                // const postComments: any =
-                //   comments && Array.isArray(comments)
-                //     ? comments.map((value: any) => {
-                //         const commentLikes = value.likedBy.map(
-                //           (commentLike: any) => ({ id: commentLike._id }),
-                //         );
-                //         return {
-                //           id: value._id,
-                //           creator: {
-                //             firstName: value.creator.firstName,
-                //             lastName: value.creator.lastName,
-                //             id: value.creator._id,
-                //             email: value.creator.email,
-                //           },
-                //           likeCount: value.likeCount,
-                //           likedBy: commentLikes,
-                //           text: value.text,
-                //         };
-                //       })
-                //     : [];
+                const postComments: any = [];
 
-                const postComments: InterfacePostComments = [];
+                comments.forEach((value: any) => {
+                  const commentLikes: any = [];
+                  value.likedBy.forEach((commentLike: any) => {
+                    const singleLike = {
+                      id: commentLike._id,
+                    };
+                    commentLikes.push(singleLike);
+                  });
+
+                  const comment = {
+                    id: value._id,
+                    creator: {
+                      firstName: value.creator.firstName,
+                      lastName: value.creator.lastName,
+                      id: value.creator._id,
+                      email: value.creator.email,
+                    },
+                    likeCount: value.likeCount,
+                    likedBy: commentLikes,
+                    text: value.text,
+                  };
+                  postComments.push(comment);
+                });
 
                 const cardProps: InterfacePostCard = {
                   id: _id,
