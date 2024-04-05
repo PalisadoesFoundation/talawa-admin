@@ -463,7 +463,10 @@
     "eventDetails": "活動詳情",
     "eventDeleted": "活动删除成功。",
     "eventUpdated": "活動更新成功。",
-    "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
+    "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。",
+    "thisInstance": "此实例",
+    "thisAndFollowingInstances": "此及其后续实例",
+    "allInstances": "所有实例"
   },
   "orgPost": {
     "title": "塔拉瓦帖子",

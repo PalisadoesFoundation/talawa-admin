@@ -1,5 +1,11 @@
 import React from 'react';
-import { act, render, screen, fireEvent } from '@testing-library/react';
+import {
+  act,
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+} from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
@@ -14,12 +20,26 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
+import { toast } from 'react-toastify';
 
 const MOCKS = [
   {
     request: {
       query: DELETE_EVENT_MUTATION,
-      variable: { id: '123' },
+      variables: { id: '1' },
+    },
+    result: {
+      data: {
+        removeEvent: {
+          _id: '1',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: DELETE_EVENT_MUTATION,
+      variables: { id: '1', recurringEventDeleteType: 'ThisInstance' },
     },
     result: {
       data: {
@@ -57,6 +77,13 @@ const MOCKS = [
 
 const link = new StaticMockLink(MOCKS, true);
 
+jest.mock('react-toastify', () => ({
+  toast: {
+    success: jest.fn(),
+    error: jest.fn(),
+  },
+}));
+
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -65,23 +92,45 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-describe('Testing Event List Card', () => {
-  const props = {
-    key: '123',
-    id: '1',
-    eventLocation: 'India',
-    eventName: 'Shelter for Dogs',
-    eventDescription: 'This is shelter for dogs event',
-    regDate: '19/03/2022',
-    regEndDate: '26/03/2022',
-    startTime: '02:00',
-    endTime: '06:00',
-    allDay: true,
-    recurring: false,
-    isPublic: true,
-    isRegisterable: false,
-  };
+const translations = JSON.parse(
+  JSON.stringify(
+    i18nForTest.getDataByLanguage('en')?.translation.eventListCard,
+  ),
+);
 
+const props = {
+  key: '123',
+  id: '1',
+  eventLocation: 'India',
+  eventName: 'Shelter for Dogs',
+  eventDescription: 'This is shelter for dogs event',
+  regDate: '19/03/2022',
+  regEndDate: '26/03/2022',
+  startTime: '02:00',
+  endTime: '06:00',
+  allDay: true,
+  recurring: false,
+  isPublic: true,
+  isRegisterable: false,
+};
+
+const recurringEventProps = {
+  key: '123',
+  id: '1',
+  eventLocation: 'India',
+  eventName: 'Shelter for Cats',
+  eventDescription: 'This is shelter for cat event',
+  regDate: '19/03/2022',
+  regEndDate: '26/03/2022',
+  startTime: '2:00',
+  endTime: '6:00',
+  allDay: false,
+  recurring: true,
+  isPublic: true,
+  isRegisterable: false,
+};
+
+describe('Testing Event List Card', () => {
   global.alert = jest.fn();
   test('Testing for modal', async () => {
     render(
@@ -261,62 +310,6 @@ describe('Testing Event List Card', () => {
     await wait();
     expect(screen.getByText(props.eventName)).toBeInTheDocument();
   });
-  describe('EventListCard', () => {
-    it('should render the delete modal', () => {
-      render(
-        <MockedProvider link={link} addTypename={false}>
-          <BrowserRouter>
-            <EventListCard {...props} />
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-      userEvent.click(screen.getByTestId('card'));
-      userEvent.click(screen.getByTestId('deleteEventModalBtn'));
-
-      userEvent.click(screen.getByTestId('EventDeleteModalCloseBtn'));
-      userEvent.click(screen.getByTestId('createEventModalCloseBtn'));
-    });
-
-    it('should call the delete event mutation when the "Yes" button is clicked', async () => {
-      render(
-        <MockedProvider link={link} addTypename={false}>
-          <BrowserRouter>
-            <EventListCard {...props} />
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-      userEvent.click(screen.getByTestId('card'));
-      userEvent.click(screen.getByTestId('deleteEventModalBtn'));
-      const deleteBtn = screen.getByTestId('deleteEventBtn');
-      fireEvent.click(deleteBtn);
-    });
-
-    it('should show an error toast when the delete event mutation fails', async () => {
-      const errorMocks = [
-        {
-          request: {
-            query: DELETE_EVENT_MUTATION,
-            variables: {
-              id: props.id,
-            },
-          },
-          error: new Error('Something went wrong'),
-        },
-      ];
-      const link2 = new StaticMockLink(errorMocks, true);
-      render(
-        <MockedProvider link={link2} addTypename={false}>
-          <BrowserRouter>
-            <EventListCard {...props} />
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-      userEvent.click(screen.getByTestId('card'));
-      userEvent.click(screen.getByTestId('deleteEventModalBtn'));
-      const deleteBtn = screen.getByTestId('deleteEventBtn');
-      fireEvent.click(deleteBtn);
-    });
-  });
 
   test('Should render truncated event details', async () => {
     const longEventName =
@@ -358,5 +351,105 @@ describe('Testing Event List Card', () => {
     expect(truncatedEventName).toContain('...');
     expect(truncatedDescriptionName).toContain('...');
     await wait();
+  });
+});
+
+describe('EventListCard delete functionality', () => {
+  it('should render the delete modal', () => {
+    render(
+      <MockedProvider link={link} addTypename={false}>
+        <BrowserRouter>
+          <EventListCard {...props} />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    userEvent.click(screen.getByTestId('card'));
+    userEvent.click(screen.getByTestId('deleteEventModalBtn'));
+
+    userEvent.click(screen.getByTestId('EventDeleteModalCloseBtn'));
+    userEvent.click(screen.getByTestId('createEventModalCloseBtn'));
+  });
+
+  it('should call the delete event mutation when the "Yes" button is clicked', async () => {
+    render(
+      <MockedProvider link={link} addTypename={false}>
+        <BrowserRouter>
+          <EventListCard {...props} />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    userEvent.click(screen.getByTestId('card'));
+    userEvent.click(screen.getByTestId('deleteEventModalBtn'));
+    const deleteBtn = screen.getByTestId('deleteEventBtn');
+    fireEvent.click(deleteBtn);
+
+    await waitFor(() => {
+      expect(toast.success).toBeCalledWith(translations.eventDeleted);
+    });
+  });
+
+  it('should show an error toast when the delete event mutation fails', async () => {
+    const errorMocks = [
+      {
+        request: {
+          query: DELETE_EVENT_MUTATION,
+          variables: {
+            id: props.id,
+          },
+        },
+        error: new Error('Something went wrong'),
+      },
+    ];
+    const link2 = new StaticMockLink(errorMocks, true);
+    render(
+      <MockedProvider link={link2} addTypename={false}>
+        <BrowserRouter>
+          <EventListCard {...props} />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    userEvent.click(screen.getByTestId('card'));
+    userEvent.click(screen.getByTestId('deleteEventModalBtn'));
+    const deleteBtn = screen.getByTestId('deleteEventBtn');
+    fireEvent.click(deleteBtn);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+    });
+  });
+
+  test('Select different delete options on recurring events & then delete the recurring event', async () => {
+    render(
+      <MockedProvider link={link} addTypename={false}>
+        <BrowserRouter>
+          <EventListCard {...recurringEventProps} />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('card')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('card'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('deleteEventModalBtn')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('deleteEventModalBtn'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('deleteEventBtn')).toBeInTheDocument();
+    });
+
+    userEvent.click(screen.getByTestId('ThisAndFollowingInstances'));
+    userEvent.click(screen.getByTestId('AllInstances'));
+    userEvent.click(screen.getByTestId('ThisInstance'));
+
+    const deleteBtn = screen.getByTestId('deleteEventBtn');
+    fireEvent.click(deleteBtn);
+
+    await waitFor(() => {
+      expect(toast.success).toBeCalledWith(translations.eventDeleted);
+    });
   });
 });
