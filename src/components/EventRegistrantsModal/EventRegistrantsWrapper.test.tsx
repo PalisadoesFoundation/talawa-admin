@@ -73,20 +73,32 @@ describe('Testing Event Registrants Wrapper', () => {
             </Provider>
           </LocalizationProvider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     // Open the modal
     fireEvent.click(queryByText('Show Registrants') as Element);
 
     await waitFor(() =>
+<<<<<<< HEAD
       expect(queryByText('Event Registrants')).toBeInTheDocument(),
+=======
+      expect(queryByText('Event Registrants')).toBeInTheDocument()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     // Close the modal
     fireEvent.click(queryByRole('button', { name: /close/i }) as HTMLElement);
     await waitFor(() =>
+<<<<<<< HEAD
       expect(queryByText('Event Registrants')).not.toBeInTheDocument(),
+=======
+      expect(queryByText('Event Registrants')).not.toBeInTheDocument()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
   });
 });

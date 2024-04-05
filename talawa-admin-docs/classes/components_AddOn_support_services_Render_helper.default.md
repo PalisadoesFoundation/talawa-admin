@@ -14,8 +14,12 @@
 
 ### constructor
 
+<<<<<<< HEAD
 • **new default**(): [`default`](components_AddOn_support_services_Render_helper.default.md)
 
 #### Returns
 
 [`default`](components_AddOn_support_services_Render_helper.default.md)
+=======
+• **new default**()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1

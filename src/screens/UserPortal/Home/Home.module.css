@@ -58,14 +58,21 @@
 }
 
 .postInput {
+<<<<<<< HEAD
   resize: none;
   border: none;
   outline: none;
+=======
+  height: 200px !important;
+  resize: none;
+  border: none;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   box-shadow: none;
   background-color: white;
   margin-bottom: 10px;
 }
 
+<<<<<<< HEAD
 .postInput:focus {
   box-shadow: none;
 }
@@ -161,4 +168,8 @@
 
 .imageInput {
   display: none;
+=======
+.imageInput {
+  background-color: white;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }

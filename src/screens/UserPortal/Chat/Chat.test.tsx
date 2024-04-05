@@ -33,7 +33,10 @@ const MOCKS = [
               image: null,
               email: 'noble1@gmail.com',
               createdAt: '2023-03-02T03:22:08.101Z',
+<<<<<<< HEAD
               userType: 'User',
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
             },
             {
               _id: '64001660a711c62d5b4076a3',
@@ -42,7 +45,10 @@ const MOCKS = [
               image: 'mockImage',
               email: 'noble@gmail.com',
               createdAt: '2023-03-02T03:22:08.101Z',
+<<<<<<< HEAD
               userType: 'User',
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
             },
           ],
         },
@@ -68,7 +74,10 @@ const MOCKS = [
               image: null,
               email: 'john@gmail.com',
               createdAt: '2023-03-02T03:22:08.101Z',
+<<<<<<< HEAD
               userType: 'User',
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
             },
           ],
         },
@@ -120,7 +129,11 @@ describe('Testing People Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -139,7 +152,11 @@ describe('Testing People Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -151,7 +168,11 @@ describe('Testing People Screen [User Portal]', () => {
     expect(screen.queryAllByText('Noble Mittal')).not.toBe([]);
   });
 
+<<<<<<< HEAD
   test('Search functionality works as expected by pressing enter key', async () => {
+=======
+  test('Search functionality works as expected', async () => {
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -161,11 +182,16 @@ describe('Testing People Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
 
+<<<<<<< HEAD
     userEvent.type(screen.getByTestId('searchInput'), 'j{enter}');
     await wait();
 
@@ -191,6 +217,9 @@ describe('Testing People Screen [User Portal]', () => {
     const searchBtn = screen.getByTestId('searchBtn');
     userEvent.type(screen.getByTestId('searchInput'), 'j');
     userEvent.click(searchBtn);
+=======
+    userEvent.type(screen.getByTestId('searchInput'), 'j');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     await wait();
 
     expect(getOrganizationIdSpy).toHaveBeenCalled();

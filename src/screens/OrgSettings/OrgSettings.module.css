@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .settingsContainer {
   min-height: 100vh;
 }
@@ -5,6 +6,10 @@
 .settingsBody {
   min-height: 100vh;
   margin: 2.5rem 1rem;
+=======
+.settingsBody {
+  margin: 2.5rem 0;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 
 .cardHeader {
@@ -28,6 +33,7 @@
   margin: 0 0 3rem 0;
   color: var(--bs-secondary);
 }
+<<<<<<< HEAD
 
 hr {
   border: none;
@@ -50,3 +56,5 @@ hr {
     display: block;
   }
 }
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1

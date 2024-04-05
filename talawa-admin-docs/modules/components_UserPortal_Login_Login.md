@@ -26,4 +26,8 @@
 
 #### Defined in
 
+<<<<<<< HEAD
 [src/components/UserPortal/Login/Login.tsx:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/UserPortal/Login/Login.tsx#L20)
+=======
+[src/components/UserPortal/Login/Login.tsx:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/UserPortal/Login/Login.tsx#L19)
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1

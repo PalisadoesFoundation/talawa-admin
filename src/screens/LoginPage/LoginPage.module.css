@@ -2,10 +2,13 @@
   min-height: 100vh;
 }
 
+<<<<<<< HEAD
 .communityLogo {
   object-fit: contain;
 }
 
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 .row .left_portion {
   display: flex;
   justify-content: center;
@@ -38,6 +41,7 @@
   margin: 0;
   position: absolute;
   top: 1rem;
+<<<<<<< HEAD
   left: 1rem;
 }
 
@@ -52,6 +56,16 @@
   width: 5rem;
   display: block;
   margin: 1.5rem auto 1rem;
+=======
+  left: 2rem;
+}
+
+.row .right_portion .talawa_logo {
+  height: 150px;
+  width: 150px;
+  display: block;
+  margin: 1rem auto;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   -webkit-animation: zoomIn 0.3s ease-in-out;
   animation: zoomIn 0.3s ease-in-out;
 }
@@ -59,10 +73,17 @@
 .row .orText {
   display: block;
   position: absolute;
+<<<<<<< HEAD
   top: 0;
   left: calc(50% - 2.6rem);
   margin: 0 auto;
   padding: 0.35rem 2rem;
+=======
+  top: calc(-0.7rem - 0.5rem);
+  left: calc(50% - 2.6rem);
+  margin: 0 auto;
+  padding: 0.5rem 2rem;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   z-index: 100;
   background: var(--bs-white);
   color: var(--bs-secondary);
@@ -112,10 +133,13 @@
     margin-bottom: 0;
     padding: 1rem;
   }
+<<<<<<< HEAD
 
   .socialIcons {
     margin-bottom: 1rem;
   }
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 
 @media (max-width: 577px) {
@@ -138,10 +162,13 @@
     height: 120px;
     margin: 0 auto 2rem auto;
   }
+<<<<<<< HEAD
 
   .socialIcons {
     margin-bottom: 1rem;
   }
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 
 .active_tab {
@@ -204,6 +231,7 @@
     transform: translateY(0);
   }
 }
+<<<<<<< HEAD
 
 .socialIcons {
   display: flex;
@@ -229,3 +257,5 @@
 .password_check_element_bottom {
   margin-bottom: -20px;
 }
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1

@@ -10,10 +10,14 @@ import { store } from 'state/store';
 import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
 import i18nForTest from './utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
+<<<<<<< HEAD
 import useLocalStorage from 'utils/useLocalstorage';
 
 const { setItem } = useLocalStorage();
 
+=======
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 // Mock the modules for PieChart rendering as they require a trasformer being used (which is not done by Jest)
 // These modules are used by the Feedback components
 jest.mock('@mui/x-charts/PieChart', () => ({
@@ -35,6 +39,7 @@ const MOCKS = [
           lastName: 'Doe',
           image: 'john.jpg',
           email: 'johndoe@gmail.com',
+<<<<<<< HEAD
           birthDate: '1990-01-01',
           educationGrade: 'NO_GRADE',
           employmentStatus: 'EMPLOYED',
@@ -48,6 +53,9 @@ const MOCKS = [
           phone: {
             mobile: '+8912313112',
           },
+=======
+          userType: 'SUPERADMIN',
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         },
       },
     },
@@ -67,7 +75,10 @@ async function wait(ms = 100): Promise<void> {
 
 describe('Testing the App Component', () => {
   test('Component should be rendered properly and user is loggedin', async () => {
+<<<<<<< HEAD
     setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -77,7 +88,11 @@ describe('Testing the App Component', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -87,8 +102,13 @@ describe('Testing the App Component', () => {
     expect(window.location).toBeAt('/orglist');
     expect(
       screen.getByText(
+<<<<<<< HEAD
         'An open source application by Palisadoes Foundation volunteers',
       ),
+=======
+        'An open source application by Palisadoes Foundation volunteers'
+      )
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     ).toBeTruthy();
   });
 
@@ -102,7 +122,11 @@ describe('Testing the App Component', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();

@@ -29,6 +29,7 @@
   },
 
   // Specify the ESLint plugins tobe used
+<<<<<<< HEAD
   "plugins": [
     "react",
     "@typescript-eslint",
@@ -40,6 +41,13 @@
   "rules": {
     "react/destructuring-assignment": "error",
     "@typescript-eslint/explicit-module-boundary-types": "error",
+=======
+  "plugins": ["react", "@typescript-eslint", "jest"],
+  "rules": {
+    "react/destructuring-assignment": ["off"],
+    "@typescript-eslint/no-explicit-any": ["off"],
+    "@typescript-eslint/explicit-module-boundary-types": ["off"],
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "react/no-multi-comp": [
       "error",
       {
@@ -52,6 +60,7 @@
         "extensions": [".tsx"]
       }
     ],
+<<<<<<< HEAD
     "import/no-duplicates": "error",
     "tsdoc/syntax": "error",
     "@typescript-eslint/ban-ts-comment": "error",
@@ -60,6 +69,8 @@
     "@typescript-eslint/no-non-null-asserted-optional-chain": "error",
     "@typescript-eslint/no-non-null-assertion": "error",
     "@typescript-eslint/no-var-requires": "error",
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "@typescript-eslint/ban-types": "error",
     "@typescript-eslint/no-duplicate-enum-values": "error",
     "@typescript-eslint/array-type": "error",
@@ -72,7 +83,10 @@
         "allowTypedFunctionExpressions": true
       }
     ],
+<<<<<<< HEAD
     "camelcase": "off",
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "@typescript-eslint/naming-convention": [
       "error",
       // Interfaces must begin with Interface or TestInterface followed by a PascalCase name
@@ -93,7 +107,11 @@
       },
       {
         "selector": "variable",
+<<<<<<< HEAD
         "format": ["camelCase", "UPPER_CASE", "PascalCase"],
+=======
+        "format": ["camelCase", "UPPER_CASE"],
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         "leadingUnderscore": "allow"
       },
       {
@@ -103,7 +121,11 @@
       },
       {
         "selector": "function",
+<<<<<<< HEAD
         "format": ["camelCase", "PascalCase"]
+=======
+        "format": ["camelCase"]
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       },
       {
         "selector": "memberLike",
@@ -112,11 +134,15 @@
         "leadingUnderscore": "require"
       },
 
+<<<<<<< HEAD
       {
         "selector": "variable",
         "modifiers": ["exported"],
         "format": null
       }
+=======
+      { "selector": "variable", "modifiers": ["exported"], "format": null }
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     ],
     // Ensures that components are always written in PascalCase
     "react/jsx-pascal-case": [
@@ -130,6 +156,20 @@
 
     // All tests must need not have an assertion
     "jest/expect-expect": 0,
+<<<<<<< HEAD
+=======
+
+    // Ensures that components are always indented by 2 spaces
+    "react/jsx-indent": ["warn", 2],
+    "react/jsx-tag-spacing": [
+      "warn",
+      {
+        "afterOpening": "never",
+        "beforeClosing": "never",
+        "beforeSelfClosing": "always"
+      }
+    ],
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
     // Enforce Strictly functional components
     "react/no-unstable-nested-components": ["error", { "allowAsProps": true }],

@@ -11,9 +11,12 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import CommentCard from './CommentCard';
 import userEvent from '@testing-library/user-event';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from 'GraphQl/Mutations/mutations';
+<<<<<<< HEAD
 import useLocalStorage from 'utils/useLocalstorage';
 
 const { getItem, setItem } = useLocalStorage();
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -56,8 +59,11 @@ const MOCKS = [
   },
 ];
 
+<<<<<<< HEAD
 const handleLikeComment = jest.fn();
 const handleDislikeComment = jest.fn();
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 const link = new StaticMockLink(MOCKS, true);
 
 describe('Testing CommentCard Component [User Portal]', () => {
@@ -83,12 +89,19 @@ describe('Testing CommentCard Component [User Portal]', () => {
         },
       ],
       text: 'testComment',
+<<<<<<< HEAD
       handleLikeComment: handleLikeComment,
       handleDislikeComment: handleDislikeComment,
     };
 
     const beforeUserId = getItem('userId');
     setItem('userId', '2');
+=======
+    };
+
+    const beforeUserId = localStorage.getItem('userId');
+    localStorage.setItem('userId', '2');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -99,12 +112,20 @@ describe('Testing CommentCard Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
     if (beforeUserId) {
+<<<<<<< HEAD
       setItem('userId', beforeUserId);
+=======
+      localStorage.setItem('userId', beforeUserId);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     }
   });
 
@@ -124,12 +145,19 @@ describe('Testing CommentCard Component [User Portal]', () => {
         },
       ],
       text: 'testComment',
+<<<<<<< HEAD
       handleLikeComment: handleLikeComment,
       handleDislikeComment: handleDislikeComment,
     };
 
     const beforeUserId = getItem('userId');
     setItem('userId', '1');
+=======
+    };
+
+    const beforeUserId = localStorage.getItem('userId');
+    localStorage.setItem('userId', '1');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -140,12 +168,20 @@ describe('Testing CommentCard Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
     if (beforeUserId) {
+<<<<<<< HEAD
       setItem('userId', beforeUserId);
+=======
+      localStorage.setItem('userId', beforeUserId);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     }
   });
 
@@ -165,12 +201,19 @@ describe('Testing CommentCard Component [User Portal]', () => {
         },
       ],
       text: 'testComment',
+<<<<<<< HEAD
       handleLikeComment: handleLikeComment,
       handleDislikeComment: handleDislikeComment,
     };
 
     const beforeUserId = getItem('userId');
     setItem('userId', '2');
+=======
+    };
+
+    const beforeUserId = localStorage.getItem('userId');
+    localStorage.setItem('userId', '2');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -181,7 +224,11 @@ describe('Testing CommentCard Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -191,7 +238,11 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await wait();
 
     if (beforeUserId) {
+<<<<<<< HEAD
       setItem('userId', beforeUserId);
+=======
+      localStorage.setItem('userId', beforeUserId);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     }
   });
 
@@ -211,12 +262,19 @@ describe('Testing CommentCard Component [User Portal]', () => {
         },
       ],
       text: 'testComment',
+<<<<<<< HEAD
       handleLikeComment: handleLikeComment,
       handleDislikeComment: handleDislikeComment,
     };
 
     const beforeUserId = getItem('userId');
     setItem('userId', '1');
+=======
+    };
+
+    const beforeUserId = localStorage.getItem('userId');
+    localStorage.setItem('userId', '1');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -227,7 +285,11 @@ describe('Testing CommentCard Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -235,7 +297,11 @@ describe('Testing CommentCard Component [User Portal]', () => {
     userEvent.click(screen.getByTestId('likeCommentBtn'));
 
     if (beforeUserId) {
+<<<<<<< HEAD
       setItem('userId', beforeUserId);
+=======
+      localStorage.setItem('userId', beforeUserId);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     }
   });
 });

@@ -1,4 +1,5 @@
 import React from 'react';
+<<<<<<< HEAD
 import styles from './OrganizationCard.module.css';
 import { Button } from 'react-bootstrap';
 import { Tooltip } from '@mui/material';
@@ -18,12 +19,18 @@ import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
 
 const { getItem } = useLocalStorage();
+=======
+import aboutImg from 'assets/images/defaultImg.png';
+import styles from './OrganizationCard.module.css';
+import { Link } from 'react-router-dom';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 interface InterfaceOrganizationCardProps {
   id: string;
   name: string;
   image: string;
   description: string;
+<<<<<<< HEAD
   admins: {
     id: string;
   }[];
@@ -183,6 +190,24 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
         )}
       </div>
     </>
+=======
+}
+
+function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
+  const imageUrl = props.image ? props.image : aboutImg;
+  const redirectLink = `/user/organization/id=${props.id}`;
+
+  return (
+    <Link to={redirectLink} className={`${styles.removeDecoration}`}>
+      <div className={styles.mainContainer}>
+        <img src={imageUrl} width="100px" height="auto" />
+        <div className={styles.organizationDetails}>
+          <b>{props.name}</b>
+          <span>{props.description}</span>
+        </div>
+      </div>
+    </Link>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   );
 }
 

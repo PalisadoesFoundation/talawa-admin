@@ -11,17 +11,29 @@
 }
 
 .maxWidth {
+<<<<<<< HEAD
   max-width: 800px;
 }
 
 .colorLight {
   background-color: #f1f3f6;
+=======
+  max-width: 300px;
+}
+
+.colorLight {
+  background-color: #f5f5f5;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 
 .mainContainer {
   width: 50%;
   flex-grow: 3;
+<<<<<<< HEAD
   padding: 20px;
+=======
+  padding: 40px;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   max-height: 100%;
   overflow: auto;
 }
@@ -30,6 +42,7 @@
   height: fit-content;
   min-height: calc(100% - 40px);
 }
+<<<<<<< HEAD
 .selectType {
   border-radius: 10px;
 }
@@ -38,6 +51,8 @@
   overflow: hidden;
   white-space: nowrap;
 }
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 .gap {
   gap: 20px;
@@ -89,6 +104,7 @@
   flex-wrap: wrap;
   margin-top: 20px;
 }
+<<<<<<< HEAD
 .titlemodal {
   color: #707070;
   font-weight: 600;
@@ -162,3 +178,5 @@
     box-shadow 0.2s;
   width: 100%;
 }
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1

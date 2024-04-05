@@ -6,8 +6,16 @@ import { useMutation } from '@apollo/client';
 import { ADD_PLUGIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+<<<<<<< HEAD
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
+=======
+
+interface InterfaceAddOnRegisterProps {
+  id?: string; // OrgId
+  createdBy?: string; // User
+}
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 interface InterfaceFormStateTypes {
   pluginName: string;
   pluginCreatedBy: string;
@@ -16,6 +24,7 @@ interface InterfaceFormStateTypes {
   installedOrgs: [string] | [];
 }
 
+<<<<<<< HEAD
 function addOnRegister(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'addOnRegister' });
 
@@ -25,6 +34,16 @@ function addOnRegister(): JSX.Element {
     return <Navigate to={'/orglist'} />;
   }
 
+=======
+const currentUrl = window.location.href.split('=')[1];
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function addOnRegister({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  createdBy,
+}: InterfaceAddOnRegisterProps): JSX.Element {
+  const { t } = useTranslation('translation', { keyPrefix: 'addOnRegister' });
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   const [show, setShow] = useState(false);
 
   const handleClose = (): void => setShow(false);
@@ -42,18 +61,30 @@ function addOnRegister(): JSX.Element {
   const handleRegister = async (): Promise<void> => {
     const { data } = await create({
       variables: {
+<<<<<<< HEAD
         pluginName: formState.pluginName,
         pluginCreatedBy: formState.pluginCreatedBy,
         pluginDesc: formState.pluginDesc,
         pluginInstallStatus: formState.pluginInstallStatus,
         installedOrgs: formState.installedOrgs,
+=======
+        $pluginName: formState.pluginName,
+        $pluginCreatedBy: formState.pluginCreatedBy,
+        $pluginDesc: formState.pluginDesc,
+        $pluginInstallStatus: formState.pluginInstallStatus,
+        $installedOrgs: formState.installedOrgs,
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       },
     });
 
     if (data) {
       toast.success('Plugin Added Successfully');
       setTimeout(() => {
+<<<<<<< HEAD
         navigate(0);
+=======
+        window.location.reload();
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       }, 2000);
     }
   };
@@ -79,7 +110,10 @@ function addOnRegister(): JSX.Element {
               <Form.Control
                 type="text"
                 placeholder={t('pName')}
+<<<<<<< HEAD
                 data-testid="pluginName"
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                 autoComplete="off"
                 required
                 value={formState.pluginName}
@@ -96,7 +130,10 @@ function addOnRegister(): JSX.Element {
               <Form.Control
                 type="text"
                 placeholder={t('cName')}
+<<<<<<< HEAD
                 data-testid="pluginCreatedBy"
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                 autoComplete="off"
                 required
                 value={formState.pluginCreatedBy}
@@ -115,7 +152,10 @@ function addOnRegister(): JSX.Element {
                 rows={3}
                 as="textarea"
                 placeholder={t('pDesc')}
+<<<<<<< HEAD
                 data-testid="pluginDesc"
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                 required
                 value={formState.pluginDesc}
                 onChange={(e): void => {
@@ -139,7 +179,11 @@ function addOnRegister(): JSX.Element {
           <Button
             variant="primary"
             onClick={handleRegister}
+<<<<<<< HEAD
             data-testid="addonregisterBtn"
+=======
+            data-testid="addonregister"
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
           >
             {t('register')}
           </Button>

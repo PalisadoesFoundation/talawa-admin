@@ -7,7 +7,11 @@ describe('Testing Plugin Reducer', () => {
       reducer(undefined, {
         type: '',
         payload: undefined,
+<<<<<<< HEAD
       }),
+=======
+      })
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     ).toEqual({
       installed: [],
       addonStore: [],
@@ -21,8 +25,13 @@ describe('Testing Plugin Reducer', () => {
         {
           type: 'INSTALL_PLUGIN',
           payload: { name: 'testplug' },
+<<<<<<< HEAD
         },
       ),
+=======
+        }
+      )
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     ).toEqual({
       installed: [{ name: 'testplug' }],
       addonStore: [],
@@ -43,8 +52,13 @@ describe('Testing Plugin Reducer', () => {
         {
           type: 'REMOVE_PLUGIN',
           payload: { id: 3 },
+<<<<<<< HEAD
         },
       ),
+=======
+        }
+      )
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     ).toEqual({
       installed: [{ name: 'testplug3', id: 5 }],
       addonStore: [],
@@ -59,8 +73,13 @@ describe('Testing Plugin Reducer', () => {
           type: 'UPDATE_INSTALLED',
           //Here payload is expected to be as array
           payload: [{ name: 'testplug-updated' }],
+<<<<<<< HEAD
         },
       ),
+=======
+        }
+      )
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     ).toEqual({
       installed: [{ name: 'testplug-updated' }],
       addonStore: [],
@@ -75,8 +94,13 @@ describe('Testing Plugin Reducer', () => {
           type: 'UPDATE_STORE',
           //Here payload is expected to be as array
           payload: [{ name: 'sample-addon' }],
+<<<<<<< HEAD
         },
       ),
+=======
+        }
+      )
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     ).toEqual({
       installed: [],
       addonStore: [{ name: 'sample-addon' }],
@@ -91,8 +115,13 @@ describe('Testing Plugin Reducer', () => {
           type: 'UPDATE_EXTRAS',
           //Here payload is expected to be as array
           payload: [{ name: 'sample-addon-extra' }],
+<<<<<<< HEAD
         },
       ),
+=======
+        }
+      )
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     ).toEqual({
       installed: [],
       addonStore: [{ name: 'sample-addon-extra' }],

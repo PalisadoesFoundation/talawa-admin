@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { MockedProvider } from '@apollo/react-testing';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -23,10 +24,39 @@ const MOCKS = [
         before: null,
         first: 6,
         last: null,
+=======
+import React from 'react';
+import { MockedProvider } from '@apollo/react-testing';
+import { BrowserRouter } from 'react-router-dom';
+import { act, render, screen, fireEvent } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { Provider } from 'react-redux';
+import 'jest-location-mock';
+import { I18nextProvider } from 'react-i18next';
+
+import OrgPost from './OrgPost';
+import { store } from 'state/store';
+import { ORGANIZATION_POST_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
+import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
+import i18nForTest from 'utils/i18nForTest';
+import { StaticMockLink } from 'utils/StaticMockLink';
+import { ToastContainer } from 'react-toastify';
+import { debug } from 'jest-preview';
+
+const MOCKS = [
+  {
+    request: {
+      query: ORGANIZATION_POST_CONNECTION_LIST,
+      variables: {
+        id: undefined,
+        title_contains: '',
+        text_contains: '',
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       },
     },
     result: {
       data: {
+<<<<<<< HEAD
         organizations: [
           {
             posts: {
@@ -130,6 +160,50 @@ const MOCKS = [
             },
           },
         ],
+=======
+        postsByOrganizationConnection: {
+          edges: [
+            {
+              _id: '6411e53835d7ba2344a78e21',
+              title: 'postone',
+              text: 'This is the first post',
+              imageUrl: null,
+              videoUrl: null,
+              createdAt: '2023-08-24T09:26:56.524+00:00',
+              creator: {
+                _id: '640d98d9eb6a743d75341067',
+                firstName: 'Aditya',
+                lastName: 'Shelke',
+                email: 'adidacreator1@gmail.com',
+              },
+              likeCount: 0,
+              commentCount: 0,
+              comments: [],
+              pinned: false,
+              likedBy: [],
+            },
+            {
+              _id: '6411e54835d7ba2344a78e29',
+              title: 'posttwo',
+              text: 'Tis is the post two',
+              imageUrl: null,
+              videoUrl: null,
+              createdAt: '2023-08-24T09:26:56.524+00:00',
+              creator: {
+                _id: '640d98d9eb6a743d75341067',
+                firstName: 'Aditya',
+                lastName: 'Shelke',
+                email: 'adidacreator1@gmail.com',
+              },
+              likeCount: 0,
+              commentCount: 0,
+              pinned: false,
+              likedBy: [],
+              comments: [],
+            },
+          ],
+        },
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       },
     },
   },
@@ -187,6 +261,7 @@ describe('Organisation Post Page', () => {
   };
 
   test('correct mock data should be queried', async () => {
+<<<<<<< HEAD
     const dataQuery1 = MOCKS[0]?.result?.data?.organizations[0].posts.edges[0];
 
     expect(dataQuery1).toEqual({
@@ -210,6 +285,29 @@ describe('Organisation Post Page', () => {
         comments: [],
       },
       cursor: '6411e53835d7ba2344a78e21',
+=======
+    const dataQuery1 =
+      MOCKS[0]?.result?.data?.postsByOrganizationConnection.edges[0];
+
+    expect(dataQuery1).toEqual({
+      _id: '6411e53835d7ba2344a78e21',
+      title: 'postone',
+      text: 'This is the first post',
+      imageUrl: null,
+      videoUrl: null,
+      createdAt: '2023-08-24T09:26:56.524+00:00',
+      creator: {
+        _id: '640d98d9eb6a743d75341067',
+        firstName: 'Aditya',
+        lastName: 'Shelke',
+        email: 'adidacreator1@gmail.com',
+      },
+      likeCount: 0,
+      commentCount: 0,
+      pinned: false,
+      likedBy: [],
+      comments: [],
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     });
   });
 
@@ -223,7 +321,11 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -233,12 +335,23 @@ describe('Organisation Post Page', () => {
     userEvent.type(screen.getByTestId('modalTitle'), formData.posttitle);
 
     userEvent.type(screen.getByTestId('modalinfo'), formData.postinfo);
+<<<<<<< HEAD
     userEvent.upload(screen.getByTestId('addMediaField'), formData.postImage);
     userEvent.upload(screen.getByTestId('addMediaField'), formData.postVideo);
     userEvent.upload(screen.getByTestId('addMediaField'), formData.postImage);
     userEvent.upload(screen.getByTestId('addMediaField'), formData.postVideo);
     userEvent.click(screen.getByTestId('pinPost'));
     expect(screen.getByTestId('pinPost')).toBeChecked();
+=======
+    userEvent.upload(
+      screen.getByTestId('organisationImage'),
+      formData.postImage
+    );
+    userEvent.upload(
+      screen.getByTestId('organisationImage'),
+      formData.postVideo
+    );
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
     userEvent.click(screen.getByTestId('createPostBtn'));
 
@@ -257,7 +370,11 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
     async function debounceWait(ms = 200): Promise<void> {
       await act(() => {
@@ -267,7 +384,11 @@ describe('Organisation Post Page', () => {
       });
     }
     await debounceWait();
+<<<<<<< HEAD
     userEvent.type(screen.getByPlaceholderText(/Search By/i), 'postone{enter}');
+=======
+    userEvent.type(screen.getByPlaceholderText(/Search By/i), 'postone');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     await debounceWait();
     const sortDropdown = screen.getByTestId('sort');
     userEvent.click(sortDropdown);
@@ -284,7 +405,11 @@ describe('Organisation Post Page', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
+<<<<<<< HEAD
         </MockedProvider>,
+=======
+        </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       );
 
       await wait();
@@ -318,7 +443,11 @@ describe('Organisation Post Page', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
+<<<<<<< HEAD
         </MockedProvider>,
+=======
+        </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       );
 
       await wait();
@@ -353,7 +482,11 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -380,7 +513,11 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -409,7 +546,11 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -422,6 +563,7 @@ describe('Organisation Post Page', () => {
     fireEvent.change(postInfoTextarea, {
       target: { value: 'Test post information' },
     });
+<<<<<<< HEAD
 
     // Simulate uploading an image
     const imageFile = new File(['image content'], 'image.png', {
@@ -440,6 +582,20 @@ describe('Organisation Post Page', () => {
 
     // Check if the image is removed from the preview
     expect(imagePreview).not.toBeInTheDocument();
+=======
+    const file = new File(['image content'], 'image.png', {
+      type: 'image/png',
+    });
+    const input = screen.getByTestId('organisationImage');
+    userEvent.upload(input, file);
+
+    await screen.findByAltText('Post Image Preview');
+    expect(screen.getByAltText('Post Image Preview')).toBeInTheDocument();
+
+    const createPostBtn = screen.getByTestId('createPostBtn');
+    fireEvent.click(createPostBtn);
+    debug();
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   }, 15000);
 
   test('Modal opens and closes', async () => {
@@ -452,7 +608,11 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -464,7 +624,11 @@ describe('Organisation Post Page', () => {
     const modalTitle = screen.getByTestId('modalOrganizationHeader');
     expect(modalTitle).toBeInTheDocument();
 
+<<<<<<< HEAD
     const closeButton = screen.getByTestId(/modalOrganizationHeader/i);
+=======
+    const closeButton = screen.getByTestId('closeOrganizationModal');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     userEvent.click(closeButton);
 
     await wait();
@@ -483,7 +647,11 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -492,6 +660,11 @@ describe('Organisation Post Page', () => {
     // Check if input fields and buttons are present
     expect(screen.getByTestId('modalTitle')).toBeInTheDocument();
     expect(screen.getByTestId('modalinfo')).toBeInTheDocument();
+<<<<<<< HEAD
+=======
+    expect(screen.getByTestId('organisationImage')).toBeInTheDocument();
+    expect(screen.getByTestId('organisationVideo')).toBeInTheDocument();
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     expect(screen.getByTestId('createPostBtn')).toBeInTheDocument();
   });
 
@@ -506,7 +679,11 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -536,7 +713,11 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -552,13 +733,21 @@ describe('Organisation Post Page', () => {
     const file = new File(['image content'], 'image.png', {
       type: 'image/png',
     });
+<<<<<<< HEAD
     const input = screen.getByTestId('addMediaField');
+=======
+    const input = screen.getByTestId('organisationImage');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     userEvent.upload(input, file);
 
     await screen.findByAltText('Post Image Preview');
     expect(screen.getByAltText('Post Image Preview')).toBeInTheDocument();
 
+<<<<<<< HEAD
     const closeButton = screen.getByTestId('mediaCloseButton');
+=======
+    const closeButton = screen.getByTestId('closePreview');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     fireEvent.click(closeButton);
   }, 15000);
   test('Create post, preview image, and close preview', async () => {
@@ -573,7 +762,11 @@ describe('Organisation Post Page', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
+<<<<<<< HEAD
         </MockedProvider>,
+=======
+        </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       );
 
       await wait();
@@ -592,18 +785,32 @@ describe('Organisation Post Page', () => {
         type: 'video/mp4',
       });
 
+<<<<<<< HEAD
       userEvent.upload(screen.getByTestId('addMediaField'), videoFile);
+=======
+      const videoInput = screen.getByTestId('organisationVideo');
+      fireEvent.change(videoInput, {
+        target: {
+          files: [videoFile],
+        },
+      });
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
       // Check if the video is displayed
       const videoPreview = await screen.findByTestId('videoPreview');
       expect(videoPreview).toBeInTheDocument();
 
       // Check if the close button for the video works
+<<<<<<< HEAD
       const closeVideoPreviewButton = screen.getByTestId('mediaCloseButton');
+=======
+      const closeVideoPreviewButton = screen.getByTestId('videoclosebutton');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       fireEvent.click(closeVideoPreviewButton);
       expect(videoPreview).not.toBeInTheDocument();
     });
   });
+<<<<<<< HEAD
   test('Sorting posts by pinned status', async () => {
     // Mocked data representing posts with different pinned statuses
     const mockedPosts = [
@@ -659,4 +866,6 @@ describe('Organisation Post Page', () => {
       'posttwoTis is the post two Aditya Shelke',
     );
   });
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 });

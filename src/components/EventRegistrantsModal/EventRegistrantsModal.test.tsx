@@ -153,6 +153,7 @@ describe('Testing Event Registrants Modal', () => {
             </Provider>
           </LocalizationProvider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
     );
 
@@ -162,12 +163,28 @@ describe('Testing Event Registrants Modal', () => {
 
     await waitFor(() =>
       expect(queryByText('Registered Registrants')).toBeInTheDocument(),
+=======
+      </MockedProvider>
+    );
+
+    await waitFor(() =>
+      expect(queryByText('Event Registrants')).toBeInTheDocument()
+    );
+
+    await waitFor(() =>
+      expect(queryByText('Registered Registrants')).toBeInTheDocument()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await waitFor(() =>
       expect(
+<<<<<<< HEAD
         queryByText('There are no registered attendees for this event.'),
       ).toBeInTheDocument(),
+=======
+        queryByText('There are no registered attendees for this event.')
+      ).toBeInTheDocument()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     // Get warning modal on blank button click
@@ -175,8 +192,13 @@ describe('Testing Event Registrants Modal', () => {
 
     await waitFor(() =>
       expect(
+<<<<<<< HEAD
         queryByText('Please choose an user to add first!'),
       ).toBeInTheDocument(),
+=======
+        queryByText('Please choose an user to add first!')
+      ).toBeInTheDocument()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     // Choose a user to add as an attendee
@@ -190,13 +212,22 @@ describe('Testing Event Registrants Modal', () => {
     fireEvent.click(queryByText('Add Registrant') as Element);
 
     await waitFor(() =>
+<<<<<<< HEAD
       expect(queryByText('Adding the attendee...')).toBeInTheDocument(),
+=======
+      expect(queryByText('Adding the attendee...')).toBeInTheDocument()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await waitFor(() =>
       expect(
+<<<<<<< HEAD
         queryByText('Added the attendee successfully!'),
       ).toBeInTheDocument(),
+=======
+        queryByText('Added the attendee successfully!')
+      ).toBeInTheDocument()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
   });
 
@@ -220,13 +251,22 @@ describe('Testing Event Registrants Modal', () => {
             </Provider>
           </LocalizationProvider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await waitFor(() =>
       expect(
+<<<<<<< HEAD
         queryByText('There are no registered attendees for this event.'),
       ).toBeInTheDocument(),
+=======
+        queryByText('There are no registered attendees for this event.')
+      ).toBeInTheDocument()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     // Choose a user to add as an attendee
@@ -240,13 +280,22 @@ describe('Testing Event Registrants Modal', () => {
     fireEvent.click(queryByText('Add Registrant') as Element);
 
     await waitFor(() =>
+<<<<<<< HEAD
       expect(queryByText('Adding the attendee...')).toBeInTheDocument(),
+=======
+      expect(queryByText('Adding the attendee...')).toBeInTheDocument()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await waitFor(() =>
       expect(
+<<<<<<< HEAD
         queryByText('There was an error in adding the attendee!'),
       ).toBeInTheDocument(),
+=======
+        queryByText('There was an error in adding the attendee!')
+      ).toBeInTheDocument()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
   });
 
@@ -270,11 +319,19 @@ describe('Testing Event Registrants Modal', () => {
             </Provider>
           </LocalizationProvider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
     );
 
     await waitFor(() =>
       expect(queryByText('Registered Registrants')).toBeInTheDocument(),
+=======
+      </MockedProvider>
+    );
+
+    await waitFor(() =>
+      expect(queryByText('Registered Registrants')).toBeInTheDocument()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await waitFor(() => expect(queryByText('John Doe')).toBeInTheDocument());
@@ -282,13 +339,22 @@ describe('Testing Event Registrants Modal', () => {
     fireEvent.click(queryByTestId('CancelIcon') as Element);
 
     await waitFor(() =>
+<<<<<<< HEAD
       expect(queryByText('Removing the attendee...')).toBeInTheDocument(),
+=======
+      expect(queryByText('Removing the attendee...')).toBeInTheDocument()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await waitFor(() =>
       expect(
+<<<<<<< HEAD
         queryByText('Removed the attendee successfully!'),
       ).toBeInTheDocument(),
+=======
+        queryByText('Removed the attendee successfully!')
+      ).toBeInTheDocument()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
   });
 
@@ -312,11 +378,19 @@ describe('Testing Event Registrants Modal', () => {
             </Provider>
           </LocalizationProvider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
     );
 
     await waitFor(() =>
       expect(queryByText('Registered Registrants')).toBeInTheDocument(),
+=======
+      </MockedProvider>
+    );
+
+    await waitFor(() =>
+      expect(queryByText('Registered Registrants')).toBeInTheDocument()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await waitFor(() => expect(queryByText('John Doe')).toBeInTheDocument());
@@ -324,13 +398,22 @@ describe('Testing Event Registrants Modal', () => {
     fireEvent.click(queryByTestId('CancelIcon') as Element);
 
     await waitFor(() =>
+<<<<<<< HEAD
       expect(queryByText('Removing the attendee...')).toBeInTheDocument(),
+=======
+      expect(queryByText('Removing the attendee...')).toBeInTheDocument()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await waitFor(() =>
       expect(
+<<<<<<< HEAD
         queryByText('There was an error in removing the attendee!'),
       ).toBeInTheDocument(),
+=======
+        queryByText('There was an error in removing the attendee!')
+      ).toBeInTheDocument()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
   });
 });

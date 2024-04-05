@@ -2,9 +2,13 @@
   position: relative;
   display: flex;
   align-items: center;
+<<<<<<< HEAD
   border: 1px solid var(--bs-gray-200);
   border-radius: 8px;
   margin-top: 20px;
+=======
+  padding: 0.75rem 0;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 
 .cardItem .iconWrapper {
@@ -41,6 +45,7 @@
 .cardItem .title {
   font-size: 1rem;
   flex: 1;
+<<<<<<< HEAD
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 1;
@@ -57,6 +62,8 @@
   -webkit-line-clamp: 1;
   line-clamp: 1;
   -webkit-box-orient: vertical;
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 
 .cardItem .time {
@@ -71,6 +78,7 @@
 
 .rightCard {
   display: flex;
+<<<<<<< HEAD
   gap: 7px;
   min-width: 170px;
   justify-content: center;
@@ -78,4 +86,10 @@
   margin-left: 10px;
   overflow-x: hidden;
   width: 210px;
+=======
+  gap: 5px;
+  min-width: 170px;
+  justify-content: center;
+  flex-direction: column;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }

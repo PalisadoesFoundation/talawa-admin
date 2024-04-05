@@ -10,9 +10,12 @@ import {
 } from './LeftDrawerEventWrapper';
 import { MockedProvider } from '@apollo/react-testing';
 import { EVENT_FEEDBACKS } from 'GraphQl/Queries/Queries';
+<<<<<<< HEAD
 import useLocalStorage from 'utils/useLocalstorage';
 
 const { setItem } = useLocalStorage();
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 const props: InterfacePropType = {
   event: {
@@ -23,6 +26,10 @@ const props: InterfacePropType = {
       _id: 'Test Organization',
     },
   },
+<<<<<<< HEAD
+=======
+  setShowAddEventProjectModal: jest.fn(),
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   children: null,
 };
 
@@ -63,11 +70,19 @@ jest.mock('@mui/x-charts/PieChart', () => ({
 }));
 
 beforeEach(() => {
+<<<<<<< HEAD
   setItem('FirstName', 'John');
   setItem('LastName', 'Doe');
   setItem(
     'UserImage',
     'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
+=======
+  localStorage.setItem('FirstName', 'John');
+  localStorage.setItem('LastName', 'Doe');
+  localStorage.setItem(
+    'UserImage',
+    'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe'
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   );
 });
 
@@ -78,13 +93,18 @@ afterEach(() => {
 
 describe('Testing Left Drawer Wrapper component for the Event Dashboard', () => {
   test('Component should be rendered properly and the close menu button should function', async () => {
+<<<<<<< HEAD
     const { queryByText, getByTestId } = render(
+=======
+    const { queryByText, queryByTestId } = render(
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       <MockedProvider mocks={mocks}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <LeftDrawerEventWrapper {...props} />
           </I18nextProvider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
     );
 
@@ -119,5 +139,14 @@ describe('Testing Left Drawer Wrapper component for the Event Dashboard', () => 
     await waitFor(() => {
       fireEvent.click(getByTestId('menuBtn') as HTMLElement);
     });
+=======
+      </MockedProvider>
+    );
+
+    await waitFor(() =>
+      expect(queryByText('Event Management')).toBeInTheDocument()
+    );
+    fireEvent.click(queryByTestId('closeLeftDrawerBtn') as HTMLElement);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   });
 });

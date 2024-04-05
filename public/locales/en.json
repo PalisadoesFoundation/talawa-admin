@@ -4,18 +4,24 @@
     "fromPalisadoes": "An open source application by Palisadoes Foundation volunteers",
     "talawa_portal": "Talawa Admin Portal",
     "login": "Login",
+<<<<<<< HEAD
     "userLogin": "User Login",
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "register": "Register",
     "firstName": "First Name",
     "lastName": "Last Name",
     "email": "Email",
     "password": "Password",
     "atleast_8_char_long": "Atleast 8 Character long",
+<<<<<<< HEAD
     "atleast_6_char_long": "Atleast 6 Character long",
     "firstName_invalid": "First name should contain only lower and upper case letters",
     "lastName_invalid": "Last name should contain only lower and upper case letters",
     "password_invalid": "Password should contain atleast one lowercase letter, one uppercase letter, one numeric value and one special character",
     "email_invalid": "Email should have atleast 8 characters",
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "Password_and_Confirm_password_mismatches.": "Password and Confirm password mismatches.",
     "confirmPassword": "Confirm Password",
     "forgotPassword": "Forgot Password ?",
@@ -31,6 +37,7 @@
     "notAuthorised": "Sorry! you are not Authorised!",
     "notFound": "User not found!",
     "successfullyRegistered": "Successfully Registered. Please wait until you will be approved.",
+<<<<<<< HEAD
     "OR": "OR",
     "admin": "ADMIN",
     "user": "USER",
@@ -38,6 +45,10 @@
     "uppercase_check": "Atleast one uppercase letter",
     "numeric_value_check": "Atleaset one numeric value",
     "special_char_check": "Atleast one special character"
+=======
+    "login_to_admin_portal": "Admin Portal Login",
+    "OR": "OR"
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
   "latestEvents": {
     "eventCardTitle": "Upcoming Events",
@@ -58,10 +69,16 @@
   "leftDrawer": {
     "talawaAdminPortal": "Talawa Admin Portal",
     "menu": "Menu",
+<<<<<<< HEAD
     "my organizations": "My Organizations",
     "users": "Users",
     "requests": "Requests",
     "communityProfile": "Community Profile",
+=======
+    "organizations": "Organizations",
+    "requests": "Requests",
+    "users": "Users",
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "logout": "Logout"
   },
   "leftDrawerOrg": {
@@ -96,11 +113,16 @@
     "designation": "Designation",
     "email": "Email",
     "searchByName": "Search By Name",
+<<<<<<< HEAD
     "my organizations": "My Organizations",
+=======
+    "organizations": "Organizations",
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "createOrganization": "Create Organization",
     "createSampleOrganization": "Create Sample Organization",
     "description": "Description",
     "location": "Location",
+<<<<<<< HEAD
     "address": "Address",
     "city": "City",
     "countryCode": "Country Code",
@@ -111,12 +133,18 @@
     "sortingCode": "Sorting code",
     "state": "State / Province",
     "userRegistrationRequired": "User Registration Required",
+=======
+    "isPublic": "Is Public",
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "visibleInSearch": "Visible In Search",
     "displayImage": "Display Image",
     "enterName": "Enter Name",
     "sort": "Sort",
+<<<<<<< HEAD
     "Latest": "Latest",
     "Earliest": "Earliest",
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "filter": "Filter",
     "cancel": "Cancel",
     "noOrgErrorTitle": "Organizations Not Found",
@@ -141,6 +169,7 @@
     "rowsPerPage": "rows per page",
     "all": "All"
   },
+<<<<<<< HEAD
   "requests": {
     "title": "Requests",
     "sl_no": "Sl. No.",
@@ -158,12 +187,18 @@
     "noOrgErrorTitle": "Organizations Not Found",
     "noOrgErrorDescription": "Please create an organization through dashboard"
   },
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   "users": {
     "title": "Talawa Roles",
     "searchByName": "Search By Name",
     "users": "Users",
     "name": "Name",
     "email": "Email",
+<<<<<<< HEAD
+=======
+    "roles_userType": "Role/User-Type",
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "joined_organizations": "Joined Organizations",
     "blocked_organizations": "Blocked Organizations",
     "orgJoinedBy": "Organizations Joined By",
@@ -186,6 +221,7 @@
     "noOrgError": "Organizations not found, please create an organization through dashboard",
     "roleUpdated": "Role Updated.",
     "noResultsFoundFor": "No results found for ",
+<<<<<<< HEAD
     "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too.",
     "cancel": "Cancel",
     "admins": "Admins",
@@ -205,6 +241,29 @@
     "url": "Enter url",
     "profileChangedMsg": "Successfully updated the Profile Details.",
     "resetData": "Successfully reset the Profile Details."
+=======
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
+  },
+  "requests": {
+    "title": "Talawa Requests",
+    "searchByName": "Search By Name",
+    "requests": "Requests",
+    "name": "Name",
+    "email": "Email",
+    "accept": "Accept",
+    "reject": "Reject",
+    "enterName": "Enter Name",
+    "endOfResults": "End of results",
+    "loadingRequests": "Loading Requests...",
+    "noRequestFound": "No Request Found",
+    "sort": "Sort",
+    "filter": "Filter",
+    "noOrgError": "Organizations not found, please create an organization through dashboard",
+    "userApproved": "User Approved",
+    "userRejected": "User Rejected",
+    "noResultsFoundFor": "No results found for ",
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
   "dashboard": {
     "title": "Dashboard",
@@ -237,6 +296,7 @@
     "users": "Users",
     "searchName": "Enter Name",
     "searchevent": "Enter Event",
+<<<<<<< HEAD
     "searchFullName": "Enter Full Name",
     "people": "People",
     "sort": "Search by Role",
@@ -258,6 +318,10 @@
     "create": "Create",
     "cancel": "Cancel",
     "invalidDetailsMessage": "Please enter valid details."
+=======
+    "searchFirstName": "Enter First Name",
+    "searchLastName": "Enter Last Name"
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
   "userListCard": {
     "joined": "Joined",
@@ -286,10 +350,18 @@
     "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
   },
   "organizationEvents": {
+<<<<<<< HEAD
     "title": "Events",
     "filterByTitle": "Filter by Title",
     "filterByLocation": "Filter by Location",
     "filterByDescription": "Filter by Description",
+=======
+    "title": "Talawa Events",
+    "filterByTitle": "Filter by Title",
+    "filterByLocation": "Filter by Location",
+    "filterByDescription": "Filter by Description",
+    "events": "Events",
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "addEvent": "Add Event",
     "eventDetails": "Event Details",
     "eventTitle": "Title",
@@ -308,6 +380,7 @@
     "enterTitle": "Enter Title",
     "enterDescrip": "Enter Description",
     "eventLocation": "Enter Location",
+<<<<<<< HEAD
     "searchEventName": "Search Event Name",
     "eventType": "Event Type",
     "eventCreated": "Congratulations! The Event is created.",
@@ -355,6 +428,10 @@
     "successfulDeletion": "Action Item deleted successfully",
     "title": "Action Items",
     "yes": "Yes"
+=======
+    "eventCreated": "Congratulations! The Event is created.",
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
   "eventListCard": {
     "location": "Location",
@@ -378,6 +455,7 @@
     "eventDetails": "Event Details",
     "eventDeleted": "Event deleted successfully.",
     "eventUpdated": "Event updated successfully.",
+<<<<<<< HEAD
     "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too.",
     "thisInstance": "This Instance",
     "thisAndFollowingInstances": "This & Following Instances",
@@ -464,15 +542,28 @@
   },
   "orgPost": {
     "title": "Posts",
+=======
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
+  },
+  "orgPost": {
+    "title": "Talawa Posts",
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "searchPost": "Search Post",
     "posts": "Posts",
     "createPost": "Create Post",
     "postDetails": "Post Details",
     "postTitle1": "Write title of the post",
     "postTitle": "Title",
+<<<<<<< HEAD
     "addMedia": "Upload Media",
     "information": "Information",
     "information1": "Write information of the post",
+=======
+    "information": "Information",
+    "information1": "Write information of the post",
+    "image": "Post Image",
+    "video": "Post Video",
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "addPost": "Add Post",
     "searchTitle": "Search By Title",
     "searchText": "Search By Text",
@@ -485,11 +576,15 @@
     "Oldest": "Oldest First",
     "Latest": "Latest First",
     "sortPost": "Sort Post",
+<<<<<<< HEAD
     "tag": " Your browser does not support the video tag",
     "postCreatedSuccess": "Congratulations! You have Posted Something.",
     "pinPost": "Pin post",
     "Next": "Next Page",
     "Previous": "Previous Page"
+=======
+    "tag": " Your browser does not support the video tag"
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
   "postNotFound": {
     "post": "Post",
@@ -518,8 +613,11 @@
     "yes": "Yes",
     "editPost": "Edit Post",
     "postTitle": "Title",
+<<<<<<< HEAD
     "postTitle1": "Edit title of the post",
     "information1": "Edit information of the post",
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "information": "Information",
     "image": "Image",
     "video": "Video",
@@ -532,7 +630,11 @@
     "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
   },
   "blockUnblockUser": {
+<<<<<<< HEAD
     "title": "Block/Unblock User",
+=======
+    "title": "Talawa Block/Unblock User",
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "pageName": "Block/Unblock",
     "searchByName": "Search By Name",
     "listOfUsers": "List of Users who spammed",
@@ -574,7 +676,10 @@
   "pageNotFound": {
     "title": "404 Not Found",
     "talawaAdmin": "Talawa Admin",
+<<<<<<< HEAD
     "talawaUser": "Talawa User",
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "404": "404",
     "notFoundMsg": "Oops! The Page you requested was not found!",
     "backToHome": "Back to Home"
@@ -599,17 +704,26 @@
     "amount": "Amount"
   },
   "orgSettings": {
+<<<<<<< HEAD
     "title": "Settings",
     "pageName": "Settings",
     "general": "General",
     "actionItemCategories": "Action Item Categories",
+=======
+    "title": "Talawa Setting",
+    "pageName": "Settings",
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "updateOrganization": "Update Organization",
     "seeRequest": "See Request",
     "settings": "Settings",
     "noData": "No data",
     "otherSettings": "Other Settings",
+<<<<<<< HEAD
     "changeLanguage": "Change Language",
     "manageCustomFields": "Manage Custom Fields"
+=======
+    "changeLanguage": "Change Language"
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
   "deleteOrg": {
     "deleteOrganization": "Delete Organization",
@@ -617,8 +731,12 @@
     "deleteMsg": "Do you want to delete this organization?",
     "cancel": "Cancel",
     "confirmDelete": "Confirm Delete",
+<<<<<<< HEAD
     "longDelOrgMsg": "By clicking on Delete Organization button the organization will be permanently deleted along with its events, tags and all related data.",
     "successfullyDeletedSampleOrganization": "Successfully deleted sample Organization"
+=======
+    "longDelOrgMsg": "By clicking on Delete Organization button the organization will be permanently deleted along with its events, tags and all related data."
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
   "userUpdate": {
     "firstName": "First Name",
@@ -654,6 +772,7 @@
     "name": "Name",
     "description": "Description",
     "location": "Location",
+<<<<<<< HEAD
     "address": "Address",
     "city": "City",
     "countryCode": "Country Code",
@@ -665,6 +784,10 @@
     "state": "State / Province",
     "displayImage": "Display Image",
     "userRegistrationRequired": "User Registration Required",
+=======
+    "displayImage": "Display Image",
+    "isPublic": "Public",
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "isVisibleInSearch": "Visible in Search",
     "saveChanges": "Save Changes",
     "enterNameOrganization": "Enter Organization Name",
@@ -705,7 +828,10 @@
   "memberDetail": {
     "title": "User Details",
     "addAdmin": "Add Admin",
+<<<<<<< HEAD
     "alreadyIsAdmin": "Member is already an Admin",
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "organizations": "Organizations",
     "events": "Events",
     "role": "Role",
@@ -714,6 +840,7 @@
     "main": "Main",
     "firstName": "First name",
     "lastName": "Last name",
+<<<<<<< HEAD
     "language": "Language",
     "gender": "Gender",
     "birthDate": "Birth Date",
@@ -733,6 +860,11 @@
     "appLanguageCode": "Choose Language",
     "delete": "Delete User",
     "saveChanges": "Save Changes",
+=======
+    "memberOfOrganization": "Member of Organization",
+    "language": "Language",
+    "adminApproved": "Admin approved",
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "pluginCreationAllowed": "Plugin creation allowed",
     "joined": "Joined",
     "created": "Created",
@@ -740,12 +872,16 @@
     "membershipRequests": "Membership requests",
     "adminForEvents": "Admin for events",
     "addedAsAdmin": "User is added as admin.",
+<<<<<<< HEAD
     "talawaApiUnavailable": "Talawa-API service is unavailable. Kindly check your network connection and wait for a while.",
     "password": "Password",
     "userType": "User Type",
     "admin": "Admin",
     "superAdmin": "Superadmin",
     "cancel": "Cancel"
+=======
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Kindly check your network connection and wait for a while."
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
   "userLogin": {
     "login": "Login",
@@ -787,6 +923,10 @@
     "events": "Events",
     "chat": "Chat",
     "donate": "Donate",
+<<<<<<< HEAD
+=======
+    "myTasks": "My Tasks",
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "settings": "Settings",
     "language": "Language",
     "logout": "Logout",
@@ -796,12 +936,18 @@
     "allOrganizations": "All Organizations",
     "joinedOrganizations": "Joined Organizations",
     "createdOrganizations": "Created Organizations",
+<<<<<<< HEAD
     "selectOrganization": "Select an organization",
     "search": "Search users",
     "nothingToShow": "Nothing to show here.",
     "organizations": "Organizations",
     "searchByName": "Search By Name",
     "filter": "Filter"
+=======
+    "search": "Search",
+    "nothingToShow": "Nothing to show here.",
+    "selectOrganization": "Select Organization"
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
   "userSidebar": {
     "yourOrganizations": "Your Organizations",
@@ -822,6 +968,7 @@
   "home": {
     "feed": "Feed",
     "pinnedPosts": "View Pinned Posts",
+<<<<<<< HEAD
     "somethingOnYourMind": "Something on your mind?",
     "addPost": "Add Post",
     "startPost": "Start a post",
@@ -900,12 +1047,41 @@
     "donate": "Donate",
     "nothingToShow": "Nothing to show here.",
     "success": "Donation Successful"
+=======
+    "somethingOnYourMind": "Something on your mind?"
+  },
+  "settings": {
+    "profileSettings": "Profile Settings",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "emailAddress": "Email Address",
+    "updateImage": "Update Image",
+    "save": "Save"
+  },
+  "donate": {
+    "donateTo": "Donate to",
+    "amount": "Amount",
+    "yourPreviousDonations": "Your Previous Donations",
+    "donate": "Donate",
+    "nothingToShow": "Nothing to show here."
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
   "userEvents": {
     "nothingToShow": "Nothing to show here.",
     "search": "Search",
     "createEvent": "Create Event",
+<<<<<<< HEAD
     "recurring": "Recurring Event",
+=======
+    "eventTitle": "Event Title",
+    "eventDescription": "Event Description",
+    "eventLocation": "Event Location",
+    "startDate": "Select Start Date",
+    "endDate": "Select End Date",
+    "publicEvent": "Public Event",
+    "registerable": "Registerable",
+    "recurring": "Recurring",
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "startTime": "Start Time",
     "endTime": "End Time",
     "cancel": "Cancel",
@@ -913,6 +1089,7 @@
     "listView": "List View",
     "calendarView": "Calendar View",
     "allDay": "All Day",
+<<<<<<< HEAD
     "eventCreated": "Event created and posted successfully.",
     "eventDetails": "Event Details",
     "eventTitle": "Title",
@@ -925,6 +1102,9 @@
     "endDate": "End Date",
     "publicEvent": "Is Public",
     "registerable": "Is Registerable"
+=======
+    "eventCreated": "Event created and posted successfully."
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
   "userEventCard": {
     "location": "Location",
@@ -934,17 +1114,45 @@
     "alreadyRegistered": "Already registered",
     "register": "Register"
   },
+<<<<<<< HEAD
   "advertisement": {
     "title": "Advertisements",
+=======
+  "userTasks": {
+    "yourAssignedTasks": "Your assigned tasks",
+    "nothingToShow": "Nothing to show here."
+  },
+  "userTaskCard": {
+    "description": "Description",
+    "deadline": "Deadline",
+    "created": "Created",
+    "assignees": "Assignees",
+    "completed": "Completed",
+    "incomplete": "Incomplete",
+    "taskCompleted": "The task has been completed",
+    "taskNotCompleted": "The task has not been completed yet",
+    "event": "Event",
+    "organization": "Organization"
+  },
+  "advertisement": {
+    "title": "Advertisements",
+    "pHeading": "Manage Ads",
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "activeAds": "Active Campaigns",
     "archievedAds": "Completed Campaigns",
     "pMessage": "Ads not present for this campaign.",
     "delete": "Delete",
+<<<<<<< HEAD
     "validLink": "Link is valid",
     "invalidLink": "Link is invalid",
     "Rname": "Enter name of Advertisement",
     "Rtype": "Select type of Advertisement",
     "Rmedia": "Provide media content to be displayed",
+=======
+    "Rname": "Enter name of Advertisement",
+    "Rtype": "Select type of Advertisement",
+    "Rlink": "Provide a link for content to be displayed",
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "RstartDate": "Select Start Date",
     "RendDate": "Select End Date",
     "RClose": "Close the window",
@@ -952,6 +1160,7 @@
     "EXname": "Ex. Cookie Shop",
     "EXlink": "Ex. http://yourwebsite.com/photo",
     "register": "Create Advertisement",
+<<<<<<< HEAD
     "close": "Close ",
     "deleteAdvertisement": "Delete Advertisement",
     "deleteAdvertisementMsg": "Do you want to remove this advertisement?",
@@ -961,6 +1170,9 @@
     "edit": "Edit",
     "editAdvertisement": "Edit Advertisement",
     "saveChanges": "Save Changes"
+=======
+    "close": "Close "
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
   "userChat": {
     "chat": "Chat",
@@ -970,6 +1182,7 @@
   "userChatRoom": {
     "selectContact": "Select a contact to start conversation",
     "sendMessage": "Send Message"
+<<<<<<< HEAD
   },
   "orgProfileField": {
     "loading": "Loading...",
@@ -1014,5 +1227,7 @@
     "update": "Update Venue Details",
     "editVenue": "Update Venue",
     "venueUpdated": "Venue details updated successfully"
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   }
 }

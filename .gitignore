@@ -31,7 +31,11 @@ yarn-error.log*
 # express setup
 debug.log
 
+<<<<<<< HEAD
 # No editor related files
 .idea
 .vscode
 *.swp
+=======
+.vscode
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1

@@ -18,7 +18,11 @@ describe('Testing Loader component', () => {
     render(
       <BrowserRouter>
         <TableLoader {...props} />
+<<<<<<< HEAD
       </BrowserRouter>,
+=======
+      </BrowserRouter>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
     // Check if header titles are rendered properly
     const data = props.headerTitles as string[];
@@ -29,11 +33,19 @@ describe('Testing Loader component', () => {
     // Check if elements are rendered properly
     for (let rowIndex = 0; rowIndex < props.noOfRows; rowIndex++) {
       expect(
+<<<<<<< HEAD
         screen.getByTestId(`row-${rowIndex}-tableLoading`),
       ).toBeInTheDocument();
       for (let colIndex = 0; colIndex < data.length; colIndex++) {
         expect(
           screen.getByTestId(`row-${rowIndex}-col-${colIndex}-tableLoading`),
+=======
+        screen.getByTestId(`row-${rowIndex}-tableLoading`)
+      ).toBeInTheDocument();
+      for (let colIndex = 0; colIndex < data.length; colIndex++) {
+        expect(
+          screen.getByTestId(`row-${rowIndex}-col-${colIndex}-tableLoading`)
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         ).toBeInTheDocument();
       }
     }
@@ -46,7 +58,11 @@ describe('Testing Loader component', () => {
     render(
       <BrowserRouter>
         <TableLoader {...props} />
+<<<<<<< HEAD
       </BrowserRouter>,
+=======
+      </BrowserRouter>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
     // Check if header titles are rendered properly
     const data = [...Array(props.noOfCols)];
@@ -54,11 +70,19 @@ describe('Testing Loader component', () => {
     // Check if elements are rendered properly
     for (let rowIndex = 0; rowIndex < props.noOfRows; rowIndex++) {
       expect(
+<<<<<<< HEAD
         screen.getByTestId(`row-${rowIndex}-tableLoading`),
       ).toBeInTheDocument();
       for (let colIndex = 0; colIndex < data.length; colIndex++) {
         expect(
           screen.getByTestId(`row-${rowIndex}-col-${colIndex}-tableLoading`),
+=======
+        screen.getByTestId(`row-${rowIndex}-tableLoading`)
+      ).toBeInTheDocument();
+      for (let colIndex = 0; colIndex < data.length; colIndex++) {
+        expect(
+          screen.getByTestId(`row-${rowIndex}-col-${colIndex}-tableLoading`)
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         ).toBeInTheDocument();
       }
     }
@@ -71,7 +95,11 @@ describe('Testing Loader component', () => {
       render(
         <BrowserRouter>
           <TableLoader {...props} />
+<<<<<<< HEAD
         </BrowserRouter>,
+=======
+        </BrowserRouter>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       );
     }).toThrowError();
   });

@@ -152,9 +152,13 @@
   outline: none;
   font-weight: 600;
   cursor: pointer;
+<<<<<<< HEAD
   transition:
     transform 0.2s,
     box-shadow 0.2s;
+=======
+  transition: transform 0.2s, box-shadow 0.2s;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   background-color: #31bb6b;
   margin-right: 13px;
 }
@@ -244,9 +248,13 @@
   outline: none;
   font-weight: 600;
   cursor: pointer;
+<<<<<<< HEAD
   transition:
     transform 0.2s,
     box-shadow 0.2s;
+=======
+  transition: transform 0.2s, box-shadow 0.2s;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   width: 100%;
 }
 
@@ -448,6 +456,7 @@
 .inactiveBtn:hover i {
   color: #31bb6b;
 }
+<<<<<<< HEAD
 
 .topRadius {
   border-top-left-radius: 16px;
@@ -521,3 +530,5 @@ input::file-selector-button {
 .Outline {
   outline: 1px solid var(--bs-gray-400);
 }
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1

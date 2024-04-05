@@ -13,26 +13,40 @@ import {
   ORGANIZATION_CONNECTION_LIST,
   USER_LIST,
 } from 'GraphQl/Queries/Queries';
+<<<<<<< HEAD
 import TableLoader from 'components/TableLoader/TableLoader';
 import UsersTableItem from 'components/UsersTableItem/UsersTableItem';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import styles from './Users.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
+=======
+import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
+import TableLoader from 'components/TableLoader/TableLoader';
+import UsersTableItem from 'components/UsersTableItem/UsersTableItem';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import debounce from 'utils/debounce';
+import type { InterfaceQueryUserListItem } from 'utils/interfaces';
+import styles from './Users.module.css';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 const Users = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'users' });
 
   document.title = t('title');
 
+<<<<<<< HEAD
   const { getItem } = useLocalStorage();
 
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   const perPageResult = 12;
   const [isLoading, setIsLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState('');
   const [sortingOption, setSortingOption] = useState('newest');
+<<<<<<< HEAD
   const [filteringOption, setFilteringOption] = useState('cancel');
   const userType = getItem('SuperAdmin')
     ? 'SUPERADMIN'
@@ -40,6 +54,11 @@ const Users = (): JSX.Element => {
       ? 'ADMIN'
       : 'USER';
   const loggedInUserId = getItem('id');
+=======
+
+  const userType = localStorage.getItem('UserType');
+  const loggedInUserId = localStorage.getItem('id');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
   const {
     data: usersData,
@@ -74,11 +93,18 @@ const Users = (): JSX.Element => {
       setHasMore(false);
     }
     if (usersData && usersData.users) {
+<<<<<<< HEAD
       let newDisplayedUsers = sortUsers(usersData.users, sortingOption);
       newDisplayedUsers = filterUsers(newDisplayedUsers, filteringOption);
       setDisplayedUsers(newDisplayedUsers);
     }
   }, [usersData, sortingOption, filteringOption]);
+=======
+      const newDisplayedUsers = sortUsers(usersData.users, sortingOption);
+      setDisplayedUsers(newDisplayedUsers);
+    }
+  }, [usersData, sortingOption]);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
   // To clear the search when the component is unmounted
   useEffect(() => {
@@ -114,9 +140,17 @@ const Users = (): JSX.Element => {
     }
   }, [loading]);
 
+<<<<<<< HEAD
   const handleSearch = (value: string): void => {
     setSearchByName(value);
     if (value === '') {
+=======
+  const handleSearchByName = (e: any): void => {
+    const { value } = e.target;
+    setSearchByName(value);
+    /* istanbul ignore next */
+    if (value.length === 0) {
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       resetAndRefetch();
       return;
     }
@@ -126,6 +160,7 @@ const Users = (): JSX.Element => {
       // Later on we can add several search and filter options
     });
   };
+<<<<<<< HEAD
 
   const handleSearchByEnter = (e: any): void => {
     if (e.key === 'Enter') {
@@ -141,6 +176,8 @@ const Users = (): JSX.Element => {
     const inputValue = inputElement?.value || '';
     handleSearch(inputValue);
   };
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   /* istanbul ignore next */
   const resetAndRefetch = (): void => {
     refetchUsers({
@@ -166,7 +203,11 @@ const Users = (): JSX.Element => {
           fetchMoreResult,
         }: {
           fetchMoreResult: { users: InterfaceQueryUserListItem[] } | undefined;
+<<<<<<< HEAD
         },
+=======
+        }
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       ): { users: InterfaceQueryUserListItem[] } | undefined => {
         setIsLoadingMore(false);
         if (!fetchMoreResult) return prev;
@@ -179,6 +220,11 @@ const Users = (): JSX.Element => {
       },
     });
   };
+<<<<<<< HEAD
+=======
+  const debouncedHandleSearchByName = debounce(handleSearchByName);
+  // console.log(usersData);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
   const handleSorting = (option: string): void => {
     setSortingOption(option);
@@ -186,13 +232,18 @@ const Users = (): JSX.Element => {
 
   const sortUsers = (
     allUsers: InterfaceQueryUserListItem[],
+<<<<<<< HEAD
     sortingOption: string,
+=======
+    sortingOption: string
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   ): InterfaceQueryUserListItem[] => {
     const sortedUsers = [...allUsers];
 
     if (sortingOption === 'newest') {
       sortedUsers.sort(
         (a, b) =>
+<<<<<<< HEAD
           new Date(b.user.createdAt).getTime() -
           new Date(a.user.createdAt).getTime(),
       );
@@ -238,18 +289,35 @@ const Users = (): JSX.Element => {
       });
       return output;
     }
+=======
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+    } else if (sortingOption === 'oldest') {
+      sortedUsers.sort(
+        (a, b) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      );
+    }
+
+    return sortedUsers;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   };
 
   const headerTitles: string[] = [
     '#',
     t('name'),
     t('email'),
+<<<<<<< HEAD
+=======
+    t('roles_userType'),
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     t('joined_organizations'),
     t('blocked_organizations'),
   ];
 
   return (
     <>
+<<<<<<< HEAD
       {/* Buttons Container */}
       <div className={styles.btnsContainer} data-testid="testcomp">
         <div className={styles.inputContainer}>
@@ -406,6 +474,136 @@ const Users = (): JSX.Element => {
                         return (
                           <UsersTableItem
                             key={user.user._id}
+=======
+      <SuperAdminScreen title={t('users')} screenName="Users">
+        {/* Buttons Container */}
+        <div className={styles.btnsContainer}>
+          <div className={styles.inputContainer}>
+            <div
+              className={styles.input}
+              style={{
+                display: userType === 'SUPERADMIN' ? 'block' : 'none',
+              }}
+            >
+              <Form.Control
+                type="name"
+                className="bg-white"
+                placeholder={t('enterName')}
+                data-testid="searchByName"
+                autoComplete="off"
+                required
+                onChange={debouncedHandleSearchByName}
+              />
+              <Button
+                tabIndex={-1}
+                className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+              >
+                <Search />
+              </Button>
+            </div>
+          </div>
+          <div className={styles.btnsBlock}>
+            <div className="d-flex">
+              <Dropdown
+                aria-expanded="false"
+                title="Sort Users"
+                data-testid="sort"
+              >
+                <Dropdown.Toggle
+                  variant="outline-success"
+                  data-testid="sortUsers"
+                >
+                  <SortIcon className={'me-1'} />
+                  {t('sort')}
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item
+                    onClick={(): void => handleSorting('newest')}
+                    data-testid="newest"
+                  >
+                    {t('Newest')}
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={(): void => handleSorting('oldest')}
+                    data-testid="oldest"
+                  >
+                    {t('Oldest')}
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+              <Dropdown aria-expanded="false" title="Filter organizations">
+                <Dropdown.Toggle variant="outline-success">
+                  <FilterListIcon className={'me-1'} />
+                  {t('filter')}
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
+                  <Dropdown.Item href="#/action-2">Action 2</Dropdown.Item>
+                  <Dropdown.Item href="#/action-3">Action 3</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
+          </div>
+        </div>
+        {isLoading == false &&
+        usersData &&
+        displayedUsers.length === 0 &&
+        searchByName.length > 0 ? (
+          <div className={styles.notFound}>
+            <h4>
+              {t('noResultsFoundFor')} &quot;{searchByName}&quot;
+            </h4>
+          </div>
+        ) : isLoading == false && usersData && displayedUsers.length === 0 ? (
+          // eslint-disable-next-line react/jsx-indent
+          <div className={styles.notFound}>
+            <h4>{t('noUserFound')}</h4>
+          </div>
+        ) : (
+          <div className={styles.listBox}>
+            {isLoading ? (
+              <TableLoader
+                headerTitles={headerTitles}
+                noOfRows={perPageResult}
+              />
+            ) : (
+              <InfiniteScroll
+                dataLength={displayedUsers.length ?? 0}
+                next={loadMoreUsers}
+                loader={
+                  <TableLoader
+                    noOfCols={headerTitles.length}
+                    noOfRows={perPageResult}
+                  />
+                }
+                hasMore={hasMore}
+                className={styles.listBox}
+                data-testid="users-list"
+                endMessage={
+                  <div className={'w-100 text-center my-4'}>
+                    <h5 className="m-0 ">{t('endOfResults')}</h5>
+                  </div>
+                }
+              >
+                <Table className="mb-0" responsive>
+                  <thead>
+                    <tr>
+                      {headerTitles.map((title: string, index: number) => {
+                        return (
+                          <th key={index} scope="col">
+                            {title}
+                          </th>
+                        );
+                      })}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {usersData &&
+                      displayedUsers.map((user, index) => {
+                        return (
+                          <UsersTableItem
+                            key={user._id}
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                             index={index}
                             resetAndRefetch={resetAndRefetch}
                             user={user}
@@ -414,6 +612,7 @@ const Users = (): JSX.Element => {
                             }
                           />
                         );
+<<<<<<< HEAD
                       },
                     )}
                 </tbody>
@@ -422,6 +621,16 @@ const Users = (): JSX.Element => {
           )}
         </div>
       )}
+=======
+                      })}
+                  </tbody>
+                </Table>
+              </InfiniteScroll>
+            )}
+          </div>
+        )}
+      </SuperAdminScreen>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     </>
   );
 };

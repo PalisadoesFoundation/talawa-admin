@@ -45,6 +45,13 @@
   animation: goToLeftBigScreen 0.5s ease-in-out;
 }
 
+<<<<<<< HEAD
+=======
+.leftDrawer .closeModalBtn {
+  display: none;
+}
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 .leftDrawer .brandingContainer {
   display: flex;
   justify-content: flex-start;
@@ -145,10 +152,13 @@
   text-transform: capitalize;
 }
 
+<<<<<<< HEAD
 .logout {
   margin-bottom: 50px;
 }
 
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 @media (max-width: 1120px) {
   .leftDrawer {
     width: calc(250px + 2rem);
@@ -168,22 +178,43 @@
     right: 0;
   }
 
+<<<<<<< HEAD
   .inactiveDrawer {
+=======
+  .leftDrawer .closeModalBtn {
+    display: block;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 10;
+  }
+
+  /* For smaller devices .activeDrawer in real behaves like inactive */
+  .activeDrawer {
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     opacity: 0;
     left: 0;
     z-index: -1;
     animation: closeDrawer 0.4s ease-in-out;
   }
 
+<<<<<<< HEAD
   .activeDrawer {
+=======
+  /* For smaller devices .inactiveDrawer in real behaves like active */
+  .inactiveDrawer {
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     display: flex;
     z-index: 100;
     animation: openDrawer 0.6s ease-in-out;
   }
+<<<<<<< HEAD
 
   .logout {
     margin-bottom: 2.5rem !important;
   }
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 
 @keyframes goToLeftBigScreen {

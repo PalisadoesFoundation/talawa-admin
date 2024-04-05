@@ -1,13 +1,20 @@
+<<<<<<< HEAD
 import { useQuery, useMutation } from '@apollo/client';
 import { Check, Clear } from '@mui/icons-material';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
+=======
+import { useMutation } from '@apollo/client';
+import type { ChangeEvent } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 import { Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useTranslation } from 'react-i18next';
+<<<<<<< HEAD
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
@@ -17,11 +24,18 @@ import {
   REACT_APP_USE_RECAPTCHA,
   RECAPTCHA_SITE_KEY,
 } from 'Constant/constant';
+=======
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
+import { REACT_APP_USE_RECAPTCHA, RECAPTCHA_SITE_KEY } from 'Constant/constant';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 import {
   LOGIN_MUTATION,
   RECAPTCHA_MUTATION,
   SIGNUP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
+<<<<<<< HEAD
 import { GET_COMMUNITY_DATA } from 'GraphQl/Queries/Queries';
 import { ReactComponent as PalisadoesLogo } from 'assets/svgs/palisadoes.svg';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
@@ -51,6 +65,22 @@ const loginPage = (): JSX.Element => {
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const [showTab, setShowTab] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
   const [role, setRole] = useState<'admin' | 'user'>('admin');
+=======
+import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
+import { ReactComponent as PalisadoesLogo } from 'assets/svgs/palisadoes.svg';
+import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
+import Loader from 'components/Loader/Loader';
+import { errorHandler } from 'utils/errorHandler';
+import styles from './LoginPage.module.css';
+import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
+
+function loginPage(): JSX.Element {
+  const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
+
+  document.title = t('title');
+
+  const [showTab, setShowTab] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   const [componentLoader, setComponentLoader] = useState(true);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [signformState, setSignFormState] = useState({
@@ -67,6 +97,7 @@ const loginPage = (): JSX.Element => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
+<<<<<<< HEAD
   const [showAlert, setShowAlert] = useState<PasswordValidation>({
     lowercaseChar: true,
     uppercaseChar: true,
@@ -98,6 +129,14 @@ const loginPage = (): JSX.Element => {
     const isLoggedIn = getItem('IsLoggedIn');
     if (isLoggedIn == 'TRUE') {
       navigate(getItem('userId') !== null ? '/user/organizations' : '/orglist');
+=======
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
+
+  useEffect(() => {
+    const isLoggedIn = localStorage.getItem('IsLoggedIn');
+    if (isLoggedIn == 'TRUE') {
+      window.location.assign('/orglist');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     }
     setComponentLoader(false);
   }, []);
@@ -106,6 +145,7 @@ const loginPage = (): JSX.Element => {
   const toggleConfirmPassword = (): void =>
     setShowConfirmPassword(!showConfirmPassword);
 
+<<<<<<< HEAD
   const { data, loading, refetch } = useQuery(GET_COMMUNITY_DATA);
   useEffect(() => {
     // refetching the data if the pre-login data updates
@@ -120,6 +160,22 @@ const loginPage = (): JSX.Element => {
       try {
         await fetch(BACKEND_URL as string);
       } catch (error) {
+=======
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [login, { loading: loginLoading }] = useMutation(LOGIN_MUTATION);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [signup, { loading: signinLoading }] = useMutation(SIGNUP_MUTATION);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [recaptcha, { loading: recaptchaLoading }] =
+    useMutation(RECAPTCHA_MUTATION);
+
+  useEffect(() => {
+    async function loadResource(): Promise<void> {
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const response = await fetch('http://localhost:4000/graphql/');
+      } catch (error: any) {
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         /* istanbul ignore next */
         errorHandler(t, error);
       }
@@ -129,7 +185,11 @@ const loginPage = (): JSX.Element => {
   }, []);
 
   const verifyRecaptcha = async (
+<<<<<<< HEAD
     recaptchaToken: string | null,
+=======
+    recaptchaToken: any
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   ): Promise<boolean | void> => {
     try {
       /* istanbul ignore next */
@@ -143,28 +203,42 @@ const loginPage = (): JSX.Element => {
       });
 
       return data.recaptcha;
+<<<<<<< HEAD
     } catch (error) {
+=======
+    } catch (error: any) {
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       /* istanbul ignore next */
       toast.error(t('captchaError'));
     }
   };
 
+<<<<<<< HEAD
   const handleCaptcha = (token: string | null): void => {
     setRecaptchaToken(token);
   };
 
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   const signupLink = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
     const { signfirstName, signlastName, signEmail, signPassword, cPassword } =
       signformState;
 
+<<<<<<< HEAD
+=======
+    const recaptchaToken = recaptchaRef.current?.getValue();
+    recaptchaRef.current?.reset();
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     const isVerified = await verifyRecaptcha(recaptchaToken);
     /* istanbul ignore next */
     if (!isVerified) {
       toast.error(t('Please_check_the_captcha'));
       return;
     }
+<<<<<<< HEAD
     const isValidatedString = (value: string): boolean =>
       /^[a-zA-Z]+$/.test(value);
 
@@ -187,6 +261,14 @@ const loginPage = (): JSX.Element => {
       signEmail.length >= 8 &&
       signPassword.length > 1 &&
       validatePassword(signPassword)
+=======
+
+    if (
+      signfirstName.length > 1 &&
+      signlastName.length > 1 &&
+      signEmail.length >= 8 &&
+      signPassword.length > 1
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     ) {
       if (cPassword == signPassword) {
         try {
@@ -202,9 +284,15 @@ const loginPage = (): JSX.Element => {
           /* istanbul ignore next */
           if (signUpData) {
             toast.success(
+<<<<<<< HEAD
               t(role === 'admin' ? 'successfullyRegistered' : 'afterRegister'),
             );
             setShowTab('LOGIN');
+=======
+              'Successfully Registered. Please wait until you will be approved.'
+            );
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
             setSignFormState({
               signfirstName: '',
               signlastName: '',
@@ -213,7 +301,11 @@ const loginPage = (): JSX.Element => {
               cPassword: '',
             });
           }
+<<<<<<< HEAD
         } catch (error) {
+=======
+        } catch (error: any) {
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
           /* istanbul ignore next */
           errorHandler(t, error);
         }
@@ -221,6 +313,7 @@ const loginPage = (): JSX.Element => {
         toast.warn(t('passwordMismatches'));
       }
     } else {
+<<<<<<< HEAD
       if (!isValidatedString(signfirstName)) {
         toast.warn(t('firstName_invalid'));
       }
@@ -233,11 +326,21 @@ const loginPage = (): JSX.Element => {
       if (signEmail.length < 8) {
         toast.warn(t('email_invalid'));
       }
+=======
+      toast.warn(t('fillCorrectly'));
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     }
   };
 
   const loginLink = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
+<<<<<<< HEAD
+=======
+
+    const recaptchaToken = recaptchaRef.current?.getValue();
+    recaptchaRef.current?.reset();
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     const isVerified = await verifyRecaptcha(recaptchaToken);
     /* istanbul ignore next */
     if (!isVerified) {
@@ -255,6 +358,7 @@ const loginPage = (): JSX.Element => {
 
       /* istanbul ignore next */
       if (loginData) {
+<<<<<<< HEAD
         const { login } = loginData;
         const { user, appUserProfile } = login;
         const isAdmin: boolean =
@@ -288,11 +392,34 @@ const loginPage = (): JSX.Element => {
         toast.warn(t('notFound'));
       }
     } catch (error) {
+=======
+        if (
+          loginData.login.user.userType === 'SUPERADMIN' ||
+          (loginData.login.user.userType === 'ADMIN' &&
+            loginData.login.user.adminApproved === true)
+        ) {
+          localStorage.setItem('token', loginData.login.accessToken);
+          localStorage.setItem('refreshToken', loginData.login.refreshToken);
+          localStorage.setItem('id', loginData.login.user._id);
+          localStorage.setItem('IsLoggedIn', 'TRUE');
+          localStorage.setItem('UserType', loginData.login.user.userType);
+          if (localStorage.getItem('IsLoggedIn') == 'TRUE') {
+            window.location.replace('/orglist');
+          }
+        } else {
+          toast.warn(t('notAuthorised'));
+        }
+      } else {
+        toast.warn(t('notFound'));
+      }
+    } catch (error: any) {
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
 
+<<<<<<< HEAD
   if (
     componentLoader ||
     loginLoading ||
@@ -327,6 +454,11 @@ const loginPage = (): JSX.Element => {
       </a>
     ),
   );
+=======
+  if (componentLoader || loginLoading || signinLoading || recaptchaLoading) {
+    return <Loader />;
+  }
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
   return (
     <>
@@ -334,6 +466,7 @@ const loginPage = (): JSX.Element => {
         <Row className={styles.row}>
           <Col sm={0} md={6} lg={7} className={styles.left_portion}>
             <div className={styles.inner}>
+<<<<<<< HEAD
               {data?.getCommunityData ? (
                 <a
                   href={data.getCommunityData.websiteLink}
@@ -363,21 +496,32 @@ const loginPage = (): JSX.Element => {
               )}
             </div>
             <div className={styles.socialIcons}>{socialIconsList}</div>
+=======
+              <PalisadoesLogo className={styles.palisadoes_logo} />
+              <p className="text-center">{t('fromPalisadoes')}</p>
+            </div>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
           </Col>
           <Col sm={12} md={6} lg={5}>
             <div className={styles.right_portion}>
               <ChangeLanguageDropDown
                 parentContainerStyle={styles.langChangeBtn}
+<<<<<<< HEAD
                 btnStyle={styles.langChangeBtnStyle}
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
               />
               <TalawaLogo
                 className={`${styles.talawa_logo}  ${
                   showTab === 'REGISTER' && styles.marginTopForReg
                 }`}
               />
+<<<<<<< HEAD
 
               <LoginPortalToggle onToggle={handleRoleToggle} />
 
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
               {/* LOGIN FORM */}
               <div
                 className={`${
@@ -386,12 +530,20 @@ const loginPage = (): JSX.Element => {
               >
                 <form onSubmit={loginLink}>
                   <h1 className="fs-2 fw-bold text-dark mb-3">
+<<<<<<< HEAD
                     {role === 'admin' ? t('login') : t('userLogin')}
+=======
+                    {t('login_to_admin_portal')}
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                   </h1>
                   <Form.Label>{t('email')}</Form.Label>
                   <div className="position-relative">
                     <Form.Control
                       type="email"
+<<<<<<< HEAD
+=======
+                      className="mb-3"
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                       placeholder={t('enterEmail')}
                       required
                       value={formState.email}
@@ -411,11 +563,19 @@ const loginPage = (): JSX.Element => {
                       <EmailOutlinedIcon />
                     </Button>
                   </div>
+<<<<<<< HEAD
                   <Form.Label className="mt-3">{t('password')}</Form.Label>
                   <div className="position-relative">
                     <Form.Control
                       type={showPassword ? 'text' : 'password'}
                       className="input_box_second lh-1"
+=======
+                  <Form.Label>{t('password')}</Form.Label>
+                  <div className="position-relative">
+                    <Form.Control
+                      type={showPassword ? 'text' : 'password'}
+                      className="input_box_second"
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                       placeholder={t('enterPassword')}
                       required
                       value={formState.password}
@@ -452,12 +612,20 @@ const loginPage = (): JSX.Element => {
                   {REACT_APP_USE_RECAPTCHA === 'yes' ? (
                     <div className="googleRecaptcha">
                       <ReCAPTCHA
+<<<<<<< HEAD
                         className="mt-2"
+=======
+                        ref={recaptchaRef}
+                        className="mt-3"
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                         sitekey={
                           /* istanbul ignore next */
                           RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
                         }
+<<<<<<< HEAD
                         onChange={handleCaptcha}
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                       />
                     </div>
                   ) : (
@@ -472,7 +640,11 @@ const loginPage = (): JSX.Element => {
                   >
                     {t('login')}
                   </Button>
+<<<<<<< HEAD
                   <div className="position-relative my-2">
+=======
+                  <div className="position-relative">
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                     <hr />
                     <span className={styles.orText}>{t('OR')}</span>
                   </div>
@@ -540,6 +712,7 @@ const loginPage = (): JSX.Element => {
                       </div>
                     </Col>
                   </Row>
+<<<<<<< HEAD
                   <div className="position-relative">
                     <Form.Label>{t('email')}</Form.Label>
                     <div className="position-relative">
@@ -565,6 +738,31 @@ const loginPage = (): JSX.Element => {
                         <EmailOutlinedIcon />
                       </Button>
                     </div>
+=======
+                  <Form.Label>{t('email')}</Form.Label>
+                  <div className="position-relative">
+                    <Form.Control
+                      type="email"
+                      data-testid="signInEmail"
+                      className="mb-3"
+                      placeholder={t('email')}
+                      autoComplete="username"
+                      required
+                      value={signformState.signEmail}
+                      onChange={(e): void => {
+                        setSignFormState({
+                          ...signformState,
+                          signEmail: e.target.value.toLowerCase(),
+                        });
+                      }}
+                    />
+                    <Button
+                      tabIndex={-1}
+                      className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+                    >
+                      <EmailOutlinedIcon />
+                    </Button>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                   </div>
 
                   <div className="position-relative mb-3">
@@ -584,7 +782,10 @@ const loginPage = (): JSX.Element => {
                             ...signformState,
                             signPassword: e.target.value,
                           });
+<<<<<<< HEAD
                           handlePasswordCheck(e.target.value);
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                         }}
                       />
                       <Button
@@ -599,6 +800,7 @@ const loginPage = (): JSX.Element => {
                         )}
                       </Button>
                     </div>
+<<<<<<< HEAD
                     <div className={styles.password_checks}>
                       {isInputFocused ? (
                         signformState.signPassword.length < 6 ? (
@@ -720,6 +922,27 @@ const loginPage = (): JSX.Element => {
                         </p>
                       )}
                     </div>
+=======
+                    {isInputFocused &&
+                      signformState.signPassword.length < 8 && (
+                        <div
+                          className="form-text text-danger"
+                          data-testid="passwordCheck"
+                        >
+                          {t('atleast_8_char_long')}
+                        </div>
+                      )}
+                    {!isInputFocused &&
+                      signformState.signPassword.length > 0 &&
+                      signformState.signPassword.length < 8 && (
+                        <div
+                          className="form-text text-danger"
+                          data-testid="passwordCheck"
+                        >
+                          {t('atleast_8_char_long')}
+                        </div>
+                      )}
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                   </div>
                   <div className="position-relative">
                     <Form.Label>{t('confirmPassword')}</Form.Label>
@@ -764,11 +987,18 @@ const loginPage = (): JSX.Element => {
                   {REACT_APP_USE_RECAPTCHA === 'yes' ? (
                     <div className="mt-3">
                       <ReCAPTCHA
+<<<<<<< HEAD
+=======
+                        ref={recaptchaRef}
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                         sitekey={
                           /* istanbul ignore next */
                           RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
                         }
+<<<<<<< HEAD
                         onChange={handleCaptcha}
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                       />
                     </div>
                   ) : (
@@ -807,6 +1037,10 @@ const loginPage = (): JSX.Element => {
       </section>
     </>
   );
+<<<<<<< HEAD
 };
+=======
+}
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 export default loginPage;

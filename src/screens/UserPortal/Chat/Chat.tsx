@@ -57,6 +57,7 @@ export default function chat(): JSX.Element {
     },
   });
 
+<<<<<<< HEAD
   const handleSearch = (value: string): void => {
     setFilterName(value);
 
@@ -74,6 +75,19 @@ export default function chat(): JSX.Element {
     const value =
       (document.getElementById('searchChats') as HTMLInputElement)?.value || '';
     handleSearch(value);
+=======
+  const handleSearch = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ): void => {
+    const newFilter = event.target.value;
+    setFilterName(newFilter);
+
+    const filter = {
+      firstName_contains: newFilter,
+    };
+
+    contactRefetch(filter);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   };
 
   React.useEffect(() => {
@@ -98,17 +112,27 @@ export default function chat(): JSX.Element {
               <InputGroup className={styles.maxWidth}>
                 <Form.Control
                   placeholder={t('search')}
+<<<<<<< HEAD
                   id="searchChats"
                   type="text"
                   className={`${styles.borderNone} ${styles.backgroundWhite}`}
                   onKeyUp={handleSearchByEnter}
+=======
+                  type="text"
+                  className={`${styles.borderNone} ${styles.backgroundWhite}`}
+                  value={filterName}
+                  onChange={handleSearch}
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                   data-testid="searchInput"
                 />
                 <InputGroup.Text
                   className={`${styles.colorPrimary} ${styles.borderNone}`}
+<<<<<<< HEAD
                   style={{ cursor: 'pointer' }}
                   onClick={handleSearchByBtnClick}
                   data-testid="searchBtn"
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                 >
                   <SearchOutlined className={`${styles.colorWhite}`} />
                 </InputGroup.Text>

@@ -26,4 +26,8 @@
 
 #### Defined in
 
+<<<<<<< HEAD
 [src/components/SecuredRoute/SecuredRoute.tsx:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/SecuredRoute/SecuredRoute.tsx#L7)
+=======
+[src/components/SecuredRoute/SecuredRoute.tsx:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/SecuredRoute/SecuredRoute.tsx#L5)
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1

@@ -12,12 +12,17 @@ import Loader from 'components/Loader/Loader';
 import { Col, Form, Row } from 'react-bootstrap';
 import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
+<<<<<<< HEAD
 import styles from './OrgUpdate.module.css';
 import type {
   InterfaceQueryOrganizationsListObject,
   InterfaceAddress,
 } from 'utils/interfaces';
 import { countryOptions } from 'utils/formEnumFields';
+=======
+import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
+import styles from './OrgUpdate.module.css';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 interface InterfaceOrgUpdateProps {
   orgId: string;
@@ -29,11 +34,16 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
   const [formState, setFormState] = useState<{
     orgName: string;
     orgDescrip: string;
+<<<<<<< HEAD
     address: InterfaceAddress;
+=======
+    location: string;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     orgImage: string | null;
   }>({
     orgName: '',
     orgDescrip: '',
+<<<<<<< HEAD
     address: {
       city: '',
       countryCode: '',
@@ -59,6 +69,13 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
 
   const [userRegistrationRequiredChecked, setuserRegistrationRequiredChecked] =
     React.useState(false);
+=======
+    location: '',
+    orgImage: null,
+  });
+
+  const [publicchecked, setPublicChecked] = React.useState(false);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   const [visiblechecked, setVisibleChecked] = React.useState(false);
 
   const [login] = useMutation(UPDATE_ORGANIZATION_MUTATION);
@@ -91,11 +108,17 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
         ...formState,
         orgName: data.organizations[0].name,
         orgDescrip: data.organizations[0].description,
+<<<<<<< HEAD
         address: data.organizations[0].address,
       });
       setuserRegistrationRequiredChecked(
         data.organizations[0].userRegistrationRequired,
       );
+=======
+        location: data.organizations[0].location,
+      });
+      setPublicChecked(data.organizations[0].isPublic);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       setVisibleChecked(data.organizations[0].visibleInSearch);
     }
     return () => {
@@ -110,6 +133,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
           id: orgId,
           name: formState.orgName,
           description: formState.orgDescrip,
+<<<<<<< HEAD
           address: {
             city: formState.address.city,
             countryCode: formState.address.countryCode,
@@ -121,6 +145,10 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
             state: formState.address.state,
           },
           userRegistrationRequired: userRegistrationRequiredChecked,
+=======
+          location: formState.location,
+          isPublic: publicchecked,
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
           visibleInSearch: visiblechecked,
           file: formState.orgImage,
         },
@@ -184,6 +212,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               });
             }}
           />
+<<<<<<< HEAD
           <Form.Label>{t('address')}</Form.Label>
           <Row className="mb-1">
             <Col sm={6} className="mb-3">
@@ -293,6 +322,29 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
                     !userRegistrationRequiredChecked,
                   )
                 }
+=======
+          <Form.Label>{t('location')}</Form.Label>
+          <Form.Control
+            className="mb-4"
+            placeholder={t('location')}
+            autoComplete="off"
+            required
+            value={formState.location}
+            onChange={(e): void => {
+              setFormState({
+                ...formState,
+                location: e.target.value,
+              });
+            }}
+          />
+          <Row>
+            <Col sm={6} className="d-flex mb-3">
+              <Form.Label className="me-3">{t('isPublic')}:</Form.Label>
+              <Form.Switch
+                placeholder={t('isPublic')}
+                checked={publicchecked}
+                onChange={(): void => setPublicChecked(!publicchecked)}
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
               />
             </Col>
             <Col sm={6} className="d-flex mb-3">

@@ -1,6 +1,10 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
+<<<<<<< HEAD
 import { act, render, screen, waitFor } from '@testing-library/react';
+=======
+import { render, screen } from '@testing-library/react';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -12,10 +16,13 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import OrgSettings from './OrgSettings';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
+<<<<<<< HEAD
 import userEvent from '@testing-library/user-event';
 import useLocalStorage from 'utils/useLocalstorage';
 
 const { setItem } = useLocalStorage();
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 const MOCKS = [
   {
@@ -84,6 +91,7 @@ const MOCKS = [
 
 const link = new StaticMockLink(MOCKS, true);
 
+<<<<<<< HEAD
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -96,6 +104,8 @@ const translations = JSON.parse(
   JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.orgSettings),
 );
 
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 afterEach(() => {
   localStorage.clear();
 });
@@ -112,7 +122,11 @@ describe('Organisation Settings Page', () => {
 
   test('should render props and text elements test for the screen', async () => {
     window.location.assign('/orgsetting/id=123');
+<<<<<<< HEAD
     setItem('SuperAdmin', true);
+=======
+    localStorage.setItem('UserType', 'SUPERADMIN');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -122,6 +136,7 @@ describe('Organisation Settings Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
     );
 
@@ -132,11 +147,21 @@ describe('Organisation Settings Page', () => {
       screen.getByText(
         /By clicking on Delete Organization button the organization will be permanently deleted along with its events, tags and all related data/i,
       ),
+=======
+      </MockedProvider>
+    );
+    expect(screen.getAllByText(/Delete Organization/i)).toHaveLength(3);
+    expect(
+      screen.getByText(
+        /By clicking on Delete Organization button the organization will be permanently deleted along with its events, tags and all related data/i
+      )
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     ).toBeInTheDocument();
     expect(screen.getByText(/Other Settings/i)).toBeInTheDocument();
     expect(screen.getByText(/Change Language/i)).toBeInTheDocument();
     expect(window.location).toBeAt('/orgsetting/id=123');
   });
+<<<<<<< HEAD
 
   test('should render appropriate settings based on the orgSetting state', async () => {
     window.location.assign('/orgsetting/id=123');
@@ -168,4 +193,6 @@ describe('Organisation Settings Page', () => {
       expect(queryByText(translations.updateOrganization)).toBeInTheDocument();
     });
   });
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 });

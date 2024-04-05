@@ -1,23 +1,36 @@
+<<<<<<< HEAD
 import React, { useState } from 'react';
 import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
 import DeleteOrg from 'components/DeleteOrg/DeleteOrg';
 import OrgUpdate from 'components/OrgUpdate/OrgUpdate';
 import { Button, Card, Dropdown, Form } from 'react-bootstrap';
+=======
+import React from 'react';
+import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
+import DeleteOrg from 'components/DeleteOrg/DeleteOrg';
+import OrgUpdate from 'components/OrgUpdate/OrgUpdate';
+import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
+import { Card, Form } from 'react-bootstrap';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import styles from './OrgSettings.module.css';
+<<<<<<< HEAD
 import OrgProfileFieldSettings from 'components/OrgProfileFieldSettings/OrgProfileFieldSettings';
 import OrgActionItemCategories from 'components/OrgActionItemCategories/OrgActionItemCategories';
 import { useParams } from 'react-router-dom';
 
 type SettingType = 'general' | 'actionItemCategories';
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 function orgSettings(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgSettings',
   });
 
+<<<<<<< HEAD
   const orgSettings: SettingType[] = ['general', 'actionItemCategories'];
 
   const [orgSetting, setOrgSetting] = useState<SettingType>('general');
@@ -140,6 +153,45 @@ function orgSettings(): JSX.Element {
           </Row>
         )}
       </div>
+=======
+  document.title = t('title');
+  const orgId = window.location.href.split('=')[1];
+
+  return (
+    <>
+      <OrganizationScreen screenName="Settings" title={t('pageName')}>
+        <Row className={styles.settingsBody}>
+          <Col lg={7}>
+            <Card border="0" className="rounded-4 mb-4">
+              <div className={styles.cardHeader}>
+                <div className={styles.cardTitle}>
+                  {t('updateOrganization')}
+                </div>
+              </div>
+              <Card.Body className={styles.cardBody}>
+                {orgId && <OrgUpdate orgId={orgId} />}
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col lg={5}>
+            <DeleteOrg />
+            <Card border="0" className="rounded-4 mb-4">
+              <div className={styles.cardHeader}>
+                <div className={styles.cardTitle}>{t('otherSettings')}</div>
+              </div>
+              <Card.Body className={styles.cardBody}>
+                <div className={styles.textBox}>
+                  <Form.Label className={'text-secondary fw-bold'}>
+                    {t('changeLanguage')}
+                  </Form.Label>
+                  <ChangeLanguageDropDown />
+                </div>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </OrganizationScreen>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     </>
   );
 }

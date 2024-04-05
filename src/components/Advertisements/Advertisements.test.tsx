@@ -1,6 +1,10 @@
 import React from 'react';
+<<<<<<< HEAD
 import 'jest-location-mock';
 import { act, fireEvent, render, screen } from '@testing-library/react';
+=======
+import { render } from '@testing-library/react';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 import { MockedProvider } from '@apollo/client/testing';
 import {
   ApolloClient,
@@ -18,6 +22,7 @@ import { store } from 'state/store';
 import { BACKEND_URL } from 'Constant/constant';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
+<<<<<<< HEAD
 import {
   ADVERTISEMENTS_GET,
   ORGANIZATIONS_LIST,
@@ -29,10 +34,14 @@ import { ToastContainer } from 'react-toastify';
 import useLocalStorage from 'utils/useLocalstorage';
 
 const { getItem } = useLocalStorage();
+=======
+import { ADVERTISEMENTS_GET } from 'GraphQl/Queries/Queries';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 const httpLink = new HttpLink({
   uri: BACKEND_URL,
   headers: {
+<<<<<<< HEAD
     authorization: 'Bearer ' + getItem('token') || '',
   },
 });
@@ -45,10 +54,17 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
+=======
+    authorization: 'Bearer ' + localStorage.getItem('token') || '',
+  },
+});
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
   link: ApolloLink.from([httpLink]),
 });
+<<<<<<< HEAD
 
 jest.mock('components/AddOn/support/services/Plugin.helper', () => ({
   __esModule: true,
@@ -289,13 +305,59 @@ describe('Testing Advertisement Component', () => {
                 },
               ],
             },
+=======
+describe('Testing Advertisement   Component', () => {
+  test('Temporary test for Advertisement', () => {
+    expect(true).toBe(true);
+    const { getByTestId } = render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              {<Advertisement />}
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>
+    );
+    expect(getByTestId('AdEntryStore')).toBeInTheDocument();
+  });
+
+  test('renders advertisement data', async () => {
+    const mocks = [
+      {
+        request: {
+          query: ADVERTISEMENTS_GET,
+          variables: {
+            name: 'Test',
+          },
+        },
+        result: {
+          data: {
+            getAdvertisements: [
+              {
+                _id: '1',
+                name: 'Advertisement',
+                type: 'POPUP',
+                orgId: 'org1',
+                link: 'http://example.com',
+                endDate: new Date(),
+                startDate: new Date(),
+              },
+              // Add more mock data if needed
+            ],
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
           },
           loading: false,
         },
       },
     ];
 
+<<<<<<< HEAD
     render(
+=======
+    const { getByTestId } = render(
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       <ApolloProvider client={client}>
         <Provider store={store}>
           <BrowserRouter>
@@ -306,6 +368,7 @@ describe('Testing Advertisement Component', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
+<<<<<<< HEAD
       </ApolloProvider>,
     );
 
@@ -398,5 +461,11 @@ describe('Testing Advertisement Component', () => {
 
     await wait();
     userEvent.click(screen.getByText('Completed Campaigns'));
+=======
+      </ApolloProvider>
+    );
+
+    expect(getByTestId('AdEntryStore')).toBeInTheDocument();
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   });
 });

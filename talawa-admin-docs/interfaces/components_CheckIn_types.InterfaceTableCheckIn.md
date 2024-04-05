@@ -18,11 +18,19 @@
 
 ### checkIn
 
+<<<<<<< HEAD
 • **checkIn**: ``null`` \| \{ `_id`: `string` ; `allotedRoom`: `string` ; `allotedSeat`: `string` ; `time`: `string`  \}
 
 #### Defined in
 
 [src/components/CheckIn/types.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/CheckIn/types.ts#L35)
+=======
+• **checkIn**: ``null`` \| { `_id`: `string` ; `allotedRoom`: `string` ; `allotedSeat`: `string` ; `time`: `string`  }
+
+#### Defined in
+
+[src/components/CheckIn/types.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/CheckIn/types.ts#L35)
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 ___
 
@@ -32,7 +40,11 @@ ___
 
 #### Defined in
 
+<<<<<<< HEAD
 [src/components/CheckIn/types.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/CheckIn/types.ts#L41)
+=======
+[src/components/CheckIn/types.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/CheckIn/types.ts#L41)
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 ___
 
@@ -42,7 +54,11 @@ ___
 
 #### Defined in
 
+<<<<<<< HEAD
 [src/components/CheckIn/types.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/CheckIn/types.ts#L32)
+=======
+[src/components/CheckIn/types.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/CheckIn/types.ts#L32)
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 ___
 
@@ -52,7 +68,11 @@ ___
 
 #### Defined in
 
+<<<<<<< HEAD
 [src/components/CheckIn/types.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/CheckIn/types.ts#L33)
+=======
+[src/components/CheckIn/types.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/CheckIn/types.ts#L33)
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 ___
 
@@ -62,4 +82,8 @@ ___
 
 #### Defined in
 
+<<<<<<< HEAD
 [src/components/CheckIn/types.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/CheckIn/types.ts#L34)
+=======
+[src/components/CheckIn/types.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/CheckIn/types.ts#L34)
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1

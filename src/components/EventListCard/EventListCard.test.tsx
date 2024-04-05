@@ -1,4 +1,5 @@
 import React from 'react';
+<<<<<<< HEAD
 import {
   act,
   render,
@@ -6,6 +7,9 @@ import {
   fireEvent,
   waitFor,
 } from '@testing-library/react';
+=======
+import { act, render, screen, fireEvent } from '@testing-library/react';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
@@ -20,12 +24,16 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
+<<<<<<< HEAD
 import { toast } from 'react-toastify';
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 const MOCKS = [
   {
     request: {
       query: DELETE_EVENT_MUTATION,
+<<<<<<< HEAD
       variables: { id: '1' },
     },
     result: {
@@ -40,6 +48,9 @@ const MOCKS = [
     request: {
       query: DELETE_EVENT_MUTATION,
       variables: { id: '1', recurringEventDeleteType: 'ThisInstance' },
+=======
+      variable: { id: '123' },
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     },
     result: {
       data: {
@@ -77,6 +88,7 @@ const MOCKS = [
 
 const link = new StaticMockLink(MOCKS, true);
 
+<<<<<<< HEAD
 jest.mock('react-toastify', () => ({
   toast: {
     success: jest.fn(),
@@ -84,6 +96,8 @@ jest.mock('react-toastify', () => ({
   },
 }));
 
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -92,6 +106,7 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
+<<<<<<< HEAD
 const translations = JSON.parse(
   JSON.stringify(
     i18nForTest.getDataByLanguage('en')?.translation.eventListCard,
@@ -131,6 +146,25 @@ const recurringEventProps = {
 };
 
 describe('Testing Event List Card', () => {
+=======
+describe('Testing Event List Card', () => {
+  const props = {
+    key: '123',
+    id: '1',
+    eventLocation: 'India',
+    eventName: 'Shelter for Dogs',
+    eventDescription: 'This is shelter for dogs event',
+    regDate: '19/03/2022',
+    regEndDate: '26/03/2022',
+    startTime: '02:00',
+    endTime: '06:00',
+    allDay: true,
+    recurring: false,
+    isPublic: true,
+    isRegisterable: false,
+  };
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   global.alert = jest.fn();
   test('Testing for modal', async () => {
     render(
@@ -156,15 +190,22 @@ describe('Testing Event List Card', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
 
     userEvent.click(screen.getByTestId('card'));
 
+<<<<<<< HEAD
     userEvent.click(screen.getByTestId('showEventDashboardBtn'));
 
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     userEvent.click(screen.getByTestId('createEventModalCloseBtn'));
 
     await wait();
@@ -176,6 +217,7 @@ describe('Testing Event List Card', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
+<<<<<<< HEAD
           <BrowserRouter>
             <EventListCard
               key="123"
@@ -195,6 +237,25 @@ describe('Testing Event List Card', () => {
           </BrowserRouter>
         </I18nextProvider>
       </MockedProvider>,
+=======
+          <EventListCard
+            key="123"
+            id="1"
+            eventName=""
+            eventLocation=""
+            eventDescription=""
+            regDate="19/03/2022"
+            regEndDate="26/03/2022"
+            startTime="02:00"
+            endTime="06:00"
+            allDay={true}
+            recurring={false}
+            isPublic={true}
+            isRegisterable={false}
+          />
+        </I18nextProvider>
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -212,7 +273,11 @@ describe('Testing Event List Card', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -230,11 +295,17 @@ describe('Testing Event List Card', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
+<<<<<<< HEAD
           <BrowserRouter>
             <EventListCard {...props} />
           </BrowserRouter>
         </I18nextProvider>
       </MockedProvider>,
+=======
+          <EventListCard {...props} />
+        </I18nextProvider>
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -243,7 +314,11 @@ describe('Testing Event List Card', () => {
     userEvent.type(screen.getByTestId('updateTitle'), props.eventName);
     userEvent.type(
       screen.getByTestId('updateDescription'),
+<<<<<<< HEAD
       props.eventDescription,
+=======
+      props.eventDescription
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
     userEvent.type(screen.getByTestId('updateLocation'), props.eventLocation);
     userEvent.click(screen.getByTestId('updateAllDay'));
@@ -261,7 +336,11 @@ describe('Testing Event List Card', () => {
             <I18nextProvider i18n={i18nForTest}></I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     expect(container.textContent).not.toBe('Loading data...');
@@ -273,11 +352,17 @@ describe('Testing Event List Card', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
+<<<<<<< HEAD
           <BrowserRouter>
             <EventListCard {...props} />
           </BrowserRouter>
         </I18nextProvider>
       </MockedProvider>,
+=======
+          <EventListCard {...props} />
+        </I18nextProvider>
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -286,7 +371,11 @@ describe('Testing Event List Card', () => {
     userEvent.type(screen.getByTestId('updateTitle'), props.eventName);
     userEvent.type(
       screen.getByTestId('updateDescription'),
+<<<<<<< HEAD
       props.eventDescription,
+=======
+      props.eventDescription
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
     userEvent.type(screen.getByTestId('updateLocation'), props.eventLocation);
     userEvent.click(screen.getByTestId('updateAllDay'));
@@ -301,15 +390,74 @@ describe('Testing Event List Card', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
+<<<<<<< HEAD
           <BrowserRouter>
             <EventListCard {...props} />
           </BrowserRouter>
         </I18nextProvider>
       </MockedProvider>,
+=======
+          <EventListCard {...props} />
+        </I18nextProvider>
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
     await wait();
     expect(screen.getByText(props.eventName)).toBeInTheDocument();
   });
+<<<<<<< HEAD
+=======
+  describe('EventListCard', () => {
+    it('should render the delete modal', () => {
+      render(
+        <MockedProvider link={link} addTypename={false}>
+          <EventListCard {...props} />
+        </MockedProvider>
+      );
+      userEvent.click(screen.getByTestId('card'));
+      userEvent.click(screen.getByTestId('deleteEventModalBtn'));
+
+      userEvent.click(screen.getByTestId('EventDeleteModalCloseBtn'));
+      userEvent.click(screen.getByTestId('createEventModalCloseBtn'));
+    });
+
+    it('should call the delete event mutation when the "Yes" button is clicked', async () => {
+      render(
+        <MockedProvider link={link} addTypename={false}>
+          <EventListCard {...props} />
+        </MockedProvider>
+      );
+      userEvent.click(screen.getByTestId('card'));
+      userEvent.click(screen.getByTestId('deleteEventModalBtn'));
+      const deleteBtn = screen.getByTestId('deleteEventBtn');
+      fireEvent.click(deleteBtn);
+    });
+
+    it('should show an error toast when the delete event mutation fails', async () => {
+      const errorMocks = [
+        {
+          request: {
+            query: DELETE_EVENT_MUTATION,
+            variables: {
+              id: props.id,
+            },
+          },
+          error: new Error('Something went wrong'),
+        },
+      ];
+      const link2 = new StaticMockLink(errorMocks, true);
+      render(
+        <MockedProvider link={link2} addTypename={false}>
+          <EventListCard {...props} />
+        </MockedProvider>
+      );
+      userEvent.click(screen.getByTestId('card'));
+      userEvent.click(screen.getByTestId('deleteEventModalBtn'));
+      const deleteBtn = screen.getByTestId('deleteEventBtn');
+      fireEvent.click(deleteBtn);
+    });
+  });
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
   test('Should render truncated event details', async () => {
     const longEventName =
@@ -323,6 +471,7 @@ describe('Testing Event List Card', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
+<<<<<<< HEAD
           <BrowserRouter>
             <EventListCard
               key="123"
@@ -342,6 +491,25 @@ describe('Testing Event List Card', () => {
           </BrowserRouter>
         </I18nextProvider>
       </MockedProvider>,
+=======
+          <EventListCard
+            key="123"
+            id="1"
+            eventName={longEventName}
+            eventLocation="location"
+            eventDescription={longDescription}
+            regDate="19/03/2022"
+            regEndDate="26/03/2022"
+            startTime="02:00"
+            endTime="06:00"
+            allDay={true}
+            recurring={false}
+            isPublic={true}
+            isRegisterable={false}
+          />
+        </I18nextProvider>
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -353,6 +521,7 @@ describe('Testing Event List Card', () => {
     await wait();
   });
 });
+<<<<<<< HEAD
 
 describe('EventListCard delete functionality', () => {
   it('should render the delete modal', () => {
@@ -453,3 +622,5 @@ describe('EventListCard delete functionality', () => {
     });
   });
 });
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1

@@ -38,7 +38,11 @@ describe('Testing the Organization Contributions Cards', () => {
             userEmail={props.userEmail}
           />
         </I18nextProvider>
+<<<<<<< HEAD
       </ApolloProvider>,
+=======
+      </ApolloProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
     expect(screen.getByText('Date:')).toBeInTheDocument();
     expect(screen.getByText('John Doe')).toBeInTheDocument();

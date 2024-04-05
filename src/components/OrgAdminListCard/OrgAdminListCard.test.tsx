@@ -41,8 +41,17 @@ describe('Testing Organization Admin List Card', () => {
 
   test('should render props and text elements test for the page component', async () => {
     const props = {
+<<<<<<< HEAD
       toggleRemoveModal: () => true,
       id: '456',
+=======
+      key: '123',
+      id: '456',
+      memberName: 'John Doe',
+      joinDate: '05/05/2022',
+      memberImage: 'image',
+      memberEmail: 'johndoe@gmail.com',
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     };
 
     render(
@@ -52,11 +61,16 @@ describe('Testing Organization Admin List Card', () => {
             <OrgAdminListCard {...props} />
           </I18nextProvider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
 
+<<<<<<< HEAD
     userEvent.click(screen.getByTestId(/removeAdminBtn/i));
   });
 
@@ -64,6 +78,23 @@ describe('Testing Organization Admin List Card', () => {
     const props = {
       toggleRemoveModal: () => true,
       id: undefined,
+=======
+    userEvent.click(screen.getByTestId(/removeAdminModalBtn/i));
+    userEvent.click(screen.getByTestId(/removeAdminBtn/i));
+
+    expect(screen.getByText(props.memberName)).toBeInTheDocument();
+    expect(screen.getByText(props.joinDate)).toBeInTheDocument();
+  });
+
+  test('Should render text elements when props value is not passed', async () => {
+    const props = {
+      key: '123',
+      id: '456',
+      memberName: '',
+      joinDate: '05/05/2022',
+      memberImage: '',
+      memberEmail: '',
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     };
 
     render(
@@ -73,11 +104,23 @@ describe('Testing Organization Admin List Card', () => {
             <OrgAdminListCard {...props} />
           </I18nextProvider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
 
+<<<<<<< HEAD
     expect(window.location.pathname).toEqual('/orglist');
+=======
+    userEvent.click(screen.getByTestId(/removeAdminModalBtn/i));
+    userEvent.click(screen.getByTestId(/removeAdminBtn/i));
+
+    expect(screen.getByText(/Dogs Care/i)).toBeInTheDocument();
+    expect(screen.getByText(props.joinDate)).toBeInTheDocument();
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   });
 });

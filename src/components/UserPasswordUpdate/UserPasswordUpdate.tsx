@@ -11,9 +11,17 @@ interface InterfaceUserPasswordUpdateProps {
   id: string;
 }
 
+<<<<<<< HEAD
 const UserUpdate: React.FC<
   InterfaceUserPasswordUpdateProps
 > = (): JSX.Element => {
+=======
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const UserUpdate: React.FC<InterfaceUserPasswordUpdateProps> = ({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  id,
+}): JSX.Element => {
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   const { t } = useTranslation('translation', {
     keyPrefix: 'userPasswordUpdate',
   });

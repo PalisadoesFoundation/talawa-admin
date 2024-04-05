@@ -10,7 +10,10 @@
 - [components/AddOn/AddOn.test](modules/components_AddOn_AddOn_test.md)
 - [components/AddOn/core/AddOnEntry/AddOnEntry](modules/components_AddOn_core_AddOnEntry_AddOnEntry.md)
 - [components/AddOn/core/AddOnEntry/AddOnEntry.test](modules/components_AddOn_core_AddOnEntry_AddOnEntry_test.md)
+<<<<<<< HEAD
 - [components/AddOn/core/AddOnEntry/AddOnEntryMocks](modules/components_AddOn_core_AddOnEntry_AddOnEntryMocks.md)
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 - [components/AddOn/core/AddOnRegister/AddOnRegister](modules/components_AddOn_core_AddOnRegister_AddOnRegister.md)
 - [components/AddOn/core/AddOnRegister/AddOnRegister.test](modules/components_AddOn_core_AddOnRegister_AddOnRegister_test.md)
 - [components/AddOn/core/AddOnStore/AddOnStore](modules/components_AddOn_core_AddOnStore_AddOnStore.md)
@@ -23,12 +26,15 @@
 - [components/AddOn/support/components/SidePanel/SidePanel.test](modules/components_AddOn_support_components_SidePanel_SidePanel_test.md)
 - [components/AddOn/support/services/Plugin.helper](modules/components_AddOn_support_services_Plugin_helper.md)
 - [components/AddOn/support/services/Render.helper](modules/components_AddOn_support_services_Render_helper.md)
+<<<<<<< HEAD
 - [components/Advertisements/Advertisements](modules/components_Advertisements_Advertisements.md)
 - [components/Advertisements/Advertisements.test](modules/components_Advertisements_Advertisements_test.md)
 - [components/Advertisements/core/AdvertisementEntry/AdvertisementEntry](modules/components_Advertisements_core_AdvertisementEntry_AdvertisementEntry.md)
 - [components/Advertisements/core/AdvertisementEntry/AdvertisementEntry.test](modules/components_Advertisements_core_AdvertisementEntry_AdvertisementEntry_test.md)
 - [components/Advertisements/core/AdvertisementRegister/AdvertisementRegister](modules/components_Advertisements_core_AdvertisementRegister_AdvertisementRegister.md)
 - [components/Advertisements/core/AdvertisementRegister/AdvertisementRegister.test](modules/components_Advertisements_core_AdvertisementRegister_AdvertisementRegister_test.md)
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 - [components/ChangeLanguageDropdown/ChangeLanguageDropDown](modules/components_ChangeLanguageDropdown_ChangeLanguageDropDown.md)
 - [components/ChangeLanguageDropdown/ChangeLanguageDropdown.test](modules/components_ChangeLanguageDropdown_ChangeLanguageDropdown_test.md)
 - [components/CheckIn/CheckInModal](modules/components_CheckIn_CheckInModal.md)
@@ -44,20 +50,33 @@
 - [components/CollapsibleDropdown/CollapsibleDropdown.test](modules/components_CollapsibleDropdown_CollapsibleDropdown_test.md)
 - [components/ContriStats/ContriStats](modules/components_ContriStats_ContriStats.md)
 - [components/ContriStats/ContriStats.test](modules/components_ContriStats_ContriStats_test.md)
+<<<<<<< HEAD
 - [components/CurrentHourIndicator/CurrentHourIndicator](modules/components_CurrentHourIndicator_CurrentHourIndicator.md)
 - [components/CurrentHourIndicator/CurrentHourIndicator.test](modules/components_CurrentHourIndicator_CurrentHourIndicator_test.md)
 - [components/DeleteOrg/DeleteOrg](modules/components_DeleteOrg_DeleteOrg.md)
 - [components/DeleteOrg/DeleteOrg.test](modules/components_DeleteOrg_DeleteOrg_test.md)
 - [components/EditCustomFieldDropDown/EditCustomFieldDropDown](modules/components_EditCustomFieldDropDown_EditCustomFieldDropDown.md)
 - [components/EditCustomFieldDropDown/EditCustomFieldDropDown.test](modules/components_EditCustomFieldDropDown_EditCustomFieldDropDown_test.md)
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 - [components/EventCalendar/EventCalendar](modules/components_EventCalendar_EventCalendar.md)
 - [components/EventCalendar/EventCalendar.test](modules/components_EventCalendar_EventCalendar_test.md)
 - [components/EventListCard/EventListCard](modules/components_EventListCard_EventListCard.md)
 - [components/EventListCard/EventListCard.test](modules/components_EventListCard_EventListCard_test.md)
+<<<<<<< HEAD
+=======
+- [components/EventProjectModals/AddEventProjectModal](modules/components_EventProjectModals_AddEventProjectModal.md)
+- [components/EventProjectModals/AddEventProjectModal.test](modules/components_EventProjectModals_AddEventProjectModal_test.md)
+- [components/EventProjectModals/DeleteEventProjectModal](modules/components_EventProjectModals_DeleteEventProjectModal.md)
+- [components/EventProjectModals/DeleteEventProjectModal.test](modules/components_EventProjectModals_DeleteEventProjectModal_test.md)
+- [components/EventProjectModals/UpdateEventProjectModal](modules/components_EventProjectModals_UpdateEventProjectModal.md)
+- [components/EventProjectModals/UpdateEventProjectModal.test](modules/components_EventProjectModals_UpdateEventProjectModal_test.md)
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 - [components/EventRegistrantsModal/EventRegistrantsModal](modules/components_EventRegistrantsModal_EventRegistrantsModal.md)
 - [components/EventRegistrantsModal/EventRegistrantsModal.test](modules/components_EventRegistrantsModal_EventRegistrantsModal_test.md)
 - [components/EventRegistrantsModal/EventRegistrantsWrapper](modules/components_EventRegistrantsModal_EventRegistrantsWrapper.md)
 - [components/EventRegistrantsModal/EventRegistrantsWrapper.test](modules/components_EventRegistrantsModal_EventRegistrantsWrapper_test.md)
+<<<<<<< HEAD
 - [components/EventStats/EventStats](modules/components_EventStats_EventStats.md)
 - [components/EventStats/EventStats.test](modules/components_EventStats_EventStats_test.md)
 - [components/EventStats/EventStatsWrapper](modules/components_EventStats_EventStatsWrapper.md)
@@ -76,12 +95,23 @@
 - [components/LeftDrawerEvent/LeftDrawerEvent.test](modules/components_LeftDrawerEvent_LeftDrawerEvent_test.md)
 - [components/LeftDrawerEvent/LeftDrawerEventWrapper](modules/components_LeftDrawerEvent_LeftDrawerEventWrapper.md)
 - [components/LeftDrawerEvent/LeftDrawerEventWrapper.test](modules/components_LeftDrawerEvent_LeftDrawerEventWrapper_test.md)
+=======
+- [components/IconComponent/IconComponent](modules/components_IconComponent_IconComponent.md)
+- [components/IconComponent/IconComponent.test](modules/components_IconComponent_IconComponent_test.md)
+- [components/LandingPage/LandingPage](modules/components_LandingPage_LandingPage.md)
+- [components/LandingPage/LandingPage.test](modules/components_LandingPage_LandingPage_test.md)
+- [components/LeftDrawer/LeftDrawer](modules/components_LeftDrawer_LeftDrawer.md)
+- [components/LeftDrawer/LeftDrawer.test](modules/components_LeftDrawer_LeftDrawer_test.md)
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 - [components/LeftDrawerOrg/LeftDrawerOrg](modules/components_LeftDrawerOrg_LeftDrawerOrg.md)
 - [components/LeftDrawerOrg/LeftDrawerOrg.test](modules/components_LeftDrawerOrg_LeftDrawerOrg_test.md)
 - [components/Loader/Loader](modules/components_Loader_Loader.md)
 - [components/Loader/Loader.test](modules/components_Loader_Loader_test.md)
+<<<<<<< HEAD
 - [components/LoginPortalToggle/LoginPortalToggle](modules/components_LoginPortalToggle_LoginPortalToggle.md)
 - [components/LoginPortalToggle/LoginPortalToggle.test](modules/components_LoginPortalToggle_LoginPortalToggle_test.md)
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 - [components/MemberRequestCard/MemberRequestCard](modules/components_MemberRequestCard_MemberRequestCard.md)
 - [components/MemberRequestCard/MemberRequestCard.test](modules/components_MemberRequestCard_MemberRequestCard_test.md)
 - [components/NotFound/NotFound](modules/components_NotFound_NotFound.md)
@@ -98,21 +128,29 @@
 - [components/OrgPeopleListCard/OrgPeopleListCard.test](modules/components_OrgPeopleListCard_OrgPeopleListCard_test.md)
 - [components/OrgPostCard/OrgPostCard](modules/components_OrgPostCard_OrgPostCard.md)
 - [components/OrgPostCard/OrgPostCard.test](modules/components_OrgPostCard_OrgPostCard_test.md)
+<<<<<<< HEAD
 - [components/OrgProfileFieldSettings/OrgProfileFieldSettings](modules/components_OrgProfileFieldSettings_OrgProfileFieldSettings.md)
 - [components/OrgProfileFieldSettings/OrgProfileFieldSettings.test](modules/components_OrgProfileFieldSettings_OrgProfileFieldSettings_test.md)
 - [components/OrgUpdate/OrgUpdate](modules/components_OrgUpdate_OrgUpdate.md)
 - [components/OrgUpdate/OrgUpdate.test](modules/components_OrgUpdate_OrgUpdate_test.md)
 - [components/OrgUpdate/OrgUpdateMocks](modules/components_OrgUpdate_OrgUpdateMocks.md)
+=======
+- [components/OrgUpdate/OrgUpdate](modules/components_OrgUpdate_OrgUpdate.md)
+- [components/OrgUpdate/OrgUpdate.test](modules/components_OrgUpdate_OrgUpdate_test.md)
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 - [components/OrganizationCard/OrganizationCard](modules/components_OrganizationCard_OrganizationCard.md)
 - [components/OrganizationCard/OrganizationCard.test](modules/components_OrganizationCard_OrganizationCard_test.md)
 - [components/OrganizationCardStart/OrganizationCardStart](modules/components_OrganizationCardStart_OrganizationCardStart.md)
 - [components/OrganizationCardStart/OrganizationCardStart.test](modules/components_OrganizationCardStart_OrganizationCardStart_test.md)
+<<<<<<< HEAD
 - [components/OrganizationDashCards/CardItem](modules/components_OrganizationDashCards_CardItem.md)
 - [components/OrganizationDashCards/CardItem.test](modules/components_OrganizationDashCards_CardItem_test.md)
 - [components/OrganizationDashCards/CardItemLoading](modules/components_OrganizationDashCards_CardItemLoading.md)
 - [components/OrganizationDashCards/DashboardCard](modules/components_OrganizationDashCards_DashboardCard.md)
 - [components/OrganizationDashCards/DashboardCard.test](modules/components_OrganizationDashCards_DashboardCard_test.md)
 - [components/OrganizationDashCards/DashboardCardLoading](modules/components_OrganizationDashCards_DashboardCardLoading.md)
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 - [components/OrganizationScreen/OrganizationScreen](modules/components_OrganizationScreen_OrganizationScreen.md)
 - [components/OrganizationScreen/OrganizationScreen.test](modules/components_OrganizationScreen_OrganizationScreen_test.md)
 - [components/Pagination/Pagination](modules/components_Pagination_Pagination.md)
@@ -123,10 +161,24 @@
 - [components/SuperAdminScreen/SuperAdminScreen.test](modules/components_SuperAdminScreen_SuperAdminScreen_test.md)
 - [components/TableLoader/TableLoader](modules/components_TableLoader_TableLoader.md)
 - [components/TableLoader/TableLoader.test](modules/components_TableLoader_TableLoader_test.md)
+<<<<<<< HEAD
+=======
+- [components/TaskListItem/TaskListItem](modules/components_TaskListItem_TaskListItem.md)
+- [components/TaskListItem/TaskListItem.test](modules/components_TaskListItem_TaskListItem_test.md)
+- [components/TaskModals/AddTaskModal](modules/components_TaskModals_AddTaskModal.md)
+- [components/TaskModals/AddTaskModal.test](modules/components_TaskModals_AddTaskModal_test.md)
+- [components/TaskModals/DeleteTaskModal](modules/components_TaskModals_DeleteTaskModal.md)
+- [components/TaskModals/DeleteTaskModal.test](modules/components_TaskModals_DeleteTaskModal_test.md)
+- [components/TaskModals/ManageVolunteerModal](modules/components_TaskModals_ManageVolunteerModal.md)
+- [components/TaskModals/ManageVolunteerModal.test](modules/components_TaskModals_ManageVolunteerModal_test.md)
+- [components/TaskModals/UpdateTaskModal](modules/components_TaskModals_UpdateTaskModal.md)
+- [components/TaskModals/UpdateTaskModal.test](modules/components_TaskModals_UpdateTaskModal_test.md)
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 - [components/UserListCard/UserListCard](modules/components_UserListCard_UserListCard.md)
 - [components/UserListCard/UserListCard.test](modules/components_UserListCard_UserListCard_test.md)
 - [components/UserPasswordUpdate/UserPasswordUpdate](modules/components_UserPasswordUpdate_UserPasswordUpdate.md)
 - [components/UserPasswordUpdate/UserPasswordUpdate.test](modules/components_UserPasswordUpdate_UserPasswordUpdate_test.md)
+<<<<<<< HEAD
 - [components/UserPortal/ChatRoom/ChatRoom](modules/components_UserPortal_ChatRoom_ChatRoom.md)
 - [components/UserPortal/ChatRoom/ChatRoom.test](modules/components_UserPortal_ChatRoom_ChatRoom_test.md)
 - [components/UserPortal/CommentCard/CommentCard](modules/components_UserPortal_CommentCard_CommentCard.md)
@@ -136,6 +188,9 @@
 - [components/UserPortal/DonationCard/DonationCard](modules/components_UserPortal_DonationCard_DonationCard.md)
 - [components/UserPortal/EventCard/EventCard](modules/components_UserPortal_EventCard_EventCard.md)
 - [components/UserPortal/EventCard/EventCard.test](modules/components_UserPortal_EventCard_EventCard_test.md)
+=======
+- [components/UserPortal/DonationCard/DonationCard](modules/components_UserPortal_DonationCard_DonationCard.md)
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 - [components/UserPortal/Login/Login](modules/components_UserPortal_Login_Login.md)
 - [components/UserPortal/Login/Login.test](modules/components_UserPortal_Login_Login_test.md)
 - [components/UserPortal/OrganizationCard/OrganizationCard](modules/components_UserPortal_OrganizationCard_OrganizationCard.md)
@@ -148,21 +203,30 @@
 - [components/UserPortal/PeopleCard/PeopleCard.test](modules/components_UserPortal_PeopleCard_PeopleCard_test.md)
 - [components/UserPortal/PostCard/PostCard](modules/components_UserPortal_PostCard_PostCard.md)
 - [components/UserPortal/PostCard/PostCard.test](modules/components_UserPortal_PostCard_PostCard_test.md)
+<<<<<<< HEAD
 - [components/UserPortal/PromotedPost/PromotedPost](modules/components_UserPortal_PromotedPost_PromotedPost.md)
 - [components/UserPortal/PromotedPost/PromotedPost.test](modules/components_UserPortal_PromotedPost_PromotedPost_test.md)
 - [components/UserPortal/Register/Register](modules/components_UserPortal_Register_Register.md)
 - [components/UserPortal/Register/Register.test](modules/components_UserPortal_Register_Register_test.md)
 - [components/UserPortal/SecuredRouteForUser/SecuredRouteForUser](modules/components_UserPortal_SecuredRouteForUser_SecuredRouteForUser.md)
 - [components/UserPortal/SecuredRouteForUser/SecuredRouteForUser.test](modules/components_UserPortal_SecuredRouteForUser_SecuredRouteForUser_test.md)
+=======
+- [components/UserPortal/Register/Register](modules/components_UserPortal_Register_Register.md)
+- [components/UserPortal/Register/Register.test](modules/components_UserPortal_Register_Register_test.md)
+- [components/UserPortal/SecuredRouteForUser/SecuredRouteForUser](modules/components_UserPortal_SecuredRouteForUser_SecuredRouteForUser.md)
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 - [components/UserPortal/UserNavbar/UserNavbar](modules/components_UserPortal_UserNavbar_UserNavbar.md)
 - [components/UserPortal/UserNavbar/UserNavbar.test](modules/components_UserPortal_UserNavbar_UserNavbar_test.md)
 - [components/UserPortal/UserSidebar/UserSidebar](modules/components_UserPortal_UserSidebar_UserSidebar.md)
 - [components/UserPortal/UserSidebar/UserSidebar.test](modules/components_UserPortal_UserSidebar_UserSidebar_test.md)
 - [components/UserUpdate/UserUpdate](modules/components_UserUpdate_UserUpdate.md)
 - [components/UserUpdate/UserUpdate.test](modules/components_UserUpdate_UserUpdate_test.md)
+<<<<<<< HEAD
 - [components/UsersTableItem/UserTableItem.test](modules/components_UsersTableItem_UserTableItem_test.md)
 - [components/UsersTableItem/UserTableItemMocks](modules/components_UsersTableItem_UserTableItemMocks.md)
 - [components/UsersTableItem/UsersTableItem](modules/components_UsersTableItem_UsersTableItem.md)
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 - [components/plugins](modules/components_plugins.md)
 - [components/plugins/DummyPlugin/DummyPlugin](modules/components_plugins_DummyPlugin_DummyPlugin.md)
 - [components/plugins/DummyPlugin/DummyPlugin.test](modules/components_plugins_DummyPlugin_DummyPlugin_test.md)
@@ -184,7 +248,10 @@
 - [screens/OrgList/OrgList](modules/screens_OrgList_OrgList.md)
 - [screens/OrgList/OrgList.test](modules/screens_OrgList_OrgList_test.md)
 - [screens/OrgList/OrgListMocks](modules/screens_OrgList_OrgListMocks.md)
+<<<<<<< HEAD
 - [screens/OrgList/OrganizationModal](modules/screens_OrgList_OrganizationModal.md)
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 - [screens/OrgPost/OrgPost](modules/screens_OrgPost_OrgPost.md)
 - [screens/OrgPost/OrgPost.test](modules/screens_OrgPost_OrgPost_test.md)
 - [screens/OrgSettings/OrgSettings](modules/screens_OrgSettings_OrgSettings.md)
@@ -198,12 +265,19 @@
 - [screens/OrganizationPeople/OrganizationPeople.test](modules/screens_OrganizationPeople_OrganizationPeople_test.md)
 - [screens/PageNotFound/PageNotFound](modules/screens_PageNotFound_PageNotFound.md)
 - [screens/PageNotFound/PageNotFound.test](modules/screens_PageNotFound_PageNotFound_test.md)
+<<<<<<< HEAD
 - [screens/UserPortal/Chat/Chat](modules/screens_UserPortal_Chat_Chat.md)
 - [screens/UserPortal/Chat/Chat.test](modules/screens_UserPortal_Chat_Chat_test.md)
 - [screens/UserPortal/Donate/Donate](modules/screens_UserPortal_Donate_Donate.md)
 - [screens/UserPortal/Donate/Donate.test](modules/screens_UserPortal_Donate_Donate_test.md)
 - [screens/UserPortal/Events/Events](modules/screens_UserPortal_Events_Events.md)
 - [screens/UserPortal/Events/Events.test](modules/screens_UserPortal_Events_Events_test.md)
+=======
+- [screens/Requests/Requests](modules/screens_Requests_Requests.md)
+- [screens/Requests/Requests.test](modules/screens_Requests_Requests_test.md)
+- [screens/UserPortal/Donate/Donate](modules/screens_UserPortal_Donate_Donate.md)
+- [screens/UserPortal/Donate/Donate.test](modules/screens_UserPortal_Donate_Donate_test.md)
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 - [screens/UserPortal/Home/Home](modules/screens_UserPortal_Home_Home.md)
 - [screens/UserPortal/Home/Home.test](modules/screens_UserPortal_Home_Home_test.md)
 - [screens/UserPortal/Organizations/Organizations](modules/screens_UserPortal_Organizations_Organizations.md)
@@ -216,4 +290,7 @@
 - [screens/UserPortal/UserLoginPage/UserLoginPage.test](modules/screens_UserPortal_UserLoginPage_UserLoginPage_test.md)
 - [screens/Users/Users](modules/screens_Users_Users.md)
 - [screens/Users/Users.test](modules/screens_Users_Users_test.md)
+<<<<<<< HEAD
 - [screens/Users/UsersMocks](modules/screens_Users_UsersMocks.md)
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1

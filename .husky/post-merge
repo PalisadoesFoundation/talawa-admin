@@ -1,4 +1,8 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
+<<<<<<< HEAD
 git diff HEAD^ HEAD --exit-code -- ./package.json || npm install
+=======
+git diff HEAD^ HEAD --exit-code -- ./package.json || npm install --legacy-peer-deps
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1

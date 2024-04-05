@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import LeftDrawerOrg from 'components/LeftDrawerOrg/LeftDrawerOrg';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -72,28 +73,87 @@ const OrganizationScreen = (): JSX.Element => {
           setHideDrawer={setHideDrawer}
         />
       </div>
+=======
+import MenuIcon from '@mui/icons-material/Menu';
+import LeftDrawerOrg from 'components/LeftDrawerOrg/LeftDrawerOrg';
+import React, { useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import styles from './OrganizationScreen.module.css';
+import { useSelector } from 'react-redux';
+import type { TargetsType } from 'state/reducers/routesReducer';
+import type { RootState } from 'state/reducers';
+
+export interface InterfaceOrganizationScreenProps {
+  title: string; // Multilingual Page title
+  screenName: string; // Internal Screen name for developers
+  children: React.ReactNode;
+}
+const organizationScreen = ({
+  title,
+  screenName,
+  children,
+}: InterfaceOrganizationScreenProps): JSX.Element => {
+  const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
+
+  const appRoutes: {
+    targets: TargetsType[];
+    configUrl: string;
+  } = useSelector((state: RootState) => state.appRoutes);
+  const { targets, configUrl } = appRoutes;
+  return (
+    <>
+      <LeftDrawerOrg
+        orgId={configUrl}
+        targets={targets}
+        screenName={screenName}
+        hideDrawer={hideDrawer}
+        setHideDrawer={setHideDrawer}
+      />
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       <div
         className={`${styles.pageContainer} ${
           hideDrawer === null
             ? ''
             : hideDrawer
+<<<<<<< HEAD
               ? styles.expand
               : styles.contract
+=======
+            ? styles.expand
+            : styles.contract
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         } `}
         data-testid="mainpageright"
       >
         <div className="d-flex justify-content-between align-items-center">
           <div style={{ flex: 1 }}>
+<<<<<<< HEAD
             <h1>{t('title')}</h1>
           </div>
           <ProfileDropdown />
         </div>
         <Outlet />
+=======
+            <h2>{title}</h2>
+          </div>
+          <Button
+            className="ms-2"
+            onClick={(): void => {
+              setHideDrawer(!hideDrawer);
+            }}
+            data-testid="menuBtn"
+          >
+            <MenuIcon fontSize="medium" />
+          </Button>
+        </div>
+        {children}
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       </div>
     </>
   );
 };
 
+<<<<<<< HEAD
 export default OrganizationScreen;
 
 interface InterfaceMapType {
@@ -117,3 +177,6 @@ const map: InterfaceMapType = {
   blockuser: 'blockUnblockUser',
   event: 'blockUnblockUser',
 };
+=======
+export default organizationScreen;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1

@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 // SKIP_LOCALSTORAGE_CHECK
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 import { refreshToken } from './getRefreshToken';
 
 jest.mock('@apollo/client', () => {
@@ -16,7 +19,11 @@ jest.mock('@apollo/client', () => {
               refreshToken: 'newRefreshToken',
             },
           },
+<<<<<<< HEAD
         }),
+=======
+        })
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       ),
     })),
   };
@@ -29,7 +36,10 @@ describe('refreshToken', () => {
   global.window.location = { ...location, reload: jest.fn() };
 
   // Mock localStorage.setItem() and localStorage.clear()
+<<<<<<< HEAD
 
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   Storage.prototype.setItem = jest.fn();
   Storage.prototype.clear = jest.fn();
 
@@ -41,12 +51,21 @@ describe('refreshToken', () => {
     const result = await refreshToken();
 
     expect(localStorage.setItem).toHaveBeenCalledWith(
+<<<<<<< HEAD
       'Talawa-admin_token',
       JSON.stringify('newAccessToken'),
     );
     expect(localStorage.setItem).toHaveBeenCalledWith(
       'Talawa-admin_refreshToken',
       JSON.stringify('newRefreshToken'),
+=======
+      'token',
+      'newAccessToken'
+    );
+    expect(localStorage.setItem).toHaveBeenCalledWith(
+      'refreshToken',
+      'newRefreshToken'
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
     expect(result).toBe(true);
     expect(window.location.reload).toHaveBeenCalled();

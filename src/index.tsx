@@ -18,7 +18,11 @@ import 'bootstrap/dist/js/bootstrap.min.js';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'flag-icons/css/flag-icons.min.css';
 import { Provider } from 'react-redux';
+<<<<<<< HEAD
 import { ToastContainer, toast } from 'react-toastify';
+=======
+import { ToastContainer } from 'react-toastify';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 import 'react-toastify/dist/ReactToastify.css';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -31,6 +35,7 @@ import {
   REACT_APP_BACKEND_WEBSOCKET_URL,
 } from 'Constant/constant';
 import { refreshToken } from 'utils/getRefreshToken';
+<<<<<<< HEAD
 import { ThemeProvider, createTheme } from '@mui/material';
 import { ApolloLink } from '@apollo/client/core';
 import { setContext } from '@apollo/client/link/context';
@@ -55,6 +60,8 @@ const authLink = setContext((_, { headers }) => {
     },
   };
 });
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 const errorLink = onError(
   ({ graphQLErrors, networkError, operation, forward }) => {
@@ -67,7 +74,11 @@ const errorLink = onError(
               operation.setContext({
                 headers: {
                   ...oldHeaders,
+<<<<<<< HEAD
                   authorization: 'Bearer ' + getItem('token'),
+=======
+                  authorization: 'Bearer ' + localStorage.getItem('token'),
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                 },
               });
               return forward(operation);
@@ -79,6 +90,7 @@ const errorLink = onError(
       });
     } else if (networkError) {
       console.log(`[Network error]: ${networkError}`);
+<<<<<<< HEAD
       toast.error(
         'API server unavailable. Check your connection or try again later',
         {
@@ -87,17 +99,31 @@ const errorLink = onError(
       );
     }
   },
+=======
+    }
+  }
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 );
 
 const httpLink = new HttpLink({
   uri: BACKEND_URL,
+<<<<<<< HEAD
+=======
+  headers: {
+    authorization: 'Bearer ' + localStorage.getItem('token') || '',
+  },
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 });
 
 // if didnt work use /subscriptions
 const wsLink = new GraphQLWsLink(
   createClient({
     url: REACT_APP_BACKEND_WEBSOCKET_URL,
+<<<<<<< HEAD
   }),
+=======
+  })
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 );
 // The split function takes three parameters:
 //
@@ -113,6 +139,7 @@ const splitLink = split(
     );
   },
   wsLink,
+<<<<<<< HEAD
   httpLink,
 );
 
@@ -121,6 +148,13 @@ const combinedLink = ApolloLink.from([errorLink, authLink, splitLink]);
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
   link: combinedLink,
+=======
+  httpLink
+);
+const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
+  cache: new InMemoryCache(),
+  link: errorLink.concat(splitLink),
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 });
 const fallbackLoader = <div className="loader"></div>;
 
@@ -129,15 +163,26 @@ ReactDOM.render(
     <ApolloProvider client={client}>
       <BrowserRouter>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
+<<<<<<< HEAD
           <ThemeProvider theme={theme}>
             <Provider store={store}>
               <App />
               <ToastContainer limit={5} />
             </Provider>
           </ThemeProvider>
+=======
+          <Provider store={store}>
+            <App />
+            <ToastContainer limit={5} />
+          </Provider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         </LocalizationProvider>
       </BrowserRouter>
     </ApolloProvider>
   </Suspense>,
+<<<<<<< HEAD
   document.getElementById('root'),
+=======
+  document.getElementById('root')
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 );

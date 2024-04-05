@@ -17,7 +17,10 @@ import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './ForgotPassword.module.css';
+<<<<<<< HEAD
 import useLocalStorage from 'utils/useLocalstorage';
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 const ForgotPassword = (): JSX.Element => {
   const { t } = useTranslation('translation', {
@@ -26,8 +29,11 @@ const ForgotPassword = (): JSX.Element => {
 
   document.title = t('title');
 
+<<<<<<< HEAD
   const { getItem, removeItem, setItem } = useLocalStorage();
 
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   const [showEnterEmail, setShowEnterEmail] = useState(true);
 
   const [registeredEmail, setregisteredEmail] = useState('');
@@ -40,15 +46,25 @@ const ForgotPassword = (): JSX.Element => {
 
   const [otp, { loading: otpLoading }] = useMutation(GENERATE_OTP_MUTATION);
   const [forgotPassword, { loading: forgotPasswordLoading }] = useMutation(
+<<<<<<< HEAD
     FORGOT_PASSWORD_MUTATION,
   );
   const isLoggedIn = getItem('IsLoggedIn');
+=======
+    FORGOT_PASSWORD_MUTATION
+  );
+  const isLoggedIn = localStorage.getItem('IsLoggedIn');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   useEffect(() => {
     if (isLoggedIn == 'TRUE') {
       window.location.replace('/orglist');
     }
     return () => {
+<<<<<<< HEAD
       removeItem('otpToken');
+=======
+      localStorage.removeItem('otpToken');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     };
   }, []);
 
@@ -63,7 +79,11 @@ const ForgotPassword = (): JSX.Element => {
       });
 
       if (data) {
+<<<<<<< HEAD
         setItem('otpToken', data.otp.otpToken);
+=======
+        localStorage.setItem('otpToken', data.otp.otpToken);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         toast.success(t('OTPsent'));
         setShowEnterEmail(false);
       }
@@ -79,7 +99,11 @@ const ForgotPassword = (): JSX.Element => {
   };
 
   const submitForgotPassword = async (
+<<<<<<< HEAD
     e: ChangeEvent<HTMLFormElement>,
+=======
+    e: ChangeEvent<HTMLFormElement>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   ): Promise<void> => {
     e.preventDefault();
     const { userOtp, newPassword, confirmNewPassword } = forgotPassFormData;
@@ -89,7 +113,11 @@ const ForgotPassword = (): JSX.Element => {
       return;
     }
 
+<<<<<<< HEAD
     const otpToken = getItem('otpToken');
+=======
+    const otpToken = localStorage.getItem('otpToken');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
     if (!otpToken) {
       return;

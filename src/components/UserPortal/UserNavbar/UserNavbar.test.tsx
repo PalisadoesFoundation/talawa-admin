@@ -49,7 +49,11 @@ describe('Testing UserNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -65,7 +69,11 @@ describe('Testing UserNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -89,7 +97,11 @@ describe('Testing UserNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -113,7 +125,11 @@ describe('Testing UserNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -137,7 +153,11 @@ describe('Testing UserNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -161,7 +181,11 @@ describe('Testing UserNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -174,6 +198,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
     expect(cookies.get('i18next')).toBe('zh');
   });
+<<<<<<< HEAD
 
   test('User can see and interact with the dropdown menu', async () => {
     render(
@@ -214,4 +239,6 @@ describe('Testing UserNavbar Component [User Portal]', () => {
     userEvent.click(screen.getByText('Settings'));
     expect(window.location.pathname).toBe('/user/settings');
   });
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 });

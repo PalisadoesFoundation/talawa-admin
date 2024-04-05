@@ -10,8 +10,11 @@ import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { REGISTER_EVENT } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 
+<<<<<<< HEAD
 import useLocalStorage from 'utils/useLocalstorage';
 
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 interface InterfaceEventCardProps {
   id: string;
   title: string;
@@ -39,11 +42,18 @@ function eventCard(props: InterfaceEventCardProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userEventCard',
   });
+<<<<<<< HEAD
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
   const creatorName = `${props.creator.firstName} ${props.creator.lastName}`;
   const isInitiallyRegistered = props.registrants.some(
     (registrant) => registrant.id === userId,
+=======
+  const userId = localStorage.getItem('userId');
+  const creatorName = `${props.creator.firstName} ${props.creator.lastName}`;
+  const isInitiallyRegistered = props.registrants.some(
+    (registrant) => registrant.id === userId
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   );
 
   const [registerEventMutation, { loading }] = useMutation(REGISTER_EVENT);
@@ -87,9 +97,13 @@ function eventCard(props: InterfaceEventCardProps): JSX.Element {
       <div className={`d-flex flex-row ${styles.eventDetails}`}>
         {`${t('starts')} `}
         {props.startTime ? (
+<<<<<<< HEAD
           <b data-testid="startTime">
             {dayjs(`2015-03-04T${props.startTime}`).format('h:mm:ss A')}
           </b>
+=======
+          <b>{dayjs(`2015-03-04T${props.startTime}`).format('h:mm:ss A')}</b>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         ) : (
           <></>
         )}
@@ -98,9 +112,13 @@ function eventCard(props: InterfaceEventCardProps): JSX.Element {
       <div className={`d-flex flex-row ${styles.eventDetails}`}>
         {`${t('ends')} `}
         {props.endTime ? (
+<<<<<<< HEAD
           <b data-testid="endTime">
             {dayjs(`2015-03-04T${props.endTime}`).format('h:mm:ss A')}
           </b>
+=======
+          <b>{dayjs(`2015-03-04T${props.endTime}`).format('h:mm:ss A')}</b>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         ) : (
           <></>
         )}{' '}

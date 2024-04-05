@@ -1,8 +1,14 @@
 import {
   ORGANIZATIONS_LIST,
   ORGANIZATION_EVENT_CONNECTION_LIST,
+<<<<<<< HEAD
   ORGANIZATION_POST_LIST,
 } from 'GraphQl/Queries/Queries';
+=======
+  ORGANIZATION_POST_CONNECTION_LIST,
+} from 'GraphQl/Queries/Queries';
+import dayjs from 'dayjs';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 export const MOCKS = [
   {
@@ -17,6 +23,7 @@ export const MOCKS = [
             image: '',
             name: 'Dummy Organization',
             description: 'This is a Dummy Organization',
+<<<<<<< HEAD
             address: {
               city: 'Delhi',
               countryCode: 'IN',
@@ -28,6 +35,10 @@ export const MOCKS = [
               state: 'Delhi',
             },
             userRegistrationRequired: true,
+=======
+            location: 'New Delhi',
+            isPublic: true,
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
             visibleInSearch: false,
             creator: {
               firstName: '',
@@ -75,6 +86,7 @@ export const MOCKS = [
   },
   {
     request: {
+<<<<<<< HEAD
       query: ORGANIZATION_POST_LIST,
       variables: { first: 10 },
     },
@@ -183,6 +195,93 @@ export const MOCKS = [
             },
           },
         ],
+=======
+      query: ORGANIZATION_POST_CONNECTION_LIST,
+    },
+    result: {
+      data: {
+        postsByOrganizationConnection: {
+          edges: [
+            {
+              _id: '6411e53835d7ba2344a78e21',
+              title: 'Post 15',
+              text: 'This is the first post that was made',
+              imageUrl: null,
+              videoUrl: null,
+              creator: {
+                _id: '640d98d9eb6a743d75341067',
+                firstName: 'Aditya',
+                lastName: 'Shelke',
+                email: 'adidacreator1@gmail.com',
+              },
+              createdAt: dayjs(new Date()).add(1, 'day'),
+              likeCount: 0,
+              commentCount: 0,
+              comments: [],
+              likedBy: [],
+              pinned: false,
+            },
+            {
+              _id: '6411e54835d7ba2344a78e29',
+              title: 'Post 2',
+              text: 'Hey, anyone saw my watch that I left at the office?',
+              imageUrl: null,
+              videoUrl: null,
+              creator: {
+                _id: '640d98d9eb6a743d75341067',
+                firstName: 'Aditya',
+                lastName: 'Shelke',
+                email: 'adidacreator1@gmail.com',
+              },
+              pinned: false,
+              createdAt: dayjs(new Date()).add(1, 'day'),
+              likeCount: 0,
+              commentCount: 2,
+              comments: [
+                {
+                  _id: '64eb13beca85de60ebe0ed0e',
+                  creator: {
+                    _id: '63d6064458fce20ee25c3bf7',
+                    firstName: 'Noble',
+                    lastName: 'Mittal',
+                    email: 'test@gmail.com',
+                    __typename: 'User',
+                  },
+                  likeCount: 1,
+                  likedBy: [
+                    {
+                      _id: 1,
+                    },
+                  ],
+                  text: 'Yes, that is $50',
+                  __typename: 'Comment',
+                },
+                {
+                  _id: '64eb483aca85de60ebe0ef99',
+                  creator: {
+                    _id: '63d6064458fce20ee25c3bf7',
+                    firstName: 'Noble',
+                    lastName: 'Mittal',
+                    email: 'test@gmail.com',
+                    __typename: 'User',
+                  },
+                  likeCount: 0,
+                  likedBy: [],
+                  text: 'Great View',
+                  __typename: 'Comment',
+                },
+              ],
+              likedBy: [
+                {
+                  _id: '63d6064458fce20ee25c3bf7',
+                  firstName: 'Comment',
+                  lastName: 'Likkert',
+                },
+              ],
+            },
+          ],
+        },
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       },
     },
   },
@@ -200,6 +299,7 @@ export const MOCKS = [
             _id: '1',
             title: 'Sample Event',
             description: 'Sample Description',
+<<<<<<< HEAD
             startDate: '2025-10-29T00:00:00.000Z',
             endDate: '2023-10-29T23:59:59.000Z',
             location: 'Sample Location',
@@ -215,6 +315,9 @@ export const MOCKS = [
             title: 'Sample Event',
             description: 'Sample Description',
             startDate: '2022-10-29T00:00:00.000Z',
+=======
+            startDate: '2023-10-29T00:00:00.000Z',
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
             endDate: '2023-10-29T23:59:59.000Z',
             location: 'Sample Location',
             startTime: '08:00:00',
@@ -243,6 +346,7 @@ export const EMPTY_MOCKS = [
             image: '',
             name: 'Dummy Organization',
             description: 'This is a Dummy Organization',
+<<<<<<< HEAD
             address: {
               city: 'Delhi',
               countryCode: 'IN',
@@ -254,6 +358,10 @@ export const EMPTY_MOCKS = [
               state: 'Delhi',
             },
             userRegistrationRequired: true,
+=======
+            location: 'New Delhi',
+            isPublic: true,
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
             visibleInSearch: false,
             creator: {
               firstName: 'John',
@@ -292,6 +400,7 @@ export const EMPTY_MOCKS = [
   },
   {
     request: {
+<<<<<<< HEAD
       query: ORGANIZATION_POST_LIST,
       variables: { first: 10 },
     },
@@ -311,6 +420,15 @@ export const EMPTY_MOCKS = [
             },
           },
         ],
+=======
+      query: ORGANIZATION_POST_CONNECTION_LIST,
+    },
+    result: {
+      data: {
+        postsByOrganizationConnection: {
+          edges: [],
+        },
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       },
     },
   },
@@ -335,7 +453,11 @@ export const ERROR_MOCKS = [
   },
   {
     request: {
+<<<<<<< HEAD
       query: ORGANIZATION_POST_LIST,
+=======
+      query: ORGANIZATION_POST_CONNECTION_LIST,
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     },
     error: new Error('Mock Graphql ORGANIZATION_POST_LIST Error'),
   },

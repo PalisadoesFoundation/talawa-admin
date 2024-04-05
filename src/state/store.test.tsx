@@ -14,6 +14,10 @@ describe('Testing src/state/store.ts', () => {
   test('appRoutes schema should contain targets, configUrl and components', () => {
     expect(state.appRoutes).toMatchObject({
       targets: expect.any(Array),
+<<<<<<< HEAD
+=======
+      configUrl: expect.any(String),
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       components: expect.any(Array),
     });
   });

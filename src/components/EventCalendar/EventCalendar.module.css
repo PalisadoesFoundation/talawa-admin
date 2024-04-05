@@ -1,24 +1,35 @@
 .calendar {
+<<<<<<< HEAD
   font-family: sans-serif;
   font-size: 1.2rem;
   margin-bottom: 20px;
   background: rgb(255, 255, 255);
   border-radius: 10px;
   padding: 5px;
+=======
+  /* display: flex;
+    flex-direction: column; */
+  font-family: sans-serif;
+  font-size: 1.2rem;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 .calendar__header {
   display: flex;
   margin-bottom: 2rem;
+<<<<<<< HEAD
   align-items: center;
   margin: 0px 10px 0px 10px;
 }
 .input {
   flex: 1;
   position: relative;
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 .calendar__header_month {
   margin: 0.5rem;
   color: #707070;
+<<<<<<< HEAD
   font-weight: 800;
   font-size: 55px;
   display: flex;
@@ -55,11 +66,27 @@
 .calendar__scroll {
   height: 80vh;
   padding: 10px;
+=======
+  font-weight: bold;
+}
+.button {
+  background-color: rgba(40, 167, 69, 1);
+  color: #fff;
+  padding: 1px;
+  font-weight: bold;
+}
+.calendar__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 1rem;
+  background-color: black;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 .weekday {
   display: flex;
   justify-content: center;
   align-items: center;
+<<<<<<< HEAD
   background-color: white;
   font-weight: 600;
 }
@@ -128,6 +155,30 @@
 .day__outside {
   background-color: white;
   color: #89898996;
+=======
+  border: 1px solid white;
+  color: #fff;
+  background-color: rgba(40, 167, 69, 1);
+}
+.calendar__days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+}
+.day {
+  background-color: #ffffff;
+  border: 1px solid rgb(0, 0, 0);
+  padding-bottom: 4rem;
+  padding-left: 0.3rem;
+  padding-right: 0.3rem;
+  background-color: white;
+  border: 1px solid #707070;
+  color: #212121;
+}
+.day__outside {
+  background-color: #eeeded;
+  color: #898989;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 .day__selected {
   background-color: #007bff;
@@ -137,6 +188,7 @@
   background-color: #def6e1;
   font-weight: 700;
   text-decoration: underline;
+<<<<<<< HEAD
   color: #31bb6b;
 }
 .day__events {
@@ -147,11 +199,24 @@
   font-family: Arial;
   color: #ffffff;
   font-size: 18px;
+=======
+  color: #006000;
+}
+.btn__today {
+  background: #06960f;
+  transition: ease-in all 200ms;
+  border-radius: 11px;
+  box-shadow: 0px 1px 3px #666666;
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 20px;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   padding: 10px 20px 10px 20px;
   text-decoration: none;
   margin-left: 20px;
   border: none;
 }
+<<<<<<< HEAD
 .btnsContainer {
   display: flex;
   margin: 2.5rem 0 2.5rem 0;
@@ -339,4 +404,10 @@
   width: 40px;
   background: rgba(146, 200, 141, 0.5);
   border-radius: 10px;
+=======
+
+.btn__today:hover {
+  background: #006000;
+  text-decoration: none;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }

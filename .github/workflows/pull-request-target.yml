@@ -39,7 +39,10 @@ jobs:
 
             ### Reviewers
 
+<<<<<<< HEAD
             Do not assign reviewers. Our Queue Monitors will review your PR and assign them. 
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
             When your PR has been assigned reviewers contact them to get your code reviewed and approved via:
 
             1. comments in this PR or

@@ -1,7 +1,13 @@
 import gql from 'graphql-tag';
 
 //Query List
+<<<<<<< HEAD
 // Check Auth
+=======
+
+// Check Auth
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 export const CHECK_AUTH = gql`
   query {
     checkAuth {
@@ -10,6 +16,7 @@ export const CHECK_AUTH = gql`
       lastName
       image
       email
+<<<<<<< HEAD
       birthDate
       educationGrade
       employmentStatus
@@ -23,6 +30,9 @@ export const CHECK_AUTH = gql`
         state
         countryCode
       }
+=======
+      userType
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     }
   }
 `;
@@ -45,6 +55,7 @@ export const ORGANIZATION_LIST = gql`
         _id
       }
       createdAt
+<<<<<<< HEAD
       address {
         city
         countryCode
@@ -55,10 +66,14 @@ export const ORGANIZATION_LIST = gql`
         sortingCode
         state
       }
+=======
+      location
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     }
   }
 `;
 
+<<<<<<< HEAD
 // Query to take the Organization list with filter  and sort option
 export const ORGANIZATION_CONNECTION_LIST = gql`
   query OrganizationsConnection(
@@ -67,11 +82,19 @@ export const ORGANIZATION_CONNECTION_LIST = gql`
     $skip: Int
     $orderBy: OrganizationOrderByInput
   ) {
+=======
+// Query to take the Organization list with filter option
+export const ORGANIZATION_CONNECTION_LIST = gql`
+  query OrganizationsConnection($filter: String, $first: Int, $skip: Int) {
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     organizationsConnection(
       where: { name_contains: $filter }
       first: $first
       skip: $skip
+<<<<<<< HEAD
       orderBy: $orderBy
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     ) {
       _id
       image
@@ -87,6 +110,7 @@ export const ORGANIZATION_CONNECTION_LIST = gql`
         _id
       }
       createdAt
+<<<<<<< HEAD
       address {
         city
         countryCode
@@ -97,6 +121,9 @@ export const ORGANIZATION_CONNECTION_LIST = gql`
         sortingCode
         state
       }
+=======
+      location
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     }
   }
 `;
@@ -117,6 +144,7 @@ export const USER_LIST = gql`
       skip: $skip
       first: $first
     ) {
+<<<<<<< HEAD
       user {
         _id
         joinedOrganizations {
@@ -211,6 +239,48 @@ export const USER_LIST_FOR_TABLE = gql`
         email
         image
         createdAt
+=======
+      firstName
+      lastName
+      image
+      _id
+      email
+      userType
+      adminApproved
+      adminFor {
+        _id
+      }
+      createdAt
+      organizationsBlockedBy {
+        _id
+        name
+        image
+        location
+        createdAt
+        creator {
+          _id
+          firstName
+          lastName
+          image
+          email
+          createdAt
+        }
+      }
+      joinedOrganizations {
+        _id
+        name
+        image
+        location
+        createdAt
+        creator {
+          _id
+          firstName
+          lastName
+          image
+          email
+          createdAt
+        }
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       }
     }
   }
@@ -222,6 +292,11 @@ export const USER_LIST_REQUEST = gql`
     $lastName_contains: String
     $first: Int
     $skip: Int
+<<<<<<< HEAD
+=======
+    $userType: String
+    $adminApproved: Boolean
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   ) {
     users(
       where: {
@@ -230,6 +305,7 @@ export const USER_LIST_REQUEST = gql`
       }
       skip: $skip
       first: $first
+<<<<<<< HEAD
     ) {
       user {
         firstName
@@ -255,6 +331,19 @@ export const USER_LIST_REQUEST = gql`
           _id
         }
       }
+=======
+      userType: $userType
+      adminApproved: $adminApproved
+    ) {
+      firstName
+      lastName
+      image
+      _id
+      email
+      userType
+      adminApproved
+      createdAt
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     }
   }
 `;
@@ -282,6 +371,26 @@ export const EVENT_DETAILS = gql`
       attendees {
         _id
       }
+<<<<<<< HEAD
+=======
+      projects {
+        _id
+        title
+        description
+        tasks {
+          _id
+          title
+          description
+          deadline
+          completed
+          volunteers {
+            _id
+            firstName
+            lastName
+          }
+        }
+      }
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     }
   }
 `;
@@ -312,6 +421,11 @@ export const EVENT_CHECKINS = gql`
         checkIn {
           _id
           time
+<<<<<<< HEAD
+=======
+          allotedRoom
+          allotedSeat
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         }
       }
     }
@@ -345,6 +459,7 @@ export const ORGANIZATIONS_LIST = gql`
       }
       name
       description
+<<<<<<< HEAD
       address {
         city
         countryCode
@@ -356,6 +471,10 @@ export const ORGANIZATIONS_LIST = gql`
         state
       }
       userRegistrationRequired
+=======
+      location
+      isPublic
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       visibleInSearch
       members {
         _id
@@ -388,6 +507,10 @@ export const ORGANIZATIONS_LIST = gql`
 `;
 
 // Query to take the Members of a particular organization
+<<<<<<< HEAD
+=======
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 export const MEMBERS_LIST = gql`
   query Organizations($id: ID!) {
     organizations(id: $id) {
@@ -439,6 +562,10 @@ export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
     $orgId: ID!
     $firstName_contains: String
     $lastName_contains: String
+<<<<<<< HEAD
+=======
+    $admin_for: ID
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     $event_title_contains: String
     $first: Int
     $skip: Int
@@ -450,6 +577,10 @@ export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
       where: {
         firstName_contains: $firstName_contains
         lastName_contains: $lastName_contains
+<<<<<<< HEAD
+=======
+        admin_for: $admin_for
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         event_title_contains: $event_title_contains
       }
     ) {
@@ -467,6 +598,7 @@ export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
 
 // To take the list of the oranization joined by a user
 export const USER_ORGANIZATION_LIST = gql`
+<<<<<<< HEAD
   query User($userId: ID!) {
     user(id: $userId) {
       user {
@@ -474,6 +606,19 @@ export const USER_ORGANIZATION_LIST = gql`
         email
         image
         lastName
+=======
+  query User($id: ID!) {
+    user(id: $id) {
+      firstName
+      lastName
+      image
+      email
+      userType
+      adminFor {
+        _id
+        name
+        image
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       }
     }
   }
@@ -483,6 +628,7 @@ export const USER_ORGANIZATION_LIST = gql`
 export const USER_DETAILS = gql`
   query User($id: ID!) {
     user(id: $id) {
+<<<<<<< HEAD
       user {
         _id
         joinedOrganizations {
@@ -531,6 +677,43 @@ export const USER_DETAILS = gql`
         eventAdmin {
           _id
         }
+=======
+      image
+      firstName
+      lastName
+      email
+      appLanguageCode
+      userType
+      pluginCreationAllowed
+      adminApproved
+      createdAt
+      adminFor {
+        _id
+      }
+      createdOrganizations {
+        _id
+      }
+      joinedOrganizations {
+        _id
+      }
+      organizationUserBelongsTo {
+        _id
+      }
+      organizationsBlockedBy {
+        _id
+      }
+      createdEvents {
+        _id
+      }
+      registeredEvents {
+        _id
+      }
+      eventAdmin {
+        _id
+      }
+      membershipRequests {
+        _id
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       }
     }
   }
@@ -606,12 +789,19 @@ export const ORGANIZATION_DONATION_CONNECTION_LIST = gql`
       amount
       userId
       payPalId
+<<<<<<< HEAD
       updatedAt
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     }
   }
 `;
 
 // to take the list of the admins of a particular
+<<<<<<< HEAD
+=======
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 export const ADMIN_LIST = gql`
   query Organizations($id: ID!) {
     organizations(id: $id) {
@@ -629,6 +819,7 @@ export const ADMIN_LIST = gql`
 `;
 
 // to take the membership request
+<<<<<<< HEAD
 export const MEMBERSHIP_REQUEST = gql`
   query Organizations(
     $id: ID!
@@ -643,6 +834,14 @@ export const MEMBERSHIP_REQUEST = gql`
         first: $first
         where: { user: { firstName_contains: $firstName_contains } }
       ) {
+=======
+
+export const MEMBERSHIP_REQUEST = gql`
+  query Organizations($id: ID!) {
+    organizations(id: $id) {
+      _id
+      membershipRequests {
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         _id
         user {
           _id
@@ -655,6 +854,7 @@ export const MEMBERSHIP_REQUEST = gql`
   }
 `;
 
+<<<<<<< HEAD
 export const USERS_CONNECTION_LIST = gql`
   query usersConnection(
     $id_not_in: [ID!]
@@ -738,12 +938,80 @@ export const USERS_CONNECTION_LIST = gql`
         }
         eventAdmin {
           _id
+=======
+// display posts
+
+export const ORGANIZATION_POST_LIST = gql`
+  query PostsByOrganization($id: ID!) {
+    postsByOrganization(id: $id) {
+      _id
+      title
+      text
+      imageUrl
+      videoUrl
+      creator {
+        _id
+        firstName
+        lastName
+        email
+      }
+      createdAt
+    }
+  }
+`;
+
+export const ORGANIZATION_POST_CONNECTION_LIST = gql`
+  query PostsByOrganizationConnection(
+    $id: ID!
+    $title_contains: String
+    $text_contains: String
+  ) {
+    postsByOrganizationConnection(
+      id: $id
+      where: { title_contains: $title_contains, text_contains: $text_contains }
+      orderBy: createdAt_DESC
+    ) {
+      edges {
+        _id
+        title
+        text
+        imageUrl
+        videoUrl
+        creator {
+          _id
+          firstName
+          lastName
+          email
+        }
+        createdAt
+        likeCount
+        commentCount
+        comments {
+          _id
+          creator {
+            _id
+            firstName
+            lastName
+            email
+          }
+          likeCount
+          likedBy {
+            _id
+          }
+          text
+        }
+        likedBy {
+          _id
+          firstName
+          lastName
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         }
       }
     }
   }
 `;
 
+<<<<<<< HEAD
 export const GET_COMMUNITY_DATA = gql`
   query getCommunityData {
     getCommunityData {
@@ -760,11 +1028,35 @@ export const GET_COMMUNITY_DATA = gql`
         youTube
         reddit
         slack
+=======
+export const USER_ORGANIZATION_CONNECTION = gql`
+  query organizationsConnection(
+    $first: Int
+    $skip: Int
+    $filter: String
+    $id: ID
+  ) {
+    organizationsConnection(
+      first: $first
+      skip: $skip
+      where: { name_contains: $filter, id: $id }
+      orderBy: name_ASC
+    ) {
+      _id
+      name
+      image
+      description
+      isPublic
+      creator {
+        firstName
+        lastName
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       }
     }
   }
 `;
 
+<<<<<<< HEAD
 // get the list of Action Item Categories
 export { ACTION_ITEM_CATEGORY_LIST } from './ActionItemCategoryQueries';
 
@@ -790,3 +1082,200 @@ export {
   USER_JOINED_ORGANIZATIONS,
   USER_ORGANIZATION_CONNECTION,
 } from './OrganizationQueries';
+=======
+export const USER_JOINED_ORGANIZATIONS = gql`
+  query UserJoinedOrganizations($id: ID!) {
+    users(where: { id: $id }) {
+      joinedOrganizations {
+        _id
+        name
+        description
+        image
+      }
+    }
+  }
+`;
+
+export const USER_CREATED_ORGANIZATIONS = gql`
+  query UserJoinedOrganizations($id: ID!) {
+    users(where: { id: $id }) {
+      createdOrganizations {
+        _id
+        name
+        description
+        image
+      }
+    }
+  }
+`;
+
+export const ORGANIZATION_ADMINS_LIST = gql`
+  query Organizations($id: ID!) {
+    organizations(id: $id) {
+      _id
+      admins {
+        _id
+        image
+        firstName
+        lastName
+        email
+      }
+    }
+  }
+`;
+
+/**
+ * @name PLUGIN_GET
+ * @description used to fetch list of plugins
+ */
+export const PLUGIN_GET = gql`
+  query getPluginList {
+    getPlugins {
+      _id
+      pluginName
+      pluginCreatedBy
+      pluginDesc
+      uninstalledOrgs
+    }
+  }
+`;
+export const ADVERTISEMENTS_GET = gql`
+  query getAdvertisement {
+    getAdvertisements {
+      _id
+      name
+      type
+      orgId
+      link
+      endDate
+      startDate
+    }
+  }
+`;
+export const ORGANIZATION_EVENTS_CONNECTION = gql`
+  query EventsByOrganizationConnection(
+    $organization_id: ID!
+    $title_contains: String
+    $description_contains: String
+    $location_contains: String
+    $first: Int
+    $skip: Int
+  ) {
+    eventsByOrganizationConnection(
+      where: {
+        organization_id: $organization_id
+        title_contains: $title_contains
+        description_contains: $description_contains
+        location_contains: $location_contains
+      }
+      first: $first
+      skip: $skip
+    ) {
+      _id
+      title
+      description
+      startDate
+      endDate
+      location
+      startTime
+      endTime
+      allDay
+      recurring
+      isPublic
+      isRegisterable
+      creator {
+        _id
+        firstName
+        lastName
+      }
+      attendees {
+        _id
+      }
+    }
+  }
+`;
+
+export const USER_TASKS_LIST = gql`
+  query User($id: ID!) {
+    user(id: $id) {
+      _id
+      assignedTasks {
+        _id
+        title
+        description
+        deadline
+        volunteers {
+          _id
+          firstName
+          lastName
+          email
+        }
+        createdAt
+        completed
+        event {
+          _id
+          title
+          organization {
+            _id
+            name
+            image
+          }
+        }
+        creator {
+          _id
+          firstName
+          lastName
+        }
+      }
+    }
+  }
+`;
+
+export const DIRECT_CHATS_LIST = gql`
+  query DirectChatsByUserID($id: ID!) {
+    directChatsByUserID(id: $id) {
+      _id
+      creator {
+        _id
+        firstName
+        lastName
+        email
+      }
+      messages {
+        _id
+        createdAt
+        messageContent
+        receiver {
+          _id
+          firstName
+          lastName
+          email
+        }
+        sender {
+          _id
+          firstName
+          lastName
+          email
+        }
+      }
+      organization {
+        _id
+        name
+      }
+      users {
+        _id
+        firstName
+        lastName
+        email
+        image
+      }
+    }
+  }
+`;
+
+export const IS_SAMPLE_ORGANIZATION_QUERY = gql`
+  query ($isSampleOrganizationId: ID!) {
+    isSampleOrganization(id: $isSampleOrganizationId)
+  }
+`;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1

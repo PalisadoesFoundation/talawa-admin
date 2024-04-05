@@ -69,13 +69,18 @@ describe('Testing User Password Update', () => {
         <I18nextProvider i18n={i18nForTest}>
           <UserPasswordUpdate {...props} />
         </I18nextProvider>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
 
     userEvent.type(
       screen.getByPlaceholderText(/Previous Password/i),
+<<<<<<< HEAD
       formData.previousPassword,
     );
     userEvent.type(
@@ -85,16 +90,34 @@ describe('Testing User Password Update', () => {
     userEvent.type(
       screen.getByPlaceholderText(/Confirm New Password/i),
       formData.confirmNewPassword,
+=======
+      formData.previousPassword
+    );
+    userEvent.type(
+      screen.getAllByPlaceholderText(/New Password/i)[0],
+      formData.newPassword
+    );
+    userEvent.type(
+      screen.getByPlaceholderText(/Confirm New Password/i),
+      formData.confirmNewPassword
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     userEvent.click(screen.getByText(/Save Changes/i));
 
     expect(screen.getByText(/Cancel/i)).toBeTruthy();
     expect(
+<<<<<<< HEAD
       screen.getByPlaceholderText(/Previous Password/i),
     ).toBeInTheDocument();
     expect(
       screen.getByPlaceholderText(/Confirm New Password/i),
+=======
+      screen.getByPlaceholderText(/Previous Password/i)
+    ).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText(/Confirm New Password/i)
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     ).toBeInTheDocument();
   });
 
@@ -104,14 +127,22 @@ describe('Testing User Password Update', () => {
         <I18nextProvider i18n={i18nForTest}>
           <UserPasswordUpdate {...props} />
         </I18nextProvider>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     userEvent.click(screen.getByText(/Save Changes/i));
 
     await wait();
     expect(mockToast.error).toHaveBeenCalledWith(
+<<<<<<< HEAD
       'The password field cannot be empty.',
+=======
+      'The password field cannot be empty.'
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
   });
 
@@ -121,13 +152,18 @@ describe('Testing User Password Update', () => {
         <I18nextProvider i18n={i18nForTest}>
           <UserPasswordUpdate {...props} />
         </I18nextProvider>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
 
     userEvent.type(
       screen.getByPlaceholderText(/Previous Password/i),
+<<<<<<< HEAD
       formData.previousPassword,
     );
     userEvent.type(
@@ -137,6 +173,17 @@ describe('Testing User Password Update', () => {
     userEvent.type(
       screen.getByPlaceholderText(/Confirm New Password/i),
       formData.confirmNewPassword,
+=======
+      formData.previousPassword
+    );
+    userEvent.type(
+      screen.getAllByPlaceholderText(/New Password/i)[0],
+      formData.wrongPassword
+    );
+    userEvent.type(
+      screen.getByPlaceholderText(/Confirm New Password/i),
+      formData.confirmNewPassword
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     userEvent.click(screen.getByText(/Save Changes/i));
@@ -144,7 +191,11 @@ describe('Testing User Password Update', () => {
     expect(screen.getByText(/Cancel/i)).toBeTruthy();
     await wait();
     expect(mockToast.error).toHaveBeenCalledWith(
+<<<<<<< HEAD
       'New and Confirm password do not match.',
+=======
+      'New and Confirm password do not match.'
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
   });
 });

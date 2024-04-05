@@ -13,10 +13,25 @@ export const MOCKS = [
     result: {
       data: {
         user: {
+<<<<<<< HEAD
+=======
+          _id: 'user1',
+          userType: 'SUPERADMIN',
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
           firstName: 'John',
           lastName: 'Doe',
           image: '',
           email: 'John_Does_Palasidoes@gmail.com',
+<<<<<<< HEAD
+=======
+          adminFor: [
+            {
+              _id: 1,
+              name: 'Palisadoes',
+              image: '',
+            },
+          ],
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         },
       },
     },
@@ -35,6 +50,7 @@ export const MOCKS = [
       data: {
         users: [
           {
+<<<<<<< HEAD
             user: {
               _id: 'user1',
               firstName: 'John',
@@ -185,6 +201,104 @@ export const MOCKS = [
               createdEvents: [],
               eventAdmin: [],
             },
+=======
+            _id: 'user1',
+            firstName: 'John',
+            lastName: 'Doe',
+            image: null,
+            email: 'john@example.com',
+            userType: 'SUPERADMIN',
+            adminApproved: true,
+            adminFor: [
+              {
+                _id: '123',
+              },
+            ],
+            createdAt: '20/06/2022',
+            organizationsBlockedBy: [
+              {
+                _id: 'xyz',
+                name: 'ABC',
+                image: null,
+                location: 'Jamaica',
+                createdAt: '20/06/2022',
+                creator: {
+                  _id: '123',
+                  firstName: 'John',
+                  lastName: 'Doe',
+                  image: null,
+                  email: 'john@example.com',
+                  createdAt: '20/06/2022',
+                },
+              },
+            ],
+            joinedOrganizations: [
+              {
+                _id: 'abc',
+                name: 'Joined Organization 1',
+                image: null,
+                location: 'Jamaica',
+                createdAt: '20/06/2022',
+                creator: {
+                  _id: '123',
+                  firstName: 'John',
+                  lastName: 'Doe',
+                  image: null,
+                  email: 'john@example.com',
+                  createdAt: '20/06/2022',
+                },
+              },
+            ],
+          },
+          {
+            _id: 'user2',
+            firstName: 'Jane',
+            lastName: 'Doe',
+            image: null,
+            email: 'john@example.com',
+            userType: 'SUPERADMIN',
+            adminApproved: true,
+            adminFor: [
+              {
+                _id: '123',
+              },
+            ],
+            createdAt: '20/06/2022',
+            organizationsBlockedBy: [
+              {
+                _id: '456',
+                name: 'ABC',
+                image: null,
+                location: 'Jamaica',
+                createdAt: '20/06/2022',
+                creator: {
+                  _id: '123',
+                  firstName: 'John',
+                  lastName: 'Doe',
+                  image: null,
+                  email: 'john@example.com',
+                  createdAt: '20/06/2022',
+                },
+              },
+            ],
+            joinedOrganizations: [
+              {
+                _id: '123',
+                name: 'Palisadoes',
+                image: null,
+                location: 'Jamaica',
+                createdAt: '20/06/2022',
+                creator: {
+                  _id: '123',
+                  firstName: 'John',
+                  lastName: 'Doe',
+                  image: null,
+                  email: 'john@example.com',
+                  createdAt: '20/06/2022',
+                },
+              },
+            ],
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
           },
         ],
       },
@@ -222,6 +336,7 @@ export const MOCKS = [
               },
             ],
             createdAt: '09/11/2001',
+<<<<<<< HEAD
             address: {
               city: 'Kingston',
               countryCode: 'JM',
@@ -467,6 +582,9 @@ export const MOCKS2 = [
               sortingCode: 'ABC-123',
               state: 'Kingston Parish',
             },
+=======
+            location: 'Twin Tower',
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
           },
         ],
       },

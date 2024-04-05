@@ -44,6 +44,7 @@ describe('Testing Average Rating Card', () => {
             <AverageRating {...props} />
           </I18nextProvider>
         </Provider>
+<<<<<<< HEAD
       </BrowserRouter>,
     );
 
@@ -53,6 +54,17 @@ describe('Testing Average Rating Card', () => {
 
     await waitFor(() =>
       expect(queryByText('Rated 5.00 / 5')).toBeInTheDocument(),
+=======
+      </BrowserRouter>
+    );
+
+    await waitFor(() =>
+      expect(queryByText('Average Review Score')).toBeInTheDocument()
+    );
+
+    await waitFor(() =>
+      expect(queryByText('Rated 5.00 / 5')).toBeInTheDocument()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
   });
 });

@@ -13,6 +13,10 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import OrganizationSidebar from './OrganizationSidebar';
+<<<<<<< HEAD
+=======
+import * as getOrganizationId from 'utils/getOrganizationId';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 const MOCKS = [
   {
@@ -65,7 +69,10 @@ const MOCKS = [
               image: null,
               email: 'noble@gmail.com',
               createdAt: '2023-03-02T03:22:08.101Z',
+<<<<<<< HEAD
               userType: 'User',
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
             },
             {
               _id: '64001660a711c62d5b4076a3',
@@ -74,7 +81,10 @@ const MOCKS = [
               image: 'mockImage',
               email: 'noble@gmail.com',
               createdAt: '2023-03-02T03:22:08.101Z',
+<<<<<<< HEAD
               userType: 'User',
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
             },
           ],
         },
@@ -92,6 +102,7 @@ async function wait(ms = 100): Promise<void> {
     });
   });
 }
+<<<<<<< HEAD
 let mockId = '';
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -100,6 +111,19 @@ jest.mock('react-router-dom', () => ({
 
 describe('Testing OrganizationSidebar Component [User Portal]', () => {
   test('Component should be rendered properly when members and events list is empty', async () => {
+=======
+
+describe('Testing OrganizationSidebar Component [User Portal]', () => {
+  jest.mock('utils/getOrganizationId');
+
+  test('Component should be rendered properly when members and events list is empty', async () => {
+    const getOrganizationIdSpy = jest
+      .spyOn(getOrganizationId, 'default')
+      .mockImplementation(() => {
+        return '';
+      });
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -109,17 +133,34 @@ describe('Testing OrganizationSidebar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
 
+<<<<<<< HEAD
+=======
+    expect(getOrganizationIdSpy).toHaveBeenCalled();
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     expect(screen.queryByText('No Members to show')).toBeInTheDocument();
     expect(screen.queryByText('No Events to show')).toBeInTheDocument();
   });
 
   test('Component should be rendered properly when events list is not empty', async () => {
+<<<<<<< HEAD
     mockId = 'events';
+=======
+    const getOrganizationIdSpy = jest
+      .spyOn(getOrganizationId, 'default')
+      .mockImplementation(() => {
+        return 'events';
+      });
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -129,17 +170,34 @@ describe('Testing OrganizationSidebar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
     );
 
     await wait();
+=======
+      </MockedProvider>
+    );
+
+    await wait();
+    expect(getOrganizationIdSpy).toHaveBeenCalled();
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     expect(screen.queryByText('No Members to show')).toBeInTheDocument();
     expect(screen.queryByText('No Events to show')).not.toBeInTheDocument();
     expect(screen.queryByText('Event')).toBeInTheDocument();
   });
 
   test('Component should be rendered properly when members list is not empty', async () => {
+<<<<<<< HEAD
     mockId = 'members';
+=======
+    const getOrganizationIdSpy = jest
+      .spyOn(getOrganizationId, 'default')
+      .mockImplementation(() => {
+        return 'members';
+      });
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -149,10 +207,18 @@ describe('Testing OrganizationSidebar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
     );
 
     await wait();
+=======
+      </MockedProvider>
+    );
+
+    await wait();
+    expect(getOrganizationIdSpy).toHaveBeenCalled();
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     expect(screen.queryByText('No Members to show')).not.toBeInTheDocument();
     expect(screen.queryByText('No Events to show')).toBeInTheDocument();
   });

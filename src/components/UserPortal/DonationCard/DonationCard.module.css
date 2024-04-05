@@ -1,4 +1,5 @@
 .mainContainer {
+<<<<<<< HEAD
   width: 49%;
   height: 8rem;
   min-width: max-content;
@@ -28,11 +29,27 @@
   border-radius: 5px;
 }
 
+=======
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+  cursor: pointer;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 2px 2px 8px 0px #c8c8c8;
+  overflow: hidden;
+}
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 .personDetails {
   display: flex;
   flex-direction: column;
   justify-content: center;
+<<<<<<< HEAD
   min-width: max-content;
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 
 .personImage {

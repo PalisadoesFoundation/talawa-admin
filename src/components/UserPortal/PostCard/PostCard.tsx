@@ -17,8 +17,45 @@ import { useTranslation } from 'react-i18next';
 import SendIcon from '@mui/icons-material/Send';
 import { errorHandler } from 'utils/errorHandler';
 import CommentCard from '../CommentCard/CommentCard';
+<<<<<<< HEAD
 import useLocalStorage from 'utils/useLocalstorage';
 import type { InterfacePostCard } from 'utils/interfaces';
+=======
+
+interface InterfacePostCardProps {
+  id: string;
+  creator: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    id: string;
+  };
+  image: string;
+  video: string;
+  text: string;
+  title: string;
+  likeCount: number;
+  commentCount: number;
+  comments: {
+    creator: {
+      _id: string;
+      firstName: string;
+      lastName: string;
+      email: string;
+    };
+    likeCount: number;
+    likedBy: {
+      id: string;
+    }[];
+    text: string;
+  }[];
+  likedBy: {
+    firstName: string;
+    lastName: string;
+    id: string;
+  }[];
+}
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 interface InterfaceCommentCardProps {
   id: string;
@@ -33,19 +70,29 @@ interface InterfaceCommentCardProps {
     id: string;
   }[];
   text: string;
+<<<<<<< HEAD
 
   handleLikeComment: (commentId: string) => void;
   handleDislikeComment: (commentId: string) => void;
 }
 
 export default function postCard(props: InterfacePostCard): JSX.Element {
+=======
+}
+
+export default function postCard(props: InterfacePostCardProps): JSX.Element {
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   const { t } = useTranslation('translation', {
     keyPrefix: 'postCard',
   });
 
+<<<<<<< HEAD
   const { getItem } = useLocalStorage();
 
   const userId = getItem('userId');
+=======
+  const userId = localStorage.getItem('userId');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   const likedByUser = props.likedBy.some((likedBy) => likedBy.id === userId);
   const [comments, setComments] = React.useState(props.comments);
   const [numComments, setNumComments] = React.useState(props.commentCount);
@@ -101,12 +148,17 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
   };
 
   const handleCommentInput = (
+<<<<<<< HEAD
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+=======
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   ): void => {
     const comment = event.target.value;
     setCommentInput(comment);
   };
 
+<<<<<<< HEAD
   const handleLikeComment = (commentId: string): void => {
     const updatedComments = comments.map((comment) => {
       if (
@@ -141,6 +193,8 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
     setComments(updatedComments);
   };
 
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   const createComment = async (): Promise<void> => {
     try {
       const { data: createEventData } = await create({
@@ -166,9 +220,12 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
           likeCount: createEventData.createComment.likeCount,
           likedBy: createEventData.createComment.likedBy,
           text: createEventData.createComment.text,
+<<<<<<< HEAD
 
           handleLikeComment: handleLikeComment,
           handleDislikeComment: handleDislikeComment,
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         };
 
         setComments([...comments, newComment]);
@@ -180,7 +237,11 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
   };
 
   return (
+<<<<<<< HEAD
     <div data-testid="postCardContainer">
+=======
+    <>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       <Card className="my-3">
         <Card.Header>
           <div className={`${styles.cardHeader}`}>
@@ -255,7 +316,11 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
           {numComments ? (
             comments.map((comment: any, index: any) => {
               const cardProps: InterfaceCommentCardProps = {
+<<<<<<< HEAD
                 id: comment._id,
+=======
+                id: comment.id,
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                 creator: {
                   id: comment.creator.id,
                   firstName: comment.creator.firstName,
@@ -265,8 +330,11 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
                 likeCount: comment.likeCount,
                 likedBy: comment.likedBy,
                 text: comment.text,
+<<<<<<< HEAD
                 handleLikeComment: handleLikeComment,
                 handleDislikeComment: handleDislikeComment,
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
               };
 
               return <CommentCard key={index} {...cardProps} />;
@@ -298,6 +366,10 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
           </InputGroup>
         </Modal.Body>
       </Modal>
+<<<<<<< HEAD
     </div>
+=======
+    </>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   );
 }

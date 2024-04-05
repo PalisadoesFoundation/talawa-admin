@@ -47,7 +47,11 @@ export class StaticMockLink extends ApolloLink {
       this._normalizeMockedResponse(mockedResponse);
     const key = requestToKey(
       normalizedMockedResponse.request,
+<<<<<<< HEAD
       this.addTypename,
+=======
+      this.addTypename
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
     let mockedResponses = this._mockedResponsesByKey[key];
     if (!mockedResponses) {
@@ -70,7 +74,11 @@ export class StaticMockLink extends ApolloLink {
           return true;
         }
         return false;
+<<<<<<< HEAD
       },
+=======
+      }
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     let configError: Error;
@@ -78,8 +86,13 @@ export class StaticMockLink extends ApolloLink {
     if (!response || typeof responseIndex === 'undefined') {
       configError = new Error(
         `No more mocked responses for the query: ${print(
+<<<<<<< HEAD
           operation.query,
         )}, variables: ${JSON.stringify(operation.variables)}`,
+=======
+          operation.query
+        )}, variables: ${JSON.stringify(operation.variables)}`
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       );
     } else {
       const { newData } = response;
@@ -90,12 +103,17 @@ export class StaticMockLink extends ApolloLink {
 
       if (!response.result && !response.error) {
         configError = new Error(
+<<<<<<< HEAD
           `Mocked response should contain either result or error: ${key}`,
+=======
+          `Mocked response should contain either result or error: ${key}`
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         );
       }
     }
 
     return new Observable((observer) => {
+<<<<<<< HEAD
       const timer = setTimeout(
         () => {
           if (configError) {
@@ -128,6 +146,37 @@ export class StaticMockLink extends ApolloLink {
         },
         (response && response.delay) || 0,
       );
+=======
+      const timer = setTimeout(() => {
+        if (configError) {
+          try {
+            // The onError function can return false to indicate that
+            // configError need not be passed to observer.error. For
+            // example, the default implementation of onError calls
+            // observer.error(configError) and then returns false to
+            // prevent this extra (harmless) observer.error call.
+            if (this.onError(configError, observer) !== false) {
+              throw configError;
+            }
+          } catch (error) {
+            observer.error(error);
+          }
+        } else if (response) {
+          if (response.error) {
+            observer.error(response.error);
+          } else {
+            if (response.result) {
+              observer.next(
+                typeof response.result === 'function'
+                  ? (response.result as ResultFunction<FetchResult>)()
+                  : response.result
+              );
+            }
+            observer.complete();
+          }
+        }
+      }, (response && response.delay) || 0);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
       return () => {
         clearTimeout(timer);
@@ -136,6 +185,7 @@ export class StaticMockLink extends ApolloLink {
   }
 
   private _normalizeMockedResponse(
+<<<<<<< HEAD
     mockedResponse: MockedResponse,
   ): MockedResponse {
     const newMockedResponse = cloneDeep(mockedResponse);
@@ -144,6 +194,17 @@ export class StaticMockLink extends ApolloLink {
     );
     invariant(queryWithoutConnection, 'query is required');
     newMockedResponse.request.query = queryWithoutConnection;
+=======
+    mockedResponse: MockedResponse
+  ): MockedResponse {
+    const newMockedResponse = cloneDeep(mockedResponse);
+    const queryWithoutConnection = removeConnectionDirectiveFromDocument(
+      newMockedResponse.request.query
+    );
+    invariant(queryWithoutConnection, 'query is required');
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    newMockedResponse.request.query = queryWithoutConnection!;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     const query = removeClientSetsFromDocument(newMockedResponse.request.query);
     if (query) {
       newMockedResponse.request.query = query;

@@ -18,7 +18,10 @@ import { ToastContainer } from 'react-toastify';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
+<<<<<<< HEAD
 
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 import BlockUser from './BlockUser';
 
 let userQueryCalled = false;
@@ -325,18 +328,25 @@ async function wait(ms = 500): Promise<void> {
   });
 }
 
+<<<<<<< HEAD
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useParams: () => ({ orgId: 'orgid' }),
 }));
 
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 describe('Testing Block/Unblock user screen', () => {
   beforeEach(() => {
     userQueryCalled = false;
   });
 
   test('Components should be rendered properly', async () => {
+<<<<<<< HEAD
     window.location.assign('/blockuser/orgid');
+=======
+    window.location.assign('/blockuser/id=orgid');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
     render(
       <MockedProvider addTypename={true} link={link}>
@@ -347,18 +357,32 @@ describe('Testing Block/Unblock user screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
 
     expect(screen.getByText('Search By First Name')).toBeInTheDocument();
+<<<<<<< HEAD
 
     expect(window.location).toBeAt('/blockuser/orgid');
   });
 
   test('Testing block user functionality', async () => {
     window.location.assign('/blockuser/orgid');
+=======
+    expect(screen.getByText('List of Users who spammed')).toBeInTheDocument();
+
+    expect(window.location).toBeAt('/blockuser/id=orgid');
+  });
+
+  test('Testing block user functionality', async () => {
+    window.location.assign('/blockuser/id=orgid');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -369,6 +393,7 @@ describe('Testing Block/Unblock user screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
     );
 
@@ -376,6 +401,11 @@ describe('Testing Block/Unblock user screen', () => {
       userEvent.click(screen.getByTestId('userFilter'));
     });
     userEvent.click(screen.getByTestId('showMembers'));
+=======
+      </MockedProvider>
+    );
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     await wait();
 
     expect(screen.getByTestId('unBlockUser123')).toBeInTheDocument();
@@ -387,11 +417,19 @@ describe('Testing Block/Unblock user screen', () => {
     expect(screen.getByTestId('blockUser123')).toBeInTheDocument();
     expect(screen.getByTestId('unBlockUser456')).toBeInTheDocument();
 
+<<<<<<< HEAD
     expect(window.location).toBeAt('/blockuser/orgid');
   });
 
   test('Testing unblock user functionality', async () => {
     window.location.assign('/blockuser/orgid');
+=======
+    expect(window.location).toBeAt('/blockuser/id=orgid');
+  });
+
+  test('Testing unblock user functionality', async () => {
+    window.location.assign('/blockuser/id=orgid');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -402,12 +440,17 @@ describe('Testing Block/Unblock user screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
     );
     await act(async () => {
       userEvent.click(screen.getByTestId('userFilter'));
     });
     userEvent.click(screen.getByTestId('showMembers'));
+=======
+      </MockedProvider>
+    );
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
     await wait();
 
@@ -420,11 +463,19 @@ describe('Testing Block/Unblock user screen', () => {
     expect(screen.getByTestId('blockUser123')).toBeInTheDocument();
     expect(screen.getByTestId('unBlockUser456')).toBeInTheDocument();
 
+<<<<<<< HEAD
     expect(window.location).toBeAt('/blockuser/orgid');
   });
 
   test('Testing First Name Filter', async () => {
     window.location.assign('/blockuser/orgid');
+=======
+    expect(window.location).toBeAt('/blockuser/id=orgid');
+  });
+
+  test('Testing First Name Filter', async () => {
+    window.location.assign('/blockuser/id=orgid');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -435,37 +486,58 @@ describe('Testing Block/Unblock user screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
     );
     await act(async () => {
       userEvent.click(screen.getByTestId('userFilter'));
     });
     userEvent.click(screen.getByTestId('showMembers'));
+=======
+      </MockedProvider>
+    );
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
     await wait();
 
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(screen.getByText('Sam Smith')).toBeInTheDocument();
 
+<<<<<<< HEAD
+=======
+    const firstNameInput = screen.getByPlaceholderText(/Search by First Name/i);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     // Open Dropdown
     await act(async () => {
       userEvent.click(screen.getByTestId('nameFilter'));
     });
     // Select option and enter first name
     userEvent.click(screen.getByTestId('searchByFirstName'));
+<<<<<<< HEAD
     const firstNameInput = screen.getByPlaceholderText(/Search by First Name/i);
     userEvent.type(firstNameInput, 'john{enter}');
+=======
+    userEvent.type(firstNameInput, 'john');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
     await wait(700);
 
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(screen.queryByText('Sam Smith')).not.toBeInTheDocument();
 
+<<<<<<< HEAD
     expect(window.location).toBeAt('/blockuser/orgid');
   });
 
   test('Testing Last Name Filter', async () => {
     window.location.assign('/blockuser/orgid');
+=======
+    expect(window.location).toBeAt('/blockuser/id=orgid');
+  });
+
+  test('Testing Last Name Filter', async () => {
+    window.location.assign('/blockuser/id=orgid');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -476,6 +548,7 @@ describe('Testing Block/Unblock user screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
     );
 
@@ -484,6 +557,11 @@ describe('Testing Block/Unblock user screen', () => {
     });
     userEvent.click(screen.getByTestId('showMembers'));
 
+=======
+      </MockedProvider>
+    );
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     await wait();
 
     expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -496,18 +574,30 @@ describe('Testing Block/Unblock user screen', () => {
     // Select option and enter last name
     userEvent.click(screen.getByTestId('searchByLastName'));
     const lastNameInput = screen.getByPlaceholderText(/Search by Last Name/i);
+<<<<<<< HEAD
     userEvent.type(lastNameInput, 'doe{enter}');
+=======
+    userEvent.type(lastNameInput, 'doe');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
     await wait(700);
 
     expect(lastNameInput).toHaveValue('doe');
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(screen.queryByText('Sam Smith')).not.toBeInTheDocument();
+<<<<<<< HEAD
     expect(window.location).toBeAt('/blockuser/orgid');
   });
 
   test('Testing No Spammers Present', async () => {
     window.location.assign('/blockuser/orgid');
+=======
+    expect(window.location).toBeAt('/blockuser/id=orgid');
+  });
+
+  test('Testing No Spammers Present', async () => {
+    window.location.assign('/blockuser/id=orgid');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     render(
       <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
@@ -517,16 +607,28 @@ describe('Testing Block/Unblock user screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
     expect(screen.getByText(/No spammer found/i)).toBeInTheDocument();
+<<<<<<< HEAD
     expect(window.location).toBeAt('/blockuser/orgid');
   });
 
   test('Testing All Members', async () => {
     window.location.assign('/blockuser/orgid');
+=======
+    expect(window.location).toBeAt('/blockuser/id=orgid');
+  });
+
+  test('Testing All Members', async () => {
+    window.location.assign('/blockuser/id=orgid');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -538,7 +640,11 @@ describe('Testing Block/Unblock user screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
     await wait();
     await act(async () => {
@@ -552,11 +658,19 @@ describe('Testing Block/Unblock user screen', () => {
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(screen.getByText('Sam Smith')).toBeInTheDocument();
 
+<<<<<<< HEAD
     expect(window.location).toBeAt('/blockuser/orgid');
   });
 
   test('Testing Blocked Users', async () => {
     window.location.assign('/blockuser/orgid');
+=======
+    expect(window.location).toBeAt('/blockuser/id=orgid');
+  });
+
+  test('Testing Blocked Users', async () => {
+    window.location.assign('/blockuser/id=orgid');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -568,7 +682,11 @@ describe('Testing Block/Unblock user screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await act(async () => {
@@ -581,11 +699,19 @@ describe('Testing Block/Unblock user screen', () => {
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(screen.queryByText('Sam Smith')).not.toBeInTheDocument();
 
+<<<<<<< HEAD
     expect(window.location).toBeAt('/blockuser/orgid');
   });
 
   test('Testing table data getting rendered', async () => {
     window.location.assign('/orglist/orgid');
+=======
+    expect(window.location).toBeAt('/blockuser/id=orgid');
+  });
+
+  test('Testing table data getting rendered', async () => {
+    window.location.assign('/orglist/id=orgid');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     const link = new StaticMockLink(MOCKS, true);
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -596,23 +722,36 @@ describe('Testing Block/Unblock user screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
     );
     await act(async () => {
       userEvent.click(screen.getByTestId('userFilter'));
     });
     userEvent.click(screen.getByTestId('showMembers'));
+=======
+      </MockedProvider>
+    );
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
     await wait();
 
     expect(screen.getByTestId(/userList/)).toBeInTheDocument();
+<<<<<<< HEAD
     expect(screen.getAllByText('Block/Unblock')).toHaveLength(1);
+=======
+    expect(screen.getAllByText('Block/Unblock')).toHaveLength(2);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(screen.getByText('Sam Smith')).toBeInTheDocument();
   });
 
   test('Testing No Results Found', async () => {
+<<<<<<< HEAD
     window.location.assign('/blockuser/orgid');
+=======
+    window.location.assign('/blockuser/id=orgid');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     render(
       <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
@@ -622,11 +761,16 @@ describe('Testing Block/Unblock user screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     const input = screen.getByPlaceholderText('Search By First Name');
     await act(async () => {
+<<<<<<< HEAD
       userEvent.type(input, 'Peter{enter}');
     });
     await wait(700);
@@ -664,5 +808,14 @@ describe('Testing Block/Unblock user screen', () => {
     userEvent.clear(searchBar);
     userEvent.type(searchBar, '');
     userEvent.click(searchBtn);
+=======
+      userEvent.type(input, 'Peter');
+    });
+    await wait(700);
+    expect(
+      screen.getByText(`No results found for "Peter"`)
+    ).toBeInTheDocument();
+    expect(window.location).toBeAt('/blockuser/id=orgid');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   });
 });

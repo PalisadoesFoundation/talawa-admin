@@ -4,6 +4,7 @@ This document provides instructions on how to set up and start a running instanc
 
 # Table of Contents
 
+<<<<<<< HEAD
 <!-- toc -->
 
 - [Prerequisites for Developers](#prerequisites-for-developers)
@@ -18,6 +19,20 @@ This document provides instructions on how to set up and start a running instanc
   - [Setting up REACT_APP_TALAWA_URL in .env file](#setting-up-react_app_talawa_url-in-env-file)
   - [Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file](#setting-up-react_app_recaptcha_site_key-in-env-file)
   - [Setting up Compiletime and Runtime logs](#setting-up-compiletime-and-runtime-logs)
+=======
+- [Talawa-Admin Installation](#talawa-admin-installation)
+- [Table of Contents](#table-of-contents)
+- [Prerequisites for Developers](#prerequisites-for-developers)
+- [Installation](#installation)
+  - [Clone This Repository](#clone-this-repository)
+  - [Change Directory into the Cloned Repo](#change-directory-into-the-cloned-repo)
+  - [Setting up NPM](#setting-up-npm)
+  - [Installing required packages/dependencies](#installing-required-packagesdependencies)
+- [Configuration](#configuration)
+  - [Creating .env file](#creating-env-file)
+  - [Setting up REACT\_APP\_TALAWA\_URL in .env file](#setting-up-react_app_talawa_url-in-env-file)
+  - [Setting up REACT\_APP\_RECAPTCHA\_SITE\_KEY in .env file](#setting-up-react_app_recaptcha_site_key-in-env-file)
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 - [Post Configuration Steps](#post-configuration-steps)
   - [Running Talawa-Admin](#running-talawa-admin)
   - [Accessing Talawa-Admin](#accessing-talawa-admin)
@@ -31,6 +46,7 @@ This document provides instructions on how to set up and start a running instanc
       - [pre-commit hook](#pre-commit-hook)
       - [post-merge hook](#post-merge-hook)
 
+<<<<<<< HEAD
 <!-- tocstop -->
 
 # Prerequisites for Developers
@@ -38,12 +54,19 @@ This document provides instructions on how to set up and start a running instanc
 We recommend that you to follow these steps before beginning development work on Talawa-Admin:
 
 1. You need to have `nodejs` installed in your machine. We recommend using Node version greater than 20.0.0. You can install it either through [nvm](https://github.com/nvm-sh/nvm) (Node Version Manager) or by visiting the official [Nodejs](https://nodejs.org/download/release/v16.20.2/) website.
+=======
+# Prerequisites for Developers
+
+We recommend that you follow these steps before beginning development work on Talawa-Admin:
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 1. [Talawa-API](https://github.com/PalisadoesFoundation/talawa-api): (**This is mandatory**) The API system that the mobile app uses for accessing data. Setup your own **_local instance_**
 1. [Talawa](https://github.com/PalisadoesFoundation/talawa): (Optional) The mobile app that people will use to access Talawa's features. This may be useful if you need to verify administrative features you have added or modified.
 
 The INSTALLATION.md files in both repositories show you how. The Talawa-API INSTALLATION.md will also show you the Organization URL to use access Talawa Admin.
 
 # Installation
+<<<<<<< HEAD
 
 You will need to have copies of your code on your local system. Here's how to do that.
 
@@ -84,12 +107,39 @@ npm install -g typescript
 ```
 
 For more details please refer to the installation guidelines provided in the [official docs](https://www.typescriptlang.org/download).
+=======
+You will need to have copies of your code on your local system. Here's how to do that.
+## Clone This Repository
+
+First you need a local copy of `talawa-admin`. Run the following command in the directory of choice on your local system.
+
+```
+git clone https://github.com/PalisadoesFoundation/talawa-admin
+```
+
+This will download a local copy of `talawa-admin` in that directory.
+
+## Change Directory into the Cloned Repo
+
+Right after cloning the repo you can change the directory of your current `terminal(shell)` to the root directory of cloned repository using this command:
+
+```
+cd talawa-admin
+```
+
+**NOTE:** `All the commands we're going to execute in the following instructions will assume you are in the root directory of the cloned talawa-admin project. If you fail to do so, the commands will not work.`
+
+## Setting up NPM
+
+If you've followed the previous steps you should have already set up node.js on your system. [Click here](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) for the official setup guide for npm.
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 ## Installing required packages/dependencies
 
 Run the following command to install the packages and dependencies required by `talawa-admin`:
 
 ```
+<<<<<<< HEAD
 npm install
 ```
 
@@ -105,6 +155,12 @@ npm run setup
 
 All the options in "setup" can be done manually as well and here's how to do it. - [Creating .env file](#creating-env-file)
 
+=======
+npm install --legacy-peer-deps
+```
+# Configuration
+It's important to configure Talawa-Admin. Here's how to do it.
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 ## Creating .env file
 
 A file named .env is required in the root directory of talawa-admin for storing environment variables used at runtime. It is not a part of the repo and you will have to create it. For a sample of `.env` file there is a file named `.env.example` in the root directory. Create a new `.env` file by copying the contents of the `.env.example` into `.env` file. Use this command:
@@ -115,6 +171,7 @@ cp .env.example .env
 
 This `.env` file must be populated with the following environment variables for `talawa-admin` to work:
 
+<<<<<<< HEAD
 | Variable                     | Description                                       |
 | ---------------------------- | ------------------------------------------------- |
 | PORT                         | Custom port for Talawa-Admin development purposes |
@@ -131,6 +188,19 @@ Add a custom port number for Talawa-Admin development purposes to the variable n
 ## Setting up REACT_APP_TALAWA_URL in .env file
 
 Add the endpoint for accessing talawa-api graphql service to the variable named `REACT_APP_TALAWA_URL` in the `.env` file.
+=======
+| Variable                     | Description                                 |
+| ---------------------------- | ------------------------------------------- |
+| REACT_APP_TALAWA_URL         | URL endpoint for talawa-api graphql service |
+| REACT_APP_USE_RECAPTCHA      | Whether you want to use reCAPTCHA or not    |
+| REACT_APP_RECAPTCHA_SITE_KEY | Site key for authentication using reCAPTCHA |
+
+Follow the instructions from section [Setting up REACT_APP_TALAWA_URL in .env file](#setting-up-REACT_APP_TALAWA_URL-in-env-file) up to and including section [Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file](#setting-up-REACT_APP_RECAPTCHA_SITE_KEY-in-env-file) to set up these environment variables.
+
+## Setting up REACT_APP_TALAWA_URL in .env file
+
+Add the endpoint for accessing talawa-api graphql service to the variable named `REACT_APP_TALAWA_URL` in the `.env` file. 
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 ```
 REACT_APP_TALAWA_URL="http://API-IP-ADRESS:4000/graphql/"
@@ -142,6 +212,7 @@ If you are a software developer working on your local system, then the URL would
 REACT_APP_TALAWA_URL="http://localhost:4000/graphql/"
 ```
 
+<<<<<<< HEAD
 If you are trying to access Talawa Admin from a remote host with the API URL containing "localhost", You will have to change the API URL to
 
 ```
@@ -149,6 +220,9 @@ REACT_APP_TALAWA_URL="http://YOUR-REMOTE-ADDRESS:4000/graphql/"
 ```
 
 For additional details, please refer  the `How to Access the Talawa-API URL` section in the INSTALLATION.md file found in the [Talawa-API repo](https://github.com/PalisadoesFoundation/talawa-api).
+=======
+For additional details, please refer to to the `How to Access the Talawa-API URL` section in the INSTALLATION.md file found in the [Talawa-API repo](https://github.com/PalisadoesFoundation/talawa-api).
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 ## Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file
 
@@ -156,7 +230,11 @@ You may not want to setup reCAPTCHA since the project will still work. Moreover,
 
 Just skip to the [Post Configuration Steps](#post-configuration-steps) if you don't want to set it up. Else, read the following steps.
 
+<<<<<<< HEAD
 If you want to setup Google reCAPTCHA now, you may refer to the `RECAPTCHA` section in the INSTALLATION.md file found in [Talawa-API repo](https://github.com/PalisadoesFoundation/talawa-api).
+=======
+If you want to setup Google reCAPTCHA now, you may refer to to the `RECAPTCHA` section in the INSTALLATION.md file found in [Talawa-API repo](https://github.com/PalisadoesFoundation/talawa-api).
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 `Talawa-admin` needs the `reCAPTCHA site key` for the `reCAPTCHA` service you set up during `talawa-api` installation as shown in this screenshot:
 
@@ -168,12 +246,16 @@ Copy/paste this `reCAPTCHA site key` to the variable named `REACT_APP_RECAPTCHA_
 REACT_APP_RECAPTCHA_SITE_KEY="this_is_the_recaptcha_key"
 ```
 
+<<<<<<< HEAD
 ## Setting up Compiletime and Runtime logs
 
 Set the `ALLOW_LOGS` to "YES" if you want warnings , info and error messages in your console or leave it blank if you dont need them or want to keep the console clean
 
 # Post Configuration Steps
 
+=======
+# Post Configuration Steps
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 It's now time to start Talawa-Admin and get it running
 
 ## Running Talawa-Admin
@@ -186,6 +268,7 @@ npm run serve
 
 ## Accessing Talawa-Admin
 
+<<<<<<< HEAD
 By default `talawa-admin` runs on port `4321` on your system's localhost. It is available on the following endpoint:
 
 ```
@@ -200,16 +283,31 @@ http://localhost:${{customPort}}/
 
 Replace `${{customPort}}` with the actual custom port number you have configured in your `.env` file.
 
+=======
+By default `talawa-admin` runs on port `3000` on your system's localhost. It is available on the following endpoint:
+
+```
+http://localhost:3000/
+```
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 ## Talawa-Admin Registration
 
 The first time you navigate to the running talawa-admin's website you'll land at talawa-admin registration page. Sign up using whatever credentials you want and create the account. Make sure to remember the email and password you entered because they'll be used to sign you in later on.
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 ## Talawa-Admin Login
 
 Now sign in to talawa-admin using the `email` and `password` you used to sign up.
 
 # Testing
+<<<<<<< HEAD
 
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 It is important to test our code. If you are a contributor, please follow these steps.
 
 ## Running tests
@@ -233,6 +331,10 @@ You don't need to re-run the `npm run jest-preview` command each time, simply ru
 
 ![Debugging Test Demo](./public/images/jest-preview.webp)
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 ## Linting code files
 
 You can lint your code files using this command:
@@ -243,16 +345,29 @@ npm run lint:fix
 
 ## Husky for Git Hooks
 
+<<<<<<< HEAD
 We are using the package `Husky` to run git hooks that run according to different git workflows.
 
 #### pre-commit hook
 
 We run a pre-commit hook which automatically runs code quality checks each time you make a commit and also fixes some of the issues. This way you don't have to run them manually each time.
 
+=======
+
+We are using the package `Husky` to run git hooks that run according to different git workflows.
+
+<br/>
+
+#### pre-commit hook
+We run a pre-commit hook which automatically runs code quality checks each time you make a commit and also fixes some of the issues. This way you don't have to run them manually each time.
+
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 If you don't want these pre-commit checks running on each commit, you can manually opt out of it using the `--no-verify` flag with your commit message as shown:-
 
         git commit -m "commit message" --no-verify
 
+<<<<<<< HEAD
 #### post-merge hook
 
 We are also running a post-merge(post-pull) hook which will automatically run "npm install" only if there is any change made to pakage.json file so that the developer has all the required dependencies when pulling files from remote.
@@ -262,3 +377,19 @@ If you don't want this hook to run, you can manually opt out of this using the `
         git pull --no-verify
 
 <br/>
+=======
+<br/>
+
+
+#### post-merge hook
+
+We are also running a post-merge(post-pull) hook which will automatically run "npm install --legacy-peer-deps" only if there is any change made to pakage.json file so that the developer has all the required dependencies when pulling files from remote.
+
+
+If you don't want this hook to run, you can manually opt out of this using the `no verify` flag while using the merge command(git pull):
+
+        git pull --no-verify  
+
+<br/>
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1

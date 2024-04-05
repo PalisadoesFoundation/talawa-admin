@@ -1,5 +1,9 @@
 import React from 'react';
+<<<<<<< HEAD
 import { act, fireEvent, render, screen } from '@testing-library/react';
+=======
+import { act, render } from '@testing-library/react';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 
@@ -9,6 +13,7 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import OrganizationCard from './OrganizationCard';
+<<<<<<< HEAD
 import {
   USER_JOINED_ORGANIZATIONS,
   USER_ORGANIZATION_CONNECTION,
@@ -148,6 +153,10 @@ const MOCKS = [
 ];
 
 const link = new StaticMockLink(MOCKS, true);
+=======
+
+const link = new StaticMockLink([], true);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -162,6 +171,7 @@ let props = {
   name: 'organizationName',
   image: '',
   description: 'organizationDescription',
+<<<<<<< HEAD
   admins: [
     {
       id: '123',
@@ -185,6 +195,8 @@ let props = {
       },
     },
   ],
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 };
 
 describe('Testing OrganizationCard Component [User Portal]', () => {
@@ -198,7 +210,11 @@ describe('Testing OrganizationCard Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -219,11 +235,16 @@ describe('Testing OrganizationCard Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
   });
+<<<<<<< HEAD
 
   test('Send membership request', async () => {
     props = {
@@ -310,4 +331,6 @@ describe('Testing OrganizationCard Component [User Portal]', () => {
 
     fireEvent.click(screen.getByTestId('withdrawBtn'));
   });
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 });

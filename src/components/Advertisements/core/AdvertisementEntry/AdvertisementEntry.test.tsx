@@ -1,5 +1,10 @@
 import React from 'react';
+<<<<<<< HEAD
 import { render, fireEvent, waitFor, screen } from '@testing-library/react';
+=======
+import { render } from '@testing-library/react';
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 import {
   ApolloClient,
   ApolloProvider,
@@ -7,23 +12,34 @@ import {
   ApolloLink,
   HttpLink,
 } from '@apollo/client';
+<<<<<<< HEAD
 import type { NormalizedCacheObject } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
 import AdvertisementEntry from './AdvertisementEntry';
 import AdvertisementRegister from '../AdvertisementRegister/AdvertisementRegister';
+=======
+
+import type { NormalizedCacheObject } from '@apollo/client';
+import { BrowserRouter } from 'react-router-dom';
+import AdvertisementEntry from './AdvertisementEntry';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { BACKEND_URL } from 'Constant/constant';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
+<<<<<<< HEAD
 import dayjs from 'dayjs';
 import useLocalStorage from 'utils/useLocalstorage';
 
 const { getItem } = useLocalStorage();
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 const httpLink = new HttpLink({
   uri: BACKEND_URL,
   headers: {
+<<<<<<< HEAD
     authorization: 'Bearer ' + getItem('token') || '',
   },
 });
@@ -34,10 +50,17 @@ const translations = JSON.parse(
   ),
 );
 
+=======
+    authorization: 'Bearer ' + localStorage.getItem('token') || '',
+  },
+});
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
   link: ApolloLink.from([httpLink]),
 });
+<<<<<<< HEAD
 
 const mockUseMutation = jest.fn();
 jest.mock('@apollo/client', () => {
@@ -56,11 +79,16 @@ describe('Testing Advertisement Entry Component', () => {
   test('Testing rendering and deleting of advertisement', async () => {
     const deleteAdByIdMock = jest.fn();
     mockUseMutation.mockReturnValue([deleteAdByIdMock]);
+=======
+describe('Testing Advertisement Entry Component', () => {
+  test('Temporary test for Advertisement Entry', () => {
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     const { getByTestId, getAllByText } = render(
       <ApolloProvider client={client}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
+<<<<<<< HEAD
               <AdvertisementEntry
                 endDate={new Date()}
                 startDate={new Date()}
@@ -379,5 +407,27 @@ describe('Testing Advertisement Entry Component', () => {
         endDate: dayjs(new Date('2023-02-01')).format('YYYY-MM-DD'),
       },
     });
+=======
+              {
+                <AdvertisementEntry
+                  endDate={new Date()}
+                  startDate={new Date()}
+                  id="1"
+                  key={1}
+                  link="google.com"
+                  name="Advert1"
+                  orgId="1"
+                  type="POPUP"
+                />
+              }
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>
+    );
+    expect(getByTestId('AdEntry')).toBeInTheDocument();
+    expect(getAllByText('POPUP')[0]).toBeInTheDocument();
+    expect(getAllByText('Advert1')[0]).toBeInTheDocument();
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   });
 });

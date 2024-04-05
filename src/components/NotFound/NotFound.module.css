@@ -1,13 +1,26 @@
 .section {
+<<<<<<< HEAD
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+=======
+  position: relative;
+  margin: 20px auto;
+  width: 100%;
+  background-color: #fff;
+  padding: 4px;
+  border-radius: 0.5rem;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 
 .error {
   font-size: 1.2rem;
+<<<<<<< HEAD
+=======
+  color: #575656;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   font-weight: 500;
 }
 

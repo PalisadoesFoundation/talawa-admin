@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useMutation, useQuery, type ApolloError } from '@apollo/client';
 import { Search } from '@mui/icons-material';
 import SortIcon from '@mui/icons-material/Sort';
@@ -20,11 +21,36 @@ import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryOrganizationPostListItem } from 'utils/interfaces';
 import styles from './OrgPost.module.css';
+=======
+import type { ChangeEvent } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Search } from '@mui/icons-material';
+import SortIcon from '@mui/icons-material/Sort';
+import Row from 'react-bootstrap/Row';
+import Modal from 'react-bootstrap/Modal';
+import { Form } from 'react-bootstrap';
+import { useMutation, useQuery } from '@apollo/client';
+import Button from 'react-bootstrap/Button';
+import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
+import Dropdown from 'react-bootstrap/Dropdown';
+import styles from './OrgPost.module.css';
+import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
+import { ORGANIZATION_POST_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
+import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
+import debounce from 'utils/debounce';
+import convertToBase64 from 'utils/convertToBase64';
+import NotFound from 'components/NotFound/NotFound';
+import { errorHandler } from 'utils/errorHandler';
+import Loader from 'components/Loader/Loader';
+import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 interface InterfaceOrgPost {
   _id: string;
   title: string;
   text: string;
+<<<<<<< HEAD
   imageUrl: string | null;
   videoUrl: string | null;
   creator: { _id: string; firstName: string; lastName: string; email: string };
@@ -42,6 +68,14 @@ interface InterfaceOrgPost {
     likeCount: number;
     likedBy: { _id: string }[];
   }[];
+=======
+  imageUrl: string;
+  videoUrl: string;
+  organizationId: string;
+  creator: { firstName: string; lastName: string };
+  pinned: boolean;
+  createdAt: string;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 
 function orgPost(): JSX.Element {
@@ -56,6 +90,7 @@ function orgPost(): JSX.Element {
     postinfo: '',
     postImage: '',
     postVideo: '',
+<<<<<<< HEAD
     addMedia: '',
     pinPost: false,
   });
@@ -68,11 +103,21 @@ function orgPost(): JSX.Element {
   const [before, setBefore] = useState<string | null | undefined>(null);
   const [first, setFirst] = useState<number | null>(6);
   const [last, setLast] = useState<number | null>(null);
+=======
+  });
+  const [sortingOption, setSortingOption] = useState('latest');
+  const [showTitle, setShowTitle] = useState(true);
+
+  const currentUrl = window.location.href.split('=')[1];
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
   const showInviteModal = (): void => {
     setPostModalIsOpen(true);
   };
+<<<<<<< HEAD
 
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   const hideInviteModal = (): void => {
     setPostModalIsOpen(false);
     setPostFormState({
@@ -80,8 +125,11 @@ function orgPost(): JSX.Element {
       postinfo: '',
       postImage: '',
       postVideo: '',
+<<<<<<< HEAD
       addMedia: '',
       pinPost: false,
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     });
   };
 
@@ -90,6 +138,7 @@ function orgPost(): JSX.Element {
     loading: orgPostListLoading,
     error: orgPostListError,
     refetch,
+<<<<<<< HEAD
   }: {
     data?: {
       organizations: InterfaceQueryOrganizationPostListItem[];
@@ -105,10 +154,15 @@ function orgPost(): JSX.Element {
       first: first,
       last: last,
     },
+=======
+  } = useQuery(ORGANIZATION_POST_CONNECTION_LIST, {
+    variables: { id: currentUrl, title_contains: '', text_contains: '' },
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   });
   const [create, { loading: createPostLoading }] =
     useMutation(CREATE_POST_MUTATION);
   const [displayedPosts, setDisplayedPosts] = useState(
+<<<<<<< HEAD
     orgPostListData?.organizations[0].posts.edges.map((edge) => edge.node) ||
       [],
   );
@@ -120,11 +174,24 @@ function orgPost(): JSX.Element {
       const newDisplayedPosts: InterfaceOrgPost[] = sortPosts(
         orgPostListData.organizations[0].posts.edges.map((edge) => edge.node),
         sortingOption,
+=======
+    orgPostListData?.postsByOrganizationConnection.edges || []
+  );
+
+  useEffect(() => {
+    if (orgPostListData && orgPostListData.postsByOrganizationConnection) {
+      const newDisplayedPosts = sortPosts(
+        orgPostListData.postsByOrganizationConnection.edges,
+        sortingOption
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       );
       setDisplayedPosts(newDisplayedPosts);
     }
   }, [orgPostListData, sortingOption]);
+<<<<<<< HEAD
 
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   const createPost = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
@@ -133,7 +200,10 @@ function orgPost(): JSX.Element {
       postinfo: _postinfo,
       postImage,
       postVideo,
+<<<<<<< HEAD
       pinPost,
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     } = postformState;
 
     const posttitle = _posttitle.trim();
@@ -149,6 +219,7 @@ function orgPost(): JSX.Element {
           title: posttitle,
           text: postinfo,
           organizationId: currentUrl,
+<<<<<<< HEAD
           file: postImage || postVideo || postformState.addMedia,
           pinned: pinPost,
         },
@@ -157,32 +228,52 @@ function orgPost(): JSX.Element {
       /* istanbul ignore next */
       if (data) {
         toast.success(t('postCreatedSuccess'));
+=======
+          file: postImage || postVideo,
+        },
+      });
+      /* istanbul ignore next */
+      if (data) {
+        toast.success('Congratulations! You have Posted Something.');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         refetch();
         setPostFormState({
           posttitle: '',
           postinfo: '',
           postImage: '',
           postVideo: '',
+<<<<<<< HEAD
           addMedia: '',
           pinPost: false,
         });
         setPostModalIsOpen(false);
       }
     } catch (error: any) {
+=======
+        });
+        setPostModalIsOpen(false); // close the modal
+      }
+    } catch (error: any) {
+      /* istanbul ignore next */
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       errorHandler(t, error);
     }
   };
 
+<<<<<<< HEAD
   useEffect(() => {
     if (orgPostListError) {
       navigate('/orglist');
     }
   }, [orgPostListError]);
 
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   if (createPostLoading || orgPostListLoading) {
     return <Loader />;
   }
 
+<<<<<<< HEAD
   const handleAddMediaChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
@@ -201,6 +292,12 @@ function orgPost(): JSX.Element {
       });
     }
   };
+=======
+  /* istanbul ignore next */
+  if (orgPostListError) {
+    window.location.assign('/orglist');
+  }
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
   const handleSearch = (e: any): void => {
     const { value } = e.target;
@@ -212,11 +309,16 @@ function orgPost(): JSX.Element {
     refetch(filterData);
   };
 
+<<<<<<< HEAD
   const debouncedHandleSearch = handleSearch;
+=======
+  const debouncedHandleSearch = debounce(handleSearch);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
   const handleSorting = (option: string): void => {
     setSortingOption(option);
   };
+<<<<<<< HEAD
   const handleNextPage = (): void => {
     setAfter(orgPostListData?.organizations[0].posts.pageInfo.endCursor);
     setBefore(null);
@@ -233,18 +335,32 @@ function orgPost(): JSX.Element {
   const sortPosts = (
     posts: InterfaceOrgPost[],
     sortingOption: string,
+=======
+
+  const sortPosts = (
+    posts: InterfaceOrgPost[],
+    sortingOption: string
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   ): InterfaceOrgPost[] => {
     const sortedPosts = [...posts];
 
     if (sortingOption === 'latest') {
       sortedPosts.sort(
         (a, b) =>
+<<<<<<< HEAD
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+=======
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       );
     } else if (sortingOption === 'oldest') {
       sortedPosts.sort(
         (a, b) =>
+<<<<<<< HEAD
           new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+=======
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       );
     }
 
@@ -256,12 +372,17 @@ function orgPost(): JSX.Element {
     if (a.pinned === b.pinned) {
       return 0;
     }
+<<<<<<< HEAD
     /* istanbul ignore next */
+=======
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     if (a.pinned) {
       return -1;
     }
     return 1;
   });
+<<<<<<< HEAD
 
   return (
     <>
@@ -418,6 +539,140 @@ function orgPost(): JSX.Element {
           </div>
         </div>
       </Row>
+=======
+  return (
+    <>
+      <OrganizationScreen screenName="Posts" title={t('title')}>
+        <Row className={styles.head}>
+          <div className={styles.mainpageright}>
+            <div className={styles.btnsContainer}>
+              <div className={styles.input}>
+                <Form.Control
+                  type="text"
+                  id="posttitle"
+                  className="bg-white"
+                  placeholder={showTitle ? t('searchTitle') : t('searchText')}
+                  data-testid="searchByName"
+                  autoComplete="off"
+                  onChange={debouncedHandleSearch}
+                  required
+                />
+                <Button
+                  tabIndex={-1}
+                  className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+                >
+                  <Search />
+                </Button>
+              </div>
+              <div className={styles.btnsBlock}>
+                <div className="d-flex">
+                  <Dropdown
+                    aria-expanded="false"
+                    title="SearchBy"
+                    data-tesid="sea"
+                  >
+                    <Dropdown.Toggle
+                      data-testid="searchBy"
+                      variant="outline-success"
+                    >
+                      <SortIcon className={'me-1'} />
+                      {t('searchBy')}
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                      <Dropdown.Item
+                        value="searchText"
+                        onClick={(e): void => {
+                          setShowTitle(false);
+                          e.preventDefault();
+                        }}
+                        data-testid="Text"
+                      >
+                        {t('Text')}
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        value="searchTitle"
+                        onClick={(e): void => {
+                          setShowTitle(true);
+                          e.preventDefault();
+                        }}
+                        data-testid="searchTitle"
+                      >
+                        {t('Title')}
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                  <Dropdown
+                    aria-expanded="false"
+                    title="Sort Post"
+                    data-testid="sort"
+                  >
+                    <Dropdown.Toggle
+                      variant="outline-success"
+                      data-testid="sortpost"
+                    >
+                      <SortIcon className={'me-1'} />
+                      {t('sortPost')}
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                      <Dropdown.Item
+                        onClick={(): void => handleSorting('latest')}
+                        data-testid="latest"
+                      >
+                        {t('Latest')}
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        onClick={(): void => handleSorting('oldest')}
+                        data-testid="oldest"
+                      >
+                        {t('Oldest')}
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </div>
+
+                <Button
+                  variant="success"
+                  onClick={showInviteModal}
+                  data-testid="createPostModalBtn"
+                >
+                  <i className={'fa fa-plus me-2'} />
+                  {t('createPost')}
+                </Button>
+              </div>
+            </div>
+            <div className={`row ${styles.list_box}`}>
+              {sortedPostsList && sortedPostsList.length > 0 ? (
+                sortedPostsList.map(
+                  (datas: {
+                    _id: string;
+                    title: string;
+                    text: string;
+                    imageUrl: string;
+                    videoUrl: string;
+                    organizationId: string;
+                    creator: { firstName: string; lastName: string };
+                    pinned: boolean;
+                  }) => (
+                    <OrgPostCard
+                      key={datas._id}
+                      id={datas._id}
+                      postTitle={datas.title}
+                      postInfo={datas.text}
+                      postAuthor={`${datas.creator.firstName} ${datas.creator.lastName}`}
+                      postPhoto={datas.imageUrl}
+                      postVideo={datas.videoUrl}
+                      pinned={datas.pinned}
+                    />
+                  )
+                )
+              ) : (
+                <NotFound title="post" keyPrefix="postNotFound" />
+              )}
+            </div>
+          </div>
+        </Row>
+      </OrganizationScreen>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       <Modal
         show={postmodalisOpen}
         onHide={hideInviteModal}
@@ -468,6 +723,7 @@ function orgPost(): JSX.Element {
                 });
               }}
             />
+<<<<<<< HEAD
           </Modal.Body>
           <Modal.Body>
             <Form.Label htmlFor="addMedia">{t('addMedia')}</Form.Label>
@@ -534,6 +790,120 @@ function orgPost(): JSX.Element {
             />
           </Modal.Body>
 
+=======
+            {!postformState.postVideo && (
+              <>
+                <Form.Label htmlFor="postPhoto">{t('image')}</Form.Label>
+                <Form.Control
+                  accept="image/*"
+                  id="postphoto"
+                  name="photo"
+                  type="file"
+                  data-testid="organisationImage"
+                  multiple={false}
+                  onChange={async (
+                    e: React.ChangeEvent<HTMLInputElement>
+                  ): Promise<void> => {
+                    setPostFormState((prevPostFormState) => ({
+                      ...prevPostFormState,
+                      postImage: '',
+                    }));
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      setPostFormState({
+                        ...postformState,
+                        postImage: await convertToBase64(file),
+                      });
+                    }
+                  }}
+                />
+
+                {postformState.postImage && (
+                  <div className={styles.preview} data-testid="org">
+                    <img
+                      src={postformState.postImage}
+                      alt="Post Image Preview"
+                    />
+                    <button
+                      className={styles.closeButton}
+                      onClick={(): void => {
+                        setPostFormState({
+                          ...postformState,
+                          postImage: '',
+                        });
+                        const fileInput = document.getElementById(
+                          'postphoto'
+                        ) as HTMLInputElement;
+                        if (fileInput) {
+                          fileInput.value = '';
+                        }
+                      }}
+                      data-testid="closePreview"
+                    >
+                      <i className="fa fa-times"></i>
+                    </button>
+                  </div>
+                )}
+              </>
+            )}
+            {!postformState.postImage && (
+              <>
+                <Form.Label htmlFor="postvideo">{t('video')}</Form.Label>
+                <Form.Control
+                  accept="video/*"
+                  id="postvideo"
+                  name="video"
+                  type="file"
+                  placeholder={t('video')}
+                  multiple={false}
+                  onChange={async (e: React.ChangeEvent): Promise<void> => {
+                    setPostFormState((prevPostFormState) => ({
+                      ...prevPostFormState,
+                      postVideo: '',
+                    }));
+                    const target = e.target as HTMLInputElement;
+                    const file = target.files && target.files[0];
+                    if (file) {
+                      const videoBase64 = await convertToBase64(file);
+                      setPostFormState({
+                        ...postformState,
+                        postVideo: videoBase64,
+                      });
+                    }
+                  }}
+                  data-testid="organisationVideo"
+                />
+
+                {postformState.postVideo && (
+                  <div className={styles.preview} data-testid="videoPreview">
+                    <video controls>
+                      <source src={postformState.postVideo} type="video/mp4" />
+                      (t{'tag'})
+                    </video>
+                    <button
+                      className={styles.closeButton}
+                      data-testid="videoclosebutton"
+                      onClick={(): void => {
+                        setPostFormState({
+                          ...postformState,
+                          postVideo: '',
+                        });
+                        const fileInput = document.getElementById(
+                          'postvideo'
+                        ) as HTMLInputElement;
+                        if (fileInput) {
+                          fileInput.value = '';
+                        }
+                      }}
+                    >
+                      <i className="fa fa-times"></i>
+                    </button>
+                  </div>
+                )}
+              </>
+            )}
+          </Modal.Body>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
           <Modal.Footer>
             <Button
               variant="secondary"
@@ -551,5 +921,8 @@ function orgPost(): JSX.Element {
     </>
   );
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 export default orgPost;

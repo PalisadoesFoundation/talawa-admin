@@ -20,4 +20,8 @@
 
 #### Defined in
 
+<<<<<<< HEAD
 [src/screens/UserPortal/People/People.tsx:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/screens/UserPortal/People/People.tsx#L26)
+=======
+[src/screens/UserPortal/People/People.tsx:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/screens/UserPortal/People/People.tsx#L26)
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1

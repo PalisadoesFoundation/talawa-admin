@@ -14,8 +14,12 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import Donate from './Donate';
 import userEvent from '@testing-library/user-event';
+<<<<<<< HEAD
 import useLocalStorage from 'utils/useLocalstorage';
 import { DONATE_TO_ORGANIZATION } from 'GraphQl/Mutations/mutations';
+=======
+import * as getOrganizationId from 'utils/getOrganizationId';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 const MOCKS = [
   {
@@ -34,7 +38,11 @@ const MOCKS = [
             amount: 1,
             userId: '6391a15bcb738c181d238952',
             payPalId: 'payPalId',
+<<<<<<< HEAD
             updatedAt: '2024-04-03T16:43:01.514Z',
+=======
+            __typename: 'Donation',
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
           },
         ],
       },
@@ -51,10 +59,15 @@ const MOCKS = [
       data: {
         organizationsConnection: [
           {
+<<<<<<< HEAD
+=======
+            __typename: 'Organization',
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
             _id: '6401ff65ce8e8406b8f07af3',
             image: '',
             name: 'anyOrganization2',
             description: 'desc',
+<<<<<<< HEAD
             address: {
               city: 'abc',
               countryCode: '123',
@@ -114,6 +127,10 @@ const MOCKS = [
             amount: 123,
             nameOfUser: 'name',
             nameOfOrg: 'anyOrganization2',
+=======
+            isPublic: true,
+            creator: { __typename: 'User', firstName: 'John', lastName: 'Doe' },
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
           },
         ],
       },
@@ -131,12 +148,18 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
+<<<<<<< HEAD
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useParams: () => ({ orgId: '' }),
 }));
 
 describe('Testing Donate Screen [User Portal]', () => {
+=======
+describe('Testing Donate Screen [User Portal]', () => {
+  jest.mock('utils/getOrganizationId');
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
     value: jest.fn().mockImplementation((query) => ({
@@ -151,9 +174,17 @@ describe('Testing Donate Screen [User Portal]', () => {
     })),
   });
 
+<<<<<<< HEAD
   beforeEach(() => {
     jest.clearAllMocks();
   });
+=======
+  const getOrganizationIdSpy = jest
+    .spyOn(getOrganizationId, 'default')
+    .mockImplementation(() => {
+      return '';
+    });
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
   test('Screen should be rendered properly', async () => {
     render(
@@ -165,6 +196,7 @@ describe('Testing Donate Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
     );
 
@@ -172,6 +204,14 @@ describe('Testing Donate Screen [User Portal]', () => {
     expect(screen.getByPlaceholderText('Search donations')).toBeInTheDocument();
     expect(screen.getByTestId('currency0')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Amount')).toBeInTheDocument();
+=======
+      </MockedProvider>
+    );
+
+    await wait();
+
+    expect(getOrganizationIdSpy).toHaveBeenCalled();
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   });
 
   test('Currency is swtiched to USD', async () => {
@@ -184,7 +224,11 @@ describe('Testing Donate Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -192,9 +236,14 @@ describe('Testing Donate Screen [User Portal]', () => {
     userEvent.click(screen.getByTestId('changeCurrencyBtn'));
 
     userEvent.click(screen.getByTestId('currency0'));
+<<<<<<< HEAD
     await wait();
 
     expect(screen.getByTestId('currency0')).toBeInTheDocument();
+=======
+
+    await wait();
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   });
 
   test('Currency is swtiched to INR', async () => {
@@ -207,7 +256,11 @@ describe('Testing Donate Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -229,7 +282,11 @@ describe('Testing Donate Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -240,6 +297,7 @@ describe('Testing Donate Screen [User Portal]', () => {
 
     await wait();
   });
+<<<<<<< HEAD
 
   test('Checking the existence of Donation Cards', async () => {
     render(
@@ -280,4 +338,6 @@ describe('Testing Donate Screen [User Portal]', () => {
     userEvent.click(screen.getByTestId('donateBtn'));
     await wait();
   });
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 });

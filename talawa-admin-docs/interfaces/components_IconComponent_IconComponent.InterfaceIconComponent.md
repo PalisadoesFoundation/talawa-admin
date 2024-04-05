@@ -21,7 +21,11 @@
 
 #### Defined in
 
+<<<<<<< HEAD
 [src/components/IconComponent/IconComponent.tsx:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/IconComponent/IconComponent.tsx#L17)
+=======
+[src/components/IconComponent/IconComponent.tsx:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/IconComponent/IconComponent.tsx#L14)
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 ___
 
@@ -31,7 +35,11 @@ ___
 
 #### Defined in
 
+<<<<<<< HEAD
 [src/components/IconComponent/IconComponent.tsx:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/IconComponent/IconComponent.tsx#L18)
+=======
+[src/components/IconComponent/IconComponent.tsx:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/IconComponent/IconComponent.tsx#L15)
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 ___
 
@@ -41,7 +49,11 @@ ___
 
 #### Defined in
 
+<<<<<<< HEAD
 [src/components/IconComponent/IconComponent.tsx:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/IconComponent/IconComponent.tsx#L16)
+=======
+[src/components/IconComponent/IconComponent.tsx:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/IconComponent/IconComponent.tsx#L13)
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 ___
 
@@ -51,4 +63,8 @@ ___
 
 #### Defined in
 
+<<<<<<< HEAD
 [src/components/IconComponent/IconComponent.tsx:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/IconComponent/IconComponent.tsx#L19)
+=======
+[src/components/IconComponent/IconComponent.tsx:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/IconComponent/IconComponent.tsx#L16)
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1

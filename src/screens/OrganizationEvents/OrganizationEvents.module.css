@@ -36,8 +36,19 @@
   display: flex;
   flex-direction: row;
 }
+<<<<<<< HEAD
 
 .sidebar:after {
+=======
+.sidebar {
+  z-index: 0;
+  padding-top: 5px;
+  margin: 0;
+  height: 100%;
+}
+.sidebar:after {
+  content: '';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   background-color: #f7f7f7;
   position: absolute;
   width: 2px;
@@ -46,6 +57,15 @@
   left: 94%;
   display: block;
 }
+<<<<<<< HEAD
+=======
+.sidebarsticky {
+  padding-left: 45px;
+}
+.sidebarsticky > p {
+  margin-top: -10px;
+}
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 .navitem {
   padding-left: 27%;
@@ -63,7 +83,19 @@
   border-bottom: 3px solid #31bb6b;
   width: 15%;
 }
+<<<<<<< HEAD
 
+=======
+.searchtitle {
+  color: #707070;
+  font-weight: 600;
+  font-size: 18px;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  border-bottom: 3px solid #31bb6b;
+  width: 60%;
+}
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 .logintitleadmin {
   color: #707070;
   font-weight: 600;
@@ -91,11 +123,29 @@
   margin-bottom: 20px;
 }
 .justifysp {
+<<<<<<< HEAD
   display: block;
   justify-content: space-between;
   margin-top: 20px;
 }
 
+=======
+  display: flex;
+  justify-content: space-between;
+}
+@media screen and (max-width: 575.5px) {
+  .justifysp {
+    padding-left: 55px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .mainpageright {
+    width: 90%;
+  }
+}
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 .addbtn {
   border: 1px solid #e8e5e5;
   box-shadow: 0 2px 2px #e8e5e5;
@@ -106,9 +156,13 @@
   outline: none;
   font-weight: 600;
   cursor: pointer;
+<<<<<<< HEAD
   transition:
     transform 0.2s,
     box-shadow 0.2s;
+=======
+  transition: transform 0.2s, box-shadow 0.2s;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 .flexdir {
   display: flex;
@@ -181,12 +235,30 @@
   outline: none;
   font-weight: 600;
   cursor: pointer;
+<<<<<<< HEAD
   transition:
     transform 0.2s,
     box-shadow 0.2s;
   width: 100%;
 }
 
+=======
+  transition: transform 0.2s, box-shadow 0.2s;
+  width: 100%;
+}
+.sidebarsticky > input {
+  text-decoration: none;
+  margin-bottom: 50px;
+  border-color: #e8e5e5;
+  width: 80%;
+  border-radius: 7px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 10px;
+  padding-left: 10px;
+  box-shadow: none;
+}
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 .datediv {
   display: flex;
   flex-direction: row;
@@ -202,8 +274,11 @@
   padding-bottom: 2px;
   padding-right: 5px;
   padding-left: 5px;
+<<<<<<< HEAD
   margin-right: 5px;
   margin-left: 5px;
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 .checkboxdiv > label {
   margin-right: 50px;
@@ -256,7 +331,10 @@
 .dispflex {
   display: flex;
   align-items: center;
+<<<<<<< HEAD
   justify-content: space-between;
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 .dispflex > input {
   border: none;
@@ -265,12 +343,16 @@
 }
 .checkboxdiv {
   display: flex;
+<<<<<<< HEAD
   margin-bottom: 5px;
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 .checkboxdiv > div {
   width: 50%;
 }
 
+<<<<<<< HEAD
 .recurrenceRuleNumberInput {
   width: 70px;
 }
@@ -321,6 +403,8 @@
   padding: 7px 15px;
 }
 
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 @media only screen and (max-width: 600px) {
   .form_wrapper {
     width: 90%;

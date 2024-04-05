@@ -10,7 +10,11 @@ describe('Tesing the NotFound Component', () => {
     render(
       <I18nextProvider i18n={i18nForTest}>
         <NotFound title="post" keyPrefix="postNotFound" />
+<<<<<<< HEAD
       </I18nextProvider>,
+=======
+      </I18nextProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
     expect(screen.getByText(/Not Found!/i)).toBeInTheDocument();
   });
@@ -19,7 +23,11 @@ describe('Tesing the NotFound Component', () => {
     render(
       <I18nextProvider i18n={i18nForTest}>
         <NotFound title="user" keyPrefix="userNotFound" />
+<<<<<<< HEAD
       </I18nextProvider>,
+=======
+      </I18nextProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
     expect(screen.getByText(/Not Found!/i)).toBeInTheDocument();
   });

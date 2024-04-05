@@ -6,7 +6,10 @@ import { UPDATE_INSTALL_STATUS_PLUGIN_MUTATION } from 'GraphQl/Mutations/mutatio
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+<<<<<<< HEAD
 import { Navigate, useParams } from 'react-router-dom';
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 interface InterfaceAddOnEntryProps {
   id: string;
@@ -30,6 +33,7 @@ function addOnEntry({
 }: InterfaceAddOnEntryProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'addOnEntry' });
   //getting orgId from URL
+<<<<<<< HEAD
   const { orgId: currentOrg } = useParams();
   if (!currentOrg) {
     return <Navigate to={'/orglist'} />;
@@ -41,6 +45,16 @@ function addOnEntry({
   // const [addOrgAsUninstalled] = useMutation(UPDATE_ORG_STATUS_PLUGIN_MUTATION);
   const [addOrgAsUninstalled] = useMutation(
     UPDATE_INSTALL_STATUS_PLUGIN_MUTATION,
+=======
+  const currentOrg = window.location.href.split('/id=')[1] + '';
+  const [buttonLoading, setButtonLoading] = useState(false);
+  const [isInstalledLocal, setIsInstalledLocal] = useState(
+    uninstalledOrgs.includes(currentOrg)
+  );
+  // const [addOrgAsUninstalled] = useMutation(UPDATE_ORG_STATUS_PLUGIN_MUTATION);
+  const [addOrgAsUninstalled] = useMutation(
+    UPDATE_INSTALL_STATUS_PLUGIN_MUTATION
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   );
 
   const togglePluginInstall = async (): Promise<void> => {
@@ -69,6 +83,10 @@ function addOnEntry({
             id="custom-switch"
             label={t('enable')}
             className={styles.entrytoggle}
+<<<<<<< HEAD
+=======
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
             onChange={(): void => {}}
             disabled={switchInProgress}
             checked={enabled}

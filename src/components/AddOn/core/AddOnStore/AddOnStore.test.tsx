@@ -1,6 +1,16 @@
 import React from 'react';
+<<<<<<< HEAD
 import 'jest-location-mock';
 import { act, fireEvent, render, screen } from '@testing-library/react';
+=======
+import { render } from '@testing-library/react';
+// import * as reactRedux from 'react-redux';
+// import { BrowserRouter } from 'react-router-dom';
+// import userEvent from '@testing-library/user-event';
+
+// import AddOnStore from './AddOnStore';
+// import { store } from 'state/store';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 import {
   ApolloClient,
   ApolloProvider,
@@ -8,6 +18,10 @@ import {
   ApolloLink,
   HttpLink,
 } from '@apollo/client';
+<<<<<<< HEAD
+=======
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 import type { NormalizedCacheObject } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
 import AddOnStore from './AddOnStore';
@@ -16,6 +30,7 @@ import { store } from 'state/store';
 import { BACKEND_URL } from 'Constant/constant';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
+<<<<<<< HEAD
 import { ORGANIZATIONS_LIST, PLUGIN_GET } from 'GraphQl/Queries/Queries';
 import userEvent from '@testing-library/user-event';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -72,10 +87,13 @@ jest.mock('components/AddOn/support/services/Plugin.helper', () => ({
     }),
   })),
 }));
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 const httpLink = new HttpLink({
   uri: BACKEND_URL,
   headers: {
+<<<<<<< HEAD
     authorization: 'Bearer ' + getItem('token') || '',
   },
 });
@@ -88,10 +106,17 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
+=======
+    authorization: 'Bearer ' + localStorage.getItem('token') || '',
+  },
+});
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
   link: ApolloLink.from([httpLink]),
 });
+<<<<<<< HEAD
 
 jest.mock('components/AddOn/support/services/Plugin.helper', () => ({
   __esModule: true,
@@ -376,10 +401,17 @@ describe('Testing AddOnStore Component', () => {
     expect(true).toBe(true);
     const mocks = [ORGANIZATIONS_LIST_MOCK, PLUGIN_LOADING_MOCK];
     render(
+=======
+describe('Testing AddOnStore Component', () => {
+  test('Temporary test for AddOnStore', () => {
+    expect(true).toBe(true);
+    const { getByTestId } = render(
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       <ApolloProvider client={client}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
+<<<<<<< HEAD
               <MockedProvider mocks={mocks} addTypename={false}>
                 <AddOnStore />
               </MockedProvider>
@@ -391,4 +423,21 @@ describe('Testing AddOnStore Component', () => {
 
     expect(screen.getByTestId('AddOnEntryStore')).toBeInTheDocument();
   });
+=======
+              {<AddOnStore />}
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>
+    );
+    expect(getByTestId('AddOnEntryStore')).toBeInTheDocument();
+  });
+  // const useSelectorMock = jest.spyOn(reactRedux, 'useSelector');
+  // const useDispatchMock = jest.spyOn(reactRedux, 'useDispatch');
+
+  // beforeEach(() => {
+  //   useSelectorMock.mockClear();
+  //   useDispatchMock.mockClear();
+  // });
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 });

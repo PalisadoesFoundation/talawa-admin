@@ -1,6 +1,9 @@
 import React from 'react';
 import styles from './ContactCard.module.css';
+<<<<<<< HEAD
 import Avatar from 'components/Avatar/Avatar';
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 interface InterfaceContactCardProps {
   id: string;
@@ -15,6 +18,12 @@ interface InterfaceContactCardProps {
 
 function contactCard(props: InterfaceContactCardProps): JSX.Element {
   const contactName = `${props.firstName} ${props.lastName}`;
+<<<<<<< HEAD
+=======
+  const imageUrl = props.image
+    ? props.image
+    : `https://api.dicebear.com/5.x/initials/svg?seed=${contactName}`;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
   const handleSelectedContactChange = (): void => {
     props.setSelectedContact(props.id);
@@ -22,7 +31,11 @@ function contactCard(props: InterfaceContactCardProps): JSX.Element {
   };
 
   const [isSelected, setIsSelected] = React.useState(
+<<<<<<< HEAD
     props.selectedContact === props.id,
+=======
+    props.selectedContact === props.id
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   );
 
   React.useEffect(() => {
@@ -38,6 +51,7 @@ function contactCard(props: InterfaceContactCardProps): JSX.Element {
         onClick={handleSelectedContactChange}
         data-testid="contactContainer"
       >
+<<<<<<< HEAD
         {props.image ? (
           <img
             src={props.image}
@@ -51,6 +65,9 @@ function contactCard(props: InterfaceContactCardProps): JSX.Element {
             avatarStyle={styles.contactImage}
           />
         )}
+=======
+        <img src={imageUrl} alt={contactName} className={styles.contactImage} />
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         <div className={styles.contactNameContainer}>
           <b>{contactName}</b>
           <small className={styles.grey}>{props.email}</small>

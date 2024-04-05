@@ -21,13 +21,21 @@
   border-radius: 4px;
 }
 
+<<<<<<< HEAD
 .orgCard .innerContainer .orgImgContainer {
+=======
+.orgCard .innerContainer .orgImgContainer img {
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   width: 125px;
   height: 120px;
   object-fit: contain;
 }
 
+<<<<<<< HEAD
 .orgCard .innerContainer .orgImgContainer {
+=======
+.orgCard .innerContainer .orgImgContainer .emptyImg {
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   width: 125px;
   height: 120px;
   background-color: var(--bs-gray-200);
@@ -36,8 +44,11 @@
 .orgCard .innerContainer .content {
   flex: 1;
   margin-left: 1rem;
+<<<<<<< HEAD
   width: 70%;
   margin-top: 0.7rem;
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 
 .orgCard button {
@@ -47,6 +58,7 @@
   z-index: 1;
 }
 
+<<<<<<< HEAD
 .flaskIcon {
   margin-top: 4px;
 }
@@ -98,6 +110,9 @@
 }
 
 @media (max-width: 580px) {
+=======
+@media (max-width: 450px) {
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   .orgCard {
     height: unset;
     margin: 0.5rem 0;
@@ -128,6 +143,7 @@
     margin-left: auto;
     display: block;
   }
+<<<<<<< HEAD
 
   .flaskIcon {
     margin-bottom: 6px;
@@ -138,4 +154,19 @@
     justify-content: space-around;
     width: 100%;
   }
+=======
+}
+
+.flaskIcon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 10px 20px 0px 0px;
+}
+
+.manageBtn {
+  display: flex;
+  justify-content: space-around;
+  width: 150px;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }

@@ -2,6 +2,10 @@ import React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
+<<<<<<< HEAD
+=======
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   ORGANIZATION_ADMINS_LIST,
@@ -13,6 +17,10 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import People from './People';
 import userEvent from '@testing-library/user-event';
+<<<<<<< HEAD
+=======
+import * as getOrganizationId from 'utils/getOrganizationId';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 const MOCKS = [
   {
@@ -34,7 +42,10 @@ const MOCKS = [
               image: null,
               email: 'noble@gmail.com',
               createdAt: '2023-03-02T03:22:08.101Z',
+<<<<<<< HEAD
               userType: 'User',
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
             },
             {
               _id: '64001660a711c62d5b4076a3',
@@ -43,7 +54,10 @@ const MOCKS = [
               image: 'mockImage',
               email: 'noble@gmail.com',
               createdAt: '2023-03-02T03:22:08.101Z',
+<<<<<<< HEAD
               userType: 'User',
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
             },
           ],
         },
@@ -70,8 +84,11 @@ const MOCKS = [
                 lastName: 'Admin',
                 image: null,
                 email: 'noble@gmail.com',
+<<<<<<< HEAD
                 createdAt: '2023-03-02T03:22:08.101Z',
                 userType: 'Admin',
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
               },
             ],
           },
@@ -98,7 +115,10 @@ const MOCKS = [
               image: null,
               email: 'john@gmail.com',
               createdAt: '2023-03-02T03:22:08.101Z',
+<<<<<<< HEAD
               userType: 'User',
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
             },
           ],
         },
@@ -117,12 +137,18 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
+<<<<<<< HEAD
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useParams: () => ({ orgId: '' }),
 }));
 
 describe('Testing People Screen [User Portal]', () => {
+=======
+describe('Testing People Screen [User Portal]', () => {
+  jest.mock('utils/getOrganizationId');
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
     value: jest.fn().mockImplementation((query) => ({
@@ -137,6 +163,15 @@ describe('Testing People Screen [User Portal]', () => {
     })),
   });
 
+<<<<<<< HEAD
+=======
+  const getOrganizationIdSpy = jest
+    .spyOn(getOrganizationId, 'default')
+    .mockImplementation(() => {
+      return '';
+    });
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   test('Screen should be rendered properly', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -147,15 +182,27 @@ describe('Testing People Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
 
+<<<<<<< HEAD
     expect(screen.queryAllByText('Noble Mittal')).not.toBe([]);
   });
 
   test('Search works properly by pressing enter', async () => {
+=======
+    expect(getOrganizationIdSpy).toHaveBeenCalled();
+    expect(screen.queryAllByText('Noble Mittal')).not.toBe([]);
+  });
+
+  test('Search works properly', async () => {
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -165,11 +212,16 @@ describe('Testing People Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
 
+<<<<<<< HEAD
     userEvent.type(screen.getByTestId('searchInput'), 'j{enter}');
     await wait();
 
@@ -199,6 +251,12 @@ describe('Testing People Screen [User Portal]', () => {
     userEvent.click(searchBtn);
     await wait();
 
+=======
+    userEvent.type(screen.getByTestId('searchInput'), 'j');
+    await wait();
+
+    expect(getOrganizationIdSpy).toHaveBeenCalled();
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     expect(screen.queryByText('John Cena')).toBeInTheDocument();
     expect(screen.queryByText('Noble Mittal')).not.toBeInTheDocument();
   });
@@ -213,7 +271,11 @@ describe('Testing People Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -223,6 +285,10 @@ describe('Testing People Screen [User Portal]', () => {
     userEvent.click(screen.getByTestId('modeBtn1'));
     await wait();
 
+<<<<<<< HEAD
+=======
+    expect(getOrganizationIdSpy).toHaveBeenCalled();
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     expect(screen.queryByText('Noble Admin')).toBeInTheDocument();
     expect(screen.queryByText('Noble Mittal')).not.toBeInTheDocument();
   });

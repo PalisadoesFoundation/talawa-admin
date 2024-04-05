@@ -11,9 +11,12 @@ import LeftDrawerEvent, {
 import { MockedProvider } from '@apollo/react-testing';
 import { EVENT_FEEDBACKS } from 'GraphQl/Queries/Queries';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
+<<<<<<< HEAD
 import useLocalStorage from 'utils/useLocalstorage';
 
 const { setItem } = useLocalStorage();
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 const props: InterfaceLeftDrawerProps = {
   event: {
@@ -26,6 +29,10 @@ const props: InterfaceLeftDrawerProps = {
   },
   hideDrawer: false,
   setHideDrawer: jest.fn(),
+<<<<<<< HEAD
+=======
+  setShowAddEventProjectModal: jest.fn(),
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 };
 const props2: InterfaceLeftDrawerProps = {
   event: {
@@ -39,6 +46,10 @@ const props2: InterfaceLeftDrawerProps = {
   },
   hideDrawer: false,
   setHideDrawer: jest.fn(),
+<<<<<<< HEAD
+=======
+  setShowAddEventProjectModal: jest.fn(),
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 };
 
 const mocks = [
@@ -84,11 +95,19 @@ jest.mock('@mui/x-charts/PieChart', () => ({
 }));
 
 beforeEach(() => {
+<<<<<<< HEAD
   setItem('FirstName', 'John');
   setItem('LastName', 'Doe');
   setItem(
     'UserImage',
     'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
+=======
+  localStorage.setItem('FirstName', 'John');
+  localStorage.setItem('LastName', 'Doe');
+  localStorage.setItem(
+    'UserImage',
+    'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe'
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   );
 });
 
@@ -99,8 +118,13 @@ afterEach(() => {
 
 describe('Testing Left Drawer component for the Event Dashboard', () => {
   test('Component should be rendered properly', async () => {
+<<<<<<< HEAD
     setItem('UserImage', '');
     setItem('UserType', 'SUPERADMIN');
+=======
+    localStorage.setItem('UserImage', '');
+    localStorage.setItem('UserType', 'SUPERADMIN');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
     const { queryByText } = render(
       <MockedProvider mocks={mocks}>
@@ -109,6 +133,7 @@ describe('Testing Left Drawer component for the Event Dashboard', () => {
             <LeftDrawerEvent {...props} />
           </I18nextProvider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
     );
 
@@ -126,6 +151,25 @@ describe('Testing Left Drawer component for the Event Dashboard', () => {
 
   test('Add Event profile page button should work properly', async () => {
     setItem('UserType', 'SUPERADMIN');
+=======
+      </MockedProvider>
+    );
+
+    await waitFor(() =>
+      expect(queryByText('Talawa Admin Portal')).toBeInTheDocument()
+    );
+    await waitFor(() => expect(queryByText('Test Event')).toBeInTheDocument());
+    await waitFor(() =>
+      expect(queryByText('Test Description')).toBeInTheDocument()
+    );
+    await waitFor(() =>
+      expect(queryByText('Event Options')).toBeInTheDocument()
+    );
+  });
+
+  test('Add Event Project button and profile page button should work properly', async () => {
+    localStorage.setItem('UserType', 'SUPERADMIN');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
     const { queryByText, queryByTestId } = render(
       <MockedProvider mocks={mocks}>
@@ -134,6 +178,7 @@ describe('Testing Left Drawer component for the Event Dashboard', () => {
             <LeftDrawerEvent {...props} />
           </I18nextProvider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
     );
 
@@ -141,11 +186,27 @@ describe('Testing Left Drawer component for the Event Dashboard', () => {
       expect(queryByText('Talawa Admin Portal')).toBeInTheDocument(),
     );
 
+=======
+      </MockedProvider>
+    );
+
+    await waitFor(() =>
+      expect(queryByText('Talawa Admin Portal')).toBeInTheDocument()
+    );
+
+    fireEvent.click(queryByText('Add an Event Project') as HTMLElement);
+    expect(props.setShowAddEventProjectModal).toHaveBeenCalled();
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     fireEvent.click(queryByTestId(/profileBtn/i) as HTMLElement);
   });
 
   test('Testing Drawer when hideDrawer is null', () => {
+<<<<<<< HEAD
     setItem('UserType', 'SUPERADMIN');
+=======
+    localStorage.setItem('UserType', 'SUPERADMIN');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     render(
       <MockedProvider mocks={mocks}>
         <BrowserRouter>
@@ -153,12 +214,20 @@ describe('Testing Left Drawer component for the Event Dashboard', () => {
             <LeftDrawerEvent {...props} hideDrawer={null} />
           </I18nextProvider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
   });
 
   test('Testing Drawer when hideDrawer is true', () => {
+<<<<<<< HEAD
     setItem('UserType', 'SUPERADMIN');
+=======
+    localStorage.setItem('UserType', 'SUPERADMIN');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     render(
       <MockedProvider mocks={mocks}>
         <BrowserRouter>
@@ -166,12 +235,21 @@ describe('Testing Left Drawer component for the Event Dashboard', () => {
             <LeftDrawerEvent {...props} hideDrawer={true} />
           </I18nextProvider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
     );
   });
 
   test('Testing logout functionality', async () => {
     setItem('UserType', 'SUPERADMIN');
+=======
+      </MockedProvider>
+    );
+  });
+
+  test('Testing Drawer open close functionality', () => {
+    localStorage.setItem('UserType', 'SUPERADMIN');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     render(
       <MockedProvider mocks={mocks}>
         <BrowserRouter>
@@ -179,7 +257,26 @@ describe('Testing Left Drawer component for the Event Dashboard', () => {
             <LeftDrawerEvent {...props} />
           </I18nextProvider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+    );
+    const closeModalBtn = screen.getByTestId(/closeModalBtn/i);
+    userEvent.click(closeModalBtn);
+  });
+
+  test('Testing logout functionality', async () => {
+    localStorage.setItem('UserType', 'SUPERADMIN');
+    render(
+      <MockedProvider mocks={mocks}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <LeftDrawerEvent {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     userEvent.click(screen.getByTestId('logoutBtn'));
@@ -187,7 +284,11 @@ describe('Testing Left Drawer component for the Event Dashboard', () => {
     expect(global.window.location.pathname).toBe('/');
   });
   test('Testing substring functionality in event title and description', async () => {
+<<<<<<< HEAD
     setItem('UserType', 'SUPERADMIN');
+=======
+    localStorage.setItem('UserType', 'SUPERADMIN');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     render(
       <MockedProvider mocks={mocks}>
         <BrowserRouter>
@@ -195,7 +296,11 @@ describe('Testing Left Drawer component for the Event Dashboard', () => {
             <LeftDrawerEvent {...props2} />
           </I18nextProvider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
     const eventTitle = props2.event.title;
     expect(eventTitle.length).toBeGreaterThan(20);
@@ -207,7 +312,11 @@ describe('Testing Left Drawer component for the Event Dashboard', () => {
     expect(truncatedEventDescription).toContain('...');
   });
   test('Testing all events button', async () => {
+<<<<<<< HEAD
     setItem('UserType', 'SUPERADMIN');
+=======
+    localStorage.setItem('UserType', 'SUPERADMIN');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     render(
       <MockedProvider mocks={mocks}>
         <BrowserRouter>
@@ -215,12 +324,20 @@ describe('Testing Left Drawer component for the Event Dashboard', () => {
             <LeftDrawerEvent {...props} />
           </I18nextProvider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     userEvent.click(screen.getByTestId('allEventsBtn'));
     expect(global.window.location.pathname).toBe(
+<<<<<<< HEAD
       `/orgevents/id=${props.event.organization._id}`,
+=======
+      `/orgevents/id=${props.event.organization._id}`
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
   });
 });

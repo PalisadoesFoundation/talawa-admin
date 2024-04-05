@@ -27,7 +27,11 @@ describe('Testing Contribution Stats', () => {
         <I18nextProvider i18n={i18nForTest}>
           <ContriStats {...props} />
         </I18nextProvider>
+<<<<<<< HEAD
       </ApolloProvider>,
+=======
+      </ApolloProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
     expect(screen.getByText('Recent Contribution: $')).toBeInTheDocument();
     expect(screen.getByText('Highest Contribution: $')).toBeInTheDocument();

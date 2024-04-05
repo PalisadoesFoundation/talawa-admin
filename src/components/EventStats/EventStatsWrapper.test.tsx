@@ -57,20 +57,32 @@ describe('Testing Event Stats Wrapper', () => {
         <BrowserRouter>
           <EventStatsWrapper {...props} />
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     // Open the modal
     fireEvent.click(queryByText('View Event Statistics') as Element);
 
     await waitFor(() =>
+<<<<<<< HEAD
       expect(queryByText('Event Statistics')).toBeInTheDocument(),
+=======
+      expect(queryByText('Event Statistics')).toBeInTheDocument()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     // Close the modal
     fireEvent.click(queryByRole('button', { name: /close/i }) as HTMLElement);
     await waitFor(() =>
+<<<<<<< HEAD
       expect(queryByText('Event Statistics')).not.toBeInTheDocument(),
+=======
+      expect(queryByText('Event Statistics')).not.toBeInTheDocument()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
   });
 });

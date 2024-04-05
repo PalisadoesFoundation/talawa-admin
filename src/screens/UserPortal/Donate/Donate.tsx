@@ -1,4 +1,5 @@
 import React from 'react';
+<<<<<<< HEAD
 import { useParams } from 'react-router-dom';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import { toast } from 'react-toastify';
@@ -8,10 +9,18 @@ import SendIcon from '@mui/icons-material/Send';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { useTranslation } from 'react-i18next';
 
+=======
+import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
+import OrganizationSidebar from 'components/UserPortal/OrganizationSidebar/OrganizationSidebar';
+import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
+import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
+import PaginationList from 'components/PaginationList/PaginationList';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 import {
   ORGANIZATION_DONATION_CONNECTION_LIST,
   USER_ORGANIZATION_CONNECTION,
 } from 'GraphQl/Queries/Queries';
+<<<<<<< HEAD
 import { DONATE_TO_ORGANIZATION } from 'GraphQl/Mutations/mutations';
 import styles from './Donate.module.css';
 import DonationCard from 'components/UserPortal/DonationCard/DonationCard';
@@ -23,12 +32,26 @@ import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import PaginationList from 'components/PaginationList/PaginationList';
 
 export interface InterfaceDonationCardProps {
+=======
+import { useQuery } from '@apollo/client';
+import styles from './Donate.module.css';
+import SendIcon from '@mui/icons-material/Send';
+import getOrganizationId from 'utils/getOrganizationId';
+import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import DonationCard from 'components/UserPortal/DonationCard/DonationCard';
+import { useTranslation } from 'react-i18next';
+
+interface InterfaceDonationCardProps {
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   id: string;
   name: string;
   amount: string;
   userId: string;
   payPalId: string;
+<<<<<<< HEAD
   updatedAt: string;
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 
 export default function donate(): JSX.Element {
@@ -36,12 +59,16 @@ export default function donate(): JSX.Element {
     keyPrefix: 'donate',
   });
 
+<<<<<<< HEAD
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
   const userName = getItem('name');
 
   const { orgId: organizationId } = useParams();
   const [amount, setAmount] = React.useState<string>('');
+=======
+  const organizationId = getOrganizationId(location.href);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   const [organizationDetails, setOrganizationDetails]: any = React.useState({});
   const [donations, setDonations] = React.useState([]);
   const [selectedCurrency, setSelectedCurrency] = React.useState(0);
@@ -50,6 +77,7 @@ export default function donate(): JSX.Element {
 
   const currencies = ['USD', 'INR', 'EUR'];
 
+<<<<<<< HEAD
   const {
     data: data2,
     loading,
@@ -57,13 +85,24 @@ export default function donate(): JSX.Element {
   } = useQuery(ORGANIZATION_DONATION_CONNECTION_LIST, {
     variables: { orgId: organizationId },
   });
+=======
+  const { data: data2, loading } = useQuery(
+    ORGANIZATION_DONATION_CONNECTION_LIST,
+    {
+      variables: { orgId: organizationId },
+    }
+  );
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
   const { data } = useQuery(USER_ORGANIZATION_CONNECTION, {
     variables: { id: organizationId },
   });
 
+<<<<<<< HEAD
   const [donate] = useMutation(DONATE_TO_ORGANIZATION);
 
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   const navbarProps = {
     currentPage: 'donate',
   };
@@ -71,14 +110,22 @@ export default function donate(): JSX.Element {
   /* istanbul ignore next */
   const handleChangePage = (
     _event: React.MouseEvent<HTMLButtonElement> | null,
+<<<<<<< HEAD
     newPage: number,
+=======
+    newPage: number
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   ): void => {
     setPage(newPage);
   };
 
   /* istanbul ignore next */
   const handleChangeRowsPerPage = (
+<<<<<<< HEAD
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+=======
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   ): void => {
     const newRowsPerPage = event.target.value;
 
@@ -98,6 +145,7 @@ export default function donate(): JSX.Element {
     }
   }, [data2]);
 
+<<<<<<< HEAD
   const donateToOrg = (): void => {
     try {
       donate({
@@ -118,11 +166,14 @@ export default function donate(): JSX.Element {
     }
   };
 
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   return (
     <>
       <OrganizationNavbar {...navbarProps} />
       <div className={`d-flex flex-row ${styles.containerHeight}`}>
         <UserSidebar />
+<<<<<<< HEAD
         <div className={` ${styles.mainContainer}`}>
           <h1>{t(`donations`)}</h1>
           <div className={styles.inputContainer}>
@@ -156,6 +207,28 @@ export default function donate(): JSX.Element {
                 <Dropdown drop="down-centered">
                   <Dropdown.Toggle
                     className={`${styles.colorPrimary} ${styles.dropdown}`}
+=======
+        <div className={`${styles.colorLight} ${styles.mainContainer}`}>
+          <div className={`${styles.box}`}>
+            <h4>
+              {t('donateTo')} {organizationDetails.name}
+            </h4>
+            <div className={styles.donationInputContainer}>
+              <InputGroup className={styles.maxWidth}>
+                <InputGroup.Text
+                  className={`${styles.colorPrimary} ${styles.borderNone}`}
+                >
+                  {t('amount')}
+                </InputGroup.Text>
+                <Form.Control
+                  type="text"
+                  className={styles.borderNone}
+                  data-testid="searchInput"
+                />
+                <Dropdown drop="down-centered">
+                  <Dropdown.Toggle
+                    className={`${styles.colorPrimary} ${styles.borderNone}`}
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                     variant="success"
                     id="dropdown-basic"
                     data-testid={`modeChangeBtn`}
@@ -178,6 +251,7 @@ export default function donate(): JSX.Element {
                     })}
                   </Dropdown.Menu>
                 </Dropdown>
+<<<<<<< HEAD
                 <Form.Control
                   type="text"
                   className={styles.inputArea}
@@ -197,6 +271,12 @@ export default function donate(): JSX.Element {
                 onClick={donateToOrg}
                 className={`${styles.donateBtn}`}
               >
+=======
+              </InputGroup>
+            </div>
+            <div className={styles.donateActions}>
+              <Button data-testid={'donateBtn'}>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                 {t('donate')} <SendIcon />
               </Button>
             </div>
@@ -206,7 +286,13 @@ export default function donate(): JSX.Element {
             <div
               className={`d-flex flex-column justify-content-between ${styles.content}`}
             >
+<<<<<<< HEAD
               <div className={` ${styles.donationCardsContainer}`}>
+=======
+              <div
+                className={`d-flex flex-column ${styles.gap} ${styles.paddingY}`}
+              >
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                 {loading ? (
                   <div className={`d-flex flex-row justify-content-center`}>
                     <HourglassBottomIcon /> <span>Loading...</span>
@@ -217,7 +303,11 @@ export default function donate(): JSX.Element {
                       (rowsPerPage > 0
                         ? donations.slice(
                             page * rowsPerPage,
+<<<<<<< HEAD
                             page * rowsPerPage + rowsPerPage,
+=======
+                            page * rowsPerPage + rowsPerPage
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                           )
                         : /* istanbul ignore next */
                           donations
@@ -228,6 +318,7 @@ export default function donate(): JSX.Element {
                           amount: donation.amount,
                           userId: donation.userId,
                           payPalId: donation.payPalId,
+<<<<<<< HEAD
                           updatedAt: donation.updatedAt,
                         };
                         return (
@@ -235,6 +326,10 @@ export default function donate(): JSX.Element {
                             <DonationCard {...cardProps} />
                           </div>
                         );
+=======
+                        };
+                        return <DonationCard key={index} {...cardProps} />;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                       })
                     ) : (
                       <span>{t('nothingToShow')}</span>

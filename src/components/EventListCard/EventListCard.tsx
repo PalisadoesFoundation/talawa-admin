@@ -12,12 +12,16 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { Form } from 'react-bootstrap';
 import { errorHandler } from 'utils/errorHandler';
+<<<<<<< HEAD
 import { useNavigate } from 'react-router-dom';
 import { getItem } from 'utils/useLocalstorage';
 import {
   RecurringEventMutationType,
   recurringEventMutationOptions,
 } from 'utils/recurrenceUtils';
+=======
+import { useHistory } from 'react-router-dom';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 interface InterfaceEventListCardProps {
   key: string;
@@ -27,8 +31,13 @@ interface InterfaceEventListCardProps {
   eventDescription: string;
   regDate: string;
   regEndDate: string;
+<<<<<<< HEAD
   startTime: string | undefined;
   endTime: string | undefined;
+=======
+  startTime: string;
+  endTime: string;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   allDay: boolean;
   recurring: boolean;
   isPublic: boolean;
@@ -45,8 +54,12 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
   const [registrablechecked, setRegistrableChecked] = React.useState(false);
   const [eventDeleteModalIsOpen, setEventDeleteModalIsOpen] = useState(false);
   const [eventUpdateModalIsOpen, setEventUpdateModalIsOpen] = useState(false);
+<<<<<<< HEAD
   const navigate = useNavigate();
   const adminFor = getItem('AdminFor', 'admin');
+=======
+  const history = useHistory();
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   const [formState, setFormState] = useState({
     title: '',
     eventdescrip: '',
@@ -84,6 +97,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
     setRegistrableChecked(props.isRegisterable);
   }, []);
 
+<<<<<<< HEAD
   const [deleteEvent] = useMutation(DELETE_EVENT_MUTATION);
   const [updateEvent] = useMutation(UPDATE_EVENT_MUTATION);
   const [recurringEventDeleteType, setRecurringEventDeleteType] =
@@ -99,6 +113,16 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
           recurringEventDeleteType: props.recurring
             ? recurringEventDeleteType
             : undefined,
+=======
+  const [create] = useMutation(DELETE_EVENT_MUTATION);
+  const [updateEvent] = useMutation(UPDATE_EVENT_MUTATION);
+
+  const deleteEvent = async (): Promise<void> => {
+    try {
+      const { data } = await create({
+        variables: {
+          id: props.id,
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         },
       });
 
@@ -109,14 +133,22 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
           window.location.reload();
         }, 2000);
       }
+<<<<<<< HEAD
     } catch (error: unknown) {
+=======
+    } catch (error: any) {
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
 
   const updateEventHandler = async (
+<<<<<<< HEAD
     e: ChangeEvent<HTMLFormElement>,
+=======
+    e: ChangeEvent<HTMLFormElement>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   ): Promise<void> => {
     e.preventDefault();
 
@@ -143,18 +175,27 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
           window.location.reload();
         }, 2000);
       }
+<<<<<<< HEAD
     } catch (error: unknown) {
+=======
+    } catch (error: any) {
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
 
   const openEventDashboard = (): void => {
+<<<<<<< HEAD
     navigate(`/event/${props.id}`);
+=======
+    history.push(`/event/${props.id}`);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   };
 
   return (
     <>
+<<<<<<< HEAD
       <div
         className={styles.cards}
         style={{
@@ -171,6 +212,33 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
       </div>
       {/* preview modal */}
       <Modal show={eventmodalisOpen} centered>
+=======
+      <div className="">
+        <div
+          className={styles.cards}
+          onClick={showViewModal}
+          data-testid="card"
+        >
+          <div className={styles.dispflex}>
+            <h2>
+              {props.eventName ? (
+                <>
+                  {props.eventName.length > 150 ? (
+                    <>{props.eventName.substring(0, 150)}...</>
+                  ) : (
+                    <>{props.eventName}</>
+                  )}
+                </>
+              ) : (
+                <>Dogs Care</>
+              )}
+            </h2>
+          </div>
+        </div>
+      </div>
+      {/* preview modal */}
+      <Modal show={eventmodalisOpen}>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         <Modal.Header>
           <p className={styles.titlemodal}>{t('eventDetails')}</p>
           <Button
@@ -228,7 +296,10 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
                 className={styles.customButton}
                 variant="success"
                 onClick={openEventDashboard}
+<<<<<<< HEAD
                 data-testid="showEventDashboardBtn"
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
               >
                 {' '}
                 Show Event Dashboard{' '}
@@ -266,7 +337,10 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
         onHide={toggleDeleteModal}
         backdrop="static"
         keyboard={false}
+<<<<<<< HEAD
         centered
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       >
         <Modal.Header closeButton className="bg-primary">
           <Modal.Title
@@ -276,6 +350,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
             {t('deleteEvent')}
           </Modal.Title>
         </Modal.Header>
+<<<<<<< HEAD
         <Modal.Body>
           {!props.recurring && t('deleteEventMsg')}
           {props.recurring && (
@@ -305,6 +380,9 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
             </>
           )}
         </Modal.Body>
+=======
+        <Modal.Body>{t('deleteEventMsg')}</Modal.Body>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         <Modal.Footer>
           <Button
             type="button"
@@ -318,7 +396,11 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
           <Button
             type="button"
             className="btn btn-success"
+<<<<<<< HEAD
             onClick={deleteEventHandler}
+=======
+            onClick={deleteEvent}
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
             data-testid="deleteEventBtn"
           >
             {t('yes')}
@@ -425,6 +507,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
                 </div>
               </div>
             )}
+<<<<<<< HEAD
             <div className={styles.checkboxContainer}>
               <div className={styles.checkboxdiv}>
                 <div className={styles.dispflex}>
@@ -473,6 +556,52 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
                     }
                   />
                 </div>
+=======
+            <div className={styles.checkboxdiv}>
+              <div className={styles.dispflex}>
+                <label htmlFor="allday">{t('allDay')}?</label>
+                <Form.Switch
+                  id="allday"
+                  type="checkbox"
+                  data-testid="updateAllDay"
+                  checked={alldaychecked}
+                  onChange={(): void => setAllDayChecked(!alldaychecked)}
+                />
+              </div>
+              <div className={styles.dispflex}>
+                <label htmlFor="recurring">{t('recurringEvent')}:</label>
+                <Form.Switch
+                  id="recurring"
+                  type="checkbox"
+                  data-testid="updateRecurring"
+                  checked={recurringchecked}
+                  onChange={(): void => setRecurringChecked(!recurringchecked)}
+                />
+              </div>
+            </div>
+            <div className={styles.checkboxdiv}>
+              <div className={styles.dispflex}>
+                <label htmlFor="ispublic">{t('isPublic')}?</label>
+                <Form.Switch
+                  id="ispublic"
+                  type="checkbox"
+                  data-testid="updateIsPublic"
+                  checked={publicchecked}
+                  onChange={(): void => setPublicChecked(!publicchecked)}
+                />
+              </div>
+              <div className={styles.dispflex}>
+                <label htmlFor="registrable">{t('isRegistrable')}?</label>
+                <Form.Switch
+                  id="registrable"
+                  type="checkbox"
+                  data-testid="updateRegistrable"
+                  checked={registrablechecked}
+                  onChange={(): void =>
+                    setRegistrableChecked(!registrablechecked)
+                  }
+                />
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
               </div>
             </div>
           </Modal.Body>

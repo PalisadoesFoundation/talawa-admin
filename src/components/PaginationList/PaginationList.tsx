@@ -11,10 +11,17 @@ interface InterfacePropsInterface {
   page: number;
   onPageChange: (
     event: React.MouseEvent<HTMLButtonElement> | null,
+<<<<<<< HEAD
     newPage: number,
   ) => void;
   onRowsPerPageChange: (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+=======
+    newPage: number
+  ) => void;
+  onRowsPerPageChange: (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   ) => void;
 }
 

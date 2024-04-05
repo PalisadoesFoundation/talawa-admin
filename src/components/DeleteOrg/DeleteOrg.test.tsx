@@ -6,15 +6,20 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
+<<<<<<< HEAD
 import {
   DELETE_ORGANIZATION_MUTATION,
   REMOVE_SAMPLE_ORGANIZATION_MUTATION,
 } from 'GraphQl/Mutations/mutations';
+=======
+import { DELETE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 import { act } from 'react-dom/test-utils';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import DeleteOrg from './DeleteOrg';
+<<<<<<< HEAD
 import { ToastContainer, toast } from 'react-toastify';
 import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -26,10 +31,13 @@ async function wait(ms = 1000): Promise<void> {
     await new Promise((resolve) => setTimeout(resolve, ms));
   });
 }
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 const MOCKS = [
   {
     request: {
+<<<<<<< HEAD
       query: IS_SAMPLE_ORGANIZATION_QUERY,
       variables: {
         isSampleOrganizationId: '123',
@@ -56,18 +64,32 @@ const MOCKS = [
       query: DELETE_ORGANIZATION_MUTATION,
       variables: {
         id: '456',
+=======
+      query: DELETE_ORGANIZATION_MUTATION,
+      variables: {
+        id: 123,
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       },
     },
     result: {
       data: {
+<<<<<<< HEAD
         removeOrganization: {
           _id: '456',
         },
+=======
+        removeOrganization: [
+          {
+            _id: 123,
+          },
+        ],
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       },
     },
   },
 ];
 
+<<<<<<< HEAD
 const MOCKS_WITH_ERROR = [
   {
     request: {
@@ -108,6 +130,9 @@ jest.mock('react-router-dom', () => ({
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_WITH_ERROR, true);
+=======
+const link = new StaticMockLink(MOCKS, true);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 afterEach(() => {
   localStorage.clear();
@@ -115,18 +140,27 @@ afterEach(() => {
 
 describe('Delete Organization Component', () => {
   test('should be able to Toggle Delete Organization Modal', async () => {
+<<<<<<< HEAD
     mockURL = '456';
     setItem('SuperAdmin', true);
+=======
+    window.location.assign('/orgsetting/id=123');
+    localStorage.setItem('UserType', 'SUPERADMIN');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
+<<<<<<< HEAD
               <ToastContainer />
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
               <DeleteOrg />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
     );
     await wait();
@@ -154,17 +188,30 @@ describe('Delete Organization Component', () => {
       </MockedProvider>,
     );
     await wait();
+=======
+      </MockedProvider>
+    );
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     screen.getByTestId(/openDeleteModalBtn/i).click();
     expect(screen.getByTestId(/orgDeleteModal/i)).toBeInTheDocument();
     screen.getByTestId(/closeDelOrgModalBtn/i).click();
     await act(async () => {
       expect(screen.queryByTestId(/orgDeleteModal/i)).not.toHaveFocus();
     });
+<<<<<<< HEAD
   });
 
   test('Delete organization functionality should work properly', async () => {
     mockURL = '456';
     setItem('SuperAdmin', true);
+=======
+    expect(window.location).toBeAt('/orgsetting/id=123');
+  });
+
+  test('Delete organization functionality should work properly', async () => {
+    window.location.assign('/orgsetting/id=123');
+    localStorage.setItem('UserType', 'SUPERADMIN');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -174,6 +221,7 @@ describe('Delete Organization Component', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
     );
     await wait();
@@ -244,5 +292,12 @@ describe('Delete Organization Component', () => {
     screen.getByTestId(/openDeleteModalBtn/i).click();
     screen.getByTestId(/deleteOrganizationBtn/i).click();
     await wait();
+=======
+      </MockedProvider>
+    );
+    screen.getByTestId(/openDeleteModalBtn/i).click();
+    screen.getByTestId(/deleteOrganizationBtn/i).click();
+    expect(window.location).not.toBeNull();
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   });
 });

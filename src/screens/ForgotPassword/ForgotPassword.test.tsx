@@ -7,6 +7,7 @@ import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
+<<<<<<< HEAD
 import { ToastContainer } from 'react-toastify';
 
 import { GENERATE_OTP_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -18,10 +19,39 @@ import i18n from 'utils/i18nForTest';
 import useLocalStorage from 'utils/useLocalstorage';
 
 const { setItem, removeItem } = useLocalStorage();
+=======
+
+import {
+  FORGOT_PASSWORD_MUTATION,
+  GENERATE_OTP_MUTATION,
+} from 'GraphQl/Mutations/mutations';
+import { store } from 'state/store';
+import { StaticMockLink } from 'utils/StaticMockLink';
+import i18nForTest from 'utils/i18nForTest';
+import ForgotPassword from './ForgotPassword';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 const MOCKS = [
   {
     request: {
+<<<<<<< HEAD
+=======
+      query: FORGOT_PASSWORD_MUTATION,
+      variables: {
+        userOtp: '12345',
+        newPassword: 'johndoe',
+        otpToken: 'otpToken',
+      },
+    },
+    result: {
+      data: {
+        forgotPassword: true,
+      },
+    },
+  },
+  {
+    request: {
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       query: GENERATE_OTP_MUTATION,
       variables: {
         email: 'johndoe@gmail.com',
@@ -35,6 +65,7 @@ const MOCKS = [
       },
     },
   },
+<<<<<<< HEAD
 
   {
     request: {
@@ -66,6 +97,10 @@ const talawaApiUnavailableLink = new StaticMockLink(
   true,
 );
 
+=======
+];
+const link = new StaticMockLink(MOCKS, true);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -73,6 +108,7 @@ async function wait(ms = 100): Promise<void> {
     });
   });
 }
+<<<<<<< HEAD
 
 const translations = JSON.parse(
   JSON.stringify(
@@ -82,6 +118,10 @@ const translations = JSON.parse(
 
 beforeEach(() => {
   setItem('IsLoggedIn', 'FALSE');
+=======
+beforeEach(() => {
+  localStorage.setItem('IsLoggedIn', 'FALSE');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 });
 afterEach(() => {
   localStorage.clear();
@@ -95,12 +135,20 @@ describe('Testing Forgot Password screen', () => {
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
+<<<<<<< HEAD
             <I18nextProvider i18n={i18n}>
+=======
+            <I18nextProvider i18n={i18nForTest}>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
               <ForgotPassword />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -113,18 +161,30 @@ describe('Testing Forgot Password screen', () => {
   });
 
   test('Testing, If user is already loggedIn', async () => {
+<<<<<<< HEAD
     setItem('IsLoggedIn', 'TRUE');
+=======
+    localStorage.setItem('IsLoggedIn', 'TRUE');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
+<<<<<<< HEAD
             <I18nextProvider i18n={i18n}>
+=======
+            <I18nextProvider i18n={i18nForTest}>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
               <ForgotPassword />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -139,19 +199,31 @@ describe('Testing Forgot Password screen', () => {
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
+<<<<<<< HEAD
             <I18nextProvider i18n={i18n}>
+=======
+            <I18nextProvider i18n={i18nForTest}>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
               <ForgotPassword />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
 
     userEvent.type(
       screen.getByPlaceholderText(/Registered email/i),
+<<<<<<< HEAD
       formData.email,
+=======
+      formData.email
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     userEvent.click(screen.getByText('Get OTP'));
@@ -170,19 +242,31 @@ describe('Testing Forgot Password screen', () => {
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
+<<<<<<< HEAD
             <I18nextProvider i18n={i18n}>
+=======
+            <I18nextProvider i18n={i18nForTest}>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
               <ForgotPassword />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
 
     userEvent.type(
       screen.getByPlaceholderText(/Registered email/i),
+<<<<<<< HEAD
       formData.email,
+=======
+      formData.email
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     userEvent.click(screen.getByText('Get OTP'));
@@ -192,6 +276,7 @@ describe('Testing Forgot Password screen', () => {
     userEvent.type(screen.getByTestId('newPassword'), formData.newPassword);
     userEvent.type(
       screen.getByTestId('confirmNewPassword'),
+<<<<<<< HEAD
       formData.confirmNewPassword,
     );
     setItem('otpToken', 'lorem ipsum');
@@ -236,6 +321,11 @@ describe('Testing Forgot Password screen', () => {
       formData.confirmNewPassword,
     );
     removeItem('otpToken');
+=======
+      formData.confirmNewPassword
+    );
+    localStorage.setItem('otpToken', 'lorem ipsum');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     userEvent.click(screen.getByText('Change Password'));
     await wait();
   });
@@ -252,19 +342,31 @@ describe('Testing Forgot Password screen', () => {
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
+<<<<<<< HEAD
             <I18nextProvider i18n={i18n}>
+=======
+            <I18nextProvider i18n={i18nForTest}>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
               <ForgotPassword />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
 
     userEvent.type(
       screen.getByPlaceholderText(/Registered email/i),
+<<<<<<< HEAD
       formData.email,
+=======
+      formData.email
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     userEvent.click(screen.getByText('Get OTP'));
@@ -274,12 +376,17 @@ describe('Testing Forgot Password screen', () => {
     userEvent.type(screen.getByTestId('newPassword'), formData.newPassword);
     userEvent.type(
       screen.getByTestId('confirmNewPassword'),
+<<<<<<< HEAD
       formData.confirmNewPassword,
+=======
+      formData.confirmNewPassword
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     userEvent.click(screen.getByText('Change Password'));
   });
 
+<<<<<<< HEAD
   test('Testing forgot password functionality, when the user is not found', async () => {
     const formData = {
       email: 'notexists@gmail.com',
@@ -365,6 +472,8 @@ describe('Testing Forgot Password screen', () => {
     ).toBeInTheDocument();
   });
 
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   test('Testing forgot password functionality, when otp token is not present', async () => {
     const formData = {
       userOtp: '12345',
@@ -373,25 +482,41 @@ describe('Testing Forgot Password screen', () => {
       email: 'johndoe@gmail.com',
     };
 
+<<<<<<< HEAD
     setItem('otpToken', '');
+=======
+    localStorage.setItem('otpToken', '');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
+<<<<<<< HEAD
             <I18nextProvider i18n={i18n}>
+=======
+            <I18nextProvider i18n={i18nForTest}>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
               <ForgotPassword />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
 
     userEvent.type(
       screen.getByPlaceholderText(/Registered email/i),
+<<<<<<< HEAD
       formData.email,
+=======
+      formData.email
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     userEvent.click(screen.getByText('Get OTP'));
@@ -401,7 +526,11 @@ describe('Testing Forgot Password screen', () => {
     userEvent.type(screen.getByTestId('newPassword'), formData.newPassword);
     userEvent.type(
       screen.getByTestId('confirmNewPassword'),
+<<<<<<< HEAD
       formData.confirmNewPassword,
+=======
+      formData.confirmNewPassword
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
     userEvent.click(screen.getByText('Change Password'));
   });

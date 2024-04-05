@@ -4,7 +4,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+<<<<<<< HEAD
   margin-bottom: 10px;
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 
 .cardHeader .cardTitle {
@@ -15,10 +18,13 @@
 .cardBody {
   min-height: 180px;
   padding-top: 0;
+<<<<<<< HEAD
   max-height: 570px;
   overflow-y: scroll;
   width: 100%;
   max-width: 400px;
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 
 .cardBody .emptyContainer {

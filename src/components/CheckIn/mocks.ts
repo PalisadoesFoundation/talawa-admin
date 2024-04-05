@@ -25,6 +25,11 @@ const checkInQueryData: InterfaceAttendeeQueryResponse = {
         checkIn: {
           _id: 'checkin1',
           time: '08:00:00',
+<<<<<<< HEAD
+=======
+          allotedRoom: 'Room 1',
+          allotedSeat: 'Seat 1',
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         },
       },
     ],
@@ -50,6 +55,11 @@ export const checkInMutationSuccess = [
       variables: {
         userId: 'user123',
         eventId: 'event123',
+<<<<<<< HEAD
+=======
+        allotedSeat: '',
+        allotedRoom: '',
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       },
     },
     result: {
@@ -69,6 +79,11 @@ export const checkInMutationUnsuccess = [
       variables: {
         userId: 'user123',
         eventId: 'event123',
+<<<<<<< HEAD
+=======
+        allotedSeat: '',
+        allotedRoom: '',
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       },
     },
     error: new Error('Oops'),

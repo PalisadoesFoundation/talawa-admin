@@ -14,7 +14,11 @@ const tableLoader = (props: InterfaceTableLoader): JSX.Element => {
   useEffect(() => {
     if (headerTitles == undefined && noOfCols == undefined) {
       throw new Error(
+<<<<<<< HEAD
         'TableLoader error Either headerTitles or noOfCols is required !',
+=======
+        'TableLoader error Either headerTitles or noOfCols is required !'
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       );
     }
   }, []);
@@ -53,7 +57,11 @@ const tableLoader = (props: InterfaceTableLoader): JSX.Element => {
                         <div className={`${styles.loadingItem} shimmer`} />
                       </td>
                     );
+<<<<<<< HEAD
                   },
+=======
+                  }
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                 )}
               </tr>
             );

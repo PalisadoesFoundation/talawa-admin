@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useMutation } from '@apollo/client';
 import CloseIcon from '@mui/icons-material/Close';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -20,6 +21,29 @@ import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfacePostForm } from 'utils/interfaces';
 import styles from './OrgPostCard.module.css';
+=======
+import type { ChangeEvent } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import { useMutation } from '@apollo/client';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import Card from 'react-bootstrap/Card';
+import { toast } from 'react-toastify';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import CloseIcon from '@mui/icons-material/Close';
+import PushPinIcon from '@mui/icons-material/PushPin';
+import AboutImg from 'assets/images/defaultImg.png';
+import {
+  DELETE_POST_MUTATION,
+  UPDATE_POST_MUTATION,
+  TOGGLE_PINNED_POST,
+} from 'GraphQl/Mutations/mutations';
+import { useTranslation } from 'react-i18next';
+import { errorHandler } from 'utils/errorHandler';
+import styles from './OrgPostCard.module.css';
+import { Form } from 'react-bootstrap';
+import convertToBase64 from 'utils/convertToBase64';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 interface InterfaceOrgPostCardProps {
   key: string;
@@ -27,6 +51,7 @@ interface InterfaceOrgPostCardProps {
   postTitle: string;
   postInfo: string;
   postAuthor: string;
+<<<<<<< HEAD
   postPhoto: string | null;
   postVideo: string | null;
   pinned: boolean;
@@ -36,15 +61,31 @@ export default function orgPostCard(
   props: InterfaceOrgPostCardProps,
 ): JSX.Element {
   const [postformState, setPostFormState] = useState<InterfacePostForm>({
+=======
+  postPhoto: string;
+  postVideo: string;
+  pinned: boolean;
+}
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+export default function OrgPostCard(
+  props: InterfaceOrgPostCardProps
+): JSX.Element {
+  const [postformState, setPostFormState] = useState({
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     posttitle: '',
     postinfo: '',
     postphoto: '',
     postvideo: '',
     pinned: false,
   });
+<<<<<<< HEAD
   // console.log('postformState', postformState);
   const [postPhotoUpdated, setPostPhotoUpdated] = useState(false);
   const [postVideoUpdated, setPostVideoUpdated] = useState(false);
+=======
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   const [togglePost, setPostToggle] = useState('Read more');
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -68,12 +109,19 @@ export default function orgPostCard(
           window.location.reload();
         }, 2000);
       }
+<<<<<<< HEAD
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.log(error.message);
         /* istanbul ignore next */
         errorHandler(t, error);
       }
+=======
+    } catch (error: any) {
+      console.log(error);
+      /* istanbul ignore next */
+      errorHandler(t, error);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     }
   };
   const toggleShowEditModal = (): void => {
@@ -84,8 +132,11 @@ export default function orgPostCard(
       postvideo: props.postVideo,
       pinned: props.pinned,
     });
+<<<<<<< HEAD
     setPostPhotoUpdated(false);
     setPostVideoUpdated(false);
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     setShowEditModal((prev) => !prev);
   };
   const toggleShowDeleteModal = (): void => setShowDeleteModal((prev) => !prev);
@@ -111,9 +162,14 @@ export default function orgPostCard(
       ...postformState,
       postphoto: '',
     });
+<<<<<<< HEAD
     setPostPhotoUpdated(true);
     const fileInput = document.getElementById(
       'postImageUrl',
+=======
+    const fileInput = document.getElementById(
+      'postImageUrl'
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     ) as HTMLInputElement;
     if (fileInput) {
       fileInput.value = '';
@@ -125,9 +181,14 @@ export default function orgPostCard(
       ...postformState,
       postvideo: '',
     });
+<<<<<<< HEAD
     setPostVideoUpdated(true);
     const fileInput = document.getElementById(
       'postVideoUrl',
+=======
+    const fileInput = document.getElementById(
+      'postVideoUrl'
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     ) as HTMLInputElement;
     if (fileInput) {
       fileInput.value = '';
@@ -159,7 +220,10 @@ export default function orgPostCard(
   }
 
   useEffect(() => {
+<<<<<<< HEAD
     // console.log(props.postPhoto);
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     setPostFormState({
       posttitle: props.postTitle,
       postinfo: props.postInfo,
@@ -186,7 +250,10 @@ export default function orgPostCard(
 
       if (data) {
         toast.success(t('postDeleted'));
+<<<<<<< HEAD
         toggleShowDeleteModal();
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         setTimeout(() => {
           window.location.reload();
         });
@@ -196,7 +263,11 @@ export default function orgPostCard(
     }
   };
   const handleInputEvent = (
+<<<<<<< HEAD
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+=======
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   ): void => {
     const { name, value } = e.target;
     setPostFormState((prevPostFormState) => ({
@@ -206,22 +277,45 @@ export default function orgPostCard(
   };
 
   const updatePostHandler = async (
+<<<<<<< HEAD
     e: ChangeEvent<HTMLFormElement>,
+=======
+    e: ChangeEvent<HTMLFormElement>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   ): Promise<void> => {
     e.preventDefault();
 
     try {
+<<<<<<< HEAD
+=======
+      let imageUrl = null;
+      let videoUrl = null;
+
+      if (e.target?.postphoto && e.target?.postphoto.files.length > 0) {
+        imageUrl = postformState.postphoto;
+      }
+
+      if (e.target?.postvideo && e.target?.postvideo.files.length > 0) {
+        videoUrl = postformState.postvideo;
+      }
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       const { data } = await updatePostMutation({
         variables: {
           id: props.id,
           title: postformState.posttitle,
           text: postformState.postinfo,
+<<<<<<< HEAD
           ...(postPhotoUpdated && {
             imageUrl: postformState.postphoto,
           }),
           ...(postVideoUpdated && {
             videoUrl: postformState.postvideo,
           }),
+=======
+          imageUrl,
+          videoUrl,
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         },
       });
 
@@ -238,7 +332,11 @@ export default function orgPostCard(
 
   return (
     <>
+<<<<<<< HEAD
       <div className="col-xl-4 col-lg-4 col-md-6" data-testid="post-item">
+=======
+      <div className="col-xl-4 col-lg-4 col-md-6">
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         <div
           className={styles.cards}
           onClick={handleCardClick}
@@ -516,7 +614,11 @@ export default function orgPostCard(
               data-testid="updateText"
               required
             />
+<<<<<<< HEAD
             {!props.postPhoto && (
+=======
+            {props.postPhoto && (
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
               <>
                 <Form.Label htmlFor="postPhoto">{t('image')}</Form.Label>
                 <Form.Control
@@ -528,13 +630,21 @@ export default function orgPostCard(
                   placeholder={t('image')}
                   multiple={false}
                   onChange={async (
+<<<<<<< HEAD
                     e: React.ChangeEvent<HTMLInputElement>,
+=======
+                    e: React.ChangeEvent<HTMLInputElement>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                   ): Promise<void> => {
                     setPostFormState((prevPostFormState) => ({
                       ...prevPostFormState,
                       postphoto: '',
                     }));
+<<<<<<< HEAD
                     setPostPhotoUpdated(true);
+=======
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                     const file = e.target.files?.[0];
                     if (file) {
                       setPostFormState({
@@ -565,7 +675,11 @@ export default function orgPostCard(
                 )}
               </>
             )}
+<<<<<<< HEAD
             {!props.postVideo && (
+=======
+            {props.postVideo && (
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
               <>
                 <Form.Label htmlFor="postvideo">{t('video')}</Form.Label>
                 <Form.Control
@@ -577,13 +691,20 @@ export default function orgPostCard(
                   placeholder={t('video')}
                   multiple={false}
                   onChange={async (
+<<<<<<< HEAD
                     e: React.ChangeEvent<HTMLInputElement>,
+=======
+                    e: React.ChangeEvent<HTMLInputElement>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                   ): Promise<void> => {
                     setPostFormState((prevPostFormState) => ({
                       ...prevPostFormState,
                       postvideo: '',
                     }));
+<<<<<<< HEAD
                     setPostVideoUpdated(true);
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                     const target = e.target as HTMLInputElement;
                     const file = target.files && target.files[0];
                     if (file) {

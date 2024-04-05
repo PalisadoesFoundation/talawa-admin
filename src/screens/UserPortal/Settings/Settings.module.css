@@ -1,7 +1,11 @@
 .mainContainer {
   width: 50%;
   flex-grow: 3;
+<<<<<<< HEAD
   padding: 25px;
+=======
+  padding: 40px;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   max-height: 100%;
   overflow: auto;
 }
@@ -10,6 +14,7 @@
   height: calc(100vh - 66px);
 }
 
+<<<<<<< HEAD
 .cardHeader .cardTitle {
   font-size: 1.2rem;
   font-weight: 600;
@@ -85,4 +90,19 @@
   .profileContainer {
     flex-direction: column;
   }
+=======
+.content {
+  display: flex;
+  flex-direction: column;
+  max-width: 300px;
+  gap: 15px;
+}
+
+.imageInput {
+  background-color: white;
+}
+
+.colorLight {
+  background-color: white;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }

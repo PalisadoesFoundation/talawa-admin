@@ -33,6 +33,7 @@ export const updatePluginLinks = (plugins: any) => {
     });
   };
 };
+<<<<<<< HEAD
 
 export const updateTargets = (orgId: string | undefined) => {
   return (dispatch: any): void => {
@@ -42,3 +43,5 @@ export const updateTargets = (orgId: string | undefined) => {
     });
   };
 };
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1

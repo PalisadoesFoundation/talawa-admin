@@ -37,7 +37,11 @@ describe('Testing Table Row for CheckIn Table', () => {
             </Provider>
           </MockedProvider>
         </LocalizationProvider>
+<<<<<<< HEAD
       </BrowserRouter>,
+=======
+      </BrowserRouter>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await waitFor(() => expect(queryByText('Check In')).toBeInTheDocument());
@@ -45,7 +49,11 @@ describe('Testing Table Row for CheckIn Table', () => {
     fireEvent.click(queryByText('Check In') as Element);
 
     await waitFor(() =>
+<<<<<<< HEAD
       expect(queryByText('Checked in successfully!')).toBeInTheDocument(),
+=======
+      expect(queryByText('Checked in successfully!')).toBeInTheDocument()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
   });
 
@@ -58,6 +66,11 @@ describe('Testing Table Row for CheckIn Table', () => {
         checkIn: {
           _id: '123',
           time: '12:00:00',
+<<<<<<< HEAD
+=======
+          allotedRoom: '',
+          allotedSeat: '',
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         },
         eventId: `event123`,
       },
@@ -76,7 +89,11 @@ describe('Testing Table Row for CheckIn Table', () => {
             </Provider>
           </MockedProvider>
         </LocalizationProvider>
+<<<<<<< HEAD
       </BrowserRouter>,
+=======
+      </BrowserRouter>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     // Stubbing functions required by the @pdfme to show pdfs
@@ -85,13 +102,21 @@ describe('Testing Table Row for CheckIn Table', () => {
 
     await waitFor(() => expect(queryByText('Checked In')).toBeInTheDocument());
     await waitFor(() =>
+<<<<<<< HEAD
       expect(queryByText('Download Tag')).toBeInTheDocument(),
+=======
+      expect(queryByText('Download Tag')).toBeInTheDocument()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     fireEvent.click(queryByText('Download Tag') as Element);
 
     await waitFor(() =>
+<<<<<<< HEAD
       expect(queryByText('Generating pdf...')).toBeInTheDocument(),
+=======
+      expect(queryByText('Generating pdf...')).toBeInTheDocument()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
     await waitFor(() => {
       expect(queryByText('PDF generated successfully!')).toBeInTheDocument();
@@ -122,7 +147,11 @@ describe('Testing Table Row for CheckIn Table', () => {
             </Provider>
           </MockedProvider>
         </LocalizationProvider>
+<<<<<<< HEAD
       </BrowserRouter>,
+=======
+      </BrowserRouter>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await waitFor(() => expect(queryByText('Check In')).toBeInTheDocument());
@@ -131,8 +160,13 @@ describe('Testing Table Row for CheckIn Table', () => {
 
     await waitFor(() =>
       expect(
+<<<<<<< HEAD
         queryByText('There was an error in checking in!'),
       ).toBeInTheDocument(),
+=======
+        queryByText('There was an error in checking in!')
+      ).toBeInTheDocument()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
     await waitFor(() => expect(queryByText('Oops')).toBeInTheDocument());
   });

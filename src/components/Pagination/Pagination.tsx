@@ -13,7 +13,11 @@ interface InterfaceTablePaginationActionsProps {
   rowsPerPage: number;
   onPageChange: (
     event: React.MouseEvent<HTMLButtonElement>,
+<<<<<<< HEAD
     newPage: number,
+=======
+    newPage: number
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   ) => void;
 }
 
@@ -23,27 +27,43 @@ function pagination(props: InterfaceTablePaginationActionsProps): JSX.Element {
 
   /* istanbul ignore next */
   const handleFirstPageButtonClick = (
+<<<<<<< HEAD
     event: React.MouseEvent<HTMLButtonElement>,
+=======
+    event: React.MouseEvent<HTMLButtonElement>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   ): void => {
     onPageChange(event, 0);
   };
 
   const handleBackButtonClick = (
+<<<<<<< HEAD
     event: React.MouseEvent<HTMLButtonElement>,
+=======
+    event: React.MouseEvent<HTMLButtonElement>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   ): void => {
     onPageChange(event, page - 1);
   };
 
   /* istanbul ignore next */
   const handleNextButtonClick = (
+<<<<<<< HEAD
     event: React.MouseEvent<HTMLButtonElement>,
+=======
+    event: React.MouseEvent<HTMLButtonElement>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   ): void => {
     onPageChange(event, page + 1);
   };
 
   /* istanbul ignore next */
   const handleLastPageButtonClick = (
+<<<<<<< HEAD
     event: React.MouseEvent<HTMLButtonElement>,
+=======
+    event: React.MouseEvent<HTMLButtonElement>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   ): void => {
     onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
   };

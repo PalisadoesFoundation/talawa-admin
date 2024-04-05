@@ -3,11 +3,14 @@ import dayjs from 'dayjs';
 import Button from 'react-bootstrap/Button';
 import React, { useState, useEffect } from 'react';
 import styles from './EventCalendar.module.css';
+<<<<<<< HEAD
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import CurrentHourIndicator from 'components/CurrentHourIndicator/CurrentHourIndicator';
 import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 import HolidayCard from '../HolidayCards/HolidayCard';
 import { holidays, hours, months, weekdays } from './constants';
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 interface InterfaceEvent {
   _id: string;
@@ -16,8 +19,13 @@ interface InterfaceEvent {
   startDate: string;
   endDate: string;
   location: string;
+<<<<<<< HEAD
   startTime: string | undefined;
   endTime: string | undefined;
+=======
+  startTime: string;
+  endTime: string;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   allDay: boolean;
   recurring: boolean;
   registrants?: InterfaceIEventAttendees[];
@@ -30,7 +38,10 @@ interface InterfaceCalendarProps {
   orgData?: InterfaceIOrgList;
   userRole?: string;
   userId?: string;
+<<<<<<< HEAD
   viewType?: ViewType;
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 
 enum Status {
@@ -44,7 +55,10 @@ enum Role {
   SUPERADMIN = 'SUPERADMIN',
   ADMIN = 'ADMIN',
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 interface InterfaceIEventAttendees {
   userId: string;
   user?: string;
@@ -60,6 +74,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   orgData,
   userRole,
   userId,
+<<<<<<< HEAD
   viewType,
 }) => {
   const [selectedDate] = useState<Date | null>(null);
@@ -79,12 +94,40 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+=======
+}) => {
+  const [selectedDate] = useState<Date | null>(null);
+  const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+
+  const today = new Date();
+  const [currentMonth, setCurrentMonth] = useState(today.getMonth());
+  const [currentYear, setCurrentYear] = useState(today.getFullYear());
+  const [events, setEvents] = useState<InterfaceEvent[] | null>(null);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
   const filterData = (
     eventData: InterfaceEvent[],
     orgData?: InterfaceIOrgList,
     userRole?: string,
+<<<<<<< HEAD
     userId?: string,
+=======
+    userId?: string
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   ): InterfaceEvent[] => {
     const data: InterfaceEvent[] = [];
     if (userRole === Role.SUPERADMIN) return eventData;
@@ -95,7 +138,11 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         if (event.isPublic) data.push(event);
         if (!event.isPublic) {
           const filteredOrg: boolean | undefined = orgData?.admins?.some(
+<<<<<<< HEAD
             (data) => data._id === userId,
+=======
+            (data) => data._id === userId
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
           );
 
           if (filteredOrg) {
@@ -107,7 +154,11 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       eventData?.forEach((event) => {
         if (event.isPublic) data.push(event);
         const userAttending = event.registrants?.some(
+<<<<<<< HEAD
           (data) => data.userId === userId,
+=======
+          (data) => data.userId === userId
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         );
         if (userAttending) {
           data.push(event);
@@ -123,7 +174,10 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   }, [eventData, orgData, userRole, userId]);
 
   const handlePrevMonth = (): void => {
+<<<<<<< HEAD
     /*istanbul ignore next*/
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     if (currentMonth === 0) {
       setCurrentMonth(11);
       setCurrentYear(currentYear - 1);
@@ -133,7 +187,10 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   };
 
   const handleNextMonth = (): void => {
+<<<<<<< HEAD
     /*istanbul ignore next*/
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     if (currentMonth === 11) {
       setCurrentMonth(0);
       setCurrentYear(currentYear + 1);
@@ -141,6 +198,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       setCurrentMonth(currentMonth + 1);
     }
   };
+<<<<<<< HEAD
 
   const handlePrevDate = (): void => {
     /*istanbul ignore next*/
@@ -305,6 +363,52 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                 ) {
                   return datas;
                 }
+=======
+  const handleTodayButton = (): void => {
+    setCurrentYear(today.getFullYear());
+    setCurrentMonth(today.getMonth());
+  };
+  const renderDays = (): JSX.Element[] => {
+    const monthStart = new Date(currentYear, currentMonth, 1);
+    const monthEnd = new Date(currentYear, currentMonth + 1, 0);
+    const startDate = new Date(
+      monthStart.getFullYear(),
+      monthStart.getMonth(),
+      monthStart.getDate() - monthStart.getDay()
+    );
+    const endDate = new Date(
+      monthEnd.getFullYear(),
+      monthEnd.getMonth(),
+      monthEnd.getDate() + (6 - monthEnd.getDay())
+    );
+    const days = [];
+    let currentDate = startDate;
+    while (currentDate <= endDate) {
+      days.push(currentDate);
+      currentDate = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth(),
+        currentDate.getDate() + 1
+      );
+    }
+    return days.map((date, index) => {
+      const className = [
+        date.toLocaleDateString() === today.toLocaleDateString() //Styling for today day cell
+          ? styles.day__today
+          : '',
+        date.getMonth() !== currentMonth ? styles.day__outside : '', //Styling for days outside the current month
+        selectedDate?.getTime() === date.getTime() ? styles.day__selected : '',
+        styles.day,
+      ].join(' ');
+      return (
+        <div style={{}} key={index} className={className} data-testid="day">
+          {date.getDate()}
+          <div className={styles.list_box}>
+            {events
+              ?.filter((datas) => {
+                if (datas.startDate == dayjs(date).format('YYYY-MM-DD'))
+                  return datas;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
               })
               .map((datas: InterfaceEvent) => {
                 return (
@@ -324,6 +428,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                     isRegisterable={datas.isRegisterable}
                   />
                 );
+<<<<<<< HEAD
               }) || [];
           /*istanbul ignore next*/
           return (
@@ -509,6 +614,10 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
               )}
             </div>
           )}
+=======
+              })}
+          </div>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         </div>
       );
     });
@@ -517,6 +626,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   return (
     <div className={styles.calendar}>
       <div className={styles.calendar__header}>
+<<<<<<< HEAD
         <Button
           variant="outlined"
           className={styles.button}
@@ -526,10 +636,16 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           <ChevronLeft />
         </Button>
 
+=======
+        <Button className={styles.button} onClick={handlePrevMonth}>
+          {'<'}
+        </Button>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         <div
           className={styles.calendar__header_month}
           data-testid="current-date"
         >
+<<<<<<< HEAD
           {viewType == ViewType.DAY ? `${currentDate}` : ``} {currentYear}{' '}
           <div>{months[currentMonth]}</div>
         </div>
@@ -547,10 +663,20 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             onClick={handleTodayButton}
             data-testid="today"
           >
+=======
+          {months[currentMonth]} {currentYear}
+        </div>
+        <Button className={styles.button} onClick={handleNextMonth}>
+          {'>'}
+        </Button>
+        <div>
+          <Button className={styles.btn__today} onClick={handleTodayButton}>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
             Today
           </Button>
         </div>
       </div>
+<<<<<<< HEAD
       <div className={`${styles.calendar__scroll} customScroll`}>
         {viewType == ViewType.MONTH ? (
           <div>
@@ -568,6 +694,17 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           <div className={styles.clendar__hours}>{renderHours()}</div>
         )}
       </div>
+=======
+
+      <div className={styles.calendar__weekdays}>
+        {weekdays.map((weekday, index) => (
+          <div key={index} className={styles.weekday}>
+            {weekday}
+          </div>
+        ))}
+      </div>
+      <div className={styles.calendar__days}>{renderDays()}</div>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     </div>
   );
 };

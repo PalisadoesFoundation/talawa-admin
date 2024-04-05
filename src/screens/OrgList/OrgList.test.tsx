@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // SKIP_LOCALSTORAGE_CHECK
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
@@ -9,6 +10,11 @@ import {
   cleanup,
   waitFor,
 } from '@testing-library/react';
+=======
+import React from 'react';
+import { MockedProvider } from '@apollo/react-testing';
+import { act, render, screen } from '@testing-library/react';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 import userEvent from '@testing-library/user-event';
 import 'jest-localstorage-mock';
 import 'jest-location-mock';
@@ -19,6 +25,7 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import OrgList from './OrgList';
+<<<<<<< HEAD
 
 import {
   MOCKS,
@@ -32,6 +39,9 @@ jest.setTimeout(30000);
 import useLocalStorage from 'utils/useLocalstorage';
 
 const { setItem } = useLocalStorage();
+=======
+import { MOCKS, MOCKS_ADMIN, MOCKS_EMPTY } from './OrgListMocks';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -43,6 +53,7 @@ async function wait(ms = 100): Promise<void> {
 
 afterEach(() => {
   localStorage.clear();
+<<<<<<< HEAD
   cleanup();
 });
 
@@ -52,10 +63,20 @@ describe('Organisations Page testing as SuperAdmin', () => {
   const link = new StaticMockLink(MOCKS, true);
   const link2 = new StaticMockLink(MOCKS_EMPTY, true);
   const link3 = new StaticMockLink(MOCKS_WITH_ERROR, true);
+=======
+});
+
+describe('Organisations Page testing as SuperAdmin', () => {
+  localStorage.setItem('id', '123');
+
+  const link = new StaticMockLink(MOCKS, true);
+  const link2 = new StaticMockLink(MOCKS_EMPTY, true);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
   const formData = {
     name: 'Dummy Organization',
     description: 'This is a dummy organization',
+<<<<<<< HEAD
     address: {
       city: 'Kingston',
       countryCode: 'JM',
@@ -74,6 +95,14 @@ describe('Organisations Page testing as SuperAdmin', () => {
     setItem('SuperAdmin', true);
     setItem('AdminFor', []);
 
+=======
+    location: 'Delhi, India',
+    image: new File(['hello'], 'hello.png', { type: 'image/png' }),
+  };
+
+  test('Testing search functionality', async () => {
+    localStorage.setItem('id', '123');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -83,6 +112,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
     );
 
@@ -107,12 +137,16 @@ describe('Organisations Page testing as SuperAdmin', () => {
           </Provider>
         </BrowserRouter>
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
     await wait();
 
     // Test that the search bar filters organizations by name
     const searchBar = screen.getByTestId(/searchByName/i);
     expect(searchBar).toBeInTheDocument();
+<<<<<<< HEAD
     userEvent.type(searchBar, 'Dummy{enter}');
   });
 
@@ -137,13 +171,20 @@ describe('Organisations Page testing as SuperAdmin', () => {
     const searchBtn = screen.getByTestId('searchBtn');
     userEvent.type(searchBar, 'Dummy');
     fireEvent.click(searchBtn);
+=======
+    userEvent.type(searchBar, 'Dummy');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   });
 
   test('Should render no organisation warning alert when there are no organization', async () => {
     window.location.assign('/');
+<<<<<<< HEAD
     setItem('id', '123');
     setItem('SuperAdmin', true);
     setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
+=======
+    localStorage.setItem('id', '123');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
     render(
       <MockedProvider addTypename={false} link={link2}>
@@ -154,22 +195,33 @@ describe('Organisations Page testing as SuperAdmin', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
     expect(screen.queryByText('Organizations Not Found')).toBeInTheDocument();
     expect(
+<<<<<<< HEAD
       screen.queryByText('Please create an organization through dashboard'),
+=======
+      screen.queryByText('Please create an organization through dashboard')
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     ).toBeInTheDocument();
     expect(window.location).toBeAt('/');
   });
 
   test('Testing Organization data is not present', async () => {
+<<<<<<< HEAD
     setItem('id', '123');
     setItem('SuperAdmin', false);
     setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     render(
       <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
@@ -177,19 +229,30 @@ describe('Organisations Page testing as SuperAdmin', () => {
             <OrgList />
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
   });
 
   test('Testing create organization modal', async () => {
+<<<<<<< HEAD
     setItem('id', '123');
     setItem('SuperAdmin', true);
     setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
     render(
       <MockedProvider addTypename={true} link={link}>
+=======
+    localStorage.setItem('id', '123');
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -197,6 +260,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
     );
 
@@ -401,10 +465,75 @@ describe('Organisations Page testing as SuperAdmin', () => {
       address.sortingCode,
     );
     expect(screen.getByTestId(/userRegistrationRequired/i)).not.toBeChecked();
+=======
+      </MockedProvider>
+    );
+
+    await wait();
+    const createOrgBtn = screen.getByTestId(/createOrganizationBtn/i);
+    expect(createOrgBtn).toBeInTheDocument();
+    userEvent.click(createOrgBtn);
+    userEvent.click(screen.getByTestId(/closeModalBtn/i));
+  });
+
+  test('Create organization model should work properly', async () => {
+    localStorage.setItem('id', '123');
+    localStorage.setItem('UserType', 'SUPERADMIN');
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <OrgList />
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
+
+      await wait(500);
+
+      expect(localStorage.setItem).toHaveBeenLastCalledWith(
+        'UserType',
+        'SUPERADMIN'
+      );
+
+      userEvent.click(screen.getByTestId(/createOrganizationBtn/i));
+
+      userEvent.type(
+        screen.getByTestId(/modalOrganizationName/i),
+        formData.name
+      );
+      userEvent.type(
+        screen.getByPlaceholderText(/Description/i),
+        formData.description
+      );
+      userEvent.type(
+        screen.getByPlaceholderText(/Location/i),
+        formData.location
+      );
+      userEvent.click(screen.getByTestId(/isPublic/i));
+      userEvent.click(screen.getByTestId(/visibleInSearch/i));
+      userEvent.upload(screen.getByLabelText(/Display Image/i), formData.image);
+
+      await wait(500);
+    });
+
+    expect(screen.getByTestId(/modalOrganizationName/i)).toHaveValue(
+      formData.name
+    );
+    expect(screen.getByPlaceholderText(/Description/i)).toHaveValue(
+      formData.description
+    );
+    expect(screen.getByPlaceholderText(/Location/i)).toHaveValue(
+      formData.location
+    );
+    expect(screen.getByTestId(/isPublic/i)).not.toBeChecked();
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     expect(screen.getByTestId(/visibleInSearch/i)).toBeChecked();
     expect(screen.getByLabelText(/Display Image/i)).toBeTruthy();
 
     userEvent.click(screen.getByTestId(/submitOrganizationForm/i));
+<<<<<<< HEAD
     // await act(async () => {
     //   await new Promise((resolve) => setTimeout(resolve, 1000));
     // });
@@ -471,15 +600,22 @@ describe('Organisations Page testing as SuperAdmin', () => {
       ).toBeInTheDocument(),
     );
   });
+=======
+  }, 10000);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 });
 
 describe('Organisations Page testing as Admin', () => {
   const link = new StaticMockLink(MOCKS_ADMIN, true);
 
   test('Create organization modal should not be present in the page for Admin', async () => {
+<<<<<<< HEAD
     setItem('id', '123');
     setItem('SuperAdmin', false);
     setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
+=======
+    localStorage.setItem('id', '123');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -490,6 +626,7 @@ describe('Organisations Page testing as Admin', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
     );
     await waitFor(() => {
@@ -532,5 +669,12 @@ describe('Organisations Page testing as Admin', () => {
       fireEvent.click(toggleTite);
       expect(searchInput).toBeInTheDocument();
     });
+=======
+      </MockedProvider>
+    );
+
+    await wait();
+    expect(screen.queryByText(/Create Organization/i)).toBeNull();
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   });
 });

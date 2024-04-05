@@ -1,5 +1,6 @@
 # Documentation
 Welcome to our documentation guide. Here are some useful tips you need to know!
+<<<<<<< HEAD
 
 # Table of Contents
 
@@ -11,6 +12,8 @@ Welcome to our documentation guide. Here are some useful tips you need to know!
 
 <!-- tocstop -->
 
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 ## Where to find our documentation
 
 Our documentation can be found in ONLY TWO PLACES:

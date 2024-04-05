@@ -35,11 +35,19 @@ describe('Testing Check In Attendees Modal', () => {
             </Provider>
           </LocalizationProvider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
     );
 
     await waitFor(() =>
       expect(queryByText('Event Check In Management')).toBeInTheDocument(),
+=======
+      </MockedProvider>
+    );
+
+    await waitFor(() =>
+      expect(queryByText('Event Check In Management')).toBeInTheDocument()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await waitFor(() => expect(queryByText('John Doe')).toBeInTheDocument());
@@ -52,7 +60,11 @@ describe('Testing Check In Attendees Modal', () => {
 
     await waitFor(() => expect(queryByText('John Doe')).toBeInTheDocument());
     await waitFor(() =>
+<<<<<<< HEAD
       expect(queryByText('John2 Doe2')).not.toBeInTheDocument(),
+=======
+      expect(queryByText('John2 Doe2')).not.toBeInTheDocument()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
   });
 });

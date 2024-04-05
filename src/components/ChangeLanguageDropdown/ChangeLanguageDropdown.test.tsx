@@ -23,7 +23,11 @@ describe('Testing Change Language Dropdown', () => {
         <I18nextProvider i18n={i18nForTest}>
           <ChangeLanguageDropDown />
         </I18nextProvider>
+<<<<<<< HEAD
       </BrowserRouter>,
+=======
+      </BrowserRouter>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     expect(getByTestId('language-dropdown-container')).toBeInTheDocument();
@@ -39,7 +43,11 @@ describe('Testing Change Language Dropdown', () => {
 
     languages.map((language) => {
       expect(
+<<<<<<< HEAD
         getByTestId(`change-language-btn-${language.code}`),
+=======
+        getByTestId(`change-language-btn-${language.code}`)
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       ).toBeInTheDocument();
     });
   });
@@ -55,10 +63,17 @@ describe('Testing Change Language Dropdown', () => {
         <I18nextProvider i18n={i18nForTest}>
           <ChangeLanguageDropDown {...props} />
         </I18nextProvider>
+<<<<<<< HEAD
       </BrowserRouter>,
     );
     getByTestId('language-dropdown-container').className.includes(
       props.parentContainerStyle,
+=======
+      </BrowserRouter>
+    );
+    getByTestId('language-dropdown-container').className.includes(
+      props.parentContainerStyle
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
     getByTestId('language-dropdown-btn').className.includes(props.btnStyle);
     getByTestId('dropdown-btn-0').className.includes(props.btnTextStyle);
@@ -73,7 +88,11 @@ describe('Testing Change Language Dropdown', () => {
     render(
       <I18nextProvider i18n={i18nForTest}>
         <ChangeLanguageDropDown />
+<<<<<<< HEAD
       </I18nextProvider>,
+=======
+      </I18nextProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -89,14 +108,22 @@ describe('Testing Change Language Dropdown', () => {
     const { getByTestId } = render(
       <I18nextProvider i18n={i18nForTest}>
         <ChangeLanguageDropDown />
+<<<<<<< HEAD
       </I18nextProvider>,
+=======
+      </I18nextProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     userEvent.click(getByTestId('language-dropdown-btn'));
     await wait();
     languages.map((language) => {
       const changeLanguageBtn = getByTestId(
+<<<<<<< HEAD
         `change-language-btn-${language.code}`,
+=======
+        `change-language-btn-${language.code}`
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       );
       expect(changeLanguageBtn).toBeInTheDocument();
       userEvent.click(changeLanguageBtn);

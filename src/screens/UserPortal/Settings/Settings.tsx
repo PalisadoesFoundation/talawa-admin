@@ -3,13 +3,18 @@ import { useTranslation } from 'react-i18next';
 import styles from './Settings.module.css';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import UserNavbar from 'components/UserPortal/UserNavbar/UserNavbar';
+<<<<<<< HEAD
 import { Button, Card, Col, Form, Row } from 'react-bootstrap';
+=======
+import { Button, Form } from 'react-bootstrap';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 import convertToBase64 from 'utils/convertToBase64';
 import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation, useQuery } from '@apollo/client';
 import { errorHandler } from 'utils/errorHandler';
 import { toast } from 'react-toastify';
 import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
+<<<<<<< HEAD
 import useLocalStorage from 'utils/useLocalstorage';
 import {
   countryOptions,
@@ -21,12 +26,15 @@ import {
 import UserProfile from 'components/UserProfileSettings/UserProfile';
 import DeleteUser from 'components/UserProfileSettings/DeleteUser';
 import OtherSettings from 'components/UserProfileSettings/OtherSettings';
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 export default function settings(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'settings',
   });
 
+<<<<<<< HEAD
   const { setItem } = useLocalStorage();
 
   const { data } = useQuery(CHECK_AUTH, { fetchPolicy: 'network-only' });
@@ -61,19 +69,55 @@ export default function settings(): JSX.Element {
       });
       /* istanbul ignore next */
       if (data) {
+=======
+  const { data } = useQuery(CHECK_AUTH);
+  const [image, setImage] = React.useState('');
+  const [updateUserDetails] = useMutation(UPDATE_USER_MUTATION);
+  const [firstName, setFirstName] = React.useState('');
+  const [lastName, setLastName] = React.useState('');
+  const [email, setEmail] = React.useState('');
+
+  const handleUpdateUserDetails = async (): Promise<void> => {
+    let variables: any = {
+      firstName,
+      lastName,
+    };
+
+    /* istanbul ignore next */
+    if (image) {
+      variables = {
+        ...variables,
+        file: image,
+      };
+    }
+    try {
+      const { data } = await updateUserDetails({
+        variables,
+      });
+
+      /* istanbul ignore next */
+      if (data) {
+        setImage('');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         toast.success('Your details have been updated.');
         setTimeout(() => {
           window.location.reload();
         }, 500);
 
+<<<<<<< HEAD
         const userFullName = `${userDetails.firstName} ${userDetails.lastName}`;
         setItem('name', userFullName);
+=======
+        const userFullName = `${firstName} ${lastName}`;
+        localStorage.setItem('name', userFullName);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       }
     } catch (error: any) {
       errorHandler(t, error);
     }
   };
 
+<<<<<<< HEAD
   const handleFieldChange = (fieldName: string, value: string): void => {
     setUserDetails((prevState) => ({
       ...prevState,
@@ -117,11 +161,22 @@ export default function settings(): JSX.Element {
         country: address?.countryCode || '',
       });
     }
+=======
+  const handleFirstNameChange = (e: any): void => {
+    const { value } = e.target;
+    setFirstName(value);
+  };
+
+  const handleLastNameChange = (e: any): void => {
+    const { value } = e.target;
+    setLastName(value);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   };
 
   React.useEffect(() => {
     /* istanbul ignore next */
     if (data) {
+<<<<<<< HEAD
       const {
         firstName,
         lastName,
@@ -155,12 +210,21 @@ export default function settings(): JSX.Element {
     }
   }, [data]);
   console.log('userDetails', userDetails);
+=======
+      setFirstName(data.checkAuth.firstName);
+      setLastName(data.checkAuth.lastName);
+      setEmail(data.checkAuth.email);
+    }
+  }, [data]);
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   return (
     <>
       <UserNavbar />
       <div className={`d-flex flex-row ${styles.containerHeight}`}>
         <UserSidebar />
         <div className={`${styles.mainContainer}`}>
+<<<<<<< HEAD
           <h3>{t('settings')}</h3>
           <Row>
             <Col lg={5} className="d-lg-none">
@@ -542,6 +606,63 @@ export default function settings(): JSX.Element {
               <OtherSettings />
             </Col>
           </Row>
+=======
+          <h3>{t('profileSettings')}</h3>
+          <div className={`${styles.content}`}>
+            <Form.Label htmlFor="inputFirstName">{t('firstName')}</Form.Label>
+            <Form.Control
+              type="text"
+              id="inputFirstName"
+              value={firstName}
+              onChange={handleFirstNameChange}
+              className={`${styles.colorLight}`}
+              data-testid="inputFirstName"
+            />
+            <Form.Label htmlFor="inputLastName">{t('lastName')}</Form.Label>
+            <Form.Control
+              type="text"
+              id="inputLastName"
+              value={lastName}
+              onChange={handleLastNameChange}
+              className={`${styles.colorLight}`}
+              data-testid="inputLastName"
+            />
+            <Form.Label htmlFor="inputEmail">{t('emailAddress')}</Form.Label>
+            <Form.Control
+              type="email"
+              id="inputEmail"
+              value={email}
+              className={`${styles.colorLight}`}
+              disabled
+            />
+            {t('updateImage')}
+            <Form.Control
+              accept="image/*"
+              id="postphoto"
+              name="photo"
+              type="file"
+              className={styles.imageInput}
+              multiple={false}
+              onChange={
+                /* istanbul ignore next */
+                async (e: React.ChangeEvent): Promise<void> => {
+                  const target = e.target as HTMLInputElement;
+                  const file = target.files && target.files[0];
+                  if (file) {
+                    const image = await convertToBase64(file);
+                    setImage(image);
+                  }
+                }
+              }
+            />
+            <Button
+              onClick={handleUpdateUserDetails}
+              data-testid="updateUserBtn"
+            >
+              {t('save')}
+            </Button>
+          </div>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         </div>
       </div>
     </>

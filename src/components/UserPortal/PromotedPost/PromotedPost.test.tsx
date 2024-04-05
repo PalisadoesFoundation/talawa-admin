@@ -37,7 +37,11 @@ describe('Testing PromotedPost Test', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -58,7 +62,11 @@ describe('Testing PromotedPost Test', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -75,7 +83,11 @@ test('Component should display the icon correctly', async () => {
           </I18nextProvider>
         </Provider>
       </BrowserRouter>
+<<<<<<< HEAD
     </MockedProvider>,
+=======
+    </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   );
 
   await waitFor(() => {
@@ -94,7 +106,11 @@ test('Component should display the text correctly', async () => {
           </I18nextProvider>
         </Provider>
       </BrowserRouter>
+<<<<<<< HEAD
     </MockedProvider>,
+=======
+    </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   );
 
   await waitFor(() => {
@@ -117,7 +133,11 @@ test('Component should display the image correctly', async () => {
           </I18nextProvider>
         </Provider>
       </BrowserRouter>
+<<<<<<< HEAD
     </MockedProvider>,
+=======
+    </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   );
 
   await waitFor(() => {

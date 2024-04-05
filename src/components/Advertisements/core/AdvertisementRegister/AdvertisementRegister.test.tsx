@@ -1,5 +1,9 @@
 import React from 'react';
+<<<<<<< HEAD
 import { render, fireEvent, waitFor, screen } from '@testing-library/react';
+=======
+import { render, fireEvent, waitFor } from '@testing-library/react';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 import {
   ApolloClient,
@@ -15,6 +19,7 @@ import AdvertisementRegister from './AdvertisementRegister';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { BACKEND_URL } from 'Constant/constant';
+<<<<<<< HEAD
 // import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
 import { MockedProvider } from '@apollo/client/testing';
@@ -62,11 +67,20 @@ const MOCKS = [
 ];
 
 const link = new StaticMockLink(MOCKS, true);
+=======
+import i18nForTest from 'utils/i18nForTest';
+import { I18nextProvider } from 'react-i18next';
+import i18n from 'utils/i18nForTest';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 const httpLink = new HttpLink({
   uri: BACKEND_URL,
   headers: {
+<<<<<<< HEAD
     authorization: 'Bearer ' + getItem('token') || '',
+=======
+    authorization: 'Bearer ' + localStorage.getItem('token') || '',
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
 });
 
@@ -76,6 +90,7 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 });
 
 const translations = JSON.parse(
+<<<<<<< HEAD
   JSON.stringify(
     i18n.getDataByLanguage('en')?.translation?.advertisement ?? null,
   ),
@@ -87,10 +102,19 @@ jest.mock('react-router-dom', () => ({
 }));
 describe('Testing Advertisement Register Component', () => {
   test('AdvertismentRegister component loads correctly in register mode', async () => {
+=======
+  // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
+  JSON.stringify(i18n.getDataByLanguage('en')?.translation.advertisement!)
+);
+
+describe('Testing Advertisement Register Component', () => {
+  test('AdvertismentRegister component loads correctly', async () => {
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     const { getByText } = render(
       <ApolloProvider client={client}>
         <Provider store={store}>
           <BrowserRouter>
+<<<<<<< HEAD
             <I18nextProvider i18n={i18n}>
               <AdvertisementRegister
                 endDate={new Date()}
@@ -104,11 +128,29 @@ describe('Testing Advertisement Register Component', () => {
           </BrowserRouter>
         </Provider>
       </ApolloProvider>,
+=======
+            <I18nextProvider i18n={i18nForTest}>
+              {
+                <AdvertisementRegister
+                  endDate={new Date()}
+                  startDate={new Date()}
+                  type="BANNER"
+                  name="Advert1"
+                  orgId="1"
+                  link="google.com"
+                />
+              }
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
     await waitFor(() => {
       expect(getByText(translations.addNew)).toBeInTheDocument();
     });
   });
+<<<<<<< HEAD
 
   test('AdvertismentRegister component loads correctly in edit mode', async () => {
     render(
@@ -136,10 +178,14 @@ describe('Testing Advertisement Register Component', () => {
   });
 
   test('Opens and closes modals on button click', async () => {
+=======
+  test('opens and closes modals on button click', async () => {
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     const { getByText, queryByText } = render(
       <ApolloProvider client={client}>
         <Provider store={store}>
           <BrowserRouter>
+<<<<<<< HEAD
             <I18nextProvider i18n={i18n}>
               <AdvertisementRegister
                 endDate={new Date()}
@@ -153,6 +199,23 @@ describe('Testing Advertisement Register Component', () => {
           </BrowserRouter>
         </Provider>
       </ApolloProvider>,
+=======
+            <I18nextProvider i18n={i18nForTest}>
+              {
+                <AdvertisementRegister
+                  endDate={new Date()}
+                  startDate={new Date()}
+                  type="BANNER"
+                  name="Advert1"
+                  orgId="1"
+                  link="google.com"
+                />
+              }
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
     await waitFor(() => {
       fireEvent.click(getByText(translations.addNew));
@@ -162,6 +225,7 @@ describe('Testing Advertisement Register Component', () => {
       expect(queryByText(translations.close)).not.toBeInTheDocument();
     });
   });
+<<<<<<< HEAD
 
   test('Submits the form and shows success toast on successful advertisement creation', async () => {
     const setTimeoutSpy = jest.spyOn(global, 'setTimeout');
@@ -188,10 +252,36 @@ describe('Testing Advertisement Register Component', () => {
     await waitFor(async () => {
       fireEvent.click(getByText(translations.addNew));
       expect(queryByText(translations.RClose)).toBeInTheDocument();
+=======
+  test('submits the form and shows success toast on successful advertisement creation', async () => {
+    const { getByText, getByLabelText } = render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              {
+                <AdvertisementRegister
+                  endDate={new Date()}
+                  startDate={new Date()}
+                  type="BANNER"
+                  name="Advert1"
+                  orgId="1"
+                  link="google.com"
+                />
+              }
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>
+    );
+    await waitFor(() => {
+      fireEvent.click(getByText(translations.addNew));
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
       fireEvent.change(getByLabelText(translations.Rname), {
         target: { value: 'Test Advertisement' },
       });
+<<<<<<< HEAD
       expect(getByLabelText(translations.Rname)).toHaveValue(
         'Test Advertisement',
       );
@@ -506,5 +596,22 @@ describe('Testing Advertisement Register Component', () => {
     const closeButton = await screen.findByTestId('closePreview');
     fireEvent.click(closeButton);
     expect(mediaPreview).not.toBeInTheDocument();
+=======
+      fireEvent.change(getByLabelText(translations.Rlink), {
+        target: { value: 'http://example.com' },
+      });
+      fireEvent.change(getByLabelText(translations.Rtype), {
+        target: { value: 'BANNER' },
+      });
+      fireEvent.change(getByLabelText(translations.RstartDate), {
+        target: { value: '2023-01-01' },
+      });
+      fireEvent.change(getByLabelText(translations.RendDate), {
+        target: { value: '2023-02-01' },
+      });
+
+      fireEvent.click(getByText(translations.register));
+    });
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   });
 });

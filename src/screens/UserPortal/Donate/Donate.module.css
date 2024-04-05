@@ -5,11 +5,16 @@
 .mainContainer {
   width: 50%;
   flex-grow: 3;
+<<<<<<< HEAD
   padding: 1rem;
+=======
+  padding: 20px;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   max-height: 100%;
   overflow: auto;
   display: flex;
   flex-direction: column;
+<<<<<<< HEAD
   background-color: #f2f7ff;
 }
 
@@ -22,12 +27,15 @@
   width: 70%;
   position: relative;
   box-shadow: 5px 5px 4px 0px #31bb6b1f;
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 
 .box {
   width: auto;
   /* height: 200px; */
   background-color: white;
+<<<<<<< HEAD
   margin-top: 1rem;
   padding: 20px;
   border: 1px solid #dddddd;
@@ -36,6 +44,11 @@
 
 .heading {
   font-size: 1.1rem;
+=======
+  margin: 20px;
+  padding: 20px;
+  border-radius: 20px;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 
 .donationInputContainer {
@@ -44,6 +57,7 @@
   margin-top: 20px;
 }
 
+<<<<<<< HEAD
 .donateBtn {
   padding-inline: 1rem !important;
 }
@@ -58,24 +72,36 @@
   background-color: #f1f3f6;
 }
 
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 .maxWidth {
   width: 100%;
 }
 
 .donateActions {
+<<<<<<< HEAD
   margin-top: 1rem;
+=======
+  margin-top: 40px;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   width: 100%;
   display: flex;
   flex-direction: row-reverse;
 }
 
 .donationsContainer {
+<<<<<<< HEAD
   padding-top: 4rem;
+=======
+  margin: 20px;
+  padding-top: 20px;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   flex-grow: 1;
   display: flex;
   flex-direction: column;
 }
 
+<<<<<<< HEAD
 .donationCardsContainer {
   display: flex;
   flex-wrap: wrap;
@@ -83,6 +109,8 @@
   --bs-gutter-x: 0;
 }
 
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 .colorLight {
   background-color: #f5f5f5;
 }

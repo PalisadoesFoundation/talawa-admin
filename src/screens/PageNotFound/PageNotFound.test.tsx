@@ -7,6 +7,7 @@ import { I18nextProvider } from 'react-i18next';
 import { store } from 'state/store';
 import PageNotFound from './PageNotFound';
 import i18nForTest from 'utils/i18nForTest';
+<<<<<<< HEAD
 import useLocalStorage from 'utils/useLocalstorage';
 
 const { setItem } = useLocalStorage();
@@ -14,6 +15,11 @@ const { setItem } = useLocalStorage();
 describe('Testing Page not found component', () => {
   test('Component should be rendered properly for User', () => {
     //setItem('AdminFor', undefined);
+=======
+
+describe('Testing Page not found component', () => {
+  test('Component should be rendered properly', () => {
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     render(
       <BrowserRouter>
         <Provider store={store}>
@@ -21,6 +27,7 @@ describe('Testing Page not found component', () => {
             <PageNotFound />
           </I18nextProvider>
         </Provider>
+<<<<<<< HEAD
       </BrowserRouter>,
     );
 
@@ -47,12 +54,19 @@ describe('Testing Page not found component', () => {
           </I18nextProvider>
         </Provider>
       </BrowserRouter>,
+=======
+      </BrowserRouter>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     expect(screen.getByText(/Talawa Admin/i)).toBeTruthy();
     expect(screen.getByText(/404/i)).toBeTruthy();
     expect(
+<<<<<<< HEAD
       screen.getByText(/Oops! The Page you requested was not found!/i),
+=======
+      screen.getByText(/Oops! The Page you requested was not found!/i)
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     ).toBeTruthy();
     expect(screen.getByText(/Back to Home/i)).toBeTruthy();
   });

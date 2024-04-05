@@ -1,13 +1,22 @@
+<<<<<<< HEAD
 import { MockedProvider } from '@apollo/react-testing';
 import { act, render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 
 import userEvent from '@testing-library/user-event';
+=======
+import React from 'react';
+import { act, render, screen } from '@testing-library/react';
+import { MockedProvider } from '@apollo/react-testing';
+import { I18nextProvider } from 'react-i18next';
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 import {
   USER_CREATED_ORGANIZATIONS,
   USER_JOINED_ORGANIZATIONS,
   USER_ORGANIZATION_CONNECTION,
 } from 'GraphQl/Queries/Queries';
+<<<<<<< HEAD
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
@@ -17,19 +26,33 @@ import useLocalStorage from 'utils/useLocalstorage';
 import Organizations from './Organizations';
 import React from 'react';
 const { getItem } = useLocalStorage();
+=======
+import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { store } from 'state/store';
+import i18nForTest from 'utils/i18nForTest';
+import { StaticMockLink } from 'utils/StaticMockLink';
+import Organizations from './Organizations';
+import userEvent from '@testing-library/user-event';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 const MOCKS = [
   {
     request: {
       query: USER_CREATED_ORGANIZATIONS,
       variables: {
+<<<<<<< HEAD
         id: getItem('userId'),
+=======
+        id: localStorage.getItem('userId'),
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       },
     },
     result: {
       data: {
         users: [
           {
+<<<<<<< HEAD
             appUserProfile: {
               createdOrganizations: [
                 {
@@ -41,6 +64,17 @@ const MOCKS = [
                 },
               ],
             },
+=======
+            createdOrganizations: [
+              {
+                __typename: 'Organization',
+                _id: '6401ff65ce8e8406b8f07af2',
+                name: 'createdOrganization',
+                image: '',
+                description: 'New Desc',
+              },
+            ],
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
           },
         ],
       },
@@ -62,6 +96,7 @@ const MOCKS = [
             image: '',
             name: 'anyOrganization1',
             description: 'desc',
+<<<<<<< HEAD
             address: {
               city: 'abc',
               countryCode: '123',
@@ -99,12 +134,17 @@ const MOCKS = [
                 },
               },
             ],
+=======
+            isPublic: true,
+            creator: { __typename: 'User', firstName: 'John', lastName: 'Doe' },
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
           },
           {
             __typename: 'Organization',
             _id: '6401ff65ce8e8406b8f07af3',
             image: '',
             name: 'anyOrganization2',
+<<<<<<< HEAD
             createdAt: '1234567890',
             address: {
               city: 'abc',
@@ -143,6 +183,11 @@ const MOCKS = [
                 },
               },
             ],
+=======
+            description: 'desc',
+            isPublic: true,
+            creator: { __typename: 'User', firstName: 'John', lastName: 'Doe' },
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
           },
         ],
       },
@@ -152,13 +197,18 @@ const MOCKS = [
     request: {
       query: USER_JOINED_ORGANIZATIONS,
       variables: {
+<<<<<<< HEAD
         id: getItem('userId'),
+=======
+        id: localStorage.getItem('userId'),
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       },
     },
     result: {
       data: {
         users: [
           {
+<<<<<<< HEAD
             user: {
               joinedOrganizations: [
                 {
@@ -170,6 +220,17 @@ const MOCKS = [
                 },
               ],
             },
+=======
+            joinedOrganizations: [
+              {
+                __typename: 'Organization',
+                _id: '6401ff65ce8e8406b8f07af2',
+                name: 'joinedOrganization',
+                image: '',
+                description: 'New Desc',
+              },
+            ],
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
           },
         ],
       },
@@ -191,6 +252,7 @@ const MOCKS = [
             image: '',
             name: 'anyOrganization2',
             description: 'desc',
+<<<<<<< HEAD
             address: {
               city: 'abc',
               countryCode: '123',
@@ -228,6 +290,10 @@ const MOCKS = [
                 },
               },
             ],
+=======
+            isPublic: true,
+            creator: { __typename: 'User', firstName: 'John', lastName: 'Doe' },
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
           },
         ],
       },
@@ -256,7 +322,11 @@ describe('Testing Organizations Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -272,20 +342,32 @@ describe('Testing Organizations Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
     );
 
     await wait();
     const searchBtn = screen.getByTestId('searchBtn');
     userEvent.type(screen.getByTestId('searchInput'), '2{enter}');
+=======
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.type(screen.getByTestId('searchInput'), '2');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     await wait();
 
     expect(screen.queryByText('anyOrganization2')).toBeInTheDocument();
     expect(screen.queryByText('anyOrganization1')).not.toBeInTheDocument();
+<<<<<<< HEAD
 
     userEvent.clear(screen.getByTestId('searchInput'));
     userEvent.click(searchBtn);
     await wait();
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   });
 
   test('Mode is changed to joined organizations', async () => {
@@ -298,7 +380,11 @@ describe('Testing Organizations Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -321,7 +407,11 @@ describe('Testing Organizations Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();

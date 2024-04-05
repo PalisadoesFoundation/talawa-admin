@@ -11,11 +11,20 @@ import {
   UNBLOCK_USER_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { BLOCK_PAGE_MEMBER_LIST } from 'GraphQl/Queries/Queries';
+<<<<<<< HEAD
 import TableLoader from 'components/TableLoader/TableLoader';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './BlockUser.module.css';
 import { useParams } from 'react-router-dom';
+=======
+import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
+import TableLoader from 'components/TableLoader/TableLoader';
+import { useTranslation } from 'react-i18next';
+import debounce from 'utils/debounce';
+import { errorHandler } from 'utils/errorHandler';
+import styles from './BlockUser.module.css';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 interface InterfaceMember {
   _id: string;
@@ -35,11 +44,19 @@ const Requests = (): JSX.Element => {
   });
 
   document.title = t('title');
+<<<<<<< HEAD
   const { orgId: currentUrl } = useParams();
   const [membersData, setMembersData] = useState<InterfaceMember[]>([]);
   const [searchByFirstName, setSearchByFirstName] = useState<boolean>(true);
   const [searchByName, setSearchByName] = useState<string>('');
   const [showBlockedMembers, setShowBlockedMembers] = useState<boolean>(true);
+=======
+  const currentUrl = window.location.href.split('=')[1];
+  const [membersData, setMembersData] = useState<InterfaceMember[]>([]);
+  const [searchByFirstName, setSearchByFirstName] = useState<boolean>(true);
+  const [searchByName, setSearchByName] = useState<string>('');
+  const [showBlockedMembers, setShowBlockedMembers] = useState<boolean>(false);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
   const {
     data: memberData,
@@ -68,7 +85,11 @@ const Requests = (): JSX.Element => {
     } else {
       const blockUsers = memberData?.organizationsMemberConnection.edges.filter(
         (user: InterfaceMember) =>
+<<<<<<< HEAD
           user.organizationsBlockedBy.some((org) => org._id === currentUrl),
+=======
+          user.organizationsBlockedBy.some((org) => org._id === currentUrl)
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       );
       setMembersData(blockUsers);
     }
@@ -117,7 +138,12 @@ const Requests = (): JSX.Element => {
     toast.error(memberError.message);
   }
 
+<<<<<<< HEAD
   const handleSearch = (value: string): void => {
+=======
+  const handleSearch = (e: any): void => {
+    const { value } = e.target;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     setSearchByName(value);
     memberRefetch({
       orgId: currentUrl,
@@ -126,6 +152,7 @@ const Requests = (): JSX.Element => {
     });
   };
 
+<<<<<<< HEAD
   const handleSearchByEnter = (e: any): void => {
     if (e.key === 'Enter') {
       const { value } = e.target;
@@ -140,6 +167,9 @@ const Requests = (): JSX.Element => {
     handleSearch(inputValue);
   };
 
+=======
+  const handleSearchDebounced = debounce(handleSearch);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   const headerTitles: string[] = [
     '#',
     t('name'),
@@ -149,14 +179,21 @@ const Requests = (): JSX.Element => {
 
   return (
     <>
+<<<<<<< HEAD
       <div>
+=======
+      <OrganizationScreen screenName="Block/Unblock" title={t('listOfUsers')}>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         {/* Buttons Container */}
         <div className={styles.btnsContainer}>
           <div className={styles.inputContainer}>
             <div className={styles.input}>
               <Form.Control
                 type="name"
+<<<<<<< HEAD
                 id="searchBlockedUsers"
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                 className="bg-white"
                 placeholder={
                   searchByFirstName
@@ -166,13 +203,20 @@ const Requests = (): JSX.Element => {
                 data-testid="searchByName"
                 autoComplete="off"
                 required
+<<<<<<< HEAD
                 onKeyUp={handleSearchByEnter}
+=======
+                onChange={handleSearchDebounced}
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
               />
               <Button
                 tabIndex={-1}
                 className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+<<<<<<< HEAD
                 onClick={handleSearchByBtnClick}
                 data-testid="searchBtn"
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
               >
                 <Search />
               </Button>
@@ -268,7 +312,11 @@ const Requests = (): JSX.Element => {
                         <td>{user.email}</td>
                         <td>
                           {user.organizationsBlockedBy.some(
+<<<<<<< HEAD
                             (spam: any) => spam._id === currentUrl,
+=======
+                            (spam: any) => spam._id === currentUrl
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                           ) ? (
                             <Button
                               variant="danger"
@@ -301,7 +349,11 @@ const Requests = (): JSX.Element => {
             )}
           </div>
         )}
+<<<<<<< HEAD
       </div>
+=======
+      </OrganizationScreen>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     </>
   );
 };

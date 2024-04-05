@@ -11,10 +11,13 @@ import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import userEvent from '@testing-library/user-event';
+<<<<<<< HEAD
 import { debug } from 'jest-preview';
 import useLocalStorage from 'utils/useLocalstorage';
 
 const { setItem } = useLocalStorage();
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 const MOCKS = [
   {
@@ -50,8 +53,13 @@ describe('Testing Event Card In User portal', () => {
     endDate: '2023-04-15',
     isRegisterable: true,
     isPublic: true,
+<<<<<<< HEAD
     endTime: '19:49:12',
     startTime: '17:49:12',
+=======
+    endTime: '19:49:12Z',
+    startTime: '17:49:12Z',
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     recurring: false,
     allDay: true,
     creator: {
@@ -77,16 +85,25 @@ describe('Testing Event Card In User portal', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
     );
     debug();
     await waitFor(() => expect(queryByText('Test Event')).toBeInTheDocument());
     await waitFor(() =>
       expect(queryByText('This is a test event')).toBeInTheDocument(),
+=======
+      </MockedProvider>
+    );
+    await waitFor(() => expect(queryByText('Test Event')).toBeInTheDocument());
+    await waitFor(() =>
+      expect(queryByText('This is a test event')).toBeInTheDocument()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
     await waitFor(() => expect(queryByText('Location')).toBeInTheDocument());
     await waitFor(() => expect(queryByText('Virtual')).toBeInTheDocument());
     await waitFor(() => expect(queryByText('Starts')).toBeInTheDocument());
+<<<<<<< HEAD
     await waitFor(() =>
       expect(screen.getByTestId('startTime')).toBeInTheDocument(),
     );
@@ -99,6 +116,16 @@ describe('Testing Event Card In User portal', () => {
     );
     await waitFor(() =>
       expect(queryByText(`15 April '23`)).toBeInTheDocument(),
+=======
+    await waitFor(() => expect(queryByText('5:49:12 PM')).toBeInTheDocument());
+    await waitFor(() =>
+      expect(queryByText(`13 April '23`)).toBeInTheDocument()
+    );
+    await waitFor(() => expect(queryByText('Ends')).toBeInTheDocument());
+    await waitFor(() => expect(queryByText('7:49:12 PM')).toBeInTheDocument());
+    await waitFor(() =>
+      expect(queryByText(`15 April '23`)).toBeInTheDocument()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
     await waitFor(() => expect(queryByText('Creator')).toBeInTheDocument());
     await waitFor(() => expect(queryByText('Joe David')).toBeInTheDocument());
@@ -106,7 +133,11 @@ describe('Testing Event Card In User portal', () => {
   });
 
   test('When the user is already registered', async () => {
+<<<<<<< HEAD
     setItem('userId', '234');
+=======
+    localStorage.setItem('userId', '234');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     const { queryByText } = render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -117,15 +148,26 @@ describe('Testing Event Card In User portal', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
     );
     await waitFor(() =>
       expect(queryByText('Already registered')).toBeInTheDocument(),
+=======
+      </MockedProvider>
+    );
+    await waitFor(() =>
+      expect(queryByText('Already registered')).toBeInTheDocument()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
   });
 
   test('Handle register should work properly', async () => {
+<<<<<<< HEAD
     setItem('userId', '456');
+=======
+    localStorage.setItem('userId', '456');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     const { queryByText } = render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -136,13 +178,22 @@ describe('Testing Event Card In User portal', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
     userEvent.click(screen.getByText('Register'));
     await waitFor(() =>
       expect(
+<<<<<<< HEAD
         queryByText('Successfully registered for Test Event'),
       ).toBeInTheDocument(),
+=======
+        queryByText('Successfully registered for Test Event')
+      ).toBeInTheDocument()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
   });
 });
@@ -184,11 +235,19 @@ describe('Event card when start and end time are not given', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
     );
 
     await waitFor(() =>
       expect(container.querySelector(':empty')).toBeInTheDocument(),
+=======
+      </MockedProvider>
+    );
+
+    await waitFor(() =>
+      expect(container.querySelector(':empty')).toBeInTheDocument()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
   });
 });

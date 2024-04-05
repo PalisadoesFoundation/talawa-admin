@@ -25,9 +25,12 @@ export default {
   moduleNameMapper: {
     '^react-native$': 'react-native-web',
     '^@mui/(.*)$': '<rootDir>/node_modules/@mui/$1',
+<<<<<<< HEAD
     '^@dicebear/core$': '<rootDir>/scripts/__mocks__/@dicebear/core.ts',
     '^@dicebear/collection$':
       '<rootDir>/scripts/__mocks__/@dicebear/collection.ts',
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
   moduleFileExtensions: [
     'web.js',

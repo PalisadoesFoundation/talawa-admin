@@ -7,7 +7,10 @@ import { LIKE_COMMENT, UNLIKE_COMMENT } from 'GraphQl/Mutations/mutations';
 import { toast } from 'react-toastify';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+<<<<<<< HEAD
 import useLocalStorage from 'utils/useLocalstorage';
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 interface InterfaceCommentCardProps {
   id: string;
@@ -22,16 +25,23 @@ interface InterfaceCommentCardProps {
     id: string;
   }[];
   text: string;
+<<<<<<< HEAD
 
   handleLikeComment: (commentId: string) => void;
   handleDislikeComment: (commentId: string) => void;
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 
 function commentCard(props: InterfaceCommentCardProps): JSX.Element {
   const creatorName = `${props.creator.firstName} ${props.creator.lastName}`;
 
+<<<<<<< HEAD
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
+=======
+  const userId = localStorage.getItem('userId');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   const likedByUser = props.likedBy.some((likedBy) => likedBy.id === userId);
 
   const [likes, setLikes] = React.useState(props.likeCount);
@@ -52,7 +62,10 @@ function commentCard(props: InterfaceCommentCardProps): JSX.Element {
         if (data) {
           setLikes((likes) => likes - 1);
           setIsLikedByUser(false);
+<<<<<<< HEAD
           props.handleDislikeComment(props.id);
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         }
       } catch (error: any) {
         /* istanbul ignore next */
@@ -69,7 +82,10 @@ function commentCard(props: InterfaceCommentCardProps): JSX.Element {
         if (data) {
           setLikes((likes) => likes + 1);
           setIsLikedByUser(true);
+<<<<<<< HEAD
           props.handleLikeComment(props.id);
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         }
       } catch (error: any) {
         /* istanbul ignore next */

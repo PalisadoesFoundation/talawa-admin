@@ -4,6 +4,7 @@ export interface InterfaceUserType {
     lastName: string;
     image: string | null;
     email: string;
+<<<<<<< HEAD
   };
 }
 
@@ -73,6 +74,17 @@ export interface InterfaceMemberInfo {
   }[];
 }
 
+=======
+    userType: string;
+    adminFor: {
+      _id: string;
+      name: string;
+      image: string | null;
+    }[];
+  };
+}
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 export interface InterfaceOrgConnectionInfoType {
   _id: string;
   image: string | null;
@@ -89,7 +101,11 @@ export interface InterfaceOrgConnectionInfoType {
     _id: string;
   }[];
   createdAt: string;
+<<<<<<< HEAD
   address: InterfaceAddress;
+=======
+  location: string;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 export interface InterfaceOrgConnectionType {
   organizationsConnection: InterfaceOrgConnectionInfoType[];
@@ -105,8 +121,13 @@ export interface InterfaceQueryOrganizationsListObject {
   };
   name: string;
   description: string;
+<<<<<<< HEAD
   address: InterfaceAddress;
   userRegistrationRequired: boolean;
+=======
+  location: string;
+  isPublic: boolean;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   visibleInSearch: boolean;
   members: {
     _id: string;
@@ -135,6 +156,7 @@ export interface InterfaceQueryOrganizationsListObject {
     email: string;
   }[];
 }
+<<<<<<< HEAD
 export interface InterfacePostForm {
   posttitle: string;
   postinfo: string;
@@ -249,6 +271,21 @@ export interface InterfacePledgeInfo {
   users: {
     _id: string;
     firstName: string;
+=======
+
+export interface InterfaceQueryOrganizationPostListItem {
+  _id: string;
+  title: string;
+  text: string;
+  imageUrl: null;
+  videoUrl: null;
+  createdAt: string;
+  creator: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   }[];
 }
 export interface InterfaceQueryOrganizationEventListItem {
@@ -277,6 +314,7 @@ export interface InterfaceQueryBlockPageMemberListItem {
 }
 
 export interface InterfaceQueryUserListItem {
+<<<<<<< HEAD
   user: {
     _id: string;
     firstName: string;
@@ -364,11 +402,28 @@ export interface InterfacePostCard {
   commentCount: number;
   comments: {
     _id: string;
+=======
+  _id: string;
+  firstName: string;
+  lastName: string;
+  image: string | null;
+  email: string;
+  userType: string;
+  adminFor: { _id: string }[];
+  adminApproved: boolean;
+  organizationsBlockedBy: {
+    _id: string;
+    name: string;
+    location: string;
+    image: string | null;
+    createdAt: string;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     creator: {
       _id: string;
       firstName: string;
       lastName: string;
       email: string;
+<<<<<<< HEAD
     };
     likeCount: number;
     likedBy: {
@@ -410,4 +465,35 @@ export interface InterfaceQueryMembershipRequestsListItem {
       };
     }[];
   }[];
+=======
+      image: string | null;
+    };
+  }[];
+  joinedOrganizations: {
+    _id: string;
+    name: string;
+    location: string;
+    image: string | null;
+    createdAt: string;
+    creator: {
+      _id: string;
+      firstName: string;
+      lastName: string;
+      email: string;
+      image: string | null;
+    };
+  }[];
+  createdAt: string;
+}
+
+export interface InterfaceQueryRequestListItem {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  image: string;
+  email: string;
+  userType: string;
+  adminApproved: boolean;
+  createdAt: string;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }

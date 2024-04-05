@@ -10,10 +10,17 @@ import LanguageIcon from '@mui/icons-material/Language';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useSubscription } from '@apollo/client';
 import { USER_ORGANIZATION_CONNECTION } from 'GraphQl/Queries/Queries';
+<<<<<<< HEAD
 import type { DropDirection } from 'react-bootstrap/esm/DropdownContext';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { PLUGIN_SUBSCRIPTION } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
+=======
+import getOrganizationId from 'utils/getOrganizationId';
+import type { DropDirection } from 'react-bootstrap/esm/DropdownContext';
+import { Link, useHistory } from 'react-router-dom';
+import { PLUGIN_SUBSCRIPTION } from 'GraphQl/Mutations/mutations';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 interface InterfaceNavbarProps {
   currentPage: string | null;
 }
@@ -31,13 +38,21 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
     keyPrefix: 'userNavbar',
   });
 
+<<<<<<< HEAD
   const navigate = useNavigate();
+=======
+  const history = useHistory();
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
   const [organizationDetails, setOrganizationDetails]: any = React.useState({});
   // const dropDirection: DropDirection = screen.width > 767 ? 'start' : 'down';
   const dropDirection: DropDirection = 'start';
 
+<<<<<<< HEAD
   const { orgId: organizationId } = useParams();
+=======
+  const organizationId = getOrganizationId(window.location.href);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
   const { data } = useQuery(USER_ORGANIZATION_CONNECTION, {
     variables: { id: organizationId },
@@ -45,6 +60,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
 
   const [currentLanguageCode, setCurrentLanguageCode] = React.useState(
     /* istanbul ignore next */
+<<<<<<< HEAD
     cookies.get('i18next') || 'en',
   );
 
@@ -57,32 +73,60 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
   };
 
   const userName = getItem('name');
+=======
+    cookies.get('i18next') || 'en'
+  );
+
+  /* istanbul ignore next */
+  const handleLogout = (): void => {
+    localStorage.clear();
+    window.location.replace('/user');
+  };
+
+  const userName = localStorage.getItem('name');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   React.useEffect(() => {
     if (data) {
       setOrganizationDetails(data.organizationsConnection[0]);
     }
   }, [data]);
 
+<<<<<<< HEAD
   const homeLink = `/user/organization/${organizationId}`;
+=======
+  const homeLink = `/user/organization/id=${organizationId}`;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   let plugins: Plugin[] = [
     {
       pluginName: 'People',
       alias: 'people',
+<<<<<<< HEAD
       link: `/user/people/${organizationId}`,
+=======
+      link: `/user/people/id=${organizationId}`,
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       translated: t('people'),
       view: true,
     },
     {
       pluginName: 'Events',
       alias: 'events',
+<<<<<<< HEAD
       link: `/user/events/${organizationId}`,
+=======
+      link: `/user/events/id=${organizationId}`,
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       translated: t('events'),
       view: true,
     },
     {
       pluginName: 'Donation',
       alias: 'donate',
+<<<<<<< HEAD
       link: `/user/donate/${organizationId}`,
+=======
+      link: `/user/donate/id=${organizationId}`,
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       translated: t('donate'),
       view: true,
     },
@@ -94,6 +138,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
     //   view: true,
     // },
   ];
+<<<<<<< HEAD
   if (getItem('talawaPlugins')) {
     const talawaPlugins: string = getItem('talawaPlugins') || '{}';
     plugins = JSON.parse(talawaPlugins);
@@ -105,6 +150,24 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
   );
   function getPluginIndex(pluginName: string, pluginsArray: Plugin[]): number {
     return pluginsArray.findIndex((plugin) => plugin.pluginName === pluginName);
+=======
+  if (localStorage.getItem('talawaPlugins')) {
+    const talawaPlugins: string = localStorage.getItem('talawaPlugins') || '{}';
+    plugins = JSON.parse(talawaPlugins);
+  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { data: updatedPluginData, loading: _loadingSub } = useSubscription(
+    PLUGIN_SUBSCRIPTION
+    // { variables: {  } }
+  );
+  function getPluginIndex(pluginName: string, pluginsArray: Plugin[]): number {
+    for (let i = 0; i < pluginsArray.length; i++) {
+      if (pluginsArray[i].pluginName === pluginName) {
+        return i; // Return the index of the matching object
+      }
+    }
+    return -1; // Return -1 if not found
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   }
 
   if (updatedPluginData != undefined) {
@@ -114,7 +177,11 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
     if (uninstalledOrgs.includes(organizationId)) {
       if (pluginIndexToRemove != -1) {
         plugins[pluginIndexToRemove].view = false;
+<<<<<<< HEAD
         setItem('talawaPlugins', JSON.stringify(plugins));
+=======
+        localStorage.setItem('talawaPlugins', JSON.stringify(plugins));
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         console.log(`Plugin ${pluginName} has been removed.`);
       } else {
         console.log(`Plugin ${pluginName} is not present.`);
@@ -122,7 +189,11 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
     } else {
       if (pluginIndexToRemove != -1) {
         plugins[pluginIndexToRemove].view = true;
+<<<<<<< HEAD
         setItem('talawaPlugins', JSON.stringify(plugins));
+=======
+        localStorage.setItem('talawaPlugins', JSON.stringify(plugins));
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       }
     }
   }
@@ -153,7 +224,11 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
                 active={props.currentPage === 'home'}
                 onClick={
                   /* istanbul ignore next */
+<<<<<<< HEAD
                   (): void => navigate(homeLink)
+=======
+                  (): void => history.push(homeLink)
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                 }
               >
                 {t('home')}
@@ -163,12 +238,20 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
                   plugin.view && (
                     <Nav.Link
                       active={props.currentPage == plugin.alias}
+<<<<<<< HEAD
                       onClick={(): void => navigate(plugin.link)}
+=======
+                      onClick={(): void => history.push(plugin.link)}
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                       key={idx}
                     >
                       {plugin.translated}
                     </Nav.Link>
+<<<<<<< HEAD
                   ),
+=======
+                  )
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
               )}
             </Nav>
             <Navbar.Collapse className="justify-content-end">
@@ -225,6 +308,14 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
                       {t('settings')}
                     </Link>
                   </Dropdown.Item>
+<<<<<<< HEAD
+=======
+                  <Dropdown.Item>
+                    <Link to="/user/tasks" className={styles.link}>
+                      {t('myTasks')}
+                    </Link>
+                  </Dropdown.Item>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                   <Dropdown.Item
                     onClick={handleLogout}
                     data-testid={`logoutBtn`}

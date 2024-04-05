@@ -1,8 +1,13 @@
 import React from 'react';
+<<<<<<< HEAD
 import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/react-testing';
 import { ADD_PLUGIN_MUTATION } from 'GraphQl/Mutations/mutations';
+=======
+import { act, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 import AddOnRegister from './AddOnRegister';
 import {
   ApolloClient,
@@ -18,14 +23,18 @@ import { BrowserRouter } from 'react-router-dom';
 import { BACKEND_URL } from 'Constant/constant';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
+<<<<<<< HEAD
 import { toast } from 'react-toastify';
 import useLocalStorage from 'utils/useLocalstorage';
 
 const { getItem } = useLocalStorage();
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 const httpLink = new HttpLink({
   uri: BACKEND_URL,
   headers: {
+<<<<<<< HEAD
     authorization: 'Bearer ' + getItem('token') || '',
   },
 });
@@ -61,6 +70,13 @@ const mocks = [
 ];
 
 async function wait(ms = 100): Promise<void> {
+=======
+    authorization: 'Bearer ' + localStorage.getItem('token') || '',
+  },
+});
+
+async function wait(ms = 500): Promise<void> {
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
@@ -68,6 +84,7 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
+<<<<<<< HEAD
 const pluginData = {
   pluginName: 'Test Plugin',
   pluginCreatedBy: 'Test Creator',
@@ -88,6 +105,12 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigate,
 }));
 
+=======
+const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
+  cache: new InMemoryCache(),
+  link: ApolloLink.from([httpLink]),
+});
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 describe('Testing AddOnRegister', () => {
   const props = {
     id: '6234d8bf6ud937ddk70ecc5c9',
@@ -104,7 +127,11 @@ describe('Testing AddOnRegister', () => {
               </I18nextProvider>
             </BrowserRouter>
           </Provider>
+<<<<<<< HEAD
         </ApolloProvider>,
+=======
+        </ApolloProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       );
 
       await wait(100);
@@ -113,6 +140,7 @@ describe('Testing AddOnRegister', () => {
       userEvent.type(screen.getByPlaceholderText(/Ex: Donations/i), 'myplugin');
       userEvent.type(
         screen.getByPlaceholderText(/This Plugin enables UI for/i),
+<<<<<<< HEAD
         'test description',
       );
       userEvent.type(
@@ -198,4 +226,14 @@ describe('Testing AddOnRegister', () => {
     );
     expect(window.location.pathname).toEqual('/orglist');
   });
+=======
+        'test description'
+      );
+      userEvent.type(
+        screen.getByPlaceholderText(/Ex: john Doe/i),
+        'test creator'
+      );
+    });
+  });
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 });

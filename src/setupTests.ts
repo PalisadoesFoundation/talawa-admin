@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 // jest-dom adds custom jest matchers for asserting on DOM nodes.
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
@@ -16,10 +17,19 @@ global.console.warn = function (...args): void {
   throw new Error(format(...args));
 };
 Object.defineProperty(HTMLMediaElement.prototype, 'muted', {
+<<<<<<< HEAD
   set: () => ({}),
 });
 
 import { jestPreviewConfigure } from 'jest-preview';
+=======
+  set: () => {},
+});
+
+import { jestPreviewConfigure } from 'jest-preview';
+import { configure } from 'enzyme';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 // Global CSS here
 import 'bootstrap/dist/css/bootstrap.css';
@@ -27,6 +37,11 @@ import 'bootstrap/dist/js/bootstrap.min.js';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'flag-icons/css/flag-icons.min.css';
 
+<<<<<<< HEAD
+=======
+configure({ adapter: new Adapter() });
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 jestPreviewConfigure({
   // Opt-in to automatic mode to preview failed test case automatically.
   autoPreview: true,

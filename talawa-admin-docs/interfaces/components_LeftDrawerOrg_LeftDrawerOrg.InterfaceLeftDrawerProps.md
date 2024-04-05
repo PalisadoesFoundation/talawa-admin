@@ -22,7 +22,11 @@
 
 #### Defined in
 
+<<<<<<< HEAD
 [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L23)
+=======
+[src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L22)
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 ___
 
@@ -32,7 +36,11 @@ ___
 
 #### Defined in
 
+<<<<<<< HEAD
 [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L20)
+=======
+[src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L19)
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 ___
 
@@ -42,17 +50,29 @@ ___
 
 #### Defined in
 
+<<<<<<< HEAD
 [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L21)
+=======
+[src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L20)
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 ___
 
 ### setHideDrawer
 
+<<<<<<< HEAD
 • **setHideDrawer**: `Dispatch`\<`SetStateAction`\<``null`` \| `boolean`\>\>
 
 #### Defined in
 
 [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L24)
+=======
+• **setHideDrawer**: `Dispatch`<`SetStateAction`<``null`` \| `boolean`\>\>
+
+#### Defined in
+
+[src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L23)
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 ___
 
@@ -62,4 +82,8 @@ ___
 
 #### Defined in
 
+<<<<<<< HEAD
 [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L22)
+=======
+[src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L21)
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1

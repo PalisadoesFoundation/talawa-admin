@@ -1,7 +1,11 @@
 .cards h2 {
   font-size: 15px;
+<<<<<<< HEAD
   color: #4e4c4c;
   font-weight: 500;
+=======
+  color: #fff;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 .cards > h3 {
   font-size: 17px;
@@ -22,6 +26,7 @@
   position: relative;
   overflow: hidden;
   transition: all 0.3s;
+<<<<<<< HEAD
   margin-bottom: 5px;
 }
 .dispflex {
@@ -35,6 +40,22 @@
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+=======
+}
+.dispflex {
+  display: flex;
+  height: 50px;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+.cards:hover {
+  transform: scale(2.5);
+  z-index: 5;
+}
+.cards:hover h2 {
+  font-size: 0.4vmax;
+  margin-bottom: 0;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 .iconContainer {
   display: flex;
@@ -46,11 +67,19 @@
 
 .cards {
   width: 100%;
+<<<<<<< HEAD
   background: #5cacf7 !important;
   padding: 2px 3px;
   border-radius: 5px;
   border: 1px solid #e8e8e8;
   box-shadow: 0 3px 2px #e8e8e8;
+=======
+  background: rgba(40, 167, 69, 1);
+  padding: 2px 3px;
+  border-radius: 5px;
+  border: 1px solid #e8e8e8;
+  box-shadow: 0 3px 5px #c9c9c9;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   color: #737373;
   box-sizing: border-box;
 }
@@ -91,19 +120,33 @@
   padding-right: 5px;
   padding-left: 5px;
 }
+<<<<<<< HEAD
 .checkboxdiv > div label {
   margin-right: 30px;
+=======
+.checkboxdiv > label {
+  margin-right: 50px;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 .checkboxdiv > label > input {
   margin-left: 10px;
 }
+<<<<<<< HEAD
 
+=======
+.dispflex {
+  display: flex;
+  margin-bottom: 5px;
+  margin-right: 5px;
+}
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 .dispflex > input {
   width: 20%;
   border: none;
   box-shadow: none;
   margin-top: 5px;
 }
+<<<<<<< HEAD
 
 .checkboxContainer {
   display: flex;
@@ -113,6 +156,13 @@
 .checkboxdiv {
   display: flex;
   flex-direction: column;
+=======
+.checkboxdiv {
+  display: flex;
+}
+.checkboxdiv > div {
+  width: 50%;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 
 .preview {
@@ -185,9 +235,12 @@
     width: 90%;
     top: 45%;
   }
+<<<<<<< HEAD
   .checkboxContainer {
     flex-direction: column;
   }
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 
 .customButton {

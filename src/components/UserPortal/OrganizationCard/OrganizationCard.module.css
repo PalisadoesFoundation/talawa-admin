@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .orgCard {
   background-color: var(--bs-white);
   margin: 0.5rem;
@@ -147,4 +148,27 @@
     justify-content: space-around;
     width: 100%;
   }
+=======
+.mainContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+  cursor: pointer;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 2px 2px 8px 0px #c8c8c8;
+  overflow: hidden;
+}
+
+.organizationDetails {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.removeDecoration {
+  text-decoration: none !important;
+  color: black;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }

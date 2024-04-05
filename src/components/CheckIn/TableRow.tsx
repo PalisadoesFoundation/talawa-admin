@@ -17,11 +17,20 @@ export const TableRow = ({
   const [checkInMutation] = useMutation(MARK_CHECKIN);
 
   const markCheckIn = (): void => {
+<<<<<<< HEAD
+=======
+    // Since the backend supports the storage of the alloted seat and the alloted room to the user, we pass the same as blank
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     // as we do not want to clutter the UI currently with the same (only provide the most basic of operations)
     checkInMutation({
       variables: {
         userId: data.userId,
         eventId: data.eventId,
+<<<<<<< HEAD
+=======
+        allotedSeat: '',
+        allotedRoom: '',
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       },
     })
       .then(() => {

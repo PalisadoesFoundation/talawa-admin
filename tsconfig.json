@@ -17,5 +17,9 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
+<<<<<<< HEAD
   "include": ["src", "src/App.tsx", "setup.ts"]
+=======
+  "include": ["src", "src/App.tsx"]
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }

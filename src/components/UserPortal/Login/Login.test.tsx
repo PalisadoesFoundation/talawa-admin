@@ -28,6 +28,7 @@ const MOCKS = [
         login: {
           user: {
             _id: '1',
+<<<<<<< HEAD
             firstName: 'firstname',
             lastName: 'secondname',
             email: 'tempemail@example.com',
@@ -43,6 +44,13 @@ const MOCKS = [
             ],
             isSuperAdmin: true,
           },
+=======
+            userType: 'ADMIN',
+            adminApproved: true,
+          },
+          accessToken: 'accessToken',
+          refreshToken: 'refreshToken',
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         },
       },
     },
@@ -60,6 +68,7 @@ const MOCKS = [
         login: {
           user: {
             _id: '1',
+<<<<<<< HEAD
             firstName: 'firstname',
             lastName: 'secondname',
             email: 'tempemail@example.com',
@@ -68,6 +77,10 @@ const MOCKS = [
           appUserProfile: {
             adminFor: {},
             isSuperAdmin: false,
+=======
+            userType: 'ADMIN',
+            adminApproved: false,
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
           },
           accessToken: 'accessToken',
           refreshToken: 'refreshToken',
@@ -104,11 +117,14 @@ jest.mock('react-toastify', () => ({
     error: jest.fn(),
   },
 }));
+<<<<<<< HEAD
 const mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockNavigate,
 }));
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 const setCurrentMode: React.Dispatch<SetStateAction<string>> = jest.fn();
 
@@ -127,7 +143,11 @@ describe('Testing Login Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -143,7 +163,11 @@ describe('Testing Login Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -163,7 +187,11 @@ describe('Testing Login Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -171,7 +199,11 @@ describe('Testing Login Component [User Portal]', () => {
     userEvent.click(screen.getByTestId('loginBtn'));
 
     expect(toast.error).toBeCalledWith(
+<<<<<<< HEAD
       'Please enter a valid email and password.',
+=======
+      'Please enter a valid email and password.'
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
   });
 
@@ -190,19 +222,31 @@ describe('Testing Login Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
 
     userEvent.type(
       screen.getByPlaceholderText(/Enter your email address/i),
+<<<<<<< HEAD
       formData.email,
+=======
+      formData.email
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
     userEvent.click(screen.getByTestId('loginBtn'));
 
     expect(toast.error).toBeCalledWith(
+<<<<<<< HEAD
       'Please enter a valid email and password.',
+=======
+      'Please enter a valid email and password.'
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
   });
 
@@ -221,19 +265,31 @@ describe('Testing Login Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
 
     userEvent.type(
       screen.getByPlaceholderText(/Enter your email address/i),
+<<<<<<< HEAD
       formData.email,
+=======
+      formData.email
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     userEvent.type(
       screen.getByPlaceholderText(/Enter your password/i),
+<<<<<<< HEAD
       formData.password,
+=======
+      formData.password
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     userEvent.click(screen.getByTestId('loginBtn'));
@@ -258,25 +314,40 @@ describe('Testing Login Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
 
     userEvent.type(
       screen.getByPlaceholderText(/Enter your email address/i),
+<<<<<<< HEAD
       formData.email,
+=======
+      formData.email
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     userEvent.type(
       screen.getByPlaceholderText(/Enter your password/i),
+<<<<<<< HEAD
       formData.password,
+=======
+      formData.password
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     userEvent.click(screen.getByTestId('loginBtn'));
 
     await wait();
+<<<<<<< HEAD
     expect(mockNavigate).toHaveBeenCalledWith('/user/organizations');
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   });
 
   test('Current user has not been approved by admin.', async () => {
@@ -294,19 +365,31 @@ describe('Testing Login Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
 
     userEvent.type(
       screen.getByPlaceholderText(/Enter your email address/i),
+<<<<<<< HEAD
       formData.email,
+=======
+      formData.email
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     userEvent.type(
       screen.getByPlaceholderText(/Enter your password/i),
+<<<<<<< HEAD
       formData.password,
+=======
+      formData.password
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     userEvent.click(screen.getByTestId('loginBtn'));

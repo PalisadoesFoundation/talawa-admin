@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
+<<<<<<< HEAD
 import { useMutation, useQuery } from '@apollo/client';
+=======
+import { useMutation } from '@apollo/client';
+import { useQuery } from '@apollo/client';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 import { EVENT_ATTENDEES, MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import {
   ADD_EVENT_ATTENDEE,
@@ -110,7 +115,11 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
           {attendeesData.event.attendees.length == 0
             ? `There are no registered attendees for this event.`
             : null}
+<<<<<<< HEAD
           <Stack direction="row" className="flex-wrap gap-2">
+=======
+          <Stack direction="row" spacing={1}>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
             {attendeesData.event.attendees.map((attendee: InterfaceUser) => (
               <Chip
                 avatar={

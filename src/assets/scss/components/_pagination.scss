@@ -35,10 +35,16 @@ $pagination-disabled-color: var(--#{$prefix}secondary-color);
 $pagination-disabled-bg: var(--#{$prefix}secondary-bg);
 $pagination-disabled-border-color: var(--#{$prefix}border-color);
 
+<<<<<<< HEAD
 $pagination-transition:
   color 0.15s ease-in-out,
   background-color 0.15s ease-in-out,
   border-color 0.15s ease-in-out;
+=======
+$pagination-transition: color 0.15s ease-in-out,
+  background-color 0.15s ease-in-out, border-color 0.15s ease-in-out,
+  box-shadow 0.15s ease-in-out;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 $pagination-border-radius-sm: var(--#{$prefix}border-radius-sm);
 $pagination-border-radius-lg: var(--#{$prefix}border-radius-lg);

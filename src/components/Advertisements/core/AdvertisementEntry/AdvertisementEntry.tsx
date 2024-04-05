@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from './AdvertisementEntry.module.css';
+<<<<<<< HEAD
 import { Button, Card, Col, Row, Spinner, Modal } from 'react-bootstrap';
 import { DELETE_ADVERTISEMENT_BY_ID } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
@@ -15,6 +16,18 @@ interface InterfaceAddOnEntryProps {
   mediaUrl: string;
   type: string;
   organizationId: string;
+=======
+import { Button, Card, Col, Row, Spinner } from 'react-bootstrap';
+import { DELETE_ADVERTISEMENT_BY_ID } from 'GraphQl/Mutations/mutations';
+import { useMutation } from '@apollo/client';
+import { useTranslation } from 'react-i18next';
+interface InterfaceAddOnEntryProps {
+  id: string;
+  name: string;
+  link: string;
+  type: string;
+  orgId: string;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   startDate: Date;
   endDate: Date;
 }
@@ -22,13 +35,22 @@ function advertisementEntry({
   id,
   name,
   type,
+<<<<<<< HEAD
   mediaUrl,
   endDate,
   organizationId,
+=======
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  orgId,
+  link,
+  endDate,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   startDate,
 }: InterfaceAddOnEntryProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   const [buttonLoading, setButtonLoading] = useState(false);
+<<<<<<< HEAD
   const [dropdown, setDropdown] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -54,6 +76,18 @@ function advertisementEntry({
   };
   const handleOptionsClick = (): void => {
     setDropdown(!dropdown);
+=======
+  const [deleteAdById] = useMutation(DELETE_ADVERTISEMENT_BY_ID);
+
+  const onDelete = async (): Promise<void> => {
+    setButtonLoading(true);
+    await deleteAdById({
+      variables: {
+        id: id.toString(),
+      },
+    });
+    setButtonLoading(false);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   };
   return (
     <>
@@ -61,6 +95,7 @@ function advertisementEntry({
         {Array.from({ length: 1 }).map((_, idx) => (
           <Col key={idx}>
             <Card>
+<<<<<<< HEAD
               <div className={styles.dropdownContainer}>
                 <button
                   className={styles.dropdownButton}
@@ -160,6 +195,37 @@ function advertisementEntry({
                     </Button>
                   </Modal.Footer>
                 </Modal>
+=======
+              <Card.Img
+                variant="top"
+                src={
+                  'https://i.pinimg.com/736x/f0/68/da/f068daf5f23f74ada84537bcb70c7e4b.jpg'
+                }
+              />
+              <Card.Body>
+                <Card.Title>{name}</Card.Title>
+                <Card.Text>Ends on {endDate?.toDateString()}</Card.Text>
+                <Card.Subtitle className="mb-2 text-muted author">
+                  {type}
+                </Card.Subtitle>
+                <Card.Text>{link} </Card.Text>
+                <Button
+                  className={styles.entryaction}
+                  variant="primary"
+                  disabled={buttonLoading}
+                  data-testid="AddOnEntry_btn_install"
+                  onClick={(): void => {
+                    onDelete();
+                  }}
+                >
+                  {buttonLoading ? (
+                    <Spinner animation="grow" />
+                  ) : (
+                    <i className={'fa fa-trash'}></i>
+                  )}
+                  {t('delete')}
+                </Button>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
               </Card.Body>
             </Card>
           </Col>
@@ -173,8 +239,13 @@ function advertisementEntry({
 advertisementEntry.propTypes = {
   name: PropTypes.string,
   type: PropTypes.string,
+<<<<<<< HEAD
   organizationId: PropTypes.string,
   mediaUrl: PropTypes.string,
+=======
+  orgId: PropTypes.string,
+  link: PropTypes.string,
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   endDate: PropTypes.instanceOf(Date),
   startDate: PropTypes.instanceOf(Date),
 };
@@ -182,8 +253,13 @@ advertisementEntry.propTypes = {
 advertisementEntry.defaultProps = {
   name: '',
   type: '',
+<<<<<<< HEAD
   organizationId: '',
   mediaUrl: '',
+=======
+  orgId: '',
+  link: '',
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   endDate: new Date(),
   startDate: new Date(),
 };

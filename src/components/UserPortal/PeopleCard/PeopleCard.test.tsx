@@ -25,8 +25,11 @@ let props = {
   name: 'First Last',
   image: '',
   email: 'first@last.com',
+<<<<<<< HEAD
   role: 'Admin',
   sno: '1',
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 };
 
 describe('Testing PeopleCard Component [User Portal]', () => {
@@ -40,7 +43,11 @@ describe('Testing PeopleCard Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -61,7 +68,11 @@ describe('Testing PeopleCard Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();

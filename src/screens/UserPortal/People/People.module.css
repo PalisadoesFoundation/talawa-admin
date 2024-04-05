@@ -1,6 +1,7 @@
 .borderNone {
   border: none;
 }
+<<<<<<< HEAD
 .borderBox {
   border: 1px solid #dddddd;
 }
@@ -30,21 +31,30 @@
 .shadow {
   box-shadow: 5px 5px 4px 0px #31bb6b1f;
 }
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 .colorWhite {
   color: white;
 }
 
+<<<<<<< HEAD
 .colorGreen {
   color: #31bb6b;
 }
 
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 .backgroundWhite {
   background-color: white;
 }
 
 .maxWidth {
+<<<<<<< HEAD
   max-width: 600px;
+=======
+  max-width: 300px;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 
 .colorLight {
@@ -68,6 +78,13 @@
   gap: 20px;
 }
 
+<<<<<<< HEAD
+=======
+.paddingY {
+  padding: 30px 0px;
+}
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 .containerHeight {
   height: calc(100vh - 66px);
 }
@@ -75,6 +92,7 @@
 .colorPrimary {
   background: #31bb6b;
 }
+<<<<<<< HEAD
 
 .greenBorder {
   border: 1px solid #31bb6b;
@@ -87,3 +105,5 @@
 .placeholderColor::placeholder {
   color: #737373;
 }
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1

@@ -15,9 +15,12 @@ import {
   LIKE_POST,
   UNLIKE_POST,
 } from 'GraphQl/Mutations/mutations';
+<<<<<<< HEAD
 import useLocalStorage from 'utils/useLocalstorage';
 
 const { setItem, getItem } = useLocalStorage();
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 const MOCKS = [
   {
@@ -61,7 +64,10 @@ const MOCKS = [
         data: {
           createComment: {
             _id: '64ef885bca85de60ebe0f304',
+<<<<<<< HEAD
 
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
             creator: {
               _id: '63d6064458fce20ee25c3bf7',
               firstName: 'Noble',
@@ -140,15 +146,24 @@ describe('Testing PostCard Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
   });
 
   test('Component should be rendered properly if user has liked the post', async () => {
+<<<<<<< HEAD
     const beforeUserId = getItem('userId');
     setItem('userId', '2');
+=======
+    const beforeUserId = localStorage.getItem('userId');
+    localStorage.setItem('userId', '2');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
     const cardProps = {
       id: '',
@@ -183,19 +198,32 @@ describe('Testing PostCard Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
 
     if (beforeUserId) {
+<<<<<<< HEAD
       setItem('userId', beforeUserId);
+=======
+      localStorage.setItem('userId', beforeUserId);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     }
   });
 
   test('Component should be rendered properly if user unlikes a post', async () => {
+<<<<<<< HEAD
     const beforeUserId = getItem('userId');
     setItem('userId', '2');
+=======
+    const beforeUserId = localStorage.getItem('userId');
+    localStorage.setItem('userId', '2');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
     const cardProps = {
       id: '',
@@ -230,7 +258,11 @@ describe('Testing PostCard Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -238,13 +270,22 @@ describe('Testing PostCard Component [User Portal]', () => {
     userEvent.click(screen.getByTestId('likePostBtn'));
 
     if (beforeUserId) {
+<<<<<<< HEAD
       setItem('userId', beforeUserId);
+=======
+      localStorage.setItem('userId', beforeUserId);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     }
   });
 
   test('Component should be rendered properly if user likes a post', async () => {
+<<<<<<< HEAD
     const beforeUserId = getItem('userId');
     setItem('userId', '2');
+=======
+    const beforeUserId = localStorage.getItem('userId');
+    localStorage.setItem('userId', '2');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
     const cardProps = {
       id: '',
@@ -279,7 +320,11 @@ describe('Testing PostCard Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -287,7 +332,11 @@ describe('Testing PostCard Component [User Portal]', () => {
     userEvent.click(screen.getByTestId('likePostBtn'));
 
     if (beforeUserId) {
+<<<<<<< HEAD
       setItem('userId', beforeUserId);
+=======
+      localStorage.setItem('userId', beforeUserId);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     }
   });
 
@@ -325,7 +374,11 @@ describe('Testing PostCard Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -365,7 +418,11 @@ describe('Testing PostCard Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     const randomComment = 'testComment';
@@ -412,7 +469,11 @@ describe('Testing PostCard Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();

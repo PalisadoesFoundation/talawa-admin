@@ -52,11 +52,19 @@ describe('Testing Event Stats', () => {
         <BrowserRouter>
           <EventStats {...props} />
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
     );
 
     await waitFor(() =>
       expect(queryByText('Event Statistics')).toBeInTheDocument(),
+=======
+      </MockedProvider>
+    );
+
+    await waitFor(() =>
+      expect(queryByText('Event Statistics')).toBeInTheDocument()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
   });
 });

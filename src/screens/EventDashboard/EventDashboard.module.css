@@ -3,6 +3,7 @@
   flex-direction: row;
 }
 
+<<<<<<< HEAD
 .content {
   flex: 1;
   display: flex;
@@ -80,6 +81,20 @@ h4 {
 }
 
 .sidebar:after {
+=======
+.toporgloc {
+  padding-top: 8px;
+  font-size: 16px;
+}
+.sidebar {
+  z-index: 0;
+  padding-top: 5px;
+  margin: 0;
+  height: 100%;
+}
+.sidebar:after {
+  content: '';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   background-color: #f7f7f7;
   position: absolute;
   width: 2px;
@@ -88,13 +103,20 @@ h4 {
   left: 94%;
   display: block;
 }
+<<<<<<< HEAD
 
+=======
+.sidebarsticky {
+  padding-left: 30px;
+}
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 .sidebarsticky > p {
   margin-top: -10px;
   width: 90%;
 }
 
 .description {
+<<<<<<< HEAD
   color: #737373;
   font-weight: 300;
   font-size: 14px;
@@ -111,14 +133,31 @@ h4 {
   width: 100%;
 }
 
+=======
+  word-wrap: break-word;
+}
+
+.titlename {
+  color: #707070;
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 30px;
+  padding-bottom: 5px;
+  width: 100%;
+}
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 .tagdetailsGreen > button {
   background-color: #31bb6b;
   color: white;
   outline: none;
   cursor: pointer;
+<<<<<<< HEAD
   transition:
     transform 0.2s,
     box-shadow 0.2s;
+=======
+  transition: transform 0.2s, box-shadow 0.2s;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   border: none;
   border-radius: 5px;
   margin-top: -12px;
@@ -160,9 +199,13 @@ h4 {
   outline: none;
   font-weight: 600;
   cursor: pointer;
+<<<<<<< HEAD
   transition:
     transform 0.2s,
     box-shadow 0.2s;
+=======
+  transition: transform 0.2s, box-shadow 0.2s;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 .flexdir {
   display: flex;
@@ -202,9 +245,13 @@ h4 {
   outline: none;
   font-weight: 600;
   cursor: pointer;
+<<<<<<< HEAD
   transition:
     transform 0.2s,
     box-shadow 0.2s;
+=======
+  transition: transform 0.2s, box-shadow 0.2s;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   width: 100%;
 }
 

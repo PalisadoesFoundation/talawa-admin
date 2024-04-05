@@ -30,6 +30,7 @@ describe('Testing Organization Update', () => {
   const formData = {
     name: 'Palisadoes Organization',
     description: 'This is a updated description',
+<<<<<<< HEAD
     address: {
       city: 'Kingston',
       countryCode: 'JM',
@@ -42,6 +43,11 @@ describe('Testing Organization Update', () => {
     },
     displayImage: new File(['hello'], 'hello.png', { type: 'image/png' }),
     userRegistrationRequired: false,
+=======
+    location: 'This is updated location',
+    displayImage: new File(['hello'], 'hello.png', { type: 'image/png' }),
+    isPublic: false,
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     isVisible: true,
   };
 
@@ -54,21 +60,32 @@ describe('Testing Organization Update', () => {
           <I18nextProvider i18n={i18nForTest}>
             <OrgUpdate {...props} />
           </I18nextProvider>
+<<<<<<< HEAD
         </MockedProvider>,
+=======
+        </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       );
     });
     await wait();
     // Check labels are present or not
     expect(screen.getByText('Name')).toBeInTheDocument();
     expect(screen.getByText('Description')).toBeInTheDocument();
+<<<<<<< HEAD
     expect(screen.getByText('Address')).toBeInTheDocument();
     expect(screen.getByText('Display Image:')).toBeInTheDocument();
     expect(screen.getByText(/Registration/)).toBeInTheDocument();
+=======
+    expect(screen.getByText('Location')).toBeInTheDocument();
+    expect(screen.getByText('Display Image:')).toBeInTheDocument();
+    expect(screen.getByText('Public:')).toBeInTheDocument();
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     expect(screen.getByText('Visible in Search:')).toBeInTheDocument();
 
     // Get the input fields, and btns
     const name = screen.getByPlaceholderText(/Enter Organization Name/i);
     const des = screen.getByPlaceholderText(/Description/i);
+<<<<<<< HEAD
     const city = screen.getByPlaceholderText(/City/i);
     const countryCode = screen.getByTestId('countrycode');
     const line1 = screen.getByPlaceholderText(/Line 1/i);
@@ -79,11 +96,16 @@ describe('Testing Organization Update', () => {
     const postalCode = screen.getByPlaceholderText(/Postal Code/i);
     const userRegistrationRequired =
       screen.getByPlaceholderText(/Registration/i);
+=======
+    const location = screen.getByPlaceholderText(/Location/i);
+    const isPublic = screen.getByPlaceholderText(/Public/i);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     const isVisible = screen.getByPlaceholderText(/Visible/i);
 
     // Checking if form fields got updated according to the mock data
     expect(name).toHaveValue('Palisadoes');
     expect(des).toHaveValue('Equitable Access to STEM Education Jobs');
+<<<<<<< HEAD
     expect(city).toHaveValue('Kingston');
     expect(countryCode).toHaveValue('JM');
     expect(dependentLocality).toHaveValue('Sample Dependent Locality');
@@ -92,6 +114,10 @@ describe('Testing Organization Update', () => {
     expect(postalCode).toHaveValue('JM12345');
     expect(sortingCode).toHaveValue('ABC-123');
     expect(userRegistrationRequired).toBeChecked();
+=======
+    expect(location).toHaveValue('Jamaica');
+    expect(isPublic).toBeChecked();
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     expect(isVisible).not.toBeChecked();
   });
 
@@ -102,7 +128,11 @@ describe('Testing Organization Update', () => {
           <I18nextProvider i18n={i18nForTest}>
             <OrgUpdate {...props} />
           </I18nextProvider>
+<<<<<<< HEAD
         </MockedProvider>,
+=======
+        </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       );
     });
 
@@ -111,6 +141,7 @@ describe('Testing Organization Update', () => {
     // Get the input fields, and btns
     const name = screen.getByPlaceholderText(/Enter Organization Name/i);
     const des = screen.getByPlaceholderText(/Description/i);
+<<<<<<< HEAD
 
     const city = screen.getByPlaceholderText(/City/i);
     const countryCode = screen.getByTestId('countrycode');
@@ -123,22 +154,32 @@ describe('Testing Organization Update', () => {
     const displayImage = screen.getByPlaceholderText(/Display Image/i);
     const userRegistrationRequired =
       screen.getByPlaceholderText(/Registration/i);
+=======
+    const location = screen.getByPlaceholderText(/Location/i);
+    const displayImage = screen.getByPlaceholderText(/Display Image/i);
+    const isPublic = screen.getByPlaceholderText(/Public/i);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     const isVisible = screen.getByPlaceholderText(/Visible/i);
     const saveChangesBtn = screen.getByText(/Save Changes/i);
 
     // Emptying the text fields to add updated data
     fireEvent.change(name, { target: { value: '' } });
     fireEvent.change(des, { target: { value: '' } });
+<<<<<<< HEAD
     fireEvent.change(city, { target: { value: '' } });
     fireEvent.change(line1, { target: { value: '' } });
     fireEvent.change(line2, { target: { value: '' } });
     fireEvent.change(postalCode, { target: { value: '' } });
     fireEvent.change(sortingCode, { target: { value: '' } });
     fireEvent.change(dependentLocality, { target: { value: '' } });
+=======
+    fireEvent.change(location, { target: { value: '' } });
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
     // Mocking filling form behaviour
     userEvent.type(name, formData.name);
     userEvent.type(des, formData.description);
+<<<<<<< HEAD
     userEvent.type(city, formData.address.city);
     userEvent.selectOptions(countryCode, formData.address.countryCode);
     userEvent.type(line1, formData.address.line1);
@@ -148,6 +189,11 @@ describe('Testing Organization Update', () => {
     userEvent.type(sortingCode, formData.address.sortingCode);
     userEvent.upload(displayImage, formData.displayImage);
     userEvent.click(userRegistrationRequired);
+=======
+    userEvent.type(location, formData.location);
+    userEvent.upload(displayImage, formData.displayImage);
+    userEvent.click(isPublic);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     userEvent.click(isVisible);
 
     await wait();
@@ -156,6 +202,7 @@ describe('Testing Organization Update', () => {
     // Checking if the form got update accordingly
     expect(name).toHaveValue(formData.name);
     expect(des).toHaveValue(formData.description);
+<<<<<<< HEAD
     expect(city).toHaveValue(formData.address.city);
     expect(countryCode).toHaveValue(formData.address.countryCode);
     expect(dependentLocality).toHaveValue(formData.address.dependentLocality);
@@ -165,6 +212,11 @@ describe('Testing Organization Update', () => {
     expect(sortingCode).toHaveValue(formData.address.sortingCode);
     expect(displayImage).toBeTruthy();
     expect(userRegistrationRequired).not.toBeChecked();
+=======
+    expect(location).toHaveValue(formData.location);
+    expect(displayImage).toBeTruthy();
+    expect(isPublic).not.toBeChecked();
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     expect(isVisible).toBeChecked();
   });
 
@@ -175,7 +227,11 @@ describe('Testing Organization Update', () => {
           <I18nextProvider i18n={i18nForTest}>
             <OrgUpdate {...props} />
           </I18nextProvider>
+<<<<<<< HEAD
         </MockedProvider>,
+=======
+        </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       );
     });
     await wait();
@@ -189,7 +245,11 @@ describe('Testing Organization Update', () => {
           <I18nextProvider i18n={i18nForTest}>
             <OrgUpdate {...props} />
           </I18nextProvider>
+<<<<<<< HEAD
         </MockedProvider>,
+=======
+        </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       );
     });
 
@@ -198,6 +258,7 @@ describe('Testing Organization Update', () => {
     // Get the input fields, and btns
     const name = screen.getByPlaceholderText(/Enter Organization Name/i);
     const des = screen.getByPlaceholderText(/Description/i);
+<<<<<<< HEAD
     const city = screen.getByPlaceholderText(/City/i);
     const countryCode = screen.getByTestId('countrycode');
     const line1 = screen.getByPlaceholderText(/Line 1/i);
@@ -209,22 +270,32 @@ describe('Testing Organization Update', () => {
     const displayImage = screen.getByPlaceholderText(/Display Image/i);
     const userRegistrationRequired =
       screen.getByPlaceholderText(/Registration/i);
+=======
+    const location = screen.getByPlaceholderText(/Location/i);
+    const displayImage = screen.getByPlaceholderText(/Display Image/i);
+    const isPublic = screen.getByPlaceholderText(/Public/i);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     const isVisible = screen.getByPlaceholderText(/Visible/i);
     const saveChangesBtn = screen.getByText(/Save Changes/i);
 
     // Emptying the text fields to add updated data
     fireEvent.change(name, { target: { value: '' } });
     fireEvent.change(des, { target: { value: '' } });
+<<<<<<< HEAD
     fireEvent.change(city, { target: { value: '' } });
     fireEvent.change(line1, { target: { value: '' } });
     fireEvent.change(line2, { target: { value: '' } });
     fireEvent.change(postalCode, { target: { value: '' } });
     fireEvent.change(sortingCode, { target: { value: '' } });
     fireEvent.change(dependentLocality, { target: { value: '' } });
+=======
+    fireEvent.change(location, { target: { value: '' } });
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
     // Mocking filling form behaviour
     userEvent.type(name, formData.name);
     userEvent.type(des, formData.description);
+<<<<<<< HEAD
     userEvent.type(city, formData.address.city);
     userEvent.selectOptions(countryCode, formData.address.countryCode);
     userEvent.type(line1, formData.address.line1);
@@ -234,6 +305,11 @@ describe('Testing Organization Update', () => {
     userEvent.type(sortingCode, formData.address.sortingCode);
     userEvent.upload(displayImage, formData.displayImage);
     userEvent.click(userRegistrationRequired);
+=======
+    userEvent.type(location, formData.location);
+    userEvent.upload(displayImage, formData.displayImage);
+    userEvent.click(isPublic);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     userEvent.click(isVisible);
 
     await wait();

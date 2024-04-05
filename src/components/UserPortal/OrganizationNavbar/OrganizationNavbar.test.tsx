@@ -1,18 +1,30 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
+<<<<<<< HEAD
 import 'jest-localstorage-mock';
 import { act, render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Router } from 'react-router-dom';
+=======
+import { act, render, screen } from '@testing-library/react';
+import { I18nextProvider } from 'react-i18next';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import cookies from 'js-cookie';
 import { StaticMockLink } from 'utils/StaticMockLink';
+<<<<<<< HEAD
+=======
+import * as getOrganizationId from 'utils/getOrganizationId';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 import OrganizationNavbar from './OrganizationNavbar';
 import userEvent from '@testing-library/user-event';
 import { USER_ORGANIZATION_CONNECTION } from 'GraphQl/Queries/Queries';
+<<<<<<< HEAD
 import { PLUGIN_SUBSCRIPTION } from 'GraphQl/Mutations/mutations';
 
 import { createMemoryHistory } from 'history';
@@ -96,10 +108,36 @@ const PLUGIN_SUBSCRIPTION_1 = [
         },
       },
       _loadingSub: false,
+=======
+
+const MOCKS = [
+  {
+    request: {
+      query: USER_ORGANIZATION_CONNECTION,
+      variables: {
+        id: '',
+      },
+    },
+    result: {
+      data: {
+        organizationsConnection: [
+          {
+            __typename: 'Organization',
+            _id: '6401ff65ce8e8406b8f07af2',
+            image: '',
+            name: 'anyOrganization1',
+            description: 'desc',
+            isPublic: true,
+            creator: { __typename: 'User', firstName: 'John', lastName: 'Doe' },
+          },
+        ],
+      },
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     },
   },
 ];
 
+<<<<<<< HEAD
 const PLUGIN_SUBSCRIPTION_2 = [
   MOCK_ORGANIZATION_CONNECTION,
   {
@@ -150,6 +188,8 @@ const testPlugins = [
   },
 ];
 
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -159,20 +199,29 @@ async function wait(ms = 100): Promise<void> {
 }
 
 const link = new StaticMockLink(MOCKS, true);
+<<<<<<< HEAD
 const link2 = new StaticMockLink(PLUGIN_SUBSCRIPTION_1, true);
 const link3 = new StaticMockLink(PLUGIN_SUBSCRIPTION_2, true);
 const link4 = new StaticMockLink(PLUGIN_SUBSCRIPTION_3, true);
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 const navbarProps = {
   currentPage: 'home',
 };
 
+<<<<<<< HEAD
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useParams: () => ({ orgId: organizationId }),
 }));
 
 describe('Testing OrganizationNavbar Component [User Portal]', () => {
+=======
+describe('Testing OrganizationNavbar Component [User Portal]', () => {
+  jest.mock('utils/getOrganizationId');
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
     value: jest.fn().mockImplementation((query) => ({
@@ -187,6 +236,15 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     })),
   });
 
+<<<<<<< HEAD
+=======
+  const getOrganizationIdSpy = jest
+    .spyOn(getOrganizationId, 'default')
+    .mockImplementation(() => {
+      return '';
+    });
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   afterEach(async () => {
     await act(async () => {
       await i18nForTest.changeLanguage('en');
@@ -203,11 +261,19 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
 
+<<<<<<< HEAD
+=======
+    expect(getOrganizationIdSpy).toHaveBeenCalled();
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     expect(screen.queryByText('anyOrganization1')).toBeInTheDocument();
     // Check if navigation links are rendered
     expect(screen.getByText('Home')).toBeInTheDocument();
@@ -217,6 +283,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     // expect(screen.getByText('Chat')).toBeInTheDocument();
   });
 
+<<<<<<< HEAD
   test('should navigate correctly on clicking a plugin', async () => {
     const history = createMemoryHistory();
     render(
@@ -240,6 +307,8 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     expect(history.location.pathname).toBe(`/user/people/${organizationId}`);
   });
 
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   test('The language is switched to English', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -250,7 +319,11 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -280,7 +353,11 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -304,7 +381,11 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -328,7 +409,11 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -352,7 +437,11 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -365,6 +454,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
     expect(cookies.get('i18next')).toBe('zh');
   });
+<<<<<<< HEAD
 
   test('Component should be rendered properly if plugins are present in localStorage', async () => {
     setItem('talawaPlugins', JSON.stringify(testPlugins));
@@ -449,4 +539,6 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
     await wait();
   });
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 });

@@ -1,6 +1,9 @@
 .leftDrawer {
   width: calc(300px + 2rem);
+<<<<<<< HEAD
   min-height: 100%;
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   position: fixed;
   top: 0;
   bottom: 0;
@@ -10,7 +13,27 @@
   padding: 0.8rem 1rem 0 1rem;
   background-color: var(--bs-white);
   transition: 0.5s;
+<<<<<<< HEAD
   font-family: var(--bs-leftDrawer-font-family);
+=======
+  overflow-y: scroll;
+}
+
+.leftDrawer::-webkit-scrollbar {
+  width: 6px;
+}
+
+.leftDrawer::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.leftDrawer::-webkit-scrollbar-thumb {
+  background: var(--bs-gray-500);
+}
+
+.leftDrawer::-webkit-scrollbar-thumb:hover {
+  background: var(--bs-gray-600);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 
 .activeDrawer {
@@ -30,6 +53,13 @@
   animation: goToLeftBigScreen 0.5s ease-in-out;
 }
 
+<<<<<<< HEAD
+=======
+.leftDrawer .closeModalBtn {
+  display: none;
+}
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 .leftDrawer .brandingContainer {
   display: flex;
   justify-content: flex-start;
@@ -38,6 +68,7 @@
 
 .leftDrawer .organizationContainer button {
   position: relative;
+<<<<<<< HEAD
   margin: 0.7rem 0;
   padding: 2.5rem 0.1rem;
   border-radius: 16px;
@@ -61,6 +92,28 @@
 
 .leftDrawer .optionList {
   height: 100%;
+=======
+  margin: 1.25rem 0;
+  padding: 2.5rem 0.1rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--bs-gray-300);
+  background-color: var(--bs-gray-100);
+}
+
+.leftDrawer .talawaLogo {
+  width: 42px;
+  height: 42px;
+  margin-right: 0.5rem;
+}
+
+.leftDrawer .talawaText {
+  font-size: 1.1rem;
+}
+
+.leftDrawer .titleHeader {
+  margin-bottom: 1rem;
+  font-weight: 600;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 
 .leftDrawer .optionList button {
@@ -69,12 +122,17 @@
   width: 100%;
   text-align: start;
   margin-bottom: 0.8rem;
+<<<<<<< HEAD
   border-radius: 16px;
   font-size: 16px;
   padding: 0.6rem;
   padding-left: 0.8rem;
   outline: none;
   border: none;
+=======
+  border: 1px solid var(--bs-gray-200);
+  border-radius: 8px;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 
 .leftDrawer button .iconWrapper {
@@ -83,7 +141,10 @@
 
 .leftDrawer .optionList .collapseBtn {
   height: 48px;
+<<<<<<< HEAD
   border: none;
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 
 .leftDrawer button .iconWrapperSm {
@@ -93,6 +154,7 @@
   align-items: center;
 }
 
+<<<<<<< HEAD
 .leftDrawer .organizationContainer .profileContainer {
   background-color: #31bb6b33;
   padding-right: 10px;
@@ -106,15 +168,33 @@
   display: flex;
   align-items: center;
   background-color: var(--bs-white);
+=======
+.leftDrawer .profileContainer {
+  border: none;
+  width: 100%;
+  margin-top: 5rem;
+  height: 52px;
+  border-radius: 8px;
+  background-color: var(--bs-white);
+  display: flex;
+  align-items: center;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 
 .leftDrawer .profileContainer:focus {
   outline: none;
+<<<<<<< HEAD
+=======
+  background-color: var(--bs-gray-100);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 
 .leftDrawer .imageContainer {
   width: 68px;
+<<<<<<< HEAD
   margin-right: 8px;
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 
 .leftDrawer .profileContainer img {
@@ -126,18 +206,24 @@
 .leftDrawer .profileContainer .profileText {
   flex: 1;
   text-align: start;
+<<<<<<< HEAD
   overflow: hidden;
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 
 .leftDrawer .profileContainer .profileText .primaryText {
   font-size: 1.1rem;
   font-weight: 600;
+<<<<<<< HEAD
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2; /* number of lines to show */
   -webkit-box-orient: vertical;
   word-wrap: break-word;
   white-space: normal;
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 
 .leftDrawer .profileContainer .profileText .secondaryText {
@@ -156,6 +242,7 @@
 }
 
 /* For tablets */
+<<<<<<< HEAD
 @media (max-height: 900px) {
   .leftDrawer {
     width: calc(300px + 1rem);
@@ -222,6 +309,8 @@
   }
 }
 
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 @media (max-width: 820px) {
   .hideElemByDefault {
     display: none;
@@ -233,6 +322,7 @@
     right: 0;
   }
 
+<<<<<<< HEAD
   .inactiveDrawer {
     opacity: 0;
     left: 0;
@@ -248,6 +338,29 @@
 
   .logout {
     margin-bottom: 2.5rem;
+=======
+  .leftDrawer .closeModalBtn {
+    display: block;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 10;
+  }
+
+  /* For smaller devices .activeDrawer in real behaves like inactive */
+  .activeDrawer {
+    opacity: 0;
+    left: 0;
+    z-index: -1;
+    animation: closeDrawer 0.4s ease-in-out;
+  }
+
+  /* For smaller devices .inactiveDrawer in real behaves like active */
+  .inactiveDrawer {
+    display: flex;
+    z-index: 100;
+    animation: openDrawer 0.6s ease-in-out;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   }
 }
 

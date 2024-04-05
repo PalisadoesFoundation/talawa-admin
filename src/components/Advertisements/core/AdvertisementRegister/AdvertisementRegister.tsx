@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styles from './AdvertisementRegister.module.css';
@@ -42,10 +43,39 @@ function advertisementRegister({
   advertisementMediaEdit,
   endDateEdit,
   startDateEdit,
+=======
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import styles from './AdvertisementRegister.module.css';
+import { Button, Form, Modal } from 'react-bootstrap';
+import { useMutation } from '@apollo/client';
+import { ADD_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+import dayjs from 'dayjs';
+
+interface InterfaceAddOnRegisterProps {
+  id?: string; // OrgId
+  createdBy?: string; // User
+}
+interface InterfaceFormStateTypes {
+  name: string;
+  link: string;
+  type: string;
+  startDate: Date;
+  endDate: Date;
+  orgId: string;
+}
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function advertisementRegister({
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+  createdBy,
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }: InterfaceAddOnRegisterProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
 
   const [show, setShow] = useState(false);
+<<<<<<< HEAD
   const handleClose = (): void => setShow(false);
   const handleShow = (): void => setShow(true);
   const [create] = useMutation(ADD_ADVERTISEMENT_MUTATION);
@@ -101,11 +131,40 @@ function advertisementRegister({
           startDate: dayjs(formState.startDate).format('YYYY-MM-DD'),
           endDate: dayjs(formState.endDate).format('YYYY-MM-DD'),
           file: formState.advertisementMedia as string,
+=======
+
+  const handleClose = (): void => setShow(false);
+  const handleShow = (): void => setShow(true);
+  const [create] = useMutation(ADD_ADVERTISEMENT_MUTATION);
+
+  //getting orgId from URL
+  const currentOrg = window.location.href.split('/id=')[1] + '';
+  const [formState, setFormState] = useState<InterfaceFormStateTypes>({
+    name: '',
+    link: '',
+    type: 'BANNER',
+    startDate: new Date(),
+    endDate: new Date(),
+    orgId: currentOrg,
+  });
+  const handleRegister = async (): Promise<void> => {
+    try {
+      console.log('At handle register', formState);
+      const { data } = await create({
+        variables: {
+          orgId: currentOrg,
+          name: formState.name as string,
+          link: formState.link as string,
+          type: formState.type as string,
+          startDate: dayjs(formState.startDate).format('YYYY-MM-DD'),
+          endDate: dayjs(formState.endDate).format('YYYY-MM-DD'),
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         },
       });
 
       if (data) {
         toast.success('Advertisement created successfully');
+<<<<<<< HEAD
         refetch();
         setFormState({
           name: '',
@@ -213,6 +272,30 @@ function advertisementRegister({
           ) : (
             <Modal.Title>{t('editAdvertisement')}</Modal.Title>
           )}
+=======
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      }
+    } catch (error) {
+      console.log('error occured', error);
+    }
+  };
+  return (
+    <>
+      <Button
+        className={styles.modalbtn}
+        variant="primary"
+        onClick={handleShow}
+      >
+        <i className="fa fa-plus"></i>
+        {t('addNew')}
+      </Button>
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title> {t('RClose')}</Modal.Title>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -232,6 +315,7 @@ function advertisementRegister({
                 }}
               />
             </Form.Group>
+<<<<<<< HEAD
             <Form.Group className="mb-3">
               <Form.Label htmlFor="advertisementMedia">
                 {t('Rmedia')}
@@ -296,6 +380,23 @@ function advertisementRegister({
                   </button>
                 </div>
               )}
+=======
+            <Form.Group className="mb-3" controlId="registerForm.Rlink">
+              <Form.Label>{t('Rlink')}</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder={t('EXlink')}
+                autoComplete="off"
+                required
+                value={formState.link}
+                onChange={(e): void => {
+                  setFormState({
+                    ...formState,
+                    link: e.target.value,
+                  });
+                }}
+              />
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
             </Form.Group>
             <Form.Group className="mb-3" controlId="registerForm.Rtype">
               <Form.Label>{t('Rtype')}</Form.Label>
@@ -307,6 +408,10 @@ function advertisementRegister({
                     ...formState,
                     type: e.target.value,
                   });
+<<<<<<< HEAD
+=======
+                  console.log(e.target, e.target.value, typeof e.target.value);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                 }}
               >
                 <option value="POPUP">Popup Ad</option>
@@ -319,7 +424,11 @@ function advertisementRegister({
               <Form.Control
                 type="date"
                 required
+<<<<<<< HEAD
                 value={formState.startDate.toISOString().slice(0, 10)}
+=======
+                // value={formState.startDate}
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                 onChange={(e): void => {
                   setFormState({
                     ...formState,
@@ -334,7 +443,11 @@ function advertisementRegister({
               <Form.Control
                 type="date"
                 required
+<<<<<<< HEAD
                 value={formState.endDate.toISOString().slice(0, 10)}
+=======
+                // value={new Date(formState.endDate)}
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
                 onChange={(e): void => {
                   setFormState({
                     ...formState,
@@ -353,6 +466,7 @@ function advertisementRegister({
           >
             {t('close')}
           </Button>
+<<<<<<< HEAD
           {formStatus === 'register' ? (
             <Button
               variant="primary"
@@ -370,6 +484,15 @@ function advertisementRegister({
               {t('saveChanges')}
             </Button>
           )}
+=======
+          <Button
+            variant="primary"
+            onClick={handleRegister}
+            data-testid="addonregister"
+          >
+            {t('register')}
+          </Button>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         </Modal.Footer>
       </Modal>
     </>
@@ -378,22 +501,38 @@ function advertisementRegister({
 
 advertisementRegister.defaultProps = {
   name: '',
+<<<<<<< HEAD
   advertisementMedia: '',
   type: 'BANNER',
   startDate: new Date(),
   endDate: new Date(),
   organizationId: '',
   formStatus: 'register',
+=======
+  link: '',
+  type: 'BANNER',
+  startDate: new Date(),
+  endDate: new Date(),
+  orgId: '',
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 };
 
 advertisementRegister.propTypes = {
   name: PropTypes.string,
+<<<<<<< HEAD
   advertisementMedia: PropTypes.string,
   type: PropTypes.string,
   startDate: PropTypes.instanceOf(Date),
   endDate: PropTypes.instanceOf(Date),
   organizationId: PropTypes.string,
   formStatus: PropTypes.string,
+=======
+  link: PropTypes.string,
+  type: PropTypes.string,
+  startDate: PropTypes.instanceOf(Date),
+  endDate: PropTypes.instanceOf(Date),
+  orgId: PropTypes.string,
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 };
 
 export default advertisementRegister;

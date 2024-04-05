@@ -12,6 +12,7 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import Users from './Users';
+<<<<<<< HEAD
 import { EMPTY_MOCKS, MOCKS, MOCKS2 } from './UsersMocks';
 import useLocalStorage from 'utils/useLocalstorage';
 
@@ -20,6 +21,12 @@ const { setItem } = useLocalStorage();
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(EMPTY_MOCKS, true);
 const link3 = new StaticMockLink(MOCKS2, true);
+=======
+import { EMPTY_MOCKS, MOCKS } from './UsersMocks';
+
+const link = new StaticMockLink(MOCKS, true);
+const link2 = new StaticMockLink(EMPTY_MOCKS, true);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -29,10 +36,17 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 beforeEach(() => {
+<<<<<<< HEAD
   setItem('id', '123');
   setItem('SuperAdmin', true);
   setItem('FirstName', 'John');
   setItem('LastName', 'Doe');
+=======
+  localStorage.setItem('id', '123');
+  localStorage.setItem('UserType', 'SUPERADMIN');
+  localStorage.setItem('FirstName', 'John');
+  localStorage.setItem('LastName', 'Doe');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 });
 
 afterEach(() => {
@@ -50,17 +64,30 @@ describe('Testing Users screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
     );
 
     await wait();
     expect(screen.getByTestId('testcomp')).toBeInTheDocument();
+=======
+      </MockedProvider>
+    );
+
+    await wait();
+    expect(screen.getAllByText(/Users/i)).toBeTruthy();
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   });
 
   test(`Component should be rendered properly when user is not superAdmin
   and or userId does not exists in localstorage`, async () => {
+<<<<<<< HEAD
     setItem('SuperAdmin', false);
     setItem('id', '');
+=======
+    localStorage.setItem('UserType', 'ADMIN');
+    localStorage.setItem('id', '');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -70,7 +97,11 @@ describe('Testing Users screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -86,7 +117,11 @@ describe('Testing Users screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -102,6 +137,7 @@ describe('Testing Users screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
     );
 
@@ -111,6 +147,15 @@ describe('Testing Users screen', () => {
     userEvent.type(screen.getByTestId(/searchByName/i), search1);
     userEvent.click(searchBtn);
     await wait();
+=======
+      </MockedProvider>
+    );
+
+    await wait();
+
+    const search1 = 'John{backspace}{backspace}{backspace}{backspace}';
+    userEvent.type(screen.getByTestId(/searchByName/i), search1);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
     const search2 = 'Pete{backspace}{backspace}{backspace}{backspace}';
     userEvent.type(screen.getByTestId(/searchByName/i), search2);
@@ -124,6 +169,7 @@ describe('Testing Users screen', () => {
 
     const search5 = 'Xe';
     userEvent.type(screen.getByTestId(/searchByName/i), search5);
+<<<<<<< HEAD
     userEvent.clear(screen.getByTestId(/searchByName/i));
     userEvent.type(screen.getByTestId(/searchByName/i), '');
     userEvent.click(searchBtn);
@@ -149,6 +195,9 @@ describe('Testing Users screen', () => {
     await act(() =>
       userEvent.type(screen.getByTestId(/searchByName/i), search),
     );
+=======
+    userEvent.type(screen.getByTestId(/searchByName/i), '');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   });
 
   test('Testing User data is not present', async () => {
@@ -161,7 +210,11 @@ describe('Testing Users screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -179,12 +232,20 @@ describe('Testing Users screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait(200);
     expect(container.textContent).toMatch(
+<<<<<<< HEAD
       'Organizations not found, please create an organization through dashboard',
+=======
+      'Organizations not found, please create an organization through dashboard'
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
   });
 
@@ -199,17 +260,29 @@ describe('Testing Users screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
 
     expect(container.textContent).not.toMatch(
+<<<<<<< HEAD
       'Organizations not found, please create an organization through dashboard',
     );
   });
 
   test('Testing sorting functionality', async () => {
+=======
+      'Organizations not found, please create an organization through dashboard'
+    );
+  });
+
+  test('Testing sort Newest and oldest toggle', async () => {
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     await act(async () => {
       render(
         <MockedProvider addTypename={false} link={link}>
@@ -221,7 +294,11 @@ describe('Testing Users screen', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
+<<<<<<< HEAD
         </MockedProvider>,
+=======
+        </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       );
 
       await wait();
@@ -232,6 +309,7 @@ describe('Testing Users screen', () => {
       const inputText = screen.getByTestId('sortUsers');
 
       fireEvent.click(inputText);
+<<<<<<< HEAD
       const toggleText = screen.getByTestId('oldest');
       fireEvent.click(toggleText);
 
@@ -324,4 +402,17 @@ describe('Testing Users screen', () => {
     );
     await wait();
   });
+=======
+      const toggleText = screen.getByTestId('newest');
+
+      fireEvent.click(toggleText);
+
+      expect(searchInput).toBeInTheDocument();
+      fireEvent.click(inputText);
+      const toggleTite = screen.getByTestId('oldest');
+      fireEvent.click(toggleTite);
+      expect(searchInput).toBeInTheDocument();
+    });
+  });
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 });

@@ -4,18 +4,24 @@
     "fromPalisadoes": "पलिसाडो के स्वयंसेवकों द्वारा एक खुला स्रोत अनुप्रयोग",
     "talawa_portal": "तलावा प्रशासन पोर्टल",
     "login": "लॉग इन करें",
+<<<<<<< HEAD
     "userLogin": "उपयोगकर्ता लॉगिन",
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "register": "पंजीकरण करवाना",
     "firstName": "पहला नाम",
     "lastName": "उपनाम",
     "email": "ईमेल",
     "password": "पासवर्ड",
     "atleast_8_char_long": "कम से कम 8 कैरेक्टर लंबा",
+<<<<<<< HEAD
     "atleast_6_char_long": "कम से कम 6 अक्षर लंबा",
     "firstName_invalid": "प्रथम नाम में केवल छोटे और बड़े अक्षर होने चाहिए",
     "lastName_invalid": "अंतिम नाम में केवल छोटे और बड़े अक्षर होने चाहिए",
     "password_invalid": "पासवर्ड में कम से कम एक लोअरकेस अक्षर, एक अपरकेस अक्षर, एक संख्यात्मक मान और एक विशेष अक्षर होना चाहिए",
     "email_invalid": "ईमेल में कम से कम 8 अक्षर होने चाहिए",
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "Password_and_Confirm_password_mismatches.": "पासवर्ड और पुष्टि पासवर्ड बेमेल।",
     "confirmPassword": "पासवर्ड की पुष्टि कीजिये",
     "forgotPassword": "पासवर्ड भूल गए ?",
@@ -31,6 +37,7 @@
     "notAuthorised": "क्षमा करें! आप अधिकृत नहीं हैं!",
     "notFound": "उपयोगकर्ता नहीं मिला!",
     "successfullyRegistered": "सफलतापूर्वक पंजीकृत। कृपया स्वीकृत होने तक प्रतीक्षा करें।",
+<<<<<<< HEAD
     "OR": "या",
     "admin": "व्यवस्थापक",
     "user": "उपयोगकर्ता",
@@ -38,17 +45,24 @@
     "uppercase_check": "कम से कम एक बड़ा अक्षर",
     "numeric_value_check": "कम से कम एक संख्यात्मक मान",
     "special_char_check": "कम से कम एक विशेष पात्र"
+=======
+    "login_to_admin_portal": "एडमिन पोर्टल लॉगिन",
+    "OR": "या"
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
   "latestEvents": {
     "eventCardTitle": "आगामी घटनाएँ",
     "eventCardSeeAll": "सभी देखें",
     "noEvents": "कोई आगामी घटनाएँ नहीं"
   },
+<<<<<<< HEAD
   "latestPosts": {
     "latestPostsTitle": "नवीनतम पोस्ट",
     "seeAllLink": "सभी देखें",
     "noPostsCreated": "कोई पोस्ट नहीं बनाई गई"
   },
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   "listNavbar": {
     "talawa_portal": "तलावा प्रशासन पोर्टल",
     "roles": "भूमिकाएँ",
@@ -58,10 +72,16 @@
   "leftDrawer": {
     "talawaAdminPortal": "तलावा व्यवस्थापक पोर्टल",
     "menu": "मेन्यू",
+<<<<<<< HEAD
     "my organizations": "मेरे संगठन",
     "users": "उपयोगकर्ता",
     "requests": "अनुरोध",
     "communityProfile": "सामुदायिक प्रोफ़ाइल",
+=======
+    "organizations": "संगठन",
+    "requests": "अनुरोध",
+    "users": "उपयोगकर्ता",
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "logout": "लॉग आउट"
   },
   "leftDrawerOrg": {
@@ -95,11 +115,16 @@
     "designation": "पद",
     "email": "ईमेल",
     "searchByName": "नाम से खोजें",
+<<<<<<< HEAD
     "my organizations": "मेरे संगठन",
+=======
+    "organizations": "संगठन",
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "createOrganization": "संगठन बनाएं",
     "createSampleOrganization": " सैंपल संगठन बनाएं",
     "description": "विवरण",
     "location": "स्थान",
+<<<<<<< HEAD
     "address": "पता",
     "city": "शहर",
     "countryCode": "देश कोड",
@@ -110,12 +135,18 @@
     "sortingCode": "क्रमबद्ध कोड",
     "state": "राज्य / प्रांत",
     "userRegistrationRequired": "उपयोगकर्ता पंजीकरण आवश्यक",
+=======
+    "isPublic": "सार्वजनिक है",
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "visibleInSearch": "खोज में दृश्यमान",
     "displayImage": "प्रदर्शन छवि",
     "enterName": "नाम दर्ज करें",
     "sort": "छांटें",
+<<<<<<< HEAD
     "Earliest": "सबसे पुराना",
     "Latest": "सबसे नवीनतम",
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "filter": "फ़िल्टर",
     "cancel": "रद्द करना",
     "endOfResults": "परिणामों का अंत",
@@ -136,6 +167,7 @@
     "rowsPerPage": "प्रति पृष्ठ पंक्तियाँ",
     "all": "सभी"
   },
+<<<<<<< HEAD
   "requests": {
     "title": "अनुरोध",
     "sl_no": "क्रमांक",
@@ -153,12 +185,18 @@
     "noOrgErrorTitle": "संगठन नहीं मिला",
     "noOrgErrorDescription": "कृपया डैशबोर्ड के माध्यम से एक संगठन बनाएं"
   },
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   "users": {
     "title": "तलावा भूमिकाएं",
     "searchByName": "नाम से खोजें",
     "users": "उपयोगकर्ता",
     "name": "नाम",
     "email": "ईमेल",
+<<<<<<< HEAD
+=======
+    "roles_userType": "भूमिका/उपयोगकर्ता-प्रकार",
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "joined_organizations": "संगठनों में शामिल हुए",
     "blocked_organizations": "अवरोधित संगठन",
     "endOfResults": "परिणामों का अंत",
@@ -180,6 +218,7 @@
     "filter": "फ़िल्टर",
     "roleUpdated": "भूमिका अपडेट की गई।",
     "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला ",
+<<<<<<< HEAD
     "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।",
     "cancel": "रद्द करें",
     "admins": "व्यवस्थापक",
@@ -203,6 +242,28 @@
     "url": "यू आर एल दर्ज करो",
     "profileChangedMsg": "प्रोफ़ाइल विवरण सफलतापूर्वक अपडेट किया गया।",
     "resetData": "प्रोफ़ाइल विवरण सफलतापूर्वक रीसेट किया गया।"
+=======
+    "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।"
+  },
+  "requests": {
+    "title": "तलवा अनुरोध",
+    "searchByName": "नाम से खोजें",
+    "requests": "अनुरोध",
+    "name": "नाम",
+    "email": "ईमेल",
+    "accept": "स्वीकार करना",
+    "reject": "अस्वीकार",
+    "enterName": "नाम दर्ज करें",
+    "endOfResults": "परिणामों का अंत",
+    "loadingRequests": "अनुरोध लोड हो रहा है ...",
+    "noRequestFound": "कोई अनुरोध नहीं मिला।",
+    "sort": "छांटें",
+    "filter": "फ़िल्टर",
+    "userApproved": "उपयोगकर्ता स्वीकृत",
+    "userRejected": "उपयोगकर्ता अस्वीकृत",
+    "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला ",
+    "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।"
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
   "dashboard": {
     "title": "डैशबोर्ड",
@@ -236,6 +297,7 @@
     "searchName": "नाम दर्ज करें",
     "searchevent": "घटना दर्ज करें",
     "searchFirstName": "प्रथम नाम दर्ज करें",
+<<<<<<< HEAD
     "searchLastName": "अंतिम नाम दर्ज करो",
     "people": "लोग",
     "sort": "भूमिका के आधार पर खोजें",
@@ -256,6 +318,9 @@
     "create": "बनाएं",
     "cancel": "रद्द करना",
     "invalidDetailsMessage": "कृपया मान्य विवरण दर्ज करें।"
+=======
+    "searchLastName": "अंतिम नाम दर्ज करो"
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
   "userListCard": {
     "joined": "में शामिल हो गए",
@@ -284,7 +349,11 @@
     "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।"
   },
   "organizationEvents": {
+<<<<<<< HEAD
     "title": "आयोजन",
+=======
+    "title": "तलावा इवेंट्स",
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "filterByTitle": "शीर्षक द्वारा फ़िल्टर करें",
     "filterByLocation": "स्थान के अनुसार फ़िल्टर करें",
     "filterByDescription": "विवरण द्वारा फ़िल्टर करें",
@@ -308,6 +377,7 @@
     "enterDescrip": "विवरण दर्ज करें",
     "eventLocation": "स्थान दर्ज करें",
     "eventCreated": "बधाई हो! इवेंट बनाया गया है।",
+<<<<<<< HEAD
     "searchEventName": "ईवेंट नाम खोजें",
     "eventType": "ईवेंट प्रकार",
     "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।",
@@ -361,6 +431,9 @@
     "successfulDeletion": "कार्य आइटम सफलतापूर्वक हटाया गया",
     "title": "कार्य आइटम",
     "yes": "हाँ"
+=======
+    "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।"
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
   "eventListCard": {
     "location": "स्थान",
@@ -384,6 +457,7 @@
     "eventDetails": "घटना की जानकारी",
     "eventDeleted": "इवेंट सफलतापूर्वक मिटाया गया.",
     "eventUpdated": "इवेंट सफलतापूर्वक अपडेट किया गया।",
+<<<<<<< HEAD
     "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।",
     "thisInstance": "यह अवसर",
     "thisAndFollowingInstances": "यह और निम्नलिखित अवसर",
@@ -470,6 +544,10 @@
     "noPledges": "कोई प्रतिज्ञा नहीं मिली"
   },
 
+=======
+    "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।"
+  },
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   "orgPost": {
     "title": "तलवा पोस्ट्स",
     "searchPost": "पोस्ट खोजें",
@@ -478,9 +556,16 @@
     "postDetails": "पोस्ट विवरण",
     "postTitle1": "पोस्ट का शीर्षक लिखें",
     "postTitle": "शीर्षक",
+<<<<<<< HEAD
     "addMedia": "फ़ोटो या वीडियो अपलोड करें",
     "information": "जानकारी",
     "information1": "पोस्ट की जानकारी लिखें",
+=======
+    "information": "जानकारी",
+    "information1": "पोस्ट की जानकारी लिखें",
+    "image": "पोस्ट छवि",
+    "video": "पोस्ट वीडियो",
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "addPost": "पोस्ट जोड़ें",
     "searchTitle": "शीर्षक से खोजें",
     "searchText": "टेक्स्ट से खोजें",
@@ -493,11 +578,15 @@
     "Oldest": "सबसे पुराना पहले",
     "Latest": "सबसे नवीनतम पहले",
     "sortPost": "पोस्ट को क्रमित करें",
+<<<<<<< HEAD
     "tag": "आपका ब्राउज़र वीडियो टैग का समर्थन नहीं करता",
     "postCreatedSuccess": "बधाई हो! आपने कुछ पोस्ट किया है।",
     "pinPost": "पोस्ट को पिन करें",
     "Next": "अगला पृष्ठ",
     "Previous": "पिछला पृष्ठ"
+=======
+    "tag": "आपका ब्राउज़र वीडियो टैग का समर्थन नहीं करता"
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
   "postNotFound": {
     "post": "पोस्ट",
@@ -526,8 +615,11 @@
     "yes": "हाँ",
     "editPost": "पोस्ट संपादित करें",
     "postTitle": "शीर्षक",
+<<<<<<< HEAD
     "postTitle1": "पोस्ट का शीर्षक संपादित करें",
     "information1": "पोस्ट की जानकारी संपादित करें",
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "information": "जानकारी",
     "image": "छवि",
     "video": "वीडियो",
@@ -582,7 +674,10 @@
   "pageNotFound": {
     "title": "404 नहीं मिला",
     "talawaAdmin": "तलावा एडमिन",
+<<<<<<< HEAD
     "talawaUser": "तलावा उपयोगकर्ता",
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "404": "404",
     "notFoundMsg": "ओह! आपके द्वारा अनुरोधित पृष्ठ नहीं मिला!",
     "backToHome": "घर वापिस जा रहा हूँ"
@@ -609,8 +704,11 @@
   "orgSettings": {
     "title": "तलावा सेटिंग",
     "pageName": "सेटिंग्स",
+<<<<<<< HEAD
     "general": "सामान्य",
     "actionItemCategories": "कार्रवाई आइटम श्रेणियाँ",
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "updateYourDetails": "अपना विवरण अपडेट करें",
     "updateYourPassword": "अपना पासवर्ड अपडेट करें",
     "updateOrganization": "अद्यतन संगठन",
@@ -618,8 +716,12 @@
     "settings": "समायोजन",
     "noData": "कोई डेटा नहीं",
     "otherSettings": "अन्य सेटिंग्स",
+<<<<<<< HEAD
     "changeLanguage": "भाषा बदलें",
     "manageCustomFields": "कस्टम फ़ील्ड प्रबंधन करें"
+=======
+    "changeLanguage": "भाषा बदलें"
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
   "deleteOrg": {
     "deleteOrganization": "संगठन हटाएं",
@@ -627,8 +729,12 @@
     "deleteMsg": "क्या आप इस संगठन को हटाना चाहते हैं?",
     "cancel": "रद्द करना",
     "confirmDelete": "हटाने की पुष्टि करें",
+<<<<<<< HEAD
     "longDelOrgMsg": "संगठन को हमेशा के लिए हटा देने के लिए संगठन हटाने के बटन पर क्लिक करके, उसके इवेंट्स, टैग्स और सभी संबंधित डेटा सहित सभी जानकारी हटा दी जाएगी।",
     "successfullyDeletedSampleOrganization": "नमूना संगठन सफलतापूर्वक हटा दिया गया"
+=======
+    "longDelOrgMsg": "संगठन को हमेशा के लिए हटा देने के लिए संगठन हटाने के बटन पर क्लिक करके, उसके इवेंट्स, टैग्स और सभी संबंधित डेटा सहित सभी जानकारी हटा दी जाएगी।"
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
   "userUpdate": {
     "firstName": "पहला नाम",
@@ -664,6 +770,7 @@
     "name": "नाम",
     "description": "विवरण",
     "location": "जगह",
+<<<<<<< HEAD
     "address": "पता",
     "city": "शहर",
     "countryCode": "देश कोड",
@@ -675,6 +782,10 @@
     "state": "राज्य / प्रांत",
     "displayImage": "प्रदर्शन छवि",
     "userRegistrationRequired": "उपयोगकर्ता पंजीकरण आवश्यक",
+=======
+    "displayImage": "प्रदर्शन छवि",
+    "isPublic": "सार्वजनिक",
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "isVisibleInSearch": "खोज में दिखाए जा सकते हैं",
     "saveChanges": "परिवर्तनों को सुरक्षित करें",
     "cancel": "रद्द करना",
@@ -714,7 +825,10 @@
   "memberDetail": {
     "title": "उपयोगकर्ता विवरण",
     "addAdmin": "व्यवस्थापक जोड़ें",
+<<<<<<< HEAD
     "alreadyIsAdmin": "सदस्य पहले से ही एक व्यवस्थापक है",
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "organizations": "संगठन",
     "events": "घटनाएं",
     "role": "भूमिका",
@@ -723,6 +837,7 @@
     "main": "मुख्य",
     "firstName": "पहला नाम",
     "lastName": "अंतिम नाम",
+<<<<<<< HEAD
     "language": "भाषा",
     "gender": "लिंग",
     "birthDate": "जन्म तिथि",
@@ -742,6 +857,11 @@
     "appLanguageCode": "भाषा चुनें",
     "delete": "उपयोगकर्ता को हटाएं",
     "saveChanges": "परिवर्तन सहेजें",
+=======
+    "memberOfOrganization": "संगठन का सदस्य",
+    "language": "भाषा",
+    "adminApproved": "व्यवस्थापक द्वारा स्वीकृत",
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "pluginCreationAllowed": "प्लगइन निर्माण अनुमति दी गई",
     "joined": "शामिल हुए",
     "created": "बनाया गया",
@@ -791,6 +911,10 @@
     "events": "आयोजन",
     "chat": "बातचीत",
     "donate": "दान देना",
+<<<<<<< HEAD
+=======
+    "myTasks": "मेरा काम",
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "settings": "समायोजन",
     "language": "भाषा",
     "logout": "लॉग आउट",
@@ -800,12 +924,18 @@
     "allOrganizations": "सभी संगठन",
     "joinedOrganizations": "संगठन शामिल हुए",
     "createdOrganizations": "संगठन बनाये गये",
+<<<<<<< HEAD
     "search": "खोज करें",
     "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
     "selectOrganization": "संगठन का चयन करें",
     "filter": "फिल्टर",
     "organizations": "संगठन",
     "searchByName": "नाम से खोजें"
+=======
+    "search": "खोज",
+    "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
+    "selectOrganization": "संगठन का चयन करें"
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
   "userSidebar": {
     "yourOrganizations": "आपके संगठन",
@@ -826,6 +956,7 @@
   "home": {
     "feed": "फ़ीड",
     "pinnedPosts": "पिन किए गए पोस्ट देखें",
+<<<<<<< HEAD
     "somethingOnYourMind": "आपके मन में कुछ है?",
     "addPost": "पोस्ट जोड़ें",
     "startPost": "एक पोस्ट शुरू करें",
@@ -899,17 +1030,44 @@
     "donations": "दान",
     "searchDonations": "दान खोजें",
     "donateForThe": "के लिए दान करें",
+=======
+    "somethingOnYourMind": "आपके मन में कुछ है?"
+  },
+  "settings": {
+    "profileSettings": "पार्श्वचित्र समायोजन",
+    "firstName": "पहला नाम",
+    "lastName": "उपनाम",
+    "emailAddress": "मेल पता",
+    "updateImage": "छवि अद्यतन करें",
+    "save": "बचाना"
+  },
+  "donate": {
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "donateTo": "दान दें",
     "amount": "मात्रा",
     "yourPreviousDonations": "आपका पिछला दान",
     "donate": "दान",
+<<<<<<< HEAD
     "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
     "success": "दान सफल"
+=======
+    "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है."
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
   "userEvents": {
     "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
     "search": "खोज",
     "createEvent": "कार्यक्रम बनाएँ",
+<<<<<<< HEAD
+=======
+    "eventTitle": "कार्यक्रम का शीर्षक",
+    "eventDescription": "घटना विवरण",
+    "eventLocation": "घटना स्थान",
+    "startDate": "आरंभ तिथि चुनें",
+    "endDate": "अंतिम तिथि चुनें",
+    "publicEvent": "सार्वजनिक समारोह",
+    "registerable": "पंजीकरण योग्य",
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "recurring": "पुनरावर्ती",
     "startTime": "समय शुरू",
     "endTime": "अंत समय",
@@ -918,6 +1076,7 @@
     "listView": "लिस्ट व्यू",
     "calendarView": "कैलेंडर दृश्य",
     "allDay": "पूरे दिन",
+<<<<<<< HEAD
     "eventCreated": "इवेंट सफलतापूर्वक बनाया और पोस्ट किया गया।",
     "eventDetails": "घटना विवरण",
     "eventTitle": "शीर्षक",
@@ -930,6 +1089,9 @@
     "endDate": "अंतिम तिथि",
     "publicEvent": "सार्वजनिक है",
     "registerable": "पंजीकृत करने योग्य है"
+=======
+    "eventCreated": "ईवेंट सफलतापूर्वक बनाया और पोस्ट किया गया."
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
   "userEventCard": {
     "location": "जगह",
@@ -939,12 +1101,32 @@
     "alreadyRegistered": "पहले से ही पंजीकृत",
     "register": "पंजीकरण करवाना"
   },
+<<<<<<< HEAD
+=======
+  "userTasks": {
+    "yourAssignedTasks": "आपके असाइन किए गए कार्य",
+    "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है."
+  },
+  "userTaskCard": {
+    "description": "विवरण",
+    "deadline": "अंतिम तारीख",
+    "created": "बनाया",
+    "assignees": "असाइनी",
+    "completed": "पुरा",
+    "incomplete": "अधूरा",
+    "taskCompleted": "काम पूरा हो गया",
+    "taskNotCompleted": "कार्य अभी तक पूरा नहीं हुआ है",
+    "event": "आयोजन",
+    "organization": "संगठन"
+  },
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   "advertisement": {
     "title": "विज्ञापन",
     "pHeading": "विज्ञापन प्रबंधन",
     "activeAds": "सक्रिय अभियान",
     "archievedAds": "संपन्न अभियान",
     "pMessage": "इस अभियान के लिए कोई विज्ञापन नहीं हैं।",
+<<<<<<< HEAD
     "delete": "हटाएँ",
     "validLink": "लिंक मान्य है",
     "invalidLink": "लिंक अमान्य है",
@@ -958,6 +1140,9 @@
     "edit": "संपादित करें",
     "editAdvertisement": "विज्ञापन संपादित करें",
     "saveChanges": "परिवर्तन सहेजें"
+=======
+    "delete": "हटाएँ"
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
   "userChat": {
     "chat": "बात",
@@ -967,6 +1152,7 @@
   "userChatRoom": {
     "selectContact": "बातचीत शुरू करने के लिए एक संपर्क चुनें",
     "sendMessage": "मेसेज भेजें"
+<<<<<<< HEAD
   },
   "orgProfileField": {
     "loading": "लोड हो रहा है...",
@@ -1011,5 +1197,7 @@
     "update": "स्थान विवरण अद्यतन करें",
     "editVenue": "अपडेट स्थान",
     "venueUpdated": "स्थल विवरण सफलतापूर्वक अद्यतन किया गया"
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   }
 }

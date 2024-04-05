@@ -16,6 +16,7 @@ import { store } from 'state/store';
 import { BACKEND_URL } from 'Constant/constant';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
+<<<<<<< HEAD
 import userEvent from '@testing-library/user-event';
 import { MockedProvider, wait } from '@apollo/react-testing';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -26,11 +27,17 @@ import useLocalStorage from 'utils/useLocalstorage';
 const { getItem } = useLocalStorage();
 
 const link = new StaticMockLink(ADD_ON_ENTRY_MOCK, true);
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 const httpLink = new HttpLink({
   uri: BACKEND_URL,
   headers: {
+<<<<<<< HEAD
     authorization: 'Bearer ' + getItem('token') || '',
+=======
+    authorization: 'Bearer ' + localStorage.getItem('token') || '',
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
 });
 console.error = jest.fn();
@@ -38,11 +45,14 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
   link: ApolloLink.from([httpLink]),
 });
+<<<<<<< HEAD
 let mockID: string | undefined = '1';
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useParams: () => ({ orgId: mockID }),
 }));
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 describe('Testing AddOnEntry', () => {
   const props = {
@@ -71,7 +81,11 @@ describe('Testing AddOnEntry', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
+<<<<<<< HEAD
       </ApolloProvider>,
+=======
+      </ApolloProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
     expect(getByTestId('AddOnEntry')).toBeInTheDocument();
   });
@@ -103,13 +117,18 @@ describe('Testing AddOnEntry', () => {
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
+<<<<<<< HEAD
       </ApolloProvider>,
+=======
+      </ApolloProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     expect(getByText('Test Addon')).toBeInTheDocument();
     expect(getByText('Test addon description')).toBeInTheDocument();
     expect(getByText('Test User')).toBeInTheDocument();
   });
+<<<<<<< HEAD
   it('Uninstall Button works correctly', async () => {
     const props = {
       id: '1',
@@ -206,4 +225,6 @@ describe('Testing AddOnEntry', () => {
     await wait(100);
     expect(window.location.pathname).toEqual('/orglist');
   });
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 });

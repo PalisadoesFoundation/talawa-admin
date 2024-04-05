@@ -8,7 +8,11 @@ interface InterfacePostCardProps {
   title: string;
 }
 export default function promotedPost(
+<<<<<<< HEAD
   props: InterfacePostCardProps,
+=======
+  props: InterfacePostCardProps
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 ): JSX.Element {
   return (
     <>

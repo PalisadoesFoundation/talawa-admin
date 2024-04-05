@@ -4,18 +4,24 @@
     "fromPalisadoes": "Una aplicación de código abierto de los voluntarios de la Fundación palisados",
     "talawa_portal": "Portal De Administración Talawa",
     "login": "Acceso",
+<<<<<<< HEAD
     "userLogin": "Inicio de sesión de usuario",
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "register": "Registro",
     "firstName": "Primer nombre",
     "lastName": "Apellido",
     "email": "Correo electrónico",
     "password": "Clave",
     "atleast_8_char_long": "Al menos 8 caracteres de largo",
+<<<<<<< HEAD
     "atleast_6_char_long": "Al menos 6 caracteres de largo",
     "firstName_invalid": "El nombre debe contener solo letras minúsculas y mayúsculas.",
     "lastName_invalid": "El apellido debe contener solo letras minúsculas y mayúsculas.",
     "password_invalid": "La contraseña debe contener al menos una letra minúscula, una letra mayúscula, un valor numérico y un carácter especial.",
     "email_invalid": "El correo electrónico debe tener al menos 8 caracteres.",
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "Password_and_Confirm_password_mismatches.": "Contraseña y Confirmar contraseña no coinciden.",
     "confirmPassword": "Confirmar contraseña",
     "forgotPassword": "Has olvidado tu contraseña ?",
@@ -31,6 +37,7 @@
     "notAuthorised": "¡Lo siento! ¡No estás autorizado!",
     "notFound": "¡Usuario no encontrado!",
     "successfullyRegistered": "Registrado con éxito. Espere hasta que sea aprobado",
+<<<<<<< HEAD
     "OR": "O",
     "admin": "ADMINISTRACIÓN",
     "user": "USUARIO",
@@ -38,17 +45,24 @@
     "uppercase_check": "Al menos una letra minúscula",
     "numeric_value_check": "Al menos un valor numérico",
     "special_char_check": "Al menos un carácter especial"
+=======
+    "login_to_admin_portal": "Inicio de sesión en el portal de administración",
+    "OR": "O"
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
   "latestEvents": {
     "eventCardTitle": "Próximos Eventos",
     "eventCardSeeAll": "Ver Todos",
     "noEvents": "No Hay Eventos Próximos"
   },
+<<<<<<< HEAD
   "latestPosts": {
     "latestPostsTitle": "Últimas Publicaciones",
     "seeAllLink": "Ver Todo",
     "noPostsCreated": "No se han creado publicaciones"
   },
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   "listNavbar": {
     "talawa_portal": "Portal De Administración Talawa",
     "roles": "Roles",
@@ -58,10 +72,16 @@
   "leftDrawer": {
     "talawaAdminPortal": "Portal de administración de Talawa",
     "menu": "Menú",
+<<<<<<< HEAD
     "my organizations": "Mis Organizaciones",
     "users": "Usuarios",
     "requests": "Solicitudes",
     "communityProfile": "Perfil de la comunidad",
+=======
+    "organizations": "Organizaciones",
+    "requests": "Solicitudes",
+    "users": "Usuarios",
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "logout": "Cerrar sesión"
   },
   "leftDrawerOrg": {
@@ -95,11 +115,16 @@
     "designation": "Designacion",
     "email": "Correo electrónico",
     "searchByName": "Buscar por nombre",
+<<<<<<< HEAD
     "my organizations": "Mis Organizaciones.",
+=======
+    "organizations": "Organizaciones",
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "createOrganization": "Crear organización",
     "createSampleOrganization": "Crear organización de muestra",
     "description": "Descripción",
     "location": "Ubicación",
+<<<<<<< HEAD
     "address": "Dirección",
     "city": "Ciudad",
     "countryCode": "Código de País",
@@ -110,12 +135,18 @@
     "sortingCode": "Código de Ordenamiento",
     "state": "Estado / Provincia",
     "userRegistrationRequired": "Registro de usuario requerido",
+=======
+    "isPublic": "Es público",
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "visibleInSearch": "Visible en la búsqueda",
     "displayImage": "Mostrar imagen",
     "enterName": "Ingrese su nombre",
     "sort": "Ordenar",
+<<<<<<< HEAD
     "Earliest": "Más Temprano",
     "Latest": "El último",
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "filter": "Filtrar",
     "cancel": "Cancelar",
     "endOfResults": "Fin de los resultados",
@@ -136,6 +167,7 @@
     "rowsPerPage": "filas por página",
     "all": "Todos"
   },
+<<<<<<< HEAD
   "requests": {
     "title": "Solicitudes",
     "sl_no": "Núm.",
@@ -153,12 +185,18 @@
     "noOrgErrorTitle": "Organizaciones no encontradas",
     "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control"
   },
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   "users": {
     "title": "Roles Talawa",
     "searchByName": "Buscar por nombre",
     "users": "Usuarios",
     "name": "Nombre",
     "email": "Correo electrónico",
+<<<<<<< HEAD
+=======
+    "roles_userType": "Rol/Tipo de usuario",
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "joined_organizations": "Organizaciones unidas",
     "blocked_organizations": "Organizaciones bloqueadas",
     "endOfResults": "Fin de los resultados",
@@ -180,6 +218,7 @@
     "filter": "Filtrar",
     "roleUpdated": "Rol actualizado.",
     "noResultsFoundFor": "No se encontraron resultados para ",
+<<<<<<< HEAD
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red.",
     "cancel": "Cancelar",
     "admins": "Administradores",
@@ -203,6 +242,28 @@
     "url": "Introducir URL",
     "profileChangedMsg": "Se actualizaron correctamente los detalles del perfil.",
     "resetData": "Restablezca correctamente los detalles del perfil."
+=======
+    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
+  },
+  "requests": {
+    "title": "Solicitudes Talawa",
+    "searchByName": "Buscar por nombre",
+    "requests": "Peticiones",
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "accept": "Aceptar",
+    "reject": "Rechazar",
+    "enterName": "Ingrese su nombre",
+    "endOfResults": "Fin de los resultados",
+    "loadingRequests": "Cargando solicitudes ...",
+    "noRequestFound": "No se encontró ninguna solicitud.",
+    "sort": "Ordenar",
+    "filter": "Filtrar",
+    "userApproved": "Aprobado por el usuario",
+    "userRejected": "Usuario rechazado",
+    "noResultsFoundFor": "No se encontraron resultados para ",
+    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
   "dashboard": {
     "title": "Panel de",
@@ -236,6 +297,7 @@
     "searchName": "Ingrese su nombre",
     "searchevent": "Ingresar evento",
     "searchFirstName": "Ingrese el nombre",
+<<<<<<< HEAD
     "searchLastName": "Introduzca el apellido",
     "people": "Personas",
     "sort": "Ordenar por Rol",
@@ -256,6 +318,9 @@
     "create": "Crear",
     "cancel": "Cancelar",
     "invalidDetailsMessage": "Ingrese detalles válidos."
+=======
+    "searchLastName": "Introduzca el apellido"
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
   "userListCard": {
     "joined": "Unido",
@@ -284,7 +349,11 @@
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
   },
   "organizationEvents": {
+<<<<<<< HEAD
     "title": "Eventos",
+=======
+    "title": "Eventos Talawa",
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "filterByTitle": "Filtrar por Título",
     "filterByLocation": "Filtrar por Ubicación",
     "filterByDescription": "Filtrar por descripción",
@@ -308,6 +377,7 @@
     "enterDescrip": "Introduce la descripción",
     "eventLocation": "Introducir ubicación",
     "eventCreated": "¡Felicidades! Se crea el Evento.",
+<<<<<<< HEAD
     "eventType": "Tipo de evento",
     "searchEventName": "Buscar nombre del evento",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red.",
@@ -360,6 +430,9 @@
     "successfulDeletion": "Ítem de acción eliminado con éxito",
     "title": "Ítems de acción",
     "yes": "Sí"
+=======
+    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
   "eventListCard": {
     "location": "Ubicación",
@@ -383,6 +456,7 @@
     "eventDetails": "Detalles del evento",
     "eventDeleted": "Evento eliminado con éxito.",
     "eventUpdated": "Evento actualizado con éxito.",
+<<<<<<< HEAD
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red.",
     "thisInstance": "Esta Instancia",
     "thisAndFollowingInstances": "Esta y las Siguientes Instancias",
@@ -468,6 +542,10 @@
     "noPledges": "No se encontraron compromisos"
   },
 
+=======
+    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
+  },
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   "orgPost": {
     "title": "Publicaciones de Talawa",
     "searchPost": "Buscar Publicación",
@@ -476,9 +554,16 @@
     "postDetails": "Detalles de la Publicación",
     "postTitle1": "Escribir título de la publicación",
     "postTitle": "Título",
+<<<<<<< HEAD
     "addMedia": "Subir foto o video",
     "information": "Información",
     "information1": "Escribir información de la publicación",
+=======
+    "information": "Información",
+    "information1": "Escribir información de la publicación",
+    "image": "Imagen de la Publicación",
+    "video": "Video de la Publicación",
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "addPost": "Agregar Publicación",
     "searchTitle": "Buscar por Título",
     "searchText": "Buscar por Texto",
@@ -491,11 +576,15 @@
     "Oldest": "Más Antiguas Primero",
     "Latest": "Más Recientes Primero",
     "sortPost": "Ordenar Publicaciones",
+<<<<<<< HEAD
     "tag": "Su navegador no admite la etiqueta de video",
     "postCreatedSuccess": "¡Felicidades! Has publicado algo.",
     "pinPost": "Fijar publicación",
     "Next": "Siguiente página",
     "Previous": "Página anterior"
+=======
+    "tag": "Su navegador no admite la etiqueta de video"
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
   "postNotFound": {
     "post": "Publicaciones",
@@ -513,6 +602,10 @@
     "admin not found!": "Administrador no encontrado!",
     "roles not found!": "roles no encontrados!"
   },
+<<<<<<< HEAD
+=======
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   "orgPostCard": {
     "author": "Autor",
     "imageURL": "URL de la Imagen",
@@ -524,8 +617,11 @@
     "yes": "Sí",
     "editPost": "Editar Publicación",
     "postTitle": "Título",
+<<<<<<< HEAD
     "postTitle1": "Editar título de la publicación",
     "information1": "Editar información de la publicación",
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "information": "Información",
     "image": "Imagen",
     "video": "Video",
@@ -579,7 +675,10 @@
   "pageNotFound": {
     "title": "404 No encontrado",
     "talawaAdmin": "Administrador de Talawa",
+<<<<<<< HEAD
     "talawaUser": "Usuario de Talawa",
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "404": "404",
     "notFoundMsg": "¡Ups! ¡No se encontró la página que solicitaste!",
     "backToHome": "De vuelta a casa"
@@ -606,8 +705,11 @@
   "orgSettings": {
     "title": "Configuración Talawa",
     "pageName": "Configuración",
+<<<<<<< HEAD
     "general": "General",
     "actionItemCategories": "Categorías de elementos de acción",
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "updateYourDetails": "Actualiza tus datos",
     "updateYourPassword": "Actualice su contraseña",
     "updateOrganization": "Actualizar Organización",
@@ -615,8 +717,12 @@
     "settings": "Ajustes",
     "noData": "Sin datos",
     "otherSettings": "Otras Configuraciones",
+<<<<<<< HEAD
     "changeLanguage": "Cambiar Idioma",
     "manageCustomFields": "Gestionar Campos Personalizados"
+=======
+    "changeLanguage": "Cambiar Idioma"
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
   "deleteOrg": {
     "deleteOrganization": "Eliminar organización",
@@ -624,8 +730,12 @@
     "deleteMsg": "¿Desea eliminar esta organización?",
     "cancel": "Cancelar",
     "confirmDelete": "Confirmar eliminación",
+<<<<<<< HEAD
     "longDelOrgMsg": "Al hacer clic en el botón Eliminar organización, la organización se eliminará permanentemente junto con sus eventos, etiquetas y todos los datos relacionados.",
     "successfullyDeletedSampleOrganization": "Organización de muestra eliminada correctamente"
+=======
+    "longDelOrgMsg": "Al hacer clic en el botón Eliminar organización, la organización se eliminará permanentemente junto con sus eventos, etiquetas y todos los datos relacionados."
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
   "userUpdate": {
     "firstName": "Primer nombre",
@@ -661,6 +771,7 @@
     "name": "Nombre",
     "description": "Descripción",
     "location": "ubicación",
+<<<<<<< HEAD
     "address": "Dirección",
     "city": "Ciudad",
     "countryCode": "Código de País",
@@ -672,6 +783,10 @@
     "state": "Estado / Provincia",
     "displayImage": "Mostrar imagen",
     "userRegistrationRequired": "Registro de usuario requerido",
+=======
+    "displayImage": "Mostrar imagen",
+    "isPublic": "Público",
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "isVisibleInSearch": "Visible en la búsqueda",
     "saveChanges": "Guardar cambios",
     "cancel": "Cancelar",
@@ -711,7 +826,10 @@
   "memberDetail": {
     "title": "Detalles del usuario",
     "addAdmin": "Agregar administrador",
+<<<<<<< HEAD
     "alreadyIsAdmin": "El Miembro ya es Administrador",
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "organizations": "Organizaciones",
     "events": "Eventos",
     "role": "Rol",
@@ -720,6 +838,7 @@
     "main": "Principal",
     "firstName": "Nombre",
     "lastName": "Apellido",
+<<<<<<< HEAD
     "language": "Idioma",
     "gender": "Género",
     "birthDate": "Fecha de Nacimiento",
@@ -739,6 +858,11 @@
     "appLanguageCode": "Elegir Idioma",
     "delete": "Eliminar Usuario",
     "saveChanges": "Guardar Cambios",
+=======
+    "memberOfOrganization": "Miembro de la organización",
+    "language": "Idioma",
+    "adminApproved": "Aprobado por el administrador",
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "pluginCreationAllowed": "Permitir creación de complementos",
     "joined": "Unido",
     "created": "Creado",
@@ -788,6 +912,10 @@
     "events": "Eventos",
     "chat": "Charlar",
     "donate": "Donar",
+<<<<<<< HEAD
+=======
+    "myTasks": "Mis tareas",
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "settings": "Ajustes",
     "language": "Idioma",
     "logout": "Cerrar sesión",
@@ -797,12 +925,18 @@
     "allOrganizations": "Todas las organizaciones",
     "joinedOrganizations": "Organizaciones unidas",
     "createdOrganizations": "Organizaciones creadas",
+<<<<<<< HEAD
     "search": "Buscar usuarios",
     "nothingToShow": "Nada que mostrar aquí.",
     "selectOrganization": "Seleccionar organización",
     "filter": "Filtrar",
     "organizations": "Organizaciones",
     "searchByName": "Buscar por nombre"
+=======
+    "search": "Buscar",
+    "nothingToShow": "Nada que mostrar aquí.",
+    "selectOrganization": "Seleccionar organización"
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
   "userSidebar": {
     "yourOrganizations": "Tus Organizaciones",
@@ -823,6 +957,7 @@
   "home": {
     "feed": "Alimentar",
     "pinnedPosts": "Ver publicaciones fijadas",
+<<<<<<< HEAD
     "somethingOnYourMind": "¿Algo en tu mente?",
     "addPost": "Agregar publicación",
     "startPost": "Comenzar una publicación",
@@ -896,17 +1031,44 @@
     "donations": "Donaciones",
     "searchDonations": "Buscar donaciones",
     "donateForThe": "Donar para el",
+=======
+    "somethingOnYourMind": "¿Algo en tu mente?"
+  },
+  "settings": {
+    "profileSettings": "Configuración de perfil",
+    "firstName": "Nombre de pila",
+    "lastName": "Apellido",
+    "emailAddress": "dirección de correo electrónico",
+    "updateImage": "Actualizar imagen",
+    "save": "Ahorrar"
+  },
+  "donate": {
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "donateTo": "Donar a",
     "amount": "Cantidad",
     "yourPreviousDonations": "Tus donaciones anteriores",
     "donate": "Donar",
+<<<<<<< HEAD
     "nothingToShow": "Nada que mostrar aquí.",
     "success": "Donación exitosa"
+=======
+    "nothingToShow": "Nada que mostrar aquí."
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
   "userEvents": {
     "nothingToShow": "No hay nada que mostrar aquí.",
     "search": "Buscar",
     "createEvent": "Crear evento",
+<<<<<<< HEAD
+=======
+    "eventTitle": "Título del evento",
+    "eventDescription": "Descripción del evento",
+    "eventLocation": "Lugar del evento",
+    "startDate": "Seleccione la fecha de inicio",
+    "endDate": "Seleccionar fecha de finalización",
+    "publicEvent": "Evento público",
+    "registerable": "Registrable",
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     "recurring": "Periódica",
     "startTime": "Hora de inicio",
     "endTime": "Hora de finalización",
@@ -915,6 +1077,7 @@
     "listView": "Vista de la lista",
     "calendarView": "Vista de calendario",
     "allDay": "Todo el dia",
+<<<<<<< HEAD
     "eventCreated": "Evento creado y publicado exitosamente.",
     "eventDetails": "Detalles del evento",
     "eventTitle": "Título",
@@ -927,6 +1090,9 @@
     "endDate": "Fecha de finalización",
     "publicEvent": "Es público",
     "registerable": "Es registrable"
+=======
+    "eventCreated": "Evento creado y publicado exitosamente."
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
   "userEventCard": {
     "location": "Ubicación",
@@ -936,12 +1102,32 @@
     "alreadyRegistered": "Ya registrado",
     "register": "Registro"
   },
+<<<<<<< HEAD
+=======
+  "userTasks": {
+    "yourAssignedTasks": "Tus tareas asignadas",
+    "nothingToShow": "No hay nada que mostrar aquí."
+  },
+  "userTaskCard": {
+    "description": "Descripción",
+    "deadline": "Fecha límite",
+    "created": "Creado",
+    "assignees": "Cesionarias",
+    "completed": "Terminada",
+    "incomplete": "Incompleta",
+    "taskCompleted": "La tarea ha sido completada",
+    "taskNotCompleted": "La tarea aún no se ha completado",
+    "event": "Evento",
+    "organization": "Organización"
+  },
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   "advertisement": {
     "title": "Anuncios",
     "pHeading": "Gestionar anuncios",
     "activeAds": "Campañas activas",
     "archievedAds": "Campañas completadas",
     "pMessage": "No hay anuncios disponibles para esta campaña.",
+<<<<<<< HEAD
     "delete": "Eliminar",
     "validLink": "El enlace es válido.",
     "invalidLink": "El enlace no es válido.",
@@ -955,6 +1141,9 @@
     "edit": "Editar",
     "editAdvertisement": "Editar Anuncio",
     "saveChanges": "Guardar Cambios"
+=======
+    "delete": "Eliminar"
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
   "userChat": {
     "chat": "Charlar",
@@ -964,6 +1153,7 @@
   "userChatRoom": {
     "selectContact": "Seleccione un contacto para iniciar una conversación",
     "sendMessage": "Enviar mensaje"
+<<<<<<< HEAD
   },
   "orgProfileField": {
     "loading": "Cargando..",
@@ -1008,5 +1198,7 @@
     "update": "Actualizar detalles del lugar",
     "editVenue": "Actualizar lugar",
     "venueUpdated": "Detalles del lugar actualizados exitosamente"
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   }
 }

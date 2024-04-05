@@ -15,7 +15,11 @@ describe('Testing Action Component', () => {
     const { getByText } = render(
       <Provider store={store}>
         <Action {...props} />
+<<<<<<< HEAD
       </Provider>,
+=======
+      </Provider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     expect(getByText(props.label)).toBeInTheDocument();

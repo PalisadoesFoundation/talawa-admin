@@ -1,10 +1,16 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
+<<<<<<< HEAD
 # npm run format:fix
 # npm run lint:fix
 npm run lint-staged
 npm run typecheck
 npm run update:toc
+=======
+npm run format:fix
+npm run lint:fix
+npm run typecheck
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 git add .

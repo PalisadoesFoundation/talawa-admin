@@ -1,7 +1,14 @@
 import React from 'react';
+<<<<<<< HEAD
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
+=======
+import { act, render, screen } from '@testing-library/react';
+import { MockedProvider } from '@apollo/react-testing';
+import { I18nextProvider } from 'react-i18next';
+
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -10,7 +17,10 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import Settings from './Settings';
 import userEvent from '@testing-library/user-event';
+<<<<<<< HEAD
 import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 const MOCKS = [
   {
@@ -19,6 +29,7 @@ const MOCKS = [
       variables: {
         firstName: 'Noble',
         lastName: 'Mittal',
+<<<<<<< HEAD
         gender: 'MALE',
         phoneNumber: '+174567890',
         birthDate: '2024-03-01',
@@ -28,6 +39,8 @@ const MOCKS = [
         address: 'random',
         state: 'random',
         country: 'IN',
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       },
       result: {
         data: {
@@ -40,6 +53,7 @@ const MOCKS = [
   },
 ];
 
+<<<<<<< HEAD
 const Mocks1 = [
   {
     request: {
@@ -107,6 +121,9 @@ const Mocks2 = [
 const link = new StaticMockLink(MOCKS, true);
 const link1 = new StaticMockLink(Mocks1, true);
 const link2 = new StaticMockLink(Mocks2, true);
+=======
+const link = new StaticMockLink(MOCKS, true);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -141,7 +158,11 @@ describe('Testing Settings Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -149,7 +170,11 @@ describe('Testing Settings Screen [User Portal]', () => {
     expect(screen.queryAllByText('Settings')).not.toBe([]);
   });
 
+<<<<<<< HEAD
   test('input works properly', async () => {
+=======
+  test('First name input works properly', async () => {
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -159,13 +184,18 @@ describe('Testing Settings Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
 
     userEvent.type(screen.getByTestId('inputFirstName'), 'Noble');
     await wait();
+<<<<<<< HEAD
     userEvent.type(screen.getByTestId('inputLastName'), 'Mittal');
     await wait();
     userEvent.selectOptions(screen.getByTestId('inputGender'), 'Male');
@@ -262,6 +292,27 @@ describe('Testing Settings Screen [User Portal]', () => {
     expect(screen.getByTestId('inputState')).toHaveValue('');
     expect(screen.getByTestId('inputCountry')).toHaveValue('');
     expect(screen.getByLabelText('Birth Date')).toHaveValue('');
+=======
+  });
+
+  test('Last name input works properly', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Settings />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    userEvent.type(screen.getByTestId('inputLastName'), 'Mittal');
+    await wait();
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   });
 
   test('updateUserDetails Mutation is triggered on button click', async () => {
@@ -274,7 +325,11 @@ describe('Testing Settings Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -285,6 +340,7 @@ describe('Testing Settings Screen [User Portal]', () => {
     userEvent.type(screen.getByTestId('inputLastName'), 'Mittal');
     await wait();
 
+<<<<<<< HEAD
     userEvent.selectOptions(screen.getByTestId('inputGender'), 'OTHER');
     await wait();
 
@@ -311,6 +367,8 @@ describe('Testing Settings Screen [User Portal]', () => {
     userEvent.type(screen.getByTestId('inputState'), 'random');
     await wait();
 
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     userEvent.click(screen.getByTestId('updateUserBtn'));
     await wait();
   });

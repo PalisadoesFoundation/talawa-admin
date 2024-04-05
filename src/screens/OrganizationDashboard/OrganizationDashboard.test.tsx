@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+import React from 'react';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 import { MockedProvider } from '@apollo/react-testing';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import 'jest-location-mock';
@@ -5,6 +9,7 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
+<<<<<<< HEAD
 import userEvent from '@testing-library/user-event';
 import { toast } from 'react-toastify';
 import { store } from 'state/store';
@@ -15,6 +20,15 @@ import OrganizationDashboard from './OrganizationDashboard';
 import { EMPTY_MOCKS, ERROR_MOCKS, MOCKS } from './OrganizationDashboardMocks';
 import React from 'react';
 const { setItem } = useLocalStorage();
+=======
+import { store } from 'state/store';
+import { StaticMockLink } from 'utils/StaticMockLink';
+import OrganizationDashboard from './OrganizationDashboard';
+import { EMPTY_MOCKS, ERROR_MOCKS, MOCKS } from './OrganizationDashboardMocks';
+import i18nForTest from 'utils/i18nForTest';
+import { toast } from 'react-toastify';
+import userEvent from '@testing-library/user-event';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -34,6 +48,7 @@ jest.mock('react-toastify', () => ({
     error: jest.fn(),
   },
 }));
+<<<<<<< HEAD
 const mockNavgate = jest.fn();
 let mockId: string | undefined = undefined;
 jest.mock('react-router-dom', () => ({
@@ -49,6 +64,16 @@ beforeEach(() => {
   setItem(
     'UserImage',
     'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
+=======
+
+beforeEach(() => {
+  localStorage.setItem('FirstName', 'John');
+  localStorage.setItem('LastName', 'Doe');
+  localStorage.setItem('UserType', 'SUPERADMIN');
+  localStorage.setItem(
+    'UserImage',
+    'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe'
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   );
 });
 
@@ -69,15 +94,24 @@ describe('Organisation Dashboard Page', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
+<<<<<<< HEAD
         </MockedProvider>,
+=======
+        </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       );
     });
 
     await wait();
     expect(screen.getByText('Members')).toBeInTheDocument();
     expect(screen.getByText('Admins')).toBeInTheDocument();
+<<<<<<< HEAD
     expect(screen.getAllByText('Posts')).toHaveLength(1);
     expect(screen.getAllByText('Events')).toHaveLength(1);
+=======
+    expect(screen.getAllByText('Posts')).toHaveLength(2);
+    expect(screen.getAllByText('Events')).toHaveLength(2);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     expect(screen.getByText('Blocked Users')).toBeInTheDocument();
     expect(screen.getByText('Requests')).toBeInTheDocument();
     expect(screen.getByText('Upcoming Events')).toBeInTheDocument();
@@ -85,7 +119,11 @@ describe('Organisation Dashboard Page', () => {
     expect(screen.getByText('Membership requests')).toBeInTheDocument();
 
     // Checking if posts are rendered
+<<<<<<< HEAD
     expect(screen.getByText('postone')).toBeInTheDocument();
+=======
+    expect(screen.getByText('Post 15')).toBeInTheDocument();
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
     // Checking if membership requests are rendered
     expect(screen.getByText('Jane Doe')).toBeInTheDocument();
@@ -100,8 +138,13 @@ describe('Organisation Dashboard Page', () => {
     userEvent.click(adminBtn);
     userEvent.click(postBtn[0]);
     userEvent.click(eventBtn[0]);
+<<<<<<< HEAD
     userEvent.click(postBtn[0]);
     userEvent.click(eventBtn[0]);
+=======
+    userEvent.click(postBtn[1]);
+    userEvent.click(eventBtn[1]);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     userEvent.click(blockUserBtn);
     userEvent.click(requestBtn);
   });
@@ -117,7 +160,11 @@ describe('Organisation Dashboard Page', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
+<<<<<<< HEAD
         </MockedProvider>,
+=======
+        </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       );
     });
 
@@ -132,10 +179,17 @@ describe('Organisation Dashboard Page', () => {
     expect(toast.success).toBeCalledWith('Coming soon!');
 
     expect(
+<<<<<<< HEAD
       screen.getByText(/No membership requests present/i),
     ).toBeInTheDocument();
     expect(screen.getByText(/No upcoming events/i)).toBeInTheDocument();
     expect(screen.getByText(/No Posts Present/i)).toBeInTheDocument();
+=======
+      screen.getByText(/No membership requests present/i)
+    ).toBeInTheDocument();
+    expect(screen.getByText(/No upcoming events/i)).toBeInTheDocument();
+    expect(screen.getByText(/No posts present/i)).toBeInTheDocument();
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   });
 
   test('Testing error scenario', async () => {
@@ -149,11 +203,16 @@ describe('Organisation Dashboard Page', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
+<<<<<<< HEAD
         </MockedProvider>,
+=======
+        </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       );
     });
 
     await wait();
+<<<<<<< HEAD
     expect(mockNavgate).toHaveBeenCalledWith('/orglist');
   });
   test('upcomingEvents cardItem component should render when length>0', async () => {
@@ -195,5 +254,8 @@ describe('Organisation Dashboard Page', () => {
       );
     });
     expect(mockSetState).toHaveBeenCalled();
+=======
+    expect(window.location).toBeAt('/orglist');
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   });
 });

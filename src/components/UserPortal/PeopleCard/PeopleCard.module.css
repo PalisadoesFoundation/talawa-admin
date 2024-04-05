@@ -19,6 +19,7 @@
 .personImage {
   border-radius: 50%;
   margin-right: 20px;
+<<<<<<< HEAD
   max-width: 70px;
 }
 
@@ -30,4 +31,6 @@
 
 .greenText {
   color: #31bb6b;
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }

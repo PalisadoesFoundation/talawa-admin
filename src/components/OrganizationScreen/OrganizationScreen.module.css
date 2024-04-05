@@ -6,6 +6,7 @@
 }
 
 .expand {
+<<<<<<< HEAD
   padding-left: 4rem;
   animation: moveLeft 0.5s ease-in-out;
 }
@@ -57,12 +58,18 @@
   display: block;
   text-transform: capitalize;
 }
+=======
+  padding-left: 1.5rem;
+  animation: moveLeft 0.5s ease-in-out;
+}
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 .contract {
   padding-left: calc(300px + 2rem + 1.5rem);
   animation: moveRight 0.5s ease-in-out;
 }
 
+<<<<<<< HEAD
 .collapseSidebarButton {
   position: fixed;
   height: 40px;
@@ -124,10 +131,13 @@
   background-color: var(--bs-primary);
 }
 
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 @media (max-width: 1120px) {
   .contract {
     padding-left: calc(250px + 2rem + 1.5rem);
   }
+<<<<<<< HEAD
   .collapseSidebarButton {
     width: calc(250px + 2rem);
   }
@@ -153,26 +163,60 @@
   .opendrawer {
     width: 30px;
   }
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 }
 
 /* For tablets */
 @media (max-width: 820px) {
   .pageContainer {
+<<<<<<< HEAD
     padding-left: 2.5rem;
   }
 
   .opendrawer {
     width: 25px;
+=======
+    padding-left: 1.5rem;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   }
 
   .contract,
   .expand {
     animation: none;
   }
+<<<<<<< HEAD
 
   .collapseSidebarButton {
     width: 100%;
     left: 0;
     right: 0;
+=======
+}
+
+@media (max-width: 820px) {
+  .pageContainer {
+    padding: 1rem;
+  }
+}
+
+@keyframes moveLeft {
+  from {
+    padding-left: calc(300px + 2rem + 1.5rem);
+  }
+
+  to {
+    padding-left: 1.5rem;
+  }
+}
+
+@keyframes moveRight {
+  from {
+    padding-left: 1.5rem;
+  }
+
+  to {
+    padding-left: calc(300px + 2rem + 1.5rem);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   }
 }

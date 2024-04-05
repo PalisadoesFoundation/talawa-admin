@@ -1,8 +1,11 @@
 import {
+<<<<<<< HEAD
   CREATE_ORGANIZATION_MUTATION,
   CREATE_SAMPLE_ORGANIZATION_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import {
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   ORGANIZATION_CONNECTION_LIST,
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
@@ -16,15 +19,32 @@ const superAdminUser: InterfaceUserType = {
   user: {
     firstName: 'John',
     lastName: 'Doe',
+<<<<<<< HEAD
     email: 'john.doe@akatsuki.com',
     image: null,
+=======
+    image: '',
+    email: 'John_Does_Palasidoes@gmail.com',
+    userType: 'SUPERADMIN',
+    adminFor: [
+      {
+        _id: '1',
+        name: 'Akatsuki',
+        image: '',
+      },
+    ],
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   },
 };
 
 const adminUser: InterfaceUserType = {
+<<<<<<< HEAD
   user: {
     ...superAdminUser.user,
   },
+=======
+  user: { ...superAdminUser.user, userType: 'ADMIN' },
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 };
 
 const organizations: InterfaceOrgConnectionInfoType[] = [
@@ -44,6 +64,7 @@ const organizations: InterfaceOrgConnectionInfoType[] = [
         _id: '234',
       },
     ],
+<<<<<<< HEAD
     address: {
       city: 'Kingston',
       countryCode: 'JM',
@@ -58,6 +79,13 @@ const organizations: InterfaceOrgConnectionInfoType[] = [
 ];
 
 for (let x = 0; x < 1; x++) {
+=======
+    location: 'Jamaica',
+  },
+];
+
+for (let x = 0; x < 100; x++) {
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   organizations.push({
     _id: 'a' + x,
     image: '',
@@ -78,6 +106,7 @@ for (let x = 0; x < 1; x++) {
       },
     ],
     createdAt: new Date().toISOString(),
+<<<<<<< HEAD
     address: {
       city: 'Kingston',
       countryCode: 'JM',
@@ -88,6 +117,9 @@ for (let x = 0; x < 1; x++) {
       sortingCode: 'ABC-123',
       state: 'Kingston Parish',
     },
+=======
+    location: 'location',
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   });
 }
 
@@ -100,7 +132,10 @@ const MOCKS = [
         first: 8,
         skip: 0,
         filter: '',
+<<<<<<< HEAD
         orderBy: 'createdAt_ASC',
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       },
       notifyOnNetworkStatusChange: true,
     },
@@ -119,6 +154,7 @@ const MOCKS = [
       data: superAdminUser,
     },
   },
+<<<<<<< HEAD
   {
     request: {
       query: CREATE_SAMPLE_ORGANIZATION_MUTATION,
@@ -161,6 +197,8 @@ const MOCKS = [
       },
     },
   },
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 ];
 const MOCKS_EMPTY = [
   {
@@ -170,7 +208,10 @@ const MOCKS_EMPTY = [
         first: 8,
         skip: 0,
         filter: '',
+<<<<<<< HEAD
         orderBy: 'createdAt_ASC',
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       },
       notifyOnNetworkStatusChange: true,
     },
@@ -190,6 +231,7 @@ const MOCKS_EMPTY = [
     },
   },
 ];
+<<<<<<< HEAD
 const MOCKS_WITH_ERROR = [
   {
     request: {
@@ -224,6 +266,8 @@ const MOCKS_WITH_ERROR = [
     error: new Error('Failed to create sample organization'),
   },
 ];
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 
 // MOCKS FOR ADMIN
 const MOCKS_ADMIN = [
@@ -234,7 +278,10 @@ const MOCKS_ADMIN = [
         first: 8,
         skip: 0,
         filter: '',
+<<<<<<< HEAD
         orderBy: 'createdAt_ASC',
+=======
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
       },
       notifyOnNetworkStatusChange: true,
     },
@@ -255,4 +302,8 @@ const MOCKS_ADMIN = [
   },
 ];
 
+<<<<<<< HEAD
 export { MOCKS, MOCKS_ADMIN, MOCKS_EMPTY, MOCKS_WITH_ERROR };
+=======
+export { MOCKS, MOCKS_ADMIN, MOCKS_EMPTY };
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1

@@ -7,7 +7,11 @@ import { toast } from 'react-toastify';
 */
 export const errorHandler = (
   t: TFunction<'translation', string>,
+<<<<<<< HEAD
   error: any,
+=======
+  error: any
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 ): void => {
   if (error?.message === 'Failed to fetch') {
     toast.error(t('talawaApiUnavailable'));

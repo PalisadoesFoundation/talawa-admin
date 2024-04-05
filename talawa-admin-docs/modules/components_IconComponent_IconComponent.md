@@ -30,4 +30,8 @@
 
 #### Defined in
 
+<<<<<<< HEAD
 [src/components/IconComponent/IconComponent.tsx:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/IconComponent/IconComponent.tsx#L22)
+=======
+[src/components/IconComponent/IconComponent.tsx:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/IconComponent/IconComponent.tsx#L19)
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1

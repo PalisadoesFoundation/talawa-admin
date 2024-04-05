@@ -15,6 +15,7 @@ export const MOCKS = [
             image: null,
             name: 'Palisadoes',
             description: 'Equitable Access to STEM Education Jobs',
+<<<<<<< HEAD
             address: {
               city: 'Kingston',
               countryCode: 'JM',
@@ -26,6 +27,10 @@ export const MOCKS = [
               state: 'Kingston Parish',
             },
             userRegistrationRequired: true,
+=======
+            location: 'Jamaica',
+            isPublic: true,
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
             visibleInSearch: false,
             creator: {
               firstName: 'John',
@@ -67,6 +72,7 @@ export const MOCKS = [
         id: '123',
         name: 'Updated Organization',
         description: 'This is an updated test organization',
+<<<<<<< HEAD
         address: {
           city: 'Kingston',
           countryCode: 'JM',
@@ -79,6 +85,11 @@ export const MOCKS = [
         },
         image: new File(['hello'], 'hello.png', { type: 'image/png' }),
         userRegistrationRequired: true,
+=======
+        location: 'Updated location',
+        image: new File(['hello'], 'hello.png', { type: 'image/png' }),
+        isPublic: true,
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         visibleInSearch: false,
       },
     },
@@ -88,6 +99,7 @@ export const MOCKS = [
           _id: '123',
           name: 'Updated Organization',
           description: 'This is an updated test organization',
+<<<<<<< HEAD
           address: {
             city: 'Kingston',
             countryCode: 'JM',
@@ -99,6 +111,10 @@ export const MOCKS = [
             state: 'Kingston Parish',
           },
           userRegistrationRequired: true,
+=======
+          location: 'Updated location',
+          isPublic: true,
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
           visibleInSearch: false,
         },
       },
@@ -130,6 +146,7 @@ export const MOCKS_ERROR_UPDATE_ORGLIST = [
             image: null,
             name: 'Palisadoes',
             description: 'Equitable Access to STEM Education Jobs',
+<<<<<<< HEAD
             address: {
               city: 'Kingston',
               countryCode: 'JM',
@@ -141,6 +158,10 @@ export const MOCKS_ERROR_UPDATE_ORGLIST = [
               state: 'Kingston Parish',
             },
             userRegistrationRequired: true,
+=======
+            location: 'Jamaica',
+            isPublic: true,
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
             visibleInSearch: false,
             creator: {
               firstName: 'John',
@@ -182,6 +203,7 @@ export const MOCKS_ERROR_UPDATE_ORGLIST = [
         id: '123',
         name: 'Updated Organization',
         description: 'This is an updated test organization',
+<<<<<<< HEAD
         address: {
           city: 'Kingston',
           countryCode: 'JM',
@@ -194,6 +216,11 @@ export const MOCKS_ERROR_UPDATE_ORGLIST = [
         },
         image: new File(['hello'], 'hello.png', { type: 'image/png' }),
         userRegistrationRequired: true,
+=======
+        location: 'Updated location',
+        image: new File(['hello'], 'hello.png', { type: 'image/png' }),
+        isPublic: true,
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
         visibleInSearch: false,
       },
     },

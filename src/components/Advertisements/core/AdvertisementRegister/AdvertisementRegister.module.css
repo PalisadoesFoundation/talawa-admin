@@ -4,6 +4,7 @@
   align-items: center;
 }
 
+<<<<<<< HEAD
 .modalbtn i,
 .button i {
   margin-right: 8px;
@@ -53,3 +54,8 @@
   justify-content: center;
   align-items: flex-start;
 }
+=======
+.modalbtn i {
+  margin-right: 8px;
+}
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1

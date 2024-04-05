@@ -81,7 +81,11 @@ describe('Testing Register Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -97,7 +101,11 @@ describe('Testing Register Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -117,7 +125,11 @@ describe('Testing Register Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -137,7 +149,11 @@ describe('Testing Register Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -158,7 +174,11 @@ describe('Testing Register Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -182,7 +202,11 @@ describe('Testing Register Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -208,7 +232,11 @@ describe('Testing Register Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -224,7 +252,11 @@ describe('Testing Register Component [User Portal]', () => {
     userEvent.click(screen.getByTestId('registerBtn'));
 
     expect(toast.error).toBeCalledWith(
+<<<<<<< HEAD
       "Password doesn't match. Confirm Password and try again.",
+=======
+      "Password doesn't match. Confirm Password and try again."
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
   });
 
@@ -238,7 +270,11 @@ describe('Testing Register Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
+<<<<<<< HEAD
       </MockedProvider>,
+=======
+      </MockedProvider>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await wait();
@@ -247,7 +283,11 @@ describe('Testing Register Component [User Portal]', () => {
 
     userEvent.type(
       screen.getByTestId('confirmPasswordInput'),
+<<<<<<< HEAD
       formData.confirmPassword,
+=======
+      formData.confirmPassword
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     userEvent.type(screen.getByTestId('emailInput'), formData.email);
@@ -261,7 +301,11 @@ describe('Testing Register Component [User Portal]', () => {
     await wait();
 
     expect(toast.success).toBeCalledWith(
+<<<<<<< HEAD
       'Successfully registered. Please wait for admin to approve your request.',
+=======
+      'Successfully registered. Please wait for admin to approve your request.'
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
   });
 });

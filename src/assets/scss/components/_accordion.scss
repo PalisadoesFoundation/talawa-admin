@@ -17,9 +17,13 @@ $accordion-button-padding-y: $accordion-padding-y;
 $accordion-button-padding-x: $accordion-padding-x;
 $accordion-button-color: var(--#{$prefix}body-color);
 $accordion-button-bg: var(--#{$prefix}accordion-bg);
+<<<<<<< HEAD
 $accordion-transition:
   $btn-transition,
   border-radius 0.15s ease;
+=======
+$accordion-transition: $btn-transition, border-radius 0.15s ease;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 $accordion-button-active-bg: var(--#{$prefix}primary-bg-subtle);
 $accordion-button-active-color: var(--#{$prefix}primary-text-emphasis);
 

@@ -10,6 +10,11 @@ export interface InterfaceAttendeeCheckIn {
   checkIn: null | {
     _id: string;
     time: string;
+<<<<<<< HEAD
+=======
+    allotedRoom: string;
+    allotedSeat: string;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   };
 }
 
@@ -33,6 +38,11 @@ export interface InterfaceTableCheckIn {
   checkIn: null | {
     _id: string;
     time: string;
+<<<<<<< HEAD
+=======
+    allotedRoom: string;
+    allotedSeat: string;
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   };
   eventId: string;
 }

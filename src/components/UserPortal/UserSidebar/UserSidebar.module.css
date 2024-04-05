@@ -6,10 +6,18 @@
   padding: 0px 10px;
   padding-top: 50px;
   flex-grow: 1;
+<<<<<<< HEAD
   background-color: var(--bs-white);
 }
 
 @media screen and (max-width: 850px) {
+=======
+  width: 250px;
+  background-color: var(--bs-white);
+}
+
+@media screen and (max-width: 700px) {
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   .mainContainer {
     display: none;
   }

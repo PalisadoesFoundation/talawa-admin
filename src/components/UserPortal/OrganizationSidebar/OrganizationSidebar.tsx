@@ -3,7 +3,12 @@ import { ListGroup } from 'react-bootstrap';
 import AboutImg from 'assets/images/defaultImg.png';
 import styles from './OrganizationSidebar.module.css';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+<<<<<<< HEAD
 import { Link, useParams } from 'react-router-dom';
+=======
+import { Link } from 'react-router-dom';
+import getOrganizationId from 'utils/getOrganizationId';
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 import { useQuery } from '@apollo/client';
 import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
@@ -19,7 +24,11 @@ export default function organizationSidebar(): JSX.Element {
     keyPrefix: 'organizationSidebar',
   });
 
+<<<<<<< HEAD
   const { orgId: organizationId } = useParams();
+=======
+  const organizationId = getOrganizationId(window.location.href);
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   const [members, setMembers]: any = React.useState([]);
   const [events, setEvents]: any = React.useState([]);
   const eventsLink = `/user/events/id=${organizationId}`;
@@ -33,7 +42,11 @@ export default function organizationSidebar(): JSX.Element {
         first: 3,
         skip: 0,
       },
+<<<<<<< HEAD
     },
+=======
+    }
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   );
 
   const { data: eventsData, loading: eventsLoading } = useQuery(
@@ -44,7 +57,11 @@ export default function organizationSidebar(): JSX.Element {
         first: 3,
         skip: 0,
       },
+<<<<<<< HEAD
     },
+=======
+    }
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   );
 
   /* istanbul ignore next */

@@ -61,15 +61,24 @@ describe('Testing Feedback Statistics Card', () => {
             <FeedbackStats {...nonEmptyProps} />
           </I18nextProvider>
         </Provider>
+<<<<<<< HEAD
       </BrowserRouter>,
     );
 
     await waitFor(() =>
       expect(queryByText('Feedback Analysis')).toBeInTheDocument(),
+=======
+      </BrowserRouter>
+    );
+
+    await waitFor(() =>
+      expect(queryByText('Feedback Analysis')).toBeInTheDocument()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await waitFor(() =>
       expect(
+<<<<<<< HEAD
         queryByText('3 people have filled feedback for this event.'),
       ).toBeInTheDocument(),
     );
@@ -77,6 +86,11 @@ describe('Testing Feedback Statistics Card', () => {
     await waitFor(() => {
       expect(queryByText('Test')).toBeInTheDocument();
     });
+=======
+        queryByText('3 people have filled feedback for this event.')
+      ).toBeInTheDocument()
+    );
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   });
 
   test('The component should be rendered and message should be shown if no feedback is present', async () => {
@@ -88,17 +102,30 @@ describe('Testing Feedback Statistics Card', () => {
             <FeedbackStats {...emptyProps} />
           </I18nextProvider>
         </Provider>
+<<<<<<< HEAD
       </BrowserRouter>,
     );
 
     await waitFor(() =>
       expect(queryByText('Feedback Analysis')).toBeInTheDocument(),
+=======
+      </BrowserRouter>
+    );
+
+    await waitFor(() =>
+      expect(queryByText('Feedback Analysis')).toBeInTheDocument()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
 
     await waitFor(() =>
       expect(
+<<<<<<< HEAD
         queryByText('Please ask attendees to submit feedback for insights!'),
       ).toBeInTheDocument(),
+=======
+        queryByText('Please ask attendees to submit feedback for insights!')
+      ).toBeInTheDocument()
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
     );
   });
 });

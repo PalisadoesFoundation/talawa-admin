@@ -107,7 +107,11 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
 
   /* istanbul ignore next */
   const handleConfirmPasswordChange = (
+<<<<<<< HEAD
     e: ChangeEvent<HTMLInputElement>,
+=======
+    e: ChangeEvent<HTMLInputElement>
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
   ): void => {
     const confirmPassword = e.target.value;
 

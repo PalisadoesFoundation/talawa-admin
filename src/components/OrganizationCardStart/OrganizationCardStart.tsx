@@ -9,7 +9,11 @@ interface InterfaceOrganizationCardStartProps {
 }
 
 function organizationCardStart(
+<<<<<<< HEAD
   props: InterfaceOrganizationCardStartProps,
+=======
+  props: InterfaceOrganizationCardStartProps
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
 ): JSX.Element {
   const uri = '/orghome/i=' + props.id;
 

@@ -30,4 +30,8 @@
 
 #### Defined in
 
+<<<<<<< HEAD
 [src/components/CollapsibleDropdown/CollapsibleDropdown.tsx:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/CollapsibleDropdown/CollapsibleDropdown.tsx#L13)
+=======
+[src/components/CollapsibleDropdown/CollapsibleDropdown.tsx:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/CollapsibleDropdown/CollapsibleDropdown.tsx#L13)
+>>>>>>> a320d35e91b2a3d10a9143384969dba0973c37f1
