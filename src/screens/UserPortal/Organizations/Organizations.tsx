@@ -1,5 +1,4 @@
-import { useQuery } from '@apollo/c
-lient';
+import { useQuery } from '@apollo/client';
 import { SearchOutlined } from '@mui/icons-material';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import {
@@ -220,37 +219,37 @@ export default function organizations(): JSX.Element {
   return (
     <>
       <UserNavbar />
-      <div className={d-flex flex-row ${styles.containerHeight}}>
+      <div className={`d-flex flex-row ${styles.containerHeight}`}>
         <UserSidebar />
-        <div className={${styles.colorLight} ${styles.mainContainer}}>
+        <div className={`${styles.colorLight} ${styles.mainContainer}`}>
           <h3>{t('selectOrganization')}</h3>
           <div
-            className={d-flex flex-row justify-content-between pt-3 flex-wrap ${styles.gap}}
+            className={`d-flex flex-row justify-content-between pt-3 flex-wrap ${styles.gap}`}
           >
             <InputGroup className={styles.maxWidth}>
               <Form.Control
                 placeholder={t('search')}
                 id="searchUserOrgs"
                 type="text"
-                className={${styles.borderNone} ${styles.backgroundWhite}}
+                className={`${styles.borderNone} ${styles.backgroundWhite}`}
                 onKeyUp={handleSearchByEnter}
                 data-testid="searchInput"
               />
               <InputGroup.Text
-                className={${styles.colorPrimary} ${styles.borderNone}}
+                className={`${styles.colorPrimary} ${styles.borderNone}`}
                 style={{ cursor: 'pointer' }}
                 onClick={handleSearchByBtnClick}
                 data-testid="searchBtn"
               >
-                <SearchOutlined className={${styles.colorWhite}} />
+                <SearchOutlined className={`${styles.colorWhite}`} />
               </InputGroup.Text>
             </InputGroup>
             <Dropdown drop="down-centered">
               <Dropdown.Toggle
-                className={${styles.colorPrimary} ${styles.borderNone}}
+                className={`${styles.colorPrimary} ${styles.borderNone}`}
                 variant="success"
                 id="dropdown-basic"
-                data-testid={modeChangeBtn}
+                data-testid={`modeChangeBtn`}
               >
                 {modes[mode]}
               </Dropdown.Toggle>
@@ -259,7 +258,7 @@ export default function organizations(): JSX.Element {
                   return (
                     <Dropdown.Item
                       key={index}
-                      data-testid={modeBtn${index}}
+                      data-testid={`modeBtn${index}`}
                       onClick={(): void => setMode(index)}
                     >
                       {value}
@@ -271,13 +270,13 @@ export default function organizations(): JSX.Element {
           </div>
 
           <div
-            className={d-flex flex-column justify-content-between ${styles.content}}
+            className={`d-flex flex-column justify-content-between ${styles.content}`}
           >
             <div
-              className={d-flex flex-column ${styles.gap} ${styles.paddingY}}
+              className={`d-flex flex-column ${styles.gap} ${styles.paddingY}`}
             >
               {loadingOrganizations ? (
-                <div className={d-flex flex-row justify-content-center}>
+                <div className={`d-flex flex-row justify-content-center`}>
                   <HourglassBottomIcon /> <span>Loading...</span>
                 </div>
               ) : (
@@ -291,23 +290,25 @@ export default function organizations(): JSX.Element {
                         )
                       : /* istanbul ignore next */
                         organizations
-                    ).map((organization: InterfaceOrganization, index) => {
-                      const cardProps: InterfaceOrganizationCardProps = {
-                        name: organization.name,
-                        image: organization.image,
-                        id: organization._id,
-                        description: organization.description,
-                        admins: organization.admins,
-                        members: organization.members,
-                        address: organization.address,
-                        membershipRequestStatus:
-                          organization.membershipRequestStatus,
-                        userRegistrationRequired:
-                          organization.userRegistrationRequired,
-                        membershipRequests: organization.membershipRequests,
-                      };
-                      return <OrganizationCard key={index} {...cardProps} />;
-                    })
+                    )
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                      .map((organization: any, index) => {
+                        const cardProps: InterfaceOrganizationCardProps = {
+                          name: organization.name,
+                          image: organization.image,
+                          id: organization._id,
+                          description: organization.description,
+                          admins: organization.admins,
+                          members: organization.members,
+                          address: organization.address,
+                          membershipRequestStatus:
+                            organization.membershipRequestStatus,
+                          userRegistrationRequired:
+                            organization.userRegistrationRequired,
+                          membershipRequests: organization.membershipRequests,
+                        };
+                        return <OrganizationCard key={index} {...cardProps} />;
+                      })
                   ) : (
                     <span>{t('nothingToShow')}</span>
                   )}

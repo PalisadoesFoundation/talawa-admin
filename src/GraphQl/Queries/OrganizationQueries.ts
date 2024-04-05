@@ -1,7 +1,6 @@
 // OrganizationQueries.js
 import gql from 'graphql-tag';
 
-
 // display posts
 
 /**
