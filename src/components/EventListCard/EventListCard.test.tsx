@@ -1,9 +1,11 @@
 import React from 'react';
+import type { RenderResult } from '@testing-library/react';
 import { act, render, screen, fireEvent } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 
+import type { InterfaceEventListCardProps } from './EventListCard';
 import EventListCard from './EventListCard';
 import {
   DELETE_EVENT_MUTATION,
@@ -55,6 +57,19 @@ const MOCKS = [
   },
 ];
 
+const ERROR_MOCKS = [
+  {
+    request: {
+      query: DELETE_EVENT_MUTATION,
+      variables: {
+        id: '1',
+      },
+    },
+    error: new Error('Something went wrong'),
+  },
+];
+const link2 = new StaticMockLink(ERROR_MOCKS, true);
+
 const link = new StaticMockLink(MOCKS, true);
 
 async function wait(ms = 100): Promise<void> {
@@ -65,8 +80,23 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-describe('Testing Event List Card', () => {
-  const props = {
+const props: InterfaceEventListCardProps[] = [
+  {
+    key: '',
+    id: '',
+    eventLocation: '',
+    eventName: '',
+    eventDescription: '',
+    regDate: '',
+    regEndDate: '',
+    startTime: '',
+    endTime: '',
+    allDay: false,
+    recurring: false,
+    isPublic: false,
+    isRegisterable: false,
+  },
+  {
     key: '123',
     id: '1',
     eventLocation: 'India',
@@ -80,8 +110,35 @@ describe('Testing Event List Card', () => {
     recurring: false,
     isPublic: true,
     isRegisterable: false,
-  };
+  },
+];
 
+const renderEventListCard = (
+  props: InterfaceEventListCardProps,
+): RenderResult => {
+  return render(
+    <MockedProvider addTypename={false} link={link}>
+      <MemoryRouter initialEntries={['/orgevents/orgId']}>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Routes>
+              <Route
+                path="/orgevents/:orgId"
+                element={<EventListCard {...props} />}
+              />
+              <Route
+                path="/event/:orgId/"
+                element={<EventListCard {...props} />}
+              />
+            </Routes>
+          </I18nextProvider>
+        </Provider>
+      </MemoryRouter>
+    </MockedProvider>,
+  );
+};
+
+describe('Testing Event List Card', () => {
   beforeAll(() => {
     jest.mock('react-router-dom', () => ({
       ...jest.requireActual('react-router-dom'),
@@ -93,98 +150,12 @@ describe('Testing Event List Card', () => {
     jest.clearAllMocks();
   });
 
-  global.alert = jest.fn();
   test('Testing for modal', async () => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: 'orgId' }),
-    }));
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <MemoryRouter initialEntries={['/orgevents/orgId']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/orgevents/:orgId"
-                  element={
-                    <EventListCard
-                      key={''}
-                      id={''}
-                      eventLocation={''}
-                      eventName={''}
-                      eventDescription={''}
-                      regDate={''}
-                      regEndDate={''}
-                      startTime={''}
-                      endTime={''}
-                      allDay={false}
-                      recurring={false}
-                      isPublic={false}
-                      isRegisterable={false}
-                    />
-                  }
-                />
-                <Route
-                  path="/event/:orgId/"
-                  element={
-                    <EventListCard
-                      key={''}
-                      id={''}
-                      eventLocation={''}
-                      eventName={''}
-                      eventDescription={''}
-                      regDate={''}
-                      regEndDate={''}
-                      startTime={''}
-                      endTime={''}
-                      allDay={false}
-                      recurring={false}
-                      isPublic={false}
-                      isRegisterable={false}
-                    />
-                  }
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-
-      // <MockedProvider addTypename={false} link={link}>
-      //   <BrowserRouter>
-      //     <Provider store={store}>
-      //       <I18nextProvider i18n={i18nForTest}>
-      //         <EventListCard
-      //           key={''}
-      //           id={''}
-      //           eventLocation={''}
-      //           eventName={''}
-      //           eventDescription={''}
-      //           regDate={''}
-      //           regEndDate={''}
-      //           startTime={''}
-      //           endTime={''}
-      //           allDay={false}
-      //           recurring={false}
-      //           isPublic={false}
-      //           isRegisterable={false}
-      //         />
-      //       </I18nextProvider>
-      //     </Provider>
-      //   </BrowserRouter>
-      // </MockedProvider>,
-    );
-
-    await wait();
+    renderEventListCard(props[0]);
 
     userEvent.click(screen.getByTestId('card'));
-
     userEvent.click(screen.getByTestId('showEventDashboardBtn'));
-
     userEvent.click(screen.getByTestId('createEventModalCloseBtn'));
-
-    await wait();
   });
 
   test('Should render text elements when props value is not passed', async () => {
@@ -215,54 +186,32 @@ describe('Testing Event List Card', () => {
     );
 
     await wait();
-
-    expect(screen.queryByText(props.eventName)).not.toBeInTheDocument();
+    expect(screen.queryByText(props[1].eventName)).not.toBeInTheDocument();
   });
 
   test('Testing for update modal', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <EventListCard {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
+    renderEventListCard(props[1]);
 
     userEvent.click(screen.getByTestId('card'));
     userEvent.click(screen.getByTestId('editEventModalBtn'));
-
     userEvent.click(screen.getByTestId('EventUpdateModalCloseBtn'));
     userEvent.click(screen.getByTestId('createEventModalCloseBtn'));
-
-    await wait();
   });
 
   test('Testing event update functionality', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <BrowserRouter>
-            <EventListCard {...props} />
-          </BrowserRouter>
-        </I18nextProvider>
-      </MockedProvider>,
-    );
+    renderEventListCard(props[1]);
 
-    await wait();
     userEvent.click(screen.getByTestId('card'));
     userEvent.click(screen.getByTestId('editEventModalBtn'));
-    userEvent.type(screen.getByTestId('updateTitle'), props.eventName);
+    userEvent.type(screen.getByTestId('updateTitle'), props[1].eventName);
     userEvent.type(
       screen.getByTestId('updateDescription'),
-      props.eventDescription,
+      props[1].eventDescription,
     );
-    userEvent.type(screen.getByTestId('updateLocation'), props.eventLocation);
+    userEvent.type(
+      screen.getByTestId('updateLocation'),
+      props[1].eventLocation,
+    );
     userEvent.click(screen.getByTestId('updateAllDay'));
     userEvent.click(screen.getByTestId('updateRecurring'));
     userEvent.click(screen.getByTestId('updateIsPublic'));
@@ -270,118 +219,86 @@ describe('Testing Event List Card', () => {
 
     userEvent.click(screen.getByTestId('updatePostBtn'));
   });
+
   test('should render props and text  elements test for the screen', async () => {
-    const { container } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}></I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    const { container } = renderEventListCard(props[1]);
 
     expect(container.textContent).not.toBe('Loading data...');
-
-    await wait();
   });
 
   test('Testing if the event is not for all day', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <BrowserRouter>
-            <EventListCard {...props} />
-          </BrowserRouter>
-        </I18nextProvider>
-      </MockedProvider>,
-    );
+    renderEventListCard(props[1]);
 
-    await wait();
     userEvent.click(screen.getByTestId('card'));
     userEvent.click(screen.getByTestId('editEventModalBtn'));
-    userEvent.type(screen.getByTestId('updateTitle'), props.eventName);
+    userEvent.type(screen.getByTestId('updateTitle'), props[1].eventName);
     userEvent.type(
       screen.getByTestId('updateDescription'),
-      props.eventDescription,
+      props[1].eventDescription,
     );
-    userEvent.type(screen.getByTestId('updateLocation'), props.eventLocation);
+    userEvent.type(
+      screen.getByTestId('updateLocation'),
+      props[1].eventLocation,
+    );
     userEvent.click(screen.getByTestId('updateAllDay'));
-    await wait();
 
-    userEvent.type(screen.getByTestId('updateStartTime'), props.startTime);
-    userEvent.type(screen.getByTestId('updateEndTime'), props.endTime);
-
+    userEvent.type(
+      screen.getByTestId('updateStartTime'),
+      props[1].startTime ?? '',
+    );
+    userEvent.type(screen.getByTestId('updateEndTime'), props[1].endTime ?? '');
     userEvent.click(screen.getByTestId('updatePostBtn'));
   });
+
   test('Testing event preview modal', async () => {
+    renderEventListCard(props[1]);
+    expect(screen.getByText(props[1].eventName)).toBeInTheDocument();
+  });
+
+  test('should render the delete modal', async () => {
+    renderEventListCard(props[1]);
+
+    userEvent.click(screen.getByTestId('card'));
+    userEvent.click(screen.getByTestId('deleteEventModalBtn'));
+
+    userEvent.click(screen.getByTestId('EventDeleteModalCloseBtn'));
+    userEvent.click(screen.getByTestId('createEventModalCloseBtn'));
+  });
+
+  test('should call the delete event mutation when the "Yes" button is clicked', async () => {
+    renderEventListCard(props[1]);
+
+    userEvent.click(screen.getByTestId('card'));
+    userEvent.click(screen.getByTestId('deleteEventModalBtn'));
+    const deleteBtn = screen.getByTestId('deleteEventBtn');
+    fireEvent.click(deleteBtn);
+  });
+
+  test('should show an error toast when the delete event mutation fails', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <BrowserRouter>
-            <EventListCard {...props} />
-          </BrowserRouter>
-        </I18nextProvider>
+      <MockedProvider addTypename={false} link={link2}>
+        <MemoryRouter initialEntries={['/orgevents/orgId']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/orgevents/:orgId"
+                  element={<EventListCard {...props[1]} />}
+                />
+                <Route
+                  path="/event/:orgId/"
+                  element={<EventListCard {...props[1]} />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
       </MockedProvider>,
     );
-    await wait();
-    expect(screen.getByText(props.eventName)).toBeInTheDocument();
-  });
-  describe('EventListCard', () => {
-    it('should render the delete modal', () => {
-      render(
-        <MockedProvider link={link} addTypename={false}>
-          <BrowserRouter>
-            <EventListCard {...props} />
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-      userEvent.click(screen.getByTestId('card'));
-      userEvent.click(screen.getByTestId('deleteEventModalBtn'));
-
-      userEvent.click(screen.getByTestId('EventDeleteModalCloseBtn'));
-      userEvent.click(screen.getByTestId('createEventModalCloseBtn'));
-    });
-
-    it('should call the delete event mutation when the "Yes" button is clicked', async () => {
-      render(
-        <MockedProvider link={link} addTypename={false}>
-          <BrowserRouter>
-            <EventListCard {...props} />
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-      userEvent.click(screen.getByTestId('card'));
-      userEvent.click(screen.getByTestId('deleteEventModalBtn'));
-      const deleteBtn = screen.getByTestId('deleteEventBtn');
-      fireEvent.click(deleteBtn);
-    });
-
-    it('should show an error toast when the delete event mutation fails', async () => {
-      const errorMocks = [
-        {
-          request: {
-            query: DELETE_EVENT_MUTATION,
-            variables: {
-              id: props.id,
-            },
-          },
-          error: new Error('Something went wrong'),
-        },
-      ];
-      const link2 = new StaticMockLink(errorMocks, true);
-      render(
-        <MockedProvider link={link2} addTypename={false}>
-          <BrowserRouter>
-            <EventListCard {...props} />
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-      userEvent.click(screen.getByTestId('card'));
-      userEvent.click(screen.getByTestId('deleteEventModalBtn'));
-      const deleteBtn = screen.getByTestId('deleteEventBtn');
-      fireEvent.click(deleteBtn);
-    });
+    userEvent.click(screen.getByTestId('card'));
+    userEvent.click(screen.getByTestId('deleteEventModalBtn'));
+    const deleteBtn = screen.getByTestId('deleteEventBtn');
+    fireEvent.click(deleteBtn);
   });
 
   test('Should render truncated event details', async () => {

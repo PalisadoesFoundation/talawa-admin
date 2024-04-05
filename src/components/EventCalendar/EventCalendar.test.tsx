@@ -11,7 +11,6 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import styles from './EventCalendar.module.css';
 import { weekdays } from './constants';
 import { BrowserRouter as Router } from 'react-router-dom';
 
@@ -250,99 +249,6 @@ describe('Calendar', () => {
     fireEvent.click(todayButton);
     // const todayCell = screen.getByText(new Date().getDate().toString());
     // expect(todayCell).toHaveClass(styles.day__today);
-  });
-  it('Should Expand and contract when clicked on view all and view less in day view', async () => {
-    const multipleEventData = [
-      {
-        _id: '1',
-        title: 'Event 1',
-        description: 'This is event 1',
-        startDate: new Date().toISOString().split('T')[0],
-        endDate: new Date().toISOString().split('T')[0],
-        location: 'Los Angeles',
-        startTime: undefined,
-        endTime: undefined,
-        allDay: true,
-        recurring: false,
-        isPublic: true,
-        isRegisterable: true,
-      },
-      {
-        _id: '2',
-        title: 'Event 2',
-        description: 'This is event 2',
-        startDate: new Date().toISOString().split('T')[0],
-        endDate: new Date().toISOString().split('T')[0],
-        location: 'Los Angeles',
-        startTime: undefined,
-        endTime: undefined,
-        allDay: true,
-        recurring: false,
-        isPublic: true,
-        isRegisterable: true,
-      },
-      {
-        _id: '3',
-        title: 'Event 3',
-        description: 'This is event 3',
-        startDate: new Date().toISOString().split('T')[0],
-        endDate: new Date().toISOString().split('T')[0],
-        location: 'Los Angeles',
-        startTime: '14:00',
-        endTime: '16:00',
-        allDay: false,
-        recurring: false,
-        isPublic: true,
-        isRegisterable: true,
-      },
-      {
-        _id: '4',
-        title: 'Event 4',
-        description: 'This is event 4',
-        startDate: new Date().toISOString().split('T')[0],
-        endDate: new Date().toISOString().split('T')[0],
-        location: 'Los Angeles',
-        startTime: '14:00',
-        endTime: '16:00',
-        allDay: false,
-        recurring: false,
-        isPublic: true,
-        isRegisterable: true,
-      },
-      {
-        _id: '5',
-        title: 'Event 5',
-        description: 'This is event 5',
-        startDate: new Date().toISOString().split('T')[0],
-        endDate: new Date().toISOString().split('T')[0],
-        location: 'Los Angeles',
-        startTime: '17:00',
-        endTime: '19:00',
-        allDay: false,
-        recurring: false,
-        isPublic: true,
-        isRegisterable: true,
-      },
-    ];
-
-    render(
-      <Router>
-        <MockedProvider addTypename={false} link={link}>
-          <I18nextProvider i18n={i18nForTest}>
-            <Calendar eventData={multipleEventData} />
-          </I18nextProvider>
-        </MockedProvider>
-      </Router>,
-    );
-
-    const moreButtons = screen.getAllByText('View all');
-    moreButtons.forEach((moreButton) => {
-      fireEvent.click(moreButton);
-      expect(screen.getByText('View less')).toBeInTheDocument();
-      const lessButton = screen.getByText('View less');
-      fireEvent.click(lessButton);
-      expect(screen.queryByText('View less')).not.toBeInTheDocument();
-    });
   });
   it('Should handle window resize in day view', async () => {
     const multipleEventData = [

@@ -15,7 +15,7 @@ import { errorHandler } from 'utils/errorHandler';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { getItem } from 'utils/useLocalstorage';
 
-interface InterfaceEventListCardProps {
+export interface InterfaceEventListCardProps {
   key: string;
   id: string;
   eventLocation: string;
