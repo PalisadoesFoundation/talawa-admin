@@ -1,6 +1,7 @@
 // OrganizationQueries.js
 import gql from 'graphql-tag';
 
+
 // display posts
 
 /**
@@ -134,6 +135,22 @@ export const USER_JOINED_ORGANIZATIONS = gql`
           name
           description
           image
+          members {
+            _id
+          }
+          address {
+            city
+            countryCode
+            dependentLocality
+            line1
+            line2
+            postalCode
+            sortingCode
+            state
+          }
+          admins {
+            _id
+          }
         }
       }
     }
@@ -156,6 +173,22 @@ export const USER_CREATED_ORGANIZATIONS = gql`
           name
           description
           image
+          members {
+            _id
+          }
+          address {
+            city
+            countryCode
+            dependentLocality
+            line1
+            line2
+            postalCode
+            sortingCode
+            state
+          }
+          admins {
+            _id
+          }
         }
       }
     }
