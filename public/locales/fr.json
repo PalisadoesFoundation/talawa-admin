@@ -383,7 +383,10 @@
     "eventDetails": "Détails de l'évènement",
     "eventDeleted": "Événement supprimé avec succès.",
     "eventUpdated": "Événement mis à jour avec succès.",
-    "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
+    "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau.",
+    "thisInstance": "Cette Instance",
+    "thisAndFollowingInstances": "Cette et les Instances Suivantes",
+    "allInstances": "Toutes les Instances"
   },
   "funds": {
     "title": "Fonds",

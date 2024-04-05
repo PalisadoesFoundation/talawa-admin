@@ -91,10 +91,6 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
       RecurringEventMutationType.ThisInstance,
     );
 
-  useEffect(() => {
-    console.log(recurringEventDeleteType);
-  }, [recurringEventDeleteType]);
-
   const deleteEventHandler = async (): Promise<void> => {
     try {
       const { data } = await deleteEvent({
@@ -294,7 +290,6 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
                         option.charAt(0).toLowerCase() + option.slice(1),
                       )}
                       name="recurringEventDeleteType"
-                      className="d-inline-block me-5"
                       value={option}
                       onChange={(e) =>
                         setRecurringEventDeleteType(
