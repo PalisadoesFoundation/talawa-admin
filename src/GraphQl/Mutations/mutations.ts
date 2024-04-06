@@ -318,50 +318,6 @@ export const DELETE_EVENT_MUTATION = gql`
   }
 `;
 
-export const CREATE_VENUE_MUTATION = gql`
-  mutation createVenue(
-    $capacity: Int!
-    $description: String
-    $file: String
-    $name: String!
-    $organizationId: ID!
-  ) {
-    createVenue(
-      data: {
-        capacity: $capacity
-        description: $description
-        file: $file
-        name: $name
-        organizationId: $organizationId
-      }
-    ) {
-      _id
-    }
-  }
-`;
-
-export const UPDATE_VENUE_MUTATION = gql`
-  mutation editVenue(
-    $capacity: Int
-    $description: String
-    $file: String
-    $id: ID!
-    $name: String
-  ) {
-    editVenue(
-      data: {
-        capacity: $capacity
-        description: $description
-        file: $file
-        id: $id
-        name: $name
-      }
-    ) {
-      _id
-    }
-  }
-`;
-
 // to remove an admin from an organization
 export const REMOVE_ADMIN_MUTATION = gql`
   mutation RemoveAdmin($orgid: ID!, $userid: ID!) {
@@ -732,3 +688,9 @@ export {
   TOGGLE_PINNED_POST,
   UPDATE_USER_ROLE_IN_ORG_MUTATION,
 } from './OrganizationMutations';
+
+export {
+  CREATE_VENUE_MUTATION,
+  DELETE_VENUE_MUTATION,
+  UPDATE_VENUE_MUTATION,
+} from './VenueMutations';

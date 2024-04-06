@@ -993,11 +993,11 @@
     "categoryDisabled": "措施项类别已禁用"
   },
   "organizationVenues": {
-    "venueTitle": "场地",
+    "title": "场地",
     "addVenue": "添加场地",
     "venueDetails": "场地详情",
     "venueName": "场地名称",
-    "enterVenueName": "请输入场地名称",
+    "enterVenueName": "输入场地名称",
     "description": "场地描述",
     "enterVenueDesc": "输入场地描述",
     "capacity": "容量",
@@ -1006,8 +1006,17 @@
     "uploadVenueImage": "上传场地图片",
     "createVenue": "创建场地",
     "venueAdded": "场地添加成功",
-    "update": "更新场地详情",
-    "editVenue": "更新地点",
-    "venueUpdated": "场地详细信息更新成功"
+    "editVenue": "编辑场地",
+    "venueUpdated": "场地详情更新成功",
+    "searchByName": "按名称搜索",
+    "sort": "排序",
+    "highestCapacity": "最高容量",
+    "lowestCapacity": "最低容量",
+    "noVenues": "没有找到场地！",
+    "edit": "编辑",
+    "view": "查看",
+    "delete": "删除",
+    "venueTitleError": "场地标题不能为空！",
+    "venueCapacityError": "容量必须为正数！"
   }
 }

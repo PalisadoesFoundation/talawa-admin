@@ -318,7 +318,7 @@ export interface InterfaceQueryUserListItem {
 export interface InterfaceQueryVenueListItem {
   _id: string;
   name: string;
-  description: string;
+  description: string | null;
   image: string | null;
   capacity: string;
 }
