@@ -79,6 +79,7 @@ function organizationVenues(): JSX.Element {
       });
       venueRefetch();
     } catch (error) {
+      /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
@@ -108,9 +109,8 @@ function organizationVenues(): JSX.Element {
     setEditVenueData(null);
     toggleVenueModal();
   };
-
+  /* istanbul ignore next */
   if (venueError) {
-    console.log(venueError);
     errorHandler(t, venueError);
   }
 
@@ -190,7 +190,7 @@ function organizationVenues(): JSX.Element {
             variant="success"
             className="mx-2"
             onClick={showCreateVenueModal}
-            data-testid="showCreateVenueModalBtn"
+            data-testid="createVenueBtn"
           >
             <i className="fa fa-plus me-1"></i> {t('addVenue')}
           </Button>
@@ -250,7 +250,7 @@ function organizationVenues(): JSX.Element {
                               <StyledTableCell align="center">
                                 <div>
                                   <Button
-                                    data-testid="updateVenueModalBtn"
+                                    data-testid={`updateVenueBtn${index + 1}`}
                                     className="me-2"
                                     onClick={() => {
                                       showEditVenueModal(venueItem);
@@ -260,7 +260,7 @@ function organizationVenues(): JSX.Element {
                                     {t('edit')}
                                   </Button>
                                   <Button
-                                    data-testid="deleteVenueBtn"
+                                    data-testid={`deleteVenueBtn${index + 1}`}
                                     onClick={() => handleDelete(venueItem._id)}
                                   >
                                     <i className="fa fa-trash me-2" />

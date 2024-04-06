@@ -14,7 +14,6 @@ import i18nForTest from 'utils/i18nForTest';
 import userEvent from '@testing-library/user-event';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
-import convertToBase64 from 'utils/convertToBase64';
 import {
   CREATE_VENUE_MUTATION,
   UPDATE_VENUE_MUTATION,
