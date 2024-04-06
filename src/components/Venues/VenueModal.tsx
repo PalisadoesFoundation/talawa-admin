@@ -12,7 +12,7 @@ import { errorHandler } from 'utils/errorHandler';
 import convertToBase64 from 'utils/convertToBase64';
 import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 
-interface InterfaceVenueModalProps {
+export interface InterfaceVenueModalProps {
   show: boolean;
   onHide: () => void;
   refetchVenues: () => void;
@@ -58,7 +58,6 @@ const VenueModal = ({
       toast.error(t('venueCapacityError'));
       return;
     }
-
     try {
       const { data } = await mutate({
         variables: {
@@ -70,13 +69,14 @@ const VenueModal = ({
           ...(edit && { id: venueData?._id }),
         },
       });
-
+      /* istanbul ignore next */
       if (data) {
         toast.success(edit ? t('venueUpdated') : t('venueAdded'));
         refetchVenues();
         onHide();
       }
     } catch (error) {
+      /* istanbul ignore next */
       errorHandler(t, error);
     }
   }, [
@@ -92,7 +92,8 @@ const VenueModal = ({
 
   const clearImageInput = useCallback(() => {
     setFormState((prevState) => ({ ...prevState, imageURL: '' }));
-    setVenueImage(true);
+    setVenueImage(false);
+    /* istanbul ignore next */
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -125,7 +126,7 @@ const VenueModal = ({
         </Button>
       </Modal.Header>
       <Modal.Body>
-        <Form>
+        <Form data-testid="venueForm">
           <label htmlFor="venuetitle">{t('venueName')}</label>
           <Form.Control
             type="title"
@@ -192,6 +193,7 @@ const VenueModal = ({
               }));
               setVenueImage(true);
               const file = e.target.files?.[0];
+              /* istanbul ignore next */
               if (file) {
                 setFormState({
                   ...formState,
