@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 interface InterfaceEventHeaderProps {
   viewType: ViewType;
-  handleChangeView: (item: any) => void;
+  handleChangeView: (item: string | null) => void;
   showInviteModal: () => void;
 }
 
@@ -53,7 +53,7 @@ function eventHeader({
                 className={styles.dropdown}
                 data-testid="selectViewType"
               >
-                {viewType || ViewType.MONTH}
+                {viewType}
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item

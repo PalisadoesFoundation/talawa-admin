@@ -346,6 +346,9 @@
     "noActionItems": "No Action Items",
     "options": "Options",
     "preCompletionNotes": "Pre Completion Notes",
+    "actionItemActive": "Active",
+    "markCompletion": "Mark Completion",
+    "actionItemStatus": "Action Item Status",
     "postCompletionNotes": "Post Completion Notes",
     "selectActionItemCategory": "Select an action item category",
     "selectAssignee": "Select an assignee",
@@ -551,6 +554,14 @@
     "searchByLastName": "Search By Last Name",
     "noResultsFoundFor": "No results found for",
     "noSpammerFound": "No spammer found"
+  },
+  "eventManagement": {
+    "title": "Event Management",
+    "dashboard": "Dashboard",
+    "registrants": "Registrants",
+    "eventActions": "Event Actions",
+    "eventStats": "Event Statistics",
+    "to": "TO"
   },
   "forgotPassword": {
     "title": "Talawa Forgot Password",
