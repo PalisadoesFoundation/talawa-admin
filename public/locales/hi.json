@@ -1019,5 +1019,29 @@
     "update": "स्थान विवरण अद्यतन करें",
     "editVenue": "अपडेट स्थान",
     "venueUpdated": "स्थल विवरण सफलतापूर्वक अद्यतन किया गया"
+  },
+  "addMember": {
+    "title": "सदस्य जोड़ें",
+    "addMembers": "सदस्य जोड़ें",
+    "existingUser": "मौजूदा उपयोगकर्ता",
+    "newUser": "नया उपयोगकर्ता",
+    "searchFullName": "पूरा नाम से खोजें",
+    "firstName": "प्रथम नाम",
+    "enterFirstName": "प्रथम नाम दर्ज करें",
+    "lastName": "अंतिम नाम",
+    "enterLastName": "अंतिम नाम दर्ज करें",
+    "emailAddress": "ईमेल पता",
+    "enterEmail": "ईमेल दर्ज करें",
+    "password": "पासवर्ड",
+    "enterPassword": "पासवर्ड दर्ज करें",
+    "confirmPassword": "पासवर्ड की पुष्टि करें",
+    "enterConfirmPassword": "पासवर्ड की पुष्टि करें",
+    "organization": "संगठन",
+    "cancel": "रद्द करें",
+    "create": "सृजन करें",
+    "invalidDetailsMessage": "कृपया सभी आवश्यक विवरण प्रदान करें।",
+    "passwordNotMatch": "पासवर्ड मेल नहीं खाते।",
+    "user": "उपयोगकर्ता",
+    "addMember": "सदस्य जोड़ें"
   }
 }

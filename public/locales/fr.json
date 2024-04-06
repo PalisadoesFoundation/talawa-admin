@@ -1014,5 +1014,29 @@
     "update": "Mettre à jour les détails du lieu",
     "editVenue": "Mettre à jour le lieu",
     "venueUpdated": "Les détails du lieu ont été mis à jour avec succès"
+  },
+  "addMember": {
+    "title": "Ajouter un membre",
+    "addMembers": "Ajouter des membres",
+    "existingUser": "Utilisateur existant",
+    "newUser": "Nouvel utilisateur",
+    "searchFullName": "Rechercher par nom complet",
+    "firstName": "Prénom",
+    "enterFirstName": "Entrez le prénom",
+    "lastName": "Nom de famille",
+    "enterLastName": "Entrez le nom de famille",
+    "emailAddress": "Adresse e-mail",
+    "enterEmail": "Entrez l'e-mail",
+    "password": "Mot de passe",
+    "enterPassword": "Entrez le mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "enterConfirmPassword": "Confirmez le mot de passe",
+    "organization": "Organisation",
+    "cancel": "Annuler",
+    "create": "Créer",
+    "invalidDetailsMessage": "Veuillez fournir tous les détails requis.",
+    "passwordNotMatch": "Les mots de passe ne correspondent pas.",
+    "user": "Utilisateur",
+    "addMember": "Ajouter un membre"
   }
 }

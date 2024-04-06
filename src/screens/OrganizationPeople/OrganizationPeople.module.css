@@ -3,7 +3,10 @@
     width: 98%;
   }
 }
-
+.modalContent {
+  width: 670px;
+  max-width: 680px;
+}
 .dropdown {
   background-color: white;
   border: 1px solid #31bb6b;
