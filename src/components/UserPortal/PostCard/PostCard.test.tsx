@@ -107,7 +107,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       commentCount: 1,
       comments: [
         {
-          _id: '64eb13beca85de60ebe0ed0e',
+          id: '64eb13beca85de60ebe0ed0e',
           creator: {
             _id: '63d6064458fce20ee25c3bf7',
             firstName: 'Noble',
