@@ -18,7 +18,7 @@ export const ADD_EVENT_ATTENDEE = gql`
 
 /**
  * GraphQL mutation to invite an user for an event
- * 
+ *
  * @param userId - The ID of the user being invited.
  * @param eventId - The ID of the event to which the user is being invited.
  * @return The updated event object with the added invited user.
@@ -57,8 +57,8 @@ export const REMOVE_EVENT_ATTENDEE = gql`
  */
 
 export const MARK_CHECKIN = gql`
-  mutation checkIn($userId: ID! $eventId: ID!) {
-    checkIn(data: {userId: $userId eventId: $eventId}) {
+  mutation checkIn($userId: ID!, $eventId: ID!) {
+    checkIn(data: { userId: $userId, eventId: $eventId }) {
       _id
     }
   }

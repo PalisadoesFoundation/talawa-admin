@@ -32,7 +32,13 @@ interface requestType {
   user: {
     firstName: string;
     lastName: string;
-  }
+  };
+}
+
+interface EventAttendee {
+  eventId: string;
+  isInvited: boolean;
+  isRegistered: boolean;
 }
 
 const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
@@ -54,19 +60,25 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const [adda] = useMutation(ADD_ADMIN_MUTATION);
   const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
 
+  console.log(`meri tamanna hai ye: ${currentUrl}`);
+
   const {
     data,
     loading: loadingOrgData,
     error: errorOrg,
   }: {
     data?: {
-      organizations: InterfaceQueryOrganizationsListObject[];
+      getEventInvitesByUserId: EventAttendee[];
     };
     loading: boolean;
     error?: ApolloError;
   } = useQuery(GET_EVENT_INVITES, {
-    variables: { id: currentUrl },
+    variables: { userId: currentUrl },
   });
+
+  console.log(`the Id is: ${location.state?.id}`);
+
+  console.log(`Jo me chahta tha woh yeh hai: ${JSON.stringify(data, null, 2)}`);
 
   useEffect(() => {
     // check component is mounted or not
@@ -83,6 +95,8 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   } = useQuery(USER_DETAILS, {
     variables: { id: currentUrl }, // For testing we are sending the id as a prop
   });
+
+  console.log(`meri chahat hai ye: ${currentUrl}`);
 
   /* istanbul ignore next */
   const toggleStateValue = (): void => {
@@ -339,51 +353,53 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   </Col>
                   <Col xl={4}>
                     <Card border="0" className="rounded-4">
-                       <div className={styles.cardHeader}>
-                          <div className={styles.cardTitle}>{t('membershipRequests')}</div>
-                        </div>       
+                      <div className={styles.cardHeader}>
+                        <div className={styles.cardTitle}>
+                          {t('eventInvites')}
+                        </div>
+                        <Button
+                          size="sm"
+                          variant="light"
+                          data-testid="viewAllMembershipRequests"
+                          onClick={(): void => {
+                            toast.success('Coming soon!');
+                          }}
+                        >
+                          {t('viewAll')}
+                        </Button>
+                      </div>
+                      <Card.Body className={styles.cardBody}>
+                        {loadingOrgData ? (
+                          [...Array(4)].map((_, index) => {
+                            return <CardItemLoading key={index} />;
+                          })
+                        ) : data?.getEventInvitesByUserId.length ==
+                          0 ? (
+                          <div className={styles.emptyContainer}>
+                            <h6>{t('noEventInvites')}</h6>
+                          </div>
+                        ) : 
+                        (
+                          data?.getEventInvitesByUserId
+                            .slice(0, 8)
+                            .map((request: EventAttendee) => {
+                              return (
+                                <div>
+                                <CardItem 
+                                  type="MembershipRequest"
+                                  key={request.eventId}
+                                  title={`${request.eventId} ${request.eventId}`}
+                                />
+                                <Button variant="success" size="sm" className="ml-[50%]">
+                                  Register
+                                </Button>
+                                </div>
+                              );
+                            })
+                        )}
+                      </Card.Body>
                     </Card>
                   </Col>
-                  <Col xl={4}>
-          <Card border="0" className="rounded-4">
-            <div className={styles.cardHeader}>
-              <div className={styles.cardTitle}>{t('membershipRequests')}</div>
-              <Button
-                size="sm"
-                variant="light"
-                data-testid="viewAllMembershipRequests"
-                onClick={(): void => {
-                  toast.success('Coming soon!');
-                }}
-              >
-                {t('viewAll')}
-              </Button>
-            </div>
-            <Card.Body className={styles.cardBody}>
-              {loadingOrgData ? (
-                [...Array(4)].map((_, index) => {
-                  return <CardItemLoading key={index} />;
-                })
-              ) : data?.organizations[0].membershipRequests.length == 0 ? (
-                <div className={styles.emptyContainer}>
-                  <h6>{t('noMembershipRequests')}</h6>
-                </div>
-              ) : (
-                data?.organizations[0]?.membershipRequests
-                  .slice(0, 8)
-                  .map((request: requestType) => {
-                    return (
-                      <CardItem
-                        type="MembershipRequest"
-                        key={request._id}
-                        title={`${request.user.firstName} ${request.user.lastName}`}
-                      />
-                    );
-                  })
-              )}
-            </Card.Body>
-          </Card>
-        </Col>
                 </Row>
               </section>
             </div>

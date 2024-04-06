@@ -239,9 +239,10 @@ export const EVENT_ATTENDEES = gql`
 `;
 
 export const GET_EVENT_ATTENDEE = gql`
-  query getEventAttendee($userId: ID!, $eventId: ID!) {
-    getEventAttendee(userId: $userId, eventId: $eventId) {
-      _id
+  query GetEventAttendeesByEventId($eventId: ID!) {
+    getEventAttendeesByEventId(eventId: $eventId) {
+      userId
+      isInvited
     }
   }
 `;
@@ -337,9 +338,10 @@ export const ORGANIZATIONS_LIST = gql`
 
 //Query to get all the event invites for an user.
 export const GET_EVENT_INVITES = gql`
-  query ExampleQuery($eventId: ID!) {
-    getEventAttendeesByEventId(eventId: $eventId) {
-      userId
+  query GetEventInvitesByUserId($userId: ID!) {
+    getEventInvitesByUserId(userId: $userId) {
+      eventId
+      isRegistered
     }
   }
 `;

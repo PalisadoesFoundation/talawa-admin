@@ -185,6 +185,7 @@
     "location": "Location",
     "about": "About",
     "deleteThisOrganization": "Delete This Organization",
+    "eventInvites": "Event Invites",
     "statistics": "Statistics",
     "members": "Members",
     "admins": "Admins",
@@ -197,8 +198,9 @@
     "noUpcomingEvents": "No Upcoming Events",
     "latestPosts": "Latest Posts",
     "noPostsPresent": "No Posts Present",
-    "membershipRequests": "Membership requests",
     "noMembershipRequests": "No Membership requests present",
+    "noEventInvites": "No Event Invites Found.",
+    "membershipRequests": "Membership requests",
     "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
   },
   "organizationPeople": {
@@ -661,7 +663,7 @@
     "addedAsAdmin": "User is added as admin.",
     "talawaApiUnavailable": "Talawa-API service is unavailable. Kindly check your network connection and wait for a while.",
     "noEventInvites": "No Event Invites Found.",
-    "viewAll":"View All"
+    "viewAll": "View All"
   },
   "userLogin": {
     "login": "Login",
