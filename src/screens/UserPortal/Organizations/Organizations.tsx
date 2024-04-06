@@ -290,25 +290,23 @@ export default function organizations(): JSX.Element {
                         )
                       : /* istanbul ignore next */
                         organizations
-                    )
-                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                      .map((organization: any, index) => {
-                        const cardProps: InterfaceOrganizationCardProps = {
-                          name: organization.name,
-                          image: organization.image,
-                          id: organization._id,
-                          description: organization.description,
-                          admins: organization.admins,
-                          members: organization.members,
-                          address: organization.address,
-                          membershipRequestStatus:
-                            organization.membershipRequestStatus,
-                          userRegistrationRequired:
-                            organization.userRegistrationRequired,
-                          membershipRequests: organization.membershipRequests,
-                        };
-                        return <OrganizationCard key={index} {...cardProps} />;
-                      })
+                    ).map((organization: InterfaceOrganization, index) => {
+                      const cardProps: InterfaceOrganizationCardProps = {
+                        name: organization.name,
+                        image: organization.image,
+                        id: organization._id,
+                        description: organization.description,
+                        admins: organization.admins,
+                        members: organization.members,
+                        address: organization.address,
+                        membershipRequestStatus:
+                          organization.membershipRequestStatus,
+                        userRegistrationRequired:
+                          organization.userRegistrationRequired,
+                        membershipRequests: organization.membershipRequests,
+                      };
+                      return <OrganizationCard key={index} {...cardProps} />;
+                    })
                   ) : (
                     <span>{t('nothingToShow')}</span>
                   )}
