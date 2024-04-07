@@ -139,7 +139,7 @@ const Requests = (): JSX.Element => {
     const inputValue = inputElement?.value || '';
     handleSearch(inputValue);
   };
-  /* istanbul ignore next */
+
   const resetAndRefetch = (): void => {
     refetch({
       first: perPageResult,
@@ -148,7 +148,7 @@ const Requests = (): JSX.Element => {
     });
     setHasMore(true);
   };
-  /* istanbul ignore next */
+
   const loadMoreRequests = (): void => {
     setIsLoadingMore(true);
     fetchMore({
@@ -254,10 +254,7 @@ const Requests = (): JSX.Element => {
             <TableLoader headerTitles={headerTitles} noOfRows={perPageResult} />
           ) : (
             <InfiniteScroll
-              dataLength={
-                /* istanbul ignore next */
-                displayedRequests.length ?? 0
-              }
+              dataLength={displayedRequests.length ?? 0}
               next={loadMoreRequests}
               loader={
                 <TableLoader
