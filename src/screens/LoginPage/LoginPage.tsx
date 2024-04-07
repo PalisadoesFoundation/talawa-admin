@@ -227,6 +227,7 @@ function loginPage(): JSX.Element {
               lastName: signlastName,
               email: signEmail,
               password: signPassword,
+              orgId: signOrg,
             },
           });
 
@@ -815,7 +816,7 @@ function loginPage(): JSX.Element {
                         {organizations.map((org: any, idx: number) => {
                           return (
                             <>
-                              <option key={idx} value={org.id}>
+                              <option key={idx} value={org._id}>
                                 {org.name}
                               </option>
                             </>
