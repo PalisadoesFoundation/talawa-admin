@@ -1,4 +1,3 @@
-import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import 'jest-location-mock';
@@ -6,13 +5,16 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
+import userEvent from '@testing-library/user-event';
+import { toast } from 'react-toastify';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import i18nForTest from 'utils/i18nForTest';
+import useLocalStorage from 'utils/useLocalstorage';
 import OrganizationDashboard from './OrganizationDashboard';
 import { EMPTY_MOCKS, ERROR_MOCKS, MOCKS } from './OrganizationDashboardMocks';
-import i18nForTest from 'utils/i18nForTest';
-import { toast } from 'react-toastify';
-import userEvent from '@testing-library/user-event';
+import React from 'react';
+const { setItem } = useLocalStorage();
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -32,14 +34,21 @@ jest.mock('react-toastify', () => ({
     error: jest.fn(),
   },
 }));
+const mockNavgate = jest.fn();
+let mockId: string | undefined = undefined;
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavgate,
+  useParams: () => ({ orgId: mockId }),
+}));
 
 beforeEach(() => {
-  localStorage.setItem('FirstName', 'John');
-  localStorage.setItem('LastName', 'Doe');
-  localStorage.setItem('UserType', 'SUPERADMIN');
-  localStorage.setItem(
+  setItem('FirstName', 'John');
+  setItem('LastName', 'Doe');
+  setItem('UserType', 'SUPERADMIN');
+  setItem(
     'UserImage',
-    'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe'
+    'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
   );
 });
 
@@ -60,15 +69,15 @@ describe('Organisation Dashboard Page', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
-        </MockedProvider>
+        </MockedProvider>,
       );
     });
 
     await wait();
     expect(screen.getByText('Members')).toBeInTheDocument();
     expect(screen.getByText('Admins')).toBeInTheDocument();
-    expect(screen.getAllByText('Posts')).toHaveLength(2);
-    expect(screen.getAllByText('Events')).toHaveLength(2);
+    expect(screen.getAllByText('Posts')).toHaveLength(1);
+    expect(screen.getAllByText('Events')).toHaveLength(1);
     expect(screen.getByText('Blocked Users')).toBeInTheDocument();
     expect(screen.getByText('Requests')).toBeInTheDocument();
     expect(screen.getByText('Upcoming Events')).toBeInTheDocument();
@@ -76,7 +85,7 @@ describe('Organisation Dashboard Page', () => {
     expect(screen.getByText('Membership requests')).toBeInTheDocument();
 
     // Checking if posts are rendered
-    expect(screen.getByText('Post 15')).toBeInTheDocument();
+    expect(screen.getByText('postone')).toBeInTheDocument();
 
     // Checking if membership requests are rendered
     expect(screen.getByText('Jane Doe')).toBeInTheDocument();
@@ -91,8 +100,8 @@ describe('Organisation Dashboard Page', () => {
     userEvent.click(adminBtn);
     userEvent.click(postBtn[0]);
     userEvent.click(eventBtn[0]);
-    userEvent.click(postBtn[1]);
-    userEvent.click(eventBtn[1]);
+    userEvent.click(postBtn[0]);
+    userEvent.click(eventBtn[0]);
     userEvent.click(blockUserBtn);
     userEvent.click(requestBtn);
   });
@@ -108,7 +117,7 @@ describe('Organisation Dashboard Page', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
-        </MockedProvider>
+        </MockedProvider>,
       );
     });
 
@@ -123,10 +132,9 @@ describe('Organisation Dashboard Page', () => {
     expect(toast.success).toBeCalledWith('Coming soon!');
 
     expect(
-      screen.getByText(/No membership requests present/i)
+      screen.getByText(/No membership requests present/i),
     ).toBeInTheDocument();
     expect(screen.getByText(/No upcoming events/i)).toBeInTheDocument();
-    expect(screen.getByText(/No posts present/i)).toBeInTheDocument();
   });
 
   test('Testing error scenario', async () => {
@@ -140,11 +148,51 @@ describe('Organisation Dashboard Page', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
-        </MockedProvider>
+        </MockedProvider>,
       );
     });
 
     await wait();
-    expect(window.location).toBeAt('/orglist');
+    expect(mockNavgate).toHaveBeenCalledWith('/orglist');
+  });
+  test('upcomingEvents cardItem component should render when length>0', async () => {
+    mockId = '123';
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link1}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <OrganizationDashboard />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+    screen.getByTestId('cardItem');
+  });
+
+  test('event data should get updated using useState function', async () => {
+    mockId = '123';
+    const mockSetState = jest.spyOn(React, 'useState');
+    jest.doMock('react', () => ({
+      ...jest.requireActual('react'),
+      useState: (initial: any) => [initial, mockSetState],
+    }));
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link1}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <OrganizationDashboard />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+    expect(mockSetState).toHaveBeenCalled();
   });
 });

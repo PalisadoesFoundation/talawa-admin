@@ -9,4 +9,6 @@ $form-floating-label-opacity: 0.65;
 $form-floating-label-transform: scale(0.85) translateY(-0.5rem)
   translateX(0.15rem);
 $form-floating-label-disabled-color: $gray-600;
-$form-floating-transition: opacity 0.1s ease-in-out, transform 0.1s ease-in-out;
+$form-floating-transition:
+  opacity 0.1s ease-in-out,
+  transform 0.1s ease-in-out;

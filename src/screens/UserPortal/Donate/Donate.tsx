@@ -11,10 +11,10 @@ import {
 import { useQuery } from '@apollo/client';
 import styles from './Donate.module.css';
 import SendIcon from '@mui/icons-material/Send';
-import getOrganizationId from 'utils/getOrganizationId';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import DonationCard from 'components/UserPortal/DonationCard/DonationCard';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
 interface InterfaceDonationCardProps {
   id: string;
@@ -29,7 +29,7 @@ export default function donate(): JSX.Element {
     keyPrefix: 'donate',
   });
 
-  const organizationId = getOrganizationId(location.href);
+  const { orgId: organizationId } = useParams();
   const [organizationDetails, setOrganizationDetails]: any = React.useState({});
   const [donations, setDonations] = React.useState([]);
   const [selectedCurrency, setSelectedCurrency] = React.useState(0);
@@ -42,7 +42,7 @@ export default function donate(): JSX.Element {
     ORGANIZATION_DONATION_CONNECTION_LIST,
     {
       variables: { orgId: organizationId },
-    }
+    },
   );
 
   const { data } = useQuery(USER_ORGANIZATION_CONNECTION, {
@@ -56,14 +56,14 @@ export default function donate(): JSX.Element {
   /* istanbul ignore next */
   const handleChangePage = (
     _event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
+    newPage: number,
   ): void => {
     setPage(newPage);
   };
 
   /* istanbul ignore next */
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
     const newRowsPerPage = event.target.value;
 
@@ -156,7 +156,7 @@ export default function donate(): JSX.Element {
                       (rowsPerPage > 0
                         ? donations.slice(
                             page * rowsPerPage,
-                            page * rowsPerPage + rowsPerPage
+                            page * rowsPerPage + rowsPerPage,
                           )
                         : /* istanbul ignore next */
                           donations

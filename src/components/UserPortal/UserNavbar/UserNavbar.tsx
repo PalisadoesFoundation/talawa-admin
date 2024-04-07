@@ -10,10 +10,12 @@ import LanguageIcon from '@mui/icons-material/Language';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import useLocalStorage from 'utils/useLocalstorage';
 
 function userNavbar(): JSX.Element {
-  const history = useHistory();
+  const { getItem } = useLocalStorage();
+  const navigate = useNavigate();
 
   const { t } = useTranslation('translation', {
     keyPrefix: 'userNavbar',
@@ -23,17 +25,17 @@ function userNavbar(): JSX.Element {
 
   const [currentLanguageCode, setCurrentLanguageCode] = React.useState(
     /* istanbul ignore next */
-    cookies.get('i18next') || 'en'
+    cookies.get('i18next') || 'en',
   );
+
+  const userName = getItem('name');
 
   /* istanbul ignore next */
   const handleLogout = (): void => {
     revokeRefreshToken();
     localStorage.clear();
-    window.location.replace('/user');
+    navigate('/');
   };
-
-  const userName = localStorage.getItem('name');
 
   return (
     <Navbar variant="dark" className={`${styles.colorPrimary}`}>
@@ -98,7 +100,7 @@ function userNavbar(): JSX.Element {
                 <b>{userName}</b>
               </Dropdown.ItemText>
               <Dropdown.Item
-                onClick={() => history.push('/user/settings')}
+                onClick={() => navigate('/user/settings')}
                 className={styles.link}
               >
                 {t('settings')}

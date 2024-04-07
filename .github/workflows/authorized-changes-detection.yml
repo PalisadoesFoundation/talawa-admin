@@ -15,6 +15,7 @@ on:
     paths:
       - '.github/**'   
       - 'env.example'
+      - '.node-version'
       - '.husky/**'
       - 'scripts/**'
       - 'package.json'

@@ -40,7 +40,7 @@ describe('Testing Custom Field Dropdown', () => {
     const { getByTestId, getByText } = render(
       <BrowserRouter>
         <EditOrgCustomFieldDropDown {...props} />
-      </BrowserRouter>
+      </BrowserRouter>,
     );
 
     expect(getByText('Number')).toBeInTheDocument();

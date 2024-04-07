@@ -1,16 +1,18 @@
-import React from 'react';
 import { QuestionMarkOutlined } from '@mui/icons-material';
+import { ReactComponent as ActionItemIcon } from 'assets/svgs/actionItem.svg';
 import { ReactComponent as BlockUserIcon } from 'assets/svgs/blockUser.svg';
+import { ReactComponent as CheckInRegistrantsIcon } from 'assets/svgs/checkInRegistrants.svg';
 import { ReactComponent as DashboardIcon } from 'assets/svgs/dashboard.svg';
+import { ReactComponent as EventStatsIcon } from 'assets/svgs/eventStats.svg';
 import { ReactComponent as EventsIcon } from 'assets/svgs/events.svg';
+import { ReactComponent as FundsIcon } from 'assets/svgs/funds.svg';
+import { ReactComponent as ListEventRegistrantsIcon } from 'assets/svgs/listEventRegistrants.svg';
 import { ReactComponent as OrganizationsIcon } from 'assets/svgs/organizations.svg';
 import { ReactComponent as PeopleIcon } from 'assets/svgs/people.svg';
 import { ReactComponent as PluginsIcon } from 'assets/svgs/plugins.svg';
 import { ReactComponent as PostsIcon } from 'assets/svgs/posts.svg';
 import { ReactComponent as SettingsIcon } from 'assets/svgs/settings.svg';
-import { ReactComponent as ListEventRegistrantsIcon } from 'assets/svgs/listEventRegistrants.svg';
-import { ReactComponent as CheckInRegistrantsIcon } from 'assets/svgs/checkInRegistrants.svg';
-import { ReactComponent as EventStatsIcon } from 'assets/svgs/eventStats.svg';
+import React from 'react';
 
 export interface InterfaceIconComponent {
   name: string;
@@ -36,6 +38,13 @@ const iconComponent = (props: InterfaceIconComponent): JSX.Element => {
       return <PeopleIcon {...props} data-testid="Icon-Component-PeopleIcon" />;
     case 'Events':
       return <EventsIcon {...props} data-testid="Icon-Component-EventsIcon" />;
+    case 'Action Items':
+      return (
+        <ActionItemIcon
+          {...props}
+          data-testid="Icon-Component-ActionItemIcon"
+        />
+      );
     case 'Posts':
       return <PostsIcon {...props} data-testid="Icon-Component-PostsIcon" />;
     case 'Block/Unblock':
@@ -81,7 +90,16 @@ const iconComponent = (props: InterfaceIconComponent): JSX.Element => {
         />
       );
     case 'Advertisement':
-      return <PostsIcon stroke={props.fill} />;
+      return (
+        <PostsIcon
+          data-testid="Icon-Component-Advertisement"
+          stroke={props.fill}
+        />
+      );
+    case 'Funds':
+      return (
+        <FundsIcon data-testid="Icon-Component-Funds" stroke={props.fill} />
+      );
     default:
       return (
         <QuestionMarkOutlined

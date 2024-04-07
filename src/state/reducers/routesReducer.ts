@@ -1,25 +1,23 @@
 import type { InterfaceAction } from 'state/helpers/Action';
 
-const currentOrg = window.location.href.split('=')[1];
-
 const reducer = (
   state = INITIAL_STATE,
-  action: InterfaceAction
+  action: InterfaceAction,
 ): typeof INITIAL_STATE => {
   switch (action.type) {
     case 'UPDATE_TARGETS': {
       return Object.assign({}, INITIAL_STATE, {
-        targets: [...INITIAL_STATE.targets, action.payload],
+        targets: [...generateRoutes(components, action.payload)],
       });
     }
     case 'UPDATE_P_TARGETS': {
       const oldTargets: any = INITIAL_STATE.targets.filter(
-        (target: any) => target.name === 'Plugins'
+        (target: any) => target.name === 'Plugins',
       )[0].subTargets;
       return Object.assign({}, INITIAL_STATE, {
         targets: [
           ...INITIAL_STATE.targets.filter(
-            (target: any) => target.name !== 'Plugins'
+            (target: any) => target.name !== 'Plugins',
           ),
           Object.assign(
             {},
@@ -28,7 +26,7 @@ const reducer = (
               comp_id: null,
               component: null,
               subTargets: [...action.payload, ...oldTargets],
-            }
+            },
           ),
         ],
       });
@@ -67,9 +65,15 @@ const components: ComponentType[] = [
   { name: 'Dashboard', comp_id: 'orgdash', component: 'OrganizationDashboard' },
   { name: 'People', comp_id: 'orgpeople', component: 'OrganizationPeople' },
   { name: 'Events', comp_id: 'orgevents', component: 'OrganizationEvents' },
+  {
+    name: 'Action Items',
+    comp_id: 'orgactionitems',
+    component: 'OrganizationActionItems',
+  },
   { name: 'Posts', comp_id: 'orgpost', component: 'OrgPost' },
   { name: 'Block/Unblock', comp_id: 'blockuser', component: 'BlockUser' },
   { name: 'Advertisement', comp_id: 'orgads', component: 'Advertisements' },
+  { name: 'Funds', comp_id: 'orgfunds', component: 'OrganizationFunds' },
   {
     name: 'Plugins',
     comp_id: null,
@@ -83,23 +87,27 @@ const components: ComponentType[] = [
       },
     ],
   },
-
   { name: 'Settings', comp_id: 'orgsetting', component: 'OrgSettings' },
   { name: '', comp_id: 'member', component: 'MemberDetail' },
 ];
 
-const generateRoutes = (comps: ComponentType[]): TargetsType[] => {
+const generateRoutes = (
+  comps: ComponentType[],
+  currentOrg = undefined,
+): TargetsType[] => {
   return comps
     .filter((comp) => comp.name && comp.name !== '')
     .map((comp) => {
       const entry: TargetsType = comp.comp_id
-        ? { name: comp.name, url: `/${comp.comp_id}/id=${currentOrg}` }
+        ? comp.comp_id === 'orglist'
+          ? { name: comp.name, url: `/${comp.comp_id}` }
+          : { name: comp.name, url: `/${comp.comp_id}/${currentOrg}` }
         : {
             name: comp.name,
             subTargets: comp.subTargets?.map((subTarget: any) => {
               return {
                 name: subTarget.name,
-                url: `/${subTarget.comp_id}/id=${currentOrg}`,
+                url: `/${subTarget.comp_id}/${currentOrg}`,
                 icon: subTarget.icon ? subTarget.icon : null,
               };
             }),
@@ -110,7 +118,6 @@ const generateRoutes = (comps: ComponentType[]): TargetsType[] => {
 
 const INITIAL_STATE = {
   targets: generateRoutes(components),
-  configUrl: `${currentOrg}`,
   components,
 };
 

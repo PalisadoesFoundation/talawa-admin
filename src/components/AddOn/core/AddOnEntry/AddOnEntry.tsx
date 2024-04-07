@@ -6,6 +6,7 @@ import { UPDATE_INSTALL_STATUS_PLUGIN_MUTATION } from 'GraphQl/Mutations/mutatio
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { Navigate, useParams } from 'react-router-dom';
 
 interface InterfaceAddOnEntryProps {
   id: string;
@@ -29,14 +30,17 @@ function addOnEntry({
 }: InterfaceAddOnEntryProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'addOnEntry' });
   //getting orgId from URL
-  const currentOrg = window.location.href.split('/id=')[1] + '';
+  const { orgId: currentOrg } = useParams();
+  if (!currentOrg) {
+    return <Navigate to={'/orglist'} />;
+  }
   const [buttonLoading, setButtonLoading] = useState(false);
   const [isInstalledLocal, setIsInstalledLocal] = useState(
-    uninstalledOrgs.includes(currentOrg)
+    uninstalledOrgs.includes(currentOrg),
   );
   // const [addOrgAsUninstalled] = useMutation(UPDATE_ORG_STATUS_PLUGIN_MUTATION);
   const [addOrgAsUninstalled] = useMutation(
-    UPDATE_INSTALL_STATUS_PLUGIN_MUTATION
+    UPDATE_INSTALL_STATUS_PLUGIN_MUTATION,
   );
 
   const togglePluginInstall = async (): Promise<void> => {
@@ -65,7 +69,6 @@ function addOnEntry({
             id="custom-switch"
             label={t('enable')}
             className={styles.entrytoggle}
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
             onChange={(): void => {}}
             disabled={switchInProgress}
             checked={enabled}

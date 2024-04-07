@@ -1,7 +1,6 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
 import IconComponent from './IconComponent';
-
+import React from 'react';
 const screenTestIdMap: Record<string, Record<string, string>> = {
   Dashboard: {
     name: 'Dashboard',
@@ -15,9 +14,17 @@ const screenTestIdMap: Record<string, Record<string, string>> = {
     name: 'Events',
     testId: 'Icon-Component-EventsIcon',
   },
+  ActionItems: {
+    name: 'Action Items',
+    testId: 'Icon-Component-ActionItemIcon',
+  },
   Posts: {
     name: 'Posts',
     testId: 'Icon-Component-PostsIcon',
+  },
+  Funds: {
+    name: 'Funds',
+    testId: 'Icon-Component-Funds',
   },
   BlockUnblock: {
     name: 'Block/Unblock',
@@ -47,6 +54,10 @@ const screenTestIdMap: Record<string, Record<string, string>> = {
     name: 'Event Stats',
     testId: 'Icon-Component-Event-Stats',
   },
+  Advertisement: {
+    name: 'Advertisement',
+    testId: 'Icon-Component-Advertisement',
+  },
   default: {
     name: 'default',
     testId: 'Icon-Component-DefaultIcon',
@@ -58,7 +69,7 @@ describe('Testing Collapsible Dropdown component', () => {
     for (const component in screenTestIdMap) {
       render(<IconComponent name={screenTestIdMap[component].name} />);
       expect(
-        screen.getByTestId(screenTestIdMap[component].testId)
+        screen.getByTestId(screenTestIdMap[component].testId),
       ).toBeInTheDocument();
     }
   });

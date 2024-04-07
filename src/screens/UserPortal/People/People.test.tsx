@@ -13,7 +13,6 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import People from './People';
 import userEvent from '@testing-library/user-event';
-import * as getOrganizationId from 'utils/getOrganizationId';
 
 const MOCKS = [
   {
@@ -113,9 +112,12 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-describe('Testing People Screen [User Portal]', () => {
-  jest.mock('utils/getOrganizationId');
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({ orgId: '' }),
+}));
 
+describe('Testing People Screen [User Portal]', () => {
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
     value: jest.fn().mockImplementation((query) => ({
@@ -130,12 +132,6 @@ describe('Testing People Screen [User Portal]', () => {
     })),
   });
 
-  const getOrganizationIdSpy = jest
-    .spyOn(getOrganizationId, 'default')
-    .mockImplementation(() => {
-      return '';
-    });
-
   test('Screen should be rendered properly', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -146,12 +142,11 @@ describe('Testing People Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
 
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
     expect(screen.queryAllByText('Noble Mittal')).not.toBe([]);
   });
 
@@ -165,7 +160,7 @@ describe('Testing People Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -173,7 +168,6 @@ describe('Testing People Screen [User Portal]', () => {
     userEvent.type(screen.getByTestId('searchInput'), 'j{enter}');
     await wait();
 
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
     expect(screen.queryByText('John Cena')).toBeInTheDocument();
     expect(screen.queryByText('Noble Mittal')).not.toBeInTheDocument();
   });
@@ -188,7 +182,7 @@ describe('Testing People Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -200,7 +194,6 @@ describe('Testing People Screen [User Portal]', () => {
     userEvent.click(searchBtn);
     await wait();
 
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
     expect(screen.queryByText('John Cena')).toBeInTheDocument();
     expect(screen.queryByText('Noble Mittal')).not.toBeInTheDocument();
   });
@@ -215,7 +208,7 @@ describe('Testing People Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -225,7 +218,6 @@ describe('Testing People Screen [User Portal]', () => {
     userEvent.click(screen.getByTestId('modeBtn1'));
     await wait();
 
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
     expect(screen.queryByText('Noble Admin')).toBeInTheDocument();
     expect(screen.queryByText('Noble Mittal')).not.toBeInTheDocument();
   });

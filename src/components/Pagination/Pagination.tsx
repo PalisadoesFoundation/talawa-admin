@@ -13,7 +13,7 @@ interface InterfaceTablePaginationActionsProps {
   rowsPerPage: number;
   onPageChange: (
     event: React.MouseEvent<HTMLButtonElement>,
-    newPage: number
+    newPage: number,
   ) => void;
 }
 
@@ -23,27 +23,27 @@ function pagination(props: InterfaceTablePaginationActionsProps): JSX.Element {
 
   /* istanbul ignore next */
   const handleFirstPageButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement>
+    event: React.MouseEvent<HTMLButtonElement>,
   ): void => {
     onPageChange(event, 0);
   };
 
   const handleBackButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement>
+    event: React.MouseEvent<HTMLButtonElement>,
   ): void => {
     onPageChange(event, page - 1);
   };
 
   /* istanbul ignore next */
   const handleNextButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement>
+    event: React.MouseEvent<HTMLButtonElement>,
   ): void => {
     onPageChange(event, page + 1);
   };
 
   /* istanbul ignore next */
   const handleLastPageButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement>
+    event: React.MouseEvent<HTMLButtonElement>,
   ): void => {
     onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
   };

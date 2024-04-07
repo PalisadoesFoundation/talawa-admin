@@ -5,9 +5,9 @@ directive @role(requires: UserType) on FIELD_DEFINITION
 type Advertisement {
   _id: ID
   endDate: Date!
-  link: String!
+  mediaUrl: URL!
   name: String!
-  orgId: ID
+  organization: Organization
   startDate: Date!
   type: String!
 }
@@ -402,6 +402,25 @@ type MinimumValueError implements FieldError {
   path: [String!]!
 }
 
+enum AdvertisementType {
+  BANNER
+  MENU
+  POPUP
+}
+
+input CreateAdvertisementInput {
+  endDate: Date!
+  name: String!
+  organizationId: ID!
+  startDate: Date!
+  type: AdvertisementType!
+  mediaFile: String!
+}
+
+type CreateAdvertisementPayload {
+  advertisement: Advertisement
+}
+
 type Mutation {
   acceptAdmin(id: ID!): Boolean!
   acceptMembershipRequest(membershipRequestId: ID!): MembershipRequest!
@@ -419,14 +438,7 @@ type Mutation {
   cancelMembershipRequest(membershipRequestId: ID!): MembershipRequest!
   checkIn(data: CheckInInput!): CheckIn!
   createAdmin(data: UserAndOrganizationInput!): User!
-  createAdvertisement(
-    endDate: Date!
-    link: String!
-    name: String!
-    orgId: ID!
-    startDate: Date!
-    type: String!
-  ): Advertisement!
+  createAdvertisement(input: CreateAdvertisementInput!): CreateAdvertisementPayload
   createComment(data: CommentInput!, postId: ID!): Comment
   createDirectChat(data: createChatInput!): DirectChat!
   createDonation(
@@ -450,7 +462,7 @@ type Mutation {
   ): Plugin!
   createPost(data: PostInput!, file: String): Post
   createUserTag(input: CreateUserTagInput!): UserTag
-  deleteAdvertisementById(id: ID!): DeletePayload!
+  deleteAdvertisement(id: ID!): DeletePayload!
   deleteDonationById(id: ID!): DeletePayload!
   forgotPassword(data: ForgotPasswordData!): Boolean!
   joinPublicOrganization(organizationId: ID!): User!
@@ -768,7 +780,7 @@ type Query {
     skip: Int
     where: EventWhereInput
   ): [Event!]!
-  getAdvertisements: [Advertisement]
+  advertisementsConnection: [Advertisement]
   getDonationById(id: ID!): Donation!
   getDonationByOrgId(orgId: ID!): [Donation]
   getDonationByOrgIdConnection(

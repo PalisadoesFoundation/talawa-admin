@@ -10,10 +10,10 @@ import LanguageIcon from '@mui/icons-material/Language';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useSubscription } from '@apollo/client';
 import { USER_ORGANIZATION_CONNECTION } from 'GraphQl/Queries/Queries';
-import getOrganizationId from 'utils/getOrganizationId';
 import type { DropDirection } from 'react-bootstrap/esm/DropdownContext';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { PLUGIN_SUBSCRIPTION } from 'GraphQl/Mutations/mutations';
+import useLocalStorage from 'utils/useLocalstorage';
 interface InterfaceNavbarProps {
   currentPage: string | null;
 }
@@ -31,13 +31,13 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
     keyPrefix: 'userNavbar',
   });
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [organizationDetails, setOrganizationDetails]: any = React.useState({});
   // const dropDirection: DropDirection = screen.width > 767 ? 'start' : 'down';
   const dropDirection: DropDirection = 'start';
 
-  const organizationId = getOrganizationId(window.location.href);
+  const { orgId: organizationId } = useParams();
 
   const { data } = useQuery(USER_ORGANIZATION_CONNECTION, {
     variables: { id: organizationId },
@@ -45,42 +45,44 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
 
   const [currentLanguageCode, setCurrentLanguageCode] = React.useState(
     /* istanbul ignore next */
-    cookies.get('i18next') || 'en'
+    cookies.get('i18next') || 'en',
   );
+
+  const { getItem, setItem } = useLocalStorage();
 
   /* istanbul ignore next */
   const handleLogout = (): void => {
     localStorage.clear();
-    window.location.replace('/user');
+    window.location.replace('/');
   };
 
-  const userName = localStorage.getItem('name');
+  const userName = getItem('name');
   React.useEffect(() => {
     if (data) {
       setOrganizationDetails(data.organizationsConnection[0]);
     }
   }, [data]);
 
-  const homeLink = `/user/organization/id=${organizationId}`;
+  const homeLink = `/user/organization/${organizationId}`;
   let plugins: Plugin[] = [
     {
       pluginName: 'People',
       alias: 'people',
-      link: `/user/people/id=${organizationId}`,
+      link: `/user/people/${organizationId}`,
       translated: t('people'),
       view: true,
     },
     {
       pluginName: 'Events',
       alias: 'events',
-      link: `/user/events/id=${organizationId}`,
+      link: `/user/events/${organizationId}`,
       translated: t('events'),
       view: true,
     },
     {
       pluginName: 'Donation',
       alias: 'donate',
-      link: `/user/donate/id=${organizationId}`,
+      link: `/user/donate/${organizationId}`,
       translated: t('donate'),
       view: true,
     },
@@ -92,13 +94,13 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
     //   view: true,
     // },
   ];
-  if (localStorage.getItem('talawaPlugins')) {
-    const talawaPlugins: string = localStorage.getItem('talawaPlugins') || '{}';
+  if (getItem('talawaPlugins')) {
+    const talawaPlugins: string = getItem('talawaPlugins') || '{}';
     plugins = JSON.parse(talawaPlugins);
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { data: updatedPluginData, loading: _loadingSub } = useSubscription(
-    PLUGIN_SUBSCRIPTION
+
+  const { data: updatedPluginData } = useSubscription(
+    PLUGIN_SUBSCRIPTION,
     // { variables: {  } }
   );
   function getPluginIndex(pluginName: string, pluginsArray: Plugin[]): number {
@@ -112,7 +114,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
     if (uninstalledOrgs.includes(organizationId)) {
       if (pluginIndexToRemove != -1) {
         plugins[pluginIndexToRemove].view = false;
-        localStorage.setItem('talawaPlugins', JSON.stringify(plugins));
+        setItem('talawaPlugins', JSON.stringify(plugins));
         console.log(`Plugin ${pluginName} has been removed.`);
       } else {
         console.log(`Plugin ${pluginName} is not present.`);
@@ -120,7 +122,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
     } else {
       if (pluginIndexToRemove != -1) {
         plugins[pluginIndexToRemove].view = true;
-        localStorage.setItem('talawaPlugins', JSON.stringify(plugins));
+        setItem('talawaPlugins', JSON.stringify(plugins));
       }
     }
   }
@@ -151,7 +153,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
                 active={props.currentPage === 'home'}
                 onClick={
                   /* istanbul ignore next */
-                  (): void => history.push(homeLink)
+                  (): void => navigate(homeLink)
                 }
               >
                 {t('home')}
@@ -161,12 +163,12 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
                   plugin.view && (
                     <Nav.Link
                       active={props.currentPage == plugin.alias}
-                      onClick={(): void => history.push(plugin.link)}
+                      onClick={(): void => navigate(plugin.link)}
                       key={idx}
                     >
                       {plugin.translated}
                     </Nav.Link>
-                  )
+                  ),
               )}
             </Nav>
             <Navbar.Collapse className="justify-content-end">

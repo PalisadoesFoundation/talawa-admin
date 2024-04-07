@@ -17,40 +17,8 @@ import { useTranslation } from 'react-i18next';
 import SendIcon from '@mui/icons-material/Send';
 import { errorHandler } from 'utils/errorHandler';
 import CommentCard from '../CommentCard/CommentCard';
-
-interface InterfacePostCardProps {
-  id: string;
-  creator: {
-    firstName: string;
-    lastName: string;
-    email: string;
-    id: string;
-  };
-  image: string;
-  video: string;
-  text: string;
-  title: string;
-  likeCount: number;
-  commentCount: number;
-  comments: {
-    creator: {
-      _id: string;
-      firstName: string;
-      lastName: string;
-      email: string;
-    };
-    likeCount: number;
-    likedBy: {
-      id: string;
-    }[];
-    text: string;
-  }[];
-  likedBy: {
-    firstName: string;
-    lastName: string;
-    id: string;
-  }[];
-}
+import useLocalStorage from 'utils/useLocalstorage';
+import type { InterfacePostCard } from 'utils/interfaces';
 
 interface InterfaceCommentCardProps {
   id: string;
@@ -67,12 +35,14 @@ interface InterfaceCommentCardProps {
   text: string;
 }
 
-export default function postCard(props: InterfacePostCardProps): JSX.Element {
+export default function postCard(props: InterfacePostCard): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'postCard',
   });
 
-  const userId = localStorage.getItem('userId');
+  const { getItem } = useLocalStorage();
+
+  const userId = getItem('userId');
   const likedByUser = props.likedBy.some((likedBy) => likedBy.id === userId);
   const [comments, setComments] = React.useState(props.comments);
   const [numComments, setNumComments] = React.useState(props.commentCount);
@@ -128,7 +98,7 @@ export default function postCard(props: InterfacePostCardProps): JSX.Element {
   };
 
   const handleCommentInput = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
     const comment = event.target.value;
     setCommentInput(comment);
@@ -170,7 +140,7 @@ export default function postCard(props: InterfacePostCardProps): JSX.Element {
   };
 
   return (
-    <>
+    <div data-testid="postCardContainer">
       <Card className="my-3">
         <Card.Header>
           <div className={`${styles.cardHeader}`}>
@@ -286,6 +256,6 @@ export default function postCard(props: InterfacePostCardProps): JSX.Element {
           </InputGroup>
         </Modal.Body>
       </Modal>
-    </>
+    </div>
   );
 }

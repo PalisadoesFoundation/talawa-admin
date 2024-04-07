@@ -143,3 +143,34 @@ export const REMOVE_CUSTOM_FIELD = gql`
     }
   }
 `;
+
+export const SEND_MEMBERSHIP_REQUEST = gql`
+  mutation ($organizationId: ID!) {
+    sendMembershipRequest(organizationId: $organizationId) {
+      _id
+      organization {
+        _id
+        name
+      }
+      user {
+        _id
+      }
+    }
+  }
+`;
+
+export const JOIN_PUBLIC_ORGANIZATION = gql`
+  mutation ($organizationId: ID!) {
+    joinPublicOrganization(organizationId: $organizationId) {
+      _id
+    }
+  }
+`;
+
+export const CANCEL_MEMBERSHIP_REQUEST = gql`
+  mutation ($membershipRequestId: ID!) {
+    cancelMembershipRequest(membershipRequestId: $membershipRequestId) {
+      _id
+    }
+  }
+`;

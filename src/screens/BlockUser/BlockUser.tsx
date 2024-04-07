@@ -11,11 +11,11 @@ import {
   UNBLOCK_USER_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { BLOCK_PAGE_MEMBER_LIST } from 'GraphQl/Queries/Queries';
-import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
 import TableLoader from 'components/TableLoader/TableLoader';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './BlockUser.module.css';
+import { useParams } from 'react-router-dom';
 
 interface InterfaceMember {
   _id: string;
@@ -35,7 +35,7 @@ const Requests = (): JSX.Element => {
   });
 
   document.title = t('title');
-  const currentUrl = window.location.href.split('=')[1];
+  const { orgId: currentUrl } = useParams();
   const [membersData, setMembersData] = useState<InterfaceMember[]>([]);
   const [searchByFirstName, setSearchByFirstName] = useState<boolean>(true);
   const [searchByName, setSearchByName] = useState<string>('');
@@ -68,7 +68,7 @@ const Requests = (): JSX.Element => {
     } else {
       const blockUsers = memberData?.organizationsMemberConnection.edges.filter(
         (user: InterfaceMember) =>
-          user.organizationsBlockedBy.some((org) => org._id === currentUrl)
+          user.organizationsBlockedBy.some((org) => org._id === currentUrl),
       );
       setMembersData(blockUsers);
     }
@@ -149,7 +149,7 @@ const Requests = (): JSX.Element => {
 
   return (
     <>
-      <OrganizationScreen screenName="Block/Unblock" title={t('listOfUsers')}>
+      <div>
         {/* Buttons Container */}
         <div className={styles.btnsContainer}>
           <div className={styles.inputContainer}>
@@ -268,7 +268,7 @@ const Requests = (): JSX.Element => {
                         <td>{user.email}</td>
                         <td>
                           {user.organizationsBlockedBy.some(
-                            (spam: any) => spam._id === currentUrl
+                            (spam: any) => spam._id === currentUrl,
                           ) ? (
                             <Button
                               variant="danger"
@@ -301,7 +301,7 @@ const Requests = (): JSX.Element => {
             )}
           </div>
         )}
-      </OrganizationScreen>
+      </div>
     </>
   );
 };

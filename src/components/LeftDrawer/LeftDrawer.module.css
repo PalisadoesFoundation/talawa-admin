@@ -60,9 +60,9 @@
 .leftDrawer .profileContainer {
   border: none;
   width: 100%;
+  padding: 2.1rem 0.5rem;
   height: 52px;
   border-radius: 8px;
-  background-color: var(--bs-white);
   display: flex;
   align-items: center;
 }

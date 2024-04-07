@@ -61,7 +61,7 @@ describe('Testing the App Component', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -71,8 +71,8 @@ describe('Testing the App Component', () => {
     expect(window.location).toBeAt('/orglist');
     expect(
       screen.getByText(
-        'An open source application by Palisadoes Foundation volunteers'
-      )
+        'An open source application by Palisadoes Foundation volunteers',
+      ),
     ).toBeTruthy();
   });
 
@@ -86,7 +86,7 @@ describe('Testing the App Component', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();

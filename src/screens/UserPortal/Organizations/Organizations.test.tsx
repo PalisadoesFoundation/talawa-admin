@@ -15,13 +15,16 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import Organizations from './Organizations';
 import userEvent from '@testing-library/user-event';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { getItem } = useLocalStorage();
 
 const MOCKS = [
   {
     request: {
       query: USER_CREATED_ORGANIZATIONS,
       variables: {
-        id: localStorage.getItem('userId'),
+        id: getItem('userId'),
       },
     },
     result: {
@@ -58,17 +61,87 @@ const MOCKS = [
             image: '',
             name: 'anyOrganization1',
             description: 'desc',
+            address: {
+              city: 'abc',
+              countryCode: '123',
+              postalCode: '456',
+              state: 'def',
+              dependentLocality: 'ghi',
+              line1: 'asdfg',
+              line2: 'dfghj',
+              sortingCode: '4567',
+            },
+            createdAt: '1234567890',
             userRegistrationRequired: true,
             creator: { __typename: 'User', firstName: 'John', lastName: 'Doe' },
+            members: [
+              {
+                _id: '56gheqyr7deyfuiwfewifruy8',
+                user: {
+                  _id: '45ydeg2yet721rtgdu32ry',
+                },
+              },
+            ],
+            admins: [
+              {
+                _id: '45gj5678jk45678fvgbhnr4rtgh',
+                user: {
+                  _id: '45ydeg2yet721rtgdu32ry',
+                },
+              },
+            ],
+            membershipRequests: [
+              {
+                _id: '56gheqyr7deyfuiwfewifruy8',
+                user: {
+                  _id: '45ydeg2yet721rtgdu32ry',
+                },
+              },
+            ],
           },
           {
             __typename: 'Organization',
             _id: '6401ff65ce8e8406b8f07af3',
             image: '',
             name: 'anyOrganization2',
+            createdAt: '1234567890',
+            address: {
+              city: 'abc',
+              countryCode: '123',
+              postalCode: '456',
+              state: 'def',
+              dependentLocality: 'ghi',
+              line1: 'asdfg',
+              line2: 'dfghj',
+              sortingCode: '4567',
+            },
             description: 'desc',
             userRegistrationRequired: true,
             creator: { __typename: 'User', firstName: 'John', lastName: 'Doe' },
+            members: [
+              {
+                _id: '56gheqyr7deyfuiwfewifruy8',
+                user: {
+                  _id: '45ydeg2yet721rtgdu32ry',
+                },
+              },
+            ],
+            admins: [
+              {
+                _id: '45gj5678jk45678fvgbhnr4rtgh',
+                user: {
+                  _id: '45ydeg2yet721rtgdu32ry',
+                },
+              },
+            ],
+            membershipRequests: [
+              {
+                _id: '56gheqyr7deyfuiwfewifruy8',
+                user: {
+                  _id: '45ydeg2yet721rtgdu32ry',
+                },
+              },
+            ],
           },
         ],
       },
@@ -78,7 +151,7 @@ const MOCKS = [
     request: {
       query: USER_JOINED_ORGANIZATIONS,
       variables: {
-        id: localStorage.getItem('userId'),
+        id: getItem('userId'),
       },
     },
     result: {
@@ -90,6 +163,7 @@ const MOCKS = [
                 __typename: 'Organization',
                 _id: '6401ff65ce8e8406b8f07af2',
                 name: 'joinedOrganization',
+                createdAt: '1234567890',
                 image: '',
                 description: 'New Desc',
               },
@@ -115,8 +189,43 @@ const MOCKS = [
             image: '',
             name: 'anyOrganization2',
             description: 'desc',
+            address: {
+              city: 'abc',
+              countryCode: '123',
+              postalCode: '456',
+              state: 'def',
+              dependentLocality: 'ghi',
+              line1: 'asdfg',
+              line2: 'dfghj',
+              sortingCode: '4567',
+            },
             userRegistrationRequired: true,
+            createdAt: '1234567890',
             creator: { __typename: 'User', firstName: 'John', lastName: 'Doe' },
+            members: [
+              {
+                _id: '56gheqyr7deyfuiwfewifruy8',
+                user: {
+                  _id: '45ydeg2yet721rtgdu32ry',
+                },
+              },
+            ],
+            admins: [
+              {
+                _id: '45gj5678jk45678fvgbhnr4rtgh',
+                user: {
+                  _id: '4567890fgvhbjn',
+                },
+              },
+            ],
+            membershipRequests: [
+              {
+                _id: '56gheqyr7deyfuiwfewifruy8',
+                user: {
+                  _id: '45ydeg2yet721rtgdu32ry',
+                },
+              },
+            ],
           },
         ],
       },
@@ -145,7 +254,7 @@ describe('Testing Organizations Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -161,7 +270,7 @@ describe('Testing Organizations Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -187,7 +296,7 @@ describe('Testing Organizations Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -210,7 +319,7 @@ describe('Testing Organizations Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();

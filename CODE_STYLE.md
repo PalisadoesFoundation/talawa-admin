@@ -237,11 +237,17 @@ The compiled CSS file is `src/assets/css/app.css` and it is imported into `src/i
 To compile the Sass file once, run the following command in the terminal
 
 ```
-node-sass src/assets/scss/app.scss src/assets/css/app.css
+npx sass src/assets/scss/app.scss src/assets/css/app.css
 ```
 
 To watch the Sass file for changes and compile it automatically, run the following command in the terminal
 
 ```
-node-sass src/assets/scss/app.scss src/assets/css/app.css --watch
+npx sass src/assets/scss/app.scss src/assets/css/app.css --watch
+```
+The `src/assets/css/app.css.map` file associates the generated CSS code with the original SCSS code. It allows you to see your SCSS code in the browser's developer tools for debugging.
+
+To skip generating the map file, run
+```
+npx sass --no-source-map src/assets/scss/app.scss src/assets/css/app.css
 ```

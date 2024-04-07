@@ -1,25 +1,15 @@
 import { useMutation, useQuery } from '@apollo/client';
 import type { ChangeEvent } from 'react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useTranslation } from 'react-i18next';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Check, Clear } from '@mui/icons-material';
-
-import {
-  FacebookLogo,
-  LinkedInLogo,
-  GithubLogo,
-  InstagramLogo,
-  SlackLogo,
-  TwitterLogo,
-  YoutubeLogo,
-} from 'assets/svgs/social-icons';
 
 import {
   REACT_APP_USE_RECAPTCHA,
@@ -39,11 +29,15 @@ import Loader from 'components/Loader/Loader';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './LoginPage.module.css';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
+import useLocalStorage from 'utils/useLocalstorage';
+import { socialMediaLinks } from '../../constants';
 import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 
-function loginPage(): JSX.Element {
+const loginPage = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
-  const history = useHistory();
+  const navigate = useNavigate();
+
+  const { getItem, setItem } = useLocalStorage();
 
   document.title = t('title');
 
@@ -53,7 +47,9 @@ function loginPage(): JSX.Element {
     numericValue: boolean;
     specialChar: boolean;
   };
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const [showTab, setShowTab] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
+  const [role, setRole] = useState<'admin' | 'user'>('admin');
   const [componentLoader, setComponentLoader] = useState(true);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [signformState, setSignFormState] = useState({
@@ -85,38 +81,26 @@ function loginPage(): JSX.Element {
     numericalValueRegExp: new RegExp('\\d'),
     specialCharRegExp: new RegExp('[!@#$%^&*()_+{}\\[\\]:;<>,.?~\\\\/-]'),
   };
-  const handleLowercasePassCheck = (pass: string): void => {
-    setShowAlert((prevAlert) => ({
-      ...prevAlert,
+
+  const handlePasswordCheck = (pass: string): void => {
+    setShowAlert({
       lowercaseChar: !passwordValidationRegExp.lowercaseCharRegExp.test(pass),
-    }));
-  };
-
-  const handleUppercasePassCheck = (pass: string): void => {
-    setShowAlert((prevAlert) => ({
-      ...prevAlert,
       uppercaseChar: !passwordValidationRegExp.uppercaseCharRegExp.test(pass),
-    }));
-  };
-  const handleNumericalValuePassCheck = (pass: string): void => {
-    setShowAlert((prevAlert) => ({
-      ...prevAlert,
       numericValue: !passwordValidationRegExp.numericalValueRegExp.test(pass),
-    }));
-  };
-  const handleSpecialCharPassCheck = (pass: string): void => {
-    setShowAlert((prevAlert) => ({
-      ...prevAlert,
       specialChar: !passwordValidationRegExp.specialCharRegExp.test(pass),
-    }));
+    });
   };
 
-  const recaptchaRef = useRef<ReCAPTCHA>(null);
+  const handleRoleToggle = (role: 'admin' | 'user'): void => {
+    setRole(role);
+  };
 
   useEffect(() => {
-    const isLoggedIn = localStorage.getItem('IsLoggedIn');
+    const isLoggedIn = getItem('IsLoggedIn');
     if (isLoggedIn == 'TRUE') {
-      history.push('/orglist');
+      navigate(
+        getItem('UserType') === 'USER' ? '/user/organizations' : '/orglist',
+      );
     }
     setComponentLoader(false);
   }, []);
@@ -125,11 +109,8 @@ function loginPage(): JSX.Element {
   const toggleConfirmPassword = (): void =>
     setShowConfirmPassword(!showConfirmPassword);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [login, { loading: loginLoading }] = useMutation(LOGIN_MUTATION);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [signup, { loading: signinLoading }] = useMutation(SIGNUP_MUTATION);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [recaptcha, { loading: recaptchaLoading }] =
     useMutation(RECAPTCHA_MUTATION);
 
@@ -153,7 +134,7 @@ function loginPage(): JSX.Element {
   }, []);
 
   const verifyRecaptcha = async (
-    recaptchaToken: any
+    recaptchaToken: any,
   ): Promise<boolean | void> => {
     try {
       /* istanbul ignore next */
@@ -173,6 +154,10 @@ function loginPage(): JSX.Element {
     }
   };
 
+  const handleCaptcha = (token: string | null): void => {
+    setRecaptchaToken(token);
+  };
+
   const signupLink = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
@@ -186,9 +171,6 @@ function loginPage(): JSX.Element {
     } = signformState;
 
     console.log(signOrg);
-
-    const recaptchaToken = recaptchaRef.current?.getValue();
-    recaptchaRef.current?.reset();
 
     const isVerified = await verifyRecaptcha(recaptchaToken);
     /* istanbul ignore next */
@@ -234,9 +216,11 @@ function loginPage(): JSX.Element {
           /* istanbul ignore next */
           if (signUpData) {
             toast.success(
-              'Successfully Registered. Please wait until you will be approved.'
+              role === 'admin'
+                ? 'Successfully Registered. Please wait until you will be approved.'
+                : 'Successfully registered. Please wait for admin to approve your request.',
             );
-
+            setShowTab('LOGIN');
             setSignFormState({
               signfirstName: '',
               signlastName: '',
@@ -271,10 +255,6 @@ function loginPage(): JSX.Element {
 
   const loginLink = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-
-    const recaptchaToken = recaptchaRef.current?.getValue();
-    recaptchaRef.current?.reset();
-
     const isVerified = await verifyRecaptcha(recaptchaToken);
     /* istanbul ignore next */
     if (!isVerified) {
@@ -292,21 +272,37 @@ function loginPage(): JSX.Element {
 
       /* istanbul ignore next */
       if (loginData) {
-        if (
-          loginData.login.user.userType === 'SUPERADMIN' ||
-          (loginData.login.user.userType === 'ADMIN' &&
-            loginData.login.user.adminApproved === true)
-        ) {
-          localStorage.setItem('token', loginData.login.accessToken);
-          localStorage.setItem('refreshToken', loginData.login.refreshToken);
-          localStorage.setItem('id', loginData.login.user._id);
-          localStorage.setItem('IsLoggedIn', 'TRUE');
-          localStorage.setItem('UserType', loginData.login.user.userType);
-          if (localStorage.getItem('IsLoggedIn') == 'TRUE') {
-            history.push('/orglist');
+        if (role === 'admin') {
+          if (
+            loginData.login.user.userType === 'SUPERADMIN' ||
+            (loginData.login.user.userType === 'ADMIN' &&
+              loginData.login.user.adminApproved === true)
+          ) {
+            setItem('token', loginData.login.accessToken);
+            setItem('refreshToken', loginData.login.refreshToken);
+            setItem('id', loginData.login.user._id);
+            setItem('IsLoggedIn', 'TRUE');
+            setItem('UserType', loginData.login.user.userType);
+          } else {
+            toast.warn(t('notAuthorised'));
           }
         } else {
-          toast.warn(t('notAuthorised'));
+          setItem('token', loginData.login.accessToken);
+          setItem('refreshToken', loginData.login.refreshToken);
+          setItem('userId', loginData.login.user._id);
+          setItem('IsLoggedIn', 'TRUE');
+          setItem('UserType', loginData.login.user.userType);
+        }
+        setItem(
+          'name',
+          `${loginData.login.user.firstName} ${loginData.login.user.lastName}`,
+        );
+        setItem('email', loginData.login.user.email);
+        setItem('FirstName', loginData.login.user.firstName);
+        setItem('LastName', loginData.login.user.lastName);
+        setItem('UserImage', loginData.login.user.image);
+        if (getItem('IsLoggedIn') == 'TRUE') {
+          navigate(role === 'admin' ? '/orglist' : '/user/organizations');
         }
       } else {
         toast.warn(t('notFound'));
@@ -320,6 +316,12 @@ function loginPage(): JSX.Element {
   if (componentLoader || loginLoading || signinLoading || recaptchaLoading) {
     return <Loader />;
   }
+
+  const socialIconsList = socialMediaLinks.map(({ href, logo }, index) => (
+    <a key={index} href={href} target="_blank" rel="noopener noreferrer">
+      <img src={logo} />
+    </a>
+  ));
 
   return (
     <>
@@ -336,58 +338,7 @@ function loginPage(): JSX.Element {
                 <p className="text-center">{t('fromPalisadoes')}</p>
               </a>
             </div>
-
-            <div className={styles.socialIcons}>
-              <a
-                href="https://www.facebook.com/palisadoesproject"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src={FacebookLogo} />
-              </a>
-              <a
-                href="https://twitter.com/palisadoesorg?lang=en"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src={TwitterLogo} className={styles.socialIcon} />
-              </a>
-              <a
-                href="https://www.linkedin.com/company/palisadoes/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src={LinkedInLogo} />
-              </a>
-              <a
-                href="https://github.com/PalisadoesFoundation"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src={GithubLogo} />
-              </a>
-              <a
-                href="https://www.youtube.com/@PalisadoesOrganization"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src={YoutubeLogo} />
-              </a>
-              <a
-                href="https://www.palisadoes.org/slack"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src={SlackLogo} />
-              </a>
-              <a
-                href="https://www.instagram.com/palisadoes/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src={InstagramLogo} />
-              </a>
-            </div>
+            <div className={styles.socialIcons}>{socialIconsList}</div>
           </Col>
           <Col sm={12} md={6} lg={5}>
             <div className={styles.right_portion}>
@@ -401,7 +352,7 @@ function loginPage(): JSX.Element {
                 }`}
               />
 
-              <LoginPortalToggle />
+              <LoginPortalToggle onToggle={handleRoleToggle} />
 
               {/* LOGIN FORM */}
               <div
@@ -409,13 +360,14 @@ function loginPage(): JSX.Element {
                   showTab === 'LOGIN' ? styles.active_tab : 'd-none'
                 }`}
               >
-                <form onSubmit={loginLink} className="gap-0">
-                  <h1 className="fs-2 fw-bold text-dark mb-3">{t('login')}</h1>
-                  <Form.Label className="mb-1">{t('email')}</Form.Label>
+                <form onSubmit={loginLink}>
+                  <h1 className="fs-2 fw-bold text-dark mb-3">
+                    {role === 'admin' ? t('login') : t('userLogin')}
+                  </h1>
+                  <Form.Label>{t('email')}</Form.Label>
                   <div className="position-relative">
                     <Form.Control
                       type="email"
-                      className="lh-1"
                       placeholder={t('enterEmail')}
                       required
                       value={formState.email}
@@ -435,7 +387,7 @@ function loginPage(): JSX.Element {
                       <EmailOutlinedIcon />
                     </Button>
                   </div>
-                  <Form.Label className="mt-2 mb-1">{t('password')}</Form.Label>
+                  <Form.Label className="mt-3">{t('password')}</Form.Label>
                   <div className="position-relative">
                     <Form.Control
                       type={showPassword ? 'text' : 'password'}
@@ -464,7 +416,7 @@ function loginPage(): JSX.Element {
                       )}
                     </Button>
                   </div>
-                  <div className="text-end mt-2 mb-3">
+                  <div className="text-end mt-3">
                     <Link
                       to="/forgotPassword"
                       className="text-secondary"
@@ -476,12 +428,12 @@ function loginPage(): JSX.Element {
                   {REACT_APP_USE_RECAPTCHA === 'yes' ? (
                     <div className="googleRecaptcha">
                       <ReCAPTCHA
-                        ref={recaptchaRef}
                         className="mt-2"
                         sitekey={
                           /* istanbul ignore next */
                           RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
                         }
+                        onChange={handleCaptcha}
                       />
                     </div>
                   ) : (
@@ -490,7 +442,7 @@ function loginPage(): JSX.Element {
                   )}
                   <Button
                     type="submit"
-                    className="mb-0 w-100 lh-1"
+                    className="mt-3 mb-3 w-100"
                     value="Login"
                     data-testid="loginBtn"
                   >
@@ -503,7 +455,7 @@ function loginPage(): JSX.Element {
                   <Button
                     variant="outline-secondary"
                     value="Register"
-                    className="w-100 lh-1"
+                    className="mt-3 mb-3 w-100"
                     data-testid="goToRegisterPortion"
                     onClick={(): void => {
                       setShowTab('REGISTER');
@@ -520,20 +472,18 @@ function loginPage(): JSX.Element {
                   showTab === 'REGISTER' ? styles.active_tab : 'd-none'
                 }`}
               >
-                <Form onSubmit={signupLink} className="gap-0">
+                <Form onSubmit={signupLink}>
                   <h1 className="fs-2 fw-bold text-dark mb-3">
                     {t('register')}
                   </h1>
                   <Row>
                     <Col sm={6}>
                       <div>
-                        <Form.Label className="mb-1">
-                          {t('firstName')}
-                        </Form.Label>
+                        <Form.Label>{t('firstName')}</Form.Label>
                         <Form.Control
                           type="text"
                           id="signfirstname"
-                          className="lh-1"
+                          className="mb-3"
                           placeholder={t('firstName')}
                           required
                           value={signformState.signfirstName}
@@ -548,13 +498,11 @@ function loginPage(): JSX.Element {
                     </Col>
                     <Col sm={6}>
                       <div>
-                        <Form.Label className="mb-1">
-                          {t('lastName')}
-                        </Form.Label>
+                        <Form.Label>{t('lastName')}</Form.Label>
                         <Form.Control
                           type="text"
                           id="signlastname"
-                          className="lh-1"
+                          className="mb-3"
                           placeholder={t('lastName')}
                           required
                           value={signformState.signlastName}
@@ -568,13 +516,13 @@ function loginPage(): JSX.Element {
                       </div>
                     </Col>
                   </Row>
-                  <div className="position-relative mt-2">
-                    <Form.Label className="mb-1">{t('email')}</Form.Label>
+                  <div className="position-relative">
+                    <Form.Label>{t('email')}</Form.Label>
                     <div className="position-relative">
                       <Form.Control
                         type="email"
                         data-testid="signInEmail"
-                        className="lh-1"
+                        className="mb-3"
                         placeholder={t('email')}
                         autoComplete="username"
                         required
@@ -595,12 +543,11 @@ function loginPage(): JSX.Element {
                     </div>
                   </div>
 
-                  <div className="position-relative my-2">
-                    <Form.Label className="mb-1">{t('password')}</Form.Label>
+                  <div className="position-relative mb-3">
+                    <Form.Label>{t('password')}</Form.Label>
                     <div className="position-relative">
                       <Form.Control
                         type={showPassword ? 'text' : 'password'}
-                        className="lh-1"
                         data-testid="passwordField"
                         placeholder={t('password')}
                         autoComplete="new-password"
@@ -613,10 +560,7 @@ function loginPage(): JSX.Element {
                             ...signformState,
                             signPassword: e.target.value,
                           });
-                          handleLowercasePassCheck(e.target.value);
-                          handleUppercasePassCheck(e.target.value);
-                          handleNumericalValuePassCheck(e.target.value);
-                          handleSpecialCharPassCheck(e.target.value);
+                          handlePasswordCheck(e.target.value);
                         }}
                       />
                       <Button
@@ -753,12 +697,11 @@ function loginPage(): JSX.Element {
                       )}
                     </div>
                   </div>
-                  <div className="position-relative  my-2">
+                  <div className="position-relative">
                     <Form.Label>{t('confirmPassword')}</Form.Label>
                     <div className="position-relative">
                       <Form.Control
                         type={showConfirmPassword ? 'text' : 'password'}
-                        className="lh-1"
                         placeholder={t('confirmPassword')}
                         required
                         value={signformState.cPassword}
@@ -838,11 +781,11 @@ function loginPage(): JSX.Element {
                   {REACT_APP_USE_RECAPTCHA === 'yes' ? (
                     <div className="mt-3">
                       <ReCAPTCHA
-                        ref={recaptchaRef}
                         sitekey={
                           /* istanbul ignore next */
                           RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
                         }
+                        onChange={handleCaptcha}
                       />
                     </div>
                   ) : (
@@ -851,7 +794,7 @@ function loginPage(): JSX.Element {
                   )}
                   <Button
                     type="submit"
-                    className="mt-4 w-100 mb-2"
+                    className="mt-4 w-100 mb-3"
                     value="Register"
                     data-testid="registrationBtn"
                   >
@@ -864,7 +807,7 @@ function loginPage(): JSX.Element {
                   <Button
                     variant="outline-secondary"
                     value="Register"
-                    className="mt-2 mb-1 w-100 lh-1"
+                    className="mt-3 mb-5 w-100"
                     data-testid="goToLoginPortion"
                     onClick={(): void => {
                       setShowTab('LOGIN');
@@ -881,6 +824,6 @@ function loginPage(): JSX.Element {
       </section>
     </>
   );
-}
+};
 
 export default loginPage;

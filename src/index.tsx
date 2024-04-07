@@ -32,6 +32,9 @@ import {
 } from 'Constant/constant';
 import { refreshToken } from 'utils/getRefreshToken';
 import { ThemeProvider, createTheme } from '@mui/material';
+import { ApolloLink } from '@apollo/client/core';
+import { setContext } from '@apollo/client/link/context';
+import '../src/assets/css/scrollStyles.css';
 
 const theme = createTheme({
   palette: {
@@ -39,6 +42,18 @@ const theme = createTheme({
       main: '#31bb6b',
     },
   },
+});
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { getItem } = useLocalStorage();
+
+const authLink = setContext((_, { headers }) => {
+  return {
+    headers: {
+      ...headers,
+      authorization: 'Bearer ' + getItem('token') || '',
+    },
+  };
 });
 
 const errorLink = onError(
@@ -52,7 +67,7 @@ const errorLink = onError(
               operation.setContext({
                 headers: {
                   ...oldHeaders,
-                  authorization: 'Bearer ' + localStorage.getItem('token'),
+                  authorization: 'Bearer ' + getItem('token'),
                 },
               });
               return forward(operation);
@@ -68,24 +83,21 @@ const errorLink = onError(
         'API server unavailable. Check your connection or try again later',
         {
           toastId: 'apiServer',
-        }
+        },
       );
     }
-  }
+  },
 );
 
 const httpLink = new HttpLink({
   uri: BACKEND_URL,
-  headers: {
-    authorization: 'Bearer ' + localStorage.getItem('token') || '',
-  },
 });
 
 // if didnt work use /subscriptions
 const wsLink = new GraphQLWsLink(
   createClient({
     url: REACT_APP_BACKEND_WEBSOCKET_URL,
-  })
+  }),
 );
 // The split function takes three parameters:
 //
@@ -101,11 +113,14 @@ const splitLink = split(
     );
   },
   wsLink,
-  httpLink
+  httpLink,
 );
+
+const combinedLink = ApolloLink.from([errorLink, authLink, splitLink]);
+
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
-  link: errorLink.concat(splitLink),
+  link: combinedLink,
 });
 const fallbackLoader = <div className="loader"></div>;
 
@@ -124,5 +139,5 @@ ReactDOM.render(
       </BrowserRouter>
     </ApolloProvider>
   </Suspense>,
-  document.getElementById('root')
+  document.getElementById('root'),
 );

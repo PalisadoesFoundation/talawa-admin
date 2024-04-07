@@ -17,6 +17,9 @@ import i18nForTest from 'utils/i18nForTest';
 import DeleteOrg from './DeleteOrg';
 import { ToastContainer, toast } from 'react-toastify';
 import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { setItem } = useLocalStorage();
 
 async function wait(ms = 1000): Promise<void> {
   await act(async () => {
@@ -95,6 +98,13 @@ const MOCKS_WITH_ERROR = [
     error: new Error('Failed to delete sample organization'),
   },
 ];
+const mockNavgatePush = jest.fn();
+let mockURL = '123';
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({ orgId: mockURL }),
+  useNavigate: () => mockNavgatePush,
+}));
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_WITH_ERROR, true);
@@ -105,8 +115,8 @@ afterEach(() => {
 
 describe('Delete Organization Component', () => {
   test('should be able to Toggle Delete Organization Modal', async () => {
-    window.location.assign('/orgsetting/id=456');
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    mockURL = '456';
+    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -117,7 +127,7 @@ describe('Delete Organization Component', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     screen.getByTestId(/openDeleteModalBtn/i).click();
@@ -126,12 +136,11 @@ describe('Delete Organization Component', () => {
     await act(async () => {
       expect(screen.queryByTestId(/orgDeleteModal/i)).not.toHaveFocus();
     });
-    expect(window.location).toBeAt('/orgsetting/id=456');
   });
 
   test('should be able to Toggle Delete Organization Modal When Organization is Sample Organization', async () => {
-    window.location.assign('/orgsetting/id=123');
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    mockURL = '123';
+    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -142,7 +151,7 @@ describe('Delete Organization Component', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     screen.getByTestId(/openDeleteModalBtn/i).click();
@@ -151,12 +160,11 @@ describe('Delete Organization Component', () => {
     await act(async () => {
       expect(screen.queryByTestId(/orgDeleteModal/i)).not.toHaveFocus();
     });
-    expect(window.location).toBeAt('/orgsetting/id=123');
   });
 
   test('Delete organization functionality should work properly', async () => {
-    window.location.assign('/orgsetting/id=456');
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    mockURL = '456';
+    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -166,18 +174,18 @@ describe('Delete Organization Component', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     screen.getByTestId(/openDeleteModalBtn/i).click();
     screen.getByTestId(/deleteOrganizationBtn/i).click();
     await wait();
-    expect(window.location.replace).toHaveBeenCalledWith('/orglist');
+    expect(mockNavgatePush).toHaveBeenCalledWith('/orglist');
   });
 
   test('Delete organization functionality should work properly for sample org', async () => {
-    window.location.assign('/orgsetting/id=123');
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    mockURL = '123';
+    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -187,18 +195,18 @@ describe('Delete Organization Component', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     screen.getByTestId(/openDeleteModalBtn/i).click();
     screen.getByTestId(/deleteOrganizationBtn/i).click();
     await wait(2000);
-    expect(window.location.replace).toHaveBeenCalledWith('/orglist');
+    expect(mockNavgatePush).toHaveBeenCalledWith('/orglist');
   });
 
   test('Error handling for IS_SAMPLE_ORGANIZATION_QUERY mock', async () => {
-    window.location.assign('/orgsetting/id=123');
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    mockURL = '123';
+    setItem('UserType', 'SUPERADMIN');
     jest.spyOn(toast, 'error');
     render(
       <MockedProvider addTypename={false} link={link2}>
@@ -209,20 +217,20 @@ describe('Delete Organization Component', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     screen.getByTestId(/openDeleteModalBtn/i).click();
     screen.getByTestId(/deleteOrganizationBtn/i).click();
     await wait();
     expect(toast.error).toHaveBeenCalledWith(
-      'Failed to delete sample organization'
+      'Failed to delete sample organization',
     );
   });
 
   test('Error handling for DELETE_ORGANIZATION_MUTATION mock', async () => {
-    window.location.assign('/orgsetting/id=456');
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    mockURL = '456';
+    setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
@@ -232,7 +240,7 @@ describe('Delete Organization Component', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     screen.getByTestId(/openDeleteModalBtn/i).click();

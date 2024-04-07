@@ -32,7 +32,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
   });
@@ -47,7 +47,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
   });
@@ -62,7 +62,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     const input = screen.getByTestId('messageInput') as HTMLInputElement;
     fireEvent.change(input, { target: { value: 'Hello' } });

@@ -11,13 +11,16 @@ import { errorHandler } from 'utils/errorHandler';
 import { toast } from 'react-toastify';
 import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
 import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
+import useLocalStorage from 'utils/useLocalstorage';
 
 export default function settings(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'settings',
   });
 
-  const { data } = useQuery(CHECK_AUTH);
+  const { setItem } = useLocalStorage();
+
+  const { data } = useQuery(CHECK_AUTH, { fetchPolicy: 'network-only' });
   const [image, setImage] = React.useState('');
   const [updateUserDetails] = useMutation(UPDATE_USER_MUTATION);
   const [firstName, setFirstName] = React.useState('');
@@ -51,7 +54,7 @@ export default function settings(): JSX.Element {
         }, 500);
 
         const userFullName = `${firstName} ${lastName}`;
-        localStorage.setItem('name', userFullName);
+        setItem('name', userFullName);
       }
     } catch (error: any) {
       errorHandler(t, error);

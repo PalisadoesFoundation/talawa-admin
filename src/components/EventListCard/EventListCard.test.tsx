@@ -107,7 +107,7 @@ describe('Testing Event List Card', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -127,23 +127,25 @@ describe('Testing Event List Card', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <EventListCard
-            key="123"
-            id="1"
-            eventName=""
-            eventLocation=""
-            eventDescription=""
-            regDate="19/03/2022"
-            regEndDate="26/03/2022"
-            startTime="02:00"
-            endTime="06:00"
-            allDay={true}
-            recurring={false}
-            isPublic={true}
-            isRegisterable={false}
-          />
+          <BrowserRouter>
+            <EventListCard
+              key="123"
+              id="1"
+              eventName=""
+              eventLocation=""
+              eventDescription=""
+              regDate="19/03/2022"
+              regEndDate="26/03/2022"
+              startTime="02:00"
+              endTime="06:00"
+              allDay={true}
+              recurring={false}
+              isPublic={true}
+              isRegisterable={false}
+            />
+          </BrowserRouter>
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -161,7 +163,7 @@ describe('Testing Event List Card', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -179,9 +181,11 @@ describe('Testing Event List Card', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <EventListCard {...props} />
+          <BrowserRouter>
+            <EventListCard {...props} />
+          </BrowserRouter>
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -190,7 +194,7 @@ describe('Testing Event List Card', () => {
     userEvent.type(screen.getByTestId('updateTitle'), props.eventName);
     userEvent.type(
       screen.getByTestId('updateDescription'),
-      props.eventDescription
+      props.eventDescription,
     );
     userEvent.type(screen.getByTestId('updateLocation'), props.eventLocation);
     userEvent.click(screen.getByTestId('updateAllDay'));
@@ -208,7 +212,7 @@ describe('Testing Event List Card', () => {
             <I18nextProvider i18n={i18nForTest}></I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     expect(container.textContent).not.toBe('Loading data...');
@@ -220,9 +224,11 @@ describe('Testing Event List Card', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <EventListCard {...props} />
+          <BrowserRouter>
+            <EventListCard {...props} />
+          </BrowserRouter>
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -231,7 +237,7 @@ describe('Testing Event List Card', () => {
     userEvent.type(screen.getByTestId('updateTitle'), props.eventName);
     userEvent.type(
       screen.getByTestId('updateDescription'),
-      props.eventDescription
+      props.eventDescription,
     );
     userEvent.type(screen.getByTestId('updateLocation'), props.eventLocation);
     userEvent.click(screen.getByTestId('updateAllDay'));
@@ -246,9 +252,11 @@ describe('Testing Event List Card', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <EventListCard {...props} />
+          <BrowserRouter>
+            <EventListCard {...props} />
+          </BrowserRouter>
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     expect(screen.getByText(props.eventName)).toBeInTheDocument();
@@ -257,8 +265,10 @@ describe('Testing Event List Card', () => {
     it('should render the delete modal', () => {
       render(
         <MockedProvider link={link} addTypename={false}>
-          <EventListCard {...props} />
-        </MockedProvider>
+          <BrowserRouter>
+            <EventListCard {...props} />
+          </BrowserRouter>
+        </MockedProvider>,
       );
       userEvent.click(screen.getByTestId('card'));
       userEvent.click(screen.getByTestId('deleteEventModalBtn'));
@@ -270,8 +280,10 @@ describe('Testing Event List Card', () => {
     it('should call the delete event mutation when the "Yes" button is clicked', async () => {
       render(
         <MockedProvider link={link} addTypename={false}>
-          <EventListCard {...props} />
-        </MockedProvider>
+          <BrowserRouter>
+            <EventListCard {...props} />
+          </BrowserRouter>
+        </MockedProvider>,
       );
       userEvent.click(screen.getByTestId('card'));
       userEvent.click(screen.getByTestId('deleteEventModalBtn'));
@@ -294,8 +306,10 @@ describe('Testing Event List Card', () => {
       const link2 = new StaticMockLink(errorMocks, true);
       render(
         <MockedProvider link={link2} addTypename={false}>
-          <EventListCard {...props} />
-        </MockedProvider>
+          <BrowserRouter>
+            <EventListCard {...props} />
+          </BrowserRouter>
+        </MockedProvider>,
       );
       userEvent.click(screen.getByTestId('card'));
       userEvent.click(screen.getByTestId('deleteEventModalBtn'));
@@ -316,23 +330,25 @@ describe('Testing Event List Card', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <EventListCard
-            key="123"
-            id="1"
-            eventName={longEventName}
-            eventLocation="location"
-            eventDescription={longDescription}
-            regDate="19/03/2022"
-            regEndDate="26/03/2022"
-            startTime="02:00"
-            endTime="06:00"
-            allDay={true}
-            recurring={false}
-            isPublic={true}
-            isRegisterable={false}
-          />
+          <BrowserRouter>
+            <EventListCard
+              key="123"
+              id="1"
+              eventName={longEventName}
+              eventLocation="location"
+              eventDescription={longDescription}
+              regDate="19/03/2022"
+              regEndDate="26/03/2022"
+              startTime="02:00"
+              endTime="06:00"
+              allDay={true}
+              recurring={false}
+              isPublic={true}
+              isRegisterable={false}
+            />
+          </BrowserRouter>
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();

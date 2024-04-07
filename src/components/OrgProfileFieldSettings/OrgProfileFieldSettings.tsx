@@ -12,6 +12,7 @@ import styles from './OrgProfileFieldSettings.module.css';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import EditOrgCustomFieldDropDown from 'components/EditCustomFieldDropDown/EditCustomFieldDropDown';
+import { useParams } from 'react-router-dom';
 
 export interface InterfaceCustomFieldData {
   type: string;
@@ -28,7 +29,7 @@ const OrgProfileFieldSettings = (): any => {
       type: '',
       name: '',
     });
-  const currentOrgId = window.location.href.split('=')[1];
+  const { orgId: currentOrgId } = useParams();
 
   const [addCustomField] = useMutation(ADD_CUSTOM_FIELD);
   const [removeCustomField] = useMutation(REMOVE_CUSTOM_FIELD);
@@ -39,7 +40,7 @@ const OrgProfileFieldSettings = (): any => {
       variables: {
         customFieldsByOrganizationId: currentOrgId,
       },
-    }
+    },
   );
 
   const handleSave = async (): Promise<void> => {
@@ -91,7 +92,7 @@ const OrgProfileFieldSettings = (): any => {
                   name: string;
                   type: string;
                 },
-                index: number
+                index: number,
               ) => (
                 <tr key={index}>
                   <td>{field.name}</td>
@@ -108,7 +109,7 @@ const OrgProfileFieldSettings = (): any => {
                     </Button>
                   </td>
                 </tr>
-              )
+              ),
             )}
           </tbody>
         </table>

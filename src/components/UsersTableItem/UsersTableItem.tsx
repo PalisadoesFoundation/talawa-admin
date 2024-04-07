@@ -9,11 +9,12 @@ import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import { Button, Form, Modal, Row, Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import styles from './UsersTableItem.module.css';
+import Avatar from 'components/Avatar/Avatar';
 
 type Props = {
   user: InterfaceQueryUserListItem;
@@ -41,7 +42,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
   });
   const [joinedOrgs, setJoinedOrgs] = useState(user.joinedOrganizations);
   const [orgsBlockedBy, setOrgsBlockedBy] = useState(
-    user.organizationsBlockedBy
+    user.organizationsBlockedBy,
   );
   const [searchByNameJoinedOrgs, setSearchByNameJoinedOrgs] = useState('');
   const [searchByNameOrgsBlockedBy, setSearchByNameOrgsBlockedBy] =
@@ -49,7 +50,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
   const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
   const [removeUser] = useMutation(REMOVE_MEMBER_MUTATION);
   const [updateUserInOrgType] = useMutation(UPDATE_USER_ROLE_IN_ORG_MUTATION);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   /* istanbul ignore next */
   const changeRole = async (e: any): Promise<void> => {
@@ -118,11 +119,11 @@ const UsersTableItem = (props: Props): JSX.Element => {
   };
 
   function goToOrg(_id: string): void {
-    const url = '/orgdash/id=' + _id;
+    const url = '/orgdash/' + _id;
 
     // Dont change the below two lines
     window.location.replace(url);
-    history.push(url);
+    navigate(url);
   }
   function handleCreator(): void {
     toast.success('Profile Page Coming Soon !');
@@ -133,7 +134,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
       setJoinedOrgs(user.joinedOrganizations);
     } else {
       const filteredOrgs = user.joinedOrganizations.filter((org) =>
-        org.name.toLowerCase().includes(value.toLowerCase())
+        org.name.toLowerCase().includes(value.toLowerCase()),
       );
       setJoinedOrgs(filteredOrgs);
     }
@@ -144,7 +145,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
       setOrgsBlockedBy(user.organizationsBlockedBy);
     } else {
       const filteredOrgs = user.organizationsBlockedBy.filter((org) =>
-        org.name.toLowerCase().includes(value.toLowerCase())
+        org.name.toLowerCase().includes(value.toLowerCase()),
       );
       setOrgsBlockedBy(filteredOrgs);
     }
@@ -306,14 +307,11 @@ const UsersTableItem = (props: Props): JSX.Element => {
                             className="p-0"
                             onClick={() => goToOrg(org._id)}
                           >
-                            <img
-                              src={
-                                org.image
-                                  ? org.image
-                                  : `https://api.dicebear.com/5.x/initials/svg?seed=${org.name}`
-                              }
-                              alt="orgImage"
-                            />
+                            {org.image ? (
+                              <img src={org.image} alt="orgImage" />
+                            ) : (
+                              <Avatar name={org.name} alt="orgImage" />
+                            )}
                             {org.name}
                           </Button>
                         </td>
@@ -326,14 +324,14 @@ const UsersTableItem = (props: Props): JSX.Element => {
                             onClick={() => handleCreator()}
                             data-testid={`creator${org._id}`}
                           >
-                            <img
-                              src={
-                                org.creator.image
-                                  ? org.creator.image
-                                  : `https://api.dicebear.com/5.x/initials/svg?seed=${org.creator.firstName} ${org.creator.lastName}`
-                              }
-                              alt="creator"
-                            />
+                            {org.creator.image ? (
+                              <img src={org.creator.image} alt="creator" />
+                            ) : (
+                              <Avatar
+                                name={`${org.creator.firstName} ${org.creator.lastName}`}
+                                alt="creator"
+                              />
+                            )}
                             {org.creator.firstName} {org.creator.lastName}
                           </Button>
                         </td>
@@ -483,14 +481,11 @@ const UsersTableItem = (props: Props): JSX.Element => {
                             className="p-0"
                             onClick={() => goToOrg(org._id)}
                           >
-                            <img
-                              src={
-                                org.image
-                                  ? org.image
-                                  : `https://api.dicebear.com/5.x/initials/svg?seed=${org.name}`
-                              }
-                              alt="orgImage"
-                            />
+                            {org.image ? (
+                              <img src={org.image} alt="orgImage" />
+                            ) : (
+                              <Avatar name={org.name} alt="orgImage" />
+                            )}
                             {org.name}
                           </Button>
                         </td>
@@ -503,14 +498,14 @@ const UsersTableItem = (props: Props): JSX.Element => {
                             onClick={() => handleCreator()}
                             data-testid={`creator${org._id}`}
                           >
-                            <img
-                              src={
-                                org.creator.image
-                                  ? org.creator.image
-                                  : `https://api.dicebear.com/5.x/initials/svg?seed=${org.creator.firstName} ${org.creator.lastName}`
-                              }
-                              alt="creator"
-                            />
+                            {org.creator.image ? (
+                              <img src={org.creator.image} alt="creator" />
+                            ) : (
+                              <Avatar
+                                name={`${org.creator.firstName} ${org.creator.lastName}`}
+                                alt="creator"
+                              />
+                            )}
                             {org.creator.firstName} {org.creator.lastName}
                           </Button>
                         </td>

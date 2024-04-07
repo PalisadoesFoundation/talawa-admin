@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import 'jest-localstorage-mock';
 import { I18nextProvider } from 'react-i18next';
@@ -15,9 +15,11 @@ import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { act } from 'react-dom/test-utils';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { setItem } = useLocalStorage();
 
 const props: InterfaceLeftDrawerProps = {
-  screenName: 'Dashboard',
   orgId: '123',
   targets: [
     {
@@ -68,7 +70,11 @@ const MOCKS = [
     request: {
       query: REVOKE_REFRESH_TOKEN,
     },
-    result: {},
+    result: {
+      data: {
+        revokeRefreshTokenForUser: true,
+      },
+    },
   },
   {
     request: {
@@ -193,6 +199,7 @@ const MOCKS_WITH_IMAGE = [
     },
   },
 ];
+
 const MOCKS_EMPTY = [
   {
     request: {
@@ -234,11 +241,11 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 beforeEach(() => {
-  localStorage.setItem('FirstName', 'John');
-  localStorage.setItem('LastName', 'Doe');
-  localStorage.setItem(
+  setItem('FirstName', 'John');
+  setItem('LastName', 'Doe');
+  setItem(
     'UserImage',
-    'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe'
+    'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
   );
 });
 
@@ -251,10 +258,13 @@ const link = new StaticMockLink(MOCKS, true);
 const linkImage = new StaticMockLink(MOCKS_WITH_IMAGE, true);
 const linkEmpty = new StaticMockLink(MOCKS_EMPTY, true);
 
-describe('Testing Left Drawer component for SUPERADMIN', () => {
+describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
+  beforeEach(() => {
+    setItem('UserType', 'SUPERADMIN');
+  });
+
   test('Component should be rendered properly', async () => {
-    localStorage.setItem('UserImage', '');
-    localStorage.setItem('UserType', 'SUPERADMIN');
+    setItem('UserImage', '');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -264,7 +274,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     defaultScreens.map((screenName) => {
@@ -276,7 +286,6 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
   });
 
   test('Testing Profile Page & Organization Detail Modal', async () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -286,7 +295,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     expect(screen.getByTestId(/orgBtn/i)).toBeInTheDocument();
@@ -294,7 +303,6 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
   });
 
   test('Testing Menu Buttons', async () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -304,7 +312,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     userEvent.click(screen.getByText('Dashboard'));
@@ -312,7 +320,6 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
   });
 
   test('Testing when image is present for Organization', async () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={linkImage}>
         <BrowserRouter>
@@ -322,13 +329,12 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
   });
 
   test('Testing when Organization does not exists', async () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={linkEmpty}>
         <BrowserRouter>
@@ -338,16 +344,15 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     expect(
-      screen.getByText(/Error Occured while loading the Organization/i)
+      screen.getByText(/Error Occured while loading the Organization/i),
     ).toBeInTheDocument();
   });
 
   test('Testing Drawer when hideDrawer is null', () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -357,12 +362,11 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
   });
 
   test('Testing Drawer when hideDrawer is true', () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -372,12 +376,11 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
   });
 
   test('Testing logout functionality', async () => {
-    localStorage.setItem('UserType', 'SUPERADMIN');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -387,10 +390,12 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     userEvent.click(screen.getByTestId('logoutBtn'));
-    expect(localStorage.clear).toHaveBeenCalled();
-    expect(global.window.location.pathname).toBe('/');
+    await waitFor(() => {
+      expect(localStorage.clear).toHaveBeenCalled();
+      expect(global.window.location.pathname).toBe('/');
+    });
   });
 });

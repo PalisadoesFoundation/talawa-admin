@@ -84,21 +84,13 @@ export const ADDRESS_DETAILS_FRAGMENT = gql`
 
 export const UPDATE_USER_MUTATION = gql`
   mutation UpdateUserProfile(
-    $id: ID
     $firstName: String
     $lastName: String
     $email: EmailAddress
-    $applangcode: String
     $file: String
   ) {
     updateUserProfile(
-      data: {
-        firstName: $firstName
-        lastName: $lastName
-        email: $email
-        id: $id
-        applangcode: $applangcode
-      }
+      data: { firstName: $firstName, lastName: $lastName, email: $email }
       file: $file
     ) {
       _id
@@ -163,6 +155,10 @@ export const LOGIN_MUTATION = gql`
         _id
         userType
         adminApproved
+        firstName
+        lastName
+        email
+        image
       }
       accessToken
       refreshToken
@@ -282,7 +278,6 @@ export const DELETE_EVENT_MUTATION = gql`
 `;
 
 // to remove an admin from an organization
-
 export const REMOVE_ADMIN_MUTATION = gql`
   mutation RemoveAdmin($orgid: ID!, $userid: ID!) {
     removeAdmin(data: { organizationId: $orgid, userId: $userid }) {
@@ -292,7 +287,6 @@ export const REMOVE_ADMIN_MUTATION = gql`
 `;
 
 // to Remove member from an organization
-
 export const REMOVE_MEMBER_MUTATION = gql`
   mutation RemoveMember($orgid: ID!, $userid: ID!) {
     removeMember(data: { organizationId: $orgid, userId: $userid }) {
@@ -302,10 +296,17 @@ export const REMOVE_MEMBER_MUTATION = gql`
 `;
 
 // to add the admin
-
 export const ADD_ADMIN_MUTATION = gql`
   mutation CreateAdmin($orgid: ID!, $userid: ID!) {
     createAdmin(data: { organizationId: $orgid, userId: $userid }) {
+      _id
+    }
+  }
+`;
+
+export const ADD_MEMBER_MUTATION = gql`
+  mutation CreateMember($orgid: ID!, $userid: ID!) {
+    createMember(input: { organizationId: $orgid, userId: $userid }) {
       _id
     }
   }
@@ -446,22 +447,26 @@ export const ADD_PLUGIN_MUTATION = gql`
 `;
 export const ADD_ADVERTISEMENT_MUTATION = gql`
   mutation (
-    $orgId: ID!
+    $organizationId: ID!
     $name: String!
-    $link: String!
-    $type: String!
+    $type: AdvertisementType!
     $startDate: Date!
     $endDate: Date!
+    $file: String!
   ) {
     createAdvertisement(
-      orgId: $orgId
-      name: $name
-      link: $link
-      type: $type
-      startDate: $startDate
-      endDate: $endDate
+      input: {
+        organizationId: $organizationId
+        name: $name
+        type: $type
+        startDate: $startDate
+        endDate: $endDate
+        mediaFile: $file
+      }
     ) {
-      _id
+      advertisement {
+        _id
+      }
     }
   }
 `;
@@ -469,7 +474,7 @@ export const UPDATE_ADVERTISEMENT_MUTATION = gql`
   mutation UpdateAdvertisement(
     $id: ID!
     $name: String
-    $link: String
+    $file: String
     $type: AdvertisementType
     $startDate: Date
     $endDate: Date
@@ -478,7 +483,7 @@ export const UPDATE_ADVERTISEMENT_MUTATION = gql`
       input: {
         _id: $id
         name: $name
-        link: $link
+        mediaFile: $file
         type: $type
         startDate: $startDate
         endDate: $endDate
@@ -492,8 +497,10 @@ export const UPDATE_ADVERTISEMENT_MUTATION = gql`
 `;
 export const DELETE_ADVERTISEMENT_BY_ID = gql`
   mutation ($id: ID!) {
-    deleteAdvertisementById(id: $id) {
-      success
+    deleteAdvertisement(id: $id) {
+      advertisement {
+        _id
+      }
     }
   }
 `;
@@ -575,6 +582,15 @@ export const REGISTER_EVENT = gql`
   }
 `;
 
+// Create and Update Action Item Categories
+export { CREATE_ACTION_ITEM_CATEGORY_MUTATION } from './ActionItemCategoryMutations';
+export { UPDATE_ACTION_ITEM_CATEGORY_MUTATION } from './ActionItemCategoryMutations';
+
+// Create, Update and Delete Action Items
+export { CREATE_ACTION_ITEM_MUTATION } from './ActionItemMutations';
+export { UPDATE_ACTION_ITEM_MUTATION } from './ActionItemMutations';
+export { DELETE_ACTION_ITEM_MUTATION } from './ActionItemMutations';
+
 // Changes the role of a event in an organization and add and remove the event from the organization
 export { ADD_EVENT_ATTENDEE } from './EventAttendeeMutations';
 export { REMOVE_EVENT_ATTENDEE } from './EventAttendeeMutations';
@@ -594,3 +610,5 @@ export { PLUGIN_SUBSCRIPTION } from './OrganizationMutations';
 export { TOGGLE_PINNED_POST } from './OrganizationMutations';
 export { ADD_CUSTOM_FIELD } from './OrganizationMutations';
 export { REMOVE_CUSTOM_FIELD } from './OrganizationMutations';
+export { SEND_MEMBERSHIP_REQUEST } from './OrganizationMutations';
+export { JOIN_PUBLIC_ORGANIZATION } from './OrganizationMutations';
