@@ -5,7 +5,7 @@ import SuperAdminScreen from 'components/SuperAdminScreen/SuperAdminScreen';
 import * as installedPlugins from 'components/plugins/index';
 import { Route, Routes } from 'react-router-dom';
 import BlockUser from 'screens/BlockUser/BlockUser';
-import EventDashboard from 'screens/EventDashboard/EventDashboard';
+import EventManagement from 'screens/EventManagement/EventManagement';
 import ForgotPassword from 'screens/ForgotPassword/ForgotPassword';
 import LoginPage from 'screens/LoginPage/LoginPage';
 import MemberDetail from 'screens/MemberDetail/MemberDetail';
@@ -88,13 +88,20 @@ function app(): JSX.Element {
 
   const extraRoutes = Object.entries(installedPlugins).map(
     (
-      [pluginName, extraComponent]: [string, React.ElementType],
+      plugin: [
+        string,
+        (
+          | typeof installedPlugins.DummyPlugin
+          | typeof installedPlugins.DummyPlugin2
+        ),
+      ],
       index: number,
     ) => {
+      const extraComponent = plugin[1];
       return (
         <Route
           key={index}
-          path={`/plugin/${pluginName.toLowerCase()}`}
+          path={`/plugin/${plugin[0].toLowerCase()}`}
           element={extraComponent}
         />
       );
@@ -119,6 +126,10 @@ function app(): JSX.Element {
             <Route path="/member/:orgId" element={<MemberDetail />} />
             <Route path="/orgevents/:orgId" element={<OrganizationEvents />} />
             <Route
+              path="/event/:orgId/:eventId"
+              element={<EventManagement />}
+            />
+            <Route
               path="/orgactionitems/:orgId"
               element={<OrganizationActionItems />}
             />
@@ -141,7 +152,7 @@ function app(): JSX.Element {
             {extraRoutes}
           </Route>
         </Route>
-        <Route path="/event/:eventId" element={<EventDashboard />} />
+
         <Route path="/forgotPassword" element={<ForgotPassword />} />
         {/* User Portal Routes */}
         <Route element={<SecuredRouteForUser />}>

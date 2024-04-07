@@ -81,4 +81,20 @@ describe('EventHeader Component', () => {
     fireEvent.click(getByTestId('createEventModalBtn'));
     expect(showInviteModal).toHaveBeenCalled();
   });
+  it('updates the input value when changed', () => {
+    const { getByTestId } = render(
+      <I18nextProvider i18n={i18nForTest}>
+        <EventHeader
+          viewType={viewType}
+          handleChangeView={handleChangeView}
+          showInviteModal={showInviteModal}
+        />
+      </I18nextProvider>,
+    );
+
+    const input = getByTestId('searchEvent') as HTMLInputElement;
+    fireEvent.change(input, { target: { value: 'test event' } });
+
+    expect(input.value).toBe('test event');
+  });
 });
