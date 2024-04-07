@@ -383,7 +383,10 @@
     "eventDetails": "Détails de l'évènement",
     "eventDeleted": "Événement supprimé avec succès.",
     "eventUpdated": "Événement mis à jour avec succès.",
-    "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
+    "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau.",
+    "thisInstance": "Cette Instance",
+    "thisAndFollowingInstances": "Cette et les Instances Suivantes",
+    "allInstances": "Toutes les Instances"
   },
   "funds": {
     "title": "Fonds",
@@ -553,6 +556,14 @@
     "searchByLastName": "Rechercher par nom de famille",
     "noResultsFoundFor": "Aucun résultat trouvé pour ",
     "noSpammerFound": "Aucun spammeur trouvé"
+  },
+  "eventManagement": {
+    "title": "Gestion des événements",
+    "dashboard": "Tableau de bord",
+    "registrants": "Participants inscrits",
+    "eventActions": "Actions d'événement",
+    "eventStats": "Statistiques de l'événement",
+    "to": "À"
   },
   "forgotPassword": {
     "title": "Mot de passe oublié Talawa",
@@ -1003,5 +1014,29 @@
     "update": "Mettre à jour les détails du lieu",
     "editVenue": "Mettre à jour le lieu",
     "venueUpdated": "Les détails du lieu ont été mis à jour avec succès"
+  },
+  "addMember": {
+    "title": "Ajouter un membre",
+    "addMembers": "Ajouter des membres",
+    "existingUser": "Utilisateur existant",
+    "newUser": "Nouvel utilisateur",
+    "searchFullName": "Rechercher par nom complet",
+    "firstName": "Prénom",
+    "enterFirstName": "Entrez le prénom",
+    "lastName": "Nom de famille",
+    "enterLastName": "Entrez le nom de famille",
+    "emailAddress": "Adresse e-mail",
+    "enterEmail": "Entrez l'e-mail",
+    "password": "Mot de passe",
+    "enterPassword": "Entrez le mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "enterConfirmPassword": "Confirmez le mot de passe",
+    "organization": "Organisation",
+    "cancel": "Annuler",
+    "create": "Créer",
+    "invalidDetailsMessage": "Veuillez fournir tous les détails requis.",
+    "passwordNotMatch": "Les mots de passe ne correspondent pas.",
+    "user": "Utilisateur",
+    "addMember": "Ajouter un membre"
   }
 }

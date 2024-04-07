@@ -37,3 +37,10 @@ export enum RecurrenceEndOption {
   on = 'on',
   after = 'after',
 }
+
+// update / delete options of recurring events
+export enum RecurringEventMutationType {
+  ThisInstance = 'ThisInstance',
+  ThisAndFollowingInstances = 'ThisAndFollowingInstances',
+  AllInstances = 'AllInstances',
+}

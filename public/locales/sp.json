@@ -383,7 +383,10 @@
     "eventDetails": "Detalles del evento",
     "eventDeleted": "Evento eliminado con éxito.",
     "eventUpdated": "Evento actualizado con éxito.",
-    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
+    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red.",
+    "thisInstance": "Esta Instancia",
+    "thisAndFollowingInstances": "Esta y las Siguientes Instancias",
+    "allInstances": "Todas las Instancias"
   },
   "funds": {
     "title": "Fondos",
@@ -553,6 +556,14 @@
     "searchByLastName": "Buscar por apellido",
     "noResultsFoundFor": "No se encontraron resultados para ",
     "noSpammerFound": "No se encontró ningún spammer"
+  },
+  "eventManagement": {
+    "title": "Gestión de eventos",
+    "dashboard": "Tablero",
+    "registrants": "Inscritos",
+    "eventActions": "Acciones del evento",
+    "eventStats": "Estadísticas del evento",
+    "to": "A"
   },
   "forgotPassword": {
     "title": "Talawa olvidó su contraseña",
@@ -1005,5 +1016,29 @@
     "update": "Actualizar detalles del lugar",
     "editVenue": "Actualizar lugar",
     "venueUpdated": "Detalles del lugar actualizados exitosamente"
+  },
+  "addMember": {
+    "title": "Agregar miembro",
+    "addMembers": "Agregar miembros",
+    "existingUser": "Usuario existente",
+    "newUser": "Usuario nuevo",
+    "searchFullName": "Buscar por nombre completo",
+    "firstName": "Nombre",
+    "enterFirstName": "Ingrese el nombre",
+    "lastName": "Apellido",
+    "enterLastName": "Ingrese el apellido",
+    "emailAddress": "Dirección de correo electrónico",
+    "enterEmail": "Ingrese el correo electrónico",
+    "password": "Contraseña",
+    "enterPassword": "Ingrese la contraseña",
+    "confirmPassword": "Confirmar contraseña",
+    "enterConfirmPassword": "Ingrese la contraseña de confirmación",
+    "organization": "Organización",
+    "cancel": "Cancelar",
+    "create": "Crear",
+    "invalidDetailsMessage": "Por favor proporcione todos los detalles requeridos.",
+    "passwordNotMatch": "Las contraseñas no coinciden.",
+    "user": "Usuario",
+    "addMember": "Agregar miembro"
   }
 }

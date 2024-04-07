@@ -346,6 +346,9 @@
     "noActionItems": "No Action Items",
     "options": "Options",
     "preCompletionNotes": "Pre Completion Notes",
+    "actionItemActive": "Active",
+    "markCompletion": "Mark Completion",
+    "actionItemStatus": "Action Item Status",
     "postCompletionNotes": "Post Completion Notes",
     "selectActionItemCategory": "Select an action item category",
     "selectAssignee": "Select an assignee",
@@ -378,7 +381,10 @@
     "eventDetails": "Event Details",
     "eventDeleted": "Event deleted successfully.",
     "eventUpdated": "Event updated successfully.",
-    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too.",
+    "thisInstance": "This Instance",
+    "thisAndFollowingInstances": "This & Following Instances",
+    "allInstances": "All Instances"
   },
   "funds": {
     "title": "Funds",
@@ -548,6 +554,14 @@
     "searchByLastName": "Search By Last Name",
     "noResultsFoundFor": "No results found for",
     "noSpammerFound": "No spammer found"
+  },
+  "eventManagement": {
+    "title": "Event Management",
+    "dashboard": "Dashboard",
+    "registrants": "Registrants",
+    "eventActions": "Event Actions",
+    "eventStats": "Event Statistics",
+    "to": "TO"
   },
   "forgotPassword": {
     "title": "Talawa Forgot Password",
@@ -1011,5 +1025,29 @@
     "update": "Update Venue Details",
     "editVenue": "Update Venue",
     "venueUpdated": "Venue details updated successfully"
+  },
+  "addMember": {
+    "title": "Add Member",
+    "addMembers": "Add Members",
+    "existingUser": "Existing User",
+    "newUser": "New User",
+    "searchFullName": "Search by Full Name",
+    "firstName": "First Name",
+    "enterFirstName": "Enter First Name",
+    "lastName": "Last Name",
+    "enterLastName": "Enter Last Name",
+    "emailAddress": "Email Address",
+    "enterEmail": "Enter Email",
+    "password": "Password",
+    "enterPassword": "Enter Password",
+    "confirmPassword": "Confirm Password",
+    "enterConfirmPassword": "Enter Confirm Password",
+    "organization": "Organization",
+    "cancel": "Cancel",
+    "create": "Create",
+    "invalidDetailsMessage": "Please provide all required details.",
+    "passwordNotMatch": "Passwords do not match.",
+    "user": "User",
+    "addMember": "Add Member"
   }
 }

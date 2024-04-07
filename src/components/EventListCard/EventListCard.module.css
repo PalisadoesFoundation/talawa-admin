@@ -1,6 +1,7 @@
 .cards h2 {
   font-size: 15px;
-  color: #fff;
+  color: #4e4c4c;
+  font-weight: 500;
 }
 .cards > h3 {
   font-size: 17px;
@@ -45,11 +46,11 @@
 
 .cards {
   width: 100%;
-  background: #31bb6b;
+  background: #5cacf7 !important;
   padding: 2px 3px;
   border-radius: 5px;
   border: 1px solid #e8e8e8;
-  box-shadow: 0 3px 5px #c9c9c9;
+  box-shadow: 0 3px 2px #e8e8e8;
   color: #737373;
   box-sizing: border-box;
 }

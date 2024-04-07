@@ -1,0 +1,12 @@
+.card {
+  background-color: #b4dcb7;
+  font-size: 14px;
+  font-weight: 400;
+  display: flex;
+  padding: 8px 4px;
+  border-radius: 5px;
+  margin-bottom: 4px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
