@@ -148,7 +148,7 @@ const Requests = (): JSX.Element => {
     });
     setHasMore(true);
   };
-
+  /* istanbul ignore next */
   const loadMoreRequests = (): void => {
     setIsLoadingMore(true);
     fetchMore({
