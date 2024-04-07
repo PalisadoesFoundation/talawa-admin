@@ -1,5 +1,18 @@
 import type { InterfaceAction } from 'state/helpers/Action';
 
+export type TargetsType = {
+  name: string;
+  url?: string;
+  subTargets?: SubTargetType[];
+};
+
+export type SubTargetType = {
+  name?: string;
+  url: string;
+  icon?: string;
+  comp_id?: string;
+};
+
 const reducer = (
   state = INITIAL_STATE,
   action: InterfaceAction,
@@ -11,13 +24,18 @@ const reducer = (
       });
     }
     case 'UPDATE_P_TARGETS': {
-      const oldTargets: any = INITIAL_STATE.targets.filter(
-        (target: any) => target.name === 'Plugins',
-      )[0].subTargets;
+      const filteredTargets = INITIAL_STATE.targets.filter(
+        (target: TargetsType) => target.name === 'Plugins',
+      );
+
+      const oldTargets: SubTargetType[] =
+        filteredTargets.length > 0 && filteredTargets[0].subTargets
+          ? filteredTargets[0].subTargets
+          : [];
       return Object.assign({}, INITIAL_STATE, {
         targets: [
           ...INITIAL_STATE.targets.filter(
-            (target: any) => target.name !== 'Plugins',
+            (target: TargetsType) => target.name !== 'Plugins',
           ),
           Object.assign(
             {},
@@ -49,21 +67,12 @@ export type ComponentType = {
   }[];
 };
 
-export type TargetsType = {
-  name: string;
-  url?: string;
-  subTargets?: {
-    name: any;
-    url: string;
-    icon: any;
-  }[];
-};
-
 // Note: Routes with names appear on NavBar
 const components: ComponentType[] = [
   { name: 'My Organizations', comp_id: 'orglist', component: 'OrgList' },
   { name: 'Dashboard', comp_id: 'orgdash', component: 'OrganizationDashboard' },
   { name: 'People', comp_id: 'orgpeople', component: 'OrganizationPeople' },
+  { name: 'Requests', comp_id: 'requests', component: 'Requests' },
   { name: 'Events', comp_id: 'orgevents', component: 'OrganizationEvents' },
   { name: 'Venues', comp_id: 'orgvenues', component: 'OrganizationVenues' },
   {
@@ -105,13 +114,20 @@ const generateRoutes = (
           : { name: comp.name, url: `/${comp.comp_id}/${currentOrg}` }
         : {
             name: comp.name,
-            subTargets: comp.subTargets?.map((subTarget: any) => {
-              return {
-                name: subTarget.name,
-                url: `/${subTarget.comp_id}/${currentOrg}`,
-                icon: subTarget.icon ? subTarget.icon : null,
-              };
-            }),
+            subTargets: comp.subTargets?.map(
+              (subTarget: {
+                name: string;
+                comp_id: string;
+                component: string;
+                icon?: string;
+              }) => {
+                return {
+                  name: subTarget.name,
+                  url: `/${subTarget.comp_id}/${currentOrg}`,
+                  icon: subTarget.icon || '',
+                };
+              },
+            ),
           };
       return entry;
     });

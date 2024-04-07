@@ -87,12 +87,14 @@ function app(): JSX.Element {
   }, [data, loading]);
 
   const extraRoutes = Object.entries(installedPlugins).map(
-    (plugin: any, index) => {
-      const extraComponent = plugin[1];
+    (
+      [pluginName, extraComponent]: [string, React.ElementType],
+      index: number,
+    ) => {
       return (
         <Route
           key={index}
-          path={`/plugin/${plugin[0].toLowerCase()}`}
+          path={`/plugin/${pluginName.toLowerCase()}`}
           element={extraComponent}
         />
       );
@@ -107,11 +109,11 @@ function app(): JSX.Element {
           <Route element={<SuperAdminScreen />}>
             <Route path="/orglist" element={<OrgList />} />
             <Route path="/member" element={<MemberDetail />} />
-            <Route path="/requests" element={<Requests />} />
             <Route path="/users" element={<Users />} />
             <Route path="/communityProfile" element={<CommunityProfile />} />
           </Route>
           <Route element={<OrganizationScreen />}>
+            <Route path="/requests/:orgId" element={<Requests />} />
             <Route path="/orgdash/:orgId" element={<OrganizationDashboard />} />
             <Route path="/orgpeople/:orgId" element={<OrganizationPeople />} />
             <Route path="/member/:orgId" element={<MemberDetail />} />
