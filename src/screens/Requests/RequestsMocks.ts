@@ -49,7 +49,7 @@ export const EMPTY_REQUEST_MOCKS = [
     request: {
       query: MEMBERSHIP_REQUEST,
       variables: {
-        id: 'org1',
+        id: '',
         skip: 0,
         first: 8,
         firstName_contains: '',
@@ -114,7 +114,7 @@ export const MOCKS = [
     request: {
       query: MEMBERSHIP_REQUEST,
       variables: {
-        id: 'org1',
+        id: '',
         skip: 0,
         first: 8,
         firstName_contains: '',
@@ -124,7 +124,7 @@ export const MOCKS = [
       data: {
         organizations: [
           {
-            _id: 'org1',
+            _id: '',
             membershipRequests: [
               {
                 _id: '1',

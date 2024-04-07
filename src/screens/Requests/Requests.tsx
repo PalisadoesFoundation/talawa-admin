@@ -67,10 +67,6 @@ const Requests = (): JSX.Element => {
       return;
     }
 
-    if (!data.organizations || !data.organizations[0]) {
-      return;
-    }
-
     const membershipRequests = data.organizations[0].membershipRequests;
 
     if (membershipRequests.length < perPageResult) {
@@ -207,7 +203,10 @@ const Requests = (): JSX.Element => {
           <div
             className={styles.input}
             style={{
-              display: userRole === 'ADMIN' ? 'block' : 'none',
+              display:
+                userRole === 'ADMIN' || userRole === 'SUPERADMIN'
+                  ? 'block'
+                  : 'none',
             }}
           >
             <Form.Control

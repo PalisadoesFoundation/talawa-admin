@@ -65,6 +65,7 @@ describe('Testing Requests screen', () => {
 
     await wait();
     expect(screen.getByTestId('testComp')).toBeInTheDocument();
+    expect(screen.getByText('Scott Tony')).toBeInTheDocument();
   });
 
   test(`Component should be rendered properly when user is not Admin
@@ -118,7 +119,7 @@ describe('Testing Requests screen', () => {
     );
 
     await wait();
-    expect(window.location.href).toEqual('http://localhost/orglist');
+    expect(window.location.href).toEqual('http://localhost/');
   });
 
   test('Testing Search requests functionality', async () => {
