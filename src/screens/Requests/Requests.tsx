@@ -100,7 +100,7 @@ const Requests = (): JSX.Element => {
 
   // Send to orgList page if user is not admin
   useEffect(() => {
-    if (userRole != 'ADMIN') {
+    if (userRole != 'ADMIN' && userRole != 'SUPERADMIN') {
       window.location.assign('/orglist');
     }
   }, []);
