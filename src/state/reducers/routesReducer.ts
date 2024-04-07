@@ -28,9 +28,7 @@ const reducer = (
         (target: TargetsType) => target.name === 'Plugins',
       );
 
-      console.log('filteredTargets', filteredTargets[0]?.subTargets);
       const oldTargets: SubTargetType[] = filteredTargets[0]?.subTargets || [];
-      console.log('oldTargets', oldTargets);
       return Object.assign({}, state, {
         targets: [
           ...state.targets.filter(
