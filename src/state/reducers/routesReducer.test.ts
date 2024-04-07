@@ -13,6 +13,7 @@ describe('Testing Routes reducer', () => {
         { name: 'My Organizations', url: '/orglist' },
         { name: 'Dashboard', url: '/orgdash/undefined' },
         { name: 'People', url: '/orgpeople/undefined' },
+        { name: 'Requests', url: '/requests/undefined' },
         { name: 'Events', url: '/orgevents/undefined' },
         { name: 'Venues', url: '/orgvenues/undefined' },
         { name: 'Action Items', url: '/orgactionitems/undefined' },
@@ -46,6 +47,11 @@ describe('Testing Routes reducer', () => {
           name: 'People',
           comp_id: 'orgpeople',
           component: 'OrganizationPeople',
+        },
+        {
+          name: 'Requests',
+          comp_id: 'requests',
+          component: 'Requests',
         },
         {
           name: 'Events',
@@ -104,6 +110,7 @@ describe('Testing Routes reducer', () => {
         { name: 'My Organizations', url: '/orglist' },
         { name: 'Dashboard', url: '/orgdash/orgId' },
         { name: 'People', url: '/orgpeople/orgId' },
+        { name: 'Requests', url: '/requests/orgId' },
         { name: 'Events', url: '/orgevents/orgId' },
         { name: 'Venues', url: '/orgvenues/orgId' },
         { name: 'Action Items', url: '/orgactionitems/orgId' },
@@ -134,6 +141,11 @@ describe('Testing Routes reducer', () => {
           name: 'People',
           comp_id: 'orgpeople',
           component: 'OrganizationPeople',
+        },
+        {
+          name: 'Requests',
+          comp_id: 'requests',
+          component: 'Requests',
         },
         {
           name: 'Events',
@@ -188,6 +200,7 @@ describe('Testing Routes reducer', () => {
         { name: 'My Organizations', url: '/orglist' },
         { name: 'Dashboard', url: '/orgdash/undefined' },
         { name: 'People', url: '/orgpeople/undefined' },
+        { name: 'Requests', url: '/requests/undefined' },
         { name: 'Events', url: '/orgevents/undefined' },
         { name: 'Venues', url: '/orgvenues/undefined' },
         { name: 'Action Items', url: '/orgactionitems/undefined' },
@@ -224,6 +237,11 @@ describe('Testing Routes reducer', () => {
           name: 'People',
           comp_id: 'orgpeople',
           component: 'OrganizationPeople',
+        },
+        {
+          name: 'Requests',
+          comp_id: 'requests',
+          component: 'Requests',
         },
         {
           name: 'Events',
