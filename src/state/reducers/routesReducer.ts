@@ -19,22 +19,21 @@ const reducer = (
 ): typeof INITIAL_STATE => {
   switch (action.type) {
     case 'UPDATE_TARGETS': {
-      return Object.assign({}, INITIAL_STATE, {
+      return Object.assign({}, state, {
         targets: [...generateRoutes(components, action.payload)],
       });
     }
     case 'UPDATE_P_TARGETS': {
-      const filteredTargets = INITIAL_STATE.targets.filter(
+      const filteredTargets = state.targets.filter(
         (target: TargetsType) => target.name === 'Plugins',
       );
 
-      const oldTargets: SubTargetType[] =
-        filteredTargets.length > 0 && filteredTargets[0].subTargets
-          ? filteredTargets[0].subTargets
-          : [];
-      return Object.assign({}, INITIAL_STATE, {
+      console.log('filteredTargets', filteredTargets[0]?.subTargets);
+      const oldTargets: SubTargetType[] = filteredTargets[0]?.subTargets || [];
+      console.log('oldTargets', oldTargets);
+      return Object.assign({}, state, {
         targets: [
-          ...INITIAL_STATE.targets.filter(
+          ...state.targets.filter(
             (target: TargetsType) => target.name !== 'Plugins',
           ),
           Object.assign(
@@ -124,7 +123,7 @@ const generateRoutes = (
                 return {
                   name: subTarget.name,
                   url: `/${subTarget.comp_id}/${currentOrg}`,
-                  icon: subTarget.icon || '',
+                  icon: subTarget.icon,
                 };
               },
             ),
