@@ -2,7 +2,12 @@
   Recurrence constants
 */
 
-import { Frequency, RecurrenceEndOption, WeekDays } from './recurrenceTypes';
+import {
+  Frequency,
+  RecurrenceEndOption,
+  RecurringEventMutationType,
+  WeekDays,
+} from './recurrenceTypes';
 
 // recurrence frequency mapping
 export const frequencies = {
@@ -33,6 +38,18 @@ export const endsAfter = RecurrenceEndOption.after;
 
 // recurrence end options array
 export const recurrenceEndOptions = [endsNever, endsOn, endsAfter];
+
+// different types of updations / deletions on recurring events
+export const thisInstance = RecurringEventMutationType.ThisInstance;
+export const thisAndFollowingInstances =
+  RecurringEventMutationType.ThisAndFollowingInstances;
+export const allInstances = RecurringEventMutationType.AllInstances;
+
+export const recurringEventMutationOptions = [
+  thisInstance,
+  thisAndFollowingInstances,
+  allInstances,
+];
 
 // array of week days containing 'MO' to 'FR
 export const mondayToFriday = Days.filter(

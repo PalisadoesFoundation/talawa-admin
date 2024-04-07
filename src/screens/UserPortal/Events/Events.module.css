@@ -11,17 +11,17 @@
 }
 
 .maxWidth {
-  max-width: 300px;
+  max-width: 800px;
 }
 
 .colorLight {
-  background-color: #f5f5f5;
+  background-color: #f1f3f6;
 }
 
 .mainContainer {
   width: 50%;
   flex-grow: 3;
-  padding: 40px;
+  padding: 20px;
   max-height: 100%;
   overflow: auto;
 }
@@ -29,6 +29,14 @@
 .content {
   height: fit-content;
   min-height: calc(100% - 40px);
+}
+.selectType {
+  border-radius: 10px;
+}
+.dropdown__item {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .gap {

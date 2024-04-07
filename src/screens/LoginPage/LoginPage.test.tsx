@@ -35,7 +35,6 @@ const MOCKS = [
         login: {
           user: {
             _id: '1',
-            adminApproved: true,
           },
           appUserProfile: {
             isSuperAdmin: false,

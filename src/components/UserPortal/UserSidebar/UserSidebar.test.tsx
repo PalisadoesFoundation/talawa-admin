@@ -56,7 +56,6 @@ const MOCKS = [
           },
           appUserProfile: {
             _id: 'properId',
-            adminApproved: true,
             adminFor: [],
             createdOrganizations: [],
             createdEvents: [],
@@ -138,7 +137,6 @@ const MOCKS = [
             createdEvents: [],
             eventAdmin: [],
             isSuperAdmin: true,
-            adminApproved: true,
             pluginCreationAllowed: true,
             appLanguageCode: 'en',
           },
@@ -210,7 +208,6 @@ const MOCKS = [
           },
           appUserProfile: {
             _id: 'orgEmpty',
-            adminApproved: true,
             adminFor: [],
             createdOrganizations: [],
             createdEvents: [],
