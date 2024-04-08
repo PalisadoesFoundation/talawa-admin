@@ -1,11 +1,10 @@
 ---
-name: Issue Report / Feature Request
-about: Create a report to help us improve or suggest an idea for this project.
-title: Issue Report / Feature Request
+name: Custom
+about: Create bug reports and feature requests using a customizable form.
 ---
 
 **Type**:
-- [ ] Issue Report
+- [ ] Bug Report
 - [ ] Feature Request
 
 **Description**:
