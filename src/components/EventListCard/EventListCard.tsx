@@ -12,10 +12,14 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { Form } from 'react-bootstrap';
 import { errorHandler } from 'utils/errorHandler';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { getItem } from 'utils/useLocalstorage';
+import {
+  RecurringEventMutationType,
+  recurringEventMutationOptions,
+} from 'utils/recurrenceUtils';
 
-interface InterfaceEventListCardProps {
+export interface InterfaceEventListCardProps {
   key: string;
   id: string;
   eventLocation: string;
@@ -38,9 +42,13 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
   const [alldaychecked, setAllDayChecked] = useState(true);
   const [recurringchecked, setRecurringChecked] = useState(false);
   const [publicchecked, setPublicChecked] = useState(true);
-  const [registrablechecked, setRegistrableChecked] = React.useState(false);
+  const [registrablechecked, setRegistrableChecked] = useState(false);
   const [eventDeleteModalIsOpen, setEventDeleteModalIsOpen] = useState(false);
   const [eventUpdateModalIsOpen, setEventUpdateModalIsOpen] = useState(false);
+  const { orgId } = useParams();
+  if (!orgId) {
+    return <Navigate to={'/'} replace />;
+  }
   const navigate = useNavigate();
   const adminFor = getItem('AdminFor', 'admin');
   const [formState, setFormState] = useState({
@@ -80,14 +88,21 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
     setRegistrableChecked(props.isRegisterable);
   }, []);
 
-  const [create] = useMutation(DELETE_EVENT_MUTATION);
+  const [deleteEvent] = useMutation(DELETE_EVENT_MUTATION);
   const [updateEvent] = useMutation(UPDATE_EVENT_MUTATION);
+  const [recurringEventDeleteType, setRecurringEventDeleteType] =
+    useState<RecurringEventMutationType>(
+      RecurringEventMutationType.ThisInstance,
+    );
 
-  const deleteEvent = async (): Promise<void> => {
+  const deleteEventHandler = async (): Promise<void> => {
     try {
-      const { data } = await create({
+      const { data } = await deleteEvent({
         variables: {
           id: props.id,
+          recurringEventDeleteType: props.recurring
+            ? recurringEventDeleteType
+            : undefined,
         },
       });
 
@@ -139,7 +154,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
   };
 
   const openEventDashboard = (): void => {
-    navigate(`/event/${props.id}`);
+    navigate(`/event/${orgId}/${props.id}`);
   };
 
   return (
@@ -159,7 +174,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
         </div>
       </div>
       {/* preview modal */}
-      <Modal show={eventmodalisOpen}>
+      <Modal show={eventmodalisOpen} centered>
         <Modal.Header>
           <p className={styles.titlemodal}>{t('eventDetails')}</p>
           <Button
@@ -255,6 +270,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
         onHide={toggleDeleteModal}
         backdrop="static"
         keyboard={false}
+        centered
       >
         <Modal.Header closeButton className="bg-primary">
           <Modal.Title
@@ -264,7 +280,35 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
             {t('deleteEvent')}
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body>{t('deleteEventMsg')}</Modal.Body>
+        <Modal.Body>
+          {!props.recurring && t('deleteEventMsg')}
+          {props.recurring && (
+            <>
+              <Form className="mt-3">
+                {recurringEventMutationOptions.map((option, index) => (
+                  <div key={index} className="my-0 d-flex align-items-center">
+                    <Form.Check
+                      type="radio"
+                      id={`radio-${index}`}
+                      label={t(
+                        option.charAt(0).toLowerCase() + option.slice(1),
+                      )}
+                      name="recurringEventDeleteType"
+                      value={option}
+                      onChange={(e) =>
+                        setRecurringEventDeleteType(
+                          e.target.value as RecurringEventMutationType,
+                        )
+                      }
+                      defaultChecked={option === recurringEventDeleteType}
+                      data-testid={`${option}`}
+                    />
+                  </div>
+                ))}
+              </Form>
+            </>
+          )}
+        </Modal.Body>
         <Modal.Footer>
           <Button
             type="button"
@@ -278,7 +322,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
           <Button
             type="button"
             className="btn btn-success"
-            onClick={deleteEvent}
+            onClick={deleteEventHandler}
             data-testid="deleteEventBtn"
           >
             {t('yes')}

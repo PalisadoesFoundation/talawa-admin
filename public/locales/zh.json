@@ -463,7 +463,10 @@
     "eventDetails": "活動詳情",
     "eventDeleted": "活动删除成功。",
     "eventUpdated": "活動更新成功。",
-    "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
+    "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。",
+    "thisInstance": "此实例",
+    "thisAndFollowingInstances": "此及其后续实例",
+    "allInstances": "所有实例"
   },
   "orgPost": {
     "title": "塔拉瓦帖子",
@@ -554,6 +557,14 @@
     "searchByLastName": "按姓氏搜索",
     "noResultsFoundFor": "未找到结果 ",
     "noSpammerFound": "未发现垃圾邮件发送者"
+  },
+  "eventManagement": {
+    "title": "事件管理",
+    "dashboard": "仪表板",
+    "registrants": "注册参与者",
+    "eventActions": "事件操作",
+    "eventStats": "事件统计",
+    "to": "到"
   },
   "forgotPassword": {
     "title": "塔拉瓦忘記密碼",
@@ -1006,5 +1017,29 @@
     "update": "更新场地详情",
     "editVenue": "更新地点",
     "venueUpdated": "场地详细信息更新成功"
+  },
+  "addMember": {
+    "title": "添加成员",
+    "addMembers": "添加成员",
+    "existingUser": "现有用户",
+    "newUser": "新用户",
+    "searchFullName": "按全名搜索",
+    "firstName": "名字",
+    "enterFirstName": "输入名字",
+    "lastName": "姓氏",
+    "enterLastName": "输入姓氏",
+    "emailAddress": "电子邮件地址",
+    "enterEmail": "输入电子邮件",
+    "password": "密码",
+    "enterPassword": "输入密码",
+    "confirmPassword": "确认密码",
+    "enterConfirmPassword": "输入确认密码",
+    "organization": "组织",
+    "cancel": "取消",
+    "create": "创建",
+    "invalidDetailsMessage": "请提供所有必需的细节。",
+    "passwordNotMatch": "密码不匹配。",
+    "user": "用户",
+    "addMember": "添加成员"
   }
 }
