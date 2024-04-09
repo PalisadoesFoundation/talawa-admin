@@ -119,7 +119,14 @@ export default function events(): JSX.Element {
   const [create] = useMutation(CREATE_EVENT_MUTATION);
 
   const userId = getItem('id') as string;
-  const userRole = getItem('UserType') as string;
+
+  const superAdmin = getItem('SuperAdmin');
+  const adminFor = getItem('AdminFor');
+  const userRole = superAdmin
+    ? 'SUPERADMIN'
+    : adminFor?.length > 0
+      ? 'ADMIN'
+      : 'USER';
 
   const createEvent = async (
     e: ChangeEvent<HTMLFormElement>,
