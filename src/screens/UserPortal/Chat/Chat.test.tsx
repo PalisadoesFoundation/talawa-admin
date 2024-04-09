@@ -33,7 +33,6 @@ const MOCKS = [
               image: null,
               email: 'noble1@gmail.com',
               createdAt: '2023-03-02T03:22:08.101Z',
-              userType: 'User',
             },
             {
               _id: '64001660a711c62d5b4076a3',
@@ -42,7 +41,6 @@ const MOCKS = [
               image: 'mockImage',
               email: 'noble@gmail.com',
               createdAt: '2023-03-02T03:22:08.101Z',
-              userType: 'User',
             },
           ],
         },
@@ -68,7 +66,6 @@ const MOCKS = [
               image: null,
               email: 'john@gmail.com',
               createdAt: '2023-03-02T03:22:08.101Z',
-              userType: 'User',
             },
           ],
         },
