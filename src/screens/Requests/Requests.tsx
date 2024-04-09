@@ -15,6 +15,16 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import type { InterfaceQueryMembershipRequestsListItem } from 'utils/interfaces';
 import styles from './Requests.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
+import { useParams } from 'react-router-dom';
+
+interface InterfaceRequestsListItem {
+  _id: string;
+  user: {
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
+}
 
 const Requests = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'requests' });
@@ -28,25 +38,15 @@ const Requests = (): JSX.Element => {
   const [hasMore, setHasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState<string>('');
-  const userType = getItem('SuperAdmin')
+  const userRole = getItem('SuperAdmin')
     ? 'SUPERADMIN'
     : getItem('AdminFor')
       ? 'ADMIN'
       : 'USER';
-  const organizationId = getItem('AdminFor')?.[0]?._id;
+  const { orgId = '' } = useParams();
+  const organizationId = orgId;
 
-  const {
-    data: requestsData,
-    loading,
-    fetchMore,
-    refetch: refetchRequests,
-  }: {
-    data: InterfaceQueryMembershipRequestsListItem | undefined;
-    loading: boolean;
-    fetchMore: any;
-    refetch: any;
-    error?: Error | undefined;
-  } = useQuery(MEMBERSHIP_REQUEST, {
+  const { data, loading, fetchMore, refetch } = useQuery(MEMBERSHIP_REQUEST, {
     variables: {
       id: organizationId,
       first: perPageResult,
@@ -58,27 +58,23 @@ const Requests = (): JSX.Element => {
 
   const { data: orgsData } = useQuery(ORGANIZATION_CONNECTION_LIST);
   const [displayedRequests, setDisplayedRequests] = useState(
-    requestsData?.organizations[0]?.membershipRequests || [],
+    data?.organizations[0]?.membershipRequests || [],
   );
 
   // Manage loading more state
   useEffect(() => {
-    if (!requestsData) {
+    if (!data) {
       return;
     }
 
-    if (!requestsData.organizations || !requestsData.organizations[0]) {
-      return;
-    }
-
-    const membershipRequests = requestsData.organizations[0].membershipRequests;
+    const membershipRequests = data.organizations[0].membershipRequests;
 
     if (membershipRequests.length < perPageResult) {
       setHasMore(false);
     }
 
     setDisplayedRequests(membershipRequests);
-  }, [requestsData]);
+  }, [data]);
 
   // To clear the search when the component is unmounted
   useEffect(() => {
@@ -100,7 +96,7 @@ const Requests = (): JSX.Element => {
 
   // Send to orgList page if user is not admin
   useEffect(() => {
-    if (userType != 'ADMIN') {
+    if (userRole != 'ADMIN' && userRole != 'SUPERADMIN') {
       window.location.assign('/orglist');
     }
   }, []);
@@ -120,16 +116,18 @@ const Requests = (): JSX.Element => {
       resetAndRefetch();
       return;
     }
-    refetchRequests({
+    refetch({
       id: organizationId,
       firstName_contains: value,
       // Later on we can add several search and filter options
     });
   };
 
-  const handleSearchByEnter = (e: any): void => {
+  const handleSearchByEnter = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ): void => {
     if (e.key === 'Enter') {
-      const { value } = e.target;
+      const { value } = e.currentTarget;
       handleSearch(value);
     }
   };
@@ -141,9 +139,9 @@ const Requests = (): JSX.Element => {
     const inputValue = inputElement?.value || '';
     handleSearch(inputValue);
   };
-  /* istanbul ignore next */
+
   const resetAndRefetch = (): void => {
-    refetchRequests({
+    refetch({
       first: perPageResult,
       skip: 0,
       firstName_contains: '',
@@ -156,7 +154,7 @@ const Requests = (): JSX.Element => {
     fetchMore({
       variables: {
         id: organizationId,
-        skip: requestsData?.organizations?.[0]?.membershipRequests?.length || 0,
+        skip: data?.organizations?.[0]?.membershipRequests?.length || 0,
         firstName_contains: searchByName,
       },
       updateQuery: (
@@ -205,7 +203,10 @@ const Requests = (): JSX.Element => {
           <div
             className={styles.input}
             style={{
-              display: userType === 'ADMIN' ? 'block' : 'none',
+              display:
+                userRole === 'ADMIN' || userRole === 'SUPERADMIN'
+                  ? 'block'
+                  : 'none',
             }}
           >
             <Form.Control
@@ -235,7 +236,7 @@ const Requests = (): JSX.Element => {
           <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>
         </div>
       ) : !isLoading &&
-        requestsData &&
+        data &&
         displayedRequests.length === 0 &&
         searchByName.length > 0 ? (
         <div className={styles.notFound}>
@@ -243,7 +244,7 @@ const Requests = (): JSX.Element => {
             {t('noResultsFoundFor')} &quot;{searchByName}&quot;
           </h4>
         </div>
-      ) : !isLoading && requestsData && displayedRequests.length === 0 ? (
+      ) : !isLoading && data && displayedRequests.length === 0 ? (
         <div className={styles.notFound}>
           <h4>{t('noRequestsFound')}</h4>
         </div>
@@ -253,10 +254,7 @@ const Requests = (): JSX.Element => {
             <TableLoader headerTitles={headerTitles} noOfRows={perPageResult} />
           ) : (
             <InfiniteScroll
-              dataLength={
-                /* istanbul ignore next */
-                displayedRequests.length ?? 0
-              }
+              dataLength={displayedRequests.length ?? 0}
               next={loadMoreRequests}
               loader={
                 <TableLoader
@@ -286,17 +284,19 @@ const Requests = (): JSX.Element => {
                   </tr>
                 </thead>
                 <tbody>
-                  {requestsData &&
-                    displayedRequests.map((request, index) => {
-                      return (
-                        <RequestsTableItem
-                          key={request._id}
-                          index={index}
-                          resetAndRefetch={resetAndRefetch}
-                          request={request}
-                        />
-                      );
-                    })}
+                  {data &&
+                    displayedRequests.map(
+                      (request: InterfaceRequestsListItem, index: number) => {
+                        return (
+                          <RequestsTableItem
+                            key={request?._id}
+                            index={index}
+                            resetAndRefetch={resetAndRefetch}
+                            request={request}
+                          />
+                        );
+                      },
+                    )}
                 </tbody>
               </Table>
             </InfiniteScroll>

@@ -143,44 +143,20 @@ describe('Testing Left Drawer component for ADMIN', () => {
     );
 
     expect(screen.getByText('My Organizations')).toBeInTheDocument();
-    expect(screen.getByText('Requests')).toBeInTheDocument();
     expect(screen.getByText('Talawa Admin Portal')).toBeInTheDocument();
 
     expect(screen.getAllByText(/admin/i)).toHaveLength(1);
 
     const orgsBtn = screen.getByTestId(/orgsBtn/i);
-    const requestsBtn = screen.getByTestId(/requestsBtn/i);
     orgsBtn.click();
     expect(
       orgsBtn.className.includes('text-white btn btn-success'),
     ).toBeTruthy();
-    expect(requestsBtn.className.includes('text-secondary btn')).toBeTruthy();
 
     // These screens arent meant for admins so they should not be present
     expect(screen.queryByTestId(/rolesBtn/i)).toBeNull();
 
     userEvent.click(orgsBtn);
     expect(global.window.location.pathname).toContain('/orglist');
-  });
-
-  test('Testing in requests screen', () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <LeftDrawer {...propsUsers} />
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    const orgsBtn = screen.getByTestId(/orgsBtn/i);
-    const requestsBtn = screen.getByTestId(/requestsBtn/i);
-
-    requestsBtn.click();
-    expect(
-      requestsBtn.className.includes('text-white btn btn-success'),
-    ).toBeTruthy();
-    expect(orgsBtn.className.includes('text-secondary btn')).toBeTruthy();
   });
 });

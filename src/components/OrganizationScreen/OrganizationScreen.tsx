@@ -103,6 +103,7 @@ interface InterfaceMapType {
 const map: InterfaceMapType = {
   orgdash: 'dashboard',
   orgpeople: 'organizationPeople',
+  requests: 'requests',
   orgads: 'advertisement',
   member: 'memberDetail',
   orgevents: 'organizationEvents',
@@ -115,5 +116,6 @@ const map: InterfaceMapType = {
   orgsetting: 'orgSettings',
   orgstore: 'addOnStore',
   blockuser: 'blockUnblockUser',
+  orgvenues: 'organizationVenues',
   event: 'eventManagement',
 };

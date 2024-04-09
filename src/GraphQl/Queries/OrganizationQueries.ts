@@ -213,8 +213,8 @@ export const ORGANIZATION_FUNDS = gql`
  * @returns The list of venues associated with the organization.
  */
 export const VENUE_LIST = gql`
-  query Venue {
-    organizations {
+  query Venue($id: ID!) {
+    organizations(id: $id) {
       venues {
         _id
         capacity
