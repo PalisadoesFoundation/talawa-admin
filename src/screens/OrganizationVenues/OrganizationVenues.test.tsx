@@ -57,6 +57,19 @@ const MOCKS = [
                 },
                 __typename: 'Venue',
               },
+              {
+                _id: 'venue3',
+                name: 'Venue with a name longer than 25 characters that should be truncated',
+                description:
+                  'Venue description that should be truncated because it is longer than 75 characters',
+                capacity: 2000,
+                imageUrl: null,
+                organization: {
+                  _id: 'orgId',
+                  __typename: 'Organization',
+                },
+                __typename: 'Venue',
+              },
             ],
           },
         ],
@@ -189,16 +202,40 @@ describe('Organisation Venues', () => {
     jest.clearAllMocks();
   });
 
-  test('searches the venue list correctly', async () => {
+  test('searches the venue list correctly by Name', async () => {
     renderOrganizationVenue(link);
     await wait();
-    const searchInput = screen.getByTestId('searchByName');
+
+    fireEvent.click(screen.getByTestId('searchByDrpdwn'));
+    fireEvent.click(screen.getByTestId('name'));
+
+    const searchInput = screen.getByTestId('searchBy');
     fireEvent.change(searchInput, {
       target: { value: 'Updated Venue 1' },
     });
     await waitFor(() => {
-      expect(screen.getByTestId('venueRow1')).toBeInTheDocument();
-      expect(screen.queryByTestId('venueRow2')).not.toBeInTheDocument();
+      expect(screen.getByTestId('venue-item1')).toBeInTheDocument();
+      expect(screen.queryByTestId('venue-item2')).not.toBeInTheDocument();
+    });
+  });
+
+  test('searches the venue list correctly by Description', async () => {
+    renderOrganizationVenue(link);
+    await waitFor(() =>
+      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
+    );
+
+    fireEvent.click(screen.getByTestId('searchByDrpdwn'));
+    fireEvent.click(screen.getByTestId('desc'));
+
+    const searchInput = screen.getByTestId('searchBy');
+    fireEvent.change(searchInput, {
+      target: { value: 'Updated description for venue 1' },
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('venue-item1')).toBeInTheDocument();
+      expect(screen.queryByTestId('venue-item2')).not.toBeInTheDocument();
     });
   });
 
@@ -211,10 +248,10 @@ describe('Organisation Venues', () => {
     fireEvent.click(screen.getByTestId('sortVenues'));
     fireEvent.click(screen.getByTestId('lowest'));
     await waitFor(() => {
-      expect(screen.getByTestId('venueRow1')).toHaveTextContent(
+      expect(screen.getByTestId('venue-item1')).toHaveTextContent(
         /Updated Venue 1/i,
       );
-      expect(screen.getByTestId('venueRow2')).toHaveTextContent(
+      expect(screen.getByTestId('venue-item2')).toHaveTextContent(
         /Updated Venue 2/i,
       );
     });
@@ -229,13 +266,55 @@ describe('Organisation Venues', () => {
     fireEvent.click(screen.getByTestId('sortVenues'));
     fireEvent.click(screen.getByTestId('highest'));
     await waitFor(() => {
-      expect(screen.getByTestId('venueRow1')).toHaveTextContent(
+      expect(screen.getByTestId('venue-item1')).toHaveTextContent(
+        /Venue with a name longer .../i,
+      );
+      expect(screen.getByTestId('venue-item2')).toHaveTextContent(
         /Updated Venue 2/i,
       );
-      expect(screen.getByTestId('venueRow2')).toHaveTextContent(
-        /Updated Venue 1/i,
-      );
     });
+  });
+
+  test('renders venue name with ellipsis if name is longer than 25 characters', async () => {
+    renderOrganizationVenue(link);
+    await waitFor(() =>
+      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
+    );
+
+    const venue = screen.getByTestId('venue-item1');
+    expect(venue).toHaveTextContent(/Venue with a name longer .../i);
+  });
+
+  test('renders full venue name if name is less than or equal to 25 characters', async () => {
+    renderOrganizationVenue(link);
+    await waitFor(() =>
+      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
+    );
+
+    const venueName = screen.getByTestId('venue-item3');
+    expect(venueName).toHaveTextContent('Updated Venue 1');
+  });
+
+  test('renders venue description with ellipsis if description is longer than 75 characters', async () => {
+    renderOrganizationVenue(link);
+    await waitFor(() =>
+      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
+    );
+
+    const venue = screen.getByTestId('venue-item1');
+    expect(venue).toHaveTextContent(
+      'Venue description that should be truncated because it is longer than 75 cha...',
+    );
+  });
+
+  test('renders full venue description if description is less than or equal to 75 characters', async () => {
+    renderOrganizationVenue(link);
+    await waitFor(() =>
+      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
+    );
+
+    const venue = screen.getByTestId('venue-item3');
+    expect(venue).toHaveTextContent('Updated description for venue 1');
   });
 
   test('Render modal to edit venue', async () => {
@@ -268,11 +347,11 @@ describe('Organisation Venues', () => {
       expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
     );
 
-    const deleteButton = screen.getByTestId('deleteVenueBtn2');
+    const deleteButton = screen.getByTestId('deleteVenueBtn3');
     fireEvent.click(deleteButton);
     await wait();
     await waitFor(() => {
-      const deletedVenue = screen.queryByTestId('venueRow2');
+      const deletedVenue = screen.queryByTestId('venue-item3');
       expect(deletedVenue).not.toHaveTextContent(/Updated Venue 2/i);
     });
   });

@@ -152,7 +152,10 @@ function organizationVenues(): JSX.Element {
               data-tesid="searchByToggle"
               className="flex-fill"
             >
-              <Dropdown.Toggle data-testid="searchBy" variant="outline-success">
+              <Dropdown.Toggle
+                data-testid="searchByDrpdwn"
+                variant="outline-success"
+              >
                 <Sort className={'me-1'} />
                 {t('searchBy')}
               </Dropdown.Toggle>
@@ -235,7 +238,7 @@ function organizationVenues(): JSX.Element {
                   (venueItem: InterfaceQueryVenueListItem, index: number) => (
                     <div
                       className="col-xl-4 col-lg-4 col-md-6"
-                      data-testid="post-item"
+                      data-testid={`venue-item${index + 1}`}
                       key={venueItem._id}
                     >
                       <div className={styles.cards} data-testid="cardStructure">
@@ -300,83 +303,6 @@ function organizationVenues(): JSX.Element {
               ) : (
                 <h6>{t('noVenues')}</h6>
               )}
-
-              {/* <Col>
-                <TableContainer component={Paper} sx={{ minWidth: '540px' }}>
-                  <Table aria-label="customized table">
-                    <TableHead>
-                      <TableRow>
-                        <StyledTableCell>#</StyledTableCell>
-                        <StyledTableCell align="center">Name</StyledTableCell>
-                        <StyledTableCell align="center">
-                          Description
-                        </StyledTableCell>
-                        <StyledTableCell align="center">div                         Capacity
-                        </StyledTableCell>
-                        <StyledTableCell align="center">
-                          Actions
-                        </StyledTableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {filteredVenues.length ? (
-                        filteredVenues.map(
-                          (
-                            venueItem: InterfaceQueryVenueListItem,
-                            index: number,
-                          ) => (
-                            <StyledTableRow
-                              key={venueItem._id}
-                              data-testid={`venueRow${index + 1}`}
-                            >
-                              <StyledTableCell component="th" scope="row">
-                                {index + 1}
-                              </StyledTableCell>
-
-                              <StyledTableCell align="center">
-                                {venueItem.name}
-                              </StyledTableCell>
-                              <StyledTableCell align="center">
-                                {venueItem.description}
-                              </StyledTableCell>
-                              <StyledTableCell align="center">
-                                {venueItem.capacity}
-                              </StyledTableCell>
-                              <StyledTableCell align="center">
-                                <div>
-                                  <Button
-                                    data-testid={`updateVenueBtn${index + 1}`}
-                                    className="me-2"
-                                    onClick={() => {
-                                      showEditVenueModal(venueItem);
-                                    }}
-                                  >
-                                    <Edit className="me-2" />
-                                    {t('edit')}
-                                  </Button>
-                                  <Button
-                                    data-testid={`deleteVenueBtn${index + 1}`}
-                                    onClick={() => handleDelete(venueItem._id)}
-                                  >
-                                    <i className="fa fa-trash me-2" />
-                                    {t('delete')}
-                                  </Button>
-                                </div>
-                              </StyledTableCell>
-                            </StyledTableRow>
-                          ),
-                        )
-                      ) : (
-                        <StyledTableRow>
-                          <StyledTableCell>
-                            <h6>{t('noVenues')}</h6>
-                          </StyledTableCell>
-                        </StyledTableRow>
-                      )}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Col> */}
             </div>
           )}
         </div>
