@@ -116,5 +116,6 @@ const map: InterfaceMapType = {
   orgsetting: 'orgSettings',
   orgstore: 'addOnStore',
   blockuser: 'blockUnblockUser',
+  orgvenues: 'organizationVenues',
   event: 'eventManagement',
 };
