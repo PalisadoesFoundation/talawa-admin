@@ -116,11 +116,11 @@ function app(): JSX.Element {
           <Route element={<SuperAdminScreen />}>
             <Route path="/orglist" element={<OrgList />} />
             <Route path="/member" element={<MemberDetail />} />
-            <Route path="/requests" element={<Requests />} />
             <Route path="/users" element={<Users />} />
             <Route path="/communityProfile" element={<CommunityProfile />} />
           </Route>
           <Route element={<OrganizationScreen />}>
+            <Route path="/requests/:orgId" element={<Requests />} />
             <Route path="/orgdash/:orgId" element={<OrganizationDashboard />} />
             <Route path="/orgpeople/:orgId" element={<OrganizationPeople />} />
             <Route path="/member/:orgId" element={<MemberDetail />} />
