@@ -1024,7 +1024,6 @@
     "venueAdded": "Venue added Successfully",
     "editVenue": "Update Venue",
     "venueUpdated": "Venue details updated successfully",
-    "searchByName": "Search By Name",
     "sort": "Sort",
     "highestCapacity": "Highest Capacity",
     "lowestCapacity": "Lowest Capacity",
@@ -1033,7 +1032,10 @@
     "view": "View",
     "delete": "Delete",
     "venueTitleError": "Venue title cannot be empty!",
-    "venueCapacityError": "Capacity must be a positive number!"
+    "venueCapacityError": "Capacity must be a positive number!",
+    "searchBy": "Search By",
+    "name": "Name",
+    "desc": "Description"
   },
   "addMember": {
     "title": "Add Member",
