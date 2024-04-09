@@ -280,6 +280,7 @@ describe('Testing Events Screen [User Portal]', () => {
     await wait();
     setItem('SuperAdmin', false);
     setItem('AdminFor', ['123']); // testing userRole as Admin
+    await wait();
   });
 
   test('Events are visible as expected without search query', async () => {
