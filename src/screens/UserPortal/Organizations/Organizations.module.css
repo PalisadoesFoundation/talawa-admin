@@ -1,0 +1,55 @@
+.borderNone {
+  border: none;
+}
+
+.colorWhite {
+  color: white;
+}
+
+.colorLight {
+  background-color: #f5f5f5;
+}
+
+.mainContainer {
+  width: 75%;
+  padding: 20px;
+  max-height: 100%;
+  overflow: auto;
+}
+
+.content {
+  height: fit-content;
+  min-height: calc(100% - 40px);
+}
+
+.paddingY {
+  padding: 30px 0px;
+}
+
+.containerHeight {
+  height: calc(100vh - 66px);
+}
+
+.colorPrimary {
+  background: #31bb6b;
+}
+
+.backgroundWhite {
+  background-color: white;
+}
+
+.input {
+  flex: 1;
+  position: relative;
+  margin-right: 10px;
+}
+
+.btnsContainer input {
+  outline: 1px solid var(--bs-gray-400);
+}
+
+@media screen and (max-width: 850px) {
+  .mainContainer {
+    width: 100%;
+  }
+}

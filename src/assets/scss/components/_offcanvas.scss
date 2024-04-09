@@ -1,0 +1,13 @@
+$offcanvas-padding-y: $modal-inner-padding;
+$offcanvas-padding-x: $modal-inner-padding;
+$offcanvas-horizontal-width: 400px;
+$offcanvas-vertical-height: 30vh;
+$offcanvas-transition-duration: 0.3s;
+$offcanvas-border-color: $modal-content-border-color;
+$offcanvas-border-width: $modal-content-border-width;
+$offcanvas-title-line-height: $modal-title-line-height;
+$offcanvas-bg-color: var(--#{$prefix}body-bg);
+$offcanvas-color: var(--#{$prefix}body-color);
+$offcanvas-box-shadow: $modal-content-box-shadow-xs;
+$offcanvas-backdrop-bg: $modal-backdrop-bg;
+$offcanvas-backdrop-opacity: $modal-backdrop-opacity;

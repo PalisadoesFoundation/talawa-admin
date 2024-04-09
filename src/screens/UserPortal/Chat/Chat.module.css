@@ -1,0 +1,63 @@
+.containerHeight {
+  height: calc(100vh - 66px);
+}
+
+.mainContainer {
+  width: 50%;
+  flex-grow: 3;
+  padding: 20px;
+  max-height: 100%;
+  overflow: auto;
+  display: flex;
+  flex-direction: row;
+}
+
+.chatContainer {
+  flex-grow: 4;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.contactContainer {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.colorLight {
+  background-color: #f5f5f5;
+}
+
+.addChatContainer {
+  gap: 5px;
+  padding: 10px;
+}
+
+.contactListContainer {
+  flex-grow: 1;
+  padding: 15px 10px;
+}
+
+.chatHeadingContainer {
+  padding: 10px;
+  color: white;
+  border-radius: 0px 10px 0px 0px;
+}
+
+.borderNone {
+  border: none;
+}
+
+.colorWhite {
+  color: white;
+}
+
+.colorPrimary {
+  background: #31bb6b;
+}
