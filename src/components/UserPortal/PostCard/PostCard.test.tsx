@@ -93,12 +93,14 @@ describe('Testing PostCard Component [User Portal]', () => {
   test('Component should be rendered properly', async () => {
     const cardProps = {
       id: '',
+      userImage: 'image.png',
       creator: {
         firstName: 'test',
         lastName: 'user',
         email: 'test@user.com',
         id: '1',
       },
+      postedAt: '',
       image: '',
       video: '',
       text: 'This is post test text',
@@ -151,12 +153,14 @@ describe('Testing PostCard Component [User Portal]', () => {
 
     const cardProps = {
       id: '',
+      userImage: 'image.png',
       creator: {
         firstName: 'test',
         lastName: 'user',
         email: 'test@user.com',
         id: '1',
       },
+      postedAt: '',
       image: '',
       video: '',
       text: 'This is post test text',
@@ -198,12 +202,14 @@ describe('Testing PostCard Component [User Portal]', () => {
 
     const cardProps = {
       id: '',
+      userImage: 'image.png',
       creator: {
         firstName: 'test',
         lastName: 'user',
         email: 'test@user.com',
         id: '1',
       },
+      postedAt: '',
       image: '',
       video: '',
       text: 'This is post test text',
@@ -247,12 +253,14 @@ describe('Testing PostCard Component [User Portal]', () => {
 
     const cardProps = {
       id: '',
+      userImage: 'image.png',
       creator: {
         firstName: 'test',
         lastName: 'user',
         email: 'test@user.com',
         id: '1',
       },
+      postedAt: '',
       image: '',
       video: '',
       text: 'This is post test text',
@@ -293,12 +301,14 @@ describe('Testing PostCard Component [User Portal]', () => {
   test('Component should be rendered properly if post image is defined', async () => {
     const cardProps = {
       id: '',
+      userImage: 'image.png',
       creator: {
         firstName: 'test',
         lastName: 'user',
         email: 'test@user.com',
         id: '1',
       },
+      postedAt: '',
       image: 'testImage',
       video: '',
       text: 'This is post test text',
@@ -333,12 +343,14 @@ describe('Testing PostCard Component [User Portal]', () => {
   test('Comment is created successfully after create comment button is clicked.', async () => {
     const cardProps = {
       id: '1',
+      userImage: 'image.png',
       creator: {
         firstName: 'test',
         lastName: 'user',
         email: 'test@user.com',
         id: '1',
       },
+      postedAt: '',
       image: 'testImage',
       video: '',
       text: 'This is post test text',
@@ -380,12 +392,14 @@ describe('Testing PostCard Component [User Portal]', () => {
   test('Comment modal pops when show comments button is clicked.', async () => {
     const cardProps = {
       id: '',
+      userImage: 'image.png',
       creator: {
         firstName: 'test',
         lastName: 'user',
         email: 'test@user.com',
         id: '1',
       },
+      postedAt: '',
       image: 'testImage',
       video: '',
       text: 'This is post test text',

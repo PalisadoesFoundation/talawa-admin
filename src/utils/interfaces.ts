@@ -346,6 +346,7 @@ export interface InterfacePostCard {
     email: string;
     id: string;
   };
+  postedAt: string;
   image: string | null;
   video: string | null;
   text: string;

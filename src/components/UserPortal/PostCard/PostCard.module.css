@@ -1,8 +1,96 @@
+.cardStyles{
+  height: 30rem;
+  max-height: 31rem;
+  width: 22rem;
+  background-color: white;
+  padding: 0;
+  border: none !important;
+  outline: none !important;
+}
+
+.cardHeader {
+  display: flex;
+  padding-inline: 1rem;
+  padding-block: 0;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: center;
+  background-color: white;
+  & > p{
+    margin-bottom: 0;
+    font-weight: 500;
+  }
+  & > svg{
+    width: 2rem;
+    height: 2rem;
+  }
+}
+
+.cardBody{
+  div{
+    padding: 0.5rem;
+  }
+}
+
+.imageContainer {
+  max-width: 100%;
+}
+
+.cardTitle{
+  font-size: 1.3rem !important;
+  height: 1.5rem !important;
+  overflow: hidden;
+  font-weight: 600;
+  position: relative;
+  display: inline-block;
+}
+.cardTitle::after{
+  position: absolute;
+  background-color: white;
+  min-width: 1rem;
+  bottom: 0;
+  right: 0;
+  content: "...";
+}
+
+.date{
+  font-weight: 600;
+}
+
+.cardText{
+  max-height: 3rem;
+  padding-top: 0;
+  font-weight: 300;
+  margin-top: 0.7rem !important;
+  overflow: hidden;
+  position: relative;
+  display: inline-block;
+  text-align: justify;
+}
+.cardText::after{
+  position: absolute;
+  background-color: white;
+  min-width: 1rem;
+  bottom: 0;
+  right: 0;
+  content: "...";
+}
+
+.viewBtn{
+  display: flex;
+  justify-content: flex-end;
+  margin: 0.5rem;
+  button{
+    padding-inline: 1rem;  
+  }
+}
+
 .cardActions {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 1px;
+  justify-content: flex-end;
 }
 
 .cardActionBtn {
@@ -17,16 +105,7 @@
   color: black !important;
 }
 
-.imageContainer {
-  max-width: 100%;
-}
 
-.cardHeader {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  align-items: center;
-}
 
 .creatorNameModal {
   display: flex;

@@ -1,5 +1,13 @@
 import React from 'react';
-import { Button, Card, Form, InputGroup, Modal } from 'react-bootstrap';
+import {
+  Button,
+  Image,
+  Card,
+  Form,
+  InputGroup,
+  Modal,
+  Col,
+} from 'react-bootstrap';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import CommentIcon from '@mui/icons-material/Comment';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -19,6 +27,7 @@ import { errorHandler } from 'utils/errorHandler';
 import CommentCard from '../CommentCard/CommentCard';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { InterfacePostCard } from 'utils/interfaces';
+import UserDefault from '../../../assets/images/defaultImg.png';
 
 interface InterfaceCommentCardProps {
   id: string;
@@ -140,47 +149,56 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
   };
 
   return (
-    <div data-testid="postCardContainer">
-      <Card className="my-3">
-        <Card.Header>
-          <div className={`${styles.cardHeader}`}>
-            <AccountCircleIcon />
-            {postCreator}
-          </div>
+    <div key={props.id} className="d-flex justify-content-center">
+      <Card className={`${styles.cardStyles}`}>
+        <Card.Header className={`${styles.cardHeader}`}>
+          <AccountCircleIcon className="my-2" />
+          <p>{postCreator}</p>
         </Card.Header>
-        <Card.Body>
-          <Card.Title>{props.title}</Card.Title>
-          <Card.Text>{props.text}</Card.Text>
+        <Card.Img variant="top" src={props.image ?? UserDefault} />
+        <Card.Body className="pb-0">
+          <Card.Title className={`${styles.cardTitle}`}>
+            {props.title}
+          </Card.Title>
+          <Card.Subtitle style={{ color: '#808080' }}>
+            Posted On: {props.postedAt}
+          </Card.Subtitle>
+          <Card.Text className={`${styles.cardText} mt-4`}>
+            {props.text}
+          </Card.Text>
           {props.image && (
             <img src={props.image} className={styles.imageContainer} />
           )}
         </Card.Body>
-        <Card.Footer className="text-muted" style={{ fontSize: `small` }}>
+        <Card.Footer style={{ border: 'none', background: 'white' }}>
           <div className={`${styles.cardActions}`}>
-            <Button
-              className={`${styles.cardActionBtn}`}
-              onClick={handleToggleLike}
-              data-testid={'likePostBtn'}
-            >
-              {likeLoading || unlikeLoading ? (
-                <HourglassBottomIcon fontSize="small" />
-              ) : isLikedByUser ? (
-                <ThumbUpIcon fontSize="small" />
-              ) : (
-                <ThumbUpOffAltIcon fontSize="small" />
-              )}
+            {/* <Button
+            className={`${styles.cardActionBtn}`}
+            onClick={handleToggleLike}
+            data-testid={'likePostBtn'}
+          >
+            {likeLoading || unlikeLoading ? (
+              <HourglassBottomIcon fontSize="small" />
+            ) : isLikedByUser ? (
+              <ThumbUpIcon fontSize="small" />
+            ) : (
+              <ThumbUpOffAltIcon fontSize="small" />
+            )}
+          </Button>
+          {likes}
+          {` ${t('likes')}`}
+          <Button
+            className={`${styles.cardActionBtn}`}
+            onClick={toggleCommentsModal}
+            data-testid="showCommentsBtn"
+          >
+            <CommentIcon fontSize="small" />
+          </Button>
+          {numComments}
+          {` ${t('comments')}`}*/}
+            <Button size="sm" variant="success" className="px-4">
+              View Post
             </Button>
-            {likes}
-            {` ${t('likes')}`}
-            <Button
-              className={`${styles.cardActionBtn}`}
-              onClick={toggleCommentsModal}
-              data-testid="showCommentsBtn"
-            >
-              <CommentIcon fontSize="small" />
-            </Button>
-            {numComments}
-            {` ${t('comments')}`}
           </div>
         </Card.Footer>
       </Card>
@@ -256,6 +274,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
           </InputGroup>
         </Modal.Body>
       </Modal>
+      {/* </div> */}
     </div>
   );
 }

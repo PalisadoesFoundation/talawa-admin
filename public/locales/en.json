@@ -831,8 +831,11 @@
     "comments": "Comments"
   },
   "home": {
+    "posts": "Posts",
+    "title": "Title",
+    "textArea": "Something on your mind?",
     "feed": "Feed",
-    "pinnedPosts": "View Pinned Posts",
+    "pinnedPosts": "Pinned Posts",
     "somethingOnYourMind": "Something on your mind?",
     "addPost": "Add Post",
     "startPost": "Start a post",
