@@ -19,6 +19,7 @@ import {
   MOCKS2,
   EMPTY_REQUEST_MOCKS,
   MOCKS3,
+  MOCKS4,
 } from './RequestsMocks';
 import useLocalStorage from 'utils/useLocalstorage';
 
@@ -30,6 +31,7 @@ const link3 = new StaticMockLink(EMPTY_REQUEST_MOCKS, true);
 const link4 = new StaticMockLink(MOCKS2, true);
 const link5 = new StaticMockLink(MOCKS_WITH_ERROR, true);
 const link6 = new StaticMockLink(MOCKS3, true);
+const link7 = new StaticMockLink(MOCKS4, true);
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -51,8 +53,9 @@ afterEach(() => {
 
 describe('Testing Requests screen', () => {
   test('Component should be rendered properly', async () => {
+    const loadMoreRequests = jest.fn();
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={false} link={link7}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -65,6 +68,7 @@ describe('Testing Requests screen', () => {
 
     await wait();
     expect(screen.getByTestId('testComp')).toBeInTheDocument();
+    expect(screen.getByText('Scott Tony')).toBeInTheDocument();
   });
 
   test(`Component should be rendered properly when user is not Admin
@@ -118,7 +122,7 @@ describe('Testing Requests screen', () => {
     );
 
     await wait();
-    expect(window.location.href).toEqual('http://localhost/orglist');
+    expect(window.location.href).toEqual('http://localhost/');
   });
 
   test('Testing Search requests functionality', async () => {

@@ -1009,7 +1009,7 @@
     "categoryDisabled": "Action Item Category Disabled"
   },
   "organizationVenues": {
-    "venueTitle": "Venues",
+    "title": "Venues",
     "addVenue": "Add Venue",
     "venueDetails": "Venue Details",
     "venueName": "Name of the Venue",
@@ -1022,9 +1022,20 @@
     "uploadVenueImage": "Upload Venue Image",
     "createVenue": "Create Venue",
     "venueAdded": "Venue added Successfully",
-    "update": "Update Venue Details",
     "editVenue": "Update Venue",
-    "venueUpdated": "Venue details updated successfully"
+    "venueUpdated": "Venue details updated successfully",
+    "sort": "Sort",
+    "highestCapacity": "Highest Capacity",
+    "lowestCapacity": "Lowest Capacity",
+    "noVenues": "No Venues Found!",
+    "edit": "Edit",
+    "view": "View",
+    "delete": "Delete",
+    "venueTitleError": "Venue title cannot be empty!",
+    "venueCapacityError": "Capacity must be a positive number!",
+    "searchBy": "Search By",
+    "name": "Name",
+    "desc": "Description"
   },
   "addMember": {
     "title": "Add Member",

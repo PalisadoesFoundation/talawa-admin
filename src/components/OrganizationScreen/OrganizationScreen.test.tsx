@@ -74,8 +74,6 @@ const clickToggleMenuBtn = (toggleButton: HTMLElement): void => {
 
 describe('Testing LeftDrawer in OrganizationScreen', () => {
   test('Testing LeftDrawer in page functionality', async () => {
-    setItem('UserType', 'SUPERADMIN');
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>

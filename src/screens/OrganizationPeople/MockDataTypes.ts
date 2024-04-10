@@ -7,7 +7,6 @@ type User = {
   image: string | null;
   _id: string;
   email: string;
-  userType: string;
   createdAt: string;
   joinedOrganizations: {
     __typename: string;
@@ -30,7 +29,6 @@ type Edge = {
   image?: string | null;
   email?: string;
   createdAt?: string;
-  userType?: string;
   user?: Edge;
 };
 export type TestMock = {
