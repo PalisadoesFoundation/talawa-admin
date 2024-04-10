@@ -1,202 +1,116 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render, screen, fireEvent } from '@testing-library/react';
+import type { RenderResult } from '@testing-library/react';
+import {
+  act,
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+} from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
-
 import OrganizationVenues from './OrganizationVenues';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
-import userEvent from '@testing-library/user-event';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { toast } from 'react-toastify';
-import convertToBase64 from 'utils/convertToBase64';
-import {
-  CREATE_VENUE_MUTATION,
-  UPDATE_VENUE_MUTATION,
-} from 'GraphQl/Mutations/mutations';
 import { VENUE_LIST } from 'GraphQl/Queries/OrganizationQueries';
+import type { ApolloLink } from '@apollo/client';
+import { DELETE_VENUE_MUTATION } from 'GraphQl/Mutations/VenueMutations';
 
 const MOCKS = [
   {
     request: {
-      query: CREATE_VENUE_MUTATION,
+      query: VENUE_LIST,
       variables: {
-        name: 'Test Venue',
-        description: 'Test Venue Desc',
-        capacity: 100,
-        organizationId: 'venue1',
-        file: 'data:image/jpeg;base64,dGVzdC1pbWFnZQ==',
+        id: 'orgId',
       },
     },
     result: {
       data: {
-        createVenue: {
-          _id: 'venue2',
-        },
+        organizations: [
+          {
+            venues: [
+              {
+                _id: 'venue1',
+                capacity: 1000,
+                description: 'Updated description for venue 1',
+                imageUrl: null,
+                name: 'Updated Venue 1',
+                organization: {
+                  __typename: 'Organization',
+                  _id: 'orgId',
+                },
+                __typename: 'Venue',
+              },
+              {
+                _id: 'venue2',
+                capacity: 1500,
+                description: 'Updated description for venue 2',
+                imageUrl: null,
+                name: 'Updated Venue 2',
+                organization: {
+                  __typename: 'Organization',
+                  _id: 'orgId',
+                },
+                __typename: 'Venue',
+              },
+              {
+                _id: 'venue3',
+                name: 'Venue with a name longer than 25 characters that should be truncated',
+                description:
+                  'Venue description that should be truncated because it is longer than 75 characters',
+                capacity: 2000,
+                imageUrl: null,
+                organization: {
+                  _id: 'orgId',
+                  __typename: 'Organization',
+                },
+                __typename: 'Venue',
+              },
+            ],
+          },
+        ],
       },
     },
   },
   {
     request: {
-      query: UPDATE_VENUE_MUTATION,
+      query: DELETE_VENUE_MUTATION,
       variables: {
-        capacity: 100,
-        description: 'Updated description',
-        file: '',
         id: 'venue1',
-        name: 'Updated Venue',
       },
     },
     result: {
       data: {
-        editVenue: {
+        deleteVenue: {
           _id: 'venue1',
+          __typename: 'Venue',
         },
       },
     },
   },
   {
     request: {
-      query: VENUE_LIST,
+      query: DELETE_VENUE_MUTATION,
       variables: {
-        orgId: 'venue1',
+        id: 'venue2',
       },
     },
     result: {
       data: {
-        organizations: [
-          {
-            venues: [
-              {
-                _id: 'venue1',
-                capacity: 1000,
-                description: 'Updated description for venue 1',
-                imageUrl: null,
-                name: 'Updated Venue 1',
-                organization: {
-                  __typename: 'Organization',
-                  _id: 'venue1',
-                },
-                __typename: 'Venue',
-              },
-              {
-                _id: 'venue2',
-                capacity: 1500,
-                description: 'Updated description for venue 2',
-                imageUrl: null,
-                name: 'Updated Venue 2',
-                organization: {
-                  __typename: 'Organization',
-                  _id: 'venue1',
-                },
-                __typename: 'Venue',
-              },
-            ],
-          },
-        ],
-      },
-    },
-  },
-];
-
-const MOCKS_ERROR_CREATE_VENUE = [
-  {
-    request: {
-      query: CREATE_VENUE_MUTATION,
-      variables: {
-        name: 'Test Venue',
-        description: 'Test Venue Desc',
-        capacity: 100,
-        organizationId: undefined,
-        file: 'data:image/jpeg;base64,dGVzdC1pbWFnZQ==',
-      },
-    },
-    result: {
-      data: {
-        createVenue: {
+        deleteVenue: {
           _id: 'venue2',
+          __typename: 'Venue',
         },
-      },
-    },
-  },
-];
-
-const MOCKS_ERROR_UPDATE_VENUE = [
-  {
-    request: {
-      query: UPDATE_VENUE_MUTATION,
-      variables: {
-        capacity: 100,
-        description: 'Updated description',
-        file: '',
-        id: undefined,
-        name: 'Updated Venue',
-      },
-    },
-    result: {
-      data: {
-        editVenue: {
-          _id: 'venue1',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: VENUE_LIST,
-      variables: {
-        orgId: 'venue1',
-      },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            venues: [
-              {
-                _id: 'venue1',
-                capacity: 1000,
-                description: 'Updated description for venue 1',
-                imageUrl: null,
-                name: 'Updated Venue 1',
-                organization: {
-                  __typename: 'Organization',
-                  _id: 'venue1',
-                },
-                __typename: 'Venue',
-              },
-              {
-                _id: 'venue2',
-                capacity: 1500,
-                description: 'Updated description for venue 2',
-                imageUrl: null,
-                name: 'Updated Venue 2',
-                organization: {
-                  __typename: 'Organization',
-                  _id: 'venue1',
-                },
-                __typename: 'Venue',
-              },
-            ],
-          },
-        ],
       },
     },
   },
 ];
 
 const link = new StaticMockLink(MOCKS, true);
-const link2 = new StaticMockLink(MOCKS_ERROR_CREATE_VENUE, true);
-const link3 = new StaticMockLink(MOCKS_ERROR_UPDATE_VENUE, true);
-
-const linkURL = 'orgid';
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({ orgId: linkURL }),
-}));
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -214,340 +128,251 @@ jest.mock('react-toastify', () => ({
   },
 }));
 
-describe('Organisation Venues Page', () => {
-  const createFormData = {
-    title: 'Test Venue',
-    description: 'Test Venue Desc',
-    capacity: 100,
-    organizationId: 'venue1',
-    file: 'data:image/jpeg;base64,dGVzdC1pbWFnZQ==',
-  };
+const renderOrganizationVenue = (link: ApolloLink): RenderResult => {
+  return render(
+    <MockedProvider addTypename={false} link={link}>
+      <MemoryRouter initialEntries={['/orgvenues/orgId']}>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Routes>
+              <Route
+                path="/orgvenues/:orgId"
+                element={<OrganizationVenues />}
+              />
+              <Route
+                path="/orglist"
+                element={<div data-testid="paramsError">paramsError</div>}
+              />
+            </Routes>
+          </I18nextProvider>
+        </Provider>
+      </MemoryRouter>
+    </MockedProvider>,
+  );
+};
 
+describe('OrganizationVenue with missing orgId', () => {
+  beforeAll(() => {
+    jest.mock('react-router-dom', () => ({
+      ...jest.requireActual('react-router-dom'),
+      useParams: () => ({ orgId: undefined }),
+    }));
+  });
+
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
+  test('Redirect to /orglist when orgId is falsy/undefined', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <MemoryRouter initialEntries={['/orgvenues/']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route path="/orgvenues/" element={<OrganizationVenues />} />
+                <Route
+                  path="/orglist"
+                  element={<div data-testid="paramsError"></div>}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      const paramsError = screen.getByTestId('paramsError');
+      expect(paramsError).toBeInTheDocument();
+    });
+  });
+});
+
+describe('Organisation Venues', () => {
   global.alert = jest.fn();
 
-  test('Testing toggling of Create venue modal', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationVenues />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    userEvent.click(screen.getByTestId('createVenueModalBtn'));
-
-    userEvent.click(screen.getByTestId('createVenueModalCloseBtn'));
+  beforeAll(() => {
+    jest.mock('react-router-dom', () => ({
+      ...jest.requireActual('react-router-dom'),
+      useParams: () => ({ orgId: 'orgId' }),
+    }));
   });
 
-  test('Testing toggling of Update venue modal', async () => {
-    window.location.assign('/orgvenues/venue1');
-    render(
-      <MockedProvider link={link} mocks={MOCKS} addTypename={false}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationVenues />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    expect(
-      screen.getByText('Updated description for venue 1'),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText('Updated description for venue 2'),
-    ).toBeInTheDocument();
-    const updateButtons = screen.getAllByText('Update Venue Details');
-    userEvent.click(updateButtons[0]);
-    userEvent.click(screen.getByTestId('updateVenueModalCloseBtn'));
+  afterAll(() => {
+    jest.clearAllMocks();
   });
 
-  test('Testing Create venue modal', async () => {
-    window.location.assign('/orgvenues/venue1');
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationVenues />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
+  test('searches the venue list correctly by Name', async () => {
+    renderOrganizationVenue(link);
     await wait();
 
-    userEvent.click(screen.getByTestId('createVenueModalBtn'));
+    fireEvent.click(screen.getByTestId('searchByDrpdwn'));
+    fireEvent.click(screen.getByTestId('name'));
 
-    userEvent.type(
-      screen.getByPlaceholderText(/Enter Venue Name/i),
-      createFormData.title,
-    );
-    userEvent.type(
-      screen.getByPlaceholderText(/Enter Venue Description/i),
-      createFormData.description,
-    );
-    userEvent.type(
-      screen.getByPlaceholderText(/Enter Venue Capacity/i),
-      createFormData.capacity.toString(),
-    );
-
-    // Mock the file upload
-    const file = new File(['test-image'], 'test.jpg', { type: 'image/jpeg' });
-    const input = screen.getByTestId('postImageUrl') as HTMLInputElement; // Assert as HTMLInputElement
-    fireEvent.change(input, { target: { files: [file] } });
-
-    await wait();
-    convertToBase64(file);
-
-    const clearImageButton = screen.getByTestId('closeimage');
-    expect(clearImageButton).toBeInTheDocument();
-    clearImageButton.addEventListener('click', (event) => {
-      event.preventDefault();
+    const searchInput = screen.getByTestId('searchBy');
+    fireEvent.change(searchInput, {
+      target: { value: 'Updated Venue 1' },
     });
-    fireEvent.click(clearImageButton);
-    expect(screen.getByTestId('postImageUrl')).toHaveValue('');
-
-    expect(input.value).toBe('');
-    expect(screen.getByPlaceholderText(/Enter Venue Name/i)).toHaveValue(
-      createFormData.title,
-    );
-    expect(screen.getByPlaceholderText(/Enter Venue Description/i)).toHaveValue(
-      createFormData.description,
-    );
-
-    userEvent.click(screen.getByTestId('createVenueBtn'));
-
-    await wait();
-    expect(toast.success).toBeCalledWith('Venue added Successfully');
+    await waitFor(() => {
+      expect(screen.getByTestId('venue-item1')).toBeInTheDocument();
+      expect(screen.queryByTestId('venue-item2')).not.toBeInTheDocument();
+    });
   });
 
-  test('Raise error if incorrect data is passed to create venue modal', async () => {
-    window.location.assign('/orgvenues/venue1');
-
-    render(
-      <MockedProvider addTypename={false} link={link2}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationVenues />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
+  test('searches the venue list correctly by Description', async () => {
+    renderOrganizationVenue(link);
+    await waitFor(() =>
+      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
     );
 
-    await wait();
+    fireEvent.click(screen.getByTestId('searchByDrpdwn'));
+    fireEvent.click(screen.getByTestId('desc'));
 
-    userEvent.click(screen.getByTestId('createVenueModalBtn'));
-
-    userEvent.type(
-      screen.getByPlaceholderText(/Enter Venue Name/i),
-      createFormData.title,
-    );
-    userEvent.type(
-      screen.getByPlaceholderText(/Enter Venue Description/i),
-      createFormData.description,
-    );
-    userEvent.type(
-      screen.getByPlaceholderText(/Enter Venue Capacity/i),
-      createFormData.capacity.toString(),
-    );
-
-    // Mock the file upload
-    const file = new File(['test-image'], 'test.jpg', { type: 'image/jpeg' });
-    const input = screen.getByTestId('postImageUrl') as HTMLInputElement; // Assert as HTMLInputElement
-    fireEvent.change(input, { target: { files: [file] } });
-
-    await wait();
-    convertToBase64(file);
-
-    const clearImageButton = screen.getByTestId('closeimage');
-    expect(clearImageButton).toBeInTheDocument();
-    clearImageButton.addEventListener('click', (event) => {
-      event.preventDefault();
+    const searchInput = screen.getByTestId('searchBy');
+    fireEvent.change(searchInput, {
+      target: { value: 'Updated description for venue 1' },
     });
-    fireEvent.click(clearImageButton);
-    expect(screen.getByTestId('postImageUrl')).toHaveValue('');
 
-    expect(input.value).toBe('');
-    expect(screen.getByPlaceholderText(/Enter Venue Name/i)).toHaveValue(
-      createFormData.title,
-    );
-    expect(screen.getByPlaceholderText(/Enter Venue Description/i)).toHaveValue(
-      createFormData.description,
-    );
-
-    userEvent.click(screen.getByTestId('createVenueBtn'));
-
-    await wait();
-    expect(toast.error).toBeCalled();
+    await waitFor(() => {
+      expect(screen.getByTestId('venue-item1')).toBeInTheDocument();
+      expect(screen.queryByTestId('venue-item2')).not.toBeInTheDocument();
+    });
   });
 
-  test('Testing successful venue update and page reload', async () => {
-    window.location.assign('/orgvenues/venue1');
-    render(
-      <MockedProvider link={link} mocks={MOCKS} addTypename={false}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationVenues />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
+  test('sorts the venue list by lowest capacity correctly', async () => {
+    renderOrganizationVenue(link);
+    await waitFor(() =>
+      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
     );
 
-    await wait();
-
-    const updateButtons = screen.getAllByText('Update Venue Details');
-    userEvent.click(updateButtons[0]);
-
-    fireEvent.change(screen.getByPlaceholderText(/Enter Venue Name/i), {
-      target: { value: 'Updated Venue' },
+    fireEvent.click(screen.getByTestId('sortVenues'));
+    fireEvent.click(screen.getByTestId('lowest'));
+    await waitFor(() => {
+      expect(screen.getByTestId('venue-item1')).toHaveTextContent(
+        /Updated Venue 1/i,
+      );
+      expect(screen.getByTestId('venue-item2')).toHaveTextContent(
+        /Updated Venue 2/i,
+      );
     });
-    fireEvent.change(screen.getByPlaceholderText(/Enter Venue Description/i), {
-      target: { value: 'Updated description' },
-    });
-    fireEvent.change(screen.getByPlaceholderText(/Enter Venue Capacity/i), {
-      target: { value: '100' },
-    });
-    // Mock the file upload
-    const file = new File(['test-image'], 'test.jpg', { type: 'image/jpeg' });
-    const input = screen.getByTestId('postImageUrl') as HTMLInputElement; // Assert as HTMLInputElement
-    fireEvent.change(input, { target: { files: [file] } });
-
-    await wait();
-    convertToBase64(file);
-
-    const clearImageButton = screen.getByTestId('closeimage');
-    expect(clearImageButton).toBeInTheDocument();
-    clearImageButton.addEventListener('click', (event) => {
-      event.preventDefault();
-    });
-    fireEvent.click(clearImageButton);
-    expect(screen.getByTestId('postImageUrl')).toHaveValue('');
-
-    expect(input.value).toBe('');
-
-    fireEvent.click(screen.getByTestId('updateVenueBtn'));
-
-    await wait();
-
-    expect(toast.success).toBeCalledWith('Venue details updated successfully');
   });
 
-  test('Raises error when incorrect data is passed to update event modal', async () => {
-    window.location.assign('/orgvenues/venue1');
-    render(
-      <MockedProvider link={link3} mocks={MOCKS} addTypename={false}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationVenues />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
+  test('sorts the venue list by highest capacity correctly', async () => {
+    renderOrganizationVenue(link);
+    await waitFor(() =>
+      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
     );
 
-    await wait();
-
-    const updateButtons = screen.getAllByText('Update Venue Details');
-    userEvent.click(updateButtons[0]);
-
-    fireEvent.change(screen.getByPlaceholderText(/Enter Venue Name/i), {
-      target: { value: 'Updated Venue' },
+    fireEvent.click(screen.getByTestId('sortVenues'));
+    fireEvent.click(screen.getByTestId('highest'));
+    await waitFor(() => {
+      expect(screen.getByTestId('venue-item1')).toHaveTextContent(
+        /Venue with a name longer .../i,
+      );
+      expect(screen.getByTestId('venue-item2')).toHaveTextContent(
+        /Updated Venue 2/i,
+      );
     });
-    fireEvent.change(screen.getByPlaceholderText(/Enter Venue Description/i), {
-      target: { value: 'Updated description' },
-    });
-    fireEvent.change(screen.getByPlaceholderText(/Enter Venue Capacity/i), {
-      target: { value: '100' },
-    });
-    // Mock the file upload
-    const file = new File(['test-image'], 'test.jpg', { type: 'image/jpeg' });
-    const input = screen.getByTestId('postImageUrl') as HTMLInputElement; // Assert as HTMLInputElement
-    fireEvent.change(input, { target: { files: [file] } });
-
-    await wait();
-    convertToBase64(file);
-
-    const clearImageButton = screen.getByTestId('closeimage');
-    expect(clearImageButton).toBeInTheDocument();
-    clearImageButton.addEventListener('click', (event) => {
-      event.preventDefault();
-    });
-    fireEvent.click(clearImageButton);
-    expect(screen.getByTestId('postImageUrl')).toHaveValue('');
-
-    expect(input.value).toBe('');
-
-    fireEvent.click(screen.getByTestId('updateVenueBtn'));
-
-    await wait();
-
-    expect(toast.error).toBeCalled();
   });
 
-  test('Gives warning when title of create modal is blank', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationVenues />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
+  test('renders venue name with ellipsis if name is longer than 25 characters', async () => {
+    renderOrganizationVenue(link);
+    await waitFor(() =>
+      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
     );
-    await wait();
-    userEvent.click(screen.getByTestId('createVenueModalBtn'));
-    await wait();
-    userEvent.type(screen.getByPlaceholderText(/Enter Venue Name/i), '');
-    userEvent.click(screen.getByTestId('createVenueBtn'));
-    expect(toast.warning).toBeCalledWith('Venue title can not be blank!');
+
+    const venue = screen.getByTestId('venue-item1');
+    expect(venue).toHaveTextContent(/Venue with a name longer .../i);
   });
 
-  test('Gives warning when title of update modal is blank', async () => {
-    window.location.assign('/orgvenues/venue1');
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationVenues />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
+  test('renders full venue name if name is less than or equal to 25 characters', async () => {
+    renderOrganizationVenue(link);
+    await waitFor(() =>
+      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
     );
-    await wait();
 
-    const updateButtons = screen.getAllByText('Update Venue Details');
-    userEvent.click(updateButtons[0]);
+    const venueName = screen.getByTestId('venue-item3');
+    expect(venueName).toHaveTextContent('Updated Venue 1');
+  });
 
-    await wait();
+  test('renders venue description with ellipsis if description is longer than 75 characters', async () => {
+    renderOrganizationVenue(link);
+    await waitFor(() =>
+      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
+    );
 
-    fireEvent.change(screen.getByPlaceholderText(/Enter Venue Name/i), {
-      target: { value: '' },
+    const venue = screen.getByTestId('venue-item1');
+    expect(venue).toHaveTextContent(
+      'Venue description that should be truncated because it is longer than 75 cha...',
+    );
+  });
+
+  test('renders full venue description if description is less than or equal to 75 characters', async () => {
+    renderOrganizationVenue(link);
+    await waitFor(() =>
+      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
+    );
+
+    const venue = screen.getByTestId('venue-item3');
+    expect(venue).toHaveTextContent('Updated description for venue 1');
+  });
+
+  test('Render modal to edit venue', async () => {
+    renderOrganizationVenue(link);
+    await waitFor(() =>
+      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
+    );
+
+    fireEvent.click(screen.getByTestId('updateVenueBtn1'));
+    await waitFor(() => {
+      expect(screen.getByTestId('venueForm')).toBeInTheDocument();
     });
+  });
+
+  test('Render Modal to add event', async () => {
+    renderOrganizationVenue(link);
+    await waitFor(() =>
+      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
+    );
+
+    fireEvent.click(screen.getByTestId('createVenueBtn'));
+    await waitFor(() => {
+      expect(screen.getByTestId('venueForm')).toBeInTheDocument();
+    });
+  });
+
+  test('calls handleDelete when delete button is clicked', async () => {
+    renderOrganizationVenue(link);
+    await waitFor(() =>
+      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
+    );
+
+    const deleteButton = screen.getByTestId('deleteVenueBtn3');
+    fireEvent.click(deleteButton);
     await wait();
-    userEvent.click(screen.getByTestId('updateVenueBtn'));
-    expect(toast.warning).toBeCalledWith('Venue title can not be blank!');
+    await waitFor(() => {
+      const deletedVenue = screen.queryByTestId('venue-item3');
+      expect(deletedVenue).not.toHaveTextContent(/Updated Venue 2/i);
+    });
+  });
+
+  test('displays loader when data is loading', () => {
+    renderOrganizationVenue(link);
+    expect(screen.getByTestId('spinner-wrapper')).toBeInTheDocument();
+  });
+
+  test('renders without crashing', async () => {
+    renderOrganizationVenue(link);
+    waitFor(() => {
+      expect(screen.findByTestId('orgvenueslist')).toBeInTheDocument();
+    });
+  });
+
+  test('renders the venue list correctly', async () => {
+    renderOrganizationVenue(link);
+    waitFor(() => {
+      expect(screen.getByTestId('venueRow2')).toBeInTheDocument();
+      expect(screen.getByTestId('venueRow1')).toBeInTheDocument();
+    });
   });
 });

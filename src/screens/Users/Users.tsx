@@ -34,25 +34,17 @@ const Users = (): JSX.Element => {
   const [searchByName, setSearchByName] = useState('');
   const [sortingOption, setSortingOption] = useState('newest');
   const [filteringOption, setFilteringOption] = useState('cancel');
-  const userType = getItem('SuperAdmin')
+  const superAdmin = getItem('SuperAdmin');
+  const adminFor = getItem('AdminFor');
+  const userRole = superAdmin
     ? 'SUPERADMIN'
-    : getItem('AdminFor')
+    : adminFor?.length > 0
       ? 'ADMIN'
       : 'USER';
+
   const loggedInUserId = getItem('id');
 
-  const {
-    data: usersData,
-    loading: loading,
-    fetchMore,
-    refetch: refetchUsers,
-  }: {
-    data?: { users: InterfaceQueryUserListItem[] };
-    loading: boolean;
-    fetchMore: any;
-    refetch: any;
-    error?: ApolloError;
-  } = useQuery(USER_LIST, {
+  const { data, loading, fetchMore, refetch } = useQuery(USER_LIST, {
     variables: {
       first: perPageResult,
       skip: 0,
@@ -63,22 +55,22 @@ const Users = (): JSX.Element => {
   });
 
   const { data: dataOrgs } = useQuery(ORGANIZATION_CONNECTION_LIST);
-  const [displayedUsers, setDisplayedUsers] = useState(usersData?.users || []);
+  const [displayedUsers, setDisplayedUsers] = useState(data?.users || []);
 
   // Manage loading more state
   useEffect(() => {
-    if (!usersData) {
+    if (!data) {
       return;
     }
-    if (usersData.users.length < perPageResult) {
+    if (data.users.length < perPageResult) {
       setHasMore(false);
     }
-    if (usersData && usersData.users) {
-      let newDisplayedUsers = sortUsers(usersData.users, sortingOption);
+    if (data && data.users) {
+      let newDisplayedUsers = sortUsers(data.users, sortingOption);
       newDisplayedUsers = filterUsers(newDisplayedUsers, filteringOption);
       setDisplayedUsers(newDisplayedUsers);
     }
-  }, [usersData, sortingOption, filteringOption]);
+  }, [data, sortingOption, filteringOption]);
 
   // To clear the search when the component is unmounted
   useEffect(() => {
@@ -100,7 +92,7 @@ const Users = (): JSX.Element => {
 
   // Send to orgList page if user is not superadmin
   useEffect(() => {
-    if (userType != 'SUPERADMIN') {
+    if (userRole != 'SUPERADMIN') {
       window.location.assign('/orglist');
     }
   }, []);
@@ -120,16 +112,18 @@ const Users = (): JSX.Element => {
       resetAndRefetch();
       return;
     }
-    refetchUsers({
+    refetch({
       firstName_contains: value,
       lastName_contains: '',
       // Later on we can add several search and filter options
     });
   };
 
-  const handleSearchByEnter = (e: any): void => {
+  const handleSearchByEnter = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ): void => {
     if (e.key === 'Enter') {
-      const { value } = e.target;
+      const { value } = e.currentTarget;
       handleSearch(value);
     }
   };
@@ -143,7 +137,7 @@ const Users = (): JSX.Element => {
   };
   /* istanbul ignore next */
   const resetAndRefetch = (): void => {
-    refetchUsers({
+    refetch({
       first: perPageResult,
       skip: 0,
       firstName_contains: '',
@@ -156,8 +150,7 @@ const Users = (): JSX.Element => {
     setIsLoadingMore(true);
     fetchMore({
       variables: {
-        skip: usersData?.users.length || 0,
-        userType: 'ADMIN',
+        skip: data?.users.length || 0,
         filter: searchByName,
       },
       updateQuery: (
@@ -256,7 +249,7 @@ const Users = (): JSX.Element => {
           <div
             className={styles.input}
             style={{
-              display: userType === 'SUPERADMIN' ? 'block' : 'none',
+              display: userRole === 'SUPERADMIN' ? 'block' : 'none',
             }}
           >
             <Form.Control
@@ -349,7 +342,7 @@ const Users = (): JSX.Element => {
         </div>
       </div>
       {isLoading == false &&
-      usersData &&
+      data &&
       displayedUsers.length === 0 &&
       searchByName.length > 0 ? (
         <div className={styles.notFound}>
@@ -357,7 +350,7 @@ const Users = (): JSX.Element => {
             {t('noResultsFoundFor')} &quot;{searchByName}&quot;
           </h4>
         </div>
-      ) : isLoading == false && usersData && displayedUsers.length === 0 ? (
+      ) : isLoading == false && data && displayedUsers.length === 0 ? (
         <div className={styles.notFound}>
           <h4>{t('noUserFound')}</h4>
         </div>
@@ -400,7 +393,7 @@ const Users = (): JSX.Element => {
                   </tr>
                 </thead>
                 <tbody>
-                  {usersData &&
+                  {data &&
                     displayedUsers.map(
                       (user: InterfaceQueryUserListItem, index: number) => {
                         return (

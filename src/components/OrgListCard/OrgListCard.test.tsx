@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 
@@ -19,6 +19,9 @@ const MOCKS = [
   {
     request: {
       query: IS_SAMPLE_ORGANIZATION_QUERY,
+      variables: {
+        isSampleOrganizationId: 'xyz',
+      },
     },
     result: {
       data: {
@@ -29,6 +32,14 @@ const MOCKS = [
 ];
 
 const link = new StaticMockLink(MOCKS, true);
+
+async function wait(ms = 100): Promise<void> {
+  await act(() => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  });
+}
 
 const props: InterfaceOrgListCardProps = {
   data: {
@@ -64,7 +75,7 @@ const props: InterfaceOrgListCardProps = {
 };
 
 describe('Testing the Super Dash List', () => {
-  test('should render props and text elements test for the page component', () => {
+  test('should render props and text elements test for the page component', async () => {
     removeItem('id');
     setItem('id', '123'); // Means the user is an admin
 
@@ -77,12 +88,15 @@ describe('Testing the Super Dash List', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
+    await wait();
     expect(screen.getByAltText(/Dogs Care image/i)).toBeInTheDocument();
     expect(screen.getByText(/Admins:/i)).toBeInTheDocument();
     expect(screen.getByText(/Members:/i)).toBeInTheDocument();
     expect(screen.getByText('Dogs Care')).toBeInTheDocument();
     expect(screen.getByText(/Sample City/i)).toBeInTheDocument();
     expect(screen.getByText(/123 Sample Street/i)).toBeInTheDocument();
+    expect(screen.getByTestId(/manageBtn/i)).toBeInTheDocument();
+    expect(screen.getByTestId(/flaskIcon/i)).toBeInTheDocument();
     userEvent.click(screen.getByTestId(/manageBtn/i));
     removeItem('id');
   });

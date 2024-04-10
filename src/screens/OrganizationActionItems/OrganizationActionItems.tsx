@@ -84,7 +84,7 @@ function organizationActionItems(): JSX.Element {
     data: InterfaceActionItemList | undefined;
     loading: boolean;
     error?: Error | undefined;
-    refetch: any;
+    refetch: () => void;
   } = useQuery(ACTION_ITEM_LIST, {
     variables: {
       organizationId: currentUrl,
@@ -198,17 +198,8 @@ function organizationActionItems(): JSX.Element {
 
   return (
     <div className={styles.organizationActionItemsContainer}>
-      <Button
-        variant="success"
-        onClick={showCreateModal}
-        data-testid="createActionItemBtn"
-        className={styles.createActionItemButton}
-      >
-        <i className={'fa fa-plus me-2'} />
-        {t('createActionItem')}
-      </Button>
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
-        <div className={`mt-4 mx-4`}>
+        <div className={`pt-4 mx-4`}>
           <div className={styles.btnsContainer}>
             <div className={styles.btnsBlock}>
               <Dropdown
@@ -315,7 +306,7 @@ function organizationActionItems(): JSX.Element {
               </Dropdown>
             </div>
 
-            <div className="mt-3 d-none d-lg-inline flex-grow-1 d-flex align-items-center border bg-light-subtle rounded-3">
+            <div className=" d-none d-lg-inline flex-grow-1 d-flex align-items-center border bg-light-subtle rounded-3">
               {!actionItemCategoryName && !actionItemStatus && (
                 <div className="lh-lg mt-2 text-center fw-semibold text-body-tertiary">
                   No Filters
@@ -356,6 +347,15 @@ function organizationActionItems(): JSX.Element {
             >
               <i className="fa fa-broom me-2"></i>
               {t('clearFilters')}
+            </Button>
+            <Button
+              variant="success"
+              onClick={showCreateModal}
+              data-testid="createActionItemBtn"
+              className={styles.createActionItemButton}
+            >
+              <i className={'fa fa-plus me-2'} />
+              {t('createActionItem')}
             </Button>
           </div>
         </div>

@@ -10,7 +10,6 @@ describe('SecuredRouteForUser', () => {
   test('renders the route when the user is logged in', () => {
     // Set the 'IsLoggedIn' value to 'TRUE' in localStorage to simulate a logged-in user and do not set 'AdminFor' so that it remains undefined.
     setItem('IsLoggedIn', 'TRUE');
-    //setItem('UserType', 'USER');
 
     render(
       <MemoryRouter initialEntries={['/user/organizations']}>
@@ -59,7 +58,7 @@ describe('SecuredRouteForUser', () => {
     });
   });
 
-  test('renders the route when the user is logged in and userType is ADMIN', () => {
+  test('renders the route when the user is logged in and user is ADMIN', () => {
     // Set the 'IsLoggedIn' value to 'TRUE' in localStorage to simulate a logged-in user and set 'AdminFor' to simulate ADMIN of some Organization.
     setItem('IsLoggedIn', 'TRUE');
     setItem('AdminFor', [
