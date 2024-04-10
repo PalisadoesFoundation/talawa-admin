@@ -108,35 +108,36 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
 
   const handleLikeComment = (commentId: string): void => {
     const updatedComments = comments.map((comment) => {
+      let updatedComment = { ...comment };
       if (
         comment.id === commentId &&
         !comment.likedBy.some((user) => user.id === userId)
       ) {
-        return {
+        updatedComment = {
           ...comment,
           likedBy: [...comment.likedBy, { id: userId }],
           likeCount: comment.likeCount + 1,
         };
       }
-
-      return comment;
+      return updatedComment;
     });
     setComments(updatedComments);
   };
 
   const handleDislikeComment = (commentId: string): void => {
     const updatedComments = comments.map((comment) => {
+      let updatedComment = { ...comment };
       if (
         comment.id === commentId &&
         comment.likedBy.some((user) => user.id === userId)
       ) {
-        return {
+        updatedComment = {
           ...comment,
           likedBy: comment.likedBy.filter((user) => user.id !== userId),
           likeCount: comment.likeCount - 1,
         };
       }
-      return comment;
+      return updatedComment;
     });
     setComments(updatedComments);
   };
