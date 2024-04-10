@@ -7,7 +7,9 @@ process.env.PORT = port;
 const reactAppRewiredStart =
   'npx react-app-rewired start --config-overrides=scripts/config-overrides/';
 
-spawn(reactAppRewiredStart, { stdio: 'inherit', shell: true });
+if (process.env.ALLOW_LOGS === "YES") {
+  spawn(reactAppRewiredStart, { stdio: 'inherit', shell: true });
+}
 
 const {
   override,
