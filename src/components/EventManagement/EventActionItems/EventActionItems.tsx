@@ -34,6 +34,15 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
     keyPrefix: 'eventActionItems',
   });
 
+  const [actionItemCreateModalIsOpen, setActionItemCreateModalIsOpen] =
+    useState(false);
+  const [actionItemUpdateModalIsOpen, setActionItemUpdateModalIsOpen] =
+    useState(false);
+  const [actionItemDeleteModalIsOpen, setActionItemDeleteModalIsOpen] =
+    useState(false);
+    const [dueDate, setDueDate] = useState<Date | null>(new Date());
+    const [completionDate, setCompletionDate] = useState<Date | null>(new Date());
+    const [actionItemId, setActionItemId] = useState('');
   document.title = t('title');
   const url: string = window.location.href;
   const startIdx: number = url.indexOf('/event/') + '/event/'.length;
@@ -61,18 +70,12 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
     setActionItemId('');
     setActionItemUpdateModalIsOpen(!actionItemUpdateModalIsOpen);
   };
-  const toggleDeleteModal = (): void => {
+  const showDeleteModal = (): void => {
     setActionItemDeleteModalIsOpen(!actionItemDeleteModalIsOpen);
   };
-  const [actionItemCreateModalIsOpen, setActionItemCreateModalIsOpen] =
-    useState(false);
-  const [actionItemUpdateModalIsOpen, setActionItemUpdateModalIsOpen] =
-    useState(false);
-  const [actionItemDeleteModalIsOpen, setActionItemDeleteModalIsOpen] =
-    useState(false);
-  const [dueDate, setDueDate] = useState<Date | null>(new Date());
-  const [completionDate, setCompletionDate] = useState<Date | null>(new Date());
-  const [actionItemId, setActionItemId] = useState('');
+  const hideDeleteModal = (): void => {
+    setActionItemDeleteModalIsOpen(!actionItemDeleteModalIsOpen);
+  };
   const {
     data: actionItemCategoriesData,
   }: {
@@ -171,20 +174,15 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
   };
   const [removeActionItem] = useMutation(DELETE_ACTION_ITEM_MUTATION);
   const deleteActionItemHandler = async (): Promise<void> => {
-    try {
       await removeActionItem({
         variables: {
           actionItemId,
         },
       });
       actionItemsRefetch();
-      toggleDeleteModal();
+      hideDeleteModal();
+      hideUpdateModal();
       toast.success(t('successfulDeletion'));
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
-    }
   };
   const columns: GridColDef[] = [
     {
@@ -493,7 +491,7 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
                 value="deleteActionItem"
                 data-testid="deleteActionItemBtn"
                 className="btn btn-danger"
-                onClick={toggleDeleteModal}
+                onClick={showDeleteModal}
               >
                 {t('deleteActionItem')}
               </Button>
@@ -506,7 +504,7 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
         size="sm"
         id={`deleteActionItemModal`}
         show={actionItemDeleteModalIsOpen}
-        onHide={toggleDeleteModal}
+        onHide={hideDeleteModal}
         backdrop="static"
         keyboard={false}
         className={styles.actionItemModal}
@@ -522,7 +520,7 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
             type="button"
             className="btn btn-danger"
             data-dismiss="modal"
-            onClick={toggleDeleteModal}
+            onClick={hideDeleteModal}
             data-testid="actionItemDeleteModalCloseBtn"
           >
             {t('no')}

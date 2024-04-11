@@ -16,6 +16,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import {
   CREATE_ACTION_ITEM_MUTATION,
   UPDATE_ACTION_ITEM_MUTATION,
+  DELETE_ACTION_ITEM_MUTATION,
 } from 'GraphQl/Mutations/ActionItemMutations';
 import {
   ACTION_ITEM_CATEGORY_LIST,
@@ -38,7 +39,7 @@ jest.mock('react-toastify', () => ({
   },
 }));
 
-const mocks = [
+const MOCKS = [
   {
     request: {
       query: CREATE_ACTION_ITEM_MUTATION,
@@ -62,17 +63,35 @@ const mocks = [
     request: {
       query: UPDATE_ACTION_ITEM_MUTATION,
       variables: {
+        actionItemId: '_6613ef741677gygwuyu',
         assigneeId: '658930fd2caa9d8d6908745c',
-        eventId: '123',
-        postCompletionNotes: 'task to be done with high priority',
+        postCompletionNotes: 'Done',
         dueDate: '2024-04-05',
         completionDate: '2024-04-05',
+        isCompleted: false,
       },
     },
     result: {
       data: {
         updateActionItem: {
-          _id: 'newly_created_action_item_id',
+          _id: '_6613ef741677gygwuyu',
+          __typename: 'ActionItem',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: DELETE_ACTION_ITEM_MUTATION,
+      variables: {
+        actionItemId: '_6613ef741677gygwuyu',
+      },
+    },
+    result: {
+      data: {
+        removeActionItem: {
+          _id: '_6613ef741677gygwuyu',
+          __typename: 'ActionItem',
         },
       },
     },
@@ -183,17 +202,57 @@ const mocks = [
             postCompletionNotes: 'Post Completion Note',
             preCompletionNotes: 'Pre Completion Note',
           },
+        ],
+      },
+      refetch: jest.fn(),
+    },
+  },
+];
+
+const CREATE_ACTION_ITEM_ERROR_MOCK=[
+  {
+    request: {
+      query: CREATE_ACTION_ITEM_MUTATION,
+      variables: {
+        assigneeId: '658930fd2caa9d8d6908745c',
+        actionItemCategoryId: '65f069a53b63ad266db32b3f',
+        eventId: '123',
+        preCompletionNotes: 'task to be done with high priority',
+        dueDate: '2024-04-05',
+      },
+    },
+    result: {
+      data: {
+        createActionItem: {
+          _id: undefined,
+        },
+      },
+    },
+  },
+]
+
+const UPDATE_ACTION_ITEM_ERROR_MOCK=[
+  {
+    request: {
+      query: ACTION_ITEM_LIST_BY_EVENTS,
+      variables: {
+        eventId: '123',
+      },
+    },
+    result: {
+      data: {
+        actionItemsByEvent: [
           {
-            _id: '_6613ef7bhscjkkk',
+            _id: '_6613ef741677gygwuyu',
             actionItemCategory: {
               __typename: 'ActionItemCategory',
-              _id: '65f069a53b63ad266db32b3e',
+              _id: '65f069a53b63ad266db32b3j',
               name: 'Default',
             },
             assignee: {
               __typename: 'User',
-              _id: '6589387e2caa9d8d69087486',
-              firstName: 'Will',
+              _id: '6589387e2caa9d8d69087485',
+              firstName: 'Burton',
               lastName: 'Sanders',
             },
             assigner: {
@@ -202,8 +261,8 @@ const mocks = [
               firstName: 'Wilt',
               lastName: 'Shepherd',
             },
-            assignmentDate: '2024-05-08',
-            completionDate: '2024-05-08',
+            assignmentDate: '2024-04-08',
+            completionDate: '2024-04-08',
             creator: {
               __typename: 'User',
               _id: '64378abd85008f171cf2990d',
@@ -214,20 +273,67 @@ const mocks = [
             event: {
               __typename: 'Event',
               _id: '123',
-              title: 'Adult Swimming Lessons',
+              title: 'Adult Painting Lessons',
             },
             isCompleted: false,
-            postCompletionNotes: 'Post Completion Note 2',
-            preCompletionNotes: 'Pre Completion Note 2',
+            postCompletionNotes: 'Post Completion Note',
+            preCompletionNotes: 'Pre Completion Note',
           },
         ],
       },
       refetch: jest.fn(),
     },
   },
-];
+  {
+    request: {
+      query: UPDATE_ACTION_ITEM_MUTATION,
+      variables: {
+        actionItemId: '_6613ef741677gygwuyu',
+        assigneeId: '658930fd2caa9d8d6908745c',
+        postCompletionNotes: 'Done',
+        dueDate: '2024-04-05',
+        completionDate: '2024-04-05',
+        isCompleted: false,
+      },
+    },
+    result: {
+      data: {
+        updateActionItem: {
+          _id: undefined,
+          __typename: 'ActionItem',
+        },
+      },
+    },
+  },
+]
 
-const link = new StaticMockLink(mocks, true);
+const NO_ACTION_ITEMs_ERROR_MOCK=[
+  {
+    request: {
+      query: ACTION_ITEM_LIST_BY_EVENTS,
+      variables: {
+        eventId: '123',
+      },
+    },
+    result: {
+      data: {
+        actionItemsByEvent: [],
+      },
+      refetch: jest.fn(),
+    },
+  },
+]
+
+const link = new StaticMockLink(MOCKS, true);
+const link2 = new StaticMockLink(CREATE_ACTION_ITEM_ERROR_MOCK, true);
+const link3 = new StaticMockLink(UPDATE_ACTION_ITEM_ERROR_MOCK, true);
+const link4 = new StaticMockLink(NO_ACTION_ITEMs_ERROR_MOCK, true);
+
+const translations = JSON.parse(
+  JSON.stringify(
+    i18nForTest.getDataByLanguage('en')?.translation.eventActionItems,
+  ),
+);
 
 describe('Event Action Items Page', () => {
   test('Testing add new action item modal', async () => {
@@ -277,8 +383,8 @@ describe('Event Action Items Page', () => {
 
     await wait();
 
-    expect(toast.success).toHaveBeenCalledWith(
-      'Action Item created successfully',
+    expect(toast.success).toBeCalledWith(
+      translations.successfulCreation
     );
   });
 
@@ -358,7 +464,10 @@ describe('Event Action Items Page', () => {
     userEvent.click(screen.getByTestId('updateActionItemFormSubmitBtn'));
 
     await wait();
-    expect(toast.success).toHaveBeenCalled();
+
+    expect(toast.success).toBeCalledWith(
+      translations.successfulUpdation
+    );
   });
   test('Testing delete action item modal and delete the record', async () => {
     window.location.assign('/event/111/123');
@@ -389,7 +498,10 @@ describe('Event Action Items Page', () => {
     ).toBeInTheDocument();
     userEvent.click(screen.getByText('Yes'));
     await wait();
-    expect(toast.success).toHaveBeenCalled();
+
+    expect(toast.success).toBeCalledWith(
+      translations.successfulDeletion
+    );
   });
 
   test('Testing delete action item modal and does not delete the record', async () => {
@@ -423,4 +535,95 @@ describe('Event Action Items Page', () => {
     await wait();
     expect(screen.getByText('Teresa Bradley')).toBeInTheDocument();
   });
+
+  test('Raises an error when incorrect information is filled while creation', async()=>{
+    window.location.assign('/event/111/123');
+    render(
+      <MockedProvider link={link2}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <I18nextProvider i18n={i18nForTest}>
+                {<EventActionItems eventId="123" />}
+              </I18nextProvider>
+            </LocalizationProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+    await wait();
+    userEvent.click(screen.getByTestId('createEventActionItemBtn'));
+
+    await wait();
+    expect(screen.getByText('Action Item Details')).toBeInTheDocument();
+
+    fireEvent.change(screen.getByPlaceholderText('Pre Completion Notes'), {
+      target: { value: 'task to be done with high priority' },
+    });
+    expect(screen.getByPlaceholderText('Pre Completion Notes')).toHaveValue(
+      'task to be done with high priority',
+    );
+
+    fireEvent.change(screen.getByLabelText('Due Date'), {
+      target: { value: '04/05/2024' },
+    });
+    expect(screen.getByLabelText('Due Date')).toHaveValue('04/05/2024');
+
+    userEvent.click(screen.getByTestId('createActionItemFormSubmitBtn'));
+    await wait();
+
+    expect(toast.error).toBeCalled();
+  })
+
+
+  test('Raises an error when incorrect information is filled while updation', async()=>{
+    window.location.assign('/event/111/123');
+    render(
+      <MockedProvider link={link3}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <I18nextProvider i18n={i18nForTest}>
+                {<EventActionItems eventId="123" />}
+              </I18nextProvider>
+            </LocalizationProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+    await wait();
+    const updateButtons = screen.getAllByText(/Manage Actions/i);
+    userEvent.click(updateButtons[0]);
+
+    expect(screen.getByText('Action Item Details')).toBeInTheDocument();
+
+    userEvent.click(screen.getByTestId('updateActionItemFormSubmitBtn'));
+
+    await wait();
+
+    expect(toast.success).toBeCalledWith(
+      translations.successfulUpdation
+    );
+
+    expect(toast.error).toBeCalled();
+  })
+
+  test('Displays message when no data is available', async()=>{
+    window.location.assign('/event/111/123');
+    render(
+      <MockedProvider link={link4}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <I18nextProvider i18n={i18nForTest}>
+                {<EventActionItems eventId="123" />}
+              </I18nextProvider>
+            </LocalizationProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+    await wait();
+    expect(screen.getByText('Nothing Found !!')).toBeInTheDocument();
+  })
 });
