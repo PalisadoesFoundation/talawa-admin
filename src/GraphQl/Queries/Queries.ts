@@ -585,6 +585,17 @@ export const ORGANIZATION_EVENT_CONNECTION_LIST = gql`
       endTime
       allDay
       recurring
+      recurrenceRule {
+        recurrenceRuleString
+        startDate
+        endDate
+        frequency
+        weekDays
+        interval
+        count
+        weekDayOccurenceInMonth
+      }
+      isRecurringEventException
       isPublic
       isRegisterable
     }

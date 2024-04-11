@@ -163,7 +163,12 @@ function organizationEvents(): JSX.Element {
             startTime: !alldaychecked ? formState.startTime + 'Z' : undefined,
             endTime: !alldaychecked ? formState.endTime + 'Z' : undefined,
             frequency: recurringchecked ? frequency : undefined,
-            weekDays: recurringchecked ? weekDays : undefined,
+            weekDays:
+              recurringchecked &&
+              (frequency === Frequency.WEEKLY ||
+                (frequency === Frequency.MONTHLY && weekDayOccurenceInMonth))
+                ? weekDays
+                : undefined,
             interval: recurringchecked ? interval : undefined,
             count: recurringchecked ? count : undefined,
             weekDayOccurenceInMonth: recurringchecked
@@ -327,9 +332,9 @@ function organizationEvents(): JSX.Element {
                       setRecurrenceRuleState({
                         ...recurrenceRuleState,
                         weekDays: [Days[date?.toDate().getDay()]],
-                        weekDayOccurenceInMonth: getWeekDayOccurenceInMonth(
-                          date?.toDate(),
-                        ),
+                        weekDayOccurenceInMonth: weekDayOccurenceInMonth
+                          ? getWeekDayOccurenceInMonth(date?.toDate())
+                          : undefined,
                       });
                     }
                   }}
