@@ -1,5 +1,4 @@
 import { useQuery } from '@apollo/client';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import {
   ADVERTISEMENTS_GET,
@@ -17,23 +16,11 @@ import PromotedPost from 'components/UserPortal/PromotedPost/PromotedPost';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import StartPostModal from 'components/UserPortal/StartPostModal/StartPostModal';
 import React, { useEffect, useState } from 'react';
-import {
-  Button,
-  Col,
-  Container,
-  Image,
-  Form,
-  InputGroup,
-  Row,
-} from 'react-bootstrap';
+import { Button, Col, Form, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { Link, Navigate, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
-import UserDefault from '../../../assets/images/defaultImg.png';
-import { ReactComponent as MediaIcon } from 'assets/svgs/media.svg';
-import { ReactComponent as ArticleIcon } from 'assets/svgs/article.svg';
-import { ReactComponent as EventIcon } from 'assets/svgs/userEvent.svg';
 import styles from './Home.module.css';
 
 interface InterfaceAdContent {
@@ -371,11 +358,9 @@ export default function home(): JSX.Element {
               </Button>
             </div>
           </div>
-
           <div style={{ marginTop: `2rem` }}>
             <h2>{t('feed')}</h2>
-            {/* Here posts should be chagned to pinned posts */}
-            {posts.length > 0 && (
+            {pinnedPosts.length > 0 && (
               <div>
                 <p>{t(`pinnedPosts`)}</p>
                 <div className={` ${styles.pinnedPostsCardsContainer}`}>
@@ -385,18 +370,18 @@ export default function home(): JSX.Element {
                     </div>
                   ) : (
                     <>
-                      {/* Here posts should be chagned to pinned posts */}
-                      {posts.map(({ node }: { node: InterfacePostNode }) => {
-                        const cardProps = getCardProps(node);
-                        return <PostCard key={node._id} {...cardProps} />;
-                      })}
+                      {pinnedPosts.map(
+                        ({ node }: { node: InterfacePostNode }) => {
+                          const cardProps = getCardProps(node);
+                          return <PostCard key={node._id} {...cardProps} />;
+                        },
+                      )}
                     </>
                   )}
                 </div>
               </div>
             )}
           </div>
-
           {filteredAd.length > 0 && (
             <div data-testid="promotedPostsContainer">
               {filteredAd.map((post: InterfaceAdContent) => (
@@ -410,15 +395,14 @@ export default function home(): JSX.Element {
               ))}
             </div>
           )}
-
           <p className=" mt-5">Your Feed</p>
           <div className={` ${styles.postsCardsContainer}`}>
             {loadingPosts ? (
-              <div className={`d-flex flex-row justify-content-center`}>
+              <div className={`d-flex flex-row`}>
                 <HourglassBottomIcon /> <span>Loading...</span>
               </div>
             ) : (
-              <div className="d-flex flex-wrap gap-3">
+              <div className="d-flex flex-wrap gap-3 justify-content-center">
                 {posts.map(({ node }: { node: InterfacePostNode }) => {
                   const cardProps = getCardProps(node);
                   return <PostCard key={node._id} {...cardProps} />;

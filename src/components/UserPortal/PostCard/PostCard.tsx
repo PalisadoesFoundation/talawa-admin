@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  Button,
-  Image,
-  Card,
-  Form,
-  InputGroup,
-  Modal,
-  Col,
-} from 'react-bootstrap';
+import { Button, Card, Form, InputGroup, Modal } from 'react-bootstrap';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import CommentIcon from '@mui/icons-material/Comment';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -28,6 +20,7 @@ import CommentCard from '../CommentCard/CommentCard';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { InterfacePostCard } from 'utils/interfaces';
 import UserDefault from '../../../assets/images/defaultImg.png';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 interface InterfaceCommentCardProps {
   id: string;
@@ -58,8 +51,8 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
 
   const [likes, setLikes] = React.useState(props.likeCount);
   const [isLikedByUser, setIsLikedByUser] = React.useState(likedByUser);
-  const [showComments, setShowComments] = React.useState(false);
   const [commentInput, setCommentInput] = React.useState('');
+  const [viewPost, setViewPost] = React.useState(false);
 
   const postCreator = `${props.creator.firstName} ${props.creator.lastName}`;
 
@@ -68,7 +61,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
   const [create, { loading: commentLoading }] =
     useMutation(CREATE_COMMENT_POST);
 
-  const toggleCommentsModal = (): void => setShowComments(!showComments);
+  const toggleViewPost = (): void => setViewPost(!viewPost);
 
   const handleToggleLike = async (): Promise<void> => {
     if (isLikedByUser) {
@@ -172,109 +165,116 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
         </Card.Body>
         <Card.Footer style={{ border: 'none', background: 'white' }}>
           <div className={`${styles.cardActions}`}>
-            {/* <Button
-            className={`${styles.cardActionBtn}`}
-            onClick={handleToggleLike}
-            data-testid={'likePostBtn'}
-          >
-            {likeLoading || unlikeLoading ? (
-              <HourglassBottomIcon fontSize="small" />
-            ) : isLikedByUser ? (
-              <ThumbUpIcon fontSize="small" />
-            ) : (
-              <ThumbUpOffAltIcon fontSize="small" />
-            )}
-          </Button>
-          {likes}
-          {` ${t('likes')}`}
-          <Button
-            className={`${styles.cardActionBtn}`}
-            onClick={toggleCommentsModal}
-            data-testid="showCommentsBtn"
-          >
-            <CommentIcon fontSize="small" />
-          </Button>
-          {numComments}
-          {` ${t('comments')}`}*/}
-            <Button size="sm" variant="success" className="px-4">
+            <Button
+              size="sm"
+              variant="success"
+              className="px-4"
+              onClick={toggleViewPost}
+            >
               View Post
             </Button>
           </div>
         </Card.Footer>
       </Card>
-      <Modal show={showComments} onHide={toggleCommentsModal}>
-        <Modal.Body>
-          <div className={`${styles.creatorNameModal}`}>
-            <AccountCircleIcon />
-            <b>{postCreator}</b>
-          </div>
-          {props.image && (
-            <img src={props.image} className={styles.imageContainer} />
-          )}
-          <div className={styles.textModal}>{props.text}</div>
-          <div className={`${styles.modalActions}`}>
-            <Button
-              className={`${styles.cardActionBtn}`}
-              onClick={handleToggleLike}
-              data-testid={'likePostBtn'}
-            >
-              {likeLoading || unlikeLoading ? (
-                <HourglassBottomIcon fontSize="small" />
-              ) : isLikedByUser ? (
-                <ThumbUpIcon fontSize="small" />
-              ) : (
-                <ThumbUpOffAltIcon fontSize="small" />
-              )}
-            </Button>
-            {likes}
-            {` ${t('likes')}`}
-          </div>
-          <h4>Comments</h4>
-          {numComments ? (
-            comments.map((comment: any, index: any) => {
-              const cardProps: InterfaceCommentCardProps = {
-                id: comment.id,
-                creator: {
-                  id: comment.creator.id,
-                  firstName: comment.creator.firstName,
-                  lastName: comment.creator.lastName,
-                  email: comment.creator.email,
-                },
-                likeCount: comment.likeCount,
-                likedBy: comment.likedBy,
-                text: comment.text,
-              };
-
-              return <CommentCard key={index} {...cardProps} />;
-            })
-          ) : (
-            <>No comments to show.</>
-          )}
-          <hr />
-          <InputGroup className={styles.maxWidth}>
-            <Form.Control
-              placeholder={'Enter comment'}
-              type="text"
-              className={`${styles.borderNone} ${styles.backgroundWhite}`}
-              value={commentInput}
-              onChange={handleCommentInput}
-              data-testid="commentInput"
+      <Modal show={viewPost} onHide={toggleViewPost} size="xl" centered>
+        <Modal.Body className="d-flex w-100 p-0" style={{ minHeight: '80vh' }}>
+          <div className="w-50 d-flex  align-items-center justify-content-center">
+            <img
+              src={props.image ?? UserDefault}
+              alt="postImg"
+              className="w-100"
             />
-            <InputGroup.Text
-              className={`${styles.colorPrimary} ${styles.borderNone}`}
-              onClick={createComment}
-              data-testid="createCommentBtn"
-            >
-              {commentLoading ? (
-                <HourglassBottomIcon fontSize="small" />
+          </div>
+          <div className="w-50 p-2 position-relative">
+            <div className="d-flex justify-content-between">
+              <div className={`${styles.cardHeader} p-0`}>
+                <AccountCircleIcon className="my-2" />
+                <p>{postCreator}</p>
+              </div>
+              <div style={{ cursor: 'pointer' }}>
+                <MoreVertIcon />
+              </div>
+            </div>
+            <div>
+              <p>{props.text}</p>
+            </div>
+            <h4>Comments</h4>
+            <div className={styles.commentContainer}>
+              {numComments ? (
+                comments.map((comment: any, index: any) => {
+                  const cardProps: InterfaceCommentCardProps = {
+                    id: comment.id,
+                    creator: {
+                      id: comment.creator.id,
+                      firstName: comment.creator.firstName,
+                      lastName: comment.creator.lastName,
+                      email: comment.creator.email,
+                    },
+                    likeCount: comment.likeCount,
+                    likedBy: comment.likedBy,
+                    text: comment.text,
+                  };
+                  return <CommentCard key={index} {...cardProps} />;
+                })
               ) : (
-                <SendIcon />
+                <p>No comments to show.</p>
               )}
-            </InputGroup.Text>
-          </InputGroup>
+            </div>
+            <div className={styles.modalFooter}>
+              <div className={`${styles.modalActions}`}>
+                <div className="d-flex align-items-center gap-2">
+                  <Button
+                    className={`${styles.cardActionBtn}`}
+                    onClick={handleToggleLike}
+                    data-testid={'likePostBtn'}
+                  >
+                    {likeLoading || unlikeLoading ? (
+                      <HourglassBottomIcon fontSize="small" />
+                    ) : isLikedByUser ? (
+                      <ThumbUpIcon fontSize="small" />
+                    ) : (
+                      <ThumbUpOffAltIcon fontSize="small" />
+                    )}
+                  </Button>
+                  {likes}
+                  {` ${t('likes')}`}
+                </div>
+                <div className="d-flex align-items-center gap-2">
+                  <Button
+                    className={`${styles.cardActionBtn}`}
+                    data-testid="showCommentsBtn"
+                  >
+                    <CommentIcon fontSize="small" />
+                  </Button>
+                  {numComments}
+                  {` ${t('comments')}`}
+                </div>
+              </div>
+              <InputGroup className="mt-2">
+                <Form.Control
+                  placeholder={'Enter comment'}
+                  type="text"
+                  className={styles.inputArea}
+                  value={commentInput}
+                  onChange={handleCommentInput}
+                  data-testid="commentInput"
+                />
+                <InputGroup.Text
+                  className={`${styles.colorPrimary} ${styles.borderNone}`}
+                  onClick={createComment}
+                  data-testid="createCommentBtn"
+                >
+                  {commentLoading ? (
+                    <HourglassBottomIcon fontSize="small" />
+                  ) : (
+                    <SendIcon />
+                  )}
+                </InputGroup.Text>
+              </InputGroup>
+            </div>
+          </div>
         </Modal.Body>
       </Modal>
-      {/* </div> */}
     </div>
   );
 }

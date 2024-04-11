@@ -832,6 +832,7 @@
   },
   "home": {
     "posts": "Posts",
+    "post": "Post",
     "title": "Title",
     "textArea": "Something on your mind?",
     "feed": "Feed",

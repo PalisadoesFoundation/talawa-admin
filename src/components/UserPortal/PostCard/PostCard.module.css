@@ -1,4 +1,4 @@
-.cardStyles{
+.cardStyles {
   height: 30rem;
   max-height: 31rem;
   width: 22rem;
@@ -16,18 +16,18 @@
   gap: 0.5rem;
   align-items: center;
   background-color: white;
-  & > p{
+  & > p {
     margin-bottom: 0;
     font-weight: 500;
   }
-  & > svg{
+  & > svg {
     width: 2rem;
     height: 2rem;
   }
 }
 
-.cardBody{
-  div{
+.cardBody {
+  div {
     padding: 0.5rem;
   }
 }
@@ -36,7 +36,7 @@
   max-width: 100%;
 }
 
-.cardTitle{
+.cardTitle {
   font-size: 1.3rem !important;
   height: 1.5rem !important;
   overflow: hidden;
@@ -44,20 +44,20 @@
   position: relative;
   display: inline-block;
 }
-.cardTitle::after{
+.cardTitle::after {
   position: absolute;
   background-color: white;
   min-width: 1rem;
   bottom: 0;
   right: 0;
-  content: "...";
+  content: '...';
 }
 
-.date{
+.date {
   font-weight: 600;
 }
 
-.cardText{
+.cardText {
   max-height: 3rem;
   padding-top: 0;
   font-weight: 300;
@@ -67,21 +67,21 @@
   display: inline-block;
   text-align: justify;
 }
-.cardText::after{
+.cardText::after {
   position: absolute;
   background-color: white;
   min-width: 1rem;
   bottom: 0;
   right: 0;
-  content: "...";
+  content: '...';
 }
 
-.viewBtn{
+.viewBtn {
   display: flex;
   justify-content: flex-end;
   margin: 0.5rem;
-  button{
-    padding-inline: 1rem;  
+  button {
+    padding-inline: 1rem;
   }
 }
 
@@ -95,6 +95,7 @@
 
 .cardActionBtn {
   background-color: rgba(0, 0, 0, 0);
+  padding: 0;
   border: none;
   color: black;
 }
@@ -104,8 +105,6 @@
   border: none;
   color: black !important;
 }
-
-
 
 .creatorNameModal {
   display: flex;
@@ -119,7 +118,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 1px;
+  gap: 1rem;
   margin: 5px 0px;
 }
 
@@ -131,4 +130,28 @@
   background: #31bb6b;
   color: white;
   cursor: pointer;
+}
+
+.commentContainer {
+  overflow: auto;
+  max-height: 18rem;
+  padding-bottom: 1rem;
+}
+
+.modalFooter {
+  position: absolute;
+  width: calc(100% - 1rem);
+  padding-block: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid #dddddd;
+  bottom: 0;
+  right: 0.5rem;
+  margin-left: 1rem;
+}
+
+.inputArea {
+  border: none;
+  outline: none;
+  background-color: #f1f3f6;
 }
