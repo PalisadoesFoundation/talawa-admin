@@ -18,6 +18,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ThemeProvider } from 'react-bootstrap';
 import { createTheme } from '@mui/material';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { setItem, getItem } = useLocalStorage();
 
 jest.mock('react-toastify', () => ({
   toast: {
@@ -273,7 +276,10 @@ describe('Testing Events Screen [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-
+    setItem('SuperAdmin', true); // testing userRole as Superadmin
+    await wait();
+    setItem('SuperAdmin', false);
+    setItem('AdminFor', ['123']); // testing userRole as Admin
     await wait();
   });
 
