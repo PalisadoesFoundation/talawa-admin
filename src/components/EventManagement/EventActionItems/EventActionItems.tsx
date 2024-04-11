@@ -416,7 +416,7 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
               <Form.Label>Assignee</Form.Label>
               <Form.Select
                 data-testid="formUpdateAssignee"
-                defaultValue=""
+                defaultValue={formState.assignee}
                 onChange={(e) =>
                   setFormState({ ...formState, assigneeId: e.target.value })
                 }
@@ -577,7 +577,7 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
                   ...item,
                   index: index + 1,
                 }),
-              ) || []
+              )
             }
             columns={columns}
             isRowSelectable={() => false}
