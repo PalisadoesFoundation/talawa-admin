@@ -571,14 +571,12 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
             getRowClassName={() => `${styles.rowBackground}`}
             autoHeight
             rowHeight={70}
-            rows={
-              actionItemsData?.actionItemsByEvent?.map(
-                (item: object, index: number) => ({
-                  ...item,
-                  index: index + 1,
-                }),
-              )
-            }
+            rows={actionItemsData?.actionItemsByEvent?.map(
+              (item: object, index: number) => ({
+                ...item,
+                index: index + 1,
+              }),
+            )}
             columns={columns}
             isRowSelectable={() => false}
           />
