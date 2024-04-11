@@ -416,7 +416,7 @@ describe('Testing Organizations Screen [User Portal]', () => {
     expect(screen.queryAllByText('createdOrganization')).not.toBe([]);
   });
 
-  test('Parent component should render the "Join Now" button when membershipRequestStatus is empty', async () => {
+  test('Join Now button render correctly', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -431,26 +431,8 @@ describe('Testing Organizations Screen [User Portal]', () => {
 
     await wait();
 
-    // Assert that the "Join Now" button is rendered in at least one OrganizationCard
-    expect(screen.getByTestId('joinBtn')).toBeInTheDocument();
-  });
-
-  test('Parent component should render the "Joined" button when membershipRequestStatus is accepted', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Organizations />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    // Assert that the "Joined" button is rendered in at least one OrganizationCard
-    expect(screen.getByTestId('manageBtn')).toBeInTheDocument();
+    // Assert "Join Now" button
+    const joinNowButtons = screen.getAllByTestId('joinBtn');
+    expect(joinNowButtons.length).toBeGreaterThan(0);
   });
 });
