@@ -133,7 +133,9 @@ export const UPDATE_USER_PASSWORD_MUTATION = gql`
         confirmNewPassword: $confirmNewPassword
       }
     ) {
-      _id
+      user {
+        _id
+      }
     }
   }
 `;
@@ -177,7 +179,6 @@ export const LOGIN_MUTATION = gql`
         email
       }
       appUserProfile {
-        adminApproved
         adminFor {
           _id
         }
@@ -247,7 +248,9 @@ export const CREATE_ORGANIZATION_MUTATION = gql`
 export const DELETE_ORGANIZATION_MUTATION = gql`
   mutation RemoveOrganization($id: ID!) {
     removeOrganization(id: $id) {
-      _id
+      user {
+        _id
+      }
     }
   }
 `;
@@ -270,7 +273,9 @@ export const CREATE_EVENT_MUTATION = gql`
     $location: String
     $frequency: Frequency
     $weekDays: [WeekDays]
-    $count: Int
+    $count: PositiveInt
+    $interval: PositiveInt
+    $weekDayOccurenceInMonth: Int
   ) {
     createEvent(
       data: {
@@ -290,7 +295,9 @@ export const CREATE_EVENT_MUTATION = gql`
       recurrenceRuleData: {
         frequency: $frequency
         weekDays: $weekDays
+        interval: $interval
         count: $count
+        weekDayOccurenceInMonth: $weekDayOccurenceInMonth
       }
     ) {
       _id
@@ -301,8 +308,11 @@ export const CREATE_EVENT_MUTATION = gql`
 // to delete any event by any organization
 
 export const DELETE_EVENT_MUTATION = gql`
-  mutation RemoveEvent($id: ID!) {
-    removeEvent(id: $id) {
+  mutation RemoveEvent(
+    $id: ID!
+    $recurringEventDeleteType: RecurringEventMutationType
+  ) {
+    removeEvent(id: $id, recurringEventDeleteType: $recurringEventDeleteType) {
       _id
     }
   }
@@ -404,18 +414,6 @@ export const FORGOT_PASSWORD_MUTATION = gql`
 export const UPDATE_USERTYPE_MUTATION = gql`
   mutation UpdateUserType($id: ID!, $userType: String!) {
     updateUserType(data: { id: $id, userType: $userType })
-  }
-`;
-
-export const ACCEPT_ADMIN_MUTATION = gql`
-  mutation AcceptAdmin($id: ID!) {
-    acceptAdmin(id: $id)
-  }
-`;
-
-export const REJECT_ADMIN_MUTATION = gql`
-  mutation RejectAdmin($id: ID!) {
-    rejectAdmin(id: $id)
   }
 `;
 
@@ -625,6 +623,31 @@ export const RESET_COMMUNITY = gql`
   }
 `;
 
+export const DONATE_TO_ORGANIZATION = gql`
+  mutation donate(
+    $userId: ID!
+    $createDonationOrgId2: ID!
+    $payPalId: ID!
+    $nameOfUser: String!
+    $amount: Float!
+    $nameOfOrg: String!
+  ) {
+    createDonation(
+      userId: $userId
+      orgId: $createDonationOrgId2
+      payPalId: $payPalId
+      nameOfUser: $nameOfUser
+      amount: $amount
+      nameOfOrg: $nameOfOrg
+    ) {
+      _id
+      amount
+      nameOfUser
+      nameOfOrg
+    }
+  }
+`;
+
 // Create and Update Action Item Categories
 export {
   CREATE_ACTION_ITEM_CATEGORY_MUTATION,
@@ -665,3 +688,9 @@ export {
   TOGGLE_PINNED_POST,
   UPDATE_USER_ROLE_IN_ORG_MUTATION,
 } from './OrganizationMutations';
+
+export {
+  CREATE_VENUE_MUTATION,
+  DELETE_VENUE_MUTATION,
+  UPDATE_VENUE_MUTATION,
+} from './VenueMutations';

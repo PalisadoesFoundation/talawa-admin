@@ -32,7 +32,6 @@ jest.mock('react-toastify', () => ({
 }));
 
 beforeEach(() => {
-  setItem('UserType', 'ADMIN');
   setItem('id', '123');
 });
 

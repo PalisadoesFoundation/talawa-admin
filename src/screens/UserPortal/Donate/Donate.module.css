@@ -5,20 +5,37 @@
 .mainContainer {
   width: 50%;
   flex-grow: 3;
-  padding: 20px;
+  padding: 1rem;
   max-height: 100%;
   overflow: auto;
   display: flex;
   flex-direction: column;
+  background-color: #f2f7ff;
+}
+
+.inputContainer {
+  margin-top: 3rem;
+  flex: 1;
+  position: relative;
+}
+.input {
+  width: 70%;
+  position: relative;
+  box-shadow: 5px 5px 4px 0px #31bb6b1f;
 }
 
 .box {
   width: auto;
   /* height: 200px; */
   background-color: white;
-  margin: 20px;
+  margin-top: 1rem;
   padding: 20px;
-  border-radius: 20px;
+  border: 1px solid #dddddd;
+  border-radius: 10px;
+}
+
+.heading {
+  font-size: 1.1rem;
 }
 
 .donationInputContainer {
@@ -27,23 +44,43 @@
   margin-top: 20px;
 }
 
+.donateBtn {
+  padding-inline: 1rem !important;
+}
+
+.dropdown {
+  min-width: 6rem;
+}
+
+.inputArea {
+  border: none;
+  outline: none;
+  background-color: #f1f3f6;
+}
+
 .maxWidth {
   width: 100%;
 }
 
 .donateActions {
-  margin-top: 40px;
+  margin-top: 1rem;
   width: 100%;
   display: flex;
   flex-direction: row-reverse;
 }
 
 .donationsContainer {
-  margin: 20px;
-  padding-top: 20px;
+  padding-top: 4rem;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+}
+
+.donationCardsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  --bs-gutter-x: 0;
 }
 
 .colorLight {

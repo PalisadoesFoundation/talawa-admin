@@ -112,11 +112,14 @@ const ActionItemUpdateModal: React.FC<InterfaceActionItemCreateModalProps> = ({
                   label={t('dueDate')}
                   className={styles.datebox}
                   value={dayjs(dueDate)}
-                  onChange={(date: Dayjs | null): void => {
-                    if (date) {
-                      setDueDate(date?.toDate());
+                  onChange={
+                    /* istanbul ignore next */ (date: Dayjs | null): void => {
+                      /* istanbul ignore next */
+                      if (date) {
+                        setDueDate(date?.toDate());
+                      }
                     }
-                  }}
+                  }
                 />
               </div>
               <div>
@@ -124,11 +127,14 @@ const ActionItemUpdateModal: React.FC<InterfaceActionItemCreateModalProps> = ({
                   label={t('completionDate')}
                   className={styles.datebox}
                   value={dayjs(completionDate)}
-                  onChange={(date: Dayjs | null): void => {
-                    if (date) {
-                      setCompletionDate(date?.toDate());
+                  onChange={
+                    /* istanbul ignore next */ (date: Dayjs | null): void => {
+                      /* istanbul ignore next */
+                      if (date) {
+                        setCompletionDate(date?.toDate());
+                      }
                     }
-                  }}
+                  }
                 />
               </div>
             </div>

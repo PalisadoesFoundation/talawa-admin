@@ -5,8 +5,10 @@
 // interface for the recurrenceRuleData that we would send to the backend
 export interface InterfaceRecurrenceRule {
   frequency: Frequency;
-  weekDays: WeekDays[];
+  weekDays: WeekDays[] | undefined;
+  interval: number | undefined;
   count: number | undefined;
+  weekDayOccurenceInMonth: number | undefined;
 }
 
 // recurrence frequency
@@ -19,13 +21,13 @@ export enum Frequency {
 
 // recurrence week days
 export enum WeekDays {
-  SU = 'SU',
-  MO = 'MO',
-  TU = 'TU',
-  WE = 'WE',
-  TH = 'TH',
-  FR = 'FR',
-  SA = 'SA',
+  SUNDAY = 'SUNDAY',
+  MONDAY = 'MONDAY',
+  TUESDAY = 'TUESDAY',
+  WEDNESDAY = 'WEDNESDAY',
+  THURSDAY = 'THURSDAY',
+  FRIDAY = 'FRIDAY',
+  SATURDAY = 'SATURDAY',
 }
 
 // recurrence end options
@@ -34,4 +36,11 @@ export enum RecurrenceEndOption {
   never = 'never',
   on = 'on',
   after = 'after',
+}
+
+// update / delete options of recurring events
+export enum RecurringEventMutationType {
+  ThisInstance = 'ThisInstance',
+  ThisAndFollowingInstances = 'ThisAndFollowingInstances',
+  AllInstances = 'AllInstances',
 }

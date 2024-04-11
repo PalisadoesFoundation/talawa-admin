@@ -1,19 +1,38 @@
 .mainContainer {
-  width: 100%;
+  width: 49%;
+  height: 8rem;
+  min-width: max-content;
   display: flex;
-  flex-direction: row;
-  padding: 10px;
-  cursor: pointer;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
   background-color: white;
+  border: 1px solid #dddddd;
   border-radius: 10px;
-  box-shadow: 2px 2px 8px 0px #c8c8c8;
   overflow: hidden;
+}
+
+.img {
+  height: 100%;
+  aspect-ratio: 1/1;
+  background-color: rgba(49, 187, 107, 12%);
+}
+
+.btn {
+  display: flex;
+  align-items: flex-end;
+}
+
+.btn button {
+  padding-inline: 2rem !important;
+  border-radius: 5px;
 }
 
 .personDetails {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  min-width: max-content;
 }
 
 .personImage {

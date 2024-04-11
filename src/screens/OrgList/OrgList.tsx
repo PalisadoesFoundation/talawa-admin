@@ -12,7 +12,7 @@ import {
 
 import OrgListCard from 'components/OrgListCard/OrgListCard';
 import type { ChangeEvent } from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dropdown, Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -29,7 +29,6 @@ import type {
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from './OrgList.module.css';
 import OrganizationModal from './OrganizationModal';
-import React from 'react';
 
 function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
@@ -407,9 +406,10 @@ function orgList(): JSX.Element {
       </div>
       {/* Text Infos for list */}
       {!isLoading &&
-      ((orgsData?.organizationsConnection.length === 0 &&
-        searchByName.length == 0) ||
-        (userData && adminFor.length === 0)) ? (
+      (!orgsData?.organizationsConnection ||
+        orgsData.organizationsConnection.length === 0) &&
+      searchByName.length === 0 &&
+      (!userData || adminFor.length === 0 || superAdmin) ? (
         <div className={styles.notFound}>
           <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
           <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>

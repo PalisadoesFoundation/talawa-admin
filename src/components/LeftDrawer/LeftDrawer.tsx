@@ -6,7 +6,6 @@ import { ReactComponent as OrganizationsIcon } from 'assets/svgs/organizations.s
 import { ReactComponent as RolesIcon } from 'assets/svgs/roles.svg';
 import { ReactComponent as SettingsIcon } from 'assets/svgs/settings.svg';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
-import { ReactComponent as RequestsIcon } from 'assets/svgs/requests.svg';
 import styles from './LeftDrawer.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 
@@ -19,9 +18,7 @@ const leftDrawer = ({ hideDrawer }: InterfaceLeftDrawerProps): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'leftDrawer' });
 
   const { getItem } = useLocalStorage();
-  const userType = getItem('UserType');
   const superAdmin = getItem('SuperAdmin');
-  const role = superAdmin ? 'SuperAdmin' : 'Admin';
 
   return (
     <>
@@ -61,30 +58,6 @@ const leftDrawer = ({ hideDrawer }: InterfaceLeftDrawerProps): JSX.Element => {
               </Button>
             )}
           </NavLink>
-          {role === 'Admin' && (
-            <NavLink to={'/requests'}>
-              {({ isActive }) => (
-                <Button
-                  variant={isActive === true ? 'success' : ''}
-                  className={`${
-                    isActive === true ? 'text-white' : 'text-secondary'
-                  }`}
-                  data-testid="requestsBtn"
-                >
-                  <div className={styles.iconWrapper}>
-                    <RequestsIcon
-                      fill={`${
-                        isActive === true
-                          ? 'var(--bs-white)'
-                          : 'var(--bs-secondary)'
-                      }`}
-                    />
-                  </div>
-                  {t('requests')}
-                </Button>
-              )}
-            </NavLink>
-          )}
           {superAdmin && (
             <>
               <NavLink to={'/users'}>
