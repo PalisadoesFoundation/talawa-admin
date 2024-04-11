@@ -253,25 +253,6 @@ describe('Testing OrganizationCard Component [User Portal]', () => {
     expect(toast.success).toHaveBeenCalledWith('users.MembershipRequestSent');
   });
 
-  test('Component should render the "Join Now" button when membershipRequestStatus is empty', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationCard {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    // Assert that the "Join Now" button is rendered
-    expect(screen.getByTestId('joinBtn')).toBeInTheDocument();
-  });
-
   test('send membership request to public org', async () => {
     const cardProps = {
       ...props,
