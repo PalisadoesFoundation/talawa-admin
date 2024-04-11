@@ -209,7 +209,7 @@ const MOCKS = [
   },
 ];
 
-const CREATE_ACTION_ITEM_ERROR_MOCK=[
+const CREATE_ACTION_ITEM_ERROR_MOCK = [
   {
     request: {
       query: CREATE_ACTION_ITEM_MUTATION,
@@ -229,9 +229,9 @@ const CREATE_ACTION_ITEM_ERROR_MOCK=[
       },
     },
   },
-]
+];
 
-const UPDATE_ACTION_ITEM_ERROR_MOCK=[
+const UPDATE_ACTION_ITEM_ERROR_MOCK = [
   {
     request: {
       query: ACTION_ITEM_LIST_BY_EVENTS,
@@ -305,9 +305,9 @@ const UPDATE_ACTION_ITEM_ERROR_MOCK=[
       },
     },
   },
-]
+];
 
-const NO_ACTION_ITEMs_ERROR_MOCK=[
+const NO_ACTION_ITEMs_ERROR_MOCK = [
   {
     request: {
       query: ACTION_ITEM_LIST_BY_EVENTS,
@@ -322,7 +322,7 @@ const NO_ACTION_ITEMs_ERROR_MOCK=[
       refetch: jest.fn(),
     },
   },
-]
+];
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(CREATE_ACTION_ITEM_ERROR_MOCK, true);
@@ -383,9 +383,7 @@ describe('Event Action Items Page', () => {
 
     await wait();
 
-    expect(toast.success).toBeCalledWith(
-      translations.successfulCreation
-    );
+    expect(toast.success).toBeCalledWith(translations.successfulCreation);
   });
 
   test('Display all the action items', async () => {
@@ -465,9 +463,7 @@ describe('Event Action Items Page', () => {
 
     await wait();
 
-    expect(toast.success).toBeCalledWith(
-      translations.successfulUpdation
-    );
+    expect(toast.success).toBeCalledWith(translations.successfulUpdation);
   });
   test('Testing delete action item modal and delete the record', async () => {
     window.location.assign('/event/111/123');
@@ -499,9 +495,7 @@ describe('Event Action Items Page', () => {
     userEvent.click(screen.getByText('Yes'));
     await wait();
 
-    expect(toast.success).toBeCalledWith(
-      translations.successfulDeletion
-    );
+    expect(toast.success).toBeCalledWith(translations.successfulDeletion);
   });
 
   test('Testing delete action item modal and does not delete the record', async () => {
@@ -536,7 +530,7 @@ describe('Event Action Items Page', () => {
     expect(screen.getByText('Teresa Bradley')).toBeInTheDocument();
   });
 
-  test('Raises an error when incorrect information is filled while creation', async()=>{
+  test('Raises an error when incorrect information is filled while creation', async () => {
     window.location.assign('/event/111/123');
     render(
       <MockedProvider link={link2}>
@@ -573,10 +567,9 @@ describe('Event Action Items Page', () => {
     await wait();
 
     expect(toast.error).toBeCalled();
-  })
+  });
 
-
-  test('Raises an error when incorrect information is filled while updation', async()=>{
+  test('Raises an error when incorrect information is filled while updation', async () => {
     window.location.assign('/event/111/123');
     render(
       <MockedProvider link={link3}>
@@ -601,14 +594,12 @@ describe('Event Action Items Page', () => {
 
     await wait();
 
-    expect(toast.success).toBeCalledWith(
-      translations.successfulUpdation
-    );
+    expect(toast.success).toBeCalledWith(translations.successfulUpdation);
 
     expect(toast.error).toBeCalled();
-  })
+  });
 
-  test('Displays message when no data is available', async()=>{
+  test('Displays message when no data is available', async () => {
     window.location.assign('/event/111/123');
     render(
       <MockedProvider link={link4}>
@@ -625,5 +616,5 @@ describe('Event Action Items Page', () => {
     );
     await wait();
     expect(screen.getByText('Nothing Found !!')).toBeInTheDocument();
-  })
+  });
 });
