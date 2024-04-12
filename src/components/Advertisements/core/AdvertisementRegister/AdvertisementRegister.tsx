@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
 import convertToBase64 from 'utils/convertToBase64';
-import { ADVERTISEMENTS_GET } from 'GraphQl/Queries/Queries';
+import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
 import { useParams } from 'react-router-dom';
 interface InterfaceAddOnRegisterProps {
   id?: string; // organizationId
@@ -24,6 +24,7 @@ interface InterfaceAddOnRegisterProps {
   advertisementMediaEdit?: string;
   endDateEdit?: Date;
   startDateEdit?: Date;
+  updateAdvertisementsList: () => Promise<void>;
 }
 interface InterfaceFormStateTypes {
   name: string;
@@ -42,18 +43,27 @@ function advertisementRegister({
   advertisementMediaEdit,
   endDateEdit,
   startDateEdit,
+  updateAdvertisementsList,
 }: InterfaceAddOnRegisterProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
+
+  const { orgId: currentOrg } = useParams();
 
   const [show, setShow] = useState(false);
   const handleClose = (): void => setShow(false);
   const handleShow = (): void => setShow(true);
   const [create] = useMutation(ADD_ADVERTISEMENT_MUTATION);
   const [updateAdvertisement] = useMutation(UPDATE_ADVERTISEMENT_MUTATION);
-  const { refetch } = useQuery(ADVERTISEMENTS_GET);
+  const { refetch } = useQuery(ORGANIZATION_ADVERTISEMENT_LIST, {
+    variables: {
+      id: currentOrg,
+      first: 6,
+      after: null,
+    },
+  });
 
   //getting organizationId from URL
-  const { orgId: currentOrg } = useParams();
+
   const [formState, setFormState] = useState<InterfaceFormStateTypes>({
     name: '',
     advertisementMedia: '',
@@ -106,7 +116,6 @@ function advertisementRegister({
 
       if (data) {
         toast.success('Advertisement created successfully');
-        refetch();
         setFormState({
           name: '',
           advertisementMedia: '',
@@ -115,6 +124,8 @@ function advertisementRegister({
           endDate: new Date(),
           organizationId: currentOrg,
         });
+        await refetch();
+        updateAdvertisementsList();
         handleClose();
       }
     } catch (error: unknown) {
@@ -180,8 +191,9 @@ function advertisementRegister({
 
       if (data) {
         toast.success('Advertisement updated successfully');
-        refetch();
+        await refetch();
         handleClose();
+        updateAdvertisementsList();
       }
     } catch (error: any) {
       toast.error(error.message);

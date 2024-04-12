@@ -70,6 +70,7 @@ describe('Testing Advertisement Entry Component', () => {
                 name="Advert1"
                 organizationId="1"
                 type="POPUP"
+                updateAdvertisementsList={jest.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -142,6 +143,7 @@ describe('Testing Advertisement Entry Component', () => {
                 name="Advert1"
                 organizationId="1"
                 type="POPUP"
+                updateAdvertisementsList={jest.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -204,6 +206,7 @@ describe('Testing Advertisement Entry Component', () => {
                 organizationId="1"
                 mediaUrl=""
                 id="1"
+                updateAdvertisementsList={jest.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -273,6 +276,7 @@ describe('Testing Advertisement Entry Component', () => {
                 organizationId="1"
                 mediaUrl=""
                 id="1"
+                updateAdvertisementsList={jest.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -331,7 +335,12 @@ describe('Testing Advertisement Entry Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              {<AdvertisementRegister formStatus="register" />}
+              {
+                <AdvertisementRegister
+                  updateAdvertisementsList={jest.fn()}
+                  formStatus="register"
+                />
+              }
             </I18nextProvider>
           </BrowserRouter>
         </Provider>

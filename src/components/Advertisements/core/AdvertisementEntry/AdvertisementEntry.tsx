@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import styles from './AdvertisementEntry.module.css';
 import { Button, Card, Col, Row, Spinner, Modal } from 'react-bootstrap';
 import { DELETE_ADVERTISEMENT_BY_ID } from 'GraphQl/Mutations/mutations';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-import { ADVERTISEMENTS_GET } from 'GraphQl/Queries/Queries';
+import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
 import AdvertisementRegister from '../AdvertisementRegister/AdvertisementRegister';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { toast } from 'react-toastify';
@@ -17,6 +17,7 @@ interface InterfaceAddOnEntryProps {
   organizationId: string;
   startDate: Date;
   endDate: Date;
+  updateAdvertisementsList: () => Promise<void>;
 }
 function advertisementEntry({
   id,
@@ -26,15 +27,21 @@ function advertisementEntry({
   endDate,
   organizationId,
   startDate,
+  updateAdvertisementsList,
 }: InterfaceAddOnEntryProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   const [buttonLoading, setButtonLoading] = useState(false);
   const [dropdown, setDropdown] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-
-  const [deleteAdById] = useMutation(DELETE_ADVERTISEMENT_BY_ID, {
-    refetchQueries: [ADVERTISEMENTS_GET],
+  const { refetch } = useQuery(ORGANIZATION_ADVERTISEMENT_LIST, {
+    variables: {
+      id: organizationId,
+      first: 6,
+      after: null,
+    },
   });
+
+  const [deleteAdById] = useMutation(DELETE_ADVERTISEMENT_BY_ID);
 
   const toggleShowDeleteModal = (): void => setShowDeleteModal((prev) => !prev);
   const onDelete = async (): Promise<void> => {
@@ -47,6 +54,7 @@ function advertisementEntry({
       });
       toast.error('Advertisement Deleted');
       setButtonLoading(false);
+      refetch();
     } catch (error: any) {
       toast.error(error.message);
       setButtonLoading(false);
@@ -81,6 +89,9 @@ function advertisementEntry({
                         advertisementMediaEdit={mediaUrl}
                         endDateEdit={endDate}
                         startDateEdit={startDate}
+                        updateAdvertisementsList={() =>
+                          updateAdvertisementsList()
+                        }
                       />
                     </li>
                     <li onClick={toggleShowDeleteModal} data-testid="deletebtn">
@@ -153,6 +164,7 @@ function advertisementEntry({
                       className="btn btn-success"
                       onClick={(): void => {
                         onDelete();
+                        updateAdvertisementsList();
                       }}
                       data-testid="delete_yes"
                     >

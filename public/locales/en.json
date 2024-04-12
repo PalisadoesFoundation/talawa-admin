@@ -957,7 +957,8 @@
     "view": "View",
     "edit": "Edit",
     "editAdvertisement": "Edit Advertisement",
-    "saveChanges": "Save Changes"
+    "saveChanges": "Save Changes",
+    "endOfResults": "End of results"
   },
   "userChat": {
     "chat": "Chat",
