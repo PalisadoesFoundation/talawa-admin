@@ -99,6 +99,7 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
               width={12}
               className={styles.flaskIcon}
               title={t('sampleOrganization')}
+              data-testid="flaskIcon"
             />
           )}
           {'  '}

@@ -87,6 +87,47 @@ const MOCKS = [
                   name: 'Any Organization',
                   image: '',
                   description: 'New Desc',
+                  address: {
+                    city: 'abc',
+                    countryCode: '123',
+                    postalCode: '456',
+                    state: 'def',
+                    dependentLocality: 'ghi',
+                    line1: 'asdfg',
+                    line2: 'dfghj',
+                    sortingCode: '4567',
+                  },
+                  createdAt: '1234567890',
+                  userRegistrationRequired: true,
+                  creator: {
+                    __typename: 'User',
+                    firstName: 'John',
+                    lastName: 'Doe',
+                  },
+                  members: [
+                    {
+                      _id: '56gheqyr7deyfuiwfewifruy8',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                  admins: [
+                    {
+                      _id: '45gj5678jk45678fvgbhnr4rtgh',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                  membershipRequests: [
+                    {
+                      _id: '56gheqyr7deyfuiwfewifruy8',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
                 },
               ],
             },
@@ -163,6 +204,47 @@ const MOCKS = [
                   name: 'Any Organization',
                   image: 'dadsa',
                   description: 'New Desc',
+                  address: {
+                    city: 'abc',
+                    countryCode: '123',
+                    postalCode: '456',
+                    state: 'def',
+                    dependentLocality: 'ghi',
+                    line1: 'asdfg',
+                    line2: 'dfghj',
+                    sortingCode: '4567',
+                  },
+                  createdAt: '1234567890',
+                  userRegistrationRequired: true,
+                  creator: {
+                    __typename: 'User',
+                    firstName: 'John',
+                    lastName: 'Doe',
+                  },
+                  members: [
+                    {
+                      _id: '56gheqyr7deyfuiwfewifruy8',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                  admins: [
+                    {
+                      _id: '45gj5678jk45678fvgbhnr4rtgh',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                  membershipRequests: [
+                    {
+                      _id: '56gheqyr7deyfuiwfewifruy8',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
                 },
               ],
             },
