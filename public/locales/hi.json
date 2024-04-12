@@ -1054,5 +1054,27 @@
     "passwordNotMatch": "पासवर्ड मेल नहीं खाते।",
     "user": "उपयोगकर्ता",
     "addMember": "सदस्य जोड़ें"
+  },
+  "eventActionItems": {
+    "title": "कार्रवाई आइटम",
+    "createActionItem": "क्रिया आइटम बनाएँ",
+    "actionItemCategory": "एक्शन आइटम श्रेणी",
+    "selectActionItemCategory": "एक क्रिया आइटम श्रेणी चुनें",
+    "selectAssignee": "एक असाइनी का चयन करें",
+    "preCompletionNotes": "पूर्व समापन नोट्स",
+    "postCompletionNotes": "पोस्टकंप्लीशननोट्स",
+    "actionItemDetails": "एक्शन आइटम विवरण",
+    "dueDate": "नियत तिथि",
+    "completionDate": "समापन तिथि",
+    "editActionItem": "एक्शन आइटम संपादित करें",
+    "deleteActionItem": "क्रिया आइटम हटाएं",
+    "deleteActionItemMsg": "क्या आप इस क्रिया आइटम को हटाना चाहते हैं?",
+    "yes": "हां",
+    "no": "नहीं",
+    "successfulDeletion": "कार्रवाई आइटम सफलतापूर्वक हटा दिया गया",
+    "successfulCreation": "क्रिया आइटम सफलतापूर्वक बनाया गया",
+    "successfulUpdation": "कार्रवाई आइटम सफलतापूर्वक अद्यतन किया गया",
+    "notes": "नोट्स",
+    "save": "सहेजें"
   }
 }

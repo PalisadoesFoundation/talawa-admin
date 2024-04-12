@@ -1052,5 +1052,27 @@
     "passwordNotMatch": "密码不匹配。",
     "user": "用户",
     "addMember": "添加成员"
+  },
+  "eventActionItems": {
+    "title": "行动项目",
+    "createActionItem": "创建操作项",
+    "actionItemCategory": "操作项类别",
+    "selectActionItemCategory": "选择操作项类别",
+    "selectAssignee": "选择受让人",
+    "preCompletionNotes": "预完成注释",
+    "postCompletionNotes": "完成后注释",
+    "actionItemDetails": "操作项详细信息",
+    "dueDate": "截止日期",
+    "completionDate": "完成日期",
+    "editActionItem": "编辑操作项",
+    "deleteActionItem": "删除操作项",
+    "deleteActionItemMsg": "您要删除此操作项吗？",
+    "yes": "是的",
+    "不": "不",
+    "successfulDeletion": "操作项删除成功",
+    "successfulCreation": "操作项创建成功",
+    "successfulUpdation": "操作项更新成功",
+    "notes": "注释",
+    "save": "保存"
   }
 }
