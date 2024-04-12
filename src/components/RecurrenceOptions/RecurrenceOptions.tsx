@@ -3,7 +3,7 @@ import { Dropdown, OverlayTrigger } from 'react-bootstrap';
 import {
   Days,
   Frequency,
-  type InterfaceRecurrenceRule,
+  type InterfaceRecurrenceRuleState,
   getRecurrenceRuleText,
   getWeekDayOccurenceInMonth,
   isLastOccurenceOfWeekDay,
@@ -11,10 +11,10 @@ import {
 } from 'utils/recurrenceUtils';
 
 interface InterfaceRecurrenceOptionsProps {
-  recurrenceRuleState: InterfaceRecurrenceRule;
+  recurrenceRuleState: InterfaceRecurrenceRuleState;
   recurrenceRuleText: string;
   setRecurrenceRuleState: (
-    state: React.SetStateAction<InterfaceRecurrenceRule>,
+    state: React.SetStateAction<InterfaceRecurrenceRuleState>,
   ) => void;
   startDate: Date;
   endDate: Date | null;

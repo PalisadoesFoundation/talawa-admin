@@ -125,6 +125,8 @@ const props: InterfaceEventListCardProps[] = [
     endTime: '',
     allDay: false,
     recurring: false,
+    recurrenceRule: null,
+    isRecurringEventException: false,
     isPublic: false,
     isRegisterable: false,
   },
@@ -140,6 +142,8 @@ const props: InterfaceEventListCardProps[] = [
     endTime: '06:00',
     allDay: true,
     recurring: false,
+    recurrenceRule: null,
+    isRecurringEventException: false,
     isPublic: true,
     isRegisterable: false,
   },
@@ -155,6 +159,8 @@ const props: InterfaceEventListCardProps[] = [
     endTime: '6:00',
     allDay: false,
     recurring: true,
+    recurrenceRule: null,
+    isRecurringEventException: false,
     isPublic: true,
     isRegisterable: false,
   },
@@ -224,6 +230,8 @@ describe('Testing Event List Card', () => {
               endTime="06:00"
               allDay={true}
               recurring={false}
+              recurrenceRule={null}
+              isRecurringEventException={false}
               isPublic={true}
               isRegisterable={false}
             />

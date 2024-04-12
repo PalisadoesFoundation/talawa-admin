@@ -2,13 +2,25 @@
   Recurrence types
 */
 
-// interface for the recurrenceRuleData that we would send to the backend
-export interface InterfaceRecurrenceRule {
+// interface for the recurrenceRuleStateData that would be sent to the backend
+export interface InterfaceRecurrenceRuleState {
   frequency: Frequency;
   weekDays: WeekDays[] | undefined;
   interval: number | undefined;
   count: number | undefined;
   weekDayOccurenceInMonth: number | undefined;
+}
+
+// interface for the RecurrenceRule document that would be fetched from the backend
+export interface InterfaceRecurrenceRule {
+  startDate: string;
+  endDate: string | null;
+  recurrenceRuleString: string;
+  frequency: Frequency;
+  weekDays: WeekDays[];
+  interval: number;
+  count: number | null;
+  weekDayOccurenceInMonth: number | null;
 }
 
 // recurrence frequency

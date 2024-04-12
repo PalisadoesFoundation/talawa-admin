@@ -27,7 +27,7 @@ import {
   getRecurrenceRuleText,
   getWeekDayOccurenceInMonth,
 } from 'utils/recurrenceUtils';
-import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
+import type { InterfaceRecurrenceRuleState } from 'utils/recurrenceUtils';
 import RecurrenceOptions from 'components/RecurrenceOptions/RecurrenceOptions';
 
 const timeToDayJs = (time: string): Dayjs => {
@@ -61,7 +61,7 @@ function organizationEvents(): JSX.Element {
   const [registrablechecked, setRegistrableChecked] = React.useState(false);
 
   const [recurrenceRuleState, setRecurrenceRuleState] =
-    useState<InterfaceRecurrenceRule>({
+    useState<InterfaceRecurrenceRuleState>({
       frequency: Frequency.WEEKLY,
       weekDays: [Days[startDate.getDay()]],
       interval: 1,

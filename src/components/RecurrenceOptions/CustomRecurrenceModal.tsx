@@ -16,7 +16,7 @@ import {
   recurrenceEndOptions,
 } from 'utils/recurrenceUtils';
 import type {
-  InterfaceRecurrenceRule,
+  InterfaceRecurrenceRuleState,
   RecurrenceEndOption,
   WeekDays,
 } from 'utils/recurrenceUtils';
@@ -24,10 +24,10 @@ import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 
 interface InterfaceCustomRecurrenceModalProps {
-  recurrenceRuleState: InterfaceRecurrenceRule;
+  recurrenceRuleState: InterfaceRecurrenceRuleState;
   recurrenceRuleText: string;
   setRecurrenceRuleState: (
-    state: React.SetStateAction<InterfaceRecurrenceRule>,
+    state: React.SetStateAction<InterfaceRecurrenceRuleState>,
   ) => void;
   startDate: Date;
   endDate: Date | null;

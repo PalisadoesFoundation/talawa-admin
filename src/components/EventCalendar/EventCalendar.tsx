@@ -8,6 +8,7 @@ import CurrentHourIndicator from 'components/CurrentHourIndicator/CurrentHourInd
 import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 import HolidayCard from '../HolidayCards/HolidayCard';
 import { holidays, hours, months, weekdays } from './constants';
+import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
 
 interface InterfaceEvent {
   _id: string;
@@ -20,6 +21,8 @@ interface InterfaceEvent {
   endTime: string | undefined;
   allDay: boolean;
   recurring: boolean;
+  recurrenceRule: InterfaceRecurrenceRule | null;
+  isRecurringEventException: boolean;
   registrants?: InterfaceIEventAttendees[];
   isPublic: boolean;
   isRegisterable: boolean;
@@ -236,6 +239,8 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
               endTime={datas.endTime}
               allDay={datas.allDay}
               recurring={datas.recurring}
+              recurrenceRule={datas.recurrenceRule}
+              isRecurringEventException={datas.isRecurringEventException}
               isPublic={datas.isPublic}
               isRegisterable={datas.isRegisterable}
             />
@@ -320,6 +325,8 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                     endTime={datas.endTime}
                     allDay={datas.allDay}
                     recurring={datas.recurring}
+                    recurrenceRule={datas.recurrenceRule}
+                    isRecurringEventException={datas.isRecurringEventException}
                     isPublic={datas.isPublic}
                     isRegisterable={datas.isRegisterable}
                   />
@@ -446,6 +453,8 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                 endTime={datas.endTime}
                 allDay={datas.allDay}
                 recurring={datas.recurring}
+                recurrenceRule={datas.recurrenceRule}
+                isRecurringEventException={datas.isRecurringEventException}
                 isPublic={datas.isPublic}
                 isRegisterable={datas.isRegisterable}
               />

@@ -15,6 +15,7 @@ import { errorHandler } from 'utils/errorHandler';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { getItem } from 'utils/useLocalstorage';
 import {
+  type InterfaceRecurrenceRule,
   RecurringEventMutationType,
   recurringEventMutationOptions,
 } from 'utils/recurrenceUtils';
@@ -31,6 +32,8 @@ export interface InterfaceEventListCardProps {
   endTime: string | undefined;
   allDay: boolean;
   recurring: boolean;
+  recurrenceRule: InterfaceRecurrenceRule | null;
+  isRecurringEventException: boolean;
   isPublic: boolean;
   isRegisterable: boolean;
 }
