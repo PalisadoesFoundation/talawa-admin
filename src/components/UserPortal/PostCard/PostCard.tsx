@@ -33,6 +33,8 @@ interface InterfaceCommentCardProps {
     id: string;
   }[];
   text: string;
+  handleLikeComment: (commentId: string) => void;
+  handleDislikeComment: (commentId: string) => void;
 }
 
 export default function postCard(props: InterfacePostCard): JSX.Element {
@@ -104,6 +106,41 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
     setCommentInput(comment);
   };
 
+  const handleDislikeComment = (commentId: string): void => {
+    const updatedComments = comments.map((comment) => {
+      let updatedComment = { ...comment };
+      if (
+        comment.id === commentId &&
+        comment.likedBy.some((user) => user.id === userId)
+      ) {
+        updatedComment = {
+          ...comment,
+          likedBy: comment.likedBy.filter((user) => user.id !== userId),
+          likeCount: comment.likeCount - 1,
+        };
+      }
+      return updatedComment;
+    });
+    setComments(updatedComments);
+  };
+  const handleLikeComment = (commentId: string): void => {
+    const updatedComments = comments.map((comment) => {
+      let updatedComment = { ...comment };
+      if (
+        comment.id === commentId &&
+        !comment.likedBy.some((user) => user.id === userId)
+      ) {
+        updatedComment = {
+          ...comment,
+          likedBy: [...comment.likedBy, { id: userId }],
+          likeCount: comment.likeCount + 1,
+        };
+      }
+      return updatedComment;
+    });
+    setComments(updatedComments);
+  };
+
   const createComment = async (): Promise<void> => {
     try {
       const { data: createEventData } = await create({
@@ -129,6 +166,8 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
           likeCount: createEventData.createComment.likeCount,
           likedBy: createEventData.createComment.likedBy,
           text: createEventData.createComment.text,
+          handleLikeComment: handleLikeComment,
+          handleDislikeComment: handleDislikeComment,
         };
 
         setComments([...comments, newComment]);
@@ -225,6 +264,8 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
                 likeCount: comment.likeCount,
                 likedBy: comment.likedBy,
                 text: comment.text,
+                handleLikeComment: handleLikeComment,
+                handleDislikeComment: handleDislikeComment,
               };
 
               return <CommentCard key={index} {...cardProps} />;
