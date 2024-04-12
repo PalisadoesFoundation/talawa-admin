@@ -33,13 +33,6 @@ function advertisementEntry({
   const [buttonLoading, setButtonLoading] = useState(false);
   const [dropdown, setDropdown] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const { refetch } = useQuery(ORGANIZATION_ADVERTISEMENT_LIST, {
-    variables: {
-      id: organizationId,
-      first: 6,
-      after: null,
-    },
-  });
 
   const [deleteAdById] = useMutation(DELETE_ADVERTISEMENT_BY_ID);
 
@@ -54,7 +47,7 @@ function advertisementEntry({
       });
       toast.error('Advertisement Deleted');
       setButtonLoading(false);
-      refetch();
+      updateAdvertisementsList();
     } catch (error: any) {
       toast.error(error.message);
       setButtonLoading(false);
@@ -164,7 +157,6 @@ function advertisementEntry({
                       className="btn btn-success"
                       onClick={(): void => {
                         onDelete();
-                        updateAdvertisementsList();
                       }}
                       data-testid="delete_yes"
                     >
