@@ -1,7 +1,7 @@
 import React from 'react';
 import Card from 'react-bootstrap/Card';
 import Rating from '@mui/material/Rating';
-
+import eventStatStyles from '../EventStats.module.css';
 type ModalPropType = {
   data: {
     event: {
@@ -27,28 +27,36 @@ export const ReviewStats = ({ data }: ModalPropType): JSX.Element => {
     <>
       <Card
         style={{
-          width: '300px',
-          maxHeight: '350px',
-          overflow: 'auto',
+          overflowY: 'auto',
           marginBottom: '5px',
         }}
       >
-        <Card.Body>
-          <Card.Title>
+        <Card.Body style={{ padding: '0px' }}>
+          <Card.Header>
             <h3>Reviews</h3>
-          </Card.Title>
-          <h5>Filled by {reviews.length} people.</h5>
-          {reviews.length ? (
+          </Card.Header>
+
+          {reviews.length > 0 ? (
             reviews.map((review) => (
-              <div className="card user-review m-1" key={review._id}>
-                <div className="card-body">
-                  <Rating name="read-only" value={review.rating} readOnly />
-                  <p className="card-text">{review.review}</p>
+              <>
+                <h5>Filled by {reviews.length} people.</h5>
+                <div className="card user-review m-1" key={review._id}>
+                  <div className="card-body">
+                    <Rating name="read-only" value={review.rating} readOnly />
+                    <p className="card-text">{review.review}</p>
+                  </div>
                 </div>
-              </div>
+              </>
             ))
           ) : (
-            <>Waiting for people to talk about the event...</>
+            <div
+              className={eventStatStyles.centerText}
+              style={{
+                height: '40rem',
+              }}
+            >
+              <p>No reviews Yet.</p>
+            </div>
           )}
         </Card.Body>
       </Card>

@@ -5,6 +5,8 @@ import {
   pieArcLabelClasses,
 } from '@mui/x-charts/PieChart';
 import Card from 'react-bootstrap/Card';
+import { Row, Col } from 'react-bootstrap';
+import evenStatStyles from '../EventStats.module.css';
 
 type ModalPropType = {
   data: {
@@ -53,48 +55,64 @@ export const FeedbackStats = ({ data }: ModalPropType): JSX.Element => {
   return (
     <>
       <Card>
-        <Card.Body>
-          <Card.Title>
-            <h3>Feedback Analysis</h3>
-          </Card.Title>
-          <h5>
-            {data.event.feedback.length} people have filled feedback for this
-            event.
-          </h5>
+        <Card.Body style={{ padding: '0px' }}>
+          <Card.Header>
+            <Row className="align-items-center">
+              <Col>
+                <h3 className="text-left ">Feedback Analysis</h3>
+              </Col>
+              <Col xs="auto">
+                <p style={{ color: 'gray' }} className="mb-0">
+                  See All
+                </p>
+              </Col>
+            </Row>
+          </Card.Header>
+
           {data.event.feedback.length ? (
-            <PieChart
-              colors={ratingColors}
-              series={[
-                {
-                  data: chartData,
-                  arcLabel: /* istanbul ignore next */ (item) =>
-                    `${item.id} (${item.value})`,
-                  innerRadius: 30,
-                  outerRadius: 120,
-                  paddingAngle: 2,
-                  cornerRadius: 5,
-                  startAngle: 0,
-                  highlightScope: { faded: 'global', highlighted: 'item' },
-                  faded: { innerRadius: 30, additionalRadius: -30 },
-                },
-              ]}
-              sx={{
-                [`& .${pieArcClasses.faded}`]: {
-                  fill: 'gray',
-                },
-                [`& .${pieArcLabelClasses.root}`]: {
-                  fill: 'black',
-                  fontSize: '15px',
-                },
-                [`& .${pieArcLabelClasses.faded}`]: {
-                  display: 'none',
-                },
-              }}
-              width={380}
-              height={380}
-            />
+            <>
+              <h5>Filled by {data.event.feedback.length} people.</h5>
+              <PieChart
+                colors={ratingColors}
+                series={[
+                  {
+                    data: chartData,
+                    arcLabel: /* istanbul ignore next */ (item) =>
+                      `${item.id} (${item.value})`,
+                    innerRadius: 30,
+                    outerRadius: 120,
+                    paddingAngle: 2,
+                    cornerRadius: 5,
+                    startAngle: 0,
+                    highlightScope: { faded: 'global', highlighted: 'item' },
+                    faded: { innerRadius: 30, additionalRadius: -30 },
+                  },
+                ]}
+                sx={{
+                  [`& .${pieArcClasses.faded}`]: {
+                    fill: 'gray',
+                  },
+                  [`& .${pieArcLabelClasses.root}`]: {
+                    fill: 'black',
+                    fontSize: '15px',
+                  },
+                  [`& .${pieArcLabelClasses.faded}`]: {
+                    display: 'none',
+                  },
+                }}
+                width={380}
+                height={380}
+              />
+            </>
           ) : (
-            <>Please ask attendees to submit feedback for insights!</>
+            <div
+              className={evenStatStyles.centerText}
+              style={{
+                height: '20rem',
+              }}
+            >
+              <p>No One Has Filled The Feedback Yet.</p>
+            </div>
           )}
         </Card.Body>
       </Card>

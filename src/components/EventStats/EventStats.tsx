@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal } from 'react-bootstrap';
+import { Modal, Row, Col, Container } from 'react-bootstrap';
 import { FeedbackStats } from './Statistics/Feedback';
 import { ReviewStats } from './Statistics/Review';
 import { AverageRating } from './Statistics/AverageRating';
@@ -9,16 +9,10 @@ import { useQuery } from '@apollo/client';
 import { EVENT_FEEDBACKS } from 'GraphQl/Queries/Queries';
 
 type ModalPropType = {
-  show: boolean;
   eventId: string;
-  handleClose: () => void;
 };
 
-export const EventStats = ({
-  show,
-  handleClose,
-  eventId,
-}: ModalPropType): JSX.Element => {
+export const EventStats = ({ eventId }: ModalPropType): JSX.Element => {
   const { data, loading } = useQuery(EVENT_FEEDBACKS, {
     variables: { id: eventId },
   });
@@ -34,24 +28,20 @@ export const EventStats = ({
 
   return (
     <>
-      <Modal
-        show={show}
-        onHide={handleClose}
-        backdrop="static"
-        centered
-        size="lg"
-      >
-        <Modal.Header closeButton className="bg-primary">
-          <Modal.Title className="text-white">Event Statistics</Modal.Title>
-        </Modal.Header>
-        <Modal.Body className={eventStatsStyles.stackEvents}>
-          <FeedbackStats data={data} />
-          <div>
+      <Container style={{ padding: '0px' }}>
+        <Row style={{ height: '100%' }}>
+          <Col md={{ span: 7 }} style={{ padding: '5px', marginRight: '30px' }}>
+            <FeedbackStats data={data} />
+
+            <div style={{ marginTop: '20px' }}>
+              <AverageRating data={data} />
+            </div>
+          </Col>
+          <Col>
             <ReviewStats data={data} />
-            <AverageRating data={data} />
-          </div>
-        </Modal.Body>
-      </Modal>
+          </Col>
+        </Row>
+      </Container>
     </>
   );
 };

@@ -1,3 +1,8 @@
+h3,
+h4 {
+  font-weight: 1000;
+}
+
 .stackEvents {
   display: flex;
   flex-direction: column;
@@ -8,6 +13,20 @@
   overflow: hidden;
   gap: 2px;
   column-gap: 2px;
+}
+
+.centerText {
+  display: flex; /* Use flexbox */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  height: 20rem;
+}
+
+.scrollablediv {
+  height: 100%; /* Adjust the height as per your requirement */
+  overflow-y: auto; /* Add a vertical scrollbar when needed */
+  /* Add border for visualization */
+  padding: 10px; /* Add padding for better appearance */
 }
 
 @media screen and (min-width: 801px) {

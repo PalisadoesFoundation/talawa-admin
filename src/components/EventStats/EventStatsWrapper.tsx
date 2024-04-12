@@ -26,12 +26,12 @@ export const EventStatsWrapper = (props: PropType): JSX.Element => {
         </div>
         View Event Statistics
       </Button>
-      <EventStats
-        show={showModal}
-        handleClose={(): void => setShowModal(false)}
+      {/* <EventStats
+        // show={showModal}
+        // handleClose={(): void => setShowModal(false)}
         key={props.eventId || 'eventStatsDetails'}
         eventId={props.eventId}
-      />
+      /> */}
     </>
   );
 };

@@ -4,7 +4,7 @@ import Rating from '@mui/material/Rating';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Typography from '@mui/material/Typography';
-
+import { Row, Col } from 'react-bootstrap';
 type ModalPropType = {
   data: {
     event: {
@@ -24,15 +24,23 @@ type FeedbackType = {
 export const AverageRating = ({ data }: ModalPropType): JSX.Element => {
   return (
     <>
-      <Card style={{ width: '300px' }}>
+      <Card>
         <Card.Body>
-          <Card.Title>
-            <h4>Average Review Score</h4>
-          </Card.Title>
-          <Typography component="legend">
-            Rated {data.event.averageFeedbackScore.toFixed(2)} / 5
-          </Typography>
-          <Rating
+          <Row className="align-items-center">
+            <Col>
+              <div>
+                <h4 className="mb-0">Average Review Score</h4>
+              </div>
+            </Col>
+            <Col>
+              <Typography component="legend">
+                <h5 className="mb-0">
+                  Rated {data.event.averageFeedbackScore.toFixed()} / 5
+                </h5>
+              </Typography>
+            </Col>
+          </Row>
+          {/* <Rating
             name="customized-color"
             precision={0.5}
             max={5}
@@ -49,7 +57,7 @@ export const AverageRating = ({ data }: ModalPropType): JSX.Element => {
                 color: '#ff3d47',
               },
             }}
-          />
+          /> */}
         </Card.Body>
       </Card>
     </>
