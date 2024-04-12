@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@apollo/client';
+import { ApolloQueryResult, useMutation, useQuery } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import {
   CREATE_PlEDGE,
@@ -24,6 +24,8 @@ import styles from './FundCampaignPledge.module.css';
 import PledgeCreateModal from './PledgeCreateModal';
 import PledgeDeleteModal from './PledgeDeleteModal';
 import PledgeEditModal from './PledgeEditModal';
+import { convertDateLocalToUTC } from 'utils/dateUtils/convertDateLocalToUTC';
+import { convertDateUTCtoLocal } from 'utils/dateUtils/convertDateUTCtoLocal';
 const fundCampaignPledge = (): JSX.Element => {
   const { fundCampaignId: currentUrl } = useParams();
   const { getItem } = useLocalStorage();
@@ -60,7 +62,11 @@ const fundCampaignPledge = (): JSX.Element => {
     };
     loading: boolean;
     error?: Error | undefined;
-    refetch: any;
+    refetch: (variables?: Partial<{ id: string }> | undefined) => Promise<
+      ApolloQueryResult<{
+        getFundraisingCampaignById: InterfaceQueryFundCampaignsPledges;
+      }>
+    >;
   } = useQuery(FUND_CAMPAIGN_PLEDGE, {
     variables: {
       id: currentUrl,
@@ -111,8 +117,12 @@ const fundCampaignPledge = (): JSX.Element => {
           campaignId: currentUrl,
           amount: formState.pledgeAmount,
           currency: formState.pledgeCurrency,
-          startDate: dayjs(formState.pledgeStartDate).format('YYYY-MM-DD'),
-          endDate: dayjs(formState.pledgeEndDate).format('YYYY-MM-DD'),
+          startDate: dayjs(
+            convertDateLocalToUTC(formState.pledgeStartDate),
+          ).format('YYYY-MM-DD'),
+          endDate: dayjs(convertDateLocalToUTC(formState.pledgeEndDate)).format(
+            'YYYY-MM-DD',
+          ),
           userIds: [userId],
         },
       });
@@ -146,17 +156,17 @@ const fundCampaignPledge = (): JSX.Element => {
         dayjs(formState.pledgeStartDate).format('YYYY-MM-DD') !==
         dayjs(pledge?.startDate).format('YYYY-MM-DD')
       ) {
-        updatedFields.startDate = dayjs(formState.pledgeStartDate).format(
-          'YYYY-MM-DD',
-        );
+        updatedFields.startDate = dayjs(
+          convertDateLocalToUTC(formState.pledgeStartDate),
+        ).format('YYYY-MM-DD');
       }
       if (
         dayjs(formState.pledgeEndDate).format('YYYY-MM-DD') !==
         dayjs(pledge?.endDate).format('YYYY-MM-DD')
       ) {
-        updatedFields.endDate = dayjs(formState.pledgeEndDate).format(
-          'YYYY-MM-DD',
-        );
+        updatedFields.endDate = dayjs(
+          convertDateLocalToUTC(formState.pledgeEndDate),
+        ).format('YYYY-MM-DD');
       }
 
       await updatePledge({
@@ -252,11 +262,17 @@ const fundCampaignPledge = (): JSX.Element => {
                     </Col>
                     <Col sm={2} md={2}>
                       <div className="ms-1">
-                        {dayjs(pledge.startDate).format('DD/MM/YYYY')}
+                        {dayjs(
+                          convertDateUTCtoLocal(new Date(pledge.startDate)),
+                        ).format('DD/MM/YYYY')}
                       </div>
                     </Col>
                     <Col sm={2} md={2}>
-                      <div>{dayjs(pledge.endDate).format('DD/MM/YYYY')}</div>
+                      <div>
+                        {dayjs(
+                          convertDateUTCtoLocal(new Date(pledge.endDate)),
+                        ).format('DD/MM/YYYY')}
+                      </div>
                     </Col>
                     <Col sm={2} md={2}>
                       <div className="ms-2">

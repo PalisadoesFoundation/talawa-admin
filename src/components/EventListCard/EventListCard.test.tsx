@@ -62,8 +62,8 @@ const MOCKS = [
         isRegisterable: true,
         allDay: false,
         location: 'New Delhi',
-        startTime: '02:00',
-        endTime: '07:00',
+        startTime: '02:00:00',
+        endTime: '07:00:00',
       },
     },
     result: {
@@ -136,8 +136,8 @@ const props: InterfaceEventListCardProps[] = [
     eventDescription: 'This is shelter for dogs event',
     regDate: '19/03/2022',
     regEndDate: '26/03/2022',
-    startTime: '02:00',
-    endTime: '06:00',
+    startTime: '02:00:00',
+    endTime: '06:00:00',
     allDay: true,
     recurring: false,
     isPublic: true,
@@ -151,8 +151,8 @@ const props: InterfaceEventListCardProps[] = [
     eventDescription: 'This is shelter for cat event',
     regDate: '19/03/2022',
     regEndDate: '26/03/2022',
-    startTime: '2:00',
-    endTime: '6:00',
+    startTime: '02:00:00',
+    endTime: '06:00:00',
     allDay: false,
     recurring: true,
     isPublic: true,
@@ -220,8 +220,8 @@ describe('Testing Event List Card', () => {
               eventDescription=""
               regDate="19/03/2022"
               regEndDate="26/03/2022"
-              startTime="02:00"
-              endTime="06:00"
+              startTime="02:00:00"
+              endTime="06:00:00"
               allDay={true}
               recurring={false}
               isPublic={true}

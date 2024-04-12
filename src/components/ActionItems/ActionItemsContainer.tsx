@@ -27,6 +27,7 @@ import styles from './ActionItemsContainer.module.css';
 import ActionItemUpdateModal from '../../screens/OrganizationActionItems/ActionItemUpdateModal';
 import ActionItemPreviewModal from '../../screens/OrganizationActionItems/ActionItemPreviewModal';
 import ActionItemDeleteModal from '../../screens/OrganizationActionItems/ActionItemDeleteModal';
+import { convertDateLocalToUTC } from 'utils/dateUtils/convertDateLocalToUTC';
 
 function actionItemsContainer({
   actionItemsConnection,
@@ -102,8 +103,14 @@ function actionItemsContainer({
           assigneeId: formState.assigneeId,
           preCompletionNotes: formState.preCompletionNotes,
           postCompletionNotes: formState.postCompletionNotes,
-          dueDate: dayjs(dueDate).format('YYYY-MM-DD'),
-          completionDate: dayjs(completionDate).format('YYYY-MM-DD'),
+          /* istanbul ignore next */
+          dueDate: dayjs(convertDateLocalToUTC(dueDate || new Date())).format(
+            'YYYY-MM-DD',
+          ),
+          /* istanbul ignore next */
+          completionDate: dayjs(
+            convertDateLocalToUTC(completionDate || new Date()),
+          ).format('YYYY-MM-DD'),
           isCompleted: formState.isCompleted,
         },
       });

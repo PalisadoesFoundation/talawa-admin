@@ -18,6 +18,7 @@ import {
   RecurringEventMutationType,
   recurringEventMutationOptions,
 } from 'utils/recurrenceUtils';
+import { convertTimeLocalToUTC } from 'utils/timeUtils/convertTimeLocalToUTC';
 
 export interface InterfaceEventListCardProps {
   key: string;
@@ -135,8 +136,12 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
           isRegisterable: registrablechecked,
           allDay: alldaychecked,
           location: formState.location,
-          startTime: !alldaychecked ? formState.startTime + 'Z' : null,
-          endTime: !alldaychecked ? formState.endTime + 'Z' : null,
+          startTime: !alldaychecked
+            ? convertTimeLocalToUTC(formState.startTime) + 'Z'
+            : null,
+          endTime: !alldaychecked
+            ? convertTimeLocalToUTC(formState.endTime) + 'Z'
+            : null,
         },
       });
 

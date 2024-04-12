@@ -13,6 +13,7 @@ import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
+import { convertDateUTCtoLocal } from 'utils/dateUtils/convertDateUTCtoLocal';
 
 export default function organizationSidebar(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -20,8 +21,8 @@ export default function organizationSidebar(): JSX.Element {
   });
 
   const { orgId: organizationId } = useParams();
-  const [members, setMembers]: any = React.useState([]);
-  const [events, setEvents]: any = React.useState([]);
+  const [members, setMembers] = React.useState([]);
+  const [events, setEvents] = React.useState([]);
   const eventsLink = `/user/events/id=${organizationId}`;
   const peopleLink = `/user/people/id=${organizationId}`;
 
@@ -131,10 +132,21 @@ export default function organizationSidebar(): JSX.Element {
                     </div>
                     <div className={`d-flex flex-row ${styles.eventDetails}`}>
                       Starts{' '}
-                      <b> {dayjs(event.startDate).format("D MMMM 'YY")}</b>
+                      <b>
+                        {' '}
+                        {dayjs(convertDateUTCtoLocal(event.startDate)).format(
+                          "D MMMM 'YY",
+                        )}
+                      </b>
                     </div>
                     <div className={`d-flex flex-row ${styles.eventDetails}`}>
-                      Ends <b> {dayjs(event.endDate).format("D MMMM 'YY")}</b>
+                      Ends{' '}
+                      <b>
+                        {' '}
+                        {dayjs(convertDateUTCtoLocal(event.endDate)).format(
+                          "D MMMM 'YY",
+                        )}
+                      </b>
                     </div>
                   </div>
                 </ListGroup.Item>

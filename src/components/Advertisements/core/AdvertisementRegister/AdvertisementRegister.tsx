@@ -13,6 +13,7 @@ import dayjs from 'dayjs';
 import convertToBase64 from 'utils/convertToBase64';
 import { ADVERTISEMENTS_GET } from 'GraphQl/Queries/Queries';
 import { useParams } from 'react-router-dom';
+import { convertDateLocalToUTC } from 'utils/dateUtils/convertDateLocalToUTC';
 interface InterfaceAddOnRegisterProps {
   id?: string; // organizationId
   createdBy?: string; // User
@@ -98,8 +99,12 @@ function advertisementRegister({
           organizationId: currentOrg,
           name: formState.name as string,
           type: formState.type as string,
-          startDate: dayjs(formState.startDate).format('YYYY-MM-DD'),
-          endDate: dayjs(formState.endDate).format('YYYY-MM-DD'),
+          startDate: dayjs(convertDateLocalToUTC(formState.startDate)).format(
+            'YYYY-MM-DD',
+          ),
+          endDate: dayjs(convertDateLocalToUTC(formState.endDate)).format(
+            'YYYY-MM-DD',
+          ),
           file: formState.advertisementMedia as string,
         },
       });
@@ -142,12 +147,12 @@ function advertisementRegister({
         toast.error('End date must be greater than or equal to start date');
         return;
       }
-      const startDateFormattedString = dayjs(formState.startDate).format(
-        'YYYY-MM-DD',
-      );
-      const endDateFormattedString = dayjs(formState.endDate).format(
-        'YYYY-MM-DD',
-      );
+      const startDateFormattedString = dayjs(
+        convertDateLocalToUTC(formState.startDate),
+      ).format('YYYY-MM-DD');
+      const endDateFormattedString = dayjs(
+        convertDateLocalToUTC(formState.endDate),
+      ).format('YYYY-MM-DD');
 
       const startDateDate = dayjs(
         startDateFormattedString,
@@ -183,8 +188,10 @@ function advertisementRegister({
         refetch();
         handleClose();
       }
-    } catch (error: any) {
-      toast.error(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
     }
   };
   return (

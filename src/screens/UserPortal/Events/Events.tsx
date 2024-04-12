@@ -26,6 +26,10 @@ import EventCalendar from 'components/EventCalendar/EventCalendar';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams } from 'react-router-dom';
 import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
+import { convertTimeLocalToUTC } from 'utils/timeUtils/convertTimeLocalToUTC';
+import { convertTimeUTCtoLocal } from 'utils/timeUtils/convertTimeUTCtoLocal';
+import { convertDateLocalToUTC } from 'utils/dateUtils/convertDateLocalToUTC';
+import { convertDateUTCtoLocal } from 'utils/dateUtils/convertDateUTCtoLocal';
 
 interface InterfaceEventCardProps {
   id: string;
@@ -91,8 +95,8 @@ export default function events(): JSX.Element {
   const [eventTitle, setEventTitle] = React.useState('');
   const [eventDescription, setEventDescription] = React.useState('');
   const [eventLocation, setEventLocation] = React.useState('');
-  const [startDate, setStartDate] = React.useState<Date | null>(new Date());
-  const [endDate, setEndDate] = React.useState<Date | null>(new Date());
+  const [startDate, setStartDate] = React.useState<Date>(new Date());
+  const [endDate, setEndDate] = React.useState<Date>(new Date());
   const [isPublic, setIsPublic] = React.useState(true);
   const [isRegisterable, setIsRegisterable] = React.useState(true);
   const [isRecurring, setIsRecurring] = React.useState(false);
@@ -141,12 +145,14 @@ export default function events(): JSX.Element {
           recurring: isRecurring,
           isRegisterable: isRegisterable,
           organizationId,
-          startDate: dayjs(startDate).format('YYYY-MM-DD'),
-          endDate: dayjs(endDate).format('YYYY-MM-DD'),
+          startDate: dayjs(convertDateLocalToUTC(startDate)).format(
+            'YYYY-MM-DD',
+          ),
+          endDate: dayjs(convertDateLocalToUTC(endDate)).format('YYYY-MM-DD'),
           allDay: isAllDay,
           location: eventLocation,
-          startTime: !isAllDay ? startTime + 'Z' : null,
-          endTime: !isAllDay ? endTime + 'Z' : null,
+          startTime: !isAllDay ? convertTimeLocalToUTC(startTime) + 'Z' : null,
+          endTime: !isAllDay ? convertTimeLocalToUTC(endTime) + 'Z' : null,
         },
       });
 
@@ -345,12 +351,16 @@ export default function events(): JSX.Element {
                           title: event.title,
                           description: event.description,
                           location: event.location,
-                          startDate: event.startDate,
-                          endDate: event.endDate,
+                          startDate: dayjs(
+                            convertDateUTCtoLocal(new Date(event.startDate)),
+                          ).format('YYYY-MM-DD'),
+                          endDate: dayjs(
+                            convertDateUTCtoLocal(new Date(event.endDate)),
+                          ).format('YYYY-MM-DD'),
                           isRegisterable: event.isRegisterable,
                           isPublic: event.isPublic,
-                          endTime: event.endTime,
-                          startTime: event.startTime,
+                          endTime: convertTimeUTCtoLocal(event.endTime),
+                          startTime: convertTimeUTCtoLocal(event.startTime),
                           recurring: event.recurring,
                           allDay: event.allDay,
                           registrants: attendees,

@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import AdvertisementEntry from './core/AdvertisementEntry/AdvertisementEntry';
 import AdvertisementRegister from './core/AdvertisementRegister/AdvertisementRegister';
 import { useParams } from 'react-router-dom';
+import { convertDateUTCtoLocal } from 'utils/dateUtils/convertDateUTCtoLocal';
 export default function advertisements(): JSX.Element {
   const { data: advertisementsData, loading: loadingAdvertisements } =
     useQuery(ADVERTISEMENTS_GET);
@@ -80,8 +81,10 @@ export default function advertisements(): JSX.Element {
                           name={ad.name}
                           type={ad.type}
                           organizationId={ad.organization._id}
-                          startDate={new Date(ad.startDate)}
-                          endDate={new Date(ad.endDate)}
+                          startDate={convertDateUTCtoLocal(
+                            new Date(ad.startDate),
+                          )}
+                          endDate={convertDateUTCtoLocal(new Date(ad.endDate))}
                           mediaUrl={ad.mediaUrl}
                         />
                       ),
@@ -121,8 +124,10 @@ export default function advertisements(): JSX.Element {
                           name={ad.name}
                           type={ad.type}
                           organizationId={ad.organization._id}
-                          startDate={new Date(ad.startDate)}
-                          endDate={new Date(ad.endDate)}
+                          startDate={convertDateUTCtoLocal(
+                            new Date(ad.startDate),
+                          )}
+                          endDate={convertDateUTCtoLocal(new Date(ad.endDate))}
                           mediaUrl={ad.mediaUrl}
                         />
                       ),

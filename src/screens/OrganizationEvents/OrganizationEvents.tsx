@@ -29,6 +29,8 @@ import {
 } from 'utils/recurrenceUtils';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
 import RecurrenceOptions from 'components/RecurrenceOptions/RecurrenceOptions';
+import { convertTimeLocalToUTC } from 'utils/timeUtils/convertTimeLocalToUTC';
+import { convertDateLocalToUTC } from 'utils/dateUtils/convertDateLocalToUTC';
 
 const timeToDayJs = (time: string): Dayjs => {
   const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
@@ -152,16 +154,22 @@ function organizationEvents(): JSX.Element {
             recurring: recurringchecked,
             isRegisterable: registrablechecked,
             organizationId: currentUrl,
-            startDate: dayjs(startDate).format('YYYY-MM-DD'),
+            startDate: dayjs(convertDateLocalToUTC(startDate)).format(
+              'YYYY-MM-DD',
+            ),
             endDate: endDate
-              ? dayjs(endDate).format('YYYY-MM-DD')
+              ? dayjs(convertDateLocalToUTC(endDate)).format('YYYY-MM-DD')
               : /* istanbul ignore next */ recurringchecked
                 ? undefined
                 : dayjs(startDate).format('YYYY-MM-DD'),
             allDay: alldaychecked,
             location: formState.location,
-            startTime: !alldaychecked ? formState.startTime + 'Z' : undefined,
-            endTime: !alldaychecked ? formState.endTime + 'Z' : undefined,
+            startTime: !alldaychecked
+              ? convertTimeLocalToUTC(formState.startTime) + 'Z'
+              : undefined,
+            endTime: !alldaychecked
+              ? convertTimeLocalToUTC(formState.endTime) + 'Z'
+              : undefined,
             frequency: recurringchecked ? frequency : undefined,
             weekDays: recurringchecked ? weekDays : undefined,
             interval: recurringchecked ? interval : undefined,

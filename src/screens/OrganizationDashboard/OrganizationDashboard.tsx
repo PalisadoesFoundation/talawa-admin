@@ -28,6 +28,8 @@ import type {
   InterfaceQueryOrganizationsListObject,
 } from 'utils/interfaces';
 import styles from './OrganizationDashboard.module.css';
+import dayjs from 'dayjs';
+import { convertDateUTCtoLocal } from 'utils/dateUtils/convertDateUTCtoLocal';
 
 function organizationDashboard(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'dashboard' });
@@ -77,7 +79,9 @@ function organizationDashboard(): JSX.Element {
     loading: loadingEvent,
     error: errorEvent,
   }: {
-    data: any;
+    data?: {
+      eventsByOrganizationConnection: InterfaceQueryOrganizationEventListItem[];
+    };
     loading: boolean;
     error?: ApolloError;
   } = useQuery(ORGANIZATION_EVENT_CONNECTION_LIST, {
@@ -90,13 +94,15 @@ function organizationDashboard(): JSX.Element {
   useEffect(() => {
     if (eventData && eventData?.eventsByOrganizationConnection.length > 0) {
       const tempUpcomingEvents: InterfaceQueryOrganizationEventListItem[] = [];
-      eventData?.eventsByOrganizationConnection.map((event: any) => {
-        const startDate = new Date(event.startDate);
-        const now = new Date();
-        if (startDate > now) {
-          tempUpcomingEvents.push(event);
-        }
-      });
+      eventData?.eventsByOrganizationConnection.map(
+        (event: InterfaceQueryOrganizationEventListItem) => {
+          const startDate = new Date(event.startDate);
+          const now = new Date();
+          if (startDate > now) {
+            tempUpcomingEvents.push(event);
+          }
+        },
+      );
       setUpcomingEvents(tempUpcomingEvents);
     }
   }, [eventData?.eventsByOrganizationConnection]);
@@ -247,8 +253,12 @@ function organizationDashboard(): JSX.Element {
                             data-testid="cardItem"
                             type="Event"
                             key={event._id}
-                            startdate={event.startDate}
-                            enddate={event.endDate}
+                            startdate={dayjs(
+                              convertDateUTCtoLocal(new Date(event.startDate)),
+                            ).format('YYYY-MM-DD')}
+                            enddate={dayjs(
+                              convertDateUTCtoLocal(new Date(event.endDate)),
+                            ).format('YYYY-MM-DD')}
                             title={event.title}
                             location={event.location}
                           />
@@ -286,14 +296,16 @@ function organizationDashboard(): JSX.Element {
                     /* eslint-enable */
                     postData?.organizations[0].posts.edges
                       .slice(0, 5)
-                      .map((edge: any) => {
+                      .map((edge) => {
                         const post = edge.node;
                         return (
                           <CardItem
                             type="Post"
                             key={post._id}
                             title={post.title}
-                            time={post.createdAt}
+                            time={dayjs(
+                              convertDateUTCtoLocal(new Date(post.createdAt)),
+                            ).format()}
                             creator={post.creator}
                           />
                         );

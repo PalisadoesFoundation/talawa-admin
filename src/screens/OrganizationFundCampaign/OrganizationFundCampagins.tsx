@@ -24,6 +24,7 @@ import CampaignCreateModal from './CampaignCreateModal';
 import CampaignDeleteModal from './CampaignDeleteModal';
 import CampaignUpdateModal from './CampaignUpdateModal';
 import styles from './OrganizationFundCampaign.module.css';
+import { convertDateLocalToUTC } from 'utils/dateUtils/convertDateLocalToUTC';
 
 const orgFundCampaign = (): JSX.Element => {
   const { t } = useTranslation('translation', {
@@ -110,8 +111,12 @@ const orgFundCampaign = (): JSX.Element => {
           name: formState.campaignName,
           currency: formState.campaignCurrency,
           fundingGoal: formState.campaignGoal,
-          startDate: dayjs(formState.campaignStartDate).format('YYYY-MM-DD'),
-          endDate: dayjs(formState.campaignEndDate).format('YYYY-MM-DD'),
+          startDate: dayjs(
+            convertDateLocalToUTC(formState.campaignStartDate),
+          ).format('YYYY-MM-DD'),
+          endDate: dayjs(
+            convertDateLocalToUTC(formState.campaignEndDate),
+          ).format('YYYY-MM-DD'),
           fundId: currentUrl,
         },
       });
@@ -149,14 +154,14 @@ const orgFundCampaign = (): JSX.Element => {
         updatedFields.fundingGoal = formState.campaignGoal;
       }
       if (campaign?.startDate !== formState.campaignStartDate) {
-        updatedFields.startDate = dayjs(formState.campaignStartDate).format(
-          'YYYY-MM-DD',
-        );
+        updatedFields.startDate = dayjs(
+          convertDateLocalToUTC(formState.campaignStartDate),
+        ).format('YYYY-MM-DD');
       }
       if (campaign?.endDate !== formState.campaignEndDate) {
-        updatedFields.endDate = dayjs(formState.campaignEndDate).format(
-          'YYYY-MM-DD',
-        );
+        updatedFields.endDate = dayjs(
+          convertDateLocalToUTC(formState.campaignEndDate),
+        ).format('YYYY-MM-DD');
       }
       await updateCampaign({
         variables: {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { Button } from 'react-bootstrap';
-import { useMutation, useQuery } from '@apollo/client';
+import { ApolloQueryResult, useMutation, useQuery } from '@apollo/client';
 import {
   ACTION_ITEM_CATEGORY_LIST,
   ACTION_ITEM_LIST,
@@ -22,6 +22,7 @@ import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
 import ActionItemCreateModal from 'screens/OrganizationActionItems/ActionItemCreateModal';
 import { useTranslation } from 'react-i18next';
+import { convertDateLocalToUTC } from 'utils/dateUtils/convertDateLocalToUTC';
 
 export const ActionItemsModalBody = ({
   organizationId,
@@ -80,7 +81,15 @@ export const ActionItemsModalBody = ({
     data: InterfaceActionItemList | undefined;
     loading: boolean;
     error?: Error | undefined;
-    refetch: any;
+    refetch: (
+      variables?:
+        | Partial<{
+            organizationId: string;
+            eventId: string;
+            orderBy: 'createdAt_DESC';
+          }>
+        | undefined,
+    ) => Promise<ApolloQueryResult<InterfaceActionItemList>>;
   } = useQuery(ACTION_ITEM_LIST, {
     variables: {
       organizationId,
@@ -103,7 +112,10 @@ export const ActionItemsModalBody = ({
           actionItemCategoryId: formState.actionItemCategoryId,
           eventId,
           preCompletionNotes: formState.preCompletionNotes,
-          dueDate: dayjs(dueDate).format('YYYY-MM-DD'),
+          /* istanbul ignore next */
+          dueDate: dayjs(convertDateLocalToUTC(dueDate || new Date())).format(
+            'YYYY-MM-DD',
+          ),
         },
       });
 

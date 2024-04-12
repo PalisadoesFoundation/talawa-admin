@@ -5,6 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
 import Loader from 'components/Loader/Loader';
+import { convertTimeUTCtoLocal } from 'utils/timeUtils/convertTimeUTCtoLocal';
+import { convertDateUTCtoLocal } from 'utils/dateUtils/convertDateUTCtoLocal';
 
 const EventDashboard = (props: { eventId: string }): JSX.Element => {
   const { eventId } = props;
@@ -12,12 +14,20 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
     keyPrefix: 'eventManagement',
   });
 
-  const { data: eventData, loading: eventInfoLoading } = useQuery(
-    EVENT_DETAILS,
-    {
-      variables: { id: eventId },
-    },
-  );
+  let { data: eventData, loading: eventInfoLoading } = useQuery(EVENT_DETAILS, {
+    variables: { id: eventId },
+  });
+
+  if (eventData && eventData.event) {
+    if (eventData.event.startDate && eventData.event.startDate.length > 0) {
+      eventData.event.startDate = convertDateUTCtoLocal(
+        eventData.event.startDate,
+      );
+    }
+    if (eventData.event.endDate && eventData.event.endDate.length > 0) {
+      eventData.event.endDate = convertDateUTCtoLocal(eventData.event.endDate);
+    }
+  }
 
   if (eventInfoLoading) {
     return <Loader />;
@@ -65,7 +75,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
                 <p>
                   <b className={styles.startTime}>
                     {eventData.event.startTime !== null
-                      ? `${formatTime(eventData.event.startTime)}`
+                      ? `${formatTime(convertTimeUTCtoLocal(eventData.event.startTime))}`
                       : ``}
                   </b>{' '}
                   <span className={styles.startDate}>
@@ -77,7 +87,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
                   <b className={styles.endTime}>
                     {' '}
                     {eventData.event.endTime !== null
-                      ? `${formatTime(eventData.event.endTime)}`
+                      ? `${formatTime(convertTimeUTCtoLocal(eventData.event.endTime))}`
                       : ``}
                   </b>{' '}
                   <span className={styles.endDate}>

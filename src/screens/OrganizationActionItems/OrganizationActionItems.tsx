@@ -26,6 +26,7 @@ import ActionItemsContainer from 'components/ActionItems/ActionItemsContainer';
 import ActionItemCreateModal from './ActionItemCreateModal';
 import styles from './OrganizationActionItems.module.css';
 import Loader from 'components/Loader/Loader';
+import { convertDateLocalToUTC } from 'utils/dateUtils/convertDateLocalToUTC';
 
 function organizationActionItems(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -108,7 +109,10 @@ function organizationActionItems(): JSX.Element {
           assigneeId: formState.assigneeId,
           actionItemCategoryId: formState.actionItemCategoryId,
           preCompletionNotes: formState.preCompletionNotes,
-          dueDate: dayjs(dueDate).format('YYYY-MM-DD'),
+          /* istanbul ignore next */
+          dueDate: dayjs(convertDateLocalToUTC(dueDate || new Date())).format(
+            'YYYY-MM-DD',
+          ),
         },
       });
 
