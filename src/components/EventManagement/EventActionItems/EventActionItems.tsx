@@ -354,9 +354,7 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
                 ))}
               </Form.Select>
             </Form.Group>
-            <label htmlFor="actionItemPreCompletionNotes">
-              {t('notes')}
-            </label>
+            <label htmlFor="actionItemPreCompletionNotes">{t('notes')}</label>
             <Form.Control
               type="actionItemPreCompletionNotes"
               id="actionItemPreCompletionNotes"
@@ -434,9 +432,7 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
                 })}
               </Form.Select>
             </Form.Group>
-            <label htmlFor="actionItemPreCompletionNotes">
-              {t('notes')}
-            </label>
+            <label htmlFor="actionItemPreCompletionNotes">{t('notes')}</label>
             <Form.Control
               type="actionItemPreCompletionNotes"
               id="actionItemPreCompletionNotes"
