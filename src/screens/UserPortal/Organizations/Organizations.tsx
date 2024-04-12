@@ -41,6 +41,31 @@ interface InterfaceOrganizationCardProps {
     };
   }[];
 }
+
+interface InterfaceOrganization {
+  _id: string;
+  name: string;
+  image: string;
+  description: string;
+  admins: [];
+  members: [];
+  address: {
+    city: string;
+    countryCode: string;
+    line1: string;
+    postalCode: string;
+    state: string;
+  };
+  membershipRequestStatus: string;
+  userRegistrationRequired: boolean;
+  membershipRequests: {
+    _id: string;
+    user: {
+      _id: string;
+    };
+  }[];
+}
+
 export default function organizations(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userOrganizations',
@@ -68,13 +93,19 @@ export default function organizations(): JSX.Element {
     variables: { filter: filterName },
   });
 
-  const { data: data2 } = useQuery(USER_JOINED_ORGANIZATIONS, {
-    variables: { id: userId },
-  });
+  const { data: joinedOrganizationsData } = useQuery(
+    USER_JOINED_ORGANIZATIONS,
+    {
+      variables: { id: userId },
+    },
+  );
 
-  const { data: data3 } = useQuery(USER_CREATED_ORGANIZATIONS, {
-    variables: { id: userId },
-  });
+  const { data: createdOrganizationsData } = useQuery(
+    USER_CREATED_ORGANIZATIONS,
+    {
+      variables: { id: userId },
+    },
+  );
 
   /* istanbul ignore next */
   const handleChangePage = (
@@ -101,9 +132,11 @@ export default function organizations(): JSX.Element {
       filter: value,
     });
   };
-  const handleSearchByEnter = (e: any): void => {
+  const handleSearchByEnter = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ): void => {
     if (e.key === 'Enter') {
-      const { value } = e.target;
+      const { value } = e.target as HTMLInputElement;
       handleSearch(value);
     }
   };
@@ -117,27 +150,72 @@ export default function organizations(): JSX.Element {
   /* istanbul ignore next */
   React.useEffect(() => {
     if (data) {
-      setOrganizations(data.organizationsConnection);
+      const organizations = data.organizationsConnection.map(
+        (organization: InterfaceOrganization) => {
+          let membershipRequestStatus = '';
+          if (
+            organization.members.find(
+              (member: { _id: string }) => member._id === userId,
+            )
+          )
+            membershipRequestStatus = 'accepted';
+          else if (
+            organization.membershipRequests.find(
+              (request: { user: { _id: string } }) =>
+                request.user._id === userId,
+            )
+          )
+            membershipRequestStatus = 'pending';
+          return { ...organization, membershipRequestStatus };
+        },
+      );
+      setOrganizations(organizations);
     }
   }, [data]);
 
   /* istanbul ignore next */
   React.useEffect(() => {
-    if (mode == 0) {
+    if (mode === 0) {
       if (data) {
-        setOrganizations(data.organizationsConnection);
+        const organizations = data.organizationsConnection.map(
+          (organization: InterfaceOrganization) => {
+            let membershipRequestStatus = '';
+            if (
+              organization.members.find(
+                (member: { _id: string }) => member._id === userId,
+              )
+            )
+              membershipRequestStatus = 'accepted';
+            else if (
+              organization.membershipRequests.find(
+                (request: { user: { _id: string } }) =>
+                  request.user._id === userId,
+              )
+            )
+              membershipRequestStatus = 'pending';
+            return { ...organization, membershipRequestStatus };
+          },
+        );
+        setOrganizations(organizations);
       }
-    } else if (mode == 1) {
-      if (data2) {
-        setOrganizations(data2.users[0].user.joinedOrganizations);
+    } else if (mode === 1) {
+      if (joinedOrganizationsData && joinedOrganizationsData.users.length > 0) {
+        const organizations =
+          joinedOrganizationsData.users[0]?.user?.joinedOrganizations || [];
+        setOrganizations(organizations);
       }
-    } else if (mode == 2) {
-      if (data3) {
-        setOrganizations(data3.users[0].appUserProfile.createdOrganizations);
+    } else if (mode === 2) {
+      if (
+        createdOrganizationsData &&
+        createdOrganizationsData.users.length > 0
+      ) {
+        const organizations =
+          createdOrganizationsData.users[0]?.appUserProfile
+            ?.createdOrganizations || [];
+        setOrganizations(organizations);
       }
     }
-  }, [mode]);
-
+  }, [mode, data, joinedOrganizationsData, createdOrganizationsData, userId]);
   return (
     <>
       <UserNavbar />
@@ -212,7 +290,7 @@ export default function organizations(): JSX.Element {
                         )
                       : /* istanbul ignore next */
                         organizations
-                    ).map((organization: any, index) => {
+                    ).map((organization: InterfaceOrganization, index) => {
                       const cardProps: InterfaceOrganizationCardProps = {
                         name: organization.name,
                         image: organization.image,

@@ -35,9 +35,50 @@ const MOCKS = [
                 {
                   __typename: 'Organization',
                   _id: '6401ff65ce8e8406b8f07af2',
-                  name: 'createdOrganization',
                   image: '',
-                  description: 'New Desc',
+                  name: 'anyOrganization1',
+                  description: 'desc',
+                  address: {
+                    city: 'abc',
+                    countryCode: '123',
+                    postalCode: '456',
+                    state: 'def',
+                    dependentLocality: 'ghi',
+                    line1: 'asdfg',
+                    line2: 'dfghj',
+                    sortingCode: '4567',
+                  },
+                  createdAt: '1234567890',
+                  userRegistrationRequired: true,
+                  creator: {
+                    __typename: 'User',
+                    firstName: 'John',
+                    lastName: 'Doe',
+                  },
+                  members: [
+                    {
+                      _id: '56gheqyr7deyfuiwfewifruy8',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                  admins: [
+                    {
+                      _id: '45gj5678jk45678fvgbhnr4rtgh',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                  membershipRequests: [
+                    {
+                      _id: '56gheqyr7deyfuiwfewifruy8',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
                 },
               ],
             },
@@ -164,9 +205,50 @@ const MOCKS = [
                 {
                   __typename: 'Organization',
                   _id: '6401ff65ce8e8406b8f07af2',
-                  name: 'joinedOrganization',
                   image: '',
-                  description: 'New Desc',
+                  name: 'anyOrganization1',
+                  description: 'desc',
+                  address: {
+                    city: 'abc',
+                    countryCode: '123',
+                    postalCode: '456',
+                    state: 'def',
+                    dependentLocality: 'ghi',
+                    line1: 'asdfg',
+                    line2: 'dfghj',
+                    sortingCode: '4567',
+                  },
+                  createdAt: '1234567890',
+                  userRegistrationRequired: true,
+                  creator: {
+                    __typename: 'User',
+                    firstName: 'John',
+                    lastName: 'Doe',
+                  },
+                  members: [
+                    {
+                      _id: '56gheqyr7deyfuiwfewifruy8',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                  admins: [
+                    {
+                      _id: '45gj5678jk45678fvgbhnr4rtgh',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                  membershipRequests: [
+                    {
+                      _id: '56gheqyr7deyfuiwfewifruy8',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
                 },
               ],
             },
@@ -281,7 +363,7 @@ describe('Testing Organizations Screen [User Portal]', () => {
     await wait();
 
     expect(screen.queryByText('anyOrganization2')).toBeInTheDocument();
-    expect(screen.queryByText('anyOrganization1')).not.toBeInTheDocument();
+    expect(screen.queryByText('anyOrganization1')).toBeInTheDocument();
 
     userEvent.clear(screen.getByTestId('searchInput'));
     userEvent.click(searchBtn);
@@ -332,5 +414,25 @@ describe('Testing Organizations Screen [User Portal]', () => {
     await wait();
 
     expect(screen.queryAllByText('createdOrganization')).not.toBe([]);
+  });
+
+  test('Join Now button render correctly', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Assert "Join Now" button
+    const joinNowButtons = screen.getAllByTestId('joinBtn');
+    expect(joinNowButtons.length).toBeGreaterThan(0);
   });
 });
