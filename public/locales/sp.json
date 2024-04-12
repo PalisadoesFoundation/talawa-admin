@@ -372,6 +372,8 @@
     "editEvent": "Editar evento",
     "eventTitle": "Título",
     "description": "Descripción",
+    "startDate": "Fecha de inicio",
+    "endDate": "Fecha final",
     "startTime": "Hora de inicio",
     "endTime": "Hora de finalización",
     "allDay": "Todo el dia",

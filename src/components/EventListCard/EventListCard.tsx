@@ -19,6 +19,9 @@ import {
   RecurringEventMutationType,
   recurringEventMutationOptions,
 } from 'utils/recurrenceUtils';
+import { DatePicker, TimePicker } from '@mui/x-date-pickers';
+import dayjs from 'dayjs';
+import type { Dayjs } from 'dayjs';
 
 export interface InterfaceEventListCardProps {
   key: string;
@@ -26,8 +29,8 @@ export interface InterfaceEventListCardProps {
   eventLocation: string;
   eventName: string;
   eventDescription: string;
-  regDate: string;
-  regEndDate: string;
+  startDate: string;
+  endDate: string;
   startTime: string | undefined;
   endTime: string | undefined;
   allDay: boolean;
@@ -37,6 +40,12 @@ export interface InterfaceEventListCardProps {
   isPublic: boolean;
   isRegisterable: boolean;
 }
+
+const timeToDayJs = (time: string): Dayjs => {
+  const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
+  return dayjs(dateTimeString, { format: 'YYYY-MM-DD HH:mm:ss' });
+};
+
 function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'eventListCard',
@@ -48,6 +57,9 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
   const [registrablechecked, setRegistrableChecked] = useState(false);
   const [eventDeleteModalIsOpen, setEventDeleteModalIsOpen] = useState(false);
   const [eventUpdateModalIsOpen, setEventUpdateModalIsOpen] = useState(false);
+  const [eventStartDate, setEventStartDate] = useState(new Date());
+  const [eventEndDate, setEventEndDate] = useState<Date | null>(new Date());
+
   const { orgId } = useParams();
   if (!orgId) {
     return <Navigate to={'/'} replace />;
@@ -89,11 +101,18 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
     setRecurringChecked(props.recurring);
     setPublicChecked(props.isPublic);
     setRegistrableChecked(props.isRegisterable);
+    setEventStartDate(new Date(props.startDate));
+    setEventEndDate(new Date(props.endDate));
   }, []);
 
   const [deleteEvent] = useMutation(DELETE_EVENT_MUTATION);
   const [updateEvent] = useMutation(UPDATE_EVENT_MUTATION);
   const [recurringEventDeleteType, setRecurringEventDeleteType] =
+    useState<RecurringEventMutationType>(
+      RecurringEventMutationType.ThisInstance,
+    );
+
+  const [recurringEventUpdateType, setRecurringEventUpdateType] =
     useState<RecurringEventMutationType>(
       RecurringEventMutationType.ThisInstance,
     );
@@ -135,11 +154,20 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
           description: formState.eventdescrip,
           isPublic: publicchecked,
           recurring: recurringchecked,
+          recurringEventUpdateType: recurringchecked
+            ? recurringEventUpdateType
+            : undefined,
           isRegisterable: registrablechecked,
           allDay: alldaychecked,
+          startDate: dayjs(eventStartDate).format('YYYY-MM-DD'),
+          endDate: eventEndDate
+            ? dayjs(eventEndDate).format('YYYY-MM-DD')
+            : /* istanbul ignore next */ recurringchecked
+              ? undefined
+              : dayjs(eventStartDate).format('YYYY-MM-DD'),
           location: formState.location,
-          startTime: !alldaychecked ? formState.startTime + 'Z' : null,
-          endTime: !alldaychecked ? formState.endTime + 'Z' : null,
+          startTime: !alldaychecked ? formState.startTime + 'Z' : undefined,
+          endTime: !alldaychecked ? formState.endTime + 'Z' : undefined,
         },
       });
 
@@ -225,11 +253,11 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
                 </span>
               </p>
               <p className={styles.preview}>
-                {t('on')}: <span className={styles.view}>{props.regDate}</span>
+                {t('on')}:{' '}
+                <span className={styles.view}>{props.startDate}</span>
               </p>
               <p className={styles.preview}>
-                {t('end')}:{' '}
-                <span className={styles.view}>{props.regEndDate}</span>
+                {t('end')}: <span className={styles.view}>{props.endDate}</span>
               </p>
               <Button
                 className={styles.customButton}
@@ -340,6 +368,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
         onHide={toggleUpdateModel}
         backdrop="static"
         keyboard={false}
+        centered
       >
         <Modal.Header closeButton className="bg-primary">
           <Modal.Title
@@ -400,38 +429,93 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
                 });
               }}
             />
-            {!alldaychecked && (
-              <div className={styles.datediv}>
-                <div className="me-1">
-                  <label htmlFor="startTime">{t('startTime')}</label>
-                  <Form.Control
-                    id="startTime"
-                    value={formState.startTime}
-                    data-testid="updateStartTime"
-                    onChange={(e): void =>
-                      setFormState({
-                        ...formState,
-                        startTime: e.target.value,
-                      })
+
+            <div className={styles.datediv}>
+              <div>
+                <DatePicker
+                  label={t('startDate')}
+                  className={styles.datebox}
+                  value={dayjs(eventStartDate)}
+                  onChange={(date: Dayjs | null): void => {
+                    if (date) {
+                      setEventStartDate(date?.toDate());
+                      setEventEndDate(
+                        eventEndDate &&
+                          (eventEndDate < date?.toDate()
+                            ? date?.toDate()
+                            : eventEndDate),
+                      );
+                      // setRecurrenceRuleState({
+                      //   ...recurrenceRuleState,
+                      //   weekDays: [Days[date?.toDate().getDay()]],
+                      //   weekDayOccurenceInMonth: weekDayOccurenceInMonth
+                      //     ? getWeekDayOccurenceInMonth(date?.toDate())
+                      //     : undefined,
+                      // });
                     }
-                  />
-                </div>
-                <div className="ms-1">
-                  <label htmlFor="endTime">{t('endTime')}</label>
-                  <Form.Control
-                    id="endTime"
-                    value={formState.endTime}
-                    data-testid="updateEndTime"
-                    onChange={(e): void =>
-                      setFormState({
-                        ...formState,
-                        endTime: e.target.value,
-                      })
-                    }
-                  />
-                </div>
+                  }}
+                />
               </div>
-            )}
+              <div>
+                <DatePicker
+                  label={t('endDate')}
+                  className={styles.datebox}
+                  value={dayjs(eventEndDate ?? eventStartDate)}
+                  onChange={(date: Dayjs | null): void => {
+                    if (date) {
+                      setEventEndDate(date?.toDate());
+                    }
+                  }}
+                  minDate={dayjs(eventStartDate)}
+                />
+              </div>
+            </div>
+            <div className={styles.datediv}>
+              <div className="mr-3">
+                <TimePicker
+                  label={t('startTime')}
+                  className={styles.datebox}
+                  timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
+                  value={timeToDayJs(formState.startTime)}
+                  /*istanbul ignore next*/
+                  onChange={(time): void => {
+                    if (time) {
+                      setFormState({
+                        ...formState,
+                        startTime: time?.format('HH:mm:ss'),
+                        endTime:
+                          /*istanbul ignore next*/
+                          timeToDayJs(formState.endTime) < time
+                            ? /* istanbul ignore next */ time?.format(
+                                'HH:mm:ss',
+                              )
+                            : formState.endTime,
+                      });
+                    }
+                  }}
+                  disabled={alldaychecked}
+                />
+              </div>
+              <div>
+                <TimePicker
+                  label={t('endTime')}
+                  className={styles.datebox}
+                  timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
+                  /*istanbul ignore next*/
+                  value={timeToDayJs(formState.endTime)}
+                  onChange={(time): void => {
+                    if (time) {
+                      setFormState({
+                        ...formState,
+                        endTime: time?.format('HH:mm:ss'),
+                      });
+                    }
+                  }}
+                  minTime={timeToDayJs(formState.startTime)}
+                  disabled={alldaychecked}
+                />
+              </div>
+            </div>
             <div className={styles.checkboxContainer}>
               <div className={styles.checkboxdiv}>
                 <div className={styles.dispflex}>
@@ -496,9 +580,9 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
             <Button
               type="submit"
               className="btn btn-success"
-              data-testid="updatePostBtn"
+              data-testid="updateEventBtn"
             >
-              {t('updatePost')}
+              {t('editEvent')}
             </Button>
           </Modal.Footer>
         </form>

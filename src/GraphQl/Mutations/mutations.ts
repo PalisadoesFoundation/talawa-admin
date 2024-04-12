@@ -605,15 +605,19 @@ export const UPDATE_EVENT_MUTATION = gql`
     $title: String!
     $description: String!
     $recurring: Boolean!
+    $recurringEventUpdateType: RecurringEventMutationType
     $isPublic: Boolean!
     $isRegisterable: Boolean!
     $allDay: Boolean!
+    $startDate: Date!
+    $endDate: Date
     $startTime: Time
     $endTime: Time
     $location: String
   ) {
     updateEvent(
       id: $id
+      recurringEventUpdateType: $recurringEventUpdateType
       data: {
         title: $title
         description: $description
@@ -621,6 +625,8 @@ export const UPDATE_EVENT_MUTATION = gql`
         isPublic: $isPublic
         isRegisterable: $isRegisterable
         allDay: $allDay
+        startDate: $startDate
+        endDate: $endDate
         startTime: $startTime
         endTime: $endTime
         location: $location

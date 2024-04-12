@@ -89,7 +89,7 @@ export const getRecurrenceRuleText = (
 };
 
 // function that generates a string of selected week days for the recurrence rule text
-// e.g. - for an array ['MO', 'TU', 'FR'], it would output: 'Monday, Tuesday & Friday'
+// e.g. - for an array ['MONDAY', 'TUESDAY', 'FRIDAY'], it would output: 'Monday, Tuesday & Friday'
 const getWeekDaysString = (weekDays: WeekDays[]): string => {
   const fullDayNames = weekDays.map((day) => dayNames[day]);
 

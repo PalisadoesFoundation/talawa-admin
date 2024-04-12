@@ -452,6 +452,8 @@
     "editEvent": "編輯事件",
     "eventTitle": "標題",
     "description": "描述",
+    "startDate": "开始日期",
+    "endDate": "结束日期",
     "startTime": "開始時間",
     "endTime": "時間結束",
     "allDay": "一整天",

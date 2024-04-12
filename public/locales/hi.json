@@ -373,6 +373,8 @@
     "editEvent": "घटना संपादित करें",
     "eventTitle": "शीर्षक",
     "description": "विवरण",
+    "startDate": "आरंभ करने की तिथि",
+    "endDate": "अंतिम तिथि",
     "startTime": "समय शुरू",
     "endTime": "अंत समय",
     "allDay": "पूरे दिन",
