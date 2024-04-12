@@ -1079,6 +1079,8 @@
     "no": "No",
     "successfulDeletion": "Action Item deleted successfully",
     "successfulCreation": "Action Item created successfully",
-    "successfulUpdation": "Action Item updated successfully"
+    "successfulUpdation": "Action Item updated successfully",
+    "notes": "Notes",
+    "save": "Save"
   }
 }

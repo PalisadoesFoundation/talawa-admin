@@ -65,6 +65,7 @@ const MOCKS = [
       variables: {
         actionItemId: '_6613ef741677gygwuyu',
         assigneeId: '658930fd2caa9d8d6908745c',
+        preCompletionNotes: 'task to be done with high priority',
         postCompletionNotes: 'Done',
         dueDate: '2024-04-05',
         completionDate: '2024-04-05',
@@ -290,6 +291,7 @@ const UPDATE_ACTION_ITEM_ERROR_MOCK = [
       variables: {
         actionItemId: '_6613ef741677gygwuyu',
         assigneeId: '658930fd2caa9d8d6908745c',
+        preCompletionNotes: 'task to be done with high priority',
         postCompletionNotes: 'Done',
         dueDate: '2024-04-05',
         completionDate: '2024-04-05',
@@ -367,10 +369,10 @@ describe('Event Action Items Page', () => {
 
     expect(assigneeDropdown).toHaveValue('658930fd2caa9d8d6908745c');
 
-    fireEvent.change(screen.getByPlaceholderText('Pre Completion Notes'), {
+    fireEvent.change(screen.getByPlaceholderText('Notes'), {
       target: { value: 'task to be done with high priority' },
     });
-    expect(screen.getByPlaceholderText('Pre Completion Notes')).toHaveValue(
+    expect(screen.getByPlaceholderText('Notes')).toHaveValue(
       'task to be done with high priority',
     );
 
@@ -441,6 +443,12 @@ describe('Event Action Items Page', () => {
     userEvent.selectOptions(assigneeDropdown, 'Teresa Bradley');
 
     expect(assigneeDropdown).toHaveValue('658930fd2caa9d8d6908745c');
+    fireEvent.change(screen.getByPlaceholderText('Notes'), {
+      target: { value: 'task to be done with high priority' },
+    });
+    expect(screen.getByPlaceholderText('Notes')).toHaveValue(
+      'task to be done with high priority',
+    );
 
     fireEvent.change(screen.getByPlaceholderText('Post Completion Notes'), {
       target: { value: 'Done' },
@@ -551,10 +559,10 @@ describe('Event Action Items Page', () => {
     await wait();
     expect(screen.getByText('Action Item Details')).toBeInTheDocument();
 
-    fireEvent.change(screen.getByPlaceholderText('Pre Completion Notes'), {
+    fireEvent.change(screen.getByPlaceholderText('Notes'), {
       target: { value: 'task to be done with high priority' },
     });
-    expect(screen.getByPlaceholderText('Pre Completion Notes')).toHaveValue(
+    expect(screen.getByPlaceholderText('Notes')).toHaveValue(
       'task to be done with high priority',
     );
 

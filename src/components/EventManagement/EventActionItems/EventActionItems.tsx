@@ -70,10 +70,7 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
     setActionItemId('');
     setActionItemUpdateModalIsOpen(!actionItemUpdateModalIsOpen);
   };
-  const showDeleteModal = (): void => {
-    setActionItemDeleteModalIsOpen(!actionItemDeleteModalIsOpen);
-  };
-  const hideDeleteModal = (): void => {
+  const toggleDeleteModal = (): void => {
     setActionItemDeleteModalIsOpen(!actionItemDeleteModalIsOpen);
   };
   const {
@@ -157,6 +154,7 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
         variables: {
           actionItemId,
           assigneeId: formState.assigneeId,
+          preCompletionNotes: formState.preCompletionNotes,
           postCompletionNotes: formState.postCompletionNotes,
           dueDate: dayjs(dueDate).format('YYYY-MM-DD'),
           completionDate: dayjs(completionDate).format('YYYY-MM-DD'),
@@ -180,7 +178,7 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
       },
     });
     actionItemsRefetch();
-    hideDeleteModal();
+    toggleDeleteModal();
     hideUpdateModal();
     toast.success(t('successfulDeletion'));
   };
@@ -357,12 +355,12 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
               </Form.Select>
             </Form.Group>
             <label htmlFor="actionItemPreCompletionNotes">
-              {t('preCompletionNotes')}
+              {t('notes')}
             </label>
             <Form.Control
               type="actionItemPreCompletionNotes"
               id="actionItemPreCompletionNotes"
-              placeholder={t('preCompletionNotes')}
+              placeholder={t('notes')}
               autoComplete="off"
               value={formState.preCompletionNotes}
               onChange={(e): void => {
@@ -436,6 +434,22 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
                 })}
               </Form.Select>
             </Form.Group>
+            <label htmlFor="actionItemPreCompletionNotes">
+              {t('notes')}
+            </label>
+            <Form.Control
+              type="actionItemPreCompletionNotes"
+              id="actionItemPreCompletionNotes"
+              placeholder={t('notes')}
+              autoComplete="off"
+              value={formState.preCompletionNotes}
+              onChange={(e): void => {
+                setFormState({
+                  ...formState,
+                  preCompletionNotes: e.target.value,
+                });
+              }}
+            />
             <label htmlFor="actionItemPostCompletionNotes">
               {t('postCompletionNotes')}
             </label>
@@ -484,14 +498,14 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
                 value="editActionItem"
                 data-testid="updateActionItemFormSubmitBtn"
               >
-                {t('editActionItem')}
+                {t('save')}
               </Button>
 
               <Button
                 value="deleteActionItem"
                 data-testid="deleteActionItemBtn"
                 className="btn btn-danger"
-                onClick={showDeleteModal}
+                onClick={toggleDeleteModal}
               >
                 {t('deleteActionItem')}
               </Button>
@@ -504,7 +518,7 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
         size="sm"
         id={`deleteActionItemModal`}
         show={actionItemDeleteModalIsOpen}
-        onHide={hideDeleteModal}
+        onHide={toggleDeleteModal}
         backdrop="static"
         keyboard={false}
         className={styles.actionItemModal}
@@ -520,7 +534,7 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
             type="button"
             className="btn btn-danger"
             data-dismiss="modal"
-            onClick={hideDeleteModal}
+            onClick={toggleDeleteModal}
             data-testid="actionItemDeleteModalCloseBtn"
           >
             {t('no')}

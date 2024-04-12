@@ -1070,6 +1070,8 @@
     "no": "no",
     "successfulDeletion": "Elemento de acción eliminado exitosamente",
     "successfulCreation": "Elemento de acción creado exitosamente",
-    "successfulUpdation": "Elemento de acción actualizado correctamente"
+    "successfulUpdation": "Elemento de acción actualizado correctamente",
+    "notes": "Notas",
+    "save": "Guardar"
   }
 }
