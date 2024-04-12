@@ -106,6 +106,30 @@ const RecurrenceOptions: React.FC<InterfaceRecurrenceOptionsProps> = ({
               )}
             </span>
           </Dropdown.Item>
+          <Dropdown.Item
+            onClick={() =>
+              setRecurrenceRuleState({
+                ...recurrenceRuleState,
+                frequency: Frequency.MONTHLY,
+                weekDays: undefined,
+                weekDayOccurenceInMonth: undefined,
+              })
+            }
+            data-testid="monthlyRecurrenceOnThatDay"
+          >
+            <span className="fw-semibold text-secondary">
+              {getRecurrenceRuleText(
+                {
+                  ...recurrenceRuleState,
+                  frequency: Frequency.MONTHLY,
+                  weekDays: undefined,
+                  weekDayOccurenceInMonth: undefined,
+                },
+                startDate,
+                endDate,
+              )}
+            </span>
+          </Dropdown.Item>
           {getWeekDayOccurenceInMonth(startDate) !== 5 && (
             <Dropdown.Item
               onClick={() =>

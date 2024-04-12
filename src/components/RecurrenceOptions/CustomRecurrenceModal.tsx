@@ -181,9 +181,8 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
                     setRecurrenceRuleState({
                       ...recurrenceRuleState,
                       frequency: Frequency.MONTHLY,
-                      weekDays: [Days[startDate.getDay()]],
-                      weekDayOccurenceInMonth:
-                        getWeekDayOccurenceInMonth(startDate),
+                      weekDays: undefined,
+                      weekDayOccurenceInMonth: undefined,
                     })
                   }
                   data-testid="customMonthlyRecurrence"

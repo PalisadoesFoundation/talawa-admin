@@ -329,7 +329,7 @@ describe('Testing the creaction of recurring events with custom recurrence patte
 
     await waitFor(() => {
       expect(screen.getByTestId('monthlyRecurrenceOptions')).toHaveTextContent(
-        'Monthly on Fourth Monday, until April 15, 2023',
+        'Monthly on Day 28, until April 15, 2023',
       );
     });
 
@@ -337,14 +337,16 @@ describe('Testing the creaction of recurring events with custom recurrence patte
 
     await waitFor(() => {
       expect(
-        screen.getByTestId('monthlyRecurrenceOptionOnThatDay'),
+        screen.getByTestId('monthlyRecurrenceOptionOnThatOccurence'),
       ).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('monthlyRecurrenceOptionOnThatDay'));
+    userEvent.click(
+      screen.getByTestId('monthlyRecurrenceOptionOnThatOccurence'),
+    );
 
     await waitFor(() => {
       expect(screen.getByTestId('monthlyRecurrenceOptions')).toHaveTextContent(
-        'Monthly on Day 28, until April 15, 2023',
+        'Monthly on Fourth Monday, until April 15, 2023',
       );
     });
 
@@ -369,16 +371,14 @@ describe('Testing the creaction of recurring events with custom recurrence patte
 
     await waitFor(() => {
       expect(
-        screen.getByTestId('monthlyRecurrenceOptionOnThatOccurence'),
+        screen.getByTestId('monthlyRecurrenceOptionOnThatDay'),
       ).toBeInTheDocument();
     });
-    userEvent.click(
-      screen.getByTestId('monthlyRecurrenceOptionOnThatOccurence'),
-    );
+    userEvent.click(screen.getByTestId('monthlyRecurrenceOptionOnThatDay'));
 
     await waitFor(() => {
       expect(screen.getByTestId('monthlyRecurrenceOptions')).toHaveTextContent(
-        'Monthly on Fourth Monday, until April 15, 2023',
+        'Monthly on Day 28, until April 15, 2023',
       );
     });
   });
@@ -520,6 +520,17 @@ describe('Testing the creaction of recurring events with custom recurrence patte
       ).toHaveTextContent('Month');
     });
 
+    userEvent.click(screen.getByTestId('monthlyRecurrenceOptions'));
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('monthlyRecurrenceOptionOnThatOccurence'),
+      ).toBeInTheDocument();
+    });
+    userEvent.click(
+      screen.getByTestId('monthlyRecurrenceOptionOnThatOccurence'),
+    );
+
     await waitFor(() => {
       expect(screen.getByTestId('on')).toBeInTheDocument();
     });
@@ -559,6 +570,7 @@ describe('Testing the creaction of recurring events with custom recurrence patte
 
     expect(screen.getByTestId('recurrenceOptions')).toHaveTextContent(
       'Every 2 months on Fourth Monday, until April...',
+      // "..." because of the overlay component, which trims the text recurrenceRuleText to 45 characters
     );
 
     userEvent.click(screen.getByTestId('createEventBtn'));

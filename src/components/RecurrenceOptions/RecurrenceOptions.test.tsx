@@ -242,6 +242,17 @@ describe('Testing the creaction of recurring events through recurrence options',
 
     userEvent.click(screen.getByTestId('createEventModalBtn'));
 
+    const startDatePicker = screen.getByLabelText('Start Date');
+    const endDatePicker = screen.getByLabelText('End Date');
+
+    fireEvent.change(startDatePicker, {
+      target: { value: formData.startDate },
+    });
+
+    fireEvent.change(endDatePicker, {
+      target: { value: formData.endDate },
+    });
+
     await waitFor(() => {
       expect(screen.getByTestId('recurringCheck')).toBeInTheDocument();
     });
@@ -272,16 +283,15 @@ describe('Testing the creaction of recurring events through recurrence options',
 
     userEvent.click(screen.getByTestId('recurrenceOptions'));
 
-    const startDatePicker = screen.getByLabelText('Start Date');
-    const endDatePicker = screen.getByLabelText('End Date');
-
-    fireEvent.change(startDatePicker, {
-      target: { value: formData.startDate },
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('monthlyRecurrenceOnThatDay'),
+      ).toBeInTheDocument();
     });
 
-    fireEvent.change(endDatePicker, {
-      target: { value: formData.endDate },
-    });
+    userEvent.click(screen.getByTestId('monthlyRecurrenceOnThatDay'));
+
+    userEvent.click(screen.getByTestId('recurrenceOptions'));
 
     await waitFor(() => {
       expect(
@@ -301,6 +311,11 @@ describe('Testing the creaction of recurring events through recurrence options',
 
     userEvent.click(screen.getByTestId('monthlyRecurrenceOnLastOccurence'));
 
+    // changing the startDate would change the weekDayOccurenceInMonth, if it is defined
+    fireEvent.change(startDatePicker, {
+      target: { value: formData.endDate },
+    });
+
     userEvent.click(screen.getByTestId('recurrenceOptions'));
 
     await waitFor(() => {
@@ -318,6 +333,12 @@ describe('Testing the creaction of recurring events through recurrence options',
     });
 
     userEvent.click(screen.getByTestId('mondayToFridayRecurrence'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('recurrenceOptions')).toHaveTextContent(
+        'Monday to Friday, until April 15, 2023',
+      );
+    });
   });
 
   test('Creating a recurring event with the daily recurrence option', async () => {
