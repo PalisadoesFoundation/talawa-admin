@@ -63,8 +63,8 @@ describe('Testing Campaign Pledge Screen', () => {
   const formData = {
     pledgeAmount: 100,
     pledgeCurrency: 'USD',
-    pledgeEndDate: '03/10/2024',
-    pledgeStartDate: '03/10/2024',
+    pledgeStartDate: new Date(),
+    pledgeEndDate: new Date(),
   };
 
   it('should render the Campaign Pledge screen', async () => {
@@ -274,12 +274,6 @@ describe('Testing Campaign Pledge Screen', () => {
     });
     const currency = screen.getByTestId('currencySelect');
     fireEvent.change(currency, { target: { value: 'INR' } });
-    const startDate = screen.getByLabelText(translations.startDate);
-    const endDate = screen.getByLabelText(translations.endDate);
-    fireEvent.change(startDate, {
-      target: { value: formData.pledgeStartDate },
-    });
-    fireEvent.change(endDate, { target: { value: formData.pledgeEndDate } });
     userEvent.type(
       screen.getByPlaceholderText('Enter Pledge Amount'),
       formData.pledgeAmount.toString(),

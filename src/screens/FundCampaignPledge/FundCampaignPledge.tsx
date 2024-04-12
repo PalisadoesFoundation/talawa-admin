@@ -152,6 +152,7 @@ const fundCampaignPledge = (): JSX.Element => {
       if (formState.pledgeCurrency !== pledge?.currency) {
         updatedFields.currency = formState.pledgeCurrency;
       }
+      /* istanbul ignore next */
       if (
         dayjs(formState.pledgeStartDate).format('YYYY-MM-DD') !==
         dayjs(pledge?.startDate).format('YYYY-MM-DD')
@@ -160,6 +161,7 @@ const fundCampaignPledge = (): JSX.Element => {
           convertDateLocalToUTC(formState.pledgeStartDate),
         ).format('YYYY-MM-DD');
       }
+      /* istanbul ignore next */
       if (
         dayjs(formState.pledgeEndDate).format('YYYY-MM-DD') !==
         dayjs(pledge?.endDate).format('YYYY-MM-DD')

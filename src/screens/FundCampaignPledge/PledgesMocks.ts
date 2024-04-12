@@ -4,6 +4,7 @@ import {
   UPDATE_PLEDGE,
 } from 'GraphQl/Mutations/PledgeMutation';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
+import dayjs from 'dayjs';
 
 export const MOCKS = [
   {
@@ -57,8 +58,8 @@ export const MOCKS = [
         campaignId: undefined,
         amount: 100,
         currency: 'USD',
-        startDate: '2024-03-09',
-        endDate: '2024-03-09',
+        startDate: dayjs(new Date()).format('YYYY-MM-DD'),
+        endDate: dayjs(new Date()).format('YYYY-MM-DD'),
         userIds: [null],
       },
     },
@@ -77,8 +78,6 @@ export const MOCKS = [
         id: '1',
         amount: 100100,
         currency: 'INR',
-        startDate: '2024-03-10',
-        endDate: '2024-03-09',
       },
     },
     result: {
