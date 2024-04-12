@@ -161,6 +161,16 @@ export interface InterfaceQueryOrganizationPostListItem {
         likeCount: number;
         commentCount: number;
         pinned: boolean;
+
+        likedBy: { _id: string }[];
+        comments: {
+          _id: string;
+          text: string;
+          creator: { _id: string };
+          createdAt: string;
+          likeCount: number;
+          likedBy: { _id: string }[];
+        }[];
       };
       cursor: string;
     }[];
@@ -341,7 +351,7 @@ export interface InterfaceQueryUserListItem {
 export interface InterfaceQueryVenueListItem {
   _id: string;
   name: string;
-  description: string;
+  description: string | null;
   image: string | null;
   capacity: string;
 }
@@ -376,6 +386,7 @@ export interface InterfacePostCard {
   likeCount: number;
   commentCount: number;
   comments: {
+    id: string;
     creator: {
       _id: string;
       firstName: string;

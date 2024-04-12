@@ -46,7 +46,6 @@ const createMemberMock = (
             image: null,
             email: 'member@gmail.com',
             createdAt: '2023-03-02T03:22:08.101Z',
-            userType: 'USER',
           },
         ],
       },
@@ -65,7 +64,6 @@ const createMemberMock = (
               image: null,
               email: 'member@gmail.com',
               createdAt: '2023-03-02T03:22:08.101Z',
-              userType: 'USER',
             },
           },
         ],
@@ -99,7 +97,6 @@ const createAdminMock = (
               image: null,
               email: 'admin@gmail.com',
               createdAt: '2023-03-02T03:22:08.101Z',
-              userType: 'USER',
             },
           },
         ],
@@ -120,7 +117,6 @@ const createAdminMock = (
               image: null,
               email: 'admin@gmail.com',
               createdAt: '2023-03-02T03:22:08.101Z',
-              userType: 'USER',
               lol: true,
             },
           },
@@ -152,7 +148,6 @@ const createUserMock = (
             image: 'tempUrl',
             _id: '64001660a711c62d5b4076a2',
             email: 'adidacreator1@gmail.com',
-            userType: 'SUPERADMIN',
             createdAt: '2023-03-02T03:22:08.101Z',
             joinedOrganizations: [
               {
@@ -170,7 +165,6 @@ const createUserMock = (
             image: 'tempUrl',
             _id: '6402030dce8e8406b8f07b0e',
             email: 'adi1@gmail.com',
-            userType: 'USER',
             createdAt: '2023-03-03T14:24:13.084Z',
             joinedOrganizations: [
               {
@@ -279,7 +273,6 @@ const MOCKS: TestMock[] = [
               image: null,
               email: 'member@gmail.com',
               createdAt: '2023-03-02T03:22:08.101Z',
-              userType: 'USER',
             },
           ],
         },
@@ -297,7 +290,6 @@ const MOCKS: TestMock[] = [
               image: null,
               email: 'member@gmail.com',
               createdAt: '2023-03-02T03:22:08.101Z',
-              userType: 'USER',
             },
           ],
         },
@@ -325,7 +317,6 @@ const MOCKS: TestMock[] = [
               image: null,
               email: 'admin@gmail.com',
               createdAt: '2023-03-02T03:22:08.101Z',
-              userType: 'USER',
             },
           ],
         },
@@ -344,7 +335,6 @@ const MOCKS: TestMock[] = [
               image: null,
               email: 'admin@gmail.com',
               createdAt: '2023-03-02T03:22:08.101Z',
-              userType: 'USER',
               lol: true,
             },
           ],
@@ -373,7 +363,6 @@ const MOCKS: TestMock[] = [
               image: 'tempUrl',
               _id: '64001660a711c62d5b4076a2',
               email: 'adidacreator1@gmail.com',
-              userType: 'SUPERADMIN',
               createdAt: '2023-03-02T03:22:08.101Z',
               joinedOrganizations: [
                 {
@@ -391,7 +380,6 @@ const MOCKS: TestMock[] = [
               image: 'tempUrl',
               _id: '6402030dce8e8406b8f07b0e',
               email: 'adi1@gmail.com',
-              userType: 'USER',
               createdAt: '2023-03-03T14:24:13.084Z',
               joinedOrganizations: [
                 {
@@ -437,7 +425,6 @@ const MOCKS: TestMock[] = [
               image: null,
               _id: '65378abd85008f171cf2990d',
               email: 'testadmin1@example.com',
-              userType: 'ADMIN',
               createdAt: '2023-04-13T04:53:17.742Z',
               joinedOrganizations: [
                 {
@@ -612,7 +599,6 @@ describe('Organization People Page', () => {
         image: null,
         email: 'member@gmail.com',
         createdAt: '2023-03-02T03:22:08.101Z',
-        userType: 'USER',
       },
     ]);
 
@@ -630,7 +616,6 @@ describe('Organization People Page', () => {
           image: 'tempUrl',
           _id: '64001660a711c62d5b4076a2',
           email: 'adidacreator1@gmail.com',
-          userType: 'SUPERADMIN',
           createdAt: '2023-03-02T03:22:08.101Z',
           joinedOrganizations: [
             {
@@ -648,7 +633,6 @@ describe('Organization People Page', () => {
           image: 'tempUrl',
           _id: '6402030dce8e8406b8f07b0e',
           email: 'adi1@gmail.com',
-          userType: 'USER',
           createdAt: '2023-03-03T14:24:13.084Z',
           joinedOrganizations: [
             {
@@ -668,7 +652,6 @@ describe('Organization People Page', () => {
         image: null,
         email: 'admin@gmail.com',
         createdAt: '2023-03-02T03:22:08.101Z',
-        userType: 'USER',
       },
     ]);
 

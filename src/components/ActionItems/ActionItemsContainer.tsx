@@ -37,7 +37,7 @@ function actionItemsContainer({
   actionItemsConnection: 'Organization' | 'Event';
   actionItemsData: InterfaceActionItemInfo[] | undefined;
   membersData: InterfaceMemberInfo[] | undefined;
-  actionItemsRefetch: any;
+  actionItemsRefetch: () => void;
 }): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationActionItems',
@@ -202,15 +202,20 @@ function actionItemsContainer({
             >
               <div className="ms-2">{t('assignee')}</div>
             </Col>
-            <Col className="fw-bold d-none d-sm-block" sm={5} md={6} lg={3}>
+            <Col
+              className="align-self-center fw-bold d-none d-sm-block"
+              sm={5}
+              md={6}
+              lg={2}
+            >
               {t('actionItemCategory')}
             </Col>
             <Col
               className="d-none d-lg-block fw-bold align-self-center"
               md={4}
-              lg={2}
+              lg={3}
             >
-              <div className="ms-3">{t('preCompletionNotes')}</div>
+              <div className="ms-1">{t('preCompletionNotes')}</div>
             </Col>
             <Col
               className="d-none d-lg-block fw-bold align-self-center"
@@ -253,7 +258,7 @@ function actionItemsContainer({
                   md={4}
                   lg={3}
                 >
-                  <div className="ms-5">
+                  <div className="ms-3">
                     <OverlayTrigger
                       trigger={['hover', 'focus']}
                       placement="right"
@@ -291,6 +296,7 @@ function actionItemsContainer({
                             setActionItemId(actionItem._id);
                             setActionItemNotes(actionItem.postCompletionNotes);
                           }}
+                          className="ms-3 "
                         >
                           {actionItem.postCompletionNotes?.length > 25
                             ? `${actionItem.postCompletionNotes.substring(0, 25)}...`

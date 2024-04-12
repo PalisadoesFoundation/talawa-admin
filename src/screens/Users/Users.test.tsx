@@ -15,7 +15,7 @@ import Users from './Users';
 import { EMPTY_MOCKS, MOCKS, MOCKS2 } from './UsersMocks';
 import useLocalStorage from 'utils/useLocalstorage';
 
-const { setItem } = useLocalStorage();
+const { setItem, removeItem } = useLocalStorage();
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(EMPTY_MOCKS, true);
@@ -32,6 +32,7 @@ beforeEach(() => {
   setItem('id', '123');
   setItem('SuperAdmin', true);
   setItem('FirstName', 'John');
+  setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
   setItem('LastName', 'Doe');
 });
 
@@ -59,7 +60,9 @@ describe('Testing Users screen', () => {
 
   test(`Component should be rendered properly when user is not superAdmin
   and or userId does not exists in localstorage`, async () => {
-    setItem('SuperAdmin', false);
+    setItem('AdminFor', ['123']);
+    removeItem('SuperAdmin');
+    await wait();
     setItem('id', '');
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -72,7 +75,25 @@ describe('Testing Users screen', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
+    await wait();
+  });
 
+  test(`Component should be rendered properly when userId does not exists in localstorage`, async () => {
+    removeItem('AdminFor');
+    removeItem('SuperAdmin');
+    await wait();
+    removeItem('id');
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Users />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
     await wait();
   });
 

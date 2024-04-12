@@ -16,7 +16,6 @@
 .btnsContainer .btnsBlock {
   display: flex;
   gap: 10px;
-  margin-top: 17px;
 }
 
 .btnsContainer button {
@@ -25,18 +24,8 @@
   align-items: center;
 }
 
-.clearFiltersBtn {
-  margin-top: 17px;
-}
-
 .container {
   min-height: 100vh;
-}
-
-.createActionItemButton {
-  position: absolute;
-  top: 1.3rem;
-  right: 2rem;
 }
 
 .datediv {
@@ -94,10 +83,6 @@
     transform 0.2s,
     box-shadow 0.2s;
   width: 100%;
-}
-
-h2 {
-  margin-top: 0.5rem;
 }
 
 hr {
@@ -173,10 +158,6 @@ hr {
 
   .btnsContainer button {
     width: 100%;
-  }
-
-  .clearFiltersBtn {
-    margin-top: 0;
   }
 
   .createActionItemButton {
