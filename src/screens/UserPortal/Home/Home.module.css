@@ -80,10 +80,9 @@
 
 .postContainer {
   width: auto;
-  /* height: 200px; */
   background-color: white;
   margin-top: 1rem;
-  padding: 20px;
+  padding: 1rem;
   border: 1px solid #dddddd;
   border-radius: 10px;
 }
@@ -110,6 +109,7 @@
   display: flex;
   width: 50px;
   height: 50px;
+  margin-left: 1rem;
   align-items: center;
   justify-content: center;
   overflow: hidden;

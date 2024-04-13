@@ -10,12 +10,14 @@
 
 .cardHeader {
   display: flex;
+  width: 100%;
   padding-inline: 1rem;
   padding-block: 0;
   flex-direction: row;
   gap: 0.5rem;
   align-items: center;
   background-color: white;
+  border-bottom: 1px solid #dddddd;
   & > p {
     margin-bottom: 0;
     font-weight: 500;
@@ -37,20 +39,14 @@
 }
 
 .cardTitle {
-  font-size: 1.3rem !important;
-  height: 1.5rem !important;
+  --max-lines: 1;
+  display: -webkit-box;
   overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--max-lines);
+
+  font-size: 1.3rem !important;
   font-weight: 600;
-  position: relative;
-  display: inline-block;
-}
-.cardTitle::after {
-  position: absolute;
-  background-color: white;
-  min-width: 1rem;
-  bottom: 0;
-  right: 0;
-  content: '...';
 }
 
 .date {
@@ -58,22 +54,16 @@
 }
 
 .cardText {
-  max-height: 3rem;
+  --max-lines: 3;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--max-lines);
+
   padding-top: 0;
   font-weight: 300;
   margin-top: 0.7rem !important;
-  overflow: hidden;
-  position: relative;
-  display: inline-block;
   text-align: justify;
-}
-.cardText::after {
-  position: absolute;
-  background-color: white;
-  min-width: 1rem;
-  bottom: 0;
-  right: 0;
-  content: '...';
 }
 
 .viewBtn {

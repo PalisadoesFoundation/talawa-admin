@@ -1,5 +1,15 @@
+import React, { useEffect, useState } from 'react';
+import { Navigate, useParams } from 'react-router-dom';
+import { Button, Form, Col, Row } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import { useQuery } from '@apollo/client';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import SendIcon from '@mui/icons-material/Send';
+
+import type {
+  InterfacePostCard,
+  InterfaceQueryUserListItem,
+} from 'utils/interfaces';
 import {
   ADVERTISEMENTS_GET,
   ORGANIZATION_POST_LIST,
@@ -7,21 +17,12 @@ import {
 } from 'GraphQl/Queries/Queries';
 import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
 import PostCard from 'components/UserPortal/PostCard/PostCard';
-import SendIcon from '@mui/icons-material/Send';
-import type {
-  InterfacePostCard,
-  InterfaceQueryUserListItem,
-} from 'utils/interfaces';
 import PromotedPost from 'components/UserPortal/PromotedPost/PromotedPost';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import StartPostModal from 'components/UserPortal/StartPostModal/StartPostModal';
-import React, { useEffect, useState } from 'react';
-import { Button, Col, Form, Row } from 'react-bootstrap';
-import { useTranslation } from 'react-i18next';
-
-import { Navigate, useParams } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from './Home.module.css';
+import convertToBase64 from 'utils/convertToBase64';
 
 interface InterfaceAdContent {
   _id: string;
@@ -98,7 +99,7 @@ export default function home(): JSX.Element {
   const [showModal, setShowModal] = useState<boolean>(false);
   const { orgId } = useParams();
 
-  const [postContent, setPostContent] = useState<string>('');
+  const [postImg, setPostImg] = useState<string>('');
 
   if (!orgId) {
     return <Navigate to={'/user'} />;
@@ -266,93 +267,37 @@ export default function home(): JSX.Element {
         <UserSidebar />
         <div className={`${styles.colorLight} ${styles.mainContainer}`}>
           <h1>{t(`posts`)}</h1>
-          {/* <Container className={styles.postContainer}>
-            <Row className="d-flex align-items-center justify-content-center">
-              <Col xs={2} className={styles.userImage}>
-                <Image
-                  src={user?.user?.image || UserDefault}
-                  roundedCircle
-                  className="mt-2"
-                />
-              </Col>
-              <Col xs={10}>
-                <Button
-                  className={styles.startPostBtn}
-                  onClick={handlePostButtonClick}
-                  data-testid="startPostBtn"
-                >
-                  {t('startPost')}
-                </Button>
-              </Col>
-            </Row>
-            <Row className="mt-3 d-flex align-items-center justify-content-evenly">
-              <Col xs={4} className={styles.uploadLink}>
-                <div className="d-flex gap-2 align-items-center justify-content-center">
-                  <div className={styles.icons}>
-                    <MediaIcon />
-                  </div>
-                  <p className={styles.iconLabel}>{t('media')}</p>
-                </div>
-              </Col>
-              <Col xs={4} className={styles.uploadLink}>
-                <div className="d-flex gap-2 align-items-center justify-content-center">
-                  <div className={styles.icons}>
-                    <EventIcon />
-                  </div>
-                  <p className={styles.iconLabel}>{t('event')}</p>
-                </div>
-              </Col>
-              <Col xs={4} className={styles.uploadLink}>
-                <div className="d-flex gap-2 align-items-center justify-content-center">
-                  <div className={styles.icons}>
-                    <ArticleIcon />
-                  </div>
-                  <p className={styles.iconLabel}>{t('article')}</p>
-                </div>
-              </Col>
-            </Row>
-          </Container> */}
           <div className={`${styles.postContainer}`}>
             <div className={`${styles.heading}`}>{t('startPost')}</div>
             <div className={styles.postInputContainer}>
               <Row className="d-flex gap-1">
                 <Col className={styles.maxWidth}>
                   <Form.Control
-                    type="text"
+                    type="file"
+                    accept="image/*"
+                    multiple={false}
                     className={styles.inputArea}
-                    data-testid="title"
-                    placeholder={t('title')}
-                    value={postContent}
-                    onChange={(e) => {
-                      setPostContent(e.target.value);
+                    data-testid="fileInput"
+                    autoComplete="off"
+                    onChange={async (
+                      e: React.ChangeEvent<HTMLInputElement>,
+                    ): Promise<void> => {
+                      setPostImg('');
+                      const target = e.target as HTMLInputElement;
+                      const file = target.files && target.files[0];
+                      const base64file = file && (await convertToBase64(file));
+                      setPostImg(base64file ?? '');
                     }}
                   />
                 </Col>
-                <Col className={styles.maxWidth}>
-                  <Form.Control type="file" className={styles.inputArea} />
-                </Col>
-              </Row>
-              <Row className="d-flex gap-3 mt-3">
-                <Form.Group className="w-100">
-                  <Form.Control
-                    as="textarea"
-                    className={styles.inputArea}
-                    data-testid="textArea"
-                    placeholder={t('textArea')}
-                    value={postContent}
-                    onChange={(e) => {
-                      setPostContent(e.target.value);
-                    }}
-                  />
-                </Form.Group>
               </Row>
             </div>
             <div className="d-flex justify-content-end">
               <Button
                 size="sm"
-                data-testid={'donateBtn'}
+                data-testid={'postBtn'}
                 onClick={handlePostButtonClick}
-                className="px-sm-3 py-sm-2"
+                className="px-4 py-sm-2"
               >
                 {t('post')} <SendIcon />
               </Button>
@@ -417,6 +362,7 @@ export default function home(): JSX.Element {
           fetchPosts={refetch}
           userData={user}
           organizationId={orgId}
+          img={postImg}
         />
       </div>
     </>

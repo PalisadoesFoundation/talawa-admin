@@ -1,26 +1,27 @@
 import React from 'react';
+import { useMutation } from '@apollo/client';
+import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import { Button, Card, Form, InputGroup, Modal } from 'react-bootstrap';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import SendIcon from '@mui/icons-material/Send';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import CommentIcon from '@mui/icons-material/Comment';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import styles from './PostCard.module.css';
-import { useMutation } from '@apollo/client';
+
+import type { InterfacePostCard } from 'utils/interfaces';
 import {
   CREATE_COMMENT_POST,
   LIKE_POST,
   UNLIKE_POST,
 } from 'GraphQl/Mutations/mutations';
-import { toast } from 'react-toastify';
-import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
-import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
-import { useTranslation } from 'react-i18next';
-import SendIcon from '@mui/icons-material/Send';
-import { errorHandler } from 'utils/errorHandler';
 import CommentCard from '../CommentCard/CommentCard';
+import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
-import type { InterfacePostCard } from 'utils/interfaces';
+import styles from './PostCard.module.css';
 import UserDefault from '../../../assets/images/defaultImg.png';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 interface InterfaceCommentCardProps {
   id: string;
@@ -186,7 +187,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
             />
           </div>
           <div className="w-50 p-2 position-relative">
-            <div className="d-flex justify-content-between">
+            <div className="d-flex justify-content-between align-items-center">
               <div className={`${styles.cardHeader} p-0`}>
                 <AccountCircleIcon className="my-2" />
                 <p>{postCreator}</p>
@@ -195,7 +196,10 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
                 <MoreVertIcon />
               </div>
             </div>
-            <div>
+            <div className="mt-2">
+              <p style={{ fontSize: '1.5rem', fontWeight: 600 }}>
+                {props.title}
+              </p>
               <p>{props.text}</p>
             </div>
             <h4>Comments</h4>
