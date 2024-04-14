@@ -35,7 +35,7 @@ This document provides instructions on how to set up and start a running instanc
 
 # Prerequisites for Developers
 
-We recommend that you follow these steps before beginning development work on Talawa-Admin:
+We recommend that you to follow these steps before beginning development work on Talawa-Admin:
 
 1. You need to have `nodejs` installed in your machine. We recommend using Node version greater than 20.0.0. You can install it either through [nvm](https://github.com/nvm-sh/nvm) (Node Version Manager) or by visiting the official [Nodejs](https://nodejs.org/download/release/v16.20.2/) website.
 1. [Talawa-API](https://github.com/PalisadoesFoundation/talawa-api): (**This is mandatory**) The API system that the mobile app uses for accessing data. Setup your own **_local instance_**

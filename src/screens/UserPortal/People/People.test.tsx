@@ -68,6 +68,7 @@ const MOCKS = [
                 lastName: 'Admin',
                 image: null,
                 email: 'noble@gmail.com',
+                createdAt: '2023-03-02T03:22:08.101Z',
               },
             ],
           },

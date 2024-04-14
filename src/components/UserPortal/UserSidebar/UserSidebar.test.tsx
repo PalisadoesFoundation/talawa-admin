@@ -1,5 +1,6 @@
 import React from 'react';
-import { act, render } from '@testing-library/react';
+import type { RenderResult } from '@testing-library/react';
+import { act, render, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 
@@ -15,39 +16,123 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import UserSidebar from './UserSidebar';
 import useLocalStorage from 'utils/useLocalstorage';
 
-const { getItem, setItem } = useLocalStorage();
+const { setItem } = useLocalStorage();
 
 const MOCKS = [
   {
     request: {
       query: USER_DETAILS,
       variables: {
-        id: getItem('userId'),
+        id: 'properId',
       },
     },
     result: {
       data: {
         user: {
-          __typename: 'User',
-          image: null,
-          firstName: 'Noble',
-          lastName: 'Mittal',
-          email: 'noble@mittal.com',
-          role: 'SUPERADMIN',
-          appLanguageCode: 'en',
-          userType: 'SUPERADMIN',
-          pluginCreationAllowed: true,
-          adminApproved: true,
-          createdAt: '2023-02-18T09:22:27.969Z',
-          adminFor: [],
-          createdOrganizations: [],
-          joinedOrganizations: [],
-          organizationsBlockedBy: [],
-          createdEvents: [],
-          registeredEvents: [],
-          eventAdmin: [],
-          membershipRequests: [],
+          user: {
+            _id: 'properId',
+            image: null,
+            firstName: 'Noble',
+            lastName: 'Mittal',
+            email: 'noble@mittal.com',
+            createdAt: '2023-02-18T09:22:27.969Z',
+            joinedOrganizations: [],
+            membershipRequests: [],
+            registeredEvents: [],
+            gender: '',
+            birthDate: '2024-03-14',
+            educationGrade: '',
+            employmentStatus: '',
+            maritalStatus: '',
+            address: {
+              line1: '',
+              countryCode: '',
+              city: '',
+              state: '',
+            },
+            phone: {
+              mobile: '',
+            },
+          },
+          appUserProfile: {
+            _id: 'properId',
+            adminFor: [],
+            createdOrganizations: [],
+            createdEvents: [],
+            eventAdmin: [],
+            isSuperAdmin: true,
+            pluginCreationAllowed: true,
+            appLanguageCode: 'en',
+          },
         },
+      },
+    },
+  },
+  {
+    request: {
+      query: USER_JOINED_ORGANIZATIONS,
+      variables: {
+        id: 'properId',
+      },
+    },
+    result: {
+      data: {
+        users: [
+          {
+            user: {
+              joinedOrganizations: [
+                {
+                  __typename: 'Organization',
+                  _id: '6401ff65ce8e8406b8f07af2',
+                  name: 'Any Organization',
+                  image: '',
+                  description: 'New Desc',
+                  address: {
+                    city: 'abc',
+                    countryCode: '123',
+                    postalCode: '456',
+                    state: 'def',
+                    dependentLocality: 'ghi',
+                    line1: 'asdfg',
+                    line2: 'dfghj',
+                    sortingCode: '4567',
+                  },
+                  createdAt: '1234567890',
+                  userRegistrationRequired: true,
+                  creator: {
+                    __typename: 'User',
+                    firstName: 'John',
+                    lastName: 'Doe',
+                  },
+                  members: [
+                    {
+                      _id: '56gheqyr7deyfuiwfewifruy8',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                  admins: [
+                    {
+                      _id: '45gj5678jk45678fvgbhnr4rtgh',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                  membershipRequests: [
+                    {
+                      _id: '56gheqyr7deyfuiwfewifruy8',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          },
+        ],
       },
     },
   },
@@ -55,31 +140,47 @@ const MOCKS = [
     request: {
       query: USER_DETAILS,
       variables: {
-        id: '2',
+        id: 'imagePresent',
       },
     },
     result: {
       data: {
         user: {
-          __typename: 'User',
-          image: 'adssda',
-          firstName: 'Noble',
-          lastName: 'Mittal',
-          email: 'noble@mittal.com',
-          role: 'SUPERADMIN',
-          appLanguageCode: 'en',
-          userType: 'SUPERADMIN',
-          pluginCreationAllowed: true,
-          adminApproved: true,
-          createdAt: '2023-02-18T09:22:27.969Z',
-          adminFor: [],
-          createdOrganizations: [],
-          joinedOrganizations: [],
-          organizationsBlockedBy: [],
-          createdEvents: [],
-          registeredEvents: [],
-          eventAdmin: [],
-          membershipRequests: [],
+          user: {
+            _id: '2',
+            image: 'adssda',
+            firstName: 'Noble',
+            lastName: 'Mittal',
+            email: 'noble@mittal.com',
+            createdAt: '2023-02-18T09:22:27.969Z',
+            joinedOrganizations: [],
+            membershipRequests: [],
+            registeredEvents: [],
+            gender: '',
+            birthDate: '2024-03-14',
+            educationGrade: '',
+            employmentStatus: '',
+            maritalStatus: '',
+            address: {
+              line1: '',
+              countryCode: '',
+              city: '',
+              state: '',
+            },
+            phone: {
+              mobile: '',
+            },
+          },
+          appUserProfile: {
+            _id: '2',
+            adminFor: [],
+            createdOrganizations: [],
+            createdEvents: [],
+            eventAdmin: [],
+            isSuperAdmin: true,
+            pluginCreationAllowed: true,
+            appLanguageCode: 'en',
+          },
         },
       },
     },
@@ -88,22 +189,65 @@ const MOCKS = [
     request: {
       query: USER_JOINED_ORGANIZATIONS,
       variables: {
-        id: getItem('userId'),
+        id: 'imagePresent',
       },
     },
     result: {
       data: {
         users: [
           {
-            joinedOrganizations: [
-              {
-                __typename: 'Organization',
-                _id: '6401ff65ce8e8406b8f07af2',
-                name: 'Any Organization',
-                image: '',
-                description: 'New Desc',
-              },
-            ],
+            user: {
+              joinedOrganizations: [
+                {
+                  __typename: 'Organization',
+                  _id: '6401ff65ce8e8406b8f07af2',
+                  name: 'Any Organization',
+                  image: 'dadsa',
+                  description: 'New Desc',
+                  address: {
+                    city: 'abc',
+                    countryCode: '123',
+                    postalCode: '456',
+                    state: 'def',
+                    dependentLocality: 'ghi',
+                    line1: 'asdfg',
+                    line2: 'dfghj',
+                    sortingCode: '4567',
+                  },
+                  createdAt: '1234567890',
+                  userRegistrationRequired: true,
+                  creator: {
+                    __typename: 'User',
+                    firstName: 'John',
+                    lastName: 'Doe',
+                  },
+                  members: [
+                    {
+                      _id: '56gheqyr7deyfuiwfewifruy8',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                  admins: [
+                    {
+                      _id: '45gj5678jk45678fvgbhnr4rtgh',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                  membershipRequests: [
+                    {
+                      _id: '56gheqyr7deyfuiwfewifruy8',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
           },
         ],
       },
@@ -111,41 +255,67 @@ const MOCKS = [
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS,
+      query: USER_DETAILS,
       variables: {
-        id: '2',
+        id: 'orgEmpty',
       },
     },
     result: {
       data: {
-        users: [
-          {
-            joinedOrganizations: [
-              {
-                __typename: 'Organization',
-                _id: '6401ff65ce8e8406b8f07af2',
-                name: 'Any Organization',
-                image: 'dadsa',
-                description: 'New Desc',
-              },
-            ],
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_JOINED_ORGANIZATIONS,
-      variables: {
-        id: '3',
-      },
-    },
-    result: {
-      data: {
-        users: [
-          {
+        user: {
+          user: {
+            _id: 'orgEmpty',
+            image: null,
+            firstName: 'Noble',
+            lastName: 'Mittal',
+            email: 'noble@mittal.com',
+            createdAt: '2023-02-18T09:22:27.969Z',
             joinedOrganizations: [],
+            membershipRequests: [],
+            registeredEvents: [],
+            gender: '',
+            birthDate: '2024-03-14',
+            educationGrade: '',
+            employmentStatus: '',
+            maritalStatus: '',
+            address: {
+              line1: '',
+              countryCode: '',
+              city: '',
+              state: '',
+            },
+            phone: {
+              mobile: '',
+            },
+          },
+          appUserProfile: {
+            _id: 'orgEmpty',
+            adminFor: [],
+            createdOrganizations: [],
+            createdEvents: [],
+            eventAdmin: [],
+            isSuperAdmin: true,
+            pluginCreationAllowed: true,
+            appLanguageCode: 'en',
+          },
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: USER_JOINED_ORGANIZATIONS,
+      variables: {
+        id: 'orgEmpty',
+      },
+    },
+    result: {
+      data: {
+        users: [
+          {
+            user: {
+              joinedOrganizations: [],
+            },
           },
         ],
       },
@@ -163,91 +333,46 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
+const renderUserSidebar = (
+  userId: string,
+  link: StaticMockLink,
+): RenderResult => {
+  setItem('userId', userId);
+  return render(
+    <MockedProvider addTypename={false} link={link}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <UserSidebar />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+};
+
 describe('Testing UserSidebar Component [User Portal]', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   test('Component should be rendered properly', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <UserSidebar />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
+    renderUserSidebar('properId', link);
     await wait();
   });
 
-  test('Component should be rendered properly when userImage is not undefined', async () => {
-    const beforeUserId = getItem('userId');
-
-    setItem('userId', '2');
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <UserSidebar />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
+  test('Component should be rendered properly when userImage is present', async () => {
+    renderUserSidebar('imagePresent', link);
     await wait();
-    if (beforeUserId) {
-      setItem('userId', beforeUserId);
-    }
   });
 
-  test('Component should be rendered properly when organizationImage is not undefined', async () => {
-    const beforeUserId = getItem('userId');
-
-    setItem('userId', '2');
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <UserSidebar />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
+  test('Component should be rendered properly when organizationImage is present', async () => {
+    renderUserSidebar('imagePresent', link);
     await wait();
-
-    if (beforeUserId) {
-      setItem('userId', beforeUserId);
-    }
   });
 
   test('Component should be rendered properly when joinedOrganizations list is empty', async () => {
-    const beforeUserId = getItem('userId');
-
-    setItem('userId', '3');
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <UserSidebar />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
+    renderUserSidebar('orgEmpty', link);
     await wait();
-
-    if (beforeUserId) {
-      setItem('userId', beforeUserId);
-    }
   });
 });

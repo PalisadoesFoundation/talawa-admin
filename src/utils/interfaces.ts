@@ -4,12 +4,6 @@ export interface InterfaceUserType {
     lastName: string;
     image: string | null;
     email: string;
-    userType: string;
-    adminFor: {
-      _id: string;
-      name: string;
-      image: string | null;
-    }[];
   };
 }
 
@@ -167,6 +161,16 @@ export interface InterfaceQueryOrganizationPostListItem {
         likeCount: number;
         commentCount: number;
         pinned: boolean;
+
+        likedBy: { _id: string }[];
+        comments: {
+          _id: string;
+          text: string;
+          creator: { _id: string };
+          createdAt: string;
+          likeCount: number;
+          likedBy: { _id: string }[];
+        }[];
       };
       cursor: string;
     }[];
@@ -180,7 +184,7 @@ export interface InterfaceQueryOrganizationPostListItem {
   };
 }
 export interface InterfaceQueryOrganizationFunds {
-  funds: {
+  fundsByOrganization: {
     _id: string;
     name: string;
     refrenceNumber: string;
@@ -188,6 +192,8 @@ export interface InterfaceQueryOrganizationFunds {
     isArchived: boolean;
     isDefault: boolean;
     createdAt: string;
+    organizationId: string;
+    creator: { _id: string; firstName: string; lastName: string };
   }[];
 }
 export interface InterfaceQueryOrganizationFundCampaigns {
@@ -199,6 +205,21 @@ export interface InterfaceQueryOrganizationFundCampaigns {
     endDate: Date;
     createdAt: string;
     currency: string;
+  }[];
+}
+export interface InterfaceQueryFundCampaignsPledges {
+  startDate: Date;
+  endDate: Date;
+  pledges: {
+    _id: string;
+    amount: number;
+    currency: string;
+    endDate: string;
+    startDate: string;
+    users: {
+      _id: string;
+      firstName: string;
+    }[];
   }[];
 }
 export interface InterfaceFundInfo {
@@ -218,6 +239,17 @@ export interface InterfaceCampaignInfo {
   endDate: Date;
   createdAt: string;
   currency: string;
+}
+export interface InterfacePledgeInfo {
+  _id: string;
+  amount: number;
+  currency: string;
+  endDate: string;
+  startDate: string;
+  users: {
+    _id: string;
+    firstName: string;
+  }[];
 }
 export interface InterfaceQueryOrganizationEventListItem {
   _id: string;
@@ -245,54 +277,60 @@ export interface InterfaceQueryBlockPageMemberListItem {
 }
 
 export interface InterfaceQueryUserListItem {
-  _id: string;
-  firstName: string;
-  lastName: string;
-  image: string | null;
-  email: string;
-  userType: string;
-  adminFor: { _id: string }[];
-  adminApproved: boolean;
-  organizationsBlockedBy: {
+  user: {
     _id: string;
-    name: string;
-    address: InterfaceAddress;
+    firstName: string;
+    lastName: string;
     image: string | null;
-    createdAt: string;
-    creator: {
+    email: string;
+    organizationsBlockedBy: {
       _id: string;
-      firstName: string;
-      lastName: string;
-      email: string;
+      name: string;
       image: string | null;
-    };
-  }[];
-  joinedOrganizations: {
+      address: InterfaceAddress;
+      creator: {
+        _id: string;
+        firstName: string;
+        lastName: string;
+        email: string;
+        image: string | null;
+      };
+      createdAt: string;
+    }[];
+    joinedOrganizations: {
+      _id: string;
+      name: string;
+      address: InterfaceAddress;
+      image: string | null;
+      createdAt: string;
+      creator: {
+        _id: string;
+        firstName: string;
+        lastName: string;
+        email: string;
+        image: string | null;
+      };
+    }[];
+    createdAt: string;
+    registeredEvents: { _id: string }[];
+    membershipRequests: { _id: string }[];
+  };
+  appUserProfile: {
     _id: string;
-    name: string;
-    address: InterfaceAddress;
-    image: string | null;
-    createdAt: string;
-    creator: {
-      _id: string;
-      firstName: string;
-      lastName: string;
-      email: string;
-      image: string | null;
-    };
-  }[];
-  createdAt: string;
+    adminFor: { _id: string }[];
+    isSuperAdmin: boolean;
+    createdOrganizations: { _id: string }[];
+    createdEvents: { _id: string }[];
+    eventAdmin: { _id: string }[];
+  };
 }
 
-export interface InterfaceQueryRequestListItem {
+export interface InterfaceQueryVenueListItem {
   _id: string;
-  firstName: string;
-  lastName: string;
-  image: string;
-  email: string;
-  userType: string;
-  adminApproved: boolean;
-  createdAt: string;
+  name: string;
+  description: string | null;
+  image: string | null;
+  capacity: string;
 }
 
 export interface InterfaceAddress {
@@ -318,13 +356,14 @@ export interface InterfacePostCard {
     email: string;
     id: string;
   };
-  image: string;
-  video: string;
+  image: string | null;
+  video: string | null;
   text: string;
   title: string;
   likeCount: number;
   commentCount: number;
   comments: {
+    id: string;
     creator: {
       _id: string;
       firstName: string;
@@ -349,4 +388,26 @@ export interface InterfaceCreateCampaign {
   campaignGoal: number;
   campaignStartDate: Date;
   campaignEndDate: Date;
+}
+
+export interface InterfaceCreatePledge {
+  pledgeAmount: number;
+  pledgeCurrency: string;
+  pledgeStartDate: Date;
+  pledgeEndDate: Date;
+}
+
+export interface InterfaceQueryMembershipRequestsListItem {
+  organizations: {
+    _id: string;
+    membershipRequests: {
+      _id: string;
+      user: {
+        _id: string;
+        firstName: string;
+        lastName: string;
+        email: string;
+      };
+    }[];
+  }[];
 }

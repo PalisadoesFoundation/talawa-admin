@@ -86,12 +86,32 @@ export const UPDATE_USER_MUTATION = gql`
   mutation UpdateUserProfile(
     $firstName: String
     $lastName: String
+    $gender: Gender
     $email: EmailAddress
-    $file: String
+    $phoneNumber: PhoneNumber
+    $birthDate: Date
+    $grade: EducationGrade
+    $empStatus: EmploymentStatus
+    $maritalStatus: MaritalStatus
+    $address: String
+    $state: String
+    $country: String
+    $image: String
   ) {
     updateUserProfile(
-      data: { firstName: $firstName, lastName: $lastName, email: $email }
-      file: $file
+      data: {
+        firstName: $firstName
+        lastName: $lastName
+        gender: $gender
+        email: $email
+        phone: { mobile: $phoneNumber }
+        birthDate: $birthDate
+        educationGrade: $grade
+        employmentStatus: $empStatus
+        maritalStatus: $maritalStatus
+        address: { line1: $address, state: $state, countryCode: $country }
+      }
+      file: $image
     ) {
       _id
     }
@@ -113,7 +133,9 @@ export const UPDATE_USER_PASSWORD_MUTATION = gql`
         confirmNewPassword: $confirmNewPassword
       }
     ) {
-      _id
+      user {
+        _id
+      }
     }
   }
 `;
@@ -151,12 +173,16 @@ export const LOGIN_MUTATION = gql`
     login(data: { email: $email, password: $password }) {
       user {
         _id
-        userType
-        adminApproved
         firstName
         lastName
-        email
         image
+        email
+      }
+      appUserProfile {
+        adminFor {
+          _id
+        }
+        isSuperAdmin
       }
       accessToken
       refreshToken
@@ -222,7 +248,9 @@ export const CREATE_ORGANIZATION_MUTATION = gql`
 export const DELETE_ORGANIZATION_MUTATION = gql`
   mutation RemoveOrganization($id: ID!) {
     removeOrganization(id: $id) {
-      _id
+      user {
+        _id
+      }
     }
   }
 `;
@@ -243,6 +271,11 @@ export const CREATE_EVENT_MUTATION = gql`
     $startTime: Time
     $endTime: Time
     $location: String
+    $frequency: Frequency
+    $weekDays: [WeekDays]
+    $count: PositiveInt
+    $interval: PositiveInt
+    $weekDayOccurenceInMonth: Int
   ) {
     createEvent(
       data: {
@@ -259,6 +292,13 @@ export const CREATE_EVENT_MUTATION = gql`
         endTime: $endTime
         location: $location
       }
+      recurrenceRuleData: {
+        frequency: $frequency
+        weekDays: $weekDays
+        interval: $interval
+        count: $count
+        weekDayOccurenceInMonth: $weekDayOccurenceInMonth
+      }
     ) {
       _id
     }
@@ -268,8 +308,11 @@ export const CREATE_EVENT_MUTATION = gql`
 // to delete any event by any organization
 
 export const DELETE_EVENT_MUTATION = gql`
-  mutation RemoveEvent($id: ID!) {
-    removeEvent(id: $id) {
+  mutation RemoveEvent(
+    $id: ID!
+    $recurringEventDeleteType: RecurringEventMutationType
+  ) {
+    removeEvent(id: $id, recurringEventDeleteType: $recurringEventDeleteType) {
       _id
     }
   }
@@ -371,18 +414,6 @@ export const FORGOT_PASSWORD_MUTATION = gql`
 export const UPDATE_USERTYPE_MUTATION = gql`
   mutation UpdateUserType($id: ID!, $userType: String!) {
     updateUserType(data: { id: $id, userType: $userType })
-  }
-`;
-
-export const ACCEPT_ADMIN_MUTATION = gql`
-  mutation AcceptAdmin($id: ID!) {
-    acceptAdmin(id: $id)
-  }
-`;
-
-export const REJECT_ADMIN_MUTATION = gql`
-  mutation RejectAdmin($id: ID!) {
-    rejectAdmin(id: $id)
   }
 `;
 
@@ -580,33 +611,86 @@ export const REGISTER_EVENT = gql`
   }
 `;
 
+export const UPDATE_COMMUNITY = gql`
+  mutation updateCommunity($data: UpdateCommunityInput!) {
+    updateCommunity(data: $data)
+  }
+`;
+
+export const RESET_COMMUNITY = gql`
+  mutation resetCommunity {
+    resetCommunity
+  }
+`;
+
+export const DONATE_TO_ORGANIZATION = gql`
+  mutation donate(
+    $userId: ID!
+    $createDonationOrgId2: ID!
+    $payPalId: ID!
+    $nameOfUser: String!
+    $amount: Float!
+    $nameOfOrg: String!
+  ) {
+    createDonation(
+      userId: $userId
+      orgId: $createDonationOrgId2
+      payPalId: $payPalId
+      nameOfUser: $nameOfUser
+      amount: $amount
+      nameOfOrg: $nameOfOrg
+    ) {
+      _id
+      amount
+      nameOfUser
+      nameOfOrg
+    }
+  }
+`;
+
 // Create and Update Action Item Categories
-export { CREATE_ACTION_ITEM_CATEGORY_MUTATION } from './ActionItemCategoryMutations';
-export { UPDATE_ACTION_ITEM_CATEGORY_MUTATION } from './ActionItemCategoryMutations';
+export {
+  CREATE_ACTION_ITEM_CATEGORY_MUTATION,
+  UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
+} from './ActionItemCategoryMutations';
 
 // Create, Update and Delete Action Items
-export { CREATE_ACTION_ITEM_MUTATION } from './ActionItemMutations';
-export { UPDATE_ACTION_ITEM_MUTATION } from './ActionItemMutations';
-export { DELETE_ACTION_ITEM_MUTATION } from './ActionItemMutations';
+export {
+  CREATE_ACTION_ITEM_MUTATION,
+  DELETE_ACTION_ITEM_MUTATION,
+  UPDATE_ACTION_ITEM_MUTATION,
+} from './ActionItemMutations';
 
 // Changes the role of a event in an organization and add and remove the event from the organization
-export { ADD_EVENT_ATTENDEE } from './EventAttendeeMutations';
-export { REMOVE_EVENT_ATTENDEE } from './EventAttendeeMutations';
-export { MARK_CHECKIN } from './EventAttendeeMutations';
+export {
+  ADD_EVENT_ATTENDEE,
+  MARK_CHECKIN,
+  REMOVE_EVENT_ATTENDEE,
+} from './EventAttendeeMutations';
 
 // Create the new comment on a post and Like and Unlike the comment
-export { CREATE_COMMENT_POST } from './CommentMutations';
-export { LIKE_COMMENT } from './CommentMutations';
-export { UNLIKE_COMMENT } from './CommentMutations';
+export {
+  CREATE_COMMENT_POST,
+  LIKE_COMMENT,
+  UNLIKE_COMMENT,
+} from './CommentMutations';
 
 // Changes the role of a user in an organization
-export { UPDATE_USER_ROLE_IN_ORG_MUTATION } from './OrganizationMutations';
-export { CREATE_SAMPLE_ORGANIZATION_MUTATION } from './OrganizationMutations';
-export { REMOVE_SAMPLE_ORGANIZATION_MUTATION } from './OrganizationMutations';
-export { CREATE_DIRECT_CHAT } from './OrganizationMutations';
-export { PLUGIN_SUBSCRIPTION } from './OrganizationMutations';
-export { TOGGLE_PINNED_POST } from './OrganizationMutations';
-export { ADD_CUSTOM_FIELD } from './OrganizationMutations';
-export { REMOVE_CUSTOM_FIELD } from './OrganizationMutations';
-export { SEND_MEMBERSHIP_REQUEST } from './OrganizationMutations';
-export { JOIN_PUBLIC_ORGANIZATION } from './OrganizationMutations';
+export {
+  ADD_CUSTOM_FIELD,
+  CREATE_DIRECT_CHAT,
+  CREATE_SAMPLE_ORGANIZATION_MUTATION,
+  JOIN_PUBLIC_ORGANIZATION,
+  PLUGIN_SUBSCRIPTION,
+  REMOVE_CUSTOM_FIELD,
+  REMOVE_SAMPLE_ORGANIZATION_MUTATION,
+  SEND_MEMBERSHIP_REQUEST,
+  TOGGLE_PINNED_POST,
+  UPDATE_USER_ROLE_IN_ORG_MUTATION,
+} from './OrganizationMutations';
+
+export {
+  CREATE_VENUE_MUTATION,
+  DELETE_VENUE_MUTATION,
+  UPDATE_VENUE_MUTATION,
+} from './VenueMutations';

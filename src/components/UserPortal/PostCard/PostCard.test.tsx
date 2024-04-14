@@ -14,6 +14,8 @@ import {
   CREATE_COMMENT_POST,
   LIKE_POST,
   UNLIKE_POST,
+  LIKE_COMMENT,
+  UNLIKE_COMMENT,
 } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
 
@@ -77,6 +79,36 @@ const MOCKS = [
       },
     },
   },
+  {
+    request: {
+      query: LIKE_COMMENT,
+      variables: {
+        commentId: '1',
+      },
+    },
+    result: {
+      data: {
+        likeComment: {
+          _id: '1',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: UNLIKE_COMMENT,
+      variables: {
+        commentId: '1',
+      },
+    },
+    result: {
+      data: {
+        unlikeComment: {
+          _id: '1',
+        },
+      },
+    },
+  },
 ];
 
 async function wait(ms = 100): Promise<void> {
@@ -107,7 +139,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       commentCount: 1,
       comments: [
         {
-          _id: '64eb13beca85de60ebe0ed0e',
+          id: '64eb13beca85de60ebe0ed0e',
           creator: {
             _id: '63d6064458fce20ee25c3bf7',
             firstName: 'Noble',
@@ -377,6 +409,145 @@ describe('Testing PostCard Component [User Portal]', () => {
     await wait();
   });
 
+  test(`Comment should be liked when like button is clicked`, async () => {
+    const cardProps = {
+      id: '1',
+      creator: {
+        firstName: 'test',
+        lastName: 'user',
+        email: 'test@user.com',
+        id: '1',
+      },
+      image: 'testImage',
+      video: '',
+      text: 'This is post test text',
+      title: 'This is post test title',
+      likeCount: 1,
+      commentCount: 1,
+      comments: [
+        {
+          id: '1',
+          creator: {
+            _id: '1',
+            id: '1',
+            firstName: 'test',
+            lastName: 'user',
+            email: 'test@user.com',
+          },
+          likeCount: 1,
+          likedBy: [
+            {
+              id: '1',
+            },
+          ],
+          text: 'testComment',
+        },
+      ],
+      likedBy: [
+        {
+          firstName: 'test',
+          lastName: 'user',
+          id: '1',
+        },
+      ],
+    };
+    const beforeUserId = getItem('userId');
+    setItem('userId', '2');
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PostCard {...cardProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const showCommentsButton = screen.getByTestId('showCommentsBtn');
+
+    userEvent.click(showCommentsButton);
+
+    userEvent.click(screen.getByTestId('likeCommentBtn'));
+
+    await wait();
+
+    if (beforeUserId) {
+      setItem('userId', beforeUserId);
+    }
+  });
+
+  test(`Comment should be unliked when like button is clicked, if already liked`, async () => {
+    const cardProps = {
+      id: '1',
+      creator: {
+        firstName: 'test',
+        lastName: 'user',
+        email: 'test@user.com',
+        id: '1',
+      },
+      image: 'testImage',
+      video: '',
+      text: 'This is post test text',
+      title: 'This is post test title',
+      likeCount: 1,
+      commentCount: 1,
+      comments: [
+        {
+          id: '1',
+          creator: {
+            _id: '1',
+            id: '1',
+            firstName: 'test',
+            lastName: 'user',
+            email: 'test@user.com',
+          },
+          likeCount: 1,
+          likedBy: [
+            {
+              id: '1',
+            },
+          ],
+          text: 'testComment',
+        },
+      ],
+      likedBy: [
+        {
+          firstName: 'test',
+          lastName: 'user',
+          id: '1',
+        },
+      ],
+    };
+    const beforeUserId = getItem('userId');
+    setItem('userId', '1');
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PostCard {...cardProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const showCommentsButton = screen.getByTestId('showCommentsBtn');
+
+    userEvent.click(showCommentsButton);
+
+    userEvent.click(screen.getByTestId('likeCommentBtn'));
+
+    await wait();
+
+    if (beforeUserId) {
+      setItem('userId', beforeUserId);
+    }
+  });
   test('Comment modal pops when show comments button is clicked.', async () => {
     const cardProps = {
       id: '',

@@ -115,6 +115,7 @@ const MOCKS = [
                           },
                         ],
                         text: 'This is the post two',
+                        createdAt: '2024-03-03T09:26:56.524+00:00',
                       },
                     ],
                   },
@@ -141,52 +142,62 @@ const MOCKS = [
     },
     result: {
       data: {
-        advertisementsConnection: [
-          {
-            _id: '1234',
-            name: 'Ad 1',
-            type: 'Type 1',
-            organization: {
-              _id: 'orgId',
+        advertisementsConnection: {
+          edges: [
+            {
+              node: {
+                _id: '1234',
+                name: 'Ad 1',
+                type: 'Type 1',
+                organization: {
+                  _id: 'orgId',
+                },
+                mediaUrl: 'Link 1',
+                endDate: '2024-12-31',
+                startDate: '2022-01-01',
+              },
             },
-            mediaUrl: 'Link 1',
-            endDate: '2024-12-31',
-            startDate: '2022-01-01',
-          },
-          {
-            _id: '2345',
-            name: 'Ad 2',
-            type: 'Type 1',
-            organization: {
-              _id: 'orgId',
+            {
+              node: {
+                _id: '2345',
+                name: 'Ad 2',
+                type: 'Type 1',
+                organization: {
+                  _id: 'orgId',
+                },
+                mediaUrl: 'Link 2',
+                endDate: '2024-09-31',
+                startDate: '2023-04-01',
+              },
             },
-            mediaUrl: 'Link 2',
-            endDate: '2024-09-31',
-            startDate: '2023-04-01',
-          },
-          {
-            _id: '3456',
-            name: 'name3',
-            type: 'Type 2',
-            organization: {
-              _id: 'orgId',
+            {
+              node: {
+                _id: '3456',
+                name: 'name3',
+                type: 'Type 2',
+                organization: {
+                  _id: 'orgId',
+                },
+                mediaUrl: 'link3',
+                startDate: '2023-01-30',
+                endDate: '2023-12-31',
+              },
             },
-            mediaUrl: 'link3',
-            startDate: '2023-01-30',
-            endDate: '2023-12-31',
-          },
-          {
-            _id: '4567',
-            name: 'name4',
-            type: 'Type 2',
-            organization: {
-              _id: 'orgId',
+            {
+              node: {
+                _id: '4567',
+                name: 'name4',
+                type: 'Type 2',
+                organization: {
+                  _id: 'orgId1',
+                },
+                mediaUrl: 'link4',
+                startDate: '2023-01-30',
+                endDate: '2023-12-01',
+              },
             },
-            mediaUrl: 'link4',
-            startDate: '2023-01-30',
-            endDate: '2023-12-01',
-          },
-        ],
+          ],
+        },
       },
     },
   },
@@ -209,7 +220,7 @@ async function wait(ms = 100): Promise<void> {
 const renderHomeScreen = (): RenderResult =>
   render(
     <MockedProvider addTypename={false} link={link}>
-      <MemoryRouter initialEntries={['/user/organization/id=orgId']}>
+      <MemoryRouter initialEntries={['/user/organization/orgId']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
             <Routes>
@@ -221,25 +232,25 @@ const renderHomeScreen = (): RenderResult =>
     </MockedProvider>,
   );
 
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: jest.fn().mockImplementation((query) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: jest.fn(), // Deprecated
+    removeListener: jest.fn(), // Deprecated
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+    dispatchEvent: jest.fn(),
+  })),
+});
+
 describe('Testing Home Screen: User Portal', () => {
   beforeAll(() => {
-    Object.defineProperty(window, 'matchMedia', {
-      writable: true,
-      value: jest.fn().mockImplementation((query) => ({
-        matches: false,
-        media: query,
-        onchange: null,
-        addListener: jest.fn(), // Deprecated
-        removeListener: jest.fn(), // Deprecated
-        addEventListener: jest.fn(),
-        removeEventListener: jest.fn(),
-        dispatchEvent: jest.fn(),
-      })),
-    });
-
     jest.mock('react-router-dom', () => ({
       ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: 'id=orgId' }),
+      useParams: () => ({ orgId: 'orgId' }),
     }));
   });
 
@@ -321,15 +332,15 @@ describe('HomeScreen with invalid orgId', () => {
   test('Redirect to /user when organizationId is falsy', async () => {
     jest.mock('react-router-dom', () => ({
       ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: '' }),
+      useParams: () => ({ orgId: undefined }),
     }));
     render(
       <MockedProvider addTypename={false} link={link}>
-        <MemoryRouter initialEntries={['/user/organization/orgId']}>
+        <MemoryRouter initialEntries={['/user/organization/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
-                <Route path="/user/organization/:orgId" element={<Home />} />
+                <Route path="/user/organization/" element={<Home />} />
                 <Route
                   path="/user"
                   element={<div data-testid="homeEl"></div>}

@@ -19,6 +19,7 @@ jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useParams: () => ({ orgId: mockID }),
 }));
+
 const MOCKS = [
   {
     request: {
@@ -73,8 +74,6 @@ const clickToggleMenuBtn = (toggleButton: HTMLElement): void => {
 
 describe('Testing LeftDrawer in OrganizationScreen', () => {
   test('Testing LeftDrawer in page functionality', async () => {
-    setItem('UserType', 'SUPERADMIN');
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -102,6 +101,7 @@ describe('Testing LeftDrawer in OrganizationScreen', () => {
     clickToggleMenuBtn(toggleButton);
     expect(icon).toHaveClass('fa fa-angle-double-right');
   });
+
   test('should be redirected to / if orgId is undefined', async () => {
     mockID = undefined;
     render(
