@@ -61,6 +61,7 @@
 
 .leftDrawer .optionList {
   height: 100%;
+  overflow-y: auto;
 }
 
 .leftDrawer .optionList button {
