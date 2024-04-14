@@ -119,6 +119,7 @@ export interface InterfaceQueryOrganizationsListObject {
     firstName: string;
     lastName: string;
     email: string;
+    createdAt: string;
   }[];
   membershipRequests: {
     _id: string;
