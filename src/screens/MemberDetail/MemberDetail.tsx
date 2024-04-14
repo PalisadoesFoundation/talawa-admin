@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { ApolloError, useMutation, useQuery } from '@apollo/client';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
@@ -13,6 +13,7 @@ import CardItem from 'components/OrganizationDashCards/CardItem';
 import CardItemLoading from 'components/OrganizationDashCards/CardItemLoading';
 import {
   ADD_ADMIN_MUTATION,
+  REGISTER_EVENT,
   UPDATE_USERTYPE_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { toast } from 'react-toastify';
@@ -21,7 +22,6 @@ import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
 import { Card } from 'react-bootstrap';
-import { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
 
 type MemberDetailProps = {
   id?: string; // This is the userId
@@ -41,13 +41,16 @@ interface EventAttendee {
   isRegistered: boolean;
 }
 
+interface Event {
+  title: string;
+}
+
 const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'memberDetail',
   });
   const navigate = useNavigate();
   const location = useLocation();
-
   const [state, setState] = useState(1);
   const [isAdmin, setIsAdmin] = useState(false);
   const isMounted = useRef(true);
@@ -59,8 +62,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
 
   const [adda] = useMutation(ADD_ADMIN_MUTATION);
   const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
-
-  console.log(`meri tamanna hai ye: ${currentUrl}`);
+  const [registerUser] = useMutation(REGISTER_EVENT);
 
   const {
     data,
@@ -76,17 +78,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     variables: { userId: currentUrl },
   });
 
-  console.log(`the Id is: ${location.state?.id}`);
-
-  console.log(`Jo me chahta tha woh yeh hai: ${JSON.stringify(data, null, 2)}`);
-
-  useEffect(() => {
-    // check component is mounted or not
-    return () => {
-      isMounted.current = false;
-    };
-  }, []);
-
   const {
     data: userData,
     loading: loading,
@@ -95,8 +86,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   } = useQuery(USER_DETAILS, {
     variables: { id: currentUrl }, // For testing we are sending the id as a prop
   });
-
-  console.log(`meri chahat hai ye: ${currentUrl}`);
 
   /* istanbul ignore next */
   const toggleStateValue = (): void => {
@@ -113,6 +102,23 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   if (error) {
     navigate(`/orgpeople/${currentUrl}`);
   }
+
+  const register = async (eventId: string): Promise<void> => {
+    console.log(`I got clicked and the Id that I received is: ${eventId}`);
+    try {
+      const { data } = await registerUser({
+        variables: {
+          eventId: eventId  // Ensure the variable name matches what your GraphQL mutation expects
+        }
+      });
+      if (data) {
+        toast.success(t('addedAsAdmin'));
+      }
+    } catch (error) {
+      console.error('Error registering user:', error);
+      // Handle error if needed
+    }
+  }  
 
   const addAdmin = async (): Promise<void> => {
     try {
@@ -355,18 +361,8 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     <Card border="0" className="rounded-4">
                       <div className={styles.cardHeader}>
                         <div className={styles.cardTitle}>
-                          {t('eventInvites')}
+                          {t('membershipRequests')}
                         </div>
-                        <Button
-                          size="sm"
-                          variant="light"
-                          data-testid="viewAllMembershipRequests"
-                          onClick={(): void => {
-                            toast.success('Coming soon!');
-                          }}
-                        >
-                          {t('viewAll')}
-                        </Button>
                       </div>
                       <Card.Body className={styles.cardBody}>
                         {loadingOrgData ? (
@@ -381,21 +377,23 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                         ) : 
                         (
                           data?.getEventInvitesByUserId
-                            .slice(0, 8)
-                            .map((request: EventAttendee) => {
-                              return (
-                                <div>
+                          .slice(0, 8)
+                          .map((request: EventAttendee) => {
+                            return (
+                              <div className="flex items-center">
                                 <CardItem 
                                   type="MembershipRequest"
                                   key={request.eventId}
-                                  title={`${request.eventId} ${request.eventId}`}
+                                  title={`${request.eventId}`}
                                 />
-                                <Button variant="success" size="sm" className="ml-[50%]">
+                                <div className="ml-10">
+                                <Button variant="success" size="sm" className="mt-2" onClick={() => {register(request.eventId)}}>
                                   Register
                                 </Button>
                                 </div>
-                              );
-                            })
+                              </div>
+                            );
+                          })
                         )}
                       </Card.Body>
                     </Card>
