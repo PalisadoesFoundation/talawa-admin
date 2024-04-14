@@ -126,7 +126,7 @@
 
 @media (max-width: 1120px) {
   .contract {
-    padding-left: calc(250px + 2rem + 1.5rem);
+    padding-left: calc(276px + 2rem + 1.5rem);
   }
   .collapseSidebarButton {
     width: calc(250px + 2rem);
@@ -134,9 +134,6 @@
 }
 
 @media (max-height: 900px) {
-  .pageContainer {
-    padding: 1rem 1.5rem 0 calc(300px + 2rem);
-  }
   .collapseSidebarButton {
     height: 30px;
     width: calc(300px + 1rem);
