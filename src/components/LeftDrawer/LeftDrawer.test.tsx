@@ -28,10 +28,6 @@ const resizeWindow = (width: number): void => {
 const propsOrg: InterfaceLeftDrawerProps = {
   ...props,
 };
-const propsUsers: InterfaceLeftDrawerProps = {
-  ...props,
-  hideDrawer: null,
-};
 
 const MOCKS = [
   {

@@ -32,6 +32,7 @@ import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import { socialMediaLinks } from '../../constants';
 import styles from './LoginPage.module.css';
+import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
 
 const loginPage = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
@@ -798,15 +799,20 @@ const loginPage = (): JSX.Element => {
                         <option value="" disabled>
                           {orgLoading ? t('loading') : t('selectOrg')}
                         </option>
-                        {organizations.map((org: any, idx: number) => {
-                          return (
-                            <>
-                              <option key={idx} value={org._id}>
-                                {org.name}
-                              </option>
-                            </>
-                          );
-                        })}
+                        {organizations.map(
+                          (
+                            org: InterfaceQueryOrganizationsListObject,
+                            idx: number,
+                          ) => {
+                            return (
+                              <>
+                                <option key={idx} value={org._id}>
+                                  {org.name}
+                                </option>
+                              </>
+                            );
+                          },
+                        )}
                       </select>
                     </div>
                     {signformState.cPassword.length > 0 &&
