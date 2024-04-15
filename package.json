@@ -139,7 +139,6 @@
   "lint-staged": {
     "**/*.{ts, tsx, json, scss, css}": [
       "prettier --write"
-    ],
-    "**/*.{ts, tsx, json}": "eslint --fix"
+    ]
   }
 }

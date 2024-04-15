@@ -22,7 +22,7 @@ import {
   RECAPTCHA_MUTATION,
   SIGNUP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import { GET_COMMUNITY_DATA } from 'GraphQl/Queries/Queries';
+import { GET_COMMUNITY_DATA, ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import { ReactComponent as PalisadoesLogo } from 'assets/svgs/palisadoes.svg';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
@@ -117,6 +117,12 @@ const loginPage = (): JSX.Element => {
   const [signup, { loading: signinLoading }] = useMutation(SIGNUP_MUTATION);
   const [recaptcha, { loading: recaptchaLoading }] =
     useMutation(RECAPTCHA_MUTATION);
+  const { data: orgData, loading: orgLoading } = useQuery(ORGANIZATION_LIST);
+
+  useEffect(() => {
+    if (orgData) setOrganizations(orgData.organizations);
+  }, [orgData]);
+
   useEffect(() => {
     async function loadResource(): Promise<void> {
       try {
@@ -790,7 +796,7 @@ const loginPage = (): JSX.Element => {
                         defaultValue=""
                       >
                         <option value="" disabled>
-                          {loading ? t('loading') : t('selectOrg')}
+                          {orgLoading ? t('loading') : t('selectOrg')}
                         </option>
                         {organizations.map((org: any, idx: number) => {
                           return (

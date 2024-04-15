@@ -985,21 +985,6 @@
     "fieldSuccessMessage": "Champ ajouté avec succès",
     "fieldRemovalSuccess": "Champ supprimé avec succès"
   },
-  "orgActionItemCategories": {
-    "createButton": "Créez",
-    "editButton": "Éditez",
-    "enableButton": "Activez",
-    "disableButton": "Désactivez",
-    "updateActionItemCategory": "Mettre à jour",
-    "actionItemCategoryName": "Nom",
-    "actionItemCategoryDetails": "Détails de la catégorie d’élément d’action",
-    "enterName": "Entrez le nom",
-    "successfulCreation": "Catégorie d’élément d’action créée avec succès",
-    "successfulUpdation": "La catégorie d’élément d’action a été mise à jour avec succès",
-    "sameNameConflict": "Veuillez modifier le nom pour effectuer une mise à jour",
-    "categoryEnabled": "Catégorie d’action activée",
-    "categoryDisabled": "Catégorie d’action désactivée"
-  },
   "organizationVenues": {
     "title": "Lieux",
     "addVenue": "Ajouter un lieu",
