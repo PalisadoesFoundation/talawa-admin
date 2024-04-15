@@ -2,7 +2,14 @@ import React from 'react';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-import { Button, Card, Form, InputGroup, Modal } from 'react-bootstrap';
+import {
+  Button,
+  Card,
+  Dropdown,
+  Form,
+  InputGroup,
+  Modal,
+} from 'react-bootstrap';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
@@ -36,6 +43,8 @@ interface InterfaceCommentCardProps {
     id: string;
   }[];
   text: string;
+  handleLikeComment: (commentId: string) => void;
+  handleDislikeComment: (commentId: string) => void;
 }
 
 export default function postCard(props: InterfacePostCard): JSX.Element {
@@ -107,6 +116,41 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
     setCommentInput(comment);
   };
 
+  const handleDislikeComment = (commentId: string): void => {
+    const updatedComments = comments.map((comment) => {
+      let updatedComment = { ...comment };
+      if (
+        comment.id === commentId &&
+        comment.likedBy.some((user) => user.id === userId)
+      ) {
+        updatedComment = {
+          ...comment,
+          likedBy: comment.likedBy.filter((user) => user.id !== userId),
+          likeCount: comment.likeCount - 1,
+        };
+      }
+      return updatedComment;
+    });
+    setComments(updatedComments);
+  };
+  const handleLikeComment = (commentId: string): void => {
+    const updatedComments = comments.map((comment) => {
+      let updatedComment = { ...comment };
+      if (
+        comment.id === commentId &&
+        !comment.likedBy.some((user) => user.id === userId)
+      ) {
+        updatedComment = {
+          ...comment,
+          likedBy: [...comment.likedBy, { id: userId }],
+          likeCount: comment.likeCount + 1,
+        };
+      }
+      return updatedComment;
+    });
+    setComments(updatedComments);
+  };
+
   const createComment = async (): Promise<void> => {
     try {
       const { data: createEventData } = await create({
@@ -132,6 +176,8 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
           likeCount: createEventData.createComment.likeCount,
           likedBy: createEventData.createComment.likedBy,
           text: createEventData.createComment.text,
+          handleLikeComment: handleLikeComment,
+          handleDislikeComment: handleDislikeComment,
         };
 
         setComments([...comments, newComment]);
@@ -146,8 +192,22 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
     <div key={props.id} className="d-flex justify-content-center">
       <Card className={`${styles.cardStyles}`}>
         <Card.Header className={`${styles.cardHeader}`}>
-          <AccountCircleIcon className="my-2" />
-          <p>{postCreator}</p>
+          <div className={`${styles.creator}`}>
+            <AccountCircleIcon className="my-2" />
+            <p>{postCreator}</p>
+          </div>
+          <Dropdown style={{ cursor: 'pointer' }}>
+            <Dropdown.Toggle className={styles.customToggle}>
+              <MoreVertIcon />
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item href="#/action-1">Edit</Dropdown.Item>
+              <Dropdown.Item href="#/action-2">Delete</Dropdown.Item>
+              <Dropdown.Item href="#/action-3">Pin Post</Dropdown.Item>
+              <Dropdown.Item href="#/action-3">Report</Dropdown.Item>
+              <Dropdown.Item href="#/action-3">Share</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </Card.Header>
         <Card.Img variant="top" src={props.image ?? UserDefault} />
         <Card.Body className="pb-0">
@@ -217,6 +277,8 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
                     likeCount: comment.likeCount,
                     likedBy: comment.likedBy,
                     text: comment.text,
+                    handleLikeComment: handleLikeComment,
+                    handleDislikeComment: handleDislikeComment,
                   };
                   return <CommentCard key={index} {...cardProps} />;
                 })

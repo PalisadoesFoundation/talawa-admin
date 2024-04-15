@@ -1051,5 +1051,27 @@
     "passwordNotMatch": "Las contraseñas no coinciden.",
     "user": "Usuario",
     "addMember": "Agregar miembro"
+  },
+  "eventActionItems": {
+    "title": "Elementos de acción",
+    "createActionItem": "Crear elementos de acción",
+    "actionItemCategory": "Categoría de elemento de acción",
+    "selectActionItemCategory": "Seleccione una categoría de elemento de acción",
+    "selectAssignee": "Seleccione un asignado",
+    "preCompletionNotes": "Notas previas a la finalización",
+    "postCompletionNotes": "Publicar notas de finalización",
+    "actionItemDetails": "Detalles del elemento de acción",
+    "dueDate": "Fecha de vencimiento",
+    "completionDate": "Fecha de finalización",
+    "editActionItem": "Editar elemento de acción",
+    "deleteActionItem": "Eliminar elemento de acción",
+    "deleteActionItemMsg": "¿Quieres eliminar este elemento de acción?",
+    "yes": "Sí",
+    "no": "no",
+    "successfulDeletion": "Elemento de acción eliminado exitosamente",
+    "successfulCreation": "Elemento de acción creado exitosamente",
+    "successfulUpdation": "Elemento de acción actualizado correctamente",
+    "notes": "Notas",
+    "save": "Guardar"
   }
 }

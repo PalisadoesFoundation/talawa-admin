@@ -34,6 +34,9 @@ interface InterfaceAdContent {
   mediaUrl: string;
   endDate: string;
   startDate: string;
+
+  comments: InterfacePostComments;
+  likes: InterfacePostLikes;
 }
 
 type AdvertisementsConnection = {
@@ -87,6 +90,9 @@ type InterfacePostNode = {
   title: string;
   videoUrl: string | null;
   _id: string;
+
+  comments: InterfacePostComments;
+  likes: InterfacePostLikes;
 };
 
 export default function home(): JSX.Element {
@@ -178,8 +184,6 @@ export default function home(): JSX.Element {
 
   const getCardProps = (node: InterfacePostNode): InterfacePostCard => {
     const {
-      // likedBy,
-      // comments,
       creator,
       _id,
       imageUrl,
@@ -188,40 +192,46 @@ export default function home(): JSX.Element {
       text,
       likeCount,
       commentCount,
+      likedBy,
+      comments,
     } = node;
-    // const allLikes: any =
-    //   likedBy && Array.isArray(likedBy)
-    //     ? likedBy.map((value: any) => ({
-    //         firstName: value.firstName,
-    //         lastName: value.lastName,
-    //         id: value._id,
-    //       }))
-    //     : [];
 
-    const allLikes: InterfacePostLikes = [];
+    const allLikes: any = [];
 
-    // const postComments: any =
-    //   comments && Array.isArray(comments)
-    //     ? comments.map((value: any) => {
-    //         const commentLikes = value.likedBy.map(
-    //           (commentLike: any) => ({ id: commentLike._id }),
-    //         );
-    //         return {
-    //           id: value._id,
-    //           creator: {
-    //             firstName: value.creator.firstName,
-    //             lastName: value.creator.lastName,
-    //             id: value.creator._id,
-    //             email: value.creator.email,
-    //           },
-    //           likeCount: value.likeCount,
-    //           likedBy: commentLikes,
-    //           text: value.text,
-    //         };
-    //       })
-    //     : [];
+    likedBy.forEach((value: any) => {
+      const singleLike = {
+        firstName: value.firstName,
+        lastName: value.lastName,
+        id: value._id,
+      };
+      allLikes.push(singleLike);
+    });
 
-    const postComments: InterfacePostComments = [];
+    const postComments: any = [];
+
+    comments.forEach((value: any) => {
+      const commentLikes: any = [];
+      value.likedBy.forEach((commentLike: any) => {
+        const singleLike = {
+          id: commentLike._id,
+        };
+        commentLikes.push(singleLike);
+      });
+
+      const comment = {
+        id: value._id,
+        creator: {
+          firstName: value.creator.firstName,
+          lastName: value.creator.lastName,
+          id: value.creator._id,
+          email: value.creator.email,
+        },
+        likeCount: value.likeCount,
+        likedBy: commentLikes,
+        text: value.text,
+      };
+      postComments.push(comment);
+    });
 
     const date = new Date(node.createdAt);
     const formattedDate = new Intl.DateTimeFormat('en-US', {
@@ -259,6 +269,172 @@ export default function home(): JSX.Element {
   const handleModalClose = (): void => {
     setShowModal(false);
   };
+
+  // return (
+  // <>
+  {
+    /* <OrganizationNavbar {...navbarProps} />
+      <div className={`d-flex flex-row ${styles.containerHeight}`}>
+        <UserSidebar />
+        <div className={`${styles.colorLight} ${styles.mainContainer}`}>
+          <h1>{t(`posts`)}</h1>
+          <div className={`${styles.postContainer}`}>
+            <div className={`${styles.heading}`}>{t('startPost')}</div>
+            <div className={styles.postInputContainer}>
+              <Row className="d-flex gap-1">
+                <Col className={styles.maxWidth}>
+                  <Form.Control
+                    type="file"
+                    accept="image/*"
+                    multiple={false}
+                    className={styles.inputArea}
+                    data-testid="fileInput"
+                    autoComplete="off"
+                    onChange={async (
+                      e: React.ChangeEvent<HTMLInputElement>,
+                    ): Promise<void> => {
+                      setPostImg('');
+                      const target = e.target as HTMLInputElement;
+                      const file = target.files && target.files[0];
+                      const base64file = file && (await convertToBase64(file));
+                      setPostImg(base64file ?? '');
+                    }}
+                  />
+                </Col>
+              </Row>
+            </div>
+            <div className="d-flex justify-content-end">
+              <Button
+                size="sm"
+                data-testid={'postBtn'}
+                onClick={handlePostButtonClick}
+                className="px-4 py-sm-2"
+              >
+                {t('post')} <SendIcon />
+              </Button>
+            </div>
+          </div>
+          <div style={{ marginTop: `2rem` }}>
+            <h2>{t('feed')}</h2>
+            {pinnedPosts.length > 0 && (
+              <div>
+                <p>{t(`pinnedPosts`)}</p>
+                <div className={` ${styles.pinnedPostsCardsContainer}`}>
+                  {loadingPosts ? (
+                    <div className={`d-flex flex-row justify-content-center`}>
+                      <HourglassBottomIcon /> <span>Loading...</span>
+                    </div>
+                  ) : (
+                    <>
+                      {pinnedPosts.map(
+                        ({ node }: { node: InterfacePostNode }) => {
+                          const cardProps = getCardProps(node);
+                          return <PostCard key={node._id} {...cardProps} />;
+                        },
+                      )}
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+          {filteredAd.length > 0 && (
+            <div data-testid="promotedPostsContainer">
+              {filteredAd.map((post: InterfaceAdContent) => (
+                <PromotedPost
+                  key={post._id}
+                  id={post._id}
+                  image={post.mediaUrl}
+                  title={post.name}
+                  data-testid="postid"
+                />
+              ))}
+            </div>
+          )}
+
+          {loadingPosts ? (
+            <div className={`d-flex flex-row justify-content-center`}>
+              <HourglassBottomIcon /> <span>Loading...</span>
+            </div>
+          ) : (
+            <>
+              {posts.map(({ node }: { node: InterfacePostNode }) => {
+                const {
+                  // likedBy,
+                  // comments,
+                  creator,
+                  _id,
+                  imageUrl,
+                  videoUrl,
+                  title,
+                  text,
+                  likeCount,
+                  commentCount,
+                } = node;
+
+                // const allLikes: any =
+                //   likedBy && Array.isArray(likedBy)
+                //     ? likedBy.map((value: any) => ({
+                //         firstName: value.firstName,
+                //         lastName: value.lastName,
+                //         id: value._id,
+                //       }))
+                //     : [];
+
+                const allLikes: InterfacePostLikes = [];
+
+                // const postComments: any =
+                //   comments && Array.isArray(comments)
+                //     ? comments.map((value: any) => {
+                //         const commentLikes = value.likedBy.map(
+                //           (commentLike: any) => ({ id: commentLike._id }),
+                //         );
+                //         return {
+                //           id: value._id,
+                //           creator: {
+                //             firstName: value.creator.firstName,
+                //             lastName: value.creator.lastName,
+                //             id: value.creator._id,
+                //             email: value.creator.email,
+                //           },
+                //           likeCount: value.likeCount,
+                //           likedBy: commentLikes,
+                //           text: value.text,
+                //         };
+                //       })
+                //     : [];
+
+                const postComments: InterfacePostComments = [];
+
+                const cardProps: InterfacePostCard = {
+                  id: _id,
+                  creator: {
+                    id: creator._id,
+                    firstName: creator.firstName,
+                    lastName: creator.lastName,
+                    email: creator.email,
+                  },
+                  image: imageUrl,
+                  video: videoUrl,
+                  title,
+                  text,
+                  likeCount,
+                  commentCount,
+                  comments: postComments,
+                  likedBy: allLikes,
+                };
+
+    return cardProps;
+  };
+
+  const handlePostButtonClick = (): void => {
+    setShowModal(true);
+  };
+
+  const handleModalClose = (): void => {
+    setShowModal(false);
+  }; */
+  }
 
   return (
     <>

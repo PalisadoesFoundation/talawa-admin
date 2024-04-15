@@ -23,6 +23,8 @@ interface InterfaceCommentCardProps {
     id: string;
   }[];
   text: string;
+  handleLikeComment: (commentId: string) => void;
+  handleDislikeComment: (commentId: string) => void;
 }
 
 function commentCard(props: InterfaceCommentCardProps): JSX.Element {
@@ -50,6 +52,7 @@ function commentCard(props: InterfaceCommentCardProps): JSX.Element {
         if (data) {
           setLikes((likes) => likes - 1);
           setIsLikedByUser(false);
+          props.handleDislikeComment(props.id);
         }
       } catch (error: any) {
         /* istanbul ignore next */
@@ -66,6 +69,7 @@ function commentCard(props: InterfaceCommentCardProps): JSX.Element {
         if (data) {
           setLikes((likes) => likes + 1);
           setIsLikedByUser(true);
+          props.handleLikeComment(props.id);
         }
       } catch (error: any) {
         /* istanbul ignore next */

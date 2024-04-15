@@ -11,13 +11,23 @@
 .cardHeader {
   display: flex;
   width: 100%;
-  padding-inline: 1rem;
+  padding-inline: 0;
   padding-block: 0;
   flex-direction: row;
   gap: 0.5rem;
   align-items: center;
   background-color: white;
   border-bottom: 1px solid #dddddd;
+}
+
+.creator {
+  display: flex;
+  width: 100%;
+  padding-inline: 1rem;
+  padding-block: 0;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: center;
   & > p {
     margin-bottom: 0;
     font-weight: 500;
@@ -25,6 +35,29 @@
   & > svg {
     width: 2rem;
     height: 2rem;
+  }
+}
+
+.customToggle {
+  padding: 0;
+  background: none;
+  border: none;
+  margin-right: 1rem;
+  --bs-btn-active-bg: none;
+  & > svg {
+    color: black;
+  }
+}
+.customToggle::after {
+  content: none;
+}
+.customToggle:hover,
+.customToggle:focus,
+.customToggle:active {
+  background: none;
+  border: none;
+  & > svg {
+    color: black;
   }
 }
 
@@ -129,6 +162,7 @@
 }
 
 .modalFooter {
+  background-color: white;
   position: absolute;
   width: calc(100% - 1rem);
   padding-block: 0.5rem;

@@ -64,3 +64,40 @@ export const ACTION_ITEM_LIST = gql`
     }
   }
 `;
+
+export const ACTION_ITEM_LIST_BY_EVENTS = gql`
+  query actionItemsByEvent($eventId: ID!) {
+    actionItemsByEvent(eventId: $eventId) {
+      _id
+      assignee {
+        _id
+        firstName
+        lastName
+      }
+      assigner {
+        _id
+        firstName
+        lastName
+      }
+      actionItemCategory {
+        _id
+        name
+      }
+      preCompletionNotes
+      postCompletionNotes
+      assignmentDate
+      dueDate
+      completionDate
+      isCompleted
+      event {
+        _id
+        title
+      }
+      creator {
+        _id
+        firstName
+        lastName
+      }
+    }
+  }
+`;
