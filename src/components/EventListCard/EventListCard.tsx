@@ -109,12 +109,12 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
   const [updateEvent] = useMutation(UPDATE_EVENT_MUTATION);
   const [recurringEventDeleteType, setRecurringEventDeleteType] =
     useState<RecurringEventMutationType>(
-      RecurringEventMutationType.ThisInstance,
+      RecurringEventMutationType.thisInstance,
     );
 
   const [recurringEventUpdateType, setRecurringEventUpdateType] =
     useState<RecurringEventMutationType>(
-      RecurringEventMutationType.ThisInstance,
+      RecurringEventMutationType.thisInstance,
     );
 
   const deleteEventHandler = async (): Promise<void> => {
@@ -321,9 +321,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
                     <Form.Check
                       type="radio"
                       id={`radio-${index}`}
-                      label={t(
-                        option.charAt(0).toLowerCase() + option.slice(1),
-                      )}
+                      label={t(option)}
                       name="recurringEventDeleteType"
                       value={option}
                       onChange={(e) =>

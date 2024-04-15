@@ -191,8 +191,8 @@ const props: InterfaceEventListCardProps[] = [
     recurrenceRule: {
       recurrenceRuleString:
         'DTSTART:20220319T000000Z\nRRULE:FREQ=WEEKLY;UNTIL=20220326T000000Z;BYDAY=SA',
-      startDate: '19/03/2022',
-      endDate: '26/03/2022',
+      recurrenceStartDate: '19/03/2022',
+      recurrenceEndDate: '26/03/2022',
       frequency: Frequency.WEEKLY,
       weekDays: [WeekDays.SATURDAY],
       interval: 1,
@@ -505,9 +505,9 @@ describe('Testing Event List Card', () => {
     userEvent.click(screen.getByTestId('card'));
     userEvent.click(screen.getByTestId('deleteEventModalBtn'));
 
-    userEvent.click(screen.getByTestId('ThisAndFollowingInstances'));
-    userEvent.click(screen.getByTestId('AllInstances'));
-    userEvent.click(screen.getByTestId('ThisInstance'));
+    userEvent.click(screen.getByTestId('thisAndFollowingInstances'));
+    userEvent.click(screen.getByTestId('allInstances'));
+    userEvent.click(screen.getByTestId('thisInstance'));
 
     userEvent.click(screen.getByTestId('deleteEventBtn'));
 

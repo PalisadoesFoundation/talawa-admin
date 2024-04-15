@@ -16,12 +16,17 @@ import type { WeekDays, InterfaceRecurrenceRuleState } from './recurrenceTypes';
 // e.g. - 'Weekly on Sunday, until Feburary 23, 2029'
 export const getRecurrenceRuleText = (
   recurrenceRuleState: InterfaceRecurrenceRuleState,
-  startDate: Date,
-  endDate: Date | null,
 ): string => {
   let recurrenceRuleText = '';
-  const { frequency, weekDays, interval, count, weekDayOccurenceInMonth } =
-    recurrenceRuleState;
+  const {
+    recurrenceStartDate,
+    recurrenceEndDate,
+    frequency,
+    weekDays,
+    interval,
+    count,
+    weekDayOccurenceInMonth,
+  } = recurrenceRuleState;
 
   switch (frequency) {
     case Frequency.DAILY:
@@ -59,9 +64,9 @@ export const getRecurrenceRuleText = (
       if (weekDayOccurenceInMonth) {
         const getOccurence =
           weekDayOccurenceInMonth !== -1 ? weekDayOccurenceInMonth - 1 : 4;
-        recurrenceRuleText += `${weekDayOccurences[getOccurence]} ${dayNames[Days[startDate.getDay()]]}`;
+        recurrenceRuleText += `${weekDayOccurences[getOccurence]} ${dayNames[Days[recurrenceStartDate.getDay()]]}`;
       } else {
-        recurrenceRuleText += `Day ${startDate.getDate()}`;
+        recurrenceRuleText += `Day ${recurrenceStartDate.getDate()}`;
       }
       break;
     case Frequency.YEARLY:
@@ -70,15 +75,15 @@ export const getRecurrenceRuleText = (
       } else {
         recurrenceRuleText = 'Annually on ';
       }
-      recurrenceRuleText += `${monthNames[startDate.getMonth()]} ${startDate.getDate()}`;
+      recurrenceRuleText += `${monthNames[recurrenceStartDate.getMonth()]} ${recurrenceStartDate.getDate()}`;
       break;
   }
 
-  if (endDate) {
+  if (recurrenceEndDate) {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    recurrenceRuleText += `, until  ${endDate.toLocaleDateString('en-US', options)}`;
+    recurrenceRuleText += `, until  ${recurrenceEndDate.toLocaleDateString('en-US', options)}`;
   }
 
   if (count) {

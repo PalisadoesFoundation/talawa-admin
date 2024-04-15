@@ -336,7 +336,7 @@ describe('Testing the creaction of recurring events through recurrence options',
 
     await waitFor(() => {
       expect(screen.getByTestId('recurrenceOptions')).toHaveTextContent(
-        'Monday to Friday, until April 15, 2023',
+        'Monday to Friday',
       );
     });
   });
@@ -444,9 +444,7 @@ describe('Testing the creaction of recurring events through recurrence options',
     expect(screen.getByTestId('alldayCheck')).not.toBeChecked();
     expect(screen.getByTestId('recurringCheck')).toBeChecked();
 
-    expect(screen.getByTestId('recurrenceOptions')).toHaveTextContent(
-      'Daily, until April 15, 2023',
-    );
+    expect(screen.getByTestId('recurrenceOptions')).toHaveTextContent('Daily');
 
     userEvent.click(screen.getByTestId('createEventBtn'));
 
@@ -567,7 +565,7 @@ describe('Testing the creaction of recurring events through recurrence options',
     expect(screen.getByTestId('recurringCheck')).toBeChecked();
 
     expect(screen.getByTestId('recurrenceOptions')).toHaveTextContent(
-      'Monday to Friday, until April 15, 2023',
+      'Monday to Friday',
     );
 
     userEvent.click(screen.getByTestId('createEventBtn'));

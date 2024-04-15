@@ -52,7 +52,7 @@ function organizationEvents(): JSX.Element {
   const [customRecurrenceModalIsOpen, setCustomRecurrenceModalIsOpen] =
     useState<boolean>(false);
   const [startDate, setStartDate] = React.useState<Date>(new Date());
-  const [endDate, setEndDate] = React.useState<Date | null>(new Date());
+  const [endDate, setEndDate] = React.useState<Date>(new Date());
   const [viewType, setViewType] = useState<ViewType>(ViewType.MONTH);
   const [alldaychecked, setAllDayChecked] = React.useState(true);
   const [recurringchecked, setRecurringChecked] = React.useState(false);
@@ -62,6 +62,8 @@ function organizationEvents(): JSX.Element {
 
   const [recurrenceRuleState, setRecurrenceRuleState] =
     useState<InterfaceRecurrenceRuleState>({
+      recurrenceStartDate: startDate,
+      recurrenceEndDate: null,
       frequency: Frequency.WEEKLY,
       weekDays: [Days[startDate.getDay()]],
       interval: 1,
@@ -126,13 +128,17 @@ function organizationEvents(): JSX.Element {
 
   const [create, { loading: loading2 }] = useMutation(CREATE_EVENT_MUTATION);
 
-  const { frequency, weekDays, interval, count, weekDayOccurenceInMonth } =
-    recurrenceRuleState;
-  const recurrenceRuleText = getRecurrenceRuleText(
-    recurrenceRuleState,
-    startDate,
-    endDate,
-  );
+  const {
+    recurrenceStartDate,
+    recurrenceEndDate,
+    frequency,
+    weekDays,
+    interval,
+    count,
+    weekDayOccurenceInMonth,
+  } = recurrenceRuleState;
+
+  const recurrenceRuleText = getRecurrenceRuleText(recurrenceRuleState);
 
   const createEvent = async (
     e: React.ChangeEvent<HTMLFormElement>,
@@ -153,15 +159,19 @@ function organizationEvents(): JSX.Element {
             isRegisterable: registrablechecked,
             organizationId: currentUrl,
             startDate: dayjs(startDate).format('YYYY-MM-DD'),
-            endDate: endDate
-              ? dayjs(endDate).format('YYYY-MM-DD')
-              : /* istanbul ignore next */ recurringchecked
-                ? undefined
-                : dayjs(startDate).format('YYYY-MM-DD'),
+            endDate: dayjs(endDate).format('YYYY-MM-DD'),
             allDay: alldaychecked,
             location: formState.location,
             startTime: !alldaychecked ? formState.startTime + 'Z' : undefined,
             endTime: !alldaychecked ? formState.endTime + 'Z' : undefined,
+            recurrenceStartDate: recurringchecked
+              ? dayjs(recurrenceStartDate).format('YYYY-MM-DD')
+              : undefined,
+            recurrenceEndDate: recurringchecked
+              ? recurrenceEndDate
+                ? dayjs(recurrenceEndDate).format('YYYY-MM-DD')
+                : null
+              : undefined,
             frequency: recurringchecked ? frequency : undefined,
             weekDays:
               recurringchecked &&
@@ -191,6 +201,8 @@ function organizationEvents(): JSX.Element {
           });
           setRecurringChecked(false);
           setRecurrenceRuleState({
+            recurrenceStartDate: new Date(),
+            recurrenceEndDate: null,
             frequency: Frequency.WEEKLY,
             weekDays: [Days[new Date().getDay()]],
             interval: 1,
@@ -198,7 +210,7 @@ function organizationEvents(): JSX.Element {
             weekDayOccurenceInMonth: undefined,
           });
           setStartDate(new Date());
-          setEndDate(null);
+          setEndDate(new Date());
         }
       } catch (error: unknown) {
         /* istanbul ignore next */
@@ -331,6 +343,7 @@ function organizationEvents(): JSX.Element {
                       );
                       setRecurrenceRuleState({
                         ...recurrenceRuleState,
+                        recurrenceStartDate: date?.toDate(),
                         weekDays: [Days[date?.toDate().getDay()]],
                         weekDayOccurenceInMonth: weekDayOccurenceInMonth
                           ? getWeekDayOccurenceInMonth(date?.toDate())
@@ -458,8 +471,6 @@ function organizationEvents(): JSX.Element {
                 recurrenceRuleState={recurrenceRuleState}
                 recurrenceRuleText={recurrenceRuleText}
                 setRecurrenceRuleState={setRecurrenceRuleState}
-                startDate={startDate}
-                endDate={endDate}
                 setCustomRecurrenceModalIsOpen={setCustomRecurrenceModalIsOpen}
                 popover={popover}
               />
@@ -482,9 +493,6 @@ function organizationEvents(): JSX.Element {
         recurrenceRuleState={recurrenceRuleState}
         recurrenceRuleText={recurrenceRuleText}
         setRecurrenceRuleState={setRecurrenceRuleState}
-        startDate={startDate}
-        endDate={endDate}
-        setEndDate={setEndDate}
         customRecurrenceModalIsOpen={customRecurrenceModalIsOpen}
         hideCustomRecurrenceModal={hideCustomRecurrenceModal}
         setCustomRecurrenceModalIsOpen={setCustomRecurrenceModalIsOpen}

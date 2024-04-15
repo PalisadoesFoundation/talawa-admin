@@ -40,10 +40,10 @@ export const endsAfter = RecurrenceEndOption.after;
 export const recurrenceEndOptions = [endsNever, endsOn, endsAfter];
 
 // different types of updations / deletions on recurring events
-export const thisInstance = RecurringEventMutationType.ThisInstance;
+export const thisInstance = RecurringEventMutationType.thisInstance;
 export const thisAndFollowingInstances =
-  RecurringEventMutationType.ThisAndFollowingInstances;
-export const allInstances = RecurringEventMutationType.AllInstances;
+  RecurringEventMutationType.thisAndFollowingInstances;
+export const allInstances = RecurringEventMutationType.allInstances;
 
 export const recurringEventMutationOptions = [
   thisInstance,

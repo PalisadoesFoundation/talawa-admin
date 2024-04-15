@@ -266,11 +266,13 @@ export const CREATE_EVENT_MUTATION = gql`
     $isRegisterable: Boolean!
     $organizationId: ID!
     $startDate: Date!
-    $endDate: Date
+    $endDate: Date!
     $allDay: Boolean!
     $startTime: Time
     $endTime: Time
     $location: String
+    $recurrenceStartDate: Date
+    $recurrenceEndDate: Date
     $frequency: Frequency
     $weekDays: [WeekDays]
     $count: PositiveInt
@@ -293,6 +295,8 @@ export const CREATE_EVENT_MUTATION = gql`
         location: $location
       }
       recurrenceRuleData: {
+        recurrenceStartDate: $recurrenceStartDate
+        recurrenceEndDate: $recurrenceEndDate
         frequency: $frequency
         weekDays: $weekDays
         interval: $interval

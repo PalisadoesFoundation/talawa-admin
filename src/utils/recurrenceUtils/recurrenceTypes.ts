@@ -4,6 +4,8 @@
 
 // interface for the recurrenceRuleStateData that would be sent to the backend
 export interface InterfaceRecurrenceRuleState {
+  recurrenceStartDate: Date;
+  recurrenceEndDate: Date | null;
   frequency: Frequency;
   weekDays: WeekDays[] | undefined;
   interval: number | undefined;
@@ -13,8 +15,8 @@ export interface InterfaceRecurrenceRuleState {
 
 // interface for the RecurrenceRule document that would be fetched from the backend
 export interface InterfaceRecurrenceRule {
-  startDate: string;
-  endDate: string | null;
+  recurrenceStartDate: string;
+  recurrenceEndDate: string | null;
   recurrenceRuleString: string;
   frequency: Frequency;
   weekDays: WeekDays[];
@@ -52,7 +54,7 @@ export enum RecurrenceEndOption {
 
 // update / delete options of recurring events
 export enum RecurringEventMutationType {
-  ThisInstance = 'ThisInstance',
-  ThisAndFollowingInstances = 'ThisAndFollowingInstances',
-  AllInstances = 'AllInstances',
+  thisInstance = 'thisInstance',
+  thisAndFollowingInstances = 'thisAndFollowingInstances',
+  allInstances = 'allInstances',
 }

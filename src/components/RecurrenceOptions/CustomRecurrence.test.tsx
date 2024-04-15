@@ -329,7 +329,7 @@ describe('Testing the creaction of recurring events with custom recurrence patte
 
     await waitFor(() => {
       expect(screen.getByTestId('monthlyRecurrenceOptions')).toHaveTextContent(
-        'Monthly on Day 28, until April 15, 2023',
+        'Monthly on Day 28',
       );
     });
 
@@ -346,7 +346,7 @@ describe('Testing the creaction of recurring events with custom recurrence patte
 
     await waitFor(() => {
       expect(screen.getByTestId('monthlyRecurrenceOptions')).toHaveTextContent(
-        'Monthly on Fourth Monday, until April 15, 2023',
+        'Monthly on Fourth Monday',
       );
     });
 
@@ -363,7 +363,7 @@ describe('Testing the creaction of recurring events with custom recurrence patte
 
     await waitFor(() => {
       expect(screen.getByTestId('monthlyRecurrenceOptions')).toHaveTextContent(
-        'Monthly on Last Monday, until April 15, 2023',
+        'Monthly on Last Monday',
       );
     });
 
@@ -378,7 +378,7 @@ describe('Testing the creaction of recurring events with custom recurrence patte
 
     await waitFor(() => {
       expect(screen.getByTestId('monthlyRecurrenceOptions')).toHaveTextContent(
-        'Monthly on Day 28, until April 15, 2023',
+        'Monthly on Day 28',
       );
     });
   });
@@ -570,7 +570,7 @@ describe('Testing the creaction of recurring events with custom recurrence patte
 
     expect(screen.getByTestId('recurrenceOptions')).toHaveTextContent(
       'Every 2 months on Fourth Monday, until April...',
-      // "..." because of the overlay component, which trims the text recurrenceRuleText to 45 characters
+      // "..." because of the overlay component that would trim the recurrence rule text at 45 characters
     );
 
     userEvent.click(screen.getByTestId('createEventBtn'));

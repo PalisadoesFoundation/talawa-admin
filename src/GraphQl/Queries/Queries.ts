@@ -586,8 +586,8 @@ export const ORGANIZATION_EVENT_CONNECTION_LIST = gql`
       allDay
       recurring
       recurrenceRule {
-        startDate
-        endDate
+        recurrenceStartDate
+        recurrenceEndDate
         recurrenceRuleString
         frequency
         weekDays
