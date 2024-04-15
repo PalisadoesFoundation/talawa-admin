@@ -14,11 +14,20 @@ export interface InterfaceLeftDrawerProps {
   setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
-const leftDrawer = ({ hideDrawer }: InterfaceLeftDrawerProps): JSX.Element => {
+const leftDrawer = ({
+  hideDrawer,
+  setHideDrawer,
+}: InterfaceLeftDrawerProps): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'leftDrawer' });
 
   const { getItem } = useLocalStorage();
   const superAdmin = getItem('SuperAdmin');
+
+  const handleLinkClick = (): void => {
+    if (window.innerWidth <= 820) {
+      setHideDrawer(true);
+    }
+  };
 
   return (
     <>
@@ -36,7 +45,7 @@ const leftDrawer = ({ hideDrawer }: InterfaceLeftDrawerProps): JSX.Element => {
         <p className={styles.talawaText}>{t('talawaAdminPortal')}</p>
         <h5 className={`${styles.titleHeader} text-secondary`}>{t('menu')}</h5>
         <div className={styles.optionList}>
-          <NavLink to={'/orglist'}>
+          <NavLink to={'/orglist'} onClick={handleLinkClick}>
             {({ isActive }) => (
               <Button
                 variant={isActive === true ? 'success' : ''}
@@ -60,7 +69,7 @@ const leftDrawer = ({ hideDrawer }: InterfaceLeftDrawerProps): JSX.Element => {
           </NavLink>
           {superAdmin && (
             <>
-              <NavLink to={'/users'}>
+              <NavLink to={'/users'} onClick={handleLinkClick}>
                 {({ isActive }) => (
                   <Button
                     variant={isActive === true ? 'success' : ''}
@@ -82,7 +91,7 @@ const leftDrawer = ({ hideDrawer }: InterfaceLeftDrawerProps): JSX.Element => {
                   </Button>
                 )}
               </NavLink>
-              <NavLink to={'/communityProfile'}>
+              <NavLink to={'/communityProfile'} onClick={handleLinkClick}>
                 {({ isActive }) => (
                   <Button
                     variant={isActive === true ? 'success' : ''}

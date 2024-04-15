@@ -25,6 +25,7 @@ const leftDrawerOrg = ({
   targets,
   orgId,
   hideDrawer,
+  setHideDrawer,
 }: InterfaceLeftDrawerProps): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'leftDrawerOrg' });
   const [showDropdown, setShowDropdown] = React.useState(false);
@@ -52,6 +53,12 @@ const leftDrawerOrg = ({
       isMounted = false;
     };
   }, [data]);
+
+  const handleLinkClick = (): void => {
+    if (window.innerWidth <= 820) {
+      setHideDrawer(true);
+    }
+  };
 
   return (
     <>
@@ -122,7 +129,7 @@ const leftDrawerOrg = ({
           </h5>
           {targets.map(({ name, url }, index) => {
             return url ? (
-              <NavLink to={url} key={name}>
+              <NavLink to={url} key={name} onClick={handleLinkClick}>
                 {({ isActive }) => (
                   <Button
                     key={name}
