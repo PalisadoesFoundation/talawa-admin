@@ -12,6 +12,7 @@
     "plugin:jest/recommended",
     "plugin:prettier/recommended",
     "plugin:@typescript-eslint/recommended",
+    "eslint-config-prettier",
     "prettier"
   ],
   "globals": {
@@ -33,12 +34,12 @@
     "@typescript-eslint",
     "jest",
     "import",
-    "eslint-plugin-tsdoc"
+    "eslint-plugin-tsdoc",
+    "prettier"
   ],
   "rules": {
-    "react/destructuring-assignment": ["off"],
-    // "@typescript-eslint/no-explicit-any": ["off"],
-    "@typescript-eslint/explicit-module-boundary-types": ["off"],
+    "react/destructuring-assignment": "error",
+    "@typescript-eslint/explicit-module-boundary-types": "error",
     "react/no-multi-comp": [
       "error",
       {
@@ -54,7 +55,7 @@
     "import/no-duplicates": "error",
     "tsdoc/syntax": "error",
     "@typescript-eslint/ban-ts-comment": "error",
-    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-explicit-any": "error",
     "@typescript-eslint/no-inferrable-types": "error",
     "@typescript-eslint/no-non-null-asserted-optional-chain": "error",
     "@typescript-eslint/no-non-null-assertion": "error",
@@ -111,7 +112,11 @@
         "leadingUnderscore": "require"
       },
 
-      { "selector": "variable", "modifiers": ["exported"], "format": null }
+      {
+        "selector": "variable",
+        "modifiers": ["exported"],
+        "format": null
+      }
     ],
     // Ensures that components are always written in PascalCase
     "react/jsx-pascal-case": [
@@ -126,21 +131,13 @@
     // All tests must need not have an assertion
     "jest/expect-expect": 0,
 
-    "react/jsx-tag-spacing": [
-      "warn",
-      {
-        "afterOpening": "never",
-        "beforeClosing": "never",
-        "beforeSelfClosing": "always"
-      }
-    ],
-
     // Enforce Strictly functional components
     "react/no-unstable-nested-components": ["error", { "allowAsProps": true }],
     "react/function-component-definition": [
       0,
       { "namedComponents": "function-declaration" }
-    ]
+    ],
+    "prettier/prettier": "error"
   },
 
   // Let ESLint use the react version in the package.json

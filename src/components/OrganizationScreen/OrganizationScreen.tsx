@@ -1,22 +1,22 @@
 import LeftDrawerOrg from 'components/LeftDrawerOrg/LeftDrawerOrg';
 import React, { useEffect, useState } from 'react';
-import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Navigate, Outlet, useLocation, useParams } from 'react-router-dom';
 import { updateTargets } from 'state/action-creators';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
-
 import styles from './OrganizationScreen.module.css';
+import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
+import { Button } from 'react-bootstrap';
 
-const organizationScreen = (): JSX.Element => {
+const OrganizationScreen = (): JSX.Element => {
   const location = useLocation();
-  const titleKey = map[location.pathname.split('/')[1]];
+  const titleKey: string | undefined = map[location.pathname.split('/')[1]];
   const { t } = useTranslation('translation', { keyPrefix: titleKey });
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
-
   const { orgId } = useParams();
+
   if (!orgId) {
     return <Navigate to={'/'} replace />;
   }
@@ -29,16 +29,12 @@ const organizationScreen = (): JSX.Element => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(updateTargets(orgId));
-  }, []);
+  }, [orgId]); // Added orgId to the dependency array
 
   const handleResize = (): void => {
-    if (window.innerWidth <= 820 && !hideDrawer) {
-      setHideDrawer(true);
+    if (window.innerWidth <= 820) {
+      setHideDrawer(!hideDrawer);
     }
-  };
-
-  const toggleDrawer = (): void => {
-    setHideDrawer(!hideDrawer);
   };
 
   useEffect(() => {
@@ -47,24 +43,31 @@ const organizationScreen = (): JSX.Element => {
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, [hideDrawer]);
+  }, []);
 
   return (
     <>
-      <Button
-        className={
-          hideDrawer ? styles.opendrawer : styles.collapseSidebarButton
-        }
-        onClick={toggleDrawer}
-        data-testid="toggleMenuBtn"
-      >
-        <i
-          className={
-            hideDrawer ? 'fa fa-angle-double-right' : 'fa fa-angle-double-left'
-          }
-          aria-hidden="true"
-        ></i>
-      </Button>
+      {hideDrawer ? (
+        <Button
+          className={styles.opendrawer}
+          onClick={(): void => {
+            setHideDrawer(!hideDrawer);
+          }}
+          data-testid="openMenu"
+        >
+          <i className="fa fa-angle-double-right" aria-hidden="true"></i>
+        </Button>
+      ) : (
+        <Button
+          className={styles.collapseSidebarButton}
+          onClick={(): void => {
+            setHideDrawer(!hideDrawer);
+          }}
+          data-testid="closeMenu"
+        >
+          <i className="fa fa-angle-double-left" aria-hidden="true"></i>
+        </Button>
+      )}
       <div className={styles.drawer}>
         <LeftDrawerOrg
           orgId={orgId}
@@ -85,8 +88,9 @@ const organizationScreen = (): JSX.Element => {
       >
         <div className="d-flex justify-content-between align-items-center">
           <div style={{ flex: 1 }}>
-            <h2>{t('title')}</h2>
+            <h1>{t('title')}</h1>
           </div>
+          <ProfileDropdown />
         </div>
         <Outlet />
       </div>
@@ -94,11 +98,16 @@ const organizationScreen = (): JSX.Element => {
   );
 };
 
-export default organizationScreen;
+export default OrganizationScreen;
 
-const map: any = {
+interface InterfaceMapType {
+  [key: string]: string;
+}
+
+const map: InterfaceMapType = {
   orgdash: 'dashboard',
   orgpeople: 'organizationPeople',
+  requests: 'requests',
   orgads: 'advertisement',
   member: 'memberDetail',
   orgevents: 'organizationEvents',
@@ -107,8 +116,10 @@ const map: any = {
   orgpost: 'orgPost',
   orgfunds: 'funds',
   orgfundcampaign: 'fundCampaign',
+  fundCampaignPledge: 'pledges',
   orgsetting: 'orgSettings',
   orgstore: 'addOnStore',
   blockuser: 'blockUnblockUser',
-  event: 'blockUnblockUser',
+  orgvenues: 'organizationVenues',
+  event: 'eventManagement',
 };

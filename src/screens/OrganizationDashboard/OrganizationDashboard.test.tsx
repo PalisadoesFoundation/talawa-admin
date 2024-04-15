@@ -15,6 +15,7 @@ import OrganizationDashboard from './OrganizationDashboard';
 import { EMPTY_MOCKS, ERROR_MOCKS, MOCKS } from './OrganizationDashboardMocks';
 import React from 'react';
 const { setItem } = useLocalStorage();
+import type { InterfaceQueryOrganizationEventListItem } from 'utils/interfaces';
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -45,7 +46,6 @@ jest.mock('react-router-dom', () => ({
 beforeEach(() => {
   setItem('FirstName', 'John');
   setItem('LastName', 'Doe');
-  setItem('UserType', 'SUPERADMIN');
   setItem(
     'UserImage',
     'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
@@ -135,6 +135,7 @@ describe('Organisation Dashboard Page', () => {
       screen.getByText(/No membership requests present/i),
     ).toBeInTheDocument();
     expect(screen.getByText(/No upcoming events/i)).toBeInTheDocument();
+    expect(screen.getByText(/No Posts Present/i)).toBeInTheDocument();
   });
 
   test('Testing error scenario', async () => {
@@ -178,7 +179,10 @@ describe('Organisation Dashboard Page', () => {
     const mockSetState = jest.spyOn(React, 'useState');
     jest.doMock('react', () => ({
       ...jest.requireActual('react'),
-      useState: (initial: any) => [initial, mockSetState],
+      useState: (initial: InterfaceQueryOrganizationEventListItem[]) => [
+        initial,
+        mockSetState,
+      ],
     }));
     await act(async () => {
       render(

@@ -6,17 +6,48 @@ import {
   SlackLogo,
   TwitterLogo,
   YoutubeLogo,
+  RedditLogo,
 } from 'assets/svgs/social-icons';
 
 export const socialMediaLinks = [
-  { href: 'https://www.facebook.com/palisadoesproject', logo: FacebookLogo },
-  { href: 'https://twitter.com/palisadoesorg?lang=en', logo: TwitterLogo },
-  { href: 'https://www.linkedin.com/company/palisadoes/', logo: LinkedInLogo },
-  { href: 'https://github.com/PalisadoesFoundation', logo: GithubLogo },
   {
+    tag: 'facebook',
+    href: 'https://www.facebook.com/palisadoesproject',
+    logo: FacebookLogo,
+  },
+  {
+    tag: 'twitter',
+    href: 'https://twitter.com/palisadoesorg?lang=en',
+    logo: TwitterLogo,
+  },
+  {
+    tag: 'linkedIn',
+    href: 'https://www.linkedin.com/company/palisadoes/',
+    logo: LinkedInLogo,
+  },
+  {
+    tag: 'gitHub',
+    href: 'https://github.com/PalisadoesFoundation',
+    logo: GithubLogo,
+  },
+  {
+    tag: 'youTube',
     href: 'https://www.youtube.com/@PalisadoesOrganization',
     logo: YoutubeLogo,
   },
-  { href: 'https://www.palisadoes.org/slack', logo: SlackLogo },
-  { href: 'https://www.instagram.com/palisadoes/', logo: InstagramLogo },
+  {
+    tag: 'slack',
+    href: 'https://www.palisadoes.org/slack',
+    logo: SlackLogo,
+  },
+  {
+    tag: 'instagram',
+    href: 'https://www.instagram.com/palisadoes/',
+    logo: InstagramLogo,
+  },
+  {
+    tag: 'reddit',
+    href: '',
+    logo: RedditLogo,
+  },
 ];

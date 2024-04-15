@@ -1,48 +1,25 @@
 import { useLazyQuery } from '@apollo/client';
-import dayjs from 'dayjs';
-import React, { useEffect, useState } from 'react';
-import { Link, useLocation, useParams } from 'react-router-dom';
-import { Button, Dropdown, Form } from 'react-bootstrap';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
+import { Search, Sort } from '@mui/icons-material';
 import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-  USER_LIST,
+  USER_LIST_FOR_TABLE,
 } from 'GraphQl/Queries/Queries';
-import NotFound from 'components/NotFound/NotFound';
-import { useTranslation } from 'react-i18next';
-import styles from './OrganizationPeople.module.css';
-import { toast } from 'react-toastify';
-import { Search, Sort } from '@mui/icons-material';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import { styled } from '@mui/material/styles';
 import Loader from 'components/Loader/Loader';
-import UserListCard from 'components/UserListCard/UserListCard';
-import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
 import OrgAdminListCard from 'components/OrgAdminListCard/OrgAdminListCard';
+import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
+import dayjs from 'dayjs';
+import React, { useEffect, useState } from 'react';
+import { Button, Dropdown, Form } from 'react-bootstrap';
+import Row from 'react-bootstrap/Row';
+import { useTranslation } from 'react-i18next';
+import { Link, useLocation, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import AddMember from './AddMember';
-
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: ['#31bb6b', '!important'],
-    color: theme.palette.common.white,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
-
-const StyledTableRow = styled(TableRow)(() => ({
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
-}));
+import styles from './OrganizationPeople.module.css';
+import { DataGrid } from '@mui/x-data-grid';
+import type { GridColDef, GridCellParams } from '@mui/x-data-grid';
+import { Stack } from '@mui/material';
+import Avatar from 'components/Avatar/Avatar';
 
 function organizationPeople(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -63,7 +40,27 @@ function organizationPeople(): JSX.Element {
     lastName_contains: '',
   });
 
-  const [fullName, setFullName] = useState('');
+  const [userName, setUserName] = useState('');
+  const [showRemoveModal, setShowRemoveModal] = React.useState(false);
+  const [selectedAdminId, setSelectedAdminId] = React.useState<
+    string | undefined
+  >();
+  const [selectedMemId, setSelectedMemId] = React.useState<
+    string | undefined
+  >();
+  const toggleRemoveModal = (): void => {
+    setShowRemoveModal((prev) => !prev);
+  };
+  const toggleRemoveMemberModal = (id: string): void => {
+    setSelectedMemId(id);
+    setSelectedAdminId(undefined);
+    toggleRemoveModal();
+  };
+  const toggleRemoveAdminModal = (id: string): void => {
+    setSelectedAdminId(id);
+    setSelectedMemId(undefined);
+    toggleRemoveModal();
+  };
 
   const {
     data: memberData,
@@ -97,7 +94,7 @@ function organizationPeople(): JSX.Element {
     loading: usersLoading,
     error: usersError,
     refetch: usersRefetch,
-  } = useLazyQuery(USER_LIST, {
+  } = useLazyQuery(USER_LIST_FOR_TABLE, {
     variables: {
       firstName_contains: '',
       lastName_contains: '',
@@ -128,66 +125,167 @@ function organizationPeople(): JSX.Element {
     const error = memberError ?? usersError ?? adminError;
     toast.error(error?.message);
   }
+  if (memberLoading || usersLoading || adminLoading) {
+    return (
+      <div className={styles.mainpageright}>
+        <Loader />
+      </div>
+    );
+  }
 
-  const handleFullNameSearchChange = (e: any): void => {
+  const handleFullNameSearchChange = (e: React.FormEvent): void => {
+    e.preventDefault();
     /* istanbul ignore next */
-    if (e.key === 'Enter') {
-      const [firstName, lastName] = fullName.split(' ');
+    const [firstName, lastName] = userName.split(' ');
+    const newFilterData = {
+      firstName_contains: firstName || '',
+      lastName_contains: lastName || '',
+    };
 
-      const newFilterData = {
-        firstName_contains: firstName ?? '',
-        lastName_contains: lastName ?? '',
-      };
+    setFilterData(newFilterData);
 
-      setFilterData(newFilterData);
-
-      if (state === 0) {
-        memberRefetch({
-          ...newFilterData,
-          orgId: currentUrl,
-        });
-      } else if (state === 1) {
-        adminRefetch({
-          ...newFilterData,
-          orgId: currentUrl,
-          admin_for: currentUrl,
-        });
-      } else {
-        usersRefetch({
-          ...newFilterData,
-        });
-      }
+    if (state === 0) {
+      memberRefetch({
+        ...newFilterData,
+        orgId: currentUrl,
+      });
+    } else if (state === 1) {
+      adminRefetch({
+        ...newFilterData,
+        orgId: currentUrl,
+        admin_for: currentUrl,
+      });
+    } else {
+      usersRefetch({
+        ...newFilterData,
+      });
     }
   };
 
+  const columns: GridColDef[] = [
+    {
+      field: 'profile',
+      headerName: 'Profile',
+      flex: 1,
+      minWidth: 50,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      renderCell: (params: GridCellParams) => {
+        return params.row?.image ? (
+          <img
+            src={params.row?.image}
+            alt="avatar"
+            className={styles.TableImage}
+          />
+        ) : (
+          <Avatar
+            avatarStyle={styles.TableImage}
+            name={`${params.row.firstName} ${params.row.lastName}`}
+          />
+        );
+      },
+    },
+    {
+      field: 'name',
+      headerName: 'Name',
+      flex: 2,
+      minWidth: 150,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      renderCell: (params: GridCellParams) => {
+        return (
+          <Link
+            to={`/member/${currentUrl}`}
+            state={{ id: params.row._id }}
+            className={styles.membername}
+          >
+            {params.row?.firstName + ' ' + params.row?.lastName}
+          </Link>
+        );
+      },
+    },
+    {
+      field: 'email',
+      headerName: 'Email',
+      minWidth: 150,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      flex: 2,
+      sortable: false,
+    },
+    {
+      field: 'joined',
+      headerName: 'Joined',
+      flex: 2,
+      minWidth: 100,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      renderCell: (params: GridCellParams) => {
+        return dayjs(params.row.createdAt).format('DD/MM/YYYY');
+      },
+    },
+    {
+      field: 'action',
+      headerName: 'Action',
+      flex: 1,
+      minWidth: 100,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      renderCell: (params: GridCellParams) => {
+        return state === 1 ? (
+          <Button
+            onClick={() => toggleRemoveAdminModal(params.row._id)}
+            data-testid="removeAdminModalBtn"
+          >
+            Remove
+          </Button>
+        ) : (
+          <Button
+            onClick={() => toggleRemoveMemberModal(params.row._id)}
+            data-testid="removeMemberModalBtn"
+          >
+            Remove
+          </Button>
+        );
+      },
+    },
+  ];
   return (
     <>
       <Row className={styles.head}>
         <div className={styles.mainpageright}>
           <div className={styles.btnsContainer}>
             <div className={styles.input}>
-              <Form.Control
-                type="name"
-                id="searchLastName"
-                placeholder={t('searchFullName')}
-                autoComplete="off"
-                required
-                className={styles.inputField}
-                value={fullName}
-                onChange={(e): void => {
-                  const { value } = e.target;
-                  setFullName(value);
-                  handleFullNameSearchChange(value);
-                }}
-                onKeyUp={handleFullNameSearchChange}
-              />
-              <Button
-                className={`position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center `}
-                onClick={handleFullNameSearchChange}
-                style={{ marginBottom: '10px' }}
-              >
-                <Search />
-              </Button>
+              <Form onSubmit={handleFullNameSearchChange}>
+                <Form.Control
+                  type="name"
+                  id="searchLastName"
+                  placeholder={t('searchFullName')}
+                  autoComplete="off"
+                  className={styles.inputField}
+                  onChange={(e): void => {
+                    const { value } = e.target;
+                    setUserName(value);
+                  }}
+                />
+                <Button
+                  type="submit"
+                  className={`position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center `}
+                  style={{ marginBottom: '10px' }}
+                  data-testid={'searchbtn'}
+                >
+                  <Search />
+                </Button>
+              </Form>
             </div>
             <div className={styles.btnsBlock}>
               <Dropdown>
@@ -249,201 +347,103 @@ function organizationPeople(): JSX.Element {
           </div>
         </div>
       </Row>
-      <Col sm={9}>
-        <div className={styles.mainpageright}>
-          {memberLoading || usersLoading || adminLoading ? (
-            <>
-              <Loader />
-            </>
-          ) : (
-            /* istanbul ignore next */
-            <div className={styles.list_box} data-testid="orgpeoplelist">
-              <Col sm={5}>
-                <TableContainer component={Paper} sx={{ minWidth: '820px' }}>
-                  <Table aria-label="customized table">
-                    <TableHead>
-                      <TableRow>
-                        <StyledTableCell>#</StyledTableCell>
-                        <StyledTableCell align="center">
-                          Profile
-                        </StyledTableCell>
-                        <StyledTableCell align="center">Name</StyledTableCell>
-                        <StyledTableCell align="center">Email</StyledTableCell>
-                        <StyledTableCell align="center">Joined</StyledTableCell>
-                        <StyledTableCell align="center">
-                          Actions
-                        </StyledTableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {
-                        /* istanbul ignore next */
-                        state === 0 &&
-                        memberData &&
-                        memberData.organizationsMemberConnection.edges.length >
-                          0 ? (
-                          memberData.organizationsMemberConnection.edges.map(
-                            (datas: any, index: number) => (
-                              <StyledTableRow key={datas._id}>
-                                <StyledTableCell component="th" scope="row">
-                                  {index + 1}
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                  {datas.image ? (
-                                    <img
-                                      src={datas.image}
-                                      alt="memberImage"
-                                      className="TableImage"
-                                    />
-                                  ) : (
-                                    <img
-                                      src="/images/svg/profiledefault.svg"
-                                      alt="memberImage"
-                                      className="TableImage"
-                                    />
-                                  )}
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                  <Link
-                                    className={styles.membername}
-                                    to={`/member/${currentUrl}`}
-                                    state={{ id: datas._id }}
-                                  >
-                                    {datas.firstName + ' ' + datas.lastName}
-                                  </Link>
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                  {datas.email}
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                  {dayjs(datas.createdAt).format('DD/MM/YYYY')}
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                  <OrgPeopleListCard
-                                    key={index}
-                                    id={datas._id}
-                                  />
-                                </StyledTableCell>
-                              </StyledTableRow>
-                            ),
-                          )
-                        ) : /* istanbul ignore next */
-                        state === 1 &&
-                          adminData &&
-                          adminData.organizationsMemberConnection.edges.length >
-                            0 ? (
-                          adminData.organizationsMemberConnection.edges.map(
-                            (datas: any, index: number) => (
-                              <StyledTableRow key={datas._id}>
-                                <StyledTableCell component="th" scope="row">
-                                  {index + 1}
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                  {datas.image ? (
-                                    <img
-                                      src={datas.image}
-                                      alt="memberImage"
-                                      className="TableImage"
-                                    />
-                                  ) : (
-                                    <img
-                                      src="/images/svg/profiledefault.svg"
-                                      alt="memberImage"
-                                      className="TableImage"
-                                    />
-                                  )}
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                  <Link
-                                    className={styles.membername}
-                                    to={`/member/${currentUrl}`}
-                                    state={{ id: datas._id }}
-                                  >
-                                    {datas.firstName + ' ' + datas.lastName}
-                                  </Link>
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                  {datas.email}
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                  {dayjs(datas.createdAt).format('DD/MM/YYYY')}
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                  <OrgAdminListCard
-                                    key={index}
-                                    id={datas._id}
-                                  />
-                                </StyledTableCell>
-                              </StyledTableRow>
-                            ),
-                          )
-                        ) : state === 2 &&
-                          usersData &&
-                          usersData.users.length > 0 ? (
-                          usersData.users.map((datas: any, index: number) => (
-                            <StyledTableRow key={datas._id}>
-                              <StyledTableCell component="th" scope="row">
-                                {index + 1}
-                              </StyledTableCell>
-                              <StyledTableCell align="center">
-                                {datas.image ? (
-                                  <img
-                                    src={datas.image}
-                                    alt="memberImage"
-                                    className="TableImage"
-                                  />
-                                ) : (
-                                  <img
-                                    src="/images/svg/profiledefault.svg"
-                                    alt="memberImage"
-                                    className="TableImage"
-                                  />
-                                )}
-                              </StyledTableCell>
-                              <StyledTableCell align="center">
-                                <Link
-                                  className={styles.membername}
-                                  to={`/member/${currentUrl}`}
-                                  state={{ id: datas._id }}
-                                >
-                                  {datas.firstName + ' ' + datas.lastName}
-                                </Link>
-                              </StyledTableCell>
-                              <StyledTableCell align="center">
-                                {datas.email}
-                              </StyledTableCell>
-                              <StyledTableCell align="center">
-                                {dayjs(datas.createdAt).format('DD/MM/YYYY')}
-                              </StyledTableCell>
-                              <StyledTableCell align="center">
-                                <UserListCard key={index} id={datas._id} />
-                              </StyledTableCell>
-                            </StyledTableRow>
-                          ))
-                        ) : (
-                          /* istanbul ignore next */
-                          <NotFound
-                            title={
-                              state === 0
-                                ? 'member'
-                                : state === 1
-                                  ? 'admin'
-                                  : 'user'
-                            }
-                            keyPrefix="userNotFound"
-                          />
-                        )
-                      }
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Col>
-            </div>
-          )}
+      {((state == 0 && memberData) ||
+        (state == 1 && adminData) ||
+        (state == 2 && usersData)) && (
+        <div className="datatable">
+          <DataGrid
+            disableColumnMenu
+            columnBuffer={5}
+            hideFooter={true}
+            className={`${styles.datagrid}`}
+            getRowId={(row) => row._id}
+            components={{
+              NoRowsOverlay: () => (
+                <Stack
+                  height="100%"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  Nothing Found !!
+                </Stack>
+              ),
+            }}
+            sx={{
+              '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
+                outline: 'none !important',
+              },
+              '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
+                outline: 'none',
+              },
+              '& .MuiDataGrid-row:hover': {
+                backgroundColor: 'transparent',
+              },
+              '& .MuiDataGrid-row.Mui-hovered': {
+                backgroundColor: 'transparent',
+              },
+            }}
+            getRowClassName={() => `${styles.rowBackground}`}
+            autoHeight
+            rowHeight={70}
+            rows={
+              state === 0
+                ? memberData.organizationsMemberConnection.edges
+                : state === 1
+                  ? adminData.organizationsMemberConnection.edges
+                  : convertObject(usersData)
+            }
+            columns={columns}
+            isRowSelectable={() => false}
+          />
         </div>
-      </Col>
+      )}
+      {showRemoveModal && selectedMemId && (
+        <OrgPeopleListCard
+          id={selectedMemId}
+          toggleRemoveModal={toggleRemoveModal}
+        />
+      )}
+      {showRemoveModal && selectedAdminId && (
+        <OrgAdminListCard
+          id={selectedAdminId}
+          toggleRemoveModal={toggleRemoveModal}
+        />
+      )}
     </>
   );
 }
 
 export default organizationPeople;
+
+// This code is used to remove 'user' object from the array index of userData and directly use store the properties at array index, this formatting is needed for DataGrid.
+
+interface InterfaceUser {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  image: string;
+  createdAt: string;
+}
+interface InterfaceOriginalObject {
+  users: { user: InterfaceUser }[];
+}
+interface InterfaceConvertedObject {
+  users: InterfaceUser[];
+}
+function convertObject(original: InterfaceOriginalObject): InterfaceUser[] {
+  const convertedObject: InterfaceConvertedObject = {
+    users: [],
+  };
+  original.users.forEach((item) => {
+    convertedObject.users.push({
+      firstName: item.user?.firstName,
+      lastName: item.user?.lastName,
+      email: item.user?.email,
+      image: item.user?.image,
+      createdAt: item.user?.createdAt,
+      _id: item.user?._id,
+    });
+  });
+  return convertedObject.users;
+}

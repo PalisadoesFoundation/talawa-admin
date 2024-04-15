@@ -1,33 +1,36 @@
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
-import type { ChangeEvent } from 'react';
-import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { Button, Dropdown, Form, InputGroup, Modal } from 'react-bootstrap';
-import {
-  ORGANIZATIONS_LIST,
-  ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-  USERS_CONNECTION_LIST,
-} from 'GraphQl/Queries/Queries';
-import { useTranslation } from 'react-i18next';
-import styles from './OrganizationPeople.module.css';
-import { toast } from 'react-toastify';
 import { Search } from '@mui/icons-material';
+import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
+import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
-import Loader from 'components/Loader/Loader';
 import {
   ADD_MEMBER_MUTATION,
   SIGNUP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
+import {
+  ORGANIZATIONS_LIST,
+  ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+  USERS_CONNECTION_LIST,
+} from 'GraphQl/Queries/Queries';
+import Loader from 'components/Loader/Loader';
+import type { ChangeEvent } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Button, Dropdown, Form, InputGroup, Modal } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
+import { Link, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
-import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
-import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
+import type {
+  InterfaceQueryOrganizationsListObject,
+  InterfaceQueryUserListItem,
+} from 'utils/interfaces';
+import styles from './OrganizationPeople.module.css';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -46,11 +49,15 @@ const StyledTableRow = styled(TableRow)(() => ({
 }));
 
 function AddMember(): JSX.Element {
-  const { t } = useTranslation('translation', {
+  const { t: translateOrgPeople } = useTranslation('translation', {
     keyPrefix: 'organizationPeople',
   });
 
-  document.title = t('title');
+  const { t: translateAddMember } = useTranslation('translation', {
+    keyPrefix: 'addMember',
+  });
+
+  document.title = translateOrgPeople('title');
 
   const [addUserModalisOpen, setAddUserModalIsOpen] = useState(false);
 
@@ -87,9 +94,11 @@ function AddMember(): JSX.Element {
       memberRefetch({
         orgId: currentUrl,
       });
-    } catch (error: any) {
-      toast.error(error.message);
-      console.log(error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+        console.log(error.message);
+      }
     }
   };
 
@@ -115,7 +124,7 @@ function AddMember(): JSX.Element {
     variables: { id: currentUrl },
   });
 
-  const getMembersId = (): any => {
+  const getMembersId = (): string[] => {
     if (memberData) {
       const ids = memberData?.organizationsMemberConnection.edges.map(
         (member: { _id: string }) => member._id,
@@ -173,11 +182,11 @@ function AddMember(): JSX.Element {
         createUserVariables.lastName
       )
     ) {
-      toast.error(t('invalidDetailsMessage'));
+      toast.error(translateOrgPeople('invalidDetailsMessage'));
     } else if (
       createUserVariables.password !== createUserVariables.confirmPassword
     ) {
-      toast.error(t('passwordNotMatch'));
+      toast.error(translateOrgPeople('passwordNotMatch'));
     } else {
       try {
         const registeredUser = await registerMutation({
@@ -202,9 +211,9 @@ function AddMember(): JSX.Element {
           password: '',
           confirmPassword: '',
         });
-      } catch (error: any) {
+      } catch (error: unknown) {
         /* istanbul ignore next */
-        errorHandler(t, error);
+        errorHandler(translateOrgPeople, error);
       }
     }
   };
@@ -246,20 +255,19 @@ function AddMember(): JSX.Element {
     setCreateUserVariables({ ...createUserVariables, confirmPassword });
   };
 
-  const handleUserModalSearchChange = (e: any): void => {
+  const handleUserModalSearchChange = (e: React.FormEvent): void => {
+    e.preventDefault();
     /* istanbul ignore next */
-    if (e.key === 'Enter') {
-      const [firstName, lastName] = userName.split(' ');
+    const [firstName, lastName] = userName.split(' ');
 
-      const newFilterData = {
-        firstName_contains: firstName ?? '',
-        lastName_contains: lastName ?? '',
-      };
+    const newFilterData = {
+      firstName_contains: firstName || '',
+      lastName_contains: lastName || '',
+    };
 
-      allUsersRefetch({
-        ...newFilterData,
-      });
-    }
+    allUsersRefetch({
+      ...newFilterData,
+    });
   };
 
   return (
@@ -271,11 +279,10 @@ function AddMember(): JSX.Element {
           className={styles.dropdown}
           data-testid="addMembers"
         >
-          {t('addMembers')}
+          {translateOrgPeople('addMembers')}
         </Dropdown.Toggle>
         <Dropdown.Menu>
           <Dropdown.Item
-            inline
             id="existingUser"
             value="existingUser"
             name="existingUser"
@@ -284,10 +291,11 @@ function AddMember(): JSX.Element {
               openAddUserModal();
             }}
           >
-            <Form.Label htmlFor="existingUser">{t('existingUser')}</Form.Label>
+            <Form.Label htmlFor="existingUser">
+              {translateOrgPeople('existingUser')}
+            </Form.Label>
           </Dropdown.Item>
           <Dropdown.Item
-            inline
             id="newUser"
             value="newUser"
             name="newUser"
@@ -296,7 +304,7 @@ function AddMember(): JSX.Element {
               openCreateNewUserModal();
             }}
           >
-            <label htmlFor="memberslist">{t('newUser')}</label>
+            <label htmlFor="memberslist">{translateOrgPeople('newUser')}</label>
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
@@ -305,9 +313,10 @@ function AddMember(): JSX.Element {
         data-testid="addExistingUserModal"
         show={addUserModalisOpen}
         onHide={toggleDialogModal}
+        contentClassName={styles.modalContent}
       >
         <Modal.Header closeButton data-testid="pluginNotificationHeader">
-          <Modal.Title>{t('addMembers')}</Modal.Title>
+          <Modal.Title>{translateOrgPeople('addMembers')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {allUsersLoading ? (
@@ -317,28 +326,28 @@ function AddMember(): JSX.Element {
           ) : (
             <>
               <div className={styles.input}>
-                <Form.Control
-                  type="name"
-                  id="searchUser"
-                  data-testid="searchUser"
-                  placeholder={t('searchFullName')}
-                  autoComplete="off"
-                  required
-                  className={styles.inputField}
-                  value={userName}
-                  onChange={(e): void => {
-                    const { value } = e.target;
-                    setUserName(value);
-                    handleUserModalSearchChange(value);
-                  }}
-                  onKeyUp={handleUserModalSearchChange}
-                />
-                <Button
-                  className={`position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center `}
-                  onClick={handleUserModalSearchChange}
-                >
-                  <Search />
-                </Button>
+                <Form onSubmit={handleUserModalSearchChange}>
+                  <Form.Control
+                    type="name"
+                    id="searchUser"
+                    data-testid="searchUser"
+                    placeholder={translateOrgPeople('searchFullName')}
+                    autoComplete="off"
+                    className={styles.inputFieldModal}
+                    value={userName}
+                    onChange={(e): void => {
+                      const { value } = e.target;
+                      setUserName(value);
+                    }}
+                  />
+                  <Button
+                    type="submit"
+                    data-testid="submitBtn"
+                    className={`position-absolute z-10 bottom-10 end-0  d-flex justify-content-center align-items-center `}
+                  >
+                    <Search />
+                  </Button>
+                </Form>
               </div>
               <TableContainer component={Paper}>
                 <Table aria-label="customized table">
@@ -346,43 +355,55 @@ function AddMember(): JSX.Element {
                     <TableRow>
                       <StyledTableCell>#</StyledTableCell>
                       <StyledTableCell align="center">
-                        User Name
+                        {translateAddMember('user')}
                       </StyledTableCell>
                       <StyledTableCell align="center">
-                        Add Member
+                        {translateAddMember('addMember')}
                       </StyledTableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {allUsersData &&
                       allUsersData.users.length > 0 &&
-                      allUsersData.users.map((user: any, index: number) => (
-                        <StyledTableRow data-testid="user" key={user._id}>
-                          <StyledTableCell component="th" scope="row">
-                            {index + 1}
-                          </StyledTableCell>
-                          <StyledTableCell align="center">
-                            <Link
-                              className={styles.membername}
-                              to={{
-                                pathname: `/member/id=${currentUrl}`,
-                              }}
-                            >
-                              {user.firstName + ' ' + user.lastName}
-                            </Link>
-                          </StyledTableCell>
-                          <StyledTableCell align="center">
-                            <Button
-                              onClick={() => {
-                                createMember(user._id);
-                              }}
-                              data-testid="addBtn"
-                            >
-                              Add
-                            </Button>
-                          </StyledTableCell>
-                        </StyledTableRow>
-                      ))}
+                      allUsersData.users.map(
+                        (
+                          userDetails: InterfaceQueryUserListItem,
+                          index: number,
+                        ) => (
+                          <StyledTableRow
+                            data-testid="user"
+                            key={userDetails.user._id}
+                          >
+                            <StyledTableCell component="th" scope="row">
+                              {index + 1}
+                            </StyledTableCell>
+                            <StyledTableCell align="center">
+                              <Link
+                                className={styles.membername}
+                                to={{
+                                  pathname: `/member/id=${currentUrl}`,
+                                }}
+                              >
+                                {userDetails.user.firstName +
+                                  ' ' +
+                                  userDetails.user.lastName}
+                                <br />
+                                {userDetails.user.email}
+                              </Link>
+                            </StyledTableCell>
+                            <StyledTableCell align="center">
+                              <Button
+                                onClick={() => {
+                                  createMember(userDetails.user._id);
+                                }}
+                                data-testid="addBtn"
+                              >
+                                Add
+                              </Button>
+                            </StyledTableCell>
+                          </StyledTableRow>
+                        ),
+                      )}
                   </TableBody>
                 </Table>
               </TableContainer>
@@ -403,10 +424,10 @@ function AddMember(): JSX.Element {
           <div className="my-3">
             <div className="row">
               <div className="col-sm-6">
-                <h6>{t('firstName')}</h6>
+                <h6>{translateOrgPeople('firstName')}</h6>
                 <InputGroup className="mt-2 mb-4">
                   <Form.Control
-                    placeholder={t('enterFirstName')}
+                    placeholder={translateOrgPeople('enterFirstName')}
                     className={styles.borderNone}
                     value={createUserVariables.firstName}
                     onChange={handleFirstName}
@@ -415,10 +436,10 @@ function AddMember(): JSX.Element {
                 </InputGroup>
               </div>
               <div className="col-sm-6">
-                <h6>{t('lastName')}</h6>
+                <h6>{translateOrgPeople('lastName')}</h6>
                 <InputGroup className="mt-2 mb-4">
                   <Form.Control
-                    placeholder={t('enterLastName')}
+                    placeholder={translateOrgPeople('enterLastName')}
                     className={styles.borderNone}
                     value={createUserVariables.lastName}
                     onChange={handleLastName}
@@ -427,10 +448,10 @@ function AddMember(): JSX.Element {
                 </InputGroup>
               </div>
             </div>
-            <h6>{t('emailAddress')}</h6>
+            <h6>{translateOrgPeople('emailAddress')}</h6>
             <InputGroup className="mt-2 mb-4">
               <Form.Control
-                placeholder={t('enterEmail')}
+                placeholder={translateOrgPeople('enterEmail')}
                 type="email"
                 className={styles.borderNone}
                 value={createUserVariables.email}
@@ -443,10 +464,10 @@ function AddMember(): JSX.Element {
                 <EmailOutlinedIcon className={`${styles.colorWhite}`} />
               </InputGroup.Text>
             </InputGroup>
-            <h6>{t('password')}</h6>
+            <h6>{translateOrgPeople('password')}</h6>
             <InputGroup className="mt-2 mb-4">
               <Form.Control
-                placeholder={t('enterPassword')}
+                placeholder={translateOrgPeople('enterPassword')}
                 type={showPassword ? 'text' : 'password'}
                 className={styles.borderNone}
                 value={createUserVariables.password}
@@ -465,10 +486,10 @@ function AddMember(): JSX.Element {
                 )}
               </InputGroup.Text>
             </InputGroup>
-            <h6>{t('confirmPassword')}</h6>
+            <h6>{translateOrgPeople('confirmPassword')}</h6>
             <InputGroup className="mt-2 mb-4">
               <Form.Control
-                placeholder={t('enterConfirmPassword')}
+                placeholder={translateOrgPeople('enterConfirmPassword')}
                 type={showConfirmPassword ? 'text' : 'password'}
                 className={styles.borderNone}
                 value={createUserVariables.confirmPassword}
@@ -487,11 +508,11 @@ function AddMember(): JSX.Element {
                 )}
               </InputGroup.Text>
             </InputGroup>
-            <h6>{t('organization')}</h6>
+            <h6>{translateOrgPeople('organization')}</h6>
             <InputGroup className="mt-2 mb-4">
               <Form.Control
                 className={styles.borderNone}
-                value={organizationData?.organizations[0].name}
+                value={organizationData?.organizations[0]?.name}
                 onChange={handlePasswordChange}
                 data-testid=""
                 disabled
@@ -505,7 +526,7 @@ function AddMember(): JSX.Element {
               onClick={closeCreateNewUserModal}
               data-testid="closeBtn"
             >
-              {t('cancel')}
+              {translateOrgPeople('cancel')}
             </Button>
             <Button
               className={`${styles.colorPrimary} ${styles.borderNone}`}
@@ -513,7 +534,7 @@ function AddMember(): JSX.Element {
               onClick={handleCreateUser}
               data-testid="createBtn"
             >
-              {t('create')}
+              {translateOrgPeople('create')}
             </Button>
           </div>
         </Modal.Body>
@@ -523,3 +544,18 @@ function AddMember(): JSX.Element {
 }
 
 export default AddMember;
+// | typeof ORGANIZATIONS_MEMBER_CONNECTION_LIST
+// | typeof ORGANIZATIONS_LIST
+// | typeof USER_LIST_FOR_TABLE
+// | typeof ADD_MEMBER_MUTATION;
+// {
+//   id?: string;
+//   orgId?: string;
+//   orgid?: string;
+//   fristNameContains?: string;
+//   lastNameContains?: string;
+//   firstName_contains?: string;
+//   lastName_contains?: string;
+//   id_not_in?: string[];
+//   userid?: string;
+// };

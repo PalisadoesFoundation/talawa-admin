@@ -57,7 +57,7 @@ jest.mock('components/AddOn/support/services/Plugin.helper', () => ({
     fetchStore: jest.fn().mockResolvedValue([]),
   })),
 }));
-let mockID: any = undefined;
+let mockID: string | undefined = undefined;
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useParams: () => ({ orgId: mockID }),
@@ -193,7 +193,9 @@ describe('Testing Advertisement Component', () => {
         },
         result: {
           data: {
-            advertisementsConnection: [],
+            advertisementsConnection: {
+              edges: [],
+            },
           },
           loading: false,
         },
@@ -257,30 +259,36 @@ describe('Testing Advertisement Component', () => {
         },
         result: {
           data: {
-            advertisementsConnection: [
-              {
-                _id: '1',
-                name: 'Advertisement1',
-                type: 'POPUP',
-                organization: {
-                  _id: 'undefined',
+            advertisementsConnection: {
+              edges: [
+                {
+                  node: {
+                    _id: '1',
+                    name: 'Advertisement1',
+                    type: 'POPUP',
+                    organization: {
+                      _id: 'undefined',
+                    },
+                    mediaUrl: 'http://example1.com',
+                    endDate: '2023-01-01',
+                    startDate: '2022-01-01',
+                  },
                 },
-                mediaUrl: 'http://example1.com',
-                endDate: '2023-01-01',
-                startDate: '2022-01-01',
-              },
-              {
-                _id: '2',
-                name: 'Advertisement2',
-                type: 'POPUP',
-                organization: {
-                  _id: 'undefined',
+                {
+                  node: {
+                    _id: '2',
+                    name: 'Advertisement2',
+                    type: 'POPUP',
+                    organization: {
+                      _id: 'undefined',
+                    },
+                    mediaUrl: 'http://example2.com',
+                    endDate: '2025-02-01',
+                    startDate: '2024-02-01',
+                  },
                 },
-                mediaUrl: 'http://example2.com',
-                endDate: '2025-02-01',
-                startDate: '2024-02-01',
-              },
-            ],
+              ],
+            },
           },
           loading: false,
         },
@@ -335,30 +343,36 @@ describe('Testing Advertisement Component', () => {
         },
         result: {
           data: {
-            advertisementsConnection: [
-              {
-                _id: '1',
-                name: 'Advertisement1',
-                type: 'POPUP',
-                organization: {
-                  _id: '65844efc814dd4003db811c4',
+            advertisementsConnection: {
+              edges: [
+                {
+                  node: {
+                    _id: '1',
+                    name: 'Advertisement1',
+                    type: 'POPUP',
+                    organization: {
+                      _id: 'undefined',
+                    },
+                    mediaUrl: 'http://example1.com',
+                    endDate: '2023-01-01',
+                    startDate: '2022-01-01',
+                  },
                 },
-                mediaUrl: 'http://example1.com',
-                endDate: '2023-01-01',
-                startDate: '2022-01-01',
-              },
-              {
-                _id: '2',
-                name: 'Advertisement2',
-                type: 'BANNER',
-                organization: {
-                  _id: '65844efc814dd4003db811c4',
+                {
+                  node: {
+                    _id: '2',
+                    name: 'Advertisement2',
+                    type: 'POPUP',
+                    organization: {
+                      _id: 'undefined',
+                    },
+                    mediaUrl: 'http://example2.com',
+                    endDate: '2025-02-01',
+                    startDate: '2024-02-01',
+                  },
                 },
-                mediaUrl: 'http://example2.com',
-                endDate: tomorrow,
-                startDate: today,
-              },
-            ],
+              ],
+            },
           },
           loading: false,
         },

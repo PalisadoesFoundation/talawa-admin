@@ -8,7 +8,10 @@ import {
 } from 'GraphQl/Queries/Queries';
 import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
 import PostCard from 'components/UserPortal/PostCard/PostCard';
-import type { InterfacePostCard } from 'utils/interfaces';
+import type {
+  InterfacePostCard,
+  InterfaceQueryUserListItem,
+} from 'utils/interfaces';
 import PromotedPost from 'components/UserPortal/PromotedPost/PromotedPost';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import StartPostModal from 'components/UserPortal/StartPostModal/StartPostModal';
@@ -31,21 +34,80 @@ interface InterfaceAdContent {
   organization: {
     _id: string;
   };
-  link: string;
+  mediaUrl: string;
   endDate: string;
   startDate: string;
+
+  comments: InterfacePostComments;
+  likes: InterfacePostLikes;
 }
+
+type AdvertisementsConnection = {
+  edges: {
+    node: InterfaceAdContent;
+  }[];
+};
+
+interface InterfaceAdConnection {
+  advertisementsConnection?: AdvertisementsConnection;
+}
+
+type InterfacePostComments = {
+  creator: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
+  likeCount: number;
+  likedBy: {
+    id: string;
+  }[];
+  text: string;
+}[];
+
+type InterfacePostLikes = {
+  firstName: string;
+  lastName: string;
+  id: string;
+}[];
+
+type InterfacePostNode = {
+  commentCount: number;
+  createdAt: string;
+  creator: {
+    email: string;
+    firstName: string;
+    lastName: string;
+    _id: string;
+  };
+  imageUrl: string | null;
+  likeCount: number;
+  likedBy: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+  }[];
+  pinned: boolean;
+  text: string;
+  title: string;
+  videoUrl: string | null;
+  _id: string;
+
+  comments: InterfacePostComments;
+  likes: InterfacePostLikes;
+};
 
 export default function home(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'home' });
   const { getItem } = useLocalStorage();
   const [posts, setPosts] = useState([]);
-  const [adContent, setAdContent] = useState<InterfaceAdContent[]>([]);
+  const [adContent, setAdContent] = useState<InterfaceAdConnection>({});
   const [filteredAd, setFilteredAd] = useState<InterfaceAdContent[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
   const { orgId } = useParams();
-  const organizationId = orgId?.split('=')[1] || null;
-  if (!organizationId) {
+
+  if (!orgId) {
     return <Navigate to={'/user'} />;
   }
 
@@ -58,13 +120,15 @@ export default function home(): JSX.Element {
     refetch,
     loading: loadingPosts,
   } = useQuery(ORGANIZATION_POST_LIST, {
-    variables: { id: organizationId, first: 10 },
+    variables: { id: orgId, first: 10 },
   });
   const userId: string | null = getItem('userId');
 
   const { data: userData } = useQuery(USER_DETAILS, {
     variables: { id: userId },
   });
+
+  const user: InterfaceQueryUserListItem | undefined = userData?.user;
 
   useEffect(() => {
     if (data) {
@@ -74,24 +138,40 @@ export default function home(): JSX.Element {
 
   useEffect(() => {
     if (promotedPostsData) {
-      setAdContent(promotedPostsData.advertisementsConnection);
+      setAdContent(promotedPostsData);
     }
   }, [promotedPostsData]);
 
   useEffect(() => {
-    setFilteredAd(filterAdContent(adContent, organizationId));
+    setFilteredAd(filterAdContent(adContent, orgId));
   }, [adContent]);
 
   const filterAdContent = (
-    adCont: InterfaceAdContent[],
+    data: {
+      advertisementsConnection?: {
+        edges: {
+          node: InterfaceAdContent;
+        }[];
+      };
+    },
     currentOrgId: string,
     currentDate: Date = new Date(),
   ): InterfaceAdContent[] => {
-    return adCont.filter(
-      (ad: InterfaceAdContent) =>
-        ad.organization._id === currentOrgId &&
-        new Date(ad.endDate) > currentDate,
-    );
+    const { advertisementsConnection } = data;
+
+    if (advertisementsConnection && advertisementsConnection.edges) {
+      const { edges } = advertisementsConnection;
+
+      return edges
+        .map((edge) => edge.node)
+        .filter(
+          (ad: InterfaceAdContent) =>
+            ad.organization._id === currentOrgId &&
+            new Date(ad.endDate) > currentDate,
+        );
+    }
+
+    return [];
   };
 
   const handlePostButtonClick = (): void => {
@@ -112,7 +192,7 @@ export default function home(): JSX.Element {
             <Row className="d-flex align-items-center justify-content-center">
               <Col xs={2} className={styles.userImage}>
                 <Image
-                  src={userData?.image || UserDefault}
+                  src={user?.user?.image || UserDefault}
                   roundedCircle
                   className="mt-2"
                 />
@@ -177,11 +257,11 @@ export default function home(): JSX.Element {
 
           {filteredAd.length > 0 && (
             <div data-testid="promotedPostsContainer">
-              {filteredAd.map((post: any) => (
+              {filteredAd.map((post: InterfaceAdContent) => (
                 <PromotedPost
                   key={post._id}
                   id={post._id}
-                  media={post.mediaUrl}
+                  image={post.mediaUrl}
                   title={post.name}
                   data-testid="postid"
                 />
@@ -195,10 +275,8 @@ export default function home(): JSX.Element {
             </div>
           ) : (
             <>
-              {posts.map(({ node }: any) => {
+              {posts.map(({ node }: { node: InterfacePostNode }) => {
                 const {
-                  // likedBy,
-                  // comments,
                   creator,
                   _id,
                   imageUrl,
@@ -207,41 +285,46 @@ export default function home(): JSX.Element {
                   text,
                   likeCount,
                   commentCount,
+                  likedBy,
+                  comments,
                 } = node;
-
-                // const allLikes: any =
-                //   likedBy && Array.isArray(likedBy)
-                //     ? likedBy.map((value: any) => ({
-                //         firstName: value.firstName,
-                //         lastName: value.lastName,
-                //         id: value._id,
-                //       }))
-                //     : [];
 
                 const allLikes: any = [];
 
-                // const postComments: any =
-                //   comments && Array.isArray(comments)
-                //     ? comments.map((value: any) => {
-                //         const commentLikes = value.likedBy.map(
-                //           (commentLike: any) => ({ id: commentLike._id }),
-                //         );
-                //         return {
-                //           id: value._id,
-                //           creator: {
-                //             firstName: value.creator.firstName,
-                //             lastName: value.creator.lastName,
-                //             id: value.creator._id,
-                //             email: value.creator.email,
-                //           },
-                //           likeCount: value.likeCount,
-                //           likedBy: commentLikes,
-                //           text: value.text,
-                //         };
-                //       })
-                //     : [];
+                likedBy.forEach((value: any) => {
+                  const singleLike = {
+                    firstName: value.firstName,
+                    lastName: value.lastName,
+                    id: value._id,
+                  };
+                  allLikes.push(singleLike);
+                });
 
                 const postComments: any = [];
+
+                comments.forEach((value: any) => {
+                  const commentLikes: any = [];
+                  value.likedBy.forEach((commentLike: any) => {
+                    const singleLike = {
+                      id: commentLike._id,
+                    };
+                    commentLikes.push(singleLike);
+                  });
+
+                  const comment = {
+                    id: value._id,
+                    creator: {
+                      firstName: value.creator.firstName,
+                      lastName: value.creator.lastName,
+                      id: value.creator._id,
+                      email: value.creator.email,
+                    },
+                    likeCount: value.likeCount,
+                    likedBy: commentLikes,
+                    text: value.text,
+                  };
+                  postComments.push(comment);
+                });
 
                 const cardProps: InterfacePostCard = {
                   id: _id,
@@ -270,8 +353,8 @@ export default function home(): JSX.Element {
           show={showModal}
           onHide={handleModalClose}
           fetchPosts={refetch}
-          userData={userData}
-          organizationId={organizationId}
+          userData={user}
+          organizationId={orgId}
         />
       </div>
     </>

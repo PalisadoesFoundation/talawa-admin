@@ -15,6 +15,10 @@
 .cardBody {
   min-height: 180px;
   padding-top: 0;
+  max-height: 570px;
+  overflow-y: scroll;
+  width: 100%;
+  max-width: 400px;
 }
 
 .cardBody .emptyContainer {

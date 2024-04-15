@@ -8,7 +8,7 @@ const { setItem } = useLocalStorage();
 
 describe('SecuredRouteForUser', () => {
   test('renders the route when the user is logged in', () => {
-    // Set the 'IsLoggedIn' value to 'TRUE' in localStorage to simulate a logged-in user
+    // Set the 'IsLoggedIn' value to 'TRUE' in localStorage to simulate a logged-in user and do not set 'AdminFor' so that it remains undefined.
     setItem('IsLoggedIn', 'TRUE');
 
     render(
@@ -38,13 +38,10 @@ describe('SecuredRouteForUser', () => {
     render(
       <MemoryRouter initialEntries={['/user/organizations']}>
         <Routes>
-          <Route
-            path="/user/organizations"
-            element={<div>User Login Page</div>}
-          />
+          <Route path="/" element={<div>User Login Page</div>} />
           <Route element={<SecuredRouteForUser />}>
             <Route
-              path="/organizations"
+              path="/user/organizations"
               element={
                 <div data-testid="organizations-content">
                   Organizations Component
@@ -59,5 +56,41 @@ describe('SecuredRouteForUser', () => {
     await waitFor(() => {
       expect(screen.getByText('User Login Page')).toBeInTheDocument();
     });
+  });
+
+  test('renders the route when the user is logged in and user is ADMIN', () => {
+    // Set the 'IsLoggedIn' value to 'TRUE' in localStorage to simulate a logged-in user and set 'AdminFor' to simulate ADMIN of some Organization.
+    setItem('IsLoggedIn', 'TRUE');
+    setItem('AdminFor', [
+      {
+        _id: '6537904485008f171cf29924',
+        __typename: 'Organization',
+      },
+    ]);
+
+    render(
+      <MemoryRouter initialEntries={['/user/organizations']}>
+        <Routes>
+          <Route
+            path="/user/organizations"
+            element={<div>Oops! The Page you requested was not found!</div>}
+          />
+          <Route element={<SecuredRouteForUser />}>
+            <Route
+              path="/user/organizations"
+              element={
+                <div data-testid="organizations-content">
+                  Organizations Component
+                </div>
+              }
+            />
+          </Route>
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    expect(
+      screen.getByText(/Oops! The Page you requested was not found!/i),
+    ).toBeTruthy();
   });
 });

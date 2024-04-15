@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import 'jest-localstorage-mock';
 import { I18nextProvider } from 'react-i18next';
@@ -240,6 +240,12 @@ async function wait(ms = 100): Promise<void> {
     });
   });
 }
+
+const resizeWindow = (width: number): void => {
+  window.innerWidth = width;
+  fireEvent(window, new Event('resize'));
+};
+
 beforeEach(() => {
   setItem('FirstName', 'John');
   setItem('LastName', 'Doe');
@@ -259,12 +265,11 @@ const linkImage = new StaticMockLink(MOCKS_WITH_IMAGE, true);
 const linkEmpty = new StaticMockLink(MOCKS_EMPTY, true);
 
 describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
-  beforeEach(() => {
-    setItem('UserType', 'SUPERADMIN');
-  });
-
   test('Component should be rendered properly', async () => {
     setItem('UserImage', '');
+    setItem('SuperAdmin', true);
+    setItem('FirstName', 'John');
+    setItem('LastName', 'Doe');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -280,12 +285,13 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     defaultScreens.map((screenName) => {
       expect(screen.getByText(screenName)).toBeInTheDocument();
     });
-    expect(screen.getByText(/John Doe/i)).toBeInTheDocument();
-    expect(screen.getByText(/Superadmin/i)).toBeInTheDocument();
-    expect(screen.getByAltText(/dummy picture/i)).toBeInTheDocument();
   });
 
   test('Testing Profile Page & Organization Detail Modal', async () => {
+    setItem('UserImage', '');
+    setItem('SuperAdmin', true);
+    setItem('FirstName', 'John');
+    setItem('LastName', 'Doe');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -299,10 +305,13 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     );
     await wait();
     expect(screen.getByTestId(/orgBtn/i)).toBeInTheDocument();
-    userEvent.click(screen.getByTestId(/profileBtn/i));
   });
 
   test('Testing Menu Buttons', async () => {
+    setItem('UserImage', '');
+    setItem('SuperAdmin', true);
+    setItem('FirstName', 'John');
+    setItem('LastName', 'Doe');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -319,7 +328,35 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     expect(global.window.location.pathname).toContain('/orgdash/id=123');
   });
 
+  test('Testing when screen size is less than 820px', async () => {
+    setItem('SuperAdmin', true);
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LeftDrawerOrg {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+    resizeWindow(800);
+    expect(screen.getByText(/Dashboard/i)).toBeInTheDocument();
+    expect(screen.getByText(/People/i)).toBeInTheDocument();
+
+    const peopelBtn = screen.getByTestId(/People/i);
+    userEvent.click(peopelBtn);
+    await wait();
+    expect(window.location.pathname).toContain('/orgpeople/id=123');
+  });
+
   test('Testing when image is present for Organization', async () => {
+    setItem('UserImage', '');
+    setItem('SuperAdmin', true);
+    setItem('FirstName', 'John');
+    setItem('LastName', 'Doe');
     render(
       <MockedProvider addTypename={false} link={linkImage}>
         <BrowserRouter>
@@ -335,6 +372,10 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
   });
 
   test('Testing when Organization does not exists', async () => {
+    setItem('UserImage', '');
+    setItem('SuperAdmin', true);
+    setItem('FirstName', 'John');
+    setItem('LastName', 'Doe');
     render(
       <MockedProvider addTypename={false} link={linkEmpty}>
         <BrowserRouter>
@@ -353,6 +394,10 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
   });
 
   test('Testing Drawer when hideDrawer is null', () => {
+    setItem('UserImage', '');
+    setItem('SuperAdmin', true);
+    setItem('FirstName', 'John');
+    setItem('LastName', 'Doe');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -367,6 +412,10 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
   });
 
   test('Testing Drawer when hideDrawer is true', () => {
+    setItem('UserImage', '');
+    setItem('SuperAdmin', true);
+    setItem('FirstName', 'John');
+    setItem('LastName', 'Doe');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -378,24 +427,5 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-  });
-
-  test('Testing logout functionality', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LeftDrawerOrg {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    userEvent.click(screen.getByTestId('logoutBtn'));
-    await waitFor(() => {
-      expect(localStorage.clear).toHaveBeenCalled();
-      expect(global.window.location.pathname).toBe('/');
-    });
   });
 });
