@@ -564,6 +564,8 @@ export const UPDATE_EVENT_MUTATION = gql`
     $isPublic: Boolean!
     $isRegisterable: Boolean!
     $allDay: Boolean!
+    $startDate: Date!
+    $endDate: Date!
     $startTime: Time
     $endTime: Time
     $location: String
@@ -577,6 +579,8 @@ export const UPDATE_EVENT_MUTATION = gql`
         isPublic: $isPublic
         isRegisterable: $isRegisterable
         allDay: $allDay
+        startDate: $startDate
+        endDate: $endDate
         startTime: $startTime
         endTime: $endTime
         location: $location
