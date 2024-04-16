@@ -258,7 +258,9 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
                   title: e.target.value,
                 });
               }}
-              disabled={props.userRole === Role.USER}
+              disabled={
+                !(props.creator?._id === userId) && props.userRole === Role.USER
+              }
             />
             <p className={styles.preview}>{t('description')}</p>
             <Form.Control
@@ -279,7 +281,9 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
                   eventdescrip: e.target.value,
                 });
               }}
-              disabled={props.userRole === Role.USER}
+              disabled={
+                !(props.creator?._id === userId) && props.userRole === Role.USER
+              }
             />
             <p className={styles.preview}>{t('location')}</p>
             <Form.Control
@@ -296,7 +300,9 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
                   location: e.target.value,
                 });
               }}
-              disabled={props.userRole === Role.USER}
+              disabled={
+                !(props.creator?._id === userId) && props.userRole === Role.USER
+              }
             />
             <div className={styles.datediv}>
               <div className={styles.startDate}>
@@ -314,7 +320,10 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
                       regDate: e.target.value,
                     });
                   }}
-                  disabled={props.userRole === Role.USER}
+                  disabled={
+                    !(props.creator?._id === userId) &&
+                    props.userRole === Role.USER
+                  }
                 />
               </div>
               <div className={styles.endDate}>
@@ -332,7 +341,10 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
                       regEndDate: e.target.value,
                     });
                   }}
-                  disabled={props.userRole === Role.USER}
+                  disabled={
+                    !(props.creator?._id === userId) &&
+                    props.userRole === Role.USER
+                  }
                 />
               </div>
             </div>
@@ -350,7 +362,10 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
                         startTime: e.target.value,
                       })
                     }
-                    disabled={props.userRole === Role.USER}
+                    disabled={
+                      !(props.creator?._id === userId) &&
+                      props.userRole === Role.USER
+                    }
                   />
                 </div>
                 <div className={styles.endTime}>
@@ -365,7 +380,10 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
                         endTime: e.target.value,
                       })
                     }
-                    disabled={props.userRole === Role.USER}
+                    disabled={
+                      !(props.creator?._id === userId) &&
+                      props.userRole === Role.USER
+                    }
                   />
                 </div>
               </div>
@@ -382,7 +400,10 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
                     onChange={(): void => {
                       setAllDayChecked(!alldaychecked);
                     }}
-                    disabled={props.userRole === Role.USER}
+                    disabled={
+                      !(props.creator?._id === userId) &&
+                      props.userRole === Role.USER
+                    }
                   />
                 </div>
                 <div className={styles.dispflex}>
@@ -395,7 +416,10 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
                     onChange={(): void => {
                       setRecurringChecked(!recurringchecked);
                     }}
-                    disabled={props.userRole === Role.USER}
+                    disabled={
+                      !(props.creator?._id === userId) &&
+                      props.userRole === Role.USER
+                    }
                   />
                 </div>
               </div>
@@ -410,7 +434,10 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
                     onChange={(): void => {
                       setPublicChecked(!publicchecked);
                     }}
-                    disabled={props.userRole === Role.USER}
+                    disabled={
+                      !(props.creator?._id === userId) &&
+                      props.userRole === Role.USER
+                    }
                   />
                 </div>
                 <div className={styles.dispflex}>
@@ -423,7 +450,10 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
                     onChange={(): void => {
                       setRegistrableChecked(!registrablechecked);
                     }}
-                    disabled={props.userRole === Role.USER}
+                    disabled={
+                      !(props.creator?._id === userId) &&
+                      props.userRole === Role.USER
+                    }
                   />
                 </div>
               </div>
@@ -432,7 +462,8 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
         </Modal.Body>
         <form onSubmit={updateEventHandler}>
           <Modal.Footer>
-            {props.userRole !== Role.USER && (
+            {(props.userRole !== Role.USER ||
+              props.creator?._id === userId) && (
               <Button
                 variant="success"
                 onClick={openEventDashboard}
@@ -443,7 +474,8 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
                 Show Event Dashboard{' '}
               </Button>
             )}
-            {props.userRole !== Role.USER && (
+            {(props.userRole !== Role.USER ||
+              props.creator?._id === userId) && (
               <Button
                 type="submit"
                 variant="success"
@@ -453,7 +485,8 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
                 {t('editEvent')}
               </Button>
             )}
-            {props.userRole !== Role.USER && (
+            {(props.userRole !== Role.USER ||
+              props.creator?._id === userId) && (
               <Button
                 variant="danger"
                 data-testid="deleteEventModalBtn"
@@ -464,6 +497,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
               </Button>
             )}
             {props.userRole === Role.USER &&
+              !(props.creator?._id === userId) &&
               (isRegistered ? (
                 <Button
                   className={styles.customButton}
