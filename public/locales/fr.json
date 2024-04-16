@@ -1049,5 +1049,27 @@
     "passwordNotMatch": "Les mots de passe ne correspondent pas.",
     "user": "Utilisateur",
     "addMember": "Ajouter un membre"
+  },
+  "eventActionItems": {
+    "title": "Éléments d'action",
+    "createActionItem": "Créer des éléments d'action",
+    "actionItemCategory": "Catégorie d'éléments d'action",
+    "selectActionItemCategory": "Sélectionnez une catégorie d'élément d'action",
+    "selectAssignee": "Sélectionner un cessionnaire",
+    "preCompletionNotes": "Notes de pré-achèvement",
+    "postCompletionNotes": "Notes post-achèvement",
+    "actionItemDetails": "Détails de l'élément d'action",
+    "dueDate": "Date d'échéance",
+    "completetionDate": "Date d'achèvement",
+    "editActionItem": "Modifier l'élément d'action",
+    "deleteActionItem": "Supprimer l'élément d'action",
+    "deleteActionItemMsg": "Voulez-vous supprimer cette action ?",
+    "yes": "Oui",
+    "no": "non",
+    "successfulDeletion": "Élément d'action supprimé avec succès",
+    "successfulCreation": "Élément d'action créé avec succès",
+    "successfulUpdation": "Élément d'action mis à jour avec succès",
+    "notes": "Remarques",
+    "save": "Enregistrer"
   }
 }

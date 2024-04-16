@@ -11,6 +11,7 @@ import { ReactComponent as EventStatisticsIcon } from 'assets/svgs/eventStats.sv
 import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
 import EventDashboard from 'components/EventManagement/Dashboard/EventDashboard';
+import EventActionItems from 'components/EventManagement/EventActionItems/EventActionItems';
 
 const eventDashboardTabs: {
   value: TabOptions;
@@ -119,7 +120,7 @@ const EventManagement = (): JSX.Element => {
               case 'eventActions':
                 return (
                   <div data-testid="eventActionsTab">
-                    <h2>Event Actions</h2>
+                    <EventActionItems eventId={eventId} />
                   </div>
                 );
               case 'eventStats':

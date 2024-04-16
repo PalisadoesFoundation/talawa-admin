@@ -8,9 +8,6 @@ import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import SuperAdminScreen from './SuperAdminScreen';
-import useLocalStorage from 'utils/useLocalstorage';
-
-const { setItem } = useLocalStorage();
 
 const resizeWindow = (width: number): void => {
   window.innerWidth = width;
@@ -35,20 +32,20 @@ describe('Testing LeftDrawer in SuperAdminScreen', () => {
       </MockedProvider>,
     );
 
-    const toggleButton = screen.getByTestId('toggleMenuBtn') as HTMLElement;
+    const toggleButton = screen.getByTestId('closeMenu') as HTMLElement;
     const icon = toggleButton.querySelector('i');
 
     // Resize window to a smaller width
     resizeWindow(800);
     clickToggleMenuBtn(toggleButton);
-    expect(icon).toHaveClass('fa fa-angle-double-right');
+    expect(icon).toHaveClass('fa fa-angle-double-left');
 
     // Resize window back to a larger width
     resizeWindow(1000);
     clickToggleMenuBtn(toggleButton);
-    expect(icon).toHaveClass('fa fa-angle-double-left');
+    expect(icon).toHaveClass('fa fa-angle-double-right');
 
     clickToggleMenuBtn(toggleButton);
-    expect(icon).toHaveClass('fa fa-angle-double-right');
+    expect(icon).toHaveClass('fa fa-angle-double-left');
   });
 });

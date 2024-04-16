@@ -10,9 +10,6 @@ import i18nForTest from 'utils/i18nForTest';
 import OrganizationScreen from './OrganizationScreen';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import useLocalStorage from 'utils/useLocalstorage';
-
-const { setItem } = useLocalStorage();
 
 let mockID: string | undefined = '123';
 jest.mock('react-router-dom', () => ({
@@ -85,21 +82,21 @@ describe('Testing LeftDrawer in OrganizationScreen', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    const toggleButton = screen.getByTestId('toggleMenuBtn') as HTMLElement;
+    const toggleButton = screen.getByTestId('closeMenu') as HTMLElement;
     const icon = toggleButton.querySelector('i');
 
     // Resize window to a smaller width
     resizeWindow(800);
     clickToggleMenuBtn(toggleButton);
-    expect(icon).toHaveClass('fa fa-angle-double-right');
+    expect(icon).toHaveClass('fa fa-angle-double-left');
     // Resize window back to a larger width
 
     resizeWindow(1000);
     clickToggleMenuBtn(toggleButton);
-    expect(icon).toHaveClass('fa fa-angle-double-left');
+    expect(icon).toHaveClass('fa fa-angle-double-right');
 
     clickToggleMenuBtn(toggleButton);
-    expect(icon).toHaveClass('fa fa-angle-double-right');
+    expect(icon).toHaveClass('fa fa-angle-double-left');
   });
 
   test('should be redirected to / if orgId is undefined', async () => {

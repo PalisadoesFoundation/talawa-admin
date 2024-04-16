@@ -1060,5 +1060,27 @@
     "passwordNotMatch": "Passwords do not match.",
     "user": "User",
     "addMember": "Add Member"
+  },
+  "eventActionItems": {
+    "title": "Action Items",
+    "createActionItem": "Create Action Items",
+    "actionItemCategory": "Action Item Category",
+    "selectActionItemCategory": "Select an action item category",
+    "selectAssignee": "Select an assignee",
+    "preCompletionNotes": "Pre Completion Notes",
+    "postCompletionNotes": "Post Completion Notes",
+    "actionItemDetails": "Action Item Details",
+    "dueDate": "Due Date",
+    "completionDate": "Completion Date",
+    "editActionItem": "Edit Action Item",
+    "deleteActionItem": "Delete Action Item",
+    "deleteActionItemMsg": "Do you want to remove this action item?",
+    "yes": "Yes",
+    "no": "No",
+    "successfulDeletion": "Action Item deleted successfully",
+    "successfulCreation": "Action Item created successfully",
+    "successfulUpdation": "Action Item updated successfully",
+    "notes": "Notes",
+    "save": "Save"
   }
 }
