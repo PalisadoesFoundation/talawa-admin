@@ -78,7 +78,8 @@
 .datediv {
   display: flex;
   flex-direction: row;
-  margin-bottom: 15px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 .datebox {
   width: 90%;
@@ -91,8 +92,9 @@
   padding-right: 5px;
   padding-left: 5px;
 }
+
 .checkboxdiv > div label {
-  margin-right: 30px;
+  margin-right: 50px;
 }
 .checkboxdiv > label > input {
   margin-left: 10px;
@@ -108,6 +110,8 @@
 .checkboxContainer {
   display: flex;
   justify-content: space-between;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .checkboxdiv {

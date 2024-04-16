@@ -606,22 +606,28 @@ export const UPDATE_POST_MUTATION = gql`
 export const UPDATE_EVENT_MUTATION = gql`
   mutation UpdateEvent(
     $id: ID!
-    $title: String!
-    $description: String!
-    $recurring: Boolean!
+    $title: String
+    $description: String
+    $recurring: Boolean
     $recurringEventUpdateType: RecurringEventMutationType
-    $isPublic: Boolean!
-    $isRegisterable: Boolean!
-    $allDay: Boolean!
-    $startDate: Date!
+    $isPublic: Boolean
+    $isRegisterable: Boolean
+    $allDay: Boolean
+    $startDate: Date
     $endDate: Date
     $startTime: Time
     $endTime: Time
     $location: String
+    $recurrenceStartDate: Date
+    $recurrenceEndDate: Date
+    $frequency: Frequency
+    $weekDays: [WeekDays]
+    $count: PositiveInt
+    $interval: PositiveInt
+    $weekDayOccurenceInMonth: Int
   ) {
     updateEvent(
       id: $id
-      recurringEventUpdateType: $recurringEventUpdateType
       data: {
         title: $title
         description: $description
@@ -635,6 +641,16 @@ export const UPDATE_EVENT_MUTATION = gql`
         endTime: $endTime
         location: $location
       }
+      recurrenceRuleData: {
+        recurrenceStartDate: $recurrenceStartDate
+        recurrenceEndDate: $recurrenceEndDate
+        frequency: $frequency
+        weekDays: $weekDays
+        interval: $interval
+        count: $count
+        weekDayOccurenceInMonth: $weekDayOccurenceInMonth
+      }
+      recurringEventUpdateType: $recurringEventUpdateType
     ) {
       _id
     }

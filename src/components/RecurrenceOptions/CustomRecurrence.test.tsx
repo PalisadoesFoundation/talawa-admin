@@ -69,7 +69,8 @@ describe('Testing the creaction of recurring events with custom recurrence patte
     title: 'Dummy Org',
     description: 'This is a dummy organization',
     startDate: '03/28/2022',
-    endDate: '04/15/2023',
+    endDate: '03/30/2022',
+    recurrenceEndDate: '04/15/2023',
     location: 'New Delhi',
     startTime: '09:00 AM',
     endTime: '05:00 PM',
@@ -488,9 +489,13 @@ describe('Testing the creaction of recurring events with custom recurrence patte
     );
 
     const startDatePicker = screen.getByLabelText('Start Date');
-
     fireEvent.change(startDatePicker, {
       target: { value: formData.startDate },
+    });
+
+    const eventEndDatePicker = screen.getByLabelText('End Date');
+    fireEvent.change(eventEndDatePicker, {
+      target: { value: formData.endDate },
     });
 
     userEvent.click(screen.getByTestId('recurringCheck'));
@@ -545,9 +550,9 @@ describe('Testing the creaction of recurring events with custom recurrence patte
       expect(screen.getAllByLabelText('End Date')[1]).toBeEnabled();
     });
 
-    const endDatePicker = screen.getAllByLabelText('End Date')[1];
-    fireEvent.change(endDatePicker, {
-      target: { value: formData.endDate },
+    const recurrenceEndDatePicker = screen.getAllByLabelText('End Date')[1];
+    fireEvent.change(recurrenceEndDatePicker, {
+      target: { value: formData.recurrenceEndDate },
     });
 
     await waitFor(() => {

@@ -338,8 +338,7 @@ function organizationEvents(): JSX.Element {
                     if (date) {
                       setStartDate(date?.toDate());
                       setEndDate(
-                        endDate &&
-                          (endDate < date?.toDate() ? date?.toDate() : endDate),
+                        endDate < date?.toDate() ? date?.toDate() : endDate,
                       );
                       setRecurrenceRuleState({
                         ...recurrenceRuleState,
@@ -357,7 +356,7 @@ function organizationEvents(): JSX.Element {
                 <DatePicker
                   label={t('endDate')}
                   className={styles.datebox}
-                  value={dayjs(endDate ?? startDate)}
+                  value={dayjs(endDate)}
                   onChange={(date: Dayjs | null): void => {
                     if (date) {
                       setEndDate(date?.toDate());
@@ -466,6 +465,7 @@ function organizationEvents(): JSX.Element {
               </div>
             </div>
 
+            {/* Recurrence Options */}
             {recurringchecked && (
               <RecurrenceOptions
                 recurrenceRuleState={recurrenceRuleState}
@@ -488,7 +488,7 @@ function organizationEvents(): JSX.Element {
         </Modal.Body>
       </Modal>
 
-      {/* Custom Recurrence */}
+      {/* Custom Recurrence Modal */}
       <CustomRecurrenceModal
         recurrenceRuleState={recurrenceRuleState}
         recurrenceRuleText={recurrenceRuleText}

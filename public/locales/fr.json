@@ -388,7 +388,15 @@
     "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau.",
     "thisInstance": "Cette Instance",
     "thisAndFollowingInstances": "Cette et les Instances Suivantes",
-    "allInstances": "Toutes les Instances"
+    "allInstances": "Toutes les Instances",
+    "customRecurrence": "Récurrence personnalisée",
+    "repeatsEvery": "Se répète tous les",
+    "repeatsOn": "Se répète sur",
+    "ends": "Finit",
+    "never": "Jamais",
+    "after": "Après",
+    "occurences": "Occurrences",
+    "done": "Fait"
   },
   "funds": {
     "title": "Fonds",

@@ -10,18 +10,25 @@ import {
   DELETE_EVENT_MUTATION,
   UPDATE_EVENT_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import { Form } from 'react-bootstrap';
+import { Form, Popover } from 'react-bootstrap';
 import { errorHandler } from 'utils/errorHandler';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { getItem } from 'utils/useLocalstorage';
 import {
   type InterfaceRecurrenceRule,
+  type InterfaceRecurrenceRuleState,
   RecurringEventMutationType,
   recurringEventMutationOptions,
+  Frequency,
+  Days,
+  getRecurrenceRuleText,
+  getWeekDayOccurenceInMonth,
 } from 'utils/recurrenceUtils';
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
+import RecurrenceOptions from 'components/RecurrenceOptions/RecurrenceOptions';
+import CustomRecurrenceModal from 'components/RecurrenceOptions/CustomRecurrenceModal';
 
 export interface InterfaceEventListCardProps {
   key: string;
@@ -51,6 +58,9 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
     keyPrefix: 'eventListCard',
   });
   const [eventmodalisOpen, setEventModalIsOpen] = useState(false);
+  const [customRecurrenceModalIsOpen, setCustomRecurrenceModalIsOpen] =
+    useState<boolean>(false);
+
   const [alldaychecked, setAllDayChecked] = useState(true);
   const [recurringchecked, setRecurringChecked] = useState(false);
   const [publicchecked, setPublicChecked] = useState(true);
@@ -58,7 +68,30 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
   const [eventDeleteModalIsOpen, setEventDeleteModalIsOpen] = useState(false);
   const [eventUpdateModalIsOpen, setEventUpdateModalIsOpen] = useState(false);
   const [eventStartDate, setEventStartDate] = useState(new Date());
-  const [eventEndDate, setEventEndDate] = useState<Date | null>(new Date());
+  const [eventEndDate, setEventEndDate] = useState(new Date());
+
+  const [recurrenceRuleState, setRecurrenceRuleState] =
+    useState<InterfaceRecurrenceRuleState>({
+      recurrenceStartDate: eventStartDate,
+      recurrenceEndDate: null,
+      frequency: Frequency.WEEKLY,
+      weekDays: [Days[eventStartDate.getDay()]],
+      interval: 1,
+      count: undefined,
+      weekDayOccurenceInMonth: undefined,
+    });
+
+  const {
+    recurrenceStartDate,
+    recurrenceEndDate,
+    frequency,
+    weekDays,
+    interval,
+    count,
+    weekDayOccurenceInMonth,
+  } = recurrenceRuleState;
+
+  const recurrenceRuleText = getRecurrenceRuleText(recurrenceRuleState);
 
   const { orgId } = useParams();
   if (!orgId) {
@@ -103,6 +136,24 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
     setRegistrableChecked(props.isRegisterable);
     setEventStartDate(new Date(props.startDate));
     setEventEndDate(new Date(props.endDate));
+
+    if (props.recurrenceRule) {
+      const { recurrenceRule } = props;
+
+      setRecurrenceRuleState({
+        ...recurrenceRuleState,
+        recurrenceStartDate: new Date(recurrenceRule.recurrenceStartDate),
+        recurrenceEndDate: recurrenceRule.recurrenceEndDate
+          ? new Date(recurrenceRule.recurrenceEndDate)
+          : null,
+        frequency: recurrenceRule.frequency,
+        weekDays: recurrenceRule.weekDays,
+        interval: recurrenceRule.interval,
+        count: recurrenceRule.count ?? undefined,
+        weekDayOccurenceInMonth:
+          recurrenceRule.weekDayOccurenceInMonth ?? undefined,
+      });
+    }
   }, []);
 
   const [deleteEvent] = useMutation(DELETE_EVENT_MUTATION);
@@ -145,7 +196,6 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
-
     try {
       const { data } = await updateEvent({
         variables: {
@@ -160,14 +210,30 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
           isRegisterable: registrablechecked,
           allDay: alldaychecked,
           startDate: dayjs(eventStartDate).format('YYYY-MM-DD'),
-          endDate: eventEndDate
-            ? dayjs(eventEndDate).format('YYYY-MM-DD')
-            : /* istanbul ignore next */ recurringchecked
-              ? undefined
-              : dayjs(eventStartDate).format('YYYY-MM-DD'),
+          endDate: dayjs(eventEndDate).format('YYYY-MM-DD'),
           location: formState.location,
           startTime: !alldaychecked ? formState.startTime + 'Z' : undefined,
           endTime: !alldaychecked ? formState.endTime + 'Z' : undefined,
+          recurrenceStartDate: recurringchecked
+            ? dayjs(recurrenceStartDate).format('YYYY-MM-DD')
+            : undefined,
+          recurrenceEndDate: recurringchecked
+            ? recurrenceEndDate
+              ? dayjs(recurrenceEndDate).format('YYYY-MM-DD')
+              : null
+            : undefined,
+          frequency: recurringchecked ? frequency : undefined,
+          weekDays:
+            recurringchecked &&
+            (frequency === Frequency.WEEKLY ||
+              (frequency === Frequency.MONTHLY && weekDayOccurenceInMonth))
+              ? weekDays
+              : undefined,
+          interval: recurringchecked ? interval : undefined,
+          count: recurringchecked ? count : undefined,
+          weekDayOccurenceInMonth: recurringchecked
+            ? weekDayOccurenceInMonth
+            : undefined,
         },
       });
 
@@ -187,6 +253,19 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
   const openEventDashboard = (): void => {
     navigate(`/event/${orgId}/${props.id}`);
   };
+
+  const hideCustomRecurrenceModal = (): void => {
+    setCustomRecurrenceModalIsOpen(false);
+  };
+
+  const popover = (
+    <Popover
+      id={`popover-recurrenceRuleText`}
+      data-testid={`popover-recurrenceRuleText`}
+    >
+      <Popover.Body>{recurrenceRuleText}</Popover.Body>
+    </Popover>
+  );
 
   return (
     <>
@@ -438,18 +517,20 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
                     if (date) {
                       setEventStartDate(date?.toDate());
                       setEventEndDate(
-                        eventEndDate &&
-                          (eventEndDate < date?.toDate()
-                            ? date?.toDate()
-                            : eventEndDate),
+                        eventEndDate < date?.toDate()
+                          ? date?.toDate()
+                          : eventEndDate,
                       );
-                      // setRecurrenceRuleState({
-                      //   ...recurrenceRuleState,
-                      //   weekDays: [Days[date?.toDate().getDay()]],
-                      //   weekDayOccurenceInMonth: weekDayOccurenceInMonth
-                      //     ? getWeekDayOccurenceInMonth(date?.toDate())
-                      //     : undefined,
-                      // });
+                      if (!props.recurring) {
+                        setRecurrenceRuleState({
+                          ...recurrenceRuleState,
+                          recurrenceStartDate: date?.toDate(),
+                          weekDays: [Days[date?.toDate().getDay()]],
+                          weekDayOccurenceInMonth: weekDayOccurenceInMonth
+                            ? getWeekDayOccurenceInMonth(date?.toDate())
+                            : undefined,
+                        });
+                      }
                     }
                   }}
                 />
@@ -458,7 +539,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
                 <DatePicker
                   label={t('endDate')}
                   className={styles.datebox}
-                  value={dayjs(eventEndDate ?? eventStartDate)}
+                  value={dayjs(eventEndDate)}
                   onChange={(date: Dayjs | null): void => {
                     if (date) {
                       setEventEndDate(date?.toDate());
@@ -564,6 +645,17 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
                 </div>
               </div>
             </div>
+
+            {/* Recurrence Options */}
+            {recurringchecked && (
+              <RecurrenceOptions
+                recurrenceRuleState={recurrenceRuleState}
+                recurrenceRuleText={recurrenceRuleText}
+                setRecurrenceRuleState={setRecurrenceRuleState}
+                setCustomRecurrenceModalIsOpen={setCustomRecurrenceModalIsOpen}
+                popover={popover}
+              />
+            )}
           </Modal.Body>
           <Modal.Footer>
             <Button
@@ -585,6 +677,17 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
           </Modal.Footer>
         </form>
       </Modal>
+
+      {/* Custom Recurrence Modal */}
+      <CustomRecurrenceModal
+        recurrenceRuleState={recurrenceRuleState}
+        recurrenceRuleText={recurrenceRuleText}
+        setRecurrenceRuleState={setRecurrenceRuleState}
+        customRecurrenceModalIsOpen={customRecurrenceModalIsOpen}
+        hideCustomRecurrenceModal={hideCustomRecurrenceModal}
+        setCustomRecurrenceModalIsOpen={setCustomRecurrenceModalIsOpen}
+        t={t}
+      />
     </>
   );
 }
