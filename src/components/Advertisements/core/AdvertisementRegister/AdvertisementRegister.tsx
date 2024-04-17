@@ -6,23 +6,13 @@ import {
   ADD_ADVERTISEMENT_MUTATION,
   UPDATE_ADVERTISEMENT_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
 import convertToBase64 from 'utils/convertToBase64';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
 import { useParams } from 'react-router-dom';
-import type { InterfaceQueryOrganizationAdvertisementListItem } from 'utils/interfaces';
-
-type Ad = {
-  _id: string;
-  name: string;
-  type: 'BANNER' | 'MENU' | 'POPUP';
-  mediaUrl: string;
-  endDate: string; // Assuming it's a string in the format 'yyyy-MM-dd'
-  startDate: string; // Assuming it's a string in the format 'yyyy-MM-dd'
-};
 interface InterfaceAddOnRegisterProps {
   id?: string; // organizationId
   createdBy?: string; // User
@@ -111,16 +101,6 @@ function advertisementRegister({
     endDateEdit,
     currentOrg,
   ]);
-
-  // useEffect(() => {
-  //   if (orgAdvertisementListData && orgAdvertisementListData.organizations) {
-  //     const ads: Ad[] =
-  //       orgAdvertisementListData.organizations[0].advertisements?.edges.map(
-  //         (edge) => edge.node,
-  //       );
-  //     setAdvertisements(ads);
-  //   }
-  // }, [orgAdvertisementListData]);
 
   const handleRegister = async (): Promise<void> => {
     try {

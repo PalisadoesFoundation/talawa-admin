@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from './AdvertisementEntry.module.css';
 import { Button, Card, Col, Row, Spinner, Modal } from 'react-bootstrap';
 import { DELETE_ADVERTISEMENT_BY_ID } from 'GraphQl/Mutations/mutations';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
 import AdvertisementRegister from '../AdvertisementRegister/AdvertisementRegister';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { toast } from 'react-toastify';
-import type { InterfaceQueryOrganizationAdvertisementListItem } from 'utils/interfaces';
 
 type Ad = {
   _id: string;

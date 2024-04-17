@@ -40,7 +40,6 @@ export default function advertisements(): JSX.Element {
       first: 6,
     },
   });
-  console.log('advertisements', orgAdvertisementListData);
   const [advertisements, setAdvertisements] = useState(
     orgAdvertisementListData?.organizations[0].advertisements?.edges.map(
       (edge: { node: Ad }) => edge.node,
@@ -48,7 +47,6 @@ export default function advertisements(): JSX.Element {
   );
 
   useEffect(() => {
-    console.log('orgAdvertisementListData', orgAdvertisementListData);
     if (orgAdvertisementListData && orgAdvertisementListData.organizations) {
       const ads: Ad[] =
         orgAdvertisementListData.organizations[0].advertisements?.edges.map(
@@ -68,11 +66,6 @@ export default function advertisements(): JSX.Element {
         orgAdvertisementListData?.organizations[0]?.advertisements.pageInfo
           .endCursor,
       );
-      // const ads: Ad[] =
-      //   orgAdvertisementListData.organizations[0].advertisements?.edges.map(
-      //     (edge) => edge.node,
-      //   );
-      // setAdvertisements([...advertisements, ...ads]);
     }
   }
 
