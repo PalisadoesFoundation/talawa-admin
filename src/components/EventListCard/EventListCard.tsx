@@ -40,8 +40,8 @@ export interface InterfaceEventListCardProps {
   eventDescription: string;
   startDate: string;
   endDate: string;
-  startTime: string | undefined;
-  endTime: string | undefined;
+  startTime: string | null;
+  endTime: string | null;
   allDay: boolean;
   recurring: boolean;
   recurrenceRule: InterfaceRecurrenceRule | null;
@@ -73,6 +73,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'eventListCard',
   });
+
   const [eventmodalisOpen, setEventModalIsOpen] = useState(false);
   const [customRecurrenceModalIsOpen, setCustomRecurrenceModalIsOpen] =
     useState<boolean>(false);
@@ -82,7 +83,6 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
   const [publicchecked, setPublicChecked] = useState(true);
   const [registrablechecked, setRegistrableChecked] = useState(false);
   const [eventDeleteModalIsOpen, setEventDeleteModalIsOpen] = useState(false);
-  const [eventUpdateModalIsOpen, setEventUpdateModalIsOpen] = useState(false);
   const [eventStartDate, setEventStartDate] = useState(new Date());
   const [eventEndDate, setEventEndDate] = useState(new Date());
 
@@ -113,26 +113,22 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
   if (!orgId) {
     return <Navigate to={'/'} replace />;
   }
+
   const navigate = useNavigate();
   const { getItem } = useLocalStorage();
   const [formState, setFormState] = useState({
     title: '',
     eventdescrip: '',
     location: '',
-    regDate: '',
-    regEndDate: '',
     startTime: '08:00:00',
     endTime: '18:00:00',
   });
+
   const showViewModal = (): void => {
     setEventModalIsOpen(true);
   };
   const hideViewModal = (): void => {
     setEventModalIsOpen(false);
-  };
-
-  const toggleUpdateModel = (): void => {
-    setEventUpdateModalIsOpen(!eventUpdateModalIsOpen);
   };
 
   const toggleDeleteModal = (): void => {
@@ -144,8 +140,6 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
       title: props.eventName,
       eventdescrip: props.eventDescription,
       location: props.eventLocation,
-      regDate: props.startDate,
-      regEndDate: props.endDate,
       startTime: props.startTime?.split('.')[0] || '08:00:00',
       endTime: props.endTime?.split('.')[0] || '18:00:00',
     });
@@ -167,7 +161,9 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
           ? new Date(recurrenceRule.recurrenceEndDate)
           : null,
         frequency: recurrenceRule.frequency,
-        weekDays: recurrenceRule.weekDays,
+        weekDays: recurrenceRule.weekDays.length
+          ? recurrenceRule.weekDays
+          : undefined,
         interval: recurrenceRule.interval,
         count: recurrenceRule.count ?? undefined,
         weekDayOccurenceInMonth:
@@ -175,17 +171,6 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
       });
     }
   }, []);
-
-  const [deleteEvent] = useMutation(DELETE_EVENT_MUTATION);
-  const [updateEvent] = useMutation(UPDATE_EVENT_MUTATION);
-  const userId = getItem('userId');
-
-  const isInitiallyRegistered = props?.registrants?.some(
-    (registrant) => registrant._id === userId,
-  );
-
-  const [registerEventMutation] = useMutation(REGISTER_EVENT);
-  const [isRegistered, setIsRegistered] = React.useState(isInitiallyRegistered);
 
   const [recurringEventDeleteType, setRecurringEventDeleteType] =
     useState<RecurringEventMutationType>(
@@ -196,6 +181,16 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
     useState<RecurringEventMutationType>(
       RecurringEventMutationType.thisInstance,
     );
+
+  const [deleteEvent] = useMutation(DELETE_EVENT_MUTATION);
+  const [updateEvent] = useMutation(UPDATE_EVENT_MUTATION);
+
+  const userId = getItem('userId');
+  const isInitiallyRegistered = props?.registrants?.some(
+    (registrant) => registrant._id === userId,
+  );
+  const [registerEventMutation] = useMutation(REGISTER_EVENT);
+  const [isRegistered, setIsRegistered] = React.useState(isInitiallyRegistered);
 
   const deleteEventHandler = async (): Promise<void> => {
     try {
@@ -332,6 +327,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
           </h2>
         </div>
       </div>
+
       {/* preview modal */}
       <Modal show={eventmodalisOpen} centered dialogClassName="" scrollable>
         <Modal.Header>
@@ -412,85 +408,91 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
               }
             />
             <div className={styles.datediv}>
-              <div className={styles.startDate}>
-                <p className={styles.preview}>{t('regDate')}</p>
-                <Form.Control
-                  type="date"
-                  id="eventregDate"
-                  autoComplete="off"
-                  data-testid="updateregDate"
-                  required
-                  value={formState.regDate}
-                  onChange={(e): void => {
-                    setFormState({
-                      ...formState,
-                      regDate: e.target.value,
-                    });
+              <div>
+                <DatePicker
+                  label={t('startDate')}
+                  className={styles.datebox}
+                  value={dayjs(eventStartDate)}
+                  onChange={(date: Dayjs | null): void => {
+                    if (date) {
+                      setEventStartDate(date?.toDate());
+                      setEventEndDate(
+                        eventEndDate < date?.toDate()
+                          ? date?.toDate()
+                          : eventEndDate,
+                      );
+                      if (!props.recurring) {
+                        setRecurrenceRuleState({
+                          ...recurrenceRuleState,
+                          recurrenceStartDate: date?.toDate(),
+                          weekDays: [Days[date?.toDate().getDay()]],
+                          weekDayOccurenceInMonth: weekDayOccurenceInMonth
+                            ? getWeekDayOccurenceInMonth(date?.toDate())
+                            : undefined,
+                        });
+                      }
+                    }
                   }}
-                  disabled={
-                    !(props.creator?._id === userId) &&
-                    props.userRole === Role.USER
-                  }
                 />
               </div>
-              <div className={styles.endDate}>
-                <p className={styles.preview}>{t('regEndDate')}</p>
-                <Form.Control
-                  type="date"
-                  id="eventregEndDate"
-                  autoComplete="off"
-                  data-testid="updateregEndDate"
-                  required
-                  value={formState.regEndDate}
-                  onChange={(e): void => {
-                    setFormState({
-                      ...formState,
-                      regEndDate: e.target.value,
-                    });
+              <div>
+                <DatePicker
+                  label={t('endDate')}
+                  className={styles.datebox}
+                  value={dayjs(eventEndDate)}
+                  onChange={(date: Dayjs | null): void => {
+                    if (date) {
+                      setEventEndDate(date?.toDate());
+                    }
                   }}
-                  disabled={
-                    !(props.creator?._id === userId) &&
-                    props.userRole === Role.USER
-                  }
+                  minDate={dayjs(eventStartDate)}
                 />
               </div>
             </div>
             {!alldaychecked && (
               <div className={styles.datediv}>
-                <div className={styles.startTime}>
-                  <p className={styles.preview}>{t('startTime')}</p>
-                  <Form.Control
-                    id="startTime"
-                    value={formState.startTime}
-                    data-testid="updateStartTime"
-                    onChange={(e): void =>
-                      setFormState({
-                        ...formState,
-                        startTime: e.target.value,
-                      })
-                    }
-                    disabled={
-                      !(props.creator?._id === userId) &&
-                      props.userRole === Role.USER
-                    }
+                <div>
+                  <TimePicker
+                    label={t('startTime')}
+                    className={styles.datebox}
+                    timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
+                    value={timeToDayJs(formState.startTime)}
+                    /*istanbul ignore next*/
+                    onChange={(time): void => {
+                      if (time) {
+                        setFormState({
+                          ...formState,
+                          startTime: time?.format('HH:mm:ss'),
+                          endTime:
+                            /*istanbul ignore next*/
+                            timeToDayJs(formState.endTime) < time
+                              ? /* istanbul ignore next */ time?.format(
+                                  'HH:mm:ss',
+                                )
+                              : formState.endTime,
+                        });
+                      }
+                    }}
+                    disabled={alldaychecked}
                   />
                 </div>
-                <div className={styles.endTime}>
-                  <p className={styles.preview}>{t('endTime')}</p>
-                  <Form.Control
-                    id="endTime"
-                    value={formState.endTime}
-                    data-testid="updateEndTime"
-                    onChange={(e): void =>
-                      setFormState({
-                        ...formState,
-                        endTime: e.target.value,
-                      })
-                    }
-                    disabled={
-                      !(props.creator?._id === userId) &&
-                      props.userRole === Role.USER
-                    }
+                <div>
+                  <TimePicker
+                    label={t('endTime')}
+                    className={styles.datebox}
+                    timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
+                    /*istanbul ignore next*/
+                    value={timeToDayJs(formState.endTime)}
+                    onChange={(time): void => {
+                      if (time) {
+                        setFormState({
+                          ...formState,
+                          endTime: time?.format('HH:mm:ss'),
+                        });
+                      }
+                    }}
+                    minTime={timeToDayJs(formState.startTime)}
+                    disabled={alldaychecked}
                   />
                 </div>
               </div>
@@ -565,6 +567,17 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
                 </div>
               </div>
             </div>
+
+            {/* Recurrence Options */}
+            {recurringchecked && (
+              <RecurrenceOptions
+                recurrenceRuleState={recurrenceRuleState}
+                recurrenceRuleText={recurrenceRuleText}
+                setRecurrenceRuleState={setRecurrenceRuleState}
+                setCustomRecurrenceModalIsOpen={setCustomRecurrenceModalIsOpen}
+                popover={popover}
+              />
+            )}
           </Form>
         </Modal.Body>
         <form onSubmit={updateEventHandler}>
@@ -691,246 +704,6 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
             {t('yes')}
           </Button>
         </Modal.Footer>
-      </Modal>
-
-      {/* Edit Modal */}
-      <Modal
-        id={`editEventModal${props.id}`}
-        show={eventUpdateModalIsOpen}
-        onHide={toggleUpdateModel}
-        backdrop="static"
-        keyboard={false}
-        centered
-      >
-        <Modal.Header closeButton className="bg-primary">
-          <Modal.Title
-            id={`editEventModal${props.id}Label`}
-            className="text-white"
-          >
-            {' '}
-            {t('editEvent')}
-          </Modal.Title>
-        </Modal.Header>
-        <form onSubmit={updateEventHandler}>
-          <Modal.Body>
-            <label htmlFor="eventtitle">{t('eventTitle')}</label>
-            <Form.Control
-              type="title"
-              id="eventitle"
-              className="mb-3"
-              autoComplete="off"
-              data-testid="updateTitle"
-              required
-              value={formState.title}
-              onChange={(e): void => {
-                setFormState({
-                  ...formState,
-                  title: e.target.value,
-                });
-              }}
-            />
-            <label htmlFor="eventdescrip">{t('description')}</label>
-            <Form.Control
-              type="eventdescrip"
-              id="eventdescrip"
-              className="mb-3"
-              autoComplete="off"
-              data-testid="updateDescription"
-              required
-              value={formState.eventdescrip}
-              onChange={(e): void => {
-                setFormState({
-                  ...formState,
-                  eventdescrip: e.target.value,
-                });
-              }}
-            />
-            <label htmlFor="eventLocation">{t('location')}</label>
-            <Form.Control
-              type="text"
-              id="eventLocation"
-              className="mb-3"
-              autoComplete="off"
-              data-testid="updateLocation"
-              required
-              value={formState.location}
-              onChange={(e): void => {
-                setFormState({
-                  ...formState,
-                  location: e.target.value,
-                });
-              }}
-            />
-
-            <div className={styles.datediv}>
-              <div>
-                <DatePicker
-                  label={t('startDate')}
-                  className={styles.datebox}
-                  value={dayjs(eventStartDate)}
-                  onChange={(date: Dayjs | null): void => {
-                    if (date) {
-                      setEventStartDate(date?.toDate());
-                      setEventEndDate(
-                        eventEndDate < date?.toDate()
-                          ? date?.toDate()
-                          : eventEndDate,
-                      );
-                      if (!props.recurring) {
-                        setRecurrenceRuleState({
-                          ...recurrenceRuleState,
-                          recurrenceStartDate: date?.toDate(),
-                          weekDays: [Days[date?.toDate().getDay()]],
-                          weekDayOccurenceInMonth: weekDayOccurenceInMonth
-                            ? getWeekDayOccurenceInMonth(date?.toDate())
-                            : undefined,
-                        });
-                      }
-                    }
-                  }}
-                />
-              </div>
-              <div>
-                <DatePicker
-                  label={t('endDate')}
-                  className={styles.datebox}
-                  value={dayjs(eventEndDate)}
-                  onChange={(date: Dayjs | null): void => {
-                    if (date) {
-                      setEventEndDate(date?.toDate());
-                    }
-                  }}
-                  minDate={dayjs(eventStartDate)}
-                />
-              </div>
-            </div>
-            <div className={styles.datediv}>
-              <div className="mr-3">
-                <TimePicker
-                  label={t('startTime')}
-                  className={styles.datebox}
-                  timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
-                  value={timeToDayJs(formState.startTime)}
-                  /*istanbul ignore next*/
-                  onChange={(time): void => {
-                    if (time) {
-                      setFormState({
-                        ...formState,
-                        startTime: time?.format('HH:mm:ss'),
-                        endTime:
-                          /*istanbul ignore next*/
-                          timeToDayJs(formState.endTime) < time
-                            ? /* istanbul ignore next */ time?.format(
-                                'HH:mm:ss',
-                              )
-                            : formState.endTime,
-                      });
-                    }
-                  }}
-                  disabled={alldaychecked}
-                />
-              </div>
-              <div>
-                <TimePicker
-                  label={t('endTime')}
-                  className={styles.datebox}
-                  timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
-                  /*istanbul ignore next*/
-                  value={timeToDayJs(formState.endTime)}
-                  onChange={(time): void => {
-                    if (time) {
-                      setFormState({
-                        ...formState,
-                        endTime: time?.format('HH:mm:ss'),
-                      });
-                    }
-                  }}
-                  minTime={timeToDayJs(formState.startTime)}
-                  disabled={alldaychecked}
-                />
-              </div>
-            </div>
-            <div className={styles.checkboxContainer}>
-              <div className={styles.checkboxdiv}>
-                <div className={styles.dispflex}>
-                  <label htmlFor="allday">{t('allDay')}?</label>
-                  <Form.Switch
-                    id="allday"
-                    type="checkbox"
-                    data-testid="updateAllDay"
-                    checked={alldaychecked}
-                    onChange={(): void => setAllDayChecked(!alldaychecked)}
-                  />
-                </div>
-                <div className={styles.dispflex}>
-                  <label htmlFor="recurring">{t('recurringEvent')}:</label>
-                  <Form.Switch
-                    id="recurring"
-                    type="checkbox"
-                    data-testid="updateRecurring"
-                    checked={recurringchecked}
-                    onChange={(): void =>
-                      setRecurringChecked(!recurringchecked)
-                    }
-                  />
-                </div>
-              </div>
-              <div className={styles.checkboxdiv}>
-                <div className={styles.dispflex}>
-                  <label htmlFor="ispublic">{t('isPublic')}?</label>
-                  <Form.Switch
-                    id="ispublic"
-                    type="checkbox"
-                    data-testid="updateIsPublic"
-                    checked={publicchecked}
-                    onChange={(): void => setPublicChecked(!publicchecked)}
-                  />
-                </div>
-                <div className={styles.dispflex}>
-                  <label htmlFor="registrable">{t('isRegistrable')}?</label>
-                  <Form.Switch
-                    id="registrable"
-                    type="checkbox"
-                    data-testid="updateRegistrable"
-                    checked={registrablechecked}
-                    onChange={(): void =>
-                      setRegistrableChecked(!registrablechecked)
-                    }
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Recurrence Options */}
-            {recurringchecked && (
-              <RecurrenceOptions
-                recurrenceRuleState={recurrenceRuleState}
-                recurrenceRuleText={recurrenceRuleText}
-                setRecurrenceRuleState={setRecurrenceRuleState}
-                setCustomRecurrenceModalIsOpen={setCustomRecurrenceModalIsOpen}
-                popover={popover}
-              />
-            )}
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              type="button"
-              className="btn btn-secondary"
-              data-dismiss="modal"
-              data-testid="EventUpdateModalCloseBtn"
-              onClick={toggleUpdateModel}
-            >
-              {t('close')}
-            </Button>
-            <Button
-              type="submit"
-              className="btn btn-success"
-              data-testid="updateEventBtn"
-            >
-              {t('editEvent')}
-            </Button>
-          </Modal.Footer>
-        </form>
       </Modal>
 
       {/* Custom Recurrence Modal */}

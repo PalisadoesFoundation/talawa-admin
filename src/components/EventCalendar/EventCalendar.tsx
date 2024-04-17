@@ -19,8 +19,8 @@ interface InterfaceEventListCardProps {
   description: string;
   startDate: string;
   endDate: string;
-  startTime: string | undefined;
-  endTime: string | undefined;
+  startTime: string | null;
+  endTime: string | null;
   allDay: boolean;
   recurring: boolean;
   recurrenceRule: InterfaceRecurrenceRule | null;

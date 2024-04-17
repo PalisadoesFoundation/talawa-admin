@@ -366,52 +366,54 @@ function organizationEvents(): JSX.Element {
                 />
               </div>
             </div>
-            <div className={styles.datediv}>
-              <div className="mr-3">
-                <TimePicker
-                  label={t('startTime')}
-                  className={styles.datebox}
-                  timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
-                  value={timeToDayJs(formState.startTime)}
-                  /*istanbul ignore next*/
-                  onChange={(time): void => {
-                    if (time) {
-                      setFormState({
-                        ...formState,
-                        startTime: time?.format('HH:mm:ss'),
-                        endTime:
-                          /*istanbul ignore next*/
-                          timeToDayJs(formState.endTime) < time
-                            ? /* istanbul ignore next */ time?.format(
-                                'HH:mm:ss',
-                              )
-                            : formState.endTime,
-                      });
-                    }
-                  }}
-                  disabled={alldaychecked}
-                />
+            {!alldaychecked && (
+              <div className={styles.datediv}>
+                <div className="mr-3">
+                  <TimePicker
+                    label={t('startTime')}
+                    className={styles.datebox}
+                    timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
+                    value={timeToDayJs(formState.startTime)}
+                    /*istanbul ignore next*/
+                    onChange={(time): void => {
+                      if (time) {
+                        setFormState({
+                          ...formState,
+                          startTime: time?.format('HH:mm:ss'),
+                          endTime:
+                            /*istanbul ignore next*/
+                            timeToDayJs(formState.endTime) < time
+                              ? /* istanbul ignore next */ time?.format(
+                                  'HH:mm:ss',
+                                )
+                              : formState.endTime,
+                        });
+                      }
+                    }}
+                    disabled={alldaychecked}
+                  />
+                </div>
+                <div>
+                  <TimePicker
+                    label={t('endTime')}
+                    className={styles.datebox}
+                    timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
+                    /*istanbul ignore next*/
+                    value={timeToDayJs(formState.endTime)}
+                    onChange={(time): void => {
+                      if (time) {
+                        setFormState({
+                          ...formState,
+                          endTime: time?.format('HH:mm:ss'),
+                        });
+                      }
+                    }}
+                    minTime={timeToDayJs(formState.startTime)}
+                    disabled={alldaychecked}
+                  />
+                </div>
               </div>
-              <div>
-                <TimePicker
-                  label={t('endTime')}
-                  className={styles.datebox}
-                  timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
-                  /*istanbul ignore next*/
-                  value={timeToDayJs(formState.endTime)}
-                  onChange={(time): void => {
-                    if (time) {
-                      setFormState({
-                        ...formState,
-                        endTime: time?.format('HH:mm:ss'),
-                      });
-                    }
-                  }}
-                  minTime={timeToDayJs(formState.startTime)}
-                  disabled={alldaychecked}
-                />
-              </div>
-            </div>
+            )}
             <div className={styles.checkboxdiv}>
               <div className={styles.dispflex}>
                 <label htmlFor="allday">{t('allDay')}?</label>

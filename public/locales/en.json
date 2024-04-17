@@ -392,6 +392,7 @@
     "repeatsOn": "Repeats On",
     "ends": "Ends",
     "never": "Never",
+    "on": "On",
     "after": "After",
     "occurences": "occurences",
     "done": "Done"
