@@ -8,12 +8,13 @@ import Button from 'react-bootstrap/Button';
 import styles from './EventListCard.module.css';
 import {
   DELETE_EVENT_MUTATION,
+  REGISTER_EVENT,
   UPDATE_EVENT_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { Form, Popover } from 'react-bootstrap';
 import { errorHandler } from 'utils/errorHandler';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { getItem } from 'utils/useLocalstorage';
+import useLocalStorage from 'utils/useLocalstorage';
 import {
   type InterfaceRecurrenceRule,
   type InterfaceRecurrenceRuleState,
@@ -31,6 +32,7 @@ import RecurrenceOptions from 'components/RecurrenceOptions/RecurrenceOptions';
 import CustomRecurrenceModal from 'components/RecurrenceOptions/CustomRecurrenceModal';
 
 export interface InterfaceEventListCardProps {
+  userRole?: string;
   key: string;
   id: string;
   eventLocation: string;
@@ -46,12 +48,26 @@ export interface InterfaceEventListCardProps {
   isRecurringEventException: boolean;
   isPublic: boolean;
   isRegisterable: boolean;
+  registrants?: {
+    _id: string;
+  }[];
+  creator?: {
+    firstName: string;
+    lastName: string;
+    _id: string;
+  };
 }
 
 const timeToDayJs = (time: string): Dayjs => {
   const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
   return dayjs(dateTimeString, { format: 'YYYY-MM-DD HH:mm:ss' });
 };
+
+enum Role {
+  USER = 'USER',
+  SUPERADMIN = 'SUPERADMIN',
+  ADMIN = 'ADMIN',
+}
 
 function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -98,11 +114,13 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
     return <Navigate to={'/'} replace />;
   }
   const navigate = useNavigate();
-  const adminFor = getItem('AdminFor', 'admin');
+  const { getItem } = useLocalStorage();
   const [formState, setFormState] = useState({
     title: '',
     eventdescrip: '',
     location: '',
+    regDate: '',
+    regEndDate: '',
     startTime: '08:00:00',
     endTime: '18:00:00',
   });
@@ -113,12 +131,12 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
     setEventModalIsOpen(false);
   };
 
-  const toggleDeleteModal = (): void => {
-    setEventDeleteModalIsOpen(!eventDeleteModalIsOpen);
-  };
-
   const toggleUpdateModel = (): void => {
     setEventUpdateModalIsOpen(!eventUpdateModalIsOpen);
+  };
+
+  const toggleDeleteModal = (): void => {
+    setEventDeleteModalIsOpen(!eventDeleteModalIsOpen);
   };
 
   useEffect(() => {
@@ -126,6 +144,8 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
       title: props.eventName,
       eventdescrip: props.eventDescription,
       location: props.eventLocation,
+      regDate: props.startDate,
+      regEndDate: props.endDate,
       startTime: props.startTime?.split('.')[0] || '08:00:00',
       endTime: props.endTime?.split('.')[0] || '18:00:00',
     });
@@ -158,6 +178,15 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
 
   const [deleteEvent] = useMutation(DELETE_EVENT_MUTATION);
   const [updateEvent] = useMutation(UPDATE_EVENT_MUTATION);
+  const userId = getItem('userId');
+
+  const isInitiallyRegistered = props?.registrants?.some(
+    (registrant) => registrant._id === userId,
+  );
+
+  const [registerEventMutation] = useMutation(REGISTER_EVENT);
+  const [isRegistered, setIsRegistered] = React.useState(isInitiallyRegistered);
+
   const [recurringEventDeleteType, setRecurringEventDeleteType] =
     useState<RecurringEventMutationType>(
       RecurringEventMutationType.thisInstance,
@@ -250,6 +279,26 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
     }
   };
 
+  const registerEventHandler = async (): Promise<void> => {
+    if (!isRegistered) {
+      try {
+        const { data } = await registerEventMutation({
+          variables: {
+            eventId: props.id,
+          },
+        });
+        /* istanbul ignore next */
+        if (data) {
+          setIsRegistered(true);
+          toast.success(`Successfully registered for ${props.eventName}`);
+        }
+      } catch (error: unknown) {
+        /* istanbul ignore next */
+        toast.error(error);
+      }
+    }
+  };
+
   const openEventDashboard = (): void => {
     navigate(`/event/${orgId}/${props.id}`);
   };
@@ -272,7 +321,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
       <div
         className={styles.cards}
         style={{
-          backgroundColor: adminFor ? '#a8d5ff' : '#d9d9d9',
+          backgroundColor: '#d9d9d9',
         }}
         onClick={showViewModal}
         data-testid="card"
@@ -284,10 +333,11 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
         </div>
       </div>
       {/* preview modal */}
-      <Modal show={eventmodalisOpen} centered>
+      <Modal show={eventmodalisOpen} centered dialogClassName="" scrollable>
         <Modal.Header>
           <p className={styles.titlemodal}>{t('eventDetails')}</p>
           <Button
+            variant="danger"
             onClick={hideViewModal}
             data-testid="createEventModalCloseBtn"
           >
@@ -296,80 +346,285 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <div>
-              <p className={styles.preview}>
-                {t('eventTitle')}:{' '}
-                <span className={styles.view}>
-                  {props.eventName ? (
-                    <>
-                      {props.eventName.length > 100 ? (
-                        <>{props.eventName.substring(0, 100)}...</>
-                      ) : (
-                        <>{props.eventName}</>
-                      )}
-                    </>
-                  ) : (
-                    <>Dogs Care</>
-                  )}
-                </span>
-              </p>
-              <p className={styles.preview}>
-                {t('location')}:
-                <span className={styles.view}>
-                  {props.eventLocation ? (
-                    <>{props.eventLocation}</>
-                  ) : (
-                    <>India</>
-                  )}
-                </span>
-              </p>
-              <p className={styles.preview}>
-                {t('description')}:{' '}
-                <span className={styles.view}>
-                  {props.eventDescription && props.eventDescription.length > 256
-                    ? props.eventDescription.substring(0, 256) + '...'
-                    : props.eventDescription}
-                </span>
-              </p>
-              <p className={styles.preview}>
-                {t('on')}:{' '}
-                <span className={styles.view}>{props.startDate}</span>
-              </p>
-              <p className={styles.preview}>
-                {t('end')}: <span className={styles.view}>{props.endDate}</span>
-              </p>
+            <p className={styles.preview}>{t('eventTitle')}</p>
+            <Form.Control
+              type="title"
+              id="eventitle"
+              className="mb-3"
+              autoComplete="off"
+              data-testid="updateTitle"
+              required
+              value={
+                formState.title.length > 100
+                  ? formState.title.substring(0, 100) + '...'
+                  : formState.title
+              }
+              onChange={(e): void => {
+                setFormState({
+                  ...formState,
+                  title: e.target.value,
+                });
+              }}
+              disabled={
+                !(props.creator?._id === userId) && props.userRole === Role.USER
+              }
+            />
+            <p className={styles.preview}>{t('description')}</p>
+            <Form.Control
+              type="eventdescrip"
+              id="eventdescrip"
+              className="mb-3"
+              autoComplete="off"
+              data-testid="updateDescription"
+              required
+              value={
+                formState.eventdescrip.length > 256
+                  ? formState.eventdescrip.substring(0, 256) + '...'
+                  : formState.eventdescrip
+              }
+              onChange={(e): void => {
+                setFormState({
+                  ...formState,
+                  eventdescrip: e.target.value,
+                });
+              }}
+              disabled={
+                !(props.creator?._id === userId) && props.userRole === Role.USER
+              }
+            />
+            <p className={styles.preview}>{t('location')}</p>
+            <Form.Control
+              type="text"
+              id="eventLocation"
+              className="mb-3"
+              autoComplete="off"
+              data-testid="updateLocation"
+              required
+              value={formState.location}
+              onChange={(e): void => {
+                setFormState({
+                  ...formState,
+                  location: e.target.value,
+                });
+              }}
+              disabled={
+                !(props.creator?._id === userId) && props.userRole === Role.USER
+              }
+            />
+            <div className={styles.datediv}>
+              <div className={styles.startDate}>
+                <p className={styles.preview}>{t('regDate')}</p>
+                <Form.Control
+                  type="date"
+                  id="eventregDate"
+                  autoComplete="off"
+                  data-testid="updateregDate"
+                  required
+                  value={formState.regDate}
+                  onChange={(e): void => {
+                    setFormState({
+                      ...formState,
+                      regDate: e.target.value,
+                    });
+                  }}
+                  disabled={
+                    !(props.creator?._id === userId) &&
+                    props.userRole === Role.USER
+                  }
+                />
+              </div>
+              <div className={styles.endDate}>
+                <p className={styles.preview}>{t('regEndDate')}</p>
+                <Form.Control
+                  type="date"
+                  id="eventregEndDate"
+                  autoComplete="off"
+                  data-testid="updateregEndDate"
+                  required
+                  value={formState.regEndDate}
+                  onChange={(e): void => {
+                    setFormState({
+                      ...formState,
+                      regEndDate: e.target.value,
+                    });
+                  }}
+                  disabled={
+                    !(props.creator?._id === userId) &&
+                    props.userRole === Role.USER
+                  }
+                />
+              </div>
+            </div>
+            {!alldaychecked && (
+              <div className={styles.datediv}>
+                <div className={styles.startTime}>
+                  <p className={styles.preview}>{t('startTime')}</p>
+                  <Form.Control
+                    id="startTime"
+                    value={formState.startTime}
+                    data-testid="updateStartTime"
+                    onChange={(e): void =>
+                      setFormState({
+                        ...formState,
+                        startTime: e.target.value,
+                      })
+                    }
+                    disabled={
+                      !(props.creator?._id === userId) &&
+                      props.userRole === Role.USER
+                    }
+                  />
+                </div>
+                <div className={styles.endTime}>
+                  <p className={styles.preview}>{t('endTime')}</p>
+                  <Form.Control
+                    id="endTime"
+                    value={formState.endTime}
+                    data-testid="updateEndTime"
+                    onChange={(e): void =>
+                      setFormState({
+                        ...formState,
+                        endTime: e.target.value,
+                      })
+                    }
+                    disabled={
+                      !(props.creator?._id === userId) &&
+                      props.userRole === Role.USER
+                    }
+                  />
+                </div>
+              </div>
+            )}
+            <div className={styles.checkboxContainer}>
+              <div className={styles.checkboxdiv}>
+                <div className={styles.dispflex}>
+                  <label htmlFor="allday">{t('allDay')}?</label>
+                  <Form.Switch
+                    id="allday"
+                    type="checkbox"
+                    data-testid="updateAllDay"
+                    checked={alldaychecked}
+                    onChange={(): void => {
+                      setAllDayChecked(!alldaychecked);
+                    }}
+                    disabled={
+                      !(props.creator?._id === userId) &&
+                      props.userRole === Role.USER
+                    }
+                  />
+                </div>
+                <div className={styles.dispflex}>
+                  <label htmlFor="recurring">{t('recurringEvent')}:</label>
+                  <Form.Switch
+                    id="recurring"
+                    type="checkbox"
+                    data-testid="updateRecurring"
+                    checked={recurringchecked}
+                    onChange={(): void => {
+                      setRecurringChecked(!recurringchecked);
+                    }}
+                    disabled={
+                      !(props.creator?._id === userId) &&
+                      props.userRole === Role.USER
+                    }
+                  />
+                </div>
+              </div>
+              <div className={styles.checkboxdiv}>
+                <div className={styles.dispflex}>
+                  <label htmlFor="ispublic">{t('isPublic')}?</label>
+                  <Form.Switch
+                    id="ispublic"
+                    type="checkbox"
+                    data-testid="updateIsPublic"
+                    checked={publicchecked}
+                    onChange={(): void => {
+                      setPublicChecked(!publicchecked);
+                    }}
+                    disabled={
+                      !(props.creator?._id === userId) &&
+                      props.userRole === Role.USER
+                    }
+                  />
+                </div>
+                <div className={styles.dispflex}>
+                  <label htmlFor="registrable">{t('isRegistrable')}?</label>
+                  <Form.Switch
+                    id="registrable"
+                    type="checkbox"
+                    data-testid="updateRegistrable"
+                    checked={registrablechecked}
+                    onChange={(): void => {
+                      setRegistrableChecked(!registrablechecked);
+                    }}
+                    disabled={
+                      !(props.creator?._id === userId) &&
+                      props.userRole === Role.USER
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+          </Form>
+        </Modal.Body>
+        <form onSubmit={updateEventHandler}>
+          <Modal.Footer>
+            {(props.userRole !== Role.USER ||
+              props.creator?._id === userId) && (
               <Button
-                className={styles.customButton}
                 variant="success"
                 onClick={openEventDashboard}
                 data-testid="showEventDashboardBtn"
+                className={styles.icon}
               >
                 {' '}
                 Show Event Dashboard{' '}
               </Button>
-            </div>
-            <div className={styles.iconContainer}>
+            )}
+            {(props.userRole !== Role.USER ||
+              props.creator?._id === userId) && (
               <Button
-                size="sm"
-                data-testid="editEventModalBtn"
+                type="submit"
+                variant="success"
                 className={styles.icon}
-                onClick={toggleUpdateModel}
+                data-testid="updatePostBtn"
               >
-                {' '}
-                <i className="fas fa-edit"></i>
+                {t('editEvent')}
               </Button>
+            )}
+            {(props.userRole !== Role.USER ||
+              props.creator?._id === userId) && (
               <Button
-                size="sm"
+                variant="danger"
                 data-testid="deleteEventModalBtn"
                 className={styles.icon}
                 onClick={toggleDeleteModal}
               >
-                {' '}
-                <i className="fa fa-trash"></i>
+                {t('deleteEvent')}
               </Button>
-            </div>
-          </Form>
-        </Modal.Body>
+            )}
+            {props.userRole === Role.USER &&
+              !(props.creator?._id === userId) &&
+              (isRegistered ? (
+                <Button
+                  className={styles.customButton}
+                  variant="success"
+                  disabled
+                >
+                  {t('alreadyRegistered')}
+                </Button>
+              ) : (
+                <Button
+                  className={styles.customButton}
+                  variant="success"
+                  onClick={registerEventHandler}
+                  data-testid="registerEventBtn"
+                >
+                  {t('registerEvent')}
+                </Button>
+              ))}
+          </Modal.Footer>
+        </form>
       </Modal>
 
       {/* delete modal */}

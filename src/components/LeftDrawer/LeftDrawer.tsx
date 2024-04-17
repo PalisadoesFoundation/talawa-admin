@@ -6,7 +6,6 @@ import { ReactComponent as OrganizationsIcon } from 'assets/svgs/organizations.s
 import { ReactComponent as RolesIcon } from 'assets/svgs/roles.svg';
 import { ReactComponent as SettingsIcon } from 'assets/svgs/settings.svg';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
-import { ReactComponent as RequestsIcon } from 'assets/svgs/requests.svg';
 import styles from './LeftDrawer.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 
@@ -15,12 +14,20 @@ export interface InterfaceLeftDrawerProps {
   setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
-const leftDrawer = ({ hideDrawer }: InterfaceLeftDrawerProps): JSX.Element => {
+const leftDrawer = ({
+  hideDrawer,
+  setHideDrawer,
+}: InterfaceLeftDrawerProps): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'leftDrawer' });
 
   const { getItem } = useLocalStorage();
   const superAdmin = getItem('SuperAdmin');
-  const role = superAdmin ? 'SuperAdmin' : 'Admin';
+
+  const handleLinkClick = (): void => {
+    if (window.innerWidth <= 820) {
+      setHideDrawer(true);
+    }
+  };
 
   return (
     <>
@@ -38,7 +45,7 @@ const leftDrawer = ({ hideDrawer }: InterfaceLeftDrawerProps): JSX.Element => {
         <p className={styles.talawaText}>{t('talawaAdminPortal')}</p>
         <h5 className={`${styles.titleHeader} text-secondary`}>{t('menu')}</h5>
         <div className={styles.optionList}>
-          <NavLink to={'/orglist'}>
+          <NavLink to={'/orglist'} onClick={handleLinkClick}>
             {({ isActive }) => (
               <Button
                 variant={isActive === true ? 'success' : ''}
@@ -60,33 +67,9 @@ const leftDrawer = ({ hideDrawer }: InterfaceLeftDrawerProps): JSX.Element => {
               </Button>
             )}
           </NavLink>
-          {role === 'Admin' && (
-            <NavLink to={'/requests'}>
-              {({ isActive }) => (
-                <Button
-                  variant={isActive === true ? 'success' : ''}
-                  className={`${
-                    isActive === true ? 'text-white' : 'text-secondary'
-                  }`}
-                  data-testid="requestsBtn"
-                >
-                  <div className={styles.iconWrapper}>
-                    <RequestsIcon
-                      fill={`${
-                        isActive === true
-                          ? 'var(--bs-white)'
-                          : 'var(--bs-secondary)'
-                      }`}
-                    />
-                  </div>
-                  {t('requests')}
-                </Button>
-              )}
-            </NavLink>
-          )}
           {superAdmin && (
             <>
-              <NavLink to={'/users'}>
+              <NavLink to={'/users'} onClick={handleLinkClick}>
                 {({ isActive }) => (
                   <Button
                     variant={isActive === true ? 'success' : ''}
@@ -108,7 +91,7 @@ const leftDrawer = ({ hideDrawer }: InterfaceLeftDrawerProps): JSX.Element => {
                   </Button>
                 )}
               </NavLink>
-              <NavLink to={'/communityProfile'}>
+              <NavLink to={'/communityProfile'} onClick={handleLinkClick}>
                 {({ isActive }) => (
                   <Button
                     variant={isActive === true ? 'success' : ''}

@@ -14,6 +14,7 @@ import type { InterfaceEventListCardProps } from './EventListCard';
 import EventListCard from './EventListCard';
 import {
   DELETE_EVENT_MUTATION,
+  REGISTER_EVENT,
   UPDATE_EVENT_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
@@ -25,6 +26,9 @@ import { toast } from 'react-toastify';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Frequency, WeekDays } from 'utils/recurrenceUtils';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { setItem } = useLocalStorage();
 
 const MOCKS = [
   {
@@ -103,6 +107,21 @@ const MOCKS = [
       },
     },
   },
+  {
+    request: {
+      query: REGISTER_EVENT,
+      variables: { eventId: '123' },
+    },
+    result: {
+      data: {
+        registerForEvent: [
+          {
+            _id: '123',
+          },
+        ],
+      },
+    },
+  },
 ];
 
 const ERROR_MOCKS = [
@@ -116,9 +135,9 @@ const ERROR_MOCKS = [
     error: new Error('Something went wrong'),
   },
 ];
-const link2 = new StaticMockLink(ERROR_MOCKS, true);
 
 const link = new StaticMockLink(MOCKS, true);
+const link2 = new StaticMockLink(ERROR_MOCKS, true);
 
 jest.mock('react-toastify', () => ({
   toast: {
@@ -203,6 +222,62 @@ const props: InterfaceEventListCardProps[] = [
     isPublic: true,
     isRegisterable: false,
   },
+  {
+    userRole: 'USER',
+    key: '123',
+    id: '1',
+    eventLocation: 'India',
+    eventName: 'Shelter for Dogs',
+    eventDescription: 'This is shelter for dogs event',
+    startDate: '19/03/2022',
+    endDate: '26/03/2022',
+    startTime: '02:00',
+    endTime: '06:00',
+    allDay: true,
+    recurring: false,
+    recurrenceRule: null,
+    isRecurringEventException: false,
+    isPublic: true,
+    isRegisterable: false,
+    creator: {
+      firstName: 'Joe',
+      lastName: 'David',
+      _id: '123',
+    },
+    registrants: [
+      {
+        _id: '234',
+      },
+    ],
+  },
+  {
+    userRole: 'USER',
+    key: '123',
+    id: '1',
+    eventLocation: 'India',
+    eventName: 'Shelter for Dogs',
+    eventDescription: 'This is shelter for dogs event',
+    startDate: '19/03/2022',
+    endDate: '26/03/2022',
+    startTime: '02:00',
+    endTime: '06:00',
+    allDay: true,
+    recurring: false,
+    recurrenceRule: null,
+    isRecurringEventException: false,
+    isPublic: true,
+    isRegisterable: false,
+    creator: {
+      firstName: 'Joe',
+      lastName: 'David',
+      _id: '123',
+    },
+    registrants: [
+      {
+        _id: '456',
+      },
+    ],
+  },
 ];
 
 const renderEventListCard = (
@@ -260,6 +335,7 @@ describe('Testing Event List Card', () => {
   });
 
   afterAll(() => {
+    localStorage.clear();
     jest.clearAllMocks();
   });
 
@@ -355,6 +431,21 @@ describe('Testing Event List Card', () => {
     await waitFor(() => {
       expect(toast.success).toBeCalledWith(translations.eventUpdated);
     });
+  });
+
+  test('should render props and text  elements test for the screen', async () => {
+    const { container } = renderEventListCard(props[1]);
+
+    expect(container.textContent).not.toBe('Loading data...');
+    expect(screen.getByText(props[1].eventName)).toBeInTheDocument();
+    userEvent.click(screen.getByTestId('card'));
+    expect(await screen.findAllByText(props[1].eventName)).toBeTruthy();
+    expect(screen.getByTestId('updateDescription')).toHaveValue(
+      props[1].eventDescription,
+    );
+    expect(screen.getByTestId('updateLocation')).toHaveValue(
+      props[1].eventLocation,
+    );
   });
 
   test('Testing if the event is not for all day', async () => {
@@ -459,9 +550,9 @@ describe('Testing Event List Card', () => {
 
     userEvent.click(screen.getByTestId('card'));
 
-    expect(
-      screen.getByText(`${longEventName.substring(0, 100)}...`),
-    ).toBeInTheDocument();
+    expect(screen.getByTestId('updateTitle')).toHaveValue(
+      `${longEventName.substring(0, 100)}...`,
+    );
   });
 
   test('Should render full event name when length is less than or equal to 100', async () => {
@@ -482,9 +573,9 @@ describe('Testing Event List Card', () => {
 
     userEvent.click(screen.getByTestId('card'));
 
-    expect(
-      screen.getByText(`${longEventDescription.substring(0, 256)}...`),
-    ).toBeInTheDocument();
+    expect(screen.getByTestId('updateDescription')).toHaveValue(
+      `${longEventDescription.substring(0, 256)}...`,
+    );
   });
 
   test('Should render full event description when length is less than or equal to 256', async () => {
@@ -496,7 +587,9 @@ describe('Testing Event List Card', () => {
 
     userEvent.click(screen.getByTestId('card'));
 
-    expect(screen.getByText(shortEventDescription)).toBeInTheDocument();
+    expect(screen.getByTestId('updateDescription')).toHaveValue(
+      shortEventDescription,
+    );
   });
 
   test('Select different delete options on recurring events & then delete the recurring event', async () => {
@@ -514,5 +607,57 @@ describe('Testing Event List Card', () => {
     await waitFor(() => {
       expect(toast.success).toBeCalledWith(translations.eventDeleted);
     });
+  });
+
+  test('Handle register should work properly', async () => {
+    setItem('userId', '456');
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <MemoryRouter initialEntries={['/orgevents/orgId']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/orgevents/:orgId"
+                  element={<EventListCard {...props[3]} />}
+                />
+                <Route
+                  path="/event/:orgId/"
+                  element={<EventListCard {...props[3]} />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+    userEvent.click(screen.getByTestId('card'));
+    const registerBtn = screen.getByTestId('registerEventBtn');
+    fireEvent.click(registerBtn);
+  });
+
+  test('When the user is already registered', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <MemoryRouter initialEntries={['/orgevents/orgId']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/orgevents/:orgId"
+                  element={<EventListCard {...props[4]} />}
+                />
+                <Route
+                  path="/event/:orgId/"
+                  element={<EventListCard {...props[4]} />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+    userEvent.click(screen.getByTestId('card'));
+    expect(screen.queryByText('Already registered')).toBeInTheDocument();
   });
 });

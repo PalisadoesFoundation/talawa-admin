@@ -10,49 +10,45 @@ import HolidayCard from '../HolidayCards/HolidayCard';
 import { holidays, hours, months, weekdays } from './constants';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
 
-interface InterfaceEvent {
+interface InterfaceEventListCardProps {
+  userRole?: string;
+  key?: string;
   _id: string;
+  location: string;
   title: string;
   description: string;
   startDate: string;
   endDate: string;
-  location: string;
   startTime: string | undefined;
   endTime: string | undefined;
   allDay: boolean;
   recurring: boolean;
   recurrenceRule: InterfaceRecurrenceRule | null;
   isRecurringEventException: boolean;
-  registrants?: InterfaceIEventAttendees[];
   isPublic: boolean;
   isRegisterable: boolean;
+  attendees?: {
+    _id: string;
+  }[];
+  creator?: {
+    firstName: string;
+    lastName: string;
+    _id: string;
+  };
 }
 
 interface InterfaceCalendarProps {
-  eventData: InterfaceEvent[];
+  eventData: InterfaceEventListCardProps[];
   orgData?: InterfaceIOrgList;
   userRole?: string;
   userId?: string;
   viewType?: ViewType;
 }
 
-enum Status {
-  ACTIVE = 'ACTIVE',
-  BLOCKED = 'BLOCKED',
-  DELETED = 'DELETED',
-}
-
 enum Role {
   USER = 'USER',
   SUPERADMIN = 'SUPERADMIN',
   ADMIN = 'ADMIN',
-}
-
-interface InterfaceIEventAttendees {
-  userId: string;
-  user?: string;
-  status?: Status;
-  createdAt?: Date;
 }
 
 interface InterfaceIOrgList {
@@ -66,12 +62,13 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   viewType,
 }) => {
   const [selectedDate] = useState<Date | null>(null);
-
   const today = new Date();
   const [currentDate, setCurrentDate] = useState(today.getDate());
   const [currentMonth, setCurrentMonth] = useState(today.getMonth());
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
-  const [events, setEvents] = useState<InterfaceEvent[] | null>(null);
+  const [events, setEvents] = useState<InterfaceEventListCardProps[] | null>(
+    null,
+  );
   const [expanded, setExpanded] = useState<number>(-1);
   const [windowWidth, setWindowWidth] = useState<number>(window.screen.width);
 
@@ -84,12 +81,12 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   }, []);
 
   const filterData = (
-    eventData: InterfaceEvent[],
+    eventData: InterfaceEventListCardProps[],
     orgData?: InterfaceIOrgList,
     userRole?: string,
     userId?: string,
-  ): InterfaceEvent[] => {
-    const data: InterfaceEvent[] = [];
+  ): InterfaceEventListCardProps[] => {
+    const data: InterfaceEventListCardProps[] = [];
     if (userRole === Role.SUPERADMIN) return eventData;
     // Hard to test all the cases
     /* istanbul ignore next */
@@ -109,8 +106,8 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     } else {
       eventData?.forEach((event) => {
         if (event.isPublic) data.push(event);
-        const userAttending = event.registrants?.some(
-          (data) => data.userId === userId,
+        const userAttending = event.attendees?.some(
+          (data) => data._id === userId,
         );
         if (userAttending) {
           data.push(event);
@@ -225,9 +222,19 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             return datas;
           }
         })
-        .map((datas: InterfaceEvent) => {
+        .map((datas: InterfaceEventListCardProps) => {
+          const attendees: { _id: string }[] = [];
+          datas.attendees?.forEach((attendee: { _id: string }) => {
+            const r = {
+              _id: attendee._id,
+            };
+
+            attendees.push(r);
+          });
+
           return (
             <EventListCard
+              userRole={userRole}
               key={datas._id}
               id={datas._id}
               eventLocation={datas.location}
@@ -243,6 +250,8 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
               isRecurringEventException={datas.isRecurringEventException}
               isPublic={datas.isPublic}
               isRegisterable={datas.isRegisterable}
+              registrants={attendees}
+              creator={datas.creator}
             />
           );
         }) || [];
@@ -311,9 +320,19 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                   return datas;
                 }
               })
-              .map((datas: InterfaceEvent) => {
+              .map((datas: InterfaceEventListCardProps) => {
+                const attendees: { _id: string }[] = [];
+                datas.attendees?.forEach((attendee: { _id: string }) => {
+                  const r = {
+                    _id: attendee._id,
+                  };
+
+                  attendees.push(r);
+                });
+
                 return (
                   <EventListCard
+                    userRole={userRole}
                     key={datas._id}
                     id={datas._id}
                     eventLocation={datas.location}
@@ -329,6 +348,8 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                     isRecurringEventException={datas.isRecurringEventException}
                     isPublic={datas.isPublic}
                     isRegisterable={datas.isRegisterable}
+                    registrants={attendees}
+                    creator={datas.creator}
                   />
                 );
               }) || [];
@@ -439,9 +460,19 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             if (datas.startDate == dayjs(date).format('YYYY-MM-DD'))
               return datas;
           })
-          .map((datas: InterfaceEvent) => {
+          .map((datas: InterfaceEventListCardProps) => {
+            const attendees: { _id: string }[] = [];
+            datas.attendees?.forEach((attendee: { _id: string }) => {
+              const r = {
+                _id: attendee._id,
+              };
+
+              attendees.push(r);
+            });
+
             return (
               <EventListCard
+                userRole={userRole}
                 key={datas._id}
                 id={datas._id}
                 eventLocation={datas.location}
@@ -457,6 +488,8 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                 isRecurringEventException={datas.isRecurringEventException}
                 isPublic={datas.isPublic}
                 isRegisterable={datas.isRegisterable}
+                registrants={attendees}
+                creator={datas.creator}
               />
             );
           }) || [];

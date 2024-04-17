@@ -24,6 +24,15 @@ interface InterfaceOrganizationCardProps {
   sno: string;
 }
 
+interface InterfaceMember {
+  firstName: string;
+  lastName: string;
+  image: string;
+  _id: string;
+  email: string;
+  userType: string;
+}
+
 export default function people(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userOrganizations',
@@ -76,9 +85,11 @@ export default function people(): JSX.Element {
     });
   };
 
-  const handleSearchByEnter = (e: any): void => {
+  const handleSearchByEnter = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ): void => {
     if (e.key === 'Enter') {
-      const { value } = e.target;
+      const { value } = e.currentTarget;
       handleSearch(value);
     }
   };
@@ -197,7 +208,7 @@ export default function people(): JSX.Element {
                         )
                       : /* istanbul ignore next */
                         members
-                    ).map((member: any, index) => {
+                    ).map((member: InterfaceMember, index) => {
                       const name = `${member.firstName} ${member.lastName}`;
 
                       const cardProps: InterfaceOrganizationCardProps = {

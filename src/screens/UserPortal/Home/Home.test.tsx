@@ -115,6 +115,7 @@ const MOCKS = [
                           },
                         ],
                         text: 'This is the post two',
+                        createdAt: '2024-03-03T09:26:56.524+00:00',
                       },
                     ],
                   },
