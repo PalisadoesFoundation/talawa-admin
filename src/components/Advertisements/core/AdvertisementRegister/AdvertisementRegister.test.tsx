@@ -155,7 +155,7 @@ describe('Testing Advertisement Register Component', () => {
                 name="Advert1"
                 organizationId="1"
                 advertisementMedia="test.png"
-                setAdvertisements={jest.fn()}
+                setAfter={jest.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -181,7 +181,7 @@ describe('Testing Advertisement Register Component', () => {
                 name="Ad1"
                 organizationId="1"
                 advertisementMedia=""
-                setAdvertisements={jest.fn()}
+                setAfter={jest.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -249,7 +249,7 @@ describe('Testing Advertisement Register Component', () => {
                 name="Ad1"
                 organizationId="1"
                 advertisementMedia=""
-                setAdvertisements={jest.fn()}
+                setAfter={jest.fn()}
                 formStatus="edit"
               />
             </I18nextProvider>
@@ -315,7 +315,7 @@ describe('Testing Advertisement Register Component', () => {
                 name="Ad1"
                 organizationId="1"
                 advertisementMedia=""
-                setAdvertisements={jest.fn()}
+                setAfter={jest.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -351,7 +351,7 @@ describe('Testing Advertisement Register Component', () => {
                 name="Ad1"
                 organizationId="1"
                 advertisementMedia=""
-                setAdvertisements={jest.fn()}
+                setAfter={jest.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -421,7 +421,7 @@ describe('Testing Advertisement Register Component', () => {
                 organizationId="1"
                 advertisementMedia="google.com"
                 formStatus="edit"
-                setAdvertisements={jest.fn()}
+                setAfter={jest.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -446,7 +446,7 @@ describe('Testing Advertisement Register Component', () => {
                 name="Advert1"
                 organizationId="1"
                 advertisementMedia="test.png"
-                setAdvertisements={jest.fn()}
+                setAfter={jest.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -477,7 +477,7 @@ describe('Testing Advertisement Register Component', () => {
                   name="Advert1"
                   organizationId="1"
                   advertisementMedia="google.com"
-                  setAdvertisements={jest.fn()}
+                  setAfter={jest.fn()}
                 />
               }
             </I18nextProvider>
@@ -540,7 +540,7 @@ describe('Testing Advertisement Register Component', () => {
                 name="Advert1"
                 organizationId="1"
                 advertisementMedia="test.mp4"
-                setAdvertisements={jest.fn()}
+                setAfter={jest.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>

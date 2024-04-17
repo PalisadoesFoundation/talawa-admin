@@ -27,7 +27,7 @@ interface InterfaceAddOnEntryProps {
   organizationId: string;
   startDate: Date;
   endDate: Date;
-  setAdvertisements: React.Dispatch<React.SetStateAction<Ad[]>>;
+  setAfter: any;
 }
 function advertisementEntry({
   id,
@@ -37,28 +37,20 @@ function advertisementEntry({
   endDate,
   organizationId,
   startDate,
-  setAdvertisements,
+  setAfter,
 }: InterfaceAddOnEntryProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   const [buttonLoading, setButtonLoading] = useState(false);
   const [dropdown, setDropdown] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  const [deleteAdById] = useMutation(DELETE_ADVERTISEMENT_BY_ID);
-  const {
-    data: orgAdvertisementListData,
-    refetch,
-  }: {
-    data?: {
-      organizations: InterfaceQueryOrganizationAdvertisementListItem[];
-    };
-    refetch: any;
-  } = useQuery(ORGANIZATION_ADVERTISEMENT_LIST, {
-    variables: {
-      id: organizationId,
-      after: null,
-      first: 6,
-    },
+  const [deleteAdById] = useMutation(DELETE_ADVERTISEMENT_BY_ID, {
+    refetchQueries: [
+      {
+        query: ORGANIZATION_ADVERTISEMENT_LIST,
+        variables: { first: 6, after: null, id: organizationId },
+      },
+    ],
   });
 
   const toggleShowDeleteModal = (): void => setShowDeleteModal((prev) => !prev);
@@ -72,14 +64,7 @@ function advertisementEntry({
       });
       toast.error('Advertisement Deleted');
       setButtonLoading(false);
-      await refetch();
-      if (orgAdvertisementListData && orgAdvertisementListData.organizations) {
-        const ads: Ad[] =
-          orgAdvertisementListData.organizations[0].advertisements?.edges.map(
-            (edge) => edge.node,
-          );
-        setAdvertisements(ads);
-      }
+      setAfter(null);
     } catch (error: any) {
       toast.error(error.message);
       setButtonLoading(false);
@@ -114,7 +99,7 @@ function advertisementEntry({
                         advertisementMediaEdit={mediaUrl}
                         endDateEdit={endDate}
                         startDateEdit={startDate}
-                        setAdvertisements={setAdvertisements}
+                        setAfter={setAfter}
                       />
                     </li>
                     <li onClick={toggleShowDeleteModal} data-testid="deletebtn">

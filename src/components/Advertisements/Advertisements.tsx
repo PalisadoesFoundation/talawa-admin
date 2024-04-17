@@ -58,7 +58,7 @@ export default function advertisements(): JSX.Element {
         ? setAdvertisements([...advertisements, ...ads])
         : setAdvertisements(ads);
     }
-  }, [orgAdvertisementListData]);
+  }, [orgAdvertisementListData, after]);
 
   async function loadMoreAdvertisements(): Promise<void> {
     await refetch();
@@ -81,7 +81,7 @@ export default function advertisements(): JSX.Element {
       <Row data-testid="advertisements">
         <Col col={8}>
           <div className={styles.justifysp}>
-            <AdvertisementRegister setAdvertisements={setAdvertisements} />
+            <AdvertisementRegister setAfter={setAfter} />
             <Tabs
               defaultActiveKey="archievedAds"
               id="uncontrolled-tab-example"
@@ -154,8 +154,8 @@ export default function advertisements(): JSX.Element {
                             startDate={new Date(ad.startDate)}
                             endDate={new Date(ad.endDate)}
                             mediaUrl={ad.mediaUrl}
-                            setAdvertisements={setAdvertisements}
                             data-testid="Ad"
+                            setAfter={setAfter}
                           />
                         ),
                       )
@@ -229,7 +229,7 @@ export default function advertisements(): JSX.Element {
                             startDate={new Date(ad.startDate)}
                             endDate={new Date(ad.endDate)}
                             mediaUrl={ad.mediaUrl}
-                            setAdvertisements={setAdvertisements}
+                            setAfter={setAfter}
                           />
                         ),
                       )
