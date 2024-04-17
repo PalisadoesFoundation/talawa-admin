@@ -962,7 +962,8 @@
     "view": "Voir",
     "edit": "Éditer",
     "editAdvertisement": "Éditer l'annonce",
-    "saveChanges": "Enregistrer les modifications"
+    "saveChanges": "Enregistrer les modifications",
+    "endOfResults": "Fin des résultats"
   },
   "userChat": {
     "chat": "Chat",

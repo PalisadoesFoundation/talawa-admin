@@ -965,7 +965,8 @@
     "view": "查看",
     "edit": "编辑",
     "editAdvertisement": "编辑广告",
-    "saveChanges": "保存更改"
+    "saveChanges": "保存更改",
+    "endOfResults": "結果結束"
   },
   "userChat": {
     "chat": "聊天",

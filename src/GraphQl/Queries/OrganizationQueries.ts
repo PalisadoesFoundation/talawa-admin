@@ -71,6 +71,44 @@ export const ORGANIZATION_POST_LIST = gql`
   }
 `;
 
+export const ORGANIZATION_ADVERTISEMENT_LIST = gql`
+  query Organizations(
+    $id: ID!
+    $after: String
+    $before: String
+    $first: Int
+    $last: Int
+  ) {
+    organizations(id: $id) {
+      _id
+      advertisements(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+      ) {
+        edges {
+          node {
+            _id
+            name
+            startDate
+            endDate
+            mediaUrl
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+        totalCount
+      }
+    }
+  }
+`;
+
 /**
  * GraphQL query to retrieve organizations based on user connection.
  *

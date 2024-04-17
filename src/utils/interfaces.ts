@@ -183,6 +183,29 @@ export interface InterfaceQueryOrganizationPostListItem {
     totalCount: number;
   };
 }
+
+export interface InterfaceQueryOrganizationAdvertisementListItem {
+  advertisements: {
+    edges: {
+      node: {
+        _id: string;
+        name: string;
+        mediaUrl: string;
+        endDate: string;
+        startDate: string;
+        type: 'BANNER' | 'MENU' | 'POPUP';
+      };
+      cursor: string;
+    }[];
+    pageInfo: {
+      startCursor: string;
+      endCursor: string;
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+    };
+    totalCount: number;
+  };
+}
 export interface InterfaceQueryOrganizationFunds {
   fundsByOrganization: {
     _id: string;

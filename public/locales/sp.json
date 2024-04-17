@@ -964,7 +964,8 @@
     "view": "Ver",
     "edit": "Editar",
     "editAdvertisement": "Editar Anuncio",
-    "saveChanges": "Guardar Cambios"
+    "saveChanges": "Guardar Cambios",
+    "endOfResults": "Fin de los resultados"
   },
   "userChat": {
     "chat": "Charlar",

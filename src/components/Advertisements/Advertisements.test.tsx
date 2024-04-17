@@ -1,6 +1,12 @@
 import React from 'react';
 import 'jest-location-mock';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import {
   ApolloClient,
@@ -10,7 +16,7 @@ import {
   HttpLink,
 } from '@apollo/client';
 
-import type { NormalizedCacheObject } from '@apollo/client';
+import type { DocumentNode, NormalizedCacheObject } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
 import Advertisement from './Advertisements';
 import { Provider } from 'react-redux';
@@ -19,8 +25,8 @@ import { BACKEND_URL } from 'Constant/constant';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
 import {
-  ADVERTISEMENTS_GET,
   ORGANIZATIONS_LIST,
+  ORGANIZATION_ADVERTISEMENT_LIST,
   PLUGIN_GET,
 } from 'GraphQl/Queries/Queries';
 import userEvent from '@testing-library/user-event';
@@ -57,7 +63,7 @@ jest.mock('components/AddOn/support/services/Plugin.helper', () => ({
     fetchStore: jest.fn().mockResolvedValue([]),
   })),
 }));
-let mockID: string | undefined = undefined;
+let mockID: string | undefined = '1';
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useParams: () => ({ orgId: mockID }),
@@ -66,6 +72,182 @@ jest.mock('react-router-dom', () => ({
 const today = new Date();
 const tomorrow = today;
 tomorrow.setDate(today.getDate() + 1);
+
+const ADVERTISEMENTS_LIST_MOCK: {
+  request:
+    | {
+        query: DocumentNode;
+        variables: { id: string; first: number; after: null };
+      }
+    | {
+        query: DocumentNode;
+        variables: {
+          id: string;
+          first: number;
+          after: null;
+          before: null;
+          last: null;
+        };
+      };
+  result:
+    | {
+        data: {
+          organizations: {
+            _id: string;
+            advertisements: {
+              edges: {
+                node: {
+                  _id: string;
+                  name: string;
+                  startDate: string;
+                  endDate: string;
+                  mediaUrl: string;
+                };
+                cursor: string;
+              }[];
+              pageInfo: {
+                startCursor: string;
+                endCursor: string;
+                hasNextPage: boolean;
+                hasPreviousPage: boolean;
+              };
+              totalCount: number;
+            };
+          }[];
+        };
+      }
+    | {
+        data: {
+          organizations: {
+            _id: string;
+            advertisements: {
+              edges: {
+                node: {
+                  _id: string;
+                  name: string;
+                  startDate: string;
+                  endDate: string;
+                  mediaUrl: string;
+                };
+                cursor: string;
+              }[];
+              pageInfo: {
+                startCursor: string;
+                endCursor: string;
+                hasNextPage: boolean;
+                hasPreviousPage: boolean;
+              };
+              totalCount: number;
+            };
+          }[];
+        };
+      };
+}[] = [];
+
+for (let i = 0; i < 4; i++) {
+  ADVERTISEMENTS_LIST_MOCK.push({
+    request: {
+      query: ORGANIZATION_ADVERTISEMENT_LIST,
+      variables: {
+        id: '1',
+        first: 6,
+        after: null,
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            _id: '1',
+            advertisements: {
+              edges: [
+                {
+                  node: {
+                    _id: '1',
+                    name: 'Advertisement1',
+                    startDate: '2022-01-01',
+                    endDate: '2023-01-01',
+                    mediaUrl: 'http://example1.com',
+                  },
+                  cursor: 'cursor1',
+                },
+                {
+                  node: {
+                    _id: '2',
+                    name: 'Advertisement2',
+                    startDate: '2024-02-01',
+                    endDate: '2025-02-01',
+                    mediaUrl: 'http://example2.com',
+                  },
+                  cursor: 'cursor2',
+                },
+              ],
+              pageInfo: {
+                startCursor: 'cursor1',
+                endCursor: 'cursor2',
+                hasNextPage: true,
+                hasPreviousPage: false,
+              },
+              totalCount: 2,
+            },
+          },
+        ],
+      },
+    },
+  });
+  ADVERTISEMENTS_LIST_MOCK.push({
+    request: {
+      query: ORGANIZATION_ADVERTISEMENT_LIST,
+      variables: {
+        id: '1',
+        first: 6,
+        after: null,
+        before: null,
+        last: null,
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            _id: '1',
+            advertisements: {
+              edges: [
+                {
+                  node: {
+                    _id: '1',
+                    name: 'Advertisement1',
+                    startDate: '2022-01-01',
+                    endDate: '2023-01-01',
+                    mediaUrl: 'http://example1.com',
+                  },
+                  cursor: 'cursor1',
+                },
+                {
+                  node: {
+                    _id: '2',
+                    name: 'Advertisement2',
+                    startDate: '2024-02-01',
+                    endDate: '2025-02-01',
+                    mediaUrl: 'http://example2.com',
+                  },
+                  cursor: 'cursor2',
+                },
+              ],
+              pageInfo: {
+                startCursor: 'cursor1',
+                endCursor: 'cursor2',
+                hasNextPage: true,
+                hasPreviousPage: false,
+              },
+              totalCount: 2,
+            },
+          },
+        ],
+      },
+    },
+  });
+}
 
 const PLUGIN_GET_MOCK = {
   request: {
@@ -97,7 +279,7 @@ const ADD_ADVERTISEMENT_MUTATION_MOCK = {
   request: {
     query: ADD_ADVERTISEMENT_MUTATION,
     variables: {
-      organizationId: undefined,
+      organizationId: '1',
       name: 'Cookie Shop',
       file: 'data:image/png;base64,bWVkaWEgY29udGVudA==',
       type: 'POPUP',
@@ -120,14 +302,14 @@ const ORGANIZATIONS_LIST_MOCK = {
   request: {
     query: ORGANIZATIONS_LIST,
     variables: {
-      id: 'undefined',
+      id: '1',
     },
   },
   result: {
     data: {
       organizations: [
         {
-          _id: 'undefined',
+          _id: '1',
           image: '',
           creator: {
             firstName: 'firstName',
@@ -187,19 +369,7 @@ describe('Testing Advertisement Component', () => {
       ORGANIZATIONS_LIST_MOCK,
       PLUGIN_GET_MOCK,
       ADD_ADVERTISEMENT_MUTATION_MOCK,
-      {
-        request: {
-          query: ADVERTISEMENTS_GET,
-        },
-        result: {
-          data: {
-            advertisementsConnection: {
-              edges: [],
-            },
-          },
-          loading: false,
-        },
-      },
+      ...ADVERTISEMENTS_LIST_MOCK,
     ];
 
     render(
@@ -217,7 +387,7 @@ describe('Testing Advertisement Component', () => {
 
     await wait();
 
-    await userEvent.click(screen.getByText('Create new advertisement'));
+    userEvent.click(screen.getByText('Create new advertisement'));
     userEvent.type(
       screen.getByLabelText('Enter name of Advertisement'),
       'Cookie Shop',
@@ -247,53 +417,38 @@ describe('Testing Advertisement Component', () => {
     ).toBeInTheDocument();
   });
 
-  test('if the component renders correctly and ads are correctly categorized date wise', async () => {
-    mockID = 'undefined';
+  test('for the working of the tabs', async () => {
     const mocks = [
       ORGANIZATIONS_LIST_MOCK,
       PLUGIN_GET_MOCK,
       ADD_ADVERTISEMENT_MUTATION_MOCK,
-      {
-        request: {
-          query: ADVERTISEMENTS_GET,
-        },
-        result: {
-          data: {
-            advertisementsConnection: {
-              edges: [
-                {
-                  node: {
-                    _id: '1',
-                    name: 'Advertisement1',
-                    type: 'POPUP',
-                    organization: {
-                      _id: 'undefined',
-                    },
-                    mediaUrl: 'http://example1.com',
-                    endDate: '2023-01-01',
-                    startDate: '2022-01-01',
-                  },
-                },
-                {
-                  node: {
-                    _id: '2',
-                    name: 'Advertisement2',
-                    type: 'POPUP',
-                    organization: {
-                      _id: 'undefined',
-                    },
-                    mediaUrl: 'http://example2.com',
-                    endDate: '2025-02-01',
-                    startDate: '2024-02-01',
-                  },
-                },
-              ],
-            },
-          },
-          loading: false,
-        },
-      },
+      ...ADVERTISEMENTS_LIST_MOCK,
     ];
+
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider mocks={mocks} addTypename={false}>
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+    userEvent.click(screen.getByText('Active Campaigns'));
+
+    await wait();
+    userEvent.click(screen.getByText('Completed Campaigns'));
+  });
+
+  test('if the component renders correctly and ads are correctly categorized date wise', async () => {
+    mockID = '1';
+    const mocks = [...ADVERTISEMENTS_LIST_MOCK];
 
     render(
       <ApolloProvider client={client}>
@@ -332,49 +487,228 @@ describe('Testing Advertisement Component', () => {
     expect(dateObject.getTime()).toBeLessThan(new Date().getTime());
   });
 
-  test('for the working of the tabs', async () => {
+  test('delete ad', async () => {
+    mockID = '1';
+    const mocks = [...ADVERTISEMENTS_LIST_MOCK];
+
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider mocks={mocks} addTypename={false}>
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+
+    const moreiconbtn = await screen.findAllByTestId('moreiconbtn');
+    fireEvent.click(moreiconbtn[1]);
+    expect(await screen.findByTestId('deletebtn'));
+    fireEvent.click(await screen.findByTestId('deletebtn'));
+  });
+
+  test('infinite scroll', async () => {
+    mockID = '1';
     const mocks = [
-      ORGANIZATIONS_LIST_MOCK,
-      PLUGIN_GET_MOCK,
-      ADD_ADVERTISEMENT_MUTATION_MOCK,
+      ...ADVERTISEMENTS_LIST_MOCK,
       {
         request: {
-          query: ADVERTISEMENTS_GET,
+          query: ORGANIZATION_ADVERTISEMENT_LIST,
+          variables: {
+            id: '1',
+            first: 2,
+            after: null,
+            last: null,
+            before: null,
+          },
         },
         result: {
           data: {
-            advertisementsConnection: {
-              edges: [
-                {
-                  node: {
-                    _id: '1',
-                    name: 'Advertisement1',
-                    type: 'POPUP',
-                    organization: {
-                      _id: 'undefined',
+            organizations: [
+              {
+                _id: '1',
+                advertisements: {
+                  edges: [
+                    {
+                      node: {
+                        _id: '1',
+                        name: 'Advertisement1',
+                        startDate: '2022-01-01',
+                        endDate: '2023-01-01',
+                        mediaUrl: 'http://example1.com',
+                      },
+                      cursor: 'cursor1',
                     },
-                    mediaUrl: 'http://example1.com',
-                    endDate: '2023-01-01',
-                    startDate: '2022-01-01',
-                  },
-                },
-                {
-                  node: {
-                    _id: '2',
-                    name: 'Advertisement2',
-                    type: 'POPUP',
-                    organization: {
-                      _id: 'undefined',
+                    {
+                      node: {
+                        _id: '2',
+                        name: 'Advertisement2',
+                        startDate: '2024-02-01',
+                        endDate: '2025-02-01',
+                        mediaUrl: 'http://example2.com',
+                      },
+                      cursor: 'cursor2',
                     },
-                    mediaUrl: 'http://example2.com',
-                    endDate: '2025-02-01',
-                    startDate: '2024-02-01',
+                    {
+                      node: {
+                        _id: '3',
+                        name: 'Advertisement1',
+                        startDate: '2022-01-01',
+                        endDate: '2023-01-01',
+                        mediaUrl: 'http://example1.com',
+                      },
+                      cursor: 'cursor3',
+                    },
+                    {
+                      node: {
+                        _id: '4',
+                        name: 'Advertisement2',
+                        startDate: '2024-02-01',
+                        endDate: '2025-02-01',
+                        mediaUrl: 'http://example2.com',
+                      },
+                      cursor: 'cursor4',
+                    },
+                    {
+                      node: {
+                        _id: '5',
+                        name: 'Advertisement1',
+                        startDate: '2022-01-01',
+                        endDate: '2023-01-01',
+                        mediaUrl: 'http://example1.com',
+                      },
+                      cursor: 'cursor5',
+                    },
+                    {
+                      node: {
+                        _id: '6',
+                        name: 'Advertisement2',
+                        startDate: '2024-02-01',
+                        endDate: '2025-02-01',
+                        mediaUrl: 'http://example2.com',
+                      },
+                      cursor: 'cursor6',
+                    },
+                  ],
+                  pageInfo: {
+                    startCursor: 'cursor1',
+                    endCursor: 'cursor6',
+                    hasNextPage: true,
+                    hasPreviousPage: false,
                   },
+                  totalCount: 8,
                 },
-              ],
-            },
+              },
+            ],
           },
-          loading: false,
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_ADVERTISEMENT_LIST,
+          variables: {
+            id: '1',
+            first: 6,
+            after: 'cursor6',
+            last: null,
+            before: null,
+          },
+        },
+        result: {
+          data: {
+            organizations: [
+              {
+                _id: '1',
+                advertisements: {
+                  edges: [
+                    {
+                      node: {
+                        _id: '7',
+                        name: 'Advertisement7',
+                        startDate: '2022-01-01',
+                        endDate: '2023-01-01',
+                        mediaUrl: 'http://example1.com',
+                      },
+                      cursor: '5rdiyruyu3hkjkjiwfhwaify',
+                    },
+                    {
+                      node: {
+                        _id: '8',
+                        name: 'Advertisement8',
+                        startDate: '2024-02-01',
+                        endDate: '2025-02-01',
+                        mediaUrl: 'http://example2.com',
+                      },
+                      cursor: '5rdiyrhgkjkjjyg3iwfhwaify',
+                    },
+                  ],
+                  pageInfo: {
+                    startCursor: '5rdiyruyu3hkjkjiwfhwaify',
+                    endCursor: '5rdiyrhgkjkjjyg3iwfhwaify',
+                    hasNextPage: false,
+                    hasPreviousPage: true,
+                  },
+                  totalCount: 8,
+                },
+              },
+            ],
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_ADVERTISEMENT_LIST,
+          variables: {
+            id: '1',
+            first: 6,
+            after: 'cursor2',
+          },
+        },
+        result: {
+          data: {
+            organizations: [
+              {
+                _id: '1',
+                advertisements: {
+                  edges: [
+                    {
+                      node: {
+                        _id: '7',
+                        name: 'Advertisement7',
+                        startDate: '2022-01-01',
+                        endDate: '2023-01-01',
+                        mediaUrl: 'http://example1.com',
+                      },
+                      cursor: '5rdiyruyu3hkjkjiwfhwaify',
+                    },
+                    {
+                      node: {
+                        _id: '8',
+                        name: 'Advertisement8',
+                        startDate: '2024-02-01',
+                        endDate: '2025-02-01',
+                        mediaUrl: 'http://example2.com',
+                      },
+                      cursor: '5rdiyrhgkjkjjyg3iwfhwaify',
+                    },
+                  ],
+                  pageInfo: {
+                    startCursor: '5rdiyruyu3hkjkjiwfhwaify',
+                    endCursor: '5rdiyrhgkjkjjyg3iwfhwaify',
+                    hasNextPage: false,
+                    hasPreviousPage: true,
+                  },
+                  totalCount: 8,
+                },
+              },
+            ],
+          },
         },
       },
     ];
@@ -392,11 +726,10 @@ describe('Testing Advertisement Component', () => {
         </Provider>
       </ApolloProvider>,
     );
-
-    await wait();
-    userEvent.click(screen.getByText('Active Campaigns'));
-
-    await wait();
-    userEvent.click(screen.getByText('Completed Campaigns'));
+    let moreiconbtn = await screen.findAllByTestId('moreiconbtn');
+    console.log('before scroll', moreiconbtn);
+    fireEvent.scroll(window, { target: { scrollY: 500 } });
+    moreiconbtn = await screen.findAllByTestId('moreiconbtn');
+    console.log('after scroll', moreiconbtn);
   });
 });
