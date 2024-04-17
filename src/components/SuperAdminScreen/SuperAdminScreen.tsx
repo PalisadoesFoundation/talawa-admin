@@ -13,13 +13,9 @@ const superAdminScreen = (): JSX.Element => {
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
 
   const handleResize = (): void => {
-    if (window.innerWidth <= 820 && !hideDrawer) {
-      setHideDrawer(true);
+    if (window.innerWidth <= 820) {
+      setHideDrawer(!hideDrawer);
     }
-  };
-
-  const toggleDrawer = (): void => {
-    setHideDrawer(!hideDrawer);
   };
 
   useEffect(() => {
@@ -28,24 +24,31 @@ const superAdminScreen = (): JSX.Element => {
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, [hideDrawer]);
+  }, []);
 
   return (
     <>
-      <Button
-        className={
-          hideDrawer ? styles.opendrawer : styles.collapseSidebarButton
-        }
-        onClick={toggleDrawer}
-        data-testid="toggleMenuBtn"
-      >
-        <i
-          className={
-            hideDrawer ? 'fa fa-angle-double-right' : 'fa fa-angle-double-left'
-          }
-          aria-hidden="true"
-        ></i>
-      </Button>
+      {hideDrawer ? (
+        <Button
+          className={styles.opendrawer}
+          onClick={(): void => {
+            setHideDrawer(!hideDrawer);
+          }}
+          data-testid="openMenu"
+        >
+          <i className="fa fa-angle-double-right" aria-hidden="true"></i>
+        </Button>
+      ) : (
+        <Button
+          className={styles.collapseSidebarButton}
+          onClick={(): void => {
+            setHideDrawer(!hideDrawer);
+          }}
+          data-testid="closeMenu"
+        >
+          <i className="fa fa-angle-double-left" aria-hidden="true"></i>
+        </Button>
+      )}
       <LeftDrawer hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       <div
         className={`${styles.pageContainer} ${

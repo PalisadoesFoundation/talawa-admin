@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import 'jest-localstorage-mock';
 import { I18nextProvider } from 'react-i18next';
@@ -18,6 +18,11 @@ const { setItem } = useLocalStorage();
 const props = {
   hideDrawer: true,
   setHideDrawer: jest.fn(),
+};
+
+const resizeWindow = (width: number): void => {
+  window.innerWidth = width;
+  fireEvent(window, new Event('resize'));
 };
 
 const propsOrg: InterfaceLeftDrawerProps = {
@@ -127,6 +132,28 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
+  });
+
+  test('Testing Drawer when the screen size is less than or equal to 820px', () => {
+    resizeWindow(800);
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <LeftDrawer {...propsOrg} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    expect(screen.getByText('My Organizations')).toBeInTheDocument();
+    expect(screen.getByText('Talawa Admin Portal')).toBeInTheDocument();
+
+    const orgsBtn = screen.getByTestId(/orgsBtn/i);
+
+    orgsBtn.click();
+    expect(
+      orgsBtn.className.includes('text-white btn btn-success'),
+    ).toBeTruthy();
   });
 });
 
