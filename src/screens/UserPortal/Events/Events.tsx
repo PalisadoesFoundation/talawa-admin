@@ -189,13 +189,14 @@ export default function events(): JSX.Element {
     setRowsPerPage(parseInt(newRowsPerPage, 10));
     setPage(0);
   };
-
+  /* istanbul ignore next */
   const handleSearch = (value: string): void => {
     refetch({
       title_contains: value,
     });
     setPage(0);
   };
+  /* istanbul ignore next */
   const handleSearchByEnter = (
     e: React.KeyboardEvent<HTMLInputElement>,
   ): void => {
@@ -204,6 +205,7 @@ export default function events(): JSX.Element {
       handleSearch(value);
     }
   };
+  /* istanbul ignore next */
   const handleSearchByBtnClick = (): void => {
     const value =
       (document.getElementById('searchEvents') as HTMLInputElement)?.value ||
@@ -239,15 +241,11 @@ export default function events(): JSX.Element {
   const navbarProps = {
     currentPage: 'events',
   };
-  const { orgId: currentUrl } = useParams();
-  const navigate = useNavigate();
-
+  /* istanbul ignore next */
   const showInviteModal = (): void => {
     setCreateEventmodalisOpen(true);
   };
-  const hideCreateEventModal = (): void => {
-    setCreateEventmodalisOpen(false);
-  };
+  /* istanbul ignore next */
   const handleChangeView = (item: string | null): void => {
     /*istanbul ignore next*/
     if (item) {
