@@ -20,7 +20,6 @@ import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams, useNavigate } from 'react-router-dom';
 import EventHeader from 'components/EventCalendar/EventHeader';
-import CustomRecurrenceModal from 'components/RecurrenceOptions/CustomRecurrenceModal';
 import {
   Frequency,
   Days,
@@ -49,8 +48,6 @@ function organizationEvents(): JSX.Element {
 
   document.title = t('title');
   const [createEventmodalisOpen, setCreateEventmodalisOpen] = useState(false);
-  const [customRecurrenceModalIsOpen, setCustomRecurrenceModalIsOpen] =
-    useState<boolean>(false);
   const [startDate, setStartDate] = React.useState<Date>(new Date());
   const [endDate, setEndDate] = React.useState<Date>(new Date());
   const [viewType, setViewType] = useState<ViewType>(ViewType.MONTH);
@@ -93,10 +90,6 @@ function organizationEvents(): JSX.Element {
     if (item) {
       setViewType(item as ViewType);
     }
-  };
-
-  const hideCustomRecurrenceModal = (): void => {
-    setCustomRecurrenceModalIsOpen(false);
   };
 
   const {
@@ -473,8 +466,8 @@ function organizationEvents(): JSX.Element {
                 recurrenceRuleState={recurrenceRuleState}
                 recurrenceRuleText={recurrenceRuleText}
                 setRecurrenceRuleState={setRecurrenceRuleState}
-                setCustomRecurrenceModalIsOpen={setCustomRecurrenceModalIsOpen}
                 popover={popover}
+                t={t}
               />
             )}
 
@@ -489,17 +482,6 @@ function organizationEvents(): JSX.Element {
           </Form>
         </Modal.Body>
       </Modal>
-
-      {/* Custom Recurrence Modal */}
-      <CustomRecurrenceModal
-        recurrenceRuleState={recurrenceRuleState}
-        recurrenceRuleText={recurrenceRuleText}
-        setRecurrenceRuleState={setRecurrenceRuleState}
-        customRecurrenceModalIsOpen={customRecurrenceModalIsOpen}
-        hideCustomRecurrenceModal={hideCustomRecurrenceModal}
-        setCustomRecurrenceModalIsOpen={setCustomRecurrenceModalIsOpen}
-        t={t}
-      />
     </>
   );
 }

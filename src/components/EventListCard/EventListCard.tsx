@@ -29,7 +29,6 @@ import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
 import RecurrenceOptions from 'components/RecurrenceOptions/RecurrenceOptions';
-import CustomRecurrenceModal from 'components/RecurrenceOptions/CustomRecurrenceModal';
 
 export interface InterfaceEventListCardProps {
   userRole?: string;
@@ -75,8 +74,6 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
   });
 
   const [eventmodalisOpen, setEventModalIsOpen] = useState(false);
-  const [customRecurrenceModalIsOpen, setCustomRecurrenceModalIsOpen] =
-    useState<boolean>(false);
 
   const [alldaychecked, setAllDayChecked] = useState(true);
   const [recurringchecked, setRecurringChecked] = useState(false);
@@ -296,10 +293,6 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
 
   const openEventDashboard = (): void => {
     navigate(`/event/${orgId}/${props.id}`);
-  };
-
-  const hideCustomRecurrenceModal = (): void => {
-    setCustomRecurrenceModalIsOpen(false);
   };
 
   const popover = (
@@ -574,8 +567,8 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
                 recurrenceRuleState={recurrenceRuleState}
                 recurrenceRuleText={recurrenceRuleText}
                 setRecurrenceRuleState={setRecurrenceRuleState}
-                setCustomRecurrenceModalIsOpen={setCustomRecurrenceModalIsOpen}
                 popover={popover}
+                t={t}
               />
             )}
           </Form>
@@ -705,17 +698,6 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
           </Button>
         </Modal.Footer>
       </Modal>
-
-      {/* Custom Recurrence Modal */}
-      <CustomRecurrenceModal
-        recurrenceRuleState={recurrenceRuleState}
-        recurrenceRuleText={recurrenceRuleText}
-        setRecurrenceRuleState={setRecurrenceRuleState}
-        customRecurrenceModalIsOpen={customRecurrenceModalIsOpen}
-        hideCustomRecurrenceModal={hideCustomRecurrenceModal}
-        setCustomRecurrenceModalIsOpen={setCustomRecurrenceModalIsOpen}
-        t={t}
-      />
     </>
   );
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Dropdown, OverlayTrigger } from 'react-bootstrap';
 import {
   Days,
@@ -9,6 +9,7 @@ import {
   isLastOccurenceOfWeekDay,
   mondayToFriday,
 } from 'utils/recurrenceUtils';
+import CustomRecurrenceModal from './CustomRecurrenceModal';
 
 interface InterfaceRecurrenceOptionsProps {
   recurrenceRuleState: InterfaceRecurrenceRuleState;
@@ -16,20 +17,25 @@ interface InterfaceRecurrenceOptionsProps {
   setRecurrenceRuleState: (
     state: React.SetStateAction<InterfaceRecurrenceRuleState>,
   ) => void;
-  setCustomRecurrenceModalIsOpen: (
-    state: React.SetStateAction<boolean>,
-  ) => void;
   popover: JSX.Element;
+  t: (key: string) => string;
 }
 
 const RecurrenceOptions: React.FC<InterfaceRecurrenceOptionsProps> = ({
   recurrenceRuleState,
   recurrenceRuleText,
   setRecurrenceRuleState,
-  setCustomRecurrenceModalIsOpen,
   popover,
+  t,
 }) => {
+  const [customRecurrenceModalIsOpen, setCustomRecurrenceModalIsOpen] =
+    useState<boolean>(false);
+
   const { recurrenceStartDate } = recurrenceRuleState;
+
+  const hideCustomRecurrenceModal = (): void => {
+    setCustomRecurrenceModalIsOpen(false);
+  };
 
   return (
     <>
@@ -209,6 +215,17 @@ const RecurrenceOptions: React.FC<InterfaceRecurrenceOptionsProps> = ({
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
+
+      {/* Custom Recurrence Modal */}
+      <CustomRecurrenceModal
+        recurrenceRuleState={recurrenceRuleState}
+        recurrenceRuleText={recurrenceRuleText}
+        setRecurrenceRuleState={setRecurrenceRuleState}
+        customRecurrenceModalIsOpen={customRecurrenceModalIsOpen}
+        hideCustomRecurrenceModal={hideCustomRecurrenceModal}
+        setCustomRecurrenceModalIsOpen={setCustomRecurrenceModalIsOpen}
+        t={t}
+      />
     </>
   );
 };
