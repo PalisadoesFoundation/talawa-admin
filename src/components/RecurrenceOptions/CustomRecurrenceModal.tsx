@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Dropdown, Form, FormControl, Modal } from 'react-bootstrap';
 import styles from './CustomRecurrenceModal.module.css';
 import { DatePicker } from '@mui/x-date-pickers';
@@ -56,6 +56,14 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
   } = recurrenceRuleState;
   const [selectedRecurrenceEndOption, setSelectedRecurrenceEndOption] =
     useState<RecurrenceEndOption>(endsNever);
+
+  useEffect(() => {
+    if (recurrenceEndDate) {
+      setSelectedRecurrenceEndOption(endsOn);
+    } else if (count) {
+      setSelectedRecurrenceEndOption(endsAfter);
+    }
+  }, [recurrenceRuleState]);
 
   const handleRecurrenceEndOptionChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -129,7 +137,7 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
             </span>{' '}
             <FormControl
               type="number"
-              defaultValue={interval}
+              value={interval}
               min={1}
               className={`${styles.recurrenceRuleNumberInput} ms-2 d-inline-block py-2`}
               data-testid="customRecurrenceIntervalInput"
