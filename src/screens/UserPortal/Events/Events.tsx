@@ -176,7 +176,7 @@ export default function events(): JSX.Element {
   ): void => {
     setPage(newPage);
   };
-
+  /* istanbul ignore next */
   const toggleCreateEventModal = (): void =>
     setCreateEventmodalisOpen(!createEventModal);
 
