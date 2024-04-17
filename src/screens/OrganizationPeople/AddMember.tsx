@@ -195,6 +195,7 @@ function AddMember(): JSX.Element {
             lastName: createUserVariables.lastName,
             email: createUserVariables.email,
             password: createUserVariables.password,
+            orgId: currentUrl,
           },
         });
         const createdUserId = registeredUser?.data.signUp.user._id;
