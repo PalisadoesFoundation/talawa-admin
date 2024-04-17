@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from './AdvertisementEntry.module.css';
 import { Button, Card, Col, Row, Spinner, Modal } from 'react-bootstrap';
@@ -9,6 +9,16 @@ import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
 import AdvertisementRegister from '../AdvertisementRegister/AdvertisementRegister';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { toast } from 'react-toastify';
+import type { InterfaceQueryOrganizationAdvertisementListItem } from 'utils/interfaces';
+
+type Ad = {
+  _id: string;
+  name: string;
+  type: 'BANNER' | 'MENU' | 'POPUP';
+  mediaUrl: string;
+  endDate: string; // Assuming it's a string in the format 'yyyy-MM-dd'
+  startDate: string; // Assuming it's a string in the format 'yyyy-MM-dd'
+};
 interface InterfaceAddOnEntryProps {
   id: string;
   name: string;
@@ -17,7 +27,7 @@ interface InterfaceAddOnEntryProps {
   organizationId: string;
   startDate: Date;
   endDate: Date;
-  updateAdvertisementsList: () => Promise<void>;
+  setAdvertisements: React.Dispatch<React.SetStateAction<Ad[]>>;
 }
 function advertisementEntry({
   id,
@@ -27,7 +37,7 @@ function advertisementEntry({
   endDate,
   organizationId,
   startDate,
-  updateAdvertisementsList,
+  setAdvertisements,
 }: InterfaceAddOnEntryProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   const [buttonLoading, setButtonLoading] = useState(false);
@@ -35,6 +45,31 @@ function advertisementEntry({
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const [deleteAdById] = useMutation(DELETE_ADVERTISEMENT_BY_ID);
+  const {
+    data: orgAdvertisementListData,
+    refetch,
+  }: {
+    data?: {
+      organizations: InterfaceQueryOrganizationAdvertisementListItem[];
+    };
+    refetch: any;
+  } = useQuery(ORGANIZATION_ADVERTISEMENT_LIST, {
+    variables: {
+      id: organizationId,
+      after: null,
+      first: 6,
+    },
+  });
+
+  useEffect(() => {
+    if (orgAdvertisementListData && orgAdvertisementListData.organizations) {
+      const ads: Ad[] =
+        orgAdvertisementListData.organizations[0].advertisements?.edges.map(
+          (edge) => edge.node,
+        );
+      setAdvertisements(ads);
+    }
+  }, [orgAdvertisementListData]);
 
   const toggleShowDeleteModal = (): void => setShowDeleteModal((prev) => !prev);
   const onDelete = async (): Promise<void> => {
@@ -47,7 +82,7 @@ function advertisementEntry({
       });
       toast.error('Advertisement Deleted');
       setButtonLoading(false);
-      updateAdvertisementsList();
+      await refetch();
     } catch (error: any) {
       toast.error(error.message);
       setButtonLoading(false);
@@ -82,9 +117,7 @@ function advertisementEntry({
                         advertisementMediaEdit={mediaUrl}
                         endDateEdit={endDate}
                         startDateEdit={startDate}
-                        updateAdvertisementsList={() =>
-                          updateAdvertisementsList()
-                        }
+                        setAdvertisements={setAdvertisements}
                       />
                     </li>
                     <li onClick={toggleShowDeleteModal} data-testid="deletebtn">

@@ -155,7 +155,7 @@ describe('Testing Advertisement Register Component', () => {
                 name="Advert1"
                 organizationId="1"
                 advertisementMedia="test.png"
-                updateAdvertisementsList={jest.fn()}
+                setAdvertisements={jest.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -181,7 +181,7 @@ describe('Testing Advertisement Register Component', () => {
                 name="Ad1"
                 organizationId="1"
                 advertisementMedia=""
-                updateAdvertisementsList={jest.fn()}
+                setAdvertisements={jest.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -235,6 +235,72 @@ describe('Testing Advertisement Register Component', () => {
     expect(setTimeoutSpy).toHaveBeenCalled();
   });
 
+  test('update advertisement', async () => {
+    const setTimeoutSpy = jest.spyOn(global, 'setTimeout');
+    const { getByText, queryByText, getByLabelText } = render(
+      <MockedProvider addTypename={false} link={link}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18n}>
+              <AdvertisementRegister
+                endDate={new Date()}
+                startDate={new Date()}
+                type="BANNER"
+                name="Ad1"
+                organizationId="1"
+                advertisementMedia=""
+                setAdvertisements={jest.fn()}
+                formStatus="edit"
+              />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    fireEvent.click(getByText(translations.edit));
+
+    fireEvent.change(getByLabelText(translations.Rname), {
+      target: { value: 'Ad1' },
+    });
+    expect(getByLabelText(translations.Rname)).toHaveValue('Ad1');
+
+    const mediaFile = new File(['media content'], 'test.png', {
+      type: 'image/png',
+    });
+
+    const mediaInput = getByLabelText(translations.Rmedia);
+    fireEvent.change(mediaInput, {
+      target: {
+        files: [mediaFile],
+      },
+    });
+
+    const mediaPreview = await screen.findByTestId('mediaPreview');
+    expect(mediaPreview).toBeInTheDocument();
+
+    fireEvent.change(getByLabelText(translations.Rtype), {
+      target: { value: 'BANNER' },
+    });
+    expect(getByLabelText(translations.Rtype)).toHaveValue('BANNER');
+
+    fireEvent.change(getByLabelText(translations.RstartDate), {
+      target: { value: '2023-01-01' },
+    });
+    expect(getByLabelText(translations.RstartDate)).toHaveValue('2023-01-01');
+
+    fireEvent.change(getByLabelText(translations.RendDate), {
+      target: { value: '2023-02-01' },
+    });
+    expect(getByLabelText(translations.RendDate)).toHaveValue('2023-02-01');
+
+    await waitFor(() => {
+      fireEvent.click(getByText(translations.saveChanges));
+    });
+    expect(toast.success).toBeCalledWith('Advertisement created successfully');
+    expect(setTimeoutSpy).toHaveBeenCalled();
+  });
+
   test('Logs error to the console and shows error toast when advertisement creation fails', async () => {
     const setTimeoutSpy = jest.spyOn(global, 'setTimeout');
     const { getByText, queryByText } = render(
@@ -249,7 +315,7 @@ describe('Testing Advertisement Register Component', () => {
                 name="Ad1"
                 organizationId="1"
                 advertisementMedia=""
-                updateAdvertisementsList={jest.fn()}
+                setAdvertisements={jest.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -285,7 +351,7 @@ describe('Testing Advertisement Register Component', () => {
                 name="Ad1"
                 organizationId="1"
                 advertisementMedia=""
-                updateAdvertisementsList={jest.fn()}
+                setAdvertisements={jest.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -355,7 +421,7 @@ describe('Testing Advertisement Register Component', () => {
                 organizationId="1"
                 advertisementMedia="google.com"
                 formStatus="edit"
-                updateAdvertisementsList={jest.fn()}
+                setAdvertisements={jest.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -380,7 +446,7 @@ describe('Testing Advertisement Register Component', () => {
                 name="Advert1"
                 organizationId="1"
                 advertisementMedia="test.png"
-                updateAdvertisementsList={jest.fn()}
+                setAdvertisements={jest.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -411,7 +477,7 @@ describe('Testing Advertisement Register Component', () => {
                   name="Advert1"
                   organizationId="1"
                   advertisementMedia="google.com"
-                  updateAdvertisementsList={jest.fn()}
+                  setAdvertisements={jest.fn()}
                 />
               }
             </I18nextProvider>
@@ -474,7 +540,7 @@ describe('Testing Advertisement Register Component', () => {
                 name="Advert1"
                 organizationId="1"
                 advertisementMedia="test.mp4"
-                updateAdvertisementsList={jest.fn()}
+                setAdvertisements={jest.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>

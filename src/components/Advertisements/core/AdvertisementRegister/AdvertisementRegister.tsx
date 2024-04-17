@@ -13,6 +13,16 @@ import dayjs from 'dayjs';
 import convertToBase64 from 'utils/convertToBase64';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
 import { useParams } from 'react-router-dom';
+import type { InterfaceQueryOrganizationAdvertisementListItem } from 'utils/interfaces';
+
+type Ad = {
+  _id: string;
+  name: string;
+  type: 'BANNER' | 'MENU' | 'POPUP';
+  mediaUrl: string;
+  endDate: string; // Assuming it's a string in the format 'yyyy-MM-dd'
+  startDate: string; // Assuming it's a string in the format 'yyyy-MM-dd'
+};
 interface InterfaceAddOnRegisterProps {
   id?: string; // organizationId
   createdBy?: string; // User
@@ -24,7 +34,7 @@ interface InterfaceAddOnRegisterProps {
   advertisementMediaEdit?: string;
   endDateEdit?: Date;
   startDateEdit?: Date;
-  updateAdvertisementsList: () => Promise<void>;
+  setAdvertisements: React.Dispatch<React.SetStateAction<Ad[]>>;
 }
 interface InterfaceFormStateTypes {
   name: string;
@@ -43,7 +53,7 @@ function advertisementRegister({
   advertisementMediaEdit,
   endDateEdit,
   startDateEdit,
-  updateAdvertisementsList,
+  setAdvertisements,
 }: InterfaceAddOnRegisterProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
 
@@ -54,14 +64,21 @@ function advertisementRegister({
   const handleShow = (): void => setShow(true);
   const [create] = useMutation(ADD_ADVERTISEMENT_MUTATION);
   const [updateAdvertisement] = useMutation(UPDATE_ADVERTISEMENT_MUTATION);
-  const { refetch } = useQuery(ORGANIZATION_ADVERTISEMENT_LIST, {
+  const {
+    data: orgAdvertisementListData,
+    refetch,
+  }: {
+    data?: {
+      organizations: InterfaceQueryOrganizationAdvertisementListItem[];
+    };
+    refetch: any;
+  } = useQuery(ORGANIZATION_ADVERTISEMENT_LIST, {
     variables: {
       id: currentOrg,
-      first: 6,
       after: null,
+      first: 6,
     },
   });
-
   //getting organizationId from URL
 
   const [formState, setFormState] = useState<InterfaceFormStateTypes>({
@@ -96,6 +113,16 @@ function advertisementRegister({
     currentOrg,
   ]);
 
+  useEffect(() => {
+    if (orgAdvertisementListData && orgAdvertisementListData.organizations) {
+      const ads: Ad[] =
+        orgAdvertisementListData.organizations[0].advertisements?.edges.map(
+          (edge) => edge.node,
+        );
+      setAdvertisements(ads);
+    }
+  }, [orgAdvertisementListData]);
+
   const handleRegister = async (): Promise<void> => {
     try {
       console.log('At handle register', formState);
@@ -125,7 +152,6 @@ function advertisementRegister({
           organizationId: currentOrg,
         });
         await refetch();
-        updateAdvertisementsList();
         handleClose();
       }
     } catch (error: unknown) {
@@ -191,9 +217,8 @@ function advertisementRegister({
 
       if (data) {
         toast.success('Advertisement updated successfully');
-        await refetch();
         handleClose();
-        updateAdvertisementsList();
+        await refetch();
       }
     } catch (error: any) {
       toast.error(error.message);

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import styles from './Advertisements.module.css';
-import type { ApolloError } from '@apollo/client';
 import { useQuery } from '@apollo/client';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
 import { Col, Row, Tab, Tabs } from 'react-bootstrap';
@@ -33,8 +32,6 @@ export default function advertisements(): JSX.Element {
     data?: {
       organizations: InterfaceQueryOrganizationAdvertisementListItem[];
     };
-    loading: boolean;
-    error?: ApolloError;
     refetch: any;
   } = useQuery(ORGANIZATION_ADVERTISEMENT_LIST, {
     variables: {
@@ -57,7 +54,6 @@ export default function advertisements(): JSX.Element {
         orgAdvertisementListData.organizations[0].advertisements?.edges.map(
           (edge) => edge.node,
         );
-      console.log('after', after);
       after
         ? setAdvertisements([...advertisements, ...ads])
         : setAdvertisements(ads);
@@ -65,10 +61,6 @@ export default function advertisements(): JSX.Element {
   }, [orgAdvertisementListData]);
 
   async function loadMoreAdvertisements(): Promise<void> {
-    console.log(
-      'scrollllllll',
-      orgAdvertisementListData && orgAdvertisementListData.organizations,
-    );
     await refetch();
 
     if (orgAdvertisementListData && orgAdvertisementListData.organizations) {
@@ -79,19 +71,12 @@ export default function advertisements(): JSX.Element {
     }
   }
 
-  async function handleUpdateAdvertisementsList(): Promise<void> {
-    setAfter(null);
-    await refetch();
-  }
-
   return (
     <>
       <Row data-testid="advertisements">
         <Col col={8}>
           <div className={styles.justifysp}>
-            <AdvertisementRegister
-              updateAdvertisementsList={() => handleUpdateAdvertisementsList()}
-            />
+            <AdvertisementRegister setAdvertisements={setAdvertisements} />
             <Tabs
               defaultActiveKey="archievedAds"
               id="uncontrolled-tab-example"
@@ -164,9 +149,7 @@ export default function advertisements(): JSX.Element {
                             startDate={new Date(ad.startDate)}
                             endDate={new Date(ad.endDate)}
                             mediaUrl={ad.mediaUrl}
-                            updateAdvertisementsList={() =>
-                              handleUpdateAdvertisementsList()
-                            }
+                            setAdvertisements={setAdvertisements}
                             data-testid="Ad"
                           />
                         ),
@@ -241,9 +224,7 @@ export default function advertisements(): JSX.Element {
                             startDate={new Date(ad.startDate)}
                             endDate={new Date(ad.endDate)}
                             mediaUrl={ad.mediaUrl}
-                            updateAdvertisementsList={() =>
-                              handleUpdateAdvertisementsList()
-                            }
+                            setAdvertisements={setAdvertisements}
                           />
                         ),
                       )
