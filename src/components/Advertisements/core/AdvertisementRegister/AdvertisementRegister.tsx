@@ -113,15 +113,15 @@ function advertisementRegister({
     currentOrg,
   ]);
 
-  useEffect(() => {
-    if (orgAdvertisementListData && orgAdvertisementListData.organizations) {
-      const ads: Ad[] =
-        orgAdvertisementListData.organizations[0].advertisements?.edges.map(
-          (edge) => edge.node,
-        );
-      setAdvertisements(ads);
-    }
-  }, [orgAdvertisementListData]);
+  // useEffect(() => {
+  //   if (orgAdvertisementListData && orgAdvertisementListData.organizations) {
+  //     const ads: Ad[] =
+  //       orgAdvertisementListData.organizations[0].advertisements?.edges.map(
+  //         (edge) => edge.node,
+  //       );
+  //     setAdvertisements(ads);
+  //   }
+  // }, [orgAdvertisementListData]);
 
   const handleRegister = async (): Promise<void> => {
     try {
@@ -152,6 +152,16 @@ function advertisementRegister({
           organizationId: currentOrg,
         });
         await refetch();
+        if (
+          orgAdvertisementListData &&
+          orgAdvertisementListData.organizations
+        ) {
+          const ads: Ad[] =
+            orgAdvertisementListData.organizations[0].advertisements?.edges.map(
+              (edge) => edge.node,
+            );
+          setAdvertisements(ads);
+        }
         handleClose();
       }
     } catch (error: unknown) {
@@ -219,6 +229,16 @@ function advertisementRegister({
         toast.success('Advertisement updated successfully');
         handleClose();
         await refetch();
+        if (
+          orgAdvertisementListData &&
+          orgAdvertisementListData.organizations
+        ) {
+          const ads: Ad[] =
+            orgAdvertisementListData.organizations[0].advertisements?.edges.map(
+              (edge) => edge.node,
+            );
+          setAdvertisements(ads);
+        }
       }
     } catch (error: any) {
       toast.error(error.message);

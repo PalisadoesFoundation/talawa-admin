@@ -68,6 +68,11 @@ export default function advertisements(): JSX.Element {
         orgAdvertisementListData?.organizations[0]?.advertisements.pageInfo
           .endCursor,
       );
+      // const ads: Ad[] =
+      //   orgAdvertisementListData.organizations[0].advertisements?.edges.map(
+      //     (edge) => edge.node,
+      //   );
+      // setAdvertisements([...advertisements, ...ads]);
     }
   }
 

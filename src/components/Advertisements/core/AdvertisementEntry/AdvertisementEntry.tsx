@@ -61,16 +61,6 @@ function advertisementEntry({
     },
   });
 
-  useEffect(() => {
-    if (orgAdvertisementListData && orgAdvertisementListData.organizations) {
-      const ads: Ad[] =
-        orgAdvertisementListData.organizations[0].advertisements?.edges.map(
-          (edge) => edge.node,
-        );
-      setAdvertisements(ads);
-    }
-  }, [orgAdvertisementListData]);
-
   const toggleShowDeleteModal = (): void => setShowDeleteModal((prev) => !prev);
   const onDelete = async (): Promise<void> => {
     setButtonLoading(true);
@@ -83,6 +73,13 @@ function advertisementEntry({
       toast.error('Advertisement Deleted');
       setButtonLoading(false);
       await refetch();
+      if (orgAdvertisementListData && orgAdvertisementListData.organizations) {
+        const ads: Ad[] =
+          orgAdvertisementListData.organizations[0].advertisements?.edges.map(
+            (edge) => edge.node,
+          );
+        setAdvertisements(ads);
+      }
     } catch (error: any) {
       toast.error(error.message);
       setButtonLoading(false);
