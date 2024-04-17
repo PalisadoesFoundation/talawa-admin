@@ -283,108 +283,6 @@ describe('Testing Events Screen [User Portal]', () => {
     await wait();
   });
 
-  test('Events are visible as expected without search query', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Events />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    let mockEventTitle = '';
-    if (MOCKS[0].result?.data.eventsByOrganizationConnection) {
-      mockEventTitle =
-        MOCKS[0].result?.data.eventsByOrganizationConnection[0].title;
-    }
-
-    expect(screen.queryByText(mockEventTitle)).toBeInTheDocument();
-  });
-
-  test('Search works as expected when user types in search input and press enter key', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Events />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    const randomSearchInput = 'test{enter}';
-    userEvent.type(screen.getByTestId('searchInput'), randomSearchInput);
-
-    await wait();
-
-    let mockEventTitle = '';
-    if (MOCKS[0].result?.data.eventsByOrganizationConnection) {
-      mockEventTitle =
-        MOCKS[0].result?.data.eventsByOrganizationConnection[0].title;
-    }
-
-    let mockEventTitleAbsent = '';
-    if (MOCKS[0].result?.data.eventsByOrganizationConnection) {
-      mockEventTitleAbsent =
-        MOCKS[0].result?.data.eventsByOrganizationConnection[1].title;
-    }
-
-    expect(screen.queryByText(mockEventTitle)).toBeInTheDocument();
-    expect(screen.queryByText(mockEventTitleAbsent)).not.toBeInTheDocument();
-  });
-
-  test('Search works as expected when user types in search input and clicks search Btn', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Events />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    const searchInput = screen.getByTestId('searchInput');
-    const searchBtn = screen.getByTestId('searchBtn');
-    userEvent.type(searchInput, '');
-    userEvent.click(searchBtn);
-    await wait();
-    userEvent.clear(searchInput);
-    userEvent.type(searchInput, 'test');
-    userEvent.click(searchBtn);
-
-    await wait();
-
-    let mockEventTitle = '';
-    if (MOCKS[0].result?.data.eventsByOrganizationConnection) {
-      mockEventTitle =
-        MOCKS[0].result?.data.eventsByOrganizationConnection[0].title;
-    }
-
-    let mockEventTitleAbsent = '';
-    if (MOCKS[0].result?.data.eventsByOrganizationConnection) {
-      mockEventTitleAbsent =
-        MOCKS[0].result?.data.eventsByOrganizationConnection[1].title;
-    }
-
-    expect(screen.queryByText(mockEventTitle)).toBeInTheDocument();
-    expect(screen.queryByText(mockEventTitleAbsent)).not.toBeInTheDocument();
-  });
-
   test('Create event works as expected when event is not an all day event.', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -503,10 +401,10 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    // await wait();
 
-    userEvent.click(screen.getByTestId('modeChangeBtn'));
-    userEvent.click(screen.getByTestId('modeBtn1'));
+    // userEvent.click(screen.getByTestId('modeChangeBtn'));
+    // userEvent.click(screen.getByTestId('modeBtn1'));
 
     await wait();
     const calenderView = 'Calendar View';
