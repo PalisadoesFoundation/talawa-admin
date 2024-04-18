@@ -360,16 +360,18 @@
     "yes": "Yes"
   },
   "eventListCard": {
-    "location": "Location",
-    "on": "On",
-    "end": "End",
+    "location": "Event Location",
     "deleteEvent": "Delete Event",
     "deleteEventMsg": "Do you want to remove this event?",
     "no": "No",
     "yes": "Yes",
-    "editEvent": "Edit Event",
-    "eventTitle": "Title",
-    "description": "Description",
+    "registerEvent": "Register",
+    "alreadyRegistered": "Already registered",
+    "editEvent": "Update Event",
+    "eventTitle": "Event Title",
+    "description": "Event Description",
+    "regDate": "Start Date",
+    "regEndDate": "End Date",
     "startTime": "Start Time",
     "endTime": "End Time",
     "allDay": "All Day",
@@ -975,7 +977,8 @@
     "view": "View",
     "edit": "Edit",
     "editAdvertisement": "Edit Advertisement",
-    "saveChanges": "Save Changes"
+    "saveChanges": "Save Changes",
+    "endOfResults": "End of results"
   },
   "userChat": {
     "chat": "Chat",

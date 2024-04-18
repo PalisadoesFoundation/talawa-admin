@@ -148,6 +148,7 @@ export const SIGNUP_MUTATION = gql`
     $lastName: String!
     $email: EmailAddress!
     $password: String!
+    $orgId: ID!
   ) {
     signUp(
       data: {
@@ -155,6 +156,7 @@ export const SIGNUP_MUTATION = gql`
         lastName: $lastName
         email: $email
         password: $password
+        selectedOrganization: $orgId
       }
     ) {
       user {
@@ -348,7 +350,9 @@ export const ADD_ADMIN_MUTATION = gql`
 export const ADD_MEMBER_MUTATION = gql`
   mutation CreateMember($orgid: ID!, $userid: ID!) {
     createMember(input: { organizationId: $orgid, userId: $userid }) {
-      _id
+      organization {
+        _id
+      }
     }
   }
 `;
@@ -564,6 +568,8 @@ export const UPDATE_EVENT_MUTATION = gql`
     $isPublic: Boolean!
     $isRegisterable: Boolean!
     $allDay: Boolean!
+    $startDate: Date!
+    $endDate: Date!
     $startTime: Time
     $endTime: Time
     $location: String
@@ -577,6 +583,8 @@ export const UPDATE_EVENT_MUTATION = gql`
         isPublic: $isPublic
         isRegisterable: $isRegisterable
         allDay: $allDay
+        startDate: $startDate
+        endDate: $endDate
         startTime: $startTime
         endTime: $endTime
         location: $location
