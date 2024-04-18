@@ -12,6 +12,7 @@ import {
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { weekdays } from './constants';
+import { months } from './constants';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 const eventData = [
@@ -87,6 +88,14 @@ const MOCKS = [
 ];
 
 const link = new StaticMockLink(MOCKS, true);
+
+async function wait(ms = 200): Promise<void> {
+  await act(() => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  });
+}
 
 describe('Calendar', () => {
   it('renders weekdays', () => {
@@ -352,6 +361,17 @@ describe('Calendar', () => {
 
     act(() => {
       window.dispatchEvent(new Event('resize'));
+    });
+  });
+  it('renders year view', async () => {
+    render(<Calendar eventData={eventData} viewType={ViewType.YEAR} />);
+
+    await wait();
+    months.forEach((month) => {
+      const elements = screen.getAllByText(month);
+      elements.forEach((element) => {
+        expect(element).toBeInTheDocument();
+      });
     });
   });
 });

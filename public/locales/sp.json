@@ -362,18 +362,16 @@
     "yes": "Sí"
   },
   "eventListCard": {
-    "location": "Lugar del evento",
+    "location": "Ubicación",
+    "on": "En",
+    "end": "Final",
     "deleteEvent": "Eliminar evento",
     "deleteEventMsg": "¿Quieres eliminar este evento?",
     "no": "No",
     "yes": "Sí",
-    "registerEvent": "Registro",
-    "alreadyRegistered": "Ya registrado",
-    "editEvent": "Evento de actualización",
-    "eventTitle": "Título del evento",
-    "description": "Descripción del evento",
-    "regDate": "Fecha de inicio",
-    "regEndDate": "Fecha final",
+    "editEvent": "Editar evento",
+    "eventTitle": "Título",
+    "description": "Descripción",
     "startTime": "Hora de inicio",
     "endTime": "Hora de finalización",
     "allDay": "Todo el dia",
@@ -936,7 +934,9 @@
     "startDate": "Fecha de inicio",
     "endDate": "Fecha de finalización",
     "publicEvent": "Es público",
-    "registerable": "Es registrable"
+    "registerable": "Es registrable",
+    "monthlyCalendarView": "Calendario mensual",
+    "yearlyCalendarView": "Calendario anual"
   },
   "userEventCard": {
     "location": "Ubicación",
@@ -964,8 +964,7 @@
     "view": "Ver",
     "edit": "Editar",
     "editAdvertisement": "Editar Anuncio",
-    "saveChanges": "Guardar Cambios",
-    "endOfResults": "Fin de los resultados"
+    "saveChanges": "Guardar Cambios"
   },
   "userChat": {
     "chat": "Charlar",

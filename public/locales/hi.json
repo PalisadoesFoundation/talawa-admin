@@ -363,18 +363,16 @@
     "yes": "हाँ"
   },
   "eventListCard": {
-    "location": "आयोजन स्थान",
+    "location": "स्थान",
+    "on": "पर",
+    "end": "समाप्त",
     "deleteEvent": "घटना हटाएं",
     "deleteEventMsg": "क्या आप इस इवेंट को हटाना चाहते हैं?",
     "no": "नहीं",
     "yes": "हाँ",
-    "registerEvent": "रजिस्टर करें",
-    "alreadyRegistered": "पहले से ही पंजीकृत",
-    "editEvent": "अपडेट इवेंट",
-    "eventTitle": "इवेंट शीर्षक",
-    "description": "इवेंट विवरण",
-    "regDate": "आरंभ करने की तिथि",
-    "regEndDate": "समाप्ति तिथि",
+    "editEvent": "घटना संपादित करें",
+    "eventTitle": "शीर्षक",
+    "description": "विवरण",
     "startTime": "समय शुरू",
     "endTime": "अंत समय",
     "allDay": "पूरे दिन",
@@ -939,7 +937,9 @@
     "startDate": "प्रारंभ तिथि",
     "endDate": "अंतिम तिथि",
     "publicEvent": "सार्वजनिक है",
-    "registerable": "पंजीकृत करने योग्य है"
+    "registerable": "पंजीकृत करने योग्य है",
+    "monthlyCalendarView": "मासिक कैलेंडर",
+    "yearlyCalendarView": "वार्षिक कैलेंडर"
   },
   "userEventCard": {
     "location": "जगह",
@@ -967,8 +967,7 @@
     "view": "देखें",
     "edit": "संपादित करें",
     "editAdvertisement": "विज्ञापन संपादित करें",
-    "saveChanges": "परिवर्तन सहेजें",
-    "endOfResults": "परिणामों का अंत"
+    "saveChanges": "परिवर्तन सहेजें"
   },
   "userChat": {
     "chat": "बात",
