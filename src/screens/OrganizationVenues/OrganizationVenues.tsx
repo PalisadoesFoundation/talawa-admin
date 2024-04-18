@@ -43,7 +43,7 @@ function organizationVenues(): JSX.Element {
     error: venueError,
     refetch: venueRefetch,
   } = useQuery(VENUE_LIST, {
-    variables: { id: orgId },
+    variables: { orgId: orgId },
   });
 
   const [deleteVenue] = useMutation(DELETE_VENUE_MUTATION);
@@ -91,13 +91,8 @@ function organizationVenues(): JSX.Element {
   }
 
   useEffect(() => {
-    if (
-      venueData &&
-      venueData.organizations &&
-      venueData.organizations[0] &&
-      venueData.organizations[0].venues
-    ) {
-      setVenues(venueData.organizations[0].venues);
+    if (venueData && venueData.getVenueByOrgId) {
+      setVenues(venueData.getVenueByOrgId);
     }
   }, [venueData]);
 
