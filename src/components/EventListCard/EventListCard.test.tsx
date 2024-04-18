@@ -208,8 +208,6 @@ const props: InterfaceEventListCardProps[] = [
     allDay: false,
     recurring: true,
     recurrenceRule: {
-      recurrenceRuleString:
-        'DTSTART:20220319T000000Z\nRRULE:FREQ=WEEKLY;UNTIL=20220326T000000Z;BYDAY=SA',
       recurrenceStartDate: '19/03/2022',
       recurrenceEndDate: '26/03/2022',
       frequency: Frequency.WEEKLY,

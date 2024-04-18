@@ -8,7 +8,7 @@ export interface InterfaceRecurrenceRuleState {
   recurrenceEndDate: Date | null;
   frequency: Frequency;
   weekDays: WeekDays[] | undefined;
-  interval: number | undefined;
+  interval: number;
   count: number | undefined;
   weekDayOccurenceInMonth: number | undefined;
 }
@@ -17,7 +17,6 @@ export interface InterfaceRecurrenceRuleState {
 export interface InterfaceRecurrenceRule {
   recurrenceStartDate: string;
   recurrenceEndDate: string | null;
-  recurrenceRuleString: string;
   frequency: Frequency;
   weekDays: WeekDays[];
   interval: number;

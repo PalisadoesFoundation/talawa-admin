@@ -177,6 +177,7 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
                     setRecurrenceRuleState({
                       ...recurrenceRuleState,
                       frequency: Frequency.WEEKLY,
+                      weekDays: [Days[recurrenceStartDate.getDay()]],
                       weekDayOccurenceInMonth: undefined,
                     })
                   }
