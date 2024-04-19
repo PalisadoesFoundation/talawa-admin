@@ -6,6 +6,7 @@ import EventListCardModals from './EventListCardModals';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
 
 export interface InterfaceEventListCardProps {
+  refetchEvents?: () => void;
   userRole?: string;
   key: string;
   id: string;

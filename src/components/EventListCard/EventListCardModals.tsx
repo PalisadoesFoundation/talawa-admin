@@ -55,6 +55,8 @@ function EventListCardModals({
   hideViewModal,
   t,
 }: InterfaceEventListCardModalProps): JSX.Element {
+  const { refetchEvents } = eventListCardProps;
+
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
 
@@ -121,43 +123,61 @@ function EventListCardModals({
   ] = useState(true);
 
   useEffect(() => {
-    setFormState({
-      title: eventListCardProps.eventName,
-      eventdescrip: eventListCardProps.eventDescription,
-      location: eventListCardProps.eventLocation,
-      startTime: eventListCardProps.startTime?.split('.')[0] || '08:00:00',
-      endTime: eventListCardProps.endTime?.split('.')[0] || '18:00:00',
-    });
-
-    setAllDayChecked(eventListCardProps.allDay);
-    setRecurringChecked(eventListCardProps.recurring);
-    setPublicChecked(eventListCardProps.isPublic);
-    setRegistrableChecked(eventListCardProps.isRegisterable);
-    setEventStartDate(new Date(eventListCardProps.startDate));
-    setEventEndDate(new Date(eventListCardProps.endDate));
-
-    if (eventListCardProps.recurrenceRule) {
-      // get the recurrence rule
-      const { recurrenceRule } = eventListCardProps;
-
-      // set the recurrence rule state
-      setRecurrenceRuleState({
-        ...recurrenceRuleState,
-        recurrenceStartDate: new Date(recurrenceRule.recurrenceStartDate),
-        recurrenceEndDate: recurrenceRule.recurrenceEndDate
-          ? new Date(recurrenceRule.recurrenceEndDate)
-          : null,
-        frequency: recurrenceRule.frequency,
-        weekDays: recurrenceRule.weekDays.length
-          ? recurrenceRule.weekDays
-          : undefined,
-        interval: recurrenceRule.interval,
-        count: recurrenceRule.count ?? undefined,
-        weekDayOccurenceInMonth:
-          recurrenceRule.weekDayOccurenceInMonth ?? undefined,
+    if (eventModalIsOpen) {
+      setFormState({
+        title: eventListCardProps.eventName,
+        eventdescrip: eventListCardProps.eventDescription,
+        location: eventListCardProps.eventLocation,
+        startTime: eventListCardProps.startTime?.split('.')[0] || '08:00:00',
+        endTime: eventListCardProps.endTime?.split('.')[0] || '18:00:00',
       });
+
+      setAllDayChecked(eventListCardProps.allDay);
+      setRecurringChecked(eventListCardProps.recurring);
+      setPublicChecked(eventListCardProps.isPublic);
+      setRegistrableChecked(eventListCardProps.isRegisterable);
+      setEventStartDate(new Date(eventListCardProps.startDate));
+      setEventEndDate(new Date(eventListCardProps.endDate));
+
+      if (eventListCardProps.recurrenceRule) {
+        // get the recurrence rule
+        const { recurrenceRule } = eventListCardProps;
+
+        // set the recurrence rule state
+        setRecurrenceRuleState({
+          ...recurrenceRuleState,
+          recurrenceStartDate: new Date(recurrenceRule.recurrenceStartDate),
+          recurrenceEndDate: recurrenceRule.recurrenceEndDate
+            ? new Date(recurrenceRule.recurrenceEndDate)
+            : null,
+          frequency: recurrenceRule.frequency,
+          weekDays: recurrenceRule.weekDays.length
+            ? recurrenceRule.weekDays
+            : undefined,
+          interval: recurrenceRule.interval,
+          count: recurrenceRule.count ?? undefined,
+          weekDayOccurenceInMonth:
+            recurrenceRule.weekDayOccurenceInMonth ?? undefined,
+        });
+      } else {
+        // i.e if the event is not recurring
+
+        // get the event's start date
+        const eventCurrentStartDate = new Date(eventListCardProps.startDate);
+
+        setRecurrenceRuleState({
+          ...recurrenceRuleState,
+          recurrenceStartDate: eventCurrentStartDate,
+          recurrenceEndDate: null,
+          frequency: Frequency.WEEKLY,
+          weekDays: [Days[eventCurrentStartDate.getDay()]],
+          interval: 1,
+          count: undefined,
+          weekDayOccurenceInMonth: undefined,
+        });
+      }
     }
-  }, []);
+  }, [eventModalIsOpen]);
 
   // a state to specify whether the recurrence rule has changed
   const [recurrenceRuleChanged, setRecurrenceRuleChanged] = useState(false);
@@ -242,7 +262,7 @@ function EventListCardModals({
           endTime: !alldaychecked ? formState.endTime + 'Z' : undefined,
           recurrenceStartDate: recurringchecked
             ? recurringEventUpdateType === thisAndFollowingInstances &&
-              instanceDatesChanged
+              (instanceDatesChanged || recurrenceRuleChanged)
               ? dayjs(eventStartDate).format('YYYY-MM-DD')
               : dayjs(recurrenceStartDate).format('YYYY-MM-DD')
             : undefined,
@@ -269,9 +289,11 @@ function EventListCardModals({
       /* istanbul ignore next */
       if (data) {
         toast.success(t('eventUpdated'));
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
+        setRecurringEventUpdateModalIsOpen(false);
+        hideViewModal();
+        if (refetchEvents) {
+          refetchEvents();
+        }
       }
     } catch (error: unknown) {
       /* istanbul ignore next */
@@ -307,9 +329,11 @@ function EventListCardModals({
       /* istanbul ignore next */
       if (data) {
         toast.success(t('eventDeleted'));
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
+        setEventDeleteModalIsOpen(false);
+        hideViewModal();
+        if (refetchEvents) {
+          refetchEvents();
+        }
       }
     } catch (error: unknown) {
       /* istanbul ignore next */
@@ -681,6 +705,67 @@ function EventListCardModals({
         </Modal.Footer>
       </Modal>
 
+      {/* recurring event update options modal */}
+      <Modal
+        size="sm"
+        id={`recurringEventUpdateOptions${eventListCardProps.id}`}
+        show={recurringEventUpdateModalIsOpen}
+        onHide={toggleRecurringEventUpdateModal}
+        backdrop="static"
+        keyboard={false}
+        centered
+      >
+        <Modal.Header closeButton className="bg-primary">
+          <Modal.Title
+            className="text-white"
+            id={`recurringEventUpdateOptionsLabel${eventListCardProps.id}`}
+          >
+            {t('editEvent')}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form className="mt-3">
+            {recurringEventUpdateOptions.map((option, index) => (
+              <div key={index} className="my-0 d-flex align-items-center">
+                <Form.Check
+                  type="radio"
+                  id={`radio-${index}`}
+                  label={t(option)}
+                  name="recurringEventUpdateType"
+                  value={option}
+                  onChange={(e) =>
+                    setRecurringEventUpdateType(
+                      e.target.value as RecurringEventMutationType,
+                    )
+                  }
+                  defaultChecked={option === recurringEventUpdateType}
+                  data-testid={`${option}`}
+                />
+              </div>
+            ))}
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            type="button"
+            className="btn btn-danger"
+            data-dismiss="modal"
+            onClick={toggleRecurringEventUpdateModal}
+            data-testid="EventDeleteModalCloseBtn"
+          >
+            {t('no')}
+          </Button>
+          <Button
+            type="button"
+            className="btn btn-success"
+            onClick={updateEventHandler}
+            data-testid="deleteEventBtn"
+          >
+            {t('yes')}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
       {/* delete modal */}
       <Modal
         size="sm"
@@ -740,67 +825,6 @@ function EventListCardModals({
             type="button"
             className="btn btn-success"
             onClick={deleteEventHandler}
-            data-testid="deleteEventBtn"
-          >
-            {t('yes')}
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-      {/* recurring event update options modal */}
-      <Modal
-        size="sm"
-        id={`recurringEventUpdateOptions${eventListCardProps.id}`}
-        show={recurringEventUpdateModalIsOpen}
-        onHide={toggleRecurringEventUpdateModal}
-        backdrop="static"
-        keyboard={false}
-        centered
-      >
-        <Modal.Header closeButton className="bg-primary">
-          <Modal.Title
-            className="text-white"
-            id={`recurringEventUpdateOptionsLabel${eventListCardProps.id}`}
-          >
-            {t('editEvent')}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form className="mt-3">
-            {recurringEventUpdateOptions.map((option, index) => (
-              <div key={index} className="my-0 d-flex align-items-center">
-                <Form.Check
-                  type="radio"
-                  id={`radio-${index}`}
-                  label={t(option)}
-                  name="recurringEventUpdateType"
-                  value={option}
-                  onChange={(e) =>
-                    setRecurringEventUpdateType(
-                      e.target.value as RecurringEventMutationType,
-                    )
-                  }
-                  defaultChecked={option === recurringEventUpdateType}
-                  data-testid={`${option}`}
-                />
-              </div>
-            ))}
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            type="button"
-            className="btn btn-danger"
-            data-dismiss="modal"
-            onClick={toggleRecurringEventUpdateModal}
-            data-testid="EventDeleteModalCloseBtn"
-          >
-            {t('no')}
-          </Button>
-          <Button
-            type="button"
-            className="btn btn-success"
-            onClick={updateEventHandler}
             data-testid="deleteEventBtn"
           >
             {t('yes')}

@@ -96,7 +96,7 @@ function organizationEvents(): JSX.Element {
     data,
     loading,
     error: eventDataError,
-    refetch,
+    refetch: refetchEvents,
   } = useQuery(ORGANIZATION_EVENT_CONNECTION_LIST, {
     variables: {
       organization_id: currentUrl,
@@ -182,7 +182,7 @@ function organizationEvents(): JSX.Element {
 
         if (createEventData) {
           toast.success(t('eventCreated'));
-          refetch();
+          refetchEvents();
           hideCreateEventModal();
           setFormState({
             title: '',
@@ -256,6 +256,7 @@ function organizationEvents(): JSX.Element {
       </div>
       <EventCalendar
         eventData={data?.eventsByOrganizationConnection}
+        refetchEvents={refetchEvents}
         orgData={orgData}
         userRole={userRole}
         userId={userId}

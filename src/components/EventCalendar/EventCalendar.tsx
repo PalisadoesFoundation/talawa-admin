@@ -39,6 +39,7 @@ interface InterfaceEventListCardProps {
 
 interface InterfaceCalendarProps {
   eventData: InterfaceEventListCardProps[];
+  refetchEvents?: () => void;
   orgData?: InterfaceIOrgList;
   userRole?: string;
   userId?: string;
@@ -56,6 +57,7 @@ interface InterfaceIOrgList {
 }
 const Calendar: React.FC<InterfaceCalendarProps> = ({
   eventData,
+  refetchEvents,
   orgData,
   userRole,
   userId,
@@ -234,6 +236,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
 
           return (
             <EventListCard
+              refetchEvents={refetchEvents}
               userRole={userRole}
               key={datas._id}
               id={datas._id}
@@ -332,6 +335,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
 
                 return (
                   <EventListCard
+                    refetchEvents={refetchEvents}
                     userRole={userRole}
                     key={datas._id}
                     id={datas._id}
@@ -472,6 +476,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
 
             return (
               <EventListCard
+                refetchEvents={refetchEvents}
                 userRole={userRole}
                 key={datas._id}
                 id={datas._id}
