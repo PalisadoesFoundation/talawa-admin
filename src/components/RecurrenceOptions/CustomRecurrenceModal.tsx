@@ -164,7 +164,6 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
                     setRecurrenceRuleState({
                       ...recurrenceRuleState,
                       frequency: Frequency.DAILY,
-                      weekDays: undefined,
                       weekDayOccurenceInMonth: undefined,
                     })
                   }
@@ -190,7 +189,6 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
                     setRecurrenceRuleState({
                       ...recurrenceRuleState,
                       frequency: Frequency.MONTHLY,
-                      weekDays: undefined,
                       weekDayOccurenceInMonth: undefined,
                     })
                   }
@@ -203,7 +201,6 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
                     setRecurrenceRuleState({
                       ...recurrenceRuleState,
                       frequency: Frequency.YEARLY,
-                      weekDays: undefined,
                       weekDayOccurenceInMonth: undefined,
                     })
                   }
@@ -253,7 +250,6 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
                       setRecurrenceRuleState({
                         ...recurrenceRuleState,
                         frequency: Frequency.MONTHLY,
-                        weekDays: undefined,
                         weekDayOccurenceInMonth: undefined,
                       })
                     }
@@ -263,7 +259,6 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
                       {getRecurrenceRuleText({
                         ...recurrenceRuleState,
                         frequency: Frequency.MONTHLY,
-                        weekDays: undefined,
                         weekDayOccurenceInMonth: undefined,
                       })}
                     </span>

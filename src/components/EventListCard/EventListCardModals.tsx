@@ -63,15 +63,25 @@ function EventListCardModals({
   const { orgId } = useParams();
   const navigate = useNavigate();
 
-  const [alldaychecked, setAllDayChecked] = useState(true);
-  const [recurringchecked, setRecurringChecked] = useState(false);
-  const [publicchecked, setPublicChecked] = useState(true);
-  const [registrablechecked, setRegistrableChecked] = useState(false);
+  const [alldaychecked, setAllDayChecked] = useState(eventListCardProps.allDay);
+  const [recurringchecked, setRecurringChecked] = useState(
+    eventListCardProps.recurring,
+  );
+  const [publicchecked, setPublicChecked] = useState(
+    eventListCardProps.isPublic,
+  );
+  const [registrablechecked, setRegistrableChecked] = useState(
+    eventListCardProps.isRegisterable,
+  );
   const [eventDeleteModalIsOpen, setEventDeleteModalIsOpen] = useState(false);
   const [recurringEventUpdateModalIsOpen, setRecurringEventUpdateModalIsOpen] =
     useState(false);
-  const [eventStartDate, setEventStartDate] = useState(new Date());
-  const [eventEndDate, setEventEndDate] = useState(new Date());
+  const [eventStartDate, setEventStartDate] = useState(
+    new Date(eventListCardProps.startDate),
+  );
+  const [eventEndDate, setEventEndDate] = useState(
+    new Date(eventListCardProps.endDate),
+  );
 
   const [recurrenceRuleState, setRecurrenceRuleState] =
     useState<InterfaceRecurrenceRuleState>({
@@ -97,11 +107,11 @@ function EventListCardModals({
   const recurrenceRuleText = getRecurrenceRuleText(recurrenceRuleState);
 
   const [formState, setFormState] = useState({
-    title: '',
-    eventdescrip: '',
-    location: '',
-    startTime: '08:00:00',
-    endTime: '18:00:00',
+    title: eventListCardProps.eventName,
+    eventdescrip: eventListCardProps.eventDescription,
+    location: eventListCardProps.eventLocation,
+    startTime: eventListCardProps.startTime?.split('.')[0] || '08:00:00',
+    endTime: eventListCardProps.endTime?.split('.')[0] || '08:00:00',
   });
 
   const [recurringEventDeleteType, setRecurringEventDeleteType] =
@@ -124,55 +134,22 @@ function EventListCardModals({
 
   useEffect(() => {
     if (eventModalIsOpen) {
-      setFormState({
-        title: eventListCardProps.eventName,
-        eventdescrip: eventListCardProps.eventDescription,
-        location: eventListCardProps.eventLocation,
-        startTime: eventListCardProps.startTime?.split('.')[0] || '08:00:00',
-        endTime: eventListCardProps.endTime?.split('.')[0] || '18:00:00',
-      });
-
-      setAllDayChecked(eventListCardProps.allDay);
-      setRecurringChecked(eventListCardProps.recurring);
-      setPublicChecked(eventListCardProps.isPublic);
-      setRegistrableChecked(eventListCardProps.isRegisterable);
-      setEventStartDate(new Date(eventListCardProps.startDate));
-      setEventEndDate(new Date(eventListCardProps.endDate));
-
       if (eventListCardProps.recurrenceRule) {
         // get the recurrence rule
         const { recurrenceRule } = eventListCardProps;
+
         // set the recurrence rule state
         setRecurrenceRuleState({
-          ...recurrenceRuleState,
           recurrenceStartDate: new Date(recurrenceRule.recurrenceStartDate),
           recurrenceEndDate: recurrenceRule.recurrenceEndDate
             ? new Date(recurrenceRule.recurrenceEndDate)
             : null,
           frequency: recurrenceRule.frequency,
-          weekDays: recurrenceRule.weekDays.length
-            ? recurrenceRule.weekDays
-            : undefined,
+          weekDays: recurrenceRule.weekDays,
           interval: recurrenceRule.interval,
           count: recurrenceRule.count ?? undefined,
           weekDayOccurenceInMonth:
             recurrenceRule.weekDayOccurenceInMonth ?? undefined,
-        });
-      } else {
-        // i.e if the event is not recurring
-
-        // get the event's start date
-        const eventCurrentStartDate = new Date(eventListCardProps.startDate);
-
-        setRecurrenceRuleState({
-          ...recurrenceRuleState,
-          recurrenceStartDate: eventCurrentStartDate,
-          recurrenceEndDate: null,
-          frequency: Frequency.WEEKLY,
-          weekDays: [Days[eventCurrentStartDate.getDay()]],
-          interval: 1,
-          count: undefined,
-          weekDayOccurenceInMonth: undefined,
         });
       }
     }
@@ -295,7 +272,6 @@ function EventListCardModals({
       }
     } catch (error: unknown) {
       /* istanbul ignore next */
-      console.log((error as Error).message);
       errorHandler(t, error);
     }
   };
@@ -366,7 +342,7 @@ function EventListCardModals({
         }
       } catch (error: unknown) {
         /* istanbul ignore next */
-        toast.error(error);
+        errorHandler(t, error);
       }
     }
   };
@@ -492,7 +468,9 @@ function EventListCardModals({
                           recurrenceStartDate: date?.toDate(),
                           weekDays: [Days[date?.toDate().getDay()]],
                           weekDayOccurenceInMonth: weekDayOccurenceInMonth
-                            ? getWeekDayOccurenceInMonth(date?.toDate())
+                            ? /* istanbul ignore next */ getWeekDayOccurenceInMonth(
+                                date?.toDate(),
+                              )
                             : undefined,
                         });
                       }
@@ -530,7 +508,8 @@ function EventListCardModals({
                           endTime:
                             timeToDayJs(formState.endTime) < time
                               ? time?.format('HH:mm:ss')
-                              : formState.endTime,
+                              : /* istanbul ignore next */
+                                formState.endTime,
                         });
                       }
                     }}
@@ -752,7 +731,7 @@ function EventListCardModals({
             type="button"
             className="btn btn-success"
             onClick={updateEventHandler}
-            data-testid="deleteEventBtn"
+            data-testid="recurringEventUpdateOptionSubmitBtn"
           >
             {t('yes')}
           </Button>

@@ -41,10 +41,8 @@ export const getRecurrenceRuleText = (
         recurrenceRuleText = 'Daily';
       }
       break;
+
     case Frequency.WEEKLY:
-      if (!weekDays) {
-        break;
-      }
       if (isMondayToFriday(weekDays)) {
         if (interval && interval > 1) {
           recurrenceRuleText = `Every ${interval} weeks, `;
@@ -59,6 +57,7 @@ export const getRecurrenceRuleText = (
       }
       recurrenceRuleText += getWeekDaysString(weekDays);
       break;
+
     case Frequency.MONTHLY:
       if (interval && interval > 1) {
         recurrenceRuleText = `Every ${interval} months on `;
@@ -74,6 +73,7 @@ export const getRecurrenceRuleText = (
         recurrenceRuleText += `Day ${recurrenceStartDate.getDate()}`;
       }
       break;
+
     case Frequency.YEARLY:
       if (interval && interval > 1) {
         recurrenceRuleText = `Every ${interval} years on `;

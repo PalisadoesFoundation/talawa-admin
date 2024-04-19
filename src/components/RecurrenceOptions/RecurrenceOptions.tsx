@@ -70,7 +70,6 @@ const RecurrenceOptions: React.FC<InterfaceRecurrenceOptionsProps> = ({
               setRecurrenceRuleState({
                 ...recurrenceRuleState,
                 frequency: Frequency.DAILY,
-                weekDays: undefined,
                 weekDayOccurenceInMonth: undefined,
               })
             }
@@ -107,7 +106,6 @@ const RecurrenceOptions: React.FC<InterfaceRecurrenceOptionsProps> = ({
               setRecurrenceRuleState({
                 ...recurrenceRuleState,
                 frequency: Frequency.MONTHLY,
-                weekDays: undefined,
                 weekDayOccurenceInMonth: undefined,
               })
             }
@@ -117,7 +115,6 @@ const RecurrenceOptions: React.FC<InterfaceRecurrenceOptionsProps> = ({
               {getRecurrenceRuleText({
                 ...recurrenceRuleState,
                 frequency: Frequency.MONTHLY,
-                weekDays: undefined,
                 weekDayOccurenceInMonth: undefined,
               })}
             </span>
@@ -173,7 +170,6 @@ const RecurrenceOptions: React.FC<InterfaceRecurrenceOptionsProps> = ({
               setRecurrenceRuleState({
                 ...recurrenceRuleState,
                 frequency: Frequency.YEARLY,
-                weekDays: undefined,
                 weekDayOccurenceInMonth: undefined,
               })
             }
@@ -183,7 +179,6 @@ const RecurrenceOptions: React.FC<InterfaceRecurrenceOptionsProps> = ({
               {getRecurrenceRuleText({
                 ...recurrenceRuleState,
                 frequency: Frequency.YEARLY,
-                weekDays: undefined,
                 weekDayOccurenceInMonth: undefined,
               })}
             </span>
