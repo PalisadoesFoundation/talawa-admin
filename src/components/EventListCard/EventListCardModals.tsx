@@ -142,7 +142,6 @@ function EventListCardModals({
       if (eventListCardProps.recurrenceRule) {
         // get the recurrence rule
         const { recurrenceRule } = eventListCardProps;
-
         // set the recurrence rule state
         setRecurrenceRuleState({
           ...recurrenceRuleState,
@@ -286,7 +285,6 @@ function EventListCardModals({
         },
       });
 
-      /* istanbul ignore next */
       if (data) {
         toast.success(t('eventUpdated'));
         setRecurringEventUpdateModalIsOpen(false);
@@ -297,6 +295,7 @@ function EventListCardModals({
       }
     } catch (error: unknown) {
       /* istanbul ignore next */
+      console.log((error as Error).message);
       errorHandler(t, error);
     }
   };
@@ -326,7 +325,6 @@ function EventListCardModals({
         },
       });
 
-      /* istanbul ignore next */
       if (data) {
         toast.success(t('eventDeleted'));
         setEventDeleteModalIsOpen(false);
@@ -336,7 +334,6 @@ function EventListCardModals({
         }
       }
     } catch (error: unknown) {
-      /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
@@ -359,12 +356,13 @@ function EventListCardModals({
             eventId: eventListCardProps.id,
           },
         });
-        /* istanbul ignore next */
+
         if (data) {
-          setIsRegistered(true);
           toast.success(
             `Successfully registered for ${eventListCardProps.eventName}`,
           );
+          setIsRegistered(true);
+          hideViewModal();
         }
       } catch (error: unknown) {
         /* istanbul ignore next */
@@ -399,7 +397,7 @@ function EventListCardModals({
           <Button
             variant="danger"
             onClick={hideViewModal}
-            data-testid="createEventModalCloseBtn"
+            data-testid="eventModalCloseBtn"
           >
             <i className="fa fa-times"></i>
           </Button>
@@ -524,18 +522,14 @@ function EventListCardModals({
                     className={styles.datebox}
                     timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
                     value={timeToDayJs(formState.startTime)}
-                    /*istanbul ignore next*/
                     onChange={(time): void => {
                       if (time) {
                         setFormState({
                           ...formState,
                           startTime: time?.format('HH:mm:ss'),
                           endTime:
-                            /*istanbul ignore next*/
                             timeToDayJs(formState.endTime) < time
-                              ? /* istanbul ignore next */ time?.format(
-                                  'HH:mm:ss',
-                                )
+                              ? time?.format('HH:mm:ss')
                               : formState.endTime,
                         });
                       }
@@ -548,7 +542,6 @@ function EventListCardModals({
                     label={t('endTime')}
                     className={styles.datebox}
                     timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
-                    /*istanbul ignore next*/
                     value={timeToDayJs(formState.endTime)}
                     onChange={(time): void => {
                       if (time) {
@@ -739,7 +732,7 @@ function EventListCardModals({
                     )
                   }
                   defaultChecked={option === recurringEventUpdateType}
-                  data-testid={`${option}`}
+                  data-testid={`update-${option}`}
                 />
               </div>
             ))}
@@ -751,7 +744,7 @@ function EventListCardModals({
             className="btn btn-danger"
             data-dismiss="modal"
             onClick={toggleRecurringEventUpdateModal}
-            data-testid="EventDeleteModalCloseBtn"
+            data-testid="eventUpdateOptionsModalCloseBtn"
           >
             {t('no')}
           </Button>
@@ -803,7 +796,7 @@ function EventListCardModals({
                         )
                       }
                       defaultChecked={option === recurringEventDeleteType}
-                      data-testid={`${option}`}
+                      data-testid={`delete-${option}`}
                     />
                   </div>
                 ))}
@@ -817,7 +810,7 @@ function EventListCardModals({
             className="btn btn-danger"
             data-dismiss="modal"
             onClick={toggleDeleteModal}
-            data-testid="EventDeleteModalCloseBtn"
+            data-testid="eventDeleteModalCloseBtn"
           >
             {t('no')}
           </Button>

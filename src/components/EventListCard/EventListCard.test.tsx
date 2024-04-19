@@ -12,11 +12,6 @@ import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import type { InterfaceEventListCardProps } from './EventListCard';
 import EventListCard from './EventListCard';
-import {
-  DELETE_EVENT_MUTATION,
-  REGISTER_EVENT,
-  UPDATE_EVENT_MUTATION,
-} from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom';
@@ -25,116 +20,11 @@ import { store } from 'state/store';
 import { toast } from 'react-toastify';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { Frequency, WeekDays } from 'utils/recurrenceUtils';
 import useLocalStorage from 'utils/useLocalstorage';
+import { props } from './EventListCardProps';
+import { ERROR_MOCKS, MOCKS } from './EventListCardMocks';
 
 const { setItem } = useLocalStorage();
-
-const MOCKS = [
-  {
-    request: {
-      query: DELETE_EVENT_MUTATION,
-      variables: { id: '1' },
-    },
-    result: {
-      data: {
-        removeEvent: {
-          _id: '1',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: DELETE_EVENT_MUTATION,
-      variables: { id: '1', recurringEventDeleteType: 'ThisInstance' },
-    },
-    result: {
-      data: {
-        removeEvent: {
-          _id: '1',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: UPDATE_EVENT_MUTATION,
-      variables: {
-        id: '1',
-        title: 'Updated title',
-        description: 'This is a new update',
-        isPublic: false,
-        recurring: false,
-        isRegisterable: true,
-        allDay: true,
-        startDate: '2022-03-19',
-        endDate: '2022-03-26',
-        location: 'New Delhi',
-      },
-    },
-    result: {
-      data: {
-        updateEvent: {
-          _id: '1',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: UPDATE_EVENT_MUTATION,
-      variables: {
-        id: '1',
-        title: 'Updated title',
-        description: 'This is a new update',
-        isPublic: false,
-        recurring: false,
-        isRegisterable: true,
-        allDay: false,
-        startDate: '2022-03-19',
-        endDate: '2022-03-26',
-        location: 'New Delhi',
-        startTime: '09:00:00Z',
-        endTime: '17:00:00Z',
-      },
-    },
-    result: {
-      data: {
-        updateEvent: {
-          _id: '1',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: REGISTER_EVENT,
-      variables: { eventId: '123' },
-    },
-    result: {
-      data: {
-        registerForEvent: [
-          {
-            _id: '123',
-          },
-        ],
-      },
-    },
-  },
-];
-
-const ERROR_MOCKS = [
-  {
-    request: {
-      query: DELETE_EVENT_MUTATION,
-      variables: {
-        id: '1',
-      },
-    },
-    error: new Error('Something went wrong'),
-  },
-];
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(ERROR_MOCKS, true);
@@ -160,124 +50,6 @@ const translations = JSON.parse(
   ),
 );
 
-const props: InterfaceEventListCardProps[] = [
-  {
-    key: '',
-    id: '',
-    eventLocation: '',
-    eventName: '',
-    eventDescription: '',
-    startDate: '',
-    endDate: '',
-    startTime: '',
-    endTime: '',
-    allDay: false,
-    recurring: false,
-    recurrenceRule: null,
-    isRecurringEventException: false,
-    isPublic: false,
-    isRegisterable: false,
-  },
-  {
-    key: '123',
-    id: '1',
-    eventLocation: 'India',
-    eventName: 'Shelter for Dogs',
-    eventDescription: 'This is shelter for dogs event',
-    startDate: '03/19/2022',
-    endDate: '03/26/2022',
-    startTime: '02:00',
-    endTime: '06:00',
-    allDay: true,
-    recurring: false,
-    recurrenceRule: null,
-    isRecurringEventException: false,
-    isPublic: true,
-    isRegisterable: false,
-  },
-  {
-    key: '123',
-    id: '1',
-    eventLocation: 'India',
-    eventName: 'Shelter for Cats',
-    eventDescription: 'This is shelter for cat event',
-    startDate: '19/03/2022',
-    endDate: '19/03/2022',
-    startTime: '2:00',
-    endTime: '6:00',
-    allDay: false,
-    recurring: true,
-    recurrenceRule: {
-      recurrenceStartDate: '19/03/2022',
-      recurrenceEndDate: '26/03/2022',
-      frequency: Frequency.WEEKLY,
-      weekDays: [WeekDays.SATURDAY],
-      interval: 1,
-      count: null,
-      weekDayOccurenceInMonth: null,
-    },
-    isRecurringEventException: false,
-    isPublic: true,
-    isRegisterable: false,
-  },
-  {
-    userRole: 'USER',
-    key: '123',
-    id: '1',
-    eventLocation: 'India',
-    eventName: 'Shelter for Dogs',
-    eventDescription: 'This is shelter for dogs event',
-    startDate: '19/03/2022',
-    endDate: '26/03/2022',
-    startTime: '02:00',
-    endTime: '06:00',
-    allDay: true,
-    recurring: false,
-    recurrenceRule: null,
-    isRecurringEventException: false,
-    isPublic: true,
-    isRegisterable: false,
-    creator: {
-      firstName: 'Joe',
-      lastName: 'David',
-      _id: '123',
-    },
-    registrants: [
-      {
-        _id: '234',
-      },
-    ],
-  },
-  {
-    userRole: 'USER',
-    key: '123',
-    id: '1',
-    eventLocation: 'India',
-    eventName: 'Shelter for Dogs',
-    eventDescription: 'This is shelter for dogs event',
-    startDate: '19/03/2022',
-    endDate: '26/03/2022',
-    startTime: '02:00',
-    endTime: '06:00',
-    allDay: true,
-    recurring: false,
-    recurrenceRule: null,
-    isRecurringEventException: false,
-    isPublic: true,
-    isRegisterable: false,
-    creator: {
-      firstName: 'Joe',
-      lastName: 'David',
-      _id: '123',
-    },
-    registrants: [
-      {
-        _id: '456',
-      },
-    ],
-  },
-];
-
 const renderEventListCard = (
   props: InterfaceEventListCardProps,
 ): RenderResult => {
@@ -296,6 +68,7 @@ const renderEventListCard = (
                   path="/event/:orgId/"
                   element={<EventListCard {...props} />}
                 />
+                <Route path="/event/:orgId/:eventId" element={<></>} />
               </Routes>
             </I18nextProvider>
           </LocalizationProvider>
@@ -314,6 +87,8 @@ describe('Testing Event List Card', () => {
     isRegisterable: true,
     allDay: false,
     location: 'New Delhi',
+    startDate: '03/18/2022',
+    endDate: '03/20/2022',
     startTime: '09:00 AM',
     endTime: '05:00 PM',
   };
@@ -323,13 +98,6 @@ describe('Testing Event List Card', () => {
       ...jest.requireActual('react-router-dom'),
       useParams: () => ({ orgId: 'orgId' }),
     }));
-
-    Object.defineProperty(window, 'location', {
-      value: {
-        reload: jest.fn(),
-      },
-      writable: true,
-    });
   });
 
   afterAll(() => {
@@ -337,17 +105,24 @@ describe('Testing Event List Card', () => {
     jest.clearAllMocks();
   });
 
-  test('Testing for modal', async () => {
-    renderEventListCard(props[0]);
+  test('Testing for event modal', async () => {
+    renderEventListCard(props[1]);
 
     userEvent.click(screen.getByTestId('card'));
-    userEvent.click(screen.getByTestId('showEventDashboardBtn'));
-    userEvent.click(screen.getByTestId('createEventModalCloseBtn'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('eventModalCloseBtn')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('eventModalCloseBtn'));
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('eventModalCloseBtn'),
+      ).not.toBeInTheDocument();
+    });
   });
 
-  test('Should render text elements when props value is not passed', async () => {
-    global.confirm = (): boolean => false;
-
+  test('Should navigate to "/" if orgId is not defined', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
@@ -375,82 +150,163 @@ describe('Testing Event List Card', () => {
     );
 
     await wait();
-    expect(screen.queryByText(props[1].eventName)).not.toBeInTheDocument();
-  });
-
-  test('Testing event preview modal', async () => {
-    renderEventListCard(props[1]);
-    expect(screen.getByText(props[1].eventName)).toBeInTheDocument();
-  });
-
-  test('should render props and text elements test for the screen', async () => {
-    const { container } = renderEventListCard(props[1]);
-
-    expect(container.textContent).not.toBe('Loading data...');
-    expect(screen.getByText(props[1].eventName)).toBeInTheDocument();
-    userEvent.click(screen.getByTestId('card'));
-    expect(await screen.findAllByText(props[1].eventName)).toBeTruthy();
-    expect(screen.getByText(props[1].eventDescription)).toBeInTheDocument();
-    expect(screen.getByText(props[1].eventLocation)).toBeInTheDocument();
-  });
-
-  test('Testing for update modal', async () => {
-    renderEventListCard(props[1]);
-
-    userEvent.click(screen.getByTestId('card'));
-    userEvent.click(screen.getByTestId('editEventModalBtn'));
-    userEvent.click(screen.getByTestId('EventUpdateModalCloseBtn'));
-    userEvent.click(screen.getByTestId('createEventModalCloseBtn'));
-  });
-
-  test('Testing event update functionality', async () => {
-    renderEventListCard(props[1]);
-
-    userEvent.click(screen.getByTestId('card'));
-    userEvent.click(screen.getByTestId('editEventModalBtn'));
-
-    const eventTitle = screen.getByTestId('updateTitle');
-    fireEvent.change(eventTitle, { target: { value: '' } });
-    userEvent.type(eventTitle, updateData.title);
-
-    const eventDescription = screen.getByTestId('updateDescription');
-    fireEvent.change(eventDescription, { target: { value: '' } });
-    userEvent.type(eventDescription, updateData.description);
-
-    const eventLocation = screen.getByTestId('updateLocation');
-    fireEvent.change(eventLocation, { target: { value: '' } });
-    userEvent.type(eventLocation, updateData.location);
-
-    userEvent.click(screen.getByTestId('updateIsPublic'));
-    userEvent.click(screen.getByTestId('updateRegistrable'));
-
-    userEvent.click(screen.getByTestId('updateEventBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.eventUpdated);
+      expect(window.location.pathname).toEqual('/');
     });
   });
 
-  test('should render props and text  elements test for the screen', async () => {
-    const { container } = renderEventListCard(props[1]);
+  test('Should render default text if event details are null', async () => {
+    renderEventListCard(props[0]);
 
-    expect(container.textContent).not.toBe('Loading data...');
+    await waitFor(() => {
+      expect(screen.getByText('Dogs Care')).toBeInTheDocument();
+    });
+  });
+
+  test('should render props and text elements test for the screen', async () => {
+    renderEventListCard(props[1]);
+
     expect(screen.getByText(props[1].eventName)).toBeInTheDocument();
+
     userEvent.click(screen.getByTestId('card'));
-    expect(await screen.findAllByText(props[1].eventName)).toBeTruthy();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('updateDescription')).toBeInTheDocument();
+    });
+
     expect(screen.getByTestId('updateDescription')).toHaveValue(
       props[1].eventDescription,
     );
     expect(screen.getByTestId('updateLocation')).toHaveValue(
       props[1].eventLocation,
     );
+
+    userEvent.click(screen.getByTestId('eventModalCloseBtn'));
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('eventModalCloseBtn'),
+      ).not.toBeInTheDocument();
+    });
   });
 
-  test('Testing if the event is not for all day', async () => {
+  test('Should render truncated event name when length is more than 100', async () => {
+    const longEventName = 'a'.repeat(101);
+    renderEventListCard({ ...props[1], eventName: longEventName });
+
+    userEvent.click(screen.getByTestId('card'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('updateTitle')).toBeInTheDocument();
+    });
+
+    expect(screen.getByTestId('updateTitle')).toHaveValue(
+      `${longEventName.substring(0, 100)}...`,
+    );
+
+    userEvent.click(screen.getByTestId('eventModalCloseBtn'));
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('eventModalCloseBtn'),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  test('Should render full event name when length is less than or equal to 100', async () => {
+    const shortEventName = 'a'.repeat(100);
+    renderEventListCard({ ...props[1], eventName: shortEventName });
+
+    userEvent.click(screen.getByTestId('card'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('updateTitle')).toBeInTheDocument();
+    });
+
+    expect(screen.getByTestId('updateTitle')).toHaveValue(shortEventName);
+
+    userEvent.click(screen.getByTestId('eventModalCloseBtn'));
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('eventModalCloseBtn'),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  test('Should render truncated event description when length is more than 256', async () => {
+    const longEventDescription = 'a'.repeat(257);
+
+    renderEventListCard({
+      ...props[1],
+      eventDescription: longEventDescription,
+    });
+
+    userEvent.click(screen.getByTestId('card'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('updateDescription')).toBeInTheDocument();
+    });
+    expect(screen.getByTestId('updateDescription')).toHaveValue(
+      `${longEventDescription.substring(0, 256)}...`,
+    );
+
+    userEvent.click(screen.getByTestId('eventModalCloseBtn'));
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('eventModalCloseBtn'),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  test('Should render full event description when length is less than or equal to 256', async () => {
+    const shortEventDescription = 'a'.repeat(256);
+
+    renderEventListCard({
+      ...props[1],
+      eventDescription: shortEventDescription,
+    });
+
+    userEvent.click(screen.getByTestId('card'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('updateDescription')).toBeInTheDocument();
+    });
+    expect(screen.getByTestId('updateDescription')).toHaveValue(
+      shortEventDescription,
+    );
+
+    userEvent.click(screen.getByTestId('eventModalCloseBtn'));
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('eventModalCloseBtn'),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  test('Should navigate to event dashboard when clicked', async () => {
     renderEventListCard(props[1]);
 
     userEvent.click(screen.getByTestId('card'));
-    userEvent.click(screen.getByTestId('editEventModalBtn'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('showEventDashboardBtn')).toBeInTheDocument();
+    });
+
+    userEvent.click(screen.getByTestId('showEventDashboardBtn'));
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('card')).not.toBeInTheDocument();
+    });
+  });
+
+  test('Testing event update functionality', async () => {
+    renderEventListCard(props[1]);
+
+    userEvent.click(screen.getByTestId('card'));
 
     const eventTitle = screen.getByTestId('updateTitle');
     fireEvent.change(eventTitle, { target: { value: '' } });
@@ -464,15 +320,65 @@ describe('Testing Event List Card', () => {
     fireEvent.change(eventLocation, { target: { value: '' } });
     userEvent.type(eventLocation, updateData.location);
 
+    const startDatePicker = screen.getByLabelText(translations.startDate);
+    fireEvent.change(startDatePicker, {
+      target: { value: updateData.startDate },
+    });
+
+    const endDatePicker = screen.getByLabelText(translations.endDate);
+    fireEvent.change(endDatePicker, {
+      target: { value: updateData.endDate },
+    });
+
     userEvent.click(screen.getByTestId('updateAllDay'));
+    userEvent.click(screen.getByTestId('updateIsPublic'));
+    userEvent.click(screen.getByTestId('updateRegistrable'));
+    userEvent.click(screen.getByTestId('updateEventBtn'));
+
+    await waitFor(() => {
+      expect(toast.success).toBeCalledWith(translations.eventUpdated);
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('eventModalCloseBtn'),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  test('Testing if the event is not for all day', async () => {
+    renderEventListCard(props[1]);
+
+    userEvent.click(screen.getByTestId('card'));
+
+    const eventTitle = screen.getByTestId('updateTitle');
+    fireEvent.change(eventTitle, { target: { value: '' } });
+    userEvent.type(eventTitle, updateData.title);
+
+    const eventDescription = screen.getByTestId('updateDescription');
+    fireEvent.change(eventDescription, { target: { value: '' } });
+    userEvent.type(eventDescription, updateData.description);
+
+    const eventLocation = screen.getByTestId('updateLocation');
+    fireEvent.change(eventLocation, { target: { value: '' } });
+    userEvent.type(eventLocation, updateData.location);
+
+    const startDatePicker = screen.getByLabelText(translations.startDate);
+    fireEvent.change(startDatePicker, {
+      target: { value: updateData.startDate },
+    });
+
+    const endDatePicker = screen.getByLabelText(translations.endDate);
+    fireEvent.change(endDatePicker, {
+      target: { value: updateData.endDate },
+    });
 
     const startTimePicker = screen.getByLabelText(translations.startTime);
-    const endTimePicker = screen.getByLabelText(translations.endTime);
-
     fireEvent.change(startTimePicker, {
       target: { value: updateData.startTime },
     });
 
+    const endTimePicker = screen.getByLabelText(translations.endTime);
     fireEvent.change(endTimePicker, {
       target: { value: updateData.endTime },
     });
@@ -485,28 +391,112 @@ describe('Testing Event List Card', () => {
     await waitFor(() => {
       expect(toast.success).toBeCalledWith(translations.eventUpdated);
     });
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('eventModalCloseBtn'),
+      ).not.toBeInTheDocument();
+    });
   });
 
   test('should render the delete modal', async () => {
     renderEventListCard(props[1]);
 
     userEvent.click(screen.getByTestId('card'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('deleteEventModalBtn')).toBeInTheDocument();
+    });
     userEvent.click(screen.getByTestId('deleteEventModalBtn'));
 
-    userEvent.click(screen.getByTestId('EventDeleteModalCloseBtn'));
-    userEvent.click(screen.getByTestId('createEventModalCloseBtn'));
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('eventDeleteModalCloseBtn'),
+      ).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('eventDeleteModalCloseBtn'));
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('eventDeleteModalCloseBtn'),
+      ).not.toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('eventModalCloseBtn')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('eventModalCloseBtn'));
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('eventModalCloseBtn'),
+      ).not.toBeInTheDocument();
+    });
   });
 
   test('should call the delete event mutation when the "Yes" button is clicked', async () => {
     renderEventListCard(props[1]);
 
     userEvent.click(screen.getByTestId('card'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('deleteEventModalBtn')).toBeInTheDocument();
+    });
     userEvent.click(screen.getByTestId('deleteEventModalBtn'));
-    const deleteBtn = screen.getByTestId('deleteEventBtn');
-    fireEvent.click(deleteBtn);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('deleteEventBtn')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('deleteEventBtn'));
 
     await waitFor(() => {
       expect(toast.success).toBeCalledWith(translations.eventDeleted);
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('eventModalCloseBtn'),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  test('Select different delete options on recurring events & then delete the recurring event', async () => {
+    renderEventListCard(props[2]);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('card')).toBeInTheDocument();
+    });
+
+    userEvent.click(screen.getByTestId('card'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('deleteEventModalBtn')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('deleteEventModalBtn'));
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('delete-thisAndFollowingInstances'),
+      ).toBeInTheDocument();
+    });
+
+    userEvent.click(screen.getByTestId('delete-thisAndFollowingInstances'));
+
+    userEvent.click(screen.getByTestId('delete-allInstances'));
+    userEvent.click(screen.getByTestId('delete-thisInstance'));
+
+    userEvent.click(screen.getByTestId('deleteEventBtn'));
+
+    await waitFor(() => {
+      expect(toast.success).toBeCalledWith(translations.eventDeleted);
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('eventModalCloseBtn'),
+      ).not.toBeInTheDocument();
     });
   });
 
@@ -533,6 +523,7 @@ describe('Testing Event List Card', () => {
         </MemoryRouter>
       </MockedProvider>,
     );
+
     userEvent.click(screen.getByTestId('card'));
     userEvent.click(screen.getByTestId('deleteEventModalBtn'));
     userEvent.click(screen.getByTestId('deleteEventBtn'));
@@ -542,120 +533,38 @@ describe('Testing Event List Card', () => {
     });
   });
 
-  test('Should render truncated event name when length is more than 100', async () => {
-    const longEventName = 'a'.repeat(101);
-    renderEventListCard({ ...props[1], eventName: longEventName });
-
-    userEvent.click(screen.getByTestId('card'));
-
-    expect(screen.getByTestId('updateTitle')).toHaveValue(
-      `${longEventName.substring(0, 100)}...`,
-    );
-  });
-
-  test('Should render full event name when length is less than or equal to 100', async () => {
-    const shortEventName = 'a'.repeat(100);
-    renderEventListCard({ ...props[1], eventName: shortEventName });
-
-    userEvent.click(screen.getByTestId('card'));
-
-    expect(screen.findAllByText(shortEventName)).toBeTruthy();
-  });
-
-  test('Should render truncated event description when length is more than 256', async () => {
-    const longEventDescription = 'a'.repeat(257);
-    renderEventListCard({
-      ...props[1],
-      eventDescription: longEventDescription,
-    });
-
-    userEvent.click(screen.getByTestId('card'));
-
-    expect(screen.getByTestId('updateDescription')).toHaveValue(
-      `${longEventDescription.substring(0, 256)}...`,
-    );
-  });
-
-  test('Should render full event description when length is less than or equal to 256', async () => {
-    const shortEventDescription = 'a'.repeat(256);
-    renderEventListCard({
-      ...props[1],
-      eventDescription: shortEventDescription,
-    });
-
-    userEvent.click(screen.getByTestId('card'));
-
-    expect(screen.getByTestId('updateDescription')).toHaveValue(
-      shortEventDescription,
-    );
-  });
-
-  test('Select different delete options on recurring events & then delete the recurring event', async () => {
-    renderEventListCard(props[2]);
-
-    userEvent.click(screen.getByTestId('card'));
-    userEvent.click(screen.getByTestId('deleteEventModalBtn'));
-
-    userEvent.click(screen.getByTestId('thisAndFollowingInstances'));
-    userEvent.click(screen.getByTestId('allInstances'));
-    userEvent.click(screen.getByTestId('thisInstance'));
-
-    userEvent.click(screen.getByTestId('deleteEventBtn'));
-
-    await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.eventDeleted);
-    });
-  });
-
   test('Handle register should work properly', async () => {
     setItem('userId', '456');
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <MemoryRouter initialEntries={['/orgevents/orgId']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/orgevents/:orgId"
-                  element={<EventListCard {...props[3]} />}
-                />
-                <Route
-                  path="/event/:orgId/"
-                  element={<EventListCard {...props[3]} />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+
+    renderEventListCard(props[3]);
+
     userEvent.click(screen.getByTestId('card'));
-    const registerBtn = screen.getByTestId('registerEventBtn');
-    fireEvent.click(registerBtn);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('registerEventBtn')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('registerEventBtn'));
+
+    await waitFor(() => {
+      expect(toast.success).toBeCalledWith(
+        `Successfully registered for ${props[3].eventName}`,
+      );
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('eventModalCloseBtn'),
+      ).not.toBeInTheDocument();
+    });
   });
 
   test('When the user is already registered', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <MemoryRouter initialEntries={['/orgevents/orgId']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/orgevents/:orgId"
-                  element={<EventListCard {...props[4]} />}
-                />
-                <Route
-                  path="/event/:orgId/"
-                  element={<EventListCard {...props[4]} />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderEventListCard(props[4]);
+
     userEvent.click(screen.getByTestId('card'));
-    expect(screen.queryByText('Already registered')).toBeInTheDocument();
+
+    expect(
+      screen.getByText(translations.alreadyRegistered),
+    ).toBeInTheDocument();
   });
 });
