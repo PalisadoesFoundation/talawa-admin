@@ -20,7 +20,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { BACKEND_URL } from 'Constant/constant';
 import useLocalStorage from 'utils/useLocalstorage';
 import { GET_COMMUNITY_DATA, ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
-import { debug } from 'jest-preview';
+
 const MOCKS = [
   {
     request: {
@@ -976,7 +976,7 @@ describe('Talawa-API server fetch check', () => {
 
   test('Render the Select Organization list', async () => {
     render(
-      <MockedProvider addTypename={false} link={link3}>
+      <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -988,12 +988,10 @@ describe('Talawa-API server fetch check', () => {
     );
     await wait();
 
-    userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
+    userEvent.click(screen.getByTestId('goToRegisterPortion'));
 
     await wait();
 
     userEvent.click(screen.getByTestId(/selectOrg/i));
-
-    debug();
   });
 });
