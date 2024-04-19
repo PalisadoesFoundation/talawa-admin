@@ -8,6 +8,7 @@ import CurrentHourIndicator from 'components/CurrentHourIndicator/CurrentHourInd
 import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 import HolidayCard from '../HolidayCards/HolidayCard';
 import { holidays, hours, months, weekdays } from './constants';
+import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
 
 interface InterfaceEventListCardProps {
   userRole?: string;
@@ -18,10 +19,12 @@ interface InterfaceEventListCardProps {
   description: string;
   startDate: string;
   endDate: string;
-  startTime: string | undefined;
-  endTime: string | undefined;
+  startTime: string | null;
+  endTime: string | null;
   allDay: boolean;
   recurring: boolean;
+  recurrenceRule: InterfaceRecurrenceRule | null;
+  isRecurringEventException: boolean;
   isPublic: boolean;
   isRegisterable: boolean;
   attendees?: {
@@ -36,6 +39,7 @@ interface InterfaceEventListCardProps {
 
 interface InterfaceCalendarProps {
   eventData: InterfaceEventListCardProps[];
+  refetchEvents?: () => void;
   orgData?: InterfaceIOrgList;
   userRole?: string;
   userId?: string;
@@ -53,6 +57,7 @@ interface InterfaceIOrgList {
 }
 const Calendar: React.FC<InterfaceCalendarProps> = ({
   eventData,
+  refetchEvents,
   orgData,
   userRole,
   userId,
@@ -231,18 +236,21 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
 
           return (
             <EventListCard
+              refetchEvents={refetchEvents}
               userRole={userRole}
               key={datas._id}
               id={datas._id}
               eventLocation={datas.location}
               eventName={datas.title}
               eventDescription={datas.description}
-              regDate={datas.startDate}
-              regEndDate={datas.endDate}
+              startDate={datas.startDate}
+              endDate={datas.endDate}
               startTime={datas.startTime}
               endTime={datas.endTime}
               allDay={datas.allDay}
               recurring={datas.recurring}
+              recurrenceRule={datas.recurrenceRule}
+              isRecurringEventException={datas.isRecurringEventException}
               isPublic={datas.isPublic}
               isRegisterable={datas.isRegisterable}
               registrants={attendees}
@@ -327,18 +335,21 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
 
                 return (
                   <EventListCard
+                    refetchEvents={refetchEvents}
                     userRole={userRole}
                     key={datas._id}
                     id={datas._id}
                     eventLocation={datas.location}
                     eventName={datas.title}
                     eventDescription={datas.description}
-                    regDate={datas.startDate}
-                    regEndDate={datas.endDate}
+                    startDate={datas.startDate}
+                    endDate={datas.endDate}
                     startTime={datas.startTime}
                     endTime={datas.endTime}
                     allDay={datas.allDay}
                     recurring={datas.recurring}
+                    recurrenceRule={datas.recurrenceRule}
+                    isRecurringEventException={datas.isRecurringEventException}
                     isPublic={datas.isPublic}
                     isRegisterable={datas.isRegisterable}
                     registrants={attendees}
@@ -465,18 +476,21 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
 
             return (
               <EventListCard
+                refetchEvents={refetchEvents}
                 userRole={userRole}
                 key={datas._id}
                 id={datas._id}
                 eventLocation={datas.location}
                 eventName={datas.title}
                 eventDescription={datas.description}
-                regDate={datas.startDate}
-                regEndDate={datas.endDate}
+                startDate={datas.startDate}
+                endDate={datas.endDate}
                 startTime={datas.startTime}
                 endTime={datas.endTime}
                 allDay={datas.allDay}
                 recurring={datas.recurring}
+                recurrenceRule={datas.recurrenceRule}
+                isRecurringEventException={datas.isRecurringEventException}
                 isPublic={datas.isPublic}
                 isRegisterable={datas.isRegisterable}
                 registrants={attendees}
