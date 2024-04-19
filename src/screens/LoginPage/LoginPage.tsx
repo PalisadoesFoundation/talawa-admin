@@ -32,7 +32,7 @@ import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import { socialMediaLinks } from '../../constants';
 import styles from './LoginPage.module.css';
-import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
+import type { InterfaceQueryOrganizationListObject } from 'utils/interfaces';
 
 const loginPage = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
@@ -75,7 +75,7 @@ const loginPage = (): JSX.Element => {
     numericValue: true,
     specialChar: true,
   });
-  const [organizations, setOrganizations] = React.useState([]);
+  const [organizations, setOrganizations] = useState([]);
 
   const passwordValidationRegExp = {
     lowercaseCharRegExp: new RegExp('[a-z]'),
@@ -119,10 +119,6 @@ const loginPage = (): JSX.Element => {
   const [recaptcha, { loading: recaptchaLoading }] =
     useMutation(RECAPTCHA_MUTATION);
   const { data: orgData, loading: orgLoading } = useQuery(ORGANIZATION_LIST);
-
-  useEffect(() => {
-    if (orgData) setOrganizations(orgData.organizations);
-  }, [orgData]);
 
   useEffect(() => {
     async function loadResource(): Promise<void> {
@@ -786,6 +782,7 @@ const loginPage = (): JSX.Element => {
                       <select
                         className="form-select text-muted "
                         aria-label="Default select example"
+                        data-testid="selectOrg"
                         onChange={(e) => {
                           setSignFormState({
                             ...signformState,
@@ -794,25 +791,28 @@ const loginPage = (): JSX.Element => {
                           e.target.classList.remove('text-muted');
                         }}
                         value={signformState.signOrg}
-                        defaultValue=""
                       >
-                        <option value="" disabled>
+                        <option
+                          value={orgLoading ? t('loading') : t('selectOrg')}
+                          disabled
+                        >
                           {orgLoading ? t('loading') : t('selectOrg')}
                         </option>
-                        {organizations.map(
-                          (
-                            org: InterfaceQueryOrganizationsListObject,
-                            idx: number,
-                          ) => {
-                            return (
+                        {orgData &&
+                          orgData.organizations.map(
+                            (
+                              org: InterfaceQueryOrganizationListObject | null,
+                            ) => (
                               <>
-                                <option key={idx} value={org._id}>
-                                  {org.name}
+                                <option
+                                  key={org ? org._id : 0}
+                                  value={org ? org._id : 0}
+                                >
+                                  {org ? org.name : null}
                                 </option>
                               </>
-                            );
-                          },
-                        )}
+                            ),
+                          )}
                       </select>
                     </div>
                     {signformState.cPassword.length > 0 &&

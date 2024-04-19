@@ -130,28 +130,31 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
       ...props,
       hideDrawer: false,
     };
+  });
+  test('Testing Drawer when the screen size is less than or equal to 820px', () => {
+    const tempProps: InterfaceLeftDrawerProps = {
+      ...props,
+      hideDrawer: false,
+    };
+    resizeWindow(800);
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <LeftDrawer {...tempProps} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    expect(screen.getByText('My Organizations')).toBeInTheDocument();
+    expect(screen.getByText('Talawa Admin Portal')).toBeInTheDocument();
 
-    test('Testing Drawer when the screen size is less than or equal to 820px', () => {
-      resizeWindow(800);
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <LeftDrawer {...tempProps} />
-            </I18nextProvider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-      expect(screen.getByText('My Organizations')).toBeInTheDocument();
-      expect(screen.getByText('Talawa Admin Portal')).toBeInTheDocument();
+    const orgsBtn = screen.getByTestId(/orgsBtn/i);
 
-      const orgsBtn = screen.getByTestId(/orgsBtn/i);
-
-      orgsBtn.click();
-      expect(
-        orgsBtn.className.includes('text-white btn btn-success'),
-      ).toBeTruthy();
-    });
+    orgsBtn.click();
+    expect(
+      orgsBtn.className.includes('text-white btn btn-success'),
+    ).toBeTruthy();
   });
 
   describe('Testing Left Drawer component for ADMIN', () => {

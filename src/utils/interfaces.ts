@@ -135,6 +135,25 @@ export interface InterfaceQueryOrganizationsListObject {
     email: string;
   }[];
 }
+
+export interface InterfaceQueryOrganizationListObject {
+  _id: string;
+  image: string | null;
+  creator: {
+    firstName: string;
+    lastName: string;
+  };
+  name: string;
+  members: {
+    _id: string;
+  }[];
+  admins: {
+    _id: string;
+  }[];
+  createdAt: string;
+  address: InterfaceAddress;
+}
+
 export interface InterfacePostForm {
   posttitle: string;
   postinfo: string;
