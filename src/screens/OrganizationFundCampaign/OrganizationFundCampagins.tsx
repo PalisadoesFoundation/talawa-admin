@@ -107,6 +107,13 @@ const orgFundCampaign = (): JSX.Element => {
   };
   const hideUpdateCampaignModal = (): void => {
     setcampaignUpdateModalIsOpen(!campaignUpdateModalIsOpen);
+    setFormState({
+      campaignName: '',
+      campaignCurrency: 'USD',
+      campaignGoal: 0,
+      campaignStartDate: new Date(),
+      campaignEndDate: new Date(),
+    });
   };
   const showDeleteCampaignModal = (): void => {
     setcampaignDeleteModalIsOpen(!campaignDeleteModalIsOpen);
@@ -332,16 +339,17 @@ const orgFundCampaign = (): JSX.Element => {
                           <Button
                             size="sm"
                             data-testid="editCampaignBtn"
-                            className="me-2"
+                            className="p-2 w-75"
                             variant="success"
                             onClick={() => {
+                              // setCampaign(campaign);
                               handleEditClick(campaign);
                             }}
                           >
-                            {' '}
-                            <i className="fas fa-edit"></i>
+                            <span>Manage</span>
                           </Button>
 
+                          {/*
                           <Button
                             size="sm"
                             data-testid="deleteCampaignBtn"
@@ -353,7 +361,7 @@ const orgFundCampaign = (): JSX.Element => {
                           >
                             {' '}
                             <i className="fa fa-trash"></i>
-                          </Button>
+                          </Button> */}
                         </StyledTableCell>
                       </StyledTableRow>
                     ),
@@ -387,6 +395,8 @@ const orgFundCampaign = (): JSX.Element => {
         setFormState={setFormState}
         updateCampaignHandler={updateCampaignHandler}
         t={t}
+        setCampaign={setCampaign}
+        showDeleteCampaignModal={showDeleteCampaignModal}
       />
 
       {/* Delete Campaign Modal */}

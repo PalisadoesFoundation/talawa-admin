@@ -46,6 +46,27 @@
     transform 0.2s,
     box-shadow 0.2s;
   width: 100%;
+  flex: 1;
+}
+
+.redregbtn {
+  margin: 1rem 0 0;
+  margin-top: 15px;
+  border: 1px solid #e8e5e5;
+  box-shadow: 0 2px 2px #e8e5e5;
+  padding: 10px 10px;
+  border-radius: 5px;
+  width: 100%;
+  font-size: 16px;
+  color: white;
+  outline: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+  width: 100%;
+  flex: 1;
 }
 .campaignNameInfo {
   font-size: medium;

@@ -447,6 +447,7 @@
     "noCampaigns": "No Campaigns Found",
     "createCampaign": "Create Fund Campaign",
     "updateCampaign": "Update Fund Campaign",
+    "manageCampaign": "Manage Fund Campaign",
     "deleteCampaign": "Delete Fund Campaign",
     "no": "No",
     "yes": "Yes",
