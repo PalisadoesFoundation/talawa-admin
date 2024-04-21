@@ -363,7 +363,6 @@
   },
   "eventListCard": {
     "location": "Ubicación",
-    "on": "En",
     "end": "Final",
     "deleteEvent": "Eliminar evento",
     "deleteEventMsg": "¿Quieres eliminar este evento?",

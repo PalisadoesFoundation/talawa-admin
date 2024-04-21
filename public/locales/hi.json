@@ -364,7 +364,6 @@
   },
   "eventListCard": {
     "location": "स्थान",
-    "on": "पर",
     "end": "समाप्त",
     "deleteEvent": "घटना हटाएं",
     "deleteEventMsg": "क्या आप इस इवेंट को हटाना चाहते हैं?",

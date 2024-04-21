@@ -443,7 +443,6 @@
   },
   "eventListCard": {
     "location": "地點",
-    "on": "上",
     "end": "結尾",
     "deleteEvent": "刪除事件",
     "deleteEventMsg": "您要刪除此活動嗎？",
