@@ -12,6 +12,7 @@ import {
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { weekdays } from './constants';
+import { months } from './constants';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 const eventData = [
@@ -92,6 +93,14 @@ const MOCKS = [
 
 const link = new StaticMockLink(MOCKS, true);
 
+async function wait(ms = 200): Promise<void> {
+  await act(() => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  });
+}
+
 describe('Calendar', () => {
   it('renders weekdays', () => {
     render(<Calendar eventData={eventData} viewType={ViewType.MONTH} />);
@@ -153,6 +162,27 @@ describe('Calendar', () => {
     for (let index = 0; index < 13; index++) {
       fireEvent.click(prevButton);
     }
+  });
+  it('Should show prev and next year on clicking < & > buttons when in year view', async () => {
+    //testing previous month button
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Calendar eventData={eventData} viewType={ViewType.YEAR} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+    await wait();
+    const prevButtons = screen.getAllByTestId('prevYear');
+    prevButtons.forEach((button) => {
+      fireEvent.click(button);
+    });
+    await wait();
+    //testing next year button
+    const nextButton = screen.getAllByTestId('prevYear');
+    nextButton.forEach((button) => {
+      fireEvent.click(button);
+    });
   });
   it('Should show prev and next date on clicking < & > buttons in the day view', async () => {
     render(
@@ -368,6 +398,17 @@ describe('Calendar', () => {
 
     act(() => {
       window.dispatchEvent(new Event('resize'));
+    });
+  });
+  it('renders year view', async () => {
+    render(<Calendar eventData={eventData} viewType={ViewType.YEAR} />);
+
+    await wait();
+    months.forEach((month) => {
+      const elements = screen.getAllByText(month);
+      elements.forEach((element) => {
+        expect(element).toBeInTheDocument();
+      });
     });
   });
 });

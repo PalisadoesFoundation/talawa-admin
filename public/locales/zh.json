@@ -949,7 +949,9 @@
     "startDate": "开始日期",
     "endDate": "结束日期",
     "publicEvent": "公开",
-    "registerable": "可注册"
+    "registerable": "可注册",
+    "monthlyCalendarView": "月历",
+    "yearlyCalendarView": "年度日历"
   },
   "userEventCard": {
     "location": "地點",

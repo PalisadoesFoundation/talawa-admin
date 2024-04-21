@@ -951,7 +951,9 @@
     "startDate": "प्रारंभ तिथि",
     "endDate": "अंतिम तिथि",
     "publicEvent": "सार्वजनिक है",
-    "registerable": "पंजीकृत करने योग्य है"
+    "registerable": "पंजीकृत करने योग्य है",
+    "monthlyCalendarView": "मासिक कैलेंडर",
+    "yearlyCalendarView": "वार्षिक कैलेंडर"
   },
   "userEventCard": {
     "location": "जगह",

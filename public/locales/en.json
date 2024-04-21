@@ -949,7 +949,9 @@
     "startDate": "Start Date",
     "endDate": "End Date",
     "publicEvent": "Is Public",
-    "registerable": "Is Registerable"
+    "registerable": "Is Registerable",
+    "monthlyCalendarView": "Monthly Calendar",
+    "yearlyCalendarView": "Yearly Calender"
   },
   "userEventCard": {
     "location": "Location",

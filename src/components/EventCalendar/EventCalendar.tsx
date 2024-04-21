@@ -9,6 +9,7 @@ import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 import HolidayCard from '../HolidayCards/HolidayCard';
 import { holidays, hours, months, weekdays } from './constants';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
+import YearlyEventCalender from './YearlyEventCalender';
 
 interface InterfaceEventListCardProps {
   userRole?: string;
@@ -563,41 +564,47 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
 
   return (
     <div className={styles.calendar}>
-      <div className={styles.calendar__header}>
-        <Button
-          variant="outlined"
-          className={styles.button}
-          onClick={viewType == ViewType.DAY ? handlePrevDate : handlePrevMonth}
-          data-testid="prevmonthordate"
-        >
-          <ChevronLeft />
-        </Button>
-
-        <div
-          className={styles.calendar__header_month}
-          data-testid="current-date"
-        >
-          {viewType == ViewType.DAY ? `${currentDate}` : ``} {currentYear}{' '}
-          <div>{months[currentMonth]}</div>
-        </div>
-        <Button
-          variant="outlined"
-          className={styles.button}
-          onClick={viewType == ViewType.DAY ? handleNextDate : handleNextMonth}
-          data-testid="nextmonthordate"
-        >
-          <ChevronRight />
-        </Button>
-        <div>
+      {viewType != ViewType.YEAR && (
+        <div className={styles.calendar__header}>
           <Button
-            className={styles.btn__today}
-            onClick={handleTodayButton}
-            data-testid="today"
+            variant="outlined"
+            className={styles.button}
+            onClick={
+              viewType == ViewType.DAY ? handlePrevDate : handlePrevMonth
+            }
+            data-testid="prevmonthordate"
           >
-            Today
+            <ChevronLeft />
           </Button>
+
+          <div
+            className={styles.calendar__header_month}
+            data-testid="current-date"
+          >
+            {viewType == ViewType.DAY ? `${currentDate}` : ``} {currentYear}{' '}
+            <div>{months[currentMonth]}</div>
+          </div>
+          <Button
+            variant="outlined"
+            className={styles.button}
+            onClick={
+              viewType == ViewType.DAY ? handleNextDate : handleNextMonth
+            }
+            data-testid="nextmonthordate"
+          >
+            <ChevronRight />
+          </Button>
+          <div>
+            <Button
+              className={styles.btn__today}
+              onClick={handleTodayButton}
+              data-testid="today"
+            >
+              Today
+            </Button>
+          </div>
         </div>
-      </div>
+      )}
       <div className={`${styles.calendar__scroll} customScroll`}>
         {viewType == ViewType.MONTH ? (
           <div>
@@ -611,8 +618,21 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             <div className={styles.calendar__days}>{renderDays()}</div>
           </div>
         ) : (
-          /*istanbul ignore next*/
-          <div className={styles.clendar__hours}>{renderHours()}</div>
+          // <YearlyEventCalender eventData={eventData} />
+          <div>
+            {viewType == ViewType.YEAR ? (
+              <YearlyEventCalender eventData={eventData} />
+            ) : (
+              <div className={styles.calendar__hours}>{renderHours()}</div>
+            )}
+          </div>
+        )}
+      </div>
+      <div>
+        {viewType == ViewType.YEAR ? (
+          <YearlyEventCalender eventData={eventData} />
+        ) : (
+          <div className={styles.calendar__hours}>{renderHours()}</div>
         )}
       </div>
     </div>
