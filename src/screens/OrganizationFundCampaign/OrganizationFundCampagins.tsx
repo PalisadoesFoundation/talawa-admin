@@ -442,7 +442,6 @@ const orgFundCampaign = (): JSX.Element => {
         setFormState={setFormState}
         updateCampaignHandler={updateCampaignHandler}
         t={t}
-        setCampaign={setCampaign}
         showDeleteCampaignModal={showDeleteCampaignModal}
       />
 

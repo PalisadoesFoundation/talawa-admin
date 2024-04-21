@@ -18,7 +18,6 @@ interface InterfaceCampaignUpdateModal {
   setFormState: (state: React.SetStateAction<InterfaceCreateCampaign>) => void;
   updateCampaignHandler: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
   t: (key: string) => string;
-  setCampaign: (campaign: InterfaceCampaignInfo) => void;
   showDeleteCampaignModal: () => void;
 }
 
