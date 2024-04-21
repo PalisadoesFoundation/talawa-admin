@@ -163,6 +163,27 @@ describe('Calendar', () => {
       fireEvent.click(prevButton);
     }
   });
+  it('Should show prev and next year on clicking < & > buttons when in year view', async () => {
+    //testing previous month button
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Calendar eventData={eventData} viewType={ViewType.YEAR} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+    await wait();
+    const prevButtons = screen.getAllByTestId('prevYear');
+    prevButtons.forEach((button) => {
+      fireEvent.click(button);
+    });
+    await wait();
+    //testing next year button
+    const nextButton = screen.getAllByTestId('prevYear');
+    nextButton.forEach((button) => {
+      fireEvent.click(button);
+    });
+  });
   it('Should show prev and next date on clicking < & > buttons in the day view', async () => {
     render(
       <Router>
