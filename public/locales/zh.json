@@ -143,7 +143,9 @@
     "no": "没有",
     "yes": "是",
     "currency": "货币",
-    "selectCurrency": "选择货币"
+    "selectCurrency": "选择货币",
+    "filter": "筛选",
+    "searchFullName": "按姓名搜索"
   },
   "pledges": {
     "title": "资金筹款承诺",

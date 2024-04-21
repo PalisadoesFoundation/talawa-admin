@@ -454,7 +454,9 @@
     "no": "Non",
     "yes": "Oui",
     "currency": "Devise",
-    "selectCurrency": "Sélectionnez la devise"
+    "selectCurrency": "Sélectionnez la devise",
+    "filter": "Filtre",
+    "searchFullName": "Rechercher par nom"
   },
   "pledges": {
     "title": "Engagements de campagne de financement",

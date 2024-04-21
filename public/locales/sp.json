@@ -454,7 +454,9 @@
     "no": "No",
     "yes": "Sí",
     "currency": "Moneda",
-    "selectCurrency": "Seleccionar moneda"
+    "selectCurrency": "Seleccionar moneda",
+    "filter": "Filtrar",
+    "searchFullName": "Buscar por nombre"
   },
   "pledges": {
     "title": "Compromisos de Campaña de Financiamiento",

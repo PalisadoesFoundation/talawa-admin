@@ -1,6 +1,6 @@
 /*eslint-disable*/
 import { useMutation, useQuery } from '@apollo/client';
-import { WarningAmberRounded } from '@mui/icons-material';
+import { Search, WarningAmberRounded } from '@mui/icons-material';
 import {
   CREATE_CAMPAIGN_MUTATION,
   DELETE_CAMPAIGN_MUTATION,
@@ -10,11 +10,12 @@ import { FUND_CAMPAIGN } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
 import dayjs from 'dayjs';
 import { useState, type ChangeEvent } from 'react';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Button, Col, Row, Dropdown, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { currencySymbols } from 'utils/currency';
+import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import type {
   InterfaceCampaignInfo,
   InterfaceCreateCampaign,
@@ -237,6 +238,14 @@ const orgFundCampaign = (): JSX.Element => {
   const handleClick = (campaignId: String) => {
     navigate(`/fundCampaignPledge/${orgId}/${campaignId}`);
   };
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchText, setSearchText] = useState('');
+  const filteredCampaigns = fundCampaignData?.getFundById.campaigns.filter(
+    (campaign) =>
+      campaign.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
+
   if (fundCampaignLoading) {
     return <Loader size="xl" />;
   }
@@ -257,18 +266,58 @@ const orgFundCampaign = (): JSX.Element => {
 
   return (
     <div className={styles.organizationFundCampaignContainer}>
-      <Button
-        variant="success"
-        className={styles.orgFundCampaignButton}
-        onClick={showCreateCampaignModal}
-        data-testid="addCampaignBtn"
-      >
-        <i className={'fa fa-plus me-2'} />
-        {t('addCampaign')}
-      </Button>
+      <div className={styles.btnsContainer}>
+        <div className={styles.input}>
+          <Form.Control
+            type="name"
+            placeholder={t('searchFullName')}
+            autoComplete="off"
+            required
+            className={styles.inputField}
+            value={searchText}
+            onChange={(e) => {
+              setSearchText(e.target.value);
+            }}
+            data-testid="searchFullName"
+          />
+          <Button
+            className={`position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center `}
+            onClick={() => setSearchQuery(searchText)}
+            data-testid="searchBtn"
+          >
+            <Search />
+          </Button>
+        </div>
+        <div className={styles.btnsBlock}>
+          <div className="d-flex justify-space-between">
+            <Dropdown>
+              <Dropdown.Toggle
+                variant="success"
+                id="dropdown-basic"
+                className={styles.dropdown}
+                data-testid="filter"
+              >
+                <FilterAltOutlinedIcon className={'me-1'} />
+                {t('filter')}
+              </Dropdown.Toggle>
+            </Dropdown>
+          </div>
+          <div>
+            <Button
+              variant="success"
+              className={styles.orgFundCampaignButton}
+              onClick={showCreateCampaignModal}
+              data-testid="addCampaignBtn"
+            >
+              <i className={'fa fa-plus me-2'} />
+              {t('addCampaign')}
+            </Button>
+          </div>
+        </div>
+      </div>
+
       <div>
-        {fundCampaignData?.getFundById &&
-        fundCampaignData?.getFundById.campaigns.length > 0 ? (
+        {filteredCampaigns && filteredCampaigns.length > 0 ? (
           <div className="my-4">
             <TableContainer
               component={Paper}
@@ -298,58 +347,57 @@ const orgFundCampaign = (): JSX.Element => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {fundCampaignData?.getFundById.campaigns.map(
-                    (campaign, index) => (
-                      <StyledTableRow key={campaign._id}>
-                        <StyledTableCell component="th" scope="row">
-                          {index + 1}
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="center"
-                          data-testid="campaignName"
-                          onClick={() => handleClick(campaign._id)}
+                  {filteredCampaigns.map((campaign, index) => (
+                    <StyledTableRow key={campaign._id}>
+                      <StyledTableCell component="th" scope="row">
+                        {index + 1}
+                      </StyledTableCell>
+                      <StyledTableCell
+                        align="center"
+                        data-testid="campaignName"
+                        onClick={() => handleClick(campaign._id)}
+                      >
+                        <span
+                          style={{
+                            color: 'rgba(23, 120, 242, 1)',
+                            cursor: 'pointer',
+                          }}
                         >
-                          <span
-                            style={{
-                              color: 'rgba(23, 120, 242, 1)',
-                              cursor: 'pointer',
-                            }}
-                          >
-                            {campaign.name}
-                          </span>
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="center"
-                          data-testid="campaignStartDate"
+                          {campaign.name}
+                        </span>
+                      </StyledTableCell>
+                      <StyledTableCell
+                        align="center"
+                        data-testid="campaignStartDate"
+                      >
+                        {dayjs(campaign.startDate).format('DD/MM/YYYY')}
+                      </StyledTableCell>
+                      <StyledTableCell
+                        align="center"
+                        data-testid="campaignEndDate"
+                      >
+                        {dayjs(campaign.endDate).format('DD/MM/YYYY')}
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        <span className={`${styles.goalButton}`}>
+                          {`${currencySymbols[campaign.currency as keyof typeof currencySymbols]}${campaign.fundingGoal}`}
+                        </span>
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        <Button
+                          size="sm"
+                          data-testid="editCampaignBtn"
+                          className="p-2 w-75"
+                          variant="success"
+                          onClick={() => {
+                            // setCampaign(campaign);
+                            handleEditClick(campaign);
+                          }}
                         >
-                          {dayjs(campaign.startDate).format('DD/MM/YYYY')}
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="center"
-                          data-testid="campaignEndDate"
-                        >
-                          {dayjs(campaign.endDate).format('DD/MM/YYYY')}
-                        </StyledTableCell>
-                        <StyledTableCell align="center">
-                          <span className={`${styles.goalButton}`}>
-                            {`${currencySymbols[campaign.currency as keyof typeof currencySymbols]}${campaign.fundingGoal}`}
-                          </span>
-                        </StyledTableCell>
-                        <StyledTableCell align="center">
-                          <Button
-                            size="sm"
-                            data-testid="editCampaignBtn"
-                            className="p-2 w-75"
-                            variant="success"
-                            onClick={() => {
-                              // setCampaign(campaign);
-                              handleEditClick(campaign);
-                            }}
-                          >
-                            <span>Manage</span>
-                          </Button>
+                          <span>Manage</span>
+                        </Button>
 
-                          {/*
+                        {/*
                           <Button
                             size="sm"
                             data-testid="deleteCampaignBtn"
@@ -362,10 +410,9 @@ const orgFundCampaign = (): JSX.Element => {
                             {' '}
                             <i className="fa fa-trash"></i>
                           </Button> */}
-                        </StyledTableCell>
-                      </StyledTableRow>
-                    ),
-                  )}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))}
                 </TableBody>
               </Table>
             </TableContainer>

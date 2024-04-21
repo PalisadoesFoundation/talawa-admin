@@ -452,7 +452,9 @@
     "no": "No",
     "yes": "Yes",
     "currency": "Currency",
-    "selectCurrency": "Select Currency"
+    "selectCurrency": "Select Currency",
+    "filter": "Filter",
+    "searchFullName": "Search By Name"
   },
   "pledges": {
     "title": "Fund Campaign Pledges",

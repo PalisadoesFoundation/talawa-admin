@@ -162,7 +162,7 @@ const CampaignUpdateModal: React.FC<InterfaceCampaignUpdateModal> = ({
                 }}
                 style={{ flex: '1' }}
               >
-                Delete
+                {t('deleteCampaign')}
               </Button>
             </div>
           </Form>
