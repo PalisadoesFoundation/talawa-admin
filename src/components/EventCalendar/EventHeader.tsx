@@ -65,7 +65,10 @@ function eventHeader({
                 <Dropdown.Item eventKey={ViewType.DAY} data-testid="selectDay">
                   {ViewType.DAY}
                 </Dropdown.Item>
-                <Dropdown.Item eventKey={ViewType.YEAR} data-testid="selectYear">
+                <Dropdown.Item
+                  eventKey={ViewType.YEAR}
+                  data-testid="selectYear"
+                >
                   {ViewType.YEAR}
                 </Dropdown.Item>
               </Dropdown.Menu>
