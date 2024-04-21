@@ -512,6 +512,11 @@ describe('Testing FundCampaigns Screen', () => {
     );
     await wait();
     await waitFor(() =>
+      expect(screen.getAllByTestId('editCampaignBtn')[0]).toBeInTheDocument(),
+    );
+    userEvent.click(screen.getAllByTestId('editCampaignBtn')[0]);
+    await wait();
+    await waitFor(() =>
       expect(screen.getAllByTestId('deleteCampaignBtn')[0]).toBeInTheDocument(),
     );
     userEvent.click(screen.getAllByTestId('deleteCampaignBtn')[0]);
@@ -541,6 +546,11 @@ describe('Testing FundCampaigns Screen', () => {
     );
     await wait();
     await waitFor(() =>
+      expect(screen.getAllByTestId('editCampaignBtn')[0]).toBeInTheDocument(),
+    );
+    userEvent.click(screen.getAllByTestId('editCampaignBtn')[0]);
+    await wait();
+    await waitFor(() =>
       expect(screen.getAllByTestId('deleteCampaignBtn')[0]).toBeInTheDocument(),
     );
     userEvent.click(screen.getAllByTestId('deleteCampaignBtn')[0]);
@@ -568,6 +578,11 @@ describe('Testing FundCampaigns Screen', () => {
         </Provider>
       </MockedProvider>,
     );
+    await wait();
+    await waitFor(() =>
+      expect(screen.getAllByTestId('editCampaignBtn')[0]).toBeInTheDocument(),
+    );
+    userEvent.click(screen.getAllByTestId('editCampaignBtn')[0]);
     await wait();
     await waitFor(() =>
       expect(screen.getAllByTestId('deleteCampaignBtn')[0]).toBeInTheDocument(),
@@ -626,5 +641,23 @@ describe('Testing FundCampaigns Screen', () => {
         '/fundCampaignPledge/undefined/1',
       );
     });
+  });
+
+  it('search funds by name', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link1}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              {<OrganizaitionFundCampiagn />}
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+    await wait();
+    userEvent.type(screen.getByTestId('searchFullName'), 'Funndds');
+    await wait();
+    userEvent.click(screen.getByTestId('searchBtn'));
   });
 });
