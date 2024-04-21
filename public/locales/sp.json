@@ -449,11 +449,14 @@
     "noCampaigns": "No se encontraron campañas",
     "createCampaign": "Crear campaña de recaudación de fondos",
     "updateCampaign": "Actualizar campaña de recaudación de fondos",
+    "manageCampaign": "Administrar campaña de recaudación de fondos",
     "deleteCampaign": "Eliminar campaña de recaudación de fondos",
     "no": "No",
     "yes": "Sí",
     "currency": "Moneda",
-    "selectCurrency": "Seleccionar moneda"
+    "selectCurrency": "Seleccionar moneda",
+    "filter": "Filtrar",
+    "searchFullName": "Buscar por nombre"
   },
   "pledges": {
     "title": "Compromisos de Campaña de Financiamiento",

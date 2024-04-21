@@ -447,11 +447,14 @@
     "noCampaigns": "No Campaigns Found",
     "createCampaign": "Create Fund Campaign",
     "updateCampaign": "Update Fund Campaign",
+    "manageCampaign": "Manage Fund Campaign",
     "deleteCampaign": "Delete Fund Campaign",
     "no": "No",
     "yes": "Yes",
     "currency": "Currency",
-    "selectCurrency": "Select Currency"
+    "selectCurrency": "Select Currency",
+    "filter": "Filter",
+    "searchFullName": "Search By Name"
   },
   "pledges": {
     "title": "Fund Campaign Pledges",
