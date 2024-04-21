@@ -396,20 +396,6 @@ const orgFundCampaign = (): JSX.Element => {
                         >
                           <span>Manage</span>
                         </Button>
-
-                        {/*
-                          <Button
-                            size="sm"
-                            data-testid="deleteCampaignBtn"
-                            variant="danger"
-                            onClick={() => {
-                              setCampaign(campaign);
-                              showDeleteCampaignModal();
-                            }}
-                          >
-                            {' '}
-                            <i className="fa fa-trash"></i>
-                          </Button> */}
                       </StyledTableCell>
                     </StyledTableRow>
                   ))}
