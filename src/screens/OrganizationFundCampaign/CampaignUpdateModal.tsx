@@ -5,10 +5,7 @@ import type { ChangeEvent } from 'react';
 import React from 'react';
 import { Button, Col, Form, Modal } from 'react-bootstrap';
 import { currencyOptions } from 'utils/currency';
-import type {
-  InterfaceCampaignInfo,
-  InterfaceCreateCampaign,
-} from 'utils/interfaces';
+import type { InterfaceCreateCampaign } from 'utils/interfaces';
 import styles from './OrganizationFundCampaign.module.css';
 
 interface InterfaceCampaignUpdateModal {
