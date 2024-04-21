@@ -1,6 +1,6 @@
 /*eslint-disable*/
 import { useMutation, useQuery } from '@apollo/client';
-import { WarningAmberRounded } from '@mui/icons-material';
+import { Search, WarningAmberRounded } from '@mui/icons-material';
 import {
   CREATE_CAMPAIGN_MUTATION,
   DELETE_CAMPAIGN_MUTATION,
@@ -10,11 +10,12 @@ import { FUND_CAMPAIGN } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
 import dayjs from 'dayjs';
 import { useState, type ChangeEvent } from 'react';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Button, Col, Row, Dropdown, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { currencySymbols } from 'utils/currency';
+import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import type {
   InterfaceCampaignInfo,
   InterfaceCreateCampaign,
@@ -24,6 +25,33 @@ import CampaignCreateModal from './CampaignCreateModal';
 import CampaignDeleteModal from './CampaignDeleteModal';
 import CampaignUpdateModal from './CampaignUpdateModal';
 import styles from './OrganizationFundCampaign.module.css';
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  styled,
+  tableCellClasses,
+} from '@mui/material';
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: ['#31bb6b', '!important'],
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(() => ({
+  '&:last-child td, &:last-child th': {
+    border: 0,
+  },
+}));
 
 const orgFundCampaign = (): JSX.Element => {
   const { t } = useTranslation('translation', {
@@ -80,6 +108,13 @@ const orgFundCampaign = (): JSX.Element => {
   };
   const hideUpdateCampaignModal = (): void => {
     setcampaignUpdateModalIsOpen(!campaignUpdateModalIsOpen);
+    setFormState({
+      campaignName: '',
+      campaignCurrency: 'USD',
+      campaignGoal: 0,
+      campaignStartDate: new Date(),
+      campaignEndDate: new Date(),
+    });
   };
   const showDeleteCampaignModal = (): void => {
     setcampaignDeleteModalIsOpen(!campaignDeleteModalIsOpen);
@@ -203,6 +238,14 @@ const orgFundCampaign = (): JSX.Element => {
   const handleClick = (campaignId: String) => {
     navigate(`/fundCampaignPledge/${orgId}/${campaignId}`);
   };
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchText, setSearchText] = useState('');
+  const filteredCampaigns = fundCampaignData?.getFundById.campaigns.filter(
+    (campaign) =>
+      campaign.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
+
   if (fundCampaignLoading) {
     return <Loader size="xl" />;
   }
@@ -223,110 +266,148 @@ const orgFundCampaign = (): JSX.Element => {
 
   return (
     <div className={styles.organizationFundCampaignContainer}>
-      <Button
-        variant="success"
-        className={styles.orgFundCampaignButton}
-        onClick={showCreateCampaignModal}
-        data-testid="addCampaignBtn"
-      >
-        <i className={'fa fa-plus me-2'} />
-        {t('addCampaign')}
-      </Button>
-      <div className={`${styles.container} bg-white rounded-4 `}>
-        <div className="mx-1 my-4 py-4">
-          <Row className="mx-4 border border-light-subtle rounded-top-4 py-3 justify-content-between shadow-sm">
-            <Col xs={7} sm={2} md={3} lg={3} className=" fs-5 fw-bold">
-              <div className="ms-2">{t('campaignName')} </div>
-            </Col>
-            <Col className="fs-5 fw-bold " md={2} sm={2}>
-              <div className="ms-3">{t('startDate')} </div>
-            </Col>
-            <Col className="fs-5 fw-bold " sm={2} md={2}>
-              <div className="ms-3">{t('endDate')}</div>
-            </Col>
-            <Col className="fs-5 fw-bold" md={2} sm={2}>
-              <div className="ms-3">{t('fundingGoal')}</div>
-            </Col>
-            <Col xs={5} md={2} sm={2} lg={2} className="fs-5 fw-bold">
-              <div className="ms-3">{t('campaignOptions')}</div>
-            </Col>
-          </Row>
-
-          <div className="mx-4 bg-light-subtle border border-light-subtle border-top-0 rounded-bottom-4 shadow-sm ">
-            {fundCampaignData?.getFundById.campaigns.map((campaign, index) => (
-              <div key={index}>
-                <Row
-                  className={`${index === 0 ? 'pt-3' : ' '} ms-2 mb-3 justify-content-between `}
-                >
-                  <Col
-                    xs={7}
-                    sm={2}
-                    md={3}
-                    lg={3}
-                    className="align-self-center"
-                  >
-                    <div
-                      className={` ${styles.campaignNameInfo} text-bg-body-tertiary:hover `}
-                      onClick={() => handleClick(campaign._id)}
-                      data-testid="campaignName"
-                    >
-                      {campaign.name}
-                    </div>
-                  </Col>
-                  <Col md={2} sm={2}>
-                    <div>{dayjs(campaign.startDate).format('DD/MM/YYYY')} </div>
-                  </Col>
-                  <Col md={2} sm={2}>
-                    <div>{dayjs(campaign.endDate).format('DD/MM/YYYY')} </div>
-                  </Col>
-                  <Col md={2} sm={2}>
-                    <div className={`  ms-3  ps-3 align-self-center`}>
-                      {`${currencySymbols[campaign.currency as keyof typeof currencySymbols]}${campaign.fundingGoal}`}
-                    </div>
-                  </Col>
-                  <Col md={2} sm={2}>
-                    <Button
-                      size="sm"
-                      data-testid="editCampaignBtn"
-                      className="me-2"
-                      variant="success"
-                      onClick={() => {
-                        handleEditClick(campaign);
-                      }}
-                    >
-                      {' '}
-                      <i className="fas fa-edit"></i>
-                    </Button>
-
-                    <Button
-                      size="sm"
-                      data-testid="deleteCampaignBtn"
-                      variant="danger"
-                      onClick={() => {
-                        setCampaign(campaign);
-                        showDeleteCampaignModal();
-                      }}
-                    >
-                      {' '}
-                      <i className="fa fa-trash"></i>
-                    </Button>
-                  </Col>
-                </Row>
-                {fundCampaignData.getFundById.campaigns &&
-                  index !==
-                    fundCampaignData.getFundById.campaigns.length - 1 && (
-                    <hr className="mx-3" />
-                  )}
-              </div>
-            ))}
-
-            {fundCampaignData?.getFundById.campaigns.length === 0 && (
-              <div className="pt-2 text-center fw-semibold text-body-tertiary">
-                <h5>{t('noCampaigns')}</h5>
-              </div>
-            )}
+      <div className={styles.btnsContainer}>
+        <div className={styles.input}>
+          <Form.Control
+            type="name"
+            placeholder={t('searchFullName')}
+            autoComplete="off"
+            required
+            className={styles.inputField}
+            value={searchText}
+            onChange={(e) => {
+              setSearchText(e.target.value);
+            }}
+            data-testid="searchFullName"
+          />
+          <Button
+            className={`position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center `}
+            onClick={() => setSearchQuery(searchText)}
+            data-testid="searchBtn"
+          >
+            <Search />
+          </Button>
+        </div>
+        <div className={styles.btnsBlock}>
+          <div className="d-flex justify-space-between">
+            <Dropdown>
+              <Dropdown.Toggle
+                variant="success"
+                id="dropdown-basic"
+                className={styles.dropdown}
+                data-testid="filter"
+              >
+                <FilterAltOutlinedIcon className={'me-1'} />
+                {t('filter')}
+              </Dropdown.Toggle>
+            </Dropdown>
+          </div>
+          <div>
+            <Button
+              variant="success"
+              className={styles.orgFundCampaignButton}
+              onClick={showCreateCampaignModal}
+              data-testid="addCampaignBtn"
+            >
+              <i className={'fa fa-plus me-2'} />
+              {t('addCampaign')}
+            </Button>
           </div>
         </div>
+      </div>
+
+      <div>
+        {filteredCampaigns && filteredCampaigns.length > 0 ? (
+          <div className="my-4">
+            <TableContainer
+              component={Paper}
+              sx={{
+                borderRadius: '16px',
+              }}
+            >
+              <Table aria-label="customized table">
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell>#</StyledTableCell>
+                    <StyledTableCell align="center">
+                      {t('campaignName')}
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      {t('startDate')}
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      {t('endDate')}
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      {t('fundingGoal')}
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      {t('campaignOptions')}
+                    </StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {filteredCampaigns.map((campaign, index) => (
+                    <StyledTableRow key={campaign._id}>
+                      <StyledTableCell component="th" scope="row">
+                        {index + 1}
+                      </StyledTableCell>
+                      <StyledTableCell
+                        align="center"
+                        data-testid="campaignName"
+                        onClick={() => handleClick(campaign._id)}
+                      >
+                        <span
+                          style={{
+                            color: 'rgba(23, 120, 242, 1)',
+                            cursor: 'pointer',
+                          }}
+                        >
+                          {campaign.name}
+                        </span>
+                      </StyledTableCell>
+                      <StyledTableCell
+                        align="center"
+                        data-testid="campaignStartDate"
+                      >
+                        {dayjs(campaign.startDate).format('DD/MM/YYYY')}
+                      </StyledTableCell>
+                      <StyledTableCell
+                        align="center"
+                        data-testid="campaignEndDate"
+                      >
+                        {dayjs(campaign.endDate).format('DD/MM/YYYY')}
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        <span className={`${styles.goalButton}`}>
+                          {`${currencySymbols[campaign.currency as keyof typeof currencySymbols]}${campaign.fundingGoal}`}
+                        </span>
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        <Button
+                          size="sm"
+                          data-testid="editCampaignBtn"
+                          className="p-2 w-75"
+                          variant="success"
+                          onClick={() => {
+                            // setCampaign(campaign);
+                            handleEditClick(campaign);
+                          }}
+                        >
+                          <span>Manage</span>
+                        </Button>
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </div>
+        ) : (
+          <div className="pt-4 text-center fw-semibold text-body-tertiary">
+            <h5>{t('noCampaigns')}</h5>
+          </div>
+        )}
       </div>
 
       {/* Create Campaign Modal */}
@@ -347,6 +428,7 @@ const orgFundCampaign = (): JSX.Element => {
         setFormState={setFormState}
         updateCampaignHandler={updateCampaignHandler}
         t={t}
+        showDeleteCampaignModal={showDeleteCampaignModal}
       />
 
       {/* Delete Campaign Modal */}

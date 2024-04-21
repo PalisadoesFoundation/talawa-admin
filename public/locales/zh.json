@@ -138,11 +138,14 @@
     "noCampaigns": "未找到活动",
     "createCampaign": "创建筹款活动",
     "updateCampaign": "更新筹款活动",
+    "manageCampaign": "管理筹款活动",
     "deleteCampaign": "删除筹款活动",
     "no": "没有",
     "yes": "是",
     "currency": "货币",
-    "selectCurrency": "选择货币"
+    "selectCurrency": "选择货币",
+    "filter": "筛选",
+    "searchFullName": "按姓名搜索"
   },
   "pledges": {
     "title": "资金筹款承诺",

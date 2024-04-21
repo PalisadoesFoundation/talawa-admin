@@ -451,11 +451,14 @@
     "noCampaigns": "कोई अभियान नहीं",
     "createCampaign": "अभियान बनाएँ",
     "updateCampaign": "अभियान अपडेट करें",
+    "manageCampaign": "अभियान प्रबंधित करें",
     "deleteCampaign": "अभियान हटाएं",
     "no": "नहीं",
     "yes": "हाँ",
     "currency": "मुद्रा",
-    "selectCurrency": "मुद्रा चुनें"
+    "selectCurrency": "मुद्रा चुनें",
+    "filter": "फ़िल्टर",
+    "searchFullName": "नाम से खोजें"
   },
   "pledges": {
     "title": "फंडकैम्पेन प्रतिज्ञाएं",
