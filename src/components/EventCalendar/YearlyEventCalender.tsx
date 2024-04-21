@@ -5,25 +5,38 @@ import React, { useState, useEffect } from 'react';
 import styles from './YearlyEventCalender.module.css';
 import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
+import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
 
-interface InterfaceEvent {
+interface InterfaceEventListCardProps {
+  userRole?: string;
+  key?: string;
   _id: string;
+  location: string;
   title: string;
   description: string;
   startDate: string;
   endDate: string;
-  location: string;
-  startTime: string | undefined;
-  endTime: string | undefined;
+  startTime: string | null;
+  endTime: string | null;
   allDay: boolean;
   recurring: boolean;
-  registrants?: InterfaceIEventAttendees[];
+  recurrenceRule: InterfaceRecurrenceRule | null;
+  isRecurringEventException: boolean;
   isPublic: boolean;
   isRegisterable: boolean;
+  attendees?: {
+    _id: string;
+  }[];
+  creator?: {
+    firstName: string;
+    lastName: string;
+    _id: string;
+  };
 }
 
 interface InterfaceCalendarProps {
-  eventData: InterfaceEvent[];
+  eventData: InterfaceEventListCardProps[];
+  refetchEvents?: () => void;
   orgData?: InterfaceIOrgList;
   userRole?: string;
   userId?: string;
@@ -54,6 +67,7 @@ interface InterfaceIOrgList {
 }
 const Calendar: React.FC<InterfaceCalendarProps> = ({
   eventData,
+  refetchEvents,
   orgData,
   userRole,
   userId,
@@ -76,16 +90,16 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   ];
   const today = new Date();
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
-  const [events, setEvents] = useState<InterfaceEvent[] | null>(null);
+  const [events, setEvents] = useState<InterfaceEventListCardProps[] | null>(null);
   const [expandedY, setExpandedY] = useState<string | null>(null);
 
   const filterData = (
-    eventData: InterfaceEvent[],
+    eventData: InterfaceEventListCardProps[],
     orgData?: InterfaceIOrgList,
     userRole?: string,
     userId?: string,
-  ): InterfaceEvent[] => {
-    const data: InterfaceEvent[] = [];
+  ): InterfaceEventListCardProps[] => {
+    const data: InterfaceEventListCardProps[] = [];
     if (userRole === Role.SUPERADMIN) return eventData;
     if (userRole === Role.ADMIN) {
       eventData?.forEach((event) => {
@@ -103,8 +117,8 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     } else {
       eventData?.forEach((event) => {
         if (event.isPublic) data.push(event);
-        const userAttending = event.registrants?.some(
-          (data) => data.userId === userId,
+        const userAttending = event.attendees?.some(
+          (data) => data._id === userId,
         );
         if (userAttending) {
           data.push(event);
@@ -172,23 +186,40 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           return dayjs(event.startDate).isSame(date, 'day');
         });
 
-        const renderedEvents = eventsForCurrentDate?.map((event) => (
-          <EventListCard
-            key={event._id}
-            id={event._id}
-            eventLocation={event.location}
-            eventName={event.title}
-            eventDescription={event.description}
-            regDate={event.startDate}
-            regEndDate={event.endDate}
-            startTime={event.startTime}
-            endTime={event.endTime}
-            allDay={event.allDay}
-            recurring={event.recurring}
-            isPublic={event.isPublic}
-            isRegisterable={event.isRegisterable}
-          />
-        ));
+        const renderedEvents = eventsForCurrentDate?.map((datas: InterfaceEventListCardProps) => {
+          const attendees: { _id: string }[] = [];
+          datas.attendees?.forEach((attendee: { _id: string }) => {
+            const r = {
+              _id: attendee._id,
+            };
+
+            attendees.push(r);
+          });
+
+          return (
+            <EventListCard
+              refetchEvents={refetchEvents}
+              userRole={userRole}
+              key={datas._id}
+              id={datas._id}
+              eventLocation={datas.location}
+              eventName={datas.title}
+              eventDescription={datas.description}
+              startDate={datas.startDate}
+              endDate={datas.endDate}
+              startTime={datas.startTime}
+              endTime={datas.endTime}
+              allDay={datas.allDay}
+              recurring={datas.recurring}
+              recurrenceRule={datas.recurrenceRule}
+              isRecurringEventException={datas.isRecurringEventException}
+              isPublic={datas.isPublic}
+              isRegisterable={datas.isRegisterable}
+              registrants={attendees}
+              creator={datas.creator}
+            />
+          );
+        }) || [];
 
         const toggleExpand = (index: string): void => {
           if (expandedY === index) {

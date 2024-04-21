@@ -372,6 +372,10 @@
     "editEvent": "Editar evento",
     "eventTitle": "Título",
     "description": "Descripción",
+    "startDate": "Fecha de inicio",
+    "endDate": "Fecha final",
+    "registerEvent": "Registro",
+    "alreadyRegistered": "Ya registrado",
     "startTime": "Hora de inicio",
     "endTime": "Hora de finalización",
     "allDay": "Todo el dia",
@@ -386,7 +390,16 @@
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red.",
     "thisInstance": "Esta Instancia",
     "thisAndFollowingInstances": "Esta y las Siguientes Instancias",
-    "allInstances": "Todas las Instancias"
+    "allInstances": "Todas las Instancias",
+    "customRecurrence": "Recurrencia personalizada",
+    "repeatsEvery": "Se repite cada",
+    "repeatsOn": "Se repite en",
+    "ends": "Finaliza",
+    "never": "Nunca",
+    "on": "En",
+    "after": "Después de",
+    "occurences": "ocurrencias",
+    "done": "Hecho"
   },
   "funds": {
     "title": "Fondos",

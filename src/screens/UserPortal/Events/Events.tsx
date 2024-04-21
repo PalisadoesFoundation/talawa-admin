@@ -304,6 +304,7 @@ export default function events(): JSX.Element {
               </Dropdown>
             </div>
           </div>
+          <br></br>
           {mode === 0 && (
             <div
               className={`d-flex flex-column justify-content-between ${styles.content}`}

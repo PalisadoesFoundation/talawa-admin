@@ -78,7 +78,8 @@
 .datediv {
   display: flex;
   flex-direction: row;
-  margin-bottom: 15px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 .datebox {
   width: 90%;
@@ -94,24 +95,16 @@
 .datediv > div > p {
   margin-bottom: 0.5rem;
 }
+
 .startDate {
   margin-right: 0.25rem;
 }
 .endDate {
   margin-left: 1.5rem;
 }
-.startTime {
-  margin-right: 0.25rem;
-  width: 165.6px;
-  height: 70.4px;
-}
-.endTime {
-  margin-left: 1.5rem;
-  width: 165.6px;
-  height: 70.4px;
-}
+
 .checkboxdiv > div label {
-  margin-right: 30px;
+  margin-right: 50px;
 }
 .checkboxdiv > label > input {
   margin-left: 10px;

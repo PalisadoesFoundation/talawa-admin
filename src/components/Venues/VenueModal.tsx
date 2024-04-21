@@ -74,6 +74,13 @@ const VenueModal = ({
         toast.success(edit ? t('venueUpdated') : t('venueAdded'));
         refetchVenues();
         onHide();
+        setFormState({
+          name: '',
+          description: '',
+          capacity: '',
+          imageURL: '',
+        });
+        setVenueImage(false);
       }
     } catch (error) {
       /* istanbul ignore next */
