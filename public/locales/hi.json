@@ -363,8 +363,7 @@
     "yes": "हाँ"
   },
   "eventListCard": {
-    "location": "स्थान",
-    "end": "समाप्त",
+    "location": "आयोजन स्थान",
     "deleteEvent": "घटना हटाएं",
     "deleteEventMsg": "क्या आप इस इवेंट को हटाना चाहते हैं?",
     "no": "नहीं",
@@ -979,7 +978,8 @@
     "view": "देखें",
     "edit": "संपादित करें",
     "editAdvertisement": "विज्ञापन संपादित करें",
-    "saveChanges": "परिवर्तन सहेजें"
+    "saveChanges": "परिवर्तन सहेजें",
+    "endOfResults": "परिणामों का अंत"
   },
   "userChat": {
     "chat": "बात",

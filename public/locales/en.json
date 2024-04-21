@@ -360,8 +360,7 @@
     "yes": "Yes"
   },
   "eventListCard": {
-    "location": "Location",
-    "end": "End",
+    "location": "Event Location",
     "deleteEvent": "Delete Event",
     "deleteEventMsg": "Do you want to remove this event?",
     "no": "No",
@@ -985,7 +984,8 @@
     "view": "View",
     "edit": "Edit",
     "editAdvertisement": "Edit Advertisement",
-    "saveChanges": "Save Changes"
+    "saveChanges": "Save Changes",
+    "endOfResults": "End of results"
   },
   "userChat": {
     "chat": "Chat",

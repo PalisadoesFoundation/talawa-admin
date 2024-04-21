@@ -362,8 +362,7 @@
     "yes": "Sí"
   },
   "eventListCard": {
-    "location": "Ubicación",
-    "end": "Final",
+    "location": "Lugar del evento",
     "deleteEvent": "Eliminar evento",
     "deleteEventMsg": "¿Quieres eliminar este evento?",
     "no": "No",
@@ -976,7 +975,8 @@
     "view": "Ver",
     "edit": "Editar",
     "editAdvertisement": "Editar Anuncio",
-    "saveChanges": "Guardar Cambios"
+    "saveChanges": "Guardar Cambios",
+    "endOfResults": "Fin de los resultados"
   },
   "userChat": {
     "chat": "Charlar",

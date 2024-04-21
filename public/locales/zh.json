@@ -442,8 +442,7 @@
     "yes": "是"
   },
   "eventListCard": {
-    "location": "地點",
-    "end": "結尾",
+    "location": "活動地點",
     "deleteEvent": "刪除事件",
     "deleteEventMsg": "您要刪除此活動嗎？",
     "no": "不",
@@ -977,7 +976,8 @@
     "view": "查看",
     "edit": "编辑",
     "editAdvertisement": "编辑广告",
-    "saveChanges": "保存更改"
+    "saveChanges": "保存更改",
+    "endOfResults": "結果結束"
   },
   "userChat": {
     "chat": "聊天",
