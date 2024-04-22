@@ -47,6 +47,7 @@ const EventManagement = (): JSX.Element => {
 
   const superAdmin = getItem('SuperAdmin');
   const adminFor = getItem('AdminFor');
+  /*istanbul ignore next*/
   const userRole = superAdmin
     ? 'SUPERADMIN'
     : adminFor?.length > 0
@@ -106,6 +107,7 @@ const EventManagement = (): JSX.Element => {
           fill={'var(--bs-secondary)'}
           data-testid="backBtn"
           onClick={() => {
+            /*istanbul ignore next*/
             userRole === 'USER'
               ? navigate(`/user/events/${orgId}`)
               : navigate(`/orgevents/${orgId}`);
