@@ -368,6 +368,7 @@ export const ORGANIZATIONS_LIST = gql`
         firstName
         lastName
         email
+        createdAt
       }
       membershipRequests {
         _id

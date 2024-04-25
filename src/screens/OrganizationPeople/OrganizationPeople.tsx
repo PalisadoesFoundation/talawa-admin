@@ -1,6 +1,7 @@
 import { useLazyQuery } from '@apollo/client';
 import { Search, Sort } from '@mui/icons-material';
 import {
+  ORGANIZATIONS_LIST,
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   USER_LIST_FOR_TABLE,
 } from 'GraphQl/Queries/Queries';
@@ -39,6 +40,7 @@ function organizationPeople(): JSX.Element {
     firstName_contains: '',
     lastName_contains: '',
   });
+  const [adminFilteredData, setAdminFilteredData] = useState();
 
   const [userName, setUserName] = useState('');
   const [showRemoveModal, setShowRemoveModal] = React.useState(false);
@@ -80,12 +82,9 @@ function organizationPeople(): JSX.Element {
     loading: adminLoading,
     error: adminError,
     refetch: adminRefetch,
-  } = useLazyQuery(ORGANIZATIONS_MEMBER_CONNECTION_LIST, {
+  } = useLazyQuery(ORGANIZATIONS_LIST, {
     variables: {
-      firstName_contains: '',
-      lastName_contains: '',
-      orgId: currentUrl,
-      admin_for: currentUrl,
+      id: currentUrl,
     },
   })[1];
 
@@ -109,16 +108,15 @@ function organizationPeople(): JSX.Element {
       });
     } else if (state === 1) {
       adminRefetch({
-        ...filterData,
-        orgId: currentUrl,
-        admin_for: currentUrl,
+        id: currentUrl,
       });
+      setAdminFilteredData(adminData?.organizations[0].admins);
     } else {
       usersRefetch({
         ...filterData,
       });
     }
-  }, [state]);
+  }, [state, adminData]);
 
   /* istanbul ignore next */
   if (memberError || usersError || adminError) {
@@ -150,11 +148,19 @@ function organizationPeople(): JSX.Element {
         orgId: currentUrl,
       });
     } else if (state === 1) {
-      adminRefetch({
-        ...newFilterData,
-        orgId: currentUrl,
-        admin_for: currentUrl,
-      });
+      const filterData = adminData.organizations[0].admins.filter(
+        (value: {
+          _id: string;
+          firstName: string;
+          lastName: string;
+          createdAt: string;
+        }) => {
+          return (value.firstName + value.lastName)
+            .toLowerCase()
+            .includes(userName.toLowerCase());
+        },
+      );
+      setAdminFilteredData(filterData);
     } else {
       usersRefetch({
         ...newFilterData,
@@ -348,7 +354,7 @@ function organizationPeople(): JSX.Element {
         </div>
       </Row>
       {((state == 0 && memberData) ||
-        (state == 1 && adminData) ||
+        (state == 1 && adminFilteredData) ||
         (state == 2 && usersData)) && (
         <div className="datatable">
           <DataGrid
@@ -389,7 +395,7 @@ function organizationPeople(): JSX.Element {
               state === 0
                 ? memberData.organizationsMemberConnection.edges
                 : state === 1
-                  ? adminData.organizationsMemberConnection.edges
+                  ? adminFilteredData
                   : convertObject(usersData)
             }
             columns={columns}
