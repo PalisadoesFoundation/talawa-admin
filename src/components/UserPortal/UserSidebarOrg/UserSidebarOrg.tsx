@@ -11,23 +11,23 @@ import type { TargetsType } from 'state/reducers/routesReducer';
 import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
 import { ReactComponent as AngleRightIcon } from 'assets/svgs/angleRight.svg';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
-import styles from './LeftDrawerOrg.module.css';
+import styles from './UserSidebarOrg.module.css';
 import Avatar from 'components/Avatar/Avatar';
 
-export interface InterfaceLeftDrawerProps {
+export interface InterfaceUserSidebarOrgProps {
   orgId: string;
   targets: TargetsType[];
   hideDrawer: boolean | null;
   setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
-const leftDrawerOrg = ({
+const UserSidebarOrg = ({
   targets,
   orgId,
   hideDrawer,
   setHideDrawer,
-}: InterfaceLeftDrawerProps): JSX.Element => {
-  const { t } = useTranslation('translation', { keyPrefix: 'leftDrawerOrg' });
+}: InterfaceUserSidebarOrgProps): JSX.Element => {
+  const { t } = useTranslation('translation', { keyPrefix: 'userSidebarOrg' });
   const [showDropdown, setShowDropdown] = React.useState(false);
 
   const [organization, setOrganization] =
@@ -76,7 +76,7 @@ const leftDrawerOrg = ({
         {/* Branding Section */}
         <div className={styles.brandingContainer}>
           <TalawaLogo className={styles.talawaLogo} />
-          <span className={styles.talawaText}>{t('talawaAdminPortal')}</span>
+          <span className={styles.talawaText}>{t('talawaUserPortal')}</span>
         </div>
 
         {/* Organization Section */}
@@ -168,4 +168,4 @@ const leftDrawerOrg = ({
   );
 };
 
-export default leftDrawerOrg;
+export default UserSidebarOrg;

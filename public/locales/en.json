@@ -828,10 +828,18 @@
     "searchByName": "Search By Name",
     "filter": "Filter"
   },
-  "userSidebar": {
+  "userSidebarOrg": {
     "yourOrganizations": "Your Organizations",
     "noOrganizations": "You haven't joined any organization yet.",
-    "viewAll": "View all"
+    "viewAll": "View all",
+    "talawaUserPortal": "Talawa User Portal",
+    "menu": "Menu",
+    "my organizations": "My Organizations",
+    "users": "Users",
+    "requests": "Requests",
+    "communityProfile": "Community Profile",
+    "logout": "Logout",
+    "settings": "Settings"
   },
   "organizationSidebar": {
     "viewAll": "View all",

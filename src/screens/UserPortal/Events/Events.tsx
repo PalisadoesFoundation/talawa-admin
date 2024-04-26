@@ -1,9 +1,6 @@
 import type { ChangeEvent } from 'react';
 import React from 'react';
-import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
-import OrganizationSidebar from 'components/UserPortal/OrganizationSidebar/OrganizationSidebar';
 import EventCard from 'components/UserPortal/EventCard/EventCard';
-import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import PaginationList from 'components/PaginationList/PaginationList';
 import {
@@ -238,9 +235,6 @@ export default function events(): JSX.Element {
     }
   }, [data]);
 
-  const navbarProps = {
-    currentPage: 'events',
-  };
   /* istanbul ignore next */
   const showInviteModal = (): void => {
     setCreateEventmodalisOpen(true);
@@ -255,10 +249,9 @@ export default function events(): JSX.Element {
 
   return (
     <>
-      <OrganizationNavbar {...navbarProps} />
       <div className={`d-flex flex-row ${styles.containerHeight}`}>
-        <UserSidebar />
         <div className={`${styles.colorLight} ${styles.mainContainer}`}>
+          <h1>Events</h1>
           <EventHeader
             viewType={viewType}
             showInviteModal={showInviteModal}

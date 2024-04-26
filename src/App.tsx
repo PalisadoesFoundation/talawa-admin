@@ -29,7 +29,7 @@ import React, { useEffect } from 'react';
 // User Portal Components
 import Donate from 'screens/UserPortal/Donate/Donate';
 import Events from 'screens/UserPortal/Events/Events';
-import Home from 'screens/UserPortal/Home/Home';
+import Posts from 'screens/UserPortal/Posts/Posts';
 import Organizations from 'screens/UserPortal/Organizations/Organizations';
 import People from 'screens/UserPortal/People/People';
 import Settings from 'screens/UserPortal/Settings/Settings';
@@ -42,6 +42,7 @@ import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/Secur
 import FundCampaignPledge from 'screens/FundCampaignPledge/FundCampaignPledge';
 
 import useLocalStorage from 'utils/useLocalstorage';
+import UserScreen from 'screens/UserPortal/UserScreen/UserScreen';
 
 const { setItem } = useLocalStorage();
 
@@ -157,11 +158,14 @@ function app(): JSX.Element {
         {/* User Portal Routes */}
         <Route element={<SecuredRouteForUser />}>
           <Route path="/user/organizations" element={<Organizations />} />
-          <Route path="/user/organization/:orgId" element={<Home />} />
-          <Route path="/user/people/:orgId" element={<People />} />
           <Route path="/user/settings" element={<Settings />} />
-          <Route path="/user/donate/:orgId" element={<Donate />} />
-          <Route path="/user/events/:orgId" element={<Events />} />
+          <Route element={<UserScreen />}>
+            <Route path="/user/organizations" element={<Organizations />} />
+            <Route path="/user/organization/:orgId" element={<Posts />} />
+            <Route path="/user/people/:orgId" element={<People />} />
+            <Route path="/user/donate/:orgId" element={<Donate />} />
+            <Route path="/user/events/:orgId" element={<Events />} />
+          </Route>
         </Route>
         {/* <SecuredRouteForUser path="/user/chat" component={Chat} /> */}
         <Route path="*" element={<PageNotFound />} />

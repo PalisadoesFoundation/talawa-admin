@@ -1,8 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './Settings.module.css';
-import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
-import UserNavbar from 'components/UserPortal/UserNavbar/UserNavbar';
 import { Button, Card, Col, Form, Row } from 'react-bootstrap';
 import convertToBase64 from 'utils/convertToBase64';
 import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -21,11 +19,28 @@ import {
 import UserProfile from 'components/UserProfileSettings/UserProfile';
 import DeleteUser from 'components/UserProfileSettings/DeleteUser';
 import OtherSettings from 'components/UserProfileSettings/OtherSettings';
+import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 
 export default function settings(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'settings',
   });
+
+  const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
+
+  const handleResize = (): void => {
+    if (window.innerWidth <= 820) {
+      setHideDrawer(!hideDrawer);
+    }
+  };
+
+  useEffect(() => {
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const { setItem } = useLocalStorage();
 
@@ -154,12 +169,40 @@ export default function settings(): JSX.Element {
       originalImageState.current = image;
     }
   }, [data]);
-  console.log('userDetails', userDetails);
+
   return (
     <>
-      <UserNavbar />
-      <div className={`d-flex flex-row ${styles.containerHeight}`}>
-        <UserSidebar />
+      {hideDrawer ? (
+        <Button
+          className={styles.opendrawer}
+          onClick={(): void => {
+            setHideDrawer(!hideDrawer);
+          }}
+          data-testid="openMenu"
+        >
+          <i className="fa fa-angle-double-right" aria-hidden="true"></i>
+        </Button>
+      ) : (
+        <Button
+          className={styles.collapseSidebarButton}
+          onClick={(): void => {
+            setHideDrawer(!hideDrawer);
+          }}
+          data-testid="closeMenu"
+        >
+          <i className="fa fa-angle-double-left" aria-hidden="true"></i>
+        </Button>
+      )}
+      <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
+      <div
+        className={`d-flex flex-row ${styles.containerHeight} ${
+          hideDrawer === null
+            ? ''
+            : hideDrawer
+              ? styles.expand
+              : styles.contract
+        }`}
+      >
         <div className={`${styles.mainContainer}`}>
           <h3>{t('settings')}</h3>
           <Row>

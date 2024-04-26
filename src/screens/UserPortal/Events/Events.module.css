@@ -48,7 +48,7 @@
 }
 
 .containerHeight {
-  height: calc(100vh - 66px);
+  height: 100vh;
 }
 
 .colorPrimary {

@@ -8,10 +8,10 @@ import {
 } from 'GraphQl/Queries/Queries';
 import PaginationList from 'components/PaginationList/PaginationList';
 import OrganizationCard from 'components/UserPortal/OrganizationCard/OrganizationCard';
-import UserNavbar from 'components/UserPortal/UserNavbar/UserNavbar';
+// import UserNavbar from 'components/UserPortal/UserNavbar/UserNavbar';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
-import React from 'react';
-import { Dropdown, Form, InputGroup } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from './Organizations.module.css';
@@ -70,6 +70,22 @@ export default function organizations(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userOrganizations',
   });
+
+  const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
+
+  const handleResize = (): void => {
+    if (window.innerWidth <= 820) {
+      setHideDrawer(!hideDrawer);
+    }
+  };
+
+  useEffect(() => {
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -218,14 +234,40 @@ export default function organizations(): JSX.Element {
   }, [mode, data, joinedOrganizationsData, createdOrganizationsData, userId]);
   return (
     <>
-      <UserNavbar />
-      <div className={`d-flex flex-row ${styles.containerHeight}`}>
-        <UserSidebar />
-        <div className={`${styles.colorLight} ${styles.mainContainer}`}>
+      {hideDrawer ? (
+        <Button
+          className={styles.opendrawer}
+          onClick={(): void => {
+            setHideDrawer(!hideDrawer);
+          }}
+          data-testid="openMenu"
+        >
+          <i className="fa fa-angle-double-right" aria-hidden="true"></i>
+        </Button>
+      ) : (
+        <Button
+          className={styles.collapseSidebarButton}
+          onClick={(): void => {
+            setHideDrawer(!hideDrawer);
+          }}
+          data-testid="closeMenu"
+        >
+          <i className="fa fa-angle-double-left" aria-hidden="true"></i>
+        </Button>
+      )}
+      <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
+      <div
+        className={`${styles.containerHeight} ${
+          hideDrawer === null
+            ? ''
+            : hideDrawer
+              ? styles.expand
+              : styles.contract
+        }`}
+      >
+        <div className={`${styles.mainContainer}`}>
           <h3>{t('selectOrganization')}</h3>
-          <div
-            className={`d-flex flex-row justify-content-between pt-3 flex-wrap ${styles.gap}`}
-          >
+          <div>
             <InputGroup className={styles.maxWidth}>
               <Form.Control
                 placeholder={t('search')}

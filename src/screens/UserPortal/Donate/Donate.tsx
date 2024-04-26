@@ -17,9 +17,7 @@ import styles from './Donate.module.css';
 import DonationCard from 'components/UserPortal/DonationCard/DonationCard';
 import useLocalStorage from 'utils/useLocalstorage';
 import { errorHandler } from 'utils/errorHandler';
-import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
 import OrganizationSidebar from 'components/UserPortal/OrganizationSidebar/OrganizationSidebar';
-import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import PaginationList from 'components/PaginationList/PaginationList';
 
 export interface InterfaceDonationCardProps {
@@ -120,9 +118,7 @@ export default function donate(): JSX.Element {
 
   return (
     <>
-      <OrganizationNavbar {...navbarProps} />
       <div className={`d-flex flex-row ${styles.containerHeight}`}>
-        <UserSidebar />
         <div className={` ${styles.mainContainer}`}>
           <h1>{t(`donations`)}</h1>
           <div className={styles.inputContainer}>
