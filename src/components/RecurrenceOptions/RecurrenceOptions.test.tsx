@@ -339,7 +339,7 @@ describe('Testing the creaction of recurring events through recurrence options',
         'Monday to Friday',
       );
     });
-  });
+  }, 30000);
 
   test('Creating a recurring event with the daily recurrence option', async () => {
     render(

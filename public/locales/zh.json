@@ -267,7 +267,7 @@
     "admins": "管理員",
     "members": "成員",
     "joinNow": "现在加入",
-    "joined": "加入",
+    "visit": "加入访问",
     "withdraw": "提取",
     "orgJoined": "成功加入组织",
     "MembershipRequestSent": "会员申请已成功发送",
@@ -827,10 +827,18 @@
     "organizations": "组织",
     "searchByName": "按名稱搜索"
   },
-  "userSidebar": {
+  "userSidebarOrg": {
     "yourOrganizations": "您的組織",
     "noOrganizations": "您還沒有加入任何組織。",
-    "viewAll": "查看全部"
+    "viewAll": "查看全部",
+    "talawaUserPortal": "用户门户",
+    "menu": "菜单",
+    "my organizations": "我的组织",
+    "users": "用户",
+    "requests": "请求",
+    "communityProfile": "社区简介",
+    "logout": "登出",
+    "settings": "設置"
   },
   "organizationSidebar": {
     "viewAll": "查看全部",

@@ -6,7 +6,6 @@
   border-radius: 8px;
   outline: 1px solid var(--bs-gray-200);
   position: relative;
-  width: 48%;
 }
 
 .orgCard .innerContainer {
