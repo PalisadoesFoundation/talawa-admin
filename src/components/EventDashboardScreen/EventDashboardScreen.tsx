@@ -8,15 +8,10 @@ import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from './EventDashboardScreen.module.css';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
-import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
-import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
 import useLocalStorage from 'utils/useLocalstorage';
 const { getItem } = useLocalStorage();
 
 const EventDashboardScreen = (): JSX.Element => {
-  const navbarProps = {
-    currentPage: 'events',
-  };
   const isLoggedIn = getItem('IsLoggedIn');
   const adminFor = getItem('AdminFor');
   const location = useLocation();
@@ -32,9 +27,7 @@ const EventDashboardScreen = (): JSX.Element => {
   if (adminFor === null) {
     return (
       <>
-        <OrganizationNavbar {...navbarProps} />
         <div className={`d-flex flex-row ${styles.containerHeight}`}>
-          <UserSidebar />
           <div className={`${styles.colorLight} ${styles.mainContainer}`}>
             <div
               className={`d-flex flex-row justify-content-between flex-wrap ${styles.gap}`}

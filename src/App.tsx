@@ -151,9 +151,6 @@ function app(): JSX.Element {
             {extraRoutes}
           </Route>
         </Route>
-        <Route element={<EventDashboardScreen />}>
-          <Route path="/event/:orgId/:eventId" element={<EventManagement />} />
-        </Route>
         <Route path="/forgotPassword" element={<ForgotPassword />} />
         {/* User Portal Routes */}
         <Route element={<SecuredRouteForUser />}>
@@ -165,6 +162,12 @@ function app(): JSX.Element {
             <Route path="/user/people/:orgId" element={<People />} />
             <Route path="/user/donate/:orgId" element={<Donate />} />
             <Route path="/user/events/:orgId" element={<Events />} />
+            <Route element={<EventDashboardScreen />}>
+              <Route
+                path="/event/:orgId/:eventId"
+                element={<EventManagement />}
+              />
+            </Route>
           </Route>
         </Route>
         {/* <SecuredRouteForUser path="/user/chat" component={Chat} /> */}
