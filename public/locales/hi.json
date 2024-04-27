@@ -829,10 +829,18 @@
     "organizations": "संगठन",
     "searchByName": "नाम से खोजें"
   },
-  "userSidebar": {
+  "userSidebarOrg": {
     "yourOrganizations": "आपके संगठन",
     "noOrganizations": "आप अभी तक किसी संगठन में शामिल नहीं हुए हैं.",
-    "viewAll": "सभी को देखें"
+    "viewAll": "सभी को देखें",
+    "talawaUserPortal": "तलावा उपयोगकर्ता पोर्टल",
+    "menu": "मेन्यू",
+    "my organizations": "मेरे संगठन",
+    "users": "उपयोगकर्ता",
+    "requests": "अनुरोध",
+    "communityProfile": "सामुदायिक प्रोफ़ाइल",
+    "logout": "लॉग आउट",
+    "settings": "समायोजन"
   },
   "organizationSidebar": {
     "viewAll": "सभी को देखें",
