@@ -3,11 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
-
-import {
-  REMOVE_ADMIN_MUTATION,
-  UPDATE_USERTYPE_MUTATION,
-} from 'GraphQl/Mutations/mutations';
+import { REMOVE_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router-dom';
 import { errorHandler } from 'utils/errorHandler';
@@ -23,7 +19,6 @@ function orgAdminListCard(props: InterfaceOrgPeopleListCardProps): JSX.Element {
   }
   const { orgId: currentUrl } = useParams();
   const [remove] = useMutation(REMOVE_ADMIN_MUTATION);
-  const [updateUserType] = useMutation(UPDATE_USERTYPE_MUTATION);
 
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgAdminListCard',
@@ -31,32 +26,17 @@ function orgAdminListCard(props: InterfaceOrgPeopleListCardProps): JSX.Element {
 
   const removeAdmin = async (): Promise<void> => {
     try {
-      const { data } = await updateUserType({
+      const { data } = await remove({
         variables: {
-          id: props.id,
-          userType: 'USER',
+          userid: props.id,
+          orgid: currentUrl,
         },
       });
-
-      /* istanbul ignore next */
       if (data) {
-        try {
-          const { data } = await remove({
-            variables: {
-              userid: props.id,
-              orgid: currentUrl,
-            },
-          });
-          if (data) {
-            toast.success(t('adminRemoved'));
-            setTimeout(() => {
-              window.location.reload();
-            }, 2000);
-          }
-        } catch (error: unknown) {
-          /* istanbul ignore next */
-          errorHandler(t, error);
-        }
+        toast.success(t('adminRemoved'));
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       }
     } catch (error: unknown) {
       /* istanbul ignore next */

@@ -226,6 +226,7 @@ const MOCKS: TestMock[] = [
                 firstName: 'firstName',
                 lastName: 'lastName',
                 email: 'email',
+                createdAt: '12-03-2024',
               },
             ],
             membershipRequests: [

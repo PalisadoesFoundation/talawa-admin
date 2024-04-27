@@ -43,6 +43,7 @@ import FundCampaignPledge from 'screens/FundCampaignPledge/FundCampaignPledge';
 
 import useLocalStorage from 'utils/useLocalstorage';
 import UserScreen from 'screens/UserPortal/UserScreen/UserScreen';
+import EventDashboardScreen from 'components/EventDashboardScreen/EventDashboardScreen';
 
 const { setItem } = useLocalStorage();
 
@@ -126,10 +127,7 @@ function app(): JSX.Element {
             <Route path="/orgpeople/:orgId" element={<OrganizationPeople />} />
             <Route path="/member/:orgId" element={<MemberDetail />} />
             <Route path="/orgevents/:orgId" element={<OrganizationEvents />} />
-            <Route
-              path="/event/:orgId/:eventId"
-              element={<EventManagement />}
-            />
+
             <Route
               path="/orgactionitems/:orgId"
               element={<OrganizationActionItems />}
@@ -153,7 +151,9 @@ function app(): JSX.Element {
             {extraRoutes}
           </Route>
         </Route>
-
+        <Route element={<EventDashboardScreen />}>
+          <Route path="/event/:orgId/:eventId" element={<EventManagement />} />
+        </Route>
         <Route path="/forgotPassword" element={<ForgotPassword />} />
         {/* User Portal Routes */}
         <Route element={<SecuredRouteForUser />}>
