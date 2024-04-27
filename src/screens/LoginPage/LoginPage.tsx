@@ -170,8 +170,6 @@ const loginPage = (): JSX.Element => {
       signOrg,
     } = signformState;
 
-    console.log(signOrg);
-
     const isVerified = await verifyRecaptcha(recaptchaToken);
     /* istanbul ignore next */
     if (!isVerified) {
@@ -781,7 +779,7 @@ const loginPage = (): JSX.Element => {
                     <div className="position-relative">
                       <select
                         className="form-select text-muted "
-                        aria-label="Default select example"
+                        aria-label="Select Organization"
                         data-testid="selectOrg"
                         onChange={(e) => {
                           setSignFormState({
@@ -799,32 +797,18 @@ const loginPage = (): JSX.Element => {
                           {orgLoading ? t('loading') : t('selectOrg')}
                         </option>
                         {orgData &&
-                          orgData.organizations.map(
+                          orgData?.organizations.map(
                             (
-                              org: InterfaceQueryOrganizationListObject | null,
+                              org: InterfaceQueryOrganizationListObject,
+                              idx: number,
                             ) => (
-                              <>
-                                <option
-                                  key={org ? org._id : 0}
-                                  value={org ? org._id : 0}
-                                >
-                                  {org ? org.name : null}
-                                </option>
-                              </>
+                              <option key={idx} value={org?._id}>
+                                {org?.name}
+                              </option>
                             ),
                           )}
                       </select>
                     </div>
-                    {signformState.cPassword.length > 0 &&
-                      signformState.signPassword !==
-                        signformState.cPassword && (
-                        <div
-                          className="form-text text-danger"
-                          data-testid="passwordCheck"
-                        >
-                          {t('Password_and_Confirm_password_mismatches.')}
-                        </div>
-                      )}
                   </div>
                   {REACT_APP_USE_RECAPTCHA === 'yes' ? (
                     <div className="mt-3">

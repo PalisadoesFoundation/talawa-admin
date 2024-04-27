@@ -20,6 +20,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { BACKEND_URL } from 'Constant/constant';
 import useLocalStorage from 'utils/useLocalstorage';
 import { GET_COMMUNITY_DATA, ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
+import { debug } from 'jest-preview';
 
 const MOCKS = [
   {
@@ -927,6 +928,28 @@ describe('Testing redirect if already logged in', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/orglist');
   });
 });
+test('Render the Select Organization list and change the option', async () => {
+  render(
+    <MockedProvider addTypename={false} link={link3}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <LoginPage />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+  await wait();
+  userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
+  await wait();
+  userEvent.selectOptions(
+    screen.getByTestId('selectOrg'),
+    'db1d5caad2ade57ab811e681',
+  );
+
+  debug();
+});
 
 describe('Talawa-API server fetch check', () => {
   beforeEach(() => {
@@ -972,26 +995,5 @@ describe('Talawa-API server fetch check', () => {
     });
 
     expect(fetch).toHaveBeenCalledWith(BACKEND_URL);
-  });
-
-  test('Render the Select Organization list', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link2}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    await wait();
-
-    userEvent.click(screen.getByTestId('goToRegisterPortion'));
-
-    await wait();
-
-    userEvent.click(screen.getByTestId(/selectOrg/i));
   });
 });
