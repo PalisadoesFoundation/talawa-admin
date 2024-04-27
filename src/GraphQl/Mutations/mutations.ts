@@ -419,12 +419,6 @@ export const FORGOT_PASSWORD_MUTATION = gql`
   }
 `;
 
-export const UPDATE_USERTYPE_MUTATION = gql`
-  mutation UpdateUserType($id: ID!, $userType: String!) {
-    updateUserType(data: { id: $id, userType: $userType })
-  }
-`;
-
 /**
  * {@label UPDATE_INSTALL_STATUS_PLUGIN_MUTATION}
  * @remarks

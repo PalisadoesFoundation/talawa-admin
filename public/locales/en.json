@@ -325,6 +325,7 @@
   "organizationActionItems": {
     "actionItemCategory": "Action Item Category",
     "actionItemDetails": "Action Item Details",
+    "actionItemCompleted": "Action Item Completed",
     "assignee": "Assignee",
     "assigner": "Assigner",
     "assignmentDate": "Assignment Date",
