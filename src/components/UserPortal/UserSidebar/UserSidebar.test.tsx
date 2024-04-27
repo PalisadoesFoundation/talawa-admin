@@ -399,13 +399,19 @@ describe('Testing UserSidebar Component [User Portal]', () => {
       </MockedProvider>,
     );
     expect(screen.getByText('My Organizations')).toBeInTheDocument();
+    expect(screen.getByText('Settings')).toBeInTheDocument();
     expect(screen.getByText('Talawa User Portal')).toBeInTheDocument();
+    const settingsBtn = screen.getByText('Settings');
 
     const orgsBtn = screen.getAllByTestId(/orgsBtn/i);
 
     orgsBtn[0].click();
     expect(
       orgsBtn[0].className.includes('text-white btn btn-success'),
+    ).toBeTruthy();
+    settingsBtn.click();
+    expect(
+      settingsBtn.className.includes('text-white btn btn-success'),
     ).toBeTruthy();
   });
 });

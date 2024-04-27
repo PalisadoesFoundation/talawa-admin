@@ -69,7 +69,7 @@ const userSidebar = ({
                 className={`${
                   isActive === true ? 'text-white' : 'text-secondary'
                 }`}
-                data-testid="orgsBtn"
+                data-testid="settingsBtn"
               >
                 <div className={styles.iconWrapper}>
                   <SettingsIcon

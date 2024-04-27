@@ -23,29 +23,6 @@ const reducer = (
         targets: [...generateRoutes(components, action.payload)],
       });
     }
-    case 'UPDATE_P_TARGETS': {
-      const filteredTargets = state.targets.filter(
-        (target: TargetsType) => target.name === 'Plugins',
-      );
-
-      const oldTargets: SubTargetType[] = filteredTargets[0]?.subTargets || [];
-      return Object.assign({}, state, {
-        targets: [
-          ...state.targets.filter(
-            (target: TargetsType) => target.name !== 'Plugins',
-          ),
-          Object.assign(
-            {},
-            {
-              name: 'Plugins',
-              comp_id: null,
-              component: null,
-              subTargets: [...action.payload, ...oldTargets],
-            },
-          ),
-        ],
-      });
-    }
     default: {
       return state;
     }
@@ -88,27 +65,10 @@ const generateRoutes = (
   return comps
     .filter((comp) => comp.name && comp.name !== '')
     .map((comp) => {
-      const entry: TargetsType = comp.comp_id
-        ? comp.comp_id === 'organizations'
+      const entry: TargetsType =
+        comp.comp_id === 'organizations'
           ? { name: comp.name, url: `user/${comp.comp_id}` }
-          : { name: comp.name, url: `user/${comp.comp_id}/${currentOrg}` }
-        : {
-            name: comp.name,
-            subTargets: comp.subTargets?.map(
-              (subTarget: {
-                name: string;
-                comp_id: string;
-                component: string;
-                icon?: string;
-              }) => {
-                return {
-                  name: subTarget.name,
-                  url: `user/${subTarget.comp_id}/${currentOrg}`,
-                  icon: subTarget.icon,
-                };
-              },
-            ),
-          };
+          : { name: comp.name, url: `user/${comp.comp_id}/${currentOrg}` };
       return entry;
     });
 };

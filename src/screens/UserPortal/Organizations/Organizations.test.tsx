@@ -1,5 +1,5 @@
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 
 import userEvent from '@testing-library/user-event';
@@ -327,6 +327,11 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
+const resizeWindow = (width: number): void => {
+  window.innerWidth = width;
+  fireEvent(window, new Event('resize'));
+};
+
 describe('Testing Organizations Screen [User Portal]', () => {
   test('Screen should be rendered properly', async () => {
     render(
@@ -433,5 +438,74 @@ describe('Testing Organizations Screen [User Portal]', () => {
     // Assert "Join Now" button
     const joinNowButtons = screen.getAllByTestId('joinBtn');
     expect(joinNowButtons.length).toBeGreaterThan(0);
+  });
+
+  test('Mode is changed to created organizations', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('modeChangeBtn'));
+    await wait();
+    userEvent.click(screen.getByTestId('modeBtn2'));
+    await wait();
+
+    expect(screen.queryAllByText('createdOrganization')).not.toBe([]);
+  });
+
+  test('Testing Sidebar', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const closeMenubtn = screen.getByTestId('closeMenu');
+    expect(closeMenubtn).toBeInTheDocument();
+    closeMenubtn.click();
+    const openMenuBtn = screen.getByTestId('openMenu');
+    expect(openMenuBtn).toBeInTheDocument();
+    openMenuBtn.click();
+  });
+
+  test('Testing sidebar when the screen size is less than or equal to 820px', async () => {
+    resizeWindow(800);
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    expect(screen.getByText('My Organizations')).toBeInTheDocument();
+    expect(screen.getByText('Talawa User Portal')).toBeInTheDocument();
+
+    const settingsBtn = screen.getByTestId('settingsBtn');
+
+    settingsBtn.click();
   });
 });
