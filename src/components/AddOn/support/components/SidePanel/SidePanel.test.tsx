@@ -20,7 +20,7 @@ describe('Testing Contribution Stats', () => {
     render(
       <ApolloProvider client={client}>
         <SidePanel {...props} />
-      </ApolloProvider>
+      </ApolloProvider>,
     );
     expect(screen.getByTestId('SidePanel')).toBeInTheDocument();
   });

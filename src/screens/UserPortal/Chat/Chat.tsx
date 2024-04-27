@@ -1,6 +1,5 @@
 import React from 'react';
-import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
-import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
+// import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
 import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
 import styles from './Chat.module.css';
@@ -57,17 +56,23 @@ export default function chat(): JSX.Element {
     },
   });
 
-  const handleSearch = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ): void => {
-    const newFilter = event.target.value;
-    setFilterName(newFilter);
+  const handleSearch = (value: string): void => {
+    setFilterName(value);
 
-    const filter = {
-      firstName_contains: newFilter,
-    };
-
-    contactRefetch(filter);
+    contactRefetch({
+      firstName_contains: value,
+    });
+  };
+  const handleSearchByEnter = (e: any): void => {
+    if (e.key === 'Enter') {
+      const { value } = e.target;
+      handleSearch(value);
+    }
+  };
+  const handleSearchByBtnClick = (): void => {
+    const value =
+      (document.getElementById('searchChats') as HTMLInputElement)?.value || '';
+    handleSearch(value);
   };
 
   React.useEffect(() => {
@@ -78,9 +83,8 @@ export default function chat(): JSX.Element {
 
   return (
     <>
-      <OrganizationNavbar {...navbarProps} />
+      {/* <OrganizationNavbar {...navbarProps} /> */}
       <div className={`d-flex flex-row ${styles.containerHeight}`}>
-        <UserSidebar />
         <div className={`${styles.colorLight} ${styles.mainContainer}`}>
           <div className={styles.contactContainer}>
             <div
@@ -92,14 +96,17 @@ export default function chat(): JSX.Element {
               <InputGroup className={styles.maxWidth}>
                 <Form.Control
                   placeholder={t('search')}
+                  id="searchChats"
                   type="text"
                   className={`${styles.borderNone} ${styles.backgroundWhite}`}
-                  value={filterName}
-                  onChange={handleSearch}
+                  onKeyUp={handleSearchByEnter}
                   data-testid="searchInput"
                 />
                 <InputGroup.Text
                   className={`${styles.colorPrimary} ${styles.borderNone}`}
+                  style={{ cursor: 'pointer' }}
+                  onClick={handleSearchByBtnClick}
+                  data-testid="searchBtn"
                 >
                   <SearchOutlined className={`${styles.colorWhite}`} />
                 </InputGroup.Text>

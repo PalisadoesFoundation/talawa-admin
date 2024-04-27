@@ -10,6 +10,8 @@ import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { REGISTER_EVENT } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 
+import useLocalStorage from 'utils/useLocalstorage';
+
 interface InterfaceEventCardProps {
   id: string;
   title: string;
@@ -37,10 +39,11 @@ function eventCard(props: InterfaceEventCardProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userEventCard',
   });
-  const userId = localStorage.getItem('userId');
+  const { getItem } = useLocalStorage();
+  const userId = getItem('userId');
   const creatorName = `${props.creator.firstName} ${props.creator.lastName}`;
   const isInitiallyRegistered = props.registrants.some(
-    (registrant) => registrant.id === userId
+    (registrant) => registrant.id === userId,
   );
 
   const [registerEventMutation, { loading }] = useMutation(REGISTER_EVENT);
@@ -84,7 +87,9 @@ function eventCard(props: InterfaceEventCardProps): JSX.Element {
       <div className={`d-flex flex-row ${styles.eventDetails}`}>
         {`${t('starts')} `}
         {props.startTime ? (
-          <b>{dayjs(`2015-03-04T${props.startTime}`).format('h:mm:ss A')}</b>
+          <b data-testid="startTime">
+            {dayjs(`2015-03-04T${props.startTime}`).format('h:mm:ss A')}
+          </b>
         ) : (
           <></>
         )}
@@ -93,7 +98,9 @@ function eventCard(props: InterfaceEventCardProps): JSX.Element {
       <div className={`d-flex flex-row ${styles.eventDetails}`}>
         {`${t('ends')} `}
         {props.endTime ? (
-          <b>{dayjs(`2015-03-04T${props.endTime}`).format('h:mm:ss A')}</b>
+          <b data-testid="endTime">
+            {dayjs(`2015-03-04T${props.endTime}`).format('h:mm:ss A')}
+          </b>
         ) : (
           <></>
         )}{' '}

@@ -20,41 +20,45 @@
 
 ### constructor
 
-• **new default**()
+• **new default**(): [`default`](components_AddOn_support_services_Plugin_helper.default.md)
+
+#### Returns
+
+[`default`](components_AddOn_support_services_Plugin_helper.default.md)
 
 ## Methods
 
 ### fetchInstalled
 
-▸ **fetchInstalled**(): `Promise`<`any`\>
+▸ **fetchInstalled**(): `Promise`\<`any`\>
 
 #### Returns
 
-`Promise`<`any`\>
+`Promise`\<`any`\>
 
 #### Defined in
 
-[src/components/AddOn/support/services/Plugin.helper.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/AddOn/support/services/Plugin.helper.ts#L7)
+[src/components/AddOn/support/services/Plugin.helper.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/AddOn/support/services/Plugin.helper.ts#L7)
 
 ___
 
 ### fetchStore
 
-▸ **fetchStore**(): `Promise`<`any`\>
+▸ **fetchStore**(): `Promise`\<`any`\>
 
 #### Returns
 
-`Promise`<`any`\>
+`Promise`\<`any`\>
 
 #### Defined in
 
-[src/components/AddOn/support/services/Plugin.helper.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/AddOn/support/services/Plugin.helper.ts#L2)
+[src/components/AddOn/support/services/Plugin.helper.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/AddOn/support/services/Plugin.helper.ts#L2)
 
 ___
 
 ### generateLinks
 
-▸ **generateLinks**(`plugins`): { `name`: `string` ; `url`: `string`  }[]
+▸ **generateLinks**(`plugins`): \{ `name`: `string` ; `url`: `string`  \}[]
 
 #### Parameters
 
@@ -64,8 +68,8 @@ ___
 
 #### Returns
 
-{ `name`: `string` ; `url`: `string`  }[]
+\{ `name`: `string` ; `url`: `string`  \}[]
 
 #### Defined in
 
-[src/components/AddOn/support/services/Plugin.helper.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/AddOn/support/services/Plugin.helper.ts#L12)
+[src/components/AddOn/support/services/Plugin.helper.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/AddOn/support/services/Plugin.helper.ts#L12)

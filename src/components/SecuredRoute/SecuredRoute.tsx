@@ -1,15 +1,17 @@
 import React from 'react';
-import { Redirect, Route } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import PageNotFound from 'screens/PageNotFound/PageNotFound';
+import useLocalStorage from 'utils/useLocalstorage';
+const { getItem, setItem } = useLocalStorage();
 
-const SecuredRoute = (props: any): JSX.Element => {
-  const isLoggedIn = localStorage.getItem('IsLoggedIn');
+const SecuredRoute = (): JSX.Element => {
+  const isLoggedIn = getItem('IsLoggedIn');
+  const adminFor = getItem('AdminFor');
   return isLoggedIn === 'TRUE' ? (
-    <>
-      <Route {...props} />
-    </>
+    <>{adminFor != null ? <Outlet /> : <PageNotFound />}</>
   ) : (
-    <Redirect to="/" />
+    <Navigate to="/" replace />
   );
 };
 
@@ -32,7 +34,7 @@ setInterval(() => {
     toast.warn('Kindly relogin as sessison has expired');
 
     window.location.href = '/';
-    localStorage.setItem('IsLoggedIn', 'FALSE');
+    setItem('IsLoggedIn', 'FALSE');
   }
 }, inactiveIntervalMilsec);
 

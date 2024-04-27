@@ -37,7 +37,7 @@ describe('Testing Table Row for CheckIn Table', () => {
             </Provider>
           </MockedProvider>
         </LocalizationProvider>
-      </BrowserRouter>
+      </BrowserRouter>,
     );
 
     await waitFor(() => expect(queryByText('Check In')).toBeInTheDocument());
@@ -45,7 +45,7 @@ describe('Testing Table Row for CheckIn Table', () => {
     fireEvent.click(queryByText('Check In') as Element);
 
     await waitFor(() =>
-      expect(queryByText('Checked in successfully!')).toBeInTheDocument()
+      expect(queryByText('Checked in successfully!')).toBeInTheDocument(),
     );
   });
 
@@ -58,8 +58,6 @@ describe('Testing Table Row for CheckIn Table', () => {
         checkIn: {
           _id: '123',
           time: '12:00:00',
-          allotedRoom: '',
-          allotedSeat: '',
         },
         eventId: `event123`,
       },
@@ -78,7 +76,7 @@ describe('Testing Table Row for CheckIn Table', () => {
             </Provider>
           </MockedProvider>
         </LocalizationProvider>
-      </BrowserRouter>
+      </BrowserRouter>,
     );
 
     // Stubbing functions required by the @pdfme to show pdfs
@@ -87,13 +85,13 @@ describe('Testing Table Row for CheckIn Table', () => {
 
     await waitFor(() => expect(queryByText('Checked In')).toBeInTheDocument());
     await waitFor(() =>
-      expect(queryByText('Download Tag')).toBeInTheDocument()
+      expect(queryByText('Download Tag')).toBeInTheDocument(),
     );
 
     fireEvent.click(queryByText('Download Tag') as Element);
 
     await waitFor(() =>
-      expect(queryByText('Generating pdf...')).toBeInTheDocument()
+      expect(queryByText('Generating pdf...')).toBeInTheDocument(),
     );
     await waitFor(() => {
       expect(queryByText('PDF generated successfully!')).toBeInTheDocument();
@@ -124,7 +122,7 @@ describe('Testing Table Row for CheckIn Table', () => {
             </Provider>
           </MockedProvider>
         </LocalizationProvider>
-      </BrowserRouter>
+      </BrowserRouter>,
     );
 
     await waitFor(() => expect(queryByText('Check In')).toBeInTheDocument());
@@ -133,8 +131,8 @@ describe('Testing Table Row for CheckIn Table', () => {
 
     await waitFor(() =>
       expect(
-        queryByText('There was an error in checking in!')
-      ).toBeInTheDocument()
+        queryByText('There was an error in checking in!'),
+      ).toBeInTheDocument(),
     );
     await waitFor(() => expect(queryByText('Oops')).toBeInTheDocument());
   });

@@ -36,14 +36,8 @@
   display: flex;
   flex-direction: row;
 }
-.sidebar {
-  z-index: 0;
-  padding-top: 5px;
-  margin: 0;
-  height: 100%;
-}
+
 .sidebar:after {
-  content: '';
   background-color: #f7f7f7;
   position: absolute;
   width: 2px;
@@ -51,12 +45,6 @@
   top: 10px;
   left: 94%;
   display: block;
-}
-.sidebarsticky {
-  padding-left: 45px;
-}
-.sidebarsticky > p {
-  margin-top: -10px;
 }
 
 .navitem {
@@ -75,15 +63,7 @@
   border-bottom: 3px solid #31bb6b;
   width: 15%;
 }
-.searchtitle {
-  color: #707070;
-  font-weight: 600;
-  font-size: 18px;
-  margin-bottom: 20px;
-  padding-bottom: 5px;
-  border-bottom: 3px solid #31bb6b;
-  width: 60%;
-}
+
 .logintitleadmin {
   color: #707070;
   font-weight: 600;
@@ -110,22 +90,13 @@
   margin-right: -15px;
   margin-bottom: 20px;
 }
-.justifysp {
-  display: flex;
-  justify-content: space-between;
-}
-@media screen and (max-width: 575.5px) {
-  .justifysp {
-    padding-left: 55px;
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-  }
 
-  .mainpageright {
-    width: 90%;
-  }
+.justifysp {
+  display: block;
+  justify-content: space-between;
+  margin-top: 20px;
 }
+
 .addbtn {
   border: 1px solid #e8e5e5;
   box-shadow: 0 2px 2px #e8e5e5;
@@ -136,7 +107,9 @@
   outline: none;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 .flexdir {
   display: flex;
@@ -209,21 +182,12 @@
   outline: none;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
   width: 100%;
 }
-.sidebarsticky > input {
-  text-decoration: none;
-  margin-bottom: 50px;
-  border-color: #e8e5e5;
-  width: 80%;
-  border-radius: 7px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  padding-right: 10px;
-  padding-left: 10px;
-  box-shadow: none;
-}
+
 .datediv {
   display: flex;
   flex-direction: row;
@@ -239,6 +203,8 @@
   padding-bottom: 2px;
   padding-right: 5px;
   padding-left: 5px;
+  margin-right: 5px;
+  margin-left: 5px;
 }
 .checkboxdiv > label {
   margin-right: 50px;
@@ -291,6 +257,7 @@
 .dispflex {
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 .dispflex > input {
   border: none;
@@ -299,9 +266,60 @@
 }
 .checkboxdiv {
   display: flex;
+  margin-bottom: 5px;
 }
 .checkboxdiv > div {
   width: 50%;
+}
+
+.recurrenceRuleNumberInput {
+  width: 70px;
+}
+
+.recurrenceRuleDateBox {
+  width: 70%;
+}
+
+.recurrenceDayButton {
+  width: 33px;
+  height: 33px;
+  border: 1px solid var(--bs-gray);
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 0.5rem;
+  border-radius: 50%;
+}
+
+.recurrenceDayButton:hover {
+  background-color: var(--bs-gray);
+}
+
+.recurrenceDayButton.selected {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+  color: var(--bs-white);
+}
+
+.recurrenceDayButton span {
+  color: var(--bs-gray);
+  padding: 0.25rem;
+  text-align: center;
+}
+
+.recurrenceDayButton:hover span {
+  color: var(--bs-white);
+}
+
+.recurrenceDayButton.selected span {
+  color: var(--bs-white);
+}
+
+.recurrenceRuleSubmitBtn {
+  margin-left: 82%;
+  padding: 7px 15px;
 }
 
 @media only screen and (max-width: 600px) {

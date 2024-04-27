@@ -1,24 +1,25 @@
-import type { ChangeEvent } from 'react';
-import React, { useEffect, useState, useRef } from 'react';
 import { useMutation } from '@apollo/client';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import Card from 'react-bootstrap/Card';
-import { toast } from 'react-toastify';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import CloseIcon from '@mui/icons-material/Close';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import PushPinIcon from '@mui/icons-material/PushPin';
-import AboutImg from 'assets/images/defaultImg.png';
 import {
   DELETE_POST_MUTATION,
-  UPDATE_POST_MUTATION,
   TOGGLE_PINNED_POST,
+  UPDATE_POST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import { useTranslation } from 'react-i18next';
-import { errorHandler } from 'utils/errorHandler';
-import styles from './OrgPostCard.module.css';
+import AboutImg from 'assets/images/defaultImg.png';
+import type { ChangeEvent } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Form } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
+import Modal from 'react-bootstrap/Modal';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import convertToBase64 from 'utils/convertToBase64';
+import { errorHandler } from 'utils/errorHandler';
+import type { InterfacePostForm } from 'utils/interfaces';
+import styles from './OrgPostCard.module.css';
 
 interface InterfaceOrgPostCardProps {
   key: string;
@@ -26,23 +27,24 @@ interface InterfaceOrgPostCardProps {
   postTitle: string;
   postInfo: string;
   postAuthor: string;
-  postPhoto: string;
-  postVideo: string;
+  postPhoto: string | null;
+  postVideo: string | null;
   pinned: boolean;
 }
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
-export default function OrgPostCard(
-  props: InterfaceOrgPostCardProps
+export default function orgPostCard(
+  props: InterfaceOrgPostCardProps,
 ): JSX.Element {
-  const [postformState, setPostFormState] = useState({
+  const [postformState, setPostFormState] = useState<InterfacePostForm>({
     posttitle: '',
     postinfo: '',
     postphoto: '',
     postvideo: '',
     pinned: false,
   });
-
+  // console.log('postformState', postformState);
+  const [postPhotoUpdated, setPostPhotoUpdated] = useState(false);
+  const [postVideoUpdated, setPostVideoUpdated] = useState(false);
   const [togglePost, setPostToggle] = useState('Read more');
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -66,10 +68,12 @@ export default function OrgPostCard(
           window.location.reload();
         }, 2000);
       }
-    } catch (error: any) {
-      console.log(error);
-      /* istanbul ignore next */
-      errorHandler(t, error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.log(error.message);
+        /* istanbul ignore next */
+        errorHandler(t, error);
+      }
     }
   };
   const toggleShowEditModal = (): void => {
@@ -80,6 +84,8 @@ export default function OrgPostCard(
       postvideo: props.postVideo,
       pinned: props.pinned,
     });
+    setPostPhotoUpdated(false);
+    setPostVideoUpdated(false);
     setShowEditModal((prev) => !prev);
   };
   const toggleShowDeleteModal = (): void => setShowDeleteModal((prev) => !prev);
@@ -105,8 +111,9 @@ export default function OrgPostCard(
       ...postformState,
       postphoto: '',
     });
+    setPostPhotoUpdated(true);
     const fileInput = document.getElementById(
-      'postImageUrl'
+      'postImageUrl',
     ) as HTMLInputElement;
     if (fileInput) {
       fileInput.value = '';
@@ -118,8 +125,9 @@ export default function OrgPostCard(
       ...postformState,
       postvideo: '',
     });
+    setPostVideoUpdated(true);
     const fileInput = document.getElementById(
-      'postVideoUrl'
+      'postVideoUrl',
     ) as HTMLInputElement;
     if (fileInput) {
       fileInput.value = '';
@@ -151,6 +159,7 @@ export default function OrgPostCard(
   }
 
   useEffect(() => {
+    // console.log(props.postPhoto);
     setPostFormState({
       posttitle: props.postTitle,
       postinfo: props.postInfo,
@@ -177,6 +186,7 @@ export default function OrgPostCard(
 
       if (data) {
         toast.success(t('postDeleted'));
+        toggleShowDeleteModal();
         setTimeout(() => {
           window.location.reload();
         });
@@ -186,7 +196,7 @@ export default function OrgPostCard(
     }
   };
   const handleInputEvent = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
     const { name, value } = e.target;
     setPostFormState((prevPostFormState) => ({
@@ -196,29 +206,22 @@ export default function OrgPostCard(
   };
 
   const updatePostHandler = async (
-    e: ChangeEvent<HTMLFormElement>
+    e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
 
     try {
-      let imageUrl = null;
-      let videoUrl = null;
-
-      if (e.target?.postphoto && e.target?.postphoto.files.length > 0) {
-        imageUrl = postformState.postphoto;
-      }
-
-      if (e.target?.postvideo && e.target?.postvideo.files.length > 0) {
-        videoUrl = postformState.postvideo;
-      }
-
       const { data } = await updatePostMutation({
         variables: {
           id: props.id,
           title: postformState.posttitle,
           text: postformState.postinfo,
-          imageUrl,
-          videoUrl,
+          ...(postPhotoUpdated && {
+            imageUrl: postformState.postphoto,
+          }),
+          ...(postVideoUpdated && {
+            videoUrl: postformState.postvideo,
+          }),
         },
       });
 
@@ -235,7 +238,7 @@ export default function OrgPostCard(
 
   return (
     <>
-      <div className="col-xl-4 col-lg-4 col-md-6">
+      <div className="col-xl-4 col-lg-4 col-md-6" data-testid="post-item">
         <div
           className={styles.cards}
           onClick={handleCardClick}
@@ -513,7 +516,7 @@ export default function OrgPostCard(
               data-testid="updateText"
               required
             />
-            {props.postPhoto && (
+            {!props.postPhoto && (
               <>
                 <Form.Label htmlFor="postPhoto">{t('image')}</Form.Label>
                 <Form.Control
@@ -525,13 +528,13 @@ export default function OrgPostCard(
                   placeholder={t('image')}
                   multiple={false}
                   onChange={async (
-                    e: React.ChangeEvent<HTMLInputElement>
+                    e: React.ChangeEvent<HTMLInputElement>,
                   ): Promise<void> => {
                     setPostFormState((prevPostFormState) => ({
                       ...prevPostFormState,
                       postphoto: '',
                     }));
-
+                    setPostPhotoUpdated(true);
                     const file = e.target.files?.[0];
                     if (file) {
                       setPostFormState({
@@ -562,7 +565,7 @@ export default function OrgPostCard(
                 )}
               </>
             )}
-            {props.postVideo && (
+            {!props.postVideo && (
               <>
                 <Form.Label htmlFor="postvideo">{t('video')}</Form.Label>
                 <Form.Control
@@ -574,12 +577,13 @@ export default function OrgPostCard(
                   placeholder={t('video')}
                   multiple={false}
                   onChange={async (
-                    e: React.ChangeEvent<HTMLInputElement>
+                    e: React.ChangeEvent<HTMLInputElement>,
                   ): Promise<void> => {
                     setPostFormState((prevPostFormState) => ({
                       ...prevPostFormState,
                       postvideo: '',
                     }));
+                    setPostVideoUpdated(true);
                     const target = e.target as HTMLInputElement;
                     const file = target.files && target.files[0];
                     if (file) {

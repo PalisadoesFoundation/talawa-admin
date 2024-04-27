@@ -1,75 +1,135 @@
-import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { BrowserRouter } from 'react-router-dom';
-import { act, render, screen, fireEvent } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Provider } from 'react-redux';
 import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
-
-import OrgPost from './OrgPost';
-import { store } from 'state/store';
-import { ORGANIZATION_POST_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
+import React from 'react';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
-import i18nForTest from 'utils/i18nForTest';
-import { StaticMockLink } from 'utils/StaticMockLink';
+import { ORGANIZATION_POST_LIST } from 'GraphQl/Queries/Queries';
 import { ToastContainer } from 'react-toastify';
-import { debug } from 'jest-preview';
-
+import { store } from 'state/store';
+import { StaticMockLink } from 'utils/StaticMockLink';
+import i18nForTest from 'utils/i18nForTest';
+import OrgPost from './OrgPost';
 const MOCKS = [
   {
     request: {
-      query: ORGANIZATION_POST_CONNECTION_LIST,
+      query: ORGANIZATION_POST_LIST,
       variables: {
         id: undefined,
-        title_contains: '',
-        text_contains: '',
+        after: null,
+        before: null,
+        first: 6,
+        last: null,
       },
     },
     result: {
       data: {
-        postsByOrganizationConnection: {
-          edges: [
-            {
-              _id: '6411e53835d7ba2344a78e21',
-              title: 'postone',
-              text: 'This is the first post',
-              imageUrl: null,
-              videoUrl: null,
-              createdAt: '2023-08-24T09:26:56.524+00:00',
-              creator: {
-                _id: '640d98d9eb6a743d75341067',
-                firstName: 'Aditya',
-                lastName: 'Shelke',
-                email: 'adidacreator1@gmail.com',
+        organizations: [
+          {
+            posts: {
+              edges: [
+                {
+                  node: {
+                    _id: '6411e53835d7ba2344a78e21',
+                    title: 'postone',
+                    text: 'This is the first post',
+                    imageUrl: null,
+                    videoUrl: null,
+                    createdAt: '2023-08-24T09:26:56.524+00:00',
+                    creator: {
+                      _id: '640d98d9eb6a743d75341067',
+                      firstName: 'Aditya',
+                      lastName: 'Shelke',
+                      email: 'adidacreator1@gmail.com',
+                    },
+                    likeCount: 0,
+                    commentCount: 0,
+                    comments: [],
+                    pinned: true,
+                    likedBy: [],
+                  },
+                  cursor: '6411e53835d7ba2344a78e21',
+                },
+                {
+                  node: {
+                    _id: '6411e54835d7ba2344a78e29',
+                    title: 'posttwo',
+                    text: 'Tis is the post two',
+                    imageUrl: null,
+                    videoUrl: null,
+                    createdAt: '2023-08-24T09:26:56.524+00:00',
+                    creator: {
+                      _id: '640d98d9eb6a743d75341067',
+                      firstName: 'Aditya',
+                      lastName: 'Shelke',
+                      email: 'adidacreator1@gmail.com',
+                    },
+                    likeCount: 0,
+                    commentCount: 0,
+                    pinned: false,
+                    likedBy: [],
+                    comments: [],
+                  },
+                  cursor: '6411e54835d7ba2344a78e29',
+                },
+                {
+                  node: {
+                    _id: '6411e54835d7ba2344a78e30',
+                    title: 'posttwo',
+                    text: 'Tis is the post two',
+                    imageUrl: null,
+                    videoUrl: null,
+                    createdAt: '2023-08-24T09:26:56.524+00:00',
+                    creator: {
+                      _id: '640d98d9eb6a743d75341067',
+                      firstName: 'Aditya',
+                      lastName: 'Shelke',
+                      email: 'adidacreator1@gmail.com',
+                    },
+                    likeCount: 0,
+                    commentCount: 0,
+                    pinned: true,
+                    likedBy: [],
+                    comments: [],
+                  },
+                  cursor: '6411e54835d7ba2344a78e30',
+                },
+                {
+                  node: {
+                    _id: '6411e54835d7ba2344a78e31',
+                    title: 'posttwo',
+                    text: 'Tis is the post two',
+                    imageUrl: null,
+                    videoUrl: null,
+                    createdAt: '2023-08-24T09:26:56.524+00:00',
+                    creator: {
+                      _id: '640d98d9eb6a743d75341067',
+                      firstName: 'Aditya',
+                      lastName: 'Shelke',
+                      email: 'adidacreator1@gmail.com',
+                    },
+                    likeCount: 0,
+                    commentCount: 0,
+                    pinned: false,
+                    likedBy: [],
+                    comments: [],
+                  },
+                  cursor: '6411e54835d7ba2344a78e31',
+                },
+              ],
+              pageInfo: {
+                startCursor: '6411e53835d7ba2344a78e21',
+                endCursor: '6411e54835d7ba2344a78e31',
+                hasNextPage: false,
+                hasPreviousPage: false,
               },
-              likeCount: 0,
-              commentCount: 0,
-              comments: [],
-              pinned: false,
-              likedBy: [],
+              totalCount: 4,
             },
-            {
-              _id: '6411e54835d7ba2344a78e29',
-              title: 'posttwo',
-              text: 'Tis is the post two',
-              imageUrl: null,
-              videoUrl: null,
-              createdAt: '2023-08-24T09:26:56.524+00:00',
-              creator: {
-                _id: '640d98d9eb6a743d75341067',
-                firstName: 'Aditya',
-                lastName: 'Shelke',
-                email: 'adidacreator1@gmail.com',
-              },
-              likeCount: 0,
-              commentCount: 0,
-              pinned: false,
-              likedBy: [],
-              comments: [],
-            },
-          ],
-        },
+          },
+        ],
       },
     },
   },
@@ -127,27 +187,29 @@ describe('Organisation Post Page', () => {
   };
 
   test('correct mock data should be queried', async () => {
-    const dataQuery1 =
-      MOCKS[0]?.result?.data?.postsByOrganizationConnection.edges[0];
+    const dataQuery1 = MOCKS[0]?.result?.data?.organizations[0].posts.edges[0];
 
     expect(dataQuery1).toEqual({
-      _id: '6411e53835d7ba2344a78e21',
-      title: 'postone',
-      text: 'This is the first post',
-      imageUrl: null,
-      videoUrl: null,
-      createdAt: '2023-08-24T09:26:56.524+00:00',
-      creator: {
-        _id: '640d98d9eb6a743d75341067',
-        firstName: 'Aditya',
-        lastName: 'Shelke',
-        email: 'adidacreator1@gmail.com',
+      node: {
+        _id: '6411e53835d7ba2344a78e21',
+        title: 'postone',
+        text: 'This is the first post',
+        imageUrl: null,
+        videoUrl: null,
+        createdAt: '2023-08-24T09:26:56.524+00:00',
+        creator: {
+          _id: '640d98d9eb6a743d75341067',
+          firstName: 'Aditya',
+          lastName: 'Shelke',
+          email: 'adidacreator1@gmail.com',
+        },
+        likeCount: 0,
+        commentCount: 0,
+        pinned: true,
+        likedBy: [],
+        comments: [],
       },
-      likeCount: 0,
-      commentCount: 0,
-      pinned: false,
-      likedBy: [],
-      comments: [],
+      cursor: '6411e53835d7ba2344a78e21',
     });
   });
 
@@ -161,7 +223,7 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -171,14 +233,12 @@ describe('Organisation Post Page', () => {
     userEvent.type(screen.getByTestId('modalTitle'), formData.posttitle);
 
     userEvent.type(screen.getByTestId('modalinfo'), formData.postinfo);
-    userEvent.upload(
-      screen.getByTestId('organisationImage'),
-      formData.postImage
-    );
-    userEvent.upload(
-      screen.getByTestId('organisationImage'),
-      formData.postVideo
-    );
+    userEvent.upload(screen.getByTestId('addMediaField'), formData.postImage);
+    userEvent.upload(screen.getByTestId('addMediaField'), formData.postVideo);
+    userEvent.upload(screen.getByTestId('addMediaField'), formData.postImage);
+    userEvent.upload(screen.getByTestId('addMediaField'), formData.postVideo);
+    userEvent.click(screen.getByTestId('pinPost'));
+    expect(screen.getByTestId('pinPost')).toBeChecked();
 
     userEvent.click(screen.getByTestId('createPostBtn'));
 
@@ -197,7 +257,7 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     async function debounceWait(ms = 200): Promise<void> {
       await act(() => {
@@ -207,7 +267,7 @@ describe('Organisation Post Page', () => {
       });
     }
     await debounceWait();
-    userEvent.type(screen.getByPlaceholderText(/Search By/i), 'postone');
+    userEvent.type(screen.getByPlaceholderText(/Search By/i), 'postone{enter}');
     await debounceWait();
     const sortDropdown = screen.getByTestId('sort');
     userEvent.click(sortDropdown);
@@ -224,7 +284,7 @@ describe('Organisation Post Page', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
-        </MockedProvider>
+        </MockedProvider>,
       );
 
       await wait();
@@ -258,7 +318,7 @@ describe('Organisation Post Page', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
-        </MockedProvider>
+        </MockedProvider>,
       );
 
       await wait();
@@ -293,7 +353,7 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -320,7 +380,7 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -349,7 +409,7 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -362,18 +422,24 @@ describe('Organisation Post Page', () => {
     fireEvent.change(postInfoTextarea, {
       target: { value: 'Test post information' },
     });
-    const file = new File(['image content'], 'image.png', {
+
+    // Simulate uploading an image
+    const imageFile = new File(['image content'], 'image.png', {
       type: 'image/png',
     });
-    const input = screen.getByTestId('organisationImage');
-    userEvent.upload(input, file);
+    const imageInput = screen.getByTestId('addMediaField');
+    userEvent.upload(imageInput, imageFile);
 
-    await screen.findByAltText('Post Image Preview');
-    expect(screen.getByAltText('Post Image Preview')).toBeInTheDocument();
+    // Check if the image is displayed
+    const imagePreview = await screen.findByAltText('Post Image Preview');
+    expect(imagePreview).toBeInTheDocument();
 
-    const createPostBtn = screen.getByTestId('createPostBtn');
-    fireEvent.click(createPostBtn);
-    debug();
+    // Check if the close button for the image works
+    const closeButton = screen.getByTestId('mediaCloseButton');
+    fireEvent.click(closeButton);
+
+    // Check if the image is removed from the preview
+    expect(imagePreview).not.toBeInTheDocument();
   }, 15000);
 
   test('Modal opens and closes', async () => {
@@ -386,7 +452,7 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -398,7 +464,7 @@ describe('Organisation Post Page', () => {
     const modalTitle = screen.getByTestId('modalOrganizationHeader');
     expect(modalTitle).toBeInTheDocument();
 
-    const closeButton = screen.getByTestId('closeOrganizationModal');
+    const closeButton = screen.getByTestId(/modalOrganizationHeader/i);
     userEvent.click(closeButton);
 
     await wait();
@@ -417,7 +483,7 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -426,8 +492,6 @@ describe('Organisation Post Page', () => {
     // Check if input fields and buttons are present
     expect(screen.getByTestId('modalTitle')).toBeInTheDocument();
     expect(screen.getByTestId('modalinfo')).toBeInTheDocument();
-    expect(screen.getByTestId('organisationImage')).toBeInTheDocument();
-    expect(screen.getByTestId('organisationVideo')).toBeInTheDocument();
     expect(screen.getByTestId('createPostBtn')).toBeInTheDocument();
   });
 
@@ -442,7 +506,7 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -472,7 +536,7 @@ describe('Organisation Post Page', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -488,13 +552,13 @@ describe('Organisation Post Page', () => {
     const file = new File(['image content'], 'image.png', {
       type: 'image/png',
     });
-    const input = screen.getByTestId('organisationImage');
+    const input = screen.getByTestId('addMediaField');
     userEvent.upload(input, file);
 
     await screen.findByAltText('Post Image Preview');
     expect(screen.getByAltText('Post Image Preview')).toBeInTheDocument();
 
-    const closeButton = screen.getByTestId('closePreview');
+    const closeButton = screen.getByTestId('mediaCloseButton');
     fireEvent.click(closeButton);
   }, 15000);
   test('Create post, preview image, and close preview', async () => {
@@ -509,7 +573,7 @@ describe('Organisation Post Page', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
-        </MockedProvider>
+        </MockedProvider>,
       );
 
       await wait();
@@ -528,21 +592,71 @@ describe('Organisation Post Page', () => {
         type: 'video/mp4',
       });
 
-      const videoInput = screen.getByTestId('organisationVideo');
-      fireEvent.change(videoInput, {
-        target: {
-          files: [videoFile],
-        },
-      });
+      userEvent.upload(screen.getByTestId('addMediaField'), videoFile);
 
       // Check if the video is displayed
       const videoPreview = await screen.findByTestId('videoPreview');
       expect(videoPreview).toBeInTheDocument();
 
       // Check if the close button for the video works
-      const closeVideoPreviewButton = screen.getByTestId('videoclosebutton');
+      const closeVideoPreviewButton = screen.getByTestId('mediaCloseButton');
       fireEvent.click(closeVideoPreviewButton);
       expect(videoPreview).not.toBeInTheDocument();
     });
+  });
+  test('Sorting posts by pinned status', async () => {
+    // Mocked data representing posts with different pinned statuses
+    const mockedPosts = [
+      {
+        _id: '1',
+        title: 'Post 1',
+        pinned: true,
+      },
+      {
+        _id: '2',
+        title: 'Post 2',
+        pinned: false,
+      },
+      {
+        _id: '3',
+        title: 'Post 3',
+        pinned: true,
+      },
+      {
+        _id: '4',
+        title: 'Post 4',
+        pinned: true,
+      },
+    ];
+
+    // Render the OrgPost component and pass the mocked data to it
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const sortedPosts = screen.getAllByTestId('post-item');
+
+    // Assert that the posts are sorted correctly
+    expect(sortedPosts).toHaveLength(mockedPosts.length);
+    expect(sortedPosts[0]).toHaveTextContent(
+      'postoneThis is the first po... Aditya Shelke',
+    );
+    expect(sortedPosts[1]).toHaveTextContent(
+      'posttwoTis is the post two Aditya Shelke',
+    );
+    expect(sortedPosts[2]).toHaveTextContent(
+      'posttwoTis is the post two Aditya Shelke',
+    );
   });
 });

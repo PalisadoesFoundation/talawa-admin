@@ -1,6 +1,7 @@
 .cards h2 {
   font-size: 15px;
-  color: #fff;
+  color: #4e4c4c;
+  font-weight: 500;
 }
 .cards > h3 {
   font-size: 17px;
@@ -21,36 +22,35 @@
   position: relative;
   overflow: hidden;
   transition: all 0.3s;
+  margin-bottom: 5px;
 }
 .dispflex {
   display: flex;
-  height: 50px;
-  transition: transform 0.3s ease;
   cursor: pointer;
+  justify-content: space-between;
+  margin: 10px 5px 5px 0px;
 }
-.cards:hover {
-  transform: scale(2.5);
-  z-index: 5;
-}
-.cards:hover h2 {
-  font-size: 0.4vmax;
-  margin-bottom: 0;
+.eventtitle {
+  margin-bottom: 0px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 .iconContainer {
   display: flex;
   justify-content: flex-end;
 }
 .icon {
-  margin: 1px;
+  margin: 2px;
 }
 
 .cards {
   width: 100%;
-  background: rgba(40, 167, 69, 1);
+  background: #5cacf7 !important;
   padding: 2px 3px;
   border-radius: 5px;
   border: 1px solid #e8e8e8;
-  box-shadow: 0 3px 5px #c9c9c9;
+  box-shadow: 0 3px 2px #e8e8e8;
   color: #737373;
   box-sizing: border-box;
 }
@@ -78,7 +78,8 @@
 .datediv {
   display: flex;
   flex-direction: row;
-  margin-bottom: 15px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 .datebox {
   width: 90%;
@@ -91,36 +92,48 @@
   padding-right: 5px;
   padding-left: 5px;
 }
-.checkboxdiv > label {
+.datediv > div > p {
+  margin-bottom: 0.5rem;
+}
+
+.startDate {
+  margin-right: 0.25rem;
+}
+.endDate {
+  margin-left: 1.5rem;
+}
+
+.checkboxdiv > div label {
   margin-right: 50px;
 }
 .checkboxdiv > label > input {
   margin-left: 10px;
 }
-.dispflex {
-  display: flex;
-  margin-bottom: 5px;
-  margin-right: 5px;
-}
+
 .dispflex > input {
   width: 20%;
   border: none;
   box-shadow: none;
   margin-top: 5px;
 }
+
+.checkboxContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
 .checkboxdiv {
   display: flex;
-}
-.checkboxdiv > div {
-  width: 50%;
+  flex-direction: column;
 }
 
 .preview {
   display: flex;
   flex-direction: row;
-  font-weight: 900;
+  font-weight: 700;
   font-size: 16px;
-  color: rgb(80, 80, 80);
+  color: #000000;
+  margin: 0;
 }
 .view {
   margin-left: 2%;
@@ -158,13 +171,13 @@
   flex-direction: column;
 }
 .titlemodal {
-  color: #707070;
+  color: #000000;
   font-weight: 600;
-  font-size: 20px;
+  font-size: 24px;
   margin-bottom: 20px;
   padding-bottom: 5px;
-  border-bottom: 3px solid #31bb6b;
-  width: 65%;
+  border-bottom: 4px solid #31bb6b;
+  width: 50%;
 }
 .cancel > i {
   margin-top: 5px;
@@ -185,9 +198,26 @@
     width: 90%;
     top: 45%;
   }
+  .checkboxContainer {
+    flex-direction: column;
+  }
+
+  .datediv {
+    flex-direction: column;
+  }
+
+  .datediv > div {
+    width: 100%;
+    margin-left: 0;
+    margin-bottom: 10px;
+  }
+
+  .datediv > div p {
+    margin-bottom: 5px;
+  }
 }
 
 .customButton {
-  background-color: #31bb6b;
-  border: #31bb6b;
+  width: 90%;
+  margin: 0 auto;
 }

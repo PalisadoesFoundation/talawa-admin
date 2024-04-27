@@ -1,27 +1,32 @@
 import React from 'react';
-import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
-import OrganizationSidebar from 'components/UserPortal/OrganizationSidebar/OrganizationSidebar';
-import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
+import { useParams } from 'react-router-dom';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
-import PaginationList from 'components/PaginationList/PaginationList';
+import { toast } from 'react-toastify';
+import { useQuery, useMutation } from '@apollo/client';
+import { Search } from '@mui/icons-material';
+import SendIcon from '@mui/icons-material/Send';
+import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import { useTranslation } from 'react-i18next';
+
 import {
   ORGANIZATION_DONATION_CONNECTION_LIST,
   USER_ORGANIZATION_CONNECTION,
 } from 'GraphQl/Queries/Queries';
-import { useQuery } from '@apollo/client';
+import { DONATE_TO_ORGANIZATION } from 'GraphQl/Mutations/mutations';
 import styles from './Donate.module.css';
-import SendIcon from '@mui/icons-material/Send';
-import getOrganizationId from 'utils/getOrganizationId';
-import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import DonationCard from 'components/UserPortal/DonationCard/DonationCard';
-import { useTranslation } from 'react-i18next';
+import useLocalStorage from 'utils/useLocalstorage';
+import { errorHandler } from 'utils/errorHandler';
+import OrganizationSidebar from 'components/UserPortal/OrganizationSidebar/OrganizationSidebar';
+import PaginationList from 'components/PaginationList/PaginationList';
 
-interface InterfaceDonationCardProps {
+export interface InterfaceDonationCardProps {
   id: string;
   name: string;
   amount: string;
   userId: string;
   payPalId: string;
+  updatedAt: string;
 }
 
 export default function donate(): JSX.Element {
@@ -29,7 +34,12 @@ export default function donate(): JSX.Element {
     keyPrefix: 'donate',
   });
 
-  const organizationId = getOrganizationId(location.href);
+  const { getItem } = useLocalStorage();
+  const userId = getItem('userId');
+  const userName = getItem('name');
+
+  const { orgId: organizationId } = useParams();
+  const [amount, setAmount] = React.useState<string>('');
   const [organizationDetails, setOrganizationDetails]: any = React.useState({});
   const [donations, setDonations] = React.useState([]);
   const [selectedCurrency, setSelectedCurrency] = React.useState(0);
@@ -38,16 +48,19 @@ export default function donate(): JSX.Element {
 
   const currencies = ['USD', 'INR', 'EUR'];
 
-  const { data: data2, loading } = useQuery(
-    ORGANIZATION_DONATION_CONNECTION_LIST,
-    {
-      variables: { orgId: organizationId },
-    }
-  );
+  const {
+    data: data2,
+    loading,
+    refetch,
+  } = useQuery(ORGANIZATION_DONATION_CONNECTION_LIST, {
+    variables: { orgId: organizationId },
+  });
 
   const { data } = useQuery(USER_ORGANIZATION_CONNECTION, {
     variables: { id: organizationId },
   });
+
+  const [donate] = useMutation(DONATE_TO_ORGANIZATION);
 
   const navbarProps = {
     currentPage: 'donate',
@@ -56,14 +69,14 @@ export default function donate(): JSX.Element {
   /* istanbul ignore next */
   const handleChangePage = (
     _event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
+    newPage: number,
   ): void => {
     setPage(newPage);
   };
 
   /* istanbul ignore next */
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
     const newRowsPerPage = event.target.value;
 
@@ -83,31 +96,62 @@ export default function donate(): JSX.Element {
     }
   }, [data2]);
 
+  const donateToOrg = (): void => {
+    try {
+      donate({
+        variables: {
+          userId,
+          createDonationOrgId2: organizationId,
+          payPalId: 'paypalId',
+          nameOfUser: userName,
+          amount: Number(amount),
+          nameOfOrg: organizationDetails.name,
+        },
+      });
+      refetch();
+      toast.success(t(`success`));
+    } catch (error: any) {
+      /* istanbul ignore next */
+      errorHandler(t, error);
+    }
+  };
+
   return (
     <>
-      <OrganizationNavbar {...navbarProps} />
       <div className={`d-flex flex-row ${styles.containerHeight}`}>
-        <UserSidebar />
-        <div className={`${styles.colorLight} ${styles.mainContainer}`}>
+        <div className={` ${styles.mainContainer}`}>
+          <h1>{t(`donations`)}</h1>
+          <div className={styles.inputContainer}>
+            <div className={styles.input}>
+              <Form.Control
+                type="name"
+                id="searchUsers"
+                className="bg-white"
+                placeholder={t('searchDonations')}
+                data-testid="searchByName"
+                autoComplete="off"
+                required
+                // onKeyUp={handleSearchByEnter}
+              />
+              <Button
+                tabIndex={-1}
+                className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+                data-testid="searchButton"
+                // onClick={handleSearchByBtnClick}
+              >
+                <Search />
+              </Button>
+            </div>
+          </div>
           <div className={`${styles.box}`}>
-            <h4>
-              {t('donateTo')} {organizationDetails.name}
-            </h4>
+            <div className={`${styles.heading}`}>
+              {t('donateForThe')} {organizationDetails.name}
+            </div>
             <div className={styles.donationInputContainer}>
               <InputGroup className={styles.maxWidth}>
-                <InputGroup.Text
-                  className={`${styles.colorPrimary} ${styles.borderNone}`}
-                >
-                  {t('amount')}
-                </InputGroup.Text>
-                <Form.Control
-                  type="text"
-                  className={styles.borderNone}
-                  data-testid="searchInput"
-                />
                 <Dropdown drop="down-centered">
                   <Dropdown.Toggle
-                    className={`${styles.colorPrimary} ${styles.borderNone}`}
+                    className={`${styles.colorPrimary} ${styles.dropdown}`}
                     variant="success"
                     id="dropdown-basic"
                     data-testid={`modeChangeBtn`}
@@ -130,10 +174,25 @@ export default function donate(): JSX.Element {
                     })}
                   </Dropdown.Menu>
                 </Dropdown>
+                <Form.Control
+                  type="text"
+                  className={styles.inputArea}
+                  data-testid="donationAmount"
+                  placeholder={t('amount')}
+                  value={amount}
+                  onChange={(e) => {
+                    setAmount(e.target.value);
+                  }}
+                />
               </InputGroup>
             </div>
             <div className={styles.donateActions}>
-              <Button data-testid={'donateBtn'}>
+              <Button
+                size="sm"
+                data-testid={'donateBtn'}
+                onClick={donateToOrg}
+                className={`${styles.donateBtn}`}
+              >
                 {t('donate')} <SendIcon />
               </Button>
             </div>
@@ -143,9 +202,7 @@ export default function donate(): JSX.Element {
             <div
               className={`d-flex flex-column justify-content-between ${styles.content}`}
             >
-              <div
-                className={`d-flex flex-column ${styles.gap} ${styles.paddingY}`}
-              >
+              <div className={` ${styles.donationCardsContainer}`}>
                 {loading ? (
                   <div className={`d-flex flex-row justify-content-center`}>
                     <HourglassBottomIcon /> <span>Loading...</span>
@@ -156,7 +213,7 @@ export default function donate(): JSX.Element {
                       (rowsPerPage > 0
                         ? donations.slice(
                             page * rowsPerPage,
-                            page * rowsPerPage + rowsPerPage
+                            page * rowsPerPage + rowsPerPage,
                           )
                         : /* istanbul ignore next */
                           donations
@@ -167,8 +224,13 @@ export default function donate(): JSX.Element {
                           amount: donation.amount,
                           userId: donation.userId,
                           payPalId: donation.payPalId,
+                          updatedAt: donation.updatedAt,
                         };
-                        return <DonationCard key={index} {...cardProps} />;
+                        return (
+                          <div key={index} data-testid="donationCard">
+                            <DonationCard {...cardProps} />
+                          </div>
+                        );
                       })
                     ) : (
                       <span>{t('nothingToShow')}</span>

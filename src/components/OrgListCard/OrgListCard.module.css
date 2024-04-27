@@ -21,13 +21,13 @@
   border-radius: 4px;
 }
 
-.orgCard .innerContainer .orgImgContainer img {
+.orgCard .innerContainer .orgImgContainer {
   width: 125px;
   height: 120px;
   object-fit: contain;
 }
 
-.orgCard .innerContainer .orgImgContainer .emptyImg {
+.orgCard .innerContainer .orgImgContainer {
   width: 125px;
   height: 120px;
   background-color: var(--bs-gray-200);
@@ -36,6 +36,8 @@
 .orgCard .innerContainer .content {
   flex: 1;
   margin-left: 1rem;
+  width: 70%;
+  margin-top: 0.7rem;
 }
 
 .orgCard button {
@@ -45,7 +47,57 @@
   z-index: 1;
 }
 
-@media (max-width: 450px) {
+.flaskIcon {
+  margin-top: 4px;
+}
+
+.manageBtn {
+  display: flex;
+  justify-content: space-around;
+  width: 8rem;
+}
+
+.orgName {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  font-size: 1rem;
+}
+
+.orgdesc {
+  font-size: 0.9rem;
+  color: var(--bs-gray-600);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  max-width: 20rem;
+}
+
+.orgadmin {
+  font-size: 0.9rem;
+}
+
+.orgmember {
+  font-size: 0.9rem;
+}
+
+.address {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  align-items: center;
+}
+
+.address h6 {
+  font-size: 0.9rem;
+  color: var(--bs-gray-600);
+}
+
+@media (max-width: 580px) {
   .orgCard {
     height: unset;
     margin: 0.5rem 0;
@@ -76,17 +128,14 @@
     margin-left: auto;
     display: block;
   }
-}
 
-.flaskIcon {
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin: 10px 20px 0px 0px;
-}
+  .flaskIcon {
+    margin-bottom: 6px;
+  }
 
-.manageBtn {
-  display: flex;
-  justify-content: space-around;
-  width: 150px;
+  .manageBtn {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+  }
 }

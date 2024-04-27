@@ -11,7 +11,9 @@
     "eslint:recommended",
     "plugin:jest/recommended",
     "plugin:prettier/recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "eslint-config-prettier",
+    "prettier"
   ],
   "globals": {
     "Atomics": "readonly",
@@ -27,11 +29,17 @@
   },
 
   // Specify the ESLint plugins tobe used
-  "plugins": ["react", "@typescript-eslint", "jest"],
+  "plugins": [
+    "react",
+    "@typescript-eslint",
+    "jest",
+    "import",
+    "eslint-plugin-tsdoc",
+    "prettier"
+  ],
   "rules": {
-    "react/destructuring-assignment": ["off"],
-    "@typescript-eslint/no-explicit-any": ["off"],
-    "@typescript-eslint/explicit-module-boundary-types": ["off"],
+    "react/destructuring-assignment": "error",
+    "@typescript-eslint/explicit-module-boundary-types": "error",
     "react/no-multi-comp": [
       "error",
       {
@@ -44,6 +52,14 @@
         "extensions": [".tsx"]
       }
     ],
+    "import/no-duplicates": "error",
+    "tsdoc/syntax": "error",
+    "@typescript-eslint/ban-ts-comment": "error",
+    "@typescript-eslint/no-explicit-any": "error",
+    "@typescript-eslint/no-inferrable-types": "error",
+    "@typescript-eslint/no-non-null-asserted-optional-chain": "error",
+    "@typescript-eslint/no-non-null-assertion": "error",
+    "@typescript-eslint/no-var-requires": "error",
     "@typescript-eslint/ban-types": "error",
     "@typescript-eslint/no-duplicate-enum-values": "error",
     "@typescript-eslint/array-type": "error",
@@ -56,6 +72,7 @@
         "allowTypedFunctionExpressions": true
       }
     ],
+    "camelcase": "off",
     "@typescript-eslint/naming-convention": [
       "error",
       // Interfaces must begin with Interface or TestInterface followed by a PascalCase name
@@ -76,7 +93,7 @@
       },
       {
         "selector": "variable",
-        "format": ["camelCase", "UPPER_CASE"],
+        "format": ["camelCase", "UPPER_CASE", "PascalCase"],
         "leadingUnderscore": "allow"
       },
       {
@@ -86,7 +103,7 @@
       },
       {
         "selector": "function",
-        "format": ["camelCase"]
+        "format": ["camelCase", "PascalCase"]
       },
       {
         "selector": "memberLike",
@@ -95,7 +112,11 @@
         "leadingUnderscore": "require"
       },
 
-      { "selector": "variable", "modifiers": ["exported"], "format": null }
+      {
+        "selector": "variable",
+        "modifiers": ["exported"],
+        "format": null
+      }
     ],
     // Ensures that components are always written in PascalCase
     "react/jsx-pascal-case": [
@@ -110,23 +131,13 @@
     // All tests must need not have an assertion
     "jest/expect-expect": 0,
 
-    // Ensures that components are always indented by 2 spaces
-    "react/jsx-indent": ["warn", 2],
-    "react/jsx-tag-spacing": [
-      "warn",
-      {
-        "afterOpening": "never",
-        "beforeClosing": "never",
-        "beforeSelfClosing": "always"
-      }
-    ],
-
     // Enforce Strictly functional components
     "react/no-unstable-nested-components": ["error", { "allowAsProps": true }],
     "react/function-component-definition": [
       0,
       { "namedComponents": "function-declaration" }
-    ]
+    ],
+    "prettier/prettier": "error"
   },
 
   // Let ESLint use the react version in the package.json

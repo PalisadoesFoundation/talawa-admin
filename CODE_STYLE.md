@@ -1,4 +1,3 @@
-
 # Talawa Admin Code Style
 
 For Talawa Admin, most of the rules for the code style have been enforced with ESLint, but this document serves to provide an overview of the Code style used in Talawa Admin and the Rationale behind it.
@@ -6,6 +5,21 @@ For Talawa Admin, most of the rules for the code style have been enforced with E
 The code style must be strictly adhered to, to ensure that there is consistency throughout the contributions made to Talawa-Admin
 
 code style should not be changed and must be followed.
+
+# Table of Contents
+
+<!-- toc -->
+
+- [Tech Stack](#tech-stack)
+- [Component Structure](#component-structure)
+- [Code Style and Naming Conventions](#code-style-and-naming-conventions)
+- [Test and Code Linting](#test-and-code-linting)
+- [Folder/Directory Structure](#folderdirectory-structure)
+  - [Sub Directories of `src`](#sub-directories-of-src)
+- [Imports](#imports)
+- [Customising Bootstrap](#customising-bootstrap)
+
+<!-- tocstop -->
 
 ## Tech Stack
 
@@ -21,7 +35,7 @@ code style should not be changed and must be followed.
 
 - GraphQL
 
-- Jest & Enzyme for testing
+- Jest & React Testing Library for testing
 
 ## Component Structure
 
@@ -175,7 +189,7 @@ Follow this [link](https://getbootstrap.com/docs/5.3/customize/sass/) to learn h
 
 **File Structure**
 
-- `src/assets/scss/components/{partialFile}.scss` - where the {partialFile} are the following files
+- `src/assets/scss/components/{'{partialFile}'}.scss` - where the {'{partialFile}'} are the following files
   - **_accordion.scss**
   - **_alert.scss**
   - **_badge.scss**
@@ -195,12 +209,12 @@ Follow this [link](https://getbootstrap.com/docs/5.3/customize/sass/) to learn h
   - **_progress.scss**
   - **_spinners.scss**
 
-- `src/assets/scss/content/{partialFile}.scss` - where the {partialFile} are the following files
+- `src/assets/scss/content/{'{partialFile}'}.scss` - where the {'{partialFile}'} are the following files
   - **_table.scss**
   - **_typography.scss**
 
 
-- `src/assets/scss/forms/{partialFile}.scss` - where the {partialFile} are the following files
+- `src/assets/scss/forms/{'{partialFile}'}.scss` - where the {'{partialFile}'} are the following files
   - **_check-radios.scss**
   - **_floating-label.scss**
   - **_form-control.scss**
@@ -223,11 +237,17 @@ The compiled CSS file is `src/assets/css/app.css` and it is imported into `src/i
 To compile the Sass file once, run the following command in the terminal
 
 ```
-node-sass src/assets/scss/app.scss src/assets/css/app.css
+npx sass src/assets/scss/app.scss src/assets/css/app.css
 ```
 
 To watch the Sass file for changes and compile it automatically, run the following command in the terminal
 
 ```
-node-sass src/assets/scss/app.scss src/assets/css/app.css --watch
+npx sass src/assets/scss/app.scss src/assets/css/app.css --watch
+```
+The `src/assets/css/app.css.map` file associates the generated CSS code with the original SCSS code. It allows you to see your SCSS code in the browser's developer tools for debugging.
+
+To skip generating the map file, run
+```
+npx sass --no-source-map src/assets/scss/app.scss src/assets/css/app.css
 ```

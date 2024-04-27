@@ -61,18 +61,22 @@ describe('Testing Feedback Statistics Card', () => {
             <FeedbackStats {...nonEmptyProps} />
           </I18nextProvider>
         </Provider>
-      </BrowserRouter>
+      </BrowserRouter>,
     );
 
     await waitFor(() =>
-      expect(queryByText('Feedback Analysis')).toBeInTheDocument()
+      expect(queryByText('Feedback Analysis')).toBeInTheDocument(),
     );
 
     await waitFor(() =>
       expect(
-        queryByText('3 people have filled feedback for this event.')
-      ).toBeInTheDocument()
+        queryByText('3 people have filled feedback for this event.'),
+      ).toBeInTheDocument(),
     );
+
+    await waitFor(() => {
+      expect(queryByText('Test')).toBeInTheDocument();
+    });
   });
 
   test('The component should be rendered and message should be shown if no feedback is present', async () => {
@@ -84,17 +88,17 @@ describe('Testing Feedback Statistics Card', () => {
             <FeedbackStats {...emptyProps} />
           </I18nextProvider>
         </Provider>
-      </BrowserRouter>
+      </BrowserRouter>,
     );
 
     await waitFor(() =>
-      expect(queryByText('Feedback Analysis')).toBeInTheDocument()
+      expect(queryByText('Feedback Analysis')).toBeInTheDocument(),
     );
 
     await waitFor(() =>
       expect(
-        queryByText('Please ask attendees to submit feedback for insights!')
-      ).toBeInTheDocument()
+        queryByText('Please ask attendees to submit feedback for insights!'),
+      ).toBeInTheDocument(),
     );
   });
 });

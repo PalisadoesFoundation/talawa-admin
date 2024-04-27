@@ -74,7 +74,7 @@ describe('Testing Member Request Card', () => {
         <I18nextProvider i18n={i18nForTest}>
           <MemberRequestCard {...props} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -105,7 +105,7 @@ describe('Testing Member Request Card', () => {
             email="johndoe@gmail.com"
           />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();

@@ -28,11 +28,21 @@ const MOCKS = [
         login: {
           user: {
             _id: '1',
-            userType: 'ADMIN',
-            adminApproved: true,
+            firstName: 'firstname',
+            lastName: 'secondname',
+            email: 'tempemail@example.com',
+            image: 'image',
           },
           accessToken: 'accessToken',
           refreshToken: 'refreshToken',
+          appUserProfile: {
+            adminFor: [
+              {
+                _id: 'id',
+              },
+            ],
+            isSuperAdmin: true,
+          },
         },
       },
     },
@@ -50,8 +60,14 @@ const MOCKS = [
         login: {
           user: {
             _id: '1',
-            userType: 'ADMIN',
-            adminApproved: false,
+            firstName: 'firstname',
+            lastName: 'secondname',
+            email: 'tempemail@example.com',
+            image: 'image',
+          },
+          appUserProfile: {
+            adminFor: {},
+            isSuperAdmin: false,
           },
           accessToken: 'accessToken',
           refreshToken: 'refreshToken',
@@ -88,6 +104,11 @@ jest.mock('react-toastify', () => ({
     error: jest.fn(),
   },
 }));
+const mockNavigate = jest.fn();
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigate,
+}));
 
 const setCurrentMode: React.Dispatch<SetStateAction<string>> = jest.fn();
 
@@ -106,7 +127,7 @@ describe('Testing Login Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -122,7 +143,7 @@ describe('Testing Login Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -142,7 +163,7 @@ describe('Testing Login Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -150,7 +171,7 @@ describe('Testing Login Component [User Portal]', () => {
     userEvent.click(screen.getByTestId('loginBtn'));
 
     expect(toast.error).toBeCalledWith(
-      'Please enter a valid email and password.'
+      'Please enter a valid email and password.',
     );
   });
 
@@ -169,19 +190,19 @@ describe('Testing Login Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
 
     userEvent.type(
       screen.getByPlaceholderText(/Enter your email address/i),
-      formData.email
+      formData.email,
     );
     userEvent.click(screen.getByTestId('loginBtn'));
 
     expect(toast.error).toBeCalledWith(
-      'Please enter a valid email and password.'
+      'Please enter a valid email and password.',
     );
   });
 
@@ -200,19 +221,19 @@ describe('Testing Login Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
 
     userEvent.type(
       screen.getByPlaceholderText(/Enter your email address/i),
-      formData.email
+      formData.email,
     );
 
     userEvent.type(
       screen.getByPlaceholderText(/Enter your password/i),
-      formData.password
+      formData.password,
     );
 
     userEvent.click(screen.getByTestId('loginBtn'));
@@ -237,24 +258,25 @@ describe('Testing Login Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
 
     userEvent.type(
       screen.getByPlaceholderText(/Enter your email address/i),
-      formData.email
+      formData.email,
     );
 
     userEvent.type(
       screen.getByPlaceholderText(/Enter your password/i),
-      formData.password
+      formData.password,
     );
 
     userEvent.click(screen.getByTestId('loginBtn'));
 
     await wait();
+    expect(mockNavigate).toHaveBeenCalledWith('/user/organizations');
   });
 
   test('Current user has not been approved by admin.', async () => {
@@ -272,19 +294,19 @@ describe('Testing Login Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
 
     userEvent.type(
       screen.getByPlaceholderText(/Enter your email address/i),
-      formData.email
+      formData.email,
     );
 
     userEvent.type(
       screen.getByPlaceholderText(/Enter your password/i),
-      formData.password
+      formData.password,
     );
 
     userEvent.click(screen.getByTestId('loginBtn'));

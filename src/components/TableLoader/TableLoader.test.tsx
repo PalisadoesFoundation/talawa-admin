@@ -18,7 +18,7 @@ describe('Testing Loader component', () => {
     render(
       <BrowserRouter>
         <TableLoader {...props} />
-      </BrowserRouter>
+      </BrowserRouter>,
     );
     // Check if header titles are rendered properly
     const data = props.headerTitles as string[];
@@ -29,11 +29,11 @@ describe('Testing Loader component', () => {
     // Check if elements are rendered properly
     for (let rowIndex = 0; rowIndex < props.noOfRows; rowIndex++) {
       expect(
-        screen.getByTestId(`row-${rowIndex}-tableLoading`)
+        screen.getByTestId(`row-${rowIndex}-tableLoading`),
       ).toBeInTheDocument();
       for (let colIndex = 0; colIndex < data.length; colIndex++) {
         expect(
-          screen.getByTestId(`row-${rowIndex}-col-${colIndex}-tableLoading`)
+          screen.getByTestId(`row-${rowIndex}-col-${colIndex}-tableLoading`),
         ).toBeInTheDocument();
       }
     }
@@ -46,7 +46,7 @@ describe('Testing Loader component', () => {
     render(
       <BrowserRouter>
         <TableLoader {...props} />
-      </BrowserRouter>
+      </BrowserRouter>,
     );
     // Check if header titles are rendered properly
     const data = [...Array(props.noOfCols)];
@@ -54,11 +54,11 @@ describe('Testing Loader component', () => {
     // Check if elements are rendered properly
     for (let rowIndex = 0; rowIndex < props.noOfRows; rowIndex++) {
       expect(
-        screen.getByTestId(`row-${rowIndex}-tableLoading`)
+        screen.getByTestId(`row-${rowIndex}-tableLoading`),
       ).toBeInTheDocument();
       for (let colIndex = 0; colIndex < data.length; colIndex++) {
         expect(
-          screen.getByTestId(`row-${rowIndex}-col-${colIndex}-tableLoading`)
+          screen.getByTestId(`row-${rowIndex}-col-${colIndex}-tableLoading`),
         ).toBeInTheDocument();
       }
     }
@@ -71,7 +71,7 @@ describe('Testing Loader component', () => {
       render(
         <BrowserRouter>
           <TableLoader {...props} />
-        </BrowserRouter>
+        </BrowserRouter>,
       );
     }).toThrowError();
   });

@@ -2,7 +2,7 @@ import type { InterfaceAction } from 'state/helpers/Action';
 
 const reducer = (
   state = INITIAL_STATE,
-  action: InterfaceAction
+  action: InterfaceAction,
 ): typeof INITIAL_STATE => {
   switch (action.type) {
     case 'UPDATE_INSTALLED':
@@ -17,7 +17,7 @@ const reducer = (
       return Object.assign({}, state, {
         installed: [
           ...state.installed.filter(
-            (plugin: any) => plugin.id !== action.payload.id
+            (plugin: any) => plugin.id !== action.payload.id,
           ),
         ],
       });

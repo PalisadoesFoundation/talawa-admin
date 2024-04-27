@@ -66,6 +66,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                 placeholder={t('sendMessage')}
                 aria-label="Send Message"
                 value={newMessage}
+                data-testid="messageInput"
                 onChange={handleNewMessageChange}
                 className={styles.backgroundWhite}
               />

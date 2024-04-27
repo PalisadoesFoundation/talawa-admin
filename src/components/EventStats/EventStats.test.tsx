@@ -52,11 +52,11 @@ describe('Testing Event Stats', () => {
         <BrowserRouter>
           <EventStats {...props} />
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await waitFor(() =>
-      expect(queryByText('Event Statistics')).toBeInTheDocument()
+      expect(queryByText('Event Statistics')).toBeInTheDocument(),
     );
   });
 });

@@ -4,6 +4,10 @@
 
 ## Table of contents
 
+### Enumerations
+
+- [ViewType](../enums/components_EventCalendar_EventCalendar.ViewType.md)
+
 ### Functions
 
 - [default](components_EventCalendar_EventCalendar.md#default)
@@ -12,19 +16,19 @@
 
 ### default
 
-▸ **default**(`props`, `context?`): ``null`` \| `ReactElement`<`any`, `any`\>
+▸ **default**(`props`, `context?`): ``null`` \| `ReactElement`\<`any`, `any`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `props` | `PropsWithChildren`<`InterfaceCalendarProps`\> |
+| `props` | `PropsWithChildren`\<`InterfaceCalendarProps`\> |
 | `context?` | `any` |
 
 #### Returns
 
-``null`` \| `ReactElement`<`any`, `any`\>
+``null`` \| `ReactElement`\<`any`, `any`\>
 
 #### Defined in
 
-node_modules/@types/react/index.d.ts:543
+[src/components/EventCalendar/EventCalendar.tsx:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/EventCalendar/EventCalendar.tsx#L59)

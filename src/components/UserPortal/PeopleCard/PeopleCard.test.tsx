@@ -25,6 +25,8 @@ let props = {
   name: 'First Last',
   image: '',
   email: 'first@last.com',
+  role: 'Admin',
+  sno: '1',
 };
 
 describe('Testing PeopleCard Component [User Portal]', () => {
@@ -38,7 +40,7 @@ describe('Testing PeopleCard Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -59,7 +61,7 @@ describe('Testing PeopleCard Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();

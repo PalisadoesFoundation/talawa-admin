@@ -1,30 +1,91 @@
-import React from 'react';
-import UserNavbar from 'components/UserPortal/UserNavbar/UserNavbar';
-import OrganizationCard from 'components/UserPortal/OrganizationCard/OrganizationCard';
-import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
-import { Dropdown, Form, InputGroup } from 'react-bootstrap';
-import PaginationList from 'components/PaginationList/PaginationList';
+import { useQuery } from '@apollo/client';
+import { SearchOutlined } from '@mui/icons-material';
+import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import {
   USER_CREATED_ORGANIZATIONS,
   USER_JOINED_ORGANIZATIONS,
   USER_ORGANIZATION_CONNECTION,
 } from 'GraphQl/Queries/Queries';
-import { useQuery } from '@apollo/client';
-import { SearchOutlined } from '@mui/icons-material';
-import styles from './Organizations.module.css';
+import PaginationList from 'components/PaginationList/PaginationList';
+import OrganizationCard from 'components/UserPortal/OrganizationCard/OrganizationCard';
+import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
+import React, { useEffect, useState } from 'react';
+import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import useLocalStorage from 'utils/useLocalstorage';
+import styles from './Organizations.module.css';
+import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
+
+const { getItem } = useLocalStorage();
 
 interface InterfaceOrganizationCardProps {
   id: string;
   name: string;
   image: string;
   description: string;
+  admins: [];
+  members: [];
+  address: {
+    city: string;
+    countryCode: string;
+    line1: string;
+    postalCode: string;
+    state: string;
+  };
+  membershipRequestStatus: string;
+  userRegistrationRequired: boolean;
+  membershipRequests: {
+    _id: string;
+    user: {
+      _id: string;
+    };
+  }[];
 }
+
+interface InterfaceOrganization {
+  _id: string;
+  name: string;
+  image: string;
+  description: string;
+  admins: [];
+  members: [];
+  address: {
+    city: string;
+    countryCode: string;
+    line1: string;
+    postalCode: string;
+    state: string;
+  };
+  membershipRequestStatus: string;
+  userRegistrationRequired: boolean;
+  membershipRequests: {
+    _id: string;
+    user: {
+      _id: string;
+    };
+  }[];
+}
+
 export default function organizations(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userOrganizations',
   });
+
+  const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
+
+  const handleResize = (): void => {
+    if (window.innerWidth <= 820) {
+      setHideDrawer(!hideDrawer);
+    }
+  };
+
+  useEffect(() => {
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -38,7 +99,7 @@ export default function organizations(): JSX.Element {
     t('createdOrganizations'),
   ];
 
-  const userId: string | null = localStorage.getItem('userId');
+  const userId: string | null = getItem('userId');
 
   const {
     data,
@@ -48,25 +109,31 @@ export default function organizations(): JSX.Element {
     variables: { filter: filterName },
   });
 
-  const { data: data2 } = useQuery(USER_JOINED_ORGANIZATIONS, {
-    variables: { id: userId },
-  });
+  const { data: joinedOrganizationsData } = useQuery(
+    USER_JOINED_ORGANIZATIONS,
+    {
+      variables: { id: userId },
+    },
+  );
 
-  const { data: data3 } = useQuery(USER_CREATED_ORGANIZATIONS, {
-    variables: { id: userId },
-  });
+  const { data: createdOrganizationsData } = useQuery(
+    USER_CREATED_ORGANIZATIONS,
+    {
+      variables: { id: userId },
+    },
+  );
 
   /* istanbul ignore next */
   const handleChangePage = (
     _event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
+    newPage: number,
   ): void => {
     setPage(newPage);
   };
 
   /* istanbul ignore next */
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
     const newRowsPerPage = event.target.value;
 
@@ -74,64 +141,150 @@ export default function organizations(): JSX.Element {
     setPage(0);
   };
 
-  const handleSearch = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  const handleSearch = (value: string): void => {
+    setFilterName(value);
+
+    refetch({
+      filter: value,
+    });
+  };
+  const handleSearchByEnter = (
+    e: React.KeyboardEvent<HTMLInputElement>,
   ): void => {
-    const newFilter = event.target.value;
-    setFilterName(newFilter);
-
-    const filter = {
-      filter: newFilter,
-    };
-
-    refetch(filter);
+    if (e.key === 'Enter') {
+      const { value } = e.target as HTMLInputElement;
+      handleSearch(value);
+    }
+  };
+  const handleSearchByBtnClick = (): void => {
+    const value =
+      (document.getElementById('searchUserOrgs') as HTMLInputElement)?.value ||
+      '';
+    handleSearch(value);
   };
 
   /* istanbul ignore next */
   React.useEffect(() => {
     if (data) {
-      setOrganizations(data.organizationsConnection);
+      const organizations = data.organizationsConnection.map(
+        (organization: InterfaceOrganization) => {
+          let membershipRequestStatus = '';
+          if (
+            organization.members.find(
+              (member: { _id: string }) => member._id === userId,
+            )
+          )
+            membershipRequestStatus = 'accepted';
+          else if (
+            organization.membershipRequests.find(
+              (request: { user: { _id: string } }) =>
+                request.user._id === userId,
+            )
+          )
+            membershipRequestStatus = 'pending';
+          return { ...organization, membershipRequestStatus };
+        },
+      );
+      setOrganizations(organizations);
     }
   }, [data]);
 
   /* istanbul ignore next */
   React.useEffect(() => {
-    if (mode == 0) {
+    if (mode === 0) {
       if (data) {
-        setOrganizations(data.organizationsConnection);
+        const organizations = data.organizationsConnection.map(
+          (organization: InterfaceOrganization) => {
+            let membershipRequestStatus = '';
+            if (
+              organization.members.find(
+                (member: { _id: string }) => member._id === userId,
+              )
+            )
+              membershipRequestStatus = 'accepted';
+            else if (
+              organization.membershipRequests.find(
+                (request: { user: { _id: string } }) =>
+                  request.user._id === userId,
+              )
+            )
+              membershipRequestStatus = 'pending';
+            return { ...organization, membershipRequestStatus };
+          },
+        );
+        setOrganizations(organizations);
       }
-    } else if (mode == 1) {
-      if (data2) {
-        setOrganizations(data2.users[0].joinedOrganizations);
+    } else if (mode === 1) {
+      if (joinedOrganizationsData && joinedOrganizationsData.users.length > 0) {
+        const organizations =
+          joinedOrganizationsData.users[0]?.user?.joinedOrganizations || [];
+        setOrganizations(organizations);
       }
-    } else if (mode == 2) {
-      if (data3) {
-        setOrganizations(data3.users[0].createdOrganizations);
+    } else if (mode === 2) {
+      if (
+        createdOrganizationsData &&
+        createdOrganizationsData.users.length > 0
+      ) {
+        const organizations =
+          createdOrganizationsData.users[0]?.appUserProfile
+            ?.createdOrganizations || [];
+        setOrganizations(organizations);
       }
     }
-  }, [mode]);
-
+  }, [mode, data, joinedOrganizationsData, createdOrganizationsData, userId]);
   return (
     <>
-      <UserNavbar />
-      <div className={`d-flex flex-row ${styles.containerHeight}`}>
-        <UserSidebar />
-        <div className={`${styles.colorLight} ${styles.mainContainer}`}>
+      {hideDrawer ? (
+        <Button
+          className={styles.opendrawer}
+          onClick={(): void => {
+            setHideDrawer(!hideDrawer);
+          }}
+          data-testid="openMenu"
+        >
+          <i className="fa fa-angle-double-right" aria-hidden="true"></i>
+        </Button>
+      ) : (
+        <Button
+          className={styles.collapseSidebarButton}
+          onClick={(): void => {
+            setHideDrawer(!hideDrawer);
+          }}
+          data-testid="closeMenu"
+        >
+          <i className="fa fa-angle-double-left" aria-hidden="true"></i>
+        </Button>
+      )}
+      <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
+      <div
+        className={`${styles.containerHeight} ${
+          hideDrawer === null
+            ? ''
+            : hideDrawer
+              ? styles.expand
+              : styles.contract
+        }`}
+      >
+        <div className={`${styles.mainContainer}`}>
+          <div className="d-flex justify-content-end align-items-center">
+            <ProfileDropdown />
+          </div>
           <h3>{t('selectOrganization')}</h3>
-          <div
-            className={`d-flex flex-row justify-content-between pt-3 flex-wrap ${styles.gap}`}
-          >
+          <div>
             <InputGroup className={styles.maxWidth}>
               <Form.Control
                 placeholder={t('search')}
+                id="searchUserOrgs"
                 type="text"
                 className={`${styles.borderNone} ${styles.backgroundWhite}`}
-                value={filterName}
-                onChange={handleSearch}
+                onKeyUp={handleSearchByEnter}
                 data-testid="searchInput"
               />
               <InputGroup.Text
                 className={`${styles.colorPrimary} ${styles.borderNone}`}
+                style={{ cursor: 'pointer' }}
+                onClick={handleSearchByBtnClick}
+                data-testid="searchBtn"
               >
                 <SearchOutlined className={`${styles.colorWhite}`} />
               </InputGroup.Text>
@@ -178,16 +331,24 @@ export default function organizations(): JSX.Element {
                     (rowsPerPage > 0
                       ? organizations.slice(
                           page * rowsPerPage,
-                          page * rowsPerPage + rowsPerPage
+                          page * rowsPerPage + rowsPerPage,
                         )
                       : /* istanbul ignore next */
                         organizations
-                    ).map((organization: any, index) => {
+                    ).map((organization: InterfaceOrganization, index) => {
                       const cardProps: InterfaceOrganizationCardProps = {
                         name: organization.name,
                         image: organization.image,
                         id: organization._id,
                         description: organization.description,
+                        admins: organization.admins,
+                        members: organization.members,
+                        address: organization.address,
+                        membershipRequestStatus:
+                          organization.membershipRequestStatus,
+                        userRegistrationRequired:
+                          organization.userRegistrationRequired,
+                        membershipRequests: organization.membershipRequests,
                       };
                       return <OrganizationCard key={index} {...cardProps} />;
                     })

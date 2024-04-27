@@ -8,11 +8,15 @@ import cookies from 'js-cookie';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import LanguageIcon from '@mui/icons-material/Language';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
+import { useNavigate } from 'react-router-dom';
+import useLocalStorage from 'utils/useLocalstorage';
 
 function userNavbar(): JSX.Element {
+  const { getItem } = useLocalStorage();
+  const navigate = useNavigate();
+
   const { t } = useTranslation('translation', {
     keyPrefix: 'userNavbar',
   });
@@ -21,17 +25,17 @@ function userNavbar(): JSX.Element {
 
   const [currentLanguageCode, setCurrentLanguageCode] = React.useState(
     /* istanbul ignore next */
-    cookies.get('i18next') || 'en'
+    cookies.get('i18next') || 'en',
   );
+
+  const userName = getItem('name');
 
   /* istanbul ignore next */
   const handleLogout = (): void => {
     revokeRefreshToken();
     localStorage.clear();
-    window.location.replace('/user');
+    navigate('/');
   };
-
-  const userName = localStorage.getItem('name');
 
   return (
     <Navbar variant="dark" className={`${styles.colorPrimary}`}>
@@ -95,15 +99,11 @@ function userNavbar(): JSX.Element {
               <Dropdown.ItemText>
                 <b>{userName}</b>
               </Dropdown.ItemText>
-              <Dropdown.Item>
-                <Link to="/user/settings" className={styles.link}>
-                  {t('settings')}
-                </Link>
-              </Dropdown.Item>
-              <Dropdown.Item>
-                <Link to="/user/tasks" className={styles.link}>
-                  {t('myTasks')}
-                </Link>
+              <Dropdown.Item
+                onClick={() => navigate('/user/settings')}
+                className={styles.link}
+              >
+                {t('settings')}
               </Dropdown.Item>
               <Dropdown.Item onClick={handleLogout} data-testid={`logoutBtn`}>
                 {t('logout')}

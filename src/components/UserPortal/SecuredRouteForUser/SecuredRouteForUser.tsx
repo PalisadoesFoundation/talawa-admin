@@ -1,14 +1,16 @@
 import React from 'react';
-import { Redirect, Route } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
+import PageNotFound from 'screens/PageNotFound/PageNotFound';
+import useLocalStorage from 'utils/useLocalstorage';
 
-const SecuredRouteForUser = (props: any): JSX.Element => {
-  const isLoggedIn = localStorage.getItem('IsLoggedIn');
+const SecuredRouteForUser = (): JSX.Element => {
+  const { getItem } = useLocalStorage();
+  const isLoggedIn = getItem('IsLoggedIn');
+  const adminFor = getItem('AdminFor');
   return isLoggedIn === 'TRUE' ? (
-    <>
-      <Route {...props} />
-    </>
+    <>{adminFor == undefined ? <Outlet /> : <PageNotFound />}</>
   ) : (
-    <Redirect to="/user" />
+    <Navigate to="/" replace />
   );
 };
 

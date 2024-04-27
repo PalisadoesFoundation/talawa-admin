@@ -25,8 +25,6 @@ const checkInQueryData: InterfaceAttendeeQueryResponse = {
         checkIn: {
           _id: 'checkin1',
           time: '08:00:00',
-          allotedRoom: 'Room 1',
-          allotedSeat: 'Seat 1',
         },
       },
     ],
@@ -52,8 +50,6 @@ export const checkInMutationSuccess = [
       variables: {
         userId: 'user123',
         eventId: 'event123',
-        allotedSeat: '',
-        allotedRoom: '',
       },
     },
     result: {
@@ -73,8 +69,6 @@ export const checkInMutationUnsuccess = [
       variables: {
         userId: 'user123',
         eventId: 'event123',
-        allotedSeat: '',
-        allotedRoom: '',
       },
     },
     error: new Error('Oops'),

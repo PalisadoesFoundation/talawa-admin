@@ -2,7 +2,9 @@
   position: relative;
   display: flex;
   align-items: center;
-  padding: 0.75rem 0;
+  border: 1px solid var(--bs-gray-200);
+  border-radius: 8px;
+  margin-top: 20px;
 }
 
 .cardItem .iconWrapper {
@@ -39,6 +41,22 @@
 .cardItem .title {
   font-size: 1rem;
   flex: 1;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  margin-left: 3px;
+}
+
+.cardItem .location {
+  font-size: 0.9rem;
+  color: var(--bs-primary);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
 }
 
 .cardItem .time {
@@ -53,8 +71,11 @@
 
 .rightCard {
   display: flex;
-  gap: 5px;
+  gap: 7px;
   min-width: 170px;
   justify-content: center;
   flex-direction: column;
+  margin-left: 10px;
+  overflow-x: hidden;
+  width: 210px;
 }

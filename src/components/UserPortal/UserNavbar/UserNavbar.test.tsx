@@ -49,7 +49,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -65,7 +65,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -89,7 +89,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -113,7 +113,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -137,7 +137,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -161,7 +161,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -173,5 +173,45 @@ describe('Testing UserNavbar Component [User Portal]', () => {
     await wait();
 
     expect(cookies.get('i18next')).toBe('zh');
+  });
+
+  test('User can see and interact with the dropdown menu', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserNavbar />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('logoutDropdown'));
+    expect(screen.getByText('Settings')).toBeInTheDocument();
+    expect(screen.getByTestId('logoutBtn')).toBeInTheDocument();
+  });
+
+  test('User can navigate to the "Settings" page', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserNavbar />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('logoutDropdown'));
+    userEvent.click(screen.getByText('Settings'));
+    expect(window.location.pathname).toBe('/user/settings');
   });
 });

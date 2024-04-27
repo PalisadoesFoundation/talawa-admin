@@ -4,23 +4,29 @@ import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { errorHandler } from 'utils/errorHandler';
 import { toast } from 'react-toastify';
-import { DELETE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
-import { REMOVE_SAMPLE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
+import {
+  DELETE_ORGANIZATION_MUTATION,
+  REMOVE_SAMPLE_ORGANIZATION_MUTATION,
+} from 'GraphQl/Mutations/mutations';
 import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
 import styles from './DeleteOrg.module.css';
+import { useNavigate, useParams } from 'react-router-dom';
+import useLocalStorage from 'utils/useLocalstorage';
 
 function deleteOrg(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'deleteOrg',
   });
+  const { orgId: currentUrl } = useParams();
+  const navigate = useNavigate();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const currentUrl = window.location.href.split('=')[1];
-  const canDelete = localStorage.getItem('UserType') === 'SUPERADMIN';
+  const { getItem } = useLocalStorage();
+  const canDelete = getItem('SuperAdmin');
   const toggleDeleteModal = (): void => setShowDeleteModal(!showDeleteModal);
 
   const [del] = useMutation(DELETE_ORGANIZATION_MUTATION);
   const [removeSampleOrganization] = useMutation(
-    REMOVE_SAMPLE_ORGANIZATION_MUTATION
+    REMOVE_SAMPLE_ORGANIZATION_MUTATION,
   );
 
   const { data } = useQuery(IS_SAMPLE_ORGANIZATION_QUERY, {
@@ -33,12 +39,14 @@ function deleteOrg(): JSX.Element {
     if (data && data.isSampleOrganization) {
       removeSampleOrganization()
         .then(() => {
-          toast.success('Successfully deleted sample Organization');
+          toast.success(t('successfullyDeletedSampleOrganization'));
+          setTimeout(() => {
+            navigate('/orglist');
+          }, 1000);
         })
         .catch((error) => {
           toast.error(error.message);
         });
-      window.location.replace('/orglist');
     } else {
       try {
         await del({
@@ -46,8 +54,8 @@ function deleteOrg(): JSX.Element {
             id: currentUrl,
           },
         });
-        window.location.replace('/orglist');
-      } catch (error: any) {
+        navigate('/orglist');
+      } catch (error) {
         errorHandler(t, error);
       }
     }
@@ -56,7 +64,7 @@ function deleteOrg(): JSX.Element {
   return (
     <>
       {canDelete && (
-        <Card border="0" className="rounded-4 mb-4">
+        <Card className="rounded-4 shadow-sm mb-4 border border-light-subtle">
           <div className={styles.cardHeader}>
             <div className={styles.cardTitle}>{t('deleteOrganization')}</div>
           </div>
@@ -82,7 +90,7 @@ function deleteOrg(): JSX.Element {
           onHide={toggleDeleteModal}
           data-testid="orgDeleteModal"
         >
-          <Modal.Header className="bg-danger" closeButton>
+          <Modal.Header className="bg-primary" closeButton>
             <h5 className="text-white fw-bold">{t('deleteOrganization')}</h5>
           </Modal.Header>
           <Modal.Body>{t('deleteMsg')}</Modal.Body>

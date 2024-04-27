@@ -2,7 +2,6 @@ import React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
-
 import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   ORGANIZATION_ADMINS_LIST,
@@ -14,7 +13,6 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import People from './People';
 import userEvent from '@testing-library/user-event';
-import * as getOrganizationId from 'utils/getOrganizationId';
 
 const MOCKS = [
   {
@@ -70,6 +68,7 @@ const MOCKS = [
                 lastName: 'Admin',
                 image: null,
                 email: 'noble@gmail.com',
+                createdAt: '2023-03-02T03:22:08.101Z',
               },
             ],
           },
@@ -114,9 +113,12 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-describe('Testing People Screen [User Portal]', () => {
-  jest.mock('utils/getOrganizationId');
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({ orgId: '' }),
+}));
 
+describe('Testing People Screen [User Portal]', () => {
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
     value: jest.fn().mockImplementation((query) => ({
@@ -131,12 +133,6 @@ describe('Testing People Screen [User Portal]', () => {
     })),
   });
 
-  const getOrganizationIdSpy = jest
-    .spyOn(getOrganizationId, 'default')
-    .mockImplementation(() => {
-      return '';
-    });
-
   test('Screen should be rendered properly', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -147,16 +143,15 @@ describe('Testing People Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
 
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
     expect(screen.queryAllByText('Noble Mittal')).not.toBe([]);
   });
 
-  test('Search works properly', async () => {
+  test('Search works properly by pressing enter', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -166,15 +161,40 @@ describe('Testing People Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
 
-    userEvent.type(screen.getByTestId('searchInput'), 'j');
+    userEvent.type(screen.getByTestId('searchInput'), 'j{enter}');
     await wait();
 
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
+    expect(screen.queryByText('John Cena')).toBeInTheDocument();
+    expect(screen.queryByText('Noble Mittal')).not.toBeInTheDocument();
+  });
+
+  test('Search works properly by clicking search Btn', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <People />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    const searchBtn = screen.getByTestId('searchBtn');
+    userEvent.type(screen.getByTestId('searchInput'), '');
+    userEvent.click(searchBtn);
+    await wait();
+    userEvent.type(screen.getByTestId('searchInput'), 'j');
+    userEvent.click(searchBtn);
+    await wait();
+
     expect(screen.queryByText('John Cena')).toBeInTheDocument();
     expect(screen.queryByText('Noble Mittal')).not.toBeInTheDocument();
   });
@@ -189,7 +209,7 @@ describe('Testing People Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -199,7 +219,6 @@ describe('Testing People Screen [User Portal]', () => {
     userEvent.click(screen.getByTestId('modeBtn1'));
     await wait();
 
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
     expect(screen.queryByText('Noble Admin')).toBeInTheDocument();
     expect(screen.queryByText('Noble Mittal')).not.toBeInTheDocument();
   });

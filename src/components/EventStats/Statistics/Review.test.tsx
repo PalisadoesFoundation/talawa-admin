@@ -60,13 +60,13 @@ describe('Testing Review Statistics Card', () => {
             <ReviewStats {...nonEmptyReviewProps} />
           </I18nextProvider>
         </Provider>
-      </BrowserRouter>
+      </BrowserRouter>,
     );
 
     await waitFor(() => expect(queryByText('Reviews')).toBeInTheDocument());
 
     await waitFor(() =>
-      expect(queryByText('Filled by 2 people.')).toBeInTheDocument()
+      expect(queryByText('Filled by 2 people.')).toBeInTheDocument(),
     );
 
     await waitFor(() => expect(queryByText('review2')).toBeInTheDocument());
@@ -81,15 +81,15 @@ describe('Testing Review Statistics Card', () => {
             <ReviewStats {...emptyReviewProps} />
           </I18nextProvider>
         </Provider>
-      </BrowserRouter>
+      </BrowserRouter>,
     );
 
     await waitFor(() => expect(queryByText('Reviews')).toBeInTheDocument());
 
     await waitFor(() =>
       expect(
-        queryByText('Waiting for people to talk about the event...')
-      ).toBeInTheDocument()
+        queryByText('Waiting for people to talk about the event...'),
+      ).toBeInTheDocument(),
     );
   });
 });

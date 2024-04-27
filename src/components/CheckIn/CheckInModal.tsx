@@ -45,8 +45,8 @@ export const CheckInModal = (props: InterfaceModalProp): JSX.Element => {
               checkIn: checkIn.checkIn,
               eventId: props.eventId,
             },
-          })
-        )
+          }),
+        ),
       );
   }, [checkInData, props.eventId, checkInLoading]);
 
@@ -80,7 +80,7 @@ export const CheckInModal = (props: InterfaceModalProp): JSX.Element => {
         size="lg"
       >
         <Modal.Header closeButton className="bg-primary">
-          <Modal.Title className="text-white">
+          <Modal.Title className="text-white" data-testid="modal-title">
             Event Check In Management
           </Modal.Title>
         </Modal.Header>

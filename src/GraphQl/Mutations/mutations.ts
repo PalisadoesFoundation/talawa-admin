@@ -1,9 +1,5 @@
 import gql from 'graphql-tag';
 
-// List of the mutations used in the code
-
-// to unblock the user
-
 export const UNBLOCK_USER_MUTATION = gql`
   mutation UnblockUser($userId: ID!, $orgId: ID!) {
     unblockUser(organizationId: $orgId, userId: $userId) {
@@ -49,8 +45,8 @@ export const UPDATE_ORGANIZATION_MUTATION = gql`
     $id: ID!
     $name: String
     $description: String
-    $location: String
-    $isPublic: Boolean
+    $address: AddressInput
+    $userRegistrationRequired: Boolean
     $visibleInSearch: Boolean
     $file: String
   ) {
@@ -59,14 +55,28 @@ export const UPDATE_ORGANIZATION_MUTATION = gql`
       data: {
         name: $name
         description: $description
-        isPublic: $isPublic
+        userRegistrationRequired: $userRegistrationRequired
         visibleInSearch: $visibleInSearch
-        location: $location
+        address: $address
       }
       file: $file
     ) {
       _id
     }
+  }
+`;
+
+// fragment for defining the Address input type.
+export const ADDRESS_DETAILS_FRAGMENT = gql`
+  fragment AddressDetails on AddressInput {
+    city: String
+    countryCode: String
+    dependentLocality: String
+    line1: String
+    line2: String
+    postalCode: String
+    sortingCode: String
+    state: String
   }
 `;
 
@@ -76,12 +86,32 @@ export const UPDATE_USER_MUTATION = gql`
   mutation UpdateUserProfile(
     $firstName: String
     $lastName: String
+    $gender: Gender
     $email: EmailAddress
-    $file: String
+    $phoneNumber: PhoneNumber
+    $birthDate: Date
+    $grade: EducationGrade
+    $empStatus: EmploymentStatus
+    $maritalStatus: MaritalStatus
+    $address: String
+    $state: String
+    $country: String
+    $image: String
   ) {
     updateUserProfile(
-      data: { firstName: $firstName, lastName: $lastName, email: $email }
-      file: $file
+      data: {
+        firstName: $firstName
+        lastName: $lastName
+        gender: $gender
+        email: $email
+        phone: { mobile: $phoneNumber }
+        birthDate: $birthDate
+        educationGrade: $grade
+        employmentStatus: $empStatus
+        maritalStatus: $maritalStatus
+        address: { line1: $address, state: $state, countryCode: $country }
+      }
+      file: $image
     ) {
       _id
     }
@@ -103,7 +133,9 @@ export const UPDATE_USER_PASSWORD_MUTATION = gql`
         confirmNewPassword: $confirmNewPassword
       }
     ) {
-      _id
+      user {
+        _id
+      }
     }
   }
 `;
@@ -116,6 +148,7 @@ export const SIGNUP_MUTATION = gql`
     $lastName: String!
     $email: EmailAddress!
     $password: String!
+    $orgId: ID!
   ) {
     signUp(
       data: {
@@ -123,6 +156,7 @@ export const SIGNUP_MUTATION = gql`
         lastName: $lastName
         email: $email
         password: $password
+        selectedOrganization: $orgId
       }
     ) {
       user {
@@ -141,8 +175,16 @@ export const LOGIN_MUTATION = gql`
     login(data: { email: $email, password: $password }) {
       user {
         _id
-        userType
-        adminApproved
+        firstName
+        lastName
+        image
+        email
+      }
+      appUserProfile {
+        adminFor {
+          _id
+        }
+        isSuperAdmin
       }
       accessToken
       refreshToken
@@ -182,19 +224,19 @@ export const RECAPTCHA_MUTATION = gql`
 export const CREATE_ORGANIZATION_MUTATION = gql`
   mutation CreateOrganization(
     $description: String!
-    $location: String!
+    $address: AddressInput!
     $name: String!
     $visibleInSearch: Boolean!
-    $isPublic: Boolean!
+    $userRegistrationRequired: Boolean!
     $image: String
   ) {
     createOrganization(
       data: {
         description: $description
-        location: $location
+        address: $address
         name: $name
         visibleInSearch: $visibleInSearch
-        isPublic: $isPublic
+        userRegistrationRequired: $userRegistrationRequired
       }
       file: $image
     ) {
@@ -208,7 +250,9 @@ export const CREATE_ORGANIZATION_MUTATION = gql`
 export const DELETE_ORGANIZATION_MUTATION = gql`
   mutation RemoveOrganization($id: ID!) {
     removeOrganization(id: $id) {
-      _id
+      user {
+        _id
+      }
     }
   }
 `;
@@ -224,11 +268,18 @@ export const CREATE_EVENT_MUTATION = gql`
     $isRegisterable: Boolean!
     $organizationId: ID!
     $startDate: Date!
-    $endDate: Date
+    $endDate: Date!
     $allDay: Boolean!
     $startTime: Time
     $endTime: Time
     $location: String
+    $recurrenceStartDate: Date
+    $recurrenceEndDate: Date
+    $frequency: Frequency
+    $weekDays: [WeekDays]
+    $count: PositiveInt
+    $interval: PositiveInt
+    $weekDayOccurenceInMonth: Int
   ) {
     createEvent(
       data: {
@@ -245,6 +296,15 @@ export const CREATE_EVENT_MUTATION = gql`
         endTime: $endTime
         location: $location
       }
+      recurrenceRuleData: {
+        recurrenceStartDate: $recurrenceStartDate
+        recurrenceEndDate: $recurrenceEndDate
+        frequency: $frequency
+        weekDays: $weekDays
+        interval: $interval
+        count: $count
+        weekDayOccurenceInMonth: $weekDayOccurenceInMonth
+      }
     ) {
       _id
     }
@@ -254,15 +314,17 @@ export const CREATE_EVENT_MUTATION = gql`
 // to delete any event by any organization
 
 export const DELETE_EVENT_MUTATION = gql`
-  mutation RemoveEvent($id: ID!) {
-    removeEvent(id: $id) {
+  mutation RemoveEvent(
+    $id: ID!
+    $recurringEventDeleteType: RecurringEventMutationType
+  ) {
+    removeEvent(id: $id, recurringEventDeleteType: $recurringEventDeleteType) {
       _id
     }
   }
 `;
 
 // to remove an admin from an organization
-
 export const REMOVE_ADMIN_MUTATION = gql`
   mutation RemoveAdmin($orgid: ID!, $userid: ID!) {
     removeAdmin(data: { organizationId: $orgid, userId: $userid }) {
@@ -272,7 +334,6 @@ export const REMOVE_ADMIN_MUTATION = gql`
 `;
 
 // to Remove member from an organization
-
 export const REMOVE_MEMBER_MUTATION = gql`
   mutation RemoveMember($orgid: ID!, $userid: ID!) {
     removeMember(data: { organizationId: $orgid, userId: $userid }) {
@@ -282,11 +343,20 @@ export const REMOVE_MEMBER_MUTATION = gql`
 `;
 
 // to add the admin
-
 export const ADD_ADMIN_MUTATION = gql`
   mutation CreateAdmin($orgid: ID!, $userid: ID!) {
     createAdmin(data: { organizationId: $orgid, userId: $userid }) {
       _id
+    }
+  }
+`;
+
+export const ADD_MEMBER_MUTATION = gql`
+  mutation CreateMember($orgid: ID!, $userid: ID!) {
+    createMember(input: { organizationId: $orgid, userId: $userid }) {
+      organization {
+        _id
+      }
     }
   }
 `;
@@ -299,6 +369,7 @@ export const CREATE_POST_MUTATION = gql`
     $videoUrl: URL
     $organizationId: ID!
     $file: String
+    $pinned: Boolean
   ) {
     createPost(
       data: {
@@ -307,6 +378,7 @@ export const CREATE_POST_MUTATION = gql`
         imageUrl: $imageUrl
         videoUrl: $videoUrl
         organizationId: $organizationId
+        pinned: $pinned
       }
       file: $file
     ) {
@@ -347,27 +419,10 @@ export const FORGOT_PASSWORD_MUTATION = gql`
   }
 `;
 
-export const UPDATE_USERTYPE_MUTATION = gql`
-  mutation UpdateUserType($id: ID!, $userType: String!) {
-    updateUserType(data: { id: $id, userType: $userType })
-  }
-`;
-
-export const ACCEPT_ADMIN_MUTATION = gql`
-  mutation AcceptAdmin($id: ID!) {
-    acceptAdmin(id: $id)
-  }
-`;
-
-export const REJECT_ADMIN_MUTATION = gql`
-  mutation RejectAdmin($id: ID!) {
-    rejectAdmin(id: $id)
-  }
-`;
-
 /**
- * @name UPDATE_INSTALL_STATUS_PLUGIN_MUTATION
- * @description used to toggle `installStatus` (boolean value) of a Plugin
+ * {@label UPDATE_INSTALL_STATUS_PLUGIN_MUTATION}
+ * @remarks
+ * used to toggle `installStatus` (boolean value) of a Plugin
  */
 export const UPDATE_INSTALL_STATUS_PLUGIN_MUTATION = gql`
   mutation ($id: ID!, $orgId: ID!) {
@@ -382,8 +437,9 @@ export const UPDATE_INSTALL_STATUS_PLUGIN_MUTATION = gql`
 `;
 
 /**
- * @name UPDATE_ORG_STATUS_PLUGIN_MUTATION
- * @description used  `updatePluginStatus`to add or remove the current Organization the in the plugin list `uninstalledOrgs`
+ * {@label UPDATE_ORG_STATUS_PLUGIN_MUTATION}
+ * @remarks
+ * used  `updatePluginStatus`to add or remove the current Organization the in the plugin list `uninstalledOrgs`
  */
 export const UPDATE_ORG_STATUS_PLUGIN_MUTATION = gql`
   mutation update_install_status_plugin_mutation($id: ID!, $orgId: ID!) {
@@ -398,8 +454,9 @@ export const UPDATE_ORG_STATUS_PLUGIN_MUTATION = gql`
 `;
 
 /**
- * @name ADD_PLUGIN_MUTATION
- * @description used  `createPlugin` to add new Plugin in database
+ * {@label ADD_PLUGIN_MUTATION}
+ * @remarks
+ * used  `createPlugin` to add new Plugin in database
  */
 export const ADD_PLUGIN_MUTATION = gql`
   mutation add_plugin_mutation(
@@ -421,29 +478,60 @@ export const ADD_PLUGIN_MUTATION = gql`
 `;
 export const ADD_ADVERTISEMENT_MUTATION = gql`
   mutation (
-    $orgId: ID!
+    $organizationId: ID!
     $name: String!
-    $link: String!
-    $type: String!
+    $type: AdvertisementType!
     $startDate: Date!
     $endDate: Date!
+    $file: String!
   ) {
     createAdvertisement(
-      orgId: $orgId
-      name: $name
-      link: $link
-      type: $type
-      startDate: $startDate
-      endDate: $endDate
+      input: {
+        organizationId: $organizationId
+        name: $name
+        type: $type
+        startDate: $startDate
+        endDate: $endDate
+        mediaFile: $file
+      }
     ) {
-      _id
+      advertisement {
+        _id
+      }
+    }
+  }
+`;
+export const UPDATE_ADVERTISEMENT_MUTATION = gql`
+  mutation UpdateAdvertisement(
+    $id: ID!
+    $name: String
+    $file: String
+    $type: AdvertisementType
+    $startDate: Date
+    $endDate: Date
+  ) {
+    updateAdvertisement(
+      input: {
+        _id: $id
+        name: $name
+        mediaFile: $file
+        type: $type
+        startDate: $startDate
+        endDate: $endDate
+      }
+    ) {
+      advertisement {
+        _id
+      }
     }
   }
 `;
 export const DELETE_ADVERTISEMENT_BY_ID = gql`
   mutation ($id: ID!) {
-    deleteAdvertisementById(id: $id) {
-      success
+    deleteAdvertisement(id: $id) {
+      advertisement {
+        _id
+      }
     }
   }
 `;
@@ -472,15 +560,25 @@ export const UPDATE_POST_MUTATION = gql`
 export const UPDATE_EVENT_MUTATION = gql`
   mutation UpdateEvent(
     $id: ID!
-    $title: String!
-    $description: String!
-    $recurring: Boolean!
-    $isPublic: Boolean!
-    $isRegisterable: Boolean!
-    $allDay: Boolean!
+    $title: String
+    $description: String
+    $recurring: Boolean
+    $recurringEventUpdateType: RecurringEventMutationType
+    $isPublic: Boolean
+    $isRegisterable: Boolean
+    $allDay: Boolean
+    $startDate: Date
+    $endDate: Date
     $startTime: Time
     $endTime: Time
     $location: String
+    $recurrenceStartDate: Date
+    $recurrenceEndDate: Date
+    $frequency: Frequency
+    $weekDays: [WeekDays]
+    $count: PositiveInt
+    $interval: PositiveInt
+    $weekDayOccurenceInMonth: Int
   ) {
     updateEvent(
       id: $id
@@ -491,10 +589,22 @@ export const UPDATE_EVENT_MUTATION = gql`
         isPublic: $isPublic
         isRegisterable: $isRegisterable
         allDay: $allDay
+        startDate: $startDate
+        endDate: $endDate
         startTime: $startTime
         endTime: $endTime
         location: $location
       }
+      recurrenceRuleData: {
+        recurrenceStartDate: $recurrenceStartDate
+        recurrenceEndDate: $recurrenceEndDate
+        frequency: $frequency
+        weekDays: $weekDays
+        interval: $interval
+        count: $count
+        weekDayOccurenceInMonth: $weekDayOccurenceInMonth
+      }
+      recurringEventUpdateType: $recurringEventUpdateType
     ) {
       _id
     }
@@ -525,218 +635,86 @@ export const REGISTER_EVENT = gql`
   }
 `;
 
-export const ADD_EVENT_PROJECT_MUTATION = gql`
-  mutation AddEventProject(
-    $title: String!
-    $description: String!
-    $eventId: ID!
-  ) {
-    createEventProject(
-      data: { title: $title, description: $description, eventId: $eventId }
-    ) {
-      _id
-    }
+export const UPDATE_COMMUNITY = gql`
+  mutation updateCommunity($data: UpdateCommunityInput!) {
+    updateCommunity(data: $data)
   }
 `;
 
-export const UPDATE_EVENT_PROJECT_MUTATION = gql`
-  mutation UpdateEventProject($title: String, $description: String, $id: ID!) {
-    updateEventProject(
-      id: $id
-      data: { title: $title, description: $description }
-    ) {
-      _id
-    }
+export const RESET_COMMUNITY = gql`
+  mutation resetCommunity {
+    resetCommunity
   }
 `;
 
-export const DELETE_EVENT_PROJECT_MUTATION = gql`
-  mutation DeleteEventProject($id: ID!) {
-    removeEventProject(id: $id) {
-      _id
-    }
-  }
-`;
-
-export const ADD_EVENT_PROJECT_TASK_MUTATION = gql`
-  mutation AddEventTask(
-    $title: String!
-    $description: String!
-    $projectId: ID!
-    $deadline: DateTime!
-  ) {
-    createTask(
-      eventProjectId: $projectId
-      data: { title: $title, description: $description, deadline: $deadline }
-    ) {
-      _id
-    }
-  }
-`;
-
-export const UPDATE_EVENT_PROJECT_TASK_MUTATION = gql`
-  mutation UpdateEventTask(
-    $title: String!
-    $description: String!
-    $taskId: ID!
-    $deadline: DateTime!
-    $completed: Boolean!
-  ) {
-    updateTask(
-      id: $taskId
-      data: {
-        title: $title
-        description: $description
-        deadline: $deadline
-        completed: $completed
-      }
-    ) {
-      _id
-    }
-  }
-`;
-
-export const DELETE_EVENT_TASK_MUTATION = gql`
-  mutation DeleteTask($id: ID!) {
-    removeTask(id: $id) {
-      _id
-    }
-  }
-`;
-
-export const SET_TASK_VOLUNTEERS_MUTATION = gql`
-  mutation SetTaskVolunteers($id: ID!, $volunteers: [ID]!) {
-    setTaskVolunteers(id: $id, volunteers: $volunteers) {
-      _id
-    }
-  }
-`;
-
-export const ADD_EVENT_ATTENDEE = gql`
-  mutation addEventAttendee($userId: ID!, $eventId: ID!) {
-    addEventAttendee(data: { userId: $userId, eventId: $eventId }) {
-      _id
-    }
-  }
-`;
-
-export const REMOVE_EVENT_ATTENDEE = gql`
-  mutation removeEventAttendee($userId: ID!, $eventId: ID!) {
-    removeEventAttendee(data: { userId: $userId, eventId: $eventId }) {
-      _id
-    }
-  }
-`;
-
-export const MARK_CHECKIN = gql`
-  mutation checkIn(
+export const DONATE_TO_ORGANIZATION = gql`
+  mutation donate(
     $userId: ID!
-    $eventId: ID!
-    $allotedRoom: String
-    $allotedSeat: String
+    $createDonationOrgId2: ID!
+    $payPalId: ID!
+    $nameOfUser: String!
+    $amount: Float!
+    $nameOfOrg: String!
   ) {
-    checkIn(
-      data: {
-        userId: $userId
-        eventId: $eventId
-        allotedRoom: $allotedRoom
-        allotedSeat: $allotedSeat
-      }
+    createDonation(
+      userId: $userId
+      orgId: $createDonationOrgId2
+      payPalId: $payPalId
+      nameOfUser: $nameOfUser
+      amount: $amount
+      nameOfOrg: $nameOfOrg
     ) {
       _id
+      amount
+      nameOfUser
+      nameOfOrg
     }
   }
 `;
 
-export const CREATE_COMMENT_POST = gql`
-  mutation createComment($comment: String!, $postId: ID!) {
-    createComment(data: { text: $comment }, postId: $postId) {
-      _id
-      creator {
-        _id
-        firstName
-        lastName
-        email
-      }
-      likeCount
-      likedBy {
-        _id
-      }
-      text
-    }
-  }
-`;
+// Create and Update Action Item Categories
+export {
+  CREATE_ACTION_ITEM_CATEGORY_MUTATION,
+  UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
+} from './ActionItemCategoryMutations';
 
-export const LIKE_COMMENT = gql`
-  mutation likeComment($commentId: ID!) {
-    likeComment(id: $commentId) {
-      _id
-    }
-  }
-`;
+// Create, Update and Delete Action Items
+export {
+  CREATE_ACTION_ITEM_MUTATION,
+  DELETE_ACTION_ITEM_MUTATION,
+  UPDATE_ACTION_ITEM_MUTATION,
+} from './ActionItemMutations';
 
-export const UNLIKE_COMMENT = gql`
-  mutation unlikeComment($commentId: ID!) {
-    unlikeComment(id: $commentId) {
-      _id
-    }
-  }
-`;
+// Changes the role of a event in an organization and add and remove the event from the organization
+export {
+  ADD_EVENT_ATTENDEE,
+  MARK_CHECKIN,
+  REMOVE_EVENT_ATTENDEE,
+} from './EventAttendeeMutations';
+
+// Create the new comment on a post and Like and Unlike the comment
+export {
+  CREATE_COMMENT_POST,
+  LIKE_COMMENT,
+  UNLIKE_COMMENT,
+} from './CommentMutations';
 
 // Changes the role of a user in an organization
-export const UPDATE_USER_ROLE_IN_ORG_MUTATION = gql`
-  mutation updateUserRoleInOrganization(
-    $organizationId: ID!
-    $userId: ID!
-    $role: String!
-  ) {
-    updateUserRoleInOrganization(
-      organizationId: $organizationId
-      userId: $userId
-      role: $role
-    ) {
-      _id
-    }
-  }
-`;
+export {
+  ADD_CUSTOM_FIELD,
+  CREATE_DIRECT_CHAT,
+  CREATE_SAMPLE_ORGANIZATION_MUTATION,
+  JOIN_PUBLIC_ORGANIZATION,
+  PLUGIN_SUBSCRIPTION,
+  REMOVE_CUSTOM_FIELD,
+  REMOVE_SAMPLE_ORGANIZATION_MUTATION,
+  SEND_MEMBERSHIP_REQUEST,
+  TOGGLE_PINNED_POST,
+  UPDATE_USER_ROLE_IN_ORG_MUTATION,
+} from './OrganizationMutations';
 
-export const CREATE_SAMPLE_ORGANIZATION_MUTATION = gql`
-  mutation {
-    createSampleOrganization
-  }
-`;
-
-export const REMOVE_SAMPLE_ORGANIZATION_MUTATION = gql`
-  mutation {
-    removeSampleOrganization
-  }
-`;
-
-export const CREATE_DIRECT_CHAT = gql`
-  mutation createDirectChat($userIds: [ID!]!, $organizationId: ID!) {
-    createDirectChat(
-      data: { userIds: $userIds, organizationId: $organizationId }
-    ) {
-      _id
-    }
-  }
-`;
-
-//Plugin WebSocket listner
-export const PLUGIN_SUBSCRIPTION = gql`
-  subscription onPluginUpdate {
-    onPluginUpdate {
-      pluginName
-      _id
-      pluginDesc
-      uninstalledOrgs
-    }
-  }
-`;
-export const TOGGLE_PINNED_POST = gql`
-  mutation TogglePostPin($id: ID!) {
-    togglePostPin(id: $id) {
-      _id
-    }
-  }
-`;
+export {
+  CREATE_VENUE_MUTATION,
+  DELETE_VENUE_MUTATION,
+  UPDATE_VENUE_MUTATION,
+} from './VenueMutations';

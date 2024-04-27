@@ -14,28 +14,28 @@
 
 ### checkInMutationSuccess
 
-• `Const` **checkInMutationSuccess**: { `request`: { `query`: `DocumentNode` = MARK\_CHECKIN; `variables`: { `allotedRoom`: `string` = ''; `allotedSeat`: `string` = ''; `eventId`: `string` = 'event123'; `userId`: `string` = 'user123' }  } ; `result`: { `data`: { `checkIn`: { `_id`: `string` = '123' }  }  }  }[]
+• `Const` **checkInMutationSuccess**: \{ `request`: \{ `query`: `DocumentNode` = MARK\_CHECKIN; `variables`: \{ `allotedRoom`: `string` = ''; `allotedSeat`: `string` = ''; `eventId`: `string` = 'event123'; `userId`: `string` = 'user123' \}  \} ; `result`: \{ `data`: \{ `checkIn`: \{ `_id`: `string` = '123' \}  \}  \}  \}[]
 
 #### Defined in
 
-[src/components/CheckIn/mocks.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/CheckIn/mocks.ts#L48)
+[src/components/CheckIn/mocks.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/CheckIn/mocks.ts#L48)
 
 ___
 
 ### checkInMutationUnsuccess
 
-• `Const` **checkInMutationUnsuccess**: { `error`: `Error` ; `request`: { `query`: `DocumentNode` = MARK\_CHECKIN; `variables`: { `allotedRoom`: `string` = ''; `allotedSeat`: `string` = ''; `eventId`: `string` = 'event123'; `userId`: `string` = 'user123' }  }  }[]
+• `Const` **checkInMutationUnsuccess**: \{ `error`: `Error` ; `request`: \{ `query`: `DocumentNode` = MARK\_CHECKIN; `variables`: \{ `allotedRoom`: `string` = ''; `allotedSeat`: `string` = ''; `eventId`: `string` = 'event123'; `userId`: `string` = 'user123' \}  \}  \}[]
 
 #### Defined in
 
-[src/components/CheckIn/mocks.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/CheckIn/mocks.ts#L69)
+[src/components/CheckIn/mocks.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/CheckIn/mocks.ts#L69)
 
 ___
 
 ### checkInQueryMock
 
-• `Const` **checkInQueryMock**: { `request`: { `query`: `DocumentNode` = EVENT\_CHECKINS; `variables`: { `id`: `string` = 'event123' }  } ; `result`: { `data`: [`InterfaceAttendeeQueryResponse`](../interfaces/components_CheckIn_types.InterfaceAttendeeQueryResponse.md) = checkInQueryData }  }[]
+• `Const` **checkInQueryMock**: \{ `request`: \{ `query`: `DocumentNode` = EVENT\_CHECKINS; `variables`: \{ `id`: `string` = 'event123' \}  \} ; `result`: \{ `data`: [`InterfaceAttendeeQueryResponse`](../interfaces/components_CheckIn_types.InterfaceAttendeeQueryResponse.md) = checkInQueryData \}  \}[]
 
 #### Defined in
 
-[src/components/CheckIn/mocks.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/b619a0d/src/components/CheckIn/mocks.ts#L36)
+[src/components/CheckIn/mocks.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/CheckIn/mocks.ts#L36)

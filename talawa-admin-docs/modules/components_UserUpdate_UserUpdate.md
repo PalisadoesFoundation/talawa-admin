@@ -12,19 +12,19 @@
 
 ### default
 
-▸ **default**(`props`, `context?`): ``null`` \| `ReactElement`<`any`, `any`\>
+▸ **default**(`props`, `context?`): ``null`` \| `ReactElement`\<`any`, `any`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `props` | `PropsWithChildren`<`InterfaceUserUpdateProps`\> |
+| `props` | `PropsWithChildren`\<`InterfaceUserUpdateProps`\> |
 | `context?` | `any` |
 
 #### Returns
 
-``null`` \| `ReactElement`<`any`, `any`\>
+``null`` \| `ReactElement`\<`any`, `any`\>
 
 #### Defined in
 
-node_modules/@types/react/index.d.ts:543
+[src/components/UserUpdate/UserUpdate.tsx:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/UserUpdate/UserUpdate.tsx#L24)

@@ -1,116 +1,286 @@
 import {
-  ACCEPT_ADMIN_MUTATION,
-  REJECT_ADMIN_MUTATION,
-} from 'GraphQl/Mutations/mutations';
-import {
+  MEMBERSHIP_REQUEST,
   ORGANIZATION_CONNECTION_LIST,
-  USER_LIST_REQUEST,
-  USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 
-export const MOCKS = [
+export const EMPTY_REQUEST_MOCKS = [
   {
     request: {
-      query: USER_ORGANIZATION_LIST,
-      variables: { id: localStorage.getItem('id') },
+      query: ORGANIZATION_CONNECTION_LIST,
     },
     result: {
       data: {
-        user: {
-          _id: '123',
-          userType: 'SUPERADMIN',
-          firstName: 'John',
-          lastName: 'Doe',
-          image: '',
-          email: 'John_Does_Palasidoes@gmail.com',
-          adminFor: {
-            _id: 1,
-            name: 'Akatsuki',
-            image: '',
+        organizationsConnection: [
+          {
+            _id: 'org1',
+            image: null,
+            creator: {
+              firstName: 'John',
+              lastName: 'Doe',
+            },
+            name: 'Palisadoes',
+            members: [
+              {
+                _id: 'user1',
+              },
+            ],
+            admins: [
+              {
+                _id: 'user1',
+              },
+            ],
+            createdAt: '09/11/2001',
+            address: {
+              city: 'Kingston',
+              countryCode: 'JM',
+              dependentLocality: 'Sample Dependent Locality',
+              line1: '123 Jamaica Street',
+              line2: 'Apartment 456',
+              postalCode: 'JM12345',
+              sortingCode: 'ABC-123',
+              state: 'Kingston Parish',
+            },
           },
-        },
+        ],
       },
     },
   },
   {
     request: {
-      query: USER_LIST_REQUEST,
+      query: MEMBERSHIP_REQUEST,
       variables: {
-        adminApproved: false,
-        first: 12,
-        firstName_contains: '',
-        lastName_contains: '',
+        id: '',
         skip: 0,
-        userType: 'ADMIN',
+        first: 8,
+        firstName_contains: '',
       },
-      notifyOnNetworkStatusChange: true,
     },
     result: {
       data: {
-        users: [
+        organizations: [
           {
-            _id: '123',
-            firstName: 'John',
-            lastName: 'Doe',
-            image: 'dummyImage',
-            email: 'johndoe@gmail.com',
-            userType: 'SUPERADMIN',
-            adminApproved: true,
-            createdAt: '20/06/2022',
-            organizationsBlockedBy: [
+            _id: 'org1',
+            membershipRequests: [],
+          },
+        ],
+      },
+    },
+  },
+];
+
+export const MOCKS = [
+  {
+    request: {
+      query: ORGANIZATION_CONNECTION_LIST,
+    },
+    result: {
+      data: {
+        organizationsConnection: [
+          {
+            _id: 'org1',
+            image: null,
+            creator: {
+              firstName: 'John',
+              lastName: 'Doe',
+            },
+            name: 'Palisadoes',
+            members: [
               {
-                _id: '256',
-                name: 'ABC',
+                _id: 'user1',
               },
             ],
-            joinedOrganizations: [
+            admins: [
               {
-                __typename: 'Organization',
-                _id: '6401ff65ce8e8406b8f07af1',
+                _id: 'user1',
+              },
+            ],
+            createdAt: '09/11/2001',
+            address: {
+              city: 'Kingston',
+              countryCode: 'JM',
+              dependentLocality: 'Sample Dependent Locality',
+              line1: '123 Jamaica Street',
+              line2: 'Apartment 456',
+              postalCode: 'JM12345',
+              sortingCode: 'ABC-123',
+              state: 'Kingston Parish',
+            },
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: MEMBERSHIP_REQUEST,
+      variables: {
+        id: '',
+        skip: 0,
+        first: 8,
+        firstName_contains: '',
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            _id: '',
+            membershipRequests: [
+              {
+                _id: '1',
+                user: {
+                  _id: 'user2',
+                  firstName: 'Scott',
+                  lastName: 'Tony',
+                  email: 'testuser3@example.com',
+                },
+              },
+              {
+                _id: '2',
+                user: {
+                  _id: 'user3',
+                  firstName: 'Teresa',
+                  lastName: 'Bradley',
+                  email: 'testuser4@example.com',
+                },
               },
             ],
           },
+        ],
+      },
+    },
+  },
+];
+
+export const MOCKS4 = [
+  {
+    request: {
+      query: ORGANIZATION_CONNECTION_LIST,
+    },
+    result: {
+      data: {
+        organizationsConnection: [
           {
-            _id: '456',
-            firstName: 'Sam',
-            lastName: 'Smith',
-            image: 'dummyImage',
-            email: 'samsmith@gmail.com',
-            userType: 'ADMIN',
-            adminApproved: false,
-            createdAt: '20/06/2022',
-            organizationsBlockedBy: [
+            _id: 'org1',
+            image: null,
+            creator: {
+              firstName: 'John',
+              lastName: 'Doe',
+            },
+            name: 'Palisadoes',
+            members: [
               {
-                _id: '256',
-                name: 'ABC',
+                _id: 'user1',
               },
             ],
-            joinedOrganizations: [
+            admins: [
               {
-                __typename: 'Organization',
-                _id: '6401ff65ce8e8406b8f07af2',
+                _id: 'user1',
               },
             ],
+            createdAt: '09/11/2001',
+            address: {
+              city: 'Kingston',
+              countryCode: 'JM',
+              dependentLocality: 'Sample Dependent Locality',
+              line1: '123 Jamaica Street',
+              line2: 'Apartment 456',
+              postalCode: 'JM12345',
+              sortingCode: 'ABC-123',
+              state: 'Kingston Parish',
+            },
           },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: MEMBERSHIP_REQUEST,
+      variables: {
+        id: '',
+        skip: 0,
+        first: 8,
+        firstName_contains: '',
+      },
+    },
+    result: {
+      data: {
+        organizations: [
           {
-            _id: '789',
-            firstName: 'Peter',
-            lastName: 'Parker',
-            image: 'dummyImage',
-            email: 'peterparker@gmail.com',
-            userType: 'USER',
-            adminApproved: true,
-            createdAt: '20/06/2022',
-            organizationsBlockedBy: [
+            _id: '',
+            membershipRequests: [
               {
-                _id: '256',
-                name: 'ABC',
+                _id: '1',
+                user: {
+                  _id: 'user2',
+                  firstName: 'Scott',
+                  lastName: 'Tony',
+                  email: 'testuser3@example.com',
+                },
               },
-            ],
-            joinedOrganizations: [
               {
-                __typename: 'Organization',
-                _id: '6401ff65ce8e8406b8f07af3',
+                _id: '2',
+                user: {
+                  _id: 'user3',
+                  firstName: 'Teresa',
+                  lastName: 'Bradley',
+                  email: 'testuser4@example.com',
+                },
+              },
+              {
+                _id: '3',
+                user: {
+                  _id: 'user4',
+                  firstName: 'Jesse',
+                  lastName: 'Hart',
+                  email: 'testuser5@example.com',
+                },
+              },
+              {
+                _id: '4',
+                user: {
+                  _id: 'user5',
+                  firstName: 'Lena',
+                  lastName: 'Mcdonald',
+                  email: 'testuser6@example.com',
+                },
+              },
+              {
+                _id: '5',
+                user: {
+                  _id: 'user6',
+                  firstName: 'David',
+                  lastName: 'Smith',
+                  email: 'testuser7@example.com',
+                },
+              },
+              {
+                _id: '6',
+                user: {
+                  _id: 'user7',
+                  firstName: 'Emily',
+                  lastName: 'Johnson',
+                  email: 'testuser8@example.com',
+                },
+              },
+              {
+                _id: '7',
+                user: {
+                  _id: 'user8',
+                  firstName: 'Michael',
+                  lastName: 'Davis',
+                  email: 'testuser9@example.com',
+                },
+              },
+              {
+                _id: '8',
+                user: {
+                  _id: 'user9',
+                  firstName: 'Sarah',
+                  lastName: 'Wilson',
+                  email: 'testuser10@example.com',
+                },
               },
             ],
           },
@@ -120,57 +290,255 @@ export const MOCKS = [
   },
   {
     request: {
-      query: ACCEPT_ADMIN_MUTATION,
+      query: MEMBERSHIP_REQUEST,
       variables: {
-        id: '123',
-        userType: 'ADMIN',
+        id: '',
+        skip: 8,
+        first: 16,
+        firstName_contains: '',
       },
     },
     result: {
       data: {
-        acceptAdmin: true,
-      },
-    },
-  },
-  {
-    request: {
-      query: REJECT_ADMIN_MUTATION,
-      variables: {
-        id: '123',
-        userType: 'ADMIN',
-      },
-    },
-    result: {
-      data: {
-        rejectAdmin: true,
+        organizations: [
+          {
+            _id: '',
+            membershipRequests: [
+              {
+                _id: '9',
+                user: {
+                  _id: 'user10',
+                  firstName: 'Daniel',
+                  lastName: 'Brown',
+                  email: 'testuser11@example.com',
+                },
+              },
+              {
+                _id: '10',
+                user: {
+                  _id: 'user11',
+                  firstName: 'Jessica',
+                  lastName: 'Martinez',
+                  email: 'testuser12@example.com',
+                },
+              },
+              {
+                _id: '11',
+                user: {
+                  _id: 'user12',
+                  firstName: 'Matthew',
+                  lastName: 'Taylor',
+                  email: 'testuser13@example.com',
+                },
+              },
+              {
+                _id: '12',
+                user: {
+                  _id: 'user13',
+                  firstName: 'Amanda',
+                  lastName: 'Anderson',
+                  email: 'testuser14@example.com',
+                },
+              },
+              {
+                _id: '13',
+                user: {
+                  _id: 'user14',
+                  firstName: 'Christopher',
+                  lastName: 'Thomas',
+                  email: 'testuser15@example.com',
+                },
+              },
+              {
+                _id: '14',
+                user: {
+                  _id: 'user15',
+                  firstName: 'Ashley',
+                  lastName: 'Hernandez',
+                  email: 'testuser16@example.com',
+                },
+              },
+              {
+                _id: '15',
+                user: {
+                  _id: 'user16',
+                  firstName: 'Andrew',
+                  lastName: 'Young',
+                  email: 'testuser17@example.com',
+                },
+              },
+              {
+                _id: '16',
+                user: {
+                  _id: 'user17',
+                  firstName: 'Nicole',
+                  lastName: 'Garcia',
+                  email: 'testuser18@example.com',
+                },
+              },
+            ],
+          },
+        ],
       },
     },
   },
 ];
 
-export const EMPTY_ORG_MOCKS = [
+export const MOCKS2 = [
   {
     request: {
-      query: ACCEPT_ADMIN_MUTATION,
-      variables: {
-        id: '123',
-        userType: 'ADMIN',
-      },
+      query: ORGANIZATION_CONNECTION_LIST,
     },
     result: {
-      data: undefined,
+      data: {
+        organizationsConnection: [
+          {
+            _id: 'org1',
+            image: null,
+            creator: {
+              firstName: 'John',
+              lastName: 'Doe',
+            },
+            name: 'Palisadoes',
+            members: [
+              {
+                _id: 'user1',
+              },
+            ],
+            admins: [
+              {
+                _id: 'user1',
+              },
+            ],
+            createdAt: '09/11/2001',
+            address: {
+              city: 'Kingston',
+              countryCode: 'JM',
+              dependentLocality: 'Sample Dependent Locality',
+              line1: '123 Jamaica Street',
+              line2: 'Apartment 456',
+              postalCode: 'JM12345',
+              sortingCode: 'ABC-123',
+              state: 'Kingston Parish',
+            },
+          },
+        ],
+      },
     },
   },
   {
     request: {
-      query: REJECT_ADMIN_MUTATION,
+      query: MEMBERSHIP_REQUEST,
       variables: {
-        id: '123',
-        userType: 'ADMIN',
+        id: 'org1',
+        skip: 0,
+        first: 8,
+        firstName_contains: '',
       },
     },
     result: {
-      data: undefined,
+      data: {
+        organizations: [
+          {
+            _id: 'org1',
+            membershipRequests: [
+              {
+                _id: '1',
+                user: {
+                  _id: 'user2',
+                  firstName: 'Scott',
+                  lastName: 'Tony',
+                  email: 'testuser3@example.com',
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  },
+];
+
+export const MOCKS3 = [
+  {
+    request: {
+      query: ORGANIZATION_CONNECTION_LIST,
+    },
+    result: {
+      data: {
+        organizationsConnection: [
+          {
+            _id: 'org1',
+            image: null,
+            creator: {
+              firstName: 'John',
+              lastName: 'Doe',
+            },
+            name: 'Palisadoes',
+            members: [
+              {
+                _id: 'user1',
+              },
+            ],
+            admins: [
+              {
+                _id: 'user1',
+              },
+            ],
+            createdAt: '09/11/2001',
+            address: {
+              city: 'Kingston',
+              countryCode: 'JM',
+              dependentLocality: 'Sample Dependent Locality',
+              line1: '123 Jamaica Street',
+              line2: 'Apartment 456',
+              postalCode: 'JM12345',
+              sortingCode: 'ABC-123',
+              state: 'Kingston Parish',
+            },
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: MEMBERSHIP_REQUEST,
+      variables: {
+        id: 'org1',
+        skip: 0,
+        first: 8,
+        firstName_contains: '',
+      },
+    },
+    result: {
+      data: {
+        organizations: [],
+      },
+    },
+  },
+];
+
+export const EMPTY_MOCKS = [
+  {
+    request: {
+      query: MEMBERSHIP_REQUEST,
+      variables: {
+        id: 'org1',
+        skip: 0,
+        first: 8,
+        firstName_contains: '',
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            _id: 'org1',
+            membershipRequests: [],
+          },
+        ],
+      },
     },
   },
   {
@@ -185,36 +553,21 @@ export const EMPTY_ORG_MOCKS = [
   },
 ];
 
-export const ORG_LIST_MOCK = [
-  ...MOCKS,
+export const MOCKS_WITH_ERROR = [
+  {
+    request: {
+      query: MEMBERSHIP_REQUEST,
+      variables: {
+        first: 0,
+        skip: 0,
+        id: '1',
+        firstName_contains: '',
+      },
+    },
+  },
   {
     request: {
       query: ORGANIZATION_CONNECTION_LIST,
-    },
-    result: {
-      data: {
-        organizationsConnection: [
-          {
-            _id: 1,
-            image: '',
-            name: 'Akatsuki',
-            creator: {
-              firstName: 'John',
-              lastName: 'Doe',
-            },
-            admins: [
-              {
-                _id: '123',
-              },
-            ],
-            members: {
-              _id: '234',
-            },
-            createdAt: '02/02/2022',
-            location: 'Washington DC',
-          },
-        ],
-      },
     },
   },
 ];

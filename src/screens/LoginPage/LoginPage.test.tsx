@@ -1,6 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render, screen } from '@testing-library/react';
+import { act, render, screen, fireEvent } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
@@ -13,9 +13,13 @@ import {
   LOGIN_MUTATION,
   RECAPTCHA_MUTATION,
   SIGNUP_MUTATION,
+  UPDATE_COMMUNITY,
 } from 'GraphQl/Mutations/mutations';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
+import { BACKEND_URL } from 'Constant/constant';
+import useLocalStorage from 'utils/useLocalstorage';
+import { GET_COMMUNITY_DATA } from 'GraphQl/Queries/Queries';
 
 const MOCKS = [
   {
@@ -31,8 +35,10 @@ const MOCKS = [
         login: {
           user: {
             _id: '1',
-            userType: 'ADMIN',
-            adminApproved: true,
+          },
+          appUserProfile: {
+            isSuperAdmin: false,
+            adminFor: ['123', '456'],
           },
           accessToken: 'accessToken',
           refreshToken: 'refreshToken',
@@ -75,9 +81,49 @@ const MOCKS = [
       },
     },
   },
+  {
+    request: {
+      query: GET_COMMUNITY_DATA,
+    },
+    result: {
+      data: {
+        getCommunityData: null,
+      },
+    },
+  },
+];
+const MOCKS2 = [
+  {
+    request: {
+      query: GET_COMMUNITY_DATA,
+    },
+    result: {
+      data: {
+        getCommunityData: {
+          _id: 'communitId',
+          websiteLink: 'http://link.com',
+          name: 'testName',
+          logoUrl: 'image.png',
+          __typename: 'Community',
+          socialMediaUrls: {
+            facebook: 'http://url.com',
+            gitHub: 'http://url.com',
+            youTube: 'http://url.com',
+            instagram: 'http://url.com',
+            linkedIn: 'http://url.com',
+            reddit: 'http://url.com',
+            slack: 'http://url.com',
+            twitter: null,
+            __typename: 'SocialMediaUrls',
+          },
+        },
+      },
+    },
+  },
 ];
 
 const link = new StaticMockLink(MOCKS, true);
+const link2 = new StaticMockLink(MOCKS2, true);
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -101,51 +147,45 @@ jest.mock('Constant/constant.ts', () => ({
   RECAPTCHA_SITE_KEY: 'xxx',
 }));
 
-describe('Talawa-API server fetch check', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+const mockNavigate = jest.fn();
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigate,
+}));
 
-  test('Checks if Talawa-API resource is loaded successfully', async () => {
-    global.fetch = jest.fn(() => Promise.resolve({} as unknown as Response));
+jest.mock('react-google-recaptcha', () => {
+  const react = jest.requireActual('react');
+  const recaptcha = react.forwardRef(
+    (
+      props: {
+        onChange: (value: string) => void;
+      } & React.InputHTMLAttributes<HTMLInputElement>,
+      ref: React.LegacyRef<HTMLInputElement> | undefined,
+    ): JSX.Element => {
+      const { onChange, ...otherProps } = props;
 
-    await act(async () => {
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <LoginPage />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>
+      const handleChange = (
+        event: React.ChangeEvent<HTMLInputElement>,
+      ): void => {
+        if (onChange) {
+          onChange(event.target.value);
+        }
+      };
+
+      return (
+        <>
+          <input
+            type="text"
+            data-testid="mock-recaptcha"
+            {...otherProps}
+            onChange={handleChange}
+            ref={ref}
+          />
+        </>
       );
-    });
-
-    expect(fetch).toHaveBeenCalledWith('http://localhost:4000/graphql/');
-  });
-
-  test('displays warning message when resource loading fails', async () => {
-    const mockError = new Error('Network error');
-    global.fetch = jest.fn(() => Promise.reject(mockError));
-
-    await act(async () => {
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <LoginPage />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>
-      );
-    });
-
-    expect(fetch).toHaveBeenCalledWith('http://localhost:4000/graphql/');
-  });
+    },
+  );
+  return recaptcha;
 });
 
 describe('Testing Login Page Screen', () => {
@@ -161,13 +201,60 @@ describe('Testing Login Page Screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
-
-    expect(screen.getByText(/Admin Portal/i)).toBeInTheDocument();
+    const adminLink = screen.getByText(/Admin/i);
+    userEvent.click(adminLink);
+    await wait();
+    expect(screen.getByText(/Admin/i)).toBeInTheDocument();
     expect(window.location).toBeAt('/orglist');
+  });
+
+  test('There should be default values of pre-login data when queried result is null', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+
+    expect(screen.getByTestId('PalisadoesLogo')).toBeInTheDocument();
+    expect(
+      screen.getAllByTestId('PalisadoesSocialMedia')[0],
+    ).toBeInTheDocument();
+
+    await wait();
+    expect(screen.queryByTestId('preLoginLogo')).not.toBeInTheDocument();
+    expect(screen.queryAllByTestId('preLoginSocialMedia')[0]).toBeUndefined();
+  });
+
+  test('There should be a different values of pre-login data if the queried result is not null', async () => {
+    render(
+      <MockedProvider addTypename={true} link={link2}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+    expect(screen.getByTestId('preLoginLogo')).toBeInTheDocument();
+    expect(screen.getAllByTestId('preLoginSocialMedia')[0]).toBeInTheDocument();
+
+    await wait();
+    expect(screen.queryByTestId('PalisadoesLogo')).not.toBeInTheDocument();
+    expect(screen.queryAllByTestId('PalisadoesSocialMedia')[0]).toBeUndefined();
   });
 
   test('Testing registration functionality', async () => {
@@ -175,8 +262,8 @@ describe('Testing Login Page Screen', () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'johndoe@gmail.com',
-      password: 'johndoe',
-      confirmPassword: 'johndoe',
+      password: 'John@123',
+      confirmPassword: 'John@123',
     };
 
     render(
@@ -188,7 +275,7 @@ describe('Testing Login Page Screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -199,19 +286,63 @@ describe('Testing Login Page Screen', () => {
 
     userEvent.type(
       screen.getByPlaceholderText(/First Name/i),
-      formData.firstName
+      formData.firstName,
     );
     userEvent.type(
       screen.getByPlaceholderText(/Last name/i),
-      formData.lastName
+      formData.lastName,
     );
     userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
     userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
     userEvent.type(
       screen.getByPlaceholderText('Confirm Password'),
-      formData.confirmPassword
+      formData.confirmPassword,
     );
 
+    userEvent.click(screen.getByTestId('registrationBtn'));
+  });
+
+  test('Testing registration functionality when all inputs are invalid', async () => {
+    const formData = {
+      firstName: '1234',
+      lastName: '8890',
+      email: 'j@l.co',
+      password: 'john@123',
+      confirmPassword: 'john@123',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
+
+    await wait();
+
+    userEvent.type(
+      screen.getByPlaceholderText(/First Name/i),
+      formData.firstName,
+    );
+    userEvent.type(
+      screen.getByPlaceholderText(/Last name/i),
+      formData.lastName,
+    );
+    userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
+    userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
+    userEvent.type(
+      screen.getByPlaceholderText('Confirm Password'),
+      formData.confirmPassword,
+    );
     userEvent.click(screen.getByTestId('registrationBtn'));
   });
 
@@ -220,8 +351,8 @@ describe('Testing Login Page Screen', () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'johndoe@gmail.com',
-      password: 'johndoe',
-      confirmPassword: 'doeJohn',
+      password: 'johnDoe@1',
+      confirmPassword: 'doeJohn@2',
     };
 
     render(
@@ -233,7 +364,7 @@ describe('Testing Login Page Screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -242,17 +373,17 @@ describe('Testing Login Page Screen', () => {
 
     userEvent.type(
       screen.getByPlaceholderText(/First Name/i),
-      formData.firstName
+      formData.firstName,
     );
     userEvent.type(
       screen.getByPlaceholderText(/Last Name/i),
-      formData.lastName
+      formData.lastName,
     );
     userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
     userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
     userEvent.type(
       screen.getByPlaceholderText('Confirm Password'),
-      formData.confirmPassword
+      formData.confirmPassword,
     );
 
     userEvent.click(screen.getByTestId('registrationBtn'));
@@ -276,7 +407,7 @@ describe('Testing Login Page Screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -285,20 +416,68 @@ describe('Testing Login Page Screen', () => {
 
     userEvent.type(
       screen.getByPlaceholderText(/First Name/i),
-      formData.firstName
+      formData.firstName,
     );
     userEvent.type(
       screen.getByPlaceholderText(/Last Name/i),
-      formData.lastName
+      formData.lastName,
     );
     userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
     userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
     userEvent.type(
       screen.getByPlaceholderText('Confirm Password'),
-      formData.confirmPassword
+      formData.confirmPassword,
     );
 
     userEvent.click(screen.getByTestId('registrationBtn'));
+  });
+
+  test('switches to login tab on successful registration', async () => {
+    const formData = {
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'johndoe@gmail.com',
+      password: 'johndoe',
+      confirmPassword: 'johndoe',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
+    userEvent.type(
+      screen.getByPlaceholderText(/First Name/i),
+      formData.firstName,
+    );
+    userEvent.type(
+      screen.getByPlaceholderText(/Last name/i),
+      formData.lastName,
+    );
+    userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
+    userEvent.type(screen.getByPlaceholderText('Password'), formData.password);
+    userEvent.type(
+      screen.getByPlaceholderText('Confirm Password'),
+      formData.confirmPassword,
+    );
+
+    userEvent.click(screen.getByTestId('registrationBtn'));
+
+    await wait();
+
+    // Check if the login tab is now active by checking for elements that only appear in the login tab
+    expect(screen.getByTestId('loginBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('goToRegisterPortion')).toBeInTheDocument();
   });
 
   test('Testing toggle login register portion', async () => {
@@ -311,7 +490,7 @@ describe('Testing Login Page Screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -338,7 +517,7 @@ describe('Testing Login Page Screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -346,7 +525,7 @@ describe('Testing Login Page Screen', () => {
     userEvent.type(screen.getByTestId(/loginEmail/i), formData.email);
     userEvent.type(
       screen.getByPlaceholderText(/Enter Password/i),
-      formData.password
+      formData.password,
     );
 
     userEvent.click(screen.getByTestId('loginBtn'));
@@ -364,7 +543,7 @@ describe('Testing Login Page Screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -393,7 +572,7 @@ describe('Testing Login Page Screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -424,7 +603,7 @@ describe('Testing Login Page Screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -455,7 +634,7 @@ describe('Testing Login Page Screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
 
@@ -476,7 +655,7 @@ describe('Testing Login Page Screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
 
@@ -505,7 +684,7 @@ describe('Testing Login Page Screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
 
@@ -534,7 +713,7 @@ describe('Testing Login Page Screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
 
@@ -563,7 +742,7 @@ describe('Testing Login Page Screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
 
@@ -578,5 +757,145 @@ describe('Testing Login Page Screen', () => {
     expect(password.password.length).toBeGreaterThanOrEqual(8);
 
     expect(screen.queryByTestId('passwordCheck')).toBeNull();
+  });
+
+  test('Component Should be rendered properly for user login', async () => {
+    window.location.assign('/user/organizations');
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    const userLink = screen.getByText(/User/i);
+    userEvent.click(userLink);
+    await wait();
+    expect(screen.getByText(/User Login/i)).toBeInTheDocument();
+    expect(window.location).toBeAt('/user/organizations');
+  });
+
+  test('on value change of ReCAPTCHA onChange event should be triggered in both the captcha', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+
+    const recaptchaElements = screen.getAllByTestId('mock-recaptcha');
+
+    for (const recaptchaElement of recaptchaElements) {
+      const inputElement = recaptchaElement as HTMLInputElement;
+
+      fireEvent.input(inputElement, {
+        target: { value: 'test-token' },
+      });
+
+      fireEvent.change(inputElement, {
+        target: { value: 'test-token2' },
+      });
+
+      expect(recaptchaElement).toHaveValue('test-token2');
+    }
+  });
+});
+
+describe('Testing redirect if already logged in', () => {
+  test('Logged in as USER', async () => {
+    const { setItem } = useLocalStorage();
+    setItem('IsLoggedIn', 'TRUE');
+    setItem('userId', 'id');
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+    expect(mockNavigate).toHaveBeenCalledWith('/user/organizations');
+  });
+  test('Logged in as Admin or SuperAdmin', async () => {
+    const { setItem } = useLocalStorage();
+    setItem('IsLoggedIn', 'TRUE');
+    setItem('userId', null);
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+    expect(mockNavigate).toHaveBeenCalledWith('/orglist');
+  });
+});
+
+describe('Talawa-API server fetch check', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('Checks if Talawa-API resource is loaded successfully', async () => {
+    global.fetch = jest.fn(() => Promise.resolve({} as unknown as Response));
+
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+
+    expect(fetch).toHaveBeenCalledWith(BACKEND_URL);
+  });
+
+  test('displays warning message when resource loading fails', async () => {
+    const mockError = new Error('Network error');
+    global.fetch = jest.fn(() => Promise.reject(mockError));
+
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+
+    expect(fetch).toHaveBeenCalledWith(BACKEND_URL);
   });
 });

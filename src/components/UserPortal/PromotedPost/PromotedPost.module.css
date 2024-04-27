@@ -54,3 +54,8 @@
   color: white;
   cursor: pointer;
 }
+
+.admedia {
+  object-fit: cover;
+  height: 30rem;
+}

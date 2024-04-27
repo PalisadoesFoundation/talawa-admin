@@ -1,8 +1,9 @@
-/* eslint-disable react/react-in-jsx-scope */
 import Calendar from './EventCalendar';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
+import React from 'react';
+import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 
 import {
   DELETE_EVENT_MUTATION,
@@ -10,7 +11,9 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import styles from './EventCalendar.module.css';
+import { weekdays } from './constants';
+import { months } from './constants';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 const eventData = [
   {
@@ -24,8 +27,11 @@ const eventData = [
     endTime: '12:00',
     allDay: false,
     recurring: false,
+    recurrenceRule: null,
+    isRecurringEventException: false,
     isPublic: true,
     isRegisterable: true,
+    viewType: ViewType.DAY,
   },
   {
     _id: '2',
@@ -38,6 +44,8 @@ const eventData = [
     endTime: '16:00',
     allDay: false,
     recurring: false,
+    recurrenceRule: null,
+    isRecurringEventException: false,
     isPublic: true,
     isRegisterable: true,
   },
@@ -85,10 +93,18 @@ const MOCKS = [
 
 const link = new StaticMockLink(MOCKS, true);
 
+async function wait(ms = 200): Promise<void> {
+  await act(() => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  });
+}
+
 describe('Calendar', () => {
   it('renders weekdays', () => {
-    render(<Calendar eventData={eventData} />);
-    const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    render(<Calendar eventData={eventData} viewType={ViewType.MONTH} />);
+
     weekdays.forEach((weekday) => {
       expect(screen.getByText(weekday)).toBeInTheDocument();
     });
@@ -101,7 +117,7 @@ describe('Calendar', () => {
     const currentYear = getByTestId('current-date');
 
     expect(currentMonth).toHaveTextContent(
-      today.toLocaleString('default', { month: 'long' })
+      today.toLocaleString('default', { month: 'long' }),
     );
     expect(currentYear).toHaveTextContent(today.getFullYear().toString());
   });
@@ -111,19 +127,18 @@ describe('Calendar', () => {
   });
 
   it('should render the current month and year', () => {
-    const { getByText } = render(<Calendar eventData={eventData} />);
+    const { getByTestId } = render(<Calendar eventData={eventData} />);
+
+    // Find the element by its data-testid attribute
+    const currentDateElement = getByTestId('current-date');
+
+    // Assert that the text content of the element matches the current month and year
     const currentMonth = new Date().toLocaleString('default', {
       month: 'long',
     });
     const currentYear = new Date().getFullYear();
-    expect(getByText(`${currentMonth} ${currentYear}`)).toBeInTheDocument();
-  });
-
-  it('should highlight the selected date when clicked', () => {
-    const { getByText } = render(<Calendar eventData={eventData} />);
-    const selectedDate = getByText('15');
-    fireEvent.click(selectedDate);
-    expect(selectedDate).toHaveClass(styles.day);
+    const expectedText = ` ${currentYear} ${currentMonth}`;
+    expect(currentDateElement.textContent).toContain(expectedText);
   });
 
   it('Should show prev and next month on clicking < & > buttons', () => {
@@ -133,12 +148,12 @@ describe('Calendar', () => {
         <I18nextProvider i18n={i18nForTest}>
           <Calendar eventData={eventData} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
-    const prevButton = screen.getByText('<');
+    const prevButton = screen.getByTestId('prevmonthordate');
     fireEvent.click(prevButton);
     //testing next month button
-    const nextButton = screen.getByText('>');
+    const nextButton = screen.getByTestId('nextmonthordate');
     fireEvent.click(nextButton);
     //Testing year change
     for (let index = 0; index < 13; index++) {
@@ -146,6 +161,51 @@ describe('Calendar', () => {
     }
     for (let index = 0; index < 13; index++) {
       fireEvent.click(prevButton);
+    }
+  });
+  it('Should show prev and next year on clicking < & > buttons when in year view', async () => {
+    //testing previous month button
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Calendar eventData={eventData} viewType={ViewType.YEAR} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+    await wait();
+    const prevButtons = screen.getAllByTestId('prevYear');
+    prevButtons.forEach((button) => {
+      fireEvent.click(button);
+    });
+    await wait();
+    //testing next year button
+    const nextButton = screen.getAllByTestId('prevYear');
+    nextButton.forEach((button) => {
+      fireEvent.click(button);
+    });
+  });
+  it('Should show prev and next date on clicking < & > buttons in the day view', async () => {
+    render(
+      <Router>
+        <MockedProvider addTypename={false} link={link}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Calendar eventData={eventData} />
+          </I18nextProvider>
+        </MockedProvider>
+      </Router>,
+    );
+    //testing previous date button
+    const prevButton = screen.getByTestId('prevmonthordate');
+    fireEvent.click(prevButton);
+    //testing next date button
+    const nextButton = screen.getByTestId('nextmonthordate');
+    fireEvent.click(nextButton);
+    //Testing year change and month change
+    for (let index = 0; index < 366; index++) {
+      fireEvent.click(prevButton);
+    }
+    for (let index = 0; index < 732; index++) {
+      fireEvent.click(nextButton);
     }
   });
   it('Should render eventlistcard of current day event', () => {
@@ -161,34 +221,45 @@ describe('Calendar', () => {
         endTime: '12:00',
         allDay: false,
         recurring: false,
+        recurrenceRule: null,
+        isRecurringEventException: false,
         isPublic: true,
         isRegisterable: true,
       },
     ];
     render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <Calendar eventData={currentDayEventMock} />
-        </I18nextProvider>
-      </MockedProvider>
+      <Router>
+        <MockedProvider addTypename={false} link={link}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Calendar eventData={currentDayEventMock} userRole={'SUPERADMIN'} />
+          </I18nextProvider>
+        </MockedProvider>
+        ,
+      </Router>,
     );
   });
   it('Test for superadmin case', () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <Calendar eventData={eventData} userRole={'SUPERADMIN'} />
-        </I18nextProvider>
-      </MockedProvider>
+      <Router>
+        <MockedProvider addTypename={false} link={link}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Calendar eventData={eventData} userRole={'SUPERADMIN'} />
+          </I18nextProvider>
+        </MockedProvider>
+        ,
+      </Router>,
     );
   });
   it('Today Cell is having correct styles', () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <Calendar eventData={eventData} userRole={'SUPERADMIN'} />
-        </I18nextProvider>
-      </MockedProvider>
+      <Router>
+        <MockedProvider addTypename={false} link={link}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Calendar eventData={eventData} userRole={'SUPERADMIN'} />
+          </I18nextProvider>
+        </MockedProvider>
+        ,
+      </Router>,
     );
     // const todayDate = new Date().getDate();
     // const todayElement = screen.getByText(todayDate.toString());
@@ -196,20 +267,148 @@ describe('Calendar', () => {
   });
   it('Today button should show today cell', () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <Calendar eventData={eventData} userRole={'SUPERADMIN'} />
-        </I18nextProvider>
-      </MockedProvider>
+      <Router>
+        <MockedProvider addTypename={false} link={link}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Calendar eventData={eventData} userRole={'SUPERADMIN'} />
+          </I18nextProvider>
+        </MockedProvider>
+        ,
+      </Router>,
     );
     //Changing the month
-    const prevButton = screen.getByText('<');
+    const prevButton = screen.getByTestId('prevmonthordate');
     fireEvent.click(prevButton);
 
     // Clicking today button
-    const todayButton = screen.getByText('Today');
+    const todayButton = screen.getByTestId('today');
     fireEvent.click(todayButton);
     // const todayCell = screen.getByText(new Date().getDate().toString());
     // expect(todayCell).toHaveClass(styles.day__today);
+  });
+  it('Should handle window resize in day view', async () => {
+    const multipleEventData = [
+      {
+        _id: '1',
+        title: 'Event 1',
+        description: 'This is event 1',
+        startDate: new Date().toISOString().split('T')[0],
+        endDate: new Date().toISOString().split('T')[0],
+        location: 'Los Angeles',
+        startTime: null,
+        endTime: null,
+        allDay: true,
+        recurring: false,
+        recurrenceRule: null,
+        isRecurringEventException: false,
+        isPublic: true,
+        isRegisterable: true,
+      },
+      {
+        _id: '2',
+        title: 'Event 2',
+        description: 'This is event 2',
+        startDate: new Date().toISOString().split('T')[0],
+        endDate: new Date().toISOString().split('T')[0],
+        location: 'Los Angeles',
+        startTime: null,
+        endTime: null,
+        allDay: true,
+        recurring: false,
+        recurrenceRule: null,
+        isRecurringEventException: false,
+        isPublic: true,
+        isRegisterable: true,
+      },
+      {
+        _id: '3',
+        title: 'Event 3',
+        description: 'This is event 3',
+        startDate: new Date().toISOString().split('T')[0],
+        endDate: new Date().toISOString().split('T')[0],
+        location: 'Los Angeles',
+        startTime: '14:00',
+        endTime: '16:00',
+        allDay: false,
+        recurring: false,
+        recurrenceRule: null,
+        isRecurringEventException: false,
+        isPublic: true,
+        isRegisterable: true,
+      },
+      {
+        _id: '4',
+        title: 'Event 4',
+        description: 'This is event 4',
+        startDate: new Date().toISOString().split('T')[0],
+        endDate: new Date().toISOString().split('T')[0],
+        location: 'Los Angeles',
+        startTime: '14:00',
+        endTime: '16:00',
+        allDay: false,
+        recurring: false,
+        recurrenceRule: null,
+        isRecurringEventException: false,
+        isPublic: true,
+        isRegisterable: true,
+      },
+      {
+        _id: '5',
+        title: 'Event 5',
+        description: 'This is event 5',
+        startDate: new Date().toISOString().split('T')[0],
+        endDate: new Date().toISOString().split('T')[0],
+        location: 'Los Angeles',
+        startTime: '17:00',
+        endTime: '19:00',
+        allDay: false,
+        recurring: false,
+        recurrenceRule: null,
+        isRecurringEventException: false,
+        isPublic: true,
+        isRegisterable: true,
+      },
+    ];
+    render(
+      <Router>
+        <MockedProvider addTypename={false} link={link}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Calendar eventData={multipleEventData} />
+          </I18nextProvider>
+        </MockedProvider>
+        ,
+      </Router>,
+    );
+    await act(async () => {
+      window.innerWidth = 500;
+      window.dispatchEvent(new Event('resize'));
+    });
+  });
+  test('Handles window resize', () => {
+    render(
+      <Router>
+        <MockedProvider addTypename={false} link={link}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Calendar eventData={eventData} />
+          </I18nextProvider>
+        </MockedProvider>
+        ,
+      </Router>,
+    );
+
+    act(() => {
+      window.dispatchEvent(new Event('resize'));
+    });
+  });
+  it('renders year view', async () => {
+    render(<Calendar eventData={eventData} viewType={ViewType.YEAR} />);
+
+    await wait();
+    months.forEach((month) => {
+      const elements = screen.getAllByText(month);
+      elements.forEach((element) => {
+        expect(element).toBeInTheDocument();
+      });
+    });
   });
 });

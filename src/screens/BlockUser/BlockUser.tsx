@@ -11,12 +11,11 @@ import {
   UNBLOCK_USER_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { BLOCK_PAGE_MEMBER_LIST } from 'GraphQl/Queries/Queries';
-import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
 import TableLoader from 'components/TableLoader/TableLoader';
 import { useTranslation } from 'react-i18next';
-import debounce from 'utils/debounce';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './BlockUser.module.css';
+import { useParams } from 'react-router-dom';
 
 interface InterfaceMember {
   _id: string;
@@ -36,11 +35,11 @@ const Requests = (): JSX.Element => {
   });
 
   document.title = t('title');
-  const currentUrl = window.location.href.split('=')[1];
+  const { orgId: currentUrl } = useParams();
   const [membersData, setMembersData] = useState<InterfaceMember[]>([]);
   const [searchByFirstName, setSearchByFirstName] = useState<boolean>(true);
   const [searchByName, setSearchByName] = useState<string>('');
-  const [showBlockedMembers, setShowBlockedMembers] = useState<boolean>(false);
+  const [showBlockedMembers, setShowBlockedMembers] = useState<boolean>(true);
 
   const {
     data: memberData,
@@ -69,7 +68,7 @@ const Requests = (): JSX.Element => {
     } else {
       const blockUsers = memberData?.organizationsMemberConnection.edges.filter(
         (user: InterfaceMember) =>
-          user.organizationsBlockedBy.some((org) => org._id === currentUrl)
+          user.organizationsBlockedBy.some((org) => org._id === currentUrl),
       );
       setMembersData(blockUsers);
     }
@@ -118,8 +117,7 @@ const Requests = (): JSX.Element => {
     toast.error(memberError.message);
   }
 
-  const handleSearch = (e: any): void => {
-    const { value } = e.target;
+  const handleSearch = (value: string): void => {
     setSearchByName(value);
     memberRefetch({
       orgId: currentUrl,
@@ -128,7 +126,20 @@ const Requests = (): JSX.Element => {
     });
   };
 
-  const handleSearchDebounced = debounce(handleSearch);
+  const handleSearchByEnter = (e: any): void => {
+    if (e.key === 'Enter') {
+      const { value } = e.target;
+      handleSearch(value);
+    }
+  };
+
+  const handleSearchByBtnClick = (): void => {
+    const inputValue =
+      (document.getElementById('searchBlockedUsers') as HTMLInputElement)
+        ?.value || '';
+    handleSearch(inputValue);
+  };
+
   const headerTitles: string[] = [
     '#',
     t('name'),
@@ -138,13 +149,14 @@ const Requests = (): JSX.Element => {
 
   return (
     <>
-      <OrganizationScreen screenName="Block/Unblock" title={t('listOfUsers')}>
+      <div>
         {/* Buttons Container */}
         <div className={styles.btnsContainer}>
           <div className={styles.inputContainer}>
             <div className={styles.input}>
               <Form.Control
                 type="name"
+                id="searchBlockedUsers"
                 className="bg-white"
                 placeholder={
                   searchByFirstName
@@ -154,11 +166,13 @@ const Requests = (): JSX.Element => {
                 data-testid="searchByName"
                 autoComplete="off"
                 required
-                onChange={handleSearchDebounced}
+                onKeyUp={handleSearchByEnter}
               />
               <Button
                 tabIndex={-1}
                 className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+                onClick={handleSearchByBtnClick}
+                data-testid="searchBtn"
               >
                 <Search />
               </Button>
@@ -254,7 +268,7 @@ const Requests = (): JSX.Element => {
                         <td>{user.email}</td>
                         <td>
                           {user.organizationsBlockedBy.some(
-                            (spam: any) => spam._id === currentUrl
+                            (spam: any) => spam._id === currentUrl,
                           ) ? (
                             <Button
                               variant="danger"
@@ -287,7 +301,7 @@ const Requests = (): JSX.Element => {
             )}
           </div>
         )}
-      </OrganizationScreen>
+      </div>
     </>
   );
 };

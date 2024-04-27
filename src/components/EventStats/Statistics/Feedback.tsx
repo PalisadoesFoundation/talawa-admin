@@ -67,7 +67,8 @@ export const FeedbackStats = ({ data }: ModalPropType): JSX.Element => {
               series={[
                 {
                   data: chartData,
-                  arcLabel: (item) => `${item.id} (${item.value})`,
+                  arcLabel: /* istanbul ignore next */ (item) =>
+                    `${item.id} (${item.value})`,
                   innerRadius: 30,
                   outerRadius: 120,
                   paddingAngle: 2,

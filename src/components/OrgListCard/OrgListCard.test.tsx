@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 
@@ -11,11 +11,17 @@ import { BrowserRouter } from 'react-router-dom';
 import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { MockedProvider } from '@apollo/react-testing';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { setItem, removeItem } = useLocalStorage();
 
 const MOCKS = [
   {
     request: {
       query: IS_SAMPLE_ORGANIZATION_QUERY,
+      variables: {
+        isSampleOrganizationId: 'xyz',
+      },
     },
     result: {
       data: {
@@ -27,12 +33,29 @@ const MOCKS = [
 
 const link = new StaticMockLink(MOCKS, true);
 
+async function wait(ms = 100): Promise<void> {
+  await act(() => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  });
+}
+
 const props: InterfaceOrgListCardProps = {
   data: {
     _id: 'xyz',
     name: 'Dogs Care',
     image: 'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
-    location: 'India',
+    address: {
+      city: 'Sample City',
+      countryCode: 'US',
+      dependentLocality: 'Sample Dependent Locality',
+      line1: '123 Sample Street',
+      line2: 'Apartment 456',
+      postalCode: '12345',
+      sortingCode: 'ABC-123',
+      state: 'Sample State',
+    },
     admins: [
       {
         _id: '123',
@@ -52,8 +75,9 @@ const props: InterfaceOrgListCardProps = {
 };
 
 describe('Testing the Super Dash List', () => {
-  test('should render props and text elements test for the page component', () => {
-    localStorage.setItem('id', '123'); // Means the user is an admin
+  test('should render props and text elements test for the page component', async () => {
+    removeItem('id');
+    setItem('id', '123'); // Means the user is an admin
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -62,14 +86,19 @@ describe('Testing the Super Dash List', () => {
             <OrgListCard {...props} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
+    await wait();
     expect(screen.getByAltText(/Dogs Care image/i)).toBeInTheDocument();
-    expect(screen.getByText('Admins:')).toBeInTheDocument();
-    expect(screen.getByText('Members:')).toBeInTheDocument();
+    expect(screen.getByText(/Admins:/i)).toBeInTheDocument();
+    expect(screen.getByText(/Members:/i)).toBeInTheDocument();
     expect(screen.getByText('Dogs Care')).toBeInTheDocument();
-    expect(screen.getByText('India')).toBeInTheDocument();
+    expect(screen.getByText(/Sample City/i)).toBeInTheDocument();
+    expect(screen.getByText(/123 Sample Street/i)).toBeInTheDocument();
+    expect(screen.getByTestId(/manageBtn/i)).toBeInTheDocument();
+    expect(screen.getByTestId(/flaskIcon/i)).toBeInTheDocument();
     userEvent.click(screen.getByTestId(/manageBtn/i));
+    removeItem('id');
   });
 
   test('Testing if the props data is not provided', () => {
@@ -82,7 +111,7 @@ describe('Testing the Super Dash List', () => {
             <OrgListCard {...props} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     expect(window.location).toBeAt('/orgdash');
@@ -95,10 +124,12 @@ describe('Testing the Super Dash List', () => {
     };
     render(
       <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgListCard {...imageNullProps} />
-        </I18nextProvider>
-      </MockedProvider>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgListCard {...imageNullProps} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
     );
     expect(screen.getByTestId(/emptyContainerForImage/i)).toBeInTheDocument();
   });
@@ -111,9 +142,8 @@ describe('Testing the Super Dash List', () => {
             <OrgListCard {...props} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     userEvent.click(screen.getByTestId('manageBtn'));
-    expect(window.location).toBeAt('/orgdash/id=xyz');
   });
 });

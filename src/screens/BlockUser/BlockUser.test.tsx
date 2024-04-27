@@ -18,6 +18,7 @@ import { ToastContainer } from 'react-toastify';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
+
 import BlockUser from './BlockUser';
 
 let userQueryCalled = false;
@@ -324,13 +325,18 @@ async function wait(ms = 500): Promise<void> {
   });
 }
 
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({ orgId: 'orgid' }),
+}));
+
 describe('Testing Block/Unblock user screen', () => {
   beforeEach(() => {
     userQueryCalled = false;
   });
 
   test('Components should be rendered properly', async () => {
-    window.location.assign('/blockuser/id=orgid');
+    window.location.assign('/blockuser/orgid');
 
     render(
       <MockedProvider addTypename={true} link={link}>
@@ -341,19 +347,18 @@ describe('Testing Block/Unblock user screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
 
     expect(screen.getByText('Search By First Name')).toBeInTheDocument();
-    expect(screen.getByText('List of Users who spammed')).toBeInTheDocument();
 
-    expect(window.location).toBeAt('/blockuser/id=orgid');
+    expect(window.location).toBeAt('/blockuser/orgid');
   });
 
   test('Testing block user functionality', async () => {
-    window.location.assign('/blockuser/id=orgid');
+    window.location.assign('/blockuser/orgid');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -364,9 +369,13 @@ describe('Testing Block/Unblock user screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
+    await act(async () => {
+      userEvent.click(screen.getByTestId('userFilter'));
+    });
+    userEvent.click(screen.getByTestId('showMembers'));
     await wait();
 
     expect(screen.getByTestId('unBlockUser123')).toBeInTheDocument();
@@ -378,11 +387,11 @@ describe('Testing Block/Unblock user screen', () => {
     expect(screen.getByTestId('blockUser123')).toBeInTheDocument();
     expect(screen.getByTestId('unBlockUser456')).toBeInTheDocument();
 
-    expect(window.location).toBeAt('/blockuser/id=orgid');
+    expect(window.location).toBeAt('/blockuser/orgid');
   });
 
   test('Testing unblock user functionality', async () => {
-    window.location.assign('/blockuser/id=orgid');
+    window.location.assign('/blockuser/orgid');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -393,8 +402,12 @@ describe('Testing Block/Unblock user screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
+    await act(async () => {
+      userEvent.click(screen.getByTestId('userFilter'));
+    });
+    userEvent.click(screen.getByTestId('showMembers'));
 
     await wait();
 
@@ -407,11 +420,11 @@ describe('Testing Block/Unblock user screen', () => {
     expect(screen.getByTestId('blockUser123')).toBeInTheDocument();
     expect(screen.getByTestId('unBlockUser456')).toBeInTheDocument();
 
-    expect(window.location).toBeAt('/blockuser/id=orgid');
+    expect(window.location).toBeAt('/blockuser/orgid');
   });
 
   test('Testing First Name Filter', async () => {
-    window.location.assign('/blockuser/id=orgid');
+    window.location.assign('/blockuser/orgid');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -422,33 +435,37 @@ describe('Testing Block/Unblock user screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
+    await act(async () => {
+      userEvent.click(screen.getByTestId('userFilter'));
+    });
+    userEvent.click(screen.getByTestId('showMembers'));
 
     await wait();
 
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(screen.getByText('Sam Smith')).toBeInTheDocument();
 
-    const firstNameInput = screen.getByPlaceholderText(/Search by First Name/i);
     // Open Dropdown
     await act(async () => {
       userEvent.click(screen.getByTestId('nameFilter'));
     });
     // Select option and enter first name
     userEvent.click(screen.getByTestId('searchByFirstName'));
-    userEvent.type(firstNameInput, 'john');
+    const firstNameInput = screen.getByPlaceholderText(/Search by First Name/i);
+    userEvent.type(firstNameInput, 'john{enter}');
 
     await wait(700);
 
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(screen.queryByText('Sam Smith')).not.toBeInTheDocument();
 
-    expect(window.location).toBeAt('/blockuser/id=orgid');
+    expect(window.location).toBeAt('/blockuser/orgid');
   });
 
   test('Testing Last Name Filter', async () => {
-    window.location.assign('/blockuser/id=orgid');
+    window.location.assign('/blockuser/orgid');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -459,8 +476,13 @@ describe('Testing Block/Unblock user screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
+
+    await act(async () => {
+      userEvent.click(screen.getByTestId('userFilter'));
+    });
+    userEvent.click(screen.getByTestId('showMembers'));
 
     await wait();
 
@@ -474,18 +496,18 @@ describe('Testing Block/Unblock user screen', () => {
     // Select option and enter last name
     userEvent.click(screen.getByTestId('searchByLastName'));
     const lastNameInput = screen.getByPlaceholderText(/Search by Last Name/i);
-    userEvent.type(lastNameInput, 'doe');
+    userEvent.type(lastNameInput, 'doe{enter}');
 
     await wait(700);
 
     expect(lastNameInput).toHaveValue('doe');
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(screen.queryByText('Sam Smith')).not.toBeInTheDocument();
-    expect(window.location).toBeAt('/blockuser/id=orgid');
+    expect(window.location).toBeAt('/blockuser/orgid');
   });
 
   test('Testing No Spammers Present', async () => {
-    window.location.assign('/blockuser/id=orgid');
+    window.location.assign('/blockuser/orgid');
     render(
       <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
@@ -495,16 +517,16 @@ describe('Testing Block/Unblock user screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
     expect(screen.getByText(/No spammer found/i)).toBeInTheDocument();
-    expect(window.location).toBeAt('/blockuser/id=orgid');
+    expect(window.location).toBeAt('/blockuser/orgid');
   });
 
   test('Testing All Members', async () => {
-    window.location.assign('/blockuser/id=orgid');
+    window.location.assign('/blockuser/orgid');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -516,7 +538,7 @@ describe('Testing Block/Unblock user screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
     await wait();
     await act(async () => {
@@ -530,11 +552,11 @@ describe('Testing Block/Unblock user screen', () => {
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(screen.getByText('Sam Smith')).toBeInTheDocument();
 
-    expect(window.location).toBeAt('/blockuser/id=orgid');
+    expect(window.location).toBeAt('/blockuser/orgid');
   });
 
   test('Testing Blocked Users', async () => {
-    window.location.assign('/blockuser/id=orgid');
+    window.location.assign('/blockuser/orgid');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -546,7 +568,7 @@ describe('Testing Block/Unblock user screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await act(async () => {
@@ -559,11 +581,11 @@ describe('Testing Block/Unblock user screen', () => {
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(screen.queryByText('Sam Smith')).not.toBeInTheDocument();
 
-    expect(window.location).toBeAt('/blockuser/id=orgid');
+    expect(window.location).toBeAt('/blockuser/orgid');
   });
 
   test('Testing table data getting rendered', async () => {
-    window.location.assign('/orglist/id=orgid');
+    window.location.assign('/orglist/orgid');
     const link = new StaticMockLink(MOCKS, true);
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -574,19 +596,23 @@ describe('Testing Block/Unblock user screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
+    await act(async () => {
+      userEvent.click(screen.getByTestId('userFilter'));
+    });
+    userEvent.click(screen.getByTestId('showMembers'));
 
     await wait();
 
     expect(screen.getByTestId(/userList/)).toBeInTheDocument();
-    expect(screen.getAllByText('Block/Unblock')).toHaveLength(2);
+    expect(screen.getAllByText('Block/Unblock')).toHaveLength(1);
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(screen.getByText('Sam Smith')).toBeInTheDocument();
   });
 
   test('Testing No Results Found', async () => {
-    window.location.assign('/blockuser/id=orgid');
+    window.location.assign('/blockuser/orgid');
     render(
       <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
@@ -596,17 +622,47 @@ describe('Testing Block/Unblock user screen', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     const input = screen.getByPlaceholderText('Search By First Name');
     await act(async () => {
-      userEvent.type(input, 'Peter');
+      userEvent.type(input, 'Peter{enter}');
     });
     await wait(700);
     expect(
-      screen.getByText(`No results found for "Peter"`)
+      screen.getByText(`No results found for "Peter"`),
     ).toBeInTheDocument();
-    expect(window.location).toBeAt('/blockuser/id=orgid');
+    expect(window.location).toBeAt('/blockuser/orgid');
+  });
+
+  test('Testing Search functionality', async () => {
+    window.location.assign('/blockuser/orgid');
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <BlockUser />
+              <ToastContainer />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+    const searchBar = screen.getByTestId(/searchByName/i);
+    const searchBtn = screen.getByTestId(/searchBtn/i);
+    expect(searchBar).toBeInTheDocument();
+    userEvent.type(searchBar, 'Dummy{enter}');
+    await wait();
+    userEvent.clear(searchBar);
+    userEvent.type(searchBar, 'Dummy');
+    userEvent.click(searchBtn);
+    await wait();
+    userEvent.clear(searchBar);
+    userEvent.type(searchBar, '');
+    userEvent.click(searchBtn);
   });
 });

@@ -1,5 +1,5 @@
 import React from 'react';
-import { act, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 
@@ -11,10 +11,16 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import Events from './Events';
 import userEvent from '@testing-library/user-event';
-import * as getOrganizationId from 'utils/getOrganizationId';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { ThemeProvider } from 'react-bootstrap';
+import { createTheme } from '@mui/material';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { setItem, getItem } = useLocalStorage();
 
 jest.mock('react-toastify', () => ({
   toast: {
@@ -23,6 +29,33 @@ jest.mock('react-toastify', () => ({
     success: jest.fn(),
   },
 }));
+
+jest.mock('@mui/x-date-pickers/DatePicker', () => {
+  return {
+    DatePicker: jest.requireActual('@mui/x-date-pickers/DesktopDatePicker')
+      .DesktopDatePicker,
+  };
+});
+
+jest.mock('@mui/x-date-pickers/TimePicker', () => {
+  return {
+    TimePicker: jest.requireActual('@mui/x-date-pickers/DesktopTimePicker')
+      .DesktopTimePicker,
+  };
+});
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({ orgId: '' }),
+}));
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#31bb6b',
+    },
+  },
+});
 
 const MOCKS = [
   {
@@ -217,8 +250,6 @@ async function wait(ms = 100): Promise<void> {
 }
 
 describe('Testing Events Screen [User Portal]', () => {
-  jest.mock('utils/getOrganizationId');
-
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
     value: jest.fn().mockImplementation((query) => ({
@@ -234,12 +265,6 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   test('Screen should be rendered properly', async () => {
-    const getOrganizationIdSpy = jest
-      .spyOn(getOrganizationId, 'default')
-      .mockImplementation(() => {
-        return '';
-      });
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -249,111 +274,34 @@ describe('Testing Events Screen [User Portal]', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
-
+    setItem('SuperAdmin', true); // testing userRole as Superadmin
     await wait();
-
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
-  });
-
-  test('Events are visible as expected without search query', async () => {
-    const getOrganizationIdSpy = jest
-      .spyOn(getOrganizationId, 'default')
-      .mockImplementation(() => {
-        return '';
-      });
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Events />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
+    setItem('SuperAdmin', false);
+    setItem('AdminFor', ['123']); // testing userRole as Admin
     await wait();
-
-    let mockEventTitle = '';
-    if (MOCKS[0].result?.data.eventsByOrganizationConnection) {
-      mockEventTitle =
-        MOCKS[0].result?.data.eventsByOrganizationConnection[0].title;
-    }
-
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
-    expect(screen.queryByText(mockEventTitle)).toBeInTheDocument();
-  });
-
-  test('Search works as expected when user types in search input', async () => {
-    const getOrganizationIdSpy = jest
-      .spyOn(getOrganizationId, 'default')
-      .mockImplementation(() => {
-        return '';
-      });
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Events />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>
-    );
-
-    await wait();
-
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
-
-    const randomSearchInput = 'test';
-    userEvent.type(screen.getByTestId('searchInput'), randomSearchInput);
-
-    await wait();
-
-    let mockEventTitle = '';
-    if (MOCKS[0].result?.data.eventsByOrganizationConnection) {
-      mockEventTitle =
-        MOCKS[0].result?.data.eventsByOrganizationConnection[0].title;
-    }
-
-    let mockEventTitleAbsent = '';
-    if (MOCKS[0].result?.data.eventsByOrganizationConnection) {
-      mockEventTitleAbsent =
-        MOCKS[0].result?.data.eventsByOrganizationConnection[1].title;
-    }
-
-    expect(screen.queryByText(mockEventTitle)).toBeInTheDocument();
-    expect(screen.queryByText(mockEventTitleAbsent)).not.toBeInTheDocument();
   });
 
   test('Create event works as expected when event is not an all day event.', async () => {
-    const getOrganizationIdSpy = jest
-      .spyOn(getOrganizationId, 'default')
-      .mockImplementation(() => {
-        return '';
-      });
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Events />
-            </I18nextProvider>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Events />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
 
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
     userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     const randomEventTitle = 'testEventTitle';
@@ -363,11 +311,11 @@ describe('Testing Events Screen [User Portal]', () => {
     userEvent.type(screen.getByTestId('eventTitleInput'), randomEventTitle);
     userEvent.type(
       screen.getByTestId('eventDescriptionInput'),
-      randomEventDescription
+      randomEventDescription,
     );
     userEvent.type(
       screen.getByTestId('eventLocationInput'),
-      randomEventLocation
+      randomEventLocation,
     );
 
     userEvent.click(screen.getByTestId('publicEventCheck'));
@@ -389,32 +337,28 @@ describe('Testing Events Screen [User Portal]', () => {
     await wait();
 
     expect(toast.success).toBeCalledWith(
-      'Event created and posted successfully.'
+      'Event created and posted successfully.',
     );
   });
 
   test('Create event works as expected when event is an all day event.', async () => {
-    const getOrganizationIdSpy = jest
-      .spyOn(getOrganizationId, 'default')
-      .mockImplementation(() => {
-        return '';
-      });
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Events />
-            </I18nextProvider>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Events />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
-
     await wait();
 
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
     userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     const randomEventTitle = 'testEventTitle';
@@ -424,11 +368,11 @@ describe('Testing Events Screen [User Portal]', () => {
     userEvent.type(screen.getByTestId('eventTitleInput'), randomEventTitle);
     userEvent.type(
       screen.getByTestId('eventDescriptionInput'),
-      randomEventDescription
+      randomEventDescription,
     );
     userEvent.type(
       screen.getByTestId('eventLocationInput'),
-      randomEventLocation
+      randomEventLocation,
     );
 
     userEvent.click(screen.getByTestId('createEventBtn'));
@@ -436,38 +380,142 @@ describe('Testing Events Screen [User Portal]', () => {
     await wait();
 
     expect(toast.success).toBeCalledWith(
-      'Event created and posted successfully.'
+      'Event created and posted successfully.',
     );
   });
 
   test('Switch to calendar view works as expected.', async () => {
-    const getOrganizationIdSpy = jest
-      .spyOn(getOrganizationId, 'default')
-      .mockImplementation(() => {
-        return '';
-      });
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Events />
-            </I18nextProvider>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Events />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
-    await wait();
-    expect(getOrganizationIdSpy).toHaveBeenCalled();
+    // await wait();
 
-    userEvent.click(screen.getByTestId('modeChangeBtn'));
-    userEvent.click(screen.getByTestId('modeBtn1'));
+    // userEvent.click(screen.getByTestId('modeChangeBtn'));
+    // userEvent.click(screen.getByTestId('modeBtn1'));
 
     await wait();
     const calenderView = 'Calendar View';
 
     expect(screen.queryAllByText(calenderView)).not.toBeNull();
+    expect(screen.getByText('Sun')).toBeInTheDocument();
+  });
+
+  test('Testing DatePicker and TimePicker', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Events />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const startDate = '03/23/2024';
+    const endDate = '04/23/2024';
+    const startTime = '02:00 PM';
+    const endTime = '06:00 PM';
+
+    userEvent.click(screen.getByTestId('createEventModalBtn'));
+
+    expect(endDate).not.toBeNull();
+    const endDateDatePicker = screen.getByLabelText('End Date');
+    expect(startDate).not.toBeNull();
+    const startDateDatePicker = screen.getByLabelText('Start Date');
+
+    fireEvent.change(startDateDatePicker, {
+      target: { value: startDate },
+    });
+    fireEvent.change(endDateDatePicker, {
+      target: { value: endDate },
+    });
+
+    await wait();
+
+    expect(endDateDatePicker).toHaveValue(endDate);
+    expect(startDateDatePicker).toHaveValue(startDate);
+
+    userEvent.click(screen.getByTestId('allDayEventCheck'));
+
+    expect(endTime).not.toBeNull();
+    const endTimePicker = screen.getByLabelText('End Time');
+    expect(startTime).not.toBeNull();
+    const startTimePicker = screen.getByLabelText('Start Time');
+
+    fireEvent.change(startTimePicker, {
+      target: { value: startTime },
+    });
+    fireEvent.change(endTimePicker, {
+      target: { value: endTime },
+    });
+
+    await wait();
+    expect(endTimePicker).toHaveValue(endTime);
+    expect(startTimePicker).toHaveValue(startTime);
+  });
+
+  test('EndDate null', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Events />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('createEventModalBtn'));
+
+    const endDateDatePicker = screen.getByLabelText('End Date');
+    const startDateDatePicker = screen.getByLabelText('Start Date');
+
+    fireEvent.change(startDateDatePicker, {
+      target: { value: null },
+    });
+    fireEvent.change(endDateDatePicker, {
+      target: { value: null },
+    });
+
+    userEvent.click(screen.getByTestId('allDayEventCheck'));
+
+    const endTimePicker = screen.getByLabelText('End Time');
+    const startTimePicker = screen.getByLabelText('Start Time');
+
+    fireEvent.change(startTimePicker, {
+      target: { value: null },
+    });
+    fireEvent.change(endTimePicker, {
+      target: { value: null },
+    });
   });
 });

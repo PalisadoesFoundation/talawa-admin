@@ -14,4 +14,8 @@
 
 ### constructor
 
-• **new default**()
+• **new default**(): [`default`](components_AddOn_support_services_Render_helper.default.md)
+
+#### Returns
+
+[`default`](components_AddOn_support_services_Render_helper.default.md)

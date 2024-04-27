@@ -1,193 +1,238 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'react';
 import styles from './Advertisements.module.css';
 import { useQuery } from '@apollo/client';
-import { ADVERTISEMENTS_GET, PLUGIN_GET } from 'GraphQl/Queries/Queries'; // PLUGIN_LIST
-import { useSelector } from 'react-redux';
-import type { RootState } from '../../state/reducers';
-import { Col, Form, Row, Tab, Tabs } from 'react-bootstrap';
-import PluginHelper from 'components/AddOn/support/services/Plugin.helper';
-import { store } from 'state/store';
+import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
+import { Col, Row, Tab, Tabs } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import Loader from 'components/Loader/Loader';
-import OrganizationScreen from 'components/OrganizationScreen/OrganizationScreen';
 import AdvertisementEntry from './core/AdvertisementEntry/AdvertisementEntry';
 import AdvertisementRegister from './core/AdvertisementRegister/AdvertisementRegister';
-import AddOnRegister from 'components/AddOn/core/AddOnRegister/AddOnRegister';
+import { useParams } from 'react-router-dom';
+import type { InterfaceQueryOrganizationAdvertisementListItem } from 'utils/interfaces';
+import InfiniteScroll from 'react-infinite-scroll-component';
+
 export default function advertisements(): JSX.Element {
-  const {
-    data: data2,
-    loading: loading2,
-    error: error2,
-  } = useQuery(ADVERTISEMENTS_GET);
-  const currentOrgId = window.location.href.split('/id=')[1] + '';
+  const { orgId: currentOrgId } = useParams();
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   document.title = t('title');
+  const [after, setAfter] = useState<string | null | undefined>(null);
 
-  const [isStore, setIsStore] = useState(true);
-  const [showEnabled, setShowEnabled] = useState(true);
-  const [searchText, setSearchText] = useState('');
-  const [dataList, setDataList] = useState([]);
-
-  const [render, setRender] = useState(true);
-  const appRoutes = useSelector((state: RootState) => state.appRoutes);
-  const { targets, configUrl } = appRoutes;
-
-  const plugins = useSelector((state: RootState) => state.plugins);
-  const { installed, addonStore } = plugins;
-  const { data, loading, error } = useQuery(PLUGIN_GET);
-  /* istanbul ignore next */
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  const getStorePlugins = async () => {
-    let plugins = await new PluginHelper().fetchStore();
-    const installIds = (await new PluginHelper().fetchInstalled()).map(
-      (plugin: any) => plugin.id
-    );
-    plugins = plugins.map((plugin: any) => {
-      plugin.installed = installIds.includes(plugin.id);
-      return plugin;
-    });
-    store.dispatch({ type: 'UPDATE_STORE', payload: plugins });
+  type Ad = {
+    _id: string;
+    name: string;
+    type: 'BANNER' | 'MENU' | 'POPUP';
+    mediaUrl: string;
+    endDate: string; // Assuming it's a string in the format 'yyyy-MM-dd'
+    startDate: string; // Assuming it's a string in the format 'yyyy-MM-dd'
   };
 
-  /* istanbul ignore next */
-  const getInstalledPlugins: () => any = () => {
-    setDataList(data);
-  };
-  // const getAdvertisements: () => any = ()=> {
-  //   return
-  // }
+  const {
+    data: orgAdvertisementListData,
+    refetch,
+  }: {
+    data?: {
+      organizations: InterfaceQueryOrganizationAdvertisementListItem[];
+    };
+    refetch: any;
+  } = useQuery(ORGANIZATION_ADVERTISEMENT_LIST, {
+    variables: {
+      id: currentOrgId,
+      after: after,
+      first: 6,
+    },
+  });
+  const [advertisements, setAdvertisements] = useState(
+    orgAdvertisementListData?.organizations[0].advertisements?.edges.map(
+      (edge: { node: Ad }) => edge.node,
+    ) || [],
+  );
 
-  /* istanbul ignore next */
-  const updateLinks = async (links: any[]): Promise<void> => {
-    store.dispatch({ type: 'UPDATE_P_TARGETS', payload: links });
-  };
-  // /* istanbul ignore next */
-  const pluginModified = (): void => {
-    return getInstalledPlugins();
-    // .then((installedPlugins) => {
-    //   getStorePlugins();
-    //   return installedPlugins;
-    // });
-  };
+  useEffect(() => {
+    if (orgAdvertisementListData && orgAdvertisementListData.organizations) {
+      const ads: Ad[] =
+        orgAdvertisementListData.organizations[0].advertisements?.edges.map(
+          (edge) => edge.node,
+        );
+      after
+        ? setAdvertisements([...advertisements, ...ads])
+        : setAdvertisements(ads);
+    }
+  }, [orgAdvertisementListData, after]);
 
-  const updateSelectedTab = (tab: any): void => {
-    setIsStore(tab === 'activeAds');
-    isStore ? getStorePlugins() : getInstalledPlugins();
-  };
+  async function loadMoreAdvertisements(): Promise<void> {
+    await refetch();
 
-  const filterChange = (ev: any): void => {
-    setShowEnabled(ev.target.value === 'enabled');
-  };
-
-  /* istanbul ignore next */
-  if (loading) {
-    return (
-      <>
-        <div data-testid="AdEntryStore" className={styles.loader}></div>
-      </>
-    );
+    if (orgAdvertisementListData && orgAdvertisementListData.organizations) {
+      setAfter(
+        orgAdvertisementListData?.organizations[0]?.advertisements.pageInfo
+          .endCursor,
+      );
+    }
   }
 
   return (
     <>
-      <OrganizationScreen
-        data-testid="AdEntryStore"
-        screenName="Advertisement Store"
-        title={t('title')}
-      >
-        <Row>
-          <Col col={8}>
-            <div className={styles.justifysp}>
-              <p className={styles.logintitle}>{t('pHeading')}</p>
-
-              <AdvertisementRegister />
-              <Tabs
-                defaultActiveKey="archievedAds"
-                id="uncontrolled-tab-example"
-                className="mb-3"
-                onSelect={updateSelectedTab}
-              >
-                <Tab eventKey="avaactiveAdsilable" title={t('activeAds')}>
-                  {data2?.getAdvertisements
-                    .filter((ad: any) => ad.orgId == currentOrgId)
-                    .filter((ad: any) => new Date(ad.endDate) > new Date())
-                    .length == 0 ? (
-                    <h4>{t('pMessage')} </h4> // eslint-disable-line
+      <Row data-testid="advertisements">
+        <Col col={8}>
+          <div className={styles.justifysp}>
+            <AdvertisementRegister setAfter={setAfter} />
+            <Tabs
+              defaultActiveKey="archievedAds"
+              id="uncontrolled-tab-example"
+              className="mb-3"
+            >
+              <Tab eventKey="activeAds" title={t('activeAds')}>
+                <InfiniteScroll
+                  dataLength={advertisements?.length ?? 0}
+                  next={loadMoreAdvertisements}
+                  loader={
+                    <>
+                      {[...Array(6)].map((_, index) => (
+                        <div key={index} className={styles.itemCard}>
+                          <div className={styles.loadingWrapper}>
+                            <div className={styles.innerContainer}>
+                              <div
+                                className={`${styles.orgImgContainer} shimmer`}
+                              ></div>
+                              <div className={styles.content}>
+                                <h5 className="shimmer" title="Name"></h5>
+                              </div>
+                            </div>
+                            <div className={`shimmer ${styles.button}`} />
+                          </div>
+                        </div>
+                      ))}
+                    </>
+                  }
+                  hasMore={
+                    orgAdvertisementListData?.organizations[0].advertisements
+                      .pageInfo.hasNextPage ?? false
+                  }
+                  className={styles.listBox}
+                  data-testid="organizations-list"
+                  endMessage={
+                    advertisements.filter(
+                      (ad: Ad) => new Date(ad.endDate) > new Date(),
+                    ).length !== 0 && (
+                      <div className={'w-100 text-center my-4'}>
+                        <h5 className="m-0 ">{t('endOfResults')}</h5>
+                      </div>
+                    )
+                  }
+                >
+                  {advertisements.filter(
+                    (ad: Ad) => new Date(ad.endDate) > new Date(),
+                  ).length === 0 ? (
+                    <h4>{t('pMessage')}</h4>
                   ) : (
-                    data2?.getAdvertisements
-                      .filter((ad: any) => ad.orgId == currentOrgId)
-                      .filter((ad: any) => new Date(ad.endDate) > new Date())
+                    advertisements
+                      .filter((ad: Ad) => new Date(ad.endDate) > new Date())
                       .map(
                         (
                           ad: {
                             _id: string;
                             name: string | undefined;
                             type: string | undefined;
-                            orgId: string;
-                            link: string;
-                            endDate: Date;
-                            startDate: Date;
+                            mediaUrl: string;
+                            endDate: string;
+                            startDate: string;
                           },
-                          i: React.Key | null | undefined
+                          i: React.Key | null | undefined,
                         ): JSX.Element => (
                           <AdvertisementEntry
                             id={ad._id}
                             key={i}
                             name={ad.name}
                             type={ad.type}
-                            orgId={ad.orgId}
+                            organizationId={currentOrgId}
                             startDate={new Date(ad.startDate)}
                             endDate={new Date(ad.endDate)}
-                            // getInstalledPlugins={getInstalledPlugins}
+                            mediaUrl={ad.mediaUrl}
+                            data-testid="Ad"
+                            setAfter={setAfter}
                           />
-                        )
+                        ),
                       )
                   )}
-                </Tab>
-                <Tab eventKey="archievedAds" title={t('archievedAds')}>
-                  {data2?.getAdvertisements
-                    .filter((ad: any) => ad.orgId == currentOrgId)
-                    .filter((ad: any) => new Date(ad.endDate) < new Date())
-                    .length == 0 ? (
-                    <h4>{t('pMessage')} </h4> // eslint-disable-line
+                </InfiniteScroll>
+              </Tab>
+              <Tab eventKey="archievedAds" title={t('archievedAds')}>
+                <InfiniteScroll
+                  dataLength={advertisements?.length ?? 0}
+                  next={loadMoreAdvertisements}
+                  loader={
+                    <>
+                      {[...Array(6)].map((_, index) => (
+                        <div key={index} className={styles.itemCard}>
+                          <div className={styles.loadingWrapper}>
+                            <div className={styles.innerContainer}>
+                              <div
+                                className={`${styles.orgImgContainer} shimmer`}
+                              ></div>
+                              <div className={styles.content}>
+                                <h5 className="shimmer" title="Name"></h5>
+                              </div>
+                            </div>
+                            <div className={`shimmer ${styles.button}`} />
+                          </div>
+                        </div>
+                      ))}
+                    </>
+                  }
+                  hasMore={
+                    orgAdvertisementListData?.organizations[0].advertisements
+                      .pageInfo.hasNextPage ?? false
+                  }
+                  className={styles.listBox}
+                  data-testid="organizations-list"
+                  endMessage={
+                    advertisements.filter(
+                      (ad: Ad) => new Date(ad.endDate) < new Date(),
+                    ).length !== 0 && (
+                      <div className={'w-100 text-center my-4'}>
+                        <h5 className="m-0 ">{t('endOfResults')}</h5>
+                      </div>
+                    )
+                  }
+                >
+                  {advertisements.filter(
+                    (ad: Ad) => new Date(ad.endDate) < new Date(),
+                  ).length === 0 ? (
+                    <h4>{t('pMessage')}</h4>
                   ) : (
-                    data2?.getAdvertisements
-                      .filter((ad: any) => ad.orgId == currentOrgId)
-                      .filter((ad: any) => new Date(ad.endDate) < new Date())
+                    advertisements
+                      .filter((ad: Ad) => new Date(ad.endDate) < new Date())
                       .map(
                         (
                           ad: {
                             _id: string;
                             name: string | undefined;
                             type: string | undefined;
-                            orgId: string;
-                            link: string;
-                            endDate: Date;
-                            startDate: Date;
+                            mediaUrl: string;
+                            endDate: string;
+                            startDate: string;
                           },
-                          i: React.Key | null | undefined
+                          i: React.Key | null | undefined,
                         ): JSX.Element => (
                           <AdvertisementEntry
                             id={ad._id}
                             key={i}
                             name={ad.name}
                             type={ad.type}
-                            orgId={ad.orgId}
+                            organizationId={currentOrgId}
                             startDate={new Date(ad.startDate)}
                             endDate={new Date(ad.endDate)}
-                            // getInstalledPlugins={getInstalledPlugins}
+                            mediaUrl={ad.mediaUrl}
+                            setAfter={setAfter}
                           />
-                        )
+                        ),
                       )
                   )}
-                </Tab>
-              </Tabs>
-            </div>
-          </Col>
-        </Row>
-      </OrganizationScreen>
+                </InfiniteScroll>
+              </Tab>
+            </Tabs>
+          </div>
+        </Col>
+      </Row>
     </>
   );
 }

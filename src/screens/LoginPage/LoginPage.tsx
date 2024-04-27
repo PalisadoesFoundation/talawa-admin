@@ -1,35 +1,56 @@
-import { useMutation } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
+import { Check, Clear } from '@mui/icons-material';
 import type { ChangeEvent } from 'react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import { REACT_APP_USE_RECAPTCHA, RECAPTCHA_SITE_KEY } from 'Constant/constant';
+import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
+import {
+  BACKEND_URL,
+  REACT_APP_USE_RECAPTCHA,
+  RECAPTCHA_SITE_KEY,
+} from 'Constant/constant';
 import {
   LOGIN_MUTATION,
   RECAPTCHA_MUTATION,
   SIGNUP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
+import { GET_COMMUNITY_DATA } from 'GraphQl/Queries/Queries';
 import { ReactComponent as PalisadoesLogo } from 'assets/svgs/palisadoes.svg';
+import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
 import Loader from 'components/Loader/Loader';
+import LoginPortalToggle from 'components/LoginPortalToggle/LoginPortalToggle';
 import { errorHandler } from 'utils/errorHandler';
+import useLocalStorage from 'utils/useLocalstorage';
+import { socialMediaLinks } from '../../constants';
 import styles from './LoginPage.module.css';
-import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 
-function loginPage(): JSX.Element {
+const loginPage = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
+  const navigate = useNavigate();
+
+  const { getItem, setItem } = useLocalStorage();
 
   document.title = t('title');
 
+  type PasswordValidation = {
+    lowercaseChar: boolean;
+    uppercaseChar: boolean;
+    numericValue: boolean;
+    specialChar: boolean;
+  };
+
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const [showTab, setShowTab] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
+  const [role, setRole] = useState<'admin' | 'user'>('admin');
   const [componentLoader, setComponentLoader] = useState(true);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [signformState, setSignFormState] = useState({
@@ -46,12 +67,37 @@ function loginPage(): JSX.Element {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
-  const recaptchaRef = useRef<ReCAPTCHA>(null);
+  const [showAlert, setShowAlert] = useState<PasswordValidation>({
+    lowercaseChar: true,
+    uppercaseChar: true,
+    numericValue: true,
+    specialChar: true,
+  });
+
+  const passwordValidationRegExp = {
+    lowercaseCharRegExp: new RegExp('[a-z]'),
+    uppercaseCharRegExp: new RegExp('[A-Z]'),
+    numericalValueRegExp: new RegExp('\\d'),
+    specialCharRegExp: new RegExp('[!@#$%^&*()_+{}\\[\\]:;<>,.?~\\\\/-]'),
+  };
+
+  const handlePasswordCheck = (pass: string): void => {
+    setShowAlert({
+      lowercaseChar: !passwordValidationRegExp.lowercaseCharRegExp.test(pass),
+      uppercaseChar: !passwordValidationRegExp.uppercaseCharRegExp.test(pass),
+      numericValue: !passwordValidationRegExp.numericalValueRegExp.test(pass),
+      specialChar: !passwordValidationRegExp.specialCharRegExp.test(pass),
+    });
+  };
+
+  const handleRoleToggle = (role: 'admin' | 'user'): void => {
+    setRole(role);
+  };
 
   useEffect(() => {
-    const isLoggedIn = localStorage.getItem('IsLoggedIn');
+    const isLoggedIn = getItem('IsLoggedIn');
     if (isLoggedIn == 'TRUE') {
-      window.location.assign('/orglist');
+      navigate(getItem('userId') !== null ? '/user/organizations' : '/orglist');
     }
     setComponentLoader(false);
   }, []);
@@ -60,20 +106,20 @@ function loginPage(): JSX.Element {
   const toggleConfirmPassword = (): void =>
     setShowConfirmPassword(!showConfirmPassword);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { data, loading, refetch } = useQuery(GET_COMMUNITY_DATA);
+  useEffect(() => {
+    // refetching the data if the pre-login data updates
+    refetch();
+  }, [data]);
   const [login, { loading: loginLoading }] = useMutation(LOGIN_MUTATION);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [signup, { loading: signinLoading }] = useMutation(SIGNUP_MUTATION);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [recaptcha, { loading: recaptchaLoading }] =
     useMutation(RECAPTCHA_MUTATION);
-
   useEffect(() => {
     async function loadResource(): Promise<void> {
       try {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const response = await fetch('http://localhost:4000/graphql/');
-      } catch (error: any) {
+        await fetch(BACKEND_URL as string);
+      } catch (error) {
         /* istanbul ignore next */
         errorHandler(t, error);
       }
@@ -83,7 +129,7 @@ function loginPage(): JSX.Element {
   }, []);
 
   const verifyRecaptcha = async (
-    recaptchaToken: any
+    recaptchaToken: string | null,
   ): Promise<boolean | void> => {
     try {
       /* istanbul ignore next */
@@ -97,10 +143,14 @@ function loginPage(): JSX.Element {
       });
 
       return data.recaptcha;
-    } catch (error: any) {
+    } catch (error) {
       /* istanbul ignore next */
       toast.error(t('captchaError'));
     }
+  };
+
+  const handleCaptcha = (token: string | null): void => {
+    setRecaptchaToken(token);
   };
 
   const signupLink = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
@@ -109,21 +159,34 @@ function loginPage(): JSX.Element {
     const { signfirstName, signlastName, signEmail, signPassword, cPassword } =
       signformState;
 
-    const recaptchaToken = recaptchaRef.current?.getValue();
-    recaptchaRef.current?.reset();
-
     const isVerified = await verifyRecaptcha(recaptchaToken);
     /* istanbul ignore next */
     if (!isVerified) {
       toast.error(t('Please_check_the_captcha'));
       return;
     }
+    const isValidatedString = (value: string): boolean =>
+      /^[a-zA-Z]+$/.test(value);
+
+    const validatePassword = (password: string): boolean => {
+      const lengthCheck = new RegExp('^.{6,}$');
+      return (
+        lengthCheck.test(password) &&
+        passwordValidationRegExp.lowercaseCharRegExp.test(password) &&
+        passwordValidationRegExp.uppercaseCharRegExp.test(password) &&
+        passwordValidationRegExp.numericalValueRegExp.test(password) &&
+        passwordValidationRegExp.specialCharRegExp.test(password)
+      );
+    };
 
     if (
+      isValidatedString(signfirstName) &&
+      isValidatedString(signlastName) &&
       signfirstName.length > 1 &&
       signlastName.length > 1 &&
       signEmail.length >= 8 &&
-      signPassword.length > 1
+      signPassword.length > 1 &&
+      validatePassword(signPassword)
     ) {
       if (cPassword == signPassword) {
         try {
@@ -139,9 +202,9 @@ function loginPage(): JSX.Element {
           /* istanbul ignore next */
           if (signUpData) {
             toast.success(
-              'Successfully Registered. Please wait until you will be approved.'
+              t(role === 'admin' ? 'successfullyRegistered' : 'afterRegister'),
             );
-
+            setShowTab('LOGIN');
             setSignFormState({
               signfirstName: '',
               signlastName: '',
@@ -150,7 +213,7 @@ function loginPage(): JSX.Element {
               cPassword: '',
             });
           }
-        } catch (error: any) {
+        } catch (error) {
           /* istanbul ignore next */
           errorHandler(t, error);
         }
@@ -158,16 +221,23 @@ function loginPage(): JSX.Element {
         toast.warn(t('passwordMismatches'));
       }
     } else {
-      toast.warn(t('fillCorrectly'));
+      if (!isValidatedString(signfirstName)) {
+        toast.warn(t('firstName_invalid'));
+      }
+      if (!isValidatedString(signlastName)) {
+        toast.warn(t('lastName_invalid'));
+      }
+      if (!validatePassword(signPassword)) {
+        toast.warn(t('password_invalid'));
+      }
+      if (signEmail.length < 8) {
+        toast.warn(t('email_invalid'));
+      }
     }
   };
 
   const loginLink = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-
-    const recaptchaToken = recaptchaRef.current?.getValue();
-    recaptchaRef.current?.reset();
-
     const isVerified = await verifyRecaptcha(recaptchaToken);
     /* istanbul ignore next */
     if (!isVerified) {
@@ -185,34 +255,78 @@ function loginPage(): JSX.Element {
 
       /* istanbul ignore next */
       if (loginData) {
-        if (
-          loginData.login.user.userType === 'SUPERADMIN' ||
-          (loginData.login.user.userType === 'ADMIN' &&
-            loginData.login.user.adminApproved === true)
-        ) {
-          localStorage.setItem('token', loginData.login.accessToken);
-          localStorage.setItem('refreshToken', loginData.login.refreshToken);
-          localStorage.setItem('id', loginData.login.user._id);
-          localStorage.setItem('IsLoggedIn', 'TRUE');
-          localStorage.setItem('UserType', loginData.login.user.userType);
-          if (localStorage.getItem('IsLoggedIn') == 'TRUE') {
-            window.location.replace('/orglist');
-          }
-        } else {
+        const { login } = loginData;
+        const { user, appUserProfile } = login;
+        const isAdmin: boolean =
+          appUserProfile.isSuperAdmin || appUserProfile.adminFor.length !== 0;
+
+        if (role === 'admin' && !isAdmin) {
           toast.warn(t('notAuthorised'));
+          return;
         }
+        const loggedInUserId = user._id;
+
+        setItem('token', login.accessToken);
+        setItem('refreshToken', login.refreshToken);
+        setItem('IsLoggedIn', 'TRUE');
+        setItem('name', `${user.firstName} ${user.lastName}`);
+        setItem('email', user.email);
+        setItem('FirstName', user.firstName);
+        setItem('LastName', user.lastName);
+        setItem('UserImage', user.image);
+
+        if (role === 'admin') {
+          setItem('id', loggedInUserId);
+          setItem('SuperAdmin', appUserProfile.isSuperAdmin);
+          setItem('AdminFor', appUserProfile.adminFor);
+        } else {
+          setItem('userId', loggedInUserId);
+        }
+
+        navigate(role === 'admin' ? '/orglist' : '/user/organizations');
       } else {
         toast.warn(t('notFound'));
       }
-    } catch (error: any) {
+    } catch (error) {
       /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
 
-  if (componentLoader || loginLoading || signinLoading || recaptchaLoading) {
+  if (
+    componentLoader ||
+    loginLoading ||
+    signinLoading ||
+    recaptchaLoading ||
+    loading
+  ) {
     return <Loader />;
   }
+  const socialIconsList = socialMediaLinks.map(({ href, logo, tag }, index) =>
+    data?.getCommunityData ? (
+      data.getCommunityData?.socialMediaUrls?.[tag] && (
+        <a
+          key={index}
+          href={data.getCommunityData?.socialMediaUrls?.[tag]}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-testid="preLoginSocialMedia"
+        >
+          <img src={logo} />
+        </a>
+      )
+    ) : (
+      <a
+        key={index}
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-testid="PalisadoesSocialMedia"
+      >
+        <img src={logo} />
+      </a>
+    ),
+  );
 
   return (
     <>
@@ -220,20 +334,50 @@ function loginPage(): JSX.Element {
         <Row className={styles.row}>
           <Col sm={0} md={6} lg={7} className={styles.left_portion}>
             <div className={styles.inner}>
-              <PalisadoesLogo className={styles.palisadoes_logo} />
-              <p className="text-center">{t('fromPalisadoes')}</p>
+              {data?.getCommunityData ? (
+                <a
+                  href={data.getCommunityData.websiteLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${styles.communityLogo}`}
+                >
+                  <img
+                    src={data.getCommunityData.logoUrl}
+                    alt="Community Logo"
+                    data-testid="preLoginLogo"
+                  />
+                  <p className="text-center">{data.getCommunityData.name}</p>
+                </a>
+              ) : (
+                <a
+                  href="https://www.palisadoes.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <PalisadoesLogo
+                    className={styles.palisadoes_logo}
+                    data-testid="PalisadoesLogo"
+                  />
+                  <p className="text-center">{t('fromPalisadoes')}</p>
+                </a>
+              )}
             </div>
+            <div className={styles.socialIcons}>{socialIconsList}</div>
           </Col>
           <Col sm={12} md={6} lg={5}>
             <div className={styles.right_portion}>
               <ChangeLanguageDropDown
                 parentContainerStyle={styles.langChangeBtn}
+                btnStyle={styles.langChangeBtnStyle}
               />
               <TalawaLogo
                 className={`${styles.talawa_logo}  ${
                   showTab === 'REGISTER' && styles.marginTopForReg
                 }`}
               />
+
+              <LoginPortalToggle onToggle={handleRoleToggle} />
+
               {/* LOGIN FORM */}
               <div
                 className={`${
@@ -242,13 +386,12 @@ function loginPage(): JSX.Element {
               >
                 <form onSubmit={loginLink}>
                   <h1 className="fs-2 fw-bold text-dark mb-3">
-                    {t('login_to_admin_portal')}
+                    {role === 'admin' ? t('login') : t('userLogin')}
                   </h1>
                   <Form.Label>{t('email')}</Form.Label>
                   <div className="position-relative">
                     <Form.Control
                       type="email"
-                      className="mb-3"
                       placeholder={t('enterEmail')}
                       required
                       value={formState.email}
@@ -268,11 +411,11 @@ function loginPage(): JSX.Element {
                       <EmailOutlinedIcon />
                     </Button>
                   </div>
-                  <Form.Label>{t('password')}</Form.Label>
+                  <Form.Label className="mt-3">{t('password')}</Form.Label>
                   <div className="position-relative">
                     <Form.Control
                       type={showPassword ? 'text' : 'password'}
-                      className="input_box_second"
+                      className="input_box_second lh-1"
                       placeholder={t('enterPassword')}
                       required
                       value={formState.password}
@@ -309,12 +452,12 @@ function loginPage(): JSX.Element {
                   {REACT_APP_USE_RECAPTCHA === 'yes' ? (
                     <div className="googleRecaptcha">
                       <ReCAPTCHA
-                        ref={recaptchaRef}
-                        className="mt-3"
+                        className="mt-2"
                         sitekey={
                           /* istanbul ignore next */
                           RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
                         }
+                        onChange={handleCaptcha}
                       />
                     </div>
                   ) : (
@@ -329,7 +472,7 @@ function loginPage(): JSX.Element {
                   >
                     {t('login')}
                   </Button>
-                  <div className="position-relative">
+                  <div className="position-relative my-2">
                     <hr />
                     <span className={styles.orText}>{t('OR')}</span>
                   </div>
@@ -397,29 +540,31 @@ function loginPage(): JSX.Element {
                       </div>
                     </Col>
                   </Row>
-                  <Form.Label>{t('email')}</Form.Label>
                   <div className="position-relative">
-                    <Form.Control
-                      type="email"
-                      data-testid="signInEmail"
-                      className="mb-3"
-                      placeholder={t('email')}
-                      autoComplete="username"
-                      required
-                      value={signformState.signEmail}
-                      onChange={(e): void => {
-                        setSignFormState({
-                          ...signformState,
-                          signEmail: e.target.value.toLowerCase(),
-                        });
-                      }}
-                    />
-                    <Button
-                      tabIndex={-1}
-                      className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
-                    >
-                      <EmailOutlinedIcon />
-                    </Button>
+                    <Form.Label>{t('email')}</Form.Label>
+                    <div className="position-relative">
+                      <Form.Control
+                        type="email"
+                        data-testid="signInEmail"
+                        className="mb-3"
+                        placeholder={t('email')}
+                        autoComplete="username"
+                        required
+                        value={signformState.signEmail}
+                        onChange={(e): void => {
+                          setSignFormState({
+                            ...signformState,
+                            signEmail: e.target.value.toLowerCase(),
+                          });
+                        }}
+                      />
+                      <Button
+                        tabIndex={-1}
+                        className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+                      >
+                        <EmailOutlinedIcon />
+                      </Button>
+                    </div>
                   </div>
 
                   <div className="position-relative mb-3">
@@ -439,6 +584,7 @@ function loginPage(): JSX.Element {
                             ...signformState,
                             signPassword: e.target.value,
                           });
+                          handlePasswordCheck(e.target.value);
                         }}
                       />
                       <Button
@@ -453,25 +599,127 @@ function loginPage(): JSX.Element {
                         )}
                       </Button>
                     </div>
-                    {isInputFocused &&
-                      signformState.signPassword.length < 8 && (
-                        <div
-                          className="form-text text-danger"
-                          data-testid="passwordCheck"
+                    <div className={styles.password_checks}>
+                      {isInputFocused ? (
+                        signformState.signPassword.length < 6 ? (
+                          <div data-testid="passwordCheck">
+                            <p
+                              className={`form-text text-danger ${styles.password_check_element_top}`}
+                            >
+                              <span>
+                                <Clear className="" />
+                              </span>
+                              {t('atleast_6_char_long')}
+                            </p>
+                          </div>
+                        ) : (
+                          <p
+                            className={`form-text text-success ${styles.password_check_element_top}`}
+                          >
+                            <span>
+                              <Check />
+                            </span>
+                            {t('atleast_6_char_long')}
+                          </p>
+                        )
+                      ) : null}
+
+                      {!isInputFocused &&
+                        signformState.signPassword.length > 0 &&
+                        signformState.signPassword.length < 6 && (
+                          <div
+                            className={`form-text text-danger ${styles.password_check_element}`}
+                            data-testid="passwordCheck"
+                          >
+                            <span>
+                              <Check className="size-sm" />
+                            </span>
+                            {t('atleast_6_char_long')}
+                          </div>
+                        )}
+                      {isInputFocused && (
+                        <p
+                          className={`form-text ${
+                            showAlert.lowercaseChar
+                              ? 'text-danger'
+                              : 'text-success'
+                          } ${styles.password_check_element}`}
                         >
-                          {t('atleast_8_char_long')}
-                        </div>
+                          {showAlert.lowercaseChar ? (
+                            <span>
+                              <Clear />
+                            </span>
+                          ) : (
+                            <span>
+                              <Check />
+                            </span>
+                          )}
+                          {t('lowercase_check')}
+                        </p>
                       )}
-                    {!isInputFocused &&
-                      signformState.signPassword.length > 0 &&
-                      signformState.signPassword.length < 8 && (
-                        <div
-                          className="form-text text-danger"
-                          data-testid="passwordCheck"
+                      {isInputFocused && (
+                        <p
+                          className={`form-text ${
+                            showAlert.uppercaseChar
+                              ? 'text-danger'
+                              : 'text-success'
+                          } ${styles.password_check_element}`}
                         >
-                          {t('atleast_8_char_long')}
-                        </div>
+                          {showAlert.uppercaseChar ? (
+                            <span>
+                              <Clear />
+                            </span>
+                          ) : (
+                            <span>
+                              <Check />
+                            </span>
+                          )}
+                          {t('uppercase_check')}
+                        </p>
                       )}
+                      {isInputFocused && (
+                        <p
+                          className={`form-text ${
+                            showAlert.numericValue
+                              ? 'text-danger'
+                              : 'text-success'
+                          } ${styles.password_check_element}`}
+                        >
+                          {showAlert.numericValue ? (
+                            <span>
+                              <Clear />
+                            </span>
+                          ) : (
+                            <span>
+                              <Check />
+                            </span>
+                          )}
+                          {t('numeric_value_check')}
+                        </p>
+                      )}
+                      {isInputFocused && (
+                        <p
+                          className={`form-text ${
+                            showAlert.specialChar
+                              ? 'text-danger'
+                              : 'text-success'
+                          } ${styles.password_check_element} ${
+                            styles.password_check_element_bottom
+                          }`}
+                        >
+                          {showAlert.specialChar ? (
+                            <span>
+                              <Clear />
+                            </span>
+                          ) : (
+                            <span>
+                              <Check />
+                            </span>
+                          )}
+                          {t('special_char_check')}
+                        </p>
+                      )}
+                    </div>
                   </div>
                   <div className="position-relative">
                     <Form.Label>{t('confirmPassword')}</Form.Label>
@@ -516,11 +764,11 @@ function loginPage(): JSX.Element {
                   {REACT_APP_USE_RECAPTCHA === 'yes' ? (
                     <div className="mt-3">
                       <ReCAPTCHA
-                        ref={recaptchaRef}
                         sitekey={
                           /* istanbul ignore next */
                           RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
                         }
+                        onChange={handleCaptcha}
                       />
                     </div>
                   ) : (
@@ -559,6 +807,6 @@ function loginPage(): JSX.Element {
       </section>
     </>
   );
-}
+};
 
 export default loginPage;
