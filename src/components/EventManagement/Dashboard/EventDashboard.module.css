@@ -1,0 +1,76 @@
+.eventContainer {
+  display: flex;
+  align-items: center;
+}
+
+.eventDetailsBox {
+  position: relative;
+  margin-left: 50px;
+  height: 90%;
+  width: 45%;
+  box-sizing: border-box;
+  background: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  margin-bottom: 0;
+}
+
+.eventDetailsBox::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 6px;
+  background-color: #31bb6b;
+  border-radius: 8px;
+}
+
+.time {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  padding-bottom: 0px;
+}
+
+.startTime,
+.endTime {
+  display: flex;
+  font-size: 20px;
+}
+
+.to {
+  padding-right: 10px;
+}
+
+.startDate,
+.endDate {
+  color: #808080;
+  font-size: 14px;
+}
+
+.titlename {
+  font-weight: 600;
+  font-size: 20px;
+  padding: 15px;
+  padding-bottom: 0px;
+  width: 100%;
+}
+
+.description {
+  color: #737373;
+  font-weight: 300;
+  font-size: 14px;
+  word-wrap: break-word;
+  padding: 15px;
+  padding-bottom: 0px;
+}
+
+.toporgloc {
+  font-size: 16px;
+  padding: 15px;
+  padding-bottom: 0px;
+}
+
+.toporgloc span {
+  color: #737373;
+}
