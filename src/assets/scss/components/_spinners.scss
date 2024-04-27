@@ -1,0 +1,24 @@
+$spinner-width: 2rem;
+$spinner-height: $spinner-width;
+$spinner-vertical-align: -0.125em;
+$spinner-border-width: 0.25em;
+$spinner-animation-speed: 0.75s;
+
+$spinner-width-sm: 1rem;
+$spinner-height-sm: $spinner-width-sm;
+$spinner-border-width-sm: 0.2em;
+
+@keyframes spinner-border {
+  to {
+    transform: rotate(360deg) #{'/* rtl:ignore */'};
+  }
+}
+@keyframes spinner-grow {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    opacity: 1;
+    transform: none;
+  }
+}

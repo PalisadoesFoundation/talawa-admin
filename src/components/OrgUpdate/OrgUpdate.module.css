@@ -1,0 +1,13 @@
+.message {
+  height: 420px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.icon {
+  transform: scale(1.5);
+  color: var(--bs-danger);
+  margin-bottom: 1rem;
+}
