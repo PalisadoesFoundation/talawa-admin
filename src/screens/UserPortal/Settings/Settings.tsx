@@ -20,6 +20,7 @@ import UserProfile from 'components/UserProfileSettings/UserProfile';
 import DeleteUser from 'components/UserProfileSettings/DeleteUser';
 import OtherSettings from 'components/UserProfileSettings/OtherSettings';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
+import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 
 export default function settings(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -204,6 +205,9 @@ export default function settings(): JSX.Element {
         }`}
       >
         <div className={`${styles.mainContainer}`}>
+          <div className="d-flex justify-content-end align-items-center">
+            <ProfileDropdown />
+          </div>
           <h3>{t('settings')}</h3>
           <Row>
             <Col lg={5} className="d-lg-none">

@@ -7,6 +7,7 @@ import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from './UserScreen.module.css';
 import { Button } from 'react-bootstrap';
 import UserSidebarOrg from 'components/UserPortal/UserSidebarOrg/UserSidebarOrg';
+import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 
 const UserScreen = (): JSX.Element => {
   const location = useLocation();
@@ -84,6 +85,9 @@ const UserScreen = (): JSX.Element => {
         } `}
         data-testid="mainpageright"
       >
+        <div className="d-flex justify-content-end align-items-center">
+          <ProfileDropdown />
+        </div>
         <Outlet />
       </div>
     </>

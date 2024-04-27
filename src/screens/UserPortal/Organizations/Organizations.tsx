@@ -8,13 +8,13 @@ import {
 } from 'GraphQl/Queries/Queries';
 import PaginationList from 'components/PaginationList/PaginationList';
 import OrganizationCard from 'components/UserPortal/OrganizationCard/OrganizationCard';
-// import UserNavbar from 'components/UserPortal/UserNavbar/UserNavbar';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import React, { useEffect, useState } from 'react';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from './Organizations.module.css';
+import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 
 const { getItem } = useLocalStorage();
 
@@ -266,6 +266,9 @@ export default function organizations(): JSX.Element {
         }`}
       >
         <div className={`${styles.mainContainer}`}>
+          <div className="d-flex justify-content-end align-items-center">
+            <ProfileDropdown />
+          </div>
           <h3>{t('selectOrganization')}</h3>
           <div>
             <InputGroup className={styles.maxWidth}>
