@@ -39,7 +39,8 @@
     "numeric_value_check": "Al menos un valor numérico",
     "special_char_check": "Al menos un carácter especial",
     "loading": "Cargando...",
-    "selectOrg": "Seleccione una organización"
+    "selectOrg": "Seleccione una organización",
+    "afterRegister": "Registro exitoso. Por favor, espere a que el administrador apruebe su solicitud."
   },
   "userLoginPage": {
     "title": "Administrador Talawa",

@@ -39,7 +39,8 @@
     "numeric_value_check": "至少一個數值",
     "special_char_check": "至少一個特殊字符",
     "loading": "载入中...",
-    "selectOrg": "选择一个组织"
+    "selectOrg": "选择一个组织",
+    "afterRegister": "注册成功。请等待管理员批准您的请求"
   },
   "userLoginPage": {
     "title": "塔拉瓦管理員",

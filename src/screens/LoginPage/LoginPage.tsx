@@ -33,6 +33,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { socialMediaLinks } from '../../constants';
 import styles from './LoginPage.module.css';
 import type { InterfaceQueryOrganizationListObject } from 'utils/interfaces';
+import { Autocomplete, TextField } from '@mui/material';
 
 const loginPage = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
@@ -118,7 +119,25 @@ const loginPage = (): JSX.Element => {
   const [signup, { loading: signinLoading }] = useMutation(SIGNUP_MUTATION);
   const [recaptcha, { loading: recaptchaLoading }] =
     useMutation(RECAPTCHA_MUTATION);
-  const { data: orgData, loading: orgLoading } = useQuery(ORGANIZATION_LIST);
+  const { data: orgData } = useQuery(ORGANIZATION_LIST);
+
+  useEffect(() => {
+    if (orgData) {
+      const options = orgData.organizations.map(
+        (org: InterfaceQueryOrganizationListObject) => {
+          const tempObj: { label: string; id: string } | null = {} as {
+            label: string;
+            id: string;
+          };
+          tempObj['label'] =
+            `${org.name}(${org.address.city},${org.address.state},${org.address.countryCode})`;
+          tempObj['id'] = org._id;
+          return tempObj;
+        },
+      );
+      setOrganizations(options);
+    }
+  }, [orgData]);
 
   useEffect(() => {
     async function loadResource(): Promise<void> {
@@ -777,37 +796,27 @@ const loginPage = (): JSX.Element => {
                   <div className="position-relative  my-2">
                     <Form.Label>{t('selectOrg')}</Form.Label>
                     <div className="position-relative">
-                      <select
-                        className="form-select text-muted "
-                        aria-label="Select Organization"
+                      <Autocomplete
+                        disablePortal
                         data-testid="selectOrg"
-                        onChange={(e) => {
+                        onChange={(
+                          event,
+                          value: { label: string; id: string } | null,
+                        ) => {
                           setSignFormState({
                             ...signformState,
-                            signOrg: e.target.value,
+                            signOrg: value?.id ?? '',
                           });
-                          e.target.classList.remove('text-muted');
                         }}
-                        value={signformState.signOrg}
-                      >
-                        <option
-                          value={orgLoading ? t('loading') : t('selectOrg')}
-                          disabled
-                        >
-                          {orgLoading ? t('loading') : t('selectOrg')}
-                        </option>
-                        {orgData &&
-                          orgData?.organizations.map(
-                            (
-                              org: InterfaceQueryOrganizationListObject,
-                              idx: number,
-                            ) => (
-                              <option key={idx} value={org?._id}>
-                                {org?.name}
-                              </option>
-                            ),
-                          )}
-                      </select>
+                        options={organizations}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label="Organizations"
+                            className={styles.selectOrgText}
+                          />
+                        )}
+                      />
                     </div>
                   </div>
                   {REACT_APP_USE_RECAPTCHA === 'yes' ? (

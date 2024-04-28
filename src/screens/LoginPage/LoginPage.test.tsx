@@ -1,6 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render, screen, fireEvent } from '@testing-library/react';
+import { act, render, screen, fireEvent, within } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
@@ -13,7 +13,6 @@ import {
   LOGIN_MUTATION,
   RECAPTCHA_MUTATION,
   SIGNUP_MUTATION,
-  UPDATE_COMMUNITY,
 } from 'GraphQl/Mutations/mutations';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
@@ -940,13 +939,18 @@ test('Render the Select Organization list and change the option', async () => {
       </BrowserRouter>
     </MockedProvider>,
   );
+
   await wait();
   userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
   await wait();
-  userEvent.selectOptions(
-    screen.getByTestId('selectOrg'),
-    'db1d5caad2ade57ab811e681',
-  );
+  const autocomplete = screen.getByTestId('selectOrg');
+  const input = within(autocomplete).getByRole('combobox');
+  autocomplete.focus();
+  // the value here can be any string you want, so you may also consider to
+  // wrapper it as a function and pass in inputValue as parameter
+  fireEvent.change(input, { target: { value: 'a' } });
+  fireEvent.keyDown(autocomplete, { key: 'ArrowDown' });
+  fireEvent.keyDown(autocomplete, { key: 'Enter' });
 
   debug();
 });

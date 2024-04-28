@@ -39,7 +39,8 @@
     "numeric_value_check": "Atleaset one numeric value",
     "special_char_check": "Atleast one special character",
     "loading": "Loading...",
-    "selectOrg": "Select an organization"
+    "selectOrg": "Select an organization",
+    "afterRegister": "Successfully registered. Please wait for admin to approve your request."
   },
   "userLoginPage": {
     "title": "Talawa Admin",
