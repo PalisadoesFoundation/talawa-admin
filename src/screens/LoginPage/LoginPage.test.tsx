@@ -1,6 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render, screen, fireEvent } from '@testing-library/react';
+import { act, render, screen, fireEvent, within } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
@@ -13,13 +13,13 @@ import {
   LOGIN_MUTATION,
   RECAPTCHA_MUTATION,
   SIGNUP_MUTATION,
-  UPDATE_COMMUNITY,
 } from 'GraphQl/Mutations/mutations';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { BACKEND_URL } from 'Constant/constant';
 import useLocalStorage from 'utils/useLocalstorage';
-import { GET_COMMUNITY_DATA } from 'GraphQl/Queries/Queries';
+import { GET_COMMUNITY_DATA, ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
+import { debug } from 'jest-preview';
 
 const MOCKS = [
   {
@@ -92,6 +92,7 @@ const MOCKS = [
     },
   },
 ];
+
 const MOCKS2 = [
   {
     request: {
@@ -121,9 +122,83 @@ const MOCKS2 = [
     },
   },
 ];
+const MOCKS3 = [
+  {
+    request: {
+      query: ORGANIZATION_LIST,
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            _id: '6437904485008f171cf29924',
+            image: null,
+            creator: {
+              firstName: 'Wilt',
+              lastName: 'Shepherd',
+            },
+            name: 'Unity Foundation',
+            members: [
+              {
+                _id: '64378abd85008f171cf2990d',
+              },
+            ],
+            admins: [
+              {
+                _id: '64378abd85008f171cf2990d',
+              },
+            ],
+            createdAt: '2023-04-13T05:16:52.827Z',
+            address: {
+              city: 'Bronx',
+              countryCode: 'US',
+              dependentLocality: 'Some Dependent Locality',
+              line1: '123 Random Street',
+              line2: 'Apartment 456',
+              postalCode: '10451',
+              sortingCode: 'ABC-123',
+              state: 'NYC',
+            },
+          },
+          {
+            _id: 'db1d5caad2ade57ab811e681',
+            image: null,
+            creator: {
+              firstName: 'Sonya',
+              lastName: 'Jones',
+            },
+            name: 'Mills Group',
+            members: [
+              {
+                _id: '661b8410bd25a325da05e67c',
+              },
+            ],
+            admins: [
+              {
+                _id: '661b8410bd25a325da05e67c',
+              },
+            ],
+            createdAt: '2024-04-14T07:21:52.940Z',
+            address: {
+              city: 'Lake Martineside',
+              countryCode: 'SL',
+              dependentLocality: 'Apt. 544',
+              line1: '5112 Dare Centers',
+              line2: 'Suite 163',
+              postalCode: '10452',
+              sortingCode: '46565-3458',
+              state: 'New Hampshire',
+            },
+          },
+        ],
+      },
+    },
+  },
+];
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS2, true);
+const link3 = new StaticMockLink(MOCKS3, true);
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -851,6 +926,33 @@ describe('Testing redirect if already logged in', () => {
     await wait();
     expect(mockNavigate).toHaveBeenCalledWith('/orglist');
   });
+});
+test('Render the Select Organization list and change the option', async () => {
+  render(
+    <MockedProvider addTypename={false} link={link3}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <LoginPage />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+
+  await wait();
+  userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
+  await wait();
+  const autocomplete = screen.getByTestId('selectOrg');
+  const input = within(autocomplete).getByRole('combobox');
+  autocomplete.focus();
+  // the value here can be any string you want, so you may also consider to
+  // wrapper it as a function and pass in inputValue as parameter
+  fireEvent.change(input, { target: { value: 'a' } });
+  fireEvent.keyDown(autocomplete, { key: 'ArrowDown' });
+  fireEvent.keyDown(autocomplete, { key: 'Enter' });
+
+  debug();
 });
 
 describe('Talawa-API server fetch check', () => {
