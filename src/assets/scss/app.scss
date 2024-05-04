@@ -1,0 +1,14 @@
+// Importing Bootstrap SCSS Functions and Mixins
+@import '../../../node_modules/bootstrap/scss/functions';
+@import '../../../node_modules/bootstrap/scss/mixins';
+
+// Importing Our Bootstrap SCSS Variables
+@import './variables';
+
+// Importing Bootstrap Variables and SCSS
+@import '../../../node_modules/bootstrap/scss/variables';
+@import '../../../node_modules/bootstrap/scss/variables-dark';
+@import '../../../node_modules/bootstrap/scss/bootstrap.scss';
+
+// Importing Our Bootstrap SCSS Overrides
+@import './talawa';
