@@ -1,0 +1,13 @@
+.chatAreaContainer {
+  padding: 10px;
+  flex-grow: 1;
+  background-color: rgba(196, 255, 211, 0.3);
+}
+
+.backgroundWhite {
+  background-color: white;
+}
+
+.grey {
+  color: grey;
+}
