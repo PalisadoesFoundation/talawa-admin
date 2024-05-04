@@ -1,5 +1,0 @@
-{
-  "**/*.{ts,tsx,yml}": "eslint --fix",
-  "**/*.{ts,tsx,json,scss,css,yml}": "prettier --write",
-  "**/*.{ts,tsx}": "node scripts/githooks/check-localstorage-usage.js"
-}
