@@ -1,0 +1,25 @@
+.actionItemStatusBadge {
+  width: 5.5rem;
+  margin-left: 1.1rem;
+}
+
+.createModal {
+  margin-top: 20vh;
+  margin-left: 13vw;
+  max-width: 80vw;
+}
+
+.titlemodal {
+  color: var(--bs-gray-600);
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  border-bottom: 3px solid var(--bs-primary);
+  width: 65%;
+}
+
+.actionItemsOptionsButton {
+  width: 24px;
+  height: 24px;
+}
