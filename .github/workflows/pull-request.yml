@@ -42,7 +42,7 @@ jobs:
 
       - name: Get changed TypeScript files
         id: changed-files
-        uses: tj-actions/changed-files@v40
+        uses: tj-actions/changed-files@v41
       
       - name: Check formatting
         if: steps.changed-files.outputs.only_changed != 'true'
@@ -85,7 +85,7 @@ jobs:
       
       - name: Get Changed Unauthorized files
         id: changed-unauth-files
-        uses: tj-actions/changed-files@v40
+        uses: tj-actions/changed-files@v41
         with:
           files: |
             .github/**
@@ -124,7 +124,7 @@ jobs:
 
       - name: Get changed files
         id: changed-files
-        uses: tj-actions/changed-files@v40
+        uses: tj-actions/changed-files@v41
 
       - name: Echo number of changed files
         env: 
@@ -177,7 +177,7 @@ jobs:
       
       - name: Get changed TypeScript files
         id: changed-files
-        uses: tj-actions/changed-files@v40
+        uses: tj-actions/changed-files@v41
           
       - name: Run tests
         if: steps.changed-files.outputs.only_changed != 'true'
