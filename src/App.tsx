@@ -127,7 +127,10 @@ function app(): JSX.Element {
             <Route path="/orgpeople/:orgId" element={<OrganizationPeople />} />
             <Route path="/member/:orgId" element={<MemberDetail />} />
             <Route path="/orgevents/:orgId" element={<OrganizationEvents />} />
-
+            <Route
+              path="/event/:orgId/:eventId"
+              element={<EventManagement />}
+            />
             <Route
               path="/orgactionitems/:orgId"
               element={<OrganizationActionItems />}
@@ -164,7 +167,7 @@ function app(): JSX.Element {
             <Route path="/user/events/:orgId" element={<Events />} />
             <Route element={<EventDashboardScreen />}>
               <Route
-                path="/event/:orgId/:eventId"
+                path="/user/event/:orgId/:eventId"
                 element={<EventManagement />}
               />
             </Route>

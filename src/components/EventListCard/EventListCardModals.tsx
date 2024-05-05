@@ -352,7 +352,8 @@ function EventListCardModals({
   };
 
   const openEventDashboard = (): void => {
-    navigate(`/event/${orgId}/${eventListCardProps.id}`);
+    const userPath = eventListCardProps.userRole === Role.USER ? 'user/' : '';
+    navigate(`/${userPath}event/${orgId}/${eventListCardProps.id}`);
   };
 
   const popover = (
