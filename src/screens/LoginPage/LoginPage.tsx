@@ -22,7 +22,7 @@ import {
   RECAPTCHA_MUTATION,
   SIGNUP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import { GET_COMMUNITY_DATA } from 'GraphQl/Queries/Queries';
+import { GET_COMMUNITY_DATA, ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import { ReactComponent as PalisadoesLogo } from 'assets/svgs/palisadoes.svg';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
@@ -32,6 +32,8 @@ import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import { socialMediaLinks } from '../../constants';
 import styles from './LoginPage.module.css';
+import type { InterfaceQueryOrganizationListObject } from 'utils/interfaces';
+import { Autocomplete, TextField } from '@mui/material';
 
 const loginPage = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
@@ -59,6 +61,7 @@ const loginPage = (): JSX.Element => {
     signEmail: '',
     signPassword: '',
     cPassword: '',
+    signOrg: '',
   });
   const [formState, setFormState] = useState({
     email: '',
@@ -73,6 +76,7 @@ const loginPage = (): JSX.Element => {
     numericValue: true,
     specialChar: true,
   });
+  const [organizations, setOrganizations] = useState([]);
 
   const passwordValidationRegExp = {
     lowercaseCharRegExp: new RegExp('[a-z]'),
@@ -115,6 +119,26 @@ const loginPage = (): JSX.Element => {
   const [signup, { loading: signinLoading }] = useMutation(SIGNUP_MUTATION);
   const [recaptcha, { loading: recaptchaLoading }] =
     useMutation(RECAPTCHA_MUTATION);
+  const { data: orgData } = useQuery(ORGANIZATION_LIST);
+
+  useEffect(() => {
+    if (orgData) {
+      const options = orgData.organizations.map(
+        (org: InterfaceQueryOrganizationListObject) => {
+          const tempObj: { label: string; id: string } | null = {} as {
+            label: string;
+            id: string;
+          };
+          tempObj['label'] =
+            `${org.name}(${org.address.city},${org.address.state},${org.address.countryCode})`;
+          tempObj['id'] = org._id;
+          return tempObj;
+        },
+      );
+      setOrganizations(options);
+    }
+  }, [orgData]);
+
   useEffect(() => {
     async function loadResource(): Promise<void> {
       try {
@@ -156,8 +180,14 @@ const loginPage = (): JSX.Element => {
   const signupLink = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
-    const { signfirstName, signlastName, signEmail, signPassword, cPassword } =
-      signformState;
+    const {
+      signfirstName,
+      signlastName,
+      signEmail,
+      signPassword,
+      cPassword,
+      signOrg,
+    } = signformState;
 
     const isVerified = await verifyRecaptcha(recaptchaToken);
     /* istanbul ignore next */
@@ -196,6 +226,7 @@ const loginPage = (): JSX.Element => {
               lastName: signlastName,
               email: signEmail,
               password: signPassword,
+              orgId: signOrg,
             },
           });
 
@@ -211,6 +242,7 @@ const loginPage = (): JSX.Element => {
               signEmail: '',
               signPassword: '',
               cPassword: '',
+              signOrg: '',
             });
           }
         } catch (error) {
@@ -760,6 +792,32 @@ const loginPage = (): JSX.Element => {
                           {t('Password_and_Confirm_password_mismatches.')}
                         </div>
                       )}
+                  </div>
+                  <div className="position-relative  my-2">
+                    <Form.Label>{t('selectOrg')}</Form.Label>
+                    <div className="position-relative">
+                      <Autocomplete
+                        disablePortal
+                        data-testid="selectOrg"
+                        onChange={(
+                          event,
+                          value: { label: string; id: string } | null,
+                        ) => {
+                          setSignFormState({
+                            ...signformState,
+                            signOrg: value?.id ?? '',
+                          });
+                        }}
+                        options={organizations}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label="Organizations"
+                            className={styles.selectOrgText}
+                          />
+                        )}
+                      />
+                    </div>
                   </div>
                   {REACT_APP_USE_RECAPTCHA === 'yes' ? (
                     <div className="mt-3">
