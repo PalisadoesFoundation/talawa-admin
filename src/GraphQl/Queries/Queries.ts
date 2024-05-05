@@ -368,6 +368,7 @@ export const ORGANIZATIONS_LIST = gql`
         firstName
         lastName
         email
+        createdAt
       }
       membershipRequests {
         _id
@@ -585,6 +586,16 @@ export const ORGANIZATION_EVENT_CONNECTION_LIST = gql`
       endTime
       allDay
       recurring
+      recurrenceRule {
+        recurrenceStartDate
+        recurrenceEndDate
+        frequency
+        weekDays
+        interval
+        count
+        weekDayOccurenceInMonth
+      }
+      isRecurringEventException
       isPublic
       isRegisterable
     }

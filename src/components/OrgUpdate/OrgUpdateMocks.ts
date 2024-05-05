@@ -44,6 +44,7 @@ export const MOCKS = [
                 firstName: 'John',
                 lastName: 'Doe',
                 email: 'johndoe@gmail.com',
+                createdAt: '12-03-2024',
               },
             ],
             membershipRequests: {
@@ -159,6 +160,7 @@ export const MOCKS_ERROR_UPDATE_ORGLIST = [
                 firstName: 'John',
                 lastName: 'Doe',
                 email: 'johndoe@gmail.com',
+                createdAt: '12-03-2024',
               },
             ],
             membershipRequests: {

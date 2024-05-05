@@ -185,7 +185,7 @@
     "admins": "Administradores",
     "members": "Miembros",
     "joinNow": "Únete ahora",
-    "joined": "Unido",
+    "visit": "visita",
     "withdraw": "retirar",
     "orgJoined": "Unido a la organización exitosamente",
     "MembershipRequestSent": "Solicitud de membresía enviada exitosamente",
@@ -367,13 +367,13 @@
     "deleteEventMsg": "¿Quieres eliminar este evento?",
     "no": "No",
     "yes": "Sí",
+    "editEvent": "Editar evento",
+    "eventTitle": "Título",
+    "description": "Descripción",
+    "startDate": "Fecha de inicio",
+    "endDate": "Fecha final",
     "registerEvent": "Registro",
     "alreadyRegistered": "Ya registrado",
-    "editEvent": "Evento de actualización",
-    "eventTitle": "Título del evento",
-    "description": "Descripción del evento",
-    "regDate": "Fecha de inicio",
-    "regEndDate": "Fecha final",
     "startTime": "Hora de inicio",
     "endTime": "Hora de finalización",
     "allDay": "Todo el dia",
@@ -388,7 +388,16 @@
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red.",
     "thisInstance": "Esta Instancia",
     "thisAndFollowingInstances": "Esta y las Siguientes Instancias",
-    "allInstances": "Todas las Instancias"
+    "allInstances": "Todas las Instancias",
+    "customRecurrence": "Recurrencia personalizada",
+    "repeatsEvery": "Se repite cada",
+    "repeatsOn": "Se repite en",
+    "ends": "Finaliza",
+    "never": "Nunca",
+    "on": "En",
+    "after": "Después de",
+    "occurences": "ocurrencias",
+    "done": "Hecho"
   },
   "funds": {
     "title": "Fondos",
@@ -440,11 +449,14 @@
     "noCampaigns": "No se encontraron campañas",
     "createCampaign": "Crear campaña de recaudación de fondos",
     "updateCampaign": "Actualizar campaña de recaudación de fondos",
+    "manageCampaign": "Administrar campaña de recaudación de fondos",
     "deleteCampaign": "Eliminar campaña de recaudación de fondos",
     "no": "No",
     "yes": "Sí",
     "currency": "Moneda",
-    "selectCurrency": "Seleccionar moneda"
+    "selectCurrency": "Seleccionar moneda",
+    "filter": "Filtrar",
+    "searchFullName": "Buscar por nombre"
   },
   "pledges": {
     "title": "Compromisos de Campaña de Financiamiento",
@@ -814,10 +826,18 @@
     "organizations": "Organizaciones",
     "searchByName": "Buscar por nombre"
   },
-  "userSidebar": {
+  "userSidebarOrg": {
     "yourOrganizations": "Tus Organizaciones",
     "noOrganizations": "Aún no te has unido a ninguna organización.",
-    "viewAll": "Ver todo"
+    "viewAll": "Ver todo",
+    "talawaUserPortal": "Talawa portal de usuario",
+    "menu": "Menú",
+    "my organizations": "Mis Organizaciones.",
+    "users": "Usuarios",
+    "requests": "Solicitudes",
+    "communityProfile": "Perfil de la comunidad",
+    "logout": "Cerrar sesión",
+    "settings": "Ajustes"
   },
   "organizationSidebar": {
     "viewAll": "Ver todo",
@@ -936,7 +956,9 @@
     "startDate": "Fecha de inicio",
     "endDate": "Fecha de finalización",
     "publicEvent": "Es público",
-    "registerable": "Es registrable"
+    "registerable": "Es registrable",
+    "monthlyCalendarView": "Calendario mensual",
+    "yearlyCalendarView": "Calendario anual"
   },
   "userEventCard": {
     "location": "Ubicación",

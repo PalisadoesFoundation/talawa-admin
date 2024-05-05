@@ -436,6 +436,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       title: 'This is post test title',
       likeCount: 1,
       commentCount: 1,
+      postedAt: '',
       comments: [
         {
           id: '1',
@@ -506,6 +507,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       title: 'This is post test title',
       likeCount: 1,
       commentCount: 1,
+      postedAt: '',
       comments: [
         {
           id: '1',

@@ -1,7 +1,5 @@
 import React from 'react';
-import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
 import PeopleCard from 'components/UserPortal/PeopleCard/PeopleCard';
-import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import { Dropdown, Form, InputGroup } from 'react-bootstrap';
 import PaginationList from 'components/PaginationList/PaginationList';
 import {
@@ -121,15 +119,9 @@ export default function people(): JSX.Element {
     }
   }, [mode]);
 
-  const navbarProps = {
-    currentPage: 'people',
-  };
-
   return (
     <>
-      <OrganizationNavbar {...navbarProps} />
       <div className={`d-flex flex-row ${styles.containerHeight}`}>
-        <UserSidebar />
         <div className={`${styles.colorLight} ${styles.mainContainer}`}>
           <h1>People</h1>
           <div

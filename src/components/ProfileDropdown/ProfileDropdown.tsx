@@ -83,7 +83,11 @@ const profileDropdown = (): JSX.Element => {
       <Dropdown.Menu>
         <Dropdown.Item
           data-testid="profileBtn"
-          onClick={() => navigate(`/member/${userID}`)}
+          onClick={() =>
+            userRole === 'User'
+              ? navigate(`/user/settings`)
+              : navigate(`/member/${userID}`)
+          }
           aria-label="View Profile"
         >
           View Profile

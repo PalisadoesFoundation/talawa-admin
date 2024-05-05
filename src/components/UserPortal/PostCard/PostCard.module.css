@@ -1,7 +1,7 @@
 .cardStyles {
-  height: 30rem;
-  max-height: 31rem;
-  width: 22rem;
+  height: 28rem;
+  max-height: 30rem;
+  width: 20rem;
   background-color: white;
   padding: 0;
   border: none !important;
@@ -87,7 +87,7 @@
 }
 
 .cardText {
-  --max-lines: 3;
+  --max-lines: 2;
   display: -webkit-box;
   overflow: hidden;
   -webkit-box-orient: vertical;

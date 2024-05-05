@@ -268,11 +268,13 @@ export const CREATE_EVENT_MUTATION = gql`
     $isRegisterable: Boolean!
     $organizationId: ID!
     $startDate: Date!
-    $endDate: Date
+    $endDate: Date!
     $allDay: Boolean!
     $startTime: Time
     $endTime: Time
     $location: String
+    $recurrenceStartDate: Date
+    $recurrenceEndDate: Date
     $frequency: Frequency
     $weekDays: [WeekDays]
     $count: PositiveInt
@@ -295,6 +297,8 @@ export const CREATE_EVENT_MUTATION = gql`
         location: $location
       }
       recurrenceRuleData: {
+        recurrenceStartDate: $recurrenceStartDate
+        recurrenceEndDate: $recurrenceEndDate
         frequency: $frequency
         weekDays: $weekDays
         interval: $interval
@@ -412,12 +416,6 @@ export const FORGOT_PASSWORD_MUTATION = gql`
         otpToken: $otpToken
       }
     )
-  }
-`;
-
-export const UPDATE_USERTYPE_MUTATION = gql`
-  mutation UpdateUserType($id: ID!, $userType: String!) {
-    updateUserType(data: { id: $id, userType: $userType })
   }
 `;
 
@@ -562,17 +560,25 @@ export const UPDATE_POST_MUTATION = gql`
 export const UPDATE_EVENT_MUTATION = gql`
   mutation UpdateEvent(
     $id: ID!
-    $title: String!
-    $description: String!
-    $recurring: Boolean!
-    $isPublic: Boolean!
-    $isRegisterable: Boolean!
-    $allDay: Boolean!
-    $startDate: Date!
-    $endDate: Date!
+    $title: String
+    $description: String
+    $recurring: Boolean
+    $recurringEventUpdateType: RecurringEventMutationType
+    $isPublic: Boolean
+    $isRegisterable: Boolean
+    $allDay: Boolean
+    $startDate: Date
+    $endDate: Date
     $startTime: Time
     $endTime: Time
     $location: String
+    $recurrenceStartDate: Date
+    $recurrenceEndDate: Date
+    $frequency: Frequency
+    $weekDays: [WeekDays]
+    $count: PositiveInt
+    $interval: PositiveInt
+    $weekDayOccurenceInMonth: Int
   ) {
     updateEvent(
       id: $id
@@ -589,6 +595,16 @@ export const UPDATE_EVENT_MUTATION = gql`
         endTime: $endTime
         location: $location
       }
+      recurrenceRuleData: {
+        recurrenceStartDate: $recurrenceStartDate
+        recurrenceEndDate: $recurrenceEndDate
+        frequency: $frequency
+        weekDays: $weekDays
+        interval: $interval
+        count: $count
+        weekDayOccurenceInMonth: $weekDayOccurenceInMonth
+      }
+      recurringEventUpdateType: $recurringEventUpdateType
     ) {
       _id
     }

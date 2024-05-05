@@ -12,6 +12,7 @@ import {
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { weekdays } from './constants';
+import { months } from './constants';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 const eventData = [
@@ -26,6 +27,8 @@ const eventData = [
     endTime: '12:00',
     allDay: false,
     recurring: false,
+    recurrenceRule: null,
+    isRecurringEventException: false,
     isPublic: true,
     isRegisterable: true,
     viewType: ViewType.DAY,
@@ -41,6 +44,8 @@ const eventData = [
     endTime: '16:00',
     allDay: false,
     recurring: false,
+    recurrenceRule: null,
+    isRecurringEventException: false,
     isPublic: true,
     isRegisterable: true,
   },
@@ -87,6 +92,14 @@ const MOCKS = [
 ];
 
 const link = new StaticMockLink(MOCKS, true);
+
+async function wait(ms = 200): Promise<void> {
+  await act(() => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  });
+}
 
 describe('Calendar', () => {
   it('renders weekdays', () => {
@@ -150,6 +163,27 @@ describe('Calendar', () => {
       fireEvent.click(prevButton);
     }
   });
+  it('Should show prev and next year on clicking < & > buttons when in year view', async () => {
+    //testing previous month button
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Calendar eventData={eventData} viewType={ViewType.YEAR} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+    await wait();
+    const prevButtons = screen.getAllByTestId('prevYear');
+    prevButtons.forEach((button) => {
+      fireEvent.click(button);
+    });
+    await wait();
+    //testing next year button
+    const nextButton = screen.getAllByTestId('prevYear');
+    nextButton.forEach((button) => {
+      fireEvent.click(button);
+    });
+  });
   it('Should show prev and next date on clicking < & > buttons in the day view', async () => {
     render(
       <Router>
@@ -187,6 +221,8 @@ describe('Calendar', () => {
         endTime: '12:00',
         allDay: false,
         recurring: false,
+        recurrenceRule: null,
+        isRecurringEventException: false,
         isPublic: true,
         isRegisterable: true,
       },
@@ -259,10 +295,12 @@ describe('Calendar', () => {
         startDate: new Date().toISOString().split('T')[0],
         endDate: new Date().toISOString().split('T')[0],
         location: 'Los Angeles',
-        startTime: undefined,
-        endTime: undefined,
+        startTime: null,
+        endTime: null,
         allDay: true,
         recurring: false,
+        recurrenceRule: null,
+        isRecurringEventException: false,
         isPublic: true,
         isRegisterable: true,
       },
@@ -273,10 +311,12 @@ describe('Calendar', () => {
         startDate: new Date().toISOString().split('T')[0],
         endDate: new Date().toISOString().split('T')[0],
         location: 'Los Angeles',
-        startTime: undefined,
-        endTime: undefined,
+        startTime: null,
+        endTime: null,
         allDay: true,
         recurring: false,
+        recurrenceRule: null,
+        isRecurringEventException: false,
         isPublic: true,
         isRegisterable: true,
       },
@@ -291,6 +331,8 @@ describe('Calendar', () => {
         endTime: '16:00',
         allDay: false,
         recurring: false,
+        recurrenceRule: null,
+        isRecurringEventException: false,
         isPublic: true,
         isRegisterable: true,
       },
@@ -305,6 +347,8 @@ describe('Calendar', () => {
         endTime: '16:00',
         allDay: false,
         recurring: false,
+        recurrenceRule: null,
+        isRecurringEventException: false,
         isPublic: true,
         isRegisterable: true,
       },
@@ -319,6 +363,8 @@ describe('Calendar', () => {
         endTime: '19:00',
         allDay: false,
         recurring: false,
+        recurrenceRule: null,
+        isRecurringEventException: false,
         isPublic: true,
         isRegisterable: true,
       },
@@ -352,6 +398,17 @@ describe('Calendar', () => {
 
     act(() => {
       window.dispatchEvent(new Event('resize'));
+    });
+  });
+  it('renders year view', async () => {
+    render(<Calendar eventData={eventData} viewType={ViewType.YEAR} />);
+
+    await wait();
+    months.forEach((month) => {
+      const elements = screen.getAllByText(month);
+      elements.forEach((element) => {
+        expect(element).toBeInTheDocument();
+      });
     });
   });
 });

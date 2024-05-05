@@ -191,7 +191,7 @@
     "admins": "Admins",
     "members": "Members",
     "joinNow": "Join Now",
-    "joined": "Joined",
+    "visit": "Visit",
     "withdraw": "Widthdraw"
   },
   "communityProfile": {
@@ -325,6 +325,7 @@
   "organizationActionItems": {
     "actionItemCategory": "Action Item Category",
     "actionItemDetails": "Action Item Details",
+    "actionItemCompleted": "Action Item Completed",
     "assignee": "Assignee",
     "assigner": "Assigner",
     "assignmentDate": "Assignment Date",
@@ -365,13 +366,13 @@
     "deleteEventMsg": "Do you want to remove this event?",
     "no": "No",
     "yes": "Yes",
+    "editEvent": "Edit Event",
+    "eventTitle": "Title",
+    "description": "Description",
+    "startDate": "Start Date",
+    "endDate": "End Date",
     "registerEvent": "Register",
     "alreadyRegistered": "Already registered",
-    "editEvent": "Update Event",
-    "eventTitle": "Event Title",
-    "description": "Event Description",
-    "regDate": "Start Date",
-    "regEndDate": "End Date",
     "startTime": "Start Time",
     "endTime": "End Time",
     "allDay": "All Day",
@@ -386,7 +387,16 @@
     "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too.",
     "thisInstance": "This Instance",
     "thisAndFollowingInstances": "This & Following Instances",
-    "allInstances": "All Instances"
+    "allInstances": "All Instances",
+    "customRecurrence": "Custom Recurrence",
+    "repeatsEvery": "Repeats Every",
+    "repeatsOn": "Repeats On",
+    "ends": "Ends",
+    "never": "Never",
+    "on": "On",
+    "after": "After",
+    "occurences": "occurences",
+    "done": "Done"
   },
   "funds": {
     "title": "Funds",
@@ -438,11 +448,14 @@
     "noCampaigns": "No Campaigns Found",
     "createCampaign": "Create Fund Campaign",
     "updateCampaign": "Update Fund Campaign",
+    "manageCampaign": "Manage Fund Campaign",
     "deleteCampaign": "Delete Fund Campaign",
     "no": "No",
     "yes": "Yes",
     "currency": "Currency",
-    "selectCurrency": "Select Currency"
+    "selectCurrency": "Select Currency",
+    "filter": "Filter",
+    "searchFullName": "Search By Name"
   },
   "pledges": {
     "title": "Fund Campaign Pledges",
@@ -816,10 +829,18 @@
     "searchByName": "Search By Name",
     "filter": "Filter"
   },
-  "userSidebar": {
+  "userSidebarOrg": {
     "yourOrganizations": "Your Organizations",
     "noOrganizations": "You haven't joined any organization yet.",
-    "viewAll": "View all"
+    "viewAll": "View all",
+    "talawaUserPortal": "Talawa User Portal",
+    "menu": "Menu",
+    "my organizations": "My Organizations",
+    "users": "Users",
+    "requests": "Requests",
+    "communityProfile": "Community Profile",
+    "logout": "Logout",
+    "settings": "Settings"
   },
   "organizationSidebar": {
     "viewAll": "View all",
@@ -829,6 +850,8 @@
     "noMembers": "No Members to show"
   },
   "postCard": {
+    "edit": "Edit",
+    "delete": "Delete",
     "likes": "Likes",
     "comments": "Comments"
   },
@@ -838,7 +861,10 @@
     "title": "Title",
     "textArea": "Something on your mind?",
     "feed": "Feed",
+    "loading": "Loading",
     "pinnedPosts": "Pinned Posts",
+    "yourFeed": "Your Feed",
+    "nothingToShowHere": "Nothing to show here",
     "somethingOnYourMind": "Something on your mind?",
     "addPost": "Add Post",
     "startPost": "Start a post",
@@ -941,7 +967,9 @@
     "startDate": "Start Date",
     "endDate": "End Date",
     "publicEvent": "Is Public",
-    "registerable": "Is Registerable"
+    "registerable": "Is Registerable",
+    "monthlyCalendarView": "Monthly Calendar",
+    "yearlyCalendarView": "Yearly Calender"
   },
   "userEventCard": {
     "location": "Location",

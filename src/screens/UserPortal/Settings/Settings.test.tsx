@@ -108,6 +108,11 @@ const link = new StaticMockLink(MOCKS, true);
 const link1 = new StaticMockLink(Mocks1, true);
 const link2 = new StaticMockLink(Mocks2, true);
 
+const resizeWindow = (width: number): void => {
+  window.innerWidth = width;
+  fireEvent(window, new Event('resize'));
+};
+
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -262,6 +267,51 @@ describe('Testing Settings Screen [User Portal]', () => {
     expect(screen.getByTestId('inputState')).toHaveValue('');
     expect(screen.getByTestId('inputCountry')).toHaveValue('');
     expect(screen.getByLabelText('Birth Date')).toHaveValue('');
+  });
+
+  test('sidebar', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link2}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Settings />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const closeMenubtn = screen.getByTestId('closeMenu');
+    expect(closeMenubtn).toBeInTheDocument();
+    closeMenubtn.click();
+    const openMenuBtn = screen.getByTestId('openMenu');
+    expect(openMenuBtn).toBeInTheDocument();
+    openMenuBtn.click();
+  });
+
+  test('Testing sidebar when the screen size is less than or equal to 820px', async () => {
+    resizeWindow(800);
+    render(
+      <MockedProvider addTypename={false} link={link2}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Settings />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+    expect(screen.getByText('My Organizations')).toBeInTheDocument();
+    expect(screen.getByText('Talawa User Portal')).toBeInTheDocument();
+
+    const settingsBtn = screen.getByTestId('settingsBtn');
+
+    settingsBtn.click();
   });
 
   test('updateUserDetails Mutation is triggered on button click', async () => {

@@ -94,6 +94,7 @@ const renderStartPostModal = (
       },
     },
     organizationId: '123',
+    img: 'image.png',
   };
 
   return render(

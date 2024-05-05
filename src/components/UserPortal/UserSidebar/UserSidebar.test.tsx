@@ -1,6 +1,6 @@
 import React from 'react';
 import type { RenderResult } from '@testing-library/react';
-import { act, render, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 
@@ -18,6 +18,15 @@ import useLocalStorage from 'utils/useLocalstorage';
 
 const { setItem } = useLocalStorage();
 
+const resizeWindow = (width: number): void => {
+  window.innerWidth = width;
+  fireEvent(window, new Event('resize'));
+};
+
+const props = {
+  hideDrawer: true,
+  setHideDrawer: jest.fn(),
+};
 const MOCKS = [
   {
     request: {
@@ -343,7 +352,7 @@ const renderUserSidebar = (
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
-            <UserSidebar />
+            <UserSidebar {...props} />
           </I18nextProvider>
         </Provider>
       </BrowserRouter>
@@ -374,5 +383,35 @@ describe('Testing UserSidebar Component [User Portal]', () => {
   test('Component should be rendered properly when joinedOrganizations list is empty', async () => {
     renderUserSidebar('orgEmpty', link);
     await wait();
+  });
+
+  test('Testing Drawer when the screen size is less than or equal to 820px', () => {
+    resizeWindow(800);
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserSidebar {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    expect(screen.getByText('My Organizations')).toBeInTheDocument();
+    expect(screen.getByText('Settings')).toBeInTheDocument();
+    expect(screen.getByText('Talawa User Portal')).toBeInTheDocument();
+    const settingsBtn = screen.getByText('Settings');
+
+    const orgsBtn = screen.getAllByTestId(/orgsBtn/i);
+
+    orgsBtn[0].click();
+    expect(
+      orgsBtn[0].className.includes('text-white btn btn-success'),
+    ).toBeTruthy();
+    settingsBtn.click();
+    expect(
+      settingsBtn.className.includes('text-white btn btn-success'),
+    ).toBeTruthy();
   });
 });

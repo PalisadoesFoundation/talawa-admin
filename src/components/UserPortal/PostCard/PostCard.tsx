@@ -3,6 +3,7 @@ import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import {
+  Col,
   Button,
   Card,
   Dropdown,
@@ -17,6 +18,8 @@ import SendIcon from '@mui/icons-material/Send';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import CommentIcon from '@mui/icons-material/Comment';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 
 import type { InterfacePostCard } from 'utils/interfaces';
 import {
@@ -189,7 +192,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
   };
 
   return (
-    <div key={props.id} className="d-flex justify-content-center">
+    <Col key={props.id} className="d-flex justify-content-center my-2">
       <Card className={`${styles.cardStyles}`}>
         <Card.Header className={`${styles.cardHeader}`}>
           <div className={`${styles.creator}`}>
@@ -201,11 +204,21 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
               <MoreVertIcon />
             </Dropdown.Toggle>
             <Dropdown.Menu>
-              <Dropdown.Item href="#/action-1">Edit</Dropdown.Item>
-              <Dropdown.Item href="#/action-2">Delete</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">Pin Post</Dropdown.Item>
+              <Dropdown.Item href="#/action-1">
+                <EditOutlinedIcon
+                  style={{ color: 'grey', marginRight: '8px' }}
+                />
+                {t(`edit`)}
+              </Dropdown.Item>
+              <Dropdown.Item href="#/action-2">
+                <DeleteOutlineOutlinedIcon
+                  style={{ color: 'red', marginRight: '8px' }}
+                />
+                {t(`delete`)}
+              </Dropdown.Item>
+              {/* <Dropdown.Item href="#/action-3">Pin Post</Dropdown.Item>
               <Dropdown.Item href="#/action-3">Report</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">Share</Dropdown.Item>
+              <Dropdown.Item href="#/action-3">Share</Dropdown.Item> */}
             </Dropdown.Menu>
           </Dropdown>
         </Card.Header>
@@ -341,6 +354,6 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
           </div>
         </Modal.Body>
       </Modal>
-    </div>
+    </Col>
   );
 }

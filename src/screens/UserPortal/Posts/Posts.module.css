@@ -21,7 +21,7 @@
 }
 
 .containerHeight {
-  height: calc(100vh - 66px);
+  height: 100vh;
 }
 
 .link {
@@ -99,10 +99,10 @@
 }
 
 .postsCardsContainer {
-  display: flex;
+  /* display: flex;
   flex-wrap: wrap;
   gap: 1rem;
-  --bs-gutter-x: 0;
+  --bs-gutter-x: 0; */
 }
 
 .userImage {
