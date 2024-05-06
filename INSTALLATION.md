@@ -6,17 +6,20 @@ This document provides instructions on how to set up and start a running instanc
 
 <!-- toc -->
 
-- [Prerequisites for Developers](#prerequisites-for-developers)
-- [Installation](#installation)
+- [Talawa-Admin Installation](#talawa-admin-installation)
+- [Table of Contents](#table-of-contents)
+- [Installation Steps Summary](#installation-steps-summary)
+- [Prerequisites](#prerequisites)
+  - [Install git](#install-git)
   - [Setting up this repository](#setting-up-this-repository)
-  - [Setting up npm](#setting-up-npm)
-  - [Setting up Typescript](#setting-up-typescript)
-  - [Installing required packages/dependencies](#installing-required-packagesdependencies)
+  - [Install node.js](#install-nodejs)
+  - [Install TypeScript](#install-typescript)
+  - [Install Required Packages](#install-required-packages)
 - [Configuration](#configuration)
   - [Creating .env file](#creating-env-file)
   - [Setting up PORT in .env file](#setting-up-port-in-env-file)
-  - [Setting up REACT_APP_TALAWA_URL in .env file](#setting-up-react_app_talawa_url-in-env-file)
-  - [Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file](#setting-up-react_app_recaptcha_site_key-in-env-file)
+  - [Setting up REACT\_APP\_TALAWA\_URL in .env file](#setting-up-react_app_talawa_url-in-env-file)
+  - [Setting up REACT\_APP\_RECAPTCHA\_SITE\_KEY in .env file](#setting-up-react_app_recaptcha_site_key-in-env-file)
   - [Setting up Compiletime and Runtime logs](#setting-up-compiletime-and-runtime-logs)
 - [Post Configuration Steps](#post-configuration-steps)
   - [Running Talawa-Admin](#running-talawa-admin)
@@ -33,65 +36,113 @@ This document provides instructions on how to set up and start a running instanc
 
 <!-- tocstop -->
 
-# Prerequisites for Developers
 
-We recommend that you to follow these steps before beginning development work on Talawa-Admin:
+# Installation Steps Summary
 
-1. You need to have `nodejs` installed in your machine. We recommend using Node version greater than 20.0.0. You can install it either through [nvm](https://github.com/nvm-sh/nvm) (Node Version Manager) or by visiting the official [Nodejs](https://nodejs.org/download/release/v16.20.2/) website.
-1. [Talawa-API](https://github.com/PalisadoesFoundation/talawa-api): (**This is mandatory**) The API system that the mobile app uses for accessing data. Setup your own **_local instance_**
-1. [Talawa](https://github.com/PalisadoesFoundation/talawa): (Optional) The mobile app that people will use to access Talawa's features. This may be useful if you need to verify administrative features you have added or modified.
+Installation is not difficult, but there are many steps. This is a brief explanation of what needs to be done:
 
-The INSTALLATION.md files in both repositories show you how. The Talawa-API INSTALLATION.md will also show you the Organization URL to use access Talawa Admin.
+1. Install `git`
+2. Download the code from GitHub using `git`
+3. Install `node.js` (Node), the runtime environment the application will need to work.
+4. Configure the Node Package Manager (`npm`) to automatically use the correct version of Node for our application.
+5. Use `npm` to install TypeScript, the language the application is written in.
+6. Install other supporting software such as the database.
+7. Configure the application
+8. Start the application
 
-# Installation
+These steps are explained in more detail in the sections that follow.
 
-You will need to have copies of your code on your local system. Here's how to do that.
+# Prerequisites
+
+In this section we'll explain how to set up all the prerequisite software packages to get you up and running.
+
+## Install git
+
+The easiest way to get the latest copies of our code is to install the `git` package on your computer.
+
+Follow the setup guide for `git` on official [git docs](https://git-scm.com/downloads). Basic `git` knowledge is required for open source contribution so make sure you're comfortable with it. [Here's](https://youtu.be/apGV9Kg7ics) a good tutorial to get started with `git` and `github`.
 
 ## Setting up this repository
 
 First you need a local copy of `talawa-admin`. Run the following command in the directory of choice on your local system.
 
-1. Navigate to the folder where you want to setup the repository. Here, I will set it up in a folder called `talawa`.
-2. Navigate to the folder and open a terminal in this folder (you can right-click and choose appropiate option based onn your OS). Next, we'll fork and clone the `talawa-admin` repository.
-3. Navigate to [https://github.com/PalisadoesFoundation/talawa-admin/](hhttps://github.com/PalisadoesFoundation/talawa-admin/) and click on the `fork` button. It is placed on the right corner opposite the repository name `PalisadoesFoundation/talawa-admin`.
-4. You should now see `talawa-admin` under your repositories. It will be marked as forked from `PalisadoesFoundation/talawa-admin`
-5. Clone the repository to your local computer (replacing the values in `{{}}`):
+1. On your computer, navigate to the folder where you want to setup the repository.
+2. Open a `cmd` (Windows) or `terminal` (Linux or MacOS) session in this folder.
+    1. An easy way to do this is to right-click and choose appropriate option based on your OS.
+3. **For Our Open Source Contributor Software Developers:**
+    1. Next, we'll fork and clone the `talawa-admin` repository.
+    1. In your web browser, navigate to [https://github.com/PalisadoesFoundation/talawa-admin/](https://github.com/PalisadoesFoundation/talawa-admin/) and click on the `fork` button. It is placed on the right corner opposite the repository name `PalisadoesFoundation/talawa-admin`.
 
-```
-$ git clone https://github.com/{{YOUR GITHUB USERNAME}}/talawa-admin.git
-```
+       ![Image with fork](public/markdown/images/install1.png)
 
-This will setup the repository and the code files locally for you. For more detailed instructions on contributing code, and managing the versions of this repository with Git, checkout [CONTRIBUTING.md here](./CONTRIBUTING.md)
+    2. You should now see `talawa-admin` under your repositories. It will be marked as forked from `PalisadoesFoundation/talawa-admin`
 
-**NOTE:** `All the commands we're going to execute in the following instructions will assume you are in the root directory of the cloned talawa-admin project. If you fail to do so, the commands will not work.`
+       ![Image of user's clone](public/markdown/images/install2.png)
 
-## Setting up npm
+    3. Clone the repository to your local computer (replacing the values in `{{}}`):
+        ```bash
+        $ git clone https://github.com/{{YOUR GITHUB USERNAME}}/talawa-admin.git
+        cd talawa-admin
+        git checkout develop
+        ```
+        - **Note:** Make sure to check out the `develop` branch
+    4. You now have a local copy of the code files. For more detailed instructions on contributing code, and managing the versions of this repository with `git`, checkout our [CONTRIBUTING.md](./CONTRIBUTING.md) file.
+4. **Talawa Administrators:**
+      1. Clone the repository to your local computer using this command:
 
-Best way to install and manage `node.js` is making use of node version managers. Two most popular node version managers right now are [fnm](https://github.com/Schniz/fnm) and [nvm](https://github.com/nvm-sh/nvm). We'd recommend `fnm` because it's written in `rust` and is much faster than `nvm`. Install whichever one you want and follow their guide to set up `node.js` on your system.
+          ```bash
+          $ git clone https://github.com/PalisadoesFoundation/talawa-admin.git
+          ```
 
-_**NOTE**_
+## Install node.js
 
-1. The repository has a `.node-version` file to help ensure you use the supported version of `node.js`. Do not edit this file.
-1. We strongly recommend that you configure your node version manager of choice to automatically read `.node-version` files
+Best way to install and manage `node.js` is making use of node version managers. We recommend using `fnm`, which will be described in more detail later.
 
-## Setting up Typescript
+Follow these steps to install the `node.js` packages in Windows, Linux and MacOS.
 
-As `talawa-admin` and `talawa-api` repositories are written using [Typescript](https://www.typescriptlang.org/), you will need to install typescript on your machine.
-We recommend to install `Typescript` globally on your machine by running the following command in the terminal:
+1. For Windows:
+    1. first install `node.js` from their website at https://nodejs.org
+        1. When installing, don't click the option to install the `necessary tools`. These are not needed in our case. 
+    2. then install [fnm](https://github.com/Schniz/fnm). Please read all the steps in this section first.
+        1. All the commands listed on this page will need to be run in a Windows terminal session in the `talawa-admin` directory.
+        2. Install `fnm` using the `winget` option listed on the page.
+        3. Setup `fnm` to automatically set the version of `node.js` to the version required for the repository using these steps:
+            1. First, refer to the `fnm` web page's section on `Shell Setup` recommendations.
+            2. Open a `Windows PowerShell` terminal window
+            3. Run the recommended `Windows PowerShell` command to open `notepad`.
+            4. Paste the recommended string into `notepad`
+            5. Save the document.
+            6. Exit `notepad`
+            7. Exit PowerShell
+            8. This will ensure that you are always using the correct version of `node.js`
+2. For Linux and MacOS, use the terminal window.
+   1. install `node.js`
+   2. then install `fnm`
+         1. Refer to the installation page's section on the `Shell Setup` recommendations.
+         2. Run the respective recommended commands to setup your node environment
+         3. This will ensure that you are always using the correct version of `node.js`
 
-```
+## Install TypeScript
+
+TypeScript is a typed superset of JavaScript that compiles to plain JavaScript. It adds optional types, classes, and modules to JavaScript, and supports tools for large-scale JavaScript applications.
+
+To install TypeScript, you can use the `npm` command which comes with `node.js`:
+
+```bash
 npm install -g typescript
 ```
 
-For more details please refer to the installation guidelines provided in the [official docs](https://www.typescriptlang.org/download).
+This command installs TypeScript globally on your system so that it can be accessed from any project.
 
-## Installing required packages/dependencies
+## Install Required Packages
 
-Run the following command to install the packages and dependencies required by `talawa-admin`:
+Run the following command to install the packages and dependencies required by the app:
 
 ```
 npm install
 ```
+
+The prerequisites are now installed. The next step will be to get the app up and running.
 
 # Configuration
 

@@ -148,6 +148,7 @@ export const SIGNUP_MUTATION = gql`
     $lastName: String!
     $email: EmailAddress!
     $password: String!
+    $orgId: ID!
   ) {
     signUp(
       data: {
@@ -155,6 +156,7 @@ export const SIGNUP_MUTATION = gql`
         lastName: $lastName
         email: $email
         password: $password
+        selectedOrganization: $orgId
       }
     ) {
       user {
@@ -266,11 +268,13 @@ export const CREATE_EVENT_MUTATION = gql`
     $isRegisterable: Boolean!
     $organizationId: ID!
     $startDate: Date!
-    $endDate: Date
+    $endDate: Date!
     $allDay: Boolean!
     $startTime: Time
     $endTime: Time
     $location: String
+    $recurrenceStartDate: Date
+    $recurrenceEndDate: Date
     $frequency: Frequency
     $weekDays: [WeekDays]
     $count: PositiveInt
@@ -293,6 +297,8 @@ export const CREATE_EVENT_MUTATION = gql`
         location: $location
       }
       recurrenceRuleData: {
+        recurrenceStartDate: $recurrenceStartDate
+        recurrenceEndDate: $recurrenceEndDate
         frequency: $frequency
         weekDays: $weekDays
         interval: $interval
@@ -313,50 +319,6 @@ export const DELETE_EVENT_MUTATION = gql`
     $recurringEventDeleteType: RecurringEventMutationType
   ) {
     removeEvent(id: $id, recurringEventDeleteType: $recurringEventDeleteType) {
-      _id
-    }
-  }
-`;
-
-export const CREATE_VENUE_MUTATION = gql`
-  mutation createVenue(
-    $capacity: Int!
-    $description: String
-    $file: String
-    $name: String!
-    $organizationId: ID!
-  ) {
-    createVenue(
-      data: {
-        capacity: $capacity
-        description: $description
-        file: $file
-        name: $name
-        organizationId: $organizationId
-      }
-    ) {
-      _id
-    }
-  }
-`;
-
-export const UPDATE_VENUE_MUTATION = gql`
-  mutation editVenue(
-    $capacity: Int
-    $description: String
-    $file: String
-    $id: ID!
-    $name: String
-  ) {
-    editVenue(
-      data: {
-        capacity: $capacity
-        description: $description
-        file: $file
-        id: $id
-        name: $name
-      }
-    ) {
       _id
     }
   }
@@ -392,7 +354,9 @@ export const ADD_ADMIN_MUTATION = gql`
 export const ADD_MEMBER_MUTATION = gql`
   mutation CreateMember($orgid: ID!, $userid: ID!) {
     createMember(input: { organizationId: $orgid, userId: $userid }) {
-      _id
+      organization {
+        _id
+      }
     }
   }
 `;
@@ -452,12 +416,6 @@ export const FORGOT_PASSWORD_MUTATION = gql`
         otpToken: $otpToken
       }
     )
-  }
-`;
-
-export const UPDATE_USERTYPE_MUTATION = gql`
-  mutation UpdateUserType($id: ID!, $userType: String!) {
-    updateUserType(data: { id: $id, userType: $userType })
   }
 `;
 
@@ -602,15 +560,25 @@ export const UPDATE_POST_MUTATION = gql`
 export const UPDATE_EVENT_MUTATION = gql`
   mutation UpdateEvent(
     $id: ID!
-    $title: String!
-    $description: String!
-    $recurring: Boolean!
-    $isPublic: Boolean!
-    $isRegisterable: Boolean!
-    $allDay: Boolean!
+    $title: String
+    $description: String
+    $recurring: Boolean
+    $recurringEventUpdateType: RecurringEventMutationType
+    $isPublic: Boolean
+    $isRegisterable: Boolean
+    $allDay: Boolean
+    $startDate: Date
+    $endDate: Date
     $startTime: Time
     $endTime: Time
     $location: String
+    $recurrenceStartDate: Date
+    $recurrenceEndDate: Date
+    $frequency: Frequency
+    $weekDays: [WeekDays]
+    $count: PositiveInt
+    $interval: PositiveInt
+    $weekDayOccurenceInMonth: Int
   ) {
     updateEvent(
       id: $id
@@ -621,10 +589,22 @@ export const UPDATE_EVENT_MUTATION = gql`
         isPublic: $isPublic
         isRegisterable: $isRegisterable
         allDay: $allDay
+        startDate: $startDate
+        endDate: $endDate
         startTime: $startTime
         endTime: $endTime
         location: $location
       }
+      recurrenceRuleData: {
+        recurrenceStartDate: $recurrenceStartDate
+        recurrenceEndDate: $recurrenceEndDate
+        frequency: $frequency
+        weekDays: $weekDays
+        interval: $interval
+        count: $count
+        weekDayOccurenceInMonth: $weekDayOccurenceInMonth
+      }
+      recurringEventUpdateType: $recurringEventUpdateType
     ) {
       _id
     }
@@ -732,3 +712,9 @@ export {
   TOGGLE_PINNED_POST,
   UPDATE_USER_ROLE_IN_ORG_MUTATION,
 } from './OrganizationMutations';
+
+export {
+  CREATE_VENUE_MUTATION,
+  DELETE_VENUE_MUTATION,
+  UPDATE_VENUE_MUTATION,
+} from './VenueMutations';

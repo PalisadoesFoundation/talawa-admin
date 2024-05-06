@@ -2,6 +2,7 @@
    Recurrence utility functions
 */
 
+import dayjs from 'dayjs';
 import {
   Days,
   dayNames,
@@ -10,18 +11,27 @@ import {
   weekDayOccurences,
 } from './recurrenceConstants';
 import { Frequency } from './recurrenceTypes';
-import type { WeekDays, InterfaceRecurrenceRule } from './recurrenceTypes';
+import type {
+  WeekDays,
+  InterfaceRecurrenceRuleState,
+  InterfaceRecurrenceRule,
+} from './recurrenceTypes';
 
 // function that generates the recurrence rule text to display
 // e.g. - 'Weekly on Sunday, until Feburary 23, 2029'
 export const getRecurrenceRuleText = (
-  recurrenceRuleState: InterfaceRecurrenceRule,
-  startDate: Date,
-  endDate: Date | null,
+  recurrenceRuleState: InterfaceRecurrenceRuleState,
 ): string => {
   let recurrenceRuleText = '';
-  const { frequency, weekDays, interval, count, weekDayOccurenceInMonth } =
-    recurrenceRuleState;
+  const {
+    recurrenceStartDate,
+    recurrenceEndDate,
+    frequency,
+    weekDays,
+    interval,
+    count,
+    weekDayOccurenceInMonth,
+  } = recurrenceRuleState;
 
   switch (frequency) {
     case Frequency.DAILY:
@@ -31,10 +41,8 @@ export const getRecurrenceRuleText = (
         recurrenceRuleText = 'Daily';
       }
       break;
+
     case Frequency.WEEKLY:
-      if (!weekDays) {
-        break;
-      }
       if (isMondayToFriday(weekDays)) {
         if (interval && interval > 1) {
           recurrenceRuleText = `Every ${interval} weeks, `;
@@ -49,6 +57,7 @@ export const getRecurrenceRuleText = (
       }
       recurrenceRuleText += getWeekDaysString(weekDays);
       break;
+
     case Frequency.MONTHLY:
       if (interval && interval > 1) {
         recurrenceRuleText = `Every ${interval} months on `;
@@ -59,26 +68,27 @@ export const getRecurrenceRuleText = (
       if (weekDayOccurenceInMonth) {
         const getOccurence =
           weekDayOccurenceInMonth !== -1 ? weekDayOccurenceInMonth - 1 : 4;
-        recurrenceRuleText += `${weekDayOccurences[getOccurence]} ${dayNames[Days[startDate.getDay()]]}`;
+        recurrenceRuleText += `${weekDayOccurences[getOccurence]} ${dayNames[Days[recurrenceStartDate.getDay()]]}`;
       } else {
-        recurrenceRuleText += `Day ${startDate.getDate()}`;
+        recurrenceRuleText += `Day ${recurrenceStartDate.getDate()}`;
       }
       break;
+
     case Frequency.YEARLY:
       if (interval && interval > 1) {
         recurrenceRuleText = `Every ${interval} years on `;
       } else {
         recurrenceRuleText = 'Annually on ';
       }
-      recurrenceRuleText += `${monthNames[startDate.getMonth()]} ${startDate.getDate()}`;
+      recurrenceRuleText += `${monthNames[recurrenceStartDate.getMonth()]} ${recurrenceStartDate.getDate()}`;
       break;
   }
 
-  if (endDate) {
+  if (recurrenceEndDate) {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    recurrenceRuleText += `, until  ${endDate.toLocaleDateString('en-US', options)}`;
+    recurrenceRuleText += `, until  ${recurrenceEndDate.toLocaleDateString('en-US', options)}`;
   }
 
   if (count) {
@@ -89,7 +99,7 @@ export const getRecurrenceRuleText = (
 };
 
 // function that generates a string of selected week days for the recurrence rule text
-// e.g. - for an array ['MO', 'TU', 'FR'], it would output: 'Monday, Tuesday & Friday'
+// e.g. - for an array ['MONDAY', 'TUESDAY', 'FRIDAY'], it would output: 'Monday, Tuesday & Friday'
 const getWeekDaysString = (weekDays: WeekDays[]): string => {
   const fullDayNames = weekDays.map((day) => dayNames[day]);
 
@@ -138,4 +148,105 @@ export const isLastOccurenceOfWeekDay = (date: Date): boolean => {
   }
 
   return date.getDate() === lastOccurenceInMonth.getDate();
+};
+
+// function that evaluates whether the startDate or endDate of a recurring event instance have changed
+export const haveInstanceDatesChanged = (
+  instanceOriginalStartDate: string,
+  instanceOriginalEndDate: string,
+  instanceNewStartDate: string,
+  instanceNewEndDate: string,
+): boolean => {
+  return (
+    instanceOriginalStartDate !== instanceNewStartDate ||
+    instanceOriginalEndDate !== instanceNewEndDate
+  );
+};
+
+// function that checks whether the recurrence rule has changed
+export const hasRecurrenceRuleChanged = (
+  originalRecurrencerule: InterfaceRecurrenceRule | null,
+  recurrenceRuleState: InterfaceRecurrenceRuleState,
+): boolean => {
+  if (!originalRecurrencerule) {
+    return false;
+  }
+
+  const newRecurrenceRule = getRecurrenceRule(recurrenceRuleState);
+
+  const recurrenceProperties = Object.keys(
+    newRecurrenceRule,
+  ) as (keyof InterfaceRecurrenceRule)[];
+
+  for (const recurrenceProperty of recurrenceProperties) {
+    if (recurrenceProperty === 'weekDays') {
+      if (
+        weekDaysHaveChanged(
+          originalRecurrencerule.weekDays,
+          newRecurrenceRule.weekDays,
+        )
+      ) {
+        return true;
+      }
+    } else if (
+      originalRecurrencerule[recurrenceProperty] !==
+      newRecurrenceRule[recurrenceProperty]
+    ) {
+      return true;
+    }
+  }
+
+  return false;
+};
+
+// function that returns the recurrence rule object based on the current recurrence rule state
+const getRecurrenceRule = (
+  recurrenceRuleState: InterfaceRecurrenceRuleState,
+): InterfaceRecurrenceRule => {
+  const {
+    recurrenceStartDate,
+    recurrenceEndDate,
+    frequency,
+    weekDays,
+    interval,
+    count,
+    weekDayOccurenceInMonth,
+  } = recurrenceRuleState;
+
+  const originalRecurrencerule = {
+    recurrenceStartDate: dayjs(recurrenceStartDate).format('YYYY-MM-DD'),
+    recurrenceEndDate: recurrenceEndDate
+      ? dayjs(recurrenceEndDate).format('YYYY-MM-DD')
+      : null,
+    frequency,
+    weekDays: weekDays?.length ? weekDays : [],
+    interval,
+    count: count ?? null,
+    weekDayOccurenceInMonth: weekDayOccurenceInMonth ?? null,
+  };
+
+  return originalRecurrencerule;
+};
+
+// function to check whether recurrence weekDays have been changed
+const weekDaysHaveChanged = (
+  originalWeekDays: WeekDays[],
+  currentWeekDays: WeekDays[],
+): boolean => {
+  if (originalWeekDays.length !== currentWeekDays.length) {
+    return true;
+  }
+
+  // Sort both arrays
+  const sortedOriginalWeekDays = [...originalWeekDays].sort();
+  const sortedCurrentWeekDays = [...currentWeekDays].sort();
+
+  // Compare arrays
+  for (let i = 0; i < sortedOriginalWeekDays.length; i++) {
+    if (sortedOriginalWeekDays[i] !== sortedCurrentWeekDays[i]) {
+      return true;
+    }
+  }
+
+  return false;
 };

@@ -18,6 +18,9 @@ import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
 import dayjs from 'dayjs';
 import useLocalStorage from 'utils/useLocalstorage';
+import { MockedProvider } from '@apollo/client/testing';
+import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/OrganizationQueries';
+import { DELETE_ADVERTISEMENT_BY_ID } from 'GraphQl/Mutations/mutations';
 
 const { getItem } = useLocalStorage();
 
@@ -70,6 +73,7 @@ describe('Testing Advertisement Entry Component', () => {
                 name="Advert1"
                 organizationId="1"
                 type="POPUP"
+                setAfter={jest.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -142,6 +146,7 @@ describe('Testing Advertisement Entry Component', () => {
                 name="Advert1"
                 organizationId="1"
                 type="POPUP"
+                setAfter={jest.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -204,6 +209,7 @@ describe('Testing Advertisement Entry Component', () => {
                 organizationId="1"
                 mediaUrl=""
                 id="1"
+                setAfter={jest.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -273,6 +279,7 @@ describe('Testing Advertisement Entry Component', () => {
                 organizationId="1"
                 mediaUrl=""
                 id="1"
+                setAfter={jest.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -331,7 +338,12 @@ describe('Testing Advertisement Entry Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              {<AdvertisementRegister formStatus="register" />}
+              {
+                <AdvertisementRegister
+                  setAfter={jest.fn()}
+                  formStatus="register"
+                />
+              }
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
@@ -378,6 +390,191 @@ describe('Testing Advertisement Entry Component', () => {
         startDate: dayjs(new Date('2023-01-01')).format('YYYY-MM-DD'),
         endDate: dayjs(new Date('2023-02-01')).format('YYYY-MM-DD'),
       },
+    });
+  });
+  test('delet advertisement', async () => {
+    const deleteAdByIdMock = jest.fn();
+    const mocks = [
+      {
+        request: {
+          query: ORGANIZATION_ADVERTISEMENT_LIST,
+          variables: {
+            id: '1',
+            first: 2,
+            after: null,
+            last: null,
+            before: null,
+          },
+        },
+        result: {
+          data: {
+            organizations: [
+              {
+                _id: '1',
+                advertisements: {
+                  edges: [
+                    {
+                      node: {
+                        _id: '1',
+                        name: 'Advertisement1',
+                        startDate: '2022-01-01',
+                        endDate: '2023-01-01',
+                        mediaUrl: 'http://example1.com',
+                      },
+                      cursor: 'cursor1',
+                    },
+                    {
+                      node: {
+                        _id: '2',
+                        name: 'Advertisement2',
+                        startDate: '2024-02-01',
+                        endDate: '2025-02-01',
+                        mediaUrl: 'http://example2.com',
+                      },
+                      cursor: 'cursor2',
+                    },
+                    {
+                      node: {
+                        _id: '3',
+                        name: 'Advertisement1',
+                        startDate: '2022-01-01',
+                        endDate: '2023-01-01',
+                        mediaUrl: 'http://example1.com',
+                      },
+                      cursor: 'cursor3',
+                    },
+                    {
+                      node: {
+                        _id: '4',
+                        name: 'Advertisement2',
+                        startDate: '2024-02-01',
+                        endDate: '2025-02-01',
+                        mediaUrl: 'http://example2.com',
+                      },
+                      cursor: 'cursor4',
+                    },
+                    {
+                      node: {
+                        _id: '5',
+                        name: 'Advertisement1',
+                        startDate: '2022-01-01',
+                        endDate: '2023-01-01',
+                        mediaUrl: 'http://example1.com',
+                      },
+                      cursor: 'cursor5',
+                    },
+                    {
+                      node: {
+                        _id: '6',
+                        name: 'Advertisement2',
+                        startDate: '2024-02-01',
+                        endDate: '2025-02-01',
+                        mediaUrl: 'http://example2.com',
+                      },
+                      cursor: 'cursor6',
+                    },
+                  ],
+                  pageInfo: {
+                    startCursor: 'cursor1',
+                    endCursor: 'cursor6',
+                    hasNextPage: true,
+                    hasPreviousPage: false,
+                  },
+                  totalCount: 8,
+                },
+              },
+            ],
+          },
+        },
+      },
+      {
+        request: {
+          query: DELETE_ADVERTISEMENT_BY_ID,
+          variables: {
+            id: '1',
+          },
+        },
+        result: {
+          data: {
+            advertisements: {
+              _id: null,
+            },
+          },
+        },
+      },
+    ];
+    mockUseMutation.mockReturnValue([deleteAdByIdMock]);
+    const { getByTestId, getAllByText } = render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider mocks={mocks} addTypename={false}>
+                <AdvertisementEntry
+                  endDate={new Date()}
+                  startDate={new Date()}
+                  id="1"
+                  key={1}
+                  mediaUrl="data:videos"
+                  name="Advert1"
+                  organizationId="1"
+                  type="POPUP"
+                  setAfter={jest.fn()}
+                />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    //Testing rendering
+    expect(getByTestId('AdEntry')).toBeInTheDocument();
+    expect(getAllByText('POPUP')[0]).toBeInTheDocument();
+    expect(getAllByText('Advert1')[0]).toBeInTheDocument();
+    expect(screen.getByTestId('media')).toBeInTheDocument();
+
+    //Testing successful deletion
+    fireEvent.click(getByTestId('moreiconbtn'));
+    fireEvent.click(getByTestId('deletebtn'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('delete_title')).toBeInTheDocument();
+      expect(screen.getByTestId('delete_body')).toBeInTheDocument();
+    });
+
+    fireEvent.click(getByTestId('delete_yes'));
+
+    await waitFor(() => {
+      expect(deleteAdByIdMock).toHaveBeenCalledWith({
+        variables: {
+          id: '1',
+        },
+      });
+      const deletedMessage = screen.queryByText('Advertisement Deleted');
+      expect(deletedMessage).toBeNull();
+    });
+
+    //Testing unsuccessful deletion
+    deleteAdByIdMock.mockRejectedValueOnce(new Error('Deletion Failed'));
+
+    fireEvent.click(getByTestId('moreiconbtn'));
+
+    fireEvent.click(getByTestId('delete_yes'));
+
+    await waitFor(() => {
+      expect(deleteAdByIdMock).toHaveBeenCalledWith({
+        variables: {
+          id: '1',
+        },
+      });
+      const deletionFailedText = screen.queryByText((content, element) => {
+        return (
+          element?.textContent === 'Deletion Failed' &&
+          element.tagName.toLowerCase() === 'div'
+        );
+      });
+      expect(deletionFailedText).toBeNull();
     });
   });
 });

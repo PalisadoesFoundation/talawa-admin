@@ -70,7 +70,7 @@ describe('Organisation Events Page', () => {
     title: 'Dummy Org',
     description: 'This is a dummy organization',
     startDate: '03/28/2022',
-    endDate: '04/15/2023',
+    endDate: '03/30/2022',
     location: 'New Delhi',
     startTime: '09:00 AM',
     endTime: '05:00 PM',
@@ -93,6 +93,8 @@ describe('Organisation Events Page', () => {
         endTime: '06:00',
         allDay: false,
         recurring: false,
+        recurrenceRule: null,
+        isRecurringEventException: false,
         isPublic: true,
         isRegisterable: true,
       },
@@ -113,6 +115,8 @@ describe('Organisation Events Page', () => {
         endTime: '06:00',
         allDay: false,
         recurring: false,
+        recurrenceRule: null,
+        isRecurringEventException: false,
         isPublic: true,
         isRegisterable: true,
       },
@@ -293,7 +297,7 @@ describe('Organisation Events Page', () => {
       description: ' ',
       location: ' ',
       startDate: '03/28/2022',
-      endDate: '04/15/2023',
+      endDate: '03/30/2022',
       startTime: '02:00',
       endTime: '06:00',
       allDay: false,
@@ -301,6 +305,7 @@ describe('Organisation Events Page', () => {
       isPublic: true,
       isRegisterable: true,
     };
+
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -384,7 +389,7 @@ describe('Organisation Events Page', () => {
     });
   });
 
-  test('Testing if the event is not for all day', async () => {
+  test('Testing create event if the event is not for all day', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>

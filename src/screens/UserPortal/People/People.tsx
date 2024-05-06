@@ -1,7 +1,5 @@
 import React from 'react';
-import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
 import PeopleCard from 'components/UserPortal/PeopleCard/PeopleCard';
-import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import { Dropdown, Form, InputGroup } from 'react-bootstrap';
 import PaginationList from 'components/PaginationList/PaginationList';
 import {
@@ -22,6 +20,15 @@ interface InterfaceOrganizationCardProps {
   email: string;
   role: string;
   sno: string;
+}
+
+interface InterfaceMember {
+  firstName: string;
+  lastName: string;
+  image: string;
+  _id: string;
+  email: string;
+  userType: string;
 }
 
 export default function people(): JSX.Element {
@@ -76,9 +83,11 @@ export default function people(): JSX.Element {
     });
   };
 
-  const handleSearchByEnter = (e: any): void => {
+  const handleSearchByEnter = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ): void => {
     if (e.key === 'Enter') {
-      const { value } = e.target;
+      const { value } = e.currentTarget;
       handleSearch(value);
     }
   };
@@ -110,15 +119,9 @@ export default function people(): JSX.Element {
     }
   }, [mode]);
 
-  const navbarProps = {
-    currentPage: 'people',
-  };
-
   return (
     <>
-      <OrganizationNavbar {...navbarProps} />
       <div className={`d-flex flex-row ${styles.containerHeight}`}>
-        <UserSidebar />
         <div className={`${styles.colorLight} ${styles.mainContainer}`}>
           <h1>People</h1>
           <div
@@ -197,7 +200,7 @@ export default function people(): JSX.Element {
                         )
                       : /* istanbul ignore next */
                         members
-                    ).map((member: any, index) => {
+                    ).map((member: InterfaceMember, index) => {
                       const name = `${member.firstName} ${member.lastName}`;
 
                       const cardProps: InterfaceOrganizationCardProps = {

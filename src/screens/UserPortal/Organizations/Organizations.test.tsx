@@ -1,5 +1,5 @@
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 
 import userEvent from '@testing-library/user-event';
@@ -35,9 +35,50 @@ const MOCKS = [
                 {
                   __typename: 'Organization',
                   _id: '6401ff65ce8e8406b8f07af2',
-                  name: 'createdOrganization',
                   image: '',
-                  description: 'New Desc',
+                  name: 'anyOrganization1',
+                  description: 'desc',
+                  address: {
+                    city: 'abc',
+                    countryCode: '123',
+                    postalCode: '456',
+                    state: 'def',
+                    dependentLocality: 'ghi',
+                    line1: 'asdfg',
+                    line2: 'dfghj',
+                    sortingCode: '4567',
+                  },
+                  createdAt: '1234567890',
+                  userRegistrationRequired: true,
+                  creator: {
+                    __typename: 'User',
+                    firstName: 'John',
+                    lastName: 'Doe',
+                  },
+                  members: [
+                    {
+                      _id: '56gheqyr7deyfuiwfewifruy8',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                  admins: [
+                    {
+                      _id: '45gj5678jk45678fvgbhnr4rtgh',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                  membershipRequests: [
+                    {
+                      _id: '56gheqyr7deyfuiwfewifruy8',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
                 },
               ],
             },
@@ -164,9 +205,50 @@ const MOCKS = [
                 {
                   __typename: 'Organization',
                   _id: '6401ff65ce8e8406b8f07af2',
-                  name: 'joinedOrganization',
                   image: '',
-                  description: 'New Desc',
+                  name: 'anyOrganization1',
+                  description: 'desc',
+                  address: {
+                    city: 'abc',
+                    countryCode: '123',
+                    postalCode: '456',
+                    state: 'def',
+                    dependentLocality: 'ghi',
+                    line1: 'asdfg',
+                    line2: 'dfghj',
+                    sortingCode: '4567',
+                  },
+                  createdAt: '1234567890',
+                  userRegistrationRequired: true,
+                  creator: {
+                    __typename: 'User',
+                    firstName: 'John',
+                    lastName: 'Doe',
+                  },
+                  members: [
+                    {
+                      _id: '56gheqyr7deyfuiwfewifruy8',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                  admins: [
+                    {
+                      _id: '45gj5678jk45678fvgbhnr4rtgh',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                  membershipRequests: [
+                    {
+                      _id: '56gheqyr7deyfuiwfewifruy8',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
                 },
               ],
             },
@@ -245,6 +327,11 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
+const resizeWindow = (width: number): void => {
+  window.innerWidth = width;
+  fireEvent(window, new Event('resize'));
+};
+
 describe('Testing Organizations Screen [User Portal]', () => {
   test('Screen should be rendered properly', async () => {
     render(
@@ -281,7 +368,6 @@ describe('Testing Organizations Screen [User Portal]', () => {
     await wait();
 
     expect(screen.queryByText('anyOrganization2')).toBeInTheDocument();
-    expect(screen.queryByText('anyOrganization1')).not.toBeInTheDocument();
 
     userEvent.clear(screen.getByTestId('searchInput'));
     userEvent.click(searchBtn);
@@ -332,5 +418,94 @@ describe('Testing Organizations Screen [User Portal]', () => {
     await wait();
 
     expect(screen.queryAllByText('createdOrganization')).not.toBe([]);
+  });
+
+  test('Join Now button render correctly', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Assert "Join Now" button
+    const joinNowButtons = screen.getAllByTestId('joinBtn');
+    expect(joinNowButtons.length).toBeGreaterThan(0);
+  });
+
+  test('Mode is changed to created organizations', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('modeChangeBtn'));
+    await wait();
+    userEvent.click(screen.getByTestId('modeBtn2'));
+    await wait();
+
+    expect(screen.queryAllByText('createdOrganization')).not.toBe([]);
+  });
+
+  test('Testing Sidebar', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const closeMenubtn = screen.getByTestId('closeMenu');
+    expect(closeMenubtn).toBeInTheDocument();
+    closeMenubtn.click();
+    const openMenuBtn = screen.getByTestId('openMenu');
+    expect(openMenuBtn).toBeInTheDocument();
+    openMenuBtn.click();
+  });
+
+  test('Testing sidebar when the screen size is less than or equal to 820px', async () => {
+    resizeWindow(800);
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    expect(screen.getByText('My Organizations')).toBeInTheDocument();
+    expect(screen.getByText('Talawa User Portal')).toBeInTheDocument();
+
+    const settingsBtn = screen.getByTestId('settingsBtn');
+
+    settingsBtn.click();
   });
 });

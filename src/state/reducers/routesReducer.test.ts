@@ -23,6 +23,7 @@ describe('Testing Routes reducer', () => {
         },
         { name: 'Advertisement', url: '/orgads/undefined' },
         { name: 'Funds', url: '/orgfunds/undefined' },
+        { name: 'Requests', url: '/requests/undefined' },
         {
           name: 'Plugins',
           subTargets: [
@@ -75,6 +76,11 @@ describe('Testing Routes reducer', () => {
           component: 'OrganizationFunds',
         },
         {
+          name: 'Requests',
+          comp_id: 'requests',
+          component: 'Requests',
+        },
+        {
           name: 'Plugins',
           comp_id: null,
           component: 'AddOnStore',
@@ -111,6 +117,7 @@ describe('Testing Routes reducer', () => {
         { name: 'Block/Unblock', url: '/blockuser/orgId' },
         { name: 'Advertisement', url: '/orgads/orgId' },
         { name: 'Funds', url: '/orgfunds/orgId' },
+        { name: 'Requests', url: '/requests/orgId' },
         {
           name: 'Plugins',
           subTargets: [
@@ -159,6 +166,11 @@ describe('Testing Routes reducer', () => {
         },
         { name: 'Funds', comp_id: 'orgfunds', component: 'OrganizationFunds' },
         {
+          name: 'Requests',
+          comp_id: 'requests',
+          component: 'Requests',
+        },
+        {
           name: 'Plugins',
           comp_id: null,
           component: 'AddOnStore',
@@ -198,6 +210,7 @@ describe('Testing Routes reducer', () => {
         },
         { name: 'Advertisement', url: '/orgads/undefined' },
         { name: 'Funds', url: '/orgfunds/undefined' },
+        { name: 'Requests', url: '/requests/undefined' },
         { name: 'Settings', url: '/orgsetting/undefined' },
         {
           comp_id: null,
@@ -253,6 +266,11 @@ describe('Testing Routes reducer', () => {
           component: 'OrganizationFunds',
         },
         {
+          name: 'Requests',
+          comp_id: 'requests',
+          component: 'Requests',
+        },
+        {
           name: 'Plugins',
           comp_id: null,
           component: 'AddOnStore',
@@ -269,5 +287,29 @@ describe('Testing Routes reducer', () => {
         { name: '', comp_id: 'member', component: 'MemberDetail' },
       ],
     });
+  });
+});
+
+describe('routesReducer', () => {
+  it('returns state with updated subTargets when UPDATE_P_TARGETS action is dispatched', () => {
+    const action = {
+      type: 'UPDATE_P_TARGETS',
+      payload: [{ name: 'New Plugin', url: '/newplugin' }],
+    };
+    const initialState = {
+      targets: [{ name: 'Plugins' }],
+      components: [],
+    };
+    const state = reducer(initialState, action);
+    const pluginsTarget = state.targets.find(
+      (target) => target.name === 'Plugins',
+    );
+    // Check if pluginsTarget is defined
+    if (!pluginsTarget) {
+      throw new Error('Plugins target not found in state');
+    }
+    expect(pluginsTarget.subTargets).toEqual([
+      { name: 'New Plugin', url: '/newplugin' },
+    ]);
   });
 });

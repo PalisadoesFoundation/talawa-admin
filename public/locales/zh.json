@@ -37,7 +37,42 @@
     "lowercase_check": "至少一個小寫字母",
     "uppercase_check": "至少有一個大寫字母",
     "numeric_value_check": "至少一個數值",
-    "special_char_check": "至少一個特殊字符"
+    "special_char_check": "至少一個特殊字符",
+    "loading": "载入中...",
+    "selectOrg": "选择一个组织",
+    "afterRegister": "注册成功。请等待管理员批准您的请求"
+  },
+  "userLoginPage": {
+    "title": "塔拉瓦管理員",
+    "fromPalisadoes": "柵欄 基金会志愿者的开源应用程序",
+    "talawa_portal": "塔拉瓦管理門戶",
+    "login": "登錄",
+    "register": "登記",
+    "firstName": "名",
+    "lastName": "姓",
+    "email": "電子郵件",
+    "password": "密碼",
+    "atleast_8_char_long": "至少 8 個字符長",
+    "Password_and_Confirm_password_mismatches.": "密碼和確認密碼不匹配。",
+    "confirmPassword": "確認密碼",
+    "forgotPassword": "忘記密碼 ？",
+    "enterEmail": "输入电子邮件",
+    "enterPassword": "输入密码",
+    "doNotOwnAnAccount": "沒有帳戶嗎？",
+    "talawaApiUnavailable": "服務不可用。它正在運行嗎？還要檢查您的網絡連接。",
+    "captchaError": "驗證碼錯誤！",
+    "Please_check_the_captcha": "請檢查驗證碼。",
+    "Something_went_wrong": "出了點問題，請稍後再試。",
+    "passwordMismatches": "密碼和確認密碼不匹配。",
+    "fillCorrectly": "正確填寫所有細節。",
+    "notAuthorised": "抱歉！你沒有被授權！",
+    "notFound": "找不到用戶！",
+    "successfullyRegistered": "註冊成功，請等待審核通過。",
+    "userLogin": "用户登录",
+    "afterRegister": "註冊成功。 請等待管理員批准您的請求。",
+    "OR": "或者",
+    "loading": "载入中...",
+    "selectOrg": "选择一个组织"
   },
   "latestEvents": {
     "eventCardTitle": "即将举行的活动",
@@ -138,11 +173,14 @@
     "noCampaigns": "未找到活动",
     "createCampaign": "创建筹款活动",
     "updateCampaign": "更新筹款活动",
+    "manageCampaign": "管理筹款活动",
     "deleteCampaign": "删除筹款活动",
     "no": "没有",
     "yes": "是",
     "currency": "货币",
-    "selectCurrency": "选择货币"
+    "selectCurrency": "选择货币",
+    "filter": "筛选",
+    "searchFullName": "按姓名搜索"
   },
   "pledges": {
     "title": "资金筹款承诺",
@@ -264,7 +302,7 @@
     "admins": "管理員",
     "members": "成員",
     "joinNow": "现在加入",
-    "joined": "加入",
+    "visit": "加入访问",
     "withdraw": "提取",
     "orgJoined": "成功加入组织",
     "MembershipRequestSent": "会员申请已成功发送",
@@ -442,9 +480,7 @@
     "yes": "是"
   },
   "eventListCard": {
-    "location": "地點",
-    "on": "上",
-    "end": "結尾",
+    "location": "活動地點",
     "deleteEvent": "刪除事件",
     "deleteEventMsg": "您要刪除此活動嗎？",
     "no": "不",
@@ -452,6 +488,10 @@
     "editEvent": "編輯事件",
     "eventTitle": "標題",
     "description": "描述",
+    "startDate": "开始日期",
+    "endDate": "结束日期",
+    "registerEvent": "登記",
+    "alreadyRegistered": "已經註冊",
     "startTime": "開始時間",
     "endTime": "時間結束",
     "allDay": "一整天",
@@ -466,7 +506,16 @@
     "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。",
     "thisInstance": "此实例",
     "thisAndFollowingInstances": "此及其后续实例",
-    "allInstances": "所有实例"
+    "allInstances": "所有实例",
+    "customRecurrence": "自定义重复",
+    "repeatsEvery": "重复每",
+    "repeatsOn": "重复于",
+    "ends": "结束",
+    "never": "永不",
+    "on": "于",
+    "after": "之后",
+    "occurences": "次数",
+    "done": "完成"
   },
   "orgPost": {
     "title": "塔拉瓦帖子",
@@ -813,10 +862,18 @@
     "organizations": "组织",
     "searchByName": "按名稱搜索"
   },
-  "userSidebar": {
+  "userSidebarOrg": {
     "yourOrganizations": "您的組織",
     "noOrganizations": "您還沒有加入任何組織。",
-    "viewAll": "查看全部"
+    "viewAll": "查看全部",
+    "talawaUserPortal": "用户门户",
+    "menu": "菜单",
+    "my organizations": "我的组织",
+    "users": "用户",
+    "requests": "请求",
+    "communityProfile": "社区简介",
+    "logout": "登出",
+    "settings": "設置"
   },
   "organizationSidebar": {
     "viewAll": "查看全部",
@@ -935,7 +992,9 @@
     "startDate": "开始日期",
     "endDate": "结束日期",
     "publicEvent": "公开",
-    "registerable": "可注册"
+    "registerable": "可注册",
+    "monthlyCalendarView": "月历",
+    "yearlyCalendarView": "年度日历"
   },
   "userEventCard": {
     "location": "地點",
@@ -963,7 +1022,8 @@
     "view": "查看",
     "edit": "编辑",
     "editAdvertisement": "编辑广告",
-    "saveChanges": "保存更改"
+    "saveChanges": "保存更改",
+    "endOfResults": "結果結束"
   },
   "userChat": {
     "chat": "聊天",
@@ -1001,22 +1061,33 @@
     "categoryDisabled": "措施项类别已禁用"
   },
   "organizationVenues": {
-    "venueTitle": "场地",
+    "title": "场地",
     "addVenue": "添加场地",
     "venueDetails": "场地详情",
     "venueName": "场地名称",
-    "enterVenueName": "请输入场地名称",
+    "enterVenueName": "输入场地名称",
     "description": "场地描述",
     "enterVenueDesc": "输入场地描述",
     "capacity": "容量",
     "enterVenueCapacity": "输入场地容量",
-    "image": "场地图片",
-    "uploadVenueImage": "上传场地图片",
+    "image": "场地图像",
+    "uploadVenueImage": "上传场地图像",
     "createVenue": "创建场地",
     "venueAdded": "场地添加成功",
-    "update": "更新场地详情",
-    "editVenue": "更新地点",
-    "venueUpdated": "场地详细信息更新成功"
+    "editVenue": "更新场地",
+    "venueUpdated": "场地详情更新成功",
+    "sort": "排序",
+    "highestCapacity": "最高容量",
+    "lowestCapacity": "最低容量",
+    "noVenues": "没有找到场地！",
+    "edit": "编辑",
+    "view": "查看",
+    "delete": "删除",
+    "venueTitleError": "场地标题不能为空！",
+    "venueCapacityError": "容量必须为正数！",
+    "searchBy": "搜索方式",
+    "name": "名称",
+    "desc": "描述"
   },
   "addMember": {
     "title": "添加成员",
@@ -1041,5 +1112,27 @@
     "passwordNotMatch": "密码不匹配。",
     "user": "用户",
     "addMember": "添加成员"
+  },
+  "eventActionItems": {
+    "title": "行动项目",
+    "createActionItem": "创建操作项",
+    "actionItemCategory": "操作项类别",
+    "selectActionItemCategory": "选择操作项类别",
+    "selectAssignee": "选择受让人",
+    "preCompletionNotes": "预完成注释",
+    "postCompletionNotes": "完成后注释",
+    "actionItemDetails": "操作项详细信息",
+    "dueDate": "截止日期",
+    "completionDate": "完成日期",
+    "editActionItem": "编辑操作项",
+    "deleteActionItem": "删除操作项",
+    "deleteActionItemMsg": "您要删除此操作项吗？",
+    "yes": "是的",
+    "不": "不",
+    "successfulDeletion": "操作项删除成功",
+    "successfulCreation": "操作项创建成功",
+    "successfulUpdation": "操作项更新成功",
+    "notes": "注释",
+    "save": "保存"
   }
 }

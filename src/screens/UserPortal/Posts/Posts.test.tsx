@@ -13,7 +13,7 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
-import Home from './Home';
+import Home from './Posts';
 import useLocalStorage from 'utils/useLocalstorage';
 
 const { setItem } = useLocalStorage();
@@ -115,6 +115,7 @@ const MOCKS = [
                           },
                         ],
                         text: 'This is the post two',
+                        createdAt: '2024-03-03T09:26:56.524+00:00',
                       },
                     ],
                   },

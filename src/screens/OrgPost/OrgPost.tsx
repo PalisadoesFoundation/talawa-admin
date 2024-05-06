@@ -32,6 +32,15 @@ interface InterfaceOrgPost {
   createdAt: string;
   likeCount: number;
   commentCount: number;
+  likedBy: { _id: string }[];
+  comments: {
+    _id: string;
+    text: string;
+    creator: { _id: string };
+    createdAt: string;
+    likeCount: number;
+    likedBy: { _id: string }[];
+  }[];
 }
 
 function orgPost(): JSX.Element {
