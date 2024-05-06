@@ -222,7 +222,14 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
             </Dropdown.Menu>
           </Dropdown>
         </Card.Header>
-        <Card.Img variant="top" src={props.image ?? UserDefault} />
+        <Card.Img
+          variant="top"
+          src={
+            props.image === '' || props.image === null
+              ? UserDefault
+              : props.image
+          }
+        />
         <Card.Body className="pb-0">
           <Card.Title className={`${styles.cardTitle}`}>
             {props.title}
@@ -243,6 +250,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
               size="sm"
               variant="success"
               className="px-4"
+              data-testid={'viewPostBtn'}
               onClick={toggleViewPost}
             >
               View Post
@@ -254,7 +262,11 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
         <Modal.Body className="d-flex w-100 p-0" style={{ minHeight: '80vh' }}>
           <div className="w-50 d-flex  align-items-center justify-content-center">
             <img
-              src={props.image ?? UserDefault}
+              src={
+                props.image === '' || props.image === null
+                  ? UserDefault
+                  : props.image
+              }
               alt="postImg"
               className="w-100"
             />
@@ -319,10 +331,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
                   {` ${t('likes')}`}
                 </div>
                 <div className="d-flex align-items-center gap-2">
-                  <Button
-                    className={`${styles.cardActionBtn}`}
-                    data-testid="showCommentsBtn"
-                  >
+                  <Button className={`${styles.cardActionBtn}`}>
                     <CommentIcon fontSize="small" />
                   </Button>
                   {numComments}

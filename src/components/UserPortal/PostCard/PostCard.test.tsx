@@ -154,6 +154,20 @@ describe('Testing PostCard Component [User Portal]', () => {
           text: 'First comment from Talawa user portal.',
           __typename: 'Comment',
         },
+        {
+          id: '64eb13beca85de60ebe0ed0b',
+          creator: {
+            _id: '63d6064458fce20ee25c3bf8',
+            firstName: 'Priyanshu',
+            lastName: 'Bartwal',
+            email: 'test1@gmail.com',
+            __typename: 'User',
+          },
+          likeCount: 0,
+          likedBy: [],
+          text: 'First comment from Talawa user portal.',
+          __typename: 'Comment',
+        },
       ],
       likedBy: [
         {
@@ -272,6 +286,7 @@ describe('Testing PostCard Component [User Portal]', () => {
 
     await wait();
 
+    userEvent.click(screen.getByTestId('viewPostBtn'));
     userEvent.click(screen.getByTestId('likePostBtn'));
 
     if (beforeUserId) {
@@ -323,6 +338,7 @@ describe('Testing PostCard Component [User Portal]', () => {
 
     await wait();
 
+    userEvent.click(screen.getByTestId('viewPostBtn'));
     userEvent.click(screen.getByTestId('likePostBtn'));
 
     if (beforeUserId) {
@@ -413,7 +429,7 @@ describe('Testing PostCard Component [User Portal]', () => {
 
     const randomComment = 'testComment';
 
-    userEvent.click(screen.getByTestId('showCommentsBtn'));
+    userEvent.click(screen.getByTestId('viewPostBtn'));
 
     userEvent.type(screen.getByTestId('commentInput'), randomComment);
     userEvent.click(screen.getByTestId('createCommentBtn'));
@@ -455,6 +471,23 @@ describe('Testing PostCard Component [User Portal]', () => {
           ],
           text: 'testComment',
         },
+        {
+          id: '2',
+          creator: {
+            _id: '1',
+            id: '1',
+            firstName: 'test',
+            lastName: 'user',
+            email: 'test@user.com',
+          },
+          likeCount: 1,
+          likedBy: [
+            {
+              id: '2',
+            },
+          ],
+          text: 'testComment',
+        },
       ],
       likedBy: [
         {
@@ -479,11 +512,9 @@ describe('Testing PostCard Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    const showCommentsButton = screen.getByTestId('showCommentsBtn');
+    userEvent.click(screen.getByTestId('viewPostBtn'));
 
-    userEvent.click(showCommentsButton);
-
-    userEvent.click(screen.getByTestId('likeCommentBtn'));
+    userEvent.click(screen.getAllByTestId('likeCommentBtn')[0]);
 
     await wait();
 
@@ -526,6 +557,23 @@ describe('Testing PostCard Component [User Portal]', () => {
           ],
           text: 'testComment',
         },
+        {
+          id: '2',
+          creator: {
+            _id: '1',
+            id: '1',
+            firstName: 'test',
+            lastName: 'user',
+            email: 'test@user.com',
+          },
+          likeCount: 1,
+          likedBy: [
+            {
+              id: '2',
+            },
+          ],
+          text: 'testComment',
+        },
       ],
       likedBy: [
         {
@@ -550,11 +598,9 @@ describe('Testing PostCard Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    const showCommentsButton = screen.getByTestId('showCommentsBtn');
+    userEvent.click(screen.getByTestId('viewPostBtn'));
 
-    userEvent.click(showCommentsButton);
-
-    userEvent.click(screen.getByTestId('likeCommentBtn'));
+    userEvent.click(screen.getAllByTestId('likeCommentBtn')[0]);
 
     await wait();
 
@@ -603,7 +649,7 @@ describe('Testing PostCard Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('showCommentsBtn'));
+    userEvent.click(screen.getByTestId('viewPostBtn'));
     expect(screen.findAllByText('Comments')).not.toBeNull();
   });
 });

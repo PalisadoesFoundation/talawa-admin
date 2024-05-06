@@ -103,7 +103,7 @@ export default function home(): JSX.Element {
   const [adContent, setAdContent] = useState<InterfaceAdConnection>({});
   const [filteredAd, setFilteredAd] = useState<InterfaceAdContent[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [postImg, setPostImg] = useState<string>('');
+  const [postImg, setPostImg] = useState<string | null>('');
   const { orgId } = useParams();
 
   if (!orgId) {
@@ -148,7 +148,7 @@ export default function home(): JSX.Element {
   useEffect(() => {
     setPinnedPosts(
       posts.filter(({ node }: { node: InterfacePostNode }) => {
-        if (!node.pinned) return;
+        return node.pinned;
       }),
     );
   }, [posts]);
@@ -284,7 +284,7 @@ export default function home(): JSX.Element {
                     accept="image/*"
                     multiple={false}
                     className={styles.inputArea}
-                    data-testid="fileInput"
+                    data-testid="postImageInput"
                     autoComplete="off"
                     onChange={async (
                       e: React.ChangeEvent<HTMLInputElement>,
@@ -293,7 +293,7 @@ export default function home(): JSX.Element {
                       const target = e.target as HTMLInputElement;
                       const file = target.files && target.files[0];
                       const base64file = file && (await convertToBase64(file));
-                      setPostImg(base64file ?? '');
+                      setPostImg(base64file);
                     }}
                   />
                 </Col>
@@ -322,20 +322,10 @@ export default function home(): JSX.Element {
               <div>
                 <p className="fs-5 mt-5">{t(`pinnedPosts`)}</p>
                 <div className={` ${styles.pinnedPostsCardsContainer}`}>
-                  {loadingPosts ? (
-                    <div className={`d-flex flex-row justify-content-center`}>
-                      <HourglassBottomIcon /> <span>{t(`loading`)}...</span>
-                    </div>
-                  ) : (
-                    <>
-                      {pinnedPosts.map(
-                        ({ node }: { node: InterfacePostNode }) => {
-                          const cardProps = getCardProps(node);
-                          return <PostCard key={node._id} {...cardProps} />;
-                        },
-                      )}
-                    </>
-                  )}
+                  {pinnedPosts.map(({ node }: { node: InterfacePostNode }) => {
+                    const cardProps = getCardProps(node);
+                    return <PostCard key={node._id} {...cardProps} />;
+                  })}
                 </div>
               </div>
             )}
