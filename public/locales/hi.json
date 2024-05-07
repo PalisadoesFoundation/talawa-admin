@@ -37,7 +37,42 @@
     "lowercase_check": "कम से कम एक छोटा अक्षर",
     "uppercase_check": "कम से कम एक बड़ा अक्षर",
     "numeric_value_check": "कम से कम एक संख्यात्मक मान",
-    "special_char_check": "कम से कम एक विशेष पात्र"
+    "special_char_check": "कम से कम एक विशेष पात्र",
+    "loading": "लोड हो रहा है...",
+    "selectOrg": "कोई संगठन चुनें",
+    "afterRegister": "सफलतापूर्वक पंजीकृत हो गया। कृपया व्यवस्थापक की मंजूरी का इंतजार करें।"
+  },
+  "userLoginPage": {
+    "title": "तलवा व्यवस्थापक",
+    "fromPalisadoes": "पलिसाडो के स्वयंसेवकों द्वारा एक खुला स्रोत अनुप्रयोग",
+    "talawa_portal": "तलावा प्रशासन पोर्टल",
+    "login": "लॉग इन करें",
+    "register": "पंजीकरण करवाना",
+    "firstName": "पहला नाम",
+    "lastName": "उपनाम",
+    "email": "ईमेल",
+    "password": "पासवर्ड",
+    "atleast_8_char_long": "कम से कम 8 कैरेक्टर लंबा",
+    "Password_and_Confirm_password_mismatches.": "पासवर्ड और पुष्टि पासवर्ड बेमेल।",
+    "confirmPassword": "पासवर्ड की पुष्टि कीजिये",
+    "forgotPassword": "पासवर्ड भूल गए ?",
+    "enterEmail": "ईमेल दर्ज करें",
+    "enterPassword": "पास वर्ड दर्ज करें",
+    "doNotOwnAnAccount": "क्या आपके पास खाता नहीं है?",
+    "talawaApiUnavailable": "तलावा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रही है? अपनी नेटवर्क कनेक्टिविटी की भी जाँच करें।",
+    "captchaError": "कैप्चा त्रुटि!",
+    "Please_check_the_captcha": "कृपया, कैप्चा जांचें।",
+    "Something_went_wrong": "कुछ गलत हुआ, कृपया कुछ समय बाद प्रयास करें।",
+    "passwordMismatches": "पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते।",
+    "fillCorrectly": "सभी विवरण सही ढंग से भरें।",
+    "notAuthorised": "क्षमा करें! आप अधिकृत नहीं हैं!",
+    "notFound": "उपयोगकर्ता नहीं मिला!",
+    "successfullyRegistered": "सफलतापूर्वक पंजीकृत। कृपया स्वीकृत होने तक प्रतीक्षा करें।",
+    "afterRegister": "पंजीकरण सफलतापूर्वक हो गया है। कृपया आपके अनुरोध को स्वीकार करने के लिए व्यवस्थापक की प्रतीक्षा करें।",
+    "userLogin": "उपयोगकर्ता लॉगिन",
+    "OR": "या",
+    "loading": "लोड हो रहा है...",
+    "selectOrg": "कोई संगठन चुनें"
   },
   "latestEvents": {
     "eventCardTitle": "आगामी घटनाएँ",
@@ -185,7 +220,7 @@
     "admins": "व्यवस्थापक",
     "members": "सदस्य",
     "joinNow": "अब शामिल हों",
-    "joined": "शामिल हुए",
+    "visit": "दर्शन",
     "withdraw": "अनुरोध वापस लें",
     "orgJoined": "संगठन सफलतापूर्वक जुड़ा गया",
     "MembershipRequestSent": "सदस्यता अनुरोध सफलतापूर्वक भेजा गया",
@@ -363,9 +398,7 @@
     "yes": "हाँ"
   },
   "eventListCard": {
-    "location": "स्थान",
-    "on": "पर",
-    "end": "समाप्त",
+    "location": "आयोजन स्थान",
     "deleteEvent": "घटना हटाएं",
     "deleteEventMsg": "क्या आप इस इवेंट को हटाना चाहते हैं?",
     "no": "नहीं",
@@ -373,6 +406,10 @@
     "editEvent": "घटना संपादित करें",
     "eventTitle": "शीर्षक",
     "description": "विवरण",
+    "startDate": "आरंभ करने की तिथि",
+    "endDate": "अंतिम तिथि",
+    "registerEvent": "रजिस्टर करें",
+    "alreadyRegistered": "पहले से ही पंजीकृत",
     "startTime": "समय शुरू",
     "endTime": "अंत समय",
     "allDay": "पूरे दिन",
@@ -387,7 +424,16 @@
     "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।",
     "thisInstance": "यह अवसर",
     "thisAndFollowingInstances": "यह और निम्नलिखित अवसर",
-    "allInstances": "सभी अवसर"
+    "allInstances": "सभी अवसर",
+    "customRecurrence": "कस्टम पुनरावृत्ति",
+    "repeatsEvery": "दोहराता है हर",
+    "repeatsOn": "को दोहराएगा",
+    "ends": "समाप्त होता",
+    "never": "कभी नहीं",
+    "on": "पर",
+    "after": "के बाद",
+    "occurences": "'घटित होता है",
+    "done": "समाज-सम्मत"
   },
   "funds": {
     "title": "फंड्स",
@@ -440,11 +486,14 @@
     "noCampaigns": "कोई अभियान नहीं",
     "createCampaign": "अभियान बनाएँ",
     "updateCampaign": "अभियान अपडेट करें",
+    "manageCampaign": "अभियान प्रबंधित करें",
     "deleteCampaign": "अभियान हटाएं",
     "no": "नहीं",
     "yes": "हाँ",
     "currency": "मुद्रा",
-    "selectCurrency": "मुद्रा चुनें"
+    "selectCurrency": "मुद्रा चुनें",
+    "filter": "फ़िल्टर",
+    "searchFullName": "नाम से खोजें"
   },
   "pledges": {
     "title": "फंडकैम्पेन प्रतिज्ञाएं",
@@ -815,10 +864,18 @@
     "organizations": "संगठन",
     "searchByName": "नाम से खोजें"
   },
-  "userSidebar": {
+  "userSidebarOrg": {
     "yourOrganizations": "आपके संगठन",
     "noOrganizations": "आप अभी तक किसी संगठन में शामिल नहीं हुए हैं.",
-    "viewAll": "सभी को देखें"
+    "viewAll": "सभी को देखें",
+    "talawaUserPortal": "तलावा उपयोगकर्ता पोर्टल",
+    "menu": "मेन्यू",
+    "my organizations": "मेरे संगठन",
+    "users": "उपयोगकर्ता",
+    "requests": "अनुरोध",
+    "communityProfile": "सामुदायिक प्रोफ़ाइल",
+    "logout": "लॉग आउट",
+    "settings": "समायोजन"
   },
   "organizationSidebar": {
     "viewAll": "सभी को देखें",
@@ -937,7 +994,9 @@
     "startDate": "प्रारंभ तिथि",
     "endDate": "अंतिम तिथि",
     "publicEvent": "सार्वजनिक है",
-    "registerable": "पंजीकृत करने योग्य है"
+    "registerable": "पंजीकृत करने योग्य है",
+    "monthlyCalendarView": "मासिक कैलेंडर",
+    "yearlyCalendarView": "वार्षिक कैलेंडर"
   },
   "userEventCard": {
     "location": "जगह",
@@ -965,7 +1024,8 @@
     "view": "देखें",
     "edit": "संपादित करें",
     "editAdvertisement": "विज्ञापन संपादित करें",
-    "saveChanges": "परिवर्तन सहेजें"
+    "saveChanges": "परिवर्तन सहेजें",
+    "endOfResults": "परिणामों का अंत"
   },
   "userChat": {
     "chat": "बात",

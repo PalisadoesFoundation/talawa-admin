@@ -6,14 +6,12 @@ import {
   ORGANIZATION_POST_LIST,
   USER_DETAILS,
 } from 'GraphQl/Queries/Queries';
-import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
 import PostCard from 'components/UserPortal/PostCard/PostCard';
 import type {
   InterfacePostCard,
   InterfaceQueryUserListItem,
 } from 'utils/interfaces';
 import PromotedPost from 'components/UserPortal/PromotedPost/PromotedPost';
-import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import StartPostModal from 'components/UserPortal/StartPostModal/StartPostModal';
 import React, { useEffect, useState } from 'react';
 import { Button, Col, Container, Image, Row } from 'react-bootstrap';
@@ -25,7 +23,7 @@ import UserDefault from '../../../assets/images/defaultImg.png';
 import { ReactComponent as MediaIcon } from 'assets/svgs/media.svg';
 import { ReactComponent as ArticleIcon } from 'assets/svgs/article.svg';
 import { ReactComponent as EventIcon } from 'assets/svgs/userEvent.svg';
-import styles from './Home.module.css';
+import styles from './Posts.module.css';
 
 interface InterfaceAdContent {
   _id: string;
@@ -111,9 +109,6 @@ export default function home(): JSX.Element {
     return <Navigate to={'/user'} />;
   }
 
-  const navbarProps = {
-    currentPage: 'home',
-  };
   const { data: promotedPostsData } = useQuery(ADVERTISEMENTS_GET);
   const {
     data,
@@ -184,10 +179,9 @@ export default function home(): JSX.Element {
 
   return (
     <>
-      <OrganizationNavbar {...navbarProps} />
       <div className={`d-flex flex-row ${styles.containerHeight}`}>
-        <UserSidebar />
         <div className={`${styles.colorLight} ${styles.mainContainer}`}>
+          <h1>Posts</h1>
           <Container className={styles.postContainer}>
             <Row className="d-flex align-items-center justify-content-center">
               <Col xs={2} className={styles.userImage}>

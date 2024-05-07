@@ -1,6 +1,5 @@
 import React from 'react';
-import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
-import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
+// import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
 import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
 import styles from './Chat.module.css';
@@ -84,9 +83,8 @@ export default function chat(): JSX.Element {
 
   return (
     <>
-      <OrganizationNavbar {...navbarProps} />
+      {/* <OrganizationNavbar {...navbarProps} /> */}
       <div className={`d-flex flex-row ${styles.containerHeight}`}>
-        <UserSidebar />
         <div className={`${styles.colorLight} ${styles.mainContainer}`}>
           <div className={styles.contactContainer}>
             <div

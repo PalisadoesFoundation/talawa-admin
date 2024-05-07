@@ -6,12 +6,12 @@ import {
   ADD_ADVERTISEMENT_MUTATION,
   UPDATE_ADVERTISEMENT_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
 import convertToBase64 from 'utils/convertToBase64';
-import { ADVERTISEMENTS_GET } from 'GraphQl/Queries/Queries';
+import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
 import { useParams } from 'react-router-dom';
 interface InterfaceAddOnRegisterProps {
   id?: string; // organizationId
@@ -24,6 +24,7 @@ interface InterfaceAddOnRegisterProps {
   advertisementMediaEdit?: string;
   endDateEdit?: Date;
   startDateEdit?: Date;
+  setAfter: any;
 }
 interface InterfaceFormStateTypes {
   name: string;
@@ -42,18 +43,33 @@ function advertisementRegister({
   advertisementMediaEdit,
   endDateEdit,
   startDateEdit,
+  setAfter,
 }: InterfaceAddOnRegisterProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
+
+  const { orgId: currentOrg } = useParams();
 
   const [show, setShow] = useState(false);
   const handleClose = (): void => setShow(false);
   const handleShow = (): void => setShow(true);
-  const [create] = useMutation(ADD_ADVERTISEMENT_MUTATION);
-  const [updateAdvertisement] = useMutation(UPDATE_ADVERTISEMENT_MUTATION);
-  const { refetch } = useQuery(ADVERTISEMENTS_GET);
-
+  const [create] = useMutation(ADD_ADVERTISEMENT_MUTATION, {
+    refetchQueries: [
+      {
+        query: ORGANIZATION_ADVERTISEMENT_LIST,
+        variables: { first: 6, after: null, id: currentOrg },
+      },
+    ],
+  });
+  const [updateAdvertisement] = useMutation(UPDATE_ADVERTISEMENT_MUTATION, {
+    refetchQueries: [
+      {
+        query: ORGANIZATION_ADVERTISEMENT_LIST,
+        variables: { first: 6, after: null, id: currentOrg },
+      },
+    ],
+  });
   //getting organizationId from URL
-  const { orgId: currentOrg } = useParams();
+
   const [formState, setFormState] = useState<InterfaceFormStateTypes>({
     name: '',
     advertisementMedia: '',
@@ -106,7 +122,6 @@ function advertisementRegister({
 
       if (data) {
         toast.success('Advertisement created successfully');
-        refetch();
         setFormState({
           name: '',
           advertisementMedia: '',
@@ -115,8 +130,8 @@ function advertisementRegister({
           endDate: new Date(),
           organizationId: currentOrg,
         });
-        handleClose();
       }
+      setAfter(null);
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error('An error occured, could not create new advertisement');
@@ -180,8 +195,8 @@ function advertisementRegister({
 
       if (data) {
         toast.success('Advertisement updated successfully');
-        refetch();
         handleClose();
+        setAfter(null);
       }
     } catch (error: any) {
       toast.error(error.message);

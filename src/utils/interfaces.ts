@@ -119,6 +119,7 @@ export interface InterfaceQueryOrganizationsListObject {
     firstName: string;
     lastName: string;
     email: string;
+    createdAt: string;
   }[];
   membershipRequests: {
     _id: string;
@@ -135,6 +136,25 @@ export interface InterfaceQueryOrganizationsListObject {
     email: string;
   }[];
 }
+
+export interface InterfaceQueryOrganizationListObject {
+  _id: string;
+  image: string | null;
+  creator: {
+    firstName: string;
+    lastName: string;
+  };
+  name: string;
+  members: {
+    _id: string;
+  }[];
+  admins: {
+    _id: string;
+  }[];
+  createdAt: string;
+  address: InterfaceAddress;
+}
+
 export interface InterfacePostForm {
   posttitle: string;
   postinfo: string;
@@ -171,6 +191,29 @@ export interface InterfaceQueryOrganizationPostListItem {
           likeCount: number;
           likedBy: { _id: string }[];
         }[];
+      };
+      cursor: string;
+    }[];
+    pageInfo: {
+      startCursor: string;
+      endCursor: string;
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+    };
+    totalCount: number;
+  };
+}
+
+export interface InterfaceQueryOrganizationAdvertisementListItem {
+  advertisements: {
+    edges: {
+      node: {
+        _id: string;
+        name: string;
+        mediaUrl: string;
+        endDate: string;
+        startDate: string;
+        type: 'BANNER' | 'MENU' | 'POPUP';
       };
       cursor: string;
     }[];

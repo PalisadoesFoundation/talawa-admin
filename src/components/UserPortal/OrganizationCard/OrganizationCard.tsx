@@ -16,6 +16,7 @@ import {
 } from 'GraphQl/Queries/OrganizationQueries';
 import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
+import { useNavigate } from 'react-router-dom';
 
 const { getItem } = useLocalStorage();
 
@@ -53,6 +54,9 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'users',
   });
+
+  const navigate = useNavigate();
+
   const [sendMembershipRequest] = useMutation(SEND_MEMBERSHIP_REQUEST, {
     refetchQueries: [
       { query: USER_ORGANIZATION_CONNECTION, variables: { id: props.id } },
@@ -156,8 +160,11 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
             variant="success"
             data-testid="manageBtn"
             className={styles.joinedBtn}
+            onClick={() => {
+              navigate(`/user/organization/${props.id}`);
+            }}
           >
-            {t('joined')}
+            {t('visit')}
           </Button>
         )}
 

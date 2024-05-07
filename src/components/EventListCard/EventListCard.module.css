@@ -41,7 +41,7 @@
   justify-content: flex-end;
 }
 .icon {
-  margin: 1px;
+  margin: 2px;
 }
 
 .cards {
@@ -78,7 +78,8 @@
 .datediv {
   display: flex;
   flex-direction: row;
-  margin-bottom: 15px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 .datebox {
   width: 90%;
@@ -91,8 +92,19 @@
   padding-right: 5px;
   padding-left: 5px;
 }
+.datediv > div > p {
+  margin-bottom: 0.5rem;
+}
+
+.startDate {
+  margin-right: 0.25rem;
+}
+.endDate {
+  margin-left: 1.5rem;
+}
+
 .checkboxdiv > div label {
-  margin-right: 30px;
+  margin-right: 50px;
 }
 .checkboxdiv > label > input {
   margin-left: 10px;
@@ -118,9 +130,10 @@
 .preview {
   display: flex;
   flex-direction: row;
-  font-weight: 900;
+  font-weight: 700;
   font-size: 16px;
-  color: rgb(80, 80, 80);
+  color: #000000;
+  margin: 0;
 }
 .view {
   margin-left: 2%;
@@ -158,13 +171,13 @@
   flex-direction: column;
 }
 .titlemodal {
-  color: #707070;
+  color: #000000;
   font-weight: 600;
-  font-size: 20px;
+  font-size: 24px;
   margin-bottom: 20px;
   padding-bottom: 5px;
-  border-bottom: 3px solid #31bb6b;
-  width: 65%;
+  border-bottom: 4px solid #31bb6b;
+  width: 50%;
 }
 .cancel > i {
   margin-top: 5px;
@@ -188,9 +201,23 @@
   .checkboxContainer {
     flex-direction: column;
   }
+
+  .datediv {
+    flex-direction: column;
+  }
+
+  .datediv > div {
+    width: 100%;
+    margin-left: 0;
+    margin-bottom: 10px;
+  }
+
+  .datediv > div p {
+    margin-bottom: 5px;
+  }
 }
 
 .customButton {
-  background-color: #31bb6b;
-  border: #31bb6b;
+  width: 90%;
+  margin: 0 auto;
 }
