@@ -48,6 +48,7 @@ const startPostModal = ({
         throw new Error("Can't create a post with an empty body.");
       }
       toast.info('Processing your post. Please wait.');
+
       const { data } = await createPost({
         variables: {
           title: '',
@@ -64,7 +65,6 @@ const startPostModal = ({
         handleHide();
       }
     } catch (error: unknown) {
-      // console.log(error);
       /* istanbul ignore next */
       errorHandler(t, error);
     }

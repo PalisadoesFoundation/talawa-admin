@@ -28,14 +28,14 @@
   flex-direction: row;
   gap: 0.5rem;
   align-items: center;
-  & > p {
-    margin-bottom: 0;
-    font-weight: 500;
-  }
-  & > svg {
-    width: 2rem;
-    height: 2rem;
-  }
+}
+.creator p {
+  margin-bottom: 0;
+  font-weight: 500;
+}
+.creator svg {
+  width: 2rem;
+  height: 2rem;
 }
 
 .customToggle {
@@ -44,10 +44,11 @@
   border: none;
   margin-right: 1rem;
   --bs-btn-active-bg: none;
-  & > svg {
-    color: black;
-  }
 }
+.customToggle svg {
+  color: black;
+}
+
 .customToggle::after {
   content: none;
 }
@@ -56,15 +57,13 @@
 .customToggle:active {
   background: none;
   border: none;
-  & > svg {
-    color: black;
-  }
+}
+.customToggle svg {
+  color: black;
 }
 
-.cardBody {
-  div {
-    padding: 0.5rem;
-  }
+.cardBody div {
+  padding: 0.5rem;
 }
 
 .imageContainer {
@@ -103,9 +102,9 @@
   display: flex;
   justify-content: flex-end;
   margin: 0.5rem;
-  button {
-    padding-inline: 1rem;
-  }
+}
+.viewBtn Button {
+  padding-inline: 1rem;
 }
 
 .cardActions {
