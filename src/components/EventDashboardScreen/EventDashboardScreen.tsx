@@ -14,11 +14,8 @@ const EventDashboardScreen = (): JSX.Element => {
   const { getItem } = useLocalStorage();
   const isLoggedIn = getItem('IsLoggedIn');
   const adminFor = getItem('AdminFor');
-  const userId = getItem('userId');
   const location = useLocation();
-  const titleKey: string | undefined = !userId
-    ? map[location.pathname.split('/')[1]]
-    : map[location.pathname.split('/')[2]];
+  const titleKey: string | undefined = map[location.pathname.split('/')[2]];
   const { t } = useTranslation('translation', { keyPrefix: titleKey });
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
   const { orgId } = useParams();
