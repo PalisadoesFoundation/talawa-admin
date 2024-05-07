@@ -6,6 +6,8 @@ This document provides instructions on how to set up and start a running instanc
 
 <!-- toc -->
 
+- [Talawa-Admin Installation](#talawa-admin-installation)
+- [Table of Contents](#table-of-contents)
 - [Installation Steps Summary](#installation-steps-summary)
 - [Prerequisites](#prerequisites)
   - [Install git](#install-git)
