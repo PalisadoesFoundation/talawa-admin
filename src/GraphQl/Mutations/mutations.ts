@@ -346,7 +346,9 @@ export const REMOVE_MEMBER_MUTATION = gql`
 export const ADD_ADMIN_MUTATION = gql`
   mutation CreateAdmin($orgid: ID!, $userid: ID!) {
     createAdmin(data: { organizationId: $orgid, userId: $userid }) {
-      _id
+      user {
+        _id
+      }
     }
   }
 `;
