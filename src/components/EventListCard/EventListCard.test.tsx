@@ -68,7 +68,14 @@ const renderEventListCard = (
                   path="/event/:orgId/"
                   element={<EventListCard {...props} />}
                 />
-                <Route path="/event/:orgId/:eventId" element={<></>} />
+                <Route
+                  path="/event/:orgId/:eventId"
+                  element={<div>Event Dashboard (Admin)</div>}
+                />
+                <Route
+                  path="/user/event/:orgId/:eventId"
+                  element={<div>Event Dashboard (User)</div>}
+                />
               </Routes>
             </I18nextProvider>
           </LocalizationProvider>
@@ -287,7 +294,7 @@ describe('Testing Event List Card', () => {
     });
   });
 
-  test('Should navigate to event dashboard when clicked', async () => {
+  test('Should navigate to event dashboard when clicked (For Admin)', async () => {
     renderEventListCard(props[1]);
 
     userEvent.click(screen.getByTestId('card'));
@@ -300,6 +307,25 @@ describe('Testing Event List Card', () => {
 
     await waitFor(() => {
       expect(screen.queryByTestId('card')).not.toBeInTheDocument();
+      expect(screen.queryByText('Event Dashboard (Admin)')).toBeInTheDocument();
+    });
+  });
+
+  test('Should navigate to event dashboard when clicked (For User)', async () => {
+    setItem('userId', '123');
+    renderEventListCard(props[2]);
+
+    userEvent.click(screen.getByTestId('card'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('showEventDashboardBtn')).toBeInTheDocument();
+    });
+
+    userEvent.click(screen.getByTestId('showEventDashboardBtn'));
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('card')).not.toBeInTheDocument();
+      expect(screen.queryByText('Event Dashboard (User)')).toBeInTheDocument();
     });
   });
 

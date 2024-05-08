@@ -322,7 +322,7 @@ function EventListCardModals({
     (registrant) => registrant._id === userId,
   );
   const [registerEventMutation] = useMutation(REGISTER_EVENT);
-  const [isRegistered, setIsRegistered] = React.useState(isInitiallyRegistered);
+  const [isRegistered, setIsRegistered] = useState(isInitiallyRegistered);
 
   const registerEventHandler = async (): Promise<void> => {
     if (!isRegistered) {
@@ -352,7 +352,9 @@ function EventListCardModals({
   };
 
   const openEventDashboard = (): void => {
-    navigate(`/event/${orgId}/${eventListCardProps.id}`);
+    const userPath = eventListCardProps.userRole === Role.USER ? 'user/' : '';
+    console.log(`/${userPath}event/${orgId}/${eventListCardProps.id}`);
+    navigate(`/${userPath}event/${orgId}/${eventListCardProps.id}`);
   };
 
   const popover = (
