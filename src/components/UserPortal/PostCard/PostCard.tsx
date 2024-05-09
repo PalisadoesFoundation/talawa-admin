@@ -53,11 +53,7 @@ interface InterfaceCommentCardProps {
   handleDislikeComment: (commentId: string) => void;
 }
 
-interface InterfacePostCardProps extends InterfacePostCard {
-  fetchPosts: () => void;
-}
-
-export default function postCard(props: InterfacePostCardProps): JSX.Element {
+export default function postCard(props: InterfacePostCard): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'postCard',
   });

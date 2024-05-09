@@ -256,6 +256,7 @@ export default function home(): JSX.Element {
       commentCount,
       comments: postComments,
       likedBy: allLikes,
+      fetchPosts: () => refetch(),
     };
 
     return cardProps;
@@ -324,13 +325,7 @@ export default function home(): JSX.Element {
                 <div className={` ${styles.pinnedPostsCardsContainer}`}>
                   {pinnedPosts.map(({ node }: { node: InterfacePostNode }) => {
                     const cardProps = getCardProps(node);
-                    return (
-                      <PostCard
-                        key={node._id}
-                        {...cardProps}
-                        fetchPosts={() => refetch()}
-                      />
-                    );
+                    return <PostCard key={node._id} {...cardProps} />;
                   })}
                 </div>
               </div>
@@ -362,13 +357,7 @@ export default function home(): JSX.Element {
                 <Row className="my-2">
                   {posts.map(({ node }: { node: InterfacePostNode }) => {
                     const cardProps = getCardProps(node);
-                    return (
-                      <PostCard
-                        key={node._id}
-                        {...cardProps}
-                        fetchPosts={() => refetch()}
-                      />
-                    );
+                    return <PostCard key={node._id} {...cardProps} />;
                   })}
                 </Row>
               ) : (

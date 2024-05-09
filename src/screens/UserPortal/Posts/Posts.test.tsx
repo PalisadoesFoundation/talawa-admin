@@ -330,6 +330,15 @@ describe('Testing Home Screen: User Portal', () => {
     expect(screen.queryByText('post two')).toBeInTheDocument();
     expect(screen.queryByText('This is the post two')).toBeInTheDocument();
   });
+
+  test('Checking if refetch works after deleting this post', async () => {
+    setItem('userId', '640d98d9eb6a743d75341067');
+    renderHomeScreen();
+    await wait();
+
+    userEvent.click(screen.getAllByTestId('dropdown')[1]);
+    userEvent.click(screen.getByTestId('deletePost'));
+  });
 });
 
 describe('HomeScreen with invalid orgId', () => {

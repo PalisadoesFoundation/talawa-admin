@@ -425,6 +425,7 @@ export interface InterfacePostCard {
     lastName: string;
     id: string;
   }[];
+  fetchPosts: () => void;
 }
 export interface InterfaceCreateCampaign {
   campaignName: string;
