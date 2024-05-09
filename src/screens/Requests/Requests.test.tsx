@@ -198,7 +198,7 @@ describe('Testing Requests screen', () => {
     );
 
     await wait();
-    expect(screen.getByText(/No Request Found/i)).toBeTruthy();
+    expect(screen.getByText(/No Membership Requests Found/i)).toBeTruthy();
   });
 
   test('Should render warning alert when there are no organizations', async () => {
