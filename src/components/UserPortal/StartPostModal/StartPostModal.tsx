@@ -122,7 +122,9 @@ const startPostModal = ({
         </Modal.Body>
         <Modal.Footer>
           <Button
-            type="button"
+            size="sm"
+            variant="success"
+            className="px-4"
             value="invite"
             data-testid="createPostBtn"
             onClick={handlePost}

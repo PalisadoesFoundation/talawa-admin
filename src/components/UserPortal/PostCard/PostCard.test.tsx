@@ -7,6 +7,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import { toast } from 'react-toastify';
 
 import PostCard from './PostCard';
 import userEvent from '@testing-library/user-event';
@@ -16,10 +17,20 @@ import {
   UNLIKE_POST,
   LIKE_COMMENT,
   UNLIKE_COMMENT,
+  DELETE_POST_MUTATION,
+  UPDATE_POST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
 
 const { setItem, getItem } = useLocalStorage();
+
+jest.mock('react-toastify', () => ({
+  toast: {
+    error: jest.fn(),
+    info: jest.fn(),
+    success: jest.fn(),
+  },
+}));
 
 const MOCKS = [
   {
@@ -109,6 +120,37 @@ const MOCKS = [
       },
     },
   },
+  {
+    request: {
+      query: UPDATE_POST_MUTATION,
+      variables: {
+        id: 'postId',
+        text: 'Edited Post',
+      },
+    },
+    result: {
+      data: {
+        updatePost: {
+          _id: '',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: DELETE_POST_MUTATION,
+      variables: {
+        id: 'postId',
+      },
+    },
+    result: {
+      data: {
+        removePost: {
+          _id: '',
+        },
+      },
+    },
+  },
 ];
 
 async function wait(ms = 100): Promise<void> {
@@ -124,7 +166,7 @@ const link = new StaticMockLink(MOCKS, true);
 describe('Testing PostCard Component [User Portal]', () => {
   test('Component should be rendered properly', async () => {
     const cardProps = {
-      id: '',
+      id: 'postId',
       userImage: 'image.png',
       creator: {
         firstName: 'test',
@@ -176,6 +218,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           id: '2',
         },
       ],
+      fetchPosts: jest.fn(),
     };
 
     render(
@@ -191,6 +234,161 @@ describe('Testing PostCard Component [User Portal]', () => {
     );
 
     await wait();
+  });
+
+  test('Dropdown component should be rendered properly', async () => {
+    setItem('userId', '2');
+
+    const cardProps = {
+      id: '',
+      userImage: 'image.png',
+      creator: {
+        firstName: 'test',
+        lastName: 'user',
+        email: 'test@user.com',
+        id: '1',
+      },
+      postedAt: '',
+      image: '',
+      video: '',
+      text: 'This is post test text',
+      title: 'This is post test title',
+      likeCount: 1,
+      commentCount: 0,
+      comments: [],
+      likedBy: [
+        {
+          firstName: 'test',
+          lastName: 'user',
+          id: '2',
+        },
+      ],
+      fetchPosts: jest.fn(),
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PostCard {...cardProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+
+    userEvent.click(screen.getByTestId('dropdown'));
+    await wait();
+    expect(screen.getByText('Edit')).toBeInTheDocument();
+    expect(screen.getByText('Delete')).toBeInTheDocument();
+  });
+
+  test('Edit post should work properly', async () => {
+    setItem('userId', '2');
+
+    const cardProps = {
+      id: 'postId',
+      userImage: 'image.png',
+      creator: {
+        firstName: 'test',
+        lastName: 'user',
+        email: 'test@user.com',
+        id: '1',
+      },
+      postedAt: '',
+      image: '',
+      video: '',
+      text: 'test Post',
+      title: 'This is post test title',
+      likeCount: 1,
+      commentCount: 0,
+      comments: [],
+      likedBy: [
+        {
+          firstName: 'test',
+          lastName: 'user',
+          id: '2',
+        },
+      ],
+      fetchPosts: jest.fn(),
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PostCard {...cardProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+
+    userEvent.click(screen.getByTestId('dropdown'));
+    userEvent.click(screen.getByTestId('editPost'));
+    await wait();
+
+    expect(screen.getByTestId('editPostModalTitle')).toBeInTheDocument();
+    userEvent.clear(screen.getByTestId('postInput'));
+    userEvent.type(screen.getByTestId('postInput'), 'Edited Post');
+    userEvent.click(screen.getByTestId('editPostBtn'));
+    await wait();
+
+    expect(toast.success).toBeCalledWith('Successfully edited the Post.');
+  });
+
+  test('Delete post should work properly', async () => {
+    setItem('userId', '2');
+
+    const cardProps = {
+      id: 'postId',
+      userImage: 'image.png',
+      creator: {
+        firstName: 'test',
+        lastName: 'user',
+        email: 'test@user.com',
+        id: '1',
+      },
+      postedAt: '',
+      image: '',
+      video: '',
+      text: 'test Post',
+      title: 'This is post test title',
+      likeCount: 1,
+      commentCount: 0,
+      comments: [],
+      likedBy: [
+        {
+          firstName: 'test',
+          lastName: 'user',
+          id: '2',
+        },
+      ],
+      fetchPosts: jest.fn(),
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PostCard {...cardProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+
+    userEvent.click(screen.getByTestId('dropdown'));
+    userEvent.click(screen.getByTestId('deletePost'));
+    await wait();
+
+    expect(toast.success).toBeCalledWith('Successfully deleted the Post.');
   });
 
   test('Component should be rendered properly if user has liked the post', async () => {
@@ -221,6 +419,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           id: '2',
         },
       ],
+      fetchPosts: jest.fn(),
     };
 
     render(
@@ -270,6 +469,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           id: '2',
         },
       ],
+      fetchPosts: jest.fn(),
     };
 
     render(
@@ -322,6 +522,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           id: '1',
         },
       ],
+      fetchPosts: jest.fn(),
     };
 
     render(
@@ -371,6 +572,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           id: '1',
         },
       ],
+      fetchPosts: jest.fn(),
     };
 
     render(
@@ -413,6 +615,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           id: '1',
         },
       ],
+      fetchPosts: jest.fn(),
     };
 
     render(
@@ -496,6 +699,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           id: '1',
         },
       ],
+      fetchPosts: jest.fn(),
     };
     const beforeUserId = getItem('userId');
     setItem('userId', '2');
@@ -582,6 +786,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           id: '1',
         },
       ],
+      fetchPosts: jest.fn(),
     };
     const beforeUserId = getItem('userId');
     setItem('userId', '1');
@@ -633,6 +838,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           id: '1',
         },
       ],
+      fetchPosts: jest.fn(),
     };
 
     render(

@@ -168,12 +168,4 @@ describe('Testing StartPostModal Component: User Portal', () => {
     const userImage = screen.getByTestId('userImage');
     expect(userImage).toHaveAttribute('src', 'image.png');
   });
-
-  // test('should update post image state when a file is selected', async () => {
-  //   renderStartPostModal(true, null);
-  //   await wait();
-
-  //   const previewImage = await screen.findByAltText('Post Image Preview');
-  //   expect(previewImage).toBeInTheDocument();
-  // });
 });

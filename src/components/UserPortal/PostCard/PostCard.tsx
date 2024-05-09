@@ -10,6 +10,7 @@ import {
   Form,
   InputGroup,
   Modal,
+  ModalFooter,
 } from 'react-bootstrap';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
@@ -24,8 +25,10 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import type { InterfacePostCard } from 'utils/interfaces';
 import {
   CREATE_COMMENT_POST,
+  DELETE_POST_MUTATION,
   LIKE_POST,
   UNLIKE_POST,
+  UPDATE_POST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import CommentCard from '../CommentCard/CommentCard';
 import { errorHandler } from 'utils/errorHandler';
@@ -50,7 +53,11 @@ interface InterfaceCommentCardProps {
   handleDislikeComment: (commentId: string) => void;
 }
 
-export default function postCard(props: InterfacePostCard): JSX.Element {
+interface InterfacePostCardProps extends InterfacePostCard {
+  fetchPosts: () => void;
+}
+
+export default function postCard(props: InterfacePostCardProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'postCard',
   });
@@ -66,6 +73,8 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
   const [isLikedByUser, setIsLikedByUser] = React.useState(likedByUser);
   const [commentInput, setCommentInput] = React.useState('');
   const [viewPost, setViewPost] = React.useState(false);
+  const [showEditPost, setShowEditPost] = React.useState(false);
+  const [postContent, setPostContent] = React.useState<string>(props.text);
 
   const postCreator = `${props.creator.firstName} ${props.creator.lastName}`;
 
@@ -73,8 +82,14 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
   const [unLikePost, { loading: unlikeLoading }] = useMutation(UNLIKE_POST);
   const [create, { loading: commentLoading }] =
     useMutation(CREATE_COMMENT_POST);
+  const [editPost] = useMutation(UPDATE_POST_MUTATION);
+  const [deletePost] = useMutation(DELETE_POST_MUTATION);
 
   const toggleViewPost = (): void => setViewPost(!viewPost);
+  const toggleEditPost = (): void => setShowEditPost(!showEditPost);
+  const handlePostInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setPostContent(e.target.value);
+  };
 
   const handleToggleLike = async (): Promise<void> => {
     if (isLikedByUser) {
@@ -191,6 +206,39 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
     }
   };
 
+  const handleEditPost = (): void => {
+    try {
+      editPost({
+        variables: {
+          id: props.id,
+          text: postContent,
+        },
+      });
+
+      props.fetchPosts();
+      toggleEditPost();
+      toast.success('Successfully edited the Post.');
+    } catch (error: any) {
+      /* istanbul ignore next */
+      errorHandler(t, error);
+    }
+  };
+  const handleDeletePost = (): void => {
+    try {
+      deletePost({
+        variables: {
+          id: props.id,
+        },
+      });
+
+      props.fetchPosts();
+      toast.success('Successfully deleted the Post.');
+    } catch (error: any) {
+      /* istanbul ignore next */
+      errorHandler(t, error);
+    }
+  };
+
   return (
     <Col key={props.id} className="d-flex justify-content-center my-2">
       <Card className={`${styles.cardStyles}`}>
@@ -200,17 +248,23 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
             <p>{postCreator}</p>
           </div>
           <Dropdown style={{ cursor: 'pointer' }}>
-            <Dropdown.Toggle className={styles.customToggle}>
+            <Dropdown.Toggle
+              className={styles.customToggle}
+              data-testid={'dropdown'}
+            >
               <MoreVertIcon />
             </Dropdown.Toggle>
             <Dropdown.Menu>
-              <Dropdown.Item href="#/action-1">
+              <Dropdown.Item onClick={toggleEditPost} data-testid={'editPost'}>
                 <EditOutlinedIcon
                   style={{ color: 'grey', marginRight: '8px' }}
                 />
                 {t(`edit`)}
               </Dropdown.Item>
-              <Dropdown.Item href="#/action-2">
+              <Dropdown.Item
+                onClick={handleDeletePost}
+                data-testid={'deletePost'}
+              >
                 <DeleteOutlineOutlinedIcon
                   style={{ color: 'red', marginRight: '8px' }}
                 />
@@ -362,6 +416,37 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
             </div>
           </div>
         </Modal.Body>
+      </Modal>
+      <Modal show={showEditPost} onHide={toggleEditPost} size="lg" centered>
+        <Modal.Header closeButton className="py-2 ">
+          <p className="fs-3" data-testid={'editPostModalTitle'}>
+            Edit Post
+          </p>
+        </Modal.Header>
+        <Modal.Body>
+          <Form.Control
+            type="text"
+            as="textarea"
+            rows={3}
+            className={styles.postInput}
+            data-testid="postInput"
+            autoComplete="off"
+            required
+            onChange={handlePostInput}
+            value={postContent}
+          />
+        </Modal.Body>
+        <ModalFooter>
+          <Button
+            size="sm"
+            variant="success"
+            className="px-4"
+            data-testid={'editPostBtn'}
+            onClick={handleEditPost}
+          >
+            Edit Post
+          </Button>
+        </ModalFooter>
       </Modal>
     </Col>
   );
