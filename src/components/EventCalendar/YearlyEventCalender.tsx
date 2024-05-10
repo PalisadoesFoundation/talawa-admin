@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import Button from 'react-bootstrap/Button';
 import React, { useState, useEffect } from 'react';
 import styles from './YearlyEventCalender.module.css';
-import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
+import type { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
 

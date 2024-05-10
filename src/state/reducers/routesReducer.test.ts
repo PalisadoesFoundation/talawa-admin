@@ -23,7 +23,7 @@ describe('Testing Routes reducer', () => {
         },
         { name: 'Advertisement', url: '/orgads/undefined' },
         { name: 'Funds', url: '/orgfunds/undefined' },
-        { name: 'Requests', url: '/requests/undefined' },
+        { name: 'Membership Requests', url: '/requests/undefined' },
         {
           name: 'Plugins',
           subTargets: [
@@ -76,7 +76,7 @@ describe('Testing Routes reducer', () => {
           component: 'OrganizationFunds',
         },
         {
-          name: 'Requests',
+          name: 'Membership Requests',
           comp_id: 'requests',
           component: 'Requests',
         },
@@ -117,7 +117,7 @@ describe('Testing Routes reducer', () => {
         { name: 'Block/Unblock', url: '/blockuser/orgId' },
         { name: 'Advertisement', url: '/orgads/orgId' },
         { name: 'Funds', url: '/orgfunds/orgId' },
-        { name: 'Requests', url: '/requests/orgId' },
+        { name: 'Membership Requests', url: '/requests/orgId' },
         {
           name: 'Plugins',
           subTargets: [
@@ -166,7 +166,7 @@ describe('Testing Routes reducer', () => {
         },
         { name: 'Funds', comp_id: 'orgfunds', component: 'OrganizationFunds' },
         {
-          name: 'Requests',
+          name: 'Membership Requests',
           comp_id: 'requests',
           component: 'Requests',
         },
@@ -210,7 +210,7 @@ describe('Testing Routes reducer', () => {
         },
         { name: 'Advertisement', url: '/orgads/undefined' },
         { name: 'Funds', url: '/orgfunds/undefined' },
-        { name: 'Requests', url: '/requests/undefined' },
+        { name: 'Membership Requests', url: '/requests/undefined' },
         { name: 'Settings', url: '/orgsetting/undefined' },
         {
           comp_id: null,
@@ -266,7 +266,7 @@ describe('Testing Routes reducer', () => {
           component: 'OrganizationFunds',
         },
         {
-          name: 'Requests',
+          name: 'Membership Requests',
           comp_id: 'requests',
           component: 'Requests',
         },

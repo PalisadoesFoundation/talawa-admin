@@ -11,8 +11,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { weekdays } from './constants';
-import { months } from './constants';
+import { weekdays, months } from './constants';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 const eventData = [

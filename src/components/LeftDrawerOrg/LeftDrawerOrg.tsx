@@ -141,7 +141,7 @@ const leftDrawerOrg = ({
                   >
                     <div className={styles.iconWrapper}>
                       <IconComponent
-                        name={name}
+                        name={name == 'Membership Requests' ? 'Requests' : name}
                         fill={
                           isActive === true
                             ? 'var(--bs-white)'

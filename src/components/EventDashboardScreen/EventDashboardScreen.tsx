@@ -9,13 +9,13 @@ import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from './EventDashboardScreen.module.css';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import useLocalStorage from 'utils/useLocalstorage';
-const { getItem } = useLocalStorage();
 
 const EventDashboardScreen = (): JSX.Element => {
+  const { getItem } = useLocalStorage();
   const isLoggedIn = getItem('IsLoggedIn');
   const adminFor = getItem('AdminFor');
   const location = useLocation();
-  const titleKey: string | undefined = map[location.pathname.split('/')[1]];
+  const titleKey: string | undefined = map[location.pathname.split('/')[2]];
   const { t } = useTranslation('translation', { keyPrefix: titleKey });
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
   const { orgId } = useParams();
