@@ -885,12 +885,21 @@
     "noMembers": "No Members to show"
   },
   "postCard": {
+    "edit": "Edit",
+    "delete": "Delete",
     "likes": "Likes",
     "comments": "Comments"
   },
   "home": {
+    "posts": "Posts",
+    "post": "Post",
+    "title": "Title",
+    "textArea": "Something on your mind?",
     "feed": "Feed",
-    "pinnedPosts": "View Pinned Posts",
+    "loading": "Loading",
+    "pinnedPosts": "Pinned Posts",
+    "yourFeed": "Your Feed",
+    "nothingToShowHere": "Nothing to show here",
     "somethingOnYourMind": "Something on your mind?",
     "addPost": "Add Post",
     "startPost": "Start a post",

@@ -1,6 +1,8 @@
 import { useQuery } from '@apollo/client';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import SendIcon from '@mui/icons-material/Send';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import {
   ADVERTISEMENTS_GET,
   ORGANIZATION_POST_LIST,
@@ -14,16 +16,13 @@ import type {
 import PromotedPost from 'components/UserPortal/PromotedPost/PromotedPost';
 import StartPostModal from 'components/UserPortal/StartPostModal/StartPostModal';
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Container, Image, Row } from 'react-bootstrap';
+import { Button, Col, Form, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { Link, Navigate, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
-import UserDefault from '../../../assets/images/defaultImg.png';
-import { ReactComponent as MediaIcon } from 'assets/svgs/media.svg';
-import { ReactComponent as ArticleIcon } from 'assets/svgs/article.svg';
-import { ReactComponent as EventIcon } from 'assets/svgs/userEvent.svg';
 import styles from './Posts.module.css';
+import convertToBase64 from 'utils/convertToBase64';
 
 interface InterfaceAdContent {
   _id: string;
@@ -100,15 +99,20 @@ export default function home(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'home' });
   const { getItem } = useLocalStorage();
   const [posts, setPosts] = useState([]);
+  const [pinnedPosts, setPinnedPosts] = useState([]);
   const [adContent, setAdContent] = useState<InterfaceAdConnection>({});
   const [filteredAd, setFilteredAd] = useState<InterfaceAdContent[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [postImg, setPostImg] = useState<string | null>('');
   const { orgId } = useParams();
 
   if (!orgId) {
     return <Navigate to={'/user'} />;
   }
 
+  const navbarProps = {
+    currentPage: 'home',
+  };
   const { data: promotedPostsData } = useQuery(ADVERTISEMENTS_GET);
   const {
     data,
@@ -141,6 +145,14 @@ export default function home(): JSX.Element {
     setFilteredAd(filterAdContent(adContent, orgId));
   }, [adContent]);
 
+  useEffect(() => {
+    setPinnedPosts(
+      posts.filter(({ node }: { node: InterfacePostNode }) => {
+        return node.pinned;
+      }),
+    );
+  }, [posts]);
+
   const filterAdContent = (
     data: {
       advertisementsConnection?: {
@@ -169,6 +181,87 @@ export default function home(): JSX.Element {
     return [];
   };
 
+  const getCardProps = (node: InterfacePostNode): InterfacePostCard => {
+    const {
+      creator,
+      _id,
+      imageUrl,
+      videoUrl,
+      title,
+      text,
+      likeCount,
+      commentCount,
+      likedBy,
+      comments,
+    } = node;
+
+    const allLikes: any = [];
+
+    likedBy.forEach((value: any) => {
+      const singleLike = {
+        firstName: value.firstName,
+        lastName: value.lastName,
+        id: value._id,
+      };
+      allLikes.push(singleLike);
+    });
+
+    const postComments: any = [];
+
+    comments.forEach((value: any) => {
+      const commentLikes: any = [];
+      value.likedBy.forEach((commentLike: any) => {
+        const singleLike = {
+          id: commentLike._id,
+        };
+        commentLikes.push(singleLike);
+      });
+
+      const comment = {
+        id: value._id,
+        creator: {
+          firstName: value.creator.firstName,
+          lastName: value.creator.lastName,
+          id: value.creator._id,
+          email: value.creator.email,
+        },
+        likeCount: value.likeCount,
+        likedBy: commentLikes,
+        text: value.text,
+      };
+      postComments.push(comment);
+    });
+
+    const date = new Date(node.createdAt);
+    const formattedDate = new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    }).format(date);
+
+    const cardProps: InterfacePostCard = {
+      id: _id,
+      creator: {
+        id: creator._id,
+        firstName: creator.firstName,
+        lastName: creator.lastName,
+        email: creator.email,
+      },
+      postedAt: formattedDate,
+      image: imageUrl,
+      video: videoUrl,
+      title,
+      text,
+      likeCount,
+      commentCount,
+      comments: postComments,
+      likedBy: allLikes,
+      fetchPosts: () => refetch(),
+    };
+
+    return cardProps;
+  };
+
   const handlePostButtonClick = (): void => {
     setShowModal(true);
   };
@@ -181,72 +274,62 @@ export default function home(): JSX.Element {
     <>
       <div className={`d-flex flex-row ${styles.containerHeight}`}>
         <div className={`${styles.colorLight} ${styles.mainContainer}`}>
-          <h1>Posts</h1>
-          <Container className={styles.postContainer}>
-            <Row className="d-flex align-items-center justify-content-center">
-              <Col xs={2} className={styles.userImage}>
-                <Image
-                  src={user?.user?.image || UserDefault}
-                  roundedCircle
-                  className="mt-2"
-                />
-              </Col>
-              <Col xs={10}>
-                <Button
-                  className={styles.startPostBtn}
-                  onClick={handlePostButtonClick}
-                  data-testid="startPostBtn"
-                >
-                  {t('startPost')}
-                </Button>
-              </Col>
-            </Row>
-            <Row className="mt-3 d-flex align-items-center justify-content-evenly">
-              <Col xs={4} className={styles.uploadLink}>
-                <div className="d-flex gap-2 align-items-center justify-content-center">
-                  <div className={styles.icons}>
-                    <MediaIcon />
-                  </div>
-                  <p className={styles.iconLabel}>{t('media')}</p>
-                </div>
-              </Col>
-              <Col xs={4} className={styles.uploadLink}>
-                <div className="d-flex gap-2 align-items-center justify-content-center">
-                  {/* <div className={styles.icons}>{eventSvg}</div> */}
-                  <div className={styles.icons}>
-                    <EventIcon />
-                  </div>
-                  <p className={styles.iconLabel}>{t('event')}</p>
-                </div>
-              </Col>
-              <Col xs={4} className={styles.uploadLink}>
-                <div className="d-flex gap-2 align-items-center justify-content-center">
-                  <div className={styles.icons}>
-                    <ArticleIcon />
-                  </div>
-                  <p className={styles.iconLabel}>{t('article')}</p>
-                </div>
-              </Col>
-            </Row>
-          </Container>
+          <h1>{t('posts')}</h1>
+          <div className={`${styles.postContainer}`}>
+            <div className={`${styles.heading}`}>{t('startPost')}</div>
+            <div className={styles.postInputContainer}>
+              <Row className="d-flex gap-1">
+                <Col className={styles.maxWidth}>
+                  <Form.Control
+                    type="file"
+                    accept="image/*"
+                    multiple={false}
+                    className={styles.inputArea}
+                    data-testid="postImageInput"
+                    autoComplete="off"
+                    onChange={async (
+                      e: React.ChangeEvent<HTMLInputElement>,
+                    ): Promise<void> => {
+                      setPostImg('');
+                      const target = e.target as HTMLInputElement;
+                      const file = target.files && target.files[0];
+                      const base64file = file && (await convertToBase64(file));
+                      setPostImg(base64file);
+                    }}
+                  />
+                </Col>
+              </Row>
+            </div>
+            <div className="d-flex justify-content-end">
+              <Button
+                size="sm"
+                data-testid={'postBtn'}
+                onClick={handlePostButtonClick}
+                className="px-4 py-sm-2"
+              >
+                {t('post')} <SendIcon />
+              </Button>
+            </div>
+          </div>
           <div
             style={{
-              display: `flex`,
-              flexDirection: `row`,
               justifyContent: `space-between`,
               alignItems: `center`,
+              marginTop: `1rem`,
             }}
           >
-            <h3>{t('feed')}</h3>
-            <div>
-              <Link to="/user/organizations" className={styles.link}>
-                {t('pinnedPosts')}
-                <ChevronRightIcon
-                  fontSize="small"
-                  className={styles.marginTop}
-                />
-              </Link>
-            </div>
+            <h2>{t('feed')}</h2>
+            {pinnedPosts.length > 0 && (
+              <div>
+                <p className="fs-5 mt-5">{t(`pinnedPosts`)}</p>
+                <div className={` ${styles.pinnedPostsCardsContainer}`}>
+                  {pinnedPosts.map(({ node }: { node: InterfacePostNode }) => {
+                    const cardProps = getCardProps(node);
+                    return <PostCard key={node._id} {...cardProps} />;
+                  })}
+                </div>
+              </div>
+            )}
           </div>
 
           {filteredAd.length > 0 && (
@@ -262,94 +345,37 @@ export default function home(): JSX.Element {
               ))}
             </div>
           )}
-
+          <p className="fs-5 mt-5">{t(`yourFeed`)}</p>
+          <div className={` ${styles.postsCardsContainer}`}></div>
           {loadingPosts ? (
             <div className={`d-flex flex-row justify-content-center`}>
-              <HourglassBottomIcon /> <span>Loading...</span>
+              <HourglassBottomIcon /> <span>{t(`loading`)}...</span>
             </div>
           ) : (
             <>
-              {posts.map(({ node }: { node: InterfacePostNode }) => {
-                const {
-                  creator,
-                  _id,
-                  imageUrl,
-                  videoUrl,
-                  title,
-                  text,
-                  likeCount,
-                  commentCount,
-                  likedBy,
-                  comments,
-                } = node;
-
-                const allLikes: any = [];
-
-                likedBy.forEach((value: any) => {
-                  const singleLike = {
-                    firstName: value.firstName,
-                    lastName: value.lastName,
-                    id: value._id,
-                  };
-                  allLikes.push(singleLike);
-                });
-
-                const postComments: any = [];
-
-                comments.forEach((value: any) => {
-                  const commentLikes: any = [];
-                  value.likedBy.forEach((commentLike: any) => {
-                    const singleLike = {
-                      id: commentLike._id,
-                    };
-                    commentLikes.push(singleLike);
-                  });
-
-                  const comment = {
-                    id: value._id,
-                    creator: {
-                      firstName: value.creator.firstName,
-                      lastName: value.creator.lastName,
-                      id: value.creator._id,
-                      email: value.creator.email,
-                    },
-                    likeCount: value.likeCount,
-                    likedBy: commentLikes,
-                    text: value.text,
-                  };
-                  postComments.push(comment);
-                });
-
-                const cardProps: InterfacePostCard = {
-                  id: _id,
-                  creator: {
-                    id: creator._id,
-                    firstName: creator.firstName,
-                    lastName: creator.lastName,
-                    email: creator.email,
-                  },
-                  image: imageUrl,
-                  video: videoUrl,
-                  title,
-                  text,
-                  likeCount,
-                  commentCount,
-                  comments: postComments,
-                  likedBy: allLikes,
-                };
-
-                return <PostCard key={_id} {...cardProps} />;
-              })}
+              {posts.length > 0 ? (
+                <Row className="my-2">
+                  {posts.map(({ node }: { node: InterfacePostNode }) => {
+                    const cardProps = getCardProps(node);
+                    return <PostCard key={node._id} {...cardProps} />;
+                  })}
+                </Row>
+              ) : (
+                <p className="container flex justify-content-center my-4">
+                  {t(`nothingToShowHere`)}
+                </p>
+              )}
             </>
           )}
+          <StartPostModal
+            show={showModal}
+            onHide={handleModalClose}
+            fetchPosts={refetch}
+            userData={user}
+            organizationId={orgId}
+            img={postImg}
+          />
         </div>
-        <StartPostModal
-          show={showModal}
-          onHide={handleModalClose}
-          fetchPosts={refetch}
-          userData={user}
-          organizationId={orgId}
-        />
       </div>
     </>
   );
