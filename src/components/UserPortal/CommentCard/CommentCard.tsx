@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import useLocalStorage from 'utils/useLocalstorage';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 interface InterfaceCommentCardProps {
   id: string;
@@ -80,7 +81,10 @@ function commentCard(props: InterfaceCommentCardProps): JSX.Element {
   return (
     <div className={styles.mainContainer}>
       <div className={styles.personDetails}>
-        <b>{creatorName}</b>
+        <div className="d-flex align-items-center gap-2">
+          <AccountCircleIcon className="my-2" />
+          <b>{creatorName}</b>
+        </div>
         <span>{props.text}</span>
         <div className={`${styles.cardActions}`}>
           <Button

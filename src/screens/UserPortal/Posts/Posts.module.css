@@ -6,10 +6,6 @@
   color: white;
 }
 
-.maxWidth {
-  max-width: 300px;
-}
-
 .colorLight {
   background-color: #f5f5f5;
 }
@@ -17,9 +13,11 @@
 .mainContainer {
   width: 50%;
   flex-grow: 3;
-  padding: 30px;
+  padding: 1rem;
   max-height: 100%;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: #f2f7ff;
 }
 
 .containerHeight {
@@ -32,10 +30,20 @@
 }
 
 .postInputContainer {
-  background-color: white;
-  padding: 10px;
-  border-radius: 10px;
-  margin-bottom: 20px;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.maxWidth {
+  width: 100%;
+  /* min-width: 3rem; */
+  /* padding: 0; */
+}
+
+.inputArea {
+  border: none;
+  outline: none;
+  background-color: #f1f3f6;
 }
 
 .postActionContainer {
@@ -71,18 +79,37 @@
 }
 
 .postContainer {
-  margin: 1rem auto;
-  background-color: transparent;
+  width: auto;
+  background-color: white;
+  margin-top: 1rem;
   padding: 1rem;
-  border-radius: 4px;
-  /* max-width: 40rem; */
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  border: 1px solid #dddddd;
+  border-radius: 10px;
+}
+
+.heading {
+  font-size: 1.1rem;
+}
+
+.pinnedPostsCardsContainer {
+  overflow-x: scroll;
+  display: flex;
+  gap: 1rem;
+  --bs-gutter-x: 0;
+}
+
+.postsCardsContainer {
+  /* display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  --bs-gutter-x: 0; */
 }
 
 .userImage {
   display: flex;
   width: 50px;
   height: 50px;
+  margin-left: 1rem;
   align-items: center;
   justify-content: center;
   overflow: hidden;

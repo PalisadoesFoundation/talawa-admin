@@ -1,4 +1,3 @@
-import type { ApolloError } from '@apollo/client';
 import { useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
 import { Dropdown, Form, Table } from 'react-bootstrap';

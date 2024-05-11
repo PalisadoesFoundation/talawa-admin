@@ -80,7 +80,7 @@ const components: ComponentType[] = [
   { name: 'Block/Unblock', comp_id: 'blockuser', component: 'BlockUser' },
   { name: 'Advertisement', comp_id: 'orgads', component: 'Advertisements' },
   { name: 'Funds', comp_id: 'orgfunds', component: 'OrganizationFunds' },
-  { name: 'Requests', comp_id: 'requests', component: 'Requests' },
+  { name: 'Membership Requests', comp_id: 'requests', component: 'Requests' },
   {
     name: 'Plugins',
     comp_id: null,

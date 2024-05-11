@@ -134,6 +134,9 @@
 }
 
 @media (max-height: 900px) {
+  .pageContainer {
+    padding: 1rem 1.5rem 0 calc(300px + 2rem);
+  }
   .collapseSidebarButton {
     height: 30px;
     width: calc(300px + 1rem);
