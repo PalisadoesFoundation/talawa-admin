@@ -34,43 +34,52 @@ const Users = (): JSX.Element => {
   const [searchByName, setSearchByName] = useState('');
   const [sortingOption, setSortingOption] = useState('newest');
   const [filteringOption, setFilteringOption] = useState('cancel');
-  const superAdmin = getItem('SuperAdmin');
-  const adminFor = getItem('AdminFor');
-  const userRole = superAdmin
+  const userType = getItem('SuperAdmin')
     ? 'SUPERADMIN'
-    : adminFor?.length > 0
+    : getItem('AdminFor')
       ? 'ADMIN'
       : 'USER';
-
   const loggedInUserId = getItem('id');
 
-  const { data, loading, fetchMore, refetch } = useQuery(USER_LIST, {
+  const {
+    data: usersData,
+    loading: loading,
+    fetchMore,
+    refetch: refetchUsers,
+  }: {
+    data?: { users: InterfaceQueryUserListItem[] };
+    loading: boolean;
+    fetchMore: any;
+    refetch: any;
+    error?: ApolloError;
+  } = useQuery(USER_LIST, {
     variables: {
       first: perPageResult,
       skip: 0,
       firstName_contains: '',
       lastName_contains: '',
+      order: sortingOption === 'newest' ? 'createdAt_DESC' : 'createdAt_ASC'
     },
     notifyOnNetworkStatusChange: true,
   });
 
   const { data: dataOrgs } = useQuery(ORGANIZATION_CONNECTION_LIST);
-  const [displayedUsers, setDisplayedUsers] = useState(data?.users || []);
+  const [displayedUsers, setDisplayedUsers] = useState(usersData?.users || []);
 
   // Manage loading more state
   useEffect(() => {
-    if (!data) {
+    if (!usersData) {
       return;
     }
-    if (data.users.length < perPageResult) {
+    if (usersData.users.length < perPageResult) {
       setHasMore(false);
     }
-    if (data && data.users) {
-      let newDisplayedUsers = sortUsers(data.users, sortingOption);
+    if (usersData && usersData.users) {
+      let newDisplayedUsers = sortUsers(usersData.users, sortingOption);
       newDisplayedUsers = filterUsers(newDisplayedUsers, filteringOption);
       setDisplayedUsers(newDisplayedUsers);
     }
-  }, [data, sortingOption, filteringOption]);
+  }, [usersData, sortingOption, filteringOption]);
 
   // To clear the search when the component is unmounted
   useEffect(() => {
@@ -92,7 +101,7 @@ const Users = (): JSX.Element => {
 
   // Send to orgList page if user is not superadmin
   useEffect(() => {
-    if (userRole != 'SUPERADMIN') {
+    if (userType != 'SUPERADMIN') {
       window.location.assign('/orglist');
     }
   }, []);
@@ -112,18 +121,17 @@ const Users = (): JSX.Element => {
       resetAndRefetch();
       return;
     }
-    refetch({
+    refetchUsers({
       firstName_contains: value,
       lastName_contains: '',
       // Later on we can add several search and filter options
     });
+    setHasMore(true);
   };
 
-  const handleSearchByEnter = (
-    e: React.KeyboardEvent<HTMLInputElement>,
-  ): void => {
+  const handleSearchByEnter = (e: any): void => {
     if (e.key === 'Enter') {
-      const { value } = e.currentTarget;
+      const { value } = e.target;
       handleSearch(value);
     }
   };
@@ -137,11 +145,12 @@ const Users = (): JSX.Element => {
   };
   /* istanbul ignore next */
   const resetAndRefetch = (): void => {
-    refetch({
+    refetchUsers({
       first: perPageResult,
       skip: 0,
       firstName_contains: '',
       lastName_contains: '',
+      order: sortingOption === 'newest' ? 'createdAt_DESC' : 'createdAt_ASC'
     });
     setHasMore(true);
   };
@@ -150,8 +159,10 @@ const Users = (): JSX.Element => {
     setIsLoadingMore(true);
     fetchMore({
       variables: {
-        skip: data?.users.length || 0,
+        skip: usersData?.users.length || 0,
+        userType: 'ADMIN',
         filter: searchByName,
+        order: sortingOption === 'newest' ? 'createdAt_DESC' : 'createdAt_ASC'
       },
       updateQuery: (
         prev: { users: InterfaceQueryUserListItem[] } | undefined,
@@ -174,6 +185,8 @@ const Users = (): JSX.Element => {
   };
 
   const handleSorting = (option: string): void => {
+    setDisplayedUsers([]);
+    setHasMore(true);
     setSortingOption(option);
   };
 
@@ -201,6 +214,7 @@ const Users = (): JSX.Element => {
   };
 
   const handleFiltering = (option: string): void => {
+    setDisplayedUsers([]);
     setFilteringOption(option);
   };
 
@@ -224,6 +238,7 @@ const Users = (): JSX.Element => {
           user.appUserProfile.adminFor.length !== 0
         );
       });
+      console.log(output)
       return output;
     } else {
       const output = filteredUsers.filter((user) => {
@@ -249,7 +264,7 @@ const Users = (): JSX.Element => {
           <div
             className={styles.input}
             style={{
-              display: userRole === 'SUPERADMIN' ? 'block' : 'none',
+              display: userType === 'SUPERADMIN' ? 'block' : 'none',
             }}
           >
             <Form.Control
@@ -342,7 +357,7 @@ const Users = (): JSX.Element => {
         </div>
       </div>
       {isLoading == false &&
-      data &&
+      usersData &&
       displayedUsers.length === 0 &&
       searchByName.length > 0 ? (
         <div className={styles.notFound}>
@@ -350,7 +365,7 @@ const Users = (): JSX.Element => {
             {t('noResultsFoundFor')} &quot;{searchByName}&quot;
           </h4>
         </div>
-      ) : isLoading == false && data && displayedUsers.length === 0 ? (
+      ) : isLoading == false && usersData === undefined && displayedUsers.length === 0 ? (
         <div className={styles.notFound}>
           <h4>{t('noUserFound')}</h4>
         </div>
@@ -393,7 +408,7 @@ const Users = (): JSX.Element => {
                   </tr>
                 </thead>
                 <tbody>
-                  {data &&
+                  {usersData &&
                     displayedUsers.map(
                       (user: InterfaceQueryUserListItem, index: number) => {
                         return (
