@@ -18,6 +18,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import styles from './Users.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
+import type { ApolloError } from '@apollo/client';
 
 const Users = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'users' });
