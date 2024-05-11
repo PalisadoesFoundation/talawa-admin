@@ -8,7 +8,7 @@ import {
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
 import dayjs from 'dayjs';
-import React, { useState, type ChangeEvent } from 'react';
+import React, { useCallback, useMemo, useState, type ChangeEvent } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -19,11 +19,19 @@ import type {
   InterfacePledgeInfo,
   InterfaceQueryFundCampaignsPledges,
 } from 'utils/interfaces';
+import type { ApolloQueryResult } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from './FundCampaignPledge.module.css';
 import PledgeCreateModal from './PledgeCreateModal';
 import PledgeDeleteModal from './PledgeDeleteModal';
 import PledgeEditModal from './PledgeEditModal';
+
+enum Modal {
+  CREATE = 'create',
+  UPDATE = 'update',
+  DELETE = 'delete',
+}
+
 const fundCampaignPledge = (): JSX.Element => {
   const { fundCampaignId: currentUrl } = useParams();
   const { getItem } = useLocalStorage();
@@ -31,12 +39,12 @@ const fundCampaignPledge = (): JSX.Element => {
     keyPrefix: 'pledges',
   });
 
-  const [createPledgeModalIsOpen, setCreatePledgeModalIsOpen] =
-    useState<boolean>(false);
-  const [updatePledgeModalIsOpen, setUpdatePledgeModalIsOpen] =
-    useState<boolean>(false);
-  const [deletePledgeModalIsOpen, setDeletePledgeModalIsOpen] =
-    useState<boolean>(false);
+  const [modalState, setModalState] = useState<{ [key in Modal]: boolean }>({
+    [Modal.CREATE]: false,
+    [Modal.UPDATE]: false,
+    [Modal.DELETE]: false,
+  });
+
   const [pledge, setPledge] = useState<InterfacePledgeInfo | null>(null);
 
   const [formState, setFormState] = useState<InterfaceCreatePledge>({
@@ -50,62 +58,65 @@ const fundCampaignPledge = (): JSX.Element => {
   const [deletePledge] = useMutation(DELETE_PLEDGE);
 
   const {
-    data: fundCampaignPledgeData,
-    loading: fundCampaignPledgeLoading,
-    error: fundCampaignPledgeError,
-    refetch: refetchFundCampaignPledge,
+    data: pledgeData,
+    loading: pledgeLoading,
+    error: pledgeError,
+    refetch: refetchPledge,
   }: {
     data?: {
       getFundraisingCampaignById: InterfaceQueryFundCampaignsPledges;
     };
     loading: boolean;
     error?: Error | undefined;
-    refetch: any;
+    refetch: () => Promise<
+      ApolloQueryResult<{
+        getFundraisingCampaignById: InterfaceQueryFundCampaignsPledges;
+      }>
+    >;
   } = useQuery(FUND_CAMPAIGN_PLEDGE, {
     variables: {
       id: currentUrl,
     },
   });
-  console.log(fundCampaignPledgeData);
 
-  const showCreatePledgeModal = (): void => {
-    setCreatePledgeModalIsOpen(true);
+  const pledges = useMemo(() => {
+    return pledgeData?.getFundraisingCampaignById.pledges ?? [];
+  }, [pledgeData]);
+
+  const openModal = (modal: Modal): void => {
+    setModalState((prevState) => ({ ...prevState, [modal]: true }));
   };
-  const hideCreatePledgeModal = (): void => {
-    setCreatePledgeModalIsOpen(false);
+
+  const closeModal = (modal: Modal): void => {
+    setModalState((prevState) => ({ ...prevState, [modal]: false }));
   };
-  const showUpdatePledgeModal = (): void => {
-    setUpdatePledgeModalIsOpen(true);
-  };
-  const hideUpdatePledgeModal = (): void => {
-    setUpdatePledgeModalIsOpen(false);
-  };
-  const showDeletePledgeModal = (): void => {
-    setDeletePledgeModalIsOpen(true);
-  };
-  const hideDeletePledgeModal = (): void => {
-    setDeletePledgeModalIsOpen(false);
-  };
-  const handleEditClick = (pledge: InterfacePledgeInfo): void => {
-    setFormState({
-      pledgeAmount: pledge.amount,
-      pledgeCurrency: pledge.currency,
-      pledgeEndDate: new Date(pledge.endDate),
-      pledgeStartDate: new Date(pledge.startDate),
-    });
-    setPledge(pledge);
-    showUpdatePledgeModal();
-  };
-  const handleDeleteClick = (pledge: InterfacePledgeInfo): void => {
-    setPledge(pledge);
-    showDeletePledgeModal();
-  };
+
+  const handleEditClick = useCallback(
+    (pledge: InterfacePledgeInfo): void => {
+      setFormState({
+        pledgeAmount: pledge.amount,
+        pledgeCurrency: pledge.currency,
+        pledgeEndDate: new Date(pledge.endDate),
+        pledgeStartDate: new Date(pledge.startDate),
+      });
+      setPledge(pledge);
+      openModal(Modal.UPDATE);
+    },
+    [openModal],
+  );
+  const handleDeleteClick = useCallback(
+    (pledge: InterfacePledgeInfo): void => {
+      setPledge(pledge);
+      openModal(Modal.DELETE);
+    },
+    [openModal],
+  );
   const createPledgeHandler = async (
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     try {
       e.preventDefault();
-      const userId = getItem('userId');
+      const userId = getItem('id');
       await createPledge({
         variables: {
           campaignId: currentUrl,
@@ -116,8 +127,8 @@ const fundCampaignPledge = (): JSX.Element => {
           userIds: [userId],
         },
       });
-      await refetchFundCampaignPledge();
-      hideCreatePledgeModal();
+      await refetchPledge();
+      closeModal(Modal.CREATE);
       toast.success(t('pledgeCreated'));
       setFormState({
         pledgeAmount: 0,
@@ -127,7 +138,6 @@ const fundCampaignPledge = (): JSX.Element => {
       });
     } catch (error: unknown) {
       toast.error((error as Error).message);
-      console.log(error);
     }
   };
   const updatePledgeHandler = async (
@@ -135,7 +145,7 @@ const fundCampaignPledge = (): JSX.Element => {
   ): Promise<void> => {
     try {
       e.preventDefault();
-      const updatedFields: { [key: string]: any } = {};
+      const updatedFields: { [key: string]: number | string | undefined } = {};
       if (formState.pledgeAmount !== pledge?.amount) {
         updatedFields.amount = formState.pledgeAmount;
       }
@@ -165,12 +175,11 @@ const fundCampaignPledge = (): JSX.Element => {
           ...updatedFields,
         },
       });
-      await refetchFundCampaignPledge();
-      hideUpdatePledgeModal();
+      await refetchPledge();
+      closeModal(Modal.UPDATE);
       toast.success(t('pledgeUpdated'));
     } catch (error: unknown) {
       toast.error((error as Error).message);
-      console.log(error);
     }
   };
   const deleteHandler = async (): Promise<void> => {
@@ -180,16 +189,15 @@ const fundCampaignPledge = (): JSX.Element => {
           id: pledge?._id,
         },
       });
-      await refetchFundCampaignPledge();
-      hideDeletePledgeModal();
+      await refetchPledge();
+      closeModal(Modal.DELETE);
       toast.success(t('pledgeDeleted'));
     } catch (error: unknown) {
       toast.error((error as Error).message);
-      console.log(error);
     }
   };
-  if (fundCampaignPledgeLoading) return <Loader size="xl" />;
-  if (fundCampaignPledgeError) {
+  if (pledgeLoading) return <Loader size="xl" />;
+  if (pledgeError) {
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
         <div className={styles.message} data-testid="errorMsg">
@@ -197,7 +205,7 @@ const fundCampaignPledge = (): JSX.Element => {
           <h6 className="fw-bold text-danger text-center">
             Error occured while loading Funds
             <br />
-            {fundCampaignPledgeError.message}
+            {pledgeError.message}
           </h6>
         </div>
       </div>
@@ -208,7 +216,7 @@ const fundCampaignPledge = (): JSX.Element => {
       <Button
         variant="success"
         className={styles.createPledgeBtn}
-        onClick={showCreatePledgeModal}
+        onClick={() => openModal(Modal.CREATE)}
         data-testid="addPledgeBtn"
       >
         <i className={'fa fa-plus me-2'} />
@@ -234,78 +242,67 @@ const fundCampaignPledge = (): JSX.Element => {
             </Col>
           </Row>
           <div className="mx-4 bg-light-subtle border border-light-subtle border-top-0 rounded-bottom-4 shadow-sm">
-            {fundCampaignPledgeData?.getFundraisingCampaignById.pledges.map(
-              (pledge, index) => (
-                <div key={index}>
-                  <Row
-                    className={`${index == 0 ? 'pt-3' : ''} mb-3 ms-2 justify-content-between `}
-                  >
-                    <Col xs={7} sm={2} md={3} lg={3}>
-                      <div className="">
-                        {pledge.users.map((user, index) => (
-                          <span key={index}>
-                            {user.firstName}
-                            {index !== pledge.users.length - 1 && ', '}
-                          </span>
-                        ))}
-                      </div>
-                    </Col>
-                    <Col sm={2} md={2}>
-                      <div className="ms-1">
-                        {dayjs(pledge.startDate).format('DD/MM/YYYY')}
-                      </div>
-                    </Col>
-                    <Col sm={2} md={2}>
-                      <div>{dayjs(pledge.endDate).format('DD/MM/YYYY')}</div>
-                    </Col>
-                    <Col sm={2} md={2}>
-                      <div className="ms-2">
-                        {
-                          currencySymbols[
-                            pledge.currency as keyof typeof currencySymbols
-                          ]
-                        }
-                        {pledge.amount}
-                      </div>
-                    </Col>
-                    <Col xs={5} md={2} sm={2} lg={2}>
-                      <Button
-                        variant="success"
-                        size="sm"
-                        className="me-2"
-                        data-testid="editPledgeBtn"
-                        onClick={() => {
-                          handleEditClick(pledge);
-                          console.log('Edit Pledge');
-                        }}
-                      >
-                        {' '}
-                        <i className="fa fa-edit" />
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="danger"
-                        data-testid="deletePledgeBtn"
-                        onClick={() => {
-                          handleDeleteClick(pledge);
-                          console.log('Delete Pledge');
-                        }}
-                      >
-                        <i className="fa fa-trash" />
-                      </Button>
-                    </Col>
-                  </Row>
-                  {fundCampaignPledgeData.getFundraisingCampaignById.pledges &&
-                    index !==
-                      fundCampaignPledgeData.getFundraisingCampaignById.pledges
-                        .length -
-                        1 && <hr className="mx-3" />}
-                </div>
-              ),
-            )}
+            {pledges.map((pledge, index) => (
+              <div key={index}>
+                <Row
+                  className={`${index == 0 ? 'pt-3' : ''} mb-3 ms-2 justify-content-between `}
+                >
+                  <Col xs={7} sm={2} md={3} lg={3}>
+                    <div className="">
+                      {pledge.users.map((user, index) => (
+                        <span key={index}>
+                          {user.firstName}
+                          {index !== pledge.users.length - 1 && ', '}
+                        </span>
+                      ))}
+                    </div>
+                  </Col>
+                  <Col sm={2} md={2}>
+                    <div className="ms-1">
+                      {dayjs(pledge.startDate).format('DD/MM/YYYY')}
+                    </div>
+                  </Col>
+                  <Col sm={2} md={2}>
+                    <div>{dayjs(pledge.endDate).format('DD/MM/YYYY')}</div>
+                  </Col>
+                  <Col sm={2} md={2}>
+                    <div className="ms-2">
+                      {
+                        currencySymbols[
+                          pledge.currency as keyof typeof currencySymbols
+                        ]
+                      }
+                      {pledge.amount}
+                    </div>
+                  </Col>
+                  <Col xs={5} md={2} sm={2} lg={2}>
+                    <Button
+                      variant="success"
+                      size="sm"
+                      className="me-2"
+                      data-testid="editPledgeBtn"
+                      onClick={() => handleEditClick(pledge)}
+                    >
+                      {' '}
+                      <i className="fa fa-edit" />
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="danger"
+                      data-testid="deletePledgeBtn"
+                      onClick={() => handleDeleteClick(pledge)}
+                    >
+                      <i className="fa fa-trash" />
+                    </Button>
+                  </Col>
+                </Row>
+                {pledges && index !== pledges.length - 1 && (
+                  <hr className="mx-3" />
+                )}
+              </div>
+            ))}
 
-            {fundCampaignPledgeData?.getFundraisingCampaignById.pledges
-              .length === 0 && (
+            {pledges.length === 0 && (
               <div className="pt-2 text-center fw-semibold text-body-tertiary ">
                 <h5>{t('noPledges')}</h5>
               </div>
@@ -316,40 +313,32 @@ const fundCampaignPledge = (): JSX.Element => {
 
       {/* Create Pledge Modal */}
       <PledgeCreateModal
-        createCamapignModalIsOpen={createPledgeModalIsOpen}
-        hideCreateCampaignModal={hideCreatePledgeModal}
+        createCamapignModalIsOpen={modalState[Modal.CREATE]}
+        hideCreateCampaignModal={() => closeModal(Modal.CREATE)}
         formState={formState}
         setFormState={setFormState}
         createPledgeHandler={createPledgeHandler}
-        startDate={
-          fundCampaignPledgeData?.getFundraisingCampaignById.startDate as Date
-        }
-        endDate={
-          fundCampaignPledgeData?.getFundraisingCampaignById.endDate as Date
-        }
+        startDate={pledgeData?.getFundraisingCampaignById.startDate as Date}
+        endDate={pledgeData?.getFundraisingCampaignById.endDate as Date}
         t={t}
       />
 
       {/* Update Pledge Modal */}
       <PledgeEditModal
-        updatePledgeModalIsOpen={updatePledgeModalIsOpen}
-        hideUpdatePledgeModal={hideUpdatePledgeModal}
+        updatePledgeModalIsOpen={modalState[Modal.UPDATE]}
+        hideUpdatePledgeModal={() => closeModal(Modal.UPDATE)}
         formState={formState}
         setFormState={setFormState}
         updatePledgeHandler={updatePledgeHandler}
-        startDate={
-          fundCampaignPledgeData?.getFundraisingCampaignById.startDate as Date
-        }
-        endDate={
-          fundCampaignPledgeData?.getFundraisingCampaignById.endDate as Date
-        }
+        startDate={pledgeData?.getFundraisingCampaignById.startDate as Date}
+        endDate={pledgeData?.getFundraisingCampaignById.endDate as Date}
         t={t}
       />
 
       {/* Delete Pledge Modal */}
       <PledgeDeleteModal
-        deletePledgeModalIsOpen={deletePledgeModalIsOpen}
-        hideDeletePledgeModal={hideDeletePledgeModal}
+        deletePledgeModalIsOpen={modalState[Modal.DELETE]}
+        hideDeletePledgeModal={() => closeModal(Modal.DELETE)}
         deletePledgeHandler={deleteHandler}
         t={t}
       />
