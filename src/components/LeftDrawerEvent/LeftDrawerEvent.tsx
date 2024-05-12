@@ -30,7 +30,7 @@ export interface InterfaceLeftDrawerProps {
 }
 
 const leftDrawerEvent = ({
-  event,
+  event, 
   hideDrawer,
 }: InterfaceLeftDrawerProps): JSX.Element => {
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
