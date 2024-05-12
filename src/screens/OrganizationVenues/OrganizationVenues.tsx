@@ -43,7 +43,14 @@ function organizationVenues(): JSX.Element {
     error: venueError,
     refetch: venueRefetch,
   } = useQuery(VENUE_LIST, {
-    variables: { id: orgId },
+    variables: {
+      orgId: orgId,
+      orderBy: sortOrder === 'highest' ? 'capacity_DESC' : 'capacity_ASC',
+      where: {
+        name_starts_with: searchBy === 'name' ? searchTerm : undefined,
+        description_starts_with: searchBy === 'desc' ? searchTerm : undefined,
+      },
+    },
   });
 
   const [deleteVenue] = useMutation(DELETE_VENUE_MUTATION);
@@ -91,34 +98,10 @@ function organizationVenues(): JSX.Element {
   }
 
   useEffect(() => {
-    if (
-      venueData &&
-      venueData.organizations &&
-      venueData.organizations[0] &&
-      venueData.organizations[0].venues
-    ) {
-      setVenues(venueData.organizations[0].venues);
+    if (venueData && venueData.getVenueByOrgId) {
+      setVenues(venueData.getVenueByOrgId);
     }
   }, [venueData]);
-
-  const filteredVenues = venues
-    .filter((venue) => {
-      if (searchBy === 'name') {
-        return venue.name.toLowerCase().includes(searchTerm.toLowerCase());
-      } else {
-        return (
-          venue.description &&
-          venue.description.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-      }
-    })
-    .sort((a, b) => {
-      if (sortOrder === 'highest') {
-        return parseInt(b.capacity) - parseInt(a.capacity);
-      } else {
-        return parseInt(a.capacity) - parseInt(b.capacity);
-      }
-    });
 
   return (
     <>
@@ -232,8 +215,8 @@ function organizationVenues(): JSX.Element {
               className={`${styles.list_box} row `}
               data-testid="orgvenueslist"
             >
-              {filteredVenues.length ? (
-                filteredVenues.map(
+              {venues.length ? (
+                venues.map(
                   (venueItem: InterfaceQueryVenueListItem, index: number) => (
                     <VenueCard
                       venueItem={venueItem}

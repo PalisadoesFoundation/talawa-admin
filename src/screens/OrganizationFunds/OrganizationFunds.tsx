@@ -332,7 +332,14 @@ const organizationFunds = (): JSX.Element => {
                             data-testid="fundName"
                             onClick={() => handleClick(fund._id)}
                           >
-                            {fund.name}
+                            <span
+                              style={{
+                                color: 'rgba(23, 120, 242, 1)',
+                                cursor: 'pointer',
+                              }}
+                            >
+                              {fund.name}
+                            </span>
                           </StyledTableCell>
                           <StyledTableCell
                             align="center"

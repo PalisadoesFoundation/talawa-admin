@@ -1,6 +1,6 @@
 import React from 'react';
 import type { RenderResult } from '@testing-library/react';
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
@@ -11,6 +11,8 @@ import EventManagement from './EventManagement';
 import userEvent from '@testing-library/user-event';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { MOCKS_WITH_TIME } from 'components/EventManagement/Dashboard/EventDashboard.mocks';
+import useLocalStorage from 'utils/useLocalstorage';
+const { setItem } = useLocalStorage();
 
 const mockWithTime = new StaticMockLink(MOCKS_WITH_TIME, true);
 
@@ -32,6 +34,12 @@ const renderEventManagement = (): RenderResult => {
               <Route
                 path="/orgevents/:orgId"
                 element={<div data-testid="eventsScreen">eventsScreen</div>}
+              />
+              <Route
+                path="/user/events/:orgId"
+                element={
+                  <div data-testid="userEventsScreen">userEventsScreen</div>
+                }
               />
             </Routes>
           </I18nextProvider>
@@ -64,8 +72,8 @@ describe('Event Management', () => {
 
     expect(dashboardTab).toBeInTheDocument();
   });
-
-  test('Testing back button navigation', async () => {
+  test('Testing back button navigation when userType is SuperAdmin', async () => {
+    setItem('SuperAdmin', true);
     renderEventManagement();
 
     const backButton = screen.getByTestId('backBtn');

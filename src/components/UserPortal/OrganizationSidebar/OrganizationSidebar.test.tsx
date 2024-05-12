@@ -38,6 +38,8 @@ const MOCKS = [
             endTime: '06:00',
             allDay: false,
             recurring: false,
+            recurrenceRule: null,
+            isRecurringEventException: false,
             isPublic: true,
             isRegisterable: true,
           },

@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
 import EventDashboard from 'components/EventManagement/Dashboard/EventDashboard';
 import EventActionItems from 'components/EventManagement/EventActionItems/EventActionItems';
+import useLocalStorage from 'utils/useLocalstorage';
 
 const eventDashboardTabs: {
   value: TabOptions;
@@ -41,6 +42,17 @@ const EventManagement = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'eventManagement',
   });
+
+  const { getItem } = useLocalStorage();
+
+  const superAdmin = getItem('SuperAdmin');
+  const adminFor = getItem('AdminFor');
+  /*istanbul ignore next*/
+  const userRole = superAdmin
+    ? 'SUPERADMIN'
+    : adminFor?.length > 0
+      ? 'ADMIN'
+      : 'USER';
 
   const { eventId, orgId } = useParams();
   /*istanbul ignore next*/
@@ -94,7 +106,12 @@ const EventManagement = (): JSX.Element => {
           height={28}
           fill={'var(--bs-secondary)'}
           data-testid="backBtn"
-          onClick={() => navigate(`/orgevents/${orgId}`)}
+          onClick={() => {
+            /*istanbul ignore next*/
+            userRole === 'USER'
+              ? navigate(`/user/events/${orgId}`)
+              : navigate(`/orgevents/${orgId}`);
+          }}
           className="mt-1"
         />
         <div className="d-flex ms-3 gap-4 mt-1">

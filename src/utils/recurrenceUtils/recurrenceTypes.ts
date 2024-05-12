@@ -2,13 +2,26 @@
   Recurrence types
 */
 
-// interface for the recurrenceRuleData that we would send to the backend
-export interface InterfaceRecurrenceRule {
+// interface for the recurrenceRuleStateData that would be sent to the backend
+export interface InterfaceRecurrenceRuleState {
+  recurrenceStartDate: Date;
+  recurrenceEndDate: Date | null;
   frequency: Frequency;
-  weekDays: WeekDays[] | undefined;
-  interval: number | undefined;
+  weekDays: WeekDays[];
+  interval: number;
   count: number | undefined;
   weekDayOccurenceInMonth: number | undefined;
+}
+
+// interface for the RecurrenceRule document that would be fetched from the backend
+export interface InterfaceRecurrenceRule {
+  recurrenceStartDate: string;
+  recurrenceEndDate: string | null;
+  frequency: Frequency;
+  weekDays: WeekDays[];
+  interval: number;
+  count: number | null;
+  weekDayOccurenceInMonth: number | null;
 }
 
 // recurrence frequency
@@ -40,7 +53,7 @@ export enum RecurrenceEndOption {
 
 // update / delete options of recurring events
 export enum RecurringEventMutationType {
-  ThisInstance = 'ThisInstance',
-  ThisAndFollowingInstances = 'ThisAndFollowingInstances',
-  AllInstances = 'AllInstances',
+  thisInstance = 'thisInstance',
+  thisAndFollowingInstances = 'thisAndFollowingInstances',
+  allInstances = 'allInstances',
 }

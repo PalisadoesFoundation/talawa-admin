@@ -70,6 +70,17 @@ enum AdvertisementType {
   POPUP
 }
 
+type AdvertisementEdge {
+  cursor: String
+  node: Advertisement
+}
+
+type AdvertisementsConnection {
+  edges: [AdvertisementEdge]
+  pageInfo: DefaultConnectionPageInfo
+  totalCount: Int
+}
+
 type AgendaCategory {
   _id: ID!
   createdAt: Date!
@@ -1053,7 +1064,7 @@ type Query {
     skip: Int
     where: EventWhereInput
   ): [Event!]!
-  advertisementsConnection: [Advertisement]
+  advertisementsConnection(after: String, before: String, first: PositiveInt, last: PositiveInt): AdvertisementsConnection
   getDonationById(id: ID!): Donation!
   getDonationByOrgId(orgId: ID!): [Donation]
   getDonationByOrgIdConnection(
@@ -1414,8 +1425,8 @@ input UserInput {
   email: EmailAddress!
   firstName: String!
   lastName: String!
-  organizationUserBelongsToId: ID
   password: String!
+  selectedOrganization : ID!
 }
 
 enum UserOrderByInput {

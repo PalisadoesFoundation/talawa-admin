@@ -25,52 +25,171 @@ const MOCKS = [
     request: {
       query: VENUE_LIST,
       variables: {
-        id: 'orgId',
+        orgId: 'orgId',
+        orderBy: 'capacity_ASC',
+        where: {
+          name_starts_with: '',
+          description_starts_with: undefined,
+        },
       },
     },
     result: {
       data: {
-        organizations: [
+        getVenueByOrgId: [
           {
-            venues: [
-              {
-                _id: 'venue1',
-                capacity: 1000,
-                description: 'Updated description for venue 1',
-                imageUrl: null,
-                name: 'Updated Venue 1',
-                organization: {
-                  __typename: 'Organization',
-                  _id: 'orgId',
-                },
-                __typename: 'Venue',
-              },
-              {
-                _id: 'venue2',
-                capacity: 1500,
-                description: 'Updated description for venue 2',
-                imageUrl: null,
-                name: 'Updated Venue 2',
-                organization: {
-                  __typename: 'Organization',
-                  _id: 'orgId',
-                },
-                __typename: 'Venue',
-              },
-              {
-                _id: 'venue3',
-                name: 'Venue with a name longer than 25 characters that should be truncated',
-                description:
-                  'Venue description that should be truncated because it is longer than 75 characters',
-                capacity: 2000,
-                imageUrl: null,
-                organization: {
-                  _id: 'orgId',
-                  __typename: 'Organization',
-                },
-                __typename: 'Venue',
-              },
-            ],
+            _id: 'venue1',
+            capacity: 1000,
+            description: 'Updated description for venue 1',
+            imageUrl: null,
+            name: 'Updated Venue 1',
+            organization: {
+              __typename: 'Organization',
+              _id: 'orgId',
+            },
+            __typename: 'Venue',
+          },
+          {
+            _id: 'venue2',
+            capacity: 1500,
+            description: 'Updated description for venue 2',
+            imageUrl: null,
+            name: 'Updated Venue 2',
+            organization: {
+              __typename: 'Organization',
+              _id: 'orgId',
+            },
+            __typename: 'Venue',
+          },
+          {
+            _id: 'venue3',
+            name: 'Venue with a name longer than 25 characters that should be truncated',
+            description:
+              'Venue description that should be truncated because it is longer than 75 characters',
+            capacity: 2000,
+            imageUrl: null,
+            organization: {
+              _id: 'orgId',
+              __typename: 'Organization',
+            },
+            __typename: 'Venue',
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: VENUE_LIST,
+      variables: {
+        orgId: 'orgId',
+        orderBy: 'capacity_DESC',
+        where: {
+          name_starts_with: '',
+          description_starts_with: undefined,
+        },
+      },
+    },
+    result: {
+      data: {
+        getVenueByOrgId: [
+          {
+            _id: 'venue3',
+            name: 'Venue with a name longer than 25 characters that should be truncated',
+            description:
+              'Venue description that should be truncated because it is longer than 75 characters',
+            capacity: 2000,
+            imageUrl: null,
+            organization: {
+              _id: 'orgId',
+              __typename: 'Organization',
+            },
+            __typename: 'Venue',
+          },
+          {
+            _id: 'venue2',
+            capacity: 1500,
+            description: 'Updated description for venue 2',
+            imageUrl: null,
+            name: 'Updated Venue 2',
+            organization: {
+              __typename: 'Organization',
+              _id: 'orgId',
+            },
+            __typename: 'Venue',
+          },
+          {
+            _id: 'venue1',
+            capacity: 1000,
+            description: 'Updated description for venue 1',
+            imageUrl: null,
+            name: 'Updated Venue 1',
+            organization: {
+              __typename: 'Organization',
+              _id: 'orgId',
+            },
+            __typename: 'Venue',
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: VENUE_LIST,
+      variables: {
+        orgId: 'orgId',
+        orderBy: 'capacity_DESC',
+        where: {
+          name_starts_with: 'Updated Venue 1',
+          description_starts_with: undefined,
+        },
+      },
+    },
+    result: {
+      data: {
+        getVenueByOrgId: [
+          {
+            _id: 'venue1',
+            capacity: 1000,
+            description: 'Updated description for venue 1',
+            imageUrl: null,
+            name: 'Updated Venue 1',
+            organization: {
+              __typename: 'Organization',
+              _id: 'orgId',
+            },
+            __typename: 'Venue',
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: VENUE_LIST,
+      variables: {
+        orgId: 'orgId',
+        orderBy: 'capacity_DESC',
+        where: {
+          name_starts_with: undefined,
+          description_starts_with: 'Updated description for venue 1',
+        },
+      },
+    },
+    result: {
+      data: {
+        getVenueByOrgId: [
+          {
+            _id: 'venue1',
+            capacity: 1000,
+            description: 'Updated description for venue 1',
+            imageUrl: null,
+            name: 'Updated Venue 1',
+            organization: {
+              __typename: 'Organization',
+              _id: 'orgId',
+            },
+            __typename: 'Venue',
           },
         ],
       },

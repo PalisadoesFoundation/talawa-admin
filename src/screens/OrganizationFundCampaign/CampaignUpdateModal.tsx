@@ -15,6 +15,7 @@ interface InterfaceCampaignUpdateModal {
   setFormState: (state: React.SetStateAction<InterfaceCreateCampaign>) => void;
   updateCampaignHandler: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
   t: (key: string) => string;
+  showDeleteCampaignModal: () => void;
 }
 
 const CampaignUpdateModal: React.FC<InterfaceCampaignUpdateModal> = ({
@@ -24,12 +25,13 @@ const CampaignUpdateModal: React.FC<InterfaceCampaignUpdateModal> = ({
   setFormState,
   updateCampaignHandler,
   t,
+  showDeleteCampaignModal,
 }) => {
   return (
     <>
       <Modal show={campaignUpdateModalIsOpen} onHide={hideUpdateCampaignModal}>
         <Modal.Header>
-          <p className={styles.titlemodal}> {t('updateCampaign')}</p>
+          <p className={styles.titlemodal}> {t('manageCampaign')}</p>
           <Button
             variant="danger"
             onClick={hideUpdateCampaignModal}
@@ -137,13 +139,28 @@ const CampaignUpdateModal: React.FC<InterfaceCampaignUpdateModal> = ({
                 />
               </Form.Group>
             </Form.Group>
-            <Button
-              type="submit"
-              className={styles.greenregbtn}
-              data-testid="editCampaignSubmitBtn"
-            >
-              {t('updateCampaign')}
-            </Button>
+            <div className="d-flex gap-3">
+              <Button
+                type="submit"
+                className={styles.greenregbtn}
+                data-testid="editCampaignSubmitBtn"
+              >
+                {t('updateCampaign')}
+              </Button>
+              <Button
+                size="sm"
+                className={styles.redregbtn}
+                data-testid="deleteCampaignBtn"
+                variant="danger"
+                onClick={() => {
+                  hideUpdateCampaignModal();
+                  showDeleteCampaignModal();
+                }}
+                style={{ flex: '1' }}
+              >
+                {t('deleteCampaign')}
+              </Button>
+            </div>
           </Form>
         </Modal.Body>
       </Modal>

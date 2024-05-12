@@ -121,7 +121,7 @@ describe('ProfileDropdown Component', () => {
       });
 
       userEvent.click(screen.getByTestId('profileBtn'));
-      expect(global.window.location.pathname).toBe('/member/123');
+      expect(global.window.location.pathname).toBe('/user/settings');
     });
   });
 });

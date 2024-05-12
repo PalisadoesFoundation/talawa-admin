@@ -16,7 +16,7 @@ import {
   recurrenceEndOptions,
 } from 'utils/recurrenceUtils';
 import type {
-  InterfaceRecurrenceRule,
+  InterfaceRecurrenceRuleState,
   RecurrenceEndOption,
   WeekDays,
 } from 'utils/recurrenceUtils';
@@ -24,14 +24,11 @@ import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 
 interface InterfaceCustomRecurrenceModalProps {
-  recurrenceRuleState: InterfaceRecurrenceRule;
+  recurrenceRuleState: InterfaceRecurrenceRuleState;
   recurrenceRuleText: string;
   setRecurrenceRuleState: (
-    state: React.SetStateAction<InterfaceRecurrenceRule>,
+    state: React.SetStateAction<InterfaceRecurrenceRuleState>,
   ) => void;
-  startDate: Date;
-  endDate: Date | null;
-  setEndDate: (state: React.SetStateAction<Date | null>) => void;
   customRecurrenceModalIsOpen: boolean;
   hideCustomRecurrenceModal: () => void;
   setCustomRecurrenceModalIsOpen: (
@@ -44,23 +41,29 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
   recurrenceRuleState,
   recurrenceRuleText,
   setRecurrenceRuleState,
-  startDate,
-  endDate,
-  setEndDate,
   customRecurrenceModalIsOpen,
   hideCustomRecurrenceModal,
   setCustomRecurrenceModalIsOpen,
   t,
 }) => {
-  const { frequency, weekDays, interval, count } = recurrenceRuleState;
+  const {
+    recurrenceStartDate,
+    recurrenceEndDate,
+    frequency,
+    weekDays,
+    interval,
+    count,
+  } = recurrenceRuleState;
   const [selectedRecurrenceEndOption, setSelectedRecurrenceEndOption] =
     useState<RecurrenceEndOption>(endsNever);
 
   useEffect(() => {
-    if (endDate) {
+    if (recurrenceEndDate) {
       setSelectedRecurrenceEndOption(endsOn);
+    } else if (count) {
+      setSelectedRecurrenceEndOption(endsAfter);
     }
-  }, [endDate]);
+  }, [recurrenceRuleState]);
 
   const handleRecurrenceEndOptionChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -68,20 +71,25 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
     const selectedRecurrenceEndOption = e.target.value as RecurrenceEndOption;
     setSelectedRecurrenceEndOption(selectedRecurrenceEndOption);
     if (selectedRecurrenceEndOption === endsNever) {
-      setEndDate(null);
       setRecurrenceRuleState({
         ...recurrenceRuleState,
+        recurrenceEndDate: null,
         count: undefined,
       });
     }
     if (selectedRecurrenceEndOption === endsOn) {
       setRecurrenceRuleState({
         ...recurrenceRuleState,
+        recurrenceEndDate: dayjs().add(1, 'month').toDate(),
         count: undefined,
       });
     }
     if (selectedRecurrenceEndOption === endsAfter) {
-      setEndDate(null);
+      setRecurrenceRuleState({
+        ...recurrenceRuleState,
+        recurrenceEndDate: null,
+        count: 10,
+      });
     }
   };
 
@@ -129,7 +137,7 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
             </span>{' '}
             <FormControl
               type="number"
-              defaultValue={interval ?? 1}
+              value={interval}
               min={1}
               className={`${styles.recurrenceRuleNumberInput} ms-2 d-inline-block py-2`}
               data-testid="customRecurrenceIntervalInput"
@@ -156,7 +164,6 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
                     setRecurrenceRuleState({
                       ...recurrenceRuleState,
                       frequency: Frequency.DAILY,
-                      weekDays: undefined,
                       weekDayOccurenceInMonth: undefined,
                     })
                   }
@@ -169,6 +176,7 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
                     setRecurrenceRuleState({
                       ...recurrenceRuleState,
                       frequency: Frequency.WEEKLY,
+                      weekDays: [Days[recurrenceStartDate.getDay()]],
                       weekDayOccurenceInMonth: undefined,
                     })
                   }
@@ -181,9 +189,7 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
                     setRecurrenceRuleState({
                       ...recurrenceRuleState,
                       frequency: Frequency.MONTHLY,
-                      weekDays: [Days[startDate.getDay()]],
-                      weekDayOccurenceInMonth:
-                        getWeekDayOccurenceInMonth(startDate),
+                      weekDayOccurenceInMonth: undefined,
                     })
                   }
                   data-testid="customMonthlyRecurrence"
@@ -195,7 +201,6 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
                     setRecurrenceRuleState({
                       ...recurrenceRuleState,
                       frequency: Frequency.YEARLY,
-                      weekDays: undefined,
                       weekDayOccurenceInMonth: undefined,
                     })
                   }
@@ -245,76 +250,62 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
                       setRecurrenceRuleState({
                         ...recurrenceRuleState,
                         frequency: Frequency.MONTHLY,
-                        weekDays: undefined,
                         weekDayOccurenceInMonth: undefined,
                       })
                     }
                     data-testid="monthlyRecurrenceOptionOnThatDay"
                   >
                     <span className="fw-semibold text-secondary">
-                      {getRecurrenceRuleText(
-                        {
-                          ...recurrenceRuleState,
-                          frequency: Frequency.MONTHLY,
-                          weekDays: undefined,
-                          weekDayOccurenceInMonth: undefined,
-                        },
-                        startDate,
-                        endDate,
-                      )}
+                      {getRecurrenceRuleText({
+                        ...recurrenceRuleState,
+                        frequency: Frequency.MONTHLY,
+                        weekDayOccurenceInMonth: undefined,
+                      })}
                     </span>
                   </Dropdown.Item>
-                  {getWeekDayOccurenceInMonth(startDate) !== 5 && (
+                  {getWeekDayOccurenceInMonth(recurrenceStartDate) !== 5 && (
                     <Dropdown.Item
                       onClick={() =>
                         setRecurrenceRuleState({
                           ...recurrenceRuleState,
                           frequency: Frequency.MONTHLY,
-                          weekDays: [Days[startDate.getDay()]],
+                          weekDays: [Days[recurrenceStartDate.getDay()]],
                           weekDayOccurenceInMonth:
-                            getWeekDayOccurenceInMonth(startDate),
+                            getWeekDayOccurenceInMonth(recurrenceStartDate),
                         })
                       }
                       data-testid="monthlyRecurrenceOptionOnThatOccurence"
                     >
                       <span className="fw-semibold text-secondary">
-                        {getRecurrenceRuleText(
-                          {
-                            ...recurrenceRuleState,
-                            frequency: Frequency.MONTHLY,
-                            weekDays: [Days[startDate.getDay()]],
-                            weekDayOccurenceInMonth:
-                              getWeekDayOccurenceInMonth(startDate),
-                          },
-                          startDate,
-                          endDate,
-                        )}
+                        {getRecurrenceRuleText({
+                          ...recurrenceRuleState,
+                          frequency: Frequency.MONTHLY,
+                          weekDays: [Days[recurrenceStartDate.getDay()]],
+                          weekDayOccurenceInMonth:
+                            getWeekDayOccurenceInMonth(recurrenceStartDate),
+                        })}
                       </span>
                     </Dropdown.Item>
                   )}
-                  {isLastOccurenceOfWeekDay(startDate) && (
+                  {isLastOccurenceOfWeekDay(recurrenceStartDate) && (
                     <Dropdown.Item
                       onClick={() =>
                         setRecurrenceRuleState({
                           ...recurrenceRuleState,
                           frequency: Frequency.MONTHLY,
-                          weekDays: [Days[startDate.getDay()]],
+                          weekDays: [Days[recurrenceStartDate.getDay()]],
                           weekDayOccurenceInMonth: -1,
                         })
                       }
                       data-testid="monthlyRecurrenceOptionOnLastOccurence"
                     >
                       <span className="fw-semibold text-secondary">
-                        {getRecurrenceRuleText(
-                          {
-                            ...recurrenceRuleState,
-                            frequency: Frequency.MONTHLY,
-                            weekDays: [Days[startDate.getDay()]],
-                            weekDayOccurenceInMonth: -1,
-                          },
-                          startDate,
-                          endDate,
-                        )}
+                        {getRecurrenceRuleText({
+                          ...recurrenceRuleState,
+                          frequency: Frequency.MONTHLY,
+                          weekDays: [Days[recurrenceStartDate.getDay()]],
+                          weekDayOccurenceInMonth: -1,
+                        })}
                       </span>
                     </Dropdown.Item>
                   )}
@@ -347,11 +338,16 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
                           label={t('endDate')}
                           className={styles.recurrenceRuleDateBox}
                           disabled={selectedRecurrenceEndOption !== endsOn}
-                          value={dayjs(endDate ?? new Date())}
+                          value={dayjs(
+                            recurrenceEndDate ?? dayjs().add(1, 'month'),
+                          )}
                           onChange={(date: Dayjs | null): void => {
                             /* istanbul ignore next */
                             if (date) {
-                              setEndDate(date?.toDate());
+                              setRecurrenceRuleState({
+                                ...recurrenceRuleState,
+                                recurrenceEndDate: date?.toDate(),
+                              });
                             }
                           }}
                         />
@@ -361,7 +357,7 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
                       <>
                         <FormControl
                           type="number"
-                          defaultValue={count ?? 1}
+                          value={count ?? 10}
                           min={1}
                           onChange={(e) =>
                             setRecurrenceRuleState({

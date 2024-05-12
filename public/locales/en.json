@@ -37,7 +37,42 @@
     "lowercase_check": "Atleast one lowercase letter",
     "uppercase_check": "Atleast one uppercase letter",
     "numeric_value_check": "Atleaset one numeric value",
-    "special_char_check": "Atleast one special character"
+    "special_char_check": "Atleast one special character",
+    "loading": "Loading...",
+    "selectOrg": "Select an organization",
+    "afterRegister": "Successfully registered. Please wait for admin to approve your request."
+  },
+  "userLoginPage": {
+    "title": "Talawa Admin",
+    "fromPalisadoes": "An open source application by Palisadoes Foundation volunteers",
+    "talawa_portal": "Talawa Admin Portal",
+    "login": "Login",
+    "register": "Register",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "password": "Password",
+    "atleast_8_char_long": "Atleast 8 Character long",
+    "Password_and_Confirm_password_mismatches.": "Password and Confirm password mismatches.",
+    "confirmPassword": "Confirm Password",
+    "forgotPassword": "Forgot Password ?",
+    "enterEmail": "Enter Email",
+    "enterPassword": "Enter Password",
+    "doNotOwnAnAccount": "Do not own an account?",
+    "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too.",
+    "captchaError": "Captcha Error!",
+    "Please_check_the_captcha": "Please, check the captcha.",
+    "Something_went_wrong": "Something went wrong, Please try after sometime.",
+    "passwordMismatches": "Password and Confirm password mismatches.",
+    "fillCorrectly": "Fill all the Details Correctly.",
+    "notAuthorised": "Sorry! you are not Authorised!",
+    "notFound": "User not found!",
+    "successfullyRegistered": "Successfully Registered. Please wait until you will be approved.",
+    "userLogin": "User Login",
+    "afterRegister": "Successfully registered. Please wait for admin to approve your request.",
+    "OR": "OR",
+    "loading": "Loading...",
+    "selectOrg": "Select an organization"
   },
   "latestEvents": {
     "eventCardTitle": "Upcoming Events",
@@ -60,7 +95,7 @@
     "menu": "Menu",
     "my organizations": "My Organizations",
     "users": "Users",
-    "requests": "Requests",
+    "requests": "Membership Requests",
     "communityProfile": "Community Profile",
     "logout": "Logout"
   },
@@ -142,17 +177,17 @@
     "all": "All"
   },
   "requests": {
-    "title": "Requests",
+    "title": "Membership Requests",
     "sl_no": "Sl. No.",
     "name": "Name",
     "email": "Email",
     "accept": "Accept",
     "reject": "Reject",
-    "searchRequests": "Search requests",
+    "searchRequests": "Search membership requests",
     "endOfResults": "End of results",
     "noOrgError": "Organizations not found, please create an organization through dashboard",
     "noResultsFoundFor": "No results found for ",
-    "noRequestsFound": "No Request Found",
+    "noRequestsFound": "No Membership Requests Found",
     "acceptedSuccessfully": "Request accepted successfully",
     "rejectedSuccessfully": "Request rejected successfully",
     "noOrgErrorTitle": "Organizations Not Found",
@@ -191,7 +226,7 @@
     "admins": "Admins",
     "members": "Members",
     "joinNow": "Join Now",
-    "joined": "Joined",
+    "visit": "Visit",
     "withdraw": "Widthdraw"
   },
   "communityProfile": {
@@ -327,6 +362,7 @@
   "organizationActionItems": {
     "actionItemCategory": "Action Item Category",
     "actionItemDetails": "Action Item Details",
+    "actionItemCompleted": "Action Item Completed",
     "assignee": "Assignee",
     "assigner": "Assigner",
     "assignmentDate": "Assignment Date",
@@ -362,9 +398,7 @@
     "yes": "Yes"
   },
   "eventListCard": {
-    "location": "Location",
-    "on": "On",
-    "end": "End",
+    "location": "Event Location",
     "deleteEvent": "Delete Event",
     "deleteEventMsg": "Do you want to remove this event?",
     "no": "No",
@@ -372,6 +406,10 @@
     "editEvent": "Edit Event",
     "eventTitle": "Title",
     "description": "Description",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "registerEvent": "Register",
+    "alreadyRegistered": "Already registered",
     "startTime": "Start Time",
     "endTime": "End Time",
     "allDay": "All Day",
@@ -386,7 +424,16 @@
     "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too.",
     "thisInstance": "This Instance",
     "thisAndFollowingInstances": "This & Following Instances",
-    "allInstances": "All Instances"
+    "allInstances": "All Instances",
+    "customRecurrence": "Custom Recurrence",
+    "repeatsEvery": "Repeats Every",
+    "repeatsOn": "Repeats On",
+    "ends": "Ends",
+    "never": "Never",
+    "on": "On",
+    "after": "After",
+    "occurences": "occurences",
+    "done": "Done"
   },
   "funds": {
     "title": "Funds",
@@ -438,11 +485,14 @@
     "noCampaigns": "No Campaigns Found",
     "createCampaign": "Create Fund Campaign",
     "updateCampaign": "Update Fund Campaign",
+    "manageCampaign": "Manage Fund Campaign",
     "deleteCampaign": "Delete Fund Campaign",
     "no": "No",
     "yes": "Yes",
     "currency": "Currency",
-    "selectCurrency": "Select Currency"
+    "selectCurrency": "Select Currency",
+    "filter": "Filter",
+    "searchFullName": "Search By Name"
   },
   "pledges": {
     "title": "Fund Campaign Pledges",
@@ -816,10 +866,18 @@
     "searchByName": "Search By Name",
     "filter": "Filter"
   },
-  "userSidebar": {
+  "userSidebarOrg": {
     "yourOrganizations": "Your Organizations",
     "noOrganizations": "You haven't joined any organization yet.",
-    "viewAll": "View all"
+    "viewAll": "View all",
+    "talawaUserPortal": "Talawa User Portal",
+    "menu": "Menu",
+    "my organizations": "My Organizations",
+    "users": "Users",
+    "requests": "Requests",
+    "communityProfile": "Community Profile",
+    "logout": "Logout",
+    "settings": "Settings"
   },
   "organizationSidebar": {
     "viewAll": "View all",
@@ -829,12 +887,21 @@
     "noMembers": "No Members to show"
   },
   "postCard": {
+    "edit": "Edit",
+    "delete": "Delete",
     "likes": "Likes",
     "comments": "Comments"
   },
   "home": {
+    "posts": "Posts",
+    "post": "Post",
+    "title": "Title",
+    "textArea": "Something on your mind?",
     "feed": "Feed",
-    "pinnedPosts": "View Pinned Posts",
+    "loading": "Loading",
+    "pinnedPosts": "Pinned Posts",
+    "yourFeed": "Your Feed",
+    "nothingToShowHere": "Nothing to show here",
     "somethingOnYourMind": "Something on your mind?",
     "addPost": "Add Post",
     "startPost": "Start a post",
@@ -937,7 +1004,9 @@
     "startDate": "Start Date",
     "endDate": "End Date",
     "publicEvent": "Is Public",
-    "registerable": "Is Registerable"
+    "registerable": "Is Registerable",
+    "monthlyCalendarView": "Monthly Calendar",
+    "yearlyCalendarView": "Yearly Calender"
   },
   "userEventCard": {
     "location": "Location",
@@ -973,7 +1042,8 @@
     "view": "View",
     "edit": "Edit",
     "editAdvertisement": "Edit Advertisement",
-    "saveChanges": "Save Changes"
+    "saveChanges": "Save Changes",
+    "endOfResults": "End of results"
   },
   "userChat": {
     "chat": "Chat",
