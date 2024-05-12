@@ -424,21 +424,29 @@ describe('InviteUserModal Component', () => {
             <InviteUserModal {...props} />
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
-    await waitFor(() => expect(getByText('Invite Event Attendee')).toBeInTheDocument());
+    await waitFor(() =>
+      expect(getByText('Invite Event Attendee')).toBeInTheDocument(),
+    );
 
     // Simulate selecting a user
     fireEvent.change(getByLabelText('Add an Registrant'), {
       target: { value: 'John Doe' },
     });
-    fireEvent.keyDown(getByLabelText('Add an Registrant'), { key: 'ArrowDown' });
+    fireEvent.keyDown(getByLabelText('Add an Registrant'), {
+      key: 'ArrowDown',
+    });
     fireEvent.keyDown(getByLabelText('Add an Registrant'), { key: 'Enter' });
 
     fireEvent.click(getByText('Invite Attendee'));
 
-    await waitFor(() => expect(getByText('Invited the Attendee successfully!')).toBeInTheDocument());
+    await waitFor(() =>
+      expect(
+        getByText('Invited the Attendee successfully!'),
+      ).toBeInTheDocument(),
+    );
   });
 
   test('handles invite user mutation failure', async () => {
@@ -456,13 +464,19 @@ describe('InviteUserModal Component', () => {
             <InviteUserModal {...props} />
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
-    await waitFor(() => expect(getByText('Invite Event Attendee')).toBeInTheDocument());
+    await waitFor(() =>
+      expect(getByText('Invite Event Attendee')).toBeInTheDocument(),
+    );
 
     fireEvent.click(getByText('Invite Attendee'));
 
-    await waitFor(() => expect(getByText('There was an error in adding the attendee!')).toBeInTheDocument());
+    await waitFor(() =>
+      expect(
+        getByText('There was an error in adding the attendee!'),
+      ).toBeInTheDocument(),
+    );
   });
 });

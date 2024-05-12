@@ -161,7 +161,7 @@ describe('Testing InviteUsersWrapper Component', () => {
             </Provider>
           </LocalizationProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     // Open the modal
