@@ -104,7 +104,7 @@
 //   const { data: user, loading: loading } = useQuery(USER_DETAILS, {
 //     variables: { id: currentUrl }, // For testing we are sending the id as a prop
 //   });
-  
+
 //   const userData = user?.user;
 
 //   useEffect(() => {
