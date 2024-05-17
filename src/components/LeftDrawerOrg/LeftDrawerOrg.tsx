@@ -152,7 +152,11 @@ const leftDrawerOrg = ({
                         }
                       />
                     </div>
-                    {(name== 'People' )? (isSuperAdmin ? "Users" : "Members"): name}
+                    {name == 'People'
+                      ? isSuperAdmin
+                        ? 'Users'
+                        : 'Members'
+                      : name}
                   </Button>
                 )}
               </NavLink>

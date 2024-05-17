@@ -31,12 +31,13 @@ import {
 } from 'utils/formEnumFields';
 import DynamicDropDown from 'components/DynamicDropDown/DynamicDropDown';
 
-
 type OrgMemberDetailProps = {
-  id?: string; 
+  id?: string;
 };
 
-const OrgMemberDetail: React.FC<OrgMemberDetailProps> = ({ id }): JSX.Element => {
+const OrgMemberDetail: React.FC<OrgMemberDetailProps> = ({
+  id,
+}): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgMemberDetail',
   });
@@ -74,12 +75,9 @@ const OrgMemberDetail: React.FC<OrgMemberDetailProps> = ({ id }): JSX.Element =>
   };
   const [updateUser] = useMutation(UPDATE_USER_MUTATION);
   const { data: user, loading: loading } = useQuery(USER_DETAILS, {
-    variables: { id: currentUrl }, 
+    variables: { id: currentUrl },
   });
   const userData = user?.user;
-
-
-
 
   useEffect(() => {
     if (userData && isMounted) {
@@ -118,7 +116,6 @@ const OrgMemberDetail: React.FC<OrgMemberDetailProps> = ({ id }): JSX.Element =>
       [name]: value,
     }));
   };
-
 
   const handleToggleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, checked } = e.target;
@@ -192,7 +189,6 @@ const OrgMemberDetail: React.FC<OrgMemberDetailProps> = ({ id }): JSX.Element =>
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-
       <div className={`my-4 ${styles.mainpageright}`}>
         <div className="d-flex flex-row">
           <div className={`left d-flex flex-column ${styles.width60}`}>
@@ -262,7 +258,7 @@ const OrgMemberDetail: React.FC<OrgMemberDetailProps> = ({ id }): JSX.Element =>
                   <DynamicDropDown
                     formState={formState}
                     setFormState={setFormState}
-                    fieldOptions={educationGradeEnum} 
+                    fieldOptions={educationGradeEnum}
                     fieldName="grade"
                   />
                 </div>
@@ -271,7 +267,7 @@ const OrgMemberDetail: React.FC<OrgMemberDetailProps> = ({ id }): JSX.Element =>
                   <DynamicDropDown
                     formState={formState}
                     setFormState={setFormState}
-                    fieldOptions={employmentStatusEnum} 
+                    fieldOptions={employmentStatusEnum}
                     fieldName="empStatus"
                   />
                 </div>
@@ -280,7 +276,7 @@ const OrgMemberDetail: React.FC<OrgMemberDetailProps> = ({ id }): JSX.Element =>
                   <DynamicDropDown
                     formState={formState}
                     setFormState={setFormState}
-                    fieldOptions={maritalStatusEnum} 
+                    fieldOptions={maritalStatusEnum}
                     fieldName="maritalStatus"
                   />
                 </div>

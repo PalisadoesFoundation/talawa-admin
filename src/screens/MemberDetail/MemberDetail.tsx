@@ -1,5 +1,5 @@
 import React from 'react';
-import {  useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
@@ -8,9 +8,7 @@ import { languages } from 'utils/languages';
 
 import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
-import {
-  LocalizationProvider,
-} from '@mui/x-date-pickers';
+import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import BusinessOutlinedIcon from '@mui/icons-material/BusinessOutlined';
@@ -22,7 +20,7 @@ import { Tab } from 'react-bootstrap';
 import OrgMemberDetail from 'components/OrgMemberDetail/OrgMemberDetails';
 
 type MemberDetailProps = {
-  id?: string; 
+  id?: string;
 };
 
 const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
@@ -35,23 +33,26 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   document.title = t('title');
 
   const { data: user, loading: loading } = useQuery(USER_DETAILS, {
-    variables: { id: currentUrl }, 
+    variables: { id: currentUrl },
   });
   const userData = user?.user;
 
-
-
   const topNavButtons = [
-    { name: 'overview', icon: <DashboardOutlinedIcon />, component: 
-    <OrgMemberDetail id={userData?.user?._id} /> 
-  },
+    {
+      name: 'overview',
+      icon: <DashboardOutlinedIcon />,
+      component: <OrgMemberDetail id={userData?.user?._id} />,
+    },
     {
       name: 'organizations',
       icon: <BusinessOutlinedIcon />,
-      component: 
-      <MemberOrganization {...{
-        userId:userData?.user?._id,
-      }} />
+      component: (
+        <MemberOrganization
+          {...{
+            userId: userData?.user?._id,
+          }}
+        />
+      ),
     },
     {
       name: 'events',
@@ -61,21 +62,21 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     { name: 'tags', icon: <LocalOfferOutlinedIcon />, component: <></> },
   ];
 
-
   if (loading) {
     return <Loader />;
   }
 
-
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <div>
+      <div>
         <Tab.Container
           id="member-detail-tab-container"
           defaultActiveKey="overview"
         >
-          <Nav variant="pills" className={styles.topNav} 
-          data-testid="memberDetailTabNav"
+          <Nav
+            variant="pills"
+            className={styles.topNav}
+            data-testid="memberDetailTabNav"
           >
             {topNavButtons.map((button) => (
               <Nav.Item key={button.name}>
@@ -98,7 +99,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
           </Tab.Content>
         </Tab.Container>
       </div>
-     
     </LocalizationProvider>
   );
 };

@@ -10,11 +10,17 @@ import {
   ORGANIZATION_CONNECTION_LIST,
 } from 'GraphQl/Queries/Queries';
 import useLocalStorage from 'utils/useLocalstorage';
-import { CREATE_ORGANIZATION_MUTATION, CREATE_SAMPLE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
+import {
+  CREATE_ORGANIZATION_MUTATION,
+  CREATE_SAMPLE_ORGANIZATION_MUTATION,
+} from 'GraphQl/Mutations/mutations';
 import { Provider } from 'react-redux';
 import OrgList from 'screens/OrgList/OrgList';
 import { store } from 'state/store';
-import { InterfaceOrgConnectionInfoType, InterfaceUserType } from 'utils/interfaces';
+import {
+  InterfaceOrgConnectionInfoType,
+  InterfaceUserType,
+} from 'utils/interfaces';
 
 const { setItem } = useLocalStorage();
 
@@ -62,7 +68,7 @@ const organizations: InterfaceOrgConnectionInfoType[] = [
       state: 'Kingston Parish',
     },
     blockedUsers: [],
-    description: ''
+    description: '',
   },
 ];
 const MOCKS = [
@@ -166,7 +172,9 @@ describe('Testing Organization People List Card', () => {
     window.location.assign('/');
     setItem('id', '123');
     setItem('SuperAdmin', false);
-    setItem('AdminFor', [{name:'Palisadoes Foundation', _id:"1", image:""}]);
+    setItem('AdminFor', [
+      { name: 'Palisadoes Foundation', _id: '1', image: '' },
+    ]);
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -181,7 +189,7 @@ describe('Testing Organization People List Card', () => {
     );
 
     await wait();
-    screen.debug()
+    screen.debug();
     expect(
       screen.queryByText('Organizations Not Found'),
     ).not.toBeInTheDocument();

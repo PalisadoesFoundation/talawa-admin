@@ -11,7 +11,6 @@ import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import { Button } from 'react-bootstrap';
 import useLocalStorage from 'utils/useLocalstorage';
 
-
 const OrganizationScreen = (): JSX.Element => {
   const location = useLocation();
   const titleKey: string | undefined = map[location.pathname.split('/')[1]];
@@ -19,7 +18,7 @@ const OrganizationScreen = (): JSX.Element => {
 
   const { getItem } = useLocalStorage();
   const isSuperAdmin = getItem('SuperAdmin');
-  
+
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
   const { orgId } = useParams();
 
@@ -94,7 +93,15 @@ const OrganizationScreen = (): JSX.Element => {
       >
         <div className="d-flex justify-content-between align-items-center">
           <div style={{ flex: 1 }}>
-            {location.pathname.split('/')[1] == 'orgpeople' ? (isSuperAdmin ? (<h1>{t('title_superadmin')}</h1>) : <h1>{t('title')}</h1>) : <h1>{t('title')}</h1>}
+            {location.pathname.split('/')[1] == 'orgpeople' ? (
+              isSuperAdmin ? (
+                <h1>{t('title_superadmin')}</h1>
+              ) : (
+                <h1>{t('title')}</h1>
+              )
+            ) : (
+              <h1>{t('title')}</h1>
+            )}
           </div>
           <ProfileDropdown />
         </div>

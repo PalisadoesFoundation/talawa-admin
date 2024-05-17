@@ -616,5 +616,4 @@ describe('Testing Organization People Card', () => {
       setItem('userId', beforeUserId);
     }
   });
-  
 });

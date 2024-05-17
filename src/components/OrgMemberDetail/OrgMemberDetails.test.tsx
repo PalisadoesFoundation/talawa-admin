@@ -15,7 +15,10 @@ import { I18nextProvider } from 'react-i18next';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import OrgMemberDetail, { getLanguageName, prettyDate } from './OrgMemberDetails';
+import OrgMemberDetail, {
+  getLanguageName,
+  prettyDate,
+} from './OrgMemberDetails';
 import { toast } from 'react-toastify';
 
 const MOCKS1 = [

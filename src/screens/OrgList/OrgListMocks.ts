@@ -55,8 +55,8 @@ const organizations: InterfaceOrgConnectionInfoType[] = [
       state: 'Kingston Parish',
     },
     blockedUsers: [],
-    description: ''
-  }
+    description: '',
+  },
 ];
 
 for (let x = 0; x < 1; x++) {
@@ -91,7 +91,7 @@ for (let x = 0; x < 1; x++) {
       state: 'Kingston Parish',
     },
     blockedUsers: [],
-    description: ''
+    description: '',
   });
 }
 

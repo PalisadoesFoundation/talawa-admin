@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  act,
-  render,
-  screen,
-} from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -140,18 +136,18 @@ describe('MemberDetail', () => {
     );
 
     await wait();
-    expect(screen.getByTestId("memberDetailTabNav")).toBeInTheDocument();
+    expect(screen.getByTestId('memberDetailTabNav')).toBeInTheDocument();
   });
 
   test('Should return formatted date', () => {
     expect(prettyDate('2024-03-14')).toBe('14 March 2024');
-  })
+  });
 
   test('Should return Unavailable if date is invalid', () => {
     expect(prettyDate('202-03-321')).toBe('Unavailable');
-  })
+  });
 
   test('Should return language name', () => {
     expect(getLanguageName('en')).toBe('English');
-  })
+  });
 });

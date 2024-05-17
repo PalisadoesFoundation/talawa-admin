@@ -72,7 +72,7 @@ const props: InterfaceOrgListCardProps = {
       lastName: 'Doe',
     },
     blockedUsers: [],
-    description: ''
+    description: '',
   },
 };
 

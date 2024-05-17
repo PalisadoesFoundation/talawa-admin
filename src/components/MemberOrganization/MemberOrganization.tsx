@@ -19,7 +19,9 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { useTranslation } from 'react-i18next';
 
 const MemberOrganization: React.FC<InterfaceMemberOrganization> = (props) => {
-  const { t } = useTranslation('translation', { keyPrefix: 'memberOrganization' });
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'memberOrganization',
+  });
 
   const { userId } = props;
 
@@ -209,14 +211,14 @@ const MemberOrganization: React.FC<InterfaceMemberOrganization> = (props) => {
                     };
                   return (
                     <div key={item._id} className={styles.itemCard}>
-                        <OrgPeopleOrganizationsCard {...OrgPeopleCardProps} />
+                      <OrgPeopleOrganizationsCard {...OrgPeopleCardProps} />
                     </div>
                   );
                 })
               : userData &&
                 adminFor.length > 0 &&
-                  orgsData?.organizationsConnection.map((item) => {
-                  if (isAdminForCurrentOrg(item) && (item._id == currentUrl)) {
+                orgsData?.organizationsConnection.map((item) => {
+                  if (isAdminForCurrentOrg(item) && item._id == currentUrl) {
                     const OrgPeopleCardProps: InterfaceOrgPeopleOrganizationsCard =
                       {
                         userId: userId,

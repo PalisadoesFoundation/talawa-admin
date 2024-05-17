@@ -23,8 +23,8 @@ import {
 function OrgPeopleOrganizationsCard(
   props: InterfaceOrgPeopleOrganizationsCard,
 ): JSX.Element {
-
-  const {userId:userID,
+  const {
+    userId: userID,
     _id,
     admins,
     blockedUsers,
@@ -32,7 +32,8 @@ function OrgPeopleOrganizationsCard(
     resetAndRefetch,
     image,
     name,
-    description} = props;
+    description,
+  } = props;
 
   const [addMember] = useMutation(ADD_MEMBER_MUTATION);
 
@@ -47,9 +48,7 @@ function OrgPeopleOrganizationsCard(
     admins.some((member) => member._id === userID) ? 'Admin' : 'User',
   );
   const [status, setStatus] = useState(
-    blockedUsers.some((member) => member._id === userID)
-      ? 'Blocked'
-      : 'Active',
+    blockedUsers.some((member) => member._id === userID) ? 'Blocked' : 'Active',
   );
   const [member, setMember] = useState(
     members.some((member) => member._id === userID) ? 'Yes' : 'No',
@@ -154,7 +153,6 @@ function OrgPeopleOrganizationsCard(
     }
   };
   const changeRoleInOrg = async (roleToUpdate: string): Promise<void> => {
-
     const memberIds = members.map((member) => member._id);
 
     if (memberIds.includes(userID)) {
@@ -171,7 +169,6 @@ function OrgPeopleOrganizationsCard(
           setRole(roleToUpdate);
           resetAndRefetch();
         }
-
       } catch (error: any) {
         /* istanbul ignore next */
         errorHandler(t, error);
@@ -202,9 +199,7 @@ function OrgPeopleOrganizationsCard(
             </div>
             <div className={styles.orgDetails}>
               <Tooltip title={name} placement="top-end">
-                <h4 className={`${styles.orgName} fw-semibold`}>
-                  {name}
-                </h4>
+                <h4 className={`${styles.orgName} fw-semibold`}>{name}</h4>
               </Tooltip>
               <h6 className={`${styles.orgdesc} fw-semibold`}>
                 <span>{description}</span>
@@ -214,7 +209,7 @@ function OrgPeopleOrganizationsCard(
           <Col sm={4}>
             <Dropdown
               drop="down-centered"
-              className="d-flex align-items-center w-100 mt-2 mb-2"             
+              className="d-flex align-items-center w-100 mt-2 mb-2"
             >
               <Col sm={4}>
                 <Dropdown.Header className={styles.dropdownTitle}>
@@ -256,7 +251,6 @@ function OrgPeopleOrganizationsCard(
               drop="down-centered"
               className="  d-flex align-items-center w-100 mt-2 mb-2"
               onSelect={(e) => {}}
-              
             >
               <Col sm={4}>
                 <Dropdown.Header className={styles.dropdownTitle}>
@@ -299,7 +293,6 @@ function OrgPeopleOrganizationsCard(
             <Dropdown
               drop="down-centered"
               className="d-flex align-items-center w-100 mt-2 mb-2"
-              
             >
               <Col sm={4}>
                 <Dropdown.Header className={styles.dropdownTitle}>

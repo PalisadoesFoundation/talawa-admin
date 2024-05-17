@@ -61,7 +61,9 @@ function AddMember(): JSX.Element {
   const { getItem } = useLocalStorage();
   const isSuperAdmin = getItem('SuperAdmin');
 
-  isSuperAdmin ? (document.title = translateOrgPeople('title_superadmin')) : (document.title = translateOrgPeople('title'));
+  isSuperAdmin
+    ? (document.title = translateOrgPeople('title_superadmin'))
+    : (document.title = translateOrgPeople('title'));
 
   const [addUserModalisOpen, setAddUserModalIsOpen] = useState(false);
 
