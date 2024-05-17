@@ -521,3 +521,56 @@ input::file-selector-button {
 .Outline {
   outline: 1px solid var(--bs-gray-400);
 }
+
+
+.topNav {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 2rem;
+  /* margin-bottom: 1rem; */
+  background-color: #ffffff;
+  padding-inline: 1.5rem;
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+  /* border-radius: 16px; */
+  border-radius: 16px 16px 0 0;
+  gap: 1rem;
+
+}
+
+.topNavBtn {
+  display: flex;
+  justify-content: space-between;
+  border-radius: 8px;
+  column-gap: .5rem;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 1.5rem;
+  padding-top:1rem;
+  padding-bottom:1rem;
+  cursor:pointer;
+  text-decoration: none;
+
+  background-color: #ffffff;
+  border: 1px solid #DDDDDD;
+  color: #707070;
+}
+
+.topNavBtn.active {
+  background-color: #31bb6b;
+  color: #ffffff;
+}
+
+
+.tabSection{
+  display: flex;
+justify-content: space-between;
+  background-color: #ffffff;
+  border-radius: 0 0 16px 16px;
+  margin-top: 0;
+  padding-inline: 1.5rem;
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+  border-top: 1px solid #DDDDDD;
+  
+}

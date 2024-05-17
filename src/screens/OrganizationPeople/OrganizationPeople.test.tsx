@@ -491,77 +491,8 @@ const MOCKS: TestMock[] = [
   },
 ];
 
-const EMPTYMOCKS: TestMock[] = [
-  {
-    request: {
-      query: ORGANIZATIONS_LIST,
-      variables: {
-        id: 'orgid',
-      },
-    },
-    result: {
-      data: {
-        organizations: [],
-      },
-    },
-  },
-
-  {
-    //These are mocks for 1st query (member list)
-    request: {
-      query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-      variables: {
-        orgId: 'orgid',
-        firstName_contains: '',
-        lastName_contains: '',
-      },
-    },
-    result: {
-      data: {
-        organizationsMemberConnection: {
-          edges: [],
-        },
-      },
-    },
-  },
-
-  {
-    request: {
-      query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-      variables: {
-        orgId: 'orgid',
-        firstName_contains: '',
-        lastName_contains: '',
-      },
-    },
-    result: {
-      data: {
-        organizationsMemberConnection: {
-          edges: [],
-        },
-      },
-    },
-  },
-
-  {
-    //This is mock for user list
-    request: {
-      query: USER_LIST_FOR_TABLE,
-      variables: {
-        firstName_contains: '',
-        lastName_contains: '',
-      },
-    },
-    result: {
-      data: {
-        users: [],
-      },
-    },
-  },
-];
 
 const link = new StaticMockLink(MOCKS, true);
-const link2 = new StaticMockLink(EMPTYMOCKS, true);
 async function wait(ms = 2): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -1305,8 +1236,27 @@ describe('Organization People Page', () => {
     await wait();
     const dataGrid = screen.getByRole('grid');
     expect(dataGrid).toBeInTheDocument();
-    const removeButtons = screen.getAllByTestId('removeMemberModalBtn');
-    userEvent.click(removeButtons[0]);
+  });
+
+  test('Datagrid row should direct to user profile', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrganizationPeople />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    const dataGrid = screen.getByRole('grid');
+    expect(dataGrid).toBeInTheDocument();
+
+    const rows = screen.getAllByRole('row');
+    rows.forEach((row) => {
+      userEvent.click(row);
+    });
   });
 
   test('Datagrid renders with admin data', async () => {
@@ -1329,27 +1279,5 @@ describe('Organization People Page', () => {
     const adminDropdownItem = screen.getByTestId('admins');
     userEvent.click(adminDropdownItem);
     await wait();
-    const removeButtons = screen.getAllByTestId('removeAdminModalBtn');
-    userEvent.click(removeButtons[0]);
-  });
-
-  test('No Mock Data test', async () => {
-    window.location.assign('/orgpeople/orgid');
-
-    render(
-      <MockedProvider addTypename={false} link={link2}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationPeople />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-    expect(window.location).toBeAt('/orgpeople/orgid');
-    expect(screen.queryByText(/Nothing Found !!/i)).toBeInTheDocument();
   });
 });

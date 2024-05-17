@@ -123,6 +123,20 @@
     "noNotifications": "No Notificaciones",
     "close": "Cerca"
   },
+  "orgPeopleOrganizationsCard": {
+    "admins": "Administradores",
+    "members": "Miembros",
+    "manage": "Gestionar",
+    "notMember": "El usuario no es miembro",
+    "unblock": "Desbloquear",
+    "block": "Bloquear",
+    "blockedSuccessfully": "Usuario bloqueado exitosamente",
+    "Un-BlockedSuccessfully": "Usuario desbloqueado exitosamente",
+    "roleUpdated": "Rol actualizado.",
+    "no": "No",
+    "yes": "Sí",
+    "memberRemoved": "El miembro ha sido eliminado"
+  },
   "orgList": {
     "title": "Organizaciones Talawa",
     "you": "Tú",
@@ -261,7 +275,8 @@
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
   },
   "organizationPeople": {
-    "title": "Miembros Talawa",
+    "title": "Miembros",
+    "title_superadmin": "Usuarios",
     "filterByName": "Filtrar por nombre",
     "filterByLocation": "Filtrar por Ubicación",
     "filterByEvent": "Filtrar por Evento",
@@ -766,6 +781,21 @@
     "uninstall": "Desinstalar"
   },
   "memberDetail": {
+    "overview": "Resumen",
+    "organizations": "Organizaciones",
+    "events": "Eventos",
+    "tags":"Etiquetas",
+    "title": "Detalles del Usuario"
+  },
+  "memberOrganization": {
+    "sort": "Ordenar",
+    "noOrgError": "Organizaciones no encontradas, por favor crea una organización a través del panel de control",
+    "noOrgErrorTitle": "Organizaciones no encontradas",
+    "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control",
+    "noResultsFoundFor": "No se encontraron resultados para",
+    "endOfResults": "Fin de los resultados"
+  },
+  "orgMemberDetail": {
     "title": "Detalles del usuario",
     "addAdmin": "Agregar administrador",
     "alreadyIsAdmin": "El Miembro ya es Administrador",

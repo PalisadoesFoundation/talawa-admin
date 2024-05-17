@@ -205,6 +205,20 @@
     "yes": "是",
     "noPledges": "未找到承诺"
   },
+  "orgPeopleOrganizationsCard": {
+    "admins": "管理员",
+    "members": "成员",
+    "manage": "管理",
+    "notMember": "用户不是成员",
+    "unblock": "解除阻止",
+    "block": "阻止",
+    "blockedSuccessfully": "用户已成功阻止",
+    "Un-BlockedSuccessfully": "用户已成功解除阻止",
+    "roleUpdated": "角色已更新",
+    "no": "否",
+    "yes": "是",
+    "memberRemoved": "成员已移除"
+  },
   "orgList": {
     "title": "塔拉瓦組織",
     "you": "你",
@@ -343,8 +357,9 @@
     "talawaApiUnavailable": "服務不可用。它在運行嗎？還要檢查您的網絡連接。"
   },
   "organizationPeople": {
-    "title": "塔拉瓦成員",
-    "filterByName": "按名稱過濾",
+    "title": "成员",
+    "title_superadmin": "用户",
+    "filterByName": "按名称过滤",
     "filterByLocation": "按位置過濾",
     "filterByEvent": "按事件過濾",
     "members": "成員",
@@ -766,7 +781,22 @@
     "install": "安装",
     "uninstall": "卸载"
   },
+  "memberOrganization": {
+    "sort": "排序",
+    "noOrgError": "未找到组织，请通过仪表板创建一个组织",
+    "noOrgErrorTitle": "未找到组织",
+    "noOrgErrorDescription": "请通过仪表板创建一个组织",
+    "noResultsFoundFor": "未找到结果",
+    "endOfResults": "结果结束"
+  },
   "memberDetail": {
+    "overview": "概览",
+    "organizations": "组织",
+    "events": "事件",
+    "tags":"标签",
+    "title": "用户详情"
+  },
+  "orgMemberDetail": {
     "title": "用户详细信息",
     "addAdmin": "添加管理员",
     "alreadyIsAdmin": "会员已经是管理员",

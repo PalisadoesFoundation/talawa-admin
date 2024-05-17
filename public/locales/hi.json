@@ -123,6 +123,20 @@
     "noNotifications": "कोई सूचनाएं नहीं",
     "close": "बंद करना"
   },
+  "orgPeopleOrganizationsCard": {
+    "admins": "व्यवस्थापक",
+    "members": "सदस्य",
+    "manage": "प्रबंधित करें",
+    "notMember": "उपयोगकर्ता सदस्य नहीं है",
+    "unblock": "अनब्लॉक करें",
+    "block": "ब्लॉक करें",
+    "blockedSuccessfully": "उपयोगकर्ता सफलतापूर्वक ब्लॉक किया गया",
+    "Un-BlockedSuccessfully": "उपयोगकर्ता सफलतापूर्वक अनब्लॉक किया गया",
+    "roleUpdated": "भूमिका अपडेट की गई।",
+    "no": "नहीं",
+    "yes": "हाँ",
+    "memberRemoved": "सदस्य हटा दिया गया है"
+  },
   "orgList": {
     "title": "तलवा संगठन",
     "you": "आप",
@@ -261,7 +275,8 @@
     "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है। क्या यह चल रहा है? अपनी नेटवर्क कनेक्टिविटी भी जांचें।"
   },
   "organizationPeople": {
-    "title": "तलावा सदस्य",
+    "title": "सदस्य",
+    "title_superadmin": "उपयोगकर्ता",
     "filterByName": "नाम से फ़िल्टर करें",
     "filterByLocation": "स्थान के अनुसार फ़िल्टर करें",
     "filterByEvent": "इवेंट द्वारा फ़िल्टर करें",
@@ -769,6 +784,21 @@
     "uninstall": "स्थापना रद्द करें"
   },
   "memberDetail": {
+    "overview": "अवलोकन",
+    "organizations": "संगठन",
+    "events": "घटनाएँ",
+    "tags":"टैग",
+    "title": "उपयोगकर्ता विवरण"
+  },
+  "memberOrganization": {
+    "sort": "क्रमबद्ध करें",
+    "noOrgError": "संगठन नहीं मिला, कृपया डैशबोर्ड के माध्यम से एक संगठन बनाएं",
+    "noOrgErrorTitle": "संगठन नहीं मिला",
+    "noOrgErrorDescription": "कृपया डैशबोर्ड के माध्यम से एक संगठन बनाएं",
+    "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिले",
+    "endOfResults": "परिणामों का अंत"
+  },
+  "orgMemberDetail": {
     "title": "उपयोगकर्ता विवरण",
     "addAdmin": "व्यवस्थापक जोड़ें",
     "alreadyIsAdmin": "सदस्य पहले से ही एक व्यवस्थापक है",

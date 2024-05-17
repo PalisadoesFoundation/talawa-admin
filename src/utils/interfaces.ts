@@ -74,6 +74,8 @@ export interface InterfaceMemberInfo {
 }
 
 export interface InterfaceOrgConnectionInfoType {
+  blockedUsers: { _id: string; firstName: string; lastName: string; email: string; }[];
+  description: string;
   _id: string;
   image: string | null;
   creator: {
@@ -455,4 +457,23 @@ export interface InterfaceQueryMembershipRequestsListItem {
       };
     }[];
   }[];
+}
+
+export interface InterfaceMemberOrganization {
+  userId:string;
+
+}
+
+export interface InterfaceOrgPeopleOrganizationsCard {
+  userId:string;
+  _id: string;
+  image: string;
+  name: string;
+  description: string;
+  blockedUsers: {
+    _id: string;
+  }[];
+  members: { _id: string }[];
+  admins: { _id: string }[];
+  resetAndRefetch: () => void;
 }

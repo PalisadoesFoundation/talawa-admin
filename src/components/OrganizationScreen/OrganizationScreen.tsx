@@ -9,11 +9,17 @@ import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from './OrganizationScreen.module.css';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import { Button } from 'react-bootstrap';
+import useLocalStorage from 'utils/useLocalstorage';
+
 
 const OrganizationScreen = (): JSX.Element => {
   const location = useLocation();
   const titleKey: string | undefined = map[location.pathname.split('/')[1]];
   const { t } = useTranslation('translation', { keyPrefix: titleKey });
+
+  const { getItem } = useLocalStorage();
+  const isSuperAdmin = getItem('SuperAdmin');
+  
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
   const { orgId } = useParams();
 
@@ -29,7 +35,7 @@ const OrganizationScreen = (): JSX.Element => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(updateTargets(orgId));
-  }, [orgId]); // Added orgId to the dependency array
+  }, [orgId]);
 
   const handleResize = (): void => {
     if (window.innerWidth <= 820) {
@@ -88,7 +94,7 @@ const OrganizationScreen = (): JSX.Element => {
       >
         <div className="d-flex justify-content-between align-items-center">
           <div style={{ flex: 1 }}>
-            <h1>{t('title')}</h1>
+            {location.pathname.split('/')[1] == 'orgpeople' ? (isSuperAdmin ? (<h1>{t('title_superadmin')}</h1>) : <h1>{t('title')}</h1>) : <h1>{t('title')}</h1>}
           </div>
           <ProfileDropdown />
         </div>

@@ -172,6 +172,20 @@
     "manage": "Manage",
     "sampleOrganization": "Sample Organization"
   },
+  "orgPeopleOrganizationsCard": {
+    "admins": "Admins",
+    "members": "Members",
+    "manage": "Manage",
+    "notMember": "User is not a member",
+    "unblock": "UnBlock",
+    "block": "Block",
+    "blockedSuccessfully": "User blocked successfully",
+    "Un-BlockedSuccessfully": "User Un-Blocked successfully",
+    "roleUpdated": "Role Updated.",
+    "no": "No",
+    "yes": "Yes",
+    "memberRemoved": "The Member is removed"
+  },
   "paginationList": {
     "rowsPerPage": "rows per page",
     "all": "All"
@@ -263,7 +277,8 @@
     "talawaApiUnavailable": "Talawa-API service is unavailable. Is it running? Check your network connectivity too."
   },
   "organizationPeople": {
-    "title": "Talawa Members",
+    "title": "Members",
+    "title_superadmin": "Users",
     "filterByName": "Filter by Name",
     "filterByLocation": "Filter by Location",
     "filterByEvent": "Filter by Event",
@@ -764,6 +779,13 @@
     "installMsg": "This feature is now enabled in your organization"
   },
   "memberDetail": {
+    "overview": "Overview",
+    "organizations": "Organizations",
+    "events": "Events",
+    "tags": "Tags",
+    "title": "User Details"
+  },
+  "orgMemberDetail": {
     "title": "User Details",
     "addAdmin": "Add Admin",
     "alreadyIsAdmin": "Member is already an Admin",
@@ -807,6 +829,14 @@
     "admin": "Admin",
     "superAdmin": "Superadmin",
     "cancel": "Cancel"
+  },
+  "memberOrganization": {
+    "sort": "Sort",
+    "noOrgError": "Organizations not found, please create an organization through dashboard",
+    "noOrgErrorTitle": "Organizations Not Found",
+    "noOrgErrorDescription": "Please create an organization through dashboard",
+    "noResultsFoundFor": "No results found for",
+    "endOfResults": "End of results"
   },
   "userLogin": {
     "login": "Login",
