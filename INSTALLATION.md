@@ -6,8 +6,6 @@ This document provides instructions on how to set up and start a running instanc
 
 <!-- toc -->
 
-- [Talawa-Admin Installation](#talawa-admin-installation)
-- [Table of Contents](#table-of-contents)
 - [Installation Steps Summary](#installation-steps-summary)
 - [Prerequisites](#prerequisites)
   - [Install git](#install-git)
@@ -18,8 +16,8 @@ This document provides instructions on how to set up and start a running instanc
 - [Configuration](#configuration)
   - [Creating .env file](#creating-env-file)
   - [Setting up PORT in .env file](#setting-up-port-in-env-file)
-  - [Setting up REACT\_APP\_TALAWA\_URL in .env file](#setting-up-react_app_talawa_url-in-env-file)
-  - [Setting up REACT\_APP\_RECAPTCHA\_SITE\_KEY in .env file](#setting-up-react_app_recaptcha_site_key-in-env-file)
+  - [Setting up REACT_APP_TALAWA_URL in .env file](#setting-up-react_app_talawa_url-in-env-file)
+  - [Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file](#setting-up-react_app_recaptcha_site_key-in-env-file)
   - [Setting up Compiletime and Runtime logs](#setting-up-compiletime-and-runtime-logs)
 - [Post Configuration Steps](#post-configuration-steps)
   - [Running Talawa-Admin](#running-talawa-admin)
@@ -35,7 +33,6 @@ This document provides instructions on how to set up and start a running instanc
       - [post-merge hook](#post-merge-hook)
 
 <!-- tocstop -->
-
 
 # Installation Steps Summary
 
