@@ -58,7 +58,7 @@ const Users = (): JSX.Element => {
       skip: 0,
       firstName_contains: '',
       lastName_contains: '',
-      order: sortingOption === 'newest' ? 'createdAt_DESC' : 'createdAt_ASC'
+      order: sortingOption === 'newest' ? 'createdAt_DESC' : 'createdAt_ASC',
     },
     notifyOnNetworkStatusChange: true,
   });
@@ -150,7 +150,7 @@ const Users = (): JSX.Element => {
       skip: 0,
       firstName_contains: '',
       lastName_contains: '',
-      order: sortingOption === 'newest' ? 'createdAt_DESC' : 'createdAt_ASC'
+      order: sortingOption === 'newest' ? 'createdAt_DESC' : 'createdAt_ASC',
     });
     setHasMore(true);
   };
@@ -162,7 +162,7 @@ const Users = (): JSX.Element => {
         skip: usersData?.users.length || 0,
         userType: 'ADMIN',
         filter: searchByName,
-        order: sortingOption === 'newest' ? 'createdAt_DESC' : 'createdAt_ASC'
+        order: sortingOption === 'newest' ? 'createdAt_DESC' : 'createdAt_ASC',
       },
       updateQuery: (
         prev: { users: InterfaceQueryUserListItem[] } | undefined,
@@ -238,7 +238,6 @@ const Users = (): JSX.Element => {
           user.appUserProfile.adminFor.length !== 0
         );
       });
-      console.log(output)
       return output;
     } else {
       const output = filteredUsers.filter((user) => {
@@ -365,7 +364,9 @@ const Users = (): JSX.Element => {
             {t('noResultsFoundFor')} &quot;{searchByName}&quot;
           </h4>
         </div>
-      ) : isLoading == false && usersData === undefined && displayedUsers.length === 0 ? (
+      ) : isLoading == false &&
+        usersData === undefined &&
+        displayedUsers.length === 0 ? (
         <div className={styles.notFound}>
           <h4>{t('noUserFound')}</h4>
         </div>
