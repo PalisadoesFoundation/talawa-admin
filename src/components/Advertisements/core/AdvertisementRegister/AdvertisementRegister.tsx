@@ -46,6 +46,7 @@ function advertisementRegister({
   setAfter,
 }: InterfaceAddOnRegisterProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
+  const { t: tCommon } = useTranslation('common');
 
   const { orgId: currentOrg } = useParams();
 
@@ -368,7 +369,7 @@ function advertisementRegister({
             onClick={handleClose}
             data-testid="addonclose"
           >
-            {t('close')}
+            {tCommon('close')}
           </Button>
           {formStatus === 'register' ? (
             <Button

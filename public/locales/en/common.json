@@ -11,5 +11,7 @@
   "users": "Users",
   "requests": "Requests",
   "OR": "OR",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "close": "Close",
+  "create": "Create"
 }

@@ -18,10 +18,11 @@ import { useParams } from 'react-router-dom';
 
 type ModalType = 'Create' | 'Update';
 
-const OrgActionItemCategories = (): any => {
+const OrgActionItemCategories = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgActionItemCategories',
   });
+  const { t: tCommon } = useTranslation('common');
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalType, setModalType] = useState<ModalType>('Create');
@@ -41,7 +42,7 @@ const OrgActionItemCategories = (): any => {
     data: InterfaceActionItemCategoryList | undefined;
     loading: boolean;
     error?: Error | undefined;
-    refetch: any;
+    refetch: () => void;
   } = useQuery(ACTION_ITEM_CATEGORY_LIST, {
     variables: {
       organizationId: currentUrl,
@@ -185,7 +186,7 @@ const OrgActionItemCategories = (): any => {
         data-testid="actionItemCategoryModalOpenBtn"
       >
         <i className={'fa fa-plus me-2'} />
-        {t('createButton')}
+        {tCommon('create')}
       </Button>
 
       <div>
@@ -278,7 +279,7 @@ const OrgActionItemCategories = (): any => {
               data-testid="formSubmitButton"
             >
               {modalType === 'Create'
-                ? t('createButton')
+                ? tCommon('create')
                 : t('updateActionItemCategory')}
             </Button>
           </Form>

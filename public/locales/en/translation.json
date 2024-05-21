@@ -98,8 +98,7 @@
     "notifications": "Notifications",
     "spamsThe": "spams the",
     "group": "group",
-    "noNotifications": "No Notifications",
-    "close": "Close"
+    "noNotifications": "No Notifications"
   },
   "orgList": {
     "title": "Talawa Organizations",
@@ -255,7 +254,6 @@
     "confirmPassword": "Confirm Password",
     "enterConfirmPassword": "Enter your password to confirm",
     "organization": "Organization",
-    "create": "Create",
     "invalidDetailsMessage": "Please enter valid details."
   },
   "userListCard": {
@@ -326,10 +324,8 @@
     "assignmentDate": "Assignment Date",
     "active": "Active",
     "clearFilters": "Clear Filters",
-    "close": "Close",
     "completed": "Completed",
     "completionDate": "Completion Date",
-    "createActionItem": "Create",
     "deleteActionItem": "Delete Action Item",
     "deleteActionItemMsg": "Do you want to remove this action item?",
     "details": "Details",
@@ -373,7 +369,6 @@
     "recurringEvent": "Recurring Event",
     "isPublic": "Is Public",
     "isRegistrable": "Is Registrable",
-    "close": "Close",
     "updatePost": "Update Post",
     "eventDetails": "Event Details",
     "eventDeleted": "Event deleted successfully.",
@@ -533,7 +528,6 @@
     "information": "Information",
     "image": "Image",
     "video": "Video",
-    "close": "Close",
     "updatePost": "Update Post",
     "postDeleted": "Post deleted successfully.",
     "postUpdated": "Post Updated successfully.",
@@ -687,7 +681,6 @@
     "pluginName": "Plugin Name",
     "creatorName": "Creator Name",
     "pluginDesc": "Plugin Description",
-    "close": "Close",
     "pName": "Ex: Donations",
     "cName": "Ex: john Doe",
     "pDesc": "This Plugin enables UI for"
@@ -791,8 +784,7 @@
     "chat": "Chat",
     "donate": "Donate",
     "settings": "Settings",
-    "language": "Language",
-    "close": "Close"
+    "language": "Language"
   },
   "userOrganizations": {
     "allOrganizations": "All Organizations",
@@ -923,7 +915,6 @@
     "recurring": "Recurring Event",
     "startTime": "Start Time",
     "endTime": "End Time",
-    "create": "Create",
     "listView": "List View",
     "calendarView": "Calendar View",
     "allDay": "All Day",
@@ -967,7 +958,6 @@
     "EXname": "Ex. Cookie Shop",
     "EXlink": "Ex. http://yourwebsite.com/photo",
     "createAdvertisement": "Create Advertisement",
-    "close": "Close ",
     "deleteAdvertisement": "Delete Advertisement",
     "deleteAdvertisementMsg": "Do you want to remove this advertisement?",
     "no": "No",
@@ -999,7 +989,6 @@
     "fieldRemovalSuccess": "Field removed successfully"
   },
   "orgActionItemCategories": {
-    "createButton": "Create",
     "editButton": "Edit",
     "enableButton": "Enable",
     "disableButton": "Disable",
@@ -1059,7 +1048,6 @@
     "confirmPassword": "Confirm Password",
     "enterConfirmPassword": "Enter Confirm Password",
     "organization": "Organization",
-    "create": "Create",
     "invalidDetailsMessage": "Please provide all required details.",
     "passwordNotMatch": "Passwords do not match.",
     "user": "User",

@@ -172,6 +172,7 @@ export default function orgPostCard(
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgPostCard',
   });
+  const { t: tCommon } = useTranslation('common');
 
   const [deletePostMutation] = useMutation(DELETE_POST_MUTATION);
   const [updatePostMutation] = useMutation(UPDATE_POST_MUTATION);
@@ -191,7 +192,7 @@ export default function orgPostCard(
           window.location.reload();
         });
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       errorHandler(t, error);
     }
   };
@@ -231,8 +232,10 @@ export default function orgPostCard(
           window.location.reload();
         }, 2000);
       }
-    } catch (error: any) {
-      toast.error(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
     }
   };
 
@@ -441,7 +444,7 @@ export default function orgPostCard(
                   onClick={(): void => setMenuVisible(false)}
                   data-testid="closebtn"
                 >
-                  {t('close')}
+                  {tCommon('close')}
                 </li>
               </ul>
             </div>
@@ -620,7 +623,7 @@ export default function orgPostCard(
               data-testid="closeOrganizationModal"
               type="button"
             >
-              {t('close')}
+              {tCommon('close')}
             </Button>
             <Button type="submit" value="invite" data-testid="updatePostBtn">
               {t('updatePost')}

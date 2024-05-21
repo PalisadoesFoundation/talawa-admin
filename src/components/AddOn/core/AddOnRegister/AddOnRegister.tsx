@@ -135,7 +135,7 @@ function addOnRegister(): JSX.Element {
             onClick={handleClose}
             data-testid="addonclose"
           >
-            {t('close')}
+            {tCommon('close')}
           </Button>
           <Button
             variant="primary"
