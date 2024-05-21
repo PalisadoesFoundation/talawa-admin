@@ -312,8 +312,7 @@
     "never": "Never",
     "on": "On",
     "after": "After",
-    "occurences": "occurences",
-    "done": "Done"
+    "occurences": "occurences"
   },
   "organizationActionItems": {
     "actionItemCategory": "Action Item Category",
@@ -383,8 +382,7 @@
     "never": "Never",
     "on": "On",
     "after": "After",
-    "occurences": "occurences",
-    "done": "Done"
+    "occurences": "occurences"
   },
   "funds": {
     "title": "Funds",

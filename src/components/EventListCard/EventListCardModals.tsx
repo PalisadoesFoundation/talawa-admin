@@ -619,6 +619,7 @@ function EventListCardModals({
                 setRecurrenceRuleState={setRecurrenceRuleState}
                 popover={popover}
                 t={t}
+                tCommon={tCommon}
               />
             )}
           </Form>

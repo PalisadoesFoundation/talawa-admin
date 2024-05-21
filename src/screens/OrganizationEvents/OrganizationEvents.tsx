@@ -44,6 +44,7 @@ function organizationEvents(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationEvents',
   });
+  const { t: tCommon } = useTranslation('common');
 
   const { getItem } = useLocalStorage();
 
@@ -470,6 +471,7 @@ function organizationEvents(): JSX.Element {
                 setRecurrenceRuleState={setRecurrenceRuleState}
                 popover={popover}
                 t={t}
+                tCommon={tCommon}
               />
             )}
 
