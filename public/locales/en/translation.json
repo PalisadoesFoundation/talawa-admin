@@ -6,7 +6,6 @@
     "userLogin": "User Login",
     "firstName": "First Name",
     "lastName": "Last Name",
-    "email": "Email",
     "password": "Password",
     "atleast_8_char_long": "Atleast 8 Character long",
     "atleast_6_char_long": "Atleast 6 Character long",
@@ -39,7 +38,6 @@
     "talawa_portal": "Talawa Admin Portal",
     "firstName": "First Name",
     "lastName": "Last Name",
-    "email": "Email",
     "password": "Password",
     "atleast_8_char_long": "Atleast 8 Character long",
     "Password_and_Confirm_password_mismatches.": "Password and Confirm password mismatches.",
@@ -103,9 +101,7 @@
   "orgList": {
     "title": "Talawa Organizations",
     "you": "You",
-    "name": "Name",
     "designation": "Designation",
-    "email": "Email",
     "searchByName": "Search By Name",
     "my organizations": "My Organizations",
     "createOrganization": "Create Organization",
@@ -152,8 +148,6 @@
   "requests": {
     "title": "Membership Requests",
     "sl_no": "Sl. No.",
-    "name": "Name",
-    "email": "Email",
     "accept": "Accept",
     "reject": "Reject",
     "searchRequests": "Search membership requests",
@@ -169,8 +163,6 @@
   "users": {
     "title": "Talawa Roles",
     "searchByName": "Search By Name",
-    "name": "Name",
-    "email": "Email",
     "joined_organizations": "Joined Organizations",
     "blocked_organizations": "Blocked Organizations",
     "orgJoinedBy": "Organizations Joined By",
@@ -521,8 +513,6 @@
     "pageName": "Block/Unblock",
     "searchByName": "Search By Name",
     "listOfUsers": "List of Users who spammed",
-    "name": "Name",
-    "email": "Email",
     "block_unblock": "Block/Unblock",
     "unblock": "UnBlock",
     "block": "Block",
@@ -613,7 +603,6 @@
   "userUpdate": {
     "firstName": "First Name",
     "lastName": "Last Name",
-    "email": "Email",
     "password": "Password",
     "appLanguageCode": "Default Language",
     "userType": "User Type",
@@ -636,7 +625,6 @@
     "memberAdded": "it is accepted"
   },
   "orgUpdate": {
-    "name": "Name",
     "description": "Description",
     "location": "Location",
     "address": "Address",
@@ -690,7 +678,6 @@
     "organizations": "Organizations",
     "events": "Events",
     "role": "Role",
-    "email": "Email",
     "createdOn": "Created on",
     "main": "Main",
     "firstName": "First name",
@@ -1001,7 +988,6 @@
     "venueTitleError": "Venue title cannot be empty!",
     "venueCapacityError": "Capacity must be a positive number!",
     "searchBy": "Search By",
-    "name": "Name",
     "desc": "Description"
   },
   "addMember": {

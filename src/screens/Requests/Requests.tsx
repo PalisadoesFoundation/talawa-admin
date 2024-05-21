@@ -28,6 +28,7 @@ interface InterfaceRequestsListItem {
 
 const Requests = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'requests' });
+  const { t: tCommon } = useTranslation('common');
 
   document.title = t('title');
 
@@ -189,8 +190,8 @@ const Requests = (): JSX.Element => {
 
   const headerTitles: string[] = [
     t('sl_no'),
-    t('name'),
-    t('email'),
+    tCommon('name'),
+    tCommon('email'),
     t('accept'),
     t('reject'),
   ];

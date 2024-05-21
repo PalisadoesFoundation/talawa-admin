@@ -33,6 +33,7 @@ const Requests = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'blockUnblockUser',
   });
+  const { t: tCommon } = useTranslation('common');
 
   document.title = t('title');
   const { orgId: currentUrl } = useParams();
@@ -87,7 +88,7 @@ const Requests = (): JSX.Element => {
         toast.success(t('blockedSuccessfully'));
         memberRefetch();
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       /* istanbul ignore next */
       errorHandler(t, error);
     }
@@ -106,7 +107,7 @@ const Requests = (): JSX.Element => {
         toast.success(t('Un-BlockedSuccessfully'));
         memberRefetch();
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       /* istanbul ignore next */
       errorHandler(t, error);
     }
@@ -126,9 +127,11 @@ const Requests = (): JSX.Element => {
     });
   };
 
-  const handleSearchByEnter = (e: any): void => {
+  const handleSearchByEnter = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ): void => {
     if (e.key === 'Enter') {
-      const { value } = e.target;
+      const { value } = e.currentTarget;
       handleSearch(value);
     }
   };
@@ -142,8 +145,8 @@ const Requests = (): JSX.Element => {
 
   const headerTitles: string[] = [
     '#',
-    t('name'),
-    t('email'),
+    tCommon('name'),
+    tCommon('email'),
     t('block_unblock'),
   ];
 
@@ -268,7 +271,7 @@ const Requests = (): JSX.Element => {
                         <td>{user.email}</td>
                         <td>
                           {user.organizationsBlockedBy.some(
-                            (spam: any) => spam._id === currentUrl,
+                            (spam) => spam._id === currentUrl,
                           ) ? (
                             <Button
                               variant="danger"

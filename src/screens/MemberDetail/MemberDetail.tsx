@@ -350,7 +350,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   />
                 </div>
                 <div className="w-50 p-2">
-                  <p className="my-0">{t('email')}</p>
+                  <p className="my-0">{tCommon('email')}</p>
                   <input
                     value={formState.email}
                     className={`w-100 rounded border-0 p-2 ${styles.inputColor}`}
@@ -358,7 +358,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     name="email"
                     onChange={handleChange}
                     required
-                    placeholder={t('email')}
+                    placeholder={tCommon('email')}
                   />
                 </div>
                 <div className="p-2" style={{ width: `82%` }}>

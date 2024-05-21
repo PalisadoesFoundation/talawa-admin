@@ -99,7 +99,7 @@ export default function login(props: InterfaceLoginProps): JSX.Element {
             <EmailOutlinedIcon className={`${styles.colorWhite}`} />
           </InputGroup.Text>
         </InputGroup>
-        <h6>{t('password')}</h6>
+        <h6>{tCommon('password')}</h6>
         <InputGroup className="mb-3">
           <Form.Control
             placeholder={t('enterPassword')}

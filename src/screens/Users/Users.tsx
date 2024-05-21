@@ -235,8 +235,8 @@ const Users = (): JSX.Element => {
 
   const headerTitles: string[] = [
     '#',
-    t('name'),
-    t('email'),
+    tCommon('name'),
+    tCommon('email'),
     t('joined_organizations'),
     t('blocked_organizations'),
   ];

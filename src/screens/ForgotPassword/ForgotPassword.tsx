@@ -23,6 +23,7 @@ const ForgotPassword = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'forgotPassword',
   });
+  const { t: tCommon } = useTranslation('common');
 
   document.title = t('title');
 
@@ -67,13 +68,15 @@ const ForgotPassword = (): JSX.Element => {
         toast.success(t('OTPsent'));
         setShowEnterEmail(false);
       }
-    } catch (error: any) {
-      if (error.message === 'User not found') {
-        toast.warn(t('emailNotRegistered'));
-      } else if (error.message === 'Failed to fetch') {
-        toast.error(t('talawaApiUnavailable'));
-      } else {
-        toast.error(t('errorSendingMail'));
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        if (error.message === 'User not found') {
+          toast.warn(t('emailNotRegistered'));
+        } else if (error.message === 'Failed to fetch') {
+          toast.error(t('talawaApiUnavailable'));
+        } else {
+          toast.error(t('errorSendingMail'));
+        }
       }
     }
   };
@@ -114,7 +117,7 @@ const ForgotPassword = (): JSX.Element => {
           confirmNewPassword: '',
         });
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       setShowEnterEmail(true);
       /* istanbul ignore next */
       errorHandler(t, error);
@@ -190,7 +193,7 @@ const ForgotPassword = (): JSX.Element => {
                       type="password"
                       className="form-control"
                       id="newPassword"
-                      placeholder={t('password')}
+                      placeholder={tCommon('password')}
                       data-testid="newPassword"
                       name="newPassword"
                       value={forgotPassFormData.newPassword}

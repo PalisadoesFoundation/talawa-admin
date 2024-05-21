@@ -17,5 +17,8 @@
   "done": "Done",
   "yes": "Yes",
   "no": "No",
-  "saveChanges": "Save Changes"
+  "saveChanges": "Save Changes",
+  "email": "Email",
+  "name": "Name",
+  "password": "Password"
 }

@@ -421,7 +421,7 @@ const loginPage = (): JSX.Element => {
                   <h1 className="fs-2 fw-bold text-dark mb-3">
                     {role === 'admin' ? tCommon('login') : t('userLogin')}
                   </h1>
-                  <Form.Label>{t('email')}</Form.Label>
+                  <Form.Label>{tCommon('email')}</Form.Label>
                   <div className="position-relative">
                     <Form.Control
                       type="email"
@@ -444,7 +444,9 @@ const loginPage = (): JSX.Element => {
                       <EmailOutlinedIcon />
                     </Button>
                   </div>
-                  <Form.Label className="mt-3">{t('password')}</Form.Label>
+                  <Form.Label className="mt-3">
+                    {tCommon('password')}
+                  </Form.Label>
                   <div className="position-relative">
                     <Form.Control
                       type={showPassword ? 'text' : 'password'}
@@ -574,13 +576,13 @@ const loginPage = (): JSX.Element => {
                     </Col>
                   </Row>
                   <div className="position-relative">
-                    <Form.Label>{t('email')}</Form.Label>
+                    <Form.Label>{tCommon('email')}</Form.Label>
                     <div className="position-relative">
                       <Form.Control
                         type="email"
                         data-testid="signInEmail"
                         className="mb-3"
-                        placeholder={t('email')}
+                        placeholder={tCommon('email')}
                         autoComplete="username"
                         required
                         value={signformState.signEmail}
@@ -601,12 +603,12 @@ const loginPage = (): JSX.Element => {
                   </div>
 
                   <div className="position-relative mb-3">
-                    <Form.Label>{t('password')}</Form.Label>
+                    <Form.Label>{tCommon('password')}</Form.Label>
                     <div className="position-relative">
                       <Form.Control
                         type={showPassword ? 'text' : 'password'}
                         data-testid="passwordField"
-                        placeholder={t('password')}
+                        placeholder={tCommon('password')}
                         autoComplete="new-password"
                         onFocus={(): void => setIsInputFocused(true)}
                         onBlur={(): void => setIsInputFocused(false)}
