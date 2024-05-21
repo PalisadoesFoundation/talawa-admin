@@ -233,7 +233,7 @@ export default function settings(): JSX.Element {
                         htmlFor="inputFirstName"
                         className={`${styles.cardLabel}`}
                       >
-                        {t('firstName')}
+                        {tCommon('firstName')}
                       </Form.Label>
                       <Form.Control
                         type="text"
@@ -251,7 +251,7 @@ export default function settings(): JSX.Element {
                         htmlFor="inputLastName"
                         className={`${styles.cardLabel}`}
                       >
-                        {t('lastName')}
+                        {tCommon('lastName')}
                       </Form.Label>
                       <Form.Control
                         type="text"

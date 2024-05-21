@@ -538,12 +538,12 @@ const loginPage = (): JSX.Element => {
                   <Row>
                     <Col sm={6}>
                       <div>
-                        <Form.Label>{t('firstName')}</Form.Label>
+                        <Form.Label>{tCommon('firstName')}</Form.Label>
                         <Form.Control
                           type="text"
                           id="signfirstname"
                           className="mb-3"
-                          placeholder={t('firstName')}
+                          placeholder={tCommon('firstName')}
                           required
                           value={signformState.signfirstName}
                           onChange={(e): void => {
@@ -557,12 +557,12 @@ const loginPage = (): JSX.Element => {
                     </Col>
                     <Col sm={6}>
                       <div>
-                        <Form.Label>{t('lastName')}</Form.Label>
+                        <Form.Label>{tCommon('lastName')}</Form.Label>
                         <Form.Control
                           type="text"
                           id="signlastname"
                           className="mb-3"
-                          placeholder={t('lastName')}
+                          placeholder={tCommon('lastName')}
                           required
                           value={signformState.signlastName}
                           onChange={(e): void => {

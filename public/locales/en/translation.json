@@ -3,8 +3,6 @@
     "title": "Talawa Admin",
     "fromPalisadoes": "An open source application by Palisadoes Foundation volunteers",
     "userLogin": "User Login",
-    "firstName": "First Name",
-    "lastName": "Last Name",
     "atleast_8_char_long": "Atleast 8 Character long",
     "atleast_6_char_long": "Atleast 6 Character long",
     "firstName_invalid": "First name should contain only lower and upper case letters",
@@ -33,8 +31,6 @@
   "userLoginPage": {
     "title": "Talawa Admin",
     "fromPalisadoes": "An open source application by Palisadoes Foundation volunteers",
-    "firstName": "First Name",
-    "lastName": "Last Name",
     "atleast_8_char_long": "Atleast 8 Character long",
     "Password_and_Confirm_password_mismatches.": "Password and Confirm password mismatches.",
     "confirmPassword": "Confirm Password",
@@ -217,9 +213,7 @@
     "addMembers": "Add Members",
     "existingUser": "Existing User",
     "newUser": "New User",
-    "firstName": "First Name",
     "enterFirstName": "Enter your first name",
-    "lastName": "Last Name",
     "enterLastName": "Enter your last name",
     "emailAddress": "Email Address",
     "enterEmail": "Enter your email address",
@@ -576,8 +570,6 @@
     "successfullyDeletedSampleOrganization": "Successfully deleted sample Organization"
   },
   "userUpdate": {
-    "firstName": "First Name",
-    "lastName": "Last Name",
     "appLanguageCode": "Default Language",
     "userType": "User Type",
     "displayImage": "Display Image"
@@ -691,9 +683,7 @@
     "invalidCredentials": "Entered credentials are incorrect. Please enter valid credentials."
   },
   "userRegister": {
-    "firstName": "First Name",
     "enterFirstName": "Enter your first name",
-    "lastName": "Last Name",
     "enterLastName": "Enter your last name",
     "emailAddress": "Email Address",
     "enterEmail": "Enter your email address",
@@ -763,8 +753,6 @@
   },
   "settings": {
     "profileSettings": "Profile Settings",
-    "firstName": "First Name",
-    "lastName": "Last Name",
     "gender": "Gender",
     "emailAddress": "Email Address",
     "phoneNumber": "Phone Number",
@@ -951,9 +939,7 @@
     "existingUser": "Existing User",
     "newUser": "New User",
     "searchFullName": "Search by Full Name",
-    "firstName": "First Name",
     "enterFirstName": "Enter First Name",
-    "lastName": "Last Name",
     "enterLastName": "Enter Last Name",
     "emailAddress": "Email Address",
     "enterEmail": "Enter Email",

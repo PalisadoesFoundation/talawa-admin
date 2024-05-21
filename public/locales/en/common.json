@@ -1,4 +1,6 @@
 {
+  "firstName": "First Name",
+  "lastName": "Last Name",
   "loading": "Loading...",
   "admins": "Admins",
   "admin": "ADMIN",

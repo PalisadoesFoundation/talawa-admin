@@ -119,7 +119,7 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
     <>
       <h3 className="mt-3 font-weight-bold">{tCommon('register')}</h3>
       <div className="my-3">
-        <h6>{t('firstName')}</h6>
+        <h6>{tCommon('firstName')}</h6>
         <InputGroup className="mb-3">
           <Form.Control
             placeholder={t('enterFirstName')}
@@ -134,7 +134,7 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
             <BadgeOutlinedIcon className={`${styles.colorWhite}`} />
           </InputGroup.Text>
         </InputGroup>
-        <h6>{t('lastName')}</h6>
+        <h6>{tCommon('lastName')}</h6>
         <InputGroup className="mb-3">
           <Form.Control
             placeholder={t('enterLastName')}

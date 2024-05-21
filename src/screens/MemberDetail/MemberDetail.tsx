@@ -225,7 +225,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               </div>
               <div className="d-flex flex-row flex-wrap py-3 px-3">
                 <div>
-                  <p className="my-0 mx-2">{t('firstName')}</p>
+                  <p className="my-0 mx-2">{tCommon('firstName')}</p>
                   <input
                     value={formState.firstName}
                     className={`rounded border-0 p-2 m-2 ${styles.inputColor}`}
@@ -233,11 +233,11 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     name="firstName"
                     onChange={handleChange}
                     required
-                    placeholder={t('firstName')}
+                    placeholder={tCommon('firstName')}
                   />
                 </div>
                 <div>
-                  <p className="my-0 mx-2">{t('lastName')}</p>
+                  <p className="my-0 mx-2">{tCommon('lastName')}</p>
                   <input
                     value={formState.lastName}
                     className={`rounded border-0 p-2 m-2 ${styles.inputColor}`}
@@ -245,7 +245,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     name="lastName"
                     onChange={handleChange}
                     required
-                    placeholder={t('lastName')}
+                    placeholder={tCommon('lastName')}
                   />
                 </div>
                 <div>
