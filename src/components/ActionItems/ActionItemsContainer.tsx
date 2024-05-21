@@ -42,6 +42,7 @@ function actionItemsContainer({
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationActionItems',
   });
+  const { t: tCommon } = useTranslation('common');
 
   const [actionItemPreviewModalIsOpen, setActionItemPreviewModalIsOpen] =
     useState(false);
@@ -453,6 +454,7 @@ function actionItemsContainer({
         deleteActionItemHandler={deleteActionItemHandler}
         toggleDeleteModal={toggleDeleteModal}
         t={t}
+        tCommon={tCommon}
       />
     </>
   );

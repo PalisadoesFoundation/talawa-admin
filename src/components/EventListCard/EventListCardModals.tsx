@@ -730,7 +730,7 @@ function EventListCardModals({
             onClick={toggleRecurringEventUpdateModal}
             data-testid="eventUpdateOptionsModalCloseBtn"
           >
-            {t('no')}
+            {tCommon('no')}
           </Button>
           <Button
             type="button"
@@ -738,7 +738,7 @@ function EventListCardModals({
             onClick={updateEventHandler}
             data-testid="recurringEventUpdateOptionSubmitBtn"
           >
-            {t('yes')}
+            {tCommon('yes')}
           </Button>
         </Modal.Footer>
       </Modal>
@@ -796,7 +796,7 @@ function EventListCardModals({
             onClick={toggleDeleteModal}
             data-testid="eventDeleteModalCloseBtn"
           >
-            {t('no')}
+            {tCommon('no')}
           </Button>
           <Button
             type="button"
@@ -804,7 +804,7 @@ function EventListCardModals({
             onClick={deleteEventHandler}
             data-testid="deleteEventBtn"
           >
-            {t('yes')}
+            {tCommon('yes')}
           </Button>
         </Modal.Footer>
       </Modal>

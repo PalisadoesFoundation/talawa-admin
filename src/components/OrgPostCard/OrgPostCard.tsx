@@ -463,7 +463,7 @@ export default function orgPostCard(
         <Modal.Body>{t('deletePostMsg')}</Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={toggleShowDeleteModal}>
-            {t('no')}
+            {tCommon('no')}
           </Button>
           <Button
             type="button"
@@ -471,7 +471,7 @@ export default function orgPostCard(
             onClick={deletePost}
             data-testid="deletePostBtn"
           >
-            {t('yes')}
+            {tCommon('yes')}
           </Button>
         </Modal.Footer>
       </Modal>

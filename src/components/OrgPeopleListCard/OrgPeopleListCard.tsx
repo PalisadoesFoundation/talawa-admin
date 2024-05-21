@@ -25,6 +25,7 @@ function orgPeopleListCard(
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgPeopleListCard',
   });
+  const { t: tCommon } = useTranslation('common');
 
   const removeMember = async (): Promise<void> => {
     try {
@@ -59,7 +60,7 @@ function orgPeopleListCard(
         <Modal.Body>{t('removeMemberMsg')}</Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={props.toggleRemoveModal}>
-            {t('no')}
+            {tCommon('no')}
           </Button>
           <Button
             type="button"
@@ -67,7 +68,7 @@ function orgPeopleListCard(
             onClick={removeMember}
             data-testid="removeMemberBtn"
           >
-            {t('yes')}
+            {tCommon('yes')}
           </Button>
         </Modal.Footer>
       </Modal>

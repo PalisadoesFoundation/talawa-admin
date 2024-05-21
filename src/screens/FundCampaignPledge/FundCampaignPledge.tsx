@@ -38,6 +38,7 @@ const fundCampaignPledge = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'pledges',
   });
+  const { t: tCommon } = useTranslation('common');
 
   const [modalState, setModalState] = useState<{ [key in Modal]: boolean }>({
     [Modal.CREATE]: false,
@@ -341,6 +342,7 @@ const fundCampaignPledge = (): JSX.Element => {
         hideDeletePledgeModal={() => closeModal(Modal.DELETE)}
         deletePledgeHandler={deleteHandler}
         t={t}
+        tCommon={tCommon}
       />
     </div>
   );

@@ -23,6 +23,7 @@ function orgAdminListCard(props: InterfaceOrgPeopleListCardProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgAdminListCard',
   });
+  const { t: tCommon } = useTranslation('common');
 
   const removeAdmin = async (): Promise<void> => {
     try {
@@ -55,14 +56,14 @@ function orgAdminListCard(props: InterfaceOrgPeopleListCardProps): JSX.Element {
         <Modal.Body>{t('removeAdminMsg')}</Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={props.toggleRemoveModal}>
-            {t('no')}
+            {tCommon('no')}
           </Button>
           <Button
             variant="success"
             onClick={removeAdmin}
             data-testid="removeAdminBtn"
           >
-            {t('yes')}
+            {tCommon('yes')}
           </Button>
         </Modal.Footer>
       </Modal>

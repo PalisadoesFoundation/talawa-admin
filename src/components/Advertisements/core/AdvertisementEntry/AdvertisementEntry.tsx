@@ -31,6 +31,7 @@ function advertisementEntry({
   setAfter,
 }: InterfaceAddOnEntryProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
+  const { t: tCommon } = useTranslation('common');
   const [buttonLoading, setButtonLoading] = useState(false);
   const [dropdown, setDropdown] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -158,7 +159,7 @@ function advertisementEntry({
                   </Modal.Body>
                   <Modal.Footer>
                     <Button variant="danger" onClick={toggleShowDeleteModal}>
-                      {t('no')}
+                      {tCommon('no')}
                     </Button>
                     <Button
                       type="button"
@@ -168,7 +169,7 @@ function advertisementEntry({
                       }}
                       data-testid="delete_yes"
                     >
-                      {t('yes')}
+                      {tCommon('yes')}
                     </Button>
                   </Modal.Footer>
                 </Modal>

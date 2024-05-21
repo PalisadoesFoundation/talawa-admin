@@ -266,8 +266,6 @@
     "remove": "Remove",
     "removeAdmin": "Remove Admin",
     "removeAdminMsg": "Do you want to remove this admin?",
-    "no": "No",
-    "yes": "Yes",
     "adminRemoved": "The admin is removed."
   },
   "orgPeopleListCard": {
@@ -275,8 +273,6 @@
     "remove": "Remove",
     "removeMember": "Remove Member",
     "removeMemberMsg": "Do you want to remove this member?",
-    "no": "No",
-    "yes": "Yes",
     "memberRemoved": "The Member is removed"
   },
   "organizationEvents": {
@@ -333,7 +329,6 @@
     "editActionItem": "Edit Action Item",
     "isCompleted": "Completed",
     "latest": "Latest",
-    "no": "No",
     "noActionItems": "No Action Items",
     "options": "Options",
     "preCompletionNotes": "Pre Completion Notes",
@@ -347,15 +342,12 @@
     "successfulCreation": "Action Item created successfully",
     "successfulUpdation": "Action Item updated successfully",
     "successfulDeletion": "Action Item deleted successfully",
-    "title": "Action Items",
-    "yes": "Yes"
+    "title": "Action Items"
   },
   "eventListCard": {
     "location": "Event Location",
     "deleteEvent": "Delete Event",
     "deleteEventMsg": "Do you want to remove this event?",
-    "no": "No",
-    "yes": "Yes",
     "editEvent": "Edit Event",
     "eventTitle": "Title",
     "description": "Description",
@@ -401,8 +393,6 @@
     "fundCreate": "Create Fund",
     "fundUpdate": "Update Fund",
     "fundDelete": "Delete Fund",
-    "no": "No",
-    "yes": "Yes",
     "manageFund": "Manage Fund",
     "searchFullName": "Search By Name",
     "filter": "Filter",
@@ -436,8 +426,6 @@
     "updateCampaign": "Update Fund Campaign",
     "manageCampaign": "Manage Fund Campaign",
     "deleteCampaign": "Delete Fund Campaign",
-    "no": "No",
-    "yes": "Yes",
     "currency": "Currency",
     "selectCurrency": "Select Currency",
     "filter": "Filter",
@@ -462,8 +450,6 @@
     "amount": "Amount",
     "editPledge": "Edit Pledge",
     "deletePledgeMsg": "Are you sure you want to delete this pledge?",
-    "no": "No",
-    "yes": "Yes",
     "noPledges": "No Pledges Found"
   },
   "orgPost": {
@@ -517,8 +503,6 @@
     "edit": "Edit Post",
     "deletePost": "Delete Post",
     "deletePostMsg": "Do you want to remove this post?",
-    "no": "No",
-    "yes": "Yes",
     "editPost": "Edit Post",
     "postTitle": "Title",
     "postTitle1": "Edit title of the post",
@@ -958,8 +942,6 @@
     "createAdvertisement": "Create Advertisement",
     "deleteAdvertisement": "Delete Advertisement",
     "deleteAdvertisementMsg": "Do you want to remove this advertisement?",
-    "no": "No",
-    "yes": "Yes",
     "view": "View",
     "edit": "Edit",
     "editAdvertisement": "Edit Advertisement",
@@ -1065,8 +1047,6 @@
     "editActionItem": "Edit Action Item",
     "deleteActionItem": "Delete Action Item",
     "deleteActionItemMsg": "Do you want to remove this action item?",
-    "yes": "Yes",
-    "no": "No",
     "successfulDeletion": "Action Item deleted successfully",
     "successfulCreation": "Action Item created successfully",
     "successfulUpdation": "Action Item updated successfully",
