@@ -21,6 +21,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 
 const Users = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'users' });
+  const { t: tCommon } = useTranslation('common');
 
   document.title = t('title');
 
@@ -314,26 +315,26 @@ const Users = (): JSX.Element => {
                   data-testid="admin"
                   onClick={(): void => handleFiltering('admin')}
                 >
-                  {t('admin')}
+                  {tCommon('admin')}
                 </Dropdown.Item>
                 <Dropdown.Item
                   data-testid="superAdmin"
                   onClick={(): void => handleFiltering('superAdmin')}
                 >
-                  {t('superAdmin')}
+                  {tCommon('superAdmin')}
                 </Dropdown.Item>
 
                 <Dropdown.Item
                   data-testid="user"
                   onClick={(): void => handleFiltering('user')}
                 >
-                  {t('user')}
+                  {tCommon('user')}
                 </Dropdown.Item>
                 <Dropdown.Item
                   data-testid="cancel"
                   onClick={(): void => handleFiltering('cancel')}
                 >
-                  {t('cancel')}
+                  {tCommon('cancel')}
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>

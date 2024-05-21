@@ -26,6 +26,7 @@ function organizationPeople(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationPeople',
   });
+  const { t: tCommon } = useTranslation('common');
 
   document.title = t('title');
 
@@ -316,7 +317,9 @@ function organizationPeople(): JSX.Element {
                       setState(2);
                     }}
                   >
-                    <Form.Label htmlFor="userslist">{t('users')}</Form.Label>
+                    <Form.Label htmlFor="userslist">
+                      {tCommon('users')}
+                    </Form.Label>
                   </Dropdown.Item>
                   <Dropdown.Item
                     inline
@@ -342,7 +345,7 @@ function organizationPeople(): JSX.Element {
                       setState(1);
                     }}
                   >
-                    <label htmlFor="adminslist">{t('admins')}</label>
+                    <label htmlFor="adminslist">{tCommon('admins')}</label>
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>

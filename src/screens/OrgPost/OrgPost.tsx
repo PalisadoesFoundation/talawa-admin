@@ -47,6 +47,7 @@ function orgPost(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgPost',
   });
+  const { t: tCommon } = useTranslation('common');
 
   document.title = t('title');
   const [postmodalisOpen, setPostModalIsOpen] = useState(false);
@@ -95,7 +96,11 @@ function orgPost(): JSX.Element {
     };
     loading: boolean;
     error?: ApolloError;
-    refetch: any;
+    refetch: (filterData?: {
+      id: string | undefined;
+      title_contains: string | null;
+      text_contains: string | null;
+    }) => void;
   } = useQuery(ORGANIZATION_POST_LIST, {
     variables: {
       id: currentUrl,
@@ -167,7 +172,7 @@ function orgPost(): JSX.Element {
         });
         setPostModalIsOpen(false);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       errorHandler(t, error);
     }
   };
@@ -201,7 +206,7 @@ function orgPost(): JSX.Element {
     }
   };
 
-  const handleSearch = (e: any): void => {
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { value } = e.target;
     const filterData = {
       id: currentUrl,
@@ -539,7 +544,7 @@ function orgPost(): JSX.Element {
               onClick={(): void => hideInviteModal()}
               data-testid="closeOrganizationModal"
             >
-              {t('cancel')}
+              {tCommon('cancel')}
             </Button>
             <Button type="submit" value="invite" data-testid="createPostBtn">
               {t('addPost')}

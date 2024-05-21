@@ -30,10 +30,13 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userNavbar',
   });
+  const { t: tCommon } = useTranslation('common');
 
   const navigate = useNavigate();
 
-  const [organizationDetails, setOrganizationDetails]: any = React.useState({});
+  const [organizationDetails, setOrganizationDetails] = React.useState<{
+    name: string;
+  }>({ name: '' });
   // const dropDirection: DropDirection = screen.width > 767 ? 'start' : 'down';
   const dropDirection: DropDirection = 'start';
 
@@ -59,7 +62,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
   const userName = getItem('name');
   React.useEffect(() => {
     if (data) {
-      setOrganizationDetails(data.organizationsConnection[0]);
+      setOrganizationDetails({ name: data.organizationsConnection[0].name });
     }
   }, [data]);
 
@@ -229,7 +232,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
                     onClick={handleLogout}
                     data-testid={`logoutBtn`}
                   >
-                    {t('logout')}
+                    {tCommon('logout')}
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>

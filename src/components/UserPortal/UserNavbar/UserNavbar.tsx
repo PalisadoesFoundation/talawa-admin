@@ -20,6 +20,7 @@ function userNavbar(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userNavbar',
   });
+  const { t: tCommon } = useTranslation('common');
 
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
 
@@ -106,7 +107,7 @@ function userNavbar(): JSX.Element {
                 {t('settings')}
               </Dropdown.Item>
               <Dropdown.Item onClick={handleLogout} data-testid={`logoutBtn`}>
-                {t('logout')}
+                {tCommon('logout')}
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>

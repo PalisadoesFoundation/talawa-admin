@@ -28,6 +28,7 @@ const UserSidebarOrg = ({
   setHideDrawer,
 }: InterfaceUserSidebarOrgProps): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'userSidebarOrg' });
+  const { t: tCommon } = useTranslation('common');
   const [showDropdown, setShowDropdown] = React.useState(false);
 
   const [organization, setOrganization] =
@@ -126,7 +127,7 @@ const UserSidebarOrg = ({
         {/* Options List */}
         <div className={styles.optionList}>
           <h5 className={`${styles.titleHeader} text-secondary`}>
-            {t('menu')}
+            {tCommon('menu')}
           </h5>
           {targets.map(({ name, url }, index) => {
             return url ? (

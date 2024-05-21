@@ -214,7 +214,7 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
           className={styles.loginText}
           data-testid="setLoginBtn"
         >
-          <u>{t('login')}</u>
+          <u>{tCommon('login')}</u>
         </span>
       </div>
     </>

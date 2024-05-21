@@ -142,7 +142,6 @@
     "sampleOrgSuccess": "Sample Organization Successfully Created"
   },
   "orgListCard": {
-    "admins": "Admins",
     "members": "Members",
     "manage": "Manage",
     "sampleOrganization": "Sample Organization"
@@ -195,7 +194,6 @@
     "noOrgError": "Organizations not found, please create an organization through dashboard",
     "roleUpdated": "Role Updated.",
     "noResultsFoundFor": "No results found for ",
-    "admins": "Admins",
     "members": "Members",
     "joinNow": "Join Now",
     "visit": "Visit",
@@ -220,7 +218,6 @@
     "deleteThisOrganization": "Delete This Organization",
     "statistics": "Statistics",
     "members": "Members",
-    "admins": "Admins",
     "posts": "Posts",
     "events": "Events",
     "blockedUsers": "Blocked Users",
@@ -238,7 +235,6 @@
     "filterByLocation": "Filter by Location",
     "filterByEvent": "Filter by Event",
     "members": "Members",
-    "admins": "Admins",
     "searchName": "Enter Name",
     "searchevent": "Enter Event",
     "searchFullName": "Enter Full Name",
@@ -970,7 +966,7 @@
     "addNew": "Create new advertisement",
     "EXname": "Ex. Cookie Shop",
     "EXlink": "Ex. http://yourwebsite.com/photo",
-    "register": "Create Advertisement",
+    "createAdvertisement": "Create Advertisement",
     "close": "Close ",
     "deleteAdvertisement": "Delete Advertisement",
     "deleteAdvertisementMsg": "Do you want to remove this advertisement?",

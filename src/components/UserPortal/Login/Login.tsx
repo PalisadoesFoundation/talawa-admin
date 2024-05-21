@@ -81,7 +81,7 @@ export default function login(props: InterfaceLoginProps): JSX.Element {
 
   return (
     <>
-      <h3 className="mt-3 font-weight-bold">{t('login')}</h3>
+      <h3 className="mt-3 font-weight-bold">{tCommon('login')}</h3>
 
       <div className="my-3">
         <h6>{t('emailAddress')}</h6>

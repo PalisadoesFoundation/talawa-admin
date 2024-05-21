@@ -844,7 +844,7 @@ const loginPage = (): JSX.Element => {
                   </Button>
                   <div className="position-relative">
                     <hr />
-                    <span className={styles.orText}>{t('OR')}</span>
+                    <span className={styles.orText}>{tCommon('OR')}</span>
                   </div>
                   <Button
                     variant="outline-secondary"
@@ -856,7 +856,7 @@ const loginPage = (): JSX.Element => {
                       setShowPassword(false);
                     }}
                   >
-                    {t('login')}
+                    {tCommon('login')}
                   </Button>
                 </Form>
               </div>

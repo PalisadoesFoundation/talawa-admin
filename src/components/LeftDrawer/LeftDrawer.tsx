@@ -19,6 +19,7 @@ const leftDrawer = ({
   setHideDrawer,
 }: InterfaceLeftDrawerProps): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'leftDrawer' });
+  const { t: tCommon } = useTranslation('common');
 
   const { getItem } = useLocalStorage();
   const superAdmin = getItem('SuperAdmin');
@@ -43,7 +44,9 @@ const leftDrawer = ({
       >
         <TalawaLogo className={styles.talawaLogo} />
         <p className={styles.talawaText}>{t('talawaAdminPortal')}</p>
-        <h5 className={`${styles.titleHeader} text-secondary`}>{t('menu')}</h5>
+        <h5 className={`${styles.titleHeader} text-secondary`}>
+          {tCommon('menu')}
+        </h5>
         <div className={styles.optionList}>
           <NavLink to={'/orglist'} onClick={handleLinkClick}>
             {({ isActive }) => (
@@ -87,7 +90,7 @@ const leftDrawer = ({
                         }`}
                       />
                     </div>
-                    {t('users')}
+                    {tCommon('users')}
                   </Button>
                 )}
               </NavLink>

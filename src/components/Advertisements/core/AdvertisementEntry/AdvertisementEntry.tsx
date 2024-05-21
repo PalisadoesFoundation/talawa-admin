@@ -10,14 +10,6 @@ import AdvertisementRegister from '../AdvertisementRegister/AdvertisementRegiste
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { toast } from 'react-toastify';
 
-type Ad = {
-  _id: string;
-  name: string;
-  type: 'BANNER' | 'MENU' | 'POPUP';
-  mediaUrl: string;
-  endDate: string; // Assuming it's a string in the format 'yyyy-MM-dd'
-  startDate: string; // Assuming it's a string in the format 'yyyy-MM-dd'
-};
 interface InterfaceAddOnEntryProps {
   id: string;
   name: string;
@@ -26,7 +18,7 @@ interface InterfaceAddOnEntryProps {
   organizationId: string;
   startDate: Date;
   endDate: Date;
-  setAfter: any;
+  setAfter: React.Dispatch<React.SetStateAction<string | null | undefined>>;
 }
 function advertisementEntry({
   id,
@@ -64,8 +56,10 @@ function advertisementEntry({
       toast.error('Advertisement Deleted');
       setButtonLoading(false);
       setAfter(null);
-    } catch (error: any) {
-      toast.error(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
       setButtonLoading(false);
     }
   };

@@ -54,6 +54,7 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'users',
   });
+  const { t: tCommon } = useTranslation('common');
 
   const navigate = useNavigate();
 
@@ -94,12 +95,14 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
         toast.success(t('orgJoined'));
       }
       refetch();
-    } catch (error: any) {
+    } catch (error: unknown) {
       /* istanbul ignore next */
-      if (error.message === 'User is already a member') {
-        toast.error(t('AlreadyJoined'));
-      } else {
-        toast.error(t('errorOccured'));
+      if (error instanceof Error) {
+        if (error.message === 'User is already a member') {
+          toast.error(t('AlreadyJoined'));
+        } else {
+          toast.error(t('errorOccured'));
+        }
       }
     }
   }
@@ -150,8 +153,8 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
               </div>
             )}
             <h6 className={styles.orgadmin}>
-              {t('admins')}: <span>{props.admins?.length}</span> &nbsp; &nbsp;
-              &nbsp; {t('members')}: <span>{props.members?.length}</span>
+              {tCommon('admins')}: <span>{props.admins?.length}</span> &nbsp;
+              &nbsp; &nbsp; {t('members')}: <span>{props.members?.length}</span>
             </h6>
           </div>
         </div>

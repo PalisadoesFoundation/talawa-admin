@@ -19,10 +19,11 @@ export interface InterfaceCustomFieldData {
   name: string;
 }
 
-const OrgProfileFieldSettings = (): any => {
+const OrgProfileFieldSettings = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgProfileField',
   });
+  const { t: tCommon } = useTranslation('common');
 
   const [customFieldData, setCustomFieldData] =
     useState<InterfaceCustomFieldData>({
@@ -75,7 +76,7 @@ const OrgProfileFieldSettings = (): any => {
     }
   };
 
-  if (loading) return <p>Loading... {t('loading')}</p>;
+  if (loading) return <p>Loading... {tCommon('loading')}</p>;
   if (error) return <p>{error.message} </p>;
 
   return (

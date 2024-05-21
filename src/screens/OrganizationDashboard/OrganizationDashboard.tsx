@@ -31,6 +31,7 @@ import styles from './OrganizationDashboard.module.css';
 
 function organizationDashboard(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'dashboard' });
+  const { t: tCommon } = useTranslation('common');
   document.title = t('title');
   const { orgId: currentUrl } = useParams();
   const peopleLink = `/orgpeople/${currentUrl}`;
@@ -76,10 +77,6 @@ function organizationDashboard(): JSX.Element {
     data: eventData,
     loading: loadingEvent,
     error: errorEvent,
-  }: {
-    data: any;
-    loading: boolean;
-    error?: ApolloError;
   } = useQuery(ORGANIZATION_EVENT_CONNECTION_LIST, {
     variables: {
       organization_id: currentUrl,
@@ -90,13 +87,15 @@ function organizationDashboard(): JSX.Element {
   useEffect(() => {
     if (eventData && eventData?.eventsByOrganizationConnection.length > 0) {
       const tempUpcomingEvents: InterfaceQueryOrganizationEventListItem[] = [];
-      eventData?.eventsByOrganizationConnection.map((event: any) => {
-        const startDate = new Date(event.startDate);
-        const now = new Date();
-        if (startDate > now) {
-          tempUpcomingEvents.push(event);
-        }
-      });
+      eventData?.eventsByOrganizationConnection.map(
+        (event: InterfaceQueryOrganizationEventListItem) => {
+          const startDate = new Date(event.startDate);
+          const now = new Date();
+          if (startDate > now) {
+            tempUpcomingEvents.push(event);
+          }
+        },
+      );
       setUpcomingEvents(tempUpcomingEvents);
     }
   }, [eventData?.eventsByOrganizationConnection]);
@@ -150,7 +149,7 @@ function organizationDashboard(): JSX.Element {
               >
                 <DashBoardCard
                   count={data?.organizations[0].admins?.length}
-                  title={t('admins')}
+                  title={tCommon('admins')}
                   icon={<AdminsIcon fill="var(--bs-primary)" />}
                 />
               </Col>
@@ -210,7 +209,7 @@ function organizationDashboard(): JSX.Element {
               >
                 <DashBoardCard
                   count={data?.organizations[0].membershipRequests?.length}
-                  title={t('requests')}
+                  title={tCommon('requests')}
                   icon={<UsersIcon fill="var(--bs-primary)" />}
                 />
               </Col>
@@ -286,7 +285,7 @@ function organizationDashboard(): JSX.Element {
                     /* eslint-enable */
                     postData?.organizations[0].posts.edges
                       .slice(0, 5)
-                      .map((edge: any) => {
+                      .map((edge) => {
                         const post = edge.node;
                         return (
                           <CardItem

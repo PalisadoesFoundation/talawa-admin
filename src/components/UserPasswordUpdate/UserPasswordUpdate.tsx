@@ -17,6 +17,7 @@ const UserUpdate: React.FC<
   const { t } = useTranslation('translation', {
     keyPrefix: 'userPasswordUpdate',
   });
+  const { t: tCommon } = useTranslation('common');
   const [formState, setFormState] = React.useState({
     previousPassword: '',
     newPassword: '',
@@ -55,9 +56,11 @@ const UserUpdate: React.FC<
           window.location.reload();
         }, 2000);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       /* istanbul ignore next */
-      toast.error(error.toString());
+      if (error instanceof Error) {
+        toast.error(error.toString());
+      }
     }
   };
 
@@ -143,7 +146,7 @@ const UserUpdate: React.FC<
               value="cancelchanges"
               onClick={cancelUpdate}
             >
-              {t('cancel')}
+              {tCommon('cancel')}
             </Button>
           </div>
         </form>

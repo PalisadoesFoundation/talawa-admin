@@ -24,7 +24,7 @@ interface InterfaceAddOnRegisterProps {
   advertisementMediaEdit?: string;
   endDateEdit?: Date;
   startDateEdit?: Date;
-  setAfter: any;
+  setAfter: React.Dispatch<React.SetStateAction<string | null | undefined>>;
 }
 interface InterfaceFormStateTypes {
   name: string;
@@ -198,8 +198,10 @@ function advertisementRegister({
         handleClose();
         setAfter(null);
       }
-    } catch (error: any) {
-      toast.error(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
     }
   };
   return (
@@ -374,7 +376,7 @@ function advertisementRegister({
               onClick={handleRegister}
               data-testid="addonregister"
             >
-              {t('register')}
+              {t('createAdvertisement')}
             </Button>
           ) : (
             <Button

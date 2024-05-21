@@ -43,6 +43,7 @@ interface InterfaceOrganizationModalProps {
   setFormState: (state: React.SetStateAction<InterfaceFormStateType>) => void;
   createOrg: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
   t: (key: string) => string;
+  tCommon: (key: string) => string;
   userData: InterfaceUserType | undefined;
   triggerCreateSampleOrg: () => void;
 }
@@ -58,6 +59,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
   setFormState,
   createOrg,
   t,
+  tCommon,
   triggerCreateSampleOrg,
 }) => {
   // function to update the state of the parameters inside address.
@@ -297,7 +299,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
 
             <div className="position-relative">
               <hr />
-              <span className={styles.orText}>{t('OR')}</span>
+              <span className={styles.orText}>{tCommon('OR')}</span>
             </div>
             {(adminFor.length > 0 || superAdmin) && (
               <div className={styles.sampleOrgSection}>
