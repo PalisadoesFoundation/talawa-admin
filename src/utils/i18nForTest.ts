@@ -4,7 +4,7 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import HttpApi from 'i18next-http-backend';
 
 import { languageArray } from './languages';
-import translationEnglish from '../../public/locales/en.json';
+import translationEnglish from '../../public/locales/en/translation.json';
 
 i18n
   .use(LanguageDetector)
