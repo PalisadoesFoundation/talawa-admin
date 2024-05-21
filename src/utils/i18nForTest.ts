@@ -11,6 +11,8 @@ i18n
   .use(HttpApi)
   .use(initReactI18next)
   .init({
+    ns: ['translation', 'errors', 'common'],
+    defaultNS: 'translation',
     fallbackLng: 'en',
     supportedLngs: languageArray,
     detection: {
