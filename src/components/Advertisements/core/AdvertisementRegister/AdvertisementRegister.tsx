@@ -385,7 +385,7 @@ function advertisementRegister({
               onClick={handleUpdate}
               data-testid="addonupdate"
             >
-              {t('saveChanges')}
+              {tCommon('saveChanges')}
             </Button>
           )}
         </Modal.Footer>

@@ -39,6 +39,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'memberDetail',
   });
+  const { t: tCommon } = useTranslation('common');
   const location = useLocation();
   const isMounted = useRef(true);
   const { getItem, setItem } = useLocalStorage();
@@ -529,7 +530,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 value="savechanges"
                 onClick={loginLink}
               >
-                {t('saveChanges')}
+                {tCommon('saveChanges')}
               </Button>
             </div>
           </div>

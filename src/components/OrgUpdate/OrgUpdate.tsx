@@ -66,6 +66,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgUpdate',
   });
+  const { t: tCommon } = useTranslation('common');
 
   const {
     data,
@@ -130,7 +131,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
         refetch({ id: orgId });
         toast.success(t('successfulUpdated'));
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       errorHandler(t, error);
     }
   };
@@ -332,7 +333,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               value="savechanges"
               onClick={onSaveChangesClicked}
             >
-              {t('saveChanges')}
+              {tCommon('saveChanges')}
             </Button>
           </div>
         </form>

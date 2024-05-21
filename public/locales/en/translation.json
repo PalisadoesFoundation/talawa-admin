@@ -619,14 +619,12 @@
     "userType": "User Type",
     "admin": "Admin",
     "superAdmin": "Superadmin",
-    "displayImage": "Display Image",
-    "saveChanges": "Save Changes"
+    "displayImage": "Display Image"
   },
   "userPasswordUpdate": {
     "previousPassword": "Previous Password",
     "newPassword": "New Password",
-    "confirmNewPassword": "Confirm New Password",
-    "saveChanges": "Save Changes"
+    "confirmNewPassword": "Confirm New Password"
   },
   "orgDelete": {
     "deleteOrg": "Delete Org"
@@ -653,7 +651,6 @@
     "displayImage": "Display Image",
     "userRegistrationRequired": "User Registration Required",
     "isVisibleInSearch": "Visible in Search",
-    "saveChanges": "Save Changes",
     "enterNameOrganization": "Enter Organization Name",
     "successfulUpdated": "Organization updated successfully"
   },
@@ -716,7 +713,6 @@
     "personalDetailsHeading": "Profile Details",
     "appLanguageCode": "Choose Language",
     "delete": "Delete User",
-    "saveChanges": "Save Changes",
     "pluginCreationAllowed": "Plugin creation allowed",
     "joined": "Joined",
     "created": "Created",
@@ -836,7 +832,6 @@
     "state": "City/State",
     "country": "Country",
     "resetChanges": "Reset Changes",
-    "saveChanges": "Save Changes",
     "profileDetails": "Profile Details",
     "deleteUserMessage": "By clicking on Delete User button your user will be permanently deleted along with its events, tags and all related data.",
     "copyLink": "Copy Profile Link",
@@ -945,7 +940,6 @@
     "view": "View",
     "edit": "Edit",
     "editAdvertisement": "Edit Advertisement",
-    "saveChanges": "Save Changes",
     "endOfResults": "End of results"
   },
   "userChat": {
@@ -963,7 +957,6 @@
     "customFieldName": "Field Name",
     "enterCustomFieldName": "Enter Field name",
     "customFieldType": "Field Type",
-    "saveChanges": "Save Changes",
     "Remove Custom Field": "Remove Custom Field",
     "fieldSuccessMessage": "Field added successfully",
     "fieldRemovalSuccess": "Field removed successfully"

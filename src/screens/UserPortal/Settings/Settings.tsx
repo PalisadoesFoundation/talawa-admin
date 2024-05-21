@@ -26,6 +26,7 @@ export default function settings(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'settings',
   });
+  const { t: tCommon } = useTranslation('common');
 
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
 
@@ -85,7 +86,7 @@ export default function settings(): JSX.Element {
         const userFullName = `${userDetails.firstName} ${userDetails.lastName}`;
         setItem('name', userFullName);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       errorHandler(t, error);
     }
   };
@@ -568,7 +569,7 @@ export default function settings(): JSX.Element {
                       data-testid="updateUserBtn"
                       className={`${styles.cardButton}`}
                     >
-                      {t('saveChanges')}
+                      {tCommon('saveChanges')}
                     </Button>
                   </div>
                 </Card.Body>

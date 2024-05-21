@@ -138,7 +138,7 @@ const UserUpdate: React.FC<
               value="savechanges"
               onClick={loginLink}
             >
-              {t('saveChanges')}
+              {tCommon('saveChanges')}
             </Button>
             <Button
               type="button"

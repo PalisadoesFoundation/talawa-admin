@@ -161,7 +161,7 @@ const OrgProfileFieldSettings = (): JSX.Element => {
                 className={styles.saveButton}
                 data-testid="saveChangesBtn"
               >
-                {t('saveChanges')}
+                {tCommon('saveChanges')}
               </Button>
             </form>
           </div>

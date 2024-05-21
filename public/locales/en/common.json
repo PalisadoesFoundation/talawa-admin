@@ -16,5 +16,6 @@
   "create": "Create",
   "done": "Done",
   "yes": "Yes",
-  "no": "No"
+  "no": "No",
+  "saveChanges": "Save Changes"
 }
