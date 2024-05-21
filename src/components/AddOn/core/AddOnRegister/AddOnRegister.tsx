@@ -18,6 +18,7 @@ interface InterfaceFormStateTypes {
 
 function addOnRegister(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'addOnRegister' });
+  const { t: tCommon } = useTranslation('common');
 
   const { orgId: currentUrl } = useParams();
   const navigate = useNavigate();
@@ -141,7 +142,7 @@ function addOnRegister(): JSX.Element {
             onClick={handleRegister}
             data-testid="addonregisterBtn"
           >
-            {t('register')}
+            {tCommon('register')}
           </Button>
         </Modal.Footer>
       </Modal>

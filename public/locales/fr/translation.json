@@ -22,7 +22,6 @@
     "enterEmail": "entrez l'e-mail",
     "enterPassword": "Entrer le mot de passe",
     "doNotOwnAnAccount": "Vous n'avez pas de compte ?",
-    "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau.",
     "captchaError": "Erreur de captcha !",
     "Please_check_the_captcha": "Veuillez vérifier le captcha.",
     "Something_went_wrong": "Quelque chose s'est mal passé, veuillez réessayer plus tard.",
@@ -57,7 +56,6 @@
     "enterEmail": "Entrez l'e-mail",
     "enterPassword": "Entrez le mot de passe",
     "doNotOwnAnAccount": "Vous n'avez pas de compte ?",
-    "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau.",
     "captchaError": "Erreur de captcha !",
     "Please_check_the_captcha": "Veuillez vérifier le captcha.",
     "Something_went_wrong": "Quelque chose s'est mal passé, veuillez réessayer ultérieurement.",
@@ -213,7 +211,6 @@
     "filter": "Filtre",
     "roleUpdated": "Rôle mis à jour.",
     "noResultsFoundFor": "Aucun résultat trouvé pour ",
-    "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau.",
     "cancel": "Annuler",
     "admins": "Administrateurs",
     "members": "Membres",
@@ -255,8 +252,7 @@
     "latestPosts": "Derniers messages",
     "noPostsPresent": "Aucune publication présente",
     "membershipRequests": "Demandes d'adhésion",
-    "noMembershipRequests": "Aucune demande d'adhésion",
-    "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
+    "noMembershipRequests": "Aucune demande d'adhésion"
   },
   "organizationPeople": {
     "title": "Membres Talawa",
@@ -293,8 +289,7 @@
   "userListCard": {
     "joined": "Inscrit",
     "addAdmin": "Ajouter un administrateur",
-    "addedAsAdmin": "L'utilisateur est ajouté en tant qu'administrateur.",
-    "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
+    "addedAsAdmin": "L'utilisateur est ajouté en tant qu'administrateur."
   },
   "orgAdminListCard": {
     "joined": "Inscrit",
@@ -303,8 +298,7 @@
     "removeAdminMsg": "Voulez-vous supprimer cet administrateur ?",
     "no": "Non",
     "yes": "Oui",
-    "adminRemoved": "L'administrateur est supprimé.",
-    "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible. Est-il en cours d'exécution ? Vérifiez également votre connectivité réseau."
+    "adminRemoved": "L'administrateur est supprimé."
   },
   "orgPeopleListCard": {
     "joined": "Inscrit",

@@ -20,6 +20,7 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
   const { setCurrentMode } = props;
 
   const { t } = useTranslation('translation', { keyPrefix: 'userRegister' });
+  const { t: tCommon } = useTranslation('common');
 
   const handleModeChangeToLogin = (): void => {
     setCurrentMode('login');
@@ -70,7 +71,7 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
           password: '',
           confirmPassword: '',
         });
-      } catch (error: any) {
+      } catch (error: unknown) {
         /* istanbul ignore next */
         errorHandler(t, error);
       }
@@ -116,7 +117,7 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
 
   return (
     <>
-      <h3 className="mt-3 font-weight-bold">{t('register')}</h3>
+      <h3 className="mt-3 font-weight-bold">{tCommon('register')}</h3>
       <div className="my-3">
         <h6>{t('firstName')}</h6>
         <InputGroup className="mb-3">
@@ -203,7 +204,7 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
         onClick={handleRegister}
         data-testid="registerBtn"
       >
-        {t('register')}
+        {tCommon('register')}
       </Button>
 
       <div className="mt-4 text-center">

@@ -47,6 +47,7 @@ interface InterfaceEventListCardModalProps {
   eventModalIsOpen: boolean;
   hideViewModal: () => void;
   t: (key: string) => string;
+  tCommon: (key: string) => string;
 }
 
 function EventListCardModals({
@@ -54,6 +55,7 @@ function EventListCardModals({
   eventModalIsOpen,
   hideViewModal,
   t,
+  tCommon,
 }: InterfaceEventListCardModalProps): JSX.Element {
   const { refetchEvents } = eventListCardProps;
 
@@ -673,7 +675,7 @@ function EventListCardModals({
                 onClick={registerEventHandler}
                 data-testid="registerEventBtn"
               >
-                {t('registerEvent')}
+                {tCommon('register')}
               </Button>
             ))}
         </Modal.Footer>

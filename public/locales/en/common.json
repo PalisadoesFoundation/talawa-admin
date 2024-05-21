@@ -1,0 +1,14 @@
+{
+  "loading": "Loading...",
+  "admin": "ADMIN",
+  "user": "USER",
+  "superadmin": "SUPERADMIN",
+  "logout": "Logout",
+  "login": "Login",
+  "register": "Register",
+  "menu": "Menu",
+  "users": "Users",
+  "requests": "Requests",
+  "OR": "OR",
+  "cancel": "Cancel"
+}

@@ -37,6 +37,7 @@ import { Autocomplete, TextField } from '@mui/material';
 
 const loginPage = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
+  const { t: tCommon } = useTranslation('common');
   const navigate = useNavigate();
 
   const { getItem, setItem } = useLocalStorage();
@@ -418,7 +419,7 @@ const loginPage = (): JSX.Element => {
               >
                 <form onSubmit={loginLink}>
                   <h1 className="fs-2 fw-bold text-dark mb-3">
-                    {role === 'admin' ? t('login') : t('userLogin')}
+                    {role === 'admin' ? tCommon('login') : t('userLogin')}
                   </h1>
                   <Form.Label>{t('email')}</Form.Label>
                   <div className="position-relative">
@@ -502,11 +503,11 @@ const loginPage = (): JSX.Element => {
                     value="Login"
                     data-testid="loginBtn"
                   >
-                    {t('login')}
+                    {tCommon('login')}
                   </Button>
                   <div className="position-relative my-2">
                     <hr />
-                    <span className={styles.orText}>{t('OR')}</span>
+                    <span className={styles.orText}>{tCommon('OR')}</span>
                   </div>
                   <Button
                     variant="outline-secondary"
@@ -518,7 +519,7 @@ const loginPage = (): JSX.Element => {
                       setShowPassword(false);
                     }}
                   >
-                    {t('register')}
+                    {tCommon('register')}
                   </Button>
                 </form>
               </div>
@@ -530,7 +531,7 @@ const loginPage = (): JSX.Element => {
               >
                 <Form onSubmit={signupLink}>
                   <h1 className="fs-2 fw-bold text-dark mb-3">
-                    {t('register')}
+                    {tCommon('register')}
                   </h1>
                   <Row>
                     <Col sm={6}>
@@ -839,7 +840,7 @@ const loginPage = (): JSX.Element => {
                     value="Register"
                     data-testid="registrationBtn"
                   >
-                    {t('register')}
+                    {tCommon('register')}
                   </Button>
                   <div className="position-relative">
                     <hr />

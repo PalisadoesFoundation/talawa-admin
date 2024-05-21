@@ -19,6 +19,7 @@ interface InterfaceLoginProps {
 
 export default function login(props: InterfaceLoginProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userLogin' });
+  const { t: tCommon } = useTranslation('common');
 
   const navigate = useNavigate();
 
@@ -52,7 +53,7 @@ export default function login(props: InterfaceLoginProps): JSX.Element {
         setItem('token', data.login.accessToken);
         setItem('userId', data.login.user._id);
         navigate('/user/organizations');
-      } catch (error: any) {
+      } catch (error: unknown) {
         errorHandler(t, error);
       }
     }
@@ -127,7 +128,7 @@ export default function login(props: InterfaceLoginProps): JSX.Element {
         onClick={handleLogin}
         data-testid="loginBtn"
       >
-        {t('login')}
+        {tCommon('login')}
       </Button>
       <hr />
       <Button
@@ -136,7 +137,7 @@ export default function login(props: InterfaceLoginProps): JSX.Element {
         onClick={handleModeChangeToRegister}
         data-testid="setRegisterBtn"
       >
-        {t('register')}
+        {tCommon('register')}
       </Button>
     </>
   );
