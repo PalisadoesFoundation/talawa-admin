@@ -43,7 +43,7 @@ const leftDrawer = ({
         data-testid="leftDrawerContainer"
       >
         <TalawaLogo className={styles.talawaLogo} />
-        <p className={styles.talawaText}>{t('talawaAdminPortal')}</p>
+        <p className={styles.talawaText}>{tCommon('talawaAdminPortal')}</p>
         <h5 className={`${styles.titleHeader} text-secondary`}>
           {tCommon('menu')}
         </h5>

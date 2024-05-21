@@ -512,12 +512,12 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   </div>
                   <div className="d-flex flex-column">
                     <label htmlFor="">
-                      {t('delete')}
+                      {t('deleteUser')}
                       <br />
                       {`(API not supported yet)`}
                     </label>
                     <Button className="btn btn-danger" data-testid="deleteBtn">
-                      {t('delete')}
+                      {t('deleteUser')}
                     </Button>
                   </div>
                 </div>

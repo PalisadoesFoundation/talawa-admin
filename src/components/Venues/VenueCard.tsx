@@ -22,6 +22,7 @@ const VenueCard = ({
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationVenues',
   });
+  const { t: tCommon } = useTranslation('common');
   return (
     <div
       className="col-xl-4 col-lg-4 col-md-6"
@@ -74,7 +75,7 @@ const VenueCard = ({
               onClick={() => handleDelete(venueItem._id)}
             >
               <i className="fa fa-trash me-2"></i>
-              <span>{t('delete')}</span>
+              <span>{tCommon('delete')}</span>
             </Button>
           </div>
         </Card>

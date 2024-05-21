@@ -85,7 +85,7 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
             )}
             <h6 className={styles.orgadmin}>
               {tCommon('admins')}: <span>{admins.length}</span> &nbsp; &nbsp;
-              &nbsp; {t('members')}: <span>{members.length}</span>
+              &nbsp; {tCommon('members')}: <span>{members.length}</span>
             </h6>
           </div>
         </div>

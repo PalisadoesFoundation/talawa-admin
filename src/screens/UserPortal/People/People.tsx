@@ -35,6 +35,7 @@ export default function people(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userOrganizations',
   });
+  const { t: tCommon } = useTranslation('common');
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -129,7 +130,7 @@ export default function people(): JSX.Element {
           >
             <InputGroup className={`${styles.maxWidth} ${styles.shadow}`}>
               <Form.Control
-                placeholder={t('search')}
+                placeholder={t('searchUsers')}
                 id="searchPeople"
                 type="text"
                 className={`${styles.borderBox} ${styles.backgroundWhite} ${styles.placeholderColor}`}
@@ -152,7 +153,7 @@ export default function people(): JSX.Element {
                 data-testid={`modeChangeBtn`}
               >
                 <FilterAltOutlined />
-                {t('filter').toUpperCase()}
+                {tCommon('filter').toUpperCase()}
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 {modes.map((value, index) => {

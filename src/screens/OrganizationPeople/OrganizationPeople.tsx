@@ -332,7 +332,7 @@ function organizationPeople(): JSX.Element {
                       setState(0);
                     }}
                   >
-                    <label htmlFor="memberslist">{t('members')}</label>
+                    <label htmlFor="memberslist">{tCommon('members')}</label>
                   </Dropdown.Item>
                   <Dropdown.Item
                     inline

@@ -209,7 +209,7 @@ export default function settings(): JSX.Element {
           <div className="d-flex justify-content-end align-items-center">
             <ProfileDropdown />
           </div>
-          <h3>{t('settings')}</h3>
+          <h3>{tCommon('settings')}</h3>
           <Row>
             <Col lg={5} className="d-lg-none">
               <UserProfile

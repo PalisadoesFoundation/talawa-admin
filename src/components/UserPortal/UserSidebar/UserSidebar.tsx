@@ -83,7 +83,7 @@ const userSidebar = ({
                     }`}
                   />
                 </div>
-                {t('settings')}
+                {tCommon('settings')}
               </Button>
             )}
           </NavLink>

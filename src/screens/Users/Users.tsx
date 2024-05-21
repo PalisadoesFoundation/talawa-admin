@@ -308,7 +308,7 @@ const Users = (): JSX.Element => {
                 data-testid="filterUsers"
               >
                 <FilterListIcon className={'me-1'} />
-                {t('filter')}
+                {tCommon('filter')}
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item

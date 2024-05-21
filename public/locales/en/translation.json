@@ -2,7 +2,6 @@
   "loginPage": {
     "title": "Talawa Admin",
     "fromPalisadoes": "An open source application by Palisadoes Foundation volunteers",
-    "talawa_portal": "Talawa Admin Portal",
     "userLogin": "User Login",
     "firstName": "First Name",
     "lastName": "Last Name",
@@ -35,7 +34,6 @@
   "userLoginPage": {
     "title": "Talawa Admin",
     "fromPalisadoes": "An open source application by Palisadoes Foundation volunteers",
-    "talawa_portal": "Talawa Admin Portal",
     "firstName": "First Name",
     "lastName": "Last Name",
     "password": "Password",
@@ -67,18 +65,14 @@
     "noPostsCreated": "No Posts Created"
   },
   "listNavbar": {
-    "talawa_portal": "Talawa Admin Portal",
     "roles": "Roles"
   },
   "leftDrawer": {
-    "talawaAdminPortal": "Talawa Admin Portal",
     "my organizations": "My Organizations",
     "requests": "Membership Requests",
     "communityProfile": "Community Profile"
   },
   "leftDrawerOrg": {
-    "talawaAdminPortal": "Talawa Admin Portal",
-    "talawa_portal": "Talawa Admin Portal",
     "Dashboard": "Dashboard",
     "People": "People",
     "Events": "Events",
@@ -91,7 +85,6 @@
     "allOrganizations": "All Organizations",
     "yourOrganization": "Your Organization",
     "notification": "Notification",
-    "settings": "Settings",
     "language": "Language",
     "notifications": "Notifications",
     "spamsThe": "spams the",
@@ -124,7 +117,6 @@
     "sort": "Sort",
     "Latest": "Latest",
     "Earliest": "Earliest",
-    "filter": "Filter",
     "noOrgErrorTitle": "Organizations Not Found",
     "sampleOrgDuplicate": "Only one sample organization allowed",
     "noOrgErrorDescription": "Please create an organization through dashboard",
@@ -137,7 +129,6 @@
     "sampleOrgSuccess": "Sample Organization Successfully Created"
   },
   "orgListCard": {
-    "members": "Members",
     "manage": "Manage",
     "sampleOrganization": "Sample Organization"
   },
@@ -172,20 +163,15 @@
     "isNotBlockedByAnyOrg": "is not blocked by any organization",
     "searchByOrgName": "Search By Organization Name",
     "view": "View",
-    "admin": "ADMIN",
-    "superAdmin": "SUPERADMIN",
-    "user": "USER",
     "enterName": "Enter Name",
     "loadingUsers": "Loading Users...",
     "noUserFound": "No User Found",
     "sort": "Sort",
     "Newest": "Newest First",
     "Oldest": "Oldest First",
-    "filter": "Filter",
     "noOrgError": "Organizations not found, please create an organization through dashboard",
     "roleUpdated": "Role Updated.",
     "noResultsFoundFor": "No results found for ",
-    "members": "Members",
     "joinNow": "Join Now",
     "visit": "Visit",
     "withdraw": "Widthdraw"
@@ -208,7 +194,6 @@
     "about": "About",
     "deleteThisOrganization": "Delete This Organization",
     "statistics": "Statistics",
-    "members": "Members",
     "posts": "Posts",
     "events": "Events",
     "blockedUsers": "Blocked Users",
@@ -225,7 +210,6 @@
     "filterByName": "Filter by Name",
     "filterByLocation": "Filter by Location",
     "filterByEvent": "Filter by Event",
-    "members": "Members",
     "searchName": "Enter Name",
     "searchevent": "Enter Event",
     "searchFullName": "Enter Full Name",
@@ -387,7 +371,6 @@
     "fundDelete": "Delete Fund",
     "manageFund": "Manage Fund",
     "searchFullName": "Search By Name",
-    "filter": "Filter",
     "noFundsFound": "No Funds Found",
     "createdBy": "Created By",
     "createdOn": "Created On",
@@ -420,7 +403,6 @@
     "deleteCampaign": "Delete Fund Campaign",
     "currency": "Currency",
     "selectCurrency": "Select Currency",
-    "filter": "Filter",
     "searchFullName": "Search By Name"
   },
   "pledges": {
@@ -480,7 +462,6 @@
     "organization not found!": "Organization Not Found!"
   },
   "userNotFound": {
-    "user": "User",
     "not found!": "Not Found!",
     "roles": "Roles",
     "user not found!": "User Not Found!",
@@ -581,12 +562,10 @@
   },
   "orgSettings": {
     "title": "Settings",
-    "pageName": "Settings",
     "general": "General",
     "actionItemCategories": "Action Item Categories",
     "updateOrganization": "Update Organization",
     "seeRequest": "See Request",
-    "settings": "Settings",
     "noData": "No data",
     "otherSettings": "Other Settings",
     "changeLanguage": "Change Language",
@@ -606,8 +585,6 @@
     "password": "Password",
     "appLanguageCode": "Default Language",
     "userType": "User Type",
-    "admin": "Admin",
-    "superAdmin": "Superadmin",
     "displayImage": "Display Image"
   },
   "userPasswordUpdate": {
@@ -660,9 +637,7 @@
     "pHeading": "Plugins",
     "install": "Installed",
     "available": "Available",
-    "pMessage": "Plugin does not exists",
-    "filter": "Filters",
-    "search": "Search"
+    "pMessage": "Plugin does not exists"
   },
   "addOnEntry": {
     "enable": "Enabled",
@@ -699,7 +674,7 @@
     "actionsHeading": "Actions",
     "personalDetailsHeading": "Profile Details",
     "appLanguageCode": "Choose Language",
-    "delete": "Delete User",
+    "deleteUser": "Delete User",
     "pluginCreationAllowed": "Plugin creation allowed",
     "joined": "Joined",
     "created": "Created",
@@ -708,9 +683,7 @@
     "adminForEvents": "Admin for events",
     "addedAsAdmin": "User is added as admin.",
     "password": "Password",
-    "userType": "User Type",
-    "admin": "Admin",
-    "superAdmin": "Superadmin"
+    "userType": "User Type"
   },
   "userLogin": {
     "login": "Login",
@@ -748,7 +721,6 @@
     "events": "Events",
     "chat": "Chat",
     "donate": "Donate",
-    "settings": "Settings",
     "language": "Language"
   },
   "userOrganizations": {
@@ -756,11 +728,10 @@
     "joinedOrganizations": "Joined Organizations",
     "createdOrganizations": "Created Organizations",
     "selectOrganization": "Select an organization",
-    "search": "Search users",
+    "searchUsers": "Search users",
     "nothingToShow": "Nothing to show here.",
     "organizations": "Organizations",
-    "searchByName": "Search By Name",
-    "filter": "Filter"
+    "searchByName": "Search By Name"
   },
   "userSidebarOrg": {
     "yourOrganizations": "Your Organizations",
@@ -768,19 +739,16 @@
     "viewAll": "View all",
     "talawaUserPortal": "Talawa User Portal",
     "my organizations": "My Organizations",
-    "communityProfile": "Community Profile",
-    "settings": "Settings"
+    "communityProfile": "Community Profile"
   },
   "organizationSidebar": {
     "viewAll": "View all",
     "events": "Events",
-    "members": "Members",
     "noEvents": "No Events to show",
     "noMembers": "No Members to show"
   },
   "postCard": {
     "edit": "Edit",
-    "delete": "Delete",
     "likes": "Likes",
     "comments": "Comments"
   },
@@ -802,7 +770,6 @@
     "article": "Article"
   },
   "settings": {
-    "settings": "Settings",
     "profileSettings": "Profile Settings",
     "firstName": "First Name",
     "lastName": "Last Name",
@@ -874,7 +841,6 @@
   },
   "userEvents": {
     "nothingToShow": "Nothing to show here.",
-    "search": "Search",
     "createEvent": "Create Event",
     "recurring": "Recurring Event",
     "startTime": "Start Time",
@@ -909,7 +875,6 @@
     "activeAds": "Active Campaigns",
     "archievedAds": "Completed Campaigns",
     "pMessage": "Ads not present for this campaign.",
-    "delete": "Delete",
     "validLink": "Link is valid",
     "invalidLink": "Link is invalid",
     "Rname": "Enter name of Advertisement",
@@ -931,7 +896,6 @@
   },
   "userChat": {
     "chat": "Chat",
-    "search": "Search",
     "contacts": "Contacts"
   },
   "userChatRoom": {
@@ -984,7 +948,6 @@
     "noVenues": "No Venues Found!",
     "edit": "Edit",
     "view": "View",
-    "delete": "Delete",
     "venueTitleError": "Venue title cannot be empty!",
     "venueCapacityError": "Capacity must be a positive number!",
     "searchBy": "Search By",
@@ -1009,7 +972,6 @@
     "organization": "Organization",
     "invalidDetailsMessage": "Please provide all required details.",
     "passwordNotMatch": "Passwords do not match.",
-    "user": "User",
     "addMember": "Add Member"
   },
   "eventActionItems": {

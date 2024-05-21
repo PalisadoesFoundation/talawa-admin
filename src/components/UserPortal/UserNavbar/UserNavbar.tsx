@@ -104,7 +104,7 @@ function userNavbar(): JSX.Element {
                 onClick={() => navigate('/user/settings')}
                 className={styles.link}
               >
-                {t('settings')}
+                {tCommon('settings')}
               </Dropdown.Item>
               <Dropdown.Item onClick={handleLogout} data-testid={`logoutBtn`}>
                 {tCommon('logout')}

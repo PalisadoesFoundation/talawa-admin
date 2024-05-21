@@ -154,7 +154,8 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
             )}
             <h6 className={styles.orgadmin}>
               {tCommon('admins')}: <span>{props.admins?.length}</span> &nbsp;
-              &nbsp; &nbsp; {t('members')}: <span>{props.members?.length}</span>
+              &nbsp; &nbsp; {tCommon('members')}:{' '}
+              <span>{props.members?.length}</span>
             </h6>
           </div>
         </div>

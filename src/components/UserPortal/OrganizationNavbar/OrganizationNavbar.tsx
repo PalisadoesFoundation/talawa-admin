@@ -225,7 +225,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
                   </Dropdown.ItemText>
                   <Dropdown.Item>
                     <Link to="/user/settings" className={styles.link}>
-                      {t('settings')}
+                      {tCommon('settings')}
                     </Link>
                   </Dropdown.Item>
                   <Dropdown.Item

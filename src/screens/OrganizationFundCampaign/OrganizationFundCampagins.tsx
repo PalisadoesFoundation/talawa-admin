@@ -299,7 +299,7 @@ const orgFundCampaign = (): JSX.Element => {
                 data-testid="filter"
               >
                 <FilterAltOutlinedIcon className={'me-1'} />
-                {t('filter')}
+                {tCommon('filter')}
               </Dropdown.Toggle>
             </Dropdown>
           </div>

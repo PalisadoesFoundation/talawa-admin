@@ -134,7 +134,7 @@ function organizationDashboard(): JSX.Element {
               >
                 <DashBoardCard
                   count={data?.organizations[0].members?.length}
-                  title={t('members')}
+                  title={tCommon('members')}
                   icon={<UsersIcon fill="var(--bs-primary)" />}
                 />
               </Col>

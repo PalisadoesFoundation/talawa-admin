@@ -97,7 +97,7 @@ function advertisementEntry({
                       />
                     </li>
                     <li onClick={toggleShowDeleteModal} data-testid="deletebtn">
-                      {t('delete')}
+                      {tCommon('delete')}
                     </li>
                   </ul>
                 )}
