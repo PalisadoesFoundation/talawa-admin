@@ -25,7 +25,7 @@ i18n
       en: {
         translation: translationEnglish,
         common: translationCommonEnglish,
-        error: translationErrorEnglish,
+        errors: translationErrorEnglish,
       },
     },
     react: { useSuspense: false },

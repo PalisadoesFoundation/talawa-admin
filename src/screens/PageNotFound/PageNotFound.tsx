@@ -23,7 +23,9 @@ const PageNotFound = (): JSX.Element => {
         <div className="brand">
           <img src={Logo} alt="Logo" className="img-fluid" />
           {adminFor != undefined ? (
-            <h3 className="text-uppercase mt-4">{tCommon('talawaAdmin')}</h3>
+            <h3 className="text-uppercase mt-4">
+              {tCommon('talawaAdminPortal')}
+            </h3>
           ) : (
             <h3 className="text-uppercase mt-4">{t('talawaUser')}</h3>
           )}

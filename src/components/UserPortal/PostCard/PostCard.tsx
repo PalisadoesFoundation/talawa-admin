@@ -57,6 +57,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'postCard',
   });
+  const { t: tCommon } = useTranslation('common');
 
   const { getItem } = useLocalStorage();
 
@@ -100,7 +101,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
           setLikes((likes) => likes - 1);
           setIsLikedByUser(false);
         }
-      } catch (error: any) {
+      } catch (error: unknown) {
         /* istanbul ignore next */
         toast.error(error);
       }
@@ -116,7 +117,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
           setLikes((likes) => likes + 1);
           setIsLikedByUser(true);
         }
-      } catch (error: any) {
+      } catch (error: unknown) {
         /* istanbul ignore next */
         toast.error(error);
       }
@@ -196,7 +197,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
 
         setComments([...comments, newComment]);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       /* istanbul ignore next */
       errorHandler(t, error);
     }
@@ -214,7 +215,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
       props.fetchPosts();
       toggleEditPost();
       toast.success('Successfully edited the Post.');
-    } catch (error: any) {
+    } catch (error: unknown) {
       /* istanbul ignore next */
       errorHandler(t, error);
     }
@@ -229,7 +230,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
 
       props.fetchPosts();
       toast.success('Successfully deleted the Post.');
-    } catch (error: any) {
+    } catch (error: unknown) {
       /* istanbul ignore next */
       errorHandler(t, error);
     }
@@ -255,7 +256,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
                 <EditOutlinedIcon
                   style={{ color: 'grey', marginRight: '8px' }}
                 />
-                {t(`edit`)}
+                {tCommon('edit')}
               </Dropdown.Item>
               <Dropdown.Item
                 onClick={handleDeletePost}
@@ -264,7 +265,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
                 <DeleteOutlineOutlinedIcon
                   style={{ color: 'red', marginRight: '8px' }}
                 />
-                {t(`delete`)}
+                {tCommon('delete')}
               </Dropdown.Item>
               {/* <Dropdown.Item href="#/action-3">Pin Post</Dropdown.Item>
               <Dropdown.Item href="#/action-3">Report</Dropdown.Item>

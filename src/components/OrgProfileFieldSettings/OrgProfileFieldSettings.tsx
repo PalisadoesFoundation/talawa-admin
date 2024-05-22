@@ -76,7 +76,7 @@ const OrgProfileFieldSettings = (): JSX.Element => {
     }
   };
 
-  if (loading) return <p>Loading... {tCommon('loading')}</p>;
+  if (loading) return <p> {tCommon('loading')}</p>;
   if (error) return <p>{error.message} </p>;
 
   return (

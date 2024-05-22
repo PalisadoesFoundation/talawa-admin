@@ -97,6 +97,7 @@ type InterfacePostNode = {
 
 export default function home(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'home' });
+  const { t: tCommon } = useTranslation('common');
   const { getItem } = useLocalStorage();
   const [posts, setPosts] = useState([]);
   const [pinnedPosts, setPinnedPosts] = useState([]);
@@ -349,7 +350,7 @@ export default function home(): JSX.Element {
           <div className={` ${styles.postsCardsContainer}`}></div>
           {loadingPosts ? (
             <div className={`d-flex flex-row justify-content-center`}>
-              <HourglassBottomIcon /> <span>{t(`loading`)}...</span>
+              <HourglassBottomIcon /> <span>{tCommon('loading')}</span>
             </div>
           ) : (
             <>

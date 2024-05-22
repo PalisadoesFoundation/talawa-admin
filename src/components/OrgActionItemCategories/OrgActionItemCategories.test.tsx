@@ -55,6 +55,10 @@ const translations = JSON.parse(
   ),
 );
 
+const translationsCommon = JSON.parse(
+  JSON.stringify(i18nForTest.getDataByLanguage('en')?.common),
+);
+
 describe('Testing Action Item Categories Component', () => {
   test('Component loads correctly', async () => {
     window.location.assign('/orgsetting/id=123');
@@ -73,7 +77,7 @@ describe('Testing Action Item Categories Component', () => {
     await wait();
 
     await waitFor(() => {
-      expect(getByText(translations.createButton)).toBeInTheDocument();
+      expect(getByText(translationsCommon.create)).toBeInTheDocument();
     });
   });
 
@@ -94,7 +98,7 @@ describe('Testing Action Item Categories Component', () => {
     await wait();
 
     await waitFor(() => {
-      expect(queryByText(translations.createButton)).not.toBeInTheDocument();
+      expect(queryByText(translationsCommon.create)).not.toBeInTheDocument();
     });
   });
 

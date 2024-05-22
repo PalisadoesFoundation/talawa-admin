@@ -377,7 +377,7 @@ function advertisementRegister({
               onClick={handleRegister}
               data-testid="addonregister"
             >
-              {t('createAdvertisement')}
+              {tCommon('register')}
             </Button>
           ) : (
             <Button

@@ -213,7 +213,7 @@ export default function events(): JSX.Element {
                 <Form.Control
                   type="text"
                   id="eventLocation"
-                  placeholder={t('enterLocation')}
+                  placeholder={tCommon('enterLocation')}
                   autoComplete="off"
                   required
                   value={eventLocation}

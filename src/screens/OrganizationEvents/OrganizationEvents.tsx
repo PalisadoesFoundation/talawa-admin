@@ -309,11 +309,11 @@ function organizationEvents(): JSX.Element {
                 });
               }}
             />
-            <label htmlFor="eventLocation">{tCommon('location')}</label>
+            <label htmlFor="eventLocation">{tCommon('enterLocation')}</label>
             <Form.Control
               type="text"
               id="eventLocation"
-              placeholder={tCommon('location')}
+              placeholder={tCommon('enterLocation')}
               autoComplete="off"
               required
               value={formState.location}
