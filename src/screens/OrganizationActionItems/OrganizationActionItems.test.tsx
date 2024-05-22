@@ -74,6 +74,10 @@ const translations = JSON.parse(
   ),
 );
 
+const translationsCommon = JSON.parse(
+  JSON.stringify(i18nForTest.getDataByLanguage('en')?.common),
+);
+
 describe('Testing Action Item Categories Component', () => {
   const formData = {
     actionItemCategory: 'ActionItemCategory 1',
@@ -98,7 +102,7 @@ describe('Testing Action Item Categories Component', () => {
     await wait();
 
     await waitFor(() => {
-      expect(getByText(translations.createActionItem)).toBeInTheDocument();
+      expect(getByText(translationsCommon.create)).toBeInTheDocument();
     });
   });
 
@@ -118,9 +122,7 @@ describe('Testing Action Item Categories Component', () => {
     await wait();
 
     await waitFor(() => {
-      expect(
-        queryByText(translations.createActionItem),
-      ).not.toBeInTheDocument();
+      expect(queryByText(translationsCommon.create)).not.toBeInTheDocument();
     });
   });
 
@@ -140,9 +142,7 @@ describe('Testing Action Item Categories Component', () => {
     await wait();
 
     await waitFor(() => {
-      expect(
-        queryByText(translations.createActionItem),
-      ).not.toBeInTheDocument();
+      expect(queryByText(translationsCommon.create)).not.toBeInTheDocument();
     });
   });
 
@@ -162,9 +162,7 @@ describe('Testing Action Item Categories Component', () => {
     await wait();
 
     await waitFor(() => {
-      expect(
-        queryByText(translations.createActionItem),
-      ).not.toBeInTheDocument();
+      expect(queryByText(translationsCommon.create)).not.toBeInTheDocument();
     });
   });
 

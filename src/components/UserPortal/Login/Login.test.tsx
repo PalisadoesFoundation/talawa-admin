@@ -195,10 +195,7 @@ describe('Testing Login Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.type(
-      screen.getByPlaceholderText(/Enter your email address/i),
-      formData.email,
-    );
+    userEvent.type(screen.getByPlaceholderText(/Enter Email/i), formData.email);
     userEvent.click(screen.getByTestId('loginBtn'));
 
     expect(toast.error).toBeCalledWith(
@@ -226,13 +223,10 @@ describe('Testing Login Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.type(
-      screen.getByPlaceholderText(/Enter your email address/i),
-      formData.email,
-    );
+    userEvent.type(screen.getByPlaceholderText(/Enter Email/i), formData.email);
 
     userEvent.type(
-      screen.getByPlaceholderText(/Enter your password/i),
+      screen.getByPlaceholderText(/Enter Password/i),
       formData.password,
     );
 
@@ -263,13 +257,10 @@ describe('Testing Login Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.type(
-      screen.getByPlaceholderText(/Enter your email address/i),
-      formData.email,
-    );
+    userEvent.type(screen.getByPlaceholderText(/Enter Email/i), formData.email);
 
     userEvent.type(
-      screen.getByPlaceholderText(/Enter your password/i),
+      screen.getByPlaceholderText(/Enter Password/i),
       formData.password,
     );
 
@@ -299,13 +290,10 @@ describe('Testing Login Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.type(
-      screen.getByPlaceholderText(/Enter your email address/i),
-      formData.email,
-    );
+    userEvent.type(screen.getByPlaceholderText(/Enter Email/i), formData.email);
 
     userEvent.type(
-      screen.getByPlaceholderText(/Enter your password/i),
+      screen.getByPlaceholderText(/Enter Password/i),
       formData.password,
     );
 

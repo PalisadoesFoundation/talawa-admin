@@ -194,7 +194,7 @@
     "newUser": "New User",
     "enterFirstName": "Enter your first name",
     "enterLastName": "Enter your last name",
-    "enterConfirmPassword": "Enter your password to confirm",
+    "enterConfirmPassword": "Enter Password to confirm",
     "organization": "Organization",
     "invalidDetailsMessage": "Please enter valid details."
   },
@@ -624,7 +624,7 @@
   "userRegister": {
     "enterFirstName": "Enter your first name",
     "enterLastName": "Enter your last name",
-    "enterConfirmPassword": "Enter your password to confirm",
+    "enterConfirmPassword": "Enter Password to confirm",
     "alreadyhaveAnAccount": "Already have an account?",
     "login": "Login",
     "afterRegister": "Successfully registered. Please wait for admin to approve your request.",

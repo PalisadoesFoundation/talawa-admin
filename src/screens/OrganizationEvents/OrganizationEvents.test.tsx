@@ -49,6 +49,10 @@ const translations = JSON.parse(
   ),
 );
 
+const translationsCommon = JSON.parse(
+  JSON.stringify(i18nForTest.getDataByLanguage('en')?.common),
+);
+
 jest.mock('@mui/x-date-pickers/DateTimePicker', () => {
   return {
     DateTimePicker: jest.requireActual(
@@ -431,11 +435,13 @@ describe('Organisation Events Page', () => {
     userEvent.click(screen.getByTestId('alldayCheck'));
 
     await waitFor(() => {
-      expect(screen.getByLabelText(translations.startTime)).toBeInTheDocument();
+      expect(
+        screen.getByLabelText(translationsCommon.startTime),
+      ).toBeInTheDocument();
     });
 
-    const startTimePicker = screen.getByLabelText(translations.startTime);
-    const endTimePicker = screen.getByLabelText(translations.endTime);
+    const startTimePicker = screen.getByLabelText(translationsCommon.startTime);
+    const endTimePicker = screen.getByLabelText(translationsCommon.endTime);
 
     fireEvent.change(startTimePicker, {
       target: { value: formData.startTime },

@@ -94,7 +94,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
       </Modal.Header>
       <Form onSubmitCapture={createOrg}>
         <Modal.Body>
-          <Form.Label htmlFor="orgname">{t('name')}</Form.Label>
+          <Form.Label htmlFor="orgname">{tCommon('name')}</Form.Label>
           <Form.Control
             type="name"
             id="orgname"

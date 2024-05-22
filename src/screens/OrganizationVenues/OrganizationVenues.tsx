@@ -151,7 +151,7 @@ function organizationVenues(): JSX.Element {
                   }}
                   data-testid="name"
                 >
-                  {t('name')}
+                  {tCommon('name')}
                 </Dropdown.Item>
                 <Dropdown.Item
                   id="searchDesc"

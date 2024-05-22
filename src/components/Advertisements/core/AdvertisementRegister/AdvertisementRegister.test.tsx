@@ -137,6 +137,10 @@ const translations = JSON.parse(
   ),
 );
 
+const translationsCommon = JSON.parse(
+  JSON.stringify(i18n.getDataByLanguage('en')?.common ?? null),
+);
+
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useParams: () => ({ orgId: '1' }),
@@ -229,7 +233,7 @@ describe('Testing Advertisement Register Component', () => {
     expect(getByLabelText(translations.RendDate)).toHaveValue('2023-02-01');
 
     await waitFor(() => {
-      fireEvent.click(getByText(translations.register));
+      fireEvent.click(getByText(translationsCommon.register));
     });
     expect(toast.success).toBeCalledWith('Advertisement created successfully');
     expect(setTimeoutSpy).toHaveBeenCalled();
@@ -258,7 +262,7 @@ describe('Testing Advertisement Register Component', () => {
       </MockedProvider>,
     );
 
-    fireEvent.click(getByText(translations.edit));
+    fireEvent.click(getByText(translationsCommon.edit));
 
     fireEvent.change(getByLabelText(translations.Rname), {
       target: { value: 'Ad1' },
@@ -295,7 +299,7 @@ describe('Testing Advertisement Register Component', () => {
     expect(getByLabelText(translations.RendDate)).toHaveValue('2023-02-01');
 
     await waitFor(() => {
-      fireEvent.click(getByText(translations.saveChanges));
+      fireEvent.click(getByText(translationsCommon.saveChanges));
     });
     expect(toast.success).toBeCalledWith('Advertisement created successfully');
     expect(setTimeoutSpy).toHaveBeenCalled();
@@ -329,7 +333,7 @@ describe('Testing Advertisement Register Component', () => {
     expect(queryByText(translations.RClose)).toBeInTheDocument();
 
     await waitFor(() => {
-      fireEvent.click(getByText(translations.register));
+      fireEvent.click(getByText(translationsCommon.register));
     });
     expect(toast.error).toBeCalledWith(
       'An error occured, could not create new advertisement',
@@ -399,7 +403,7 @@ describe('Testing Advertisement Register Component', () => {
     expect(getByLabelText(translations.RendDate)).toHaveValue('2022-02-01');
 
     await waitFor(() => {
-      fireEvent.click(getByText(translations.register));
+      fireEvent.click(getByText(translationsCommon.register));
     });
     expect(toast.error).toBeCalledWith(
       'End date must be greater than or equal to start date',
@@ -458,7 +462,7 @@ describe('Testing Advertisement Register Component', () => {
       expect(queryByText(translations.RClose)).toBeInTheDocument();
 
       fireEvent.click(getByText(translations.RClose));
-      expect(queryByText(translations.close)).not.toBeInTheDocument();
+      expect(queryByText(translationsCommon.close)).not.toBeInTheDocument();
     });
   });
 
@@ -486,7 +490,7 @@ describe('Testing Advertisement Register Component', () => {
       </MockedProvider>,
     );
 
-    fireEvent.click(getByText(translations.edit));
+    fireEvent.click(getByText(translationsCommon.edit));
     expect(queryByText(translations.editAdvertisement)).toBeInTheDocument();
     fireEvent.change(getByLabelText(translations.Rname), {
       target: { value: 'Test Advertisement' },
@@ -519,7 +523,7 @@ describe('Testing Advertisement Register Component', () => {
     });
     expect(getByLabelText(translations.RendDate)).toHaveValue('2023-01-01');
 
-    fireEvent.click(getByText(translations.saveChanges));
+    fireEvent.click(getByText(translationsCommon.saveChanges));
     await waitFor(() => {
       expect(toast.error).toBeCalledWith(
         'End date must be greater than or equal to start date',

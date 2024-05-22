@@ -6,6 +6,7 @@ import HttpApi from 'i18next-http-backend';
 import { languageArray } from './languages';
 import translationEnglish from '../../public/locales/en/translation.json';
 import translationCommonEnglish from '../../public/locales/en/common.json';
+import translationErrorEnglish from '../../public/locales/en/errors.json';
 
 i18n
   .use(LanguageDetector)
@@ -24,6 +25,7 @@ i18n
       en: {
         translation: translationEnglish,
         common: translationCommonEnglish,
+        error: translationErrorEnglish,
       },
     },
     react: { useSuspense: false },

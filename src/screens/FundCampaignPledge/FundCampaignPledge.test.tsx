@@ -58,6 +58,9 @@ const link6 = new StaticMockLink(EMPTY_MOCKS);
 const translations = JSON.parse(
   JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.pledges),
 );
+const translationsCommon = JSON.parse(
+  JSON.stringify(i18nForTest.getDataByLanguage('en')?.common),
+);
 
 describe('Testing Campaign Pledge Screen', () => {
   const formData = {
@@ -160,8 +163,8 @@ describe('Testing Campaign Pledge Screen', () => {
     });
     const currency = screen.getByTestId('currencySelect');
     fireEvent.change(currency, { target: { value: formData.pledgeCurrency } });
-    const startDate = screen.getByLabelText(translations.startDate);
-    const endDate = screen.getByLabelText(translations.endDate);
+    const startDate = screen.getByLabelText(translationsCommon.startDate);
+    const endDate = screen.getByLabelText(translationsCommon.endDate);
     fireEvent.change(startDate, {
       target: { value: formData.pledgeStartDate },
     });
@@ -203,8 +206,8 @@ describe('Testing Campaign Pledge Screen', () => {
     });
     const currency = screen.getByTestId('currencySelect');
     fireEvent.change(currency, { target: { value: formData.pledgeCurrency } });
-    const startDate = screen.getByLabelText(translations.startDate);
-    const endDate = screen.getByLabelText(translations.endDate);
+    const startDate = screen.getByLabelText(translationsCommon.startDate);
+    const endDate = screen.getByLabelText(translationsCommon.endDate);
     fireEvent.change(startDate, {
       target: { value: formData.pledgeStartDate },
     });
@@ -274,8 +277,8 @@ describe('Testing Campaign Pledge Screen', () => {
     });
     const currency = screen.getByTestId('currencySelect');
     fireEvent.change(currency, { target: { value: 'INR' } });
-    const startDate = screen.getByLabelText(translations.startDate);
-    const endDate = screen.getByLabelText(translations.endDate);
+    const startDate = screen.getByLabelText(translationsCommon.startDate);
+    const endDate = screen.getByLabelText(translationsCommon.endDate);
     fireEvent.change(startDate, {
       target: { value: formData.pledgeStartDate },
     });
@@ -317,8 +320,8 @@ describe('Testing Campaign Pledge Screen', () => {
     });
     const currency = screen.getByTestId('currencySelect');
     fireEvent.change(currency, { target: { value: 'INR' } });
-    const startDate = screen.getByLabelText(translations.startDate);
-    const endDate = screen.getByLabelText(translations.endDate);
+    const startDate = screen.getByLabelText(translationsCommon.startDate);
+    const endDate = screen.getByLabelText(translationsCommon.endDate);
     fireEvent.change(startDate, {
       target: { value: formData.pledgeStartDate },
     });

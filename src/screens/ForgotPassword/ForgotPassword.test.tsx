@@ -80,6 +80,10 @@ const translations = JSON.parse(
   ),
 );
 
+const translationsError = JSON.parse(
+  JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {}),
+);
+
 beforeEach(() => {
   setItem('IsLoggedIn', 'FALSE');
 });
@@ -361,7 +365,7 @@ describe('Testing Forgot Password screen', () => {
     await wait();
 
     expect(
-      await screen.findByText(translations.talawaApiUnavailable),
+      await screen.findByText(translationsError.talawaApiUnavailable),
     ).toBeInTheDocument();
   });
 

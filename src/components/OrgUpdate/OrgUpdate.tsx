@@ -157,7 +157,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     <>
       <div id="orgupdate" className={styles.userupdatediv}>
         <form>
-          <Form.Label>{t('name')}</Form.Label>
+          <Form.Label>{tCommon('name')}</Form.Label>
           <Form.Control
             className="mb-3"
             placeholder={t('enterNameOrganization')}
