@@ -253,7 +253,7 @@ export default function events(): JSX.Element {
                 <div className={styles.datediv}>
                   <div className="mr-3">
                     <TimePicker
-                      label={t('startTime')}
+                      label={tCommon('startTime')}
                       className={styles.datebox}
                       timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
                       value={timeToDayJs(startTime)}
@@ -268,7 +268,7 @@ export default function events(): JSX.Element {
                   </div>
                   <div>
                     <TimePicker
-                      label={t('endTime')}
+                      label={tCommon('endTime')}
                       className={styles.datebox}
                       timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
                       value={timeToDayJs(endTime)}

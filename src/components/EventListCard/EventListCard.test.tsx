@@ -50,6 +50,10 @@ const translations = JSON.parse(
   ),
 );
 
+const translationsCommon = JSON.parse(
+  JSON.stringify(i18nForTest.getDataByLanguage('en')?.common),
+);
+
 const renderEventListCard = (
   props: InterfaceEventListCardProps,
 ): RenderResult => {
@@ -346,12 +350,12 @@ describe('Testing Event List Card', () => {
     fireEvent.change(eventLocation, { target: { value: '' } });
     userEvent.type(eventLocation, updateData.location);
 
-    const startDatePicker = screen.getByLabelText(translations.startDate);
+    const startDatePicker = screen.getByLabelText(translationsCommon.startDate);
     fireEvent.change(startDatePicker, {
       target: { value: updateData.startDate },
     });
 
-    const endDatePicker = screen.getByLabelText(translations.endDate);
+    const endDatePicker = screen.getByLabelText(translationsCommon.endDate);
     fireEvent.change(endDatePicker, {
       target: { value: updateData.endDate },
     });
@@ -389,22 +393,22 @@ describe('Testing Event List Card', () => {
     fireEvent.change(eventLocation, { target: { value: '' } });
     userEvent.type(eventLocation, updateData.location);
 
-    const startDatePicker = screen.getByLabelText(translations.startDate);
+    const startDatePicker = screen.getByLabelText(translationsCommon.startDate);
     fireEvent.change(startDatePicker, {
       target: { value: updateData.startDate },
     });
 
-    const endDatePicker = screen.getByLabelText(translations.endDate);
+    const endDatePicker = screen.getByLabelText(translationsCommon.endDate);
     fireEvent.change(endDatePicker, {
       target: { value: updateData.endDate },
     });
 
-    const startTimePicker = screen.getByLabelText(translations.startTime);
+    const startTimePicker = screen.getByLabelText(translationsCommon.startTime);
     fireEvent.change(startTimePicker, {
       target: { value: updateData.startTime },
     });
 
-    const endTimePicker = screen.getByLabelText(translations.endTime);
+    const endTimePicker = screen.getByLabelText(translationsCommon.endTime);
     fireEvent.change(endTimePicker, {
       target: { value: updateData.endTime },
     });
@@ -442,12 +446,12 @@ describe('Testing Event List Card', () => {
     fireEvent.change(eventLocation, { target: { value: '' } });
     userEvent.type(eventLocation, updateData.location);
 
-    const startDatePicker = screen.getByLabelText(translations.startDate);
+    const startDatePicker = screen.getByLabelText(translationsCommon.startDate);
     fireEvent.change(startDatePicker, {
       target: { value: updateData.startDate },
     });
 
-    const endDatePicker = screen.getByLabelText(translations.endDate);
+    const endDatePicker = screen.getByLabelText(translationsCommon.endDate);
     fireEvent.change(endDatePicker, {
       target: { value: updateData.endDate },
     });
@@ -491,16 +495,18 @@ describe('Testing Event List Card', () => {
     userEvent.click(screen.getByTestId('eventUpdateOptionsModalCloseBtn'));
 
     await waitFor(() => {
-      expect(screen.getByLabelText(translations.startDate)).toBeInTheDocument();
+      expect(
+        screen.getByLabelText(translationsCommon.startDate),
+      ).toBeInTheDocument();
     });
 
     // change the event dates
-    let startDatePicker = screen.getByLabelText(translations.startDate);
+    let startDatePicker = screen.getByLabelText(translationsCommon.startDate);
     fireEvent.change(startDatePicker, {
       target: { value: updateData.startDate },
     });
 
-    let endDatePicker = screen.getByLabelText(translations.endDate);
+    let endDatePicker = screen.getByLabelText(translationsCommon.endDate);
     fireEvent.change(endDatePicker, {
       target: { value: updateData.endDate },
     });
@@ -521,16 +527,18 @@ describe('Testing Event List Card', () => {
     userEvent.click(screen.getByTestId('eventUpdateOptionsModalCloseBtn'));
 
     await waitFor(() => {
-      expect(screen.getByLabelText(translations.startDate)).toBeInTheDocument();
+      expect(
+        screen.getByLabelText(translationsCommon.startDate),
+      ).toBeInTheDocument();
     });
 
     // reset the event dates to their original values
-    startDatePicker = screen.getByLabelText(translations.startDate);
+    startDatePicker = screen.getByLabelText(translationsCommon.startDate);
     fireEvent.change(startDatePicker, {
       target: { value: '03/17/2022' },
     });
 
-    endDatePicker = screen.getByLabelText(translations.endDate);
+    endDatePicker = screen.getByLabelText(translationsCommon.endDate);
     fireEvent.change(endDatePicker, {
       target: { value: '03/17/2022' },
     });
@@ -712,16 +720,18 @@ describe('Testing Event List Card', () => {
     userEvent.click(screen.getByTestId('card'));
 
     await waitFor(() => {
-      expect(screen.getByLabelText(translations.startDate)).toBeInTheDocument();
+      expect(
+        screen.getByLabelText(translationsCommon.startDate),
+      ).toBeInTheDocument();
     });
 
     // change the event dates
-    const startDatePicker = screen.getByLabelText(translations.startDate);
+    const startDatePicker = screen.getByLabelText(translationsCommon.startDate);
     fireEvent.change(startDatePicker, {
       target: { value: updateData.startDate },
     });
 
-    const endDatePicker = screen.getByLabelText(translations.endDate);
+    const endDatePicker = screen.getByLabelText(translationsCommon.endDate);
     fireEvent.change(endDatePicker, {
       target: { value: updateData.endDate },
     });

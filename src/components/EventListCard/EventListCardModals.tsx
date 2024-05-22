@@ -500,7 +500,7 @@ function EventListCardModals({
               <div className={styles.datediv}>
                 <div>
                   <TimePicker
-                    label={t('startTime')}
+                    label={tCommon('startTime')}
                     className={styles.datebox}
                     timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
                     value={timeToDayJs(formState.startTime)}
@@ -522,7 +522,7 @@ function EventListCardModals({
                 </div>
                 <div>
                   <TimePicker
-                    label={t('endTime')}
+                    label={tCommon('endTime')}
                     className={styles.datebox}
                     timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
                     value={timeToDayJs(formState.endTime)}

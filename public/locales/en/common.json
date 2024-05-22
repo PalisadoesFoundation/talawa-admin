@@ -44,5 +44,7 @@
   "location": "Location",
   "joined": "Joined",
   "startDate": "Start Date",
-  "endDate": "End Date"
+  "endDate": "End Date",
+  "startTime": "Start Time",
+  "endTime": "End Time"
 }
