@@ -19,6 +19,7 @@ function organizationVenues(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationVenues',
   });
+  const { t: tCommon } = useTranslation('common');
 
   document.title = t('title');
   const [venueModal, setVenueModal] = useState<boolean>(false);
@@ -160,7 +161,7 @@ function organizationVenues(): JSX.Element {
                   }}
                   data-testid="desc"
                 >
-                  {t('desc')}
+                  {tCommon('description')}
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>

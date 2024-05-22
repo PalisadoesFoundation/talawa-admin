@@ -1,72 +1,25 @@
-import type { ChangeEvent } from 'react';
-import React from 'react';
-import EventCard from 'components/UserPortal/EventCard/EventCard';
-import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
-import PaginationList from 'components/PaginationList/PaginationList';
-import {
-  ORGANIZATION_EVENTS_CONNECTION,
-  ORGANIZATIONS_LIST,
-} from 'GraphQl/Queries/Queries';
 import { useMutation, useQuery } from '@apollo/client';
-import { SearchOutlined } from '@mui/icons-material';
-import styles from './Events.module.css';
-import { useTranslation } from 'react-i18next';
-import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
-import Modal from 'react-bootstrap/Modal';
-import { TimePicker, DatePicker } from '@mui/x-date-pickers';
+import { DatePicker, TimePicker } from '@mui/x-date-pickers';
+import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
+import {
+  ORGANIZATIONS_LIST,
+  ORGANIZATION_EVENTS_CONNECTION,
+} from 'GraphQl/Queries/Queries';
+import EventCalendar from 'components/EventCalendar/EventCalendar';
+import EventHeader from 'components/EventCalendar/EventHeader';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
-import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
+import type { ChangeEvent } from 'react';
+import React from 'react';
+import { Button, Form } from 'react-bootstrap';
+import Modal from 'react-bootstrap/Modal';
+import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { errorHandler } from 'utils/errorHandler';
-import EventCalendar from 'components/EventCalendar/EventCalendar';
-import useLocalStorage from 'utils/useLocalstorage';
-import { useNavigate, useParams } from 'react-router-dom';
 import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
-import EventHeader from 'components/EventCalendar/EventHeader';
-interface InterfaceEventCardProps {
-  id: string;
-  title: string;
-  description: string;
-  location: string;
-  startDate: string;
-  endDate: string;
-  isRegisterable: boolean;
-  isPublic: boolean;
-  endTime: string;
-  startTime: string;
-  recurring: boolean;
-  allDay: boolean;
-  creator: {
-    firstName: string;
-    lastName: string;
-    id: string;
-  };
-  registrants: {
-    id: string;
-  }[];
-}
-
-interface InterfaceAttendee {
-  _id: string;
-  title: string;
-  description: string;
-  location: string;
-  startDate: string;
-  endDate: string;
-  isRegisterable: boolean;
-  isPublic: boolean;
-  endTime: string;
-  startTime: string;
-  recurring: boolean;
-  allDay: boolean;
-  attendees: { _id: string }[];
-  creator: {
-    firstName: string;
-    lastName: string;
-    _id: string;
-  };
-}
+import { errorHandler } from 'utils/errorHandler';
+import useLocalStorage from 'utils/useLocalstorage';
+import styles from './Events.module.css';
 
 const timeToDayJs = (time: string): Dayjs => {
   const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
@@ -77,14 +30,11 @@ export default function events(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userEvents',
   });
+  const { t: tCommon } = useTranslation('common');
 
   const { getItem } = useLocalStorage();
 
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [events, setEvents] = React.useState([]);
-  const [mode, setMode] = React.useState(0);
-  // const [showCreateEventModal, setShowCreateEventModal] = React.useState(false);
   const [eventTitle, setEventTitle] = React.useState('');
   const [eventDescription, setEventDescription] = React.useState('');
   const [eventLocation, setEventLocation] = React.useState('');
@@ -100,9 +50,7 @@ export default function events(): JSX.Element {
   const [createEventModal, setCreateEventmodalisOpen] = React.useState(false);
   const { orgId: organizationId } = useParams();
 
-  const modes = [t('listView'), t('calendarView')];
-
-  const { data, loading, refetch } = useQuery(ORGANIZATION_EVENTS_CONNECTION, {
+  const { data, refetch } = useQuery(ORGANIZATION_EVENTS_CONNECTION, {
     variables: {
       organization_id: organizationId,
       title_contains: '',
@@ -167,48 +115,8 @@ export default function events(): JSX.Element {
   };
 
   /* istanbul ignore next */
-  const handleChangePage = (
-    _event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number,
-  ): void => {
-    setPage(newPage);
-  };
-  /* istanbul ignore next */
   const toggleCreateEventModal = (): void =>
     setCreateEventmodalisOpen(!createEventModal);
-
-  /* istanbul ignore next */
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ): void => {
-    const newRowsPerPage = event.target.value;
-
-    setRowsPerPage(parseInt(newRowsPerPage, 10));
-    setPage(0);
-  };
-  /* istanbul ignore next */
-  const handleSearch = (value: string): void => {
-    refetch({
-      title_contains: value,
-    });
-    setPage(0);
-  };
-  /* istanbul ignore next */
-  const handleSearchByEnter = (
-    e: React.KeyboardEvent<HTMLInputElement>,
-  ): void => {
-    if (e.key === 'Enter') {
-      const { value } = e.target as HTMLInputElement;
-      handleSearch(value);
-    }
-  };
-  /* istanbul ignore next */
-  const handleSearchByBtnClick = (): void => {
-    const value =
-      (document.getElementById('searchEvents') as HTMLInputElement)?.value ||
-      '';
-    handleSearch(value);
-  };
 
   const handleEventTitleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -290,7 +198,7 @@ export default function events(): JSX.Element {
                   onChange={handleEventTitleChange}
                   data-testid="eventTitleInput"
                 />
-                <label htmlFor="eventdescrip">{t('eventDescription')}</label>
+                <label htmlFor="eventdescrip">{tCommon('description')}</label>
                 <Form.Control
                   type="eventdescrip"
                   id="eventdescrip"
@@ -301,7 +209,7 @@ export default function events(): JSX.Element {
                   onChange={handleEventDescriptionChange}
                   data-testid="eventDescriptionInput"
                 />
-                <label htmlFor="eventLocation">{t('eventLocation')}</label>
+                <label htmlFor="eventLocation">{tCommon('location')}</label>
                 <Form.Control
                   type="text"
                   id="eventLocation"
@@ -315,7 +223,7 @@ export default function events(): JSX.Element {
                 <div className={styles.datediv}>
                   <div>
                     <DatePicker
-                      label={t('startDate')}
+                      label={tCommon('startDate')}
                       className={styles.datebox}
                       value={dayjs(startDate)}
                       onChange={(date: Dayjs | null): void => {
@@ -329,7 +237,7 @@ export default function events(): JSX.Element {
                   </div>
                   <div>
                     <DatePicker
-                      label={t('endDate')}
+                      label={tCommon('endDate')}
                       className={styles.datebox}
                       value={dayjs(endDate)}
                       onChange={(date: Dayjs | null): void => {

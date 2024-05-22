@@ -7,12 +7,14 @@ interface InterfaceDeletePledgeModal {
   hideDeletePledgeModal: () => void;
   deletePledgeHandler: () => Promise<void>;
   t: (key: string) => string;
+  tCommon: (key: string) => string;
 }
 const PledgeDeleteModal: React.FC<InterfaceDeletePledgeModal> = ({
   deletePledgeModalIsOpen,
   hideDeletePledgeModal,
   deletePledgeHandler,
   t,
+  tCommon,
 }) => {
   return (
     <>
@@ -41,14 +43,14 @@ const PledgeDeleteModal: React.FC<InterfaceDeletePledgeModal> = ({
             onClick={deletePledgeHandler}
             data-testid="deleteyesbtn"
           >
-            {t('yes')}
+            {tCommon('yes')}
           </Button>
           <Button
             variant="secondary"
             onClick={hideDeletePledgeModal}
             data-testid="deletenobtn"
           >
-            {t('no')}
+            {tCommon('no')}
           </Button>
         </Modal.Footer>
       </Modal>

@@ -44,6 +44,7 @@ function organizationEvents(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationEvents',
   });
+  const { t: tCommon } = useTranslation('common');
 
   const { getItem } = useLocalStorage();
 
@@ -293,7 +294,7 @@ function organizationEvents(): JSX.Element {
                 });
               }}
             />
-            <label htmlFor="eventdescrip">{t('description')}</label>
+            <label htmlFor="eventdescrip">{tCommon('description')}</label>
             <Form.Control
               type="eventdescrip"
               id="eventdescrip"
@@ -308,11 +309,11 @@ function organizationEvents(): JSX.Element {
                 });
               }}
             />
-            <label htmlFor="eventLocation">{t('location')}</label>
+            <label htmlFor="eventLocation">{tCommon('location')}</label>
             <Form.Control
               type="text"
               id="eventLocation"
-              placeholder={t('eventLocation')}
+              placeholder={tCommon('location')}
               autoComplete="off"
               required
               value={formState.location}
@@ -326,7 +327,7 @@ function organizationEvents(): JSX.Element {
             <div className={styles.datediv}>
               <div>
                 <DatePicker
-                  label={t('startDate')}
+                  label={tCommon('startDate')}
                   className={styles.datebox}
                   value={dayjs(startDate)}
                   onChange={(date: Dayjs | null): void => {
@@ -349,7 +350,7 @@ function organizationEvents(): JSX.Element {
               </div>
               <div>
                 <DatePicker
-                  label={t('endDate')}
+                  label={tCommon('endDate')}
                   className={styles.datebox}
                   value={dayjs(endDate)}
                   onChange={(date: Dayjs | null): void => {
@@ -470,6 +471,7 @@ function organizationEvents(): JSX.Element {
                 setRecurrenceRuleState={setRecurrenceRuleState}
                 popover={popover}
                 t={t}
+                tCommon={tCommon}
               />
             )}
 

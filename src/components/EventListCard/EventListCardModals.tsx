@@ -47,6 +47,7 @@ interface InterfaceEventListCardModalProps {
   eventModalIsOpen: boolean;
   hideViewModal: () => void;
   t: (key: string) => string;
+  tCommon: (key: string) => string;
 }
 
 function EventListCardModals({
@@ -54,6 +55,7 @@ function EventListCardModals({
   eventModalIsOpen,
   hideViewModal,
   t,
+  tCommon,
 }: InterfaceEventListCardModalProps): JSX.Element {
   const { refetchEvents } = eventListCardProps;
 
@@ -406,7 +408,7 @@ function EventListCardModals({
                 eventListCardProps.userRole === Role.USER
               }
             />
-            <p className={styles.preview}>{t('description')}</p>
+            <p className={styles.preview}>{tCommon('description')}</p>
             <Form.Control
               type="eventdescrip"
               id="eventdescrip"
@@ -430,7 +432,7 @@ function EventListCardModals({
                 eventListCardProps.userRole === Role.USER
               }
             />
-            <p className={styles.preview}>{t('location')}</p>
+            <p className={styles.preview}>{tCommon('location')}</p>
             <Form.Control
               type="text"
               id="eventLocation"
@@ -453,7 +455,7 @@ function EventListCardModals({
             <div className={styles.datediv}>
               <div>
                 <DatePicker
-                  label={t('startDate')}
+                  label={tCommon('startDate')}
                   className={styles.datebox}
                   value={dayjs(eventStartDate)}
                   onChange={(date: Dayjs | null): void => {
@@ -482,7 +484,7 @@ function EventListCardModals({
               </div>
               <div>
                 <DatePicker
-                  label={t('endDate')}
+                  label={tCommon('endDate')}
                   className={styles.datebox}
                   value={dayjs(eventEndDate)}
                   onChange={(date: Dayjs | null): void => {
@@ -617,6 +619,7 @@ function EventListCardModals({
                 setRecurrenceRuleState={setRecurrenceRuleState}
                 popover={popover}
                 t={t}
+                tCommon={tCommon}
               />
             )}
           </Form>
@@ -673,7 +676,7 @@ function EventListCardModals({
                 onClick={registerEventHandler}
                 data-testid="registerEventBtn"
               >
-                {t('registerEvent')}
+                {tCommon('register')}
               </Button>
             ))}
         </Modal.Footer>
@@ -727,7 +730,7 @@ function EventListCardModals({
             onClick={toggleRecurringEventUpdateModal}
             data-testid="eventUpdateOptionsModalCloseBtn"
           >
-            {t('no')}
+            {tCommon('no')}
           </Button>
           <Button
             type="button"
@@ -735,7 +738,7 @@ function EventListCardModals({
             onClick={updateEventHandler}
             data-testid="recurringEventUpdateOptionSubmitBtn"
           >
-            {t('yes')}
+            {tCommon('yes')}
           </Button>
         </Modal.Footer>
       </Modal>
@@ -793,7 +796,7 @@ function EventListCardModals({
             onClick={toggleDeleteModal}
             data-testid="eventDeleteModalCloseBtn"
           >
-            {t('no')}
+            {tCommon('no')}
           </Button>
           <Button
             type="button"
@@ -801,7 +804,7 @@ function EventListCardModals({
             onClick={deleteEventHandler}
             data-testid="deleteEventBtn"
           >
-            {t('yes')}
+            {tCommon('yes')}
           </Button>
         </Modal.Footer>
       </Modal>
