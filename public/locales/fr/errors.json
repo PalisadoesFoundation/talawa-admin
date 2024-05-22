@@ -1,0 +1,6 @@
+{
+  "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible !. ",
+  "notFound": "Pas trouvé",
+  "unknownError": "Une erreur inconnue est survenue.  {{msg}}",
+  "notAuthorised": "Désolé! "
+}

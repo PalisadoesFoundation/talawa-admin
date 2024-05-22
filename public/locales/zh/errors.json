@@ -1,0 +1,6 @@
+{
+  "talawaApiUnavailable": "Talawa-API 服务不可用！",
+  "notFound": "未找到",
+  "unknownError": "出现未知错误。 {{msg}}",
+  "notAuthorised": "对不起！"
+}

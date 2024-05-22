@@ -1,0 +1,6 @@
+{
+  "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है! ",
+  "notFound": "नहीं मिला",
+  "unknownError": "एक अज्ञात त्रुटि हुई।  {{msg}}",
+  "notAuthorised": "क्षमा मांगना! "
+}
