@@ -238,7 +238,7 @@ const Requests = (): JSX.Element => {
         searchByName.length > 0 ? (
           <div className={styles.notFound}>
             <h4>
-              {t('noResultsFoundFor')} &quot;{searchByName}&quot;
+              {tCommon('noResultsFoundFor')} &quot;{searchByName}&quot;
             </h4>
           </div>
         ) : loadingMembers == false && membersData.length === 0 ? (

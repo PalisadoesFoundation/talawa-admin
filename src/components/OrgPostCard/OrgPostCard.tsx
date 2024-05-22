@@ -421,7 +421,7 @@ export default function orgPostCard(
                   onClick={handleEditModal}
                   data-testid="editPostModalBtn"
                 >
-                  {t('edit')}
+                  {tCommon('edit')}
                 </li>
                 <li
                   data-toggle="modal"

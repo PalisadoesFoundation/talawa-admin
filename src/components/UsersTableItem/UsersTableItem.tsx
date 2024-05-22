@@ -24,6 +24,7 @@ type Props = {
 
 const UsersTableItem = (props: Props): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'users' });
+  const { t: tCommon } = useTranslation('common');
   const { user, index, resetAndRefetch } = props;
 
   const [showJoinedOrganizations, setShowJoinedOrganizations] = useState(false);
@@ -63,14 +64,16 @@ const UsersTableItem = (props: Props): JSX.Element => {
         toast.success('Removed User from Organization successfully');
         resetAndRefetch();
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
 
   /* istanbul ignore next */
-  const changeRoleInOrg = async (e: any): Promise<void> => {
+  const changeRoleInOrg = async (
+    e: React.ChangeEvent<HTMLSelectElement>,
+  ): Promise<void> => {
     const { value } = e.target;
 
     const inputData = value.split('?');
@@ -87,7 +90,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         toast.success(t('roleUpdated'));
         resetAndRefetch();
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       /* istanbul ignore next */
       errorHandler(t, error);
     }
@@ -125,18 +128,25 @@ const UsersTableItem = (props: Props): JSX.Element => {
       setOrgsBlockedBy(filteredOrgs);
     }
   };
-  const handleSearchJoinedOrgs = (e: any): void => {
+
+  const handleSearchJoinedOrgs = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ): void => {
     if (e.key === 'Enter') {
-      const { value } = e.target;
+      const { value } = e.currentTarget;
       searchJoinedOrgs(value);
     }
   };
-  const handleSearcgByOrgsBlockedBy = (e: any): void => {
+
+  const handleSearchByOrgsBlockedBy = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ): void => {
     if (e.key === 'Enter') {
-      const { value } = e.target;
+      const { value } = e.currentTarget;
       searchOrgsBlockedBy(value);
     }
   };
+
   const handleSearchButtonClickJoinedOrgs = (): void => {
     const inputValue =
       (document.getElementById('orgname-joined-orgs') as HTMLInputElement)
@@ -238,7 +248,8 @@ const UsersTableItem = (props: Props): JSX.Element => {
               <>
                 <div className={styles.notJoined}>
                   <h4>
-                    {t('noResultsFoundFor')} &quot;{searchByNameJoinedOrgs}
+                    {tCommon('noResultsFoundFor')} &quot;
+                    {searchByNameJoinedOrgs}
                     &quot;
                   </h4>
                 </div>
@@ -410,7 +421,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                 placeholder={t('searchByOrgName')}
                 data-testid="searchByNameOrgsBlockedBy"
                 autoComplete="off"
-                onKeyUp={handleSearcgByOrgsBlockedBy}
+                onKeyUp={handleSearchByOrgsBlockedBy}
               />
               <Button
                 tabIndex={-1}
@@ -435,7 +446,8 @@ const UsersTableItem = (props: Props): JSX.Element => {
               <>
                 <div className={styles.notJoined}>
                   <h4>
-                    {t('noResultsFoundFor')} &quot;{searchByNameOrgsBlockedBy}
+                    {tCommon('noResultsFoundFor')} &quot;
+                    {searchByNameOrgsBlockedBy}
                     &quot;
                   </h4>
                 </div>

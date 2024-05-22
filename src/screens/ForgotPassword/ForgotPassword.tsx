@@ -137,7 +137,9 @@ const ForgotPassword = (): JSX.Element => {
                 <div className={styles.themeOverlay} />
                 <KeyLogo className={styles.keyLogo} fill="var(--bs-primary)" />
               </div>
-              <h3 className="text-center fw-bold">{t('forgotPassword')}</h3>
+              <h3 className="text-center fw-bold">
+                {tCommon('forgotPassword')}
+              </h3>
               {showEnterEmail ? (
                 <div className="mt-4">
                   <Form onSubmit={getOTP}>

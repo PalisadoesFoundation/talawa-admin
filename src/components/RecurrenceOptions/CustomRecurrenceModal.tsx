@@ -46,7 +46,7 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
   hideCustomRecurrenceModal,
   setCustomRecurrenceModalIsOpen,
   t,
-  tCommon
+  tCommon,
 }) => {
   const {
     recurrenceStartDate,
@@ -337,7 +337,7 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
                     {option === endsOn && (
                       <div className="ms-3">
                         <DatePicker
-                          label={t('endDate')}
+                          label={tCommon('endDate')}
                           className={styles.recurrenceRuleDateBox}
                           disabled={selectedRecurrenceEndOption !== endsOn}
                           value={dayjs(

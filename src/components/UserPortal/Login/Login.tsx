@@ -84,10 +84,10 @@ export default function login(props: InterfaceLoginProps): JSX.Element {
       <h3 className="mt-3 font-weight-bold">{tCommon('login')}</h3>
 
       <div className="my-3">
-        <h6>{t('emailAddress')}</h6>
+        <h6>{tCommon('emailAddress')}</h6>
         <InputGroup className="mb-3">
           <Form.Control
-            placeholder={t('enterEmail')}
+            placeholder={tCommon('enterEmail')}
             type="email"
             className={styles.borderNone}
             value={loginVariables.email}
@@ -102,7 +102,7 @@ export default function login(props: InterfaceLoginProps): JSX.Element {
         <h6>{tCommon('password')}</h6>
         <InputGroup className="mb-3">
           <Form.Control
-            placeholder={t('enterPassword')}
+            placeholder={tCommon('enterPassword')}
             type="password"
             className={styles.borderNone}
             value={loginVariables.password}
@@ -118,7 +118,7 @@ export default function login(props: InterfaceLoginProps): JSX.Element {
 
       <div className={styles.forgotPasswordContainer}>
         <Link to="/forgotPassword" className={`${styles.forgotPasswordText}`}>
-          <u>{t('forgotPassword')}</u>
+          <u>{tCommon('forgotPassword')}</u>
         </Link>
       </div>
 

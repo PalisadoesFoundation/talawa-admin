@@ -19,9 +19,6 @@ const VenueCard = ({
   showEditVenueModal,
   handleDelete,
 }: InterfaceVenueCardProps): JSX.Element => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'organizationVenues',
-  });
   const { t: tCommon } = useTranslation('common');
   return (
     <div
@@ -66,7 +63,7 @@ const VenueCard = ({
               data-testid={`updateVenueBtn${index + 1}`}
             >
               <i className="fa fa-pen me-1"></i>
-              <span>{t('edit')}</span>
+              <span>{tCommon('edit')}</span>
             </Button>
             <Button
               variant="outline-danger"

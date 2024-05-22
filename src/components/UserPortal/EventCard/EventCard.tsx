@@ -82,7 +82,7 @@ function eventCard(props: InterfaceEventCardProps): JSX.Element {
       </div>
       {props.description}
       <span>
-        {`${t('location')} `}
+        {`${tCommon('location')} `}
         <b>{props.location}</b>
       </span>
       <div className={`d-flex flex-row ${styles.eventDetails}`}>

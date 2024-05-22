@@ -211,7 +211,7 @@ const OrgActionItemCategories = (): JSX.Element => {
                     className="me-2"
                     data-testid="actionItemCategoryUpdateModalOpenBtn"
                   >
-                    {t('editButton')}
+                    {tCommon('edit')}
                   </Button>
                   <Button
                     onClick={() =>

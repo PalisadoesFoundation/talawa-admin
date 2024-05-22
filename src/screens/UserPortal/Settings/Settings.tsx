@@ -298,7 +298,7 @@ export default function settings(): JSX.Element {
                         htmlFor="inputEmail"
                         className={`${styles.cardLabel}`}
                       >
-                        {t('emailAddress')}
+                        {tCommon('emailAddress')}
                       </Form.Label>
                       <Form.Control
                         type="email"
@@ -332,7 +332,7 @@ export default function settings(): JSX.Element {
                         htmlFor="postphoto"
                         className={`${styles.cardLabel}`}
                       >
-                        {t('displayImage')}
+                        {tCommon('displayImage')}
                       </Form.Label>
                       <div>
                         <Button
@@ -486,7 +486,7 @@ export default function settings(): JSX.Element {
                         htmlFor="address"
                         className={`${styles.cardLabel}`}
                       >
-                        {t('address')}
+                        {tCommon('address')}
                       </Form.Label>
                       <Form.Control
                         type="text"

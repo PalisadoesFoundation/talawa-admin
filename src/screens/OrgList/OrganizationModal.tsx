@@ -114,12 +114,12 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               }
             }}
           />
-          <Form.Label htmlFor="descrip">{t('description')}</Form.Label>
+          <Form.Label htmlFor="descrip">{tCommon('description')}</Form.Label>
           <Form.Control
             type="descrip"
             id="descrip"
             className="mb-3"
-            placeholder={t('description')}
+            placeholder={tCommon('description')}
             autoComplete="off"
             required
             value={formState.descrip}
@@ -133,7 +133,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               }
             }}
           />
-          <Form.Label>{t('address')}</Form.Label>
+          <Form.Label>{tCommon('address')}</Form.Label>
           <Row className="mb-1">
             <Col sm={6} className="mb-3">
               <Form.Control
@@ -267,7 +267,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               />
             </Col>
           </Row>
-          <Form.Label htmlFor="orgphoto">{t('displayImage')}</Form.Label>
+          <Form.Label htmlFor="orgphoto">{tCommon('displayImage')}</Form.Label>
           <Form.Control
             accept="image/*"
             id="orgphoto"

@@ -334,10 +334,10 @@ const orgFundCampaign = (): JSX.Element => {
                       {t('campaignName')}
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                      {t('startDate')}
+                      {tCommon('startDate')}
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                      {t('endDate')}
+                      {tCommon('endDate')}
                     </StyledTableCell>
                     <StyledTableCell align="center">
                       {t('fundingGoal')}

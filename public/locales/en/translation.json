@@ -10,10 +10,6 @@
     "password_invalid": "Password should contain atleast one lowercase letter, one uppercase letter, one numeric value and one special character",
     "email_invalid": "Email should have atleast 8 characters",
     "Password_and_Confirm_password_mismatches.": "Password and Confirm password mismatches.",
-    "confirmPassword": "Confirm Password",
-    "forgotPassword": "Forgot Password ?",
-    "enterEmail": "Enter Email",
-    "enterPassword": "Enter Password",
     "doNotOwnAnAccount": "Do not own an account?",
     "captchaError": "Captcha Error!",
     "Please_check_the_captcha": "Please, check the captcha.",
@@ -33,10 +29,6 @@
     "fromPalisadoes": "An open source application by Palisadoes Foundation volunteers",
     "atleast_8_char_long": "Atleast 8 Character long",
     "Password_and_Confirm_password_mismatches.": "Password and Confirm password mismatches.",
-    "confirmPassword": "Confirm Password",
-    "forgotPassword": "Forgot Password ?",
-    "enterEmail": "Enter Email",
-    "enterPassword": "Enter Password",
     "doNotOwnAnAccount": "Do not own an account?",
     "captchaError": "Captcha Error!",
     "Please_check_the_captcha": "Please, check the captcha.",
@@ -89,13 +81,9 @@
     "title": "Talawa Organizations",
     "you": "You",
     "designation": "Designation",
-    "searchByName": "Search By Name",
     "my organizations": "My Organizations",
     "createOrganization": "Create Organization",
     "createSampleOrganization": "Create Sample Organization",
-    "description": "Description",
-    "location": "Location",
-    "address": "Address",
     "city": "City",
     "countryCode": "Country Code",
     "dependentLocality": "Dependent Locality",
@@ -106,7 +94,6 @@
     "state": "State / Province",
     "userRegistrationRequired": "User Registration Required",
     "visibleInSearch": "Visible In Search",
-    "displayImage": "Display Image",
     "enterName": "Enter Name",
     "sort": "Sort",
     "Latest": "Latest",
@@ -114,12 +101,10 @@
     "noOrgErrorTitle": "Organizations Not Found",
     "sampleOrgDuplicate": "Only one sample organization allowed",
     "noOrgErrorDescription": "Please create an organization through dashboard",
-    "endOfResults": "End of results",
     "manageFeatures": "Manage Features",
     "manageFeaturesInfo": "Creation Successful ! Please select features that you want to enale for this organization from the plugin store.",
     "goToStore": "Go to Plugin Store",
     "enableEverything": "Enable Everything",
-    "noResultsFoundFor": "No results found for",
     "sampleOrgSuccess": "Sample Organization Successfully Created"
   },
   "orgListCard": {
@@ -136,9 +121,7 @@
     "accept": "Accept",
     "reject": "Reject",
     "searchRequests": "Search membership requests",
-    "endOfResults": "End of results",
     "noOrgError": "Organizations not found, please create an organization through dashboard",
-    "noResultsFoundFor": "No results found for ",
     "noRequestsFound": "No Membership Requests Found",
     "acceptedSuccessfully": "Request accepted successfully",
     "rejectedSuccessfully": "Request rejected successfully",
@@ -147,12 +130,10 @@
   },
   "users": {
     "title": "Talawa Roles",
-    "searchByName": "Search By Name",
     "joined_organizations": "Joined Organizations",
     "blocked_organizations": "Blocked Organizations",
     "orgJoinedBy": "Organizations Joined By",
     "orgThatBlocked": "Organizations That Blocked",
-    "endOfResults": "End of results",
     "hasNotJoinedAnyOrg": "has not joined any organization",
     "isNotBlockedByAnyOrg": "is not blocked by any organization",
     "searchByOrgName": "Search By Organization Name",
@@ -165,7 +146,6 @@
     "Oldest": "Oldest First",
     "noOrgError": "Organizations not found, please create an organization through dashboard",
     "roleUpdated": "Role Updated.",
-    "noResultsFoundFor": "No results found for ",
     "joinNow": "Join Now",
     "visit": "Visit",
     "withdraw": "Widthdraw"
@@ -184,7 +164,6 @@
   },
   "dashboard": {
     "title": "Dashboard",
-    "location": "Location",
     "about": "About",
     "deleteThisOrganization": "Delete This Organization",
     "statistics": "Statistics",
@@ -215,28 +194,21 @@
     "newUser": "New User",
     "enterFirstName": "Enter your first name",
     "enterLastName": "Enter your last name",
-    "emailAddress": "Email Address",
-    "enterEmail": "Enter your email address",
-    "enterPassword": "Enter your password",
-    "confirmPassword": "Confirm Password",
     "enterConfirmPassword": "Enter your password to confirm",
     "organization": "Organization",
     "invalidDetailsMessage": "Please enter valid details."
   },
   "userListCard": {
-    "joined": "Joined",
     "addAdmin": "Add Admin",
     "addedAsAdmin": "User is added as admin."
   },
   "orgAdminListCard": {
-    "joined": "Joined",
     "remove": "Remove",
     "removeAdmin": "Remove Admin",
     "removeAdminMsg": "Do you want to remove this admin?",
     "adminRemoved": "The admin is removed."
   },
   "orgPeopleListCard": {
-    "joined": "Joined",
     "remove": "Remove",
     "removeMember": "Remove Member",
     "removeMemberMsg": "Do you want to remove this member?",
@@ -250,10 +222,6 @@
     "addEvent": "Add Event",
     "eventDetails": "Event Details",
     "eventTitle": "Title",
-    "description": "Description",
-    "location": "Location",
-    "startDate": "Start Date",
-    "endDate": "End Date",
     "startTime": "Start Time",
     "endTime": "End Time",
     "allDay": "All Day",
@@ -312,14 +280,10 @@
     "title": "Action Items"
   },
   "eventListCard": {
-    "location": "Event Location",
     "deleteEvent": "Delete Event",
     "deleteEventMsg": "Do you want to remove this event?",
     "editEvent": "Edit Event",
     "eventTitle": "Title",
-    "description": "Description",
-    "startDate": "Start Date",
-    "endDate": "End Date",
     "alreadyRegistered": "Already registered",
     "startTime": "Start Time",
     "endTime": "End Time",
@@ -378,8 +342,6 @@
   "fundCampaign": {
     "title": "Fundraising Campaigns",
     "campaignName": "Campaign Name",
-    "startDate": "Start Date",
-    "endDate": "End Date",
     "campaignOptions": "Options",
     "fundingGoal": "Funding Goal",
     "addCampaign": "Add Campaign",
@@ -399,8 +361,6 @@
   "pledges": {
     "title": "Fund Campaign Pledges",
     "volunteers": "Volunteers",
-    "startDate": "Start Date",
-    "endDate": "End Date",
     "pledgeAmount": "Pledge Amount",
     "pledgeOptions": "Options",
     "pledgeCreated": "Pledge created successfully",
@@ -464,7 +424,6 @@
     "author": "Author",
     "imageURL": "Image URL",
     "videoURL": "Video URL",
-    "edit": "Edit Post",
     "deletePost": "Delete Post",
     "deletePostMsg": "Do you want to remove this post?",
     "editPost": "Edit Post",
@@ -483,7 +442,6 @@
   "blockUnblockUser": {
     "title": "Block/Unblock User",
     "pageName": "Block/Unblock",
-    "searchByName": "Search By Name",
     "listOfUsers": "List of Users who spammed",
     "block_unblock": "Block/Unblock",
     "unblock": "UnBlock",
@@ -495,7 +453,6 @@
     "blockedUsers": "Blocked Users",
     "searchByFirstName": "Search By First Name",
     "searchByLastName": "Search By Last Name",
-    "noResultsFoundFor": "No results found for",
     "noSpammerFound": "No spammer found"
   },
   "eventManagement": {
@@ -508,7 +465,6 @@
   },
   "forgotPassword": {
     "title": "Talawa Forgot Password",
-    "forgotPassword": "Forgot Password",
     "registeredEmail": "Registered Email",
     "getOtp": "Get OTP",
     "enterOtp": "Enter OTP",
@@ -571,8 +527,7 @@
   },
   "userUpdate": {
     "appLanguageCode": "Default Language",
-    "userType": "User Type",
-    "displayImage": "Display Image"
+    "userType": "User Type"
   },
   "userPasswordUpdate": {
     "previousPassword": "Previous Password",
@@ -583,15 +538,11 @@
     "deleteOrg": "Delete Org"
   },
   "membershipRequest": {
-    "joined": "Joined",
     "accept": "Accept",
     "reject": "Reject",
     "memberAdded": "it is accepted"
   },
   "orgUpdate": {
-    "description": "Description",
-    "location": "Location",
-    "address": "Address",
     "city": "City",
     "countryCode": "Country Code",
     "line1": "Line 1",
@@ -600,7 +551,6 @@
     "dependentLocality": "Dependent Locality",
     "sortingCode": "Sorting code",
     "state": "State / Province",
-    "displayImage": "Display Image",
     "userRegistrationRequired": "User Registration Required",
     "isVisibleInSearch": "Visible in Search",
     "enterNameOrganization": "Enter Organization Name",
@@ -650,9 +600,7 @@
     "educationGrade": "Educational Grade",
     "employmentStatus": "Employment Status",
     "maritalStatus": "Marital Status",
-    "displayImage": "Display Image",
     "phone": "Phone",
-    "address": "Address",
     "countryCode": "Country Code",
     "state": "State",
     "city": "City",
@@ -663,7 +611,6 @@
     "appLanguageCode": "Choose Language",
     "deleteUser": "Delete User",
     "pluginCreationAllowed": "Plugin creation allowed",
-    "joined": "Joined",
     "created": "Created",
     "adminForOrganizations": "Admin for organizations",
     "membershipRequests": "Membership requests",
@@ -673,11 +620,7 @@
   },
   "userLogin": {
     "login": "Login",
-    "forgotPassword": "Forgot Password?",
     "loginIntoYourAccount": "Login into your account",
-    "emailAddress": "Email Address",
-    "enterEmail": "Enter your email address",
-    "enterPassword": "Enter your password",
     "invalidDetailsMessage": "Please enter a valid email and password.",
     "notAuthorised": "Sorry! you are not Authorised!",
     "invalidCredentials": "Entered credentials are incorrect. Please enter valid credentials."
@@ -685,10 +628,6 @@
   "userRegister": {
     "enterFirstName": "Enter your first name",
     "enterLastName": "Enter your last name",
-    "emailAddress": "Email Address",
-    "enterEmail": "Enter your email address",
-    "enterPassword": "Enter your password",
-    "confirmPassword": "Confirm Password",
     "enterConfirmPassword": "Enter your password to confirm",
     "alreadyhaveAnAccount": "Already have an account?",
     "login": "Login",
@@ -712,8 +651,7 @@
     "selectOrganization": "Select an organization",
     "searchUsers": "Search users",
     "nothingToShow": "Nothing to show here.",
-    "organizations": "Organizations",
-    "searchByName": "Search By Name"
+    "organizations": "Organizations"
   },
   "userSidebarOrg": {
     "yourOrganizations": "Your Organizations",
@@ -730,7 +668,6 @@
     "noMembers": "No Members to show"
   },
   "postCard": {
-    "edit": "Edit",
     "likes": "Likes",
     "comments": "Comments"
   },
@@ -754,15 +691,12 @@
   "settings": {
     "profileSettings": "Profile Settings",
     "gender": "Gender",
-    "emailAddress": "Email Address",
     "phoneNumber": "Phone Number",
-    "displayImage": "Display Image",
     "chooseFile": "Choose File",
     "birthDate": "Birth Date",
     "grade": "Educational Grade",
     "empStatus": "Employment Status",
     "maritalStatus": "Marital Status",
-    "address": "Address",
     "state": "City/State",
     "country": "Country",
     "resetChanges": "Reset Changes",
@@ -806,8 +740,7 @@
     "fullTime": "Full Time",
     "partTime": "Part Time",
     "selectCountry": "Select a country",
-    "enterState": "Enter City or State",
-    "joined": "Joined"
+    "enterState": "Enter City or State"
   },
   "donate": {
     "donations": "Donations",
@@ -832,19 +765,14 @@
     "eventDetails": "Event Details",
     "eventTitle": "Title",
     "enterTitle": "Enter Title",
-    "eventDescription": "Description",
     "enterDescription": "Enter Description",
-    "eventLocation": "Location",
     "enterLocation": "Enter Location",
-    "startDate": "Start Date",
-    "endDate": "End Date",
     "publicEvent": "Is Public",
     "registerable": "Is Registerable",
     "monthlyCalendarView": "Monthly Calendar",
     "yearlyCalendarView": "Yearly Calender"
   },
   "userEventCard": {
-    "location": "Location",
     "starts": "Starts",
     "ends": "Ends",
     "creator": "Creator",
@@ -870,9 +798,7 @@
     "deleteAdvertisement": "Delete Advertisement",
     "deleteAdvertisementMsg": "Do you want to remove this advertisement?",
     "view": "View",
-    "edit": "Edit",
-    "editAdvertisement": "Edit Advertisement",
-    "endOfResults": "End of results"
+    "editAdvertisement": "Edit Advertisement"
   },
   "userChat": {
     "chat": "Chat",
@@ -893,7 +819,6 @@
     "fieldRemovalSuccess": "Field removed successfully"
   },
   "orgActionItemCategories": {
-    "editButton": "Edit",
     "enableButton": "Enable",
     "disableButton": "Disable",
     "updateActionItemCategory": "Update",
@@ -912,7 +837,6 @@
     "venueDetails": "Venue Details",
     "venueName": "Name of the Venue",
     "enterVenueName": "Enter Venue Name",
-    "description": "Description of the Venue",
     "enterVenueDesc": "Enter Venue Description",
     "capacity": "Capacity",
     "enterVenueCapacity": "Enter Venue Capacity",
@@ -926,12 +850,10 @@
     "highestCapacity": "Highest Capacity",
     "lowestCapacity": "Lowest Capacity",
     "noVenues": "No Venues Found!",
-    "edit": "Edit",
     "view": "View",
     "venueTitleError": "Venue title cannot be empty!",
     "venueCapacityError": "Capacity must be a positive number!",
-    "searchBy": "Search By",
-    "desc": "Description"
+    "searchBy": "Search By"
   },
   "addMember": {
     "title": "Add Member",
@@ -941,10 +863,6 @@
     "searchFullName": "Search by Full Name",
     "enterFirstName": "Enter First Name",
     "enterLastName": "Enter Last Name",
-    "emailAddress": "Email Address",
-    "enterEmail": "Enter Email",
-    "enterPassword": "Enter Password",
-    "confirmPassword": "Confirm Password",
     "enterConfirmPassword": "Enter Confirm Password",
     "organization": "Organization",
     "invalidDetailsMessage": "Please provide all required details.",

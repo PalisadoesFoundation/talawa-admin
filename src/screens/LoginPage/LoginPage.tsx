@@ -425,7 +425,7 @@ const loginPage = (): JSX.Element => {
                   <div className="position-relative">
                     <Form.Control
                       type="email"
-                      placeholder={t('enterEmail')}
+                      placeholder={tCommon('enterEmail')}
                       required
                       value={formState.email}
                       onChange={(e): void => {
@@ -451,7 +451,7 @@ const loginPage = (): JSX.Element => {
                     <Form.Control
                       type={showPassword ? 'text' : 'password'}
                       className="input_box_second lh-1"
-                      placeholder={t('enterPassword')}
+                      placeholder={tCommon('enterPassword')}
                       required
                       value={formState.password}
                       data-testid="password"
@@ -481,7 +481,7 @@ const loginPage = (): JSX.Element => {
                       className="text-secondary"
                       tabIndex={-1}
                     >
-                      {t('forgotPassword')}
+                      {tCommon('forgotPassword')}
                     </Link>
                   </div>
                   {REACT_APP_USE_RECAPTCHA === 'yes' ? (
@@ -757,11 +757,11 @@ const loginPage = (): JSX.Element => {
                     </div>
                   </div>
                   <div className="position-relative">
-                    <Form.Label>{t('confirmPassword')}</Form.Label>
+                    <Form.Label>{tCommon('confirmPassword')}</Form.Label>
                     <div className="position-relative">
                       <Form.Control
                         type={showConfirmPassword ? 'text' : 'password'}
-                        placeholder={t('confirmPassword')}
+                        placeholder={tCommon('confirmPassword')}
                         required
                         value={signformState.cPassword}
                         onChange={(e): void => {

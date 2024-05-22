@@ -307,7 +307,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 </div>
                 <p className="my-0 mx-2 w-100">
                   <label htmlFor="orgphoto" className={styles.orgphoto}>
-                    {t('displayImage')}:
+                    {tCommon('displayImage')}:
                     <Form.Control
                       className="w-75"
                       accept="image/*"
@@ -362,14 +362,14 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   />
                 </div>
                 <div className="p-2" style={{ width: `82%` }}>
-                  <p className="my-0">{t('address')}</p>
+                  <p className="my-0">{tCommon('address')}</p>
                   <input
                     value={formState.address}
                     className={`w-100 rounded border-0 p-2 ${styles.inputColor}`}
                     type="email"
                     name="address"
                     onChange={handleChange}
-                    placeholder={t('address')}
+                    placeholder={tCommon('address')}
                   />
                 </div>
                 <div className="w-25 p-2">

@@ -220,7 +220,7 @@ function advertisementRegister({
         </Button>
       ) : (
         <div onClick={handleShow} data-testid="editBtn">
-          {t('edit')}
+          {tCommon('edit')}
         </div>
       )}
 

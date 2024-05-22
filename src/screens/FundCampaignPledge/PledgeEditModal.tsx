@@ -16,6 +16,7 @@ interface InterfaceUpdatePledgeModal {
   startDate: Date;
   endDate: Date;
   t: (key: string) => string;
+  tCommon: (key: string) => string;
 }
 const PledgeEditModal: React.FC<InterfaceUpdatePledgeModal> = ({
   updatePledgeModalIsOpen,
@@ -26,6 +27,7 @@ const PledgeEditModal: React.FC<InterfaceUpdatePledgeModal> = ({
   startDate,
   endDate,
   t,
+  tCommon,
 }) => {
   return (
     <>
@@ -50,7 +52,7 @@ const PledgeEditModal: React.FC<InterfaceUpdatePledgeModal> = ({
             <Form.Group className="d-flex flex-column mx-auto  mb-3">
               <div className="mb-4">
                 <DatePicker
-                  label={t('startDate')}
+                  label={tCommon('startDate')}
                   value={dayjs(formState.pledgeStartDate)}
                   className="me-4 "
                   onChange={(date: Dayjs | null): void => {
@@ -71,7 +73,7 @@ const PledgeEditModal: React.FC<InterfaceUpdatePledgeModal> = ({
               </div>
               <div>
                 <DatePicker
-                  label={t('endDate')}
+                  label={tCommon('endDate')}
                   value={dayjs(endDate)}
                   onChange={(date: Dayjs | null): void => {
                     if (date) {

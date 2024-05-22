@@ -347,7 +347,7 @@ const Users = (): JSX.Element => {
       searchByName.length > 0 ? (
         <div className={styles.notFound}>
           <h4>
-            {t('noResultsFoundFor')} &quot;{searchByName}&quot;
+            {tCommon('noResultsFoundFor')} &quot;{searchByName}&quot;
           </h4>
         </div>
       ) : isLoading == false && data && displayedUsers.length === 0 ? (
@@ -376,7 +376,7 @@ const Users = (): JSX.Element => {
               data-testid="users-list"
               endMessage={
                 <div className={'w-100 text-center my-4'}>
-                  <h5 className="m-0 ">{t('endOfResults')}</h5>
+                  <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
                 </div>
               }
             >

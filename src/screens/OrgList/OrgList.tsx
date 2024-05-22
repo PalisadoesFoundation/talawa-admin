@@ -342,7 +342,7 @@ function orgList(): JSX.Element {
             type="name"
             id="searchOrgname"
             className="bg-white"
-            placeholder={t('searchByName')}
+            placeholder={tCommon('searchByName')}
             data-testid="searchByName"
             autoComplete="off"
             required
@@ -418,7 +418,7 @@ function orgList(): JSX.Element {
         /* istanbul ignore next */
         <div className={styles.notFound} data-testid="noResultFound">
           <h4 className="m-0">
-            {t('noResultsFoundFor')} &quot;{searchByName}&quot;
+            {tCommon('noResultsFoundFor')} &quot;{searchByName}&quot;
           </h4>
         </div>
       ) : (
@@ -453,7 +453,7 @@ function orgList(): JSX.Element {
             data-testid="organizations-list"
             endMessage={
               <div className={'w-100 text-center my-4'}>
-                <h5 className="m-0 ">{t('endOfResults')}</h5>
+                <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
               </div>
             }
           >

@@ -408,7 +408,7 @@ function EventListCardModals({
                 eventListCardProps.userRole === Role.USER
               }
             />
-            <p className={styles.preview}>{t('description')}</p>
+            <p className={styles.preview}>{tCommon('description')}</p>
             <Form.Control
               type="eventdescrip"
               id="eventdescrip"
@@ -432,7 +432,7 @@ function EventListCardModals({
                 eventListCardProps.userRole === Role.USER
               }
             />
-            <p className={styles.preview}>{t('location')}</p>
+            <p className={styles.preview}>{tCommon('location')}</p>
             <Form.Control
               type="text"
               id="eventLocation"
@@ -455,7 +455,7 @@ function EventListCardModals({
             <div className={styles.datediv}>
               <div>
                 <DatePicker
-                  label={t('startDate')}
+                  label={tCommon('startDate')}
                   className={styles.datebox}
                   value={dayjs(eventStartDate)}
                   onChange={(date: Dayjs | null): void => {
@@ -484,7 +484,7 @@ function EventListCardModals({
               </div>
               <div>
                 <DatePicker
-                  label={t('endDate')}
+                  label={tCommon('endDate')}
                   className={styles.datebox}
                   value={dayjs(eventEndDate)}
                   onChange={(date: Dayjs | null): void => {
