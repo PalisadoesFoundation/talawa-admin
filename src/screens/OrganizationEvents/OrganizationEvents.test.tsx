@@ -246,10 +246,7 @@ describe('Organisation Events Page', () => {
       screen.getByPlaceholderText(/Enter Description/i),
       formData.description,
     );
-    userEvent.type(
-      screen.getByPlaceholderText(/Enter Location/i),
-      formData.location,
-    );
+    userEvent.type(screen.getByPlaceholderText(/Location/i), formData.location);
 
     const endDatePicker = screen.getByLabelText('End Date');
     const startDatePicker = screen.getByLabelText('Start Date');
@@ -339,14 +336,8 @@ describe('Organisation Events Page', () => {
       screen.getByPlaceholderText(/Enter Description/i),
       formData.description,
     );
-    userEvent.type(
-      screen.getByPlaceholderText(/Enter Location/i),
-      formData.location,
-    );
-    userEvent.type(
-      screen.getByPlaceholderText(/Enter Location/i),
-      formData.location,
-    );
+    userEvent.type(screen.getByPlaceholderText(/Location/i), formData.location);
+    userEvent.type(screen.getByPlaceholderText(/Location/i), formData.location);
 
     const endDatePicker = screen.getByLabelText('End Date');
     const startDatePicker = screen.getByLabelText('Start Date');
@@ -425,10 +416,7 @@ describe('Organisation Events Page', () => {
       formData.description,
     );
 
-    userEvent.type(
-      screen.getByPlaceholderText(/Enter Location/i),
-      formData.location,
-    );
+    userEvent.type(screen.getByPlaceholderText(/Location/i), formData.location);
 
     const endDatePicker = screen.getByLabelText('End Date');
     const startDatePicker = screen.getByLabelText('Start Date');

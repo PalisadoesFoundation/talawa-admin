@@ -21,7 +21,6 @@ type Props = {
   loggedInUserId: string;
   resetAndRefetch: () => void;
 };
-
 const UsersTableItem = (props: Props): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'users' });
   const { t: tCommon } = useTranslation('common');
@@ -50,7 +49,6 @@ const UsersTableItem = (props: Props): JSX.Element => {
   const [removeUser] = useMutation(REMOVE_MEMBER_MUTATION);
   const [updateUserInOrgType] = useMutation(UPDATE_USER_ROLE_IN_ORG_MUTATION);
   const navigate = useNavigate();
-
   const confirmRemoveUser = async (): Promise<void> => {
     try {
       const { data } = await removeUser({
@@ -59,7 +57,6 @@ const UsersTableItem = (props: Props): JSX.Element => {
           orgid: removeUserProps.orgId,
         },
       });
-
       if (data) {
         toast.success('Removed User from Organization successfully');
         resetAndRefetch();
@@ -69,15 +66,12 @@ const UsersTableItem = (props: Props): JSX.Element => {
       errorHandler(t, error);
     }
   };
-
   /* istanbul ignore next */
   const changeRoleInOrg = async (
     e: React.ChangeEvent<HTMLSelectElement>,
   ): Promise<void> => {
     const { value } = e.target;
-
     const inputData = value.split('?');
-
     try {
       const { data } = await updateUserInOrgType({
         variables: {
@@ -95,10 +89,8 @@ const UsersTableItem = (props: Props): JSX.Element => {
       errorHandler(t, error);
     }
   };
-
   function goToOrg(_id: string): void {
     const url = '/orgdash/' + _id;
-
     // Dont change the below two lines
     window.location.replace(url);
     navigate(url);
@@ -128,7 +120,6 @@ const UsersTableItem = (props: Props): JSX.Element => {
       setOrgsBlockedBy(filteredOrgs);
     }
   };
-
   const handleSearchJoinedOrgs = (
     e: React.KeyboardEvent<HTMLInputElement>,
   ): void => {
@@ -137,7 +128,6 @@ const UsersTableItem = (props: Props): JSX.Element => {
       searchJoinedOrgs(value);
     }
   };
-
   const handleSearchByOrgsBlockedBy = (
     e: React.KeyboardEvent<HTMLInputElement>,
   ): void => {
@@ -146,21 +136,18 @@ const UsersTableItem = (props: Props): JSX.Element => {
       searchOrgsBlockedBy(value);
     }
   };
-
   const handleSearchButtonClickJoinedOrgs = (): void => {
     const inputValue =
       (document.getElementById('orgname-joined-orgs') as HTMLInputElement)
         ?.value || '';
     searchJoinedOrgs(inputValue);
   };
-
   const handleSearchButtonClickOrgsBlockedBy = (): void => {
     const inputValue =
       (document.getElementById('orgname-blocked-by') as HTMLInputElement)
         ?.value || '';
     searchOrgsBlockedBy(inputValue);
   };
-
   /* istanbul ignore next */
   function onHideRemoveUserModal(): void {
     setShowRemoveUserModal(false);
@@ -170,9 +157,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
       setShowBlockedOrganizations(true);
     }
   }
-
   const isSuperAdmin = user.appUserProfile.isSuperAdmin;
-
   return (
     <>
       {/* Table Item */}
@@ -634,5 +619,4 @@ const UsersTableItem = (props: Props): JSX.Element => {
     </>
   );
 };
-
 export default UsersTableItem;
