@@ -10,12 +10,13 @@ jest.mock('react-toastify', () => ({
 
 describe('Test if errorHandler is working properly', () => {
   const t: TFunction<'translation', string> = (key: string) => key;
+  const tErrors: TFunction<'errors', string> = (key: string) => key;
 
   it('should call toast.error with the correct message if error message is "Failed to fetch"', () => {
     const error = { message: 'Failed to fetch' };
     errorHandler(t, error);
 
-    expect(toast.error).toHaveBeenCalledWith(t('talawaApiUnavailable'));
+    expect(toast.error).toHaveBeenCalledWith(tErrors('talawaApiUnavailable'));
   });
 
   it('should call toast.error with the error message if it is not "Failed to fetch"', () => {

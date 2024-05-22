@@ -11,6 +11,7 @@ const PageNotFound = (): JSX.Element => {
     keyPrefix: 'pageNotFound',
   });
   const { t: tCommon } = useTranslation('common');
+  const { t: tErrors } = useTranslation('errors');
 
   document.title = t('title');
 
@@ -33,7 +34,7 @@ const PageNotFound = (): JSX.Element => {
         <h1 className={styles.head}>
           <span>{t('404')}</span>
         </h1>
-        <p>{t('notFoundMsg')}</p>
+        <p>{tErrors('notFoundMsg')}</p>
         {adminFor != undefined ? (
           <Link to="/orglist" className="btn btn-outline-success mt-3">
             <i className="fas fa-home"></i> {t('backToHome')}

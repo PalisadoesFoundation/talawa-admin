@@ -74,15 +74,15 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-const translations = JSON.parse(
-  JSON.stringify(
-    i18n.getDataByLanguage('en')?.translation.forgotPassword ?? {},
+const translations = {
+  ...JSON.parse(
+    JSON.stringify(
+      i18n.getDataByLanguage('en')?.translation.forgotPassword ?? {},
+    ),
   ),
-);
-
-const translationsError = JSON.parse(
-  JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {}),
-);
+  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
+  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
+};
 
 beforeEach(() => {
   setItem('IsLoggedIn', 'FALSE');
@@ -365,7 +365,7 @@ describe('Testing Forgot Password screen', () => {
     await wait();
 
     expect(
-      await screen.findByText(translationsError.talawaApiUnavailable),
+      await screen.findByText(translations.talawaApiUnavailable),
     ).toBeInTheDocument();
   });
 

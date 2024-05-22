@@ -13,7 +13,7 @@ import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import i18nForTest from 'utils/i18nForTest';
+import i18n from 'utils/i18nForTest';
 import { toast } from 'react-toastify';
 
 import { store } from 'state/store';
@@ -49,15 +49,15 @@ const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR_QUERY, true);
 const link3 = new StaticMockLink(MOCKS_ERROR_MUTATIONS, true);
 
-const translations = JSON.parse(
-  JSON.stringify(
-    i18nForTest.getDataByLanguage('en')?.translation.orgActionItemCategories,
+const translations = {
+  ...JSON.parse(
+    JSON.stringify(
+      i18n.getDataByLanguage('en')?.translation.orgActionItemCategories ?? {},
+    ),
   ),
-);
-
-const translationsCommon = JSON.parse(
-  JSON.stringify(i18nForTest.getDataByLanguage('en')?.common),
-);
+  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
+  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
+};
 
 describe('Testing Action Item Categories Component', () => {
   test('Component loads correctly', async () => {
@@ -66,7 +66,7 @@ describe('Testing Action Item Categories Component', () => {
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
           <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
+            <I18nextProvider i18n={i18n}>
               {<OrgActionItemCategories />}
             </I18nextProvider>
           </BrowserRouter>
@@ -77,7 +77,7 @@ describe('Testing Action Item Categories Component', () => {
     await wait();
 
     await waitFor(() => {
-      expect(getByText(translationsCommon.create)).toBeInTheDocument();
+      expect(getByText(translations.create)).toBeInTheDocument();
     });
   });
 
@@ -87,7 +87,7 @@ describe('Testing Action Item Categories Component', () => {
       <MockedProvider addTypename={false} link={link2}>
         <Provider store={store}>
           <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
+            <I18nextProvider i18n={i18n}>
               {<OrgActionItemCategories />}
             </I18nextProvider>
           </BrowserRouter>
@@ -98,7 +98,7 @@ describe('Testing Action Item Categories Component', () => {
     await wait();
 
     await waitFor(() => {
-      expect(queryByText(translationsCommon.create)).not.toBeInTheDocument();
+      expect(queryByText(translations.create)).not.toBeInTheDocument();
     });
   });
 
@@ -108,7 +108,7 @@ describe('Testing Action Item Categories Component', () => {
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
           <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
+            <I18nextProvider i18n={i18n}>
               {<OrgActionItemCategories />}
             </I18nextProvider>
           </BrowserRouter>
@@ -137,7 +137,7 @@ describe('Testing Action Item Categories Component', () => {
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
           <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
+            <I18nextProvider i18n={i18n}>
               {<OrgActionItemCategories />}
             </I18nextProvider>
           </BrowserRouter>
@@ -168,7 +168,7 @@ describe('Testing Action Item Categories Component', () => {
       <MockedProvider addTypename={false} link={link3}>
         <Provider store={store}>
           <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
+            <I18nextProvider i18n={i18n}>
               {<OrgActionItemCategories />}
             </I18nextProvider>
           </BrowserRouter>
@@ -199,7 +199,7 @@ describe('Testing Action Item Categories Component', () => {
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
           <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
+            <I18nextProvider i18n={i18n}>
               {<OrgActionItemCategories />}
             </I18nextProvider>
           </BrowserRouter>
@@ -236,7 +236,7 @@ describe('Testing Action Item Categories Component', () => {
       <MockedProvider addTypename={false} link={link3}>
         <Provider store={store}>
           <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
+            <I18nextProvider i18n={i18n}>
               {<OrgActionItemCategories />}
             </I18nextProvider>
           </BrowserRouter>
@@ -273,7 +273,7 @@ describe('Testing Action Item Categories Component', () => {
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
           <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
+            <I18nextProvider i18n={i18n}>
               {<OrgActionItemCategories />}
             </I18nextProvider>
           </BrowserRouter>
@@ -310,7 +310,7 @@ describe('Testing Action Item Categories Component', () => {
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
           <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
+            <I18nextProvider i18n={i18n}>
               {<OrgActionItemCategories />}
             </I18nextProvider>
           </BrowserRouter>
@@ -343,7 +343,7 @@ describe('Testing Action Item Categories Component', () => {
       <MockedProvider addTypename={false} link={link3}>
         <Provider store={store}>
           <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
+            <I18nextProvider i18n={i18n}>
               {<OrgActionItemCategories />}
             </I18nextProvider>
           </BrowserRouter>

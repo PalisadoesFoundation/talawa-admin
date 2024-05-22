@@ -38,6 +38,8 @@ import { Autocomplete, TextField } from '@mui/material';
 const loginPage = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
   const { t: tCommon } = useTranslation('common');
+  const { t: tErrors } = useTranslation('errors');
+
   const navigate = useNavigate();
 
   const { getItem, setItem } = useLocalStorage();
@@ -294,7 +296,7 @@ const loginPage = (): JSX.Element => {
           appUserProfile.isSuperAdmin || appUserProfile.adminFor.length !== 0;
 
         if (role === 'admin' && !isAdmin) {
-          toast.warn(t('notAuthorised'));
+          toast.warn(tErrors('notAuthorised'));
           return;
         }
         const loggedInUserId = user._id;
@@ -318,7 +320,7 @@ const loginPage = (): JSX.Element => {
 
         navigate(role === 'admin' ? '/orglist' : '/user/organizations');
       } else {
-        toast.warn(t('notFound'));
+        toast.warn(tErrors('notFound'));
       }
     } catch (error) {
       /* istanbul ignore next */

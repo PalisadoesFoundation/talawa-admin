@@ -24,6 +24,7 @@ const ForgotPassword = (): JSX.Element => {
     keyPrefix: 'forgotPassword',
   });
   const { t: tCommon } = useTranslation('common');
+  const { t: tErrors } = useTranslation('errors');
 
   document.title = t('title');
 
@@ -71,11 +72,11 @@ const ForgotPassword = (): JSX.Element => {
     } catch (error: unknown) {
       if (error instanceof Error) {
         if (error.message === 'User not found') {
-          toast.warn(t('emailNotRegistered'));
+          toast.warn(tErrors('emailNotRegistered'));
         } else if (error.message === 'Failed to fetch') {
-          toast.error(t('talawaApiUnavailable'));
+          toast.error(tErrors('talawaApiUnavailable'));
         } else {
-          toast.error(t('errorSendingMail'));
+          toast.error(tErrors('errorSendingMail'));
         }
       }
     }

@@ -16,7 +16,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import i18nForTest from '../../utils/i18nForTest';
+import i18n from '../../utils/i18nForTest';
 import FundCampaignPledge from './FundCampaignPledge';
 import {
   EMPTY_MOCKS,
@@ -55,12 +55,14 @@ const link3 = new StaticMockLink(MOCKS_CREATE_PLEDGE_ERROR);
 const link4 = new StaticMockLink(MOCKS_UPDATE_PLEDGE_ERROR);
 const link5 = new StaticMockLink(MOCKS_DELETE_PLEDGE_ERROR);
 const link6 = new StaticMockLink(EMPTY_MOCKS);
-const translations = JSON.parse(
-  JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.pledges),
-);
-const translationsCommon = JSON.parse(
-  JSON.stringify(i18nForTest.getDataByLanguage('en')?.common),
-);
+
+const translations = {
+  ...JSON.parse(
+    JSON.stringify(i18n.getDataByLanguage('en')?.translation.pledges ?? {}),
+  ),
+  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
+  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
+};
 
 describe('Testing Campaign Pledge Screen', () => {
   const formData = {
@@ -75,7 +77,7 @@ describe('Testing Campaign Pledge Screen', () => {
       <MockedProvider link={link1} addTypename={false}>
         <Provider store={store}>
           <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
+            <I18nextProvider i18n={i18n}>
               {<FundCampaignPledge />}
             </I18nextProvider>
           </BrowserRouter>
@@ -92,7 +94,7 @@ describe('Testing Campaign Pledge Screen', () => {
       <MockedProvider link={link2} addTypename={false}>
         <Provider store={store}>
           <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
+            <I18nextProvider i18n={i18n}>
               {<FundCampaignPledge />}
             </I18nextProvider>
           </BrowserRouter>
@@ -114,7 +116,7 @@ describe('Testing Campaign Pledge Screen', () => {
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <I18nextProvider i18n={i18nForTest}>
+              <I18nextProvider i18n={i18n}>
                 {<FundCampaignPledge />}
               </I18nextProvider>
             </LocalizationProvider>
@@ -143,7 +145,7 @@ describe('Testing Campaign Pledge Screen', () => {
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <I18nextProvider i18n={i18nForTest}>
+              <I18nextProvider i18n={i18n}>
                 {<FundCampaignPledge />}
               </I18nextProvider>
             </LocalizationProvider>
@@ -163,8 +165,8 @@ describe('Testing Campaign Pledge Screen', () => {
     });
     const currency = screen.getByTestId('currencySelect');
     fireEvent.change(currency, { target: { value: formData.pledgeCurrency } });
-    const startDate = screen.getByLabelText(translationsCommon.startDate);
-    const endDate = screen.getByLabelText(translationsCommon.endDate);
+    const startDate = screen.getByLabelText(translations.startDate);
+    const endDate = screen.getByLabelText(translations.endDate);
     fireEvent.change(startDate, {
       target: { value: formData.pledgeStartDate },
     });
@@ -186,7 +188,7 @@ describe('Testing Campaign Pledge Screen', () => {
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <I18nextProvider i18n={i18nForTest}>
+              <I18nextProvider i18n={i18n}>
                 {<FundCampaignPledge />}
               </I18nextProvider>
             </LocalizationProvider>
@@ -206,8 +208,8 @@ describe('Testing Campaign Pledge Screen', () => {
     });
     const currency = screen.getByTestId('currencySelect');
     fireEvent.change(currency, { target: { value: formData.pledgeCurrency } });
-    const startDate = screen.getByLabelText(translationsCommon.startDate);
-    const endDate = screen.getByLabelText(translationsCommon.endDate);
+    const startDate = screen.getByLabelText(translations.startDate);
+    const endDate = screen.getByLabelText(translations.endDate);
     fireEvent.change(startDate, {
       target: { value: formData.pledgeStartDate },
     });
@@ -228,7 +230,7 @@ describe('Testing Campaign Pledge Screen', () => {
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <I18nextProvider i18n={i18nForTest}>
+              <I18nextProvider i18n={i18n}>
                 {<FundCampaignPledge />}
               </I18nextProvider>
             </LocalizationProvider>
@@ -257,7 +259,7 @@ describe('Testing Campaign Pledge Screen', () => {
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <I18nextProvider i18n={i18nForTest}>
+              <I18nextProvider i18n={i18n}>
                 {<FundCampaignPledge />}
               </I18nextProvider>
             </LocalizationProvider>
@@ -277,8 +279,8 @@ describe('Testing Campaign Pledge Screen', () => {
     });
     const currency = screen.getByTestId('currencySelect');
     fireEvent.change(currency, { target: { value: 'INR' } });
-    const startDate = screen.getByLabelText(translationsCommon.startDate);
-    const endDate = screen.getByLabelText(translationsCommon.endDate);
+    const startDate = screen.getByLabelText(translations.startDate);
+    const endDate = screen.getByLabelText(translations.endDate);
     fireEvent.change(startDate, {
       target: { value: formData.pledgeStartDate },
     });
@@ -300,7 +302,7 @@ describe('Testing Campaign Pledge Screen', () => {
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <I18nextProvider i18n={i18nForTest}>
+              <I18nextProvider i18n={i18n}>
                 {<FundCampaignPledge />}
               </I18nextProvider>
             </LocalizationProvider>
@@ -320,8 +322,8 @@ describe('Testing Campaign Pledge Screen', () => {
     });
     const currency = screen.getByTestId('currencySelect');
     fireEvent.change(currency, { target: { value: 'INR' } });
-    const startDate = screen.getByLabelText(translationsCommon.startDate);
-    const endDate = screen.getByLabelText(translationsCommon.endDate);
+    const startDate = screen.getByLabelText(translations.startDate);
+    const endDate = screen.getByLabelText(translations.endDate);
     fireEvent.change(startDate, {
       target: { value: formData.pledgeStartDate },
     });
@@ -341,7 +343,7 @@ describe('Testing Campaign Pledge Screen', () => {
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <I18nextProvider i18n={i18nForTest}>
+              <I18nextProvider i18n={i18n}>
                 {<FundCampaignPledge />}
               </I18nextProvider>
             </LocalizationProvider>
@@ -370,7 +372,7 @@ describe('Testing Campaign Pledge Screen', () => {
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <I18nextProvider i18n={i18nForTest}>
+              <I18nextProvider i18n={i18n}>
                 {<FundCampaignPledge />}
               </I18nextProvider>
             </LocalizationProvider>
@@ -401,7 +403,7 @@ describe('Testing Campaign Pledge Screen', () => {
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <I18nextProvider i18n={i18nForTest}>
+              <I18nextProvider i18n={i18n}>
                 {<FundCampaignPledge />}
               </I18nextProvider>
             </LocalizationProvider>
@@ -430,7 +432,7 @@ describe('Testing Campaign Pledge Screen', () => {
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <I18nextProvider i18n={i18nForTest}>
+              <I18nextProvider i18n={i18n}>
                 {<FundCampaignPledge />}
               </I18nextProvider>
             </LocalizationProvider>

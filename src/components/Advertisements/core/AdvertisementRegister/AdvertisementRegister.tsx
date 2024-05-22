@@ -216,7 +216,7 @@ function advertisementRegister({
           data-testid="createAdvertisement"
         >
           <i className="fa fa-plus"></i>
-          {t('addNew')}
+          {t('createAdvertisement')}
         </Button>
       ) : (
         <div onClick={handleShow} data-testid="editBtn">
@@ -227,7 +227,7 @@ function advertisementRegister({
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton className={styles.editHeader}>
           {formStatus === 'register' ? (
-            <Modal.Title> {t('RClose')}</Modal.Title>
+            <Modal.Title> {t('addNew')}</Modal.Title>
           ) : (
             <Modal.Title>{t('editAdvertisement')}</Modal.Title>
           )}

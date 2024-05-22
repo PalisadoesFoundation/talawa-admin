@@ -12,7 +12,7 @@ import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import type { InterfaceEventListCardProps } from './EventListCard';
 import EventListCard from './EventListCard';
-import i18nForTest from 'utils/i18nForTest';
+import i18n from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -44,15 +44,15 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-const translations = JSON.parse(
-  JSON.stringify(
-    i18nForTest.getDataByLanguage('en')?.translation.eventListCard,
+const translations = {
+  ...JSON.parse(
+    JSON.stringify(
+      i18n.getDataByLanguage('en')?.translation.eventListCard ?? {},
+    ),
   ),
-);
-
-const translationsCommon = JSON.parse(
-  JSON.stringify(i18nForTest.getDataByLanguage('en')?.common),
-);
+  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
+  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
+};
 
 const renderEventListCard = (
   props: InterfaceEventListCardProps,
@@ -62,7 +62,7 @@ const renderEventListCard = (
       <MemoryRouter initialEntries={['/orgevents/orgId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <I18nextProvider i18n={i18nForTest}>
+            <I18nextProvider i18n={i18n}>
               <Routes>
                 <Route
                   path="/orgevents/:orgId"
@@ -136,7 +136,7 @@ describe('Testing Event List Card', () => {
   test('Should navigate to "/" if orgId is not defined', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
+        <I18nextProvider i18n={i18n}>
           <BrowserRouter>
             <EventListCard
               key="123"
@@ -350,12 +350,12 @@ describe('Testing Event List Card', () => {
     fireEvent.change(eventLocation, { target: { value: '' } });
     userEvent.type(eventLocation, updateData.location);
 
-    const startDatePicker = screen.getByLabelText(translationsCommon.startDate);
+    const startDatePicker = screen.getByLabelText(translations.startDate);
     fireEvent.change(startDatePicker, {
       target: { value: updateData.startDate },
     });
 
-    const endDatePicker = screen.getByLabelText(translationsCommon.endDate);
+    const endDatePicker = screen.getByLabelText(translations.endDate);
     fireEvent.change(endDatePicker, {
       target: { value: updateData.endDate },
     });
@@ -393,22 +393,22 @@ describe('Testing Event List Card', () => {
     fireEvent.change(eventLocation, { target: { value: '' } });
     userEvent.type(eventLocation, updateData.location);
 
-    const startDatePicker = screen.getByLabelText(translationsCommon.startDate);
+    const startDatePicker = screen.getByLabelText(translations.startDate);
     fireEvent.change(startDatePicker, {
       target: { value: updateData.startDate },
     });
 
-    const endDatePicker = screen.getByLabelText(translationsCommon.endDate);
+    const endDatePicker = screen.getByLabelText(translations.endDate);
     fireEvent.change(endDatePicker, {
       target: { value: updateData.endDate },
     });
 
-    const startTimePicker = screen.getByLabelText(translationsCommon.startTime);
+    const startTimePicker = screen.getByLabelText(translations.startTime);
     fireEvent.change(startTimePicker, {
       target: { value: updateData.startTime },
     });
 
-    const endTimePicker = screen.getByLabelText(translationsCommon.endTime);
+    const endTimePicker = screen.getByLabelText(translations.endTime);
     fireEvent.change(endTimePicker, {
       target: { value: updateData.endTime },
     });
@@ -446,12 +446,12 @@ describe('Testing Event List Card', () => {
     fireEvent.change(eventLocation, { target: { value: '' } });
     userEvent.type(eventLocation, updateData.location);
 
-    const startDatePicker = screen.getByLabelText(translationsCommon.startDate);
+    const startDatePicker = screen.getByLabelText(translations.startDate);
     fireEvent.change(startDatePicker, {
       target: { value: updateData.startDate },
     });
 
-    const endDatePicker = screen.getByLabelText(translationsCommon.endDate);
+    const endDatePicker = screen.getByLabelText(translations.endDate);
     fireEvent.change(endDatePicker, {
       target: { value: updateData.endDate },
     });
@@ -495,18 +495,16 @@ describe('Testing Event List Card', () => {
     userEvent.click(screen.getByTestId('eventUpdateOptionsModalCloseBtn'));
 
     await waitFor(() => {
-      expect(
-        screen.getByLabelText(translationsCommon.startDate),
-      ).toBeInTheDocument();
+      expect(screen.getByLabelText(translations.startDate)).toBeInTheDocument();
     });
 
     // change the event dates
-    let startDatePicker = screen.getByLabelText(translationsCommon.startDate);
+    let startDatePicker = screen.getByLabelText(translations.startDate);
     fireEvent.change(startDatePicker, {
       target: { value: updateData.startDate },
     });
 
-    let endDatePicker = screen.getByLabelText(translationsCommon.endDate);
+    let endDatePicker = screen.getByLabelText(translations.endDate);
     fireEvent.change(endDatePicker, {
       target: { value: updateData.endDate },
     });
@@ -527,18 +525,16 @@ describe('Testing Event List Card', () => {
     userEvent.click(screen.getByTestId('eventUpdateOptionsModalCloseBtn'));
 
     await waitFor(() => {
-      expect(
-        screen.getByLabelText(translationsCommon.startDate),
-      ).toBeInTheDocument();
+      expect(screen.getByLabelText(translations.startDate)).toBeInTheDocument();
     });
 
     // reset the event dates to their original values
-    startDatePicker = screen.getByLabelText(translationsCommon.startDate);
+    startDatePicker = screen.getByLabelText(translations.startDate);
     fireEvent.change(startDatePicker, {
       target: { value: '03/17/2022' },
     });
 
-    endDatePicker = screen.getByLabelText(translationsCommon.endDate);
+    endDatePicker = screen.getByLabelText(translations.endDate);
     fireEvent.change(endDatePicker, {
       target: { value: '03/17/2022' },
     });
@@ -720,18 +716,16 @@ describe('Testing Event List Card', () => {
     userEvent.click(screen.getByTestId('card'));
 
     await waitFor(() => {
-      expect(
-        screen.getByLabelText(translationsCommon.startDate),
-      ).toBeInTheDocument();
+      expect(screen.getByLabelText(translations.startDate)).toBeInTheDocument();
     });
 
     // change the event dates
-    const startDatePicker = screen.getByLabelText(translationsCommon.startDate);
+    const startDatePicker = screen.getByLabelText(translations.startDate);
     fireEvent.change(startDatePicker, {
       target: { value: updateData.startDate },
     });
 
-    const endDatePicker = screen.getByLabelText(translationsCommon.endDate);
+    const endDatePicker = screen.getByLabelText(translations.endDate);
     fireEvent.change(endDatePicker, {
       target: { value: updateData.endDate },
     });
@@ -889,7 +883,7 @@ describe('Testing Event List Card', () => {
         <MemoryRouter initialEntries={['/orgevents/orgId']}>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <I18nextProvider i18n={i18nForTest}>
+              <I18nextProvider i18n={i18n}>
                 <Routes>
                   <Route
                     path="/orgevents/:orgId"

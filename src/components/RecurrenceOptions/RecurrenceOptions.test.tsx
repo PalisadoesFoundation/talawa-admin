@@ -14,7 +14,7 @@ import { I18nextProvider } from 'react-i18next';
 
 import OrganizationEvents from '../../screens/OrganizationEvents/OrganizationEvents';
 import { store } from 'state/store';
-import i18nForTest from 'utils/i18nForTest';
+import i18n from 'utils/i18nForTest';
 import userEvent from '@testing-library/user-event';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
@@ -42,15 +42,15 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-const translations = JSON.parse(
-  JSON.stringify(
-    i18nForTest.getDataByLanguage('en')?.translation.organizationEvents,
+const translations = {
+  ...JSON.parse(
+    JSON.stringify(
+      i18n.getDataByLanguage('en')?.translation.organizationEvents ?? {},
+    ),
   ),
-);
-
-const translationsCommon = JSON.parse(
-  JSON.stringify(i18nForTest.getDataByLanguage('en')?.common),
-);
+  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
+  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
+};
 
 jest.mock('@mui/x-date-pickers/DateTimePicker', () => {
   return {
@@ -86,7 +86,7 @@ describe('Testing the creaction of recurring events through recurrence options',
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <ThemeProvider theme={theme}>
-                <I18nextProvider i18n={i18nForTest}>
+                <I18nextProvider i18n={i18n}>
                   <OrganizationEvents />
                 </I18nextProvider>
               </ThemeProvider>
@@ -124,7 +124,7 @@ describe('Testing the creaction of recurring events through recurrence options',
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <ThemeProvider theme={theme}>
-                <I18nextProvider i18n={i18nForTest}>
+                <I18nextProvider i18n={i18n}>
                   <OrganizationEvents />
                 </I18nextProvider>
               </ThemeProvider>
@@ -168,7 +168,7 @@ describe('Testing the creaction of recurring events through recurrence options',
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <ThemeProvider theme={theme}>
-                <I18nextProvider i18n={i18nForTest}>
+                <I18nextProvider i18n={i18n}>
                   <OrganizationEvents />
                 </I18nextProvider>
               </ThemeProvider>
@@ -228,7 +228,7 @@ describe('Testing the creaction of recurring events through recurrence options',
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <ThemeProvider theme={theme}>
-                <I18nextProvider i18n={i18nForTest}>
+                <I18nextProvider i18n={i18n}>
                   <OrganizationEvents />
                 </I18nextProvider>
               </ThemeProvider>
@@ -352,7 +352,7 @@ describe('Testing the creaction of recurring events through recurrence options',
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <ThemeProvider theme={theme}>
-                <I18nextProvider i18n={i18nForTest}>
+                <I18nextProvider i18n={i18n}>
                   <OrganizationEvents />
                 </I18nextProvider>
               </ThemeProvider>
@@ -400,13 +400,11 @@ describe('Testing the creaction of recurring events through recurrence options',
     userEvent.click(screen.getByTestId('alldayCheck'));
 
     await waitFor(() => {
-      expect(
-        screen.getByLabelText(translationsCommon.startTime),
-      ).toBeInTheDocument();
+      expect(screen.getByLabelText(translations.startTime)).toBeInTheDocument();
     });
 
-    const startTimePicker = screen.getByLabelText(translationsCommon.startTime);
-    const endTimePicker = screen.getByLabelText(translationsCommon.endTime);
+    const startTimePicker = screen.getByLabelText(translations.startTime);
+    const endTimePicker = screen.getByLabelText(translations.endTime);
 
     fireEvent.change(startTimePicker, {
       target: { value: formData.startTime },
@@ -472,7 +470,7 @@ describe('Testing the creaction of recurring events through recurrence options',
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <ThemeProvider theme={theme}>
-                <I18nextProvider i18n={i18nForTest}>
+                <I18nextProvider i18n={i18n}>
                   <OrganizationEvents />
                 </I18nextProvider>
               </ThemeProvider>
@@ -520,13 +518,11 @@ describe('Testing the creaction of recurring events through recurrence options',
     userEvent.click(screen.getByTestId('alldayCheck'));
 
     await waitFor(() => {
-      expect(
-        screen.getByLabelText(translationsCommon.startTime),
-      ).toBeInTheDocument();
+      expect(screen.getByLabelText(translations.startTime)).toBeInTheDocument();
     });
 
-    const startTimePicker = screen.getByLabelText(translationsCommon.startTime);
-    const endTimePicker = screen.getByLabelText(translationsCommon.endTime);
+    const startTimePicker = screen.getByLabelText(translations.startTime);
+    const endTimePicker = screen.getByLabelText(translations.endTime);
 
     fireEvent.change(startTimePicker, {
       target: { value: formData.startTime },
