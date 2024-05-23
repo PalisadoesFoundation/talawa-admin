@@ -11,7 +11,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Dropdown, Form } from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import AddMember from './AddMember';
 import styles from './OrganizationPeople.module.css';
@@ -19,20 +19,11 @@ import { DataGrid } from '@mui/x-data-grid';
 import type { GridColDef, GridCellParams } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
-import useLocalStorage from 'utils/useLocalstorage';
-import { useNavigate } from 'react-router-dom';
 
 function organizationPeople(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationPeople',
   });
-
-  const { getItem } = useLocalStorage();
-  const isSuperAdmin = getItem('SuperAdmin');
-
-  isSuperAdmin
-    ? (document.title = t('title_superadmin'))
-    : (document.title = t('title'));
 
   const navigate = useNavigate();
 
@@ -353,7 +344,11 @@ function organizationPeople(): JSX.Element {
             columns={columns}
             isRowSelectable={() => false}
             onRowClick={(row: any) => {
-              navigate(`/member/${currentUrl}`, { state: { id: row.id } });
+              try {
+                navigate(`/member/${currentUrl}`, { state: { id: row.id } });
+              } catch (error) {
+                toast.error('Navigation failed');
+              }
             }}
           />
         </div>

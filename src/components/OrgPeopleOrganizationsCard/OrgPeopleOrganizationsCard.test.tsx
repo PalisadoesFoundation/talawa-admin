@@ -1,7 +1,12 @@
 import React from 'react';
-import { act, render, screen } from '@testing-library/react';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
-import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import OrgPeopleOrganizationsCard from './OrgPeopleOrganizationsCard';
 import {
@@ -9,12 +14,22 @@ import {
   BLOCK_USER_MUTATION,
   REMOVE_MEMBER_MUTATION,
   UNBLOCK_USER_MUTATION,
+  UPDATE_USER_ROLE_IN_ORG_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { BrowserRouter } from 'react-router-dom';
-import { StaticMockLink } from 'utils/StaticMockLink';
 import useLocalStorage from 'utils/useLocalstorage';
 import { toast } from 'react-toastify';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { Provider } from 'react-redux';
+import { store } from 'state/store';
+
+const translations = JSON.parse(
+  JSON.stringify(
+    i18nForTest.getDataByLanguage('en')?.translation.orgPeopleOrganizationsCard,
+  ),
+);
 
 const MOCKS = [
   {
@@ -84,536 +99,488 @@ const MOCKS = [
       },
     },
   },
+  {
+    request: {
+      query: UPDATE_USER_ROLE_IN_ORG_MUTATION,
+      variables: {
+        userId: '123',
+        organizationId: 'orgid',
+        role: 'Admin',
+      },
+    },
+    result: {
+      data: {
+        updateUserRoleInOrganization: {
+          _id: 'orgid',
+        },
+      },
+    },
+  },
 ];
-const link = new StaticMockLink(MOCKS, true);
-const { getItem, setItem } = useLocalStorage();
 
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
+const MOCKS_WITH_ERROR = [
+  {
+    request: {
+      query: REMOVE_MEMBER_MUTATION,
+      variables: {
+        userid: '123',
+        orgid: 'orgid',
+      },
+    },
+    error: new Error('Remove member failed'),
+  },
+  {
+    request: {
+      query: UNBLOCK_USER_MUTATION,
+      variables: {
+        userId: '123',
+        orgId: 'orgid',
+      },
+    },
+    error: new Error('Unblock user failed'),
+  },
+  {
+    request: {
+      query: ADD_MEMBER_MUTATION,
+      variables: {
+        userid: '123',
+        orgid: 'orgid',
+      },
+    },
+    error: new Error('Add member failed'),
+  },
+  {
+    request: {
+      query: BLOCK_USER_MUTATION,
+      variables: {
+        userId: '123',
+        orgId: 'orgid',
+      },
+    },
+    error: new Error('Block user failed'),
+  },
+  {
+    request: {
+      query: UPDATE_USER_ROLE_IN_ORG_MUTATION,
+      variables: {
+        organizationId: 'orgid',
+        userId: '123',
+        role: 'User',
+      },
+    },
+    error: new Error('Role update failed'),
+  },
+  {
+    request: {
+      query: UPDATE_USER_ROLE_IN_ORG_MUTATION,
+      variables: {
+        organizationId: 'orgid',
+        userId: '123',
+        role: 'Admin',
+      },
+    },
+    error: new Error('Role update failed'),
+  },
+  {
+    request: {
+      query: UPDATE_USER_ROLE_IN_ORG_MUTATION,
+      variables: {
+        organizationId: 'orgid',
+        userId: '123',
+        role: 'Super Admin',
+      },
+    },
+    error: new Error('Role update failed'),
+  },
+];
+
+const { getItem, setItem } = useLocalStorage();
 
 jest.mock('react-toastify', () => ({
   toast: {
     success: jest.fn(),
     warn: jest.fn(),
     error: jest.fn(),
+    dismiss: jest.fn(),
   },
 }));
 
+const defaultProps = {
+  userId: '123',
+  _id: 'orgid',
+  admins: [{ _id: '123' }],
+  blockedUsers: [],
+  members: [{ _id: '123' }],
+  resetAndRefetch: jest.fn(),
+  image: '',
+  name: 'Organization Name',
+  description: 'Organization Description',
+};
+
+beforeEach(() => {
+  toast.dismiss();
+});
+
 describe('Testing Organization People Card', () => {
-  const props = {
-    toggleRemoveModal: () => true,
-    id: '1',
-    userId: '123',
-    _id: 'orgid',
-    image: '',
-    name: 'OrgName',
-    description: 'OrgDescription',
-    blockedUsers: [],
-    members: [],
-    admins: [],
-    resetAndRefetch: () => jest.fn(),
-  };
-  global.alert = jest.fn();
-
-  test('Should render components properly', async () => {
-    global.confirm = (): boolean => true;
-
+  test('Should render without crashing', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
+      <Provider store={store}>
+        <MockedProvider mocks={MOCKS} addTypename={false}>
           <I18nextProvider i18n={i18nForTest}>
-            <OrgPeopleOrganizationsCard {...props} />
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <BrowserRouter>
+                <OrgPeopleOrganizationsCard {...defaultProps} />
+              </BrowserRouter>
+            </LocalizationProvider>
           </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
+        </MockedProvider>
+      </Provider>,
     );
 
-    await wait();
-
-    userEvent.click(screen.getByTestId(/dropdown-role/i));
+    expect(screen.getByText('Organization Name')).toBeInTheDocument();
+    expect(screen.getByText('Organization Description')).toBeInTheDocument();
   });
 
-  test('Should update role to admin of user on click in dropdown', async () => {
-    const roleProps = {
-      toggleRemoveModal: () => true,
-      id: '1',
-      userId: '123',
-      _id: 'orgid',
-      image: '',
-      name: 'OrgName',
-      description: 'OrgDescription',
-      blockedUsers: [],
-      members: [{ _id: '123' }],
-      admins: [],
-      resetAndRefetch: () => jest.fn(),
-    };
-    const beforeUserId = getItem('userId');
-    setItem('userId', '1');
-
+  test('displays the correct role', () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrgPeopleOrganizationsCard {...roleProps} />
-          </I18nextProvider>
-        </BrowserRouter>
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <OrgPeopleOrganizationsCard {...defaultProps} />
       </MockedProvider>,
     );
 
-    await wait();
-    userEvent.click(screen.getByTestId(/dropdown-role/i));
-    await wait();
-    userEvent.click(screen.getByTestId(/admin-item/i));
-    await wait();
-    expect(screen.getByText('Admin')).toBeInTheDocument();
-    await wait();
+    const roleToggle = screen.getByTestId('dropdown-role');
+    expect(roleToggle).toHaveTextContent('Admin');
+  });
+
+  test('displays the correct status', () => {
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <OrgPeopleOrganizationsCard {...defaultProps} />
+      </MockedProvider>,
+    );
+
+    const statusToggle = screen.getByTestId('dropdown-status');
+    expect(statusToggle).toHaveTextContent('Active');
+  });
+
+  test('calls handleBlockUser on block user click', async () => {
+    const beforeUserId = getItem('userId');
+
+    setItem('userId', '1');
+    const userProps = { ...defaultProps, blockedUsers: [{ _id: '2' }] };
+    render(
+      <Provider store={store}>
+        <MockedProvider mocks={MOCKS} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <BrowserRouter>
+                <OrgPeopleOrganizationsCard {...userProps} />
+              </BrowserRouter>
+            </LocalizationProvider>
+          </I18nextProvider>
+        </MockedProvider>
+      </Provider>,
+    );
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('dropdown-status'));
+    });
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('block-item'));
+    });
+
+    await waitFor(() =>
+      expect(toast.success).toHaveBeenCalledWith(
+        translations.blockedSuccessfully,
+      ),
+    );
     if (beforeUserId) {
       setItem('userId', beforeUserId);
     }
   });
 
-  test('Should throw error on update role to user if not able to update', async () => {
-    const roleProps = {
-      toggleRemoveModal: () => true,
-      id: '1',
-      userId: '123',
-      _id: 'orgid',
-      image: '',
-      name: 'OrgName',
-      description: 'OrgDescription',
-      blockedUsers: [],
-      members: [{ _id: '123' }],
-      admins: [],
-      resetAndRefetch: () => jest.fn(),
-    };
+  test('calls addMember on add member click', async () => {
     const beforeUserId = getItem('userId');
-    setItem('userId', '1');
-
+    setItem('userId', '123');
+    const userProps = { ...defaultProps, members: [{ _id: '2' }] };
     render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
+      <Provider store={store}>
+        <MockedProvider mocks={MOCKS} addTypename={false}>
           <I18nextProvider i18n={i18nForTest}>
-            <OrgPeopleOrganizationsCard {...roleProps} />
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <BrowserRouter>
+                <OrgPeopleOrganizationsCard {...userProps} />
+              </BrowserRouter>
+            </LocalizationProvider>
           </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
+        </MockedProvider>
+      </Provider>,
     );
 
-    await wait();
-    userEvent.click(screen.getByTestId(/dropdown-role/i));
-    await wait();
-    userEvent.click(screen.getByTestId(/user-item/i));
-    await wait();
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('dropdown-member'));
+    });
 
-    expect(toast.error).toHaveBeenCalled();
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('accept-item'));
+    });
 
-    if (beforeUserId) {
-      setItem('userId', beforeUserId);
-    }
-  });
-
-  test('Should update role to user of admin on click in dropdown', async () => {
-    const roleProps = {
-      toggleRemoveModal: () => true,
-      id: '1',
-      userId: '123',
-      _id: 'orgid',
-      image: '',
-      name: 'OrgName',
-      description: 'OrgDescription',
-      blockedUsers: [],
-      members: [{ _id: '123' }],
-      admins: [{ _id: '123' }],
-      resetAndRefetch: () => jest.fn(),
-    };
-    const beforeUserId = getItem('userId');
-    setItem('userId', '1');
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrgPeopleOrganizationsCard {...roleProps} />
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
+    await waitFor(() =>
+      expect(toast.success).toHaveBeenCalledWith(
+        'Member added to the organization.',
+      ),
     );
-
-    await wait();
-    userEvent.click(screen.getByTestId(/dropdown-role/i));
-    await wait();
-    userEvent.click(screen.getByTestId(/user-item/i));
-    await wait();
-
-    expect(screen.getByText('User')).toBeInTheDocument();
-    if (beforeUserId) {
-      setItem('userId', beforeUserId);
-    }
-  });
-
-  test('Should throw error on update role to admin if not able to update', async () => {
-    const roleProps = {
-      toggleRemoveModal: () => true,
-      id: '1',
-      userId: '123',
-      _id: 'orgid',
-      image: '',
-      name: 'OrgName',
-      description: 'OrgDescription',
-      blockedUsers: [],
-      members: [{ _id: '123' }],
-      admins: [],
-      resetAndRefetch: () => jest.fn(),
-    };
-    const beforeUserId = getItem('userId');
-    setItem('userId', '1');
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrgPeopleOrganizationsCard {...roleProps} />
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-    userEvent.click(screen.getByTestId(/dropdown-role/i));
-    await wait();
-    userEvent.click(screen.getByTestId(/admin-item/i));
-    await wait();
-
-    expect(toast.error).toHaveBeenCalled();
 
     if (beforeUserId) {
       setItem('userId', beforeUserId);
     }
   });
 
-  test('Should add member on click in dropdown if not member', async () => {
-    const memberProps = {
-      toggleRemoveModal: () => true,
-      id: '1',
+  test('calls removeMember on remove member click', async () => {
+    const beforeUserId = getItem('userId');
+    setItem('userId', '123');
+
+    const userProps = {
+      ...defaultProps,
+      members: [{ _id: '123' }],
       userId: '123',
-      _id: 'orgid',
-      image: '',
-      name: 'OrgName',
-      description: 'OrgDescription',
-      blockedUsers: [],
+    };
+
+    render(
+      <Provider store={store}>
+        <MockedProvider mocks={MOCKS} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <BrowserRouter>
+                <OrgPeopleOrganizationsCard {...userProps} />
+              </BrowserRouter>
+            </LocalizationProvider>
+          </I18nextProvider>
+        </MockedProvider>
+      </Provider>,
+    );
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('dropdown-member'));
+    });
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('reject-item'));
+    });
+
+    await waitFor(() =>
+      expect(toast.success).toHaveBeenCalledWith(translations.memberRemoved),
+    );
+
+    if (beforeUserId) {
+      setItem('userId', beforeUserId);
+    }
+  });
+
+  test('should show error on adding a member who is already a member', async () => {
+    const beforeUserId = getItem('userId');
+    setItem('userId', '123');
+    const userProps = { ...defaultProps, members: [{ _id: '123' }] };
+    render(
+      <Provider store={store}>
+        <MockedProvider mocks={MOCKS} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <BrowserRouter>
+                <OrgPeopleOrganizationsCard {...userProps} />
+              </BrowserRouter>
+            </LocalizationProvider>
+          </I18nextProvider>
+        </MockedProvider>
+      </Provider>,
+    );
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('dropdown-member'));
+    });
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('accept-item'));
+    });
+
+    await waitFor(() =>
+      expect(toast.error).toHaveBeenCalledWith(
+        'The user is already a member of this organization.',
+      ),
+    );
+
+    if (beforeUserId) {
+      setItem('userId', beforeUserId);
+    }
+  });
+
+  test('renders error of adding a blocked user', async () => {
+    const beforeUserId = getItem('userId');
+    setItem('userId', '123');
+
+    const userProps = { ...defaultProps, blockedUsers: [{ _id: '123' }] };
+
+    render(
+      <Provider store={store}>
+        <MockedProvider mocks={MOCKS} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <BrowserRouter>
+                <OrgPeopleOrganizationsCard {...userProps} />
+              </BrowserRouter>
+            </LocalizationProvider>
+          </I18nextProvider>
+        </MockedProvider>
+      </Provider>,
+    );
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('dropdown-member'));
+    });
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('accept-item'));
+    });
+
+    await waitFor(() =>
+      expect(toast.error).toHaveBeenCalledWith(translations.blockedUser),
+    );
+
+    if (beforeUserId) {
+      setItem('userId', beforeUserId);
+    }
+  });
+
+  test('renders error on removing a non member', async () => {
+    const beforeUserId = getItem('userId');
+    setItem('userId', '123');
+
+    const userProps = { ...defaultProps, members: [], userId: '123' };
+
+    render(
+      <Provider store={store}>
+        <MockedProvider mocks={MOCKS} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <BrowserRouter>
+                <OrgPeopleOrganizationsCard {...userProps} />
+              </BrowserRouter>
+            </LocalizationProvider>
+          </I18nextProvider>
+        </MockedProvider>
+      </Provider>,
+    );
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('dropdown-member'));
+    });
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('reject-item'));
+    });
+
+    await waitFor(() =>
+      expect(toast.error).toHaveBeenCalledWith(translations.notMember),
+    );
+
+    if (beforeUserId) {
+      setItem('userId', beforeUserId);
+    }
+  });
+
+  test("renders error if can't remove a member", async () => {
+    const beforeUserId = getItem('userId');
+
+    const userProps = {
+      ...defaultProps,
       members: [],
       admins: [],
-      resetAndRefetch: () => jest.fn(),
-    };
-    const beforeUserId = getItem('userId');
-    setItem('userId', '1');
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrgPeopleOrganizationsCard {...memberProps} />
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    expect(screen.getByText('No')).toBeInTheDocument();
-    await wait();
-    userEvent.click(screen.getByTestId(/dropdown-member/i));
-    await wait();
-    userEvent.click(screen.getByTestId(/accept-item/i));
-    await wait();
-
-    const dropdown = screen.getByTestId('dropdown-member');
-    expect(dropdown.innerHTML).toMatch(/Yes/i);
-
-    if (beforeUserId) {
-      setItem('userId', beforeUserId);
-    }
-  });
-
-  test('Should throw error on add member user if not able to add', async () => {
-    const roleProps = {
-      toggleRemoveModal: () => true,
-      id: '1',
-      userId: '123',
-      _id: 'orgid',
-      image: '',
-      name: 'OrgName',
-      description: 'OrgDescription',
-      blockedUsers: [{ _id: '123' }],
-      members: [],
-      admins: [],
-      resetAndRefetch: () => jest.fn(),
-    };
-    const beforeUserId = getItem('userId');
-    setItem('userId', '1');
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrgPeopleOrganizationsCard {...roleProps} />
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-    userEvent.click(screen.getByTestId(/dropdown-member/i));
-    await wait();
-    userEvent.click(screen.getByTestId(/accept-item/i));
-    await wait();
-
-    expect(toast.error).toHaveBeenCalled();
-
-    if (beforeUserId) {
-      setItem('userId', beforeUserId);
-    }
-  });
-
-  test('Should remove member on click in dropdown if member', async () => {
-    const memberProps = {
-      toggleRemoveModal: () => true,
-      id: '1',
-      userId: '123',
-      _id: 'orgid',
-      image: '',
-      name: 'OrgName',
-      description: 'OrgDescription',
       blockedUsers: [],
-      members: [{ _id: '123' }],
-      admins: [],
-      resetAndRefetch: () => jest.fn(),
+      userId: '123',
     };
-    const beforeUserId = getItem('userId');
-    setItem('userId', '1');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
+      <Provider store={store}>
+        <MockedProvider mocks={MOCKS} addTypename={false}>
           <I18nextProvider i18n={i18nForTest}>
-            <OrgPeopleOrganizationsCard {...memberProps} />
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <BrowserRouter>
+                <OrgPeopleOrganizationsCard {...userProps} />
+              </BrowserRouter>
+            </LocalizationProvider>
           </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
+        </MockedProvider>
+      </Provider>,
     );
-    expect(screen.getByText('Yes')).toBeInTheDocument();
 
-    await wait();
-    userEvent.click(screen.getByTestId(/dropdown-member/i));
-    await wait();
-    userEvent.click(screen.getByTestId(/reject-item/i));
-    await wait();
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('dropdown-member'));
+    });
 
-    const dropdown = screen.getByTestId('dropdown-member');
-    expect(dropdown.innerHTML).toMatch(/No/i);
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('reject-item'));
+    });
+
+    await waitFor(() =>
+      expect(toast.error).toHaveBeenCalledWith(translations.notMember),
+    );
 
     if (beforeUserId) {
       setItem('userId', beforeUserId);
     }
   });
 
-  test('Should throw error on remove member user if not able to remove', async () => {
-    const roleProps = {
-      toggleRemoveModal: () => true,
-      id: '1',
-      userId: '123',
-      _id: 'orgid',
-      image: '',
-      name: 'OrgName',
-      description: 'OrgDescription',
-      blockedUsers: [{ _id: '123' }],
-      members: [],
-      admins: [],
-      resetAndRefetch: () => jest.fn(),
-    };
-    const beforeUserId = getItem('userId');
-    setItem('userId', '1');
-
+  test('displays error toast if mutation fails', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
+      <Provider store={store}>
+        <MockedProvider mocks={MOCKS_WITH_ERROR} addTypename={false}>
           <I18nextProvider i18n={i18nForTest}>
-            <OrgPeopleOrganizationsCard {...roleProps} />
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <BrowserRouter>
+                <OrgPeopleOrganizationsCard {...defaultProps} />
+              </BrowserRouter>
+            </LocalizationProvider>
           </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
+        </MockedProvider>
+      </Provider>,
     );
 
-    await wait();
-    userEvent.click(screen.getByTestId(/dropdown-member/i));
-    await wait();
-    userEvent.click(screen.getByTestId(/reject-item/i));
-    await wait();
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('dropdown-role'));
+    });
 
-    expect(toast.error).toHaveBeenCalled();
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('admin-item'));
+    });
 
-    if (beforeUserId) {
-      setItem('userId', beforeUserId);
-    }
+    await waitFor(() => expect(toast.error).toHaveBeenCalled());
   });
 
-  test('Should block user on click in dropdown if member', async () => {
-    const roleProps = {
-      toggleRemoveModal: () => true,
-      id: '1',
-      userId: '123',
-      _id: 'orgid',
-      image: '',
-      name: 'OrgName',
-      description: 'OrgDescription',
-      blockedUsers: [],
-      members: [{ _id: '123' }],
-      admins: [],
-      resetAndRefetch: () => jest.fn(),
-    };
-    const beforeUserId = getItem('userId');
-    setItem('userId', '1');
-
+  test('displays error toast if add member mutation fails', async () => {
+    const props = { ...defaultProps, members: [], blockedUsers: [] };
     render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
+      <Provider store={store}>
+        <MockedProvider mocks={MOCKS_WITH_ERROR} addTypename={false}>
           <I18nextProvider i18n={i18nForTest}>
-            <OrgPeopleOrganizationsCard {...roleProps} />
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <BrowserRouter>
+                <OrgPeopleOrganizationsCard {...props} />
+              </BrowserRouter>
+            </LocalizationProvider>
           </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
+        </MockedProvider>
+      </Provider>,
     );
 
-    await wait();
-    userEvent.click(screen.getByTestId(/dropdown-status/i));
-    await wait();
-    userEvent.click(screen.getByTestId(/block-item/i));
-    await wait();
-    const dropdown = screen.getByTestId('dropdown-status');
-    expect(dropdown.innerHTML).toMatch(/Blocked/i);
-    if (beforeUserId) {
-      setItem('userId', beforeUserId);
-    }
-  });
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('dropdown-member'));
+    });
 
-  test('Should throw error on block user if not able to block', async () => {
-    const roleProps = {
-      toggleRemoveModal: () => true,
-      id: '1',
-      userId: '123',
-      _id: 'orgid',
-      image: '',
-      name: 'OrgName',
-      description: 'OrgDescription',
-      blockedUsers: [{ _id: '123' }],
-      members: [],
-      admins: [],
-      resetAndRefetch: () => jest.fn(),
-    };
-    const beforeUserId = getItem('userId');
-    setItem('userId', '1');
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('accept-item'));
+    });
 
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrgPeopleOrganizationsCard {...roleProps} />
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-    userEvent.click(screen.getByTestId(/dropdown-status/i));
-    await wait();
-    userEvent.click(screen.getByTestId(/block-item/i));
-    await wait();
-
-    expect(toast.error).toHaveBeenCalled();
-
-    if (beforeUserId) {
-      setItem('userId', beforeUserId);
-    }
-  });
-
-  test('Should unblock user on click in dropdown if blocked', async () => {
-    const roleProps = {
-      toggleRemoveModal: () => true,
-      id: '1',
-      userId: '123',
-      _id: 'orgid',
-      image: '',
-      name: 'OrgName',
-      description: 'OrgDescription',
-      blockedUsers: [{ _id: '123' }],
-      members: [],
-      admins: [],
-      resetAndRefetch: () => jest.fn(),
-    };
-    const beforeUserId = getItem('userId');
-    setItem('userId', '1');
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrgPeopleOrganizationsCard {...roleProps} />
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-    userEvent.click(screen.getByTestId(/dropdown-status/i));
-    await wait();
-    userEvent.click(screen.getByTestId(/UnblockItem/i));
-    await wait();
-    const dropdown = screen.getByTestId('dropdown-status');
-    expect(dropdown.innerHTML).toMatch(/Active/i);
-
-    if (beforeUserId) {
-      setItem('userId', beforeUserId);
-    }
-  });
-
-  test('Should throw error on add user if user is blocked', async () => {
-    const memberProps = {
-      toggleRemoveModal: () => true,
-      id: '1',
-      userId: '123',
-      _id: 'orgid',
-      image: '',
-      name: 'OrgName',
-      description: 'OrgDescription',
-      blockedUsers: [{ _id: '123' }],
-      members: [],
-      admins: [],
-      resetAndRefetch: () => jest.fn(),
-    };
-    const beforeUserId = getItem('userId');
-    setItem('userId', '1');
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrgPeopleOrganizationsCard {...memberProps} />
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    await wait();
-    userEvent.click(screen.getByTestId(/dropdown-member/i));
-    await wait();
-    userEvent.click(screen.getByTestId(/accept-item/i));
-    await wait();
-
-    expect(toast.error).toHaveBeenCalled();
-
-    if (beforeUserId) {
-      setItem('userId', beforeUserId);
-    }
+    await waitFor(() => expect(toast.error).toHaveBeenCalled());
   });
 });

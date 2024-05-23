@@ -9,12 +9,12 @@
 
 .orgCreationBtn {
   width: 100%;
-  border: None;
+  border: none;
 }
 
 .enableEverythingBtn {
   width: 100%;
-  border: None;
+  border: none;
 }
 
 .pluginStoreBtn {
@@ -57,8 +57,11 @@
 .orText {
   display: block;
   position: absolute;
-  top: calc(-0.7rem + 0.5rem);
-  left: calc(50% - 2.6rem);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* top: calc(-0.7rem + 0.5rem); */
+  /* left: calc(50% - 2.6rem); */
   margin: 0 auto;
   padding: 0.5rem 2rem;
   z-index: 100;

@@ -207,6 +207,7 @@ const MOCKS2 = [
     },
   },
 ];
+
 const MOCKS3 = [
   {
     request: {
@@ -314,6 +315,8 @@ jest.mock('@mui/x-date-pickers/DateTimePicker', () => {
 
 jest.mock('react-toastify');
 
+jest.mock('../../utils/errorHandler.tsx'); // Mock the errorHandler function
+
 describe('OrgMemberDetail', () => {
   global.alert = jest.fn();
 
@@ -365,6 +368,8 @@ describe('OrgMemberDetail', () => {
     expect(getLangName('en')).toBe('English');
     // If the language code is not provided
     expect(getLangName('')).toBe('Unavailable');
+    // Test for non-existent language code
+    expect(getLangName('xx')).toBe('Unavailable');
   });
 
   test('should render props and text elements test for the page component', async () => {
@@ -377,6 +382,156 @@ describe('OrgMemberDetail', () => {
       lastName: 'Goyal',
       email: 'ansh@gmail.com',
       image: new File(['hello'], 'hello.png', { type: 'image/png' }),
+      address: 'abc',
+      countryCode: 'IN',
+      state: 'abc',
+      city: 'abc',
+      phoneNumber: '1234567890',
+      birthDate: '03/28/2022',
+    };
+    render(
+      <MockedProvider addTypename={false} link={link2}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgMemberDetail {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
+    await wait();
+    expect(screen.getAllByText(/Email/i)).toBeTruthy();
+    expect(screen.getByText('User')).toBeInTheDocument();
+    const birthDateDatePicker = screen.getByTestId('birthDate');
+    fireEvent.change(birthDateDatePicker, {
+      target: { value: formData.birthDate },
+    });
+
+    userEvent.type(
+      screen.getByPlaceholderText(/First Name/i),
+      formData.firstName,
+    );
+    userEvent.type(
+      screen.getByPlaceholderText(/Last Name/i),
+      formData.lastName,
+    );
+    userEvent.type(screen.getByPlaceholderText(/Address/i), formData.address);
+    userEvent.type(
+      screen.getByPlaceholderText(/Country Code/i),
+      formData.countryCode,
+    );
+    userEvent.type(screen.getByPlaceholderText(/State/i), formData.state);
+    userEvent.type(screen.getByPlaceholderText(/City/i), formData.city);
+    userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
+    userEvent.type(screen.getByPlaceholderText(/Phone/i), formData.phoneNumber);
+    userEvent.click(screen.getByPlaceholderText(/pluginCreationAllowed/i));
+    userEvent.selectOptions(screen.getByTestId('applangcode'), 'Français');
+    userEvent.upload(screen.getByLabelText(/Display Image:/i), formData.image);
+    await wait();
+
+    userEvent.click(screen.getByText(/Save Changes/i));
+
+    expect(screen.getByPlaceholderText(/First Name/i)).toHaveValue(
+      formData.firstName,
+    );
+    expect(screen.getByPlaceholderText(/Last Name/i)).toHaveValue(
+      formData.lastName,
+    );
+    expect(birthDateDatePicker).toHaveValue(formData.birthDate);
+    expect(screen.getByPlaceholderText(/Email/i)).toHaveValue(formData.email);
+    expect(screen.getByPlaceholderText(/First Name/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/Last Name/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/Email/i)).toBeInTheDocument();
+    expect(screen.getByText(/Display Image/i)).toBeInTheDocument();
+  });
+
+  test('should render props and text elements test for the page component', async () => {
+    const props = {
+      id: '1',
+    };
+
+    const formData = {
+      firstName: 'Ansh',
+      lastName: 'Goyal',
+      email: 'ansh@gmail.com',
+      image: new File(['hello'], 'hello.png', { type: 'image/png' }),
+      address: 'abc',
+      countryCode: 'IN',
+      state: 'abc',
+      city: 'abc',
+      phoneNumber: '1234567890',
+      birthDate: '',
+    };
+    render(
+      <MockedProvider addTypename={false} link={link2}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgMemberDetail {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
+    await wait();
+    expect(screen.getAllByText(/Email/i)).toBeTruthy();
+    expect(screen.getByText('User')).toBeInTheDocument();
+    const birthDateDatePicker = screen.getByTestId('birthDate');
+    fireEvent.change(birthDateDatePicker, {
+      target: { value: formData.birthDate },
+    });
+
+    userEvent.type(
+      screen.getByPlaceholderText(/First Name/i),
+      formData.firstName,
+    );
+    userEvent.type(
+      screen.getByPlaceholderText(/Last Name/i),
+      formData.lastName,
+    );
+    userEvent.type(screen.getByPlaceholderText(/Address/i), formData.address);
+    userEvent.type(
+      screen.getByPlaceholderText(/Country Code/i),
+      formData.countryCode,
+    );
+    userEvent.type(screen.getByPlaceholderText(/State/i), formData.state);
+    userEvent.type(screen.getByPlaceholderText(/City/i), formData.city);
+    userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
+    userEvent.type(screen.getByPlaceholderText(/Phone/i), formData.phoneNumber);
+    userEvent.click(screen.getByPlaceholderText(/pluginCreationAllowed/i));
+    userEvent.selectOptions(screen.getByTestId('applangcode'), 'Français');
+    userEvent.upload(screen.getByLabelText(/Display Image:/i), formData.image);
+    await wait();
+
+    userEvent.click(screen.getByText(/Save Changes/i));
+
+    expect(screen.getByPlaceholderText(/First Name/i)).toHaveValue(
+      formData.firstName,
+    );
+    expect(screen.getByPlaceholderText(/Last Name/i)).toHaveValue(
+      formData.lastName,
+    );
+    expect(birthDateDatePicker).toHaveValue(formData.birthDate);
+    expect(screen.getByPlaceholderText(/Email/i)).toHaveValue(formData.email);
+    expect(screen.getByPlaceholderText(/First Name/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/Last Name/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/Email/i)).toBeInTheDocument();
+    expect(screen.getByText(/Display Image/i)).toBeInTheDocument();
+  });
+
+  test('should render props and text elements test for the page component', async () => {
+    const props = {
+      id: '1',
+    };
+
+    const formData = {
+      firstName: 'Ansh',
+      lastName: 'Goyal',
+      email: 'ansh@gmail.com',
+      image: '',
       address: 'abc',
       countryCode: 'IN',
       state: 'abc',
@@ -513,7 +668,7 @@ describe('OrgMemberDetail', () => {
     expect(screen.getByText('Super Admin')).toBeInTheDocument();
   });
 
-  test('Should display dicebear image if image is null', async () => {
+  test('Should display avatar image if image is null', async () => {
     const props = {
       id: 'rishav-jha-mech',
       from: 'orglist',
@@ -532,11 +687,11 @@ describe('OrgMemberDetail', () => {
     );
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
 
-    const dicebearUrl = `mocked-data-uri`;
+    const avatarUrl = `mocked-data-uri`;
 
     const userImage = await screen.findByTestId('userImageAbsent');
     expect(userImage).toBeInTheDocument();
-    expect(userImage.getAttribute('src')).toBe(dicebearUrl);
+    expect(userImage.getAttribute('src')).toBe(avatarUrl);
   });
 
   test('Should display image if image is present', async () => {

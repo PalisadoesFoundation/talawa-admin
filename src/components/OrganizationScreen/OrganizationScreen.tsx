@@ -19,6 +19,20 @@ const OrganizationScreen = (): JSX.Element => {
   const { getItem } = useLocalStorage();
   const isSuperAdmin = getItem('SuperAdmin');
 
+  const [title, setTitle] = useState('');
+
+  useEffect(() => {
+    if (location.pathname.split('/')[1] === 'orgpeople') {
+      if (isSuperAdmin) {
+        setTitle(t('title_superadmin'));
+      } else {
+        setTitle(t('title'));
+      }
+    } else {
+      setTitle(t('title'));
+    }
+  }, [location, isSuperAdmin]);
+
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
   const { orgId } = useParams();
 
@@ -93,15 +107,7 @@ const OrganizationScreen = (): JSX.Element => {
       >
         <div className="d-flex justify-content-between align-items-center">
           <div style={{ flex: 1 }}>
-            {location.pathname.split('/')[1] == 'orgpeople' ? (
-              isSuperAdmin ? (
-                <h1>{t('title_superadmin')}</h1>
-              ) : (
-                <h1>{t('title')}</h1>
-              )
-            ) : (
-              <h1>{t('title')}</h1>
-            )}
+            <h1 data-testid="title">{title}</h1>
           </div>
           <ProfileDropdown />
         </div>

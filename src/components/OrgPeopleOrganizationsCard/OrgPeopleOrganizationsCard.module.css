@@ -29,7 +29,7 @@
 }
 
 .orgCard .innerContainer .orgImgContainer {
-  width: 120;
+  width: 120px;
   height: 120px;
   background-color: var(--bs-gray-200);
 }

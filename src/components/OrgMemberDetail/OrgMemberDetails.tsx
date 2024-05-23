@@ -53,7 +53,7 @@ const OrgMemberDetail: React.FC<OrgMemberDetailProps> = ({
     appLanguageCode: '',
     image: '',
     gender: '',
-    birthDate: '2024-03-14',
+    birthDate: '',
     grade: '',
     empStatus: '',
     maritalStatus: '',
@@ -64,7 +64,6 @@ const OrgMemberDetail: React.FC<OrgMemberDetailProps> = ({
     country: '',
     pluginCreationAllowed: false,
   });
-
   const handleDateChange = (date: Dayjs | null): void => {
     if (date) {
       setFormState((prevState) => ({
@@ -88,7 +87,7 @@ const OrgMemberDetail: React.FC<OrgMemberDetailProps> = ({
         email: userData?.user?.email,
         appLanguageCode: userData?.appUserProfile?.appLanguageCode,
         gender: userData?.user?.gender,
-        birthDate: userData?.user?.birthDate || '2020-03-14',
+        birthDate: userData?.user?.birthDate,
         grade: userData?.user?.educationGrade,
         empStatus: userData?.user?.employmentStatus,
         maritalStatus: userData?.user?.maritalStatus,

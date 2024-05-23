@@ -509,6 +509,13 @@ jest.mock('react-router-dom', () => ({
 // FOR THE FIRST TEST WHICH CAME OUT OF NOWHERE
 console.error = jest.fn();
 
+jest.mock('react-toastify', () => ({
+  toast: {
+    success: jest.fn(),
+    error: jest.fn(),
+  },
+}));
+
 describe('Organization People Page', () => {
   const searchData = {
     fullNameMember: 'Aditya Memberguy',

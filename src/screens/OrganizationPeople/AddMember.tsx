@@ -26,7 +26,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
-import useLocalStorage from 'utils/useLocalstorage';
+import { getItem } from 'utils/useLocalstorage';
 import type {
   InterfaceQueryOrganizationsListObject,
   InterfaceQueryUserListItem,
@@ -58,13 +58,13 @@ function AddMember(): JSX.Element {
     keyPrefix: 'addMember',
   });
 
-  const { getItem } = useLocalStorage();
-  const isSuperAdmin = getItem('SuperAdmin');
+  const isSuperAdmin = getItem('SuperAdmin', '');
 
-  isSuperAdmin
-    ? (document.title = translateOrgPeople('title_superadmin'))
-    : (document.title = translateOrgPeople('title'));
-
+  const updateDocumentTitle = () => {
+    const titleKey = isSuperAdmin ? 'title_superadmin' : 'title';
+    document.title = translateOrgPeople(titleKey);
+  };
+  updateDocumentTitle();
   const [addUserModalisOpen, setAddUserModalIsOpen] = useState(false);
 
   function openAddUserModal(): void {

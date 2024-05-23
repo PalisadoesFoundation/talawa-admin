@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import OrgPeopleOrganizationsCard from 'components/OrgPeopleOrganizationsCard/OrgPeopleOrganizationsCard';
-import { InterfaceMemberOrganization } from 'utils/interfaces';
-import { InterfaceOrgPeopleOrganizationsCard } from 'utils/interfaces';
+import type {
+  InterfaceMemberOrganization,
+  InterfaceOrgPeopleOrganizationsCard,
+  InterfaceOrgConnectionInfoType,
+  InterfaceOrgConnectionType,
+  InterfaceUserType,
+} from 'utils/interfaces';
 import { useQuery } from '@apollo/client';
 import { useParams } from 'react-router-dom';
 import {
   ORGANIZATION_CONNECTION_LIST,
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
-import type {
-  InterfaceOrgConnectionInfoType,
-  InterfaceOrgConnectionType,
-  InterfaceUserType,
-} from 'utils/interfaces';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from './MemberOrganization.module.css';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -27,10 +27,7 @@ const MemberOrganization: React.FC<InterfaceMemberOrganization> = (props) => {
 
   const perPageResult = 8;
   const [isLoading, setIsLoading] = useState(true);
-  const [sortingState, setSortingState] = useState({
-    option: '',
-    selectedOption: t('sort'),
-  });
+
   const [hasMore, sethasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState('');
@@ -72,8 +69,7 @@ const MemberOrganization: React.FC<InterfaceMemberOrganization> = (props) => {
       first: perPageResult,
       skip: 0,
       filter: searchByName,
-      orderBy:
-        sortingState.option === 'Latest' ? 'createdAt_DESC' : 'createdAt_ASC',
+      orderBy: 'createdAt_ASC',
     },
     notifyOnNetworkStatusChange: true,
   });
@@ -232,7 +228,11 @@ const MemberOrganization: React.FC<InterfaceMemberOrganization> = (props) => {
                         blockedUsers: item.blockedUsers,
                       };
                     return (
-                      <div key={item._id} className={styles.itemCard}>
+                      <div
+                        key={item._id}
+                        className={styles.itemCard}
+                        data-testid="OrgPeopleOrganizationsCardContainer"
+                      >
                         <OrgPeopleOrganizationsCard {...OrgPeopleCardProps} />
                       </div>
                     );

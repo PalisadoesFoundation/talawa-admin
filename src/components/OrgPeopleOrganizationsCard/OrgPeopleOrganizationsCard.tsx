@@ -1,24 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './OrgPeopleOrganizationsCard.module.css';
 import { Tooltip } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 import { Col, Dropdown, Row } from 'react-bootstrap';
-import { useState } from 'react';
-import { InterfaceOrgPeopleOrganizationsCard } from 'utils/interfaces';
+import type { InterfaceOrgPeopleOrganizationsCard } from 'utils/interfaces';
 import {
   BLOCK_USER_MUTATION,
   UNBLOCK_USER_MUTATION,
   ADD_MEMBER_MUTATION,
+  REMOVE_MEMBER_MUTATION,
+  UPDATE_USER_ROLE_IN_ORG_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
-
-import {
-  REMOVE_MEMBER_MUTATION,
-  UPDATE_USER_ROLE_IN_ORG_MUTATION,
-} from 'GraphQl/Mutations/mutations';
 
 function OrgPeopleOrganizationsCard(
   props: InterfaceOrgPeopleOrganizationsCard,
@@ -88,7 +84,7 @@ function OrgPeopleOrganizationsCard(
       });
       /* istanbul ignore next */
       if (data) {
-        toast.success(t('Un-BlockedSuccessfully'));
+        toast.success(t('unBlockedSuccessfully'));
         setMember('No');
         setStatus('Active');
         resetAndRefetch();
@@ -125,6 +121,7 @@ function OrgPeopleOrganizationsCard(
       toast.error(t('notMember'));
     }
   };
+
   const acceptMember = async (): Promise<void> => {
     const memberIds = members.map((member) => member._id);
     const blockedUserIds = blockedUsers.map((member) => member._id);
@@ -146,35 +143,33 @@ function OrgPeopleOrganizationsCard(
         }
       }
     } else {
-      if (!blockedUserIds.includes(userID)) {
+      if (blockedUserIds.includes(userID)) {
         toast.error(t('blockedUser'));
+      } else {
+        toast.error('The user is already a member of this organization.');
       }
-      toast.error('You are already a member of this organization.');
     }
   };
+
   const changeRoleInOrg = async (roleToUpdate: string): Promise<void> => {
     const memberIds = members.map((member) => member._id);
 
     if (memberIds.includes(userID)) {
       try {
-        const { data } = await updateUserInOrgType({
+        await updateUserInOrgType({
           variables: {
             userId: userID,
             role: roleToUpdate,
             organizationId: _id,
           },
         });
-        if (data) {
-          toast.success(t('roleUpdated'));
-          setRole(roleToUpdate);
-          resetAndRefetch();
-        }
+        toast.success(t('roleUpdated'));
+        setRole(roleToUpdate);
+        resetAndRefetch();
       } catch (error: any) {
         /* istanbul ignore next */
-        errorHandler(t, error);
+        toast.error(errorHandler(t, error));
       }
-    } else {
-      toast.error(t('notMember'));
     }
   };
   return (
@@ -290,6 +285,7 @@ function OrgPeopleOrganizationsCard(
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
+
             <Dropdown
               drop="down-centered"
               className="d-flex align-items-center w-100 mt-2 mb-2"
