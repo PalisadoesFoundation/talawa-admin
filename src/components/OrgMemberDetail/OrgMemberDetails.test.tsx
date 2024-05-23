@@ -358,8 +358,9 @@ describe('OrgMemberDetail', () => {
     expect(datePretty('2023-02-18T09:22:27.969Z')).toBe(
       prettyDate('2023-02-18T09:22:27.969Z'),
     );
-    // If there's some error in formatting the date
-    expect(datePretty('')).toBe('Unavailable');
+    // Handle edge cases where date input might be null or undefined
+    expect(datePretty(null)).toBe('Unavailable');
+    expect(datePretty(undefined)).toBe('Unavailable');
   });
 
   test('getLanguageName function should work properly', () => {
