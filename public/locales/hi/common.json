@@ -42,7 +42,10 @@
   "talawaAdminPortal": "तलावा एडमिन पोर्टल",
   "address": "पता",
   "location": "जगह",
+  "enterLocation": "स्थान दर्ज करें",
   "joined": "में शामिल हो गए",
   "startDate": "आरंभ करने की तिथि",
-  "endDate": "अंतिम तिथि"
+  "endDate": "अंतिम तिथि",
+  "startTime": "समय शुरू",
+  "endTime": "अंत समय"
 }

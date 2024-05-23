@@ -42,7 +42,10 @@
   "talawaAdminPortal": "塔拉瓦管理门户",
   "address": "地址",
   "location": "地点",
+  "enterLocation": "输入位置",
   "joined": "已加入",
   "startDate": "开始日期",
-  "endDate": "结束日期"
+  "endDate": "结束日期",
+  "startTime": "开始时间",
+  "endTime": "时间结束"
 }

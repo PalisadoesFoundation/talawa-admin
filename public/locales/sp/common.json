@@ -42,7 +42,10 @@
   "talawaAdminPortal": "Talawa Admin Portal",
   "address": "Address",
   "location": "Location",
+  "enterLocation": "Enter Location",
   "joined": "Joined",
   "startDate": "Start Date",
-  "endDate": "End Date"
+  "endDate": "End Date",
+  "startTime": "Start Time",
+  "endTime": "End Time"
 }
