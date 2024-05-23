@@ -4,6 +4,7 @@ import {
   REMOVE_MEMBER_MUTATION,
   UPDATE_USER_ROLE_IN_ORG_MUTATION,
 } from 'GraphQl/Mutations/mutations';
+import Avatar from 'components/Avatar/Avatar';
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import { Button, Form, Modal, Row, Table } from 'react-bootstrap';
@@ -13,8 +14,6 @@ import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import styles from './UsersTableItem.module.css';
-import Avatar from 'components/Avatar/Avatar';
-
 type Props = {
   user: InterfaceQueryUserListItem;
   index: number;
@@ -25,7 +24,6 @@ const UsersTableItem = (props: Props): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'users' });
   const { t: tCommon } = useTranslation('common');
   const { user, index, resetAndRefetch } = props;
-
   const [showJoinedOrganizations, setShowJoinedOrganizations] = useState(false);
   const [showBlockedOrganizations, setShowBlockedOrganizations] =
     useState(false);
@@ -62,11 +60,9 @@ const UsersTableItem = (props: Props): JSX.Element => {
         resetAndRefetch();
       }
     } catch (error: unknown) {
-      /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
-  /* istanbul ignore next */
   const changeRoleInOrg = async (
     e: React.ChangeEvent<HTMLSelectElement>,
   ): Promise<void> => {
@@ -85,13 +81,11 @@ const UsersTableItem = (props: Props): JSX.Element => {
         resetAndRefetch();
       }
     } catch (error: unknown) {
-      /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
   function goToOrg(_id: string): void {
     const url = '/orgdash/' + _id;
-    // Dont change the below two lines
     window.location.replace(url);
     navigate(url);
   }
@@ -148,7 +142,6 @@ const UsersTableItem = (props: Props): JSX.Element => {
         ?.value || '';
     searchOrgsBlockedBy(inputValue);
   };
-  /* istanbul ignore next */
   function onHideRemoveUserModal(): void {
     setShowRemoveUserModal(false);
     if (removeUserProps.setShowOnCancel == 'JOINED') {
@@ -160,7 +153,6 @@ const UsersTableItem = (props: Props): JSX.Element => {
   const isSuperAdmin = user.appUserProfile.isSuperAdmin;
   return (
     <>
-      {/* Table Item */}
       <tr>
         <th scope="row">{index + 1}</th>
         <td>{`${user.user.firstName} ${user.user.lastName}`}</td>
@@ -173,7 +165,6 @@ const UsersTableItem = (props: Props): JSX.Element => {
             {t('view')} ({user.user.joinedOrganizations.length})
           </Button>
         </td>
-
         <td>
           <Button
             variant="danger"
@@ -184,7 +175,6 @@ const UsersTableItem = (props: Props): JSX.Element => {
           </Button>
         </td>
       </tr>
-      {/* Organizations joined modal */}
       <Modal
         show={showJoinedOrganizations}
         key={`modal-joined-org-${index}`}
@@ -202,7 +192,6 @@ const UsersTableItem = (props: Props): JSX.Element => {
           {user.user.joinedOrganizations.length !== 0 && (
             <div className={'position-relative mb-4 border rounded'}>
               <Form.Control
-                type="name"
                 id="orgname-joined-orgs"
                 className="bg-white"
                 defaultValue={searchByNameJoinedOrgs}
@@ -230,15 +219,13 @@ const UsersTableItem = (props: Props): JSX.Element => {
                 </h4>
               </div>
             ) : joinedOrgs.length == 0 ? (
-              <>
-                <div className={styles.notJoined}>
-                  <h4>
-                    {tCommon('noResultsFoundFor')} &quot;
-                    {searchByNameJoinedOrgs}
-                    &quot;
-                  </h4>
-                </div>
-              </>
+              <div className={styles.notJoined}>
+                <h4>
+                  {tCommon('noResultsFoundFor')} &quot;
+                  {searchByNameJoinedOrgs}
+                  &quot;
+                </h4>
+              </div>
             ) : (
               <Table className={styles.modalTable} responsive>
                 <thead>
@@ -254,7 +241,6 @@ const UsersTableItem = (props: Props): JSX.Element => {
                 </thead>
                 <tbody>
                   {joinedOrgs.map((org) => {
-                    // Check user is admin for this organization or not
                     let isAdmin = false;
                     user.appUserProfile.adminFor.map((item) => {
                       if (item._id == org._id) {
@@ -380,7 +366,6 @@ const UsersTableItem = (props: Props): JSX.Element => {
           </Button>
         </Modal.Footer>
       </Modal>
-      {/* Organizations blocked by modal */}
       <Modal
         show={showBlockedOrganizations}
         key={`modal-blocked-org-${index}`}
@@ -399,7 +384,6 @@ const UsersTableItem = (props: Props): JSX.Element => {
           {user.user.organizationsBlockedBy.length !== 0 && (
             <div className={'position-relative mb-4 border rounded'}>
               <Form.Control
-                type="name"
                 id="orgname-blocked-by"
                 className="bg-white"
                 defaultValue={searchByNameOrgsBlockedBy}
@@ -428,15 +412,9 @@ const UsersTableItem = (props: Props): JSX.Element => {
                 </h4>
               </div>
             ) : orgsBlockedBy.length == 0 ? (
-              <>
-                <div className={styles.notJoined}>
-                  <h4>
-                    {tCommon('noResultsFoundFor')} &quot;
-                    {searchByNameOrgsBlockedBy}
-                    &quot;
-                  </h4>
-                </div>
-              </>
+              <div className={styles.notJoined}>
+                <h4>{`${tCommon('noResultsFoundFor')} "${searchByNameOrgsBlockedBy}"`}</h4>
+              </div>
             ) : (
               <Table className={styles.modalTable} responsive>
                 <thead>
@@ -450,10 +428,8 @@ const UsersTableItem = (props: Props): JSX.Element => {
                     <th>Action</th>
                   </tr>
                 </thead>
-
                 <tbody>
                   {orgsBlockedBy.map((org) => {
-                    // Check user is admin for this organization or not
                     let isAdmin = false;
                     user.appUserProfile.adminFor.map((item) => {
                       if (item._id == org._id) {
@@ -573,7 +549,6 @@ const UsersTableItem = (props: Props): JSX.Element => {
           </Button>
         </Modal.Footer>
       </Modal>
-      {/* Remove user from Organization modal */}
       <Modal
         show={showRemoveUserModal}
         key={`modal-remove-org-${index}`}

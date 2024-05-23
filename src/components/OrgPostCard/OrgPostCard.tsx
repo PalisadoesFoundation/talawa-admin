@@ -1,7 +1,5 @@
 import { useMutation } from '@apollo/client';
-import CloseIcon from '@mui/icons-material/Close';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import PushPinIcon from '@mui/icons-material/PushPin';
+import { Close, MoreVert, PushPin } from '@mui/icons-material';
 import {
   DELETE_POST_MUTATION,
   TOGGLE_PINNED_POST,
@@ -10,17 +8,13 @@ import {
 import AboutImg from 'assets/images/defaultImg.png';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
-import { Form } from 'react-bootstrap';
-import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
-import Modal from 'react-bootstrap/Modal';
+import { Form, Button, Card, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfacePostForm } from 'utils/interfaces';
 import styles from './OrgPostCard.module.css';
-
 interface InterfaceOrgPostCardProps {
   key: string;
   id: string;
@@ -31,7 +25,6 @@ interface InterfaceOrgPostCardProps {
   postVideo: string | null;
   pinned: boolean;
 }
-
 export default function orgPostCard(
   props: InterfaceOrgPostCardProps,
 ): JSX.Element {
@@ -42,7 +35,6 @@ export default function orgPostCard(
     postvideo: '',
     pinned: false,
   });
-  // console.log('postformState', postformState);
   const [postPhotoUpdated, setPostPhotoUpdated] = useState(false);
   const [postVideoUpdated, setPostVideoUpdated] = useState(false);
   const [togglePost, setPostToggle] = useState('Read more');
@@ -70,7 +62,6 @@ export default function orgPostCard(
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
-        console.log(error.message);
         /* istanbul ignore next */
         errorHandler(t, error);
       }
@@ -89,12 +80,10 @@ export default function orgPostCard(
     setShowEditModal((prev) => !prev);
   };
   const toggleShowDeleteModal = (): void => setShowDeleteModal((prev) => !prev);
-
   const handleVideoPlay = (): void => {
     setPlaying(true);
     videoRef.current?.play();
   };
-
   const handleVideoPause = (): void => {
     setPlaying(false);
     videoRef.current?.pause();
@@ -102,7 +91,6 @@ export default function orgPostCard(
   const handleCardClick = (): void => {
     setModalVisible(true);
   };
-
   const handleMoreOptionsClick = (): void => {
     setMenuVisible(true);
   };
@@ -119,7 +107,6 @@ export default function orgPostCard(
       fileInput.value = '';
     }
   };
-
   const clearVideoInput = (): void => {
     setPostFormState({
       ...postformState,
@@ -140,7 +127,6 @@ export default function orgPostCard(
       setPostToggle('Read more');
     }
   }
-
   function handleEditModal(): void {
     setModalVisible(false);
     setMenuVisible(false);
@@ -151,15 +137,12 @@ export default function orgPostCard(
       postvideo: props.postVideo,
     });
   }
-
   function handleDeleteModal(): void {
     setModalVisible(false);
     setMenuVisible(false);
     setShowDeleteModal(true);
   }
-
   useEffect(() => {
-    // console.log(props.postPhoto);
     setPostFormState({
       posttitle: props.postTitle,
       postinfo: props.postInfo,
@@ -168,15 +151,12 @@ export default function orgPostCard(
       pinned: props.pinned,
     });
   }, []);
-
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgPostCard',
   });
   const { t: tCommon } = useTranslation('common');
-
   const [deletePostMutation] = useMutation(DELETE_POST_MUTATION);
   const [updatePostMutation] = useMutation(UPDATE_POST_MUTATION);
-
   const deletePost = async (): Promise<void> => {
     try {
       const { data } = await deletePostMutation({
@@ -184,7 +164,6 @@ export default function orgPostCard(
           id: props.id,
         },
       });
-
       if (data) {
         toast.success(t('postDeleted'));
         toggleShowDeleteModal();
@@ -205,12 +184,10 @@ export default function orgPostCard(
       [name]: value,
     }));
   };
-
   const updatePostHandler = async (
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
-
     try {
       const { data } = await updatePostMutation({
         variables: {
@@ -225,7 +202,6 @@ export default function orgPostCard(
           }),
         },
       });
-
       if (data) {
         toast.success(t('postUpdated'));
         setTimeout(() => {
@@ -238,7 +214,6 @@ export default function orgPostCard(
       }
     }
   };
-
   return (
     <>
       <div className="col-xl-4 col-lg-4 col-md-6" data-testid="post-item">
@@ -266,7 +241,7 @@ export default function orgPostCard(
               </video>
               <Card.Body>
                 {props.pinned && (
-                  <PushPinIcon
+                  <PushPin
                     color="success"
                     fontSize="large"
                     className="fs-5"
@@ -295,11 +270,7 @@ export default function orgPostCard(
               />
               <Card.Body>
                 {props.pinned && (
-                  <PushPinIcon
-                    color="success"
-                    fontSize="large"
-                    className="fs-5"
-                  />
+                  <PushPin color="success" fontSize="large" className="fs-5" />
                 )}
                 <Card.Title className={styles.title}>
                   {props.postTitle}
@@ -319,7 +290,7 @@ export default function orgPostCard(
                 />
                 <Card.Body>
                   {props.pinned && (
-                    <PushPinIcon
+                    <PushPin
                       color="success"
                       fontSize="large"
                       className="fs-5"
@@ -364,7 +335,6 @@ export default function orgPostCard(
                   <img src={AboutImg} alt="Post Image" />
                 </div>
               )}
-
               <div className={styles.modalInfo}>
                 <p>
                   {t('author')}:<span> {props.postAuthor}</span>
@@ -398,19 +368,18 @@ export default function orgPostCard(
                 onClick={handleMoreOptionsClick}
                 data-testid="moreiconbtn"
               >
-                <MoreVertIcon />
+                <MoreVert />
               </button>
               <button
                 className={styles.closeButton}
                 onClick={(): void => setModalVisible(false)}
                 data-testid="closeiconbtn"
               >
-                <CloseIcon />
+                <Close />
               </button>
             </div>
           </div>
         )}
-
         {menuVisible && (
           <div className={styles.menuModal}>
             <div className={styles.menuContent}>
@@ -451,8 +420,6 @@ export default function orgPostCard(
           </div>
         )}
       </div>
-
-      {/* Delete Modal */}
       <Modal show={showDeleteModal} onHide={toggleShowDeleteModal}>
         <Modal.Header>
           <h5>{t('deletePost')}</h5>
@@ -475,8 +442,6 @@ export default function orgPostCard(
           </Button>
         </Modal.Footer>
       </Modal>
-
-      {/* Edit Modal */}
       <Modal
         show={showEditModal}
         onHide={toggleShowEditModal}
