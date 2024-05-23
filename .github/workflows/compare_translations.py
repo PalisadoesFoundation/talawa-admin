@@ -98,9 +98,15 @@ def load_translation(filepath):
     Returns:
         translation: Loaded translation
     """
-    with open(filepath, "r", encoding="utf-8") as file:
-        translation = json.load(file)
-    return translation
+    try:
+        with open(filepath, "r", encoding="utf-8") as file:
+            content = file.read()
+            if not content.strip():
+                raise ValueError(f"File {filepath} is empty.")
+            translation = json.loads(content)
+        return translation
+    except json.JSONDecodeError as e:
+        raise ValueError(f"Error decoding JSON from file {filepath}: {e}")
 
 
 def check_translations(directory):
