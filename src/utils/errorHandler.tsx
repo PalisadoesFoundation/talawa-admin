@@ -11,7 +11,6 @@ export const errorHandler = (a: unknown, error: unknown): void => {
   if (error instanceof Error) {
     switch (error.message) {
       case 'Failed to fetch':
-        console.log(error);
         toast.error(tErrors('talawaApiUnavailable'));
         break;
       // Add more cases as needed

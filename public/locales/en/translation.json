@@ -569,7 +569,8 @@
     "pHeading": "Plugins",
     "install": "Installed",
     "available": "Available",
-    "pMessage": "Plugin does not exists"
+    "pMessage": "Plugin does not exists",
+    "filter": "Filters"
   },
   "addOnEntry": {
     "enable": "Enabled",

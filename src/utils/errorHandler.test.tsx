@@ -13,14 +13,14 @@ describe('Test if errorHandler is working properly', () => {
   const tErrors: TFunction<'errors', string> = (key: string) => key;
 
   it('should call toast.error with the correct message if error message is "Failed to fetch"', () => {
-    const error = { message: 'Failed to fetch' };
+    const error = new Error('Failed to fetch');
     errorHandler(t, error);
 
     expect(toast.error).toHaveBeenCalledWith(tErrors('talawaApiUnavailable'));
   });
 
   it('should call toast.error with the error message if it is not "Failed to fetch"', () => {
-    const error = { message: 'Some other error message' };
+    const error = new Error('Some other error message');
     errorHandler(t, error);
 
     expect(toast.error).toHaveBeenCalledWith(error.message);
@@ -30,6 +30,8 @@ describe('Test if errorHandler is working properly', () => {
     const error = null;
     errorHandler(t, error);
 
-    expect(toast.error).toHaveBeenCalledWith(undefined);
+    expect(toast.error).toHaveBeenCalledWith(
+      tErrors('unknownError', { msg: error }),
+    );
   });
 });
