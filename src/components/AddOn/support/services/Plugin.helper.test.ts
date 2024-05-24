@@ -9,7 +9,18 @@ describe('Testing src/components/AddOn/support/services/Plugin.helper.ts', () =>
     expect(pluginHelper).toHaveProperty('generateLinks');
   });
   test('generateLinks should return proper objects', () => {
-    const obj = { enabled: true, name: 'demo', component: 'samplecomponent' };
+    const obj = {
+      enabled: true,
+      name: 'demo',
+      component: 'samplecomponent',
+      _id: 'someId',
+      pluginName: 'pluginName',
+      pluginDesc: 'pluginDesc',
+      pluginCreatedBy: 'creator',
+      pluginInstallStatus: true,
+      uninstalledOrgs: ['org1', 'org2'],
+      installed: true,
+    };
     const objToMatch = { name: 'demo', url: '/plugin/samplecomponent' };
     const pluginHelper = new PluginHelper();
     const val = pluginHelper.generateLinks([obj]);

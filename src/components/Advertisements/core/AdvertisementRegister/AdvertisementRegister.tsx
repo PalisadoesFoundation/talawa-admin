@@ -24,7 +24,7 @@ interface InterfaceAddOnRegisterProps {
   advertisementMediaEdit?: string;
   endDateEdit?: Date;
   startDateEdit?: Date;
-  setAfter: any;
+  setAfter: (after: string | null) => void;
 }
 interface InterfaceFormStateTypes {
   name: string;
@@ -198,8 +198,10 @@ function advertisementRegister({
         handleClose();
         setAfter(null);
       }
-    } catch (error: any) {
-      toast.error(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
     }
   };
   return (

@@ -19,8 +19,8 @@ export const ActionItemsModal = (props: InterfaceModalProp): JSX.Element => {
   return (
     <>
       <Modal
-        show={props.show}
-        onHide={props.handleClose}
+        show={props?.show}
+        onHide={props?.handleClose}
         backdrop="static"
         centered
         dialogClassName={styles.actionItemsModal}
@@ -32,8 +32,8 @@ export const ActionItemsModal = (props: InterfaceModalProp): JSX.Element => {
         </Modal.Header>
         <Modal.Body>
           <ActionItemsModalBody
-            organizationId={props.orgId}
-            eventId={props.eventId}
+            organizationId={props?.orgId}
+            eventId={props?.eventId}
           />
         </Modal.Body>
       </Modal>
