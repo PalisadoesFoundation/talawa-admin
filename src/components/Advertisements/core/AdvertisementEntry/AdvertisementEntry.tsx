@@ -10,14 +10,6 @@ import AdvertisementRegister from '../AdvertisementRegister/AdvertisementRegiste
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { toast } from 'react-toastify';
 
-type Ad = {
-  _id: string;
-  name: string;
-  type: 'BANNER' | 'MENU' | 'POPUP';
-  mediaUrl: string;
-  endDate: string; // Assuming it's a string in the format 'yyyy-MM-dd'
-  startDate: string; // Assuming it's a string in the format 'yyyy-MM-dd'
-};
 interface InterfaceAddOnEntryProps {
   id: string;
   name: string;
@@ -26,7 +18,7 @@ interface InterfaceAddOnEntryProps {
   organizationId: string;
   startDate: Date;
   endDate: Date;
-  setAfter: any;
+  setAfter: (after: string | null) => void;
 }
 function advertisementEntry({
   id,
@@ -38,6 +30,7 @@ function advertisementEntry({
   startDate,
   setAfter,
 }: InterfaceAddOnEntryProps): JSX.Element {
+  console.log(id, type);
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   const [buttonLoading, setButtonLoading] = useState(false);
   const [dropdown, setDropdown] = useState(false);
@@ -64,9 +57,11 @@ function advertisementEntry({
       toast.error('Advertisement Deleted');
       setButtonLoading(false);
       setAfter(null);
-    } catch (error: any) {
-      toast.error(error.message);
-      setButtonLoading(false);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+        setButtonLoading(false);
+      }
     }
   };
   const handleOptionsClick = (): void => {
@@ -77,7 +72,7 @@ function advertisementEntry({
       <Row data-testid="AdEntry" xs={1} md={2} className="g-4">
         {Array.from({ length: 1 }).map((_, idx) => (
           <Col key={idx}>
-            <Card>
+            <Card className={styles.card}>
               <div className={styles.dropdownContainer}>
                 <button
                   className={styles.dropdownButton}
@@ -128,10 +123,14 @@ function advertisementEntry({
                 />
               )}
               <Card.Body>
-                <Card.Title>{name}</Card.Title>
+                <Card.Title className="t-bold">{name}</Card.Title>
+                <Card.Text data-testid="Ad_end_date">
+                  Starts on {startDate?.toDateString()}
+                </Card.Text>
                 <Card.Text data-testid="Ad_end_date">
                   Ends on {endDate?.toDateString()}
                 </Card.Text>
+
                 <Card.Subtitle className="mb-2 text-muted author">
                   {type}
                 </Card.Subtitle>

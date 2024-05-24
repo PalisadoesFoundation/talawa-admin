@@ -6,7 +6,8 @@
 
 .modalbtn i,
 .button i {
-  margin-right: 8px;
+  height: min-content;
+  margin-right: 4px;
 }
 
 .preview {
