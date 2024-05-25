@@ -6,11 +6,18 @@ import { toast } from 'react-toastify';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
-import { MOCKS } from './UserTableItemMocks';
+import { MOCKS, MOCKS2, MOCKS_UPDATE } from './UserTableItemMocks';
 import UsersTableItem from './UsersTableItem';
 import { BrowserRouter } from 'react-router-dom';
 const link = new StaticMockLink(MOCKS, true);
+const link2 = new StaticMockLink(MOCKS2, true);
+const link3 = new StaticMockLink(MOCKS_UPDATE, true);
 import useLocalStorage from 'utils/useLocalstorage';
+import {
+  REMOVE_ADMIN_MUTATION,
+  REMOVE_MEMBER_MUTATION,
+} from 'GraphQl/Mutations/mutations';
+import userEvent from '@testing-library/user-event';
 
 const { setItem } = useLocalStorage();
 
@@ -1083,5 +1090,252 @@ describe('Testing User Table Item', () => {
     expect(confirmRemoveBtn).toBeInTheDocument();
 
     fireEvent.click(confirmRemoveBtn);
+  });
+
+  test('handles errors in removeUser mutation', async () => {
+    const props: {
+      user: InterfaceQueryUserListItem;
+      index: number;
+      loggedInUserId: string;
+      resetAndRefetch: () => void;
+    } = {
+      user: {
+        user: {
+          _id: '123',
+          firstName: 'John',
+          lastName: 'Doe',
+          image: 'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
+          email: '',
+          createdAt: '2022-09-29T15:39:36.355Z',
+          organizationsBlockedBy: [
+            {
+              _id: 'xyz',
+              name: 'Blocked Organization 1',
+              image:
+                'https://api.dicebear.com/5.x/initials/svg?seed=Blocked%20Organization%201',
+              address: {
+                city: 'Kingston',
+                countryCode: 'JM',
+                dependentLocality: 'Sample Dependent Locality',
+                line1: '123 Jamaica Street',
+                line2: 'Apartment 456',
+                postalCode: 'JM12345',
+                sortingCode: 'ABC-123',
+                state: 'Kingston Parish',
+              },
+              createdAt: '2023-08-29T15:39:36.355Z',
+              creator: {
+                _id: '123',
+                firstName: 'John',
+                lastName: 'Doe',
+                image:
+                  'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
+                email: '',
+              },
+            },
+          ],
+          joinedOrganizations: [
+            {
+              _id: 'abc',
+              name: 'Joined Organization 1',
+              image: null,
+              address: {
+                city: 'Kingston',
+                countryCode: 'JM',
+                dependentLocality: 'Sample Dependent Locality',
+                line1: '123 Jamaica Street',
+                line2: 'Apartment 456',
+                postalCode: 'JM12345',
+                sortingCode: 'ABC-123',
+                state: 'Kingston Parish',
+              },
+              createdAt: '2023-08-29T15:39:36.355Z',
+              creator: {
+                _id: '123',
+                firstName: 'John',
+                lastName: 'Doe',
+                image: null,
+                email: '',
+              },
+            },
+          ],
+          registeredEvents: [],
+          membershipRequests: [],
+        },
+        appUserProfile: {
+          _id: '123',
+          isSuperAdmin: true,
+          createdOrganizations: [],
+          createdEvents: [],
+          eventAdmin: [],
+          adminFor: [
+            {
+              _id: 'abc',
+            },
+            {
+              _id: 'xyz',
+            },
+          ],
+        },
+      },
+      index: 0,
+      loggedInUserId: '123',
+      resetAndRefetch: resetAndRefetchMock,
+    };
+
+    const mocks = [
+      {
+        request: {
+          query: REMOVE_MEMBER_MUTATION,
+          variables: {
+            userId: '123',
+            orgId: 'xyz',
+          },
+        },
+        result: {
+          errors: [
+            {
+              message: 'User does not exist',
+            },
+          ],
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider addTypename={false} link={link2}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <UsersTableItem {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    const showBlockedByOrgsBtn = screen.getByTestId(
+      `showBlockedByOrgsBtn${123}`,
+    );
+    expect(showBlockedByOrgsBtn).toBeInTheDocument();
+    fireEvent.click(showBlockedByOrgsBtn);
+    expect(screen.getByTestId('modal-blocked-org-123')).toBeInTheDocument();
+  });
+
+  test('change role button should function properly', async () => {
+    const props: {
+      user: InterfaceQueryUserListItem;
+      index: number;
+      loggedInUserId: string;
+      resetAndRefetch: () => void;
+    } = {
+      user: {
+        user: {
+          _id: '123',
+          firstName: 'John',
+          lastName: 'Doe',
+          image: 'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
+          email: '',
+          createdAt: '2022-09-29T15:39:36.355Z',
+          organizationsBlockedBy: [
+            {
+              _id: 'xyz',
+              name: 'Blocked Organization 1',
+              image:
+                'https://api.dicebear.com/5.x/initials/svg?seed=Blocked%20Organization%201',
+              address: {
+                city: 'Kingston',
+                countryCode: 'JM',
+                dependentLocality: 'Sample Dependent Locality',
+                line1: '123 Jamaica Street',
+                line2: 'Apartment 456',
+                postalCode: 'JM12345',
+                sortingCode: 'ABC-123',
+                state: 'Kingston Parish',
+              },
+              createdAt: '2023-08-29T15:39:36.355Z',
+              creator: {
+                _id: '123',
+                firstName: 'John',
+                lastName: 'Doe',
+                image:
+                  'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
+                email: '',
+              },
+            },
+          ],
+          joinedOrganizations: [
+            {
+              _id: 'abc',
+              name: 'Joined Organization 1',
+              image: null,
+              address: {
+                city: 'Kingston',
+                countryCode: 'JM',
+                dependentLocality: 'Sample Dependent Locality',
+                line1: '123 Jamaica Street',
+                line2: 'Apartment 456',
+                postalCode: 'JM12345',
+                sortingCode: 'ABC-123',
+                state: 'Kingston Parish',
+              },
+              createdAt: '2023-08-29T15:39:36.355Z',
+              creator: {
+                _id: '123',
+                firstName: 'John',
+                lastName: 'Doe',
+                image: null,
+                email: '',
+              },
+            },
+          ],
+          registeredEvents: [],
+
+          membershipRequests: [],
+        },
+        appUserProfile: {
+          _id: '123',
+          isSuperAdmin: false,
+          createdOrganizations: [],
+          createdEvents: [],
+          eventAdmin: [],
+          adminFor: [
+            {
+              _id: 'abc',
+            },
+            {
+              _id: 'xyz',
+            },
+          ],
+        },
+      },
+      index: 0,
+      loggedInUserId: '123',
+      resetAndRefetch: resetAndRefetchMock,
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link3}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <UsersTableItem {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    const showJoinedOrgs = screen.getByTestId(`showJoinedOrgsBtn${123}`);
+    expect(showJoinedOrgs).toBeInTheDocument();
+    fireEvent.click(showJoinedOrgs);
+    const changeRoleBtn = screen.getByTestId(
+      `changeRoleInOrg${'abc'}`,
+    ) as HTMLSelectElement;
+    expect(changeRoleBtn).toBeInTheDocument();
+    userEvent.selectOptions(changeRoleBtn, 'ADMIN');
+    await wait();
+    userEvent.selectOptions(changeRoleBtn, 'USER');
+    await wait();
+    expect(changeRoleBtn.value).toBe(`USER?abc`);
+    await wait();
   });
 });
