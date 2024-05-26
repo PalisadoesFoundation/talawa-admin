@@ -10,6 +10,8 @@ const PageNotFound = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'pageNotFound',
   });
+  const { t: tCommon } = useTranslation('common');
+  const { t: tErrors } = useTranslation('errors');
 
   document.title = t('title');
 
@@ -22,7 +24,9 @@ const PageNotFound = (): JSX.Element => {
         <div className="brand">
           <img src={Logo} alt="Logo" className="img-fluid" />
           {adminFor != undefined ? (
-            <h3 className="text-uppercase mt-4">{t('talawaAdmin')}</h3>
+            <h3 className="text-uppercase mt-4">
+              {tCommon('talawaAdminPortal')}
+            </h3>
           ) : (
             <h3 className="text-uppercase mt-4">{t('talawaUser')}</h3>
           )}
@@ -30,7 +34,7 @@ const PageNotFound = (): JSX.Element => {
         <h1 className={styles.head}>
           <span>{t('404')}</span>
         </h1>
-        <p>{t('notFoundMsg')}</p>
+        <p>{tErrors('notFoundMsg')}</p>
         {adminFor != undefined ? (
           <Link to="/orglist" className="btn btn-outline-success mt-3">
             <i className="fas fa-home"></i> {t('backToHome')}

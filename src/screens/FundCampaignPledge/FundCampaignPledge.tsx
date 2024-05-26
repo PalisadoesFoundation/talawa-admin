@@ -38,6 +38,7 @@ const fundCampaignPledge = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'pledges',
   });
+  const { t: tCommon } = useTranslation('common');
 
   const [modalState, setModalState] = useState<{ [key in Modal]: boolean }>({
     [Modal.CREATE]: false,
@@ -229,10 +230,10 @@ const fundCampaignPledge = (): JSX.Element => {
               <div className="ms-2"> {t('volunteers')} </div>
             </Col>
             <Col className=" fw-bold " md={2} sm={2}>
-              <div className="ms-3">{t('startDate')}</div>
+              <div className="ms-3">{tCommon('startDate')}</div>
             </Col>
             <Col className=" fw-bold " sm={2} md={2}>
-              <div className="ms-3">{t('endDate')}</div>
+              <div className="ms-3">{tCommon('endDate')}</div>
             </Col>
             <Col className=" fw-bold" md={2} sm={2}>
               <div>{t('pledgeAmount')}</div>
@@ -321,6 +322,7 @@ const fundCampaignPledge = (): JSX.Element => {
         startDate={pledgeData?.getFundraisingCampaignById.startDate as Date}
         endDate={pledgeData?.getFundraisingCampaignById.endDate as Date}
         t={t}
+        tCommon={tCommon}
       />
 
       {/* Update Pledge Modal */}
@@ -333,6 +335,7 @@ const fundCampaignPledge = (): JSX.Element => {
         startDate={pledgeData?.getFundraisingCampaignById.startDate as Date}
         endDate={pledgeData?.getFundraisingCampaignById.endDate as Date}
         t={t}
+        tCommon={tCommon}
       />
 
       {/* Delete Pledge Modal */}
@@ -341,6 +344,7 @@ const fundCampaignPledge = (): JSX.Element => {
         hideDeletePledgeModal={() => closeModal(Modal.DELETE)}
         deletePledgeHandler={deleteHandler}
         t={t}
+        tCommon={tCommon}
       />
     </div>
   );

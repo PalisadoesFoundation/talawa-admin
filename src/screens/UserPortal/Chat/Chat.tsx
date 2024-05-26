@@ -30,16 +30,13 @@ export default function chat(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userChat',
   });
+  const { t: tCommon } = useTranslation('common');
   const organizationId = getOrganizationId(location.href);
 
   const [selectedContact, setSelectedContact] = React.useState('');
   const [selectedContactName, setSelectedContactName] = React.useState('');
   const [contacts, setContacts] = React.useState([]);
   const [filterName, setFilterName] = React.useState('');
-
-  const navbarProps = {
-    currentPage: 'chat',
-  };
 
   const chatRoomProps: InterfaceChatRoomProps = {
     selectedContact,
@@ -63,9 +60,11 @@ export default function chat(): JSX.Element {
       firstName_contains: value,
     });
   };
-  const handleSearchByEnter = (e: any): void => {
+  const handleSearchByEnter = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ): void => {
     if (e.key === 'Enter') {
-      const { value } = e.target;
+      const { value } = e.currentTarget;
       handleSearch(value);
     }
   };
@@ -95,7 +94,7 @@ export default function chat(): JSX.Element {
               </h4>
               <InputGroup className={styles.maxWidth}>
                 <Form.Control
-                  placeholder={t('search')}
+                  placeholder={tCommon('search')}
                   id="searchChats"
                   type="text"
                   className={`${styles.borderNone} ${styles.backgroundWhite}`}
@@ -118,19 +117,21 @@ export default function chat(): JSX.Element {
                   <HourglassBottomIcon /> <span>Loading...</span>
                 </div>
               ) : (
-                contacts.map((contact: any, index: number) => {
-                  const cardProps: InterfaceContactCardProps = {
-                    id: contact._id,
-                    firstName: contact.firstName,
-                    lastName: contact.lastName,
-                    email: contact.email,
-                    image: contact.image,
-                    setSelectedContactName,
-                    selectedContact,
-                    setSelectedContact,
-                  };
-                  return <ContactCard {...cardProps} key={index} />;
-                })
+                contacts.map(
+                  (contact: InterfaceContactCardProps, index: number) => {
+                    const cardProps: InterfaceContactCardProps = {
+                      id: contact.id,
+                      firstName: contact.firstName,
+                      lastName: contact.lastName,
+                      email: contact.email,
+                      image: contact.image,
+                      setSelectedContactName,
+                      selectedContact,
+                      setSelectedContact,
+                    };
+                    return <ContactCard {...cardProps} key={index} />;
+                  },
+                )
               )}
             </div>
           </div>

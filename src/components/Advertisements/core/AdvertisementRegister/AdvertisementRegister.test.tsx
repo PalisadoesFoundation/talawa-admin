@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  render,
-  fireEvent,
-  waitFor,
-  screen,
-  act,
-} from '@testing-library/react';
+import { render, fireEvent, waitFor, screen } from '@testing-library/react';
 
 import {
   ApolloClient,
@@ -131,11 +125,15 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   link: ApolloLink.from([httpLink]),
 });
 
-const translations = JSON.parse(
-  JSON.stringify(
-    i18n.getDataByLanguage('en')?.translation?.advertisement ?? null,
+const translations = {
+  ...JSON.parse(
+    JSON.stringify(
+      i18n.getDataByLanguage('en')?.translation.advertisement ?? {},
+    ),
   ),
-);
+  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
+  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
+};
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -163,7 +161,7 @@ describe('Testing Advertisement Register Component', () => {
       </ApolloProvider>,
     );
     await waitFor(() => {
-      expect(getByText(translations.addNew)).toBeInTheDocument();
+      expect(getByText(translations.createAdvertisement)).toBeInTheDocument();
     });
   });
 
@@ -189,10 +187,10 @@ describe('Testing Advertisement Register Component', () => {
       </MockedProvider>,
     );
 
-    expect(getByText(translations.addNew)).toBeInTheDocument();
+    expect(getByText(translations.createAdvertisement)).toBeInTheDocument();
 
-    fireEvent.click(getByText(translations.addNew));
-    expect(queryByText(translations.RClose)).toBeInTheDocument();
+    fireEvent.click(getByText(translations.createAdvertisement));
+    expect(queryByText(translations.addNew)).toBeInTheDocument();
 
     fireEvent.change(getByLabelText(translations.Rname), {
       target: { value: 'Ad1' },
@@ -237,7 +235,7 @@ describe('Testing Advertisement Register Component', () => {
 
   test('update advertisement', async () => {
     const setTimeoutSpy = jest.spyOn(global, 'setTimeout');
-    const { getByText, queryByText, getByLabelText } = render(
+    const { getByText, getByLabelText } = render(
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
           <BrowserRouter>
@@ -323,10 +321,10 @@ describe('Testing Advertisement Register Component', () => {
       </MockedProvider>,
     );
 
-    expect(getByText(translations.addNew)).toBeInTheDocument();
+    expect(getByText(translations.createAdvertisement)).toBeInTheDocument();
 
-    fireEvent.click(getByText(translations.addNew));
-    expect(queryByText(translations.RClose)).toBeInTheDocument();
+    fireEvent.click(getByText(translations.createAdvertisement));
+    expect(queryByText(translations.addNew)).toBeInTheDocument();
 
     await waitFor(() => {
       fireEvent.click(getByText(translations.register));
@@ -359,10 +357,10 @@ describe('Testing Advertisement Register Component', () => {
       </MockedProvider>,
     );
 
-    expect(getByText(translations.addNew)).toBeInTheDocument();
+    expect(getByText(translations.createAdvertisement)).toBeInTheDocument();
 
-    fireEvent.click(getByText(translations.addNew));
-    expect(queryByText(translations.RClose)).toBeInTheDocument();
+    fireEvent.click(getByText(translations.createAdvertisement));
+    expect(queryByText(translations.addNew)).toBeInTheDocument();
 
     fireEvent.change(getByLabelText(translations.Rname), {
       target: { value: 'Ad1' },
@@ -453,11 +451,12 @@ describe('Testing Advertisement Register Component', () => {
         </Provider>
       </ApolloProvider>,
     );
+    fireEvent.click(getByText(translations.createAdvertisement));
     await waitFor(() => {
-      fireEvent.click(getByText(translations.addNew));
-      expect(queryByText(translations.RClose)).toBeInTheDocument();
-
-      fireEvent.click(getByText(translations.RClose));
+      expect(queryByText(translations.addNew)).toBeInTheDocument();
+    });
+    fireEvent.click(getByText(translations.close));
+    await waitFor(() => {
       expect(queryByText(translations.close)).not.toBeInTheDocument();
     });
   });
@@ -548,8 +547,8 @@ describe('Testing Advertisement Register Component', () => {
       </MockedProvider>,
     );
 
-    fireEvent.click(screen.getByText(translations.addNew));
-    await screen.findByText(translations.RClose);
+    fireEvent.click(screen.getByText(translations.createAdvertisement));
+    await screen.findByText(translations.addNew);
 
     const mediaFile = new File(['video content'], 'test.mp4', {
       type: 'video/mp4',

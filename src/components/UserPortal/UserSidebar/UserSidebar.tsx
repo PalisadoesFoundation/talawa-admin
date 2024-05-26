@@ -17,6 +17,7 @@ const userSidebar = ({
   setHideDrawer,
 }: InterfaceUserSidebarProps): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'userSidebarOrg' });
+  const { t: tCommon } = useTranslation('common');
 
   const handleLinkClick = (): void => {
     if (window.innerWidth <= 820) {
@@ -38,7 +39,9 @@ const userSidebar = ({
       >
         <TalawaLogo className={styles.talawaLogo} />
         <p className={styles.talawaText}>{t('talawaUserPortal')}</p>
-        <h5 className={`${styles.titleHeader} text-secondary`}>{t('menu')}</h5>
+        <h5 className={`${styles.titleHeader} text-secondary`}>
+          {tCommon('menu')}
+        </h5>
         <div className={styles.optionList}>
           <NavLink to={'/user/organizations'} onClick={handleLinkClick}>
             {({ isActive }) => (
@@ -80,7 +83,7 @@ const userSidebar = ({
                     }`}
                   />
                 </div>
-                {t('settings')}
+                {tCommon('settings')}
               </Button>
             )}
           </NavLink>

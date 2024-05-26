@@ -23,6 +23,8 @@ const ForgotPassword = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'forgotPassword',
   });
+  const { t: tCommon } = useTranslation('common');
+  const { t: tErrors } = useTranslation('errors');
 
   document.title = t('title');
 
@@ -67,13 +69,15 @@ const ForgotPassword = (): JSX.Element => {
         toast.success(t('OTPsent'));
         setShowEnterEmail(false);
       }
-    } catch (error: any) {
-      if (error.message === 'User not found') {
-        toast.warn(t('emailNotRegistered'));
-      } else if (error.message === 'Failed to fetch') {
-        toast.error(t('talawaApiUnavailable'));
-      } else {
-        toast.error(t('errorSendingMail'));
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        if (error.message === 'User not found') {
+          toast.warn(tErrors('emailNotRegistered'));
+        } else if (error.message === 'Failed to fetch') {
+          toast.error(tErrors('talawaApiUnavailable'));
+        } else {
+          toast.error(tErrors('errorSendingMail'));
+        }
       }
     }
   };
@@ -114,7 +118,7 @@ const ForgotPassword = (): JSX.Element => {
           confirmNewPassword: '',
         });
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       setShowEnterEmail(true);
       /* istanbul ignore next */
       errorHandler(t, error);
@@ -134,7 +138,9 @@ const ForgotPassword = (): JSX.Element => {
                 <div className={styles.themeOverlay} />
                 <KeyLogo className={styles.keyLogo} fill="var(--bs-primary)" />
               </div>
-              <h3 className="text-center fw-bold">{t('forgotPassword')}</h3>
+              <h3 className="text-center fw-bold">
+                {tCommon('forgotPassword')}
+              </h3>
               {showEnterEmail ? (
                 <div className="mt-4">
                   <Form onSubmit={getOTP}>
@@ -190,7 +196,7 @@ const ForgotPassword = (): JSX.Element => {
                       type="password"
                       className="form-control"
                       id="newPassword"
-                      placeholder={t('password')}
+                      placeholder={tCommon('password')}
                       data-testid="newPassword"
                       name="newPassword"
                       value={forgotPassFormData.newPassword}

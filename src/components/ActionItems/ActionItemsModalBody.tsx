@@ -33,6 +33,7 @@ export const ActionItemsModalBody = ({
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationActionItems',
   });
+  const { t: tCommon } = useTranslation('common');
 
   const [dueDate, setDueDate] = useState<Date | null>(new Date());
   const [actionItemCreateModalIsOpen, setActionItemCreateModalIsOpen] =
@@ -80,7 +81,7 @@ export const ActionItemsModalBody = ({
     data: InterfaceActionItemList | undefined;
     loading: boolean;
     error?: Error | undefined;
-    refetch: any;
+    refetch: () => void;
   } = useQuery(ACTION_ITEM_LIST, {
     variables: {
       organizationId,
@@ -188,7 +189,7 @@ export const ActionItemsModalBody = ({
           data-testid="createEventActionItemBtn"
           onClick={showCreateModal}
         >
-          {t('createActionItem')}
+          {tCommon('create')}
         </Button>
       </div>
 

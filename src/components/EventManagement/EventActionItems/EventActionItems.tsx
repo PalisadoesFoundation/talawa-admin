@@ -33,6 +33,7 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'eventActionItems',
   });
+  const { t: tCommon } = useTranslation('common');
 
   const [actionItemCreateModalIsOpen, setActionItemCreateModalIsOpen] =
     useState(false);
@@ -533,7 +534,7 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
             onClick={toggleDeleteModal}
             data-testid="actionItemDeleteModalCloseBtn"
           >
-            {t('no')}
+            {tCommon('no')}
           </Button>
           <Button
             type="button"
@@ -541,7 +542,7 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
             onClick={deleteActionItemHandler}
             data-testid="deleteActionItemBtn"
           >
-            {t('yes')}
+            {tCommon('yes')}
           </Button>
         </Modal.Footer>
       </Modal>

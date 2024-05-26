@@ -57,7 +57,12 @@ const renderOrgAdminListCard = (props: {
     </MockedProvider>,
   );
 };
-
+jest.mock('i18next-browser-languagedetector', () => ({
+  init: jest.fn(),
+  type: 'languageDetector',
+  detect: jest.fn(() => 'en'),
+  cacheUserLanguage: jest.fn(),
+}));
 describe('Testing Organization Admin List Card', () => {
   global.alert = jest.fn();
 
