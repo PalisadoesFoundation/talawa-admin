@@ -151,7 +151,7 @@ const leftDrawerOrg = ({
                         }
                       />
                     </div>
-                    {name}
+                    {tCommon(name)}
                   </Button>
                 )}
               </NavLink>

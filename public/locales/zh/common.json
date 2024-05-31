@@ -47,5 +47,19 @@
   "startDate": "开始日期",
   "endDate": "结束日期",
   "startTime": "开始时间",
-  "endTime": "时间结束"
+  "endTime": "时间结束",
+  "My Organizations": "我的组织",
+  "Dashboard": "仪表板",
+  "People": "人们",
+  "Events": "事件",
+  "Venues": "场地",
+  "Action Items": "行动项目",
+  "Posts": "帖子",
+  "Block/Unblock": "封锁/解除封锁",
+  "Advertisement": "广告",
+  "Funds": "资金",
+  "Membership Requests": "会员请求",
+  "Plugins": "插件",
+  "Plugin Store": "插件商店",
+  "Settings": "设置"
 }

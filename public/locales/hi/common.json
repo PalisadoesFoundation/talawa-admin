@@ -47,5 +47,19 @@
   "startDate": "आरंभ करने की तिथि",
   "endDate": "अंतिम तिथि",
   "startTime": "समय शुरू",
-  "endTime": "अंत समय"
+  "endTime": "अंत समय",
+  "My Organizations": "मेरे संगठन",
+  "Dashboard": "डैशबोर्ड",
+  "People": "लोग",
+  "Events": "कार्यक्रम",
+  "Venues": "स्थल",
+  "Action Items": "कार्य आइटम",
+  "Posts": "पोस्ट",
+  "Block/Unblock": "ब्लॉक/अनब्लॉक",
+  "Advertisement": "विज्ञापन",
+  "Funds": "निधि",
+  "Membership Requests": "सदस्यता अनुरोध",
+  "Plugins": "प्लगइन्स",
+  "Plugin Store": "प्लगइन स्टोर",
+  "Settings": "सेटिंग्स"
 }

@@ -47,5 +47,19 @@
   "startDate": "Start Date",
   "endDate": "End Date",
   "startTime": "Start Time",
-  "endTime": "End Time"
+  "endTime": "End Time",
+  "My Organizations": "My Organizations",
+  "Dashboard": "Dashboard",
+  "People": "People",
+  "Events": "Events",
+  "Venues": "Venues",
+  "Action Items": "Action Items",
+  "Posts": "Posts",
+  "Block/Unblock": "Block/Unblock",
+  "Advertisement": "Advertisement",
+  "Funds": "Funds",
+  "Membership Requests": "Membership Requests",
+  "Plugins": "Plugins",
+  "Plugin Store": "Plugin Store",
+  "Settings": "Settings"
 }
