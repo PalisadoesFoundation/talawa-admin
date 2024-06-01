@@ -148,7 +148,9 @@
     "roleUpdated": "Role Updated.",
     "joinNow": "Join Now",
     "visit": "Visit",
-    "withdraw": "Widthdraw"
+    "withdraw": "Widthdraw",
+    "removeUserFrom": "Remove User from {{org}}",
+    "removeConfirmation": "Are you sure you want to remove '{{name}}' from organization '{{org}}'?"
   },
   "communityProfile": {
     "title": "Community Profile",

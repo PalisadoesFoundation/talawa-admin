@@ -148,7 +148,9 @@
     "roleUpdated": "角色已更新。",
     "joinNow": "立即加入",
     "visit": "访问",
-    "withdraw": "拉幅"
+    "withdraw": "拉幅",
+    "removeUserFrom": "从{{org}}中删除用户",
+    "removeConfirmation": "您确定要将'{{name}}'从组织'{{org}}'中删除吗？"
   },
   "communityProfile": {
     "title": "社区简介",
