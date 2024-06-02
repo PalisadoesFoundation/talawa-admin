@@ -12,7 +12,7 @@ interface InterfaceLoginPortalToggleProps {
 function loginPortalToggle({
   onToggle,
 }: InterfaceLoginPortalToggleProps): JSX.Element {
-  const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
+  const { t: tCommon } = useTranslation('common');
   const [activeRole, setActiveRole] = useState<'admin' | 'user'>('admin');
 
   const handleNavLinkClick = (role: 'admin' | 'user'): void => {
@@ -28,7 +28,7 @@ function loginPortalToggle({
           to="/"
           onClick={() => handleNavLinkClick('admin')}
         >
-          {t('admin')}
+          {tCommon('admin')}
         </NavLink>
       </Col>
       <Col>
@@ -37,7 +37,7 @@ function loginPortalToggle({
           to="/"
           onClick={() => handleNavLinkClick('user')}
         >
-          {t('user')}
+          {tCommon('user')}
         </NavLink>
       </Col>
     </Row>

@@ -35,6 +35,7 @@ interface InterfaceCustomRecurrenceModalProps {
     state: React.SetStateAction<boolean>,
   ) => void;
   t: (key: string) => string;
+  tCommon: (key: string) => string;
 }
 
 const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
@@ -45,6 +46,7 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
   hideCustomRecurrenceModal,
   setCustomRecurrenceModalIsOpen,
   t,
+  tCommon,
 }) => {
   const {
     recurrenceStartDate,
@@ -335,7 +337,7 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
                     {option === endsOn && (
                       <div className="ms-3">
                         <DatePicker
-                          label={t('endDate')}
+                          label={tCommon('endDate')}
                           className={styles.recurrenceRuleDateBox}
                           disabled={selectedRecurrenceEndOption !== endsOn}
                           value={dayjs(
@@ -386,7 +388,7 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
               data-testid="customRecurrenceSubmitBtn"
               onClick={handleCustomRecurrenceSubmit}
             >
-              {t('done')}
+              {tCommon('done')}
             </Button>
           </div>
         </Modal.Body>

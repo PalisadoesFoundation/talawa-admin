@@ -49,7 +49,7 @@ describe('Testing Page not found component', () => {
       </BrowserRouter>,
     );
 
-    expect(screen.getByText(/Talawa Admin/i)).toBeTruthy();
+    expect(screen.getByText(/Talawa Admin Portal/i)).toBeTruthy();
     expect(screen.getByText(/404/i)).toBeTruthy();
     expect(
       screen.getByText(/Oops! The Page you requested was not found!/i),

@@ -41,11 +41,14 @@ const OrgMemberDetail: React.FC<OrgMemberDetailProps> = ({
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgMemberDetail',
   });
+
+  const { t: tCommon } = useTranslation('common');
+
   const location = useLocation();
   const isMounted = useRef(true);
   const { getItem, setItem } = useLocalStorage();
   const currentUrl = location.state?.id || getItem('id') || id;
-  document.title = t('title');
+  document.title = tCommon('title');
   const [formState, setFormState] = useState({
     firstName: '',
     lastName: '',
@@ -200,7 +203,7 @@ const OrgMemberDetail: React.FC<OrgMemberDetailProps> = ({
               </div>
               <div className="d-flex flex-row flex-wrap py-3 px-3">
                 <div>
-                  <p className="my-0 mx-2">{t('firstName')}</p>
+                  <p className="my-0 mx-2">{tCommon('firstName')}</p>
                   <input
                     value={formState.firstName}
                     className={`rounded border-0 p-2 m-2 ${styles.inputColor}`}
@@ -212,7 +215,7 @@ const OrgMemberDetail: React.FC<OrgMemberDetailProps> = ({
                   />
                 </div>
                 <div>
-                  <p className="my-0 mx-2">{t('lastName')}</p>
+                  <p className="my-0 mx-2">{tCommon('lastName')}</p>
                   <input
                     value={formState.lastName}
                     className={`rounded border-0 p-2 m-2 ${styles.inputColor}`}
@@ -220,7 +223,7 @@ const OrgMemberDetail: React.FC<OrgMemberDetailProps> = ({
                     name="lastName"
                     onChange={handleChange}
                     required
-                    placeholder={t('lastName')}
+                    placeholder={tCommon('lastName')}
                   />
                 </div>
                 <div>
@@ -281,7 +284,7 @@ const OrgMemberDetail: React.FC<OrgMemberDetailProps> = ({
                 </div>
                 <p className="my-0 mx-2 w-100">
                   <label htmlFor="orgphoto" className={styles.orgphoto}>
-                    {t('displayImage')}:
+                    {tCommon('displayImage')}:
                     <Form.Control
                       className="w-75"
                       accept="image/*"
@@ -504,7 +507,7 @@ const OrgMemberDetail: React.FC<OrgMemberDetailProps> = ({
                 value="savechanges"
                 onClick={loginLink}
               >
-                {t('saveChanges')}
+                {tCommon('saveChanges')}
               </Button>
             </div>
           </div>

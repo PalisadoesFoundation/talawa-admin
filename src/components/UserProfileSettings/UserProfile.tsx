@@ -21,6 +21,7 @@ const UserProfile: React.FC<InterfaceUserProfile> = ({
   const { t } = useTranslation('translation', {
     keyPrefix: 'settings',
   });
+  const { t: tCommon } = useTranslation('common');
   return (
     <>
       <Card border="0" className="rounded-4 mb-4">
@@ -48,7 +49,7 @@ const UserProfile: React.FC<InterfaceUserProfile> = ({
               <span className="d-flex">
                 <CalendarMonthOutlinedIcon />
                 <span className="d-flex align-end">
-                  {t('joined')} 1st May, 2021
+                  {tCommon('joined')} 1st May, 2021
                 </span>
               </span>
             </div>

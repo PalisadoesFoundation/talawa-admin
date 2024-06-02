@@ -28,6 +28,7 @@ interface InterfaceRequestsListItem {
 
 const Requests = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'requests' });
+  const { t: tCommon } = useTranslation('common');
 
   document.title = t('title');
 
@@ -189,8 +190,8 @@ const Requests = (): JSX.Element => {
 
   const headerTitles: string[] = [
     t('sl_no'),
-    t('name'),
-    t('email'),
+    tCommon('name'),
+    tCommon('email'),
     t('accept'),
     t('reject'),
   ];
@@ -241,7 +242,7 @@ const Requests = (): JSX.Element => {
         searchByName.length > 0 ? (
         <div className={styles.notFound}>
           <h4 className="m-0">
-            {t('noResultsFoundFor')} &quot;{searchByName}&quot;
+            {tCommon('noResultsFoundFor')} &quot;{searchByName}&quot;
           </h4>
         </div>
       ) : !isLoading && data && displayedRequests.length === 0 ? (
@@ -267,7 +268,7 @@ const Requests = (): JSX.Element => {
               data-testid="requests-list"
               endMessage={
                 <div className={'w-100 text-center my-4'}>
-                  <h5 className="m-0 ">{t('endOfResults')}</h5>
+                  <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
                 </div>
               }
             >

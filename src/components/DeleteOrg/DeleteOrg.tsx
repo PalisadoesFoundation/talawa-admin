@@ -17,6 +17,7 @@ function deleteOrg(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'deleteOrg',
   });
+  const { t: tCommon } = useTranslation('common');
   const { orgId: currentUrl } = useParams();
   const navigate = useNavigate();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -100,7 +101,7 @@ function deleteOrg(): JSX.Element {
               onClick={toggleDeleteModal}
               data-testid="closeDelOrgModalBtn"
             >
-              {t('cancel')}
+              {tCommon('cancel')}
             </Button>
             <Button
               variant="danger"
