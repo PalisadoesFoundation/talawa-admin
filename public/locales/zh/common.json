@@ -30,6 +30,7 @@
   "search": "搜索",
   "description": "描述",
   "saveChanges": "保存更改",
+  "resetChanges": "重置更改",
   "displayImage": "显示图像",
   "enterEmail": "输入电子邮件",
   "emailAddress": "电子邮件地址",
@@ -61,5 +62,13 @@
   "Membership Requests": "会员请求",
   "Plugins": "插件",
   "Plugin Store": "插件商店",
-  "Settings": "设置"
+  "Settings": "设置",
+  "createdOn": "创建于",
+  "createdBy": "创建者",
+  "usersRole": "用户角色",
+  "changeRole": "更改角色",
+  "action": "操作",
+  "removeUser": "删除用户",
+  "remove": "删除",
+  "viewProfile": "查看个人资料"
 }

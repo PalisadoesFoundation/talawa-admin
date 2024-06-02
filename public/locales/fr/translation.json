@@ -148,7 +148,9 @@
     "roleUpdated": "Rôle mis à jour.",
     "joinNow": "Adhérer maintenant",
     "visit": "Visite",
-    "withdraw": "Largeur de tirage"
+    "withdraw": "Largeur de tirage",
+    "removeUserFrom": "Supprimer l'Utilisateur de {{org}}",
+    "removeConfirmation": "Êtes-vous sûr de vouloir supprimer '{{name}}' de l'organisation '{{org}}' ?"
   },
   "communityProfile": {
     "title": "Profil de la communauté",
