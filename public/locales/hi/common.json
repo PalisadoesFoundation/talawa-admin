@@ -69,5 +69,6 @@
   "changeRole": "भूमिका बदलें",
   "action": "क्रिया",
   "removeUser": "उपयोगकर्ता हटाएं",
-  "remove": "हटाएं"
+  "remove": "हटाएं",
+  "viewProfile": "प्रोफ़ाइल देखें"
 }

@@ -69,5 +69,6 @@
   "changeRole": "Cambiar Rol",
   "action": "Acción",
   "removeUser": "Eliminar Usuario",
-  "remove": "Eliminar"
+  "remove": "Eliminar",
+  "viewProfile": "Ver Perfil"
 }

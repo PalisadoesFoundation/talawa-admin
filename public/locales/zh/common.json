@@ -69,5 +69,6 @@
   "changeRole": "更改角色",
   "action": "操作",
   "removeUser": "删除用户",
-  "remove": "删除"
+  "remove": "删除",
+  "viewProfile": "查看个人资料"
 }

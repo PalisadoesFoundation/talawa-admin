@@ -6,8 +6,10 @@ import useLocalStorage from 'utils/useLocalstorage';
 import styles from './ProfileDropdown.module.css';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
+import { useTranslation } from 'react-i18next';
 
 const profileDropdown = (): JSX.Element => {
+  const { t: tCommon } = useTranslation('common');
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
   const { getItem } = useLocalStorage();
   const superAdmin = getItem('SuperAdmin');
@@ -90,14 +92,14 @@ const profileDropdown = (): JSX.Element => {
           }
           aria-label="View Profile"
         >
-          View Profile
+          {tCommon('viewProfile')}
         </Dropdown.Item>
         <Dropdown.Item
           style={{ color: 'red' }}
           onClick={logout}
           data-testid="logoutBtn"
         >
-          Logout
+          {tCommon('logout')}
         </Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
