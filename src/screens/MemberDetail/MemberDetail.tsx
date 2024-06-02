@@ -27,7 +27,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'memberDetail',
   });
-  
+
   // const { t: tCommon } = useTranslation('common');
 
   const location = useLocation();
@@ -74,7 +74,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       <div>
         <Tab.Container
           id="member-detail-tab-container"
-
           defaultActiveKey="overview"
         >
           <Nav
