@@ -40,6 +40,8 @@ function OrgPeopleOrganizationsCard(
     keyPrefix: 'orgPeopleOrganizationsCard',
   });
 
+  const { t: tCommon } = useTranslation('common');
+
   const [role, setRole] = useState(
     admins.some((member) => member._id === userID) ? 'Admin' : 'User',
   );
@@ -272,7 +274,7 @@ function OrgPeopleOrganizationsCard(
                     acceptMember();
                   }}
                 >
-                  {t('yes')}
+                  {tCommon('yes')}
                 </Dropdown.Item>
                 <Dropdown.Item
                   data-testid="reject-item"
@@ -281,7 +283,7 @@ function OrgPeopleOrganizationsCard(
                     removeMember();
                   }}
                 >
-                  {t('no')}
+                  {tCommon('no')}
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>

@@ -112,8 +112,6 @@
     "sampleOrganization": "Sample Organization"
   },
   "orgPeopleOrganizationsCard": {
-    "admins": "Admins",
-    "members": "Members",
     "manage": "Manage",
     "notMember": "User is not a member",
     "unblock": "UnBlock",
@@ -122,8 +120,6 @@
     "unBlockedSuccessfully": "User Un-Blocked successfully",
     "blockedUser": "User is blocked",
     "roleUpdated": "Role Updated.",
-    "no": "No",
-    "yes": "Yes",
     "memberRemoved": "The Member is removed"
   },
   "paginationList": {
@@ -641,9 +637,7 @@
     "sort": "Sort",
     "noOrgError": "Organizations not found, please create an organization through dashboard",
     "noOrgErrorTitle": "Organizations Not Found",
-    "noOrgErrorDescription": "Please create an organization through dashboard",
-    "noResultsFoundFor": "No results found for",
-    "endOfResults": "End of results"
+    "noOrgErrorDescription": "Please create an organization through dashboard"
   },
   "userLogin": {
     "login": "Login",

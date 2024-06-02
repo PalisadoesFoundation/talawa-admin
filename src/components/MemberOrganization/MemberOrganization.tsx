@@ -23,6 +23,8 @@ const MemberOrganization: React.FC<InterfaceMemberOrganization> = (props) => {
     keyPrefix: 'memberOrganization',
   });
 
+  const { t: tCommon } = useTranslation('common');
+
   const { userId } = props;
 
   const perPageResult = 8;
@@ -152,7 +154,7 @@ const MemberOrganization: React.FC<InterfaceMemberOrganization> = (props) => {
         /* istanbul ignore next */
         <div className={styles.notFound} data-testid="noResultFound">
           <h4 className="m-0">
-            {t('noResultsFoundFor')} &quot;{searchByName}&quot;
+            {tCommon('noResultsFoundFor')} &quot;{searchByName}&quot;
           </h4>
         </div>
       ) : (
@@ -187,7 +189,7 @@ const MemberOrganization: React.FC<InterfaceMemberOrganization> = (props) => {
             data-testid="organizations-list"
             endMessage={
               <div className={'w-100 text-center my-4'}>
-                <h5 className="m-0 ">{t('endOfResults')}</h5>
+                <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
               </div>
             }
           >

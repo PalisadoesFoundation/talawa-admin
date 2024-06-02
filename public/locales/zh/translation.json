@@ -584,7 +584,15 @@
     "installMsg": "您的组织现已启用此功能"
   },
   "memberDetail": {
-    "title": "用户详细信息",
+    "overview": "概览",
+    "organizations": "组织",
+    "events": "活动",
+    "tags": "标签",
+    "title": "用户详情"
+  },
+
+  "orgMemberDetail": {
+    "title": "用户详情",
     "addAdmin": "添加管理员",
     "alreadyIsAdmin": "会员已经是管理员",
     "organizations": "组织机构",
@@ -617,6 +625,13 @@
     "adminForEvents": "活动管理员",
     "addedAsAdmin": "用户被添加为管理员。",
     "userType": "用户类型"
+  },
+
+  "memberOrganization": {
+    "sort": "按角色搜索",
+    "noOrgError": "未找到组织，请通过仪表板创建组织",
+    "noOrgErrorTitle": "未找到组织",
+    "noOrgErrorDescription": "请通过仪表板创建组织"
   },
   "userLogin": {
     "login": "登录",

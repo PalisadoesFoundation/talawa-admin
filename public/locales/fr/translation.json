@@ -111,6 +111,17 @@
     "manage": "Gérer",
     "sampleOrganization": "Exemple d'organisation"
   },
+  "orgPeopleOrganizationsCard": {
+    "manage": "Gérer",
+    "notMember": "L'utilisateur n'est pas un membre",
+    "unblock": "Débloquer",
+    "block": "Bloc",
+    "blockedSuccessfully": "Utilisateur bloqué avec succès",
+    "unBlockedSuccessfully": "Utilisateur débloqué avec succès",
+    "blockedUser": "Utilisateur bloqué",
+    "roleUpdated": "Rôle mis à jour.",
+    "memberRemoved": "Le membre est supprimé"
+  },
   "paginationList": {
     "rowsPerPage": "lignes par page",
     "all": "Tous"
@@ -584,6 +595,13 @@
     "installMsg": "Cette fonctionnalité est désormais activée dans votre organisation"
   },
   "memberDetail": {
+    "overview": "Aperçu",
+    "organizations": "Organisations",
+    "events": "Événements",
+    "tags": "Balises",
+    "title": "Détails de l'utilisateur"
+  },
+  "orgMemberDetail": {
     "title": "Détails de l'utilisateur",
     "addAdmin": "Ajouter un administrateur",
     "alreadyIsAdmin": "Le membre est déjà un administrateur",
@@ -617,6 +635,12 @@
     "adminForEvents": "Administrateur pour les événements",
     "addedAsAdmin": "L'utilisateur est ajouté en tant qu'administrateur.",
     "userType": "Type d'utilisateur"
+  },
+  "memberOrganization": {
+    "sort": "Trier",
+    "noOrgError": "Organisations non trouvées, veuillez créer une organisation via le tableau de bord",
+    "noOrgErrorTitle": "Organisations non trouvées",
+    "noOrgErrorDescription": "Veuillez créer une organisation via le tableau de bord"
   },
   "userLogin": {
     "login": "Se connecter",

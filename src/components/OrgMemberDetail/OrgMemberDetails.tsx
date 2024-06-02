@@ -211,7 +211,7 @@ const OrgMemberDetail: React.FC<OrgMemberDetailProps> = ({
                     name="firstName"
                     onChange={handleChange}
                     required
-                    placeholder={t('firstName')}
+                    placeholder={tCommon('firstName')}
                   />
                 </div>
                 <div>
@@ -335,18 +335,18 @@ const OrgMemberDetail: React.FC<OrgMemberDetailProps> = ({
                     name="email"
                     onChange={handleChange}
                     required
-                    placeholder={t('email')}
+                    placeholder={tCommon('email')}
                   />
                 </div>
                 <div className="p-2" style={{ width: `82%` }}>
-                  <p className="my-0">{t('address')}</p>
+                  <p className="my-0">{tCommon('address')}</p>
                   <input
                     value={formState.address}
                     className={`w-100 rounded border-0 p-2 ${styles.inputColor}`}
                     type="email"
                     name="address"
                     onChange={handleChange}
-                    placeholder={t('address')}
+                    placeholder={tCommon('address')}
                   />
                 </div>
                 <div className="w-25 p-2">
@@ -489,12 +489,12 @@ const OrgMemberDetail: React.FC<OrgMemberDetailProps> = ({
                   </div>
                   <div className="d-flex flex-column">
                     <label htmlFor="">
-                      {t('delete')}
+                      {tCommon('delete')}
                       <br />
                       {`(API not supported yet)`}
                     </label>
                     <Button className="btn btn-danger" data-testid="deleteBtn">
-                      {t('delete')}
+                      {tCommon('delete')}
                     </Button>
                   </div>
                 </div>

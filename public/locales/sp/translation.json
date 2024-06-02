@@ -123,21 +123,6 @@
     "noNotifications": "No Notificaciones",
     "close": "Cerca"
   },
-  "orgPeopleOrganizationsCard": {
-    "admins": "Administradores",
-    "members": "Miembros",
-    "manage": "Gestionar",
-    "notMember": "El usuario no es miembro",
-    "unblock": "Desbloquear",
-    "block": "Bloquear",
-    "blockedUser": "Usuario bloqueado",
-    "blockedSuccessfully": "Usuario bloqueado exitosamente",
-    "unBlockedSuccessfully": "Usuario desbloqueado exitosamente",
-    "roleUpdated": "Rol actualizado.",
-    "no": "No",
-    "yes": "Sí",
-    "memberRemoved": "El miembro ha sido eliminado"
-  },
   "orgList": {
     "title": "Organizaciones Talawa",
     "you": "Tú",
@@ -181,6 +166,17 @@
     "members": "Miembros",
     "manage": "Administrar",
     "sampleOrganization": "Organización de muestra"
+  },
+  "orgPeopleOrganizationsCard": {
+    "manage": "Gestionar",
+    "notMember": "El usuario no es miembro",
+    "unblock": "Desbloquear",
+    "block": "Bloquear",
+    "blockedSuccessfully": "Usuario bloqueado con éxito",
+    "unBlockedSuccessfully": "Usuario desbloqueado exitosamente",
+    "blockedUser": "Usuario bloqueado",
+    "roleUpdated": "Rol actualizado.",
+    "memberRemoved": "El miembro ha sido eliminado"
   },
   "paginationList": {
     "rowsPerPage": "filas por página",
