@@ -31,6 +31,7 @@ function organizationActionItems(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationActionItems',
   });
+  const { t: tCommon } = useTranslation('common');
 
   const { orgId: currentUrl } = useParams();
 
@@ -355,7 +356,7 @@ function organizationActionItems(): JSX.Element {
               className={styles.createActionItemButton}
             >
               <i className={'fa fa-plus me-2'} />
-              {t('createActionItem')}
+              {tCommon('create')}
             </Button>
           </div>
         </div>

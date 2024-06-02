@@ -37,6 +37,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'eventListCard',
   });
+  const { t: tCommon } = useTranslation('common');
 
   const [eventModalIsOpen, setEventModalIsOpen] = useState(false);
 
@@ -75,6 +76,7 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
         eventModalIsOpen={eventModalIsOpen}
         hideViewModal={hideViewModal}
         t={t}
+        tCommon={tCommon}
       />
     </>
   );

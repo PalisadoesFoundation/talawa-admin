@@ -21,6 +21,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 
 const Users = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'users' });
+  const { t: tCommon } = useTranslation('common');
 
   document.title = t('title');
 
@@ -234,8 +235,8 @@ const Users = (): JSX.Element => {
 
   const headerTitles: string[] = [
     '#',
-    t('name'),
-    t('email'),
+    tCommon('name'),
+    tCommon('email'),
     t('joined_organizations'),
     t('blocked_organizations'),
   ];
@@ -307,33 +308,33 @@ const Users = (): JSX.Element => {
                 data-testid="filterUsers"
               >
                 <FilterListIcon className={'me-1'} />
-                {t('filter')}
+                {tCommon('filter')}
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item
                   data-testid="admin"
                   onClick={(): void => handleFiltering('admin')}
                 >
-                  {t('admin')}
+                  {tCommon('admin')}
                 </Dropdown.Item>
                 <Dropdown.Item
                   data-testid="superAdmin"
                   onClick={(): void => handleFiltering('superAdmin')}
                 >
-                  {t('superAdmin')}
+                  {tCommon('superAdmin')}
                 </Dropdown.Item>
 
                 <Dropdown.Item
                   data-testid="user"
                   onClick={(): void => handleFiltering('user')}
                 >
-                  {t('user')}
+                  {tCommon('user')}
                 </Dropdown.Item>
                 <Dropdown.Item
                   data-testid="cancel"
                   onClick={(): void => handleFiltering('cancel')}
                 >
-                  {t('cancel')}
+                  {tCommon('cancel')}
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
@@ -346,7 +347,7 @@ const Users = (): JSX.Element => {
       searchByName.length > 0 ? (
         <div className={styles.notFound}>
           <h4>
-            {t('noResultsFoundFor')} &quot;{searchByName}&quot;
+            {tCommon('noResultsFoundFor')} &quot;{searchByName}&quot;
           </h4>
         </div>
       ) : isLoading == false && data && displayedUsers.length === 0 ? (
@@ -375,7 +376,7 @@ const Users = (): JSX.Element => {
               data-testid="users-list"
               endMessage={
                 <div className={'w-100 text-center my-4'}>
-                  <h5 className="m-0 ">{t('endOfResults')}</h5>
+                  <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
                 </div>
               }
             >

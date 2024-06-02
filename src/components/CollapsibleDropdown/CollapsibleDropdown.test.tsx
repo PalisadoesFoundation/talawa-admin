@@ -4,6 +4,10 @@ import { BrowserRouter } from 'react-router-dom';
 
 import CollapsibleDropdown from './CollapsibleDropdown';
 import type { InterfaceCollapsibleDropdown } from './CollapsibleDropdown';
+import { store } from 'state/store';
+import { Provider } from 'react-redux';
+import { I18nextProvider } from 'react-i18next';
+import i18nForTest from 'utils/i18nForTest';
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -41,7 +45,11 @@ describe('Testing CollapsibleDropdown component', () => {
   test('Component should be rendered properly', () => {
     render(
       <BrowserRouter>
-        <CollapsibleDropdown {...props} />
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <CollapsibleDropdown {...props} />
+          </I18nextProvider>
+        </Provider>
       </BrowserRouter>,
     );
     expect(screen.getByText('DropDown Category')).toBeInTheDocument();
@@ -52,7 +60,11 @@ describe('Testing CollapsibleDropdown component', () => {
   test('Dropdown should be rendered and functioning correctly', () => {
     render(
       <BrowserRouter>
-        <CollapsibleDropdown {...props} />
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <CollapsibleDropdown {...props} />
+          </I18nextProvider>
+        </Provider>
       </BrowserRouter>,
     );
     const parentDropdownBtn = screen.getByTestId('collapsible-dropdown');

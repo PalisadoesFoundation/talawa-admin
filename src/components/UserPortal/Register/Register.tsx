@@ -20,6 +20,7 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
   const { setCurrentMode } = props;
 
   const { t } = useTranslation('translation', { keyPrefix: 'userRegister' });
+  const { t: tCommon } = useTranslation('common');
 
   const handleModeChangeToLogin = (): void => {
     setCurrentMode('login');
@@ -70,7 +71,7 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
           password: '',
           confirmPassword: '',
         });
-      } catch (error: any) {
+      } catch (error: unknown) {
         /* istanbul ignore next */
         errorHandler(t, error);
       }
@@ -116,9 +117,9 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
 
   return (
     <>
-      <h3 className="mt-3 font-weight-bold">{t('register')}</h3>
+      <h3 className="mt-3 font-weight-bold">{tCommon('register')}</h3>
       <div className="my-3">
-        <h6>{t('firstName')}</h6>
+        <h6>{tCommon('firstName')}</h6>
         <InputGroup className="mb-3">
           <Form.Control
             placeholder={t('enterFirstName')}
@@ -133,7 +134,7 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
             <BadgeOutlinedIcon className={`${styles.colorWhite}`} />
           </InputGroup.Text>
         </InputGroup>
-        <h6>{t('lastName')}</h6>
+        <h6>{tCommon('lastName')}</h6>
         <InputGroup className="mb-3">
           <Form.Control
             placeholder={t('enterLastName')}
@@ -148,10 +149,10 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
             <BadgeOutlinedIcon className={`${styles.colorWhite}`} />
           </InputGroup.Text>
         </InputGroup>
-        <h6>{t('emailAddress')}</h6>
+        <h6>{tCommon('emailAddress')}</h6>
         <InputGroup className="mb-3">
           <Form.Control
-            placeholder={t('enterEmail')}
+            placeholder={tCommon('enterEmail')}
             type="email"
             className={styles.borderNone}
             value={registerVariables.email}
@@ -164,10 +165,10 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
             <EmailOutlinedIcon className={`${styles.colorWhite}`} />
           </InputGroup.Text>
         </InputGroup>
-        <h6>{t('password')}</h6>
+        <h6>{tCommon('password')}</h6>
         <InputGroup className="mb-3">
           <Form.Control
-            placeholder={t('enterPassword')}
+            placeholder={tCommon('enterPassword')}
             type="password"
             className={styles.borderNone}
             value={registerVariables.password}
@@ -180,7 +181,7 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
             <LockOutlined className={`${styles.colorWhite}`} />
           </InputGroup.Text>
         </InputGroup>
-        <h6>{t('confirmPassword')}</h6>
+        <h6>{tCommon('confirmPassword')}</h6>
         <InputGroup className="mb-3">
           <Form.Control
             placeholder={t('enterConfirmPassword')}
@@ -203,7 +204,7 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
         onClick={handleRegister}
         data-testid="registerBtn"
       >
-        {t('register')}
+        {tCommon('register')}
       </Button>
 
       <div className="mt-4 text-center">
@@ -213,7 +214,7 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
           className={styles.loginText}
           data-testid="setLoginBtn"
         >
-          <u>{t('login')}</u>
+          <u>{tCommon('login')}</u>
         </span>
       </div>
     </>

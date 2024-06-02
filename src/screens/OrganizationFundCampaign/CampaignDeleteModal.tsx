@@ -7,12 +7,14 @@ interface InterfaceDeleteCampaignModal {
   hideDeleteCampaignModal: () => void;
   deleteCampaignHandler: () => Promise<void>;
   t: (key: string) => string;
+  tCommon: (key: string) => string;
 }
 const CampaignDeleteModal: React.FC<InterfaceDeleteCampaignModal> = ({
   campaignDeleteModalIsOpen,
   hideDeleteCampaignModal,
   deleteCampaignHandler,
   t,
+  tCommon,
 }) => {
   return (
     <>
@@ -36,14 +38,14 @@ const CampaignDeleteModal: React.FC<InterfaceDeleteCampaignModal> = ({
             onClick={deleteCampaignHandler}
             data-testid="deleteyesbtn"
           >
-            {t('yes')}
+            {tCommon('yes')}
           </Button>
           <Button
             variant="secondary"
             onClick={hideDeleteCampaignModal}
             data-testid="deletenobtn"
           >
-            {t('no')}
+            {tCommon('no')}
           </Button>
         </Modal.Footer>
       </Modal>

@@ -19,6 +19,7 @@ interface InterfaceLoginProps {
 
 export default function login(props: InterfaceLoginProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userLogin' });
+  const { t: tCommon } = useTranslation('common');
 
   const navigate = useNavigate();
 
@@ -52,7 +53,7 @@ export default function login(props: InterfaceLoginProps): JSX.Element {
         setItem('token', data.login.accessToken);
         setItem('userId', data.login.user._id);
         navigate('/user/organizations');
-      } catch (error: any) {
+      } catch (error: unknown) {
         errorHandler(t, error);
       }
     }
@@ -80,13 +81,13 @@ export default function login(props: InterfaceLoginProps): JSX.Element {
 
   return (
     <>
-      <h3 className="mt-3 font-weight-bold">{t('login')}</h3>
+      <h3 className="mt-3 font-weight-bold">{tCommon('login')}</h3>
 
       <div className="my-3">
-        <h6>{t('emailAddress')}</h6>
+        <h6>{tCommon('emailAddress')}</h6>
         <InputGroup className="mb-3">
           <Form.Control
-            placeholder={t('enterEmail')}
+            placeholder={tCommon('enterEmail')}
             type="email"
             className={styles.borderNone}
             value={loginVariables.email}
@@ -98,10 +99,10 @@ export default function login(props: InterfaceLoginProps): JSX.Element {
             <EmailOutlinedIcon className={`${styles.colorWhite}`} />
           </InputGroup.Text>
         </InputGroup>
-        <h6>{t('password')}</h6>
+        <h6>{tCommon('password')}</h6>
         <InputGroup className="mb-3">
           <Form.Control
-            placeholder={t('enterPassword')}
+            placeholder={tCommon('enterPassword')}
             type="password"
             className={styles.borderNone}
             value={loginVariables.password}
@@ -117,7 +118,7 @@ export default function login(props: InterfaceLoginProps): JSX.Element {
 
       <div className={styles.forgotPasswordContainer}>
         <Link to="/forgotPassword" className={`${styles.forgotPasswordText}`}>
-          <u>{t('forgotPassword')}</u>
+          <u>{tCommon('forgotPassword')}</u>
         </Link>
       </div>
 
@@ -127,7 +128,7 @@ export default function login(props: InterfaceLoginProps): JSX.Element {
         onClick={handleLogin}
         data-testid="loginBtn"
       >
-        {t('login')}
+        {tCommon('login')}
       </Button>
       <hr />
       <Button
@@ -136,7 +137,7 @@ export default function login(props: InterfaceLoginProps): JSX.Element {
         onClick={handleModeChangeToRegister}
         data-testid="setRegisterBtn"
       >
-        {t('register')}
+        {tCommon('register')}
       </Button>
     </>
   );

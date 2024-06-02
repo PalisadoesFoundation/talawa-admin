@@ -98,9 +98,15 @@ def load_translation(filepath):
     Returns:
         translation: Loaded translation
     """
-    with open(filepath, "r", encoding="utf-8") as file:
-        translation = json.load(file)
-    return translation
+    try:
+        with open(filepath, "r", encoding="utf-8") as file:
+            content = file.read()
+            if not content.strip():
+                raise ValueError(f"File {filepath} is empty.")
+            translation = json.loads(content)
+        return translation
+    except json.JSONDecodeError as e:
+        raise ValueError(f"Error decoding JSON from file {filepath}: {e}")
 
 
 def check_translations(directory):
@@ -112,26 +118,36 @@ def check_translations(directory):
     Returns:
         None
     """
-    default_file = "en.json"
-    default_translation = load_translation(os.path.join(directory, default_file))
-    translations = os.listdir(directory)
-    translations.remove(default_file)  # Exclude default translation
+    default_language_dir = os.path.join(directory, "en")
+    default_files = ["common.json", "errors.json", "translation.json"]
+    default_translations = {}
+    for file in default_files:
+        file_path = os.path.join(default_language_dir, file)
+        default_translations[file] = load_translation(file_path)
+
+    languages = os.listdir(directory)
+    languages.remove("en")  # Exclude default language directory
+
 
     error_found = False
 
-    for translation_file in translations:
-        other_file = os.path.join(directory, translation_file)
-        other_translation = load_translation(other_file)
+    for language in languages:
+        language_dir = os.path.join(directory, language)
+        for file in default_files:
+            default_translation = default_translations[file]
+            other_file_path = os.path.join(language_dir, file)
+            other_translation = load_translation(other_file_path)
 
-        # Compare translations and get detailed error messages
-        errors = compare_translations(
-            default_translation, other_translation, default_file, translation_file
-        )
-        if errors:
-            error_found = True
-            print(f"File {translation_file} has missing translations for:")
-            for error in errors:
-                print(f"  - {error}")
+            # Compare translations and get detailed error messages
+            errors = compare_translations(
+                default_translation, other_translation, f"en/{file}", f"{language}/{file}"
+            )
+            if errors:
+                error_found = True
+                print(f"File {language}/{file} has missing translations for:")
+                for error in errors:
+                    print(f"  - {error}")
+
 
     if error_found:
         sys.exit(1)  # Exit with an error status code
@@ -154,7 +170,7 @@ def main():
         "--directory",
         type=str,
         nargs="?",
-        default=os.path.join(os.getcwd(), "public/locales"),
+        default=os.path.join(os.getcwd(), "locales"),
         help="Directory containing translation files(relative to the root directory).",
     )
     args = parser.parse_args()

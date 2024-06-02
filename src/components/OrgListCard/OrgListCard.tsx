@@ -50,6 +50,7 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgListCard',
   });
+  const { t: tCommon } = useTranslation('common');
 
   return (
     <>
@@ -83,8 +84,8 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
               </div>
             )}
             <h6 className={styles.orgadmin}>
-              {t('admins')}: <span>{admins.length}</span> &nbsp; &nbsp; &nbsp;{' '}
-              {t('members')}: <span>{members.length}</span>
+              {tCommon('admins')}: <span>{admins.length}</span> &nbsp; &nbsp;
+              &nbsp; {tCommon('members')}: <span>{members.length}</span>
             </h6>
           </div>
         </div>

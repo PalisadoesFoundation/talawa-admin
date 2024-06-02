@@ -13,6 +13,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 export default function advertisements(): JSX.Element {
   const { orgId: currentOrgId } = useParams();
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
+  const { t: tCommon } = useTranslation('common');
   document.title = t('title');
   const [after, setAfter] = useState<string | null | undefined>(null);
 
@@ -32,7 +33,7 @@ export default function advertisements(): JSX.Element {
     data?: {
       organizations: InterfaceQueryOrganizationAdvertisementListItem[];
     };
-    refetch: any;
+    refetch: () => void;
   } = useQuery(ORGANIZATION_ADVERTISEMENT_LIST, {
     variables: {
       id: currentOrgId,
@@ -114,7 +115,7 @@ export default function advertisements(): JSX.Element {
                       (ad: Ad) => new Date(ad.endDate) > new Date(),
                     ).length !== 0 && (
                       <div className={'w-100 text-center my-4'}>
-                        <h5 className="m-0 ">{t('endOfResults')}</h5>
+                        <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
                       </div>
                     )
                   }
@@ -189,7 +190,7 @@ export default function advertisements(): JSX.Element {
                       (ad: Ad) => new Date(ad.endDate) < new Date(),
                     ).length !== 0 && (
                       <div className={'w-100 text-center my-4'}>
-                        <h5 className="m-0 ">{t('endOfResults')}</h5>
+                        <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
                       </div>
                     )
                   }

@@ -13,15 +13,20 @@ import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
+import type {
+  InterfaceQueryOrganizationEventListItem,
+  InterfaceMemberInfo,
+} from 'utils/interfaces';
 
 export default function organizationSidebar(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationSidebar',
   });
+  const { t: tCommon } = useTranslation('common');
 
   const { orgId: organizationId } = useParams();
-  const [members, setMembers]: any = React.useState([]);
-  const [events, setEvents]: any = React.useState([]);
+  const [members, setMembers] = React.useState([]);
+  const [events, setEvents] = React.useState([]);
   const eventsLink = `/user/events/id=${organizationId}`;
   const peopleLink = `/user/people/id=${organizationId}`;
 
@@ -64,7 +69,7 @@ export default function organizationSidebar(): JSX.Element {
   return (
     <div className={`${styles.mainContainer}`}>
       <div className={styles.heading}>
-        <b>{t('members')}</b>
+        <b>{tCommon('members')}</b>
       </div>
       {memberLoading ? (
         <div className={`d-flex flex-row justify-content-center`}>
@@ -73,26 +78,31 @@ export default function organizationSidebar(): JSX.Element {
       ) : (
         <ListGroup variant="flush">
           {members.length ? (
-            members.map((member: any, index: React.Key | null | undefined) => {
-              const memberName = `${member.firstName} ${member.lastName}`;
-              return (
-                <ListGroup.Item
-                  key={index}
-                  action
-                  className={`${styles.rounded} ${styles.colorLight} my-1`}
-                >
-                  <div className="d-flex flex-row">
-                    <img
-                      src={member.image ? member.image : AboutImg}
-                      className={styles.memberImage}
-                      width="auto"
-                      height="30px"
-                    />
-                    <div className={styles.orgName}>{memberName}</div>
-                  </div>
-                </ListGroup.Item>
-              );
-            })
+            members.map(
+              (
+                member: InterfaceMemberInfo,
+                index: React.Key | null | undefined,
+              ) => {
+                const memberName = `${member.firstName} ${member.lastName}`;
+                return (
+                  <ListGroup.Item
+                    key={index}
+                    action
+                    className={`${styles.rounded} ${styles.colorLight} my-1`}
+                  >
+                    <div className="d-flex flex-row">
+                      <img
+                        src={member.image ? member.image : AboutImg}
+                        className={styles.memberImage}
+                        width="auto"
+                        height="30px"
+                      />
+                      <div className={styles.orgName}>{memberName}</div>
+                    </div>
+                  </ListGroup.Item>
+                );
+              },
+            )
           ) : (
             <div className="w-100 text-center">{t('noMembers')}</div>
           )}
@@ -115,31 +125,36 @@ export default function organizationSidebar(): JSX.Element {
       ) : (
         <ListGroup variant="flush">
           {events.length ? (
-            events.map((event: any, index: React.Key | null | undefined) => {
-              return (
-                <ListGroup.Item
-                  key={index}
-                  action
-                  className={`${styles.rounded} ${styles.colorLight} my-1`}
-                >
-                  <div className="d-flex flex-column">
-                    <div className="d-flex flex-row justify-content-between align-items-center">
-                      <div className={styles.orgName}>{event.title}</div>
-                      <div>
-                        <CalendarMonthIcon />
+            events.map(
+              (
+                event: InterfaceQueryOrganizationEventListItem,
+                index: React.Key | null | undefined,
+              ) => {
+                return (
+                  <ListGroup.Item
+                    key={index}
+                    action
+                    className={`${styles.rounded} ${styles.colorLight} my-1`}
+                  >
+                    <div className="d-flex flex-column">
+                      <div className="d-flex flex-row justify-content-between align-items-center">
+                        <div className={styles.orgName}>{event.title}</div>
+                        <div>
+                          <CalendarMonthIcon />
+                        </div>
+                      </div>
+                      <div className={`d-flex flex-row ${styles.eventDetails}`}>
+                        Starts{' '}
+                        <b> {dayjs(event.startDate).format("D MMMM 'YY")}</b>
+                      </div>
+                      <div className={`d-flex flex-row ${styles.eventDetails}`}>
+                        Ends <b> {dayjs(event.endDate).format("D MMMM 'YY")}</b>
                       </div>
                     </div>
-                    <div className={`d-flex flex-row ${styles.eventDetails}`}>
-                      Starts{' '}
-                      <b> {dayjs(event.startDate).format("D MMMM 'YY")}</b>
-                    </div>
-                    <div className={`d-flex flex-row ${styles.eventDetails}`}>
-                      Ends <b> {dayjs(event.endDate).format("D MMMM 'YY")}</b>
-                    </div>
-                  </div>
-                </ListGroup.Item>
-              );
-            })
+                  </ListGroup.Item>
+                );
+              },
+            )
           ) : (
             <div className="w-100 text-center">{t('noEvents')}</div>
           )}

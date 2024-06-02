@@ -27,7 +27,7 @@ const leftDrawerOrg = ({
   hideDrawer,
   setHideDrawer,
 }: InterfaceLeftDrawerProps): JSX.Element => {
-  const { t } = useTranslation('translation', { keyPrefix: 'leftDrawerOrg' });
+  const { t: tCommon } = useTranslation('common');
   const [showDropdown, setShowDropdown] = React.useState(false);
 
   const [organization, setOrganization] =
@@ -76,7 +76,9 @@ const leftDrawerOrg = ({
         {/* Branding Section */}
         <div className={styles.brandingContainer}>
           <TalawaLogo className={styles.talawaLogo} />
-          <span className={styles.talawaText}>{t('talawaAdminPortal')}</span>
+          <span className={styles.talawaText}>
+            {tCommon('talawaAdminPortal')}
+          </span>
         </div>
 
         {/* Organization Section */}
@@ -126,7 +128,7 @@ const leftDrawerOrg = ({
         {/* Options List */}
         <div className={styles.optionList}>
           <h5 className={`${styles.titleHeader} text-secondary`}>
-            {t('menu')}
+            {tCommon('menu')}
           </h5>
           {targets.map(({ name, url }, index) => {
             return url ? (
@@ -149,7 +151,7 @@ const leftDrawerOrg = ({
                         }
                       />
                     </div>
-                    {name}
+                    {tCommon(name)}
                   </Button>
                 )}
               </NavLink>

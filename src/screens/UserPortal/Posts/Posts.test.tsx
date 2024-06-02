@@ -262,7 +262,7 @@ describe('Testing Home Screen: User Portal', () => {
     renderHomeScreen();
 
     await wait();
-    const startPostBtn = await screen.findByTestId('startPostBtn');
+    const startPostBtn = await screen.findByTestId('postBtn');
     expect(startPostBtn).toBeInTheDocument();
   });
 
@@ -270,7 +270,7 @@ describe('Testing Home Screen: User Portal', () => {
     renderHomeScreen();
 
     await wait();
-    const startPostBtn = await screen.findByTestId('startPostBtn');
+    const startPostBtn = await screen.findByTestId('postBtn');
     expect(startPostBtn).toBeInTheDocument();
 
     userEvent.click(startPostBtn);
@@ -282,7 +282,13 @@ describe('Testing Home Screen: User Portal', () => {
     renderHomeScreen();
 
     await wait();
-    const startPostBtn = await screen.findByTestId('startPostBtn');
+    userEvent.upload(
+      screen.getByTestId('postImageInput'),
+      new File(['image content'], 'image.png', { type: 'image/png' }),
+    );
+    await wait();
+
+    const startPostBtn = await screen.findByTestId('postBtn');
     expect(startPostBtn).toBeInTheDocument();
 
     userEvent.click(startPostBtn);
@@ -290,10 +296,6 @@ describe('Testing Home Screen: User Portal', () => {
     expect(startPostModal).toBeInTheDocument();
 
     userEvent.type(screen.getByTestId('postInput'), 'some content');
-    userEvent.upload(
-      screen.getByTestId('postImageInput'),
-      new File(['image content'], 'image.png', { type: 'image/png' }),
-    );
 
     // Check that the content and image have been added
     expect(screen.getByTestId('postInput')).toHaveValue('some content');
@@ -320,11 +322,22 @@ describe('Testing Home Screen: User Portal', () => {
     const postCardContainers = screen.findAllByTestId('postCardContainer');
     expect(postCardContainers).not.toBeNull();
 
-    expect(screen.queryByText('post one')).toBeInTheDocument();
-    expect(screen.queryByText('This is the first post')).toBeInTheDocument();
+    expect(screen.queryAllByText('post one')[0]).toBeInTheDocument();
+    expect(
+      screen.queryAllByText('This is the first post')[0],
+    ).toBeInTheDocument();
 
     expect(screen.queryByText('post two')).toBeInTheDocument();
     expect(screen.queryByText('This is the post two')).toBeInTheDocument();
+  });
+
+  test('Checking if refetch works after deleting this post', async () => {
+    setItem('userId', '640d98d9eb6a743d75341067');
+    renderHomeScreen();
+    await wait();
+
+    userEvent.click(screen.getAllByTestId('dropdown')[1]);
+    userEvent.click(screen.getByTestId('deletePost'));
   });
 });
 
