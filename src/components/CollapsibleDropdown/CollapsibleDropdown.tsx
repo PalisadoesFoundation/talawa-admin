@@ -4,6 +4,7 @@ import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from './CollapsibleDropdown.module.css';
 import IconComponent from 'components/IconComponent/IconComponent';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export interface InterfaceCollapsibleDropdown {
   showDropdown: boolean;
@@ -16,6 +17,7 @@ const collapsibleDropdown = ({
   showDropdown,
   setShowDropdown,
 }: InterfaceCollapsibleDropdown): JSX.Element => {
+  const { t: tCommon } = useTranslation('common');
   const { name, subTargets } = target;
   const navigate = useNavigate();
   const location = useLocation();
@@ -42,7 +44,7 @@ const collapsibleDropdown = ({
             fill={showDropdown ? 'var(--bs-white)' : 'var(--bs-secondary)'}
           />
         </div>
-        {name}
+        {tCommon(name)}
         <i
           className={`ms-auto fa  
           ${showDropdown ? 'var(--bs-white)' : 'var(--bs-secondary)'} 
@@ -72,7 +74,7 @@ const collapsibleDropdown = ({
                       <div className={styles.iconWrapperSm}>
                         <i className={`fa ${stringIcon}`} />
                       </div>
-                      {name}
+                      {tCommon(name || '')}
                       <div className="ms-auto">
                         <i
                           className={`fa me-2 fa-chevron-right ${

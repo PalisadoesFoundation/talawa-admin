@@ -154,11 +154,13 @@ const leftDrawerOrg = ({
                         }
                       />
                     </div>
+
                     {name == 'People'
                       ? isSuperAdmin
                         ? 'Users'
                         : 'Members'
-                      : name}
+                      : tCommon(name)}
+
                   </Button>
                 )}
               </NavLink>
