@@ -32,6 +32,7 @@ function memberRequestCard(
   const { t } = useTranslation('translation', {
     keyPrefix: 'membershipRequest',
   });
+  const { t: tCommon } = useTranslation('common');
 
   const addMember = async (): Promise<void> => {
     try {
@@ -47,7 +48,7 @@ function memberRequestCard(
       setTimeout(() => {
         window.location.reload();
       }, 2000);
-    } catch (error: any) {
+    } catch (error: unknown) {
       /* istanbul ignore next */
       errorHandler(t, error);
     }
@@ -65,7 +66,7 @@ function memberRequestCard(
 
         /* istanbul ignore next */
         window.location.reload();
-      } catch (error: any) {
+      } catch (error: unknown) {
         /* istanbul ignore next */
         errorHandler(t, error);
       }
@@ -99,7 +100,7 @@ function memberRequestCard(
             </div>
             <div className={styles.singledetails_data_right}>
               <p className={styles.memberfont}>
-                {t('joined')}: <span>{props.joinDate}</span>
+                {tCommon('joined')}: <span>{props.joinDate}</span>
               </p>
               <Button
                 className={styles.memberfontcreatedbtn}

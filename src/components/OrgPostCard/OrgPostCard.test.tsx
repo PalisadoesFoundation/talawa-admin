@@ -78,6 +78,12 @@ jest.mock('react-toastify', () => ({
     error: jest.fn(),
   },
 }));
+jest.mock('i18next-browser-languagedetector', () => ({
+  init: jest.fn(),
+  type: 'languageDetector',
+  detect: jest.fn(() => 'en'),
+  cacheUserLanguage: jest.fn(),
+}));
 const link = new StaticMockLink(MOCKS, true);
 async function wait(ms = 100): Promise<void> {
   await act(() => {

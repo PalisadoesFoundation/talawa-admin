@@ -12,7 +12,7 @@ import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import type { InterfaceEventListCardProps } from './EventListCard';
 import EventListCard from './EventListCard';
-import i18nForTest from 'utils/i18nForTest';
+import i18n from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -44,11 +44,15 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-const translations = JSON.parse(
-  JSON.stringify(
-    i18nForTest.getDataByLanguage('en')?.translation.eventListCard,
+const translations = {
+  ...JSON.parse(
+    JSON.stringify(
+      i18n.getDataByLanguage('en')?.translation.eventListCard ?? {},
+    ),
   ),
-);
+  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
+  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
+};
 
 const renderEventListCard = (
   props: InterfaceEventListCardProps,
@@ -58,7 +62,7 @@ const renderEventListCard = (
       <MemoryRouter initialEntries={['/orgevents/orgId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <I18nextProvider i18n={i18nForTest}>
+            <I18nextProvider i18n={i18n}>
               <Routes>
                 <Route
                   path="/orgevents/:orgId"
@@ -68,7 +72,14 @@ const renderEventListCard = (
                   path="/event/:orgId/"
                   element={<EventListCard {...props} />}
                 />
-                <Route path="/event/:orgId/:eventId" element={<></>} />
+                <Route
+                  path="/event/:orgId/:eventId"
+                  element={<div>Event Dashboard (Admin)</div>}
+                />
+                <Route
+                  path="/user/event/:orgId/:eventId"
+                  element={<div>Event Dashboard (User)</div>}
+                />
               </Routes>
             </I18nextProvider>
           </LocalizationProvider>
@@ -125,7 +136,7 @@ describe('Testing Event List Card', () => {
   test('Should navigate to "/" if orgId is not defined', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
+        <I18nextProvider i18n={i18n}>
           <BrowserRouter>
             <EventListCard
               key="123"
@@ -287,7 +298,7 @@ describe('Testing Event List Card', () => {
     });
   });
 
-  test('Should navigate to event dashboard when clicked', async () => {
+  test('Should navigate to event dashboard when clicked (For Admin)', async () => {
     renderEventListCard(props[1]);
 
     userEvent.click(screen.getByTestId('card'));
@@ -300,6 +311,25 @@ describe('Testing Event List Card', () => {
 
     await waitFor(() => {
       expect(screen.queryByTestId('card')).not.toBeInTheDocument();
+      expect(screen.queryByText('Event Dashboard (Admin)')).toBeInTheDocument();
+    });
+  });
+
+  test('Should navigate to event dashboard when clicked (For User)', async () => {
+    setItem('userId', '123');
+    renderEventListCard(props[2]);
+
+    userEvent.click(screen.getByTestId('card'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('showEventDashboardBtn')).toBeInTheDocument();
+    });
+
+    userEvent.click(screen.getByTestId('showEventDashboardBtn'));
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('card')).not.toBeInTheDocument();
+      expect(screen.queryByText('Event Dashboard (User)')).toBeInTheDocument();
     });
   });
 
@@ -853,7 +883,7 @@ describe('Testing Event List Card', () => {
         <MemoryRouter initialEntries={['/orgevents/orgId']}>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <I18nextProvider i18n={i18nForTest}>
+              <I18nextProvider i18n={i18n}>
                 <Routes>
                   <Route
                     path="/orgevents/:orgId"

@@ -7,6 +7,7 @@ interface InterfaceActionItemCreateModalProps {
   deleteActionItemHandler: () => Promise<void>;
   toggleDeleteModal: () => void;
   t: (key: string) => string;
+  tCommon: (key: string) => string;
 }
 
 const ActionItemPreviewModal: React.FC<InterfaceActionItemCreateModalProps> = ({
@@ -14,6 +15,7 @@ const ActionItemPreviewModal: React.FC<InterfaceActionItemCreateModalProps> = ({
   deleteActionItemHandler,
   toggleDeleteModal,
   t,
+  tCommon,
 }) => {
   return (
     <>
@@ -40,7 +42,7 @@ const ActionItemPreviewModal: React.FC<InterfaceActionItemCreateModalProps> = ({
             onClick={toggleDeleteModal}
             data-testid="actionItemDeleteModalCloseBtn"
           >
-            {t('no')}
+            {tCommon('no')}
           </Button>
           <Button
             type="button"
@@ -48,7 +50,7 @@ const ActionItemPreviewModal: React.FC<InterfaceActionItemCreateModalProps> = ({
             onClick={deleteActionItemHandler}
             data-testid="deleteActionItemBtn"
           >
-            {t('yes')}
+            {tCommon('yes')}
           </Button>
         </Modal.Footer>
       </Modal>

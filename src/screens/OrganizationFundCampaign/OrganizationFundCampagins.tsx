@@ -57,6 +57,7 @@ const orgFundCampaign = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'fundCampaign',
   });
+  const { t: tCommon } = useTranslation('common');
   const navigate = useNavigate();
 
   const { fundId: currentUrl, orgId: orgId } = useParams();
@@ -298,7 +299,7 @@ const orgFundCampaign = (): JSX.Element => {
                 data-testid="filter"
               >
                 <FilterAltOutlinedIcon className={'me-1'} />
-                {t('filter')}
+                {tCommon('filter')}
               </Dropdown.Toggle>
             </Dropdown>
           </div>
@@ -333,10 +334,10 @@ const orgFundCampaign = (): JSX.Element => {
                       {t('campaignName')}
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                      {t('startDate')}
+                      {tCommon('startDate')}
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                      {t('endDate')}
+                      {tCommon('endDate')}
                     </StyledTableCell>
                     <StyledTableCell align="center">
                       {t('fundingGoal')}
@@ -437,6 +438,7 @@ const orgFundCampaign = (): JSX.Element => {
         hideDeleteCampaignModal={hideDeleteCampaignModal}
         deleteCampaignHandler={deleteCampaignHandler}
         t={t}
+        tCommon={tCommon}
       />
     </div>
   );

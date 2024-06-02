@@ -66,6 +66,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgUpdate',
   });
+  const { t: tCommon } = useTranslation('common');
 
   const {
     data,
@@ -130,7 +131,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
         refetch({ id: orgId });
         toast.success(t('successfulUpdated'));
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       errorHandler(t, error);
     }
   };
@@ -156,7 +157,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     <>
       <div id="orgupdate" className={styles.userupdatediv}>
         <form>
-          <Form.Label>{t('name')}</Form.Label>
+          <Form.Label>{tCommon('name')}</Form.Label>
           <Form.Control
             className="mb-3"
             placeholder={t('enterNameOrganization')}
@@ -170,10 +171,10 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               });
             }}
           />
-          <Form.Label>{t('description')}</Form.Label>
+          <Form.Label>{tCommon('description')}</Form.Label>
           <Form.Control
             className="mb-3"
-            placeholder={t('description')}
+            placeholder={tCommon('description')}
             autoComplete="off"
             required
             value={formState.orgDescrip}
@@ -184,7 +185,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               });
             }}
           />
-          <Form.Label>{t('address')}</Form.Label>
+          <Form.Label>{tCommon('address')}</Form.Label>
           <Row className="mb-1">
             <Col sm={6} className="mb-3">
               <Form.Control
@@ -306,11 +307,11 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               />
             </Col>
           </Row>
-          <Form.Label htmlFor="orgphoto">{t('displayImage')}:</Form.Label>
+          <Form.Label htmlFor="orgphoto">{tCommon('displayImage')}:</Form.Label>
           <Form.Control
             className="mb-4"
             accept="image/*"
-            placeholder={t('displayImage')}
+            placeholder={tCommon('displayImage')}
             name="photo"
             type="file"
             multiple={false}
@@ -332,7 +333,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               value="savechanges"
               onClick={onSaveChangesClicked}
             >
-              {t('saveChanges')}
+              {tCommon('saveChanges')}
             </Button>
           </div>
         </form>

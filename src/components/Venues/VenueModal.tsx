@@ -32,6 +32,7 @@ const VenueModal = ({
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationVenues',
   });
+  const { t: tCommon } = useTranslation('common');
 
   const [venueImage, setVenueImage] = useState<boolean>(false);
   const [formState, setFormState] = useState({
@@ -149,7 +150,7 @@ const VenueModal = ({
               });
             }}
           />
-          <label htmlFor="venuedescrip">{t('description')}</label>
+          <label htmlFor="venuedescrip">{tCommon('description')}</label>
           <Form.Control
             type="text"
             id="venuedescrip"

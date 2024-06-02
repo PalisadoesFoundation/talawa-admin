@@ -399,6 +399,7 @@ export interface InterfacePostCard {
     email: string;
     id: string;
   };
+  postedAt: string;
   image: string | null;
   video: string | null;
   text: string;
@@ -424,6 +425,7 @@ export interface InterfacePostCard {
     lastName: string;
     id: string;
   }[];
+  fetchPosts: () => void;
 }
 export interface InterfaceCreateCampaign {
   campaignName: string;

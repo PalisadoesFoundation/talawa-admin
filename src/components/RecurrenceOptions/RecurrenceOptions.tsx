@@ -19,6 +19,7 @@ interface InterfaceRecurrenceOptionsProps {
   ) => void;
   popover: JSX.Element;
   t: (key: string) => string;
+  tCommon: (key: string) => string;
 }
 
 const RecurrenceOptions: React.FC<InterfaceRecurrenceOptionsProps> = ({
@@ -27,6 +28,7 @@ const RecurrenceOptions: React.FC<InterfaceRecurrenceOptionsProps> = ({
   setRecurrenceRuleState,
   popover,
   t,
+  tCommon,
 }) => {
   const [customRecurrenceModalIsOpen, setCustomRecurrenceModalIsOpen] =
     useState<boolean>(false);
@@ -220,6 +222,7 @@ const RecurrenceOptions: React.FC<InterfaceRecurrenceOptionsProps> = ({
         hideCustomRecurrenceModal={hideCustomRecurrenceModal}
         setCustomRecurrenceModalIsOpen={setCustomRecurrenceModalIsOpen}
         t={t}
+        tCommon={tCommon}
       />
     </>
   );
