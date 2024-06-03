@@ -813,7 +813,11 @@
     "customFieldType": "Field Type",
     "Remove Custom Field": "Remove Custom Field",
     "fieldSuccessMessage": "Field added successfully",
-    "fieldRemovalSuccess": "Field removed successfully"
+    "fieldRemovalSuccess": "Field removed successfully",
+    "String": "String",
+    "Boolean": "Boolean",
+    "Date": "Date",
+    "Number": "Number"
   },
   "orgActionItemCategories": {
     "enableButton": "Enable",

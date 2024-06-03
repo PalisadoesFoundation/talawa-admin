@@ -820,7 +820,11 @@
     "customFieldType": "क्षेत्र प्रकार",
     "Remove Custom Field": "कस्टम फ़ील्ड हटाएँ",
     "fieldSuccessMessage": "फ़ील्ड सफलतापूर्वक जोड़ा गया",
-    "fieldRemovalSuccess": "फ़ील्ड सफलतापूर्वक हटा दी गई"
+    "fieldRemovalSuccess": "फ़ील्ड सफलतापूर्वक हटा दी गई",
+    "String": "स्ट्रिंग",
+    "Boolean": "बूलियन",
+    "Date": "तारीख",
+    "Number": "संख्या"
   },
   "orgActionItemCategories": {
     "enableButton": "सक्षम",

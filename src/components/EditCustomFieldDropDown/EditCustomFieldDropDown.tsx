@@ -3,6 +3,7 @@ import type { SetStateAction, Dispatch } from 'react';
 import { Dropdown } from 'react-bootstrap';
 import availableFieldTypes from 'utils/fieldTypes';
 import type { InterfaceCustomFieldData } from 'components/OrgProfileFieldSettings/OrgProfileFieldSettings';
+import { useTranslation } from 'react-i18next';
 
 interface InterfaceEditCustomFieldDropDownProps {
   customFieldData: InterfaceCustomFieldData;
@@ -11,38 +12,45 @@ interface InterfaceEditCustomFieldDropDownProps {
   btnStyle?: string;
   btnTextStyle?: string;
 }
-[];
 
-const EditOrgCustomFieldDropDown = (
-  props: InterfaceEditCustomFieldDropDownProps,
-): JSX.Element => {
+const EditOrgCustomFieldDropDown = ({
+  customFieldData,
+  setCustomFieldData,
+  parentContainerStyle,
+  btnStyle,
+}: InterfaceEditCustomFieldDropDownProps): JSX.Element => {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'orgProfileField',
+  });
+  const { t: tCommon } = useTranslation('common');
+
   return (
     <Dropdown
       title="Edit Custom Field"
-      className={`${props?.parentContainerStyle ?? ''}`}
+      className={`${parentContainerStyle ?? ''}`}
     >
       <Dropdown.Toggle
         variant="outline-success"
-        className={`${props?.btnStyle ?? ''}`}
+        className={`${btnStyle ?? ''}`}
         data-testid="toggleBtn"
       >
-        {props.customFieldData.type || 'None'}
+        {customFieldData.type ? t(customFieldData.type) : tCommon('none')}
       </Dropdown.Toggle>
       <Dropdown.Menu>
         {availableFieldTypes.map((customFieldType, index: number) => (
           <Dropdown.Item
             key={`dropdown-item-${index}`}
-            className={`dropdown-item`}
+            className="dropdown-item"
             data-testid={`dropdown-btn-${index}`}
             onClick={(): void => {
-              props.setCustomFieldData({
-                ...props.customFieldData,
+              setCustomFieldData({
+                ...customFieldData,
                 type: customFieldType,
               });
             }}
-            disabled={props.customFieldData.type == customFieldType}
+            disabled={customFieldData.type === customFieldType}
           >
-            {customFieldType}
+            {t(customFieldType)}
           </Dropdown.Item>
         ))}
       </Dropdown.Menu>

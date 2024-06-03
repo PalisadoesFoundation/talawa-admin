@@ -75,5 +75,6 @@
   "profile": "轮廓",
   "noFiltersApplied": "未应用筛选器",
   "manage": "管理",
-  "searchResultsFor": "搜索结果：{{text}}"
+  "searchResultsFor": "搜索结果：{{text}}",
+  "none": "没有"
 }

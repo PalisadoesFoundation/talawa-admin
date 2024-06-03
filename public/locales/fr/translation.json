@@ -820,7 +820,11 @@
     "customFieldType": "Type de champ",
     "Remove Custom Field": "Supprimer le champ personnalisé",
     "fieldSuccessMessage": "Champ ajouté avec succès",
-    "fieldRemovalSuccess": "Champ supprimé avec succès"
+    "fieldRemovalSuccess": "Champ supprimé avec succès",
+    "String": "Chaîne",
+    "Boolean": "Booléen",
+    "Date": "Date",
+    "Number": "Nombre"
   },
   "orgActionItemCategories": {
     "enableButton": "Activer",

@@ -1044,7 +1044,11 @@
     "saveChanges": "Guardar Cambios",
     "Remove Custom Field": "Eliminar Campo Personalizado",
     "fieldSuccessMessage": "Campo añadido exitosamente",
-    "fieldRemovalSuccess": "Campo eliminado exitosamente"
+    "fieldRemovalSuccess": "Campo eliminado exitosamente",
+    "String": "Cadena",
+    "Boolean": "Booleano",
+    "Date": "Fecha",
+    "Number": "Número"
   },
   "orgActionItemCategories": {
     "createButton": "Crear",

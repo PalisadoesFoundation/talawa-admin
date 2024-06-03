@@ -75,5 +75,6 @@
   "profile": "Perfil",
   "noFiltersApplied": "No se aplicaron filtros",
   "manage": "Administrar",
-  "searchResultsFor": "Resultados de búsqueda para {{text}}"
+  "searchResultsFor": "Resultados de búsqueda para {{text}}",
+  "none": "Ninguno"
 }

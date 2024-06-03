@@ -820,7 +820,11 @@
     "customFieldType": "字段类型",
     "Remove Custom Field": "删除自定义字段",
     "fieldSuccessMessage": "字段添加成功",
-    "fieldRemovalSuccess": "字段删除成功"
+    "fieldRemovalSuccess": "字段删除成功",
+    "String": "字符串",
+    "Boolean": "布尔值",
+    "Date": "日期",
+    "Number": "数字"
   },
   "orgActionItemCategories": {
     "enableButton": "使能够",
