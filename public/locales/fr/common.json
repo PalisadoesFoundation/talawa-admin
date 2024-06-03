@@ -70,5 +70,6 @@
   "action": "Action",
   "removeUser": "Supprimer l'Utilisateur",
   "remove": "Supprimer",
-  "viewProfile": "Voir le Profil"
+  "viewProfile": "Voir le Profil",
+  "profile": "Profil"
 }
