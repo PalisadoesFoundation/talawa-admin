@@ -695,10 +695,6 @@ describe('Testing Organization People Card', () => {
 
   test('updates role from user to admin', async () => {
     const beforeUserId = getItem('userId');
-    // setItem('userId', '123');
-
-    // setItem('SuperAdmin', true);
-
     const roleProps = {
       ...defaultProps,
       admins: [{ _id: '254' }],
