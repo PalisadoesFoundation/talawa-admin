@@ -255,6 +255,7 @@
     "clearFilters": "Clear Filters",
     "completed": "Completed",
     "completionDate": "Completion Date",
+    "createActionItem": "Create Action Items",
     "deleteActionItem": "Delete Action Item",
     "deleteActionItemMsg": "Do you want to remove this action item?",
     "details": "Details",

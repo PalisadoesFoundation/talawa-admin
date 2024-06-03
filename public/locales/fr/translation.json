@@ -258,6 +258,7 @@
     "clearFilters": "Effacer les filtres",
     "completed": "Complété",
     "completionDate": "Date d'achèvement",
+    "createActionItem": "Créer un élément d'action",
     "deleteActionItem": "Supprimer l'élément d'action",
     "deleteActionItemMsg": "Voulez-vous supprimer cette action ?",
     "details": "Détails",
