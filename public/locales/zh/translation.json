@@ -111,6 +111,17 @@
     "manage": "管理",
     "sampleOrganization": "组织样本"
   },
+  "orgPeopleOrganizationsCard": {
+    "manage": "管理",
+    "notMember": "不是会员",
+    "unblock": "解锁",
+    "block": "堵塞",
+    "blockedSuccessfully": "用户被成功屏蔽",
+    "unBlockedSuccessfully": "用户解封成功",
+    "blockedUser": "被阻止的用户",
+    "roleUpdated": "角色已更新。",
+    "memberRemoved": "该会员已被删除"
+  },
   "paginationList": {
     "rowsPerPage": "每页行数",
     "all": "全部"
