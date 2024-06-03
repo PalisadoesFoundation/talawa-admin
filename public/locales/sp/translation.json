@@ -236,7 +236,9 @@
     "orgJoined": "Unido a la organización exitosamente",
     "MembershipRequestSent": "Solicitud de membresía enviada exitosamente",
     "AlreadyJoined": "Ya eres miembro de esta organización.",
-    "errorOccured": "Se produjo un error. Por favor, inténtalo de nuevo más tarde."
+    "errorOccured": "Se produjo un error. Por favor, inténtalo de nuevo más tarde.",
+    "removeUserFrom": "Eliminar Usuario de {{org}}",
+    "removeConfirmation": "¿Está seguro de que desea eliminar a '{{name}}' de la organización '{{org}}'?"
   },
   "communityProfile": {
     "title": "Perfil de la comunidad",

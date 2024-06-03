@@ -159,7 +159,9 @@
     "roleUpdated": "भूमिका अद्यतन की गई.",
     "joinNow": "अब शामिल हों",
     "visit": "मिलने जाना",
-    "withdraw": "चौड़ाई निकालना"
+    "withdraw": "चौड़ाई निकालना",
+    "removeUserFrom": "{{org}} से उपयोगकर्ता हटाएं",
+    "removeConfirmation": "क्या आप वाकई '{{org}}' संगठन से '{{name}}' को हटाना चाहते हैं?"
   },
   "communityProfile": {
     "title": "सामुदायिक प्रोफ़ाइल",

@@ -30,6 +30,7 @@
   "search": "Search",
   "description": "Description",
   "saveChanges": "Save Changes",
+  "resetChanges": "Reset Changes",
   "displayImage": "Display Image",
   "enterEmail": "Enter Email",
   "emailAddress": "Email Address",
@@ -61,5 +62,13 @@
   "Membership Requests": "Membership Requests",
   "Plugins": "Plugins",
   "Plugin Store": "Plugin Store",
-  "Settings": "Settings"
+  "Settings": "Settings",
+  "createdOn": "Created On",
+  "createdBy": "Created By",
+  "usersRole": "User's Role",
+  "changeRole": "Change Role",
+  "action": "Action",
+  "removeUser": "Remove User",
+  "remove": "Remove",
+  "viewProfile": "View Profile"
 }
