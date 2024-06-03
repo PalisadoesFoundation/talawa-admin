@@ -72,5 +72,6 @@
   "removeUser": "删除用户",
   "remove": "删除",
   "viewProfile": "查看个人资料",
-  "profile": "轮廓"
+  "profile": "轮廓",
+  "noFiltersApplied": "未应用筛选器"
 }

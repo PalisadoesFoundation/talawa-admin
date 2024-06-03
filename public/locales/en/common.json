@@ -72,5 +72,6 @@
   "removeUser": "Remove User",
   "remove": "Remove",
   "viewProfile": "View Profile",
-  "profile": "Profile"
+  "profile": "Profile",
+  "noFiltersApplied": "No filters applied"
 }

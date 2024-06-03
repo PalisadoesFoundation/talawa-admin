@@ -72,5 +72,6 @@
   "removeUser": "उपयोगकर्ता हटाएं",
   "remove": "हटाएं",
   "viewProfile": "प्रोफ़ाइल देखें",
-  "profile": "प्रोफ़ाइल"
+  "profile": "प्रोफ़ाइल",
+  "noFiltersApplied": "कोई फ़िल्टर लागू नहीं हैं"
 }
