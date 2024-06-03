@@ -105,7 +105,41 @@ const MOCKS = [
       variables: {
         userId: '123',
         organizationId: 'orgid',
-        role: 'Admin',
+        role: 'ADMIN',
+      },
+    },
+    result: {
+      data: {
+        updateUserRoleInOrganization: {
+          _id: 'orgid',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: UPDATE_USER_ROLE_IN_ORG_MUTATION,
+      variables: {
+        userId: '234',
+        organizationId: 'orgid',
+        role: 'ADMIN',
+      },
+    },
+    result: {
+      data: {
+        updateUserRoleInOrganization: {
+          _id: 'orgid',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: UPDATE_USER_ROLE_IN_ORG_MUTATION,
+      variables: {
+        userId: '123',
+        organizationId: 'orgid',
+        role: 'USER',
       },
     },
     result: {
@@ -221,6 +255,10 @@ beforeEach(() => {
   toast.dismiss();
 });
 
+beforeEach(() => {
+  jest.clearAllMocks();
+});
+
 describe('Testing Organization People Card', () => {
   test('Should render without crashing', async () => {
     render(
@@ -263,6 +301,36 @@ describe('Testing Organization People Card', () => {
     expect(statusToggle).toHaveTextContent('Active');
   });
 
+  test('displays org image', () => {
+    const beforeUserId = getItem('userId');
+
+    setItem('userId', '1');
+    const imageProps = { ...defaultProps, image: 'image.png' };
+
+    render(
+      <Provider store={store}>
+        <MockedProvider mocks={MOCKS} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <BrowserRouter>
+                <OrgPeopleOrganizationsCard {...imageProps} />
+              </BrowserRouter>
+            </LocalizationProvider>
+          </I18nextProvider>
+        </MockedProvider>
+      </Provider>,
+    );
+
+    const image = screen.getByTestId('orgImage');
+    expect(image).toBeInTheDocument();
+
+    expect(image).toHaveAttribute('src', imageProps.image);
+
+    if (beforeUserId) {
+      setItem('userId', beforeUserId);
+    }
+  });
+
   test('calls handleBlockUser on block user click', async () => {
     const beforeUserId = getItem('userId');
 
@@ -293,6 +361,43 @@ describe('Testing Organization People Card', () => {
     await waitFor(() =>
       expect(toast.success).toHaveBeenCalledWith(
         translations.blockedSuccessfully,
+      ),
+    );
+    if (beforeUserId) {
+      setItem('userId', beforeUserId);
+    }
+  });
+
+  test('unblocks user on block user click', async () => {
+    const beforeUserId = getItem('userId');
+
+    setItem('userId', '1');
+    const userProps = { ...defaultProps, blockedUsers: [{ _id: '123' }] };
+    render(
+      <Provider store={store}>
+        <MockedProvider mocks={MOCKS} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <BrowserRouter>
+                <OrgPeopleOrganizationsCard {...userProps} />
+              </BrowserRouter>
+            </LocalizationProvider>
+          </I18nextProvider>
+        </MockedProvider>
+      </Provider>,
+    );
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('dropdown-status'));
+    });
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('UnblockItem'));
+    });
+
+    await waitFor(() =>
+      expect(toast.success).toHaveBeenCalledWith(
+        translations.unBlockedSuccessfully,
       ),
     );
     if (beforeUserId) {
@@ -557,15 +662,17 @@ describe('Testing Organization People Card', () => {
     await waitFor(() => expect(toast.error).toHaveBeenCalled());
   });
 
-  test('displays error toast if add member mutation fails', async () => {
-    const props = { ...defaultProps, members: [], blockedUsers: [] };
+  test('displays error instance of Error if add member mutation fails', async () => {
+    const errorInstance = new Error('Add member failed');
+    const errorMemberProps = { ...defaultProps, members: [] };
+
     render(
       <Provider store={store}>
         <MockedProvider mocks={MOCKS_WITH_ERROR} addTypename={false}>
           <I18nextProvider i18n={i18nForTest}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <BrowserRouter>
-                <OrgPeopleOrganizationsCard {...props} />
+                <OrgPeopleOrganizationsCard {...errorMemberProps} />
               </BrowserRouter>
             </LocalizationProvider>
           </I18nextProvider>
@@ -581,6 +688,99 @@ describe('Testing Organization People Card', () => {
       fireEvent.click(screen.getByTestId('accept-item'));
     });
 
-    await waitFor(() => expect(toast.error).toHaveBeenCalled());
+    await waitFor(() =>
+      expect(toast.error).toHaveBeenCalledWith(errorInstance.message),
+    );
+  });
+
+  test('updates role from user to admin', async () => {
+    const beforeUserId = getItem('userId');
+    // setItem('userId', '123');
+
+    // setItem('SuperAdmin', true);
+
+    const roleProps = {
+      ...defaultProps,
+      admins: [{ _id: '254' }],
+      userId: '123',
+      members: [{ _id: '123' }],
+    };
+
+    render(
+      <Provider store={store}>
+        <MockedProvider mocks={MOCKS} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <BrowserRouter>
+                <OrgPeopleOrganizationsCard {...roleProps} />
+              </BrowserRouter>
+            </LocalizationProvider>
+          </I18nextProvider>
+        </MockedProvider>
+      </Provider>,
+    );
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('dropdown-role'));
+    });
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('admin-item'));
+    });
+
+    await waitFor(() =>
+      expect(toast.success).toHaveBeenCalledWith(translations.roleUpdated),
+    );
+
+    expect(screen.getByTestId('dropdown-role')).toHaveTextContent('ADMIN');
+
+    if (beforeUserId) {
+      setItem('userId', beforeUserId);
+    }
+  });
+
+  test('updates role from admin to user', async () => {
+    const beforeUserId = getItem('userId');
+    setItem('userId', '345');
+
+    setItem('SuperAdmin', true);
+
+    const roleProps = {
+      ...defaultProps,
+      admins: [{ _id: '345' }, { _id: '123' }],
+      members: [{ _id: '123' }],
+    };
+
+    render(
+      <Provider store={store}>
+        <MockedProvider mocks={MOCKS} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <BrowserRouter>
+                <OrgPeopleOrganizationsCard {...roleProps} />
+              </BrowserRouter>
+            </LocalizationProvider>
+          </I18nextProvider>
+        </MockedProvider>
+      </Provider>,
+    );
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('dropdown-role'));
+    });
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('user-item'));
+    });
+
+    await waitFor(() =>
+      expect(toast.success).toHaveBeenCalledWith(translations.roleUpdated),
+    );
+
+    expect(screen.getByTestId('dropdown-role')).toHaveTextContent('USER');
+
+    if (beforeUserId) {
+      setItem('userId', beforeUserId);
+    }
   });
 });

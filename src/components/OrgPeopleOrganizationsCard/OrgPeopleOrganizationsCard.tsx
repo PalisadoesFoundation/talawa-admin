@@ -70,7 +70,7 @@ function OrgPeopleOrganizationsCard(
         setStatus('Blocked');
         resetAndRefetch();
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       /* istanbul ignore next */
       errorHandler(t, error);
     }
@@ -91,7 +91,7 @@ function OrgPeopleOrganizationsCard(
         setStatus('Active');
         resetAndRefetch();
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       /* istanbul ignore next */
       errorHandler(t, error);
     }
@@ -140,9 +140,7 @@ function OrgPeopleOrganizationsCard(
         setMember('Yes');
         resetAndRefetch();
       } catch (error: unknown) {
-        if (error instanceof Error) {
-          toast.error(error.message);
-        }
+        toast.error(errorHandler(t, error));
       }
     } else {
       if (blockedUserIds.includes(userID)) {
@@ -154,24 +152,19 @@ function OrgPeopleOrganizationsCard(
   };
 
   const changeRoleInOrg = async (roleToUpdate: string): Promise<void> => {
-    const memberIds = members.map((member) => member._id);
-
-    if (memberIds.includes(userID)) {
-      try {
-        await updateUserInOrgType({
-          variables: {
-            userId: userID,
-            role: roleToUpdate,
-            organizationId: _id,
-          },
-        });
-        toast.success(t('roleUpdated'));
-        setRole(roleToUpdate);
-        resetAndRefetch();
-      } catch (error: any) {
-        /* istanbul ignore next */
-        toast.error(errorHandler(t, error));
-      }
+    try {
+      await updateUserInOrgType({
+        variables: {
+          userId: userID,
+          role: roleToUpdate,
+          organizationId: _id,
+        },
+      });
+      toast.success(t('roleUpdated'));
+      setRole(roleToUpdate);
+      resetAndRefetch();
+    } catch (error: unknown) {
+      toast.error(errorHandler(t, error));
     }
   };
   return (
@@ -184,7 +177,7 @@ function OrgPeopleOrganizationsCard(
           <Col sm={7}>
             <div className={styles.orgImgContainer}>
               {image ? (
-                <img src={image} alt={`${name} image`} />
+                <img src={image} alt={`${name} image`} data-testid="orgImage" />
               ) : (
                 <Avatar
                   name={name}
@@ -203,6 +196,7 @@ function OrgPeopleOrganizationsCard(
               </h6>
             </div>
           </Col>
+
           <Col sm={4}>
             <Dropdown
               drop="down-centered"
@@ -227,6 +221,7 @@ function OrgPeopleOrganizationsCard(
               <Dropdown.Menu>
                 <Dropdown.Item
                   data-testid="user-item"
+                  eventKey="user"
                   onClick={() => {
                     changeRoleInOrg('USER');
                   }}
@@ -235,6 +230,7 @@ function OrgPeopleOrganizationsCard(
                 </Dropdown.Item>
                 <Dropdown.Item
                   data-testid="admin-item"
+                  eventKey="admin"
                   onClick={() => {
                     changeRoleInOrg('ADMIN');
                   }}
@@ -247,7 +243,6 @@ function OrgPeopleOrganizationsCard(
             <Dropdown
               drop="down-centered"
               className="  d-flex align-items-center w-100 mt-2 mb-2"
-              onSelect={(e) => {}}
             >
               <Col sm={4}>
                 <Dropdown.Header className={styles.dropdownTitle}>

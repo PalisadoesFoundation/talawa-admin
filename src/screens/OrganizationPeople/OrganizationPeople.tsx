@@ -346,12 +346,9 @@ function organizationPeople(): JSX.Element {
             }
             columns={columns}
             isRowSelectable={() => false}
-            onRowClick={(row: any) => {
-              try {
-                navigate(`/member/${currentUrl}`, { state: { id: row.id } });
-              } catch (error) {
-                toast.error('Navigation failed');
-              }
+            onRowClick={(row: unknown) => {
+              const id = (row as { id: string }).id;
+              navigate(`/member/${currentUrl}`, { state: { id } });
             }}
           />
         </div>
