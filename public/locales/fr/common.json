@@ -73,5 +73,7 @@
   "remove": "Supprimer",
   "viewProfile": "Voir le Profil",
   "profile": "Profil",
-  "noFiltersApplied": "Aucun filtre appliqué"
+  "noFiltersApplied": "Aucun filtre appliqué",
+  "manage": "Gérer",
+  "searchResultsFor": "Résultats de recherche pour {{text}}"
 }

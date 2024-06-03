@@ -572,6 +572,7 @@
   "addOnStore": {
     "title": "स्टोर पर जोड़ें",
     "searchName": "उदाहरणार्थ: दान",
+    "search": "खोजें",
     "enable": "सक्रिय",
     "disable": "अक्षम",
     "pHeading": "प्लग-इन",

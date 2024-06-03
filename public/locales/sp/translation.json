@@ -753,14 +753,14 @@
   "addOnStore": {
     "title": "Tienda de complementos",
     "searchName": "Ej: Donaciones",
+    "search": "Buscar",
     "enable": "Activada",
     "disable": "Desactivada",
     "pHeading": "Complementos",
     "install": "Instalada",
     "available": "Disponible",
     "pMessage": "El complemento no existe",
-    "filter": "filtros",
-    "search": "Buscar"
+    "filter": "filtros"
   },
   "addOnEntry": {
     "enable": "Activada",

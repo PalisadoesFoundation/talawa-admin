@@ -567,6 +567,7 @@
   "addOnStore": {
     "title": "Add On Store",
     "searchName": "Ex: Donations",
+    "search": "Search",
     "enable": "Enabled",
     "disable": "Disabled",
     "pHeading": "Plugins",

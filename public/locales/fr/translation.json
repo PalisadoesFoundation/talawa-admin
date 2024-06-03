@@ -572,6 +572,7 @@
   "addOnStore": {
     "title": "Ajouter sur la boutique",
     "searchName": "Ex : Dons",
+    "search": "Rechercher",
     "enable": "Activé",
     "disable": "Désactivé",
     "pHeading": "Plugins",

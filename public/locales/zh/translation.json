@@ -572,6 +572,7 @@
   "addOnStore": {
     "title": "添加商店",
     "searchName": "例如：捐款",
+    "search": "搜索",
     "enable": "启用",
     "disable": "残疾人",
     "pHeading": "插件",

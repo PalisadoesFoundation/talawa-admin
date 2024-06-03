@@ -73,5 +73,7 @@
   "remove": "हटाएं",
   "viewProfile": "प्रोफ़ाइल देखें",
   "profile": "प्रोफ़ाइल",
-  "noFiltersApplied": "कोई फ़िल्टर लागू नहीं हैं"
+  "noFiltersApplied": "कोई फ़िल्टर लागू नहीं हैं",
+  "manage": "प्रबंधित करें",
+  "searchResultsFor": "{{text}} के लिए खोज परिणाम"
 }
