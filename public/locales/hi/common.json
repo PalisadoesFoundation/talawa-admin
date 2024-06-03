@@ -36,6 +36,7 @@
   "emailAddress": "मेल पता",
   "email": "ईमेल",
   "name": "नाम",
+  "desc": "विवरण",
   "enterPassword": "पास वर्ड दर्ज करें",
   "password": "पासवर्ड",
   "confirmPassword": "पासवर्ड की पुष्टि कीजिये",

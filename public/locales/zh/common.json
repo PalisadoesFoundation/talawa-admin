@@ -36,6 +36,7 @@
   "emailAddress": "电子邮件地址",
   "email": "电子邮件",
   "name": "姓名",
+  "desc": "描述",
   "enterPassword": "输入密码",
   "password": "密码",
   "confirmPassword": "确认密码",

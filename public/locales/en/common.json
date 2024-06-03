@@ -36,6 +36,7 @@
   "emailAddress": "Email Address",
   "email": "Email",
   "name": "Name",
+  "desc": "Description",
   "enterPassword": "Enter Password",
   "password": "Password",
   "confirmPassword": "Confirm Password",
