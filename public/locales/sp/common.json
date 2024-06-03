@@ -30,6 +30,7 @@
   "search": "Search",
   "description": "Description",
   "saveChanges": "Save Changes",
+  "resetChanges": "Reset Changes",
   "displayImage": "Display Image",
   "enterEmail": "Enter Email",
   "emailAddress": "Email Address",
@@ -61,5 +62,13 @@
   "Membership Requests": "Solicitudes de Membresía",
   "Plugins": "Complementos",
   "Plugin Store": "Tienda de Complementos",
-  "Settings": "Configuraciones"
+  "Settings": "Configuraciones",
+  "createdOn": "Creado En",
+  "createdBy": "Creado Por",
+  "usersRole": "Rol del Usuario",
+  "changeRole": "Cambiar Rol",
+  "action": "Acción",
+  "removeUser": "Eliminar Usuario",
+  "remove": "Eliminar",
+  "viewProfile": "Ver Perfil"
 }
