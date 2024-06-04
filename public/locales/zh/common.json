@@ -36,6 +36,7 @@
   "emailAddress": "电子邮件地址",
   "email": "电子邮件",
   "name": "姓名",
+  "desc": "描述",
   "enterPassword": "输入密码",
   "password": "密码",
   "confirmPassword": "确认密码",
@@ -70,5 +71,10 @@
   "action": "操作",
   "removeUser": "删除用户",
   "remove": "删除",
-  "viewProfile": "查看个人资料"
+  "viewProfile": "查看个人资料",
+  "profile": "轮廓",
+  "noFiltersApplied": "未应用筛选器",
+  "manage": "管理",
+  "searchResultsFor": "搜索结果：{{text}}",
+  "none": "没有"
 }
