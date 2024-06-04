@@ -12,7 +12,7 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import Users from './Users';
-import { EMPTY_MOCKS, MOCKS, MOCKS2, MOCKS4 } from './UsersMocks';
+import { EMPTY_MOCKS, MOCKS, MOCKS2 } from './UsersMocks';
 import useLocalStorage from 'utils/useLocalstorage';
 
 import {
@@ -280,7 +280,6 @@ const MOCKS_NEW = [
 ];
 
 const link = new StaticMockLink(MOCKS, true);
-const link4 = new StaticMockLink(MOCKS4, true);
 const link2 = new StaticMockLink(EMPTY_MOCKS, true);
 const link3 = new StaticMockLink(MOCKS2, true);
 const link5 = new StaticMockLink(MOCKS_NEW, true);
@@ -630,28 +629,24 @@ describe('Testing Users screen', () => {
       const filterAdmin = screen.getByTestId('admin');
       fireEvent.click(filterAdmin);
       await wait();
-      let rows = screen.getAllByRole('row');
       expect(screen.getByText('Jane Doe')).toBeInTheDocument();
 
       fireEvent.click(filterButton);
       const filterSuperAdmin = screen.getByTestId('superAdmin');
       fireEvent.click(filterSuperAdmin);
       await wait();
-      rows = screen.getAllByRole('row');
       expect(screen.getByText('John Doe')).toBeInTheDocument();
 
       fireEvent.click(filterButton);
       const filterUser = screen.getByTestId('user');
       fireEvent.click(filterUser);
       await wait();
-      rows = screen.getAllByRole('row');
       expect(screen.getByText('Jack Smith')).toBeInTheDocument();
 
       fireEvent.click(filterButton);
       const filterCancel = screen.getByTestId('cancel');
       fireEvent.click(filterCancel);
       await wait();
-      rows = screen.getAllByRole('row');
       expect(screen.getByText('John Doe')).toBeInTheDocument();
       expect(screen.getByText('Jane Doe')).toBeInTheDocument();
       expect(screen.getByText('Jack Smith')).toBeInTheDocument();
