@@ -60,6 +60,8 @@ export const FUND_CAMPAIGN_PLEDGE = gql`
         users {
           _id
           firstName
+          lastName
+          image
         }
       }
     }

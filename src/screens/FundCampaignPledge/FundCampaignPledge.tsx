@@ -1,62 +1,56 @@
-import { useMutation, useQuery } from '@apollo/client';
-import { WarningAmberRounded } from '@mui/icons-material';
-import {
-  CREATE_PlEDGE,
-  DELETE_PLEDGE,
-  UPDATE_PLEDGE,
-} from 'GraphQl/Mutations/PledgeMutation';
+import { useQuery, type ApolloQueryResult } from '@apollo/client';
+import { Search, Sort, WarningAmberRounded } from '@mui/icons-material';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
 import dayjs from 'dayjs';
-import React, { useCallback, useMemo, useState, type ChangeEvent } from 'react';
-import { Button, Col, Row } from 'react-bootstrap';
+import React, { useCallback, useMemo, useState } from 'react';
+import { Button, Dropdown, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { Navigate, useParams } from 'react-router-dom';
 import { currencySymbols } from 'utils/currency';
+import styles from './FundCampaignPledge.module.css';
+import PledgeDeleteModal from './PledgeDeleteModal';
+import PledgeModal from './PledgeModal';
+import { Stack } from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
+import Avatar from 'components/Avatar/Avatar';
+import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import type {
-  InterfaceCreatePledge,
   InterfacePledgeInfo,
+  InterfacePledgeVolunteer,
   InterfaceQueryFundCampaignsPledges,
 } from 'utils/interfaces';
-import type { ApolloQueryResult } from '@apollo/client';
-import useLocalStorage from 'utils/useLocalstorage';
-import styles from './FundCampaignPledge.module.css';
-import PledgeCreateModal from './PledgeCreateModal';
-import PledgeDeleteModal from './PledgeDeleteModal';
-import PledgeEditModal from './PledgeEditModal';
 
 enum Modal {
-  CREATE = 'create',
-  UPDATE = 'update',
+  SAME = 'same',
   DELETE = 'delete',
 }
 
 const fundCampaignPledge = (): JSX.Element => {
-  const { fundCampaignId: currentUrl } = useParams();
-  const { getItem } = useLocalStorage();
   const { t } = useTranslation('translation', {
     keyPrefix: 'pledges',
   });
   const { t: tCommon } = useTranslation('common');
 
+  const { fundCampaignId, orgId } = useParams();
+  if (!fundCampaignId || !orgId) {
+    return <Navigate to={'/'} replace />;
+  }
+
   const [modalState, setModalState] = useState<{ [key in Modal]: boolean }>({
-    [Modal.CREATE]: false,
-    [Modal.UPDATE]: false,
+    [Modal.SAME]: false,
     [Modal.DELETE]: false,
   });
 
+  const [pledgeModalMode, setPledgeModalMode] = useState<'edit' | 'create'>(
+    'create',
+  );
   const [pledge, setPledge] = useState<InterfacePledgeInfo | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
-  const [formState, setFormState] = useState<InterfaceCreatePledge>({
-    pledgeAmount: 0,
-    pledgeCurrency: 'USD',
-    pledgeEndDate: new Date(),
-    pledgeStartDate: new Date(),
-  });
-  const [createPledge] = useMutation(CREATE_PlEDGE);
-  const [updatePledge] = useMutation(UPDATE_PLEDGE);
-  const [deletePledge] = useMutation(DELETE_PLEDGE);
+  const [sortBy, setSortBy] = useState<
+    'highest' | 'lowest' | 'latest' | 'earliest'
+  >('latest');
 
   const {
     data: pledgeData,
@@ -76,13 +70,43 @@ const fundCampaignPledge = (): JSX.Element => {
     >;
   } = useQuery(FUND_CAMPAIGN_PLEDGE, {
     variables: {
-      id: currentUrl,
+      id: fundCampaignId,
     },
   });
 
+  const endDate = dayjs(
+    pledgeData?.getFundraisingCampaignById?.endDate,
+    'YYYY-MM-DD',
+  ).toDate();
+
   const pledges = useMemo(() => {
-    return pledgeData?.getFundraisingCampaignById.pledges ?? [];
-  }, [pledgeData]);
+    return (
+      pledgeData?.getFundraisingCampaignById.pledges
+        .filter((pledge) => {
+          const search = searchTerm.toLowerCase();
+          return pledge.users.some((user) => {
+            const fullName = `${user.firstName} ${user.lastName}`;
+            return fullName.toLowerCase().includes(search);
+          });
+        })
+        .sort((a, b) => {
+          switch (sortBy) {
+            case 'highest':
+              return b.amount - a.amount;
+            case 'lowest':
+              return a.amount - b.amount;
+            case 'latest':
+              return (
+                new Date(b.endDate).getTime() - new Date(a.endDate).getTime()
+              );
+            case 'earliest':
+              return (
+                new Date(a.endDate).getTime() - new Date(b.endDate).getTime()
+              );
+          }
+        }) ?? []
+    );
+  }, [pledgeData, sortBy, searchTerm]);
 
   const openModal = (modal: Modal): void => {
     setModalState((prevState) => ({ ...prevState, [modal]: true }));
@@ -92,19 +116,15 @@ const fundCampaignPledge = (): JSX.Element => {
     setModalState((prevState) => ({ ...prevState, [modal]: false }));
   };
 
-  const handleEditClick = useCallback(
-    (pledge: InterfacePledgeInfo): void => {
-      setFormState({
-        pledgeAmount: pledge.amount,
-        pledgeCurrency: pledge.currency,
-        pledgeEndDate: new Date(pledge.endDate),
-        pledgeStartDate: new Date(pledge.startDate),
-      });
+  const handleOpenModal = useCallback(
+    (pledge: InterfacePledgeInfo | null, mode: 'edit' | 'create'): void => {
       setPledge(pledge);
-      openModal(Modal.UPDATE);
+      setPledgeModalMode(mode);
+      openModal(Modal.SAME);
     },
     [openModal],
   );
+
   const handleDeleteClick = useCallback(
     (pledge: InterfacePledgeInfo): void => {
       setPledge(pledge);
@@ -112,91 +132,7 @@ const fundCampaignPledge = (): JSX.Element => {
     },
     [openModal],
   );
-  const createPledgeHandler = async (
-    e: ChangeEvent<HTMLFormElement>,
-  ): Promise<void> => {
-    try {
-      e.preventDefault();
-      const userId = getItem('id');
-      await createPledge({
-        variables: {
-          campaignId: currentUrl,
-          amount: formState.pledgeAmount,
-          currency: formState.pledgeCurrency,
-          startDate: dayjs(formState.pledgeStartDate).format('YYYY-MM-DD'),
-          endDate: dayjs(formState.pledgeEndDate).format('YYYY-MM-DD'),
-          userIds: [userId],
-        },
-      });
-      await refetchPledge();
-      closeModal(Modal.CREATE);
-      toast.success(t('pledgeCreated'));
-      setFormState({
-        pledgeAmount: 0,
-        pledgeCurrency: 'USD',
-        pledgeEndDate: new Date(),
-        pledgeStartDate: new Date(),
-      });
-    } catch (error: unknown) {
-      toast.error((error as Error).message);
-    }
-  };
-  const updatePledgeHandler = async (
-    e: ChangeEvent<HTMLFormElement>,
-  ): Promise<void> => {
-    try {
-      e.preventDefault();
-      const updatedFields: { [key: string]: number | string | undefined } = {};
-      if (formState.pledgeAmount !== pledge?.amount) {
-        updatedFields.amount = formState.pledgeAmount;
-      }
-      if (formState.pledgeCurrency !== pledge?.currency) {
-        updatedFields.currency = formState.pledgeCurrency;
-      }
-      if (
-        dayjs(formState.pledgeStartDate).format('YYYY-MM-DD') !==
-        dayjs(pledge?.startDate).format('YYYY-MM-DD')
-      ) {
-        updatedFields.startDate = dayjs(formState.pledgeStartDate).format(
-          'YYYY-MM-DD',
-        );
-      }
-      if (
-        dayjs(formState.pledgeEndDate).format('YYYY-MM-DD') !==
-        dayjs(pledge?.endDate).format('YYYY-MM-DD')
-      ) {
-        updatedFields.endDate = dayjs(formState.pledgeEndDate).format(
-          'YYYY-MM-DD',
-        );
-      }
 
-      await updatePledge({
-        variables: {
-          id: pledge?._id,
-          ...updatedFields,
-        },
-      });
-      await refetchPledge();
-      closeModal(Modal.UPDATE);
-      toast.success(t('pledgeUpdated'));
-    } catch (error: unknown) {
-      toast.error((error as Error).message);
-    }
-  };
-  const deleteHandler = async (): Promise<void> => {
-    try {
-      await deletePledge({
-        variables: {
-          id: pledge?._id,
-        },
-      });
-      await refetchPledge();
-      closeModal(Modal.DELETE);
-      toast.success(t('pledgeDeleted'));
-    } catch (error: unknown) {
-      toast.error((error as Error).message);
-    }
-  };
   if (pledgeLoading) return <Loader size="xl" />;
   if (pledgeError) {
     return (
@@ -212,139 +148,274 @@ const fundCampaignPledge = (): JSX.Element => {
       </div>
     );
   }
-  return (
-    <div className={styles.pledgeContainer}>
-      <Button
-        variant="success"
-        className={styles.createPledgeBtn}
-        onClick={() => openModal(Modal.CREATE)}
-        data-testid="addPledgeBtn"
-      >
-        <i className={'fa fa-plus me-2'} />
-        {t('addPledge')}
-      </Button>
-      <div className={`${styles.container} bg-white rounded-4 `}>
-        <div className="mx-1 my-4 py-4">
-          <Row className="mx-4 border border-light-subtle rounded-top-4 py-3 justify-content-between shadow-sm">
-            <Col xs={7} sm={2} md={3} lg={3} className=" fw-bold">
-              <div className="ms-2"> {t('volunteers')} </div>
-            </Col>
-            <Col className=" fw-bold " md={2} sm={2}>
-              <div className="ms-3">{tCommon('startDate')}</div>
-            </Col>
-            <Col className=" fw-bold " sm={2} md={2}>
-              <div className="ms-3">{tCommon('endDate')}</div>
-            </Col>
-            <Col className=" fw-bold" md={2} sm={2}>
-              <div>{t('pledgeAmount')}</div>
-            </Col>
-            <Col xs={5} md={2} sm={2} lg={2} className=" fw-bold">
-              <div className="ms-3"> {t('pledgeOptions')} </div>
-            </Col>
-          </Row>
-          <div className="mx-4 bg-light-subtle border border-light-subtle border-top-0 rounded-bottom-4 shadow-sm">
-            {pledges.map((pledge, index) => (
-              <div key={index}>
-                <Row
-                  className={`${index == 0 ? 'pt-3' : ''} mb-3 ms-2 justify-content-between `}
-                >
-                  <Col xs={7} sm={2} md={3} lg={3}>
-                    <div className="">
-                      {pledge.users.map((user, index) => (
-                        <span key={index}>
-                          {user.firstName}
-                          {index !== pledge.users.length - 1 && ', '}
-                        </span>
-                      ))}
-                    </div>
-                  </Col>
-                  <Col sm={2} md={2}>
-                    <div className="ms-1">
-                      {dayjs(pledge.startDate).format('DD/MM/YYYY')}
-                    </div>
-                  </Col>
-                  <Col sm={2} md={2}>
-                    <div>{dayjs(pledge.endDate).format('DD/MM/YYYY')}</div>
-                  </Col>
-                  <Col sm={2} md={2}>
-                    <div className="ms-2">
-                      {
-                        currencySymbols[
-                          pledge.currency as keyof typeof currencySymbols
-                        ]
-                      }
-                      {pledge.amount}
-                    </div>
-                  </Col>
-                  <Col xs={5} md={2} sm={2} lg={2}>
-                    <Button
-                      variant="success"
-                      size="sm"
-                      className="me-2"
-                      data-testid="editPledgeBtn"
-                      onClick={() => handleEditClick(pledge)}
-                    >
-                      {' '}
-                      <i className="fa fa-edit" />
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="danger"
-                      data-testid="deletePledgeBtn"
-                      onClick={() => handleDeleteClick(pledge)}
-                    >
-                      <i className="fa fa-trash" />
-                    </Button>
-                  </Col>
-                </Row>
-                {pledges && index !== pledges.length - 1 && (
-                  <hr className="mx-3" />
-                )}
-              </div>
-            ))}
 
-            {pledges.length === 0 && (
-              <div className="pt-2 text-center fw-semibold text-body-tertiary ">
-                <h5>{t('noPledges')}</h5>
-              </div>
+  const columns: GridColDef[] = [
+    {
+      field: 'volunteers',
+      headerName: 'Volunteers',
+      flex: 2,
+      minWidth: 50,
+      align: 'left',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      renderCell: (params: GridCellParams) => {
+        return (
+          <div className="d-flex flex-wrap gap-1" style={{ maxHeight: 120 }}>
+            {params.row.users.map(
+              (user: InterfacePledgeVolunteer, index: number) => (
+                <div className={styles.volunteerContainer} key={index}>
+                  {user.image ? (
+                    <img
+                      src={user.image}
+                      alt="volunteer"
+                      className={styles.TableImage}
+                    />
+                  ) : (
+                    <div className={styles.avatarContainer}>
+                      <Avatar
+                        key={user._id + '1'}
+                        avatarStyle={styles.TableImage}
+                        name={user.firstName + ' ' + user.lastName}
+                        alt={user.firstName + ' ' + user.lastName}
+                      />
+                    </div>
+                  )}
+                  <span key={user._id + '2'}>
+                    {user.firstName + ' ' + user.lastName}
+                  </span>
+                </div>
+              ),
             )}
+          </div>
+        );
+      },
+    },
+    {
+      field: 'startDate',
+      headerName: 'Start Date',
+      flex: 1,
+      minWidth: 150,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      renderCell: (params: GridCellParams) => {
+        return dayjs(params.row.startDate).format('DD/MM/YYYY');
+      },
+    },
+    {
+      field: 'endDate',
+      headerName: 'End Date',
+      minWidth: 150,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      flex: 1,
+      sortable: false,
+      renderCell: (params: GridCellParams) => {
+        return dayjs(params.row.endDate).format('DD/MM/YYYY');
+      },
+    },
+    {
+      field: 'amount',
+      headerName: 'Pledge Amount',
+      flex: 1,
+      minWidth: 100,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      renderCell: (params: GridCellParams) => {
+        return (
+          <div className="d-flex justify-content-center fw-bold">
+            {
+              currencySymbols[
+                params.row.currency as keyof typeof currencySymbols
+              ]
+            }
+            {params.row.amount}
+          </div>
+        );
+      },
+    },
+    {
+      field: 'action',
+      headerName: 'Action',
+      flex: 1,
+      minWidth: 100,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      renderCell: (params: GridCellParams) => {
+        return (
+          <>
+            <Button
+              variant="success"
+              size="sm"
+              className="me-2"
+              data-testid="editPledgeBtn"
+              onClick={() =>
+                handleOpenModal(params.row as InterfacePledgeInfo, 'edit')
+              }
+            >
+              {' '}
+              <i className="fa fa-edit" />
+            </Button>
+            <Button
+              size="sm"
+              variant="danger"
+              data-testid="deletePledgeBtn"
+              onClick={() =>
+                handleDeleteClick(params.row as InterfacePledgeInfo)
+              }
+            >
+              <i className="fa fa-trash" />
+            </Button>
+          </>
+        );
+      },
+    },
+  ];
+
+  return (
+    <div>
+      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
+        <div className={`${styles.input} mb-1`}>
+          <Form.Control
+            type="name"
+            placeholder={t('searchVolunteer')}
+            autoComplete="off"
+            required
+            className={styles.inputField}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            data-testid="searchVolunteer"
+          />
+          <Button
+            tabIndex={-1}
+            className={`position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center`}
+            data-testid="searchBtn"
+          >
+            <Search />
+          </Button>
+        </div>
+        <div className="d-flex gap-4 mb-1">
+          <div className="d-flex justify-space-between">
+            <Dropdown>
+              <Dropdown.Toggle
+                variant="success"
+                id="dropdown-basic"
+                className={styles.dropdown}
+                data-testid="filter"
+              >
+                <Sort className={'me-1'} />
+                {tCommon('sort')}
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item
+                  onClick={() => setSortBy('highest')}
+                  data-testid="highest"
+                >
+                  {t('highestAmount')}
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => setSortBy('lowest')}
+                  data-testid="lowest"
+                >
+                  {t('lowestAmount')}
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => setSortBy('latest')}
+                  data-testid="latest"
+                >
+                  {t('latestEndDate')}
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => setSortBy('earliest')}
+                  data-testid="earliest"
+                >
+                  {t('earliestEndDate')}
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
+          <div>
+            <Button
+              variant="success"
+              className={styles.orgFundCampaignButton}
+              disabled={endDate < new Date()}
+              onClick={() => handleOpenModal(null, 'create')}
+              data-testid="addPledgeBtn"
+            >
+              <i className={'fa fa-plus me-2'} />
+              {t('addPledge')}
+            </Button>
           </div>
         </div>
       </div>
 
-      {/* Create Pledge Modal */}
-      <PledgeCreateModal
-        createCamapignModalIsOpen={modalState[Modal.CREATE]}
-        hideCreateCampaignModal={() => closeModal(Modal.CREATE)}
-        formState={formState}
-        setFormState={setFormState}
-        createPledgeHandler={createPledgeHandler}
-        startDate={pledgeData?.getFundraisingCampaignById.startDate as Date}
-        endDate={pledgeData?.getFundraisingCampaignById.endDate as Date}
-        t={t}
-        tCommon={tCommon}
+      <DataGrid
+        disableColumnMenu
+        columnBuffer={5}
+        hideFooter={true}
+        className={`${styles.datagrid}`}
+        getRowId={(row) => row._id}
+        components={{
+          NoRowsOverlay: () => (
+            <Stack height="100%" alignItems="center" justifyContent="center">
+              Nothing Found !!
+            </Stack>
+          ),
+        }}
+        sx={{
+          '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
+            outline: 'none !important',
+          },
+          '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
+            outline: 'none',
+          },
+          '& .MuiDataGrid-row:hover': {
+            backgroundColor: 'transparent',
+          },
+          '& .MuiDataGrid-row.Mui-hovered': {
+            backgroundColor: 'transparent',
+          },
+        }}
+        getRowClassName={() => `${styles.rowBackground}`}
+        autoHeight
+        rowHeight={65}
+        rows={pledges.map((pledge) => ({
+          _id: pledge._id,
+          users: pledge.users,
+          startDate: pledge.startDate,
+          endDate: pledge.endDate,
+          amount: pledge.amount,
+          currency: pledge.currency,
+        }))}
+        columns={columns}
+        isRowSelectable={() => false}
       />
 
       {/* Update Pledge Modal */}
-      <PledgeEditModal
-        updatePledgeModalIsOpen={modalState[Modal.UPDATE]}
-        hideUpdatePledgeModal={() => closeModal(Modal.UPDATE)}
-        formState={formState}
-        setFormState={setFormState}
-        updatePledgeHandler={updatePledgeHandler}
-        startDate={pledgeData?.getFundraisingCampaignById.startDate as Date}
+      <PledgeModal
+        isOpen={modalState[Modal.SAME]}
+        hide={() => closeModal(Modal.SAME)}
+        campaignId={fundCampaignId}
+        orgId={orgId}
+        pledge={pledge}
+        refetchPledge={refetchPledge}
         endDate={pledgeData?.getFundraisingCampaignById.endDate as Date}
-        t={t}
-        tCommon={tCommon}
+        mode={pledgeModalMode}
       />
 
       {/* Delete Pledge Modal */}
       <PledgeDeleteModal
-        deletePledgeModalIsOpen={modalState[Modal.DELETE]}
-        hideDeletePledgeModal={() => closeModal(Modal.DELETE)}
-        deletePledgeHandler={deleteHandler}
-        t={t}
-        tCommon={tCommon}
+        isOpen={modalState[Modal.DELETE]}
+        hide={() => closeModal(Modal.DELETE)}
+        pledge={pledge}
+        refetchPledge={refetchPledge}
       />
     </div>
   );

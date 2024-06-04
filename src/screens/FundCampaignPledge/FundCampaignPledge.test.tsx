@@ -16,7 +16,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import i18n from '../../utils/i18nForTest';
+import i18nForTest from '../../utils/i18nForTest';
 import FundCampaignPledge from './FundCampaignPledge';
 import {
   EMPTY_MOCKS,
@@ -55,14 +55,9 @@ const link3 = new StaticMockLink(MOCKS_CREATE_PLEDGE_ERROR);
 const link4 = new StaticMockLink(MOCKS_UPDATE_PLEDGE_ERROR);
 const link5 = new StaticMockLink(MOCKS_DELETE_PLEDGE_ERROR);
 const link6 = new StaticMockLink(EMPTY_MOCKS);
-
-const translations = {
-  ...JSON.parse(
-    JSON.stringify(i18n.getDataByLanguage('en')?.translation.pledges ?? {}),
-  ),
-  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
-  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
-};
+const translations = JSON.parse(
+  JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.pledges),
+);
 
 describe('Testing Campaign Pledge Screen', () => {
   const formData = {
@@ -77,7 +72,7 @@ describe('Testing Campaign Pledge Screen', () => {
       <MockedProvider link={link1} addTypename={false}>
         <Provider store={store}>
           <BrowserRouter>
-            <I18nextProvider i18n={i18n}>
+            <I18nextProvider i18n={i18nForTest}>
               {<FundCampaignPledge />}
             </I18nextProvider>
           </BrowserRouter>
@@ -94,7 +89,7 @@ describe('Testing Campaign Pledge Screen', () => {
       <MockedProvider link={link2} addTypename={false}>
         <Provider store={store}>
           <BrowserRouter>
-            <I18nextProvider i18n={i18n}>
+            <I18nextProvider i18n={i18nForTest}>
               {<FundCampaignPledge />}
             </I18nextProvider>
           </BrowserRouter>
@@ -116,7 +111,7 @@ describe('Testing Campaign Pledge Screen', () => {
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <I18nextProvider i18n={i18n}>
+              <I18nextProvider i18n={i18nForTest}>
                 {<FundCampaignPledge />}
               </I18nextProvider>
             </LocalizationProvider>
@@ -131,12 +126,12 @@ describe('Testing Campaign Pledge Screen', () => {
     userEvent.click(screen.getByTestId('addPledgeBtn'));
     await waitFor(() => {
       return expect(
-        screen.findByTestId('createPledgeCloseBtn'),
+        screen.findByTestId('pledgeModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('createPledgeCloseBtn'));
+    userEvent.click(screen.getByTestId('pledgeModalCloseBtn'));
     await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('createPledgeCloseBtn'),
+      screen.queryByTestId('pledgeModalCloseBtn'),
     );
   });
   it('creates a pledge', async () => {
@@ -145,7 +140,7 @@ describe('Testing Campaign Pledge Screen', () => {
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <I18nextProvider i18n={i18n}>
+              <I18nextProvider i18n={i18nForTest}>
                 {<FundCampaignPledge />}
               </I18nextProvider>
             </LocalizationProvider>
@@ -160,7 +155,7 @@ describe('Testing Campaign Pledge Screen', () => {
     userEvent.click(screen.getByTestId('addPledgeBtn'));
     await waitFor(() => {
       return expect(
-        screen.findByTestId('createPledgeCloseBtn'),
+        screen.findByTestId('pledgeModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
     const currency = screen.getByTestId('currencySelect');
@@ -175,7 +170,7 @@ describe('Testing Campaign Pledge Screen', () => {
       screen.getByPlaceholderText('Enter Pledge Amount'),
       formData.pledgeAmount.toString(),
     );
-    userEvent.click(screen.getByTestId('createPledgeBtn'));
+    userEvent.click(screen.getByTestId('submitPledgeBtn'));
     await waitFor(() => {
       return expect(toast.success).toHaveBeenCalledWith(
         translations.pledgeCreated,
@@ -188,7 +183,7 @@ describe('Testing Campaign Pledge Screen', () => {
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <I18nextProvider i18n={i18n}>
+              <I18nextProvider i18n={i18nForTest}>
                 {<FundCampaignPledge />}
               </I18nextProvider>
             </LocalizationProvider>
@@ -203,7 +198,7 @@ describe('Testing Campaign Pledge Screen', () => {
     userEvent.click(screen.getByTestId('addPledgeBtn'));
     await waitFor(() => {
       return expect(
-        screen.findByTestId('createPledgeCloseBtn'),
+        screen.findByTestId('pledgeModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
     const currency = screen.getByTestId('currencySelect');
@@ -218,7 +213,7 @@ describe('Testing Campaign Pledge Screen', () => {
       screen.getByPlaceholderText('Enter Pledge Amount'),
       formData.pledgeAmount.toString(),
     );
-    userEvent.click(screen.getByTestId('createPledgeBtn'));
+    userEvent.click(screen.getByTestId('submitPledgeBtn'));
     await waitFor(() => {
       return expect(toast.error).toHaveBeenCalled();
     });
@@ -230,7 +225,7 @@ describe('Testing Campaign Pledge Screen', () => {
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <I18nextProvider i18n={i18n}>
+              <I18nextProvider i18n={i18nForTest}>
                 {<FundCampaignPledge />}
               </I18nextProvider>
             </LocalizationProvider>
@@ -245,12 +240,12 @@ describe('Testing Campaign Pledge Screen', () => {
     userEvent.click(screen.getAllByTestId('editPledgeBtn')[0]);
     await waitFor(() => {
       return expect(
-        screen.findByTestId('updatePledgeCloseBtn'),
+        screen.findByTestId('pledgeModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('updatePledgeCloseBtn'));
+    userEvent.click(screen.getByTestId('pledgeModalCloseBtn'));
     await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('updatePledgeCloseBtn'),
+      screen.queryByTestId('pledgeModalCloseBtn'),
     );
   });
   it('updates a pledge', async () => {
@@ -259,7 +254,7 @@ describe('Testing Campaign Pledge Screen', () => {
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <I18nextProvider i18n={i18n}>
+              <I18nextProvider i18n={i18nForTest}>
                 {<FundCampaignPledge />}
               </I18nextProvider>
             </LocalizationProvider>
@@ -274,7 +269,7 @@ describe('Testing Campaign Pledge Screen', () => {
     userEvent.click(screen.getAllByTestId('editPledgeBtn')[0]);
     await waitFor(() => {
       return expect(
-        screen.findByTestId('updatePledgeCloseBtn'),
+        screen.findByTestId('pledgeModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
     const currency = screen.getByTestId('currencySelect');
@@ -289,7 +284,7 @@ describe('Testing Campaign Pledge Screen', () => {
       screen.getByPlaceholderText('Enter Pledge Amount'),
       formData.pledgeAmount.toString(),
     );
-    userEvent.click(screen.getByTestId('updatePledgeBtn'));
+    userEvent.click(screen.getByTestId('submitPledgeBtn'));
     await waitFor(() => {
       return expect(toast.success).toHaveBeenCalledWith(
         translations.pledgeUpdated,
@@ -302,7 +297,7 @@ describe('Testing Campaign Pledge Screen', () => {
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <I18nextProvider i18n={i18n}>
+              <I18nextProvider i18n={i18nForTest}>
                 {<FundCampaignPledge />}
               </I18nextProvider>
             </LocalizationProvider>
@@ -317,7 +312,7 @@ describe('Testing Campaign Pledge Screen', () => {
     userEvent.click(screen.getAllByTestId('editPledgeBtn')[0]);
     await waitFor(() => {
       return expect(
-        screen.findByTestId('updatePledgeCloseBtn'),
+        screen.findByTestId('pledgeModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
     const currency = screen.getByTestId('currencySelect');
@@ -332,7 +327,7 @@ describe('Testing Campaign Pledge Screen', () => {
       screen.getByPlaceholderText('Enter Pledge Amount'),
       formData.pledgeAmount.toString(),
     );
-    userEvent.click(screen.getByTestId('updatePledgeBtn'));
+    userEvent.click(screen.getByTestId('submitPledgeBtn'));
     await waitFor(() => {
       return expect(toast.error).toHaveBeenCalled();
     });
@@ -343,7 +338,7 @@ describe('Testing Campaign Pledge Screen', () => {
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <I18nextProvider i18n={i18n}>
+              <I18nextProvider i18n={i18nForTest}>
                 {<FundCampaignPledge />}
               </I18nextProvider>
             </LocalizationProvider>
@@ -372,7 +367,7 @@ describe('Testing Campaign Pledge Screen', () => {
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <I18nextProvider i18n={i18n}>
+              <I18nextProvider i18n={i18nForTest}>
                 {<FundCampaignPledge />}
               </I18nextProvider>
             </LocalizationProvider>
@@ -403,7 +398,7 @@ describe('Testing Campaign Pledge Screen', () => {
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <I18nextProvider i18n={i18n}>
+              <I18nextProvider i18n={i18nForTest}>
                 {<FundCampaignPledge />}
               </I18nextProvider>
             </LocalizationProvider>
@@ -432,7 +427,7 @@ describe('Testing Campaign Pledge Screen', () => {
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <I18nextProvider i18n={i18n}>
+              <I18nextProvider i18n={i18nForTest}>
                 {<FundCampaignPledge />}
               </I18nextProvider>
             </LocalizationProvider>

@@ -514,7 +514,13 @@
     "deletePledgeMsg": "¿Estás seguro de que quieres eliminar este compromiso?",
     "no": "No",
     "yes": "Sí",
-    "noPledges": "No se encontraron compromisos"
+    "noPledges": "No se encontraron compromisos",
+    "sort": "Ordenar",
+    "searchVolunteer": "Buscar por voluntario",
+    "highestAmount": "Cantidad más alta",
+    "lowestAmount": "Cantidad más baja",
+    "latestEndDate": "Fecha de finalización más reciente",
+    "earliestEndDate": "Fecha de finalización más cercana"
   },
 
   "orgPost": {

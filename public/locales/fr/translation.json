@@ -375,7 +375,13 @@
     "amount": "Montant",
     "editPledge": "Modifier l'engagement",
     "deletePledgeMsg": "Etes-vous sûr de vouloir supprimer cet engagement ?",
-    "noPledges": "Aucun engagement trouvé"
+    "noPledges": "Aucun engagement trouvé",
+    "sort": "Trier",
+    "searchVolunteer": "Rechercher par bénévole",
+    "highestAmount": "Montant le plus élevé",
+    "lowestAmount": "Montant le plus bas",
+    "latestEndDate": "Date de fin la plus récente",
+    "earliestEndDate": "Date de fin la plus proche"
   },
   "orgPost": {
     "title": "Des postes",

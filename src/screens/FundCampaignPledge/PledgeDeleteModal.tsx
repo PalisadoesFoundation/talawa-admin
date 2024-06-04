@@ -1,33 +1,54 @@
 import { Button, Modal } from 'react-bootstrap';
 import styles from './FundCampaignPledge.module.css';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { useMutation } from '@apollo/client';
+import { DELETE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
+import type { InterfacePledgeInfo } from 'utils/interfaces';
+import { toast } from 'react-toastify';
 
 interface InterfaceDeletePledgeModal {
-  deletePledgeModalIsOpen: boolean;
-  hideDeletePledgeModal: () => void;
-  deletePledgeHandler: () => Promise<void>;
-  t: (key: string) => string;
-  tCommon: (key: string) => string;
+  isOpen: boolean;
+  hide: () => void;
+  pledge: InterfacePledgeInfo | null;
+  refetchPledge: () => void;
 }
 const PledgeDeleteModal: React.FC<InterfaceDeletePledgeModal> = ({
-  deletePledgeModalIsOpen,
-  hideDeletePledgeModal,
-  deletePledgeHandler,
-  t,
-  tCommon,
+  isOpen,
+  hide,
+  pledge,
+  refetchPledge,
 }) => {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'pledges',
+  });
+  const { t: tCommon } = useTranslation('common');
+
+  const [deletePledge] = useMutation(DELETE_PLEDGE);
+
+  const deleteHandler = async (): Promise<void> => {
+    try {
+      await deletePledge({
+        variables: {
+          id: pledge?._id,
+        },
+      });
+      refetchPledge();
+      hide();
+      toast.success(t('pledgeDeleted'));
+    } catch (error: unknown) {
+      toast.error((error as Error).message);
+    }
+  };
   return (
     <>
-      <Modal
-        className={styles.pledgeModal}
-        onHide={hideDeletePledgeModal}
-        show={deletePledgeModalIsOpen}
-      >
+      <Modal className={styles.pledgeModal} onHide={hide} show={isOpen}>
         <Modal.Header>
           <p className={styles.titlemodal}> {t('deletePledge')}</p>
           <Button
             variant="danger"
-            onClick={hideDeletePledgeModal}
+            onClick={hide}
+            className={styles.modalCloseBtn}
             data-testid="deletePledgeCloseBtn"
           >
             {' '}
@@ -40,16 +61,12 @@ const PledgeDeleteModal: React.FC<InterfaceDeletePledgeModal> = ({
         <Modal.Footer>
           <Button
             variant="danger"
-            onClick={deletePledgeHandler}
+            onClick={deleteHandler}
             data-testid="deleteyesbtn"
           >
             {tCommon('yes')}
           </Button>
-          <Button
-            variant="secondary"
-            onClick={hideDeletePledgeModal}
-            data-testid="deletenobtn"
-          >
+          <Button variant="secondary" onClick={hide} data-testid="deletenobtn">
             {tCommon('no')}
           </Button>
         </Modal.Footer>
