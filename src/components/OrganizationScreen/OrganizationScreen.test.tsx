@@ -121,6 +121,50 @@ describe('Testing LeftDrawer in OrganizationScreen', () => {
     console.log(title);
   });
 
+  test('title should be users if user is super admin for member/orgid', async () => {
+    setItem('userId', '123');
+    setItem('SuperAdmin', true);
+    window.location.assign('/member/orgid');
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationScreen />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+    const title = screen.getByTestId('title').textContent;
+    expect(title).toBe('User Details');
+    console.log(title);
+  });
+
+  test('title should be members if members if user not is super admin for member/orgid', async () => {
+    setItem('userId', '123');
+    setItem('SuperAdmin', false);
+    window.location.assign('/member/orgid');
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationScreen />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+    const title = screen.getByTestId('title').textContent;
+    expect(title).toBe('Member Details');
+    console.log(title);
+  });
+
   test('Testing LeftDrawer in page functionality', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>

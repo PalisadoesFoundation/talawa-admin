@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
@@ -32,10 +32,12 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const { getItem } = useLocalStorage();
   const currentUrl = location.state?.id || getItem('id') || id;
 
-  const superAdmin = getItem('SuperAdmin');
-  superAdmin
-    ? (document.title = t('title'))
-    : (document.title = t('titleAdmin'));
+  useEffect(() => {
+    const superAdmin = getItem('SuperAdmin');
+    superAdmin
+      ? (document.title = t('title_superadmin'))
+      : (document.title = t('title'));
+  }, []);
 
   const { data: user, loading: loading } = useQuery(USER_DETAILS, {
     variables: { id: currentUrl },

@@ -107,7 +107,16 @@ const OrganizationScreen = (): JSX.Element => {
       >
         <div className="d-flex justify-content-between align-items-center">
           <div style={{ flex: 1 }}>
-            <h1 data-testid="title">{title}</h1>
+            {location.pathname.split('/')[1] == 'member' ||
+            location.pathname.split('/')[1] == 'orgpeople' ? (
+              isSuperAdmin ? (
+                <h1 data-testid="title">{t('title_superadmin')}</h1>
+              ) : (
+                <h1 data-testid="title">{t('title')}</h1>
+              )
+            ) : (
+              <h1>{t('title')}</h1>
+            )}{' '}
           </div>
           <ProfileDropdown />
         </div>
