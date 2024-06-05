@@ -64,7 +64,7 @@ const ActionItemUpdateModal: React.FC<InterfaceActionItemCreateModalProps> = ({
         <Modal.Body>
           <Form onSubmitCapture={updateActionItemHandler}>
             <Form.Group className="mb-2">
-              <Form.Label>Assignee</Form.Label>
+              <Form.Label>{t('assignee')}</Form.Label>
               <Form.Select
                 data-testid="formUpdateAssignee"
                 defaultValue=""

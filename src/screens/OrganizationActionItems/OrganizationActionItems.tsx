@@ -310,7 +310,7 @@ function organizationActionItems(): JSX.Element {
             <div className=" d-none d-lg-inline flex-grow-1 d-flex align-items-center border bg-light-subtle rounded-3">
               {!actionItemCategoryName && !actionItemStatus && (
                 <div className="lh-lg mt-2 text-center fw-semibold text-body-tertiary">
-                  No Filters
+                  {tCommon('noFiltersApplied')}
                 </div>
               )}
 
