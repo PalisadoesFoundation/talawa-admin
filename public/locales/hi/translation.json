@@ -269,6 +269,7 @@
     "clearFilters": "फ़िल्टर साफ़ करें",
     "completed": "पुरा होना।",
     "completionDate": "पूरा करने की तिथि",
+    "createActionItem": "कार्रवाई आइटम बनाएं",
     "deleteActionItem": "क्रिया आइटम हटाएँ",
     "deleteActionItemMsg": "क्या आप इस क्रिया आइटम को हटाना चाहते हैं?",
     "details": "विवरण",
@@ -582,6 +583,7 @@
   "addOnStore": {
     "title": "स्टोर पर जोड़ें",
     "searchName": "उदाहरणार्थ: दान",
+    "search": "खोजें",
     "enable": "सक्रिय",
     "disable": "अक्षम",
     "pHeading": "प्लग-इन",
@@ -842,7 +844,11 @@
     "customFieldType": "क्षेत्र प्रकार",
     "Remove Custom Field": "कस्टम फ़ील्ड हटाएँ",
     "fieldSuccessMessage": "फ़ील्ड सफलतापूर्वक जोड़ा गया",
-    "fieldRemovalSuccess": "फ़ील्ड सफलतापूर्वक हटा दी गई"
+    "fieldRemovalSuccess": "फ़ील्ड सफलतापूर्वक हटा दी गई",
+    "String": "स्ट्रिंग",
+    "Boolean": "बूलियन",
+    "Date": "तारीख",
+    "Number": "संख्या"
   },
   "orgActionItemCategories": {
     "enableButton": "सक्षम",

@@ -269,6 +269,7 @@
     "clearFilters": "Effacer les filtres",
     "completed": "Complété",
     "completionDate": "Date d'achèvement",
+    "createActionItem": "Créer un élément d'action",
     "deleteActionItem": "Supprimer l'élément d'action",
     "deleteActionItemMsg": "Voulez-vous supprimer cette action ?",
     "details": "Détails",
@@ -582,6 +583,7 @@
   "addOnStore": {
     "title": "Ajouter sur la boutique",
     "searchName": "Ex : Dons",
+    "search": "Rechercher",
     "enable": "Activé",
     "disable": "Désactivé",
     "pHeading": "Plugins",
@@ -842,7 +844,11 @@
     "customFieldType": "Type de champ",
     "Remove Custom Field": "Supprimer le champ personnalisé",
     "fieldSuccessMessage": "Champ ajouté avec succès",
-    "fieldRemovalSuccess": "Champ supprimé avec succès"
+    "fieldRemovalSuccess": "Champ supprimé avec succès",
+    "String": "Chaîne",
+    "Boolean": "Booléen",
+    "Date": "Date",
+    "Number": "Nombre"
   },
   "orgActionItemCategories": {
     "enableButton": "Activer",

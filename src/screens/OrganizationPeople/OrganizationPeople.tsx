@@ -150,7 +150,7 @@ function organizationPeople(): JSX.Element {
   const columns: GridColDef[] = [
     {
       field: 'profile',
-      headerName: 'Profile',
+      headerName: tCommon('profile'),
       flex: 1,
       minWidth: 50,
       align: 'center',
@@ -174,7 +174,7 @@ function organizationPeople(): JSX.Element {
     },
     {
       field: 'name',
-      headerName: 'Name',
+      headerName: tCommon('name'),
       flex: 2,
       minWidth: 150,
       align: 'center',
@@ -187,7 +187,7 @@ function organizationPeople(): JSX.Element {
     },
     {
       field: 'email',
-      headerName: 'Email',
+      headerName: tCommon('email'),
       minWidth: 150,
       align: 'center',
       headerAlign: 'center',
@@ -197,7 +197,7 @@ function organizationPeople(): JSX.Element {
     },
     {
       field: 'joined',
-      headerName: 'Joined',
+      headerName: tCommon('joined'),
       flex: 2,
       minWidth: 100,
       align: 'center',
@@ -208,6 +208,7 @@ function organizationPeople(): JSX.Element {
         return dayjs(params.row.createdAt).format('DD/MM/YYYY');
       },
     },
+
   ];
   return (
     <>
