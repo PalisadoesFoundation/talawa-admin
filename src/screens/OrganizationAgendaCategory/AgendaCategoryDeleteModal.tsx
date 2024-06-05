@@ -43,7 +43,7 @@ const AgendaCategoryDeleteModal: React.FC<
           className="btn btn-danger"
           data-dismiss="modal"
           onClick={toggleDeleteModal}
-          data-testid="cancelDeleteAgendaCategoryBtn"
+          data-testid="deleteAgendaCategoryCloseBtn"
         >
           {tCommon('no')}
         </Button>

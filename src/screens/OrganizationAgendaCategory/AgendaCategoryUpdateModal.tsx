@@ -70,7 +70,11 @@ const AgendaCategoryUpdateModal: React.FC<
               }
             />
           </Form.Group>
-          <Button variant="primary" type="submit">
+          <Button
+            type="submit"
+            className={styles.greenregbtn}
+            data-testid="editAgendaCategoryBtn"
+          >
             {t('update')}
           </Button>
         </Form>

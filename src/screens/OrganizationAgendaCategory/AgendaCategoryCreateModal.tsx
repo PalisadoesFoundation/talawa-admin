@@ -54,7 +54,7 @@ const AgendaCategoryCreateModal: React.FC<
             <Form.Label>{t('name')}</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Enter Agenda Category Name"
+              placeholder="Category"
               value={formState.name}
               required
               onChange={(e) =>
@@ -66,7 +66,7 @@ const AgendaCategoryCreateModal: React.FC<
             <Form.Label>{t('description')}</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Enter Description"
+              placeholder="Description"
               required
               value={formState.description}
               onChange={(e) =>
@@ -74,7 +74,12 @@ const AgendaCategoryCreateModal: React.FC<
               }
             />
           </Form.Group>
-          <Button variant="primary" type="submit">
+          <Button
+            type="submit"
+            className={styles.greenregbtn}
+            value="createAgendaCategory"
+            data-testid="createAgendaCategoryFormSubmitBtn"
+          >
             {t('createAgendaCategory')}
           </Button>
         </Form>

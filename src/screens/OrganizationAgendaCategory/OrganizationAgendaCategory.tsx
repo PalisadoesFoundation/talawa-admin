@@ -124,8 +124,8 @@ function organizationAgendaCategory(): JSX.Element {
             <Button
               variant="success"
               onClick={showCreateModal}
-              data-testid="createActionItemBtn"
-              className={styles.createActionItemButton}
+              data-testid="createAgendaCategoryBtn"
+              className={styles.createAgendaCategoryButton}
             >
               <i className={'fa fa-plus me-2'} />
               {t('createAgendaCategory')}
