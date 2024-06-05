@@ -78,7 +78,7 @@ const components: ComponentType[] = [
   },
   {
     name: 'Agenda Items Category',
-    comp_id: 'orgagendaitemscategory',
+    comp_id: 'orgagendacategory',
     component: 'OrganizationAgendaCategory',
   },
   { name: 'Posts', comp_id: 'orgpost', component: 'OrgPost' },
