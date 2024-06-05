@@ -371,7 +371,7 @@ const organizationFunds = (): JSX.Element => {
                               data-testid="editFundBtn"
                               onClick={() => handleEditClick(fund)}
                             >
-                              Manage
+                              {tCommon('manage')}
                             </Button>
                           </StyledTableCell>
                         </StyledTableRow>

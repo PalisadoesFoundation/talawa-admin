@@ -112,7 +112,7 @@ function organizationVenues(): JSX.Element {
             type="name"
             id="searchByName"
             className="bg-white"
-            placeholder={t('searchBy') + ' ' + t(searchBy)}
+            placeholder={t('searchBy') + ' ' + tCommon(searchBy)}
             data-testid="searchBy"
             autoComplete="off"
             required

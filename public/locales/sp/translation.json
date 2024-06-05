@@ -372,7 +372,7 @@
     "close": "Cerrar",
     "completed": "Completado",
     "completionDate": "Fecha de finalización",
-    "createActionItem": "Crear",
+    "createActionItem": "Crear ítem de acción",
     "deleteActionItem": "Eliminar ítem de acción",
     "deleteActionItemMsg": "¿Desea eliminar este ítem de acción?",
     "details": "Detalles",
@@ -753,14 +753,14 @@
   "addOnStore": {
     "title": "Tienda de complementos",
     "searchName": "Ej: Donaciones",
+    "search": "Buscar",
     "enable": "Activada",
     "disable": "Desactivada",
     "pHeading": "Complementos",
     "install": "Instalada",
     "available": "Disponible",
     "pMessage": "El complemento no existe",
-    "filter": "filtros",
-    "search": "Buscar"
+    "filter": "filtros"
   },
   "addOnEntry": {
     "enable": "Activada",
@@ -1044,7 +1044,11 @@
     "saveChanges": "Guardar Cambios",
     "Remove Custom Field": "Eliminar Campo Personalizado",
     "fieldSuccessMessage": "Campo añadido exitosamente",
-    "fieldRemovalSuccess": "Campo eliminado exitosamente"
+    "fieldRemovalSuccess": "Campo eliminado exitosamente",
+    "String": "Cadena",
+    "Boolean": "Booleano",
+    "Date": "Fecha",
+    "Number": "Número"
   },
   "orgActionItemCategories": {
     "createButton": "Crear",
