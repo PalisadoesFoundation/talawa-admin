@@ -208,7 +208,6 @@ function organizationPeople(): JSX.Element {
         return dayjs(params.row.createdAt).format('DD/MM/YYYY');
       },
     },
-
   ];
   return (
     <>
