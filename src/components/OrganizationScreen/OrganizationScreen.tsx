@@ -46,6 +46,7 @@ const OrganizationScreen = (): JSX.Element => {
   const { targets } = appRoutes;
 
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(updateTargets(orgId));
   }, [orgId]);
