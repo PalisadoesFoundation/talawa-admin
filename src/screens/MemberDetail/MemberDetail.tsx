@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
@@ -28,17 +28,27 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     keyPrefix: 'memberDetail',
   });
 
-  // const { t: tCommon } = useTranslation('common');
-
   const location = useLocation();
   const { getItem } = useLocalStorage();
   const currentUrl = location.state?.id || getItem('id') || id;
-  document.title = t('title');
+
+  const superAdmin = getItem('SuperAdmin');
+  superAdmin
+    ? (document.title = t('title'))
+    : (document.title = t('titleAdmin'));
 
   const { data: user, loading: loading } = useQuery(USER_DETAILS, {
     variables: { id: currentUrl },
   });
   const userData = user?.user;
+
+  const [activeTab, setActiveTab] = useState('overview');
+
+  const handleSelect = (selectedKey: string | null): void => {
+    if (selectedKey) {
+      setActiveTab(selectedKey);
+    }
+  };
 
   const topNavButtons = [
     {
@@ -75,10 +85,13 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         <Tab.Container
           id="member-detail-tab-container"
           defaultActiveKey="overview"
+          onSelect={handleSelect}
         >
           <Nav
             variant="pills"
-            className={styles.topNav}
+            className={`${styles.topNav} ${
+              activeTab === 'overview' ? styles.navOverview : styles.navOther
+            }`}
             data-testid="memberDetailTabNav"
           >
             {topNavButtons.map((button) => (
@@ -94,7 +107,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               <Tab.Pane
                 eventKey={button.name}
                 key={button.name}
-                className={styles.tabSection}
+                className={`${styles.tabSection} ${
+                  activeTab === 'overview' ? '' : styles.othertabSection
+                }`}
               >
                 {button.component}
               </Tab.Pane>

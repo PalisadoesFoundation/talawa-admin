@@ -168,7 +168,7 @@ function OrgPeopleOrganizationsCard(
     }
   };
   return (
-    <Row>
+    <Row style={{ width: '100%' }}>
       <div className={styles.orgCard}>
         <div
           className={styles.innerContainer}

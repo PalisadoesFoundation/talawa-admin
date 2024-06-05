@@ -325,3 +325,10 @@ form > input {
     display: block;
   }
 }
+
+.container {
+  width: 100%;
+  padding-inline: 1rem;
+  justify-content: space-between;
+  gap: 1rem;
+}

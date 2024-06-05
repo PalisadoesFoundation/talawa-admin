@@ -416,7 +416,10 @@ const OrgMemberDetail: React.FC<OrgMemberDetailProps> = ({
                     </>
                   )}
                 </div>
-                <div className="d-flex flex-column mx-2">
+                <div
+                  className="d-flex flex-column mx-2"
+                  style={{ width: 'inherit' }}
+                >
                   <p className="fs-2 my-0 fw-medium">{formState?.firstName}</p>
                   <div
                     className={`p-1 bg-white border border-success text-success text-center rounded mt-1 ${styles.WidthFit}`}

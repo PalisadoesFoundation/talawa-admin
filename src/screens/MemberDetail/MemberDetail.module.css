@@ -526,14 +526,20 @@ input::file-selector-button {
   display: flex;
   justify-content: flex-start;
   margin-top: 2rem;
-  /* margin-bottom: 1rem; */
   background-color: #ffffff;
   padding-inline: 1.5rem;
   padding-top: 2.5rem;
   padding-bottom: 2.5rem;
-  /* border-radius: 16px; */
-  border-radius: 16px 16px 0 0;
   gap: 1rem;
+  border-bottom: 1px solid #dddddd;
+}
+
+.navOverview {
+  border-radius: 16px;
+}
+
+.navOther {
+  border-radius: 16px 16px 0 0;
 }
 
 .topNavBtn {
@@ -562,11 +568,13 @@ input::file-selector-button {
 .tabSection {
   display: flex;
   justify-content: space-between;
-  background-color: #ffffff;
-  border-radius: 0 0 16px 16px;
   margin-top: 0;
-  padding-inline: 1.5rem;
   padding-top: 2.5rem;
   padding-bottom: 2.5rem;
-  border-top: 1px solid #dddddd;
+}
+
+.othertabSection {
+  background-color: #ffffff;
+  border-radius: 0 0 16px 16px;
+  padding-inline: 1.5rem;
 }

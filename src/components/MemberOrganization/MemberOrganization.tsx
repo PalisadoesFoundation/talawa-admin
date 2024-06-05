@@ -137,7 +137,7 @@ const MemberOrganization: React.FC<InterfaceMemberOrganization> = (props) => {
   };
 
   return (
-    <div>
+    <div className={styles.container}>
       {!isLoading &&
       (!orgsData?.organizationsConnection ||
         orgsData.organizationsConnection.length === 0) &&
@@ -158,8 +158,9 @@ const MemberOrganization: React.FC<InterfaceMemberOrganization> = (props) => {
           </h4>
         </div>
       ) : (
-        <>
+        <div>
           <InfiniteScroll
+            style={{ gap: '2rem' }}
             dataLength={orgsData?.organizationsConnection?.length ?? 0}
             next={loadMoreOrganizations}
             loader={
@@ -263,7 +264,7 @@ const MemberOrganization: React.FC<InterfaceMemberOrganization> = (props) => {
               ))}
             </>
           )}
-        </>
+        </div>
       )}
     </div>
   );

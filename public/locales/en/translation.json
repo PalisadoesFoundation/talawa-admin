@@ -598,7 +598,8 @@
     "organizations": "Organizations",
     "events": "Events",
     "tags": "Tags",
-    "title": "User Details"
+    "title_superadmin": "User Details",
+    "title": "Member Details"
   },
   "orgMemberDetail": {
     "title": "User Details",
