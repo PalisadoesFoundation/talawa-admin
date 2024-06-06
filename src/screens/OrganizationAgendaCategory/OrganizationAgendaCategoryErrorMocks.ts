@@ -15,11 +15,35 @@ export const MOCKS_ERROR_AGENDA_ITEM_CATEGORY_LIST_QUERY = [
 export const MOCKS_ERROR_MUTATION = [
   {
     request: {
+      query: AGENDA_ITEM_CATEGORY_LIST,
+      variables: { organizationId: '123' },
+    },
+    result: {
+      data: {
+        agendaItemCategoriesByOrganization: [
+          {
+            _id: 'agendaItemCategory1',
+            name: 'Category',
+            description: 'Test Description',
+            createdBy: {
+              _id: 'user1',
+              firstName: 'Harve',
+              lastName: 'Lance',
+            },
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
       query: CREATE_AGENDA_ITEM_CATEGORY_MUTATION,
       variables: {
-        name: 'Test Name',
-        description: 'Test Description',
-        organizationId: '123',
+        input: {
+          organizationId: '123',
+          name: 'Category',
+          description: 'Test Description',
+        },
       },
     },
     error: new Error('Mock Graphql Error'),

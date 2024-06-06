@@ -3,8 +3,6 @@ import { Modal, Form, Button } from 'react-bootstrap';
 import type { ChangeEvent } from 'react';
 import styles from './OrganizationAgendaCategory.module.css';
 
-// import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';
-
 interface InterfaceFormStateType {
   name: string;
   description: string;
@@ -54,7 +52,7 @@ const AgendaCategoryCreateModal: React.FC<
             <Form.Label>{t('name')}</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Category"
+              placeholder={t('name')}
               value={formState.name}
               required
               onChange={(e) =>
@@ -66,7 +64,7 @@ const AgendaCategoryCreateModal: React.FC<
             <Form.Label>{t('description')}</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Description"
+              placeholder={t('description')}
               required
               value={formState.description}
               onChange={(e) =>

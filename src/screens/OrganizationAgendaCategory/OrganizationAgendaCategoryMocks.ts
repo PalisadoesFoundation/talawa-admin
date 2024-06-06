@@ -13,7 +13,7 @@ export const MOCKS = [
         agendaItemCategoriesByOrganization: [
           {
             _id: 'agendaItemCategory1',
-            name: 'Test Name',
+            name: 'Category',
             description: 'Test Description',
             createdBy: {
               _id: 'user1',
@@ -31,7 +31,7 @@ export const MOCKS = [
       variables: {
         input: {
           organizationId: '123',
-          name: 'Test Name',
+          name: 'Category',
           description: 'Test Description',
         },
       },

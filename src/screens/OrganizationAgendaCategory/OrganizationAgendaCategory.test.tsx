@@ -2,7 +2,6 @@ import React from 'react';
 import {
   render,
   screen,
-  fireEvent,
   waitFor,
   act,
   waitForElementToBeRemoved,
@@ -27,7 +26,7 @@ import {
   MOCKS_ERROR_AGENDA_ITEM_CATEGORY_LIST_QUERY,
   MOCKS_ERROR_MUTATION,
 } from './OrganizationAgendaCategoryErrorMocks';
-import { MOCKS } from './/OrganizationAgendaCategoryMocks';
+import { MOCKS } from './OrganizationAgendaCategoryMocks';
 
 jest.mock('react-toastify', () => ({
   toast: {
@@ -63,16 +62,14 @@ const translations = {
         {},
     ),
   ),
-  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
-  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
 };
 
 describe('Testing Agenda Categories Component', () => {
   const formData = {
-    name: 'Test Name',
+    name: 'Category',
     description: 'Test Description',
+    createdBy: 'Test User',
   };
-
   test('Component loads correctly', async () => {
     const { getByText } = render(
       <MockedProvider addTypename={false} link={link}>
@@ -148,45 +145,91 @@ describe('Testing Agenda Categories Component', () => {
       screen.queryByTestId('createAgendaCategoryModalCloseBtn'),
     );
   });
+  test('creates new agenda cagtegory', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <I18nextProvider i18n={i18n}>
+                {<OrganizationAgendaCategory />}
+              </I18nextProvider>
+            </LocalizationProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
 
-  //   test('creates new agenda category with correct orgId', async () => {
-  //     render(
-  //       <MockedProvider mocks={MOCKS} addTypename={false}>
-  //         <Provider store={store}>
-  //           <BrowserRouter>
-  //             <LocalizationProvider dateAdapter={AdapterDayjs}>
-  //               <I18nextProvider i18n={i18n}>
-  //                 <OrganizationAgendaCategory />
-  //               </I18nextProvider>
-  //             </LocalizationProvider>
-  //           </BrowserRouter>
-  //         </Provider>
-  //       </MockedProvider>,
-  //     );
+    await wait();
 
-  //     await wait();
+    await waitFor(() => {
+      expect(screen.getByTestId('createAgendaCategoryBtn')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('createAgendaCategoryBtn'));
 
-  //     await waitFor(() => {
-  //       expect(screen.getByTestId('createAgendaCategoryBtn')).toBeInTheDocument();
-  //     });
-  //     userEvent.click(screen.getByTestId('createAgendaCategoryBtn'));
+    await waitFor(() => {
+      return expect(
+        screen.findByTestId('createAgendaCategoryModalCloseBtn'),
+      ).resolves.toBeInTheDocument();
+    });
 
-  //     await waitFor(() => {
-  //       expect(
-  //         screen.getByTestId('createAgendaCategoryModalCloseBtn'),
-  //       ).toBeInTheDocument();
-  //     });
+    userEvent.type(
+      screen.getByPlaceholderText(translations.name),
+      formData.name,
+    );
 
-  //     userEvent.type(screen.getByPlaceholderText('Category'), formData.name);
-  //     userEvent.type(
-  //       screen.getByPlaceholderText('Description'),
-  //       formData.description,
-  //     );
+    userEvent.type(
+      screen.getByPlaceholderText(translations.description),
+      formData.description,
+    );
+    userEvent.click(screen.getByTestId('createAgendaCategoryFormSubmitBtn'));
 
-  //     userEvent.click(screen.getByTestId('createAgendaCategoryFormSubmitBtn'));
+    await waitFor(() => {
+      expect(toast.success).toBeCalledWith(translations.agendaCategoryCreated);
+    });
+  });
 
-  //     await waitFor(() => {
-  //       expect(toast.success).toBeCalledWith(translations.agendaCategoryCreated);
-  //     });
+  // test('toasts error on unsuccessful creation', async () => {
+  //   render(
+  //     <MockedProvider addTypename={false} link={link3}>
+  //       <Provider store={store}>
+  //         <BrowserRouter>
+  //           <LocalizationProvider dateAdapter={AdapterDayjs}>
+  //             <I18nextProvider i18n={i18n}>
+  //               {<OrganizationAgendaCategory />}
+  //             </I18nextProvider>
+  //           </LocalizationProvider>
+  //         </BrowserRouter>
+  //       </Provider>
+  //     </MockedProvider>,
+  //   );
+
+  //   await wait();
+
+  //   await waitFor(() => {
+  //     expect(screen.getByTestId('createAgendaCategoryBtn')).toBeInTheDocument();
   //   });
+  //   userEvent.click(screen.getByTestId('createAgendaCategoryBtn'));
+
+  //   await waitFor(() => {
+  //     return expect(
+  //       screen.findByTestId('createAgendaCategoryModalCloseBtn'),
+  //     ).resolves.toBeInTheDocument();
+  //   });
+
+  //   userEvent.type(
+  //     screen.getByPlaceholderText(translations.name),
+  //     formData.name,
+  //   );
+
+  //   userEvent.type(
+  //     screen.getByPlaceholderText(translations.description),
+  //     formData.description,
+  //   );
+  //   userEvent.click(screen.getByTestId('createAgendaCategoryFormSubmitBtn'));
+
+  //   await waitFor(() => {
+  //     expect(toast.error).toBeCalledWith();
+  //   });
+  // });
 });
