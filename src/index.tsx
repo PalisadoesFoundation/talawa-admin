@@ -12,6 +12,8 @@ import {
 import { getMainDefinition } from '@apollo/client/utilities';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
+import { WebSocketLink } from '@apollo/client/link/ws';
+import { SubscriptionClient } from 'subscriptions-transport-ws';
 import { onError } from '@apollo/link-error';
 import './assets/css/app.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
@@ -99,6 +101,12 @@ const wsLink = new GraphQLWsLink(
     url: REACT_APP_BACKEND_WEBSOCKET_URL,
   }),
 );
+
+// const wsLink = new GraphQLWsLink(
+//   createClient({
+//     url: 'ws://localhost:4000/subscriptions',
+//   }),
+// );
 // The split function takes three parameters:
 //
 // * A function that's called for each operation to execute

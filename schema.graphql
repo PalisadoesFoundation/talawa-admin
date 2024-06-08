@@ -1152,7 +1152,7 @@ enum Status {
 
 type Subscription {
   directMessageChat: MessageChat
-  messageSentToDirectChat: DirectChatMessage
+  messageSentToDirectChat(userId: ID!): DirectChatMessage
   messageSentToGroupChat: GroupChatMessage
   onPluginUpdate: Plugin
 }

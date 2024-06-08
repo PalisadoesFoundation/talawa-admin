@@ -34,7 +34,7 @@ import Organizations from 'screens/UserPortal/Organizations/Organizations';
 import People from 'screens/UserPortal/People/People';
 import Settings from 'screens/UserPortal/Settings/Settings';
 // import UserLoginPage from 'screens/UserPortal/UserLoginPage/UserLoginPage';
-// import Chat from 'screens/UserPortal/Chat/Chat';
+import Chat from 'screens/UserPortal/Chat/Chat';
 import { useQuery } from '@apollo/client';
 import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
 import Advertisements from 'components/Advertisements/Advertisements';
@@ -159,12 +159,14 @@ function app(): JSX.Element {
         <Route element={<SecuredRouteForUser />}>
           <Route path="/user/organizations" element={<Organizations />} />
           <Route path="/user/settings" element={<Settings />} />
+          <Route path="/user/chat" element={<Chat />} />
           <Route element={<UserScreen />}>
             <Route path="/user/organizations" element={<Organizations />} />
             <Route path="/user/organization/:orgId" element={<Posts />} />
             <Route path="/user/people/:orgId" element={<People />} />
             <Route path="/user/donate/:orgId" element={<Donate />} />
             <Route path="/user/events/:orgId" element={<Events />} />
+            <Route path="/user/chat/:orgId" element={<Chat />} />
             <Route element={<EventDashboardScreen />}>
               <Route
                 path="/user/event/:orgId/:eventId"

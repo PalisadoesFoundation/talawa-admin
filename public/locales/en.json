@@ -875,7 +875,8 @@
     "requests": "Requests",
     "communityProfile": "Community Profile",
     "logout": "Logout",
-    "settings": "Settings"
+    "settings": "Settings",
+    "chat": "Chat"
   },
   "organizationSidebar": {
     "viewAll": "View all",

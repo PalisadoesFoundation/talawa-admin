@@ -66,6 +66,66 @@ export const CREATE_DIRECT_CHAT = gql`
     }
   }
 `;
+
+export const SEND_MESSAGE_TO_DIRECT_CHAT = gql`
+  mutation sendMessageToDirectChat($chatId: ID!, $messageContent: String!) {
+    sendMessageToDirectChat(chatId: $chatId, messageContent: $messageContent) {
+      _id
+      createdAt
+      messageContent
+      receiver {
+        _id
+        firstName
+        lastName
+      }
+      sender {
+        _id
+        firstName
+        lastName
+      }
+      updatedAt
+    }
+  }
+`;
+
+export const CREATE_MESSAGE_CHAT = gql`
+  mutation createMessageChat($receiver: ID!, $messageContent: String!) {
+    createMessageChat(data: { receiver: $receiver, message: $messageContent }) {
+      _id
+      createdAt
+      message
+      languageBarrier
+      receiver {
+        _id
+      }
+      sender {
+        _id
+      }
+      updatedAt
+    }
+  }
+`;
+
+export const MESSAGE_SENT_TO_DIRECT_CHAT = gql`
+  subscription messageSentToDirectChat($userId: ID!) {
+    messageSentToDirectChat(userId: $userId) {
+      _id
+      createdAt
+      messageContent
+      receiver {
+        _id
+        firstName
+        lastName
+      }
+      sender {
+        _id
+        firstName
+        lastName
+      }
+      updatedAt
+    }
+  }
+`;
 //Plugin WebSocket listner
 
 /**
