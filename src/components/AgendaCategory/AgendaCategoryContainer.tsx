@@ -3,13 +3,12 @@ import type { ChangeEvent } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { useMutation } from '@apollo/client';
 
 import {
   DELETE_AGENDA_ITEM_CATEGORY_MUTATION,
   UPDATE_AGENDA_ITEM_CATEGORY_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import { useMutation } from '@apollo/client';
-
 import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';
 import styles from './AgendaCategoryContainer.module.css';
 
@@ -40,7 +39,6 @@ function agendaCategoryContainer({
     useState(false);
 
   const [agendaCategoryId, setAgendaCategoryId] = useState('');
-  // const [creationDate, setcreationDate] = useState<Date | null>(new Date());
 
   const [formState, setFormState] = useState({
     name: '',
@@ -161,18 +159,13 @@ function agendaCategoryContainer({
               <div className="ms-3">{t('name')}</div>
             </Col>
             <Col
-              className="align-self-center fw-bold d-none d-sm-block"
-              sm={5}
+              className="align-self-center fw-bold d-none d-md-block"
               md={6}
               lg={2}
             >
               {t('description')}
             </Col>
-            <Col
-              className="d-none d-sm-block fw-bold align-self-center"
-              md={4}
-              lg={2}
-            >
+            <Col className="d-none d-lg-block fw-bold align-self-center" lg={2}>
               <div className="ms-1">{t('createdBy')}</div>
             </Col>
             <Col xs={5} sm={3} lg={2} className="fw-bold align-self-center">
@@ -196,18 +189,15 @@ function agendaCategoryContainer({
                   {`${agendaCategory.name}`}
                 </Col>
                 <Col
-                  sm={5}
                   md={6}
                   lg={2}
-                  className="p-1 d-none d-sm-block align-self-center text-body-secondary"
+                  className="p-1 d-none d-md-block align-self-center text-body-secondary"
                 >
                   {agendaCategory.description}
                 </Col>
                 <Col
-                  sm={5}
-                  md={6}
                   lg={2}
-                  className="p-1 d-none d-sm-block align-self-center text-body-secondary"
+                  className="p-1 d-none d-lg-block align-self-center text-body-secondary"
                 >
                   {`${agendaCategory.createdBy.firstName} ${agendaCategory.createdBy.lastName}`}
                 </Col>
@@ -221,7 +211,7 @@ function agendaCategoryContainer({
                       size="sm"
                       onClick={() => showPreviewModal(agendaCategory)}
                     >
-                      <i className="fas fa-info fa-sm"></i>
+                      <i className="fas fa-info fa-sm" />
                     </Button>
                     <Button
                       size="sm"
@@ -230,7 +220,7 @@ function agendaCategoryContainer({
                       className={`${styles.agendaCategoryOptionsButton} d-flex align-items-center justify-content-center`}
                       variant="outline-secondary"
                     >
-                      <i className="fas fa-edit fa-sm"></i>
+                      <i className="fas fa-edit fa-sm" />
                     </Button>
                   </div>
                 </Col>

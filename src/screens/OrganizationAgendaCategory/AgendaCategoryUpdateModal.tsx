@@ -43,7 +43,7 @@ const AgendaCategoryUpdateModal: React.FC<
           onClick={hideUpdateModal}
           data-testid="updateAgendaCategoryModalCloseBtn"
         >
-          <i className="fa fa-times"></i>
+          <i className="fa fa-times" />
         </Button>
       </Modal.Header>
       <Modal.Body>
