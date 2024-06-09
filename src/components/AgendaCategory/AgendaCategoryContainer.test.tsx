@@ -50,8 +50,8 @@ const translations = JSON.parse(
 
 describe('Testing Agenda Category Component', () => {
   const formData = {
-    name: 'Test',
-    description: 'Test',
+    name: 'AgendaCategory 1 Edited',
+    description: 'AgendaCategory 1 Description Edited',
   };
 
   test('component loads correctly with categories', async () => {
@@ -228,6 +228,49 @@ describe('Testing Agenda Category Component', () => {
     await waitForElementToBeRemoved(() =>
       screen.queryByTestId('updateAgendaCategoryModalCloseBtn'),
     );
+  });
+
+  test('updates an agenda category and toasts success', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <I18nextProvider i18n={i18nForTest}>
+                <AgendaCategoryContainer {...props} />
+              </I18nextProvider>
+            </LocalizationProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await waitFor(() => {
+      expect(
+        screen.getAllByTestId('editAgendCategoryModalBtn')[0],
+      ).toBeInTheDocument();
+    });
+    userEvent.click(screen.getAllByTestId('editAgendCategoryModalBtn')[0]);
+
+    const name = screen.getByPlaceholderText(translations.name);
+    const description = screen.getByPlaceholderText(translations.description);
+
+    fireEvent.change(name, { target: { value: '' } });
+    userEvent.type(name, formData.name);
+
+    fireEvent.change(description, { target: { value: '' } });
+    userEvent.type(description, formData.description);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('editAgendaCategoryBtn')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('editAgendaCategoryBtn'));
+
+    await waitFor(() => {
+      expect(toast.success).toBeCalledWith(translations.agendaCategoryUpdated);
+    });
   });
 
   test('toasts error on unsuccessful updation', async () => {

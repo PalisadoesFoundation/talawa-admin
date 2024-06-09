@@ -52,7 +52,7 @@ const AgendaCategoryUpdateModal: React.FC<
             <Form.Label>{t('name')}</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Enter Name"
+              placeholder={t('name')}
               value={formState.name}
               onChange={(e) =>
                 setFormState({ ...formState, name: e.target.value })
@@ -63,7 +63,7 @@ const AgendaCategoryUpdateModal: React.FC<
             <Form.Label>{t('description')}</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Enter Description"
+              placeholder={t('description')}
               value={formState.description}
               onChange={(e) =>
                 setFormState({ ...formState, description: e.target.value })

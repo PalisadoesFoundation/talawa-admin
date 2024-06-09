@@ -73,7 +73,6 @@ function organizationAgendaCategory(): JSX.Element {
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message);
-        console.error(error.message);
       }
     }
   };

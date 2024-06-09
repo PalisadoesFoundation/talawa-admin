@@ -48,7 +48,7 @@ export const MOCKS = [
       variables: {
         updateAgendaCategoryId: 'agendaCategory2',
         input: {
-          name: 'AgendaCategory 2',
+          name: 'AgendaCategory 2 edited',
           description: 'AgendaCategory 2 Description',
         },
       },
