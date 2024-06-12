@@ -112,6 +112,7 @@ const map: InterfaceMapType = {
   member: 'memberDetail',
   orgevents: 'organizationEvents',
   orgactionitems: 'organizationActionItems',
+  orgagendacategory: 'organizationAgendaCategory',
   orgcontribution: 'orgContribution',
   orgpost: 'orgPost',
   orgfunds: 'funds',

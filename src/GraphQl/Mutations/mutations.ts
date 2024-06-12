@@ -687,6 +687,12 @@ export {
   UPDATE_ACTION_ITEM_MUTATION,
 } from './ActionItemMutations';
 
+export {
+  CREATE_AGENDA_ITEM_CATEGORY_MUTATION,
+  DELETE_AGENDA_ITEM_CATEGORY_MUTATION,
+  UPDATE_AGENDA_ITEM_CATEGORY_MUTATION,
+} from './AgendaCategoryMutations';
+
 // Changes the role of a event in an organization and add and remove the event from the organization
 export {
   ADD_EVENT_ATTENDEE,

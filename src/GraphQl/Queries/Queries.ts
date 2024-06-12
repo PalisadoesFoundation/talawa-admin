@@ -782,6 +782,7 @@ export { ACTION_ITEM_CATEGORY_LIST } from './ActionItemCategoryQueries';
 // get the list of Action Items
 export { ACTION_ITEM_LIST } from './ActionItemQueries';
 
+export { AGENDA_ITEM_CATEGORY_LIST } from './AgendaCategoryQueries';
 // to take the list of the blocked users
 export {
   ADVERTISEMENTS_GET,
