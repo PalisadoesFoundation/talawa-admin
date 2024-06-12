@@ -87,7 +87,7 @@ const ActionItemCreateModal: React.FC<InterfaceActionItemCreateModalProps> = ({
             </Form.Group>
 
             <Form.Group className="mb-3">
-              <Form.Label>Assignee</Form.Label>
+              <Form.Label>{t('assignee')}</Form.Label>
               <Form.Select
                 data-testid="formSelectAssignee"
                 required

@@ -255,6 +255,7 @@
     "clearFilters": "Clear Filters",
     "completed": "Completed",
     "completionDate": "Completion Date",
+    "createActionItem": "Create Action Items",
     "deleteActionItem": "Delete Action Item",
     "deleteActionItemMsg": "Do you want to remove this action item?",
     "details": "Details",
@@ -572,6 +573,7 @@
   "addOnStore": {
     "title": "Add On Store",
     "searchName": "Ex: Donations",
+    "search": "Search",
     "enable": "Enabled",
     "disable": "Disabled",
     "pHeading": "Plugins",
@@ -817,7 +819,11 @@
     "customFieldType": "Field Type",
     "Remove Custom Field": "Remove Custom Field",
     "fieldSuccessMessage": "Field added successfully",
-    "fieldRemovalSuccess": "Field removed successfully"
+    "fieldRemovalSuccess": "Field removed successfully",
+    "String": "String",
+    "Boolean": "Boolean",
+    "Date": "Date",
+    "Number": "Number"
   },
   "orgActionItemCategories": {
     "enableButton": "Enable",

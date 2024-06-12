@@ -36,6 +36,7 @@
   "emailAddress": "Email Address",
   "email": "Email",
   "name": "Name",
+  "desc": "Description",
   "enterPassword": "Enter Password",
   "password": "Password",
   "confirmPassword": "Confirm Password",
@@ -70,5 +71,10 @@
   "action": "Action",
   "removeUser": "Remove User",
   "remove": "Remove",
-  "viewProfile": "View Profile"
+  "viewProfile": "View Profile",
+  "profile": "Profile",
+  "noFiltersApplied": "No filters applied",
+  "manage": "Manage",
+  "searchResultsFor": "Search results for {{text}}",
+  "none": "None"
 }
