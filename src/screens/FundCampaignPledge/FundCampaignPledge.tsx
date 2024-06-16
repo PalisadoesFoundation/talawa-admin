@@ -3,7 +3,7 @@ import { Search, Sort, WarningAmberRounded } from '@mui/icons-material';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
 import dayjs from 'dayjs';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Dropdown, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router-dom';
@@ -49,8 +49,8 @@ const fundCampaignPledge = (): JSX.Element => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const [sortBy, setSortBy] = useState<
-    'highest' | 'lowest' | 'latest' | 'earliest'
-  >('latest');
+    'amount_ASC' | 'amount_DESC' | 'endDate_ASC' | 'endDate_DESC'
+  >('endDate_DESC');
 
   const {
     data: pledgeData,
@@ -71,6 +71,7 @@ const fundCampaignPledge = (): JSX.Element => {
   } = useQuery(FUND_CAMPAIGN_PLEDGE, {
     variables: {
       id: fundCampaignId,
+      orderBy: sortBy,
     },
   });
 
@@ -81,32 +82,19 @@ const fundCampaignPledge = (): JSX.Element => {
 
   const pledges = useMemo(() => {
     return (
-      pledgeData?.getFundraisingCampaignById.pledges
-        .filter((pledge) => {
-          const search = searchTerm.toLowerCase();
-          return pledge.users.some((user) => {
-            const fullName = `${user.firstName} ${user.lastName}`;
-            return fullName.toLowerCase().includes(search);
-          });
-        })
-        .sort((a, b) => {
-          switch (sortBy) {
-            case 'highest':
-              return b.amount - a.amount;
-            case 'lowest':
-              return a.amount - b.amount;
-            case 'latest':
-              return (
-                new Date(b.endDate).getTime() - new Date(a.endDate).getTime()
-              );
-            case 'earliest':
-              return (
-                new Date(a.endDate).getTime() - new Date(b.endDate).getTime()
-              );
-          }
-        }) ?? []
+      pledgeData?.getFundraisingCampaignById.pledges.filter((pledge) => {
+        const search = searchTerm.toLowerCase();
+        return pledge.users.some((user) => {
+          const fullName = `${user.firstName} ${user.lastName}`;
+          return fullName.toLowerCase().includes(search);
+        });
+      }) ?? []
     );
-  }, [pledgeData, sortBy, searchTerm]);
+  }, [pledgeData, searchTerm]);
+
+  useEffect(() => {
+    refetchPledge();
+  }, [sortBy, refetchPledge]);
 
   const openModal = (modal: Modal): void => {
     setModalState((prevState) => ({ ...prevState, [modal]: true }));
@@ -228,7 +216,10 @@ const fundCampaignPledge = (): JSX.Element => {
       sortable: false,
       renderCell: (params: GridCellParams) => {
         return (
-          <div className="d-flex justify-content-center fw-bold">
+          <div
+            className="d-flex justify-content-center fw-bold"
+            data-testid="amountCell"
+          >
             {
               currencySymbols[
                 params.row.currency as keyof typeof currencySymbols
@@ -315,26 +306,26 @@ const fundCampaignPledge = (): JSX.Element => {
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item
-                  onClick={() => setSortBy('highest')}
-                  data-testid="highest"
+                  onClick={() => setSortBy('amount_ASC')}
+                  data-testid="amount_ASC"
                 >
                   {t('highestAmount')}
                 </Dropdown.Item>
                 <Dropdown.Item
-                  onClick={() => setSortBy('lowest')}
-                  data-testid="lowest"
+                  onClick={() => setSortBy('amount_DESC')}
+                  data-testid="amount_DESC"
                 >
                   {t('lowestAmount')}
                 </Dropdown.Item>
                 <Dropdown.Item
-                  onClick={() => setSortBy('latest')}
-                  data-testid="latest"
+                  onClick={() => setSortBy('endDate_DESC')}
+                  data-testid="endDate_DESC"
                 >
                   {t('latestEndDate')}
                 </Dropdown.Item>
                 <Dropdown.Item
-                  onClick={() => setSortBy('earliest')}
-                  data-testid="earliest"
+                  onClick={() => setSortBy('endDate_ASC')}
+                  data-testid="endDate_ASC"
                 >
                   {t('earliestEndDate')}
                 </Dropdown.Item>
@@ -365,7 +356,7 @@ const fundCampaignPledge = (): JSX.Element => {
         components={{
           NoRowsOverlay: () => (
             <Stack height="100%" alignItems="center" justifyContent="center">
-              Nothing Found !!
+              {t('noPledges')}
             </Stack>
           ),
         }}

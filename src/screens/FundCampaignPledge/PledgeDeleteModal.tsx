@@ -7,7 +7,7 @@ import { DELETE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
 import type { InterfacePledgeInfo } from 'utils/interfaces';
 import { toast } from 'react-toastify';
 
-interface InterfaceDeletePledgeModal {
+export interface InterfaceDeletePledgeModal {
   isOpen: boolean;
   hide: () => void;
   pledge: InterfacePledgeInfo | null;
