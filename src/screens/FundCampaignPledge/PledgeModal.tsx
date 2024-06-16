@@ -204,14 +204,15 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               getOptionLabel={(member: InterfacePledgeVolunteer): string =>
                 `${member.firstName} ${member.lastName}`
               }
-              /*istanbul ignore next*/
-              onChange={(_, newVolunteers): void => {
+              onChange={
                 /*istanbul ignore next*/
-                setFormState({
-                  ...formState,
-                  pledgeUsers: newVolunteers,
-                });
-              }}
+                (_, newVolunteers): void => {
+                  setFormState({
+                    ...formState,
+                    pledgeUsers: newVolunteers,
+                  });
+                }
+              }
               renderInput={(params) => (
                 <TextField {...params} label="Volunteers" />
               )}
@@ -270,14 +271,15 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 value={pledgeCurrency}
                 label={t('currency')}
                 data-testid="currencySelect"
-                /*istanbul ignore next*/
-                onChange={(e) => {
+                onChange={
                   /*istanbul ignore next*/
-                  setFormState({
-                    ...formState,
-                    pledgeCurrency: e.target.value,
-                  });
-                }}
+                  (e) => {
+                    setFormState({
+                      ...formState,
+                      pledgeCurrency: e.target.value,
+                    });
+                  }
+                }
               >
                 {currencyOptions.map((currency) => (
                   <MenuItem key={currency.label} value={currency.value}>
