@@ -309,13 +309,13 @@ const fundCampaignPledge = (): JSX.Element => {
                   onClick={() => setSortBy('amount_ASC')}
                   data-testid="amount_ASC"
                 >
-                  {t('highestAmount')}
+                  {t('lowestAmount')}
                 </Dropdown.Item>
                 <Dropdown.Item
                   onClick={() => setSortBy('amount_DESC')}
                   data-testid="amount_DESC"
                 >
-                  {t('lowestAmount')}
+                  {t('highestAmount')}
                 </Dropdown.Item>
                 <Dropdown.Item
                   onClick={() => setSortBy('endDate_DESC')}
