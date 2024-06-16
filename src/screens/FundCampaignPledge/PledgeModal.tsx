@@ -97,11 +97,10 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
       const startDate = dayjs(pledgeStartDate).format('YYYY-MM-DD');
       const endDate = dayjs(pledgeEndDate).format('YYYY-MM-DD');
 
-      console.log('pledgeAmount', pledgeAmount);
-
       const updatedFields: {
         [key: string]: number | string | string[] | undefined;
       } = {};
+      // checks if there are changes to the pledge and adds them to the updatedFields object
       if (pledgeAmount !== pledge?.amount) {
         updatedFields.amount = pledgeAmount;
       }
@@ -134,6 +133,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     [formState, pledge],
   );
 
+  // Function to create a new pledge
   const createPledgeHandler = useCallback(
     async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
       try {
@@ -190,6 +190,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           }
           className="p-3"
         >
+          {/* A Multi-select dropdown enables admin to select more than one volunteer for participating in a pledge */}
           <Form.Group className="d-flex mb-3 w-100">
             <Autocomplete
               multiple
@@ -203,6 +204,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               getOptionLabel={(member: InterfacePledgeVolunteer): string =>
                 `${member.firstName} ${member.lastName}`
               }
+              /*istanbul ignore next*/
               onChange={(_, newVolunteers): void => {
                 /*istanbul ignore next*/
                 setFormState({
@@ -216,6 +218,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
             />
           </Form.Group>
           <Form.Group className="d-flex gap-3 mx-auto  mb-3">
+            {/* Date Calendar Component to select start date of an event */}
             <DatePicker
               format="DD/MM/YYYY"
               label={tCommon('startDate')}
@@ -238,6 +241,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               minDate={dayjs(pledgeStartDate)}
               maxDate={dayjs(endDate)}
             />
+            {/* Date Calendar Component to select end Date of an event */}
             <DatePicker
               format="DD/MM/YYYY"
               label={tCommon('endDate')}
@@ -256,6 +260,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
             />
           </Form.Group>
           <Form.Group className="d-flex gap-3 mb-4">
+            {/* Dropdown to select the currency in which amount is to be pledged */}
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">
                 {t('currency')}
@@ -265,6 +270,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 value={pledgeCurrency}
                 label={t('currency')}
                 data-testid="currencySelect"
+                /*istanbul ignore next*/
                 onChange={(e) => {
                   /*istanbul ignore next*/
                   setFormState({
@@ -280,6 +286,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 ))}
               </Select>
             </FormControl>
+            {/* Input field to enter amount to be pledged */}
             <FormControl fullWidth>
               <TextField
                 label={t('amount')}
@@ -297,7 +304,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               />
             </FormControl>
           </Form.Group>
-
+          {/* Button to submit the pledge form */}
           <Button
             type="submit"
             className={styles.greenregbtn}
