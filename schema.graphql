@@ -1440,6 +1440,8 @@ enum UserOrderByInput {
   id_DESC
   lastName_ASC
   lastName_DESC
+  createdAt_ASC
+  createdAt_DESC
 }
 
 type UserPhone {
