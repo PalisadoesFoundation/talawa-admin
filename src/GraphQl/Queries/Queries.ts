@@ -108,6 +108,7 @@ export const USER_LIST = gql`
     $lastName_contains: String
     $skip: Int
     $first: Int
+    $order: UserOrderByInput
   ) {
     users(
       where: {
@@ -116,6 +117,7 @@ export const USER_LIST = gql`
       }
       skip: $skip
       first: $first
+      orderBy: $order
     ) {
       user {
         _id
