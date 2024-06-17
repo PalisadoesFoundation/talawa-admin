@@ -52,10 +52,12 @@ export const UPDATE_PLEDGE = gql`
     $currency: Currency
     $startDate: Date
     $endDate: Date
+    $users: [ID!]
   ) {
     updateFundraisingCampaignPledge(
       id: $id
       data: {
+        users: $users
         amount: $amount
         currency: $currency
         startDate: $startDate

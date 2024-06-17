@@ -390,7 +390,13 @@
     "amount": "Amount",
     "editPledge": "Edit Pledge",
     "deletePledgeMsg": "Are you sure you want to delete this pledge?",
-    "noPledges": "No Pledges Found"
+    "noPledges": "No Pledges Found",
+    "sort": "Sort",
+    "searchVolunteer": "Search By Volunteer",
+    "highestAmount": "Highest Amount",
+    "lowestAmount": "Lowest Amount",
+    "latestEndDate": "Latest End Date",
+    "earliestEndDate": "Earliest End Date"
   },
   "orgPost": {
     "title": "Posts",
