@@ -17,7 +17,7 @@
     "@mui/private-theming": "^5.15.12",
     "@mui/system": "^5.14.12",
     "@mui/x-charts": "^7.6.2",
-    "@mui/x-data-grid": "^6.20.0",
+    "@mui/x-data-grid": "^7.7.0",
     "@mui/x-date-pickers": "^7.6.1",
     "@pdfme/generator": "^1.2.6",
     "bootstrap": "^5.3.0",
