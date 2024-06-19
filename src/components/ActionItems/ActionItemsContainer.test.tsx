@@ -473,6 +473,9 @@ describe('Testing Action Item Categories Component', () => {
         screen.getByTestId('actionItemStatusChangeSubmitBtn'),
       ).toBeInTheDocument();
     });
+    expect(
+      screen.getByTestId('actionItemStatusChangeSubmitBtn'),
+    ).toHaveTextContent(translations.markCompletion);
     userEvent.click(screen.getByTestId('actionItemStatusChangeSubmitBtn'));
 
     await waitFor(() => {
@@ -506,6 +509,9 @@ describe('Testing Action Item Categories Component', () => {
         screen.getByTestId('actionItemStatusChangeSubmitBtn'),
       ).toBeInTheDocument();
     });
+    expect(
+      screen.getByTestId('actionItemStatusChangeSubmitBtn'),
+    ).toHaveTextContent(translations.makeActive);
     userEvent.click(screen.getByTestId('actionItemStatusChangeSubmitBtn'));
 
     await waitFor(() => {
