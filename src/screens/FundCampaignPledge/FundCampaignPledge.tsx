@@ -26,6 +26,27 @@ enum Modal {
   DELETE = 'delete',
 }
 
+const dataGridStyle = {
+  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
+    outline: 'none !important',
+  },
+  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
+    outline: 'none',
+  },
+  '& .MuiDataGrid-row:hover': {
+    backgroundColor: 'transparent',
+  },
+  '& .MuiDataGrid-row.Mui-hovered': {
+    backgroundColor: 'transparent',
+  },
+  '& .MuiDataGrid-root': {
+    borderRadius: '0.5rem',
+  },
+  '& .MuiDataGrid-main': {
+    borderRadius: '0.5rem',
+  },
+};
+
 const fundCampaignPledge = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'pledges',
@@ -245,7 +266,7 @@ const fundCampaignPledge = (): JSX.Element => {
             <Button
               variant="success"
               size="sm"
-              className="me-2"
+              className="me-2 rounded"
               data-testid="editPledgeBtn"
               onClick={() =>
                 handleOpenModal(params.row as InterfacePledgeInfo, 'edit')
@@ -257,6 +278,7 @@ const fundCampaignPledge = (): JSX.Element => {
             <Button
               size="sm"
               variant="danger"
+              className="rounded"
               data-testid="deletePledgeBtn"
               onClick={() =>
                 handleDeleteClick(params.row as InterfacePledgeInfo)
@@ -351,7 +373,6 @@ const fundCampaignPledge = (): JSX.Element => {
         disableColumnMenu
         columnBuffer={5}
         hideFooter={true}
-        className={`${styles.datagrid}`}
         getRowId={(row) => row._id}
         components={{
           NoRowsOverlay: () => (
@@ -360,20 +381,7 @@ const fundCampaignPledge = (): JSX.Element => {
             </Stack>
           ),
         }}
-        sx={{
-          '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-            outline: 'none !important',
-          },
-          '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-            outline: 'none',
-          },
-          '& .MuiDataGrid-row:hover': {
-            backgroundColor: 'transparent',
-          },
-          '& .MuiDataGrid-row.Mui-hovered': {
-            backgroundColor: 'transparent',
-          },
-        }}
+        sx={dataGridStyle}
         getRowClassName={() => `${styles.rowBackground}`}
         autoHeight
         rowHeight={65}
