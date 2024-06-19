@@ -395,7 +395,13 @@
     "amount": "मात्रा",
     "editPledge": "प्रतिज्ञा संपादित करें",
     "deletePledgeMsg": "क्या आप वाकई इस प्रतिज्ञा को हटाना चाहते हैं?",
-    "noPledges": "कोई प्रतिज्ञा नहीं मिली"
+    "noPledges": "कोई प्रतिज्ञा नहीं मिली",
+    "sort": "क्रमबद्ध करें",
+    "searchVolunteer": "स्वयंसेवक द्वारा खोजें",
+    "highestAmount": "सबसे अधिक राशि",
+    "lowestAmount": "सबसे कम राशि",
+    "latestEndDate": "नवीनतम समाप्ति तिथि",
+    "earliestEndDate": "सबसे प्रारंभिक समाप्ति तिथि"
   },
   "orgPost": {
     "title": "पदों",

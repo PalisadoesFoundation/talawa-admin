@@ -395,7 +395,13 @@
     "amount": "数量",
     "editPledge": "编辑承诺",
     "deletePledgeMsg": "您确定要删除此承诺吗？",
-    "noPledges": "未找到承诺"
+    "noPledges": "未找到承诺",
+    "sort": "排序",
+    "searchVolunteer": "按志愿者搜索",
+    "highestAmount": "最高金额",
+    "lowestAmount": "最低金额",
+    "latestEndDate": "最新结束日期",
+    "earliestEndDate": "最早结束日期"
   },
   "orgPost": {
     "title": "帖子",
