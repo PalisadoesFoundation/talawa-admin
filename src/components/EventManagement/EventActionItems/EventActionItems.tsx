@@ -76,15 +76,15 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
     setActionItemDeleteModalIsOpen(!actionItemDeleteModalIsOpen);
   };
   const setActionItemState = (actionItem: InterfaceActionItemInfo): void => {
-    setFormState({
-      ...formState,
+    setFormState((prevState) => ({
+      ...prevState,
       assignee: `${actionItem.assignee.firstName} ${actionItem.assignee.lastName}`,
       assigner: `${actionItem.assigner.firstName} ${actionItem.assigner.lastName}`,
       assigneeId: actionItem.assignee._id,
       preCompletionNotes: actionItem.preCompletionNotes,
       postCompletionNotes: actionItem.postCompletionNotes,
       isCompleted: actionItem.isCompleted,
-    });
+    }));
   };
   const {
     data: actionItemCategoriesData,
