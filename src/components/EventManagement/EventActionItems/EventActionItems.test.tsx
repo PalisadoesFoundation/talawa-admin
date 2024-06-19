@@ -309,7 +309,7 @@ const UPDATE_ACTION_ITEM_ERROR_MOCK = [
   },
 ];
 
-const NO_ACTION_ITEMs_ERROR_MOCK = [
+const NO_ACTION_ITEMS_ERROR_MOCK = [
   {
     request: {
       query: ACTION_ITEM_LIST_BY_EVENTS,
@@ -329,7 +329,7 @@ const NO_ACTION_ITEMs_ERROR_MOCK = [
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(CREATE_ACTION_ITEM_ERROR_MOCK, true);
 const link3 = new StaticMockLink(UPDATE_ACTION_ITEM_ERROR_MOCK, true);
-const link4 = new StaticMockLink(NO_ACTION_ITEMs_ERROR_MOCK, true);
+const link4 = new StaticMockLink(NO_ACTION_ITEMS_ERROR_MOCK, true);
 
 const translations = JSON.parse(
   JSON.stringify(
@@ -624,5 +624,41 @@ describe('Event Action Items Page', () => {
     );
     await wait();
     expect(screen.getByText('Nothing Found !!')).toBeInTheDocument();
+  });
+
+  test('Testing update action modal to have correct initial values', async () => {
+    window.location.assign('/event/111/123');
+    render(
+      <MockedProvider link={link}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <I18nextProvider i18n={i18nForTest}>
+                {<EventActionItems eventId="123" />}
+              </I18nextProvider>
+            </LocalizationProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+    await wait();
+    const updateButton = screen.getByRole('button', {
+      name: /manage actions/i,
+    });
+    userEvent.click(updateButton);
+
+    expect(screen.getByText('Action Item Details')).toBeInTheDocument();
+    const assigneeDropdown = screen.getByTestId(
+      'formUpdateAssignee',
+    ) as HTMLSelectElement;
+    expect(assigneeDropdown.value).toBe('6589387e2caa9d8d69087485');
+    expect(assigneeDropdown).toHaveTextContent('Burton Sanders');
+
+    expect(screen.getByPlaceholderText('Notes')).toHaveValue(
+      'Pre Completion Note',
+    );
+    expect(screen.getByPlaceholderText('Post Completion Notes')).toHaveValue(
+      'Post Completion Note',
+    );
   });
 });

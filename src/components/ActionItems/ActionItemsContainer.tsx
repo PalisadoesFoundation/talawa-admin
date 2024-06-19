@@ -193,6 +193,7 @@ function actionItemsContainer({
         >
           <Row
             className={`mx-0 border border-light-subtle py-3 ${actionItemsConnection === 'Organization' ? 'rounded-top-4' : 'rounded-top-2'}`}
+            data-testid="actionItemsHeader"
           >
             <Col
               xs={7}
@@ -214,7 +215,7 @@ function actionItemsContainer({
             <Col
               className="d-none d-lg-block fw-bold align-self-center"
               md={4}
-              lg={3}
+              lg={2}
             >
               <div className="ms-1">{t('preCompletionNotes')}</div>
             </Col>
@@ -257,9 +258,9 @@ function actionItemsContainer({
                 <Col
                   className="p-0 d-none d-lg-block align-self-center text-body-secondary"
                   md={4}
-                  lg={3}
+                  lg={2}
                 >
-                  <div className="ms-3">
+                  <div className="ms-2">
                     <OverlayTrigger
                       trigger={['hover', 'focus']}
                       placement="right"

@@ -19,6 +19,7 @@ import {
 } from 'GraphQl/Mutations/ActionItemMutations';
 import type {
   InterfaceActionItemCategoryList,
+  InterfaceActionItemInfo,
   InterfaceMembersList,
 } from 'utils/interfaces';
 import { DatePicker } from '@mui/x-date-pickers';
@@ -73,6 +74,17 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
   };
   const toggleDeleteModal = (): void => {
     setActionItemDeleteModalIsOpen(!actionItemDeleteModalIsOpen);
+  };
+  const setActionItemState = (actionItem: InterfaceActionItemInfo): void => {
+    setFormState({
+      ...formState,
+      assignee: `${actionItem.assignee.firstName} ${actionItem.assignee.lastName}`,
+      assigner: `${actionItem.assigner.firstName} ${actionItem.assigner.lastName}`,
+      assigneeId: actionItem.assignee._id,
+      preCompletionNotes: actionItem.preCompletionNotes,
+      postCompletionNotes: actionItem.postCompletionNotes,
+      isCompleted: actionItem.isCompleted,
+    });
   };
   const {
     data: actionItemCategoriesData,
@@ -274,6 +286,7 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
             onClick={() => {
               showUpdateModal();
               setActionItemId(params.row._id);
+              setActionItemState(params.row);
             }}
             data-testid="updateAdminModalBtn"
           >
@@ -413,12 +426,12 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
               <Form.Label>Assignee</Form.Label>
               <Form.Select
                 data-testid="formUpdateAssignee"
-                defaultValue={formState.assignee}
+                defaultValue={formState.assigneeId}
                 onChange={(e) =>
                   setFormState({ ...formState, assigneeId: e.target.value })
                 }
               >
-                <option value="" disabled>
+                <option value={formState.assigneeId} disabled>
                   {formState.assignee}
                 </option>
                 {membersData?.organizations[0].members.map((member, index) => {
