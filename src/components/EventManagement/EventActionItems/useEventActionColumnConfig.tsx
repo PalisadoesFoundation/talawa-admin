@@ -1,7 +1,7 @@
 import React from 'react';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
-import { Button } from '@mui/material';
+import { Button } from 'react-bootstrap';
 import styles from './EventActionItems.module.css';
 
 export type Props = {
