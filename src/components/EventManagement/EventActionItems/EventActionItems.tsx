@@ -28,6 +28,7 @@ import {
   MEMBERS_LIST,
 } from 'GraphQl/Queries/Queries';
 import { ACTION_ITEM_LIST_BY_EVENTS } from 'GraphQl/Queries/ActionItemQueries';
+import { useEventActionColumnConfig } from './useEventActionColumnConfig';
 
 function eventActionItems(props: { eventId: string }): JSX.Element {
   const { eventId } = props;
@@ -195,107 +196,17 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
     hideUpdateModal();
     toast.success(t('successfulDeletion'));
   };
-  const columns: GridColDef[] = [
-    {
-      field: 'serialNo',
-      headerName: '#',
-      flex: 1,
-      minWidth: 50,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return params.row?.index;
-      },
-    },
-    {
-      field: 'assignee',
-      headerName: 'Assignee',
-      flex: 2,
-      minWidth: 150,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <Link
-            to={`/member/${eventId}`}
-            state={{ id: params.row._id }}
-            className={styles.membername}
-          >
-            {params.row?.assignee.firstName +
-              ' ' +
-              params.row?.assignee.lastName}
-          </Link>
-        );
-      },
-    },
-    {
-      field: 'actionItemCategory',
-      headerName: 'Action Item Category',
-      flex: 2,
-      minWidth: 100,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return params.row.actionItemCategory.name;
-      },
-    },
-    {
-      field: 'notes',
-      headerName: 'Notes',
-      minWidth: 150,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      flex: 2,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return params.row.preCompletionNotes;
-      },
-    },
-    {
-      field: 'completionNotes',
-      headerName: 'Completion Notes',
-      minWidth: 150,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      flex: 2,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return params.row.postCompletionNotes;
-      },
-    },
-    {
-      field: 'options',
-      headerName: 'Options',
-      flex: 2,
-      minWidth: 100,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <Button
-            onClick={() => {
-              showUpdateModal();
-              setActionItemId(params.row._id);
-              setActionItemState(params.row);
-            }}
-            data-testid="updateAdminModalBtn"
-          >
-            Manage Actions
-          </Button>
-        );
-      },
-    },
-  ];
+  const manageActionsHandler = (params: GridCellParams): void => {
+    showUpdateModal();
+    setActionItemId(params.row._id);
+    setActionItemState(params.row);
+  };
+
+  const { columns } = useEventActionColumnConfig({
+    eventId,
+    manageActionsHandler,
+  });
+
   return (
     <>
       <Button
