@@ -333,7 +333,6 @@
     "fundCreate": "Create Fund",
     "fundUpdate": "Update Fund",
     "fundDelete": "Delete Fund",
-    "searchByName": "Search By Name",
     "noFundsFound": "No Funds Found",
     "createdBy": "Created By",
     "createdOn": "Created On",
@@ -343,7 +342,8 @@
     "fundDeleted": "Fund deleted successfully",
     "deleteFundMsg": "Are you sure you want to delete this fund?",
     "createdLatest": "Created Latest",
-    "createdEarliest": "Created Earliest"
+    "createdEarliest": "Created Earliest",
+    "viewCampaigns": "View Campaigns"
   },
   "fundCampaign": {
     "title": "Fundraising Campaigns",
@@ -356,13 +356,14 @@
     "deletedCampaign": "Campaign deleted successfully",
     "deleteCampaignMsg": "Are you sure you want to delete this campaign?",
     "noCampaigns": "No Campaigns Found",
-    "createCampaign": "Create Fund Campaign",
-    "updateCampaign": "Update Fund Campaign",
-    "manageCampaign": "Manage Fund Campaign",
-    "deleteCampaign": "Delete Fund Campaign",
+    "createCampaign": "Create Campaign",
+    "updateCampaign": "Update Campaign",
+    "deleteCampaign": "Delete Campaign",
     "currency": "Currency",
     "selectCurrency": "Select Currency",
-    "searchFullName": "Search By Name"
+    "searchFullName": "Search By Name",
+    "viewPledges": "View Pledges",
+    "noCampaignsFound": "No Campaigns Found"
   },
   "pledges": {
     "title": "Fund Campaign Pledges",
@@ -382,7 +383,6 @@
     "editPledge": "Edit Pledge",
     "deletePledgeMsg": "Are you sure you want to delete this pledge?",
     "noPledges": "No Pledges Found",
-    "sort": "Sort",
     "searchVolunteer": "Search By Volunteer",
     "highestAmount": "Highest Amount",
     "lowestAmount": "Lowest Amount",

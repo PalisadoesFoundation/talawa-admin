@@ -348,7 +348,8 @@
     "fundDeleted": "फंड सफलतापूर्वक हटाया गया",
     "deleteFundMsg": "क्या आप वाकई इस फंड को हटाना चाहते हैं?",
     "createdLatest": "सबसे पहले बनाया",
-    "createdEarliest": "सबसे जल्दी बनाया"
+    "createdEarliest": "सबसे जल्दी बनाया",
+    "viewCampaigns": "कैम्पेंस देखें"
   },
   "fundCampaign": {
     "title": "धन उगाही अभियान",
@@ -387,7 +388,6 @@
     "editPledge": "प्रतिज्ञा संपादित करें",
     "deletePledgeMsg": "क्या आप वाकई इस प्रतिज्ञा को हटाना चाहते हैं?",
     "noPledges": "कोई प्रतिज्ञा नहीं मिली",
-    "sort": "क्रमबद्ध करें",
     "searchVolunteer": "स्वयंसेवक द्वारा खोजें",
     "highestAmount": "सबसे अधिक राशि",
     "lowestAmount": "सबसे कम राशि",

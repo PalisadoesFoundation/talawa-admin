@@ -348,7 +348,8 @@
     "fundDeleted": "基金删除成功",
     "deleteFundMsg": "您确定要删除此基金吗？",
     "createdLatest": "最近创建",
-    "createdEarliest": "最早创建"
+    "createdEarliest": "最早创建",
+    "viewCampaigns": "查看活动"
   },
   "fundCampaign": {
     "title": "筹款活动",
@@ -387,7 +388,6 @@
     "editPledge": "编辑承诺",
     "deletePledgeMsg": "您确定要删除此承诺吗？",
     "noPledges": "未找到承诺",
-    "sort": "排序",
     "searchVolunteer": "按志愿者搜索",
     "highestAmount": "最高金额",
     "lowestAmount": "最低金额",

@@ -1,57 +1,49 @@
 /*eslint-disable*/
-import { useMutation, useQuery } from '@apollo/client';
-import { Search, WarningAmberRounded } from '@mui/icons-material';
-import {
-  CREATE_CAMPAIGN_MUTATION,
-  DELETE_CAMPAIGN_MUTATION,
-  UPDATE_CAMPAIGN_MUTATION,
-} from 'GraphQl/Mutations/CampaignMutation';
+import { useQuery } from '@apollo/client';
+import { Search, Sort, WarningAmberRounded } from '@mui/icons-material';
 import { FUND_CAMPAIGN } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
 import dayjs from 'dayjs';
-import { useState, type ChangeEvent } from 'react';
-import { Button, Col, Row, Dropdown, Form } from 'react-bootstrap';
+import { useCallback, useMemo, useState } from 'react';
+import { Button, Dropdown, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { currencySymbols } from 'utils/currency';
-import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import type {
   InterfaceCampaignInfo,
-  InterfaceCreateCampaign,
   InterfaceQueryOrganizationFundCampaigns,
 } from 'utils/interfaces';
-import CampaignCreateModal from './CampaignCreateModal';
+import CampaignModal from './CampaignModal';
 import CampaignDeleteModal from './CampaignDeleteModal';
-import CampaignUpdateModal from './CampaignUpdateModal';
 import styles from './OrganizationFundCampaign.module.css';
-import {
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  styled,
-  tableCellClasses,
-} from '@mui/material';
+import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
+import { currencySymbols } from 'utils/currency';
+import { Stack } from '@mui/material';
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: ['#31bb6b', '!important'],
-    color: theme.palette.common.white,
+const dataGridStyle = {
+  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
+    outline: 'none !important',
   },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
+  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
+    outline: 'none',
   },
-}));
+  '& .MuiDataGrid-row:hover': {
+    backgroundColor: 'transparent',
+  },
+  '& .MuiDataGrid-row.Mui-hovered': {
+    backgroundColor: 'transparent',
+  },
+  '& .MuiDataGrid-root': {
+    borderRadius: '0.5rem',
+  },
+  '& .MuiDataGrid-main': {
+    borderRadius: '0.5rem',
+  },
+};
 
-const StyledTableRow = styled(TableRow)(() => ({
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
-}));
+enum Modal {
+  SAME = 'same',
+  DELETE = 'delete',
+}
 
 const orgFundCampaign = (): JSX.Element => {
   const { t } = useTranslation('translation', {
@@ -60,197 +52,80 @@ const orgFundCampaign = (): JSX.Element => {
   const { t: tCommon } = useTranslation('common');
   const navigate = useNavigate();
 
-  const { fundId: currentUrl, orgId: orgId } = useParams();
-  const [campaignCreateModalIsOpen, setcampaignCreateModalIsOpen] =
-    useState<boolean>(false);
-  const [campaignUpdateModalIsOpen, setcampaignUpdateModalIsOpen] =
-    useState<boolean>(false);
-  const [campaignDeleteModalIsOpen, setcampaignDeleteModalIsOpen] =
-    useState<boolean>(false);
+  const { fundId, orgId } = useParams();
+
+  if (!fundId || !orgId) {
+    return <Navigate to={'/'} />;
+  }
 
   const [campaign, setCampaign] = useState<InterfaceCampaignInfo | null>(null);
-  const [formState, setFormState] = useState<InterfaceCreateCampaign>({
-    campaignName: '',
-    campaignCurrency: 'USD',
-    campaignGoal: 0,
-    campaignStartDate: new Date(),
-    campaignEndDate: new Date(),
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortBy, setSortBy] = useState<string | null>(null);
+
+  const [modalState, setModalState] = useState<{ [key in Modal]: boolean }>({
+    [Modal.SAME]: false,
+    [Modal.DELETE]: false,
   });
+  const [campaignModalMode, setCampaignModalMode] = useState<'edit' | 'create'>(
+    'create',
+  );
+  const openModal = (modal: Modal): void =>
+    setModalState((prevState) => ({ ...prevState, [modal]: true }));
+
+  const closeModal = (modal: Modal): void =>
+    setModalState((prevState) => ({ ...prevState, [modal]: false }));
+
+  const handleOpenModal = useCallback(
+    (campaign: InterfaceCampaignInfo | null, mode: 'edit' | 'create'): void => {
+      setCampaign(campaign);
+      setCampaignModalMode(mode);
+      openModal(Modal.SAME);
+    },
+    [openModal],
+  );
+
+  const handleDeleteClick = useCallback(
+    (campaign: InterfaceCampaignInfo): void => {
+      setCampaign(campaign);
+      openModal(Modal.DELETE);
+    },
+    [openModal],
+  );
+
   const {
-    data: fundCampaignData,
-    loading: fundCampaignLoading,
-    error: fundCampaignError,
-    refetch: refetchFundCampaign,
+    data: campaignData,
+    loading: campaignLoading,
+    error: campaignError,
+    refetch: refetchCampaign,
   }: {
     data?: {
       getFundById: InterfaceQueryOrganizationFundCampaigns;
     };
     loading: boolean;
     error?: Error | undefined;
-    refetch: any;
+    refetch: () => void;
   } = useQuery(FUND_CAMPAIGN, {
     variables: {
-      id: currentUrl,
+      id: fundId,
     },
   });
-
-  const [createCampaign] = useMutation(CREATE_CAMPAIGN_MUTATION);
-  const [updateCampaign] = useMutation(UPDATE_CAMPAIGN_MUTATION);
-  const [deleteCampaign] = useMutation(DELETE_CAMPAIGN_MUTATION);
-
-  const showCreateCampaignModal = (): void => {
-    setcampaignCreateModalIsOpen(!campaignCreateModalIsOpen);
-  };
-  const hideCreateCampaignModal = (): void => {
-    setcampaignCreateModalIsOpen(!campaignCreateModalIsOpen);
-  };
-  const showUpdateCampaignModal = (): void => {
-    setcampaignUpdateModalIsOpen(!campaignUpdateModalIsOpen);
-  };
-  const hideUpdateCampaignModal = (): void => {
-    setcampaignUpdateModalIsOpen(!campaignUpdateModalIsOpen);
-    setFormState({
-      campaignName: '',
-      campaignCurrency: 'USD',
-      campaignGoal: 0,
-      campaignStartDate: new Date(),
-      campaignEndDate: new Date(),
-    });
-  };
-  const showDeleteCampaignModal = (): void => {
-    setcampaignDeleteModalIsOpen(!campaignDeleteModalIsOpen);
-  };
-  const hideDeleteCampaignModal = (): void => {
-    setcampaignDeleteModalIsOpen(!campaignDeleteModalIsOpen);
-  };
-
-  const handleEditClick = (campaign: InterfaceCampaignInfo): void => {
-    setFormState({
-      campaignName: campaign.name,
-      campaignCurrency: campaign.currency,
-      campaignGoal: campaign.fundingGoal,
-      campaignStartDate: new Date(campaign.startDate),
-      campaignEndDate: new Date(campaign.endDate),
-    });
-    setCampaign(campaign);
-    showUpdateCampaignModal();
-  };
-
-  const createCampaignHandler = async (
-    e: ChangeEvent<HTMLFormElement>,
-  ): Promise<void> => {
-    e.preventDefault();
-    try {
-      await createCampaign({
-        variables: {
-          name: formState.campaignName,
-          currency: formState.campaignCurrency,
-          fundingGoal: formState.campaignGoal,
-          startDate: dayjs(formState.campaignStartDate).format('YYYY-MM-DD'),
-          endDate: dayjs(formState.campaignEndDate).format('YYYY-MM-DD'),
-          fundId: currentUrl,
-        },
-      });
-      toast.success(t('createdCampaign'));
-      setFormState({
-        campaignName: '',
-        campaignCurrency: 'USD',
-        campaignGoal: 0,
-        campaignStartDate: new Date(),
-        campaignEndDate: new Date(),
-      });
-      refetchFundCampaign();
-      hideCreateCampaignModal();
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-        console.log(error.message);
-      }
-    }
-  };
-
-  const updateCampaignHandler = async (
-    e: ChangeEvent<HTMLFormElement>,
-  ): Promise<void> => {
-    e.preventDefault();
-    try {
-      const updatedFields: { [key: string]: any } = {};
-      if (campaign?.name !== formState.campaignName) {
-        updatedFields.name = formState.campaignName;
-      }
-      if (campaign?.currency !== formState.campaignCurrency) {
-        updatedFields.currency = formState.campaignCurrency;
-      }
-      if (campaign?.fundingGoal !== formState.campaignGoal) {
-        updatedFields.fundingGoal = formState.campaignGoal;
-      }
-      if (campaign?.startDate !== formState.campaignStartDate) {
-        updatedFields.startDate = dayjs(formState.campaignStartDate).format(
-          'YYYY-MM-DD',
-        );
-      }
-      if (campaign?.endDate !== formState.campaignEndDate) {
-        updatedFields.endDate = dayjs(formState.campaignEndDate).format(
-          'YYYY-MM-DD',
-        );
-      }
-      await updateCampaign({
-        variables: {
-          id: campaign?._id,
-          ...updatedFields,
-        },
-      });
-      setFormState({
-        campaignName: '',
-        campaignCurrency: 'USD',
-        campaignGoal: 0,
-        campaignStartDate: new Date(),
-        campaignEndDate: new Date(),
-      });
-      refetchFundCampaign();
-      hideUpdateCampaignModal();
-      toast.success(t('updatedCampaign'));
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-        console.log(error.message);
-      }
-    }
-  };
-
-  const deleteCampaignHandler = async (): Promise<void> => {
-    try {
-      await deleteCampaign({
-        variables: {
-          id: campaign?._id,
-        },
-      });
-      toast.success(t('deletedCampaign'));
-      refetchFundCampaign();
-      hideDeleteCampaignModal();
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-        console.log(error.message);
-      }
-    }
-  };
 
   const handleClick = (campaignId: String) => {
     navigate(`/fundCampaignPledge/${orgId}/${campaignId}`);
   };
 
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchText, setSearchText] = useState('');
-  const filteredCampaigns = fundCampaignData?.getFundById.campaigns.filter(
-    (campaign) =>
-      campaign.name.toLowerCase().includes(searchQuery.toLowerCase()),
-  );
+  const campaigns = useMemo(() => {
+    return (
+      campaignData?.getFundById.campaigns.filter((campaign) =>
+        campaign.name.toLowerCase().includes(searchTerm.toLowerCase()),
+      ) ?? []
+    );
+  }, [campaignData, searchTerm]);
 
-  if (fundCampaignLoading) {
+  if (campaignLoading) {
     return <Loader size="xl" />;
   }
-  if (fundCampaignError) {
+  if (campaignError) {
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
         <div className={styles.message} data-testid="errorMsg">
@@ -258,12 +133,164 @@ const orgFundCampaign = (): JSX.Element => {
           <h6 className="fw-bold text-danger text-center">
             Error occured while loading Campaigns
             <br />
-            {fundCampaignError.message}
+            {campaignError.message}
           </h6>
         </div>
       </div>
     );
   }
+
+  const columns: GridColDef[] = [
+    {
+      field: 'id',
+      headerName: 'Sr. No.',
+      flex: 1,
+      minWidth: 100,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      renderCell: (params: GridCellParams) => {
+        return <div>{params.row.id}</div>;
+      },
+    },
+    {
+      field: 'campaignName',
+      headerName: 'Campaign Name',
+      flex: 2,
+      minWidth: 150,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      renderCell: (params: GridCellParams) => {
+        return (
+          <div
+            className="d-flex justify-content-center fw-bold"
+            data-testid="campaignName"
+            onClick={() => handleClick(params.row.campaign._id as string)}
+          >
+            {params.row.campaign.name}
+          </div>
+        );
+      },
+    },
+    {
+      field: 'startDate',
+      headerName: 'Start Date',
+      flex: 1,
+      minWidth: 150,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      renderCell: (params: GridCellParams) => {
+        return dayjs(params.row.campaign.startDate).format('DD/MM/YYYY');
+      },
+    },
+    {
+      field: 'endDate',
+      headerName: 'End Date',
+      minWidth: 150,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      flex: 1,
+      sortable: false,
+      renderCell: (params: GridCellParams) => {
+        return dayjs(params.row.campaign.endDate).format('DD/MM/YYYY');
+      },
+    },
+    {
+      field: 'fundingGoal',
+      headerName: 'Funding Goal',
+      flex: 1,
+      minWidth: 100,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      renderCell: (params: GridCellParams) => {
+        return (
+          <div
+            className="d-flex justify-content-center fw-bold"
+            data-testid="goalCell"
+          >
+            {
+              currencySymbols[
+                params.row.campaign.currency as keyof typeof currencySymbols
+              ]
+            }
+            {params.row.campaign.fundingGoal}
+          </div>
+        );
+      },
+    },
+    {
+      field: 'action',
+      headerName: 'Action',
+      flex: 1,
+      minWidth: 100,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      renderCell: (params: GridCellParams) => {
+        return (
+          <>
+            <Button
+              variant="success"
+              size="sm"
+              className="me-2 rounded"
+              data-testid="editCampaignBtn"
+              onClick={() =>
+                handleOpenModal(
+                  params.row.campaign as InterfaceCampaignInfo,
+                  'edit',
+                )
+              }
+            >
+              <i className="fa fa-edit" />
+            </Button>
+            <Button
+              size="sm"
+              variant="danger"
+              className="rounded"
+              data-testid="deleteCampaignBtn"
+              onClick={() =>
+                handleDeleteClick(params.row.campaign as InterfaceCampaignInfo)
+              }
+            >
+              <i className="fa fa-trash" />
+            </Button>
+          </>
+        );
+      },
+    },
+    {
+      field: 'assocPledge',
+      headerName: 'Associated Pledges',
+      flex: 2,
+      minWidth: 100,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      renderCell: (params: GridCellParams) => {
+        return (
+          <Button
+            variant="outline-success"
+            size="sm"
+            className="rounded"
+            onClick={() => handleClick(params.row.campaign._id as string)}
+          >
+            <i className="fa fa-eye me-1" />
+            {t('viewPledges')}
+          </Button>
+        );
+      },
+    },
+  ];
 
   return (
     <div className={styles.organizationFundCampaignContainer}>
@@ -271,19 +298,16 @@ const orgFundCampaign = (): JSX.Element => {
         <div className={styles.input}>
           <Form.Control
             type="name"
-            placeholder={t('searchFullName')}
+            placeholder={tCommon('searchByName')}
             autoComplete="off"
             required
             className={styles.inputField}
-            value={searchText}
-            onChange={(e) => {
-              setSearchText(e.target.value);
-            }}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             data-testid="searchFullName"
           />
           <Button
             className={`position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center `}
-            onClick={() => setSearchQuery(searchText)}
             data-testid="searchBtn"
           >
             <Search />
@@ -298,16 +322,42 @@ const orgFundCampaign = (): JSX.Element => {
                 className={styles.dropdown}
                 data-testid="filter"
               >
-                <FilterAltOutlinedIcon className={'me-1'} />
-                {tCommon('filter')}
+                <Sort className={'me-1'} />
+                {tCommon('sort')}
               </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item
+                  onClick={() => setSortBy('amount_ASC')}
+                  data-testid="amount_ASC"
+                >
+                  {t('lowestAmount')}
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => setSortBy('amount_DESC')}
+                  data-testid="amount_DESC"
+                >
+                  {t('highestAmount')}
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => setSortBy('endDate_DESC')}
+                  data-testid="endDate_DESC"
+                >
+                  {t('latestEndDate')}
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => setSortBy('endDate_ASC')}
+                  data-testid="endDate_ASC"
+                >
+                  {t('earliestEndDate')}
+                </Dropdown.Item>
+              </Dropdown.Menu>
             </Dropdown>
           </div>
           <div>
             <Button
               variant="success"
               className={styles.orgFundCampaignButton}
-              onClick={showCreateCampaignModal}
+              onClick={() => handleOpenModal(null, 'create')}
               data-testid="addCampaignBtn"
             >
               <i className={'fa fa-plus me-2'} />
@@ -317,128 +367,45 @@ const orgFundCampaign = (): JSX.Element => {
         </div>
       </div>
 
-      <div>
-        {filteredCampaigns && filteredCampaigns.length > 0 ? (
-          <div className="my-4">
-            <TableContainer
-              component={Paper}
-              sx={{
-                borderRadius: '16px',
-              }}
-            >
-              <Table aria-label="customized table">
-                <TableHead>
-                  <TableRow>
-                    <StyledTableCell>#</StyledTableCell>
-                    <StyledTableCell align="center">
-                      {t('campaignName')}
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
-                      {tCommon('startDate')}
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
-                      {tCommon('endDate')}
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
-                      {t('fundingGoal')}
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
-                      {t('campaignOptions')}
-                    </StyledTableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {filteredCampaigns.map((campaign, index) => (
-                    <StyledTableRow key={campaign._id}>
-                      <StyledTableCell component="th" scope="row">
-                        {index + 1}
-                      </StyledTableCell>
-                      <StyledTableCell
-                        align="center"
-                        data-testid="campaignName"
-                        onClick={() => handleClick(campaign._id)}
-                      >
-                        <span
-                          style={{
-                            color: 'rgba(23, 120, 242, 1)',
-                            cursor: 'pointer',
-                          }}
-                        >
-                          {campaign.name}
-                        </span>
-                      </StyledTableCell>
-                      <StyledTableCell
-                        align="center"
-                        data-testid="campaignStartDate"
-                      >
-                        {dayjs(campaign.startDate).format('DD/MM/YYYY')}
-                      </StyledTableCell>
-                      <StyledTableCell
-                        align="center"
-                        data-testid="campaignEndDate"
-                      >
-                        {dayjs(campaign.endDate).format('DD/MM/YYYY')}
-                      </StyledTableCell>
-                      <StyledTableCell align="center">
-                        <span className={`${styles.goalButton}`}>
-                          {`${currencySymbols[campaign.currency as keyof typeof currencySymbols]}${campaign.fundingGoal}`}
-                        </span>
-                      </StyledTableCell>
-                      <StyledTableCell align="center">
-                        <Button
-                          size="sm"
-                          data-testid="editCampaignBtn"
-                          className="p-2 w-75"
-                          variant="success"
-                          onClick={() => {
-                            // setCampaign(campaign);
-                            handleEditClick(campaign);
-                          }}
-                        >
-                          <span>Manage</span>
-                        </Button>
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </div>
-        ) : (
-          <div className="pt-4 text-center fw-semibold text-body-tertiary">
-            <h5>{t('noCampaigns')}</h5>
-          </div>
-        )}
-      </div>
+      <DataGrid
+        disableColumnMenu
+        columnBuffer={5}
+        hideFooter={true}
+        getRowId={(row) => row.campaign._id}
+        components={{
+          NoRowsOverlay: () => (
+            <Stack height="100%" alignItems="center" justifyContent="center">
+              {t('noCampaignsFound')}
+            </Stack>
+          ),
+        }}
+        sx={dataGridStyle}
+        getRowClassName={() => `${styles.rowBackground}`}
+        autoHeight
+        rowHeight={65}
+        rows={campaigns.map((campaign, index) => ({
+          id: index + 1,
+          campaign,
+        }))}
+        columns={columns}
+        isRowSelectable={() => false}
+      />
 
       {/* Create Campaign Modal */}
-      <CampaignCreateModal
-        campaignCreateModalIsOpen={campaignCreateModalIsOpen}
-        hideCreateCampaignModal={hideCreateCampaignModal}
-        createCampaignHandler={createCampaignHandler}
-        formState={formState}
-        setFormState={setFormState}
-        t={t}
+      <CampaignModal
+        isOpen={modalState[Modal.SAME]}
+        hide={() => closeModal(Modal.SAME)}
+        refetchCampaign={refetchCampaign}
+        fundId={fundId}
+        campaign={campaign}
+        mode={campaignModalMode}
       />
 
-      {/* Update Campaign Modal */}
-      <CampaignUpdateModal
-        campaignUpdateModalIsOpen={campaignUpdateModalIsOpen}
-        hideUpdateCampaignModal={hideUpdateCampaignModal}
-        formState={formState}
-        setFormState={setFormState}
-        updateCampaignHandler={updateCampaignHandler}
-        t={t}
-        showDeleteCampaignModal={showDeleteCampaignModal}
-      />
-
-      {/* Delete Campaign Modal */}
       <CampaignDeleteModal
-        campaignDeleteModalIsOpen={campaignDeleteModalIsOpen}
-        hideDeleteCampaignModal={hideDeleteCampaignModal}
-        deleteCampaignHandler={deleteCampaignHandler}
-        t={t}
-        tCommon={tCommon}
+        isOpen={modalState[Modal.DELETE]}
+        hide={() => closeModal(Modal.DELETE)}
+        campaign={campaign}
+        refetchCampaign={refetchCampaign}
       />
     </div>
   );

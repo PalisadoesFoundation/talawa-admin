@@ -68,13 +68,11 @@ const organizationFunds = (): JSX.Element => {
   const [fundModalMode, setFundModalMode] = useState<'edit' | 'create'>(
     'create',
   );
-  const openModal = (modal: Modal): void => {
+  const openModal = (modal: Modal): void =>
     setModalState((prevState) => ({ ...prevState, [modal]: true }));
-  };
 
-  const closeModal = (modal: Modal): void => {
+  const closeModal = (modal: Modal): void =>
     setModalState((prevState) => ({ ...prevState, [modal]: false }));
-  };
 
   const handleOpenModal = useCallback(
     (fund: InterfaceFundInfo | null, mode: 'edit' | 'create'): void => {
@@ -221,7 +219,7 @@ const organizationFunds = (): JSX.Element => {
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
-        return params.row.fund.isArchived ? <p>Archived</p> : <p>Active</p>;
+        return params.row.fund.isArchived ? 'Archived' : 'Active';
       },
     },
     {
@@ -280,7 +278,7 @@ const organizationFunds = (): JSX.Element => {
             onClick={() => handleClick(params.row.fund._id as string)}
           >
             <i className="fa fa-eye me-1" />
-            View
+            {t('viewCampaigns')}
           </Button>
         );
       },
@@ -295,13 +293,13 @@ const organizationFunds = (): JSX.Element => {
             <div className={styles.input}>
               <Form.Control
                 type="name"
-                placeholder={t('searchFullName')}
+                placeholder={tCommon('searchByName')}
                 autoComplete="off"
                 required
                 className={styles.inputField}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                data-testid="searchFullName"
+                data-testid="searchByName"
               />
               <Button
                 className={`position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center `}

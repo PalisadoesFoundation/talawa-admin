@@ -348,7 +348,8 @@
     "fundDeleted": "Fonds supprimé avec succès",
     "deleteFundMsg": "Êtes-vous sûr de vouloir supprimer ce fonds ?",
     "createdLatest": "Créé le plus récemment",
-    "createdEarliest": "Créé le plus tôt"
+    "createdEarliest": "Créé le plus tôt",
+    "viewCampaigns": "Voir les campagnes"
   },
   "fundCampaign": {
     "title": "Campagnes de collecte de fonds",
@@ -387,7 +388,6 @@
     "editPledge": "Modifier l'engagement",
     "deletePledgeMsg": "Etes-vous sûr de vouloir supprimer cet engagement ?",
     "noPledges": "Aucun engagement trouvé",
-    "sort": "Trier",
     "searchVolunteer": "Rechercher par bénévole",
     "highestAmount": "Montant le plus élevé",
     "lowestAmount": "Montant le plus bas",

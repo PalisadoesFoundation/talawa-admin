@@ -474,7 +474,8 @@
     "fundDeleted": "Fondo eliminado correctamente",
     "deleteFundMsg": "¿Está seguro de que desea eliminar este fondo?",
     "createdLatest": "Creado más reciente",
-    "createdEarliest": "Creado más temprano"
+    "createdEarliest": "Creado más temprano",
+    "viewCampaigns": "Ver campañas"
   },
   "fundCampaign": {
     "title": "Campañas de recaudación de fondos",
@@ -493,8 +494,6 @@
     "updateCampaign": "Actualizar campaña de recaudación de fondos",
     "manageCampaign": "Administrar campaña de recaudación de fondos",
     "deleteCampaign": "Eliminar campaña de recaudación de fondos",
-    "no": "No",
-    "yes": "Sí",
     "currency": "Moneda",
     "selectCurrency": "Seleccionar moneda",
     "filter": "Filtrar",
@@ -519,10 +518,7 @@
     "amount": "Monto",
     "editPledge": "Editar Compromiso",
     "deletePledgeMsg": "¿Estás seguro de que quieres eliminar este compromiso?",
-    "no": "No",
-    "yes": "Sí",
     "noPledges": "No se encontraron compromisos",
-    "sort": "Ordenar",
     "searchVolunteer": "Buscar por voluntario",
     "highestAmount": "Cantidad más alta",
     "lowestAmount": "Cantidad más baja",

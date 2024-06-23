@@ -414,13 +414,6 @@ export interface InterfacePostCard {
   }[];
   fetchPosts: () => void;
 }
-export interface InterfaceCreateCampaign {
-  campaignName: string;
-  campaignCurrency: string;
-  campaignGoal: number;
-  campaignStartDate: Date;
-  campaignEndDate: Date;
-}
 
 export interface InterfaceCreatePledge {
   pledgeUsers: InterfacePledgeVolunteer[];
