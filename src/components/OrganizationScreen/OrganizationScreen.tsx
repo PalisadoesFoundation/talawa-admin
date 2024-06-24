@@ -18,19 +18,13 @@ const OrganizationScreen = (): JSX.Element => {
 
   const { getItem } = useLocalStorage();
   const isSuperAdmin = getItem('SuperAdmin');
-  // const title = isSuperAdmin ? t('title_superadmin') ? t('title_superadmin') : t('title') : t('title');
 
-  // // const title = // for some pages title_superadmin is not defined render title accordingly
-  //   const title = t('title_superadmin') ? t('title_superadmin') : t('title');
-
-  const condition =
-    titleKey == 'memberDetail' || titleKey == 'organizationPeople';
-  const title = condition
-    ? isSuperAdmin
-      ? t('title_superadmin')
-      : t('title')
-    : t('title');
-  // const title = isSuperAdmin ? t('title_superadmin') : t('title');
+  const title = t(
+    isSuperAdmin &&
+      (titleKey == 'memberDetail' || titleKey == 'organizationPeople')
+      ? 'title_superadmin'
+      : 'title',
+  );
 
   useEffect(() => {
     document.title = title;
