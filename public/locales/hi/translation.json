@@ -112,15 +112,15 @@
     "sampleOrganization": "नमूना संगठन"
   },
   "orgPeopleOrganizationsCard": {
-    "manage": "Manage",
-    "notMember": "User is not a member",
-    "unblock": "UnBlock",
-    "block": "Block",
-    "blockedSuccessfully": "User blocked successfully",
-    "unBlockedSuccessfully": "User Un-Blocked successfully",
-    "blockedUser": "User is blocked",
-    "roleUpdated": "Role Updated.",
-    "memberRemoved": "The Member is removed"
+    "manage": "प्रबंधित करें",
+    "notMember": "उपयोगकर्ता सदस्य नहीं है",
+    "unblock": "अनब्लॉक करें",
+    "block": "ब्लॉक करें",
+    "blockedSuccessfully": "उपयोगकर्ता को सफलतापूर्वक ब्लॉक किया गया",
+    "unBlockedSuccessfully": "उपयोगकर्ता को सफलतापूर्वक अनब्लॉक किया गया",
+    "blockedUser": "उपयोगकर्ता ब्लॉक है",
+    "roleUpdated": "भूमिका अद्यतन की गई।",
+    "memberRemoved": "सदस्य को हटा दिया गया"
   },
   "paginationList": {
     "rowsPerPage": "प्रति पृष्ठ पंक्तियाँ",
