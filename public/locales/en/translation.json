@@ -363,7 +363,11 @@
     "selectCurrency": "Select Currency",
     "searchFullName": "Search By Name",
     "viewPledges": "View Pledges",
-    "noCampaignsFound": "No Campaigns Found"
+    "noCampaignsFound": "No Campaigns Found",
+    "latestEndDate": "Latest End Date",
+    "earliestEndDate": "Earliest End Date",
+    "lowestGoal": "Lowest Goal",
+    "highestGoal": "Highest Goal"
   },
   "pledges": {
     "title": "Fund Campaign Pledges",

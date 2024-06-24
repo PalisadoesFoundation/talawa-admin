@@ -98,6 +98,8 @@ const organizationFunds = (): JSX.Element => {
   } = useQuery(FUND_LIST, {
     variables: {
       organizationId: orgId,
+      filter: searchTerm,
+      orderBy: sortBy,
     },
   });
 
@@ -109,18 +111,7 @@ const organizationFunds = (): JSX.Element => {
     [openModal],
   );
 
-  const funds = useMemo(() => {
-    return (
-      fundData?.fundsByOrganization.filter((fund) => {
-        const search = searchTerm.toLowerCase();
-        const fullName = `${fund.creator.firstName} ${fund.creator.lastName}`;
-        return (
-          fullName.toLowerCase().includes(search) ||
-          fund.name.toLowerCase().includes(search)
-        );
-      }) ?? []
-    );
-  }, [fundData, searchTerm]);
+  const funds = useMemo(() => fundData?.fundsByOrganization ?? [], [fundData]);
 
   const handleClick = (fundId: string): void => {
     navigate(`/orgfundcampaign/${orgId}/${fundId}`);

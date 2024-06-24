@@ -9,10 +9,15 @@ import gql from 'graphql-tag';
  * @returns The list of members associated with the organization.
  */
 export const FUND_LIST = gql`
-  query FundsByOrganization($organizationId: ID!, $filter: String) {
+  query FundsByOrganization(
+    $organizationId: ID!
+    $filter: String
+    $orderBy: FundOrderByInput
+  ) {
     fundsByOrganization(
       organizationId: $organizationId
       where: { name_contains: $filter }
+      orderBy: $orderBy
     ) {
       _id
       name

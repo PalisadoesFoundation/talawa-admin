@@ -327,16 +327,16 @@ const orgFundCampaign = (): JSX.Element => {
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item
-                  onClick={() => setSortBy('amount_ASC')}
-                  data-testid="amount_ASC"
+                  onClick={() => setSortBy('goal_ASC')}
+                  data-testid="goal_ASC"
                 >
-                  {t('lowestAmount')}
+                  {t('lowestGoal')}
                 </Dropdown.Item>
                 <Dropdown.Item
-                  onClick={() => setSortBy('amount_DESC')}
-                  data-testid="amount_DESC"
+                  onClick={() => setSortBy('goal_DESC')}
+                  data-testid="goal_DESC"
                 >
-                  {t('highestAmount')}
+                  {t('highestGoal')}
                 </Dropdown.Item>
                 <Dropdown.Item
                   onClick={() => setSortBy('endDate_DESC')}
