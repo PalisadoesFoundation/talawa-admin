@@ -293,6 +293,23 @@
     "successfulDeletion": "Élément d'action supprimé avec succès",
     "title": "Éléments d'action"
   },
+  "organizationAgendaCategory": {
+    "agendaCategoryDetails": "Détails de la catégorie d'ordre du jour",
+    "updateAgendaCategory": "Mettre à jour la catégorie d'ordre du jour",
+    "title": "Catégories d'ordre du jour",
+    "name": "Catégorie",
+    "description": "Description",
+    "createdBy": "Créé par",
+    "options": "Options",
+    "createAgendaCategory": "Créer une catégorie d'ordre du jour",
+    "noAgendaCategories": "Aucune catégorie d'ordre du jour",
+    "update": "Mettre à jour",
+    "agendaCategoryCreated": "Catégorie d'ordre du jour créée avec succès",
+    "agendaCategoryUpdated": "Catégorie d'ordre du jour mise à jour avec succès",
+    "agendaCategoryDeleted": "Catégorie d'ordre du jour supprimée avec succès",
+    "deleteAgendaCategory": "Supprimer la catégorie d'ordre du jour",
+    "deleteAgendaCategoryMsg": "Souhaitez-vous supprimer cette catégorie d'ordre du jour ?"
+  },
   "eventListCard": {
     "deleteEvent": "Supprimer l'événement",
     "deleteEventMsg": "Voulez-vous supprimer cet événement ?",
@@ -389,7 +406,13 @@
     "amount": "Montant",
     "editPledge": "Modifier l'engagement",
     "deletePledgeMsg": "Etes-vous sûr de vouloir supprimer cet engagement ?",
-    "noPledges": "Aucun engagement trouvé"
+    "noPledges": "Aucun engagement trouvé",
+    "sort": "Trier",
+    "searchVolunteer": "Rechercher par bénévole",
+    "highestAmount": "Montant le plus élevé",
+    "lowestAmount": "Montant le plus bas",
+    "latestEndDate": "Date de fin la plus récente",
+    "earliestEndDate": "Date de fin la plus proche"
   },
   "orgPost": {
     "title": "Des postes",

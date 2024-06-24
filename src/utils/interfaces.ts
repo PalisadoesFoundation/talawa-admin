@@ -266,10 +266,7 @@ export interface InterfaceQueryFundCampaignsPledges {
     currency: string;
     endDate: string;
     startDate: string;
-    users: {
-      _id: string;
-      firstName: string;
-    }[];
+    users: InterfacePledgeVolunteer[];
   }[];
 }
 export interface InterfaceFundInfo {
@@ -296,10 +293,7 @@ export interface InterfacePledgeInfo {
   currency: string;
   endDate: string;
   startDate: string;
-  users: {
-    _id: string;
-    firstName: string;
-  }[];
+  users: InterfacePledgeVolunteer[];
 }
 export interface InterfaceQueryOrganizationEventListItem {
   _id: string;
@@ -443,6 +437,7 @@ export interface InterfaceCreateCampaign {
 }
 
 export interface InterfaceCreatePledge {
+  pledgeUsers: InterfacePledgeVolunteer[];
   pledgeAmount: number;
   pledgeCurrency: string;
   pledgeStartDate: Date;
@@ -480,4 +475,24 @@ export interface InterfaceOrgPeopleOrganizationsCard {
   members: { _id: string }[];
   admins: { _id: string }[];
   resetAndRefetch: () => void;
+
+export interface InterfacePledgeVolunteer {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  image: string | null;
+}
+export interface InterfaceAgendaItemCategoryInfo {
+  _id: string;
+  name: string;
+  description: string;
+  createdBy: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+  };
+}
+
+export interface InterfaceAgendaItemCategoryList {
+  agendaItemCategoriesByOrganization: InterfaceAgendaItemCategoryInfo[];
 }

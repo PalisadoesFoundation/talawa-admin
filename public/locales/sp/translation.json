@@ -410,6 +410,23 @@
     "title": "Ítems de acción",
     "yes": "Sí"
   },
+  "organizationAgendaCategory": {
+    "agendaCategoryDetails": "Detalles de la categoría de la agenda",
+    "updateAgendaCategory": "Actualizar categoría de la agenda",
+    "title": "Categorías de la agenda",
+    "name": "Categoría",
+    "description": "Descripción",
+    "createdBy": "Creado por",
+    "options": "Opciones",
+    "createAgendaCategory": "Crear categoría de la agenda",
+    "noAgendaCategories": "No hay categorías de la agenda",
+    "update": "Actualizar",
+    "agendaCategoryCreated": "Categoría de la agenda creada exitosamente",
+    "agendaCategoryUpdated": "Categoría de la agenda actualizada exitosamente",
+    "agendaCategoryDeleted": "Categoría de la agenda eliminada exitosamente",
+    "deleteAgendaCategory": "Eliminar categoría de la agenda",
+    "deleteAgendaCategoryMsg": "¿Desea eliminar esta categoría de la agenda?"
+  },
   "eventListCard": {
     "location": "Lugar del evento",
     "deleteEvent": "Eliminar evento",
@@ -528,7 +545,13 @@
     "deletePledgeMsg": "¿Estás seguro de que quieres eliminar este compromiso?",
     "no": "No",
     "yes": "Sí",
-    "noPledges": "No se encontraron compromisos"
+    "noPledges": "No se encontraron compromisos",
+    "sort": "Ordenar",
+    "searchVolunteer": "Buscar por voluntario",
+    "highestAmount": "Cantidad más alta",
+    "lowestAmount": "Cantidad más baja",
+    "latestEndDate": "Fecha de finalización más reciente",
+    "earliestEndDate": "Fecha de finalización más cercana"
   },
 
   "orgPost": {
