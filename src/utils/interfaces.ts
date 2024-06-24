@@ -475,6 +475,7 @@ export interface InterfaceOrgPeopleOrganizationsCard {
   members: { _id: string }[];
   admins: { _id: string }[];
   resetAndRefetch: () => void;
+}
 
 export interface InterfacePledgeVolunteer {
   _id: string;
