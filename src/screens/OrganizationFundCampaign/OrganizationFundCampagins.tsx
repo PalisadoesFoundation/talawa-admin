@@ -17,7 +17,7 @@ import CampaignDeleteModal from './CampaignDeleteModal';
 import styles from './OrganizationFundCampaign.module.css';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { currencySymbols } from 'utils/currency';
-import { Stack } from '@mui/material';
+import { Stack, Typography, Breadcrumbs, Link } from '@mui/material';
 
 const dataGridStyle = {
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
@@ -294,6 +294,17 @@ const orgFundCampaign = (): JSX.Element => {
 
   return (
     <div className={styles.organizationFundCampaignContainer}>
+      <Breadcrumbs aria-label="breadcrumb" className="ms-1">
+        <Link
+          underline="hover"
+          color="inherit"
+          component="button"
+          onClick={() => history.back()}
+        >
+          Funds
+        </Link>
+        <Typography color="text.primary">FundRaising Campaign</Typography>
+      </Breadcrumbs>
       <div className={styles.btnsContainer}>
         <div className={styles.input}>
           <Form.Control

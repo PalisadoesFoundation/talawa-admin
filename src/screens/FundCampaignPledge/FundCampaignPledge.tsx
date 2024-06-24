@@ -11,7 +11,7 @@ import { currencySymbols } from 'utils/currency';
 import styles from './FundCampaignPledge.module.css';
 import PledgeDeleteModal from './PledgeDeleteModal';
 import PledgeModal from './PledgeModal';
-import { Stack } from '@mui/material';
+import { Breadcrumbs, Link, Stack, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import Avatar from 'components/Avatar/Avatar';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
@@ -294,6 +294,25 @@ const fundCampaignPledge = (): JSX.Element => {
 
   return (
     <div>
+      <Breadcrumbs aria-label="breadcrumb" className="ms-1 mt-2">
+        <Link
+          underline="hover"
+          color="inherit"
+          component="button"
+          onClick={() => history.go(-2)}
+        >
+          Funds
+        </Link>
+        <Link
+          underline="hover"
+          color="inherit"
+          component="button"
+          onClick={() => history.back()}
+        >
+          Campaigns
+        </Link>
+        <Typography color="text.primary">Fund Campaign Pledges</Typography>
+      </Breadcrumbs>
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
         <div className={`${styles.input} mb-1`}>
           <Form.Control
