@@ -1,5 +1,6 @@
 import React from 'react';
-import { act, render, screen } from '@testing-library/react';
+import type { RenderResult } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -9,13 +10,15 @@ import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import MemberDetail, { getLanguageName, prettyDate } from './MemberDetail';
+import useLocalStorage from 'utils/useLocalstorage';
+const { setItem } = useLocalStorage();
 
 const MOCKS = [
   {
     request: {
       query: USER_DETAILS,
       variables: {
-        id: 'rishav-jha-mech',
+        id: '101',
       },
     },
     result: {
@@ -101,10 +104,6 @@ const MOCKS = [
 
 const link = new StaticMockLink(MOCKS, true);
 
-async function wait(ms = 20): Promise<void> {
-  await act(() => new Promise((resolve) => setTimeout(resolve, ms)));
-}
-
 jest.mock('@mui/x-date-pickers/DateTimePicker', () => {
   return {
     DateTimePicker: jest.requireActual(
@@ -115,28 +114,29 @@ jest.mock('@mui/x-date-pickers/DateTimePicker', () => {
 
 jest.mock('react-toastify');
 
+const renderMemberDetail = (): RenderResult => {
+  return render(
+    <MockedProvider addTypename={false} link={link}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <MemberDetail id="101" />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+};
+
 describe('MemberDetail', () => {
   global.alert = jest.fn();
 
   test('Should render the elements', async () => {
-    const props = {
-      id: 'rishav-jha-mech',
-    };
+    renderMemberDetail();
 
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <MemberDetail {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-    expect(screen.getByTestId('memberDetailTabNav')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('container')).toBeInTheDocument();
+    });
   });
 
   test('Should return formatted date', () => {
@@ -149,5 +149,39 @@ describe('MemberDetail', () => {
 
   test('Should return language name', () => {
     expect(getLanguageName('en')).toBe('English');
+  });
+
+  test('Title should be User Details for Super Admin', async () => {
+    setItem('SuperAdmin', true);
+    renderMemberDetail();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('container')).toBeInTheDocument();
+    });
+
+    expect(document.title).toBe('User Details');
+  });
+
+  test('Should change tab', async () => {
+    renderMemberDetail();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('container')).toBeInTheDocument();
+    });
+
+    const tab = screen.getByTestId('organizationsBtn');
+    tab.click();
+
+    expect(screen.getByTestId('memberorganizationTab')).toBeInTheDocument();
+
+    const tab1 = screen.getByTestId('eventsBtn');
+    tab1.click();
+
+    expect(screen.getByTestId('eventsTab')).toBeInTheDocument();
+
+    const tab2 = screen.getByTestId('tagsBtn');
+    tab2.click();
+
+    expect(screen.getByTestId('tagsTab')).toBeInTheDocument();
   });
 });

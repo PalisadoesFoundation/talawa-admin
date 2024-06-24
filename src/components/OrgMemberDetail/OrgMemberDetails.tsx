@@ -48,7 +48,6 @@ const OrgMemberDetail: React.FC<OrgMemberDetailProps> = ({
   const isMounted = useRef(true);
   const { getItem, setItem } = useLocalStorage();
   const currentUrl = location.state?.id || getItem('id') || id;
-  document.title = tCommon('title');
   const [formState, setFormState] = useState({
     firstName: '',
     lastName: '',
@@ -68,12 +67,10 @@ const OrgMemberDetail: React.FC<OrgMemberDetailProps> = ({
     pluginCreationAllowed: false,
   });
   const handleDateChange = (date: Dayjs | null): void => {
-    if (date) {
-      setFormState((prevState) => ({
-        ...prevState,
-        birthDate: dayjs(date).format('YYYY-MM-DD'),
-      }));
-    }
+    setFormState((prevState) => ({
+      ...prevState,
+      birthDate: dayjs(date).format('YYYY-MM-DD'),
+    }));
   };
   const [updateUser] = useMutation(UPDATE_USER_MUTATION);
   const { data: user, loading: loading } = useQuery(USER_DETAILS, {
@@ -295,7 +292,7 @@ const OrgMemberDetail: React.FC<OrgMemberDetailProps> = ({
                       onChange={async (e: React.ChangeEvent): Promise<void> => {
                         const target = e.target as HTMLInputElement;
                         const image = target.files && target.files[0];
-                        if (image)
+                        image &&
                           setFormState({
                             ...formState,
                             image: await convertToBase64(image),
@@ -316,18 +313,18 @@ const OrgMemberDetail: React.FC<OrgMemberDetailProps> = ({
               </div>
               <div className="d-flex flex-row flex-wrap py-3 px-3">
                 <div>
-                  <p className="my-0 mx-2">{t('phone')}</p>
+                  <p className="my-0 mx-2">{tCommon('phone')}</p>
                   <input
                     value={formState.phoneNumber}
                     className={`rounded border-0 p-2 m-2 ${styles.inputColor}`}
                     type="number"
                     name="phoneNumber"
                     onChange={handleChange}
-                    placeholder={t('phone')}
+                    placeholder={tCommon('phone')}
                   />
                 </div>
                 <div className="w-50 p-2">
-                  <p className="my-0">{t('email')}</p>
+                  <p className="my-0">{tCommon('email')}</p>
                   <input
                     value={formState.email}
                     className={`w-100 rounded border-0 p-2 ${styles.inputColor}`}
@@ -361,25 +358,25 @@ const OrgMemberDetail: React.FC<OrgMemberDetailProps> = ({
                   />
                 </div>
                 <div className="w-25 p-2">
-                  <p className="my-0">{t('city')}</p>
+                  <p className="my-0">{tCommon('city')}</p>
                   <input
                     value={formState.city}
                     className={`w-100 rounded border-0 p-2 ${styles.inputColor}`}
                     type="text"
                     name="city"
                     onChange={handleChange}
-                    placeholder={t('city')}
+                    placeholder={tCommon('city')}
                   />
                 </div>
                 <div className="w-25 p-2">
-                  <p className="my-0">{t('state')}</p>
+                  <p className="my-0">{tCommon('state')}</p>
                   <input
                     value={formState.state}
                     className={`w-100 rounded border-0 p-2 ${styles.inputColor}`}
                     type="text"
                     name="state"
                     onChange={handleChange}
-                    placeholder={t('state')}
+                    placeholder={tCommon('state')}
                   />
                 </div>
               </div>

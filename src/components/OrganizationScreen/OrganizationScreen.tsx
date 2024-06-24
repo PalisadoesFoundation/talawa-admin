@@ -18,20 +18,23 @@ const OrganizationScreen = (): JSX.Element => {
 
   const { getItem } = useLocalStorage();
   const isSuperAdmin = getItem('SuperAdmin');
+  // const title = isSuperAdmin ? t('title_superadmin') ? t('title_superadmin') : t('title') : t('title');
 
-  const [title, setTitle] = useState('');
+  // // const title = // for some pages title_superadmin is not defined render title accordingly
+  //   const title = t('title_superadmin') ? t('title_superadmin') : t('title');
+
+  const condition =
+    titleKey == 'memberDetail' || titleKey == 'organizationPeople';
+  const title = condition
+    ? isSuperAdmin
+      ? t('title_superadmin')
+      : t('title')
+    : t('title');
+  // const title = isSuperAdmin ? t('title_superadmin') : t('title');
 
   useEffect(() => {
-    if (location.pathname.split('/')[1] === 'orgpeople') {
-      if (isSuperAdmin) {
-        setTitle(t('title_superadmin'));
-      } else {
-        setTitle(t('title'));
-      }
-    } else {
-      setTitle(t('title'));
-    }
-  }, [location, isSuperAdmin]);
+    document.title = title;
+  }, [title]);
 
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
   const { orgId } = useParams();
@@ -109,16 +112,7 @@ const OrganizationScreen = (): JSX.Element => {
       >
         <div className="d-flex justify-content-between align-items-center">
           <div style={{ flex: 1 }}>
-            {location.pathname.split('/')[1] == 'member' ||
-            location.pathname.split('/')[1] == 'orgpeople' ? (
-              isSuperAdmin ? (
-                <h1 data-testid="title">{t('title_superadmin')}</h1>
-              ) : (
-                <h1 data-testid="title">{t('title')}</h1>
-              )
-            ) : (
-              <h1>{t('title')}</h1>
-            )}{' '}
+            <h1 data-testid="title">{title}</h1>
           </div>
           <ProfileDropdown />
         </div>

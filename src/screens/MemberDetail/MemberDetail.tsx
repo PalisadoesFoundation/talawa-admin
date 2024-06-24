@@ -5,7 +5,6 @@ import { useLocation } from 'react-router-dom';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import styles from './MemberDetail.module.css';
 import { languages } from 'utils/languages';
-
 import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -14,14 +13,37 @@ import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import BusinessOutlinedIcon from '@mui/icons-material/BusinessOutlined';
 import InsertInvitationOutlinedIcon from '@mui/icons-material/InsertInvitationOutlined';
 import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
-import Nav from 'react-bootstrap/Nav';
 import MemberOrganization from 'components/MemberOrganization/MemberOrganization';
-import { Tab } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import OrgMemberDetail from 'components/OrgMemberDetail/OrgMemberDetails';
 
 type MemberDetailProps = {
   id?: string;
 };
+
+type TabOptions = 'overview' | 'organizations' | 'events' | 'tags';
+
+const topNavButtons: {
+  value: TabOptions;
+  icon: JSX.Element;
+}[] = [
+  {
+    value: 'overview',
+    icon: <DashboardOutlinedIcon />,
+  },
+  {
+    value: 'organizations',
+    icon: <BusinessOutlinedIcon />,
+  },
+  {
+    value: 'events',
+    icon: <InsertInvitationOutlinedIcon />,
+  },
+  {
+    value: 'tags',
+    icon: <LocalOfferOutlinedIcon />,
+  },
+];
 
 const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const { t } = useTranslation('translation', {
@@ -37,45 +59,41 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     superAdmin
       ? (document.title = t('title_superadmin'))
       : (document.title = t('title'));
-  }, []);
+  }, [getItem, t]);
 
   const { data: user, loading: loading } = useQuery(USER_DETAILS, {
     variables: { id: currentUrl },
   });
   const userData = user?.user;
 
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState<TabOptions>('overview');
 
-  const handleSelect = (selectedKey: string | null): void => {
-    if (selectedKey) {
-      setActiveTab(selectedKey);
-    }
+  const renderButton = ({
+    value,
+    icon,
+  }: {
+    value: TabOptions;
+    icon: React.ReactNode;
+  }): JSX.Element => {
+    const selected = activeTab === value;
+    const translatedText = t(value);
+    const className = selected
+      ? `${styles.topNavBtn} ${styles.topNavBtn_selected}`
+      : `${styles.topNavBtn} ${styles.topNavBtn_notSelected}`;
+    const props = {
+      className,
+      key: value,
+      onClick: () => setActiveTab(value),
+      'data-testid': `${value}Btn`,
+    };
+
+    return (
+      <Button {...props}>
+        {icon}
+        {translatedText}
+      </Button>
+    );
   };
-
-  const topNavButtons = [
-    {
-      name: 'overview',
-      icon: <DashboardOutlinedIcon />,
-      component: <OrgMemberDetail id={userData?.user?._id} />,
-    },
-    {
-      name: 'organizations',
-      icon: <BusinessOutlinedIcon />,
-      component: (
-        <MemberOrganization
-          {...{
-            userId: userData?.user?._id,
-          }}
-        />
-      ),
-    },
-    {
-      name: 'events',
-      icon: <InsertInvitationOutlinedIcon />,
-      component: <></>,
-    },
-    { name: 'tags', icon: <LocalOfferOutlinedIcon />, component: <></> },
-  ];
 
   if (loading) {
     return <Loader />;
@@ -83,41 +101,55 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <div>
-        <Tab.Container
-          id="member-detail-tab-container"
-          defaultActiveKey="overview"
-          onSelect={handleSelect}
+      <div data-testid="container">
+        <div
+          className={`${styles.topNav} ${
+            (activeTab === 'overview' && styles.navOverview) || styles.navOther
+          }`}
         >
-          <Nav
-            variant="pills"
-            className={`${styles.topNav} ${
-              activeTab === 'overview' ? styles.navOverview : styles.navOther
-            }`}
-            data-testid="memberDetailTabNav"
-          >
-            {topNavButtons.map((button) => (
-              <Nav.Item key={button.name}>
-                <Nav.Link eventKey={button.name} className={styles.topNavBtn}>
-                  {button.icon} {t(button.name)}
-                </Nav.Link>
-              </Nav.Item>
-            ))}
-          </Nav>
-          <Tab.Content>
-            {topNavButtons.map((button) => (
-              <Tab.Pane
-                eventKey={button.name}
-                key={button.name}
-                className={`${styles.tabSection} ${
-                  activeTab === 'overview' ? '' : styles.othertabSection
-                }`}
-              >
-                {button.component}
-              </Tab.Pane>
-            ))}
-          </Tab.Content>
-        </Tab.Container>
+          {topNavButtons.map(renderButton)}
+        </div>
+
+        {(() => {
+          switch (activeTab) {
+            case 'overview':
+              return (
+                <div
+                  data-testid="orgmemberdetailTab"
+                  className={`${styles.tabSection}`}
+                >
+                  <OrgMemberDetail id={userData?.user?._id} />
+                </div>
+              );
+            case 'organizations':
+              return (
+                <div
+                  data-testid="memberorganizationTab"
+                  className={`${styles.tabSection} ${styles.othertabSection}`}
+                >
+                  <MemberOrganization
+                    {...{
+                      userId: userData?.user?._id,
+                    }}
+                  />
+                </div>
+              );
+            case 'events':
+              return (
+                <div
+                  data-testid="eventsTab"
+                  className={`${styles.tabSection} ${styles.othertabSection}`}
+                ></div>
+              );
+            case 'tags':
+              return (
+                <div
+                  data-testid="tagsTab"
+                  className={`${styles.tabSection} ${styles.othertabSection}`}
+                ></div>
+              );
+          }
+        })()}
       </div>
     </LocalizationProvider>
   );
