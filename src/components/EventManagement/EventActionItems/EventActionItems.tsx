@@ -19,6 +19,7 @@ import {
 } from 'GraphQl/Mutations/ActionItemMutations';
 import type {
   InterfaceActionItemCategoryList,
+  InterfaceActionItemInfo,
   InterfaceMembersList,
 } from 'utils/interfaces';
 import { DatePicker } from '@mui/x-date-pickers';
@@ -27,6 +28,7 @@ import {
   MEMBERS_LIST,
 } from 'GraphQl/Queries/Queries';
 import { ACTION_ITEM_LIST_BY_EVENTS } from 'GraphQl/Queries/ActionItemQueries';
+import { useEventActionColumnConfig } from './useEventActionColumnConfig';
 
 function eventActionItems(props: { eventId: string }): JSX.Element {
   const { eventId } = props;
@@ -73,6 +75,17 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
   };
   const toggleDeleteModal = (): void => {
     setActionItemDeleteModalIsOpen(!actionItemDeleteModalIsOpen);
+  };
+  const setActionItemState = (actionItem: InterfaceActionItemInfo): void => {
+    setFormState((prevState) => ({
+      ...prevState,
+      assignee: `${actionItem.assignee.firstName} ${actionItem.assignee.lastName}`,
+      assigner: `${actionItem.assigner.firstName} ${actionItem.assigner.lastName}`,
+      assigneeId: actionItem.assignee._id,
+      preCompletionNotes: actionItem.preCompletionNotes,
+      postCompletionNotes: actionItem.postCompletionNotes,
+      isCompleted: actionItem.isCompleted,
+    }));
   };
   const {
     data: actionItemCategoriesData,
@@ -183,106 +196,17 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
     hideUpdateModal();
     toast.success(t('successfulDeletion'));
   };
-  const columns: GridColDef[] = [
-    {
-      field: 'serialNo',
-      headerName: '#',
-      flex: 1,
-      minWidth: 50,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return params.row?.index;
-      },
-    },
-    {
-      field: 'assignee',
-      headerName: 'Assignee',
-      flex: 2,
-      minWidth: 150,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <Link
-            to={`/member/${eventId}`}
-            state={{ id: params.row._id }}
-            className={styles.membername}
-          >
-            {params.row?.assignee.firstName +
-              ' ' +
-              params.row?.assignee.lastName}
-          </Link>
-        );
-      },
-    },
-    {
-      field: 'actionItemCategory',
-      headerName: 'Action Item Category',
-      flex: 2,
-      minWidth: 100,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return params.row.actionItemCategory.name;
-      },
-    },
-    {
-      field: 'notes',
-      headerName: 'Notes',
-      minWidth: 150,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      flex: 2,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return params.row.preCompletionNotes;
-      },
-    },
-    {
-      field: 'completionNotes',
-      headerName: 'Completion Notes',
-      minWidth: 150,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      flex: 2,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return params.row.postCompletionNotes;
-      },
-    },
-    {
-      field: 'options',
-      headerName: 'Options',
-      flex: 2,
-      minWidth: 100,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <Button
-            onClick={() => {
-              showUpdateModal();
-              setActionItemId(params.row._id);
-            }}
-            data-testid="updateAdminModalBtn"
-          >
-            Manage Actions
-          </Button>
-        );
-      },
-    },
-  ];
+  const manageActionsHandler = (params: GridCellParams): void => {
+    showUpdateModal();
+    setActionItemId(params.row._id);
+    setActionItemState(params.row);
+  };
+
+  const { columns } = useEventActionColumnConfig({
+    eventId,
+    manageActionsHandler,
+  });
+
   return (
     <>
       <Button
@@ -413,12 +337,12 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
               <Form.Label>Assignee</Form.Label>
               <Form.Select
                 data-testid="formUpdateAssignee"
-                defaultValue={formState.assignee}
+                defaultValue={formState.assigneeId}
                 onChange={(e) =>
                   setFormState({ ...formState, assigneeId: e.target.value })
                 }
               >
-                <option value="" disabled>
+                <option value={formState.assigneeId} disabled>
                   {formState.assignee}
                 </option>
                 {membersData?.organizations[0].members.map((member, index) => {

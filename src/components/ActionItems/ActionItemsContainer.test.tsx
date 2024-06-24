@@ -667,4 +667,34 @@ describe('Testing Action Item Categories Component', () => {
       );
     });
   });
+
+  test('Action Items loads with correct headers', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <ActionItemsContainer {...props} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const actionItemHeaders = screen.getByTestId('actionItemsHeader');
+    expect(actionItemHeaders).toBeInTheDocument();
+    expect(screen.getByText(translations.assignee)).toBeInTheDocument();
+    expect(
+      screen.getByText(translations.actionItemCategory),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(translations.preCompletionNotes),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(translations.postCompletionNotes),
+    ).toBeInTheDocument();
+    expect(screen.getByText(translations.options)).toBeInTheDocument();
+  });
 });
