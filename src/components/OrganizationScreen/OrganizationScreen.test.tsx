@@ -11,7 +11,9 @@ import OrganizationScreen from './OrganizationScreen';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import useLocalStorage from 'utils/useLocalstorage';
+
 let mockID: string | undefined = '123';
+
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useParams: () => ({ orgId: mockID }),
