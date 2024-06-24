@@ -107,6 +107,10 @@ const orgFundCampaign = (): JSX.Element => {
   } = useQuery(FUND_CAMPAIGN, {
     variables: {
       id: fundId,
+      orderBy: sortBy,
+      where: {
+        name_contains: searchTerm,
+      },
     },
   });
 
@@ -115,12 +119,10 @@ const orgFundCampaign = (): JSX.Element => {
   };
 
   const campaigns = useMemo(() => {
-    return (
-      campaignData?.getFundById.campaigns.filter((campaign) =>
-        campaign.name.toLowerCase().includes(searchTerm.toLowerCase()),
-      ) ?? []
-    );
-  }, [campaignData, searchTerm]);
+    if (campaignData?.getFundById?.campaigns)
+      return campaignData.getFundById.campaigns;
+    return [];
+  }, [campaignData]);
 
   if (campaignLoading) {
     return <Loader size="xl" />;
@@ -318,7 +320,7 @@ const orgFundCampaign = (): JSX.Element => {
             data-testid="searchFullName"
           />
           <Button
-            className={`position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center `}
+            className="position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center"
             data-testid="searchBtn"
           >
             <Search />
@@ -338,14 +340,14 @@ const orgFundCampaign = (): JSX.Element => {
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item
-                  onClick={() => setSortBy('goal_ASC')}
-                  data-testid="goal_ASC"
+                  onClick={() => setSortBy('fundingGoal_ASC')}
+                  data-testid="fundingGoal_ASC"
                 >
                   {t('lowestGoal')}
                 </Dropdown.Item>
                 <Dropdown.Item
-                  onClick={() => setSortBy('goal_DESC')}
-                  data-testid="goal_DESC"
+                  onClick={() => setSortBy('fundingGoal_DESC')}
+                  data-testid="fundingGoal_DESC"
                 >
                   {t('highestGoal')}
                 </Dropdown.Item>

@@ -37,8 +37,12 @@ export const FUND_LIST = gql`
 `;
 
 export const FUND_CAMPAIGN = gql`
-  query GetFundById($id: ID!) {
-    getFundById(id: $id) {
+  query GetFundById(
+    $id: ID!
+    $where: CampaignWhereInput
+    $orderBy: CampaignOrderByInput
+  ) {
+    getFundById(id: $id, where: $where, orderBy: $orderBy) {
       campaigns {
         _id
         endDate

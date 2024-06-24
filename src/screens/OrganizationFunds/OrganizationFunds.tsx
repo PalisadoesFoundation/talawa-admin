@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { Search, Sort, WarningAmberRounded } from '@mui/icons-material';
 import Loader from 'components/Loader/Loader';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Dropdown, Form, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
@@ -58,7 +58,8 @@ const organizationFunds = (): JSX.Element => {
   }
 
   const [fund, setFund] = useState<InterfaceFundInfo | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [funds, setFunds] = useState<InterfaceFundInfo[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>('');
   const [sortBy, setSortBy] = useState<string | null>(null);
 
   const [modalState, setModalState] = useState<{ [key in Modal]: boolean }>({
@@ -111,7 +112,13 @@ const organizationFunds = (): JSX.Element => {
     [openModal],
   );
 
-  const funds = useMemo(() => fundData?.fundsByOrganization ?? [], [fundData]);
+  // const funds = useMemo(() => fundData?.fundsByOrganization ?? [], [fundData]);
+
+  useEffect(() => {
+    if (fundData) {
+      setFunds(fundData.fundsByOrganization);
+    }
+  }, [fundData]);
 
   const handleClick = (fundId: string): void => {
     navigate(`/orgfundcampaign/${orgId}/${fundId}`);
@@ -293,7 +300,7 @@ const organizationFunds = (): JSX.Element => {
                 data-testid="searchByName"
               />
               <Button
-                className={`position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center `}
+                className="position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center"
                 data-testid="searchBtn"
                 style={{ marginBottom: '10px' }}
               >
