@@ -54,6 +54,8 @@ const organizations: InterfaceOrgConnectionInfoType[] = [
       sortingCode: 'ABC-123',
       state: 'Kingston Parish',
     },
+    blockedUsers: [],
+    description: '',
   },
 ];
 
@@ -88,6 +90,8 @@ for (let x = 0; x < 1; x++) {
       sortingCode: 'ABC-123',
       state: 'Kingston Parish',
     },
+    blockedUsers: [],
+    description: '',
   });
 }
 

@@ -111,6 +111,17 @@
     "manage": "प्रबंधित करना",
     "sampleOrganization": "नमूना संगठन"
   },
+  "orgPeopleOrganizationsCard": {
+    "manage": "प्रबंधित करें",
+    "notMember": "उपयोगकर्ता सदस्य नहीं है",
+    "unblock": "अनब्लॉक करें",
+    "block": "ब्लॉक करें",
+    "blockedSuccessfully": "उपयोगकर्ता को सफलतापूर्वक ब्लॉक किया गया",
+    "unBlockedSuccessfully": "उपयोगकर्ता को सफलतापूर्वक अनब्लॉक किया गया",
+    "blockedUser": "उपयोगकर्ता ब्लॉक है",
+    "roleUpdated": "भूमिका अद्यतन की गई।",
+    "memberRemoved": "सदस्य को हटा दिया गया"
+  },
   "paginationList": {
     "rowsPerPage": "प्रति पृष्ठ पंक्तियाँ",
     "all": "सभी"
@@ -611,6 +622,13 @@
     "installMsg": "यह सुविधा अब आपके संगठन में सक्षम है"
   },
   "memberDetail": {
+    "overview": "अवलोकन",
+    "organizations": "संगठन",
+    "events": "घटनाएँ",
+    "tags": "टैग",
+    "title": "उपयोगकर्ता विवरण"
+  },
+  "orgMemberDetail": {
     "title": "उपयोगकर्ता विवरण",
     "addAdmin": "व्यवस्थापक जोड़ें",
     "alreadyIsAdmin": "सदस्य पहले से ही एक व्यवस्थापक है",
@@ -644,6 +662,12 @@
     "adminForEvents": "घटनाओं के लिए व्यवस्थापक",
     "addedAsAdmin": "उपयोगकर्ता को व्यवस्थापक के रूप में जोड़ा गया है.",
     "userType": "उपयोगकर्ता का प्रकार"
+  },
+  "memberOrganization": {
+    "sort": "क्रम से लगाना",
+    "noOrgError": "संगठन नहीं मिला, कृपया डैशबोर्ड के माध्यम से एक संगठन बनाएं",
+    "noOrgErrorTitle": "संगठन नहीं मिले",
+    "noOrgErrorDescription": "कृपया डैशबोर्ड के माध्यम से एक संगठन बनाएं"
   },
   "userLogin": {
     "login": "लॉग इन करें",

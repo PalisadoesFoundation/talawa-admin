@@ -6,14 +6,12 @@ import {
   USER_LIST_FOR_TABLE,
 } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
-import OrgAdminListCard from 'components/OrgAdminListCard/OrgAdminListCard';
-import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { Button, Dropdown, Form } from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import AddMember from './AddMember';
 import styles from './OrganizationPeople.module.css';
@@ -28,7 +26,7 @@ function organizationPeople(): JSX.Element {
   });
   const { t: tCommon } = useTranslation('common');
 
-  document.title = t('title');
+  const navigate = useNavigate();
 
   const location = useLocation();
   const role = location?.state;
@@ -44,26 +42,6 @@ function organizationPeople(): JSX.Element {
   const [adminFilteredData, setAdminFilteredData] = useState();
 
   const [userName, setUserName] = useState('');
-  const [showRemoveModal, setShowRemoveModal] = React.useState(false);
-  const [selectedAdminId, setSelectedAdminId] = React.useState<
-    string | undefined
-  >();
-  const [selectedMemId, setSelectedMemId] = React.useState<
-    string | undefined
-  >();
-  const toggleRemoveModal = (): void => {
-    setShowRemoveModal((prev) => !prev);
-  };
-  const toggleRemoveMemberModal = (id: string): void => {
-    setSelectedMemId(id);
-    setSelectedAdminId(undefined);
-    toggleRemoveModal();
-  };
-  const toggleRemoveAdminModal = (id: string): void => {
-    setSelectedAdminId(id);
-    setSelectedMemId(undefined);
-    toggleRemoveModal();
-  };
 
   const {
     data: memberData,
@@ -204,15 +182,7 @@ function organizationPeople(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
-        return (
-          <Link
-            to={`/member/${currentUrl}`}
-            state={{ id: params.row._id }}
-            className={styles.membername}
-          >
-            {params.row?.firstName + ' ' + params.row?.lastName}
-          </Link>
-        );
+        return <div>{params.row?.firstName + ' ' + params.row?.lastName}</div>;
       },
     },
     {
@@ -236,33 +206,6 @@ function organizationPeople(): JSX.Element {
       sortable: false,
       renderCell: (params: GridCellParams) => {
         return dayjs(params.row.createdAt).format('DD/MM/YYYY');
-      },
-    },
-    {
-      field: 'action',
-      headerName: tCommon('action'),
-      flex: 1,
-      minWidth: 100,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return state === 1 ? (
-          <Button
-            onClick={() => toggleRemoveAdminModal(params.row._id)}
-            data-testid="removeAdminModalBtn"
-          >
-            {tCommon('remove')}
-          </Button>
-        ) : (
-          <Button
-            onClick={() => toggleRemoveMemberModal(params.row._id)}
-            data-testid="removeMemberModalBtn"
-          >
-            {tCommon('remove')}
-          </Button>
-        );
       },
     },
   ];
@@ -403,20 +346,12 @@ function organizationPeople(): JSX.Element {
             }
             columns={columns}
             isRowSelectable={() => false}
+            onRowClick={(row: unknown) => {
+              const id = (row as { id: string }).id;
+              navigate(`/member/${currentUrl}`, { state: { id } });
+            }}
           />
         </div>
-      )}
-      {showRemoveModal && selectedMemId && (
-        <OrgPeopleListCard
-          id={selectedMemId}
-          toggleRemoveModal={toggleRemoveModal}
-        />
-      )}
-      {showRemoveModal && selectedAdminId && (
-        <OrgAdminListCard
-          id={selectedAdminId}
-          toggleRemoveModal={toggleRemoveModal}
-        />
       )}
     </>
   );
