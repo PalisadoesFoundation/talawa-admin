@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
 import EventDashboard from 'components/EventManagement/Dashboard/EventDashboard';
 import EventActionItems from 'components/EventManagement/EventActionItems/EventActionItems';
+import EventAgendaItems from 'components/EventManagement/EventAgendaItems/EventAgendaItems';
 import useLocalStorage from 'utils/useLocalstorage';
 
 const eventDashboardTabs: {
@@ -154,7 +155,7 @@ const EventManagement = (): JSX.Element => {
               case 'eventAgendas':
                 return (
                   <div data-testid="eventAgendasTab">
-                    <h2>Event Agendas</h2>
+                    <EventAgendaItems eventId={eventId} />
                   </div>
                 );
               case 'eventStats':
