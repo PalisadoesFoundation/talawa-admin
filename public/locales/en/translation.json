@@ -314,6 +314,8 @@
     "invalidUrl": "Please enter a valid URL",
     "link": "Link",
     "createdBy": "Created By",
+    "regular": "Regular",
+    "note": "Note",
     "duration": "Duration",
     "enterDuration": "mm:ss",
     "options": "Options",

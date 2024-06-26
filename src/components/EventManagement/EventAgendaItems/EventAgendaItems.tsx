@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from 'react-bootstrap';
+import { Dropdown } from 'react-bootstrap';
 
 import { WarningAmberRounded } from '@mui/icons-material';
 import { toast } from 'react-toastify';
@@ -165,15 +165,31 @@ function eventAgendaItems(props: { eventId: string }): JSX.Element {
               /> */}
             </div>
 
-            <Button
-              variant="success"
-              onClick={showCreateModal}
-              data-testid="createAgendaItemBtn"
-              className={styles.createAgendaItemButton}
-            >
-              <i className={'fa fa-plus me-2'} />
-              {t('createAgendaItem')}
-            </Button>
+            <Dropdown>
+              <Dropdown.Toggle
+                variant="success"
+                className={styles.createAgendaItemButton}
+              >
+                <i className={'fa fa-plus me-2'} />
+                {t('createAgendaItem')}
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu>
+                <Dropdown.Item
+                  className={styles.createAgendaItemButton}
+                  data-testid="createAgendaItemBtn"
+                  onClick={() => showCreateModal()}
+                >
+                  {t('regular')}
+                </Dropdown.Item>
+                <Dropdown.Item
+                  className={styles.createAgendaItemButton}
+                  // onClick={() => showCreateModal()}
+                >
+                  {t('note')}
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
           </div>
         </div>
 
