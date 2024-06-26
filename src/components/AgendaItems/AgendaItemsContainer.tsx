@@ -255,12 +255,19 @@ function AgendaItemsContainer({
                   className="p-1 d-none d-md-block align-self-center text-body-secondary text-center"
                 >
                   <div className={styles.categoryContainer}>
-                    {agendaItem.categories.map((category, idx) => (
-                      <span key={category._id} className={styles.categoryChip}>
-                        {category.name}
-                        {idx < agendaItem.categories.length - 1 && ', '}
-                      </span>
-                    ))}
+                    {agendaItem.categories.length > 0 ? (
+                      agendaItem.categories.map((category, idx) => (
+                        <span
+                          key={category._id}
+                          className={styles.categoryChip}
+                        >
+                          {category.name}
+                          {idx < agendaItem.categories.length - 1 && ', '}
+                        </span>
+                      ))
+                    ) : (
+                      <span className={styles.categoryChip}>No Category</span>
+                    )}
                   </div>
                 </Col>
                 <Col
