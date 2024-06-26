@@ -3,13 +3,9 @@ import { Modal, Form, Button } from 'react-bootstrap';
 import styles from './AgendaItemsContainer.module.css';
 import { FaLink } from 'react-icons/fa';
 
-interface InterfaceCategory {
-  _id: string;
-  name: string;
-}
-
 interface InterfaceFormStateType {
-  agendaItemCategoryIds: InterfaceCategory[];
+  agendaItemCategoryIds: string[];
+  agendaItemCategoryNames: string[];
   title: string;
   description: string;
   sequence: number;
@@ -98,9 +94,7 @@ const AgendaItemsPreviewModal: React.FC<
             <p className={styles.preview}>
               {t('category')}
               <span className={styles.view}>
-                {formState.agendaItemCategoryIds
-                  .map((category) => category.name)
-                  .join(', ')}
+                {formState.agendaItemCategoryNames.join(', ')}
               </span>
             </p>
 

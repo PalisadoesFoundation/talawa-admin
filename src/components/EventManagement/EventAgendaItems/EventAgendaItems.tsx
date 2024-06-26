@@ -183,6 +183,9 @@ function eventAgendaItems(props: { eventId: string }): JSX.Element {
           agendaItemConnection={`Event`}
           agendaItemData={agendaItemData?.agendaItemByEvent}
           agendaItemRefetch={refetchAgendaItem}
+          agendaItemCategories={
+            agendaCategoryData?.agendaItemCategoriesByOrganization
+          }
         />
       </div>
 

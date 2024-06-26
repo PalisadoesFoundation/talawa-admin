@@ -9,21 +9,26 @@ import {
   DELETE_AGENDA_ITEM_MUTATION,
   UPDATE_AGENDA_ITEM_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import type { InterfaceAgendaItemInfo } from 'utils/interfaces';
+import type {
+  InterfaceAgendaItemInfo,
+  InterfaceAgendaItemCategoryInfo,
+} from 'utils/interfaces';
 import styles from './AgendaItemsContainer.module.css';
 
 import AgendaItemsPreviewModal from 'components/AgendaItems/AgendaItemsPreviewModal';
 import AgendaItemsDeleteModal from 'components/AgendaItems/AgendaItemsDeleteModal';
 import AgendaItemsUpdateModal from 'components/AgendaItems/AgendaItemsUpdateModal';
 
-function agendaItemsContainer({
+function AgendaItemsContainer({
   agendaItemConnection,
   agendaItemData,
   agendaItemRefetch,
+  agendaItemCategories,
 }: {
   agendaItemConnection: 'Event';
   agendaItemData: InterfaceAgendaItemInfo[] | undefined;
   agendaItemRefetch: () => void;
+  agendaItemCategories: InterfaceAgendaItemCategoryInfo[] | undefined;
 }): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'agendaItems',
@@ -40,7 +45,8 @@ function agendaItemsContainer({
   const [agendaItemId, setAgendaItemId] = useState('');
 
   const [formState, setFormState] = useState<{
-    agendaItemCategoryIds: { _id: string; name: string }[];
+    agendaItemCategoryIds: string[];
+    agendaItemCategoryNames: string[];
     title: string;
     description: string;
     sequence: number;
@@ -53,6 +59,7 @@ function agendaItemsContainer({
     };
   }>({
     agendaItemCategoryIds: [],
+    agendaItemCategoryNames: [],
     title: '',
     description: '',
     sequence: 0,
@@ -101,6 +108,9 @@ function agendaItemsContainer({
             description: formState.description,
             sequence: formState.sequence,
             duration: formState.duration,
+            categories: formState.agendaItemCategoryIds,
+            attachments: formState.attachments,
+            urls: formState.urls,
           },
         },
       });
@@ -141,14 +151,16 @@ function agendaItemsContainer({
   const setAgendaItemState = (agendaItem: InterfaceAgendaItemInfo): void => {
     setFormState({
       ...formState,
-      agendaItemCategoryIds: agendaItem.categories.map((category) => ({
-        _id: category._id,
-        name: category.name,
-      })),
-      title: `${agendaItem.title}`,
-      description: `${agendaItem.description}`,
+      agendaItemCategoryIds: agendaItem.categories.map(
+        (category) => category._id,
+      ),
+      agendaItemCategoryNames: agendaItem.categories.map(
+        (category) => category.name,
+      ),
+      title: agendaItem.title,
+      description: agendaItem.description,
       sequence: agendaItem.sequence,
-      duration: `${agendaItem.duration}`,
+      duration: agendaItem.duration,
       attachments: agendaItem.attachments,
       urls: agendaItem.urls,
       createdBy: {
@@ -226,7 +238,7 @@ function agendaItemsContainer({
                   lg={1}
                   className="align-self-center text-body-secondary text-center"
                 >
-                  {`${agendaItem.sequence}`}
+                  {agendaItem.sequence}
                 </Col>
                 <Col
                   xs={6}
@@ -256,7 +268,7 @@ function agendaItemsContainer({
                   lg={3}
                   className="p-1 d-none d-md-block align-self-center text-body-secondary text-center"
                 >
-                  {`${agendaItem.description}`}
+                  {agendaItem.description}
                 </Col>
 
                 <Col
@@ -323,9 +335,10 @@ function agendaItemsContainer({
         setFormState={setFormState}
         updateAgendaItemHandler={updateAgendaItemHandler}
         t={t}
+        agendaItemCategories={agendaItemCategories}
       />
     </>
   );
 }
 
-export default agendaItemsContainer;
+export default AgendaItemsContainer;

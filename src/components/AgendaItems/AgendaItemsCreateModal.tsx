@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Form, Button, Row, Col } from 'react-bootstrap';
-import Autocomplete from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
+import { Autocomplete, TextField } from '@mui/material';
+
 import { FaLink, FaTrash } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import styles from './AgendaItemsContainer.module.css';
@@ -57,6 +57,25 @@ const AgendaItemsCreateModal: React.FC<
     return urlRegex.test(url);
   };
 
+  const handleAddUrl = (): void => {
+    if (newUrl.trim() !== '' && isValidUrl(newUrl.trim())) {
+      setFormState({
+        ...formState,
+        urls: [...formState.urls.filter((url) => url.trim() !== ''), newUrl],
+      });
+      setNewUrl('');
+    } else {
+      toast.error(t('invalidUrl'));
+    }
+  };
+
+  const handleRemoveUrl = (url: string): void => {
+    setFormState({
+      ...formState,
+      urls: formState.urls.filter((item) => item !== url),
+    });
+  };
+
   const handleFileChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
@@ -85,25 +104,6 @@ const AgendaItemsCreateModal: React.FC<
     setFormState({
       ...formState,
       attachments: formState.attachments.filter((item) => item !== attachment),
-    });
-  };
-
-  const handleAddUrl = (): void => {
-    if (newUrl.trim() !== '' && isValidUrl(newUrl.trim())) {
-      setFormState({
-        ...formState,
-        urls: [...formState.urls.filter((url) => url.trim() !== ''), newUrl],
-      });
-      setNewUrl('');
-    } else {
-      toast.error(t('invalidUrl'));
-    }
-  };
-
-  const handleRemoveUrl = (url: string): void => {
-    setFormState({
-      ...formState,
-      urls: formState.urls.filter((item) => item !== url),
     });
   };
 
@@ -251,6 +251,7 @@ const AgendaItemsCreateModal: React.FC<
               multiple={true}
               onChange={handleFileChange}
             />
+            <Form.Text>{t('attachmentLimit')}</Form.Text>
           </Form.Group>
           {formState.attachments && (
             <div className={styles.previewFile} data-testid="mediaPreview">
