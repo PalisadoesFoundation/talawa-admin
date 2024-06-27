@@ -111,7 +111,7 @@ describe('Organisation Settings Page', () => {
   });
 
   test('should render props and text elements test for the screen', async () => {
-    window.location.assign('/orgsetting/id=123');
+    window.location.assign('/orgsetting/123');
     setItem('SuperAdmin', true);
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -135,11 +135,11 @@ describe('Organisation Settings Page', () => {
     ).toBeInTheDocument();
     expect(screen.getByText(/Other Settings/i)).toBeInTheDocument();
     expect(screen.getByText(/Change Language/i)).toBeInTheDocument();
-    expect(window.location).toBeAt('/orgsetting/id=123');
+    expect(window.location).toBeAt('/orgsetting/123');
   });
 
   test('should render appropriate settings based on the orgSetting state', async () => {
-    window.location.assign('/orgsetting/id=123');
+    window.location.assign('/orgsetting/123');
     setItem('SuperAdmin', true);
 
     const { queryByText } = render(

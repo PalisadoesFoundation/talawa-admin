@@ -382,7 +382,7 @@ function AddMember(): JSX.Element {
                               <Link
                                 className={styles.membername}
                                 to={{
-                                  pathname: `/member/id=${currentUrl}`,
+                                  pathname: `/member/${currentUrl}`,
                                 }}
                               >
                                 {userDetails.user.firstName +
