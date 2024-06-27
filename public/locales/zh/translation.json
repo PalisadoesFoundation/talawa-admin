@@ -282,6 +282,23 @@
     "successfulDeletion": "操作项已成功删除",
     "title": "行动项目"
   },
+  "organizationAgendaCategory": {
+    "agendaCategoryDetails": "议程类别详情",
+    "updateAgendaCategory": "更新议程类别",
+    "title": "议程类别",
+    "name": "类别",
+    "description": "描述",
+    "createdBy": "创建人",
+    "options": "选项",
+    "createAgendaCategory": "创建议程类别",
+    "noAgendaCategories": "没有议程类别",
+    "update": "更新",
+    "agendaCategoryCreated": "议程类别创建成功",
+    "agendaCategoryUpdated": "议程类别更新成功",
+    "agendaCategoryDeleted": "议程类别删除成功",
+    "deleteAgendaCategory": "删除议程类别",
+    "deleteAgendaCategoryMsg": "是否要删除此议程类别？"
+  },
   "eventListCard": {
     "deleteEvent": "删除事件",
     "deleteEventMsg": "您想删除此事件吗？",
@@ -378,7 +395,13 @@
     "amount": "数量",
     "editPledge": "编辑承诺",
     "deletePledgeMsg": "您确定要删除此承诺吗？",
-    "noPledges": "未找到承诺"
+    "noPledges": "未找到承诺",
+    "sort": "排序",
+    "searchVolunteer": "按志愿者搜索",
+    "highestAmount": "最高金额",
+    "lowestAmount": "最低金额",
+    "latestEndDate": "最新结束日期",
+    "earliestEndDate": "最早结束日期"
   },
   "orgPost": {
     "title": "帖子",
