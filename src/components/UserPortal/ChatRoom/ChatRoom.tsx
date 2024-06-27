@@ -14,10 +14,14 @@ import {
   SEND_MESSAGE_TO_DIRECT_CHAT,
 } from 'GraphQl/Mutations/OrganizationMutations';
 import useLocalStorage from 'utils/useLocalstorage';
+import Avatar from 'components/Avatar/Avatar';
+import { hours } from 'components/EventCalendar/constants';
 
 type SelectedContact = {
   id: string;
   userId: string;
+  firstName: string;
+  lastName: string;
   messages: DirectMessage[];
 };
 interface InterfaceChatRoomProps {
@@ -135,19 +139,60 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
         </div>
       ) : (
         <>
+          <div className={styles.header}>
+            <div className={styles.userInfo}>
+              <Avatar
+                name={`${props.selectedContact.firstName} ${props.selectedContact.lastName}`}
+                alt={`${props.selectedContact.firstName} ${props.selectedContact.lastName}`}
+                avatarStyle={styles.contactImage}
+              />
+              <h5>
+                {props.selectedContact.firstName}{' '}
+                {props.selectedContact.lastName}
+              </h5>
+            </div>
+          </div>
           <div className={`d-flex flex-grow-1 flex-column`}>
             <div className="chatMessages">
-              {messages.length}
               {messages.length && (
                 <div id="messages">
                   {messages.map((message: DirectMessage, index: number) => {
-                    return <div key={index}>{message.messageContent}</div>;
+                    return (
+                      <>
+                        <div
+                          className={
+                            message.sender._id === userId
+                              ? styles.messageReceivedContainer
+                              : styles.messageSentContainer
+                          }
+                        >
+                          <div
+                            className={
+                              message.sender._id === userId
+                                ? styles.messageSent
+                                : styles.messageReceived
+                            }
+                            key={index}
+                          >
+                            <span className={styles.messageContent}>
+                              {message.messageContent}
+                            </span>
+                            <span className={styles.messageTime}>
+                              {new Date(message?.createdAt).toLocaleTimeString(
+                                'it-IT',
+                                { hour: '2-digit', minute: '2-digit' },
+                              )}
+                            </span>
+                          </div>
+                        </div>
+                      </>
+                    );
                   })}
                 </div>
               )}
             </div>
 
-            <Paper
+            {/* <Paper
               variant="outlined"
               sx={{
                 p: 2,
@@ -169,7 +214,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
               }}
             >
               Other message
-            </Paper>
+            </Paper> */}
           </div>
           <div>
             <InputGroup>

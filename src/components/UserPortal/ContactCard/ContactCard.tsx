@@ -22,6 +22,8 @@ type DirectMessage = {
 type SelectedContact = {
   id: string;
   userId: string;
+  firstName: string;
+  lastName: string;
   messages: DirectMessage[];
 };
 interface InterfaceContactCardProps {
@@ -44,6 +46,8 @@ function contactCard(props: InterfaceContactCardProps): JSX.Element {
     props.setSelectedContact({
       id: props.id,
       userId: props.userId,
+      firstName: props.firstName,
+      lastName: props.lastName,
       messages: props.selectedContact.messages,
     });
     props.setSelectedContactName(contactName);
@@ -61,7 +65,7 @@ function contactCard(props: InterfaceContactCardProps): JSX.Element {
     <>
       <div
         className={`${styles.contact} ${
-          isSelected ? styles.bgGrey : styles.bgWhite
+          isSelected ? styles.bgGreen : styles.bgWhite
         }`}
         onClick={handleSelectedContactChange}
         data-testid="contactContainer"
@@ -80,6 +84,7 @@ function contactCard(props: InterfaceContactCardProps): JSX.Element {
           />
         )}
         <div className={styles.contactNameContainer}>
+          {props.firstName}
           <b>{contactName}</b>
           <small className={styles.grey}>{props.email}</small>
         </div>

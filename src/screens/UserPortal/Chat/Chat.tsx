@@ -5,7 +5,6 @@ import {
   USERS_CONNECTION_LIST,
 } from 'GraphQl/Queries/Queries';
 import { useMutation, useQuery } from '@apollo/client';
-import styles from './Chat.module.css';
 import { useTranslation } from 'react-i18next';
 import { Button, Form, InputGroup, Modal } from 'react-bootstrap';
 import { SearchOutlined, Search } from '@mui/icons-material';
@@ -25,6 +24,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { styled } from '@mui/material/styles';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
+import Accordion from 'react-bootstrap/Accordion';
+import styles from './Chat.module.css';
 
 type DirectMessage = {
   _id: string;
@@ -46,6 +47,8 @@ type DirectMessage = {
 type SelectedContact = {
   id: string;
   userId: string;
+  firstName: string;
+  lastName: string;
   messages: DirectMessage[];
 };
 interface InterfaceContactCardProps {
@@ -91,6 +94,8 @@ export default function chat(): JSX.Element {
   const [selectedContact, setSelectedContact] = useState<SelectedContact>({
     id: '',
     userId: '',
+    firstName: '',
+    lastName: '',
     messages: [],
   });
   const [selectedContactName, setSelectedContactName] = React.useState('');
@@ -186,16 +191,17 @@ export default function chat(): JSX.Element {
     <>
       {/* <OrganizationNavbar {...navbarProps} /> */}
       <div className={`d-flex flex-row ${styles.containerHeight}`}>
-        <div className={`${styles.colorLight} ${styles.mainContainer}`}>
+        <div className={`${styles.mainContainer}`}>
           <div className={styles.contactContainer}>
             <div
-              className={`d-flex flex-column align-items-center justify-content-center ${styles.addChatContainer}`}
+              className={`d-flex justify-content-between ${styles.addChatContainer}`}
             >
-              <h4 className={`d-flex w-100 justify-content-start`}>
-                {t('contacts')}
-              </h4>
-              <button onClick={openCreateDirectChatModal}>
-                Create Direct Chat
+              <h4>{t('messages')}</h4>
+              <button
+                className={styles.createChat}
+                onClick={openCreateDirectChatModal}
+              >
+                +
               </button>
               {/* <InputGroup className={styles.maxWidth}>
                 <Form.Control
@@ -222,30 +228,53 @@ export default function chat(): JSX.Element {
                   <HourglassBottomIcon /> <span>Loading...</span>
                 </div>
               ) : (
-                contacts.map((contact: any, index: number) => {
-                  const cardProps: InterfaceContactCardProps = {
-                    id: contact._id,
-                    firstName: contact.users[0]?.firstName,
-                    userId: contact.users[0]?._id,
-                    lastName: contact.users[0]?.lastName,
-                    email: contact.users[0]?.email,
-                    image: contact.users[0]?.image,
-                    messages: contact.messages,
-                    setSelectedContactName,
-                    setSelectedContact,
-                    selectedContact,
-                  };
-                  return <ContactCard {...cardProps} key={index} />;
-                })
+                <div>
+                  <Accordion flush defaultActiveKey={['0', '1']} alwaysOpen>
+                    <Accordion.Item eventKey="0">
+                      <Accordion.Header className={styles.chatType}>
+                        DIRECT CHATS
+                      </Accordion.Header>
+                      <Accordion.Body>
+                        {contacts.map((contact: any) => {
+                          const cardProps: InterfaceContactCardProps = {
+                            id: contact._id,
+                            firstName:
+                              contact.users[0]?._id === userId
+                                ? contact.users[1]?.firstName
+                                : contact.users[0]?.firstName,
+                            userId:
+                              contact.users[0]?._id === userId
+                                ? contact.users[1]?._id
+                                : contact.users[0]?._id,
+                            lastName: userId
+                              ? contact.users[1]?.lastName
+                              : contact.users[0]?.lastName,
+                            email: userId
+                              ? contact.users[1]?.email
+                              : contact.users[0]?.email,
+                            image: userId
+                              ? contact.users[1]?.image
+                              : contact.users[0]?.image,
+                            messages: contact.messages,
+                            setSelectedContactName,
+                            setSelectedContact,
+                            selectedContact,
+                          };
+                          return (
+                            <>
+                              {console.log(contact.users)}
+                              <ContactCard {...cardProps} key={contact._id} />
+                            </>
+                          );
+                        })}
+                      </Accordion.Body>
+                    </Accordion.Item>
+                  </Accordion>
+                </div>
               )}
             </div>
           </div>
           <div className={styles.chatContainer}>
-            <div
-              className={`d-flex flex-row justify-content-center align-items-center ${styles.chatHeadingContainer} ${styles.colorPrimary}`}
-            >
-              {selectedContact ? selectedContactName : t('chat')}
-            </div>
             <ChatRoom selectedContact={selectedContact} />
           </div>
         </div>

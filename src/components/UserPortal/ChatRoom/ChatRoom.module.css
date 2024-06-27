@@ -1,7 +1,7 @@
 .chatAreaContainer {
   padding: 10px;
   flex-grow: 1;
-  background-color: rgba(196, 255, 211, 0.3);
+  /* background-color: rgba(196, 255, 211, 0.3); */
 }
 
 .backgroundWhite {
@@ -10,4 +10,64 @@
 
 .grey {
   color: grey;
+}
+
+.userInfo {
+  display: flex;
+  border-bottom: 1px solid black;
+  padding-bottom: 5px;
+  align-items: center;
+}
+
+.contactImage {
+  width: 45px !important;
+  height: auto !important;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.messageReceivedContainer {
+ display: flex;
+ justify-content: flex-end;
+}
+
+.messageSent {
+  border: 1px solid #C2C2C2;
+  border-radius: 8px 8px 0px 8px;
+  padding: 6px;
+  margin: 6px;
+  width: fit-content;
+  max-width: 75%;
+  background-color: rgba(196, 255, 211, 0.3);
+  min-width: 80px;
+}
+
+.messageReceived {
+  border: 1px solid #C2C2C2;
+  border-radius: 8px 8px 8px 0px;
+  padding: 8px;
+  margin: 6px;
+  width: fit-content;
+  max-width: 75%;
+  min-width: 80px;
+  padding-bottom: 0;
+}
+
+.messageTime {
+  font-size: 12px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  margin-bottom: 0px;
+}
+
+.messageContent {
+  margin-bottom: 0px;
+}
+
+.createChat {
+  border: none;
+  background-color: white;
 }

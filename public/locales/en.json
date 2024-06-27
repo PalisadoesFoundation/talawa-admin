@@ -1047,7 +1047,7 @@
   "userChat": {
     "chat": "Chat",
     "search": "Search",
-    "contacts": "Contacts"
+    "messages": "Messages"
   },
   "userChatRoom": {
     "selectContact": "Select a contact to start conversation",
