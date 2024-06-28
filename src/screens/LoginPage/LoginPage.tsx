@@ -133,7 +133,7 @@ const loginPage = (): JSX.Element => {
             id: string;
           };
           tempObj['label'] =
-            `${org.name}(${org.address.city},${org.address.state},${org.address.countryCode})`;
+            `${org.name}(${org.address?.city},${org.address?.state},${org.address?.countryCode})`;
           tempObj['id'] = org._id;
           return tempObj;
         },
