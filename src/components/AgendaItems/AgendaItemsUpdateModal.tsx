@@ -279,7 +279,7 @@ const AgendaItemsUpdateModal: React.FC<
           <Button
             type="submit"
             className={styles.greenregbtn}
-            data-testid="editAgendaItemBtn"
+            data-testid="updateAgendaItemBtn"
           >
             {t('update')}
           </Button>

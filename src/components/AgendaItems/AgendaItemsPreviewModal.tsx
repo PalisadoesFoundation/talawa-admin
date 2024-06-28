@@ -66,7 +66,7 @@ const AgendaItemsPreviewModal: React.FC<
       <li key={index} className={styles.urlListItem}>
         <FaLink className={styles.urlIcon} />
         <a href={url} target="_blank" rel="noopener noreferrer">
-          {url.length > 50 ? url.substring(0, 50) + '...' : url}
+          {url.length > 50 ? `${url.substring(0, 50)}...` : url}
         </a>
       </li>
     ));
@@ -90,40 +90,38 @@ const AgendaItemsPreviewModal: React.FC<
       <Modal.Body>
         <Form>
           <div>
-            <p className={styles.preview}>
-              {t('category')}
+            <div className={styles.preview}>
+              <p>{t('category')}</p>
               <span className={styles.view}>
                 {formState.agendaItemCategoryNames.join(', ')}
               </span>
-            </p>
-
-            <p className={styles.preview}>
-              {t('title')}
+            </div>
+            <div className={styles.preview}>
+              <p>{t('title')}</p>
               <span className={styles.view}>{formState.title}</span>
-            </p>
-            <p className={styles.preview}>
-              {t('description')}
+            </div>
+            <div className={styles.preview}>
+              <p>{t('description')}</p>
               <span className={styles.view}>{formState.description}</span>
-            </p>
-
-            <p className={styles.preview}>
-              {t('duration')}
+            </div>
+            <div className={styles.preview}>
+              <p>{t('duration')}</p>
               <span className={styles.view}>{formState.duration}</span>
-            </p>
-            <p className={styles.preview}>
-              {t('createdBy')}
+            </div>
+            <div className={styles.preview}>
+              <p>{t('createdBy')}</p>
               <span className={styles.view}>
                 {`${formState.createdBy.firstName} ${formState.createdBy.lastName}`}
               </span>
-            </p>
-            <p className={styles.preview}>
-              {t('urls')}
+            </div>
+            <div className={styles.preview}>
+              <p>{t('urls')}</p>
               <span className={styles.view}>{renderUrls()}</span>
-            </p>
-            <p className={styles.preview}>
-              {t('attachments')}
+            </div>
+            <div className={styles.preview}>
+              <p>{t('attachments')}</p>
               <span className={styles.view}>{renderAttachments()}</span>
-            </p>
+            </div>
           </div>
           <div className={styles.iconContainer}>
             <Button

@@ -477,27 +477,23 @@ export interface InterfaceAgendaItemInfo {
   title: string;
   description: string;
   duration: string;
-  attachments: [string];
+  attachments: string[];
   createdBy: {
     _id: string;
     firstName: string;
     lastName: string;
   };
-  urls: [string];
-  users: [
-    {
-      _id: string;
-      firstName: string;
-      lastName: string;
-    },
-  ];
+  urls: string[];
+  users: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+  }[];
   sequence: number;
-  categories: [
-    {
-      _id: string;
-      name: string;
-    },
-  ];
+  categories: {
+    _id: string;
+    name: string;
+  }[];
   organization: {
     _id: string;
     name: string;

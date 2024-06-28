@@ -353,7 +353,7 @@ function AgendaItemsContainer({
                                 </Button>
                                 <Button
                                   size="sm"
-                                  data-testid="editAgendItemModalBtn"
+                                  data-testid="editAgendaItemModalBtn"
                                   onClick={() => handleEditClick(agendaItem)}
                                   className={`${styles.agendaItemsOptionsButton} d-flex align-items-center justify-content-center`}
                                   variant="outline-secondary"

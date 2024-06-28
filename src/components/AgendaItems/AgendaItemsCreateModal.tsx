@@ -276,7 +276,7 @@ const AgendaItemsCreateModal: React.FC<
             type="submit"
             className={styles.greenregbtn}
             value="createAgendaItem"
-            data-testid="createAgendaItemBtn"
+            data-testid="createAgendaItemFormBtn"
           >
             {t('createAgendaItem')}
           </Button>

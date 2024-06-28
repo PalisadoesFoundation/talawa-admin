@@ -167,7 +167,6 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
               data-testid="createAgendaItemBtn"
               className={styles.createAgendaItemButton}
             >
-              <i className={'fa fa-plus me-2'} />
               {t('createAgendaItem')}
             </Button>
           </div>
