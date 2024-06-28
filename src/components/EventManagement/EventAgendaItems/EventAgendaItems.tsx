@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Dropdown } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
 import { WarningAmberRounded } from '@mui/icons-material';
 import { toast } from 'react-toastify';
@@ -23,7 +23,7 @@ import AgendaItemsCreateModal from 'components/AgendaItems/AgendaItemsCreateModa
 import styles from './EventAgendaItems.module.css';
 import Loader from 'components/Loader/Loader';
 
-function eventAgendaItems(props: { eventId: string }): JSX.Element {
+function EventAgendaItems(props: { eventId: string }): JSX.Element {
   const { eventId } = props;
 
   const { t } = useTranslation('translation', {
@@ -36,14 +36,11 @@ function eventAgendaItems(props: { eventId: string }): JSX.Element {
 
   const [agendaItemCreateModalIsOpen, setAgendaItemCreateModalIsOpen] =
     useState<boolean>(false);
-  // const [agendaItemCategoryId, setAgendaItemCategoryId] = useState('');
-  // const [agendaItemCategoryName, setAgendaItemCategoryName] = useState('');
 
   const [formState, setFormState] = useState({
     agendaItemCategoryIds: [''],
     title: '',
     description: '',
-    sequence: 0,
     duration: '',
     attachments: [''],
     urls: [''],
@@ -91,7 +88,7 @@ function eventAgendaItems(props: { eventId: string }): JSX.Element {
             description: formState.description,
             relatedEventId: eventId,
             organizationId: orgId,
-            sequence: formState.sequence,
+            sequence: (agendaItemData?.agendaItemByEvent.length || 0) + 1 || 1, // Assign sequence based on current length
             duration: formState.duration,
             categories: formState.agendaItemCategoryIds,
             attachments: formState.attachments,
@@ -103,7 +100,6 @@ function eventAgendaItems(props: { eventId: string }): JSX.Element {
       setFormState({
         title: '',
         description: '',
-        sequence: 0,
         duration: '',
         agendaItemCategoryIds: [''],
         attachments: [''],
@@ -134,7 +130,7 @@ function eventAgendaItems(props: { eventId: string }): JSX.Element {
         <div className={styles.message}>
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
-            Error occured while loading{' '}
+            Error occurred while loading{' '}
             {agendaCategoryError
               ? 'Agenda Categories'
               : agendaItemError && 'Agenda Items'}
@@ -165,31 +161,15 @@ function eventAgendaItems(props: { eventId: string }): JSX.Element {
               /> */}
             </div>
 
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="success"
-                className={styles.createAgendaItemButton}
-              >
-                <i className={'fa fa-plus me-2'} />
-                {t('createAgendaItem')}
-              </Dropdown.Toggle>
-
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  className={styles.createAgendaItemButton}
-                  data-testid="createAgendaItemBtn"
-                  onClick={() => showCreateModal()}
-                >
-                  {t('regular')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  className={styles.createAgendaItemButton}
-                  // onClick={() => showCreateModal()}
-                >
-                  {t('note')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+            <Button
+              variant="success"
+              onClick={showCreateModal}
+              data-testid="createAgendaItemBtn"
+              className={styles.createAgendaItemButton}
+            >
+              <i className={'fa fa-plus me-2'} />
+              {t('createAgendaItem')}
+            </Button>
           </div>
         </div>
 
@@ -220,4 +200,4 @@ function eventAgendaItems(props: { eventId: string }): JSX.Element {
   );
 }
 
-export default eventAgendaItems;
+export default EventAgendaItems;

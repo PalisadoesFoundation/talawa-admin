@@ -14,7 +14,6 @@ interface InterfaceFormStateType {
   agendaItemCategoryNames: string[];
   title: string;
   description: string;
-  sequence: number;
   duration: string;
   attachments: string[];
   urls: string[];
@@ -159,40 +158,17 @@ const AgendaItemsUpdateModal: React.FC<
               )}
             />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="title">
-            <Form.Label>{t('title')}</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder={t('enterTitle')}
-              value={formState.title}
-              onChange={(e) =>
-                setFormState({ ...formState, title: e.target.value })
-              }
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="description">
-            <Form.Label>{t('description')}</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={1}
-              placeholder={t('enterDescription')}
-              value={formState.description}
-              onChange={(e) =>
-                setFormState({ ...formState, description: e.target.value })
-              }
-            />
-          </Form.Group>
+
           <Row className="mb-3">
             <Col>
-              <Form.Group controlId="sequence">
-                <Form.Label>{t('sequence')}</Form.Label>
+              <Form.Group className="mb-3" controlId="title">
+                <Form.Label>{t('title')}</Form.Label>
                 <Form.Control
-                  type="number"
-                  placeholder={t('sequence')}
-                  value={formState.sequence}
-                  required
+                  type="text"
+                  placeholder={t('enterTitle')}
+                  value={formState.title}
                   onChange={(e) =>
-                    setFormState({ ...formState, sequence: +e.target.value })
+                    setFormState({ ...formState, title: e.target.value })
                   }
                 />
               </Form.Group>
@@ -212,6 +188,20 @@ const AgendaItemsUpdateModal: React.FC<
               </Form.Group>
             </Col>
           </Row>
+
+          <Form.Group className="mb-3" controlId="description">
+            <Form.Label>{t('description')}</Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={1}
+              placeholder={t('enterDescription')}
+              value={formState.description}
+              onChange={(e) =>
+                setFormState({ ...formState, description: e.target.value })
+              }
+            />
+          </Form.Group>
+
           <Form.Group className="mb-3">
             <Form.Label>{t('url')}</Form.Label>
             <div className="d-flex">

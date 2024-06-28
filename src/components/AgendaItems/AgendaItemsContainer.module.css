@@ -159,5 +159,36 @@
 }
 
 .urlListItem a:hover {
-  text-decoration: underline; /* Optional: add underline on hover if desired */
+  text-decoration: underline;
+}
+
+.agendaItemRow {
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  transition: box-shadow 0.2s ease;
+  background-color: #fff;
+}
+.agendaItemRow:hover {
+  background-color: #f0f0f0;
+}
+
+.dragging {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  background-color: #f0f0f0;
+}
+
+.droppable {
+  background-color: #f9f9f9; /* Background color of droppable area */
+}
+
+.droppableDraggingOver {
+  background-color: #e6f7ff; /* Background color of droppable area while dragging over */
+}
+
+.tableHead {
+  background-color: #31bb6b !important;
+  color: white;
+  border-radius: 20px 20px 0px 0px !important;
+  padding: 20px;
 }

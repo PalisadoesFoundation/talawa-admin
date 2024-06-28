@@ -4,6 +4,8 @@ import { Button, Col, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useMutation } from '@apollo/client';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import type { DropResult } from 'react-beautiful-dnd';
 
 import {
   DELETE_AGENDA_ITEM_MUTATION,
@@ -49,7 +51,6 @@ function AgendaItemsContainer({
     agendaItemCategoryNames: string[];
     title: string;
     description: string;
-    sequence: number;
     duration: string;
     attachments: string[];
     urls: string[];
@@ -62,7 +63,6 @@ function AgendaItemsContainer({
     agendaItemCategoryNames: [],
     title: '',
     description: '',
-    sequence: 0,
     duration: '',
     attachments: [],
     urls: [],
@@ -106,7 +106,6 @@ function AgendaItemsContainer({
           input: {
             title: formState.title,
             description: formState.description,
-            sequence: formState.sequence,
             duration: formState.duration,
             categories: formState.agendaItemCategoryIds,
             attachments: formState.attachments,
@@ -159,7 +158,6 @@ function AgendaItemsContainer({
       ),
       title: agendaItem.title,
       description: agendaItem.description,
-      sequence: agendaItem.sequence,
       duration: agendaItem.duration,
       attachments: agendaItem.attachments,
       urls: agendaItem.urls,
@@ -171,6 +169,41 @@ function AgendaItemsContainer({
     setAgendaItemId(agendaItem._id);
   };
 
+  const onDragEnd = async (result: DropResult): Promise<void> => {
+    if (!result.destination || !agendaItemData) {
+      return;
+    }
+
+    const reorderedAgendaItems = Array.from(agendaItemData);
+    const [removed] = reorderedAgendaItems.splice(result.source.index, 1);
+    reorderedAgendaItems.splice(result.destination.index, 0, removed);
+
+    try {
+      await Promise.all(
+        reorderedAgendaItems.map(async (item, index) => {
+          if (item.sequence !== index + 1) {
+            // Only update if the sequence has changed
+            await updateAgendaItem({
+              variables: {
+                updateAgendaItemId: item._id,
+                input: {
+                  sequence: index + 1, // Update sequence based on new index
+                },
+              },
+            });
+          }
+        }),
+      );
+
+      // After updating all items, refetch data and notify success
+      agendaItemRefetch();
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(`${error.message}`);
+      }
+    }
+  };
+
   return (
     <>
       <div
@@ -180,7 +213,7 @@ function AgendaItemsContainer({
           className={` shadow-sm ${agendaItemConnection === 'Event' ? 'rounded-top-4 mx-4' : 'rounded-top-2 mx-0'}`}
         >
           <Row
-            className={` mx-0 border border-light-subtle py-3 ${agendaItemConnection === 'Event' ? 'rounded-top-4' : 'rounded-top-2'}`}
+            className={`${styles.tableHead} mx-0 border border-light-subtle py-3 ${agendaItemConnection === 'Event' ? 'rounded-top-4' : 'rounded-top-2'}`}
           >
             <Col
               xs={6}
@@ -225,97 +258,124 @@ function AgendaItemsContainer({
             </Col>
           </Row>
         </div>
-        <div
-          className={`bg-light-subtle border border-light-subtle border-top-0 shadow-sm ${agendaItemConnection === 'Event' ? 'rounded-bottom-4 mx-4' : 'rounded-bottom-2 mb-2 mx-0'}`}
-        >
-          {agendaItemData?.map((agendaItem, index) => (
-            <div key={index}>
-              <Row className={`${index === 0 ? 'pt-3' : ''} mb-3 mx-2 `}>
-                <Col
-                  xs={6}
-                  sm={4}
-                  md={2}
-                  lg={1}
-                  className="align-self-center text-body-secondary text-center"
-                >
-                  {agendaItem.sequence}
-                </Col>
-                <Col
-                  xs={6}
-                  sm={4}
-                  md={2}
-                  lg={3}
-                  className="p-1 align-self-center text-body-secondary text-center"
-                >
-                  {agendaItem.title}
-                </Col>
-                <Col
-                  md={3}
-                  lg={3}
-                  className="p-1 d-none d-md-block align-self-center text-body-secondary text-center"
-                >
-                  <div className={styles.categoryContainer}>
-                    {agendaItem.categories.length > 0 ? (
-                      agendaItem.categories.map((category, idx) => (
-                        <span
-                          key={category._id}
-                          className={styles.categoryChip}
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="agendaItems">
+            {(provided) => (
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                className={`bg-light-subtle border border-light-subtle border-top-0 shadow-sm ${agendaItemConnection === 'Event' ? 'rounded-bottom-4 mx-4' : 'rounded-bottom-2 mb-2 mx-0'}`}
+              >
+                {agendaItemData &&
+                  agendaItemData.map((agendaItem, index) => (
+                    <Draggable
+                      key={agendaItem._id}
+                      draggableId={agendaItem._id}
+                      index={index}
+                    >
+                      {(provided, snapshot) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          className={`${styles.agendaItemRow} ${
+                            snapshot.isDragging ? styles.dragging : ''
+                          }`}
                         >
-                          {category.name}
-                          {idx < agendaItem.categories.length - 1 && ', '}
-                        </span>
-                      ))
-                    ) : (
-                      <span className={styles.categoryChip}>No Category</span>
-                    )}
+                          <Row
+                            className={`${index === 0 ? 'pt-3' : ''} mb-2 mt-2 mx-3 `}
+                          >
+                            <Col
+                              xs={6}
+                              sm={4}
+                              md={2}
+                              lg={1}
+                              className="align-self-center text-body-secondary text-center"
+                            >
+                              <i className="fas fa-bars fa-sm" />
+                            </Col>
+                            <Col
+                              xs={6}
+                              sm={4}
+                              md={2}
+                              lg={3}
+                              className="p-1 align-self-center text-body-secondary text-center"
+                            >
+                              {agendaItem.title}
+                            </Col>
+                            <Col
+                              md={3}
+                              lg={3}
+                              className="p-1 d-none d-md-block align-self-center text-body-secondary text-center"
+                            >
+                              <div className={styles.categoryContainer}>
+                                {agendaItem.categories.length > 0 ? (
+                                  agendaItem.categories.map((category, idx) => (
+                                    <span
+                                      key={category._id}
+                                      className={styles.categoryChip}
+                                    >
+                                      {category.name}
+                                      {idx < agendaItem.categories.length - 1 &&
+                                        ', '}
+                                    </span>
+                                  ))
+                                ) : (
+                                  <span className={styles.categoryChip}>
+                                    No Category
+                                  </span>
+                                )}
+                              </div>
+                            </Col>{' '}
+                            <Col
+                              md={3}
+                              lg={3}
+                              className="p-1 d-none d-md-block align-self-center text-body-secondary text-center"
+                            >
+                              {agendaItem.description}
+                            </Col>
+                            <Col
+                              xs={12}
+                              sm={4}
+                              md={2}
+                              lg={2}
+                              className="p-0 align-self-center d-flex justify-content-center"
+                            >
+                              <div className="d-flex align-items-center gap-2">
+                                <Button
+                                  data-testid="previewAgendaItemModalBtn"
+                                  className={`${styles.agendaCategoryOptionsButton} d-flex align-items-center justify-content-center`}
+                                  variant="outline-secondary"
+                                  size="sm"
+                                  onClick={() => showPreviewModal(agendaItem)}
+                                >
+                                  <i className="fas fa-info fa-sm" />
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  data-testid="editAgendItemModalBtn"
+                                  onClick={() => handleEditClick(agendaItem)}
+                                  className={`${styles.agendaItemsOptionsButton} d-flex align-items-center justify-content-center`}
+                                  variant="outline-secondary"
+                                >
+                                  <i className="fas fa-edit fa-sm" />
+                                </Button>
+                              </div>
+                            </Col>
+                          </Row>
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                {agendaItemData?.length === 0 && (
+                  <div className="lh-lg text-center fw-semibold text-body-tertiary">
+                    {t('noAgendaItems')}
                   </div>
-                </Col>
-                <Col
-                  md={3}
-                  lg={3}
-                  className="p-1 d-none d-md-block align-self-center text-body-secondary text-center"
-                >
-                  {agendaItem.description}
-                </Col>
-
-                <Col
-                  xs={12}
-                  sm={4}
-                  md={2}
-                  lg={2}
-                  className="p-0 align-self-center d-flex justify-content-center"
-                >
-                  <div className="d-flex align-items-center gap-2">
-                    <Button
-                      data-testid="previewAgendaItemModalBtn"
-                      className={`${styles.agendaCategoryOptionsButton} d-flex align-items-center justify-content-center`}
-                      variant="outline-secondary"
-                      size="sm"
-                      onClick={() => showPreviewModal(agendaItem)}
-                    >
-                      <i className="fas fa-info fa-sm" />
-                    </Button>
-                    <Button
-                      size="sm"
-                      data-testid="editAgendItemModalBtn"
-                      onClick={() => handleEditClick(agendaItem)}
-                      className={`${styles.agendaItemsOptionsButton} d-flex align-items-center justify-content-center`}
-                      variant="outline-secondary"
-                    >
-                      <i className="fas fa-edit fa-sm" />
-                    </Button>
-                  </div>
-                </Col>
-              </Row>
-              {index !== agendaItemData.length - 1 && <hr className="mx-3" />}
-            </div>
-          ))}
-          {agendaItemData?.length === 0 && (
-            <div className="lh-lg text-center fw-semibold text-body-tertiary">
-              {t('noAgendaItems')}
-            </div>
-          )}
-        </div>
+                )}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
       </div>
       {/* Preview model */}
       <AgendaItemsPreviewModal

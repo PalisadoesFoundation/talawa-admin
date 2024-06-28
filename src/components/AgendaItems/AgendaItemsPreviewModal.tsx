@@ -8,7 +8,6 @@ interface InterfaceFormStateType {
   agendaItemCategoryNames: string[];
   title: string;
   description: string;
-  sequence: number;
   duration: string;
   attachments: string[];
   urls: string[];
@@ -106,10 +105,7 @@ const AgendaItemsPreviewModal: React.FC<
               {t('description')}
               <span className={styles.view}>{formState.description}</span>
             </p>
-            <p className={styles.preview}>
-              {t('sequence')}
-              <span className={styles.view}>{formState.sequence}</span>
-            </p>
+
             <p className={styles.preview}>
               {t('duration')}
               <span className={styles.view}>{formState.duration}</span>
