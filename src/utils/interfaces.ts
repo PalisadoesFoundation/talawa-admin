@@ -456,3 +456,18 @@ export interface InterfaceQueryMembershipRequestsListItem {
     }[];
   }[];
 }
+
+export interface InterfaceAgendaItemCategoryInfo {
+  _id: string;
+  name: string;
+  description: string;
+  createdBy: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+  };
+}
+
+export interface InterfaceAgendaItemCategoryList {
+  agendaItemCategoriesByOrganization: InterfaceAgendaItemCategoryInfo[];
+}
