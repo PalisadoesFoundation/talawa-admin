@@ -214,6 +214,42 @@ export default function orgPostCard(
       }
     }
   };
+
+  const handlePostImageChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): Promise<void> => {
+    setPostFormState((prevPostFormState) => ({
+      ...prevPostFormState,
+      postphoto: '',
+    }));
+    setPostPhotoUpdated(true);
+    const file = e.target.files?.[0];
+    if (file) {
+      setPostFormState({
+        ...postformState,
+        postphoto: await convertToBase64(file),
+      });
+    }
+  };
+
+  const handlePostVideoChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): Promise<void> => {
+    setPostFormState((prevPostFormState) => ({
+      ...prevPostFormState,
+      postvideo: '',
+    }));
+    setPostVideoUpdated(true);
+    const target = e.target as HTMLInputElement;
+    const file = target.files && target.files[0];
+    if (file) {
+      const videoBase64 = await convertToBase64(file);
+      setPostFormState({
+        ...postformState,
+        postvideo: videoBase64,
+      });
+    }
+  };
   return (
     <>
       <div className="col-xl-4 col-lg-4 col-md-6" data-testid="post-item">
@@ -495,22 +531,7 @@ export default function orgPostCard(
                   type="file"
                   placeholder={t('image')}
                   multiple={false}
-                  onChange={async (
-                    e: React.ChangeEvent<HTMLInputElement>,
-                  ): Promise<void> => {
-                    setPostFormState((prevPostFormState) => ({
-                      ...prevPostFormState,
-                      postphoto: '',
-                    }));
-                    setPostPhotoUpdated(true);
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      setPostFormState({
-                        ...postformState,
-                        postphoto: await convertToBase64(file),
-                      });
-                    }
-                  }}
+                  onChange={handlePostImageChange}
                 />
                 {props.postPhoto && (
                   <>
@@ -544,24 +565,7 @@ export default function orgPostCard(
                   type="file"
                   placeholder={t('video')}
                   multiple={false}
-                  onChange={async (
-                    e: React.ChangeEvent<HTMLInputElement>,
-                  ): Promise<void> => {
-                    setPostFormState((prevPostFormState) => ({
-                      ...prevPostFormState,
-                      postvideo: '',
-                    }));
-                    setPostVideoUpdated(true);
-                    const target = e.target as HTMLInputElement;
-                    const file = target.files && target.files[0];
-                    if (file) {
-                      const videoBase64 = await convertToBase64(file);
-                      setPostFormState({
-                        ...postformState,
-                        postvideo: videoBase64,
-                      });
-                    }
-                  }}
+                  onChange={handlePostVideoChange}
                 />
                 {postformState.postvideo && (
                   <div className={styles.preview}>
