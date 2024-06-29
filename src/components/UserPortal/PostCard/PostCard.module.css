@@ -1,6 +1,4 @@
 .cardStyles {
-  height: 28rem;
-  max-height: 30rem;
   width: 20rem;
   background-color: white;
   padding: 0;
@@ -177,4 +175,9 @@
   border: none;
   outline: none;
   background-color: #f1f3f6;
+}
+
+.postImage {
+  height: 300px;
+  object-fit: cover;
 }

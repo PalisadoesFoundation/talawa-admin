@@ -1,16 +1,15 @@
 import { useQuery } from '@apollo/client';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import SendIcon from '@mui/icons-material/Send';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import {
-  ADVERTISEMENTS_GET,
+  ORGANIZATION_ADVERTISEMENT_LIST,
   ORGANIZATION_POST_LIST,
   USER_DETAILS,
 } from 'GraphQl/Queries/Queries';
 import PostCard from 'components/UserPortal/PostCard/PostCard';
 import type {
   InterfacePostCard,
+  InterfaceQueryOrganizationAdvertisementListItem,
   InterfaceQueryUserListItem,
 } from 'utils/interfaces';
 import PromotedPost from 'components/UserPortal/PromotedPost/PromotedPost';
@@ -23,7 +22,36 @@ import { Navigate, useParams } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from './Posts.module.css';
 import convertToBase64 from 'utils/convertToBase64';
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
 
+const responsive = {
+  superLargeDesktop: {
+    breakpoint: { max: 4000, min: 3000 },
+    items: 5,
+  },
+  desktop: {
+    breakpoint: { max: 3000, min: 1024 },
+    items: 3,
+  },
+  tablet: {
+    breakpoint: { max: 1024, min: 600 },
+    items: 2,
+  },
+  mobile: {
+    breakpoint: { max: 600, min: 0 },
+    items: 1,
+  },
+};
+
+type Ad = {
+  _id: string;
+  name: string;
+  type: 'BANNER' | 'MENU' | 'POPUP';
+  mediaUrl: string;
+  endDate: string; // Assuming it's a string in the format 'yyyy-MM-dd'
+  startDate: string; // Assuming it's a string in the format 'yyyy-MM-dd'
+};
 interface InterfaceAdContent {
   _id: string;
   name: string;
@@ -44,10 +72,6 @@ type AdvertisementsConnection = {
     node: InterfaceAdContent;
   }[];
 };
-
-interface InterfaceAdConnection {
-  advertisementsConnection?: AdvertisementsConnection;
-}
 
 type InterfacePostComments = {
   creator: {
@@ -101,8 +125,7 @@ export default function home(): JSX.Element {
   const { getItem } = useLocalStorage();
   const [posts, setPosts] = useState([]);
   const [pinnedPosts, setPinnedPosts] = useState([]);
-  const [adContent, setAdContent] = useState<InterfaceAdConnection>({});
-  const [filteredAd, setFilteredAd] = useState<InterfaceAdContent[]>([]);
+
   const [showModal, setShowModal] = useState<boolean>(false);
   const [postImg, setPostImg] = useState<string | null>('');
   const { orgId } = useParams();
@@ -111,10 +134,19 @@ export default function home(): JSX.Element {
     return <Navigate to={'/user'} />;
   }
 
-  const navbarProps = {
-    currentPage: 'home',
-  };
-  const { data: promotedPostsData } = useQuery(ADVERTISEMENTS_GET);
+  const {
+    data: promotedPostsData,
+  }: {
+    data?: {
+      organizations: InterfaceQueryOrganizationAdvertisementListItem[];
+    };
+    refetch: () => void;
+  } = useQuery(ORGANIZATION_ADVERTISEMENT_LIST, {
+    variables: {
+      id: orgId,
+      first: 6,
+    },
+  });
   const {
     data,
     refetch,
@@ -122,6 +154,8 @@ export default function home(): JSX.Element {
   } = useQuery(ORGANIZATION_POST_LIST, {
     variables: { id: orgId, first: 10 },
   });
+
+  const [adContent, setAdContent] = useState<Ad[]>([]);
   const userId: string | null = getItem('userId');
 
   const { data: userData } = useQuery(USER_DETAILS, {
@@ -137,14 +171,15 @@ export default function home(): JSX.Element {
   }, [data]);
 
   useEffect(() => {
-    if (promotedPostsData) {
-      setAdContent(promotedPostsData);
+    if (promotedPostsData && promotedPostsData.organizations) {
+      const ads: Ad[] =
+        promotedPostsData.organizations[0].advertisements?.edges.map(
+          (edge) => edge.node,
+        ) || [];
+
+      setAdContent(ads);
     }
   }, [promotedPostsData]);
-
-  useEffect(() => {
-    setFilteredAd(filterAdContent(adContent, orgId));
-  }, [adContent]);
 
   useEffect(() => {
     setPinnedPosts(
@@ -153,34 +188,6 @@ export default function home(): JSX.Element {
       }),
     );
   }, [posts]);
-
-  const filterAdContent = (
-    data: {
-      advertisementsConnection?: {
-        edges: {
-          node: InterfaceAdContent;
-        }[];
-      };
-    },
-    currentOrgId: string,
-    currentDate: Date = new Date(),
-  ): InterfaceAdContent[] => {
-    const { advertisementsConnection } = data;
-
-    if (advertisementsConnection && advertisementsConnection.edges) {
-      const { edges } = advertisementsConnection;
-
-      return edges
-        .map((edge) => edge.node)
-        .filter(
-          (ad: InterfaceAdContent) =>
-            ad.organization._id === currentOrgId &&
-            new Date(ad.endDate) > currentDate,
-        );
-    }
-
-    return [];
-  };
 
   const getCardProps = (node: InterfacePostNode): InterfacePostCard => {
     const {
@@ -321,21 +328,18 @@ export default function home(): JSX.Element {
           >
             <h2>{t('feed')}</h2>
             {pinnedPosts.length > 0 && (
-              <div>
-                <p className="fs-5 mt-5">{t(`pinnedPosts`)}</p>
-                <div className={` ${styles.pinnedPostsCardsContainer}`}>
-                  {pinnedPosts.map(({ node }: { node: InterfacePostNode }) => {
-                    const cardProps = getCardProps(node);
-                    return <PostCard key={node._id} {...cardProps} />;
-                  })}
-                </div>
-              </div>
+              <Carousel responsive={responsive}>
+                {pinnedPosts.map(({ node }: { node: InterfacePostNode }) => {
+                  const cardProps = getCardProps(node);
+                  return <PostCard key={node._id} {...cardProps} />;
+                })}
+              </Carousel>
             )}
           </div>
 
-          {filteredAd.length > 0 && (
+          {adContent.length > 0 && (
             <div data-testid="promotedPostsContainer">
-              {filteredAd.map((post: InterfaceAdContent) => (
+              {adContent.map((post: Ad) => (
                 <PromotedPost
                   key={post._id}
                   id={post._id}
