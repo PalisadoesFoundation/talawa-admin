@@ -179,7 +179,7 @@ export default function home(): JSX.Element {
       const ads: Ad[] =
         promotedPostsData.organizations[0].advertisements?.edges.map(
           (edge) => edge.node,
-        );
+        ) || [];
 
       setAdContent(ads);
     }

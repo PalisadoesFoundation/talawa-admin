@@ -93,8 +93,8 @@ export const PLUGIN_SUBSCRIPTION = gql`
  */
 
 export const TOGGLE_PINNED_POST = gql`
-  mutation TogglePostPin($id: ID!, $title: String) {
-    togglePostPin(id: $id, title: $title) {
+  mutation TogglePostPin($id: ID!) {
+    togglePostPin(id: $id) {
       _id
     }
   }

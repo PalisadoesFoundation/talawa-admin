@@ -50,7 +50,6 @@ export default function orgPostCard(
       const { data } = await toggle({
         variables: {
           id,
-          title: props.postTitle,
         },
       });
       if (data) {
