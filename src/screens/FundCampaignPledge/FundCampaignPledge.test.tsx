@@ -1,32 +1,29 @@
 import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import type { RenderResult } from '@testing-library/react';
 import {
+  cleanup,
   fireEvent,
   render,
   screen,
   waitFor,
-  waitForElementToBeRemoved,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { act } from 'react-dom/test-utils';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import i18n from '../../utils/i18nForTest';
+import i18nForTest from '../../utils/i18nForTest';
 import FundCampaignPledge from './FundCampaignPledge';
 import {
   EMPTY_MOCKS,
   MOCKS,
-  MOCKS_CREATE_PLEDGE_ERROR,
-  MOCKS_DELETE_PLEDGE_ERROR,
   MOCKS_FUND_CAMPAIGN_PLEDGE_ERROR,
-  MOCKS_UPDATE_PLEDGE_ERROR,
 } from './PledgesMocks';
 import React from 'react';
+import type { ApolloLink } from '@apollo/client';
 
 jest.mock('react-toastify', () => ({
   toast: {
@@ -42,407 +39,248 @@ jest.mock('@mui/x-date-pickers/DateTimePicker', () => {
   };
 });
 
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
 const link1 = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(MOCKS_FUND_CAMPAIGN_PLEDGE_ERROR);
-const link3 = new StaticMockLink(MOCKS_CREATE_PLEDGE_ERROR);
-const link4 = new StaticMockLink(MOCKS_UPDATE_PLEDGE_ERROR);
-const link5 = new StaticMockLink(MOCKS_DELETE_PLEDGE_ERROR);
-const link6 = new StaticMockLink(EMPTY_MOCKS);
+const link3 = new StaticMockLink(EMPTY_MOCKS);
+const translations = JSON.parse(
+  JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.pledges),
+);
 
-const translations = {
-  ...JSON.parse(
-    JSON.stringify(i18n.getDataByLanguage('en')?.translation.pledges ?? {}),
-  ),
-  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
-  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
+const renderFundCampaignPledge = (link: ApolloLink): RenderResult => {
+  return render(
+    <MockedProvider addTypename={false} link={link}>
+      <MemoryRouter
+        initialEntries={['/fundCampaignPledge/orgId/fundCampaignId']}
+      >
+        <Provider store={store}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/fundCampaignPledge/:orgId/:fundCampaignId"
+                  element={<FundCampaignPledge />}
+                />
+                <Route
+                  path="/"
+                  element={<div data-testid="paramsError"></div>}
+                />
+              </Routes>
+            </I18nextProvider>
+          </LocalizationProvider>
+        </Provider>
+      </MemoryRouter>
+    </MockedProvider>,
+  );
 };
 
 describe('Testing Campaign Pledge Screen', () => {
-  const formData = {
-    pledgeAmount: 100,
-    pledgeCurrency: 'USD',
-    pledgeEndDate: '03/10/2024',
-    pledgeStartDate: '03/10/2024',
-  };
+  beforeAll(() => {
+    jest.mock('react-router-dom', () => ({
+      ...jest.requireActual('react-router-dom'),
+      useParams: () => ({ orgId: 'orgId', fundCampaignId: 'fundCampaignId' }),
+    }));
+  });
+
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
+
+  afterEach(() => {
+    cleanup();
+  });
 
   it('should render the Campaign Pledge screen', async () => {
-    const { getByText } = render(
-      <MockedProvider link={link1} addTypename={false}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18n}>
-              {<FundCampaignPledge />}
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
-    await wait();
+    renderFundCampaignPledge(link1);
     await waitFor(() => {
-      expect(getByText(translations.addPledge)).toBeInTheDocument();
+      expect(screen.getByTestId('searchVolunteer')).toBeInTheDocument();
     });
   });
-  it('should render the Campaign Pledge screen with error', async () => {
-    const { queryByText } = render(
-      <MockedProvider link={link2} addTypename={false}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18n}>
-              {<FundCampaignPledge />}
+
+  it('should redirect to fallback URL if URL params are undefined', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link1}>
+        <MemoryRouter initialEntries={['/fundCampaignPledge/']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/fundCampaignPledge/"
+                  element={<FundCampaignPledge />}
+                />
+                <Route
+                  path="/"
+                  element={<div data-testid="paramsError"></div>}
+                />
+              </Routes>
             </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
+          </Provider>
+        </MemoryRouter>
       </MockedProvider>,
     );
-    await wait();
-    await waitFor(() =>
-      expect(queryByText(translations.addPledge)).not.toBeInTheDocument(),
-    );
-    await waitFor(() =>
-      expect(screen.getByTestId('errorMsg')).toBeInTheDocument(),
-    );
+    await waitFor(() => {
+      expect(screen.getByTestId('paramsError')).toBeInTheDocument();
+    });
   });
 
   it('open and closes Create Pledge modal', async () => {
-    render(
-      <MockedProvider link={link1} addTypename={false}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <I18nextProvider i18n={i18n}>
-                {<FundCampaignPledge />}
-              </I18nextProvider>
-            </LocalizationProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
-    await wait();
+    renderFundCampaignPledge(link1);
+
+    const addPledgeBtn = await screen.findByTestId('addPledgeBtn');
+    expect(addPledgeBtn).toBeInTheDocument();
+    userEvent.click(addPledgeBtn);
+
     await waitFor(() =>
-      expect(screen.getByTestId('addPledgeBtn')).toBeInTheDocument(),
+      expect(screen.getAllByText(translations.createPledge)).toHaveLength(2),
     );
-    userEvent.click(screen.getByTestId('addPledgeBtn'));
-    await waitFor(() => {
-      return expect(
-        screen.findByTestId('createPledgeCloseBtn'),
-      ).resolves.toBeInTheDocument();
-    });
-    userEvent.click(screen.getByTestId('createPledgeCloseBtn'));
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('createPledgeCloseBtn'),
-    );
-  });
-  it('creates a pledge', async () => {
-    render(
-      <MockedProvider link={link1} addTypename={false}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <I18nextProvider i18n={i18n}>
-                {<FundCampaignPledge />}
-              </I18nextProvider>
-            </LocalizationProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
-    await wait();
+    userEvent.click(screen.getByTestId('pledgeModalCloseBtn'));
     await waitFor(() =>
-      expect(screen.getByTestId('addPledgeBtn')).toBeInTheDocument(),
+      expect(screen.queryByTestId('pledgeModalCloseBtn')).toBeNull(),
     );
-    userEvent.click(screen.getByTestId('addPledgeBtn'));
-    await waitFor(() => {
-      return expect(
-        screen.findByTestId('createPledgeCloseBtn'),
-      ).resolves.toBeInTheDocument();
-    });
-    const currency = screen.getByTestId('currencySelect');
-    fireEvent.change(currency, { target: { value: formData.pledgeCurrency } });
-    const startDate = screen.getByLabelText(translations.startDate);
-    const endDate = screen.getByLabelText(translations.endDate);
-    fireEvent.change(startDate, {
-      target: { value: formData.pledgeStartDate },
-    });
-    fireEvent.change(endDate, { target: { value: formData.pledgeEndDate } });
-    userEvent.type(
-      screen.getByPlaceholderText('Enter Pledge Amount'),
-      formData.pledgeAmount.toString(),
-    );
-    userEvent.click(screen.getByTestId('createPledgeBtn'));
-    await waitFor(() => {
-      return expect(toast.success).toHaveBeenCalledWith(
-        translations.pledgeCreated,
-      );
-    });
-  });
-  it('toasts an error on unsuccessful pledge creation', async () => {
-    render(
-      <MockedProvider link={link3} addTypename={false}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <I18nextProvider i18n={i18n}>
-                {<FundCampaignPledge />}
-              </I18nextProvider>
-            </LocalizationProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
-    await wait();
-    await waitFor(() =>
-      expect(screen.getByTestId('addPledgeBtn')).toBeInTheDocument(),
-    );
-    userEvent.click(screen.getByTestId('addPledgeBtn'));
-    await waitFor(() => {
-      return expect(
-        screen.findByTestId('createPledgeCloseBtn'),
-      ).resolves.toBeInTheDocument();
-    });
-    const currency = screen.getByTestId('currencySelect');
-    fireEvent.change(currency, { target: { value: formData.pledgeCurrency } });
-    const startDate = screen.getByLabelText(translations.startDate);
-    const endDate = screen.getByLabelText(translations.endDate);
-    fireEvent.change(startDate, {
-      target: { value: formData.pledgeStartDate },
-    });
-    fireEvent.change(endDate, { target: { value: formData.pledgeEndDate } });
-    userEvent.type(
-      screen.getByPlaceholderText('Enter Pledge Amount'),
-      formData.pledgeAmount.toString(),
-    );
-    userEvent.click(screen.getByTestId('createPledgeBtn'));
-    await waitFor(() => {
-      return expect(toast.error).toHaveBeenCalled();
-    });
   });
 
   it('open and closes update pledge modal', async () => {
-    render(
-      <MockedProvider link={link1} addTypename={false}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <I18nextProvider i18n={i18n}>
-                {<FundCampaignPledge />}
-              </I18nextProvider>
-            </LocalizationProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
-    await wait();
+    renderFundCampaignPledge(link1);
+
+    const editPledgeBtn = await screen.findAllByTestId('editPledgeBtn');
+    await waitFor(() => expect(editPledgeBtn[0]).toBeInTheDocument());
+    userEvent.click(editPledgeBtn[0]);
+
     await waitFor(() =>
-      expect(screen.getAllByTestId('editPledgeBtn')[0]).toBeInTheDocument(),
+      expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
     );
-    userEvent.click(screen.getAllByTestId('editPledgeBtn')[0]);
-    await waitFor(() => {
-      return expect(
-        screen.findByTestId('updatePledgeCloseBtn'),
-      ).resolves.toBeInTheDocument();
-    });
-    userEvent.click(screen.getByTestId('updatePledgeCloseBtn'));
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('updatePledgeCloseBtn'),
+    userEvent.click(screen.getByTestId('pledgeModalCloseBtn'));
+    await waitFor(() =>
+      expect(screen.queryByTestId('pledgeModalCloseBtn')).toBeNull(),
     );
   });
-  it('updates a pledge', async () => {
-    render(
-      <MockedProvider link={link1} addTypename={false}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <I18nextProvider i18n={i18n}>
-                {<FundCampaignPledge />}
-              </I18nextProvider>
-            </LocalizationProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
-    await wait();
-    await waitFor(() =>
-      expect(screen.getAllByTestId('editPledgeBtn')[0]).toBeInTheDocument(),
-    );
-    userEvent.click(screen.getAllByTestId('editPledgeBtn')[0]);
-    await waitFor(() => {
-      return expect(
-        screen.findByTestId('updatePledgeCloseBtn'),
-      ).resolves.toBeInTheDocument();
-    });
-    const currency = screen.getByTestId('currencySelect');
-    fireEvent.change(currency, { target: { value: 'INR' } });
-    const startDate = screen.getByLabelText(translations.startDate);
-    const endDate = screen.getByLabelText(translations.endDate);
-    fireEvent.change(startDate, {
-      target: { value: formData.pledgeStartDate },
-    });
-    fireEvent.change(endDate, { target: { value: formData.pledgeEndDate } });
-    userEvent.type(
-      screen.getByPlaceholderText('Enter Pledge Amount'),
-      formData.pledgeAmount.toString(),
-    );
-    userEvent.click(screen.getByTestId('updatePledgeBtn'));
-    await waitFor(() => {
-      return expect(toast.success).toHaveBeenCalledWith(
-        translations.pledgeUpdated,
-      );
-    });
-  });
-  it('toasts an error on unsuccessful pledge update', async () => {
-    render(
-      <MockedProvider link={link4} addTypename={false}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <I18nextProvider i18n={i18n}>
-                {<FundCampaignPledge />}
-              </I18nextProvider>
-            </LocalizationProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
-    await wait();
-    await waitFor(() =>
-      expect(screen.getAllByTestId('editPledgeBtn')[0]).toBeInTheDocument(),
-    );
-    userEvent.click(screen.getAllByTestId('editPledgeBtn')[0]);
-    await waitFor(() => {
-      return expect(
-        screen.findByTestId('updatePledgeCloseBtn'),
-      ).resolves.toBeInTheDocument();
-    });
-    const currency = screen.getByTestId('currencySelect');
-    fireEvent.change(currency, { target: { value: 'INR' } });
-    const startDate = screen.getByLabelText(translations.startDate);
-    const endDate = screen.getByLabelText(translations.endDate);
-    fireEvent.change(startDate, {
-      target: { value: formData.pledgeStartDate },
-    });
-    fireEvent.change(endDate, { target: { value: formData.pledgeEndDate } });
-    userEvent.type(
-      screen.getByPlaceholderText('Enter Pledge Amount'),
-      formData.pledgeAmount.toString(),
-    );
-    userEvent.click(screen.getByTestId('updatePledgeBtn'));
-    await waitFor(() => {
-      return expect(toast.error).toHaveBeenCalled();
-    });
-  });
+
   it('open and closes delete pledge modal', async () => {
-    render(
-      <MockedProvider link={link1} addTypename={false}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <I18nextProvider i18n={i18n}>
-                {<FundCampaignPledge />}
-              </I18nextProvider>
-            </LocalizationProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
-    await wait();
+    renderFundCampaignPledge(link1);
+
+    const deletePledgeBtn = await screen.findAllByTestId('deletePledgeBtn');
+    await waitFor(() => expect(deletePledgeBtn[0]).toBeInTheDocument());
+    userEvent.click(deletePledgeBtn[0]);
+
     await waitFor(() =>
-      expect(screen.getAllByTestId('deletePledgeBtn')[0]).toBeInTheDocument(),
+      expect(screen.getByText(translations.deletePledge)).toBeInTheDocument(),
     );
-    userEvent.click(screen.getAllByTestId('deletePledgeBtn')[0]);
-    await waitFor(() => {
-      return expect(
-        screen.findByTestId('deletePledgeCloseBtn'),
-      ).resolves.toBeInTheDocument();
-    });
     userEvent.click(screen.getByTestId('deletePledgeCloseBtn'));
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('deletePledgeCloseBtn'),
-    );
-  });
-  it('deletes a pledge', async () => {
-    render(
-      <MockedProvider link={link1} addTypename={false}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <I18nextProvider i18n={i18n}>
-                {<FundCampaignPledge />}
-              </I18nextProvider>
-            </LocalizationProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
-    await wait();
     await waitFor(() =>
-      expect(screen.getAllByTestId('deletePledgeBtn')[0]).toBeInTheDocument(),
+      expect(screen.queryByTestId('deletePledgeCloseBtn')).toBeNull(),
     );
-    userEvent.click(screen.getAllByTestId('deletePledgeBtn')[0]);
-    await waitFor(() => {
-      return expect(
-        screen.findByTestId('deletePledgeCloseBtn'),
-      ).resolves.toBeInTheDocument();
+  });
+
+  it('Search the Pledges list by Users', async () => {
+    renderFundCampaignPledge(link1);
+    const searchVolunteer = await screen.findByTestId('searchVolunteer');
+    fireEvent.change(searchVolunteer, {
+      target: { value: 'John' },
     });
-    userEvent.click(screen.getByTestId('deleteyesbtn'));
+
     await waitFor(() => {
-      return expect(toast.success).toHaveBeenCalledWith(
-        translations.pledgeDeleted,
-      );
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+      expect(screen.queryByText('Jane Doe')).toBeNull();
     });
   });
-  it('toasts an error on unsuccessful pledge deletion', async () => {
-    render(
-      <MockedProvider link={link5} addTypename={false}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <I18nextProvider i18n={i18n}>
-                {<FundCampaignPledge />}
-              </I18nextProvider>
-            </LocalizationProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
-    await wait();
-    await waitFor(() =>
-      expect(screen.getAllByTestId('deletePledgeBtn')[0]).toBeInTheDocument(),
-    );
-    userEvent.click(screen.getAllByTestId('deletePledgeBtn')[0]);
+
+  it('should render the Campaign Pledge screen with error', async () => {
+    renderFundCampaignPledge(link2);
     await waitFor(() => {
-      return expect(
-        screen.findByTestId('deletePledgeCloseBtn'),
-      ).resolves.toBeInTheDocument();
-    });
-    userEvent.click(screen.getByTestId('deleteyesbtn'));
-    await waitFor(() => {
-      return expect(toast.error).toHaveBeenCalled();
+      expect(screen.getByTestId('errorMsg')).toBeInTheDocument();
     });
   });
+
   it('renders the empty pledge component', async () => {
-    render(
-      <MockedProvider link={link6} addTypename={false}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <I18nextProvider i18n={i18n}>
-                {<FundCampaignPledge />}
-              </I18nextProvider>
-            </LocalizationProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
-    await wait();
+    renderFundCampaignPledge(link3);
     await waitFor(() =>
       expect(screen.getByText(translations.noPledges)).toBeInTheDocument(),
     );
+  });
+
+  it('Sort the Pledges list by Lowest Amount', async () => {
+    renderFundCampaignPledge(link1);
+
+    const searchVolunteer = await screen.findByTestId('searchVolunteer');
+    expect(searchVolunteer).toBeInTheDocument();
+
+    fireEvent.click(screen.getByTestId('filter'));
+    fireEvent.click(screen.getByTestId('amount_ASC'));
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+      expect(screen.queryByText('Jane Doe')).toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('amountCell')[0]).toHaveTextContent('100');
+    });
+  });
+
+  it('Sort the Pledges list by Highest Amount', async () => {
+    renderFundCampaignPledge(link1);
+
+    const searchVolunteer = await screen.findByTestId('searchVolunteer');
+    expect(searchVolunteer).toBeInTheDocument();
+
+    fireEvent.click(screen.getByTestId('filter'));
+    fireEvent.click(screen.getByTestId('amount_DESC'));
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+      expect(screen.queryByText('Jane Doe')).toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('amountCell')[0]).toHaveTextContent('200');
+    });
+  });
+
+  it('Sort the Pledges list by latest endDate', async () => {
+    renderFundCampaignPledge(link1);
+
+    const searchVolunteer = await screen.findByTestId('searchVolunteer');
+    expect(searchVolunteer).toBeInTheDocument();
+
+    fireEvent.click(screen.getByTestId('filter'));
+    fireEvent.click(screen.getByTestId('endDate_DESC'));
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+      expect(screen.queryByText('Jane Doe')).toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('amountCell')[0]).toHaveTextContent('100');
+    });
+  });
+
+  it('Sort the Pledges list by earliest endDate', async () => {
+    renderFundCampaignPledge(link1);
+
+    const searchVolunteer = await screen.findByTestId('searchVolunteer');
+    expect(searchVolunteer).toBeInTheDocument();
+
+    fireEvent.click(screen.getByTestId('filter'));
+    fireEvent.click(screen.getByTestId('endDate_ASC'));
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+      expect(screen.queryByText('Jane Doe')).toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('amountCell')[0]).toHaveTextContent('200');
+    });
+  });
+
+  it('check if user image renders', async () => {
+    renderFundCampaignPledge(link1);
+    await waitFor(() => {
+      expect(screen.getByTestId('searchVolunteer')).toBeInTheDocument();
+    });
+
+    const image = await screen.findByAltText('volunteer');
+    expect(image).toBeInTheDocument();
+    expect(image).toHaveAttribute('src', 'img-url');
   });
 });

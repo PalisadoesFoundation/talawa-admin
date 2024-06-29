@@ -25,6 +25,7 @@ const CommunityProfile = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'communityProfile',
   });
+  const { t: tCommon } = useTranslation('common');
 
   document.title = t('title');
 
@@ -82,7 +83,7 @@ const CommunityProfile = (): JSX.Element => {
       });
   }, [data]);
 
-  const handleOnChange = (e: any): void => {
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setProfileVariable({
       ...profileVariable,
       [e.target.name]: e.target.value,
@@ -114,9 +115,9 @@ const CommunityProfile = (): JSX.Element => {
         },
       });
       toast.success(t('profileChangedMsg'));
-    } catch (error: any) {
+    } catch (error: unknown) {
       /* istanbul ignore next */
-      errorHandler(t, error);
+      errorHandler(t, error as Error);
     }
   };
 
@@ -144,9 +145,9 @@ const CommunityProfile = (): JSX.Element => {
         },
       });
       toast.success(t(`resetData`));
-    } catch (error: any) {
+    } catch (error: unknown) {
       /* istanbul ignore next */
-      errorHandler(t, error);
+      errorHandler(t, error as Error);
     }
   };
 
@@ -358,14 +359,14 @@ const CommunityProfile = (): JSX.Element => {
               data-testid="resetChangesBtn"
               disabled={isDisabled()}
             >
-              Reset Changes
+              {tCommon('resetChanges')}
             </Button>
             <Button
               type="submit"
               data-testid="saveChangesBtn"
               disabled={isDisabled()}
             >
-              Save Changes
+              {tCommon('saveChanges')}
             </Button>
           </div>
         </Form>

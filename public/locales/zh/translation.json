@@ -148,7 +148,9 @@
     "roleUpdated": "角色已更新。",
     "joinNow": "立即加入",
     "visit": "访问",
-    "withdraw": "拉幅"
+    "withdraw": "拉幅",
+    "removeUserFrom": "从{{org}}中删除用户",
+    "removeConfirmation": "您确定要将'{{name}}'从组织'{{org}}'中删除吗？"
   },
   "communityProfile": {
     "title": "社区简介",
@@ -256,6 +258,7 @@
     "clearFilters": "清除过滤器",
     "completed": "完全的",
     "completionDate": "完成日期",
+    "createActionItem": "创建操作项",
     "deleteActionItem": "删除操作项",
     "deleteActionItemMsg": "您想删除此操作项吗？",
     "details": "细节",
@@ -278,6 +281,23 @@
     "successfulUpdation": "操作项已成功更新",
     "successfulDeletion": "操作项已成功删除",
     "title": "行动项目"
+  },
+  "organizationAgendaCategory": {
+    "agendaCategoryDetails": "议程类别详情",
+    "updateAgendaCategory": "更新议程类别",
+    "title": "议程类别",
+    "name": "类别",
+    "description": "描述",
+    "createdBy": "创建人",
+    "options": "选项",
+    "createAgendaCategory": "创建议程类别",
+    "noAgendaCategories": "没有议程类别",
+    "update": "更新",
+    "agendaCategoryCreated": "议程类别创建成功",
+    "agendaCategoryUpdated": "议程类别更新成功",
+    "agendaCategoryDeleted": "议程类别删除成功",
+    "deleteAgendaCategory": "删除议程类别",
+    "deleteAgendaCategoryMsg": "是否要删除此议程类别？"
   },
   "eventListCard": {
     "deleteEvent": "删除事件",
@@ -375,7 +395,13 @@
     "amount": "数量",
     "editPledge": "编辑承诺",
     "deletePledgeMsg": "您确定要删除此承诺吗？",
-    "noPledges": "未找到承诺"
+    "noPledges": "未找到承诺",
+    "sort": "排序",
+    "searchVolunteer": "按志愿者搜索",
+    "highestAmount": "最高金额",
+    "lowestAmount": "最低金额",
+    "latestEndDate": "最新结束日期",
+    "earliestEndDate": "最早结束日期"
   },
   "orgPost": {
     "title": "帖子",
@@ -569,6 +595,7 @@
   "addOnStore": {
     "title": "添加商店",
     "searchName": "例如：捐款",
+    "search": "搜索",
     "enable": "启用",
     "disable": "残疾人",
     "pHeading": "插件",
@@ -816,7 +843,11 @@
     "customFieldType": "字段类型",
     "Remove Custom Field": "删除自定义字段",
     "fieldSuccessMessage": "字段添加成功",
-    "fieldRemovalSuccess": "字段删除成功"
+    "fieldRemovalSuccess": "字段删除成功",
+    "String": "字符串",
+    "Boolean": "布尔值",
+    "Date": "日期",
+    "Number": "数字"
   },
   "orgActionItemCategories": {
     "enableButton": "使能够",
