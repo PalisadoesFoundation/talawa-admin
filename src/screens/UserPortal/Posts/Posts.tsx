@@ -155,11 +155,7 @@ export default function home(): JSX.Element {
     variables: { id: orgId, first: 10 },
   });
 
-  const [adContent, setAdContent] = useState(
-    promotedPostsData?.organizations[0].advertisements?.edges.map(
-      (edge: { node: Ad }) => edge.node,
-    ) || [],
-  );
+  const [adContent, setAdContent] = useState<Ad[]>([]);
   const userId: string | null = getItem('userId');
 
   const { data: userData } = useQuery(USER_DETAILS, {
