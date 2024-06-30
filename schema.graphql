@@ -464,6 +464,7 @@ type Group {
 
 type GroupChat {
   _id: ID!
+  title: String!
   createdAt: DateTime!
   creator: User
   messages: [GroupChatMessage]
@@ -1057,6 +1058,7 @@ type Query {
   customFieldsByOrganization(id: ID!): [OrganizationCustomField]
   directChatsByUserID(id: ID!): [DirectChat]
   directChatsMessagesByChatID(id: ID!): [DirectChatMessage]
+  groupChatsByUserId(id: ID!): [GroupChat]
   event(id: ID!): Event
   eventVolunteersByEvent(id: ID!): [EventVolunteer]
   eventsByOrganization(id: ID, orderBy: EventOrderByInput): [Event]

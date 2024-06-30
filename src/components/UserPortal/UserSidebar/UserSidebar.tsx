@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 import { ReactComponent as OrganizationsIcon } from 'assets/svgs/organizations.svg';
 import { ReactComponent as SettingsIcon } from 'assets/svgs/settings.svg';
+import { ReactComponent as ChatIcon } from 'assets/svgs/chat.svg';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import styles from './UserSidebar.module.css';
 
@@ -94,7 +95,7 @@ const userSidebar = ({
                 data-testid="settingsBtn"
               >
                 <div className={styles.iconWrapper}>
-                  <SettingsIcon
+                  <ChatIcon
                     stroke={`${
                       isActive === true
                         ? 'var(--bs-white)'

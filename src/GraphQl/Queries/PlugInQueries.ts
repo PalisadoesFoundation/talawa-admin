@@ -172,6 +172,42 @@ export const DIRECT_CHATS_LIST = gql`
   }
 `;
 
+export const GROUP_CHAT_LIST = gql`
+  query GroupChatsByUserID($id: ID!) {
+    groupChatsByUserId(id: $id) {
+      _id
+      creator {
+        _id
+        firstName
+        lastName
+        email
+      }
+      title
+      messages {
+        _id
+        createdAt
+        messageContent
+        sender {
+          _id
+          firstName
+          lastName
+          email
+        }
+      }
+      organization {
+        _id
+        name
+      }
+      users {
+        _id
+        firstName
+        lastName
+        email
+        image
+      }
+    }
+  }
+`;
 /**
  * GraphQL query to check if an organization is a sample organization.
  *

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
 import {
   DIRECT_CHATS_LIST,
@@ -6,7 +6,7 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { useMutation, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-import { Button, Form, InputGroup, Modal } from 'react-bootstrap';
+import { Button, Dropdown, Form, InputGroup, Modal } from 'react-bootstrap';
 import { SearchOutlined, Search } from '@mui/icons-material';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import ContactCard from 'components/UserPortal/ContactCard/ContactCard';
@@ -23,9 +23,14 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { styled } from '@mui/material/styles';
+import { ReactComponent as NewChat } from 'assets/svgs/newChat.svg';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import Accordion from 'react-bootstrap/Accordion';
 import styles from './Chat.module.css';
+import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import CreateGroupChat from './core/CreateGroupChat/CreateGroupChat';
+import { GROUP_CHAT_LIST } from 'GraphQl/Queries/PlugInQueries';
 
 type DirectMessage = {
   _id: string;
@@ -89,6 +94,23 @@ export default function chat(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userChat',
   });
+
+  const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
+
+  const handleResize = (): void => {
+    if (window.innerWidth <= 820) {
+      setHideDrawer(!hideDrawer);
+    }
+  };
+
+  useEffect(() => {
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   const { orgId: organizationId } = useParams();
 
   const [selectedContact, setSelectedContact] = useState<SelectedContact>({
@@ -100,6 +122,7 @@ export default function chat(): JSX.Element {
   });
   const [selectedContactName, setSelectedContactName] = React.useState('');
   const [contacts, setContacts] = React.useState([]);
+  const [groupChats, setGroupChats] = React.useState([]);
   const [filterName, setFilterName] = React.useState('');
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
@@ -111,8 +134,18 @@ export default function chat(): JSX.Element {
     setCreateDirectChatModalisOpen(true);
   }
 
-  const toggleDialogModal = /* istanbul ignore next */ (): void =>
+  const toggleCreateDirectChatModal = /* istanbul ignore next */ (): void =>
     setCreateDirectChatModalisOpen(!createDirectChatModalisOpen);
+
+  const [createGroupChatModalisOpen, setCreateGroupChatModalisOpen] =
+    useState(false);
+
+  function openCreateGroupChatModal(): void {
+    setCreateGroupChatModalisOpen(true);
+  }
+
+  const toggleCreateGroupChatModal = /* istanbul ignore next */ (): void =>
+    setCreateGroupChatModalisOpen(!createGroupChatModalisOpen);
 
   const [userName, setUserName] = useState('');
 
@@ -147,6 +180,16 @@ export default function chat(): JSX.Element {
     loading: contactLoading,
     refetch: contactRefetch,
   } = useQuery(DIRECT_CHATS_LIST, {
+    variables: {
+      id: userId,
+    },
+  });
+
+  const {
+    data: groupChatList,
+    loading: groupChatListLoading,
+    refetch: groupChatListRefetch,
+  } = useQuery(GROUP_CHAT_LIST, {
     variables: {
       id: userId,
     },
@@ -187,9 +230,38 @@ export default function chat(): JSX.Element {
     }
   }, [contactData]);
 
+  React.useEffect(() => {
+    console.log('GGGGGGGGGGGGGGGG', groupChatList);
+    if (groupChatList) {
+      setGroupChats(groupChatList.groupChatsByUserId);
+      console.log(groupChats);
+    }
+  }, [groupChatList]);
+
   return (
     <>
-      {/* <OrganizationNavbar {...navbarProps} /> */}
+      {hideDrawer ? (
+        <Button
+          className={styles.opendrawer}
+          onClick={(): void => {
+            setHideDrawer(!hideDrawer);
+          }}
+          data-testid="openMenu"
+        >
+          <i className="fa fa-angle-double-right" aria-hidden="true"></i>
+        </Button>
+      ) : (
+        <Button
+          className={styles.collapseSidebarButton}
+          onClick={(): void => {
+            setHideDrawer(!hideDrawer);
+          }}
+          data-testid="closeMenu"
+        >
+          <i className="fa fa-angle-double-left" aria-hidden="true"></i>
+        </Button>
+      )}
+      <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       <div className={`d-flex flex-row ${styles.containerHeight}`}>
         <div className={`${styles.mainContainer}`}>
           <div className={styles.contactContainer}>
@@ -197,33 +269,34 @@ export default function chat(): JSX.Element {
               className={`d-flex justify-content-between ${styles.addChatContainer}`}
             >
               <h4>{t('messages')}</h4>
-              <button
-                className={styles.createChat}
-                onClick={openCreateDirectChatModal}
-              >
-                +
-              </button>
-              {/* <InputGroup className={styles.maxWidth}>
-                <Form.Control
-                  placeholder={t('search')}
-                  id="searchChats"
-                  type="text"
-                  className={`${styles.borderNone} ${styles.backgroundWhite}`}
-                  onKeyUp={handleSearchByEnter}
-                  data-testid="searchInput"
-                />
-                <InputGroup.Text
-                  className={`${styles.colorPrimary} ${styles.borderNone}`}
-                  style={{ cursor: 'pointer' }}
-                  onClick={handleSearchByBtnClick}
-                  data-testid="searchBtn"
+              <Dropdown style={{ cursor: 'pointer' }}>
+                <Dropdown.Toggle
+                  className={styles.customToggle}
+                  data-testid={'dropdown'}
                 >
-                  <SearchOutlined className={`${styles.colorWhite}`} />
-                </InputGroup.Text>
-              </InputGroup> */}
+                  <NewChat />
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item
+                    onClick={openCreateDirectChatModal}
+                    data-testid={'newDirectChat'}
+                  >
+                    New Chat
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={openCreateGroupChatModal}
+                    data-testid={'deletePost'}
+                  >
+                    New Group Chat
+                  </Dropdown.Item>
+                  <Dropdown.Item href="#/action-3">
+                    Starred Messages
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
             </div>
             <div className={styles.contactListContainer}>
-              {contactLoading ? (
+              {contactLoading || groupChatListLoading ? (
                 <div className={`d-flex flex-row justify-content-center`}>
                   <HourglassBottomIcon /> <span>Loading...</span>
                 </div>
@@ -262,11 +335,26 @@ export default function chat(): JSX.Element {
                           };
                           return (
                             <>
-                              {console.log(contact.users)}
                               <ContactCard {...cardProps} key={contact._id} />
                             </>
                           );
                         })}
+                      </Accordion.Body>
+                    </Accordion.Item>
+                    <Accordion.Item eventKey="0">
+                      <Accordion.Header className={styles.chatType}>
+                        GROUP CHATS
+                      </Accordion.Header>
+                      <Accordion.Body>
+                        {groupChats &&
+                          groupChats.map((chat: any) => {
+                            return (
+                              <>
+                                <div>{chat.title}</div>
+                                <p>{chat.users.length} Members</p>
+                              </>
+                            );
+                          })}
                       </Accordion.Body>
                     </Accordion.Item>
                   </Accordion>
@@ -282,7 +370,7 @@ export default function chat(): JSX.Element {
       <Modal
         data-testid="addExistingUserModal"
         show={createDirectChatModalisOpen}
-        onHide={toggleDialogModal}
+        onHide={toggleCreateDirectChatModal}
         contentClassName={styles.modalContent}
       >
         <Modal.Header closeButton data-testid="pluginNotificationHeader">
@@ -377,6 +465,10 @@ export default function chat(): JSX.Element {
           )}
         </Modal.Body>
       </Modal>
+      <CreateGroupChat
+        toggleCreateGroupChatModal={toggleCreateGroupChatModal}
+        createGroupChatModalisOpen={createGroupChatModalisOpen}
+      ></CreateGroupChat>
     </>
   );
 }

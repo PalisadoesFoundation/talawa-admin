@@ -84,7 +84,6 @@ function contactCard(props: InterfaceContactCardProps): JSX.Element {
           />
         )}
         <div className={styles.contactNameContainer}>
-          {props.firstName}
           <b>{contactName}</b>
           <small className={styles.grey}>{props.email}</small>
         </div>
