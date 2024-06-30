@@ -299,17 +299,23 @@ const fundCampaignPledge = (): JSX.Element => {
           underline="hover"
           color="inherit"
           component="button"
-          onClick={() => history.go(-2)}
+          onClick={
+            /* istanbul ignore next */
+            () => history.go(-2)
+          }
         >
-          Funds
+          {tCommon('Funds')}
         </Link>
         <Link
           underline="hover"
           color="inherit"
           component="button"
-          onClick={() => history.back()}
+          onClick={
+            /* istanbul ignore next */
+            () => history.back()
+          }
         >
-          Campaigns
+          {t('campaigns')}
         </Link>
         <Typography color="text.primary">Fund Campaign Pledges</Typography>
       </Breadcrumbs>

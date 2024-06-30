@@ -525,7 +525,8 @@
     "highestAmount": "Cantidad más alta",
     "lowestAmount": "Cantidad más baja",
     "latestEndDate": "Fecha de finalización más reciente",
-    "earliestEndDate": "Fecha de finalización más cercana"
+    "earliestEndDate": "Fecha de finalización más cercana",
+    "campaigns": "Campañas"
   },
 
   "orgPost": {

@@ -397,7 +397,8 @@
     "highestAmount": "最高金额",
     "lowestAmount": "最低金额",
     "latestEndDate": "最新结束日期",
-    "earliestEndDate": "最早结束日期"
+    "earliestEndDate": "最早结束日期",
+    "campaigns": "活动"
   },
   "orgPost": {
     "title": "帖子",

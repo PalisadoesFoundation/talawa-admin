@@ -397,7 +397,8 @@
     "highestAmount": "Montant le plus élevé",
     "lowestAmount": "Montant le plus bas",
     "latestEndDate": "Date de fin la plus récente",
-    "earliestEndDate": "Date de fin la plus proche"
+    "earliestEndDate": "Date de fin la plus proche",
+    "campaigns": "Campagnes"
   },
   "orgPost": {
     "title": "Des postes",

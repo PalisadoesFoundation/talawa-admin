@@ -397,7 +397,8 @@
     "highestAmount": "सबसे अधिक राशि",
     "lowestAmount": "सबसे कम राशि",
     "latestEndDate": "नवीनतम समाप्ति तिथि",
-    "earliestEndDate": "सबसे प्रारंभिक समाप्ति तिथि"
+    "earliestEndDate": "सबसे प्रारंभिक समाप्ति तिथि",
+    "campaigns": "अभियान"
   },
   "orgPost": {
     "title": "पदों",
