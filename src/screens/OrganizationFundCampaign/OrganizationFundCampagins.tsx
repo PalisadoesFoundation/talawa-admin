@@ -1,23 +1,26 @@
 import { useQuery } from '@apollo/client';
 import { Search, Sort, WarningAmberRounded } from '@mui/icons-material';
-import { FUND_CAMPAIGN } from 'GraphQl/Queries/fundQueries';
-import Loader from 'components/Loader/Loader';
-import dayjs from 'dayjs';
-import React, { useCallback, useMemo, useState } from 'react';
+import { Stack, Typography, Breadcrumbs, Link } from '@mui/material';
+import {
+  DataGrid,
+  type GridCellParams,
+  type GridColDef,
+} from '@mui/x-data-grid';
 import { Button, Dropdown, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import React, { useCallback, useMemo, useState } from 'react';
+import dayjs from 'dayjs';
+import Loader from 'components/Loader/Loader';
+import CampaignModal from './CampaignModal';
+import CampaignDeleteModal from './CampaignDeleteModal';
+import { FUND_CAMPAIGN } from 'GraphQl/Queries/fundQueries';
+import styles from './OrganizationFundCampaign.module.css';
+import { currencySymbols } from 'utils/currency';
 import type {
   InterfaceCampaignInfo,
   InterfaceQueryOrganizationFundCampaigns,
 } from 'utils/interfaces';
-import CampaignModal from './CampaignModal';
-import CampaignDeleteModal from './CampaignDeleteModal';
-import styles from './OrganizationFundCampaign.module.css';
-import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
-import { DataGrid } from '@mui/x-data-grid';
-import { currencySymbols } from 'utils/currency';
-import { Stack, Typography, Breadcrumbs, Link } from '@mui/material';
 
 const dataGridStyle = {
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
@@ -40,7 +43,7 @@ const dataGridStyle = {
   },
 };
 
-enum Modal {
+enum ModalState {
   SAME = 'same',
   DELETE = 'delete',
 }
@@ -62,24 +65,26 @@ const orgFundCampaign = (): JSX.Element => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState<string | null>(null);
 
-  const [modalState, setModalState] = useState<{ [key in Modal]: boolean }>({
-    [Modal.SAME]: false,
-    [Modal.DELETE]: false,
+  const [modalState, setModalState] = useState<{
+    [key in ModalState]: boolean;
+  }>({
+    [ModalState.SAME]: false,
+    [ModalState.DELETE]: false,
   });
   const [campaignModalMode, setCampaignModalMode] = useState<'edit' | 'create'>(
     'create',
   );
-  const openModal = (modal: Modal): void =>
+  const openModal = (modal: ModalState): void =>
     setModalState((prevState) => ({ ...prevState, [modal]: true }));
 
-  const closeModal = (modal: Modal): void =>
+  const closeModal = (modal: ModalState): void =>
     setModalState((prevState) => ({ ...prevState, [modal]: false }));
 
   const handleOpenModal = useCallback(
     (campaign: InterfaceCampaignInfo | null, mode: 'edit' | 'create'): void => {
       setCampaign(campaign);
       setCampaignModalMode(mode);
-      openModal(Modal.SAME);
+      openModal(ModalState.SAME);
     },
     [openModal],
   );
@@ -87,7 +92,7 @@ const orgFundCampaign = (): JSX.Element => {
   const handleDeleteClick = useCallback(
     (campaign: InterfaceCampaignInfo): void => {
       setCampaign(campaign);
-      openModal(Modal.DELETE);
+      openModal(ModalState.DELETE);
     },
     [openModal],
   );
@@ -411,10 +416,10 @@ const orgFundCampaign = (): JSX.Element => {
         isRowSelectable={() => false}
       />
 
-      {/* Create Campaign Modal */}
+      {/* Create Campaign ModalState */}
       <CampaignModal
-        isOpen={modalState[Modal.SAME]}
-        hide={() => closeModal(Modal.SAME)}
+        isOpen={modalState[ModalState.SAME]}
+        hide={() => closeModal(ModalState.SAME)}
         refetchCampaign={refetchCampaign}
         fundId={fundId}
         campaign={campaign}
@@ -422,8 +427,8 @@ const orgFundCampaign = (): JSX.Element => {
       />
 
       <CampaignDeleteModal
-        isOpen={modalState[Modal.DELETE]}
-        hide={() => closeModal(Modal.DELETE)}
+        isOpen={modalState[ModalState.DELETE]}
+        hide={() => closeModal(ModalState.DELETE)}
         campaign={campaign}
         refetchCampaign={refetchCampaign}
       />

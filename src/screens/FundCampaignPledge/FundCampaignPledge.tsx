@@ -37,7 +37,7 @@ interface InterfaceCampaignInfo {
   currency: string;
 }
 
-enum Modal {
+enum ModalState {
   SAME = 'same',
   DELETE = 'delete',
 }
@@ -94,9 +94,11 @@ const fundCampaignPledge = (): JSX.Element => {
     currency: '',
   });
 
-  const [modalState, setModalState] = useState<{ [key in Modal]: boolean }>({
-    [Modal.SAME]: false,
-    [Modal.DELETE]: false,
+  const [modalState, setModalState] = useState<{
+    [key in ModalState]: boolean;
+  }>({
+    [ModalState.SAME]: false,
+    [ModalState.DELETE]: false,
   });
 
   const [pledgeModalMode, setPledgeModalMode] = useState<'edit' | 'create'>(
@@ -165,11 +167,11 @@ const fundCampaignPledge = (): JSX.Element => {
     refetchPledge();
   }, [sortBy, refetchPledge]);
 
-  const openModal = (modal: Modal): void => {
+  const openModal = (modal: ModalState): void => {
     setModalState((prevState) => ({ ...prevState, [modal]: true }));
   };
 
-  const closeModal = (modal: Modal): void => {
+  const closeModal = (modal: ModalState): void => {
     setModalState((prevState) => ({ ...prevState, [modal]: false }));
   };
 
@@ -177,7 +179,7 @@ const fundCampaignPledge = (): JSX.Element => {
     (pledge: InterfacePledgeInfo | null, mode: 'edit' | 'create'): void => {
       setPledge(pledge);
       setPledgeModalMode(mode);
-      openModal(Modal.SAME);
+      openModal(ModalState.SAME);
     },
     [openModal],
   );
@@ -185,7 +187,7 @@ const fundCampaignPledge = (): JSX.Element => {
   const handleDeleteClick = useCallback(
     (pledge: InterfacePledgeInfo): void => {
       setPledge(pledge);
-      openModal(Modal.DELETE);
+      openModal(ModalState.DELETE);
     },
     [openModal],
   );
@@ -515,10 +517,10 @@ const fundCampaignPledge = (): JSX.Element => {
         isRowSelectable={() => false}
       />
 
-      {/* Update Pledge Modal */}
+      {/* Update Pledge ModalState */}
       <PledgeModal
-        isOpen={modalState[Modal.SAME]}
-        hide={() => closeModal(Modal.SAME)}
+        isOpen={modalState[ModalState.SAME]}
+        hide={() => closeModal(ModalState.SAME)}
         campaignId={fundCampaignId}
         orgId={orgId}
         pledge={pledge}
@@ -527,10 +529,10 @@ const fundCampaignPledge = (): JSX.Element => {
         mode={pledgeModalMode}
       />
 
-      {/* Delete Pledge Modal */}
+      {/* Delete Pledge ModalState */}
       <PledgeDeleteModal
-        isOpen={modalState[Modal.DELETE]}
-        hide={() => closeModal(Modal.DELETE)}
+        isOpen={modalState[ModalState.DELETE]}
+        hide={() => closeModal(ModalState.DELETE)}
         pledge={pledge}
         refetchPledge={refetchPledge}
       />

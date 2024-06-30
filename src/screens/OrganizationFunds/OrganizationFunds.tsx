@@ -1,22 +1,22 @@
 import { useQuery } from '@apollo/client';
 import { Search, Sort, WarningAmberRounded } from '@mui/icons-material';
-import Loader from 'components/Loader/Loader';
-import React, { useCallback, useMemo, useState } from 'react';
-import { Button, Dropdown, Form } from 'react-bootstrap';
-import { useTranslation } from 'react-i18next';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import type { InterfaceFundInfo } from 'utils/interfaces';
-import FundModal from './FundModal';
-import styles from './OrganizationFunds.module.css';
 import { Stack } from '@mui/material';
-import dayjs from 'dayjs';
-import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
 import {
   DataGrid,
   type GridCellParams,
   type GridColDef,
 } from '@mui/x-data-grid';
+import { Button, Dropdown, Form } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import React, { useCallback, useMemo, useState } from 'react';
+import dayjs from 'dayjs';
+import Loader from 'components/Loader/Loader';
+import FundModal from './FundModal';
 import FundDeleteModal from './FundDeleteModal';
+import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
+import styles from './OrganizationFunds.module.css';
+import type { InterfaceFundInfo } from 'utils/interfaces';
 
 const dataGridStyle = {
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
@@ -39,7 +39,7 @@ const dataGridStyle = {
   },
 };
 
-enum Modal {
+enum ModalState {
   SAME = 'same',
   DELETE = 'delete',
 }
@@ -63,24 +63,26 @@ const organizationFunds = (): JSX.Element => {
     'createdAt_DESC',
   );
 
-  const [modalState, setModalState] = useState<{ [key in Modal]: boolean }>({
-    [Modal.SAME]: false,
-    [Modal.DELETE]: false,
+  const [modalState, setModalState] = useState<{
+    [key in ModalState]: boolean;
+  }>({
+    [ModalState.SAME]: false,
+    [ModalState.DELETE]: false,
   });
   const [fundModalMode, setFundModalMode] = useState<'edit' | 'create'>(
     'create',
   );
-  const openModal = (modal: Modal): void =>
+  const openModal = (modal: ModalState): void =>
     setModalState((prevState) => ({ ...prevState, [modal]: true }));
 
-  const closeModal = (modal: Modal): void =>
+  const closeModal = (modal: ModalState): void =>
     setModalState((prevState) => ({ ...prevState, [modal]: false }));
 
   const handleOpenModal = useCallback(
     (fund: InterfaceFundInfo | null, mode: 'edit' | 'create'): void => {
       setFund(fund);
       setFundModalMode(mode);
-      openModal(Modal.SAME);
+      openModal(ModalState.SAME);
     },
     [openModal],
   );
@@ -108,7 +110,7 @@ const organizationFunds = (): JSX.Element => {
   const handleDeleteClick = useCallback(
     (fund: InterfaceFundInfo): void => {
       setFund(fund);
-      openModal(Modal.DELETE);
+      openModal(ModalState.DELETE);
     },
     [openModal],
   );
@@ -366,8 +368,8 @@ const organizationFunds = (): JSX.Element => {
         isRowSelectable={() => false}
       />
       <FundModal
-        isOpen={modalState[Modal.SAME]}
-        hide={() => closeModal(Modal.SAME)}
+        isOpen={modalState[ModalState.SAME]}
+        hide={() => closeModal(ModalState.SAME)}
         refetchFunds={refetchFunds}
         fund={fund}
         orgId={orgId}
@@ -375,8 +377,8 @@ const organizationFunds = (): JSX.Element => {
       />
 
       <FundDeleteModal
-        isOpen={modalState[Modal.DELETE]}
-        hide={() => closeModal(Modal.DELETE)}
+        isOpen={modalState[ModalState.DELETE]}
+        hide={() => closeModal(ModalState.DELETE)}
         fund={fund}
         refetchFunds={refetchFunds}
       />
