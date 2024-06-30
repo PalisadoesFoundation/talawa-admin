@@ -391,7 +391,8 @@
     "highestAmount": "Highest Amount",
     "lowestAmount": "Lowest Amount",
     "latestEndDate": "Latest End Date",
-    "earliestEndDate": "Earliest End Date"
+    "earliestEndDate": "Earliest End Date",
+    "campaigns": "Campaigns"
   },
   "orgPost": {
     "title": "Posts",
