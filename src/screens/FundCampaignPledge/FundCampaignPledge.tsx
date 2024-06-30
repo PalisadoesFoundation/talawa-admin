@@ -11,7 +11,14 @@ import { currencySymbols } from 'utils/currency';
 import styles from './FundCampaignPledge.module.css';
 import PledgeDeleteModal from './PledgeDeleteModal';
 import PledgeModal from './PledgeModal';
-import { Stack } from '@mui/material';
+import {
+  Breadcrumbs,
+  LinearProgress,
+  Link,
+  Stack,
+  Typography,
+  linearProgressClasses,
+} from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import Avatar from 'components/Avatar/Avatar';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
@@ -20,11 +27,53 @@ import type {
   InterfacePledgeVolunteer,
   InterfaceQueryFundCampaignsPledges,
 } from 'utils/interfaces';
+import { styled } from '@mui/system';
 
-enum Modal {
+interface InterfaceCampaignInfo {
+  name: string;
+  goal: number;
+  startDate: Date;
+  endDate: Date;
+  currency: string;
+}
+
+enum ModalState {
   SAME = 'same',
   DELETE = 'delete',
 }
+
+const dataGridStyle = {
+  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
+    outline: 'none !important',
+  },
+  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
+    outline: 'none',
+  },
+  '& .MuiDataGrid-row:hover': {
+    backgroundColor: 'transparent',
+  },
+  '& .MuiDataGrid-row.Mui-hovered': {
+    backgroundColor: 'transparent',
+  },
+  '& .MuiDataGrid-root': {
+    borderRadius: '0.5rem',
+  },
+  '& .MuiDataGrid-main': {
+    borderRadius: '0.5rem',
+  },
+};
+
+const BorderLinearProgress = styled(LinearProgress)(() => ({
+  height: 15,
+  borderRadius: 4,
+  [`&.${linearProgressClasses.colorPrimary}`]: {
+    backgroundColor: '#e0e0e0',
+  },
+  [`& .${linearProgressClasses.bar}`]: {
+    borderRadius: 5,
+    backgroundColor: '#31bb6b',
+  },
+}));
 
 const fundCampaignPledge = (): JSX.Element => {
   const { t } = useTranslation('translation', {
@@ -37,9 +86,19 @@ const fundCampaignPledge = (): JSX.Element => {
     return <Navigate to={'/'} replace />;
   }
 
-  const [modalState, setModalState] = useState<{ [key in Modal]: boolean }>({
-    [Modal.SAME]: false,
-    [Modal.DELETE]: false,
+  const [campaignInfo, setCampaignInfo] = useState<InterfaceCampaignInfo>({
+    name: '',
+    goal: 0,
+    startDate: new Date(),
+    endDate: new Date(),
+    currency: '',
+  });
+
+  const [modalState, setModalState] = useState<{
+    [key in ModalState]: boolean;
+  }>({
+    [ModalState.SAME]: false,
+    [ModalState.DELETE]: false,
   });
 
   const [pledgeModalMode, setPledgeModalMode] = useState<'edit' | 'create'>(
@@ -93,14 +152,26 @@ const fundCampaignPledge = (): JSX.Element => {
   }, [pledgeData, searchTerm]);
 
   useEffect(() => {
+    if (pledgeData) {
+      setCampaignInfo({
+        name: pledgeData.getFundraisingCampaignById.name,
+        goal: pledgeData.getFundraisingCampaignById.fundingGoal,
+        startDate: pledgeData.getFundraisingCampaignById.startDate,
+        endDate: pledgeData.getFundraisingCampaignById.endDate,
+        currency: pledgeData.getFundraisingCampaignById.currency,
+      });
+    }
+  }, [pledgeData]);
+
+  useEffect(() => {
     refetchPledge();
   }, [sortBy, refetchPledge]);
 
-  const openModal = (modal: Modal): void => {
+  const openModal = (modal: ModalState): void => {
     setModalState((prevState) => ({ ...prevState, [modal]: true }));
   };
 
-  const closeModal = (modal: Modal): void => {
+  const closeModal = (modal: ModalState): void => {
     setModalState((prevState) => ({ ...prevState, [modal]: false }));
   };
 
@@ -108,7 +179,7 @@ const fundCampaignPledge = (): JSX.Element => {
     (pledge: InterfacePledgeInfo | null, mode: 'edit' | 'create'): void => {
       setPledge(pledge);
       setPledgeModalMode(mode);
-      openModal(Modal.SAME);
+      openModal(ModalState.SAME);
     },
     [openModal],
   );
@@ -116,7 +187,7 @@ const fundCampaignPledge = (): JSX.Element => {
   const handleDeleteClick = useCallback(
     (pledge: InterfacePledgeInfo): void => {
       setPledge(pledge);
-      openModal(Modal.DELETE);
+      openModal(ModalState.DELETE);
     },
     [openModal],
   );
@@ -207,7 +278,7 @@ const fundCampaignPledge = (): JSX.Element => {
     },
     {
       field: 'amount',
-      headerName: 'Pledge Amount',
+      headerName: 'Pledged',
       flex: 1,
       minWidth: 100,
       align: 'center',
@@ -231,6 +302,31 @@ const fundCampaignPledge = (): JSX.Element => {
       },
     },
     {
+      field: 'paid',
+      headerName: 'Paid',
+      flex: 1,
+      minWidth: 100,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      renderCell: (params: GridCellParams) => {
+        return (
+          <div
+            className="d-flex justify-content-center fw-bold"
+            data-testid="paidCell"
+          >
+            {
+              currencySymbols[
+                params.row.currency as keyof typeof currencySymbols
+              ]
+            }
+            0
+          </div>
+        );
+      },
+    },
+    {
       field: 'action',
       headerName: 'Action',
       flex: 1,
@@ -245,7 +341,7 @@ const fundCampaignPledge = (): JSX.Element => {
             <Button
               variant="success"
               size="sm"
-              className="me-2"
+              className="me-2 rounded"
               data-testid="editPledgeBtn"
               onClick={() =>
                 handleOpenModal(params.row as InterfacePledgeInfo, 'edit')
@@ -257,6 +353,7 @@ const fundCampaignPledge = (): JSX.Element => {
             <Button
               size="sm"
               variant="danger"
+              className="rounded"
               data-testid="deletePledgeBtn"
               onClick={() =>
                 handleDeleteClick(params.row as InterfacePledgeInfo)
@@ -272,6 +369,51 @@ const fundCampaignPledge = (): JSX.Element => {
 
   return (
     <div>
+      <Breadcrumbs aria-label="breadcrumb" className="ms-1">
+        <Link
+          underline="hover"
+          color="inherit"
+          component="button"
+          onClick={
+            /* istanbul ignore next */
+            () => history.go(-2)
+          }
+        >
+          {tCommon('Funds')}
+        </Link>
+        <Link
+          underline="hover"
+          color="inherit"
+          component="button"
+          onClick={
+            /* istanbul ignore next */
+            () => history.back()
+          }
+        >
+          {t('campaigns')}
+        </Link>
+        <Typography color="text.primary">{t('pledges')}</Typography>
+      </Breadcrumbs>
+
+      <div className={styles.overviewContainer}>
+        <div className={styles.titleContainer}>
+          <h3>{campaignInfo?.name}</h3>
+          <span>
+            {t('endsOn')} {campaignInfo?.endDate.toString()}
+          </span>
+        </div>
+        <div className={styles.progressContainer}>
+          <div className={styles.raisedAmount}>$1,000 {t('raised')}</div>
+          <div className={styles.progress}>
+            <BorderLinearProgress variant="determinate" value={50} />
+            <div className={styles.endpoints}>
+              <div className={styles.start}>$0</div>
+              <div className={styles.end}>${campaignInfo?.goal}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
         <div className={`${styles.input} mb-1`}>
           <Form.Control
@@ -349,9 +491,8 @@ const fundCampaignPledge = (): JSX.Element => {
 
       <DataGrid
         disableColumnMenu
-        columnBuffer={5}
+        columnBuffer={6}
         hideFooter={true}
-        className={`${styles.datagrid}`}
         getRowId={(row) => row._id}
         components={{
           NoRowsOverlay: () => (
@@ -360,20 +501,7 @@ const fundCampaignPledge = (): JSX.Element => {
             </Stack>
           ),
         }}
-        sx={{
-          '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-            outline: 'none !important',
-          },
-          '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-            outline: 'none',
-          },
-          '& .MuiDataGrid-row:hover': {
-            backgroundColor: 'transparent',
-          },
-          '& .MuiDataGrid-row.Mui-hovered': {
-            backgroundColor: 'transparent',
-          },
-        }}
+        sx={dataGridStyle}
         getRowClassName={() => `${styles.rowBackground}`}
         autoHeight
         rowHeight={65}
@@ -389,10 +517,10 @@ const fundCampaignPledge = (): JSX.Element => {
         isRowSelectable={() => false}
       />
 
-      {/* Update Pledge Modal */}
+      {/* Update Pledge ModalState */}
       <PledgeModal
-        isOpen={modalState[Modal.SAME]}
-        hide={() => closeModal(Modal.SAME)}
+        isOpen={modalState[ModalState.SAME]}
+        hide={() => closeModal(ModalState.SAME)}
         campaignId={fundCampaignId}
         orgId={orgId}
         pledge={pledge}
@@ -401,10 +529,10 @@ const fundCampaignPledge = (): JSX.Element => {
         mode={pledgeModalMode}
       />
 
-      {/* Delete Pledge Modal */}
+      {/* Delete Pledge ModalState */}
       <PledgeDeleteModal
-        isOpen={modalState[Modal.DELETE]}
-        hide={() => closeModal(Modal.DELETE)}
+        isOpen={modalState[ModalState.DELETE]}
+        hide={() => closeModal(ModalState.DELETE)}
         pledge={pledge}
         refetchPledge={refetchPledge}
       />

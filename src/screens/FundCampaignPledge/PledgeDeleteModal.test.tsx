@@ -23,14 +23,6 @@ jest.mock('react-toastify', () => ({
   },
 }));
 
-jest.mock('@mui/x-date-pickers/DateTimePicker', () => {
-  return {
-    DateTimePicker: jest.requireActual(
-      '@mui/x-date-pickers/DesktopDateTimePicker',
-    ).DesktopDateTimePicker,
-  };
-});
-
 const link = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(MOCKS_DELETE_PLEDGE_ERROR);
 const translations = JSON.parse(
@@ -57,6 +49,7 @@ const pledgeProps: InterfaceDeletePledgeModal = {
   },
   refetchPledge: jest.fn(),
 };
+
 const renderPledgeDeleteModal = (
   link: ApolloLink,
   props: InterfaceDeletePledgeModal,

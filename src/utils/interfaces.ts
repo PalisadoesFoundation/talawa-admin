@@ -226,19 +226,7 @@ export interface InterfaceQueryOrganizationAdvertisementListItem {
     totalCount: number;
   };
 }
-export interface InterfaceQueryOrganizationFunds {
-  fundsByOrganization: {
-    _id: string;
-    name: string;
-    refrenceNumber: string;
-    taxDeductible: boolean;
-    isArchived: boolean;
-    isDefault: boolean;
-    createdAt: string;
-    organizationId: string;
-    creator: { _id: string; firstName: string; lastName: string };
-  }[];
-}
+
 export interface InterfaceQueryOrganizationFundCampaigns {
   campaigns: {
     _id: string;
@@ -251,6 +239,9 @@ export interface InterfaceQueryOrganizationFundCampaigns {
   }[];
 }
 export interface InterfaceQueryFundCampaignsPledges {
+  name: string;
+  fundingGoal: number;
+  currency: string;
   startDate: Date;
   endDate: Date;
   pledges: {
@@ -270,6 +261,8 @@ export interface InterfaceFundInfo {
   isArchived: boolean;
   isDefault: boolean;
   createdAt: string;
+  organizationId: string;
+  creator: { _id: string; firstName: string; lastName: string };
 }
 export interface InterfaceCampaignInfo {
   _id: string;
@@ -383,6 +376,9 @@ export interface InterfaceAddress {
 export interface InterfaceCreateFund {
   fundName: string;
   fundRef: string;
+  isDefault: boolean;
+  isArchived: boolean;
+  taxDeductible: boolean;
 }
 
 export interface InterfacePostCard {
@@ -420,13 +416,6 @@ export interface InterfacePostCard {
     id: string;
   }[];
   fetchPosts: () => void;
-}
-export interface InterfaceCreateCampaign {
-  campaignName: string;
-  campaignCurrency: string;
-  campaignGoal: number;
-  campaignStartDate: Date;
-  campaignEndDate: Date;
 }
 
 export interface InterfaceCreatePledge {
