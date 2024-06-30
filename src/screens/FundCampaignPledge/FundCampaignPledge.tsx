@@ -11,7 +11,14 @@ import { currencySymbols } from 'utils/currency';
 import styles from './FundCampaignPledge.module.css';
 import PledgeDeleteModal from './PledgeDeleteModal';
 import PledgeModal from './PledgeModal';
-import { Breadcrumbs, Link, Stack, Typography } from '@mui/material';
+import {
+  Breadcrumbs,
+  LinearProgress,
+  Link,
+  Stack,
+  Typography,
+  linearProgressClasses,
+} from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import Avatar from 'components/Avatar/Avatar';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
@@ -20,6 +27,15 @@ import type {
   InterfacePledgeVolunteer,
   InterfaceQueryFundCampaignsPledges,
 } from 'utils/interfaces';
+import { styled } from '@mui/system';
+
+interface InterfaceCampaignInfo {
+  name: string;
+  goal: number;
+  startDate: Date;
+  endDate: Date;
+  currency: string;
+}
 
 enum Modal {
   SAME = 'same',
@@ -47,6 +63,18 @@ const dataGridStyle = {
   },
 };
 
+const BorderLinearProgress = styled(LinearProgress)(() => ({
+  height: 15,
+  borderRadius: 4,
+  [`&.${linearProgressClasses.colorPrimary}`]: {
+    backgroundColor: '#e0e0e0',
+  },
+  [`& .${linearProgressClasses.bar}`]: {
+    borderRadius: 5,
+    backgroundColor: '#31bb6b',
+  },
+}));
+
 const fundCampaignPledge = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'pledges',
@@ -57,6 +85,14 @@ const fundCampaignPledge = (): JSX.Element => {
   if (!fundCampaignId || !orgId) {
     return <Navigate to={'/'} replace />;
   }
+
+  const [campaignInfo, setCampaignInfo] = useState<InterfaceCampaignInfo>({
+    name: '',
+    goal: 0,
+    startDate: new Date(),
+    endDate: new Date(),
+    currency: '',
+  });
 
   const [modalState, setModalState] = useState<{ [key in Modal]: boolean }>({
     [Modal.SAME]: false,
@@ -112,6 +148,18 @@ const fundCampaignPledge = (): JSX.Element => {
       }) ?? []
     );
   }, [pledgeData, searchTerm]);
+
+  useEffect(() => {
+    if (pledgeData) {
+      setCampaignInfo({
+        name: pledgeData.getFundraisingCampaignById.name,
+        goal: pledgeData.getFundraisingCampaignById.fundingGoal,
+        startDate: pledgeData.getFundraisingCampaignById.startDate,
+        endDate: pledgeData.getFundraisingCampaignById.endDate,
+        currency: pledgeData.getFundraisingCampaignById.currency,
+      });
+    }
+  }, [pledgeData]);
 
   useEffect(() => {
     refetchPledge();
@@ -228,7 +276,7 @@ const fundCampaignPledge = (): JSX.Element => {
     },
     {
       field: 'amount',
-      headerName: 'Pledge Amount',
+      headerName: 'Pledged',
       flex: 1,
       minWidth: 100,
       align: 'center',
@@ -247,6 +295,31 @@ const fundCampaignPledge = (): JSX.Element => {
               ]
             }
             {params.row.amount}
+          </div>
+        );
+      },
+    },
+    {
+      field: 'paid',
+      headerName: 'Paid',
+      flex: 1,
+      minWidth: 100,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      renderCell: (params: GridCellParams) => {
+        return (
+          <div
+            className="d-flex justify-content-center fw-bold"
+            data-testid="paidCell"
+          >
+            {
+              currencySymbols[
+                params.row.currency as keyof typeof currencySymbols
+              ]
+            }
+            0
           </div>
         );
       },
@@ -294,7 +367,7 @@ const fundCampaignPledge = (): JSX.Element => {
 
   return (
     <div>
-      <Breadcrumbs aria-label="breadcrumb" className="ms-1 mt-2">
+      <Breadcrumbs aria-label="breadcrumb" className="ms-1">
         <Link
           underline="hover"
           color="inherit"
@@ -317,8 +390,28 @@ const fundCampaignPledge = (): JSX.Element => {
         >
           {t('campaigns')}
         </Link>
-        <Typography color="text.primary">Fund Campaign Pledges</Typography>
+        <Typography color="text.primary">{t('pledges')}</Typography>
       </Breadcrumbs>
+
+      <div className={styles.overviewContainer}>
+        <div className={styles.titleContainer}>
+          <h3>{campaignInfo?.name}</h3>
+          <span>
+            {t('endsOn')} {campaignInfo?.endDate.toString()}
+          </span>
+        </div>
+        <div className={styles.progressContainer}>
+          <div className={styles.raisedAmount}>$1,000 {t('raised')}</div>
+          <div className={styles.progress}>
+            <BorderLinearProgress variant="determinate" value={50} />
+            <div className={styles.endpoints}>
+              <div className={styles.start}>$0</div>
+              <div className={styles.end}>${campaignInfo?.goal}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
         <div className={`${styles.input} mb-1`}>
           <Form.Control
@@ -396,7 +489,7 @@ const fundCampaignPledge = (): JSX.Element => {
 
       <DataGrid
         disableColumnMenu
-        columnBuffer={5}
+        columnBuffer={6}
         hideFooter={true}
         getRowId={(row) => row._id}
         components={{

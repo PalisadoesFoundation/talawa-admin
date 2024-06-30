@@ -1,5 +1,5 @@
 .organizationFundCampaignContainer {
-  margin: 0.6rem 0;
+  margin: 0.5rem 0;
 }
 .goalButton {
   border: 1px solid rgba(49, 187, 107, 1) !important;
@@ -112,11 +112,13 @@
 
 .btnsContainer {
   display: flex;
-  margin: 2rem 0 2.5rem 0;
+  margin: 2rem 0 2rem 0;
+  gap: 0.8rem;
 }
 
 .btnsContainer .btnsBlock {
   display: flex;
+  gap: 0.8rem;
 }
 
 .btnsContainer .btnsBlock div button {

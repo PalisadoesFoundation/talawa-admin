@@ -398,7 +398,10 @@
     "lowestAmount": "Montant le plus bas",
     "latestEndDate": "Date de fin la plus récente",
     "earliestEndDate": "Date de fin la plus proche",
-    "campaigns": "Campagnes"
+    "campaigns": "Campagnes",
+    "pledges": "Promesses de dons",
+    "endsOn": "Se termine le",
+    "raised": "Levé"
   },
   "orgPost": {
     "title": "Des postes",

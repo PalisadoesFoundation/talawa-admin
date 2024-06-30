@@ -526,7 +526,10 @@
     "lowestAmount": "Cantidad más baja",
     "latestEndDate": "Fecha de finalización más reciente",
     "earliestEndDate": "Fecha de finalización más cercana",
-    "campaigns": "Campañas"
+    "campaigns": "Campañas",
+    "pledges": "Compromisos",
+    "endsOn": "Finaliza el",
+    "raised": "Recaudado"
   },
 
   "orgPost": {

@@ -58,7 +58,8 @@
 
 .btnsContainer {
   display: flex;
-  margin: 2rem 0 2.5rem 0;
+  gap: 0.8rem;
+  margin: 2.2rem 0 0.8rem 0;
 }
 
 .btnsContainer .input {
@@ -124,4 +125,77 @@
 
 .noOutline input {
   outline: none;
+}
+
+.overviewContainer {
+  display: flex;
+  gap: 7rem;
+  width: 100%;
+  justify-content: space-between;
+  margin: 1.5rem 0 0 0;
+  padding: 1.25rem 2rem;
+  background-color: rgba(255, 255, 255, 0.591);
+
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  border-radius: 0.5rem;
+}
+
+.titleContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.titleContainer h3 {
+  font-size: 1.75rem;
+  font-weight: 750;
+  color: #5e5e5e;
+  margin-top: 0.2rem;
+}
+
+.titleContainer span {
+  font-size: 0.9rem;
+  margin-left: 0.5rem;
+  font-weight: lighter;
+  color: #707070;
+}
+
+.raisedAmount {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.25rem;
+  font-weight: 750;
+  color: #5e5e5e;
+}
+
+.progressContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-grow: 1;
+}
+
+.progress {
+  margin-top: 0.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.endpoints {
+  display: flex;
+  position: relative;
+  font-size: 0.85rem;
+}
+
+.start {
+  position: absolute;
+  top: 0px;
+}
+
+.end {
+  position: absolute;
+  top: 0px;
+  right: 0px;
 }

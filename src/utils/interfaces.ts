@@ -239,6 +239,9 @@ export interface InterfaceQueryOrganizationFundCampaigns {
   }[];
 }
 export interface InterfaceQueryFundCampaignsPledges {
+  name: string;
+  fundingGoal: number;
+  currency: string;
   startDate: Date;
   endDate: Date;
   pledges: {

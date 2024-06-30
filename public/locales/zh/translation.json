@@ -398,7 +398,10 @@
     "lowestAmount": "最低金额",
     "latestEndDate": "最新结束日期",
     "earliestEndDate": "最早结束日期",
-    "campaigns": "活动"
+    "campaigns": "活动",
+    "pledges": "承诺",
+    "endsOn": "结束于",
+    "raised": "筹集到"
   },
   "orgPost": {
     "title": "帖子",

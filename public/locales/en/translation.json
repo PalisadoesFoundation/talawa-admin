@@ -392,7 +392,10 @@
     "lowestAmount": "Lowest Amount",
     "latestEndDate": "Latest End Date",
     "earliestEndDate": "Earliest End Date",
-    "campaigns": "Campaigns"
+    "campaigns": "Campaigns",
+    "pledges": "Pledges",
+    "endsOn": "Ends on",
+    "raised": "Raised"
   },
   "orgPost": {
     "title": "Posts",
