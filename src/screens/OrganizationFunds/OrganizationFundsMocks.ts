@@ -185,6 +185,7 @@ export const MOCKS = [
     },
   },
 ];
+
 export const NO_FUNDS = [
   {
     request: {
@@ -202,6 +203,7 @@ export const NO_FUNDS = [
     },
   },
 ];
+
 export const MOCKS_ERROR = [
   {
     request: {

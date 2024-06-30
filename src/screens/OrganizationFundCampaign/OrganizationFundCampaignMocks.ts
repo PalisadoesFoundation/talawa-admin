@@ -307,6 +307,7 @@ export const MOCK_ERROR = [
     error: new Error('Mock graphql error'),
   },
 ];
+
 export const EMPTY_MOCKS = [
   {
     request: {

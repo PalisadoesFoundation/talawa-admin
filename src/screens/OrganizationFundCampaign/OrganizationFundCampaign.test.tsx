@@ -9,14 +9,11 @@ import {
   render,
   screen,
   waitFor,
-  waitForElementToBeRemoved,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { act } from 'react-dom/test-utils';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { store } from '../../state/store';
 import { StaticMockLink } from '../../utils/StaticMockLink';
 import i18nForTest from '../../utils/i18nForTest';
@@ -43,13 +40,6 @@ jest.mock('@mui/x-date-pickers/DateTimePicker', () => {
   };
 });
 
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
 const link1 = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCK_ERROR, true);
 const link3 = new StaticMockLink(EMPTY_MOCKS, true);

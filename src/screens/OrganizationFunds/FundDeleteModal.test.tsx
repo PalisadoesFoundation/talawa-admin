@@ -23,14 +23,6 @@ jest.mock('react-toastify', () => ({
   },
 }));
 
-jest.mock('@mui/x-date-pickers/DateTimePicker', () => {
-  return {
-    DateTimePicker: jest.requireActual(
-      '@mui/x-date-pickers/DesktopDateTimePicker',
-    ).DesktopDateTimePicker,
-  };
-});
-
 const link1 = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(MOCKS_ERROR);
 const translations = JSON.parse(

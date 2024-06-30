@@ -1,10 +1,9 @@
-/*eslint-disable*/
 import { useQuery } from '@apollo/client';
 import { Search, Sort, WarningAmberRounded } from '@mui/icons-material';
 import { FUND_CAMPAIGN } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
 import dayjs from 'dayjs';
-import { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Button, Dropdown, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
@@ -15,7 +14,8 @@ import type {
 import CampaignModal from './CampaignModal';
 import CampaignDeleteModal from './CampaignDeleteModal';
 import styles from './OrganizationFundCampaign.module.css';
-import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
+import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
+import { DataGrid } from '@mui/x-data-grid';
 import { currencySymbols } from 'utils/currency';
 import { Stack, Typography, Breadcrumbs, Link } from '@mui/material';
 
@@ -114,7 +114,7 @@ const orgFundCampaign = (): JSX.Element => {
     },
   });
 
-  const handleClick = (campaignId: String) => {
+  const handleClick = (campaignId: string): void => {
     navigate(`/fundCampaignPledge/${orgId}/${campaignId}`);
   };
 
