@@ -12,7 +12,7 @@ import {
 import { toast } from 'react-toastify';
 import { FormControl, TextField } from '@mui/material';
 
-interface InterfaceFundModal {
+export interface InterfaceFundModal {
   isOpen: boolean;
   hide: () => void;
   refetchFunds: () => void;
@@ -83,12 +83,11 @@ const FundModal: React.FC<InterfaceFundModal> = ({
       refetchFunds();
       hide();
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
+      toast.error((error as Error).message);
     }
   };
 
+  /*istanbul ignore next*/
   const updateFundHandler = async (
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {

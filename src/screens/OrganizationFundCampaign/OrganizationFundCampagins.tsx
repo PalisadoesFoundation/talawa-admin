@@ -200,7 +200,11 @@ const orgFundCampaign = (): JSX.Element => {
       flex: 1,
       sortable: false,
       renderCell: (params: GridCellParams) => {
-        return dayjs(params.row.campaign.endDate).format('DD/MM/YYYY');
+        return (
+          <div data-testid="endDateCell">
+            {dayjs(params.row.campaign.endDate).format('DD/MM/YYYY')}{' '}
+          </div>
+        );
       },
     },
     {
@@ -284,6 +288,7 @@ const orgFundCampaign = (): JSX.Element => {
             variant="outline-success"
             size="sm"
             className="rounded"
+            data-testid="viewBtn"
             onClick={() => handleClick(params.row.campaign._id as string)}
           >
             <i className="fa fa-eye me-1" />
@@ -301,9 +306,10 @@ const orgFundCampaign = (): JSX.Element => {
           underline="hover"
           color="inherit"
           component="button"
-          onClick={() => history.back()}
+          data-testid="fundsLink"
+          onClick={() => navigate(`/orgfunds/${orgId}`)}
         >
-          Funds
+          {tCommon('Funds')}
         </Link>
         <Typography color="text.primary">FundRaising Campaign</Typography>
       </Breadcrumbs>
@@ -382,7 +388,7 @@ const orgFundCampaign = (): JSX.Element => {
 
       <DataGrid
         disableColumnMenu
-        columnBuffer={5}
+        columnBuffer={7}
         hideFooter={true}
         getRowId={(row) => row.campaign._id}
         components={{

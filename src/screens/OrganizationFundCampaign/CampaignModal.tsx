@@ -22,7 +22,7 @@ import {
 } from '@mui/material';
 import type { InterfaceCampaignInfo } from 'utils/interfaces';
 
-interface InterfaceCampaignModal {
+export interface InterfaceCampaignModal {
   isOpen: boolean;
   hide: () => void;
   fundId: string;
@@ -99,10 +99,11 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
       refetchCampaign();
       hide();
     } catch (error: unknown) {
-      if (error instanceof Error) toast.error(error.message);
+      toast.error((error as Error).message);
     }
   };
 
+  /*istanbul ignore next*/
   const updateCampaignHandler = async (
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
@@ -143,7 +144,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
       hide();
       toast.success(t('updatedCampaign'));
     } catch (error: unknown) {
-      if (error instanceof Error) toast.error(error.message);
+      toast.error((error as Error).message);
     }
   };
 

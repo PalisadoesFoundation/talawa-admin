@@ -7,7 +7,7 @@ import type { InterfaceCampaignInfo } from 'utils/interfaces';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 
-interface InterfaceDeleteCampaignModal {
+export interface InterfaceDeleteCampaignModal {
   isOpen: boolean;
   hide: () => void;
   campaign: InterfaceCampaignInfo | null;
@@ -37,7 +37,7 @@ const CampaignDeleteModal: React.FC<InterfaceDeleteCampaignModal> = ({
       refetchCampaign();
       hide();
     } catch (error: unknown) {
-      if (error instanceof Error) toast.error(error.message);
+      toast.error((error as Error).message);
     }
   };
   return (

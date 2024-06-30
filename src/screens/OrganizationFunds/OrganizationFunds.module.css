@@ -21,13 +21,7 @@
   border: 1px solid #31bb6b;
   position: relative;
   display: inline-block;
-  margin-top: 10px;
-  margin-bottom: 10px;
   color: #31bb6b;
-}
-
-.createFundBtn {
-  margin-top: 10px;
 }
 
 .fundName {
@@ -111,22 +105,12 @@
 
 .btnsContainer {
   display: flex;
-  margin: 2.5rem 0 2.5rem 0;
-}
-
-.btnsContainer .btnsBlock {
-  display: flex;
-}
-
-.btnsContainer .btnsBlock div button {
-  display: flex;
-  margin-left: 1rem;
-  justify-content: center;
-  align-items: center;
+  margin: 2rem 0 2.5rem 0;
 }
 
 .btnsContainer .input {
   flex: 1;
+  min-width: 18rem;
   position: relative;
 }
 
@@ -155,50 +139,4 @@
   background-color: var(--bs-primary);
   color: var(--bs-white);
   font-size: 1rem;
-}
-
-@media (max-width: 1020px) {
-  .btnsContainer {
-    flex-direction: column;
-    margin: 1.5rem 0;
-  }
-
-  .btnsContainer .btnsBlock {
-    margin: 1.5rem 0 0 0;
-    justify-content: space-between;
-  }
-
-  .btnsContainer .btnsBlock div button {
-    margin: 0;
-  }
-
-  .createFundBtn {
-    margin-top: 0;
-  }
-}
-
-@media screen and (max-width: 575.5px) {
-  .mainpageright {
-    width: 98%;
-  }
-}
-
-/* For mobile devices  */
-
-@media (max-width: 520px) {
-  .btnsContainer {
-    margin-bottom: 0;
-  }
-
-  .btnsContainer .btnsBlock {
-    display: block;
-    margin-top: 1rem;
-    margin-right: 0;
-  }
-
-  .btnsContainer .btnsBlock div button {
-    margin-bottom: 1rem;
-    margin-right: 0;
-    width: 100%;
-  }
 }

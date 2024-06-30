@@ -38,9 +38,7 @@ const FundDeleteModal: React.FC<InterfaceDeleteFundModal> = ({
       hide();
       toast.success(t('fundDeleted'));
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
+      toast.error((error as Error).message);
     }
   };
 
