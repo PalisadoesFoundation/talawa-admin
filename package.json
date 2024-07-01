@@ -125,7 +125,7 @@
     "lint-staged": "^15.2.7",
     "postcss-modules": "^6.0.0",
     "sass": "^1.77.4",
-    "tsx": "^4.15.5"
+    "tsx": "^4.16.0"
   },
   "resolutions": {
     "@apollo/client": "^3.4.0-beta.19",
