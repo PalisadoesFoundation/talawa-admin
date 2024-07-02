@@ -89,15 +89,13 @@ const AgendaItemsCreateModal: React.FC<
         toast.error(t('fileSizeExceedsLimit'));
         return;
       }
-      if (files.length > 0) {
-        const base64Files = await Promise.all(
-          files.map(async (file) => await convertToBase64(file)),
-        );
-        setFormState({
-          ...formState,
-          attachments: [...formState.attachments, ...base64Files],
-        });
-      }
+      const base64Files = await Promise.all(
+        files.map(async (file) => await convertToBase64(file)),
+      );
+      setFormState({
+        ...formState,
+        attachments: [...formState.attachments, ...base64Files],
+      });
     }
   };
 

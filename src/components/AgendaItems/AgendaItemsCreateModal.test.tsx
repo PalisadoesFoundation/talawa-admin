@@ -11,6 +11,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import AgendaItemsCreateModal from './AgendaItemsCreateModal';
+import { toast } from 'react-toastify';
+import convertToBase64 from 'utils/convertToBase64';
 
 const mockFormState = {
   title: 'Test Title',
@@ -31,6 +33,17 @@ const mockT = (key: string): string => key;
 //     createdBy: 'Test User',
 //   },
 // ];
+
+jest.mock('react-toastify', () => ({
+  toast: {
+    success: jest.fn(),
+    error: jest.fn(),
+  },
+}));
+jest.mock('utils/convertToBase64');
+const mockedConvertToBase64 = convertToBase64 as jest.MockedFunction<
+  typeof convertToBase64
+>;
 
 describe('AgendaItemsCreateModal', () => {
   test('renders modal correctly', () => {
@@ -134,6 +147,156 @@ describe('AgendaItemsCreateModal', () => {
       expect(mockSetFormState).toHaveBeenCalledWith({
         ...mockFormState,
         attachments: [],
+      });
+    });
+  });
+  test('handleAddUrl correctly adds valid URL', async () => {
+    render(
+      <MockedProvider addTypename={false}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AgendaItemsCreateModal
+                agendaItemCreateModalIsOpen
+                hideCreateModal={mockHideCreateModal}
+                formState={mockFormState}
+                setFormState={mockSetFormState}
+                createAgendaItemHandler={mockCreateAgendaItemHandler}
+                t={mockT}
+                agendaItemCategories={[]}
+              />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    const urlInput = screen.getByTestId('urlInput');
+    const linkBtn = screen.getByTestId('linkBtn');
+
+    fireEvent.change(urlInput, { target: { value: 'https://example.com' } });
+    fireEvent.click(linkBtn);
+
+    await waitFor(() => {
+      expect(mockSetFormState).toHaveBeenCalledWith({
+        ...mockFormState,
+        urls: [...mockFormState.urls, 'https://example.com'],
+      });
+    });
+  });
+
+  test('shows error toast for invalid URL', async () => {
+    render(
+      <MockedProvider addTypename={false}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <AgendaItemsCreateModal
+                  agendaItemCreateModalIsOpen
+                  hideCreateModal={mockHideCreateModal}
+                  formState={mockFormState}
+                  setFormState={mockSetFormState}
+                  createAgendaItemHandler={mockCreateAgendaItemHandler}
+                  t={mockT}
+                  agendaItemCategories={[]}
+                />
+              </LocalizationProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    const urlInput = screen.getByTestId('urlInput');
+    const linkBtn = screen.getByTestId('linkBtn');
+
+    fireEvent.change(urlInput, { target: { value: 'invalid-url' } });
+    fireEvent.click(linkBtn);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('invalidUrl');
+    });
+  });
+
+  test('shows error toast for file size exceeding limit', async () => {
+    render(
+      <MockedProvider addTypename={false}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <AgendaItemsCreateModal
+                  agendaItemCreateModalIsOpen
+                  hideCreateModal={mockHideCreateModal}
+                  formState={mockFormState}
+                  setFormState={mockSetFormState}
+                  createAgendaItemHandler={mockCreateAgendaItemHandler}
+                  t={mockT}
+                  agendaItemCategories={[]}
+                />
+              </LocalizationProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    const fileInput = screen.getByTestId('attachment');
+    const largeFile = new File(
+      ['a'.repeat(11 * 1024 * 1024)],
+      'large-file.jpg',
+    ); // 11 MB file
+
+    Object.defineProperty(fileInput, 'files', {
+      value: [largeFile],
+    });
+
+    fireEvent.change(fileInput);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('fileSizeExceedsLimit');
+    });
+  });
+
+  test('adds files correctly when within size limit', async () => {
+    mockedConvertToBase64.mockResolvedValue('base64-file');
+
+    render(
+      <MockedProvider addTypename={false}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <AgendaItemsCreateModal
+                  agendaItemCreateModalIsOpen
+                  hideCreateModal={mockHideCreateModal}
+                  formState={mockFormState}
+                  setFormState={mockSetFormState}
+                  createAgendaItemHandler={mockCreateAgendaItemHandler}
+                  t={mockT}
+                  agendaItemCategories={[]}
+                />
+              </LocalizationProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    const fileInput = screen.getByTestId('attachment');
+    const smallFile = new File(['small-file-content'], 'small-file.jpg'); // Small file
+
+    Object.defineProperty(fileInput, 'files', {
+      value: [smallFile],
+    });
+
+    fireEvent.change(fileInput);
+
+    await waitFor(() => {
+      expect(mockSetFormState).toHaveBeenCalledWith({
+        ...mockFormState,
+        attachments: [...mockFormState.attachments, 'base64-file'],
       });
     });
   });
