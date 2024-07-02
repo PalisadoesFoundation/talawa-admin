@@ -10,6 +10,7 @@ import { Button, Dropdown, Form, InputGroup, Modal } from 'react-bootstrap';
 import { SearchOutlined, Search } from '@mui/icons-material';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import ContactCard from 'components/UserPortal/ContactCard/ContactCard';
+import GroupChatCard from 'components/UserPortal/GroupChatCard/GroupChatCard';
 import ChatRoom from 'components/UserPortal/ChatRoom/ChatRoom';
 import { Link, useParams } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -32,41 +33,27 @@ import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import CreateGroupChat from './core/CreateGroupChat/CreateGroupChat';
 import { GROUP_CHAT_LIST } from 'GraphQl/Queries/PlugInQueries';
 
-type DirectMessage = {
-  _id: string;
-  createdAt: Date;
-  sender: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-  };
-  messageContent: string;
-  receiver: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-  };
-  updatedAt: Date;
-};
-
-type SelectedContact = {
-  id: string;
-  userId: string;
-  firstName: string;
-  lastName: string;
-  messages: DirectMessage[];
-};
 interface InterfaceContactCardProps {
   id: string;
-  firstName: string;
-  userId: string;
-  lastName: string;
-  email: string;
+  title: string;
+  subtitle: string;
   image: string;
-  selectedContact: SelectedContact;
-  messages: DirectMessage;
-  setSelectedContact: React.Dispatch<React.SetStateAction<SelectedContact>>;
-  setSelectedContactName: React.Dispatch<React.SetStateAction<string>>;
+  selectedContact: string;
+  setSelectedContact: React.Dispatch<React.SetStateAction<string>>;
+  type: string;
+  setSelectedChatType: React.Dispatch<React.SetStateAction<string>>;
+}
+
+type GroupChatMessage = {
+  _id: string;
+  createdAt: string;
+  messageContent: string;
+  sender: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+  }
 }
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -84,11 +71,6 @@ const StyledTableRow = styled(TableRow)(() => ({
     border: 0,
   },
 }));
-
-// interface InterfaceChatRoomProps {
-//   selectedContact: string;
-//   messages: DirectMessage[];
-// }
 
 export default function chat(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -113,17 +95,11 @@ export default function chat(): JSX.Element {
 
   const { orgId: organizationId } = useParams();
 
-  const [selectedContact, setSelectedContact] = useState<SelectedContact>({
-    id: '',
-    userId: '',
-    firstName: '',
-    lastName: '',
-    messages: [],
-  });
-  const [selectedContactName, setSelectedContactName] = React.useState('');
-  const [contacts, setContacts] = React.useState([]);
-  const [groupChats, setGroupChats] = React.useState([]);
-  const [filterName, setFilterName] = React.useState('');
+  const [selectedContact, setSelectedContact] = useState('');
+  const [contacts, setContacts] = useState([]);
+  const [groupChats, setGroupChats] = useState([]);
+  const [selectChatType, setSelectedChatType] = useState('');
+  const [filterName, setFilterName] = useState('');
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
 
@@ -144,8 +120,10 @@ export default function chat(): JSX.Element {
     setCreateGroupChatModalisOpen(true);
   }
 
-  const toggleCreateGroupChatModal = /* istanbul ignore next */ (): void =>
+  const toggleCreateGroupChatModal = /* istanbul ignore next */ (): void => {
     setCreateGroupChatModalisOpen(!createGroupChatModalisOpen);
+  }
+    
 
   const [userName, setUserName] = useState('');
 
@@ -231,7 +209,6 @@ export default function chat(): JSX.Element {
   }, [contactData]);
 
   React.useEffect(() => {
-    console.log('GGGGGGGGGGGGGGGG', groupChatList);
     if (groupChatList) {
       setGroupChats(groupChatList.groupChatsByUserId);
       console.log(groupChats);
@@ -285,7 +262,7 @@ export default function chat(): JSX.Element {
                   </Dropdown.Item>
                   <Dropdown.Item
                     onClick={openCreateGroupChatModal}
-                    data-testid={'deletePost'}
+                    data-testid={'newGroupChat'}
                   >
                     New Group Chat
                   </Dropdown.Item>
@@ -311,27 +288,17 @@ export default function chat(): JSX.Element {
                         {contacts.map((contact: any) => {
                           const cardProps: InterfaceContactCardProps = {
                             id: contact._id,
-                            firstName:
-                              contact.users[0]?._id === userId
-                                ? contact.users[1]?.firstName
-                                : contact.users[0]?.firstName,
-                            userId:
-                              contact.users[0]?._id === userId
-                                ? contact.users[1]?._id
-                                : contact.users[0]?._id,
-                            lastName: userId
-                              ? contact.users[1]?.lastName
-                              : contact.users[0]?.lastName,
-                            email: userId
+                            title: contact.users[0]?._id === userId ? `${contact.users[1]?.firstName} ${contact.users[1]?.lastName}` : `${contact.users[0]?.firstName} ${contact.users[0]?.lastName}`,
+                            subtitle: userId
                               ? contact.users[1]?.email
                               : contact.users[0]?.email,
                             image: userId
                               ? contact.users[1]?.image
                               : contact.users[0]?.image,
-                            messages: contact.messages,
-                            setSelectedContactName,
                             setSelectedContact,
                             selectedContact,
+                            type: 'direct',
+                            setSelectedChatType
                           };
                           return (
                             <>
@@ -341,17 +308,27 @@ export default function chat(): JSX.Element {
                         })}
                       </Accordion.Body>
                     </Accordion.Item>
-                    <Accordion.Item eventKey="0">
+                    <Accordion.Item eventKey="1">
                       <Accordion.Header className={styles.chatType}>
                         GROUP CHATS
                       </Accordion.Header>
                       <Accordion.Body>
                         {groupChats &&
                           groupChats.map((chat: any) => {
+                            console.log('chat', chat)
+                            const cardProps: InterfaceContactCardProps = {
+                              id: chat._id,
+                              title: chat.title,
+                              subtitle: `${chat.users.length} ${chat.users.length > 1 ? 'members' : 'member'}`,
+                              image: '',
+                              setSelectedContact,
+                              selectedContact,
+                              type: 'group',
+                              setSelectedChatType
+                            };
                             return (
                               <>
-                                <div>{chat.title}</div>
-                                <p>{chat.users.length} Members</p>
+                                <ContactCard {...cardProps}></ContactCard>
                               </>
                             );
                           })}
@@ -363,7 +340,7 @@ export default function chat(): JSX.Element {
             </div>
           </div>
           <div className={styles.chatContainer}>
-            <ChatRoom selectedContact={selectedContact} />
+            <ChatRoom selectedContact={selectedContact} selectedChatType={selectChatType} />
           </div>
         </div>
       </div>
@@ -432,12 +409,6 @@ export default function chat(): JSX.Element {
                               {index + 1}
                             </StyledTableCell>
                             <StyledTableCell align="center">
-                              {/* <Link
-                                className={styles.membername}
-                                to={{
-                                  pathname: `/member/id=${currentUrl}`,
-                                }}
-                              > */}
                               {userDetails.user.firstName +
                                 ' ' +
                                 userDetails.user.lastName}
@@ -465,10 +436,11 @@ export default function chat(): JSX.Element {
           )}
         </Modal.Body>
       </Modal>
-      <CreateGroupChat
+      {createGroupChatModalisOpen && <CreateGroupChat
         toggleCreateGroupChatModal={toggleCreateGroupChatModal}
         createGroupChatModalisOpen={createGroupChatModalisOpen}
-      ></CreateGroupChat>
+        groupChatListRefetch={groupChatListRefetch}
+      ></CreateGroupChat>}
     </>
   );
 }

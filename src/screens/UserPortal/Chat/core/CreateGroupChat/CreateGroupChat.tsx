@@ -1,16 +1,21 @@
 import {
   FormControl,
+  FormControlLabel,
+  FormHelperText,
   InputLabel,
   MenuItem,
   Paper,
+  RadioGroup,
   Select,
+  FormLabel,
   TableBody,
+  Radio,
 } from '@mui/material';
 import type { SelectChangeEvent } from '@mui/material/Select';
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import styles from './CreateGroupChat.module.css';
-import { useMutation, useQuery } from '@apollo/client';
+import { ApolloQueryResult, useMutation, useQuery } from '@apollo/client';
 import { USER_JOINED_ORGANIZATIONS } from 'GraphQl/Queries/OrganizationQueries';
 import useLocalStorage from 'utils/useLocalstorage';
 import { CREATE_GROUP_CHAT } from 'GraphQl/Mutations/OrganizationMutations';
@@ -23,12 +28,15 @@ import { styled } from '@mui/material/styles';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import { USERS_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
-import { Search } from '@mui/icons-material';
+import { LocalPoliceTwoTone, Search } from '@mui/icons-material';
 import { style } from '@mui/system';
 
 interface InterfaceCreateGroupChatProps {
   toggleCreateGroupChatModal: () => void;
   createGroupChatModalisOpen: boolean;
+  groupChatListRefetch: (variables?: Partial<{
+    id: any;
+}> | undefined) => Promise<ApolloQueryResult<any>>
 }
 
 interface InterfaceOrganization {
@@ -76,6 +84,7 @@ const { getItem } = useLocalStorage();
 export default function chat({
   toggleCreateGroupChatModal,
   createGroupChatModalisOpen,
+  groupChatListRefetch
 }: InterfaceCreateGroupChatProps): JSX.Element {
   const userId: string | null = getItem('userId');
 
@@ -84,6 +93,7 @@ export default function chat({
   const [organizations, setOrganizations] = useState([]);
   const [selectedOrganization, setSelectedOrganization] = useState('');
   const [title, setTitle] = useState('');
+  let [userIds, setUserIds] = useState<String[]>([]);
 
   const [addUserModalisOpen, setAddUserModalisOpen] = useState(false);
 
@@ -105,15 +115,28 @@ export default function chat({
     },
   );
 
+  function reset(): void {
+    setOrganizations([]);
+    setTitle('');
+    setUserIds([]);
+    setSelectedOrganization('');
+  }
+
+  useEffect(() => {
+    setUserIds(userIds);
+  }, [userIds]);
+
   async function handleCreateGroupChat(): Promise<void> {
     const groupChat = await createGroupChat({
       variables: {
         organizationId: selectedOrganization,
-        userIds: [userId],
+        userIds: [userId, ...userIds],
         title,
       },
     });
-    console.log('GROUP CHAT', groupChat);
+    groupChatListRefetch();
+    toggleAddUserModal();
+    toggleCreateGroupChatModal();
   }
 
   const [userName, setUserName] = useState('');
@@ -203,14 +226,6 @@ export default function chat({
           >
             Next
           </Button>
-          {/* <Button
-            className={`${styles.colorPrimary} ${styles.borderNone}`}
-            variant="success"
-            onClick={handleCreateGroupChat}
-            data-testid="registerBtn"
-          >
-            Create
-          </Button> */}
         </Modal.Body>
       </Modal>
       <Modal
@@ -222,7 +237,7 @@ export default function chat({
         <Modal.Header closeButton data-testid="pluginNotificationHeader">
           <Modal.Title>{'Chat'}</Modal.Title>
         </Modal.Header>
-        <Modal.Body className={styles.addUserModalBody}>
+        <Modal.Body>
           {allUsersLoading ? (
             <>
               <Loader />
@@ -253,6 +268,7 @@ export default function chat({
                   </Button>
                 </Form>
               </div>
+
               <TableContainer className={styles.userData} component={Paper}>
                 <Table aria-label="customized table">
                   <TableHead>
@@ -283,17 +299,25 @@ export default function chat({
                                 userDetails.user.lastName}
                               <br />
                               {userDetails.user.email}
-                              {/* </Link> */}
                             </StyledTableCell>
                             <StyledTableCell align="center">
-                              <Button
+                              {userIds.includes(userDetails.user._id) ? (<Button
+                                variant='danger'
                                 onClick={() => {
-                                  // createChat(userDetails.user._id);
+                                  userIds = userIds.filter(id => id !== userDetails.user._id)
+                                  setUserIds(userIds);
+                                }}
+                                data-testid="removeBtn"
+                              >
+                                Remove
+                              </Button>) : (<Button
+                                onClick={() => {
+                                  setUserIds([...userIds, userDetails.user._id]);
                                 }}
                                 data-testid="addBtn"
                               >
                                 Add
-                              </Button>
+                              </Button>)}
                             </StyledTableCell>
                           </StyledTableRow>
                         ),
@@ -303,6 +327,14 @@ export default function chat({
               </TableContainer>
             </>
           )}
+          <Button
+            className={`${styles.colorPrimary} ${styles.borderNone}`}
+            variant="success"
+            onClick={handleCreateGroupChat}
+            data-testid="registerBtn"
+          >
+            Create
+          </Button>
         </Modal.Body>
       </Modal>
     </>

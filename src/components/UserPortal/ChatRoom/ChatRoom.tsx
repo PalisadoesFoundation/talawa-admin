@@ -6,7 +6,7 @@ import { Button, Form, InputGroup } from 'react-bootstrap';
 import styles from './ChatRoom.module.css';
 import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
 import { useTranslation } from 'react-i18next';
-import { DIRECT_CHAT_MESSAGES_BY_CHAT_ID } from 'GraphQl/Queries/PlugInQueries';
+import { DIRECT_CHAT_BY_ID, DIRECT_CHAT_MESSAGES_BY_CHAT_ID, GROUP_CHAT_BY_ID } from 'GraphQl/Queries/PlugInQueries';
 import { useMutation, useQuery, useSubscription } from '@apollo/client';
 import {
   CREATE_MESSAGE_CHAT,
@@ -17,15 +17,9 @@ import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
 import { hours } from 'components/EventCalendar/constants';
 
-type SelectedContact = {
-  id: string;
-  userId: string;
-  firstName: string;
-  lastName: string;
-  messages: DirectMessage[];
-};
 interface InterfaceChatRoomProps {
-  selectedContact: SelectedContact;
+  selectedContact: string;
+  selectedChatType: string;
 }
 
 type DirectMessage = {
@@ -44,6 +38,31 @@ type DirectMessage = {
   };
 };
 
+type Chat = {
+  _id: string;
+  messages: {
+    _id: string;
+    createdAt: Date;
+    sender: {
+      _id: string;
+      firstName: string;
+      lastName: string;
+    };
+    messageContent: string;
+    receiver: {
+      _id: string;
+      firstName: string;
+      lastName: string;
+    };
+  }[];
+  users: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+  }[];
+};
+
 export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userChatRoom',
@@ -52,9 +71,12 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
 
+  const [chatTitle, setChatTitle] = useState('');
+
   const [newMessage, setNewMessage] = useState('');
 
-  const [messages, setMessages] = useState<DirectMessage[]>([]);
+  const [directChat, setDirectChat] = useState<Chat>();
+  const [groupChat, setGroupChat] = useState<Chat>();
 
   const handleNewMessageChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const newMessageValue = e.target.value;
@@ -62,20 +84,51 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     setNewMessage(newMessageValue);
   };
 
-  // DIRECT_CHAT_MESSAGES_BY_CHAT_ID
 
   const [sendMessageToDirectChat] = useMutation(SEND_MESSAGE_TO_DIRECT_CHAT);
   const [createMessageChat] = useMutation(CREATE_MESSAGE_CHAT);
 
-  const {
-    data: chatMessages,
-    loading: chatMessagesLoading,
-    refetch: chatMessagesRefresh,
-  } = useQuery(DIRECT_CHAT_MESSAGES_BY_CHAT_ID, {
-    variables: {
-      id: props.selectedContact.id,
-    },
-  });
+  if(props.selectedChatType == 'direct') {
+    const {
+      data: chatData,
+      loading: chatLoading,
+      refetch: chatRefresh,
+    } = useQuery(DIRECT_CHAT_BY_ID, { variables: {
+       id: props.selectedContact
+      }
+    });
+
+    useEffect(() => {
+      if (chatData) {
+        console.log(chatData, 'chat');
+        setDirectChat(chatData.directChatById);
+  
+        if(chatData.directChatById.users[0]._id == userId) {
+          setChatTitle(`${chatData.directChatById.users[1].firstName} ${chatData.directChatById.users[1].lastName}`);
+        } else {
+          setChatTitle(`${chatData.directChatById.users[0].firstName} ${chatData.directChatById.users[0].lastName}`);
+        }
+      }
+    }, [chatData]);
+  } else {
+    const {
+      data: groupChatData,
+      loading: groupChatLoading,
+      refetch: groupChatRefresh,
+    } = useQuery(GROUP_CHAT_BY_ID, { variables: {
+      id: props.selectedContact
+      }
+    });
+
+    useEffect(() => {
+      if (groupChatData) {
+        console.log(groupChatData, 'chat');
+        setGroupChat(groupChatData.groupChatById);
+  
+        setChatTitle(groupChatData.groupChatById.title);
+      }
+    }, [groupChatData]);
+  }
 
   const { data: messageSubscriptionData } = useSubscription(
     MESSAGE_SENT_TO_DIRECT_CHAT,
@@ -86,34 +139,29 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     },
   );
 
-  // CREATE_MESSAGE_CHAT
+  
 
-  useEffect(() => {
-    if (chatMessages) {
-      console.log(chatMessages, 'messages');
-      setMessages(chatMessages.directChatsMessagesByChatID);
-    }
-  }, [chatMessages]);
+  
 
-  useEffect(() => {
-    if (messageSubscriptionData) {
-      const updatedMessages = JSON.parse(JSON.stringify(messages));
-      console.log('before', updatedMessages.length, updatedMessages);
-      console.log(
-        messageSubscriptionData.messageSentToDirectChat,
-        'subscription',
-      );
-      updatedMessages.push(messageSubscriptionData.messageSentToDirectChat);
-      setMessages(updatedMessages);
-      console.log('after', updatedMessages.length, updatedMessages);
-    }
-  }, [messageSubscriptionData]);
+  // useEffect(() => {
+  //   if (messageSubscriptionData) {
+  //     const updatedMessages = JSON.parse(JSON.stringify(messages));
+  //     console.log('before', updatedMessages.length, updatedMessages);
+  //     console.log(
+  //       messageSubscriptionData.messageSentToDirectChat,
+  //       'subscription',
+  //     );
+  //     updatedMessages.push(messageSubscriptionData.messageSentToDirectChat);
+  //     setMessages(updatedMessages);
+  //     console.log('after', updatedMessages.length, updatedMessages);
+  //   }
+  // }, [messageSubscriptionData]);
 
   const sendMessage = async (): Promise<void> => {
     console.log('selesctedContact', props.selectedContact);
     await sendMessageToDirectChat({
       variables: {
-        chatId: props.selectedContact.id,
+        chatId: props.selectedContact,
         messageContent: newMessage,
       },
     });
@@ -124,7 +172,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     //     receiver: props.selectedContact.userId,
     //   },
     // });
-    await chatMessagesRefresh();
+    // await chatMessagesRefresh();
     // setMessages(chatMessages);
   };
 
@@ -142,21 +190,51 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
           <div className={styles.header}>
             <div className={styles.userInfo}>
               <Avatar
-                name={`${props.selectedContact.firstName} ${props.selectedContact.lastName}`}
-                alt={`${props.selectedContact.firstName} ${props.selectedContact.lastName}`}
+                name={chatTitle}
+                alt={chatTitle}
                 avatarStyle={styles.contactImage}
               />
               <h5>
-                {props.selectedContact.firstName}{' '}
-                {props.selectedContact.lastName}
+                {chatTitle}
               </h5>
             </div>
           </div>
           <div className={`d-flex flex-grow-1 flex-column`}>
             <div className="chatMessages">
-              {messages.length && (
+              {(directChat?.messages.length || groupChat?.messages.length) && (
                 <div id="messages">
-                  {messages.map((message: DirectMessage, index: number) => {
+                  {props.selectedChatType == 'direct' ? directChat?.messages.map((message: DirectMessage, index: number) => {
+                    return (
+                      <>
+                        <div
+                          className={
+                            message.sender._id === userId
+                              ? styles.messageReceivedContainer
+                              : styles.messageSentContainer
+                          }
+                        >
+                          <div
+                            className={
+                              message.sender._id === userId
+                                ? styles.messageSent
+                                : styles.messageReceived
+                            }
+                            key={index}
+                          >
+                            <span className={styles.messageContent}>
+                              {message.messageContent}
+                            </span>
+                            <span className={styles.messageTime}>
+                              {new Date(message?.createdAt).toLocaleTimeString(
+                                'it-IT',
+                                { hour: '2-digit', minute: '2-digit' },
+                              )}
+                            </span>
+                          </div>
+                        </div>
+                      </>
+                    );
+                  }) : groupChat?.messages.map((message: DirectMessage, index: number) => {
                     return (
                       <>
                         <div
@@ -191,30 +269,6 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                 </div>
               )}
             </div>
-
-            {/* <Paper
-              variant="outlined"
-              sx={{
-                p: 2,
-                backgroundColor: 'white',
-                borderRadius: '20px 20px 5px 20px',
-                marginBottom: `10px`,
-              }}
-            >
-              My message
-            </Paper>
-            <Paper
-              variant="outlined"
-              sx={{
-                p: 2,
-                backgroundColor: '#31bb6b',
-                borderRadius: '20px 20px 20px 5px',
-                color: 'white',
-                marginBottom: `10px`,
-              }}
-            >
-              Other message
-            </Paper> */}
           </div>
           <div>
             <InputGroup>

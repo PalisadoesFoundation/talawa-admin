@@ -1058,6 +1058,8 @@ type Query {
   customFieldsByOrganization(id: ID!): [OrganizationCustomField]
   directChatsByUserID(id: ID!): [DirectChat]
   directChatsMessagesByChatID(id: ID!): [DirectChatMessage]
+  directChatById(id: ID!): DirectChat
+  groupChatById(id: ID!): DirectChat
   groupChatsByUserId(id: ID!): [GroupChat]
   event(id: ID!): Event
   eventVolunteersByEvent(id: ID!): [EventVolunteer]
