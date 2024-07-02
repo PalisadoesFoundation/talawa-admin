@@ -205,10 +205,13 @@ const AgendaItemsCreateModal: React.FC<
                 type="text"
                 placeholder={t('enterUrl')}
                 id="basic-url"
+                data-testid="urlInput"
                 value={newUrl}
                 onChange={(e) => setNewUrl(e.target.value)}
               />
-              <Button onClick={handleAddUrl}>{t('link')}</Button>
+              <Button onClick={handleAddUrl} data-testid="linkBtn">
+                {t('link')}
+              </Button>
             </div>
 
             {formState.urls.map((url, index) => (
@@ -221,6 +224,7 @@ const AgendaItemsCreateModal: React.FC<
                   variant="danger"
                   size="sm"
                   className={styles.deleteButton}
+                  data-testid="deleteUrl"
                   onClick={() => handleRemoveUrl(url)}
                 >
                   <FaTrash />
@@ -264,7 +268,7 @@ const AgendaItemsCreateModal: React.FC<
                       e.preventDefault();
                       handleRemoveAttachment(attachment);
                     }}
-                    data-testid="closePreview"
+                    data-testid="deleteAttachment"
                   >
                     <i className="fa fa-times" />
                   </button>
