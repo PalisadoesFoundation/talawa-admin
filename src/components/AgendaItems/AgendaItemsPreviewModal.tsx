@@ -54,7 +54,7 @@ const AgendaItemsPreviewModal: React.FC<
           </a>
         ) : (
           <a href={attachment} target="_blank" rel="noopener noreferrer">
-            <img src={attachment} />
+            <img src={attachment} alt="Attachment preview" />
           </a>
         )}
       </div>
