@@ -1,5 +1,11 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  within,
+} from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -27,6 +33,39 @@ const mockFormState = {
     lastName: 'User',
   },
 };
+
+const mockAgendaItemCategories = [
+  {
+    _id: '1',
+    name: 'Test Name',
+    description: 'Test Description',
+    createdBy: {
+      _id: '1',
+      firstName: 'Test',
+      lastName: 'User',
+    },
+  },
+  {
+    _id: '2',
+    name: 'Another Category',
+    description: 'Another Description',
+    createdBy: {
+      _id: '2',
+      firstName: 'Another',
+      lastName: 'Creator',
+    },
+  },
+  {
+    _id: '3',
+    name: 'Third Category',
+    description: 'Third Description',
+    createdBy: {
+      _id: '3',
+      firstName: 'Third',
+      lastName: 'User',
+    },
+  },
+];
 
 const mockHideUpdateModal = jest.fn();
 const mockSetFormState = jest.fn();
@@ -291,5 +330,40 @@ describe('AgendaItemsUpdateModal', () => {
         attachments: [...mockFormState.attachments, 'base64-file'],
       });
     });
+  });
+  test('renders autocomplete and selects categories correctly', async () => {
+    render(
+      <MockedProvider addTypename={false}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <AgendaItemsUpdateModal
+                  agendaItemCategories={mockAgendaItemCategories}
+                  agendaItemUpdateModalIsOpen
+                  hideUpdateModal={mockHideUpdateModal}
+                  formState={mockFormState}
+                  setFormState={mockSetFormState}
+                  updateAgendaItemHandler={mockUpdateAgendaItemHandler}
+                  t={mockT}
+                />
+              </LocalizationProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    const autocomplete = screen.getByTestId('categorySelect');
+    expect(autocomplete).toBeInTheDocument();
+
+    const input = within(autocomplete).getByRole('combobox');
+    fireEvent.mouseDown(input);
+
+    const options = screen.getAllByRole('option');
+    expect(options).toHaveLength(mockAgendaItemCategories.length);
+
+    fireEvent.click(options[0]);
+    fireEvent.click(options[1]);
   });
 });

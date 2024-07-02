@@ -136,7 +136,7 @@ const AgendaItemsCreateModal: React.FC<
                   formState.agendaItemCategoryIds.includes(category._id),
                 ) || []
               }
-              isOptionEqualToValue={(option, value) => option._id === value._id}
+              // isOptionEqualToValue={(option, value) => option._id === value._id}
               filterSelectedOptions={true}
               getOptionLabel={(
                 category: InterfaceAgendaItemCategoryInfo,
