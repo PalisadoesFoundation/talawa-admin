@@ -1147,8 +1147,8 @@
     "actionItemCategory": "Categoría de elemento de acción",
     "selectActionItemCategory": "Seleccione una categoría de elemento de acción",
     "selectAssignee": "Seleccione un asignado",
-    "preCompletionNotes": "Notas previas a la finalización",
-    "postCompletionNotes": "Publicar notas de finalización",
+    "preCompletionNotes": "Notas",
+    "postCompletionNotes": "Notas finales",
     "actionItemDetails": "Detalles del elemento de acción",
     "dueDate": "Fecha de vencimiento",
     "completionDate": "Fecha de finalización",
@@ -1161,6 +1161,14 @@
     "successfulCreation": "Elemento de acción creado exitosamente",
     "successfulUpdation": "Elemento de acción actualizado correctamente",
     "notes": "Notas",
-    "save": "Guardar"
+    "save": "Guardar",
+    "assignee": "Cesionario",
+    "assigner": "Asignador",
+    "assignmentDate": "Fecha de asignación",
+    "status": "Estado",
+    "actionItemActive": "Activo",
+    "actionItemStatus": "Estado del elemento de acción",
+    "actionItemCompleted": "Elemento de acción completado",
+    "markCompletion": "Marcar finalización"
   }
 }

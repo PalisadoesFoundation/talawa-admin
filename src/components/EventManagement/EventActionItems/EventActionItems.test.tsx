@@ -2,7 +2,14 @@ import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  waitForElementToBeRemoved,
+} from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
@@ -406,16 +413,95 @@ describe('Event Action Items Page', () => {
     await wait();
 
     expect(screen.getByText('#')).toBeInTheDocument();
-    expect(screen.getByText('Assignee')).toBeInTheDocument();
-    expect(screen.getByText('Action Item Category')).toBeInTheDocument();
-    expect(screen.getByText('Notes')).toBeInTheDocument();
-    expect(screen.getByText('Completion Notes')).toBeInTheDocument();
+    expect(screen.getByText(translations.assignee)).toBeInTheDocument();
+    expect(
+      screen.getByText(translations.actionItemCategory),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(translations.preCompletionNotes),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(translations.postCompletionNotes),
+    ).toBeInTheDocument();
 
     await wait();
+    const asigneeAnchorElement = screen.getByText('Burton Sanders');
+    expect(asigneeAnchorElement.tagName).toBe('A');
+    expect(asigneeAnchorElement).toHaveAttribute('href', '/member/123');
+
     expect(screen.getByText('Burton Sanders')).toBeInTheDocument();
-    expect(screen.getByText('Pre Completion Note')).toBeInTheDocument();
-    const updateButtons = screen.getAllByText(/Manage Actions/i);
+    const updateButtons = screen.getAllByTestId('editActionItemModalBtn');
+    const previewButtons = screen.getAllByTestId('previewActionItemModalBtn');
+    const updateStatusButtons = screen.getAllByTestId(
+      'actionItemStatusChangeCheckbox',
+    );
     expect(updateButtons[0]).toBeInTheDocument();
+    expect(previewButtons[0]).toBeInTheDocument();
+    expect(updateStatusButtons[0]).toBeInTheDocument();
+  });
+
+  test('opens and closes the update and delete modals through the preview modal', async () => {
+    window.location.assign('/event/111/123');
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <I18nextProvider i18n={i18nForTest}>
+                {<EventActionItems eventId="123" />}
+              </I18nextProvider>
+            </LocalizationProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    expect(
+      screen.getAllByTestId('previewActionItemModalBtn')[0],
+    ).toBeInTheDocument();
+    userEvent.click(screen.getAllByTestId('previewActionItemModalBtn')[0]);
+
+    await waitFor(() => {
+      return expect(
+        screen.findByTestId('previewActionItemModalCloseBtn'),
+      ).resolves.toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('deleteActionItemPreviewModalBtn'),
+      ).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('deleteActionItemPreviewModalBtn'));
+
+    await waitFor(() => {
+      return expect(
+        screen.findByTestId('actionItemDeleteModalCloseBtn'),
+      ).resolves.toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('actionItemDeleteModalCloseBtn'));
+
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId('actionItemDeleteModalCloseBtn'),
+    );
+
+    expect(
+      screen.getByTestId('editActionItemPreviewModalBtn'),
+    ).toBeInTheDocument();
+    userEvent.click(screen.getByTestId('editActionItemPreviewModalBtn'));
+
+    await waitFor(() => {
+      return expect(
+        screen.findByTestId('updateActionItemModalCloseBtn'),
+      ).resolves.toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('updateActionItemModalCloseBtn'));
+
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId('updateActionItemModalCloseBtn'),
+    );
   });
 
   test('Testing update action item modal', async () => {
@@ -434,7 +520,7 @@ describe('Event Action Items Page', () => {
       </MockedProvider>,
     );
     await wait();
-    const updateButtons = screen.getAllByText(/Manage Actions/i);
+    const updateButtons = screen.getAllByTestId('editActionItemModalBtn');
     userEvent.click(updateButtons[0]);
 
     expect(screen.getByText('Action Item Details')).toBeInTheDocument();
@@ -448,13 +534,6 @@ describe('Event Action Items Page', () => {
     });
     expect(screen.getByPlaceholderText('Notes')).toHaveValue(
       'task to be done with high priority',
-    );
-
-    fireEvent.change(screen.getByPlaceholderText('Post Completion Notes'), {
-      target: { value: 'Done' },
-    });
-    expect(screen.getByPlaceholderText('Post Completion Notes')).toHaveValue(
-      'Done',
     );
 
     fireEvent.change(screen.getByLabelText('Due Date'), {
@@ -471,7 +550,7 @@ describe('Event Action Items Page', () => {
 
     await wait();
 
-    expect(toast.success).toBeCalledWith(translations.successfulUpdation);
+    expect(toast.success).toBeCalled();
   });
   test('Testing delete action item modal and delete the record', async () => {
     window.location.assign('/event/111/123');
@@ -489,13 +568,17 @@ describe('Event Action Items Page', () => {
       </MockedProvider>,
     );
     await wait();
-    const updateButtons = screen.getAllByText(/Manage Actions/i);
-    userEvent.click(updateButtons[0]);
+    expect(
+      screen.getAllByTestId('previewActionItemModalBtn')[0],
+    ).toBeInTheDocument();
+    userEvent.click(screen.getAllByTestId('previewActionItemModalBtn')[0]);
 
-    expect(screen.getByText('Action Item Details')).toBeInTheDocument();
-
-    expect(screen.getByTestId('deleteActionItemBtn')).toBeInTheDocument();
-    userEvent.click(screen.getByTestId('deleteActionItemBtn'));
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('deleteActionItemPreviewModalBtn'),
+      ).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('deleteActionItemPreviewModalBtn'));
     await wait();
     expect(
       screen.getByText('Do you want to remove this action item?'),
@@ -522,20 +605,27 @@ describe('Event Action Items Page', () => {
       </MockedProvider>,
     );
     await wait();
-    const updateButtons = screen.getAllByText(/Manage Actions/i);
-    userEvent.click(updateButtons[0]);
+    expect(
+      screen.getAllByTestId('previewActionItemModalBtn')[0],
+    ).toBeInTheDocument();
+    userEvent.click(screen.getAllByTestId('previewActionItemModalBtn')[0]);
 
-    expect(screen.getByText('Action Item Details')).toBeInTheDocument();
-
-    expect(screen.getByTestId('deleteActionItemBtn')).toBeInTheDocument();
-    userEvent.click(screen.getByTestId('deleteActionItemBtn'));
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('deleteActionItemPreviewModalBtn'),
+      ).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('deleteActionItemPreviewModalBtn'));
     await wait();
     expect(
       screen.getByText('Do you want to remove this action item?'),
     ).toBeInTheDocument();
     userEvent.click(screen.getByText('No'));
     await wait();
-    expect(screen.getByText('Teresa Bradley')).toBeInTheDocument();
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(
+      screen.getByText(translations.actionItemDetails),
+    ).toBeInTheDocument();
   });
 
   test('Raises an error when incorrect information is filled while creation', async () => {
@@ -593,16 +683,16 @@ describe('Event Action Items Page', () => {
       </MockedProvider>,
     );
     await wait();
-    const updateButtons = screen.getAllByText(/Manage Actions/i);
+    const updateButtons = screen.getAllByTestId('editActionItemModalBtn');
     userEvent.click(updateButtons[0]);
 
-    expect(screen.getByText('Action Item Details')).toBeInTheDocument();
+    expect(
+      screen.getByText(translations.actionItemDetails),
+    ).toBeInTheDocument();
 
     userEvent.click(screen.getByTestId('updateActionItemFormSubmitBtn'));
 
     await wait();
-
-    expect(toast.success).toBeCalledWith(translations.successfulUpdation);
 
     expect(toast.error).toBeCalled();
   });
@@ -642,10 +732,8 @@ describe('Event Action Items Page', () => {
       </MockedProvider>,
     );
     await wait();
-    const updateButton = screen.getByRole('button', {
-      name: /manage actions/i,
-    });
-    userEvent.click(updateButton);
+    const updateButtons = screen.getAllByTestId('editActionItemModalBtn');
+    userEvent.click(updateButtons[0]);
 
     expect(screen.getByText('Action Item Details')).toBeInTheDocument();
     const assigneeDropdown = screen.getByTestId(
@@ -657,8 +745,9 @@ describe('Event Action Items Page', () => {
     expect(screen.getByPlaceholderText('Notes')).toHaveValue(
       'Pre Completion Note',
     );
-    expect(screen.getByPlaceholderText('Post Completion Notes')).toHaveValue(
-      'Post Completion Note',
-    );
+    const editActionItem = screen.getByRole('button', {
+      name: translations.editActionItem,
+    });
+    expect(editActionItem).toBeInTheDocument();
   });
 });

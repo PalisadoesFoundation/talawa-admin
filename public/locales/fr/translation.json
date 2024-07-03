@@ -906,8 +906,8 @@
     "actionItemCategory": "Catégorie d'élément d'action",
     "selectActionItemCategory": "Sélectionnez une catégorie d'élément d'action",
     "selectAssignee": "Sélectionnez un responsable",
-    "preCompletionNotes": "Notes préalables à l'achèvement",
-    "postCompletionNotes": "Notes post-achèvement",
+    "preCompletionNotes": "Remarques",
+    "postCompletionNotes": "Notes d'achèvement",
     "actionItemDetails": "Détails de l'action",
     "dueDate": "Date d'échéance",
     "completionDate": "Date d'achèvement",
@@ -918,6 +918,14 @@
     "successfulCreation": "Élément d'action créé avec succès",
     "successfulUpdation": "Élément d'action mis à jour avec succès",
     "notes": "Remarques",
-    "save": "Sauvegarder"
+    "save": "Sauvegarder",
+    "assignee": "Cessionnaire",
+    "assigner": "Assigner",
+    "assignmentDate": "Date d'affectation",
+    "status": "Statut",
+    "actionItemActive": "Actif",
+    "actionItemStatus": "Statut de l'action",
+    "actionItemCompleted": "Élément d'action terminé",
+    "markCompletion": "Marquer l'achèvement"
   }
 }
