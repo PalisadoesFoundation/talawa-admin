@@ -75,18 +75,16 @@ const ActionItemUpdateModal: React.FC<InterfaceActionItemCreateModalProps> = ({
                 <option value="" disabled>
                   {formState.assignee}
                 </option>
-                {membersData?.map(
-                  (member: InterfaceMemberInfo, index: number) => {
-                    const currMemberName = `${member.firstName} ${member.lastName}`;
-                    if (currMemberName !== formState.assignee) {
-                      return (
-                        <option key={index} value={member._id}>
-                          {`${member.firstName} ${member.lastName}`}
-                        </option>
-                      );
-                    }
-                  },
-                )}
+                {membersData?.map((member: InterfaceMemberInfo) => {
+                  const currMemberName = `${member.firstName} ${member.lastName}`;
+                  if (currMemberName !== formState.assignee) {
+                    return (
+                      <option key={member._id} value={member._id}>
+                        {`${member.firstName} ${member.lastName}`}
+                      </option>
+                    );
+                  }
+                })}
               </Form.Select>
             </Form.Group>
 
