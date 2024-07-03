@@ -2,6 +2,7 @@ import { CREATE_AGENDA_ITEM_MUTATION } from 'GraphQl/Mutations/AgendaItemMutatio
 
 import { AgendaItemByEvent } from 'GraphQl/Queries/AgendaItemQueries';
 import { AGENDA_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/AgendaCategoryQueries';
+
 export const MOCKS = [
   {
     request: {
@@ -13,12 +14,12 @@ export const MOCKS = [
         agendaItemCategoriesByOrganization: [
           {
             _id: 'agendaItemCategory1',
-            name: 'Category',
+            name: 'Category 1',
             description: 'Test Description',
             createdBy: {
-              _id: 'user1',
-              firstName: 'Harve',
-              lastName: 'Lance',
+              _id: 'user0',
+              firstName: 'Wilt',
+              lastName: 'Shepherd',
             },
           },
         ],
@@ -37,8 +38,8 @@ export const MOCKS = [
             _id: 'agendaItem1',
             title: 'AgendaItem 1',
             description: 'AgendaItem 1 Description',
-            duration: '2h',
-            attachments: ['attachment1'],
+            duration: '30',
+            attachments: [],
             createdBy: {
               _id: 'user0',
               firstName: 'Wilt',
@@ -49,16 +50,16 @@ export const MOCKS = [
             sequence: 1,
             categories: [
               {
-                _id: 'category1',
+                _id: 'agendaItemCategory1',
                 name: 'Category 1',
               },
             ],
             organization: {
-              _id: 'org1',
+              _id: '111',
               name: 'Unity Foundation',
             },
             relatedEvent: {
-              _id: 'event1',
+              _id: '123',
               title: 'Aerobics for Everyone',
             },
           },
@@ -71,13 +72,13 @@ export const MOCKS = [
       query: CREATE_AGENDA_ITEM_MUTATION,
       variables: {
         input: {
-          title: 'item',
-          description: 'test description',
+          title: 'AgendaItem 1',
+          description: 'AgendaItem 1 Description',
           duration: '30',
           relatedEventId: '123',
           organizationId: '111',
-          sequence: 2, // Ensure sequence is included in the input
-          categories: ['category'],
+          sequence: 1,
+          categories: ['Category 1'],
           attachments: [],
           urls: [],
         },
@@ -86,7 +87,7 @@ export const MOCKS = [
     result: {
       data: {
         createAgendaItem: {
-          _id: 'agendaItem2',
+          _id: 'agendaItem1',
         },
       },
     },
@@ -101,22 +102,18 @@ export const MOCKS_ERROR_MUTATION = [
         input: {
           title: 'AgendaItem 1',
           description: 'AgendaItem 1 Description',
-          duration: '2h',
-          attachments: ['attachment1'],
-          relatedEvent: 'event1',
-          urls: [],
-          users: [],
-          categories: ['category1'],
+          duration: '30',
+          relatedEventId: '123',
+          organizationId: '111',
           sequence: 1,
-          organizationId: 'org1',
+          categories: ['agendaItemCategory1'],
+          attachments: [],
+          urls: [],
         },
       },
     },
     error: new Error('Mock Graphql Error'),
   },
-];
-
-export const MOCKS_ERROR_QUERY = [
   {
     request: {
       query: AgendaItemByEvent,
@@ -132,3 +129,5 @@ export const MOCKS_ERROR_QUERY = [
     error: new Error('Mock Graphql Error'),
   },
 ];
+
+export const MOCKS_ERROR_QUERY = [];

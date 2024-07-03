@@ -96,7 +96,7 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
           },
         },
       });
-      toast.success(t('agendaItemCreated'));
+
       setFormState({
         title: '',
         description: '',
@@ -107,6 +107,7 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
       });
       hideCreateModal();
       refetchAgendaItem();
+      toast.success(t('agendaItemCreated'));
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message);

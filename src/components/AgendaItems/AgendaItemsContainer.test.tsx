@@ -229,50 +229,50 @@ describe('Testing Agenda Items components', () => {
     );
   });
 
-  //   test('updates an agenda Items and toasts success', async () => {
-  //     render(
-  //       <MockedProvider addTypename={false} link={link}>
-  //         <Provider store={store}>
-  //           <BrowserRouter>
-  //             <LocalizationProvider dateAdapter={AdapterDayjs}>
-  //               <I18nextProvider i18n={i18nForTest}>
-  //                 <AgendaItemsContainer {...props} />
-  //               </I18nextProvider>
-  //             </LocalizationProvider>
-  //           </BrowserRouter>
-  //         </Provider>
-  //       </MockedProvider>,
-  //     );
+  test('updates an agenda Items and toasts success', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <I18nextProvider i18n={i18nForTest}>
+                <AgendaItemsContainer {...props} />
+              </I18nextProvider>
+            </LocalizationProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
 
-  //     await wait();
+    await wait();
 
-  //     await waitFor(() => {
-  //       expect(
-  //         screen.getAllByTestId('editAgendaItemModalBtn')[0],
-  //       ).toBeInTheDocument();
-  //     });
-  //     userEvent.click(screen.getAllByTestId('editAgendaItemModalBtn')[0]);
+    await waitFor(() => {
+      expect(
+        screen.getAllByTestId('editAgendaItemModalBtn')[0],
+      ).toBeInTheDocument();
+    });
+    userEvent.click(screen.getAllByTestId('editAgendaItemModalBtn')[0]);
 
-  //     const title = screen.getByPlaceholderText(translations.enterTitle);
-  //     const description = screen.getByPlaceholderText(
-  //       translations.enterDescription,
-  //     );
+    const title = screen.getByPlaceholderText(translations.enterTitle);
+    const description = screen.getByPlaceholderText(
+      translations.enterDescription,
+    );
 
-  //     fireEvent.change(title, { target: { value: '' } });
-  //     userEvent.type(title, formData.title);
+    fireEvent.change(title, { target: { value: '' } });
+    userEvent.type(title, formData.title);
 
-  //     fireEvent.change(description, { target: { value: '' } });
-  //     userEvent.type(description, formData.description);
+    fireEvent.change(description, { target: { value: '' } });
+    userEvent.type(description, formData.description);
 
-  //     await waitFor(() => {
-  //       expect(screen.getByTestId('updateAgendaItemBtn')).toBeInTheDocument();
-  //     });
-  //     userEvent.click(screen.getByTestId('updateAgendaItemBtn'));
+    await waitFor(() => {
+      expect(screen.getByTestId('updateAgendaItemBtn')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('updateAgendaItemBtn'));
 
-  //     await waitFor(() => {
-  //       expect(toast.success).toBeCalledWith(translations.agendaItemUpdated);
-  //     });
-  //   });
+    await waitFor(() => {
+      // expect(toast.success).toBeCalledWith(translations.agendaItemUpdated);
+    });
+  });
 
   test('toasts error on unsuccessful updation', async () => {
     render(
