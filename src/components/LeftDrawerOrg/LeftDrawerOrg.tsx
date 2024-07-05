@@ -13,6 +13,7 @@ import { ReactComponent as AngleRightIcon } from 'assets/svgs/angleRight.svg';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import styles from './LeftDrawerOrg.module.css';
 import Avatar from 'components/Avatar/Avatar';
+import useLocalStorage from 'utils/useLocalstorage';
 
 export interface InterfaceLeftDrawerProps {
   orgId: string;
@@ -28,6 +29,9 @@ const leftDrawerOrg = ({
   setHideDrawer,
 }: InterfaceLeftDrawerProps): JSX.Element => {
   const { t: tCommon } = useTranslation('common');
+  const { getItem } = useLocalStorage();
+  const isSuperAdmin = getItem('SuperAdmin');
+
   const [showDropdown, setShowDropdown] = React.useState(false);
 
   const [organization, setOrganization] =
@@ -43,7 +47,6 @@ const leftDrawerOrg = ({
   } = useQuery(ORGANIZATIONS_LIST, {
     variables: { id: orgId },
   });
-  // Set organization data
   useEffect(() => {
     let isMounted = true;
     if (data && isMounted) {
@@ -151,7 +154,12 @@ const leftDrawerOrg = ({
                         }
                       />
                     </div>
-                    {tCommon(name)}
+
+                    {name == 'People'
+                      ? isSuperAdmin
+                        ? 'Users'
+                        : 'Members'
+                      : tCommon(name)}
                   </Button>
                 )}
               </NavLink>

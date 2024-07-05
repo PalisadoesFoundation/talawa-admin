@@ -216,9 +216,20 @@ const MOCKS_EMPTY = [
   },
 ];
 
+const defaultScreensForSuperadmin = [
+  'Dashboard',
+  'Users',
+  'Events',
+  'Posts',
+  'Block/Unblock',
+  'Plugins',
+  'Settings',
+  'All Organizations',
+];
+
 const defaultScreens = [
   'Dashboard',
-  'People',
+  'Members',
   'Events',
   'Posts',
   'Block/Unblock',
@@ -269,7 +280,7 @@ const linkEmpty = new StaticMockLink(MOCKS_EMPTY, true);
 describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
   test('Component should be rendered properly', async () => {
     setItem('UserImage', '');
-    setItem('SuperAdmin', true);
+    setItem('SuperAdmin', false);
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
     render(
@@ -285,6 +296,28 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     );
     await wait();
     defaultScreens.map((screenName) => {
+      expect(screen.getByText(screenName)).toBeInTheDocument();
+    });
+  });
+
+  test('Component should be rendered properly for superadmin', async () => {
+    setItem('UserImage', '');
+    setItem('SuperAdmin', true);
+    setItem('FirstName', 'John');
+    setItem('LastName', 'Doe');
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LeftDrawerOrg {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+    defaultScreensForSuperadmin.map((screenName) => {
       expect(screen.getByText(screenName)).toBeInTheDocument();
     });
   });
@@ -330,7 +363,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     expect(global.window.location.pathname).toContain('/orgdash/id=123');
   });
 
-  test('Testing when screen size is less than 820px', async () => {
+  test('Testing when screen size is less than 820px for superadmins', async () => {
     setItem('SuperAdmin', true);
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -346,7 +379,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     await wait();
     resizeWindow(800);
     expect(screen.getByText(/Dashboard/i)).toBeInTheDocument();
-    expect(screen.getByText(/People/i)).toBeInTheDocument();
+    expect(screen.getByText(/Users/i)).toBeInTheDocument();
 
     const peopelBtn = screen.getByTestId(/People/i);
     userEvent.click(peopelBtn);

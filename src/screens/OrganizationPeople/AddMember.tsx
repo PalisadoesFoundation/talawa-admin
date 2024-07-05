@@ -26,6 +26,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
+import { getItem } from 'utils/useLocalstorage';
 import type {
   InterfaceQueryOrganizationsListObject,
   InterfaceQueryUserListItem,
@@ -57,8 +58,13 @@ function AddMember(): JSX.Element {
     keyPrefix: 'addMember',
   });
 
-  document.title = translateOrgPeople('title');
+  const isSuperAdmin = getItem('SuperAdmin', '');
 
+  const updateDocumentTitle = () => {
+    const titleKey = isSuperAdmin ? 'title_superadmin' : 'title';
+    document.title = translateOrgPeople(titleKey);
+  };
+  updateDocumentTitle();
   const [addUserModalisOpen, setAddUserModalIsOpen] = useState(false);
 
   function openAddUserModal(): void {

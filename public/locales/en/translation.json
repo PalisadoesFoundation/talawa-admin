@@ -111,6 +111,17 @@
     "manage": "Manage",
     "sampleOrganization": "Sample Organization"
   },
+  "orgPeopleOrganizationsCard": {
+    "manage": "Manage",
+    "notMember": "User is not a member",
+    "unblock": "UnBlock",
+    "block": "Block",
+    "blockedSuccessfully": "User blocked successfully",
+    "unBlockedSuccessfully": "User Un-Blocked successfully",
+    "blockedUser": "User is blocked",
+    "roleUpdated": "Role Updated.",
+    "memberRemoved": "The Member is removed"
+  },
   "paginationList": {
     "rowsPerPage": "rows per page",
     "all": "All"
@@ -181,7 +192,8 @@
     "noMembershipRequests": "No Membership requests present"
   },
   "organizationPeople": {
-    "title": "Talawa Members",
+    "title": "Members",
+    "title_superadmin": "Users",
     "filterByName": "Filter by Name",
     "filterByLocation": "Filter by Location",
     "filterByEvent": "Filter by Event",
@@ -643,6 +655,14 @@
     "installMsg": "This feature is now enabled in your organization"
   },
   "memberDetail": {
+    "overview": "Overview",
+    "organizations": "Organizations",
+    "events": "Events",
+    "tags": "Tags",
+    "title_superadmin": "User Details",
+    "title": "Member Details"
+  },
+  "orgMemberDetail": {
     "title": "User Details",
     "addAdmin": "Add Admin",
     "alreadyIsAdmin": "Member is already an Admin",
@@ -676,6 +696,12 @@
     "adminForEvents": "Admin for events",
     "addedAsAdmin": "User is added as admin.",
     "userType": "User Type"
+  },
+  "memberOrganization": {
+    "sort": "Sort",
+    "noOrgError": "Organizations not found, please create an organization through dashboard",
+    "noOrgErrorTitle": "Organizations Not Found",
+    "noOrgErrorDescription": "Please create an organization through dashboard"
   },
   "userLogin": {
     "login": "Login",
