@@ -81,7 +81,7 @@ export default function organizationSidebar(): JSX.Element {
         </div>
       ) : (
         <ListGroup variant="flush">
-          {members ? (
+          {members.length ? (
             members.map((member: InterfaceMemberInfo) => {
               const memberName = `${member.firstName} ${member.lastName}`;
               return (
@@ -123,7 +123,7 @@ export default function organizationSidebar(): JSX.Element {
         </div>
       ) : (
         <ListGroup variant="flush">
-          {events ? (
+          {events.length ? (
             events.map((event: InterfaceQueryOrganizationEventListItem) => {
               return (
                 <ListGroup.Item
