@@ -7,11 +7,13 @@ import { ReactComponent as AngleLeftIcon } from 'assets/svgs/angleLeft.svg';
 import { ReactComponent as EventDashboardIcon } from 'assets/svgs/eventDashboard.svg';
 import { ReactComponent as EventRegistrantsIcon } from 'assets/svgs/people.svg';
 import { ReactComponent as EventActionsIcon } from 'assets/svgs/settings.svg';
+import { ReactComponent as EventAgendaItemsIcon } from 'assets/svgs/agenda-items.svg';
 import { ReactComponent as EventStatisticsIcon } from 'assets/svgs/eventStats.svg';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
 import EventDashboard from 'components/EventManagement/Dashboard/EventDashboard';
 import EventActionItems from 'components/EventManagement/EventActionItems/EventActionItems';
+import EventAgendaItems from 'components/EventManagement/EventAgendaItems/EventAgendaItems';
 import useLocalStorage from 'utils/useLocalstorage';
 
 const eventDashboardTabs: {
@@ -31,12 +33,22 @@ const eventDashboardTabs: {
     icon: <EventActionsIcon width={23} height={23} className="me-1" />,
   },
   {
+    value: 'eventAgendas',
+    icon: <EventAgendaItemsIcon width={23} height={23} className="me-1" />,
+  },
+
+  {
     value: 'eventStats',
     icon: <EventStatisticsIcon width={23} height={23} className="me-2" />,
   },
 ];
 
-type TabOptions = 'dashboard' | 'registrants' | 'eventActions' | 'eventStats';
+type TabOptions =
+  | 'dashboard'
+  | 'registrants'
+  | 'eventActions'
+  | 'eventAgendas'
+  | 'eventStats';
 
 const EventManagement = (): JSX.Element => {
   const { t } = useTranslation('translation', {
@@ -138,6 +150,12 @@ const EventManagement = (): JSX.Element => {
                 return (
                   <div data-testid="eventActionsTab">
                     <EventActionItems eventId={eventId} />
+                  </div>
+                );
+              case 'eventAgendas':
+                return (
+                  <div data-testid="eventAgendasTab">
+                    <EventAgendaItems eventId={eventId} />
                   </div>
                 );
               case 'eventStats':
