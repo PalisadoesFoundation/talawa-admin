@@ -2,6 +2,7 @@ import { useQuery, type ApolloQueryResult } from '@apollo/client';
 import { Search, Sort, WarningAmberRounded } from '@mui/icons-material';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
+import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Dropdown, Form } from 'react-bootstrap';
@@ -101,6 +102,10 @@ const fundCampaignPledge = (): JSX.Element => {
     [ModalState.DELETE]: false,
   });
 
+  const [anchor, setAnchor] = useState<null | HTMLElement>(null);
+  const [extraUsers, setExtraUsers] = useState<InterfacePledgeVolunteer[]>([]);
+  const open = Boolean(anchor);
+  const id = open ? 'simple-popup' : undefined;
   const [pledgeModalMode, setPledgeModalMode] = useState<'edit' | 'create'>(
     'create',
   );
@@ -192,6 +197,14 @@ const fundCampaignPledge = (): JSX.Element => {
     [openModal],
   );
 
+  const handleClick = (
+    event: React.MouseEvent<HTMLElement>,
+    users: InterfacePledgeVolunteer[],
+  ): void => {
+    setExtraUsers(users);
+    setAnchor(anchor ? null : event.currentTarget);
+  };
+
   if (pledgeLoading) return <Loader size="xl" />;
   if (pledgeError) {
     return (
@@ -212,7 +225,7 @@ const fundCampaignPledge = (): JSX.Element => {
     {
       field: 'volunteers',
       headerName: 'Volunteers',
-      flex: 2,
+      flex: 3,
       minWidth: 50,
       align: 'left',
       headerAlign: 'center',
@@ -221,13 +234,15 @@ const fundCampaignPledge = (): JSX.Element => {
       renderCell: (params: GridCellParams) => {
         return (
           <div className="d-flex flex-wrap gap-1" style={{ maxHeight: 120 }}>
-            {params.row.users.map(
-              (user: InterfacePledgeVolunteer, index: number) => (
+            {params.row.users
+              .slice(0, 2)
+              .map((user: InterfacePledgeVolunteer, index: number) => (
                 <div className={styles.volunteerContainer} key={index}>
                   {user.image ? (
                     <img
                       src={user.image}
                       alt="volunteer"
+                      data-testid={`image${index + 1}`}
                       className={styles.TableImage}
                     />
                   ) : (
@@ -244,7 +259,16 @@ const fundCampaignPledge = (): JSX.Element => {
                     {user.firstName + ' ' + user.lastName}
                   </span>
                 </div>
-              ),
+              ))}
+            {params.row.users.length > 2 && (
+              <div
+                className={styles.moreContainer}
+                aria-describedby={id}
+                data-testid="moreContainer"
+                onClick={(e) => handleClick(e, params.row.users.slice(2))}
+              >
+                <span>+{params.row.users.length - 2} more...</span>
+              </div>
             )}
           </div>
         );
@@ -394,7 +418,6 @@ const fundCampaignPledge = (): JSX.Element => {
         </Link>
         <Typography color="text.primary">{t('pledges')}</Typography>
       </Breadcrumbs>
-
       <div className={styles.overviewContainer}>
         <div className={styles.titleContainer}>
           <h3>{campaignInfo?.name}</h3>
@@ -413,7 +436,6 @@ const fundCampaignPledge = (): JSX.Element => {
           </div>
         </div>
       </div>
-
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
         <div className={`${styles.input} mb-1`}>
           <Form.Control
@@ -488,10 +510,9 @@ const fundCampaignPledge = (): JSX.Element => {
           </div>
         </div>
       </div>
-
       <DataGrid
         disableColumnMenu
-        columnBuffer={6}
+        columnBuffer={7}
         hideFooter={true}
         getRowId={(row) => row._id}
         components={{
@@ -516,7 +537,6 @@ const fundCampaignPledge = (): JSX.Element => {
         columns={columns}
         isRowSelectable={() => false}
       />
-
       {/* Update Pledge ModalState */}
       <PledgeModal
         isOpen={modalState[ModalState.SAME]}
@@ -528,7 +548,6 @@ const fundCampaignPledge = (): JSX.Element => {
         endDate={pledgeData?.getFundraisingCampaignById.endDate as Date}
         mode={pledgeModalMode}
       />
-
       {/* Delete Pledge ModalState */}
       <PledgeDeleteModal
         isOpen={modalState[ModalState.DELETE]}
@@ -536,6 +555,43 @@ const fundCampaignPledge = (): JSX.Element => {
         pledge={pledge}
         refetchPledge={refetchPledge}
       />
+      <BasePopup
+        id={id}
+        open={open}
+        anchor={anchor}
+        disablePortal
+        className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
+      >
+        {extraUsers.map((user: InterfacePledgeVolunteer, index: number) => (
+          <div
+            className={styles.volunteerContainer}
+            key={index}
+            data-testid={`extra${index + 1}`}
+          >
+            {user.image ? (
+              <img
+                src={user.image}
+                alt="volunteer"
+                data-testid={`extraImage${index + 1}`}
+                className={styles.TableImage}
+              />
+            ) : (
+              <div className={styles.avatarContainer}>
+                <Avatar
+                  key={user._id + '1'}
+                  avatarStyle={styles.TableImage}
+                  name={user.firstName + ' ' + user.lastName}
+                  alt={user.firstName + ' ' + user.lastName}
+                  dataTestId={`extraAvatar${index + 1}`}
+                />
+              </div>
+            )}
+            <span key={user._id + '2'}>
+              {user.firstName + ' ' + user.lastName}
+            </span>
+          </div>
+        ))}
+      </BasePopup>
     </div>
   );
 };

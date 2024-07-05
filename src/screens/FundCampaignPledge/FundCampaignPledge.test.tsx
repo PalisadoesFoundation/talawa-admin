@@ -279,8 +279,40 @@ describe('Testing Campaign Pledge Screen', () => {
       expect(screen.getByTestId('searchVolunteer')).toBeInTheDocument();
     });
 
-    const image = await screen.findByAltText('volunteer');
+    const image = await screen.findByTestId('image1');
     expect(image).toBeInTheDocument();
     expect(image).toHaveAttribute('src', 'img-url');
+  });
+
+  it('should render extraUserDetails in Popup', async () => {
+    renderFundCampaignPledge(link1);
+    await waitFor(() => {
+      expect(screen.getByTestId('searchVolunteer')).toBeInTheDocument();
+    });
+
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
+    expect(screen.getByText('John Doe2')).toBeInTheDocument();
+    expect(screen.queryByText('John Doe3')).toBeNull();
+    expect(screen.queryByText('John Doe4')).toBeNull();
+
+    const moreContainer = await screen.findAllByTestId('moreContainer');
+    userEvent.click(moreContainer[0]);
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe3')).toBeInTheDocument();
+      expect(screen.getByText('John Doe4')).toBeInTheDocument();
+      expect(screen.getByTestId('extra1')).toBeInTheDocument();
+      expect(screen.getByTestId('extra2')).toBeInTheDocument();
+      expect(screen.getByTestId('extraAvatar8')).toBeInTheDocument();
+      const image = screen.getByTestId('extraImage1');
+      expect(image).toBeInTheDocument();
+      expect(image).toHaveAttribute('src', 'img-url3');
+    });
+
+    userEvent.click(moreContainer[0]);
+    await waitFor(() => {
+      expect(screen.queryByText('John Doe3')).toBeNull();
+      expect(screen.queryByText('John Doe4')).toBeNull();
+    });
   });
 });

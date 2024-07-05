@@ -199,3 +199,35 @@
   top: 0px;
   right: 0px;
 }
+
+.moreContainer {
+  display: flex;
+  align-items: center;
+}
+
+.moreContainer:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.popup {
+  z-index: 50;
+  border-radius: 0.5rem;
+  font-family: sans-serif;
+  font-weight: 500;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid #e2e8f0;
+  background-color: white;
+  color: #1e293b;
+  box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.popupExtra {
+  max-height: 15rem;
+  overflow-y: auto;
+}
