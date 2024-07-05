@@ -314,6 +314,15 @@ const UPDATE_ACTION_ITEM_ERROR_MOCK = [
       },
     },
   },
+  {
+    request: {
+      query: DELETE_ACTION_ITEM_MUTATION,
+      variables: {
+        actionItemId: 'actionItem1',
+      },
+    },
+    error: new Error('Mock Graphql Error'),
+  },
 ];
 
 const NO_ACTION_ITEMS_ERROR_MOCK = [
@@ -503,6 +512,41 @@ describe('Event Action Items Page', () => {
       screen.queryByTestId('updateActionItemModalCloseBtn'),
     );
   });
+  test('opens and closes the action item status change modal correctly', async () => {
+    window.location.assign('/event/111/123');
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <I18nextProvider i18n={i18nForTest}>
+                {<EventActionItems eventId="123" />}
+              </I18nextProvider>
+            </LocalizationProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+    await wait();
+
+    await waitFor(() => {
+      expect(
+        screen.getAllByTestId('actionItemStatusChangeCheckbox')[0],
+      ).toBeInTheDocument();
+    });
+    userEvent.click(screen.getAllByTestId('actionItemStatusChangeCheckbox')[0]);
+
+    await waitFor(() => {
+      return expect(
+        screen.findByTestId('actionItemStatusChangeModalCloseBtn'),
+      ).resolves.toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('actionItemStatusChangeModalCloseBtn'));
+
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId('actionItemStatusChangeModalCloseBtn'),
+    );
+  });
 
   test('Testing update action item modal', async () => {
     window.location.assign('/event/111/123');
@@ -626,6 +670,53 @@ describe('Event Action Items Page', () => {
     expect(
       screen.getByText(translations.actionItemDetails),
     ).toBeInTheDocument();
+  });
+
+  test('toasts error on unsuccessful deletion', async () => {
+    window.location.assign('/event/111/123');
+    render(
+      <MockedProvider link={link3}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <I18nextProvider i18n={i18nForTest}>
+                {<EventActionItems eventId="123" />}
+              </I18nextProvider>
+            </LocalizationProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+    await wait();
+
+    expect(
+      screen.getAllByTestId('previewActionItemModalBtn')[0],
+    ).toBeInTheDocument();
+    userEvent.click(screen.getAllByTestId('previewActionItemModalBtn')[0]);
+
+    await waitFor(() => {
+      return expect(
+        screen.findByTestId('previewActionItemModalCloseBtn'),
+      ).resolves.toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('deleteActionItemPreviewModalBtn'),
+      ).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('deleteActionItemPreviewModalBtn'));
+
+    await waitFor(() => {
+      return expect(
+        screen.findByTestId('actionItemDeleteModalCloseBtn'),
+      ).resolves.toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('deleteActionItemBtn'));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+    });
   });
 
   test('Raises an error when incorrect information is filled while creation', async () => {
