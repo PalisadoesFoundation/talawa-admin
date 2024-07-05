@@ -180,10 +180,10 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
         setCommentInput('');
         setNumComments((numComments) => numComments + 1);
 
-        const newComment: InterfaceCommentCardProps = {
-          id: createEventData.createComment.id,
+        const newComment: any = {
+          id: createEventData.createComment._id,
           creator: {
-            id: createEventData.createComment.creator._id,
+            id: createEventData.createComment.creator.id,
             firstName: createEventData.createComment.creator.firstName,
             lastName: createEventData.createComment.creator.lastName,
             email: createEventData.createComment.creator.email,
@@ -287,7 +287,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
             {props.title}
           </Card.Title>
           <Card.Subtitle style={{ color: '#808080' }}>
-            {t('postedOn', { date: props.postedAt })}
+            Posted On: {props.postedAt}
           </Card.Subtitle>
           <Card.Text className={`${styles.cardText} mt-4`}>
             {props.text}
@@ -302,7 +302,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
               data-testid={'viewPostBtn'}
               onClick={toggleViewPost}
             >
-              {t('viewPost')}
+              View Post
             </Button>
           </div>
         </Card.Footer>
@@ -339,7 +339,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
             <h4>Comments</h4>
             <div className={styles.commentContainer}>
               {numComments ? (
-                comments.map((comment, index: number) => {
+                comments.map((comment: any, index: any) => {
                   const cardProps: InterfaceCommentCardProps = {
                     id: comment.id,
                     creator: {
@@ -415,7 +415,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
       <Modal show={showEditPost} onHide={toggleEditPost} size="lg" centered>
         <Modal.Header closeButton className="py-2 ">
           <p className="fs-3" data-testid={'editPostModalTitle'}>
-            {t('editPost')}
+            Edit Post
           </p>
         </Modal.Header>
         <Modal.Body>
@@ -439,7 +439,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
             data-testid={'editPostBtn'}
             onClick={handleEditPost}
           >
-            {t('editPost')}
+            Edit Post
           </Button>
         </ModalFooter>
       </Modal>

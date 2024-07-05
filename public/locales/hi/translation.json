@@ -697,10 +697,7 @@
   },
   "postCard": {
     "likes": "पसंद है",
-    "comments": "टिप्पणियाँ",
-    "viewPost": "पोस्ट देखें",
-    "editPost": "पोस्ट संपादित करें",
-    "postedOn": "{{date}} को पोस्ट किया गया"
+    "comments": "टिप्पणियाँ"
   },
   "home": {
     "posts": "पदों",

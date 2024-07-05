@@ -908,10 +908,7 @@
   },
   "postCard": {
     "likes": "Gustos",
-    "comments": "Comentarios",
-    "viewPost": "Ver publicación",
-    "editPost": "Editar publicación",
-    "postedOn": "Publicado el {{date}}"
+    "comments": "Comentarios"
   },
   "home": {
     "feed": "Alimentar",

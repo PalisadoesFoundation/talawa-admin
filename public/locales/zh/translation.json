@@ -697,10 +697,7 @@
   },
   "postCard": {
     "likes": "喜欢",
-    "comments": "评论",
-    "viewPost": "查看帖子",
-    "editPost": "编辑帖子",
-    "postedOn": "发布于 {{date}}"
+    "comments": "评论"
   },
   "home": {
     "posts": "帖子",

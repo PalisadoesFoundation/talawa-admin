@@ -150,7 +150,7 @@ const UserSidebarOrg = ({
                         }
                       />
                     </div>
-                    {tCommon(name)}
+                    {name}
                   </Button>
                 )}
               </NavLink>

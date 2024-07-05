@@ -693,10 +693,7 @@
   },
   "postCard": {
     "likes": "Likes",
-    "comments": "Comments",
-    "viewPost": "View Post",
-    "editPost": "Edit Post",
-    "postedOn": "Posted on {{date}}"
+    "comments": "Comments"
   },
   "home": {
     "posts": "Posts",
