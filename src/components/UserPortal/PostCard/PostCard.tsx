@@ -274,6 +274,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
           </Dropdown>
         </Card.Header>
         <Card.Img
+          className={styles.postImage}
           variant="top"
           src={
             props.image === '' || props.image === null
@@ -291,9 +292,6 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
           <Card.Text className={`${styles.cardText} mt-4`}>
             {props.text}
           </Card.Text>
-          {props.image && (
-            <img src={props.image} className={styles.imageContainer} />
-          )}
         </Card.Body>
         <Card.Footer style={{ border: 'none', background: 'white' }}>
           <div className={`${styles.cardActions}`}>

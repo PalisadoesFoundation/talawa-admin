@@ -211,6 +211,48 @@ describe('Testing Action Item Categories Component', () => {
     );
   });
 
+  test('completed action item status change modal loads correctly', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <I18nextProvider i18n={i18nForTest}>
+                <ActionItemsContainer {...props} />
+              </I18nextProvider>
+            </LocalizationProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await waitFor(() => {
+      expect(
+        screen.getAllByTestId('actionItemStatusChangeCheckbox')[1],
+      ).toBeInTheDocument();
+    });
+    userEvent.click(screen.getAllByTestId('actionItemStatusChangeCheckbox')[1]);
+
+    await waitFor(() => {
+      return expect(
+        screen.findByTestId('actionItemStatusChangeModalCloseBtn'),
+      ).resolves.toBeInTheDocument();
+    });
+    expect(screen.getByText(translations.actionItemStatus)).toBeInTheDocument();
+
+    expect(
+      screen.getByTestId('actionItemsStatusChangeNotes'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText(translations.actionItemCompleted),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: translations.makeActive }),
+    ).toBeInTheDocument();
+  });
+
   test('opens and closes the preview modal correctly', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -502,6 +544,9 @@ describe('Testing Action Item Categories Component', () => {
         screen.getByTestId('actionItemStatusChangeSubmitBtn'),
       ).toBeInTheDocument();
     });
+    expect(
+      screen.getByTestId('actionItemStatusChangeSubmitBtn'),
+    ).toHaveTextContent(translations.markCompletion);
     userEvent.click(screen.getByTestId('actionItemStatusChangeSubmitBtn'));
 
     await waitFor(() => {
@@ -535,6 +580,9 @@ describe('Testing Action Item Categories Component', () => {
         screen.getByTestId('actionItemStatusChangeSubmitBtn'),
       ).toBeInTheDocument();
     });
+    expect(
+      screen.getByTestId('actionItemStatusChangeSubmitBtn'),
+    ).toHaveTextContent(translations.makeActive);
     userEvent.click(screen.getByTestId('actionItemStatusChangeSubmitBtn'));
 
     await waitFor(() => {
