@@ -10,6 +10,10 @@ import cookies from 'js-cookie';
 import { MockedProvider } from '@apollo/react-testing';
 import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import useLocalStorage from 'utils/useLocalstorage';
+import { Provider } from 'react-redux';
+import { store } from 'state/store';
+const { setItem } = useLocalStorage();
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -24,18 +28,25 @@ const MOCKS = [
     request: {
       query: UPDATE_USER_MUTATION,
       variables: {
-        id: 1,
-        appLanguageCode: 'en',
+        appLanguageCode: 'fr',
       },
     },
     result: {
       data: {
-        updateUser: {
-          id: 1,
-          appLanguageCode: 'en',
+        updateUserProfile: {
+          _id: '1',
         },
       },
     },
+  },
+  {
+    request: {
+      query: UPDATE_USER_MUTATION,
+      variables: {
+        appLanguageCode: 'hi',
+      },
+    },
+    error: new Error('An error occurred'),
   },
 ];
 
@@ -113,8 +124,9 @@ describe('Testing Change Language Dropdown', () => {
   test('Testing change language functionality', async () => {
     Object.defineProperty(window.document, 'cookie', {
       writable: true,
-      value: 'i18next=en',
+      value: 'i18next=sp',
     });
+    setItem('userId', '1');
 
     const { getByTestId } = render(
       <MockedProvider addTypename={false} link={link}>
@@ -126,13 +138,21 @@ describe('Testing Change Language Dropdown', () => {
 
     userEvent.click(getByTestId('language-dropdown-btn'));
     await wait();
-    languages.map((language) => {
-      const changeLanguageBtn = getByTestId(
-        `change-language-btn-${language.code}`,
-      );
-      expect(changeLanguageBtn).toBeInTheDocument();
-      userEvent.click(changeLanguageBtn);
-      expect(cookies.get('i18next')).toBe(language.code);
-    });
+    const changeLanguageBtn = getByTestId(`change-language-btn-fr`);
+    await wait();
+    expect(changeLanguageBtn).toBeInTheDocument();
+    await wait();
+    userEvent.click(changeLanguageBtn);
+    await wait();
+    expect(cookies.get('i18next')).toBe('fr');
+    await wait();
+    userEvent.click(getByTestId('language-dropdown-btn'));
+    await wait();
+    const changeLanguageBtnHi = getByTestId(`change-language-btn-hi`);
+    await wait();
+    expect(changeLanguageBtnHi).toBeInTheDocument();
+    await wait();
+    userEvent.click(changeLanguageBtnHi);
+    await wait();
   });
 });

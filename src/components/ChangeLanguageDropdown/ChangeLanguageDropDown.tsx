@@ -22,18 +22,18 @@ const ChangeLanguageDropDown = (
   const [updateUser] = useMutation(UPDATE_USER_MUTATION);
 
   const changeLanguage = async (languageCode: string): Promise<void> => {
-    try {
-      if (userId) {
+    if (userId) {
+      try {
         await updateUser({
           variables: {
-            id: userId,
             appLanguageCode: languageCode,
           },
         });
+        await i18next.changeLanguage(languageCode);
+        cookies.set('i18next', languageCode);
+      } catch (error) {
+        console.log('Error in changing language', error);
       }
-      await i18next.changeLanguage(languageCode);
-    } catch (error) {
-      console.error('Error in changing language', error);
     }
   };
 
