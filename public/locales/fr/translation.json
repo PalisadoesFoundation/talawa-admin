@@ -732,7 +732,10 @@
   },
   "postCard": {
     "likes": "Aime",
-    "comments": "commentaires"
+    "comments": "commentaires",
+    "viewPost": "Voir le message",
+    "editPost": "Modifier le message",
+    "postedOn": "Publié le {{date}}"
   },
   "home": {
     "posts": "Des postes",
