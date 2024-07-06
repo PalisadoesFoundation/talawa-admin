@@ -75,7 +75,8 @@
   "profile": "轮廓",
   "noFiltersApplied": "未应用筛选器",
   "manage": "管理",
-  "searchResultsFor": "搜索结果：{{text}}",
+  "searchResultsFor": "搜索结果",
   "none": "没有",
-  "sort": "种类"
+  "sort": "种类",
+  "Donate": "捐赠"
 }
