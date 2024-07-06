@@ -229,7 +229,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
       });
 
       props.fetchPosts();
-      toast.success(tCommon('deletedSuccessfully', { item: 'Post' }));
+      toast.success('Successfully deleted the Post.');
     } catch (error: unknown) {
       /* istanbul ignore next */
       errorHandler(t, error);
