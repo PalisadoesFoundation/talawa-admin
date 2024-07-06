@@ -254,7 +254,7 @@ describe('Testing Campaign Pledge Screen', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('progressBar')).toBeInTheDocument();
-      expect(screen.getByTestId('progressBar')).toHaveTextContent('$500');
+      expect(screen.getByTestId('progressBar')).toHaveTextContent('$0');
     });
 
     userEvent.click(pledged);
