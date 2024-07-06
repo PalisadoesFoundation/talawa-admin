@@ -263,8 +263,10 @@ const MOCKS = [
               _id: 'actionItemCategory1',
               name: 'ActionItemCategory 1',
             },
-            preCompletionNotes: 'Pre Completion Notes',
-            postCompletionNotes: 'Post Completion Notes',
+            preCompletionNotes:
+              'Long Pre Completion Notes Text that exceeds 25 characters',
+            postCompletionNotes:
+              'Long Post Completion Notes Text that exceeds 25 characters',
             assignmentDate: new Date('2024-02-14'),
             dueDate: new Date('2024-02-21'),
             completionDate: new Date('2024-02-21'),
@@ -534,6 +536,14 @@ describe('Event Action Items Page', () => {
     expect(updateButtons[0]).toBeInTheDocument();
     expect(previewButtons[0]).toBeInTheDocument();
     expect(updateStatusButtons[0]).toBeInTheDocument();
+
+    // Truncate notes and long completion notes txt
+    expect(
+      screen.getAllByTestId('actionItemPreCompletionNotesOverlay')[1],
+    ).toHaveTextContent('Long Pre Completion Notes...');
+    expect(
+      screen.getAllByTestId('actionItemPostCompletionNotesOverlay')[0],
+    ).toHaveTextContent('Long Post Completion Note...');
   });
 
   test('opens and closes the update and delete modals through the preview modal', async () => {
