@@ -97,6 +97,7 @@ export const UPDATE_USER_MUTATION = gql`
     $state: String
     $country: String
     $image: String
+    $appLanguageCode: String
   ) {
     updateUserProfile(
       data: {
@@ -110,6 +111,7 @@ export const UPDATE_USER_MUTATION = gql`
         employmentStatus: $empStatus
         maritalStatus: $maritalStatus
         address: { line1: $address, state: $state, countryCode: $country }
+        appLanguageCode: $appLanguageCode
       }
       file: $image
     ) {
@@ -185,6 +187,7 @@ export const LOGIN_MUTATION = gql`
           _id
         }
         isSuperAdmin
+        appLanguageCode
       }
       accessToken
       refreshToken
