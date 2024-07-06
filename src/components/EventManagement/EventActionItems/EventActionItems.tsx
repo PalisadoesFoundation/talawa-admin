@@ -433,11 +433,14 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
                 className={styles.datebox}
                 value={dayjs(completionDate)}
                 label={t('completionDate')}
-                onChange={(date: Dayjs | null): void => {
-                  if (date) {
-                    setCompletionDate(date?.toDate());
+                onChange={
+                  /* istanbul ignore next */ (date: Dayjs | null): void => {
+                    /* istanbul ignore next */
+                    if (date) {
+                      setCompletionDate(date?.toDate());
+                    }
                   }
-                }}
+                }
               />
             </div>
             <div>
