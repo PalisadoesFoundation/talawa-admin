@@ -112,7 +112,7 @@
   height: 26px;
 }
 
-.volunteerContainer {
+.pledgerContainer {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -230,4 +230,30 @@
 .popupExtra {
   max-height: 15rem;
   overflow-y: auto;
+}
+
+.toggleGroup {
+  width: 50%;
+  min-width: 27.75rem;
+  margin: 0.5rem 0rem;
+}
+
+.toggleBtn {
+  padding: 0rem;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.toggleBtn:hover {
+  color: #31bb6b !important;
+}
+
+input[type='radio']:checked + label {
+  background-color: #31bb6a50 !important;
+}
+
+input[type='radio']:checked + label:hover {
+  color: black !important;
 }

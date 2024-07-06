@@ -12,23 +12,16 @@ import { currencySymbols } from 'utils/currency';
 import styles from './FundCampaignPledge.module.css';
 import PledgeDeleteModal from './PledgeDeleteModal';
 import PledgeModal from './PledgeModal';
-import {
-  Breadcrumbs,
-  LinearProgress,
-  Link,
-  Stack,
-  Typography,
-  linearProgressClasses,
-} from '@mui/material';
+import { Breadcrumbs, Link, Stack, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import Avatar from 'components/Avatar/Avatar';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import type {
   InterfacePledgeInfo,
-  InterfacePledgeVolunteer,
+  InterfacePledger,
   InterfaceQueryFundCampaignsPledges,
 } from 'utils/interfaces';
-import { styled } from '@mui/system';
+import ProgressBar from 'react-bootstrap/ProgressBar';
 
 interface InterfaceCampaignInfo {
   name: string;
@@ -64,18 +57,6 @@ const dataGridStyle = {
   },
 };
 
-const BorderLinearProgress = styled(LinearProgress)(() => ({
-  height: 15,
-  borderRadius: 4,
-  [`&.${linearProgressClasses.colorPrimary}`]: {
-    backgroundColor: '#e0e0e0',
-  },
-  [`& .${linearProgressClasses.bar}`]: {
-    borderRadius: 5,
-    backgroundColor: '#31bb6b',
-  },
-}));
-
 const fundCampaignPledge = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'pledges',
@@ -103,7 +84,10 @@ const fundCampaignPledge = (): JSX.Element => {
   });
 
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
-  const [extraUsers, setExtraUsers] = useState<InterfacePledgeVolunteer[]>([]);
+  const [extraUsers, setExtraUsers] = useState<InterfacePledger[]>([]);
+  const [progressIndicator, setProgressIndicator] = useState<
+    'raised' | 'pledged'
+  >('pledged');
   const open = Boolean(anchor);
   const id = open ? 'simple-popup' : undefined;
   const [pledgeModalMode, setPledgeModalMode] = useState<'edit' | 'create'>(
@@ -144,16 +128,18 @@ const fundCampaignPledge = (): JSX.Element => {
     'YYYY-MM-DD',
   ).toDate();
 
-  const pledges = useMemo(() => {
-    return (
+  const { pledges, totalPledged } = useMemo(() => {
+    let totalPledged = 0;
+    const pledges =
       pledgeData?.getFundraisingCampaignById.pledges.filter((pledge) => {
+        totalPledged += pledge.amount;
         const search = searchTerm.toLowerCase();
         return pledge.users.some((user) => {
           const fullName = `${user.firstName} ${user.lastName}`;
           return fullName.toLowerCase().includes(search);
         });
-      }) ?? []
-    );
+      }) ?? [];
+    return { pledges, totalPledged };
   }, [pledgeData, searchTerm]);
 
   useEffect(() => {
@@ -199,7 +185,7 @@ const fundCampaignPledge = (): JSX.Element => {
 
   const handleClick = (
     event: React.MouseEvent<HTMLElement>,
-    users: InterfacePledgeVolunteer[],
+    users: InterfacePledger[],
   ): void => {
     setExtraUsers(users);
     setAnchor(anchor ? null : event.currentTarget);
@@ -223,8 +209,8 @@ const fundCampaignPledge = (): JSX.Element => {
 
   const columns: GridColDef[] = [
     {
-      field: 'volunteers',
-      headerName: 'Volunteers',
+      field: 'pledgers',
+      headerName: 'Pledgers',
       flex: 3,
       minWidth: 50,
       align: 'left',
@@ -236,12 +222,12 @@ const fundCampaignPledge = (): JSX.Element => {
           <div className="d-flex flex-wrap gap-1" style={{ maxHeight: 120 }}>
             {params.row.users
               .slice(0, 2)
-              .map((user: InterfacePledgeVolunteer, index: number) => (
-                <div className={styles.volunteerContainer} key={index}>
+              .map((user: InterfacePledger, index: number) => (
+                <div className={styles.pledgerContainer} key={index}>
                   {user.image ? (
                     <img
                       src={user.image}
-                      alt="volunteer"
+                      alt="pledge"
                       data-testid={`image${index + 1}`}
                       className={styles.TableImage}
                     />
@@ -326,8 +312,8 @@ const fundCampaignPledge = (): JSX.Element => {
       },
     },
     {
-      field: 'paid',
-      headerName: 'Paid',
+      field: 'donated',
+      headerName: 'Donated',
       flex: 1,
       minWidth: 100,
       align: 'center',
@@ -426,9 +412,53 @@ const fundCampaignPledge = (): JSX.Element => {
           </span>
         </div>
         <div className={styles.progressContainer}>
-          <div className={styles.raisedAmount}>$1,000 {t('raised')}</div>
+          <div className="d-flex justify-content-center">
+            <div
+              className={`btn-group ${styles.toggleGroup}`}
+              role="group"
+              aria-label="Toggle between Pledged and Raised amounts"
+            >
+              <input
+                type="radio"
+                className={`btn-check ${styles.toggleBtn}`}
+                name="btnradio"
+                id="pledgedRadio"
+                checked={progressIndicator === 'pledged'}
+                onChange={() => setProgressIndicator('pledged')}
+              />
+              <label
+                className={`btn btn-outline-primary ${styles.toggleBtn}`}
+                htmlFor="pledgedRadio"
+              >
+                {t('fundsPledged')}
+              </label>
+
+              <input
+                type="radio"
+                className={`btn-check`}
+                name="btnradio"
+                id="raisedRadio"
+                onChange={() => setProgressIndicator('raised')}
+                checked={progressIndicator === 'raised'}
+              />
+              <label
+                className={`btn btn-outline-primary ${styles.toggleBtn}`}
+                htmlFor="raisedRadio"
+              >
+                {t('fundsRaised')}
+              </label>
+            </div>
+          </div>
+
           <div className={styles.progress}>
-            <BorderLinearProgress variant="determinate" value={50} />
+            <ProgressBar
+              animated
+              now={progressIndicator === 'pledged' ? totalPledged : 500}
+              label={`$${progressIndicator === 'pledged' ? totalPledged : 500}`}
+              max={campaignInfo?.goal}
+              style={{ height: '1.5rem', fontSize: '0.9rem' }}
+              data-testid="progressBar"
+            />
             <div className={styles.endpoints}>
               <div className={styles.start}>$0</div>
               <div className={styles.end}>${campaignInfo?.goal}</div>
@@ -440,13 +470,13 @@ const fundCampaignPledge = (): JSX.Element => {
         <div className={`${styles.input} mb-1`}>
           <Form.Control
             type="name"
-            placeholder={t('searchVolunteer')}
+            placeholder={t('searchPledger')}
             autoComplete="off"
             required
             className={styles.inputField}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            data-testid="searchVolunteer"
+            data-testid="searchPledger"
           />
           <Button
             tabIndex={-1}
@@ -562,16 +592,16 @@ const fundCampaignPledge = (): JSX.Element => {
         disablePortal
         className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
       >
-        {extraUsers.map((user: InterfacePledgeVolunteer, index: number) => (
+        {extraUsers.map((user: InterfacePledger, index: number) => (
           <div
-            className={styles.volunteerContainer}
+            className={styles.pledgerContainer}
             key={index}
             data-testid={`extra${index + 1}`}
           >
             {user.image ? (
               <img
                 src={user.image}
-                alt="volunteer"
+                alt="pledger"
                 data-testid={`extraImage${index + 1}`}
                 className={styles.TableImage}
               />

@@ -250,7 +250,7 @@ export interface InterfaceQueryFundCampaignsPledges {
     currency: string;
     endDate: string;
     startDate: string;
-    users: InterfacePledgeVolunteer[];
+    users: InterfacePledger[];
   }[];
 }
 export interface InterfaceFundInfo {
@@ -279,7 +279,7 @@ export interface InterfacePledgeInfo {
   currency: string;
   endDate: string;
   startDate: string;
-  users: InterfacePledgeVolunteer[];
+  users: InterfacePledger[];
 }
 export interface InterfaceQueryOrganizationEventListItem {
   _id: string;
@@ -419,7 +419,7 @@ export interface InterfacePostCard {
 }
 
 export interface InterfaceCreatePledge {
-  pledgeUsers: InterfacePledgeVolunteer[];
+  pledgeUsers: InterfacePledger[];
   pledgeAmount: number;
   pledgeCurrency: string;
   pledgeStartDate: Date;
@@ -441,7 +441,7 @@ export interface InterfaceQueryMembershipRequestsListItem {
   }[];
 }
 
-export interface InterfacePledgeVolunteer {
+export interface InterfacePledger {
   _id: string;
   firstName: string;
   lastName: string;

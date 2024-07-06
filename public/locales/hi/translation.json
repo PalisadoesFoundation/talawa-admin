@@ -412,7 +412,6 @@
   },
   "pledges": {
     "title": "निधि अभियान प्रतिज्ञाएँ",
-    "volunteers": "स्वयंसेवकों",
     "pledgeAmount": "प्रतिज्ञा राशि",
     "pledgeOptions": "विकल्प",
     "pledgeCreated": "प्रतिज्ञा सफलतापूर्वक बनाई गई",
@@ -428,7 +427,7 @@
     "editPledge": "प्रतिज्ञा संपादित करें",
     "deletePledgeMsg": "क्या आप वाकई इस प्रतिज्ञा को हटाना चाहते हैं?",
     "noPledges": "कोई प्रतिज्ञा नहीं मिली",
-    "searchVolunteer": "स्वयंसेवक द्वारा खोजें",
+    "searchPledger": "प्लेजर्स के द्वारा खोजें",
     "highestAmount": "सबसे अधिक राशि",
     "lowestAmount": "सबसे कम राशि",
     "latestEndDate": "नवीनतम समाप्ति तिथि",
@@ -436,7 +435,8 @@
     "campaigns": "अभियान",
     "pledges": "प्रतिज्ञाएँ",
     "endsOn": "पर समाप्त होता है",
-    "raised": "उठाया गया"
+    "fundsRaised": "आमंत्रित किस्म के धन",
+    "fundsPledged": "धन प्रतिबद्ध"
   },
   "orgPost": {
     "title": "पदों",

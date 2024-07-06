@@ -406,7 +406,6 @@
   },
   "pledges": {
     "title": "Fund Campaign Pledges",
-    "volunteers": "Volunteers",
     "pledgeAmount": "Pledge Amount",
     "pledgeOptions": "Options",
     "pledgeCreated": "Pledge created successfully",
@@ -422,7 +421,7 @@
     "editPledge": "Edit Pledge",
     "deletePledgeMsg": "Are you sure you want to delete this pledge?",
     "noPledges": "No Pledges Found",
-    "searchVolunteer": "Search By Volunteer",
+    "searchPledger": "Search By Pledgers",
     "highestAmount": "Highest Amount",
     "lowestAmount": "Lowest Amount",
     "latestEndDate": "Latest End Date",
@@ -430,7 +429,8 @@
     "campaigns": "Campaigns",
     "pledges": "Pledges",
     "endsOn": "Ends on",
-    "raised": "Raised"
+    "fundsRaised": "Funds Raised",
+    "fundsPledged": "Funds Pledged"
   },
   "orgPost": {
     "title": "Posts",

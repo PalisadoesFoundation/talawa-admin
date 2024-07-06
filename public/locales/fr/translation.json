@@ -412,7 +412,6 @@
   },
   "pledges": {
     "title": "Engagements de campagne de financement",
-    "volunteers": "Bénévoles",
     "pledgeAmount": "Montant de la promesse de don",
     "pledgeOptions": "Possibilités",
     "pledgeCreated": "Engagement créé avec succès",
@@ -428,7 +427,7 @@
     "editPledge": "Modifier l'engagement",
     "deletePledgeMsg": "Etes-vous sûr de vouloir supprimer cet engagement ?",
     "noPledges": "Aucun engagement trouvé",
-    "searchVolunteer": "Rechercher par bénévole",
+    "searchPledger": "Rechercher par les bailleurs de fonds",
     "highestAmount": "Montant le plus élevé",
     "lowestAmount": "Montant le plus bas",
     "latestEndDate": "Date de fin la plus récente",
@@ -436,7 +435,8 @@
     "campaigns": "Campagnes",
     "pledges": "Promesses de dons",
     "endsOn": "Se termine le",
-    "raised": "Levé"
+    "fundsRaised": "Fonds collectés",
+    "fundsPledged": "Fonds promis"
   },
   "orgPost": {
     "title": "Des postes",

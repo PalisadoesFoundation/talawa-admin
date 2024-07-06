@@ -412,7 +412,6 @@
   },
   "pledges": {
     "title": "基金活动承诺",
-    "volunteers": "志愿者",
     "pledgeAmount": "质押金额",
     "pledgeOptions": "选项",
     "pledgeCreated": "质押创建成功",
@@ -428,7 +427,7 @@
     "editPledge": "编辑承诺",
     "deletePledgeMsg": "您确定要删除此承诺吗？",
     "noPledges": "未找到承诺",
-    "searchVolunteer": "按志愿者搜索",
+    "searchPledger": "按承诺搜索",
     "highestAmount": "最高金额",
     "lowestAmount": "最低金额",
     "latestEndDate": "最新结束日期",
@@ -436,7 +435,8 @@
     "campaigns": "活动",
     "pledges": "承诺",
     "endsOn": "结束于",
-    "raised": "筹集到"
+    "fundsRaised": "募集到的资金",
+    "fundsPledged": "承诺的资金"
   },
   "orgPost": {
     "title": "帖子",
