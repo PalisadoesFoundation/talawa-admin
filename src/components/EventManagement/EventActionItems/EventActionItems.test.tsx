@@ -367,7 +367,7 @@ const UPDATE_ACTION_ITEM_ERROR_MOCK = [
             },
             assignee: {
               __typename: 'User',
-              _id: '6589387e2caa9d8d69087485',
+              _id: '658930fd2caa9d8d6908745c',
               firstName: 'Burton',
               lastName: 'Sanders',
             },
@@ -377,15 +377,15 @@ const UPDATE_ACTION_ITEM_ERROR_MOCK = [
               firstName: 'Wilt',
               lastName: 'Shepherd',
             },
-            assignmentDate: new Date('2024-04-08'),
-            completionDate: new Date('2024-04-08'),
+            assignmentDate: new Date('2024-02-14'),
+            dueDate: new Date('2024-02-21'),
+            completionDate: new Date('2024-02-21'),
             creator: {
               __typename: 'User',
               _id: '64378abd85008f171cf2990d',
               firstName: 'Wilt',
               lastName: 'Shepherd',
             },
-            dueDate: new Date('2024-04-08'),
             event: {
               __typename: 'Event',
               _id: '123',
@@ -402,23 +402,40 @@ const UPDATE_ACTION_ITEM_ERROR_MOCK = [
   },
   {
     request: {
-      query: UPDATE_ACTION_ITEM_MUTATION,
+      query: MEMBERS_LIST,
       variables: {
-        actionItemId: '_6613ef741677gygwuyu',
-        assigneeId: '658930fd2caa9d8d6908745c',
-        preCompletionNotes: 'task to be done with high priority',
-        postCompletionNotes: 'Done',
-        dueDate: '2024-04-05',
-        completionDate: '2024-04-05',
-        isCompleted: false,
+        id: '111',
       },
     },
     result: {
       data: {
-        updateActionItem: {
-          _id: undefined,
-          __typename: 'ActionItem',
-        },
+        organizations: [
+          {
+            _id: '111',
+            members: [
+              {
+                createdAt: '2023-04-13',
+                email: 'testuser4@example.com',
+                firstName: 'Teresa',
+                image: null,
+                lastName: 'Bradley',
+                organizationsBlockedBy: [],
+                __typename: 'User',
+                _id: '658930fd2caa9d8d6908745c',
+              },
+              {
+                createdAt: '2024-04-13',
+                email: 'testuser2@example.com',
+                firstName: 'Anna',
+                image: null,
+                lastName: 'Bradley',
+                organizationsBlockedBy: [],
+                __typename: 'User',
+                _id: '658930fd2caa9d8d690sfhgush',
+              },
+            ],
+          },
+        ],
       },
     },
   },
@@ -427,6 +444,21 @@ const UPDATE_ACTION_ITEM_ERROR_MOCK = [
       query: DELETE_ACTION_ITEM_MUTATION,
       variables: {
         actionItemId: '_6613ef741677gygwuyu',
+      },
+    },
+    error: new Error('Mock Graphql Error'),
+  },
+  {
+    request: {
+      query: UPDATE_ACTION_ITEM_MUTATION,
+      variables: {
+        actionItemId: '_6613ef741677gygwuyu',
+        assigneeId: '658930fd2caa9d8d690sfhgush',
+        preCompletionNotes: 'pre completion notes edited',
+        postCompletionNotes: '',
+        dueDate: '2024-02-14',
+        completionDate: '2024-02-21',
+        isCompleted: false,
       },
     },
     error: new Error('Mock Graphql Error'),
@@ -946,6 +978,69 @@ describe('Event Action Items Page', () => {
       ).resolves.toBeInTheDocument();
     });
     userEvent.click(screen.getByTestId('deleteActionItemBtn'));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+    });
+  });
+
+  test('toasts error on unsuccessful updation', async () => {
+    window.location.assign('/event/111/123');
+    render(
+      <MockedProvider link={link3}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <I18nextProvider i18n={i18nForTest}>
+                {<EventActionItems eventId="123" />}
+              </I18nextProvider>
+            </LocalizationProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+    await wait();
+
+    await waitFor(() => {
+      expect(
+        screen.getAllByTestId('editActionItemModalBtn')[0],
+      ).toBeInTheDocument();
+    });
+    userEvent.click(screen.getAllByTestId('editActionItemModalBtn')[0]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('formUpdateAssignee')).toBeInTheDocument();
+    });
+
+    userEvent.selectOptions(
+      screen.getByTestId('formUpdateAssignee'),
+      formData.assignee,
+    );
+
+    const preCompletionNotes = screen.getByPlaceholderText(
+      translations.preCompletionNotes,
+    );
+    fireEvent.change(preCompletionNotes, { target: { value: '' } });
+    userEvent.type(preCompletionNotes, formData.preCompletionNotes);
+
+    const dueDatePicker = screen.getByLabelText(translations.dueDate);
+    fireEvent.change(dueDatePicker, {
+      target: { value: formData.dueDate },
+    });
+
+    const completionDatePicker = screen.getByLabelText(
+      translations.completionDate,
+    );
+    fireEvent.change(completionDatePicker, {
+      target: { value: formData.completionDate },
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('updateActionItemFormSubmitBtn'),
+      ).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('updateActionItemFormSubmitBtn'));
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();
