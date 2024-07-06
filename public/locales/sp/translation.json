@@ -415,6 +415,40 @@
     "deleteAgendaCategory": "Eliminar categoría de la agenda",
     "deleteAgendaCategoryMsg": "¿Desea eliminar esta categoría de la agenda?"
   },
+  "agendaItems": {
+    "agendaItemDetails": "Detalles del punto del orden del día",
+    "updateAgendaItem": "Actualizar punto del orden del día",
+    "title": "Título",
+    "enterTitle": "Ingresar título",
+    "sequence": "Secuencia",
+    "description": "Descripción",
+    "enterDescription": "Ingresar descripción",
+    "category": "Categoría del orden del día",
+    "attachments": "Archivos adjuntos",
+    "attachmentLimit": "Agregar cualquier archivo de imagen o video hasta 10MB",
+    "fileSizeExceedsLimit": "El tamaño del archivo excede el límite de 10MB",
+    "urls": "URLs",
+    "url": "Agregar enlace a URL",
+    "enterUrl": "https://example.com",
+    "invalidUrl": "Ingrese una URL válida",
+    "link": "Enlace",
+    "createdBy": "Creado por",
+    "regular": "Regular",
+    "note": "Nota",
+    "duration": "Duración",
+    "enterDuration": "mm:ss",
+    "options": "Opciones",
+    "createAgendaItem": "Crear punto del orden del día",
+    "noAgendaItems": "No hay puntos del orden del día",
+    "selectAgendaItemCategory": "Seleccionar una categoría de punto del orden del día",
+    "update": "Actualizar",
+    "delete": "Eliminar",
+    "agendaItemCreated": "Punto del orden del día creado exitosamente",
+    "agendaItemUpdated": "Punto del orden del día actualizado exitosamente",
+    "agendaItemDeleted": "Punto del orden del día eliminado exitosamente",
+    "deleteAgendaItem": "Eliminar punto del orden del día",
+    "deleteAgendaItemMsg": "¿Desea eliminar este punto del orden del día?"
+  },
   "eventListCard": {
     "location": "Lugar del evento",
     "deleteEvent": "Eliminar evento",
@@ -636,6 +670,7 @@
     "dashboard": "Tablero",
     "registrants": "Inscritos",
     "eventActions": "Acciones del evento",
+    "eventAgendas": "Agendas de eventos",
     "eventStats": "Estadísticas del evento",
     "to": "A"
   },
@@ -908,7 +943,10 @@
   },
   "postCard": {
     "likes": "Gustos",
-    "comments": "Comentarios"
+    "comments": "Comentarios",
+    "viewPost": "Ver publicación",
+    "editPost": "Editar publicación",
+    "postedOn": "Publicado el {{date}}"
   },
   "home": {
     "feed": "Alimentar",
