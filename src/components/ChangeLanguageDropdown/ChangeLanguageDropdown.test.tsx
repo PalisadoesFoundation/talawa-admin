@@ -7,6 +7,9 @@ import i18nForTest from 'utils/i18nForTest';
 import { languages } from 'utils/languages';
 import ChangeLanguageDropDown from './ChangeLanguageDropDown';
 import cookies from 'js-cookie';
+import { MockedProvider } from '@apollo/react-testing';
+import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
+import { StaticMockLink } from 'utils/StaticMockLink';
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -16,14 +19,37 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
+const MOCKS = [
+  {
+    request: {
+      query: UPDATE_USER_MUTATION,
+      variables: {
+        id: 1,
+        appLanguageCode: 'en',
+      },
+    },
+    result: {
+      data: {
+        updateUser: {
+          id: 1,
+          appLanguageCode: 'en',
+        },
+      },
+    },
+  },
+];
+
+const link = new StaticMockLink(MOCKS, true);
 describe('Testing Change Language Dropdown', () => {
   test('Component Should be rendered properly', async () => {
     const { getByTestId } = render(
-      <BrowserRouter>
-        <I18nextProvider i18n={i18nForTest}>
-          <ChangeLanguageDropDown />
-        </I18nextProvider>
-      </BrowserRouter>,
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <ChangeLanguageDropDown />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
     );
 
     expect(getByTestId('language-dropdown-container')).toBeInTheDocument();
@@ -51,11 +77,13 @@ describe('Testing Change Language Dropdown', () => {
       btnTextStyle: 'btnTextStyle',
     };
     const { getByTestId } = render(
-      <BrowserRouter>
-        <I18nextProvider i18n={i18nForTest}>
-          <ChangeLanguageDropDown {...props} />
-        </I18nextProvider>
-      </BrowserRouter>,
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <ChangeLanguageDropDown {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
     );
     getByTestId('language-dropdown-container').className.includes(
       props.parentContainerStyle,
@@ -71,9 +99,11 @@ describe('Testing Change Language Dropdown', () => {
     });
 
     render(
-      <I18nextProvider i18n={i18nForTest}>
-        <ChangeLanguageDropDown />
-      </I18nextProvider>,
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <ChangeLanguageDropDown />
+        </I18nextProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -87,9 +117,11 @@ describe('Testing Change Language Dropdown', () => {
     });
 
     const { getByTestId } = render(
-      <I18nextProvider i18n={i18nForTest}>
-        <ChangeLanguageDropDown />
-      </I18nextProvider>,
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <ChangeLanguageDropDown />
+        </I18nextProvider>
+      </MockedProvider>,
     );
 
     userEvent.click(getByTestId('language-dropdown-btn'));
