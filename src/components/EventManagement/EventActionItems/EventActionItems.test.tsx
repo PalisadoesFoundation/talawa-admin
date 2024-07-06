@@ -286,6 +286,38 @@ const MOCKS = [
               lastName: 'Shepherd',
             },
           },
+          {
+            _id: 'actionItem3',
+            assignee: {
+              _id: '658930fd2caa9d8d6908745c',
+              firstName: 'Harve',
+              lastName: 'Lance',
+            },
+            actionItemCategory: {
+              _id: 'actionItemCategory1',
+              name: 'ActionItemCategory 1',
+            },
+            preCompletionNotes: 'Pre Completion Text',
+            postCompletionNotes: 'Post Completion Text',
+            assignmentDate: new Date('2024-02-14'),
+            dueDate: new Date('2024-02-21'),
+            completionDate: new Date('2024-02-21'),
+            isCompleted: true,
+            assigner: {
+              _id: 'user0',
+              firstName: 'Wilt',
+              lastName: 'Shepherd',
+            },
+            event: {
+              _id: 'event1',
+              title: 'event 1',
+            },
+            creator: {
+              _id: 'user0',
+              firstName: 'Wilt',
+              lastName: 'Shepherd',
+            },
+          },
         ],
       },
       refetch: jest.fn(),
@@ -544,6 +576,12 @@ describe('Event Action Items Page', () => {
     expect(
       screen.getAllByTestId('actionItemPostCompletionNotesOverlay')[0],
     ).toHaveTextContent('Long Post Completion Note...');
+    expect(
+      screen.getAllByTestId('actionItemPostCompletionNotesOverlay')[1],
+    ).toHaveTextContent('Post Completion Text');
+    expect(
+      screen.getAllByTestId('actionItemPreCompletionNotesOverlay')[2],
+    ).toHaveTextContent('Pre Completion Text');
   });
 
   test('opens and closes the update and delete modals through the preview modal', async () => {
