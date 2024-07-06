@@ -762,7 +762,9 @@
     "newPassword": "Nueva contraseña",
     "confirmNewPassword": "Confirmar nueva contraseña",
     "saveChanges": "Guardar cambios",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "passCantBeEmpty": "La contraseña no puede estar vacía",
+    "passNoMatch": "La nueva contraseña y la confirmación no coinciden."
   },
   "orgDelete": {
     "deleteOrg": "Eliminar organización"
@@ -956,7 +958,8 @@
     "startPost": "Comenzar una publicación",
     "media": "Medios",
     "event": "Evento",
-    "article": "Artículo"
+    "article": "Artículo",
+    "postNowVisibleInFeed": "La publicación ahora es visible en el feed"
   },
   "settings": {
     "settings": "Ajustes",
@@ -1084,6 +1087,9 @@
     "view": "Ver",
     "edit": "Editar",
     "editAdvertisement": "Editar Anuncio",
+    "advertisementDeleted": "Anuncio eliminado con éxito.",
+    "endDateGreaterOrEqual": "La fecha de finalización debe ser mayor o igual a la fecha de inicio",
+    "advertisementCreated": "Anuncio creado con éxito.",
     "saveChanges": "Guardar Cambios",
     "endOfResults": "Fin de los resultados"
   },
@@ -1200,5 +1206,13 @@
     "successfulUpdation": "Elemento de acción actualizado correctamente",
     "notes": "Notas",
     "save": "Guardar"
+  },
+  "checkIn": {
+    "errorCheckingIn": "Error al registrarse",
+    "checkedInSuccessfully": "Registrado con éxito"
+  },
+  "eventRegistrantsModal": {
+    "errorAddingAttendee": "Error al agregar asistente",
+    "errorRemovingAttendee": "Error al eliminar asistente"
   }
 }

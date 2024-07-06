@@ -77,5 +77,9 @@
   "manage": "管理",
   "searchResultsFor": "搜索结果：{{text}}",
   "none": "没有",
-  "Donate": "捐赠"
+  "Donate": "捐赠",
+  "addedSuccessfully": "{{item}} 添加成功",
+  "updatedSuccessfully": "{{item}} 更新成功",
+  "removedSuccessfully": "{{item}} 删除成功",
+  "successfullyUpdated": "更新成功"
 }

@@ -77,5 +77,9 @@
   "manage": "Gérer",
   "searchResultsFor": "Résultats de recherche pour {{text}}",
   "none": "Aucun",
-  "Donate": "Faire un don"
+  "Donate": "Faire un don",
+  "addedSuccessfully": "{{item}} ajouté avec succès",
+  "updatedSuccessfully": "{{item}} mis à jour avec succès",
+  "removedSuccessfully": "{{item}} supprimé avec succès",
+  "successfullyUpdated": "Mis à jour avec succès"
 }
