@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React from 'react';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
