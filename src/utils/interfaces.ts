@@ -403,7 +403,7 @@ export interface InterfacePostCard {
   comments: {
     id: string;
     creator: {
-      _id: string;
+      id: string;
       firstName: string;
       lastName: string;
       email: string;

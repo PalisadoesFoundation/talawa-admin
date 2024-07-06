@@ -943,7 +943,10 @@
   },
   "postCard": {
     "likes": "Gustos",
-    "comments": "Comentarios"
+    "comments": "Comentarios",
+    "viewPost": "Ver publicación",
+    "editPost": "Editar publicación",
+    "postedOn": "Publicado el {{date}}"
   },
   "home": {
     "feed": "Alimentar",
