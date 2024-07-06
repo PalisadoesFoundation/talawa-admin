@@ -60,7 +60,7 @@ const startPostModal = ({
       /* istanbul ignore next */
       if (data) {
         toast.dismiss();
-        toast.success('Your post is now visible in the feed.');
+        toast.success(t('postNowVisibleInFeed'));
         fetchPosts();
         handleHide();
       }

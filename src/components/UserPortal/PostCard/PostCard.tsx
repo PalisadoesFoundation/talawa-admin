@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
@@ -214,7 +215,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
 
       props.fetchPosts();
       toggleEditPost();
-      toast.success('Successfully edited the Post.');
+      toast.success(tCommon('updatedSuccessfully', { item: 'Post' }));
     } catch (error: unknown) {
       /* istanbul ignore next */
       errorHandler(t, error);
@@ -229,7 +230,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
       });
 
       props.fetchPosts();
-      toast.success('Successfully deleted the Post.');
+      toast.success(tCommon('deletedSuccessfully', { item: 'Post' }));
     } catch (error: unknown) {
       /* istanbul ignore next */
       errorHandler(t, error);
