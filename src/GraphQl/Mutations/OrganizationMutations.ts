@@ -106,6 +106,22 @@ export const SEND_MESSAGE_TO_DIRECT_CHAT = gql`
   }
 `;
 
+export const SEND_MESSAGE_TO_GROUP_CHAT = gql`
+  mutation sendMessageToGroupChat($chatId: ID!, $messageContent: String!) {
+    sendMessageToGroupChat(chatId: $chatId, messageContent: $messageContent) {
+      _id
+      createdAt
+      messageContent
+      sender {
+        _id
+        firstName
+        lastName
+      }
+      updatedAt
+    }
+  }
+`;
+
 export const CREATE_MESSAGE_CHAT = gql`
   mutation createMessageChat($receiver: ID!, $messageContent: String!) {
     createMessageChat(data: { receiver: $receiver, message: $messageContent }) {
@@ -135,6 +151,22 @@ export const MESSAGE_SENT_TO_DIRECT_CHAT = gql`
         firstName
         lastName
       }
+      sender {
+        _id
+        firstName
+        lastName
+      }
+      updatedAt
+    }
+  }
+`;
+
+export const MESSAGE_SENT_TO_GROUP_CHAT = gql`
+  subscription messageSentToGroupChat($userId: ID!) {
+    messageSentToGroupChat(userId: $userId) {
+      _id
+      createdAt
+      messageContent
       sender {
         _id
         firstName

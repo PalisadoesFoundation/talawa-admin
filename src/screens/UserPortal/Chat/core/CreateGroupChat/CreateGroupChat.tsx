@@ -34,9 +34,13 @@ import { style } from '@mui/system';
 interface InterfaceCreateGroupChatProps {
   toggleCreateGroupChatModal: () => void;
   createGroupChatModalisOpen: boolean;
-  groupChatListRefetch: (variables?: Partial<{
-    id: any;
-}> | undefined) => Promise<ApolloQueryResult<any>>
+  groupChatListRefetch: (
+    variables?:
+      | Partial<{
+          id: any;
+        }>
+      | undefined,
+  ) => Promise<ApolloQueryResult<any>>;
 }
 
 interface InterfaceOrganization {
@@ -84,7 +88,7 @@ const { getItem } = useLocalStorage();
 export default function chat({
   toggleCreateGroupChatModal,
   createGroupChatModalisOpen,
-  groupChatListRefetch
+  groupChatListRefetch,
 }: InterfaceCreateGroupChatProps): JSX.Element {
   const userId: string | null = getItem('userId');
 
@@ -301,23 +305,32 @@ export default function chat({
                               {userDetails.user.email}
                             </StyledTableCell>
                             <StyledTableCell align="center">
-                              {userIds.includes(userDetails.user._id) ? (<Button
-                                variant='danger'
-                                onClick={() => {
-                                  userIds = userIds.filter(id => id !== userDetails.user._id)
-                                  setUserIds(userIds);
-                                }}
-                                data-testid="removeBtn"
-                              >
-                                Remove
-                              </Button>) : (<Button
-                                onClick={() => {
-                                  setUserIds([...userIds, userDetails.user._id]);
-                                }}
-                                data-testid="addBtn"
-                              >
-                                Add
-                              </Button>)}
+                              {userIds.includes(userDetails.user._id) ? (
+                                <Button
+                                  variant="danger"
+                                  onClick={() => {
+                                    userIds = userIds.filter(
+                                      (id) => id !== userDetails.user._id,
+                                    );
+                                    setUserIds(userIds);
+                                  }}
+                                  data-testid="removeBtn"
+                                >
+                                  Remove
+                                </Button>
+                              ) : (
+                                <Button
+                                  onClick={() => {
+                                    setUserIds([
+                                      ...userIds,
+                                      userDetails.user._id,
+                                    ]);
+                                  }}
+                                  data-testid="addBtn"
+                                >
+                                  Add
+                                </Button>
+                              )}
                             </StyledTableCell>
                           </StyledTableRow>
                         ),

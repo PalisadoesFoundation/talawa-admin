@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import type { ChangeEvent } from 'react';
-import { Paper } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import { Button, Form, InputGroup } from 'react-bootstrap';
 import styles from './ChatRoom.module.css';
 import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
 import { useTranslation } from 'react-i18next';
-import { DIRECT_CHAT_BY_ID, DIRECT_CHAT_MESSAGES_BY_CHAT_ID, GROUP_CHAT_BY_ID } from 'GraphQl/Queries/PlugInQueries';
+import {
+  DIRECT_CHAT_BY_ID,
+  GROUP_CHAT_BY_ID,
+} from 'GraphQl/Queries/PlugInQueries';
 import { useMutation, useQuery, useSubscription } from '@apollo/client';
 import {
-  CREATE_MESSAGE_CHAT,
   MESSAGE_SENT_TO_DIRECT_CHAT,
+  MESSAGE_SENT_TO_GROUP_CHAT,
   SEND_MESSAGE_TO_DIRECT_CHAT,
+  SEND_MESSAGE_TO_GROUP_CHAT,
 } from 'GraphQl/Mutations/OrganizationMutations';
 import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
-import { hours } from 'components/EventCalendar/constants';
 
 interface InterfaceChatRoomProps {
   selectedContact: string;
@@ -29,6 +31,7 @@ type DirectMessage = {
     _id: string;
     firstName: string;
     lastName: string;
+    image: string;
   };
   messageContent: string;
   receiver: {
@@ -47,6 +50,7 @@ type Chat = {
       _id: string;
       firstName: string;
       lastName: string;
+      image: string;
     };
     messageContent: string;
     receiver: {
@@ -70,67 +74,89 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
 
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
-
   const [chatTitle, setChatTitle] = useState('');
-
+  const [chatSubtitle, setChatSubtitle] = useState('');
   const [newMessage, setNewMessage] = useState('');
-
   const [directChat, setDirectChat] = useState<Chat>();
   const [groupChat, setGroupChat] = useState<Chat>();
 
   const handleNewMessageChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const newMessageValue = e.target.value;
-
     setNewMessage(newMessageValue);
   };
 
+  const [sendMessageToDirectChat] = useMutation(SEND_MESSAGE_TO_DIRECT_CHAT, {
+    variables: {
+      chatId: props.selectedContact,
+      messageContent: newMessage,
+    },
+  });
 
-  const [sendMessageToDirectChat] = useMutation(SEND_MESSAGE_TO_DIRECT_CHAT);
-  const [createMessageChat] = useMutation(CREATE_MESSAGE_CHAT);
+  const [sendMessageToGroupChat] = useMutation(SEND_MESSAGE_TO_GROUP_CHAT, {
+    variables: {
+      chatId: props.selectedContact,
+      messageContent: newMessage,
+    },
+  });
 
-  if(props.selectedChatType == 'direct') {
-    const {
-      data: chatData,
-      loading: chatLoading,
-      refetch: chatRefresh,
-    } = useQuery(DIRECT_CHAT_BY_ID, { variables: {
-       id: props.selectedContact
-      }
-    });
+  const {
+    data: chatData,
+    loading: chatLoading,
+    refetch: chatRefetch,
+  } = useQuery(DIRECT_CHAT_BY_ID, {
+    variables: {
+      id: props.selectedContact,
+    },
+  });
 
+  const {
+    data: groupChatData,
+    loading: groupChatLoading,
+    refetch: groupChatRefresh,
+  } = useQuery(GROUP_CHAT_BY_ID, {
+    variables: {
+      id: props.selectedContact,
+    },
+  });
+  if (props.selectedChatType == 'direct') {
     useEffect(() => {
       if (chatData) {
-        console.log(chatData, 'chat');
         setDirectChat(chatData.directChatById);
-  
-        if(chatData.directChatById.users[0]._id == userId) {
-          setChatTitle(`${chatData.directChatById.users[1].firstName} ${chatData.directChatById.users[1].lastName}`);
+        if (chatData.directChatById.users[0]._id == userId) {
+          setChatTitle(
+            `${chatData.directChatById.users[1].firstName} ${chatData.directChatById.users[1].lastName}`,
+          );
+          setChatSubtitle(chatData.directChatById.users[1].email);
         } else {
-          setChatTitle(`${chatData.directChatById.users[0].firstName} ${chatData.directChatById.users[0].lastName}`);
+          setChatTitle(
+            `${chatData.directChatById.users[0].firstName} ${chatData.directChatById.users[0].lastName}`,
+          );
+          setChatSubtitle(chatData.directChatById.users[0].email);
         }
       }
     }, [chatData]);
   } else {
-    const {
-      data: groupChatData,
-      loading: groupChatLoading,
-      refetch: groupChatRefresh,
-    } = useQuery(GROUP_CHAT_BY_ID, { variables: {
-      id: props.selectedContact
-      }
-    });
-
     useEffect(() => {
       if (groupChatData) {
-        console.log(groupChatData, 'chat');
         setGroupChat(groupChatData.groupChatById);
-  
         setChatTitle(groupChatData.groupChatById.title);
+        setChatSubtitle(groupChatData.groupChatById.users.length);
       }
     }, [groupChatData]);
   }
 
-  const { data: messageSubscriptionData } = useSubscription(
+  const sendMessage = async (): Promise<void> => {
+    if (props.selectedChatType == 'direct') {
+      await sendMessageToDirectChat();
+      await chatRefetch();
+    } else {
+      await sendMessageToGroupChat();
+      await groupChatRefresh();
+    }
+    setNewMessage('');
+  };
+
+  const { data: directMessageSubscriptionData } = useSubscription(
     MESSAGE_SENT_TO_DIRECT_CHAT,
     {
       variables: {
@@ -139,45 +165,46 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     },
   );
 
-  
-
-  
-
-  // useEffect(() => {
-  //   if (messageSubscriptionData) {
-  //     const updatedMessages = JSON.parse(JSON.stringify(messages));
-  //     console.log('before', updatedMessages.length, updatedMessages);
-  //     console.log(
-  //       messageSubscriptionData.messageSentToDirectChat,
-  //       'subscription',
-  //     );
-  //     updatedMessages.push(messageSubscriptionData.messageSentToDirectChat);
-  //     setMessages(updatedMessages);
-  //     console.log('after', updatedMessages.length, updatedMessages);
-  //   }
-  // }, [messageSubscriptionData]);
-
-  const sendMessage = async (): Promise<void> => {
-    console.log('selesctedContact', props.selectedContact);
-    await sendMessageToDirectChat({
+  const { data: groupMessageSubscriptionData } = useSubscription(
+    MESSAGE_SENT_TO_GROUP_CHAT,
+    {
       variables: {
-        chatId: props.selectedContact,
-        messageContent: newMessage,
+        userId: userId,
       },
-    });
+    },
+  );
 
-    // await createMessageChat({
-    //   variables: {
-    //     messageContent: newMessage,
-    //     receiver: props.selectedContact.userId,
-    //   },
-    // });
-    // await chatMessagesRefresh();
-    // setMessages(chatMessages);
-  };
+  useEffect(() => {
+    document
+      .getElementById('chat-area')
+      ?.lastElementChild?.scrollIntoView({ block: 'end' });
+  });
+
+  useEffect(() => {
+    if (groupMessageSubscriptionData) {
+      const updatedChat = JSON.parse(JSON.stringify(groupChat));
+      updatedChat?.messages.push(
+        groupMessageSubscriptionData.messageSentToGroupChat,
+      );
+      setGroupChat(updatedChat);
+    }
+  }, [groupMessageSubscriptionData]);
+
+  useEffect(() => {
+    if (directMessageSubscriptionData) {
+      const updatedChat = JSON.parse(JSON.stringify(directChat));
+      updatedChat?.messages.push(
+        directMessageSubscriptionData.messageSentToDirectChat,
+      );
+      setDirectChat(updatedChat);
+    }
+  }, [directMessageSubscriptionData]);
 
   return (
-    <div className={`d-flex flex-column ${styles.chatAreaContainer}`}>
+    <div
+      className={`d-flex flex-column ${styles.chatAreaContainer}`}
+      id="chat-area"
+    >
       {!props.selectedContact ? (
         <div
           className={`d-flex flex-column justify-content-center align-items-center w-100 h-75 gap-2 ${styles.grey}`}
@@ -194,83 +221,131 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                 alt={chatTitle}
                 avatarStyle={styles.contactImage}
               />
-              <h5>
-                {chatTitle}
-              </h5>
+              <div className={styles.userDetails}>
+                <p className={styles.title}>{chatTitle}</p>
+                <p className={styles.subtitle}>
+                  {chatSubtitle}{' '}
+                  {props.selectedChatType == 'direct' ? '' : 'members'}
+                </p>
+              </div>
             </div>
           </div>
           <div className={`d-flex flex-grow-1 flex-column`}>
-            <div className="chatMessages">
-              {(directChat?.messages.length || groupChat?.messages.length) && (
+            <div className={styles.chatMessages}>
+              {!!(
+                directChat?.messages.length || groupChat?.messages.length
+              ) && (
                 <div id="messages">
-                  {props.selectedChatType == 'direct' ? directChat?.messages.map((message: DirectMessage, index: number) => {
-                    return (
-                      <>
-                        <div
-                          className={
-                            message.sender._id === userId
-                              ? styles.messageReceivedContainer
-                              : styles.messageSentContainer
-                          }
-                        >
-                          <div
-                            className={
-                              message.sender._id === userId
-                                ? styles.messageSent
-                                : styles.messageReceived
-                            }
-                            key={index}
-                          >
-                            <span className={styles.messageContent}>
-                              {message.messageContent}
-                            </span>
-                            <span className={styles.messageTime}>
-                              {new Date(message?.createdAt).toLocaleTimeString(
-                                'it-IT',
-                                { hour: '2-digit', minute: '2-digit' },
-                              )}
-                            </span>
-                          </div>
-                        </div>
-                      </>
-                    );
-                  }) : groupChat?.messages.map((message: DirectMessage, index: number) => {
-                    return (
-                      <>
-                        <div
-                          className={
-                            message.sender._id === userId
-                              ? styles.messageReceivedContainer
-                              : styles.messageSentContainer
-                          }
-                        >
-                          <div
-                            className={
-                              message.sender._id === userId
-                                ? styles.messageSent
-                                : styles.messageReceived
-                            }
-                            key={index}
-                          >
-                            <span className={styles.messageContent}>
-                              {message.messageContent}
-                            </span>
-                            <span className={styles.messageTime}>
-                              {new Date(message?.createdAt).toLocaleTimeString(
-                                'it-IT',
-                                { hour: '2-digit', minute: '2-digit' },
-                              )}
-                            </span>
-                          </div>
-                        </div>
-                      </>
-                    );
-                  })}
+                  {props.selectedChatType == 'direct'
+                    ? directChat?.messages.map(
+                        (message: DirectMessage, index: number) => {
+                          return (
+                            <>
+                              <div
+                                className={
+                                  message.sender._id === userId
+                                    ? styles.messageSentContainer
+                                    : styles.messageReceivedContainer
+                                }
+                              >
+                                <div
+                                  className={
+                                    message.sender._id === userId
+                                      ? styles.messageSent
+                                      : styles.messageReceived
+                                  }
+                                  key={index}
+                                >
+                                  <span className={styles.messageContent}>
+                                    {message.messageContent}
+                                  </span>
+                                  <span className={styles.messageTime}>
+                                    {new Date(
+                                      message?.createdAt,
+                                    ).toLocaleTimeString('it-IT', {
+                                      hour: '2-digit',
+                                      minute: '2-digit',
+                                    })}
+                                  </span>
+                                </div>
+                              </div>
+                            </>
+                          );
+                        },
+                      )
+                    : groupChat?.messages.map(
+                        (message: DirectMessage, index: number) => {
+                          return (
+                            <>
+                              <div
+                                className={
+                                  message.sender._id === userId
+                                    ? styles.messageSentContainer
+                                    : styles.messageReceivedContainer
+                                }
+                                key={index}
+                              >
+                                {message.sender._id !== userId ? (
+                                  message.sender?.image ? (
+                                    <img
+                                      src={message.sender.image}
+                                      alt={message.sender.image}
+                                      className={styles.contactImage}
+                                    />
+                                  ) : (
+                                    <Avatar
+                                      name={
+                                        message.sender.firstName +
+                                        ' ' +
+                                        message.sender.lastName
+                                      }
+                                      alt={
+                                        message.sender.firstName +
+                                        ' ' +
+                                        message.sender.lastName
+                                      }
+                                      avatarStyle={styles.contactImage}
+                                    />
+                                  )
+                                ) : (
+                                  ''
+                                )}
+                                <div
+                                  className={
+                                    message.sender._id === userId
+                                      ? styles.messageSent
+                                      : styles.messageReceived
+                                  }
+                                >
+                                  {message.sender._id !== userId && (
+                                    <p className={styles.senderInfo}>
+                                      {message.sender.firstName +
+                                        ' ' +
+                                        message.sender.lastName}
+                                    </p>
+                                  )}
+                                  <span className={styles.messageContent}>
+                                    {message.messageContent}
+                                  </span>
+                                  <span className={styles.messageTime}>
+                                    {new Date(
+                                      message?.createdAt,
+                                    ).toLocaleTimeString('it-IT', {
+                                      hour: '2-digit',
+                                      minute: '2-digit',
+                                    })}
+                                  </span>
+                                </div>
+                              </div>
+                            </>
+                          );
+                        },
+                      )}
                 </div>
               )}
             </div>
           </div>
-          <div>
+          <div id="messageInput">
             <InputGroup>
               <Form.Control
                 placeholder={t('sendMessage')}
@@ -280,11 +355,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                 onChange={handleNewMessageChange}
                 className={styles.backgroundWhite}
               />
-              <Button
-                onClick={sendMessage}
-                variant="primary"
-                id="button-addon2"
-              >
+              <Button onClick={sendMessage} variant="primary" id="button-send">
                 <SendIcon fontSize="small" />
               </Button>
             </InputGroup>

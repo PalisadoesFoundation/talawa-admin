@@ -119,12 +119,14 @@ export const DIRECT_CHAT_MESSAGES_BY_CHAT_ID = gql`
         firstName
         lastName
         email
+        image
       }
       sender {
         _id
         firstName
         lastName
         email
+        image
       }
     }
   }
@@ -144,12 +146,14 @@ export const DIRECT_CHAT_BY_ID = gql`
           firstName
           lastName
           email
+          image
         }
         sender {
           _id
           firstName
           lastName
           email
+          image
         }
       }
       users {
@@ -177,6 +181,7 @@ export const GROUP_CHAT_BY_ID = gql`
           firstName
           lastName
           email
+          image
         }
       }
       users {
@@ -184,6 +189,7 @@ export const GROUP_CHAT_BY_ID = gql`
         firstName
         lastName
         email
+        image
       }
     }
   }

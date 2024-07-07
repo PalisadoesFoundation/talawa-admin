@@ -12,11 +12,18 @@
   color: grey;
 }
 
+.header {
+  position: sticky;
+  top: 0px;
+  background: white;
+}
+
 .userInfo {
   display: flex;
   border-bottom: 1px solid black;
   padding-bottom: 5px;
   align-items: center;
+  margin-top: 5px;
 }
 
 .contactImage {
@@ -28,35 +35,40 @@
   justify-content: center;
 }
 
-.messageReceivedContainer {
- display: flex;
- justify-content: flex-end;
+.messageSentContainer {
+  display: flex;
+  justify-content: flex-end;
 }
 
-.messageSent {
-  border: 1px solid #C2C2C2;
-  border-radius: 8px 8px 0px 8px;
-  padding: 6px;
-  margin: 6px;
-  width: fit-content;
-  max-width: 75%;
-  background-color: rgba(196, 255, 211, 0.3);
-  min-width: 80px;
+.messageReceivedContainer {
+  display: flex;
+  align-items: flex-end;
 }
 
 .messageReceived {
-  border: 1px solid #C2C2C2;
+  border: 1px solid #c2c2c2;
   border-radius: 8px 8px 8px 0px;
-  padding: 8px;
-  margin: 6px;
+  padding: 4px 6px;
+  margin: 4px 6px;
   width: fit-content;
   max-width: 75%;
+  min-width: 80px;
+}
+
+.messageSent {
+  border: 1px solid #c2c2c2;
+  border-radius: 8px 8px 0px 8px;
+  padding: 4px 6px;
+  margin: 4px 6px;
+  width: fit-content;
+  max-width: 75%;
+  background-color: rgba(196, 255, 211, 0.3);
   min-width: 80px;
   padding-bottom: 0;
 }
 
 .messageTime {
-  font-size: 12px;
+  font-size: 10px;
   display: flex;
   align-items: flex-end;
   justify-content: flex-end;
@@ -70,4 +82,31 @@
 .createChat {
   border: none;
   background-color: white;
+}
+
+.chatMessages {
+  margin: 10px 0;
+}
+
+.userDetails {
+  .title {
+    font-size: 18px;
+    margin: 0;
+  }
+
+  .subtitle {
+    font-size: 12px;
+    color: #959595;
+    margin: 0;
+  }
+}
+
+.contactImage {
+  height: fit-content;
+}
+
+.senderInfo {
+  margin: 2px 2px 0px 2px;
+  font-size: 12px;
+  font-weight: 600;
 }

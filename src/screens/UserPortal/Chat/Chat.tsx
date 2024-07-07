@@ -10,7 +10,6 @@ import { Button, Dropdown, Form, InputGroup, Modal } from 'react-bootstrap';
 import { SearchOutlined, Search } from '@mui/icons-material';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import ContactCard from 'components/UserPortal/ContactCard/ContactCard';
-import GroupChatCard from 'components/UserPortal/GroupChatCard/GroupChatCard';
 import ChatRoom from 'components/UserPortal/ChatRoom/ChatRoom';
 import { Link, useParams } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -53,8 +52,8 @@ type GroupChatMessage = {
     firstName: string;
     lastName: string;
     email: string;
-  }
-}
+  };
+};
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -122,8 +121,7 @@ export default function chat(): JSX.Element {
 
   const toggleCreateGroupChatModal = /* istanbul ignore next */ (): void => {
     setCreateGroupChatModalisOpen(!createGroupChatModalisOpen);
-  }
-    
+  };
 
   const [userName, setUserName] = useState('');
 
@@ -211,7 +209,6 @@ export default function chat(): JSX.Element {
   React.useEffect(() => {
     if (groupChatList) {
       setGroupChats(groupChatList.groupChatsByUserId);
-      console.log(groupChats);
     }
   }, [groupChatList]);
 
@@ -280,67 +277,80 @@ export default function chat(): JSX.Element {
               ) : (
                 <div>
                   <Accordion flush defaultActiveKey={['0', '1']} alwaysOpen>
-                    <Accordion.Item eventKey="0">
-                      <Accordion.Header className={styles.chatType}>
-                        DIRECT CHATS
-                      </Accordion.Header>
-                      <Accordion.Body>
-                        {contacts.map((contact: any) => {
-                          const cardProps: InterfaceContactCardProps = {
-                            id: contact._id,
-                            title: contact.users[0]?._id === userId ? `${contact.users[1]?.firstName} ${contact.users[1]?.lastName}` : `${contact.users[0]?.firstName} ${contact.users[0]?.lastName}`,
-                            subtitle: userId
-                              ? contact.users[1]?.email
-                              : contact.users[0]?.email,
-                            image: userId
-                              ? contact.users[1]?.image
-                              : contact.users[0]?.image,
-                            setSelectedContact,
-                            selectedContact,
-                            type: 'direct',
-                            setSelectedChatType
-                          };
-                          return (
-                            <>
-                              <ContactCard {...cardProps} key={contact._id} />
-                            </>
-                          );
-                        })}
-                      </Accordion.Body>
-                    </Accordion.Item>
-                    <Accordion.Item eventKey="1">
-                      <Accordion.Header className={styles.chatType}>
-                        GROUP CHATS
-                      </Accordion.Header>
-                      <Accordion.Body>
-                        {groupChats &&
-                          groupChats.map((chat: any) => {
-                            console.log('chat', chat)
+                    {contacts.length ? (
+                      <Accordion.Item eventKey="0">
+                        <Accordion.Header className={styles.chatType}>
+                          DIRECT CHATS
+                        </Accordion.Header>
+                        <Accordion.Body>
+                          {contacts.map((contact: any) => {
                             const cardProps: InterfaceContactCardProps = {
-                              id: chat._id,
-                              title: chat.title,
-                              subtitle: `${chat.users.length} ${chat.users.length > 1 ? 'members' : 'member'}`,
-                              image: '',
+                              id: contact._id,
+                              title:
+                                contact.users[0]?._id === userId
+                                  ? `${contact.users[1]?.firstName} ${contact.users[1]?.lastName}`
+                                  : `${contact.users[0]?.firstName} ${contact.users[0]?.lastName}`,
+                              subtitle: userId
+                                ? contact.users[1]?.email
+                                : contact.users[0]?.email,
+                              image: userId
+                                ? contact.users[1]?.image
+                                : contact.users[0]?.image,
                               setSelectedContact,
                               selectedContact,
-                              type: 'group',
-                              setSelectedChatType
+                              type: 'direct',
+                              setSelectedChatType,
                             };
                             return (
                               <>
-                                <ContactCard {...cardProps}></ContactCard>
+                                <ContactCard {...cardProps} key={contact._id} />
                               </>
                             );
                           })}
-                      </Accordion.Body>
-                    </Accordion.Item>
+                        </Accordion.Body>
+                      </Accordion.Item>
+                    ) : (
+                      ''
+                    )}
+                    {groupChats.length ? (
+                      <Accordion.Item eventKey="1">
+                        <Accordion.Header className={styles.chatType}>
+                          GROUP CHATS
+                        </Accordion.Header>
+                        <Accordion.Body>
+                          {groupChats &&
+                            groupChats.map((chat: any) => {
+                              const cardProps: InterfaceContactCardProps = {
+                                id: chat._id,
+                                title: chat.title,
+                                subtitle: `${chat.users.length} ${chat.users.length > 1 ? 'members' : 'member'}`,
+                                image: '',
+                                setSelectedContact,
+                                selectedContact,
+                                type: 'group',
+                                setSelectedChatType,
+                              };
+                              return (
+                                <>
+                                  <ContactCard {...cardProps}></ContactCard>
+                                </>
+                              );
+                            })}
+                        </Accordion.Body>
+                      </Accordion.Item>
+                    ) : (
+                      ''
+                    )}
                   </Accordion>
                 </div>
               )}
             </div>
           </div>
-          <div className={styles.chatContainer}>
-            <ChatRoom selectedContact={selectedContact} selectedChatType={selectChatType} />
+          <div className={styles.chatContainer} id="chat-container">
+            <ChatRoom
+              selectedContact={selectedContact}
+              selectedChatType={selectChatType}
+            />
           </div>
         </div>
       </div>
@@ -436,11 +446,13 @@ export default function chat(): JSX.Element {
           )}
         </Modal.Body>
       </Modal>
-      {createGroupChatModalisOpen && <CreateGroupChat
-        toggleCreateGroupChatModal={toggleCreateGroupChatModal}
-        createGroupChatModalisOpen={createGroupChatModalisOpen}
-        groupChatListRefetch={groupChatListRefetch}
-      ></CreateGroupChat>}
+      {createGroupChatModalisOpen && (
+        <CreateGroupChat
+          toggleCreateGroupChatModal={toggleCreateGroupChatModal}
+          createGroupChatModalisOpen={createGroupChatModalisOpen}
+          groupChatListRefetch={groupChatListRefetch}
+        ></CreateGroupChat>
+      )}
     </>
   );
 }
