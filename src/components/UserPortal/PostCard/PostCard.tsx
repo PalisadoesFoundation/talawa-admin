@@ -214,7 +214,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
 
       props.fetchPosts();
       toggleEditPost();
-      toast.success('Successfully edited the Post.');
+      toast.success(tCommon('updatedSuccessfully', { item: 'Post' }));
     } catch (error: unknown) {
       /* istanbul ignore next */
       errorHandler(t, error);

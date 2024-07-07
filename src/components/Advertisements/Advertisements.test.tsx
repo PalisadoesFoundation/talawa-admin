@@ -407,7 +407,7 @@ describe('Testing Advertisement Component', () => {
 
     userEvent.click(screen.getByTestId('addonregister'));
     expect(
-      await screen.findByText('Advertisement created successfully'),
+      await screen.findByText('Advertisement created successfully.'),
     ).toBeInTheDocument();
   });
 

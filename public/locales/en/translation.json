@@ -429,8 +429,8 @@
     "campaigns": "Campaigns",
     "pledges": "Pledges",
     "endsOn": "Ends on",
-    "fundsRaised": "Funds Raised",
-    "fundsPledged": "Funds Pledged"
+    "raisedAmount": "Raised amount ",
+    "pledgedAmount": "Pledged amount"
   },
   "orgPost": {
     "title": "Posts",
@@ -588,7 +588,9 @@
   "userPasswordUpdate": {
     "previousPassword": "Previous Password",
     "newPassword": "New Password",
-    "confirmNewPassword": "Confirm New Password"
+    "confirmNewPassword": "Confirm New Password",
+    "passCantBeEmpty": "Password can't be empty",
+    "passNoMatch": "New and Confirm password do not match."
   },
   "orgDelete": {
     "deleteOrg": "Delete Org"
@@ -747,7 +749,8 @@
     "startPost": "Start a post",
     "media": "Media",
     "event": "Event",
-    "article": "Article"
+    "article": "Article",
+    "postNowVisibleInFeed": "Post now visible in feed"
   },
   "settings": {
     "profileSettings": "Profile Settings",
@@ -856,7 +859,10 @@
     "deleteAdvertisement": "Delete Advertisement",
     "deleteAdvertisementMsg": "Do you want to remove this advertisement?",
     "view": "View",
-    "editAdvertisement": "Edit Advertisement"
+    "editAdvertisement": "Edit Advertisement",
+    "advertisementDeleted": "Advertisement deleted successfully.",
+    "endDateGreaterOrEqual": "End Date should be greater than or equal to Start Date",
+    "advertisementCreated": "Advertisement created successfully."
   },
   "userChat": {
     "chat": "Chat",
@@ -950,5 +956,13 @@
     "successfulUpdation": "Action Item updated successfully",
     "notes": "Notes",
     "save": "Save"
+  },
+  "checkIn": {
+    "errorCheckingIn": "Error checking in",
+    "checkedInSuccessfully": "Checked in successfully"
+  },
+  "eventRegistrantsModal": {
+    "errorAddingAttendee": "Error adding attendee",
+    "errorRemovingAttendee": "Error removing attendee"
   }
 }

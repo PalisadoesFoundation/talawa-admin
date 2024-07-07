@@ -430,7 +430,7 @@ const fundCampaignPledge = (): JSX.Element => {
                 className={`btn btn-outline-primary ${styles.toggleBtn}`}
                 htmlFor="pledgedRadio"
               >
-                {t('fundsPledged')}
+                {t('pledgedAmount')}
               </label>
 
               <input
@@ -445,7 +445,7 @@ const fundCampaignPledge = (): JSX.Element => {
                 className={`btn btn-outline-primary ${styles.toggleBtn}`}
                 htmlFor="raisedRadio"
               >
-                {t('fundsRaised')}
+                {t('raisedAmount')}
               </label>
             </div>
           </div>

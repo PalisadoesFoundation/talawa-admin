@@ -338,7 +338,7 @@ describe('Testing PostCard Component [User Portal]', () => {
     userEvent.click(screen.getByTestId('editPostBtn'));
     await wait();
 
-    expect(toast.success).toBeCalledWith('Successfully edited the Post.');
+    expect(toast.success).toBeCalledWith('Post updated Successfully');
   });
 
   test('Delete post should work properly', async () => {

@@ -435,8 +435,8 @@
     "campaigns": "Campagnes",
     "pledges": "Promesses de dons",
     "endsOn": "Se termine le",
-    "fundsRaised": "Fonds collectés",
-    "fundsPledged": "Fonds promis"
+    "raisedAmount": "Montant collecté",
+    "pledgedAmount": "Montant promis"
   },
   "orgPost": {
     "title": "Des postes",
@@ -594,7 +594,9 @@
   "userPasswordUpdate": {
     "previousPassword": "Mot de passe précédent",
     "newPassword": "nouveau mot de passe",
-    "confirmNewPassword": "Confirmer le nouveau mot de passe"
+    "confirmNewPassword": "Confirmer le nouveau mot de passe",
+    "passCantBeEmpty": "Le mot de passe ne peut pas être vide",
+    "passNoMatch": "Le nouveau mot de passe et la confirmation du mot de passe ne correspondent pas."
   },
   "orgDelete": {
     "deleteOrg": "Supprimer l'organisation"
@@ -752,7 +754,8 @@
     "startPost": "Démarrer un message",
     "media": "Médias",
     "event": "Événement",
-    "article": "Article"
+    "article": "Article",
+    "postNowVisibleInFeed": "Le post est maintenant visible dans le fil d'actualité"
   },
   "settings": {
     "profileSettings": "Paramètres de profil",
@@ -864,7 +867,10 @@
     "deleteAdvertisement": "Supprimer la publicité",
     "deleteAdvertisementMsg": "Voulez-vous supprimer cette publicité ?",
     "view": "Voir",
-    "editAdvertisement": "Modifier l'annonce"
+    "editAdvertisement": "Modifier l'annonce",
+    "advertisementDeleted": "Publicité supprimée avec succès.",
+    "endDateGreaterOrEqual": "La date de fin doit être supérieure ou égale à la date de début",
+    "advertisementCreated": "Publicité créée avec succès."
   },
   "userChat": {
     "chat": "Chat",
@@ -958,5 +964,13 @@
     "successfulUpdation": "Élément d'action mis à jour avec succès",
     "notes": "Remarques",
     "save": "Sauvegarder"
+  },
+  "checkIn": {
+    "errorCheckingIn": "Erreur lors de l'enregistrement",
+    "checkedInSuccessfully": "Enregistrement réussi"
+  },
+  "eventRegistrantsModal": {
+    "errorAddingAttendee": "Erreur lors de l'ajout du participant",
+    "errorRemovingAttendee": "Erreur lors de la suppression du participant"
   }
 }

@@ -45,7 +45,7 @@ describe('Testing Table Row for CheckIn Table', () => {
     fireEvent.click(queryByText('Check In') as Element);
 
     await waitFor(() =>
-      expect(queryByText('Checked in successfully!')).toBeInTheDocument(),
+      expect(queryByText('Checked in successfully')).toBeInTheDocument(),
     );
   });
 
@@ -130,9 +130,7 @@ describe('Testing Table Row for CheckIn Table', () => {
     fireEvent.click(queryByText('Check In') as Element);
 
     await waitFor(() =>
-      expect(
-        queryByText('There was an error in checking in!'),
-      ).toBeInTheDocument(),
+      expect(queryByText('Error checking in')).toBeInTheDocument(),
     );
     await waitFor(() => expect(queryByText('Oops')).toBeInTheDocument());
   });

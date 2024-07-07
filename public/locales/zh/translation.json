@@ -435,8 +435,8 @@
     "campaigns": "活动",
     "pledges": "承诺",
     "endsOn": "结束于",
-    "fundsRaised": "募集到的资金",
-    "fundsPledged": "承诺的资金"
+    "raisedAmount": "募集金額",
+    "pledgedAmount": "承诺金額"
   },
   "orgPost": {
     "title": "帖子",
@@ -594,7 +594,9 @@
   "userPasswordUpdate": {
     "previousPassword": "旧密码",
     "newPassword": "新密码",
-    "confirmNewPassword": "确认新密码"
+    "confirmNewPassword": "确认新密码",
+    "passCantBeEmpty": "密码不能为空",
+    "passNoMatch": "新密码和确认密码不匹配。"
   },
   "orgDelete": {
     "deleteOrg": "删除组织"
@@ -752,7 +754,8 @@
     "startPost": "开始发帖",
     "media": "媒体",
     "event": "事件",
-    "article": "文章"
+    "article": "文章",
+    "postNowVisibleInFeed": "帖子现在在动态中可见"
   },
   "settings": {
     "profileSettings": "配置文件设置",
@@ -864,7 +867,10 @@
     "deleteAdvertisement": "删除广告",
     "deleteAdvertisementMsg": "您想删除该广告吗？",
     "view": "看法",
-    "editAdvertisement": "编辑广告"
+    "editAdvertisement": "编辑广告",
+    "advertisementDeleted": "广告已成功删除。",
+    "endDateGreaterOrEqual": "结束日期应大于或等于开始日期",
+    "advertisementCreated": "广告已成功创建。"
   },
   "userChat": {
     "chat": "聊天",
@@ -958,5 +964,13 @@
     "successfulUpdation": "操作项已成功更新",
     "notes": "笔记",
     "save": "节省"
+  },
+  "checkIn": {
+    "errorCheckingIn": "签到错误",
+    "checkedInSuccessfully": "成功签到"
+  },
+  "eventRegistrantsModal": {
+    "errorAddingAttendee": "添加与会者时出错",
+    "errorRemovingAttendee": "删除与会者时出错"
   }
 }
