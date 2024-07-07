@@ -245,8 +245,8 @@ describe('Testing Campaign Pledge Screen', () => {
     await waitFor(() => {
       expect(screen.getByTestId('searchPledger')).toBeInTheDocument();
     });
-    const raised = screen.getByText('Funds Raised');
-    const pledged = screen.getByText('Funds Pledged');
+    const raised = screen.getByText('Raised amount');
+    const pledged = screen.getByText('Pledged amount');
     expect(pledged).toBeInTheDocument();
     expect(raised).toBeInTheDocument();
 
