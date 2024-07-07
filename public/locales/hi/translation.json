@@ -594,7 +594,9 @@
   "userPasswordUpdate": {
     "previousPassword": "पिछला पासवर्ड",
     "newPassword": "नया पासवर्ड",
-    "confirmNewPassword": "नए पासवर्ड की पुष्टि करें"
+    "confirmNewPassword": "नए पासवर्ड की पुष्टि करें",
+    "passCantBeEmpty": "पासवर्ड खाली नहीं हो सकता",
+    "passNoMatch": "नया पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते।"
   },
   "orgDelete": {
     "deleteOrg": "संगठन हटाएं"
@@ -752,7 +754,8 @@
     "startPost": "एक पोस्ट प्रारंभ करें",
     "media": "मिडिया",
     "event": "आयोजन",
-    "article": "लेख"
+    "article": "लेख",
+    "postNowVisibleInFeed": "पोस्ट अब फीड में दिखाई दे रहा है"
   },
   "settings": {
     "profileSettings": "पार्श्वचित्र समायोजन",
@@ -864,7 +867,10 @@
     "deleteAdvertisement": "विज्ञापन हटाएँ",
     "deleteAdvertisementMsg": "क्या आप यह विज्ञापन हटाना चाहते हैं?",
     "view": "देखना",
-    "editAdvertisement": "विज्ञापन संपादित करें"
+    "editAdvertisement": "विज्ञापन संपादित करें",
+    "advertisementDeleted": "विज्ञापन सफलतापूर्वक हटाया गया।",
+    "endDateGreaterOrEqual": "समाप्ति तिथि प्रारंभ तिथि से अधिक या उसके बराबर होनी चाहिए",
+    "advertisementCreated": "विज्ञापन सफलतापूर्वक बनाया गया।"
   },
   "userChat": {
     "chat": "बात करना",
@@ -958,5 +964,13 @@
     "successfulUpdation": "कार्रवाई आइटम सफलतापूर्वक अपडेट किया गया",
     "notes": "टिप्पणियाँ",
     "save": "बचाना"
+  },
+  "checkIn": {
+    "errorCheckingIn": "चेक-इन में त्रुटि",
+    "checkedInSuccessfully": "सफलतापूर्वक चेक-इन किया गया"
+  },
+  "eventRegistrantsModal": {
+    "errorAddingAttendee": "उपस्थित होने वाले को जोड़ने में त्रुटि",
+    "errorRemovingAttendee": "उपस्थित होने वाले को हटाने में त्रुटि"
   }
 }

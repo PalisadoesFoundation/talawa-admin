@@ -56,7 +56,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         },
       });
       if (data) {
-        toast.success('Removed User from Organization successfully');
+        toast.success(tCommon('removedSuccessfully', { item: 'User' }));
         resetAndRefetch();
       }
     } catch (error: unknown) {
