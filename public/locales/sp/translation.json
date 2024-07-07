@@ -881,6 +881,10 @@
     "invalidCredentials": "Las credenciales ingresadas son incorrectas. Ingrese credenciales válidas.",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. Compruebe amablemente su conexión de red y espere un momento."
   },
+  "people": {
+    "title": "Gente",
+    "searchUsers": "Buscar usuarios"
+  },
   "userRegister": {
     "register": "Registro",
     "firstName": "Nombre de pila",
@@ -951,15 +955,21 @@
     "postedOn": "Publicado el {{date}}"
   },
   "home": {
-    "feed": "Alimentar",
-    "pinnedPosts": "Ver publicaciones fijadas",
-    "somethingOnYourMind": "¿Algo en tu mente?",
-    "addPost": "Agregar publicación",
+    "posts": "Publicaciones",
+    "post": "Publicación",
+    "title": "Publicaciones",
+    "textArea": "¿Tienes algo en mente?",
+    "feed": "Feed",
+    "loading": "Cargando",
+    "pinnedPosts": "Publicaciones fijadas",
+    "yourFeed": "Tu feed",
+    "nothingToShowHere": "No hay nada que mostrar aquí",
+    "somethingOnYourMind": "¿Tienes algo en mente?",
+    "addPost": "Añadir publicación",
     "startPost": "Comenzar una publicación",
     "media": "Medios",
     "event": "Evento",
-    "article": "Artículo",
-    "postNowVisibleInFeed": "La publicación ahora es visible en el feed"
+    "article": "Artículo"
   },
   "settings": {
     "settings": "Ajustes",
@@ -1024,6 +1034,7 @@
     "joined": "Unido"
   },
   "donate": {
+    "title": "Donaciones",
     "donations": "Donaciones",
     "searchDonations": "Buscar donaciones",
     "donateForThe": "Donar para el",
@@ -1035,6 +1046,7 @@
     "success": "Donación exitosa"
   },
   "userEvents": {
+    "title": "Eventos",
     "nothingToShow": "No hay nada que mostrar aquí.",
     "search": "Buscar",
     "createEvent": "Crear evento",

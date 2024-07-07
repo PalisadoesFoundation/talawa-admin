@@ -148,6 +148,7 @@ export default function organizations(): JSX.Element {
       filter: value,
     });
   };
+
   const handleSearchByEnter = (
     e: React.KeyboardEvent<HTMLInputElement>,
   ): void => {
@@ -156,6 +157,7 @@ export default function organizations(): JSX.Element {
       handleSearch(value);
     }
   };
+
   const handleSearchByBtnClick = (): void => {
     const value =
       (document.getElementById('searchUserOrgs') as HTMLInputElement)?.value ||
@@ -164,7 +166,7 @@ export default function organizations(): JSX.Element {
   };
 
   /* istanbul ignore next */
-  React.useEffect(() => {
+  useEffect(() => {
     if (data) {
       const organizations = data.organizationsConnection.map(
         (organization: InterfaceOrganization) => {
@@ -190,7 +192,7 @@ export default function organizations(): JSX.Element {
   }, [data]);
 
   /* istanbul ignore next */
-  React.useEffect(() => {
+  useEffect(() => {
     if (mode === 0) {
       if (data) {
         const organizations = data.organizationsConnection.map(
@@ -232,6 +234,7 @@ export default function organizations(): JSX.Element {
       }
     }
   }, [mode, data, joinedOrganizationsData, createdOrganizationsData, userId]);
+
   return (
     <>
       {hideDrawer ? (
@@ -266,11 +269,14 @@ export default function organizations(): JSX.Element {
         }`}
       >
         <div className={`${styles.mainContainer}`}>
-          <div className="d-flex justify-content-end align-items-center">
+          <div className="d-flex justify-content-between align-items-center">
+            <div style={{ flex: 1 }}>
+              <h1>{t('selectOrganization')}</h1>
+            </div>
             <ProfileDropdown />
           </div>
-          <h3>{t('selectOrganization')}</h3>
-          <div>
+
+          <div className="mt-4">
             <InputGroup className={styles.maxWidth}>
               <Form.Control
                 placeholder={t('searchUsers')}

@@ -9,6 +9,7 @@ import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from './EventDashboardScreen.module.css';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import useLocalStorage from 'utils/useLocalstorage';
+import type { InterfaceMapType } from 'utils/interfaces';
 
 const EventDashboardScreen = (): JSX.Element => {
   const { getItem } = useLocalStorage();
@@ -51,7 +52,7 @@ const EventDashboardScreen = (): JSX.Element => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(updateTargets(orgId));
-  }, [orgId]); // Added orgId to the dependency array
+  }, [orgId]);
 
   const handleResize = (): void => {
     if (window.innerWidth <= 820 && !hideDrawer) {
@@ -118,10 +119,6 @@ const EventDashboardScreen = (): JSX.Element => {
 };
 
 export default EventDashboardScreen;
-
-interface InterfaceMapType {
-  [key: string]: string;
-}
 
 const map: InterfaceMapType = {
   orgdash: 'dashboard',

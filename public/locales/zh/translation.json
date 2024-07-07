@@ -690,6 +690,10 @@
     "notAuthorised": "对不起！",
     "invalidCredentials": "输入的凭据不正确。"
   },
+  "people": {
+    "title": "人们",
+    "searchUsers": "搜索用户"
+  },
   "userRegister": {
     "enterFirstName": "输入您的名字",
     "enterLastName": "输入您的姓氏",
@@ -740,9 +744,9 @@
     "postedOn": "发布于 {{date}}"
   },
   "home": {
+    "title": "帖子",
     "posts": "帖子",
     "post": "邮政",
-    "title": "标题",
     "textArea": "你有什么心事吗？",
     "feed": "喂养",
     "loading": "加载中",
@@ -812,6 +816,7 @@
     "enterState": "输入城市或州"
   },
   "donate": {
+    "title": "捐款",
     "donations": "捐款",
     "searchDonations": "搜索捐款",
     "donateForThe": "为",
@@ -822,6 +827,7 @@
     "success": "捐赠成功"
   },
   "userEvents": {
+    "title": "活动",
     "nothingToShow": "这里没有什么可显示的。",
     "createEvent": "创建事件",
     "recurring": "重复事件",

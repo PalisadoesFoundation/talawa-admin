@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './Settings.module.css';
 import { Button, Card, Col, Form, Row } from 'react-bootstrap';
@@ -65,8 +65,8 @@ export default function settings(): JSX.Element {
     image: '',
   });
 
-  const originalImageState = React.useRef<string>('');
-  const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const originalImageState = useRef<string>('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const handleUpdateUserDetails = async (): Promise<void> => {
     try {
       let updatedUserDetails = { ...userDetails };
@@ -136,7 +136,7 @@ export default function settings(): JSX.Element {
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     /* istanbul ignore next */
     if (data) {
       const {
@@ -206,11 +206,14 @@ export default function settings(): JSX.Element {
         }`}
       >
         <div className={`${styles.mainContainer}`}>
-          <div className="d-flex justify-content-end align-items-center">
+          <div className="d-flex justify-content-between align-items-center">
+            <div style={{ flex: 1 }}>
+              <h1>{tCommon('settings')}</h1>
+            </div>
             <ProfileDropdown />
           </div>
-          <h3>{tCommon('settings')}</h3>
-          <Row>
+
+          <Row className="mt-4">
             <Col lg={5} className="d-lg-none">
               <UserProfile
                 firstName={userDetails.firstName}

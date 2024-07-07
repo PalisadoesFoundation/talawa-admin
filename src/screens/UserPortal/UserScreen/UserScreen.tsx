@@ -8,27 +8,38 @@ import styles from './UserScreen.module.css';
 import { Button } from 'react-bootstrap';
 import UserSidebarOrg from 'components/UserPortal/UserSidebarOrg/UserSidebarOrg';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
+import type { InterfaceMapType } from 'utils/interfaces';
+import { useTranslation } from 'react-i18next';
+
+const map: InterfaceMapType = {
+  organization: 'home',
+  people: 'people',
+  events: 'userEvents',
+  donate: 'donate',
+};
 
 const UserScreen = (): JSX.Element => {
-  const location = useLocation();
-  const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
   const { orgId } = useParams();
+  const location = useLocation();
 
   if (!orgId) {
     return <Navigate to={'/'} replace />;
   }
 
+  const titleKey: string | undefined = map[location.pathname.split('/')[2]];
+  const { t } = useTranslation('translation', { keyPrefix: titleKey });
+
   const appRoutes: {
     targets: TargetsType[];
   } = useSelector((state: RootState) => state.userRoutes);
-  const { targets } = appRoutes;
 
-  console.log(location.pathname.split('/'));
+  const { targets } = appRoutes;
+  const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
 
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(updateTargets(orgId));
-  }, [orgId]); // Added orgId to the dependency array
+  }, [orgId]);
 
   const handleResize = (): void => {
     if (window.innerWidth <= 820) {
@@ -43,6 +54,8 @@ const UserScreen = (): JSX.Element => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  console.log(titleKey);
 
   return (
     <>
@@ -85,7 +98,10 @@ const UserScreen = (): JSX.Element => {
         } `}
         data-testid="mainpageright"
       >
-        <div className="d-flex justify-content-end align-items-center">
+        <div className="d-flex justify-content-between align-items-center">
+          <div style={{ flex: 1 }}>
+            <h1>{titleKey !== 'home' ? t('title') : ''}</h1>
+          </div>
           <ProfileDropdown />
         </div>
         <Outlet />

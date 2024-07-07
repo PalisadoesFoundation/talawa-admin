@@ -683,6 +683,10 @@
     "addedAsAdmin": "उपयोगकर्ता को व्यवस्थापक के रूप में जोड़ा गया है.",
     "userType": "उपयोगकर्ता का प्रकार"
   },
+  "people": {
+    "title": "लोग",
+    "searchUsers": "उपयोगकर्ताओं को खोजें"
+  },
   "userLogin": {
     "login": "लॉग इन करें",
     "loginIntoYourAccount": "अपने खाते में लॉगिन करें",
@@ -740,9 +744,9 @@
     "postedOn": "{{date}} को पोस्ट किया गया"
   },
   "home": {
+    "title": "पदों",
     "posts": "पदों",
     "post": "डाक",
-    "title": "शीर्षक",
     "textArea": "आपके मन में कुछ है?",
     "feed": "खिलाना",
     "loading": "लोड हो रहा है",
@@ -812,6 +816,7 @@
     "enterState": "शहर या राज्य दर्ज करें"
   },
   "donate": {
+    "title": "दान",
     "donations": "दान",
     "searchDonations": "दान खोजें",
     "donateForThe": "के लिए दान करें",
@@ -822,6 +827,7 @@
     "success": "दान सफल"
   },
   "userEvents": {
+    "title": "ईवेंट",
     "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
     "createEvent": "कार्यक्रम बनाएँ",
     "recurring": "पुनरावर्ती ईवेंट",

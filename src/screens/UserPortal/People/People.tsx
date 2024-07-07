@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PeopleCard from 'components/UserPortal/PeopleCard/PeopleCard';
 import { Dropdown, Form, InputGroup } from 'react-bootstrap';
 import PaginationList from 'components/PaginationList/PaginationList';
@@ -33,14 +33,14 @@ interface InterfaceMember {
 
 export default function people(): JSX.Element {
   const { t } = useTranslation('translation', {
-    keyPrefix: 'userOrganizations',
+    keyPrefix: 'people',
   });
   const { t: tCommon } = useTranslation('common');
 
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [members, setMembers] = React.useState([]);
-  const [mode, setMode] = React.useState(0);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [members, setMembers] = useState([]);
+  const [mode, setMode] = useState(0);
 
   const { orgId: organizationId } = useParams();
 
@@ -100,7 +100,7 @@ export default function people(): JSX.Element {
     handleSearch(inputValue);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (data) {
       setMembers(data.organizationsMemberConnection.edges);
       console.log(data);
@@ -108,7 +108,7 @@ export default function people(): JSX.Element {
   }, [data]);
 
   /* istanbul ignore next */
-  React.useEffect(() => {
+  useEffect(() => {
     if (mode == 0) {
       if (data) {
         setMembers(data.organizationsMemberConnection.edges);
@@ -122,9 +122,8 @@ export default function people(): JSX.Element {
 
   return (
     <>
-      <div className={`d-flex flex-row ${styles.containerHeight}`}>
-        <div className={`${styles.colorLight} ${styles.mainContainer}`}>
-          <h1>People</h1>
+      <div className={`d-flex flex-row`}>
+        <div className={`${styles.mainContainer}`}>
           <div
             className={`mt-4 d-flex flex-row justify-content-between flex-wrap ${styles.gap}`}
           >

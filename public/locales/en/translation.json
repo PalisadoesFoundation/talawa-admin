@@ -679,6 +679,10 @@
     "addedAsAdmin": "User is added as admin.",
     "userType": "User Type"
   },
+  "people": {
+    "title": "People",
+    "searchUsers": "Search users"
+  },
   "userLogin": {
     "login": "Login",
     "loginIntoYourAccount": "Login into your account",
@@ -738,7 +742,7 @@
   "home": {
     "posts": "Posts",
     "post": "Post",
-    "title": "Title",
+    "title": "Posts",
     "textArea": "Something on your mind?",
     "feed": "Feed",
     "loading": "Loading",
@@ -808,6 +812,7 @@
     "enterState": "Enter City or State"
   },
   "donate": {
+    "title": "Donations",
     "donations": "Donations",
     "searchDonations": "Search donations",
     "donateForThe": "Donate for the",
@@ -818,6 +823,7 @@
     "success": "Donation Successful"
   },
   "userEvents": {
+    "title": "Events",
     "nothingToShow": "Nothing to show here.",
     "createEvent": "Create Event",
     "recurring": "Recurring Event",

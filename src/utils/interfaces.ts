@@ -508,3 +508,7 @@ export interface InterfaceAgendaItemInfo {
 export interface InterfaceAgendaItemList {
   agendaItemByEvent: InterfaceAgendaItemInfo[];
 }
+
+export interface InterfaceMapType {
+  [key: string]: string;
+}

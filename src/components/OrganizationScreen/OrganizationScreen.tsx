@@ -9,6 +9,7 @@ import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from './OrganizationScreen.module.css';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import { Button } from 'react-bootstrap';
+import type { InterfaceMapType } from 'utils/interfaces';
 
 const OrganizationScreen = (): JSX.Element => {
   const location = useLocation();
@@ -99,10 +100,6 @@ const OrganizationScreen = (): JSX.Element => {
 };
 
 export default OrganizationScreen;
-
-interface InterfaceMapType {
-  [key: string]: string;
-}
 
 const map: InterfaceMapType = {
   orgdash: 'dashboard',
