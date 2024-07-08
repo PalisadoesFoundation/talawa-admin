@@ -185,7 +185,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
             setItem('Email', email);
             setItem('UserImage', image);
           }
-          toast.success('Successful updated');
+          toast.success(tCommon('successfullyUpdated'));
         }
       } catch (error: unknown) {
         if (error instanceof Error) {
@@ -490,7 +490,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     <div>
                       <label>
                         {t('appLanguageCode')} <br />
-                        {`(API not supported yet)`}
                         <select
                           className="form-control"
                           data-testid="applangcode"
@@ -500,6 +499,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                               appLanguageCode: e.target.value,
                             });
                           }}
+                          value={formState.appLanguageCode}
                         >
                           {languages.map((language, index: number) => (
                             <option key={index} value={language.code}>

@@ -5,5 +5,6 @@
   "notAuthorised": "Sorry! you are not Authorised!",
   "errorSendingMail": "Error sending mail",
   "emailNotRegistered": "Email not registered",
-  "notFoundMsg": "Oops! The Page you requested was not found!"
+  "notFoundMsg": "Oops! The Page you requested was not found!",
+  "errorOccurredCouldntCreate": "An error occurred. Couldn't create {{entity}}"
 }

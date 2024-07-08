@@ -52,7 +52,7 @@ function addOnRegister(): JSX.Element {
     });
 
     if (data) {
-      toast.success('Plugin Added Successfully');
+      toast.success(tCommon('addedSuccessfully', { item: 'Plugin' }));
       setTimeout(() => {
         navigate(0);
       }, 2000);

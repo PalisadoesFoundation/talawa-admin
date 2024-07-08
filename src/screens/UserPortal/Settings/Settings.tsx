@@ -78,7 +78,7 @@ export default function settings(): JSX.Element {
       });
       /* istanbul ignore next */
       if (data) {
-        toast.success('Your details have been updated.');
+        toast.success(tCommon('updatedSuccessfully', { item: 'Profile' }));
         setTimeout(() => {
           window.location.reload();
         }, 500);

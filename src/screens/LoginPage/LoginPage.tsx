@@ -34,6 +34,7 @@ import { socialMediaLinks } from '../../constants';
 import styles from './LoginPage.module.css';
 import type { InterfaceQueryOrganizationListObject } from 'utils/interfaces';
 import { Autocomplete, TextField } from '@mui/material';
+import i18n from 'utils/i18n';
 
 const loginPage = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
@@ -290,6 +291,7 @@ const loginPage = (): JSX.Element => {
 
       /* istanbul ignore next */
       if (loginData) {
+        i18n.changeLanguage(loginData.login.appUserProfile.appLanguageCode);
         const { login } = loginData;
         const { user, appUserProfile } = login;
         const isAdmin: boolean =
