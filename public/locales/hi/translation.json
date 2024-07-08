@@ -267,6 +267,7 @@
     "editActionItem": "क्रिया आइटम संपादित करें",
     "isCompleted": "पुरा होना।",
     "latest": "नवीनतम",
+    "makeActive": "सक्रिय",
     "noActionItems": "कोई एक्शन आइटम नहीं",
     "options": "विकल्प",
     "preCompletionNotes": "समापन पूर्व नोट्स",
@@ -281,6 +282,57 @@
     "successfulUpdation": "कार्रवाई आइटम सफलतापूर्वक अपडेट किया गया",
     "successfulDeletion": "कार्रवाई आइटम सफलतापूर्वक हटा दिया गया",
     "title": "एक्शन आइटम्स"
+  },
+  "organizationAgendaCategory": {
+    "agendaCategoryDetails": "एजेंडा श्रेणी विवरण",
+    "updateAgendaCategory": "एजेंडा श्रेणी अपडेट करें",
+    "title": "एजेंडा श्रेणियाँ",
+    "name": "श्रेणी",
+    "description": "विवरण",
+    "createdBy": "द्वारा बनाया गया",
+    "options": "विकल्प",
+    "createAgendaCategory": "एजेंडा श्रेणी बनाएं",
+    "noAgendaCategories": "कोई एजेंडा श्रेणी नहीं",
+    "update": "अपडेट करें",
+    "agendaCategoryCreated": "एजेंडा श्रेणी सफलतापूर्वक बनाई गई",
+    "agendaCategoryUpdated": "एजेंडा श्रेणी सफलतापूर्वक अपडेट की गई",
+    "agendaCategoryDeleted": "एजेंडा श्रेणी सफलतापूर्वक हटा दी गई",
+    "deleteAgendaCategory": "एजेंडा श्रेणी हटाएं",
+    "deleteAgendaCategoryMsg": "क्या आप इस एजेंडा श्रेणी को हटाना चाहते हैं?"
+  },
+  "agendaItems": {
+    "agendaItemDetails": "एजेंडा आइटम विवरण",
+    "updateAgendaItem": "एजेंडा आइटम अपडेट करें",
+    "title": "शीर्षक",
+    "enterTitle": "शीर्षक दर्ज करें",
+    "sequence": "क्रम",
+    "description": "विवरण",
+    "enterDescription": "विवरण दर्ज करें",
+    "category": "एजेंडा श्रेणी",
+    "attachments": "संलग्नक",
+    "attachmentLimit": "10MB तक कोई भी छवि फ़ाइल या वीडियो फ़ाइल जोड़ें",
+    "fileSizeExceedsLimit": "फ़ाइल का आकार सीमा 10MB से अधिक है",
+    "urls": "URL",
+    "url": "URL में लिंक जोड़ें",
+    "enterUrl": "https://example.com",
+    "invalidUrl": "कृपया एक वैध URL दर्ज करें",
+    "link": "लिंक",
+    "createdBy": "बनाया गया द्वारा",
+    "regular": "नियमित",
+    "note": "नोट",
+    "duration": "अवधि",
+    "enterDuration": "मिमी:से",
+    "options": "विकल्प",
+    "createAgendaItem": "एजेंडा आइटम बनाएं",
+    "noAgendaItems": "कोई एजेंडा आइटम नहीं",
+    "selectAgendaItemCategory": "एजेंडा आइटम श्रेणी चुनें",
+    "update": "अपडेट करें",
+    "delete": "हटाएं",
+    "agendaItemCreated": "एजेंडा आइटम सफलतापूर्वक बनाया गया",
+    "agendaItemUpdated": "एजेंडा आइटम सफलतापूर्वक अपडेट किया गया",
+    "agendaItemDeleted": "एजेंडा आइटम सफलतापूर्वक हटा दिया गया",
+    "deleteAgendaItem": "एजेंडा आइटम हटाएं",
+    "deleteAgendaItemMsg": "क्या आप इस एजेंडा आइटम को हटाना चाहते हैं?"
   },
   "eventListCard": {
     "deleteEvent": "ईवेंट हटाएँ",
@@ -378,7 +430,13 @@
     "amount": "मात्रा",
     "editPledge": "प्रतिज्ञा संपादित करें",
     "deletePledgeMsg": "क्या आप वाकई इस प्रतिज्ञा को हटाना चाहते हैं?",
-    "noPledges": "कोई प्रतिज्ञा नहीं मिली"
+    "noPledges": "कोई प्रतिज्ञा नहीं मिली",
+    "sort": "क्रमबद्ध करें",
+    "searchVolunteer": "स्वयंसेवक द्वारा खोजें",
+    "highestAmount": "सबसे अधिक राशि",
+    "lowestAmount": "सबसे कम राशि",
+    "latestEndDate": "नवीनतम समाप्ति तिथि",
+    "earliestEndDate": "सबसे प्रारंभिक समाप्ति तिथि"
   },
   "orgPost": {
     "title": "पदों",
@@ -463,6 +521,7 @@
     "dashboard": "डैशबोर्ड",
     "registrants": "कुलसचिव",
     "eventActions": "घटना क्रियाएँ",
+    "eventAgendas": "इवेंट एजेंडा",
     "eventStats": "घटना सांख्यिकी",
     "to": "को"
   },
@@ -535,7 +594,9 @@
   "userPasswordUpdate": {
     "previousPassword": "पिछला पासवर्ड",
     "newPassword": "नया पासवर्ड",
-    "confirmNewPassword": "नए पासवर्ड की पुष्टि करें"
+    "confirmNewPassword": "नए पासवर्ड की पुष्टि करें",
+    "passCantBeEmpty": "पासवर्ड खाली नहीं हो सकता",
+    "passNoMatch": "नया पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते।"
   },
   "orgDelete": {
     "deleteOrg": "संगठन हटाएं"
@@ -673,7 +734,10 @@
   },
   "postCard": {
     "likes": "पसंद है",
-    "comments": "टिप्पणियाँ"
+    "comments": "टिप्पणियाँ",
+    "viewPost": "पोस्ट देखें",
+    "editPost": "पोस्ट संपादित करें",
+    "postedOn": "{{date}} को पोस्ट किया गया"
   },
   "home": {
     "posts": "पदों",
@@ -690,7 +754,8 @@
     "startPost": "एक पोस्ट प्रारंभ करें",
     "media": "मिडिया",
     "event": "आयोजन",
-    "article": "लेख"
+    "article": "लेख",
+    "postNowVisibleInFeed": "पोस्ट अब फीड में दिखाई दे रहा है"
   },
   "settings": {
     "profileSettings": "पार्श्वचित्र समायोजन",
@@ -802,7 +867,10 @@
     "deleteAdvertisement": "विज्ञापन हटाएँ",
     "deleteAdvertisementMsg": "क्या आप यह विज्ञापन हटाना चाहते हैं?",
     "view": "देखना",
-    "editAdvertisement": "विज्ञापन संपादित करें"
+    "editAdvertisement": "विज्ञापन संपादित करें",
+    "advertisementDeleted": "विज्ञापन सफलतापूर्वक हटाया गया।",
+    "endDateGreaterOrEqual": "समाप्ति तिथि प्रारंभ तिथि से अधिक या उसके बराबर होनी चाहिए",
+    "advertisementCreated": "विज्ञापन सफलतापूर्वक बनाया गया।"
   },
   "userChat": {
     "chat": "बात करना",
@@ -896,5 +964,13 @@
     "successfulUpdation": "कार्रवाई आइटम सफलतापूर्वक अपडेट किया गया",
     "notes": "टिप्पणियाँ",
     "save": "बचाना"
+  },
+  "checkIn": {
+    "errorCheckingIn": "चेक-इन में त्रुटि",
+    "checkedInSuccessfully": "सफलतापूर्वक चेक-इन किया गया"
+  },
+  "eventRegistrantsModal": {
+    "errorAddingAttendee": "उपस्थित होने वाले को जोड़ने में त्रुटि",
+    "errorRemovingAttendee": "उपस्थित होने वाले को हटाने में त्रुटि"
   }
 }

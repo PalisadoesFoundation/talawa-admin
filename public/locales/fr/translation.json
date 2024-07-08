@@ -267,6 +267,7 @@
     "editActionItem": "Modifier l'élément d'action",
     "isCompleted": "Complété",
     "latest": "Dernier",
+    "makeActive": "Actif",
     "noActionItems": "Aucune action",
     "options": "Possibilités",
     "preCompletionNotes": "Notes préalables à l'achèvement",
@@ -281,6 +282,57 @@
     "successfulUpdation": "Élément d'action mis à jour avec succès",
     "successfulDeletion": "Élément d'action supprimé avec succès",
     "title": "Éléments d'action"
+  },
+  "organizationAgendaCategory": {
+    "agendaCategoryDetails": "Détails de la catégorie d'ordre du jour",
+    "updateAgendaCategory": "Mettre à jour la catégorie d'ordre du jour",
+    "title": "Catégories d'ordre du jour",
+    "name": "Catégorie",
+    "description": "Description",
+    "createdBy": "Créé par",
+    "options": "Options",
+    "createAgendaCategory": "Créer une catégorie d'ordre du jour",
+    "noAgendaCategories": "Aucune catégorie d'ordre du jour",
+    "update": "Mettre à jour",
+    "agendaCategoryCreated": "Catégorie d'ordre du jour créée avec succès",
+    "agendaCategoryUpdated": "Catégorie d'ordre du jour mise à jour avec succès",
+    "agendaCategoryDeleted": "Catégorie d'ordre du jour supprimée avec succès",
+    "deleteAgendaCategory": "Supprimer la catégorie d'ordre du jour",
+    "deleteAgendaCategoryMsg": "Souhaitez-vous supprimer cette catégorie d'ordre du jour ?"
+  },
+  "agendaItems": {
+    "agendaItemDetails": "Détails du point de l'ordre du jour",
+    "updateAgendaItem": "Mettre à jour le point de l'ordre du jour",
+    "title": "Titre",
+    "enterTitle": "Entrer le titre",
+    "sequence": "Ordre",
+    "description": "Description",
+    "enterDescription": "Entrer la description",
+    "category": "Catégorie de l'ordre du jour",
+    "attachments": "Pièces jointes",
+    "attachmentLimit": "Ajouter un fichier image ou vidéo jusqu'à 10 Mo",
+    "fileSizeExceedsLimit": "La taille du fichier dépasse la limite de 10 Mo",
+    "urls": "URL",
+    "url": "Ajouter un lien vers l'URL",
+    "enterUrl": "https://example.com",
+    "invalidUrl": "Veuillez saisir une URL valide",
+    "link": "Lien",
+    "createdBy": "Créé par",
+    "regular": "Régulier",
+    "note": "Note",
+    "duration": "Durée",
+    "enterDuration": "mm:ss",
+    "options": "Options",
+    "createAgendaItem": "Créer un point à l'ordre du jour",
+    "noAgendaItems": "Aucun point à l'ordre du jour",
+    "selectAgendaItemCategory": "Sélectionner une catégorie de point de l'ordre du jour",
+    "update": "Mettre à jour",
+    "delete": "Supprimer",
+    "agendaItemCreated": "Point de l'ordre du jour créé avec succès",
+    "agendaItemUpdated": "Point de l'ordre du jour mis à jour avec succès",
+    "agendaItemDeleted": "Point de l'ordre du jour supprimé avec succès",
+    "deleteAgendaItem": "Supprimer le point de l'ordre du jour",
+    "deleteAgendaItemMsg": "Voulez-vous supprimer ce point de l'ordre du jour ?"
   },
   "eventListCard": {
     "deleteEvent": "Supprimer l'événement",
@@ -378,7 +430,13 @@
     "amount": "Montant",
     "editPledge": "Modifier l'engagement",
     "deletePledgeMsg": "Etes-vous sûr de vouloir supprimer cet engagement ?",
-    "noPledges": "Aucun engagement trouvé"
+    "noPledges": "Aucun engagement trouvé",
+    "sort": "Trier",
+    "searchVolunteer": "Rechercher par bénévole",
+    "highestAmount": "Montant le plus élevé",
+    "lowestAmount": "Montant le plus bas",
+    "latestEndDate": "Date de fin la plus récente",
+    "earliestEndDate": "Date de fin la plus proche"
   },
   "orgPost": {
     "title": "Des postes",
@@ -463,6 +521,7 @@
     "dashboard": "Tableau de bord",
     "registrants": "Inscrits",
     "eventActions": "Actions d'événement",
+    "eventAgendas": "Ordres du jour des événements",
     "eventStats": "Statistiques des événements",
     "to": "À"
   },
@@ -535,7 +594,9 @@
   "userPasswordUpdate": {
     "previousPassword": "Mot de passe précédent",
     "newPassword": "nouveau mot de passe",
-    "confirmNewPassword": "Confirmer le nouveau mot de passe"
+    "confirmNewPassword": "Confirmer le nouveau mot de passe",
+    "passCantBeEmpty": "Le mot de passe ne peut pas être vide",
+    "passNoMatch": "Le nouveau mot de passe et la confirmation du mot de passe ne correspondent pas."
   },
   "orgDelete": {
     "deleteOrg": "Supprimer l'organisation"
@@ -673,7 +734,10 @@
   },
   "postCard": {
     "likes": "Aime",
-    "comments": "commentaires"
+    "comments": "commentaires",
+    "viewPost": "Voir le message",
+    "editPost": "Modifier le message",
+    "postedOn": "Publié le {{date}}"
   },
   "home": {
     "posts": "Des postes",
@@ -690,7 +754,8 @@
     "startPost": "Démarrer un message",
     "media": "Médias",
     "event": "Événement",
-    "article": "Article"
+    "article": "Article",
+    "postNowVisibleInFeed": "Le post est maintenant visible dans le fil d'actualité"
   },
   "settings": {
     "profileSettings": "Paramètres de profil",
@@ -802,7 +867,10 @@
     "deleteAdvertisement": "Supprimer la publicité",
     "deleteAdvertisementMsg": "Voulez-vous supprimer cette publicité ?",
     "view": "Voir",
-    "editAdvertisement": "Modifier l'annonce"
+    "editAdvertisement": "Modifier l'annonce",
+    "advertisementDeleted": "Publicité supprimée avec succès.",
+    "endDateGreaterOrEqual": "La date de fin doit être supérieure ou égale à la date de début",
+    "advertisementCreated": "Publicité créée avec succès."
   },
   "userChat": {
     "chat": "Chat",
@@ -896,5 +964,13 @@
     "successfulUpdation": "Élément d'action mis à jour avec succès",
     "notes": "Remarques",
     "save": "Sauvegarder"
+  },
+  "checkIn": {
+    "errorCheckingIn": "Erreur lors de l'enregistrement",
+    "checkedInSuccessfully": "Enregistrement réussi"
+  },
+  "eventRegistrantsModal": {
+    "errorAddingAttendee": "Erreur lors de l'ajout du participant",
+    "errorRemovingAttendee": "Erreur lors de la suppression du participant"
   }
 }

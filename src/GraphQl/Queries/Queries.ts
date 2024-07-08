@@ -108,6 +108,7 @@ export const USER_LIST = gql`
     $lastName_contains: String
     $skip: Int
     $first: Int
+    $order: UserOrderByInput
   ) {
     users(
       where: {
@@ -116,6 +117,7 @@ export const USER_LIST = gql`
       }
       skip: $skip
       first: $first
+      orderBy: $order
     ) {
       user {
         _id
@@ -782,6 +784,12 @@ export { ACTION_ITEM_CATEGORY_LIST } from './ActionItemCategoryQueries';
 // get the list of Action Items
 export { ACTION_ITEM_LIST } from './ActionItemQueries';
 
+export {
+  AgendaItemByEvent,
+  AgendaItemByOrganization,
+} from './AgendaItemQueries';
+
+export { AGENDA_ITEM_CATEGORY_LIST } from './AgendaCategoryQueries';
 // to take the list of the blocked users
 export {
   ADVERTISEMENTS_GET,

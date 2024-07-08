@@ -5,5 +5,6 @@
   "notAuthorised": "Désolé! ",
   "errorSendingMail": "Erreur lors de l'envoi du courrier",
   "emailNotRegistered": "Email non enregistré",
-  "notFoundMsg": "Oops! "
+  "notFoundMsg": "Oops! ",
+  "errorOccurredCouldntCreate": "Une erreur s'est produite. Impossible de créer {{entity}}"
 }

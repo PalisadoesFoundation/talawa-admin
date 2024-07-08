@@ -267,6 +267,7 @@
     "editActionItem": "编辑操作项",
     "isCompleted": "完全的",
     "latest": "最新的",
+    "makeActive": "积极的",
     "noActionItems": "无行动项目",
     "options": "选项",
     "preCompletionNotes": "预完成注释",
@@ -281,6 +282,57 @@
     "successfulUpdation": "操作项已成功更新",
     "successfulDeletion": "操作项已成功删除",
     "title": "行动项目"
+  },
+  "organizationAgendaCategory": {
+    "agendaCategoryDetails": "议程类别详情",
+    "updateAgendaCategory": "更新议程类别",
+    "title": "议程类别",
+    "name": "类别",
+    "description": "描述",
+    "createdBy": "创建人",
+    "options": "选项",
+    "createAgendaCategory": "创建议程类别",
+    "noAgendaCategories": "没有议程类别",
+    "update": "更新",
+    "agendaCategoryCreated": "议程类别创建成功",
+    "agendaCategoryUpdated": "议程类别更新成功",
+    "agendaCategoryDeleted": "议程类别删除成功",
+    "deleteAgendaCategory": "删除议程类别",
+    "deleteAgendaCategoryMsg": "是否要删除此议程类别？"
+  },
+  "agendaItems": {
+    "agendaItemDetails": "议程项目详细信息",
+    "updateAgendaItem": "更新议程项目",
+    "title": "标题",
+    "enterTitle": "输入标题",
+    "sequence": "顺序",
+    "description": "描述",
+    "enterDescription": "输入描述",
+    "category": "议程类别",
+    "attachments": "附件",
+    "attachmentLimit": "添加任何图像文件或视频文件，最大 10MB",
+    "fileSizeExceedsLimit": "文件大小超过 10MB 的限制",
+    "urls": "网址",
+    "url": "添加链接到网址",
+    "enterUrl": "https://example.com",
+    "invalidUrl": "请输入有效的网址",
+    "link": "链接",
+    "createdBy": "创建人",
+    "regular": "常规",
+    "note": "注意",
+    "duration": "持续时间",
+    "enterDuration": "分:秒",
+    "options": "选项",
+    "createAgendaItem": "创建议程项目",
+    "noAgendaItems": "没有议程项目",
+    "selectAgendaItemCategory": "选择议程项目类别",
+    "update": "更新",
+    "delete": "删除",
+    "agendaItemCreated": "议程项目已成功创建",
+    "agendaItemUpdated": "议程项目已成功更新",
+    "agendaItemDeleted": "议程项目已成功删除",
+    "deleteAgendaItem": "删除议程项目",
+    "deleteAgendaItemMsg": "您要删除此议程项目吗？"
   },
   "eventListCard": {
     "deleteEvent": "删除事件",
@@ -378,7 +430,13 @@
     "amount": "数量",
     "editPledge": "编辑承诺",
     "deletePledgeMsg": "您确定要删除此承诺吗？",
-    "noPledges": "未找到承诺"
+    "noPledges": "未找到承诺",
+    "sort": "排序",
+    "searchVolunteer": "按志愿者搜索",
+    "highestAmount": "最高金额",
+    "lowestAmount": "最低金额",
+    "latestEndDate": "最新结束日期",
+    "earliestEndDate": "最早结束日期"
   },
   "orgPost": {
     "title": "帖子",
@@ -463,6 +521,7 @@
     "dashboard": "仪表板",
     "registrants": "注册者",
     "eventActions": "事件动作",
+    "eventAgendas": "活动议程",
     "eventStats": "事件统计",
     "to": "到"
   },
@@ -535,7 +594,9 @@
   "userPasswordUpdate": {
     "previousPassword": "旧密码",
     "newPassword": "新密码",
-    "confirmNewPassword": "确认新密码"
+    "confirmNewPassword": "确认新密码",
+    "passCantBeEmpty": "密码不能为空",
+    "passNoMatch": "新密码和确认密码不匹配。"
   },
   "orgDelete": {
     "deleteOrg": "删除组织"
@@ -673,7 +734,10 @@
   },
   "postCard": {
     "likes": "喜欢",
-    "comments": "评论"
+    "comments": "评论",
+    "viewPost": "查看帖子",
+    "editPost": "编辑帖子",
+    "postedOn": "发布于 {{date}}"
   },
   "home": {
     "posts": "帖子",
@@ -690,7 +754,8 @@
     "startPost": "开始发帖",
     "media": "媒体",
     "event": "事件",
-    "article": "文章"
+    "article": "文章",
+    "postNowVisibleInFeed": "帖子现在在动态中可见"
   },
   "settings": {
     "profileSettings": "配置文件设置",
@@ -802,7 +867,10 @@
     "deleteAdvertisement": "删除广告",
     "deleteAdvertisementMsg": "您想删除该广告吗？",
     "view": "看法",
-    "editAdvertisement": "编辑广告"
+    "editAdvertisement": "编辑广告",
+    "advertisementDeleted": "广告已成功删除。",
+    "endDateGreaterOrEqual": "结束日期应大于或等于开始日期",
+    "advertisementCreated": "广告已成功创建。"
   },
   "userChat": {
     "chat": "聊天",
@@ -896,5 +964,13 @@
     "successfulUpdation": "操作项已成功更新",
     "notes": "笔记",
     "save": "节省"
+  },
+  "checkIn": {
+    "errorCheckingIn": "签到错误",
+    "checkedInSuccessfully": "成功签到"
+  },
+  "eventRegistrantsModal": {
+    "errorAddingAttendee": "添加与会者时出错",
+    "errorRemovingAttendee": "删除与会者时出错"
   }
 }

@@ -180,10 +180,10 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
         setCommentInput('');
         setNumComments((numComments) => numComments + 1);
 
-        const newComment: any = {
-          id: createEventData.createComment._id,
+        const newComment: InterfaceCommentCardProps = {
+          id: createEventData.createComment.id,
           creator: {
-            id: createEventData.createComment.creator.id,
+            id: createEventData.createComment.creator._id,
             firstName: createEventData.createComment.creator.firstName,
             lastName: createEventData.createComment.creator.lastName,
             email: createEventData.createComment.creator.email,
@@ -214,7 +214,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
 
       props.fetchPosts();
       toggleEditPost();
-      toast.success('Successfully edited the Post.');
+      toast.success(tCommon('updatedSuccessfully', { item: 'Post' }));
     } catch (error: unknown) {
       /* istanbul ignore next */
       errorHandler(t, error);
@@ -274,6 +274,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
           </Dropdown>
         </Card.Header>
         <Card.Img
+          className={styles.postImage}
           variant="top"
           src={
             props.image === '' || props.image === null
@@ -286,14 +287,11 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
             {props.title}
           </Card.Title>
           <Card.Subtitle style={{ color: '#808080' }}>
-            Posted On: {props.postedAt}
+            {t('postedOn', { date: props.postedAt })}
           </Card.Subtitle>
           <Card.Text className={`${styles.cardText} mt-4`}>
             {props.text}
           </Card.Text>
-          {props.image && (
-            <img src={props.image} className={styles.imageContainer} />
-          )}
         </Card.Body>
         <Card.Footer style={{ border: 'none', background: 'white' }}>
           <div className={`${styles.cardActions}`}>
@@ -304,7 +302,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
               data-testid={'viewPostBtn'}
               onClick={toggleViewPost}
             >
-              View Post
+              {t('viewPost')}
             </Button>
           </div>
         </Card.Footer>
@@ -341,7 +339,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
             <h4>Comments</h4>
             <div className={styles.commentContainer}>
               {numComments ? (
-                comments.map((comment: any, index: any) => {
+                comments.map((comment, index: number) => {
                   const cardProps: InterfaceCommentCardProps = {
                     id: comment.id,
                     creator: {
@@ -417,7 +415,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
       <Modal show={showEditPost} onHide={toggleEditPost} size="lg" centered>
         <Modal.Header closeButton className="py-2 ">
           <p className="fs-3" data-testid={'editPostModalTitle'}>
-            Edit Post
+            {t('editPost')}
           </p>
         </Modal.Header>
         <Modal.Body>
@@ -441,7 +439,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
             data-testid={'editPostBtn'}
             onClick={handleEditPost}
           >
-            Edit Post
+            {t('editPost')}
           </Button>
         </ModalFooter>
       </Modal>
