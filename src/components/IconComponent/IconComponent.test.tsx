@@ -62,6 +62,14 @@ const screenTestIdMap: Record<string, Record<string, string>> = {
     name: 'Venues',
     testId: 'Icon-Component-Venues',
   },
+  Donate: {
+    name: 'Donate',
+    testId: 'Icon-Component-Donate',
+  },
+  Campaigns: {
+    name: 'Campaigns',
+    testId: 'Icon-Component-Campaigns',
+  },
   default: {
     name: 'default',
     testId: 'Icon-Component-DefaultIcon',

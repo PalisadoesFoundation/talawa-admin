@@ -16,6 +16,7 @@ const map: InterfaceMapType = {
   people: 'people',
   events: 'userEvents',
   donate: 'donate',
+  campaigns: 'userCampaigns',
 };
 
 const UserScreen = (): JSX.Element => {
@@ -29,11 +30,11 @@ const UserScreen = (): JSX.Element => {
   const titleKey: string | undefined = map[location.pathname.split('/')[2]];
   const { t } = useTranslation('translation', { keyPrefix: titleKey });
 
-  const appRoutes: {
+  const userRoutes: {
     targets: TargetsType[];
   } = useSelector((state: RootState) => state.userRoutes);
 
-  const { targets } = appRoutes;
+  const { targets } = userRoutes;
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
 
   const dispatch = useDispatch();

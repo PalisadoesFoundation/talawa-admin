@@ -49,7 +49,6 @@ const UserSidebarOrg = ({
     let isMounted = true;
     if (data && isMounted) {
       setOrganization(data?.organizations[0]);
-      console.log(targets, 'targets');
     }
     return () => {
       isMounted = false;

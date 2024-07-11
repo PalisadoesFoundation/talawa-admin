@@ -971,5 +971,16 @@
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error adding attendee",
     "errorRemovingAttendee": "Error removing attendee"
+  },
+  "userCampaigns": {
+    "title": "Fundraising Campaigns",
+    "searchByName": "Search by Name...",
+    "myPledges": "My Pledges",
+    "lowestGoal": "Lowest Goal",
+    "highestGoal": "Highest Goal",
+    "latestEndDate": "Latest End Date",
+    "earliestEndDate": "Earliest End Date",
+    "addPledge": "Add Pledge",
+    "viewPledges": "View Pledges"
   }
 }
