@@ -72,6 +72,7 @@ const organizationFunds = (): JSX.Element => {
   const [fundModalMode, setFundModalMode] = useState<'edit' | 'create'>(
     'create',
   );
+
   const openModal = (modal: ModalState): void =>
     setModalState((prevState) => ({ ...prevState, [modal]: true }));
 
