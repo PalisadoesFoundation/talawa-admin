@@ -149,7 +149,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     if (props.selectedChatType == 'direct') {
       await sendMessageToDirectChat();
       await chatRefetch();
-    } else if(props.selectedChatType == 'group') {
+    } else if (props.selectedChatType == 'group') {
       await sendMessageToGroupChat();
       await groupChatRefresh();
     }
@@ -182,7 +182,9 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
 
   useEffect(() => {
     if (groupMessageSubscriptionData) {
-      const updatedChat = groupChat ? JSON.parse(JSON.stringify(groupChat)) : {messages: []};
+      const updatedChat = groupChat
+        ? JSON.parse(JSON.stringify(groupChat))
+        : { messages: [] };
       updatedChat?.messages.push(
         groupMessageSubscriptionData.messageSentToGroupChat,
       );
@@ -192,7 +194,9 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
 
   useEffect(() => {
     if (directMessageSubscriptionData) {
-      const updatedChat = directChat ? JSON.parse(JSON.stringify(directChat)) : {messages: []};
+      const updatedChat = directChat
+        ? JSON.parse(JSON.stringify(directChat))
+        : { messages: [] };
       updatedChat?.messages.push(
         directMessageSubscriptionData.messageSentToDirectChat,
       );
@@ -275,67 +279,67 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                     : groupChat?.messages.map(
                         (message: DirectMessage, index: number) => {
                           return (
+                            <div
+                              className={
+                                message.sender._id === userId
+                                  ? styles.messageSentContainer
+                                  : styles.messageReceivedContainer
+                              }
+                              key={message._id}
+                            >
+                              {message.sender._id !== userId ? (
+                                message.sender?.image ? (
+                                  <img
+                                    src={message.sender.image}
+                                    alt={message.sender.image}
+                                    className={styles.contactImage}
+                                  />
+                                ) : (
+                                  <Avatar
+                                    name={
+                                      message.sender.firstName +
+                                      ' ' +
+                                      message.sender.lastName
+                                    }
+                                    alt={
+                                      message.sender.firstName +
+                                      ' ' +
+                                      message.sender.lastName
+                                    }
+                                    avatarStyle={styles.contactImage}
+                                  />
+                                )
+                              ) : (
+                                ''
+                              )}
                               <div
                                 className={
                                   message.sender._id === userId
-                                    ? styles.messageSentContainer
-                                    : styles.messageReceivedContainer
+                                    ? styles.messageSent
+                                    : styles.messageReceived
                                 }
                                 key={message._id}
                               >
-                                {message.sender._id !== userId ? (
-                                  message.sender?.image ? (
-                                    <img
-                                      src={message.sender.image}
-                                      alt={message.sender.image}
-                                      className={styles.contactImage}
-                                    />
-                                  ) : (
-                                    <Avatar
-                                      name={
-                                        message.sender.firstName +
-                                        ' ' +
-                                        message.sender.lastName
-                                      }
-                                      alt={
-                                        message.sender.firstName +
-                                        ' ' +
-                                        message.sender.lastName
-                                      }
-                                      avatarStyle={styles.contactImage}
-                                    />
-                                  )
-                                ) : (
-                                  ''
+                                {message.sender._id !== userId && (
+                                  <p className={styles.senderInfo}>
+                                    {message.sender.firstName +
+                                      ' ' +
+                                      message.sender.lastName}
+                                  </p>
                                 )}
-                                <div
-                                  className={
-                                    message.sender._id === userId
-                                      ? styles.messageSent
-                                      : styles.messageReceived
-                                  }
-                                  key={message._id}
-                                >
-                                  {message.sender._id !== userId && (
-                                    <p className={styles.senderInfo}>
-                                      {message.sender.firstName +
-                                        ' ' +
-                                        message.sender.lastName}
-                                    </p>
-                                  )}
-                                  <span className={styles.messageContent}>
-                                    {message.messageContent}
-                                  </span>
-                                  <span className={styles.messageTime}>
-                                    {new Date(
-                                      message?.createdAt,
-                                    ).toLocaleTimeString('it-IT', {
-                                      hour: '2-digit',
-                                      minute: '2-digit',
-                                    })}
-                                  </span>
-                                </div>
+                                <span className={styles.messageContent}>
+                                  {message.messageContent}
+                                </span>
+                                <span className={styles.messageTime}>
+                                  {new Date(
+                                    message?.createdAt,
+                                  ).toLocaleTimeString('it-IT', {
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                  })}
+                                </span>
                               </div>
+                            </div>
                           );
                         },
                       )}
