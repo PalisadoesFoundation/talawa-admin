@@ -88,17 +88,15 @@
   margin: 10px 0;
 }
 
-.userDetails {
-  .title {
-    font-size: 18px;
-    margin: 0;
-  }
+.userDetails .subtitle {
+  font-size: 12px;
+  color: #959595;
+  margin: 0;
+}
 
-  .subtitle {
-    font-size: 12px;
-    color: #959595;
-    margin: 0;
-  }
+.userDetails .title {
+  font-size: 18px;
+  margin: 0;
 }
 
 .contactImage {

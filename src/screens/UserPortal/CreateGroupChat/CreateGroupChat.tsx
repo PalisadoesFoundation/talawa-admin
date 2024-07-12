@@ -15,7 +15,8 @@ import type { SelectChangeEvent } from '@mui/material/Select';
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import styles from './CreateGroupChat.module.css';
-import { ApolloQueryResult, useMutation, useQuery } from '@apollo/client';
+import type { ApolloQueryResult } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { USER_JOINED_ORGANIZATIONS } from 'GraphQl/Queries/OrganizationQueries';
 import useLocalStorage from 'utils/useLocalstorage';
 import { CREATE_GROUP_CHAT } from 'GraphQl/Mutations/OrganizationMutations';
@@ -30,6 +31,7 @@ import { USERS_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
 import { LocalPoliceTwoTone, Search } from '@mui/icons-material';
 import { style } from '@mui/system';
+import { useTranslation } from 'react-i18next';
 
 interface InterfaceCreateGroupChatProps {
   toggleCreateGroupChatModal: () => void;
@@ -85,11 +87,15 @@ const StyledTableRow = styled(TableRow)(() => ({
 
 const { getItem } = useLocalStorage();
 
-export default function chat({
+export default function groupChat({
   toggleCreateGroupChatModal,
   createGroupChatModalisOpen,
   groupChatListRefetch,
 }: InterfaceCreateGroupChatProps): JSX.Element {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'userChat',
+  });
+
   const userId: string | null = getItem('userId');
 
   const [createGroupChat] = useMutation(CREATE_GROUP_CHAT);
@@ -97,7 +103,7 @@ export default function chat({
   const [organizations, setOrganizations] = useState([]);
   const [selectedOrganization, setSelectedOrganization] = useState('');
   const [title, setTitle] = useState('');
-  let [userIds, setUserIds] = useState<String[]>([]);
+  let [userIds, setUserIds] = useState<string[]>([]);
 
   const [addUserModalisOpen, setAddUserModalisOpen] = useState(false);
 

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-// import OrganizationNavbar from 'components/UserPortal/OrganizationNavbar/OrganizationNavbar';
 import {
   DIRECT_CHATS_LIST,
   USERS_CONNECTION_LIST,
@@ -11,7 +10,7 @@ import { SearchOutlined, Search } from '@mui/icons-material';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import ContactCard from 'components/UserPortal/ContactCard/ContactCard';
 import ChatRoom from 'components/UserPortal/ChatRoom/ChatRoom';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
 import { CREATE_DIRECT_CHAT } from 'GraphQl/Mutations/OrganizationMutations';
 import Loader from 'components/Loader/Loader';
@@ -29,8 +28,8 @@ import Accordion from 'react-bootstrap/Accordion';
 import styles from './Chat.module.css';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
-import CreateGroupChat from './core/CreateGroupChat/CreateGroupChat';
 import { GROUP_CHAT_LIST } from 'GraphQl/Queries/PlugInQueries';
+import CreateGroupChat from '../CreateGroupChat/CreateGroupChat';
 
 interface InterfaceContactCardProps {
   id: string;
@@ -42,18 +41,6 @@ interface InterfaceContactCardProps {
   type: string;
   setSelectedChatType: React.Dispatch<React.SetStateAction<string>>;
 }
-
-type GroupChatMessage = {
-  _id: string;
-  createdAt: string;
-  messageContent: string;
-  sender: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-  };
-};
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -73,7 +60,7 @@ const StyledTableRow = styled(TableRow)(() => ({
 
 export default function chat(): JSX.Element {
   const { t } = useTranslation('translation', {
-    keyPrefix: 'userChat',
+    keyPrefix: 'chat',
   });
 
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
@@ -202,12 +189,14 @@ export default function chat(): JSX.Element {
 
   React.useEffect(() => {
     if (contactData) {
+      console.log('TEST', contactData);
       setContacts(contactData.directChatsByUserID);
     }
   }, [contactData]);
 
   React.useEffect(() => {
     if (groupChatList) {
+      console.log(groupChatList);
       setGroupChats(groupChatList.groupChatsByUserId);
     }
   }, [groupChatList]);
@@ -237,12 +226,12 @@ export default function chat(): JSX.Element {
       )}
       <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       <div className={`d-flex flex-row ${styles.containerHeight}`}>
-        <div className={`${styles.mainContainer}`}>
+        <div data-testid="chat" className={`${styles.mainContainer}`}>
           <div className={styles.contactContainer}>
             <div
               className={`d-flex justify-content-between ${styles.addChatContainer}`}
             >
-              <h4>{t('messages')}</h4>
+              <h4>Messages</h4>
               <Dropdown style={{ cursor: 'pointer' }}>
                 <Dropdown.Toggle
                   className={styles.customToggle}
@@ -277,9 +266,12 @@ export default function chat(): JSX.Element {
               ) : (
                 <div>
                   <Accordion flush defaultActiveKey={['0', '1']} alwaysOpen>
-                    {contacts.length ? (
+                    {!!contacts.length && (
                       <Accordion.Item eventKey="0">
-                        <Accordion.Header className={styles.chatType}>
+                        <Accordion.Header
+                          data-testid="chatContact"
+                          className={styles.chatType}
+                        >
                           DIRECT CHATS
                         </Accordion.Header>
                         <Accordion.Body>
@@ -302,44 +294,42 @@ export default function chat(): JSX.Element {
                               setSelectedChatType,
                             };
                             return (
-                              <>
-                                <ContactCard {...cardProps} key={contact._id} />
-                              </>
+                              <ContactCard
+                                data-testid="contact-card"
+                                {...cardProps}
+                                key={contact._id}
+                              />
                             );
                           })}
                         </Accordion.Body>
                       </Accordion.Item>
-                    ) : (
-                      ''
                     )}
-                    {groupChats.length ? (
+                    {!!groupChats.length && (
                       <Accordion.Item eventKey="1">
                         <Accordion.Header className={styles.chatType}>
                           GROUP CHATS
                         </Accordion.Header>
                         <Accordion.Body>
-                          {groupChats &&
-                            groupChats.map((chat: any) => {
-                              const cardProps: InterfaceContactCardProps = {
-                                id: chat._id,
-                                title: chat.title,
-                                subtitle: `${chat.users.length} ${chat.users.length > 1 ? 'members' : 'member'}`,
-                                image: '',
-                                setSelectedContact,
-                                selectedContact,
-                                type: 'group',
-                                setSelectedChatType,
-                              };
-                              return (
-                                <>
-                                  <ContactCard {...cardProps}></ContactCard>
-                                </>
-                              );
-                            })}
+                          {groupChats.map((chat: any) => {
+                            const cardProps: InterfaceContactCardProps = {
+                              id: chat._id,
+                              title: chat.title,
+                              subtitle: `${chat.users.length} ${chat.users.length > 1 ? 'members' : 'member'}`,
+                              image: '',
+                              setSelectedContact,
+                              selectedContact,
+                              type: 'group',
+                              setSelectedChatType,
+                            };
+                            return (
+                              <ContactCard
+                                {...cardProps}
+                                key={chat._id}
+                              ></ContactCard>
+                            );
+                          })}
                         </Accordion.Body>
                       </Accordion.Item>
-                    ) : (
-                      ''
                     )}
                   </Accordion>
                 </div>
@@ -424,7 +414,6 @@ export default function chat(): JSX.Element {
                                 userDetails.user.lastName}
                               <br />
                               {userDetails.user.email}
-                              {/* </Link> */}
                             </StyledTableCell>
                             <StyledTableCell align="center">
                               <Button

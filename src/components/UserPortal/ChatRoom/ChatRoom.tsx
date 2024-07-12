@@ -149,7 +149,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     if (props.selectedChatType == 'direct') {
       await sendMessageToDirectChat();
       await chatRefetch();
-    } else {
+    } else if(props.selectedChatType == 'group') {
       await sendMessageToGroupChat();
       await groupChatRefresh();
     }
@@ -182,7 +182,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
 
   useEffect(() => {
     if (groupMessageSubscriptionData) {
-      const updatedChat = JSON.parse(JSON.stringify(groupChat));
+      const updatedChat = groupChat ? JSON.parse(JSON.stringify(groupChat)) : {messages: []};
       updatedChat?.messages.push(
         groupMessageSubscriptionData.messageSentToGroupChat,
       );
@@ -192,7 +192,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
 
   useEffect(() => {
     if (directMessageSubscriptionData) {
-      const updatedChat = JSON.parse(JSON.stringify(directChat));
+      const updatedChat = directChat ? JSON.parse(JSON.stringify(directChat)) : {messages: []};
       updatedChat?.messages.push(
         directMessageSubscriptionData.messageSentToDirectChat,
       );
@@ -210,7 +210,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
           className={`d-flex flex-column justify-content-center align-items-center w-100 h-75 gap-2 ${styles.grey}`}
         >
           <PermContactCalendarIcon fontSize="medium" className={styles.grey} />
-          <h6>{t('selectContact')}</h6>
+          <h6 data-testid="noChatSelected">{t('selectContact')}</h6>
         </div>
       ) : (
         <>
@@ -240,50 +240,48 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                     ? directChat?.messages.map(
                         (message: DirectMessage, index: number) => {
                           return (
-                            <>
+                            <div
+                              className={
+                                message.sender._id === userId
+                                  ? styles.messageSentContainer
+                                  : styles.messageReceivedContainer
+                              }
+                              key={message._id}
+                            >
                               <div
                                 className={
                                   message.sender._id === userId
-                                    ? styles.messageSentContainer
-                                    : styles.messageReceivedContainer
+                                    ? styles.messageSent
+                                    : styles.messageReceived
                                 }
+                                key={message._id}
                               >
-                                <div
-                                  className={
-                                    message.sender._id === userId
-                                      ? styles.messageSent
-                                      : styles.messageReceived
-                                  }
-                                  key={index}
-                                >
-                                  <span className={styles.messageContent}>
-                                    {message.messageContent}
-                                  </span>
-                                  <span className={styles.messageTime}>
-                                    {new Date(
-                                      message?.createdAt,
-                                    ).toLocaleTimeString('it-IT', {
-                                      hour: '2-digit',
-                                      minute: '2-digit',
-                                    })}
-                                  </span>
-                                </div>
+                                <span className={styles.messageContent}>
+                                  {message.messageContent}
+                                </span>
+                                <span className={styles.messageTime}>
+                                  {new Date(
+                                    message?.createdAt,
+                                  ).toLocaleTimeString('it-IT', {
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                  })}
+                                </span>
                               </div>
-                            </>
+                            </div>
                           );
                         },
                       )
                     : groupChat?.messages.map(
                         (message: DirectMessage, index: number) => {
                           return (
-                            <>
                               <div
                                 className={
                                   message.sender._id === userId
                                     ? styles.messageSentContainer
                                     : styles.messageReceivedContainer
                                 }
-                                key={index}
+                                key={message._id}
                               >
                                 {message.sender._id !== userId ? (
                                   message.sender?.image ? (
@@ -316,6 +314,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                                       ? styles.messageSent
                                       : styles.messageReceived
                                   }
+                                  key={message._id}
                                 >
                                   {message.sender._id !== userId && (
                                     <p className={styles.senderInfo}>
@@ -337,7 +336,6 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                                   </span>
                                 </div>
                               </div>
-                            </>
                           );
                         },
                       )}
@@ -355,7 +353,12 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                 onChange={handleNewMessageChange}
                 className={styles.backgroundWhite}
               />
-              <Button onClick={sendMessage} variant="primary" id="button-send">
+              <Button
+                onClick={sendMessage}
+                variant="primary"
+                id="button-send"
+                data-testid="sendMessage"
+              >
                 <SendIcon fontSize="small" />
               </Button>
             </InputGroup>
