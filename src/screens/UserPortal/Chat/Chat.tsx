@@ -29,7 +29,8 @@ import styles from './Chat.module.css';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import { GROUP_CHAT_LIST } from 'GraphQl/Queries/PlugInQueries';
-import CreateGroupChat from '../CreateGroupChat/CreateGroupChat';
+import CreateGroupChat from '../../../components/UserPortal/CreateGroupChat/CreateGroupChat';
+import CreateDirectChat from 'components/UserPortal/CreateDirectChat/CreateDirectChat';
 
 interface InterfaceContactCardProps {
   id: string;
@@ -110,34 +111,6 @@ export default function chat(): JSX.Element {
     setCreateGroupChatModalisOpen(!createGroupChatModalisOpen);
   };
 
-  const [userName, setUserName] = useState('');
-
-  const {
-    data: allUsersData,
-    loading: allUsersLoading,
-    refetch: allUsersRefetch,
-  } = useQuery(USERS_CONNECTION_LIST, {
-    variables: {
-      firstName_contains: '',
-      lastName_contains: '',
-    },
-  });
-
-  const handleUserModalSearchChange = (e: React.FormEvent): void => {
-    e.preventDefault();
-    /* istanbul ignore next */
-    const [firstName, lastName] = userName.split(' ');
-
-    const newFilterData = {
-      firstName_contains: firstName || '',
-      lastName_contains: lastName || '',
-    };
-
-    allUsersRefetch({
-      ...newFilterData,
-    });
-  };
-
   const {
     data: contactData,
     loading: contactLoading,
@@ -158,8 +131,6 @@ export default function chat(): JSX.Element {
     },
   });
 
-  const [createDirectChat] = useMutation(CREATE_DIRECT_CHAT);
-
   // const handleSearch = (value: string): void => {
   //   setFilterName(value);
 
@@ -176,16 +147,6 @@ export default function chat(): JSX.Element {
   //     (document.getElementById('searchChats') as HTMLInputElement)?.value || '';
   //   handleSearch(value);
   // };
-
-  const createChat = async (id: string): Promise<void> => {
-    await createDirectChat({
-      variables: {
-        organizationId,
-        userIds: [userId, id],
-      },
-    });
-    contactRefetch();
-  };
 
   React.useEffect(() => {
     if (contactData) {
@@ -344,103 +305,19 @@ export default function chat(): JSX.Element {
           </div>
         </div>
       </div>
-      <Modal
-        data-testid="addExistingUserModal"
-        show={createDirectChatModalisOpen}
-        onHide={toggleCreateDirectChatModal}
-        contentClassName={styles.modalContent}
-      >
-        <Modal.Header closeButton data-testid="pluginNotificationHeader">
-          <Modal.Title>{'Chat'}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {allUsersLoading ? (
-            <>
-              <Loader />
-            </>
-          ) : (
-            <>
-              <div className={styles.input}>
-                <Form onSubmit={handleUserModalSearchChange}>
-                  <Form.Control
-                    type="name"
-                    id="searchUser"
-                    data-testid="searchUser"
-                    placeholder="searchFullName"
-                    autoComplete="off"
-                    className={styles.inputFieldModal}
-                    value={userName}
-                    onChange={(e): void => {
-                      const { value } = e.target;
-                      setUserName(value);
-                    }}
-                  />
-                  <Button
-                    type="submit"
-                    data-testid="submitBtn"
-                    className={`position-absolute z-10 bottom-10 end-0  d-flex justify-content-center align-items-center `}
-                  >
-                    <Search />
-                  </Button>
-                </Form>
-              </div>
-              <TableContainer component={Paper}>
-                <Table aria-label="customized table">
-                  <TableHead>
-                    <TableRow>
-                      <StyledTableCell>#</StyledTableCell>
-                      <StyledTableCell align="center">{'user'}</StyledTableCell>
-                      <StyledTableCell align="center">{'Chat'}</StyledTableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {allUsersData &&
-                      allUsersData.users.length > 0 &&
-                      allUsersData.users.map(
-                        (
-                          userDetails: InterfaceQueryUserListItem,
-                          index: number,
-                        ) => (
-                          <StyledTableRow
-                            data-testid="user"
-                            key={userDetails.user._id}
-                          >
-                            <StyledTableCell component="th" scope="row">
-                              {index + 1}
-                            </StyledTableCell>
-                            <StyledTableCell align="center">
-                              {userDetails.user.firstName +
-                                ' ' +
-                                userDetails.user.lastName}
-                              <br />
-                              {userDetails.user.email}
-                            </StyledTableCell>
-                            <StyledTableCell align="center">
-                              <Button
-                                onClick={() => {
-                                  createChat(userDetails.user._id);
-                                }}
-                                data-testid="addBtn"
-                              >
-                                Add
-                              </Button>
-                            </StyledTableCell>
-                          </StyledTableRow>
-                        ),
-                      )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </>
-          )}
-        </Modal.Body>
-      </Modal>
       {createGroupChatModalisOpen && (
         <CreateGroupChat
           toggleCreateGroupChatModal={toggleCreateGroupChatModal}
           createGroupChatModalisOpen={createGroupChatModalisOpen}
           groupChatListRefetch={groupChatListRefetch}
         ></CreateGroupChat>
+      )}
+      {createDirectChatModalisOpen && (
+        <CreateDirectChat
+          toggleCreateDirectChatModal={toggleCreateDirectChatModal}
+          createDirectChatModalisOpen={createDirectChatModalisOpen}
+          contactRefetch={contactRefetch}
+        ></CreateDirectChat>
       )}
     </>
   );

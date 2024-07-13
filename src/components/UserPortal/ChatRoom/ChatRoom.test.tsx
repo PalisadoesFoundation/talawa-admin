@@ -6,6 +6,7 @@ import {
   screen,
   fireEvent,
   waitFor,
+  findAllByTestId,
 } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -76,8 +77,8 @@ const SEND_MESSAGE_TO_GROUP_CHAT_MOCK = {
   request: {
     query: SEND_MESSAGE_TO_GROUP_CHAT,
     variables: {
-      messageContent: 'Test ',
-      chatId: '2',
+      messageContent: 'Test message',
+      chatId: '1',
     },
   },
   result: {
@@ -108,7 +109,31 @@ const MESSAGE_SENT_TO_GROUP_CHAT_MOCK = [
     result: {
       data: {
         messageSentToGroupChat: {
-          _id: '668ec1f1364e03ac4697a151',
+          _id: '668ec1f1364e03ac47a151',
+          createdAt: '2024-07-10T17:16:33.248Z',
+          messageContent: 'Test ',
+          sender: {
+            _id: '64378abd85008f171cf2990d',
+            firstName: 'Wilt',
+            lastName: 'Shepherd',
+            image: '',
+          },
+          updatedAt: '2024-07-10',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: MESSAGE_SENT_TO_GROUP_CHAT,
+      variables: {
+        userId: '2',
+      },
+    },
+    result: {
+      data: {
+        messageSentToGroupChat: {
+          _id: '668ec1f1df364e03ac47a151',
           createdAt: '2024-07-10T17:16:33.248Z',
           messageContent: 'Test ',
           sender: {
@@ -132,7 +157,7 @@ const MESSAGE_SENT_TO_GROUP_CHAT_MOCK = [
     result: {
       data: {
         messageSentToGroupChat: {
-          _id: '668ec1f1364e03ac4697a151',
+          _id: '668ec1f13603ac4697a151',
           createdAt: '2024-07-10T17:16:33.248Z',
           messageContent: 'Test ',
           sender: {
@@ -183,13 +208,43 @@ const MESSAGE_SENT_TO_DIRECT_CHAT_MOCK = [
     request: {
       query: MESSAGE_SENT_TO_DIRECT_CHAT,
       variables: {
+        userId: '2',
+      },
+    },
+    result: {
+      data: {
+        messageSentToDirectChat: {
+          _id: '668ec1f1364e03ac4697vgfa151',
+          createdAt: '2024-07-10T17:16:33.248Z',
+          messageContent: 'Test ',
+          receiver: {
+            _id: '65378abd85008f171cf2990d',
+            firstName: 'Vyvyan',
+            lastName: 'Kerry',
+            image: '',
+          },
+          sender: {
+            _id: '64378abd85008f171cf2990d',
+            firstName: 'Wilt',
+            lastName: 'Shepherd',
+            image: '',
+          },
+          updatedAt: '2024-07-10',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: MESSAGE_SENT_TO_DIRECT_CHAT,
+      variables: {
         userId: null,
       },
     },
     result: {
       data: {
         messageSentToDirectChat: {
-          _id: '668ec1f1364e03ac4697a151',
+          _id: '6ec1f1364e03ac4697a151',
           createdAt: '2024-07-10T17:16:33.248Z',
           messageContent: 'Test ',
           receiver: {
@@ -499,13 +554,13 @@ const GROUP_CHAT_BY_ID_QUERY_MOCK = [
     request: {
       query: GROUP_CHAT_BY_ID,
       variables: {
-        id: '2',
+        id: '1',
       },
     },
     result: {
       data: {
         groupChatById: {
-          _id: '65844efc814dd4003db811c4',
+          _id: '1',
           createdAt: '2345678903456',
           title: 'Test Group Chat',
           messages: [
@@ -704,10 +759,8 @@ const GROUP_CHAT_BY_ID_QUERY_MOCK = [
 describe('Testing Chatroom Component [User Portal]', () => {
   window.HTMLElement.prototype.scrollIntoView = jest.fn();
 
-  test('Test send message to group chat', async () => {
+  test('Chat room should display fallback content if no chat is active', async () => {
     const mocks = [
-      SEND_MESSAGE_TO_GROUP_CHAT_MOCK,
-      ...DIRECT_CHAT_BY_ID_QUERY_MOCK,
       ...DIRECT_CHAT_BY_ID_QUERY_MOCK,
       ...MESSAGE_SENT_TO_DIRECT_CHAT_MOCK,
       ...MESSAGE_SENT_TO_GROUP_CHAT_MOCK,
@@ -718,13 +771,57 @@ describe('Testing Chatroom Component [User Portal]', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ChatRoom selectedContact="2" selectedChatType="group" />
+              <ContactCard selectedContact="" selectedChatType="" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>,
     );
+    await wait();
+    expect(await screen.findByTestId('noChatSelected')).toBeInTheDocument();
+  });
 
+  test('Selected contact is direct chat', async () => {
+    const mocks = [
+      ...DIRECT_CHAT_BY_ID_QUERY_MOCK,
+      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
+      ...MESSAGE_SENT_TO_DIRECT_CHAT_MOCK,
+      ...MESSAGE_SENT_TO_GROUP_CHAT_MOCK,
+    ];
+    render(
+      <MockedProvider addTypename={false} mocks={mocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ContactCard selectedContact="1" selectedChatType="direct" />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+  });
+
+  test('Test send message direct chat', async () => {
+    setItem('userId', '2');
+    const mocks = [
+      SEND_MESSAGE_TO_DIRECT_CHAT_MOCK,
+      ...DIRECT_CHAT_BY_ID_QUERY_MOCK,
+      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
+      ...MESSAGE_SENT_TO_DIRECT_CHAT_MOCK,
+      ...MESSAGE_SENT_TO_GROUP_CHAT_MOCK,
+    ];
+    render(
+      <MockedProvider addTypename={false} mocks={mocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ContactCard selectedContact="1" selectedChatType="direct" />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
     await wait();
 
     const input = (await screen.findByTestId(
@@ -732,9 +829,9 @@ describe('Testing Chatroom Component [User Portal]', () => {
     )) as HTMLInputElement;
 
     act(() => {
-      fireEvent.change(input, { target: { value: 'Test ' } });
+      fireEvent.change(input, { target: { value: 'Hello' } });
     });
-    expect(input.value).toBe('Test ');
+    expect(input.value).toBe('Hello');
 
     const sendBtn = await screen.findByTestId('sendMessage');
 
@@ -742,127 +839,70 @@ describe('Testing Chatroom Component [User Portal]', () => {
     act(() => {
       fireEvent.click(sendBtn);
     });
+    await waitFor(() => {
+      expect(input.value).toBeFalsy();
+    });
   });
 
-  test('Test send message to group chat', async () => {
+  test('Selected contact is group chat', async () => {
     const mocks = [
-      SEND_MESSAGE_TO_GROUP_CHAT_MOCK,
       ...DIRECT_CHAT_BY_ID_QUERY_MOCK,
-      ...DIRECT_CHAT_BY_ID_QUERY_MOCK,
+      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
       ...MESSAGE_SENT_TO_DIRECT_CHAT_MOCK,
       ...MESSAGE_SENT_TO_GROUP_CHAT_MOCK,
-      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
     ];
     render(
       <MockedProvider addTypename={false} mocks={mocks}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ChatRoom selectedContact="1" selectedChatType="direct" />
+              <ContactCard selectedContact="1" selectedChatType="group" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>,
     );
+    await wait();
+  });
 
+  test('Test send message group chat', async () => {
+    const mocks = [
+      SEND_MESSAGE_TO_GROUP_CHAT_MOCK,
+      ...DIRECT_CHAT_BY_ID_QUERY_MOCK,
+      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
+      ...MESSAGE_SENT_TO_DIRECT_CHAT_MOCK,
+      ...MESSAGE_SENT_TO_GROUP_CHAT_MOCK,
+    ];
+    render(
+      <MockedProvider addTypename={false} mocks={mocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ContactCard selectedContact="1" selectedChatType="group" />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
     await wait();
 
     const input = (await screen.findByTestId(
       'messageInput',
     )) as HTMLInputElement;
 
-    //  act(() => {
-    fireEvent.change(input, { target: { value: 'Hello' } });
-    //  })
-    expect(input.value).toBe('Hello');
+    act(() => {
+      fireEvent.change(input, { target: { value: 'Test message' } });
+    });
+    expect(input.value).toBe('Test message');
 
     const sendBtn = await screen.findByTestId('sendMessage');
 
     expect(sendBtn).toBeInTheDocument();
-    // act(() => {
-    fireEvent.click(sendBtn);
-    // })
+    act(() => {
+      fireEvent.click(sendBtn);
+    });
+    await waitFor(() => {
+      expect(input.value).toBeFalsy();
+    });
   });
-
-  // test('Component should be rendered properly if the selectedContact is undefined', async () => {
-  //   const mocks = [...DIRECT_CHAT_BY_ID_QUERY_MOCK, ...MESSAGE_SENT_TO_DIRECT_CHAT_MOCK, ...MESSAGE_SENT_TO_GROUP_CHAT_MOCK, ...GROUP_CHAT_BY_ID_QUERY_MOCK];
-  //   render(
-  //     <MockedProvider addTypename={false} mocks={mocks}>
-  //       <BrowserRouter>
-  //         <Provider store={store}>
-  //           <I18nextProvider i18n={i18nForTest}>
-  //             <ChatRoom selectedContact="" selectedChatType="" />
-  //           </I18nextProvider>
-  //         </Provider>
-  //       </BrowserRouter>
-  //     </MockedProvider>,
-  //   );
-  //   await wait();
-  //   await waitFor(async() => {
-  //     expect(await screen.findByText('Select a contact to start conversation')).toBeInTheDocument()
-  //   });
-
-  // });
-
-  // test('Component should be rendered properly if selectedContact is direct chat and not undefined', async () => {
-  //   const mocks = [...DIRECT_CHAT_BY_ID_QUERY_MOCK, ...MESSAGE_SENT_TO_DIRECT_CHAT_MOCK, ...MESSAGE_SENT_TO_GROUP_CHAT_MOCK, ...GROUP_CHAT_BY_ID_QUERY_MOCK];
-
-  //   render(
-  //     <MockedProvider addTypename={false} mocks={mocks}>
-  //       <BrowserRouter>
-  //         <Provider store={store}>
-  //           <I18nextProvider i18n={i18nForTest}>
-  //             <ContactCard selectedContact="1" selectedChatType="direct" />
-  //           </I18nextProvider>
-  //         </Provider>
-  //       </BrowserRouter>
-  //     </MockedProvider>,
-  //   );
-  //   await wait();
-  // });
-
-  // test('Component should be rendered properly if selectedContact is direct chat and not undefined and user id is undefined', async () => {
-  //   setItem('userId', '1');
-  //   const mocks = [...DIRECT_CHAT_BY_ID_QUERY_MOCK, ...MESSAGE_SENT_TO_DIRECT_CHAT_MOCK, ...MESSAGE_SENT_TO_GROUP_CHAT_MOCK, ...GROUP_CHAT_BY_ID_QUERY_MOCK];
-  //   render(
-  //     <MockedProvider addTypename={false} mocks={mocks}>
-  //       <BrowserRouter>
-  //         <Provider store={store}>
-  //           <I18nextProvider i18n={i18nForTest}>
-  //             <ContactCard selectedContact="1" selectedChatType="direct" />
-  //           </I18nextProvider>
-  //         </Provider>
-  //       </BrowserRouter>
-  //     </MockedProvider>,
-  //   );
-  //   act(async () => {await wait(1500)})
-  // });
-
-  // test('Message should change when the user types in the input', async () => {
-  //   const mocks = [...DIRECT_CHAT_BY_ID_QUERY_MOCK, ...DIRECT_CHAT_BY_ID_QUERY_MOCK, ...MESSAGE_SENT_TO_DIRECT_CHAT_MOCK, ...MESSAGE_SENT_TO_GROUP_CHAT_MOCK, ...GROUP_CHAT_BY_ID_QUERY_MOCK];
-  //   render(
-  //     <MockedProvider addTypename={false} mocks={mocks}>
-  //       <BrowserRouter>
-  //         <Provider store={store}>
-  //           <I18nextProvider i18n={i18nForTest}>
-  //             <ContactCard
-  //               selectedContact="1"
-  //               selectedChatType="direct"
-  //             />
-  //           </I18nextProvider>
-  //         </Provider>
-  //       </BrowserRouter>
-  //     </MockedProvider>,
-  //   );
-  //   act(async () => {await wait(1500)})
-
-  //   const input = (await screen.findByTestId(
-  //     'messageInput',
-  //   )) as HTMLInputElement;
-  //   act(() => {
-  //     fireEvent.change(input, { target: { value: 'Hello' } });
-  //   })
-
-  //   expect(input.value).toBe('Hello');
-  // });
 });

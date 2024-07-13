@@ -9,7 +9,7 @@ import {
 } from '@apollo/client';
 import type { ApolloQueryResult, NormalizedCacheObject } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
-import CreateGroupChat from '../CreateGroupChat/CreateGroupChat';
+import CreateGroupChat from './CreateGroupChat';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { BACKEND_URL } from 'Constant/constant';

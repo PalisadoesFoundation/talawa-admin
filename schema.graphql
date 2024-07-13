@@ -210,7 +210,6 @@ type DirectChat {
   createdAt: DateTime!
   creator: User
   messages: [DirectChatMessage]
-  organization: Organization!
   updatedAt: DateTime!
   users: [User!]!
 }
@@ -1550,7 +1549,7 @@ enum WeekDays {
 }
 
 input createChatInput {
-  organizationId: ID!
+  organizationId: ID
   userIds: [ID!]!
 }
 

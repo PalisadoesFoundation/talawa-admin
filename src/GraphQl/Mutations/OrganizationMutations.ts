@@ -76,7 +76,7 @@ export const CREATE_GROUP_CHAT = gql`
 `;
 
 export const CREATE_DIRECT_CHAT = gql`
-  mutation createDirectChat($userIds: [ID!]!, $organizationId: ID!) {
+  mutation createDirectChat($userIds: [ID!]!, $organizationId: ID) {
     createDirectChat(
       data: { userIds: $userIds, organizationId: $organizationId }
     ) {

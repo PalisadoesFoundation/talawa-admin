@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import SendIcon from '@mui/icons-material/Send';
 import { Button, Form, InputGroup } from 'react-bootstrap';
@@ -71,6 +71,13 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userChatRoom',
   });
+  const isMountedRef = useRef<boolean>(true);
+
+  useEffect(() => {
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
@@ -110,7 +117,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
   });
 
   const {
-    data: groupChatData,
+    data: chatDataGorup,
     loading: groupChatLoading,
     refetch: groupChatRefresh,
   } = useQuery(GROUP_CHAT_BY_ID, {
@@ -118,61 +125,105 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
       id: props.selectedContact,
     },
   });
-  if (props.selectedChatType == 'direct') {
-    useEffect(() => {
-      if (chatData) {
-        setDirectChat(chatData.directChatById);
-        if (chatData.directChatById.users[0]._id == userId) {
-          setChatTitle(
-            `${chatData.directChatById.users[1].firstName} ${chatData.directChatById.users[1].lastName}`,
-          );
-          setChatSubtitle(chatData.directChatById.users[1].email);
-        } else {
-          setChatTitle(
-            `${chatData.directChatById.users[0].firstName} ${chatData.directChatById.users[0].lastName}`,
-          );
-          setChatSubtitle(chatData.directChatById.users[0].email);
-        }
+
+  useEffect(() => {
+    if (
+      props.selectedChatType === 'direct' &&
+      chatData &&
+      isMountedRef.current
+    ) {
+      const directChatData = chatData.directChatById;
+      setDirectChat(directChatData);
+      const otherUser = directChatData.users.find(
+        (user: any) => user._id !== userId,
+      );
+      if (otherUser) {
+        setChatTitle(`${otherUser.firstName} ${otherUser.lastName}`);
+        setChatSubtitle(otherUser.email);
       }
-    }, [chatData]);
-  } else {
-    useEffect(() => {
-      if (groupChatData) {
-        setGroupChat(groupChatData.groupChatById);
-        setChatTitle(groupChatData.groupChatById.title);
-        setChatSubtitle(groupChatData.groupChatById.users.length);
-      }
-    }, [groupChatData]);
-  }
+    }
+  }, [chatData]);
+
+  useEffect(() => {
+    if (
+      props.selectedChatType === 'group' &&
+      chatDataGorup &&
+      isMountedRef.current
+    ) {
+      const groupChatData = chatDataGorup.groupChatById;
+      setGroupChat(groupChatData);
+      setChatTitle(groupChatData.title);
+      setChatSubtitle(`${groupChatData.users.length} members`);
+    }
+  }, [chatDataGorup]);
 
   const sendMessage = async (): Promise<void> => {
-    if (props.selectedChatType == 'direct') {
+    console.log(props.selectedChatType);
+    if (props.selectedChatType === 'direct') {
       await sendMessageToDirectChat();
       await chatRefetch();
-    } else if (props.selectedChatType == 'group') {
-      await sendMessageToGroupChat();
+    } else if (props.selectedChatType === 'group') {
+      const data = await sendMessageToGroupChat();
       await groupChatRefresh();
     }
     setNewMessage('');
   };
 
-  const { data: directMessageSubscriptionData } = useSubscription(
-    MESSAGE_SENT_TO_DIRECT_CHAT,
-    {
-      variables: {
-        userId: userId,
-      },
-    },
-  );
+  // const { data: directMessageSubscriptionData } = useSubscription(
+  //   MESSAGE_SENT_TO_DIRECT_CHAT,
+  //   {
+  //     variables: {
+  //       userId: userId,
+  //     },
+  //   },
+  // );
 
-  const { data: groupMessageSubscriptionData } = useSubscription(
-    MESSAGE_SENT_TO_GROUP_CHAT,
-    {
-      variables: {
-        userId: userId,
-      },
+  useSubscription(MESSAGE_SENT_TO_DIRECT_CHAT, {
+    variables: {
+      userId: userId,
     },
-  );
+    onData: (directMessageSubscriptionData) => {
+      if (directMessageSubscriptionData?.data.data.messageSentToDirectChat) {
+        const updatedChat = directChat
+          ? JSON.parse(JSON.stringify(directChat))
+          : { messages: [] };
+        updatedChat?.messages.push(
+          directMessageSubscriptionData?.data.data.messageSentToDirectChat,
+        );
+        setDirectChat(updatedChat);
+        chatRefetch();
+      }
+    },
+  });
+
+  useSubscription(MESSAGE_SENT_TO_GROUP_CHAT, {
+    variables: {
+      userId: userId,
+    },
+    onData: (groupMessageSubscriptionData) => {
+      if (groupMessageSubscriptionData?.data.data.messageSentToGroupChat) {
+        const updatedChat = directChat
+          ? JSON.parse(JSON.stringify(directChat))
+          : { messages: [] };
+        updatedChat?.messages.push(
+          groupMessageSubscriptionData.data.data.messageSentToGroupChat,
+        );
+        setGroupChat(updatedChat);
+        groupChatRefresh({
+          id: props.selectedContact,
+        });
+      }
+    },
+  });
+
+  // const { data: groupMessageSubscriptionData } = useSubscription(
+  //   MESSAGE_SENT_TO_GROUP_CHAT,
+  //   {
+  //     variables: {
+  //       userId: userId,
+  //     },
+  //   },
+  // );
 
   useEffect(() => {
     document
@@ -180,29 +231,33 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
       ?.lastElementChild?.scrollIntoView({ block: 'end' });
   });
 
-  useEffect(() => {
-    if (groupMessageSubscriptionData) {
-      const updatedChat = groupChat
-        ? JSON.parse(JSON.stringify(groupChat))
-        : { messages: [] };
-      updatedChat?.messages.push(
-        groupMessageSubscriptionData.messageSentToGroupChat,
-      );
-      setGroupChat(updatedChat);
-    }
-  }, [groupMessageSubscriptionData]);
+  // useEffect(() => {
+  //   console.log(groupMessageSubscriptionData);
+  //   if (groupMessageSubscriptionData && isMountedRef.current) {
+  //     const updatedChat = groupChat
+  //       ? JSON.parse(JSON.stringify(groupChat))
+  //       : { messages: [] };
+  //     updatedChat?.messages.push(
+  //       groupMessageSubscriptionData.messageSentToGroupChat,
+  //     );
+  //     setGroupChat(updatedChat);
+  //     groupChatRefresh();
+  //   }
+  // }, [groupMessageSubscriptionData]);
 
-  useEffect(() => {
-    if (directMessageSubscriptionData) {
-      const updatedChat = directChat
-        ? JSON.parse(JSON.stringify(directChat))
-        : { messages: [] };
-      updatedChat?.messages.push(
-        directMessageSubscriptionData.messageSentToDirectChat,
-      );
-      setDirectChat(updatedChat);
-    }
-  }, [directMessageSubscriptionData]);
+  // useEffect(() => {
+  //   console.log(directMessageSubscriptionData, "DIRECT MSG SUBS");
+  //   if (directMessageSubscriptionData && isMountedRef.current) {
+  //     const updatedChat = directChat
+  //       ? JSON.parse(JSON.stringify(directChat))
+  //       : { messages: [] };
+  //     updatedChat?.messages.push(
+  //       directMessageSubscriptionData.messageSentToDirectChat,
+  //     );
+  //     setDirectChat(updatedChat);
+  //     chatRefetch();
+  //   }
+  // }, [directMessageSubscriptionData]);
 
   return (
     <div
@@ -286,6 +341,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                                   : styles.messageReceivedContainer
                               }
                               key={message._id}
+                              data-testid="groupChatMsg"
                             >
                               {message.sender._id !== userId ? (
                                 message.sender?.image ? (

@@ -87,7 +87,7 @@ const StyledTableRow = styled(TableRow)(() => ({
 
 const { getItem } = useLocalStorage();
 
-export default function groupChat({
+export default function CreateGroupChat({
   toggleCreateGroupChatModal,
   createGroupChatModalisOpen,
   groupChatListRefetch,
