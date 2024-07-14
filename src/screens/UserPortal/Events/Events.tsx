@@ -20,6 +20,7 @@ import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from './Events.module.css';
+import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 
 const timeToDayJs = (time: string): Dayjs => {
   const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
@@ -159,7 +160,10 @@ export default function events(): JSX.Element {
     <>
       <div className={`d-flex flex-row ${styles.containerHeight}`}>
         <div className={`${styles.colorLight} ${styles.mainContainer}`}>
-          <h1>Events</h1>
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <h1>Events</h1>
+            <ProfileDropdown />
+          </div>
           <EventHeader
             viewType={viewType}
             showInviteModal={showInviteModal}
