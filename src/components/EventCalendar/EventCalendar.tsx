@@ -234,7 +234,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
 
             attendees.push(r);
           });
-
           return (
             <EventListCard
               refetchEvents={refetchEvents}
@@ -318,7 +317,8 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                 );
 
                 if (
-                  datas.startTime?.slice(0, 2) == (index % 24).toString() &&
+                  parseInt(datas.startTime?.slice(0, 2) as string).toString() ==
+                    (index % 24).toString() &&
                   datas.startDate == dayjs(currDate).format('YYYY-MM-DD')
                 ) {
                   return datas;
