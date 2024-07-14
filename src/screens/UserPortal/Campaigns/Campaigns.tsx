@@ -11,6 +11,11 @@ import {
   Chip,
 } from '@mui/material';
 import { GridExpandMoreIcon } from '@mui/x-data-grid';
+import useLocalStorage from 'utils/useLocalstorage';
+// import PledgeModal from './PledgeModal';
+// import { FUND_CAMPAIGN } from 'GraphQl/Queries/fundQueries';
+// import { useQuery } from '@apollo/client';
+// import { InterfaceQueryOrganizationFundCampaigns } from 'utils/interfaces';
 
 const Campaigns = (): JSX.Element => {
   const { t } = useTranslation('translation', {
@@ -23,11 +28,35 @@ const Campaigns = (): JSX.Element => {
     return <Navigate to={'/'} replace />;
   }
 
+  const { getItem } = useLocalStorage();
+  const userId = getItem('userId');
+
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState<
     'goal_ASC' | 'goal_DESC' | 'endDate_ASC' | 'endDate_DESC'
   >('endDate_DESC');
-  console.log(sortBy);
+
+  const openModal = (): void => {
+    console.log({ sortBy, userId });
+  };
+
+  // const {
+  //   data: fundCampaignData,
+  //   loading: fundCampaignLoading,
+  //   error: fundCampaignError,
+  //   refetch: refetchFundCampaign,
+  // }: {
+  //   data?: {
+  //     getFundById: InterfaceQueryOrganizationFundCampaigns;
+  //   };
+  //   loading: boolean;
+  //   error?: Error | undefined;
+  //   refetch: any;
+  // } = useQuery(FUND_CAMPAIGN, {
+  //   variables: {
+  //     id: currentUrl,
+  //   },
+  // });
 
   return (
     <>
@@ -99,59 +128,67 @@ const Campaigns = (): JSX.Element => {
           </div>
         </div>
       </div>
-      {
-        <Accordion>
-          <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
-            <div className={styles.accordionSummary}>
-              <div className={styles.titleContainer}>
-                <div className="d-flex">
-                  <h3>Test Campaign 1</h3>
-                  <Chip
-                    icon={<Circle className={styles.chipIcon} />}
-                    label="Active"
-                    variant="outlined"
-                    color="primary"
-                    className={`${styles.chip} ${styles.pending}`}
-                  />
-                </div>
 
-                <div className={`d-flex gap-4 ${styles.subContainer}`}>
-                  <span>Goal: $1000</span>
-                  <span>Raised: $750</span>
-                  <span>Start Date: 26-07-2024</span>
-                  <span>End Date: 26-08-2024</span>
-                </div>
+      <Accordion>
+        <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
+          <div className={styles.accordionSummary}>
+            <div className={styles.titleContainer}>
+              <div className="d-flex">
+                <h3>Test Campaign 1</h3>
+                <Chip
+                  icon={<Circle className={styles.chipIcon} />}
+                  label="Active"
+                  variant="outlined"
+                  color="primary"
+                  className={`${styles.chip} ${styles.pending}`}
+                />
               </div>
-              <div className="d-flex gap-3">
-                <Button variant="outline-success" data-testid="viewPledgesBtn">
-                  <i className={'fa fa-eye me-2'} />
-                  {t('viewPledges')}
-                </Button>
-                <Button variant="outline-success" data-testid="addPledgeBtn">
-                  <i className={'fa fa-plus me-2'} />
-                  {t('addPledge')}
-                </Button>
+
+              <div className={`d-flex gap-4 ${styles.subContainer}`}>
+                <span>Goal: $1000</span>
+                <span>Raised: $750</span>
+                <span>Start Date: 26-07-2024</span>
+                <span>End Date: 26-08-2024</span>
               </div>
             </div>
-          </AccordionSummary>
-          <AccordionDetails className="d-flex gap-3 ms-2">
-            {/* <hr className="ms-0 me-0" /> */}
-            <span>Progress: </span>
-            <div className={styles.progress}>
-              <span>$0</span>
-              <ProgressBar
-                striped
-                now={200}
-                label={`${(200 / 1000) * 100}%`}
-                max={1000}
-                className={styles.progressBar}
-                data-testid="progressBar"
-              />
-              <span>$1000</span>
+            <div className="d-flex gap-3">
+              <Button
+                variant="outline-success"
+                data-testid="addPledgeBtn"
+                onClick={openModal}
+              >
+                <i className={'fa fa-plus me-2'} />
+                {t('addPledge')}
+              </Button>
             </div>
-          </AccordionDetails>
-        </Accordion>
-      }
+          </div>
+        </AccordionSummary>
+        <AccordionDetails className="d-flex gap-3 ms-2">
+          <span className="fw-bold">Progress: </span>
+          <div className={styles.progress}>
+            <span>$0</span>
+            <ProgressBar
+              striped
+              now={200}
+              label={`${(200 / 1000) * 100}%`}
+              max={1000}
+              className={styles.progressBar}
+              data-testid="progressBar"
+            />
+            <span>$1000</span>
+          </div>
+        </AccordionDetails>
+      </Accordion>
+      {/* <PledgeModal
+        isOpen={modalState[Modal.SAME]}
+        hide={() => closeModal(Modal.SAME)}
+        campaignId={fundCampaignId}
+        orgId={orgId}
+        pledge={pledge}
+        refetchPledge={refetchPledge}
+        endDate={pledgeData?.getFundraisingCampaignById.endDate as Date}
+        mode='create'
+      /> */}
     </>
   );
 };
