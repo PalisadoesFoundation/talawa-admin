@@ -177,15 +177,6 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     setNewMessage('');
   };
 
-  // const { data: directMessageSubscriptionData } = useSubscription(
-  //   MESSAGE_SENT_TO_DIRECT_CHAT,
-  //   {
-  //     variables: {
-  //       userId: userId,
-  //     },
-  //   },
-  // );
-
   useSubscription(MESSAGE_SENT_TO_DIRECT_CHAT, {
     variables: {
       userId: userId,
@@ -245,48 +236,11 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     },
   });
 
-  // const { data: groupMessageSubscriptionData } = useSubscription(
-  //   MESSAGE_SENT_TO_GROUP_CHAT,
-  //   {
-  //     variables: {
-  //       userId: userId,
-  //     },
-  //   },
-  // );
-
   useEffect(() => {
     document
       .getElementById('chat-area')
       ?.lastElementChild?.scrollIntoView({ block: 'end' });
   });
-
-  // useEffect(() => {
-  //   console.log(groupMessageSubscriptionData);
-  //   if (groupMessageSubscriptionData && isMountedRef.current) {
-  //     const updatedChat = groupChat
-  //       ? JSON.parse(JSON.stringify(groupChat))
-  //       : { messages: [] };
-  //     updatedChat?.messages.push(
-  //       groupMessageSubscriptionData.messageSentToGroupChat,
-  //     );
-  //     setGroupChat(updatedChat);
-  //     groupChatRefresh();
-  //   }
-  // }, [groupMessageSubscriptionData]);
-
-  // useEffect(() => {
-  //   console.log(directMessageSubscriptionData, "DIRECT MSG SUBS");
-  //   if (directMessageSubscriptionData && isMountedRef.current) {
-  //     const updatedChat = directChat
-  //       ? JSON.parse(JSON.stringify(directChat))
-  //       : { messages: [] };
-  //     updatedChat?.messages.push(
-  //       directMessageSubscriptionData.messageSentToDirectChat,
-  //     );
-  //     setDirectChat(updatedChat);
-  //     chatRefetch();
-  //   }
-  // }, [directMessageSubscriptionData]);
 
   return (
     <div
