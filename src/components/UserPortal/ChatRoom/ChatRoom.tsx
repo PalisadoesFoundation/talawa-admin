@@ -127,6 +127,14 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
   });
 
   useEffect(() => {
+    if (props.selectedChatType == 'direct') {
+      chatRefetch();
+    } else if (props.selectedChatType == 'group') {
+      groupChatRefresh();
+    }
+  }, [props.selectedContact]);
+
+  useEffect(() => {
     if (
       props.selectedChatType === 'direct' &&
       chatData &&
@@ -183,7 +191,16 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
       userId: userId,
     },
     onData: (directMessageSubscriptionData) => {
-      if (directMessageSubscriptionData?.data.data.messageSentToDirectChat) {
+      console.log(
+        directMessageSubscriptionData?.data.data.messageSentToDirectChat
+          .directChatMessageBelongsTo['_id'],
+        props.selectedContact,
+      );
+      if (
+        directMessageSubscriptionData?.data.data.messageSentToDirectChat &&
+        directMessageSubscriptionData?.data.data.messageSentToDirectChat
+          .directChatMessageBelongsTo['_id'] == props.selectedContact
+      ) {
         const updatedChat = directChat
           ? JSON.parse(JSON.stringify(directChat))
           : { messages: [] };
@@ -201,14 +218,26 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
       userId: userId,
     },
     onData: (groupMessageSubscriptionData) => {
-      if (groupMessageSubscriptionData?.data.data.messageSentToGroupChat) {
-        const updatedChat = directChat
-          ? JSON.parse(JSON.stringify(directChat))
+      if (
+        groupMessageSubscriptionData?.data.data.messageSentToGroupChat &&
+        groupMessageSubscriptionData?.data.data.messageSentToGroupChat
+          .groupChatMessageBelongsTo['_id'] == props.selectedContact
+      ) {
+        const updatedChat = groupChat
+          ? JSON.parse(JSON.stringify(groupChat))
           : { messages: [] };
         updatedChat?.messages.push(
           groupMessageSubscriptionData.data.data.messageSentToGroupChat,
         );
         setGroupChat(updatedChat);
+        groupChatRefresh({
+          id: props.selectedContact,
+        });
+      } else {
+        groupChatRefresh({
+          id: groupMessageSubscriptionData?.data.data.messageSentToGroupChat
+            .groupChatMessageBelongsTo['_id'],
+        });
         groupChatRefresh({
           id: props.selectedContact,
         });

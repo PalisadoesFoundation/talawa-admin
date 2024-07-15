@@ -16,7 +16,6 @@ import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import ContactCard from './ChatRoom';
 import {
   DIRECT_CHAT_BY_ID,
   GROUP_CHAT_BY_ID,
@@ -771,7 +770,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ContactCard selectedContact="" selectedChatType="" />
+              <ChatRoom selectedContact="" selectedChatType="" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -793,7 +792,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ContactCard selectedContact="1" selectedChatType="direct" />
+              <ChatRoom selectedContact="1" selectedChatType="direct" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -816,7 +815,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ContactCard selectedContact="1" selectedChatType="direct" />
+              <ChatRoom selectedContact="1" selectedChatType="direct" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -856,7 +855,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ContactCard selectedContact="1" selectedChatType="group" />
+              <ChatRoom selectedContact="1" selectedChatType="group" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -878,7 +877,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ContactCard selectedContact="1" selectedChatType="group" />
+              <ChatRoom selectedContact="1" selectedChatType="group" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>

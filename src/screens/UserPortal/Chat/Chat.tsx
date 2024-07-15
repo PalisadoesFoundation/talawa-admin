@@ -1,33 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import {
-  DIRECT_CHATS_LIST,
-  USERS_CONNECTION_LIST,
-} from 'GraphQl/Queries/Queries';
-import { useMutation, useQuery } from '@apollo/client';
+import { DIRECT_CHATS_LIST } from 'GraphQl/Queries/Queries';
+import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-import { Button, Dropdown, Form, InputGroup, Modal } from 'react-bootstrap';
+import { Button, Dropdown } from 'react-bootstrap';
 import { SearchOutlined, Search } from '@mui/icons-material';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import ContactCard from 'components/UserPortal/ContactCard/ContactCard';
 import ChatRoom from 'components/UserPortal/ChatRoom/ChatRoom';
-import { useParams } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
-import { CREATE_DIRECT_CHAT } from 'GraphQl/Mutations/OrganizationMutations';
-import Loader from 'components/Loader/Loader';
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import { styled } from '@mui/material/styles';
 import { ReactComponent as NewChat } from 'assets/svgs/newChat.svg';
-import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import Accordion from 'react-bootstrap/Accordion';
 import styles from './Chat.module.css';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
-import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import { GROUP_CHAT_LIST } from 'GraphQl/Queries/PlugInQueries';
 import CreateGroupChat from '../../../components/UserPortal/CreateGroupChat/CreateGroupChat';
 import CreateDirectChat from 'components/UserPortal/CreateDirectChat/CreateDirectChat';
@@ -42,22 +26,6 @@ interface InterfaceContactCardProps {
   type: string;
   setSelectedChatType: React.Dispatch<React.SetStateAction<string>>;
 }
-
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: ['#31bb6b', '!important'],
-    color: theme.palette.common.white,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
-
-const StyledTableRow = styled(TableRow)(() => ({
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
-}));
 
 export default function chat(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -80,13 +48,10 @@ export default function chat(): JSX.Element {
     };
   }, []);
 
-  const { orgId: organizationId } = useParams();
-
   const [selectedContact, setSelectedContact] = useState('');
   const [contacts, setContacts] = useState([]);
   const [groupChats, setGroupChats] = useState([]);
   const [selectChatType, setSelectedChatType] = useState('');
-  const [filterName, setFilterName] = useState('');
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
 
@@ -203,13 +168,13 @@ export default function chat(): JSX.Element {
                 <Dropdown.Menu>
                   <Dropdown.Item
                     onClick={openCreateDirectChatModal}
-                    data-testid={'newDirectChat'}
+                    data-testid="newDirectChat"
                   >
                     New Chat
                   </Dropdown.Item>
                   <Dropdown.Item
                     onClick={openCreateGroupChatModal}
-                    data-testid={'newGroupChat'}
+                    data-testid="newGroupChat"
                   >
                     New Group Chat
                   </Dropdown.Item>
@@ -235,7 +200,7 @@ export default function chat(): JSX.Element {
                         >
                           DIRECT CHATS
                         </Accordion.Header>
-                        <Accordion.Body>
+                        <Accordion.Body className={styles.accordionBody}>
                           {contacts.map((contact: any) => {
                             const cardProps: InterfaceContactCardProps = {
                               id: contact._id,
@@ -270,7 +235,7 @@ export default function chat(): JSX.Element {
                         <Accordion.Header className={styles.chatType}>
                           GROUP CHATS
                         </Accordion.Header>
-                        <Accordion.Body>
+                        <Accordion.Body className={styles.accordionBody}>
                           {groupChats.map((chat: any) => {
                             const cardProps: InterfaceContactCardProps = {
                               id: chat._id,

@@ -1,28 +1,14 @@
 import {
-  FormControl,
-  FormControlLabel,
-  FormHelperText,
-  InputLabel,
-  MenuItem,
   Paper,
-  RadioGroup,
-  Select,
-  FormLabel,
   TableBody,
-  Radio,
 } from '@mui/material';
-import type { SelectChangeEvent } from '@mui/material/Select';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import styles from './CreateDirectChat.module.css';
 import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
-import { USER_JOINED_ORGANIZATIONS } from 'GraphQl/Queries/OrganizationQueries';
 import useLocalStorage from 'utils/useLocalstorage';
-import {
-  CREATE_DIRECT_CHAT,
-  CREATE_GROUP_CHAT,
-} from 'GraphQl/Mutations/OrganizationMutations';
+import { CREATE_DIRECT_CHAT } from 'GraphQl/Mutations/OrganizationMutations';
 import Table from '@mui/material/Table';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
@@ -32,8 +18,7 @@ import { styled } from '@mui/material/styles';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import { USERS_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
-import { LocalPoliceTwoTone, Search } from '@mui/icons-material';
-import { style } from '@mui/system';
+import { Search } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
@@ -47,30 +32,6 @@ interface InterfaceCreateDirectChatProps {
         }>
       | undefined,
   ) => Promise<ApolloQueryResult<any>>;
-}
-
-interface InterfaceOrganization {
-  _id: string;
-  name: string;
-  image: string;
-  description: string;
-  admins: [];
-  members: [];
-  address: {
-    city: string;
-    countryCode: string;
-    line1: string;
-    postalCode: string;
-    state: string;
-  };
-  membershipRequestStatus: string;
-  userRegistrationRequired: boolean;
-  membershipRequests: {
-    _id: string;
-    user: {
-      _id: string;
-    };
-  }[];
 }
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -117,6 +78,7 @@ export default function groupChat({
       },
     });
     contactRefetch();
+    toggleCreateDirectChatModal();
   };
 
   const {
@@ -148,7 +110,7 @@ export default function groupChat({
   return (
     <>
       <Modal
-        data-testid="addExistingUserModal"
+        data-testid="createDirectChatModal"
         show={createDirectChatModalisOpen}
         onHide={toggleCreateDirectChatModal}
         contentClassName={styles.modalContent}
@@ -187,7 +149,7 @@ export default function groupChat({
                   </Button>
                 </Form>
               </div>
-              <TableContainer component={Paper}>
+              <TableContainer className={styles.userData} component={Paper}>
                 <Table aria-label="customized table">
                   <TableHead>
                     <TableRow>

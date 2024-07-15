@@ -114,7 +114,7 @@ export default function CreateGroupChat({
   const toggleAddUserModal = /* istanbul ignore next */ (): void =>
     setAddUserModalisOpen(!addUserModalisOpen);
 
-  const handleChange = (event: SelectChangeEvent): void => {
+  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
     setSelectedOrganization(event.target.value as string);
   };
 
@@ -147,6 +147,7 @@ export default function CreateGroupChat({
     groupChatListRefetch();
     toggleAddUserModal();
     toggleCreateGroupChatModal();
+    reset();
   }
 
   const [userName, setUserName] = useState('');
@@ -188,7 +189,7 @@ export default function CreateGroupChat({
   return (
     <>
       <Modal
-        data-testid="addExistingUserModal"
+        data-testid="createGroupChatModal"
         show={createGroupChatModalisOpen}
         onHide={toggleCreateGroupChatModal}
         contentClassName={styles.modalContent}
@@ -197,11 +198,34 @@ export default function CreateGroupChat({
           <Modal.Title>New Group</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <FormControl fullWidth>
+          <Form>
+            <Form.Group controlId="registerForm.Rtype">
+              <Form.Label>Select Organization</Form.Label>
+              <Form.Select
+                aria-label={'Select Organization'}
+                value={selectedOrganization}
+                onChange={(e) => handleChange(e)}
+              >
+                {organizations &&
+                  organizations.length &&
+                  organizations.map((organization: InterfaceOrganization) => (
+                    <option
+                      data-testid="selectOptions"
+                      key={organization._id}
+                      value={organization._id}
+                    >
+                      {`${organization.name}(${organization.address?.city},${organization.address?.state},${organization.address?.countryCode})`}
+                    </option>
+                  ))}
+              </Form.Select>
+            </Form.Group>
+
+            {/* <FormControl fullWidth>
             <InputLabel id="select-org">Select Organization</InputLabel>
             <Select
               labelId="select-org"
               id="select-org"
+              data-testid="orgSelect"
               label="Select Organization"
               value={selectedOrganization}
               onChange={handleChange}
@@ -209,33 +233,39 @@ export default function CreateGroupChat({
               {organizations &&
                 organizations.length &&
                 organizations.map((organization: InterfaceOrganization) => (
-                  <MenuItem key={organization._id} value={organization._id}>
+                  <MenuItem
+                    data-testid="selectOptions"
+                    key={organization._id}
+                    value={organization._id}
+                  >
                     {`${organization.name}(${organization.address?.city},${organization.address?.state},${organization.address?.countryCode})`}
                   </MenuItem>
                 ))}
             </Select>
-          </FormControl>
-          <Form.Group className="mb-3" controlId="registerForm.Rname">
-            <Form.Label>Group name</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder={'Group name'}
-              autoComplete="off"
-              required
-              value={title}
-              onChange={(e): void => {
-                setTitle(e.target.value);
-              }}
-            />
-          </Form.Group>
-          <Button
-            className={`${styles.colorPrimary} ${styles.borderNone}`}
-            variant="success"
-            onClick={openAddUserModal}
-            data-testid="registerBtn"
-          >
-            Next
-          </Button>
+          </FormControl> */}
+            <Form.Group className="mb-3" controlId="registerForm.Rname">
+              <Form.Label>Group name</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder={'Group name'}
+                autoComplete="off"
+                required
+                data-tsetid="groupTitleInput"
+                value={title}
+                onChange={(e): void => {
+                  setTitle(e.target.value);
+                }}
+              />
+            </Form.Group>
+            <Button
+              className={`${styles.colorPrimary} ${styles.borderNone}`}
+              variant="success"
+              onClick={openAddUserModal}
+              data-testid="nextBtn"
+            >
+              Next
+            </Button>
+          </Form>
         </Modal.Body>
       </Modal>
       <Modal
@@ -350,7 +380,7 @@ export default function CreateGroupChat({
             className={`${styles.colorPrimary} ${styles.borderNone}`}
             variant="success"
             onClick={handleCreateGroupChat}
-            data-testid="registerBtn"
+            data-testid="createBtn"
           >
             Create
           </Button>

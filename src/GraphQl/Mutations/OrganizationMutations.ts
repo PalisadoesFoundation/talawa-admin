@@ -145,6 +145,9 @@ export const MESSAGE_SENT_TO_DIRECT_CHAT = gql`
     messageSentToDirectChat(userId: $userId) {
       _id
       createdAt
+      directChatMessageBelongsTo {
+        _id
+      }
       messageContent
       receiver {
         _id
@@ -166,6 +169,9 @@ export const MESSAGE_SENT_TO_GROUP_CHAT = gql`
     messageSentToGroupChat(userId: $userId) {
       _id
       createdAt
+      groupChatMessageBelongsTo {
+        _id
+      }
       messageContent
       sender {
         _id

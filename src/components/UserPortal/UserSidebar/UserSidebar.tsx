@@ -92,7 +92,7 @@ const userSidebar = ({
                 className={`${
                   isActive === true ? 'text-white' : 'text-secondary'
                 }`}
-                data-testid="settingsBtn"
+                data-testid="chatBtn"
               >
                 <div className={styles.iconWrapper}>
                   <ChatIcon
