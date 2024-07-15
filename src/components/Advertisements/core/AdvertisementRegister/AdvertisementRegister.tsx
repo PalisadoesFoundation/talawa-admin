@@ -24,7 +24,7 @@ interface InterfaceAddOnRegisterProps {
   advertisementMediaEdit?: string;
   endDateEdit?: Date;
   startDateEdit?: Date;
-  setAfter: any;
+  setAfter: React.Dispatch<React.SetStateAction<string | null | undefined>>;
 }
 interface InterfaceFormStateTypes {
   name: string;
@@ -46,6 +46,8 @@ function advertisementRegister({
   setAfter,
 }: InterfaceAddOnRegisterProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
+  const { t: tCommon } = useTranslation('common');
+  const { t: tErrors } = useTranslation('errors');
 
   const { orgId: currentOrg } = useParams();
 
@@ -106,7 +108,7 @@ function advertisementRegister({
     try {
       console.log('At handle register', formState);
       if (formState.endDate < formState.startDate) {
-        toast.error('End date must be greater than or equal to start date');
+        toast.error(t('endDateGreaterOrEqual'));
         return;
       }
       const { data } = await create({
@@ -121,7 +123,7 @@ function advertisementRegister({
       });
 
       if (data) {
-        toast.success('Advertisement created successfully');
+        toast.success(t('advertisementCreated'));
         setFormState({
           name: '',
           advertisementMedia: '',
@@ -134,7 +136,9 @@ function advertisementRegister({
       setAfter(null);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error('An error occured, could not create new advertisement');
+        toast.error(
+          tErrors('errorOccurredCouldntCreate', { entity: 'advertisement' }),
+        );
         console.log('error occured', error.message);
       }
     }
@@ -154,7 +158,7 @@ function advertisementRegister({
         updatedFields.type = formState.type;
       }
       if (formState.endDate < formState.startDate) {
-        toast.error('End date must be greater than or equal to start date');
+        toast.error(t('endDateGreaterOrEqual'));
         return;
       }
       const startDateFormattedString = dayjs(formState.startDate).format(
@@ -194,12 +198,16 @@ function advertisementRegister({
       });
 
       if (data) {
-        toast.success('Advertisement updated successfully');
+        toast.success(
+          tCommon('updatedSuccessfully', { item: 'Advertisement' }),
+        );
         handleClose();
         setAfter(null);
       }
-    } catch (error: any) {
-      toast.error(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
     }
   };
   return (
@@ -213,18 +221,18 @@ function advertisementRegister({
           data-testid="createAdvertisement"
         >
           <i className="fa fa-plus"></i>
-          {t('addNew')}
+          {t('createAdvertisement')}
         </Button>
       ) : (
         <div onClick={handleShow} data-testid="editBtn">
-          {t('edit')}
+          {tCommon('edit')}
         </div>
       )}
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton className={styles.editHeader}>
           {formStatus === 'register' ? (
-            <Modal.Title> {t('RClose')}</Modal.Title>
+            <Modal.Title> {t('addNew')}</Modal.Title>
           ) : (
             <Modal.Title>{t('editAdvertisement')}</Modal.Title>
           )}
@@ -366,7 +374,7 @@ function advertisementRegister({
             onClick={handleClose}
             data-testid="addonclose"
           >
-            {t('close')}
+            {tCommon('close')}
           </Button>
           {formStatus === 'register' ? (
             <Button
@@ -374,7 +382,7 @@ function advertisementRegister({
               onClick={handleRegister}
               data-testid="addonregister"
             >
-              {t('register')}
+              {tCommon('register')}
             </Button>
           ) : (
             <Button
@@ -382,7 +390,7 @@ function advertisementRegister({
               onClick={handleUpdate}
               data-testid="addonupdate"
             >
-              {t('saveChanges')}
+              {tCommon('saveChanges')}
             </Button>
           )}
         </Modal.Footer>

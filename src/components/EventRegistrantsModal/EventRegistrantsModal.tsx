@@ -13,6 +13,7 @@ import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import { useTranslation } from 'react-i18next';
 
 type ModalPropType = {
   show: boolean;
@@ -28,21 +29,26 @@ interface InterfaceUser {
 }
 
 export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
+  const { eventId, orgId, handleClose, show } = props;
   const [member, setMember] = useState<InterfaceUser | null>(null);
 
   const [addRegistrantMutation] = useMutation(ADD_EVENT_ATTENDEE);
   const [removeRegistrantMutation] = useMutation(REMOVE_EVENT_ATTENDEE);
 
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'eventRegistrantsModal',
+  });
+  const { t: tCommon } = useTranslation('common');
   const {
     data: attendeesData,
     loading: attendeesLoading,
     refetch: attendeesRefetch,
   } = useQuery(EVENT_ATTENDEES, {
-    variables: { id: props.eventId },
+    variables: { id: eventId },
   });
 
   const { data: memberData, loading: memberLoading } = useQuery(MEMBERS_LIST, {
-    variables: { id: props.orgId },
+    variables: { id: orgId },
   });
 
   const addRegistrant = (): void => {
@@ -54,15 +60,15 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
     addRegistrantMutation({
       variables: {
         userId: member._id,
-        eventId: props.eventId,
+        eventId: eventId,
       },
     })
       .then(() => {
-        toast.success('Added the attendee successfully!');
+        toast.success(tCommon('addedSuccessfully', { item: 'Attendee' }));
         attendeesRefetch();
       })
       .catch((err) => {
-        toast.error('There was an error in adding the attendee!');
+        toast.error(t('errorAddingAttendee'));
         toast.error(err.message);
       });
   };
@@ -72,15 +78,15 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
     removeRegistrantMutation({
       variables: {
         userId,
-        eventId: props.eventId,
+        eventId: eventId,
       },
     })
       .then(() => {
-        toast.success('Removed the attendee successfully!');
+        toast.success(tCommon('removedSuccessfully', { item: 'Attendee' }));
         attendeesRefetch();
       })
       .catch((err) => {
-        toast.error('There was an error in removing the attendee!');
+        toast.error(t('errorRemovingAttendee'));
         toast.error(err.message);
       });
   };
@@ -96,12 +102,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
 
   return (
     <>
-      <Modal
-        show={props.show}
-        onHide={props.handleClose}
-        backdrop="static"
-        centered
-      >
+      <Modal show={show} onHide={handleClose} backdrop="static" centered>
         <Modal.Header closeButton className="bg-primary">
           <Modal.Title className="text-white">Event Registrants</Modal.Title>
         </Modal.Header>

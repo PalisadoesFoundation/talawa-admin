@@ -39,6 +39,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'memberDetail',
   });
+  const { t: tCommon } = useTranslation('common');
   const location = useLocation();
   const isMounted = useRef(true);
   const { getItem, setItem } = useLocalStorage();
@@ -184,7 +185,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
             setItem('Email', email);
             setItem('UserImage', image);
           }
-          toast.success('Successful updated');
+          toast.success(tCommon('successfullyUpdated'));
         }
       } catch (error: unknown) {
         if (error instanceof Error) {
@@ -224,7 +225,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               </div>
               <div className="d-flex flex-row flex-wrap py-3 px-3">
                 <div>
-                  <p className="my-0 mx-2">{t('firstName')}</p>
+                  <p className="my-0 mx-2">{tCommon('firstName')}</p>
                   <input
                     value={formState.firstName}
                     className={`rounded border-0 p-2 m-2 ${styles.inputColor}`}
@@ -232,11 +233,11 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     name="firstName"
                     onChange={handleChange}
                     required
-                    placeholder={t('firstName')}
+                    placeholder={tCommon('firstName')}
                   />
                 </div>
                 <div>
-                  <p className="my-0 mx-2">{t('lastName')}</p>
+                  <p className="my-0 mx-2">{tCommon('lastName')}</p>
                   <input
                     value={formState.lastName}
                     className={`rounded border-0 p-2 m-2 ${styles.inputColor}`}
@@ -244,7 +245,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     name="lastName"
                     onChange={handleChange}
                     required
-                    placeholder={t('lastName')}
+                    placeholder={tCommon('lastName')}
                   />
                 </div>
                 <div>
@@ -306,7 +307,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 </div>
                 <p className="my-0 mx-2 w-100">
                   <label htmlFor="orgphoto" className={styles.orgphoto}>
-                    {t('displayImage')}:
+                    {tCommon('displayImage')}:
                     <Form.Control
                       className="w-75"
                       accept="image/*"
@@ -349,7 +350,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   />
                 </div>
                 <div className="w-50 p-2">
-                  <p className="my-0">{t('email')}</p>
+                  <p className="my-0">{tCommon('email')}</p>
                   <input
                     value={formState.email}
                     className={`w-100 rounded border-0 p-2 ${styles.inputColor}`}
@@ -357,18 +358,18 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     name="email"
                     onChange={handleChange}
                     required
-                    placeholder={t('email')}
+                    placeholder={tCommon('email')}
                   />
                 </div>
                 <div className="p-2" style={{ width: `82%` }}>
-                  <p className="my-0">{t('address')}</p>
+                  <p className="my-0">{tCommon('address')}</p>
                   <input
                     value={formState.address}
                     className={`w-100 rounded border-0 p-2 ${styles.inputColor}`}
                     type="email"
                     name="address"
                     onChange={handleChange}
-                    placeholder={t('address')}
+                    placeholder={tCommon('address')}
                   />
                 </div>
                 <div className="w-25 p-2">
@@ -489,7 +490,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     <div>
                       <label>
                         {t('appLanguageCode')} <br />
-                        {`(API not supported yet)`}
                         <select
                           className="form-control"
                           data-testid="applangcode"
@@ -499,6 +499,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                               appLanguageCode: e.target.value,
                             });
                           }}
+                          value={formState.appLanguageCode}
                         >
                           {languages.map((language, index: number) => (
                             <option key={index} value={language.code}>
@@ -511,12 +512,12 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   </div>
                   <div className="d-flex flex-column">
                     <label htmlFor="">
-                      {t('delete')}
+                      {t('deleteUser')}
                       <br />
                       {`(API not supported yet)`}
                     </label>
                     <Button className="btn btn-danger" data-testid="deleteBtn">
-                      {t('delete')}
+                      {t('deleteUser')}
                     </Button>
                   </div>
                 </div>
@@ -529,7 +530,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 value="savechanges"
                 onClick={loginLink}
               >
-                {t('saveChanges')}
+                {tCommon('saveChanges')}
               </Button>
             </div>
           </div>

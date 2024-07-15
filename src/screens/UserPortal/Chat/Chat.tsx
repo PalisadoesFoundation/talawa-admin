@@ -31,6 +31,7 @@ export default function chat(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'chat',
   });
+  const { t: tCommon } = useTranslation('common');
 
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
 
@@ -115,14 +116,12 @@ export default function chat(): JSX.Element {
 
   React.useEffect(() => {
     if (contactData) {
-      console.log('TEST', contactData);
       setContacts(contactData.directChatsByUserID);
     }
   }, [contactData]);
 
   React.useEffect(() => {
     if (groupChatList) {
-      console.log(groupChatList);
       setGroupChats(groupChatList.groupChatsByUserId);
     }
   }, [groupChatList]);

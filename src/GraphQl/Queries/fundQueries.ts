@@ -47,8 +47,8 @@ export const FUND_CAMPAIGN = gql`
 `;
 
 export const FUND_CAMPAIGN_PLEDGE = gql`
-  query GetFundraisingCampaignById($id: ID!) {
-    getFundraisingCampaignById(id: $id) {
+  query GetFundraisingCampaignById($id: ID!, $orderBy: PledgeOrderByInput) {
+    getFundraisingCampaignById(id: $id, orderBy: $orderBy) {
       startDate
       endDate
       pledges {
@@ -60,6 +60,8 @@ export const FUND_CAMPAIGN_PLEDGE = gql`
         users {
           _id
           firstName
+          lastName
+          image
         }
       }
     }

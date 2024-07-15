@@ -259,10 +259,7 @@ export interface InterfaceQueryFundCampaignsPledges {
     currency: string;
     endDate: string;
     startDate: string;
-    users: {
-      _id: string;
-      firstName: string;
-    }[];
+    users: InterfacePledgeVolunteer[];
   }[];
 }
 export interface InterfaceFundInfo {
@@ -289,10 +286,7 @@ export interface InterfacePledgeInfo {
   currency: string;
   endDate: string;
   startDate: string;
-  users: {
-    _id: string;
-    firstName: string;
-  }[];
+  users: InterfacePledgeVolunteer[];
 }
 export interface InterfaceQueryOrganizationEventListItem {
   _id: string;
@@ -409,7 +403,7 @@ export interface InterfacePostCard {
   comments: {
     id: string;
     creator: {
-      _id: string;
+      id: string;
       firstName: string;
       lastName: string;
       email: string;
@@ -436,6 +430,7 @@ export interface InterfaceCreateCampaign {
 }
 
 export interface InterfaceCreatePledge {
+  pledgeUsers: InterfacePledgeVolunteer[];
   pledgeAmount: number;
   pledgeCurrency: string;
   pledgeStartDate: Date;
@@ -455,4 +450,61 @@ export interface InterfaceQueryMembershipRequestsListItem {
       };
     }[];
   }[];
+}
+
+export interface InterfacePledgeVolunteer {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  image: string | null;
+}
+export interface InterfaceAgendaItemCategoryInfo {
+  _id: string;
+  name: string;
+  description: string;
+  createdBy: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+  };
+}
+
+export interface InterfaceAgendaItemCategoryList {
+  agendaItemCategoriesByOrganization: InterfaceAgendaItemCategoryInfo[];
+}
+
+export interface InterfaceAgendaItemInfo {
+  _id: string;
+  title: string;
+  description: string;
+  duration: string;
+  attachments: string[];
+  createdBy: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+  };
+  urls: string[];
+  users: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+  }[];
+  sequence: number;
+  categories: {
+    _id: string;
+    name: string;
+  }[];
+  organization: {
+    _id: string;
+    name: string;
+  };
+  relatedEvent: {
+    _id: string;
+    title: string;
+  };
+}
+
+export interface InterfaceAgendaItemList {
+  agendaItemByEvent: InterfaceAgendaItemInfo[];
 }

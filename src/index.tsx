@@ -25,7 +25,6 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import App from './App';
 import { store } from './state/store';
-import './utils/i18n';
 import {
   BACKEND_URL,
   REACT_APP_BACKEND_WEBSOCKET_URL,
@@ -44,14 +43,16 @@ const theme = createTheme({
   },
 });
 import useLocalStorage from 'utils/useLocalstorage';
+import i18n from './utils/i18n';
 
 const { getItem } = useLocalStorage();
-
 const authLink = setContext((_, { headers }) => {
+  const lng = i18n.language;
   return {
     headers: {
       ...headers,
       authorization: 'Bearer ' + getItem('token') || '',
+      'Accept-Language': lng,
     },
   };
 });

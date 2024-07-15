@@ -18,6 +18,7 @@ interface InterfaceFormStateTypes {
 
 function addOnRegister(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'addOnRegister' });
+  const { t: tCommon } = useTranslation('common');
 
   const { orgId: currentUrl } = useParams();
   const navigate = useNavigate();
@@ -51,7 +52,7 @@ function addOnRegister(): JSX.Element {
     });
 
     if (data) {
-      toast.success('Plugin Added Successfully');
+      toast.success(tCommon('addedSuccessfully', { item: 'Plugin' }));
       setTimeout(() => {
         navigate(0);
       }, 2000);
@@ -134,14 +135,14 @@ function addOnRegister(): JSX.Element {
             onClick={handleClose}
             data-testid="addonclose"
           >
-            {t('close')}
+            {tCommon('close')}
           </Button>
           <Button
             variant="primary"
             onClick={handleRegister}
             data-testid="addonregisterBtn"
           >
-            {t('register')}
+            {tCommon('register')}
           </Button>
         </Modal.Footer>
       </Modal>

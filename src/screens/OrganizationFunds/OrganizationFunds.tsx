@@ -55,6 +55,7 @@ const organizationFunds = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'funds',
   });
+  const { t: tCommon } = useTranslation('common');
 
   const { orgId: currentUrl } = useParams();
   const navigate = useNavigate();
@@ -274,7 +275,7 @@ const organizationFunds = (): JSX.Element => {
                     data-testid="filter"
                   >
                     <FilterAltOutlinedIcon className={'me-1'} />
-                    {t('filter')}
+                    {tCommon('filter')}
                   </Dropdown.Toggle>
                 </Dropdown>
               </div>
@@ -370,7 +371,7 @@ const organizationFunds = (): JSX.Element => {
                               data-testid="editFundBtn"
                               onClick={() => handleEditClick(fund)}
                             >
-                              Manage
+                              {tCommon('manage')}
                             </Button>
                           </StyledTableCell>
                         </StyledTableRow>

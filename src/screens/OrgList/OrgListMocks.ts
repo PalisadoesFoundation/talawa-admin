@@ -113,10 +113,10 @@ const MOCKS = [
   {
     request: {
       query: USER_ORGANIZATION_LIST,
-      variables: { id: '123' },
+      variables: { userId: '123' },
     },
     result: {
-      data: superAdminUser,
+      data: { user: superAdminUser },
     },
   },
   {
@@ -183,10 +183,10 @@ const MOCKS_EMPTY = [
   {
     request: {
       query: USER_ORGANIZATION_LIST,
-      variables: { id: '123' },
+      variables: { userId: '123' },
     },
     result: {
-      data: superAdminUser,
+      data: { user: superAdminUser },
     },
   },
 ];
@@ -211,10 +211,10 @@ const MOCKS_WITH_ERROR = [
   {
     request: {
       query: USER_ORGANIZATION_LIST,
-      variables: { id: '123' },
+      variables: { userId: '123' },
     },
     result: {
-      data: superAdminUser,
+      data: { user: superAdminUser },
     },
   },
   {
@@ -247,10 +247,10 @@ const MOCKS_ADMIN = [
   {
     request: {
       query: USER_ORGANIZATION_LIST,
-      variables: { id: '123' },
+      variables: { userId: '123' },
     },
     result: {
-      data: adminUser,
+      data: { user: adminUser },
     },
   },
 ];

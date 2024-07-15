@@ -17,6 +17,7 @@ const UserUpdate: React.FC<
   const { t } = useTranslation('translation', {
     keyPrefix: 'userPasswordUpdate',
   });
+  const { t: tCommon } = useTranslation('common');
   const [formState, setFormState] = React.useState({
     previousPassword: '',
     newPassword: '',
@@ -31,12 +32,12 @@ const UserUpdate: React.FC<
       !formState.newPassword ||
       !formState.confirmNewPassword
     ) {
-      toast.error('The password field cannot be empty.');
+      toast.error(t('passCantBeEmpty'));
       return;
     }
 
     if (formState.newPassword !== formState.confirmNewPassword) {
-      toast.error('New and Confirm password do not match.');
+      toast.error(t('passNoMatch'));
       return;
     }
 
@@ -50,14 +51,16 @@ const UserUpdate: React.FC<
       });
       /* istanbul ignore next */
       if (data) {
-        toast.success('Successful updated');
+        toast.success(tCommon('updatedSuccessfully', { item: 'Password' }));
         setTimeout(() => {
           window.location.reload();
         }, 2000);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       /* istanbul ignore next */
-      toast.error(error.toString());
+      if (error instanceof Error) {
+        toast.error(error.toString());
+      }
     }
   };
 
@@ -135,7 +138,7 @@ const UserUpdate: React.FC<
               value="savechanges"
               onClick={loginLink}
             >
-              {t('saveChanges')}
+              {tCommon('saveChanges')}
             </Button>
             <Button
               type="button"
@@ -143,7 +146,7 @@ const UserUpdate: React.FC<
               value="cancelchanges"
               onClick={cancelUpdate}
             >
-              {t('cancel')}
+              {tCommon('cancel')}
             </Button>
           </div>
         </form>

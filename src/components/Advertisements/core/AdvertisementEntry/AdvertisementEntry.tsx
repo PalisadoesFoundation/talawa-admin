@@ -10,14 +10,6 @@ import AdvertisementRegister from '../AdvertisementRegister/AdvertisementRegiste
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { toast } from 'react-toastify';
 
-type Ad = {
-  _id: string;
-  name: string;
-  type: 'BANNER' | 'MENU' | 'POPUP';
-  mediaUrl: string;
-  endDate: string; // Assuming it's a string in the format 'yyyy-MM-dd'
-  startDate: string; // Assuming it's a string in the format 'yyyy-MM-dd'
-};
 interface InterfaceAddOnEntryProps {
   id: string;
   name: string;
@@ -26,7 +18,7 @@ interface InterfaceAddOnEntryProps {
   organizationId: string;
   startDate: Date;
   endDate: Date;
-  setAfter: any;
+  setAfter: React.Dispatch<React.SetStateAction<string | null | undefined>>;
 }
 function advertisementEntry({
   id,
@@ -39,6 +31,7 @@ function advertisementEntry({
   setAfter,
 }: InterfaceAddOnEntryProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
+  const { t: tCommon } = useTranslation('common');
   const [buttonLoading, setButtonLoading] = useState(false);
   const [dropdown, setDropdown] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -61,11 +54,13 @@ function advertisementEntry({
           id: id.toString(),
         },
       });
-      toast.error('Advertisement Deleted');
+      toast.success(t('advertisementDeleted'));
       setButtonLoading(false);
       setAfter(null);
-    } catch (error: any) {
-      toast.error(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
       setButtonLoading(false);
     }
   };
@@ -102,7 +97,7 @@ function advertisementEntry({
                       />
                     </li>
                     <li onClick={toggleShowDeleteModal} data-testid="deletebtn">
-                      {t('delete')}
+                      {tCommon('delete')}
                     </li>
                   </ul>
                 )}
@@ -164,7 +159,7 @@ function advertisementEntry({
                   </Modal.Body>
                   <Modal.Footer>
                     <Button variant="danger" onClick={toggleShowDeleteModal}>
-                      {t('no')}
+                      {tCommon('no')}
                     </Button>
                     <Button
                       type="button"
@@ -174,7 +169,7 @@ function advertisementEntry({
                       }}
                       data-testid="delete_yes"
                     >
-                      {t('yes')}
+                      {tCommon('yes')}
                     </Button>
                   </Modal.Footer>
                 </Modal>

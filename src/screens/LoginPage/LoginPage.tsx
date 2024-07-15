@@ -34,9 +34,13 @@ import { socialMediaLinks } from '../../constants';
 import styles from './LoginPage.module.css';
 import type { InterfaceQueryOrganizationListObject } from 'utils/interfaces';
 import { Autocomplete, TextField } from '@mui/material';
+import i18n from 'utils/i18n';
 
 const loginPage = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
+  const { t: tCommon } = useTranslation('common');
+  const { t: tErrors } = useTranslation('errors');
+
   const navigate = useNavigate();
 
   const { getItem, setItem } = useLocalStorage();
@@ -287,13 +291,14 @@ const loginPage = (): JSX.Element => {
 
       /* istanbul ignore next */
       if (loginData) {
+        i18n.changeLanguage(loginData.login.appUserProfile.appLanguageCode);
         const { login } = loginData;
         const { user, appUserProfile } = login;
         const isAdmin: boolean =
           appUserProfile.isSuperAdmin || appUserProfile.adminFor.length !== 0;
 
         if (role === 'admin' && !isAdmin) {
-          toast.warn(t('notAuthorised'));
+          toast.warn(tErrors('notAuthorised'));
           return;
         }
         const loggedInUserId = user._id;
@@ -317,7 +322,7 @@ const loginPage = (): JSX.Element => {
 
         navigate(role === 'admin' ? '/orglist' : '/user/organizations');
       } else {
-        toast.warn(t('notFound'));
+        toast.warn(tErrors('notFound'));
       }
     } catch (error) {
       /* istanbul ignore next */
@@ -418,13 +423,13 @@ const loginPage = (): JSX.Element => {
               >
                 <form onSubmit={loginLink}>
                   <h1 className="fs-2 fw-bold text-dark mb-3">
-                    {role === 'admin' ? t('login') : t('userLogin')}
+                    {role === 'admin' ? tCommon('login') : t('userLogin')}
                   </h1>
-                  <Form.Label>{t('email')}</Form.Label>
+                  <Form.Label>{tCommon('email')}</Form.Label>
                   <div className="position-relative">
                     <Form.Control
                       type="email"
-                      placeholder={t('enterEmail')}
+                      placeholder={tCommon('enterEmail')}
                       required
                       value={formState.email}
                       onChange={(e): void => {
@@ -443,12 +448,14 @@ const loginPage = (): JSX.Element => {
                       <EmailOutlinedIcon />
                     </Button>
                   </div>
-                  <Form.Label className="mt-3">{t('password')}</Form.Label>
+                  <Form.Label className="mt-3">
+                    {tCommon('password')}
+                  </Form.Label>
                   <div className="position-relative">
                     <Form.Control
                       type={showPassword ? 'text' : 'password'}
                       className="input_box_second lh-1"
-                      placeholder={t('enterPassword')}
+                      placeholder={tCommon('enterPassword')}
                       required
                       value={formState.password}
                       data-testid="password"
@@ -478,7 +485,7 @@ const loginPage = (): JSX.Element => {
                       className="text-secondary"
                       tabIndex={-1}
                     >
-                      {t('forgotPassword')}
+                      {tCommon('forgotPassword')}
                     </Link>
                   </div>
                   {REACT_APP_USE_RECAPTCHA === 'yes' ? (
@@ -502,11 +509,11 @@ const loginPage = (): JSX.Element => {
                     value="Login"
                     data-testid="loginBtn"
                   >
-                    {t('login')}
+                    {tCommon('login')}
                   </Button>
                   <div className="position-relative my-2">
                     <hr />
-                    <span className={styles.orText}>{t('OR')}</span>
+                    <span className={styles.orText}>{tCommon('OR')}</span>
                   </div>
                   <Button
                     variant="outline-secondary"
@@ -518,7 +525,7 @@ const loginPage = (): JSX.Element => {
                       setShowPassword(false);
                     }}
                   >
-                    {t('register')}
+                    {tCommon('register')}
                   </Button>
                 </form>
               </div>
@@ -530,17 +537,17 @@ const loginPage = (): JSX.Element => {
               >
                 <Form onSubmit={signupLink}>
                   <h1 className="fs-2 fw-bold text-dark mb-3">
-                    {t('register')}
+                    {tCommon('register')}
                   </h1>
                   <Row>
                     <Col sm={6}>
                       <div>
-                        <Form.Label>{t('firstName')}</Form.Label>
+                        <Form.Label>{tCommon('firstName')}</Form.Label>
                         <Form.Control
                           type="text"
                           id="signfirstname"
                           className="mb-3"
-                          placeholder={t('firstName')}
+                          placeholder={tCommon('firstName')}
                           required
                           value={signformState.signfirstName}
                           onChange={(e): void => {
@@ -554,12 +561,12 @@ const loginPage = (): JSX.Element => {
                     </Col>
                     <Col sm={6}>
                       <div>
-                        <Form.Label>{t('lastName')}</Form.Label>
+                        <Form.Label>{tCommon('lastName')}</Form.Label>
                         <Form.Control
                           type="text"
                           id="signlastname"
                           className="mb-3"
-                          placeholder={t('lastName')}
+                          placeholder={tCommon('lastName')}
                           required
                           value={signformState.signlastName}
                           onChange={(e): void => {
@@ -573,13 +580,13 @@ const loginPage = (): JSX.Element => {
                     </Col>
                   </Row>
                   <div className="position-relative">
-                    <Form.Label>{t('email')}</Form.Label>
+                    <Form.Label>{tCommon('email')}</Form.Label>
                     <div className="position-relative">
                       <Form.Control
                         type="email"
                         data-testid="signInEmail"
                         className="mb-3"
-                        placeholder={t('email')}
+                        placeholder={tCommon('email')}
                         autoComplete="username"
                         required
                         value={signformState.signEmail}
@@ -600,12 +607,12 @@ const loginPage = (): JSX.Element => {
                   </div>
 
                   <div className="position-relative mb-3">
-                    <Form.Label>{t('password')}</Form.Label>
+                    <Form.Label>{tCommon('password')}</Form.Label>
                     <div className="position-relative">
                       <Form.Control
                         type={showPassword ? 'text' : 'password'}
                         data-testid="passwordField"
-                        placeholder={t('password')}
+                        placeholder={tCommon('password')}
                         autoComplete="new-password"
                         onFocus={(): void => setIsInputFocused(true)}
                         onBlur={(): void => setIsInputFocused(false)}
@@ -754,11 +761,11 @@ const loginPage = (): JSX.Element => {
                     </div>
                   </div>
                   <div className="position-relative">
-                    <Form.Label>{t('confirmPassword')}</Form.Label>
+                    <Form.Label>{tCommon('confirmPassword')}</Form.Label>
                     <div className="position-relative">
                       <Form.Control
                         type={showConfirmPassword ? 'text' : 'password'}
-                        placeholder={t('confirmPassword')}
+                        placeholder={tCommon('confirmPassword')}
                         required
                         value={signformState.cPassword}
                         onChange={(e): void => {
@@ -839,11 +846,11 @@ const loginPage = (): JSX.Element => {
                     value="Register"
                     data-testid="registrationBtn"
                   >
-                    {t('register')}
+                    {tCommon('register')}
                   </Button>
                   <div className="position-relative">
                     <hr />
-                    <span className={styles.orText}>{t('OR')}</span>
+                    <span className={styles.orText}>{tCommon('OR')}</span>
                   </div>
                   <Button
                     variant="outline-secondary"
@@ -855,7 +862,7 @@ const loginPage = (): JSX.Element => {
                       setShowPassword(false);
                     }}
                   >
-                    {t('login')}
+                    {tCommon('login')}
                   </Button>
                 </Form>
               </div>

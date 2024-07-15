@@ -19,6 +19,7 @@ function organizationVenues(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationVenues',
   });
+  const { t: tCommon } = useTranslation('common');
 
   document.title = t('title');
   const [venueModal, setVenueModal] = useState<boolean>(false);
@@ -111,7 +112,7 @@ function organizationVenues(): JSX.Element {
             type="name"
             id="searchByName"
             className="bg-white"
-            placeholder={t('searchBy') + ' ' + t(searchBy)}
+            placeholder={t('searchBy') + ' ' + tCommon(searchBy)}
             data-testid="searchBy"
             autoComplete="off"
             required
@@ -150,7 +151,7 @@ function organizationVenues(): JSX.Element {
                   }}
                   data-testid="name"
                 >
-                  {t('name')}
+                  {tCommon('name')}
                 </Dropdown.Item>
                 <Dropdown.Item
                   id="searchDesc"
@@ -160,7 +161,7 @@ function organizationVenues(): JSX.Element {
                   }}
                   data-testid="desc"
                 >
-                  {t('desc')}
+                  {tCommon('description')}
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>

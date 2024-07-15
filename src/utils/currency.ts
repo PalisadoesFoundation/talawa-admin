@@ -163,7 +163,7 @@ export const currencyOptions = [
   { value: 'ZMW', label: 'ZMW' }, // Zambian Kwacha
   { value: 'ZWD', label: 'ZWD' }, // Zimbabwean Dollar
 ];
-export const currencySymbols = {
+export const currencySymbols: { [key: string]: string } = {
   AED: 'د.إ', // United Arab Emirates Dirham
   AFN: '؋', // Afghan Afghani
   ALL: 'L', // Albanian Lek

@@ -19,9 +19,7 @@ const VenueCard = ({
   showEditVenueModal,
   handleDelete,
 }: InterfaceVenueCardProps): JSX.Element => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'organizationVenues',
-  });
+  const { t: tCommon } = useTranslation('common');
   return (
     <div
       className="col-xl-4 col-lg-4 col-md-6"
@@ -65,7 +63,7 @@ const VenueCard = ({
               data-testid={`updateVenueBtn${index + 1}`}
             >
               <i className="fa fa-pen me-1"></i>
-              <span>{t('edit')}</span>
+              <span>{tCommon('edit')}</span>
             </Button>
             <Button
               variant="outline-danger"
@@ -74,7 +72,7 @@ const VenueCard = ({
               onClick={() => handleDelete(venueItem._id)}
             >
               <i className="fa fa-trash me-2"></i>
-              <span>{t('delete')}</span>
+              <span>{tCommon('delete')}</span>
             </Button>
           </div>
         </Card>

@@ -26,6 +26,7 @@ function organizationPeople(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationPeople',
   });
+  const { t: tCommon } = useTranslation('common');
 
   document.title = t('title');
 
@@ -171,7 +172,7 @@ function organizationPeople(): JSX.Element {
   const columns: GridColDef[] = [
     {
       field: 'profile',
-      headerName: 'Profile',
+      headerName: tCommon('profile'),
       flex: 1,
       minWidth: 50,
       align: 'center',
@@ -195,7 +196,7 @@ function organizationPeople(): JSX.Element {
     },
     {
       field: 'name',
-      headerName: 'Name',
+      headerName: tCommon('name'),
       flex: 2,
       minWidth: 150,
       align: 'center',
@@ -216,7 +217,7 @@ function organizationPeople(): JSX.Element {
     },
     {
       field: 'email',
-      headerName: 'Email',
+      headerName: tCommon('email'),
       minWidth: 150,
       align: 'center',
       headerAlign: 'center',
@@ -226,7 +227,7 @@ function organizationPeople(): JSX.Element {
     },
     {
       field: 'joined',
-      headerName: 'Joined',
+      headerName: tCommon('joined'),
       flex: 2,
       minWidth: 100,
       align: 'center',
@@ -239,7 +240,7 @@ function organizationPeople(): JSX.Element {
     },
     {
       field: 'action',
-      headerName: 'Action',
+      headerName: tCommon('action'),
       flex: 1,
       minWidth: 100,
       align: 'center',
@@ -252,14 +253,14 @@ function organizationPeople(): JSX.Element {
             onClick={() => toggleRemoveAdminModal(params.row._id)}
             data-testid="removeAdminModalBtn"
           >
-            Remove
+            {tCommon('remove')}
           </Button>
         ) : (
           <Button
             onClick={() => toggleRemoveMemberModal(params.row._id)}
             data-testid="removeMemberModalBtn"
           >
-            Remove
+            {tCommon('remove')}
           </Button>
         );
       },
@@ -316,7 +317,9 @@ function organizationPeople(): JSX.Element {
                       setState(2);
                     }}
                   >
-                    <Form.Label htmlFor="userslist">{t('users')}</Form.Label>
+                    <Form.Label htmlFor="userslist">
+                      {tCommon('users')}
+                    </Form.Label>
                   </Dropdown.Item>
                   <Dropdown.Item
                     inline
@@ -329,7 +332,7 @@ function organizationPeople(): JSX.Element {
                       setState(0);
                     }}
                   >
-                    <label htmlFor="memberslist">{t('members')}</label>
+                    <label htmlFor="memberslist">{tCommon('members')}</label>
                   </Dropdown.Item>
                   <Dropdown.Item
                     inline
@@ -342,7 +345,7 @@ function organizationPeople(): JSX.Element {
                       setState(1);
                     }}
                   >
-                    <label htmlFor="adminslist">{t('admins')}</label>
+                    <label htmlFor="adminslist">{tCommon('admins')}</label>
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>

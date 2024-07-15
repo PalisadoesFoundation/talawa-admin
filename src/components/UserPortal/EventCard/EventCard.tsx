@@ -39,6 +39,7 @@ function eventCard(props: InterfaceEventCardProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userEventCard',
   });
+  const { t: tCommon } = useTranslation('common');
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
   const creatorName = `${props.creator.firstName} ${props.creator.lastName}`;
@@ -62,7 +63,7 @@ function eventCard(props: InterfaceEventCardProps): JSX.Element {
           setIsRegistered(true);
           toast.success(`Successfully registered for ${props.title}`);
         }
-      } catch (error: any) {
+      } catch (error: unknown) {
         /* istanbul ignore next */
         toast.error(error);
       }
@@ -81,7 +82,7 @@ function eventCard(props: InterfaceEventCardProps): JSX.Element {
       </div>
       {props.description}
       <span>
-        {`${t('location')} `}
+        {`${tCommon('location')} `}
         <b>{props.location}</b>
       </span>
       <div className={`d-flex flex-row ${styles.eventDetails}`}>
@@ -120,7 +121,7 @@ function eventCard(props: InterfaceEventCardProps): JSX.Element {
           </Button>
         ) : (
           <Button size="sm" onClick={handleRegister}>
-            {t('register')}
+            {tCommon('register')}
           </Button>
         )}
       </div>

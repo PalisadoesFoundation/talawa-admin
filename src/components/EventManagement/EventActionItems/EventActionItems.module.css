@@ -42,9 +42,9 @@
   position: relative;
 }
 
-input {
+/* input {
   outline: 1px solid var(--bs-gray-400);
-}
+} */
 
 .btnsContainer .input button {
   width: 52px;

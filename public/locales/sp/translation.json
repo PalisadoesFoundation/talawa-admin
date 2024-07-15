@@ -225,7 +225,9 @@
     "orgJoined": "Unido a la organización exitosamente",
     "MembershipRequestSent": "Solicitud de membresía enviada exitosamente",
     "AlreadyJoined": "Ya eres miembro de esta organización.",
-    "errorOccured": "Se produjo un error. Por favor, inténtalo de nuevo más tarde."
+    "errorOccured": "Se produjo un error. Por favor, inténtalo de nuevo más tarde.",
+    "removeUserFrom": "Eliminar Usuario de {{org}}",
+    "removeConfirmation": "¿Está seguro de que desea eliminar a '{{name}}' de la organización '{{org}}'?"
   },
   "communityProfile": {
     "title": "Perfil de la comunidad",
@@ -370,7 +372,7 @@
     "close": "Cerrar",
     "completed": "Completado",
     "completionDate": "Fecha de finalización",
-    "createActionItem": "Crear",
+    "createActionItem": "Crear ítem de acción",
     "deleteActionItem": "Eliminar ítem de acción",
     "deleteActionItemMsg": "¿Desea eliminar este ítem de acción?",
     "details": "Detalles",
@@ -395,6 +397,57 @@
     "successfulDeletion": "Ítem de acción eliminado con éxito",
     "title": "Ítems de acción",
     "yes": "Sí"
+  },
+  "organizationAgendaCategory": {
+    "agendaCategoryDetails": "Detalles de la categoría de la agenda",
+    "updateAgendaCategory": "Actualizar categoría de la agenda",
+    "title": "Categorías de la agenda",
+    "name": "Categoría",
+    "description": "Descripción",
+    "createdBy": "Creado por",
+    "options": "Opciones",
+    "createAgendaCategory": "Crear categoría de la agenda",
+    "noAgendaCategories": "No hay categorías de la agenda",
+    "update": "Actualizar",
+    "agendaCategoryCreated": "Categoría de la agenda creada exitosamente",
+    "agendaCategoryUpdated": "Categoría de la agenda actualizada exitosamente",
+    "agendaCategoryDeleted": "Categoría de la agenda eliminada exitosamente",
+    "deleteAgendaCategory": "Eliminar categoría de la agenda",
+    "deleteAgendaCategoryMsg": "¿Desea eliminar esta categoría de la agenda?"
+  },
+  "agendaItems": {
+    "agendaItemDetails": "Detalles del punto del orden del día",
+    "updateAgendaItem": "Actualizar punto del orden del día",
+    "title": "Título",
+    "enterTitle": "Ingresar título",
+    "sequence": "Secuencia",
+    "description": "Descripción",
+    "enterDescription": "Ingresar descripción",
+    "category": "Categoría del orden del día",
+    "attachments": "Archivos adjuntos",
+    "attachmentLimit": "Agregar cualquier archivo de imagen o video hasta 10MB",
+    "fileSizeExceedsLimit": "El tamaño del archivo excede el límite de 10MB",
+    "urls": "URLs",
+    "url": "Agregar enlace a URL",
+    "enterUrl": "https://example.com",
+    "invalidUrl": "Ingrese una URL válida",
+    "link": "Enlace",
+    "createdBy": "Creado por",
+    "regular": "Regular",
+    "note": "Nota",
+    "duration": "Duración",
+    "enterDuration": "mm:ss",
+    "options": "Opciones",
+    "createAgendaItem": "Crear punto del orden del día",
+    "noAgendaItems": "No hay puntos del orden del día",
+    "selectAgendaItemCategory": "Seleccionar una categoría de punto del orden del día",
+    "update": "Actualizar",
+    "delete": "Eliminar",
+    "agendaItemCreated": "Punto del orden del día creado exitosamente",
+    "agendaItemUpdated": "Punto del orden del día actualizado exitosamente",
+    "agendaItemDeleted": "Punto del orden del día eliminado exitosamente",
+    "deleteAgendaItem": "Eliminar punto del orden del día",
+    "deleteAgendaItemMsg": "¿Desea eliminar este punto del orden del día?"
   },
   "eventListCard": {
     "location": "Lugar del evento",
@@ -514,7 +567,13 @@
     "deletePledgeMsg": "¿Estás seguro de que quieres eliminar este compromiso?",
     "no": "No",
     "yes": "Sí",
-    "noPledges": "No se encontraron compromisos"
+    "noPledges": "No se encontraron compromisos",
+    "sort": "Ordenar",
+    "searchVolunteer": "Buscar por voluntario",
+    "highestAmount": "Cantidad más alta",
+    "lowestAmount": "Cantidad más baja",
+    "latestEndDate": "Fecha de finalización más reciente",
+    "earliestEndDate": "Fecha de finalización más cercana"
   },
 
   "orgPost": {
@@ -611,6 +670,7 @@
     "dashboard": "Tablero",
     "registrants": "Inscritos",
     "eventActions": "Acciones del evento",
+    "eventAgendas": "Agendas de eventos",
     "eventStats": "Estadísticas del evento",
     "to": "A"
   },
@@ -702,7 +762,9 @@
     "newPassword": "Nueva contraseña",
     "confirmNewPassword": "Confirmar nueva contraseña",
     "saveChanges": "Guardar cambios",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "passCantBeEmpty": "La contraseña no puede estar vacía",
+    "passNoMatch": "La nueva contraseña y la confirmación no coinciden."
   },
   "orgDelete": {
     "deleteOrg": "Eliminar organización"
@@ -751,14 +813,14 @@
   "addOnStore": {
     "title": "Tienda de complementos",
     "searchName": "Ej: Donaciones",
+    "search": "Buscar",
     "enable": "Activada",
     "disable": "Desactivada",
     "pHeading": "Complementos",
     "install": "Instalada",
     "available": "Disponible",
     "pMessage": "El complemento no existe",
-    "filter": "filtros",
-    "search": "Buscar"
+    "filter": "filtros"
   },
   "addOnEntry": {
     "enable": "Activada",
@@ -883,7 +945,10 @@
   },
   "postCard": {
     "likes": "Gustos",
-    "comments": "Comentarios"
+    "comments": "Comentarios",
+    "viewPost": "Ver publicación",
+    "editPost": "Editar publicación",
+    "postedOn": "Publicado el {{date}}"
   },
   "home": {
     "feed": "Alimentar",
@@ -893,7 +958,8 @@
     "startPost": "Comenzar una publicación",
     "media": "Medios",
     "event": "Evento",
-    "article": "Artículo"
+    "article": "Artículo",
+    "postNowVisibleInFeed": "La publicación ahora es visible en el feed"
   },
   "settings": {
     "settings": "Ajustes",
@@ -1021,6 +1087,9 @@
     "view": "Ver",
     "edit": "Editar",
     "editAdvertisement": "Editar Anuncio",
+    "advertisementDeleted": "Anuncio eliminado con éxito.",
+    "endDateGreaterOrEqual": "La fecha de finalización debe ser mayor o igual a la fecha de inicio",
+    "advertisementCreated": "Anuncio creado con éxito.",
     "saveChanges": "Guardar Cambios",
     "endOfResults": "Fin de los resultados"
   },
@@ -1042,7 +1111,11 @@
     "saveChanges": "Guardar Cambios",
     "Remove Custom Field": "Eliminar Campo Personalizado",
     "fieldSuccessMessage": "Campo añadido exitosamente",
-    "fieldRemovalSuccess": "Campo eliminado exitosamente"
+    "fieldRemovalSuccess": "Campo eliminado exitosamente",
+    "String": "Cadena",
+    "Boolean": "Booleano",
+    "Date": "Fecha",
+    "Number": "Número"
   },
   "orgActionItemCategories": {
     "createButton": "Crear",
@@ -1133,5 +1206,13 @@
     "successfulUpdation": "Elemento de acción actualizado correctamente",
     "notes": "Notas",
     "save": "Guardar"
+  },
+  "checkIn": {
+    "errorCheckingIn": "Error al registrarse",
+    "checkedInSuccessfully": "Registrado con éxito"
+  },
+  "eventRegistrantsModal": {
+    "errorAddingAttendee": "Error al agregar asistente",
+    "errorRemovingAttendee": "Error al eliminar asistente"
   }
 }

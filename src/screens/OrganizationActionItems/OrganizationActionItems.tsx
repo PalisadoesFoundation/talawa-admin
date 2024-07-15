@@ -31,6 +31,7 @@ function organizationActionItems(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationActionItems',
   });
+  const { t: tCommon } = useTranslation('common');
 
   const { orgId: currentUrl } = useParams();
 
@@ -309,7 +310,7 @@ function organizationActionItems(): JSX.Element {
             <div className=" d-none d-lg-inline flex-grow-1 d-flex align-items-center border bg-light-subtle rounded-3">
               {!actionItemCategoryName && !actionItemStatus && (
                 <div className="lh-lg mt-2 text-center fw-semibold text-body-tertiary">
-                  No Filters
+                  {tCommon('noFiltersApplied')}
                 </div>
               )}
 
@@ -355,7 +356,7 @@ function organizationActionItems(): JSX.Element {
               className={styles.createActionItemButton}
             >
               <i className={'fa fa-plus me-2'} />
-              {t('createActionItem')}
+              {tCommon('create')}
             </Button>
           </div>
         </div>

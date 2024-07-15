@@ -26,6 +26,7 @@ export default function settings(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'settings',
   });
+  const { t: tCommon } = useTranslation('common');
 
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
 
@@ -77,7 +78,7 @@ export default function settings(): JSX.Element {
       });
       /* istanbul ignore next */
       if (data) {
-        toast.success('Your details have been updated.');
+        toast.success(tCommon('updatedSuccessfully', { item: 'Profile' }));
         setTimeout(() => {
           window.location.reload();
         }, 500);
@@ -85,7 +86,7 @@ export default function settings(): JSX.Element {
         const userFullName = `${userDetails.firstName} ${userDetails.lastName}`;
         setItem('name', userFullName);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       errorHandler(t, error);
     }
   };
@@ -208,7 +209,7 @@ export default function settings(): JSX.Element {
           <div className="d-flex justify-content-end align-items-center">
             <ProfileDropdown />
           </div>
-          <h3>{t('settings')}</h3>
+          <h3>{tCommon('settings')}</h3>
           <Row>
             <Col lg={5} className="d-lg-none">
               <UserProfile
@@ -232,7 +233,7 @@ export default function settings(): JSX.Element {
                         htmlFor="inputFirstName"
                         className={`${styles.cardLabel}`}
                       >
-                        {t('firstName')}
+                        {tCommon('firstName')}
                       </Form.Label>
                       <Form.Control
                         type="text"
@@ -250,7 +251,7 @@ export default function settings(): JSX.Element {
                         htmlFor="inputLastName"
                         className={`${styles.cardLabel}`}
                       >
-                        {t('lastName')}
+                        {tCommon('lastName')}
                       </Form.Label>
                       <Form.Control
                         type="text"
@@ -297,7 +298,7 @@ export default function settings(): JSX.Element {
                         htmlFor="inputEmail"
                         className={`${styles.cardLabel}`}
                       >
-                        {t('emailAddress')}
+                        {tCommon('emailAddress')}
                       </Form.Label>
                       <Form.Control
                         type="email"
@@ -331,7 +332,7 @@ export default function settings(): JSX.Element {
                         htmlFor="postphoto"
                         className={`${styles.cardLabel}`}
                       >
-                        {t('displayImage')}
+                        {tCommon('displayImage')}
                       </Form.Label>
                       <div>
                         <Button
@@ -485,7 +486,7 @@ export default function settings(): JSX.Element {
                         htmlFor="address"
                         className={`${styles.cardLabel}`}
                       >
-                        {t('address')}
+                        {tCommon('address')}
                       </Form.Label>
                       <Form.Control
                         type="text"
@@ -568,7 +569,7 @@ export default function settings(): JSX.Element {
                       data-testid="updateUserBtn"
                       className={`${styles.cardButton}`}
                     >
-                      {t('saveChanges')}
+                      {tCommon('saveChanges')}
                     </Button>
                   </div>
                 </Card.Body>

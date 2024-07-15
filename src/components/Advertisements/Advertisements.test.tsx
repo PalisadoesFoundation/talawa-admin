@@ -1,38 +1,32 @@
 import React from 'react';
-import 'jest-location-mock';
-import {
-  act,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react';
-import { MockedProvider } from '@apollo/client/testing';
 import {
   ApolloClient,
-  ApolloProvider,
-  InMemoryCache,
   ApolloLink,
+  ApolloProvider,
   HttpLink,
+  InMemoryCache,
 } from '@apollo/client';
+import { MockedProvider } from '@apollo/client/testing';
+import { act, fireEvent, render, screen } from '@testing-library/react';
+import 'jest-location-mock';
 
 import type { DocumentNode, NormalizedCacheObject } from '@apollo/client';
-import { BrowserRouter } from 'react-router-dom';
-import Advertisement from './Advertisements';
-import { Provider } from 'react-redux';
-import { store } from 'state/store';
+import userEvent from '@testing-library/user-event';
 import { BACKEND_URL } from 'Constant/constant';
-import i18nForTest from 'utils/i18nForTest';
-import { I18nextProvider } from 'react-i18next';
+import { ADD_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import {
   ORGANIZATIONS_LIST,
   ORGANIZATION_ADVERTISEMENT_LIST,
   PLUGIN_GET,
 } from 'GraphQl/Queries/Queries';
-import userEvent from '@testing-library/user-event';
-import { ADD_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
+import { I18nextProvider } from 'react-i18next';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+import { store } from 'state/store';
+import i18nForTest from 'utils/i18nForTest';
 import useLocalStorage from 'utils/useLocalstorage';
+import Advertisement from './Advertisements';
 
 const { getItem } = useLocalStorage();
 
@@ -387,7 +381,7 @@ describe('Testing Advertisement Component', () => {
 
     await wait();
 
-    userEvent.click(screen.getByText('Create new advertisement'));
+    userEvent.click(screen.getByText('Create Advertisement'));
     userEvent.type(
       screen.getByLabelText('Enter name of Advertisement'),
       'Cookie Shop',
@@ -413,7 +407,7 @@ describe('Testing Advertisement Component', () => {
 
     userEvent.click(screen.getByTestId('addonregister'));
     expect(
-      await screen.findByText('Advertisement created successfully'),
+      await screen.findByText('Advertisement created successfully.'),
     ).toBeInTheDocument();
   });
 
@@ -509,8 +503,9 @@ describe('Testing Advertisement Component', () => {
 
     const moreiconbtn = await screen.findAllByTestId('moreiconbtn');
     fireEvent.click(moreiconbtn[1]);
-    expect(await screen.findByTestId('deletebtn'));
-    fireEvent.click(await screen.findByTestId('deletebtn'));
+    const deleteBtn = await screen.findByTestId('deletebtn');
+    expect(deleteBtn).toBeInTheDocument();
+    fireEvent.click(deleteBtn);
   });
 
   test('infinite scroll', async () => {
