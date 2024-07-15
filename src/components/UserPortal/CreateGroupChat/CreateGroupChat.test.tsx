@@ -2477,42 +2477,44 @@ const GROUP_CHAT_BY_ID_QUERY_MOCK = [
   },
 ];
 
-const CREATE_GROUP_CHAT_MOCK = [{
-  request: {
-    query: CREATE_GROUP_CHAT,
-    variables: {
-      organizationId: '6401ff65ce8e8406b8f07af2',
-      userIds: [null],
-      title: 'Test Group',
+const CREATE_GROUP_CHAT_MOCK = [
+  {
+    request: {
+      query: CREATE_GROUP_CHAT,
+      variables: {
+        organizationId: '6401ff65ce8e8406b8f07af2',
+        userIds: [null],
+        title: 'Test Group',
+      },
     },
-  },
-  result: {
-    data: {
-      createGroupChat: {
-        _id: '669394c180e96b740ba1c0ce',
-        __typename: 'GroupChat',
+    result: {
+      data: {
+        createGroupChat: {
+          _id: '669394c180e96b740ba1c0ce',
+          __typename: 'GroupChat',
+        },
       },
     },
   },
-},
-{
-  request: {
-    query: CREATE_GROUP_CHAT,
-    variables: {
-      organizationId: '',
-      userIds: [null],
-      title: 'Test Group',
+  {
+    request: {
+      query: CREATE_GROUP_CHAT,
+      variables: {
+        organizationId: '',
+        userIds: [null],
+        title: 'Test Group',
+      },
     },
-  },
-  result: {
-    data: {
-      createGroupChat: {
-        _id: '669394c180e96b740ba1c0ce',
-        __typename: 'GroupChat',
+    result: {
+      data: {
+        createGroupChat: {
+          _id: '669394c180e96b740ba1c0ce',
+          __typename: 'GroupChat',
+        },
       },
     },
   },
-}];
+];
 
 const link = new StaticMockLink(MOCKS, true);
 
@@ -2629,7 +2631,7 @@ describe('Testing Create Direct Chat Modal [User Portal]', () => {
       expect(groupTitleInput.value).toBe('Test Group');
     });
 
-    const orgSelect = screen.getByLabelText('Select Organization')
+    const orgSelect = screen.getByLabelText('Select Organization');
 
     fireEvent.change(orgSelect, {
       target: { value: '6401ff65ce8e8406b8f07af2' },
@@ -2641,9 +2643,9 @@ describe('Testing Create Direct Chat Modal [User Portal]', () => {
       fireEvent.click(nextBtn);
     });
 
-    const createBtn = await screen.findByTestId('createBtn')
+    const createBtn = await screen.findByTestId('createBtn');
     await waitFor(async () => {
-      expect(createBtn).toBeInTheDocument()
+      expect(createBtn).toBeInTheDocument();
     });
 
     await act(async () => {
@@ -2652,7 +2654,7 @@ describe('Testing Create Direct Chat Modal [User Portal]', () => {
 
     await waitFor(() => {
       expect(createBtn).not.toBeInTheDocument();
-    })
+    });
   }, 3000);
 
   test('Test add and remove user ', async () => {
@@ -2689,8 +2691,10 @@ describe('Testing Create Direct Chat Modal [User Portal]', () => {
     fireEvent.click(newGroupChatBtn);
 
     await waitFor(async () => {
-      expect(await screen.findByTestId('createGroupChatModal')).toBeInTheDocument()
-    })
+      expect(
+        await screen.findByTestId('createGroupChatModal'),
+      ).toBeInTheDocument();
+    });
 
     const nextBtn = await screen.findByTestId('nextBtn');
 
@@ -2699,25 +2703,23 @@ describe('Testing Create Direct Chat Modal [User Portal]', () => {
     });
 
     await waitFor(async () => {
-      const addBtn = await screen.findAllByTestId('addBtn')
+      const addBtn = await screen.findAllByTestId('addBtn');
       expect(addBtn[0]).toBeInTheDocument();
-    })
+    });
 
-    const addBtn = await screen.findAllByTestId('addBtn')
+    const addBtn = await screen.findAllByTestId('addBtn');
 
     fireEvent.click(addBtn[0]);
 
-
-    const removeBtn = await screen.findAllByText('Remove')
+    const removeBtn = await screen.findAllByText('Remove');
     await waitFor(async () => {
-      
-      expect(removeBtn[0]).toBeInTheDocument()
+      expect(removeBtn[0]).toBeInTheDocument();
     });
     fireEvent.click(removeBtn[0]);
 
     await waitFor(() => {
       expect(addBtn[0]).toBeInTheDocument();
-    })
+    });
 
     const submitBtn = await screen.findByTestId('submitBtn');
 

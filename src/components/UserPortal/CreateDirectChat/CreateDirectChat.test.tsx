@@ -2082,7 +2082,6 @@ const CREATE_DIRECT_CHAT_MOCK = {
   },
 };
 
-
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {

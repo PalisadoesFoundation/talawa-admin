@@ -1,7 +1,4 @@
-import {
-  Paper,
-  TableBody,
-} from '@mui/material';
+import { Paper, TableBody } from '@mui/material';
 import React, { useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import styles from './CreateDirectChat.module.css';

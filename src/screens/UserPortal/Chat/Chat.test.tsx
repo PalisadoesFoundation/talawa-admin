@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  act,
-  fireEvent,
-  render,
-  screen,
-} from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 
@@ -2074,7 +2069,6 @@ const GROUP_CHAT_BY_ID_QUERY_MOCK = [
     },
   },
 ];
-
 
 const resizeWindow = (width: number): void => {
   window.innerWidth = width;
