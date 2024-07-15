@@ -20,7 +20,7 @@
     "@mui/x-data-grid": "^6.20.0",
     "@mui/x-date-pickers": "^7.6.1",
     "@pdfme/generator": "^1.2.6",
-    "bootstrap": "^5.3.0",
+    "bootstrap": "^5.3.3",
     "customize-cra": "^1.0.0",
     "dayjs": "^1.11.11",
     "flag-icons": "^6.6.6",
