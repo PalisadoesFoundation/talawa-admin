@@ -14,9 +14,7 @@
   max-width: 800px;
 }
 
-<<<<<<< HEAD ======= .colorLight {
-}
->>>>>>>63e706517e70f62009e4c852fe0d75de726dd597 .mainContainer {
+.mainContainer {
   width: 50%;
   flex-grow: 3;
   padding: 20px;
