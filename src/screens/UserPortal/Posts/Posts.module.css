@@ -6,8 +6,6 @@
   color: white;
 }
 
-
-
 .mainContainer {
   width: 50%;
   flex-grow: 3;
@@ -34,8 +32,6 @@
 
 .maxWidth {
   width: 100%;
-  /* min-width: 3rem; */
-  /* padding: 0; */
 }
 
 .inputArea {
