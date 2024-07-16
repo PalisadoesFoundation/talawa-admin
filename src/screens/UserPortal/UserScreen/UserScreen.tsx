@@ -8,7 +8,6 @@ import styles from './UserScreen.module.css';
 import { Button } from 'react-bootstrap';
 import UserSidebarOrg from 'components/UserPortal/UserSidebarOrg/UserSidebarOrg';
 
-
 const UserScreen = (): JSX.Element => {
   const location = useLocation();
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
