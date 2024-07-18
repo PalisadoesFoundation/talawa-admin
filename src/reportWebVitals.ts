@@ -1,14 +1,14 @@
+import { promises } from 'dns';
 import type { MetricType } from 'web-vitals';
 
-const reportWebVitals = async (
-  onPerfEntry?: (metric: MetricType) => void,
-): Promise<void> => {
-  if (onPerfEntry && typeof onPerfEntry === 'function') {
-    const { onCLS, onFCP, onLCP, onTTFB } = await import('web-vitals');
-    onCLS(onPerfEntry);
-    onFCP(onPerfEntry);
-    onLCP(onPerfEntry);
-    onTTFB(onPerfEntry);
+const reportWebVitals = (onPerfEntry?: (metric: MetricType) => void): void => {
+  if (onPerfEntry && onPerfEntry instanceof Function) {
+    import('web-vitals').then(({ onCLS, onFCP, onLCP, onTTFB }) => {
+      onCLS(onPerfEntry);
+      onFCP(onPerfEntry);
+      onLCP(onPerfEntry);
+      onTTFB(onPerfEntry);
+    });
   }
 };
 
