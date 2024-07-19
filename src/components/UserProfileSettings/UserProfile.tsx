@@ -4,6 +4,7 @@ import { Button, Card } from 'react-bootstrap';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import { useTranslation } from 'react-i18next';
 import styles from './UserProfileSettings.module.css';
+import { Tooltip as ReactTooltip } from 'react-tooltip';
 
 interface InterfaceUserProfile {
   firstName: string;
@@ -41,11 +42,28 @@ const UserProfile: React.FC<InterfaceUserProfile> = ({
               )}
             </div>
             <div className={styles.profileDetails}>
-              <span style={{ fontWeight: '700', fontSize: '28px' }}>
-                {`${firstName}`.charAt(0).toUpperCase() +
-                  `${firstName}`.slice(1)}
+              <span
+                style={{ fontWeight: '700', fontSize: '28px' }}
+                data-tooltip-id="name"
+                data-tooltip-content={`${firstName} ${lastName}`}
+              >
+                {firstName.length >= 18
+                  ? `${firstName.charAt(0).toUpperCase() + firstName.slice(1, 9)}...` +
+                    firstName.charAt(0).toUpperCase() +
+                    firstName.slice(firstName.length - 3, firstName.length)
+                  : firstName.charAt(0).toUpperCase() + firstName.slice(1)}
               </span>
-              <span data-testid="userEmail">{email}</span>
+              <ReactTooltip id="name" />
+              <span
+                data-testid="userEmail"
+                data-tooltip-id="email"
+                data-tooltip-content={email}
+              >
+                {email.length >= 10
+                  ? `${email.slice(0, 8)}...` + email.slice(email.indexOf('@'))
+                  : email}
+              </span>
+              <ReactTooltip id="email" />
               <span className="d-flex">
                 <CalendarMonthOutlinedIcon />
                 <span className="d-flex align-end">
