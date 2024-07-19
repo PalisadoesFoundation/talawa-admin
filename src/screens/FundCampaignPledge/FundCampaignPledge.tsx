@@ -346,15 +346,14 @@ const fundCampaignPledge = (): JSX.Element => {
           </div>
         </div>
       </div>
-
       <DataGrid
         disableColumnMenu
-        columnBuffer={5}
+        columnBufferPx={5}
         hideFooter={true}
         className={`${styles.datagrid}`}
         getRowId={(row) => row._id}
-        components={{
-          NoRowsOverlay: () => (
+        slots={{
+          noRowsOverlay: () => (
             <Stack height="100%" alignItems="center" justifyContent="center">
               {t('noPledges')}
             </Stack>
@@ -388,7 +387,6 @@ const fundCampaignPledge = (): JSX.Element => {
         columns={columns}
         isRowSelectable={() => false}
       />
-
       {/* Update Pledge Modal */}
       <PledgeModal
         isOpen={modalState[Modal.SAME]}
@@ -400,7 +398,6 @@ const fundCampaignPledge = (): JSX.Element => {
         endDate={pledgeData?.getFundraisingCampaignById.endDate as Date}
         mode={pledgeModalMode}
       />
-
       {/* Delete Pledge Modal */}
       <PledgeDeleteModal
         isOpen={modalState[Modal.DELETE]}
