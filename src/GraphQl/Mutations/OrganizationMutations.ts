@@ -86,11 +86,35 @@ export const CREATE_DIRECT_CHAT = gql`
 `;
 
 export const SEND_MESSAGE_TO_DIRECT_CHAT = gql`
-  mutation sendMessageToDirectChat($chatId: ID!, $messageContent: String!) {
-    sendMessageToDirectChat(chatId: $chatId, messageContent: $messageContent) {
+  mutation sendMessageToDirectChat(
+    $chatId: ID!
+    $replyTo: ID
+    $messageContent: String!
+  ) {
+    sendMessageToDirectChat(
+      chatId: $chatId
+      replyTo: $replyTo
+      messageContent: $messageContent
+    ) {
       _id
       createdAt
       messageContent
+      replyTo {
+        _id
+        createdAt
+        messageContent
+        receiver {
+          _id
+          firstName
+          lastName
+        }
+        sender {
+          _id
+          firstName
+          lastName
+        }
+        updatedAt
+      }
       receiver {
         _id
         firstName

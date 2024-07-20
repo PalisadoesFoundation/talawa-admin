@@ -141,6 +141,25 @@ export const DIRECT_CHAT_BY_ID = gql`
         _id
         createdAt
         messageContent
+        replyTo {
+          _id
+          createdAt
+          messageContent
+          receiver {
+            _id
+            firstName
+            lastName
+            email
+            image
+          }
+          sender {
+            _id
+            firstName
+            lastName
+            email
+            image
+          }
+        }
         receiver {
           _id
           firstName
