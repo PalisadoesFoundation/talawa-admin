@@ -452,7 +452,6 @@ const fundCampaignPledge = (): JSX.Element => {
 
           <div className={styles.progress}>
             <ProgressBar
-              animated
               now={progressIndicator === 'pledged' ? totalPledged : 0}
               label={`$${progressIndicator === 'pledged' ? totalPledged : 0}`}
               max={campaignInfo?.goal}
