@@ -71,9 +71,9 @@ export const FUND_CAMPAIGN_PLEDGE = gql`
 export const USER_FUND_CAMPAIGNS = gql`
   query GetFundraisingCampaigns(
     $where: CampaignWhereInput
-    $orderBy: PledgeOrderByInput
+    $campaignOrderBy: CampaignOrderByInput
   ) {
-    getFundraisingCampaigns(where: $where, orderBy: $orderBy) {
+    getFundraisingCampaigns(where: $where, campaignOrderby: $campaignOrderBy) {
       _id
       startDate
       endDate

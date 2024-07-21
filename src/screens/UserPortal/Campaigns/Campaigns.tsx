@@ -40,7 +40,7 @@ const Campaigns = (): JSX.Element => {
     useState<InterfaceUserCampaign | null>(null);
   const [modalState, setModalState] = useState<boolean>(false);
   const [sortBy, setSortBy] = useState<
-    'goal_ASC' | 'goal_DESC' | 'endDate_ASC' | 'endDate_DESC'
+    'fundingGoal_ASC' | 'fundingGoal_DESC' | 'endDate_ASC' | 'endDate_DESC'
   >('endDate_DESC');
 
   const {
@@ -59,7 +59,9 @@ const Campaigns = (): JSX.Element => {
     variables: {
       where: {
         organizationId: orgId,
+        name_contains: searchTerm,
       },
+      campaignOrderBy: sortBy,
     },
   });
 
@@ -131,14 +133,14 @@ const Campaigns = (): JSX.Element => {
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item
-                  onClick={() => setSortBy('goal_ASC')}
-                  data-testid="goal_ASC"
+                  onClick={() => setSortBy('fundingGoal_ASC')}
+                  data-testid="fundingGoal_ASC"
                 >
                   {t('lowestGoal')}
                 </Dropdown.Item>
                 <Dropdown.Item
-                  onClick={() => setSortBy('goal_DESC')}
-                  data-testid="goal_DESC"
+                  onClick={() => setSortBy('fundingGoal_DESC')}
+                  data-testid="fundingGoal_DESC"
                 >
                   {t('highestGoal')}
                 </Dropdown.Item>
@@ -224,12 +226,11 @@ const Campaigns = (): JSX.Element => {
             </div>
           </AccordionSummary>
           <AccordionDetails className="d-flex gap-3 ms-2">
-            <span className="fw-bold">Progress: </span>
+            <span className="fw-bold">Amount Raised: </span>
             <div className={styles.progress}>
               <span>$0</span>
               <ProgressBar
-                striped
-                now={200}
+                now={0}
                 label={`${(200 / 1000) * 100}%`}
                 max={1000}
                 className={styles.progressBar}
