@@ -47,10 +47,8 @@ const UserProfile: React.FC<InterfaceUserProfile> = ({
                 data-tooltip-id="name"
                 data-tooltip-content={`${firstName} ${lastName}`}
               >
-                {firstName.length >= 18
-                  ? `${firstName.charAt(0).toUpperCase() + firstName.slice(1, 9)}...` +
-                    firstName.charAt(0).toUpperCase() +
-                    firstName.slice(firstName.length - 3, firstName.length)
+                {firstName.length >= 10
+                  ? `${firstName.charAt(0).toUpperCase() + firstName.slice(1, 5)}...`
                   : firstName.charAt(0).toUpperCase() + firstName.slice(1)}
               </span>
               <ReactTooltip id="name" />
@@ -60,7 +58,7 @@ const UserProfile: React.FC<InterfaceUserProfile> = ({
                 data-tooltip-content={email}
               >
                 {email.length >= 10
-                  ? `${email.slice(0, 8)}...` + email.slice(email.indexOf('@'))
+                  ? `${email.slice(0, 4)}...` + email.slice(email.indexOf('@'))
                   : email}
               </span>
               <ReactTooltip id="email" />
