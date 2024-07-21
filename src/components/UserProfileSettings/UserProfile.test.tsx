@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import UserProfile from './UserProfile'; // Adjust this import to match your actual file path
+import UserProfile from './UserProfile';
 import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
@@ -42,7 +42,7 @@ describe('UserProfile component', () => {
       firstName: 'Christopher',
       lastName: 'Smith',
       email: 'chris.smith@example.com',
-      image: 'profile-image-url', // Add the image property
+      image: 'profile-image-url',
     };
 
     const { getByText, getByTestId } = render(
@@ -56,17 +56,9 @@ describe('UserProfile component', () => {
     );
 
     expect(getByText('Chris...')).toBeInTheDocument();
-
-    // Test for the email display logic
-    // const expectedEmail = userDetails.email.length >= 10
-    //   ? `${userDetails.email.slice(0, 4)}...${userDetails.email.slice(userDetails.email.indexOf('@'))}`
-    //   : userDetails.email;
-
     const emailElement = getByTestId('userEmail');
     expect(emailElement).toBeInTheDocument();
     expect(emailElement).toHaveTextContent('chri...@example.com');
-
-    // Check tooltips
     expect(emailElement.getAttribute('data-tooltip-content')).toBe(
       userDetails.email,
     );
