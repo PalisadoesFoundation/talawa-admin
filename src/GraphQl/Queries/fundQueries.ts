@@ -67,3 +67,19 @@ export const FUND_CAMPAIGN_PLEDGE = gql`
     }
   }
 `;
+
+export const USER_FUND_CAMPAIGNS = gql`
+  query GetFundraisingCampaigns(
+    $where: CampaignWhereInput
+    $orderBy: PledgeOrderByInput
+  ) {
+    getFundraisingCampaigns(where: $where, orderBy: $orderBy) {
+      _id
+      startDate
+      endDate
+      name
+      fundingGoal
+      currency
+    }
+  }
+`;

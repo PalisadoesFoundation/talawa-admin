@@ -11,7 +11,7 @@ import type {
 import styles from './Campaigns.module.css';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { CREATE_PlEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
 import { toast } from 'react-toastify';
 import {
@@ -22,7 +22,7 @@ import {
   Select,
   TextField,
 } from '@mui/material';
-// import { USER_DETAILS } from 'GraphQl/Queries/Queries';
+import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 
 export interface InterfacePledgeModal {
   isOpen: boolean;
@@ -38,7 +38,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   isOpen,
   hide,
   campaignId,
-  // userId,
+  userId,
   pledge,
   refetchPledge,
   endDate,
@@ -78,23 +78,25 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     pledgeEndDate,
   } = formState;
 
-  // const {
-  //   data: userData,
-  //   loading: userLoading,
-  //   error: userError,
-  //   refetch: refetchFunds,
-  // } = useQuery(USER_DETAILS, {
-  //   variables: {
-  //     id: userId,
-  //   },
-  // });
-  setVolunteers([]);
+  const { data: userData } = useQuery(USER_DETAILS, {
+    variables: {
+      id: userId,
+    },
+  });
 
-  // useEffect(() => {
-  //   if (userData) {
-  //     setVolunteers(userData.user.volunteers);
-  //   }
-  // }, [userData]);
+  useEffect(() => {
+    if (userData) {
+      console.log(userData);
+      setVolunteers([
+        {
+          _id: userData.user.user._id,
+          firstName: userData.user.user.firstName,
+          lastName: userData.user.user.lastName,
+          image: userData.user.user.image,
+        },
+      ]);
+    }
+  }, [userData]);
 
   /*istanbul ignore next*/
   const updatePledgeHandler = useCallback(

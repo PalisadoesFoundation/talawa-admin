@@ -17,6 +17,7 @@ const map: InterfaceMapType = {
   events: 'userEvents',
   donate: 'donate',
   campaigns: 'userCampaigns',
+  pledges: 'userPledges',
 };
 
 const UserScreen = (): JSX.Element => {

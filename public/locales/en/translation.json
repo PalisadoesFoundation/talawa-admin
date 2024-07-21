@@ -982,5 +982,8 @@
     "earliestEndDate": "Earliest End Date",
     "addPledge": "Add Pledge",
     "viewPledges": "View Pledges"
+  },
+  "userPledges": {
+    "title": "My Pledges"
   }
 }

@@ -127,6 +127,13 @@ const iconComponent = (props: InterfaceIconComponent): JSX.Element => {
       return (
         <FundsIcon data-testid="Icon-Component-Campaigns" stroke={props.fill} />
       );
+    case 'My Pledges':
+      return (
+        <FundsIcon
+          data-testid="Icon-Component-My-Pledges"
+          stroke={props.fill}
+        />
+      );
     default:
       return (
         <QuestionMarkOutlined

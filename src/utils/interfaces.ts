@@ -250,6 +250,14 @@ export interface InterfaceQueryOrganizationFundCampaigns {
     currency: string;
   }[];
 }
+export interface InterfaceUserCampaign {
+  _id: string;
+  name: string;
+  fundingGoal: number;
+  startDate: Date;
+  endDate: Date;
+  currency: string;
+}
 export interface InterfaceQueryFundCampaignsPledges {
   startDate: Date;
   endDate: Date;
