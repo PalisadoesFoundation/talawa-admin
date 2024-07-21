@@ -18,6 +18,9 @@ export const MOCKS = [
     result: {
       data: {
         getFundraisingCampaignById: {
+          name: 'Campaign Name',
+          fundingGoal: 1000,
+          currency: 'USD',
           startDate: '2024-01-01',
           endDate: '2024-08-08',
           pledges: [
@@ -33,6 +36,60 @@ export const MOCKS = [
                   firstName: 'John',
                   lastName: 'Doe',
                   image: 'img-url',
+                },
+                {
+                  _id: '2',
+                  firstName: 'John',
+                  lastName: 'Doe2',
+                  image: 'img-url2',
+                },
+                {
+                  _id: '3',
+                  firstName: 'John',
+                  lastName: 'Doe3',
+                  image: 'img-url3',
+                },
+                {
+                  _id: '4',
+                  firstName: 'John',
+                  lastName: 'Doe4',
+                  image: 'img-url4',
+                },
+                {
+                  _id: '5',
+                  firstName: 'John',
+                  lastName: 'Doe5',
+                  image: 'img-url5',
+                },
+                {
+                  _id: '6',
+                  firstName: 'John',
+                  lastName: 'Doe6',
+                  image: 'img-url6',
+                },
+                {
+                  _id: '7',
+                  firstName: 'John',
+                  lastName: 'Doe7',
+                  image: 'img-url7',
+                },
+                {
+                  _id: '8',
+                  firstName: 'John',
+                  lastName: 'Doe8',
+                  image: 'img-url8',
+                },
+                {
+                  _id: '9',
+                  firstName: 'John',
+                  lastName: 'Doe9',
+                  image: 'img-url9',
+                },
+                {
+                  _id: '10',
+                  firstName: 'John',
+                  lastName: 'Doe10',
+                  image: null,
                 },
               ],
             },
@@ -67,6 +124,9 @@ export const MOCKS = [
     result: {
       data: {
         getFundraisingCampaignById: {
+          name: 'Campaign Name',
+          fundingGoal: 1000,
+          currency: 'USD',
           startDate: '2024-01-01',
           endDate: '2024-08-08',
           pledges: [
@@ -116,6 +176,9 @@ export const MOCKS = [
     result: {
       data: {
         getFundraisingCampaignById: {
+          name: 'Campaign Name',
+          fundingGoal: 1000,
+          currency: 'USD',
           startDate: '2024-01-01',
           endDate: '2024-08-08',
           pledges: [
@@ -165,6 +228,9 @@ export const MOCKS = [
     result: {
       data: {
         getFundraisingCampaignById: {
+          name: 'Campaign Name',
+          fundingGoal: 1000,
+          currency: 'USD',
           startDate: '2024-01-01',
           endDate: '2024-08-08',
           pledges: [
@@ -422,6 +488,9 @@ export const EMPTY_MOCKS = [
     result: {
       data: {
         getFundraisingCampaignById: {
+          name: 'Campaign Name',
+          fundingGoal: 1000,
+          currency: 'USD',
           startDate: '2024-01-01',
           endDate: '2024-01-01',
           pledges: [],

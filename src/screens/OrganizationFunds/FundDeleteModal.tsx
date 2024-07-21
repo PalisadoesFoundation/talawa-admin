@@ -1,65 +1,68 @@
 import React from 'react';
-import { Button, Modal } from 'react-bootstrap';
-import styles from './OrganizationFundCampaign.module.css';
-import { useMutation } from '@apollo/client';
-import { DELETE_CAMPAIGN_MUTATION } from 'GraphQl/Mutations/CampaignMutation';
-import type { InterfaceCampaignInfo } from 'utils/interfaces';
-import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+import type { InterfaceFundInfo } from 'utils/interfaces';
+import styles from './OrganizationFunds.module.css';
+import { Button, Modal } from 'react-bootstrap';
+import { REMOVE_FUND_MUTATION } from 'GraphQl/Mutations/FundMutation';
+import { useMutation } from '@apollo/client';
+import { toast } from 'react-toastify';
 
-export interface InterfaceDeleteCampaignModal {
+export interface InterfaceDeleteFundModal {
   isOpen: boolean;
   hide: () => void;
-  campaign: InterfaceCampaignInfo | null;
-  refetchCampaign: () => void;
+  fund: InterfaceFundInfo | null;
+  refetchFunds: () => void;
 }
-const CampaignDeleteModal: React.FC<InterfaceDeleteCampaignModal> = ({
+
+const FundDeleteModal: React.FC<InterfaceDeleteFundModal> = ({
   isOpen,
   hide,
-  campaign,
-  refetchCampaign,
+  fund,
+  refetchFunds,
 }) => {
   const { t } = useTranslation('translation', {
-    keyPrefix: 'fundCampaign',
+    keyPrefix: 'funds',
   });
   const { t: tCommon } = useTranslation('common');
 
-  const [deleteCampaign] = useMutation(DELETE_CAMPAIGN_MUTATION);
+  const [deleteFund] = useMutation(REMOVE_FUND_MUTATION);
 
-  const deleteCampaignHandler = async (): Promise<void> => {
+  const deleteFundHandler = async (): Promise<void> => {
     try {
-      await deleteCampaign({
+      await deleteFund({
         variables: {
-          id: campaign?._id,
+          id: fund?._id,
         },
       });
-      toast.success(t('deletedCampaign'));
-      refetchCampaign();
+      refetchFunds();
       hide();
+      toast.success(t('fundDeleted'));
     } catch (error: unknown) {
       toast.error((error as Error).message);
     }
   };
+
   return (
     <>
-      <Modal show={isOpen} onHide={hide}>
+      <Modal className={styles.fundModal} onHide={hide} show={isOpen}>
         <Modal.Header>
-          <p className={styles.titlemodal}> {t('deleteCampaign')} </p>
+          <p className={styles.titlemodal}> {t('fundDelete')}</p>
           <Button
             variant="danger"
             onClick={hide}
-            data-testid="deleteCampaignCloseBtn"
+            className={styles.modalCloseBtn}
+            data-testid="deleteFundCloseBtn"
           >
             <i className="fa fa-times"></i>
           </Button>
         </Modal.Header>
         <Modal.Body>
-          <p> {t('deleteCampaignMsg')} </p>
+          <p> {t('deleteFundMsg')}</p>
         </Modal.Body>
         <Modal.Footer>
           <Button
             variant="danger"
-            onClick={deleteCampaignHandler}
+            onClick={deleteFundHandler}
             data-testid="deleteyesbtn"
           >
             {tCommon('yes')}
@@ -72,4 +75,5 @@ const CampaignDeleteModal: React.FC<InterfaceDeleteCampaignModal> = ({
     </>
   );
 };
-export default CampaignDeleteModal;
+
+export default FundDeleteModal;

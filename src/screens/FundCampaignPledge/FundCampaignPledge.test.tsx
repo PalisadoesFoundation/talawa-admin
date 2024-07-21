@@ -92,7 +92,7 @@ describe('Testing Campaign Pledge Screen', () => {
   it('should render the Campaign Pledge screen', async () => {
     renderFundCampaignPledge(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchVolunteer')).toBeInTheDocument();
+      expect(screen.getByTestId('searchPledger')).toBeInTheDocument();
     });
   });
 
@@ -172,8 +172,8 @@ describe('Testing Campaign Pledge Screen', () => {
 
   it('Search the Pledges list by Users', async () => {
     renderFundCampaignPledge(link1);
-    const searchVolunteer = await screen.findByTestId('searchVolunteer');
-    fireEvent.change(searchVolunteer, {
+    const searchPledger = await screen.findByTestId('searchPledger');
+    fireEvent.change(searchPledger, {
       target: { value: 'John' },
     });
 
@@ -197,13 +197,84 @@ describe('Testing Campaign Pledge Screen', () => {
     );
   });
 
+  it('check if user image renders', async () => {
+    renderFundCampaignPledge(link1);
+    await waitFor(() => {
+      expect(screen.getByTestId('searchPledger')).toBeInTheDocument();
+    });
+
+    const image = await screen.findByTestId('image1');
+    expect(image).toBeInTheDocument();
+    expect(image).toHaveAttribute('src', 'img-url');
+  });
+
+  it('should render extraUserDetails in Popup', async () => {
+    renderFundCampaignPledge(link1);
+    await waitFor(() => {
+      expect(screen.getByTestId('searchPledger')).toBeInTheDocument();
+    });
+
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
+    expect(screen.getByText('John Doe2')).toBeInTheDocument();
+    expect(screen.queryByText('John Doe3')).toBeNull();
+    expect(screen.queryByText('John Doe4')).toBeNull();
+
+    const moreContainer = await screen.findAllByTestId('moreContainer');
+    userEvent.click(moreContainer[0]);
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe3')).toBeInTheDocument();
+      expect(screen.getByText('John Doe4')).toBeInTheDocument();
+      expect(screen.getByTestId('extra1')).toBeInTheDocument();
+      expect(screen.getByTestId('extra2')).toBeInTheDocument();
+      expect(screen.getByTestId('extraAvatar8')).toBeInTheDocument();
+      const image = screen.getByTestId('extraImage1');
+      expect(image).toBeInTheDocument();
+      expect(image).toHaveAttribute('src', 'img-url3');
+    });
+
+    userEvent.click(moreContainer[0]);
+    await waitFor(() => {
+      expect(screen.queryByText('John Doe3')).toBeNull();
+      expect(screen.queryByText('John Doe4')).toBeNull();
+    });
+  });
+
+  it('should render Progress Bar with Raised amount (CONSTANT) & Pledged Amount', async () => {
+    renderFundCampaignPledge(link1);
+    await waitFor(() => {
+      expect(screen.getByTestId('searchPledger')).toBeInTheDocument();
+    });
+    const raised = screen.getByText('Raised amount');
+    const pledged = screen.getByText('Pledged amount');
+    expect(pledged).toBeInTheDocument();
+    expect(raised).toBeInTheDocument();
+
+    userEvent.click(raised);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('progressBar')).toBeInTheDocument();
+      expect(screen.getByTestId('progressBar')).toHaveTextContent('$0');
+    });
+
+    userEvent.click(pledged);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('progressBar')).toBeInTheDocument();
+      expect(screen.getByTestId('progressBar')).toHaveTextContent('$300');
+    });
+  });
+
   it('Sort the Pledges list by Lowest Amount', async () => {
     renderFundCampaignPledge(link1);
 
-    const searchVolunteer = await screen.findByTestId('searchVolunteer');
-    expect(searchVolunteer).toBeInTheDocument();
+    const searchPledger = await screen.findByTestId('searchPledger');
+    expect(searchPledger).toBeInTheDocument();
 
     fireEvent.click(screen.getByTestId('filter'));
+    await waitFor(() => {
+      expect(screen.getByTestId('amount_ASC')).toBeInTheDocument();
+    });
     fireEvent.click(screen.getByTestId('amount_ASC'));
 
     await waitFor(() => {
@@ -219,10 +290,13 @@ describe('Testing Campaign Pledge Screen', () => {
   it('Sort the Pledges list by Highest Amount', async () => {
     renderFundCampaignPledge(link1);
 
-    const searchVolunteer = await screen.findByTestId('searchVolunteer');
-    expect(searchVolunteer).toBeInTheDocument();
+    const searchPledger = await screen.findByTestId('searchPledger');
+    expect(searchPledger).toBeInTheDocument();
 
     fireEvent.click(screen.getByTestId('filter'));
+    await waitFor(() => {
+      expect(screen.getByTestId('amount_DESC')).toBeInTheDocument();
+    });
     fireEvent.click(screen.getByTestId('amount_DESC'));
 
     await waitFor(() => {
@@ -238,10 +312,13 @@ describe('Testing Campaign Pledge Screen', () => {
   it('Sort the Pledges list by latest endDate', async () => {
     renderFundCampaignPledge(link1);
 
-    const searchVolunteer = await screen.findByTestId('searchVolunteer');
-    expect(searchVolunteer).toBeInTheDocument();
+    const searchPledger = await screen.findByTestId('searchPledger');
+    expect(searchPledger).toBeInTheDocument();
 
     fireEvent.click(screen.getByTestId('filter'));
+    await waitFor(() => {
+      expect(screen.getByTestId('endDate_DESC')).toBeInTheDocument();
+    });
     fireEvent.click(screen.getByTestId('endDate_DESC'));
 
     await waitFor(() => {
@@ -257,10 +334,13 @@ describe('Testing Campaign Pledge Screen', () => {
   it('Sort the Pledges list by earliest endDate', async () => {
     renderFundCampaignPledge(link1);
 
-    const searchVolunteer = await screen.findByTestId('searchVolunteer');
-    expect(searchVolunteer).toBeInTheDocument();
+    const searchPledger = await screen.findByTestId('searchPledger');
+    expect(searchPledger).toBeInTheDocument();
 
     fireEvent.click(screen.getByTestId('filter'));
+    await waitFor(() => {
+      expect(screen.getByTestId('endDate_ASC')).toBeInTheDocument();
+    });
     fireEvent.click(screen.getByTestId('endDate_ASC'));
 
     await waitFor(() => {
@@ -271,16 +351,5 @@ describe('Testing Campaign Pledge Screen', () => {
     await waitFor(() => {
       expect(screen.getAllByTestId('amountCell')[0]).toHaveTextContent('200');
     });
-  });
-
-  it('check if user image renders', async () => {
-    renderFundCampaignPledge(link1);
-    await waitFor(() => {
-      expect(screen.getByTestId('searchVolunteer')).toBeInTheDocument();
-    });
-
-    const image = await screen.findByAltText('volunteer');
-    expect(image).toBeInTheDocument();
-    expect(image).toHaveAttribute('src', 'img-url');
   });
 });
