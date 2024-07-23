@@ -576,6 +576,7 @@ const fundCampaignPledge = (): JSX.Element => {
         refetchPledge={refetchPledge}
         endDate={pledgeData?.getFundraisingCampaignById.endDate as Date}
         mode={pledgeModalMode}
+      />
       {/* Delete Pledge ModalState */}
       <PledgeDeleteModal
         isOpen={modalState[ModalState.DELETE]}
