@@ -8,6 +8,9 @@ import { currencyOptions } from 'utils/currency';
 import type { InterfaceCreateCampaign } from 'utils/interfaces';
 import styles from './OrganizationFundCampaign.module.css';
 
+/**
+ * InterfaceCampaignUpdateModal is an object containing the props for CampaignUpdateModal component
+ */
 interface InterfaceCampaignUpdateModal {
   campaignUpdateModalIsOpen: boolean;
   hideUpdateCampaignModal: () => void;
@@ -18,6 +21,17 @@ interface InterfaceCampaignUpdateModal {
   showDeleteCampaignModal: () => void;
 }
 
+/**
+ * CampaignUpdateModal component is used to update the campaign
+ * @param  campaignUpdateModalIsOpen - boolean value to check if the modal is open or not
+ * @param  hideUpdateCampaignModal - function to hide the modal
+ * @param  formState - object containing the form state
+ * @param  setFormState - function to set the form state
+ * @param  updateCampaignHandler - function to update the campaign
+ * @param  t - i18n function to translate the text
+ * @param  showDeleteCampaignModal - function to show the delete campaign modal
+ * @returns  returns the CampaignUpdateModal component
+ */
 const CampaignUpdateModal: React.FC<InterfaceCampaignUpdateModal> = ({
   campaignUpdateModalIsOpen,
   hideUpdateCampaignModal,

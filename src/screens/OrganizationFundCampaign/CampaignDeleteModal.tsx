@@ -2,6 +2,9 @@ import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import styles from './OrganizationFundCampaign.module.css';
 
+/**
+ * InterfaceDeleteCampaignModal is an object containing the props for CampaignDeleteModal component
+ */
 interface InterfaceDeleteCampaignModal {
   campaignDeleteModalIsOpen: boolean;
   hideDeleteCampaignModal: () => void;
@@ -9,6 +12,16 @@ interface InterfaceDeleteCampaignModal {
   t: (key: string) => string;
   tCommon: (key: string) => string;
 }
+
+/**
+ * CampaignDeleteModal component is used to delete the campaign
+ * @param  campaignDeleteModalIsOpen - boolean value to check if the modal is open or not
+ * @param  hideDeleteCampaignModal - function to hide the modal
+ * @param  deleteCampaignHandler - function to delete the campaign
+ * @param  t - i18n function to translate the text
+ * @param  tCommon - i18n function to translate the common text
+ * @returns  returns the CampaignDeleteModal component
+ */
 const CampaignDeleteModal: React.FC<InterfaceDeleteCampaignModal> = ({
   campaignDeleteModalIsOpen,
   hideDeleteCampaignModal,

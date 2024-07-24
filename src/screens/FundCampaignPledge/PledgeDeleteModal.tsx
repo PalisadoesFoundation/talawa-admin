@@ -7,12 +7,25 @@ import { DELETE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
 import type { InterfacePledgeInfo } from 'utils/interfaces';
 import { toast } from 'react-toastify';
 
+/**
+ * Props for the PledgeDeleteModal component.
+ */
 export interface InterfaceDeletePledgeModal {
   isOpen: boolean;
   hide: () => void;
   pledge: InterfacePledgeInfo | null;
   refetchPledge: () => void;
 }
+
+/**
+ * Modal component for confirming the deletion of a pledge.
+ *
+ * Allows users to confirm or cancel the deletion of a pledge.
+ * Triggers a mutation to delete the pledge and refetches the pledge data upon success.
+ *
+ * @param props - The props for the component.
+ * @returns  The rendered component.
+ */
 const PledgeDeleteModal: React.FC<InterfaceDeletePledgeModal> = ({
   isOpen,
   hide,
@@ -26,6 +39,12 @@ const PledgeDeleteModal: React.FC<InterfaceDeletePledgeModal> = ({
 
   const [deletePledge] = useMutation(DELETE_PLEDGE);
 
+  /**
+   * Handler for deleting the pledge.
+   *
+   * Executes the delete mutation and refetches the pledge data.
+   * Shows a success or error toast based on the result of the mutation.
+   */
   const deleteHandler = async (): Promise<void> => {
     try {
       await deletePledge({
@@ -74,4 +93,5 @@ const PledgeDeleteModal: React.FC<InterfaceDeletePledgeModal> = ({
     </>
   );
 };
+
 export default PledgeDeleteModal;

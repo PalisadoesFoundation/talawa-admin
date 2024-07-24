@@ -8,6 +8,9 @@ import type { Dayjs } from 'dayjs';
 import styles from './OrganizationActionItems.module.css';
 import type { InterfaceMemberInfo } from 'utils/interfaces';
 
+/**
+ * InterfaceFormStateType is an object containing the form state
+ */
 interface InterfaceFormStateType {
   assigneeId: string;
   assignee: string;
@@ -17,6 +20,21 @@ interface InterfaceFormStateType {
   postCompletionNotes: string;
 }
 
+/**
+ * ActionItemUpdateModal component is used to update the action item details like assignee, preCompletionNotes, dueDate, completionDate
+ * @param  actionItemUpdateModalIsOpen - boolean value to check if the modal is open or not
+ * @param  hideUpdateModal - function to hide the modal
+ * @param  formState - object containing the form state
+ * @param  setFormState - function to set the form state
+ * @param  updateActionItemHandler - function to update the action item
+ * @param  t - i18n function to translate the text
+ * @param  membersData - array of members data
+ * @param  dueDate - due date of the action item
+ * @param  setDueDate - function to set the due date
+ * @param  completionDate - completion date of the action item
+ * @param  setCompletionDate - function to set the completion date
+ * @returns  returns the ActionItemUpdateModal component
+ */
 interface InterfaceActionItemCreateModalProps {
   actionItemUpdateModalIsOpen: boolean;
   hideUpdateModal: () => void;

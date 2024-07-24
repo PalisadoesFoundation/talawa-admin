@@ -22,6 +22,12 @@ import OtherSettings from 'components/UserProfileSettings/OtherSettings';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 
+/**
+ * The Settings component allows users to view and update their profile settings.
+ * It includes functionality to handle image uploads, reset changes, and save updated user details.
+ *
+ * @returns The Settings component.
+ */
 export default function settings(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'settings',
@@ -30,6 +36,10 @@ export default function settings(): JSX.Element {
 
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
 
+  /**
+   * Handler to adjust sidebar visibility based on window width.
+   * This function is invoked on window resize and when the component mounts.
+   */
   const handleResize = (): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer(!hideDrawer);
@@ -65,8 +75,21 @@ export default function settings(): JSX.Element {
     image: '',
   });
 
+  /**
+   * Ref to store the original image URL for comparison during updates.
+   */
   const originalImageState = React.useRef<string>('');
+
+  /**
+   * Ref to access the file input element for image uploads.
+   */
   const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+  /**
+   * Handles the update of user details.
+   * This function sends a mutation request to update the user details
+   * and reloads the page on success.
+   */
   const handleUpdateUserDetails = async (): Promise<void> => {
     try {
       let updatedUserDetails = { ...userDetails };
@@ -91,6 +114,12 @@ export default function settings(): JSX.Element {
     }
   };
 
+  /**
+   * Handles the change of a specific field in the user details state.
+   *
+   * @param fieldName - The name of the field to be updated.
+   * @param value - The new value for the field.
+   */
   const handleFieldChange = (fieldName: string, value: string): void => {
     setUserDetails((prevState) => ({
       ...prevState,
@@ -98,12 +127,18 @@ export default function settings(): JSX.Element {
     }));
   };
 
+  /**
+   * Triggers the file input click event to open the file picker dialog.
+   */
   const handleImageUpload = (): void => {
     if (fileInputRef.current) {
       (fileInputRef.current as HTMLInputElement).click();
     }
   };
 
+  /**
+   * Resets the user details to the values fetched from the server.
+   */
   const handleResetChanges = (): void => {
     /* istanbul ignore next */
     if (data) {

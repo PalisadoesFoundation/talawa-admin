@@ -4,6 +4,9 @@ import { Button, Form, Modal } from 'react-bootstrap';
 import type { InterfaceCreateFund } from 'utils/interfaces';
 import styles from './OrganizationFunds.module.css';
 
+/**
+ * This interface defines the props for the FundUpdateModal component.
+ */
 interface InterfaceFundUpdateModal {
   fundUpdateModalIsOpen: boolean;
   hideUpdateModal: () => void;
@@ -19,7 +22,24 @@ interface InterfaceFundUpdateModal {
   setIsDefault: (state: React.SetStateAction<boolean>) => void;
   t: (key: string) => string;
 }
-
+/**
+ * FundUpdateModal component allows users to update an existing fund.
+ * It displays a modal with a form to modify the fund details.
+ *
+ * @param fundUpdateModalIsOpen - Controls whether the modal is open or closed.
+ * @param hideUpdateModal - Function to hide the modal.
+ * @param formState - The current state of the form used to update a fund.
+ * @param setFormState - Function to update the state of the form.
+ * @param updateFundHandler - Handler function for form submission.
+ * @param taxDeductible - Indicates whether the fund is tax deductible.
+ * @param setTaxDeductible - Function to set the tax deductible state.
+ * @param isArchived - Indicates whether the fund is archived.
+ * @param deleteFundHandler - Handler function to delete the fund.
+ * @param setIsArchived - Function to set the archived state.
+ * @param isDefault - Indicates whether the fund is the default fund.
+ * @param setIsDefault - Function to set the default state.
+ * @param t - Translation function to get the translated text.
+ */
 const FundUpdateModal: React.FC<InterfaceFundUpdateModal> = ({
   fundUpdateModalIsOpen,
   hideUpdateModal,

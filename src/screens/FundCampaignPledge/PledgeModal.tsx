@@ -25,6 +25,9 @@ import {
 
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 
+/**
+ * Props for the PledgeModal component.
+ */
 export interface InterfacePledgeModal {
   isOpen: boolean;
   hide: () => void;
@@ -35,6 +38,16 @@ export interface InterfacePledgeModal {
   endDate: Date;
   mode: 'create' | 'edit';
 }
+
+/**
+ * Modal component for creating or editing a pledge.
+ *
+ * This component provides a form for creating a new pledge or editing an existing one.
+ * It includes fields for pledge amount, currency, start and end dates, and selected volunteers.
+ *
+ * @param props - The props for the component.
+ * @returns The rendered component.
+ */
 const PledgeModal: React.FC<InterfacePledgeModal> = ({
   isOpen,
   hide,
@@ -57,6 +70,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     pledgeEndDate: new Date(pledge?.endDate ?? new Date()),
     pledgeStartDate: new Date(pledge?.startDate ?? new Date()),
   });
+
   const [volunteers, setVolunteers] = useState<InterfacePledgeVolunteer[]>([]);
   const [updatePledge] = useMutation(UPDATE_PLEDGE);
   const [createPledge] = useMutation(CREATE_PlEDGE);
@@ -90,6 +104,14 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     pledgeEndDate,
   } = formState;
 
+  /**
+   * Handler for updating an existing pledge.
+   *
+   * Executes the update mutation if any changes are detected in the form fields.
+   * Shows a success or error toast based on the result of the mutation.
+   *
+   * @param  e - The form submission event.
+   */
   /*istanbul ignore next*/
   const updatePledgeHandler = useCallback(
     async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
@@ -100,7 +122,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
       const updatedFields: {
         [key: string]: number | string | string[] | undefined;
       } = {};
-      // checks if there are changes to the pledge and adds them to the updatedFields object
+      // Checks if there are changes to the pledge and adds them to the updatedFields object
       if (pledgeAmount !== pledge?.amount) {
         updatedFields.amount = pledgeAmount;
       }
@@ -133,7 +155,15 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     [formState, pledge],
   );
 
-  // Function to create a new pledge
+  /**
+   * Handler for creating a new pledge.
+   *
+   * Executes the create mutation with the form data.
+   * Shows a success or error toast based on the result of the mutation.
+   * Resets the form state upon success.
+   *
+   * @param  e - The form submission event.
+   */
   const createPledgeHandler = useCallback(
     async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
       try {

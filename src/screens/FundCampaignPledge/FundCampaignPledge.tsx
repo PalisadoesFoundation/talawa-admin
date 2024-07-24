@@ -21,11 +21,22 @@ import type {
   InterfaceQueryFundCampaignsPledges,
 } from 'utils/interfaces';
 
+/**
+ * Enum representing the different modals used in the component.
+ */
 enum Modal {
   SAME = 'same',
   DELETE = 'delete',
 }
 
+/**
+ * Component to manage and display pledges for a specific fundraising campaign.
+ *
+ * Handles pledge display, sorting, searching, and modals for editing and deleting pledges.
+ * Fetches data from GraphQL and provides user interactions for managing pledges.
+ *
+ * @returns JSX.Element - The rendered component.
+ */
 const fundCampaignPledge = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'pledges',
@@ -96,14 +107,30 @@ const fundCampaignPledge = (): JSX.Element => {
     refetchPledge();
   }, [sortBy, refetchPledge]);
 
+  /**
+   * Opens the specified modal.
+   *
+   * @param modal - The modal to open.
+   */
   const openModal = (modal: Modal): void => {
     setModalState((prevState) => ({ ...prevState, [modal]: true }));
   };
 
+  /**
+   * Closes the specified modal.
+   *
+   * @param modal - The modal to close.
+   */
   const closeModal = (modal: Modal): void => {
     setModalState((prevState) => ({ ...prevState, [modal]: false }));
   };
 
+  /**
+   * Handles opening the pledge modal for editing or creating a pledge.
+   *
+   * @param pledge - The pledge to edit, or null if creating a new pledge.
+   * @param mode - The mode of the modal ('edit' or 'create').
+   */
   const handleOpenModal = useCallback(
     (pledge: InterfacePledgeInfo | null, mode: 'edit' | 'create'): void => {
       setPledge(pledge);
@@ -113,6 +140,11 @@ const fundCampaignPledge = (): JSX.Element => {
     [openModal],
   );
 
+  /**
+   * Handles opening the delete modal for a specific pledge.
+   *
+   * @param pledge - The pledge to delete.
+   */
   const handleDeleteClick = useCallback(
     (pledge: InterfacePledgeInfo): void => {
       setPledge(pledge);

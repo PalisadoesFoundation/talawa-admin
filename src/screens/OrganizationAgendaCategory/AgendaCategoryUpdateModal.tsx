@@ -4,12 +4,18 @@ import type { ChangeEvent } from 'react';
 
 import styles from './OrganizationAgendaCategory.module.css';
 
+/**
+ * InterfaceFormStateType is an object containing the form state
+ */
 interface InterfaceFormStateType {
   name: string;
   description: string;
   createdBy: string;
 }
 
+/**
+ * InterfaceAgendaCategoryUpdateModalProps is an object containing the props for AgendaCategoryUpdateModal component
+ */
 interface InterfaceAgendaCategoryUpdateModalProps {
   agendaCategoryUpdateModalIsOpen: boolean;
   hideUpdateModal: () => void;
@@ -21,6 +27,16 @@ interface InterfaceAgendaCategoryUpdateModalProps {
   t: (key: string) => string;
 }
 
+/**
+ * AgendaCategoryUpdateModal component is used to update the agenda category details like name, description
+ * @param  agendaCategoryUpdateModalIsOpen - boolean value to check if the modal is open or not
+ * @param  hideUpdateModal - function to hide the modal
+ * @param  formState - object containing the form state
+ * @param  setFormState - function to set the form state
+ * @param  updateAgendaCategoryHandler - function to update the agenda category
+ * @param  t - i18n function to translate the text
+ * @returns  returns the AgendaCategoryUpdateModal component
+ */
 const AgendaCategoryUpdateModal: React.FC<
   InterfaceAgendaCategoryUpdateModalProps
 > = ({

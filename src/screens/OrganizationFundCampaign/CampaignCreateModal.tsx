@@ -8,6 +8,9 @@ import { currencyOptions } from 'utils/currency';
 import type { InterfaceCreateCampaign } from 'utils/interfaces';
 import styles from './OrganizationFundCampaign.module.css';
 
+/**
+ * InterfaceCampaignCreateModal is an object containing the props for CampaignCreateModal component
+ */
 interface InterfaceCampaignCreateModal {
   campaignCreateModalIsOpen: boolean;
   hideCreateCampaignModal: () => void;
@@ -17,6 +20,16 @@ interface InterfaceCampaignCreateModal {
   t: (key: string) => string;
 }
 
+/**
+ * CampaignCreateModal component is used to create the campaign
+ * @param  campaignCreateModalIsOpen - boolean value to check if the modal is open or not
+ * @param  hideCreateCampaignModal - function to hide the modal
+ * @param  formState - object containing the form state
+ * @param  setFormState - function to set the form state
+ * @param  createCampaignHandler - function to create the campaign
+ * @param  t - i18n function to translate the text
+ * @returns  returns the CampaignCreateModal component
+ */
 const CampaignCreateModal: React.FC<InterfaceCampaignCreateModal> = ({
   campaignCreateModalIsOpen,
   hideCreateCampaignModal,

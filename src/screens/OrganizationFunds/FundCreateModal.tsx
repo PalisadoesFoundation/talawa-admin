@@ -4,6 +4,9 @@ import { Button, Form, Modal } from 'react-bootstrap';
 import type { InterfaceCreateFund } from 'utils/interfaces';
 import styles from './OrganizationFunds.module.css';
 
+/**
+ * This interface defines the props for the FundCreateModal component.
+ */
 interface InterfaceFundCreateModal {
   fundCreateModalIsOpen: boolean;
   hideCreateModal: () => void;
@@ -17,6 +20,21 @@ interface InterfaceFundCreateModal {
   t: (key: string) => string;
 }
 
+/**
+ * FundCreateModal component allows users to create a new fund.
+ * It displays a modal with a form to enter the fund details.
+ *
+ * @param fundCreateModalIsOpen - Controls whether the modal is open or closed.
+ * @param hideCreateModal - Function to hide the modal.
+ * @param formState - The current state of the form used to create a fund.
+ * @param setFormState - Function to update the state of the form.
+ * @param createFundHandler - Handler function for form submission.
+ * @param taxDeductible - Indicates whether the fund is tax deductible.
+ * @param setTaxDeductible - Function to set the tax deductible state.
+ * @param isDefault - Indicates whether the fund is the default fund.
+ * @param setIsDefault - Function to set the default state.
+ * @param t - Translation function to get the translated text.
+ */
 const FundCreateModal: React.FC<InterfaceFundCreateModal> = ({
   fundCreateModalIsOpen,
   hideCreateModal,

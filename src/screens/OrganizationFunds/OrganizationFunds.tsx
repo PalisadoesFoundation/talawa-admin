@@ -51,6 +51,12 @@ const StyledTableRow = styled(TableRow)(() => ({
   },
 }));
 
+/**
+ * This component handles displaying and managing organization funds.
+ * It allows users to create, update, delete, and filter funds.
+ *
+ * @returns A JSX.Element that renders the organization funds page.
+ */
 const organizationFunds = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'funds',
@@ -73,6 +79,9 @@ const organizationFunds = (): JSX.Element => {
     fundRef: '',
   });
 
+  /**
+   * Fetches the list of funds by organization.
+   */
   const {
     data: fundData,
     loading: fundLoading,
@@ -92,6 +101,10 @@ const organizationFunds = (): JSX.Element => {
   });
 
   const [fullName, setFullName] = useState('');
+
+  /**
+   * Handles the search functionality by refetching funds based on the filter.
+   */
   const handleSearch = (): void => {
     refetchFunds({ organizationId: currentUrl, filter: fullName });
   };
@@ -100,21 +113,46 @@ const organizationFunds = (): JSX.Element => {
   const [updateFund] = useMutation(UPDATE_FUND_MUTATION);
   const [deleteFund] = useMutation(REMOVE_FUND_MUTATION);
 
+  /**
+   * Toggles the visibility of the create fund modal.
+   */
   const showCreateModal = (): void => {
     setFundCreateModalIsOpen(!fundCreateModalIsOpen);
   };
+
+  /**
+   * Hides the create fund modal.
+   */
   const hideCreateModal = (): void => {
     setFundCreateModalIsOpen(!fundCreateModalIsOpen);
   };
+
+  /**
+   * Toggles the visibility of the update fund modal.
+   */
   const showUpdateModal = (): void => {
     setFundUpdateModalIsOpen(!fundUpdateModalIsOpen);
   };
+
+  /**
+   * Hides the update fund modal.
+   */
   const hideUpdateModal = (): void => {
     setFundUpdateModalIsOpen(!fundUpdateModalIsOpen);
   };
+
+  /**
+   * Toggles the visibility of the delete fund modal.
+   */
   const toggleDeleteModal = (): void => {
     setFundUpdateModalIsOpen(!fundUpdateModalIsOpen);
   };
+
+  /**
+   * Handles the edit action by setting the form state and showing the update modal.
+   *
+   * @param fund - The fund information to be edited.
+   */
   const handleEditClick = (fund: InterfaceFundInfo): void => {
     setFormState({
       fundName: fund.name,
@@ -126,6 +164,12 @@ const organizationFunds = (): JSX.Element => {
     setFund(fund);
     showUpdateModal();
   };
+
+  /**
+   * Handles the creation of a new fund.
+   *
+   * @param e - The form submission event.
+   */
   const createFundHandler = async (
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
@@ -156,6 +200,12 @@ const organizationFunds = (): JSX.Element => {
       }
     }
   };
+
+  /**
+   * Handles the updating of an existing fund.
+   *
+   * @param e - The form submission event.
+   */
   const updateFundHandler = async (
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
@@ -198,6 +248,10 @@ const organizationFunds = (): JSX.Element => {
       }
     }
   };
+
+  /**
+   * Handles the deletion of a fund.
+   */
   const deleteFundHandler = async (): Promise<void> => {
     try {
       await deleteFund({
@@ -216,6 +270,11 @@ const organizationFunds = (): JSX.Element => {
     }
   };
 
+  /**
+   * Handles clicking on a fund to navigate to its campaign page.
+   *
+   * @param fundId - The ID of the fund to navigate to.
+   */
   const handleClick = (fundId: String) => {
     navigate(`/orgfundcampaign/${currentUrl}/${fundId}`);
   };
