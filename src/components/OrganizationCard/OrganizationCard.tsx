@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './OrganizationCard.module.css';
 
 interface InterfaceOrganizationCardProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   key: any;
   image: string;
   id: string;
@@ -10,6 +11,16 @@ interface InterfaceOrganizationCardProps {
   firstName: string;
 }
 
+/**
+ * Component to display an organization's card with its image and owner details.
+ *
+ * @param image - URL of the organization's image.
+ * @param id - Unique identifier for the organization.
+ * @param name - Name of the organization.
+ * @param lastName - Last name of the owner's name.
+ * @param firstName - First name of the owner's name.
+ * @returns JSX element representing the organization card.
+ */
 function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
   const uri = '/superorghome/i=' + props.id;
 

@@ -15,6 +15,7 @@ import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfacePostForm } from 'utils/interfaces';
 import styles from './OrgPostCard.module.css';
+
 interface InterfaceOrgPostCardProps {
   key: string;
   id: string;
@@ -25,6 +26,39 @@ interface InterfaceOrgPostCardProps {
   postVideo: string | null;
   pinned: boolean;
 }
+
+/**
+ * The `orgPostCard` component represents a card that displays information about a post
+ * in an organization. It shows the post's title, information, author, and optionally,
+ * a photo or video. Users can interact with the card to view more details, edit the post,
+ * delete the post, or pin/unpin the post. The component uses Apollo Client for GraphQL
+ * mutations, React Bootstrap for styling, and React hooks for state management.
+ *
+ * @param props - The properties passed to the component.
+ * @param key - A unique key for the component.
+ * @param id - The ID of the post.
+ * @param postTitle - The title of the post.
+ * @param postInfo - The information or description of the post.
+ * @param postAuthor - The author of the post.
+ * @param postPhoto - The URL of the post's photo (if any).
+ * @param postVideo - The URL of the post's video (if any).
+ * @param pinned - A boolean indicating whether the post is pinned.
+ * @returns A JSX element representing the post card.
+ *
+ * @example
+ * ```tsx
+ * <orgPostCard
+ *   key="1"
+ *   id="post1"
+ *   postTitle="Post Title"
+ *   postInfo="Post Information"
+ *   postAuthor="Author Name"
+ *   postPhoto="https://example.com/photo.jpg"
+ *   postVideo="https://example.com/video.mp4"
+ *   pinned={true}
+ * />
+ * ```
+ */
 export default function orgPostCard(
   props: InterfaceOrgPostCardProps,
 ): JSX.Element {
@@ -45,6 +79,14 @@ export default function orgPostCard(
   const [playing, setPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [toggle] = useMutation(TOGGLE_PINNED_POST);
+
+  /**
+   * Toggles the pinned status of a post.
+   *
+   * @param id - The ID of the post.
+   * @param pinned - The current pinned status of the post.
+   * @returns A promise that resolves when the pin status is toggled.
+   */
   const togglePostPin = async (id: string, pinned: boolean): Promise<void> => {
     try {
       const { data } = await toggle({

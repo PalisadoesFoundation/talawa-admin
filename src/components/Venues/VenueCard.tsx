@@ -13,6 +13,26 @@ interface InterfaceVenueCardProps {
   handleDelete: (venueId: string) => void;
 }
 
+/**
+ * Represents a card component displaying venue information.
+ *
+ * @param  props - The properties for the component.
+ * @param  venueItem - The venue item to be displayed.
+ * @param  index - The index of the venue item in the list.
+ * @param  showEditVenueModal - Function to show the edit venue modal, passing the current venue item.
+ * @param  handleDelete - Function to handle the deletion of the venue, passing the venue ID.
+ * @returns  The `VenueCard` component.
+ *
+ * @example
+ * ```tsx
+ * <VenueCard
+ *   venueItem={venue}
+ *   index={0}
+ *   showEditVenueModal={handleShowEditVenueModal}
+ *   handleDelete={handleDeleteVenue}
+ * />
+ * ```
+ */
 const VenueCard = ({
   venueItem,
   index,
@@ -20,6 +40,7 @@ const VenueCard = ({
   handleDelete,
 }: InterfaceVenueCardProps): JSX.Element => {
   const { t: tCommon } = useTranslation('common');
+
   return (
     <div
       className="col-xl-4 col-lg-4 col-md-6"

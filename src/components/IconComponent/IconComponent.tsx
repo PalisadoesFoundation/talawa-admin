@@ -26,7 +26,12 @@ export interface InterfaceIconComponent {
   height?: string;
   width?: string;
 }
-
+/**
+ * Renders an icon based on the provided name.
+ *
+ * @param props - Contains the name of the icon and optional styles (fill, height, width).
+ * @returns JSX element representing the icon.
+ */
 const iconComponent = (props: InterfaceIconComponent): JSX.Element => {
   switch (props.name) {
     case 'My Organizations':

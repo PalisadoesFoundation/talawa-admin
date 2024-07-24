@@ -14,12 +14,24 @@ import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import styles from './UsersTableItem.module.css';
+
+/**
+ * Props for the `UsersTableItem` component.
+ */
 type Props = {
   user: InterfaceQueryUserListItem;
   index: number;
   loggedInUserId: string;
   resetAndRefetch: () => void;
 };
+
+/**
+ * A component that displays a table row for a user with their joined and blocked organizations.
+ * Allows searching, viewing, and managing user roles within organizations.
+ *
+ * @param props - The props for the component.
+ * @returns A JSX element displaying user details and modals for managing organizations.
+ */
 const UsersTableItem = (props: Props): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'users' });
   const { t: tCommon } = useTranslation('common');
@@ -47,6 +59,11 @@ const UsersTableItem = (props: Props): JSX.Element => {
   const [removeUser] = useMutation(REMOVE_MEMBER_MUTATION);
   const [updateUserInOrgType] = useMutation(UPDATE_USER_ROLE_IN_ORG_MUTATION);
   const navigate = useNavigate();
+
+  /**
+   * Handles user removal from an organization.
+   * Confirms the removal via a modal and performs the mutation if confirmed.
+   */
   const confirmRemoveUser = async (): Promise<void> => {
     try {
       const { data } = await removeUser({
@@ -63,6 +80,11 @@ const UsersTableItem = (props: Props): JSX.Element => {
       errorHandler(t, error);
     }
   };
+
+  /**
+   * Handles the change of user role in an organization.
+   * @param e - The event object from the form select change.
+   */
   const changeRoleInOrg = async (
     e: React.ChangeEvent<HTMLSelectElement>,
   ): Promise<void> => {
@@ -84,14 +106,28 @@ const UsersTableItem = (props: Props): JSX.Element => {
       errorHandler(t, error);
     }
   };
+
+  /**
+   * Navigates to the organization dashboard.
+   * @param _id - The ID of the organization to navigate to.
+   */
   function goToOrg(_id: string): void {
     const url = '/orgdash/' + _id;
     window.location.replace(url);
     navigate(url);
   }
+
+  /**
+   * Displays a toast message indicating that the profile page is coming soon.
+   */
   function handleCreator(): void {
     toast.success('Profile Page Coming Soon !');
   }
+
+  /**
+   * Searches for joined organizations by name.
+   * @param value - The search input value.
+   */
   const searchJoinedOrgs = (value: string): void => {
     setSearchByNameJoinedOrgs(value);
     if (value == '') {
@@ -103,6 +139,11 @@ const UsersTableItem = (props: Props): JSX.Element => {
       setJoinedOrgs(filteredOrgs);
     }
   };
+
+  /**
+   * Searches for organizations that have blocked the user by name.
+   * @param value - The search input value.
+   */
   const searchOrgsBlockedBy = (value: string): void => {
     setSearchByNameOrgsBlockedBy(value);
     if (value == '') {
@@ -114,6 +155,11 @@ const UsersTableItem = (props: Props): JSX.Element => {
       setOrgsBlockedBy(filteredOrgs);
     }
   };
+
+  /**
+   * Handles the Enter key press event for searching joined organizations.
+   * @param e - The keyboard event object.
+   */
   const handleSearchJoinedOrgs = (
     e: React.KeyboardEvent<HTMLInputElement>,
   ): void => {
@@ -122,6 +168,11 @@ const UsersTableItem = (props: Props): JSX.Element => {
       searchJoinedOrgs(value);
     }
   };
+
+  /**
+   * Handles the Enter key press event for searching organizations that blocked the user.
+   * @param e - The keyboard event object.
+   */
   const handleSearchByOrgsBlockedBy = (
     e: React.KeyboardEvent<HTMLInputElement>,
   ): void => {
@@ -130,18 +181,31 @@ const UsersTableItem = (props: Props): JSX.Element => {
       searchOrgsBlockedBy(value);
     }
   };
+
+  /**
+   * Handles the search button click event for joined organizations.
+   */
   const handleSearchButtonClickJoinedOrgs = (): void => {
     const inputValue =
       (document.getElementById('orgname-joined-orgs') as HTMLInputElement)
         ?.value || '';
     searchJoinedOrgs(inputValue);
   };
+
+  /**
+   * Handles the search button click event for organizations that blocked the user.
+   */
   const handleSearchButtonClickOrgsBlockedBy = (): void => {
     const inputValue =
       (document.getElementById('orgname-blocked-by') as HTMLInputElement)
         ?.value || '';
     searchOrgsBlockedBy(inputValue);
   };
+
+  /**
+   * Handles the hiding of the remove user modal.
+   * Restores the visibility of the joined or blocked organizations modal based on user action.
+   */
   function onHideRemoveUserModal(): void {
     setShowRemoveUserModal(false);
     if (removeUserProps.setShowOnCancel == 'JOINED') {

@@ -8,7 +8,14 @@ type PropType = {
   eventId: string;
 };
 
-export const CheckInWrapper = (props: PropType): JSX.Element => {
+/**
+ * Wrapper component that displays a button to open the CheckInModal.
+ *
+ * @param eventId - The ID of the event for which check-in management is being handled.
+ *
+ * @returns JSX.Element - The rendered CheckInWrapper component.
+ */
+export const CheckInWrapper = ({ eventId }: PropType): JSX.Element => {
   const [showModal, setShowModal] = useState(false);
 
   return (
@@ -33,7 +40,7 @@ export const CheckInWrapper = (props: PropType): JSX.Element => {
         <CheckInModal
           show={showModal}
           handleClose={(): void => setShowModal(false)}
-          eventId={props.eventId}
+          eventId={eventId}
         />
       )}
     </>

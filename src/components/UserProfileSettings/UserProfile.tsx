@@ -12,6 +12,17 @@ interface InterfaceUserProfile {
   image: string;
 }
 
+/**
+ * UserProfile component displays user profile details including an avatar or profile image, name, email, and join date.
+ * It also provides a button to copy the profile link.
+ *
+ * @param  props - The properties to be passed into the component.
+ * @param firstName - The first name of the user.
+ * @param lastName - The last name of the user.
+ * @param email - The email address of the user.
+ * @param image - The URL of the user's profile image.
+ * @returns The JSX element for the user profile card.
+ */
 const UserProfile: React.FC<InterfaceUserProfile> = ({
   firstName,
   lastName,
@@ -22,6 +33,7 @@ const UserProfile: React.FC<InterfaceUserProfile> = ({
     keyPrefix: 'settings',
   });
   const { t: tCommon } = useTranslation('common');
+
   return (
     <>
       <Card border="0" className="rounded-4 mb-4">
