@@ -50,6 +50,7 @@
     "react-router-dom": "^6.25.1",
     "react-scripts": "5.0.1",
     "react-toastify": "^9.0.3",
+    "react-tooltip": "^5.27.1",
     "redux": "^4.1.1",
     "redux-thunk": "^2.3.0",
     "sanitize-html": "^2.13.0",
