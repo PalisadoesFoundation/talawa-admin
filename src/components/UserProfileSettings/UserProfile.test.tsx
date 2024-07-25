@@ -11,6 +11,7 @@ describe('UserProfile component', () => {
     const userDetails = {
       firstName: 'Christopher',
       lastName: 'Doe',
+      createdAt: '2023-04-13T04:53:17.742+00:00',
       email: 'john.doe@example.com',
       image: 'profile-image-url',
     };
@@ -31,7 +32,7 @@ describe('UserProfile component', () => {
     expect(profileImage).toBeInTheDocument();
     expect(profileImage).toHaveAttribute('src', 'profile-image-url');
 
-    expect(getByText('Joined 1st May, 2021')).toBeInTheDocument();
+    expect(getByText('Joined 13 April 2023')).toBeInTheDocument();
 
     expect(getByText('Copy Profile Link')).toBeInTheDocument();
   });

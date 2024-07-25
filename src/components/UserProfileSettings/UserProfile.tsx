@@ -9,13 +9,25 @@ import { Tooltip as ReactTooltip } from 'react-tooltip';
 interface InterfaceUserProfile {
   firstName: string;
   lastName: string;
+  createdAt: string;
   email: string;
   image: string;
 }
+const joinedDate = (param: string): string => {
+  const date = new Date(param);
+  if (date?.toDateString() === 'Invalid Date') {
+    return 'Unavailable';
+  }
+  const day = date.getDate();
+  const month = date.toLocaleString('default', { month: 'long' });
+  const year = date.getFullYear();
+  return `${day} ${month} ${year}`;
+};
 
 const UserProfile: React.FC<InterfaceUserProfile> = ({
   firstName,
   lastName,
+  createdAt,
   email,
   image,
 }): JSX.Element => {
@@ -65,7 +77,7 @@ const UserProfile: React.FC<InterfaceUserProfile> = ({
               <span className="d-flex">
                 <CalendarMonthOutlinedIcon />
                 <span className="d-flex align-end">
-                  {tCommon('joined')} 1st May, 2021
+                  {tCommon('joined')} {joinedDate(createdAt)}
                 </span>
               </span>
             </div>
