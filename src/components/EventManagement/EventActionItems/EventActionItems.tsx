@@ -546,12 +546,12 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
         <div className="datatable">
           <DataGrid
             disableColumnMenu
-            columnBuffer={6}
+            columnBufferPx={6}
             hideFooter={true}
             className={`${styles.datagrid}`}
             getRowId={(row) => row._id}
-            components={{
-              NoRowsOverlay: () => (
+            slots={{
+              noRowsOverlay: () => (
                 <Stack
                   height="100%"
                   alignItems="center"
