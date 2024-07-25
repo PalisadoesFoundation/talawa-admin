@@ -8,13 +8,25 @@ import styles from './UserProfileSettings.module.css';
 interface InterfaceUserProfile {
   firstName: string;
   lastName: string;
+  createdAt: string;
   email: string;
   image: string;
 }
+const prettyDate = (param: string): string => {
+  const date = new Date(param);
+  if (date?.toDateString() === 'Invalid Date') {
+    return 'Unavailable';
+  }
+  const day = date.getDate();
+  const month = date.toLocaleString('default', { month: 'long' });
+  const year = date.getFullYear();
+  return `${day} ${month} ${year}`;
+};
 
 const UserProfile: React.FC<InterfaceUserProfile> = ({
   firstName,
   lastName,
+  createdAt,
   email,
   image,
 }): JSX.Element => {
@@ -49,7 +61,7 @@ const UserProfile: React.FC<InterfaceUserProfile> = ({
               <span className="d-flex">
                 <CalendarMonthOutlinedIcon />
                 <span className="d-flex align-end">
-                  {tCommon('joined')} 1st May, 2021
+                  {tCommon('joined')} {prettyDate(createdAt)}
                 </span>
               </span>
             </div>

@@ -8,6 +8,7 @@ export const CHECK_AUTH = gql`
       _id
       firstName
       lastName
+      createdAt
       image
       email
       birthDate
