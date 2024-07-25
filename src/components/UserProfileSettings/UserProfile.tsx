@@ -58,7 +58,7 @@ const UserProfile: React.FC<InterfaceUserProfile> = ({
                 data-tooltip-content={email}
               >
                 {email.length > 10
-                  ? email.slice(0, 3) + '...' + email.slice(email.indexOf('@'))
+                  ? email.slice(0, 4) + '..' + email.slice(email.indexOf('@'))
                   : email}
               </span>
               <ReactTooltip id="email" />
