@@ -9,7 +9,7 @@ import i18nForTest from 'utils/i18nForTest';
 describe('UserProfile component', () => {
   test('renders user profile details correctly', () => {
     const userDetails = {
-      firstName: 'John',
+      firstName: 'Christopher',
       lastName: 'Doe',
       email: 'john.doe@example.com',
       image: 'profile-image-url',
@@ -24,8 +24,8 @@ describe('UserProfile component', () => {
       </MockedProvider>,
     );
 
-    expect(getByText('John')).toBeInTheDocument();
-    expect(getByText('john.doe@example.com')).toBeInTheDocument();
+    expect(getByText('Chris..')).toBeInTheDocument();
+    expect(getByText('john..@example.com')).toBeInTheDocument();
 
     const profileImage = getByAltText('profile picture');
     expect(profileImage).toBeInTheDocument();
