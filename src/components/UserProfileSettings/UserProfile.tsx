@@ -48,7 +48,7 @@ const UserProfile: React.FC<InterfaceUserProfile> = ({
                 data-tooltip-content={`${firstName} ${lastName}`}
               >
                 {firstName.length > 10
-                  ? firstName.slice(0, 4) + '...'
+                  ? firstName.slice(0, 5) + '..'
                   : firstName}
               </span>
               <ReactTooltip id="name" />
