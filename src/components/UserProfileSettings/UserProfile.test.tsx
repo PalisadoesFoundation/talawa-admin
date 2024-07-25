@@ -24,8 +24,8 @@ describe('UserProfile component', () => {
       </MockedProvider>,
     );
 
-    expect(getByText('Chri...')).toBeInTheDocument();
-    expect(getByText('joh...@example.com')).toBeInTheDocument();
+    expect(getByText('Chris..')).toBeInTheDocument();
+    expect(getByText('john..@example.com')).toBeInTheDocument();
 
     const profileImage = getByAltText('profile picture');
     expect(profileImage).toBeInTheDocument();
