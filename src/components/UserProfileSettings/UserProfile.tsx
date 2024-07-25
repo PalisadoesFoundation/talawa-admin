@@ -12,7 +12,7 @@ interface InterfaceUserProfile {
   email: string;
   image: string;
 }
-const prettyDate = (param: string): string => {
+const joinedDate = (param: string): string => {
   const date = new Date(param);
   if (date?.toDateString() === 'Invalid Date') {
     return 'Unavailable';
@@ -61,7 +61,7 @@ const UserProfile: React.FC<InterfaceUserProfile> = ({
               <span className="d-flex">
                 <CalendarMonthOutlinedIcon />
                 <span className="d-flex align-end">
-                  {tCommon('joined')} {prettyDate(createdAt)}
+                  {tCommon('joined')} {joinedDate(createdAt)}
                 </span>
               </span>
             </div>
