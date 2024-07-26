@@ -228,7 +228,6 @@ function advertisementRegister({
           {tCommon('edit')}
         </div>
       )}
-
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton className={styles.editHeader}>
           {formStatus === 'register' ? (

@@ -57,12 +57,128 @@ export const REMOVE_SAMPLE_ORGANIZATION_MUTATION = gql`
  * @returns The created direct chat object.
  */
 
+export const CREATE_GROUP_CHAT = gql`
+  mutation createGroupChat(
+    $userIds: [ID!]!
+    $organizationId: ID!
+    $title: String!
+  ) {
+    createGroupChat(
+      data: {
+        userIds: $userIds
+        organizationId: $organizationId
+        title: $title
+      }
+    ) {
+      _id
+    }
+  }
+`;
+
 export const CREATE_DIRECT_CHAT = gql`
-  mutation createDirectChat($userIds: [ID!]!, $organizationId: ID!) {
+  mutation createDirectChat($userIds: [ID!]!, $organizationId: ID) {
     createDirectChat(
       data: { userIds: $userIds, organizationId: $organizationId }
     ) {
       _id
+    }
+  }
+`;
+
+export const SEND_MESSAGE_TO_DIRECT_CHAT = gql`
+  mutation sendMessageToDirectChat($chatId: ID!, $messageContent: String!) {
+    sendMessageToDirectChat(chatId: $chatId, messageContent: $messageContent) {
+      _id
+      createdAt
+      messageContent
+      receiver {
+        _id
+        firstName
+        lastName
+      }
+      sender {
+        _id
+        firstName
+        lastName
+      }
+      updatedAt
+    }
+  }
+`;
+
+export const SEND_MESSAGE_TO_GROUP_CHAT = gql`
+  mutation sendMessageToGroupChat($chatId: ID!, $messageContent: String!) {
+    sendMessageToGroupChat(chatId: $chatId, messageContent: $messageContent) {
+      _id
+      createdAt
+      messageContent
+      sender {
+        _id
+        firstName
+        lastName
+      }
+      updatedAt
+    }
+  }
+`;
+
+export const CREATE_MESSAGE_CHAT = gql`
+  mutation createMessageChat($receiver: ID!, $messageContent: String!) {
+    createMessageChat(data: { receiver: $receiver, message: $messageContent }) {
+      _id
+      createdAt
+      message
+      languageBarrier
+      receiver {
+        _id
+      }
+      sender {
+        _id
+      }
+      updatedAt
+    }
+  }
+`;
+
+export const MESSAGE_SENT_TO_DIRECT_CHAT = gql`
+  subscription messageSentToDirectChat($userId: ID!) {
+    messageSentToDirectChat(userId: $userId) {
+      _id
+      createdAt
+      directChatMessageBelongsTo {
+        _id
+      }
+      messageContent
+      receiver {
+        _id
+        firstName
+        lastName
+      }
+      sender {
+        _id
+        firstName
+        lastName
+      }
+      updatedAt
+    }
+  }
+`;
+
+export const MESSAGE_SENT_TO_GROUP_CHAT = gql`
+  subscription messageSentToGroupChat($userId: ID!) {
+    messageSentToGroupChat(userId: $userId) {
+      _id
+      createdAt
+      groupChatMessageBelongsTo {
+        _id
+      }
+      messageContent
+      sender {
+        _id
+        firstName
+        lastName
+      }
+      updatedAt
     }
   }
 `;

@@ -394,11 +394,11 @@ const orgFundCampaign = (): JSX.Element => {
 
       <DataGrid
         disableColumnMenu
-        columnBuffer={7}
+        columnBufferPx={7}
         hideFooter={true}
         getRowId={(row) => row.campaign._id}
-        components={{
-          NoRowsOverlay: () => (
+        slots={{
+          noRowsOverlay: () => (
             <Stack height="100%" alignItems="center" justifyContent="center">
               {t('noCampaignsFound')}
             </Stack>

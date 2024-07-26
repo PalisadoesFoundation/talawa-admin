@@ -19,6 +19,7 @@ const MOCKS = [
       variables: {
         firstName: 'Noble',
         lastName: 'Mittal',
+        createdAt: '2021-03-01',
         gender: 'MALE',
         phoneNumber: '+174567890',
         birthDate: '2024-03-01',
@@ -51,6 +52,7 @@ const Mocks1 = [
           email: 'johndoe@gmail.com',
           firstName: 'John',
           lastName: 'Doe',
+          createdAt: '2021-03-01T00:00:00.000Z',
           gender: 'MALE',
           maritalStatus: 'SINGLE',
           educationGrade: 'GRADUATE',
@@ -83,6 +85,7 @@ const Mocks2 = [
           email: 'johndoe@gmail.com',
           firstName: '',
           lastName: '',
+          createdAt: '',
           gender: '',
           maritalStatus: '',
           educationGrade: '',
