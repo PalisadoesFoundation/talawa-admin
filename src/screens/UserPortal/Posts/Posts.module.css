@@ -9,7 +9,7 @@
 .mainContainer {
   width: 50%;
   flex-grow: 3;
-  padding: 20px;
+  padding: 1rem;
   max-height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
