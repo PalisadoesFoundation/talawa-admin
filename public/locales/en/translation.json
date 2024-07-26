@@ -719,7 +719,12 @@
     "viewAll": "View all",
     "talawaUserPortal": "Talawa User Portal",
     "my organizations": "My Organizations",
-    "communityProfile": "Community Profile"
+    "users": "Users",
+    "requests": "Requests",
+    "communityProfile": "Community Profile",
+    "logout": "Logout",
+    "settings": "Settings",
+    "chat": "Chat"
   },
   "organizationSidebar": {
     "viewAll": "View all",
@@ -866,6 +871,8 @@
   },
   "userChat": {
     "chat": "Chat",
+    "search": "Search",
+    "messages": "Messages",
     "contacts": "Contacts"
   },
   "userChatRoom": {

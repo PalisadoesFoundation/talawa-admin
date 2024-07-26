@@ -2166,7 +2166,7 @@ progress {
   color: var(--bs-body-color);
   background-color: #f2f2f2;
   background-clip: padding-box;
-  border: 0 solid var(--bs-border-color);
+  border: 1px solid var(--bs-border-color);
   appearance: none;
   border-radius: var(--bs-border-radius);
   transition:
