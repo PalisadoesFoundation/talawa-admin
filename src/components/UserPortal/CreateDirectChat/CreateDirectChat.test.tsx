@@ -1,19 +1,25 @@
 import React from 'react';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 
 import {
   DIRECT_CHATS_LIST,
   USERS_CONNECTION_LIST,
-  USER_JOINED_ORGANIZATIONS,
 } from 'GraphQl/Queries/Queries';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
-import Chat from './Chat';
+import Chat from '../../../screens/UserPortal/Chat/Chat';
 import {
+  CREATE_DIRECT_CHAT,
   MESSAGE_SENT_TO_DIRECT_CHAT,
   MESSAGE_SENT_TO_GROUP_CHAT,
 } from 'GraphQl/Mutations/OrganizationMutations';
@@ -529,6 +535,258 @@ const MOCKS = [
     request: {
       query: DIRECT_CHATS_LIST,
       variables: {
+        id: '1',
+      },
+    },
+    result: {
+      data: {
+        directChatsByUserID: [
+          {
+            _id: '666c88dd92e995354d98527c',
+            creator: {
+              _id: '65378abd85008f171cf2990d',
+              firstName: 'Vyvyan',
+              lastName: 'Kerry',
+              email: 'testadmin1@example.com',
+              __typename: 'User',
+            },
+            messages: [
+              {
+                _id: '668930bae43ce54e6e302cf1',
+                createdAt: '2024-07-06T11:55:38.933Z',
+                messageContent: 'hJnkank',
+                receiver: {
+                  _id: '65378abd85008f171cf2990d',
+                  firstName: 'Vyvyan',
+                  lastName: 'Kerry',
+                  email: 'testadmin1@example.com',
+                  __typename: 'User',
+                },
+                sender: {
+                  _id: '64378abd85008f171cf2990d',
+                  firstName: 'Wilt',
+                  lastName: 'Shepherd',
+                  email: 'testsuperadmin@example.com',
+                  __typename: 'User',
+                },
+                __typename: 'DirectChatMessage',
+              },
+            ],
+            organization: {
+              _id: '6737904485008f171cf29924',
+              name: 'Unity Foundation',
+              __typename: 'Organization',
+            },
+            users: [
+              {
+                _id: '64378abd85008f171cf2990d',
+                firstName: 'Wilt',
+                lastName: 'Shepherd',
+                email: 'testsuperadmin@example.com',
+                image: null,
+                __typename: 'User',
+              },
+              {
+                _id: '65378abd85008f171cf2990d',
+                firstName: 'Vyvyan',
+                lastName: 'Kerry',
+                email: 'testadmin1@example.com',
+                image: null,
+                __typename: 'User',
+              },
+            ],
+            __typename: 'DirectChat',
+          },
+          {
+            _id: '666f09c892e995354d98a5ee',
+            creator: {
+              _id: '67378abd85008f171cf2990d',
+              firstName: 'Darcy',
+              lastName: 'Wilf',
+              email: 'testadmin3@example.com',
+              __typename: 'User',
+            },
+            messages: [
+              {
+                _id: '6676932692e995354d98ab7f',
+                createdAt: '2024-06-22T09:02:30.776Z',
+                messageContent: 'hii',
+                receiver: {
+                  _id: '67378abd85008f171cf2990d',
+                  firstName: 'Darcy',
+                  lastName: 'Wilf',
+                  email: 'testadmin3@example.com',
+                  __typename: 'User',
+                },
+                sender: {
+                  _id: '64378abd85008f171cf2990d',
+                  firstName: 'Wilt',
+                  lastName: 'Shepherd',
+                  email: 'testsuperadmin@example.com',
+                  __typename: 'User',
+                },
+                __typename: 'DirectChatMessage',
+              },
+            ],
+            organization: {
+              _id: '6737904485008f171cf29924',
+              name: 'Unity Foundation',
+              __typename: 'Organization',
+            },
+            users: [
+              {
+                _id: '64378abd85008f171cf2990d',
+                firstName: 'Wilt',
+                lastName: 'Shepherd',
+                email: 'testsuperadmin@example.com',
+                image: null,
+                __typename: 'User',
+              },
+              {
+                _id: '67378abd85008f171cf2990d',
+                firstName: 'Darcy',
+                lastName: 'Wilf',
+                email: 'testadmin3@example.com',
+                image: null,
+                __typename: 'User',
+              },
+            ],
+            __typename: 'DirectChat',
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: DIRECT_CHATS_LIST,
+      variables: {
+        id: '1',
+      },
+    },
+    result: {
+      data: {
+        directChatsByUserID: [
+          {
+            _id: '666c88dd92e995354d98527c',
+            creator: {
+              _id: '65378abd85008f171cf2990d',
+              firstName: 'Vyvyan',
+              lastName: 'Kerry',
+              email: 'testadmin1@example.com',
+              __typename: 'User',
+            },
+            messages: [
+              {
+                _id: '668930bae43ce54e6e302cf1',
+                createdAt: '2024-07-06T11:55:38.933Z',
+                messageContent: 'hJnkank',
+                receiver: {
+                  _id: '65378abd85008f171cf2990d',
+                  firstName: 'Vyvyan',
+                  lastName: 'Kerry',
+                  email: 'testadmin1@example.com',
+                  __typename: 'User',
+                },
+                sender: {
+                  _id: '64378abd85008f171cf2990d',
+                  firstName: 'Wilt',
+                  lastName: 'Shepherd',
+                  email: 'testsuperadmin@example.com',
+                  __typename: 'User',
+                },
+                __typename: 'DirectChatMessage',
+              },
+            ],
+            organization: {
+              _id: '6737904485008f171cf29924',
+              name: 'Unity Foundation',
+              __typename: 'Organization',
+            },
+            users: [
+              {
+                _id: '64378abd85008f171cf2990d',
+                firstName: 'Wilt',
+                lastName: 'Shepherd',
+                email: 'testsuperadmin@example.com',
+                image: null,
+                __typename: 'User',
+              },
+              {
+                _id: '65378abd85008f171cf2990d',
+                firstName: 'Vyvyan',
+                lastName: 'Kerry',
+                email: 'testadmin1@example.com',
+                image: null,
+                __typename: 'User',
+              },
+            ],
+            __typename: 'DirectChat',
+          },
+          {
+            _id: '666f09c892e995354d98a5ee',
+            creator: {
+              _id: '67378abd85008f171cf2990d',
+              firstName: 'Darcy',
+              lastName: 'Wilf',
+              email: 'testadmin3@example.com',
+              __typename: 'User',
+            },
+            messages: [
+              {
+                _id: '6676932692e995354d98ab7f',
+                createdAt: '2024-06-22T09:02:30.776Z',
+                messageContent: 'hii',
+                receiver: {
+                  _id: '67378abd85008f171cf2990d',
+                  firstName: 'Darcy',
+                  lastName: 'Wilf',
+                  email: 'testadmin3@example.com',
+                  __typename: 'User',
+                },
+                sender: {
+                  _id: '64378abd85008f171cf2990d',
+                  firstName: 'Wilt',
+                  lastName: 'Shepherd',
+                  email: 'testsuperadmin@example.com',
+                  __typename: 'User',
+                },
+                __typename: 'DirectChatMessage',
+              },
+            ],
+            organization: {
+              _id: '6737904485008f171cf29924',
+              name: 'Unity Foundation',
+              __typename: 'Organization',
+            },
+            users: [
+              {
+                _id: '64378abd85008f171cf2990d',
+                firstName: 'Wilt',
+                lastName: 'Shepherd',
+                email: 'testsuperadmin@example.com',
+                image: null,
+                __typename: 'User',
+              },
+              {
+                _id: '67378abd85008f171cf2990d',
+                firstName: 'Darcy',
+                lastName: 'Wilf',
+                email: 'testadmin3@example.com',
+                image: null,
+                __typename: 'User',
+              },
+            ],
+            __typename: 'DirectChat',
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: DIRECT_CHATS_LIST,
+      variables: {
         id: '',
       },
     },
@@ -653,423 +911,159 @@ const MOCKS = [
   },
 ];
 
-const USER_JOINED_ORG_MOCK = [
-  {
-    request: {
-      query: USER_JOINED_ORGANIZATIONS,
-      variables: {
-        id: '1',
-      },
-    },
-    result: {
-      data: {
-        users: [
-          {
-            user: {
-              joinedOrganizations: [
-                {
-                  __typename: 'Organization',
-                  _id: '6401ff65ce8e8406b8f07af2',
-                  name: 'Any Organization',
-                  image: '',
-                  description: 'New Desc',
-                  address: {
-                    city: 'abc',
-                    countryCode: '123',
-                    postalCode: '456',
-                    state: 'def',
-                    dependentLocality: 'ghi',
-                    line1: 'asdfg',
-                    line2: 'dfghj',
-                    sortingCode: '4567',
-                  },
-                  createdAt: '1234567890',
-                  userRegistrationRequired: true,
-                  creator: {
-                    __typename: 'User',
-                    firstName: 'John',
-                    lastName: 'Doe',
-                  },
-                  members: [
-                    {
-                      _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
-                    },
-                  ],
-                  admins: [
-                    {
-                      _id: '45gj5678jk45678fvgbhnr4rtgh',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
-                    },
-                  ],
-                  membershipRequests: [
-                    {
-                      _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
-                    },
-                  ],
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_JOINED_ORGANIZATIONS,
-      variables: {
-        id: '1',
-      },
-    },
-    result: {
-      data: {
-        users: [
-          {
-            user: {
-              joinedOrganizations: [
-                {
-                  __typename: 'Organization',
-                  _id: '6401ff65ce8e8406b8f07af2',
-                  name: 'Any Organization',
-                  image: '',
-                  description: 'New Desc',
-                  address: {
-                    city: 'abc',
-                    countryCode: '123',
-                    postalCode: '456',
-                    state: 'def',
-                    dependentLocality: 'ghi',
-                    line1: 'asdfg',
-                    line2: 'dfghj',
-                    sortingCode: '4567',
-                  },
-                  createdAt: '1234567890',
-                  userRegistrationRequired: true,
-                  creator: {
-                    __typename: 'User',
-                    firstName: 'John',
-                    lastName: 'Doe',
-                  },
-                  members: [
-                    {
-                      _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
-                    },
-                  ],
-                  admins: [
-                    {
-                      _id: '45gj5678jk45678fvgbhnr4rtgh',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
-                    },
-                  ],
-                  membershipRequests: [
-                    {
-                      _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
-                    },
-                  ],
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_JOINED_ORGANIZATIONS,
-      variables: {
-        id: '1',
-      },
-    },
-    result: {
-      data: {
-        users: [
-          {
-            user: {
-              joinedOrganizations: [
-                {
-                  __typename: 'Organization',
-                  _id: '6401ff65ce8e8406b8f07af2',
-                  name: 'Any Organization',
-                  image: '',
-                  description: 'New Desc',
-                  address: {
-                    city: 'abc',
-                    countryCode: '123',
-                    postalCode: '456',
-                    state: 'def',
-                    dependentLocality: 'ghi',
-                    line1: 'asdfg',
-                    line2: 'dfghj',
-                    sortingCode: '4567',
-                  },
-                  createdAt: '1234567890',
-                  userRegistrationRequired: true,
-                  creator: {
-                    __typename: 'User',
-                    firstName: 'John',
-                    lastName: 'Doe',
-                  },
-                  members: [
-                    {
-                      _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
-                    },
-                  ],
-                  admins: [
-                    {
-                      _id: '45gj5678jk45678fvgbhnr4rtgh',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
-                    },
-                  ],
-                  membershipRequests: [
-                    {
-                      _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
-                    },
-                  ],
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_JOINED_ORGANIZATIONS,
-      variables: {
-        id: null,
-      },
-    },
-    result: {
-      data: {
-        users: [
-          {
-            user: {
-              joinedOrganizations: [
-                {
-                  __typename: 'Organization',
-                  _id: '6401ff65ce8e8406b8f07af2',
-                  name: 'Any Organization',
-                  image: '',
-                  description: 'New Desc',
-                  address: {
-                    city: 'abc',
-                    countryCode: '123',
-                    postalCode: '456',
-                    state: 'def',
-                    dependentLocality: 'ghi',
-                    line1: 'asdfg',
-                    line2: 'dfghj',
-                    sortingCode: '4567',
-                  },
-                  createdAt: '1234567890',
-                  userRegistrationRequired: true,
-                  creator: {
-                    __typename: 'User',
-                    firstName: 'John',
-                    lastName: 'Doe',
-                  },
-                  members: [
-                    {
-                      _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
-                    },
-                  ],
-                  admins: [
-                    {
-                      _id: '45gj5678jk45678fvgbhnr4rtgh',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
-                    },
-                  ],
-                  membershipRequests: [
-                    {
-                      _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
-                    },
-                  ],
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_JOINED_ORGANIZATIONS,
-      variables: {
-        id: null,
-      },
-    },
-    result: {
-      data: {
-        users: [
-          {
-            user: {
-              joinedOrganizations: [
-                {
-                  __typename: 'Organization',
-                  _id: '6401ff65ce8e8406b8f07af2',
-                  name: 'Any Organization',
-                  image: '',
-                  description: 'New Desc',
-                  address: {
-                    city: 'abc',
-                    countryCode: '123',
-                    postalCode: '456',
-                    state: 'def',
-                    dependentLocality: 'ghi',
-                    line1: 'asdfg',
-                    line2: 'dfghj',
-                    sortingCode: '4567',
-                  },
-                  createdAt: '1234567890',
-                  userRegistrationRequired: true,
-                  creator: {
-                    __typename: 'User',
-                    firstName: 'John',
-                    lastName: 'Doe',
-                  },
-                  members: [
-                    {
-                      _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
-                    },
-                  ],
-                  admins: [
-                    {
-                      _id: '45gj5678jk45678fvgbhnr4rtgh',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
-                    },
-                  ],
-                  membershipRequests: [
-                    {
-                      _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
-                    },
-                  ],
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_JOINED_ORGANIZATIONS,
-      variables: {
-        id: null,
-      },
-    },
-    result: {
-      data: {
-        users: [
-          {
-            user: {
-              joinedOrganizations: [
-                {
-                  __typename: 'Organization',
-                  _id: '6401ff65ce8e8406b8f07af2',
-                  name: 'Any Organization',
-                  image: '',
-                  description: 'New Desc',
-                  address: {
-                    city: 'abc',
-                    countryCode: '123',
-                    postalCode: '456',
-                    state: 'def',
-                    dependentLocality: 'ghi',
-                    line1: 'asdfg',
-                    line2: 'dfghj',
-                    sortingCode: '4567',
-                  },
-                  createdAt: '1234567890',
-                  userRegistrationRequired: true,
-                  creator: {
-                    __typename: 'User',
-                    firstName: 'John',
-                    lastName: 'Doe',
-                  },
-                  members: [
-                    {
-                      _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
-                    },
-                  ],
-                  admins: [
-                    {
-                      _id: '45gj5678jk45678fvgbhnr4rtgh',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
-                    },
-                  ],
-                  membershipRequests: [
-                    {
-                      _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
-                    },
-                  ],
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  },
-];
-
 const UserConnectionListMock = [
   {
     request: {
       query: USERS_CONNECTION_LIST,
       variables: {
         firstName_contains: '',
+        lastName_contains: '',
+      },
+    },
+    result: {
+      data: {
+        users: [
+          {
+            user: {
+              firstName: 'Deanne',
+              lastName: 'Marks',
+              image: null,
+              _id: '6589389d2caa9d8d69087487',
+              email: 'testuser8@example.com',
+              createdAt: '2023-04-13T04:53:17.742Z',
+              organizationsBlockedBy: [],
+              joinedOrganizations: [
+                {
+                  _id: '6537904485008f171cf29924',
+                  name: 'Unity Foundation',
+                  image: null,
+                  address: {
+                    city: 'Queens',
+                    countryCode: 'US',
+                    dependentLocality: 'Some Dependent Locality',
+                    line1: '123 Coffee Street',
+                    line2: 'Apartment 501',
+                    postalCode: '11427',
+                    sortingCode: 'ABC-133',
+                    state: 'NYC',
+                    __typename: 'Address',
+                  },
+                  createdAt: '2023-04-13T05:16:52.827Z',
+                  creator: {
+                    _id: '64378abd85008f171cf2990d',
+                    firstName: 'Wilt',
+                    lastName: 'Shepherd',
+                    image: null,
+                    email: 'testsuperadmin@example.com',
+                    createdAt: '2023-04-13T04:53:17.742Z',
+                    __typename: 'User',
+                  },
+                  __typename: 'Organization',
+                },
+                {
+                  _id: '6637904485008f171cf29924',
+                  name: 'Unity Foundation',
+                  image: null,
+                  address: {
+                    city: 'Staten Island',
+                    countryCode: 'US',
+                    dependentLocality: 'Some Dependent Locality',
+                    line1: '123 church Street',
+                    line2: 'Apartment 499',
+                    postalCode: '10301',
+                    sortingCode: 'ABC-122',
+                    state: 'NYC',
+                    __typename: 'Address',
+                  },
+                  createdAt: '2023-04-13T05:16:52.827Z',
+                  creator: {
+                    _id: '64378abd85008f171cf2990d',
+                    firstName: 'Wilt',
+                    lastName: 'Shepherd',
+                    image: null,
+                    email: 'testsuperadmin@example.com',
+                    createdAt: '2023-04-13T04:53:17.742Z',
+                    __typename: 'User',
+                  },
+                  __typename: 'Organization',
+                },
+                {
+                  _id: '6737904485008f171cf29924',
+                  name: 'Unity Foundation',
+                  image: null,
+                  address: {
+                    city: 'Brooklyn',
+                    countryCode: 'US',
+                    dependentLocality: 'Sample Dependent Locality',
+                    line1: '123 Main Street',
+                    line2: 'Apt 456',
+                    postalCode: '10004',
+                    sortingCode: 'ABC-789',
+                    state: 'NY',
+                    __typename: 'Address',
+                  },
+                  createdAt: '2023-04-13T05:16:52.827Z',
+                  creator: {
+                    _id: '64378abd85008f171cf2990d',
+                    firstName: 'Wilt',
+                    lastName: 'Shepherd',
+                    image: null,
+                    email: 'testsuperadmin@example.com',
+                    createdAt: '2023-04-13T04:53:17.742Z',
+                    __typename: 'User',
+                  },
+                  __typename: 'Organization',
+                },
+                {
+                  _id: '6437904485008f171cf29924',
+                  name: 'Unity Foundation',
+                  image: null,
+                  address: {
+                    city: 'Bronx',
+                    countryCode: 'US',
+                    dependentLocality: 'Some Dependent Locality',
+                    line1: '123 Random Street',
+                    line2: 'Apartment 456',
+                    postalCode: '10451',
+                    sortingCode: 'ABC-123',
+                    state: 'NYC',
+                    __typename: 'Address',
+                  },
+                  createdAt: '2023-04-13T05:16:52.827Z',
+                  creator: {
+                    _id: '64378abd85008f171cf2990d',
+                    firstName: 'Wilt',
+                    lastName: 'Shepherd',
+                    image: null,
+                    email: 'testsuperadmin@example.com',
+                    createdAt: '2023-04-13T04:53:17.742Z',
+                    __typename: 'User',
+                  },
+                  __typename: 'Organization',
+                },
+              ],
+              __typename: 'User',
+            },
+            appUserProfile: {
+              _id: '64378abd85308f171cf2993d',
+              adminFor: [],
+              isSuperAdmin: false,
+              createdOrganizations: [],
+              createdEvents: [],
+              eventAdmin: [],
+              __typename: 'AppUserProfile',
+            },
+            __typename: 'UserData',
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: USERS_CONNECTION_LIST,
+      variables: {
+        firstName_contains: 'Disha',
         lastName_contains: '',
       },
     },
@@ -2070,9 +2064,22 @@ const GROUP_CHAT_BY_ID_QUERY_MOCK = [
   },
 ];
 
-const resizeWindow = (width: number): void => {
-  window.innerWidth = width;
-  fireEvent(window, new Event('resize'));
+const CREATE_DIRECT_CHAT_MOCK = {
+  request: {
+    query: CREATE_DIRECT_CHAT,
+    variables: {
+      userIds: ['1', '6589389d2caa9d8d69087487'],
+      organizationId: undefined,
+    },
+  },
+  result: {
+    data: {
+      createDirectChat: {
+        _id: '669394c180e96b740ba1c0ce',
+        __typename: 'DirectChat',
+      },
+    },
+  },
 };
 
 async function wait(ms = 100): Promise<void> {
@@ -2083,7 +2090,7 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-describe('Testing Chat Screen [User Portal]', () => {
+describe('Testing Create Direct Chat Modal [User Portal]', () => {
   window.HTMLElement.prototype.scrollIntoView = jest.fn();
 
   Object.defineProperty(window, 'matchMedia', {
@@ -2100,68 +2107,8 @@ describe('Testing Chat Screen [User Portal]', () => {
     })),
   });
 
-  test('Screen should be rendered properly', async () => {
+  test('Test open and close create new direct chat modal', async () => {
     const mock = [
-      ...USER_JOINED_ORG_MOCK,
-      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
-      ...DIRECT_CHAT_BY_ID_QUERY_MOCK,
-      ...MESSAGE_SENT_TO_DIRECT_CHAT_MOCK,
-      ...MESSAGE_SENT_TO_GROUP_CHAT_MOCK,
-      ...UserConnectionListMock,
-      ...MOCKS,
-    ];
-
-    render(
-      <MockedProvider addTypename={false} mocks={mock}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Chat />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    await wait();
-  });
-
-  test('User is able to select a contact', async () => {
-    const mock = [
-      ...USER_JOINED_ORG_MOCK,
-      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
-      ...DIRECT_CHAT_BY_ID_QUERY_MOCK,
-      ...MESSAGE_SENT_TO_DIRECT_CHAT_MOCK,
-      ...MESSAGE_SENT_TO_GROUP_CHAT_MOCK,
-      ...UserConnectionListMock,
-      ...MOCKS,
-    ];
-
-    render(
-      <MockedProvider addTypename={false} mocks={mock}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Chat />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    expect(await screen.findByText('Messages')).toBeInTheDocument();
-    const contactCards = await screen.findAllByTestId('chatContact');
-    console.log(contactCards);
-    expect(contactCards[0]).toBeInTheDocument();
-    act(() => {
-      fireEvent.click(contactCards[0]);
-    });
-  });
-
-  test('Test create new direct chat', async () => {
-    const mock = [
-      ...USER_JOINED_ORG_MOCK,
       ...GROUP_CHAT_BY_ID_QUERY_MOCK,
       ...DIRECT_CHAT_BY_ID_QUERY_MOCK,
       ...MESSAGE_SENT_TO_DIRECT_CHAT_MOCK,
@@ -2190,18 +2137,30 @@ describe('Testing Chat Screen [User Portal]', () => {
     expect(newDirectChatBtn).toBeInTheDocument();
     fireEvent.click(newDirectChatBtn);
 
-    const closeButton = screen.getByRole('button', { name: /close/i });
-    expect(closeButton).toBeInTheDocument();
-
     const submitBtn = await screen.findByTestId('submitBtn');
     expect(submitBtn).toBeInTheDocument();
+
+    const searchInput = (await screen.findByTestId(
+      'searchUser',
+    )) as HTMLInputElement;
+    expect(searchInput).toBeInTheDocument();
+
+    fireEvent.change(searchInput, { target: { value: 'Disha' } });
+
+    expect(searchInput.value).toBe('Disha');
+
+    fireEvent.click(submitBtn);
+
+    const closeButton = screen.getByRole('button', { name: /close/i });
+    expect(closeButton).toBeInTheDocument();
 
     fireEvent.click(closeButton);
   });
 
-  test('Test create new group chat', async () => {
+  test('Test create new direct chat', async () => {
+    setItem('userId', '1');
     const mock = [
-      ...USER_JOINED_ORG_MOCK,
+      CREATE_DIRECT_CHAT_MOCK,
       ...GROUP_CHAT_BY_ID_QUERY_MOCK,
       ...DIRECT_CHAT_BY_ID_QUERY_MOCK,
       ...MESSAGE_SENT_TO_DIRECT_CHAT_MOCK,
@@ -2226,79 +2185,20 @@ describe('Testing Chat Screen [User Portal]', () => {
     const dropdown = await screen.findByTestId('dropdown');
     expect(dropdown).toBeInTheDocument();
     fireEvent.click(dropdown);
+    const newDirectChatBtn = await screen.findByTestId('newDirectChat');
+    expect(newDirectChatBtn).toBeInTheDocument();
+    fireEvent.click(newDirectChatBtn);
 
-    const newGroupChatBtn = await screen.findByTestId('newGroupChat');
-    expect(newGroupChatBtn).toBeInTheDocument();
+    const addBtn = await screen.findAllByTestId('addBtn');
+    waitFor(() => {
+      expect(addBtn[0]).toBeInTheDocument();
+    });
 
-    fireEvent.click(newGroupChatBtn);
+    fireEvent.click(addBtn[0]);
+
     const closeButton = screen.getByRole('button', { name: /close/i });
     expect(closeButton).toBeInTheDocument();
+
     fireEvent.click(closeButton);
-  });
-
-  test('sidebar', async () => {
-    const mock = [
-      ...USER_JOINED_ORG_MOCK,
-      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
-      ...DIRECT_CHAT_BY_ID_QUERY_MOCK,
-      ...MESSAGE_SENT_TO_DIRECT_CHAT_MOCK,
-      ...MESSAGE_SENT_TO_GROUP_CHAT_MOCK,
-      ...UserConnectionListMock,
-      ...MOCKS,
-    ];
-    setItem('userId', '1');
-
-    render(
-      <MockedProvider addTypename={false} mocks={mock}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Chat />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    const closeMenubtn = screen.getByTestId('closeMenu');
-    expect(closeMenubtn).toBeInTheDocument();
-    closeMenubtn.click();
-    const openMenuBtn = screen.getByTestId('openMenu');
-    expect(openMenuBtn).toBeInTheDocument();
-    openMenuBtn.click();
-  });
-
-  test('Testing sidebar when the screen size is less than or equal to 820px', async () => {
-    setItem('userId', '1');
-    const mock = [
-      ...USER_JOINED_ORG_MOCK,
-      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
-      ...DIRECT_CHAT_BY_ID_QUERY_MOCK,
-      ...MESSAGE_SENT_TO_DIRECT_CHAT_MOCK,
-      ...MESSAGE_SENT_TO_GROUP_CHAT_MOCK,
-      ...UserConnectionListMock,
-      ...MOCKS,
-    ];
-    resizeWindow(800);
-    render(
-      <MockedProvider addTypename={false} mocks={mock}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Chat />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    await wait();
-    expect(screen.getByText('My Organizations')).toBeInTheDocument();
-    expect(screen.getByText('Talawa User Portal')).toBeInTheDocument();
-
-    const chatBtn = screen.getByTestId('chatBtn');
-
-    chatBtn.click();
   });
 });

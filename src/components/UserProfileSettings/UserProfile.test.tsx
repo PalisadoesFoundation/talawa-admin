@@ -9,8 +9,9 @@ import i18nForTest from 'utils/i18nForTest';
 describe('UserProfile component', () => {
   test('renders user profile details correctly', () => {
     const userDetails = {
-      firstName: 'John',
+      firstName: 'Christopher',
       lastName: 'Doe',
+      createdAt: '2023-04-13T04:53:17.742+00:00',
       email: 'john.doe@example.com',
       image: 'profile-image-url',
     };
@@ -24,14 +25,14 @@ describe('UserProfile component', () => {
       </MockedProvider>,
     );
 
-    expect(getByText('John')).toBeInTheDocument();
-    expect(getByText('john.doe@example.com')).toBeInTheDocument();
+    expect(getByText('Chris..')).toBeInTheDocument();
+    expect(getByText('john..@example.com')).toBeInTheDocument();
 
     const profileImage = getByAltText('profile picture');
     expect(profileImage).toBeInTheDocument();
     expect(profileImage).toHaveAttribute('src', 'profile-image-url');
 
-    expect(getByText('Joined 1st May, 2021')).toBeInTheDocument();
+    expect(getByText('Joined 13 April 2023')).toBeInTheDocument();
 
     expect(getByText('Copy Profile Link')).toBeInTheDocument();
   });

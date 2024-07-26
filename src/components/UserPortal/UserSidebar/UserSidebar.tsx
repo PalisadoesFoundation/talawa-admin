@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 import { ReactComponent as OrganizationsIcon } from 'assets/svgs/organizations.svg';
 import { ReactComponent as SettingsIcon } from 'assets/svgs/settings.svg';
+import { ReactComponent as ChatIcon } from 'assets/svgs/chat.svg';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import styles from './UserSidebar.module.css';
 
@@ -84,6 +85,28 @@ const userSidebar = ({
                   />
                 </div>
                 {tCommon('settings')}
+              </Button>
+            )}
+          </NavLink>
+          <NavLink to={'/user/chat'} onClick={handleLinkClick}>
+            {({ isActive }) => (
+              <Button
+                variant={isActive === true ? 'success' : ''}
+                className={`${
+                  isActive === true ? 'text-white' : 'text-secondary'
+                }`}
+                data-testid="chatBtn"
+              >
+                <div className={styles.iconWrapper}>
+                  <ChatIcon
+                    stroke={`${
+                      isActive === true
+                        ? 'var(--bs-white)'
+                        : 'var(--bs-secondary)'
+                    }`}
+                  />
+                </div>
+                {t('chat')}
               </Button>
             )}
           </NavLink>
