@@ -40,7 +40,9 @@ export default function donate(): JSX.Element {
 
   const { orgId: organizationId } = useParams();
   const [amount, setAmount] = React.useState<string>('');
-  const [organizationDetails, setOrganizationDetails]: any = React.useState({});
+  const [organizationDetails, setOrganizationDetails] = React.useState<{
+    name: string;
+  }>({ name: '' });
   const [donations, setDonations] = React.useState([]);
   const [selectedCurrency, setSelectedCurrency] = React.useState(0);
   const [page, setPage] = React.useState(0);
@@ -96,9 +98,9 @@ export default function donate(): JSX.Element {
     }
   }, [data2]);
 
-  const donateToOrg = (): void => {
+  const donateToOrg = async (): Promise<void> => {
     try {
-      donate({
+      const response = await donate({
         variables: {
           userId,
           createDonationOrgId2: organizationId,
@@ -108,9 +110,15 @@ export default function donate(): JSX.Element {
           nameOfOrg: organizationDetails.name,
         },
       });
+      if (!response.data) {
+        errorHandler(null, {
+          message: 'no api response',
+        });
+        return;
+      }
       refetch();
       toast.success(t(`success`));
-    } catch (error: any) {
+    } catch (error: unknown) {
       /* istanbul ignore next */
       errorHandler(t, error);
     }
@@ -217,21 +225,33 @@ export default function donate(): JSX.Element {
                           )
                         : /* istanbul ignore next */
                           donations
-                      ).map((donation: any, index) => {
-                        const cardProps: InterfaceDonationCardProps = {
-                          name: donation.nameOfUser,
-                          id: donation._id,
-                          amount: donation.amount,
-                          userId: donation.userId,
-                          payPalId: donation.payPalId,
-                          updatedAt: donation.updatedAt,
-                        };
-                        return (
-                          <div key={index} data-testid="donationCard">
-                            <DonationCard {...cardProps} />
-                          </div>
-                        );
-                      })
+                      ).map(
+                        (
+                          donation: {
+                            nameOfUser: string;
+                            _id: string;
+                            amount: string;
+                            userId: string;
+                            payPalId: string;
+                            updatedAt: string;
+                          },
+                          index,
+                        ) => {
+                          const cardProps: InterfaceDonationCardProps = {
+                            name: donation.nameOfUser,
+                            id: donation._id,
+                            amount: donation.amount,
+                            userId: donation.userId,
+                            payPalId: donation.payPalId,
+                            updatedAt: donation.updatedAt,
+                          };
+                          return (
+                            <div key={index} data-testid="donationCard">
+                              <DonationCard {...cardProps} />
+                            </div>
+                          );
+                        },
+                      )
                     ) : (
                       <span>{t('nothingToShow')}</span>
                     )}
