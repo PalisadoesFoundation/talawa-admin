@@ -100,6 +100,12 @@ const wsLink = new GraphQLWsLink(
     url: REACT_APP_BACKEND_WEBSOCKET_URL,
   }),
 );
+
+// const wsLink = new GraphQLWsLink(
+//   createClient({
+//     url: 'ws://localhost:4000/subscriptions',
+//   }),
+// );
 // The split function takes three parameters:
 //
 // * A function that's called for each operation to execute

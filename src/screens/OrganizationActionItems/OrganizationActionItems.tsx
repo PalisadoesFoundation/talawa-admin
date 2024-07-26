@@ -197,6 +197,10 @@ function organizationActionItems(): JSX.Element {
       (category) => !category.isDisabled,
     );
 
+  const actionItemOnly = actionItemsData?.actionItemsByOrganization.filter(
+    (item) => item.event == null,
+  );
+
   return (
     <div className={styles.organizationActionItemsContainer}>
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
@@ -365,7 +369,7 @@ function organizationActionItems(): JSX.Element {
 
         <ActionItemsContainer
           actionItemsConnection={`Organization`}
-          actionItemsData={actionItemsData?.actionItemsByOrganization}
+          actionItemsData={actionItemOnly}
           membersData={membersData?.organizations[0].members}
           actionItemsRefetch={actionItemsRefetch}
         />

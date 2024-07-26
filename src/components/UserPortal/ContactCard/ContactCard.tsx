@@ -4,21 +4,19 @@ import Avatar from 'components/Avatar/Avatar';
 
 interface InterfaceContactCardProps {
   id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
+  title: string;
+  subtitle: string;
   image: string;
   selectedContact: string;
   setSelectedContact: React.Dispatch<React.SetStateAction<string>>;
-  setSelectedContactName: React.Dispatch<React.SetStateAction<string>>;
+  type: string;
+  setSelectedChatType: React.Dispatch<React.SetStateAction<string>>;
 }
 
 function contactCard(props: InterfaceContactCardProps): JSX.Element {
-  const contactName = `${props.firstName} ${props.lastName}`;
-
   const handleSelectedContactChange = (): void => {
     props.setSelectedContact(props.id);
-    props.setSelectedContactName(contactName);
+    props.setSelectedChatType(props.type);
   };
 
   const [isSelected, setIsSelected] = React.useState(
@@ -33,7 +31,7 @@ function contactCard(props: InterfaceContactCardProps): JSX.Element {
     <>
       <div
         className={`${styles.contact} ${
-          isSelected ? styles.bgGrey : styles.bgWhite
+          isSelected ? styles.bgGreen : styles.bgWhite
         }`}
         onClick={handleSelectedContactChange}
         data-testid="contactContainer"
@@ -41,19 +39,19 @@ function contactCard(props: InterfaceContactCardProps): JSX.Element {
         {props.image ? (
           <img
             src={props.image}
-            alt={contactName}
+            alt={props.title}
             className={styles.contactImage}
           />
         ) : (
           <Avatar
-            name={contactName}
-            alt={contactName}
+            name={props.title}
+            alt={props.title}
             avatarStyle={styles.contactImage}
           />
         )}
         <div className={styles.contactNameContainer}>
-          <b>{contactName}</b>
-          <small className={styles.grey}>{props.email}</small>
+          <b>{props.title}</b>
+          <small className={styles.grey}>{props.subtitle}</small>
         </div>
       </div>
     </>

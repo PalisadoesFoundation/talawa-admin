@@ -347,11 +347,11 @@ const organizationFunds = (): JSX.Element => {
 
       <DataGrid
         disableColumnMenu
-        columnBuffer={7}
+        columnBufferPx={7}
         hideFooter={true}
         getRowId={(row) => row._id}
-        components={{
-          NoRowsOverlay: () => (
+        slots={{
+          noRowsOverlay: () => (
             <Stack height="100%" alignItems="center" justifyContent="center">
               {t('noFundsFound')}
             </Stack>

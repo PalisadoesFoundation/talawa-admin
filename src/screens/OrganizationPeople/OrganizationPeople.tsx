@@ -362,12 +362,12 @@ function organizationPeople(): JSX.Element {
         <div className="datatable">
           <DataGrid
             disableColumnMenu
-            columnBuffer={5}
+            columnBufferPx={5}
             hideFooter={true}
             className={`${styles.datagrid}`}
             getRowId={(row) => row._id}
-            components={{
-              NoRowsOverlay: () => (
+            slots={{
+              noRowsOverlay: () => (
                 <Stack
                   height="100%"
                   alignItems="center"

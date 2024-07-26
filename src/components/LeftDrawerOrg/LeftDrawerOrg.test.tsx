@@ -24,41 +24,41 @@ const props: InterfaceLeftDrawerProps = {
   targets: [
     {
       name: 'Dashboard',
-      url: '/orgdash/id=123',
+      url: '/orgdash/123',
     },
     {
       name: 'People',
-      url: '/orgpeople/id=123',
+      url: '/orgpeople/123',
     },
     {
       name: 'Events',
-      url: '/orgevents/id=123',
+      url: '/orgevents/123',
     },
     {
       name: 'Posts',
-      url: '/orgpost/id=123',
+      url: '/orgpost/123',
     },
     {
       name: 'Block/Unblock',
-      url: '/blockuser/id=123',
+      url: '/blockuser/123',
     },
     {
       name: 'Plugins',
       subTargets: [
         {
           name: 'Plugin Store',
-          url: '/orgstore/id=123',
+          url: '/orgstore/123',
           icon: 'fa-store',
         },
       ],
     },
     {
       name: 'Settings',
-      url: '/orgsetting/id=123',
+      url: '/orgsetting/123',
     },
     {
       name: 'All Organizations',
-      url: '/orglist/id=123',
+      url: '/orglist/123',
     },
   ],
   hideDrawer: false,
@@ -327,7 +327,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     );
     await wait();
     userEvent.click(screen.getByText('Dashboard'));
-    expect(global.window.location.pathname).toContain('/orgdash/id=123');
+    expect(global.window.location.pathname).toContain('/orgdash/123');
   });
 
   test('Testing when screen size is less than 820px', async () => {
@@ -351,7 +351,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     const peopelBtn = screen.getByTestId(/People/i);
     userEvent.click(peopelBtn);
     await wait();
-    expect(window.location.pathname).toContain('/orgpeople/id=123');
+    expect(window.location.pathname).toContain('/orgpeople/123');
   });
 
   test('Testing when image is present for Organization', async () => {
