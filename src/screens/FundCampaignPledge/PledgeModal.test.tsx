@@ -131,7 +131,7 @@ describe('PledgeModal', () => {
     await waitFor(() =>
       expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
     );
-    expect(screen.getByTestId('volunteerSelect')).toHaveTextContent('John Doe');
+    expect(screen.getByTestId('pledgerSelect')).toHaveTextContent('John Doe');
     expect(screen.getByLabelText('Start Date')).toHaveValue('01/01/2024');
     expect(screen.getByLabelText('End Date')).toHaveValue('10/01/2024');
     expect(screen.getByLabelText('Currency')).toHaveTextContent('USD ($)');
