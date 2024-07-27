@@ -195,6 +195,18 @@ export const GROUP_CHAT_BY_ID = gql`
         _id
         createdAt
         messageContent
+        replyTo {
+          _id
+          createdAt
+          messageContent
+          sender {
+            _id
+            firstName
+            lastName
+            email
+            image
+          }
+        }
         sender {
           _id
           firstName
@@ -213,7 +225,6 @@ export const GROUP_CHAT_BY_ID = gql`
     }
   }
 `;
-
 // directChatByChatId
 
 // export const GROUP_CHAT_MESSAGES_BY_CHAT_ID = gql`

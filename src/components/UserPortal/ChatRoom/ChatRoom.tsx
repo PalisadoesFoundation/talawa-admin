@@ -109,6 +109,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
   const [sendMessageToGroupChat] = useMutation(SEND_MESSAGE_TO_GROUP_CHAT, {
     variables: {
       chatId: props.selectedContact,
+      replyTo: replyToDirectMessage?._id,
       messageContent: newMessage,
     },
   });
@@ -181,6 +182,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     } else if (props.selectedChatType === 'group') {
       const data = await sendMessageToGroupChat();
       await groupChatRefresh();
+      setReplyToDirectMessage(null);
     }
     setNewMessage('');
   };
@@ -355,51 +357,52 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                           </div>
                         );
                       })
-                    : groupChat?.messages.map(
-                        (message: DirectMessage, index: number) => {
-                          return (
+                    : groupChat?.messages.map((message: DirectMessage) => {
+                        return (
+                          <div
+                            className={
+                              message.sender._id === userId
+                                ? styles.messageSentContainer
+                                : styles.messageReceivedContainer
+                            }
+                            key={message._id}
+                            data-testid="groupChatMsg"
+                          >
+                            {message.sender._id !== userId ? (
+                              message.sender?.image ? (
+                                <img
+                                  src={message.sender.image}
+                                  alt={message.sender.image}
+                                  className={styles.contactImage}
+                                />
+                              ) : (
+                                <Avatar
+                                  name={
+                                    message.sender.firstName +
+                                    ' ' +
+                                    message.sender.lastName
+                                  }
+                                  alt={
+                                    message.sender.firstName +
+                                    ' ' +
+                                    message.sender.lastName
+                                  }
+                                  avatarStyle={styles.contactImage}
+                                />
+                              )
+                            ) : (
+                              ''
+                            )}
                             <div
                               className={
                                 message.sender._id === userId
-                                  ? styles.messageSentContainer
-                                  : styles.messageReceivedContainer
+                                  ? styles.messageSent
+                                  : styles.messageReceived
                               }
                               key={message._id}
-                              data-testid="groupChatMsg"
+                              id={message._id}
                             >
-                              {message.sender._id !== userId ? (
-                                message.sender?.image ? (
-                                  <img
-                                    src={message.sender.image}
-                                    alt={message.sender.image}
-                                    className={styles.contactImage}
-                                  />
-                                ) : (
-                                  <Avatar
-                                    name={
-                                      message.sender.firstName +
-                                      ' ' +
-                                      message.sender.lastName
-                                    }
-                                    alt={
-                                      message.sender.firstName +
-                                      ' ' +
-                                      message.sender.lastName
-                                    }
-                                    avatarStyle={styles.contactImage}
-                                  />
-                                )
-                              ) : (
-                                ''
-                              )}
-                              <div
-                                className={
-                                  message.sender._id === userId
-                                    ? styles.messageSent
-                                    : styles.messageReceived
-                                }
-                                key={message._id}
-                              >
+                              <div className={styles.messageContent}>
                                 {message.sender._id !== userId && (
                                   <p className={styles.senderInfo}>
                                     {message.sender.firstName +
@@ -407,9 +410,42 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                                       message.sender.lastName}
                                   </p>
                                 )}
-                                <span className={styles.messageContent}>
-                                  {message.messageContent}
-                                </span>
+                                {message.replyTo && (
+                                  <a href={`#${message.replyTo._id}`}>
+                                    <div className={styles.replyToMessage}>
+                                      <p className={styles.senderInfo}>
+                                        {message.replyTo.sender.firstName +
+                                          ' ' +
+                                          message.replyTo.sender.lastName}
+                                      </p>
+                                      <span>
+                                        {message.replyTo.messageContent}
+                                      </span>
+                                    </div>
+                                  </a>
+                                )}
+                                <span>{message.messageContent}</span>
+                              </div>
+
+                              <div className={styles.messageAttributes}>
+                                <Dropdown style={{ cursor: 'pointer' }}>
+                                  <Dropdown.Toggle
+                                    className={styles.customToggle}
+                                    data-testid={'dropdown'}
+                                  >
+                                    <MoreVert />
+                                  </Dropdown.Toggle>
+                                  <Dropdown.Menu>
+                                    <Dropdown.Item
+                                      onClick={() => {
+                                        setReplyToDirectMessage(message);
+                                      }}
+                                      data-testid="newDirectChat"
+                                    >
+                                      Reply
+                                    </Dropdown.Item>
+                                  </Dropdown.Menu>
+                                </Dropdown>
                                 <span className={styles.messageTime}>
                                   {new Date(
                                     message?.createdAt,
@@ -420,9 +456,9 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                                 </span>
                               </div>
                             </div>
-                          );
-                        },
-                      )}
+                          </div>
+                        );
+                      })}
                 </div>
               )}
             </div>

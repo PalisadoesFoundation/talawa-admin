@@ -131,11 +131,30 @@ export const SEND_MESSAGE_TO_DIRECT_CHAT = gql`
 `;
 
 export const SEND_MESSAGE_TO_GROUP_CHAT = gql`
-  mutation sendMessageToGroupChat($chatId: ID!, $messageContent: String!) {
-    sendMessageToGroupChat(chatId: $chatId, messageContent: $messageContent) {
+  mutation sendMessageToGroupChat(
+    $chatId: ID!
+    $replyTo: ID
+    $messageContent: String!
+  ) {
+    sendMessageToGroupChat(
+      chatId: $chatId
+      replyTo: $replyTo
+      messageContent: $messageContent
+    ) {
       _id
       createdAt
       messageContent
+      replyTo {
+        _id
+        createdAt
+        messageContent
+        sender {
+          _id
+          firstName
+          lastName
+        }
+        updatedAt
+      }
       sender {
         _id
         firstName
