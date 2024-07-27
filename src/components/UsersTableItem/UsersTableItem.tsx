@@ -56,7 +56,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         },
       });
       if (data) {
-        toast.success('Removed User from Organization successfully');
+        toast.success(tCommon('removedSuccessfully', { item: 'User' }));
         resetAndRefetch();
       }
     } catch (error: unknown) {
@@ -230,13 +230,13 @@ const UsersTableItem = (props: Props): JSX.Element => {
               <Table className={styles.modalTable} responsive>
                 <thead>
                   <tr>
-                    <th>Name</th>
-                    <th>Address</th>
-                    <th>Created on</th>
-                    <th>Created By</th>
-                    <th>Users Role</th>
-                    <th>Change Role</th>
-                    <th>Action</th>
+                    <th>{tCommon('name')}</th>
+                    <th>{tCommon('address')}</th>
+                    <th>{tCommon('createdOn')}</th>
+                    <th>{tCommon('createdBy')}</th>
+                    <th>{tCommon('usersRole')}</th>
+                    <th>{tCommon('changeRole')}</th>
+                    <th>{tCommon('action')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -345,7 +345,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                               setShowRemoveUserModal(true);
                             }}
                           >
-                            Remove User
+                            {tCommon('removeUser')}
                           </Button>
                         </td>
                       </tr>
@@ -362,7 +362,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
             onClick={() => setShowJoinedOrganizations(false)}
             data-testid={`closeJoinedOrgsBtn${user.user._id}`}
           >
-            Close
+            {tCommon('close')}
           </Button>
         </Modal.Footer>
       </Modal>
@@ -419,13 +419,13 @@ const UsersTableItem = (props: Props): JSX.Element => {
               <Table className={styles.modalTable} responsive>
                 <thead>
                   <tr>
-                    <th>Name</th>
-                    <th>Address</th>
-                    <th>Created on</th>
-                    <th>Created By</th>
-                    <th>Users Role</th>
-                    <th>Change Role</th>
-                    <th>Action</th>
+                    <th>{tCommon('name')}</th>
+                    <th>{tCommon('address')}</th>
+                    <th>{tCommon('createdOn')}</th>
+                    <th>{tCommon('createdBy')}</th>
+                    <th>{tCommon('usersRole')}</th>
+                    <th>{tCommon('changeRole')}</th>
+                    <th>{tCommon('action')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -528,7 +528,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                               setShowRemoveUserModal(true);
                             }}
                           >
-                            Remove User
+                            {tCommon('removeUser')}
                           </Button>
                         </td>
                       </tr>
@@ -545,7 +545,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
             onClick={() => setShowBlockedOrganizations(false)}
             data-testid={`closeBlockedByOrgsBtn${user.user._id}`}
           >
-            Close
+            {tCommon('close')}
           </Button>
         </Modal.Footer>
       </Modal>
@@ -557,21 +557,15 @@ const UsersTableItem = (props: Props): JSX.Element => {
       >
         <Modal.Header className="bg-danger" closeButton>
           <Modal.Title className="text-white">
-            Remove User from {removeUserProps.orgName}
+            {t('removeUserFrom', { org: removeUserProps.orgName })}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <p>
-            Are you sure you want to remove{' '}
-            <strong>
-              &ldquo;{user.user.firstName} {user.user.lastName}&rdquo;
-            </strong>{' '}
-            from organization{' '}
-            <strong>
-              &ldquo;
-              {removeUserProps.orgName}&rdquo;
-            </strong>{' '}
-            ?
+            {t('removeConfirmation', {
+              name: `${user.user.firstName} ${user.user.lastName}`,
+              org: removeUserProps.orgName,
+            })}
           </p>
         </Modal.Body>
         <Modal.Footer>
@@ -580,14 +574,14 @@ const UsersTableItem = (props: Props): JSX.Element => {
             onClick={() => onHideRemoveUserModal()}
             data-testid={`closeRemoveUserModal${user.user._id}`}
           >
-            Close
+            {tCommon('close')}
           </Button>
           <Button
             variant="danger"
             onClick={() => confirmRemoveUser()}
             data-testid={`confirmRemoveUser${user.user._id}`}
           >
-            Remove
+            {tCommon('remove')}
           </Button>
         </Modal.Footer>
       </Modal>

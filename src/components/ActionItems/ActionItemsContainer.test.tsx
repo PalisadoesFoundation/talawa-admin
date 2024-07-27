@@ -86,6 +86,35 @@ describe('Testing Action Item Categories Component', () => {
         screen.queryByText(translations.noActionItems),
       ).not.toBeInTheDocument();
     });
+
+    expect(screen.getByText('#')).toBeInTheDocument();
+    expect(screen.getByText(translations.assignee)).toBeInTheDocument();
+    expect(
+      screen.getByText(translations.actionItemCategory),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(translations.preCompletionNotes),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(translations.postCompletionNotes),
+    ).toBeInTheDocument();
+
+    await wait();
+    expect(screen.getAllByText('Harve Lance')[0]).toBeInTheDocument();
+
+    const asigneeAnchorElement = screen.getAllByText('Harve Lance')[0];
+    expect(asigneeAnchorElement.tagName).toBe('A');
+    expect(asigneeAnchorElement).toHaveAttribute('href', '/member/event1');
+
+    expect(screen.getAllByText('ActionItemCategory 1')[0]).toBeInTheDocument();
+    const updateButtons = screen.getAllByTestId('editActionItemModalBtn');
+    const previewButtons = screen.getAllByTestId('previewActionItemModalBtn');
+    const updateStatusButtons = screen.getAllByTestId(
+      'actionItemStatusChangeCheckbox',
+    );
+    expect(updateButtons[0]).toBeInTheDocument();
+    expect(previewButtons[0]).toBeInTheDocument();
+    expect(updateStatusButtons[0]).toBeInTheDocument();
   });
 
   test('component loads correctly with no action items', async () => {
@@ -180,6 +209,48 @@ describe('Testing Action Item Categories Component', () => {
     await waitForElementToBeRemoved(() =>
       screen.queryByTestId('actionItemStatusChangeModalCloseBtn'),
     );
+  });
+
+  test('completed action item status change modal loads correctly', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <I18nextProvider i18n={i18nForTest}>
+                <ActionItemsContainer {...props} />
+              </I18nextProvider>
+            </LocalizationProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await waitFor(() => {
+      expect(
+        screen.getAllByTestId('actionItemStatusChangeCheckbox')[1],
+      ).toBeInTheDocument();
+    });
+    userEvent.click(screen.getAllByTestId('actionItemStatusChangeCheckbox')[1]);
+
+    await waitFor(() => {
+      return expect(
+        screen.findByTestId('actionItemStatusChangeModalCloseBtn'),
+      ).resolves.toBeInTheDocument();
+    });
+    expect(screen.getByText(translations.actionItemStatus)).toBeInTheDocument();
+
+    expect(
+      screen.getByTestId('actionItemsStatusChangeNotes'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText(translations.actionItemCompleted),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: translations.makeActive }),
+    ).toBeInTheDocument();
   });
 
   test('opens and closes the preview modal correctly', async () => {
@@ -473,6 +544,9 @@ describe('Testing Action Item Categories Component', () => {
         screen.getByTestId('actionItemStatusChangeSubmitBtn'),
       ).toBeInTheDocument();
     });
+    expect(
+      screen.getByTestId('actionItemStatusChangeSubmitBtn'),
+    ).toHaveTextContent(translations.markCompletion);
     userEvent.click(screen.getByTestId('actionItemStatusChangeSubmitBtn'));
 
     await waitFor(() => {
@@ -506,6 +580,9 @@ describe('Testing Action Item Categories Component', () => {
         screen.getByTestId('actionItemStatusChangeSubmitBtn'),
       ).toBeInTheDocument();
     });
+    expect(
+      screen.getByTestId('actionItemStatusChangeSubmitBtn'),
+    ).toHaveTextContent(translations.makeActive);
     userEvent.click(screen.getByTestId('actionItemStatusChangeSubmitBtn'));
 
     await waitFor(() => {
@@ -666,5 +743,35 @@ describe('Testing Action Item Categories Component', () => {
         getAllByTestId('actionItemPostCompletionNotesOverlay')[0],
       );
     });
+  });
+
+  test('Action Items loads with correct headers', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <ActionItemsContainer {...props} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const actionItemHeaders = screen.getByTestId('actionItemsHeader');
+    expect(actionItemHeaders).toBeInTheDocument();
+    expect(screen.getByText(translations.assignee)).toBeInTheDocument();
+    expect(
+      screen.getByText(translations.actionItemCategory),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(translations.preCompletionNotes),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(translations.postCompletionNotes),
+    ).toBeInTheDocument();
+    expect(screen.getByText(translations.options)).toBeInTheDocument();
   });
 });
