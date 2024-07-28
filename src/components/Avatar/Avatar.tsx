@@ -7,6 +7,7 @@ interface InterfaceAvatarProps {
   name: string;
   alt?: string;
   size?: number;
+  containerStyle?: string;
   avatarStyle?: string;
   dataTestId?: string;
   radius?: number;
@@ -17,6 +18,7 @@ const Avatar = ({
   alt = 'Dummy Avatar',
   size,
   avatarStyle,
+  containerStyle,
   dataTestId,
   radius,
 }: InterfaceAvatarProps): JSX.Element => {
@@ -31,7 +33,7 @@ const Avatar = ({
   const svg = avatar.toString();
 
   return (
-    <div className={styles.imageContainer}>
+    <div className={`${containerStyle ?? styles.imageContainer}`}>
       <img
         src={svg}
         alt={alt}

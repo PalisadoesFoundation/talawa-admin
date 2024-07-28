@@ -107,31 +107,33 @@ const fundCampaignPledge = (): JSX.Element => {
     refetch: refetchPledge,
   }: {
     data?: {
-      getFundraisingCampaignById: InterfaceQueryFundCampaignsPledges;
+      getFundraisingCampaigns: InterfaceQueryFundCampaignsPledges[];
     };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => Promise<
       ApolloQueryResult<{
-        getFundraisingCampaignById: InterfaceQueryFundCampaignsPledges;
+        getFundraisingCampaigns: InterfaceQueryFundCampaignsPledges[];
       }>
     >;
   } = useQuery(FUND_CAMPAIGN_PLEDGE, {
     variables: {
-      id: fundCampaignId,
-      orderBy: sortBy,
+      where: {
+        id: fundCampaignId,
+      },
+      pledgeOrderBy: sortBy,
     },
   });
 
   const endDate = dayjs(
-    pledgeData?.getFundraisingCampaignById?.endDate,
+    pledgeData?.getFundraisingCampaigns[0]?.endDate,
     'YYYY-MM-DD',
   ).toDate();
 
   const { pledges, totalPledged } = useMemo(() => {
     let totalPledged = 0;
     const pledges =
-      pledgeData?.getFundraisingCampaignById.pledges.filter((pledge) => {
+      pledgeData?.getFundraisingCampaigns[0].pledges.filter((pledge) => {
         totalPledged += pledge.amount;
         const search = searchTerm.toLowerCase();
         return pledge.users.some((user) => {
@@ -145,11 +147,11 @@ const fundCampaignPledge = (): JSX.Element => {
   useEffect(() => {
     if (pledgeData) {
       setCampaignInfo({
-        name: pledgeData.getFundraisingCampaignById.name,
-        goal: pledgeData.getFundraisingCampaignById.fundingGoal,
-        startDate: pledgeData.getFundraisingCampaignById.startDate,
-        endDate: pledgeData.getFundraisingCampaignById.endDate,
-        currency: pledgeData.getFundraisingCampaignById.currency,
+        name: pledgeData.getFundraisingCampaigns[0].name,
+        goal: pledgeData.getFundraisingCampaigns[0].fundingGoal,
+        startDate: pledgeData.getFundraisingCampaigns[0].startDate,
+        endDate: pledgeData.getFundraisingCampaigns[0].endDate,
+        currency: pledgeData.getFundraisingCampaigns[0].currency,
       });
     }
   }, [pledgeData]);
@@ -235,6 +237,7 @@ const fundCampaignPledge = (): JSX.Element => {
                     <div className={styles.avatarContainer}>
                       <Avatar
                         key={user._id + '1'}
+                        containerStyle={styles.imageContainer}
                         avatarStyle={styles.TableImage}
                         name={user.firstName + ' ' + user.lastName}
                         alt={user.firstName + ' ' + user.lastName}
@@ -574,7 +577,7 @@ const fundCampaignPledge = (): JSX.Element => {
         orgId={orgId}
         pledge={pledge}
         refetchPledge={refetchPledge}
-        endDate={pledgeData?.getFundraisingCampaignById.endDate as Date}
+        endDate={pledgeData?.getFundraisingCampaigns[0].endDate as Date}
         mode={pledgeModalMode}
       />
       {/* Delete Pledge ModalState */}

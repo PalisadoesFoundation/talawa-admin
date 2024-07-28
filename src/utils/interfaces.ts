@@ -252,14 +252,7 @@ export interface InterfaceQueryFundCampaignsPledges {
   currency: string;
   startDate: Date;
   endDate: Date;
-  pledges: {
-    _id: string;
-    amount: number;
-    currency: string;
-    endDate: string;
-    startDate: string;
-    users: InterfacePledger[];
-  }[];
+  pledges: InterfacePledgeInfo[];
 }
 export interface InterfaceFundInfo {
   _id: string;
@@ -283,6 +276,7 @@ export interface InterfaceCampaignInfo {
 }
 export interface InterfacePledgeInfo {
   _id: string;
+  campaign?: { _id: string; name: string; endDate: Date };
   amount: number;
   currency: string;
   endDate: string;
@@ -455,6 +449,7 @@ export interface InterfacePledger {
   lastName: string;
   image: string | null;
 }
+
 export interface InterfaceAgendaItemCategoryInfo {
   _id: string;
   name: string;

@@ -989,13 +989,17 @@
   "userCampaigns": {
     "title": "Fundraising Campaigns",
     "searchByName": "Search by Name...",
+    "searchBy": "Search by",
+    "pledgers": "Pledgers",
+    "campaigns": "Campaigns",
     "myPledges": "My Pledges",
-    "lowestGoal": "Lowest Goal",
-    "highestGoal": "Highest Goal",
+    "lowestAmount": "Lowest Amount",
+    "highestAmount": "Highest Amount",
     "latestEndDate": "Latest End Date",
     "earliestEndDate": "Earliest End Date",
     "addPledge": "Add Pledge",
-    "viewPledges": "View Pledges"
+    "viewPledges": "View Pledges",
+    "noPledges": "No Pledges Found"
   },
   "userPledges": {
     "title": "My Pledges"

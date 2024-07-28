@@ -56,8 +56,11 @@ export const FUND_CAMPAIGN = gql`
 `;
 
 export const FUND_CAMPAIGN_PLEDGE = gql`
-  query GetFundraisingCampaignById($id: ID!, $orderBy: PledgeOrderByInput) {
-    getFundraisingCampaignById(id: $id, orderBy: $orderBy) {
+  query GetFundraisingCampaigns(
+    $where: CampaignWhereInput
+    $pledgeOrderBy: PledgeOrderByInput
+  ) {
+    getFundraisingCampaigns(where: $where, pledgeOrderBy: $pledgeOrderBy) {
       name
       fundingGoal
       currency
@@ -92,6 +95,33 @@ export const USER_FUND_CAMPAIGNS = gql`
       name
       fundingGoal
       currency
+    }
+  }
+`;
+
+export const USER_PLEDGES = gql`
+  query GetPledgesByUserId(
+    $userId: ID!
+    $where: PledgeWhereInput
+    $orderBy: PledgeOrderByInput
+  ) {
+    getPledgesByUserId(userId: $userId, where: $where, orderBy: $orderBy) {
+      _id
+      amount
+      startDate
+      endDate
+      campaign {
+        _id
+        name
+        endDate
+      }
+      currency
+      users {
+        _id
+        firstName
+        lastName
+        image
+      }
     }
   }
 `;
