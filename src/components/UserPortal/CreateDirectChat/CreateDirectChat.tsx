@@ -5,7 +5,10 @@ import styles from './CreateDirectChat.module.css';
 import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
-import { CREATE_DIRECT_CHAT } from 'GraphQl/Mutations/OrganizationMutations';
+import {
+  CREATE_CHAT,
+  CREATE_DIRECT_CHAT,
+} from 'GraphQl/Mutations/OrganizationMutations';
 import Table from '@mui/material/Table';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
@@ -22,7 +25,7 @@ import { useParams } from 'react-router-dom';
 interface InterfaceCreateDirectChatProps {
   toggleCreateDirectChatModal: () => void;
   createDirectChatModalisOpen: boolean;
-  contactRefetch: (
+  chatsListRefetch: (
     variables?:
       | Partial<{
           id: any;
@@ -49,10 +52,10 @@ const StyledTableRow = styled(TableRow)(() => ({
 
 const { getItem } = useLocalStorage();
 
-export default function groupChat({
+export default function createDirectChatModal({
   toggleCreateDirectChatModal,
   createDirectChatModalisOpen,
-  contactRefetch,
+  chatsListRefetch,
 }: InterfaceCreateDirectChatProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userChat',
@@ -64,17 +67,18 @@ export default function groupChat({
 
   const [userName, setUserName] = useState('');
 
-  const [createDirectChat] = useMutation(CREATE_DIRECT_CHAT);
+  const [createChat] = useMutation(CREATE_CHAT);
 
   const handleCreateDirectChat = async (id: string): Promise<void> => {
-    console.log(organizationId);
-    await createDirectChat({
+    await createChat({
       variables: {
         organizationId,
         userIds: [userId, id],
+        isGroup: false,
       },
     });
-    contactRefetch();
+    chatsListRefetch();
+
     toggleCreateDirectChatModal();
   };
 

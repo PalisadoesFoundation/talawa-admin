@@ -19,7 +19,10 @@ import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
 import { USER_JOINED_ORGANIZATIONS } from 'GraphQl/Queries/OrganizationQueries';
 import useLocalStorage from 'utils/useLocalstorage';
-import { CREATE_GROUP_CHAT } from 'GraphQl/Mutations/OrganizationMutations';
+import {
+  CREATE_CHAT,
+  CREATE_GROUP_CHAT,
+} from 'GraphQl/Mutations/OrganizationMutations';
 import Table from '@mui/material/Table';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
@@ -36,7 +39,7 @@ import { useTranslation } from 'react-i18next';
 interface InterfaceCreateGroupChatProps {
   toggleCreateGroupChatModal: () => void;
   createGroupChatModalisOpen: boolean;
-  groupChatListRefetch: (
+  chatsListRefetch: (
     variables?:
       | Partial<{
           id: any;
@@ -90,7 +93,7 @@ const { getItem } = useLocalStorage();
 export default function CreateGroupChat({
   toggleCreateGroupChatModal,
   createGroupChatModalisOpen,
-  groupChatListRefetch,
+  chatsListRefetch,
 }: InterfaceCreateGroupChatProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userChat',
@@ -98,7 +101,7 @@ export default function CreateGroupChat({
 
   const userId: string | null = getItem('userId');
 
-  const [createGroupChat] = useMutation(CREATE_GROUP_CHAT);
+  const [createChat] = useMutation(CREATE_CHAT);
 
   const [organizations, setOrganizations] = useState([]);
   const [selectedOrganization, setSelectedOrganization] = useState('');
@@ -137,14 +140,15 @@ export default function CreateGroupChat({
   }, [userIds]);
 
   async function handleCreateGroupChat(): Promise<void> {
-    const groupChat = await createGroupChat({
+    const chat = await createChat({
       variables: {
         organizationId: selectedOrganization,
         userIds: [userId, ...userIds],
-        title,
+        name: title,
+        isGroup: true,
       },
     });
-    groupChatListRefetch();
+    chatsListRefetch();
     toggleAddUserModal();
     toggleCreateGroupChatModal();
     reset();

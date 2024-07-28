@@ -28,7 +28,7 @@ const Avatar = ({
     }).toDataUriSync();
   }, [name, size]);
 
-  const svg = avatar.toString();
+  const svg = avatar?.toString();
 
   return (
     <div className={styles.imageContainer}>

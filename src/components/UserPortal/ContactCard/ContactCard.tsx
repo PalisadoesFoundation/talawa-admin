@@ -5,20 +5,16 @@ import Avatar from 'components/Avatar/Avatar';
 interface InterfaceContactCardProps {
   id: string;
   title: string;
-  subtitle: string;
   image: string;
   selectedContact: string;
   setSelectedContact: React.Dispatch<React.SetStateAction<string>>;
-  type: string;
-  setSelectedChatType: React.Dispatch<React.SetStateAction<string>>;
+  isGroup: boolean;
 }
 
 function contactCard(props: InterfaceContactCardProps): JSX.Element {
   const handleSelectedContactChange = (): void => {
     props.setSelectedContact(props.id);
-    props.setSelectedChatType(props.type);
   };
-
   const [isSelected, setIsSelected] = React.useState(
     props.selectedContact === props.id,
   );
@@ -51,7 +47,6 @@ function contactCard(props: InterfaceContactCardProps): JSX.Element {
         )}
         <div className={styles.contactNameContainer}>
           <b>{props.title}</b>
-          <small className={styles.grey}>{props.subtitle}</small>
         </div>
       </div>
     </>
