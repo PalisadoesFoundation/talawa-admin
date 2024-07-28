@@ -192,11 +192,6 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
       userId: userId,
     },
     onData: (directMessageSubscriptionData) => {
-      console.log(
-        directMessageSubscriptionData?.data.data.messageSentToDirectChat
-          .directChatMessageBelongsTo['_id'],
-        props.selectedContact,
-      );
       if (
         directMessageSubscriptionData?.data.data.messageSentToDirectChat &&
         directMessageSubscriptionData?.data.data.messageSentToDirectChat
@@ -297,6 +292,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                                 ? styles.messageSentContainer
                                 : styles.messageReceivedContainer
                             }
+                            data-testid="message"
                             key={message._id}
                           >
                             <div
@@ -428,7 +424,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                               </div>
 
                               <div className={styles.messageAttributes}>
-                                <Dropdown style={{ cursor: 'pointer' }}>
+                                <Dropdown data-testid="moreOptions" style={{ cursor: 'pointer' }}>
                                   <Dropdown.Toggle
                                     className={styles.customToggle}
                                     data-testid={'dropdown'}
@@ -440,7 +436,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                                       onClick={() => {
                                         setReplyToDirectMessage(message);
                                       }}
-                                      data-testid="newDirectChat"
+                                      data-testid="replyBtn"
                                     >
                                       Reply
                                     </Dropdown.Item>

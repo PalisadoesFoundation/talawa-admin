@@ -57,6 +57,7 @@ const MOCKS = [
               _id: '1',
               createdAt: '',
               messageContent: 'Hello',
+              replyTo: null,
               sender: {
                 _id: '2',
                 firstName: 'Test',
@@ -91,6 +92,7 @@ const MOCKS = [
               _id: '1',
               createdAt: '',
               messageContent: 'Hello',
+              replyTo: null,
               sender: {
                 _id: '2',
                 firstName: 'Test',
@@ -139,6 +141,7 @@ const MOCKS = [
               _id: '1',
               createdAt: '',
               messageContent: 'Hello',
+              replyTo: null,
               sender: {
                 _id: '2',
                 firstName: 'Test',
@@ -173,6 +176,7 @@ const MOCKS = [
               _id: '1',
               createdAt: '',
               messageContent: 'Hello',
+              replyTo: null,
               sender: {
                 _id: '2',
                 firstName: 'Test',
@@ -221,6 +225,7 @@ const MOCKS = [
               _id: '1',
               createdAt: '',
               messageContent: 'Hello',
+              replyTo: null,
               sender: {
                 _id: '2',
                 firstName: 'Test',
@@ -255,6 +260,7 @@ const MOCKS = [
               _id: '1',
               createdAt: '',
               messageContent: 'Hello',
+              replyTo: null,
               sender: {
                 _id: '2',
                 firstName: 'Test',
@@ -305,6 +311,7 @@ const MOCKS = [
                 _id: '668930bae43ce54e6e302cf1',
                 createdAt: '2024-07-06T11:55:38.933Z',
                 messageContent: 'hJnkank',
+                replyTo: null,
                 receiver: {
                   _id: '65378abd85008f171cf2990d',
                   firstName: 'Vyvyan',
@@ -361,6 +368,7 @@ const MOCKS = [
                 _id: '6676932692e995354d98ab7f',
                 createdAt: '2024-06-22T09:02:30.776Z',
                 messageContent: 'hii',
+                replyTo: null,
                 receiver: {
                   _id: '67378abd85008f171cf2990d',
                   firstName: 'Darcy',
@@ -431,6 +439,7 @@ const MOCKS = [
                 _id: '668930bae43ce54e6e302cf1',
                 createdAt: '2024-07-06T11:55:38.933Z',
                 messageContent: 'hJnkank',
+                replyTo: null,
                 receiver: {
                   _id: '65378abd85008f171cf2990d',
                   firstName: 'Vyvyan',
@@ -487,6 +496,7 @@ const MOCKS = [
                 _id: '6676932692e995354d98ab7f',
                 createdAt: '2024-06-22T09:02:30.776Z',
                 messageContent: 'hii',
+                replyTo: null,
                 receiver: {
                   _id: '67378abd85008f171cf2990d',
                   firstName: 'Darcy',
@@ -557,6 +567,7 @@ const MOCKS = [
                 _id: '668930bae43ce54e6e302cf1',
                 createdAt: '2024-07-06T11:55:38.933Z',
                 messageContent: 'hJnkank',
+                replyTo: null,
                 receiver: {
                   _id: '65378abd85008f171cf2990d',
                   firstName: 'Vyvyan',
@@ -613,6 +624,7 @@ const MOCKS = [
                 _id: '6676932692e995354d98ab7f',
                 createdAt: '2024-06-22T09:02:30.776Z',
                 messageContent: 'hii',
+                replyTo: null,
                 receiver: {
                   _id: '67378abd85008f171cf2990d',
                   firstName: 'Darcy',
@@ -683,6 +695,7 @@ const MOCKS = [
                 _id: '668930bae43ce54e6e302cf1',
                 createdAt: '2024-07-06T11:55:38.933Z',
                 messageContent: 'hJnkank',
+                replyTo: null,
                 receiver: {
                   _id: '65378abd85008f171cf2990d',
                   firstName: 'Vyvyan',
@@ -739,6 +752,7 @@ const MOCKS = [
                 _id: '6676932692e995354d98ab7f',
                 createdAt: '2024-06-22T09:02:30.776Z',
                 messageContent: 'hii',
+                replyTo: null,
                 receiver: {
                   _id: '67378abd85008f171cf2990d',
                   firstName: 'Darcy',
@@ -809,6 +823,7 @@ const MOCKS = [
                 _id: '668930bae43ce54e6e302cf1',
                 createdAt: '2024-07-06T11:55:38.933Z',
                 messageContent: 'hJnkank',
+                replyTo: null,
                 receiver: {
                   _id: '65378abd85008f171cf2990d',
                   firstName: 'Vyvyan',
@@ -865,6 +880,7 @@ const MOCKS = [
                 _id: '6676932692e995354d98ab7f',
                 createdAt: '2024-06-22T09:02:30.776Z',
                 messageContent: 'hii',
+                replyTo: null,
                 receiver: {
                   _id: '67378abd85008f171cf2990d',
                   firstName: 'Darcy',
@@ -1712,6 +1728,7 @@ const MESSAGE_SENT_TO_GROUP_CHAT_MOCK = [
           _id: '668ec1f1364e03ac47a151',
           createdAt: '2024-07-10T17:16:33.248Z',
           messageContent: 'Test ',
+          replyTo: null,
           sender: {
             _id: '64378abd85008f171cf2990d',
             firstName: 'Wilt',
@@ -1736,6 +1753,7 @@ const MESSAGE_SENT_TO_GROUP_CHAT_MOCK = [
           _id: '668ec1f1df364e03ac47a151',
           createdAt: '2024-07-10T17:16:33.248Z',
           messageContent: 'Test ',
+          replyTo: null,
           sender: {
             _id: '64378abd85008f171cf2990d',
             firstName: 'Wilt',
@@ -1760,6 +1778,7 @@ const MESSAGE_SENT_TO_GROUP_CHAT_MOCK = [
           _id: '668ec1f13603ac4697a151',
           createdAt: '2024-07-10T17:16:33.248Z',
           messageContent: 'Test ',
+          replyTo: null,
           sender: {
             _id: '64378abd85008f171cf2990d',
             firstName: 'Wilt',
@@ -1787,6 +1806,7 @@ const MESSAGE_SENT_TO_DIRECT_CHAT_MOCK = [
           _id: '668ec1f1364e03ac4697a151',
           createdAt: '2024-07-10T17:16:33.248Z',
           messageContent: 'Test ',
+          replyTo: null,
           receiver: {
             _id: '65378abd85008f171cf2990d',
             firstName: 'Vyvyan',
@@ -1817,6 +1837,7 @@ const MESSAGE_SENT_TO_DIRECT_CHAT_MOCK = [
           _id: '668ec1f1364e03ac4697vgfa151',
           createdAt: '2024-07-10T17:16:33.248Z',
           messageContent: 'Test ',
+          replyTo: null,
           receiver: {
             _id: '65378abd85008f171cf2990d',
             firstName: 'Vyvyan',
@@ -1847,6 +1868,7 @@ const MESSAGE_SENT_TO_DIRECT_CHAT_MOCK = [
           _id: '6ec1f1364e03ac4697a151',
           createdAt: '2024-07-10T17:16:33.248Z',
           messageContent: 'Test ',
+          replyTo: null,
           receiver: {
             _id: '65378abd85008f171cf2990d',
             firstName: 'Vyvyan',
@@ -1884,6 +1906,7 @@ const DIRECT_CHAT_BY_ID_QUERY_MOCK = [
               _id: '345678',
               createdAt: '345678908765',
               messageContent: 'Hello',
+              replyTo: null,
               receiver: {
                 _id: '1',
                 firstName: 'Disha',
@@ -1937,6 +1960,7 @@ const DIRECT_CHAT_BY_ID_QUERY_MOCK = [
               _id: '345678',
               createdAt: '345678908765',
               messageContent: 'Hello',
+              replyTo: null,
               receiver: {
                 _id: '1',
                 firstName: 'Disha',
@@ -1990,6 +2014,7 @@ const DIRECT_CHAT_BY_ID_QUERY_MOCK = [
               _id: '345678',
               createdAt: '345678908765',
               messageContent: 'Hello',
+              replyTo: null,
               receiver: {
                 _id: '1',
                 firstName: 'Disha',
@@ -2043,6 +2068,7 @@ const DIRECT_CHAT_BY_ID_QUERY_MOCK = [
               _id: '345678',
               createdAt: '345678908765',
               messageContent: 'Hello',
+              replyTo: null,
               receiver: {
                 _id: '1',
                 firstName: 'Disha',
@@ -2096,6 +2122,7 @@ const DIRECT_CHAT_BY_ID_QUERY_MOCK = [
               _id: '345678',
               createdAt: '345678908765',
               messageContent: 'Hello',
+              replyTo: null,
               receiver: {
                 _id: '1',
                 firstName: 'Disha',
@@ -2153,6 +2180,7 @@ const GROUP_CHAT_BY_ID_QUERY_MOCK = [
               _id: '345678',
               createdAt: '345678908765',
               messageContent: 'Hello',
+              replyTo: null,
               sender: {
                 _id: '2',
                 firstName: 'Test',
@@ -2221,6 +2249,7 @@ const GROUP_CHAT_BY_ID_QUERY_MOCK = [
               _id: '345678',
               createdAt: '345678908765',
               messageContent: 'Hello',
+              replyTo: null,
               sender: {
                 _id: '2',
                 firstName: 'Test',
@@ -2289,6 +2318,7 @@ const GROUP_CHAT_BY_ID_QUERY_MOCK = [
               _id: '345678',
               createdAt: '345678908765',
               messageContent: 'Hello',
+              replyTo: null,
               sender: {
                 _id: '2',
                 firstName: 'Test',
@@ -2357,6 +2387,7 @@ const GROUP_CHAT_BY_ID_QUERY_MOCK = [
               _id: '345678',
               createdAt: '345678908765',
               messageContent: 'Hello',
+              replyTo: null,
               sender: {
                 _id: '2',
                 firstName: 'Test',

@@ -6,7 +6,6 @@ import {
   screen,
   fireEvent,
   waitFor,
-  findAllByTestId,
 } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -53,9 +52,10 @@ const SEND_MESSAGE_TO_DIRECT_CHAT_MOCK = {
   result: {
     data: {
       sendMessageToDirectChat: {
-        _id: '',
+        _id: '1',
         createdAt: '',
-        messageContent: '',
+        messageContent: 'Hello',
+        replyTo: null,
         receiver: {
           _id: '',
           firstName: '',
@@ -83,9 +83,10 @@ const SEND_MESSAGE_TO_GROUP_CHAT_MOCK = {
   result: {
     data: {
       sendMessageToGroupChat: {
-        _id: '',
+        _id: '1',
         createdAt: '',
-        messageContent: '',
+        messageContent: 'Test Message',
+        replyTo: null,
         sender: {
           _id: '',
           firstName: '',
@@ -111,6 +112,7 @@ const MESSAGE_SENT_TO_GROUP_CHAT_MOCK = [
           _id: '668ec1f1364e03ac47a151',
           createdAt: '2024-07-10T17:16:33.248Z',
           messageContent: 'Test ',
+          replyTo: null,
           sender: {
             _id: '64378abd85008f171cf2990d',
             firstName: 'Wilt',
@@ -135,6 +137,7 @@ const MESSAGE_SENT_TO_GROUP_CHAT_MOCK = [
           _id: '668ec1f1df364e03ac47a151',
           createdAt: '2024-07-10T17:16:33.248Z',
           messageContent: 'Test ',
+          replyTo: null,
           sender: {
             _id: '64378abd85008f171cf2990d',
             firstName: 'Wilt',
@@ -159,6 +162,19 @@ const MESSAGE_SENT_TO_GROUP_CHAT_MOCK = [
           _id: '668ec1f13603ac4697a151',
           createdAt: '2024-07-10T17:16:33.248Z',
           messageContent: 'Test ',
+          replyTo: {
+            _id: '668ec1f1df364e03ac47a151',
+            createdAt: '2024-07-10T17:16:33.248Z',
+            messageContent: 'Test ',
+            replyTo: null,
+            sender: {
+              _id: '64378abd85008f171cf2990d',
+              firstName: 'Wilt',
+              lastName: 'Shepherd',
+              image: '',
+            },
+            updatedAt: '2024-07-10',
+          },
           sender: {
             _id: '64378abd85008f171cf2990d',
             firstName: 'Wilt',
@@ -186,6 +202,7 @@ const MESSAGE_SENT_TO_DIRECT_CHAT_MOCK = [
           _id: '668ec1f1364e03ac4697a151',
           createdAt: '2024-07-10T17:16:33.248Z',
           messageContent: 'Test ',
+          replyTo: null,
           receiver: {
             _id: '65378abd85008f171cf2990d',
             firstName: 'Vyvyan',
@@ -216,6 +233,7 @@ const MESSAGE_SENT_TO_DIRECT_CHAT_MOCK = [
           _id: '668ec1f1364e03ac4697vgfa151',
           createdAt: '2024-07-10T17:16:33.248Z',
           messageContent: 'Test ',
+          replyTo: null,
           receiver: {
             _id: '65378abd85008f171cf2990d',
             firstName: 'Vyvyan',
@@ -246,6 +264,7 @@ const MESSAGE_SENT_TO_DIRECT_CHAT_MOCK = [
           _id: '6ec1f1364e03ac4697a151',
           createdAt: '2024-07-10T17:16:33.248Z',
           messageContent: 'Test ',
+          replyTo: null,
           receiver: {
             _id: '65378abd85008f171cf2990d',
             firstName: 'Vyvyan',
@@ -283,6 +302,7 @@ const DIRECT_CHAT_BY_ID_QUERY_MOCK = [
               _id: '345678',
               createdAt: '345678908765',
               messageContent: 'Hello',
+              replyTo: null,
               receiver: {
                 _id: '1',
                 firstName: 'Disha',
@@ -336,6 +356,7 @@ const DIRECT_CHAT_BY_ID_QUERY_MOCK = [
               _id: '345678',
               createdAt: '345678908765',
               messageContent: 'Hello',
+              replyTo: null,
               receiver: {
                 _id: '1',
                 firstName: 'Disha',
@@ -389,6 +410,7 @@ const DIRECT_CHAT_BY_ID_QUERY_MOCK = [
               _id: '345678',
               createdAt: '345678908765',
               messageContent: 'Hello',
+              replyTo: null,
               receiver: {
                 _id: '1',
                 firstName: 'Disha',
@@ -442,6 +464,7 @@ const DIRECT_CHAT_BY_ID_QUERY_MOCK = [
               _id: '345678',
               createdAt: '345678908765',
               messageContent: 'Hello',
+              replyTo: null,
               receiver: {
                 _id: '1',
                 firstName: 'Disha',
@@ -499,6 +522,7 @@ const GROUP_CHAT_BY_ID_QUERY_MOCK = [
               _id: '345678',
               createdAt: '345678908765',
               messageContent: 'Hello',
+              replyTo: null,
               sender: {
                 _id: '2',
                 firstName: 'Test',
@@ -567,6 +591,7 @@ const GROUP_CHAT_BY_ID_QUERY_MOCK = [
               _id: '345678',
               createdAt: '345678908765',
               messageContent: 'Hello',
+              replyTo: null,
               sender: {
                 _id: '2',
                 firstName: 'Test',
@@ -635,6 +660,7 @@ const GROUP_CHAT_BY_ID_QUERY_MOCK = [
               _id: '345678',
               createdAt: '345678908765',
               messageContent: 'Hello',
+              replyTo: null,
               sender: {
                 _id: '2',
                 firstName: 'Test',
@@ -703,6 +729,7 @@ const GROUP_CHAT_BY_ID_QUERY_MOCK = [
               _id: '345678',
               createdAt: '345678908765',
               messageContent: 'Hello',
+              replyTo: null,
               sender: {
                 _id: '2',
                 firstName: 'Test',
@@ -903,5 +930,29 @@ describe('Testing Chatroom Component [User Portal]', () => {
     await waitFor(() => {
       expect(input.value).toBeFalsy();
     });
+
+    const messages = await screen.findAllByTestId('groupChatMsg');
+
+    expect(messages.length).not.toBe(0);
+
+    act(() => {
+      fireEvent.mouseOver(messages[0]);
+    })
+
+    await waitFor(async () => {
+      expect(await screen.findByTestId('moreOptions')).toBeInTheDocument()
+    })
+
+    const moreOptionsBtn = await screen.findByTestId('dropdown')
+    act( () => {
+      fireEvent.click(moreOptionsBtn);
+    })
+
+    const replyBtn = await screen.findByTestId('replyBtn');
+
+    // await waitFor(() => {
+    //   expect(replyBtn).toBeInTheDocument();
+    // })
+    fireEvent.click(replyBtn);
   });
 });
