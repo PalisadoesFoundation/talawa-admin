@@ -47,6 +47,7 @@ function advertisementRegister({
 }: InterfaceAddOnRegisterProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   const { t: tCommon } = useTranslation('common');
+  const { t: tErrors } = useTranslation('errors');
 
   const { orgId: currentOrg } = useParams();
 
@@ -107,7 +108,7 @@ function advertisementRegister({
     try {
       console.log('At handle register', formState);
       if (formState.endDate < formState.startDate) {
-        toast.error('End date must be greater than or equal to start date');
+        toast.error(t('endDateGreaterOrEqual'));
         return;
       }
       const { data } = await create({
@@ -122,7 +123,7 @@ function advertisementRegister({
       });
 
       if (data) {
-        toast.success('Advertisement created successfully');
+        toast.success(t('advertisementCreated'));
         setFormState({
           name: '',
           advertisementMedia: '',
@@ -135,7 +136,9 @@ function advertisementRegister({
       setAfter(null);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error('An error occured, could not create new advertisement');
+        toast.error(
+          tErrors('errorOccurredCouldntCreate', { entity: 'advertisement' }),
+        );
         console.log('error occured', error.message);
       }
     }
@@ -155,7 +158,7 @@ function advertisementRegister({
         updatedFields.type = formState.type;
       }
       if (formState.endDate < formState.startDate) {
-        toast.error('End date must be greater than or equal to start date');
+        toast.error(t('endDateGreaterOrEqual'));
         return;
       }
       const startDateFormattedString = dayjs(formState.startDate).format(
@@ -195,7 +198,9 @@ function advertisementRegister({
       });
 
       if (data) {
-        toast.success('Advertisement updated successfully');
+        toast.success(
+          tCommon('updatedSuccessfully', { item: 'Advertisement' }),
+        );
         handleClose();
         setAfter(null);
       }
@@ -223,7 +228,6 @@ function advertisementRegister({
           {tCommon('edit')}
         </div>
       )}
-
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton className={styles.editHeader}>
           {formStatus === 'register' ? (

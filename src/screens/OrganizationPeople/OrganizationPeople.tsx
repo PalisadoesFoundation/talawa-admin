@@ -172,7 +172,7 @@ function organizationPeople(): JSX.Element {
   const columns: GridColDef[] = [
     {
       field: 'profile',
-      headerName: 'Profile',
+      headerName: tCommon('profile'),
       flex: 1,
       minWidth: 50,
       align: 'center',
@@ -196,7 +196,7 @@ function organizationPeople(): JSX.Element {
     },
     {
       field: 'name',
-      headerName: 'Name',
+      headerName: tCommon('name'),
       flex: 2,
       minWidth: 150,
       align: 'center',
@@ -217,7 +217,7 @@ function organizationPeople(): JSX.Element {
     },
     {
       field: 'email',
-      headerName: 'Email',
+      headerName: tCommon('email'),
       minWidth: 150,
       align: 'center',
       headerAlign: 'center',
@@ -227,7 +227,7 @@ function organizationPeople(): JSX.Element {
     },
     {
       field: 'joined',
-      headerName: 'Joined',
+      headerName: tCommon('joined'),
       flex: 2,
       minWidth: 100,
       align: 'center',
@@ -240,7 +240,7 @@ function organizationPeople(): JSX.Element {
     },
     {
       field: 'action',
-      headerName: 'Action',
+      headerName: tCommon('action'),
       flex: 1,
       minWidth: 100,
       align: 'center',
@@ -253,14 +253,14 @@ function organizationPeople(): JSX.Element {
             onClick={() => toggleRemoveAdminModal(params.row._id)}
             data-testid="removeAdminModalBtn"
           >
-            Remove
+            {tCommon('remove')}
           </Button>
         ) : (
           <Button
             onClick={() => toggleRemoveMemberModal(params.row._id)}
             data-testid="removeMemberModalBtn"
           >
-            Remove
+            {tCommon('remove')}
           </Button>
         );
       },
@@ -362,12 +362,12 @@ function organizationPeople(): JSX.Element {
         <div className="datatable">
           <DataGrid
             disableColumnMenu
-            columnBuffer={5}
+            columnBufferPx={5}
             hideFooter={true}
             className={`${styles.datagrid}`}
             getRowId={(row) => row._id}
-            components={{
-              NoRowsOverlay: () => (
+            slots={{
+              noRowsOverlay: () => (
                 <Stack
                   height="100%"
                   alignItems="center"

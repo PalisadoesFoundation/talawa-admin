@@ -7,6 +7,8 @@ import 'jest-localstorage-mock';
 import { MockedProvider } from '@apollo/react-testing';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
+import { I18nextProvider } from 'react-i18next';
+import i18nForTest from 'utils/i18nForTest';
 
 const { setItem } = useLocalStorage();
 const MOCKS = [
@@ -57,7 +59,9 @@ describe('ProfileDropdown Component', () => {
     render(
       <MockedProvider mocks={MOCKS} addTypename={false}>
         <BrowserRouter>
-          <ProfileDropdown />
+          <I18nextProvider i18n={i18nForTest}>
+            <ProfileDropdown />
+          </I18nextProvider>
         </BrowserRouter>
       </MockedProvider>,
     );

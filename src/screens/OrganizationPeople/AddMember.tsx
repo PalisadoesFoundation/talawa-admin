@@ -57,6 +57,8 @@ function AddMember(): JSX.Element {
     keyPrefix: 'addMember',
   });
 
+  const { t: tCommon } = useTranslation('common');
+
   document.title = translateOrgPeople('title');
 
   const [addUserModalisOpen, setAddUserModalIsOpen] = useState(false);
@@ -90,7 +92,7 @@ function AddMember(): JSX.Element {
           orgid: currentUrl,
         },
       });
-      toast.success('Member added to the organization.');
+      toast.success(tCommon('addedSuccessfully', { item: 'Member' }));
       memberRefetch({
         orgId: currentUrl,
       });
@@ -382,7 +384,7 @@ function AddMember(): JSX.Element {
                               <Link
                                 className={styles.membername}
                                 to={{
-                                  pathname: `/member/id=${currentUrl}`,
+                                  pathname: `/member/${currentUrl}`,
                                 }}
                               >
                                 {userDetails.user.firstName +

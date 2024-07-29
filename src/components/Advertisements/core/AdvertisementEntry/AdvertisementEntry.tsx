@@ -54,7 +54,7 @@ function advertisementEntry({
           id: id.toString(),
         },
       });
-      toast.error('Advertisement Deleted');
+      toast.success(t('advertisementDeleted'));
       setButtonLoading(false);
       setAfter(null);
     } catch (error: unknown) {

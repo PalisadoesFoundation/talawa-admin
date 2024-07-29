@@ -6,6 +6,7 @@ import { MARK_CHECKIN } from 'GraphQl/Mutations/mutations';
 import { toast } from 'react-toastify';
 import { generate } from '@pdfme/generator';
 import { tagTemplate } from './tagTemplate';
+import { useTranslation } from 'react-i18next';
 
 export const TableRow = ({
   data,
@@ -15,6 +16,7 @@ export const TableRow = ({
   refetch: () => void;
 }): JSX.Element => {
   const [checkInMutation] = useMutation(MARK_CHECKIN);
+  const { t } = useTranslation('translation', { keyPrefix: 'checkIn' });
 
   const markCheckIn = (): void => {
     // as we do not want to clutter the UI currently with the same (only provide the most basic of operations)
@@ -25,11 +27,11 @@ export const TableRow = ({
       },
     })
       .then(() => {
-        toast.success('Checked in successfully!');
+        toast.success(t('checkedInSuccessfully'));
         refetch();
       })
       .catch((err) => {
-        toast.error('There was an error in checking in!');
+        toast.error(t('errorCheckingIn'));
         toast.error(err.message);
       });
   };

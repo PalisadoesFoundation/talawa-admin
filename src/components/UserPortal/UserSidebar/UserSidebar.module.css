@@ -1,5 +1,5 @@
 .leftDrawer {
-  width: calc(300px + 2rem);
+  width: calc(300px);
   position: fixed;
   top: 0;
   bottom: 0;
@@ -13,7 +13,7 @@
 }
 
 .activeDrawer {
-  width: calc(300px + 2rem);
+  width: calc(300px);
   position: fixed;
   top: 0;
   left: 0;

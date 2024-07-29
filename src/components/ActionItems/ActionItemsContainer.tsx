@@ -27,6 +27,7 @@ import styles from './ActionItemsContainer.module.css';
 import ActionItemUpdateModal from '../../screens/OrganizationActionItems/ActionItemUpdateModal';
 import ActionItemPreviewModal from '../../screens/OrganizationActionItems/ActionItemPreviewModal';
 import ActionItemDeleteModal from '../../screens/OrganizationActionItems/ActionItemDeleteModal';
+import { Link } from 'react-router-dom';
 
 function actionItemsContainer({
   actionItemsConnection,
@@ -193,18 +194,28 @@ function actionItemsContainer({
         >
           <Row
             className={`mx-0 border border-light-subtle py-3 ${actionItemsConnection === 'Organization' ? 'rounded-top-4' : 'rounded-top-2'}`}
+            data-testid="actionItemsHeader"
           >
             <Col
               xs={7}
               sm={4}
               md={3}
+              lg={1}
+              className="d-flex align-items-center justify-content-center ps-3 fw-bold"
+            >
+              <div className="ms-2">{'#'}</div>
+            </Col>
+            <Col
+              xs={7}
+              sm={4}
+              md={3}
               lg={2}
-              className="align-self-center ps-3 fw-bold"
+              className="d-flex align-items-center justify-content-center ps-3 fw-bold"
             >
               <div className="ms-2">{t('assignee')}</div>
             </Col>
             <Col
-              className="align-self-center fw-bold d-none d-sm-block"
+              className="d-flex align-items-center justify-content-center fw-bold d-none d-sm-flex"
               sm={5}
               md={6}
               lg={2}
@@ -212,20 +223,25 @@ function actionItemsContainer({
               {t('actionItemCategory')}
             </Col>
             <Col
-              className="d-none d-lg-block fw-bold align-self-center"
+              className="d-none d-lg-flex fw-bold d-flex align-items-center justify-content-center "
               md={4}
-              lg={3}
+              lg={2}
             >
               <div className="ms-1">{t('preCompletionNotes')}</div>
             </Col>
             <Col
-              className="d-none d-lg-block fw-bold align-self-center"
+              className="d-none d-lg-flex fw-bold d-flex align-items-center justify-content-center "
               md={4}
-              lg={3}
+              lg={2}
             >
               <div className="ms-3">{t('postCompletionNotes')}</div>
             </Col>
-            <Col xs={5} sm={3} lg={2} className="fw-bold align-self-center">
+            <Col
+              xs={5}
+              sm={3}
+              lg={2}
+              className="fw-bold d-flex align-items-center justify-content-center "
+            >
               <div className="ms-3">{t('options')}</div>
             </Col>
           </Row>
@@ -241,25 +257,40 @@ function actionItemsContainer({
                   sm={4}
                   xs={7}
                   md={3}
-                  lg={2}
-                  className="align-self-center text-body-secondary"
+                  lg={1}
+                  className="d-flex align-items-center justify-content-center text-body-secondary"
                 >
-                  {`${actionItem.assignee.firstName} ${actionItem.assignee.lastName}`}
+                  {index + 1}
+                </Col>
+                <Col
+                  sm={4}
+                  xs={7}
+                  md={3}
+                  lg={2}
+                  className="d-flex align-items-center justify-content-center text-body-secondary"
+                >
+                  <Link
+                    to={`/member/${actionItem?.event?._id}`}
+                    state={{ id: index }}
+                    className={styles.membername}
+                  >
+                    {`${actionItem.assignee.firstName} ${actionItem.assignee.lastName}`}
+                  </Link>
                 </Col>
                 <Col
                   sm={5}
                   md={6}
                   lg={2}
-                  className="p-1 d-none d-sm-block align-self-center text-body-secondary"
+                  className="p-1 d-none d-sm-flex d-flex align-items-center justify-content-center text-body-secondary"
                 >
                   {actionItem.actionItemCategory.name}
                 </Col>
                 <Col
-                  className="p-0 d-none d-lg-block align-self-center text-body-secondary"
+                  className="p-0 d-none d-lg-flex d-flex align-items-center justify-content-center text-body-secondary"
                   md={4}
-                  lg={3}
+                  lg={2}
                 >
-                  <div className="ms-3">
+                  <div className="ms-2">
                     <OverlayTrigger
                       trigger={['hover', 'focus']}
                       placement="right"
@@ -280,9 +311,9 @@ function actionItemsContainer({
                   </div>
                 </Col>
                 <Col
-                  className="p-0 d-none d-lg-block align-self-center text-body-secondary"
+                  className="p-0 d-none d-lg-flex d-flex align-items-center justify-content-center text-body-secondary"
                   md={4}
-                  lg={3}
+                  lg={2}
                 >
                   <div className="ms-3">
                     {actionItem.isCompleted ? (
@@ -311,7 +342,12 @@ function actionItemsContainer({
                     )}
                   </div>
                 </Col>
-                <Col xs={5} sm={3} lg={2} className="p-0 align-self-center">
+                <Col
+                  xs={5}
+                  sm={3}
+                  lg={2}
+                  className="p-0 d-flex align-items-center justify-content-center"
+                >
                   <div className="d-flex align-items-center ms-4 gap-2">
                     <input
                       type="checkbox"
