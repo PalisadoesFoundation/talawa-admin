@@ -111,9 +111,7 @@ export default function donate(): JSX.Element {
         },
       });
       if (!response.data) {
-        errorHandler(null, {
-          message: 'no api response',
-        });
+        toast.error(t('no api response'));
         return;
       }
       refetch();
