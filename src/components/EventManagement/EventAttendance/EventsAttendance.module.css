@@ -1,0 +1,32 @@
+.input {
+    display: flex;
+    width: 75%;
+    position: relative;
+  }
+.customcell {
+    background-color: #31bb6b !important;
+    color: white !important;
+    font-size: medium !important;
+    font-weight: 500 !important;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+}
+.actionBtn{
+    /* color:#39a440 !important; */
+    background-color:#ffffff !important;
+}
+.actionBtn:hover, .actionBtn:focus, .actionBtn:active{
+    color:#39a440 !important;
+
+}
+
+/* Add this to your CSS file */
+.small-doughnut {
+    width: 200px; /* Adjust as needed */
+    height: 200px; /* Adjust as needed */
+  }
+  
+  .large-doughnut {
+    width: 400px; /* Adjust as needed */
+    height: 400px; /* Adjust as needed */
+  }

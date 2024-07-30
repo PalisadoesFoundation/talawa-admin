@@ -77,7 +77,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     variables: { id: currentUrl }, // For testing we are sending the id as a prop
   });
   const userData = user?.user;
-
+  console.log(userData?.user?.registeredEvents);
   useEffect(() => {
     if (userData && isMounted) {
       // console.log(userData);

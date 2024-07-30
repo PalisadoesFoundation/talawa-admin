@@ -233,6 +233,7 @@
     "enterTitle": "Enter Title",
     "enterDescrip": "Enter Description",
     "searchEventName": "Search Event Name",
+    "searchMemberName":"Search Member Name",
     "eventType": "Event Type",
     "eventCreated": "Congratulations! The Event is created.",
     "customRecurrence": "Custom Recurrence",
@@ -477,11 +478,12 @@
     "noSpammerFound": "No spammer found"
   },
   "eventManagement": {
-    "title": "Event Management",
+    "title": "Event Management Dashboard",
     "dashboard": "Dashboard",
     "registrants": "Registrants",
     "eventActions": "Event Actions",
     "eventStats": "Event Statistics",
+    "attendance": "Attendance",
     "to": "TO"
   },
   "forgotPassword": {

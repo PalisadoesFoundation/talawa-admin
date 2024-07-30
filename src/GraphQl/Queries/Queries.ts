@@ -273,6 +273,7 @@ export const EVENT_DETAILS = gql`
       endTime
       allDay
       location
+      recurring
       organization {
         _id
         members {
@@ -295,6 +296,20 @@ export const EVENT_ATTENDEES = gql`
         _id
         firstName
         lastName
+        createdAt
+        gender
+        birthDate
+        eventsAttended {
+          _id
+        }
+        tagsAssignedWith {
+          edges {
+            node {
+              name
+              _id
+            }
+          }
+        }
       }
     }
   }
@@ -402,8 +417,20 @@ export const MEMBERS_LIST = gql`
         image
         email
         createdAt
+        gender
         organizationsBlockedBy {
           _id
+        }
+        eventsAttended {
+          _id
+        }
+        tagsAssignedWith(organizationId: $id) {
+          edges {
+            cursor
+            node {
+              name
+            }
+          }
         }
       }
     }

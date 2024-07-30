@@ -13,6 +13,8 @@ import { Button } from 'react-bootstrap';
 import EventDashboard from 'components/EventManagement/Dashboard/EventDashboard';
 import EventActionItems from 'components/EventManagement/EventActionItems/EventActionItems';
 import useLocalStorage from 'utils/useLocalstorage';
+import EventAttendance from 'components/EventManagement/EventAttendance/EventAttendance';
+import { ReactComponent as EventAttendanceIcon } from 'assets/svgs/Attendance.svg';
 
 const eventDashboardTabs: {
   value: TabOptions;
@@ -27,6 +29,10 @@ const eventDashboardTabs: {
     icon: <EventRegistrantsIcon width={23} height={23} className="me-1" />,
   },
   {
+    value: 'attendance',
+    icon: <EventAttendanceIcon width={23} height={23} className="me-1" />,
+  },
+  {
     value: 'eventActions',
     icon: <EventActionsIcon width={23} height={23} className="me-1" />,
   },
@@ -36,7 +42,12 @@ const eventDashboardTabs: {
   },
 ];
 
-type TabOptions = 'dashboard' | 'registrants' | 'eventActions' | 'eventStats';
+type TabOptions =
+  | 'dashboard'
+  | 'registrants'
+  | 'eventActions'
+  | 'eventStats'
+  | 'attendance';
 
 const EventManagement = (): JSX.Element => {
   const { t } = useTranslation('translation', {
@@ -144,6 +155,12 @@ const EventManagement = (): JSX.Element => {
                 return (
                   <div data-testid="eventStatsTab">
                     <h2>Event Statistics</h2>
+                  </div>
+                );
+              case 'attendance':
+                return (
+                  <div data-testid="eventAttendanceTab">
+                    <EventAttendance />
                   </div>
                 );
             }

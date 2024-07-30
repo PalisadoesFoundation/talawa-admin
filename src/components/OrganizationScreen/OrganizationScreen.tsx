@@ -2,13 +2,26 @@ import LeftDrawerOrg from 'components/LeftDrawerOrg/LeftDrawerOrg';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Navigate, Outlet, useLocation, useParams } from 'react-router-dom';
+import {
+  Navigate,
+  Outlet,
+  useLocation,
+  useParams,
+  useMatch,
+} from 'react-router-dom';
 import { updateTargets } from 'state/action-creators';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from './OrganizationScreen.module.css';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import { Button } from 'react-bootstrap';
+import { useQuery } from '@apollo/client';
+import { ORGANIZATION_EVENT_LIST } from 'GraphQl/Queries/Queries';
+
+interface InterfaceEvent {
+  _id: string;
+  title: string;
+}
 
 const OrganizationScreen = (): JSX.Element => {
   const location = useLocation();
@@ -16,6 +29,9 @@ const OrganizationScreen = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: titleKey });
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
   const { orgId } = useParams();
+  const [eventName, setEventName] = useState<string | null>(null);
+
+  const isEventPath = useMatch('/event/:orgId/:eventId');
 
   if (!orgId) {
     return <Navigate to={'/'} replace />;
@@ -29,7 +45,23 @@ const OrganizationScreen = (): JSX.Element => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(updateTargets(orgId));
-  }, [orgId]); // Added orgId to the dependency array
+  }, [orgId]);
+
+  const { data: eventsData } = useQuery(ORGANIZATION_EVENT_LIST, {
+    variables: { id: orgId },
+  });
+
+  useEffect(() => {
+    if (isEventPath && eventsData) {
+      const eventId = isEventPath.params.eventId;
+      const event = eventsData.eventsByOrganization.find(
+        (e: InterfaceEvent) => e._id === eventId,
+      );
+      setEventName(event ? event.title : null);
+    } else {
+      setEventName(null);
+    }
+  }, [isEventPath, eventsData]);
 
   const handleResize = (): void => {
     if (window.innerWidth <= 820) {
@@ -89,6 +121,7 @@ const OrganizationScreen = (): JSX.Element => {
         <div className="d-flex justify-content-between align-items-center">
           <div style={{ flex: 1 }}>
             <h1>{t('title')}</h1>
+            {eventName && <h4 className="">{eventName}</h4>}
           </div>
           <ProfileDropdown />
         </div>
