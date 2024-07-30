@@ -24,6 +24,7 @@ import styles from './Posts.module.css';
 import convertToBase64 from 'utils/convertToBase64';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
+import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 
 const responsive = {
   superLargeDesktop: {
@@ -282,7 +283,10 @@ export default function home(): JSX.Element {
     <>
       <div className={`d-flex flex-row ${styles.containerHeight}`}>
         <div className={`${styles.colorLight} ${styles.mainContainer}`}>
-          <h1>{t('posts')}</h1>
+          <div className="d-flex justify-content-between align-items-center">
+            <h1>{t('posts')}</h1>
+            <ProfileDropdown />
+          </div>
           <div className={`${styles.postContainer}`}>
             <div className={`${styles.heading}`}>{t('startPost')}</div>
             <div className={styles.postInputContainer}>
