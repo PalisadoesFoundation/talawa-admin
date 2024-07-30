@@ -17,6 +17,7 @@ import type {
   InterfaceQueryOrganizationEventListItem,
   InterfaceMemberInfo,
 } from 'utils/interfaces';
+import { skip } from 'node:test';
 
 /**
  * OrganizationSidebar displays the sidebar for an organization, showing a list of members and events.
@@ -43,6 +44,7 @@ export default function organizationSidebar(): JSX.Element {
   // Extract the organization ID from the URL parameters
   const { orgId: organizationId } = useParams();
 
+
   // State variables for storing members and events data
   const [members, setMembers] = React.useState([]);
   const [events, setEvents] = React.useState([]);
@@ -50,6 +52,16 @@ export default function organizationSidebar(): JSX.Element {
   // Define the links to view all members and events
   const eventsLink = `/user/events/id=${organizationId}`;
   const peopleLink = `/user/people/id=${organizationId}`;
+
+  const [members, setMembers] = React.useState<
+    InterfaceMemberInfo[] | undefined
+  >(undefined);
+  const [events, setEvents] = React.useState<
+    InterfaceQueryOrganizationEventListItem[] | undefined
+  >(undefined);
+  const eventsLink = `/user/events/${organizationId}`;
+  const peopleLink = `/user/people/${organizationId}`;
+
 
   // Query to fetch members of the organization
   const { data: memberData, loading: memberLoading } = useQuery(
@@ -111,6 +123,7 @@ export default function organizationSidebar(): JSX.Element {
         </div>
       ) : (
         <ListGroup variant="flush">
+
           {members.length ? (
             members.map(
               (
@@ -138,6 +151,29 @@ export default function organizationSidebar(): JSX.Element {
                 );
               },
             )
+
+          {members && members.length ? (
+            members.map((member: InterfaceMemberInfo) => {
+              const memberName = `${member.firstName} ${member.lastName}`;
+              return (
+                <ListGroup.Item
+                  key={member._id}
+                  action
+                  className={`${styles.rounded} ${styles.colorLight} my-1`}
+                >
+                  <div className="d-flex flex-row">
+                    <img
+                      src={member.image ? member.image : AboutImg}
+                      className={styles.memberImage}
+                      width="auto"
+                      height="30px"
+                    />
+                    <div className={styles.orgName}>{memberName}</div>
+                  </div>
+                </ListGroup.Item>
+              );
+            })
+
           ) : (
             <div className="w-100 text-center">{t('noMembers')}</div>
           )}
@@ -162,37 +198,32 @@ export default function organizationSidebar(): JSX.Element {
         </div>
       ) : (
         <ListGroup variant="flush">
-          {events.length ? (
-            events.map(
-              (
-                event: InterfaceQueryOrganizationEventListItem,
-                index: React.Key | null | undefined,
-              ) => {
-                return (
-                  <ListGroup.Item
-                    key={index}
-                    action
-                    className={`${styles.rounded} ${styles.colorLight} my-1`}
-                  >
-                    <div className="d-flex flex-column">
-                      <div className="d-flex flex-row justify-content-between align-items-center">
-                        <div className={styles.orgName}>{event.title}</div>
-                        <div>
-                          <CalendarMonthIcon />
-                        </div>
-                      </div>
-                      <div className={`d-flex flex-row ${styles.eventDetails}`}>
-                        Starts{' '}
-                        <b> {dayjs(event.startDate).format("D MMMM 'YY")}</b>
-                      </div>
-                      <div className={`d-flex flex-row ${styles.eventDetails}`}>
-                        Ends <b> {dayjs(event.endDate).format("D MMMM 'YY")}</b>
+          {events && events.length ? (
+            events.map((event: InterfaceQueryOrganizationEventListItem) => {
+              return (
+                <ListGroup.Item
+                  key={event._id}
+                  action
+                  className={`${styles.rounded} ${styles.colorLight} my-1`}
+                >
+                  <div className="d-flex flex-column">
+                    <div className="d-flex flex-row justify-content-between align-items-center">
+                      <div className={styles.orgName}>{event.title}</div>
+                      <div>
+                        <CalendarMonthIcon />
                       </div>
                     </div>
-                  </ListGroup.Item>
-                );
-              },
-            )
+                    <div className={`d-flex flex-row ${styles.eventDetails}`}>
+                      Starts{' '}
+                      <b> {dayjs(event.startDate).format("D MMMM 'YY")}</b>
+                    </div>
+                    <div className={`d-flex flex-row ${styles.eventDetails}`}>
+                      Ends <b> {dayjs(event.endDate).format("D MMMM 'YY")}</b>
+                    </div>
+                  </div>
+                </ListGroup.Item>
+              );
+            })
           ) : (
             <div className="w-100 text-center">{t('noEvents')}</div>
           )}

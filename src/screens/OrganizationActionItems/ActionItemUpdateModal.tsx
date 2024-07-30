@@ -93,11 +93,11 @@ const ActionItemUpdateModal: React.FC<InterfaceActionItemCreateModalProps> = ({
                 <option value="" disabled>
                   {formState.assignee}
                 </option>
-                {membersData?.map((member, index) => {
+                {membersData?.map((member: InterfaceMemberInfo) => {
                   const currMemberName = `${member.firstName} ${member.lastName}`;
                   if (currMemberName !== formState.assignee) {
                     return (
-                      <option key={index} value={member._id}>
+                      <option key={member._id} value={member._id}>
                         {`${member.firstName} ${member.lastName}`}
                       </option>
                     );
@@ -125,36 +125,33 @@ const ActionItemUpdateModal: React.FC<InterfaceActionItemCreateModalProps> = ({
             />
 
             <div className={`${styles.datediv} mt-3 mb-2`}>
-              <div>
-                <DatePicker
-                  label={t('dueDate')}
-                  className={styles.datebox}
-                  value={dayjs(dueDate)}
-                  onChange={
-                    /* istanbul ignore next */ (date: Dayjs | null): void => {
-                      /* istanbul ignore next */
-                      if (date) {
-                        setDueDate(date?.toDate());
-                      }
+              <DatePicker
+                label={t('dueDate')}
+                className={styles.datebox}
+                value={dayjs(dueDate)}
+                onChange={
+                  /* istanbul ignore next */ (date: Dayjs | null): void => {
+                    /* istanbul ignore next */
+                    if (date) {
+                      setDueDate(date?.toDate());
                     }
                   }
-                />
-              </div>
-              <div>
-                <DatePicker
-                  label={t('completionDate')}
-                  className={styles.datebox}
-                  value={dayjs(completionDate)}
-                  onChange={
-                    /* istanbul ignore next */ (date: Dayjs | null): void => {
-                      /* istanbul ignore next */
-                      if (date) {
-                        setCompletionDate(date?.toDate());
-                      }
+                }
+              />
+              &nbsp;
+              <DatePicker
+                label={t('completionDate')}
+                className={styles.datebox}
+                value={dayjs(completionDate)}
+                onChange={
+                  /* istanbul ignore next */ (date: Dayjs | null): void => {
+                    /* istanbul ignore next */
+                    if (date) {
+                      setCompletionDate(date?.toDate());
                     }
                   }
-                />
-              </div>
+                }
+              />
             </div>
 
             <Button

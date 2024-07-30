@@ -594,4 +594,26 @@ describe('Testing Action Item Categories Component', () => {
       expect(toast.error).toHaveBeenCalled();
     });
   });
+
+  test('Testing Only Action Items Displaying', async () => {
+    const mockApp = render(
+      <MockedProvider addTypename={false} link={link}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <I18nextProvider i18n={i18n}>
+                {<OrganizationActionItems />}
+              </I18nextProvider>
+            </LocalizationProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    await waitFor(mockApp.asFragment);
+
+    const actionItem = screen.getByText(/John Doe/i);
+
+    expect(actionItem).toContainHTML('John Doe');
+  });
 });

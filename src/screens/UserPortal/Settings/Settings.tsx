@@ -21,6 +21,7 @@ import DeleteUser from 'components/UserProfileSettings/DeleteUser';
 import OtherSettings from 'components/UserProfileSettings/OtherSettings';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
+import { create } from 'domain';
 
 /**
  * The Settings component allows users to view and update their profile settings.
@@ -62,6 +63,7 @@ export default function settings(): JSX.Element {
   const [userDetails, setUserDetails] = React.useState({
     firstName: '',
     lastName: '',
+    createdAt: '',
     gender: '',
     email: '',
     phoneNumber: '',
@@ -145,6 +147,7 @@ export default function settings(): JSX.Element {
       const {
         firstName,
         lastName,
+        createdAt,
         gender,
         phone,
         birthDate,
@@ -158,6 +161,7 @@ export default function settings(): JSX.Element {
         ...userDetails,
         firstName: firstName || '',
         lastName: lastName || '',
+        createdAt: createdAt || '',
         gender: gender || '',
         phoneNumber: phone?.mobile || '',
         birthDate: birthDate || '',
@@ -177,6 +181,7 @@ export default function settings(): JSX.Element {
       const {
         firstName,
         lastName,
+        createdAt,
         gender,
         email,
         phone,
@@ -191,6 +196,7 @@ export default function settings(): JSX.Element {
       setUserDetails({
         firstName,
         lastName,
+        createdAt,
         gender,
         email,
         phoneNumber: phone?.mobile || '',
@@ -250,6 +256,7 @@ export default function settings(): JSX.Element {
               <UserProfile
                 firstName={userDetails.firstName}
                 lastName={userDetails.lastName}
+                createdAt={userDetails.createdAt}
                 email={userDetails.email}
                 image={userDetails.image}
               />
@@ -614,6 +621,7 @@ export default function settings(): JSX.Element {
               <UserProfile
                 firstName={userDetails.firstName}
                 lastName={userDetails.lastName}
+                createdAt={userDetails.createdAt}
                 email={userDetails.email}
                 image={userDetails.image}
               />
