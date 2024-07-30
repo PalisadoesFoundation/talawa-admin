@@ -12,6 +12,7 @@ import styles from './People.module.css';
 import { useTranslation } from 'react-i18next';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { useParams } from 'react-router-dom';
+import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 
 interface InterfaceOrganizationCardProps {
   id: string;
@@ -124,7 +125,10 @@ export default function people(): JSX.Element {
     <>
       <div className={`d-flex flex-row ${styles.containerHeight}`}>
         <div className={`${styles.colorLight} ${styles.mainContainer}`}>
-          <h1>People</h1>
+          <div className="d-flex justify-content-between align-items-center">
+            <h1>People</h1>
+            <ProfileDropdown />
+          </div>
           <div
             className={`mt-4 d-flex flex-row justify-content-between flex-wrap ${styles.gap}`}
           >
