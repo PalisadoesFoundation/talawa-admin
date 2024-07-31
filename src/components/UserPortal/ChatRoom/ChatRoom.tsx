@@ -148,13 +148,6 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
         MessageSubscriptionData?.data.data.messageSentToChat
           .chatMessageBelongsTo['_id'] == props.selectedContact
       ) {
-        const updatedChat = chat
-          ? JSON.parse(JSON.stringify(chat))
-          : { messages: [] };
-        updatedChat?.messages.push(
-          MessageSubscriptionData?.data.data.messageSentToChat,
-        );
-        setChat(updatedChat);
         chatRefetch();
       }
     },

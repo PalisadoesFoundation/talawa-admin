@@ -77,9 +77,8 @@ export default function createDirectChatModal({
         isGroup: false,
       },
     });
-    chatsListRefetch();
-
-    toggleCreateDirectChatModal();
+    await chatsListRefetch();
+    await toggleCreateDirectChatModal();
   };
 
   const {
