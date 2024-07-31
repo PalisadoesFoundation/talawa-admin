@@ -166,7 +166,10 @@ export default function chat(): JSX.Element {
                   <HourglassBottomIcon /> <span>Loading...</span>
                 </div>
               ) : (
-                <div data-testid="contactCardContainer">
+                <div
+                  data-testid="contactCardContainer"
+                  className={styles.contactCardContainer}
+                >
                   {!!chats.length &&
                     chats.map((chat: any) => {
                       const cardProps: InterfaceContactCardProps = {
