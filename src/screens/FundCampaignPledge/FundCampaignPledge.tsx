@@ -56,44 +56,6 @@ const dataGridStyle = {
     borderRadius: '0.5rem',
   },
 };
-/**
- * `FundCampaignPledge` component displays and manages pledges for a fundraising campaign.
- *
- * This component fetches pledge data for a specific fundraising campaign using a GraphQL query.
- * It supports searching, sorting, and managing pledges through modals for creating, editing, and deleting pledges.
- *
- * ## Functional Components:
- * - **DataGrid**: Displays pledge information in a tabular format.
- * - **PledgeModal**: Modal for creating or editing a pledge.
- * - **PledgeDeleteModal**: Modal for confirming pledge deletion.
- * - **BasePopup**: Popup to display additional users associated with a pledge.
- *
- * ## State Management:
- * - `campaignInfo`: Stores information about the campaign.
- * - `modalState`: Tracks the visibility state of modals.
- * - `anchor`: Manages anchor for the popup display.
- * - `extraUsers`: Holds additional users to be displayed in the popup.
- * - `progressIndicator`: Indicates whether to show pledged or raised amount in the progress bar.
- * - `pledgeModalMode`: Determines whether the modal is in edit or create mode.
- * - `pledge`: Contains details of the currently selected pledge.
- * - `searchTerm`: The term used for searching pledgers.
- * - `sortBy`: Determines the sorting order of pledges.
- *
- * ## Event Handlers:
- * - `openModal`: Opens the specified modal.
- * - `closeModal`: Closes the specified modal.
- * - `handleOpenModal`: Prepares and opens the modal for editing or creating a pledge.
- * - `handleDeleteClick`: Prepares and opens the modal for deleting a pledge.
- * - `handleClick`: Opens the popup to display additional users.
- *
- * ## Render:
- * - Renders breadcrumbs for navigation.
- * - Displays campaign details, including progress bar for pledged or raised amount.
- * - Provides search and filter options for pledges.
- * - Renders the `DataGrid` component with pledge details.
- * - Displays modals and popup for user interactions.
- *
- */
 const fundCampaignPledge = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'pledges',

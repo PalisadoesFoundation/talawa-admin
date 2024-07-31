@@ -25,57 +25,6 @@ interface InterfaceOrgPostCardProps {
   postVideo: string | null;
   pinned: boolean;
 }
-
-/**
- * `OrgPostCard` component for displaying and managing organizational posts.
- *
- * This component displays a post card with options to view details, edit, delete, pin, or unpin the post. It supports video and image content, and includes modals for editing and deleting posts. The component uses GraphQL mutations for post management and integrates with a toast notification system for user feedback.
- *
- * ### Props
- * - `key` (string): Unique key for the component.
- * - `id` (string): Unique identifier of the post.
- * - `postTitle` (string): Title of the post.
- * - `postInfo` (string): Description or information about the post.
- * - `postAuthor` (string): Author of the post.
- * - `postPhoto` (string | null): URL of the post's image.
- * - `postVideo` (string | null): URL of the post's video.
- * - `pinned` (boolean): Indicates whether the post is pinned.
- *
- * ### State
- * - `postformState`: State object for managing form data.
- * - `postPhotoUpdated`: Boolean flag indicating if the post photo has been updated.
- * - `postVideoUpdated`: Boolean flag indicating if the post video has been updated.
- * - `togglePost`: String indicating the current toggle state ('Read more' or 'hide').
- * - `showEditModal`: Boolean flag indicating whether the edit modal is visible.
- * - `showDeleteModal`: Boolean flag indicating whether the delete modal is visible.
- * - `modalVisible`: Boolean flag indicating whether the modal for viewing post details is visible.
- * - `menuVisible`: Boolean flag indicating whether the options menu is visible.
- * - `playing`: Boolean flag indicating whether the video is playing.
- *
- * ### Refs
- * - `videoRef`: Ref for the video element.
- *
- * ### Methods
- * - `togglePostPin(id: string, pinned: boolean)`: Toggles the pinned state of the post.
- * - `toggleShowEditModal()`: Toggles visibility of the edit modal.
- * - `toggleShowDeleteModal()`: Toggles visibility of the delete modal.
- * - `handleVideoPlay()`: Starts playing the video.
- * - `handleVideoPause()`: Pauses the video.
- * - `handleCardClick()`: Displays the modal with post details.
- * - `handleMoreOptionsClick()`: Displays the options menu.
- * - `clearImageInput()`: Clears the selected image input.
- * - `clearVideoInput()`: Clears the selected video input.
- * - `handletoggleClick()`: Toggles the visibility of the post information.
- * - `handleEditModal()`: Shows the edit modal.
- * - `handleDeleteModal()`: Shows the delete modal.
- * - `handleInputEvent(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)`: Updates form state based on input changes.
- * - `updatePostHandler(e: ChangeEvent<HTMLFormElement>)`: Handles form submission to update the post.
- * - `deletePost()`: Deletes the post and provides feedback.
- *
- * ### Effects
- * - Synchronizes form state with props on initial render.
- */
-
 export default function orgPostCard(
   props: InterfaceOrgPostCardProps,
 ): JSX.Element {

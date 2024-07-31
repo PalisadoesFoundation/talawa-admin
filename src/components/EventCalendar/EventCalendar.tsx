@@ -57,19 +57,6 @@ interface InterfaceIOrgList {
   admins: { _id: string }[];
 }
 
-/**
- * The `Calendar` component displays a calendar with events.
- * It supports different views such as day, month, and year.
- *
- * @param eventData - Array of event data to be displayed.
- * @param refetchEvents - Optional function to refetch events.
- * @param orgData - Optional organization data, which includes a list of admins.
- * @param userRole - Optional role of the user, which can affect the visibility of events.
- * @param userId - Optional ID of the current user, used to determine if the user is attending an event.
- * @param viewType - Optional type of view for the calendar (day, month, year).
- *
- * @returns A calendar component displaying events based on the selected view type.
- */
 const Calendar: React.FC<InterfaceCalendarProps> = ({
   eventData,
   refetchEvents,
@@ -97,16 +84,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  /**
-   * Filters the event data based on the user's role and organization data.
-   *
-   * @param eventData - Array of event data to be filtered.
-   * @param orgData - Optional organization data, including a list of admins.
-   * @param userRole - Optional role of the user.
-   * @param userId - Optional ID of the current user.
-   *
-   * @returns A filtered array of events based on the user's role and organization data.
-   */
   const filterData = (
     eventData: InterfaceEventListCardProps[],
     orgData?: InterfaceIOrgList,
