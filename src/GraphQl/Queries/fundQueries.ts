@@ -9,10 +9,15 @@ import gql from 'graphql-tag';
  * @returns The list of members associated with the organization.
  */
 export const FUND_LIST = gql`
-  query FundsByOrganization($organizationId: ID!, $filter: String) {
+  query FundsByOrganization(
+    $organizationId: ID!
+    $filter: String
+    $orderBy: FundOrderByInput
+  ) {
     fundsByOrganization(
       organizationId: $organizationId
       where: { name_contains: $filter }
+      orderBy: $orderBy
     ) {
       _id
       name
@@ -32,8 +37,12 @@ export const FUND_LIST = gql`
 `;
 
 export const FUND_CAMPAIGN = gql`
-  query GetFundById($id: ID!) {
-    getFundById(id: $id) {
+  query GetFundById(
+    $id: ID!
+    $where: CampaignWhereInput
+    $orderBy: CampaignOrderByInput
+  ) {
+    getFundById(id: $id, where: $where, orderBy: $orderBy) {
       campaigns {
         _id
         endDate
@@ -49,6 +58,9 @@ export const FUND_CAMPAIGN = gql`
 export const FUND_CAMPAIGN_PLEDGE = gql`
   query GetFundraisingCampaignById($id: ID!, $orderBy: PledgeOrderByInput) {
     getFundraisingCampaignById(id: $id, orderBy: $orderBy) {
+      name
+      fundingGoal
+      currency
       startDate
       endDate
       pledges {

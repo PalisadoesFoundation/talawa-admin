@@ -6,7 +6,7 @@ import { currencyOptions, currencySymbols } from 'utils/currency';
 import type {
   InterfaceCreatePledge,
   InterfacePledgeInfo,
-  InterfacePledgeVolunteer,
+  InterfacePledger,
 } from 'utils/interfaces';
 import styles from './FundCampaignPledge.module.css';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -57,7 +57,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     pledgeEndDate: new Date(pledge?.endDate ?? new Date()),
     pledgeStartDate: new Date(pledge?.startDate ?? new Date()),
   });
-  const [volunteers, setVolunteers] = useState<InterfacePledgeVolunteer[]>([]);
+  const [pledgers, setPledgers] = useState<InterfacePledger[]>([]);
   const [updatePledge] = useMutation(UPDATE_PLEDGE);
   const [createPledge] = useMutation(CREATE_PlEDGE);
 
@@ -78,7 +78,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   useEffect(() => {
     if (memberData) {
       /*istanbul ignore next*/
-      setVolunteers(memberData.organizations[0].members);
+      setPledgers(memberData.organizations[0].members);
     }
   }, [memberData]);
 
@@ -190,31 +190,31 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           }
           className="p-3"
         >
-          {/* A Multi-select dropdown enables admin to select more than one volunteer for participating in a pledge */}
+          {/* A Multi-select dropdown enables admin to select more than one pledger for participating in a pledge */}
           <Form.Group className="d-flex mb-3 w-100">
             <Autocomplete
               multiple
               className={`${styles.noOutline} w-100`}
               limitTags={2}
-              data-testid="volunteerSelect"
-              options={volunteers}
+              data-testid="pledgerSelect"
+              options={pledgers}
               value={pledgeUsers}
               isOptionEqualToValue={(option, value) => option._id === value._id}
               filterSelectedOptions={true}
-              getOptionLabel={(member: InterfacePledgeVolunteer): string =>
+              getOptionLabel={(member: InterfacePledger): string =>
                 `${member.firstName} ${member.lastName}`
               }
               onChange={
                 /*istanbul ignore next*/
-                (_, newVolunteers): void => {
+                (_, newPledgers): void => {
                   setFormState({
                     ...formState,
-                    pledgeUsers: newVolunteers,
+                    pledgeUsers: newPledgers,
                   });
                 }
               }
               renderInput={(params) => (
-                <TextField {...params} label="Volunteers" />
+                <TextField {...params} label="Pledgers" />
               )}
             />
           </Form.Group>
