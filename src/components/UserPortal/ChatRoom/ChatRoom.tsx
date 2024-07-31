@@ -174,13 +174,12 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
   }, [chatDataGorup]);
 
   const sendMessage = async (): Promise<void> => {
-    console.log(props.selectedChatType);
     if (props.selectedChatType === 'direct') {
       await sendMessageToDirectChat();
       await chatRefetch();
       setReplyToDirectMessage(null);
     } else if (props.selectedChatType === 'group') {
-      const data = await sendMessageToGroupChat();
+      await sendMessageToGroupChat();
       await groupChatRefresh();
       setReplyToDirectMessage(null);
     }
@@ -424,7 +423,10 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                               </div>
 
                               <div className={styles.messageAttributes}>
-                                <Dropdown data-testid="moreOptions" style={{ cursor: 'pointer' }}>
+                                <Dropdown
+                                  data-testid="moreOptions"
+                                  style={{ cursor: 'pointer' }}
+                                >
                                   <Dropdown.Toggle
                                     className={styles.customToggle}
                                     data-testid={'dropdown'}
@@ -461,7 +463,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
           </div>
           <div id="messageInput">
             {!!replyToDirectMessage?._id && (
-              <div className={styles.replyTo}>
+              <div data-testid="replyMsg" className={styles.replyTo}>
                 <div className={styles.replyToMessageContainer}>
                   <div className={styles.userDetails}>
                     <Avatar

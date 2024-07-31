@@ -72,33 +72,135 @@ const SEND_MESSAGE_TO_DIRECT_CHAT_MOCK = {
   },
 };
 
-const SEND_MESSAGE_TO_GROUP_CHAT_MOCK = {
-  request: {
-    query: SEND_MESSAGE_TO_GROUP_CHAT,
-    variables: {
-      messageContent: 'Test message',
-      chatId: '1',
+const SEND_MESSAGE_TO_GROUP_CHAT_MOCK = [
+  {
+    request: {
+      query: SEND_MESSAGE_TO_GROUP_CHAT,
+      variables: {
+        messageContent: 'Test message',
+        chatId: '1',
+      },
     },
-  },
-  result: {
-    data: {
-      sendMessageToGroupChat: {
-        _id: '1',
-        createdAt: '',
-        messageContent: 'Test Message',
-        replyTo: null,
-        sender: {
-          _id: '',
-          firstName: '',
-          lastName: '',
+    result: {
+      data: {
+        sendMessageToGroupChat: {
+          _id: '123',
+          createdAt: '',
+          messageContent: 'Test Message',
+          replyTo: null,
+          sender: {
+            _id: '',
+            firstName: '',
+            lastName: '',
+          },
+          updatedAt: '',
         },
-        updatedAt: '',
       },
     },
   },
-};
+  {
+    request: {
+      query: SEND_MESSAGE_TO_GROUP_CHAT,
+      variables: {
+        messageContent: 'Test reply message',
+        replyTo: '3',
+        chatId: '1',
+      },
+    },
+    result: {
+      data: {
+        sendMessageToGroupChat: {
+          _id: '2',
+          createdAt: '',
+          messageContent: 'Test reply message',
+          replyTo: {
+            _id: '3',
+            createdAt: '345678908765',
+            messageContent: 'Hello',
+            replyTo: null,
+            sender: {
+              _id: '2',
+              firstName: 'Test',
+              lastName: 'User',
+              email: 'test@example.com',
+              image: '',
+            },
+          },
+          sender: {
+            _id: '',
+            firstName: '',
+            lastName: '',
+          },
+          updatedAt: '',
+        },
+      },
+    },
+  },
+];
 
 const MESSAGE_SENT_TO_GROUP_CHAT_MOCK = [
+  {
+    request: {
+      query: MESSAGE_SENT_TO_GROUP_CHAT,
+      variables: {
+        userId: null,
+      },
+    },
+    result: {
+      data: {
+        messageSentToGroupChat: {
+          _id: '123',
+          createdAt: '2024-07-10T17:16:33.248Z',
+          messageContent: 'Test message',
+          replyTo: null,
+          sender: {
+            _id: '64378abd85008f171cf2990d',
+            firstName: 'Wilt',
+            lastName: 'Shepherd',
+            image: '',
+          },
+          updatedAt: '2024-07-10',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: MESSAGE_SENT_TO_GROUP_CHAT,
+      variables: {
+        userId: null,
+      },
+    },
+    result: {
+      data: {
+        messageSentToGroupChat: {
+          _id: '1',
+          createdAt: '2024-07-10T17:16:33.248Z',
+          messageContent: 'Test message',
+          replyTo: {
+            _id: '123',
+            createdAt: '2024-07-10T17:16:33.248Z',
+            messageContent: 'Test message',
+            replyTo: null,
+            sender: {
+              _id: '64378abd85008f171cf2990d',
+              firstName: 'Wilt',
+              lastName: 'Shepherd',
+              image: '',
+            },
+            updatedAt: '2024-07-10',
+          },
+          sender: {
+            _id: '64378abd85008f171cf2990d',
+            firstName: 'Wilt',
+            lastName: 'Shepherd',
+            image: '',
+          },
+          updatedAt: '2024-07-10',
+        },
+      },
+    },
+  },
   {
     request: {
       query: MESSAGE_SENT_TO_GROUP_CHAT,
@@ -299,7 +401,7 @@ const DIRECT_CHAT_BY_ID_QUERY_MOCK = [
           createdAt: '2345678903456',
           messages: [
             {
-              _id: '345678',
+              _id: '4',
               createdAt: '345678908765',
               messageContent: 'Hello',
               replyTo: null,
@@ -353,7 +455,7 @@ const DIRECT_CHAT_BY_ID_QUERY_MOCK = [
           createdAt: '2345678903456',
           messages: [
             {
-              _id: '345678',
+              _id: '3',
               createdAt: '345678908765',
               messageContent: 'Hello',
               replyTo: null,
@@ -407,7 +509,7 @@ const DIRECT_CHAT_BY_ID_QUERY_MOCK = [
           createdAt: '2345678903456',
           messages: [
             {
-              _id: '345678',
+              _id: '2',
               createdAt: '345678908765',
               messageContent: 'Hello',
               replyTo: null,
@@ -461,7 +563,7 @@ const DIRECT_CHAT_BY_ID_QUERY_MOCK = [
           createdAt: '2345678903456',
           messages: [
             {
-              _id: '345678',
+              _id: '1',
               createdAt: '345678908765',
               messageContent: 'Hello',
               replyTo: null,
@@ -519,7 +621,7 @@ const GROUP_CHAT_BY_ID_QUERY_MOCK = [
           title: 'Test Group Chat',
           messages: [
             {
-              _id: '345678',
+              _id: '4',
               createdAt: '345678908765',
               messageContent: 'Hello',
               replyTo: null,
@@ -588,7 +690,7 @@ const GROUP_CHAT_BY_ID_QUERY_MOCK = [
           title: 'Test Group Chat',
           messages: [
             {
-              _id: '345678',
+              _id: '3',
               createdAt: '345678908765',
               messageContent: 'Hello',
               replyTo: null,
@@ -657,7 +759,7 @@ const GROUP_CHAT_BY_ID_QUERY_MOCK = [
           title: 'Test Group Chat',
           messages: [
             {
-              _id: '345678',
+              _id: '2',
               createdAt: '345678908765',
               messageContent: 'Hello',
               replyTo: null,
@@ -726,7 +828,7 @@ const GROUP_CHAT_BY_ID_QUERY_MOCK = [
           title: 'Test Group Chat',
           messages: [
             {
-              _id: '345678',
+              _id: '1',
               createdAt: '345678908765',
               messageContent: 'Hello',
               replyTo: null,
@@ -893,7 +995,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
 
   test('Test send message group chat', async () => {
     const mocks = [
-      SEND_MESSAGE_TO_GROUP_CHAT_MOCK,
+      ...SEND_MESSAGE_TO_GROUP_CHAT_MOCK,
       ...DIRECT_CHAT_BY_ID_QUERY_MOCK,
       ...GROUP_CHAT_BY_ID_QUERY_MOCK,
       ...MESSAGE_SENT_TO_DIRECT_CHAT_MOCK,
@@ -937,22 +1039,37 @@ describe('Testing Chatroom Component [User Portal]', () => {
 
     act(() => {
       fireEvent.mouseOver(messages[0]);
-    })
+    });
 
     await waitFor(async () => {
-      expect(await screen.findByTestId('moreOptions')).toBeInTheDocument()
-    })
+      expect(await screen.findByTestId('moreOptions')).toBeInTheDocument();
+    });
 
-    const moreOptionsBtn = await screen.findByTestId('dropdown')
-    act( () => {
+    const moreOptionsBtn = await screen.findByTestId('dropdown');
+    act(() => {
       fireEvent.click(moreOptionsBtn);
-    })
+    });
 
     const replyBtn = await screen.findByTestId('replyBtn');
 
-    // await waitFor(() => {
-    //   expect(replyBtn).toBeInTheDocument();
+    act(() => {
+      fireEvent.click(replyBtn);
+    });
+
+    const replyMsg = await screen.findByTestId('replyMsg');
+
+    await waitFor(() => {
+      expect(replyMsg).toBeInTheDocument();
+    });
+
+    act(() => {
+      fireEvent.change(input, { target: { value: 'Test reply message' } });
+    });
+    expect(input.value).toBe('Test reply message');
+
+    await wait(400);
+    // act(() => {
+    fireEvent.click(sendBtn);
     // })
-    fireEvent.click(replyBtn);
   });
 });
