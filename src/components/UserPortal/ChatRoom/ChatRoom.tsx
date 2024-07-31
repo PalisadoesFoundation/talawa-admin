@@ -196,14 +196,12 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
         directMessageSubscriptionData?.data.data.messageSentToDirectChat
           .directChatMessageBelongsTo['_id'] == props.selectedContact
       ) {
-        const updatedChat = directChat
-          ? JSON.parse(JSON.stringify(directChat))
-          : { messages: [] };
-        updatedChat?.messages.push(
-          directMessageSubscriptionData?.data.data.messageSentToDirectChat,
-        );
-        setDirectChat(updatedChat);
         chatRefetch();
+      } else {
+        chatRefetch({
+          id: directMessageSubscriptionData?.data.data.messageSentToDirectChat
+            .directChatMessageBelongsTo['_id'],
+        });
       }
     },
   });
@@ -218,13 +216,6 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
         groupMessageSubscriptionData?.data.data.messageSentToGroupChat
           .groupChatMessageBelongsTo['_id'] == props.selectedContact
       ) {
-        const updatedChat = groupChat
-          ? JSON.parse(JSON.stringify(groupChat))
-          : { messages: [] };
-        updatedChat?.messages.push(
-          groupMessageSubscriptionData.data.data.messageSentToGroupChat,
-        );
-        setGroupChat(updatedChat);
         groupChatRefresh({
           id: props.selectedContact,
         });
@@ -232,9 +223,6 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
         groupChatRefresh({
           id: groupMessageSubscriptionData?.data.data.messageSentToGroupChat
             .groupChatMessageBelongsTo['_id'],
-        });
-        groupChatRefresh({
-          id: props.selectedContact,
         });
       }
     },
@@ -291,7 +279,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                                 ? styles.messageSentContainer
                                 : styles.messageReceivedContainer
                             }
-                            data-testid="message"
+                            data-testid="directChatMsg"
                             key={message._id}
                           >
                             <div
@@ -321,7 +309,10 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                                 {message.messageContent}
                               </span>
                               <div className={styles.messageAttributes}>
-                                <Dropdown style={{ cursor: 'pointer' }}>
+                                <Dropdown
+                                  data-testid="moreOptions"
+                                  style={{ cursor: 'pointer' }}
+                                >
                                   <Dropdown.Toggle
                                     className={styles.customToggle}
                                     data-testid={'dropdown'}
@@ -333,7 +324,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                                       onClick={() => {
                                         setReplyToDirectMessage(message);
                                       }}
-                                      data-testid="newDirectChat"
+                                      data-testid="replyBtn"
                                     >
                                       Reply
                                     </Dropdown.Item>
@@ -491,6 +482,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                 <Button
                   onClick={() => setReplyToDirectMessage(null)}
                   className={styles.closeBtn}
+                  data-testid="closeReplyMsg"
                 >
                   <Close />
                 </Button>
