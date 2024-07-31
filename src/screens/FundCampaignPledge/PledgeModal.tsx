@@ -35,6 +35,40 @@ export interface InterfacePledgeModal {
   endDate: Date;
   mode: 'create' | 'edit';
 }
+
+/**
+ * A modal dialog for creating or editing a pledge.
+ *
+ * @param isOpen - Indicates whether the modal is open.
+ * @param hide - Function to close the modal.
+ * @param campaignId - The ID of the campaign associated with the pledge.
+ * @param orgId - The ID of the organization associated with the pledge.
+ * @param pledge - The pledge object to be edited, or `null` if creating a new pledge.
+ * @param refetchPledge - Function to refetch the list of pledges after creation or update.
+ * @param endDate - The end date of the campaign to ensure pledge dates are within this range.
+ * @param mode - The mode indicating whether the modal is for creating a new pledge or editing an existing one.
+ *
+ * @returns The rendered modal component.
+ *
+ * The `PledgeModal` component displays a form within a modal dialog for creating or editing a pledge.
+ * It includes fields for selecting users, entering an amount, choosing a currency, and setting start and end dates for the pledge.
+ *
+ * The modal includes:
+ * - A header with a title indicating the current mode (create or edit) and a close button.
+ * - A form with:
+ *   - A multi-select dropdown for selecting users to participate in the pledge.
+ *   - Date pickers for selecting the start and end dates of the pledge.
+ *   - A dropdown for selecting the currency of the pledge amount.
+ *   - An input field for entering the pledge amount.
+ * - A submit button to create or update the pledge.
+ *
+ * On form submission, the component either:
+ * - Calls `updatePledge` mutation to update an existing pledge, or
+ * - Calls `createPledge` mutation to create a new pledge.
+ *
+ * Success or error messages are displayed using toast notifications based on the result of the mutation.
+ */
+
 const PledgeModal: React.FC<InterfacePledgeModal> = ({
   isOpen,
   hide,

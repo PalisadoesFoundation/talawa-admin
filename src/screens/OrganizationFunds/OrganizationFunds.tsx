@@ -43,7 +43,43 @@ enum ModalState {
   SAME = 'same',
   DELETE = 'delete',
 }
-
+/**
+ * `organizationFunds` component displays a list of funds for a specific organization,
+ * allowing users to search, sort, view, edit, and delete funds.
+ *
+ * This component utilizes the `DataGrid` from Material-UI to present the list of funds in a tabular format,
+ * and includes functionality for filtering and sorting. It also handles the opening and closing of modals
+ * for creating, editing, and deleting funds.
+ *
+ * It includes:
+ * - A search input field to filter funds by name.
+ * - A dropdown menu to sort funds by creation date.
+ * - A button to create a new fund.
+ * - A table to display the list of funds with columns for fund details and actions.
+ * - Modals for creating, editing, and deleting funds.
+ *
+ * ### GraphQL Queries
+ * - `FUND_LIST`: Fetches a list of funds for the given organization, filtered and sorted based on the provided parameters.
+ *
+ * ### Props
+ * - `orgId`: The ID of the organization whose funds are being managed.
+ *
+ * ### State
+ * - `fund`: The currently selected fund for editing or deletion.
+ * - `searchTerm`: The current search term used for filtering funds.
+ * - `sortBy`: The current sorting order for funds.
+ * - `modalState`: The state of the modals (edit/create or delete).
+ * - `fundModalMode`: The mode of the fund modal (edit or create).
+ *
+ * ### Methods
+ * - `openModal(modal: ModalState)`: Opens the specified modal.
+ * - `closeModal(modal: ModalState)`: Closes the specified modal.
+ * - `handleOpenModal(fund: InterfaceFundInfo | null, mode: 'edit' | 'create')`: Opens the fund modal with the given fund and mode.
+ * - `handleDeleteClick(fund: InterfaceFundInfo)`: Opens the delete modal for the specified fund.
+ * - `handleClick(fundId: string)`: Navigates to the campaign page for the specified fund.
+ *
+ * @returns The rendered component.
+ */
 const organizationFunds = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'funds',

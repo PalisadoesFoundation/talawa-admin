@@ -8,7 +8,6 @@ interface InterfaceMainContentProps {
   /**
    * The child elements to be rendered inside the main content container.
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   children: any;
 }
 

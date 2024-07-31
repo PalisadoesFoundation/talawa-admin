@@ -13,7 +13,6 @@ interface InterfaceSidePanelProps {
   /**
    * The child elements to be rendered inside the side panel.
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   children: any;
 }
 

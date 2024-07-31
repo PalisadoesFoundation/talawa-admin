@@ -91,9 +91,7 @@ const Users = (): JSX.Element => {
   }: {
     data?: { users: InterfaceQueryUserListItem[] };
     loading: boolean;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fetchMore: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     refetch: any;
     error?: ApolloError;
   } = useQuery(USER_LIST, {
@@ -173,7 +171,6 @@ const Users = (): JSX.Element => {
     setHasMore(true);
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSearchByEnter = (e: any): void => {
     if (e.key === 'Enter') {
       const { value } = e.target;

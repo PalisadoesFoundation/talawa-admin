@@ -2,10 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 interface InterfaceAddOnProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   extras: any;
   name: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   children: any;
 }
 

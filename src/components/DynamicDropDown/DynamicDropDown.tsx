@@ -9,9 +9,7 @@ interface InterfaceChangeDropDownProps {
   parentContainerStyle?: string;
   btnStyle?: string;
   btnTextStyle?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setFormState: React.Dispatch<React.SetStateAction<any>>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   formState: any;
   fieldOptions: { value: string; label: string }[]; // Field options for dropdown
   fieldName: string; // Field name for labeling

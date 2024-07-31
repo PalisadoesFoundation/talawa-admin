@@ -18,10 +18,8 @@ interface InterfaceAddOnEntryProps {
   description: string;
   createdBy: string;
   component: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   modified: any;
   uninstalledOrgs: string[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getInstalledPlugins: () => any;
 }
 

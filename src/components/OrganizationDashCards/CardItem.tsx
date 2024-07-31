@@ -17,7 +17,6 @@ export interface InterfaceCardItem {
   time?: string;
   startdate?: string;
   enddate?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   creator?: any;
   location?: string;
 }

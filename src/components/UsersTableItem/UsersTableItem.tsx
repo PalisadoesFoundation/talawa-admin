@@ -20,6 +20,31 @@ type Props = {
   loggedInUserId: string;
   resetAndRefetch: () => void;
 };
+/**
+ * `UsersTableItem` is a React component that represents a row in a table displaying user information.
+ * This component handles displaying and interacting with user details, including:
+ *
+ * - Viewing organizations the user has joined or blocked.
+ * - Searching through these organizations.
+ * - Changing the user's role in various organizations.
+ * - Removing the user from an organization.
+ *
+ * It also manages multiple modals:
+ *
+ * - **Joined Organizations Modal**: Displays a list of organizations the user has joined, with search functionality.
+ * - **Blocked Organizations Modal**: Displays a list of organizations that have blocked the user, with search functionality.
+ * - **Remove User Modal**: Confirms the removal of the user from a specific organization.
+ *
+ *
+ * @param  props - The props for the `UsersTableItem` component.
+ * @param user - The user data to be displayed.
+ * @param index - The index of the user in the table.
+ * @param loggedInUserId - The ID of the currently logged-in user.
+ * @param resetAndRefetch - A function to reset and refetch the data.
+ *
+ * @returns The rendered component.
+ */
+
 const UsersTableItem = (props: Props): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'users' });
   const { t: tCommon } = useTranslation('common');

@@ -7,7 +7,6 @@ interface InterfaceActionProps {
   /**
    * The child elements to be rendered inside the action component.
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   children: any;
 
   /**
