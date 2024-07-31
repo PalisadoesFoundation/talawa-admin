@@ -33,9 +33,7 @@ interface InterfaceContactCardProps {
  * @returns  The rendered contact card component.
  */
 function contactCard(props: InterfaceContactCardProps): JSX.Element {
-
   // Full name of the contact
-  const contactName = `${props.firstName} ${props.lastName}`;
 
   /**
    * Updates the selected contact and its name when the card is clicked.

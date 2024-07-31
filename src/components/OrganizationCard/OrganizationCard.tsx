@@ -2,8 +2,6 @@ import React from 'react';
 import styles from './OrganizationCard.module.css';
 
 interface InterfaceOrganizationCardProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  key: any;
   image: string;
   id: string;
   name: string;

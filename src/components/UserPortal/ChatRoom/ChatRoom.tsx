@@ -24,7 +24,6 @@ interface InterfaceChatRoomProps {
   selectedChatType: string;
 }
 
-
 /**
  * A chat room component that displays messages and a message input field.
  *
@@ -80,17 +79,12 @@ type Chat = {
   }[];
 };
 
-
 export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
   // Translation hook for text in different languages
   const { t } = useTranslation('translation', {
     keyPrefix: 'userChatRoom',
   });
   const isMountedRef = useRef<boolean>(true);
-
-
-  // State to manage the new message input
-  const [newMessage, setNewMessage] = React.useState('');
 
   useEffect(() => {
     return () => {
@@ -105,7 +99,6 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
   const [newMessage, setNewMessage] = useState('');
   const [directChat, setDirectChat] = useState<Chat>();
   const [groupChat, setGroupChat] = useState<Chat>();
-
 
   /**
    * Handles changes to the new message input field.

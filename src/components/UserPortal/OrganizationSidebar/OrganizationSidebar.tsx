@@ -17,7 +17,6 @@ import type {
   InterfaceQueryOrganizationEventListItem,
   InterfaceMemberInfo,
 } from 'utils/interfaces';
-import { skip } from 'node:test';
 
 /**
  * OrganizationSidebar displays the sidebar for an organization, showing a list of members and events.
@@ -43,16 +42,6 @@ export default function organizationSidebar(): JSX.Element {
 
   // Extract the organization ID from the URL parameters
   const { orgId: organizationId } = useParams();
-
-
-  // State variables for storing members and events data
-  const [members, setMembers] = React.useState([]);
-  const [events, setEvents] = React.useState([]);
-
-  // Define the links to view all members and events
-  const eventsLink = `/user/events/id=${organizationId}`;
-  const peopleLink = `/user/people/id=${organizationId}`;
-
   const [members, setMembers] = React.useState<
     InterfaceMemberInfo[] | undefined
   >(undefined);
@@ -61,7 +50,6 @@ export default function organizationSidebar(): JSX.Element {
   >(undefined);
   const eventsLink = `/user/events/${organizationId}`;
   const peopleLink = `/user/people/${organizationId}`;
-
 
   // Query to fetch members of the organization
   const { data: memberData, loading: memberLoading } = useQuery(
@@ -123,35 +111,6 @@ export default function organizationSidebar(): JSX.Element {
         </div>
       ) : (
         <ListGroup variant="flush">
-
-          {members.length ? (
-            members.map(
-              (
-                member: InterfaceMemberInfo,
-                index: React.Key | null | undefined,
-              ) => {
-                // Construct member's full name
-                const memberName = `${member.firstName} ${member.lastName}`;
-                return (
-                  <ListGroup.Item
-                    key={index}
-                    action
-                    className={`${styles.rounded} ${styles.colorLight} my-1`}
-                  >
-                    <div className="d-flex flex-row">
-                      <img
-                        src={member.image ? member.image : AboutImg}
-                        className={styles.memberImage}
-                        width="auto"
-                        height="30px"
-                      />
-                      <div className={styles.orgName}>{memberName}</div>
-                    </div>
-                  </ListGroup.Item>
-                );
-              },
-            )
-
           {members && members.length ? (
             members.map((member: InterfaceMemberInfo) => {
               const memberName = `${member.firstName} ${member.lastName}`;
@@ -173,7 +132,6 @@ export default function organizationSidebar(): JSX.Element {
                 </ListGroup.Item>
               );
             })
-
           ) : (
             <div className="w-100 text-center">{t('noMembers')}</div>
           )}

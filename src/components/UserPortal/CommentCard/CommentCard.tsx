@@ -90,8 +90,7 @@ function commentCard(props: InterfaceCommentCardProps): JSX.Element {
           setIsLikedByUser(false);
           props.handleDislikeComment(props.id);
         }
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (error: any) {
+      } catch (error: unknown) {
         /* istanbul ignore next */
         toast.error(error);
       }
@@ -108,8 +107,7 @@ function commentCard(props: InterfaceCommentCardProps): JSX.Element {
           setIsLikedByUser(true);
           props.handleLikeComment(props.id);
         }
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (error: any) {
+      } catch (error: unknown) {
         /* istanbul ignore next */
         toast.error(error);
       }

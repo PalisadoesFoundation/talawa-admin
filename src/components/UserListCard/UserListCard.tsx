@@ -52,8 +52,7 @@ function userListCard(props: InterfaceUserListCardProps): JSX.Element {
           window.location.reload();
         }, 2000);
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
+    } catch (error: unknown) {
       /* istanbul ignore next */
       errorHandler(t, error);
     }

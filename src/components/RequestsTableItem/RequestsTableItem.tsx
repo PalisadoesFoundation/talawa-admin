@@ -70,8 +70,7 @@ const RequestsTableItem = (props: Props): JSX.Element => {
         toast.success(t('acceptedSuccessfully'));
         resetAndRefetch();
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
+    } catch (error: unknown) {
       /* istanbul ignore next */
       errorHandler(t, error);
     }
@@ -99,8 +98,7 @@ const RequestsTableItem = (props: Props): JSX.Element => {
         toast.success(t('rejectedSuccessfully'));
         resetAndRefetch();
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
+    } catch (error: unknown) {
       /* istanbul ignore next */
       errorHandler(t, error);
     }
