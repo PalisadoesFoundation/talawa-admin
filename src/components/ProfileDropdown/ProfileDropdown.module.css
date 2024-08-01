@@ -2,13 +2,13 @@
   border: none;
   padding: 2.1rem 0.5rem;
   height: 52px;
-  width: 240px;
+  width: 15vw;
   border-radius: 8px 0px 0px 8px;
   display: flex;
   position: absolute;
   align-items: center;
-  top: 50px;
-  right: 70px;
+  top: 5vh;
+  right: 5vw;
   background-color: white !important;
   box-shadow:
     0 4px 4px 0 rgba(177, 177, 177, 0.2),
@@ -65,14 +65,17 @@
   background-color: transparent !important;
 }
 .dropdownToggle {
-  height: 67px;
+  height: 7.7vh;
   position: absolute;
-  top: 50px;
-  right: 40px;
+  top: 5vh;
+  right: 2.7vw;
+  box-shadow:
+    0 4px 4px 0 rgba(177, 177, 177, 0.2),
+    0 6px 44px 0 rgba(246, 246, 246, 0.19);
   background-image: url(/public/images/svg/angleDown.svg);
   background-repeat: no-repeat;
   background-position: center;
-  background-color: azure;
+  background-color: white !important;
   z-index: 1000;
 }
 
