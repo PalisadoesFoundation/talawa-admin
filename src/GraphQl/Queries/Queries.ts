@@ -767,7 +767,7 @@ export const GET_COMMUNITY_DATA = gql`
         facebook
         gitHub
         instagram
-        twitter
+        x
         linkedIn
         youTube
         reddit
