@@ -11,6 +11,15 @@ interface InterfaceUserPasswordUpdateProps {
   id: string;
 }
 
+/**
+ * UserUpdate component allows users to update their passwords.
+ * It handles form submission and communicates with the backend to update the user's password.
+ *
+ * @param props - The properties for the UserUpdate component.
+ * @param id - The ID of the user whose password is being updated.
+ *
+ * @returns The JSX element for updating user password.
+ */
 const UserUpdate: React.FC<
   InterfaceUserPasswordUpdateProps
 > = (): JSX.Element => {
@@ -26,6 +35,10 @@ const UserUpdate: React.FC<
 
   const [login] = useMutation(UPDATE_USER_PASSWORD_MUTATION);
 
+  /**
+   * Handles the password update process.
+   * It validates the form inputs and performs the mutation to update the password.
+   */
   const loginLink = async (): Promise<string | void> => {
     if (
       !formState.previousPassword ||
@@ -64,6 +77,10 @@ const UserUpdate: React.FC<
     }
   };
 
+  /**
+   * Handles canceling the update process.
+   * It reloads the page to reset any changes.
+   */
   /* istanbul ignore next */
   const cancelUpdate = (): void => {
     window.location.reload();

@@ -12,7 +12,13 @@ interface InterfaceOrgPeopleListCardProps {
   id: string | undefined;
   toggleRemoveModal: () => void;
 }
-
+/**
+ * Component to confirm and handle the removal of an admin.
+ *
+ * @param id - ID of the admin to be removed.
+ * @param toggleRemoveModal - Function to toggle the visibility of the modal.
+ * @returns JSX element for the removal confirmation modal.
+ */
 function orgAdminListCard(props: InterfaceOrgPeopleListCardProps): JSX.Element {
   if (!props.id) {
     return <Navigate to={'/orglist'} />;
@@ -25,6 +31,10 @@ function orgAdminListCard(props: InterfaceOrgPeopleListCardProps): JSX.Element {
   });
   const { t: tCommon } = useTranslation('common');
 
+  /**
+   * Function to remove the admin from the organization
+   * and display a success message.
+   */
   const removeAdmin = async (): Promise<void> => {
     try {
       const { data } = await remove({

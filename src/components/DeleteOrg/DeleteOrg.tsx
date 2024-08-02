@@ -13,31 +13,60 @@ import styles from './DeleteOrg.module.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
 
+/**
+ * A component for deleting an organization.
+ *
+ * It displays a card with a delete button. When the delete button is clicked,
+ * a modal appears asking for confirmation. Depending on the type of organization
+ * (sample or regular), it performs the delete operation and shows appropriate
+ * success or error messages.
+ *
+ * @returns JSX.Element - The rendered component with delete functionality.
+ */
 function deleteOrg(): JSX.Element {
+  // Translation hook for localization
   const { t } = useTranslation('translation', {
     keyPrefix: 'deleteOrg',
   });
   const { t: tCommon } = useTranslation('common');
+
+  // Get the current organization ID from the URL
   const { orgId: currentUrl } = useParams();
+  // Navigation hook for redirecting
   const navigate = useNavigate();
+  // State to control the visibility of the delete confirmation modal
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  // Hook for accessing local storage
   const { getItem } = useLocalStorage();
+  // Check if the user has super admin privileges
   const canDelete = getItem('SuperAdmin');
+
+  /**
+   * Toggles the visibility of the delete confirmation modal.
+   */
   const toggleDeleteModal = (): void => setShowDeleteModal(!showDeleteModal);
 
+  // GraphQL mutations for deleting organizations
   const [del] = useMutation(DELETE_ORGANIZATION_MUTATION);
   const [removeSampleOrganization] = useMutation(
     REMOVE_SAMPLE_ORGANIZATION_MUTATION,
   );
 
+  // Query to check if the organization is a sample organization
   const { data } = useQuery(IS_SAMPLE_ORGANIZATION_QUERY, {
     variables: {
       isSampleOrganizationId: currentUrl,
     },
   });
 
+  /**
+   * Deletes the organization. It handles both sample and regular organizations.
+   * Displays success or error messages based on the operation result.
+   */
   const deleteOrg = async (): Promise<void> => {
     if (data && data.isSampleOrganization) {
+      // If it's a sample organization, use a specific mutation
       removeSampleOrganization()
         .then(() => {
           toast.success(t('successfullyDeletedSampleOrganization'));
@@ -49,6 +78,7 @@ function deleteOrg(): JSX.Element {
           toast.error(error.message);
         });
     } else {
+      // For regular organizations, use a different mutation
       try {
         await del({
           variables: {

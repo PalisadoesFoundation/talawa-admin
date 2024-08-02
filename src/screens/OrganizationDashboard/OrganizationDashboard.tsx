@@ -29,6 +29,13 @@ import type {
 } from 'utils/interfaces';
 import styles from './OrganizationDashboard.module.css';
 
+/**
+ * Component for displaying the organization dashboard.
+ *
+ * This component provides an overview of various statistics and information related to an organization, including members, admins, posts, events, blocked users, and membership requests. It also displays upcoming events and latest posts.
+ *
+ * @returns The rendered component.
+ */
 function organizationDashboard(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'dashboard' });
   const { t: tCommon } = useTranslation('common');
@@ -45,6 +52,9 @@ function organizationDashboard(): JSX.Element {
     InterfaceQueryOrganizationEventListItem[]
   >([]);
 
+  /**
+   * Query to fetch organization data.
+   */
   const {
     data,
     loading: loadingOrgData,
@@ -59,6 +69,9 @@ function organizationDashboard(): JSX.Element {
     variables: { id: currentUrl },
   });
 
+  /**
+   * Query to fetch posts for the organization.
+   */
   const {
     data: postData,
     loading: loadingPost,
@@ -73,6 +86,9 @@ function organizationDashboard(): JSX.Element {
     variables: { id: currentUrl, first: 10 },
   });
 
+  /**
+   * Query to fetch events for the organization.
+   */
   const {
     data: eventData,
     loading: loadingEvent,
@@ -83,7 +99,9 @@ function organizationDashboard(): JSX.Element {
     },
   });
 
-  // UseEffect to update upcomingEvents array
+  /**
+   * UseEffect to update the list of upcoming events.
+   */
   useEffect(() => {
     if (eventData && eventData?.eventsByOrganizationConnection.length > 0) {
       const tempUpcomingEvents: InterfaceQueryOrganizationEventListItem[] = [];
@@ -100,6 +118,9 @@ function organizationDashboard(): JSX.Element {
     }
   }, [eventData?.eventsByOrganizationConnection]);
 
+  /**
+   * UseEffect to handle errors and navigate if necessary.
+   */
   useEffect(() => {
     if (errorOrg || errorPost || errorEvent) {
       console.log('error', errorPost?.message);
