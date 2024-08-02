@@ -1,8 +1,9 @@
 .pageContainer {
   display: flex;
   flex-direction: column;
+  position: relative;
   min-height: 100vh;
-  padding: 1rem 1.5rem 0 calc(300px + 2rem + 1.5rem);
+  padding: 0rem 1.5rem 0rem calc(300px + 2rem + 1.5rem);
 }
 
 .expand {
