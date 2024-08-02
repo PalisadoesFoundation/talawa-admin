@@ -13,21 +13,30 @@ import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 
 interface InterfaceRegisterProps {
+  /**
+   * Function to change the current mode (e.g., from register to login).
+   */
   setCurrentMode: React.Dispatch<SetStateAction<string>>;
 }
 
 export default function register(props: InterfaceRegisterProps): JSX.Element {
   const { setCurrentMode } = props;
 
+  // Translation hooks for user registration and common text
   const { t } = useTranslation('translation', { keyPrefix: 'userRegister' });
   const { t: tCommon } = useTranslation('common');
 
+  /**
+   * Changes the mode to login when invoked.
+   */
   const handleModeChangeToLogin = (): void => {
     setCurrentMode('login');
   };
 
+  // Mutation hook for user registration
   const [registerMutation] = useMutation(SIGNUP_MUTATION);
 
+  // State to manage the registration form variables
   const [registerVariables, setRegisterVariables] = React.useState({
     firstName: '',
     lastName: '',
@@ -36,6 +45,9 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
     confirmPassword: '',
   });
 
+  /**
+   * Handles the registration process by validating inputs and invoking the mutation.
+   */
   const handleRegister = async (): Promise<void> => {
     if (
       !(
@@ -45,11 +57,11 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
         registerVariables.lastName
       )
     ) {
-      toast.error(t('invalidDetailsMessage'));
+      toast.error(t('invalidDetailsMessage')); // Error if fields are missing
     } else if (
       registerVariables.password !== registerVariables.confirmPassword
     ) {
-      toast.error(t('passwordNotMatch'));
+      toast.error(t('passwordNotMatch')); // Error if passwords do not match
     } else {
       try {
         await registerMutation({
@@ -61,8 +73,9 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
           },
         });
 
-        toast.success(t('afterRegister'));
+        toast.success(t('afterRegister')); // Success message
 
+        // Reset form fields
         /* istanbul ignore next */
         setRegisterVariables({
           firstName: '',
@@ -72,33 +85,47 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
           confirmPassword: '',
         });
       } catch (error: unknown) {
+        // Handle any errors during registration
         /* istanbul ignore next */
         errorHandler(t, error);
       }
     }
   };
 
+  /**
+   * Updates the state with the first name input value.
+   * @param e - Change event from the input element
+   */
   /* istanbul ignore next */
   const handleFirstName = (e: ChangeEvent<HTMLInputElement>): void => {
     const firstName = e.target.value;
-
     setRegisterVariables({ ...registerVariables, firstName });
   };
 
+  /**
+   * Updates the state with the last name input value.
+   * @param e - Change event from the input element
+   */
   /* istanbul ignore next */
   const handleLastName = (e: ChangeEvent<HTMLInputElement>): void => {
     const lastName = e.target.value;
-
     setRegisterVariables({ ...registerVariables, lastName });
   };
 
+  /**
+   * Updates the state with the email input value.
+   * @param e - Change event from the input element
+   */
   /* istanbul ignore next */
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const email = e.target.value;
-
     setRegisterVariables({ ...registerVariables, email });
   };
 
+  /**
+   * Updates the state with the password input value.
+   * @param e - Change event from the input element
+   */
   /* istanbul ignore next */
   const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const password = e.target.value;
@@ -106,6 +133,10 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
     setRegisterVariables({ ...registerVariables, password });
   };
 
+  /**
+   * Updates the state with the confirm password input value.
+   * @param e - Change event from the input element
+   */
   /* istanbul ignore next */
   const handleConfirmPasswordChange = (
     e: ChangeEvent<HTMLInputElement>,

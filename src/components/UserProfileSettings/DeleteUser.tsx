@@ -3,6 +3,12 @@ import { Button, Card } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import styles from './UserProfileSettings.module.css';
 
+/**
+ * DeleteUser component displays a card with a button to delete a user.
+ * It includes a message and a button to trigger the delete action.
+ *
+ * @returns The JSX element for the delete user card.
+ */
 const DeleteUser: React.FC = () => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'settings',

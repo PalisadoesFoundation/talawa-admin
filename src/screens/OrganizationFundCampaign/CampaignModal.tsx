@@ -3,7 +3,7 @@ import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Form, Modal } from 'react-bootstrap';
+import { Button, Form, Modal } from 'react-bootstrap';
 import { currencyOptions, currencySymbols } from 'utils/currency';
 import styles from './OrganizationFundCampaign.module.css';
 import { useTranslation } from 'react-i18next';
@@ -22,6 +22,9 @@ import {
 } from '@mui/material';
 import type { InterfaceCampaignInfo } from 'utils/interfaces';
 
+/**
+ * Props for the CampaignModal component.
+ */
 export interface InterfaceCampaignModal {
   isOpen: boolean;
   hide: () => void;
@@ -31,6 +34,12 @@ export interface InterfaceCampaignModal {
   mode: 'create' | 'edit';
 }
 
+/**
+ * Modal component for creating or editing a campaign.
+ *
+ * @param props - The props for the CampaignModal component.
+ * @returns JSX.Element
+ */
 const CampaignModal: React.FC<InterfaceCampaignModal> = ({
   isOpen,
   hide,
@@ -73,6 +82,12 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
   const [createCampaign] = useMutation(CREATE_CAMPAIGN_MUTATION);
   const [updateCampaign] = useMutation(UPDATE_CAMPAIGN_MUTATION);
 
+  /**
+   * Handles form submission to create a new campaign.
+   *
+   * @param e - The form event.
+   * @returns Promise<void>
+   */
   const createCampaignHandler = async (
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
@@ -103,6 +118,12 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
     }
   };
 
+  /**
+   * Handles form submission to update an existing campaign.
+   *
+   * @param e - The form event.
+   * @returns Promise<void>
+   */
   /*istanbul ignore next*/
   const updateCampaignHandler = async (
     e: ChangeEvent<HTMLFormElement>,

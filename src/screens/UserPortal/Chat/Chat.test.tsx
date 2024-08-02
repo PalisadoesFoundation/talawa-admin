@@ -2159,7 +2159,8 @@ describe('Testing Chat Screen [User Portal]', () => {
     });
   });
 
-  test('Testcreate new direct chat', async () => {
+  test('create new direct chat', async () => {
+
     const mock = [
       ...USER_JOINED_ORG_MOCK,
       ...GROUP_CHAT_BY_ID_QUERY_MOCK,

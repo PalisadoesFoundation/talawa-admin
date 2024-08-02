@@ -26,14 +26,23 @@ interface InterfaceRequestsListItem {
   };
 }
 
+/**
+ * The `Requests` component fetches and displays a paginated list of membership requests
+ * for an organization, with functionality for searching, filtering, and infinite scrolling.
+ *
+ */
 const Requests = (): JSX.Element => {
+  // Translation hooks for internationalization
   const { t } = useTranslation('translation', { keyPrefix: 'requests' });
   const { t: tCommon } = useTranslation('common');
 
+  // Set the document title to the translated title for the requests page
   document.title = t('title');
 
+  // Hook for managing local storage
   const { getItem } = useLocalStorage();
 
+  // Define constants and state variables
   const perPageResult = 8;
   const [isLoading, setIsLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
@@ -47,6 +56,7 @@ const Requests = (): JSX.Element => {
   const { orgId = '' } = useParams();
   const organizationId = orgId;
 
+  // Query to fetch membership requests
   const { data, loading, fetchMore, refetch } = useQuery(MEMBERSHIP_REQUEST, {
     variables: {
       id: organizationId,
@@ -57,6 +67,7 @@ const Requests = (): JSX.Element => {
     notifyOnNetworkStatusChange: true,
   });
 
+  // Query to fetch the list of organizations
   const { data: orgsData } = useQuery(ORGANIZATION_CONNECTION_LIST);
   const [displayedRequests, setDisplayedRequests] = useState(
     data?.organizations[0]?.membershipRequests || [],
@@ -77,14 +88,14 @@ const Requests = (): JSX.Element => {
     setDisplayedRequests(membershipRequests);
   }, [data]);
 
-  // To clear the search when the component is unmounted
+  // Clear the search field when the component is unmounted
   useEffect(() => {
     return () => {
       setSearchByName('');
     };
   }, []);
 
-  // Warn if there is no organization
+  // Show a warning if there are no organizations
   useEffect(() => {
     if (!orgsData) {
       return;
@@ -95,7 +106,7 @@ const Requests = (): JSX.Element => {
     }
   }, [orgsData]);
 
-  // Send to orgList page if user is not admin
+  // Redirect to orgList page if the user is not an admin
   useEffect(() => {
     if (userRole != 'ADMIN' && userRole != 'SUPERADMIN') {
       window.location.assign('/orglist');
@@ -111,6 +122,11 @@ const Requests = (): JSX.Element => {
     }
   }, [loading]);
 
+  /**
+   * Handles the search input change and refetches the data based on the search value.
+   *
+   * @param value - The search term entered by the user.
+   */
   const handleSearch = (value: string): void => {
     setSearchByName(value);
     if (value === '') {
@@ -124,6 +140,11 @@ const Requests = (): JSX.Element => {
     });
   };
 
+  /**
+   * Handles search input when the Enter key is pressed.
+   *
+   * @param  e - The keyboard event.
+   */
   const handleSearchByEnter = (
     e: React.KeyboardEvent<HTMLInputElement>,
   ): void => {
@@ -133,6 +154,9 @@ const Requests = (): JSX.Element => {
     }
   };
 
+  /**
+   * Handles the search button click to trigger the search.
+   */
   const handleSearchByBtnClick = (): void => {
     const inputElement = document.getElementById(
       'searchRequests',
@@ -141,6 +165,9 @@ const Requests = (): JSX.Element => {
     handleSearch(inputValue);
   };
 
+  /**
+   * Resets search and refetches the data.
+   */
   const resetAndRefetch = (): void => {
     refetch({
       first: perPageResult,
@@ -149,6 +176,10 @@ const Requests = (): JSX.Element => {
     });
     setHasMore(true);
   };
+
+  /**
+   * Loads more requests when scrolling to the bottom of the page.
+   */
   /* istanbul ignore next */
   const loadMoreRequests = (): void => {
     setIsLoadingMore(true);
@@ -188,6 +219,7 @@ const Requests = (): JSX.Element => {
     });
   };
 
+  // Header titles for the table
   const headerTitles: string[] = [
     t('sl_no'),
     tCommon('name'),

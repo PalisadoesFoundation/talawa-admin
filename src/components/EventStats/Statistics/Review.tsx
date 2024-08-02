@@ -2,6 +2,7 @@ import React from 'react';
 import Card from 'react-bootstrap/Card';
 import Rating from '@mui/material/Rating';
 
+// Props for the ReviewStats component
 type ModalPropType = {
   data: {
     event: {
@@ -12,13 +13,22 @@ type ModalPropType = {
   };
 };
 
+// Type representing individual feedback
 type FeedbackType = {
   _id: string;
   rating: number;
   review: string | null;
 };
 
+/**
+ * Component that displays reviews for an event.
+ * Shows a list of reviews with ratings and text.
+ *
+ * @param data - Data containing event feedback to be displayed.
+ * @returns JSX element representing the reviews card.
+ */
 export const ReviewStats = ({ data }: ModalPropType): JSX.Element => {
+  // Filter out feedback that has a review
   const reviews = data.event.feedback.filter(
     (feedback: FeedbackType) => feedback.review != null,
   );
