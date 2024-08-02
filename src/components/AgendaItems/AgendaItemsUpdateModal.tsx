@@ -33,6 +33,19 @@ interface InterfaceAgendaItemsUpdateModalProps {
   agendaItemCategories: InterfaceAgendaItemCategoryInfo[] | undefined;
 }
 
+/**
+ * Modal component for updating details of an agenda item.
+ * Provides a form to update the agenda item's title, description, duration, categories, URLs, and attachments.
+ * Also includes functionality to add, remove URLs and attachments.
+ *
+ * @param agendaItemUpdateModalIsOpen - Boolean flag indicating if the update modal is open.
+ * @param hideUpdateModal - Function to hide the update modal.
+ * @param formState - The current state of the form containing agenda item details.
+ * @param setFormState - Function to update the form state.
+ * @param updateAgendaItemHandler - Handler function for submitting the form.
+ * @param t - Function for translating text based on keys.
+ * @param agendaItemCategories - List of agenda item categories for selection.
+ */
 const AgendaItemsUpdateModal: React.FC<
   InterfaceAgendaItemsUpdateModalProps
 > = ({
@@ -54,13 +67,22 @@ const AgendaItemsUpdateModal: React.FC<
     }));
   }, []);
 
-  // Function to validate URL
+  /**
+   * Validates if a given URL is in a correct format.
+   *
+   * @param url - The URL to validate.
+   * @returns True if the URL is valid, false otherwise.
+   */
   const isValidUrl = (url: string): boolean => {
     // Regular expression for basic URL validation
     const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
     return urlRegex.test(url);
   };
 
+  /**
+   * Handles adding a new URL to the form state.
+   * Displays an error toast if the URL is invalid.
+   */
   const handleAddUrl = (): void => {
     if (newUrl.trim() !== '' && isValidUrl(newUrl.trim())) {
       setFormState({
@@ -73,6 +95,11 @@ const AgendaItemsUpdateModal: React.FC<
     }
   };
 
+  /**
+   * Handles removing a URL from the form state.
+   *
+   * @param url - The URL to remove.
+   */
   const handleRemoveUrl = (url: string): void => {
     setFormState({
       ...formState,
@@ -80,6 +107,13 @@ const AgendaItemsUpdateModal: React.FC<
     });
   };
 
+  /**
+   * Handles file input change event.
+   * Converts selected files to base64 format and updates the form state.
+   * Displays an error toast if the total file size exceeds the limit.
+   *
+   * @param e - The change event for file input.
+   */
   const handleFileChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
@@ -104,6 +138,11 @@ const AgendaItemsUpdateModal: React.FC<
     }
   };
 
+  /**
+   * Handles removing an attachment from the form state.
+   *
+   * @param attachment - The attachment to remove.
+   */
   const handleRemoveAttachment = (attachment: string): void => {
     setFormState({
       ...formState,
@@ -140,7 +179,6 @@ const AgendaItemsUpdateModal: React.FC<
                   formState.agendaItemCategoryIds.includes(category._id),
                 ) || []
               }
-              // isOptionEqualToValue={(option, value) => option._id === value._id}
               filterSelectedOptions={true}
               getOptionLabel={(
                 category: InterfaceAgendaItemCategoryInfo,

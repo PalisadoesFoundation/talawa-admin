@@ -23,6 +23,13 @@ import AgendaItemsCreateModal from 'components/AgendaItems/AgendaItemsCreateModa
 import styles from './EventAgendaItems.module.css';
 import Loader from 'components/Loader/Loader';
 
+/**
+ * Component to manage and display agenda items for a specific event.
+ *
+ * @param  props - The component props.
+ * @param eventId - The ID of the event to manage agenda items for.
+ * @returns  The rendered component.
+ */
 function EventAgendaItems(props: { eventId: string }): JSX.Element {
   const { eventId } = props;
 
@@ -30,13 +37,16 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
     keyPrefix: 'agendaItems',
   });
 
+  // Extract organization ID from URL
   const url: string = window.location.href;
   const startIdx: number = url.indexOf('/event/') + '/event/'.length;
   const orgId: string = url.slice(startIdx, url.indexOf('/', startIdx));
 
+  // State to manage the create agenda item modal visibility
   const [agendaItemCreateModalIsOpen, setAgendaItemCreateModalIsOpen] =
     useState<boolean>(false);
 
+  // State to manage form values
   const [formState, setFormState] = useState({
     agendaItemCategoryIds: [''],
     title: '',
@@ -46,6 +56,7 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
     urls: [''],
   });
 
+  // Query for agenda item categories
   const {
     data: agendaCategoryData,
     loading: agendaCategoryLoading,
@@ -59,6 +70,7 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
     notifyOnNetworkStatusChange: true,
   });
 
+  // Query for agenda items by event
   const {
     data: agendaItemData,
     loading: agendaItemLoading,
@@ -74,8 +86,14 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
     notifyOnNetworkStatusChange: true,
   });
 
+  // Mutation for creating an agenda item
   const [createAgendaItem] = useMutation(CREATE_AGENDA_ITEM_MUTATION);
 
+  /**
+   * Handler for creating a new agenda item.
+   *
+   * @param  e - The form submit event.
+   */
   const createAgendaItemHandler = async (
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
@@ -97,6 +115,7 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
         },
       });
 
+      // Reset form state and hide modal
       setFormState({
         title: '',
         description: '',
@@ -115,16 +134,24 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
     }
   };
 
+  /**
+   * Toggles the visibility of the create agenda item modal.
+   */
   const showCreateModal = (): void => {
     setAgendaItemCreateModalIsOpen(!agendaItemCreateModalIsOpen);
   };
 
+  /**
+   * Hides the create agenda item modal.
+   */
   const hideCreateModal = (): void => {
     setAgendaItemCreateModalIsOpen(!agendaItemCreateModalIsOpen);
   };
 
+  // Show loader while data is loading
   if (agendaItemLoading || agendaCategoryLoading) return <Loader size="xl" />;
 
+  // Show error message if there is an error loading data
   if (agendaItemError || agendaCategoryError) {
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>

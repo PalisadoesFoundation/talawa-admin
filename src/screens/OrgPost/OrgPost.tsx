@@ -43,6 +43,12 @@ interface InterfaceOrgPost {
   }[];
 }
 
+/**
+ * This function is used to display the posts of the organization. It displays the posts in a card format.
+ * It also provides the functionality to create a new post. The user can also sort the posts based on the date of creation.
+ * The user can also search for a post based on the title of the post.
+ * @returns JSX.Element which contains the posts of the organization.
+ */
 function orgPost(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgPost',
