@@ -1,4 +1,8 @@
-import { QuestionMarkOutlined } from '@mui/icons-material';
+import {
+  QuestionMarkOutlined,
+  ContactPageOutlined,
+  NewspaperOutlined,
+} from '@mui/icons-material';
 import { ReactComponent as ActionItemIcon } from 'assets/svgs/actionItem.svg';
 import { ReactComponent as AgendaCategoryIcon } from 'assets/svgs/agenda-category-icon.svg';
 import { ReactComponent as BlockUserIcon } from 'assets/svgs/blockUser.svg';
@@ -125,11 +129,11 @@ const iconComponent = (props: InterfaceIconComponent): JSX.Element => {
       );
     case 'Campaigns':
       return (
-        <FundsIcon data-testid="Icon-Component-Campaigns" stroke={props.fill} />
+        <NewspaperOutlined {...props} data-testid="Icon-Component-Campaigns" />
       );
     case 'My Pledges':
       return (
-        <FundsIcon
+        <ContactPageOutlined
           data-testid="Icon-Component-My-Pledges"
           stroke={props.fill}
         />
@@ -138,6 +142,7 @@ const iconComponent = (props: InterfaceIconComponent): JSX.Element => {
       return (
         <QuestionMarkOutlined
           {...props}
+          fontSize="large"
           data-testid="Icon-Component-DefaultIcon"
         />
       );

@@ -1224,5 +1224,25 @@
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error al agregar asistente",
     "errorRemovingAttendee": "Error al eliminar asistente"
+  },
+  "userCampaigns": {
+    "title": "Campañas de recaudación de fondos",
+    "searchByName": "Buscar por nombre...",
+    "searchBy": "Buscar por",
+    "pledgers": "Contribuyentes",
+    "campaigns": "Campañas",
+    "myPledges": "Mis Promesas",
+    "lowestAmount": "Monto más bajo",
+    "highestAmount": "Monto más alto",
+    "lowestGoal": "Meta más baja",
+    "highestGoal": "Meta más alta",
+    "latestEndDate": "Fecha de finalización más tardía",
+    "earliestEndDate": "Fecha de finalización más temprana",
+    "addPledge": "Añadir Promesa",
+    "viewPledges": "Ver Promesas",
+    "noPledges": "No se encontraron promesas"
+  },
+  "userPledges": {
+    "title": "Mis Promesas"
   }
 }

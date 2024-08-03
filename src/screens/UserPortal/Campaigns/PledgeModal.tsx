@@ -86,7 +86,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
 
   useEffect(() => {
     if (userData) {
-      console.log(userData);
       setVolunteers([
         {
           _id: userData.user.user._id,

@@ -986,5 +986,25 @@
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Erreur lors de l'ajout du participant",
     "errorRemovingAttendee": "Erreur lors de la suppression du participant"
+  },
+  "userCampaigns": {
+    "title": "Campagnes de financement",
+    "searchByName": "Rechercher par nom...",
+    "searchBy": "Rechercher par",
+    "pledgers": "Contributeurs",
+    "campaigns": "Campagnes",
+    "myPledges": "Mes Promesses",
+    "lowestAmount": "Montant le plus bas",
+    "highestAmount": "Montant le plus élevé",
+    "lowestGoal": "Objectif le plus bas",
+    "highestGoal": "Objectif le plus élevé",
+    "latestEndDate": "Date de fin la plus tardive",
+    "earliestEndDate": "Date de fin la plus proche",
+    "addPledge": "Ajouter une promesse",
+    "viewPledges": "Voir les promesses",
+    "noPledges": "Aucune promesse trouvée"
+  },
+  "userPledges": {
+    "title": "Mes Promesses"
   }
 }

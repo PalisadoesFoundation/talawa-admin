@@ -62,6 +62,7 @@ const fundCampaignPledge = (): JSX.Element => {
     keyPrefix: 'pledges',
   });
   const { t: tCommon } = useTranslation('common');
+  const { t: tErrors } = useTranslation('errors');
 
   const { fundCampaignId, orgId } = useParams();
   if (!fundCampaignId || !orgId) {
@@ -200,7 +201,7 @@ const fundCampaignPledge = (): JSX.Element => {
         <div className={styles.message} data-testid="errorMsg">
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
-            Error occured while loading Funds
+            {tErrors('errorLoading', { entity: 'Pledges' })}
             <br />
             {pledgeError.message}
           </h6>
@@ -611,6 +612,7 @@ const fundCampaignPledge = (): JSX.Element => {
               <div className={styles.avatarContainer}>
                 <Avatar
                   key={user._id + '1'}
+                  containerStyle={styles.imageContainer}
                   avatarStyle={styles.TableImage}
                   name={user.firstName + ' ' + user.lastName}
                   alt={user.firstName + ' ' + user.lastName}

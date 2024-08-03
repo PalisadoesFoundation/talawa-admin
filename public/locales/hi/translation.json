@@ -986,5 +986,25 @@
   "eventRegistrantsModal": {
     "errorAddingAttendee": "उपस्थित होने वाले को जोड़ने में त्रुटि",
     "errorRemovingAttendee": "उपस्थित होने वाले को हटाने में त्रुटि"
+  },
+  "userCampaigns": {
+    "title": "धन उगाहने के अभियान",
+    "searchByName": "नाम से खोजें...",
+    "searchBy": "द्वारा खोजें",
+    "pledgers": "प्रतिज्ञाकर्ता",
+    "campaigns": "अभियान",
+    "myPledges": "मेरी प्रतिज्ञाएँ",
+    "lowestAmount": "सबसे कम राशि",
+    "highestAmount": "सबसे अधिक राशि",
+    "lowestGoal": "सबसे कम लक्ष्य",
+    "highestGoal": "सबसे बड़ा लक्ष्य",
+    "latestEndDate": "सबसे अंतिम समाप्ति तिथि",
+    "earliestEndDate": "सबसे पहले समाप्ति तिथि",
+    "addPledge": "प्रतिज्ञा जोड़ें",
+    "viewPledges": "प्रतिज्ञाएँ देखें",
+    "noPledges": "कोई प्रतिज्ञा नहीं मिली"
+  },
+  "userPledges": {
+    "title": "मेरी प्रतिज्ञाएँ"
   }
 }

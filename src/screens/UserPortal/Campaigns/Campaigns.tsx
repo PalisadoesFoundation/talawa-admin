@@ -24,6 +24,7 @@ const Campaigns = (): JSX.Element => {
     keyPrefix: 'userCampaigns',
   });
   const { t: tCommon } = useTranslation('common');
+  const { t: tErrors } = useTranslation('errors');
 
   const { orgId } = useParams();
   if (!orgId) {
@@ -88,7 +89,7 @@ const Campaigns = (): JSX.Element => {
         <div className={styles.message} data-testid="errorMsg">
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
-            Error occured while loading Campaigns
+            {tErrors('errorLoading', { entity: 'Campaigns' })}
             <br />
             {campaignError.message}
           </h6>

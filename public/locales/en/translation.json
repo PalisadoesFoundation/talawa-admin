@@ -995,6 +995,8 @@
     "myPledges": "My Pledges",
     "lowestAmount": "Lowest Amount",
     "highestAmount": "Highest Amount",
+    "lowestGoal": "Lowest Goal",
+    "highestGoal": "Highest Goal",
     "latestEndDate": "Latest End Date",
     "earliestEndDate": "Earliest End Date",
     "addPledge": "Add Pledge",

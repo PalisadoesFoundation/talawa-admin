@@ -53,6 +53,8 @@ const Pledges = (): JSX.Element => {
     keyPrefix: 'userCampaigns',
   });
   const { t: tCommon } = useTranslation('common');
+  const { t: tErrors } = useTranslation('errors');
+
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
   const { orgId } = useParams();
@@ -146,6 +148,10 @@ const Pledges = (): JSX.Element => {
     }
   }, [pledgeData]);
 
+  useEffect(() => {
+    refetchPledge();
+  }, [searchTerm, searchBy, sortBy]);
+
   if (pledgeLoading) return <Loader size="xl" />;
   if (pledgeError) {
     return (
@@ -153,7 +159,7 @@ const Pledges = (): JSX.Element => {
         <div className={styles.message} data-testid="errorMsg">
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
-            Error occured while loading Funds
+            {tErrors('errorLoading', { entity: 'Pledges' })}
             <br />
             {pledgeError.message}
           </h6>
@@ -166,7 +172,7 @@ const Pledges = (): JSX.Element => {
     {
       field: 'pledgers',
       headerName: 'Pledgers',
-      flex: 3,
+      flex: 4,
       minWidth: 50,
       align: 'left',
       headerAlign: 'center',
@@ -226,7 +232,7 @@ const Pledges = (): JSX.Element => {
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
-        return <>{params.row.campaign}</>;
+        return <>{params.row.campaign?.name}</>;
       },
     },
     {
@@ -474,7 +480,7 @@ const Pledges = (): JSX.Element => {
           endDate: pledge.endDate,
           amount: pledge.amount,
           currency: pledge.currency,
-          campaign: pledge.campaign ? pledge.campaign.name : 'No Campaign',
+          campaign: pledge.campaign ?? null,
         }))}
         columns={columns}
         isRowSelectable={() => false}
@@ -522,6 +528,7 @@ const Pledges = (): JSX.Element => {
               <div className={styles.avatarContainer}>
                 <Avatar
                   key={user._id + '1'}
+                  containerStyle={styles.imageContainer}
                   avatarStyle={styles.TableImage}
                   name={user.firstName + ' ' + user.lastName}
                   alt={user.firstName + ' ' + user.lastName}
