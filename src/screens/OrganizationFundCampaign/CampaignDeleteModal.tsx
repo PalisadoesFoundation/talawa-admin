@@ -7,12 +7,22 @@ import type { InterfaceCampaignInfo } from 'utils/interfaces';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 
+/**
+ * Props for the CampaignDeleteModal component.
+ */
 export interface InterfaceDeleteCampaignModal {
   isOpen: boolean;
   hide: () => void;
   campaign: InterfaceCampaignInfo | null;
   refetchCampaign: () => void;
 }
+
+/**
+ * Modal component for confirming the deletion of a campaign.
+ *
+ * @param props - The props for the CampaignDeleteModal component.
+ * @returns JSX.Element
+ */
 const CampaignDeleteModal: React.FC<InterfaceDeleteCampaignModal> = ({
   isOpen,
   hide,
@@ -26,6 +36,11 @@ const CampaignDeleteModal: React.FC<InterfaceDeleteCampaignModal> = ({
 
   const [deleteCampaign] = useMutation(DELETE_CAMPAIGN_MUTATION);
 
+  /**
+   * Handles the campaign deletion.
+   *
+   * @returns Promise<void>
+   */
   const deleteCampaignHandler = async (): Promise<void> => {
     try {
       await deleteCampaign({

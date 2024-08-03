@@ -8,6 +8,9 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { Navigate, useParams } from 'react-router-dom';
 
+/**
+ * Props for the `addOnEntry` component.
+ */
 interface InterfaceAddOnEntryProps {
   id: string;
   enabled: boolean;
@@ -20,6 +23,27 @@ interface InterfaceAddOnEntryProps {
   getInstalledPlugins: () => any;
 }
 
+/**
+ * A React component that represents an add-on entry, displaying its details and allowing installation or uninstallation.
+ *
+ * @param props - The properties for the component.
+ * @returns A JSX element containing the add-on entry.
+ *
+ * @example
+ * ```tsx
+ * <AddOnEntry
+ *   id="1"
+ *   enabled={true}
+ *   title="Sample Add-On"
+ *   description="This is a sample add-on."
+ *   createdBy="Author Name"
+ *   component="SampleComponent"
+ *   modified={new Date()}
+ *   uninstalledOrgs={['org1', 'org2']}
+ *   getInstalledPlugins={() => {}}
+ * />
+ * ```
+ */
 function addOnEntry({
   id,
   title,
@@ -28,21 +52,31 @@ function addOnEntry({
   uninstalledOrgs,
   getInstalledPlugins,
 }: InterfaceAddOnEntryProps): JSX.Element {
+  // Translation hook with namespace 'addOnEntry'
   const { t } = useTranslation('translation', { keyPrefix: 'addOnEntry' });
-  //getting orgId from URL
+
+  // Getting orgId from URL parameters
   const { orgId: currentOrg } = useParams();
   if (!currentOrg) {
+    // If orgId is not present in the URL, navigate to the org list page
     return <Navigate to={'/orglist'} />;
   }
+
+  // State to manage button loading state
   const [buttonLoading, setButtonLoading] = useState(false);
+  // State to manage local installation status of the add-on
   const [isInstalledLocal, setIsInstalledLocal] = useState(
     uninstalledOrgs.includes(currentOrg),
   );
-  // const [addOrgAsUninstalled] = useMutation(UPDATE_ORG_STATUS_PLUGIN_MUTATION);
+
+  // Mutation hook for updating the install status of the plugin
   const [addOrgAsUninstalled] = useMutation(
     UPDATE_INSTALL_STATUS_PLUGIN_MUTATION,
   );
 
+  /**
+   * Function to toggle the installation status of the plugin.
+   */
   const togglePluginInstall = async (): Promise<void> => {
     setButtonLoading(true);
     await addOrgAsUninstalled({
@@ -52,8 +86,11 @@ function addOnEntry({
       },
     });
 
+    // Toggle the local installation status
     setIsInstalledLocal(!isInstalledLocal);
     setButtonLoading(false);
+
+    // Display a success message based on the new installation status
     const dialog: string = isInstalledLocal
       ? t('installMsg')
       : t('uninstallMsg');
@@ -110,6 +147,7 @@ function addOnEntry({
   );
 }
 
+// Default prop values for the component
 addOnEntry.defaultProps = {
   enabled: false,
   configurable: true,

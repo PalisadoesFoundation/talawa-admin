@@ -56,7 +56,6 @@ const dataGridStyle = {
     borderRadius: '0.5rem',
   },
 };
-
 const fundCampaignPledge = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'pledges',

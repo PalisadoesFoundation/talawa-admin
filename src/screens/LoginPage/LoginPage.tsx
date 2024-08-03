@@ -36,6 +36,12 @@ import type { InterfaceQueryOrganizationListObject } from 'utils/interfaces';
 import { Autocomplete, TextField } from '@mui/material';
 import i18n from 'utils/i18n';
 
+/**
+ * LoginPage component is used to render the login page of the application where user can login or register
+ * to the application using email and password. The component also provides the functionality to switch between login and
+ * register form.
+ *
+ */
 const loginPage = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
   const { t: tCommon } = useTranslation('common');

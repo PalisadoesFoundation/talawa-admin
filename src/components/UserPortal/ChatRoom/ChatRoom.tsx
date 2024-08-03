@@ -24,6 +24,18 @@ interface InterfaceChatRoomProps {
   selectedChatType: string;
 }
 
+/**
+ * A chat room component that displays messages and a message input field.
+ *
+ * This component shows a list of messages between the user and a selected contact.
+ * If no contact is selected, it displays a placeholder with an icon and a message asking the user to select a contact.
+ *
+ * @param  props - The properties passed to the component.
+ * @param selectedContact - The ID or name of the currently selected contact. If empty, a placeholder is shown.
+ *
+ * @returns The rendered chat room component.
+ */
+
 type DirectMessage = {
   _id: string;
   createdAt: Date;
@@ -68,6 +80,7 @@ type Chat = {
 };
 
 export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
+  // Translation hook for text in different languages
   const { t } = useTranslation('translation', {
     keyPrefix: 'userChatRoom',
   });
@@ -87,6 +100,13 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
   const [directChat, setDirectChat] = useState<Chat>();
   const [groupChat, setGroupChat] = useState<Chat>();
 
+  /**
+   * Handles changes to the new message input field.
+   *
+   * Updates the state with the current value of the input field whenever it changes.
+   *
+   * @param e - The event triggered by the input field change.
+   */
   const handleNewMessageChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const newMessageValue = e.target.value;
     setNewMessage(newMessageValue);

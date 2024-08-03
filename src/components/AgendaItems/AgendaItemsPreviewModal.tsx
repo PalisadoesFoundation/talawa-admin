@@ -26,6 +26,18 @@ interface InterfaceAgendaItemsPreviewModalProps {
   t: (key: string) => string;
 }
 
+/**
+ * Modal component for previewing details of an agenda item.
+ * Displays the details of the selected agenda item, including its categories, title, description, duration, creator, URLs, and attachments.
+ * Also provides options to update or delete the agenda item.
+ *
+ * @param agendaItemPreviewModalIsOpen - Boolean flag indicating if the preview modal is open.
+ * @param hidePreviewModal - Function to hide the preview modal.
+ * @param showUpdateModal - Function to show the update modal.
+ * @param toggleDeleteModal - Function to toggle the delete modal.
+ * @param formState - The current state of the form containing agenda item details.
+ * @param t - Function for translating text based on keys.
+ */
 const AgendaItemsPreviewModal: React.FC<
   InterfaceAgendaItemsPreviewModalProps
 > = ({
@@ -36,6 +48,11 @@ const AgendaItemsPreviewModal: React.FC<
   formState,
   t,
 }) => {
+  /**
+   * Renders the attachments preview.
+   *
+   * @returns JSX elements for each attachment, displaying videos and images.
+   */
   const renderAttachments = (): JSX.Element[] => {
     return formState.attachments.map((attachment, index) => (
       <div key={index} className={styles.previewFile}>
@@ -61,6 +78,11 @@ const AgendaItemsPreviewModal: React.FC<
     ));
   };
 
+  /**
+   * Renders the URLs list.
+   *
+   * @returns JSX elements for each URL, displaying clickable links.
+   */
   const renderUrls = (): JSX.Element[] => {
     return formState.urls.map((url, index) => (
       <li key={index} className={styles.urlListItem}>

@@ -16,6 +16,11 @@ import EventActionItems from 'components/EventManagement/EventActionItems/EventA
 import EventAgendaItems from 'components/EventManagement/EventAgendaItems/EventAgendaItems';
 import useLocalStorage from 'utils/useLocalstorage';
 
+/**
+ * List of tabs for the event dashboard.
+ *
+ * Each tab is associated with an icon and value.
+ */
 const eventDashboardTabs: {
   value: TabOptions;
   icon: JSX.Element;
@@ -36,13 +41,15 @@ const eventDashboardTabs: {
     value: 'eventAgendas',
     icon: <EventAgendaItemsIcon width={23} height={23} className="me-1" />,
   },
-
   {
     value: 'eventStats',
     icon: <EventStatisticsIcon width={23} height={23} className="me-2" />,
   },
 ];
 
+/**
+ * Tab options for the event management component.
+ */
 type TabOptions =
   | 'dashboard'
   | 'registrants'
@@ -50,13 +57,33 @@ type TabOptions =
   | 'eventAgendas'
   | 'eventStats';
 
+/**
+ * `EventManagement` component handles the display and navigation of different event management sections.
+ *
+ * It provides a tabbed interface for:
+ * - Viewing event dashboard
+ * - Managing event registrants
+ * - Handling event actions
+ * - Reviewing event agendas
+ * - Viewing event statistics
+ *
+ * @returns JSX.Element - The `EventManagement` component.
+ *
+ * @example
+ * ```tsx
+ * <EventManagement />
+ * ```
+ */
 const EventManagement = (): JSX.Element => {
+  // Translation hook for internationalization
   const { t } = useTranslation('translation', {
     keyPrefix: 'eventManagement',
   });
 
+  // Custom hook for accessing local storage
   const { getItem } = useLocalStorage();
 
+  // Determine user role based on local storage
   const superAdmin = getItem('SuperAdmin');
   const adminFor = getItem('AdminFor');
   /*istanbul ignore next*/
@@ -66,19 +93,36 @@ const EventManagement = (): JSX.Element => {
       ? 'ADMIN'
       : 'USER';
 
+  // Extract event and organization IDs from URL parameters
   const { eventId, orgId } = useParams();
   /*istanbul ignore next*/
   if (!eventId || !orgId) {
+    // Redirect if event ID or organization ID is missing
     return <Navigate to={'/orglist'} />;
   }
 
+  // Hook for navigation
   const navigate = useNavigate();
+
+  // State hook for managing the currently selected tab
   const [tab, setTab] = useState<TabOptions>('dashboard');
 
+  /**
+   * Handles tab button clicks to update the selected tab.
+   *
+   * @param value - The value representing the tab to select
+   */
   const handleClick = (value: TabOptions): void => {
     setTab(value);
   };
 
+  /**
+   * Renders a button for each tab with the appropriate icon and label.
+   *
+   * @param value - The tab value
+   * @param icon - The icon to display for the tab
+   * @returns JSX.Element - The rendered button component
+   */
   const renderButton = ({
     value,
     icon,
@@ -132,6 +176,7 @@ const EventManagement = (): JSX.Element => {
       </div>
       <Row>
         <Col className="pt-4">
+          {/* Render content based on the selected tab */}
           {(() => {
             switch (tab) {
               case 'dashboard':

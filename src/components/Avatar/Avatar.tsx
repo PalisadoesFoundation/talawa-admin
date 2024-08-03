@@ -13,6 +13,19 @@ interface InterfaceAvatarProps {
   radius?: number;
 }
 
+/**
+ * A component that generates and displays an avatar based on the provided name.
+ * The avatar is generated using the DiceBear library with the initials style.
+ *
+ * @param name - The name used to generate the avatar.
+ * @param alt - Alternative text for the avatar image.
+ * @param size - Size of the avatar image.
+ * @param avatarStyle - Custom CSS class for the avatar image.
+ * @param dataTestId - Data-testid attribute for testing purposes.
+ * @param radius - Radius of the avatar corners.
+ *
+ * @returns JSX.Element - The rendered avatar image component.
+ */
 const Avatar = ({
   name,
   alt = 'Dummy Avatar',
@@ -22,6 +35,7 @@ const Avatar = ({
   dataTestId,
   radius,
 }: InterfaceAvatarProps): JSX.Element => {
+  // Memoize the avatar creation to avoid unnecessary recalculations
   const avatar = useMemo(() => {
     return createAvatar(initials, {
       size: size || 128,
