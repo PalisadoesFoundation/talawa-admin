@@ -16,8 +16,8 @@ export const socialMediaLinks = [
     logo: FacebookLogo,
   },
   {
-    tag: 'twitter',
-    href: 'https://twitter.com/palisadoesorg?lang=en',
+    tag: 'X',
+    href: 'https://x.com/palisadoesorg?lang=en',
     logo: TwitterLogo,
   },
   {
