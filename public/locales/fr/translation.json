@@ -1002,7 +1002,8 @@
     "earliestEndDate": "Date de fin la plus proche",
     "addPledge": "Ajouter une promesse",
     "viewPledges": "Voir les promesses",
-    "noPledges": "Aucune promesse trouvée"
+    "noPledges": "Aucune promesse trouvée",
+    "noCampaigns": "Aucune campagne trouvée"
   },
   "userPledges": {
     "title": "Mes Promesses"

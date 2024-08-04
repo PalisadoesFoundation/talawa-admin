@@ -9,6 +9,7 @@ import {
   AccordionDetails,
   AccordionSummary,
   Chip,
+  Stack,
 } from '@mui/material';
 import { GridExpandMoreIcon } from '@mui/x-data-grid';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -26,13 +27,14 @@ const Campaigns = (): JSX.Element => {
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
+  const { getItem } = useLocalStorage();
+  const userId = getItem('userId');
+
   const { orgId } = useParams();
-  if (!orgId) {
+  if (!orgId || !userId) {
     return <Navigate to={'/'} replace />;
   }
 
-  const { getItem } = useLocalStorage();
-  const userId = getItem('userId');
   const navigate = useNavigate();
 
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -174,74 +176,83 @@ const Campaigns = (): JSX.Element => {
           </div>
         </div>
       </div>
-      {campaigns.map((campaign: InterfaceUserCampaign, index: number) => (
-        <Accordion className="mt-3 rounded" key={index}>
-          <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
-            <div className={styles.accordionSummary}>
-              <div className={styles.titleContainer}>
-                <div className="d-flex">
-                  <h3>{campaign.name}</h3>
-                  <Chip
-                    icon={<Circle className={styles.chipIcon} />}
-                    label={
-                      new Date(campaign.endDate) < new Date()
-                        ? 'Ended'
-                        : 'Active'
-                    }
-                    variant="outlined"
-                    color="primary"
-                    className={`${styles.chip} ${new Date(campaign.endDate) < new Date() ? styles.pending : styles.active}`}
-                  />
-                </div>
-
-                <div className={`d-flex gap-4 ${styles.subContainer}`}>
-                  <span>
-                    Goal:{' '}
-                    {
-                      currencySymbols[
-                        campaign.currency as keyof typeof currencySymbols
-                      ]
-                    }
-                    {campaign.fundingGoal}
-                  </span>
-                  <span>Raised: $0</span>
-                  <span>Start Date: {campaign.startDate}</span>
-                  <span>End Date: {campaign.endDate}</span>
-                </div>
-              </div>
-              <div className="d-flex gap-3">
-                <Button
-                  variant={
-                    new Date(campaign.endDate) < new Date()
-                      ? 'outline-secondary'
-                      : 'outline-success'
-                  }
-                  data-testid="addPledgeBtn"
-                  disabled={new Date(campaign.endDate) < new Date()}
-                  onClick={() => openModal(campaign)}
+      {campaigns.length < 1 ? (
+        <Stack height="100%" alignItems="center" justifyContent="center">
+          {t('noCampaigns')}
+        </Stack>
+      ) : (
+        campaigns.map((campaign: InterfaceUserCampaign, index: number) => (
+          <Accordion className="mt-3 rounded" key={index}>
+            <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
+              <div className={styles.accordionSummary}>
+                <div
+                  className={styles.titleContainer}
+                  data-testid={`detailContainer${index + 1}`}
                 >
-                  <i className={'fa fa-plus me-2'} />
-                  {t('addPledge')}
-                </Button>
+                  <div className="d-flex">
+                    <h3>{campaign.name}</h3>
+                    <Chip
+                      icon={<Circle className={styles.chipIcon} />}
+                      label={
+                        new Date(campaign.endDate) < new Date()
+                          ? 'Ended'
+                          : 'Active'
+                      }
+                      variant="outlined"
+                      color="primary"
+                      className={`${styles.chip} ${new Date(campaign.endDate) < new Date() ? styles.pending : styles.active}`}
+                    />
+                  </div>
+
+                  <div className={`d-flex gap-4 ${styles.subContainer}`}>
+                    <span>
+                      Goal:{' '}
+                      {
+                        currencySymbols[
+                          campaign.currency as keyof typeof currencySymbols
+                        ]
+                      }
+                      {campaign.fundingGoal}
+                    </span>
+                    <span>Raised: $0</span>
+                    <span>Start Date: {campaign.startDate}</span>
+                    <span>End Date: {campaign.endDate}</span>
+                  </div>
+                </div>
+                <div className="d-flex gap-3">
+                  <Button
+                    variant={
+                      new Date(campaign.endDate) < new Date()
+                        ? 'outline-secondary'
+                        : 'outline-success'
+                    }
+                    data-testid="addPledgeBtn"
+                    disabled={new Date(campaign.endDate) < new Date()}
+                    onClick={() => openModal(campaign)}
+                  >
+                    <i className={'fa fa-plus me-2'} />
+                    {t('addPledge')}
+                  </Button>
+                </div>
               </div>
-            </div>
-          </AccordionSummary>
-          <AccordionDetails className="d-flex gap-3 ms-2">
-            <span className="fw-bold">Amount Raised: </span>
-            <div className={styles.progress}>
-              <span>$0</span>
-              <ProgressBar
-                now={0}
-                label={`${(200 / 1000) * 100}%`}
-                max={1000}
-                className={styles.progressBar}
-                data-testid="progressBar"
-              />
-              <span>$1000</span>
-            </div>
-          </AccordionDetails>
-        </Accordion>
-      ))}
+            </AccordionSummary>
+            <AccordionDetails className="d-flex gap-3 ms-2">
+              <span className="fw-bold">Amount Raised: </span>
+              <div className={styles.progress}>
+                <span>$0</span>
+                <ProgressBar
+                  now={0}
+                  label={`${(200 / 1000) * 100}%`}
+                  max={1000}
+                  className={styles.progressBar}
+                  data-testid="progressBar"
+                />
+                <span>$1000</span>
+              </div>
+            </AccordionDetails>
+          </Accordion>
+        ))
+      )}
 
       <PledgeModal
         isOpen={modalState}

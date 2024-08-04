@@ -56,7 +56,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     pledgeEndDate: new Date(pledge?.endDate ?? new Date()),
     pledgeStartDate: new Date(pledge?.startDate ?? new Date()),
   });
-  const [volunteers, setVolunteers] = useState<InterfacePledger[]>([]);
+  const [pledgers, setPledgers] = useState<InterfacePledger[]>([]);
   const [updatePledge] = useMutation(UPDATE_PLEDGE);
   const [createPledge] = useMutation(CREATE_PlEDGE);
 
@@ -86,7 +86,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
 
   useEffect(() => {
     if (userData) {
-      setVolunteers([
+      setPledgers([
         {
           _id: userData.user.user._id,
           firstName: userData.user.user.firstName,
@@ -197,15 +197,17 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           }
           className="p-3"
         >
-          {/* A Multi-select dropdown enables admin to select more than one volunteer for participating in a pledge */}
+          {/* A Multi-select dropdown enables user to view participating pledgers */}
           <Form.Group className="d-flex mb-3 w-100">
             <Autocomplete
               multiple
               className={`${styles.noOutline} w-100`}
               limitTags={2}
-              data-testid="volunteerSelect"
-              options={volunteers}
+              data-testid="pledgerSelect"
+              options={[...pledgers, ...pledgeUsers]}
               value={pledgeUsers}
+              // TODO: Remove readOnly function once User Family implementation is done
+              readOnly={true}
               isOptionEqualToValue={(option, value) => option._id === value._id}
               filterSelectedOptions={true}
               getOptionLabel={(member: InterfacePledger): string =>
@@ -213,15 +215,15 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               }
               onChange={
                 /*istanbul ignore next*/
-                (_, newVolunteers): void => {
+                (_, newPledgers): void => {
                   setFormState({
                     ...formState,
-                    pledgeUsers: newVolunteers,
+                    pledgeUsers: newPledgers,
                   });
                 }
               }
               renderInput={(params) => (
-                <TextField {...params} label="Volunteers" />
+                <TextField {...params} label="Pledgers" />
               )}
             />
           </Form.Group>

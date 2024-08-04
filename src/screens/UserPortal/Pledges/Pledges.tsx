@@ -148,10 +148,6 @@ const Pledges = (): JSX.Element => {
     }
   }, [pledgeData]);
 
-  useEffect(() => {
-    refetchPledge();
-  }, [searchTerm, searchBy, sortBy]);
-
   if (pledgeLoading) return <Loader size="xl" />;
   if (pledgeError) {
     return (
@@ -396,20 +392,14 @@ const Pledges = (): JSX.Element => {
             <Dropdown.Menu>
               <Dropdown.Item
                 id="searchPledgers"
-                onClick={(e): void => {
-                  setSearchBy('pledgers');
-                  e.preventDefault();
-                }}
+                onClick={(): void => setSearchBy('pledgers')}
                 data-testid="pledgers"
               >
                 {t('pledgers')}
               </Dropdown.Item>
               <Dropdown.Item
                 id="searchCampaigns"
-                onClick={(e): void => {
-                  setSearchBy('campaigns');
-                  e.preventDefault();
-                }}
+                onClick={(): void => setSearchBy('campaigns')}
                 data-testid="campaigns"
               >
                 {t('campaigns')}
@@ -480,7 +470,7 @@ const Pledges = (): JSX.Element => {
           endDate: pledge.endDate,
           amount: pledge.amount,
           currency: pledge.currency,
-          campaign: pledge.campaign ?? null,
+          campaign: pledge.campaign,
         }))}
         columns={columns}
         isRowSelectable={() => false}

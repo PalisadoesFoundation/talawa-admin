@@ -1002,7 +1002,8 @@
     "earliestEndDate": "最早结束日期",
     "addPledge": "添加承诺",
     "viewPledges": "查看承诺",
-    "noPledges": "未找到承诺"
+    "noPledges": "未找到承诺",
+    "noCampaigns": "未找到活动"
   },
   "userPledges": {
     "title": "我的承诺"

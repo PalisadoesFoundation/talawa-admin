@@ -11,8 +11,10 @@ export const MOCKS = [
     request: {
       query: FUND_CAMPAIGN_PLEDGE,
       variables: {
-        id: 'fundCampaignId',
-        orderBy: 'endDate_DESC',
+        where: {
+          id: 'fundCampaignId',
+        },
+        pledgeOrderBy: 'endDate_DESC',
       },
     },
     result: {
@@ -119,8 +121,10 @@ export const MOCKS = [
     request: {
       query: FUND_CAMPAIGN_PLEDGE,
       variables: {
-        id: 'fundCampaignId',
-        orderBy: 'endDate_ASC',
+        where: {
+          id: 'fundCampaignId',
+        },
+        pledgeOrderBy: 'endDate_ASC',
       },
     },
     result: {
@@ -173,8 +177,10 @@ export const MOCKS = [
     request: {
       query: FUND_CAMPAIGN_PLEDGE,
       variables: {
-        id: 'fundCampaignId',
-        orderBy: 'amount_DESC',
+        where: {
+          id: 'fundCampaignId',
+        },
+        pledgeOrderBy: 'amount_DESC',
       },
     },
     result: {
@@ -227,8 +233,10 @@ export const MOCKS = [
     request: {
       query: FUND_CAMPAIGN_PLEDGE,
       variables: {
-        id: 'fundCampaignId',
-        orderBy: 'amount_ASC',
+        where: {
+          id: 'fundCampaignId',
+        },
+        pledgeOrderBy: 'amount_ASC',
       },
     },
     result: {
@@ -299,8 +307,10 @@ export const MOCKS_FUND_CAMPAIGN_PLEDGE_ERROR = [
     request: {
       query: FUND_CAMPAIGN_PLEDGE,
       variables: {
-        id: 'fundCampaignId',
-        orderBy: 'endDate_DESC',
+        where: {
+          id: 'fundCampaignId',
+        },
+        pledgeOrderBy: 'endDate_DESC',
       },
     },
     error: new Error('Error fetching pledges'),
@@ -312,7 +322,9 @@ export const MOCKS_CREATE_PLEDGE_ERROR = [
     request: {
       query: FUND_CAMPAIGN_PLEDGE,
       variables: {
-        id: undefined,
+        where: {
+          id: undefined,
+        },
       },
     },
     result: {
@@ -375,7 +387,9 @@ export const MOCKS_UPDATE_PLEDGE_ERROR = [
     request: {
       query: FUND_CAMPAIGN_PLEDGE,
       variables: {
-        id: undefined,
+        where: {
+          id: undefined,
+        },
       },
     },
     result: {
@@ -437,7 +451,9 @@ export const MOCKS_DELETE_PLEDGE_ERROR = [
     request: {
       query: FUND_CAMPAIGN_PLEDGE,
       variables: {
-        id: undefined,
+        where: {
+          id: undefined,
+        },
       },
     },
     result: {
@@ -495,8 +511,10 @@ export const EMPTY_MOCKS = [
     request: {
       query: FUND_CAMPAIGN_PLEDGE,
       variables: {
-        id: 'fundCampaignId',
-        orderBy: 'endDate_DESC',
+        where: {
+          id: 'fundCampaignId',
+        },
+        pledgeOrderBy: 'endDate_DESC',
       },
     },
     result: {

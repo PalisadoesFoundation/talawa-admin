@@ -1001,7 +1001,8 @@
     "earliestEndDate": "Earliest End Date",
     "addPledge": "Add Pledge",
     "viewPledges": "View Pledges",
-    "noPledges": "No Pledges Found"
+    "noPledges": "No Pledges Found",
+    "noCampaigns": "No Campaigns Found"
   },
   "userPledges": {
     "title": "My Pledges"
