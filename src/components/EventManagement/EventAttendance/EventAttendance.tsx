@@ -46,7 +46,7 @@ interface InterfaceMember {
 }
 interface InterfaceEvent {
   _id: string;
-  title: string;
+  // title: string;
 }
 
 
@@ -54,7 +54,7 @@ function EventAttendance(): JSX.Element {
   const { t } = useTranslation();
   const { eventId } = useParams<{ eventId: string }>();
   const { orgId: currentUrl } = useParams();
-  const [setSearchText] = useState('');
+  const [searchText, setSearchText] = useState<String>('');  
   const [filteredAttendees, setFilteredAttendees] = useState<InterfaceMember[]>([]);
   const [sortOrder, setSortOrder] = useState<'ascending' | 'descending'>(
     'ascending',
@@ -68,7 +68,7 @@ function EventAttendance(): JSX.Element {
         id: eventId,
       },
     },
-  );
+  )[1];
 
   useEffect(() => {
     memberRefetch({

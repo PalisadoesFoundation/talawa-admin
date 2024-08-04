@@ -15,6 +15,7 @@ import EventActionItems from 'components/EventManagement/EventActionItems/EventA
 import useLocalStorage from 'utils/useLocalstorage';
 import EventAttendance from 'components/EventManagement/EventAttendance/EventAttendance';
 import { ReactComponent as EventAttendanceIcon } from 'assets/svgs/Attendance.svg';
+import { EventRegistrantsWrapper } from 'components/EventRegistrantsModal/EventRegistrantsWrapper';
 
 const eventDashboardTabs: {
   value: TabOptions;
@@ -142,7 +143,7 @@ const EventManagement = (): JSX.Element => {
               case 'registrants':
                 return (
                   <div data-testid="eventRegistrantsTab">
-                    <h2>Event Registrants</h2>
+                    <EventRegistrantsWrapper eventId={eventId} orgId={orgId}/>
                   </div>
                 );
               case 'eventActions':

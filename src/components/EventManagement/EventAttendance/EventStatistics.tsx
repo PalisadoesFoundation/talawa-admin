@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, ButtonGroup } from 'react-bootstrap';
 import 'chart.js/auto';
-import { Doughnut, Line } from 'react-chartjs-2';
+import { Bar, Line } from 'react-chartjs-2';
 import { useParams } from 'react-router-dom';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import { useLazyQuery } from '@apollo/client';
@@ -42,7 +42,7 @@ export const AttendanceStatisticsModal: React.FC<InterfaceAttendanceStatisticsMo
   console.log('stats', memberData);
   const [selectedCategory, setSelectedCategory] = useState('Gender');
   const { eventId } = useParams<{ eventId: string }>();
-  const handleCategoryChange = (category: string) => {
+  const handleCategoryChange = (category: string):void => {
     setSelectedCategory(category);
 };
   const { data: eventData, refetch: eventRefetch } = useLazyQuery(
@@ -148,54 +148,49 @@ export const AttendanceStatisticsModal: React.FC<InterfaceAttendanceStatisticsMo
                 Age
               </Button>
             </ButtonGroup>
-            <Doughnut
+            <Bar
               options={{ responsive: true }}
               data={{
+                labels: selectedCategory === 'Gender' ? ['Male', 'Female', 'Other'] : ['Under 18', '18-40', 'Over 40'],
                 datasets: [
                   {
-                    label:
-                      selectedCategory === 'Gender'
-                        ? 'Gender Distribution'
-                        : 'Age Distribution',
-                    data:
-                      selectedCategory === 'Gender'
-                        ? [
-                            memberData.filter(
-                              (member: InterfaceMember) =>
-                                member.gender === 'MALE',
-                            ).length,
-                            memberData.filter(
-                              (member: InterfaceMember) =>
-                                member.gender === 'FEMALE',
-                            ).length,
-                            memberData.filter(
-                              (member: InterfaceMember) =>
-                                member.gender === 'OTHER',
-                            ).length,
-                          ]
-                        : [
-                            memberData.filter(
-                              (member: InterfaceMember) =>
-                                new Date().getFullYear() -
-                                  new Date(member.birthDate).getFullYear() <
-                                18,
-                            ).length,
-                            memberData.filter(
-                              (member: InterfaceMember) =>
-                                new Date().getFullYear() -
-                                  new Date(member.birthDate).getFullYear() >=
-                                  18 &&
-                                new Date().getFullYear() -
-                                  new Date(member.birthDate).getFullYear() <=
-                                  40,
-                            ).length,
-                            memberData.filter(
-                              (member: InterfaceMember) =>
-                                new Date().getFullYear() -
-                                  new Date(member.birthDate).getFullYear() >
-                                40,
-                            ).length,
-                          ],
+                    label: selectedCategory === 'Gender' ? 'Gender Distribution' : 'Age Distribution',
+                    data: selectedCategory === 'Gender' ? [
+                        memberData.filter(
+                          (member: InterfaceMember) =>
+                            member.gender === 'MALE',
+                        ).length,
+                        memberData.filter(
+                          (member: InterfaceMember) =>
+                            member.gender === 'FEMALE',
+                        ).length,
+                        memberData.filter(
+                          (member: InterfaceMember) =>
+                            member.gender === 'OTHER',
+                        ).length,
+                      ] : [
+                        memberData.filter(
+                          (member: InterfaceMember) =>
+                            new Date().getFullYear() -
+                              new Date(member.birthDate).getFullYear() <
+                            18,
+                        ).length,
+                        memberData.filter(
+                          (member: InterfaceMember) =>
+                            new Date().getFullYear() -
+                              new Date(member.birthDate).getFullYear() >=
+                              18 &&
+                            new Date().getFullYear() -
+                              new Date(member.birthDate).getFullYear() <=
+                              40,
+                        ).length,
+                        memberData.filter(
+                          (member: InterfaceMember) =>
+                            new Date().getFullYear() -
+                              new Date(member.birthDate).getFullYear() >
+                            40,
+                        ).length,
+                      ],
                     backgroundColor: [
                       'rgba(40, 167, 69, 0.2)',
                       'rgba(57, 255, 20, 0.2)',
@@ -217,7 +212,7 @@ export const AttendanceStatisticsModal: React.FC<InterfaceAttendanceStatisticsMo
                 ],
               }}
             />
-            <div className="d-flex align-items-center justify-content-between w-100 px-2 mt-2 mb-5">
+            {/* <div className="d-flex align-items-center justify-content-between w-100 px-2 mt-2 mb-5">
               {selectedCategory === 'Gender' && (
                 <div
                   className={
@@ -346,7 +341,7 @@ export const AttendanceStatisticsModal: React.FC<InterfaceAttendanceStatisticsMo
                   </p>
                 </div>
               )}
-            </div>
+            </div> */}
             <div
               className="px-1 border border-success"
               style={{
