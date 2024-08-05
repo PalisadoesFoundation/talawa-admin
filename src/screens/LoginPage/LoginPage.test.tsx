@@ -114,7 +114,7 @@ const MOCKS2 = [
             linkedIn: 'http://url.com',
             reddit: 'http://url.com',
             slack: 'http://url.com',
-            twitter: null,
+            X: null,
             __typename: 'SocialMediaUrls',
           },
         },
