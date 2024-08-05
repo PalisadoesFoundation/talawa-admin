@@ -1,9 +1,7 @@
-# Node modules and build outputs
+#.dockerignore
 node_modules
 dist
 build
-
-# Git and Docker specific files
 .git
 Dockerfile
 .dockerignore
