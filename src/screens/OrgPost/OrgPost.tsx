@@ -104,14 +104,18 @@ function orgPost(): JSX.Element {
     error?: ApolloError;
     refetch: (filterData?: {
       id: string | undefined;
-      title_contains: string | null;
-      text_contains: string | null;
+      // title_contains: string | null;
+      // text_contains: string | null;
+      after: String | null | undefined;
+      before: String | null | undefined;
+      first: Number | null;
+      last: Number | null;
     }) => void;
   } = useQuery(ORGANIZATION_POST_LIST, {
     variables: {
-      id: currentUrl,
-      after: after,
-      before: before,
+      id: currentUrl!,  //Need to replace '!'
+      after: after ?? null,
+      before: before ?? null,
       first: first,
       last: last,
     },
@@ -218,6 +222,10 @@ function orgPost(): JSX.Element {
       id: currentUrl,
       title_contains: showTitle ? value : null,
       text_contains: !showTitle ? value : null,
+      after: after || null,
+      before: before || null,
+      first: first || null,
+      last: last || null,
     };
     refetch(filterData);
   };
