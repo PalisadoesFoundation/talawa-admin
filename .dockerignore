@@ -1,3 +1,11 @@
+#.dockerignore
+node_modules
+dist
+build
+.git
+Dockerfile
+.dockerignore
+
 # Files that interfere with YARN
 yarn.lock
 pnpm-lock.yaml
