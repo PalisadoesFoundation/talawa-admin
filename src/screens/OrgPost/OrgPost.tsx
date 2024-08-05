@@ -106,10 +106,10 @@ function orgPost(): JSX.Element {
       id: string | undefined;
       // title_contains: string | null;
       // text_contains: string | null;
-      after: String | null | undefined;
-      before: String | null | undefined;
-      first: Number | null;
-      last: Number | null;
+      after: string | null | undefined;
+      before: string | null | undefined;
+      first: number | null;
+      last: number | null;
     }) => void;
   } = useQuery(ORGANIZATION_POST_LIST, {
     variables: {
