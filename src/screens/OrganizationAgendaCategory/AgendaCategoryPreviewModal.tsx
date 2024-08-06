@@ -3,12 +3,18 @@ import { Modal, Form, Button } from 'react-bootstrap';
 
 import styles from './OrganizationAgendaCategory.module.css';
 
+/**
+ * InterfaceFormStateType is an object containing the form state
+ */
 interface InterfaceFormStateType {
   name: string;
   description: string;
   createdBy: string;
 }
 
+/**
+ * InterfaceAgendaCategoryPreviewModalProps is an object containing the props for AgendaCategoryPreviewModal component
+ */
 interface InterfaceAgendaCategoryPreviewModalProps {
   agendaCategoryPreviewModalIsOpen: boolean;
   hidePreviewModal: () => void;
@@ -19,6 +25,16 @@ interface InterfaceAgendaCategoryPreviewModalProps {
   t: (key: string) => string;
 }
 
+/**
+ * AgendaCategoryPreviewModal component is used to preview the agenda category details like name, description, createdBy
+ * @param  agendaCategoryPreviewModalIsOpen - boolean value to check if the modal is open or not
+ * @param  hidePreviewModal - function to hide the modal
+ * @param  showUpdateModal - function to show the update modal
+ * @param  toggleDeleteModal - function to toggle the delete modal
+ * @param  formState - object containing the form state
+ * @param  t - i18n function to translate the text
+ * @returns  returns the AgendaCategoryPreviewModal component
+ */
 const AgendaCategoryPreviewModal: React.FC<
   InterfaceAgendaCategoryPreviewModalProps
 > = ({

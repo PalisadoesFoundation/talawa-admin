@@ -1460,7 +1460,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
     await wait();
   });
 
-  test('Test send message direct chat', async () => {
+  test('send message direct chat', async () => {
     setItem('userId', '2');
     const mocks = [
       ...SEND_MESSAGE_TO_DIRECT_CHAT_MOCK,
@@ -1565,7 +1565,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
     await wait();
   });
 
-  test('Test send message group chat', async () => {
+  test('send message group chat', async () => {
     const mocks = [
       ...SEND_MESSAGE_TO_GROUP_CHAT_MOCK,
       ...DIRECT_CHAT_BY_ID_QUERY_MOCK,

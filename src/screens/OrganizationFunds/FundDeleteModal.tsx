@@ -13,7 +13,28 @@ export interface InterfaceDeleteFundModal {
   fund: InterfaceFundInfo | null;
   refetchFunds: () => void;
 }
-
+/**
+ * `FundDeleteModal` component provides a modal dialog for confirming the deletion of a fund.
+ * It prompts the user to confirm or cancel the deletion of a specific fund.
+ *
+ * ### Props
+ * - `isOpen`: A boolean indicating whether the modal is open or closed.
+ * - `hide`: A function to close the modal.
+ * - `fund`: The fund object to be deleted or `null` if no fund is selected.
+ * - `refetchFunds`: A function to refetch the list of funds after a successful deletion.
+ *
+ * ### Methods
+ * - `deleteFundHandler()`: Asynchronously handles the deletion of the fund using the `REMOVE_FUND_MUTATION` mutation.
+ * - `onClose()`: Closes the modal without deleting the fund.
+ *
+ * ### Behavior
+ * - Displays a confirmation modal when `isOpen` is `true`.
+ * - On confirmation, it triggers the `deleteFundHandler` to perform the deletion.
+ * - On successful deletion, it calls `refetchFunds`, hides the modal, and shows a success toast notification.
+ * - On failure, it shows an error toast notification.
+ *
+ * @returns  The rendered modal dialog.
+ */
 const FundDeleteModal: React.FC<InterfaceDeleteFundModal> = ({
   isOpen,
   hide,

@@ -14,6 +14,7 @@ export type Props = {
 };
 
 type ColumnConfig = {
+  /** Configuration for the columns of the data grid. */
   columns: GridColDef[];
 };
 

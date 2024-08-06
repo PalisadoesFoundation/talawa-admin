@@ -13,13 +13,31 @@ export interface InterfaceUserSidebarProps {
   setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
+/**
+ * Sidebar component for user navigation, including links to organizations and settings.
+ *
+ * Provides:
+ * - A logo and title for the sidebar.
+ * - Navigation buttons for "My Organizations" and "Settings".
+ * - Dynamic styling based on the active route.
+ *
+ * @param hideDrawer - Boolean indicating if the sidebar should be hidden or shown.
+ * @param setHideDrawer - Function to update the `hideDrawer` state.
+ *
+ * @returns JSX.Element - The rendered sidebar component.
+ */
 const userSidebar = ({
   hideDrawer,
   setHideDrawer,
 }: InterfaceUserSidebarProps): JSX.Element => {
+  // Translation hook for internationalization
   const { t } = useTranslation('translation', { keyPrefix: 'userSidebarOrg' });
   const { t: tCommon } = useTranslation('common');
 
+  /**
+   * Handles click events on navigation links.
+   * Closes the sidebar if the viewport width is 820px or less.
+   */
   const handleLinkClick = (): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer(true);
@@ -38,12 +56,14 @@ const userSidebar = ({
         }`}
         data-testid="leftDrawerContainer"
       >
+        {/* Logo and title */}
         <TalawaLogo className={styles.talawaLogo} />
         <p className={styles.talawaText}>{t('talawaUserPortal')}</p>
         <h5 className={`${styles.titleHeader} text-secondary`}>
           {tCommon('menu')}
         </h5>
         <div className={styles.optionList}>
+          {/* Link to "My Organizations" page */}
           <NavLink to={'/user/organizations'} onClick={handleLinkClick}>
             {({ isActive }) => (
               <Button
@@ -66,6 +86,7 @@ const userSidebar = ({
               </Button>
             )}
           </NavLink>
+          {/* Link to "Settings" page */}
           <NavLink to={'/user/settings'} onClick={handleLinkClick}>
             {({ isActive }) => (
               <Button

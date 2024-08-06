@@ -21,6 +21,14 @@ import AgendaItemsPreviewModal from 'components/AgendaItems/AgendaItemsPreviewMo
 import AgendaItemsDeleteModal from 'components/AgendaItems/AgendaItemsDeleteModal';
 import AgendaItemsUpdateModal from 'components/AgendaItems/AgendaItemsUpdateModal';
 
+/**
+ * Component for displaying and managing agenda items.
+ * Supports drag-and-drop functionality, and includes modals for previewing,
+ * updating, and deleting agenda items.
+ *
+ * @param props - The props for the component.
+ * @returns JSX.Element
+ */
 function AgendaItemsContainer({
   agendaItemConnection,
   agendaItemData,
@@ -37,6 +45,7 @@ function AgendaItemsContainer({
   });
   const { t: tCommon } = useTranslation('common');
 
+  // State for modals
   const [agendaItemPreviewModalIsOpen, setAgendaItemPreviewModalIsOpen] =
     useState(false);
   const [agendaItemUpdateModalIsOpen, setAgendaItemUpdateModalIsOpen] =
@@ -44,6 +53,7 @@ function AgendaItemsContainer({
   const [agendaItemDeleteModalIsOpen, setAgendaItemDeleteModalIsOpen] =
     useState(false);
 
+  // State for current agenda item ID and form data
   const [agendaItemId, setAgendaItemId] = useState('');
 
   const [formState, setFormState] = useState<{
@@ -72,29 +82,49 @@ function AgendaItemsContainer({
     },
   });
 
+  /**
+   * Shows the preview modal with the details of the selected agenda item.
+   * @param agendaItem - The agenda item to preview.
+   */
   const showPreviewModal = (agendaItem: InterfaceAgendaItemInfo): void => {
     setAgendaItemState(agendaItem);
     setAgendaItemPreviewModalIsOpen(true);
   };
 
+  /**
+   * Hides the preview modal.
+   */
   const hidePreviewModal = (): void => {
     setAgendaItemPreviewModalIsOpen(false);
   };
 
+  /**
+   * Toggles the visibility of the update modal.
+   */
   const showUpdateModal = (): void => {
     setAgendaItemUpdateModalIsOpen(!agendaItemUpdateModalIsOpen);
   };
 
+  /**
+   * Toggles the visibility of the update modal.
+   */
   const hideUpdateModal = (): void => {
     setAgendaItemUpdateModalIsOpen(!agendaItemUpdateModalIsOpen);
   };
 
+  /**
+   * Toggles the visibility of the delete modal.
+   */
   const toggleDeleteModal = (): void => {
     setAgendaItemDeleteModalIsOpen(!agendaItemDeleteModalIsOpen);
   };
 
   const [updateAgendaItem] = useMutation(UPDATE_AGENDA_ITEM_MUTATION);
 
+  /**
+   * Handles updating an agenda item.
+   * @param e - The form submission event.
+   */
   const updateAgendaItemHandler = async (
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
@@ -125,6 +155,9 @@ function AgendaItemsContainer({
 
   const [deleteAgendaItem] = useMutation(DELETE_AGENDA_ITEM_MUTATION);
 
+  /**
+   * Handles deleting an agenda item.
+   */
   const deleteAgendaItemHandler = async (): Promise<void> => {
     try {
       await deleteAgendaItem({
@@ -142,11 +175,19 @@ function AgendaItemsContainer({
     }
   };
 
+  /**
+   * Handles click event to show the update modal for the selected agenda item.
+   * @param agendaItem - The agenda item to update.
+   */
   const handleEditClick = (agendaItem: InterfaceAgendaItemInfo): void => {
     setAgendaItemState(agendaItem);
     showUpdateModal();
   };
 
+  /**
+   * Sets the state for the selected agenda item.
+   * @param agendaItem - The agenda item to set in the state.
+   */
   const setAgendaItemState = (agendaItem: InterfaceAgendaItemInfo): void => {
     setFormState({
       ...formState,
@@ -169,6 +210,10 @@ function AgendaItemsContainer({
     setAgendaItemId(agendaItem._id);
   };
 
+  /**
+   * Handles the end of a drag-and-drop operation.
+   * @param result - The result of the drag-and-drop operation.
+   */
   const onDragEnd = async (result: DropResult): Promise<void> => {
     if (!result.destination || !agendaItemData) {
       return;
@@ -377,7 +422,7 @@ function AgendaItemsContainer({
           </Droppable>
         </DragDropContext>
       </div>
-      {/* Preview model */}
+      {/* Preview modal */}
       <AgendaItemsPreviewModal
         agendaItemPreviewModalIsOpen={agendaItemPreviewModalIsOpen}
         hidePreviewModal={hidePreviewModal}
@@ -386,7 +431,7 @@ function AgendaItemsContainer({
         formState={formState}
         t={t}
       />
-      {/* Delete model */}
+      {/* Delete modal */}
       <AgendaItemsDeleteModal
         agendaItemDeleteModalIsOpen={agendaItemDeleteModalIsOpen}
         toggleDeleteModal={toggleDeleteModal}
@@ -394,7 +439,7 @@ function AgendaItemsContainer({
         t={t}
         tCommon={tCommon}
       />
-      {/* Update model */}
+      {/* Update modal */}
       <AgendaItemsUpdateModal
         agendaItemUpdateModalIsOpen={agendaItemUpdateModalIsOpen}
         hideUpdateModal={hideUpdateModal}

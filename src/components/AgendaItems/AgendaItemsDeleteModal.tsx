@@ -10,6 +10,16 @@ interface InterfaceAgendaItemsDeleteModalProps {
   tCommon: (key: string) => string;
 }
 
+/**
+ * Modal component for confirming the deletion of an agenda item.
+ * Displays a confirmation dialog when a user attempts to delete an agenda item.
+ *
+ * @param agendaItemDeleteModalIsOpen - Boolean flag indicating if the modal is open.
+ * @param toggleDeleteModal - Function to toggle the visibility of the modal.
+ * @param deleteAgendaItemHandler - Function to handle the deletion of the agenda item.
+ * @param t - Function for translating text based on keys.
+ * @param tCommon - Function for translating common text keys.
+ */
 const AgendaItemsDeleteModal: React.FC<
   InterfaceAgendaItemsDeleteModalProps
 > = ({
