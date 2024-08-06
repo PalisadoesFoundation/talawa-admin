@@ -67,6 +67,7 @@
     "lint:fix": "eslint --fix \"**/*.{ts,tsx}\"",
     "format:fix": "prettier --write \"**/*.{ts,tsx,json,scss,css}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,json,scss,css}\"",
+    "check-tsdoc": "node .github/check-tsdoc.js",
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "prepare": "husky install",
     "jest-preview": "jest-preview",
