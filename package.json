@@ -65,6 +65,7 @@
     "eject": "react-scripts eject",
     "lint:check": "eslint \"**/*.{ts,tsx}\" --max-warnings=0",
     "lint:fix": "eslint --fix \"**/*.{ts,tsx}\"",
+    "check-tsdoc": "node .github/check-tsdoc.js",
     "format:fix": "prettier --write \"**/*.{ts,tsx,json,scss,css}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,json,scss,css}\"",
     "typecheck": "tsc --project tsconfig.json --noEmit",
