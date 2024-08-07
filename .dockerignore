@@ -1,9 +1,18 @@
+# Node modules and build outputs
+node_modules
+dist
+build
+
+# Git and Docker specific files
+.git
+Dockerfile
+.dockerignore
+
 # Files that interfere with YARN
 yarn.lock
 pnpm-lock.yaml
 
 # Dependencies
-/node_modules
 /.pnp
 .pnp.js
 
