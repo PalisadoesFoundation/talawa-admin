@@ -170,7 +170,7 @@ function orgPost(): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success(t('postCreatedSuccess'));
+        toast.success(t('postCreatedSuccess') as string);
         refetch();
         setPostFormState({
           posttitle: '',

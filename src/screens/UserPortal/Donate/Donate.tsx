@@ -132,7 +132,7 @@ export default function donate(): JSX.Element {
         },
       });
       refetch();
-      toast.success(t(`success`));
+      toast.success(t(`success`) as string);
     } catch (error: any) {
       /* istanbul ignore next */
       errorHandler(t, error);

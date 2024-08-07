@@ -105,7 +105,7 @@ const Requests = (): JSX.Element => {
       });
       /* istanbul ignore next */
       if (data) {
-        toast.success(t('blockedSuccessfully'));
+        toast.success(t('blockedSuccessfully') as string);
         memberRefetch();
       }
     } catch (error: unknown) {
@@ -125,7 +125,7 @@ const Requests = (): JSX.Element => {
       });
       /* istanbul ignore next */
       if (data) {
-        toast.success(t('Un-BlockedSuccessfully'));
+        toast.success(t('Un-BlockedSuccessfully') as string);
         memberRefetch();
       }
     } catch (error: unknown) {

@@ -82,7 +82,7 @@ function addOnRegister(): JSX.Element {
 
     if (data) {
       // Show a success message when the plugin is added
-      toast.success(tCommon('addedSuccessfully', { item: 'Plugin' }));
+      toast.success(tCommon('addedSuccessfully', { item: 'Plugin' }) as string);
       // Refresh the page after 2 seconds
       setTimeout(() => {
         navigate(0);

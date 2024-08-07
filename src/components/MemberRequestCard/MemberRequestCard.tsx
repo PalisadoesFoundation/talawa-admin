@@ -53,7 +53,7 @@ function memberRequestCard(
       });
 
       /* istanbul ignore next */
-      toast.success(t('memberAdded'));
+      toast.success(t('memberAdded') as string);
       /* istanbul ignore next */
       setTimeout(() => {
         window.location.reload();

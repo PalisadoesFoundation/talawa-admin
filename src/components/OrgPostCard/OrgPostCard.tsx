@@ -165,7 +165,7 @@ export default function orgPostCard(
         },
       });
       if (data) {
-        toast.success(t('postDeleted'));
+        toast.success(t('postDeleted') as string);
         toggleShowDeleteModal();
         setTimeout(() => {
           window.location.reload();
@@ -203,7 +203,7 @@ export default function orgPostCard(
         },
       });
       if (data) {
-        toast.success(t('postUpdated'));
+        toast.success(t('postUpdated') as string);
         setTimeout(() => {
           window.location.reload();
         }, 2000);

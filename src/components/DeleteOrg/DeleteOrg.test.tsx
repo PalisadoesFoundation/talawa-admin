@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { render, screen } from '@testing-library/react';
 import 'jest-location-mock';
@@ -10,7 +10,6 @@ import {
   DELETE_ORGANIZATION_MUTATION,
   REMOVE_SAMPLE_ORGANIZATION_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import { act } from 'react-dom/test-utils';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';

@@ -21,7 +21,7 @@ import DeleteUser from 'components/UserProfileSettings/DeleteUser';
 import OtherSettings from 'components/UserProfileSettings/OtherSettings';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
-import { create } from 'domain';
+// import { create } from 'domain';
 
 /**
  * The Settings component allows users to view and update their profile settings.
@@ -103,7 +103,7 @@ export default function settings(): JSX.Element {
       });
       /* istanbul ignore next */
       if (data) {
-        toast.success(tCommon('updatedSuccessfully', { item: 'Profile' }));
+        toast.success(tCommon('updatedSuccessfully', { item: 'Profile' }) as string);
         setTimeout(() => {
           window.location.reload();
         }, 500);

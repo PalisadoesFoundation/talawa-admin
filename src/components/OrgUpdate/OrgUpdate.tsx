@@ -144,7 +144,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
       // istanbul ignore next
       if (data) {
         refetch({ id: orgId });
-        toast.success(t('successfulUpdated'));
+        toast.success(t('successfulUpdated') as string);
       }
     } catch (error: unknown) {
       errorHandler(t, error);

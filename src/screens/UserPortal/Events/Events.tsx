@@ -122,7 +122,7 @@ export default function events(): JSX.Element {
 
       /* istanbul ignore next */
       if (createEventData) {
-        toast.success(t('eventCreated'));
+        toast.success(t('eventCreated') as string);
         refetch();
         setEventTitle('');
         setEventDescription('');

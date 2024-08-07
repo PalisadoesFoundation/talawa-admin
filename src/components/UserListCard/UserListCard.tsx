@@ -47,7 +47,7 @@ function userListCard(props: InterfaceUserListCardProps): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success(t('addedAsAdmin'));
+        toast.success(t('addedAsAdmin') as string);
         setTimeout(() => {
           window.location.reload();
         }, 2000);

@@ -284,7 +284,7 @@ function EventListCardModals({
       });
 
       if (data) {
-        toast.success(t('eventUpdated'));
+        toast.success(t('eventUpdated') as string);
         setRecurringEventUpdateModalIsOpen(false);
         hideViewModal();
         if (refetchEvents) {
@@ -323,7 +323,7 @@ function EventListCardModals({
       });
 
       if (data) {
-        toast.success(t('eventDeleted'));
+        toast.success(t('eventDeleted') as string);
         setEventDeleteModalIsOpen(false);
         hideViewModal();
         if (refetchEvents) {

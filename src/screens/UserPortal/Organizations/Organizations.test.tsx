@@ -1,5 +1,5 @@
 import { MockedProvider } from '@apollo/react-testing';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 
 import userEvent from '@testing-library/user-event';
@@ -15,7 +15,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import useLocalStorage from 'utils/useLocalstorage';
 import Organizations from './Organizations';
-import React from 'react';
+import React, { act } from 'react';
 const { getItem } = useLocalStorage();
 
 const MOCKS = [

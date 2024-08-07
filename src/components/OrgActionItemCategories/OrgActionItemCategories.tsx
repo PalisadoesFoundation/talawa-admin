@@ -83,7 +83,7 @@ const OrgActionItemCategories = (): JSX.Element => {
 
       setModalIsOpen(false);
 
-      toast.success(t('successfulCreation'));
+      toast.success(t('successfulCreation') as string);
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message);
@@ -96,7 +96,7 @@ const OrgActionItemCategories = (): JSX.Element => {
   const handleEdit = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     if (name === currName) {
-      toast.error(t('sameNameConflict')); // Show error if the name is the same
+      toast.error(t('sameNameConflict') as string); // Show error if the name is the same
     } else {
       try {
         await updateActionItemCategory({
@@ -111,7 +111,7 @@ const OrgActionItemCategories = (): JSX.Element => {
         refetch(); // Refetch the list of categories
         setModalIsOpen(false); // Close the modal
 
-        toast.success(t('successfulUpdation')); // Show success toast
+        toast.success(t('successfulUpdation') as string); // Show success toast
       } catch (error: unknown) {
         if (error instanceof Error) {
           toast.error(error.message); // Show error toast
@@ -137,8 +137,8 @@ const OrgActionItemCategories = (): JSX.Element => {
       refetch(); // Refetch the list of categories
 
       toast.success(
-        disabledStatus ? t('categoryEnabled') : t('categoryDisabled'),
-      ); // Show success toast
+        disabledStatus ? t('categoryEnabled') as string : t('categoryDisabled') as string,
+       ); // Show success toast
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message);
