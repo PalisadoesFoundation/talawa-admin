@@ -20,7 +20,7 @@ const MOCKS = [
   {
     request: {
       query: UPDATE_USER_PASSWORD_MUTATION,
-      variable: {
+      variables: {
         previousPassword: 'anshgoyal',
         newPassword: 'anshgoyalansh',
         confirmNewPassword: 'anshgoyalansh',
@@ -49,15 +49,10 @@ async function wait(ms = 5): Promise<void> {
 }
 
 describe('Testing User Password Update', () => {
-  const props = {
-    key: '123',
-    id: '1',
-  };
-
   const formData = {
     previousPassword: 'Palisadoes',
     newPassword: 'ThePalisadoesFoundation',
-    wrongPassword: 'This is wrong passoword',
+    wrongPassword: 'This is wrong password',
     confirmNewPassword: 'ThePalisadoesFoundation',
   };
 
@@ -67,7 +62,7 @@ describe('Testing User Password Update', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <UserPasswordUpdate {...props} />
+          <UserPasswordUpdate id="1" />
         </I18nextProvider>
       </MockedProvider>,
     );
@@ -102,7 +97,7 @@ describe('Testing User Password Update', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <UserPasswordUpdate {...props} />
+          <UserPasswordUpdate id="1" />
         </I18nextProvider>
       </MockedProvider>,
     );
@@ -117,7 +112,7 @@ describe('Testing User Password Update', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <UserPasswordUpdate {...props} />
+          <UserPasswordUpdate id="1" />
         </I18nextProvider>
       </MockedProvider>,
     );

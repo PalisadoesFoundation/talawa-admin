@@ -14,7 +14,6 @@ import defaultImg from 'assets/images/blank.png';
 import { errorHandler } from 'utils/errorHandler';
 
 interface InterfaceMemberRequestCardProps {
-  key: string; // Unique key for the component (could be omitted in most cases)
   id: string; // Unique identifier for the member
   memberName: string; // Name of the member
   memberLocation: string; // Location of the member
@@ -29,9 +28,7 @@ interface InterfaceMemberRequestCardProps {
  * @param props - Properties for the member request card.
  * @returns JSX element for member request card.
  */
-function memberRequestCard(
-  props: InterfaceMemberRequestCardProps,
-): JSX.Element {
+function MemberRequestCard(props: InterfaceMemberRequestCardProps): JSX.Element {
   const [acceptMutation] = useMutation(ACCEPT_ORGANIZATION_REQUEST_MUTATION);
   const [rejectMutation] = useMutation(REJECT_ORGANIZATION_REQUEST_MUTATION);
 
@@ -136,5 +133,4 @@ function memberRequestCard(
     </>
   );
 }
-export {};
-export default memberRequestCard;
+export default MemberRequestCard;
