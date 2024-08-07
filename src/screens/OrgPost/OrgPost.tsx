@@ -113,7 +113,7 @@ function orgPost(): JSX.Element {
     }) => void;
   } = useQuery(ORGANIZATION_POST_LIST, {
     variables: {
-      id: currentUrl!,  //Need to replace '!'
+      id: currentUrl as string,
       after: after ?? null,
       before: before ?? null,
       first: first,

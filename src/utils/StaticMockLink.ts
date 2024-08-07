@@ -118,7 +118,9 @@ export class StaticMockLink extends ApolloLink {
               if (response.result) {
                 observer.next(
                   typeof response.result === 'function'
-                    ? (response.result as ResultFunction<FetchResult>)(operation.variables)
+                    ? (response.result as ResultFunction<FetchResult>)(
+                        operation.variables,
+                      )
                     : response.result,
                 );
               }
