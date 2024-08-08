@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { act } from 'react';
 import {
   render,
   screen,
   waitFor,
-  act,
   waitForElementToBeRemoved,
   fireEvent,
 } from '@testing-library/react';
