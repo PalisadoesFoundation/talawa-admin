@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -97,6 +97,7 @@ const MOCKS_WITH_ERROR = [
     error: new Error('Failed to delete sample organization'),
   },
 ];
+
 const mockNavgatePush = jest.fn();
 let mockURL = '123';
 jest.mock('react-router-dom', () => ({
@@ -116,87 +117,119 @@ describe('Delete Organization Component', () => {
   test('should be able to Toggle Delete Organization Modal', async () => {
     mockURL = '456';
     setItem('SuperAdmin', true);
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
-              <DeleteOrg />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    await wait();
-    screen.getByTestId(/openDeleteModalBtn/i).click();
-    expect(screen.getByTestId(/orgDeleteModal/i)).toBeInTheDocument();
-    screen.getByTestId(/closeDelOrgModalBtn/i).click();
     await act(async () => {
-      expect(screen.queryByTestId(/orgDeleteModal/i)).not.toHaveFocus();
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <ToastContainer />
+                <DeleteOrg />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+    act(() => {
+      screen.getByTestId(/openDeleteModalBtn/i).click();
+    });
+    expect(await screen.findByTestId(/orgDeleteModal/i)).toBeInTheDocument();
+    act(() => {
+      screen.getByTestId(/closeDelOrgModalBtn/i).click();
+    });
+    await waitFor(() => {
+      expect(screen.queryByTestId(/orgDeleteModal/i)).not.toBeInTheDocument();
     });
   });
 
   test('should be able to Toggle Delete Organization Modal When Organization is Sample Organization', async () => {
     mockURL = '123';
     setItem('SuperAdmin', true);
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
-              <DeleteOrg />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    await wait();
-    screen.getByTestId(/openDeleteModalBtn/i).click();
-    expect(screen.getByTestId(/orgDeleteModal/i)).toBeInTheDocument();
-    screen.getByTestId(/closeDelOrgModalBtn/i).click();
     await act(async () => {
-      expect(screen.queryByTestId(/orgDeleteModal/i)).not.toHaveFocus();
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <ToastContainer />
+                <DeleteOrg />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+    await wait();
+    act(() => {
+      screen.getByTestId(/openDeleteModalBtn/i).click();
+    });
+    expect(screen.getByTestId(/orgDeleteModal/i)).toBeInTheDocument();
+    act(() => {
+      screen.getByTestId(/closeDelOrgModalBtn/i).click();
+    });
+    await waitFor(() => {
+      expect(screen.queryByTestId(/orgDeleteModal/i)).not.toBeInTheDocument();
     });
   });
 
   test('Delete organization functionality should work properly', async () => {
     mockURL = '456';
     setItem('SuperAdmin', true);
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <DeleteOrg />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    await wait();
-    screen.getByTestId(/openDeleteModalBtn/i).click();
-    screen.getByTestId(/deleteOrganizationBtn/i).click();
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <DeleteOrg />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+    screen.debug();
+    act(() => {
+      screen.getByTestId('openDeleteModalBtn').click();
+    });
+    screen.debug();
+    expect(await screen.findByTestId('orgDeleteModal')).toBeInTheDocument();
+    const deleteButton = await screen.findByTestId('deleteOrganizationBtn');
+    act(() => {
+      deleteButton.click();
+    });
   });
 
   test('Delete organization functionality should work properly for sample org', async () => {
     mockURL = '123';
     setItem('SuperAdmin', true);
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <DeleteOrg />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    await wait();
-    screen.getByTestId(/openDeleteModalBtn/i).click();
-    screen.getByTestId(/deleteOrganizationBtn/i).click();
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <DeleteOrg />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+    await waitFor(() => {
+      expect(screen.getByTestId('openDeleteModalBtn')).toBeInTheDocument();
+    });
+    act(() => {
+      screen.getByTestId('openDeleteModalBtn').click();
+    });
+    await waitFor(() => {
+      expect(screen.getByTestId('orgDeleteModal')).toBeInTheDocument();
+    });
+    const deleteButton = await screen.findByTestId('deleteOrganizationBtn');
+    act(() => {
+      deleteButton.click();
+    });
     await wait(2000);
     expect(mockNavgatePush).toHaveBeenCalledWith('/orglist');
   });
@@ -205,43 +238,70 @@ describe('Delete Organization Component', () => {
     mockURL = '123';
     setItem('SuperAdmin', true);
     jest.spyOn(toast, 'error');
-    render(
-      <MockedProvider addTypename={false} link={link2}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <DeleteOrg />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    await wait();
-    screen.getByTestId(/openDeleteModalBtn/i).click();
-    screen.getByTestId(/deleteOrganizationBtn/i).click();
-    await wait();
-    expect(toast.error).toHaveBeenCalledWith(
-      'Failed to delete sample organization',
-    );
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link2}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <DeleteOrg />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+    await waitFor(() => {
+      expect(screen.getByTestId('openDeleteModalBtn')).toBeInTheDocument();
+    });
+    act(() => {
+      screen.getByTestId('openDeleteModalBtn').click();
+    });
+    await waitFor(() => {
+      expect(screen.getByTestId('orgDeleteModal')).toBeInTheDocument();
+    });
+    act(() => {
+      screen.getByTestId('deleteOrganizationBtn').click();
+    });
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(
+        'Failed to delete sample organization',
+      );
+    });
   });
 
   test('Error handling for DELETE_ORGANIZATION_MUTATION mock', async () => {
     mockURL = '456';
     setItem('SuperAdmin', true);
-    render(
-      <MockedProvider addTypename={false} link={link2}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <DeleteOrg />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    await wait();
-    screen.getByTestId(/openDeleteModalBtn/i).click();
-    screen.getByTestId(/deleteOrganizationBtn/i).click();
-    await wait();
+    jest.spyOn(toast, 'error');
+
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link2}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <DeleteOrg />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+    await waitFor(() => {
+      expect(screen.getByTestId('openDeleteModalBtn')).toBeInTheDocument();
+    });
+    act(() => {
+      screen.getByTestId('openDeleteModalBtn').click();
+    });
+    await waitFor(() => {
+      expect(screen.getByTestId('orgDeleteModal')).toBeInTheDocument();
+    });
+    act(() => {
+      screen.getByTestId('deleteOrganizationBtn').click();
+    });
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Failed to delete organization');
+    });
   });
 });
