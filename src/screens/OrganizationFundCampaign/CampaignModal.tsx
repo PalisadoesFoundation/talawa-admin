@@ -29,6 +29,7 @@ export interface InterfaceCampaignModal {
   isOpen: boolean;
   hide: () => void;
   fundId: string;
+  orgId: string;
   campaign: InterfaceCampaignInfo | null;
   refetchCampaign: () => void;
   mode: 'create' | 'edit';
@@ -44,6 +45,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
   isOpen,
   hide,
   fundId,
+  orgId,
   refetchCampaign,
   mode,
   campaign,
@@ -98,6 +100,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
           name: formState.campaignName,
           currency: formState.campaignCurrency,
           fundingGoal: formState.campaignGoal,
+          organizationId: orgId,
           startDate: dayjs(formState.campaignStartDate).format('YYYY-MM-DD'),
           endDate: dayjs(formState.campaignEndDate).format('YYYY-MM-DD'),
           fundId,

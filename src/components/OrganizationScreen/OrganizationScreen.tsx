@@ -9,6 +9,7 @@ import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from './OrganizationScreen.module.css';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import { Button } from 'react-bootstrap';
+import type { InterfaceMapType } from 'utils/interfaces';
 
 /**
  * Component for the organization screen
@@ -121,12 +122,6 @@ const OrganizationScreen = (): JSX.Element => {
 
 export default OrganizationScreen;
 
-/**
- * Interface for the mapping type
- */
-interface InterfaceMapType {
-  [key: string]: string;
-}
 /**
  * Mapping object to get translation keys based on route
  */

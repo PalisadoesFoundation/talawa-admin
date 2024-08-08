@@ -6,5 +6,6 @@
   "errorSendingMail": "मेल भेजने में त्रुटि",
   "emailNotRegistered": "ईमेल पंजीकृत नहीं है",
   "notFoundMsg": "उफ़! ",
-  "errorOccurredCouldntCreate": "एक त्रुटि हुई। {{entity}} नहीं बना सके"
+  "errorOccurredCouldntCreate": "एक त्रुटि हुई। {{entity}} नहीं बना सके",
+  "errorLoading": "{{entity}} डेटा लोड करते समय त्रुटि हुई"
 }

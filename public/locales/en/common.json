@@ -77,10 +77,10 @@
   "manage": "Manage",
   "searchResultsFor": "Search results for {{text}}",
   "none": "None",
-  "sort": "Sort",
   "Donate": "Donate",
   "addedSuccessfully": "{{item}} added Successfully",
   "updatedSuccessfully": "{{item}} updated Successfully",
   "removedSuccessfully": "{{item}} removed Successfully",
-  "successfullyUpdated": "Successfully Updated"
+  "successfullyUpdated": "Successfully Updated",
+  "sort": "Sort"
 }

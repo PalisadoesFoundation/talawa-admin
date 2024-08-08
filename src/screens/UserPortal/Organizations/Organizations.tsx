@@ -203,7 +203,7 @@ export default function organizations(): JSX.Element {
    * Updates the list of organizations based on query results and selected mode.
    */
   /* istanbul ignore next */
-  React.useEffect(() => {
+  useEffect(() => {
     if (data) {
       const organizations = data.organizationsConnection.map(
         (organization: InterfaceOrganization) => {
@@ -232,7 +232,7 @@ export default function organizations(): JSX.Element {
    * Updates the list of organizations based on the selected mode and query results.
    */
   /* istanbul ignore next */
-  React.useEffect(() => {
+  useEffect(() => {
     if (mode === 0) {
       if (data) {
         const organizations = data.organizationsConnection.map(
@@ -274,6 +274,7 @@ export default function organizations(): JSX.Element {
       }
     }
   }, [mode, data, joinedOrganizationsData, createdOrganizationsData, userId]);
+
   return (
     <>
       {hideDrawer ? (
@@ -308,11 +309,14 @@ export default function organizations(): JSX.Element {
         }`}
       >
         <div className={`${styles.mainContainer}`}>
-          <div className="d-flex justify-content-end align-items-center">
+          <div className="d-flex justify-content-between align-items-center">
+            <div style={{ flex: 1 }}>
+              <h1>{t('selectOrganization')}</h1>
+            </div>
             <ProfileDropdown />
           </div>
-          <h3>{t('selectOrganization')}</h3>
-          <div>
+
+          <div className="mt-4">
             <InputGroup className={styles.maxWidth}>
               <Form.Control
                 placeholder={t('searchUsers')}

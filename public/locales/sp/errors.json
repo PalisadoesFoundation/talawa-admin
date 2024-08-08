@@ -6,5 +6,6 @@
   "errorSendingMail": "Error sending mail",
   "emailNotRegistered": "Email not registered",
   "notFoundMsg": "Oops! The Page you requested was not found!",
-  "errorOccurredCouldntCreate": "Ocurrió un error. No se pudo crear {{entity}}"
+  "errorOccurredCouldntCreate": "Ocurrió un error. No se pudo crear {{entity}}",
+  "errorLoading": "Ocurrió un error al cargar los datos de {{entity}}"
 }

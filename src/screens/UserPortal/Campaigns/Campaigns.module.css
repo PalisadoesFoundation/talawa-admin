@@ -1,0 +1,137 @@
+.btnsContainer {
+  display: flex;
+  margin: 1.5rem 0;
+}
+
+.btnsContainer .input {
+  flex: 1;
+  min-width: 18rem;
+  position: relative;
+}
+
+.btnsContainer input {
+  outline: 1px solid var(--bs-gray-400);
+  background-color: white;
+}
+
+.btnsContainer .input button {
+  width: 52px;
+}
+
+.accordionSummary {
+  width: 100% !important;
+  padding-right: 0.75rem;
+  display: flex;
+  justify-content: space-between !important;
+  align-items: center;
+}
+
+.accordionSummary button {
+  height: 2.25rem;
+  padding-top: 0.35rem;
+}
+
+.accordionSummary button:hover {
+  background-color: #31bb6a50 !important;
+  color: #31bb6b !important;
+}
+
+.titleContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.titleContainer h3 {
+  font-size: 1.25rem;
+  font-weight: 750;
+  color: #5e5e5e;
+  margin-top: 0.2rem;
+}
+
+.subContainer span {
+  font-size: 0.9rem;
+  margin-left: 0.5rem;
+  font-weight: lighter;
+  color: #707070;
+}
+
+.chipIcon {
+  height: 0.9rem !important;
+}
+
+.chip {
+  height: 1.5rem !important;
+  margin: 0.15rem 0 0 1.25rem;
+}
+
+.active {
+  background-color: #31bb6a50 !important;
+}
+
+.pending {
+  background-color: #ffd76950 !important;
+  color: #bb952bd0 !important;
+  border-color: #bb952bd0 !important;
+}
+
+.progress {
+  display: flex;
+  width: 45rem;
+}
+
+.progressBar {
+  margin: 0rem 0.75rem;
+  width: 100%;
+  font-size: 0.9rem;
+  height: 1.25rem;
+}
+
+/* Pledge Modal */
+
+.pledgeModal {
+  max-width: 80vw;
+  margin-top: 2vh;
+  margin-left: 13vw;
+}
+
+.titlemodal {
+  color: #707070;
+  font-weight: 600;
+  font-size: 32px;
+  width: 65%;
+  margin-bottom: 0px;
+}
+
+.modalCloseBtn {
+  width: 40px;
+  height: 40px;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.noOutline input {
+  outline: none;
+}
+
+.greenregbtn {
+  margin: 1rem 0 0;
+  margin-top: 15px;
+  border: 1px solid #e8e5e5;
+  box-shadow: 0 2px 2px #e8e5e5;
+  padding: 10px 10px;
+  border-radius: 5px;
+  background-color: #31bb6b;
+  width: 100%;
+  font-size: 16px;
+  color: white;
+  outline: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+  width: 100%;
+}

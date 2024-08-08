@@ -56,6 +56,12 @@
   flex-direction: column;
 }
 
+.errorIcon {
+  transform: scale(1.5);
+  color: var(--bs-danger);
+  margin-bottom: 1rem;
+}
+
 .btnsContainer {
   display: flex;
   gap: 0.8rem;
@@ -112,6 +118,12 @@
   height: 26px;
 }
 
+.imageContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .pledgerContainer {
   display: flex;
   align-items: center;
@@ -121,6 +133,8 @@
   padding: 0.25rem 0.45rem;
   border-radius: 0.35rem;
   background-color: #31bb6b33;
+  height: 2.2rem;
+  margin-top: 0.75rem;
 }
 
 .noOutline input {

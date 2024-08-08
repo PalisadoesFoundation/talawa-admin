@@ -9,6 +9,7 @@ import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from './EventDashboardScreen.module.css';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import useLocalStorage from 'utils/useLocalstorage';
+import type { InterfaceMapType } from 'utils/interfaces';
 
 /**
  * The EventDashboardScreen component is the main dashboard view for event management.
@@ -62,7 +63,7 @@ const EventDashboardScreen = (): JSX.Element => {
   // Update targets when orgId changes
   useEffect(() => {
     dispatch(updateTargets(orgId));
-  }, [orgId]); // Added orgId to the dependency array
+  }, [orgId]);
 
   /**
    * Handles window resize events to toggle the visibility of the sidebar drawer.
@@ -135,13 +136,6 @@ const EventDashboardScreen = (): JSX.Element => {
 };
 
 export default EventDashboardScreen;
-
-/**
- * A mapping of route keys to translation key prefixes.
- */
-interface InterfaceMapType {
-  [key: string]: string;
-}
 
 const map: InterfaceMapType = {
   orgdash: 'dashboard',

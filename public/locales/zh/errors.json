@@ -6,5 +6,6 @@
   "errorSendingMail": "发送邮件时出错",
   "emailNotRegistered": "邮箱未注册",
   "notFoundMsg": "哎呀！",
-  "errorOccurredCouldntCreate": "发生错误。 无法创建{{entity}}"
+  "errorOccurredCouldntCreate": "发生错误。 无法创建{{entity}}",
+  "errorLoading": "加载{{entity}}数据时出错"
 }

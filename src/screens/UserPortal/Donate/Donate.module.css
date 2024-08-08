@@ -1,25 +1,16 @@
-.containerHeight {
-  height: 100vh;
-}
-
 .mainContainer {
   width: 50%;
   flex-grow: 3;
-  padding: 1rem;
-  max-height: 100%;
-  overflow: auto;
   display: flex;
   flex-direction: column;
   background-color: #f2f7ff;
 }
 
 .inputContainer {
-  margin-top: 3rem;
   flex: 1;
   position: relative;
 }
 .input {
-  width: 70%;
   position: relative;
   box-shadow: 5px 5px 4px 0px #31bb6b1f;
 }
