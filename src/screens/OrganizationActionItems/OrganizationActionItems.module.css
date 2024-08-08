@@ -11,6 +11,8 @@
 .btnsContainer {
   display: flex;
   gap: 10px;
+  justify-content: center;
+  align-items: center;
 }
 
 .btnsContainer .btnsBlock {
@@ -150,6 +152,11 @@ hr {
     margin-bottom: 0;
     display: flex;
     flex-direction: column;
+    align-items: normal;
+  }
+
+  .btnsBlock {
+    flex-direction: column;
   }
 
   .btnsContainer .btnsBlock .dropdownToggle {
@@ -158,11 +165,5 @@ hr {
 
   .btnsContainer button {
     width: 100%;
-  }
-
-  .createActionItemButton {
-    position: absolute;
-    top: 1rem;
-    right: 2rem;
   }
 }

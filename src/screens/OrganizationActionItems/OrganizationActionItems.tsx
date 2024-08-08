@@ -253,7 +253,7 @@ function organizationActionItems(): JSX.Element {
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
         <div className={`pt-4 mx-4`}>
           <div className={styles.btnsContainer}>
-            <div className={styles.btnsBlock}>
+            <div className={`${styles.btnsBlock}`}>
               <Dropdown
                 aria-expanded="false"
                 title="Sort Action Items"
