@@ -15,12 +15,13 @@ import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18nForTest from 'utils/i18nForTest';
-import { PLEDGE_MODAL_MOCKS } from '../Pledges/PledgesMocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
 import type { InterfacePledgeModal } from './PledgeModal';
 import PledgeModal from './PledgeModal';
 import React from 'react';
+import { USER_DETAILS } from 'GraphQl/Queries/Queries';
+import { CREATE_PlEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
 
 jest.mock('react-toastify', () => ({
   toast: {
@@ -36,11 +37,6 @@ jest.mock('@mui/x-date-pickers/DateTimePicker', () => {
     ).DesktopDateTimePicker,
   };
 });
-
-const link1 = new StaticMockLink(PLEDGE_MODAL_MOCKS);
-const translations = JSON.parse(
-  JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.pledges),
-);
 
 const pledgeProps: InterfacePledgeModal[] = [
   {
@@ -92,6 +88,107 @@ const pledgeProps: InterfacePledgeModal[] = [
     mode: 'edit',
   },
 ];
+
+const PLEDGE_MODAL_MOCKS = [
+  {
+    request: {
+      query: USER_DETAILS,
+      variables: {
+        id: 'userId',
+      },
+    },
+    result: {
+      data: {
+        user: {
+          user: {
+            _id: 'userId',
+            joinedOrganizations: [
+              {
+                _id: '6537904485008f171cf29924',
+                __typename: 'Organization',
+              },
+            ],
+            firstName: 'Harve',
+            lastName: 'Lance',
+            email: 'testuser1@example.com',
+            image: null,
+            createdAt: '2023-04-13T04:53:17.742Z',
+            birthDate: null,
+            educationGrade: null,
+            employmentStatus: null,
+            gender: null,
+            maritalStatus: null,
+            phone: null,
+            address: {
+              line1: 'Line1',
+              countryCode: 'CountryCode',
+              city: 'CityName',
+              state: 'State',
+              __typename: 'Address',
+            },
+            registeredEvents: [],
+            membershipRequests: [],
+            __typename: 'User',
+          },
+          appUserProfile: {
+            _id: '67078abd85008f171cf2991d',
+            adminFor: [],
+            isSuperAdmin: false,
+            appLanguageCode: 'en',
+            pluginCreationAllowed: true,
+            createdOrganizations: [],
+            createdEvents: [],
+            eventAdmin: [],
+            __typename: 'AppUserProfile',
+          },
+          __typename: 'UserData',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: UPDATE_PLEDGE,
+      variables: {
+        id: '1',
+        amount: 200,
+      },
+    },
+    result: {
+      data: {
+        updateFundraisingCampaignPledge: {
+          _id: '1',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: CREATE_PlEDGE,
+      variables: {
+        campaignId: 'campaignId',
+        amount: 200,
+        currency: 'USD',
+        startDate: '2024-01-02',
+        endDate: '2024-01-02',
+        userIds: ['1'],
+      },
+    },
+    result: {
+      data: {
+        createFundraisingCampaignPledge: {
+          _id: '3',
+        },
+      },
+    },
+  },
+];
+
+const link1 = new StaticMockLink(PLEDGE_MODAL_MOCKS);
+const translations = JSON.parse(
+  JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.pledges),
+);
+
 const renderPledgeModal = (
   link: ApolloLink,
   props: InterfacePledgeModal,

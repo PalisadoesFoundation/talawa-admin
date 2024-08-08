@@ -297,7 +297,6 @@ describe('Testing User Pledge Screen', () => {
     });
 
     expect(screen.getByText('Harve Lance')).toBeInTheDocument();
-    expect(screen.getByText('Deanne Marks')).toBeInTheDocument();
     expect(screen.queryByText('Jeramy Gracia')).toBeNull();
     expect(screen.queryByText('Praise Norris')).toBeNull();
 

@@ -21,7 +21,6 @@ import DeleteUser from 'components/UserProfileSettings/DeleteUser';
 import OtherSettings from 'components/UserProfileSettings/OtherSettings';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
-import { create } from 'domain';
 
 /**
  * The Settings component allows users to view and update their profile settings.
@@ -34,7 +33,6 @@ export default function settings(): JSX.Element {
     keyPrefix: 'settings',
   });
   const { t: tCommon } = useTranslation('common');
-
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
 
   /**
@@ -56,11 +54,10 @@ export default function settings(): JSX.Element {
   }, []);
 
   const { setItem } = useLocalStorage();
-
   const { data } = useQuery(CHECK_AUTH, { fetchPolicy: 'network-only' });
   const [updateUserDetails] = useMutation(UPDATE_USER_MUTATION);
 
-  const [userDetails, setUserDetails] = React.useState({
+  const [userDetails, setUserDetails] = useState({
     firstName: '',
     lastName: '',
     createdAt: '',
@@ -81,7 +78,6 @@ export default function settings(): JSX.Element {
    * Ref to store the original image URL for comparison during updates.
    */
   const originalImageState = React.useRef<string>('');
-
   /**
    * Ref to access the file input element for image uploads.
    */
@@ -107,7 +103,6 @@ export default function settings(): JSX.Element {
         setTimeout(() => {
           window.location.reload();
         }, 500);
-
         const userFullName = `${userDetails.firstName} ${userDetails.lastName}`;
         setItem('name', userFullName);
       }
@@ -595,13 +590,7 @@ export default function settings(): JSX.Element {
                       </Form.Control>
                     </Col>
                   </Row>
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      marginTop: '1.5em',
-                    }}
-                  >
+                  <div className="d-flex justify-content-between mt-3">
                     <Button
                       onClick={handleResetChanges}
                       variant="outline-success"
