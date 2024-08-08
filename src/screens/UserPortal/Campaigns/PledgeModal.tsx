@@ -207,7 +207,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               options={[...pledgers, ...pledgeUsers]}
               value={pledgeUsers}
               // TODO: Remove readOnly function once User Family implementation is done
-              readOnly={true}
+              readOnly={mode === 'edit' ? true : false}
               isOptionEqualToValue={(option, value) => option._id === value._id}
               filterSelectedOptions={true}
               getOptionLabel={(member: InterfacePledger): string =>
