@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from 'fs/promises'; // Import fs.promises for async operations
 import path from 'path';
 
 // List of files to skip
@@ -11,15 +11,15 @@ const filesToSkip = [
 ];
 
 // Recursively find all .tsx files, excluding files listed in filesToSkip
-function findTsxFiles(dir) {
+async function findTsxFiles(dir) {
   let results = [];
   try {
-    const list = fs.readdirSync(dir);
-    list.forEach((file) => {
+    const list = await fs.readdir(dir);
+    for (const file of list) {
       const filePath = path.join(dir, file);
-      const stat = fs.statSync(filePath);
-      if (stat && stat.isDirectory()) {
-        results = results.concat(findTsxFiles(filePath));
+      const stat = await fs.stat(filePath);
+      if (stat.isDirectory()) {
+        results = results.concat(await findTsxFiles(filePath));
       } else if (
         filePath.endsWith('.tsx') &&
         !filePath.endsWith('.test.tsx') &&
@@ -27,7 +27,7 @@ function findTsxFiles(dir) {
       ) {
         results.push(filePath);
       }
-    });
+    }
   } catch (err) {
     console.error(`Error reading directory ${dir}: ${err.message}`);
   }
@@ -35,9 +35,9 @@ function findTsxFiles(dir) {
 }
 
 // Check if a file contains at least one TSDoc comment
-function containsTsDocComment(filePath) {
+async function containsTsDocComment(filePath) {
   try {
-    const content = fs.readFileSync(filePath, 'utf8');
+    const content = await fs.readFile(filePath, 'utf8');
     return /\/\*\*[\s\S]*?\*\//.test(content);
   } catch (err) {
     console.error(`Error reading file ${filePath}: ${err.message}`);
@@ -46,19 +46,21 @@ function containsTsDocComment(filePath) {
 }
 
 // Main function to run the validation
-function run() {
+async function run() {
   const dir = process.argv[2] || './src'; // Allow directory path as a command-line argument
-  const files = findTsxFiles(dir);
-  let allValid = true;
+  const files = await findTsxFiles(dir);
+  const filesWithoutTsDoc = [];
 
-  files.forEach((file) => {
-    if (!containsTsDocComment(file)) {
-      console.error(`No TSDoc comment found in file: ${file}`);
-      allValid = false;
+  for (const file of files) {
+    if (!await containsTsDocComment(file)) {
+      filesWithoutTsDoc.push(file);
     }
-  });
+  }
 
-  if (!allValid) {
+  if (filesWithoutTsDoc.length > 0) {
+    filesWithoutTsDoc.forEach(file => {
+      console.error(`No TSDoc comment found in file: ${file}`);
+    });
     process.exit(1);
   }
 }
