@@ -3,7 +3,10 @@ import { Modal, Button, ButtonGroup } from 'react-bootstrap';
 import 'chart.js/auto';
 import { Bar, Line } from 'react-chartjs-2';
 import { useParams } from 'react-router-dom';
-import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
+import {
+  EVENT_DETAILS,
+  ORGANIZATION_EVENT_CONNECTION_LIST,
+} from 'GraphQl/Queries/Queries';
 import { useLazyQuery } from '@apollo/client';
 
 interface InterfaceAttendanceStatisticsModalProps {
@@ -37,48 +40,190 @@ interface InterfaceMember {
     }[];
   };
 }
+interface InterfaceEvent {
+  _id: string;
+  title: string;
+  description: string;
+  startDate: string;
+  endDate: string;
+  location: string;
+  startTime: string;
+  endTime: string;
+  allDay: boolean;
+  recurring: boolean;
+  recurrenceRule: {
+    recurrenceStartDate: string;
+    recurrenceEndDate?: string | null;
+    frequency: string;
+    weekDays: string[];
+    interval: number;
+    count?: number;
+    weekDayOccurenceInMonth?: number;
+  };
+  isRecurringEventException: boolean;
+  isPublic: boolean;
+  isRegisterable: boolean;
+  attendees: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    gender: string;
+    birthDate: string;
+  }[];
+  __typename: string;
+}
 
-export const AttendanceStatisticsModal: React.FC<InterfaceAttendanceStatisticsModalProps> = ({ show, handleClose, statistics, memberData }): JSX.Element => {
-  console.log('stats', memberData);
+export const AttendanceStatisticsModal: React.FC<
+  InterfaceAttendanceStatisticsModalProps
+> = ({ show, handleClose, statistics, memberData }): JSX.Element => {
   const [selectedCategory, setSelectedCategory] = useState('Gender');
-  const { eventId } = useParams<{ eventId: string }>();
-  const handleCategoryChange = (category: string):void => {
+  const { eventId, orgId } = useParams();
+  const handleCategoryChange = (category: string): void => {
     setSelectedCategory(category);
-};
-  const { data: eventData, refetch: eventRefetch } = useLazyQuery(
-    EVENT_DETAILS,
-    {
-      variables: {
-        id: eventId,
-      },
-    },
-  )[1];
+  };
+
+  const eventIdPrefix = eventId?.slice(0, 21).toString();
+  const [loadEventDetails, { data: eventData, refetch: eventRefetch }] =
+    useLazyQuery(EVENT_DETAILS);
+  const [loadRecurringEvents, { data: recurringData }] = useLazyQuery(
+    ORGANIZATION_EVENT_CONNECTION_LIST,
+  );
+  const [currentPage, setCurrentPage] = useState(0);
+  const eventsPerPage = 20;
+  useEffect(() => {
+    if (eventId) {
+      loadEventDetails({ variables: { id: eventId } });
+    }
+  }, [eventId, loadEventDetails]);
 
   useEffect(() => {
-    eventRefetch({
-      id: eventId,
-    });
-  }, [eventId, eventRefetch]);
+    if (eventIdPrefix && orgId) {
+      loadRecurringEvents({
+        variables: {
+          organization_id: orgId,
+          id_starts_with: eventIdPrefix,
+          first: eventsPerPage,
+          orderBy: 'endDate_ASC',
+          skip: currentPage * eventsPerPage,
+        },
+      });
+    }
+  }, [eventIdPrefix, orgId, loadRecurringEvents, currentPage]);
 
+  useEffect(() => {
+    if (recurringData) {
+      console.log(
+        'Recurring events data:',
+        recurringData.eventsByOrganizationConnection,
+      );
+    }
+  }, [recurringData]);
   const isEventRecurring = eventData?.event?.recurring;
-  console.log('Event Recurring Status:', isEventRecurring);
-  const data = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept'],
+  console.log('recurring data');
+  const attendeeCounts =
+    recurringData?.eventsByOrganizationConnection.map(
+      (event: InterfaceEvent) => event.attendees.length,
+    ) || [];
+  const eventLabels =
+    recurringData?.eventsByOrganizationConnection.map((event: InterfaceEvent) =>
+      new Date(event.endDate).toLocaleDateString('en-US', { month: 'short' }),
+    ) || [];
+  const maleCounts =
+    recurringData?.eventsByOrganizationConnection.map(
+      (event: InterfaceEvent) =>
+        event.attendees.filter((attendee) => attendee.gender === 'MALE').length,
+    ) || [];
+  const femaleCounts =
+    recurringData?.eventsByOrganizationConnection.map(
+      (event: InterfaceEvent) =>
+        event.attendees.filter((attendee) => attendee.gender === 'FEMALE')
+          .length,
+    ) || [];
+  const otherCounts =
+    recurringData?.eventsByOrganizationConnection.map(
+      (event: InterfaceEvent) =>
+        event.attendees.filter((attendee) => attendee.gender === 'OTHER')
+          .length,
+    ) || [];
+
+  const chartData = {
+    labels: eventLabels,
     datasets: [
       {
         label: 'Attendee Count',
-        data: [33, 25, 35, 51, 54, 76, 67, 56, 40],
+        data: attendeeCounts,
         fill: true,
         borderColor: '#008000',
       },
+      {
+        label: 'Male Attendees',
+        data: maleCounts,
+        fill: false,
+        borderColor: '#0000FF',
+      },
+      {
+        label: 'Female Attendees',
+        data: femaleCounts,
+        fill: false,
+        borderColor: '#FF1493',
+      },
+      {
+        label: 'Other Attendees',
+        data: otherCounts,
+        fill: false,
+        borderColor: '#FFD700',
+      },
     ],
   };
+  const handlePreviousPage = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+  const categoryLabels =
+    selectedCategory === 'Gender'
+      ? ['Male', 'Female', 'Other']
+      : ['Under 18', '18-40', 'Over 40'];
+  const categoryData =
+    selectedCategory === 'Gender'
+      ? [
+          memberData.filter((member) => member.gender === 'MALE').length,
+          memberData.filter((member) => member.gender === 'FEMALE').length,
+          memberData.filter((member) => member.gender === 'OTHER').length,
+        ]
+      : [
+          memberData.filter(
+            (member) =>
+              new Date().getFullYear() -
+                new Date(member.birthDate).getFullYear() <
+              18,
+          ).length,
+          memberData.filter(
+            (member) =>
+              new Date().getFullYear() -
+                new Date(member.birthDate).getFullYear() >=
+                18 &&
+              new Date().getFullYear() -
+                new Date(member.birthDate).getFullYear() <=
+                40,
+          ).length,
+          memberData.filter(
+            (member) =>
+              new Date().getFullYear() -
+                new Date(member.birthDate).getFullYear() >
+              40,
+          ).length,
+        ];
+
   return (
     <Modal
       show={show}
       onHide={handleClose}
       className="attendance-modal"
-      size={isEventRecurring ? 'lg' : undefined}
+      size={isEventRecurring ? 'xl' : undefined}
     >
       <Modal.Header closeButton className="bg-success">
         <Modal.Title>Attendance Statistics</Modal.Title>
@@ -87,11 +232,11 @@ export const AttendanceStatisticsModal: React.FC<InterfaceAttendanceStatisticsMo
         <div className="w-100 border border-success d-flex flex-row rounded">
           {isEventRecurring ? (
             <div
-              className="text-success position-relative d-flex align-items-center justify-content-center w-50 border-right-1 border-success"
+              className="text-success position-relative  align-items-center justify-content-center w-50 border-right-1 border-success"
               style={{ borderRight: '1px solid green' }}
             >
               <Line
-                data={data}
+                data={chartData}
                 options={{ maintainAspectRatio: false, responsive: true }}
                 style={{ paddingBottom: '40px' }}
               />
@@ -105,6 +250,21 @@ export const AttendanceStatisticsModal: React.FC<InterfaceAttendanceStatisticsMo
                 }}
               >
                 <p className="text-black">Trends</p>
+              </div>
+              <div
+                className="d-flex position-absolute bottom-2 end-50 translate-middle-y "
+                style={{ paddingBottom: '2.5rem' }}
+              >
+                <Button
+                  className="p-1 rounded-circle mr-2"
+                  onClick={handlePreviousPage}
+                  disabled={currentPage === 0}
+                >
+                  &#8249;
+                </Button>
+                <Button className="p-1 rounded-circle" onClick={handleNextPage}>
+                  &#8250;
+                </Button>
               </div>
             </div>
           ) : (
@@ -149,48 +309,17 @@ export const AttendanceStatisticsModal: React.FC<InterfaceAttendanceStatisticsMo
               </Button>
             </ButtonGroup>
             <Bar
+              className="mb-5"
               options={{ responsive: true }}
               data={{
-                labels: selectedCategory === 'Gender' ? ['Male', 'Female', 'Other'] : ['Under 18', '18-40', 'Over 40'],
+                labels: categoryLabels,
                 datasets: [
                   {
-                    label: selectedCategory === 'Gender' ? 'Gender Distribution' : 'Age Distribution',
-                    data: selectedCategory === 'Gender' ? [
-                        memberData.filter(
-                          (member: InterfaceMember) =>
-                            member.gender === 'MALE',
-                        ).length,
-                        memberData.filter(
-                          (member: InterfaceMember) =>
-                            member.gender === 'FEMALE',
-                        ).length,
-                        memberData.filter(
-                          (member: InterfaceMember) =>
-                            member.gender === 'OTHER',
-                        ).length,
-                      ] : [
-                        memberData.filter(
-                          (member: InterfaceMember) =>
-                            new Date().getFullYear() -
-                              new Date(member.birthDate).getFullYear() <
-                            18,
-                        ).length,
-                        memberData.filter(
-                          (member: InterfaceMember) =>
-                            new Date().getFullYear() -
-                              new Date(member.birthDate).getFullYear() >=
-                              18 &&
-                            new Date().getFullYear() -
-                              new Date(member.birthDate).getFullYear() <=
-                              40,
-                        ).length,
-                        memberData.filter(
-                          (member: InterfaceMember) =>
-                            new Date().getFullYear() -
-                              new Date(member.birthDate).getFullYear() >
-                            40,
-                        ).length,
-                      ],
+                    label:
+                      selectedCategory === 'Gender'
+                        ? 'Gender Distribution'
+                        : 'Age Distribution',
+                    data: categoryData,
                     backgroundColor: [
                       'rgba(40, 167, 69, 0.2)',
                       'rgba(57, 255, 20, 0.2)',
@@ -212,136 +341,6 @@ export const AttendanceStatisticsModal: React.FC<InterfaceAttendanceStatisticsMo
                 ],
               }}
             />
-            {/* <div className="d-flex align-items-center justify-content-between w-100 px-2 mt-2 mb-5">
-              {selectedCategory === 'Gender' && (
-                <div
-                  className={
-                    isEventRecurring
-                      ? 'd-flex w-100  align-items-center justify-content-between  px-2'
-                      : ' '
-                  }
-                >
-                  <p>
-                    <span
-                      style={{
-                        backgroundColor: 'rgba(40, 167, 69, 1)',
-                        padding: '1px 8px',
-                        borderRadius: '2px',
-                        marginRight: '2px',
-                      }}
-                    ></span>{' '}
-                    Men:{' '}
-                    {
-                      memberData.filter(
-                        (member: InterfaceMember) => member.gender === 'MALE',
-                      ).length
-                    }
-                  </p>
-                  <p>
-                    <span
-                      style={{
-                        backgroundColor: 'rgba(57, 255, 20, 1)',
-                        padding: '1px 8px',
-                        borderRadius: '2px',
-                        marginRight: '2px',
-                      }}
-                    ></span>{' '}
-                    Women:{' '}
-                    {
-                      memberData.filter(
-                        (member: InterfaceMember) => member.gender === 'FEMALE',
-                      ).length
-                    }
-                  </p>
-                  <p>
-                    <span
-                      style={{
-                        backgroundColor: 'rgba(255, 99, 132, 1)',
-                        padding: '1px 8px',
-                        borderRadius: '2px',
-                        marginRight: '2px',
-                      }}
-                    ></span>{' '}
-                    Other:{' '}
-                    {
-                      memberData.filter(
-                        (member: InterfaceMember) => member.gender === 'OTHER',
-                      ).length
-                    }
-                  </p>
-                </div>
-              )}
-              {selectedCategory === 'Age' && (
-                <div
-                  className={
-                    isEventRecurring
-                      ? 'd-flex w-100  align-items-center justify-content-between  px-2'
-                      : ' '
-                  }
-                >
-                  <p className="text-sm">
-                    <span
-                      style={{
-                        backgroundColor: 'rgba(40, 167, 69, 1)',
-                        padding: '1px 8px',
-                        borderRadius: '2px',
-                        marginRight: '2px',
-                      }}
-                    ></span>{' '}
-                    Under 18:{' '}
-                    {
-                      memberData.filter(
-                        (member: InterfaceMember) =>
-                          new Date().getFullYear() -
-                            new Date(member.birthDate).getFullYear() <
-                          18,
-                      ).length
-                    }
-                  </p>
-                  <p className="text-sm">
-                    <span
-                      style={{
-                        backgroundColor: 'rgba(57, 255, 20, 0.2)',
-                        padding: '1px 8px',
-                        borderRadius: '2px',
-                        marginRight: '2px',
-                      }}
-                    ></span>{' '}
-                    19-40:{' '}
-                    {
-                      memberData.filter(
-                        (member: InterfaceMember) =>
-                          new Date().getFullYear() -
-                            new Date(member.birthDate).getFullYear() >=
-                            18 &&
-                          new Date().getFullYear() -
-                            new Date(member.birthDate).getFullYear() <=
-                            40,
-                      ).length
-                    }
-                  </p>
-                  <p className="text-sm">
-                    <span
-                      style={{
-                        backgroundColor: 'rgba(255, 99, 132, 1)',
-                        padding: '1px 8px',
-                        borderRadius: '2px',
-                        marginRight: '2px',
-                      }}
-                    ></span>{' '}
-                    40+:{' '}
-                    {
-                      memberData.filter(
-                        (member: InterfaceMember) =>
-                          new Date().getFullYear() -
-                            new Date(member.birthDate).getFullYear() >
-                          40,
-                      ).length
-                    }
-                  </p>
-                </div>
-              )}
-            </div> */}
             <div
               className="px-1 border border-success"
               style={{

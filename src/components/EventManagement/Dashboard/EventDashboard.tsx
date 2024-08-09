@@ -8,6 +8,7 @@ import Loader from 'components/Loader/Loader';
 import { Edit } from '@mui/icons-material';
 import EventListCardModals from 'components/EventListCard/EventListCardModals';
 import type { InterfaceEventListCardProps } from 'components/EventListCard/EventListCard';
+import { formatDate } from 'utils/dateFormatter';
 
 const EventDashboard = (props: { eventId: string }): JSX.Element => {
   const { eventId } = props;
@@ -36,32 +37,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
     return `${hours}:${minutes}`;
   }
 
-  function formatDate(dateString: string): string {
-    const date = new Date(dateString);
-    const day = date.getDate();
-    const monthIndex = date.getMonth();
-    const year = date.getFullYear();
 
-    const suffixes = ['th', 'st', 'nd', 'rd'];
-    const suffix = suffixes[day % 10 > 3 ? 0 : day % 10];
-
-    const monthNames = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-
-    return `${day}${suffix} ${monthNames[monthIndex]} ${year}`;
-  }
 
   const showViewModal = (): void => {
     setEventModalIsOpen(true);

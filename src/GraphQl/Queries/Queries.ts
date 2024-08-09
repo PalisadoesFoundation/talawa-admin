@@ -594,6 +594,7 @@ export const ORGANIZATION_EVENT_CONNECTION_LIST = gql`
     $location_contains: String
     $first: Int
     $skip: Int
+    $id_starts_with: ID
   ) {
     eventsByOrganizationConnection(
       where: {
@@ -601,6 +602,7 @@ export const ORGANIZATION_EVENT_CONNECTION_LIST = gql`
         title_contains: $title_contains
         description_contains: $description_contains
         location_contains: $location_contains
+        id_starts_with: $id_starts_with
       }
       first: $first
       skip: $skip
@@ -615,6 +617,18 @@ export const ORGANIZATION_EVENT_CONNECTION_LIST = gql`
       endTime
       allDay
       recurring
+      attendees {
+        _id
+        createdAt
+        firstName
+        lastName
+        gender
+        eventsAttended {
+          _id
+          endDate
+        }
+        
+      }
       recurrenceRule {
         recurrenceStartDate
         recurrenceEndDate

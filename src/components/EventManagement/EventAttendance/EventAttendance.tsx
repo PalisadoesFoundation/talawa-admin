@@ -23,6 +23,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { AttendanceStatisticsModal } from './EventStatistics';
 import AttendedEventList from './AttendedEventList';
+import { maxHeight } from '@mui/system';
 
 interface InterfaceMember {
   createdAt: string;
@@ -49,16 +50,16 @@ interface InterfaceEvent {
   // title: string;
 }
 
-
 function EventAttendance(): JSX.Element {
   const { t } = useTranslation();
   const { eventId } = useParams<{ eventId: string }>();
   const { orgId: currentUrl } = useParams();
-  const [searchText, setSearchText] = useState<String>('');  
+  const [searchText, setSearchText] = useState<string>('');  
   const [filteredAttendees, setFilteredAttendees] = useState<InterfaceMember[]>([]);
   const [sortOrder, setSortOrder] = useState<'ascending' | 'descending'>(
     'ascending',
   );
+  const [filteringBy, setFilteringBy] = useState<'This Month' | 'This Year' | 'All'>('All');
   const [show, setShow] = useState(false);
 
   const { data: memberData, refetch: memberRefetch } = useLazyQuery(
@@ -78,19 +79,47 @@ function EventAttendance(): JSX.Element {
 
   useEffect(() => {
     if (memberData?.event?.attendees) {
-      sortAttendees(memberData.event.attendees);
+      const updatedAttendees = filterAndSortAttendees(memberData.event.attendees);
+      setFilteredAttendees(updatedAttendees);
     }
-  }, [sortOrder, memberData]);
+  }, [sortOrder, filteringBy, memberData]);
 
-  const sortAttendees = (attendees: InterfaceMember[]): void => {
-    const sorted = [...attendees].sort((a, b) => {
+  const sortAttendees = (attendees: InterfaceMember[]): InterfaceMember[] => {
+    return [...attendees].sort((a, b) => {
       const nameA = `${a.firstName} ${a.lastName}`.toLowerCase();
       const nameB = `${b.firstName} ${b.lastName}`.toLowerCase();
       return sortOrder === 'ascending'
         ? nameA.localeCompare(nameB)
         : nameB.localeCompare(nameA);
     });
-    setFilteredAttendees(sorted);
+  };
+
+  const filterAttendees = (attendees: InterfaceMember[]): InterfaceMember[] => {
+    const now = new Date();
+    let filtered = [...attendees];
+    
+    if (filteringBy === 'This Month') {
+      filtered = filtered.filter((attendee) => {
+        const attendeeDate = new Date(attendee.createdAt);
+        return (
+          attendeeDate.getMonth() === now.getMonth() &&
+          attendeeDate.getFullYear() === now.getFullYear()
+        );
+      });
+    } else if (filteringBy === 'This Year') {
+      filtered = filtered.filter((attendee) => {
+        const attendeeDate = new Date(attendee.createdAt);
+        return attendeeDate.getFullYear() === now.getFullYear();
+      });
+    }
+
+    return filtered;
+  };
+
+  const filterAndSortAttendees = (attendees: InterfaceMember[]): InterfaceMember[] => {
+    const filtered = filterAttendees(attendees);
+    const sorted = sortAttendees(filtered);
+    return sorted;
   };
 
   const searchEventAttendees = (value: string): void => {
@@ -102,7 +131,8 @@ function EventAttendance(): JSX.Element {
           attendee.lastName?.toLowerCase().includes(value.toLowerCase()) ||
           attendee.email?.toLowerCase().includes(value.toLowerCase()),
       );
-      sortAttendees(filtered);
+      const updatedAttendees = filterAndSortAttendees(filtered);
+      setFilteredAttendees(updatedAttendees);
     }
   };
 
@@ -126,7 +156,7 @@ function EventAttendance(): JSX.Element {
       />
       <div className="border-1 border-top pb-4"></div>
       <div className="d-flex justify-content-between">
-        <div className="d-flex">
+        <div className="d-flex w-100">
           <Button
             className={`border-1 bg-white text-success ${styles.actionBtn}`}
             onClick={showModal}
@@ -134,7 +164,7 @@ function EventAttendance(): JSX.Element {
             Attendance Statistics
           </Button>
         </div>
-        <div className="d-flex justify-content-between align-items-end w-50">
+        <div className="d-flex justify-content-between align-items-end w-100 ">
           <div className={styles.input}>
             <FormControl
               type="text"
@@ -153,6 +183,29 @@ function EventAttendance(): JSX.Element {
               <Search />
             </Button>
           </div>
+          
+          <DropdownButton
+            className={`border-1 mx-4`}
+            title={
+              <>
+                <img
+                  src="/images/svg/up-down.svg"
+                  width={20}
+                  height={20}
+                  alt="Sort"
+                  className={styles.sortImg}
+                />
+                <span className="ms-2">Filter</span>
+              </>
+            }
+            onSelect={(eventKey) =>
+              setFilteringBy(eventKey as 'This Month' | 'This Year' | 'All')
+            }
+          >
+            <Dropdown.Item eventKey="This Month">This Month</Dropdown.Item>
+            <Dropdown.Item eventKey="This Year">This Year</Dropdown.Item>
+            <Dropdown.Item eventKey="All">All</Dropdown.Item>
+          </DropdownButton>
           <DropdownButton
             className={`border-1 `}
             title={
@@ -212,18 +265,32 @@ function EventAttendance(): JSX.Element {
                   {member.__typename === 'User' ? t('Member') : t('Admin')}
                 </TableCell>
                 <Tooltip
+                  componentsProps={{
+                    tooltip: {
+                      sx: {
+                        backgroundColor: "white",
+                        fontSize: "2em",
+                        maxHeight:"170px",
+                        overflowY: "scroll",
+                        scrollbarColor: "white",
+                        border: "1px solid green",
+                        borderRadius: "6px",
+                        boxShadow: "0 0 5px rgba(0,0,0,0.1)",
+                      }
+                    }
+                  }}
                   arrow
                   title={member.eventsAttended?.map((event: InterfaceEvent) => (
                     <AttendedEventList key={event._id} eventId={event._id} />
                   ))}
                 >
                   <TableCell align="left">
-                    <a href="#">
+                  <a href="#">
                       {member.eventsAttended
                         ? member.eventsAttended.length
                         : '0'}
                     </a>
-                  </TableCell>
+                </TableCell>
                 </Tooltip>
                 <TableCell align="left">
                   {member.tagsAssignedWith ? (
