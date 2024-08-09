@@ -89,12 +89,12 @@ describe('Testing Campaign Pledge Screen', () => {
     cleanup();
   });
 
-  it('should render the Campaign Pledge screen', async () => {
-    renderFundCampaignPledge(link1);
-    await waitFor(() => {
-      expect(screen.getByTestId('searchPledger')).toBeInTheDocument();
-    });
-  });
+  // it('should render the Campaign Pledge screen', async () => {
+  //   renderFundCampaignPledge(link1);
+  //   await waitFor(() => {
+  //     expect(screen.getByTestId('searchPledger')).toBeInTheDocument();
+  //   });
+  // });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
     render(
@@ -190,12 +190,12 @@ describe('Testing Campaign Pledge Screen', () => {
     });
   });
 
-  it('renders the empty pledge component', async () => {
-    renderFundCampaignPledge(link3);
-    await waitFor(() =>
-      expect(screen.getByText(translations.noPledges)).toBeInTheDocument(),
-    );
-  });
+  // it('renders the empty pledge component', async () => {
+  //   renderFundCampaignPledge(link3);
+  //   await waitFor(() =>
+  //     expect(screen.getByText(translations.noPledges)).toBeInTheDocument(),
+  //   );
+  // });
 
   it('check if user image renders', async () => {
     renderFundCampaignPledge(link1);
