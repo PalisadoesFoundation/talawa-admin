@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import SendIcon from '@mui/icons-material/Send';
-import { Button, Form, InputGroup } from 'react-bootstrap';
+import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import styles from './ChatRoom.module.css';
 import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
 import { useTranslation } from 'react-i18next';
@@ -18,6 +18,7 @@ import {
 } from 'GraphQl/Mutations/OrganizationMutations';
 import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
+import { MoreVert, Close } from '@mui/icons-material';
 
 interface InterfaceChatRoomProps {
   selectedContact: string;
@@ -45,6 +46,24 @@ type DirectMessage = {
     lastName: string;
     image: string;
   };
+  replyTo:
+    | {
+        _id: string;
+        createdAt: Date;
+        sender: {
+          _id: string;
+          firstName: string;
+          lastName: string;
+          image: string;
+        };
+        messageContent: string;
+        receiver: {
+          _id: string;
+          firstName: string;
+          lastName: string;
+        };
+      }
+    | undefined;
   messageContent: string;
   receiver: {
     _id: string;
@@ -55,22 +74,7 @@ type DirectMessage = {
 
 type Chat = {
   _id: string;
-  messages: {
-    _id: string;
-    createdAt: Date;
-    sender: {
-      _id: string;
-      firstName: string;
-      lastName: string;
-      image: string;
-    };
-    messageContent: string;
-    receiver: {
-      _id: string;
-      firstName: string;
-      lastName: string;
-    };
-  }[];
+  messages: DirectMessage[];
   users: {
     _id: string;
     firstName: string;
@@ -99,6 +103,8 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
   const [newMessage, setNewMessage] = useState('');
   const [directChat, setDirectChat] = useState<Chat>();
   const [groupChat, setGroupChat] = useState<Chat>();
+  const [replyToDirectMessage, setReplyToDirectMessage] =
+    useState<DirectMessage | null>(null);
 
   /**
    * Handles changes to the new message input field.
@@ -115,6 +121,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
   const [sendMessageToDirectChat] = useMutation(SEND_MESSAGE_TO_DIRECT_CHAT, {
     variables: {
       chatId: props.selectedContact,
+      replyTo: replyToDirectMessage?._id,
       messageContent: newMessage,
     },
   });
@@ -122,6 +129,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
   const [sendMessageToGroupChat] = useMutation(SEND_MESSAGE_TO_GROUP_CHAT, {
     variables: {
       chatId: props.selectedContact,
+      replyTo: replyToDirectMessage?._id,
       messageContent: newMessage,
     },
   });
@@ -186,13 +194,14 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
   }, [chatDataGorup]);
 
   const sendMessage = async (): Promise<void> => {
-    console.log(props.selectedChatType);
     if (props.selectedChatType === 'direct') {
       await sendMessageToDirectChat();
       await chatRefetch();
+      setReplyToDirectMessage(null);
     } else if (props.selectedChatType === 'group') {
-      const data = await sendMessageToGroupChat();
+      await sendMessageToGroupChat();
       await groupChatRefresh();
+      setReplyToDirectMessage(null);
     }
     setNewMessage('');
   };
@@ -202,24 +211,17 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
       userId: userId,
     },
     onData: (directMessageSubscriptionData) => {
-      console.log(
-        directMessageSubscriptionData?.data.data.messageSentToDirectChat
-          .directChatMessageBelongsTo['_id'],
-        props.selectedContact,
-      );
       if (
         directMessageSubscriptionData?.data.data.messageSentToDirectChat &&
         directMessageSubscriptionData?.data.data.messageSentToDirectChat
           .directChatMessageBelongsTo['_id'] == props.selectedContact
       ) {
-        const updatedChat = directChat
-          ? JSON.parse(JSON.stringify(directChat))
-          : { messages: [] };
-        updatedChat?.messages.push(
-          directMessageSubscriptionData?.data.data.messageSentToDirectChat,
-        );
-        setDirectChat(updatedChat);
         chatRefetch();
+      } else {
+        chatRefetch({
+          id: directMessageSubscriptionData?.data.data.messageSentToDirectChat
+            .directChatMessageBelongsTo['_id'],
+        });
       }
     },
   });
@@ -234,13 +236,6 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
         groupMessageSubscriptionData?.data.data.messageSentToGroupChat
           .groupChatMessageBelongsTo['_id'] == props.selectedContact
       ) {
-        const updatedChat = groupChat
-          ? JSON.parse(JSON.stringify(groupChat))
-          : { messages: [] };
-        updatedChat?.messages.push(
-          groupMessageSubscriptionData.data.data.messageSentToGroupChat,
-        );
-        setGroupChat(updatedChat);
         groupChatRefresh({
           id: props.selectedContact,
         });
@@ -248,9 +243,6 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
         groupChatRefresh({
           id: groupMessageSubscriptionData?.data.data.messageSentToGroupChat
             .groupChatMessageBelongsTo['_id'],
-        });
-        groupChatRefresh({
-          id: props.selectedContact,
         });
       }
     },
@@ -299,28 +291,65 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
               ) && (
                 <div id="messages">
                   {props.selectedChatType == 'direct'
-                    ? directChat?.messages.map(
-                        (message: DirectMessage, index: number) => {
-                          return (
+                    ? directChat?.messages.map((message: DirectMessage) => {
+                        return (
+                          <div
+                            className={
+                              message.sender._id === userId
+                                ? styles.messageSentContainer
+                                : styles.messageReceivedContainer
+                            }
+                            data-testid="directChatMsg"
+                            key={message._id}
+                          >
                             <div
                               className={
                                 message.sender._id === userId
-                                  ? styles.messageSentContainer
-                                  : styles.messageReceivedContainer
+                                  ? styles.messageSent
+                                  : styles.messageReceived
                               }
                               key={message._id}
+                              id={message._id}
                             >
-                              <div
-                                className={
-                                  message.sender._id === userId
-                                    ? styles.messageSent
-                                    : styles.messageReceived
-                                }
-                                key={message._id}
-                              >
-                                <span className={styles.messageContent}>
-                                  {message.messageContent}
-                                </span>
+                              <span className={styles.messageContent}>
+                                {message.replyTo && (
+                                  <a href={`#${message.replyTo._id}`}>
+                                    <div className={styles.replyToMessage}>
+                                      <p className={styles.senderInfo}>
+                                        {message.replyTo.sender.firstName +
+                                          ' ' +
+                                          message.replyTo.sender.lastName}
+                                      </p>
+                                      <span>
+                                        {message.replyTo.messageContent}
+                                      </span>
+                                    </div>
+                                  </a>
+                                )}
+                                {message.messageContent}
+                              </span>
+                              <div className={styles.messageAttributes}>
+                                <Dropdown
+                                  data-testid="moreOptions"
+                                  style={{ cursor: 'pointer' }}
+                                >
+                                  <Dropdown.Toggle
+                                    className={styles.customToggle}
+                                    data-testid={'dropdown'}
+                                  >
+                                    <MoreVert />
+                                  </Dropdown.Toggle>
+                                  <Dropdown.Menu>
+                                    <Dropdown.Item
+                                      onClick={() => {
+                                        setReplyToDirectMessage(message);
+                                      }}
+                                      data-testid="replyBtn"
+                                    >
+                                      Reply
+                                    </Dropdown.Item>
+                                  </Dropdown.Menu>
+                                </Dropdown>
                                 <span className={styles.messageTime}>
                                   {new Date(
                                     message?.createdAt,
@@ -331,54 +360,55 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                                 </span>
                               </div>
                             </div>
-                          );
-                        },
-                      )
-                    : groupChat?.messages.map(
-                        (message: DirectMessage, index: number) => {
-                          return (
+                          </div>
+                        );
+                      })
+                    : groupChat?.messages.map((message: DirectMessage) => {
+                        return (
+                          <div
+                            className={
+                              message.sender._id === userId
+                                ? styles.messageSentContainer
+                                : styles.messageReceivedContainer
+                            }
+                            key={message._id}
+                            data-testid="groupChatMsg"
+                          >
+                            {message.sender._id !== userId ? (
+                              message.sender?.image ? (
+                                <img
+                                  src={message.sender.image}
+                                  alt={message.sender.image}
+                                  className={styles.contactImage}
+                                />
+                              ) : (
+                                <Avatar
+                                  name={
+                                    message.sender.firstName +
+                                    ' ' +
+                                    message.sender.lastName
+                                  }
+                                  alt={
+                                    message.sender.firstName +
+                                    ' ' +
+                                    message.sender.lastName
+                                  }
+                                  avatarStyle={styles.contactImage}
+                                />
+                              )
+                            ) : (
+                              ''
+                            )}
                             <div
                               className={
                                 message.sender._id === userId
-                                  ? styles.messageSentContainer
-                                  : styles.messageReceivedContainer
+                                  ? styles.messageSent
+                                  : styles.messageReceived
                               }
                               key={message._id}
-                              data-testid="groupChatMsg"
+                              id={message._id}
                             >
-                              {message.sender._id !== userId ? (
-                                message.sender?.image ? (
-                                  <img
-                                    src={message.sender.image}
-                                    alt={message.sender.image}
-                                    className={styles.contactImage}
-                                  />
-                                ) : (
-                                  <Avatar
-                                    name={
-                                      message.sender.firstName +
-                                      ' ' +
-                                      message.sender.lastName
-                                    }
-                                    alt={
-                                      message.sender.firstName +
-                                      ' ' +
-                                      message.sender.lastName
-                                    }
-                                    avatarStyle={styles.contactImage}
-                                  />
-                                )
-                              ) : (
-                                ''
-                              )}
-                              <div
-                                className={
-                                  message.sender._id === userId
-                                    ? styles.messageSent
-                                    : styles.messageReceived
-                                }
-                                key={message._id}
-                              >
+                              <div className={styles.messageContent}>
                                 {message.sender._id !== userId && (
                                   <p className={styles.senderInfo}>
                                     {message.sender.firstName +
@@ -386,9 +416,45 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                                       message.sender.lastName}
                                   </p>
                                 )}
-                                <span className={styles.messageContent}>
-                                  {message.messageContent}
-                                </span>
+                                {message.replyTo && (
+                                  <a href={`#${message.replyTo._id}`}>
+                                    <div className={styles.replyToMessage}>
+                                      <p className={styles.senderInfo}>
+                                        {message.replyTo.sender.firstName +
+                                          ' ' +
+                                          message.replyTo.sender.lastName}
+                                      </p>
+                                      <span>
+                                        {message.replyTo.messageContent}
+                                      </span>
+                                    </div>
+                                  </a>
+                                )}
+                                <span>{message.messageContent}</span>
+                              </div>
+
+                              <div className={styles.messageAttributes}>
+                                <Dropdown
+                                  data-testid="moreOptions"
+                                  style={{ cursor: 'pointer' }}
+                                >
+                                  <Dropdown.Toggle
+                                    className={styles.customToggle}
+                                    data-testid={'dropdown'}
+                                  >
+                                    <MoreVert />
+                                  </Dropdown.Toggle>
+                                  <Dropdown.Menu>
+                                    <Dropdown.Item
+                                      onClick={() => {
+                                        setReplyToDirectMessage(message);
+                                      }}
+                                      data-testid="replyBtn"
+                                    >
+                                      Reply
+                                    </Dropdown.Item>
+                                  </Dropdown.Menu>
+                                </Dropdown>
                                 <span className={styles.messageTime}>
                                   {new Date(
                                     message?.createdAt,
@@ -399,14 +465,49 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                                 </span>
                               </div>
                             </div>
-                          );
-                        },
-                      )}
+                          </div>
+                        );
+                      })}
                 </div>
               )}
             </div>
           </div>
           <div id="messageInput">
+            {!!replyToDirectMessage?._id && (
+              <div data-testid="replyMsg" className={styles.replyTo}>
+                <div className={styles.replyToMessageContainer}>
+                  <div className={styles.userDetails}>
+                    <Avatar
+                      name={
+                        replyToDirectMessage.sender.firstName +
+                        ' ' +
+                        replyToDirectMessage.sender.lastName
+                      }
+                      alt={
+                        replyToDirectMessage.sender.firstName +
+                        ' ' +
+                        replyToDirectMessage.sender.lastName
+                      }
+                      avatarStyle={styles.userImage}
+                    />
+                    <span>
+                      {replyToDirectMessage.sender.firstName +
+                        ' ' +
+                        replyToDirectMessage.sender.lastName}
+                    </span>
+                  </div>
+                  <p>{replyToDirectMessage.messageContent}</p>
+                </div>
+
+                <Button
+                  onClick={() => setReplyToDirectMessage(null)}
+                  className={styles.closeBtn}
+                  data-testid="closeReplyMsg"
+                >
+                  <Close />
+                </Button>
+              </div>
+            )}
             <InputGroup>
               <Form.Control
                 placeholder={t('sendMessage')}
