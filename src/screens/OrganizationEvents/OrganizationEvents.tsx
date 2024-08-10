@@ -105,8 +105,6 @@ function organizationEvents(): JSX.Element {
       title_contains: '',
       description_contains: '',
       location_contains: '',
-      first:100,
-      orderBy:'endDate_ASC',
     },
   });
 

@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Button, ButtonGroup } from 'react-bootstrap';
+import {
+  Modal,
+  Button,
+  ButtonGroup,
+  Tooltip,
+  OverlayTrigger,
+} from 'react-bootstrap';
 import 'chart.js/auto';
 import { Bar, Line } from 'react-chartjs-2';
 import { useParams } from 'react-router-dom';
@@ -8,6 +14,7 @@ import {
   ORGANIZATION_EVENT_CONNECTION_LIST,
 } from 'GraphQl/Queries/Queries';
 import { useLazyQuery } from '@apollo/client';
+import CollapsibleTable from './CollapsibleTable';
 
 interface InterfaceAttendanceStatisticsModalProps {
   show: boolean;
@@ -82,7 +89,8 @@ export const AttendanceStatisticsModal: React.FC<
   const handleCategoryChange = (category: string): void => {
     setSelectedCategory(category);
   };
-
+  const [clickedData, setClickedData] = useState<InterfaceMember[]>([]);
+  const [isTableCollapsed, setIsTableCollapsed] = useState(true);
   const eventIdPrefix = eventId?.slice(0, 21).toString();
   const [loadEventDetails, { data: eventData, refetch: eventRefetch }] =
     useLazyQuery(EVENT_DETAILS);
@@ -127,7 +135,10 @@ export const AttendanceStatisticsModal: React.FC<
     ) || [];
   const eventLabels =
     recurringData?.eventsByOrganizationConnection.map((event: InterfaceEvent) =>
-      new Date(event.endDate).toLocaleDateString('en-US', { month: 'short' }),
+      new Date(event.endDate).toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+      }),
     ) || [];
   const maleCounts =
     recurringData?.eventsByOrganizationConnection.map(
@@ -226,9 +237,9 @@ export const AttendanceStatisticsModal: React.FC<
       size={isEventRecurring ? 'xl' : undefined}
     >
       <Modal.Header closeButton className="bg-success">
-        <Modal.Title>Attendance Statistics</Modal.Title>
+        <Modal.Title className="text-white">Attendance Statistics</Modal.Title>
       </Modal.Header>
-      <Modal.Body className="w-100 d-flex flex-column align-items-center w-80">
+      <Modal.Body className="w-100 d-flex flex-column align-items-center ">
         <div className="w-100 border border-success d-flex flex-row rounded">
           {isEventRecurring ? (
             <div
@@ -237,8 +248,27 @@ export const AttendanceStatisticsModal: React.FC<
             >
               <Line
                 data={chartData}
-                options={{ maintainAspectRatio: false, responsive: true }}
+                options={{
+                  maintainAspectRatio: false,
+                  responsive: true,
+                  onClick: (event, elements) => {
+                    if (elements.length > 0) {
+                      const index = elements[0].index;
+                      const eventDate = eventLabels[index];
+                      const eventAttendees =
+                        recurringData.eventsByOrganizationConnection[index]
+                          .attendees;
+                      setClickedData(eventAttendees);
+                      setIsTableCollapsed(false);
+                    }
+                  },
+                }}
                 style={{ paddingBottom: '40px' }}
+              />
+              <CollapsibleTable
+                isTableCollapsed={isTableCollapsed}
+                clickedData={clickedData}
+                onToggle={() => setIsTableCollapsed(!isTableCollapsed)}
               />
               <div
                 className="px-1 border border-success w-30"
@@ -252,19 +282,43 @@ export const AttendanceStatisticsModal: React.FC<
                 <p className="text-black">Trends</p>
               </div>
               <div
-                className="d-flex position-absolute bottom-2 end-50 translate-middle-y "
+                className="d-flex position-absolute bottom-2 end-50 translate-middle-y"
                 style={{ paddingBottom: '2.5rem' }}
               >
-                <Button
-                  className="p-1 rounded-circle mr-2"
-                  onClick={handlePreviousPage}
-                  disabled={currentPage === 0}
+                <OverlayTrigger
+                  placement="bottom"
+                  overlay={<Tooltip id="tooltip-prev">Previous Page</Tooltip>}
                 >
-                  &#8249;
-                </Button>
-                <Button className="p-1 rounded-circle" onClick={handleNextPage}>
-                  &#8250;
-                </Button>
+                  <Button
+                    className="p-0 rounded-circle w-10 me-2"
+                    onClick={handlePreviousPage}
+                    disabled={currentPage === 0}
+                  >
+                    <img
+                      src="/images/svg/arrow-left.svg"
+                      alt="left-arrow"
+                      width={20}
+                      height={20}
+                    />
+                  </Button>
+                </OverlayTrigger>
+
+                <OverlayTrigger
+                  placement="bottom"
+                  overlay={<Tooltip id="tooltip-next">Next Page</Tooltip>}
+                >
+                  <Button
+                    className="p-0 rounded-circle ms-2"
+                    onClick={handleNextPage}
+                  >
+                    <img
+                      src="/images/svg/arrow-right.svg"
+                      alt="right-arrow"
+                      width={20}
+                      height={20}
+                    />
+                  </Button>
+                </OverlayTrigger>
               </div>
             </div>
           ) : (
@@ -292,17 +346,17 @@ export const AttendanceStatisticsModal: React.FC<
             </div>
           )}
           <div className="text-success position-relative d-flex flex-column align-items-center justify-content-start w-50 ">
-            <ButtonGroup className="mt-2 pb-2">
+            <ButtonGroup className="mt-2 pb-2 p-1">
               <Button
                 variant={selectedCategory === 'Gender' ? 'success' : 'light'}
-                className="border border-success p-2 pl-2"
+                className="border border-success p-1 pl-2"
                 onClick={() => handleCategoryChange('Gender')}
               >
                 Gender
               </Button>
               <Button
                 variant={selectedCategory === 'Age' ? 'success' : 'light'}
-                className="border border-success border-left-0 p-2"
+                className="border border-success border-left-0 p-1"
                 onClick={() => handleCategoryChange('Age')}
               >
                 Age
