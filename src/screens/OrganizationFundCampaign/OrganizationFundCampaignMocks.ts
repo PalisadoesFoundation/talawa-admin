@@ -207,6 +207,7 @@ export const MOCKS = [
       query: CREATE_CAMPAIGN_MUTATION,
       variables: {
         fundId: 'fundId',
+        organizationId: 'orgId',
         name: 'Campaign 2',
         fundingGoal: 200,
         startDate: '2024-01-02',
@@ -275,6 +276,7 @@ export const MOCK_ERROR = [
       query: CREATE_CAMPAIGN_MUTATION,
       variables: {
         fundId: 'fundId',
+        organizationId: 'orgId',
         name: 'Campaign 2',
         fundingGoal: 200,
         startDate: '2024-01-02',

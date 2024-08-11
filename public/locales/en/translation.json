@@ -678,6 +678,10 @@
     "addedAsAdmin": "User is added as admin.",
     "userType": "User Type"
   },
+  "people": {
+    "title": "People",
+    "searchUsers": "Search users"
+  },
   "userLogin": {
     "login": "Login",
     "loginIntoYourAccount": "Login into your account",
@@ -742,7 +746,7 @@
   "home": {
     "posts": "Posts",
     "post": "Post",
-    "title": "Title",
+    "title": "Posts",
     "textArea": "Something on your mind?",
     "feed": "Feed",
     "loading": "Loading",
@@ -812,6 +816,7 @@
     "enterState": "Enter City or State"
   },
   "donate": {
+    "title": "Donations",
     "donations": "Donations",
     "searchDonations": "Search donations",
     "donateForThe": "Donate for the",
@@ -822,6 +827,7 @@
     "success": "Donation Successful"
   },
   "userEvents": {
+    "title": "Events",
     "nothingToShow": "Nothing to show here.",
     "createEvent": "Create Event",
     "recurring": "Recurring Event",
@@ -979,5 +985,26 @@
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error adding attendee",
     "errorRemovingAttendee": "Error removing attendee"
+  },
+  "userCampaigns": {
+    "title": "Fundraising Campaigns",
+    "searchByName": "Search by Name...",
+    "searchBy": "Search by",
+    "pledgers": "Pledgers",
+    "campaigns": "Campaigns",
+    "myPledges": "My Pledges",
+    "lowestAmount": "Lowest Amount",
+    "highestAmount": "Highest Amount",
+    "lowestGoal": "Lowest Goal",
+    "highestGoal": "Highest Goal",
+    "latestEndDate": "Latest End Date",
+    "earliestEndDate": "Earliest End Date",
+    "addPledge": "Add Pledge",
+    "viewPledges": "View Pledges",
+    "noPledges": "No Pledges Found",
+    "noCampaigns": "No Campaigns Found"
+  },
+  "userPledges": {
+    "title": "My Pledges"
   }
 }
