@@ -47,7 +47,7 @@
     "react-infinite-scroll-component": "^6.1.0",
     "react-multi-carousel": "^2.8.5",
     "react-redux": "^7.2.5",
-    "react-router-dom": "^6.25.1",
+    "react-router-dom": "^6.26.0",
     "react-scripts": "5.0.1",
     "react-toastify": "^9.0.3",
     "react-tooltip": "^5.27.1",
