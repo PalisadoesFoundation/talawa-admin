@@ -126,7 +126,7 @@
     "jest-localstorage-mock": "^2.4.19",
     "jest-location-mock": "^2.0.0",
     "jest-preview": "^0.3.1",
-    "lint-staged": "^15.2.7",
+    "lint-staged": "^15.2.8",
     "postcss-modules": "^6.0.0",
     "sass": "^1.77.8",
     "tsx": "^4.16.2"
