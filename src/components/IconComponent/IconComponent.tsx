@@ -1,4 +1,8 @@
-import { QuestionMarkOutlined } from '@mui/icons-material';
+import {
+  QuestionMarkOutlined,
+  ContactPageOutlined,
+  NewspaperOutlined,
+} from '@mui/icons-material';
 import { ReactComponent as ActionItemIcon } from 'assets/svgs/actionItem.svg';
 import { ReactComponent as AgendaCategoryIcon } from 'assets/svgs/agenda-category-icon.svg';
 import { ReactComponent as BlockUserIcon } from 'assets/svgs/blockUser.svg';
@@ -15,8 +19,6 @@ import { ReactComponent as PostsIcon } from 'assets/svgs/posts.svg';
 import { ReactComponent as SettingsIcon } from 'assets/svgs/settings.svg';
 import { ReactComponent as VenueIcon } from 'assets/svgs/venues.svg';
 import { ReactComponent as RequestsIcon } from 'assets/svgs/requests.svg';
-// import { ReactComponent as HomeIcon } from 'assets/svgs/home.svg';
-// import { ReactComponent as DonateIcon } from 'assets/svgs/donate.svg';
 
 import React from 'react';
 
@@ -126,18 +128,26 @@ const iconComponent = (props: InterfaceIconComponent): JSX.Element => {
       return (
         <VenueIcon data-testid="Icon-Component-Venues" stroke={props.fill} />
       );
-    case 'Home':
-      return (
-        <FundsIcon data-testid="Icon-Component-Home" stroke={props.fill} />
-      );
     case 'Donate':
       return (
         <FundsIcon data-testid="Icon-Component-Donate" stroke={props.fill} />
+      );
+    case 'Campaigns':
+      return (
+        <NewspaperOutlined {...props} data-testid="Icon-Component-Campaigns" />
+      );
+    case 'My Pledges':
+      return (
+        <ContactPageOutlined
+          data-testid="Icon-Component-My-Pledges"
+          stroke={props.fill}
+        />
       );
     default:
       return (
         <QuestionMarkOutlined
           {...props}
+          fontSize="large"
           data-testid="Icon-Component-DefaultIcon"
         />
       );

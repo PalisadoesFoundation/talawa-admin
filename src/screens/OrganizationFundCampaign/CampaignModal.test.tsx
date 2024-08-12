@@ -48,6 +48,7 @@ const campaignProps: InterfaceCampaignModal[] = [
     isOpen: true,
     hide: jest.fn(),
     fundId: 'fundId',
+    orgId: 'orgId',
     campaign: {
       _id: 'campaignId1',
       name: 'Campaign 1',
@@ -64,6 +65,7 @@ const campaignProps: InterfaceCampaignModal[] = [
     isOpen: true,
     hide: jest.fn(),
     fundId: 'fundId',
+    orgId: 'orgId',
     campaign: {
       _id: 'campaignId1',
       name: 'Campaign 1',

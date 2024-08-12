@@ -100,25 +100,23 @@ describe('Testing AddOnRegister', () => {
           <Provider store={store}>
             <BrowserRouter>
               <I18nextProvider i18n={i18nForTest}>
-                {<AddOnRegister {...props} />}
+                <AddOnRegister {...props} />
               </I18nextProvider>
             </BrowserRouter>
           </Provider>
         </ApolloProvider>,
       );
 
-      await wait(100);
+      // Wait for the button to be in the document
+      await waitFor(() =>
+        expect(screen.getByRole('button', { name: /Add New/i })).toBeInTheDocument()
+      );
 
+      // Simulate user interactions
       userEvent.click(screen.getByRole('button', { name: /Add New/i }));
       userEvent.type(screen.getByPlaceholderText(/Ex: Donations/i), 'myplugin');
-      userEvent.type(
-        screen.getByPlaceholderText(/This Plugin enables UI for/i),
-        'test description',
-      );
-      userEvent.type(
-        screen.getByPlaceholderText(/Ex: john Doe/i),
-        'test creator',
-      );
+      userEvent.type(screen.getByPlaceholderText(/This Plugin enables UI for/i), 'test description');
+      userEvent.type(screen.getByPlaceholderText(/Ex: john Doe/i), 'test creator');
     });
   });
 
@@ -183,6 +181,7 @@ describe('Testing AddOnRegister', () => {
       expect(mockNavigate).toHaveBeenCalledWith(0);
     });
   });
+
   test('should be redirected to /orglist if orgId is undefined', async () => {
     mockId = undefined;
     render(
@@ -190,7 +189,7 @@ describe('Testing AddOnRegister', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              {<AddOnRegister {...props} />}
+              <AddOnRegister {...props} />
             </I18nextProvider>
           </BrowserRouter>
         </Provider>

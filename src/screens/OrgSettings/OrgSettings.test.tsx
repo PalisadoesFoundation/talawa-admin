@@ -142,7 +142,7 @@ describe('Organisation Settings Page', () => {
     window.location.assign('/orgsetting/123');
     setItem('SuperAdmin', true);
 
-    const { queryByText } = render(
+    const { getAllByText, queryByText } = render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
@@ -158,9 +158,8 @@ describe('Organisation Settings Page', () => {
 
     await waitFor(() => {
       userEvent.click(screen.getByTestId('actionItemCategoriesSettings'));
-      expect(
-        queryByText(translations.actionItemCategories),
-      ).toBeInTheDocument();
+      const elements = getAllByText(translations.actionItemCategories);
+      expect(elements[2]).toBeInTheDocument();
     });
 
     await waitFor(() => {

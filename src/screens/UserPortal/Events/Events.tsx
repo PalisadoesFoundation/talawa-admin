@@ -218,9 +218,8 @@ export default function events(): JSX.Element {
 
   return (
     <>
-      <div className={`d-flex flex-row ${styles.containerHeight}`}>
-        <div className={`${styles.colorLight} ${styles.mainContainer}`}>
-          <h1>Events</h1>
+      <div className={`d-flex flex-row`}>
+        <div className={`${styles.mainContainer}`}>
           <EventHeader
             viewType={viewType}
             showInviteModal={showInviteModal}
