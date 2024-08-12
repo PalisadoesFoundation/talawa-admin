@@ -128,7 +128,7 @@
     "jest-preview": "^0.3.1",
     "lint-staged": "^15.2.7",
     "postcss-modules": "^6.0.0",
-    "sass": "^1.77.4",
+    "sass": "^1.77.8",
     "tsx": "^4.16.2"
   },
   "resolutions": {
