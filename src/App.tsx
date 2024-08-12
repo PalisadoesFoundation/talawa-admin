@@ -45,6 +45,8 @@ import FundCampaignPledge from 'screens/FundCampaignPledge/FundCampaignPledge';
 import useLocalStorage from 'utils/useLocalstorage';
 import UserScreen from 'screens/UserPortal/UserScreen/UserScreen';
 import EventDashboardScreen from 'components/EventDashboardScreen/EventDashboardScreen';
+import Campaigns from 'screens/UserPortal/Campaigns/Campaigns';
+import Pledges from 'screens/UserPortal/Pledges/Pledges';
 
 const { setItem } = useLocalStorage();
 
@@ -188,6 +190,8 @@ function app(): JSX.Element {
             <Route path="/user/people/:orgId" element={<People />} />
             <Route path="/user/donate/:orgId" element={<Donate />} />
             <Route path="/user/events/:orgId" element={<Events />} />
+            <Route path="/user/campaigns/:orgId" element={<Campaigns />} />
+            <Route path="/user/pledges/:orgId" element={<Pledges />} />
             <Route element={<EventDashboardScreen />}>
               <Route
                 path="/user/event/:orgId/:eventId"

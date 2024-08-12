@@ -1,40 +1,26 @@
-import { useQuery, type ApolloQueryResult } from '@apollo/client';
-import { Search, Sort, WarningAmberRounded } from '@mui/icons-material';
-import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
-import Loader from 'components/Loader/Loader';
-import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
-import dayjs from 'dayjs';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Button, Dropdown, Form } from 'react-bootstrap';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Dropdown, Form, Button, ProgressBar } from 'react-bootstrap';
+import styles from './Pledges.module.css';
 import { useTranslation } from 'react-i18next';
-import { Navigate, useParams } from 'react-router-dom';
-import { currencySymbols } from 'utils/currency';
-import styles from './FundCampaignPledge.module.css';
-import PledgeDeleteModal from './PledgeDeleteModal';
-import PledgeModal from './PledgeModal';
-import { Breadcrumbs, Link, Stack, Typography } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
+import { Search, Sort, WarningAmberRounded } from '@mui/icons-material';
+import useLocalStorage from 'utils/useLocalstorage';
+import type { InterfacePledgeInfo, InterfacePledger } from 'utils/interfaces';
+import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
+import { type ApolloQueryResult, useQuery } from '@apollo/client';
+import { USER_PLEDGES } from 'GraphQl/Queries/fundQueries';
+import Loader from 'components/Loader/Loader';
+import {
+  DataGrid,
+  type GridCellParams,
+  type GridColDef,
+} from '@mui/x-data-grid';
+import { Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
-import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
-import type {
-  InterfacePledgeInfo,
-  InterfacePledger,
-  InterfaceQueryFundCampaignsPledges,
-} from 'utils/interfaces';
-import ProgressBar from 'react-bootstrap/ProgressBar';
-
-interface InterfaceCampaignInfo {
-  name: string;
-  goal: number;
-  startDate: Date;
-  endDate: Date;
-  currency: string;
-}
-
-enum ModalState {
-  SAME = 'same',
-  DELETE = 'delete',
-}
+import dayjs from 'dayjs';
+import { currencySymbols } from 'utils/currency';
+import PledgeDeleteModal from 'screens/FundCampaignPledge/PledgeDeleteModal';
+import { Navigate, useParams } from 'react-router-dom';
+import PledgeModal from '../Campaigns/PledgeModal';
 
 const dataGridStyle = {
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
@@ -56,49 +42,46 @@ const dataGridStyle = {
     borderRadius: '0.5rem',
   },
 };
-const fundCampaignPledge = (): JSX.Element => {
+
+enum ModalState {
+  UPDATE = 'update',
+  DELETE = 'delete',
+}
+
+const Pledges = (): JSX.Element => {
   const { t } = useTranslation('translation', {
-    keyPrefix: 'pledges',
+    keyPrefix: 'userCampaigns',
   });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
-  const { fundCampaignId, orgId } = useParams();
-  if (!fundCampaignId || !orgId) {
+  const { getItem } = useLocalStorage();
+  const userId = getItem('userId');
+  const { orgId } = useParams();
+  if (!orgId || !userId) {
     return <Navigate to={'/'} replace />;
   }
 
-  const [campaignInfo, setCampaignInfo] = useState<InterfaceCampaignInfo>({
-    name: '',
-    goal: 0,
-    startDate: new Date(),
-    endDate: new Date(),
-    currency: '',
-  });
-
-  const [modalState, setModalState] = useState<{
-    [key in ModalState]: boolean;
-  }>({
-    [ModalState.SAME]: false,
-    [ModalState.DELETE]: false,
-  });
-
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
   const [extraUsers, setExtraUsers] = useState<InterfacePledger[]>([]);
-  const [progressIndicator, setProgressIndicator] = useState<
-    'raised' | 'pledged'
-  >('pledged');
-  const open = Boolean(anchor);
-  const id = open ? 'simple-popup' : undefined;
-  const [pledgeModalMode, setPledgeModalMode] = useState<'edit' | 'create'>(
-    'create',
-  );
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [pledges, setPledges] = useState<InterfacePledgeInfo[]>([]);
   const [pledge, setPledge] = useState<InterfacePledgeInfo | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
-
+  const [searchBy, setSearchBy] = useState<'pledgers' | 'campaigns'>(
+    'pledgers',
+  );
   const [sortBy, setSortBy] = useState<
     'amount_ASC' | 'amount_DESC' | 'endDate_ASC' | 'endDate_DESC'
   >('endDate_DESC');
+  const [modalState, setModalState] = useState<{
+    [key in ModalState]: boolean;
+  }>({
+    [ModalState.UPDATE]: false,
+    [ModalState.DELETE]: false,
+  });
+
+  const open = Boolean(anchor);
+  const id = open ? 'simple-popup' : undefined;
 
   const {
     data: pledgeData,
@@ -107,58 +90,25 @@ const fundCampaignPledge = (): JSX.Element => {
     refetch: refetchPledge,
   }: {
     data?: {
-      getFundraisingCampaigns: InterfaceQueryFundCampaignsPledges[];
+      getPledgesByUserId: InterfacePledgeInfo[];
     };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => Promise<
       ApolloQueryResult<{
-        getFundraisingCampaigns: InterfaceQueryFundCampaignsPledges[];
+        getPledgesByUserId: InterfacePledgeInfo[];
       }>
     >;
-  } = useQuery(FUND_CAMPAIGN_PLEDGE, {
+  } = useQuery(USER_PLEDGES, {
     variables: {
+      userId: userId,
       where: {
-        id: fundCampaignId,
+        firstName_contains: searchBy === 'pledgers' ? searchTerm : undefined,
+        name_contains: searchBy === 'campaigns' ? searchTerm : undefined,
       },
-      pledgeOrderBy: sortBy,
+      orderBy: sortBy,
     },
   });
-
-  const endDate = dayjs(
-    pledgeData?.getFundraisingCampaigns[0]?.endDate,
-    'YYYY-MM-DD',
-  ).toDate();
-
-  const { pledges, totalPledged } = useMemo(() => {
-    let totalPledged = 0;
-    const pledges =
-      pledgeData?.getFundraisingCampaigns[0].pledges.filter((pledge) => {
-        totalPledged += pledge.amount;
-        const search = searchTerm.toLowerCase();
-        return pledge.users.some((user) => {
-          const fullName = `${user.firstName} ${user.lastName}`;
-          return fullName.toLowerCase().includes(search);
-        });
-      }) ?? [];
-    return { pledges, totalPledged };
-  }, [pledgeData, searchTerm]);
-
-  useEffect(() => {
-    if (pledgeData) {
-      setCampaignInfo({
-        name: pledgeData.getFundraisingCampaigns[0].name,
-        goal: pledgeData.getFundraisingCampaigns[0].fundingGoal,
-        startDate: pledgeData.getFundraisingCampaigns[0].startDate,
-        endDate: pledgeData.getFundraisingCampaigns[0].endDate,
-        currency: pledgeData.getFundraisingCampaigns[0].currency,
-      });
-    }
-  }, [pledgeData]);
-
-  useEffect(() => {
-    refetchPledge();
-  }, [sortBy, refetchPledge]);
 
   const openModal = (modal: ModalState): void => {
     setModalState((prevState) => ({ ...prevState, [modal]: true }));
@@ -169,10 +119,9 @@ const fundCampaignPledge = (): JSX.Element => {
   };
 
   const handleOpenModal = useCallback(
-    (pledge: InterfacePledgeInfo | null, mode: 'edit' | 'create'): void => {
+    (pledge: InterfacePledgeInfo | null): void => {
       setPledge(pledge);
-      setPledgeModalMode(mode);
-      openModal(ModalState.SAME);
+      openModal(ModalState.UPDATE);
     },
     [openModal],
   );
@@ -192,6 +141,12 @@ const fundCampaignPledge = (): JSX.Element => {
     setExtraUsers(users);
     setAnchor(anchor ? null : event.currentTarget);
   };
+
+  useEffect(() => {
+    if (pledgeData) {
+      setPledges(pledgeData.getPledgesByUserId);
+    }
+  }, [pledgeData]);
 
   if (pledgeLoading) return <Loader size="xl" />;
   if (pledgeError) {
@@ -213,7 +168,7 @@ const fundCampaignPledge = (): JSX.Element => {
     {
       field: 'pledgers',
       headerName: 'Pledgers',
-      flex: 3,
+      flex: 4,
       minWidth: 50,
       align: 'left',
       headerAlign: 'center',
@@ -264,22 +219,21 @@ const fundCampaignPledge = (): JSX.Element => {
       },
     },
     {
-      field: 'startDate',
-      headerName: 'Start Date',
-      flex: 1,
-      minWidth: 150,
-      align: 'center',
-      headerAlign: 'center',
+      field: 'associatedCampaign',
+      headerName: 'Associated Campaign',
+      flex: 2,
+      minWidth: 100,
+      align: 'left',
+      headerAlign: 'left',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
-        return dayjs(params.row.startDate).format('DD/MM/YYYY');
+        return <>{params.row.campaign?.name}</>;
       },
     },
     {
       field: 'endDate',
       headerName: 'End Date',
-      minWidth: 150,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -293,7 +247,6 @@ const fundCampaignPledge = (): JSX.Element => {
       field: 'amount',
       headerName: 'Pledged',
       flex: 1,
-      minWidth: 100,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -318,7 +271,6 @@ const fundCampaignPledge = (): JSX.Element => {
       field: 'donated',
       headerName: 'Donated',
       flex: 1,
-      minWidth: 100,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -340,6 +292,29 @@ const fundCampaignPledge = (): JSX.Element => {
       },
     },
     {
+      field: 'progress',
+      headerName: 'Progress',
+      flex: 2,
+      minWidth: 100,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      renderCell: () => {
+        return (
+          <div className="d-flex justify-content-center align-items-center h-100">
+            <ProgressBar
+              now={200}
+              label={`${(200 / 1000) * 100}%`}
+              max={1000}
+              className={styles.progressBar}
+              data-testid="progressBar"
+            />
+          </div>
+        );
+      },
+    },
+    {
       field: 'action',
       headerName: 'Action',
       flex: 1,
@@ -356,9 +331,7 @@ const fundCampaignPledge = (): JSX.Element => {
               size="sm"
               className="me-2 rounded"
               data-testid="editPledgeBtn"
-              onClick={() =>
-                handleOpenModal(params.row as InterfacePledgeInfo, 'edit')
-              }
+              onClick={() => handleOpenModal(params.row as InterfacePledgeInfo)}
             >
               {' '}
               <i className="fa fa-edit" />
@@ -382,103 +355,17 @@ const fundCampaignPledge = (): JSX.Element => {
 
   return (
     <div>
-      <Breadcrumbs aria-label="breadcrumb" className="ms-1">
-        <Link
-          underline="hover"
-          color="inherit"
-          component="button"
-          onClick={
-            /* istanbul ignore next */
-            () => history.go(-2)
-          }
-        >
-          {tCommon('Funds')}
-        </Link>
-        <Link
-          underline="hover"
-          color="inherit"
-          component="button"
-          onClick={
-            /* istanbul ignore next */
-            () => history.back()
-          }
-        >
-          {t('campaigns')}
-        </Link>
-        <Typography color="text.primary">{t('pledges')}</Typography>
-      </Breadcrumbs>
-      <div className={styles.overviewContainer}>
-        <div className={styles.titleContainer}>
-          <h3>{campaignInfo?.name}</h3>
-          <span>
-            {t('endsOn')} {campaignInfo?.endDate.toString()}
-          </span>
-        </div>
-        <div className={styles.progressContainer}>
-          <div className="d-flex justify-content-center">
-            <div
-              className={`btn-group ${styles.toggleGroup}`}
-              role="group"
-              aria-label="Toggle between Pledged and Raised amounts"
-            >
-              <input
-                type="radio"
-                className={`btn-check ${styles.toggleBtn}`}
-                name="btnradio"
-                id="pledgedRadio"
-                checked={progressIndicator === 'pledged'}
-                onChange={() => setProgressIndicator('pledged')}
-              />
-              <label
-                className={`btn btn-outline-primary ${styles.toggleBtn}`}
-                htmlFor="pledgedRadio"
-              >
-                {t('pledgedAmount')}
-              </label>
-
-              <input
-                type="radio"
-                className={`btn-check`}
-                name="btnradio"
-                id="raisedRadio"
-                onChange={() => setProgressIndicator('raised')}
-                checked={progressIndicator === 'raised'}
-              />
-              <label
-                className={`btn btn-outline-primary ${styles.toggleBtn}`}
-                htmlFor="raisedRadio"
-              >
-                {t('raisedAmount')}
-              </label>
-            </div>
-          </div>
-
-          <div className={styles.progress}>
-            <ProgressBar
-              now={progressIndicator === 'pledged' ? totalPledged : 0}
-              label={`$${progressIndicator === 'pledged' ? totalPledged : 0}`}
-              max={campaignInfo?.goal}
-              style={{ height: '1.5rem', fontSize: '0.9rem' }}
-              data-testid="progressBar"
-            />
-            <div className={styles.endpoints}>
-              <div className={styles.start}>$0</div>
-              <div className={styles.end}>${campaignInfo?.goal}</div>
-            </div>
-          </div>
-        </div>
-      </div>
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
         <div className={`${styles.input} mb-1`}>
           <Form.Control
             type="name"
-            placeholder={t('searchPledger')}
+            placeholder={t('searchBy') + ' ' + t(searchBy)}
             autoComplete="off"
             required
             className={styles.inputField}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            data-testid="searchPledger"
+            data-testid="searchPledges"
           />
           <Button
             tabIndex={-1}
@@ -489,62 +376,80 @@ const fundCampaignPledge = (): JSX.Element => {
           </Button>
         </div>
         <div className="d-flex gap-4 mb-1">
-          <div className="d-flex justify-space-between">
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="success"
-                id="dropdown-basic"
-                className={styles.dropdown}
-                data-testid="filter"
-              >
-                <Sort className={'me-1'} />
-                {tCommon('sort')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => setSortBy('amount_ASC')}
-                  data-testid="amount_ASC"
-                >
-                  {t('lowestAmount')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSortBy('amount_DESC')}
-                  data-testid="amount_DESC"
-                >
-                  {t('highestAmount')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSortBy('endDate_DESC')}
-                  data-testid="endDate_DESC"
-                >
-                  {t('latestEndDate')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSortBy('endDate_ASC')}
-                  data-testid="endDate_ASC"
-                >
-                  {t('earliestEndDate')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
-          <div>
-            <Button
-              variant="success"
-              className={styles.orgFundCampaignButton}
-              disabled={endDate < new Date()}
-              onClick={() => handleOpenModal(null, 'create')}
-              data-testid="addPledgeBtn"
+          <Dropdown
+            aria-expanded="false"
+            title="SearchBy"
+            data-tesid="searchByToggle"
+            className="flex-fill"
+          >
+            <Dropdown.Toggle
+              data-testid="searchByDrpdwn"
+              variant="outline-success"
             >
-              <i className={'fa fa-plus me-2'} />
-              {t('addPledge')}
-            </Button>
-          </div>
+              <Sort className={'me-1'} />
+              {t('searchBy')}
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item
+                id="searchPledgers"
+                onClick={(): void => setSearchBy('pledgers')}
+                data-testid="pledgers"
+              >
+                {t('pledgers')}
+              </Dropdown.Item>
+              <Dropdown.Item
+                id="searchCampaigns"
+                onClick={(): void => setSearchBy('campaigns')}
+                data-testid="campaigns"
+              >
+                {t('campaigns')}
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+
+          <Dropdown>
+            <Dropdown.Toggle
+              variant="success"
+              id="dropdown-basic"
+              className={styles.dropdown}
+              data-testid="filter"
+            >
+              <Sort className={'me-1'} />
+              {tCommon('sort')}
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item
+                onClick={() => setSortBy('amount_ASC')}
+                data-testid="amount_ASC"
+              >
+                {t('lowestAmount')}
+              </Dropdown.Item>
+              <Dropdown.Item
+                onClick={() => setSortBy('amount_DESC')}
+                data-testid="amount_DESC"
+              >
+                {t('highestAmount')}
+              </Dropdown.Item>
+              <Dropdown.Item
+                onClick={() => setSortBy('endDate_DESC')}
+                data-testid="endDate_DESC"
+              >
+                {t('latestEndDate')}
+              </Dropdown.Item>
+              <Dropdown.Item
+                onClick={() => setSortBy('endDate_ASC')}
+                data-testid="endDate_ASC"
+              >
+                {t('earliestEndDate')}
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </div>
       </div>
+
       <DataGrid
         disableColumnMenu
-        columnBufferPx={7}
+        columnBufferPx={8}
         hideFooter={true}
         getRowId={(row) => row._id}
         slots={{
@@ -565,28 +470,30 @@ const fundCampaignPledge = (): JSX.Element => {
           endDate: pledge.endDate,
           amount: pledge.amount,
           currency: pledge.currency,
+          campaign: pledge.campaign,
         }))}
         columns={columns}
         isRowSelectable={() => false}
       />
-      {/* Update Pledge ModalState */}
+
       <PledgeModal
-        isOpen={modalState[ModalState.SAME]}
-        hide={() => closeModal(ModalState.SAME)}
-        campaignId={fundCampaignId}
-        orgId={orgId}
+        isOpen={modalState[ModalState.UPDATE]}
+        hide={() => closeModal(ModalState.UPDATE)}
+        campaignId={pledge?.campaign ? pledge?.campaign._id : ''}
+        userId={userId}
         pledge={pledge}
         refetchPledge={refetchPledge}
-        endDate={pledgeData?.getFundraisingCampaigns[0].endDate as Date}
-        mode={pledgeModalMode}
+        endDate={pledge?.campaign ? pledge?.campaign.endDate : new Date()}
+        mode={'edit'}
       />
-      {/* Delete Pledge ModalState */}
+
       <PledgeDeleteModal
         isOpen={modalState[ModalState.DELETE]}
         hide={() => closeModal(ModalState.DELETE)}
         pledge={pledge}
         refetchPledge={refetchPledge}
       />
+
       <BasePopup
         id={id}
         open={open}
@@ -628,4 +535,5 @@ const fundCampaignPledge = (): JSX.Element => {
     </div>
   );
 };
-export default fundCampaignPledge;
+
+export default Pledges;
