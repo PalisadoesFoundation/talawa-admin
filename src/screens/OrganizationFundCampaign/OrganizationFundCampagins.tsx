@@ -199,7 +199,6 @@ const orgFundCampaign = (): JSX.Element => {
       field: 'campaignName',
       headerName: 'Campaign Name',
       flex: 2,
-      minWidth: 150,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -220,7 +219,6 @@ const orgFundCampaign = (): JSX.Element => {
       field: 'startDate',
       headerName: 'Start Date',
       flex: 1,
-      minWidth: 150,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -232,7 +230,6 @@ const orgFundCampaign = (): JSX.Element => {
     {
       field: 'endDate',
       headerName: 'End Date',
-      minWidth: 150,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -267,6 +264,31 @@ const orgFundCampaign = (): JSX.Element => {
               ]
             }
             {params.row.campaign.fundingGoal}
+          </div>
+        );
+      },
+    },
+    {
+      field: 'fundingRaised',
+      headerName: 'Raised',
+      flex: 1,
+      minWidth: 100,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      renderCell: (params: GridCellParams) => {
+        return (
+          <div
+            className="d-flex justify-content-center fw-bold"
+            data-testid="goalCell"
+          >
+            {
+              currencySymbols[
+                params.row.campaign.currency as keyof typeof currencySymbols
+              ]
+            }
+            0
           </div>
         );
       },
@@ -428,7 +450,7 @@ const orgFundCampaign = (): JSX.Element => {
 
       <DataGrid
         disableColumnMenu
-        columnBufferPx={7}
+        columnBufferPx={8}
         hideFooter={true}
         getRowId={(row) => row.campaign._id}
         slots={{
@@ -456,6 +478,7 @@ const orgFundCampaign = (): JSX.Element => {
         hide={() => closeModal(ModalState.SAME)}
         refetchCampaign={refetchCampaign}
         fundId={fundId}
+        orgId={orgId}
         campaign={campaign}
         mode={campaignModalMode}
       />
