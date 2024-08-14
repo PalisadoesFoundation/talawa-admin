@@ -9,6 +9,7 @@ If you are new to contributing to open source, please read the Open Source Guide
 <!-- toc -->
 
 - [Code of Conduct](#code-of-conduct)
+- [Videos](#videos)
 - [Ways to Contribute](#ways-to-contribute)
   - [Our Development Process](#our-development-process)
     - [Issues](#issues)
