@@ -151,7 +151,6 @@ function OrganizationTags(): JSX.Element {
   }
 
   if (orgUserTagsError) {
-    console.log(orgUserTagsError.message);
     return (
       <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
         <div className={styles.errorMessage}>
