@@ -58,6 +58,7 @@ function OrganizationTags(): JSX.Element {
   const [before, setBefore] = useState<string | null | undefined>(null);
   const [first, setFirst] = useState<number | null>(5);
   const [last, setLast] = useState<number | null>(null);
+  const [tagSerialNumber, setTagSerialNumber] = useState(0);
 
   const [tagName, setTagName] = useState<string>('');
 
@@ -170,12 +171,14 @@ function OrganizationTags(): JSX.Element {
     setBefore(null);
     setFirst(5);
     setLast(null);
+    setTagSerialNumber(tagSerialNumber + 1);
   };
   const handlePreviousPage = (): void => {
     setBefore(orgUserTagsData?.organizations[0].userTags.pageInfo.startCursor);
     setAfter(null);
     setFirst(null);
     setLast(5);
+    setTagSerialNumber(tagSerialNumber - 1);
   };
 
   const userTagsList =
@@ -201,7 +204,7 @@ function OrganizationTags(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
-        return <div>{params.row.id}</div>;
+        return <div>{tagSerialNumber * 5 + params.row.id}</div>;
       },
     },
     {
