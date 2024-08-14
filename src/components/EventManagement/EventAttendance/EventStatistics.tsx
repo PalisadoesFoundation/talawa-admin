@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import {
   Modal,
   Button,
   ButtonGroup,
   Tooltip,
   OverlayTrigger,
+  Dropdown
 } from 'react-bootstrap';
 import 'chart.js/auto';
 import { Bar, Line } from 'react-chartjs-2';
@@ -14,7 +15,7 @@ import {
   ORGANIZATION_EVENT_CONNECTION_LIST,
 } from 'GraphQl/Queries/Queries';
 import { useLazyQuery } from '@apollo/client';
-import CollapsibleTable from './CollapsibleTable';
+import { exportToPDF, exportToCSV } from 'utils/chartToPdf';
 
 interface InterfaceAttendanceStatisticsModalProps {
   show: boolean;
@@ -47,6 +48,7 @@ interface InterfaceMember {
     }[];
   };
 }
+
 interface InterfaceEvent {
   _id: string;
   title: string;
@@ -83,22 +85,18 @@ interface InterfaceEvent {
 
 export const AttendanceStatisticsModal: React.FC<
   InterfaceAttendanceStatisticsModalProps
-> = ({ show, handleClose, statistics, memberData }): JSX.Element => {
+> = ({ show, handleClose, statistics, memberData, eventId }): JSX.Element => {
   const [selectedCategory, setSelectedCategory] = useState('Gender');
-  const { eventId, orgId } = useParams();
-  const handleCategoryChange = (category: string): void => {
-    setSelectedCategory(category);
-  };
-  const [clickedData, setClickedData] = useState<InterfaceMember[]>([]);
-  const [isTableCollapsed, setIsTableCollapsed] = useState(true);
-  const eventIdPrefix = eventId?.slice(0, 21).toString();
-  const [loadEventDetails, { data: eventData, refetch: eventRefetch }] =
-    useLazyQuery(EVENT_DETAILS);
+  const { orgId } = useParams();
+  const [currentPage, setCurrentPage] = useState(0);
+  const eventsPerPage = 10;
+
+  const eventIdPrefix = eventId?.slice(0, 10).toString();
+  const [loadEventDetails, { data: eventData }] = useLazyQuery(EVENT_DETAILS);
   const [loadRecurringEvents, { data: recurringData }] = useLazyQuery(
     ORGANIZATION_EVENT_CONNECTION_LIST,
   );
-  const [currentPage, setCurrentPage] = useState(0);
-  const eventsPerPage = 20;
+
   useEffect(() => {
     if (eventId) {
       loadEventDetails({ variables: { id: eventId } });
@@ -111,124 +109,186 @@ export const AttendanceStatisticsModal: React.FC<
         variables: {
           organization_id: orgId,
           id_starts_with: eventIdPrefix,
+          orderBy: 'startDate_DESC',
           first: eventsPerPage,
-          orderBy: 'endDate_ASC',
           skip: currentPage * eventsPerPage,
         },
       });
     }
   }, [eventIdPrefix, orgId, loadRecurringEvents, currentPage]);
 
-  useEffect(() => {
-    if (recurringData) {
-      console.log(
-        'Recurring events data:',
-        recurringData.eventsByOrganizationConnection,
-      );
-    }
-  }, [recurringData]);
   const isEventRecurring = eventData?.event?.recurring;
-  console.log('recurring data');
-  const attendeeCounts =
-    recurringData?.eventsByOrganizationConnection.map(
-      (event: InterfaceEvent) => event.attendees.length,
-    ) || [];
-  const eventLabels =
-    recurringData?.eventsByOrganizationConnection.map((event: InterfaceEvent) =>
-      new Date(event.endDate).toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-      }),
-    ) || [];
-  const maleCounts =
-    recurringData?.eventsByOrganizationConnection.map(
-      (event: InterfaceEvent) =>
-        event.attendees.filter((attendee) => attendee.gender === 'MALE').length,
-    ) || [];
-  const femaleCounts =
-    recurringData?.eventsByOrganizationConnection.map(
-      (event: InterfaceEvent) =>
-        event.attendees.filter((attendee) => attendee.gender === 'FEMALE')
-          .length,
-    ) || [];
-  const otherCounts =
-    recurringData?.eventsByOrganizationConnection.map(
-      (event: InterfaceEvent) =>
-        event.attendees.filter((attendee) => attendee.gender === 'OTHER')
-          .length,
-    ) || [];
 
-  const chartData = {
-    labels: eventLabels,
-    datasets: [
-      {
-        label: 'Attendee Count',
-        data: attendeeCounts,
-        fill: true,
-        borderColor: '#008000',
-      },
-      {
-        label: 'Male Attendees',
-        data: maleCounts,
-        fill: false,
-        borderColor: '#0000FF',
-      },
-      {
-        label: 'Female Attendees',
-        data: femaleCounts,
-        fill: false,
-        borderColor: '#FF1493',
-      },
-      {
-        label: 'Other Attendees',
-        data: otherCounts,
-        fill: false,
-        borderColor: '#FFD700',
-      },
-    ],
-  };
-  const handlePreviousPage = () => {
+  const attendeeCounts = useMemo(
+    () =>
+      recurringData?.eventsByOrganizationConnection.map(
+        (event: InterfaceEvent) => event.attendees.length,
+      ) || [],
+    [recurringData],
+  );
+  const eventLabels = useMemo(
+    () =>
+      recurringData?.eventsByOrganizationConnection.map(
+        (event: InterfaceEvent) =>
+          new Date(event.endDate).toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+          }),
+      ) || [],
+    [recurringData],
+  );
+  const maleCounts = useMemo(
+    () =>
+      recurringData?.eventsByOrganizationConnection.map(
+        (event: InterfaceEvent) =>
+          event.attendees.filter((attendee) => attendee.gender === 'MALE')
+            .length,
+      ) || [],
+    [recurringData],
+  );
+  const femaleCounts = useMemo(
+    () =>
+      recurringData?.eventsByOrganizationConnection.map(
+        (event: InterfaceEvent) =>
+          event.attendees.filter((attendee) => attendee.gender === 'FEMALE')
+            .length,
+      ) || [],
+    [recurringData],
+  );
+  const otherCounts = useMemo(
+    () =>
+      recurringData?.eventsByOrganizationConnection.map(
+        (event: InterfaceEvent) =>
+          event.attendees.filter((attendee) => attendee.gender === 'OTHER')
+            .length,
+      ) || [],
+    [recurringData],
+  );
+
+  const chartData = useMemo(
+    () => ({
+      labels: eventLabels,
+      datasets: [
+        {
+          label: 'Attendee Count',
+          data: attendeeCounts,
+          fill: true,
+          borderColor: '#008000',
+        },
+        {
+          label: 'Male Attendees',
+          data: maleCounts,
+          fill: false,
+          borderColor: '#0000FF',
+        },
+        {
+          label: 'Female Attendees',
+          data: femaleCounts,
+          fill: false,
+          borderColor: '#FF1493',
+        },
+        {
+          label: 'Other Attendees',
+          data: otherCounts,
+          fill: false,
+          borderColor: '#FFD700',
+        },
+      ],
+    }),
+    [eventLabels, attendeeCounts, maleCounts, femaleCounts, otherCounts],
+  );
+
+  const handlePreviousPage = useCallback(() => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
-  };
+  }, []);
 
-  const handleNextPage = () => {
+  const handleNextPage = useCallback(() => {
     setCurrentPage((prevPage) => prevPage + 1);
-  };
-  const categoryLabels =
-    selectedCategory === 'Gender'
-      ? ['Male', 'Female', 'Other']
-      : ['Under 18', '18-40', 'Over 40'];
-  const categoryData =
-    selectedCategory === 'Gender'
-      ? [
-          memberData.filter((member) => member.gender === 'MALE').length,
-          memberData.filter((member) => member.gender === 'FEMALE').length,
-          memberData.filter((member) => member.gender === 'OTHER').length,
-        ]
-      : [
-          memberData.filter(
-            (member) =>
-              new Date().getFullYear() -
-                new Date(member.birthDate).getFullYear() <
-              18,
-          ).length,
-          memberData.filter(
-            (member) =>
-              new Date().getFullYear() -
-                new Date(member.birthDate).getFullYear() >=
-                18 &&
-              new Date().getFullYear() -
-                new Date(member.birthDate).getFullYear() <=
-                40,
-          ).length,
-          memberData.filter(
-            (member) =>
-              new Date().getFullYear() -
-                new Date(member.birthDate).getFullYear() >
-              40,
-          ).length,
-        ];
+  }, []);
 
+  const categoryLabels = useMemo(
+    () =>
+      selectedCategory === 'Gender'
+        ? ['Male', 'Female', 'Other']
+        : ['Under 18', '18-40', 'Over 40'],
+    [selectedCategory],
+  );
+  const categoryData = useMemo(
+    () =>
+      selectedCategory === 'Gender'
+        ? [
+            memberData.filter((member) => member.gender === 'MALE').length,
+            memberData.filter((member) => member.gender === 'FEMALE').length,
+            memberData.filter((member) => member.gender === 'OTHER').length,
+          ]
+        : [
+            memberData.filter(
+              (member) =>
+                new Date().getFullYear() -
+                  new Date(member.birthDate).getFullYear() <
+                18,
+            ).length,
+            memberData.filter((member) => {
+              const age =
+                new Date().getFullYear() -
+                new Date(member.birthDate).getFullYear();
+              return age >= 18 && age <= 40;
+            }).length,
+            memberData.filter(
+              (member) =>
+                new Date().getFullYear() -
+                  new Date(member.birthDate).getFullYear() >
+                40,
+            ).length,
+          ],
+    [selectedCategory, memberData],
+  );
+
+  const handleCategoryChange = useCallback((category: string): void => {
+    setSelectedCategory(category);
+  }, []);
+  const exportTrendsToCSV = useCallback(() => {
+    const headers = [
+      'Date',
+      'Attendee Count',
+      'Male Attendees',
+      'Female Attendees',
+      'Other Attendees',
+    ];
+    const data = [
+      headers,
+      ...eventLabels.map((label, index) => [
+        label,
+        attendeeCounts[index],
+        maleCounts[index],
+        femaleCounts[index],
+        otherCounts[index],
+      ]),
+    ];
+    exportToCSV(data, 'attendance_trends.csv');
+  }, [eventLabels, attendeeCounts, maleCounts, femaleCounts, otherCounts]);
+
+  const exportDemographicsToCSV = useCallback(() => {
+    const headers = [selectedCategory, 'Count'];
+    const data = [
+      headers,
+      ...categoryLabels.map((label, index) => [label, categoryData[index]]),
+    ];
+    exportToCSV(data, `${selectedCategory.toLowerCase()}_demographics.csv`);
+  }, [selectedCategory, categoryLabels, categoryData]);
+  const handleExport = (eventKey: string | null) => {
+    switch (eventKey) {
+      case 'pdf':
+        exportToPDF('pdf-content', 'attendance_statistics');
+        break;
+      case 'trends':
+        exportTrendsToCSV();
+        break;
+      case 'demographics':
+        exportDemographicsToCSV();
+        break;
+    }
+  };
   return (
     <Modal
       show={show}
@@ -239,36 +299,42 @@ export const AttendanceStatisticsModal: React.FC<
       <Modal.Header closeButton className="bg-success">
         <Modal.Title className="text-white">Attendance Statistics</Modal.Title>
       </Modal.Header>
-      <Modal.Body className="w-100 d-flex flex-column align-items-center ">
+      <Modal.Body
+        className="w-100 d-flex flex-column align-items-center position-relative"
+        id="pdf-content"
+      >
+        <div
+          className="w-100 d-flex justify-content-end align-baseline position-absolute"
+          style={{ top: '10px', right: '15px', zIndex: 1 }}
+        >
+          <Dropdown onSelect={handleExport}>
+            <Dropdown.Toggle variant="success" id="dropdown-export" className='p-1'>
+               Export
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+              <Dropdown.Item eventKey="pdf">Export PDF</Dropdown.Item>
+              {isEventRecurring && (
+                <Dropdown.Item eventKey="trends">Export Trends CSV</Dropdown.Item>
+              )}
+              <Dropdown.Item eventKey="demographics">Export Demographics CSV</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
         <div className="w-100 border border-success d-flex flex-row rounded">
           {isEventRecurring ? (
             <div
-              className="text-success position-relative  align-items-center justify-content-center w-50 border-right-1 border-success"
+              className="text-success position-relative align-items-center justify-content-center w-50 border-right-1 border-success"
               style={{ borderRight: '1px solid green' }}
             >
               <Line
                 data={chartData}
                 options={{
-                  maintainAspectRatio: false,
                   responsive: true,
-                  onClick: (event, elements) => {
-                    if (elements.length > 0) {
-                      const index = elements[0].index;
-                      const eventDate = eventLabels[index];
-                      const eventAttendees =
-                        recurringData.eventsByOrganizationConnection[index]
-                          .attendees;
-                      setClickedData(eventAttendees);
-                      setIsTableCollapsed(false);
-                    }
-                  },
+                  maintainAspectRatio: false,
+                  scales: { y: { beginAtZero: true } },
                 }}
                 style={{ paddingBottom: '40px' }}
-              />
-              <CollapsibleTable
-                isTableCollapsed={isTableCollapsed}
-                clickedData={clickedData}
-                onToggle={() => setIsTableCollapsed(!isTableCollapsed)}
               />
               <div
                 className="px-1 border border-success w-30"
@@ -302,7 +368,6 @@ export const AttendanceStatisticsModal: React.FC<
                     />
                   </Button>
                 </OverlayTrigger>
-
                 <OverlayTrigger
                   placement="bottom"
                   overlay={<Tooltip id="tooltip-next">Next Page</Tooltip>}
@@ -345,18 +410,18 @@ export const AttendanceStatisticsModal: React.FC<
               </div>
             </div>
           )}
-          <div className="text-success position-relative d-flex flex-column align-items-center justify-content-start w-50 ">
-            <ButtonGroup className="mt-2 pb-2 p-1">
+          <div className="text-success position-relative d-flex flex-column align-items-center justify-content-start w-50">
+            <ButtonGroup className="mt-2 pb-2 p-2">
               <Button
                 variant={selectedCategory === 'Gender' ? 'success' : 'light'}
-                className="border border-success p-1 pl-2"
+                className="border border-success p-2 pl-2"
                 onClick={() => handleCategoryChange('Gender')}
               >
                 Gender
               </Button>
               <Button
                 variant={selectedCategory === 'Age' ? 'success' : 'light'}
-                className="border border-success border-left-0 p-1"
+                className="border border-success border-left-0 p-2"
                 onClick={() => handleCategoryChange('Age')}
               >
                 Age

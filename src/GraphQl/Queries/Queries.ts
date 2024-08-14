@@ -627,7 +627,6 @@ export const ORGANIZATION_EVENT_CONNECTION_LIST = gql`
           _id
           endDate
         }
-        
       }
       recurrenceRule {
         recurrenceStartDate

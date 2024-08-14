@@ -143,7 +143,7 @@ const EventManagement = (): JSX.Element => {
               case 'registrants':
                 return (
                   <div data-testid="eventRegistrantsTab">
-                    <EventRegistrantsWrapper eventId={eventId} orgId={orgId}/>
+                    <EventRegistrantsWrapper eventId={eventId} orgId={orgId} />
                   </div>
                 );
               case 'eventActions':
