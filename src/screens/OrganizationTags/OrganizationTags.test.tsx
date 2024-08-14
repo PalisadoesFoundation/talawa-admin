@@ -84,9 +84,6 @@ describe('Organisation Tags Page', () => {
 
   afterEach(() => {
     jest.clearAllMocks();
-  });
-
-  afterEach(() => {
     cleanup();
   });
 

@@ -44,13 +44,12 @@ const dataGridStyle = {
   },
 };
 
-function organizationTags(): JSX.Element {
+function OrganizationTags(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationTags',
   });
   const { t: tCommon } = useTranslation('common');
 
-  document.title = t('title');
   const [createTagModalIsOpen, setCreateTagModalIsOpen] = useState(false);
 
   const { orgId: currentUrl } = useParams();
@@ -188,9 +187,7 @@ function organizationTags(): JSX.Element {
   };
 
   const toggleRemoveUserTagModal = (): void => {
-    {
-      removeTagModalIsOpen && setRemoveUserTagId(null);
-    }
+    if (removeTagModalIsOpen) setRemoveUserTagId(null);
     setRemoveTagModalIsOpen(!removeTagModalIsOpen);
   };
 
@@ -508,4 +505,4 @@ function organizationTags(): JSX.Element {
   );
 }
 
-export default organizationTags;
+export default OrganizationTags;
