@@ -56,7 +56,7 @@ const mocks = [
 ];
 
 describe('EventAttendance Component', () => {
-  const renderComponent = (): any=>
+  const renderComponent = (): any =>
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <BrowserRouter>
@@ -78,7 +78,7 @@ describe('EventAttendance Component', () => {
       expect(screen.getByText('Attendance Statistics')).toBeInTheDocument();
       expect(screen.getByText('Sort')).toBeInTheDocument();
       expect(screen.getByPlaceholderText('Search event')).toBeInTheDocument();
-    }); 
+    });
   });
 
   test('displays correct table headers', async () => {

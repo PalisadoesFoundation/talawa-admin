@@ -392,7 +392,7 @@ function actionItemsContainer({
               value={
                 isActionItemCompleted
                   ? formState.preCompletionNotes
-                  : formState.postCompletionNotes ?? ''
+                  : (formState.postCompletionNotes ?? '')
               }
               onChange={(e): void => {
                 if (isActionItemCompleted) {

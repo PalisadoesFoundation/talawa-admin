@@ -37,8 +37,6 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
     return `${hours}:${minutes}`;
   }
 
-
-
   const showViewModal = (): void => {
     setEventModalIsOpen(true);
   };

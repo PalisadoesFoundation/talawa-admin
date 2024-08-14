@@ -162,6 +162,7 @@ function EventAttendance(): JSX.Element {
         statistics={{ totalMembers, membersAttended, attendanceRate }}
         handleClose={handleClose}
         memberData={filteredAttendees}
+        eventId={eventId}
       />
       <div className="border-1 border-top pb-4"></div>
       <div className="d-flex justify-content-between">
