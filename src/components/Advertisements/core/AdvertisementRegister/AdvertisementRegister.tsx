@@ -58,13 +58,13 @@ interface InterfaceFormStateTypes {
  * ```
  */
 function advertisementRegister({
-  formStatus,
+  formStatus = 'register',
   idEdit,
-  nameEdit,
-  typeEdit,
-  advertisementMediaEdit,
-  endDateEdit,
-  startDateEdit,
+  nameEdit = '',
+  typeEdit = 'BANNER',
+  advertisementMediaEdit = '',
+  endDateEdit = new Date(),
+  startDateEdit = new Date(),
   setAfter,
 }: InterfaceAddOnRegisterProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
@@ -164,7 +164,9 @@ function advertisementRegister({
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(
-          tErrors('errorOccurredCouldntCreate', { entity: 'advertisement' }) as string
+          tErrors('errorOccurredCouldntCreate', {
+            entity: 'advertisement',
+          }) as string,
         );
         console.log('error occured', error.message);
       }
@@ -429,16 +431,6 @@ function advertisementRegister({
     </>
   );
 }
-
-advertisementRegister.defaultProps = {
-  name: '',
-  advertisementMedia: '',
-  type: 'BANNER',
-  startDate: new Date(),
-  endDate: new Date(),
-  organizationId: '',
-  formStatus: 'register',
-};
 
 advertisementRegister.propTypes = {
   name: PropTypes.string,

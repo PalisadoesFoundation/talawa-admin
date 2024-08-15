@@ -309,7 +309,7 @@ function orgPost(): JSX.Element {
                 <Dropdown
                   aria-expanded="false"
                   title="SearchBy"
-                  data-tesid="sea"
+                  data-testid="sea"
                 >
                   <Dropdown.Toggle
                     data-testid="searchBy"

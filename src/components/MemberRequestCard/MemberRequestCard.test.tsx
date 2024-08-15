@@ -16,7 +16,7 @@ const MOCKS = [
   {
     request: {
       query: ACCEPT_ORGANIZATION_REQUEST_MUTATION,
-      variables: { id: '1' },
+      variables: { id: '123' },
     },
     result: {
       data: {
@@ -31,7 +31,7 @@ const MOCKS = [
   {
     request: {
       query: REJECT_ORGANIZATION_REQUEST_MUTATION,
-      variables: { userid: '1' },
+      variables: { userid: '234' },
     },
     result: {
       data: {
@@ -75,7 +75,7 @@ describe('Testing Member Request Card', () => {
         <I18nextProvider i18n={i18nForTest}>
           <MemberRequestCard {...props} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -105,7 +105,7 @@ describe('Testing Member Request Card', () => {
             email="johndoe@gmail.com"
           />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();

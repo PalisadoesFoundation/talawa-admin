@@ -62,7 +62,7 @@ describe('Testing User Password Update', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <UserPasswordUpdate id="1" />
+          <UserPasswordUpdate id="1" key="123" />
         </I18nextProvider>
       </MockedProvider>,
     );
@@ -97,7 +97,7 @@ describe('Testing User Password Update', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <UserPasswordUpdate id="1" />
+          <UserPasswordUpdate id="1" key="123" />
         </I18nextProvider>
       </MockedProvider>,
     );
@@ -112,7 +112,7 @@ describe('Testing User Password Update', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <UserPasswordUpdate id="1" />
+          <UserPasswordUpdate id="1" key="123" />
         </I18nextProvider>
       </MockedProvider>,
     );

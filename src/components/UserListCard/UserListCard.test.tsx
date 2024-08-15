@@ -14,7 +14,7 @@ const MOCKS = [
   {
     request: {
       query: ADD_ADMIN_MUTATION,
-      variables: { userid: '456', orgid: '123' }, // Fixed typo: `variables` instead of `variable`
+      variables: { userid: '784', orgid: '554' },
     },
     result: {
       data: {
