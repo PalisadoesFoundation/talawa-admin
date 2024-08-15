@@ -59,7 +59,7 @@ const renderOrganizationTags = (link: ApolloLink): RenderResult => {
             <Routes>
               <Route path="/orgtags/:orgId" element={<OrganizationTags />} />
               <Route
-                path="/orgtags/:orgId/orgtagdetails/:tagId"
+                path="/orgtags/:orgId/managetag/:tagId"
                 element={<div data-testid="tagDetailsScreen"></div>}
               />
               <Route

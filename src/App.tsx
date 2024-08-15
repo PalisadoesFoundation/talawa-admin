@@ -21,8 +21,7 @@ import OrganizaitionFundCampiagn from 'screens/OrganizationFundCampaign/Organiza
 import OrganizationFunds from 'screens/OrganizationFunds/OrganizationFunds';
 import OrganizationPeople from 'screens/OrganizationPeople/OrganizationPeople';
 import OrganizationTags from 'screens/OrganizationTags/OrganizationTags';
-// import OrganizationTagDetails from 'screens/OrgnanizationTagDetails/OrganizationTagDetails';
-// import OrganizationTagChildTags from 'screens/OrganizationTagChildTags/OrganizationTagChildTags';
+import ManageTag from 'screens/ManageTag/ManageTag';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import Requests from 'screens/Requests/Requests';
 import Users from 'screens/Users/Users';
@@ -149,14 +148,10 @@ function app(): JSX.Element {
             <Route path="/orgdash/:orgId" element={<OrganizationDashboard />} />
             <Route path="/orgpeople/:orgId" element={<OrganizationPeople />} />
             <Route path="/orgtags/:orgId" element={<OrganizationTags />} />
-            {/* <Route
-              path="orgtags/:orgId/orgtagdetails/:tagId"
-              element={<OrganizationTagDetails />}
-            />
             <Route
-              path="/orgtags/:orgId/orgtagChildTags/:tagId"
-              element={<OrganizationTagChildTags />}
-            /> */}
+              path="orgtags/:orgId/managetag/:tagId"
+              element={<ManageTag />}
+            />
             <Route path="/member/:orgId" element={<MemberDetail />} />
             <Route path="/orgevents/:orgId" element={<OrganizationEvents />} />
             <Route

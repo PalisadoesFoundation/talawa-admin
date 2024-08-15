@@ -218,6 +218,18 @@
     "removeUserTagMessage": "您确定要删除此标签吗？",
     "addChildTag": "添加子标签"
   },
+  "manageTag": {
+    "title": "标签详情",
+    "addPeopleToTag": "将人员添加到标签",
+    "viewProfile": "查看",
+    "noAssignedMembersFound": "没有分配成员",
+    "unassignUserTag": "取消分配标签",
+    "unassignUserTagMessage": "您想从此用户中删除标签吗？",
+    "successfullyUnassigned": "标签已从用户中取消分配",
+    "addPeople": "添加人员",
+    "add": "添加",
+    "subTags": "子标签"
+  },
   "userListCard": {
     "addAdmin": "添加管理员",
     "addedAsAdmin": "用户被添加为管理员。"
