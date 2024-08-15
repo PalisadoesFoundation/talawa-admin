@@ -19,9 +19,10 @@
 
 .contactNameContainer {
   display: flex;
-  flex-direction: column;
   padding: 0px 10px;
-  justify-content: center;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
 }
 
 .grey {
@@ -34,4 +35,14 @@
 
 .bgWhite {
   background-color: white;
+}
+
+.lastMessage {
+  margin-bottom: 0;
+  font-size: 14px;
+  color: rgba(163, 163, 163, 0.839);
+}
+
+.unseenMessagesCount {
+  border-radius: 50%;
 }

@@ -5,9 +5,10 @@ import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import styles from './ChatRoom.module.css';
 import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
 import { useTranslation } from 'react-i18next';
-import { CHAT_BY_ID } from 'GraphQl/Queries/PlugInQueries';
+import { CHATS_LIST, CHAT_BY_ID } from 'GraphQl/Queries/PlugInQueries';
 import { useMutation, useQuery, useSubscription } from '@apollo/client';
 import {
+  MARK_CHAT_MESSAGES_AS_READ,
   MESSAGE_SENT_TO_CHAT,
   SEND_MESSAGE_TO_CHAT,
 } from 'GraphQl/Mutations/OrganizationMutations';
@@ -82,7 +83,6 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
   const [chatSubtitle, setChatSubtitle] = useState('');
   const [newMessage, setNewMessage] = useState('');
   const [chat, setChat] = useState<Chat>();
-  const [groupChat, setGroupChat] = useState<Chat>();
   const [replyToDirectMessage, setReplyToDirectMessage] =
     useState<DirectMessage | null>(null);
 
@@ -100,6 +100,13 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     },
   });
 
+  const [markChatMessagesAsRead] = useMutation(MARK_CHAT_MESSAGES_AS_READ, {
+    variables: {
+      chatId: props.selectedContact,
+      userId: userId,
+    },
+  });
+
   const {
     data: chatData,
     loading: chatLoading,
@@ -110,8 +117,21 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     },
   });
 
+  const {
+    data: chatListData,
+    loading: chatListLoading,
+    refetch: chatListRefetch,
+  } = useQuery(CHATS_LIST, {
+    variables: {
+      id: userId,
+    },
+  });
+
   useEffect(() => {
     chatRefetch();
+    markChatMessagesAsRead().then(() => {
+      chatListRefetch();
+    });
   }, [props.selectedContact]);
 
   useEffect(() => {
@@ -142,13 +162,17 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     variables: {
       userId: userId,
     },
-    onData: (MessageSubscriptionData) => {
+    onData: async (MessageSubscriptionData) => {
       if (
         MessageSubscriptionData?.data.data.messageSentToChat &&
         MessageSubscriptionData?.data.data.messageSentToChat
           .chatMessageBelongsTo['_id'] == props.selectedContact
       ) {
+        await markChatMessagesAsRead();
         chatRefetch();
+        chatListRefetch();
+      } else {
+        chatListRefetch();
       }
     },
   });

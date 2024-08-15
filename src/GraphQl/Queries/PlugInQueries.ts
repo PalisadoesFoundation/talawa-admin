@@ -226,6 +226,7 @@ export const CHAT_BY_ID = gql`
         lastName
         email
       }
+      unseenMessagesByUsers
     }
   }
 `;
@@ -330,6 +331,7 @@ export const CHATS_LIST = gql`
         email
         image
       }
+      unseenMessagesByUsers
     }
   }
 `;

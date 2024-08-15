@@ -1,6 +1,8 @@
 import React from 'react';
 import styles from './ContactCard.module.css';
 import Avatar from 'components/Avatar/Avatar';
+import { Spa } from '@mui/icons-material';
+import { Badge } from 'react-bootstrap';
 
 interface InterfaceContactCardProps {
   id: string;
@@ -9,6 +11,8 @@ interface InterfaceContactCardProps {
   selectedContact: string;
   setSelectedContact: React.Dispatch<React.SetStateAction<string>>;
   isGroup: boolean;
+  unseenMessages: number;
+  lastMessage: any;
 }
 
 function contactCard(props: InterfaceContactCardProps): JSX.Element {
@@ -46,7 +50,15 @@ function contactCard(props: InterfaceContactCardProps): JSX.Element {
           />
         )}
         <div className={styles.contactNameContainer}>
-          <b>{props.title}</b>
+          <div>
+            <b>{props.title}</b>{' '}
+            <p className={styles.lastMessage}>{props.lastMessage}</p>
+          </div>
+          {!!props.unseenMessages && (
+            <Badge className={styles.unseenMessagesCount}>
+              {props.unseenMessages}
+            </Badge>
+          )}
         </div>
       </div>
     </>
