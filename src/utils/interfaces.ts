@@ -204,6 +204,31 @@ export interface InterfaceQueryOrganizationPostListItem {
   };
 }
 
+export interface InterfaceQueryOrganizationUserTags {
+  userTags: {
+    edges: {
+      node: {
+        _id: string;
+        name: string;
+        usersAssignedTo: {
+          totalCount: number;
+        };
+        childTags: {
+          totalCount: number;
+        };
+      };
+      cursor: string;
+    }[];
+    pageInfo: {
+      startCursor: string;
+      endCursor: string;
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+    };
+    totalCount: number;
+  };
+}
+
 export interface InterfaceQueryOrganizationAdvertisementListItem {
   advertisements: {
     edges: {

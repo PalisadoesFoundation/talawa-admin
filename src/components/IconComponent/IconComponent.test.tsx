@@ -15,6 +15,14 @@ const screenTestIdMap: Record<string, Record<string, string>> = {
     name: 'People',
     testId: 'Icon-Component-PeopleIcon',
   },
+  Tags: {
+    name: 'Tags',
+    testId: 'Icon-Component-TagsIcon',
+  },
+  Tag: {
+    name: 'Tag',
+    testId: 'Icon-Component-TagIcon',
+  },
   Requests: {
     name: 'Requests',
     testId: 'Icon-Component-RequestsIcon',
