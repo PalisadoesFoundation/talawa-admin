@@ -15,9 +15,7 @@ If you are new to contributing to open source, please read the Open Source Guide
     - [Issues](#issues)
     - [Pull Requests](#pull-requests)
     - [Branching Strategy](#branching-strategy)
-    - [Branching Strategy](#branching-strategy-1)
   - [Contributing Code](#contributing-code)
-  - [Contributing Code](#contributing-code-1)
 - [Internships](#internships)
 - [Community](#community)
 
@@ -64,15 +62,11 @@ Make sure you are following [issue report guidelines](ISSUE_GUIDELINES.md) avail
 
 #### Branching Strategy
 
-#### Branching Strategy
-
 For Talawa Admin, to simplify the development process, and to ensure that only stable code is pushed to the `master` branch, we had employed the following branching strategy:
 
 - Develop branch: For unstable code and bug fixing
 - Alpha-x.x.x: for stability teesting
 - Master: Where the stable production ready code lies
-
-### Contributing Code
 
 ### Contributing Code
 
