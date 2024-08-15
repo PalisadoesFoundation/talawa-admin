@@ -35,6 +35,15 @@ jest.mock('react-toastify', () => ({
   },
 }));
 
+//temporarily fixes react-beautiful-dnd droppable method's depreciation error
+//needs to be fixed in React 19
+jest.spyOn(console, 'error').mockImplementation((message) => {
+  if (message.includes('Support for defaultProps will be removed')) {
+    return;
+  }
+  console.error(message);
+});
+
 async function wait(ms = 100): Promise<void> {
   await act(async () => {
     return new Promise((resolve) => setTimeout(resolve, ms));

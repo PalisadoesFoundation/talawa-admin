@@ -112,7 +112,6 @@ describe('Testing Organization Post Card', () => {
   });
 
   const props = {
-    key: '123',
     id: '12',
     postTitle: 'Event Info',
     postInfo: 'Time change',
@@ -139,7 +138,7 @@ describe('Testing Organization Post Card', () => {
     const { getByAltText, getByTestId } = render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
+          <OrgPostCard postID="123" {...props} />
         </I18nextProvider>
       </MockedProvider>,
     );
@@ -152,7 +151,7 @@ describe('Testing Organization Post Card', () => {
     const { getByTestId } = render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
+          <OrgPostCard postID="123" {...props} />
         </I18nextProvider>
       </MockedProvider>,
     );
@@ -169,7 +168,7 @@ describe('Testing Organization Post Card', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
+          <OrgPostCard postID="123" {...props} />
         </I18nextProvider>
       </MockedProvider>,
     );
@@ -188,7 +187,7 @@ describe('Testing Organization Post Card', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
+          <OrgPostCard postID="123" {...props} />
         </I18nextProvider>
       </MockedProvider>,
     );
@@ -200,7 +199,7 @@ describe('Testing Organization Post Card', () => {
     const { getByTestId } = render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
+          <OrgPostCard postID="123" {...props} />
         </I18nextProvider>
       </MockedProvider>,
     );
@@ -269,7 +268,7 @@ describe('Testing Organization Post Card', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
+          <OrgPostCard postID="123" {...props} />
         </I18nextProvider>
       </MockedProvider>,
     );
@@ -289,7 +288,6 @@ describe('Testing Organization Post Card', () => {
   });
   test('Testing pin post functionality fail case', async () => {
     const props2 = {
-      key: '123',
       id: '',
       postTitle: 'Event Info',
       postInfo: 'Time change',
@@ -301,7 +299,7 @@ describe('Testing Organization Post Card', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props2} />
+          <OrgPostCard postID="123" {...props2} />
         </I18nextProvider>
       </MockedProvider>,
     );
@@ -317,7 +315,7 @@ describe('Testing Organization Post Card', () => {
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
-            <OrgPostCard {...props} />
+            <OrgPostCard postID="123" {...props} />
           </I18nextProvider>
         </BrowserRouter>
       </MockedProvider>,
@@ -340,7 +338,6 @@ describe('Testing Organization Post Card', () => {
   });
   test('Testing post delete functionality fail case', async () => {
     const props2 = {
-      key: '123',
       id: '',
       postTitle: 'Event Info',
       postInfo: 'Time change',
@@ -353,7 +350,7 @@ describe('Testing Organization Post Card', () => {
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
-            <OrgPostCard {...props2} />
+            <OrgPostCard postID="123" {...props2} />
           </I18nextProvider>
         </BrowserRouter>
       </MockedProvider>,
@@ -371,7 +368,7 @@ describe('Testing Organization Post Card', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
+          <OrgPostCard postID="123" {...props} />
         </I18nextProvider>
       </MockedProvider>,
     );
@@ -385,7 +382,7 @@ describe('Testing Organization Post Card', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
+          <OrgPostCard postID="123" {...props} />
         </I18nextProvider>
       </MockedProvider>,
     );
@@ -398,7 +395,6 @@ describe('Testing Organization Post Card', () => {
   });
   test('renders without "Read more" button when postInfo length is less than or equal to 43', () => {
     const props2 = {
-      key: '123',
       id: '12',
       postTitle: 'Event Info',
       postInfo: 'Lorem ipsum dolor sit amet',
@@ -410,7 +406,7 @@ describe('Testing Organization Post Card', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props2} />
+          <OrgPostCard postID="123" {...props2} />
         </I18nextProvider>
       </MockedProvider>,
     );
@@ -419,7 +415,7 @@ describe('Testing Organization Post Card', () => {
     const link2 = new StaticMockLink(MOCKS, true);
     render(
       <MockedProvider link={link2} addTypename={false}>
-        <OrgPostCard {...props} />
+        <OrgPostCard postID="123" {...props} />
       </MockedProvider>,
     );
     userEvent.click(screen.getByAltText('image'));
@@ -446,7 +442,7 @@ describe('Testing Organization Post Card', () => {
     const { getByTestId } = render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
+          <OrgPostCard postID="123" {...props} />
         </I18nextProvider>
       </MockedProvider>,
     );
@@ -480,7 +476,7 @@ describe('Testing Organization Post Card', () => {
     const { getByTestId } = render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
+          <OrgPostCard postID="123" {...props} />
         </I18nextProvider>
       </MockedProvider>,
     );
@@ -519,7 +515,7 @@ describe('Testing Organization Post Card', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
+          <OrgPostCard postID="123" {...props} />
         </I18nextProvider>
       </MockedProvider>,
     );
@@ -539,7 +535,7 @@ describe('Testing Organization Post Card', () => {
     const { getByTestId } = render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
+          <OrgPostCard postID="123" {...props} />
         </I18nextProvider>
       </MockedProvider>,
     );
@@ -558,7 +554,7 @@ describe('Testing Organization Post Card', () => {
     const { getByTestId } = render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
+          <OrgPostCard postID="123" {...props} />
         </I18nextProvider>
       </MockedProvider>,
     );
@@ -576,7 +572,6 @@ describe('Testing Organization Post Card', () => {
   });
   test('for rendering when no image and no video is available', async () => {
     const props2 = {
-      key: '123',
       id: '',
       postTitle: 'Event Info',
       postInfo: 'Time change',
@@ -589,7 +584,7 @@ describe('Testing Organization Post Card', () => {
     const { getByAltText } = render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props2} />
+          <OrgPostCard postID="123" {...props2} />
         </I18nextProvider>
       </MockedProvider>,
     );

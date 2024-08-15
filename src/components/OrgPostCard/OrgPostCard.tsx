@@ -16,7 +16,7 @@ import { errorHandler } from 'utils/errorHandler';
 import type { InterfacePostForm } from 'utils/interfaces';
 import styles from './OrgPostCard.module.css';
 interface InterfaceOrgPostCardProps {
-  key: string;
+  postID: string;
   id: string;
   postTitle: string;
   postInfo: string;
@@ -25,9 +25,13 @@ interface InterfaceOrgPostCardProps {
   postVideo: string | null;
   pinned: boolean;
 }
-export default function orgPostCard(
+export default function OrgPostCard(
   props: InterfaceOrgPostCardProps,
 ): JSX.Element {
+  const {
+    postID, // Destructure the key prop from props
+    // ...rest // Spread the rest of the props
+  } = props;
   const [postformState, setPostFormState] = useState<InterfacePostForm>({
     posttitle: '',
     postinfo: '',
@@ -68,12 +72,13 @@ export default function orgPostCard(
     }
   };
   const toggleShowEditModal = (): void => {
+    const { postTitle, postInfo, postPhoto, postVideo, pinned } = props;
     setPostFormState({
-      posttitle: props.postTitle,
-      postinfo: props.postInfo,
-      postphoto: props.postPhoto,
-      postvideo: props.postVideo,
-      pinned: props.pinned,
+      posttitle: postTitle,
+      postinfo: postInfo,
+      postphoto: postPhoto,
+      postvideo: postVideo,
+      pinned: pinned,
     });
     setPostPhotoUpdated(false);
     setPostVideoUpdated(false);
@@ -128,13 +133,14 @@ export default function orgPostCard(
     }
   }
   function handleEditModal(): void {
+    const { postPhoto, postVideo } = props;
     setModalVisible(false);
     setMenuVisible(false);
     setShowEditModal(true);
     setPostFormState({
       ...postformState,
-      postphoto: props.postPhoto,
-      postvideo: props.postVideo,
+      postphoto: postPhoto,
+      postvideo: postVideo,
     });
   }
   function handleDeleteModal(): void {
@@ -216,7 +222,7 @@ export default function orgPostCard(
   };
   return (
     <>
-      <div className="col-xl-4 col-lg-4 col-md-6" data-testid="post-item">
+      <div key={postID} className="col-xl-4 col-lg-4 col-md-6" data-testid="post-item">
         <div
           className={styles.cards}
           onClick={handleCardClick}
