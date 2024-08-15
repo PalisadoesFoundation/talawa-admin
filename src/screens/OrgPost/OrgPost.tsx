@@ -402,6 +402,7 @@ function orgPost(): JSX.Element {
                     postPhoto={datas?.imageUrl}
                     postVideo={datas?.videoUrl}
                     pinned={datas.pinned}
+                    postID={''}
                   />
                 ),
               )
