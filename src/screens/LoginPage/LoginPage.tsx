@@ -336,13 +336,7 @@ const loginPage = (): JSX.Element => {
     }
   };
 
-  if (
-    componentLoader ||
-    loginLoading ||
-    signinLoading ||
-    recaptchaLoading ||
-    loading
-  ) {
+  if (componentLoader || recaptchaLoading || loading) {
     return <Loader />;
   }
   const socialIconsList = socialMediaLinks.map(({ href, logo, tag }, index) =>
@@ -435,6 +429,7 @@ const loginPage = (): JSX.Element => {
                   <div className="position-relative">
                     <Form.Control
                       type="email"
+                      disabled={loginLoading}
                       placeholder={tCommon('enterEmail')}
                       required
                       value={formState.email}
@@ -471,6 +466,7 @@ const loginPage = (): JSX.Element => {
                           password: e.target.value,
                         });
                       }}
+                      disabled={loginLoading}
                       autoComplete="current-password"
                     />
                     <Button
@@ -510,6 +506,7 @@ const loginPage = (): JSX.Element => {
                     <></>
                   )}
                   <Button
+                    disabled={loginLoading}
                     type="submit"
                     className="mt-3 mb-3 w-100"
                     value="Login"
@@ -550,6 +547,7 @@ const loginPage = (): JSX.Element => {
                       <div>
                         <Form.Label>{tCommon('firstName')}</Form.Label>
                         <Form.Control
+                          disabled={signinLoading}
                           type="text"
                           id="signfirstname"
                           className="mb-3"
@@ -569,6 +567,7 @@ const loginPage = (): JSX.Element => {
                       <div>
                         <Form.Label>{tCommon('lastName')}</Form.Label>
                         <Form.Control
+                          disabled={signinLoading}
                           type="text"
                           id="signlastname"
                           className="mb-3"
@@ -589,6 +588,7 @@ const loginPage = (): JSX.Element => {
                     <Form.Label>{tCommon('email')}</Form.Label>
                     <div className="position-relative">
                       <Form.Control
+                        disabled={signinLoading}
                         type="email"
                         data-testid="signInEmail"
                         className="mb-3"
@@ -616,6 +616,7 @@ const loginPage = (): JSX.Element => {
                     <Form.Label>{tCommon('password')}</Form.Label>
                     <div className="position-relative">
                       <Form.Control
+                        disabled={signinLoading}
                         type={showPassword ? 'text' : 'password'}
                         data-testid="passwordField"
                         placeholder={tCommon('password')}
@@ -770,6 +771,7 @@ const loginPage = (): JSX.Element => {
                     <Form.Label>{tCommon('confirmPassword')}</Form.Label>
                     <div className="position-relative">
                       <Form.Control
+                        disabled={signinLoading}
                         type={showConfirmPassword ? 'text' : 'password'}
                         placeholder={tCommon('confirmPassword')}
                         required
@@ -851,6 +853,7 @@ const loginPage = (): JSX.Element => {
                     className="mt-4 w-100 mb-3"
                     value="Register"
                     data-testid="registrationBtn"
+                    disabled={signinLoading}
                   >
                     {tCommon('register')}
                   </Button>
