@@ -26,7 +26,6 @@ import { GET_COMMUNITY_DATA, ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import { ReactComponent as PalisadoesLogo } from 'assets/svgs/palisadoes.svg';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
-import Loader from 'components/Loader/Loader';
 import LoginPortalToggle from 'components/LoginPortalToggle/LoginPortalToggle';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -63,7 +62,6 @@ const loginPage = (): JSX.Element => {
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const [showTab, setShowTab] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
   const [role, setRole] = useState<'admin' | 'user'>('admin');
-  const [componentLoader, setComponentLoader] = useState(true);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [signformState, setSignFormState] = useState({
     signfirstName: '',
@@ -113,22 +111,20 @@ const loginPage = (): JSX.Element => {
     if (isLoggedIn == 'TRUE') {
       navigate(getItem('userId') !== null ? '/user/organizations' : '/orglist');
     }
-    setComponentLoader(false);
   }, []);
 
   const togglePassword = (): void => setShowPassword(!showPassword);
   const toggleConfirmPassword = (): void =>
     setShowConfirmPassword(!showConfirmPassword);
 
-  const { data, loading, refetch } = useQuery(GET_COMMUNITY_DATA);
+  const { data, refetch } = useQuery(GET_COMMUNITY_DATA);
   useEffect(() => {
     // refetching the data if the pre-login data updates
     refetch();
   }, [data]);
   const [login, { loading: loginLoading }] = useMutation(LOGIN_MUTATION);
   const [signup, { loading: signinLoading }] = useMutation(SIGNUP_MUTATION);
-  const [recaptcha, { loading: recaptchaLoading }] =
-    useMutation(RECAPTCHA_MUTATION);
+  const [recaptcha] = useMutation(RECAPTCHA_MUTATION);
   const { data: orgData } = useQuery(ORGANIZATION_LIST);
 
   useEffect(() => {
@@ -336,9 +332,6 @@ const loginPage = (): JSX.Element => {
     }
   };
 
-  if (componentLoader || recaptchaLoading || loading) {
-    return <Loader />;
-  }
   const socialIconsList = socialMediaLinks.map(({ href, logo, tag }, index) =>
     data?.getCommunityData ? (
       data.getCommunityData?.socialMediaUrls?.[tag] && (
