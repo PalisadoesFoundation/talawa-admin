@@ -219,7 +219,7 @@ export const MOCKS = [
   },
 ];
 
-export const MOCKS_ERROR = [
+export const MOCKS_ERROR_ASSIGNED_MEMBERS = [
   {
     request: {
       query: USER_TAGS_ASSIGNED_MEMBERS,
@@ -232,6 +232,51 @@ export const MOCKS_ERROR = [
       },
     },
     error: new Error('Mock Graphql Error'),
+  },
+  {
+    request: {
+      query: USER_TAG_ANCESTORS,
+      variables: {
+        id: '1',
+      },
+    },
+    result: {
+      data: {
+        getUserTagAncestors: [],
+      },
+    },
+  },
+];
+
+export const MOCKS_ERROR_TAG_ANCESTORS = [
+  {
+    request: {
+      query: USER_TAGS_ASSIGNED_MEMBERS,
+      variables: {
+        id: '1',
+        after: null,
+        before: null,
+        first: 5,
+        last: null,
+      },
+    },
+    result: {
+      data: {
+        getUserTag: {
+          name: 'tag1',
+          usersAssignedTo: {
+            edges: [],
+            pageInfo: {
+              startCursor: '1',
+              endCursor: '5',
+              hasNextPage: true,
+              hasPreviousPage: false,
+            },
+            totalCount: 6,
+          },
+        },
+      },
+    },
   },
   {
     request: {

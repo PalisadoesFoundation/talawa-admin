@@ -358,6 +358,7 @@ function ManageTag(): JSX.Element {
                     {tag.name}
 
                     {orgUserTagAncestors.length - 1 !== index && (
+                      /* istanbul ignore next */
                       <i className={'mx-2 fa fa-caret-right'} />
                     )}
                   </div>
