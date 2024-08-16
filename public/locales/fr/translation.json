@@ -200,6 +200,24 @@
     "organization": "Organisation",
     "invalidDetailsMessage": "Veuillez saisir des informations valides."
   },
+  "organizationTags": {
+    "title": "Étiquettes d'Organisation",
+    "createTag": "Créer une nouvelle étiquette",
+    "manageTag": "Gérer",
+    "editTag": "Modifier",
+    "removeTag": "Supprimer",
+    "tagDetails": "Détails de l'Étiquette",
+    "tagName": "Nom",
+    "tagType": "Type",
+    "tagNamePlaceholder": "Écrire le nom de l'étiquette",
+    "tagCreationSuccess": "Nouvelle étiquette créée avec succès",
+    "tagUpdationSuccess": "Étiquette mise à jour avec succès",
+    "tagRemovalSuccess": "Étiquette supprimée avec succès",
+    "noTagsFound": "Aucune étiquette trouvée",
+    "removeUserTag": "Supprimer l'Étiquette",
+    "removeUserTagMessage": "Voulez-vous supprimer cette étiquette ?",
+    "addChildTag": "Ajouter une Sous-Étiquette"
+  },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",
     "addedAsAdmin": "L'utilisateur est ajouté en tant qu'administrateur."
