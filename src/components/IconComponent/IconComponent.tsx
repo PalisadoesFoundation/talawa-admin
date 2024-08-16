@@ -14,6 +14,8 @@ import { ReactComponent as FundsIcon } from 'assets/svgs/funds.svg';
 import { ReactComponent as ListEventRegistrantsIcon } from 'assets/svgs/listEventRegistrants.svg';
 import { ReactComponent as OrganizationsIcon } from 'assets/svgs/organizations.svg';
 import { ReactComponent as PeopleIcon } from 'assets/svgs/people.svg';
+import { ReactComponent as TagsIcon } from 'assets/svgs/tags.svg';
+import { ReactComponent as TagIcon } from 'assets/svgs/tag.svg';
 import { ReactComponent as PluginsIcon } from 'assets/svgs/plugins.svg';
 import { ReactComponent as PostsIcon } from 'assets/svgs/posts.svg';
 import { ReactComponent as SettingsIcon } from 'assets/svgs/settings.svg';
@@ -49,6 +51,10 @@ const iconComponent = (props: InterfaceIconComponent): JSX.Element => {
       );
     case 'People':
       return <PeopleIcon {...props} data-testid="Icon-Component-PeopleIcon" />;
+    case 'Tags':
+      return <TagsIcon {...props} data-testid="Icon-Component-TagsIcon" />;
+    case 'Tag':
+      return <TagIcon {...props} data-testid="Icon-Component-TagIcon" />;
     case 'Requests':
       return (
         <RequestsIcon {...props} data-testid="Icon-Component-RequestsIcon" />

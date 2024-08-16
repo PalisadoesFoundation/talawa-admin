@@ -128,6 +128,7 @@ export default OrganizationScreen;
 const map: InterfaceMapType = {
   orgdash: 'dashboard',
   orgpeople: 'organizationPeople',
+  orgtags: 'organizationTags',
   requests: 'requests',
   orgads: 'advertisement',
   member: 'memberDetail',

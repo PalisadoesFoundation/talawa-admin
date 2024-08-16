@@ -200,6 +200,24 @@
     "organization": "संगठन",
     "invalidDetailsMessage": "कृपया वैध विवरण दर्ज करें."
   },
+  "organizationTags": {
+    "title": "संस्थान टैग",
+    "createTag": "नया टैग बनाएँ",
+    "manageTag": "प्रबंधित करें",
+    "editTag": "संपादित करें",
+    "removeTag": "हटाएँ",
+    "tagDetails": "टैग विवरण",
+    "tagName": "नाम",
+    "tagType": "प्रकार",
+    "tagNamePlaceholder": "टैग का नाम लिखें",
+    "tagCreationSuccess": "नई टैग सफलतापूर्वक बनाई गई",
+    "tagUpdationSuccess": "टैग सफलतापूर्वक अपडेट की गई",
+    "tagRemovalSuccess": "टैग सफलतापूर्वक हटाई गई",
+    "noTagsFound": "कोई टैग नहीं मिला",
+    "removeUserTag": "टैग हटाएँ",
+    "removeUserTagMessage": "क्या आप इस टैग को हटाना चाहते हैं?",
+    "addChildTag": "उप-टैग जोड़ें"
+  },
   "userListCard": {
     "addAdmin": "व्यवस्थापक जोड़ें",
     "addedAsAdmin": "उपयोगकर्ता को व्यवस्थापक के रूप में जोड़ा गया है."
