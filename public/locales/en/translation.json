@@ -710,6 +710,7 @@
     "createdOrganizations": "Created Organizations",
     "selectOrganization": "Select an organization",
     "searchUsers": "Search users",
+    "searchOrganizations": "Search organizations",
     "nothingToShow": "Nothing to show here.",
     "organizations": "Organizations"
   },

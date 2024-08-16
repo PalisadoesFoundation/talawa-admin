@@ -18,7 +18,13 @@ interface InterfacePropsInterface {
   ) => void;
 }
 
-const PaginationList = (props: InterfacePropsInterface): JSX.Element => {
+const PaginationList = ({
+  count,
+  rowsPerPage,
+  page,
+  onPageChange,
+  onRowsPerPageChange,
+}: InterfacePropsInterface): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'paginationList',
   });
@@ -34,24 +40,23 @@ const PaginationList = (props: InterfacePropsInterface): JSX.Element => {
           }}
           rowsPerPageOptions={[]}
           colSpan={5}
-          count={props.count}
-          rowsPerPage={props.rowsPerPage}
-          page={props.page}
+          count={count}
+          rowsPerPage={rowsPerPage}
+          page={page}
           SelectProps={{
             inputProps: {
               'aria-label': 'rows per page',
             },
             native: true,
           }}
-          onPageChange={props.onPageChange}
-          onRowsPerPageChange={props.onRowsPerPageChange}
+          onPageChange={onPageChange}
+          onRowsPerPageChange={onRowsPerPageChange}
           ActionsComponent={Pagination}
         />
       </Hidden>
       <Hidden smDown initialWidth={'lg'}>
         <TablePagination
           rowsPerPageOptions={[
-            -1,
             5,
             10,
             30,
@@ -59,17 +64,17 @@ const PaginationList = (props: InterfacePropsInterface): JSX.Element => {
           ]}
           data-testid={'table-pagination'}
           colSpan={4}
-          count={props.count}
-          rowsPerPage={props.rowsPerPage}
-          page={props.page}
+          count={count}
+          rowsPerPage={rowsPerPage}
+          page={page}
           SelectProps={{
             inputProps: {
               'aria-label': 'rows per page',
             },
             native: true,
           }}
-          onPageChange={props.onPageChange}
-          onRowsPerPageChange={props.onRowsPerPageChange}
+          onPageChange={onPageChange}
+          onRowsPerPageChange={onRowsPerPageChange}
           ActionsComponent={Pagination}
           labelRowsPerPage={t('rowsPerPage')}
         />
