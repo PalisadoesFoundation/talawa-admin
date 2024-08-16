@@ -34,6 +34,7 @@ import { socialMediaLinks } from '../../constants';
 import styles from './LoginPage.module.css';
 import type { InterfaceQueryOrganizationListObject } from 'utils/interfaces';
 import { Autocomplete, TextField } from '@mui/material';
+import useSession from 'utils/useSession';
 import i18n from 'utils/i18n';
 
 /**
@@ -42,6 +43,7 @@ import i18n from 'utils/i18n';
  * register form.
  *
  */
+
 const loginPage = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
   const { t: tCommon } = useTranslation('common');
@@ -112,6 +114,7 @@ const loginPage = (): JSX.Element => {
     const isLoggedIn = getItem('IsLoggedIn');
     if (isLoggedIn == 'TRUE') {
       navigate(getItem('userId') !== null ? '/user/organizations' : '/orglist');
+      startSession();
     }
     setComponentLoader(false);
   }, []);
@@ -130,7 +133,7 @@ const loginPage = (): JSX.Element => {
   const [recaptcha, { loading: recaptchaLoading }] =
     useMutation(RECAPTCHA_MUTATION);
   const { data: orgData } = useQuery(ORGANIZATION_LIST);
-
+  const { startSession } = useSession();
   useEffect(() => {
     if (orgData) {
       const options = orgData.organizations.map(
@@ -327,6 +330,7 @@ const loginPage = (): JSX.Element => {
         }
 
         navigate(role === 'admin' ? '/orglist' : '/user/organizations');
+        startSession();
       } else {
         toast.warn(tErrors('notFound'));
       }
