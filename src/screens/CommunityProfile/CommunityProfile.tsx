@@ -266,7 +266,7 @@ const CommunityProfile = (): JSX.Element => {
                     logo: '',
                   }));
                   const target = e.target as HTMLInputElement;
-                  const file = target.files && target.files[0];
+                  const file = target.files?.[0];
                   const base64file = file && (await convertToBase64(file));
                   setProfileVariable({
                     ...profileVariable,

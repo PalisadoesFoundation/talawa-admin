@@ -52,6 +52,7 @@ const useSession = (): UseSessionReturnType => {
       await revokeRefreshToken();
     } catch (error) {
       console.error('Error revoking refresh token:', error);
+      toast.error('Failed to revoke session. Please try again.');
     }
     localStorage.clear();
     endSession();

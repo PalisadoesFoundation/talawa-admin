@@ -22,10 +22,10 @@ import useSession from 'utils/useSession';
  * @returns JSX.Element - The profile dropdown menu.
  */
 const profileDropdown = (): JSX.Element => {
+  const { endSession } = useSession();
   const { t: tCommon } = useTranslation('common');
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
   const { getItem } = useLocalStorage();
-  const { endSession } = useSession();
   const superAdmin = getItem('SuperAdmin');
   const adminFor = getItem('AdminFor');
   const userRole = superAdmin

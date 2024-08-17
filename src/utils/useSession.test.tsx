@@ -3,7 +3,7 @@ import React from 'react';
 import { renderHook, act } from '@testing-library/react-hooks';
 import { MockedProvider } from '@apollo/client/testing';
 import { toast } from 'react-toastify';
-import useSession from 'utils/useSession';
+import useSession from './useSession';
 import { GET_COMMUNITY_SESSION_TIMEOUT_DATA } from 'GraphQl/Queries/Queries';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
@@ -33,6 +33,7 @@ const MOCKS = [
         },
       },
     },
+    delay: 1000,
   },
   {
     request: {
@@ -113,8 +114,6 @@ describe('useSession Hook', () => {
         </MockedProvider>
       ),
     });
-
-    await waitForNextUpdate();
 
     await act(async () => {
       await result.current.startSession();

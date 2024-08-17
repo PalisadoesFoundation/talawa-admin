@@ -41,7 +41,7 @@ const UpdateTimeout = (): JSX.Element => {
     const SessionTimeoutData: TimeoutDataType | undefined =
       data?.getCommunityData;
 
-    if (SessionTimeoutData) {
+    if (SessionTimeoutData && SessionTimeoutData.timeout !== null) {
       setCommunityTimeout(SessionTimeoutData.timeout);
       setTimeout(SessionTimeoutData.timeout);
     } else {
@@ -53,10 +53,15 @@ const UpdateTimeout = (): JSX.Element => {
   const handleOnChange = (
     e: Event | React.ChangeEvent<HTMLInputElement>,
   ): void => {
-    if ((e as React.ChangeEvent<HTMLInputElement>).target) {
-      setTimeout(
-        parseInt((e as React.ChangeEvent<HTMLInputElement>).target?.value),
-      );
+    if ('target' in e && e.target) {
+      const target = e.target as HTMLInputElement;
+      // Ensure the value is a number and not NaN
+      const value = parseInt(target.value, 10);
+      if (!isNaN(value)) {
+        setTimeout(value);
+      } else {
+        console.warn('Invalid timeout value:', target.value);
+      }
     }
   };
 
@@ -80,7 +85,7 @@ const UpdateTimeout = (): JSX.Element => {
   };
 
   if (loading) {
-    <Loader />;
+    return <Loader />;
   }
 
   return (
