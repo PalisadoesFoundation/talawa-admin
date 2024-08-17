@@ -6,12 +6,13 @@ import React from 'react';
 import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 
 import {
+  CREATE_EVENT_MUTATION,
   DELETE_EVENT_MUTATION,
   UPDATE_EVENT_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { weekdays, months } from './constants';
+import { weekdays, months, hours } from './constants';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 const eventData = [
@@ -54,7 +55,7 @@ const MOCKS = [
   {
     request: {
       query: DELETE_EVENT_MUTATION,
-      variable: { id: '123' },
+      variables: { id: '123' },
     },
     result: {
       data: {
@@ -67,7 +68,7 @@ const MOCKS = [
   {
     request: {
       query: UPDATE_EVENT_MUTATION,
-      variable: {
+      variables: {
         id: '123',
         title: 'Updated title',
         description: 'This is a new update',
@@ -84,6 +85,39 @@ const MOCKS = [
       data: {
         updateEvent: {
           _id: '1',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: CREATE_EVENT_MUTATION,
+      variables: {
+        title: 'New Event',
+        description: 'This is a new event',
+        recurring: false,
+        isPublic: true,
+        isRegisterable: true,
+        organizationId: 'org-id',
+        startDate: '2024-08-16',
+        endDate: '2024-08-16',
+        allDay: false,
+        startTime: '10:00',
+        endTime: '12:00',
+        location: 'Conference Room',
+        recurrenceStartDate: null,
+        recurrenceEndDate: null,
+        frequency: null,
+        weekDays: [],
+        count: null,
+        interval: null,
+        weekDayOccurenceInMonth: null,
+      },
+    },
+    result: {
+      data: {
+        createEvent: {
+          _id: 'new-event-id', // ID of the newly created event
         },
       },
     },
@@ -131,12 +165,16 @@ describe('Calendar', () => {
     // Find the element by its data-testid attribute
     const currentDateElement = getByTestId('current-date');
 
-    // Assert that the text content of the element matches the current month and year
+    // Get the current month and year
     const currentMonth = new Date().toLocaleString('default', {
       month: 'long',
     });
     const currentYear = new Date().getFullYear();
-    const expectedText = ` ${currentYear} ${currentMonth}`;
+
+    // Construct the expected text with correct template literals
+    const expectedText = `${currentYear} ${currentMonth}`;
+
+    // Assert that the text content matches the current month and year
     expect(currentDateElement.textContent).toContain(expectedText);
   });
 
@@ -249,165 +287,288 @@ describe('Calendar', () => {
       </Router>,
     );
   });
-  it('Today Cell is having correct styles', () => {
-    render(
-      <Router>
-        <MockedProvider addTypename={false} link={link}>
-          <I18nextProvider i18n={i18nForTest}>
-            <Calendar eventData={eventData} userRole={'SUPERADMIN'} />
-          </I18nextProvider>
-        </MockedProvider>
-        ,
-      </Router>,
-    );
-    // const todayDate = new Date().getDate();
-    // const todayElement = screen.getByText(todayDate.toString());
-    // expect(todayElement).toHaveClass(styles.day__today);
-  });
-  it('Today button should show today cell', () => {
-    render(
-      <Router>
-        <MockedProvider addTypename={false} link={link}>
-          <I18nextProvider i18n={i18nForTest}>
-            <Calendar eventData={eventData} userRole={'SUPERADMIN'} />
-          </I18nextProvider>
-        </MockedProvider>
-        ,
-      </Router>,
-    );
-    //Changing the month
-    const prevButton = screen.getByTestId('prevmonthordate');
-    fireEvent.click(prevButton);
 
-    // Clicking today button
-    const todayButton = screen.getByTestId('today');
-    fireEvent.click(todayButton);
-    // const todayCell = screen.getByText(new Date().getDate().toString());
-    // expect(todayCell).toHaveClass(styles.day__today);
-  });
-  it('Should handle window resize in day view', async () => {
-    const multipleEventData = [
-      {
-        _id: '1',
-        title: 'Event 1',
-        description: 'This is event 1',
-        startDate: new Date().toISOString().split('T')[0],
-        endDate: new Date().toISOString().split('T')[0],
-        location: 'Los Angeles',
-        startTime: null,
-        endTime: null,
-        allDay: true,
-        recurring: false,
-        recurrenceRule: null,
-        isRecurringEventException: false,
-        isPublic: true,
-        isRegisterable: true,
-      },
-      {
-        _id: '2',
-        title: 'Event 2',
-        description: 'This is event 2',
-        startDate: new Date().toISOString().split('T')[0],
-        endDate: new Date().toISOString().split('T')[0],
-        location: 'Los Angeles',
-        startTime: null,
-        endTime: null,
-        allDay: true,
-        recurring: false,
-        recurrenceRule: null,
-        isRecurringEventException: false,
-        isPublic: true,
-        isRegisterable: true,
-      },
-      {
-        _id: '3',
-        title: 'Event 3',
-        description: 'This is event 3',
-        startDate: new Date().toISOString().split('T')[0],
-        endDate: new Date().toISOString().split('T')[0],
-        location: 'Los Angeles',
-        startTime: '14:00',
-        endTime: '16:00',
-        allDay: false,
-        recurring: false,
-        recurrenceRule: null,
-        isRecurringEventException: false,
-        isPublic: true,
-        isRegisterable: true,
-      },
-      {
-        _id: '4',
-        title: 'Event 4',
-        description: 'This is event 4',
-        startDate: new Date().toISOString().split('T')[0],
-        endDate: new Date().toISOString().split('T')[0],
-        location: 'Los Angeles',
-        startTime: '14:00',
-        endTime: '16:00',
-        allDay: false,
-        recurring: false,
-        recurrenceRule: null,
-        isRecurringEventException: false,
-        isPublic: true,
-        isRegisterable: true,
-      },
-      {
-        _id: '5',
-        title: 'Event 5',
-        description: 'This is event 5',
-        startDate: new Date().toISOString().split('T')[0],
-        endDate: new Date().toISOString().split('T')[0],
-        location: 'Los Angeles',
-        startTime: '17:00',
-        endTime: '19:00',
-        allDay: false,
-        recurring: false,
-        recurrenceRule: null,
-        isRecurringEventException: false,
-        isPublic: true,
-        isRegisterable: true,
-      },
-    ];
+  it('Current time indicator has a border at the current time', async () => {
     render(
-      <Router>
-        <MockedProvider addTypename={false} link={link}>
-          <I18nextProvider i18n={i18nForTest}>
-            <Calendar eventData={multipleEventData} />
-          </I18nextProvider>
-        </MockedProvider>
-        ,
-      </Router>,
+      <I18nextProvider i18n={i18nForTest}>
+        <Calendar
+          eventData={[]}
+          userRole={'SUPERADMIN'}
+          viewType={ViewType.DAY}
+        />
+      </I18nextProvider>,
     );
-    await act(async () => {
-      window.innerWidth = 500;
-      window.dispatchEvent(new Event('resize'));
+
+    screen.debug();
+
+    const timeSlotElements = screen.getAllByText('02 AM');
+
+    const timeSlotElement = timeSlotElements[0];
+    expect(timeSlotElement).toBeInTheDocument();
+    expect(timeSlotElement).toHaveClass(' _calendar_hour_text_gtiyn_141');
+  });
+});
+
+it('displays all-day events in the correct section', async () => {
+  const allDayEvent = [
+    {
+      ...eventData[0],
+      allDay: true,
+    },
+  ];
+
+  render(
+    <MockedProvider>
+      <I18nextProvider i18n={i18nForTest}>
+        <Calendar eventData={allDayEvent} viewType={ViewType.DAY} />
+      </I18nextProvider>
+    </MockedProvider>,
+  );
+
+  await wait();
+  const allDaySection = screen.getByText('All Day');
+  expect(allDaySection).toBeInTheDocument();
+});
+
+it('Today button should show today cell', () => {
+  render(
+    <Router>
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Calendar eventData={eventData} userRole={'SUPERADMIN'} />
+        </I18nextProvider>
+      </MockedProvider>
+      ,
+    </Router>,
+  );
+  //Changing the month
+  const prevButton = screen.getByTestId('prevmonthordate');
+  fireEvent.click(prevButton);
+
+  // Clicking today button
+  const todayButton = screen.getByTestId('today');
+  fireEvent.click(todayButton);
+  // const todayCell = screen.getByText(new Date().getDate().toString());
+  // expect(todayCell).toHaveClass(styles.day__today);
+});
+it('Should handle window resize in day view', async () => {
+  const multipleEventData = [
+    {
+      _id: '1',
+      title: 'Event 1',
+      description: 'This is event 1',
+      startDate: new Date().toISOString().split('T')[0],
+      endDate: new Date().toISOString().split('T')[0],
+      location: 'Los Angeles',
+      startTime: null,
+      endTime: null,
+      allDay: true,
+      recurring: false,
+      recurrenceRule: null,
+      isRecurringEventException: false,
+      isPublic: true,
+      isRegisterable: true,
+    },
+    {
+      _id: '2',
+      title: 'Event 2',
+      description: 'This is event 2',
+      startDate: new Date().toISOString().split('T')[0],
+      endDate: new Date().toISOString().split('T')[0],
+      location: 'Los Angeles',
+      startTime: null,
+      endTime: null,
+      allDay: true,
+      recurring: false,
+      recurrenceRule: null,
+      isRecurringEventException: false,
+      isPublic: true,
+      isRegisterable: true,
+    },
+    {
+      _id: '3',
+      title: 'Event 3',
+      description: 'This is event 3',
+      startDate: new Date().toISOString().split('T')[0],
+      endDate: new Date().toISOString().split('T')[0],
+      location: 'Los Angeles',
+      startTime: '14:00',
+      endTime: '16:00',
+      allDay: false,
+      recurring: false,
+      recurrenceRule: null,
+      isRecurringEventException: false,
+      isPublic: true,
+      isRegisterable: true,
+    },
+    {
+      _id: '4',
+      title: 'Event 4',
+      description: 'This is event 4',
+      startDate: new Date().toISOString().split('T')[0],
+      endDate: new Date().toISOString().split('T')[0],
+      location: 'Los Angeles',
+      startTime: '14:00',
+      endTime: '16:00',
+      allDay: false,
+      recurring: false,
+      recurrenceRule: null,
+      isRecurringEventException: false,
+      isPublic: true,
+      isRegisterable: true,
+    },
+    {
+      _id: '5',
+      title: 'Event 5',
+      description: 'This is event 5',
+      startDate: new Date().toISOString().split('T')[0],
+      endDate: new Date().toISOString().split('T')[0],
+      location: 'Los Angeles',
+      startTime: '17:00',
+      endTime: '19:00',
+      allDay: false,
+      recurring: false,
+      recurrenceRule: null,
+      isRecurringEventException: false,
+      isPublic: true,
+      isRegisterable: true,
+    },
+  ];
+  render(
+    <Router>
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Calendar eventData={multipleEventData} />
+        </I18nextProvider>
+      </MockedProvider>
+      ,
+    </Router>,
+  );
+  await act(async () => {
+    window.innerWidth = 500;
+    window.dispatchEvent(new Event('resize'));
+  });
+});
+test('Handles window resize', () => {
+  render(
+    <Router>
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Calendar eventData={eventData} />
+        </I18nextProvider>
+      </MockedProvider>
+      ,
+    </Router>,
+  );
+
+  act(() => {
+    window.dispatchEvent(new Event('resize'));
+  });
+});
+
+it('renders year view', async () => {
+  render(<Calendar eventData={eventData} viewType={ViewType.YEAR} />);
+
+  await wait();
+  months.forEach((month) => {
+    const elements = screen.getAllByText(month);
+    elements.forEach((element) => {
+      expect(element).toBeInTheDocument();
     });
   });
-  test('Handles window resize', () => {
+});
+
+describe('Calendar Day View', () => {
+  const today = new Date();
+  const todayISO = today.toISOString().split('T')[0];
+
+  const eventData = [
+    {
+      _id: '1',
+      title: 'Morning Event',
+      description: 'This is a morning event',
+      startDate: todayISO,
+      endDate: todayISO,
+      location: 'New York',
+      startTime: '09:00',
+      endTime: '11:00',
+      allDay: false,
+      recurring: false,
+      recurrenceRule: null,
+      isRecurringEventException: false,
+      isPublic: true,
+      isRegisterable: true,
+    },
+    {
+      _id: '2',
+      title: 'EVENING Event',
+      description: 'This is a evening event',
+      startDate: todayISO,
+      endDate: todayISO,
+      location: 'New York',
+      startTime: '09:00',
+      endTime: '11:00',
+      allDay: false,
+      recurring: false,
+      recurrenceRule: null,
+      isRecurringEventException: false,
+      isPublic: true,
+      isRegisterable: true,
+    },
+  ];
+
+  it('renders events correctly in day view', () => {
     render(
       <Router>
-        <MockedProvider addTypename={false} link={link}>
-          <I18nextProvider i18n={i18nForTest}>
-            <Calendar eventData={eventData} />
-          </I18nextProvider>
-        </MockedProvider>
-        ,
+        <Calendar eventData={eventData} viewType={ViewType.DAY} />
       </Router>,
     );
 
-    act(() => {
-      window.dispatchEvent(new Event('resize'));
+    expect(screen.getByText('Today')).toBeInTheDocument();
+    const timeZoneElements = screen.getAllByText('UTC+05:30');
+    expect(timeZoneElements).toHaveLength(2);
+    timeZoneElements.forEach((element) => {
+      expect(element).toBeInTheDocument();
     });
-  });
-  it('renders year view', async () => {
-    render(<Calendar eventData={eventData} viewType={ViewType.YEAR} />);
 
-    await wait();
-    months.forEach((month) => {
-      const elements = screen.getAllByText(month);
+    hours.forEach((hour) => {
+      const elements = screen.getAllByText(hour);
       elements.forEach((element) => {
         expect(element).toBeInTheDocument();
       });
     });
+  });
+
+  it('should display newly created event in day view', async () => {
+    const newEvent = {
+      _id: 'new-event-id',
+      title: 'New Event',
+      description: 'This is a new event',
+      startDate: '2024-08-16',
+      endDate: '2024-08-16',
+      location: 'Conference Room',
+      startTime: '10:00',
+      endTime: '12:00',
+      allDay: false,
+      recurring: false,
+      recurrenceRule: null,
+      isRecurringEventException: false,
+      isPublic: true,
+      isRegisterable: true,
+    };
+    render(
+      <Router>
+        <MockedProvider addTypename={false} link={link}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Calendar eventData={[newEvent]} viewType={ViewType.DAY} />
+          </I18nextProvider>
+        </MockedProvider>
+      </Router>,
+    );
+
+    // Wait for the mock to resolve and the component to update
+    await wait();
+
+    expect(screen.getByText('New Event')).toBeInTheDocument();
   });
 });
