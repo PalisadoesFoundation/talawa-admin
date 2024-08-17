@@ -296,8 +296,6 @@ function AddMember(): JSX.Element {
         <Dropdown.Menu>
           <Dropdown.Item
             id="existingUser"
-            value="existingUser"
-            name="existingUser"
             data-testid="existingUser"
             onClick={(): void => {
               openAddUserModal();
@@ -309,14 +307,12 @@ function AddMember(): JSX.Element {
           </Dropdown.Item>
           <Dropdown.Item
             id="newUser"
-            value="newUser"
-            name="newUser"
             data-testid="newUser"
             onClick={(): void => {
               openCreateNewUserModal();
             }}
           >
-            <label htmlFor="memberslist">{translateOrgPeople('newUser')}</label>
+            {translateOrgPeople('newUser')}
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
