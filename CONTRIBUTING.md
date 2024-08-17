@@ -15,9 +15,8 @@ If you are new to contributing to open source, please read the Open Source Guide
     - [Issues](#issues)
     - [Pull Requests](#pull-requests)
     - [Branching Strategy](#branching-strategy)
-    - [Branching Strategy](#branching-strategy-1)
+    - [Conflict Resolution](#conflict-resolution)
   - [Contributing Code](#contributing-code)
-  - [Contributing Code](#contributing-code-1)
 - [Internships](#internships)
 - [Community](#community)
 
@@ -64,15 +63,19 @@ Make sure you are following [issue report guidelines](ISSUE_GUIDELINES.md) avail
 
 #### Branching Strategy
 
-#### Branching Strategy
+For Talawa Admin, we had employed the following branching strategy to simplify the development process and to ensure that only stable code is pushed to the `main` branch:
 
-For Talawa Admin, to simplify the development process, and to ensure that only stable code is pushed to the `master` branch, we had employed the following branching strategy:
+- `develop`: For unstable code and bug fixing
+- `main`: Where the stable production ready code lies. This is our default branch.
 
-- Develop branch: For unstable code and bug fixing
-- Alpha-x.x.x: for stability teesting
-- Master: Where the stable production ready code lies
+#### Conflict Resolution
 
-### Contributing Code
+When multiple developers are working on issues there is bound to be a conflict of interest (not to be confused with git conflicts) among issues, PRs or even ideas. Usually these conflicts are resolved in a **First Come First Serve** basis however there are certain exceptions to it.
+
+- In the cases where you feel your potential issues could be an extension or in conflict with other PRs it is important to ask the author of the PR in the slack channel or in their PRs or issues themselves why he/she did not write code for something that would require minimal effort on their part.
+- Based on basic courtesy, it is good practice to let the person who created a function apply and test that function when needed.
+- Last but not the least, communication is important make sure to talk to other contributors, in these cases, in slack channel or in a issue/PR thread.
+- As a last resort the Admins would be responsible for deciding how to resolve this conflict.
 
 ### Contributing Code
 
