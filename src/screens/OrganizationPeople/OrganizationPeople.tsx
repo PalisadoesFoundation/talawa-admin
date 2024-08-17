@@ -21,7 +21,6 @@ import { DataGrid } from '@mui/x-data-grid';
 import type { GridColDef, GridCellParams } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
-import { stringify } from 'querystring';
 
 /**
  * OrganizationPeople component is used to display the list of members, admins and users of the organization.
