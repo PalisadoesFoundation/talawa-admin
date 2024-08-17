@@ -5,7 +5,7 @@
   "type": "module",
   "config-overrides-path": "scripts/config-overrides",
   "dependencies": {
-    "@apollo/client": "^3.4.0-beta.19",
+    "@apollo/client": "^3.11.4",
     "@apollo/link-error": "^2.0.0-beta.3",
     "@apollo/react-testing": "^4.0.0",
     "@dicebear/collection": "^8.0.1",
