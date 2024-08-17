@@ -504,3 +504,8 @@ export interface InterfaceAgendaItemList {
 export interface InterfaceMapType {
   [key: string]: string;
 }
+
+export interface InterfaceCustomFieldData {
+  type: string;
+  name: string;
+}

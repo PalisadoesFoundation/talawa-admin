@@ -13,14 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import EditOrgCustomFieldDropDown from 'components/EditCustomFieldDropDown/EditCustomFieldDropDown';
 import { useParams } from 'react-router-dom';
-
-/**
- * Interface for custom field data
- */
-export interface InterfaceCustomFieldData {
-  type: string;
-  name: string;
-}
+import type { InterfaceCustomFieldData } from 'utils/interfaces';
 
 /**
  * Component for managing organization profile field settings
