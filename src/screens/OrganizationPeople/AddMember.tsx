@@ -312,7 +312,7 @@ function AddMember(): JSX.Element {
               openCreateNewUserModal();
             }}
           >
-            {translateOrgPeople('newUser')}
+            <label htmlFor="memberslist">{translateOrgPeople('newUser')}</label>
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
