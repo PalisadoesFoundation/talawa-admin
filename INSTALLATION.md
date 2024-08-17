@@ -167,6 +167,7 @@ This `.env` file must be populated with the following environment variables for 
 | ---------------------------- | ------------------------------------------------- |
 | PORT                         | Custom port for Talawa-Admin development purposes |
 | REACT_APP_TALAWA_URL         | URL endpoint for talawa-api graphql service       |
+|REACT_APP_BACKEND_WEBSOCKET_URL|URL endpoint for websocket end point              |
 | REACT_APP_USE_RECAPTCHA      | Whether you want to use reCAPTCHA or not          |
 | REACT_APP_RECAPTCHA_SITE_KEY | Site key for authentication using reCAPTCHA       |
 
@@ -194,6 +195,26 @@ If you are trying to access Talawa Admin from a remote host with the API URL con
 
 ```
 REACT_APP_TALAWA_URL="http://YOUR-REMOTE-ADDRESS:4000/graphql/"
+```
+
+## Setting up REACT_APP_BACKEND_WEBSOCKET_URL in .env file
+
+Add the endpoint for accessing talawa-api graphql service to the variable named `REACT_APP_BACKEND_WEBSOCKET_URL` in the `.env` file.
+
+```
+REACT_APP_BACKEND_WEBSOCKET_URL="ws://API-IP-ADRESS:4000/graphql/"
+```
+
+If you are a software developer working on your local system, then the URL would be:
+
+```
+REACT_APP_BACKEND_WEBSOCKET_URL="ws://localhost:4000/graphql/"
+```
+
+If you are trying to access Talawa Admin from a remote host with the API URL containing "localhost", You will have to change the API URL to
+
+```
+REACT_APP_BACKEND_WEBSOCKET_URL="ws://YOUR-REMOTE-ADDRESS:4000/graphql/"
 ```
 
 For additional details, please refer  the `How to Access the Talawa-API URL` section in the INSTALLATION.md file found in the [Talawa-API repo](https://github.com/PalisadoesFoundation/talawa-api).
