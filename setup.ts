@@ -6,6 +6,7 @@ import { askForTalawaApiUrl } from './src/setup/askForTalawaApiUrl/askForTalawaA
 import { checkEnvFile } from './src/setup/checkEnvFile/checkEnvFile';
 import { validateRecaptcha } from './src/setup/validateRecaptcha/validateRecaptcha';
 import { askForCustomPort } from './src/setup/askForCustomPort/askForCustomPort';
+import { askForTalawaWebsocketUrl } from 'setup/askForTalawaWebsocketUrl/askForTalawaWebsocketUrl';
 
 export async function main(): Promise<void> {
   console.log('Welcome to the Talawa Admin setup! 🚀');
@@ -43,6 +44,7 @@ export async function main(): Promise<void> {
     const port = dotenv.parse(fs.readFileSync('.env')).PORT;
 
     fs.readFile('.env', 'utf8', (err, data) => {
+      if (err) throw err;
       const result = data.replace(`PORT=${port}`, `PORT=${customPort}`);
       fs.writeFileSync('.env', result, 'utf8');
     });
@@ -52,22 +54,22 @@ export async function main(): Promise<void> {
 
   if (process.env.REACT_APP_TALAWA_URL) {
     console.log(
-      `\nEndpoint for accessing talawa-api graphql service already exists with the value:\n${process.env.REACT_APP_TALAWA_URL}`,
+      `\nEndpoint for accessing talawa-api GraphQL service already exists with the value:\n${process.env.REACT_APP_TALAWA_URL}`,
     );
     shouldSetTalawaApiUrl = true;
   } else {
     const { shouldSetTalawaApiUrlResponse } = await inquirer.prompt({
       type: 'confirm',
       name: 'shouldSetTalawaApiUrlResponse',
-      message: 'Would you like to set up talawa-api endpoint?',
+      message: 'Would you like to set up the Talawa API endpoint?',
       default: true,
     });
     shouldSetTalawaApiUrl = shouldSetTalawaApiUrlResponse;
   }
 
   if (shouldSetTalawaApiUrl) {
-    let isConnected = false,
-      endpoint = '';
+    let isConnected = false;
+    let endpoint = '';
 
     while (!isConnected) {
       endpoint = await askForTalawaApiUrl();
@@ -80,9 +82,51 @@ export async function main(): Promise<void> {
     ).REACT_APP_TALAWA_URL;
 
     fs.readFile('.env', 'utf8', (err, data) => {
+      if (err) throw err;
       const result = data.replace(
         `REACT_APP_TALAWA_URL=${talawaApiUrl}`,
         `REACT_APP_TALAWA_URL=${endpoint}`,
+      );
+      fs.writeFileSync('.env', result, 'utf8');
+    });
+  }
+
+  let shouldSetTalawaWebsocketUrl: boolean;
+
+  if (process.env.REACT_APP_BACKEND_WEBSOCKET_URL) {
+    console.log(
+      `\nEndpoint for accessing Talawa WebSocket service already exists with the value:\n${process.env.REACT_APP_BACKEND_WEBSOCKET_URL}`,
+    );
+    shouldSetTalawaWebsocketUrl = true;
+  } else {
+    const { shouldSetTalawaWebsocketUrlResponse } = await inquirer.prompt({
+      type: 'confirm',
+      name: 'shouldSetTalawaWebsocketUrlResponse',
+      message: 'Would you like to set up the Talawa WebSocket endpoint?',
+      default: true,
+    });
+    shouldSetTalawaWebsocketUrl = shouldSetTalawaWebsocketUrlResponse;
+  }
+
+  if (shouldSetTalawaWebsocketUrl) {
+    let isConnected = false;
+    let endpoint = '';
+
+    while (!isConnected) {
+      endpoint = await askForTalawaWebsocketUrl();
+      const url = new URL(endpoint);
+      isConnected = await checkConnection(url.origin);
+    }
+
+    const websocketUrl = dotenv.parse(
+      fs.readFileSync('.env'),
+    ).REACT_APP_BACKEND_WEBSOCKET_URL;
+
+    fs.readFile('.env', 'utf8', (err, data) => {
+      if (err) throw err;
+      const result = data.replace(
+        `REACT_APP_BACKEND_WEBSOCKET_URL=${websocketUrl}`,
+        `REACT_APP_BACKEND_WEBSOCKET_URL=${endpoint}`,
       );
       fs.writeFileSync('.env', result, 'utf8');
     });
@@ -101,6 +145,7 @@ export async function main(): Promise<void> {
     ).REACT_APP_USE_RECAPTCHA;
 
     fs.readFile('.env', 'utf8', (err, data) => {
+      if (err) throw err;
       const result = data.replace(
         `REACT_APP_USE_RECAPTCHA=${useRecaptcha}`,
         `REACT_APP_USE_RECAPTCHA=yes`,
@@ -143,6 +188,7 @@ export async function main(): Promise<void> {
       ).REACT_APP_RECAPTCHA_SITE_KEY;
 
       fs.readFile('.env', 'utf8', (err, data) => {
+        if (err) throw err;
         const result = data.replace(
           `REACT_APP_RECAPTCHA_SITE_KEY=${recaptchaSiteKey}`,
           `REACT_APP_RECAPTCHA_SITE_KEY=${recaptchaSiteKeyInput}`,
@@ -155,8 +201,7 @@ export async function main(): Promise<void> {
   const { shouldLogErrors } = await inquirer.prompt({
     type: 'confirm',
     name: 'shouldLogErrors',
-    message:
-      'Would you like to log Compiletime and Runtime errors in the console?',
+    message: 'Would you like to log compile-time and runtime errors in the console?',
     default: true,
   });
 
@@ -164,13 +209,14 @@ export async function main(): Promise<void> {
     const logErrors = dotenv.parse(fs.readFileSync('.env')).ALLOW_LOGS;
 
     fs.readFile('.env', 'utf8', (err, data) => {
+      if (err) throw err;
       const result = data.replace(`ALLOW_LOGS=${logErrors}`, 'ALLOW_LOGS=YES');
       fs.writeFileSync('.env', result, 'utf8');
     });
   }
 
   console.log(
-    '\nCongratulations! Talawa Admin has been successfully setup! 🥂🎉',
+    '\nCongratulations! Talawa Admin has been successfully set up! 🥂🎉',
   );
 }
 
