@@ -200,6 +200,36 @@
     "organization": "संगठन",
     "invalidDetailsMessage": "कृपया वैध विवरण दर्ज करें."
   },
+  "organizationTags": {
+    "title": "संस्थान टैग",
+    "createTag": "नया टैग बनाएँ",
+    "manageTag": "प्रबंधित करें",
+    "editTag": "संपादित करें",
+    "removeTag": "हटाएँ",
+    "tagDetails": "टैग विवरण",
+    "tagName": "नाम",
+    "tagType": "प्रकार",
+    "tagNamePlaceholder": "टैग का नाम लिखें",
+    "tagCreationSuccess": "नई टैग सफलतापूर्वक बनाई गई",
+    "tagUpdationSuccess": "टैग सफलतापूर्वक अपडेट की गई",
+    "tagRemovalSuccess": "टैग सफलतापूर्वक हटाई गई",
+    "noTagsFound": "कोई टैग नहीं मिला",
+    "removeUserTag": "टैग हटाएँ",
+    "removeUserTagMessage": "क्या आप इस टैग को हटाना चाहते हैं?",
+    "addChildTag": "उप-टैग जोड़ें"
+  },
+  "manageTag": {
+    "title": "टैग विवरण",
+    "addPeopleToTag": "टैग में लोगों को जोड़ें",
+    "viewProfile": "देखें",
+    "noAssignedMembersFound": "कोई असाइन किए गए सदस्य नहीं मिले",
+    "unassignUserTag": "टैग को हटाएं",
+    "unassignUserTagMessage": "क्या आप इस उपयोगकर्ता से टैग हटाना चाहते हैं?",
+    "successfullyUnassigned": "उपयोगकर्ता से टैग हटा दिया गया",
+    "addPeople": "लोगों को जोड़ें",
+    "add": "जोड़ें",
+    "subTags": "उप-टैग्स"
+  },
   "userListCard": {
     "addAdmin": "व्यवस्थापक जोड़ें",
     "addedAsAdmin": "उपयोगकर्ता को व्यवस्थापक के रूप में जोड़ा गया है."
@@ -683,6 +713,10 @@
     "addedAsAdmin": "उपयोगकर्ता को व्यवस्थापक के रूप में जोड़ा गया है.",
     "userType": "उपयोगकर्ता का प्रकार"
   },
+  "people": {
+    "title": "लोग",
+    "searchUsers": "उपयोगकर्ताओं को खोजें"
+  },
   "userLogin": {
     "login": "लॉग इन करें",
     "loginIntoYourAccount": "अपने खाते में लॉगिन करें",
@@ -740,9 +774,9 @@
     "postedOn": "{{date}} को पोस्ट किया गया"
   },
   "home": {
+    "title": "पदों",
     "posts": "पदों",
     "post": "डाक",
-    "title": "शीर्षक",
     "textArea": "आपके मन में कुछ है?",
     "feed": "खिलाना",
     "loading": "लोड हो रहा है",
@@ -812,6 +846,7 @@
     "enterState": "शहर या राज्य दर्ज करें"
   },
   "donate": {
+    "title": "दान",
     "donations": "दान",
     "searchDonations": "दान खोजें",
     "donateForThe": "के लिए दान करें",
@@ -822,6 +857,7 @@
     "success": "दान सफल"
   },
   "userEvents": {
+    "title": "ईवेंट",
     "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
     "createEvent": "कार्यक्रम बनाएँ",
     "recurring": "पुनरावर्ती ईवेंट",
@@ -980,5 +1016,26 @@
   "eventRegistrantsModal": {
     "errorAddingAttendee": "उपस्थित होने वाले को जोड़ने में त्रुटि",
     "errorRemovingAttendee": "उपस्थित होने वाले को हटाने में त्रुटि"
+  },
+  "userCampaigns": {
+    "title": "धन उगाहने के अभियान",
+    "searchByName": "नाम से खोजें...",
+    "searchBy": "द्वारा खोजें",
+    "pledgers": "प्रतिज्ञाकर्ता",
+    "campaigns": "अभियान",
+    "myPledges": "मेरी प्रतिज्ञाएँ",
+    "lowestAmount": "सबसे कम राशि",
+    "highestAmount": "सबसे अधिक राशि",
+    "lowestGoal": "सबसे कम लक्ष्य",
+    "highestGoal": "सबसे बड़ा लक्ष्य",
+    "latestEndDate": "सबसे अंतिम समाप्ति तिथि",
+    "earliestEndDate": "सबसे पहले समाप्ति तिथि",
+    "addPledge": "प्रतिज्ञा जोड़ें",
+    "viewPledges": "प्रतिज्ञाएँ देखें",
+    "noPledges": "कोई प्रतिज्ञा नहीं मिली",
+    "noCampaigns": "कोई अभियान नहीं मिला"
+  },
+  "userPledges": {
+    "title": "मेरी प्रतिज्ञाएँ"
   }
 }

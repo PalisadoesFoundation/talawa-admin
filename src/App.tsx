@@ -20,6 +20,8 @@ import OrganizationEvents from 'screens/OrganizationEvents/OrganizationEvents';
 import OrganizaitionFundCampiagn from 'screens/OrganizationFundCampaign/OrganizationFundCampagins';
 import OrganizationFunds from 'screens/OrganizationFunds/OrganizationFunds';
 import OrganizationPeople from 'screens/OrganizationPeople/OrganizationPeople';
+import OrganizationTags from 'screens/OrganizationTags/OrganizationTags';
+import ManageTag from 'screens/ManageTag/ManageTag';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import Requests from 'screens/Requests/Requests';
 import Users from 'screens/Users/Users';
@@ -45,6 +47,8 @@ import FundCampaignPledge from 'screens/FundCampaignPledge/FundCampaignPledge';
 import useLocalStorage from 'utils/useLocalstorage';
 import UserScreen from 'screens/UserPortal/UserScreen/UserScreen';
 import EventDashboardScreen from 'components/EventDashboardScreen/EventDashboardScreen';
+import Campaigns from 'screens/UserPortal/Campaigns/Campaigns';
+import Pledges from 'screens/UserPortal/Pledges/Pledges';
 
 const { setItem } = useLocalStorage();
 
@@ -143,6 +147,11 @@ function app(): JSX.Element {
             <Route path="/requests/:orgId" element={<Requests />} />
             <Route path="/orgdash/:orgId" element={<OrganizationDashboard />} />
             <Route path="/orgpeople/:orgId" element={<OrganizationPeople />} />
+            <Route path="/orgtags/:orgId" element={<OrganizationTags />} />
+            <Route
+              path="orgtags/:orgId/managetag/:tagId"
+              element={<ManageTag />}
+            />
             <Route path="/member/:orgId" element={<MemberDetail />} />
             <Route path="/orgevents/:orgId" element={<OrganizationEvents />} />
             <Route
@@ -188,6 +197,8 @@ function app(): JSX.Element {
             <Route path="/user/people/:orgId" element={<People />} />
             <Route path="/user/donate/:orgId" element={<Donate />} />
             <Route path="/user/events/:orgId" element={<Events />} />
+            <Route path="/user/campaigns/:orgId" element={<Campaigns />} />
+            <Route path="/user/pledges/:orgId" element={<Pledges />} />
             <Route element={<EventDashboardScreen />}>
               <Route
                 path="/user/event/:orgId/:eventId"

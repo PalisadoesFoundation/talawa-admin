@@ -200,6 +200,36 @@
     "organization": "Organisation",
     "invalidDetailsMessage": "Veuillez saisir des informations valides."
   },
+  "organizationTags": {
+    "title": "Étiquettes d'Organisation",
+    "createTag": "Créer une nouvelle étiquette",
+    "manageTag": "Gérer",
+    "editTag": "Modifier",
+    "removeTag": "Supprimer",
+    "tagDetails": "Détails de l'Étiquette",
+    "tagName": "Nom",
+    "tagType": "Type",
+    "tagNamePlaceholder": "Écrire le nom de l'étiquette",
+    "tagCreationSuccess": "Nouvelle étiquette créée avec succès",
+    "tagUpdationSuccess": "Étiquette mise à jour avec succès",
+    "tagRemovalSuccess": "Étiquette supprimée avec succès",
+    "noTagsFound": "Aucune étiquette trouvée",
+    "removeUserTag": "Supprimer l'Étiquette",
+    "removeUserTagMessage": "Voulez-vous supprimer cette étiquette ?",
+    "addChildTag": "Ajouter une Sous-Étiquette"
+  },
+  "manageTag": {
+    "title": "Détails de l'étiquette",
+    "addPeopleToTag": "Ajouter des personnes à l'étiquette",
+    "viewProfile": "Voir",
+    "noAssignedMembersFound": "Aucun membre assigné",
+    "unassignUserTag": "Désassigner l'étiquette",
+    "unassignUserTagMessage": "Voulez-vous retirer l'étiquette de cet utilisateur?",
+    "successfullyUnassigned": "Étiquette retirée de l'utilisateur",
+    "addPeople": "Ajouter des personnes",
+    "add": "Ajouter",
+    "subTags": "Sous-étiquettes"
+  },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",
     "addedAsAdmin": "L'utilisateur est ajouté en tant qu'administrateur."
@@ -683,6 +713,10 @@
     "addedAsAdmin": "L'utilisateur est ajouté en tant qu'administrateur.",
     "userType": "Type d'utilisateur"
   },
+  "people": {
+    "title": "Personnes",
+    "searchUsers": "Rechercher des utilisateurs"
+  },
   "userLogin": {
     "login": "Se connecter",
     "loginIntoYourAccount": "Connectez-vous à votre compte",
@@ -812,6 +846,7 @@
     "enterState": "Entrez la ville ou l'état"
   },
   "donate": {
+    "title": "Des dons",
     "donations": "Des dons",
     "searchDonations": "Rechercher des dons",
     "donateForThe": "Faites un don pour le",
@@ -822,6 +857,7 @@
     "success": "Don réussi"
   },
   "userEvents": {
+    "title": "Événements",
     "nothingToShow": "Rien à montrer ici.",
     "createEvent": "Créer un évènement",
     "recurring": "Événement récurrent",
@@ -980,5 +1016,26 @@
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Erreur lors de l'ajout du participant",
     "errorRemovingAttendee": "Erreur lors de la suppression du participant"
+  },
+  "userCampaigns": {
+    "title": "Campagnes de financement",
+    "searchByName": "Rechercher par nom...",
+    "searchBy": "Rechercher par",
+    "pledgers": "Contributeurs",
+    "campaigns": "Campagnes",
+    "myPledges": "Mes Promesses",
+    "lowestAmount": "Montant le plus bas",
+    "highestAmount": "Montant le plus élevé",
+    "lowestGoal": "Objectif le plus bas",
+    "highestGoal": "Objectif le plus élevé",
+    "latestEndDate": "Date de fin la plus tardive",
+    "earliestEndDate": "Date de fin la plus proche",
+    "addPledge": "Ajouter une promesse",
+    "viewPledges": "Voir les promesses",
+    "noPledges": "Aucune promesse trouvée",
+    "noCampaigns": "Aucune campagne trouvée"
+  },
+  "userPledges": {
+    "title": "Mes Promesses"
   }
 }
