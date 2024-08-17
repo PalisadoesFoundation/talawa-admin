@@ -229,6 +229,26 @@ export interface InterfaceQueryOrganizationUserTags {
   };
 }
 
+export interface InterfaceQueryUserTagsAssignedMembers {
+  name: string;
+  usersAssignedTo: {
+    edges: {
+      node: {
+        _id: string;
+        firstName: string;
+        lastName: string;
+      };
+    }[];
+    pageInfo: {
+      startCursor: string;
+      endCursor: string;
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+    };
+    totalCount: number;
+  };
+}
+
 export interface InterfaceQueryOrganizationAdvertisementListItem {
   advertisements: {
     edges: {

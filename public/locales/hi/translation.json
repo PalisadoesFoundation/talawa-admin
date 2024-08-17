@@ -218,6 +218,18 @@
     "removeUserTagMessage": "क्या आप इस टैग को हटाना चाहते हैं?",
     "addChildTag": "उप-टैग जोड़ें"
   },
+  "manageTag": {
+    "title": "टैग विवरण",
+    "addPeopleToTag": "टैग में लोगों को जोड़ें",
+    "viewProfile": "देखें",
+    "noAssignedMembersFound": "कोई असाइन किए गए सदस्य नहीं मिले",
+    "unassignUserTag": "टैग को हटाएं",
+    "unassignUserTagMessage": "क्या आप इस उपयोगकर्ता से टैग हटाना चाहते हैं?",
+    "successfullyUnassigned": "उपयोगकर्ता से टैग हटा दिया गया",
+    "addPeople": "लोगों को जोड़ें",
+    "add": "जोड़ें",
+    "subTags": "उप-टैग्स"
+  },
   "userListCard": {
     "addAdmin": "व्यवस्थापक जोड़ें",
     "addedAsAdmin": "उपयोगकर्ता को व्यवस्थापक के रूप में जोड़ा गया है."
