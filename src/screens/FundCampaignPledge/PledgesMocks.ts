@@ -22,7 +22,7 @@ export const MOCKS = [
           fundingGoal: 1000,
           currency: 'USD',
           startDate: '2024-01-01',
-          endDate: '2024-08-08',
+          endDate: '2034-08-08',
           pledges: [
             {
               _id: '1',
