@@ -312,6 +312,18 @@
     "removeUserTagMessage": "¿Desea eliminar esta etiqueta?",
     "addChildTag": "Agregar una Sub Etiqueta"
   },
+  "manageTag": {
+    "title": "Detalles de la Etiqueta",
+    "addPeopleToTag": "Agregar Personas a la etiqueta",
+    "viewProfile": "Ver",
+    "noAssignedMembersFound": "Ningún miembro asignado",
+    "unassignUserTag": "Desasignar Etiqueta",
+    "unassignUserTagMessage": "¿Desea eliminar la etiqueta de este usuario?",
+    "successfullyUnassigned": "Etiqueta desasignada del usuario",
+    "addPeople": "Agregar Personas",
+    "add": "Agregar",
+    "subTags": "Subetiquetas"
+  },
   "userListCard": {
     "joined": "Unido",
     "addAdmin": "Agregar administrador",

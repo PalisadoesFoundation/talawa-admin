@@ -29,35 +29,35 @@ export const CREATE_USER_TAG = gql`
   }
 `;
 
-// /**
-//  * GraphQL mutation to unsssign a user tag from a user.
-//  *
-//  * @param tagId - Id the tag.
-//  * @param userId - Id of the user to be unassigned.
-//  */
+/**
+ * GraphQL mutation to unsssign a user tag from a user.
+ *
+ * @param tagId - Id the tag.
+ * @param userId - Id of the user to be unassigned.
+ */
 
-// export const UNASSIGN_USER_TAG = gql`
-//   mutation UnassignUserTag($tagId: ID!, $userId: ID!) {
-//     unassignUserTag(input: { tagId: $tagId, userId: $userId }) {
-//       _id
-//     }
-//   }
-// `;
+export const UNASSIGN_USER_TAG = gql`
+  mutation UnassignUserTag($tagId: ID!, $userId: ID!) {
+    unassignUserTag(input: { tagId: $tagId, userId: $userId }) {
+      _id
+    }
+  }
+`;
 
-// /**
-//  * GraphQL mutation to update a user tag.
-//  *
-//  * @param tagId - Id the tag.
-//  * @param name - Updated name of the tag.
-//  */
+/**
+ * GraphQL mutation to update a user tag.
+ *
+ * @param tagId - Id the tag.
+ * @param name - Updated name of the tag.
+ */
 
-// export const UPDATE_USER_TAG = gql`
-//   mutation UpdateUserTag($tagId: ID!, $name: String!) {
-//     updateUserTag(input: { tagId: $tagId, name: $name }) {
-//       _id
-//     }
-//   }
-// `;
+export const UPDATE_USER_TAG = gql`
+  mutation UpdateUserTag($tagId: ID!, $name: String!) {
+    updateUserTag(input: { tagId: $tagId, name: $name }) {
+      _id
+    }
+  }
+`;
 
 /**
  * GraphQL mutation to remove a user tag.
