@@ -171,7 +171,7 @@ This `.env` file must be populated with the following environment variables for 
 | REACT_APP_USE_RECAPTCHA      | Whether you want to use reCAPTCHA or not          |
 | REACT_APP_RECAPTCHA_SITE_KEY | Site key for authentication using reCAPTCHA       |
 
-Follow the instructions from the sections [Setting up PORT in .env file](#setting-up-port-in-env-file), [Setting up REACT_APP_TALAWA_URL in .env file](#setting-up-REACT_APP_TALAWA_URL-in-env-file), [Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file](#setting-up-REACT_APP_RECAPTCHA_SITE_KEY-in-env-file) and [Setting up Compiletime and Runtime logs](#setting-up-compiletime-and-runtime-logs) to set up these environment variables.
+Follow the instructions from the sections [Setting up PORT in .env file](#setting-up-port-in-env-file), [Setting up REACT_APP_TALAWA_URL in .env file](#setting-up-REACT_APP_TALAWA_URL-in-env-file), [Setting up REACT_APP_BACKEND_WEBSOCKET_URL in .env file](#setting-up-REACT_APP_BACKEND_WEBSOCKET_URL-in-env-file), [Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file](#setting-up-REACT_APP_RECAPTCHA_SITE_KEY-in-env-file) and [Setting up Compiletime and Runtime logs](#setting-up-compiletime-and-runtime-logs) to set up these environment variables.
 
 ## Setting up PORT in .env file
 
