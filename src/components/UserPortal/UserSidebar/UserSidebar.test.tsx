@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import type { RenderResult } from '@testing-library/react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 
@@ -420,13 +420,19 @@ describe('Testing UserSidebar Component [User Portal]', () => {
 
     act(() => {
       orgsBtn[0].click();
+    });
+    await waitFor(() =>
       expect(
         orgsBtn[0].className.includes('text-white btn btn-success'),
-      ).toBeTruthy();
+      ).toBeTruthy(),
+    );
+    act(() => {
       settingsBtn.click();
+    });
+    await waitFor(() =>
       expect(
         settingsBtn.className.includes('text-white btn btn-success'),
-      ).toBeTruthy();
-    });
+      ).toBeTruthy(),
+    );
   });
 });
