@@ -54,7 +54,6 @@ function SubTags(): JSX.Element {
   });
   const { t: tCommon } = useTranslation('common');
 
-  document.title = t('title');
   const [addSubTagModalIsOpen, setAddSubTagModalIsOpen] = useState(false);
 
   const { orgId: currentUrl, tagId: parentTagId } = useParams();
