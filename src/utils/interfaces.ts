@@ -11,6 +11,8 @@ export interface InterfaceActionItemCategoryInfo {
   _id: string;
   name: string;
   isDisabled: boolean;
+  createdAt: string;
+  creator: { _id: string; firstName: string; lastName: string };
 }
 
 export interface InterfaceActionItemCategoryList {

@@ -25,9 +25,93 @@
 }
 
 .titlemodal {
-  color: var(--bs-gray-600);
+  color: #707070;
   font-weight: 600;
-  font-size: 20px;
-  margin-top: 1rem;
+  font-size: 32px;
   width: 65%;
+  margin-bottom: 0px;
+}
+
+.modalCloseBtn {
+  width: 40px;
+  height: 40px;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.noOutline input {
+  outline: none;
+}
+
+/* Header */
+/* Action Item Categories */
+.btnsContainer {
+  display: flex;
+  margin: 0.5rem 0 1.5rem 0;
+}
+
+.btnsContainer .input {
+  flex: 1;
+  min-width: 18rem;
+  position: relative;
+}
+
+.btnsContainer input {
+  outline: 1px solid var(--bs-gray-400);
+}
+
+.btnsContainer .input button {
+  width: 52px;
+}
+
+.inputField {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: white;
+  box-shadow: 0 1px 1px #31bb6b;
+}
+
+.inputField > button {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.dropdown {
+  background-color: white;
+  border: 1px solid #31bb6b;
+  position: relative;
+  display: inline-block;
+  color: #31bb6b;
+}
+
+/* Datagrid */
+.rowBackground {
+  background-color: var(--bs-white);
+  max-height: 120px;
+}
+
+.tableHeader {
+  background-color: var(--bs-primary);
+  color: var(--bs-white);
+  font-size: 1rem;
+}
+
+.chipIcon {
+  height: 0.9rem !important;
+}
+
+.chip {
+  height: 1.5rem !important;
+}
+
+.active {
+  background-color: #31bb6a50 !important;
+}
+
+.pending {
+  background-color: #ffd76950 !important;
+  color: #bb952bd0 !important;
+  border-color: #bb952bd0 !important;
 }

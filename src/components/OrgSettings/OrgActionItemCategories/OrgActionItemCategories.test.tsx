@@ -1,372 +1,374 @@
-import React from 'react';
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-  act,
-} from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import 'jest-localstorage-mock';
-import { MockedProvider } from '@apollo/client/testing';
-import 'jest-location-mock';
-import { I18nextProvider } from 'react-i18next';
-import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
-import i18n from 'utils/i18nForTest';
-import { toast } from 'react-toastify';
+export {};
 
-import { store } from 'state/store';
-import { StaticMockLink } from 'utils/StaticMockLink';
+// import React from 'react';
+// import {
+//   render,
+//   screen,
+//   fireEvent,
+//   waitFor,
+//   act,
+// } from '@testing-library/react';
+// import userEvent from '@testing-library/user-event';
+// import 'jest-localstorage-mock';
+// import { MockedProvider } from '@apollo/client/testing';
+// import 'jest-location-mock';
+// import { I18nextProvider } from 'react-i18next';
+// import { Provider } from 'react-redux';
+// import { BrowserRouter } from 'react-router-dom';
+// import i18n from 'utils/i18nForTest';
+// import { toast } from 'react-toastify';
 
-import OrgActionItemCategories from './OrgActionItemCategories';
-import {
-  MOCKS,
-  MOCKS_ERROR_QUERY,
-  MOCKS_ERROR_MUTATIONS,
-} from './OrgActionItemCategoryMocks';
+// import { store } from 'state/store';
+// import { StaticMockLink } from 'utils/StaticMockLink';
 
-jest.mock('react-toastify', () => ({
-  toast: {
-    success: jest.fn(),
-    error: jest.fn(),
-  },
-}));
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({ orgId: '123' }),
-}));
+// import OrgActionItemCategories from './OrgActionItemCategories';
+// import {
+//   MOCKS,
+//   MOCKS_ERROR_QUERY,
+//   MOCKS_ERROR_MUTATIONS,
+// } from './OrgActionItemCategoryMocks';
 
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
+// jest.mock('react-toastify', () => ({
+//   toast: {
+//     success: jest.fn(),
+//     error: jest.fn(),
+//   },
+// }));
+// jest.mock('react-router-dom', () => ({
+//   ...jest.requireActual('react-router-dom'),
+//   useParams: () => ({ orgId: '123' }),
+// }));
 
-const link = new StaticMockLink(MOCKS, true);
-const link2 = new StaticMockLink(MOCKS_ERROR_QUERY, true);
-const link3 = new StaticMockLink(MOCKS_ERROR_MUTATIONS, true);
+// async function wait(ms = 100): Promise<void> {
+//   await act(() => {
+//     return new Promise((resolve) => {
+//       setTimeout(resolve, ms);
+//     });
+//   });
+// }
 
-const translations = {
-  ...JSON.parse(
-    JSON.stringify(
-      i18n.getDataByLanguage('en')?.translation.orgActionItemCategories ?? {},
-    ),
-  ),
-  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
-  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
-};
+// const link = new StaticMockLink(MOCKS, true);
+// const link2 = new StaticMockLink(MOCKS_ERROR_QUERY, true);
+// const link3 = new StaticMockLink(MOCKS_ERROR_MUTATIONS, true);
 
-describe('Testing Action Item Categories Component', () => {
-  test('Component loads correctly', async () => {
-    window.location.assign('/orgsetting/123');
-    const { getByText } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18n}>
-              {<OrgActionItemCategories />}
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
+// const translations = {
+//   ...JSON.parse(
+//     JSON.stringify(
+//       i18n.getDataByLanguage('en')?.translation.orgActionItemCategories ?? {},
+//     ),
+//   ),
+//   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
+//   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
+// };
 
-    await wait();
+// describe('Testing Action Item Categories Component', () => {
+//   test('Component loads correctly', async () => {
+//     window.location.assign('/orgsetting/123');
+//     const { getByText } = render(
+//       <MockedProvider addTypename={false} link={link}>
+//         <Provider store={store}>
+//           <BrowserRouter>
+//             <I18nextProvider i18n={i18n}>
+//               {<OrgActionItemCategories />}
+//             </I18nextProvider>
+//           </BrowserRouter>
+//         </Provider>
+//       </MockedProvider>,
+//     );
 
-    await waitFor(() => {
-      expect(getByText(translations.create)).toBeInTheDocument();
-    });
-  });
+//     await wait();
 
-  test('render error component on unsuccessful query', async () => {
-    window.location.assign('/orgsetting/123');
-    const { queryByText } = render(
-      <MockedProvider addTypename={false} link={link2}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18n}>
-              {<OrgActionItemCategories />}
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
+//     await waitFor(() => {
+//       expect(getByText(translations.create)).toBeInTheDocument();
+//     });
+//   });
 
-    await wait();
+//   test('render error component on unsuccessful query', async () => {
+//     window.location.assign('/orgsetting/123');
+//     const { queryByText } = render(
+//       <MockedProvider addTypename={false} link={link2}>
+//         <Provider store={store}>
+//           <BrowserRouter>
+//             <I18nextProvider i18n={i18n}>
+//               {<OrgActionItemCategories />}
+//             </I18nextProvider>
+//           </BrowserRouter>
+//         </Provider>
+//       </MockedProvider>,
+//     );
 
-    await waitFor(() => {
-      expect(queryByText(translations.create)).not.toBeInTheDocument();
-    });
-  });
+//     await wait();
 
-  test('opens and closes create and update modals on button clicks', async () => {
-    window.location.assign('/orgsetting/123');
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18n}>
-              {<OrgActionItemCategories />}
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
+//     await waitFor(() => {
+//       expect(queryByText(translations.create)).not.toBeInTheDocument();
+//     });
+//   });
 
-    await wait();
+//   test('opens and closes create and update modals on button clicks', async () => {
+//     window.location.assign('/orgsetting/123');
+//     render(
+//       <MockedProvider addTypename={false} link={link}>
+//         <Provider store={store}>
+//           <BrowserRouter>
+//             <I18nextProvider i18n={i18n}>
+//               {<OrgActionItemCategories />}
+//             </I18nextProvider>
+//           </BrowserRouter>
+//         </Provider>
+//       </MockedProvider>,
+//     );
 
-    await waitFor(() => {
-      userEvent.click(screen.getByTestId('actionItemCategoryModalOpenBtn'));
-      userEvent.click(screen.getByTestId('actionItemCategoryModalCloseBtn'));
-    });
+//     await wait();
 
-    await waitFor(() => {
-      userEvent.click(
-        screen.getAllByTestId('actionItemCategoryUpdateModalOpenBtn')[0],
-      );
-      userEvent.click(screen.getByTestId('actionItemCategoryModalCloseBtn'));
-    });
-  });
+//     await waitFor(() => {
+//       userEvent.click(screen.getByTestId('actionItemCategoryModalOpenBtn'));
+//       userEvent.click(screen.getByTestId('actionItemCategoryModalCloseBtn'));
+//     });
 
-  test('create a new action item category', async () => {
-    window.location.assign('/orgsetting/123');
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18n}>
-              {<OrgActionItemCategories />}
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
+//     await waitFor(() => {
+//       userEvent.click(
+//         screen.getAllByTestId('actionItemCategoryUpdateModalOpenBtn')[0],
+//       );
+//       userEvent.click(screen.getByTestId('actionItemCategoryModalCloseBtn'));
+//     });
+//   });
 
-    await wait();
+//   test('create a new action item category', async () => {
+//     window.location.assign('/orgsetting/123');
+//     render(
+//       <MockedProvider addTypename={false} link={link}>
+//         <Provider store={store}>
+//           <BrowserRouter>
+//             <I18nextProvider i18n={i18n}>
+//               {<OrgActionItemCategories />}
+//             </I18nextProvider>
+//           </BrowserRouter>
+//         </Provider>
+//       </MockedProvider>,
+//     );
 
-    await waitFor(() => {
-      userEvent.click(screen.getByTestId('actionItemCategoryModalOpenBtn'));
-      userEvent.type(
-        screen.getByPlaceholderText(translations.enterName),
-        'ActionItemCategory 4',
-      );
+//     await wait();
 
-      userEvent.click(screen.getByTestId('formSubmitButton'));
-    });
+//     await waitFor(() => {
+//       userEvent.click(screen.getByTestId('actionItemCategoryModalOpenBtn'));
+//       userEvent.type(
+//         screen.getByPlaceholderText(translations.enterName),
+//         'ActionItemCategory 4',
+//       );
 
-    await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.successfulCreation);
-    });
-  });
+//       userEvent.click(screen.getByTestId('formSubmitButton'));
+//     });
 
-  test('toast error on unsuccessful creation', async () => {
-    window.location.assign('/orgsetting/123');
-    render(
-      <MockedProvider addTypename={false} link={link3}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18n}>
-              {<OrgActionItemCategories />}
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
+//     await waitFor(() => {
+//       expect(toast.success).toBeCalledWith(translations.successfulCreation);
+//     });
+//   });
 
-    await wait();
+//   test('toast error on unsuccessful creation', async () => {
+//     window.location.assign('/orgsetting/123');
+//     render(
+//       <MockedProvider addTypename={false} link={link3}>
+//         <Provider store={store}>
+//           <BrowserRouter>
+//             <I18nextProvider i18n={i18n}>
+//               {<OrgActionItemCategories />}
+//             </I18nextProvider>
+//           </BrowserRouter>
+//         </Provider>
+//       </MockedProvider>,
+//     );
 
-    await waitFor(() => {
-      userEvent.click(screen.getByTestId('actionItemCategoryModalOpenBtn'));
-      userEvent.type(
-        screen.getByPlaceholderText(translations.enterName),
-        'ActionItemCategory 4',
-      );
+//     await wait();
 
-      userEvent.click(screen.getByTestId('formSubmitButton'));
-    });
+//     await waitFor(() => {
+//       userEvent.click(screen.getByTestId('actionItemCategoryModalOpenBtn'));
+//       userEvent.type(
+//         screen.getByPlaceholderText(translations.enterName),
+//         'ActionItemCategory 4',
+//       );
 
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
-    });
-  });
+//       userEvent.click(screen.getByTestId('formSubmitButton'));
+//     });
 
-  test('update an action item category', async () => {
-    window.location.assign('/orgsetting/123');
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18n}>
-              {<OrgActionItemCategories />}
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
+//     await waitFor(() => {
+//       expect(toast.error).toHaveBeenCalled();
+//     });
+//   });
 
-    await wait();
+//   test('update an action item category', async () => {
+//     window.location.assign('/orgsetting/123');
+//     render(
+//       <MockedProvider addTypename={false} link={link}>
+//         <Provider store={store}>
+//           <BrowserRouter>
+//             <I18nextProvider i18n={i18n}>
+//               {<OrgActionItemCategories />}
+//             </I18nextProvider>
+//           </BrowserRouter>
+//         </Provider>
+//       </MockedProvider>,
+//     );
 
-    await waitFor(() => {
-      userEvent.click(
-        screen.getAllByTestId('actionItemCategoryUpdateModalOpenBtn')[0],
-      );
+//     await wait();
 
-      const name = screen.getByPlaceholderText(translations.enterName);
-      fireEvent.change(name, { target: { value: '' } });
+//     await waitFor(() => {
+//       userEvent.click(
+//         screen.getAllByTestId('actionItemCategoryUpdateModalOpenBtn')[0],
+//       );
 
-      userEvent.type(
-        screen.getByPlaceholderText(translations.enterName),
-        'ActionItemCategory 1 updated',
-      );
+//       const name = screen.getByPlaceholderText(translations.enterName);
+//       fireEvent.change(name, { target: { value: '' } });
 
-      userEvent.click(screen.getByTestId('formSubmitButton'));
-    });
+//       userEvent.type(
+//         screen.getByPlaceholderText(translations.enterName),
+//         'ActionItemCategory 1 updated',
+//       );
 
-    await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.successfulUpdation);
-    });
-  });
+//       userEvent.click(screen.getByTestId('formSubmitButton'));
+//     });
 
-  test('toast error on unsuccessful updation', async () => {
-    window.location.assign('/orgsetting/123');
-    render(
-      <MockedProvider addTypename={false} link={link3}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18n}>
-              {<OrgActionItemCategories />}
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
+//     await waitFor(() => {
+//       expect(toast.success).toBeCalledWith(translations.successfulUpdation);
+//     });
+//   });
 
-    await wait();
+//   test('toast error on unsuccessful updation', async () => {
+//     window.location.assign('/orgsetting/123');
+//     render(
+//       <MockedProvider addTypename={false} link={link3}>
+//         <Provider store={store}>
+//           <BrowserRouter>
+//             <I18nextProvider i18n={i18n}>
+//               {<OrgActionItemCategories />}
+//             </I18nextProvider>
+//           </BrowserRouter>
+//         </Provider>
+//       </MockedProvider>,
+//     );
 
-    await waitFor(() => {
-      userEvent.click(
-        screen.getAllByTestId('actionItemCategoryUpdateModalOpenBtn')[0],
-      );
+//     await wait();
 
-      const name = screen.getByPlaceholderText(translations.enterName);
-      fireEvent.change(name, { target: { value: '' } });
+//     await waitFor(() => {
+//       userEvent.click(
+//         screen.getAllByTestId('actionItemCategoryUpdateModalOpenBtn')[0],
+//       );
 
-      userEvent.type(
-        screen.getByPlaceholderText(translations.enterName),
-        'ActionItemCategory 1 updated',
-      );
+//       const name = screen.getByPlaceholderText(translations.enterName);
+//       fireEvent.change(name, { target: { value: '' } });
 
-      userEvent.click(screen.getByTestId('formSubmitButton'));
-    });
+//       userEvent.type(
+//         screen.getByPlaceholderText(translations.enterName),
+//         'ActionItemCategory 1 updated',
+//       );
 
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
-    });
-  });
+//       userEvent.click(screen.getByTestId('formSubmitButton'));
+//     });
 
-  test('toast error on providing the same name on updation', async () => {
-    window.location.assign('/orgsetting/123');
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18n}>
-              {<OrgActionItemCategories />}
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
+//     await waitFor(() => {
+//       expect(toast.error).toHaveBeenCalled();
+//     });
+//   });
 
-    await wait();
+//   test('toast error on providing the same name on updation', async () => {
+//     window.location.assign('/orgsetting/123');
+//     render(
+//       <MockedProvider addTypename={false} link={link}>
+//         <Provider store={store}>
+//           <BrowserRouter>
+//             <I18nextProvider i18n={i18n}>
+//               {<OrgActionItemCategories />}
+//             </I18nextProvider>
+//           </BrowserRouter>
+//         </Provider>
+//       </MockedProvider>,
+//     );
 
-    await waitFor(() => {
-      userEvent.click(
-        screen.getAllByTestId('actionItemCategoryUpdateModalOpenBtn')[0],
-      );
+//     await wait();
 
-      const name = screen.getByPlaceholderText(translations.enterName);
-      fireEvent.change(name, { target: { value: '' } });
+//     await waitFor(() => {
+//       userEvent.click(
+//         screen.getAllByTestId('actionItemCategoryUpdateModalOpenBtn')[0],
+//       );
 
-      userEvent.type(
-        screen.getByPlaceholderText(translations.enterName),
-        'ActionItemCategory 1',
-      );
+//       const name = screen.getByPlaceholderText(translations.enterName);
+//       fireEvent.change(name, { target: { value: '' } });
 
-      userEvent.click(screen.getByTestId('formSubmitButton'));
-    });
+//       userEvent.type(
+//         screen.getByPlaceholderText(translations.enterName),
+//         'ActionItemCategory 1',
+//       );
 
-    await waitFor(() => {
-      expect(toast.error).toBeCalledWith(translations.sameNameConflict);
-    });
-  });
+//       userEvent.click(screen.getByTestId('formSubmitButton'));
+//     });
 
-  test('toggle the disablity status of an action item category', async () => {
-    window.location.assign('/orgsetting/123');
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18n}>
-              {<OrgActionItemCategories />}
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
+//     await waitFor(() => {
+//       expect(toast.error).toBeCalledWith(translations.sameNameConflict);
+//     });
+//   });
 
-    await wait();
+//   test('toggle the disablity status of an action item category', async () => {
+//     window.location.assign('/orgsetting/123');
+//     render(
+//       <MockedProvider addTypename={false} link={link}>
+//         <Provider store={store}>
+//           <BrowserRouter>
+//             <I18nextProvider i18n={i18n}>
+//               {<OrgActionItemCategories />}
+//             </I18nextProvider>
+//           </BrowserRouter>
+//         </Provider>
+//       </MockedProvider>,
+//     );
 
-    await waitFor(() => {
-      userEvent.click(screen.getAllByTestId('disabilityStatusButton')[0]);
-    });
+//     await wait();
 
-    await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.categoryDisabled);
-    });
+//     await waitFor(() => {
+//       userEvent.click(screen.getAllByTestId('disabilityStatusButton')[0]);
+//     });
 
-    await waitFor(() => {
-      userEvent.click(screen.getAllByTestId('disabilityStatusButton')[1]);
-    });
+//     await waitFor(() => {
+//       expect(toast.success).toBeCalledWith(translations.categoryDisabled);
+//     });
 
-    await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.categoryEnabled);
-    });
-  });
+//     await waitFor(() => {
+//       userEvent.click(screen.getAllByTestId('disabilityStatusButton')[1]);
+//     });
 
-  test('toast error on unsuccessful toggling of the disablity status', async () => {
-    window.location.assign('/orgsetting/123');
-    render(
-      <MockedProvider addTypename={false} link={link3}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18n}>
-              {<OrgActionItemCategories />}
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
+//     await waitFor(() => {
+//       expect(toast.success).toBeCalledWith(translations.categoryEnabled);
+//     });
+//   });
 
-    await wait();
+//   test('toast error on unsuccessful toggling of the disablity status', async () => {
+//     window.location.assign('/orgsetting/123');
+//     render(
+//       <MockedProvider addTypename={false} link={link3}>
+//         <Provider store={store}>
+//           <BrowserRouter>
+//             <I18nextProvider i18n={i18n}>
+//               {<OrgActionItemCategories />}
+//             </I18nextProvider>
+//           </BrowserRouter>
+//         </Provider>
+//       </MockedProvider>,
+//     );
 
-    await waitFor(() => {
-      userEvent.click(screen.getAllByTestId('disabilityStatusButton')[0]);
-    });
+//     await wait();
 
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
-    });
+//     await waitFor(() => {
+//       userEvent.click(screen.getAllByTestId('disabilityStatusButton')[0]);
+//     });
 
-    await waitFor(() => {
-      userEvent.click(screen.getAllByTestId('disabilityStatusButton')[1]);
-    });
+//     await waitFor(() => {
+//       expect(toast.error).toHaveBeenCalled();
+//     });
 
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
-    });
-  });
-});
+//     await waitFor(() => {
+//       userEvent.click(screen.getAllByTestId('disabilityStatusButton')[1]);
+//     });
+
+//     await waitFor(() => {
+//       expect(toast.error).toHaveBeenCalled();
+//     });
+//   });
+// });

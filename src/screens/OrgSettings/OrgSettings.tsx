@@ -9,6 +9,9 @@ import GeneralSettings from 'components/OrgSettings/General/GeneralSettings';
 // Type representing the different settings categories available
 type SettingType = 'general' | 'actionItemCategories';
 
+// List of available settings categories
+const settingtabs: SettingType[] = ['general', 'actionItemCategories'];
+
 /**
  * The `orgSettings` component provides a user interface for managing various settings related to an organization.
  * It includes options for updating organization details, deleting the organization, changing language preferences,
@@ -24,10 +27,6 @@ function orgSettings(): JSX.Element {
     keyPrefix: 'orgSettings',
   });
 
-  // List of available settings categories
-  const orgSettings: SettingType[] = ['general', 'actionItemCategories'];
-
-  // State to manage the currently selected settings category
   const [tab, setTab] = useState<SettingType>('general');
 
   // Set the document title using the translated title for this page
@@ -46,10 +45,10 @@ function orgSettings(): JSX.Element {
         <Col>
           <div className={styles.settingsTabs}>
             {/* Render buttons for each settings category */}
-            {orgSettings.map((setting, index) => (
+            {settingtabs.map((setting, index) => (
               <Button
                 key={index}
-                className="me-3 border rounded-3"
+                className={`me-3 border rounded-3 ${styles.headerBtn}`}
                 variant={tab === setting ? `success` : `none`}
                 onClick={() => setTab(setting)}
                 data-testid={`${setting}Settings`}
@@ -74,7 +73,7 @@ function orgSettings(): JSX.Element {
             </Dropdown.Toggle>
             <Dropdown.Menu>
               {/* Render dropdown items for each settings category */}
-              {orgSettings.map((setting, index) => (
+              {settingtabs.map((setting, index) => (
                 <Dropdown.Item
                   key={index}
                   onClick={
@@ -101,21 +100,7 @@ function orgSettings(): JSX.Element {
           case 'general':
             return <GeneralSettings orgId={orgId} />;
           case 'actionItemCategories':
-            return (
-              <Row
-                className={`${styles.actionItemStyles} mt-3 mb-3 mx-4 position-relative shadow-sm rounded-4`}
-              >
-                <div className={`${styles.cardHeader} border rounded-top-4`}>
-                  <div className={`${styles.cardTitle} pt-1 pb-2`}>
-                    {t('actionItemCategories')}
-                  </div>
-                </div>
-                <div className="bg-light-subtle border border-top-0 rounded-bottom-4">
-                  {/* Render action item categories component */}
-                  <OrgActionItemCategories />
-                </div>
-              </Row>
-            );
+            return <OrgActionItemCategories orgId={orgId} />;
         }
       })()}
     </div>
