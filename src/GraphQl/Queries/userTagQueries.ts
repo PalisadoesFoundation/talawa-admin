@@ -35,7 +35,7 @@ export const USER_TAGS_ASSIGNED_MEMBERS = gql`
   }
 `;
 
-export const USER_TAG_CHILD_TAGS = gql`
+export const USER_TAG_SUB_TAGS = gql`
   query GetChildTags(
     $id: ID!
     $after: String

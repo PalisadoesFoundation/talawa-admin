@@ -13,16 +13,19 @@ import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import type { InterfaceQueryOrganizationUserTags } from 'utils/interfaces';
-import styles from './OrganizationTags.module.css';
+import type { InterfaceQueryUserTagChildTags } from 'utils/interfaces';
+import styles from './SubTags.module.css';
 import { DataGrid } from '@mui/x-data-grid';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
-import { ORGANIZATION_USER_TAGS_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import {
   CREATE_USER_TAG,
   REMOVE_USER_TAG,
 } from 'GraphQl/Mutations/TagMutations';
+import {
+  USER_TAG_ANCESTORS,
+  USER_TAG_SUB_TAGS,
+} from 'GraphQl/Queries/userTagQueries';
 
 const dataGridStyle = {
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
@@ -45,51 +48,54 @@ const dataGridStyle = {
   },
 };
 
-function OrganizationTags(): JSX.Element {
+function SubTags(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationTags',
   });
   const { t: tCommon } = useTranslation('common');
 
-  const [createTagModalIsOpen, setCreateTagModalIsOpen] = useState(false);
+  document.title = t('title');
+  const [addSubTagModalIsOpen, setAddSubTagModalIsOpen] = useState(false);
 
-  const { orgId: currentUrl } = useParams();
+  const { orgId: currentUrl, tagId: parentTagId } = useParams();
+
   const navigate = useNavigate();
+
   const [after, setAfter] = useState<string | null | undefined>(null);
   const [before, setBefore] = useState<string | null | undefined>(null);
   const [first, setFirst] = useState<number | null>(5);
   const [last, setLast] = useState<number | null>(null);
-  const [tagSerialNumber, setTagSerialNumber] = useState(0);
 
   const [tagName, setTagName] = useState<string>('');
 
   const [removeUserTagId, setRemoveUserTagId] = useState(null);
-  const [removeTagModalIsOpen, setRemoveTagModalIsOpen] = useState(false);
+  const [removeUserTagModalIsOpen, setRemoveUserTagModalIsOpen] =
+    useState(false);
 
-  const showCreateTagModal = (): void => {
-    setTagName('');
-    setCreateTagModalIsOpen(true);
+  const showAddSubTagModal = (): void => {
+    setAddSubTagModalIsOpen(true);
   };
 
-  const hideCreateTagModal = (): void => {
-    setCreateTagModalIsOpen(false);
+  const hideAddSubTagModal = (): void => {
+    setAddSubTagModalIsOpen(false);
+    setTagName('');
   };
 
   const {
-    data: orgUserTagsData,
-    loading: orgUserTagsLoading,
-    error: orgUserTagsError,
-    refetch: orgUserTagsRefetch,
+    data: subTagsData,
+    loading: subTagsLoading,
+    error: subTagsError,
+    refetch: subTagsRefetch,
   }: {
     data?: {
-      organizations: InterfaceQueryOrganizationUserTags[];
+      getUserTag: InterfaceQueryUserTagChildTags;
     };
     loading: boolean;
     error?: ApolloError;
     refetch: () => void;
-  } = useQuery(ORGANIZATION_USER_TAGS_LIST, {
+  } = useQuery(USER_TAG_SUB_TAGS, {
     variables: {
-      id: currentUrl,
+      id: parentTagId,
       after: after,
       before: before,
       first: first,
@@ -97,10 +103,30 @@ function OrganizationTags(): JSX.Element {
     },
   });
 
+  const {
+    data: orgUserTagAncestorsData,
+    loading: orgUserTagsAncestorsLoading,
+    error: orgUserTagsAncestorsError,
+  }: {
+    data?: {
+      getUserTagAncestors: {
+        _id: string;
+        name: string;
+      }[];
+    };
+    loading: boolean;
+    error?: ApolloError;
+    refetch: () => void;
+  } = useQuery(USER_TAG_ANCESTORS, {
+    variables: {
+      id: parentTagId,
+    },
+  });
+
   const [create, { loading: createUserTagLoading }] =
     useMutation(CREATE_USER_TAG);
 
-  const createTag = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
+  const addSubTag = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
     try {
@@ -108,14 +134,16 @@ function OrganizationTags(): JSX.Element {
         variables: {
           name: tagName,
           organizationId: currentUrl,
+          parentTagId,
         },
       });
 
+      /* istanbul ignore next */
       if (data) {
         toast.success(t('tagCreationSuccess'));
-        orgUserTagsRefetch();
+        subTagsRefetch();
         setTagName('');
-        setCreateTagModalIsOpen(false);
+        setAddSubTagModalIsOpen(false);
       }
     } catch (error: unknown) {
       /* istanbul ignore next */
@@ -135,7 +163,7 @@ function OrganizationTags(): JSX.Element {
         },
       });
 
-      orgUserTagsRefetch();
+      subTagsRefetch();
       toggleRemoveUserTagModal();
       toast.success(t('tagRemovalSuccess'));
     } catch (error: unknown) {
@@ -147,55 +175,61 @@ function OrganizationTags(): JSX.Element {
     }
   };
 
-  if (createUserTagLoading || orgUserTagsLoading) {
+  if (createUserTagLoading || subTagsLoading || orgUserTagsAncestorsLoading) {
     return <Loader />;
   }
 
-  if (orgUserTagsError) {
+  const handleNextPage = (): void => {
+    setAfter(subTagsData?.getUserTag.childTags.pageInfo.endCursor);
+    setBefore(null);
+    setFirst(5);
+    setLast(null);
+  };
+
+  const handlePreviousPage = (): void => {
+    setBefore(subTagsData?.getUserTag.childTags.pageInfo.startCursor);
+    setAfter(null);
+    setFirst(null);
+    setLast(5);
+  };
+
+  if (subTagsError || orgUserTagsAncestorsError) {
     return (
       <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
         <div className={styles.errorMessage}>
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
-            Error occured while loading Organization Tags Data
+            Error occured while loading{' '}
+            {subTagsError ? 'sub tags' : 'tag ancestors'}
             <br />
-            {orgUserTagsError.message}
+            {subTagsError
+              ? subTagsError.message
+              : orgUserTagsAncestorsError?.message}
           </h6>
         </div>
       </div>
     );
   }
 
-  const handleNextPage = (): void => {
-    setAfter(orgUserTagsData?.organizations[0].userTags.pageInfo.endCursor);
-    setBefore(null);
-    setFirst(5);
-    setLast(null);
-    setTagSerialNumber(tagSerialNumber + 1);
-  };
-  const handlePreviousPage = (): void => {
-    setBefore(orgUserTagsData?.organizations[0].userTags.pageInfo.startCursor);
-    setAfter(null);
-    setFirst(null);
-    setLast(5);
-    setTagSerialNumber(tagSerialNumber - 1);
-  };
+  const userTagsList = subTagsData?.getUserTag.childTags.edges.map(
+    (edge) => edge.node,
+  );
 
-  const userTagsList =
-    orgUserTagsData?.organizations[0].userTags.edges.map((edge) => edge.node) ||
-    [];
+  const orgUserTagAncestors = orgUserTagAncestorsData?.getUserTagAncestors;
 
   const goToManageTag = (tagId: string): void => {
-    navigate(`/orgtags/${currentUrl}/managetag/${tagId}`);
+    navigate(`/orgtags/${currentUrl}/manageTag/${tagId}`);
   };
 
   const goToSubTags = (tagId: string): void => {
-    navigate(`/orgtags/${currentUrl}/subTags/${tagId}`);
+    navigate(`/orgtags/${currentUrl}/subtags/${tagId}`);
   };
 
   const toggleRemoveUserTagModal = (): void => {
-    if (removeTagModalIsOpen) setRemoveUserTagId(null);
-    setRemoveTagModalIsOpen(!removeTagModalIsOpen);
+    if (removeUserTagModalIsOpen) {
+      setRemoveUserTagId(null);
+    }
+    setRemoveUserTagModalIsOpen(!removeUserTagModalIsOpen);
   };
 
   const columns: GridColDef[] = [
@@ -208,7 +242,7 @@ function OrganizationTags(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
-        return <div>{tagSerialNumber * 5 + params.row.id}</div>;
+        return <div>{params.row.id}</div>;
       },
     },
     {
@@ -223,7 +257,7 @@ function OrganizationTags(): JSX.Element {
           <div
             className={styles.subTagsLink}
             data-testid="tagName"
-            onClick={() => goToSubTags(params.row._id)}
+            onClick={() => goToSubTags(params.row._id as string)}
           >
             {params.row.name}
 
@@ -245,7 +279,7 @@ function OrganizationTags(): JSX.Element {
         return (
           <Link
             className="text-secondary"
-            to={`/orgtags/${currentUrl}/orgtagchildtags/${params.row._id}`}
+            to={`/orgtags/${currentUrl}/subtags/${params.row._id}`}
           >
             {params.row.childTags.totalCount}
           </Link>
@@ -312,8 +346,8 @@ function OrganizationTags(): JSX.Element {
 
   return (
     <>
-      <Row>
-        <div>
+      <Row className={styles.head}>
+        <div className={styles.mainpageright}>
           <div className={styles.btnsContainer}>
             <div className={styles.input}>
               <Form.Control
@@ -335,12 +369,12 @@ function OrganizationTags(): JSX.Element {
             <div className={styles.btnsBlock}>
               <Dropdown
                 aria-expanded="false"
-                title="Sort Tags"
+                title="Sort Tag"
                 data-testid="sort"
               >
                 <Dropdown.Toggle
                   variant="outline-success"
-                  data-testid="sortTags"
+                  data-testid="sortTag"
                 >
                   <SortIcon className={'me-1'} />
                   {tCommon('sort')}
@@ -354,16 +388,26 @@ function OrganizationTags(): JSX.Element {
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
+
+              <Button
+                variant="success"
+                onClick={() => goToManageTag(parentTagId as string)}
+                data-testid="manageCurrentTagBtn"
+                className="mx-4"
+              >
+                {`${t('manageTag')} ${subTagsData?.getUserTag.name}`}
+              </Button>
+
+              <Button
+                variant="success"
+                onClick={showAddSubTagModal}
+                data-testid="addSubTagBtn"
+                className="ms-auto"
+              >
+                <i className={'fa fa-plus me-2'} />
+                {t('addChildTag')}
+              </Button>
             </div>
-            <Button
-              variant="success"
-              onClick={showCreateTagModal}
-              data-testid="createTagBtn"
-              className="ms-auto"
-            >
-              <i className={'fa fa-plus me-2'} />
-              {t('createTag')}
-            </Button>
           </div>
 
           <div>
@@ -374,10 +418,27 @@ function OrganizationTags(): JSX.Element {
 
               <div
                 onClick={() => navigate(`/orgtags/${currentUrl}`)}
-                className={`fs-4 ms-3 my-1 ${styles.tagsBreadCrumbs}`}
+                className={`fs-6 ms-3 my-1 ${styles.tagsBreadCrumbs}`}
+                data-testid="allTagsBtn"
               >
                 {'Tags'}
+                <i className={'mx-2 fa fa-caret-right'} />
               </div>
+
+              {orgUserTagAncestors?.map((tag, index) => (
+                <div
+                  key={index}
+                  className={`ms-2 my-1 ${tag._id === parentTagId ? `fs-4 fw-semibold text-secondary` : `${styles.tagsBreadCrumbs} fs-6`}`}
+                  onClick={() => goToSubTags(tag._id as string)}
+                  data-testid="goToSubTags"
+                >
+                  {tag.name}
+
+                  {orgUserTagAncestors.length - 1 !== index && (
+                    <i className={'mx-2 fa fa-caret-right'} />
+                  )}
+                </div>
+              ))}
             </div>
             <DataGrid
               disableColumnMenu
@@ -399,7 +460,7 @@ function OrganizationTags(): JSX.Element {
               getRowClassName={() => `${styles.rowBackground}`}
               autoHeight
               rowHeight={65}
-              rows={userTagsList.map((fund, index) => ({
+              rows={userTagsList?.map((fund, index) => ({
                 id: index + 1,
                 ...fund,
               }))}
@@ -414,11 +475,10 @@ function OrganizationTags(): JSX.Element {
             <Button
               onClick={handlePreviousPage}
               className="btn-sm"
-              data-testid="previousPageBtn"
               disabled={
-                !orgUserTagsData?.organizations[0].userTags.pageInfo
-                  .hasPreviousPage
+                !subTagsData?.getUserTag.childTags.pageInfo.hasPreviousPage
               }
+              data-testid="previousPageBtn"
             >
               <i className={'mx-2 fa fa-caret-left'} />
             </Button>
@@ -427,10 +487,8 @@ function OrganizationTags(): JSX.Element {
             <Button
               onClick={handleNextPage}
               className="btn-sm"
+              disabled={!subTagsData?.getUserTag.childTags.pageInfo.hasNextPage}
               data-testid="nextPagBtn"
-              disabled={
-                !orgUserTagsData?.organizations[0].userTags.pageInfo.hasNextPage
-              }
             >
               <i className={'mx-2 fa fa-caret-right'} />
             </Button>
@@ -440,28 +498,28 @@ function OrganizationTags(): JSX.Element {
 
       {/* Create Tag Modal */}
       <Modal
-        show={createTagModalIsOpen}
-        onHide={hideCreateTagModal}
+        show={addSubTagModalIsOpen}
+        onHide={hideAddSubTagModal}
         backdrop="static"
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
         <Modal.Header
           className="bg-primary"
-          data-testid="modalOrganizationHeader"
+          data-testid="tagHeader"
           closeButton
         >
           <Modal.Title className="text-white">{t('tagDetails')}</Modal.Title>
         </Modal.Header>
-        <Form onSubmitCapture={createTag}>
+        <Form onSubmitCapture={addSubTag}>
           <Modal.Body>
             <Form.Label htmlFor="tagName">{t('tagName')}</Form.Label>
             <Form.Control
               type="name"
-              id="orgname"
+              id="tagname"
               className="mb-3"
               placeholder={t('tagNamePlaceholder')}
-              data-testid="tagNameInput"
+              data-testid="modalTitle"
               autoComplete="off"
               required
               value={tagName}
@@ -474,16 +532,12 @@ function OrganizationTags(): JSX.Element {
           <Modal.Footer>
             <Button
               variant="secondary"
-              onClick={(): void => hideCreateTagModal()}
-              data-testid="closeCreateTagModal"
+              onClick={(): void => hideAddSubTagModal()}
+              data-testid="addSubTagModalCloseBtn"
             >
               {tCommon('cancel')}
             </Button>
-            <Button
-              type="submit"
-              value="invite"
-              data-testid="createTagSubmitBtn"
-            >
+            <Button type="submit" value="add" data-testid="addSubTagSubmitBtn">
               {tCommon('create')}
             </Button>
           </Modal.Footer>
@@ -494,14 +548,15 @@ function OrganizationTags(): JSX.Element {
       <Modal
         size="sm"
         id={`deleteActionItemModal`}
-        show={removeTagModalIsOpen}
+        show={removeUserTagModalIsOpen}
         onHide={toggleRemoveUserTagModal}
         backdrop="static"
         keyboard={false}
+        className={styles.actionItemModal}
         centered
       >
         <Modal.Header closeButton className="bg-primary">
-          <Modal.Title className="text-white" id={`deleteActionItem`}>
+          <Modal.Title className="text-white" id={`removeUserTag`}>
             {t('removeUserTag')}
           </Modal.Title>
         </Modal.Header>
@@ -530,4 +585,4 @@ function OrganizationTags(): JSX.Element {
   );
 }
 
-export default OrganizationTags;
+export default SubTags;

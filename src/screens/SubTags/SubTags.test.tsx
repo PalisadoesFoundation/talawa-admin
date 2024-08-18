@@ -18,9 +18,13 @@ import { toast } from 'react-toastify';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
-import OrganizationTags from './OrganizationTags';
-import { MOCKS, MOCKS_ERROR } from './OrganizationTagsMocks';
-import type { ApolloLink } from '@apollo/client';
+import SubTags from './SubTags';
+import {
+  MOCKS,
+  MOCKS_ERROR_SUB_TAGS,
+  MOCKS_ERROR_TAG_ANCESTORS,
+} from './SubTagsMocks';
+import { InMemoryCache, type ApolloLink } from '@apollo/client';
 
 const translations = {
   ...JSON.parse(
@@ -33,7 +37,8 @@ const translations = {
 };
 
 const link = new StaticMockLink(MOCKS, true);
-const link2 = new StaticMockLink(MOCKS_ERROR, true);
+const link2 = new StaticMockLink(MOCKS_ERROR_SUB_TAGS, true);
+const link3 = new StaticMockLink(MOCKS_ERROR_TAG_ANCESTORS, true);
 
 async function wait(ms = 500): Promise<void> {
   await act(() => {
@@ -50,21 +55,39 @@ jest.mock('react-toastify', () => ({
   },
 }));
 
-const renderOrganizationTags = (link: ApolloLink): RenderResult => {
+const cache = new InMemoryCache({
+  typePolicies: {
+    Query: {
+      fields: {
+        getUserTag: {
+          keyArgs: false,
+          merge(existing = {}, incoming) {
+            return incoming;
+          },
+        },
+      },
+    },
+  },
+});
+
+const renderSubTags = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
-      <MemoryRouter initialEntries={['/orgtags/123']}>
+    <MockedProvider cache={cache} link={link}>
+      <MemoryRouter initialEntries={['/orgtags/123/subtags/tag1']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
             <Routes>
-              <Route path="/orgtags/:orgId" element={<OrganizationTags />} />
+              <Route
+                path="/orgtags/:orgId"
+                element={<div data-testid="orgtagsScreen"></div>}
+              />
               <Route
                 path="/orgtags/:orgId/managetag/:tagId"
                 element={<div data-testid="manageTagScreen"></div>}
               />
               <Route
                 path="/orgtags/:orgId/subtags/:tagId"
-                element={<div data-testid="subTagsScreen"></div>}
+                element={<SubTags />}
               />
             </Routes>
           </I18nextProvider>
@@ -80,6 +103,7 @@ describe('Organisation Tags Page', () => {
       ...jest.requireActual('react-router-dom'),
       useParams: () => ({ orgId: 'orgId' }),
     }));
+    cache.reset();
   });
 
   afterEach(() => {
@@ -88,49 +112,59 @@ describe('Organisation Tags Page', () => {
   });
 
   test('Component loads correctly', async () => {
-    const { getByText } = renderOrganizationTags(link);
+    const { getByText } = renderSubTags(link);
 
     await wait();
 
     await waitFor(() => {
-      expect(getByText(translations.createTag)).toBeInTheDocument();
+      expect(getByText(translations.addChildTag)).toBeInTheDocument();
     });
   });
 
-  test('render error component on unsuccessful userTags query', async () => {
-    const { queryByText } = renderOrganizationTags(link2);
+  test('render error component on unsuccessful subtags query', async () => {
+    const { queryByText } = renderSubTags(link2);
 
     await wait();
 
     await waitFor(() => {
-      expect(queryByText(translations.create)).not.toBeInTheDocument();
+      expect(queryByText(translations.addChildTag)).not.toBeInTheDocument();
+    });
+  });
+
+  test('renders error component on unsuccessful userTag ancestors query', async () => {
+    const { queryByText } = renderSubTags(link3);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(queryByText(translations.addChildTag)).not.toBeInTheDocument();
     });
   });
 
   test('opens and closes the create tag modal', async () => {
-    renderOrganizationTags(link);
+    renderSubTags(link);
 
     await wait();
 
     await waitFor(() => {
-      expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
+      expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('createTagBtn'));
+    userEvent.click(screen.getByTestId('addSubTagBtn'));
 
     await waitFor(() => {
       return expect(
-        screen.findByTestId('closeCreateTagModal'),
+        screen.findByTestId('addSubTagModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('closeCreateTagModal'));
+    userEvent.click(screen.getByTestId('addSubTagModalCloseBtn'));
 
     await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('closeCreateTagModal'),
+      screen.queryByTestId('addSubTagModalCloseBtn'),
     );
   });
 
   test('opens and closes the remove tag modal', async () => {
-    renderOrganizationTags(link);
+    renderSubTags(link);
 
     await wait();
 
@@ -151,8 +185,8 @@ describe('Organisation Tags Page', () => {
     );
   });
 
-  test('navigates to manage tag page after clicking manage tag option', async () => {
-    renderOrganizationTags(link);
+  test('navigates to manage tag screen after clicking manage tag option', async () => {
+    renderSubTags(link);
 
     await wait();
 
@@ -166,8 +200,68 @@ describe('Organisation Tags Page', () => {
     });
   });
 
+  test('navigates to sub tags screen after clicking on a tag', async () => {
+    renderSubTags(link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('tagName')[0]).toBeInTheDocument();
+    });
+    userEvent.click(screen.getAllByTestId('tagName')[0]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
+    });
+  });
+
+  test('navigates to the different sub tag screen screen after clicking a tag in the breadcrumbs', async () => {
+    renderSubTags(link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('goToSubTags')[0]).toBeInTheDocument();
+    });
+    userEvent.click(screen.getAllByTestId('goToSubTags')[0]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
+    });
+  });
+
+  test('navigates to organization tags screen screen after clicking tha all tags option in the breadcrumbs', async () => {
+    renderSubTags(link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('allTagsBtn')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('allTagsBtn'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('orgtagsScreen')).toBeInTheDocument();
+    });
+  });
+
+  test('navigates to manage tags screen for the current tag after clicking tha manageCurrentTag button', async () => {
+    renderSubTags(link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('manageCurrentTagBtn')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('manageCurrentTagBtn'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('manageTagScreen')).toBeInTheDocument();
+    });
+  });
+
   test('paginates between different pages', async () => {
-    renderOrganizationTags(link);
+    renderSubTags(link);
 
     await wait();
 
@@ -177,7 +271,7 @@ describe('Organisation Tags Page', () => {
     userEvent.click(screen.getByTestId('nextPagBtn'));
 
     await waitFor(() => {
-      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent('6');
+      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent('subTag 6');
     });
 
     await waitFor(() => {
@@ -186,34 +280,34 @@ describe('Organisation Tags Page', () => {
     userEvent.click(screen.getByTestId('previousPageBtn'));
 
     await waitFor(() => {
-      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent('1');
+      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent('subTag 1');
     });
   });
 
-  test('creates a new user tag', async () => {
-    renderOrganizationTags(link);
+  test('adds a new sub tag to the current tag', async () => {
+    renderSubTags(link);
 
     await wait();
 
     await waitFor(() => {
-      expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
+      expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('createTagBtn'));
+    userEvent.click(screen.getByTestId('addSubTagBtn'));
 
     userEvent.type(
       screen.getByPlaceholderText(translations.tagNamePlaceholder),
-      '7',
+      'subTag 7',
     );
 
-    userEvent.click(screen.getByTestId('createTagSubmitBtn'));
+    userEvent.click(screen.getByTestId('addSubTagSubmitBtn'));
 
     await waitFor(() => {
       expect(toast.success).toBeCalledWith(translations.tagCreationSuccess);
     });
   });
 
-  test('removes a user tag', async () => {
-    renderOrganizationTags(link);
+  test('removes a sub tag', async () => {
+    renderSubTags(link);
 
     await wait();
 

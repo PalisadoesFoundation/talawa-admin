@@ -166,10 +166,10 @@ function ManageTag(): JSX.Element {
   const orgUserTagAncestors = orgUserTagAncestorsData?.getUserTagAncestors;
 
   const goToSubTags = (tagId: string): void => {
-    navigate(`/orgtags/${currentUrl}/orgtagSubTags/${tagId}`);
+    navigate(`/orgtags/${currentUrl}/subTags/${tagId}`);
   };
 
-  const handleClick = (tagId: string): void => {
+  const goToManageTag = (tagId: string): void => {
     navigate(`/orgtags/${currentUrl}/managetag/${tagId}`);
   };
 
@@ -352,7 +352,7 @@ function ManageTag(): JSX.Element {
                   <div
                     key={index}
                     className={`ms-2 my-1 ${tag._id === currentTagId ? `fs-4 fw-semibold text-secondary` : `${styles.tagsBreadCrumbs} fs-6`}`}
-                    onClick={() => handleClick(tag._id as string)}
+                    onClick={() => goToManageTag(tag._id as string)}
                     data-testid="goToManageTag"
                   >
                     {tag.name}
