@@ -181,9 +181,9 @@ function OrganizationTags(): JSX.Element {
     setTagSerialNumber(tagSerialNumber - 1);
   };
 
-  const userTagsList =
-    orgUserTagsData?.organizations[0].userTags.edges.map((edge) => edge.node) ||
-    [];
+  const userTagsList = orgUserTagsData?.organizations[0].userTags.edges.map(
+    (edge) => edge.node,
+  );
 
   const goToManageTag = (tagId: string): void => {
     navigate(`/orgtags/${currentUrl}/managetag/${tagId}`);
@@ -372,10 +372,7 @@ function OrganizationTags(): JSX.Element {
                 <IconComponent name="Tag" />
               </div>
 
-              <div
-                onClick={() => navigate(`/orgtags/${currentUrl}`)}
-                className={`fs-4 ms-3 my-1 ${styles.tagsBreadCrumbs}`}
-              >
+              <div className={`fs-4 ms-3 my-1 ${styles.tagsBreadCrumbs}`}>
                 {'Tags'}
               </div>
             </div>
@@ -399,7 +396,7 @@ function OrganizationTags(): JSX.Element {
               getRowClassName={() => `${styles.rowBackground}`}
               autoHeight
               rowHeight={65}
-              rows={userTagsList.map((fund, index) => ({
+              rows={userTagsList?.map((fund, index) => ({
                 id: index + 1,
                 ...fund,
               }))}

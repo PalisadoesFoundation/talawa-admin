@@ -151,6 +151,21 @@ describe('Organisation Tags Page', () => {
     );
   });
 
+  test('navigates to sub tags screen after clicking on a tag', async () => {
+    renderOrganizationTags(link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('tagName')[0]).toBeInTheDocument();
+    });
+    userEvent.click(screen.getAllByTestId('tagName')[0]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('subTagsScreen')).toBeInTheDocument();
+    });
+  });
+
   test('navigates to manage tag page after clicking manage tag option', async () => {
     renderOrganizationTags(link);
 
