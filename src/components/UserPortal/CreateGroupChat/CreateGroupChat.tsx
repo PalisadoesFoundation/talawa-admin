@@ -106,7 +106,7 @@ export default function CreateGroupChat({
   const [organizations, setOrganizations] = useState([]);
   const [selectedOrganization, setSelectedOrganization] = useState('');
   const [title, setTitle] = useState('');
-  let [userIds, setUserIds] = useState<string[]>([]);
+  const [userIds, setUserIds] = useState<string[]>([]);
 
   const [addUserModalisOpen, setAddUserModalisOpen] = useState(false);
 
@@ -117,7 +117,7 @@ export default function CreateGroupChat({
   const toggleAddUserModal = /* istanbul ignore next */ (): void =>
     setAddUserModalisOpen(!addUserModalisOpen);
 
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
+  const handleChange = (event: SelectChangeEvent<string>): void => {
     setSelectedOrganization(event.target.value as string);
   };
 
@@ -140,7 +140,7 @@ export default function CreateGroupChat({
   }, [userIds]);
 
   async function handleCreateGroupChat(): Promise<void> {
-    const chat = await createChat({
+    await createChat({
       variables: {
         organizationId: selectedOrganization,
         userIds: [userId, ...userIds],
@@ -203,26 +203,29 @@ export default function CreateGroupChat({
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <Form.Group controlId="registerForm.Rtype">
-              <Form.Label>Select Organization</Form.Label>
-              <Form.Select
-                aria-label={'Select Organization'}
+            <FormControl fullWidth>
+              <InputLabel id="select-org">Select Organization</InputLabel>
+              <Select
+                labelId="select-org"
+                id="select-org"
+                data-testid="orgSelect"
+                label="Select Organization"
                 value={selectedOrganization}
                 onChange={(e) => handleChange(e)}
               >
                 {organizations &&
                   organizations.length &&
                   organizations.map((organization: InterfaceOrganization) => (
-                    <option
+                    <MenuItem
                       data-testid="selectOptions"
                       key={organization._id}
                       value={organization._id}
                     >
                       {`${organization.name}(${organization.address?.city},${organization.address?.state},${organization.address?.countryCode})`}
-                    </option>
+                    </MenuItem>
                   ))}
-              </Form.Select>
-            </Form.Group>
+              </Select>
+            </FormControl>
 
             {/* <FormControl fullWidth>
             <InputLabel id="select-org">Select Organization</InputLabel>
@@ -349,10 +352,10 @@ export default function CreateGroupChat({
                                 <Button
                                   variant="danger"
                                   onClick={() => {
-                                    userIds = userIds.filter(
+                                    const updatedUserIds = userIds.filter(
                                       (id) => id !== userDetails.user._id,
                                     );
-                                    setUserIds(userIds);
+                                    setUserIds(updatedUserIds);
                                   }}
                                   data-testid="removeBtn"
                                 >
