@@ -294,15 +294,25 @@ describe('Organisation Post Page', () => {
 
     const inputText = screen.getByTestId('searchBy');
 
-    fireEvent.click(inputText);
+    await act(async () => {
+      fireEvent.click(inputText);
+    });
+
     const toggleText = screen.getByTestId('Text');
 
-    fireEvent.click(toggleText);
+    await act(async () => {
+      fireEvent.click(toggleText);
+    });
 
     expect(searchInput).toHaveAttribute('placeholder', 'Search By Text');
-    fireEvent.click(inputText);
+    await act(async () => {
+      fireEvent.click(inputText);
+    });
     const toggleTite = screen.getByTestId('searchTitle');
-    fireEvent.click(toggleTite);
+    await act(async () => {
+      fireEvent.click(toggleTite);
+    });
+
     expect(searchInput).toHaveAttribute('placeholder', 'Search By Title');
   });
   test('Testing search latest and oldest toggle', async () => {
@@ -327,15 +337,25 @@ describe('Organisation Post Page', () => {
 
     const inputText = screen.getByTestId('sortpost');
 
-    fireEvent.click(inputText);
+    await act(async () => {
+      fireEvent.click(inputText);
+    });
+
     const toggleText = screen.getByTestId('latest');
 
-    fireEvent.click(toggleText);
+    await act(async () => {
+      fireEvent.click(toggleText);
+    });
 
     expect(searchInput).toBeInTheDocument();
-    fireEvent.click(inputText);
+    await act(async () => {
+      fireEvent.click(inputText);
+    });
+
     const toggleTite = screen.getByTestId('oldest');
-    fireEvent.click(toggleTite);
+    await act(async () => {
+      fireEvent.click(toggleTite);
+    });
     expect(searchInput).toBeInTheDocument();
   });
   test('After creating a post, the data should be refetched', async () => {
@@ -576,21 +596,29 @@ describe('Organisation Post Page', () => {
     });
     await wait();
 
-    userEvent.click(screen.getByTestId('createPostModalBtn'));
+    await act(async () => {
+      userEvent.click(screen.getByTestId('createPostModalBtn'));
+    });
 
     const postTitleInput = screen.getByTestId('modalTitle');
-    fireEvent.change(postTitleInput, { target: { value: 'Test Post' } });
+    await act(async () => {
+      fireEvent.change(postTitleInput, { target: { value: 'Test Post' } });
+    });
 
     const postInfoTextarea = screen.getByTestId('modalinfo');
-    fireEvent.change(postInfoTextarea, {
-      target: { value: 'Test post information' },
+    await act(async () => {
+      fireEvent.change(postInfoTextarea, {
+        target: { value: 'Test post information' },
+      });
     });
 
     const videoFile = new File(['video content'], 'video.mp4', {
       type: 'video/mp4',
     });
 
-    userEvent.upload(screen.getByTestId('addMediaField'), videoFile);
+    await act(async () => {
+      userEvent.upload(screen.getByTestId('addMediaField'), videoFile);
+    });
 
     // Check if the video is displayed
     const videoPreview = await screen.findByTestId('videoPreview');
@@ -598,7 +626,9 @@ describe('Organisation Post Page', () => {
 
     // Check if the close button for the video works
     const closeVideoPreviewButton = screen.getByTestId('mediaCloseButton');
-    fireEvent.click(closeVideoPreviewButton);
+    await act(async () => {
+      fireEvent.click(closeVideoPreviewButton);
+    });
     expect(videoPreview).not.toBeInTheDocument();
   });
   test('Sorting posts by pinned status', async () => {

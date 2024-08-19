@@ -169,7 +169,6 @@ describe('Testing Advertisement Register Component', () => {
     jest.useFakeTimers();
     const setTimeoutSpy = jest.spyOn(global, 'setTimeout');
 
-    // Use `act` to ensure all updates are handled during rendering
     await act(async () => {
       render(
         <MockedProvider addTypename={false} link={link}>
@@ -192,22 +191,17 @@ describe('Testing Advertisement Register Component', () => {
       );
     });
 
-    // Ensure that the component renders correctly
     expect(
       screen.getByText(translations.createAdvertisement),
     ).toBeInTheDocument();
 
-    // Wrap only fireEvent calls inside `act`
     await act(async () => {
-      // Trigger the initial button click
       fireEvent.click(screen.getByText(translations.createAdvertisement));
     });
 
-    // Expectations after fireEvent
     expect(screen.queryByText(translations.addNew)).toBeInTheDocument();
 
     await act(async () => {
-      // Update form fields
       fireEvent.change(screen.getByLabelText(translations.Rname), {
         target: { value: 'Ad1' },
       });
@@ -223,7 +217,6 @@ describe('Testing Advertisement Register Component', () => {
       });
     });
 
-    // Await the media preview update
     await waitFor(() => {
       expect(screen.getByTestId('mediaPreview')).toBeInTheDocument();
     });
@@ -242,7 +235,6 @@ describe('Testing Advertisement Register Component', () => {
       });
     });
 
-    // Expectations after field changes
     expect(screen.getByLabelText(translations.Rname)).toHaveValue('Ad1');
     expect(screen.getByLabelText(translations.Rtype)).toHaveValue('BANNER');
     expect(screen.getByLabelText(translations.RstartDate)).toHaveValue(
@@ -253,11 +245,9 @@ describe('Testing Advertisement Register Component', () => {
     );
 
     await act(async () => {
-      // Trigger form submission
       fireEvent.click(screen.getByText(translations.register));
     });
 
-    // Check the success message and setTimeout call
     await waitFor(() => {
       expect(toast.success).toBeCalledWith(
         'Advertisement created successfully.',
@@ -294,7 +284,6 @@ describe('Testing Advertisement Register Component', () => {
       );
     });
 
-    // Wait for the edit button text to be available
     await waitFor(() => {
       expect(screen.getByText(translations.edit)).toBeInTheDocument();
     });
@@ -303,7 +292,6 @@ describe('Testing Advertisement Register Component', () => {
       fireEvent.click(screen.getByText(translations.edit));
     });
 
-    // Update form fields inside act
     await act(async () => {
       fireEvent.change(screen.getByLabelText(translations.Rname), {
         target: { value: 'Ad1' },
@@ -320,7 +308,6 @@ describe('Testing Advertisement Register Component', () => {
       });
     });
 
-    // Wait for the media preview to appear
     await waitFor(() => {
       expect(screen.getByTestId('mediaPreview')).toBeInTheDocument();
     });
@@ -339,7 +326,6 @@ describe('Testing Advertisement Register Component', () => {
       });
     });
 
-    // Validate form field values
     expect(screen.getByLabelText(translations.Rname)).toHaveValue('Ad1');
     expect(screen.getByLabelText(translations.Rtype)).toHaveValue('BANNER');
     expect(screen.getByLabelText(translations.RstartDate)).toHaveValue(
@@ -349,12 +335,10 @@ describe('Testing Advertisement Register Component', () => {
       '2023-02-01',
     );
 
-    // Trigger form submission inside act
     await act(async () => {
       fireEvent.click(screen.getByText(translations.saveChanges));
     });
 
-    // Check success message and setTimeout
     await waitFor(() => {
       expect(toast.success).toBeCalledWith(
         'Advertisement created successfully.',
@@ -402,22 +386,17 @@ describe('Testing Advertisement Register Component', () => {
 
     expect(screen.queryByText(translations.addNew)).toBeInTheDocument();
 
-    // Simulate the error case in the component
     await act(async () => {
       fireEvent.click(screen.getByText(translations.register));
     });
 
-    // Check that `toast.error` was called with the correct arguments
     await waitFor(() => {
       expect(toastErrorSpy).toHaveBeenCalledWith(
         `An error occurred. Couldn't create advertisement`,
       );
     });
 
-    // Ensure that `setTimeout` was called
     expect(setTimeoutSpy).toHaveBeenCalled();
-
-    // Clean up
     jest.useRealTimers();
   });
 
