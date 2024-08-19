@@ -26,7 +26,7 @@
 
 [src/components/OrganizationDashCards/CardItem.tsx:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/OrganizationDashCards/CardItem.tsx#L17)
 
-___
+---
 
 ### enddate
 
@@ -36,7 +36,7 @@ ___
 
 [src/components/OrganizationDashCards/CardItem.tsx:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/OrganizationDashCards/CardItem.tsx#L16)
 
-___
+---
 
 ### location
 
@@ -46,7 +46,7 @@ ___
 
 [src/components/OrganizationDashCards/CardItem.tsx:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/OrganizationDashCards/CardItem.tsx#L18)
 
-___
+---
 
 ### startdate
 
@@ -56,7 +56,7 @@ ___
 
 [src/components/OrganizationDashCards/CardItem.tsx:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/OrganizationDashCards/CardItem.tsx#L15)
 
-___
+---
 
 ### time
 
@@ -66,7 +66,7 @@ ___
 
 [src/components/OrganizationDashCards/CardItem.tsx:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/OrganizationDashCards/CardItem.tsx#L14)
 
-___
+---
 
 ### title
 
@@ -76,11 +76,11 @@ ___
 
 [src/components/OrganizationDashCards/CardItem.tsx:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/OrganizationDashCards/CardItem.tsx#L13)
 
-___
+---
 
 ### type
 
-• **type**: ``"Event"`` \| ``"Post"`` \| ``"MembershipRequest"``
+• **type**: `"Event"` \| `"Post"` \| `"MembershipRequest"`
 
 #### Defined in
 

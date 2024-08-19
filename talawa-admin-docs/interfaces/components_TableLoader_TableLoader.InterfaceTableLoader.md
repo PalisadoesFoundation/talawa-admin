@@ -22,7 +22,7 @@
 
 [src/components/TableLoader/TableLoader.tsx:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/TableLoader/TableLoader.tsx#L7)
 
-___
+---
 
 ### noOfCols
 
@@ -32,7 +32,7 @@ ___
 
 [src/components/TableLoader/TableLoader.tsx:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/TableLoader/TableLoader.tsx#L8)
 
-___
+---
 
 ### noOfRows
 

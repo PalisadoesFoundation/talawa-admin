@@ -20,33 +20,33 @@
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `_id` | `string` |
-| `description` | `string` |
-| `organization` | \{ `_id`: `string`  \} |
-| `organization._id` | `string` |
-| `title` | `string` |
+| Name               | Type                  |
+| :----------------- | :-------------------- |
+| `_id`              | `string`              |
+| `description`      | `string`              |
+| `organization`     | \{ `_id`: `string` \} |
+| `organization._id` | `string`              |
+| `title`            | `string`              |
 
 #### Defined in
 
 [src/components/LeftDrawerEvent/LeftDrawerEvent.tsx:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/LeftDrawerEvent/LeftDrawerEvent.tsx#L17)
 
-___
+---
 
 ### hideDrawer
 
-• **hideDrawer**: ``null`` \| `boolean`
+• **hideDrawer**: `null` \| `boolean`
 
 #### Defined in
 
 [src/components/LeftDrawerEvent/LeftDrawerEvent.tsx:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/LeftDrawerEvent/LeftDrawerEvent.tsx#L25)
 
-___
+---
 
 ### setHideDrawer
 
-• **setHideDrawer**: `Dispatch`\<`SetStateAction`\<``null`` \| `boolean`\>\>
+• **setHideDrawer**: `Dispatch`\<`SetStateAction`\<`null` \| `boolean`\>\>
 
 #### Defined in
 

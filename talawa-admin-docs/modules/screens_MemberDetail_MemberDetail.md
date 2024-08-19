@@ -14,24 +14,24 @@
 
 ### default
 
-▸ **default**(`props`, `context?`): ``null`` \| `ReactElement`\<`any`, `any`\>
+▸ **default**(`props`, `context?`): `null` \| `ReactElement`\<`any`, `any`\>
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `props` | `PropsWithChildren`\<`MemberDetailProps`\> |
-| `context?` | `any` |
+| Name       | Type                                       |
+| :--------- | :----------------------------------------- |
+| `props`    | `PropsWithChildren`\<`MemberDetailProps`\> |
+| `context?` | `any`                                      |
 
 #### Returns
 
-``null`` \| `ReactElement`\<`any`, `any`\>
+`null` \| `ReactElement`\<`any`, `any`\>
 
 #### Defined in
 
 [src/screens/MemberDetail/MemberDetail.tsx:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/screens/MemberDetail/MemberDetail.tsx#L28)
 
-___
+---
 
 ### getLanguageName
 
@@ -39,8 +39,8 @@ ___
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name   | Type     |
+| :----- | :------- |
 | `code` | `string` |
 
 #### Returns
@@ -51,7 +51,7 @@ ___
 
 [src/screens/MemberDetail/MemberDetail.tsx:328](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/screens/MemberDetail/MemberDetail.tsx#L328)
 
-___
+---
 
 ### prettyDate
 
@@ -59,8 +59,8 @@ ___
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name    | Type     |
+| :------ | :------- |
 | `param` | `string` |
 
 #### Returns

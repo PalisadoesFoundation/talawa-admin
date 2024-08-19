@@ -137,8 +137,10 @@ const OrgActionItemCategories = (): JSX.Element => {
       refetch(); // Refetch the list of categories
 
       toast.success(
-        disabledStatus ? t('categoryEnabled') as string : t('categoryDisabled') as string,
-       ); // Show success toast
+        disabledStatus
+          ? (t('categoryEnabled') as string)
+          : (t('categoryDisabled') as string),
+      ); // Show success toast
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message);

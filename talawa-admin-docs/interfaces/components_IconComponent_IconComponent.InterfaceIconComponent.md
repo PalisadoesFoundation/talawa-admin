@@ -23,7 +23,7 @@
 
 [src/components/IconComponent/IconComponent.tsx:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/IconComponent/IconComponent.tsx#L17)
 
-___
+---
 
 ### height
 
@@ -33,7 +33,7 @@ ___
 
 [src/components/IconComponent/IconComponent.tsx:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/IconComponent/IconComponent.tsx#L18)
 
-___
+---
 
 ### name
 
@@ -43,7 +43,7 @@ ___
 
 [src/components/IconComponent/IconComponent.tsx:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/IconComponent/IconComponent.tsx#L16)
 
-___
+---
 
 ### width
 

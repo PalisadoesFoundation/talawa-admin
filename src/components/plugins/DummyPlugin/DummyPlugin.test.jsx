@@ -22,7 +22,7 @@ describe('Testing dummy plugin', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     expect(getByText(/Welcome to the Dummy Plugin!/i)).toBeInTheDocument();

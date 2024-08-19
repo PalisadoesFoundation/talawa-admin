@@ -22,7 +22,7 @@
 
 [src/components/CheckIn/types.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/CheckIn/types.ts#L2)
 
-___
+---
 
 ### firstName
 
@@ -32,7 +32,7 @@ ___
 
 [src/components/CheckIn/types.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/CheckIn/types.ts#L3)
 
-___
+---
 
 ### lastName
 

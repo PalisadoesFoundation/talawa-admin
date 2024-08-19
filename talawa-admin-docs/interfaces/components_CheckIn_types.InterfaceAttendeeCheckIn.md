@@ -22,17 +22,17 @@
 
 [src/components/CheckIn/types.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/CheckIn/types.ts#L8)
 
-___
+---
 
 ### checkIn
 
-• **checkIn**: ``null`` \| \{ `_id`: `string` ; `allotedRoom`: `string` ; `allotedSeat`: `string` ; `time`: `string`  \}
+• **checkIn**: `null` \| \{ `_id`: `string` ; `allotedRoom`: `string` ; `allotedSeat`: `string` ; `time`: `string` \}
 
 #### Defined in
 
 [src/components/CheckIn/types.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/CheckIn/types.ts#L10)
 
-___
+---
 
 ### user
 

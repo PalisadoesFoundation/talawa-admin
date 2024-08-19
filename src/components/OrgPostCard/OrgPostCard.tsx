@@ -222,7 +222,11 @@ export default function OrgPostCard(
   };
   return (
     <>
-      <div key={postID} className="col-xl-4 col-lg-4 col-md-6" data-testid="post-item">
+      <div
+        key={postID}
+        className="col-xl-4 col-lg-4 col-md-6"
+        data-testid="post-item"
+      >
         <div
           className={styles.cards}
           onClick={handleCardClick}

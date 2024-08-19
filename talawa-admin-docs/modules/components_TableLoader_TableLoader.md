@@ -20,8 +20,8 @@
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name    | Type                                                                                               |
+| :------ | :------------------------------------------------------------------------------------------------- |
 | `props` | [`InterfaceTableLoader`](../interfaces/components_TableLoader_TableLoader.InterfaceTableLoader.md) |
 
 #### Returns

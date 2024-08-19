@@ -81,7 +81,9 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
       },
     })
       .then(() => {
-        toast.success(tCommon('addedSuccessfully', { item: 'Attendee' }) as string);
+        toast.success(
+          tCommon('addedSuccessfully', { item: 'Attendee' }) as string,
+        );
         attendeesRefetch(); // Refresh the list of attendees
       })
       .catch((err) => {
@@ -100,7 +102,9 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
       },
     })
       .then(() => {
-        toast.success(tCommon('removedSuccessfully', { item: 'Attendee' }) as string );
+        toast.success(
+          tCommon('removedSuccessfully', { item: 'Attendee' }) as string,
+        );
         attendeesRefetch(); // Refresh the list of attendees
       })
       .catch((err) => {

@@ -20,8 +20,8 @@
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name             | Type                                                                                                                                     |
+| :--------------- | :--------------------------------------------------------------------------------------------------------------------------------------- |
 | `«destructured»` | [`InterfaceOrganizationScreenProps`](../interfaces/components_OrganizationScreen_OrganizationScreen.InterfaceOrganizationScreenProps.md) |
 
 #### Returns

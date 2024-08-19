@@ -28,7 +28,9 @@ interface InterfaceMemberRequestCardProps {
  * @param props - Properties for the member request card.
  * @returns JSX element for member request card.
  */
-function MemberRequestCard(props: InterfaceMemberRequestCardProps): JSX.Element {
+function MemberRequestCard(
+  props: InterfaceMemberRequestCardProps,
+): JSX.Element {
   const [acceptMutation] = useMutation(ACCEPT_ORGANIZATION_REQUEST_MUTATION);
   const [rejectMutation] = useMutation(REJECT_ORGANIZATION_REQUEST_MUTATION);
 

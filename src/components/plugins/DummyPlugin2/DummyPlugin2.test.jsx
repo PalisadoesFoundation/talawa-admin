@@ -12,7 +12,7 @@ describe('Testing DummyPlugin2', () => {
         <Provider store={store}>
           <DummyPlugin2 />
         </Provider>
-      </BrowserRouter>
+      </BrowserRouter>,
     );
   });
 });

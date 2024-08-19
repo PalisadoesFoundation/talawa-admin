@@ -20,8 +20,8 @@
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name    | Type                                                                                                |
+| :------ | :-------------------------------------------------------------------------------------------------- |
 | `props` | [`InterfaceCardItem`](../interfaces/components_OrganizationDashCards_CardItem.InterfaceCardItem.md) |
 
 #### Returns

@@ -40,7 +40,7 @@
 
 [src/components/AddOn/support/services/Plugin.helper.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/AddOn/support/services/Plugin.helper.ts#L7)
 
-___
+---
 
 ### fetchStore
 
@@ -54,21 +54,21 @@ ___
 
 [src/components/AddOn/support/services/Plugin.helper.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/AddOn/support/services/Plugin.helper.ts#L2)
 
-___
+---
 
 ### generateLinks
 
-▸ **generateLinks**(`plugins`): \{ `name`: `string` ; `url`: `string`  \}[]
+▸ **generateLinks**(`plugins`): \{ `name`: `string` ; `url`: `string` \}[]
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name      | Type    |
+| :-------- | :------ |
 | `plugins` | `any`[] |
 
 #### Returns
 
-\{ `name`: `string` ; `url`: `string`  \}[]
+\{ `name`: `string` ; `url`: `string` \}[]
 
 #### Defined in
 

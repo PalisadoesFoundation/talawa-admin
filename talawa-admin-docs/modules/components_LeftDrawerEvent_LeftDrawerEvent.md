@@ -20,8 +20,8 @@
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name             | Type                                                                                                               |
+| :--------------- | :----------------------------------------------------------------------------------------------------------------- |
 | `«destructured»` | [`InterfaceLeftDrawerProps`](../interfaces/components_LeftDrawerEvent_LeftDrawerEvent.InterfaceLeftDrawerProps.md) |
 
 #### Returns

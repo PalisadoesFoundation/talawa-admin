@@ -22,7 +22,7 @@
 
 [src/components/CheckIn/types.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/CheckIn/types.ts#L27)
 
-___
+---
 
 ### handleClose
 
@@ -40,7 +40,7 @@ ___
 
 [src/components/CheckIn/types.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/CheckIn/types.ts#L28)
 
-___
+---
 
 ### show
 

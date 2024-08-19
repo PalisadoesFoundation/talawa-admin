@@ -20,8 +20,8 @@
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name    | Type                                                                                                        |
+| :------ | :---------------------------------------------------------------------------------------------------------- |
 | `props` | [`InterfacePropType`](../interfaces/components_LeftDrawerEvent_LeftDrawerEventWrapper.InterfacePropType.md) |
 
 #### Returns

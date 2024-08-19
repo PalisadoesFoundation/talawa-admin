@@ -22,7 +22,7 @@
 
 [src/components/SuperAdminScreen/SuperAdminScreen.tsx:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/SuperAdminScreen/SuperAdminScreen.tsx#L9)
 
-___
+---
 
 ### screenName
 
@@ -32,7 +32,7 @@ ___
 
 [src/components/SuperAdminScreen/SuperAdminScreen.tsx:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/SuperAdminScreen/SuperAdminScreen.tsx#L8)
 
-___
+---
 
 ### title
 

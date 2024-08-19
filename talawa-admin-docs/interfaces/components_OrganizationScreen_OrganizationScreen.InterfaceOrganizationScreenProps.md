@@ -22,7 +22,7 @@
 
 [src/components/OrganizationScreen/OrganizationScreen.tsx:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/OrganizationScreen/OrganizationScreen.tsx#L12)
 
-___
+---
 
 ### screenName
 
@@ -32,7 +32,7 @@ ___
 
 [src/components/OrganizationScreen/OrganizationScreen.tsx:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/OrganizationScreen/OrganizationScreen.tsx#L11)
 
-___
+---
 
 ### title
 

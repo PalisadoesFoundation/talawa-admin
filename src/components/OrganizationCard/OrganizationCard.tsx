@@ -23,7 +23,11 @@ function OrganizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
       <div className={styles.box}>
         <div className={styles.first_box}>
           {props.image ? (
-            <img src={props.image} className={styles.alignimg} alt="Organization" />
+            <img
+              src={props.image}
+              className={styles.alignimg}
+              alt="Organization"
+            />
           ) : (
             <img
               src="https://via.placeholder.com/80"
