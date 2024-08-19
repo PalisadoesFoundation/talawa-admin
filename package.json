@@ -32,6 +32,7 @@
     "i18next-browser-languagedetector": "^8.0.0",
     "i18next-http-backend": "^2.5.2",
     "inquirer": "^8.0.0",
+    "jest-watch-typeahead": "^2.2.2",
     "js-cookie": "^3.0.1",
     "markdown-toc": "^1.2.0",
     "prettier": "^3.3.2",
