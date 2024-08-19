@@ -1,6 +1,6 @@
-import React, { act } from 'react';
+import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import 'jest-localstorage-mock';
 import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
@@ -429,17 +429,18 @@ describe('Testing Users screen', () => {
         </MockedProvider>,
       );
     });
+    await wait();
 
-    const searchBtn = await screen.findByTestId('searchButton');
+    const searchBtn = screen.getByTestId('searchButton');
+    const searchInput = screen.getByTestId(/searchByName/i);
 
-    const searchInput = await screen.findByTestId(/searchByName/i);
-
-    // Clear the search input
-    userEvent.clear(searchInput);
-
-    // Search for a name that doesn't exist
-    userEvent.type(screen.getByTestId(/searchByName/i), 'NonexistentName');
-    userEvent.click(searchBtn);
+    await act(async () => {
+      // Clear the search input
+      userEvent.clear(searchInput);
+      // Search for a name that doesn't exist
+      userEvent.type(screen.getByTestId(/searchByName/i), 'NonexistentName');
+      userEvent.click(searchBtn);
+    });
 
     expect(screen.queryByText(/No User Found/i)).toBeInTheDocument();
   });
@@ -452,8 +453,7 @@ describe('Testing Users screen', () => {
             <I18nextProvider i18n={i18nForTest}>
               <Users />
             </I18nextProvider>
-          </Provider>{' '}
-          ,
+          </Provider>
         </BrowserRouter>
       </MockedProvider>,
     );
@@ -518,25 +518,61 @@ describe('Testing Users screen', () => {
         </MockedProvider>,
       );
     });
+    await wait();
 
-    const searchInput = await screen.findByTestId('filter');
+    const searchInput = screen.getByTestId('filter');
     expect(searchInput).toBeInTheDocument();
+
     const inputText = screen.getByTestId('filterUsers');
-    fireEvent.click(inputText);
-    const toggleText = await screen.findByTestId('admin');
-    fireEvent.click(toggleText);
+
+    await act(async () => {
+      fireEvent.click(inputText);
+    });
+
+    const toggleText = screen.getByTestId('admin');
+
+    await act(async () => {
+      fireEvent.click(toggleText);
+    });
+
     expect(searchInput).toBeInTheDocument();
-    fireEvent.click(inputText);
-    let toggleTitle = await screen.findByTestId('superAdmin');
-    fireEvent.click(toggleTitle);
+
+    await act(async () => {
+      fireEvent.click(inputText);
+    });
+
+    let toggleTite = screen.getByTestId('superAdmin');
+
+    await act(async () => {
+      fireEvent.click(toggleTite);
+    });
+
     expect(searchInput).toBeInTheDocument();
-    fireEvent.click(inputText);
-    toggleTitle = await screen.findByTestId('user');
-    fireEvent.click(toggleTitle);
+
+    await act(async () => {
+      fireEvent.click(inputText);
+    });
+
+    toggleTite = screen.getByTestId('user');
+
+    await act(async () => {
+      fireEvent.click(toggleTite);
+    });
+
     expect(searchInput).toBeInTheDocument();
-    fireEvent.click(inputText);
-    const toggleCancel = await screen.findByTestId('cancel');
-    fireEvent.click(toggleCancel);
+
+    await act(async () => {
+      fireEvent.click(inputText);
+    });
+
+    toggleTite = screen.getByTestId('cancel');
+
+    await act(async () => {
+      fireEvent.click(toggleTite);
+    });
+
+    await wait();
+
     expect(searchInput).toBeInTheDocument();
   });
 
@@ -607,30 +643,60 @@ describe('Testing Users screen', () => {
         </MockedProvider>,
       );
     });
+    await wait();
 
     const filterButton = screen.getByTestId('filterUsers');
-    fireEvent.click(filterButton);
+
+    await act(async () => {
+      fireEvent.click(filterButton);
+    });
 
     const filterAdmin = screen.getByTestId('admin');
-    fireEvent.click(filterAdmin);
 
-    expect(await screen.findByText('Jane Doe')).toBeInTheDocument();
+    await act(async () => {
+      fireEvent.click(filterAdmin);
+    });
 
-    fireEvent.click(filterButton);
+    await wait();
+    expect(screen.getByText('Jane Doe')).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.click(filterButton);
+    });
+
     const filterSuperAdmin = screen.getByTestId('superAdmin');
-    fireEvent.click(filterSuperAdmin);
-    expect(await screen.findByText('John Doe')).toBeInTheDocument();
 
-    fireEvent.click(filterButton);
+    await act(async () => {
+      fireEvent.click(filterSuperAdmin);
+    });
+
+    await wait();
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.click(filterButton);
+    });
+
     const filterUser = screen.getByTestId('user');
-    fireEvent.click(filterUser);
-    expect(await screen.findByText('Jack Smith')).toBeInTheDocument();
+    await act(async () => {
+      fireEvent.click(filterUser);
+    });
 
-    fireEvent.click(filterButton);
+    await wait();
+    expect(screen.getByText('Jack Smith')).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.click(filterButton);
+    });
+
     const filterCancel = screen.getByTestId('cancel');
-    fireEvent.click(filterCancel);
 
-    expect(await screen.findByText('John Doe')).toBeInTheDocument();
+    await act(async () => {
+      fireEvent.click(filterCancel);
+    });
+
+    await wait();
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(screen.getByText('Jane Doe')).toBeInTheDocument();
     expect(screen.getByText('Jack Smith')).toBeInTheDocument();
   });
@@ -650,9 +716,10 @@ describe('Testing Users screen', () => {
         </MockedProvider>,
       );
     });
+    await wait();
 
     // Check if the sorting and filtering logic was applied correctly
-    const rows = await screen.findAllByRole('row');
+    const rows = screen.getAllByRole('row');
 
     const firstRow = rows[1];
     const secondRow = rows[2];
@@ -660,27 +727,52 @@ describe('Testing Users screen', () => {
     expect(firstRow).toHaveTextContent('John Doe');
     expect(secondRow).toHaveTextContent('Jane Doe');
 
-    const inputText = await screen.findByTestId('sortUsers');
-    fireEvent.click(inputText);
-    const toggleText = await screen.findByTestId('oldest');
-    fireEvent.click(toggleText);
+    await wait();
 
-    fireEvent.click(inputText);
-    const toggleTite = await screen.findByTestId('newest');
-    fireEvent.click(toggleTite);
+    const inputText = screen.getByTestId('sortUsers');
+
+    await act(async () => {
+      fireEvent.click(inputText);
+    });
+
+    const toggleText = screen.getByTestId('oldest');
+
+    await act(async () => {
+      fireEvent.click(toggleText);
+      fireEvent.click(inputText);
+    });
+
+    const toggleTite = screen.getByTestId('newest');
+
+    await act(async () => {
+      fireEvent.click(toggleTite);
+    });
 
     // Verify the users are sorted by oldest
-    const displayedUsers = await screen.findAllByRole('row');
+    await wait();
+
+    const displayedUsers = screen.getAllByRole('row');
     expect(displayedUsers[1]).toHaveTextContent('John Doe'); // assuming User1 is the oldest
     expect(displayedUsers[displayedUsers.length - 1]).toHaveTextContent(
       'Jack Smith',
     ); // assuming UserN is the newest
-    fireEvent.click(inputText);
-    const toggleOld = await screen.findByTestId('oldest');
-    fireEvent.click(toggleOld);
 
-    fireEvent.click(inputText);
-    const toggleNewest = await screen.findByTestId('newest');
-    fireEvent.click(toggleNewest);
+    await wait();
+
+    await act(async () => {
+      fireEvent.click(inputText);
+    });
+
+    const toggleOld = screen.getByTestId('oldest');
+
+    await act(async () => {
+      fireEvent.click(toggleOld);
+      fireEvent.click(inputText);
+    });
+
+    const toggleNewest = screen.getByTestId('newest');
+    await act(async () => {
+      fireEvent.click(toggleNewest);
+    });
   });
 });
