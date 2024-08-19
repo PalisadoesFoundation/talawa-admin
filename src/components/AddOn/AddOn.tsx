@@ -19,7 +19,11 @@ interface InterfaceAddOnProps {
  *
  * @returns The JSX element representing the AddOn component.
  */
-function AddOn({ children = 'Default text', extras = {}, name = '' }: InterfaceAddOnProps): JSX.Element {
+function AddOn({
+  children = 'Default text',
+  extras = {},
+  name = '',
+}: InterfaceAddOnProps): JSX.Element {
   return (
     <div className="plugin-container" data-testid="pluginContainer">
       {children}

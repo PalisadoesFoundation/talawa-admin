@@ -56,7 +56,9 @@ const UsersTableItem = (props: Props): JSX.Element => {
         },
       });
       if (data) {
-        toast.success(tCommon('removedSuccessfully', { item: 'User' }) as string);
+        toast.success(
+          tCommon('removedSuccessfully', { item: 'User' }) as string,
+        );
         resetAndRefetch();
       }
     } catch (error: unknown) {

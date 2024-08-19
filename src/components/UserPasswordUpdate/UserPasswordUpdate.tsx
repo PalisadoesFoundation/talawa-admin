@@ -64,7 +64,9 @@ const UserUpdate: React.FC<
       });
       /* istanbul ignore next */
       if (data) {
-        toast.success(tCommon('updatedSuccessfully', { item: 'Password' }) as string);
+        toast.success(
+          tCommon('updatedSuccessfully', { item: 'Password' }) as string,
+        );
         setTimeout(() => {
           window.location.reload();
         }, 2000);

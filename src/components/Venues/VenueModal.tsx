@@ -100,7 +100,9 @@ const VenueModal = ({
       });
       /* istanbul ignore next */
       if (data) {
-        toast.success(edit ? t('venueUpdated') as string : t('venueAdded') as string);
+        toast.success(
+          edit ? (t('venueUpdated') as string) : (t('venueAdded') as string),
+        );
         refetchVenues();
         onHide();
         setFormState({

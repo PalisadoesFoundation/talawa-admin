@@ -35,7 +35,9 @@ interface AddOnRegisterProps {
  *
  * @returns A JSX element containing the button and modal for plugin registration.
  */
-function addOnRegister({ createdBy = 'Admin' }: AddOnRegisterProps): JSX.Element {
+function addOnRegister({
+  createdBy = 'Admin',
+}: AddOnRegisterProps): JSX.Element {
   // Translation hook for the 'addOnRegister' namespace
   const { t } = useTranslation('translation', { keyPrefix: 'addOnRegister' });
   // Translation hook for the 'common' namespace

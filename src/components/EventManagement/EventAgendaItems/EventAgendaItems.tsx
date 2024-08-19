@@ -154,8 +154,10 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
   // Show error message if there is an error loading data
   if (agendaItemError || agendaCategoryError) {
     const errorMessage =
-      agendaCategoryError?.message || (agendaItemError as Error)?.message || 'Unknown error';
-  
+      agendaCategoryError?.message ||
+      (agendaItemError as Error)?.message ||
+      'Unknown error';
+
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
         <div className={styles.message}>
@@ -170,7 +172,6 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
       </div>
     );
   }
-  
 
   return (
     <div className={styles.eventAgendaItemContainer}>
