@@ -200,6 +200,36 @@
     "organization": "Organization",
     "invalidDetailsMessage": "Please enter valid details."
   },
+  "organizationTags": {
+    "title": "Organization Tags",
+    "createTag": "Create a new tag",
+    "manageTag": "Manage",
+    "editTag": "Edit",
+    "removeTag": "Remove",
+    "tagDetails": "Tag Details",
+    "tagName": "Name",
+    "tagType": "Type",
+    "tagNamePlaceholder": "Write the name of the tag",
+    "tagCreationSuccess": "New tag created successfully",
+    "tagUpdationSuccess": "Tag updated successfully",
+    "tagRemovalSuccess": "Tag deleted successfully",
+    "noTagsFound": "No tags found",
+    "removeUserTag": "Delete Tag",
+    "removeUserTagMessage": "Do you want to delete this tag?",
+    "addChildTag": "Add a Sub Tag"
+  },
+  "manageTag": {
+    "title": "Tag Details",
+    "addPeopleToTag": "Add People to tag",
+    "viewProfile": "View",
+    "noAssignedMembersFound": "No one assigned",
+    "unassignUserTag": "Unassign Tag",
+    "unassignUserTagMessage": "Do you want to remove the tag from this user?",
+    "successfullyUnassigned": "Tag unassigned from user",
+    "addPeople": "Add People",
+    "add": "Add",
+    "subTags": "Sub Tags"
+  },
   "userListCard": {
     "addAdmin": "Add Admin",
     "addedAsAdmin": "User is added as admin."
@@ -678,6 +708,10 @@
     "addedAsAdmin": "User is added as admin.",
     "userType": "User Type"
   },
+  "people": {
+    "title": "People",
+    "searchUsers": "Search users"
+  },
   "userLogin": {
     "login": "Login",
     "loginIntoYourAccount": "Login into your account",
@@ -742,7 +776,7 @@
   "home": {
     "posts": "Posts",
     "post": "Post",
-    "title": "Title",
+    "title": "Posts",
     "textArea": "Something on your mind?",
     "feed": "Feed",
     "loading": "Loading",
@@ -812,6 +846,7 @@
     "enterState": "Enter City or State"
   },
   "donate": {
+    "title": "Donations",
     "donations": "Donations",
     "searchDonations": "Search donations",
     "donateForThe": "Donate for the",
@@ -822,6 +857,7 @@
     "success": "Donation Successful"
   },
   "userEvents": {
+    "title": "Events",
     "nothingToShow": "Nothing to show here.",
     "createEvent": "Create Event",
     "recurring": "Recurring Event",
@@ -979,5 +1015,26 @@
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error adding attendee",
     "errorRemovingAttendee": "Error removing attendee"
+  },
+  "userCampaigns": {
+    "title": "Fundraising Campaigns",
+    "searchByName": "Search by Name...",
+    "searchBy": "Search by",
+    "pledgers": "Pledgers",
+    "campaigns": "Campaigns",
+    "myPledges": "My Pledges",
+    "lowestAmount": "Lowest Amount",
+    "highestAmount": "Highest Amount",
+    "lowestGoal": "Lowest Goal",
+    "highestGoal": "Highest Goal",
+    "latestEndDate": "Latest End Date",
+    "earliestEndDate": "Earliest End Date",
+    "addPledge": "Add Pledge",
+    "viewPledges": "View Pledges",
+    "noPledges": "No Pledges Found",
+    "noCampaigns": "No Campaigns Found"
+  },
+  "userPledges": {
+    "title": "My Pledges"
   }
 }
