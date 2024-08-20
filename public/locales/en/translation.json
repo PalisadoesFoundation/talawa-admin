@@ -218,6 +218,18 @@
     "removeUserTagMessage": "Do you want to delete this tag?",
     "addChildTag": "Add a Sub Tag"
   },
+  "manageTag": {
+    "title": "Tag Details",
+    "addPeopleToTag": "Add People to tag",
+    "viewProfile": "View",
+    "noAssignedMembersFound": "No one assigned",
+    "unassignUserTag": "Unassign Tag",
+    "unassignUserTagMessage": "Do you want to remove the tag from this user?",
+    "successfullyUnassigned": "Tag unassigned from user",
+    "addPeople": "Add People",
+    "add": "Add",
+    "subTags": "Sub Tags"
+  },
   "userListCard": {
     "addAdmin": "Add Admin",
     "addedAsAdmin": "User is added as admin."

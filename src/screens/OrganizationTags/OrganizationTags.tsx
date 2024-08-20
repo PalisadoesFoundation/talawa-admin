@@ -185,7 +185,7 @@ function OrganizationTags(): JSX.Element {
     [];
 
   const handleClick = (tagId: string): void => {
-    navigate(`/orgtags/${currentUrl}/orgtagdetails/${tagId}`);
+    navigate(`/orgtags/${currentUrl}/managetag/${tagId}`);
   };
 
   const toggleRemoveUserTagModal = (): void => {

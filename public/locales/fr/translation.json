@@ -218,6 +218,18 @@
     "removeUserTagMessage": "Voulez-vous supprimer cette étiquette ?",
     "addChildTag": "Ajouter une Sous-Étiquette"
   },
+  "manageTag": {
+    "title": "Détails de l'étiquette",
+    "addPeopleToTag": "Ajouter des personnes à l'étiquette",
+    "viewProfile": "Voir",
+    "noAssignedMembersFound": "Aucun membre assigné",
+    "unassignUserTag": "Désassigner l'étiquette",
+    "unassignUserTagMessage": "Voulez-vous retirer l'étiquette de cet utilisateur?",
+    "successfullyUnassigned": "Étiquette retirée de l'utilisateur",
+    "addPeople": "Ajouter des personnes",
+    "add": "Ajouter",
+    "subTags": "Sous-étiquettes"
+  },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",
     "addedAsAdmin": "L'utilisateur est ajouté en tant qu'administrateur."

@@ -10,7 +10,7 @@ import { UPDATE_COMMUNITY, RESET_COMMUNITY } from 'GraphQl/Mutations/mutations';
 import {
   FacebookLogo,
   InstagramLogo,
-  TwitterLogo,
+  XLogo,
   LinkedInLogo,
   GithubLogo,
   YoutubeLogo,
@@ -55,7 +55,7 @@ const CommunityProfile = (): JSX.Element => {
     socialMediaUrls: {
       facebook: string | undefined;
       instagram: string | undefined;
-      twitter: string | undefined;
+      X: string | undefined;
       linkedIn: string | undefined;
       gitHub: string | undefined;
       youTube: string | undefined;
@@ -71,7 +71,7 @@ const CommunityProfile = (): JSX.Element => {
     logoUrl: '',
     facebook: '',
     instagram: '',
-    twitter: '',
+    X: '',
     linkedIn: '',
     github: '',
     youtube: '',
@@ -97,7 +97,7 @@ const CommunityProfile = (): JSX.Element => {
         logoUrl: preLoginData.logoUrl ?? '',
         facebook: preLoginData.socialMediaUrls.facebook ?? '',
         instagram: preLoginData.socialMediaUrls.instagram ?? '',
-        twitter: preLoginData.socialMediaUrls.twitter ?? '',
+        X: preLoginData.socialMediaUrls.X ?? '',
         linkedIn: preLoginData.socialMediaUrls.linkedIn ?? '',
         github: preLoginData.socialMediaUrls.gitHub ?? '',
         youtube: preLoginData.socialMediaUrls.youTube ?? '',
@@ -137,7 +137,7 @@ const CommunityProfile = (): JSX.Element => {
             socialMediaUrls: {
               facebook: profileVariable.facebook,
               instagram: profileVariable.instagram,
-              twitter: profileVariable.twitter,
+              X: profileVariable.X,
               linkedIn: profileVariable.linkedIn,
               gitHub: profileVariable.github,
               youTube: profileVariable.youtube,
@@ -167,7 +167,7 @@ const CommunityProfile = (): JSX.Element => {
         logoUrl: '',
         facebook: '',
         instagram: '',
-        twitter: '',
+        X: '',
         linkedIn: '',
         github: '',
         youtube: '',
@@ -312,14 +312,14 @@ const CommunityProfile = (): JSX.Element => {
                 />
               </div>
               <div className="mb-3 d-flex align-items-center gap-3">
-                <img src={TwitterLogo} alt="Twitter Logo" />
+                <img src={XLogo} alt="X Logo" />
                 <Form.Control
                   type="url"
-                  id="twitter"
-                  name="twitter"
-                  data-testid="twitter"
+                  id="X"
+                  name="X"
+                  data-testid="X"
                   className={styles.socialInput}
-                  value={profileVariable.twitter}
+                  value={profileVariable.X}
                   onChange={handleOnChange}
                   placeholder={t('url')}
                   autoComplete="off"

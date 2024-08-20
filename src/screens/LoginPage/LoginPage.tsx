@@ -26,7 +26,6 @@ import { GET_COMMUNITY_DATA, ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import { ReactComponent as PalisadoesLogo } from 'assets/svgs/palisadoes.svg';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
-import Loader from 'components/Loader/Loader';
 import LoginPortalToggle from 'components/LoginPortalToggle/LoginPortalToggle';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -65,7 +64,6 @@ const loginPage = (): JSX.Element => {
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const [showTab, setShowTab] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
   const [role, setRole] = useState<'admin' | 'user'>('admin');
-  const [componentLoader, setComponentLoader] = useState(true);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [signformState, setSignFormState] = useState({
     signfirstName: '',
@@ -116,22 +114,20 @@ const loginPage = (): JSX.Element => {
       navigate(getItem('userId') !== null ? '/user/organizations' : '/orglist');
       startSession();
     }
-    setComponentLoader(false);
   }, []);
 
   const togglePassword = (): void => setShowPassword(!showPassword);
   const toggleConfirmPassword = (): void =>
     setShowConfirmPassword(!showConfirmPassword);
 
-  const { data, loading, refetch } = useQuery(GET_COMMUNITY_DATA);
+  const { data, refetch } = useQuery(GET_COMMUNITY_DATA);
   useEffect(() => {
     // refetching the data if the pre-login data updates
     refetch();
   }, [data]);
   const [login, { loading: loginLoading }] = useMutation(LOGIN_MUTATION);
   const [signup, { loading: signinLoading }] = useMutation(SIGNUP_MUTATION);
-  const [recaptcha, { loading: recaptchaLoading }] =
-    useMutation(RECAPTCHA_MUTATION);
+  const [recaptcha] = useMutation(RECAPTCHA_MUTATION);
   const { data: orgData } = useQuery(ORGANIZATION_LIST);
   const { startSession } = useSession();
   useEffect(() => {
@@ -340,15 +336,6 @@ const loginPage = (): JSX.Element => {
     }
   };
 
-  if (
-    componentLoader ||
-    loginLoading ||
-    signinLoading ||
-    recaptchaLoading ||
-    loading
-  ) {
-    return <Loader />;
-  }
   const socialIconsList = socialMediaLinks.map(({ href, logo, tag }, index) =>
     data?.getCommunityData ? (
       data.getCommunityData?.socialMediaUrls?.[tag] && (
@@ -439,6 +426,7 @@ const loginPage = (): JSX.Element => {
                   <div className="position-relative">
                     <Form.Control
                       type="email"
+                      disabled={loginLoading}
                       placeholder={tCommon('enterEmail')}
                       required
                       value={formState.email}
@@ -475,6 +463,7 @@ const loginPage = (): JSX.Element => {
                           password: e.target.value,
                         });
                       }}
+                      disabled={loginLoading}
                       autoComplete="current-password"
                     />
                     <Button
@@ -514,6 +503,7 @@ const loginPage = (): JSX.Element => {
                     <></>
                   )}
                   <Button
+                    disabled={loginLoading}
                     type="submit"
                     className="mt-3 mb-3 w-100"
                     value="Login"
@@ -554,6 +544,7 @@ const loginPage = (): JSX.Element => {
                       <div>
                         <Form.Label>{tCommon('firstName')}</Form.Label>
                         <Form.Control
+                          disabled={signinLoading}
                           type="text"
                           id="signfirstname"
                           className="mb-3"
@@ -573,6 +564,7 @@ const loginPage = (): JSX.Element => {
                       <div>
                         <Form.Label>{tCommon('lastName')}</Form.Label>
                         <Form.Control
+                          disabled={signinLoading}
                           type="text"
                           id="signlastname"
                           className="mb-3"
@@ -593,6 +585,7 @@ const loginPage = (): JSX.Element => {
                     <Form.Label>{tCommon('email')}</Form.Label>
                     <div className="position-relative">
                       <Form.Control
+                        disabled={signinLoading}
                         type="email"
                         data-testid="signInEmail"
                         className="mb-3"
@@ -620,6 +613,7 @@ const loginPage = (): JSX.Element => {
                     <Form.Label>{tCommon('password')}</Form.Label>
                     <div className="position-relative">
                       <Form.Control
+                        disabled={signinLoading}
                         type={showPassword ? 'text' : 'password'}
                         data-testid="passwordField"
                         placeholder={tCommon('password')}
@@ -774,6 +768,7 @@ const loginPage = (): JSX.Element => {
                     <Form.Label>{tCommon('confirmPassword')}</Form.Label>
                     <div className="position-relative">
                       <Form.Control
+                        disabled={signinLoading}
                         type={showConfirmPassword ? 'text' : 'password'}
                         placeholder={tCommon('confirmPassword')}
                         required
@@ -855,6 +850,7 @@ const loginPage = (): JSX.Element => {
                     className="mt-4 w-100 mb-3"
                     value="Register"
                     data-testid="registrationBtn"
+                    disabled={signinLoading}
                   >
                     {tCommon('register')}
                   </Button>
