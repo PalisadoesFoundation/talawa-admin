@@ -223,9 +223,11 @@ describe('Organisation Tags Page', () => {
     await wait();
 
     await waitFor(() => {
-      expect(screen.getAllByTestId('goToManageTag')[0]).toBeInTheDocument();
+      expect(
+        screen.getAllByTestId('redirectToManageTag')[0],
+      ).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('goToManageTag')[0]);
+    userEvent.click(screen.getAllByTestId('redirectToManageTag')[0]);
 
     await waitFor(() => {
       expect(screen.getByTestId('addPeopleToTagBtn')).toBeInTheDocument();

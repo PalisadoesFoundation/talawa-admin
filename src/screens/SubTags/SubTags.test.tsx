@@ -221,9 +221,9 @@ describe('Organisation Tags Page', () => {
     await wait();
 
     await waitFor(() => {
-      expect(screen.getAllByTestId('goToSubTags')[0]).toBeInTheDocument();
+      expect(screen.getAllByTestId('redirectToSubTags')[0]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('goToSubTags')[0]);
+    userEvent.click(screen.getAllByTestId('redirectToSubTags')[0]);
 
     await waitFor(() => {
       expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();

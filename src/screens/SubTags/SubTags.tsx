@@ -16,6 +16,7 @@ import { toast } from 'react-toastify';
 import type { InterfaceQueryUserTagChildTags } from 'utils/interfaces';
 import styles from './SubTags.module.css';
 import { DataGrid } from '@mui/x-data-grid';
+import { dataGridStyle } from 'utils/organizationTagsUtils';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
 import {
@@ -27,27 +28,6 @@ import {
   USER_TAG_SUB_TAGS,
 } from 'GraphQl/Queries/userTagQueries';
 
-const dataGridStyle = {
-  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-    outline: 'none !important',
-  },
-  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-    outline: 'none',
-  },
-  '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-root': {
-    borderRadius: '0.1rem',
-  },
-  '& .MuiDataGrid-main': {
-    borderRadius: '0.1rem',
-  },
-};
-
 function SubTags(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationTags',
@@ -56,7 +36,7 @@ function SubTags(): JSX.Element {
 
   const [addSubTagModalIsOpen, setAddSubTagModalIsOpen] = useState(false);
 
-  const { orgId: currentUrl, tagId: parentTagId } = useParams();
+  const { orgId, tagId: parentTagId } = useParams();
 
   const navigate = useNavigate();
 
@@ -132,7 +112,7 @@ function SubTags(): JSX.Element {
       const { data } = await create({
         variables: {
           name: tagName,
-          organizationId: currentUrl,
+          organizationId: orgId,
           parentTagId,
         },
       });
@@ -148,7 +128,6 @@ function SubTags(): JSX.Element {
       /* istanbul ignore next */
       if (error instanceof Error) {
         toast.error(error.message);
-        console.log(error.message);
       }
     }
   };
@@ -169,7 +148,6 @@ function SubTags(): JSX.Element {
       /* istanbul ignore next */
       if (error instanceof Error) {
         toast.error(error.message);
-        console.log(error.message);
       }
     }
   };
@@ -216,12 +194,12 @@ function SubTags(): JSX.Element {
 
   const orgUserTagAncestors = orgUserTagAncestorsData?.getUserTagAncestors;
 
-  const goToManageTag = (tagId: string): void => {
-    navigate(`/orgtags/${currentUrl}/manageTag/${tagId}`);
+  const redirectToManageTag = (tagId: string): void => {
+    navigate(`/orgtags/${orgId}/manageTag/${tagId}`);
   };
 
-  const goToSubTags = (tagId: string): void => {
-    navigate(`/orgtags/${currentUrl}/subtags/${tagId}`);
+  const redirectToSubTags = (tagId: string): void => {
+    navigate(`/orgtags/${orgId}/subtags/${tagId}`);
   };
 
   const toggleRemoveUserTagModal = (): void => {
@@ -256,7 +234,7 @@ function SubTags(): JSX.Element {
           <div
             className={styles.subTagsLink}
             data-testid="tagName"
-            onClick={() => goToSubTags(params.row._id as string)}
+            onClick={() => redirectToSubTags(params.row._id as string)}
           >
             {params.row.name}
 
@@ -278,7 +256,7 @@ function SubTags(): JSX.Element {
         return (
           <Link
             className="text-secondary"
-            to={`/orgtags/${currentUrl}/subtags/${params.row._id}`}
+            to={`/orgtags/${orgId}/subtags/${params.row._id}`}
           >
             {params.row.childTags.totalCount}
           </Link>
@@ -298,7 +276,7 @@ function SubTags(): JSX.Element {
         return (
           <Link
             className="text-secondary"
-            to={`/orgtags/${currentUrl}/orgtagdetails/${params.row._id}`}
+            to={`/orgtags/${orgId}/orgtagdetails/${params.row._id}`}
           >
             {params.row.usersAssignedTo.totalCount}
           </Link>
@@ -320,7 +298,7 @@ function SubTags(): JSX.Element {
             <Button
               size="sm"
               className="btn btn-primary rounded mt-3"
-              onClick={() => goToManageTag(params.row._id)}
+              onClick={() => redirectToManageTag(params.row._id)}
               data-testid="manageTagBtn"
             >
               {t('manageTag')}
@@ -390,7 +368,7 @@ function SubTags(): JSX.Element {
 
               <Button
                 variant="success"
-                onClick={() => goToManageTag(parentTagId as string)}
+                onClick={() => redirectToManageTag(parentTagId as string)}
                 data-testid="manageCurrentTagBtn"
                 className="mx-4"
               >
@@ -416,7 +394,7 @@ function SubTags(): JSX.Element {
               </div>
 
               <div
-                onClick={() => navigate(`/orgtags/${currentUrl}`)}
+                onClick={() => navigate(`/orgtags/${orgId}`)}
                 className={`fs-6 ms-3 my-1 ${styles.tagsBreadCrumbs}`}
                 data-testid="allTagsBtn"
               >
@@ -428,8 +406,8 @@ function SubTags(): JSX.Element {
                 <div
                   key={index}
                   className={`ms-2 my-1 ${tag._id === parentTagId ? `fs-4 fw-semibold text-secondary` : `${styles.tagsBreadCrumbs} fs-6`}`}
-                  onClick={() => goToSubTags(tag._id as string)}
-                  data-testid="goToSubTags"
+                  onClick={() => redirectToSubTags(tag._id as string)}
+                  data-testid="redirectToSubTags"
                 >
                   {tag.name}
 
