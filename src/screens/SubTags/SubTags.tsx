@@ -28,6 +28,13 @@ import {
   USER_TAG_SUB_TAGS,
 } from 'GraphQl/Queries/userTagQueries';
 
+/**
+ * Component that renders the SubTags screen when the app navigates to '/orgtags/:orgId/subtags/:tagId'.
+ *
+ * This component does not accept any props and is responsible for displaying
+ * the content associated with the corresponding route.
+ */
+
 function SubTags(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationTags',

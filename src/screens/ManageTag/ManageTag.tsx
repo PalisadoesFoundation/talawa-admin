@@ -24,6 +24,13 @@ import {
   USER_TAGS_ASSIGNED_MEMBERS,
 } from 'GraphQl/Queries/userTagQueries';
 
+/**
+ * Component that renders the Manage Tag screen when the app navigates to '/orgtags/:orgId/managetag/:tagId'.
+ *
+ * This component does not accept any props and is responsible for displaying
+ * the content associated with the corresponding route.
+ */
+
 function ManageTag(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'manageTag',

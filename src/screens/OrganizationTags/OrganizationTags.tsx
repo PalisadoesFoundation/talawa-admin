@@ -25,6 +25,13 @@ import {
   REMOVE_USER_TAG,
 } from 'GraphQl/Mutations/TagMutations';
 
+/**
+ * Component that renders the Organization Tags screen when the app navigates to '/orgtags/:orgId'.
+ *
+ * This component does not accept any props and is responsible for displaying
+ * the content associated with the corresponding route.
+ */
+
 function OrganizationTags(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationTags',
