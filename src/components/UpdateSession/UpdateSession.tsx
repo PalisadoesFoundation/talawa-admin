@@ -57,7 +57,7 @@ const UpdateTimeout = (): JSX.Element => {
       const target = e.target as HTMLInputElement;
       // Ensure the value is a number and not NaN
       const value = parseInt(target.value, 10);
-      if (!isNaN(value)) {
+      if (!Number.isNaN(value)) {
         setTimeout(value);
       } else {
         console.warn('Invalid timeout value:', target.value);
