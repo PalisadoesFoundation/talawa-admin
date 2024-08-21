@@ -20,23 +20,35 @@ import type { InterfaceUserCampaign } from 'utils/interfaces';
 import { currencySymbols } from 'utils/currency';
 import Loader from 'components/Loader/Loader';
 
+/**
+ * The `Campaigns` component displays a list of fundraising campaigns for a specific organization.
+ * It allows users to search, sort, and view details about each campaign. Users can also add pledges to active campaigns.
+ *
+ * @returns The rendered component displaying the campaigns.
+ */
 const Campaigns = (): JSX.Element => {
+  // Retrieves translation functions for various namespaces
   const { t } = useTranslation('translation', {
     keyPrefix: 'userCampaigns',
   });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
+  // Retrieves stored user ID from local storage
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
 
+  // Extracts organization ID from the URL parameters
   const { orgId } = useParams();
   if (!orgId || !userId) {
+    // Redirects to the homepage if orgId or userId is missing
     return <Navigate to={'/'} replace />;
   }
 
+  // Navigation hook to programmatically navigate between routes
   const navigate = useNavigate();
 
+  // State for managing search term, campaigns, selected campaign, modal state, and sorting order
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [campaigns, setCampaigns] = useState<InterfaceUserCampaign[]>([]);
   const [selectedCampaign, setSelectedCampaign] =
@@ -46,6 +58,7 @@ const Campaigns = (): JSX.Element => {
     'fundingGoal_ASC' | 'fundingGoal_DESC' | 'endDate_ASC' | 'endDate_DESC'
   >('endDate_DESC');
 
+  // Fetches campaigns based on the organization ID, search term, and sorting order
   const {
     data: campaignData,
     loading: campaignLoading,
@@ -68,24 +81,35 @@ const Campaigns = (): JSX.Element => {
     },
   });
 
+  /**
+   * Opens the modal for adding a pledge to a selected campaign.
+   *
+   * @param campaign - The campaign to which the user wants to add a pledge.
+   */
   const openModal = (campaign: InterfaceUserCampaign): void => {
     setSelectedCampaign(campaign);
     setModalState(true);
   };
 
+  /**
+   * Closes the modal and clears the selected campaign.
+   */
   const closeModal = (): void => {
     setModalState(false);
     setSelectedCampaign(null);
   };
 
+  // Updates the campaigns state when the fetched campaign data changes
   useEffect(() => {
     if (campaignData) {
       setCampaigns(campaignData.getFundraisingCampaigns);
     }
   }, [campaignData]);
 
+  // Renders a loader while campaigns are being fetched
   if (campaignLoading) return <Loader size="xl" />;
   if (campaignError) {
+    // Displays an error message if there is an issue loading the campaigns
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
         <div className={styles.message} data-testid="errorMsg">
@@ -100,9 +124,11 @@ const Campaigns = (): JSX.Element => {
     );
   }
 
+  // Renders the campaign list and UI elements for searching, sorting, and adding pledges
   return (
     <>
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
+        {/* Search input field and button */}
         <div className={`${styles.input} mb-1`}>
           <Form.Control
             type="name"
@@ -124,6 +150,7 @@ const Campaigns = (): JSX.Element => {
         </div>
         <div className="d-flex gap-4 mb-1">
           <div className="d-flex justify-space-between">
+            {/* Dropdown menu for sorting campaigns */}
             <Dropdown>
               <Dropdown.Toggle
                 variant="success"
@@ -163,6 +190,7 @@ const Campaigns = (): JSX.Element => {
             </Dropdown>
           </div>
           <div>
+            {/* Button to navigate to the user's pledges */}
             <Button
               variant="success"
               data-testid="myPledgesBtn"
@@ -178,6 +206,7 @@ const Campaigns = (): JSX.Element => {
       </div>
       {campaigns.length < 1 ? (
         <Stack height="100%" alignItems="center" justifyContent="center">
+          {/* Displayed if no campaigns are found */}
           {t('noCampaigns')}
         </Stack>
       ) : (
@@ -258,6 +287,7 @@ const Campaigns = (): JSX.Element => {
         ))
       )}
 
+      {/* Modal for adding pledges to campaigns */}
       <PledgeModal
         isOpen={modalState}
         hide={closeModal}
