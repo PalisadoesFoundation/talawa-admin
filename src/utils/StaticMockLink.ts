@@ -77,9 +77,7 @@ export class StaticMockLink extends ApolloLink {
 
     if (!response || typeof responseIndex === 'undefined') {
       configError = new Error(
-        `No more mocked responses for the query: ${print(
-          operation.query,
-        )}, variables: ${JSON.stringify(operation.variables)}`,
+        `No more mocked responses for the query: ${print(operation.query)},`,
       );
     } else {
       const { newData } = response;
