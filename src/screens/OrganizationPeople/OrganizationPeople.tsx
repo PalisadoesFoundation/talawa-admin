@@ -315,6 +315,8 @@ function organizationPeople(): JSX.Element {
                   <Dropdown.Item
                     d-inline
                     id="userslist"
+                    data-value="userslist"
+                    data-name="displaylist"
                     data-testid="users"
                     defaultChecked={state == 2 ? true : false}
                     onClick={(): void => {
@@ -328,6 +330,8 @@ function organizationPeople(): JSX.Element {
                   <Dropdown.Item
                     d-inline
                     id="memberslist"
+                    data-value="memberslist"
+                    data-name="displaylist"
                     data-testid="members"
                     defaultChecked={state == 0 ? true : false}
                     onClick={(): void => {
@@ -339,6 +343,8 @@ function organizationPeople(): JSX.Element {
                   <Dropdown.Item
                     d-inline
                     id="adminslist"
+                    data-value="adminslist"
+                    data-name="displaylist"
                     data-testid="admins"
                     defaultChecked={state == 1 ? true : false}
                     onClick={(): void => {
