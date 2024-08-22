@@ -204,29 +204,31 @@ export interface InterfaceQueryOrganizationPostListItem {
   };
 }
 
-export interface InterfaceQueryOrganizationUserTags {
-  userTags: {
-    edges: {
-      node: {
-        _id: string;
-        name: string;
-        usersAssignedTo: {
-          totalCount: number;
-        };
-        childTags: {
-          totalCount: number;
-        };
+interface InterfaceTagData {
+  edges: {
+    node: {
+      _id: string;
+      name: string;
+      usersAssignedTo: {
+        totalCount: number;
       };
-      cursor: string;
-    }[];
-    pageInfo: {
-      startCursor: string;
-      endCursor: string;
-      hasNextPage: boolean;
-      hasPreviousPage: boolean;
+      childTags: {
+        totalCount: number;
+      };
     };
-    totalCount: number;
+    cursor: string;
+  }[];
+  pageInfo: {
+    startCursor: string;
+    endCursor: string;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
   };
+  totalCount: number;
+}
+
+export interface InterfaceQueryOrganizationUserTags {
+  userTags: InterfaceTagData;
 }
 
 export interface InterfaceQueryUserTagsAssignedMembers {
@@ -247,6 +249,11 @@ export interface InterfaceQueryUserTagsAssignedMembers {
     };
     totalCount: number;
   };
+}
+
+export interface InterfaceQueryUserTagChildTags {
+  name: string;
+  childTags: InterfaceTagData;
 }
 
 export interface InterfaceQueryOrganizationAdvertisementListItem {
