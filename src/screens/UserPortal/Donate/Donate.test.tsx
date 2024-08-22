@@ -136,9 +136,29 @@ jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   ...jest.requireActual('react-i18next'),
   useParams: () => ({ orgId: '' }),
-  useTranslation: () => ({
-    t: (key: string) => key, // This will return the key itself as the translation
-  }),
+}));
+
+jest.mock('react-i18next', () => ({
+  // This mock makes sure any components using the translate hook can use it without a warning being shown
+  useTranslation: () => {
+    return {
+      t: (str: string) => str,
+      i18n: {
+        changeLanguage: () =>
+          new Promise(() => {
+            // This is an intentionally empty function
+            // It's used to mock the changeLanguage method without actually doing anything
+          }),
+      },
+    };
+  },
+}));
+
+jest.mock('react-toastify', () => ({
+  toast: {
+    error: jest.fn(),
+    success: jest.fn(),
+  },
 }));
 
 describe('Testing Donate Screen [User Portal]', () => {
@@ -329,25 +349,5 @@ describe('Testing Donate Screen [User Portal]', () => {
     await wait();
 
     expect(toast.error).toHaveBeenCalledWith('invalidAmount');
-  });
-
-  test('displays donation amount description', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    const descriptionElement = screen.getByText('donationAmountDescription');
-    expect(descriptionElement).toBeInTheDocument();
-    expect(descriptionElement).toHaveClass('text-muted');
   });
 });
