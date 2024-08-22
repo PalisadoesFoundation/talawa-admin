@@ -16,6 +16,7 @@ import Donate from './Donate';
 import userEvent from '@testing-library/user-event';
 import useLocalStorage from 'utils/useLocalstorage';
 import { DONATE_TO_ORGANIZATION } from 'GraphQl/Mutations/mutations';
+import { toast } from 'react-toastify';
 
 const MOCKS = [
   {
@@ -133,7 +134,11 @@ async function wait(ms = 100): Promise<void> {
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
+  ...jest.requireActual('react-i18next'),
   useParams: () => ({ orgId: '' }),
+  useTranslation: () => ({
+    t: (key: string) => key, // This will return the key itself as the translation
+  }),
 }));
 
 describe('Testing Donate Screen [User Portal]', () => {
@@ -279,5 +284,70 @@ describe('Testing Donate Screen [User Portal]', () => {
     userEvent.type(screen.getByTestId('donationAmount'), '123');
     userEvent.click(screen.getByTestId('donateBtn'));
     await wait();
+  });
+
+  test('displays error toast for empty donation amount', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Donate />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('donateBtn'));
+
+    await wait();
+
+    expect(toast.error).toHaveBeenCalledWith('invalidAmount');
+  });
+
+  test('displays error toast for invalid (non-numeric) donation amount', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Donate />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    userEvent.type(screen.getByTestId('donationAmount'), 'abc');
+    userEvent.click(screen.getByTestId('donateBtn'));
+
+    await wait();
+
+    expect(toast.error).toHaveBeenCalledWith('invalidAmount');
+  });
+
+  test('displays donation amount description', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Donate />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const descriptionElement = screen.getByText('donationAmountDescription');
+    expect(descriptionElement).toBeInTheDocument();
+    expect(descriptionElement).toHaveClass('text-muted');
   });
 });
