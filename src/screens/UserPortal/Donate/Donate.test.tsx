@@ -122,7 +122,6 @@ const MOCKS = [
   },
 ];
 
-
 const link = new StaticMockLink(MOCKS, true);
 
 async function wait(ms = 100): Promise<void> {
@@ -310,7 +309,9 @@ describe('Testing Donate Screen [User Portal]', () => {
 
     await wait();
 
-    expect(toast.error).toHaveBeenCalledWith("Please enter a numerical value for the donation amount.");
+    expect(toast.error).toHaveBeenCalledWith(
+      'Please enter a numerical value for the donation amount.',
+    );
   });
 
   test('displays error toast for invalid (non-numeric) donation amount', async () => {
@@ -333,6 +334,8 @@ describe('Testing Donate Screen [User Portal]', () => {
 
     await wait();
 
-    expect(toast.error).toHaveBeenCalledWith("Please enter a numerical value for the donation amount.");
+    expect(toast.error).toHaveBeenCalledWith(
+      'Please enter a numerical value for the donation amount.',
+    );
   });
 });
