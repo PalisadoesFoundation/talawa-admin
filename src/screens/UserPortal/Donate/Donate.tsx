@@ -128,6 +128,11 @@ export default function donate(): JSX.Element {
   }, [donationData]);
 
   const donateToOrg = (): void => {
+    // check if the amount is non empty and is a number
+    if (amount === '' || isNaN(Number(amount))) {
+      toast.error(t(`invalidAmount`));
+      return;
+    }
     try {
       donate({
         variables: {
@@ -216,6 +221,9 @@ export default function donate(): JSX.Element {
                 />
               </InputGroup>
             </div>
+            <Form.Text className="text-muted">
+              {t('donationAmountDescription')}
+            </Form.Text>
             <div className={styles.donateActions}>
               <Button
                 size="sm"

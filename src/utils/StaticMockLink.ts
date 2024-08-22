@@ -84,7 +84,9 @@ export class StaticMockLink extends ApolloLink {
     } else {
       const { newData } = response;
       if (newData) {
-        response.result = newData(operation.variables);
+        response.result = newData(
+          // operation.variables
+        );
         this._mockedResponsesByKey[key].push(response);
       }
 
@@ -119,7 +121,7 @@ export class StaticMockLink extends ApolloLink {
                 observer.next(
                   typeof response.result === 'function'
                     ? (response.result as ResultFunction<FetchResult>)(
-                        operation.variables,
+                        // operation.variables,
                       )
                     : response.result,
                 );

@@ -854,7 +854,9 @@
     "yourPreviousDonations": "Your Previous Donations",
     "donate": "Donate",
     "nothingToShow": "Nothing to show here.",
-    "success": "Donation Successful"
+    "success": "Donation Successful",
+    "invalidAmount": "Please enter a numerical value for the donation amount.",
+    "donationAmountDescription": "Please enter the numerical value for the donation amount."
   },
   "userEvents": {
     "title": "Events",
