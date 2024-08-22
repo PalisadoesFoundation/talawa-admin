@@ -30,16 +30,6 @@
   width: 52px;
 }
 
-@media (max-width: 1120px) {
-  .contract {
-    padding-left: calc(250px + 2rem + 1.5rem);
-  }
-
-  .listBox .itemCard {
-    width: 100%;
-  }
-}
-
 @media (max-width: 1020px) {
   .btnsContainer {
     flex-direction: column;
@@ -138,4 +128,10 @@
 .tagsBreadCrumbs {
   color: var(--bs-gray);
   cursor: pointer;
+}
+
+.tagsBreadCrumbs:hover {
+  color: var(--bs-blue);
+  font-weight: 600;
+  text-decoration: underline;
 }
