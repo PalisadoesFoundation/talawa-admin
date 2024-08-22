@@ -13,6 +13,17 @@ type UseSessionReturnType = {
   handleLogout: () => void;
 };
 
+/**
+ * Custom hook for managing user session timeouts in a React application.
+ *
+ * This hook handles:
+ * - Starting and ending the user session.
+ * - Displaying a warning toast at half of the session timeout duration.
+ * - Logging the user out and displaying a session expiration toast when the session times out.
+ * - Automatically resetting the timers when user activity is detected.
+ *
+ * @returns UseSessionReturnType - An object with methods to start and end the session, and to handle logout.
+ */
 const useSession = (): UseSessionReturnType => {
   const [sessionTimeout, setSessionTimeout] = useState<number>(30);
   const sessionTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -24,6 +35,10 @@ const useSession = (): UseSessionReturnType => {
     GET_COMMUNITY_SESSION_TIMEOUT_DATA,
   );
 
+  /**
+   * Effect that runs on initial mount to fetch session timeout data and set the session timeout state.
+   * If the query fails, an error handler is invoked.
+   */
   useEffect(() => {
     if (queryError) {
       errorHandler(t, queryError as Error);
@@ -36,17 +51,27 @@ const useSession = (): UseSessionReturnType => {
     }
   }, [data, queryError]);
 
+  /**
+   * Resets the session and warning timers by clearing any existing timeouts.
+   */
   const resetTimers = (): void => {
     if (sessionTimerRef.current) clearTimeout(sessionTimerRef.current);
     if (warningTimerRef.current) clearTimeout(warningTimerRef.current);
   };
 
+  /**
+   * Ends the session by clearing timers and removing event listeners for user activity.
+   */
   const endSession = (): void => {
     resetTimers();
     window.removeEventListener('mousemove', extendSession);
     window.removeEventListener('keydown', extendSession);
   };
 
+  /**
+   * Handles user logout, revoking the refresh token and clearing local storage.
+   * Displays a toast notification about session expiration and redirects the user to the login page.
+   */
   const handleLogout = async (): Promise<void> => {
     try {
       await revokeRefreshToken();
@@ -63,6 +88,10 @@ const useSession = (): UseSessionReturnType => {
     );
   };
 
+  /**
+   * Initializes the session and warning timers based on the current session timeout duration.
+   * Displays a warning toast at half the session timeout duration and logs the user out at the end of the session.
+   */
   const initializeTimers = (): void => {
     const warningTime = sessionTimeout / 2;
     const sessionTimeoutInMilliseconds = sessionTimeout * 60 * 1000;
@@ -79,11 +108,19 @@ const useSession = (): UseSessionReturnType => {
     }, sessionTimeoutInMilliseconds);
   };
 
+  /**
+   * Extends the session by resetting the timers and initializing them again.
+   * This function is triggered by user activity such as mouse movement or key presses.
+   */
   const extendSession = (): void => {
     resetTimers();
     initializeTimers();
   };
 
+  /**
+   * Starts the session by initializing timers and adding event listeners for user activity.
+   * Resets the timers whenever user activity is detected.
+   */
   const startSession = (): void => {
     resetTimers();
     initializeTimers();
@@ -91,6 +128,9 @@ const useSession = (): UseSessionReturnType => {
     window.addEventListener('keydown', extendSession);
   };
 
+  /**
+   * Effect that runs on component unmount to end the session and clean up resources.
+   */
   useEffect(() => {
     return () => endSession();
   }, []);

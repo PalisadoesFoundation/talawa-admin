@@ -11,6 +11,16 @@ import { UPDATE_SESSION_TIMEOUT } from 'GraphQl/Mutations/mutations';
 import './UpdateSession.css';
 import Loader from 'components/Loader/Loader';
 
+/**
+ * Component for updating the session timeout for a community.
+ *
+ * This component fetches the current session timeout value from the server
+ * and allows the user to update it using a slider.
+ *
+ * The component also handles form submission, making a mutation request to update the session timeout.
+ *
+ * @returns JSX.Element - The rendered component.
+ */
 const UpdateTimeout = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'communityProfile',
@@ -19,7 +29,7 @@ const UpdateTimeout = (): JSX.Element => {
   const [timeout, setTimeout] = useState<number | undefined>(30);
   const [communityTimeout, setCommunityTimeout] = useState<number | undefined>(
     30,
-  ); //timeout from database for community
+  ); // Timeout from database for the community
 
   const {
     data,
@@ -32,7 +42,10 @@ const UpdateTimeout = (): JSX.Element => {
     timeout: number;
   };
 
-  //handle fetching timeout from community
+  /**
+   * Effect that fetches the current session timeout from the server and sets the initial state.
+   * If there is an error in fetching the data, it is handled using the error handler.
+   */
   React.useEffect(() => {
     if (queryError) {
       errorHandler(t, queryError as Error);
@@ -49,7 +62,11 @@ const UpdateTimeout = (): JSX.Element => {
     }
   }, [data, queryError]);
 
-  //handles slider changes
+  /**
+   * Handles changes to the slider value and updates the timeout state.
+   *
+   * @param e - The event triggered by slider movement.
+   */
   const handleOnChange = (
     e: Event | React.ChangeEvent<HTMLInputElement>,
   ): void => {
@@ -65,6 +82,13 @@ const UpdateTimeout = (): JSX.Element => {
     }
   };
 
+  /**
+   * Handles form submission to update the session timeout.
+   * It makes a mutation request to update the timeout value on the server.
+   * If the update is successful, a success toast is shown, and the state is updated.
+   *
+   * @param e - The event triggered by form submission.
+   */
   const handleOnSubmit = async (
     e: React.FormEvent<HTMLFormElement>,
   ): Promise<void> => {
@@ -84,6 +108,7 @@ const UpdateTimeout = (): JSX.Element => {
     }
   };
 
+  // Show a loader while the data is being fetched
   if (loading) {
     return <Loader />;
   }
