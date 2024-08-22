@@ -122,6 +122,7 @@ const MOCKS = [
   },
 ];
 
+
 const link = new StaticMockLink(MOCKS, true);
 
 async function wait(ms = 100): Promise<void> {
@@ -136,22 +137,6 @@ jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   ...jest.requireActual('react-i18next'),
   useParams: () => ({ orgId: '' }),
-}));
-
-jest.mock('react-i18next', () => ({
-  // This mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => {
-    return {
-      t: (str: string) => str,
-      i18n: {
-        changeLanguage: () =>
-          new Promise(() => {
-            // This is an intentionally empty function
-            // It's used to mock the changeLanguage method without actually doing anything
-          }),
-      },
-    };
-  },
 }));
 
 jest.mock('react-toastify', () => ({
@@ -325,7 +310,7 @@ describe('Testing Donate Screen [User Portal]', () => {
 
     await wait();
 
-    expect(toast.error).toHaveBeenCalledWith('invalidAmount');
+    expect(toast.error).toHaveBeenCalledWith("Please enter a numerical value for the donation amount.");
   });
 
   test('displays error toast for invalid (non-numeric) donation amount', async () => {
@@ -348,6 +333,6 @@ describe('Testing Donate Screen [User Portal]', () => {
 
     await wait();
 
-    expect(toast.error).toHaveBeenCalledWith('invalidAmount');
+    expect(toast.error).toHaveBeenCalledWith("Please enter a numerical value for the donation amount.");
   });
 });
