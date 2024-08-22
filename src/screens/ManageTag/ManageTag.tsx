@@ -15,6 +15,7 @@ import { toast } from 'react-toastify';
 import type { InterfaceQueryUserTagsAssignedMembers } from 'utils/interfaces';
 import styles from './ManageTag.module.css';
 import { DataGrid } from '@mui/x-data-grid';
+import { dataGridStyle } from 'utils/organizationTagsUtils';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
 import { UNASSIGN_USER_TAG } from 'GraphQl/Mutations/TagMutations';
@@ -23,26 +24,12 @@ import {
   USER_TAGS_ASSIGNED_MEMBERS,
 } from 'GraphQl/Queries/userTagQueries';
 
-const dataGridStyle = {
-  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-    outline: 'none !important',
-  },
-  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-    outline: 'none',
-  },
-  '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-root': {
-    borderRadius: '0.1rem',
-  },
-  '& .MuiDataGrid-main': {
-    borderRadius: '0.1rem',
-  },
-};
+/**
+ * Component that renders the Manage Tag screen when the app navigates to '/orgtags/:orgId/managetag/:tagId'.
+ *
+ * This component does not accept any props and is responsible for displaying
+ * the content associated with the corresponding route.
+ */
 
 function ManageTag(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -54,7 +41,7 @@ function ManageTag(): JSX.Element {
     useState(false);
   const [unassignTagModalIsOpen, setUnassignTagModalIsOpen] = useState(false);
 
-  const { orgId: currentUrl, tagId: currentTagId } = useParams();
+  const { orgId, tagId: currentTagId } = useParams();
   const navigate = useNavigate();
   const [after, setAfter] = useState<string | null | undefined>(null);
   const [before, setBefore] = useState<string | null | undefined>(null);
@@ -131,7 +118,6 @@ function ManageTag(): JSX.Element {
       /* istanbul ignore next */
       if (error instanceof Error) {
         toast.error(error.message);
-        console.log(error.message);
       }
     }
   };
@@ -165,12 +151,12 @@ function ManageTag(): JSX.Element {
 
   const orgUserTagAncestors = orgUserTagAncestorsData?.getUserTagAncestors;
 
-  const goToSubTags = (tagId: string): void => {
-    navigate(`/orgtags/${currentUrl}/orgtagSubTags/${tagId}`);
+  const redirectToSubTags = (tagId: string): void => {
+    navigate(`/orgtags/${orgId}/subTags/${tagId}`);
   };
 
-  const handleClick = (tagId: string): void => {
-    navigate(`/orgtags/${currentUrl}/managetag/${tagId}`);
+  const redirectToManageTag = (tagId: string): void => {
+    navigate(`/orgtags/${orgId}/managetag/${tagId}`);
   };
 
   const handleNextPage = (): void => {
@@ -239,7 +225,7 @@ function ManageTag(): JSX.Element {
         return (
           <div className="d-flex justify-content-center align-items-center">
             <Link
-              to={`/member/${currentUrl}`}
+              to={`/member/${orgId}`}
               state={{ id: params.row._id }}
               className={styles.membername}
               data-testid="viewProfileBtn"
@@ -313,7 +299,7 @@ function ManageTag(): JSX.Element {
 
               <Button
                 variant="success"
-                onClick={() => goToSubTags(currentTagId as string)}
+                onClick={() => redirectToSubTags(currentTagId as string)}
                 className="mx-4"
                 data-testid="subTagsBtn"
               >
@@ -340,7 +326,7 @@ function ManageTag(): JSX.Element {
                 </div>
 
                 <div
-                  onClick={() => navigate(`/orgtags/${currentUrl}`)}
+                  onClick={() => navigate(`/orgtags/${orgId}`)}
                   className={`fs-6 ms-3 my-1 ${styles.tagsBreadCrumbs}`}
                   data-testid="allTagsBtn"
                 >
@@ -352,8 +338,8 @@ function ManageTag(): JSX.Element {
                   <div
                     key={index}
                     className={`ms-2 my-1 ${tag._id === currentTagId ? `fs-4 fw-semibold text-secondary` : `${styles.tagsBreadCrumbs} fs-6`}`}
-                    onClick={() => handleClick(tag._id as string)}
-                    data-testid="goToManageTag"
+                    onClick={() => redirectToManageTag(tag._id as string)}
+                    data-testid="redirectToManageTag"
                   >
                     {tag.name}
 
