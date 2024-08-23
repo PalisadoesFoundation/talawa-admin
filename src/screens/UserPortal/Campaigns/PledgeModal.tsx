@@ -24,6 +24,9 @@ import {
 } from '@mui/material';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 
+/**
+ * Interface representing the properties for the `PledgeModal` component.
+ */
 export interface InterfacePledgeModal {
   isOpen: boolean;
   hide: () => void;
@@ -34,6 +37,20 @@ export interface InterfacePledgeModal {
   endDate: Date;
   mode: 'create' | 'edit';
 }
+
+/**
+ * `PledgeModal` is a React component that allows users to create or edit a pledge for a specific campaign.
+ * It displays a form with inputs for pledge details such as amount, currency, dates, and users involved in the pledge.
+ *
+ * @param isOpen - Determines if the modal is visible or hidden.
+ * @param hide - Function to close the modal.
+ * @param campaignId - The ID of the campaign for which the pledge is being made.
+ * @param userId - The ID of the user making or editing the pledge.
+ * @param pledge - The current pledge information if in edit mode, or null if creating a new pledge.
+ * @param refetchPledge - Function to refresh the pledge data after a successful operation.
+ * @param endDate - The maximum date allowed for the pledge's end date, based on the campaign's end date.
+ * @param mode - Specifies whether the modal is used for creating a new pledge or editing an existing one.
+ */
 const PledgeModal: React.FC<InterfacePledgeModal> = ({
   isOpen,
   hide,
@@ -44,11 +61,13 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   endDate,
   mode,
 }) => {
+  // Translation functions to support internationalization
   const { t } = useTranslation('translation', {
     keyPrefix: 'pledges',
   });
   const { t: tCommon } = useTranslation('common');
 
+  // State to manage the form inputs for the pledge
   const [formState, setFormState] = useState<InterfaceCreatePledge>({
     pledgeUsers: [],
     pledgeAmount: pledge?.amount ?? 0,
@@ -56,10 +75,17 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     pledgeEndDate: new Date(pledge?.endDate ?? new Date()),
     pledgeStartDate: new Date(pledge?.startDate ?? new Date()),
   });
+
+  // State to manage the list of pledgers (users who are part of the pledge)
   const [pledgers, setPledgers] = useState<InterfacePledger[]>([]);
+
+  // Mutation to update an existing pledge
   const [updatePledge] = useMutation(UPDATE_PLEDGE);
+
+  // Mutation to create a new pledge
   const [createPledge] = useMutation(CREATE_PlEDGE);
 
+  // Effect to update the form state when the pledge prop changes (e.g., when editing a pledge)
   useEffect(() => {
     setFormState({
       pledgeUsers: pledge?.users ?? [],
@@ -70,6 +96,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     });
   }, [pledge]);
 
+  // Destructuring the form state for easier access
   const {
     pledgeUsers,
     pledgeAmount,
@@ -78,12 +105,14 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     pledgeEndDate,
   } = formState;
 
+  // Query to get the user details based on the userId prop
   const { data: userData } = useQuery(USER_DETAILS, {
     variables: {
       id: userId,
     },
   });
 
+  // Effect to update the pledgers state when user data is fetched
   useEffect(() => {
     if (userData) {
       setPledgers([
@@ -97,6 +126,13 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     }
   }, [userData]);
 
+  /**
+   * Handler function to update an existing pledge.
+   * It compares the current form state with the existing pledge and updates only the changed fields.
+   *
+   * @param e - The form submission event.
+   * @returns A promise that resolves when the pledge is successfully updated.
+   */
   /*istanbul ignore next*/
   const updatePledgeHandler = useCallback(
     async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
@@ -140,7 +176,13 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     [formState, pledge],
   );
 
-  // Function to create a new pledge
+  /**
+   * Handler function to create a new pledge.
+   * It collects the form data and sends a request to create a pledge with the specified details.
+   *
+   * @param e - The form submission event.
+   * @returns A promise that resolves when the pledge is successfully created.
+   */
   const createPledgeHandler = useCallback(
     async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
       try {

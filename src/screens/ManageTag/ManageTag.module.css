@@ -78,6 +78,24 @@
   }
 }
 
+.errorContainer {
+  min-height: 100vh;
+}
+
+.errorMessage {
+  margin-top: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.errorIcon {
+  transform: scale(1.5);
+  color: var(--bs-danger);
+  margin-bottom: 1rem;
+}
+
 .tableHeader {
   background-color: var(--bs-primary);
   color: var(--bs-white);
