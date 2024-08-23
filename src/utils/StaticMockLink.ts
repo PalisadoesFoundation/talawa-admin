@@ -77,12 +77,14 @@ export class StaticMockLink extends ApolloLink {
 
     if (!response || typeof responseIndex === 'undefined') {
       configError = new Error(
-        `No more mocked responses for the query: ${print(operation.query)},`,
+        `No more mocked responses for the query: ${print(
+          operation.query,
+        )}, variables: ${JSON.stringify(operation.variables)}`,
       );
     } else {
       const { newData } = response;
       if (newData) {
-        response.result = newData();
+        response.result = newData(operation.variables);
         this._mockedResponsesByKey[key].push(response);
       }
 
@@ -116,7 +118,9 @@ export class StaticMockLink extends ApolloLink {
               if (response.result) {
                 observer.next(
                   typeof response.result === 'function'
-                    ? (response.result as ResultFunction<FetchResult>)()
+                    ? (response.result as ResultFunction<FetchResult>)(
+                        operation.variables,
+                      )
                     : response.result,
                 );
               }
