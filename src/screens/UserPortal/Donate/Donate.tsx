@@ -133,6 +133,24 @@ export default function donate(): JSX.Element {
       toast.error(t(`invalidAmount`));
       return;
     }
+
+    // check if the amount is non negative and within the range
+    const minDonation = 1;
+    const maxDonation = 10000;
+    if (
+      Number(amount) <= 0 ||
+      Number(amount) < minDonation ||
+      Number(amount) > maxDonation
+    ) {
+      toast.error(
+        t(`donationOutOfRange`, { min: minDonation, max: maxDonation }),
+      );
+      return;
+    }
+
+    // format the amount to 2 decimal places
+    const formattedAmount = parseFloat(amount.trim()).toFixed(2);
+
     try {
       donate({
         variables: {
@@ -140,7 +158,7 @@ export default function donate(): JSX.Element {
           createDonationOrgId2: organizationId,
           payPalId: 'paypalId',
           nameOfUser: userName,
-          amount: Number(amount),
+          amount: formattedAmount,
           nameOfOrg: organizationDetails.name,
         },
       });

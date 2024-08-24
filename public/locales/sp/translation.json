@@ -1065,7 +1065,8 @@
     "nothingToShow": "Nada que mostrar aquí.",
     "success": "Donación exitosa",
     "invalidAmount": "Ingrese un valor numérico para el monto de la donación.",
-    "donationAmountDescription": "Ingrese el valor numérico del monto de la donación."
+    "donationAmountDescription": "Ingrese el valor numérico del monto de la donación.",
+    "donationOutOfRange": "El monto de la donación debe estar entre {{min}} y {{max}}."
   },
   "userEvents": {
     "title": "Eventos",

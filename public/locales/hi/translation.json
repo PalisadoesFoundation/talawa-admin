@@ -856,7 +856,8 @@
     "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
     "success": "दान सफल",
     "invalidAmount": "कृपया दान राशि के लिए संख्यात्मक मान दर्ज करें.",
-    "donationAmountDescription": "कृपया दान राशि के लिए संख्यात्मक मान दर्ज करें."
+    "donationAmountDescription": "कृपया दान राशि के लिए संख्यात्मक मान दर्ज करें.",
+    "donationOutOfRange": "दान राशि {{min}} और {{max}} के बीच होनी चाहिए."
   },
   "userEvents": {
     "title": "ईवेंट",
