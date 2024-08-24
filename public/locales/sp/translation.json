@@ -1063,7 +1063,9 @@
     "yourPreviousDonations": "Tus donaciones anteriores",
     "donate": "Donar",
     "nothingToShow": "Nada que mostrar aquí.",
-    "success": "Donación exitosa"
+    "success": "Donación exitosa",
+    "invalidAmount": "Ingrese un valor numérico para el monto de la donación.",
+    "donationAmountDescription": "Ingrese el valor numérico del monto de la donación."
   },
   "userEvents": {
     "title": "Eventos",

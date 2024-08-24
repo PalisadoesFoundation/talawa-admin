@@ -854,7 +854,9 @@
     "yourPreviousDonations": "Vos dons précédents",
     "donate": "Faire un don",
     "nothingToShow": "Rien à montrer ici.",
-    "success": "Don réussi"
+    "success": "Don réussi",
+    "invalidAmount": "Veuillez saisir une valeur numérique pour le montant du don.",
+    "donationAmountDescription": "Veuillez saisir la valeur numérique du montant du don."
   },
   "userEvents": {
     "title": "Événements",
