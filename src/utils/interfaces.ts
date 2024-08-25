@@ -463,20 +463,6 @@ export interface InterfaceMemberOrganization {
   userId: string;
 }
 
-export interface InterfaceOrgPeopleOrganizationsCard {
-  userId: string;
-  _id: string;
-  image: string;
-  name: string;
-  description: string;
-  blockedUsers: {
-    _id: string;
-  }[];
-  members: { _id: string }[];
-  admins: { _id: string }[];
-  resetAndRefetch: () => void;
-}
-
 export interface InterfacePledgeVolunteer {
   _id: string;
   firstName: string;

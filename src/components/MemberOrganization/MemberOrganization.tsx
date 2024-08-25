@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import OrgPeopleOrganizationsCard from 'components/OrgPeopleOrganizationsCard/OrgPeopleOrganizationsCard';
 import type {
   InterfaceMemberOrganization,
-  InterfaceOrgPeopleOrganizationsCard,
   InterfaceOrgConnectionInfoType,
   InterfaceOrgConnectionType,
   InterfaceUserType,
@@ -64,7 +63,7 @@ const MemberOrganization: React.FC<InterfaceMemberOrganization> = (props) => {
     data: InterfaceOrgConnectionType | undefined;
     loading: boolean;
     error?: Error | undefined;
-    refetch: any;
+    refetch: () => void;
     fetchMore: any;
   } = useQuery(ORGANIZATION_CONNECTION_LIST, {
     variables: {
@@ -196,21 +195,10 @@ const MemberOrganization: React.FC<InterfaceMemberOrganization> = (props) => {
           >
             {userData && superAdmin
               ? orgsData?.organizationsConnection.map((item) => {
-                  const OrgPeopleCardProps: InterfaceOrgPeopleOrganizationsCard =
-                    {
-                      userId: userId,
-                      _id: item._id,
-                      image: item.image ?? '',
-                      name: item.name,
-                      members: item.members,
-                      admins: item.admins,
-                      resetAndRefetch: refetchOrgs,
-                      description: item.description,
-                      blockedUsers: item.blockedUsers,
-                    };
                   return (
                     <div key={item._id} className={styles.itemCard}>
-                      <OrgPeopleOrganizationsCard {...OrgPeopleCardProps} />
+                      {/* <OrgPeopleOrganizationsCard {...OrgPeopleCardProps} /> */}
+                      <OrgPeopleOrganizationsCard data={item} />
                     </div>
                   );
                 })
@@ -218,25 +206,13 @@ const MemberOrganization: React.FC<InterfaceMemberOrganization> = (props) => {
                 adminFor.length > 0 &&
                 orgsData?.organizationsConnection.map((item) => {
                   if (isAdminForCurrentOrg(item) && item._id == currentUrl) {
-                    const OrgPeopleCardProps: InterfaceOrgPeopleOrganizationsCard =
-                      {
-                        userId: userId,
-                        _id: item._id,
-                        image: item.image ?? '',
-                        name: item.name,
-                        members: item.members,
-                        admins: item.admins,
-                        resetAndRefetch: refetchOrgs,
-                        description: item.description,
-                        blockedUsers: item.blockedUsers,
-                      };
                     return (
                       <div
                         key={item._id}
                         className={styles.itemCard}
                         data-testid="OrgPeopleOrganizationsCardContainer"
                       >
-                        <OrgPeopleOrganizationsCard {...OrgPeopleCardProps} />
+                        <OrgPeopleOrganizationsCard data={item} />
                       </div>
                     );
                   }
