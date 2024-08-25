@@ -148,8 +148,7 @@ export default function donate(): JSX.Element {
       return;
     }
 
-    // format the amount to 2 decimal places
-    const formattedAmount = parseFloat(amount.trim()).toFixed(2);
+    const formattedAmount = Number(amount.trim());
 
     try {
       donate({

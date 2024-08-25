@@ -134,7 +134,6 @@ async function wait(ms = 100): Promise<void> {
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  ...jest.requireActual('react-i18next'),
   useParams: () => ({ orgId: '' }),
 }));
 
