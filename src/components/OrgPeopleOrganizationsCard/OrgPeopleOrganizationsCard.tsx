@@ -98,7 +98,7 @@ function OrgPeopleOrganizationsCard({
             </h6>
 
             <h6 className={styles.orgadmin}>
-              {tCommon('admins')}: <span>{admins.length}</span>
+              {tCommon('admins')}: <span> {admins.length}</span>
             </h6>
 
             <h6 className={styles.orgadmin}>
