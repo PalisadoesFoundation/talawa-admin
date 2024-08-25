@@ -23,7 +23,6 @@ export interface InterfaceOrgPeopleOrganizationCardProps {
 function OrgPeopleOrganizationsCard({
   data: { _id, admins, image, address, members, name },
 }: InterfaceOrgPeopleOrganizationCardProps): JSX.Element {
-
   const { data } = useQuery(IS_SAMPLE_ORGANIZATION_QUERY, {
     variables: {
       isSampleOrganizationId: _id,
@@ -51,7 +50,6 @@ function OrgPeopleOrganizationsCard({
   });
   const { t: tCommon } = useTranslation('common');
 
-
   return (
     <>
       <div className={styles.orgCard}>
@@ -74,18 +72,13 @@ function OrgPeopleOrganizationsCard({
             <h6 className={`${styles.orgdesc} fw-semibold`}>
               <span>{userData?.organizations[0].description}</span>
             </h6>
-            {address && address.city && (
-              <div className={styles.address}>
-                <h6 className="text-secondary">
-                  <span className="address-line">{address.line1}, </span>
-                  <span className="address-line">{address.city}, </span>
-                  <span className="address-line">{address.countryCode}</span>
-                </h6>
-              </div>
-            )}
+
             <h6 className={styles.orgadmin}>
-              {tCommon('admins')}: <span>{admins.length}</span> &nbsp; &nbsp;
-              &nbsp; {tCommon('members')}: <span>{members.length}</span>
+              {tCommon('admins')}: <span>{admins.length}</span>
+            </h6>
+
+            <h6 className={styles.orgadmin}>
+              {tCommon('members')}: <span>{members.length}</span>
             </h6>
           </div>
         </div>
