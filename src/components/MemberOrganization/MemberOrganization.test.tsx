@@ -16,12 +16,10 @@ import { store } from 'state/store';
 
 const { getItem, setItem } = useLocalStorage();
 
-
 afterEach(() => {
   localStorage.clear();
   cleanup();
 });
-
 
 const mocks = [
   {
@@ -108,11 +106,9 @@ jest.mock('react-router-dom', () => ({
 }));
 
 describe('MemberOrganization', () => {
-
   const link = new StaticMockLink(mocks, true);
 
-
-  test ('renders the member organization component for super admin', async () => {
+  test('renders the member organization component for super admin', async () => {
     const beforeUserId = getItem('userId');
     setItem('id', 'testUserId');
 
@@ -125,7 +121,7 @@ describe('MemberOrganization', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-                <MemberOrganization userId="testUserId" />
+              <MemberOrganization userId="testUserId" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -143,10 +139,9 @@ describe('MemberOrganization', () => {
     if (beforeUserId) {
       setItem('userId', beforeUserId);
     }
-  })
+  });
 
-
-  test ('renders the member organization component for admin', async () => {
+  test('renders the member organization component for admin', async () => {
     const beforeUserId = getItem('userId');
     setItem('id', 'testUserId');
 
@@ -159,7 +154,7 @@ describe('MemberOrganization', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-                <MemberOrganization userId="testUserId" />
+              <MemberOrganization userId="testUserId" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -177,10 +172,7 @@ describe('MemberOrganization', () => {
     if (beforeUserId) {
       setItem('userId', beforeUserId);
     }
-  })
-
-
-
+  });
 
   // test('renders MemberOrganization component for Superadmin', async () => {
   //   const beforeUserId = getItem('userId');
@@ -238,4 +230,3 @@ describe('MemberOrganization', () => {
   //   }
   // });
 });
-

@@ -42,7 +42,6 @@ const OrganizationScreen = (): JSX.Element => {
     document.title = title;
   }, [title]);
 
-
   // State to manage visibility of the side drawer
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
 

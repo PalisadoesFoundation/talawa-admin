@@ -45,7 +45,6 @@ const topNavButtons: {
   },
 ];
 
-
 /**
  * MemberDetail component is used to display the details of a user.
  * It also allows the user to update the details. It uses the UPDATE_USER_MUTATION to update the user details.
@@ -103,7 +102,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         {translatedText}
       </Button>
     );
-
   };
 
   if (loading) {
