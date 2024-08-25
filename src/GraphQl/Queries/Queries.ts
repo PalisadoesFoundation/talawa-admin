@@ -791,7 +791,6 @@ export { AGENDA_ITEM_CATEGORY_LIST } from './AgendaCategoryQueries';
 // to take the list of the blocked users
 export {
   ADVERTISEMENTS_GET,
-  DIRECT_CHATS_LIST,
   IS_SAMPLE_ORGANIZATION_QUERY,
   ORGANIZATION_CUSTOM_FIELDS,
   ORGANIZATION_EVENTS_CONNECTION,

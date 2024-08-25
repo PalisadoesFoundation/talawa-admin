@@ -5,7 +5,11 @@ import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import styles from './ChatRoom.module.css';
 import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
 import { useTranslation } from 'react-i18next';
-import { CHATS_LIST, CHAT_BY_ID } from 'GraphQl/Queries/PlugInQueries';
+import {
+  CHATS_LIST,
+  CHAT_BY_ID,
+  UNREAD_CHAT_LIST,
+} from 'GraphQl/Queries/PlugInQueries';
 import { useMutation, useQuery, useSubscription } from '@apollo/client';
 import {
   MARK_CHAT_MESSAGES_AS_READ,
@@ -53,7 +57,7 @@ type DirectMessage = {
 
 type Chat = {
   _id: string;
-  isGroup: Boolean;
+  isGroup: boolean;
   name?: string;
   image?: string;
   messages: DirectMessage[];
@@ -114,23 +118,26 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
   } = useQuery(CHAT_BY_ID, {
     variables: {
       id: props.selectedContact,
+      searchString: 'te',
     },
   });
 
-  const {
-    data: chatListData,
-    loading: chatListLoading,
-    refetch: chatListRefetch,
-  } = useQuery(CHATS_LIST, {
+  const { refetch: chatListRefetch } = useQuery(CHATS_LIST, {
+    variables: {
+      id: userId,
+    },
+  });
+
+  const { refetch: unreadChatListRefetch } = useQuery(UNREAD_CHAT_LIST, {
     variables: {
       id: userId,
     },
   });
 
   useEffect(() => {
-    chatRefetch();
     markChatMessagesAsRead().then(() => {
       chatListRefetch();
+      unreadChatListRefetch();
     });
   }, [props.selectedContact]);
 
@@ -162,18 +169,17 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     variables: {
       userId: userId,
     },
-    onData: async (MessageSubscriptionData) => {
+    onData: async (messageSubscriptionData) => {
       if (
-        MessageSubscriptionData?.data.data.messageSentToChat &&
-        MessageSubscriptionData?.data.data.messageSentToChat
+        messageSubscriptionData?.data.data.messageSentToChat &&
+        messageSubscriptionData?.data.data.messageSentToChat
           .chatMessageBelongsTo['_id'] == props.selectedContact
       ) {
         await markChatMessagesAsRead();
-        chatRefetch();
-        chatListRefetch();
-      } else {
-        chatListRefetch();
+        await chatRefetch();
       }
+      chatListRefetch();
+      unreadChatListRefetch();
     },
   });
   useEffect(() => {

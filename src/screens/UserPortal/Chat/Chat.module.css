@@ -216,3 +216,24 @@
 .accordionBody::-webkit-scrollbar {
   display: none;
 }
+
+.filters {
+  padding: 20px 0px 0px 20px;
+  display: flex;
+  gap: 8px;
+}
+
+.filterButton {
+  border-radius: 14px;
+  padding: 5px 10px;
+  background-color: white;
+  color: #a5a5a5;
+  border: none;
+  border: 1px solid #a5a5a5;
+}
+
+.selectedBtn, .filterButton:hover {
+  border: 1px solid #98e0b6;
+  background-color: #98e0b6;
+  color: rgb(255, 255, 255);
+}

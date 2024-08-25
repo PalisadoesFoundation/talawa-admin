@@ -271,33 +271,9 @@ export const GROUP_CHAT_BY_ID = gql`
     }
   }
 `;
-// directChatByChatId
-
-// export const GROUP_CHAT_MESSAGES_BY_CHAT_ID = gql`
-//   query directChatsMessagesByChatID($id: ID!) {
-//     directChatsMessagesByChatID(id: $id) {
-//       _id
-//       createdAt
-//       messageContent
-//       receiver {
-//         _id
-//         firstName
-//         lastName
-//         email
-//       }
-//       sender {
-//         _id
-//         firstName
-//         lastName
-//         email
-//       }
-//     }
-//   }
-// `;
-
-export const CHATS_LIST = gql`
-  query ChatsByUserId($id: ID!) {
-    chatsByUserId(id: $id) {
+export const UNREAD_CHAT_LIST = gql`
+  query unreadChatList {
+    getUnreadChatsByUserId {
       _id
       isGroup
       name
@@ -336,10 +312,13 @@ export const CHATS_LIST = gql`
   }
 `;
 
-export const DIRECT_CHATS_LIST = gql`
-  query DirectChatsByUserID($id: ID!) {
-    directChatsByUserID(id: $id) {
+export const GROUP_CHAT_LIST = gql`
+  query groupChatsByUserId {
+    getGroupChatsByUserId {
       _id
+      isGroup
+      name
+
       creator {
         _id
         firstName
@@ -348,14 +327,9 @@ export const DIRECT_CHATS_LIST = gql`
       }
       messages {
         _id
+        type
         createdAt
         messageContent
-        receiver {
-          _id
-          firstName
-          lastName
-          email
-        }
         sender {
           _id
           firstName
@@ -374,23 +348,35 @@ export const DIRECT_CHATS_LIST = gql`
         email
         image
       }
+      unseenMessagesByUsers
     }
   }
 `;
 
-export const GROUP_CHAT_LIST = gql`
-  query GroupChatsByUserID($id: ID!) {
-    groupChatsByUserId(id: $id) {
+export const CHATS_LIST = gql`
+  query ChatsByUserId($id: ID!, $searchString: String) {
+    chatsByUserId(
+      id: $id
+      where: {
+        name_contains: $searchString
+        user: {
+          firstName_contains: $searchString
+          lastName_contains: $searchString
+        }
+      }
+    ) {
       _id
+      isGroup
+      name
       creator {
         _id
         firstName
         lastName
         email
       }
-      title
       messages {
         _id
+        type
         createdAt
         messageContent
         sender {
@@ -411,6 +397,7 @@ export const GROUP_CHAT_LIST = gql`
         email
         image
       }
+      unseenMessagesByUsers
     }
   }
 `;

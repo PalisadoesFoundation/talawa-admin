@@ -10,7 +10,11 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { ReactComponent as NewChat } from 'assets/svgs/newChat.svg';
 import styles from './Chat.module.css';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
-import { CHATS_LIST } from 'GraphQl/Queries/PlugInQueries';
+import {
+  CHATS_LIST,
+  GROUP_CHAT_LIST,
+  UNREAD_CHAT_LIST,
+} from 'GraphQl/Queries/PlugInQueries';
 import CreateGroupChat from '../../../components/UserPortal/CreateGroupChat/CreateGroupChat';
 import CreateDirectChat from 'components/UserPortal/CreateDirectChat/CreateDirectChat';
 import { MARK_CHAT_MESSAGES_AS_READ } from 'GraphQl/Mutations/OrganizationMutations';
@@ -35,6 +39,8 @@ export default function chat(): JSX.Element {
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
   const [chats, setChats] = useState<any>([]);
   const [selectedContact, setSelectedContact] = useState('');
+  const [filterType, setFilterType] = useState('all');
+  const [searchName, setsearchName] = useState('');
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
 
@@ -51,6 +57,52 @@ export default function chat(): JSX.Element {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  React.useEffect(() => {
+    if (filterType === 'all') {
+      chatsListRefetch();
+      if (chatsListData && chatsListData.chatsByUserId) {
+        const chatList = chatsListData.chatsByUserId.map((chat: any) => {
+          const parsedChat = {
+            ...chat,
+            unseenMessagesByUsers: JSON.parse(chat.unseenMessagesByUsers),
+          };
+          return parsedChat;
+        });
+        setChats(chatList);
+      }
+    } else if (filterType === 'unread') {
+      unreadChatListRefetch();
+      if (unreadChatListData && unreadChatListData.getUnreadChatsByUserId) {
+        const chatList = unreadChatListData.getUnreadChatsByUserId.map(
+          (chat: any) => {
+            const parsedChat = {
+              ...chat,
+              unseenMessagesByUsers: JSON.parse(chat.unseenMessagesByUsers),
+            };
+            return parsedChat;
+          },
+        );
+        setChats(chatList);
+      }
+      console.log(unreadChatListData);
+    } else if (filterType === 'group') {
+      groupChatListRefetch();
+      console.log(groupChatListData);
+      if (groupChatListData && groupChatListData.getGroupChatsByUserId) {
+        const chatList = groupChatListData.getGroupChatsByUserId.map(
+          (chat: any) => {
+            const parsedChat = {
+              ...chat,
+              unseenMessagesByUsers: JSON.parse(chat.unseenMessagesByUsers),
+            };
+            return parsedChat;
+          },
+        );
+        setChats(chatList);
+      }
+    }
+  }, [filterType]);
 
   const [createDirectChatModalisOpen, setCreateDirectChatModalisOpen] =
     useState(false);
@@ -80,8 +132,21 @@ export default function chat(): JSX.Element {
   } = useQuery(CHATS_LIST, {
     variables: {
       id: userId,
+      searchString: 'l',
     },
   });
+
+  const {
+    data: groupChatListData,
+    loading: groupChatListLoading,
+    refetch: groupChatListRefetch,
+  } = useQuery(GROUP_CHAT_LIST);
+
+  const {
+    data: unreadChatListData,
+    loading: unreadChatListLoading,
+    refetch: unreadChatListRefetch,
+  } = useQuery(UNREAD_CHAT_LIST);
 
   const [markChatMessagesAsRead] = useMutation(MARK_CHAT_MESSAGES_AS_READ, {
     variables: {
@@ -94,8 +159,6 @@ export default function chat(): JSX.Element {
     markChatMessagesAsRead().then(() => {
       chatsListRefetch({ id: userId });
     });
-
-    console.log(chats);
   }, [selectedContact]);
 
   React.useEffect(() => {
@@ -113,22 +176,21 @@ export default function chat(): JSX.Element {
     }
   }, [chatsListData]);
 
-  // const handleSearch = (value: string): void => {
-  //   setFilterName(value);
-
-  //   contactRefetch();
-  // };
-  // const handleSearchByEnter = (e: any): void => {
-  //   if (e.key === 'Enter') {
-  //     const { value } = e.target;
-  //     handleSearch(value);
-  //   }
-  // };
-  // const handleSearchByBtnClick = (): void => {
-  //   const value =
-  //     (document.getElementById('searchChats') as HTMLInputElement)?.value || '';
-  //   handleSearch(value);
-  // };
+  const handleSearch = (value: string): void => {
+    setsearchName(value);
+    chatsListRefetch();
+  };
+  const handleSearchByEnter = (e: any): void => {
+    if (e.key === 'Enter') {
+      const { value } = e.target;
+      handleSearch(value);
+    }
+  };
+  const handleSearchByBtnClick = (): void => {
+    const value =
+      (document.getElementById('searchChats') as HTMLInputElement)?.value || '';
+    handleSearch(value);
+  };
 
   return (
     <>
@@ -193,41 +255,86 @@ export default function chat(): JSX.Element {
                   <HourglassBottomIcon /> <span>Loading...</span>
                 </div>
               ) : (
-                <div
-                  data-testid="contactCardContainer"
-                  className={styles.contactCardContainer}
-                >
-                  {!!chats.length &&
-                    chats.map((chat: any) => {
-                      const cardProps: InterfaceContactCardProps = {
-                        id: chat._id,
-                        title: !chat.isGroup
-                          ? chat.users[0]?._id === userId
-                            ? `${chat.users[1]?.firstName} ${chat.users[1]?.lastName}`
-                            : `${chat.users[0]?.firstName} ${chat.users[0]?.lastName}`
-                          : chat.name,
-                        image: chat.isGroup
-                          ? userId
-                            ? chat.users[1]?.image
-                            : chat.users[0]?.image
-                          : chat.image,
-                        setSelectedContact,
-                        selectedContact,
-                        isGroup: chat.isGroup,
-                        unseenMessages: chat.unseenMessagesByUsers[userId],
-                        lastMessage:
-                          chat.messages[chat.messages.length - 1]
-                            ?.messageContent,
-                      };
-                      return (
-                        <ContactCard
-                          data-testid="chatContact"
-                          {...cardProps}
-                          key={chat._id}
-                        />
-                      );
-                    })}
-                </div>
+                <>
+                  <div className={styles.filters}>
+                    {/* three buttons to filter unread, all and group chats. All selected by default. */}
+                    <Button
+                      onClick={() => {
+                        setFilterType('all');
+                      }}
+                      className={[
+                        styles.filterButton,
+                        filterType === 'all' && styles.selectedBtn,
+                      ]
+                        .filter(Boolean)
+                        .join(' ')}
+                    >
+                      All
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        setFilterType('unread');
+                      }}
+                      className={[
+                        styles.filterButton,
+                        filterType === 'unread' && styles.selectedBtn,
+                      ]
+                        .filter(Boolean)
+                        .join(' ')}
+                    >
+                      Unread
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        setFilterType('group');
+                      }}
+                      className={[
+                        styles.filterButton,
+                        filterType === 'group' && styles.selectedBtn,
+                      ]
+                        .filter(Boolean)
+                        .join(' ')}
+                    >
+                      Groups
+                    </Button>
+                  </div>
+
+                  <div
+                    data-testid="contactCardContainer"
+                    className={styles.contactCardContainer}
+                  >
+                    {!!chats.length &&
+                      chats.map((chat: any) => {
+                        const cardProps: InterfaceContactCardProps = {
+                          id: chat._id,
+                          title: !chat.isGroup
+                            ? chat.users[0]?._id === userId
+                              ? `${chat.users[1]?.firstName} ${chat.users[1]?.lastName}`
+                              : `${chat.users[0]?.firstName} ${chat.users[0]?.lastName}`
+                            : chat.name,
+                          image: chat.isGroup
+                            ? userId
+                              ? chat.users[1]?.image
+                              : chat.users[0]?.image
+                            : chat.image,
+                          setSelectedContact,
+                          selectedContact,
+                          isGroup: chat.isGroup,
+                          unseenMessages: chat.unseenMessagesByUsers[userId],
+                          lastMessage:
+                            chat.messages[chat.messages.length - 1]
+                              ?.messageContent,
+                        };
+                        return (
+                          <ContactCard
+                            data-testid="chatContact"
+                            {...cardProps}
+                            key={chat._id}
+                          />
+                        );
+                      })}
+                  </div>
+                </>
               )}
             </div>
           </div>

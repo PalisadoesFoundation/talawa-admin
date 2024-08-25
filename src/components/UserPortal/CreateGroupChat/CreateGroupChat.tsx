@@ -140,7 +140,7 @@ export default function CreateGroupChat({
   }, [userIds]);
 
   async function handleCreateGroupChat(): Promise<void> {
-    const chat = await createChat({
+    await createChat({
       variables: {
         organizationId: selectedOrganization,
         userIds: [userId, ...userIds],
