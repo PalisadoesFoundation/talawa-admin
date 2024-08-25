@@ -21,7 +21,7 @@ export interface InterfaceOrgPeopleOrganizationCardProps {
 }
 
 function OrgPeopleOrganizationsCard({
-  data: { _id, admins, image, address, members, name },
+  data: { _id, admins, image, members, name },
 }: InterfaceOrgPeopleOrganizationCardProps): JSX.Element {
   const { data } = useQuery(IS_SAMPLE_ORGANIZATION_QUERY, {
     variables: {
