@@ -741,6 +741,10 @@
     "notAuthorised": "Sorry! you are not Authorised!",
     "invalidCredentials": "Entered credentials are incorrect. Please enter valid credentials."
   },
+  "people": {
+    "title": "People",
+    "searchUsers": "Search People"
+  },
   "userRegister": {
     "enterFirstName": "Enter your first name",
     "enterLastName": "Enter your last name",

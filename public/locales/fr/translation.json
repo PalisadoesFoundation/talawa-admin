@@ -744,6 +744,10 @@
     "notAuthorised": "Désolé! ",
     "invalidCredentials": "Les informations d'identification saisies sont incorrectes. "
   },
+  "people": {
+    "title": "Personnes",
+    "searchUsers": "Rechercher des utilisateurs"
+  },
   "userRegister": {
     "enterFirstName": "Entrez votre prénom",
     "enterLastName": "Entrez votre nom de famille",

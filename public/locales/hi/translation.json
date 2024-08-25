@@ -744,6 +744,10 @@
     "notAuthorised": "क्षमा मांगना! ",
     "invalidCredentials": "दर्ज किए गए क्रेडेंशियल ग़लत हैं. "
   },
+  "people": {
+    "title": "लोग",
+    "searchUsers": "उपयोगकर्ता खोजें"
+  },
   "userRegister": {
     "enterFirstName": "अपना पहला नाम दर्ज करें",
     "enterLastName": "अपना अंतिम नाम दर्ज करें",
