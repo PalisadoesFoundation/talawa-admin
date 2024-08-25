@@ -17,6 +17,22 @@ import styles from './MemberOrganization.module.css';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useTranslation } from 'react-i18next';
 
+/**
+ * MemberOrganization component displays the details of a member organization.
+ *
+ * This component:
+ * - Uses the `useTranslation` hook for translations.
+ * - Accepts props of type `InterfaceMemberOrganization`.
+ * - Manages state for loading, search, and pagination.
+ * - Retrieves `superAdmin` and `adminFor` from local storage.
+ * - Extracts `orgId` from URL parameters.
+ * - Fetches the user organization list and organization connection list using GraphQL queries.
+ * - Implements infinite scroll to load more data.
+ *
+ * @param props - The properties passed to the component, including organization details.
+ * @returns A JSX element representing the member organization details.
+ */
+
 const MemberOrganization: React.FC<InterfaceMemberOrganization> = (props) => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'memberOrganization',

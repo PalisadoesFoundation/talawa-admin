@@ -20,6 +20,30 @@ export interface InterfaceOrgPeopleOrganizationCardProps {
   data: InterfaceOrgConnectionInfoType;
 }
 
+/**
+ * OrgPeopleOrganizationsCard component displays a card with information about an organization and its people.
+ *
+ * This component is responsible for rendering a card that provides detailed information about a specific organization,
+ * including its name, image, number of admins, and number of members. It also includes functionality to navigate to
+ * the organization's dashboard and manage the organization.
+ *
+ * @param props - The properties passed to the component.
+ * @returns A JSX element representing the organization and people card.
+ *
+ * @example
+ * ```tsx
+ * const organizationData = {
+ *   _id: 'org123',
+ *   admins: ['admin1', 'admin2'],
+ *   image: 'https://example.com/image.png',
+ *   members: ['member1', 'member2', 'member3'],
+ *   name: 'Example Organization',
+ * };
+ *
+ * <OrgPeopleOrganizationsCard data={organizationData} />
+ * ```
+ */
+
 function OrgPeopleOrganizationsCard({
   data: { _id, admins, image, members, name },
 }: InterfaceOrgPeopleOrganizationCardProps): JSX.Element {

@@ -35,6 +35,29 @@ type OrgMemberDetailProps = {
   id?: string;
 };
 
+/**
+ * OrgMemberDetails component displays detailed information about an organization member.
+ *
+ * This component:
+ * - Fetches user details using the `USER_DETAILS` GraphQL query.
+ * - Allows updating user details using the `UPDATE_USER_MUTATION` GraphQL mutation.
+ * - Utilizes various utility functions and components such as `useLocalStorage`, `convertToBase64`, `sanitizeHtml`, and `DynamicDropDown`.
+ * - Uses the `useTranslation` hook for internationalization support.
+ * - Manages form state for user details including first name, last name, email, language code, image, gender, birth date, education grade, employment status, marital status, phone number, address, state, city, country, and plugin creation permission.
+ * - Handles date changes using the `DatePicker` component from `@mui/x-date-pickers`.
+ * - Displays a loader while fetching user details.
+ * - Shows toast notifications for success and error messages.
+ * - Ensures component cleanup using the `useEffect` hook.
+ *
+ * @param props - The properties passed to the component, including member details.
+ * @returns A JSX element representing the organization member details.
+ *
+ * @example
+ * ```tsx
+ * <OrgMemberDetails id="12345" />
+ * ```
+ */
+
 const OrgMemberDetail: React.FC<OrgMemberDetailProps> = ({
   id,
 }): JSX.Element => {
