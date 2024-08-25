@@ -75,6 +75,12 @@
   "profile": "轮廓",
   "noFiltersApplied": "未应用筛选器",
   "manage": "管理",
-  "searchResultsFor": "搜索结果：{{text}}",
-  "none": "没有"
+  "searchResultsFor": "搜索结果",
+  "none": "没有",
+  "sort": "种类",
+  "Donate": "捐赠",
+  "addedSuccessfully": "{{item}} 添加成功",
+  "updatedSuccessfully": "{{item}} 更新成功",
+  "removedSuccessfully": "{{item}} 删除成功",
+  "successfullyUpdated": "更新成功"
 }

@@ -19,17 +19,35 @@ import { errorHandler } from 'utils/errorHandler';
 import styles from './ForgotPassword.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 
+/**
+ * `ForgotPassword` component allows users to reset their password.
+ *
+ * It provides two stages:
+ * 1. Entering the registered email to receive an OTP.
+ * 2. Entering the OTP and new password to reset the password.
+ *
+ * @returns JSX.Element - The `ForgotPassword` component.
+ *
+ * @example
+ * ```tsx
+ * <ForgotPassword />
+ * ```
+ */
 const ForgotPassword = (): JSX.Element => {
+  // Translation hook for internationalization
   const { t } = useTranslation('translation', {
     keyPrefix: 'forgotPassword',
   });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
+  // Set the page title
   document.title = t('title');
 
+  // Custom hook for accessing local storage
   const { getItem, removeItem, setItem } = useLocalStorage();
 
+  // State hooks for form data and UI
   const [showEnterEmail, setShowEnterEmail] = useState(true);
 
   const [registeredEmail, setregisteredEmail] = useState('');
@@ -40,10 +58,13 @@ const ForgotPassword = (): JSX.Element => {
     confirmNewPassword: '',
   });
 
+  // GraphQL mutations
   const [otp, { loading: otpLoading }] = useMutation(GENERATE_OTP_MUTATION);
   const [forgotPassword, { loading: forgotPasswordLoading }] = useMutation(
     FORGOT_PASSWORD_MUTATION,
   );
+
+  // Check if the user is already logged in
   const isLoggedIn = getItem('IsLoggedIn');
   useEffect(() => {
     if (isLoggedIn == 'TRUE') {
@@ -54,6 +75,11 @@ const ForgotPassword = (): JSX.Element => {
     };
   }, []);
 
+  /**
+   * Handles the form submission for generating OTP.
+   *
+   * @param e - The form submit event
+   */
   const getOTP = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
@@ -82,6 +108,11 @@ const ForgotPassword = (): JSX.Element => {
     }
   };
 
+  /**
+   * Handles the form submission for resetting the password.
+   *
+   * @param e - The form submit event
+   */
   const submitForgotPassword = async (
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
@@ -125,9 +156,11 @@ const ForgotPassword = (): JSX.Element => {
     }
   };
 
+  // Show loader while performing OTP or password reset operations
   if (otpLoading || forgotPasswordLoading) {
     return <Loader />;
   }
+
   return (
     <>
       <div className={styles.pageWrapper}>

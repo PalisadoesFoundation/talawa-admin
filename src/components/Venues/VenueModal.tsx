@@ -21,6 +21,21 @@ export interface InterfaceVenueModalProps {
   edit: boolean;
 }
 
+/**
+ * A modal component for creating or updating venue information.
+ *
+ * This component displays a modal window where users can enter details for a venue, such as name, description, capacity, and an image.
+ * It also handles submitting the form data to create or update a venue based on whether the `edit` prop is true or false.
+ *
+ * @param show - A flag indicating if the modal should be visible.
+ * @param onHide - A function to call when the modal should be closed.
+ * @param refetchVenues - A function to refetch the list of venues after a successful operation.
+ * @param orgId - The ID of the organization to which the venue belongs.
+ * @param venueData - Optional venue data to prefill the form for editing. If null, the form will be empty.
+ * @param edit - A flag indicating if the modal is in edit mode. If true, the component will update an existing venue; if false, it will create a new one.
+ *
+ * @returns The rendered modal component.
+ */
 const VenueModal = ({
   show,
   onHide,
@@ -29,11 +44,13 @@ const VenueModal = ({
   edit,
   venueData,
 }: InterfaceVenueModalProps): JSX.Element => {
+  // Translation hooks for different languages
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationVenues',
   });
   const { t: tCommon } = useTranslation('common');
 
+  // State to manage image preview and form data
   const [venueImage, setVenueImage] = useState<boolean>(false);
   const [formState, setFormState] = useState({
     name: venueData?.name || '',
@@ -42,12 +59,22 @@ const VenueModal = ({
     imageURL: venueData?.image || '',
   });
 
+  // Reference for the file input element
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+  // Mutation function for creating or updating a venue
   const [mutate, { loading }] = useMutation(
     edit ? UPDATE_VENUE_MUTATION : CREATE_VENUE_MUTATION,
   );
 
+  /**
+   * Handles form submission to create or update a venue.
+   *
+   * Validates form inputs and sends a request to the server to create or update the venue.
+   * If the operation is successful, it shows a success message, refetches venues, and resets the form.
+   *
+   * @returns A promise that resolves when the submission is complete.
+   */
   const handleSubmit = useCallback(async () => {
     if (formState.name.trim().length === 0) {
       toast.error(t('venueTitleError'));
@@ -59,6 +86,7 @@ const VenueModal = ({
       toast.error(t('venueCapacityError'));
       return;
     }
+
     try {
       const { data } = await mutate({
         variables: {
@@ -98,6 +126,11 @@ const VenueModal = ({
     venueData?._id,
   ]);
 
+  /**
+   * Clears the selected image and resets the image preview.
+   *
+   * This function also clears the file input field.
+   */
   const clearImageInput = useCallback(() => {
     setFormState((prevState) => ({ ...prevState, imageURL: '' }));
     setVenueImage(false);
@@ -107,6 +140,7 @@ const VenueModal = ({
     }
   }, []);
 
+  // Update form state when venueData changes
   useEffect(() => {
     setFormState({
       name: venueData?.name || '',

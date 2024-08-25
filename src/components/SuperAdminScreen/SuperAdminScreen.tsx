@@ -6,12 +6,21 @@ import { Outlet, useLocation } from 'react-router-dom';
 import styles from './SuperAdminScreen.module.css';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 
+/**
+ * The SuperAdminScreen component manages the layout for the Super Admin screen,
+ * including handling the sidebar visibility and page title based on the current route.
+ *
+ * @returns The JSX element representing the Super Admin screen layout.
+ */
 const superAdminScreen = (): JSX.Element => {
   const location = useLocation();
   const titleKey = map[location.pathname.split('/')[1]];
   const { t } = useTranslation('translation', { keyPrefix: titleKey });
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
 
+  /**
+   * Handles resizing of the window to show or hide the sidebar.
+   */
   const handleResize = (): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer(!hideDrawer);
@@ -74,6 +83,9 @@ const superAdminScreen = (): JSX.Element => {
 
 export default superAdminScreen;
 
+/**
+ * Map of route segments to translation keys for page titles.
+ */
 const map: Record<
   string,
   'orgList' | 'requests' | 'users' | 'memberDetail' | 'communityProfile'

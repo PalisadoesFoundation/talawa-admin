@@ -20,6 +20,12 @@ import type { GridColDef, GridCellParams } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 
+/**
+ * OrganizationPeople component is used to display the list of members, admins and users of the organization.
+ * It also provides the functionality to search the members, admins and users by their full name.
+ * It also provides the functionality to remove the members and admins from the organization.
+ * @returns JSX.Element which contains the list of members, admins and users of the organization.
+ */
 function organizationPeople(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationPeople',
@@ -305,12 +311,12 @@ function organizationPeople(): JSX.Element {
         <div className="datatable">
           <DataGrid
             disableColumnMenu
-            columnBuffer={5}
+            columnBufferPx={5}
             hideFooter={true}
             className={`${styles.datagrid}`}
             getRowId={(row) => row._id}
-            components={{
-              NoRowsOverlay: () => (
+            slots={{
+              noRowsOverlay: () => (
                 <Stack
                   height="100%"
                   alignItems="center"

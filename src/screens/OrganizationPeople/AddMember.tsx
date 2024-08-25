@@ -49,6 +49,15 @@ const StyledTableRow = styled(TableRow)(() => ({
   },
 }));
 
+/**
+ * AddMember component is used to add new members to the organization by selecting from
+ * the existing users or creating a new user.
+ * It uses the following queries and mutations:
+ *  ORGANIZATIONS_LIST,
+ *  ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+ *  USERS_CONNECTION_LIST,
+ *  ADD_MEMBER_MUTATION,SIGNUP_MUTATION.
+ */
 function AddMember(): JSX.Element {
   const { t: translateOrgPeople } = useTranslation('translation', {
     keyPrefix: 'organizationPeople',
@@ -59,6 +68,8 @@ function AddMember(): JSX.Element {
   });
 
   const isSuperAdmin = getItem('SuperAdmin', '');
+  const { t: tCommon } = useTranslation('common');
+  document.title = translateOrgPeople('title');
 
   const updateDocumentTitle = () => {
     const titleKey = isSuperAdmin ? 'title_superadmin' : 'title';
@@ -96,7 +107,7 @@ function AddMember(): JSX.Element {
           orgid: currentUrl,
         },
       });
-      toast.success('Member added to the organization.');
+      toast.success(tCommon('addedSuccessfully', { item: 'Member' }));
       memberRefetch({
         orgId: currentUrl,
       });
@@ -388,7 +399,7 @@ function AddMember(): JSX.Element {
                               <Link
                                 className={styles.membername}
                                 to={{
-                                  pathname: `/member/id=${currentUrl}`,
+                                  pathname: `/member/${currentUrl}`,
                                 }}
                               >
                                 {userDetails.user.firstName +

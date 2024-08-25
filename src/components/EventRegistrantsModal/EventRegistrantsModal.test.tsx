@@ -194,9 +194,7 @@ describe('Testing Event Registrants Modal', () => {
     );
 
     await waitFor(() =>
-      expect(
-        queryByText('Added the attendee successfully!'),
-      ).toBeInTheDocument(),
+      expect(queryByText('Attendee added Successfully')).toBeInTheDocument(),
     );
   });
 
@@ -244,9 +242,7 @@ describe('Testing Event Registrants Modal', () => {
     );
 
     await waitFor(() =>
-      expect(
-        queryByText('There was an error in adding the attendee!'),
-      ).toBeInTheDocument(),
+      expect(queryByText('Error adding attendee')).toBeInTheDocument(),
     );
   });
 
@@ -286,9 +282,7 @@ describe('Testing Event Registrants Modal', () => {
     );
 
     await waitFor(() =>
-      expect(
-        queryByText('Removed the attendee successfully!'),
-      ).toBeInTheDocument(),
+      expect(queryByText('Attendee removed Successfully')).toBeInTheDocument(),
     );
   });
 
@@ -328,9 +322,7 @@ describe('Testing Event Registrants Modal', () => {
     );
 
     await waitFor(() =>
-      expect(
-        queryByText('There was an error in removing the attendee!'),
-      ).toBeInTheDocument(),
+      expect(queryByText('Error removing attendee')).toBeInTheDocument(),
     );
   });
 });

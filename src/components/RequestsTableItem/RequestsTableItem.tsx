@@ -10,6 +10,9 @@ import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './RequestsTableItem.module.css';
 
+/**
+ * Represents a membership request in the requests table.
+ */
 export interface InterfaceRequestsListItem {
   _id: string;
   user: {
@@ -19,18 +22,40 @@ export interface InterfaceRequestsListItem {
   };
 }
 
+/**
+ * Props for the RequestsTableItem component.
+ *
+ */
 type Props = {
   request: InterfaceRequestsListItem;
   index: number;
   resetAndRefetch: () => void;
 };
 
+/**
+ * Renders a table row item for a membership request.
+ *
+ * This component displays user details and provides buttons to accept or reject
+ * the membership request. It also handles showing success or error messages using
+ * toast notifications.
+ *
+ * @param props - The props object containing request details, index, and state reset function.
+ * @returns The JSX element representing the RequestsTableItem.
+ */
 const RequestsTableItem = (props: Props): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'requests' });
   const { request, index, resetAndRefetch } = props;
   const [acceptUser] = useMutation(ACCEPT_ORGANIZATION_REQUEST_MUTATION);
   const [rejectUser] = useMutation(REJECT_ORGANIZATION_REQUEST_MUTATION);
 
+  /**
+   * Handles the acceptance of a membership request.
+   *
+   * Sends a mutation request to accept the user and shows a success message if successful.
+   * It also triggers a state reset and refetch.
+   *
+   * @param membershipRequestId - The ID of the membership request to accept.
+   */
   const handleAcceptUser = async (
     membershipRequestId: string,
   ): Promise<void> => {
@@ -45,12 +70,20 @@ const RequestsTableItem = (props: Props): JSX.Element => {
         toast.success(t('acceptedSuccessfully'));
         resetAndRefetch();
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
 
+  /**
+   * Handles the rejection of a membership request.
+   *
+   * Sends a mutation request to reject the user and shows a success message if successful.
+   * It also triggers a state reset and refetch.
+   *
+   * @param membershipRequestId - The ID of the membership request to reject.
+   */
   const handleRejectUser = async (
     membershipRequestId: string,
   ): Promise<void> => {
@@ -65,7 +98,7 @@ const RequestsTableItem = (props: Props): JSX.Element => {
         toast.success(t('rejectedSuccessfully'));
         resetAndRefetch();
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       /* istanbul ignore next */
       errorHandler(t, error);
     }

@@ -211,6 +211,58 @@ export interface InterfaceQueryOrganizationPostListItem {
   };
 }
 
+interface InterfaceTagData {
+  edges: {
+    node: {
+      _id: string;
+      name: string;
+      usersAssignedTo: {
+        totalCount: number;
+      };
+      childTags: {
+        totalCount: number;
+      };
+    };
+    cursor: string;
+  }[];
+  pageInfo: {
+    startCursor: string;
+    endCursor: string;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+  };
+  totalCount: number;
+}
+
+export interface InterfaceQueryOrganizationUserTags {
+  userTags: InterfaceTagData;
+}
+
+export interface InterfaceQueryUserTagsAssignedMembers {
+  name: string;
+  usersAssignedTo: {
+    edges: {
+      node: {
+        _id: string;
+        firstName: string;
+        lastName: string;
+      };
+    }[];
+    pageInfo: {
+      startCursor: string;
+      endCursor: string;
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+    };
+    totalCount: number;
+  };
+}
+
+export interface InterfaceQueryUserTagChildTags {
+  name: string;
+  childTags: InterfaceTagData;
+}
+
 export interface InterfaceQueryOrganizationAdvertisementListItem {
   advertisements: {
     edges: {
@@ -233,19 +285,7 @@ export interface InterfaceQueryOrganizationAdvertisementListItem {
     totalCount: number;
   };
 }
-export interface InterfaceQueryOrganizationFunds {
-  fundsByOrganization: {
-    _id: string;
-    name: string;
-    refrenceNumber: string;
-    taxDeductible: boolean;
-    isArchived: boolean;
-    isDefault: boolean;
-    createdAt: string;
-    organizationId: string;
-    creator: { _id: string; firstName: string; lastName: string };
-  }[];
-}
+
 export interface InterfaceQueryOrganizationFundCampaigns {
   campaigns: {
     _id: string;
@@ -257,17 +297,21 @@ export interface InterfaceQueryOrganizationFundCampaigns {
     currency: string;
   }[];
 }
-export interface InterfaceQueryFundCampaignsPledges {
+export interface InterfaceUserCampaign {
+  _id: string;
+  name: string;
+  fundingGoal: number;
   startDate: Date;
   endDate: Date;
-  pledges: {
-    _id: string;
-    amount: number;
-    currency: string;
-    endDate: string;
-    startDate: string;
-    users: InterfacePledgeVolunteer[];
-  }[];
+  currency: string;
+}
+export interface InterfaceQueryFundCampaignsPledges {
+  name: string;
+  fundingGoal: number;
+  currency: string;
+  startDate: Date;
+  endDate: Date;
+  pledges: InterfacePledgeInfo[];
 }
 export interface InterfaceFundInfo {
   _id: string;
@@ -277,6 +321,8 @@ export interface InterfaceFundInfo {
   isArchived: boolean;
   isDefault: boolean;
   createdAt: string;
+  organizationId: string;
+  creator: { _id: string; firstName: string; lastName: string };
 }
 export interface InterfaceCampaignInfo {
   _id: string;
@@ -289,11 +335,12 @@ export interface InterfaceCampaignInfo {
 }
 export interface InterfacePledgeInfo {
   _id: string;
+  campaign?: { _id: string; name: string; endDate: Date };
   amount: number;
   currency: string;
   endDate: string;
   startDate: string;
-  users: InterfacePledgeVolunteer[];
+  users: InterfacePledger[];
 }
 export interface InterfaceQueryOrganizationEventListItem {
   _id: string;
@@ -390,6 +437,9 @@ export interface InterfaceAddress {
 export interface InterfaceCreateFund {
   fundName: string;
   fundRef: string;
+  isDefault: boolean;
+  isArchived: boolean;
+  taxDeductible: boolean;
 }
 
 export interface InterfacePostCard {
@@ -410,7 +460,7 @@ export interface InterfacePostCard {
   comments: {
     id: string;
     creator: {
-      _id: string;
+      id: string;
       firstName: string;
       lastName: string;
       email: string;
@@ -428,16 +478,9 @@ export interface InterfacePostCard {
   }[];
   fetchPosts: () => void;
 }
-export interface InterfaceCreateCampaign {
-  campaignName: string;
-  campaignCurrency: string;
-  campaignGoal: number;
-  campaignStartDate: Date;
-  campaignEndDate: Date;
-}
 
 export interface InterfaceCreatePledge {
-  pledgeUsers: InterfacePledgeVolunteer[];
+  pledgeUsers: InterfacePledger[];
   pledgeAmount: number;
   pledgeCurrency: string;
   pledgeStartDate: Date;
@@ -463,12 +506,13 @@ export interface InterfaceMemberOrganization {
   userId: string;
 }
 
-export interface InterfacePledgeVolunteer {
+export interface InterfacePledger {
   _id: string;
   firstName: string;
   lastName: string;
   image: string | null;
 }
+
 export interface InterfaceAgendaItemCategoryInfo {
   _id: string;
   name: string;
@@ -482,4 +526,44 @@ export interface InterfaceAgendaItemCategoryInfo {
 
 export interface InterfaceAgendaItemCategoryList {
   agendaItemCategoriesByOrganization: InterfaceAgendaItemCategoryInfo[];
+}
+
+export interface InterfaceAgendaItemInfo {
+  _id: string;
+  title: string;
+  description: string;
+  duration: string;
+  attachments: string[];
+  createdBy: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+  };
+  urls: string[];
+  users: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+  }[];
+  sequence: number;
+  categories: {
+    _id: string;
+    name: string;
+  }[];
+  organization: {
+    _id: string;
+    name: string;
+  };
+  relatedEvent: {
+    _id: string;
+    title: string;
+  };
+}
+
+export interface InterfaceAgendaItemList {
+  agendaItemByEvent: InterfaceAgendaItemInfo[];
+}
+
+export interface InterfaceMapType {
+  [key: string]: string;
 }
