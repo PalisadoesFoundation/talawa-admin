@@ -76,5 +76,11 @@
   "noFiltersApplied": "No filters applied",
   "manage": "Manage",
   "searchResultsFor": "Search results for {{text}}",
-  "none": "None"
+  "none": "None",
+  "Donate": "Donate",
+  "addedSuccessfully": "{{item}} added Successfully",
+  "updatedSuccessfully": "{{item}} updated Successfully",
+  "removedSuccessfully": "{{item}} removed Successfully",
+  "successfullyUpdated": "Successfully Updated",
+  "sort": "Sort"
 }

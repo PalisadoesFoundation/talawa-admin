@@ -29,19 +29,36 @@ interface InterfaceMember {
   __typename: 'User';
 }
 
+/**
+ * Requests component displays and manages a list of users that can be blocked or unblocked.
+ *
+ * This component allows users to search for members by their first name or last name,
+ * toggle between viewing blocked and all members, and perform block/unblock operations.
+ *
+ * @returns JSX.Element - The `Requests` component.
+ *
+ * @example
+ * ```tsx
+ * <Requests />
+ * ```
+ */
 const Requests = (): JSX.Element => {
+  // Translation hooks for internationalization
   const { t } = useTranslation('translation', {
     keyPrefix: 'blockUnblockUser',
   });
   const { t: tCommon } = useTranslation('common');
 
-  document.title = t('title');
-  const { orgId: currentUrl } = useParams();
+  document.title = t('title'); // Set document title
+  const { orgId: currentUrl } = useParams(); // Get current organization ID from URL
+
+  // State hooks
   const [membersData, setMembersData] = useState<InterfaceMember[]>([]);
   const [searchByFirstName, setSearchByFirstName] = useState<boolean>(true);
   const [searchByName, setSearchByName] = useState<string>('');
   const [showBlockedMembers, setShowBlockedMembers] = useState<boolean>(true);
 
+  // Query to fetch members list
   const {
     data: memberData,
     loading: loadingMembers,
@@ -55,9 +72,11 @@ const Requests = (): JSX.Element => {
     },
   });
 
+  // Mutations for blocking and unblocking users
   const [blockUser] = useMutation(BLOCK_USER_MUTATION);
   const [unBlockUser] = useMutation(UNBLOCK_USER_MUTATION);
 
+  // Effect to update member data based on filters and data changes
   useEffect(() => {
     if (!memberData) {
       setMembersData([]);
@@ -75,6 +94,7 @@ const Requests = (): JSX.Element => {
     }
   }, [memberData, showBlockedMembers]);
 
+  // Handler for blocking a user
   const handleBlockUser = async (userId: string): Promise<void> => {
     try {
       const { data } = await blockUser({
@@ -94,6 +114,7 @@ const Requests = (): JSX.Element => {
     }
   };
 
+  // Handler for unblocking a user
   const handleUnBlockUser = async (userId: string): Promise<void> => {
     try {
       const { data } = await unBlockUser({
@@ -113,11 +134,13 @@ const Requests = (): JSX.Element => {
     }
   };
 
+  // Display error if member query fails
   /* istanbul ignore next */
   if (memberError) {
     toast.error(memberError.message);
   }
 
+  // Search handler
   const handleSearch = (value: string): void => {
     setSearchByName(value);
     memberRefetch({
@@ -127,6 +150,7 @@ const Requests = (): JSX.Element => {
     });
   };
 
+  // Search by Enter key
   const handleSearchByEnter = (
     e: React.KeyboardEvent<HTMLInputElement>,
   ): void => {
@@ -136,6 +160,7 @@ const Requests = (): JSX.Element => {
     }
   };
 
+  // Search button click handler
   const handleSearchByBtnClick = (): void => {
     const inputValue =
       (document.getElementById('searchBlockedUsers') as HTMLInputElement)
@@ -143,6 +168,7 @@ const Requests = (): JSX.Element => {
     handleSearch(inputValue);
   };
 
+  // Header titles for the table
   const headerTitles: string[] = [
     '#',
     tCommon('name'),
@@ -183,6 +209,7 @@ const Requests = (): JSX.Element => {
           </div>
           <div className={styles.btnsBlock}>
             <div className={styles.largeBtnsWrapper}>
+              {/* Dropdown for filtering members */}
               <Dropdown aria-expanded="false" title="Sort organizations">
                 <Dropdown.Toggle variant="success" data-testid="userFilter">
                   <SortIcon className={'me-1'} />
@@ -205,6 +232,7 @@ const Requests = (): JSX.Element => {
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
+              {/* Dropdown for sorting by name */}
               <Dropdown aria-expanded="false">
                 <Dropdown.Toggle variant="success" data-testid="nameFilter">
                   <SortIcon className={'me-1'} />

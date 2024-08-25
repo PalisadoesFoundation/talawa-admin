@@ -1,6 +1,5 @@
 .mainContainer {
   flex-grow: 3;
-  padding: 25px;
   max-height: 100%;
   overflow: auto;
 }
@@ -117,7 +116,7 @@
 
 @media (max-width: 1120px) {
   .collapseSidebarButton {
-    width: calc(250px + 2rem);
+    width: calc(250px);
   }
 }
 

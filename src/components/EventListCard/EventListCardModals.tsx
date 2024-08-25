@@ -37,11 +37,24 @@ enum Role {
   ADMIN = 'ADMIN',
 }
 
+/**
+ * Converts a time string to a Dayjs object representing the current date with the specified time.
+ * @param time - A string representing the time in 'HH:mm:ss' format.
+ * @returns A Dayjs object with the current date and specified time.
+ */
 const timeToDayJs = (time: string): Dayjs => {
   const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
   return dayjs(dateTimeString, { format: 'YYYY-MM-DD HH:mm:ss' });
 };
 
+/**
+ * Properties for the `EventListCardModals` component.
+ * eventListCardProps - The properties of the event list card.
+ * eventModalIsOpen - Boolean indicating if the event modal is open.
+ * hideViewModal - Function to hide the event modal.
+ * t - Function for translation of text.
+ * tCommon - Function for translation of common text.
+ */
 interface InterfaceEventListCardModalProps {
   eventListCardProps: InterfaceEventListCardProps;
   eventModalIsOpen: boolean;
@@ -50,6 +63,12 @@ interface InterfaceEventListCardModalProps {
   tCommon: (key: string) => string;
 }
 
+/**
+ * The `EventListCardModals` component displays the modals related to events, such as viewing,
+ * updating, and deleting events.
+ * @param props - The properties for the component.
+ * @returns A JSX element containing the event modals.
+ */
 function EventListCardModals({
   eventListCardProps,
   eventModalIsOpen,

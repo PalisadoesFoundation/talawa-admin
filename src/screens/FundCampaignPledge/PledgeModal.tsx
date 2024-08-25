@@ -6,7 +6,7 @@ import { currencyOptions, currencySymbols } from 'utils/currency';
 import type {
   InterfaceCreatePledge,
   InterfacePledgeInfo,
-  InterfacePledgeVolunteer,
+  InterfacePledger,
 } from 'utils/interfaces';
 import styles from './FundCampaignPledge.module.css';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -35,6 +35,40 @@ export interface InterfacePledgeModal {
   endDate: Date;
   mode: 'create' | 'edit';
 }
+
+/**
+ * A modal dialog for creating or editing a pledge.
+ *
+ * @param isOpen - Indicates whether the modal is open.
+ * @param hide - Function to close the modal.
+ * @param campaignId - The ID of the campaign associated with the pledge.
+ * @param orgId - The ID of the organization associated with the pledge.
+ * @param pledge - The pledge object to be edited, or `null` if creating a new pledge.
+ * @param refetchPledge - Function to refetch the list of pledges after creation or update.
+ * @param endDate - The end date of the campaign to ensure pledge dates are within this range.
+ * @param mode - The mode indicating whether the modal is for creating a new pledge or editing an existing one.
+ *
+ * @returns The rendered modal component.
+ *
+ * The `PledgeModal` component displays a form within a modal dialog for creating or editing a pledge.
+ * It includes fields for selecting users, entering an amount, choosing a currency, and setting start and end dates for the pledge.
+ *
+ * The modal includes:
+ * - A header with a title indicating the current mode (create or edit) and a close button.
+ * - A form with:
+ *   - A multi-select dropdown for selecting users to participate in the pledge.
+ *   - Date pickers for selecting the start and end dates of the pledge.
+ *   - A dropdown for selecting the currency of the pledge amount.
+ *   - An input field for entering the pledge amount.
+ * - A submit button to create or update the pledge.
+ *
+ * On form submission, the component either:
+ * - Calls `updatePledge` mutation to update an existing pledge, or
+ * - Calls `createPledge` mutation to create a new pledge.
+ *
+ * Success or error messages are displayed using toast notifications based on the result of the mutation.
+ */
+
 const PledgeModal: React.FC<InterfacePledgeModal> = ({
   isOpen,
   hide,
@@ -57,7 +91,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     pledgeEndDate: new Date(pledge?.endDate ?? new Date()),
     pledgeStartDate: new Date(pledge?.startDate ?? new Date()),
   });
-  const [volunteers, setVolunteers] = useState<InterfacePledgeVolunteer[]>([]);
+  const [pledgers, setPledgers] = useState<InterfacePledger[]>([]);
   const [updatePledge] = useMutation(UPDATE_PLEDGE);
   const [createPledge] = useMutation(CREATE_PlEDGE);
 
@@ -78,7 +112,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   useEffect(() => {
     if (memberData) {
       /*istanbul ignore next*/
-      setVolunteers(memberData.organizations[0].members);
+      setPledgers(memberData.organizations[0].members);
     }
   }, [memberData]);
 
@@ -190,31 +224,31 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           }
           className="p-3"
         >
-          {/* A Multi-select dropdown enables admin to select more than one volunteer for participating in a pledge */}
+          {/* A Multi-select dropdown enables admin to select more than one pledger for participating in a pledge */}
           <Form.Group className="d-flex mb-3 w-100">
             <Autocomplete
               multiple
               className={`${styles.noOutline} w-100`}
               limitTags={2}
-              data-testid="volunteerSelect"
-              options={volunteers}
+              data-testid="pledgerSelect"
+              options={pledgers}
               value={pledgeUsers}
               isOptionEqualToValue={(option, value) => option._id === value._id}
               filterSelectedOptions={true}
-              getOptionLabel={(member: InterfacePledgeVolunteer): string =>
+              getOptionLabel={(member: InterfacePledger): string =>
                 `${member.firstName} ${member.lastName}`
               }
               onChange={
                 /*istanbul ignore next*/
-                (_, newVolunteers): void => {
+                (_, newPledgers): void => {
                   setFormState({
                     ...formState,
-                    pledgeUsers: newVolunteers,
+                    pledgeUsers: newPledgers,
                   });
                 }
               }
               renderInput={(params) => (
-                <TextField {...params} label="Volunteers" />
+                <TextField {...params} label="Pledgers" />
               )}
             />
           </Form.Group>

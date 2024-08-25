@@ -8,6 +8,9 @@ import type { Dayjs } from 'dayjs';
 import styles from './OrganizationActionItems.module.css';
 import type { InterfaceMemberInfo } from 'utils/interfaces';
 
+/**
+ * InterfaceFormStateType is an object containing the form state
+ */
 interface InterfaceFormStateType {
   assigneeId: string;
   assignee: string;
@@ -17,6 +20,21 @@ interface InterfaceFormStateType {
   postCompletionNotes: string;
 }
 
+/**
+ * ActionItemUpdateModal component is used to update the action item details like assignee, preCompletionNotes, dueDate, completionDate
+ * @param  actionItemUpdateModalIsOpen - boolean value to check if the modal is open or not
+ * @param  hideUpdateModal - function to hide the modal
+ * @param  formState - object containing the form state
+ * @param  setFormState - function to set the form state
+ * @param  updateActionItemHandler - function to update the action item
+ * @param  t - i18n function to translate the text
+ * @param  membersData - array of members data
+ * @param  dueDate - due date of the action item
+ * @param  setDueDate - function to set the due date
+ * @param  completionDate - completion date of the action item
+ * @param  setCompletionDate - function to set the completion date
+ * @returns  returns the ActionItemUpdateModal component
+ */
 interface InterfaceActionItemCreateModalProps {
   actionItemUpdateModalIsOpen: boolean;
   hideUpdateModal: () => void;
@@ -75,11 +93,11 @@ const ActionItemUpdateModal: React.FC<InterfaceActionItemCreateModalProps> = ({
                 <option value="" disabled>
                   {formState.assignee}
                 </option>
-                {membersData?.map((member, index) => {
+                {membersData?.map((member: InterfaceMemberInfo) => {
                   const currMemberName = `${member.firstName} ${member.lastName}`;
                   if (currMemberName !== formState.assignee) {
                     return (
-                      <option key={index} value={member._id}>
+                      <option key={member._id} value={member._id}>
                         {`${member.firstName} ${member.lastName}`}
                       </option>
                     );
@@ -107,36 +125,33 @@ const ActionItemUpdateModal: React.FC<InterfaceActionItemCreateModalProps> = ({
             />
 
             <div className={`${styles.datediv} mt-3 mb-2`}>
-              <div>
-                <DatePicker
-                  label={t('dueDate')}
-                  className={styles.datebox}
-                  value={dayjs(dueDate)}
-                  onChange={
-                    /* istanbul ignore next */ (date: Dayjs | null): void => {
-                      /* istanbul ignore next */
-                      if (date) {
-                        setDueDate(date?.toDate());
-                      }
+              <DatePicker
+                label={t('dueDate')}
+                className={styles.datebox}
+                value={dayjs(dueDate)}
+                onChange={
+                  /* istanbul ignore next */ (date: Dayjs | null): void => {
+                    /* istanbul ignore next */
+                    if (date) {
+                      setDueDate(date?.toDate());
                     }
                   }
-                />
-              </div>
-              <div>
-                <DatePicker
-                  label={t('completionDate')}
-                  className={styles.datebox}
-                  value={dayjs(completionDate)}
-                  onChange={
-                    /* istanbul ignore next */ (date: Dayjs | null): void => {
-                      /* istanbul ignore next */
-                      if (date) {
-                        setCompletionDate(date?.toDate());
-                      }
+                }
+              />
+              &nbsp;
+              <DatePicker
+                label={t('completionDate')}
+                className={styles.datebox}
+                value={dayjs(completionDate)}
+                onChange={
+                  /* istanbul ignore next */ (date: Dayjs | null): void => {
+                    /* istanbul ignore next */
+                    if (date) {
+                      setCompletionDate(date?.toDate());
                     }
                   }
-                />
-              </div>
+                }
+              />
             </div>
 
             <Button

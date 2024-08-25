@@ -22,6 +22,15 @@ export interface InterfaceLeftDrawerProps {
   setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
+/**
+ * LeftDrawerOrg component for displaying organization details and navigation options.
+ *
+ * @param orgId - ID of the current organization.
+ * @param targets - List of navigation targets.
+ * @param hideDrawer - Determines if the drawer should be hidden or shown.
+ * @param setHideDrawer - Function to update the visibility state of the drawer.
+ * @returns JSX element for the left navigation drawer with organization details.
+ */
 const leftDrawerOrg = ({
   targets,
   orgId,
@@ -47,6 +56,7 @@ const leftDrawerOrg = ({
   } = useQuery(ORGANIZATIONS_LIST, {
     variables: { id: orgId },
   });
+
   useEffect(() => {
     let isMounted = true;
     if (data && isMounted) {
@@ -58,6 +68,9 @@ const leftDrawerOrg = ({
     };
   }, [data]);
 
+  /**
+   * Handles link click to hide the drawer on smaller screens.
+   */
   const handleLinkClick = (): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer(true);

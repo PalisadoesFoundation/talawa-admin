@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './Settings.module.css';
 import { Button, Card, Col, Form, Row } from 'react-bootstrap';
@@ -22,14 +22,23 @@ import OtherSettings from 'components/UserProfileSettings/OtherSettings';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 
+/**
+ * The Settings component allows users to view and update their profile settings.
+ * It includes functionality to handle image uploads, reset changes, and save updated user details.
+ *
+ * @returns The Settings component.
+ */
 export default function settings(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'settings',
   });
   const { t: tCommon } = useTranslation('common');
-
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
 
+  /**
+   * Handler to adjust sidebar visibility based on window width.
+   * This function is invoked on window resize and when the component mounts.
+   */
   const handleResize = (): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer(!hideDrawer);
@@ -45,13 +54,13 @@ export default function settings(): JSX.Element {
   }, []);
 
   const { setItem } = useLocalStorage();
-
   const { data } = useQuery(CHECK_AUTH, { fetchPolicy: 'network-only' });
   const [updateUserDetails] = useMutation(UPDATE_USER_MUTATION);
 
-  const [userDetails, setUserDetails] = React.useState({
+  const [userDetails, setUserDetails] = useState({
     firstName: '',
     lastName: '',
+    createdAt: '',
     gender: '',
     email: '',
     phoneNumber: '',
@@ -65,8 +74,20 @@ export default function settings(): JSX.Element {
     image: '',
   });
 
+  /**
+   * Ref to store the original image URL for comparison during updates.
+   */
   const originalImageState = React.useRef<string>('');
+  /**
+   * Ref to access the file input element for image uploads.
+   */
   const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+  /**
+   * Handles the update of user details.
+   * This function sends a mutation request to update the user details
+   * and reloads the page on success.
+   */
   const handleUpdateUserDetails = async (): Promise<void> => {
     try {
       let updatedUserDetails = { ...userDetails };
@@ -78,11 +99,10 @@ export default function settings(): JSX.Element {
       });
       /* istanbul ignore next */
       if (data) {
-        toast.success('Your details have been updated.');
+        toast.success(tCommon('updatedSuccessfully', { item: 'Profile' }));
         setTimeout(() => {
           window.location.reload();
         }, 500);
-
         const userFullName = `${userDetails.firstName} ${userDetails.lastName}`;
         setItem('name', userFullName);
       }
@@ -91,6 +111,12 @@ export default function settings(): JSX.Element {
     }
   };
 
+  /**
+   * Handles the change of a specific field in the user details state.
+   *
+   * @param fieldName - The name of the field to be updated.
+   * @param value - The new value for the field.
+   */
   const handleFieldChange = (fieldName: string, value: string): void => {
     setUserDetails((prevState) => ({
       ...prevState,
@@ -98,18 +124,25 @@ export default function settings(): JSX.Element {
     }));
   };
 
+  /**
+   * Triggers the file input click event to open the file picker dialog.
+   */
   const handleImageUpload = (): void => {
     if (fileInputRef.current) {
       (fileInputRef.current as HTMLInputElement).click();
     }
   };
 
+  /**
+   * Resets the user details to the values fetched from the server.
+   */
   const handleResetChanges = (): void => {
     /* istanbul ignore next */
     if (data) {
       const {
         firstName,
         lastName,
+        createdAt,
         gender,
         phone,
         birthDate,
@@ -123,6 +156,7 @@ export default function settings(): JSX.Element {
         ...userDetails,
         firstName: firstName || '',
         lastName: lastName || '',
+        createdAt: createdAt || '',
         gender: gender || '',
         phoneNumber: phone?.mobile || '',
         birthDate: birthDate || '',
@@ -136,12 +170,13 @@ export default function settings(): JSX.Element {
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     /* istanbul ignore next */
     if (data) {
       const {
         firstName,
         lastName,
+        createdAt,
         gender,
         email,
         phone,
@@ -156,6 +191,7 @@ export default function settings(): JSX.Element {
       setUserDetails({
         firstName,
         lastName,
+        createdAt,
         gender,
         email,
         phoneNumber: phone?.mobile || '',
@@ -206,15 +242,19 @@ export default function settings(): JSX.Element {
         }`}
       >
         <div className={`${styles.mainContainer}`}>
-          <div className="d-flex justify-content-end align-items-center">
+          <div className="d-flex justify-content-between align-items-center">
+            <div style={{ flex: 1 }}>
+              <h1>{tCommon('settings')}</h1>
+            </div>
             <ProfileDropdown />
           </div>
-          <h3>{tCommon('settings')}</h3>
-          <Row>
+
+          <Row className="mt-4">
             <Col lg={5} className="d-lg-none">
               <UserProfile
                 firstName={userDetails.firstName}
                 lastName={userDetails.lastName}
+                createdAt={userDetails.createdAt}
                 email={userDetails.email}
                 image={userDetails.image}
               />
@@ -550,13 +590,7 @@ export default function settings(): JSX.Element {
                       </Form.Control>
                     </Col>
                   </Row>
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      marginTop: '1.5em',
-                    }}
-                  >
+                  <div className="d-flex justify-content-between mt-3">
                     <Button
                       onClick={handleResetChanges}
                       variant="outline-success"
@@ -579,6 +613,7 @@ export default function settings(): JSX.Element {
               <UserProfile
                 firstName={userDetails.firstName}
                 lastName={userDetails.lastName}
+                createdAt={userDetails.createdAt}
                 email={userDetails.email}
                 image={userDetails.image}
               />

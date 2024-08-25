@@ -14,6 +14,16 @@ interface InterfaceUserListCardProps {
   id: string;
 }
 
+/**
+ * The UserListCard component allows for adding a user as an admin in a specific organization.
+ * It uses a button to trigger a mutation for updating the user's role.
+ *
+ * @param props - The properties for the UserListCard component.
+ * @param key - The unique key for the component (although not used here).
+ * @param id - The ID of the user to be promoted to admin.
+ *
+ * @returns The JSX element representing the user list card.
+ */
 function userListCard(props: InterfaceUserListCardProps): JSX.Element {
   const { orgId: currentUrl } = useParams();
   const [adda] = useMutation(ADD_ADMIN_MUTATION);
@@ -22,6 +32,10 @@ function userListCard(props: InterfaceUserListCardProps): JSX.Element {
     keyPrefix: 'userListCard',
   });
 
+  /**
+   * Handles adding a user as an admin.
+   * It performs a mutation and handles success or failure accordingly.
+   */
   const addAdmin = async (): Promise<void> => {
     try {
       const { data } = await adda({
@@ -38,7 +52,7 @@ function userListCard(props: InterfaceUserListCardProps): JSX.Element {
           window.location.reload();
         }, 2000);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       /* istanbul ignore next */
       errorHandler(t, error);
     }

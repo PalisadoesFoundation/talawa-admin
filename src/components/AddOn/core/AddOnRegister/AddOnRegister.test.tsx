@@ -149,7 +149,7 @@ describe('Testing AddOnRegister', () => {
       userEvent.click(screen.getByTestId('addonregisterBtn'));
 
       await wait(100);
-      expect(toast.success).toBeCalledWith('Plugin Added Successfully');
+      expect(toast.success).toBeCalledWith('Plugin added Successfully');
     });
   });
 

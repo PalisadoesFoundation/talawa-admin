@@ -5,7 +5,7 @@ import { act, render, screen, waitFor, within } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import userEvent from '@testing-library/user-event';
 import {
-  ADVERTISEMENTS_GET,
+  ORGANIZATION_ADVERTISEMENT_LIST,
   ORGANIZATION_POST_LIST,
 } from 'GraphQl/Queries/Queries';
 import { Provider } from 'react-redux';
@@ -137,67 +137,83 @@ const MOCKS = [
   },
   {
     request: {
-      query: ADVERTISEMENTS_GET,
-      variables: {},
+      query: ORGANIZATION_ADVERTISEMENT_LIST,
+      variables: { id: 'orgId', first: 6 },
     },
     result: {
       data: {
-        advertisementsConnection: {
-          edges: [
-            {
-              node: {
-                _id: '1234',
-                name: 'Ad 1',
-                type: 'Type 1',
-                organization: {
-                  _id: 'orgId',
+        organizations: [
+          {
+            _id: 'orgId',
+            advertisements: {
+              edges: [
+                {
+                  node: {
+                    _id: '1234',
+                    name: 'Ad 1',
+                    type: 'Type 1',
+                    organization: {
+                      _id: 'orgId',
+                    },
+                    mediaUrl: 'Link 1',
+                    endDate: '2024-12-31',
+                    startDate: '2022-01-01',
+                  },
+                  cursor: '1234',
                 },
-                mediaUrl: 'Link 1',
-                endDate: '2024-12-31',
-                startDate: '2022-01-01',
-              },
-            },
-            {
-              node: {
-                _id: '2345',
-                name: 'Ad 2',
-                type: 'Type 1',
-                organization: {
-                  _id: 'orgId',
+                {
+                  node: {
+                    _id: '2345',
+                    name: 'Ad 2',
+                    type: 'Type 1',
+                    organization: {
+                      _id: 'orgId',
+                    },
+                    mediaUrl: 'Link 2',
+                    endDate: '2024-09-31',
+                    startDate: '2023-04-01',
+                  },
+                  cursor: '1234',
                 },
-                mediaUrl: 'Link 2',
-                endDate: '2024-09-31',
-                startDate: '2023-04-01',
-              },
-            },
-            {
-              node: {
-                _id: '3456',
-                name: 'name3',
-                type: 'Type 2',
-                organization: {
-                  _id: 'orgId',
+                {
+                  node: {
+                    _id: '3456',
+                    name: 'name3',
+                    type: 'Type 2',
+                    organization: {
+                      _id: 'orgId',
+                    },
+                    mediaUrl: 'link3',
+                    startDate: '2023-01-30',
+                    endDate: '2023-12-31',
+                  },
+                  cursor: '1234',
                 },
-                mediaUrl: 'link3',
-                startDate: '2023-01-30',
-                endDate: '2023-12-31',
-              },
-            },
-            {
-              node: {
-                _id: '4567',
-                name: 'name4',
-                type: 'Type 2',
-                organization: {
-                  _id: 'orgId1',
+                {
+                  node: {
+                    _id: '4567',
+                    name: 'name4',
+                    type: 'Type 2',
+                    organization: {
+                      _id: 'orgId1',
+                    },
+                    mediaUrl: 'link4',
+                    startDate: '2023-01-30',
+                    endDate: '2023-12-01',
+                  },
+                  cursor: '1234',
                 },
-                mediaUrl: 'link4',
-                startDate: '2023-01-30',
-                endDate: '2023-12-01',
+              ],
+              pageInfo: {
+                startCursor: '6411e53835d7ba2344a78e21',
+                endCursor: '6411e54835d7ba2344a78e31',
+                hasNextPage: false,
+                hasPreviousPage: false,
               },
+              totalCount: 2,
             },
-          ],
-        },
+          },
+        ],
       },
     },
   },
