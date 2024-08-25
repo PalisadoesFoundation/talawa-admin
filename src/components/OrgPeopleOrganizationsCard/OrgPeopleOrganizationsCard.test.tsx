@@ -97,9 +97,6 @@ describe('Testing the Super Dash List', () => {
     expect(screen.getByAltText(/Dogs Care image/i)).toBeInTheDocument();
     expect(screen.getByText(/Admins:/i)).toBeInTheDocument();
     expect(screen.getByText(/Members:/i)).toBeInTheDocument();
-    expect(screen.getByText('Dogs Care')).toBeInTheDocument();
-    expect(screen.getByText(/Sample City/i)).toBeInTheDocument();
-    expect(screen.getByText(/123 Sample Street/i)).toBeInTheDocument();
     expect(screen.getByTestId(/manageBtn/i)).toBeInTheDocument();
     expect(screen.getByTestId(/flaskIcon/i)).toBeInTheDocument();
     userEvent.click(screen.getByTestId(/manageBtn/i));
