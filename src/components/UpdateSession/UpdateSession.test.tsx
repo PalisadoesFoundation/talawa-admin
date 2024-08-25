@@ -1,6 +1,13 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/client/testing';
-import { render, screen, act, within } from '@testing-library/react';
+import {
+  render,
+  screen,
+  act,
+  within,
+  fireEvent,
+  waitFor,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import 'jest-localstorage-mock';
 import 'jest-location-mock';
@@ -72,8 +79,94 @@ jest.mock('utils/errorHandler', () => ({
 }));
 
 describe('Testing UpdateTimeout Component', () => {
+  let consoleWarnSpy: jest.SpyInstance;
+
   beforeEach(() => {
+    consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
+  });
+
+  afterEach(() => {
     jest.clearAllMocks();
+  });
+
+  test('Should handle minimum slider value correctly', async () => {
+    const mockOnValueChange = jest.fn();
+
+    render(
+      <MockedProvider>
+        <UpdateTimeout onValueChange={mockOnValueChange} />
+      </MockedProvider>,
+    );
+
+    const slider = await screen.findByTestId('slider-thumb');
+
+    // Simulate dragging to minimum value
+    userEvent.click(slider, {
+      // Simulate clicking on the slider to focus
+      clientX: -999, // Adjust the clientX to simulate different slider positions
+    });
+
+    expect(mockOnValueChange).toHaveBeenCalledWith(15); // Adjust based on slider min value
+  });
+
+  test('Should handle maximum slider value correctly', async () => {
+    const mockOnValueChange = jest.fn();
+
+    render(
+      <MockedProvider>
+        <UpdateTimeout onValueChange={mockOnValueChange} />
+      </MockedProvider>,
+    );
+
+    const slider = await screen.findByTestId('slider-thumb');
+
+    // Simulate dragging to maximum value
+    userEvent.click(slider, {
+      // Simulate clicking on the slider to focus
+      clientX: 999, // Adjust the clientX to simulate different slider positions
+    });
+
+    expect(mockOnValueChange).toHaveBeenCalledWith(60); // Adjust based on slider max value
+  });
+
+  test('Should not update value if an invalid value is passed', async () => {
+    const mockOnValueChange = jest.fn();
+
+    render(
+      <MockedProvider>
+        <UpdateTimeout onValueChange={mockOnValueChange} />
+      </MockedProvider>,
+    );
+
+    const slider = await screen.findByTestId('slider-thumb');
+
+    // Simulate invalid value handling
+    userEvent.click(slider, {
+      // Simulate clicking on the slider to focus
+      clientX: 0, // Adjust the clientX to simulate different slider positions
+    });
+
+    // Ensure onValueChange is not called with invalid values
+    expect(mockOnValueChange).not.toHaveBeenCalled();
+  });
+
+  test('Should update slider value on user interaction', async () => {
+    const mockOnValueChange = jest.fn();
+
+    render(
+      <MockedProvider>
+        <UpdateTimeout onValueChange={mockOnValueChange} />
+      </MockedProvider>,
+    );
+
+    // Wait for the slider to be present
+    const slider = await screen.findByTestId('slider-thumb');
+
+    // Simulate slider interaction
+    userEvent.type(slider, '45'); // Simulate typing value
+
+    // Assert that the callback was called with the expected value
+    expect(mockOnValueChange).toHaveBeenCalledWith(expect.any(Number)); // Adjust as needed
   });
 
   test('Components should render properly', async () => {
@@ -125,10 +218,6 @@ describe('Testing UpdateTimeout Component', () => {
 
     const submitButton = screen.getByTestId('update-button');
     userEvent.click(submitButton);
-
-    const successtoast = toast.success as jest.Mock;
-    // Debugging output
-    console.log(successtoast.mock.calls);
 
     // Wait for the toast success call
 

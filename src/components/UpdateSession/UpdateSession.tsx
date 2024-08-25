@@ -21,7 +21,14 @@ import Loader from 'components/Loader/Loader';
  *
  * @returns JSX.Element - The rendered component.
  */
-const UpdateTimeout = (): JSX.Element => {
+
+interface TestInterfaceUpdateTimeoutProps {
+  onValueChange?: (value: number) => void;
+}
+
+const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
+  onValueChange,
+}): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'communityProfile',
   });
@@ -76,6 +83,9 @@ const UpdateTimeout = (): JSX.Element => {
       const value = parseInt(target.value, 10);
       if (!Number.isNaN(value)) {
         setTimeout(value);
+        if (onValueChange) {
+          onValueChange(value);
+        }
       } else {
         console.warn('Invalid timeout value:', target.value);
       }
@@ -124,7 +134,10 @@ const UpdateTimeout = (): JSX.Element => {
             <div className="update-timeout-labels-container">
               <Form.Label className="update-timeout-current">
                 Current Timeout:
-                <span className="update-timeout-value">
+                <span
+                  className="update-timeout-value"
+                  data-testid="timeout-value"
+                >
                   {communityTimeout !== undefined
                     ? ` ${communityTimeout} minutes`
                     : ' No timeout set'}
