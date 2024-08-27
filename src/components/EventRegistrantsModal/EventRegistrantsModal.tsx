@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { EVENT_ATTENDEES, MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import {
   ADD_EVENT_ATTENDEE,
@@ -13,9 +13,7 @@ import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import { Add } from '@mui/icons-material';
 import AddOnSpotAttendee from './AddOnSpotAttendee';
-import { use } from 'i18next';
 
 type ModalPropType = {
   show: boolean;
@@ -30,16 +28,22 @@ interface InterfaceUser {
   lastName: string;
 }
 
-export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
+export const EventRegistrantsModal = ({
+  show,
+  eventId,
+  orgId,
+  handleClose,
+}: ModalPropType): JSX.Element => {
   const [member, setMember] = useState<InterfaceUser | null>(null);
-  const [show, setShow] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [addRegistrantMutation] = useMutation(ADD_EVENT_ATTENDEE, {
     refetchQueries: [
-      { query: EVENT_ATTENDEES, variables: { id: props.eventId } },
-      { query: MEMBERS_LIST, variables: { id: props.orgId } },
+      { query: EVENT_ATTENDEES, variables: { id: eventId } },
+      { query: MEMBERS_LIST, variables: { id: orgId } },
     ],
   });
+  const [open, setOpen] = useState(false);
+
   const [removeRegistrantMutation] = useMutation(REMOVE_EVENT_ATTENDEE);
 
   const {
@@ -47,7 +51,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
     loading: attendeesLoading,
     refetch: attendeesRefetch,
   } = useQuery(EVENT_ATTENDEES, {
-    variables: { id: props.eventId },
+    variables: { id: eventId },
   });
 
   const {
@@ -55,13 +59,13 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
     loading: memberLoading,
     refetch: memberRefetch,
   } = useQuery(MEMBERS_LIST, {
-    variables: { id: props.orgId },
+    variables: { id: orgId },
     pollInterval: 500,
   });
 
   const addRegistrant = (): void => {
     if (member == null) {
-      toast.warning('Please choose an user to add first!');
+      toast.warning('Please choose a user to add first!');
       return;
     }
     setIsAdding(true);
@@ -69,7 +73,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
     addRegistrantMutation({
       variables: {
         userId: member._id,
-        eventId: props.eventId,
+        eventId: eventId,
       },
     })
       .then(() => {
@@ -84,15 +88,13 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
         setIsAdding(false); // Set loading state to false
       });
   };
-  const showModal = (): void => {
-    setShow(true);
-  };
+
   const deleteRegistrant = (userId: string): void => {
     toast.warn('Removing the attendee...');
     removeRegistrantMutation({
       variables: {
         userId,
-        eventId: props.eventId,
+        eventId: eventId,
       },
     })
       .then(() => {
@@ -104,8 +106,9 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
         toast.error(err.message);
       });
   };
+
   useEffect(() => {
-    if (props.show) {
+    if (show) {
       const refetchInterval = setInterval(() => {
         attendeesRefetch();
         memberRefetch();
@@ -113,7 +116,8 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
 
       return () => clearInterval(refetchInterval);
     }
-  }, [props.show, attendeesRefetch, memberRefetch]);
+  }, [show, attendeesRefetch, memberRefetch]);
+
   // Render the loading screen
   if (attendeesLoading || memberLoading) {
     return (
@@ -125,16 +129,11 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
 
   return (
     <>
-      <Modal
-        show={props.show}
-        onHide={props.handleClose}
-        backdrop="static"
-        centered
-      >
+      <Modal show={show} onHide={handleClose} backdrop="static" centered>
         <AddOnSpotAttendee
-          show={show}
-          handleClose={(): void => setShow(false)}
-          reloadMembers={(): void => {
+          show={open}
+          handleClose={() => setOpen(false)}
+          reloadMembers={() => {
             memberRefetch();
             attendeesRefetch();
           }}
@@ -144,8 +143,8 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
         </Modal.Header>
         <Modal.Body>
           <h5 className="mb-2"> Registered Registrants </h5>
-          {attendeesData.event.attendees.length == 0
-            ? `There are no registered attendees for this event.`
+          {attendeesData.event.attendees.length === 0
+            ? 'There are no registered attendees for this event.'
             : null}
           <Stack direction="row" className="flex-wrap gap-2">
             {attendeesData.event.attendees.map((attendee: InterfaceUser) => (
@@ -156,7 +155,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
                 label={`${attendee.firstName} ${attendee.lastName}`}
                 variant="outlined"
                 key={attendee._id}
-                onDelete={(): void => deleteRegistrant(attendee._id)}
+                onDelete={() => deleteRegistrant(attendee._id)}
               />
             ))}
           </Stack>
@@ -164,14 +163,20 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
 
           <Autocomplete
             id="addRegistrant"
-            onChange={(_, newMember): void => {
+            onChange={(_, newMember) => {
               setMember(newMember);
             }}
             noOptionsText={
               <>
                 <div className="d-flex ">
                   <p className="me-2">No Registrations found</p>
-                  <a className="underline" href="#" onClick={showModal}>
+                  <a
+                    className="underline"
+                    href="#"
+                    onClick={() => {
+                      setOpen(true);
+                    }}
+                  >
                     Add Onspot Registration
                   </a>
                 </div>
@@ -181,10 +186,10 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
             getOptionLabel={(member: InterfaceUser): string =>
               `${member.firstName} ${member.lastName}`
             }
-            renderInput={(params): React.ReactNode => (
+            renderInput={(params) => (
               <TextField
                 {...params}
-                label="Add an Registrant"
+                label="Add a Registrant"
                 placeholder="Choose the user that you want to add"
               />
             )}

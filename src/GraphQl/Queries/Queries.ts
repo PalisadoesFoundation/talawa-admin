@@ -274,6 +274,9 @@ export const EVENT_DETAILS = gql`
       allDay
       location
       recurring
+      baseRecurringEvent {
+        _id
+      }
       organization {
         _id
         members {
@@ -284,6 +287,20 @@ export const EVENT_DETAILS = gql`
       }
       attendees {
         _id
+      }
+    }
+  }
+`;
+
+export const RECURRING_EVENTS = gql`
+  query RecurringEvents($baseRecurringEventId: ID!) {
+    getRecurringEvents(baseRecurringEventId: $baseRecurringEventId) {
+      _id
+      startDate
+      title
+      attendees {
+        _id
+        gender
       }
     }
   }

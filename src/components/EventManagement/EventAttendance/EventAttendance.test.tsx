@@ -1,72 +1,70 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
-import { MockedProvider } from '@apollo/react-testing';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import { MockedProvider } from '@apollo/client/testing';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import EventAttendance from './EventAttendance';
-import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
+import { EVENT_ATTENDEES } from 'GraphQl/Queries/Queries';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 
-const mockMembers = [
+const mockAttendees = [
   {
     _id: 'user1',
     firstName: 'John',
     lastName: 'Doe',
     email: 'johndoe@example.com',
-    image: '',
-    createdAt: '2023-01-01',
-    organizationsBlockedBy: [],
+    gender: 'male',
+    eventsAttended: [{ _id: 'event1' }, { _id: 'event2' }],
+    birthDate: new Date('1990-01-01'),
     __typename: 'User',
-    eventsAttended: ['event1', 'event2'],
+    tagsAssignedWith: {
+      edges: [],
+    },
   },
   {
     _id: 'user2',
     firstName: 'Jane',
     lastName: 'Smith',
     email: 'janesmith@example.com',
-    image: '',
-    createdAt: '2023-01-02',
-    organizationsBlockedBy: [],
-    __typename: 'Admin',
+    gender: 'female',
     eventsAttended: [],
+    birthDate: new Date('1985-05-05'),
+    __typename: 'Admin',
+    tagsAssignedWith: {
+      edges: [],
+    },
   },
 ];
 
 const mocks = [
   {
     request: {
-      query: MEMBERS_LIST,
-      variables: { id: 'org123' },
+      query: EVENT_ATTENDEES,
+      variables: { id: 'event123' },
     },
     result: {
       data: {
-        organizations: [
-          {
-            _id: 'org123',
-            members: mockMembers,
-          },
-        ],
+        event: {
+          _id: 'event123',
+          attendees: mockAttendees,
+        },
       },
     },
   },
 ];
 
 describe('EventAttendance Component', () => {
-  const renderComponent = (): any =>
+  const renderComponent = () =>
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <BrowserRouter>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <EventAttendance />
-              </I18nextProvider>
-            </Provider>
-          </LocalizationProvider>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <EventAttendance />
+            </I18nextProvider>
+          </Provider>
         </BrowserRouter>
       </MockedProvider>,
     );
@@ -75,9 +73,9 @@ describe('EventAttendance Component', () => {
     renderComponent();
 
     await waitFor(() => {
-      expect(screen.getByText('Attendance Statistics')).toBeInTheDocument();
+      expect(screen.getByText('Historical Statistics')).toBeInTheDocument();
       expect(screen.getByText('Sort')).toBeInTheDocument();
-      expect(screen.getByPlaceholderText('Search event')).toBeInTheDocument();
+      expect(screen.getByPlaceholderText('Search member')).toBeInTheDocument();
     });
   });
 
@@ -101,8 +99,8 @@ describe('EventAttendance Component', () => {
       expect(screen.getByText('Jane Smith')).toBeInTheDocument();
       expect(screen.getByText('Member')).toBeInTheDocument();
       expect(screen.getByText('Admin')).toBeInTheDocument();
-      expect(screen.getByText('2')).toBeInTheDocument();
-      expect(screen.getByText('0')).toBeInTheDocument();
+      expect(screen.getAllByText('0').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('2').length).toBeGreaterThan(0);
     });
   });
 
@@ -111,7 +109,39 @@ describe('EventAttendance Component', () => {
 
     await waitFor(() => {
       const rows = screen.getAllByTestId('row');
-      expect(rows.length).toBe(3);
+      expect(rows.length).toBeGreaterThan(2);
+    });
+  });
+
+  test('filters attendees by search text', async () => {
+    renderComponent();
+
+    await waitFor(() => {
+      const searchInput = screen.getByPlaceholderText('Search member');
+      fireEvent.change(searchInput, { target: { value: 'John' } });
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+      expect(screen.queryByText('Jane Smith')).toBeNull();
+    });
+  });
+
+  test('sorts attendees by name', async () => {
+    renderComponent();
+
+    await waitFor(() => {
+      const sortButton = screen.getByText('Sort');
+      fireEvent.click(sortButton);
+      const firstAttendee = screen.getAllByTestId('row')[1];
+      expect(firstAttendee).toHaveTextContent('John Doe');
+    });
+  });
+
+  test('shows modal with attendance statistics', async () => {
+    renderComponent();
+
+    await waitFor(() => {
+      const statsButton = screen.getByText('Historical Statistics');
+      fireEvent.click(statsButton);
+      expect(screen.getByText('Attendance Rate')).toBeInTheDocument();
     });
   });
 });

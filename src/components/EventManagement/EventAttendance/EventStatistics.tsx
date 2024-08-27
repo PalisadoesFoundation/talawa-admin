@@ -5,164 +5,101 @@ import {
   ButtonGroup,
   Tooltip,
   OverlayTrigger,
-  Dropdown
+  Dropdown,
 } from 'react-bootstrap';
+import 'react-datepicker/dist/react-datepicker.css';
 import 'chart.js/auto';
 import { Bar, Line } from 'react-chartjs-2';
 import { useParams } from 'react-router-dom';
-import {
-  EVENT_DETAILS,
-  ORGANIZATION_EVENT_CONNECTION_LIST,
-} from 'GraphQl/Queries/Queries';
+import { EVENT_DETAILS, RECURRING_EVENTS } from 'GraphQl/Queries/Queries';
 import { useLazyQuery } from '@apollo/client';
-import { exportToPDF, exportToCSV } from 'utils/chartToPdf';
-
-interface InterfaceAttendanceStatisticsModalProps {
-  show: boolean;
-  handleClose: () => void;
-  statistics: {
-    totalMembers: number;
-    membersAttended: number;
-    attendanceRate: number;
-  };
-  memberData: InterfaceMember[];
-}
-
-interface InterfaceMember {
-  createdAt: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  gender: string;
-  eventsAttended?: {
-    _id: string;
-  }[];
-  birthDate: Date;
-  __typename: string;
-  _id: string;
-  tagsAssignedWith: {
-    edges: {
-      node: {
-        name: string;
-      };
-    }[];
-  };
-}
-
-interface InterfaceEvent {
-  _id: string;
-  title: string;
-  description: string;
-  startDate: string;
-  endDate: string;
-  location: string;
-  startTime: string;
-  endTime: string;
-  allDay: boolean;
-  recurring: boolean;
-  recurrenceRule: {
-    recurrenceStartDate: string;
-    recurrenceEndDate?: string | null;
-    frequency: string;
-    weekDays: string[];
-    interval: number;
-    count?: number;
-    weekDayOccurenceInMonth?: number;
-  };
-  isRecurringEventException: boolean;
-  isPublic: boolean;
-  isRegisterable: boolean;
-  attendees: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    gender: string;
-    birthDate: string;
-  }[];
-  __typename: string;
-}
+import { exportToCSV } from 'utils/chartToPdf';
+import type {
+  InterfaceAttendanceStatisticsModalProps,
+  InterfaceEvent,
+} from './InterfaceEvents';
 
 export const AttendanceStatisticsModal: React.FC<
   InterfaceAttendanceStatisticsModalProps
-> = ({ show, handleClose, statistics, memberData, eventId }): JSX.Element => {
+> = ({ show, handleClose, statistics, memberData }): JSX.Element => {
   const [selectedCategory, setSelectedCategory] = useState('Gender');
-  const { orgId } = useParams();
+  const { orgId, eventId } = useParams();
   const [currentPage, setCurrentPage] = useState(0);
   const eventsPerPage = 10;
-
-  const eventIdPrefix = eventId?.slice(0, 10).toString();
+  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const [loadEventDetails, { data: eventData }] = useLazyQuery(EVENT_DETAILS);
-  const [loadRecurringEvents, { data: recurringData }] = useLazyQuery(
-    ORGANIZATION_EVENT_CONNECTION_LIST,
-  );
-
-  useEffect(() => {
-    if (eventId) {
-      loadEventDetails({ variables: { id: eventId } });
-    }
-  }, [eventId, loadEventDetails]);
-
-  useEffect(() => {
-    if (eventIdPrefix && orgId) {
-      loadRecurringEvents({
-        variables: {
-          organization_id: orgId,
-          id_starts_with: eventIdPrefix,
-          orderBy: 'startDate_DESC',
-          first: eventsPerPage,
-          skip: currentPage * eventsPerPage,
-        },
-      });
-    }
-  }, [eventIdPrefix, orgId, loadRecurringEvents, currentPage]);
+  const [loadRecurringEvents, { data: recurringData }] =
+    useLazyQuery(RECURRING_EVENTS);
 
   const isEventRecurring = eventData?.event?.recurring;
 
+  const currentDate = selectedDate || new Date();
+  const filteredRecurringEvents = useMemo(
+    () =>
+      recurringData?.getRecurringEvents.filter(
+        (event: InterfaceEvent) => new Date(event.startDate) >= currentDate,
+      ) || [],
+    [recurringData, currentDate],
+  );
+
+  const totalEvents = filteredRecurringEvents.length;
+  const totalPages = Math.ceil(totalEvents / eventsPerPage);
+
+  const paginatedRecurringEvents = useMemo(() => {
+    const startIndex = currentPage * eventsPerPage;
+    const endIndex = Math.min(startIndex + eventsPerPage, totalEvents);
+    return filteredRecurringEvents.slice(startIndex, endIndex);
+  }, [filteredRecurringEvents, currentPage, eventsPerPage]);
+
   const attendeeCounts = useMemo(
     () =>
-      recurringData?.eventsByOrganizationConnection.map(
+      paginatedRecurringEvents.map(
         (event: InterfaceEvent) => event.attendees.length,
-      ) || [],
-    [recurringData],
+      ),
+    [paginatedRecurringEvents],
   );
+
   const eventLabels = useMemo(
     () =>
-      recurringData?.eventsByOrganizationConnection.map(
-        (event: InterfaceEvent) =>
-          new Date(event.endDate).toLocaleDateString('en-US', {
-            month: 'short',
-            day: 'numeric',
-          }),
-      ) || [],
-    [recurringData],
+      paginatedRecurringEvents.map((event: InterfaceEvent) =>
+        new Date(event.startDate).toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric',
+        }),
+      ),
+    [paginatedRecurringEvents],
   );
+
   const maleCounts = useMemo(
     () =>
-      recurringData?.eventsByOrganizationConnection.map(
+      paginatedRecurringEvents.map(
         (event: InterfaceEvent) =>
           event.attendees.filter((attendee) => attendee.gender === 'MALE')
             .length,
-      ) || [],
-    [recurringData],
+      ),
+    [paginatedRecurringEvents],
   );
+
   const femaleCounts = useMemo(
     () =>
-      recurringData?.eventsByOrganizationConnection.map(
+      paginatedRecurringEvents.map(
         (event: InterfaceEvent) =>
           event.attendees.filter((attendee) => attendee.gender === 'FEMALE')
             .length,
-      ) || [],
-    [recurringData],
+      ),
+    [paginatedRecurringEvents],
   );
+
   const otherCounts = useMemo(
     () =>
-      recurringData?.eventsByOrganizationConnection.map(
+      paginatedRecurringEvents.map(
         (event: InterfaceEvent) =>
-          event.attendees.filter((attendee) => attendee.gender === 'OTHER')
-            .length,
-      ) || [],
-    [recurringData],
+          event.attendees.filter(
+            (attendee) =>
+              attendee.gender === 'OTHER' || attendee.gender === null,
+          ).length,
+      ),
+    [paginatedRecurringEvents],
   );
 
   const chartData = useMemo(
@@ -203,7 +140,14 @@ export const AttendanceStatisticsModal: React.FC<
   }, []);
 
   const handleNextPage = useCallback(() => {
-    setCurrentPage((prevPage) => prevPage + 1);
+    if (currentPage < totalPages - 1) {
+      setCurrentPage((prevPage) => prevPage + 1);
+    }
+  }, [currentPage, totalPages]);
+
+  const handleDateChange = useCallback((date: Date | null) => {
+    setSelectedDate(date);
+    setCurrentPage(0);
   }, []);
 
   const categoryLabels = useMemo(
@@ -213,6 +157,7 @@ export const AttendanceStatisticsModal: React.FC<
         : ['Under 18', '18-40', 'Over 40'],
     [selectedCategory],
   );
+
   const categoryData = useMemo(
     () =>
       selectedCategory === 'Gender'
@@ -247,6 +192,7 @@ export const AttendanceStatisticsModal: React.FC<
   const handleCategoryChange = useCallback((category: string): void => {
     setSelectedCategory(category);
   }, []);
+
   const exportTrendsToCSV = useCallback(() => {
     const headers = [
       'Date',
@@ -257,7 +203,7 @@ export const AttendanceStatisticsModal: React.FC<
     ];
     const data = [
       headers,
-      ...eventLabels.map((label, index) => [
+      ...eventLabels.map((label: string, index: number) => [
         label,
         attendeeCounts[index],
         maleCounts[index],
@@ -276,19 +222,36 @@ export const AttendanceStatisticsModal: React.FC<
     ];
     exportToCSV(data, `${selectedCategory.toLowerCase()}_demographics.csv`);
   }, [selectedCategory, categoryLabels, categoryData]);
-  const handleExport = (eventKey: string | null) => {
+
+  const handleExport = (eventKey: string | null): number | void => {
     switch (eventKey) {
-      case 'pdf':
-        exportToPDF('pdf-content', 'attendance_statistics');
-        break;
       case 'trends':
         exportTrendsToCSV();
         break;
       case 'demographics':
         exportDemographicsToCSV();
         break;
+      default:
+        return 0;
     }
   };
+
+  useEffect(() => {
+    if (eventId) {
+      loadEventDetails({ variables: { id: eventId } });
+    }
+  }, [eventId, loadEventDetails]);
+
+  useEffect(() => {
+    if (eventId && orgId && eventData?.event?.baseRecurringEvent?._id) {
+      loadRecurringEvents({
+        variables: {
+          baseRecurringEventId: eventData.event.baseRecurringEvent._id,
+        },
+      });
+    }
+  }, [eventId, orgId, eventData, loadRecurringEvents]);
+
   return (
     <Modal
       show={show}
@@ -306,25 +269,11 @@ export const AttendanceStatisticsModal: React.FC<
         <div
           className="w-100 d-flex justify-content-end align-baseline position-absolute"
           style={{ top: '10px', right: '15px', zIndex: 1 }}
-        >
-          <Dropdown onSelect={handleExport}>
-            <Dropdown.Toggle variant="success" id="dropdown-export" className='p-1'>
-               Export
-            </Dropdown.Toggle>
-
-            <Dropdown.Menu>
-              <Dropdown.Item eventKey="pdf">Export PDF</Dropdown.Item>
-              {isEventRecurring && (
-                <Dropdown.Item eventKey="trends">Export Trends CSV</Dropdown.Item>
-              )}
-              <Dropdown.Item eventKey="demographics">Export Demographics CSV</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </div>
+        ></div>
         <div className="w-100 border border-success d-flex flex-row rounded">
           {isEventRecurring ? (
             <div
-              className="text-success position-relative align-items-center justify-content-center w-50 border-right-1 border-success"
+              className="text-success position-relative pt-4 align-items-center justify-content-center w-50 border-right-1 border-success"
               style={{ borderRight: '1px solid green' }}
             >
               <Line
@@ -333,30 +282,31 @@ export const AttendanceStatisticsModal: React.FC<
                   responsive: true,
                   maintainAspectRatio: false,
                   scales: { y: { beginAtZero: true } },
+                  animation: false,
                 }}
-                style={{ paddingBottom: '40px' }}
+                style={{ paddingBottom: '30px' }}
               />
               <div
                 className="px-1 border border-success w-30"
                 style={{
                   position: 'absolute',
                   right: 0,
-                  bottom: 0,
-                  borderTopLeftRadius: 12,
+                  top: 0,
+                  borderBottomLeftRadius: 8,
                 }}
               >
                 <p className="text-black">Trends</p>
               </div>
               <div
-                className="d-flex position-absolute bottom-2 end-50 translate-middle-y"
-                style={{ paddingBottom: '2.5rem' }}
+                className="d-flex position-absolute bottom-1 end-50 translate-middle-y"
+                style={{ paddingBottom: '2.0rem' }}
               >
                 <OverlayTrigger
                   placement="bottom"
                   overlay={<Tooltip id="tooltip-prev">Previous Page</Tooltip>}
                 >
                   <Button
-                    className="p-0 rounded-circle w-10 me-2"
+                    className="p-0"
                     onClick={handlePreviousPage}
                     disabled={currentPage === 0}
                   >
@@ -368,14 +318,17 @@ export const AttendanceStatisticsModal: React.FC<
                     />
                   </Button>
                 </OverlayTrigger>
+                <Button
+                  className="p-0 ms-2"
+                  onClick={() => handleDateChange(new Date())}
+                >
+                  Today
+                </Button>
                 <OverlayTrigger
                   placement="bottom"
                   overlay={<Tooltip id="tooltip-next">Next Page</Tooltip>}
                 >
-                  <Button
-                    className="p-0 rounded-circle ms-2"
-                    onClick={handleNextPage}
-                  >
+                  <Button className="p-0 ms-2" onClick={handleNextPage}>
                     <img
                       src="/images/svg/arrow-right.svg"
                       alt="right-arrow"
@@ -428,8 +381,8 @@ export const AttendanceStatisticsModal: React.FC<
               </Button>
             </ButtonGroup>
             <Bar
-              className="mb-5"
-              options={{ responsive: true }}
+              className="mb-3"
+              options={{ responsive: true, animation: false }}
               data={{
                 labels: categoryLabels,
                 datasets: [
@@ -465,8 +418,8 @@ export const AttendanceStatisticsModal: React.FC<
               style={{
                 position: 'absolute',
                 left: 0,
-                bottom: 0,
-                borderTopRightRadius: 8,
+                top: 0,
+                borderBottomRightRadius: 8,
               }}
             >
               <p className="text-black">Demography</p>
@@ -474,6 +427,24 @@ export const AttendanceStatisticsModal: React.FC<
           </div>
         </div>
       </Modal.Body>
+      <Modal.Footer className="p-0 m-2">
+        <Dropdown onSelect={handleExport}>
+          <Dropdown.Toggle
+            className="p-2 m-2"
+            variant="info"
+            id="export-dropdown"
+          >
+            Export Data
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
+            <Dropdown.Item eventKey="trends">Trends</Dropdown.Item>
+            <Dropdown.Item eventKey="demographics">Demographics</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+        <Button className="p-2 m-2" variant="secondary" onClick={handleClose}>
+          Close
+        </Button>
+      </Modal.Footer>
     </Modal>
   );
 };

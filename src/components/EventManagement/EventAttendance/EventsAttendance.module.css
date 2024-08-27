@@ -30,3 +30,11 @@
     width: 400px; /* Adjust as needed */
     height: 400px; /* Adjust as needed */
   }
+
+  .table-body > .table-row {
+    background-color: #fff !important;
+  }
+  
+  .table-body > .table-row:nth-child(2n) {
+      background: #afffe8 !important;
+  }

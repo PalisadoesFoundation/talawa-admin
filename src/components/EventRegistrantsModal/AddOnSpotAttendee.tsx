@@ -1,14 +1,21 @@
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
-import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import React, { useState } from 'react';
 import { Modal, Form, Button, Spinner } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import type {
+  InterfaceAddOnSpotAttendeeProps,
+  InterfaceFormData,
+} from 'utils/interfaces';
 
-const AddOnSpotAttendee = ({ show, handleClose, reloadMembers }) => {
-  const [formData, setFormData] = useState({
+const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
+  show,
+  handleClose,
+  reloadMembers,
+}) => {
+  const [formData, setFormData] = useState<InterfaceFormData>({
     firstName: '',
     lastName: '',
     email: '',
@@ -16,14 +23,24 @@ const AddOnSpotAttendee = ({ show, handleClose, reloadMembers }) => {
     gender: '',
   });
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
+  ): void => {
+    const target = e.target as
+      | HTMLInputElement
+      | HTMLSelectElement
+      | HTMLTextAreaElement;
+    setFormData({ ...formData, [target.name]: target.value });
   };
 
-  const { orgId } = useParams();
+  const { orgId } = useParams<{ orgId: string }>();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [addSignUp] = useMutation(SIGNUP_MUTATION);
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>,
+  ): Promise<void> => {
     e.preventDefault();
     if (!orgId) {
       toast.error('Organization ID is missing. Please try again.');
@@ -54,7 +71,7 @@ const AddOnSpotAttendee = ({ show, handleClose, reloadMembers }) => {
   };
   return (
     <>
-      <Modal show={show} onHide={handleClose} className="mt-3">
+      <Modal show={show} onHide={handleClose} backdrop="static" centered>
         <Modal.Header closeButton className="bg-success text-white">
           <Modal.Title>On-spot Attendee</Modal.Title>
         </Modal.Header>

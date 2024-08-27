@@ -472,3 +472,17 @@ export interface InterfaceAgendaItemCategoryInfo {
 export interface InterfaceAgendaItemCategoryList {
   agendaItemCategoriesByOrganization: InterfaceAgendaItemCategoryInfo[];
 }
+
+export interface InterfaceAddOnSpotAttendeeProps {
+  show: boolean;
+  handleClose: () => void;
+  reloadMembers: () => void;
+}
+
+export interface InterfaceFormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNo: string;
+  gender: string;
+}

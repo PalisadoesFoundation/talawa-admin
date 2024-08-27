@@ -4,6 +4,7 @@ import {
   Paper,
   TableBody,
   TableCell,
+  tableCellClasses,
   TableContainer,
   TableHead,
   TableRow,
@@ -23,7 +24,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { AttendanceStatisticsModal } from './EventStatistics';
 import AttendedEventList from './AttendedEventList';
-import { maxHeight } from '@mui/system';
+import { maxHeight, styled } from '@mui/system';
 
 interface InterfaceMember {
   createdAt: string;
@@ -119,30 +120,27 @@ function EventAttendance(): JSX.Element {
         return attendeeDate.getFullYear() === now.getFullYear();
       }
 
-      return true; // This should never happen, but it's a fallback
+      return true;
     });
   };
 
   const filterAndSortAttendees = (
     attendees: InterfaceMember[],
   ): InterfaceMember[] => {
-    const filtered = filterAttendees(attendees);
-    const sorted = sortAttendees(filtered);
-    return sorted;
+    return sortAttendees(filterAttendees(attendees));
   };
 
   const searchEventAttendees = (value: string): void => {
     setSearchText(value);
-    if (memberData?.event?.attendees) {
-      const filtered = memberData?.event?.attendees.filter(
+    const searchValueLower = value.toLowerCase();
+    const filtered =
+      memberData?.event?.attendees?.filter(
         (attendee: InterfaceMember) =>
-          attendee.firstName?.toLowerCase().includes(value.toLowerCase()) ||
-          attendee.lastName?.toLowerCase().includes(value.toLowerCase()) ||
-          attendee.email?.toLowerCase().includes(value.toLowerCase()),
-      );
-      const updatedAttendees = filterAndSortAttendees(filtered);
-      setFilteredAttendees(updatedAttendees);
-    }
+          attendee.firstName?.toLowerCase().includes(searchValueLower) ||
+          attendee.lastName?.toLowerCase().includes(searchValueLower) ||
+          attendee.email?.toLowerCase().includes(searchValueLower),
+      ) ?? [];
+    setFilteredAttendees(filterAndSortAttendees(filtered));
   };
 
   const showModal = (): void => setShow(true);
@@ -155,6 +153,28 @@ function EventAttendance(): JSX.Element {
   const attendanceRate =
     totalMembers > 0 ? (membersAttended / totalMembers) * 100 : 0;
 
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+      backgroundColor: '#90EE90', // Light green color for odd rows
+    },
+    '&:nth-of-type(even)': {
+      backgroundColor: '#90EE90', // White color for even rows
+    },
+    // hide last border
+    '&:last-child td, &:last-child th': {
+      border: 0,
+    },
+  }));
   return (
     <div className="">
       <AttendanceStatisticsModal
@@ -162,7 +182,6 @@ function EventAttendance(): JSX.Element {
         statistics={{ totalMembers, membersAttended, attendanceRate }}
         handleClose={handleClose}
         memberData={filteredAttendees}
-        eventId={eventId}
       />
       <div className="border-1 border-top pb-4"></div>
       <div className="d-flex justify-content-between">
@@ -171,7 +190,7 @@ function EventAttendance(): JSX.Element {
             className={`border-1 bg-white text-success ${styles.actionBtn}`}
             onClick={showModal}
           >
-            Attendance Statistics
+            Historical Statistics
           </Button>
         </div>
         <div className="d-flex justify-content-between align-items-end w-100 ">
@@ -239,6 +258,7 @@ function EventAttendance(): JSX.Element {
           </DropdownButton>
         </div>
       </div>
+      {/* <h3>{totalMembers}</h3> */}
       <TableContainer component={Paper} className="mt-3">
         <Table aria-label="customized table">
           <TableHead>
@@ -258,11 +278,11 @@ function EventAttendance(): JSX.Element {
           </TableHead>
           <TableBody>
             {filteredAttendees.map((member: InterfaceMember, index: number) => (
-              <TableRow key={index} className="my-6">
-                <TableCell component="th" scope="row">
+              <StyledTableRow key={index} className="my-6">
+                <StyledTableCell component="th" scope="row">
                   {index + 1}
-                </TableCell>
-                <TableCell align="left">
+                </StyledTableCell>
+                <StyledTableCell align="left">
                   <Link
                     to={`/member/${currentUrl}`}
                     state={{ id: member._id }}
@@ -270,10 +290,10 @@ function EventAttendance(): JSX.Element {
                   >
                     {member.firstName} {member.lastName}
                   </Link>
-                </TableCell>
-                <TableCell align="left">
+                </StyledTableCell>
+                <StyledTableCell align="left">
                   {member.__typename === 'User' ? t('Member') : t('Admin')}
-                </TableCell>
+                </StyledTableCell>
                 <Tooltip
                   componentsProps={{
                     tooltip: {
@@ -294,15 +314,15 @@ function EventAttendance(): JSX.Element {
                     <AttendedEventList key={event._id} eventId={event._id} />
                   ))}
                 >
-                  <TableCell align="left">
+                  <StyledTableCell align="left">
                     <a href="#">
                       {member.eventsAttended
                         ? member.eventsAttended.length
                         : '0'}
                     </a>
-                  </TableCell>
+                  </StyledTableCell>
                 </Tooltip>
-                <TableCell align="left">
+                <StyledTableCell align="left">
                   {member.tagsAssignedWith ? (
                     member.tagsAssignedWith.edges.map(
                       (edge: { node: { name: string } }, index: number) => (
@@ -312,8 +332,8 @@ function EventAttendance(): JSX.Element {
                   ) : (
                     <div>None</div>
                   )}
-                </TableCell>
-              </TableRow>
+                </StyledTableCell>
+              </StyledTableRow>
             ))}
           </TableBody>
         </Table>
