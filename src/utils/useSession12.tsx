@@ -3,7 +3,6 @@ import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { GET_COMMUNITY_SESSION_TIMEOUT_DATA } from 'GraphQl/Queries/Queries';
 import { t } from 'i18next';
 import { useEffect, useState, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
@@ -12,7 +11,6 @@ type UseSessionReturnType = {
   startSession: () => void;
   endSession: () => void;
   handleLogout: () => void;
-  extendSession: () => void; //for when logged in already, simply extend session
 };
 
 /**
@@ -23,15 +21,10 @@ type UseSessionReturnType = {
  * - Displaying a warning toast at half of the session timeout duration.
  * - Logging the user out and displaying a session expiration toast when the session times out.
  * - Automatically resetting the timers when user activity is detected.
- * - Pausing session timers when the tab is inactive and resuming them when it becomes active again.
  *
  * @returns UseSessionReturnType - An object with methods to start and end the session, and to handle logout.
  */
 const useSession = (): UseSessionReturnType => {
-  const { t: tCommon } = useTranslation('common');
-
-  let startTime: number;
-  let timeoutDuration: number;
   const [sessionTimeout, setSessionTimeout] = useState<number>(30);
   const sessionTimerRef = useRef<NodeJS.Timeout | null>(null);
   const warningTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -42,6 +35,10 @@ const useSession = (): UseSessionReturnType => {
     GET_COMMUNITY_SESSION_TIMEOUT_DATA,
   );
 
+  /**
+   * Effect that runs on initial mount to fetch session timeout data and set the session timeout state.
+   * If the query fails, an error handler is invoked.
+   */
   useEffect(() => {
     if (queryError) {
       errorHandler(t, queryError as Error);
@@ -54,45 +51,56 @@ const useSession = (): UseSessionReturnType => {
     }
   }, [data, queryError]);
 
+  /**
+   * Resets the session and warning timers by clearing any existing timeouts.
+   */
   const resetTimers = (): void => {
     if (sessionTimerRef.current) clearTimeout(sessionTimerRef.current);
     if (warningTimerRef.current) clearTimeout(warningTimerRef.current);
   };
 
+  /**
+   * Ends the session by clearing timers and removing event listeners for user activity.
+   */
   const endSession = (): void => {
     resetTimers();
     window.removeEventListener('mousemove', extendSession);
     window.removeEventListener('keydown', extendSession);
-    document.removeEventListener('visibilitychange', handleVisibilityChange);
   };
 
+  /**
+   * Handles user logout, revoking the refresh token and clearing local storage.
+   * Displays a toast notification about session expiration and redirects the user to the login page.
+   */
   const handleLogout = async (): Promise<void> => {
     try {
       await revokeRefreshToken();
     } catch (error) {
       console.error('Error revoking refresh token:', error);
-      // toast.error('Failed to revoke session. Please try again.');
+      toast.error('Failed to revoke session. Please try again.');
     }
     localStorage.clear();
     endSession();
     navigate('/');
-    toast.warning(tCommon('sessionLogout'), { autoClose: false });
+    toast.warning(
+      'Your session has expired due to inactivity. Please log in again to continue.',
+      { autoClose: false },
+    );
   };
 
-  const initializeTimers = (
-    timeLeft?: number,
-    warningTimeLeft?: number,
-  ): void => {
-    const warningTime = warningTimeLeft ?? sessionTimeout / 2;
-    const sessionTimeoutInMilliseconds =
-      (timeLeft || sessionTimeout) * 60 * 1000;
+  /**
+   * Initializes the session and warning timers based on the current session timeout duration.
+   * Displays a warning toast at half the session timeout duration and logs the user out at the end of the session.
+   */
+  const initializeTimers = (): void => {
+    const warningTime = sessionTimeout / 2;
+    const sessionTimeoutInMilliseconds = sessionTimeout * 60 * 1000;
     const warningTimeInMilliseconds = warningTime * 60 * 1000;
 
-    timeoutDuration = sessionTimeoutInMilliseconds;
-    startTime = Date.now();
-
     warningTimerRef.current = setTimeout(() => {
-      toast.warning(tCommon('sessionWarning'));
+      toast.warning(
+        'Your session will expire soon due to inactivity. Please interact with the page to extend your session.',
+      );
     }, warningTimeInMilliseconds);
 
     sessionTimerRef.current = setTimeout(() => {
@@ -100,60 +108,34 @@ const useSession = (): UseSessionReturnType => {
     }, sessionTimeoutInMilliseconds);
   };
 
+  /**
+   * Extends the session by resetting the timers and initializing them again.
+   * This function is triggered by user activity such as mouse movement or key presses.
+   */
   const extendSession = (): void => {
     resetTimers();
     initializeTimers();
   };
 
+  /**
+   * Starts the session by initializing timers and adding event listeners for user activity.
+   * Resets the timers whenever user activity is detected.
+   */
   const startSession = (): void => {
     resetTimers();
     initializeTimers();
     window.addEventListener('mousemove', extendSession);
     window.addEventListener('keydown', extendSession);
-    document.addEventListener('visibilitychange', handleVisibilityChange);
   };
 
-  const handleVisibilityChange = (): void => {
-    if (document.visibilityState === 'hidden') {
-      window.removeEventListener('mousemove', extendSession);
-      window.removeEventListener('keydown', extendSession);
-      resetTimers(); // Optionally reset timers to prevent them from running in the background
-    } else if (document.visibilityState === 'visible') {
-      window.removeEventListener('mousemove', extendSession);
-      window.removeEventListener('keydown', extendSession); // Ensure no duplicates
-      window.addEventListener('mousemove', extendSession);
-      window.addEventListener('keydown', extendSession);
-
-      // Calculate remaining time now that the tab is active again
-      const remainingSessionTime = calculateRemainingTime();
-
-      if (remainingSessionTime > 0) {
-        // Calculate remaining warning time only if session time is positive
-        const remainingWarningTime = Math.max(remainingSessionTime / 2, 0);
-
-        initializeTimers(
-          remainingSessionTime / 60 / 1000,
-          remainingWarningTime / 60 / 1000,
-        );
-      } else {
-        // Handle session expiration immediately if time has run out
-        handleLogout();
-      }
-    }
-  };
-
-  const calculateRemainingTime = (): number => {
-    const elapsedTime = Date.now() - startTime;
-    const remainingTime = timeoutDuration - elapsedTime;
-
-    return Math.max(remainingTime, 0); // Ensures the remaining time is non-negative and measured in ms;
-  };
-
+  /**
+   * Effect that runs on component unmount to end the session and clean up resources.
+   */
   useEffect(() => {
     return () => endSession();
   }, []);
 
-  return { startSession, endSession, handleLogout, extendSession };
+  return { startSession, endSession, handleLogout };
 };
 
 export default useSession;

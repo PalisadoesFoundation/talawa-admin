@@ -112,7 +112,7 @@ const loginPage = (): JSX.Element => {
     const isLoggedIn = getItem('IsLoggedIn');
     if (isLoggedIn == 'TRUE') {
       navigate(getItem('userId') !== null ? '/user/organizations' : '/orglist');
-      startSession();
+      extendSession();
     }
   }, []);
 
@@ -129,7 +129,7 @@ const loginPage = (): JSX.Element => {
   const [signup, { loading: signinLoading }] = useMutation(SIGNUP_MUTATION);
   const [recaptcha] = useMutation(RECAPTCHA_MUTATION);
   const { data: orgData } = useQuery(ORGANIZATION_LIST);
-  const { startSession } = useSession();
+  const { startSession, extendSession } = useSession();
   useEffect(() => {
     if (orgData) {
       const options = orgData.organizations.map(
