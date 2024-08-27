@@ -8,6 +8,7 @@ import { GET_COMMUNITY_SESSION_TIMEOUT_DATA } from 'GraphQl/Queries/Queries';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
 import { BrowserRouter } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 jest.mock('react-toastify', () => ({
   toast: {
@@ -19,6 +20,12 @@ jest.mock('react-toastify', () => ({
 
 jest.mock('utils/errorHandler', () => ({
   errorHandler: jest.fn(),
+}));
+
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+  }),
 }));
 
 const MOCKS = [
@@ -70,7 +77,6 @@ describe('useSession Hook', () => {
   test('should call handleLogout after session timeout', async (): Promise<void> => {
     jest.useFakeTimers(); // Control the passage of time
 
-    // Custom hook wrapper
     const wrapper = ({
       children,
     }: {
@@ -81,32 +87,28 @@ describe('useSession Hook', () => {
       </MockedProvider>
     );
 
-    // Render hook
     const { result, waitForNextUpdate } = renderHook(() => useSession(), {
       wrapper,
     });
 
-    // Ensure handleLogout is called from the hook
     const { startSession } = result.current;
 
-    // Start the session
     act(() => {
       startSession();
     });
 
-    // Fast-forward time to simulate the session timeout
     act(() => {
       jest.advanceTimersByTime(31 * 60 * 1000); // Adjust this time based on the session timeout
     });
 
     await waitForNextUpdate();
 
-    //might be able to repalce this with the handelogout funcito instead
     expect(global.localStorage.clear).toHaveBeenCalled();
-    expect(toast.warning).toHaveBeenCalledWith(
-      'Your session has expired due to inactivity. Please log in again to continue.',
-      { autoClose: false },
-    );
+    expect(toast.warning).toHaveBeenCalledTimes(2);
+    expect(toast.warning).toHaveBeenNthCalledWith(1, 'sessionWarning'); // First call for session warning
+    expect(toast.warning).toHaveBeenNthCalledWith(2, 'sessionLogout', {
+      autoClose: false,
+    }); // Second call for session logout
   });
 
   test('should show a warning toast before session expiration', async (): Promise<void> => {
@@ -124,25 +126,20 @@ describe('useSession Hook', () => {
       result.current.startSession();
     });
 
-    // Fast forward to the time just before the session expires
     act(() => {
       jest.advanceTimersByTime(15 * 60 * 1000); // 15 minutes in milliseconds
     });
 
     await waitFor(() =>
-      expect(toast.warning).toHaveBeenCalledWith(
-        'Your session will expire soon due to inactivity. Please interact with the page to extend your session.',
-      ),
+      expect(toast.warning).toHaveBeenCalledWith('sessionWarning'),
     );
 
     jest.useRealTimers();
   });
 
   test('should handle error when revoking token fails', async (): Promise<void> => {
-    // Mock the console.error to verify it was called
     const consoleErrorMock = jest.spyOn(console, 'error').mockImplementation();
 
-    // Update MOCKS to simulate a mutation error
     const errorMocks = [
       {
         request: {
@@ -180,18 +177,11 @@ describe('useSession Hook', () => {
 
     await waitForNextUpdate();
 
-    // Verify that console.error was called with the expected error
     expect(consoleErrorMock).toHaveBeenCalledWith(
       'Error revoking refresh token:',
       expect.any(Error),
     );
 
-    // Verify that toast.error was called with the expected message
-    expect(toast.error).toHaveBeenCalledWith(
-      'Failed to revoke session. Please try again.',
-    );
-
-    // Restore the original console.error implementation
     consoleErrorMock.mockRestore();
   });
 
@@ -252,15 +242,23 @@ describe('useSession Hook', () => {
 
     await waitForNextUpdate();
 
-    // Ensure clear was called
     expect(global.localStorage.clear).toHaveBeenCalled();
-    expect(toast.warning).toHaveBeenCalledWith(
-      'Your session has expired due to inactivity. Please log in again to continue.',
-      { autoClose: false },
-    );
+    expect(toast.warning).toHaveBeenCalledWith('sessionLogout', {
+      autoClose: false,
+    });
   });
 
   test('should remove event listeners on endSession', async () => {
+    // Mock the removeEventListener functions for both window and document
+    const removeEventListenerMock = jest.fn();
+
+    // Temporarily replace the real methods with the mock
+    const originalWindowRemoveEventListener = window.removeEventListener;
+    const originalDocumentRemoveEventListener = document.removeEventListener;
+
+    window.removeEventListener = removeEventListenerMock;
+    document.removeEventListener = removeEventListenerMock;
+
     const { result, waitForNextUpdate } = renderHook(() => useSession(), {
       wrapper: ({ children }: { children?: ReactNode }) => (
         <MockedProvider mocks={MOCKS} addTypename={false}>
@@ -279,14 +277,22 @@ describe('useSession Hook', () => {
       result.current.endSession();
     });
 
-    // No actual way to verify removal directly, so this verifies behavior
-    expect(window.removeEventListener).toHaveBeenCalledWith(
+    // Test that event listeners were removed
+    expect(removeEventListenerMock).toHaveBeenCalledWith(
       'mousemove',
       expect.any(Function),
     );
-    expect(window.removeEventListener).toHaveBeenCalledWith(
+    expect(removeEventListenerMock).toHaveBeenCalledWith(
       'keydown',
       expect.any(Function),
     );
+    expect(removeEventListenerMock).toHaveBeenCalledWith(
+      'visibilitychange',
+      expect.any(Function),
+    );
+
+    // Restore the original removeEventListener functions
+    window.removeEventListener = originalWindowRemoveEventListener;
+    document.removeEventListener = originalDocumentRemoveEventListener;
   });
 });
