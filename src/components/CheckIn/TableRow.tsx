@@ -67,10 +67,16 @@ export const TableRow = ({
    * @returns A promise that resolves when the PDF is successfully generated and opened.
    */
   const generateTag = async (): Promise<void> => {
-    const inputs = [{ name: data.name }];
-    const pdf = await generate({ template: tagTemplate, inputs });
-    const blob = new Blob([pdf.buffer], { type: 'application/pdf' });
-    window.open(URL.createObjectURL(blob));
+    try {
+      const inputs = [{ name: data.name }];
+      const pdf = await generate({ template: tagTemplate, inputs });
+      const blob = new Blob([pdf.buffer], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      window.open(url);
+      toast.success('PDF generated successfully!');
+    } catch (error) {
+      toast.error('Error generating pdf!');
+    }
   };
 
   return (
