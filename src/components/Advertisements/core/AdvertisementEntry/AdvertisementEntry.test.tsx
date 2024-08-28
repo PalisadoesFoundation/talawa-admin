@@ -131,30 +131,34 @@ describe('Testing Advertisement Entry Component', () => {
     });
   });
   it('should use default props when none are provided', () => {
-  render(
-    <AdvertisementEntry
-      id={''}
-      setAfter={function (value: React.SetStateAction<string | null | undefined>): void {
-        throw new Error('Function not implemented.');
-      }}
-    />
-  );
+    render(
+      <AdvertisementEntry
+        id={''}
+        setAfter={function (
+          _value: React.SetStateAction<string | null | undefined>,
+        ): void {
+          throw new Error('Function not implemented.');
+        }}
+      />,
+    );
 
-  //Check if component renders with default ''(empty string)
-  const elements = screen.getAllByText(''); // This will return an array of matching elements
-  elements.forEach(element => expect(element).toBeInTheDocument()); 
+    //Check if component renders with default ''(empty string)
+    const elements = screen.getAllByText(''); // This will return an array of matching elements
+    elements.forEach((element) => expect(element).toBeInTheDocument());
 
-  // Check that the component renders with default `mediaUrl` (empty string)
-  const mediaElement = screen.getByTestId('media');
-  expect(mediaElement).toHaveAttribute('src', '');
+    // Check that the component renders with default `mediaUrl` (empty string)
+    const mediaElement = screen.getByTestId('media');
+    expect(mediaElement).toHaveAttribute('src', '');
 
-  // Check that the component renders with default `endDate`
-  const defaultEndDate = new Date().toDateString();
-  expect(screen.getByText(`Ends on ${defaultEndDate}`)).toBeInTheDocument();
+    // Check that the component renders with default `endDate`
+    const defaultEndDate = new Date().toDateString();
+    expect(screen.getByText(`Ends on ${defaultEndDate}`)).toBeInTheDocument();
 
-  // Check that the component renders with default `startDate`
-  const defaultStartDate = new Date().toDateString();
-});
+    // Check that the component renders with default `startDate`
+    const defaultStartDate = new Date().toDateString();
+    console.log(screen.getByText);
+    expect(screen.getByText(`Ends on ${defaultStartDate}`)).toBeInTheDocument(); //fix text "Ends on"?
+  });
   it('should correctly override default props when values are provided', () => {
     const mockName = 'Test Ad';
     const mockType = 'Banner';
@@ -170,9 +174,14 @@ describe('Testing Advertisement Entry Component', () => {
         mediaUrl={mockMediaUrl}
         endDate={mockEndDate}
         startDate={mockStartDate}
-        organizationId={mockOrganizationId} id={''} setAfter={function (value: React.SetStateAction<string | null | undefined>): void {
+        organizationId={mockOrganizationId}
+        id={''}
+        setAfter={function (
+          _value: React.SetStateAction<string | null | undefined>,
+        ): void {
           throw new Error('Function not implemented.');
-        } }      />
+        }}
+      />,
     );
 
     // Check that the component renders with provided values

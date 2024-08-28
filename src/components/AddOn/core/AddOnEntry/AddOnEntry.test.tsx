@@ -78,27 +78,28 @@ describe('Testing AddOnEntry', () => {
 
   test('uses default values for title and description when not provided', () => {
     // Render the component with only required parameters
+    const mockGetInstalledPlugins = jest.fn();
     render(
-      <ApolloProvider client = { client } >
-      <Provider store={store}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <AddOnEntry
-              id="123"
-              createdBy="user1"
-              uninstalledOrgs={['Org1']}
-              getInstalledPlugins={() => { }}  // Providing an empty function
-            />
-          </I18nextProvider>
-        </BrowserRouter>
-      </Provider>
-      </ApolloProvider >,
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AddOnEntry
+                id="123"
+                createdBy="user1"
+                uninstalledOrgs={['Org1']}
+                getInstalledPlugins={mockGetInstalledPlugins} // Providing an empty function
+              />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
     );
 
-    const titleElement = screen.getByText("No title provided");  // This will check for the default empty string in the title
-    const descriptionElement = screen.getByText("Description not available");  // This will check for the default empty string in the description
-    expect(titleElement).toBeInTheDocument();  // Ensure the title element with default value exists
-    expect(descriptionElement).toBeInTheDocument();  // Ensure the description element with default value exists
+    const titleElement = screen.getByText('No title provided'); // This will check for the default empty string in the title
+    const descriptionElement = screen.getByText('Description not available'); // This will check for the default empty string in the description
+    expect(titleElement).toBeInTheDocument(); // Ensure the title element with default value exists
+    expect(descriptionElement).toBeInTheDocument(); // Ensure the description element with default value exists
   });
 
   it('renders correctly', () => {

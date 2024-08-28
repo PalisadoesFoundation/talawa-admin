@@ -45,8 +45,8 @@ interface InterfaceAddOnEntryProps {
  */
 function addOnEntry({
   id,
-  title = "No title provided", // Default parameter
-  description = "Description not available", // Default parameter
+  title = 'No title provided', // Default parameter
+  description = 'Description not available', // Default parameter
   createdBy,
   uninstalledOrgs,
   getInstalledPlugins,
