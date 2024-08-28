@@ -607,7 +607,8 @@
     "noData": "No data",
     "otherSettings": "Other Settings",
     "changeLanguage": "Change Language",
-    "manageCustomFields": "Manage Custom Fields"
+    "manageCustomFields": "Manage Custom Fields",
+    "agendaItemCategories": "Agenda Item Categories"
   },
   "deleteOrg": {
     "deleteOrganization": "Delete Organization",

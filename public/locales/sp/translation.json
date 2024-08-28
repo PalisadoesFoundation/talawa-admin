@@ -747,19 +747,16 @@
     "amount": "Monto"
   },
   "orgSettings": {
-    "title": "Configuración Talawa",
-    "pageName": "Configuración",
+    "title": "Configuración",
     "general": "General",
     "actionItemCategories": "Categorías de elementos de acción",
-    "updateYourDetails": "Actualiza tus datos",
-    "updateYourPassword": "Actualice su contraseña",
-    "updateOrganization": "Actualizar Organización",
-    "seeRequest": "Ver Solicitud",
-    "settings": "Ajustes",
+    "updateOrganization": "Actualizar organización",
+    "seeRequest": "Ver solicitud",
     "noData": "Sin datos",
-    "otherSettings": "Otras Configuraciones",
-    "changeLanguage": "Cambiar Idioma",
-    "manageCustomFields": "Gestionar Campos Personalizados"
+    "otherSettings": "Otras configuraciones",
+    "changeLanguage": "Cambiar idioma",
+    "manageCustomFields": "Administrar campos personalizados",
+    "agendaItemCategories": "Categorías de elementos de agenda"
   },
   "deleteOrg": {
     "deleteOrganization": "Eliminar organización",

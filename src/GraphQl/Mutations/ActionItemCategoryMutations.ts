@@ -46,11 +46,3 @@ export const UPDATE_ACTION_ITEM_CATEGORY_MUTATION = gql`
     }
   }
 `;
-
-export const DELETE_ACTION_ITEM_CATEGORY_MUTATION = gql`
-  mutation RemoveActionItemCategory($categoryId: ID!) {
-    removeActionCategory(id: $categoryId) {
-      _id
-    }
-  }
-`;

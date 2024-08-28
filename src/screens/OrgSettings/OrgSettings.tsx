@@ -2,15 +2,20 @@ import React, { useState } from 'react';
 import { Button, Dropdown, Row, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import styles from './OrgSettings.module.css';
-import OrgActionItemCategories from 'components/OrgSettings/OrgActionItemCategories/OrgActionItemCategories';
+import OrgActionItemCategories from 'components/OrgSettings/ActionItemCategories/OrgActionItemCategories';
+import OrganizationAgendaCategory from 'components/OrgSettings/AgendaItemCategories/OrganizationAgendaCategory';
 import { Navigate, useParams } from 'react-router-dom';
 import GeneralSettings from 'components/OrgSettings/General/GeneralSettings';
 
 // Type representing the different settings categories available
-type SettingType = 'general' | 'actionItemCategories';
+type SettingType = 'general' | 'actionItemCategories' | 'agendaItemCategories';
 
 // List of available settings categories
-const settingtabs: SettingType[] = ['general', 'actionItemCategories'];
+const settingtabs: SettingType[] = [
+  'general',
+  'actionItemCategories',
+  'agendaItemCategories',
+];
 
 /**
  * The `orgSettings` component provides a user interface for managing various settings related to an organization.
@@ -101,6 +106,8 @@ function orgSettings(): JSX.Element {
             return <GeneralSettings orgId={orgId} />;
           case 'actionItemCategories':
             return <OrgActionItemCategories orgId={orgId} />;
+          case 'agendaItemCategories':
+            return <OrganizationAgendaCategory orgId={orgId} />;
         }
       })()}
     </div>

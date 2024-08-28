@@ -228,7 +228,6 @@ describe('Testing Routes reducer', () => {
         { name: 'Events', url: '/orgevents/undefined' },
         { name: 'Venues', url: '/orgvenues/undefined' },
         { name: 'Action Items', url: '/orgactionitems/undefined' },
-        { name: 'Agenda Items Category', url: '/orgagendacategory/undefined' },
         { name: 'Posts', url: '/orgpost/undefined' },
         {
           name: 'Block/Unblock',
@@ -283,11 +282,6 @@ describe('Testing Routes reducer', () => {
           name: 'Action Items',
           comp_id: 'orgactionitems',
           component: 'OrganizationActionItems',
-        },
-        {
-          name: 'Agenda Items Category',
-          comp_id: 'orgagendacategory',
-          component: 'OrganizationAgendaCategory',
         },
         { name: 'Posts', comp_id: 'orgpost', component: 'OrgPost' },
         { name: 'Block/Unblock', comp_id: 'blockuser', component: 'BlockUser' },

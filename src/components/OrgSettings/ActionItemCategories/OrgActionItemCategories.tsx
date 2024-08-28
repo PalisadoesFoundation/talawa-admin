@@ -23,7 +23,6 @@ import {
 import dayjs from 'dayjs';
 import { Chip, Stack } from '@mui/material';
 import CategoryModal from './CategoryModal';
-import CategoryDeleteModal from './CategoryDeleteModal';
 
 enum ModalState {
   SAME = 'same',
@@ -129,14 +128,6 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
       setCategory(category);
       setModalMode(mode);
       openModal(ModalState.SAME);
-    },
-    [openModal],
-  );
-
-  const handleDeleteClick = useCallback(
-    (category: InterfaceActionItemCategoryInfo): void => {
-      setCategory(category);
-      openModal(ModalState.DELETE);
     },
     [openModal],
   );
@@ -262,33 +253,20 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <>
-            <Button
-              variant="success"
-              size="sm"
-              className="me-2 rounded"
-              data-testid="editCategoryBtn"
-              onClick={() =>
-                handleOpenModal(
-                  params.row as InterfaceActionItemCategoryInfo,
-                  'edit',
-                )
-              }
-            >
-              <i className="fa fa-edit" />
-            </Button>
-            <Button
-              size="sm"
-              variant="danger"
-              className="rounded"
-              data-testid="deleteCategoryBtn"
-              onClick={() =>
-                handleDeleteClick(params.row as InterfaceActionItemCategoryInfo)
-              }
-            >
-              <i className="fa fa-trash" />
-            </Button>
-          </>
+          <Button
+            variant="success"
+            size="sm"
+            className="me-2 rounded"
+            data-testid="editCategoryBtn"
+            onClick={() =>
+              handleOpenModal(
+                params.row as InterfaceActionItemCategoryInfo,
+                'edit',
+              )
+            }
+          >
+            <i className="fa fa-edit" />
+          </Button>
         );
       },
     },
@@ -423,13 +401,6 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
         category={category}
         orgId={orgId}
         mode={modalMode}
-      />
-
-      <CategoryDeleteModal
-        isOpen={modalState[ModalState.DELETE]}
-        hide={() => closeModal(ModalState.DELETE)}
-        category={category}
-        refetchCategories={refetchCategories}
       />
     </div>
   );
