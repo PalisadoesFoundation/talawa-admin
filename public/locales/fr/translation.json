@@ -200,6 +200,36 @@
     "organization": "Organisation",
     "invalidDetailsMessage": "Veuillez saisir des informations valides."
   },
+  "organizationTags": {
+    "title": "Étiquettes d'Organisation",
+    "createTag": "Créer une nouvelle étiquette",
+    "manageTag": "Gérer",
+    "editTag": "Modifier",
+    "removeTag": "Supprimer",
+    "tagDetails": "Détails de l'Étiquette",
+    "tagName": "Nom",
+    "tagType": "Type",
+    "tagNamePlaceholder": "Écrire le nom de l'étiquette",
+    "tagCreationSuccess": "Nouvelle étiquette créée avec succès",
+    "tagUpdationSuccess": "Étiquette mise à jour avec succès",
+    "tagRemovalSuccess": "Étiquette supprimée avec succès",
+    "noTagsFound": "Aucune étiquette trouvée",
+    "removeUserTag": "Supprimer l'Étiquette",
+    "removeUserTagMessage": "Voulez-vous supprimer cette étiquette ?",
+    "addChildTag": "Ajouter une Sous-Étiquette"
+  },
+  "manageTag": {
+    "title": "Détails de l'étiquette",
+    "addPeopleToTag": "Ajouter des personnes à l'étiquette",
+    "viewProfile": "Voir",
+    "noAssignedMembersFound": "Aucun membre assigné",
+    "unassignUserTag": "Désassigner l'étiquette",
+    "unassignUserTagMessage": "Voulez-vous retirer l'étiquette de cet utilisateur?",
+    "successfullyUnassigned": "Étiquette retirée de l'utilisateur",
+    "addPeople": "Ajouter des personnes",
+    "add": "Ajouter",
+    "subTags": "Sous-étiquettes"
+  },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",
     "addedAsAdmin": "L'utilisateur est ajouté en tant qu'administrateur."

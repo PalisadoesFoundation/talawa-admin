@@ -200,6 +200,36 @@
     "organization": "组织",
     "invalidDetailsMessage": "请输入有效的详细信息。"
   },
+  "organizationTags": {
+    "title": "组织标签",
+    "createTag": "创建新标签",
+    "manageTag": "管理",
+    "editTag": "编辑",
+    "removeTag": "删除",
+    "tagDetails": "标签详情",
+    "tagName": "名称",
+    "tagType": "类型",
+    "tagNamePlaceholder": "输入标签名称",
+    "tagCreationSuccess": "新标签创建成功",
+    "tagUpdationSuccess": "标签更新成功",
+    "tagRemovalSuccess": "标签删除成功",
+    "noTagsFound": "未找到标签",
+    "removeUserTag": "删除标签",
+    "removeUserTagMessage": "您确定要删除此标签吗？",
+    "addChildTag": "添加子标签"
+  },
+  "manageTag": {
+    "title": "标签详情",
+    "addPeopleToTag": "将人员添加到标签",
+    "viewProfile": "查看",
+    "noAssignedMembersFound": "没有分配成员",
+    "unassignUserTag": "取消分配标签",
+    "unassignUserTagMessage": "您想从此用户中删除标签吗？",
+    "successfullyUnassigned": "标签已从用户中取消分配",
+    "addPeople": "添加人员",
+    "add": "添加",
+    "subTags": "子标签"
+  },
   "userListCard": {
     "addAdmin": "添加管理员",
     "addedAsAdmin": "用户被添加为管理员。"

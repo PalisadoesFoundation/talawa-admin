@@ -209,6 +209,58 @@ export interface InterfaceQueryOrganizationPostListItem {
   };
 }
 
+interface InterfaceTagData {
+  edges: {
+    node: {
+      _id: string;
+      name: string;
+      usersAssignedTo: {
+        totalCount: number;
+      };
+      childTags: {
+        totalCount: number;
+      };
+    };
+    cursor: string;
+  }[];
+  pageInfo: {
+    startCursor: string;
+    endCursor: string;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+  };
+  totalCount: number;
+}
+
+export interface InterfaceQueryOrganizationUserTags {
+  userTags: InterfaceTagData;
+}
+
+export interface InterfaceQueryUserTagsAssignedMembers {
+  name: string;
+  usersAssignedTo: {
+    edges: {
+      node: {
+        _id: string;
+        firstName: string;
+        lastName: string;
+      };
+    }[];
+    pageInfo: {
+      startCursor: string;
+      endCursor: string;
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+    };
+    totalCount: number;
+  };
+}
+
+export interface InterfaceQueryUserTagChildTags {
+  name: string;
+  childTags: InterfaceTagData;
+}
+
 export interface InterfaceQueryOrganizationAdvertisementListItem {
   advertisements: {
     edges: {

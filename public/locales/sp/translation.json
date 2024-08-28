@@ -294,6 +294,36 @@
     "cancel": "Cancelar",
     "invalidDetailsMessage": "Ingrese detalles válidos."
   },
+  "organizationTags": {
+    "title": "Etiquetas de Organización",
+    "createTag": "Crear una nueva etiqueta",
+    "manageTag": "Gestionar",
+    "editTag": "Editar",
+    "removeTag": "Eliminar",
+    "tagDetails": "Detalles de la Etiqueta",
+    "tagName": "Nombre",
+    "tagType": "Tipo",
+    "tagNamePlaceholder": "Escribe el nombre de la etiqueta",
+    "tagCreationSuccess": "Nueva etiqueta creada con éxito",
+    "tagUpdationSuccess": "Etiqueta actualizada con éxito",
+    "tagRemovalSuccess": "Etiqueta eliminada con éxito",
+    "noTagsFound": "No se encontraron etiquetas",
+    "removeUserTag": "Eliminar Etiqueta",
+    "removeUserTagMessage": "¿Desea eliminar esta etiqueta?",
+    "addChildTag": "Agregar una Sub Etiqueta"
+  },
+  "manageTag": {
+    "title": "Detalles de la Etiqueta",
+    "addPeopleToTag": "Agregar Personas a la etiqueta",
+    "viewProfile": "Ver",
+    "noAssignedMembersFound": "Ningún miembro asignado",
+    "unassignUserTag": "Desasignar Etiqueta",
+    "unassignUserTagMessage": "¿Desea eliminar la etiqueta de este usuario?",
+    "successfullyUnassigned": "Etiqueta desasignada del usuario",
+    "addPeople": "Agregar Personas",
+    "add": "Agregar",
+    "subTags": "Subetiquetas"
+  },
   "userListCard": {
     "joined": "Unido",
     "addAdmin": "Agregar administrador",

@@ -4,7 +4,7 @@ import {
   GithubLogo,
   InstagramLogo,
   SlackLogo,
-  TwitterLogo,
+  XLogo,
   YoutubeLogo,
   RedditLogo,
 } from 'assets/svgs/social-icons';
@@ -16,9 +16,9 @@ export const socialMediaLinks = [
     logo: FacebookLogo,
   },
   {
-    tag: 'twitter',
-    href: 'https://twitter.com/palisadoesorg?lang=en',
-    logo: TwitterLogo,
+    tag: 'X',
+    href: 'https://X.com/palisadoesorg?lang=en',
+    logo: XLogo,
   },
   {
     tag: 'linkedIn',
