@@ -267,7 +267,7 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
               variant="success"
               size="sm"
               className="me-2 rounded"
-              data-testid="editFundBtn"
+              data-testid="editCategoryBtn"
               onClick={() =>
                 handleOpenModal(
                   params.row as InterfaceActionItemCategoryInfo,
@@ -281,7 +281,7 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
               size="sm"
               variant="danger"
               className="rounded"
-              data-testid="deleteFundBtn"
+              data-testid="deleteCategoryBtn"
               onClick={() =>
                 handleDeleteClick(params.row as InterfaceActionItemCategoryInfo)
               }
@@ -335,13 +335,13 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
                   onClick={() => setSortBy('createdAt_DESC')}
                   data-testid="createdAt_DESC"
                 >
-                  {t('createdLatest')}
+                  {tCommon('createdLatest')}
                 </Dropdown.Item>
                 <Dropdown.Item
                   onClick={() => setSortBy('createdAt_ASC')}
                   data-testid="createdAt_ASC"
                 >
-                  {t('createdEarliest')}
+                  {tCommon('createdEarliest')}
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
@@ -360,19 +360,19 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
                   onClick={() => setStatus(null)}
                   data-testid="statusAll"
                 >
-                  {t('all')}
+                  {tCommon('all')}
                 </Dropdown.Item>
                 <Dropdown.Item
                   onClick={() => setStatus(CategoryStatus.Active)}
                   data-testid="statusActive"
                 >
-                  {t('active')}
+                  {tCommon('active')}
                 </Dropdown.Item>
                 <Dropdown.Item
                   onClick={() => setStatus(CategoryStatus.Disabled)}
                   data-testid="statusDisabled"
                 >
-                  {t('disabled')}
+                  {tCommon('disabled')}
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>

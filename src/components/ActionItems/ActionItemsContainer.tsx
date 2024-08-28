@@ -26,7 +26,6 @@ import type {
 import styles from './ActionItemsContainer.module.css';
 import ActionItemUpdateModal from '../../screens/OrganizationActionItems/ActionItemUpdateModal';
 import ActionItemPreviewModal from '../../screens/OrganizationActionItems/ActionItemPreviewModal';
-import ActionItemDeleteModal from '../../screens/OrganizationActionItems/ActionItemDeleteModal';
 import { Link } from 'react-router-dom';
 
 /**
@@ -554,13 +553,13 @@ function actionItemsContainer({
       />
 
       {/* Delete Modal */}
-      <ActionItemDeleteModal
+      {/* <ActionItemDeleteModal
         actionItemDeleteModalIsOpen={actionItemDeleteModalIsOpen}
         deleteActionItemHandler={deleteActionItemHandler}
         toggleDeleteModal={toggleDeleteModal}
         t={t}
         tCommon={tCommon}
-      />
+      /> */}
     </>
   );
 }

@@ -256,7 +256,6 @@
     "assignmentDate": "分配日期",
     "active": "积极的",
     "clearFilters": "清除过滤器",
-    "completed": "完全的",
     "completionDate": "完成日期",
     "createActionItem": "创建操作项",
     "deleteActionItem": "删除操作项",
@@ -281,7 +280,14 @@
     "successfulCreation": "操作项创建成功",
     "successfulUpdation": "操作项已成功更新",
     "successfulDeletion": "操作项已成功删除",
-    "title": "行动项目"
+    "title": "行动项目",
+    "category": "类别",
+    "allotedHours": "分配的小时",
+    "latestDueDate": "最晚到期日",
+    "earliestDueDate": "最早到期日",
+    "updateActionItem": "更新操作项",
+    "noneUpdated": "没有更新任何字段",
+    "updateStatusMsg": "您确定要将此操作项标记为待处理吗？"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "议程类别详情",
@@ -912,13 +918,8 @@
     "sameNameConflict": "请更改名称以进行更新",
     "categoryEnabled": "已启用操作项类别",
     "categoryDisabled": "操作项类别已禁用",
-    "createdLatest": "最近创建",
-    "createdEarliest": "最早创建",
     "noActionItemCategories": "没有操作项目类别",
     "status": "地位",
-    "active": "活跃的",
-    "disabled": "禁用",
-    "all": "全部",
     "categoryDeleted": "操作项目类别已成功删除",
     "deleteCategory": "删除类别",
     "deleteCategoryMsg": "您确定要删除此操作项目类别吗？"

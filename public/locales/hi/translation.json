@@ -256,7 +256,6 @@
     "assignmentDate": "असाइनमेंट दिनांक",
     "active": "सक्रिय",
     "clearFilters": "फ़िल्टर साफ़ करें",
-    "completed": "पुरा होना।",
     "completionDate": "पूरा करने की तिथि",
     "createActionItem": "कार्रवाई आइटम बनाएं",
     "deleteActionItem": "क्रिया आइटम हटाएँ",
@@ -281,7 +280,14 @@
     "successfulCreation": "कार्रवाई आइटम सफलतापूर्वक बनाया गया",
     "successfulUpdation": "कार्रवाई आइटम सफलतापूर्वक अपडेट किया गया",
     "successfulDeletion": "कार्रवाई आइटम सफलतापूर्वक हटा दिया गया",
-    "title": "एक्शन आइटम्स"
+    "title": "एक्शन आइटम्स",
+    "category": "श्रेणी",
+    "allotedHours": "आवंटित घंटे",
+    "latestDueDate": "सबसे अधिक नियत तिथि",
+    "earliestDueDate": "सबसे पहले की नियत तिथि",
+    "updateActionItem": "कार्य आइटम अपडेट करें",
+    "noneUpdated": "कोई फ़ील्ड अपडेट नहीं किया गया",
+    "updateStatusMsg": "क्या आप वाकई इस कार्य आइटम को लंबित के रूप में चिह्नित करना चाहते हैं?"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "एजेंडा श्रेणी विवरण",
@@ -912,13 +918,8 @@
     "sameNameConflict": "अपडेट करने के लिए कृपया नाम बदलें",
     "categoryEnabled": "कार्य आइटम श्रेणी सक्षम",
     "categoryDisabled": "कार्रवाई आइटम श्रेणी अक्षम",
-    "createdLatest": "सबसे पहले बनाया",
-    "createdEarliest": "सबसे जल्दी बनाया",
     "noActionItemCategories": "कोई कार्रवाई आइटम श्रेणी नहीं",
     "status": "स्थिति",
-    "active": "सक्रिय",
-    "disabled": "अक्षम",
-    "all": "सभी",
     "categoryDeleted": "कार्रवाई आइटम श्रेणी सफलतापूर्वक हटा दी गई",
     "deleteCategory": "श्रेणी हटाएं",
     "deleteCategoryMsg": "क्या आप वाकई इस कार्रवाई आइटम श्रेणी को हटाना चाहते हैं?"

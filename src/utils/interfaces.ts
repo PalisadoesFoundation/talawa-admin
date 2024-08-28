@@ -25,11 +25,13 @@ export interface InterfaceActionItemInfo {
     _id: string;
     firstName: string;
     lastName: string;
+    image: string | null;
   };
   assigner: {
     _id: string;
     firstName: string;
     lastName: string;
+    image: string | null;
   };
   actionItemCategory: {
     _id: string;
@@ -50,6 +52,7 @@ export interface InterfaceActionItemInfo {
     firstName: string;
     lastName: string;
   };
+  allotedHours: number;
 }
 
 export interface InterfaceActionItemList {

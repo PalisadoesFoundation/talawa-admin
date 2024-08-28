@@ -20,7 +20,6 @@ import { WarningAmberRounded } from '@mui/icons-material';
 import { CREATE_ACTION_ITEM_MUTATION } from 'GraphQl/Mutations/ActionItemMutations';
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
-import ActionItemCreateModal from 'screens/OrganizationActionItems/ActionItemCreateModal';
 import { useTranslation } from 'react-i18next';
 
 /**
@@ -240,7 +239,7 @@ export const ActionItemsModalBody = ({
       />
 
       {/* Create Modal */}
-      <ActionItemCreateModal
+      {/* <ActionItemCreateModal
         actionItemCreateModalIsOpen={actionItemCreateModalIsOpen}
         hideCreateModal={hideCreateModal}
         formState={formState}
@@ -251,7 +250,7 @@ export const ActionItemsModalBody = ({
         membersData={membersData?.organizations[0].members}
         dueDate={dueDate}
         setDueDate={setDueDate}
-      />
+      /> */}
     </>
   );
 };

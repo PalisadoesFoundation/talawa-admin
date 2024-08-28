@@ -256,7 +256,6 @@
     "assignmentDate": "Date d'affectation",
     "active": "Actif",
     "clearFilters": "Effacer les filtres",
-    "completed": "Complété",
     "completionDate": "Date d'achèvement",
     "createActionItem": "Créer un élément d'action",
     "deleteActionItem": "Supprimer l'élément d'action",
@@ -281,7 +280,14 @@
     "successfulCreation": "Élément d'action créé avec succès",
     "successfulUpdation": "Élément d'action mis à jour avec succès",
     "successfulDeletion": "Élément d'action supprimé avec succès",
-    "title": "Éléments d'action"
+    "title": "Éléments d'action",
+    "category": "Category",
+    "allotedHours": "Heures allouées",
+    "latestDueDate": "Date d'échéance la plus récente",
+    "earliestDueDate": "Date d'échéance la plus ancienne",
+    "updateActionItem": "Mettre à jour l'élément d'action",
+    "noneUpdated": "Aucun des champs n'a été mis à jour",
+    "updateStatusMsg": "Êtes-vous sûr de vouloir marquer cet élément d'action comme en attente?"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "Détails de la catégorie d'ordre du jour",
@@ -912,13 +918,8 @@
     "sameNameConflict": "Veuillez changer le nom pour effectuer une mise à jour",
     "categoryEnabled": "Catégorie d'élément d'action activée",
     "categoryDisabled": "Catégorie d'élément d'action désactivée",
-    "createdLatest": "Créé le plus récemment",
-    "createdEarliest": "Créé le plus tôt",
     "noActionItemCategories": "Aucune catégorie d'élément d'action",
     "status": "Statut",
-    "active": "Actif",
-    "disabled": "Désactivé",
-    "all": "Tous",
     "categoryDeleted": "Catégorie d'élément d'action supprimée avec succès",
     "deleteCategory": "Supprimer la catégorie",
     "deleteCategoryMsg": "Êtes-vous sûr de vouloir supprimer cette catégorie d'élément d'action ?"

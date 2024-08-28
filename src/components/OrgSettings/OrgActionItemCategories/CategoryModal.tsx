@@ -147,7 +147,7 @@ const CategoryModal: FC<InterfaceActionItemCategoryModal> = ({
             />
           </FormControl>
           <Form.Group className="d-flex flex-column mb-4">
-            <label>{t('disabled')} </label>
+            <label>{tCommon('disabled')} </label>
             <Form.Switch
               type="checkbox"
               checked={isDisabled}

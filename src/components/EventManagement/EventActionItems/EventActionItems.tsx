@@ -8,12 +8,10 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import styles from './EventActionItems.module.css';
 import { DataGrid } from '@mui/x-data-grid';
-import type { GridCellParams } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
 import Modal from 'react-bootstrap/Modal';
 import {
   CREATE_ACTION_ITEM_MUTATION,
-  DELETE_ACTION_ITEM_MUTATION,
   UPDATE_ACTION_ITEM_MUTATION,
 } from 'GraphQl/Mutations/ActionItemMutations';
 import type {
@@ -29,7 +27,6 @@ import {
 import { ACTION_ITEM_LIST_BY_EVENTS } from 'GraphQl/Queries/ActionItemQueries';
 import { useEventActionColumnConfig } from './useEventActionColumnConfig';
 import ActionItemPreviewModal from 'screens/OrganizationActionItems/ActionItemPreviewModal';
-import ActionItemDeleteModal from 'screens/OrganizationActionItems/ActionItemDeleteModal';
 
 function eventActionItems(props: { eventId: string }): JSX.Element {
   const { eventId } = props;
@@ -192,25 +189,6 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message);
-      }
-    }
-  };
-  const [removeActionItem] = useMutation(DELETE_ACTION_ITEM_MUTATION);
-  const deleteActionItemHandler = async (): Promise<void> => {
-    try {
-      await removeActionItem({
-        variables: {
-          actionItemId,
-        },
-      });
-      actionItemsRefetch();
-      toggleDeleteModal();
-      hidePreviewModal();
-      toast.success(t('successfulDeletion'));
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-        console.log(error.message);
       }
     }
   };
@@ -471,13 +449,13 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
       />
 
       {/* Delete Modal */}
-      <ActionItemDeleteModal
+      {/* <ActionItemDeleteModal
         actionItemDeleteModalIsOpen={actionItemDeleteModalIsOpen}
         deleteActionItemHandler={deleteActionItemHandler}
         toggleDeleteModal={toggleDeleteModal}
         t={t}
         tCommon={tCommon}
-      />
+      /> */}
 
       {/* action item status change modal */}
       <Modal
