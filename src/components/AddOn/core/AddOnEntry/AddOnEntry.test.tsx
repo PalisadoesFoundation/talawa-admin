@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import AddOnEntry from './AddOnEntry';
 import {
@@ -76,6 +76,31 @@ describe('Testing AddOnEntry', () => {
     expect(getByTestId('AddOnEntry')).toBeInTheDocument();
   });
 
+  test('uses default values for title and description when not provided', () => {
+    // Render the component with only required parameters
+    render(
+      <ApolloProvider client = { client } >
+      <Provider store={store}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <AddOnEntry
+              id="123"
+              createdBy="user1"
+              uninstalledOrgs={['Org1']}
+              getInstalledPlugins={() => { }}  // Providing an empty function
+            />
+          </I18nextProvider>
+        </BrowserRouter>
+      </Provider>
+      </ApolloProvider >,
+    );
+
+    const titleElement = screen.getByText("No title provided");  // This will check for the default empty string in the title
+    const descriptionElement = screen.getByText("Description not available");  // This will check for the default empty string in the description
+    expect(titleElement).toBeInTheDocument();  // Ensure the title element with default value exists
+    expect(descriptionElement).toBeInTheDocument();  // Ensure the description element with default value exists
+  });
+
   it('renders correctly', () => {
     const props = {
       id: '1',
@@ -110,6 +135,7 @@ describe('Testing AddOnEntry', () => {
     expect(getByText('Test addon description')).toBeInTheDocument();
     expect(getByText('Test User')).toBeInTheDocument();
   });
+
   it('Uninstall Button works correctly', async () => {
     const props = {
       id: '1',
