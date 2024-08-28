@@ -128,6 +128,9 @@
     "noOrgErrorTitle": "Organizations Not Found",
     "noOrgErrorDescription": "Please create an organization through dashboard"
   },
+  "posts": {
+    "title": "Posts"
+  },
   "users": {
     "title": "Talawa Roles",
     "joined_organizations": "Joined Organizations",

@@ -52,38 +52,17 @@ type Ad = {
   endDate: string; // Assuming it's a string in the format 'yyyy-MM-dd'
   startDate: string; // Assuming it's a string in the format 'yyyy-MM-dd'
 };
-interface InterfaceAdContent {
-  _id: string;
-  name: string;
-  type: string;
-  organization: {
-    _id: string;
-  };
-  mediaUrl: string;
-  endDate: string;
-  startDate: string;
-
-  comments: InterfacePostComments;
-  likes: InterfacePostLikes;
-}
-
-type AdvertisementsConnection = {
-  edges: {
-    node: InterfaceAdContent;
-  }[];
-};
 
 type InterfacePostComments = {
+  _id: string;
   creator: {
-    _id: string;
     firstName: string;
     lastName: string;
+    _id: string;
     email: string;
   };
   likeCount: number;
-  likedBy: {
-    id: string;
-  }[];
+  likedBy: { _id: string }[];
   text: string;
 }[];
 
@@ -117,6 +96,23 @@ type InterfacePostNode = {
 
   comments: InterfacePostComments;
   likes: InterfacePostLikes;
+};
+
+type CommentLike = {
+  id: string;
+};
+
+type Comment = {
+  id: string;
+  creator: {
+    firstName: string;
+    lastName: string;
+    id: string;
+    email: string;
+  };
+  likeCount: number;
+  likedBy: CommentLike[];
+  text: string;
 };
 
 /**
@@ -226,29 +222,27 @@ export default function home(): JSX.Element {
       comments,
     } = node;
 
-    const allLikes: any = [];
+    const allLikes: InterfacePostLikes = [];
 
-    likedBy.forEach((value: any) => {
-      const singleLike = {
-        firstName: value.firstName,
-        lastName: value.lastName,
-        id: value._id,
-      };
-      allLikes.push(singleLike);
-    });
-
-    const postComments: any = [];
-
-    comments.forEach((value: any) => {
-      const commentLikes: any = [];
-      value.likedBy.forEach((commentLike: any) => {
+    likedBy.forEach(
+      (value: { _id: string; firstName: string; lastName: string }) => {
         const singleLike = {
-          id: commentLike._id,
+          firstName: value.firstName,
+          lastName: value.lastName,
+          id: value._id,
         };
-        commentLikes.push(singleLike);
-      });
+        allLikes.push(singleLike);
+      },
+    );
 
-      const comment = {
+    const postComments: Comment[] = [];
+
+    comments.forEach((value) => {
+      const commentLikes: CommentLike[] = value.likedBy.map((commentLike) => ({
+        id: commentLike._id,
+      }));
+
+      const comment: Comment = {
         id: value._id,
         creator: {
           firstName: value.creator.firstName,
@@ -260,6 +254,7 @@ export default function home(): JSX.Element {
         likedBy: commentLikes,
         text: value.text,
       };
+
       postComments.push(comment);
     });
 
@@ -311,7 +306,6 @@ export default function home(): JSX.Element {
     <>
       <div className={`d-flex flex-row ${styles.containerHeight}`}>
         <div className={`${styles.colorLight} ${styles.mainContainer}`}>
-          <h1>{t('posts')}</h1>
           <div className={`${styles.postContainer}`}>
             <div className={`${styles.heading}`}>{t('startPost')}</div>
             <div className={styles.postInputContainer}>

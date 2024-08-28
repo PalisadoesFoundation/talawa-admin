@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 
 const map: InterfaceMapType = {
   organization: 'home',
+  posts: 'posts',
   people: 'people',
   events: 'userEvents',
   donate: 'donate',
