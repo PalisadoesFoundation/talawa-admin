@@ -61,7 +61,7 @@ const loginPage = (): JSX.Element => {
 
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const [showTab, setShowTab] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
-  const [role, setRole] = useState<'admin' | 'user'>('admin');
+  const [role, setRole] = useState<'admin' | 'user'>();
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [signformState, setSignFormState] = useState({
     signfirstName: '',
