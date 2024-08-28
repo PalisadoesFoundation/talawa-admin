@@ -82,11 +82,13 @@ function organizationActionItems(): JSX.Element {
   const { t: tErrors } = useTranslation('errors');
 
   // Get the organization ID from URL parameters
-  const { orgId } = useParams();
+  const { orgId, eventId } = useParams();
 
   if (!orgId) {
     return <Navigate to={'/'} replace />;
   }
+
+  console.log('eventId', eventId);
 
   const [actionItem, setActionItem] = useState<InterfaceActionItemInfo | null>(
     null,
@@ -141,7 +143,7 @@ function organizationActionItems(): JSX.Element {
   } = useQuery(ACTION_ITEM_LIST, {
     variables: {
       organizationId: orgId,
-      eventId: null,
+      eventId: eventId,
       orderBy: sortBy,
       where: {
         assigneeName: searchBy === 'assignee' ? searchTerm : undefined,
@@ -352,7 +354,7 @@ function organizationActionItems(): JSX.Element {
   ];
 
   return (
-    <div className="mt-4">
+    <div className="mt-3">
       {/* Header with search, filter  and Create Button */}
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
         <div className={`${styles.input} mb-1`}>

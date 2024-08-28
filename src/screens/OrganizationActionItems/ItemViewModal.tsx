@@ -10,7 +10,7 @@ import { FormControl, TextField } from '@mui/material';
 import { TaskAlt, HistoryToggleOff } from '@mui/icons-material';
 import Avatar from 'components/Avatar/Avatar';
 
-export interface InterfacePledgeModal {
+interface InterfaceViewModal {
   isOpen: boolean;
   hide: () => void;
   item: InterfaceActionItemInfo;
@@ -29,7 +29,7 @@ export interface InterfacePledgeModal {
  * It includes fields for assignee, assigner, category, pre and post completion notes, assignment date, due date, completion date, and event.
  */
 
-const ItemViewModal: FC<InterfacePledgeModal> = ({ isOpen, hide, item }) => {
+const ItemViewModal: FC<InterfaceViewModal> = ({ isOpen, hide, item }) => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationActionItems',
   });
@@ -173,7 +173,7 @@ const ItemViewModal: FC<InterfacePledgeModal> = ({ isOpen, hide, item }) => {
               label={t('allotedHours')}
               variant="outlined"
               className={`${styles.noOutline} w-100`}
-              value={allotedHours}
+              value={allotedHours ?? '-'}
               disabled
             />
           </Form.Group>

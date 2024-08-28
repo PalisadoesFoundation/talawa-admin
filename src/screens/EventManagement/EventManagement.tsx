@@ -10,7 +10,7 @@ import { ReactComponent as EventAgendaItemsIcon } from 'assets/svgs/agenda-items
 import { useTranslation } from 'react-i18next';
 import { Button, Dropdown } from 'react-bootstrap';
 import EventDashboard from 'components/EventManagement/Dashboard/EventDashboard';
-import EventActionItems from 'components/EventManagement/EventActionItems/EventActionItems';
+import OrganizationActionItems from 'screens/OrganizationActionItems/OrganizationActionItems';
 import EventAgendaItems from 'components/EventManagement/EventAgendaItems/EventAgendaItems';
 import useLocalStorage from 'utils/useLocalstorage';
 
@@ -124,8 +124,8 @@ const EventManagement = (): JSX.Element => {
     const translatedText = t(value);
 
     const className = selected
-      ? 'px-4 d-flex align-items-center'
-      : 'text-secondary border-secondary-subtle px-4 d-flex align-items-center';
+      ? 'px-4 d-flex align-items-center shadow'
+      : 'text-secondary bg-white px-4 d-flex align-items-center rounded shadow';
     const props = {
       variant,
       className,
@@ -152,7 +152,7 @@ const EventManagement = (): JSX.Element => {
             <Button
               size="sm"
               variant="light"
-              className="d-flex text-secondary border-secondary-subtle align-items-center px-3"
+              className="d-flex text-secondary bg-white align-items-center px-3 shadow"
             >
               <FaChevronLeft
                 cursor={'pointer'}
@@ -220,8 +220,8 @@ const EventManagement = (): JSX.Element => {
             );
           case 'eventActions':
             return (
-              <div data-testid="eventActionsTab">
-                <EventActionItems eventId={eventId} />
+              <div data-testid="eventActionsTab" className="mx-4">
+                <OrganizationActionItems />
               </div>
             );
           case 'eventAgendas':

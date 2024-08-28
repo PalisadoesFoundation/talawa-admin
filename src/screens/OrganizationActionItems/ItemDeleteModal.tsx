@@ -5,13 +5,12 @@ import { useMutation } from '@apollo/client';
 import { DELETE_ACTION_ITEM_MUTATION } from 'GraphQl/Mutations/ActionItemMutations';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-import { InterfaceAction } from 'state/helpers/Action';
 import type { InterfaceActionItemInfo } from 'utils/interfaces';
 
 /**
- * Props for the `ActionItemPreviewModal` component.
+ * Props for the `ItemDeleteModal` component.
  */
-interface InterfaceActionItemCreateModalProps {
+interface InterfaceItemDeleteModalProps {
   isOpen: boolean;
   hide: () => void;
   actionItem: InterfaceActionItemInfo | null;
@@ -22,9 +21,9 @@ interface InterfaceActionItemCreateModalProps {
  * A modal component for confirming the deletion of an action item.
  *
  * @param props - The properties passed to the component.
- * @returns The `ActionItemPreviewModal` component.
+ * @returns The `ItemDeleteModal` component.
  */
-const ItemDeleteModal: React.FC<InterfaceActionItemCreateModalProps> = ({
+const ItemDeleteModal: React.FC<InterfaceItemDeleteModalProps> = ({
   isOpen,
   hide,
   actionItem,
