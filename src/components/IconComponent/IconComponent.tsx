@@ -7,7 +7,6 @@ import { ReactComponent as ActionItemIcon } from 'assets/svgs/actionItem.svg';
 import { ReactComponent as BlockUserIcon } from 'assets/svgs/blockUser.svg';
 import { ReactComponent as CheckInRegistrantsIcon } from 'assets/svgs/checkInRegistrants.svg';
 import { ReactComponent as DashboardIcon } from 'assets/svgs/dashboard.svg';
-import { ReactComponent as EventStatsIcon } from 'assets/svgs/eventStats.svg';
 import { ReactComponent as EventsIcon } from 'assets/svgs/events.svg';
 import { ReactComponent as FundsIcon } from 'assets/svgs/funds.svg';
 import { ReactComponent as ListEventRegistrantsIcon } from 'assets/svgs/listEventRegistrants.svg';
@@ -101,13 +100,6 @@ const iconComponent = (props: InterfaceIconComponent): JSX.Element => {
       return (
         <CheckInRegistrantsIcon
           data-testid="Icon-Component-Check-In-Registrants"
-          stroke={props.fill}
-        />
-      );
-    case 'Event Stats':
-      return (
-        <EventStatsIcon
-          data-testid="Icon-Component-Event-Stats"
           stroke={props.fill}
         />
       );
