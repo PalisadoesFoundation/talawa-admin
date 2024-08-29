@@ -103,11 +103,23 @@ function orgSettings(): JSX.Element {
       {(() => {
         switch (tab) {
           case 'general':
-            return <GeneralSettings orgId={orgId} />;
+            return (
+              <div data-testid="generalTab">
+                <GeneralSettings orgId={orgId} />
+              </div>
+            );
           case 'actionItemCategories':
-            return <OrgActionItemCategories orgId={orgId} />;
+            return (
+              <div data-testid="actionItemCategoriesTab">
+                <OrgActionItemCategories orgId={orgId} />
+              </div>
+            );
           case 'agendaItemCategories':
-            return <OrganizationAgendaCategory orgId={orgId} />;
+            return (
+              <div data-testid="agendaItemCategoriesTab">
+                <OrganizationAgendaCategory orgId={orgId} />
+              </div>
+            );
         }
       })()}
     </div>
