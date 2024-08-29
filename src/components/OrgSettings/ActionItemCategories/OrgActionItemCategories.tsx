@@ -75,6 +75,7 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
   const [category, setCategory] =
     useState<InterfaceActionItemCategoryInfo | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [searchValue, setSearchValue] = useState<string>('');
   const [sortBy, setSortBy] = useState<'createdAt_ASC' | 'createdAt_DESC'>(
     'createdAt_DESC',
   );
@@ -146,7 +147,7 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
   // Show error message if there's an error
   if (catError) {
     return (
-      <div className={styles.message}>
+      <div className={styles.message} data-testid="errorMsg">
         <WarningAmberRounded className={styles.icon} fontSize="large" />
         <h6 className="fw-bold text-danger text-center">
           {tErrors('errorLoading', { entity: 'Action Item Categories' })}
@@ -257,7 +258,7 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
             variant="success"
             size="sm"
             className="me-2 rounded"
-            data-testid="editCategoryBtn"
+            data-testid={'editCategoryBtn' + params.row.id}
             onClick={() =>
               handleOpenModal(
                 params.row as InterfaceActionItemCategoryInfo,
@@ -283,14 +284,22 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
             autoComplete="off"
             required
             className={styles.inputField}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            onKeyUp={(e) => {
+              if (e.key === 'Enter') {
+                setSearchTerm(searchValue);
+              } else if (e.key === 'Backspace' && searchValue === '') {
+                setSearchTerm('');
+              }
+            }}
             data-testid="searchByName"
           />
           <Button
             tabIndex={-1}
             className={`position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center`}
             style={{ marginBottom: '10px' }}
+            onClick={() => setSearchTerm(searchValue)}
             data-testid="searchBtn"
           >
             <Search />
@@ -303,7 +312,7 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
                 variant="success"
                 id="dropdown-basic"
                 className={styles.dropdown}
-                data-testid="filter"
+                data-testid="sort"
               >
                 <Sort className={'me-1'} />
                 {tCommon('sort')}

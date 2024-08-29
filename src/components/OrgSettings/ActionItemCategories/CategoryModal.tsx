@@ -104,11 +104,11 @@ const CategoryModal: FC<InterfaceActionItemCategoryModal> = ({
           name: '',
           isDisabled: false,
         });
-        refetchCategories(); // Refetch the list of categories
-        hide(); // Close the modal
-        toast.success(t('successfulUpdation')); // Show success toast
+        refetchCategories();
+        hide();
+        toast.success(t('successfulUpdation'));
       } catch (error: unknown) {
-        toast.error((error as Error).message); // Show error toast
+        toast.error((error as Error).message);
       }
     }
   };

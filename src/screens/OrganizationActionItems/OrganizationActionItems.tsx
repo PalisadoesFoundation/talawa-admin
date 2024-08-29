@@ -88,8 +88,6 @@ function organizationActionItems(): JSX.Element {
     return <Navigate to={'/'} replace />;
   }
 
-  console.log('eventId', eventId);
-
   const [actionItem, setActionItem] = useState<InterfaceActionItemInfo | null>(
     null,
   );

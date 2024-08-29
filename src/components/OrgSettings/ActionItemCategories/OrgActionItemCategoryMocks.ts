@@ -9,25 +9,155 @@ export const MOCKS = [
   {
     request: {
       query: ACTION_ITEM_CATEGORY_LIST,
-      variables: { organizationId: '123' },
+      variables: {
+        organizationId: 'orgId',
+        where: { name_contains: '' },
+        orderBy: 'createdAt_DESC',
+      },
     },
     result: {
       data: {
         actionItemCategoriesByOrganization: [
           {
-            _id: '1',
-            name: 'ActionItemCategory 1',
+            _id: 'categoryId1',
+            name: 'Category 1',
             isDisabled: false,
+            createdAt: '2024-08-26',
+            creator: {
+              _id: 'creatorId1',
+              firstName: 'Wilt',
+              lastName: 'Shepherd',
+            },
           },
           {
-            _id: '2',
-            name: 'ActionItemCategory 2',
+            _id: 'categoryId2',
+            name: 'Category 2',
             isDisabled: true,
+            createdAt: '2024-08-25',
+            creator: {
+              _id: 'creatorId2',
+              firstName: 'John',
+              lastName: 'Doe',
+            },
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: ACTION_ITEM_CATEGORY_LIST,
+      variables: {
+        organizationId: 'orgId',
+        where: { name_contains: '' },
+        orderBy: 'createdAt_ASC',
+      },
+    },
+    result: {
+      data: {
+        actionItemCategoriesByOrganization: [
+          {
+            _id: 'categoryId2',
+            name: 'Category 2',
+            isDisabled: true,
+            createdAt: '2024-08-25',
+            creator: {
+              _id: 'creatorId2',
+              firstName: 'John',
+              lastName: 'Doe',
+            },
           },
           {
-            _id: '3',
-            name: 'ActionItemCategory 3',
+            _id: 'categoryId1',
+            name: 'Category 1',
             isDisabled: false,
+            createdAt: '2024-08-26',
+            creator: {
+              _id: 'creatorId1',
+              firstName: 'Wilt',
+              lastName: 'Shepherd',
+            },
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: ACTION_ITEM_CATEGORY_LIST,
+      variables: {
+        organizationId: 'orgId',
+        where: { name_contains: '', is_disabled: false },
+        orderBy: 'createdAt_DESC',
+      },
+    },
+    result: {
+      data: {
+        actionItemCategoriesByOrganization: [
+          {
+            _id: 'categoryId1',
+            name: 'Category 1',
+            isDisabled: false,
+            createdAt: '2024-08-26',
+            creator: {
+              _id: 'creatorId1',
+              firstName: 'Wilt',
+              lastName: 'Shepherd',
+            },
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: ACTION_ITEM_CATEGORY_LIST,
+      variables: {
+        organizationId: 'orgId',
+        where: { name_contains: '', is_disabled: true },
+        orderBy: 'createdAt_DESC',
+      },
+    },
+    result: {
+      data: {
+        actionItemCategoriesByOrganization: [
+          {
+            _id: 'categoryId2',
+            name: 'Category 2',
+            isDisabled: true,
+            createdAt: '2024-08-25',
+            creator: {
+              _id: 'creatorId2',
+              firstName: 'John',
+              lastName: 'Doe',
+            },
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: ACTION_ITEM_CATEGORY_LIST,
+      variables: {
+        organizationId: 'orgId',
+        where: { name_contains: 'Category 1' },
+        orderBy: 'createdAt_DESC',
+      },
+    },
+    result: {
+      data: {
+        actionItemCategoriesByOrganization: [
+          {
+            _id: 'categoryId1',
+            name: 'Category 1',
+            isDisabled: false,
+            createdAt: '2024-08-26',
+            creator: {
+              _id: 'creatorId1',
+              firstName: 'Wilt',
+              lastName: 'Shepherd',
+            },
           },
         ],
       },
@@ -36,12 +166,16 @@ export const MOCKS = [
   {
     request: {
       query: CREATE_ACTION_ITEM_CATEGORY_MUTATION,
-      variables: { name: 'ActionItemCategory 4', organizationId: '123' },
+      variables: {
+        name: 'Category 2',
+        isDisabled: true,
+        organizationId: 'orgId',
+      },
     },
     result: {
       data: {
         createActionItemCategory: {
-          _id: '4',
+          _id: 'categoryId3',
         },
       },
     },
@@ -50,30 +184,15 @@ export const MOCKS = [
     request: {
       query: UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
       variables: {
-        name: 'ActionItemCategory 1 updated',
-        actionItemCategoryId: '1',
-      },
-    },
-    result: {
-      data: {
-        updateActionItemCategory: {
-          _id: '1',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
-      variables: {
+        name: 'Category 2',
         isDisabled: true,
-        actionItemCategoryId: '1',
+        actionItemCategoryId: 'categoryId',
       },
     },
     result: {
       data: {
         updateActionItemCategory: {
-          _id: '1',
+          _id: 'categoryId',
         },
       },
     },
@@ -82,81 +201,75 @@ export const MOCKS = [
     request: {
       query: UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
       variables: {
+        name: 'Category 2',
         isDisabled: false,
-        actionItemCategoryId: '2',
+        actionItemCategoryId: 'categoryId',
       },
     },
     result: {
       data: {
         updateActionItemCategory: {
-          _id: '2',
+          _id: 'categoryId',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
+      variables: {
+        name: 'Category 1',
+        isDisabled: true,
+        actionItemCategoryId: 'categoryId',
+      },
+    },
+    result: {
+      data: {
+        updateActionItemCategory: {
+          _id: 'categoryId',
         },
       },
     },
   },
 ];
 
-export const MOCKS_ERROR_QUERY = [
+export const MOCKS_EMPTY = [
   {
     request: {
       query: ACTION_ITEM_CATEGORY_LIST,
-      variables: { organizationId: '123' },
+      variables: {
+        organizationId: 'orgId',
+        where: { name_contains: '' },
+        orderBy: 'createdAt_DESC',
+      },
+    },
+    result: {
+      data: {
+        actionItemCategoriesByOrganization: [],
+      },
+    },
+  },
+];
+
+export const MOCKS_ERROR = [
+  {
+    request: {
+      query: ACTION_ITEM_CATEGORY_LIST,
+      variables: {
+        organizationId: 'orgId',
+        where: { name_contains: '' },
+        orderBy: 'createdAt_DESC',
+      },
     },
     error: new Error('Mock Graphql Error'),
-  },
-];
-
-export const MOCKS_ERROR_MUTATIONS = [
-  {
-    request: {
-      query: ACTION_ITEM_CATEGORY_LIST,
-      variables: { organizationId: '123' },
-    },
-    result: {
-      data: {
-        actionItemCategoriesByOrganization: [
-          {
-            _id: '1',
-            name: 'ActionItemCategory 1',
-            isDisabled: false,
-          },
-          {
-            _id: '2',
-            name: 'ActionItemCategory 2',
-            isDisabled: true,
-          },
-          {
-            _id: '3',
-            name: 'ActionItemCategory 3',
-            isDisabled: false,
-          },
-        ],
-      },
-    },
   },
   {
     request: {
       query: CREATE_ACTION_ITEM_CATEGORY_MUTATION,
-      variables: { name: 'ActionItemCategory 4', organizationId: '123' },
-    },
-    error: new Error('Mock Graphql Error'),
-  },
-  {
-    request: {
-      query: UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
       variables: {
-        name: 'ActionItemCategory 1 updated',
-        actionItemCategoryId: '1',
-      },
-    },
-    error: new Error('Mock Graphql Error'),
-  },
-  {
-    request: {
-      query: UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
-      variables: {
+        name: 'Category 2',
         isDisabled: true,
-        actionItemCategoryId: '1',
+        organizationId: 'orgId',
       },
     },
     error: new Error('Mock Graphql Error'),
@@ -165,8 +278,9 @@ export const MOCKS_ERROR_MUTATIONS = [
     request: {
       query: UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
       variables: {
-        isDisabled: false,
-        actionItemCategoryId: '2',
+        name: 'Category 2',
+        isDisabled: true,
+        actionItemCategoryId: 'categoryId',
       },
     },
     error: new Error('Mock Graphql Error'),
