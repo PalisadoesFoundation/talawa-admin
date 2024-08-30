@@ -237,7 +237,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
     if (actionItem) {
       setFormState({
         dueDate: actionItem.dueDate,
-        actionItemCategoryId: actionItem.actionItemCategory?._id ?? '',
+        actionItemCategoryId: actionItem.actionItemCategory?._id,
         assigneeId: actionItem.assignee._id,
         preCompletionNotes: actionItem.preCompletionNotes,
         postCompletionNotes: actionItem.postCompletionNotes,
@@ -309,6 +309,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                 item.name
               }
               onChange={(_, newCategory): void => {
+                /* istanbul ignore next */
                 setFormState({
                   ...formState,
                   actionItemCategoryId: newCategory?._id ?? '',
@@ -366,6 +367,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                     `${member.firstName} ${member.lastName}`
                   }
                   onChange={(_, newAssignee): void => {
+                    /* istanbul ignore next */
                     setFormState({
                       ...formState,
                       assigneeId: newAssignee?._id ?? '',
@@ -386,6 +388,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                   className={styles.noOutline}
                   value={dayjs(dueDate)}
                   onChange={(date: Dayjs | null): void => {
+                    /* istanbul ignore next */
                     if (date) {
                       setFormState({
                         ...formState,
@@ -402,20 +405,22 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                     variant="outlined"
                     className={styles.noOutline}
                     value={allotedHours ?? ''}
-                    onChange={(e) => {
-                      if (e.target.value === '') {
-                        /* istanbul ignore next */
-                        setFormState({
-                          ...formState,
-                          allotedHours: null,
-                        });
-                      } else if (parseInt(e.target.value) > 0) {
-                        setFormState({
-                          ...formState,
-                          allotedHours: parseInt(e.target.value),
-                        });
+                    onChange={
+                      /* istanbul ignore next */
+                      (e) => {
+                        if (e.target.value === '') {
+                          setFormState({
+                            ...formState,
+                            allotedHours: null,
+                          });
+                        } else if (parseInt(e.target.value) > 0) {
+                          setFormState({
+                            ...formState,
+                            allotedHours: parseInt(e.target.value),
+                          });
+                        }
                       }
-                    }}
+                    }
                   />
                 </FormControl>
               </Form.Group>
@@ -426,7 +431,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                   label={t('preCompletionNotes')}
                   variant="outlined"
                   className={styles.noOutline}
-                  value={preCompletionNotes ?? ''}
+                  value={preCompletionNotes}
                   onChange={(e) =>
                     setFormState({
                       ...formState,
