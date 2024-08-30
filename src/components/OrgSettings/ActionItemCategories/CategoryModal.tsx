@@ -11,6 +11,18 @@ import {
 import { toast } from 'react-toastify';
 import { FormControl, TextField } from '@mui/material';
 
+/**
+ * Props for the `CategoryModal` component.
+ *
+ *
+ * isOpen - The state of the modal.
+ * hide - The function to hide the modal.
+ * refetchCategories - The function to refetch the categories.
+ * orgId - The organization ID.
+ * category - The category to be edited.
+ * mode - The mode of the modal.
+ * @returns The `CategoryModal` component.
+ */
 export interface InterfaceActionItemCategoryModal {
   isOpen: boolean;
   hide: () => void;
@@ -20,6 +32,12 @@ export interface InterfaceActionItemCategoryModal {
   mode: 'create' | 'edit';
 }
 
+/**
+ * A modal component for creating and editing action item categories.
+ *
+ * @param props - The properties passed to the component.
+ * @returns The `CategoryModal` component.
+ */
 const CategoryModal: FC<InterfaceActionItemCategoryModal> = ({
   category,
   hide,
@@ -56,7 +74,11 @@ const CategoryModal: FC<InterfaceActionItemCategoryModal> = ({
     UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
   );
 
-  // Handles category creation
+  /**
+   * Handles category creation.
+   *
+   * @param e - The form submission event.
+   */
   const handleCreate = async (
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
@@ -78,7 +100,11 @@ const CategoryModal: FC<InterfaceActionItemCategoryModal> = ({
     }
   };
 
-  // Handles category update
+  /**
+   * Handles category update.
+   *
+   * @param e - The form submission event.
+   */
   const handleEdit = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     if (name === category?.name && isDisabled === category?.isDisabled) {

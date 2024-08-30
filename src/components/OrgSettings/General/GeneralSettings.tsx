@@ -7,10 +7,19 @@ import DeleteOrg from './DeleteOrg/DeleteOrg';
 import OrgUpdate from './OrgUpdate/OrgUpdate';
 import { useTranslation } from 'react-i18next';
 
+/**
+ * Props for the `GeneralSettings` component.
+ */
 interface InterfaceGeneralSettingsProps {
   orgId: string;
 }
 
+/**
+ * A component for displaying general settings for an organization.
+ *
+ * @param props - The properties passed to the component.
+ * @returns The `GeneralSettings` component.
+ */
 const GeneralSettings: FC<InterfaceGeneralSettingsProps> = ({ orgId }) => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgSettings',
