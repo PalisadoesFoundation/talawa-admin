@@ -10,7 +10,7 @@ import type { InterfaceActionItemInfo } from 'utils/interfaces';
 /**
  * Props for the `ItemDeleteModal` component.
  */
-interface InterfaceItemDeleteModalProps {
+export interface InterfaceItemDeleteModalProps {
   isOpen: boolean;
   hide: () => void;
   actionItem: InterfaceActionItemInfo | null;
@@ -51,10 +51,7 @@ const ItemDeleteModal: React.FC<InterfaceItemDeleteModalProps> = ({
       hide();
       toast.success(t('successfulDeletion'));
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-        console.log(error.message);
-      }
+      toast.error((error as Error).message);
     }
   };
   return (

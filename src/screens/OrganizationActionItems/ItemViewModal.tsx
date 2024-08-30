@@ -10,7 +10,7 @@ import { FormControl, TextField } from '@mui/material';
 import { TaskAlt, HistoryToggleOff } from '@mui/icons-material';
 import Avatar from 'components/Avatar/Avatar';
 
-interface InterfaceViewModal {
+export interface InterfaceViewModalProps {
   isOpen: boolean;
   hide: () => void;
   item: InterfaceActionItemInfo;
@@ -29,7 +29,7 @@ interface InterfaceViewModal {
  * It includes fields for assignee, assigner, category, pre and post completion notes, assignment date, due date, completion date, and event.
  */
 
-const ItemViewModal: FC<InterfaceViewModal> = ({ isOpen, hide, item }) => {
+const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationActionItems',
   });
@@ -55,7 +55,7 @@ const ItemViewModal: FC<InterfaceViewModal> = ({ isOpen, hide, item }) => {
           variant="danger"
           onClick={hide}
           className={styles.modalCloseBtn}
-          data-testid="pledgeModalCloseBtn"
+          data-testid="modalCloseBtn"
         >
           <i className="fa fa-times"></i>
         </Button>
@@ -88,7 +88,7 @@ const ItemViewModal: FC<InterfaceViewModal> = ({ isOpen, hide, item }) => {
                         <img
                           src={assignee.image}
                           alt="Assignee"
-                          data-testid={`image${assignee._id + 1}`}
+                          data-testid={`${assignee.firstName}_image`}
                           className={styles.TableImage}
                         />
                       ) : (
@@ -97,6 +97,7 @@ const ItemViewModal: FC<InterfaceViewModal> = ({ isOpen, hide, item }) => {
                             key={assignee._id + '1'}
                             containerStyle={styles.imageContainer}
                             avatarStyle={styles.TableImage}
+                            dataTestId={`${assignee.firstName}_avatar`}
                             name={assignee.firstName + ' ' + assignee.lastName}
                             alt={assignee.firstName + ' ' + assignee.lastName}
                           />
@@ -121,7 +122,7 @@ const ItemViewModal: FC<InterfaceViewModal> = ({ isOpen, hide, item }) => {
                         <img
                           src={assigner.image}
                           alt="Assignee"
-                          data-testid={`image${assigner._id + 1}`}
+                          data-testid={`${assigner.firstName}_image`}
                           className={styles.TableImage}
                         />
                       ) : (
@@ -130,6 +131,7 @@ const ItemViewModal: FC<InterfaceViewModal> = ({ isOpen, hide, item }) => {
                             key={assigner._id + '1'}
                             containerStyle={styles.imageContainer}
                             avatarStyle={styles.TableImage}
+                            dataTestId={`${assigner.firstName}_avatar`}
                             name={assigner.firstName + ' ' + assigner.lastName}
                             alt={assigner.firstName + ' ' + assigner.lastName}
                           />

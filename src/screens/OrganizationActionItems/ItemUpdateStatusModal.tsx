@@ -8,7 +8,7 @@ import { UPDATE_ACTION_ITEM_MUTATION } from 'GraphQl/Mutations/ActionItemMutatio
 import { toast } from 'react-toastify';
 import type { InterfaceActionItemInfo } from 'utils/interfaces';
 
-interface InterfaceItemUpdateStatusModalProps {
+export interface InterfaceItemUpdateStatusModalProps {
   isOpen: boolean;
   hide: () => void;
   actionItemsRefetch: () => void;
@@ -68,7 +68,7 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
 
   useEffect(() => {
     if (actionItem) {
-      setIsCompleted(actionItem?.isCompleted ?? false);
+      setIsCompleted(actionItem?.isCompleted);
       setPostCompletionNotes(actionItem?.postCompletionNotes ?? '');
     }
   }, [actionItem]);
@@ -104,14 +104,10 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
 
           {isCompleted ? (
             <div className="d-flex gap-3 justify-content-end">
-              <Button type="submit" variant="primary" data-testid="createBtn">
+              <Button type="submit" variant="primary" data-testid="yesBtn">
                 {tCommon('yes')}
               </Button>
-              <Button
-                variant="secondary"
-                onClick={hide}
-                data-testid="deletenobtn"
-              >
+              <Button variant="secondary" onClick={hide}>
                 {tCommon('no')}
               </Button>
             </div>

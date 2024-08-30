@@ -38,7 +38,7 @@ export interface InterfaceActionItemInfo {
     name: string;
   };
   preCompletionNotes: string;
-  postCompletionNotes: string;
+  postCompletionNotes: string | null;
   assignmentDate: Date;
   dueDate: Date;
   completionDate: Date;
@@ -46,13 +46,13 @@ export interface InterfaceActionItemInfo {
   event: {
     _id: string;
     title: string;
-  };
+  } | null;
   creator: {
     _id: string;
     firstName: string;
     lastName: string;
   };
-  allotedHours: number;
+  allotedHours: number | null;
 }
 
 export interface InterfaceActionItemList {

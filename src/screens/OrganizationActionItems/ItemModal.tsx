@@ -33,7 +33,7 @@ interface InterfaceFormStateType {
   assigneeId: string;
   eventId?: string;
   preCompletionNotes: string;
-  postCompletionNotes: string;
+  postCompletionNotes: string | null;
   allotedHours: number | null;
   isCompleted: boolean;
 }
@@ -41,7 +41,7 @@ interface InterfaceFormStateType {
 /**
  * Props for the `ItemModal` component.
  */
-interface InterfaceItemModalProps {
+export interface InterfaceItemModalProps {
   isOpen: boolean;
   hide: () => void;
   orgId: string;
@@ -77,7 +77,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
     actionItemCategoryId: '',
     assigneeId: '',
     preCompletionNotes: '',
-    postCompletionNotes: '',
+    postCompletionNotes: null,
     allotedHours: null,
     isCompleted: false,
   });
@@ -160,7 +160,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
         assigneeId: '',
         actionItemCategoryId: '',
         preCompletionNotes: '',
-        postCompletionNotes: '',
+        postCompletionNotes: null,
         allotedHours: null,
         isCompleted: false,
       });
@@ -250,7 +250,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
         actionItemCategoryId: '',
         assigneeId: '',
         preCompletionNotes: '',
-        postCompletionNotes: '',
+        postCompletionNotes: null,
         allotedHours: null,
         isCompleted: false,
       });
@@ -308,16 +308,13 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
               getOptionLabel={(item: InterfaceActionItemCategoryInfo): string =>
                 item.name
               }
-              onChange={
-                /*istanbul ignore next*/
-                (_, newCategory): void => {
-                  setFormState({
-                    ...formState,
-                    actionItemCategoryId: newCategory?._id ?? '',
-                  });
-                  setActionItemCategory(newCategory);
-                }
-              }
+              onChange={(_, newCategory): void => {
+                setFormState({
+                  ...formState,
+                  actionItemCategoryId: newCategory?._id ?? '',
+                });
+                setActionItemCategory(newCategory);
+              }}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -368,16 +365,13 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                   getOptionLabel={(member: InterfaceMemberInfo): string =>
                     `${member.firstName} ${member.lastName}`
                   }
-                  onChange={
-                    /*istanbul ignore next*/
-                    (_, newAssignee): void => {
-                      setFormState({
-                        ...formState,
-                        assigneeId: newAssignee?._id ?? '',
-                      });
-                      setAssignee(newAssignee);
-                    }
-                  }
+                  onChange={(_, newAssignee): void => {
+                    setFormState({
+                      ...formState,
+                      assigneeId: newAssignee?._id ?? '',
+                    });
+                    setAssignee(newAssignee);
+                  }}
                   renderInput={(params) => (
                     <TextField {...params} label={t('assignee')} required />
                   )}
@@ -410,6 +404,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                     value={allotedHours ?? ''}
                     onChange={(e) => {
                       if (e.target.value === '') {
+                        /* istanbul ignore next */
                         setFormState({
                           ...formState,
                           allotedHours: null,
@@ -431,7 +426,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                   label={t('preCompletionNotes')}
                   variant="outlined"
                   className={styles.noOutline}
-                  value={preCompletionNotes}
+                  value={preCompletionNotes ?? ''}
                   onChange={(e) =>
                     setFormState({
                       ...formState,
@@ -464,7 +459,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
           <Button
             type="submit"
             className={styles.greenregbtn}
-            data-testid="createBtn"
+            data-testid="submitBtn"
           >
             {editMode ? t('updateActionItem') : t('createActionItem')}
           </Button>

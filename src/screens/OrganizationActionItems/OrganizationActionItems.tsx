@@ -163,7 +163,7 @@ function organizationActionItems(): JSX.Element {
 
   if (actionItemsError) {
     return (
-      <div className={styles.message}>
+      <div className={styles.message} data-testid="errorMsg">
         <WarningAmberRounded className={styles.icon} fontSize="large" />
         <h6 className="fw-bold text-danger text-center">
           {tErrors('errorLoading', { entity: 'Action Items' })}
@@ -229,7 +229,7 @@ function organizationActionItems(): JSX.Element {
             className="d-flex justify-content-center fw-bold"
             data-testid="categoryName"
           >
-            {params.row.actionItemCategory?.name ?? '-'}
+            {params.row.actionItemCategory?.name}
           </div>
         );
       },
@@ -301,7 +301,7 @@ function organizationActionItems(): JSX.Element {
               size="sm"
               style={{ minWidth: '32px' }}
               className="me-2 rounded"
-              data-testid="viewItemBtn"
+              data-testid={`viewItemBtn${params.row.id}`}
               onClick={() => handleModalClick(params.row, ModalState.VIEW)}
             >
               <i className="fa fa-info" />
@@ -310,7 +310,7 @@ function organizationActionItems(): JSX.Element {
               variant="success"
               size="sm"
               className="me-2 rounded"
-              data-testid="editItemBtn"
+              data-testid={`editItemBtn${params.row.id}`}
               onClick={() => handleModalClick(params.row, ModalState.SAME)}
             >
               <i className="fa fa-edit" />
@@ -319,7 +319,7 @@ function organizationActionItems(): JSX.Element {
               size="sm"
               variant="danger"
               className="rounded"
-              data-testid="deleteItemBtn"
+              data-testid={`deleteItemBtn${params.row.id}`}
               onClick={() => handleModalClick(params.row, ModalState.DELETE)}
             >
               <i className="fa fa-trash" />
@@ -342,6 +342,7 @@ function organizationActionItems(): JSX.Element {
           <div className="d-flex align-items-center justify-content-center mt-3">
             <Form.Check
               type="checkbox"
+              data-testid={`statusCheckbox${params.row.id}`}
               checked={params.row.isCompleted}
               onChange={() => handleModalClick(params.row, ModalState.STATUS)}
             />
@@ -392,7 +393,7 @@ function organizationActionItems(): JSX.Element {
                 variant="success"
                 id="dropdown-basic"
                 className={styles.dropdown}
-                data-testid="filter"
+                data-testid="searchByToggle"
               >
                 <Sort className={'me-1'} />
                 {tCommon('searchBy', { item: '' })}
@@ -417,7 +418,7 @@ function organizationActionItems(): JSX.Element {
                 variant="success"
                 id="dropdown-basic"
                 className={styles.dropdown}
-                data-testid="filter"
+                data-testid="sort"
               >
                 <Sort className={'me-1'} />
                 {tCommon('sort')}

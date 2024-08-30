@@ -31,7 +31,7 @@ jest.mock('@mui/x-date-pickers/DateTimePicker', () => {
 const link1 = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(MOCKS_EMPTY);
 const link3 = new StaticMockLink(MOCKS_ERROR);
-const translations = {
+const t = {
   ...JSON.parse(
     JSON.stringify(
       i18n.getDataByLanguage('en')?.translation.orgActionItemCategories ?? {},
@@ -155,9 +155,7 @@ describe('Testing Organisation Action Item Categories', () => {
     expect(addCategoryBtn).toBeInTheDocument();
     userEvent.click(addCategoryBtn);
 
-    await waitFor(() =>
-      expect(screen.getAllByText(translations.create)).toHaveLength(2),
-    );
+    await waitFor(() => expect(screen.getAllByText(t.create)).toHaveLength(2));
     userEvent.click(screen.getByTestId('actionItemCategoryModalCloseBtn'));
     await waitFor(() =>
       expect(
@@ -174,9 +172,7 @@ describe('Testing Organisation Action Item Categories', () => {
     userEvent.click(editCategoryBtn);
 
     await waitFor(() =>
-      expect(
-        screen.getByText(translations.updateActionItemCategory),
-      ).toBeInTheDocument(),
+      expect(screen.getByText(t.updateActionItemCategory)).toBeInTheDocument(),
     );
     userEvent.click(screen.getByTestId('actionItemCategoryModalCloseBtn'));
     await waitFor(() =>
@@ -232,9 +228,7 @@ describe('Testing Organisation Action Item Categories', () => {
     renderActionItemCategories(link2, 'orgId');
     await waitFor(() => {
       expect(screen.getByTestId('searchByName')).toBeInTheDocument();
-      expect(
-        screen.getByText(translations.noActionItemCategories),
-      ).toBeInTheDocument();
+      expect(screen.getByText(t.noActionItemCategories)).toBeInTheDocument();
     });
   });
 
