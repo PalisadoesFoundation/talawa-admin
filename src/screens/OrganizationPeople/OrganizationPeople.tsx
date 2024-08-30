@@ -313,10 +313,10 @@ function organizationPeople(): JSX.Element {
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item
-                    inline
+                    d-inline
                     id="userslist"
-                    value="userslist"
-                    name="displaylist"
+                    data-value="userslist"
+                    data-name="displaylist"
                     data-testid="users"
                     defaultChecked={state == 2 ? true : false}
                     onClick={(): void => {
@@ -328,10 +328,10 @@ function organizationPeople(): JSX.Element {
                     </Form.Label>
                   </Dropdown.Item>
                   <Dropdown.Item
-                    inline
+                    d-inline
                     id="memberslist"
-                    value="memberslist"
-                    name="displaylist"
+                    data-value="memberslist"
+                    data-name="displaylist"
                     data-testid="members"
                     defaultChecked={state == 0 ? true : false}
                     onClick={(): void => {
@@ -341,10 +341,10 @@ function organizationPeople(): JSX.Element {
                     <label htmlFor="memberslist">{tCommon('members')}</label>
                   </Dropdown.Item>
                   <Dropdown.Item
-                    inline
+                    d-inline
                     id="adminslist"
-                    value="adminslist"
-                    name="displaylist"
+                    data-value="adminslist"
+                    data-name="displaylist"
                     data-testid="admins"
                     defaultChecked={state == 1 ? true : false}
                     onClick={(): void => {
