@@ -310,7 +310,7 @@ describe('Testing Donate Screen [User Portal]', () => {
     await wait();
 
     expect(toast.error).toHaveBeenCalledWith(
-      'Donation amount must be between 1 and 10000.',
+      'Donation amount must be between 1 and 10000000.',
     );
   });
 
@@ -335,7 +335,7 @@ describe('Testing Donate Screen [User Portal]', () => {
     await wait();
 
     expect(toast.error).toHaveBeenCalledWith(
-      'Donation amount must be between 1 and 10000.',
+      'Donation amount must be between 1 and 10000000.',
     );
   });
 
