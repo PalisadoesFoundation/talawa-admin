@@ -129,22 +129,8 @@ export default function donate(): JSX.Element {
 
   const donateToOrg = (): void => {
     // check if the amount is non empty and is a number
-    if (amount === '' || Number.isNaN(Number(amount))) {
+    if (amount === '' || Number.isNaN(Number(amount)) || Number(amount) <= 0) {
       toast.error(t(`invalidAmount`));
-      return;
-    }
-
-    // check if the amount is non negative and within the range
-    const minDonation = 1;
-    const maxDonation = 10000;
-    if (
-      Number(amount) <= 0 ||
-      Number(amount) < minDonation ||
-      Number(amount) > maxDonation
-    ) {
-      toast.error(
-        t(`donationOutOfRange`, { min: minDonation, max: maxDonation }),
-      );
       return;
     }
 
