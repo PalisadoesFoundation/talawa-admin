@@ -56,6 +56,9 @@ const SEND_MESSAGE_TO_DIRECT_CHAT_MOCK = [
           _id: '1',
           createdAt: '',
           messageContent: 'Hello',
+          directChatMessageBelongsTo: {
+            _id: '',
+          },
           replyTo: null,
           receiver: {
             _id: '',
@@ -87,10 +90,16 @@ const SEND_MESSAGE_TO_DIRECT_CHAT_MOCK = [
           _id: '1',
           createdAt: '',
           messageContent: 'Hello',
+          directChatMessageBelongsTo: {
+            _id: '',
+          },
           replyTo: {
             _id: '1',
             createdAt: '',
             messageContent: 'Hello',
+            directChatMessageBelongsTo: {
+              _id: '',
+            },
             replyTo: null,
             receiver: {
               _id: '',
@@ -134,10 +143,69 @@ const SEND_MESSAGE_TO_DIRECT_CHAT_MOCK = [
           _id: '1',
           createdAt: '',
           messageContent: 'Hello',
+          directChatMessageBelongsTo: {
+            _id: '',
+          },
           replyTo: {
             _id: '1',
             createdAt: '',
             messageContent: 'Hello',
+            directChatMessageBelongsTo: {
+              _id: '',
+            },
+            replyTo: null,
+            receiver: {
+              _id: '',
+              firstName: '',
+              lastName: '',
+            },
+            sender: {
+              _id: '',
+              firstName: '',
+              lastName: '',
+            },
+            updatedAt: '',
+          },
+          receiver: {
+            _id: '',
+            firstName: '',
+            lastName: '',
+          },
+          sender: {
+            _id: '',
+            firstName: '',
+            lastName: '',
+          },
+          updatedAt: '',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: SEND_MESSAGE_TO_DIRECT_CHAT,
+      variables: {
+        chatId: '1',
+        replyTo: '1',
+        messageContent: 'Test reply message',
+      },
+    },
+    result: {
+      data: {
+        sendMessageToDirectChat: {
+          _id: '1',
+          createdAt: '',
+          messageContent: 'Hello',
+          directChatMessageBelongsTo: {
+            _id: '',
+          },
+          replyTo: {
+            _id: '1',
+            createdAt: '',
+            messageContent: 'Hello',
+            directChatMessageBelongsTo: {
+              _id: '',
+            },
             replyTo: null,
             receiver: {
               _id: '',
@@ -294,6 +362,45 @@ const SEND_MESSAGE_TO_GROUP_CHAT_MOCK = [
       },
     },
   },
+  {
+    request: {
+      query: SEND_MESSAGE_TO_GROUP_CHAT,
+      variables: {
+        messageContent: 'Test reply message',
+        replyTo: '1',
+        chatId: '1',
+      },
+    },
+    result: {
+      data: {
+        sendMessageToGroupChat: {
+          _id: '2',
+          createdAt: '',
+          messageContent: 'Test reply message',
+          replyTo: {
+            _id: '3',
+            createdAt: '345678908765',
+            messageContent: 'Hello',
+            replyTo: null,
+            sender: {
+              _id: '2',
+              firstName: 'Test',
+              lastName: 'User',
+              email: 'test@example.com',
+              image: '',
+            },
+            updatedAt: '345678908765',
+          },
+          sender: {
+            _id: '',
+            firstName: '',
+            lastName: '',
+          },
+          updatedAt: '',
+        },
+      },
+    },
+  },
 ];
 
 const MESSAGE_SENT_TO_GROUP_CHAT_MOCK = [
@@ -309,6 +416,9 @@ const MESSAGE_SENT_TO_GROUP_CHAT_MOCK = [
         messageSentToGroupChat: {
           _id: '123',
           createdAt: '2024-07-10T17:16:33.248Z',
+          groupChatMessageBelongsTo: {
+            _id: '',
+          },
           messageContent: 'Test message',
           replyTo: null,
           sender: {
@@ -334,6 +444,9 @@ const MESSAGE_SENT_TO_GROUP_CHAT_MOCK = [
         messageSentToGroupChat: {
           _id: '1',
           createdAt: '2024-07-10T17:16:33.248Z',
+          groupChatMessageBelongsTo: {
+            _id: '',
+          },
           messageContent: 'Test message',
           replyTo: {
             _id: '123',
@@ -371,6 +484,9 @@ const MESSAGE_SENT_TO_GROUP_CHAT_MOCK = [
         messageSentToGroupChat: {
           _id: '668ec1f1364e03ac47a151',
           createdAt: '2024-07-10T17:16:33.248Z',
+          groupChatMessageBelongsTo: {
+            _id: '',
+          },
           messageContent: 'Test ',
           replyTo: null,
           sender: {
@@ -397,6 +513,9 @@ const MESSAGE_SENT_TO_GROUP_CHAT_MOCK = [
           _id: '668ec1f1df364e03ac47a151',
           createdAt: '2024-07-10T17:16:33.248Z',
           messageContent: 'Test ',
+          groupChatMessageBelongsTo: {
+            _id: '',
+          },
           replyTo: null,
           sender: {
             _id: '64378abd85008f171cf2990d',
@@ -422,10 +541,16 @@ const MESSAGE_SENT_TO_GROUP_CHAT_MOCK = [
           _id: '668ec1f13603ac4697a151',
           createdAt: '2024-07-10T17:16:33.248Z',
           messageContent: 'Test ',
+          groupChatMessageBelongsTo: {
+            _id: '',
+          },
           replyTo: {
             _id: '668ec1f1df364e03ac47a151',
             createdAt: '2024-07-10T17:16:33.248Z',
             messageContent: 'Test ',
+            groupChatMessageBelongsTo: {
+              _id: '',
+            },
             replyTo: null,
             sender: {
               _id: '64378abd85008f171cf2990d',
@@ -462,6 +587,9 @@ const MESSAGE_SENT_TO_DIRECT_CHAT_MOCK = [
           _id: '668ec1f1364e03ac4697a151',
           createdAt: '2024-07-10T17:16:33.248Z',
           messageContent: 'Test ',
+          directChatMessageBelongsTo: {
+            _id: '',
+          },
           replyTo: null,
           receiver: {
             _id: '65378abd85008f171cf2990d',
@@ -493,6 +621,9 @@ const MESSAGE_SENT_TO_DIRECT_CHAT_MOCK = [
           _id: '668ec1f1364e03ac4697vgfa151',
           createdAt: '2024-07-10T17:16:33.248Z',
           messageContent: 'Test ',
+          directChatMessageBelongsTo: {
+            _id: '',
+          },
           replyTo: null,
           receiver: {
             _id: '65378abd85008f171cf2990d',
@@ -524,6 +655,9 @@ const MESSAGE_SENT_TO_DIRECT_CHAT_MOCK = [
           _id: '6ec1f1364e03ac4697a151',
           createdAt: '2024-07-10T17:16:33.248Z',
           messageContent: 'Test ',
+          directChatMessageBelongsTo: {
+            _id: '',
+          },
           replyTo: null,
           receiver: {
             _id: '65378abd85008f171cf2990d',
@@ -1460,7 +1594,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
     await wait();
   });
 
-  test('Test send message direct chat', async () => {
+  test('send message direct chat', async () => {
     setItem('userId', '2');
     const mocks = [
       ...SEND_MESSAGE_TO_DIRECT_CHAT_MOCK,
@@ -1469,8 +1603,9 @@ describe('Testing Chatroom Component [User Portal]', () => {
       ...MESSAGE_SENT_TO_DIRECT_CHAT_MOCK,
       ...MESSAGE_SENT_TO_GROUP_CHAT_MOCK,
     ];
+    const link2 = new StaticMockLink(mocks, true);
     render(
-      <MockedProvider addTypename={false} mocks={mocks}>
+      <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1565,7 +1700,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
     await wait();
   });
 
-  test('Test send message group chat', async () => {
+  test('send message group chat', async () => {
     const mocks = [
       ...SEND_MESSAGE_TO_GROUP_CHAT_MOCK,
       ...DIRECT_CHAT_BY_ID_QUERY_MOCK,
@@ -1573,8 +1708,9 @@ describe('Testing Chatroom Component [User Portal]', () => {
       ...MESSAGE_SENT_TO_DIRECT_CHAT_MOCK,
       ...MESSAGE_SENT_TO_GROUP_CHAT_MOCK,
     ];
+    const link2 = new StaticMockLink(mocks, true);
     render(
-      <MockedProvider addTypename={false} mocks={mocks}>
+      <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1646,7 +1782,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
     await wait(400);
   });
 
-  test('Test remove reply msg', async () => {
+  test('remove reply msg', async () => {
     const mocks = [
       ...SEND_MESSAGE_TO_GROUP_CHAT_MOCK,
       ...DIRECT_CHAT_BY_ID_QUERY_MOCK,
@@ -1654,8 +1790,10 @@ describe('Testing Chatroom Component [User Portal]', () => {
       ...MESSAGE_SENT_TO_DIRECT_CHAT_MOCK,
       ...MESSAGE_SENT_TO_GROUP_CHAT_MOCK,
     ];
+    const link2 = new StaticMockLink(mocks, true);
+
     render(
-      <MockedProvider addTypename={false} mocks={mocks}>
+      <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1723,5 +1861,27 @@ describe('Testing Chatroom Component [User Portal]', () => {
     await act(async () => {
       fireEvent.click(await screen.findByTestId('closeReplyMsg'));
     });
+  });
+
+  test('websocket subscription', async () => {
+    const mocks = [
+      ...SEND_MESSAGE_TO_GROUP_CHAT_MOCK,
+      ...DIRECT_CHAT_BY_ID_QUERY_MOCK,
+      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
+      ...MESSAGE_SENT_TO_DIRECT_CHAT_MOCK,
+      ...MESSAGE_SENT_TO_GROUP_CHAT_MOCK,
+    ];
+    render(
+      <MockedProvider addTypename={false} mocks={mocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ChatRoom selectedContact="1" selectedChatType="group" />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait(500);
   });
 });
