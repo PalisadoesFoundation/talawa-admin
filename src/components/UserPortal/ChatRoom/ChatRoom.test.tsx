@@ -1802,6 +1802,91 @@ describe('Testing Chatroom Component [User Portal]', () => {
     await wait(400);
   });
 
+  test('send message direct chat when userId is different', async () => {
+    setItem('userId', '8');
+    const mocks = [
+      ...SEND_MESSAGE_TO_DIRECT_CHAT_MOCK,
+      ...DIRECT_CHAT_BY_ID_QUERY_MOCK,
+      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
+      ...MESSAGE_SENT_TO_DIRECT_CHAT_MOCK,
+      ...MESSAGE_SENT_TO_GROUP_CHAT_MOCK,
+    ];
+    const link2 = new StaticMockLink(mocks, true);
+    render(
+      <MockedProvider addTypename={false} link={link2}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ChatRoom selectedContact="1" selectedChatType="direct" />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+
+    const input = (await screen.findByTestId(
+      'messageInput',
+    )) as HTMLInputElement;
+
+    act(() => {
+      fireEvent.change(input, { target: { value: 'Hello' } });
+    });
+    expect(input.value).toBe('Hello');
+
+    const sendBtn = await screen.findByTestId('sendMessage');
+
+    expect(sendBtn).toBeInTheDocument();
+    act(() => {
+      fireEvent.click(sendBtn);
+    });
+    await waitFor(() => {
+      expect(input.value).toBeFalsy();
+    });
+
+    const messages = await screen.findAllByTestId('directChatMsg');
+
+    console.log('MESSAGES', messages);
+
+    expect(messages.length).not.toBe(0);
+
+    act(() => {
+      fireEvent.mouseOver(messages[0]);
+    });
+
+    await waitFor(async () => {
+      expect(await screen.findByTestId('moreOptions')).toBeInTheDocument();
+    });
+
+    const moreOptionsBtn = await screen.findByTestId('dropdown');
+    act(() => {
+      fireEvent.click(moreOptionsBtn);
+    });
+
+    const replyBtn = await screen.findByTestId('replyBtn');
+
+    act(() => {
+      fireEvent.click(replyBtn);
+    });
+
+    const replyMsg = await screen.findByTestId('replyMsg');
+
+    await waitFor(() => {
+      expect(replyMsg).toBeInTheDocument();
+    });
+
+    act(() => {
+      fireEvent.change(input, { target: { value: 'Test reply message' } });
+    });
+    expect(input.value).toBe('Test reply message');
+
+    act(() => {
+      fireEvent.click(sendBtn);
+    });
+
+    await wait(400);
+  });
+
   test('Selected contact is group chat', async () => {
     const mocks = [
       ...DIRECT_CHAT_BY_ID_QUERY_MOCK,
