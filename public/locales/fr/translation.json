@@ -200,6 +200,36 @@
     "organization": "Organisation",
     "invalidDetailsMessage": "Veuillez saisir des informations valides."
   },
+  "organizationTags": {
+    "title": "Étiquettes d'Organisation",
+    "createTag": "Créer une nouvelle étiquette",
+    "manageTag": "Gérer",
+    "editTag": "Modifier",
+    "removeTag": "Supprimer",
+    "tagDetails": "Détails de l'Étiquette",
+    "tagName": "Nom",
+    "tagType": "Type",
+    "tagNamePlaceholder": "Écrire le nom de l'étiquette",
+    "tagCreationSuccess": "Nouvelle étiquette créée avec succès",
+    "tagUpdationSuccess": "Étiquette mise à jour avec succès",
+    "tagRemovalSuccess": "Étiquette supprimée avec succès",
+    "noTagsFound": "Aucune étiquette trouvée",
+    "removeUserTag": "Supprimer l'Étiquette",
+    "removeUserTagMessage": "Voulez-vous supprimer cette étiquette ?",
+    "addChildTag": "Ajouter une Sous-Étiquette"
+  },
+  "manageTag": {
+    "title": "Détails de l'étiquette",
+    "addPeopleToTag": "Ajouter des personnes à l'étiquette",
+    "viewProfile": "Voir",
+    "noAssignedMembersFound": "Aucun membre assigné",
+    "unassignUserTag": "Désassigner l'étiquette",
+    "unassignUserTagMessage": "Voulez-vous retirer l'étiquette de cet utilisateur?",
+    "successfullyUnassigned": "Étiquette retirée de l'utilisateur",
+    "addPeople": "Ajouter des personnes",
+    "add": "Ajouter",
+    "subTags": "Sous-étiquettes"
+  },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",
     "addedAsAdmin": "L'utilisateur est ajouté en tant qu'administrateur."
@@ -300,6 +330,40 @@
     "deleteAgendaCategory": "Supprimer la catégorie d'ordre du jour",
     "deleteAgendaCategoryMsg": "Souhaitez-vous supprimer cette catégorie d'ordre du jour ?"
   },
+  "agendaItems": {
+    "agendaItemDetails": "Détails du point de l'ordre du jour",
+    "updateAgendaItem": "Mettre à jour le point de l'ordre du jour",
+    "title": "Titre",
+    "enterTitle": "Entrer le titre",
+    "sequence": "Ordre",
+    "description": "Description",
+    "enterDescription": "Entrer la description",
+    "category": "Catégorie de l'ordre du jour",
+    "attachments": "Pièces jointes",
+    "attachmentLimit": "Ajouter un fichier image ou vidéo jusqu'à 10 Mo",
+    "fileSizeExceedsLimit": "La taille du fichier dépasse la limite de 10 Mo",
+    "urls": "URL",
+    "url": "Ajouter un lien vers l'URL",
+    "enterUrl": "https://example.com",
+    "invalidUrl": "Veuillez saisir une URL valide",
+    "link": "Lien",
+    "createdBy": "Créé par",
+    "regular": "Régulier",
+    "note": "Note",
+    "duration": "Durée",
+    "enterDuration": "mm:ss",
+    "options": "Options",
+    "createAgendaItem": "Créer un point à l'ordre du jour",
+    "noAgendaItems": "Aucun point à l'ordre du jour",
+    "selectAgendaItemCategory": "Sélectionner une catégorie de point de l'ordre du jour",
+    "update": "Mettre à jour",
+    "delete": "Supprimer",
+    "agendaItemCreated": "Point de l'ordre du jour créé avec succès",
+    "agendaItemUpdated": "Point de l'ordre du jour mis à jour avec succès",
+    "agendaItemDeleted": "Point de l'ordre du jour supprimé avec succès",
+    "deleteAgendaItem": "Supprimer le point de l'ordre du jour",
+    "deleteAgendaItemMsg": "Voulez-vous supprimer ce point de l'ordre du jour ?"
+  },
   "eventListCard": {
     "deleteEvent": "Supprimer l'événement",
     "deleteEventMsg": "Voulez-vous supprimer cet événement ?",
@@ -332,56 +396,52 @@
     "title": "Fonds",
     "createFund": "Créer un fonds",
     "fundName": "Nom du fonds",
-    "fundId": "ID du fonds",
-    "fundOptions": "Options",
-    "noFunds": "Aucun fonds trouvé",
-    "fundDetails": "Détails du fonds",
-    "taxDeductible": "Déductible d'impôts",
-    "enterfundName": "Entrez le nom du fonds",
-    "enterfundId": "Entrez l'ID du fonds",
-    "default": "Fonds de défaut",
+    "fundId": "ID de référence du fonds",
+    "taxDeductible": "Déductible d'impôt",
+    "default": "Par défaut",
     "archived": "Archivé",
-    "nonArchive": "Non archivé",
     "fundCreate": "Créer un fonds",
     "fundUpdate": "Mettre à jour le fonds",
     "fundDelete": "Supprimer le fonds",
-    "manageFund": "Gérer le fonds",
-    "searchFullName": "Rechercher par nom",
+    "searchByName": "Rechercher par nom",
     "noFundsFound": "Aucun fonds trouvé",
     "createdBy": "Créé par",
-    "createdOn": "Créé sur",
+    "createdOn": "Créé le",
     "status": "Statut",
-    "archiveFund": "Fonds d'archives",
-    "archiveFundMsg": "Lors de l'archivage, ce fonds le supprimera de la liste des fonds. Cette action peut être annulée.",
     "fundCreated": "Fonds créé avec succès",
     "fundUpdated": "Fonds mis à jour avec succès",
     "fundDeleted": "Fonds supprimé avec succès",
-    "fundArchived": "Fonds archivé avec succès",
-    "fundUnarchived": "Fonds désarchivé avec succès",
-    "deleteFundMsg": "Voulez-vous supprimer ce fonds ?"
+    "deleteFundMsg": "Êtes-vous sûr de vouloir supprimer ce fonds ?",
+    "createdLatest": "Créé le plus récemment",
+    "createdEarliest": "Créé le plus tôt",
+    "viewCampaigns": "Voir les campagnes"
   },
   "fundCampaign": {
     "title": "Campagnes de collecte de fonds",
     "campaignName": "Nom de la campagne",
-    "campaignOptions": "Possibilités",
+    "campaignOptions": "Options",
     "fundingGoal": "Objectif de financement",
     "addCampaign": "Ajouter une campagne",
     "createdCampaign": "Campagne créée avec succès",
     "updatedCampaign": "Campagne mise à jour avec succès",
     "deletedCampaign": "Campagne supprimée avec succès",
-    "deleteCampaignMsg": "Êtes-vous sûr de vouloir supprimer cette campagne ?",
+    "deleteCampaignMsg": "Êtes-vous sûr de vouloir supprimer cette campagne ?",
     "noCampaigns": "Aucune campagne trouvée",
-    "createCampaign": "Créer une campagne de financement",
-    "updateCampaign": "Mettre à jour la campagne de financement",
-    "manageCampaign": "Gérer la campagne de financement",
-    "deleteCampaign": "Supprimer la campagne de financement",
+    "createCampaign": "Créer une campagne",
+    "updateCampaign": "Mettre à jour la campagne",
+    "deleteCampaign": "Supprimer la campagne",
     "currency": "Devise",
-    "selectCurrency": "Sélectionnez la devise",
-    "searchFullName": "Rechercher par nom"
+    "selectCurrency": "Sélectionner la devise",
+    "searchFullName": "Rechercher par nom",
+    "viewPledges": "Voir les promesses de dons",
+    "noCampaignsFound": "Aucune campagne trouvée",
+    "latestEndDate": "Dernière date de fin",
+    "earliestEndDate": "Date de fin la plus ancienne",
+    "lowestGoal": "Objectif le plus bas",
+    "highestGoal": "Objectif le plus élevé"
   },
   "pledges": {
     "title": "Engagements de campagne de financement",
-    "volunteers": "Bénévoles",
     "pledgeAmount": "Montant de la promesse de don",
     "pledgeOptions": "Possibilités",
     "pledgeCreated": "Engagement créé avec succès",
@@ -397,12 +457,16 @@
     "editPledge": "Modifier l'engagement",
     "deletePledgeMsg": "Etes-vous sûr de vouloir supprimer cet engagement ?",
     "noPledges": "Aucun engagement trouvé",
-    "sort": "Trier",
-    "searchVolunteer": "Rechercher par bénévole",
+    "searchPledger": "Rechercher par les bailleurs de fonds",
     "highestAmount": "Montant le plus élevé",
     "lowestAmount": "Montant le plus bas",
     "latestEndDate": "Date de fin la plus récente",
-    "earliestEndDate": "Date de fin la plus proche"
+    "earliestEndDate": "Date de fin la plus proche",
+    "campaigns": "Campagnes",
+    "pledges": "Promesses de dons",
+    "endsOn": "Se termine le",
+    "raisedAmount": "Montant collecté",
+    "pledgedAmount": "Montant promis"
   },
   "orgPost": {
     "title": "Des postes",
@@ -487,6 +551,7 @@
     "dashboard": "Tableau de bord",
     "registrants": "Inscrits",
     "eventActions": "Actions d'événement",
+    "eventAgendas": "Ordres du jour des événements",
     "eventStats": "Statistiques des événements",
     "to": "À"
   },
@@ -559,7 +624,9 @@
   "userPasswordUpdate": {
     "previousPassword": "Mot de passe précédent",
     "newPassword": "nouveau mot de passe",
-    "confirmNewPassword": "Confirmer le nouveau mot de passe"
+    "confirmNewPassword": "Confirmer le nouveau mot de passe",
+    "passCantBeEmpty": "Le mot de passe ne peut pas être vide",
+    "passNoMatch": "Le nouveau mot de passe et la confirmation du mot de passe ne correspondent pas."
   },
   "orgDelete": {
     "deleteOrg": "Supprimer l'organisation"
@@ -646,6 +713,10 @@
     "addedAsAdmin": "L'utilisateur est ajouté en tant qu'administrateur.",
     "userType": "Type d'utilisateur"
   },
+  "people": {
+    "title": "Personnes",
+    "searchUsers": "Rechercher des utilisateurs"
+  },
   "userLogin": {
     "login": "Se connecter",
     "loginIntoYourAccount": "Connectez-vous à votre compte",
@@ -697,7 +768,10 @@
   },
   "postCard": {
     "likes": "Aime",
-    "comments": "commentaires"
+    "comments": "commentaires",
+    "viewPost": "Voir le message",
+    "editPost": "Modifier le message",
+    "postedOn": "Publié le {{date}}"
   },
   "home": {
     "posts": "Des postes",
@@ -714,7 +788,8 @@
     "startPost": "Démarrer un message",
     "media": "Médias",
     "event": "Événement",
-    "article": "Article"
+    "article": "Article",
+    "postNowVisibleInFeed": "Le post est maintenant visible dans le fil d'actualité"
   },
   "settings": {
     "profileSettings": "Paramètres de profil",
@@ -748,7 +823,7 @@
     "widowed": "Veuf",
     "divorced": "Divorcé",
     "engaged": "Engagé",
-    "seperated": "Séparé",
+    "separated": "Séparé",
     "grade1": "1re année",
     "grade2": "2e année",
     "grade3": "3e année",
@@ -771,6 +846,7 @@
     "enterState": "Entrez la ville ou l'état"
   },
   "donate": {
+    "title": "Des dons",
     "donations": "Des dons",
     "searchDonations": "Rechercher des dons",
     "donateForThe": "Faites un don pour le",
@@ -781,6 +857,7 @@
     "success": "Don réussi"
   },
   "userEvents": {
+    "title": "Événements",
     "nothingToShow": "Rien à montrer ici.",
     "createEvent": "Créer un évènement",
     "recurring": "Événement récurrent",
@@ -826,7 +903,10 @@
     "deleteAdvertisement": "Supprimer la publicité",
     "deleteAdvertisementMsg": "Voulez-vous supprimer cette publicité ?",
     "view": "Voir",
-    "editAdvertisement": "Modifier l'annonce"
+    "editAdvertisement": "Modifier l'annonce",
+    "advertisementDeleted": "Publicité supprimée avec succès.",
+    "endDateGreaterOrEqual": "La date de fin doit être supérieure ou égale à la date de début",
+    "advertisementCreated": "Publicité créée avec succès."
   },
   "userChat": {
     "chat": "Chat",
@@ -907,8 +987,8 @@
     "actionItemCategory": "Catégorie d'élément d'action",
     "selectActionItemCategory": "Sélectionnez une catégorie d'élément d'action",
     "selectAssignee": "Sélectionnez un responsable",
-    "preCompletionNotes": "Notes préalables à l'achèvement",
-    "postCompletionNotes": "Notes post-achèvement",
+    "preCompletionNotes": "Remarques",
+    "postCompletionNotes": "Notes d'achèvement",
     "actionItemDetails": "Détails de l'action",
     "dueDate": "Date d'échéance",
     "completionDate": "Date d'achèvement",
@@ -919,6 +999,43 @@
     "successfulCreation": "Élément d'action créé avec succès",
     "successfulUpdation": "Élément d'action mis à jour avec succès",
     "notes": "Remarques",
+    "assignee": "Cessionnaire",
+    "assigner": "Assigner",
+    "assignmentDate": "Date d'affectation",
+    "status": "Statut",
+    "actionItemActive": "Actif",
+    "actionItemStatus": "Statut de l'action",
+    "actionItemCompleted": "Élément d'action terminé",
+    "markCompletion": "Marquer l'achèvement",
     "save": "Sauvegarder"
+  },
+  "checkIn": {
+    "errorCheckingIn": "Erreur lors de l'enregistrement",
+    "checkedInSuccessfully": "Enregistrement réussi"
+  },
+  "eventRegistrantsModal": {
+    "errorAddingAttendee": "Erreur lors de l'ajout du participant",
+    "errorRemovingAttendee": "Erreur lors de la suppression du participant"
+  },
+  "userCampaigns": {
+    "title": "Campagnes de financement",
+    "searchByName": "Rechercher par nom...",
+    "searchBy": "Rechercher par",
+    "pledgers": "Contributeurs",
+    "campaigns": "Campagnes",
+    "myPledges": "Mes Promesses",
+    "lowestAmount": "Montant le plus bas",
+    "highestAmount": "Montant le plus élevé",
+    "lowestGoal": "Objectif le plus bas",
+    "highestGoal": "Objectif le plus élevé",
+    "latestEndDate": "Date de fin la plus tardive",
+    "earliestEndDate": "Date de fin la plus proche",
+    "addPledge": "Ajouter une promesse",
+    "viewPledges": "Voir les promesses",
+    "noPledges": "Aucune promesse trouvée",
+    "noCampaigns": "Aucune campagne trouvée"
+  },
+  "userPledges": {
+    "title": "Mes Promesses"
   }
 }

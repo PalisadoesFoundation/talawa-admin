@@ -1,77 +1,128 @@
-/*eslint-disable*/
-import { useMutation, useQuery } from '@apollo/client';
-import { Search, WarningAmberRounded } from '@mui/icons-material';
+import { useQuery } from '@apollo/client';
+import { Search, Sort, WarningAmberRounded } from '@mui/icons-material';
+import { Stack } from '@mui/material';
 import {
-  CREATE_FUND_MUTATION,
-  REMOVE_FUND_MUTATION,
-  UPDATE_FUND_MUTATION,
-} from 'GraphQl/Mutations/FundMutation';
-import Loader from 'components/Loader/Loader';
-import { useState, type ChangeEvent } from 'react';
-import { Button, Col, Dropdown, Form, Row } from 'react-bootstrap';
+  DataGrid,
+  type GridCellParams,
+  type GridColDef,
+} from '@mui/x-data-grid';
+import { Button, Dropdown, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import type {
-  InterfaceCreateFund,
-  InterfaceFundInfo,
-  InterfaceQueryOrganizationFunds,
-} from 'utils/interfaces';
-import FundCreateModal from './FundCreateModal';
-import FundUpdateModal from './FundUpdateModal';
-import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
-import styles from './OrganizationFunds.module.css';
-import {
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  styled,
-  tableCellClasses,
-} from '@mui/material';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import React, { useCallback, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
+import Loader from 'components/Loader/Loader';
+import FundModal from './FundModal';
+import FundDeleteModal from './FundDeleteModal';
 import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
+import styles from './OrganizationFunds.module.css';
+import type { InterfaceFundInfo } from 'utils/interfaces';
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: ['#31bb6b', '!important'],
-    color: theme.palette.common.white,
+const dataGridStyle = {
+  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
+    outline: 'none !important',
   },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
+  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
+    outline: 'none',
   },
-}));
+  '& .MuiDataGrid-row:hover': {
+    backgroundColor: 'transparent',
+  },
+  '& .MuiDataGrid-row.Mui-hovered': {
+    backgroundColor: 'transparent',
+  },
+  '& .MuiDataGrid-root': {
+    borderRadius: '0.5rem',
+  },
+  '& .MuiDataGrid-main': {
+    borderRadius: '0.5rem',
+  },
+};
 
-const StyledTableRow = styled(TableRow)(() => ({
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
-}));
-
+enum ModalState {
+  SAME = 'same',
+  DELETE = 'delete',
+}
+/**
+ * `organizationFunds` component displays a list of funds for a specific organization,
+ * allowing users to search, sort, view, edit, and delete funds.
+ *
+ * This component utilizes the `DataGrid` from Material-UI to present the list of funds in a tabular format,
+ * and includes functionality for filtering and sorting. It also handles the opening and closing of modals
+ * for creating, editing, and deleting funds.
+ *
+ * It includes:
+ * - A search input field to filter funds by name.
+ * - A dropdown menu to sort funds by creation date.
+ * - A button to create a new fund.
+ * - A table to display the list of funds with columns for fund details and actions.
+ * - Modals for creating, editing, and deleting funds.
+ *
+ * ### GraphQL Queries
+ * - `FUND_LIST`: Fetches a list of funds for the given organization, filtered and sorted based on the provided parameters.
+ *
+ * ### Props
+ * - `orgId`: The ID of the organization whose funds are being managed.
+ *
+ * ### State
+ * - `fund`: The currently selected fund for editing or deletion.
+ * - `searchTerm`: The current search term used for filtering funds.
+ * - `sortBy`: The current sorting order for funds.
+ * - `modalState`: The state of the modals (edit/create or delete).
+ * - `fundModalMode`: The mode of the fund modal (edit or create).
+ *
+ * ### Methods
+ * - `openModal(modal: ModalState)`: Opens the specified modal.
+ * - `closeModal(modal: ModalState)`: Closes the specified modal.
+ * - `handleOpenModal(fund: InterfaceFundInfo | null, mode: 'edit' | 'create')`: Opens the fund modal with the given fund and mode.
+ * - `handleDeleteClick(fund: InterfaceFundInfo)`: Opens the delete modal for the specified fund.
+ * - `handleClick(fundId: string)`: Navigates to the campaign page for the specified fund.
+ *
+ * @returns The rendered component.
+ */
 const organizationFunds = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'funds',
   });
   const { t: tCommon } = useTranslation('common');
 
-  const { orgId: currentUrl } = useParams();
+  const { orgId } = useParams();
   const navigate = useNavigate();
-  const [fundCreateModalIsOpen, setFundCreateModalIsOpen] =
-    useState<boolean>(false);
-  const [fundUpdateModalIsOpen, setFundUpdateModalIsOpen] =
-    useState<boolean>(false);
 
-  const [taxDeductible, setTaxDeductible] = useState<boolean>(true);
-  const [isArchived, setIsArchived] = useState<boolean>(false);
-  const [isDefault, setIsDefault] = useState<boolean>(false);
+  if (!orgId) {
+    return <Navigate to={'/'} replace />;
+  }
+
   const [fund, setFund] = useState<InterfaceFundInfo | null>(null);
-  const [formState, setFormState] = useState<InterfaceCreateFund>({
-    fundName: '',
-    fundRef: '',
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [sortBy, setSortBy] = useState<'createdAt_ASC' | 'createdAt_DESC'>(
+    'createdAt_DESC',
+  );
+
+  const [modalState, setModalState] = useState<{
+    [key in ModalState]: boolean;
+  }>({
+    [ModalState.SAME]: false,
+    [ModalState.DELETE]: false,
   });
+  const [fundModalMode, setFundModalMode] = useState<'edit' | 'create'>(
+    'create',
+  );
+
+  const openModal = (modal: ModalState): void =>
+    setModalState((prevState) => ({ ...prevState, [modal]: true }));
+
+  const closeModal = (modal: ModalState): void =>
+    setModalState((prevState) => ({ ...prevState, [modal]: false }));
+
+  const handleOpenModal = useCallback(
+    (fund: InterfaceFundInfo | null, mode: 'edit' | 'create'): void => {
+      setFund(fund);
+      setFundModalMode(mode);
+      openModal(ModalState.SAME);
+    },
+    [openModal],
+  );
 
   const {
     data: fundData,
@@ -80,144 +131,31 @@ const organizationFunds = (): JSX.Element => {
     refetch: refetchFunds,
   }: {
     data?: {
-      fundsByOrganization: InterfaceQueryOrganizationFunds[];
+      fundsByOrganization: InterfaceFundInfo[];
     };
     loading: boolean;
     error?: Error | undefined;
-    refetch: any;
+    refetch: () => void;
   } = useQuery(FUND_LIST, {
     variables: {
-      organizationId: currentUrl,
+      organizationId: orgId,
+      filter: searchTerm,
+      orderBy: sortBy,
     },
   });
 
-  const [fullName, setFullName] = useState('');
-  const handleSearch = (): void => {
-    refetchFunds({ organizationId: currentUrl, filter: fullName });
-  };
+  const handleDeleteClick = useCallback(
+    (fund: InterfaceFundInfo): void => {
+      setFund(fund);
+      openModal(ModalState.DELETE);
+    },
+    [openModal],
+  );
 
-  const [createFund] = useMutation(CREATE_FUND_MUTATION);
-  const [updateFund] = useMutation(UPDATE_FUND_MUTATION);
-  const [deleteFund] = useMutation(REMOVE_FUND_MUTATION);
+  const funds = useMemo(() => fundData?.fundsByOrganization ?? [], [fundData]);
 
-  const showCreateModal = (): void => {
-    setFundCreateModalIsOpen(!fundCreateModalIsOpen);
-  };
-  const hideCreateModal = (): void => {
-    setFundCreateModalIsOpen(!fundCreateModalIsOpen);
-  };
-  const showUpdateModal = (): void => {
-    setFundUpdateModalIsOpen(!fundUpdateModalIsOpen);
-  };
-  const hideUpdateModal = (): void => {
-    setFundUpdateModalIsOpen(!fundUpdateModalIsOpen);
-  };
-  const toggleDeleteModal = (): void => {
-    setFundUpdateModalIsOpen(!fundUpdateModalIsOpen);
-  };
-  const handleEditClick = (fund: InterfaceFundInfo): void => {
-    setFormState({
-      fundName: fund.name,
-      fundRef: fund.refrenceNumber,
-    });
-    setTaxDeductible(fund.taxDeductible);
-    setIsArchived(fund.isArchived);
-    setIsDefault(fund.isDefault);
-    setFund(fund);
-    showUpdateModal();
-  };
-  const createFundHandler = async (
-    e: ChangeEvent<HTMLFormElement>,
-  ): Promise<void> => {
-    e.preventDefault();
-    try {
-      await createFund({
-        variables: {
-          name: formState.fundName,
-          refrenceNumber: formState.fundRef,
-          organizationId: currentUrl,
-          taxDeductible: taxDeductible,
-          isArchived: isArchived,
-          isDefault: isDefault,
-        },
-      });
-
-      setFormState({
-        fundName: '',
-        fundRef: '',
-      });
-      toast.success(t('fundCreated'));
-      refetchFunds();
-      hideCreateModal();
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-        console.log(error.message);
-      }
-    }
-  };
-  const updateFundHandler = async (
-    e: ChangeEvent<HTMLFormElement>,
-  ): Promise<void> => {
-    e.preventDefault();
-    try {
-      const updatedFields: { [key: string]: any } = {};
-      if (formState.fundName != fund?.name) {
-        updatedFields.name = formState.fundName;
-      }
-      if (formState.fundRef != fund?.refrenceNumber) {
-        updatedFields.refrenceNumber = formState.fundRef;
-      }
-      if (taxDeductible != fund?.taxDeductible) {
-        updatedFields.taxDeductible = taxDeductible;
-      }
-      if (isArchived != fund?.isArchived) {
-        updatedFields.isArchived = isArchived;
-      }
-      if (isDefault != fund?.isDefault) {
-        updatedFields.isDefault = isDefault;
-      }
-
-      await updateFund({
-        variables: {
-          id: fund?._id,
-          ...updatedFields,
-        },
-      });
-      setFormState({
-        fundName: '',
-        fundRef: '',
-      });
-      refetchFunds();
-      hideUpdateModal();
-      toast.success(t('fundUpdated'));
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-        console.log(error.message);
-      }
-    }
-  };
-  const deleteFundHandler = async (): Promise<void> => {
-    try {
-      await deleteFund({
-        variables: {
-          id: fund?._id,
-        },
-      });
-      refetchFunds();
-      toggleDeleteModal();
-      toast.success(t('fundDeleted'));
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-        console.log(error.message);
-      }
-    }
-  };
-
-  const handleClick = (fundId: String) => {
-    navigate(`/orgfundcampaign/${currentUrl}/${fundId}`);
+  const handleClick = (fundId: string): void => {
+    navigate(`/orgfundcampaign/${orgId}/${fundId}`);
   };
 
   if (fundLoading) {
@@ -238,187 +176,250 @@ const organizationFunds = (): JSX.Element => {
     );
   }
 
+  const columns: GridColDef[] = [
+    {
+      field: 'id',
+      headerName: 'Sr. No.',
+      flex: 1,
+      minWidth: 100,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      renderCell: (params: GridCellParams) => {
+        return <div>{params.row.id}</div>;
+      },
+    },
+    {
+      field: 'fundName',
+      headerName: 'Fund Name',
+      flex: 2,
+      align: 'center',
+      minWidth: 100,
+      headerAlign: 'center',
+      sortable: false,
+      headerClassName: `${styles.tableHeader}`,
+      renderCell: (params: GridCellParams) => {
+        return (
+          <div
+            className="d-flex justify-content-center fw-bold"
+            data-testid="fundName"
+            onClick={() => handleClick(params.row._id as string)}
+          >
+            {params.row.name}
+          </div>
+        );
+      },
+    },
+    {
+      field: 'createdBy',
+      headerName: 'Created By',
+      flex: 2,
+      align: 'center',
+      minWidth: 100,
+      headerAlign: 'center',
+      sortable: false,
+      headerClassName: `${styles.tableHeader}`,
+      renderCell: (params: GridCellParams) => {
+        return params.row.creator.firstName + ' ' + params.row.creator.lastName;
+      },
+    },
+    {
+      field: 'createdOn',
+      headerName: 'Created On',
+      align: 'center',
+      minWidth: 100,
+      headerAlign: 'center',
+      sortable: false,
+      headerClassName: `${styles.tableHeader}`,
+      flex: 2,
+      renderCell: (params: GridCellParams) => {
+        return (
+          <div data-testid="createdOn">
+            {dayjs(params.row.createdAt).format('DD/MM/YYYY')}
+          </div>
+        );
+      },
+    },
+    {
+      field: 'status',
+      headerName: 'Status',
+      flex: 2,
+      align: 'center',
+      minWidth: 100,
+      headerAlign: 'center',
+      sortable: false,
+      headerClassName: `${styles.tableHeader}`,
+      renderCell: (params: GridCellParams) => {
+        return params.row.isArchived ? 'Archived' : 'Active';
+      },
+    },
+    {
+      field: 'action',
+      headerName: 'Action',
+      flex: 2,
+      align: 'center',
+      minWidth: 100,
+      headerAlign: 'center',
+      sortable: false,
+      headerClassName: `${styles.tableHeader}`,
+      renderCell: (params: GridCellParams) => {
+        return (
+          <>
+            <Button
+              variant="success"
+              size="sm"
+              className="me-2 rounded"
+              data-testid="editFundBtn"
+              onClick={() =>
+                handleOpenModal(params.row as InterfaceFundInfo, 'edit')
+              }
+            >
+              <i className="fa fa-edit" />
+            </Button>
+            <Button
+              size="sm"
+              variant="danger"
+              className="rounded"
+              data-testid="deleteFundBtn"
+              onClick={() => handleDeleteClick(params.row as InterfaceFundInfo)}
+            >
+              <i className="fa fa-trash" />
+            </Button>
+          </>
+        );
+      },
+    },
+    {
+      field: 'assocCampaigns',
+      headerName: 'Associated Campaigns',
+      flex: 2,
+      align: 'center',
+      minWidth: 100,
+      headerAlign: 'center',
+      sortable: false,
+      headerClassName: `${styles.tableHeader}`,
+      renderCell: (params: GridCellParams) => {
+        return (
+          <Button
+            variant="outline-success"
+            size="sm"
+            className="rounded"
+            onClick={() => handleClick(params.row._id as string)}
+            data-testid="viewBtn"
+          >
+            <i className="fa fa-eye me-1" />
+            {t('viewCampaigns')}
+          </Button>
+        );
+      },
+    },
+  ];
+
   return (
-    <>
-      <Row>
-        <div className={styles.mainpageright}>
-          <div className={styles.btnsContainer}>
-            <div className={styles.input}>
-              <Form.Control
-                type="name"
-                placeholder={t('searchFullName')}
-                autoComplete="off"
-                required
-                className={styles.inputField}
-                value={fullName}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                  setFullName(e.target.value);
-                }}
-                data-testid="searchFullName"
-              />
-              <Button
-                className={`position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center `}
-                onClick={handleSearch}
-                data-testid="searchBtn"
-                style={{ marginBottom: '10px' }}
+    <div>
+      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
+        <div className={`${styles.input} mb-1`}>
+          <Form.Control
+            type="name"
+            placeholder={tCommon('searchByName')}
+            autoComplete="off"
+            required
+            className={styles.inputField}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            data-testid="searchByName"
+          />
+          <Button
+            tabIndex={-1}
+            className={`position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center`}
+            style={{ marginBottom: '9px' }}
+            data-testid="searchBtn"
+          >
+            <Search />
+          </Button>
+        </div>
+        <div className="d-flex gap-4 mb-1">
+          <div className="d-flex justify-space-between align-items-center">
+            <Dropdown>
+              <Dropdown.Toggle
+                variant="success"
+                id="dropdown-basic"
+                className={styles.dropdown}
+                data-testid="filter"
               >
-                <Search />
-              </Button>
-            </div>
-            <div className={styles.btnsBlock}>
-              <div className="d-flex justify-space-between">
-                <Dropdown>
-                  <Dropdown.Toggle
-                    variant="success"
-                    id="dropdown-basic"
-                    className={styles.dropdown}
-                    data-testid="filter"
-                  >
-                    <FilterAltOutlinedIcon className={'me-1'} />
-                    {tCommon('filter')}
-                  </Dropdown.Toggle>
-                </Dropdown>
-              </div>
-              <div>
-                <Button
-                  variant="success"
-                  onClick={showCreateModal}
-                  data-testid="createFundBtn"
-                  className={styles.createFundBtn}
+                <Sort className={'me-1'} />
+                {tCommon('sort')}
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item
+                  onClick={() => setSortBy('createdAt_DESC')}
+                  data-testid="createdAt_DESC"
                 >
-                  <i className={'fa fa-plus me-2'} />
-                  {t('createFund')}
-                </Button>
-              </div>
-            </div>
+                  {t('createdLatest')}
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => setSortBy('createdAt_ASC')}
+                  data-testid="createdAt_ASC"
+                >
+                  {t('createdEarliest')}
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
+          <div>
+            <Button
+              variant="success"
+              onClick={() => handleOpenModal(null, 'create')}
+              style={{ marginTop: '11px' }}
+              data-testid="createFundBtn"
+            >
+              <i className={'fa fa-plus me-2'} />
+              {t('createFund')}
+            </Button>
           </div>
         </div>
-      </Row>
-      <div className={styles.mainpageright}>
-        <div className={`${styles.list_box}  bg-white rounded-4 my-3`}>
-          {fundData?.fundsByOrganization &&
-          fundData.fundsByOrganization.length > 0 ? (
-            <div className={styles.list_box} data-testid="orgFunds">
-              <TableContainer component={Paper} sx={{ minWidth: '820px' }}>
-                <Table aria-label="customized table">
-                  <TableHead>
-                    <TableRow>
-                      <StyledTableCell>#</StyledTableCell>
-                      <StyledTableCell align="center">
-                        {t('fundName')}
-                      </StyledTableCell>
-                      <StyledTableCell align="center">
-                        {t('createdBy')}
-                      </StyledTableCell>
-                      <StyledTableCell align="center">
-                        {t('createdOn')}
-                      </StyledTableCell>
-                      <StyledTableCell align="center">
-                        {t('status')}
-                      </StyledTableCell>
-                      <StyledTableCell align="center">
-                        {t('manageFund')}
-                      </StyledTableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {fundData.fundsByOrganization.map(
-                      (fund: any, index: number) => (
-                        <StyledTableRow key={fund._id}>
-                          <StyledTableCell component="th" scope="row">
-                            {index + 1}
-                          </StyledTableCell>
-                          <StyledTableCell
-                            align="center"
-                            data-testid="fundName"
-                            onClick={() => handleClick(fund._id)}
-                          >
-                            <span
-                              style={{
-                                color: 'rgba(23, 120, 242, 1)',
-                                cursor: 'pointer',
-                              }}
-                            >
-                              {fund.name}
-                            </span>
-                          </StyledTableCell>
-                          <StyledTableCell
-                            align="center"
-                            data-testid="fundCreatedBy"
-                          >
-                            {fund.creator.firstName} {fund.creator.lastName}
-                          </StyledTableCell>
-                          <StyledTableCell
-                            align="center"
-                            data-testid="fundCreatedAt"
-                          >
-                            {dayjs(fund.createdAt).format('DD/MM/YYYY')}
-                          </StyledTableCell>
-                          <StyledTableCell align="center">
-                            <Button
-                              variant="outline-success"
-                              disabled={true}
-                              data-testid="fundtype"
-                            >
-                              {fund.isArchived
-                                ? t('archived')
-                                : t('nonArchive')}
-                            </Button>
-                          </StyledTableCell>
-                          <StyledTableCell align="center">
-                            <Button
-                              variant="success"
-                              data-testid="editFundBtn"
-                              onClick={() => handleEditClick(fund)}
-                            >
-                              {tCommon('manage')}
-                            </Button>
-                          </StyledTableCell>
-                        </StyledTableRow>
-                      ),
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </div>
-          ) : (
-            <div>
-              <h6 className="text-center text-danger">{t('noFundsFound')}</h6>
-            </div>
-          )}
-        </div>
-        {/* <FundCreateModal*/}
-        <FundCreateModal
-          fundCreateModalIsOpen={fundCreateModalIsOpen}
-          hideCreateModal={hideCreateModal}
-          formState={formState}
-          setFormState={setFormState}
-          createFundHandler={createFundHandler}
-          taxDeductible={taxDeductible}
-          setTaxDeductible={setTaxDeductible}
-          isDefault={isDefault}
-          setIsDefault={setIsDefault}
-          t={t}
-        />
-
-        {/* <FundUpdateModal*/}
-        <FundUpdateModal
-          fundUpdateModalIsOpen={fundUpdateModalIsOpen}
-          hideUpdateModal={hideUpdateModal}
-          formState={formState}
-          setFormState={setFormState}
-          updateFundHandler={updateFundHandler}
-          taxDeductible={taxDeductible}
-          setTaxDeductible={setTaxDeductible}
-          isArchived={isArchived}
-          deleteFundHandler={deleteFundHandler}
-          setIsArchived={setIsArchived}
-          isDefault={isDefault}
-          setIsDefault={setIsDefault}
-          t={t}
-        />
       </div>
-    </>
+
+      <DataGrid
+        disableColumnMenu
+        columnBufferPx={7}
+        hideFooter={true}
+        getRowId={(row) => row._id}
+        slots={{
+          noRowsOverlay: () => (
+            <Stack height="100%" alignItems="center" justifyContent="center">
+              {t('noFundsFound')}
+            </Stack>
+          ),
+        }}
+        sx={dataGridStyle}
+        getRowClassName={() => `${styles.rowBackground}`}
+        autoHeight
+        rowHeight={65}
+        rows={funds.map((fund, index) => ({
+          id: index + 1,
+          ...fund,
+        }))}
+        columns={columns}
+        isRowSelectable={() => false}
+      />
+      <FundModal
+        isOpen={modalState[ModalState.SAME]}
+        hide={() => closeModal(ModalState.SAME)}
+        refetchFunds={refetchFunds}
+        fund={fund}
+        orgId={orgId}
+        mode={fundModalMode}
+      />
+
+      <FundDeleteModal
+        isOpen={modalState[ModalState.DELETE]}
+        hide={() => closeModal(ModalState.DELETE)}
+        fund={fund}
+        refetchFunds={refetchFunds}
+      />
+    </div>
   );
 };
 

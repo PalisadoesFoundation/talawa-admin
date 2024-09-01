@@ -20,6 +20,23 @@ interface InterfaceStartPostModalProps {
   img: string | null;
 }
 
+/**
+ * A modal component for creating a new post.
+ *
+ * This modal includes:
+ * - A form where users can input the content of the post.
+ * - A preview of the image if provided.
+ * - User's profile image and name displayed in the modal header.
+ *
+ * @param show - Whether the modal is visible.
+ * @param onHide - Function to call when the modal is hidden.
+ * @param fetchPosts - Function to refresh the posts after creating a new one.
+ * @param userData - User data to display in the modal header.
+ * @param organizationId - The ID of the organization for the post.
+ * @param img - The URL of the image to be included in the post.
+ *
+ * @returns JSX.Element - The rendered modal component.
+ */
 const startPostModal = ({
   show,
   onHide,
@@ -28,20 +45,36 @@ const startPostModal = ({
   organizationId,
   img,
 }: InterfaceStartPostModalProps): JSX.Element => {
+  // Translation hook for internationalization
   const { t } = useTranslation('translation', { keyPrefix: 'home' });
+
+  // State to manage the content of the post
   const [postContent, setPostContent] = useState<string>('');
 
+  // Mutation hook for creating a new post
   const [createPost] = useMutation(CREATE_POST_MUTATION);
 
+  /**
+   * Updates the state with the content of the post as the user types.
+   *
+   * @param e - Change event from the textarea input.
+   */
   const handlePostInput = (e: ChangeEvent<HTMLInputElement>): void => {
     setPostContent(e.target.value);
   };
 
+  /**
+   * Hides the modal and clears the post content.
+   */
   const handleHide = (): void => {
     setPostContent('');
     onHide();
   };
 
+  /**
+   * Handles the creation of a new post by calling the mutation.
+   * Displays a toast notification based on the outcome.
+   */
   const handlePost = async (): Promise<void> => {
     try {
       if (!postContent) {
@@ -60,7 +93,7 @@ const startPostModal = ({
       /* istanbul ignore next */
       if (data) {
         toast.dismiss();
-        toast.success('Your post is now visible in the feed.');
+        toast.success(t('postNowVisibleInFeed'));
         fetchPosts();
         handleHide();
       }

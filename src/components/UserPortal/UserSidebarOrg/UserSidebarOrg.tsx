@@ -21,18 +21,39 @@ export interface InterfaceUserSidebarOrgProps {
   setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
+/**
+ * Sidebar component for user navigation within an organization.
+ *
+ * Provides:
+ * - Branding with the Talawa logo.
+ * - Displays the current organization's details.
+ * - Navigation options with links and collapsible dropdowns.
+ *
+ * @param orgId - ID of the current organization.
+ * @param targets - List of navigation targets.
+ * @param hideDrawer - Boolean indicating if the sidebar should be hidden or shown.
+ * @param setHideDrawer - Function to update the `hideDrawer` state.
+ *
+ * @returns JSX.Element - The rendered sidebar component.
+ */
 const UserSidebarOrg = ({
   targets,
   orgId,
   hideDrawer,
   setHideDrawer,
 }: InterfaceUserSidebarOrgProps): JSX.Element => {
+  // Translation hook for internationalization
   const { t } = useTranslation('translation', { keyPrefix: 'userSidebarOrg' });
   const { t: tCommon } = useTranslation('common');
+
+  // State for managing dropdown visibility
   const [showDropdown, setShowDropdown] = React.useState(false);
 
+  // State for organization data
   const [organization, setOrganization] =
     useState<InterfaceQueryOrganizationsListObject>();
+
+  // Query to fetch organization data
   const {
     data,
     loading,
@@ -44,18 +65,22 @@ const UserSidebarOrg = ({
   } = useQuery(ORGANIZATIONS_LIST, {
     variables: { id: orgId },
   });
-  // Set organization data
+
+  // Set organization data once the query is complete
   useEffect(() => {
     let isMounted = true;
     if (data && isMounted) {
       setOrganization(data?.organizations[0]);
-      console.log(targets, 'targets');
     }
     return () => {
       isMounted = false;
     };
   }, [data]);
 
+  /**
+   * Handles click events on navigation links.
+   * Closes the sidebar if the viewport width is 820px or less.
+   */
   const handleLinkClick = (): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer(true);
@@ -150,7 +175,7 @@ const UserSidebarOrg = ({
                         }
                       />
                     </div>
-                    {name}
+                    {tCommon(name)}
                   </Button>
                 )}
               </NavLink>

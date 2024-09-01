@@ -33,6 +33,7 @@ const MOCKS = [
           _id: '123',
           firstName: 'John',
           lastName: 'Doe',
+          createdAt: '2023-04-13T04:53:17.742+00:00',
           image: 'john.jpg',
           email: 'johndoe@gmail.com',
           birthDate: '1990-01-01',

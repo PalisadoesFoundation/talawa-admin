@@ -5,11 +5,10 @@ import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import styles from './EventActionItems.module.css';
 import { DataGrid } from '@mui/x-data-grid';
-import type { GridColDef, GridCellParams } from '@mui/x-data-grid';
+import type { GridCellParams } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
 import Modal from 'react-bootstrap/Modal';
 import {
@@ -19,6 +18,7 @@ import {
 } from 'GraphQl/Mutations/ActionItemMutations';
 import type {
   InterfaceActionItemCategoryList,
+  InterfaceActionItemInfo,
   InterfaceMembersList,
 } from 'utils/interfaces';
 import { DatePicker } from '@mui/x-date-pickers';
@@ -27,6 +27,9 @@ import {
   MEMBERS_LIST,
 } from 'GraphQl/Queries/Queries';
 import { ACTION_ITEM_LIST_BY_EVENTS } from 'GraphQl/Queries/ActionItemQueries';
+import { useEventActionColumnConfig } from './useEventActionColumnConfig';
+import ActionItemPreviewModal from 'screens/OrganizationActionItems/ActionItemPreviewModal';
+import ActionItemDeleteModal from 'screens/OrganizationActionItems/ActionItemDeleteModal';
 
 function eventActionItems(props: { eventId: string }): JSX.Element {
   const { eventId } = props;
@@ -35,6 +38,11 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
   });
   const { t: tCommon } = useTranslation('common');
 
+  const [actionItemPreviewModalIsOpen, setActionItemPreviewModalIsOpen] =
+    useState(false);
+  const [actionItemStatusModal, setActionItemStatusModal] = useState(false);
+  const [isActionItemCompleted, setIsActionItemCompleted] = useState(false);
+  const [assignmentDate, setAssignmentDate] = useState<Date | null>(new Date());
   const [actionItemCreateModalIsOpen, setActionItemCreateModalIsOpen] =
     useState(false);
   const [actionItemUpdateModalIsOpen, setActionItemUpdateModalIsOpen] =
@@ -73,6 +81,21 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
   };
   const toggleDeleteModal = (): void => {
     setActionItemDeleteModalIsOpen(!actionItemDeleteModalIsOpen);
+  };
+  const setActionItemState = (actionItem: InterfaceActionItemInfo): void => {
+    setFormState((prevState) => ({
+      ...prevState,
+      assignee: `${actionItem.assignee.firstName} ${actionItem.assignee.lastName}`,
+      assigner: `${actionItem.assigner.firstName} ${actionItem.assigner.lastName}`,
+      assigneeId: actionItem.assignee._id,
+      preCompletionNotes: actionItem.preCompletionNotes,
+      postCompletionNotes: actionItem.postCompletionNotes,
+      isCompleted: actionItem.isCompleted,
+    }));
+    setActionItemId(actionItem._id);
+    setDueDate(actionItem.dueDate);
+    setAssignmentDate(actionItem.assignmentDate);
+    setCompletionDate(actionItem.completionDate);
   };
   const {
     data: actionItemCategoriesData,
@@ -164,6 +187,7 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
       });
       actionItemsRefetch();
       hideUpdateModal();
+      hideActionItemStatusModal();
       toast.success(t('successfulUpdation'));
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -173,116 +197,60 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
   };
   const [removeActionItem] = useMutation(DELETE_ACTION_ITEM_MUTATION);
   const deleteActionItemHandler = async (): Promise<void> => {
-    await removeActionItem({
-      variables: {
-        actionItemId,
-      },
-    });
-    actionItemsRefetch();
-    toggleDeleteModal();
-    hideUpdateModal();
-    toast.success(t('successfulDeletion'));
+    try {
+      await removeActionItem({
+        variables: {
+          actionItemId,
+        },
+      });
+      actionItemsRefetch();
+      toggleDeleteModal();
+      hidePreviewModal();
+      toast.success(t('successfulDeletion'));
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+        console.log(error.message);
+      }
+    }
   };
-  const columns: GridColDef[] = [
-    {
-      field: 'serialNo',
-      headerName: '#',
-      flex: 1,
-      minWidth: 50,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return params.row?.index;
-      },
-    },
-    {
-      field: 'assignee',
-      headerName: 'Assignee',
-      flex: 2,
-      minWidth: 150,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <Link
-            to={`/member/${eventId}`}
-            state={{ id: params.row._id }}
-            className={styles.membername}
-          >
-            {params.row?.assignee.firstName +
-              ' ' +
-              params.row?.assignee.lastName}
-          </Link>
-        );
-      },
-    },
-    {
-      field: 'actionItemCategory',
-      headerName: 'Action Item Category',
-      flex: 2,
-      minWidth: 100,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return params.row.actionItemCategory.name;
-      },
-    },
-    {
-      field: 'notes',
-      headerName: 'Notes',
-      minWidth: 150,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      flex: 2,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return params.row.preCompletionNotes;
-      },
-    },
-    {
-      field: 'completionNotes',
-      headerName: 'Completion Notes',
-      minWidth: 150,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      flex: 2,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return params.row.postCompletionNotes;
-      },
-    },
-    {
-      field: 'options',
-      headerName: 'Options',
-      flex: 2,
-      minWidth: 100,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <Button
-            onClick={() => {
-              showUpdateModal();
-              setActionItemId(params.row._id);
-            }}
-            data-testid="updateAdminModalBtn"
-          >
-            Manage Actions
-          </Button>
-        );
-      },
-    },
-  ];
+
+  const handleActionItemStatusChange = (
+    actionItem: InterfaceActionItemInfo,
+  ): void => {
+    actionItem = { ...actionItem, isCompleted: !actionItem.isCompleted };
+    setIsActionItemCompleted(!actionItem.isCompleted);
+    setActionItemState(actionItem);
+    setActionItemStatusModal(true);
+  };
+
+  const showPreviewModal = (actionItem: InterfaceActionItemInfo): void => {
+    setActionItemState(actionItem);
+    setActionItemPreviewModalIsOpen(true);
+  };
+
+  const handleEditClick = (actionItem: InterfaceActionItemInfo): void => {
+    setActionItemId(actionItem._id);
+    setActionItemState(actionItem);
+    showUpdateModal();
+  };
+
+  const hidePreviewModal = (): void => {
+    setActionItemPreviewModalIsOpen(false);
+  };
+
+  const hideActionItemStatusModal = (): void => {
+    setActionItemStatusModal(false);
+    setActionItemUpdateModalIsOpen(false);
+  };
+
+  const { columns } = useEventActionColumnConfig({
+    eventId,
+    handleActionItemStatusChange,
+    showPreviewModal,
+    handleEditClick,
+  });
+
   return (
     <>
       <Button
@@ -292,8 +260,10 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
         data-testid="createEventActionItemBtn"
         onClick={showCreateModal}
       >
-        {t('createActionItem')}
+        <i className={'fa fa-plus me-2'} />
+        {tCommon('create')}
       </Button>
+      <hr />
       {/* create action item modal */}
       <Modal
         className={styles.actionItemModal}
@@ -413,12 +383,12 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
               <Form.Label>Assignee</Form.Label>
               <Form.Select
                 data-testid="formUpdateAssignee"
-                defaultValue={formState.assignee}
+                defaultValue={formState.assigneeId}
                 onChange={(e) =>
                   setFormState({ ...formState, assigneeId: e.target.value })
                 }
               >
-                <option value="" disabled>
+                <option value={formState.assigneeId} disabled>
                   {formState.assignee}
                 </option>
                 {membersData?.organizations[0].members.map((member, index) => {
@@ -447,24 +417,6 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
                 });
               }}
             />
-            <label htmlFor="actionItemPostCompletionNotes">
-              {t('postCompletionNotes')}
-            </label>
-            <Form.Control
-              type="actionItemPostCompletionNotes"
-              id="actionItemPostCompletionNotes"
-              placeholder={t('postCompletionNotes')}
-              autoComplete="off"
-              value={formState.postCompletionNotes || ''}
-              onChange={(e): void => {
-                setFormState({
-                  ...formState,
-                  postCompletionNotes: e.target.value,
-                });
-              }}
-              className="mb-2"
-            />
-            <br></br>
             <div className={styles.datediv}>
               <DatePicker
                 className={styles.datebox}
@@ -481,81 +433,125 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
                 className={styles.datebox}
                 value={dayjs(completionDate)}
                 label={t('completionDate')}
-                onChange={(date: Dayjs | null): void => {
-                  if (date) {
-                    setCompletionDate(date?.toDate());
+                onChange={
+                  /* istanbul ignore next */ (date: Dayjs | null): void => {
+                    /* istanbul ignore next */
+                    if (date) {
+                      setCompletionDate(date?.toDate());
+                    }
                   }
-                }}
+                }
               />
             </div>
-            <br></br>
-            <div className={styles.editDelBtns}>
+            <div>
               <Button
                 type="submit"
                 value="editActionItem"
                 data-testid="updateActionItemFormSubmitBtn"
+                className={styles.editDelBtns}
               >
-                {t('save')}
-              </Button>
-
-              <Button
-                value="deleteActionItem"
-                data-testid="deleteActionItemBtn"
-                className="btn btn-danger"
-                onClick={toggleDeleteModal}
-              >
-                {t('deleteActionItem')}
+                {t('editActionItem')}
               </Button>
             </div>
           </Form>
         </Modal.Body>
       </Modal>
-      {/* delete modal */}
+
+      {/* preview modal */}
+      <ActionItemPreviewModal
+        actionItemPreviewModalIsOpen={actionItemPreviewModalIsOpen}
+        hidePreviewModal={hidePreviewModal}
+        showUpdateModal={showUpdateModal}
+        toggleDeleteModal={toggleDeleteModal}
+        formState={formState}
+        t={t}
+        dueDate={dueDate}
+        completionDate={completionDate}
+        assignmentDate={assignmentDate}
+      />
+
+      {/* Delete Modal */}
+      <ActionItemDeleteModal
+        actionItemDeleteModalIsOpen={actionItemDeleteModalIsOpen}
+        deleteActionItemHandler={deleteActionItemHandler}
+        toggleDeleteModal={toggleDeleteModal}
+        t={t}
+        tCommon={tCommon}
+      />
+
+      {/* action item status change modal */}
       <Modal
-        size="sm"
-        id={`deleteActionItemModal`}
-        show={actionItemDeleteModalIsOpen}
-        onHide={toggleDeleteModal}
-        backdrop="static"
-        keyboard={false}
-        className={styles.actionItemModal}
+        className={styles.createModal}
+        show={actionItemStatusModal}
+        onHide={hideActionItemStatusModal}
       >
-        <Modal.Header closeButton className="bg-primary">
-          <Modal.Title className="text-white" id={`deleteActionItem`}>
-            {t('deleteActionItem')}
-          </Modal.Title>
+        <Modal.Header>
+          <p className={`${styles.titlemodal}`}>{t('actionItemStatus')}</p>
+          <Button
+            variant="danger"
+            onClick={hideActionItemStatusModal}
+            data-testid="actionItemStatusChangeModalCloseBtn"
+          >
+            <i className="fa fa-times"></i>
+          </Button>
         </Modal.Header>
-        <Modal.Body>{t('deleteActionItemMsg')}</Modal.Body>
-        <Modal.Footer>
-          <Button
-            type="button"
-            className="btn btn-danger"
-            data-dismiss="modal"
-            onClick={toggleDeleteModal}
-            data-testid="actionItemDeleteModalCloseBtn"
-          >
-            {tCommon('no')}
-          </Button>
-          <Button
-            type="button"
-            className="btn btn-success"
-            onClick={deleteActionItemHandler}
-            data-testid="deleteActionItemBtn"
-          >
-            {tCommon('yes')}
-          </Button>
-        </Modal.Footer>
+        <Modal.Body>
+          <Form onSubmitCapture={updateActionItemHandler}>
+            <Form.Label
+              className="ms-1 fs-6 mt-2 mb-0"
+              htmlFor="actionItemCategoryName"
+            >
+              {isActionItemCompleted
+                ? t('preCompletionNotes')
+                : t('postCompletionNotes')}
+            </Form.Label>
+            <Form.Control
+              type="title"
+              id="actionItemsStatusChangeNotes"
+              data-testid="actionItemsStatusChangeNotes"
+              placeholder={t('actionItemCompleted')}
+              autoComplete="off"
+              required
+              value={
+                isActionItemCompleted
+                  ? formState.preCompletionNotes
+                  : formState.postCompletionNotes ?? ''
+              }
+              onChange={(e): void => {
+                if (isActionItemCompleted) {
+                  setFormState({
+                    ...formState,
+                    preCompletionNotes: e.target.value,
+                  });
+                } else {
+                  setFormState({
+                    ...formState,
+                    postCompletionNotes: e.target.value,
+                  });
+                }
+              }}
+            />
+            <Button
+              type="submit"
+              className={styles.editDelBtns}
+              value="actionItemStatusChange"
+              data-testid="actionItemStatusChangeSubmitBtn"
+            >
+              {isActionItemCompleted ? t('makeActive') : t('markCompletion')}
+            </Button>
+          </Form>
+        </Modal.Body>
       </Modal>
       {actionItemsData && (
         <div className="datatable">
           <DataGrid
             disableColumnMenu
-            columnBuffer={6}
+            columnBufferPx={6}
             hideFooter={true}
             className={`${styles.datagrid}`}
             getRowId={(row) => row._id}
-            components={{
-              NoRowsOverlay: () => (
+            slots={{
+              noRowsOverlay: () => (
                 <Stack
                   height="100%"
                   alignItems="center"
@@ -578,10 +574,14 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
               '& .MuiDataGrid-row.Mui-hovered': {
                 backgroundColor: 'transparent',
               },
+              '& .MuiDataGrid-columnHeaderTitle': {
+                fontWeight: 700,
+              },
             }}
             getRowClassName={() => `${styles.rowBackground}`}
             autoHeight
-            rowHeight={70}
+            rowHeight={50}
+            columnHeaderHeight={40}
             rows={actionItemsData?.actionItemsByEvent?.map(
               (item: object, index: number) => ({
                 ...item,

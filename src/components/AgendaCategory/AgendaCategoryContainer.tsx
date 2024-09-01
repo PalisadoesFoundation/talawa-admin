@@ -16,6 +16,21 @@ import AgendaCategoryDeleteModal from 'screens/OrganizationAgendaCategory/Agenda
 import AgendaCategoryPreviewModal from 'screens/OrganizationAgendaCategory/AgendaCategoryPreviewModal';
 import AgendaCategoryUpdateModal from 'screens/OrganizationAgendaCategory/AgendaCategoryUpdateModal';
 
+/**
+ * Component for displaying and managing agenda item categories.
+ *
+ * @param props - Contains agenda category data and functions for data management.
+ * @returns A JSX element that renders agenda item categories with options to preview, edit, and delete.
+ *
+ * @example
+ * ```tsx
+ * <AgendaCategoryContainer
+ *   agendaCategoryConnection="Organization"
+ *   agendaCategoryData={data}
+ *   agendaCategoryRefetch={refetch}
+ * />
+ * ```
+ */
 function agendaCategoryContainer({
   agendaCategoryConnection,
   agendaCategoryData,
@@ -29,6 +44,8 @@ function agendaCategoryContainer({
     keyPrefix: 'organizationAgendaCategory',
   });
   const { t: tCommon } = useTranslation('common');
+
+  // State management for modals and form data
   const [
     agendaCategoryPreviewModalIsOpen,
     setAgendaCategoryPreviewModalIsOpen,
@@ -46,6 +63,11 @@ function agendaCategoryContainer({
     createdBy: '',
   });
 
+  /**
+   * Opens the preview modal and sets the state for the selected agenda category.
+   *
+   * @param agendaItemCategory - The agenda category to preview.
+   */
   const showPreviewModal = (
     agendaItemCategory: InterfaceAgendaItemCategoryInfo,
   ): void => {
@@ -53,18 +75,30 @@ function agendaCategoryContainer({
     setAgendaCategoryPreviewModalIsOpen(true);
   };
 
+  /**
+   * Closes the preview modal.
+   */
   const hidePreviewModal = (): void => {
     setAgendaCategoryPreviewModalIsOpen(false);
   };
 
+  /**
+   * Toggles the visibility of the update modal.
+   */
   const showUpdateModal = (): void => {
     setAgendaCategoryUpdateModalIsOpen(!agendaCategoryUpdateModalIsOpen);
   };
 
+  /**
+   * Toggles the visibility of the update modal.
+   */
   const hideUpdateModal = (): void => {
     setAgendaCategoryUpdateModalIsOpen(!agendaCategoryUpdateModalIsOpen);
   };
 
+  /**
+   * Toggles the visibility of the delete modal.
+   */
   const toggleDeleteModal = (): void => {
     setAgendaCategoryDeleteModalIsOpen(!agendaCategoryDeleteModalIsOpen);
   };
@@ -73,6 +107,11 @@ function agendaCategoryContainer({
     UPDATE_AGENDA_ITEM_CATEGORY_MUTATION,
   );
 
+  /**
+   * Handles the update of an agenda category.
+   *
+   * @param event - The form submit event.
+   */
   const updateAgendaCategoryHandler = async (
     event: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
@@ -102,6 +141,9 @@ function agendaCategoryContainer({
     DELETE_AGENDA_ITEM_CATEGORY_MUTATION,
   );
 
+  /**
+   * Handles the deletion of an agenda category.
+   */
   const deleteAgendaCategoryHandler = async (): Promise<void> => {
     try {
       await deleteAgendaCategory({
@@ -119,6 +161,11 @@ function agendaCategoryContainer({
     }
   };
 
+  /**
+   * Prepares the form state and shows the update modal for the selected agenda category.
+   *
+   * @param agendaItemCategory - The agenda category to edit.
+   */
   const handleEditClick = (
     agendaItemCategory: InterfaceAgendaItemCategoryInfo,
   ): void => {
@@ -126,6 +173,11 @@ function agendaCategoryContainer({
     showUpdateModal();
   };
 
+  /**
+   * Updates the form state with the selected agenda category's details.
+   *
+   * @param agendaItemCategory - The agenda category details.
+   */
   const setAgendaCategoryState = (
     agendaItemCategory: InterfaceAgendaItemCategoryInfo,
   ): void => {
@@ -239,7 +291,7 @@ function agendaCategoryContainer({
         </div>
       </div>
 
-      {/* Preview model */}
+      {/* Preview modal */}
       <AgendaCategoryPreviewModal
         agendaCategoryPreviewModalIsOpen={agendaCategoryPreviewModalIsOpen}
         hidePreviewModal={hidePreviewModal}
@@ -248,7 +300,7 @@ function agendaCategoryContainer({
         formState={formState}
         t={t}
       />
-      {/* Update model */}
+      {/* Update modal */}
       <AgendaCategoryUpdateModal
         agendaCategoryUpdateModalIsOpen={agendaCategoryUpdateModalIsOpen}
         hideUpdateModal={hideUpdateModal}
@@ -257,7 +309,7 @@ function agendaCategoryContainer({
         updateAgendaCategoryHandler={updateAgendaCategoryHandler}
         t={t}
       />
-      {/* Delete model */}
+      {/* Delete modal */}
       <AgendaCategoryDeleteModal
         agendaCategoryDeleteModalIsOpen={agendaCategoryDeleteModalIsOpen}
         toggleDeleteModal={toggleDeleteModal}

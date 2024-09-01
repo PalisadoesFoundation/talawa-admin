@@ -13,24 +13,45 @@ import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { useNavigate } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
 
+/**
+ * Navbar component for user-specific actions and settings.
+ *
+ * This component provides:
+ * - A branding image and name.
+ * - A dropdown for language selection.
+ * - A dropdown for user actions including profile settings and logout.
+ *
+ * @returns JSX.Element - The rendered Navbar component.
+ */
 function userNavbar(): JSX.Element {
+  // Hook for local storage operations
   const { getItem } = useLocalStorage();
+
+  // Hook for programmatic navigation
   const navigate = useNavigate();
 
+  // Translation hook for internationalization
   const { t } = useTranslation('translation', {
     keyPrefix: 'userNavbar',
   });
   const { t: tCommon } = useTranslation('common');
 
+  // Mutation hook for revoking the refresh token
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
 
+  // State for managing the current language code
   const [currentLanguageCode, setCurrentLanguageCode] = React.useState(
     /* istanbul ignore next */
     cookies.get('i18next') || 'en',
   );
 
+  // Retrieve the username from local storage
   const userName = getItem('name');
 
+  /**
+   * Handles user logout by revoking the refresh token and clearing local storage.
+   * Redirects to the home page after logout.
+   */
   /* istanbul ignore next */
   const handleLogout = (): void => {
     revokeRefreshToken();
@@ -41,6 +62,7 @@ function userNavbar(): JSX.Element {
   return (
     <Navbar variant="dark" className={`${styles.colorPrimary}`}>
       <Container fluid>
+        {/* Navbar brand with logo and name */}
         <Navbar.Brand href="#">
           <img
             className={styles.talawaImage}
@@ -50,8 +72,12 @@ function userNavbar(): JSX.Element {
           <b>{t('talawa')}</b>
         </Navbar.Brand>
 
+        {/* Navbar toggle button for responsive design */}
         <Navbar.Toggle />
+
+        {/* Navbar collapsible content */}
         <Navbar.Collapse className="justify-content-end">
+          {/* Dropdown for language selection */}
           <Dropdown data-testid="languageDropdown" drop="start">
             <Dropdown.Toggle
               variant="white"
@@ -84,6 +110,7 @@ function userNavbar(): JSX.Element {
             </Dropdown.Menu>
           </Dropdown>
 
+          {/* Dropdown for user actions */}
           <Dropdown drop="start">
             <Dropdown.Toggle
               variant="white"
@@ -97,15 +124,18 @@ function userNavbar(): JSX.Element {
               />
             </Dropdown.Toggle>
             <Dropdown.Menu>
+              {/* Display the user's name */}
               <Dropdown.ItemText>
                 <b>{userName}</b>
               </Dropdown.ItemText>
+              {/* Link to user settings */}
               <Dropdown.Item
                 onClick={() => navigate('/user/settings')}
                 className={styles.link}
               >
                 {tCommon('settings')}
               </Dropdown.Item>
+              {/* Logout button */}
               <Dropdown.Item onClick={handleLogout} data-testid={`logoutBtn`}>
                 {tCommon('logout')}
               </Dropdown.Item>

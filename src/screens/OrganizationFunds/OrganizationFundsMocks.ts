@@ -10,21 +10,23 @@ export const MOCKS = [
     request: {
       query: FUND_LIST,
       variables: {
-        id: undefined,
+        organizationId: 'orgId',
+        orderBy: 'createdAt_DESC',
+        filter: '',
       },
     },
     result: {
       data: {
         fundsByOrganization: [
           {
-            _id: '1',
+            _id: 'fundId',
             name: 'Fund 1',
-            refrenceNumber: '123',
+            refrenceNumber: '1111',
             taxDeductible: true,
             isArchived: false,
             isDefault: false,
-            createdAt: '2021-07-01T00:00:00.000Z',
-            organizationId: 'organizationId1',
+            createdAt: '2024-06-22',
+            organizationId: 'orgId',
             creator: {
               _id: 'creatorId1',
               firstName: 'John',
@@ -32,14 +34,91 @@ export const MOCKS = [
             },
           },
           {
-            _id: '99',
-            name: 'Funndds',
-            refrenceNumber: '1234',
+            _id: 'fundId2',
+            name: 'Fund 2',
+            refrenceNumber: '2222',
             taxDeductible: true,
             isArchived: true,
             isDefault: false,
-            createdAt: '2021-07-01T00:00:00.000Z',
-            organizationId: 'organizationId1',
+            createdAt: '2024-06-21',
+            organizationId: 'orgId',
+            creator: {
+              _id: 'creatorId1',
+              firstName: 'John',
+              lastName: 'Doe',
+            },
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: FUND_LIST,
+      variables: {
+        organizationId: 'orgId',
+        orderBy: 'createdAt_ASC',
+        filter: '',
+      },
+    },
+    result: {
+      data: {
+        fundsByOrganization: [
+          {
+            _id: 'fundId',
+            name: 'Fund 2',
+            refrenceNumber: '2222',
+            taxDeductible: true,
+            isArchived: true,
+            isDefault: false,
+            createdAt: '2024-06-21',
+            organizationId: 'orgId',
+            creator: {
+              _id: 'creatorId1',
+              firstName: 'John',
+              lastName: 'Doe',
+            },
+          },
+          {
+            _id: 'fundId2',
+            name: 'Fund 1',
+            refrenceNumber: '1111',
+            taxDeductible: true,
+            isArchived: false,
+            isDefault: false,
+            createdAt: '2024-06-22',
+            organizationId: 'orgId',
+            creator: {
+              _id: 'creatorId1',
+              firstName: 'John',
+              lastName: 'Doe',
+            },
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: FUND_LIST,
+      variables: {
+        organizationId: 'orgId',
+        orderBy: 'createdAt_DESC',
+        filter: '2',
+      },
+    },
+    result: {
+      data: {
+        fundsByOrganization: [
+          {
+            _id: 'fundId',
+            name: 'Fund 2',
+            refrenceNumber: '2222',
+            taxDeductible: true,
+            isArchived: true,
+            isDefault: false,
+            createdAt: '2024-06-21',
+            organizationId: 'orgId',
             creator: {
               _id: 'creatorId1',
               firstName: 'John',
@@ -54,18 +133,18 @@ export const MOCKS = [
     request: {
       query: CREATE_FUND_MUTATION,
       variables: {
-        name: 'Test Fund',
-        refrenceNumber: '1',
-        taxDeductible: true,
+        name: 'Fund 2',
+        refrenceNumber: '2222',
+        taxDeductible: false,
         isArchived: false,
-        isDefault: false,
-        organizationId: undefined,
+        isDefault: true,
+        organizationId: 'orgId',
       },
     },
     result: {
       data: {
         createFund: {
-          _id: '3',
+          _id: '2222',
         },
       },
     },
@@ -74,9 +153,9 @@ export const MOCKS = [
     request: {
       query: UPDATE_FUND_MUTATION,
       variables: {
-        id: '1',
-        name: 'Test Fund',
-        refrenceNumber: '1',
+        id: 'fundId',
+        name: 'Fund 2',
+        refrenceNumber: '2222',
         taxDeductible: false,
         isArchived: true,
         isDefault: true,
@@ -85,7 +164,7 @@ export const MOCKS = [
     result: {
       data: {
         updateFund: {
-          _id: '1',
+          _id: 'fundId',
         },
       },
     },
@@ -94,24 +173,27 @@ export const MOCKS = [
     request: {
       query: REMOVE_FUND_MUTATION,
       variables: {
-        id: '1',
+        id: 'fundId',
       },
     },
     result: {
       data: {
         removeFund: {
-          _id: '1',
+          _id: 'fundId',
         },
       },
     },
   },
 ];
+
 export const NO_FUNDS = [
   {
     request: {
       query: FUND_LIST,
       variables: {
-        id: undefined,
+        organizationId: 'orgId',
+        orderBy: 'createdAt_DESC',
+        filter: '',
       },
     },
     result: {
@@ -121,246 +203,52 @@ export const NO_FUNDS = [
     },
   },
 ];
-export const MOCKS_ERROR_ORGANIZATIONS_FUNDS = [
+
+export const MOCKS_ERROR = [
   {
     request: {
       query: FUND_LIST,
       variables: {
-        organizationId: '1',
+        organizationId: 'orgId',
+        orderBy: 'createdAt_DESC',
+        filter: '',
       },
     },
     error: new Error('Mock graphql error'),
-  },
-];
-export const MOCKS_ERROR_CREATE_FUND = [
-  {
-    request: {
-      query: FUND_LIST,
-      variables: {
-        id: undefined,
-      },
-    },
-    result: {
-      data: {
-        fundsByOrganization: [
-          {
-            _id: '1',
-            name: 'Fund 1',
-            refrenceNumber: '123',
-            taxDeductible: true,
-            isArchived: false,
-            isDefault: false,
-            createdAt: '2021-07-01T00:00:00.000Z',
-            organizationId: 'organizationId1',
-            creator: {
-              _id: 'creatorId1',
-              firstName: 'John',
-              lastName: 'Doe',
-            },
-          },
-          {
-            _id: '2',
-            name: 'Fund 2',
-            refrenceNumber: '456',
-            taxDeductible: false,
-            isArchived: false,
-            isDefault: false,
-            createdAt: '2021-07-01T00:00:00.000Z',
-            organizationId: 'organizationId2',
-            creator: {
-              _id: 'creatorId2',
-              firstName: 'Jane',
-              lastName: 'Doe',
-            },
-          },
-        ],
-      },
-    },
   },
   {
     request: {
       query: CREATE_FUND_MUTATION,
       variables: {
-        name: 'Fund 3',
-        refrenceNumber: '789',
-        taxDeductible: true,
+        name: 'Fund 2',
+        refrenceNumber: '2222',
+        taxDeductible: false,
         isArchived: false,
-        isDefault: false,
-        organizationId: undefined,
+        isDefault: true,
+        organizationId: 'orgId',
       },
     },
     error: new Error('Mock graphql error'),
-  },
-];
-export const MOCKS_ERROR_UPDATE_FUND = [
-  {
-    request: {
-      query: FUND_LIST,
-      variables: {
-        id: undefined,
-      },
-    },
-    result: {
-      data: {
-        fundsByOrganization: [
-          {
-            _id: '1',
-            name: 'Fund 1',
-            refrenceNumber: '123',
-            taxDeductible: true,
-            isArchived: false,
-            isDefault: false,
-            createdAt: '2021-07-01T00:00:00.000Z',
-            organizationId: 'organizationId1',
-            creator: {
-              _id: 'creatorId1',
-              firstName: 'John',
-              lastName: 'Doe',
-            },
-          },
-          {
-            _id: '2',
-            name: 'Fund 2',
-            refrenceNumber: '456',
-            taxDeductible: false,
-            isArchived: false,
-            isDefault: false,
-            createdAt: '2021-07-01T00:00:00.000Z',
-            organizationId: 'organizationId2',
-            creator: {
-              _id: 'creatorId2',
-              firstName: 'Jane',
-              lastName: 'Doe',
-            },
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: CREATE_FUND_MUTATION,
-      variables: {
-        name: 'Fund 3',
-        refrenceNumber: '789',
-        taxDeductible: true,
-        isArchived: false,
-        isDefault: false,
-        organizationId: undefined,
-      },
-    },
-    result: {
-      data: {
-        createFund: {
-          _id: '3',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: UPDATE_FUND_MUTATION,
-      variables: {
-        id: undefined,
-        name: 'Fund 1',
-        refrenceNumber: '789',
-        taxDeductible: true,
-        isArchived: false,
-        isDefault: false,
-      },
-    },
-    error: new Error('Mock graphql error'),
-  },
-];
-export const MOCKS_ERROR_REMOVE_FUND = [
-  {
-    request: {
-      query: FUND_LIST,
-      variables: {
-        id: undefined,
-      },
-    },
-    result: {
-      data: {
-        fundsByOrganization: [
-          {
-            _id: '3',
-            name: 'Fund 1',
-            refrenceNumber: '123',
-            taxDeductible: true,
-            isArchived: false,
-            isDefault: false,
-            createdAt: '2021-07-01T00:00:00.000Z',
-            organizationId: 'organizationId1',
-            creator: {
-              _id: 'creatorId1',
-              firstName: 'John',
-              lastName: 'Doe',
-            },
-          },
-          {
-            _id: '2',
-            name: 'Fund 2',
-            refrenceNumber: '456',
-            taxDeductible: false,
-            isArchived: false,
-            isDefault: false,
-            createdAt: '2021-07-01T00:00:00.000Z',
-            organizationId: 'organizationId2',
-            creator: {
-              _id: 'creatorId2',
-              firstName: 'Jane',
-              lastName: 'Doe',
-            },
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: CREATE_FUND_MUTATION,
-      variables: {
-        name: 'Fund 3',
-        refrenceNumber: '789',
-        taxDeductible: true,
-        isArchived: false,
-        isDefault: false,
-        organizationId: undefined,
-      },
-    },
-    result: {
-      data: {
-        createFund: {
-          _id: '3',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: UPDATE_FUND_MUTATION,
-      variables: {
-        id: undefined,
-        name: 'Fund 1',
-        taxDeductible: true,
-        isArchived: false,
-        isDefault: false,
-      },
-    },
-    result: {
-      data: {
-        updateFund: {
-          _id: '1',
-        },
-      },
-    },
   },
   {
     request: {
       query: REMOVE_FUND_MUTATION,
       variables: {
-        id: undefined,
+        id: 'fundId',
+      },
+    },
+    error: new Error('Mock graphql error'),
+  },
+  {
+    request: {
+      query: UPDATE_FUND_MUTATION,
+      variables: {
+        id: 'fundId',
+        name: 'Fund 2',
+        refrenceNumber: '2222',
+        taxDeductible: false,
+        isArchived: true,
+        isDefault: true,
       },
     },
     error: new Error('Mock graphql error'),

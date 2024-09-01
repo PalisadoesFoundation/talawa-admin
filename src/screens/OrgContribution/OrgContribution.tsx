@@ -8,11 +8,19 @@ import OrgContriCards from 'components/OrgContriCards/OrgContriCards';
 import { Form } from 'react-bootstrap';
 import styles from './OrgContribution.module.css';
 
+/**
+ * The `orgContribution` component displays the contributions to an organization.
+ * It includes a sidebar for filtering contributions by organization name and transaction ID.
+ * Additionally, it shows recent contribution statistics and a list of contribution cards.
+ *
+ */
 function orgContribution(): JSX.Element {
+  // Hook to get translation functions and translation text
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgContribution',
   });
 
+  // Set the document title based on the translated title for this page
   document.title = t('title');
 
   return (
@@ -21,6 +29,7 @@ function orgContribution(): JSX.Element {
         <Col sm={3}>
           <div className={styles.sidebar}>
             <div className={styles.sidebarsticky}>
+              {/* Input for filtering by organization name */}
               <h6 className={styles.searchtitle}>{t('filterByName')}</h6>
               <Form.Control
                 type="name"
@@ -30,6 +39,7 @@ function orgContribution(): JSX.Element {
                 required
               />
 
+              {/* Input for filtering by transaction ID */}
               <h6 className={styles.searchtitle}>{t('filterByTransId')}</h6>
               <Form.Control
                 type="transaction"
@@ -39,6 +49,7 @@ function orgContribution(): JSX.Element {
                 required
               />
 
+              {/* Section displaying recent contribution statistics */}
               <h6 className={styles.searchtitle}>{t('recentStats')}</h6>
               <ContriStats
                 key="129"
@@ -55,6 +66,7 @@ function orgContribution(): JSX.Element {
             <Row className={styles.justifysp}>
               <p className={styles.logintitle}>{t('contribution')}</p>
             </Row>
+            {/* Section displaying a list of contribution cards */}
             <OrgContriCards
               key="129"
               id="21"

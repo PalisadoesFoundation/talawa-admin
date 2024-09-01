@@ -11,6 +11,15 @@ interface InterfaceUserPasswordUpdateProps {
   id: string;
 }
 
+/**
+ * UserUpdate component allows users to update their passwords.
+ * It handles form submission and communicates with the backend to update the user's password.
+ *
+ * @param props - The properties for the UserUpdate component.
+ * @param id - The ID of the user whose password is being updated.
+ *
+ * @returns The JSX element for updating user password.
+ */
 const UserUpdate: React.FC<
   InterfaceUserPasswordUpdateProps
 > = (): JSX.Element => {
@@ -26,18 +35,22 @@ const UserUpdate: React.FC<
 
   const [login] = useMutation(UPDATE_USER_PASSWORD_MUTATION);
 
+  /**
+   * Handles the password update process.
+   * It validates the form inputs and performs the mutation to update the password.
+   */
   const loginLink = async (): Promise<string | void> => {
     if (
       !formState.previousPassword ||
       !formState.newPassword ||
       !formState.confirmNewPassword
     ) {
-      toast.error('The password field cannot be empty.');
+      toast.error(t('passCantBeEmpty'));
       return;
     }
 
     if (formState.newPassword !== formState.confirmNewPassword) {
-      toast.error('New and Confirm password do not match.');
+      toast.error(t('passNoMatch'));
       return;
     }
 
@@ -51,7 +64,7 @@ const UserUpdate: React.FC<
       });
       /* istanbul ignore next */
       if (data) {
-        toast.success('Successful updated');
+        toast.success(tCommon('updatedSuccessfully', { item: 'Password' }));
         setTimeout(() => {
           window.location.reload();
         }, 2000);
@@ -64,6 +77,10 @@ const UserUpdate: React.FC<
     }
   };
 
+  /**
+   * Handles canceling the update process.
+   * It reloads the page to reset any changes.
+   */
   /* istanbul ignore next */
   const cancelUpdate = (): void => {
     window.location.reload();

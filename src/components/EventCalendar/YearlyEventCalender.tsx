@@ -7,6 +7,9 @@ import type { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
 
+/**
+ * Interface for event data used in the calendar.
+ */
 interface InterfaceEventListCardProps {
   userRole?: string;
   key?: string;
@@ -49,12 +52,18 @@ enum Status {
   DELETED = 'DELETED',
 }
 
+/**
+ * Enum for different user roles.
+ */
 enum Role {
   USER = 'USER',
   SUPERADMIN = 'SUPERADMIN',
   ADMIN = 'ADMIN',
 }
 
+/**
+ * Interface for event attendees.
+ */
 interface InterfaceIEventAttendees {
   userId: string;
   user?: string;
@@ -62,9 +71,27 @@ interface InterfaceIEventAttendees {
   createdAt?: Date;
 }
 
+/**
+ * Interface for organization list.
+ */
 interface InterfaceIOrgList {
   admins: { _id: string }[];
 }
+
+/**
+ * Calendar component to display events for a selected year.
+ *
+ * This component renders a yearly calendar with navigation to view previous and next years.
+ * It displays events for each day, with functionality to expand and view details of events.
+ *
+ * @param eventData - Array of event data to display on the calendar.
+ * @param refetchEvents - Function to refresh the event data.
+ * @param orgData - Organization data to filter events.
+ * @param userRole - Role of the user for access control.
+ * @param userId - ID of the user for filtering events they are attending.
+ * @param viewType - Type of view for the calendar.
+ * @returns JSX.Element - The rendered calendar component.
+ */
 const Calendar: React.FC<InterfaceCalendarProps> = ({
   eventData,
   refetchEvents,
@@ -95,6 +122,15 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   );
   const [expandedY, setExpandedY] = useState<string | null>(null);
 
+  /**
+   * Filters events based on user role, organization data, and user ID.
+   *
+   * @param eventData - Array of event data to filter.
+   * @param orgData - Organization data for filtering events.
+   * @param userRole - Role of the user for access control.
+   * @param userId - ID of the user for filtering events they are attending.
+   * @returns Filtered array of event data.
+   */
   const filterData = (
     eventData: InterfaceEventListCardProps[],
     orgData?: InterfaceIOrgList,
@@ -137,16 +173,27 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     setEvents(data);
   }, [eventData, orgData, userRole, userId]);
 
+  /**
+   * Navigates to the previous year.
+   */
   const handlePrevYear = (): void => {
     /*istanbul ignore next*/
     setCurrentYear(currentYear - 1);
   };
 
+  /**
+   * Navigates to the next year.
+   */
   const handleNextYear = (): void => {
     /*istanbul ignore next*/
     setCurrentYear(currentYear + 1);
   };
 
+  /**
+   * Renders the days of the month for the calendar.
+   *
+   * @returns Array of JSX elements representing the days of each month.
+   */
   const renderMonthDays = (): JSX.Element[] => {
     const renderedMonths: JSX.Element[] = [];
 
@@ -320,6 +367,11 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     return renderedMonths;
   };
 
+  /**
+   * Renders the yearly calendar with navigation buttons.
+   *
+   * @returns JSX.Element - The rendered yearly calendar component.
+   */
   const renderYearlyCalendar = (): JSX.Element => {
     return (
       <div className={styles.yearlyCalendar}>

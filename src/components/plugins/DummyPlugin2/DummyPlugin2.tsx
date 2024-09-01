@@ -1,6 +1,12 @@
 import React from 'react';
 
-// Validate Extras
+/**
+ * A placeholder component for demonstration or testing purposes.
+ * It renders an empty `div` element.
+ *
+ * This component currently does not have any additional functionality
+ * or properties.
+ */
 function dummyPlugin2(): JSX.Element {
   return <div></div>;
 }

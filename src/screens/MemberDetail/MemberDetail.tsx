@@ -35,6 +35,15 @@ type MemberDetailProps = {
   id?: string; // This is the userId
 };
 
+/**
+ * MemberDetail component is used to display the details of a user.
+ * It also allows the user to update the details. It uses the UPDATE_USER_MUTATION to update the user details.
+ * It uses the USER_DETAILS query to get the user details. It uses the useLocalStorage hook to store the user
+ *  details in the local storage.
+ * @param id - The id of the user whose details are to be displayed.
+ * @returns  React component
+ *
+ */
 const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'memberDetail',
@@ -185,7 +194,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
             setItem('Email', email);
             setItem('UserImage', image);
           }
-          toast.success('Successful updated');
+          toast.success(tCommon('successfullyUpdated'));
         }
       } catch (error: unknown) {
         if (error instanceof Error) {
@@ -490,7 +499,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     <div>
                       <label>
                         {t('appLanguageCode')} <br />
-                        {`(API not supported yet)`}
                         <select
                           className="form-control"
                           data-testid="applangcode"
@@ -500,6 +508,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                               appLanguageCode: e.target.value,
                             });
                           }}
+                          value={formState.appLanguageCode}
                         >
                           {languages.map((language, index: number) => (
                             <option key={index} value={language.code}>

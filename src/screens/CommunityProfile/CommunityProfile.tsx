@@ -10,7 +10,7 @@ import { UPDATE_COMMUNITY, RESET_COMMUNITY } from 'GraphQl/Mutations/mutations';
 import {
   FacebookLogo,
   InstagramLogo,
-  TwitterLogo,
+  XLogo,
   LinkedInLogo,
   GithubLogo,
   YoutubeLogo,
@@ -21,14 +21,31 @@ import convertToBase64 from 'utils/convertToBase64';
 import styles from './CommunityProfile.module.css';
 import { errorHandler } from 'utils/errorHandler';
 
+/**
+ * `CommunityProfile` component allows users to view and update their community profile details.
+ *
+ * It includes functionalities to:
+ * - Display current community profile information
+ * - Update profile details including social media links and logo
+ * - Reset profile changes to the initial state
+ *
+ * @returns JSX.Element - The `CommunityProfile` component.
+ *
+ * @example
+ * ```tsx
+ * <CommunityProfile />
+ * ```
+ */
 const CommunityProfile = (): JSX.Element => {
+  // Translation hooks for internationalization
   const { t } = useTranslation('translation', {
     keyPrefix: 'communityProfile',
   });
   const { t: tCommon } = useTranslation('common');
 
-  document.title = t('title');
+  document.title = t('title'); // Set document title
 
+  // Define the type for pre-login imagery data
   type PreLoginImageryDataType = {
     _id: string;
     name: string | undefined;
@@ -37,7 +54,7 @@ const CommunityProfile = (): JSX.Element => {
     socialMediaUrls: {
       facebook: string | undefined;
       instagram: string | undefined;
-      twitter: string | undefined;
+      X: string | undefined;
       linkedIn: string | undefined;
       gitHub: string | undefined;
       youTube: string | undefined;
@@ -46,13 +63,14 @@ const CommunityProfile = (): JSX.Element => {
     };
   };
 
+  // State hook for managing profile variables
   const [profileVariable, setProfileVariable] = React.useState({
     name: '',
     websiteLink: '',
     logoUrl: '',
     facebook: '',
     instagram: '',
-    twitter: '',
+    X: '',
     linkedIn: '',
     github: '',
     youtube: '',
@@ -60,10 +78,14 @@ const CommunityProfile = (): JSX.Element => {
     slack: '',
   });
 
+  // Query to fetch community data
   const { data, loading } = useQuery(GET_COMMUNITY_DATA);
+
+  // Mutations for updating and resetting community data
   const [uploadPreLoginImagery] = useMutation(UPDATE_COMMUNITY);
   const [resetPreLoginImagery] = useMutation(RESET_COMMUNITY);
 
+  // Effect to set profile data from fetched data
   React.useEffect(() => {
     const preLoginData: PreLoginImageryDataType | undefined =
       data?.getCommunityData;
@@ -74,7 +96,7 @@ const CommunityProfile = (): JSX.Element => {
         logoUrl: preLoginData.logoUrl ?? '',
         facebook: preLoginData.socialMediaUrls.facebook ?? '',
         instagram: preLoginData.socialMediaUrls.instagram ?? '',
-        twitter: preLoginData.socialMediaUrls.twitter ?? '',
+        X: preLoginData.socialMediaUrls.X ?? '',
         linkedIn: preLoginData.socialMediaUrls.linkedIn ?? '',
         github: preLoginData.socialMediaUrls.gitHub ?? '',
         youtube: preLoginData.socialMediaUrls.youTube ?? '',
@@ -83,6 +105,11 @@ const CommunityProfile = (): JSX.Element => {
       });
   }, [data]);
 
+  /**
+   * Handles change events for form inputs.
+   *
+   * @param e - Change event for input elements
+   */
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setProfileVariable({
       ...profileVariable,
@@ -90,6 +117,11 @@ const CommunityProfile = (): JSX.Element => {
     });
   };
 
+  /**
+   * Handles form submission to update community profile.
+   *
+   * @param e - Form submit event
+   */
   const handleOnSubmit = async (
     e: React.FormEvent<HTMLFormElement>,
   ): Promise<void> => {
@@ -104,7 +136,7 @@ const CommunityProfile = (): JSX.Element => {
             socialMediaUrls: {
               facebook: profileVariable.facebook,
               instagram: profileVariable.instagram,
-              twitter: profileVariable.twitter,
+              X: profileVariable.X,
               linkedIn: profileVariable.linkedIn,
               gitHub: profileVariable.github,
               youTube: profileVariable.youtube,
@@ -121,6 +153,9 @@ const CommunityProfile = (): JSX.Element => {
     }
   };
 
+  /**
+   * Resets profile data to initial values and performs a reset operation.
+   */
   const resetData = async (): Promise<void> => {
     const preLoginData: PreLoginImageryDataType | undefined =
       data?.getCommunityData;
@@ -131,7 +166,7 @@ const CommunityProfile = (): JSX.Element => {
         logoUrl: '',
         facebook: '',
         instagram: '',
-        twitter: '',
+        X: '',
         linkedIn: '',
         github: '',
         youtube: '',
@@ -151,6 +186,11 @@ const CommunityProfile = (): JSX.Element => {
     }
   };
 
+  /**
+   * Determines whether the save and reset buttons should be disabled.
+   *
+   * @returns boolean - True if buttons should be disabled, otherwise false
+   */
   const isDisabled = (): boolean => {
     if (
       profileVariable.name == '' &&
@@ -166,6 +206,7 @@ const CommunityProfile = (): JSX.Element => {
   if (loading) {
     <Loader />;
   }
+
   return (
     <Card border="0" className={`${styles.card} "rounded-4 my-4 shadow-sm"`}>
       <div className={styles.cardHeader}>
@@ -237,6 +278,7 @@ const CommunityProfile = (): JSX.Element => {
           </Form.Group>
           <Form.Group>
             <Form.Label className={styles.formLabel}>{t('social')}</Form.Label>
+            {/* Social media inputs */}
             <div className="mb-3 d-flex align-items-center gap-3">
               <img src={FacebookLogo} alt="Facebook Logo" />
               <Form.Control
@@ -266,14 +308,14 @@ const CommunityProfile = (): JSX.Element => {
               />
             </div>
             <div className="mb-3 d-flex align-items-center gap-3">
-              <img src={TwitterLogo} alt="Twitter Logo" />
+              <img src={XLogo} alt="X Logo" />
               <Form.Control
                 type="url"
-                id="twitter"
-                name="twitter"
-                data-testid="twitter"
+                id="X"
+                name="X"
+                data-testid="X"
                 className={styles.socialInput}
-                value={profileVariable.twitter}
+                value={profileVariable.X}
                 onChange={handleOnChange}
                 placeholder={t('url')}
                 autoComplete="off"

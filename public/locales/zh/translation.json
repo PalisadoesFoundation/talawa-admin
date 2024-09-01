@@ -200,6 +200,36 @@
     "organization": "组织",
     "invalidDetailsMessage": "请输入有效的详细信息。"
   },
+  "organizationTags": {
+    "title": "组织标签",
+    "createTag": "创建新标签",
+    "manageTag": "管理",
+    "editTag": "编辑",
+    "removeTag": "删除",
+    "tagDetails": "标签详情",
+    "tagName": "名称",
+    "tagType": "类型",
+    "tagNamePlaceholder": "输入标签名称",
+    "tagCreationSuccess": "新标签创建成功",
+    "tagUpdationSuccess": "标签更新成功",
+    "tagRemovalSuccess": "标签删除成功",
+    "noTagsFound": "未找到标签",
+    "removeUserTag": "删除标签",
+    "removeUserTagMessage": "您确定要删除此标签吗？",
+    "addChildTag": "添加子标签"
+  },
+  "manageTag": {
+    "title": "标签详情",
+    "addPeopleToTag": "将人员添加到标签",
+    "viewProfile": "查看",
+    "noAssignedMembersFound": "没有分配成员",
+    "unassignUserTag": "取消分配标签",
+    "unassignUserTagMessage": "您想从此用户中删除标签吗？",
+    "successfullyUnassigned": "标签已从用户中取消分配",
+    "addPeople": "添加人员",
+    "add": "添加",
+    "subTags": "子标签"
+  },
   "userListCard": {
     "addAdmin": "添加管理员",
     "addedAsAdmin": "用户被添加为管理员。"
@@ -300,6 +330,40 @@
     "deleteAgendaCategory": "删除议程类别",
     "deleteAgendaCategoryMsg": "是否要删除此议程类别？"
   },
+  "agendaItems": {
+    "agendaItemDetails": "议程项目详细信息",
+    "updateAgendaItem": "更新议程项目",
+    "title": "标题",
+    "enterTitle": "输入标题",
+    "sequence": "顺序",
+    "description": "描述",
+    "enterDescription": "输入描述",
+    "category": "议程类别",
+    "attachments": "附件",
+    "attachmentLimit": "添加任何图像文件或视频文件，最大 10MB",
+    "fileSizeExceedsLimit": "文件大小超过 10MB 的限制",
+    "urls": "网址",
+    "url": "添加链接到网址",
+    "enterUrl": "https://example.com",
+    "invalidUrl": "请输入有效的网址",
+    "link": "链接",
+    "createdBy": "创建人",
+    "regular": "常规",
+    "note": "注意",
+    "duration": "持续时间",
+    "enterDuration": "分:秒",
+    "options": "选项",
+    "createAgendaItem": "创建议程项目",
+    "noAgendaItems": "没有议程项目",
+    "selectAgendaItemCategory": "选择议程项目类别",
+    "update": "更新",
+    "delete": "删除",
+    "agendaItemCreated": "议程项目已成功创建",
+    "agendaItemUpdated": "议程项目已成功更新",
+    "agendaItemDeleted": "议程项目已成功删除",
+    "deleteAgendaItem": "删除议程项目",
+    "deleteAgendaItemMsg": "您要删除此议程项目吗？"
+  },
   "eventListCard": {
     "deleteEvent": "删除事件",
     "deleteEventMsg": "您想删除此事件吗？",
@@ -329,59 +393,55 @@
     "occurences": "事件"
   },
   "funds": {
-    "title": "资金",
+    "title": "基金",
     "createFund": "创建基金",
     "fundName": "基金名称",
-    "fundId": "基金编号",
-    "fundOptions": "奥皮通斯",
-    "noFunds": "未找到资金",
-    "fundDetails": "基金详情",
-    "taxDeductible": "免税额",
-    "enterfundName": "输入基金名称",
-    "enterfundId": "输入基金ID",
-    "default": "违约基金",
+    "fundId": "基金（参考）ID",
+    "taxDeductible": "税前扣除",
+    "default": "默认",
     "archived": "已归档",
-    "nonArchive": "非存档",
     "fundCreate": "创建基金",
     "fundUpdate": "更新基金",
     "fundDelete": "删除基金",
-    "manageFund": "管理基金",
-    "searchFullName": "按名称搜索",
-    "noFundsFound": "未找到资金",
-    "createdBy": "由...制作",
+    "searchByName": "按名称搜索",
+    "noFundsFound": "未找到基金",
+    "createdBy": "由...创建",
     "createdOn": "创建于",
-    "status": "地位",
-    "archiveFund": "档案基金",
-    "archiveFundMsg": "存档后，该基金将从基金列表中删除。此操作可以撤消",
+    "status": "状态",
     "fundCreated": "基金创建成功",
     "fundUpdated": "基金更新成功",
-    "fundDeleted": "资金删除成功",
-    "fundArchived": "资金归档成功",
-    "fundUnarchived": "基金已成功解档",
-    "deleteFundMsg": "您想删除该基金吗？"
+    "fundDeleted": "基金删除成功",
+    "deleteFundMsg": "您确定要删除此基金吗？",
+    "createdLatest": "最近创建",
+    "createdEarliest": "最早创建",
+    "viewCampaigns": "查看活动"
   },
   "fundCampaign": {
-    "title": "筹款活动",
+    "title": "募捐活动",
     "campaignName": "活动名称",
     "campaignOptions": "选项",
-    "fundingGoal": "资助目标",
+    "fundingGoal": "资金目标",
     "addCampaign": "添加活动",
     "createdCampaign": "活动创建成功",
     "updatedCampaign": "活动更新成功",
-    "deletedCampaign": "营销活动删除成功",
-    "deleteCampaignMsg": "您确定要删除此广告活动吗？",
+    "deletedCampaign": "活动删除成功",
+    "deleteCampaignMsg": "您确定要删除此活动吗？",
     "noCampaigns": "未找到活动",
-    "createCampaign": "创建基金活动",
-    "updateCampaign": "更新基金活动",
-    "manageCampaign": "管理基金活动",
-    "deleteCampaign": "删除基金活动",
+    "createCampaign": "创建活动",
+    "updateCampaign": "更新活动",
+    "deleteCampaign": "删除活动",
     "currency": "货币",
     "selectCurrency": "选择货币",
-    "searchFullName": "按名称搜索"
+    "searchFullName": "按名称搜索",
+    "viewPledges": "查看承诺",
+    "noCampaignsFound": "未找到活动",
+    "latestEndDate": "最新结束日期",
+    "earliestEndDate": "最早结束日期",
+    "lowestGoal": "最低目标",
+    "highestGoal": "最高目标"
   },
   "pledges": {
     "title": "基金活动承诺",
-    "volunteers": "志愿者",
     "pledgeAmount": "质押金额",
     "pledgeOptions": "选项",
     "pledgeCreated": "质押创建成功",
@@ -397,12 +457,16 @@
     "editPledge": "编辑承诺",
     "deletePledgeMsg": "您确定要删除此承诺吗？",
     "noPledges": "未找到承诺",
-    "sort": "排序",
-    "searchVolunteer": "按志愿者搜索",
+    "searchPledger": "按承诺搜索",
     "highestAmount": "最高金额",
     "lowestAmount": "最低金额",
     "latestEndDate": "最新结束日期",
-    "earliestEndDate": "最早结束日期"
+    "earliestEndDate": "最早结束日期",
+    "campaigns": "活动",
+    "pledges": "承诺",
+    "endsOn": "结束于",
+    "raisedAmount": "募集金額",
+    "pledgedAmount": "承诺金額"
   },
   "orgPost": {
     "title": "帖子",
@@ -487,6 +551,7 @@
     "dashboard": "仪表板",
     "registrants": "注册者",
     "eventActions": "事件动作",
+    "eventAgendas": "活动议程",
     "eventStats": "事件统计",
     "to": "到"
   },
@@ -559,7 +624,9 @@
   "userPasswordUpdate": {
     "previousPassword": "旧密码",
     "newPassword": "新密码",
-    "confirmNewPassword": "确认新密码"
+    "confirmNewPassword": "确认新密码",
+    "passCantBeEmpty": "密码不能为空",
+    "passNoMatch": "新密码和确认密码不匹配。"
   },
   "orgDelete": {
     "deleteOrg": "删除组织"
@@ -653,6 +720,10 @@
     "notAuthorised": "对不起！",
     "invalidCredentials": "输入的凭据不正确。"
   },
+  "people": {
+    "title": "人们",
+    "searchUsers": "搜索用户"
+  },
   "userRegister": {
     "enterFirstName": "输入您的名字",
     "enterLastName": "输入您的姓氏",
@@ -697,12 +768,15 @@
   },
   "postCard": {
     "likes": "喜欢",
-    "comments": "评论"
+    "comments": "评论",
+    "viewPost": "查看帖子",
+    "editPost": "编辑帖子",
+    "postedOn": "发布于 {{date}}"
   },
   "home": {
+    "title": "帖子",
     "posts": "帖子",
     "post": "邮政",
-    "title": "标题",
     "textArea": "你有什么心事吗？",
     "feed": "喂养",
     "loading": "加载中",
@@ -714,7 +788,8 @@
     "startPost": "开始发帖",
     "media": "媒体",
     "event": "事件",
-    "article": "文章"
+    "article": "文章",
+    "postNowVisibleInFeed": "帖子现在在动态中可见"
   },
   "settings": {
     "profileSettings": "配置文件设置",
@@ -748,7 +823,7 @@
     "widowed": "寡",
     "divorced": "离婚",
     "engaged": "已订婚的",
-    "seperated": "分离的",
+    "separated": "分离的",
     "grade1": "1级",
     "grade2": "二年级",
     "grade3": "三年级",
@@ -771,6 +846,7 @@
     "enterState": "输入城市或州"
   },
   "donate": {
+    "title": "捐款",
     "donations": "捐款",
     "searchDonations": "搜索捐款",
     "donateForThe": "为",
@@ -781,6 +857,7 @@
     "success": "捐赠成功"
   },
   "userEvents": {
+    "title": "活动",
     "nothingToShow": "这里没有什么可显示的。",
     "createEvent": "创建事件",
     "recurring": "重复事件",
@@ -826,7 +903,10 @@
     "deleteAdvertisement": "删除广告",
     "deleteAdvertisementMsg": "您想删除该广告吗？",
     "view": "看法",
-    "editAdvertisement": "编辑广告"
+    "editAdvertisement": "编辑广告",
+    "advertisementDeleted": "广告已成功删除。",
+    "endDateGreaterOrEqual": "结束日期应大于或等于开始日期",
+    "advertisementCreated": "广告已成功创建。"
   },
   "userChat": {
     "chat": "聊天",
@@ -907,8 +987,8 @@
     "actionItemCategory": "行动项目类别",
     "selectActionItemCategory": "选择操作项类别",
     "selectAssignee": "选择受托人",
-    "preCompletionNotes": "预完成注释",
-    "postCompletionNotes": "完成后注释",
+    "preCompletionNotes": "笔记",
+    "postCompletionNotes": "完成说明",
     "actionItemDetails": "行动项目详情",
     "dueDate": "到期日",
     "completionDate": "完成日期",
@@ -919,6 +999,43 @@
     "successfulCreation": "操作项创建成功",
     "successfulUpdation": "操作项已成功更新",
     "notes": "笔记",
+    "assignee": "受让人",
+    "assigner": "分配者",
+    "assignmentDate": "任务分配日期",
+    "status": "地位",
+    "actionItemActive": "积极的",
+    "actionItemStatus": "行动项目状态",
+    "actionItemCompleted": "行动项目已完成",
+    "markCompletion": "标记完成",
     "save": "节省"
+  },
+  "checkIn": {
+    "errorCheckingIn": "签到错误",
+    "checkedInSuccessfully": "成功签到"
+  },
+  "eventRegistrantsModal": {
+    "errorAddingAttendee": "添加与会者时出错",
+    "errorRemovingAttendee": "删除与会者时出错"
+  },
+  "userCampaigns": {
+    "title": "筹款活动",
+    "searchByName": "按名字搜索...",
+    "searchBy": "按...搜索",
+    "pledgers": "承诺者",
+    "campaigns": "活动",
+    "myPledges": "我的承诺",
+    "lowestAmount": "最低金额",
+    "highestAmount": "最高金额",
+    "lowestGoal": "最低目标",
+    "highestGoal": "最高目标",
+    "latestEndDate": "最晚结束日期",
+    "earliestEndDate": "最早结束日期",
+    "addPledge": "添加承诺",
+    "viewPledges": "查看承诺",
+    "noPledges": "未找到承诺",
+    "noCampaigns": "未找到活动"
+  },
+  "userPledges": {
+    "title": "我的承诺"
   }
 }

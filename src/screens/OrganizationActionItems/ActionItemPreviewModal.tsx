@@ -3,7 +3,9 @@ import { Modal, Form, Button } from 'react-bootstrap';
 
 import styles from './OrganizationActionItems.module.css';
 import dayjs from 'dayjs';
-
+/**
+ * State object for form details related to an action item.
+ */
 interface InterfaceFormStateType {
   assigneeId: string;
   assignee: string;
@@ -12,7 +14,9 @@ interface InterfaceFormStateType {
   preCompletionNotes: string;
   postCompletionNotes: string;
 }
-
+/**
+ * Props for the `ActionItemPreviewModal` component.
+ */
 interface InterfaceActionItemCreateModalProps {
   actionItemPreviewModalIsOpen: boolean;
   hidePreviewModal: () => void;
@@ -25,6 +29,12 @@ interface InterfaceActionItemCreateModalProps {
   assignmentDate: Date | null;
 }
 
+/**
+ * A modal component for previewing the details of an action item.
+ *
+ * @param props - The properties passed to the component.
+ * @returns The `ActionItemPreviewModal` component.
+ */
 const ActionItemPreviewModal: React.FC<InterfaceActionItemCreateModalProps> = ({
   actionItemPreviewModalIsOpen,
   hidePreviewModal,

@@ -1,5 +1,5 @@
 .organizationFundCampaignContainer {
-  margin: 0.6rem 0;
+  margin: 0.5rem 0;
 }
 .goalButton {
   border: 1px solid rgba(49, 187, 107, 1) !important;
@@ -11,6 +11,10 @@
   margin: auto;
   box-shadow: 5px 5px 4px 0px rgba(49, 187, 107, 0.12);
 }
+.rowBackground {
+  background-color: var(--bs-white);
+  max-height: 120px;
+}
 .container {
   min-height: 100vh;
 }
@@ -20,13 +24,22 @@
   margin-left: 13vw;
 }
 .titlemodal {
-  color: var(--bs-gray-600);
+  color: #707070;
   font-weight: 600;
-  font-size: 20px;
-  margin-bottom: 20px;
-  padding-bottom: 5px;
-  border-bottom: 3px solid var(--bs-primary);
+  font-size: 32px;
   width: 65%;
+  margin-bottom: 0px;
+}
+.noOutline input {
+  outline: none;
+}
+.modalCloseBtn {
+  width: 40px;
+  height: 40px;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .greenregbtn {
   margin: 1rem 0 0;
@@ -99,11 +112,13 @@
 
 .btnsContainer {
   display: flex;
-  margin: 2.5rem 0 2.5rem 0;
+  margin: 2rem 0 2rem 0;
+  gap: 0.8rem;
 }
 
 .btnsContainer .btnsBlock {
   display: flex;
+  gap: 0.8rem;
 }
 
 .btnsContainer .btnsBlock div button {
@@ -132,6 +147,12 @@
   margin-left: -15px;
   margin-right: -15px;
   margin-bottom: 20px;
+}
+
+.tableHeader {
+  background-color: var(--bs-primary);
+  color: var(--bs-white);
+  font-size: 1rem;
 }
 
 @media (max-width: 1020px) {

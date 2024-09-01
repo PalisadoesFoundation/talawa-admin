@@ -3,7 +3,7 @@ import GithubLogo from './Github-Logo.svg';
 import InstagramLogo from './Instagram-Logo.svg';
 import LinkedInLogo from './Linkedin-Logo.svg';
 import SlackLogo from './Slack-Logo.svg';
-import TwitterLogo from './Twitter-Logo.svg';
+import XLogo from './X-Logo.svg';
 import YoutubeLogo from './Youtube-Logo.svg';
 import RedditLogo from './Reddit-Logo.svg';
 
@@ -13,7 +13,7 @@ export {
   InstagramLogo,
   LinkedInLogo,
   SlackLogo,
-  TwitterLogo,
+  XLogo,
   YoutubeLogo,
   RedditLogo,
 };

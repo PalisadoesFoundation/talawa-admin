@@ -11,6 +11,9 @@ import type {
   InterfaceMemberInfo,
 } from 'utils/interfaces';
 
+/**
+ * Interface for the form state used in the `ActionItemCreateModal` component.
+ */
 interface InterfaceFormStateType {
   actionItemCategoryId: string;
   assigneeId: string;
@@ -18,6 +21,9 @@ interface InterfaceFormStateType {
   preCompletionNotes: string;
 }
 
+/**
+ * Props for the `ActionItemCreateModal` component.
+ */
 interface InterfaceActionItemCreateModalProps {
   actionItemCreateModalIsOpen: boolean;
   hideCreateModal: () => void;
@@ -31,6 +37,12 @@ interface InterfaceActionItemCreateModalProps {
   setDueDate: (state: React.SetStateAction<Date | null>) => void;
 }
 
+/**
+ * A modal component for creating action items.
+ *
+ * @param props - The properties passed to the component.
+ * @returns The `ActionItemCreateModal` component.
+ */
 const ActionItemCreateModal: React.FC<InterfaceActionItemCreateModalProps> = ({
   actionItemCreateModalIsOpen,
   hideCreateModal,

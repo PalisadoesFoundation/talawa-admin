@@ -200,6 +200,36 @@
     "organization": "Organization",
     "invalidDetailsMessage": "Please enter valid details."
   },
+  "organizationTags": {
+    "title": "Organization Tags",
+    "createTag": "Create a new tag",
+    "manageTag": "Manage",
+    "editTag": "Edit",
+    "removeTag": "Remove",
+    "tagDetails": "Tag Details",
+    "tagName": "Name",
+    "tagType": "Type",
+    "tagNamePlaceholder": "Write the name of the tag",
+    "tagCreationSuccess": "New tag created successfully",
+    "tagUpdationSuccess": "Tag updated successfully",
+    "tagRemovalSuccess": "Tag deleted successfully",
+    "noTagsFound": "No tags found",
+    "removeUserTag": "Delete Tag",
+    "removeUserTagMessage": "Do you want to delete this tag?",
+    "addChildTag": "Add a Sub Tag"
+  },
+  "manageTag": {
+    "title": "Tag Details",
+    "addPeopleToTag": "Add People to tag",
+    "viewProfile": "View",
+    "noAssignedMembersFound": "No one assigned",
+    "unassignUserTag": "Unassign Tag",
+    "unassignUserTagMessage": "Do you want to remove the tag from this user?",
+    "successfullyUnassigned": "Tag unassigned from user",
+    "addPeople": "Add People",
+    "add": "Add",
+    "subTags": "Sub Tags"
+  },
   "userListCard": {
     "addAdmin": "Add Admin",
     "addedAsAdmin": "User is added as admin."
@@ -267,11 +297,11 @@
     "makeActive": "Active",
     "noActionItems": "No Action Items",
     "options": "Options",
-    "preCompletionNotes": "Pre Completion Notes",
+    "preCompletionNotes": "Notes",
     "actionItemActive": "Active",
     "markCompletion": "Mark Completion",
     "actionItemStatus": "Action Item Status",
-    "postCompletionNotes": "Post Completion Notes",
+    "postCompletionNotes": "Completion Notes",
     "selectActionItemCategory": "Select an action item category",
     "selectAssignee": "Select an assignee",
     "status": "Status",
@@ -296,6 +326,40 @@
     "agendaCategoryDeleted": "Agenda Category deleted successfully",
     "deleteAgendaCategory": "Delete Agenda Category",
     "deleteAgendaCategoryMsg": "Do you want to remove this agenda category?"
+  },
+  "agendaItems": {
+    "agendaItemDetails": "Agenda Item Details",
+    "updateAgendaItem": "Update Agenda Item",
+    "title": "Title",
+    "enterTitle": "Enter Title",
+    "sequence": "Sequence",
+    "description": "Description",
+    "enterDescription": "Enter Description",
+    "category": "Agenda Category",
+    "attachments": "Attachments",
+    "attachmentLimit": "Add any image file or video file upto 10MB",
+    "fileSizeExceedsLimit": "File size exceeds the limit which is 10MB",
+    "urls": "URLs",
+    "url": "add link to URL",
+    "enterUrl": "https://example.com",
+    "invalidUrl": "Please enter a valid URL",
+    "link": "Link",
+    "createdBy": "Created By",
+    "regular": "Regular",
+    "note": "Note",
+    "duration": "Duration",
+    "enterDuration": "mm:ss",
+    "options": "Options",
+    "createAgendaItem": "Create Agenda Item",
+    "noAgendaItems": "No Agenda Items",
+    "selectAgendaItemCategory": "Select an agenda item category",
+    "update": "Update",
+    "delete": "Delete",
+    "agendaItemCreated": "Agenda Item created successfully",
+    "agendaItemUpdated": "Agenda Item updated successfully",
+    "agendaItemDeleted": "Agenda Item deleted successfully",
+    "deleteAgendaItem": "Delete Agenda Item",
+    "deleteAgendaItemMsg": "Do you want to remove this agenda item?"
   },
   "eventListCard": {
     "deleteEvent": "Delete Event",
@@ -327,33 +391,24 @@
     "title": "Funds",
     "createFund": "Create Fund",
     "fundName": "Fund Name",
-    "fundId": "Fund ID",
-    "fundOptions": "Opitons",
-    "noFunds": "No Funds Found",
-    "fundDetails": "Fund Details",
+    "fundId": "Fund (Reference) ID",
     "taxDeductible": "Tax Deductible",
-    "enterfundName": "Enter Fund Name",
-    "enterfundId": "Enter Fund ID",
-    "default": "Default Fund",
+    "default": "Default",
     "archived": "Archived",
-    "nonArchive": "Non-Archived",
     "fundCreate": "Create Fund",
     "fundUpdate": "Update Fund",
     "fundDelete": "Delete Fund",
-    "manageFund": "Manage Fund",
-    "searchFullName": "Search By Name",
     "noFundsFound": "No Funds Found",
     "createdBy": "Created By",
     "createdOn": "Created On",
     "status": "Status",
-    "archiveFund": "Archive Fund",
-    "archiveFundMsg": "On Archiving this fund will remove it from the fund listing.Thisaction can be undone",
     "fundCreated": "Fund created successfully",
     "fundUpdated": "Fund updated successfully",
     "fundDeleted": "Fund deleted successfully",
-    "fundArchived": "Fund archived successfully",
-    "fundUnarchived": "Fund unarchived successfully",
-    "deleteFundMsg": "Do you want to remove this fund?"
+    "deleteFundMsg": "Are you sure you want to delete this fund?",
+    "createdLatest": "Created Latest",
+    "createdEarliest": "Created Earliest",
+    "viewCampaigns": "View Campaigns"
   },
   "fundCampaign": {
     "title": "Fundraising Campaigns",
@@ -366,17 +421,21 @@
     "deletedCampaign": "Campaign deleted successfully",
     "deleteCampaignMsg": "Are you sure you want to delete this campaign?",
     "noCampaigns": "No Campaigns Found",
-    "createCampaign": "Create Fund Campaign",
-    "updateCampaign": "Update Fund Campaign",
-    "manageCampaign": "Manage Fund Campaign",
-    "deleteCampaign": "Delete Fund Campaign",
+    "createCampaign": "Create Campaign",
+    "updateCampaign": "Update Campaign",
+    "deleteCampaign": "Delete Campaign",
     "currency": "Currency",
     "selectCurrency": "Select Currency",
-    "searchFullName": "Search By Name"
+    "searchFullName": "Search By Name",
+    "viewPledges": "View Pledges",
+    "noCampaignsFound": "No Campaigns Found",
+    "latestEndDate": "Latest End Date",
+    "earliestEndDate": "Earliest End Date",
+    "lowestGoal": "Lowest Goal",
+    "highestGoal": "Highest Goal"
   },
   "pledges": {
     "title": "Fund Campaign Pledges",
-    "volunteers": "Volunteers",
     "pledgeAmount": "Pledge Amount",
     "pledgeOptions": "Options",
     "pledgeCreated": "Pledge created successfully",
@@ -392,12 +451,16 @@
     "editPledge": "Edit Pledge",
     "deletePledgeMsg": "Are you sure you want to delete this pledge?",
     "noPledges": "No Pledges Found",
-    "sort": "Sort",
-    "searchVolunteer": "Search By Volunteer",
+    "searchPledger": "Search By Pledgers",
     "highestAmount": "Highest Amount",
     "lowestAmount": "Lowest Amount",
     "latestEndDate": "Latest End Date",
-    "earliestEndDate": "Earliest End Date"
+    "earliestEndDate": "Earliest End Date",
+    "campaigns": "Campaigns",
+    "pledges": "Pledges",
+    "endsOn": "Ends on",
+    "raisedAmount": "Raised amount ",
+    "pledgedAmount": "Pledged amount"
   },
   "orgPost": {
     "title": "Posts",
@@ -482,6 +545,7 @@
     "dashboard": "Dashboard",
     "registrants": "Registrants",
     "eventActions": "Event Actions",
+    "eventAgendas": "Event Agendas",
     "eventStats": "Event Statistics",
     "to": "TO"
   },
@@ -554,7 +618,9 @@
   "userPasswordUpdate": {
     "previousPassword": "Previous Password",
     "newPassword": "New Password",
-    "confirmNewPassword": "Confirm New Password"
+    "confirmNewPassword": "Confirm New Password",
+    "passCantBeEmpty": "Password can't be empty",
+    "passNoMatch": "New and Confirm password do not match."
   },
   "orgDelete": {
     "deleteOrg": "Delete Org"
@@ -642,6 +708,10 @@
     "addedAsAdmin": "User is added as admin.",
     "userType": "User Type"
   },
+  "people": {
+    "title": "People",
+    "searchUsers": "Search users"
+  },
   "userLogin": {
     "login": "Login",
     "loginIntoYourAccount": "Login into your account",
@@ -683,7 +753,12 @@
     "viewAll": "View all",
     "talawaUserPortal": "Talawa User Portal",
     "my organizations": "My Organizations",
-    "communityProfile": "Community Profile"
+    "users": "Users",
+    "requests": "Requests",
+    "communityProfile": "Community Profile",
+    "logout": "Logout",
+    "settings": "Settings",
+    "chat": "Chat"
   },
   "organizationSidebar": {
     "viewAll": "View all",
@@ -693,12 +768,15 @@
   },
   "postCard": {
     "likes": "Likes",
-    "comments": "Comments"
+    "comments": "Comments",
+    "viewPost": "View Post",
+    "editPost": "Edit Post",
+    "postedOn": "Posted on {{date}}"
   },
   "home": {
     "posts": "Posts",
     "post": "Post",
-    "title": "Title",
+    "title": "Posts",
     "textArea": "Something on your mind?",
     "feed": "Feed",
     "loading": "Loading",
@@ -710,7 +788,8 @@
     "startPost": "Start a post",
     "media": "Media",
     "event": "Event",
-    "article": "Article"
+    "article": "Article",
+    "postNowVisibleInFeed": "Post now visible in feed"
   },
   "settings": {
     "profileSettings": "Profile Settings",
@@ -744,7 +823,7 @@
     "widowed": "Widowed",
     "divorced": "Divorced",
     "engaged": "Engaged",
-    "seperated": "Seperated",
+    "separated": "Separated",
     "grade1": "Grade 1",
     "grade2": "Grade 2",
     "grade3": "Grade 3",
@@ -767,6 +846,7 @@
     "enterState": "Enter City or State"
   },
   "donate": {
+    "title": "Donations",
     "donations": "Donations",
     "searchDonations": "Search donations",
     "donateForThe": "Donate for the",
@@ -777,6 +857,7 @@
     "success": "Donation Successful"
   },
   "userEvents": {
+    "title": "Events",
     "nothingToShow": "Nothing to show here.",
     "createEvent": "Create Event",
     "recurring": "Recurring Event",
@@ -819,10 +900,15 @@
     "deleteAdvertisement": "Delete Advertisement",
     "deleteAdvertisementMsg": "Do you want to remove this advertisement?",
     "view": "View",
-    "editAdvertisement": "Edit Advertisement"
+    "editAdvertisement": "Edit Advertisement",
+    "advertisementDeleted": "Advertisement deleted successfully.",
+    "endDateGreaterOrEqual": "End Date should be greater than or equal to Start Date",
+    "advertisementCreated": "Advertisement created successfully."
   },
   "userChat": {
     "chat": "Chat",
+    "search": "Search",
+    "messages": "Messages",
     "contacts": "Contacts"
   },
   "userChatRoom": {
@@ -900,8 +986,16 @@
     "actionItemCategory": "Action Item Category",
     "selectActionItemCategory": "Select an action item category",
     "selectAssignee": "Select an assignee",
-    "preCompletionNotes": "Pre Completion Notes",
-    "postCompletionNotes": "Post Completion Notes",
+    "assignee": "Assignee",
+    "assigner": "Assigner",
+    "preCompletionNotes": "Notes",
+    "postCompletionNotes": "Completion Notes",
+    "assignmentDate": "Assignment Date",
+    "status": "Status",
+    "actionItemActive": "Active",
+    "actionItemStatus": "Action Item Status",
+    "actionItemCompleted": "Action Item Completed",
+    "markCompletion": "Mark Completion",
     "actionItemDetails": "Action Item Details",
     "dueDate": "Due Date",
     "completionDate": "Completion Date",
@@ -913,5 +1007,34 @@
     "successfulUpdation": "Action Item updated successfully",
     "notes": "Notes",
     "save": "Save"
+  },
+  "checkIn": {
+    "errorCheckingIn": "Error checking in",
+    "checkedInSuccessfully": "Checked in successfully"
+  },
+  "eventRegistrantsModal": {
+    "errorAddingAttendee": "Error adding attendee",
+    "errorRemovingAttendee": "Error removing attendee"
+  },
+  "userCampaigns": {
+    "title": "Fundraising Campaigns",
+    "searchByName": "Search by Name...",
+    "searchBy": "Search by",
+    "pledgers": "Pledgers",
+    "campaigns": "Campaigns",
+    "myPledges": "My Pledges",
+    "lowestAmount": "Lowest Amount",
+    "highestAmount": "Highest Amount",
+    "lowestGoal": "Lowest Goal",
+    "highestGoal": "Highest Goal",
+    "latestEndDate": "Latest End Date",
+    "earliestEndDate": "Earliest End Date",
+    "addPledge": "Add Pledge",
+    "viewPledges": "View Pledges",
+    "noPledges": "No Pledges Found",
+    "noCampaigns": "No Campaigns Found"
+  },
+  "userPledges": {
+    "title": "My Pledges"
   }
 }

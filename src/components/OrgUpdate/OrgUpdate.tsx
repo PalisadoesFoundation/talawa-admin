@@ -23,6 +23,16 @@ interface InterfaceOrgUpdateProps {
   orgId: string;
 }
 
+/**
+ * Component for updating organization details.
+ *
+ * This component allows users to update the organization's name, description, address,
+ * visibility settings, and upload an image. It uses GraphQL mutations and queries to
+ * fetch and update data.
+ *
+ * @param props - Component props containing the organization ID.
+ * @returns The rendered component.
+ */
 function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
   const { orgId } = props;
 
@@ -85,6 +95,7 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     notifyOnNetworkStatusChange: true,
   });
 
+  // Update form state when data changes
   useEffect(() => {
     let isMounted = true;
     if (data && isMounted) {
@@ -104,6 +115,10 @@ function orgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     };
   }, [data, orgId]);
 
+  /**
+   * Handles the save button click event.
+   * Updates the organization with the form data.
+   */
   const onSaveChangesClicked = async (): Promise<void> => {
     try {
       const { data } = await login({

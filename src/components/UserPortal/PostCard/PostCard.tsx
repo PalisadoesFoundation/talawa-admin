@@ -53,6 +53,19 @@ interface InterfaceCommentCardProps {
   handleDislikeComment: (commentId: string) => void;
 }
 
+/**
+ * PostCard component displays an individual post, including its details, interactions, and comments.
+ *
+ * The component allows users to:
+ * - View the post's details in a modal.
+ * - Edit or delete the post.
+ * - Like or unlike the post.
+ * - Add comments to the post.
+ * - Like or dislike individual comments.
+ *
+ * @param props - The properties passed to the component including post details, comments, and related actions.
+ * @returns JSX.Element representing a post card with interactive features.
+ */
 export default function postCard(props: InterfacePostCard): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'postCard',
@@ -61,8 +74,12 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
 
   const { getItem } = useLocalStorage();
 
+  // Retrieve user ID from local storage
   const userId = getItem('userId');
+  // Check if the post is liked by the current user
   const likedByUser = props.likedBy.some((likedBy) => likedBy.id === userId);
+
+  // State variables
   const [comments, setComments] = React.useState(props.comments);
   const [numComments, setNumComments] = React.useState(props.commentCount);
 
@@ -73,8 +90,10 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
   const [showEditPost, setShowEditPost] = React.useState(false);
   const [postContent, setPostContent] = React.useState<string>(props.text);
 
+  // Post creator's full name
   const postCreator = `${props.creator.firstName} ${props.creator.lastName}`;
 
+  // GraphQL mutations
   const [likePost, { loading: likeLoading }] = useMutation(LIKE_POST);
   const [unLikePost, { loading: unlikeLoading }] = useMutation(UNLIKE_POST);
   const [create, { loading: commentLoading }] =
@@ -82,12 +101,18 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
   const [editPost] = useMutation(UPDATE_POST_MUTATION);
   const [deletePost] = useMutation(DELETE_POST_MUTATION);
 
+  // Toggle the view post modal
   const toggleViewPost = (): void => setViewPost(!viewPost);
+
+  // Toggle the edit post modal
   const toggleEditPost = (): void => setShowEditPost(!showEditPost);
+
+  // Handle input changes for the post content
   const handlePostInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setPostContent(e.target.value);
   };
 
+  // Toggle like or unlike the post
   const handleToggleLike = async (): Promise<void> => {
     if (isLikedByUser) {
       try {
@@ -124,6 +149,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
     }
   };
 
+  // Handle changes to the comment input field
   const handleCommentInput = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
@@ -131,6 +157,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
     setCommentInput(comment);
   };
 
+  // Dislike a comment
   const handleDislikeComment = (commentId: string): void => {
     const updatedComments = comments.map((comment) => {
       let updatedComment = { ...comment };
@@ -148,6 +175,8 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
     });
     setComments(updatedComments);
   };
+
+  // Like a comment
   const handleLikeComment = (commentId: string): void => {
     const updatedComments = comments.map((comment) => {
       let updatedComment = { ...comment };
@@ -166,6 +195,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
     setComments(updatedComments);
   };
 
+  // Create a new comment
   const createComment = async (): Promise<void> => {
     try {
       const { data: createEventData } = await create({
@@ -180,10 +210,10 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
         setCommentInput('');
         setNumComments((numComments) => numComments + 1);
 
-        const newComment: any = {
-          id: createEventData.createComment._id,
+        const newComment: InterfaceCommentCardProps = {
+          id: createEventData.createComment.id,
           creator: {
-            id: createEventData.createComment.creator.id,
+            id: createEventData.createComment.creator._id,
             firstName: createEventData.createComment.creator.firstName,
             lastName: createEventData.createComment.creator.lastName,
             email: createEventData.createComment.creator.email,
@@ -203,6 +233,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
     }
   };
 
+  // Edit the post
   const handleEditPost = (): void => {
     try {
       editPost({
@@ -212,14 +243,16 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
         },
       });
 
-      props.fetchPosts();
+      props.fetchPosts(); // Refresh the posts
       toggleEditPost();
-      toast.success('Successfully edited the Post.');
+      toast.success(tCommon('updatedSuccessfully', { item: 'Post' }));
     } catch (error: unknown) {
       /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
+
+  // Delete the post
   const handleDeletePost = (): void => {
     try {
       deletePost({
@@ -228,7 +261,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
         },
       });
 
-      props.fetchPosts();
+      props.fetchPosts(); // Refresh the posts
       toast.success('Successfully deleted the Post.');
     } catch (error: unknown) {
       /* istanbul ignore next */
@@ -287,7 +320,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
             {props.title}
           </Card.Title>
           <Card.Subtitle style={{ color: '#808080' }}>
-            Posted On: {props.postedAt}
+            {t('postedOn', { date: props.postedAt })}
           </Card.Subtitle>
           <Card.Text className={`${styles.cardText} mt-4`}>
             {props.text}
@@ -302,7 +335,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
               data-testid={'viewPostBtn'}
               onClick={toggleViewPost}
             >
-              View Post
+              {t('viewPost')}
             </Button>
           </div>
         </Card.Footer>
@@ -339,7 +372,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
             <h4>Comments</h4>
             <div className={styles.commentContainer}>
               {numComments ? (
-                comments.map((comment: any, index: any) => {
+                comments.map((comment, index: number) => {
                   const cardProps: InterfaceCommentCardProps = {
                     id: comment.id,
                     creator: {
@@ -415,7 +448,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
       <Modal show={showEditPost} onHide={toggleEditPost} size="lg" centered>
         <Modal.Header closeButton className="py-2 ">
           <p className="fs-3" data-testid={'editPostModalTitle'}>
-            Edit Post
+            {t('editPost')}
           </p>
         </Modal.Header>
         <Modal.Body>
@@ -439,7 +472,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
             data-testid={'editPostBtn'}
             onClick={handleEditPost}
           >
-            Edit Post
+            {t('editPost')}
           </Button>
         </ModalFooter>
       </Modal>

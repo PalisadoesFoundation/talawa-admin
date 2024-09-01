@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import { toast } from 'react-toastify';
@@ -29,6 +29,39 @@ export interface InterfaceDonationCardProps {
   updatedAt: string;
 }
 
+interface InterfaceDonation {
+  _id: string;
+  nameOfUser: string;
+  amount: string;
+  userId: string;
+  payPalId: string;
+  updatedAt: string;
+}
+
+/**
+ * `donate` component allows users to make donations to an organization and view their previous donations.
+ *
+ * This component fetches donation-related data using GraphQL queries and allows users to make donations
+ * using a mutation. It supports currency selection, donation amount input, and displays a paginated list
+ * of previous donations.
+ *
+ * It includes:
+ * - An input field for searching donations.
+ * - A dropdown to select currency.
+ * - An input field for entering donation amount.
+ * - A button to submit the donation.
+ * - A list of previous donations displayed in a paginated format.
+ * - An organization sidebar for navigation.
+ *
+ * ### GraphQL Queries
+ * - `ORGANIZATION_DONATION_CONNECTION_LIST`: Fetches the list of donations for the organization.
+ * - `USER_ORGANIZATION_CONNECTION`: Fetches organization details.
+ *
+ * ### GraphQL Mutations
+ * - `DONATE_TO_ORGANIZATION`: Performs the donation action.
+ *
+ * @returns The rendered component.
+ */
 export default function donate(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'donate',
@@ -39,17 +72,19 @@ export default function donate(): JSX.Element {
   const userName = getItem('name');
 
   const { orgId: organizationId } = useParams();
-  const [amount, setAmount] = React.useState<string>('');
-  const [organizationDetails, setOrganizationDetails]: any = React.useState({});
-  const [donations, setDonations] = React.useState([]);
-  const [selectedCurrency, setSelectedCurrency] = React.useState(0);
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [amount, setAmount] = useState<string>('');
+  const [organizationDetails, setOrganizationDetails] = useState<{
+    name: string;
+  }>({ name: '' });
+  const [donations, setDonations] = useState([]);
+  const [selectedCurrency, setSelectedCurrency] = useState(0);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const currencies = ['USD', 'INR', 'EUR'];
 
   const {
-    data: data2,
+    data: donationData,
     loading,
     refetch,
   } = useQuery(ORGANIZATION_DONATION_CONNECTION_LIST, {
@@ -61,10 +96,6 @@ export default function donate(): JSX.Element {
   });
 
   const [donate] = useMutation(DONATE_TO_ORGANIZATION);
-
-  const navbarProps = {
-    currentPage: 'donate',
-  };
 
   /* istanbul ignore next */
   const handleChangePage = (
@@ -84,17 +115,17 @@ export default function donate(): JSX.Element {
     setPage(0);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (data) {
       setOrganizationDetails(data.organizationsConnection[0]);
     }
   }, [data]);
 
-  React.useEffect(() => {
-    if (data2) {
-      setDonations(data2.getDonationByOrgIdConnection);
+  useEffect(() => {
+    if (donationData) {
+      setDonations(donationData.getDonationByOrgIdConnection);
     }
-  }, [data2]);
+  }, [donationData]);
 
   const donateToOrg = (): void => {
     try {
@@ -110,7 +141,7 @@ export default function donate(): JSX.Element {
       });
       refetch();
       toast.success(t(`success`));
-    } catch (error: any) {
+    } catch (error: unknown) {
       /* istanbul ignore next */
       errorHandler(t, error);
     }
@@ -118,9 +149,8 @@ export default function donate(): JSX.Element {
 
   return (
     <>
-      <div className={`d-flex flex-row ${styles.containerHeight}`}>
-        <div className={` ${styles.mainContainer}`}>
-          <h1>{t(`donations`)}</h1>
+      <div className={`d-flex flex-row mt-4`}>
+        <div className={`${styles.mainContainer} me-4`}>
           <div className={styles.inputContainer}>
             <div className={styles.input}>
               <Form.Control
@@ -217,7 +247,7 @@ export default function donate(): JSX.Element {
                           )
                         : /* istanbul ignore next */
                           donations
-                      ).map((donation: any, index) => {
+                      ).map((donation: InterfaceDonation, index) => {
                         const cardProps: InterfaceDonationCardProps = {
                           name: donation.nameOfUser,
                           id: donation._id,

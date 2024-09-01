@@ -47,16 +47,9 @@
   max-width: 600px;
 }
 
-.colorLight {
-  background-color: #f5f5f5;
-}
-
 .mainContainer {
   width: 50%;
   flex-grow: 3;
-  padding: 40px;
-  max-height: 100%;
-  overflow: auto;
 }
 
 .content {
@@ -66,10 +59,6 @@
 
 .gap {
   gap: 20px;
-}
-
-.containerHeight {
-  height: 100vh;
 }
 
 .colorPrimary {

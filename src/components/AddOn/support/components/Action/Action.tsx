@@ -1,12 +1,31 @@
 import React, { useRef } from 'react';
 
-// TODO: UI logic for embedded actions (hide label)
+/**
+ * Props for the `action` component.
+ */
 interface InterfaceActionProps {
+  /**
+   * The child elements to be rendered inside the action component.
+   */
   children: any;
+
+  /**
+   * The label to be displayed above the child elements.
+   */
   label: string;
 }
 
-// TODO: props => Validate child element type, register functions from children for global use?,
+/**
+ * A React component that renders a labeled container for embedded actions.
+ *
+ * @param  props - The properties for the component.
+ * @returns  A JSX element containing the label and child elements.
+ *
+ * @example
+ * <Action label="My Label">
+ *   <button>Click Me</button>
+ * </Action>
+ */
 function action(props: InterfaceActionProps): JSX.Element {
   const actionRef = useRef<HTMLDivElement>(null);
 

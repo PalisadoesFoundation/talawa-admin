@@ -3,10 +3,17 @@ import styles from './Loader.module.css';
 import { Spinner } from 'react-bootstrap';
 
 interface InterfaceLoaderProps {
-  styles?: StyleSheet | string;
-  size?: 'sm' | 'lg' | 'xl';
+  styles?: StyleSheet | string; // Custom styles for the spinner wrapper
+  size?: 'sm' | 'lg' | 'xl'; // Size of the spinner
 }
 
+/**
+ * Loader component for displaying a loading spinner.
+ *
+ * @param styles - Optional custom styles for the spinner wrapper.
+ * @param size - Size of the spinner. Can be 'sm', 'lg', or 'xl'.
+ * @returns JSX element for a loading spinner.
+ */
 const Loader = (props: InterfaceLoaderProps): JSX.Element => {
   return (
     <>

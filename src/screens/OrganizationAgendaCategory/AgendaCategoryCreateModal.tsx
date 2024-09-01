@@ -3,12 +3,18 @@ import { Modal, Form, Button } from 'react-bootstrap';
 import type { ChangeEvent } from 'react';
 import styles from './OrganizationAgendaCategory.module.css';
 
+/**
+ * InterfaceFormStateType is an object containing the form state
+ */
 interface InterfaceFormStateType {
   name: string;
   description: string;
   createdBy: string;
 }
 
+/**
+ * InterfaceAgendaCategoryCreateModalProps is an object containing the props for AgendaCategoryCreateModal component
+ */
 interface InterfaceAgendaCategoryCreateModalProps {
   agendaCategoryCreateModalIsOpen: boolean;
   hideCreateModal: () => void;
@@ -20,6 +26,16 @@ interface InterfaceAgendaCategoryCreateModalProps {
   t: (key: string) => string;
 }
 
+/**
+ * AgendaCategoryCreateModal component is used to create the agenda category details like name, description
+ * @param  agendaCategoryCreateModalIsOpen - boolean value to check if the modal is open or not
+ * @param  hideCreateModal - function to hide the modal
+ * @param  formState - object containing the form state
+ * @param  setFormState - function to set the form state
+ * @param  createAgendaCategoryHandler - function to create the agenda category
+ * @param  t - i18n function to translate the text
+ * @returns  returns the AgendaCategoryCreateModal component
+ */
 const AgendaCategoryCreateModal: React.FC<
   InterfaceAgendaCategoryCreateModalProps
 > = ({

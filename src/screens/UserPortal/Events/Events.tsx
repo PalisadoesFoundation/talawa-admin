@@ -21,11 +21,25 @@ import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from './Events.module.css';
 
+/**
+ * Converts a time string to a Dayjs object.
+ *
+ * @param time - The time string to convert, in HH:mm:ss format.
+ * @returns A Dayjs object representing the time.
+ */
 const timeToDayJs = (time: string): Dayjs => {
   const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
   return dayjs(dateTimeString, { format: 'YYYY-MM-DD HH:mm:ss' });
 };
 
+/**
+ * Component to manage and display events for an organization.
+ *
+ * This component allows users to view, create, and manage events within an organization.
+ * It includes a calendar view, a form to create new events, and various filters and settings.
+ *
+ * @returns The JSX element for the events management interface.
+ */
 export default function events(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userEvents',
@@ -34,6 +48,7 @@ export default function events(): JSX.Element {
 
   const { getItem } = useLocalStorage();
 
+  // State variables to manage event details and UI
   const [events, setEvents] = React.useState([]);
   const [eventTitle, setEventTitle] = React.useState('');
   const [eventDescription, setEventDescription] = React.useState('');
@@ -50,6 +65,7 @@ export default function events(): JSX.Element {
   const [createEventModal, setCreateEventmodalisOpen] = React.useState(false);
   const { orgId: organizationId } = useParams();
 
+  // Query to fetch events for the organization
   const { data, refetch } = useQuery(ORGANIZATION_EVENTS_CONNECTION, {
     variables: {
       organization_id: organizationId,
@@ -57,12 +73,15 @@ export default function events(): JSX.Element {
     },
   });
 
+  // Query to fetch organization details
   const { data: orgData } = useQuery(ORGANIZATIONS_LIST, {
     variables: { id: organizationId },
   });
 
+  // Mutation to create a new event
   const [create] = useMutation(CREATE_EVENT_MUTATION);
 
+  // Get user details from local storage
   const userId = getItem('id') as string;
 
   const superAdmin = getItem('SuperAdmin');
@@ -73,6 +92,12 @@ export default function events(): JSX.Element {
       ? 'ADMIN'
       : 'USER';
 
+  /**
+   * Handles the form submission for creating a new event.
+   *
+   * @param e - The form submit event.
+   * @returns A promise that resolves when the event is created.
+   */
   const createEvent = async (
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
@@ -114,28 +139,52 @@ export default function events(): JSX.Element {
     }
   };
 
+  /**
+   * Toggles the visibility of the event creation modal.
+   *
+   * @returns Void.
+   */
   /* istanbul ignore next */
   const toggleCreateEventModal = (): void =>
     setCreateEventmodalisOpen(!createEventModal);
 
+  /**
+   * Updates the event title state when the input changes.
+   *
+   * @param event - The input change event.
+   * @returns Void.
+   */
   const handleEventTitleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
     setEventTitle(event.target.value);
   };
 
+  /**
+   * Updates the event location state when the input changes.
+   *
+   * @param event - The input change event.
+   * @returns Void.
+   */
   const handleEventLocationChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
     setEventLocation(event.target.value);
   };
 
+  /**
+   * Updates the event description state when the input changes.
+   *
+   * @param event - The input change event.
+   * @returns Void.
+   */
   const handleEventDescriptionChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
     setEventDescription(event.target.value);
   };
 
+  // Update the list of events when the data from the query changes
   /* istanbul ignore next */
   React.useEffect(() => {
     if (data) {
@@ -143,10 +192,22 @@ export default function events(): JSX.Element {
     }
   }, [data]);
 
+  /**
+   * Shows the modal for creating a new event.
+   *
+   * @returns Void.
+   */
   /* istanbul ignore next */
   const showInviteModal = (): void => {
     setCreateEventmodalisOpen(true);
   };
+
+  /**
+   * Updates the calendar view type.
+   *
+   * @param item - The view type to set, or null to reset.
+   * @returns Void.
+   */
   /* istanbul ignore next */
   const handleChangeView = (item: string | null): void => {
     /*istanbul ignore next*/
@@ -157,9 +218,8 @@ export default function events(): JSX.Element {
 
   return (
     <>
-      <div className={`d-flex flex-row ${styles.containerHeight}`}>
-        <div className={`${styles.colorLight} ${styles.mainContainer}`}>
-          <h1>Events</h1>
+      <div className={`d-flex flex-row`}>
+        <div className={`${styles.mainContainer}`}>
           <EventHeader
             viewType={viewType}
             showInviteModal={showInviteModal}

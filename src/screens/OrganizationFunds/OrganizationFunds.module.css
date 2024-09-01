@@ -21,23 +21,12 @@
   border: 1px solid #31bb6b;
   position: relative;
   display: inline-block;
-  margin-top: 10px;
-  margin-bottom: 10px;
   color: #31bb6b;
-}
-
-.createFundBtn {
-  margin-top: 10px;
 }
 
 .fundName {
   font-weight: 600;
   cursor: pointer;
-}
-.fundModal {
-  max-width: 80vw;
-  margin-top: 2vh;
-  margin-left: 13vw;
 }
 
 .modalHeader {
@@ -49,12 +38,33 @@
   color: var(--bs-emphasis-color);
 }
 
-.titlemodal {
-  font-weight: 600;
-  font-size: 25px;
-  margin-top: 1rem;
-  width: 65%;
+.fundModal {
+  max-width: 80vw;
+  margin-top: 2vh;
+  margin-left: 13vw;
 }
+
+.titlemodal {
+  color: #707070;
+  font-weight: 600;
+  font-size: 32px;
+  width: 65%;
+  margin-bottom: 0px;
+}
+
+.noOutline input {
+  outline: none;
+}
+
+.modalCloseBtn {
+  width: 40px;
+  height: 40px;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .greenregbtn {
   margin: 1rem 0 0;
   margin-top: 15px;
@@ -95,22 +105,12 @@
 
 .btnsContainer {
   display: flex;
-  margin: 2.5rem 0 2.5rem 0;
-}
-
-.btnsContainer .btnsBlock {
-  display: flex;
-}
-
-.btnsContainer .btnsBlock div button {
-  display: flex;
-  margin-left: 1rem;
-  justify-content: center;
-  align-items: center;
+  margin: 2rem 0 2.5rem 0;
 }
 
 .btnsContainer .input {
   flex: 1;
+  min-width: 18rem;
   position: relative;
 }
 
@@ -130,48 +130,13 @@
   margin-bottom: 20px;
 }
 
-@media (max-width: 1020px) {
-  .btnsContainer {
-    flex-direction: column;
-    margin: 1.5rem 0;
-  }
-
-  .btnsContainer .btnsBlock {
-    margin: 1.5rem 0 0 0;
-    justify-content: space-between;
-  }
-
-  .btnsContainer .btnsBlock div button {
-    margin: 0;
-  }
-
-  .createFundBtn {
-    margin-top: 0;
-  }
+.rowBackground {
+  background-color: var(--bs-white);
+  max-height: 120px;
 }
 
-@media screen and (max-width: 575.5px) {
-  .mainpageright {
-    width: 98%;
-  }
-}
-
-/* For mobile devices  */
-
-@media (max-width: 520px) {
-  .btnsContainer {
-    margin-bottom: 0;
-  }
-
-  .btnsContainer .btnsBlock {
-    display: block;
-    margin-top: 1rem;
-    margin-right: 0;
-  }
-
-  .btnsContainer .btnsBlock div button {
-    margin-bottom: 1rem;
-    margin-right: 0;
-    width: 100%;
-  }
+.tableHeader {
+  background-color: var(--bs-primary);
+  color: var(--bs-white);
+  font-size: 1rem;
 }

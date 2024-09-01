@@ -110,9 +110,7 @@ describe('Testing User Password Update', () => {
     userEvent.click(screen.getByText(/Save Changes/i));
 
     await wait();
-    expect(mockToast.error).toHaveBeenCalledWith(
-      'The password field cannot be empty.',
-    );
+    expect(mockToast.error).toHaveBeenCalledWith(`Password can't be empty`);
   });
 
   test('displays an error when new and confirm password field does not match', async () => {

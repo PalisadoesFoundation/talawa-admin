@@ -22,6 +22,12 @@ import type { GridColDef, GridCellParams } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 
+/**
+ * OrganizationPeople component is used to display the list of members, admins and users of the organization.
+ * It also provides the functionality to search the members, admins and users by their full name.
+ * It also provides the functionality to remove the members and admins from the organization.
+ * @returns JSX.Element which contains the list of members, admins and users of the organization.
+ */
 function organizationPeople(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationPeople',
@@ -307,10 +313,10 @@ function organizationPeople(): JSX.Element {
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item
-                    inline
+                    d-inline
                     id="userslist"
-                    value="userslist"
-                    name="displaylist"
+                    data-value="userslist"
+                    data-name="displaylist"
                     data-testid="users"
                     defaultChecked={state == 2 ? true : false}
                     onClick={(): void => {
@@ -322,10 +328,10 @@ function organizationPeople(): JSX.Element {
                     </Form.Label>
                   </Dropdown.Item>
                   <Dropdown.Item
-                    inline
+                    d-inline
                     id="memberslist"
-                    value="memberslist"
-                    name="displaylist"
+                    data-value="memberslist"
+                    data-name="displaylist"
                     data-testid="members"
                     defaultChecked={state == 0 ? true : false}
                     onClick={(): void => {
@@ -335,10 +341,10 @@ function organizationPeople(): JSX.Element {
                     <label htmlFor="memberslist">{tCommon('members')}</label>
                   </Dropdown.Item>
                   <Dropdown.Item
-                    inline
+                    d-inline
                     id="adminslist"
-                    value="adminslist"
-                    name="displaylist"
+                    data-value="adminslist"
+                    data-name="displaylist"
                     data-testid="admins"
                     defaultChecked={state == 1 ? true : false}
                     onClick={(): void => {
@@ -362,12 +368,12 @@ function organizationPeople(): JSX.Element {
         <div className="datatable">
           <DataGrid
             disableColumnMenu
-            columnBuffer={5}
+            columnBufferPx={5}
             hideFooter={true}
             className={`${styles.datagrid}`}
             getRowId={(row) => row._id}
-            components={{
-              NoRowsOverlay: () => (
+            slots={{
+              noRowsOverlay: () => (
                 <Stack
                   height="100%"
                   alignItems="center"

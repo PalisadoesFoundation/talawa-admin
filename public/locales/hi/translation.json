@@ -200,6 +200,36 @@
     "organization": "संगठन",
     "invalidDetailsMessage": "कृपया वैध विवरण दर्ज करें."
   },
+  "organizationTags": {
+    "title": "संस्थान टैग",
+    "createTag": "नया टैग बनाएँ",
+    "manageTag": "प्रबंधित करें",
+    "editTag": "संपादित करें",
+    "removeTag": "हटाएँ",
+    "tagDetails": "टैग विवरण",
+    "tagName": "नाम",
+    "tagType": "प्रकार",
+    "tagNamePlaceholder": "टैग का नाम लिखें",
+    "tagCreationSuccess": "नई टैग सफलतापूर्वक बनाई गई",
+    "tagUpdationSuccess": "टैग सफलतापूर्वक अपडेट की गई",
+    "tagRemovalSuccess": "टैग सफलतापूर्वक हटाई गई",
+    "noTagsFound": "कोई टैग नहीं मिला",
+    "removeUserTag": "टैग हटाएँ",
+    "removeUserTagMessage": "क्या आप इस टैग को हटाना चाहते हैं?",
+    "addChildTag": "उप-टैग जोड़ें"
+  },
+  "manageTag": {
+    "title": "टैग विवरण",
+    "addPeopleToTag": "टैग में लोगों को जोड़ें",
+    "viewProfile": "देखें",
+    "noAssignedMembersFound": "कोई असाइन किए गए सदस्य नहीं मिले",
+    "unassignUserTag": "टैग को हटाएं",
+    "unassignUserTagMessage": "क्या आप इस उपयोगकर्ता से टैग हटाना चाहते हैं?",
+    "successfullyUnassigned": "उपयोगकर्ता से टैग हटा दिया गया",
+    "addPeople": "लोगों को जोड़ें",
+    "add": "जोड़ें",
+    "subTags": "उप-टैग्स"
+  },
   "userListCard": {
     "addAdmin": "व्यवस्थापक जोड़ें",
     "addedAsAdmin": "उपयोगकर्ता को व्यवस्थापक के रूप में जोड़ा गया है."
@@ -300,6 +330,40 @@
     "deleteAgendaCategory": "एजेंडा श्रेणी हटाएं",
     "deleteAgendaCategoryMsg": "क्या आप इस एजेंडा श्रेणी को हटाना चाहते हैं?"
   },
+  "agendaItems": {
+    "agendaItemDetails": "एजेंडा आइटम विवरण",
+    "updateAgendaItem": "एजेंडा आइटम अपडेट करें",
+    "title": "शीर्षक",
+    "enterTitle": "शीर्षक दर्ज करें",
+    "sequence": "क्रम",
+    "description": "विवरण",
+    "enterDescription": "विवरण दर्ज करें",
+    "category": "एजेंडा श्रेणी",
+    "attachments": "संलग्नक",
+    "attachmentLimit": "10MB तक कोई भी छवि फ़ाइल या वीडियो फ़ाइल जोड़ें",
+    "fileSizeExceedsLimit": "फ़ाइल का आकार सीमा 10MB से अधिक है",
+    "urls": "URL",
+    "url": "URL में लिंक जोड़ें",
+    "enterUrl": "https://example.com",
+    "invalidUrl": "कृपया एक वैध URL दर्ज करें",
+    "link": "लिंक",
+    "createdBy": "बनाया गया द्वारा",
+    "regular": "नियमित",
+    "note": "नोट",
+    "duration": "अवधि",
+    "enterDuration": "मिमी:से",
+    "options": "विकल्प",
+    "createAgendaItem": "एजेंडा आइटम बनाएं",
+    "noAgendaItems": "कोई एजेंडा आइटम नहीं",
+    "selectAgendaItemCategory": "एजेंडा आइटम श्रेणी चुनें",
+    "update": "अपडेट करें",
+    "delete": "हटाएं",
+    "agendaItemCreated": "एजेंडा आइटम सफलतापूर्वक बनाया गया",
+    "agendaItemUpdated": "एजेंडा आइटम सफलतापूर्वक अपडेट किया गया",
+    "agendaItemDeleted": "एजेंडा आइटम सफलतापूर्वक हटा दिया गया",
+    "deleteAgendaItem": "एजेंडा आइटम हटाएं",
+    "deleteAgendaItemMsg": "क्या आप इस एजेंडा आइटम को हटाना चाहते हैं?"
+  },
   "eventListCard": {
     "deleteEvent": "ईवेंट हटाएँ",
     "deleteEventMsg": "क्या आप इस ईवेंट को हटाना चाहते हैं?",
@@ -330,58 +394,54 @@
   },
   "funds": {
     "title": "फंड",
-    "createFund": "फंड बनाएं",
+    "createFund": "फंड बनाएँ",
     "fundName": "फंड का नाम",
-    "fundId": "फंड आईडी",
-    "fundOptions": "Opitons",
-    "noFunds": "कोई फंड नहीं मिला",
-    "fundDetails": "फंड विवरण",
-    "taxDeductible": "कर छूट",
-    "enterfundName": "फंड का नाम दर्ज करें",
-    "enterfundId": "फंड आईडी दर्ज करें",
-    "default": "डिफ़ॉल्ट फंड",
-    "archived": "संग्रहीत",
-    "nonArchive": "गैर-अभिलेखित",
-    "fundCreate": "फंड बनाएं",
-    "fundUpdate": "अद्यतन निधि",
-    "fundDelete": "फ़ंड हटाएँ",
-    "manageFund": "फंड का प्रबंधन करें",
-    "searchFullName": "नाम से खोजें",
+    "fundId": "फंड (संदर्भ) आईडी",
+    "taxDeductible": "कर ड्यूटी कटाई",
+    "default": "डिफ़ॉल्ट",
+    "archived": "आर्काइव",
+    "fundCreate": "फंड बनाएँ",
+    "fundUpdate": "फंड अपडेट करें",
+    "fundDelete": "फंड को हटाएँ",
+    "searchByName": "नाम से खोजें",
     "noFundsFound": "कोई फंड नहीं मिला",
-    "createdBy": "के द्वारा बनाई गई",
-    "createdOn": "पर बनाया",
+    "createdBy": "द्वारा बनाया गया",
+    "createdOn": "पर बनाया गया",
     "status": "स्थिति",
-    "archiveFund": "पुरालेख कोष",
-    "archiveFundMsg": "इस फंड को संग्रहित करने पर इसे फंड सूची से हटा दिया जाएगा। इस कार्रवाई को पूर्ववत किया जा सकता है",
     "fundCreated": "फंड सफलतापूर्वक बनाया गया",
     "fundUpdated": "फंड सफलतापूर्वक अपडेट किया गया",
-    "fundDeleted": "फंड सफलतापूर्वक हटा दिया गया",
-    "fundArchived": "निधि सफलतापूर्वक संग्रहित की गई",
-    "fundUnarchived": "फंड सफलतापूर्वक संग्रहित किया गया",
-    "deleteFundMsg": "क्या आप इस फंड को हटाना चाहते हैं?"
+    "fundDeleted": "फंड सफलतापूर्वक हटाया गया",
+    "deleteFundMsg": "क्या आप वाकई इस फंड को हटाना चाहते हैं?",
+    "createdLatest": "सबसे पहले बनाया",
+    "createdEarliest": "सबसे जल्दी बनाया",
+    "viewCampaigns": "कैम्पेंस देखें"
   },
   "fundCampaign": {
-    "title": "धन उगाही अभियान",
-    "campaignName": "अभियान का नाम",
+    "title": "फंडरेजिंग कैंपेन",
+    "campaignName": "कैंपेन का नाम",
     "campaignOptions": "विकल्प",
-    "fundingGoal": "वित्त पोषण लक्ष्य",
-    "addCampaign": "अभियान जोड़ें",
-    "createdCampaign": "अभियान सफलतापूर्वक बनाया गया",
-    "updatedCampaign": "अभियान सफलतापूर्वक अपडेट किया गया",
-    "deletedCampaign": "अभियान सफलतापूर्वक हटा दिया गया",
-    "deleteCampaignMsg": "क्या आप वाकई इस अभियान को हटाना चाहते हैं?",
-    "noCampaigns": "कोई अभियान नहीं मिला",
-    "createCampaign": "फंड अभियान बनाएं",
-    "updateCampaign": "अद्यतन निधि अभियान",
-    "manageCampaign": "फंड अभियान प्रबंधित करें",
-    "deleteCampaign": "फ़ंड अभियान हटाएँ",
+    "fundingGoal": "फंडिंग उद्देश्य",
+    "addCampaign": "कैंपेन जोड़ें",
+    "createdCampaign": "कैंपेन सफलतापूर्वक बनाई गई",
+    "updatedCampaign": "कैंपेन सफलतापूर्वक अपडेट की गई",
+    "deletedCampaign": "कैंपेन सफलतापूर्वक हटा दी गई",
+    "deleteCampaignMsg": "क्या आप वाकई इस कैंपेन को हटाना चाहते हैं?",
+    "noCampaigns": "कोई कैंपेन नहीं मिली",
+    "createCampaign": "कैंपेन बनाएँ",
+    "updateCampaign": "कैंपेन अपडेट करें",
+    "deleteCampaign": "कैंपेन को हटाएं",
     "currency": "मुद्रा",
-    "selectCurrency": "मुद्रा चुनें",
-    "searchFullName": "नाम से खोजें"
+    "selectCurrency": "मुद्रा का चयन करें",
+    "searchFullName": "नाम से खोजें",
+    "viewPledges": "प्लेज देखें",
+    "noCampaignsFound": "कोई कैंपेन नहीं मिली",
+    "latestEndDate": "अंतिम समाप्ति तिथि",
+    "earliestEndDate": "सबसे पहली समाप्ति तिथि",
+    "lowestGoal": "सबसे कम उद्देश्य",
+    "highestGoal": "सबसे ऊंचा उद्देश्य"
   },
   "pledges": {
     "title": "निधि अभियान प्रतिज्ञाएँ",
-    "volunteers": "स्वयंसेवकों",
     "pledgeAmount": "प्रतिज्ञा राशि",
     "pledgeOptions": "विकल्प",
     "pledgeCreated": "प्रतिज्ञा सफलतापूर्वक बनाई गई",
@@ -397,12 +457,16 @@
     "editPledge": "प्रतिज्ञा संपादित करें",
     "deletePledgeMsg": "क्या आप वाकई इस प्रतिज्ञा को हटाना चाहते हैं?",
     "noPledges": "कोई प्रतिज्ञा नहीं मिली",
-    "sort": "क्रमबद्ध करें",
-    "searchVolunteer": "स्वयंसेवक द्वारा खोजें",
+    "searchPledger": "प्लेजर्स के द्वारा खोजें",
     "highestAmount": "सबसे अधिक राशि",
     "lowestAmount": "सबसे कम राशि",
     "latestEndDate": "नवीनतम समाप्ति तिथि",
-    "earliestEndDate": "सबसे प्रारंभिक समाप्ति तिथि"
+    "earliestEndDate": "सबसे प्रारंभिक समाप्ति तिथि",
+    "campaigns": "अभियान",
+    "pledges": "प्रतिज्ञाएँ",
+    "endsOn": "पर समाप्त होता है",
+    "raisedAmount": "उठाया गया राशि",
+    "pledgedAmount": "प्रतिबद्ध राशि"
   },
   "orgPost": {
     "title": "पदों",
@@ -487,6 +551,7 @@
     "dashboard": "डैशबोर्ड",
     "registrants": "कुलसचिव",
     "eventActions": "घटना क्रियाएँ",
+    "eventAgendas": "इवेंट एजेंडा",
     "eventStats": "घटना सांख्यिकी",
     "to": "को"
   },
@@ -559,7 +624,9 @@
   "userPasswordUpdate": {
     "previousPassword": "पिछला पासवर्ड",
     "newPassword": "नया पासवर्ड",
-    "confirmNewPassword": "नए पासवर्ड की पुष्टि करें"
+    "confirmNewPassword": "नए पासवर्ड की पुष्टि करें",
+    "passCantBeEmpty": "पासवर्ड खाली नहीं हो सकता",
+    "passNoMatch": "नया पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते।"
   },
   "orgDelete": {
     "deleteOrg": "संगठन हटाएं"
@@ -646,6 +713,10 @@
     "addedAsAdmin": "उपयोगकर्ता को व्यवस्थापक के रूप में जोड़ा गया है.",
     "userType": "उपयोगकर्ता का प्रकार"
   },
+  "people": {
+    "title": "लोग",
+    "searchUsers": "उपयोगकर्ताओं को खोजें"
+  },
   "userLogin": {
     "login": "लॉग इन करें",
     "loginIntoYourAccount": "अपने खाते में लॉगिन करें",
@@ -697,12 +768,15 @@
   },
   "postCard": {
     "likes": "पसंद है",
-    "comments": "टिप्पणियाँ"
+    "comments": "टिप्पणियाँ",
+    "viewPost": "पोस्ट देखें",
+    "editPost": "पोस्ट संपादित करें",
+    "postedOn": "{{date}} को पोस्ट किया गया"
   },
   "home": {
+    "title": "पदों",
     "posts": "पदों",
     "post": "डाक",
-    "title": "शीर्षक",
     "textArea": "आपके मन में कुछ है?",
     "feed": "खिलाना",
     "loading": "लोड हो रहा है",
@@ -714,7 +788,8 @@
     "startPost": "एक पोस्ट प्रारंभ करें",
     "media": "मिडिया",
     "event": "आयोजन",
-    "article": "लेख"
+    "article": "लेख",
+    "postNowVisibleInFeed": "पोस्ट अब फीड में दिखाई दे रहा है"
   },
   "settings": {
     "profileSettings": "पार्श्वचित्र समायोजन",
@@ -748,7 +823,7 @@
     "widowed": "विधवा",
     "divorced": "तलाकशुदा",
     "engaged": "काम में लगा हुआ",
-    "seperated": "विभाजित",
+    "separated": "विभाजित",
     "grade1": "ग्रेड 1",
     "grade2": "ग्रेड 2",
     "grade3": "ग्रेड 3",
@@ -771,6 +846,7 @@
     "enterState": "शहर या राज्य दर्ज करें"
   },
   "donate": {
+    "title": "दान",
     "donations": "दान",
     "searchDonations": "दान खोजें",
     "donateForThe": "के लिए दान करें",
@@ -781,6 +857,7 @@
     "success": "दान सफल"
   },
   "userEvents": {
+    "title": "ईवेंट",
     "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
     "createEvent": "कार्यक्रम बनाएँ",
     "recurring": "पुनरावर्ती ईवेंट",
@@ -826,7 +903,10 @@
     "deleteAdvertisement": "विज्ञापन हटाएँ",
     "deleteAdvertisementMsg": "क्या आप यह विज्ञापन हटाना चाहते हैं?",
     "view": "देखना",
-    "editAdvertisement": "विज्ञापन संपादित करें"
+    "editAdvertisement": "विज्ञापन संपादित करें",
+    "advertisementDeleted": "विज्ञापन सफलतापूर्वक हटाया गया।",
+    "endDateGreaterOrEqual": "समाप्ति तिथि प्रारंभ तिथि से अधिक या उसके बराबर होनी चाहिए",
+    "advertisementCreated": "विज्ञापन सफलतापूर्वक बनाया गया।"
   },
   "userChat": {
     "chat": "बात करना",
@@ -907,8 +987,8 @@
     "actionItemCategory": "कार्य आइटम श्रेणी",
     "selectActionItemCategory": "एक क्रिया आइटम श्रेणी का चयन करें",
     "selectAssignee": "एक समनुदेशिती का चयन करें",
-    "preCompletionNotes": "समापन पूर्व नोट्स",
-    "postCompletionNotes": "समापन के बाद के नोट्स",
+    "preCompletionNotes": "टिप्पणियाँ",
+    "postCompletionNotes": "समापन नोट्स",
     "actionItemDetails": "कार्रवाई मद विवरण",
     "dueDate": "नियत तारीख",
     "completionDate": "पूरा करने की तिथि",
@@ -919,6 +999,43 @@
     "successfulCreation": "कार्रवाई आइटम सफलतापूर्वक बनाया गया",
     "successfulUpdation": "कार्रवाई आइटम सफलतापूर्वक अपडेट किया गया",
     "notes": "टिप्पणियाँ",
+    "assignee": "संपत्ति-भागी",
+    "assigner": "असाइनर",
+    "assignmentDate": "असाइनमेंट तिथि",
+    "status": "स्थिति",
+    "actionItemActive": "सक्रिय",
+    "actionItemStatus": "कार्रवाई आइटम स्थिति",
+    "actionItemCompleted": "कार्रवाई आइटम पूर्ण हुआ",
+    "markCompletion": "पूर्णता को चिह्नित करें",
     "save": "बचाना"
+  },
+  "checkIn": {
+    "errorCheckingIn": "चेक-इन में त्रुटि",
+    "checkedInSuccessfully": "सफलतापूर्वक चेक-इन किया गया"
+  },
+  "eventRegistrantsModal": {
+    "errorAddingAttendee": "उपस्थित होने वाले को जोड़ने में त्रुटि",
+    "errorRemovingAttendee": "उपस्थित होने वाले को हटाने में त्रुटि"
+  },
+  "userCampaigns": {
+    "title": "धन उगाहने के अभियान",
+    "searchByName": "नाम से खोजें...",
+    "searchBy": "द्वारा खोजें",
+    "pledgers": "प्रतिज्ञाकर्ता",
+    "campaigns": "अभियान",
+    "myPledges": "मेरी प्रतिज्ञाएँ",
+    "lowestAmount": "सबसे कम राशि",
+    "highestAmount": "सबसे अधिक राशि",
+    "lowestGoal": "सबसे कम लक्ष्य",
+    "highestGoal": "सबसे बड़ा लक्ष्य",
+    "latestEndDate": "सबसे अंतिम समाप्ति तिथि",
+    "earliestEndDate": "सबसे पहले समाप्ति तिथि",
+    "addPledge": "प्रतिज्ञा जोड़ें",
+    "viewPledges": "प्रतिज्ञाएँ देखें",
+    "noPledges": "कोई प्रतिज्ञा नहीं मिली",
+    "noCampaigns": "कोई अभियान नहीं मिला"
+  },
+  "userPledges": {
+    "title": "मेरी प्रतिज्ञाएँ"
   }
 }

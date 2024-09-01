@@ -17,13 +17,22 @@ import AgendaCategoryCreateModal from './AgendaCategoryCreateModal';
 import styles from './OrganizationAgendaCategory.module.css';
 import Loader from 'components/Loader/Loader';
 
+/**
+ * Component for managing and displaying agenda item categories within an organization.
+ *
+ * This component allows users to view, create, and manage agenda item categories. It includes functionality for displaying categories, handling creation, and managing modal visibility.
+ *
+ * @returns The rendered component.
+ */
 function organizationAgendaCategory(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationAgendaCategory',
   });
 
+  // Get the organization ID from URL parameters
   const { orgId: currentUrl } = useParams();
 
+  // State for managing modal visibility and form data
   const [agendaCategoryCreateModalIsOpen, setAgendaCategoryCreateModalIsOpen] =
     useState<boolean>(false);
 
@@ -33,6 +42,9 @@ function organizationAgendaCategory(): JSX.Element {
     createdBy: '',
   });
 
+  /**
+   * Query to fetch agenda item categories for the organization.
+   */
   const {
     data: agendaCategoryData,
     loading: agendaCategoryLoading,
@@ -48,10 +60,19 @@ function organizationAgendaCategory(): JSX.Element {
     notifyOnNetworkStatusChange: true,
   });
 
+  /**
+   * Mutation to create a new agenda item category.
+   */
   const [createAgendaCategory] = useMutation(
     CREATE_AGENDA_ITEM_CATEGORY_MUTATION,
   );
 
+  /**
+   * Handler function to create a new agenda item category.
+   *
+   * @param e - The form submit event.
+   * @returns A promise that resolves when the agenda item category is created.
+   */
   const createAgendaCategoryHandler = async (
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
@@ -77,10 +98,16 @@ function organizationAgendaCategory(): JSX.Element {
     }
   };
 
+  /**
+   * Toggles the visibility of the create agenda item category modal.
+   */
   const showCreateModal = (): void => {
     setAgendaCategoryCreateModalIsOpen(!agendaCategoryCreateModalIsOpen);
   };
 
+  /**
+   * Hides the create agenda item category modal.
+   */
   const hideCreateModal = (): void => {
     setAgendaCategoryCreateModalIsOpen(!agendaCategoryCreateModalIsOpen);
   };

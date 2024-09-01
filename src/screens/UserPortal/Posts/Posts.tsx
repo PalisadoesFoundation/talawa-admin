@@ -119,21 +119,35 @@ type InterfacePostNode = {
   likes: InterfacePostLikes;
 };
 
+/**
+ * `home` component displays the main feed for a user, including posts, promoted content, and options to create a new post.
+ *
+ * It utilizes Apollo Client for fetching and managing data through GraphQL queries. The component fetches and displays posts from an organization, promoted advertisements, and handles user interactions for creating new posts. It also manages state for displaying modal dialogs and handling file uploads for new posts.
+ *
+ * @returns JSX.Element - The rendered `home` component.
+ */
 export default function home(): JSX.Element {
+  // Translation hook for localized text
   const { t } = useTranslation('translation', { keyPrefix: 'home' });
   const { t: tCommon } = useTranslation('common');
+
+  // Custom hook for accessing local storage
   const { getItem } = useLocalStorage();
   const [posts, setPosts] = useState([]);
   const [pinnedPosts, setPinnedPosts] = useState([]);
 
   const [showModal, setShowModal] = useState<boolean>(false);
   const [postImg, setPostImg] = useState<string | null>('');
+
+  // Fetching the organization ID from URL parameters
   const { orgId } = useParams();
 
+  // Redirect to user page if organization ID is not available
   if (!orgId) {
     return <Navigate to={'/user'} />;
   }
 
+  // Query hooks for fetching posts, advertisements, and user details
   const {
     data: promotedPostsData,
   }: {
@@ -147,6 +161,7 @@ export default function home(): JSX.Element {
       first: 6,
     },
   });
+
   const {
     data,
     refetch,
@@ -164,12 +179,14 @@ export default function home(): JSX.Element {
 
   const user: InterfaceQueryUserListItem | undefined = userData?.user;
 
+  // Effect hook to update posts state when data changes
   useEffect(() => {
     if (data) {
       setPosts(data.organizations[0].posts.edges);
     }
   }, [data]);
 
+  // Effect hook to update advertisements state when data changes
   useEffect(() => {
     if (promotedPostsData && promotedPostsData.organizations) {
       const ads: Ad[] =
@@ -189,6 +206,12 @@ export default function home(): JSX.Element {
     );
   }, [posts]);
 
+  /**
+   * Converts a post node into props for the `PostCard` component.
+   *
+   * @param node - The post node to convert.
+   * @returns The props for the `PostCard` component.
+   */
   const getCardProps = (node: InterfacePostNode): InterfacePostCard => {
     const {
       creator,
@@ -270,10 +293,16 @@ export default function home(): JSX.Element {
     return cardProps;
   };
 
+  /**
+   * Opens the post creation modal.
+   */
   const handlePostButtonClick = (): void => {
     setShowModal(true);
   };
 
+  /**
+   * Closes the post creation modal.
+   */
   const handleModalClose = (): void => {
     setShowModal(false);
   };

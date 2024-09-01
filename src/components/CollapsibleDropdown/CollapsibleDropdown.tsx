@@ -12,6 +12,15 @@ export interface InterfaceCollapsibleDropdown {
   setShowDropdown: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+/**
+ * A collapsible dropdown component that toggles visibility of sub-targets.
+ *
+ * @param showDropdown - Boolean indicating whether the dropdown is visible or not.
+ * @param target - Object containing the target information, including the name and sub-targets.
+ * @param setShowDropdown - Function to toggle the visibility of the dropdown.
+ *
+ * @returns JSX.Element - The rendered CollapsibleDropdown component.
+ */
 const collapsibleDropdown = ({
   target,
   showDropdown,
@@ -22,6 +31,7 @@ const collapsibleDropdown = ({
   const navigate = useNavigate();
   const location = useLocation();
   useEffect(() => {
+    // Show dropdown if the current path includes 'orgstore', otherwise hide it.
     if (location.pathname.includes('orgstore')) {
       setShowDropdown(true);
     } else {

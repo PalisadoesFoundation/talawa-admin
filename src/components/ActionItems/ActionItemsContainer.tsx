@@ -27,7 +27,30 @@ import styles from './ActionItemsContainer.module.css';
 import ActionItemUpdateModal from '../../screens/OrganizationActionItems/ActionItemUpdateModal';
 import ActionItemPreviewModal from '../../screens/OrganizationActionItems/ActionItemPreviewModal';
 import ActionItemDeleteModal from '../../screens/OrganizationActionItems/ActionItemDeleteModal';
+import { Link } from 'react-router-dom';
 
+/**
+ * ActionItemsContainer component is responsible for displaying, managing, and updating action items
+ * related to either an organization or an event. It provides a UI for previewing, updating, and deleting
+ * action items, as well as changing their status.
+ *
+ * @param props - The component props
+ * @param actionItemsConnection - Specifies the connection type (Organization or Event) to determine the context of the action items.
+ * @param actionItemsData - Array of action item data to be displayed.
+ * @param membersData - Array of member data for the organization.
+ * @param actionItemsRefetch - Function to refetch the action items data.
+ *
+ * @example
+ * ```tsx
+ * <ActionItemsContainer
+ *   actionItemsConnection="Organization"
+ *   actionItemsData={actionItems}
+ *   membersData={members}
+ *   actionItemsRefetch={refetchActionItems}
+ * />
+ * ```
+ * This example renders the `ActionItemsContainer` component with organization connection, providing the necessary action items and members data along with a refetch function.
+ */
 function actionItemsContainer({
   actionItemsConnection,
   actionItemsData,
@@ -39,11 +62,13 @@ function actionItemsContainer({
   membersData: InterfaceMemberInfo[] | undefined;
   actionItemsRefetch: () => void;
 }): JSX.Element {
+  // Translation hooks for localized text
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationActionItems',
   });
   const { t: tCommon } = useTranslation('common');
 
+  // State hooks for controlling modals and action item properties
   const [actionItemPreviewModalIsOpen, setActionItemPreviewModalIsOpen] =
     useState(false);
   const [actionItemUpdateModalIsOpen, setActionItemUpdateModalIsOpen] =
@@ -68,30 +93,53 @@ function actionItemsContainer({
     isCompleted: false,
   });
 
+  /**
+   * Opens the preview modal for the selected action item.
+   *
+   * @param actionItem - The action item to be previewed.
+   */
   const showPreviewModal = (actionItem: InterfaceActionItemInfo): void => {
     setActionItemState(actionItem);
     setActionItemPreviewModalIsOpen(true);
   };
 
+  /**
+   * Toggles the update modal visibility.
+   */
   const showUpdateModal = (): void => {
     setActionItemUpdateModalIsOpen(!actionItemUpdateModalIsOpen);
   };
 
+  /**
+   * Hides the preview modal.
+   */
   const hidePreviewModal = (): void => {
     setActionItemPreviewModalIsOpen(false);
   };
 
+  /**
+   * Hides the update modal and resets the action item ID.
+   */
   const hideUpdateModal = (): void => {
     setActionItemId('');
     setActionItemUpdateModalIsOpen(!actionItemUpdateModalIsOpen);
   };
 
+  /**
+   * Toggles the delete modal visibility.
+   */
   const toggleDeleteModal = (): void => {
     setActionItemDeleteModalIsOpen(!actionItemDeleteModalIsOpen);
   };
 
+  // Apollo Client mutations for updating and deleting action items
   const [updateActionItem] = useMutation(UPDATE_ACTION_ITEM_MUTATION);
 
+  /**
+   * Handles the form submission for updating an action item.
+   *
+   * @param  e - The form submission event.
+   */
   const updateActionItemHandler = async (
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
@@ -121,6 +169,10 @@ function actionItemsContainer({
   };
 
   const [removeActionItem] = useMutation(DELETE_ACTION_ITEM_MUTATION);
+
+  /**
+   * Handles the action item deletion.
+   */
   const deleteActionItemHandler = async (): Promise<void> => {
     try {
       await removeActionItem({
@@ -140,11 +192,21 @@ function actionItemsContainer({
     }
   };
 
+  /**
+   * Handles the edit button click and opens the update modal with the action item data.
+   *
+   * @param actionItem - The action item to be edited.
+   */
   const handleEditClick = (actionItem: InterfaceActionItemInfo): void => {
     setActionItemState(actionItem);
     showUpdateModal();
   };
 
+  /**
+   * Handles the action item status change and updates the state accordingly.
+   *
+   * @param actionItem - The action item whose status is being changed.
+   */
   const handleActionItemStatusChange = (
     actionItem: InterfaceActionItemInfo,
   ): void => {
@@ -154,10 +216,18 @@ function actionItemsContainer({
     setActionItemStatusModal(true);
   };
 
+  /**
+   * Hides the action item status modal.
+   */
   const hideActionItemStatusModal = (): void => {
     setActionItemStatusModal(false);
   };
 
+  /**
+   * Sets the state with the action item data.
+   *
+   * @param actionItem - The action item data.
+   */
   const setActionItemState = (actionItem: InterfaceActionItemInfo): void => {
     setFormState({
       ...formState,
@@ -193,18 +263,28 @@ function actionItemsContainer({
         >
           <Row
             className={`mx-0 border border-light-subtle py-3 ${actionItemsConnection === 'Organization' ? 'rounded-top-4' : 'rounded-top-2'}`}
+            data-testid="actionItemsHeader"
           >
             <Col
               xs={7}
               sm={4}
               md={3}
+              lg={1}
+              className="d-flex align-items-center justify-content-center ps-3 fw-bold"
+            >
+              <div className="ms-2">{'#'}</div>
+            </Col>
+            <Col
+              xs={7}
+              sm={4}
+              md={3}
               lg={2}
-              className="align-self-center ps-3 fw-bold"
+              className="d-flex align-items-center justify-content-center ps-3 fw-bold"
             >
               <div className="ms-2">{t('assignee')}</div>
             </Col>
             <Col
-              className="align-self-center fw-bold d-none d-sm-block"
+              className="d-flex align-items-center justify-content-center fw-bold d-none d-sm-flex"
               sm={5}
               md={6}
               lg={2}
@@ -212,20 +292,25 @@ function actionItemsContainer({
               {t('actionItemCategory')}
             </Col>
             <Col
-              className="d-none d-lg-block fw-bold align-self-center"
+              className="d-none d-lg-flex fw-bold d-flex align-items-center justify-content-center "
               md={4}
-              lg={3}
+              lg={2}
             >
               <div className="ms-1">{t('preCompletionNotes')}</div>
             </Col>
             <Col
-              className="d-none d-lg-block fw-bold align-self-center"
+              className="d-none d-lg-flex fw-bold d-flex align-items-center justify-content-center "
               md={4}
-              lg={3}
+              lg={2}
             >
               <div className="ms-3">{t('postCompletionNotes')}</div>
             </Col>
-            <Col xs={5} sm={3} lg={2} className="fw-bold align-self-center">
+            <Col
+              xs={5}
+              sm={3}
+              lg={2}
+              className="fw-bold d-flex align-items-center justify-content-center "
+            >
               <div className="ms-3">{t('options')}</div>
             </Col>
           </Row>
@@ -241,25 +326,40 @@ function actionItemsContainer({
                   sm={4}
                   xs={7}
                   md={3}
-                  lg={2}
-                  className="align-self-center text-body-secondary"
+                  lg={1}
+                  className="d-flex align-items-center justify-content-center text-body-secondary"
                 >
-                  {`${actionItem.assignee.firstName} ${actionItem.assignee.lastName}`}
+                  {index + 1}
+                </Col>
+                <Col
+                  sm={4}
+                  xs={7}
+                  md={3}
+                  lg={2}
+                  className="d-flex align-items-center justify-content-center text-body-secondary"
+                >
+                  <Link
+                    to={`/member/${actionItem?.event?._id}`}
+                    state={{ id: index }}
+                    className={styles.membername}
+                  >
+                    {`${actionItem.assignee.firstName} ${actionItem.assignee.lastName}`}
+                  </Link>
                 </Col>
                 <Col
                   sm={5}
                   md={6}
                   lg={2}
-                  className="p-1 d-none d-sm-block align-self-center text-body-secondary"
+                  className="p-1 d-none d-sm-flex d-flex align-items-center justify-content-center text-body-secondary"
                 >
                   {actionItem.actionItemCategory.name}
                 </Col>
                 <Col
-                  className="p-0 d-none d-lg-block align-self-center text-body-secondary"
+                  className="p-0 d-none d-lg-flex d-flex align-items-center justify-content-center text-body-secondary"
                   md={4}
-                  lg={3}
+                  lg={2}
                 >
-                  <div className="ms-3">
+                  <div className="ms-2">
                     <OverlayTrigger
                       trigger={['hover', 'focus']}
                       placement="right"
@@ -280,9 +380,9 @@ function actionItemsContainer({
                   </div>
                 </Col>
                 <Col
-                  className="p-0 d-none d-lg-block align-self-center text-body-secondary"
+                  className="p-0 d-none d-lg-flex d-flex align-items-center justify-content-center text-body-secondary"
                   md={4}
-                  lg={3}
+                  lg={2}
                 >
                   <div className="ms-3">
                     {actionItem.isCompleted ? (
@@ -311,7 +411,12 @@ function actionItemsContainer({
                     )}
                   </div>
                 </Col>
-                <Col xs={5} sm={3} lg={2} className="p-0 align-self-center">
+                <Col
+                  xs={5}
+                  sm={3}
+                  lg={2}
+                  className="p-0 d-flex align-items-center justify-content-center"
+                >
                   <div className="d-flex align-items-center ms-4 gap-2">
                     <input
                       type="checkbox"

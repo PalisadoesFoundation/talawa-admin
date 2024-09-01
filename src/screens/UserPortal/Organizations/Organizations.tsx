@@ -42,6 +42,9 @@ interface InterfaceOrganizationCardProps {
   }[];
 }
 
+/**
+ * Interface defining the structure of organization properties.
+ */
 interface InterfaceOrganization {
   _id: string;
   name: string;
@@ -66,6 +69,10 @@ interface InterfaceOrganization {
   }[];
 }
 
+/**
+ * Component for displaying and managing user organizations.
+ *
+ */
 export default function organizations(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userOrganizations',
@@ -73,6 +80,9 @@ export default function organizations(): JSX.Element {
 
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
 
+  /**
+   * Handles window resize events to toggle drawer visibility.
+   */
   const handleResize = (): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer(!hideDrawer);
@@ -123,6 +133,12 @@ export default function organizations(): JSX.Element {
     },
   );
 
+  /**
+   * Handles page change in pagination.
+   *
+   * @param _event - The event triggering the page change.
+   * @param  newPage - The new page number.
+   */
   /* istanbul ignore next */
   const handleChangePage = (
     _event: React.MouseEvent<HTMLButtonElement> | null,
@@ -131,6 +147,11 @@ export default function organizations(): JSX.Element {
     setPage(newPage);
   };
 
+  /**
+   * Handles change in the number of rows per page.
+   *
+   * @param  event - The event triggering the change.
+   */
   /* istanbul ignore next */
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -141,6 +162,11 @@ export default function organizations(): JSX.Element {
     setPage(0);
   };
 
+  /**
+   * Searches organizations based on the provided filter value.
+   *
+   * @param  value - The search filter value.
+   */
   const handleSearch = (value: string): void => {
     setFilterName(value);
 
@@ -148,6 +174,12 @@ export default function organizations(): JSX.Element {
       filter: value,
     });
   };
+
+  /**
+   * Handles search input submission by pressing the Enter key.
+   *
+   * @param  e - The keyboard event.
+   */
   const handleSearchByEnter = (
     e: React.KeyboardEvent<HTMLInputElement>,
   ): void => {
@@ -156,6 +188,10 @@ export default function organizations(): JSX.Element {
       handleSearch(value);
     }
   };
+
+  /**
+   * Handles search button click to search organizations.
+   */
   const handleSearchByBtnClick = (): void => {
     const value =
       (document.getElementById('searchUserOrgs') as HTMLInputElement)?.value ||
@@ -163,8 +199,11 @@ export default function organizations(): JSX.Element {
     handleSearch(value);
   };
 
+  /**
+   * Updates the list of organizations based on query results and selected mode.
+   */
   /* istanbul ignore next */
-  React.useEffect(() => {
+  useEffect(() => {
     if (data) {
       const organizations = data.organizationsConnection.map(
         (organization: InterfaceOrganization) => {
@@ -189,8 +228,11 @@ export default function organizations(): JSX.Element {
     }
   }, [data]);
 
+  /**
+   * Updates the list of organizations based on the selected mode and query results.
+   */
   /* istanbul ignore next */
-  React.useEffect(() => {
+  useEffect(() => {
     if (mode === 0) {
       if (data) {
         const organizations = data.organizationsConnection.map(
@@ -232,6 +274,7 @@ export default function organizations(): JSX.Element {
       }
     }
   }, [mode, data, joinedOrganizationsData, createdOrganizationsData, userId]);
+
   return (
     <>
       {hideDrawer ? (
@@ -266,11 +309,14 @@ export default function organizations(): JSX.Element {
         }`}
       >
         <div className={`${styles.mainContainer}`}>
-          <div className="d-flex justify-content-end align-items-center">
+          <div className="d-flex justify-content-between align-items-center">
+            <div style={{ flex: 1 }}>
+              <h1>{t('selectOrganization')}</h1>
+            </div>
             <ProfileDropdown />
           </div>
-          <h3>{t('selectOrganization')}</h3>
-          <div>
+
+          <div className="mt-4">
             <InputGroup className={styles.maxWidth}>
               <Form.Control
                 placeholder={t('searchUsers')}

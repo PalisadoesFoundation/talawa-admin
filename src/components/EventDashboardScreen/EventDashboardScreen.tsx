@@ -9,7 +9,14 @@ import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from './EventDashboardScreen.module.css';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import useLocalStorage from 'utils/useLocalstorage';
+import type { InterfaceMapType } from 'utils/interfaces';
 
+/**
+ * The EventDashboardScreen component is the main dashboard view for event management.
+ * It includes navigation, a sidebar, and a profile dropdown.
+ *
+ * @returns JSX.Element - The rendered EventDashboardScreen component.
+ */
 const EventDashboardScreen = (): JSX.Element => {
   const { getItem } = useLocalStorage();
   const isLoggedIn = getItem('IsLoggedIn');
@@ -19,6 +26,8 @@ const EventDashboardScreen = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: titleKey });
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
   const { orgId } = useParams();
+
+  // Redirect to home if orgId is not present or if user is not logged in
   if (!orgId) {
     return <Navigate to={'/'} replace />;
   }
@@ -43,22 +52,31 @@ const EventDashboardScreen = (): JSX.Element => {
     );
   }
 
+  // Access targets from Redux store
   const appRoutes: {
     targets: TargetsType[];
   } = useSelector((state: RootState) => state.appRoutes);
   const { targets } = appRoutes;
 
   const dispatch = useDispatch();
+
+  // Update targets when orgId changes
   useEffect(() => {
     dispatch(updateTargets(orgId));
-  }, [orgId]); // Added orgId to the dependency array
+  }, [orgId]);
 
+  /**
+   * Handles window resize events to toggle the visibility of the sidebar drawer.
+   */
   const handleResize = (): void => {
     if (window.innerWidth <= 820 && !hideDrawer) {
       setHideDrawer(true);
     }
   };
 
+  /**
+   * Toggles the visibility of the sidebar drawer.
+   */
   const toggleDrawer = (): void => {
     setHideDrawer(!hideDrawer);
   };
@@ -118,10 +136,6 @@ const EventDashboardScreen = (): JSX.Element => {
 };
 
 export default EventDashboardScreen;
-
-interface InterfaceMapType {
-  [key: string]: string;
-}
 
 const map: InterfaceMapType = {
   orgdash: 'dashboard',

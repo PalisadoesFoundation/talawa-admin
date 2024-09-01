@@ -13,7 +13,9 @@ import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import { useTranslation } from 'react-i18next';
 
+// Props for the EventRegistrantsModal component
 type ModalPropType = {
   show: boolean;
   eventId: string;
@@ -21,30 +23,51 @@ type ModalPropType = {
   handleClose: () => void;
 };
 
+// User information interface
 interface InterfaceUser {
   _id: string;
   firstName: string;
   lastName: string;
 }
 
+/**
+ * Modal component for managing event registrants.
+ * Allows adding and removing attendees from an event.
+ *
+ * @param show - Whether the modal is visible or not.
+ * @param eventId - The ID of the event.
+ * @param orgId - The ID of the organization.
+ * @param handleClose - Function to close the modal.
+ * @returns JSX element representing the modal.
+ */
 export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
+  const { eventId, orgId, handleClose, show } = props;
   const [member, setMember] = useState<InterfaceUser | null>(null);
 
+  // Hooks for mutation operations
   const [addRegistrantMutation] = useMutation(ADD_EVENT_ATTENDEE);
   const [removeRegistrantMutation] = useMutation(REMOVE_EVENT_ATTENDEE);
 
+  // Translation hooks
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'eventRegistrantsModal',
+  });
+  const { t: tCommon } = useTranslation('common');
+
+  // Query hooks to fetch event attendees and organization members
   const {
     data: attendeesData,
     loading: attendeesLoading,
     refetch: attendeesRefetch,
   } = useQuery(EVENT_ATTENDEES, {
-    variables: { id: props.eventId },
+    variables: { id: eventId },
   });
 
   const { data: memberData, loading: memberLoading } = useQuery(MEMBERS_LIST, {
-    variables: { id: props.orgId },
+    variables: { id: orgId },
   });
 
+  // Function to add a new registrant to the event
   const addRegistrant = (): void => {
     if (member == null) {
       toast.warning('Please choose an user to add first!');
@@ -54,38 +77,39 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
     addRegistrantMutation({
       variables: {
         userId: member._id,
-        eventId: props.eventId,
+        eventId: eventId,
       },
     })
       .then(() => {
-        toast.success('Added the attendee successfully!');
-        attendeesRefetch();
+        toast.success(tCommon('addedSuccessfully', { item: 'Attendee' }));
+        attendeesRefetch(); // Refresh the list of attendees
       })
       .catch((err) => {
-        toast.error('There was an error in adding the attendee!');
+        toast.error(t('errorAddingAttendee'));
         toast.error(err.message);
       });
   };
 
+  // Function to remove a registrant from the event
   const deleteRegistrant = (userId: string): void => {
     toast.warn('Removing the attendee...');
     removeRegistrantMutation({
       variables: {
         userId,
-        eventId: props.eventId,
+        eventId: eventId,
       },
     })
       .then(() => {
-        toast.success('Removed the attendee successfully!');
-        attendeesRefetch();
+        toast.success(tCommon('removedSuccessfully', { item: 'Attendee' }));
+        attendeesRefetch(); // Refresh the list of attendees
       })
       .catch((err) => {
-        toast.error('There was an error in removing the attendee!');
+        toast.error(t('errorRemovingAttendee'));
         toast.error(err.message);
       });
   };
 
-  // Render the loading screen
+  // Show a loading screen if data is still being fetched
   if (attendeesLoading || memberLoading) {
     return (
       <>
@@ -96,12 +120,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
 
   return (
     <>
-      <Modal
-        show={props.show}
-        onHide={props.handleClose}
-        backdrop="static"
-        centered
-      >
+      <Modal show={show} onHide={handleClose} backdrop="static" centered>
         <Modal.Header closeButton className="bg-primary">
           <Modal.Title className="text-white">Event Registrants</Modal.Title>
         </Modal.Header>

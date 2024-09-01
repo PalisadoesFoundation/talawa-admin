@@ -99,6 +99,12 @@ describe('Event Management', () => {
     const eventActionsTab = screen.getByTestId('eventActionsTab');
     expect(eventActionsTab).toBeInTheDocument();
 
+    const eventAgendasButton = screen.getByTestId('eventAgendasBtn');
+    userEvent.click(eventAgendasButton);
+
+    const eventAgendasTab = screen.getByTestId('eventAgendasTab');
+    expect(eventAgendasTab).toBeInTheDocument();
+
     const eventStatsButton = screen.getByTestId('eventStatsBtn');
     userEvent.click(eventStatsButton);
 

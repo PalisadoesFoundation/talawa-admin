@@ -27,14 +27,23 @@ import ActionItemCreateModal from './ActionItemCreateModal';
 import styles from './OrganizationActionItems.module.css';
 import Loader from 'components/Loader/Loader';
 
+/**
+ * Component for managing and displaying action items within an organization.
+ *
+ * This component allows users to view, filter, sort, and create action items. It also handles fetching and displaying related data such as action item categories and members.
+ *
+ * @returns The rendered component.
+ */
 function organizationActionItems(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationActionItems',
   });
   const { t: tCommon } = useTranslation('common');
 
+  // Get the organization ID from URL parameters
   const { orgId: currentUrl } = useParams();
 
+  // State for managing modal visibility and form data
   const [actionItemCreateModalIsOpen, setActionItemCreateModalIsOpen] =
     useState(false);
   const [dueDate, setDueDate] = useState<Date | null>(new Date());
@@ -49,6 +58,9 @@ function organizationActionItems(): JSX.Element {
     preCompletionNotes: '',
   });
 
+  /**
+   * Query to fetch action item categories for the organization.
+   */
   const {
     data: actionItemCategoriesData,
     loading: actionItemCategoriesLoading,
@@ -64,6 +76,9 @@ function organizationActionItems(): JSX.Element {
     notifyOnNetworkStatusChange: true,
   });
 
+  /**
+   * Query to fetch members of the organization.
+   */
   const {
     data: membersData,
     loading: membersLoading,
@@ -76,6 +91,9 @@ function organizationActionItems(): JSX.Element {
     variables: { id: currentUrl },
   });
 
+  /**
+   * Query to fetch action items for the organization based on filters and sorting.
+   */
   const {
     data: actionItemsData,
     loading: actionItemsLoading,
@@ -97,8 +115,17 @@ function organizationActionItems(): JSX.Element {
     notifyOnNetworkStatusChange: true,
   });
 
+  /**
+   * Mutation to create a new action item.
+   */
   const [createActionItem] = useMutation(CREATE_ACTION_ITEM_MUTATION);
 
+  /**
+   * Handler function to create a new action item.
+   *
+   * @param e - The form submit event.
+   * @returns A promise that resolves when the action item is created.
+   */
   const createActionItemHandler = async (
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
@@ -113,6 +140,7 @@ function organizationActionItems(): JSX.Element {
         },
       });
 
+      // Reset form and date after successful creation
       setFormState({
         assigneeId: '',
         actionItemCategoryId: '',
@@ -132,14 +160,25 @@ function organizationActionItems(): JSX.Element {
     }
   };
 
+  /**
+   * Toggles the visibility of the create action item modal.
+   */
   const showCreateModal = (): void => {
     setActionItemCreateModalIsOpen(!actionItemCreateModalIsOpen);
   };
 
+  /**
+   * Hides the create action item modal.
+   */
   const hideCreateModal = (): void => {
     setActionItemCreateModalIsOpen(!actionItemCreateModalIsOpen);
   };
 
+  /**
+   * Handles sorting action items by date.
+   *
+   * @param sort - The sorting order ('Latest' or 'Earliest').
+   */
   const handleSorting = (sort: string): void => {
     if (sort === 'Latest') {
       setOrderBy('Latest');
@@ -148,6 +187,11 @@ function organizationActionItems(): JSX.Element {
     }
   };
 
+  /**
+   * Filters action items by status.
+   *
+   * @param status - The status to filter by ('Active' or 'Completed').
+   */
   const handleStatusFilter = (status: string): void => {
     if (status === 'Active') {
       setActionItemStatus('Active');
@@ -156,6 +200,9 @@ function organizationActionItems(): JSX.Element {
     }
   };
 
+  /**
+   * Clears all filters applied to the action items.
+   */
   const handleClearFilters = (): void => {
     setActionItemCategoryId('');
     setActionItemCategoryName('');
@@ -196,6 +243,10 @@ function organizationActionItems(): JSX.Element {
     actionItemCategoriesData?.actionItemCategoriesByOrganization.filter(
       (category) => !category.isDisabled,
     );
+
+  const actionItemOnly = actionItemsData?.actionItemsByOrganization.filter(
+    (item) => item.event == null,
+  );
 
   return (
     <div className={styles.organizationActionItemsContainer}>
@@ -365,7 +416,7 @@ function organizationActionItems(): JSX.Element {
 
         <ActionItemsContainer
           actionItemsConnection={`Organization`}
-          actionItemsData={actionItemsData?.actionItemsByOrganization}
+          actionItemsData={actionItemOnly}
           membersData={membersData?.organizations[0].members}
           actionItemsRefetch={actionItemsRefetch}
         />

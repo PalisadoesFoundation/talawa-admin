@@ -56,9 +56,16 @@
   flex-direction: column;
 }
 
+.errorIcon {
+  transform: scale(1.5);
+  color: var(--bs-danger);
+  margin-bottom: 1rem;
+}
+
 .btnsContainer {
   display: flex;
-  margin: 2.5rem 0 2.5rem 0;
+  gap: 0.8rem;
+  margin: 2.2rem 0 0.8rem 0;
 }
 
 .btnsContainer .input {
@@ -111,7 +118,13 @@
   height: 26px;
 }
 
-.volunteerContainer {
+.imageContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pledgerContainer {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -120,8 +133,141 @@
   padding: 0.25rem 0.45rem;
   border-radius: 0.35rem;
   background-color: #31bb6b33;
+  height: 2.2rem;
+  margin-top: 0.75rem;
 }
 
 .noOutline input {
   outline: none;
+}
+
+.overviewContainer {
+  display: flex;
+  gap: 7rem;
+  width: 100%;
+  justify-content: space-between;
+  margin: 1.5rem 0 0 0;
+  padding: 1.25rem 2rem;
+  background-color: rgba(255, 255, 255, 0.591);
+
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  border-radius: 0.5rem;
+}
+
+.titleContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.titleContainer h3 {
+  font-size: 1.75rem;
+  font-weight: 750;
+  color: #5e5e5e;
+  margin-top: 0.2rem;
+}
+
+.titleContainer span {
+  font-size: 0.9rem;
+  margin-left: 0.5rem;
+  font-weight: lighter;
+  color: #707070;
+}
+
+.raisedAmount {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.25rem;
+  font-weight: 750;
+  color: #5e5e5e;
+}
+
+.progressContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-grow: 1;
+}
+
+.progress {
+  margin-top: 0.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.endpoints {
+  display: flex;
+  position: relative;
+  font-size: 0.85rem;
+}
+
+.start {
+  position: absolute;
+  top: 0px;
+}
+
+.end {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
+
+.moreContainer {
+  display: flex;
+  align-items: center;
+}
+
+.moreContainer:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.popup {
+  z-index: 50;
+  border-radius: 0.5rem;
+  font-family: sans-serif;
+  font-weight: 500;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid #e2e8f0;
+  background-color: white;
+  color: #1e293b;
+  box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.popupExtra {
+  max-height: 15rem;
+  overflow-y: auto;
+}
+
+.toggleGroup {
+  width: 50%;
+  min-width: 27.75rem;
+  margin: 0.5rem 0rem;
+}
+
+.toggleBtn {
+  padding: 0rem;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.toggleBtn:hover {
+  color: #31bb6b !important;
+}
+
+input[type='radio']:checked + label {
+  background-color: #31bb6a50 !important;
+}
+
+input[type='radio']:checked + label:hover {
+  color: black !important;
 }

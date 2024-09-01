@@ -20,6 +20,14 @@ interface InterfaceAddOnEntryProps {
   endDate: Date;
   setAfter: React.Dispatch<React.SetStateAction<string | null | undefined>>;
 }
+
+/**
+ * Component for displaying an advertisement entry.
+ * Allows viewing, editing, and deleting of the advertisement.
+ *
+ * @param  props - Component properties
+ * @returns  The rendered component
+ */
 function advertisementEntry({
   id,
   name,
@@ -32,10 +40,15 @@ function advertisementEntry({
 }: InterfaceAddOnEntryProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   const { t: tCommon } = useTranslation('common');
+
+  // State for loading button
   const [buttonLoading, setButtonLoading] = useState(false);
+  // State for dropdown menu visibility
   const [dropdown, setDropdown] = useState(false);
+  // State for delete confirmation modal visibility
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
+  // Mutation hook for deleting an advertisement
   const [deleteAdById] = useMutation(DELETE_ADVERTISEMENT_BY_ID, {
     refetchQueries: [
       {
@@ -45,7 +58,15 @@ function advertisementEntry({
     ],
   });
 
+  /**
+   * Toggles the visibility of the delete confirmation modal.
+   */
   const toggleShowDeleteModal = (): void => setShowDeleteModal((prev) => !prev);
+
+  /**
+   * Handles advertisement deletion.
+   * Displays a success or error message based on the result.
+   */
   const onDelete = async (): Promise<void> => {
     setButtonLoading(true);
     try {
@@ -54,7 +75,7 @@ function advertisementEntry({
           id: id.toString(),
         },
       });
-      toast.error('Advertisement Deleted');
+      toast.success(t('advertisementDeleted'));
       setButtonLoading(false);
       setAfter(null);
     } catch (error: unknown) {
@@ -64,6 +85,10 @@ function advertisementEntry({
       setButtonLoading(false);
     }
   };
+
+  /**
+   * Toggles the visibility of the dropdown menu.
+   */
   const handleOptionsClick = (): void => {
     setDropdown(!dropdown);
   };

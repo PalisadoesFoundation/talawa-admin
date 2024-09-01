@@ -19,6 +19,7 @@ const MOCKS = [
       variables: {
         firstName: 'Noble',
         lastName: 'Mittal',
+        createdAt: '2021-03-01',
         gender: 'MALE',
         phoneNumber: '+174567890',
         birthDate: '2024-03-01',
@@ -51,6 +52,7 @@ const Mocks1 = [
           email: 'johndoe@gmail.com',
           firstName: 'John',
           lastName: 'Doe',
+          createdAt: '2021-03-01T00:00:00.000Z',
           gender: 'MALE',
           maritalStatus: 'SINGLE',
           educationGrade: 'GRADUATE',
@@ -83,6 +85,7 @@ const Mocks2 = [
           email: 'johndoe@gmail.com',
           firstName: '',
           lastName: '',
+          createdAt: '',
           gender: '',
           maritalStatus: '',
           educationGrade: '',
@@ -101,6 +104,33 @@ const Mocks2 = [
         },
       },
     },
+  },
+];
+
+const mockMaritalStatusEnum = [
+  {
+    value: 'SINGLE',
+    label: 'Single',
+  },
+  {
+    value: 'ENGAGED',
+    label: 'Engaged',
+  },
+  {
+    value: 'MARRIED',
+    label: 'Married',
+  },
+  {
+    value: 'DIVORCED',
+    label: 'Divorced',
+  },
+  {
+    value: 'WIDOWED',
+    label: 'Widowed',
+  },
+  {
+    value: 'SEPARATED',
+    label: 'Separated',
   },
 ];
 
@@ -364,4 +394,116 @@ describe('Testing Settings Screen [User Portal]', () => {
     userEvent.click(screen.getByTestId('updateUserBtn'));
     await wait();
   });
+
+  test('Marital Status dropdown value verification', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Settings />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // SINGLE
+    expect(
+      screen.queryByRole('option', { name: mockMaritalStatusEnum[0].label }),
+    ).toBeInTheDocument();
+
+    userEvent.selectOptions(
+      // Find the select element
+      screen.getByTestId('inputMaritalStatus'),
+      // Find and select the Single option
+      screen.getByRole('option', { name: mockMaritalStatusEnum[0].label }),
+    );
+
+    expect(screen.getByTestId('inputMaritalStatus')).toHaveValue(
+      mockMaritalStatusEnum[0].value,
+    );
+
+    // ENGAGED
+    expect(
+      screen.queryByRole('option', { name: mockMaritalStatusEnum[1].label }),
+    ).toBeInTheDocument();
+
+    userEvent.selectOptions(
+      // Find the select element
+      screen.getByTestId('inputMaritalStatus'),
+      // Find and select the Engaged option
+      screen.getByRole('option', { name: mockMaritalStatusEnum[1].label }),
+    );
+
+    expect(screen.getByTestId('inputMaritalStatus')).toHaveValue(
+      mockMaritalStatusEnum[1].value,
+    );
+
+    // MARRIED
+    expect(
+      screen.queryByRole('option', { name: mockMaritalStatusEnum[2].label }),
+    ).toBeInTheDocument();
+
+    userEvent.selectOptions(
+      // Find the select element
+      screen.getByTestId('inputMaritalStatus'),
+      // Find and select the Married option
+      screen.getByRole('option', { name: mockMaritalStatusEnum[2].label }),
+    );
+
+    expect(screen.getByTestId('inputMaritalStatus')).toHaveValue(
+      mockMaritalStatusEnum[2].value,
+    );
+
+    // DIVORCED
+    expect(
+      screen.queryByRole('option', { name: mockMaritalStatusEnum[3].label }),
+    ).toBeInTheDocument();
+
+    userEvent.selectOptions(
+      // Find the select element
+      screen.getByTestId('inputMaritalStatus'),
+      // Find and select the Divorced option
+      screen.getByRole('option', { name: mockMaritalStatusEnum[3].label }),
+    );
+
+    expect(screen.getByTestId('inputMaritalStatus')).toHaveValue(
+      mockMaritalStatusEnum[3].value,
+    );
+
+    // WIDOWED
+    expect(
+      screen.queryByRole('option', { name: mockMaritalStatusEnum[4].label }),
+    ).toBeInTheDocument();
+
+    userEvent.selectOptions(
+      // Find the select element
+      screen.getByTestId('inputMaritalStatus'),
+      // Find and select the Widowed option
+      screen.getByRole('option', { name: mockMaritalStatusEnum[4].label }),
+    );
+
+    expect(screen.getByTestId('inputMaritalStatus')).toHaveValue(
+      mockMaritalStatusEnum[4].value,
+    );
+
+    // SEPARATED
+    expect(
+      screen.queryByRole('option', { name: mockMaritalStatusEnum[5].label }),
+    ).toBeInTheDocument();
+
+    userEvent.selectOptions(
+      // Find the select element
+      screen.getByTestId('inputMaritalStatus'),
+      // Find and select the Separated option
+      screen.getByRole('option', { name: mockMaritalStatusEnum[5].label }),
+    );
+
+    expect(screen.getByTestId('inputMaritalStatus')).toHaveValue(
+      mockMaritalStatusEnum[5].value,
+    );
+  }, 60000);
 });

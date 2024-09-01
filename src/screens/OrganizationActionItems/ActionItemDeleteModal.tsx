@@ -2,6 +2,9 @@ import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import styles from './OrganizationActionItems.module.css';
 
+/**
+ * Props for the `ActionItemPreviewModal` component.
+ */
 interface InterfaceActionItemCreateModalProps {
   actionItemDeleteModalIsOpen: boolean;
   deleteActionItemHandler: () => Promise<void>;
@@ -10,6 +13,12 @@ interface InterfaceActionItemCreateModalProps {
   tCommon: (key: string) => string;
 }
 
+/**
+ * A modal component for confirming the deletion of an action item.
+ *
+ * @param props - The properties passed to the component.
+ * @returns The `ActionItemPreviewModal` component.
+ */
 const ActionItemPreviewModal: React.FC<InterfaceActionItemCreateModalProps> = ({
   actionItemDeleteModalIsOpen,
   deleteActionItemHandler,

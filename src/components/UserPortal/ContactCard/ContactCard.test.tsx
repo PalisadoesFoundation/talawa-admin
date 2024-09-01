@@ -23,13 +23,14 @@ async function wait(ms = 100): Promise<void> {
 
 let props = {
   id: '1',
-  firstName: 'Noble',
-  lastName: 'Mittal',
+  title: 'Disha Talreja',
+  subtitle: 'disha@example.com',
   email: 'noble@mittal.com',
   image: '',
   selectedContact: '',
+  type: '',
   setSelectedContact: jest.fn(),
-  setSelectedContactName: jest.fn(),
+  setSelectedChatType: jest.fn(),
 };
 
 describe('Testing ContactCard Component [User Portal]', () => {

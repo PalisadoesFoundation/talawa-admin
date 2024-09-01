@@ -58,6 +58,9 @@ jobs:
           CHANGED_FILES: ${{ steps.changed_files.outputs.all_changed_files }}
         run: npx eslint ${CHANGED_FILES} 
         
+      - name: Check for TSDoc comments
+        run: npm run check-tsdoc # Run the TSDoc check script
+
       - name: Check for localStorage Usage
         run: |
           chmod +x scripts/githooks/check-localstorage-usage.js

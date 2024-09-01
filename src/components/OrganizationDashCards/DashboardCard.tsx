@@ -3,6 +3,13 @@ import { Card, Row } from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import styles from './Dashboardcard.module.css';
 
+/** Dashboard card component is used to display the card with icon, title and count.
+ * @param  icon - Icon for the card
+ * @param  title - Title for the card
+ * @param  count - Count for the card
+ * @returns  Dashboard card component
+ *
+ */
 const dashBoardCard = (props: {
   icon: React.ReactNode;
   title: string;

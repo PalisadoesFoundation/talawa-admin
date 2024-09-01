@@ -23,6 +23,20 @@ import { toast } from 'react-toastify';
 import ActionItemCreateModal from 'screens/OrganizationActionItems/ActionItemCreateModal';
 import { useTranslation } from 'react-i18next';
 
+/**
+ * Component displaying the body of the Action Items modal.
+ * Fetches and displays action items, members, and action item categories related to a specific event within an organization.
+ *
+ * @param organizationId - The ID of the organization.
+ * @param eventId - The ID of the event.
+ *
+ *
+ * @example
+ * ```tsx
+ * <ActionItemsModalBody organizationId="org123" eventId="event456" />
+ * ```
+ * This example renders the `ActionItemsModalBody` component with the provided organization and event IDs.
+ */
 export const ActionItemsModalBody = ({
   organizationId,
   eventId,
@@ -30,21 +44,26 @@ export const ActionItemsModalBody = ({
   organizationId: string;
   eventId: string;
 }): JSX.Element => {
+  // Setting up translation
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationActionItems',
   });
   const { t: tCommon } = useTranslation('common');
 
+  // State to manage due date
   const [dueDate, setDueDate] = useState<Date | null>(new Date());
+  // State to manage the visibility of the action item creation modal
   const [actionItemCreateModalIsOpen, setActionItemCreateModalIsOpen] =
     useState(false);
 
+  // State to manage form inputs
   const [formState, setFormState] = useState({
     actionItemCategoryId: '',
     assigneeId: '',
     preCompletionNotes: '',
   });
 
+  // Query to fetch action item categories
   const {
     data: actionItemCategoriesData,
     loading: actionItemCategoriesLoading,
@@ -60,6 +79,7 @@ export const ActionItemsModalBody = ({
     notifyOnNetworkStatusChange: true,
   });
 
+  // Query to fetch members list
   const {
     data: membersData,
     loading: membersLoading,
@@ -72,6 +92,7 @@ export const ActionItemsModalBody = ({
     variables: { id: organizationId },
   });
 
+  // Query to fetch action items list
   const {
     data: actionItemsData,
     loading: actionItemsLoading,
@@ -91,8 +112,14 @@ export const ActionItemsModalBody = ({
     notifyOnNetworkStatusChange: true,
   });
 
+  // Mutation to create a new action item
   const [createActionItem] = useMutation(CREATE_ACTION_ITEM_MUTATION);
 
+  /**
+   * Handles the creation of a new action item.
+   *
+   * @param e - The change event from the form submission.
+   */
   const createActionItemHandler = async (
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
@@ -108,6 +135,7 @@ export const ActionItemsModalBody = ({
         },
       });
 
+      // Resetting form state and due date after successful creation
       setFormState({
         assigneeId: '',
         actionItemCategoryId: '',
@@ -116,6 +144,7 @@ export const ActionItemsModalBody = ({
 
       setDueDate(new Date());
 
+      // Refetching the action items list to update the UI
       actionItemsRefetch();
       hideCreateModal();
       toast.success(t('successfulCreation'));
@@ -127,18 +156,26 @@ export const ActionItemsModalBody = ({
     }
   };
 
+  /**
+   * Shows the create action item modal.
+   */
   const showCreateModal = (): void => {
     setActionItemCreateModalIsOpen(!actionItemCreateModalIsOpen);
   };
 
+  /**
+   * Hides the create action item modal.
+   */
   const hideCreateModal = (): void => {
     setActionItemCreateModalIsOpen(!actionItemCreateModalIsOpen);
   };
 
+  // Showing loader while data is being fetched
   if (actionItemCategoriesLoading || membersLoading || actionItemsLoading) {
     return <Loader size="xl" />;
   }
 
+  // Showing error message if any of the queries fail
   if (actionItemCategoriesError || membersError || actionItemsError) {
     return (
       <div className={styles.message}>
@@ -162,11 +199,13 @@ export const ActionItemsModalBody = ({
     );
   }
 
+  // Filtering out disabled action item categories
   const actionItemCategories =
     actionItemCategoriesData?.actionItemCategoriesByOrganization.filter(
       (category) => !category.isDisabled,
     );
 
+  // Counting the number of completed action items
   const completedActionItemsCount =
     actionItemsData?.actionItemsByOrganization.reduce(
       (acc, item) => (item.isCompleted === true ? acc + 1 : acc),

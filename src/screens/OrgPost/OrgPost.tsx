@@ -43,6 +43,12 @@ interface InterfaceOrgPost {
   }[];
 }
 
+/**
+ * This function is used to display the posts of the organization. It displays the posts in a card format.
+ * It also provides the functionality to create a new post. The user can also sort the posts based on the date of creation.
+ * The user can also search for a post based on the title of the post.
+ * @returns JSX.Element which contains the posts of the organization.
+ */
 function orgPost(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgPost',
@@ -98,14 +104,18 @@ function orgPost(): JSX.Element {
     error?: ApolloError;
     refetch: (filterData?: {
       id: string | undefined;
-      title_contains: string | null;
-      text_contains: string | null;
+      // title_contains: string | null;
+      // text_contains: string | null;
+      after: string | null | undefined;
+      before: string | null | undefined;
+      first: number | null;
+      last: number | null;
     }) => void;
   } = useQuery(ORGANIZATION_POST_LIST, {
     variables: {
-      id: currentUrl,
-      after: after,
-      before: before,
+      id: currentUrl as string,
+      after: after ?? null,
+      before: before ?? null,
       first: first,
       last: last,
     },
@@ -212,6 +222,10 @@ function orgPost(): JSX.Element {
       id: currentUrl,
       title_contains: showTitle ? value : null,
       text_contains: !showTitle ? value : null,
+      after: after || null,
+      before: before || null,
+      first: first || null,
+      last: last || null,
     };
     refetch(filterData);
   };

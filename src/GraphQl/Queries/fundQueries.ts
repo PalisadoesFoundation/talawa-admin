@@ -9,10 +9,15 @@ import gql from 'graphql-tag';
  * @returns The list of members associated with the organization.
  */
 export const FUND_LIST = gql`
-  query FundsByOrganization($organizationId: ID!, $filter: String) {
+  query FundsByOrganization(
+    $organizationId: ID!
+    $filter: String
+    $orderBy: FundOrderByInput
+  ) {
     fundsByOrganization(
       organizationId: $organizationId
       where: { name_contains: $filter }
+      orderBy: $orderBy
     ) {
       _id
       name
@@ -32,8 +37,12 @@ export const FUND_LIST = gql`
 `;
 
 export const FUND_CAMPAIGN = gql`
-  query GetFundById($id: ID!) {
-    getFundById(id: $id) {
+  query GetFundById(
+    $id: ID!
+    $where: CampaignWhereInput
+    $orderBy: CampaignOrderByInput
+  ) {
+    getFundById(id: $id, where: $where, orderBy: $orderBy) {
       campaigns {
         _id
         endDate
@@ -47,8 +56,14 @@ export const FUND_CAMPAIGN = gql`
 `;
 
 export const FUND_CAMPAIGN_PLEDGE = gql`
-  query GetFundraisingCampaignById($id: ID!, $orderBy: PledgeOrderByInput) {
-    getFundraisingCampaignById(id: $id, orderBy: $orderBy) {
+  query GetFundraisingCampaigns(
+    $where: CampaignWhereInput
+    $pledgeOrderBy: PledgeOrderByInput
+  ) {
+    getFundraisingCampaigns(where: $where, pledgeOrderBy: $pledgeOrderBy) {
+      name
+      fundingGoal
+      currency
       startDate
       endDate
       pledges {
@@ -63,6 +78,49 @@ export const FUND_CAMPAIGN_PLEDGE = gql`
           lastName
           image
         }
+      }
+    }
+  }
+`;
+
+export const USER_FUND_CAMPAIGNS = gql`
+  query GetFundraisingCampaigns(
+    $where: CampaignWhereInput
+    $campaignOrderBy: CampaignOrderByInput
+  ) {
+    getFundraisingCampaigns(where: $where, campaignOrderby: $campaignOrderBy) {
+      _id
+      startDate
+      endDate
+      name
+      fundingGoal
+      currency
+    }
+  }
+`;
+
+export const USER_PLEDGES = gql`
+  query GetPledgesByUserId(
+    $userId: ID!
+    $where: PledgeWhereInput
+    $orderBy: PledgeOrderByInput
+  ) {
+    getPledgesByUserId(userId: $userId, where: $where, orderBy: $orderBy) {
+      _id
+      amount
+      startDate
+      endDate
+      campaign {
+        _id
+        name
+        endDate
+      }
+      currency
+      users {
+        _id
+        firstName
+        lastName
+        image
       }
     }
   }

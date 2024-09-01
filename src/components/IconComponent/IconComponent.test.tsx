@@ -1,7 +1,12 @@
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import IconComponent from './IconComponent';
-import React from 'react';
+
 const screenTestIdMap: Record<string, Record<string, string>> = {
+  MyOrganizations: {
+    name: 'My Organizations',
+    testId: 'Icon-Component-MyOrganizationsIcon',
+  },
   Dashboard: {
     name: 'Dashboard',
     testId: 'Icon-Component-DashboardIcon',
@@ -9,6 +14,18 @@ const screenTestIdMap: Record<string, Record<string, string>> = {
   People: {
     name: 'People',
     testId: 'Icon-Component-PeopleIcon',
+  },
+  Tags: {
+    name: 'Tags',
+    testId: 'Icon-Component-TagsIcon',
+  },
+  Tag: {
+    name: 'Tag',
+    testId: 'Icon-Component-TagIcon',
+  },
+  Requests: {
+    name: 'Requests',
+    testId: 'Icon-Component-RequestsIcon',
   },
   Events: {
     name: 'Events',
@@ -18,13 +35,13 @@ const screenTestIdMap: Record<string, Record<string, string>> = {
     name: 'Action Items',
     testId: 'Icon-Component-ActionItemIcon',
   },
+  AgendaItemsCategory: {
+    name: 'Agenda Items Category',
+    testId: 'Icon-Component-AgendaCategoryIcon',
+  },
   Posts: {
     name: 'Posts',
     testId: 'Icon-Component-PostsIcon',
-  },
-  Funds: {
-    name: 'Funds',
-    testId: 'Icon-Component-Funds',
   },
   BlockUnblock: {
     name: 'Block/Unblock',
@@ -38,11 +55,7 @@ const screenTestIdMap: Record<string, Record<string, string>> = {
     name: 'Settings',
     testId: 'Icon-Component-SettingsIcon',
   },
-  AllOrganizations: {
-    name: 'My Organizations',
-    testId: 'Icon-Component-MyOrganizationsIcon',
-  },
-  ListEventRegistrant: {
+  ListEventRegistrants: {
     name: 'List Event Registrants',
     testId: 'Icon-Component-List-Event-Registrants',
   },
@@ -58,9 +71,25 @@ const screenTestIdMap: Record<string, Record<string, string>> = {
     name: 'Advertisement',
     testId: 'Icon-Component-Advertisement',
   },
+  Funds: {
+    name: 'Funds',
+    testId: 'Icon-Component-Funds',
+  },
   Venues: {
     name: 'Venues',
     testId: 'Icon-Component-Venues',
+  },
+  Donate: {
+    name: 'Donate',
+    testId: 'Icon-Component-Donate',
+  },
+  Campaigns: {
+    name: 'Campaigns',
+    testId: 'Icon-Component-Campaigns',
+  },
+  MyPledges: {
+    name: 'My Pledges',
+    testId: 'Icon-Component-My-Pledges',
   },
   default: {
     name: 'default',

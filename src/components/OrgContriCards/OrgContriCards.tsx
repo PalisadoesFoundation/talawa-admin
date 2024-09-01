@@ -5,6 +5,9 @@ import { useTranslation } from 'react-i18next';
 
 import styles from './OrgContriCards.module.css';
 
+/**
+ * Props for the OrgContriCards component
+ */
 interface InterfaceOrgContriCardsProps {
   key: string;
   id: string;
@@ -14,6 +17,16 @@ interface InterfaceOrgContriCardsProps {
   contriTransactionId: string;
   userEmail: string;
 }
+
+/**
+ * Component to display organization contribution cards
+ *
+ * This component shows the contribution details of a user in a card format. It includes
+ * the user's name, email, contribution date, transaction ID, and the contribution amount.
+ *
+ * @param props - The properties passed to the component
+ * @returns JSX.Element representing a contribution card
+ */
 function orgContriCards(props: InterfaceOrgContriCardsProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgContriCards',

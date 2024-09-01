@@ -17,8 +17,24 @@ interface InterfacePropsInterface {
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => void;
 }
+/**
+ * A component that provides pagination controls for a table.
+ * It uses different pagination styles based on screen size.
+ *
+ * @param count - The total number of rows in the table.
+ * @param rowsPerPage - The number of rows displayed per page.
+ * @param page - The current page number.
+ * @param onPageChange - Callback function to handle page changes.
+ * @param onRowsPerPageChange - Callback function to handle changes in rows per page.
+ */
 
-const PaginationList = (props: InterfacePropsInterface): JSX.Element => {
+const PaginationList = ({
+  count,
+  rowsPerPage,
+  page,
+  onPageChange,
+  onRowsPerPageChange,
+}: InterfacePropsInterface): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'paginationList',
   });
@@ -34,17 +50,17 @@ const PaginationList = (props: InterfacePropsInterface): JSX.Element => {
           }}
           rowsPerPageOptions={[]}
           colSpan={5}
-          count={props.count}
-          rowsPerPage={props.rowsPerPage}
-          page={props.page}
+          count={count}
+          rowsPerPage={rowsPerPage}
+          page={page}
           SelectProps={{
             inputProps: {
               'aria-label': 'rows per page',
             },
             native: true,
           }}
-          onPageChange={props.onPageChange}
-          onRowsPerPageChange={props.onRowsPerPageChange}
+          onPageChange={onPageChange}
+          onRowsPerPageChange={onRowsPerPageChange}
           ActionsComponent={Pagination}
         />
       </Hidden>
@@ -59,17 +75,17 @@ const PaginationList = (props: InterfacePropsInterface): JSX.Element => {
           ]}
           data-testid={'table-pagination'}
           colSpan={4}
-          count={props.count}
-          rowsPerPage={props.rowsPerPage}
-          page={props.page}
+          count={count}
+          rowsPerPage={rowsPerPage}
+          page={page}
           SelectProps={{
             inputProps: {
               'aria-label': 'rows per page',
             },
             native: true,
           }}
-          onPageChange={props.onPageChange}
-          onRowsPerPageChange={props.onRowsPerPageChange}
+          onPageChange={onPageChange}
+          onRowsPerPageChange={onRowsPerPageChange}
           ActionsComponent={Pagination}
           labelRowsPerPage={t('rowsPerPage')}
         />

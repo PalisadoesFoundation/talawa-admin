@@ -10,10 +10,17 @@ import styles from './LeftDrawer.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 
 export interface InterfaceLeftDrawerProps {
-  hideDrawer: boolean | null;
-  setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
+  hideDrawer: boolean | null; // Controls the visibility of the drawer
+  setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>; // Function to set the visibility state
 }
 
+/**
+ * LeftDrawer component for displaying navigation options.
+ *
+ * @param hideDrawer - Determines if the drawer should be hidden or shown.
+ * @param setHideDrawer - Function to update the visibility state of the drawer.
+ * @returns JSX element for the left navigation drawer.
+ */
 const leftDrawer = ({
   hideDrawer,
   setHideDrawer,
@@ -24,6 +31,9 @@ const leftDrawer = ({
   const { getItem } = useLocalStorage();
   const superAdmin = getItem('SuperAdmin');
 
+  /**
+   * Handles link click to hide the drawer on smaller screens.
+   */
   const handleLinkClick = (): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer(true);

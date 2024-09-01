@@ -229,7 +229,7 @@ describe('Testing Advertisement Register Component', () => {
     await waitFor(() => {
       fireEvent.click(getByText(translations.register));
     });
-    expect(toast.success).toBeCalledWith('Advertisement created successfully');
+    expect(toast.success).toBeCalledWith('Advertisement created successfully.');
     expect(setTimeoutSpy).toHaveBeenCalled();
   });
 
@@ -295,7 +295,7 @@ describe('Testing Advertisement Register Component', () => {
     await waitFor(() => {
       fireEvent.click(getByText(translations.saveChanges));
     });
-    expect(toast.success).toBeCalledWith('Advertisement created successfully');
+    expect(toast.success).toBeCalledWith('Advertisement created successfully.');
     expect(setTimeoutSpy).toHaveBeenCalled();
   });
 
@@ -330,7 +330,7 @@ describe('Testing Advertisement Register Component', () => {
       fireEvent.click(getByText(translations.register));
     });
     expect(toast.error).toBeCalledWith(
-      'An error occured, could not create new advertisement',
+      `An error occurred. Couldn't create advertisement`,
     );
     expect(setTimeoutSpy).toHaveBeenCalled();
   });
@@ -400,7 +400,7 @@ describe('Testing Advertisement Register Component', () => {
       fireEvent.click(getByText(translations.register));
     });
     expect(toast.error).toBeCalledWith(
-      'End date must be greater than or equal to start date',
+      'End Date should be greater than or equal to Start Date',
     );
     expect(setTimeoutSpy).toHaveBeenCalled();
   });
@@ -521,7 +521,7 @@ describe('Testing Advertisement Register Component', () => {
     fireEvent.click(getByText(translations.saveChanges));
     await waitFor(() => {
       expect(toast.error).toBeCalledWith(
-        'End date must be greater than or equal to start date',
+        'End Date should be greater than or equal to Start Date',
       );
     });
   });

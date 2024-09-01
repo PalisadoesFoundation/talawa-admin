@@ -56,6 +56,7 @@ enum Role {
 interface InterfaceIOrgList {
   admins: { _id: string }[];
 }
+
 const Calendar: React.FC<InterfaceCalendarProps> = ({
   eventData,
   refetchEvents,
@@ -125,6 +126,9 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     setEvents(data);
   }, [eventData, orgData, userRole, userId]);
 
+  /**
+   * Moves the calendar view to the previous month.
+   */
   const handlePrevMonth = (): void => {
     /*istanbul ignore next*/
     if (currentMonth === 0) {
@@ -135,6 +139,9 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     }
   };
 
+  /**
+   * Moves the calendar view to the next month.
+   */
   const handleNextMonth = (): void => {
     /*istanbul ignore next*/
     if (currentMonth === 11) {
@@ -145,6 +152,9 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     }
   };
 
+  /**
+   * Moves the calendar view to the previous date.
+   */
   const handlePrevDate = (): void => {
     /*istanbul ignore next*/
     if (currentDate > 1) {
@@ -188,6 +198,9 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     }
   };
 
+  /**
+   * Moves the calendar view to today's date.
+   */
   const handleTodayButton = (): void => {
     /*istanbul ignore next*/
     setCurrentYear(today.getFullYear());
@@ -318,7 +331,8 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                 );
 
                 if (
-                  datas.startTime?.slice(0, 2) == (index % 24).toString() &&
+                  parseInt(datas.startTime?.slice(0, 2) as string).toString() ==
+                    (index % 24).toString() &&
                   datas.startDate == dayjs(currDate).format('YYYY-MM-DD')
                 ) {
                   return datas;

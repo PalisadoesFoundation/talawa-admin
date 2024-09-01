@@ -3,6 +3,11 @@
     width: 98%;
   }
 }
+.actionItemModal {
+  max-width: 80vw;
+  margin-top: 2vh;
+  margin-left: 13vw;
+}
 .modalContent {
   width: 670px;
   max-width: 680px;
@@ -71,6 +76,10 @@
   height: 50px !important;
   border-radius: 100% !important;
 }
+.datagrid {
+  overflow: auto;
+  border-radius: 10px;
+}
 .tableHead {
   background-color: #31bb6b !important;
   color: white;
@@ -94,9 +103,8 @@
   background-color: var(--bs-white);
 }
 .tableHeader {
-  background-color: var(--bs-primary);
-  color: var(--bs-white);
-  font-size: 16px;
+  color: var(--bs-black);
+  font-size: var(--bs-body-font-size);
 }
 .addButton {
   width: 7em;
@@ -128,18 +136,33 @@
   color: var(--bs-gray-600);
   font-weight: 600;
   font-size: 20px;
-  margin-top: 1rem;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  border-bottom: 3px solid var(--bs-primary);
   width: 65%;
 }
 
 .editDelBtns {
-  display: flex;
-  justify-content: space-around;
+  margin-top: 15px;
+  border: 1px solid var(--bs-gray-300);
+  box-shadow: 0 2px 2px var(--bs-gray-300);
+  padding: 10px 10px;
+  border-radius: 5px;
+  background-color: var(--bs-primary);
+  width: 100%;
+  font-size: 16px;
+  color: var(--bs-white);
+  outline: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+  width: 100%;
 }
 
 .greenregbtn {
-  margin-bottom: 20px;
-  margin-left: 85%;
+  margin-left: 93%;
 }
 
 .datatable {
@@ -148,6 +171,17 @@
 
 .datediv {
   display: flex;
+  flex-direction: row;
+}
+.datebox {
+  width: 90%;
+  border-radius: 7px;
+  outline: none;
+  box-shadow: none;
+}
+.actionItemsOptionsButton {
+  width: 24px;
+  height: 24px;
 }
 
 @-webkit-keyframes load8 {

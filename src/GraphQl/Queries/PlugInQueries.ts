@@ -106,6 +106,119 @@ export const ORGANIZATION_EVENTS_CONNECTION = gql`
  * @returns The list of direct chats associated with the user, including details such as ID, creator, messages, organization, and participating users.
  */
 
+// directChatsMessagesByChatID(id: ID!): [DirectChatMessage]
+
+export const DIRECT_CHAT_MESSAGES_BY_CHAT_ID = gql`
+  query directChatsMessagesByChatID($id: ID!) {
+    directChatsMessagesByChatID(id: $id) {
+      _id
+      createdAt
+      messageContent
+      receiver {
+        _id
+        firstName
+        lastName
+        email
+        image
+      }
+      sender {
+        _id
+        firstName
+        lastName
+        email
+        image
+      }
+    }
+  }
+`;
+
+export const DIRECT_CHAT_BY_ID = gql`
+  query directChatById($id: ID!) {
+    directChatById(id: $id) {
+      _id
+      createdAt
+      messages {
+        _id
+        createdAt
+        messageContent
+        receiver {
+          _id
+          firstName
+          lastName
+          email
+          image
+        }
+        sender {
+          _id
+          firstName
+          lastName
+          email
+          image
+        }
+      }
+      users {
+        _id
+        firstName
+        lastName
+        email
+      }
+    }
+  }
+`;
+
+export const GROUP_CHAT_BY_ID = gql`
+  query groupChatById($id: ID!) {
+    groupChatById(id: $id) {
+      _id
+      createdAt
+      title
+      messages {
+        _id
+        createdAt
+        messageContent
+        sender {
+          _id
+          firstName
+          lastName
+          email
+          image
+        }
+      }
+      users {
+        _id
+        firstName
+        lastName
+        email
+        image
+      }
+    }
+  }
+`;
+
+// directChatByChatId
+
+// export const GROUP_CHAT_MESSAGES_BY_CHAT_ID = gql`
+//   query directChatsMessagesByChatID($id: ID!) {
+//     directChatsMessagesByChatID(id: $id) {
+//       _id
+//       createdAt
+//       messageContent
+//       receiver {
+//         _id
+//         firstName
+//         lastName
+//         email
+//       }
+//       sender {
+//         _id
+//         firstName
+//         lastName
+//         email
+//       }
+//     }
+//   }
+// `;
+
 export const DIRECT_CHATS_LIST = gql`
   query DirectChatsByUserID($id: ID!) {
     directChatsByUserID(id: $id) {
@@ -148,6 +261,42 @@ export const DIRECT_CHATS_LIST = gql`
   }
 `;
 
+export const GROUP_CHAT_LIST = gql`
+  query GroupChatsByUserID($id: ID!) {
+    groupChatsByUserId(id: $id) {
+      _id
+      creator {
+        _id
+        firstName
+        lastName
+        email
+      }
+      title
+      messages {
+        _id
+        createdAt
+        messageContent
+        sender {
+          _id
+          firstName
+          lastName
+          email
+        }
+      }
+      organization {
+        _id
+        name
+      }
+      users {
+        _id
+        firstName
+        lastName
+        email
+        image
+      }
+    }
+  }
+`;
 /**
  * GraphQL query to check if an organization is a sample organization.
  *

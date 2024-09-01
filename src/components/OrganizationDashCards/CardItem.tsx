@@ -8,6 +8,9 @@ import dayjs from 'dayjs';
 import styles from './CardItem.module.css';
 import { PersonAddAlt1Rounded } from '@mui/icons-material';
 
+/**
+ * Interface for the CardItem component's props.
+ */
 export interface InterfaceCardItem {
   type: 'Event' | 'Post' | 'MembershipRequest';
   title: string;
@@ -18,6 +21,12 @@ export interface InterfaceCardItem {
   location?: string;
 }
 
+/**
+ * Component to display a card item with various types such as Event, Post, or MembershipRequest.
+ *
+ * @param props - Props for the CardItem component.
+ * @returns JSX element representing the card item.
+ */
 const cardItem = (props: InterfaceCardItem): JSX.Element => {
   const { creator, type, title, startdate, time, enddate, location } = props;
   return (
