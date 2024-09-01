@@ -1058,6 +1058,60 @@ const DIRECT_CHAT_BY_ID_QUERY_MOCK = [
       },
     },
   },
+  {
+    request: {
+      query: DIRECT_CHAT_BY_ID,
+      variables: {
+        id: '',
+      },
+    },
+    result: {
+      data: {
+        directChatById: {
+          _id: '65844efc814dd4003db811c4',
+          createdAt: '2345678903456',
+          messages: [
+            {
+              _id: '1',
+              createdAt: '345678908765',
+              messageContent: 'Hello',
+              replyTo: null,
+              receiver: {
+                _id: '1',
+                firstName: 'Disha',
+                lastName: 'Talreja',
+                email: 'disha@example.com',
+                image: '',
+              },
+              sender: {
+                _id: '2',
+                firstName: 'Test',
+                lastName: 'User',
+                email: 'test@example.com',
+                image: '',
+              },
+            },
+          ],
+          users: [
+            {
+              _id: '1',
+              firstName: 'Disha',
+              lastName: 'Talreja',
+              email: 'disha@example.com',
+              image: '',
+            },
+            {
+              _id: '2',
+              firstName: 'Test',
+              lastName: 'User',
+              email: 'test@example.com',
+              image: '',
+            },
+          ],
+        },
+      },
+    },
+  },
 ];
 
 const GROUP_CHAT_BY_ID_QUERY_MOCK = [
