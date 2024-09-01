@@ -105,6 +105,14 @@ export const CREATE_CHAT = gql`
   }
 `;
 
+export const ADD_USER_TO_GROUP_CHAT = gql`
+  mutation addUserToGroupChat($userId: ID!, $chatId: ID!) {
+    addUserToGroupChat(userId: $userId, chatId: $chatId) {
+      _id
+    }
+  }
+`;
+
 // markChatMessagesAsRead(chatId: ID!, userId: ID!): Chat
 
 export const MARK_CHAT_MESSAGES_AS_READ = gql`

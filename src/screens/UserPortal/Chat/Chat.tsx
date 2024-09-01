@@ -339,7 +339,10 @@ export default function chat(): JSX.Element {
             </div>
           </div>
           <div className={styles.chatContainer} id="chat-container">
-            <ChatRoom selectedContact={selectedContact} />
+            <ChatRoom
+              chatListRefetch={chatsListRefetch}
+              selectedContact={selectedContact}
+            />
           </div>
         </div>
       </div>

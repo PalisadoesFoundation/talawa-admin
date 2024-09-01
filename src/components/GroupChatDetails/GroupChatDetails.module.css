@@ -1,0 +1,29 @@
+.groupInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.groupImage {
+    margin-bottom: 10px;
+}
+
+.memberList {
+    max-height: 300px;
+    overflow: scroll;
+}
+
+.memberList::-webkit-scrollbar {
+    display: none;
+  }
+
+.listItem {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.membersImage {
+    width: 40px !important;
+}

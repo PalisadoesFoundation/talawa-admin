@@ -104,7 +104,9 @@ export default function CreateGroupChat({
   const [createChat] = useMutation(CREATE_CHAT);
 
   const [organizations, setOrganizations] = useState([]);
-  const [selectedOrganization, setSelectedOrganization] = useState('');
+  const [selectedOrganization, setSelectedOrganization] = useState(
+    organizations[0]?._id,
+  );
   const [title, setTitle] = useState('');
   let [userIds, setUserIds] = useState<string[]>([]);
 

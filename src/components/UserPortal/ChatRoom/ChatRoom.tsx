@@ -10,6 +10,7 @@ import {
   CHAT_BY_ID,
   UNREAD_CHAT_LIST,
 } from 'GraphQl/Queries/PlugInQueries';
+import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery, useSubscription } from '@apollo/client';
 import {
   MARK_CHAT_MESSAGES_AS_READ,
@@ -19,9 +20,18 @@ import {
 import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
 import { MoreVert, Close } from '@mui/icons-material';
+import GroupChatDetails from 'components/GroupChatDetails/GroupChatDetails';
 
 interface InterfaceChatRoomProps {
   selectedContact: string;
+  chatListRefetch: (
+    variables?:
+      | Partial<{
+          id: any;
+          searchString: string;
+        }>
+      | undefined,
+  ) => Promise<ApolloQueryResult<any>>;
 }
 
 type DirectMessage = {
@@ -89,6 +99,15 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
   const [chat, setChat] = useState<Chat>();
   const [replyToDirectMessage, setReplyToDirectMessage] =
     useState<DirectMessage | null>(null);
+  const [groupChatDetailsModalisOpen, setGroupChatDetailsModalisOpen] =
+    useState(false);
+
+  const openGroupChatDetails = (): void => {
+    setGroupChatDetailsModalisOpen(true);
+  };
+
+  const toggleGroupChatDetailsModal = (): void =>
+    setGroupChatDetailsModalisOpen(!groupChatDetailsModalisOpen);
 
   const handleNewMessageChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const newMessageValue = e.target.value;
@@ -118,15 +137,14 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
   } = useQuery(CHAT_BY_ID, {
     variables: {
       id: props.selectedContact,
-      searchString: 'te',
     },
   });
 
-  const { refetch: chatListRefetch } = useQuery(CHATS_LIST, {
-    variables: {
-      id: userId,
-    },
-  });
+  // const { refetch: chatListRefetch } = useQuery(CHATS_LIST, {
+  //   variables: {
+  //     id: userId,
+  //   },
+  // });
 
   const { refetch: unreadChatListRefetch } = useQuery(UNREAD_CHAT_LIST, {
     variables: {
@@ -136,7 +154,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
 
   useEffect(() => {
     markChatMessagesAsRead().then(() => {
-      chatListRefetch();
+      props.chatListRefetch();
       unreadChatListRefetch();
     });
   }, [props.selectedContact]);
@@ -163,6 +181,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     await chatRefetch();
     setReplyToDirectMessage(null);
     setNewMessage('');
+    await props.chatListRefetch({ id: userId });
   };
 
   useSubscription(MESSAGE_SENT_TO_CHAT, {
@@ -178,7 +197,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
         await markChatMessagesAsRead();
         await chatRefetch();
       }
-      chatListRefetch();
+      props.chatListRefetch();
       unreadChatListRefetch();
     },
   });
@@ -209,7 +228,10 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                 alt={chatTitle}
                 avatarStyle={styles.contactImage}
               />
-              <div className={styles.userDetails}>
+              <div
+                onClick={() => (chat?.isGroup ? openGroupChatDetails() : null)}
+                className={styles.userDetails}
+              >
                 <p className={styles.title}>{chatTitle}</p>
                 <p className={styles.subtitle}>{chatSubtitle}</p>
               </div>
@@ -375,6 +397,14 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
             </InputGroup>
           </div>
         </>
+      )}
+      {groupChatDetailsModalisOpen && (
+        <GroupChatDetails
+          toggleGroupChatDetailsModal={toggleGroupChatDetailsModal}
+          groupChatDetailsModalisOpen={groupChatDetailsModalisOpen}
+          chat={chat}
+          chatRefetch={chatRefetch}
+        ></GroupChatDetails>
       )}
     </div>
   );
