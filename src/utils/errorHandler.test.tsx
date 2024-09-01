@@ -1,4 +1,5 @@
-import type { TFunction } from 'react-i18next';
+type TFunction = (key: string, options?: Record<string, unknown>) => string;
+
 import { errorHandler } from './errorHandler';
 import { toast } from 'react-toastify';
 
@@ -9,8 +10,9 @@ jest.mock('react-toastify', () => ({
 }));
 
 describe('Test if errorHandler is working properly', () => {
-  const t: TFunction<'translation', string> = (key: string) => key;
-  const tErrors: TFunction<'errors', string> = (key: string) => key;
+  const t: TFunction = (key: string) => key;
+  const tErrors: TFunction = (key: string, options?: Record<string, unknown>) =>
+    key;
 
   it('should call toast.error with the correct message if error message is "Failed to fetch"', () => {
     const error = new Error('Failed to fetch');

@@ -23,6 +23,9 @@ import type {
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 
+/**
+ * Props for the CustomRecurrenceModal component.
+ */
 interface InterfaceCustomRecurrenceModalProps {
   recurrenceRuleState: InterfaceRecurrenceRuleState;
   recurrenceRuleText: string;
@@ -38,6 +41,16 @@ interface InterfaceCustomRecurrenceModalProps {
   tCommon: (key: string) => string;
 }
 
+/**
+ * A modal for setting up custom recurrence rules.
+ *
+ * This component allows users to configure how often an event should repeat, and
+ * when it should end. It includes options for daily, weekly, monthly, and yearly
+ * recurrence, as well as specific end options.
+ *
+ * @param props - The props object containing various configurations and state management functions.
+ * @returns The JSX element representing the CustomRecurrenceModal.
+ */
 const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
   recurrenceRuleState,
   recurrenceRuleText,
@@ -67,6 +80,13 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
     }
   }, [recurrenceRuleState]);
 
+  /**
+   * Handles changes to the recurrence end option.
+   *
+   * Updates the recurrence rule state based on the selected option.
+   *
+   * @param e - The event object from the radio button change.
+   */
   const handleRecurrenceEndOptionChange = (
     e: React.ChangeEvent<HTMLInputElement>,
   ): void => {
@@ -95,6 +115,13 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
     }
   };
 
+  /**
+   * Handles clicks on day buttons for weekly recurrence.
+   *
+   * Toggles the selected state of a day button in the weekly recurrence setup.
+   *
+   * @param day - The day of the week to toggle.
+   */
   const handleDayClick = (day: WeekDays): void => {
     if (weekDays !== undefined && weekDays.includes(day)) {
       setRecurrenceRuleState({
@@ -111,6 +138,9 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
     }
   };
 
+  /**
+   * Toggles the visibility of the custom recurrence modal.
+   */
   const handleCustomRecurrenceSubmit = (): void => {
     setCustomRecurrenceModalIsOpen(!customRecurrenceModalIsOpen);
   };

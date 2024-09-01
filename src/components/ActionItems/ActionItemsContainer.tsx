@@ -29,6 +29,28 @@ import ActionItemPreviewModal from '../../screens/OrganizationActionItems/Action
 import ActionItemDeleteModal from '../../screens/OrganizationActionItems/ActionItemDeleteModal';
 import { Link } from 'react-router-dom';
 
+/**
+ * ActionItemsContainer component is responsible for displaying, managing, and updating action items
+ * related to either an organization or an event. It provides a UI for previewing, updating, and deleting
+ * action items, as well as changing their status.
+ *
+ * @param props - The component props
+ * @param actionItemsConnection - Specifies the connection type (Organization or Event) to determine the context of the action items.
+ * @param actionItemsData - Array of action item data to be displayed.
+ * @param membersData - Array of member data for the organization.
+ * @param actionItemsRefetch - Function to refetch the action items data.
+ *
+ * @example
+ * ```tsx
+ * <ActionItemsContainer
+ *   actionItemsConnection="Organization"
+ *   actionItemsData={actionItems}
+ *   membersData={members}
+ *   actionItemsRefetch={refetchActionItems}
+ * />
+ * ```
+ * This example renders the `ActionItemsContainer` component with organization connection, providing the necessary action items and members data along with a refetch function.
+ */
 function actionItemsContainer({
   actionItemsConnection,
   actionItemsData,
@@ -40,11 +62,13 @@ function actionItemsContainer({
   membersData: InterfaceMemberInfo[] | undefined;
   actionItemsRefetch: () => void;
 }): JSX.Element {
+  // Translation hooks for localized text
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationActionItems',
   });
   const { t: tCommon } = useTranslation('common');
 
+  // State hooks for controlling modals and action item properties
   const [actionItemPreviewModalIsOpen, setActionItemPreviewModalIsOpen] =
     useState(false);
   const [actionItemUpdateModalIsOpen, setActionItemUpdateModalIsOpen] =
@@ -69,30 +93,53 @@ function actionItemsContainer({
     isCompleted: false,
   });
 
+  /**
+   * Opens the preview modal for the selected action item.
+   *
+   * @param actionItem - The action item to be previewed.
+   */
   const showPreviewModal = (actionItem: InterfaceActionItemInfo): void => {
     setActionItemState(actionItem);
     setActionItemPreviewModalIsOpen(true);
   };
 
+  /**
+   * Toggles the update modal visibility.
+   */
   const showUpdateModal = (): void => {
     setActionItemUpdateModalIsOpen(!actionItemUpdateModalIsOpen);
   };
 
+  /**
+   * Hides the preview modal.
+   */
   const hidePreviewModal = (): void => {
     setActionItemPreviewModalIsOpen(false);
   };
 
+  /**
+   * Hides the update modal and resets the action item ID.
+   */
   const hideUpdateModal = (): void => {
     setActionItemId('');
     setActionItemUpdateModalIsOpen(!actionItemUpdateModalIsOpen);
   };
 
+  /**
+   * Toggles the delete modal visibility.
+   */
   const toggleDeleteModal = (): void => {
     setActionItemDeleteModalIsOpen(!actionItemDeleteModalIsOpen);
   };
 
+  // Apollo Client mutations for updating and deleting action items
   const [updateActionItem] = useMutation(UPDATE_ACTION_ITEM_MUTATION);
 
+  /**
+   * Handles the form submission for updating an action item.
+   *
+   * @param  e - The form submission event.
+   */
   const updateActionItemHandler = async (
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
@@ -122,6 +169,10 @@ function actionItemsContainer({
   };
 
   const [removeActionItem] = useMutation(DELETE_ACTION_ITEM_MUTATION);
+
+  /**
+   * Handles the action item deletion.
+   */
   const deleteActionItemHandler = async (): Promise<void> => {
     try {
       await removeActionItem({
@@ -141,11 +192,21 @@ function actionItemsContainer({
     }
   };
 
+  /**
+   * Handles the edit button click and opens the update modal with the action item data.
+   *
+   * @param actionItem - The action item to be edited.
+   */
   const handleEditClick = (actionItem: InterfaceActionItemInfo): void => {
     setActionItemState(actionItem);
     showUpdateModal();
   };
 
+  /**
+   * Handles the action item status change and updates the state accordingly.
+   *
+   * @param actionItem - The action item whose status is being changed.
+   */
   const handleActionItemStatusChange = (
     actionItem: InterfaceActionItemInfo,
   ): void => {
@@ -155,10 +216,18 @@ function actionItemsContainer({
     setActionItemStatusModal(true);
   };
 
+  /**
+   * Hides the action item status modal.
+   */
   const hideActionItemStatusModal = (): void => {
     setActionItemStatusModal(false);
   };
 
+  /**
+   * Sets the state with the action item data.
+   *
+   * @param actionItem - The action item data.
+   */
   const setActionItemState = (actionItem: InterfaceActionItemInfo): void => {
     setFormState({
       ...formState,

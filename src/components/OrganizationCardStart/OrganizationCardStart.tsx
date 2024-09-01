@@ -2,12 +2,19 @@ import React from 'react';
 import styles from './OrganizationCardStart.module.css';
 
 interface InterfaceOrganizationCardStartProps {
-  key: any;
   image: string;
   id: string;
   name: string;
 }
 
+/**
+ * Component to display a simplified card for an organization.
+ *
+ * @param image - URL of the organization's image.
+ * @param id - Unique identifier for the organization.
+ * @param name - Name of the organization.
+ * @returns JSX element representing the organization card.
+ */
 function organizationCardStart(
   props: InterfaceOrganizationCardStartProps,
 ): JSX.Element {

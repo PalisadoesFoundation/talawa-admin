@@ -18,21 +18,27 @@ import { useParams } from 'react-router-dom';
 
 type ModalType = 'Create' | 'Update';
 
+/**
+ * Represents the component for managing organization action item categories.
+ * This component allows creating, updating, enabling, and disabling action item categories.
+ */
 const OrgActionItemCategories = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgActionItemCategories',
   });
   const { t: tCommon } = useTranslation('common');
 
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [modalType, setModalType] = useState<ModalType>('Create');
-  const [categoryId, setCategoryId] = useState('');
+  // State variables
+  const [modalIsOpen, setModalIsOpen] = useState(false); // Controls modal visibility
+  const [modalType, setModalType] = useState<ModalType>('Create'); // Type of modal (Create or Update)
+  const [categoryId, setCategoryId] = useState(''); // Current category ID for updating
+  const [name, setName] = useState(''); // Category name for creation or update
+  const [currName, setCurrName] = useState(''); // Current category name (used for comparison)
 
-  const [name, setName] = useState('');
-  const [currName, setCurrName] = useState('');
-
+  // Fetch organization ID from URL params
   const { orgId: currentUrl } = useParams();
 
+  // Query to fetch action item categories
   const {
     data,
     loading,
@@ -50,6 +56,7 @@ const OrgActionItemCategories = (): JSX.Element => {
     notifyOnNetworkStatusChange: true,
   });
 
+  // Mutations for creating and updating categories
   const [createActionItemCategory] = useMutation(
     CREATE_ACTION_ITEM_CATEGORY_MUTATION,
   );
@@ -58,6 +65,7 @@ const OrgActionItemCategories = (): JSX.Element => {
     UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
   );
 
+  // Handles category creation
   const handleCreate = async (
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
@@ -84,10 +92,11 @@ const OrgActionItemCategories = (): JSX.Element => {
     }
   };
 
+  // Handles category update
   const handleEdit = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     if (name === currName) {
-      toast.error(t('sameNameConflict'));
+      toast.error(t('sameNameConflict')); // Show error if the name is the same
     } else {
       try {
         await updateActionItemCategory({
@@ -97,22 +106,22 @@ const OrgActionItemCategories = (): JSX.Element => {
           },
         });
 
-        setName('');
-        setCategoryId('');
-        refetch();
+        setName(''); // Clear the name input
+        setCategoryId(''); // Clear the category ID
+        refetch(); // Refetch the list of categories
+        setModalIsOpen(false); // Close the modal
 
-        setModalIsOpen(false);
-
-        toast.success(t('successfulUpdation'));
+        toast.success(t('successfulUpdation')); // Show success toast
       } catch (error: unknown) {
         if (error instanceof Error) {
-          toast.error(error.message);
-          console.log(error.message);
+          toast.error(error.message); // Show error toast
+          console.log(error.message); // Log the error
         }
       }
     }
   };
 
+  // Handles enabling or disabling a category
   const handleStatusChange = async (
     id: string,
     disabledStatus: boolean,
@@ -125,11 +134,11 @@ const OrgActionItemCategories = (): JSX.Element => {
         },
       });
 
-      refetch();
+      refetch(); // Refetch the list of categories
 
       toast.success(
         disabledStatus ? t('categoryEnabled') : t('categoryDisabled'),
-      );
+      ); // Show success toast
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message);
@@ -138,11 +147,13 @@ const OrgActionItemCategories = (): JSX.Element => {
     }
   };
 
+  // Shows the modal for creating a new category
   const showCreateModal = (): void => {
     setModalType('Create');
     setModalIsOpen(true);
   };
 
+  // Shows the modal for updating an existing category
   const showUpdateModal = (name: string, id: string): void => {
     setCurrName(name);
     setName(name);
@@ -151,16 +162,19 @@ const OrgActionItemCategories = (): JSX.Element => {
     setModalIsOpen(true);
   };
 
+  // Hides the modal and clears input fields
   const hideModal = (): void => {
     setName('');
     setCategoryId('');
     setModalIsOpen(false);
   };
 
+  // Show loader while data is being fetched
   if (loading) {
     return <Loader styles={styles.message} size="lg" />;
   }
 
+  // Show error message if there's an error
   if (error) {
     return (
       <div className={styles.message}>
@@ -174,6 +188,7 @@ const OrgActionItemCategories = (): JSX.Element => {
     );
   }
 
+  // Render the list of action item categories
   const actionItemCategories = data?.actionItemCategoriesByOrganization;
 
   return (
@@ -234,6 +249,7 @@ const OrgActionItemCategories = (): JSX.Element => {
         })}
       </div>
 
+      {/* Modal for creating or updating categories */}
       <Modal
         className={styles.createModal}
         show={modalIsOpen}

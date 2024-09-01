@@ -35,21 +35,59 @@ interface InterfaceEventCardProps {
   }[];
 }
 
+/**
+ * Displays information about an event and provides an option to register for it.
+ *
+ * Shows the event's title, description, location, start and end dates and times,
+ * creator's name, and registration status. Includes a button to register for the event
+ * if the user is not already registered.
+ *
+ * @param props - The properties for the event card.
+ * @param id - The unique identifier of the event.
+ * @param title - The title of the event.
+ * @param description - A description of the event.
+ * @param location - The location where the event will take place.
+ * @param startDate - The start date of the event in ISO format.
+ * @param endDate - The end date of the event in ISO format.
+ * @param isRegisterable - Indicates if the event can be registered for.
+ * @param isPublic - Indicates if the event is public.
+ * @param endTime - The end time of the event in HH:mm:ss format.
+ * @param startTime - The start time of the event in HH:mm:ss format.
+ * @param recurring - Indicates if the event is recurring.
+ * @param allDay - Indicates if the event lasts all day.
+ * @param creator - The creator of the event with their name and ID.
+ * @param registrants - A list of registrants with their IDs.
+ *
+ * @returns The event card component.
+ */
 function eventCard(props: InterfaceEventCardProps): JSX.Element {
+  // Extract the translation functions
   const { t } = useTranslation('translation', {
     keyPrefix: 'userEventCard',
   });
   const { t: tCommon } = useTranslation('common');
+
+  // Get user ID from local storage
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
+
+  // Create a full name for the event creator
   const creatorName = `${props.creator.firstName} ${props.creator.lastName}`;
+
+  // Check if the user is initially registered for the event
   const isInitiallyRegistered = props.registrants.some(
     (registrant) => registrant.id === userId,
   );
 
+  // Set up the mutation for registering for the event
   const [registerEventMutation, { loading }] = useMutation(REGISTER_EVENT);
   const [isRegistered, setIsRegistered] = React.useState(isInitiallyRegistered);
 
+  /**
+   * Handles registering for the event.
+   * If the user is not already registered, sends a mutation request to register.
+   * Displays a success or error message based on the result.
+   */
   const handleRegister = async (): Promise<void> => {
     if (!isRegistered) {
       try {

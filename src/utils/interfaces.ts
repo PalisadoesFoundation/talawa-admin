@@ -204,6 +204,58 @@ export interface InterfaceQueryOrganizationPostListItem {
   };
 }
 
+interface InterfaceTagData {
+  edges: {
+    node: {
+      _id: string;
+      name: string;
+      usersAssignedTo: {
+        totalCount: number;
+      };
+      childTags: {
+        totalCount: number;
+      };
+    };
+    cursor: string;
+  }[];
+  pageInfo: {
+    startCursor: string;
+    endCursor: string;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+  };
+  totalCount: number;
+}
+
+export interface InterfaceQueryOrganizationUserTags {
+  userTags: InterfaceTagData;
+}
+
+export interface InterfaceQueryUserTagsAssignedMembers {
+  name: string;
+  usersAssignedTo: {
+    edges: {
+      node: {
+        _id: string;
+        firstName: string;
+        lastName: string;
+      };
+    }[];
+    pageInfo: {
+      startCursor: string;
+      endCursor: string;
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+    };
+    totalCount: number;
+  };
+}
+
+export interface InterfaceQueryUserTagChildTags {
+  name: string;
+  childTags: InterfaceTagData;
+}
+
 export interface InterfaceQueryOrganizationAdvertisementListItem {
   advertisements: {
     edges: {
@@ -238,20 +290,21 @@ export interface InterfaceQueryOrganizationFundCampaigns {
     currency: string;
   }[];
 }
+export interface InterfaceUserCampaign {
+  _id: string;
+  name: string;
+  fundingGoal: number;
+  startDate: Date;
+  endDate: Date;
+  currency: string;
+}
 export interface InterfaceQueryFundCampaignsPledges {
   name: string;
   fundingGoal: number;
   currency: string;
   startDate: Date;
   endDate: Date;
-  pledges: {
-    _id: string;
-    amount: number;
-    currency: string;
-    endDate: string;
-    startDate: string;
-    users: InterfacePledger[];
-  }[];
+  pledges: InterfacePledgeInfo[];
 }
 export interface InterfaceFundInfo {
   _id: string;
@@ -275,6 +328,7 @@ export interface InterfaceCampaignInfo {
 }
 export interface InterfacePledgeInfo {
   _id: string;
+  campaign?: { _id: string; name: string; endDate: Date };
   amount: number;
   currency: string;
   endDate: string;
@@ -447,6 +501,7 @@ export interface InterfacePledger {
   lastName: string;
   image: string | null;
 }
+
 export interface InterfaceAgendaItemCategoryInfo {
   _id: string;
   name: string;
@@ -496,4 +551,8 @@ export interface InterfaceAgendaItemInfo {
 
 export interface InterfaceAgendaItemList {
   agendaItemByEvent: InterfaceAgendaItemInfo[];
+}
+
+export interface InterfaceMapType {
+  [key: string]: string;
 }

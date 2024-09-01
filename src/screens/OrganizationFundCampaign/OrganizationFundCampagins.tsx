@@ -47,7 +47,41 @@ enum ModalState {
   SAME = 'same',
   DELETE = 'delete',
 }
-
+/**
+ * `orgFundCampaign` component displays a list of fundraising campaigns for a specific fund within an organization.
+ * It allows users to search, sort, view, edit, and delete campaigns.
+ *
+ * ### Functionality
+ * - Displays a data grid with campaigns information, including their names, start and end dates, funding goals, and actions.
+ * - Provides search functionality to filter campaigns by name.
+ * - Offers sorting options based on funding goal and end date.
+ * - Opens modals for creating, editing, or deleting campaigns.
+ *
+ *
+ * ### State
+ * - `campaign`: The current campaign being edited or deleted.
+ * - `searchTerm`: The term used for searching campaigns by name.
+ * - `sortBy`: The current sorting criteria for campaigns.
+ * - `modalState`: An object indicating the visibility of different modals (`same` for create/edit and `delete` for deletion).
+ * - `campaignModalMode`: Determines if the modal is in 'edit' or 'create' mode.
+ *
+ * ### Methods
+ * - `openModal(modal: ModalState)`: Opens the specified modal.
+ * - `closeModal(modal: ModalState)`: Closes the specified modal.
+ * - `handleOpenModal(campaign: InterfaceCampaignInfo | null, mode: 'edit' | 'create')`: Opens the modal for creating or editing a campaign.
+ * - `handleDeleteClick(campaign: InterfaceCampaignInfo)`: Opens the delete confirmation modal.
+ * - `handleClick(campaignId: string)`: Navigates to the pledge details page for a specific campaign.
+ *
+ * ### GraphQL Queries
+ * - Uses `FUND_CAMPAIGN` query to fetch the list of campaigns based on the provided fund ID, search term, and sorting criteria.
+ *
+ * ### Rendering
+ * - Renders a `DataGrid` component with campaigns information.
+ * - Displays modals for creating, editing, and deleting campaigns.
+ * - Shows error and loading states using `Loader` and error message components.
+ *
+ * @returns The rendered component including breadcrumbs, search and filter controls, data grid, and modals.
+ */
 const orgFundCampaign = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'fundCampaign',
@@ -165,7 +199,6 @@ const orgFundCampaign = (): JSX.Element => {
       field: 'campaignName',
       headerName: 'Campaign Name',
       flex: 2,
-      minWidth: 150,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -186,7 +219,6 @@ const orgFundCampaign = (): JSX.Element => {
       field: 'startDate',
       headerName: 'Start Date',
       flex: 1,
-      minWidth: 150,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -198,7 +230,6 @@ const orgFundCampaign = (): JSX.Element => {
     {
       field: 'endDate',
       headerName: 'End Date',
-      minWidth: 150,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -233,6 +264,31 @@ const orgFundCampaign = (): JSX.Element => {
               ]
             }
             {params.row.campaign.fundingGoal}
+          </div>
+        );
+      },
+    },
+    {
+      field: 'fundingRaised',
+      headerName: 'Raised',
+      flex: 1,
+      minWidth: 100,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      renderCell: (params: GridCellParams) => {
+        return (
+          <div
+            className="d-flex justify-content-center fw-bold"
+            data-testid="goalCell"
+          >
+            {
+              currencySymbols[
+                params.row.campaign.currency as keyof typeof currencySymbols
+              ]
+            }
+            0
           </div>
         );
       },
@@ -394,7 +450,7 @@ const orgFundCampaign = (): JSX.Element => {
 
       <DataGrid
         disableColumnMenu
-        columnBufferPx={7}
+        columnBufferPx={8}
         hideFooter={true}
         getRowId={(row) => row.campaign._id}
         slots={{
@@ -422,6 +478,7 @@ const orgFundCampaign = (): JSX.Element => {
         hide={() => closeModal(ModalState.SAME)}
         refetchCampaign={refetchCampaign}
         fundId={fundId}
+        orgId={orgId}
         campaign={campaign}
         mode={campaignModalMode}
       />

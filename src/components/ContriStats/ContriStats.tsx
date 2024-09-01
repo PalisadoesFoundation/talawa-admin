@@ -11,6 +11,13 @@ interface InterfaceContriStatsProps {
   totalAmount: string;
 }
 
+/**
+ * A component that displays contribution statistics.
+ *
+ * @param props - The properties passed to the component, including `recentAmount`, `highestAmount`, and `totalAmount`.
+ *
+ * @returns JSX.Element - The rendered component displaying the contribution stats.
+ */
 function contriStats(props: InterfaceContriStatsProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'contriStats',

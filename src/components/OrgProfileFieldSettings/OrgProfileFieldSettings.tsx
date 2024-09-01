@@ -14,27 +14,45 @@ import { toast } from 'react-toastify';
 import EditOrgCustomFieldDropDown from 'components/EditCustomFieldDropDown/EditCustomFieldDropDown';
 import { useParams } from 'react-router-dom';
 
+/**
+ * Interface for custom field data
+ */
 export interface InterfaceCustomFieldData {
   type: string;
   name: string;
 }
 
+/**
+ * Component for managing organization profile field settings
+ *
+ * This component allows adding and removing custom fields for an organization.
+ * It displays existing custom fields and provides a form to add new fields.
+ *
+ * @returns JSX.Element representing the organization profile field settings
+ */
 const OrgProfileFieldSettings = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgProfileField',
   });
   const { t: tCommon } = useTranslation('common');
 
+  // State to hold the custom field data
   const [customFieldData, setCustomFieldData] =
     useState<InterfaceCustomFieldData>({
       type: '',
       name: '',
     });
+
+  // Get the current organization ID from the URL parameters
   const { orgId: currentOrgId } = useParams();
 
+  // Mutation to add a custom field
   const [addCustomField] = useMutation(ADD_CUSTOM_FIELD);
+
+  // Mutation to remove a custom field
   const [removeCustomField] = useMutation(REMOVE_CUSTOM_FIELD);
 
+  // Query to fetch custom fields for the organization
   const { loading, error, data, refetch } = useQuery(
     ORGANIZATION_CUSTOM_FIELDS,
     {
@@ -44,6 +62,7 @@ const OrgProfileFieldSettings = (): JSX.Element => {
     },
   );
 
+  // Function to handle saving a new custom field
   const handleSave = async (): Promise<void> => {
     try {
       await addCustomField({
@@ -60,6 +79,7 @@ const OrgProfileFieldSettings = (): JSX.Element => {
     }
   };
 
+  // Function to handle removing a custom field
   const handleRemove = async (customFieldId: string): Promise<void> => {
     try {
       await removeCustomField({
@@ -76,11 +96,13 @@ const OrgProfileFieldSettings = (): JSX.Element => {
     }
   };
 
+  // Render loading or error messages if needed
   if (loading) return <p> {tCommon('loading')}</p>;
   if (error) return <p>{error.message} </p>;
 
   return (
     <div>
+      {/* Display existing custom fields or a message if there are none */}
       {data.customFieldsByOrganization.length === 0 ? (
         <p>{t('noCustomField')}</p>
       ) : (
@@ -99,6 +121,7 @@ const OrgProfileFieldSettings = (): JSX.Element => {
                   <td>{field.name}</td>
                   <td>{field.type}</td>
                   <td>
+                    {/* Button to remove a custom field */}
                     <Button
                       variant="danger"
                       size={'sm'}
@@ -119,6 +142,7 @@ const OrgProfileFieldSettings = (): JSX.Element => {
       <div>
         <div>
           <div>
+            {/* Form to add a new custom field */}
             <form>
               <div>
                 <Form.Label>{t('customFieldName')}</Form.Label>

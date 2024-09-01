@@ -2194,7 +2194,7 @@ describe('Testing Chat Screen [User Portal]', () => {
     });
   });
 
-  test('Test create new direct chat', async () => {
+  test('create new direct chat', async () => {
     const mock = [
       ...USER_JOINED_ORG_MOCK,
       ...GROUP_CHAT_BY_ID_QUERY_MOCK,
@@ -2234,7 +2234,7 @@ describe('Testing Chat Screen [User Portal]', () => {
     fireEvent.click(closeButton);
   });
 
-  test('Test create new group chat', async () => {
+  test('create new group chat', async () => {
     const mock = [
       ...USER_JOINED_ORG_MOCK,
       ...GROUP_CHAT_BY_ID_QUERY_MOCK,

@@ -87,6 +87,13 @@ const StyledTableRow = styled(TableRow)(() => ({
 
 const { getItem } = useLocalStorage();
 
+/**
+ *
+ * @param toggleCreateGroupChatModal - function to toggle the create group chat modal
+ * @param createGroupChatModalisOpen - boolean to check if the create group chat modal is open
+ * @param groupChatListRefetch - function to refetch the group chat list
+ * @returns - returns the create group chat modal
+ */
 export default function CreateGroupChat({
   toggleCreateGroupChatModal,
   createGroupChatModalisOpen,

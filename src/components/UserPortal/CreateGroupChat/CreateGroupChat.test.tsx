@@ -2574,7 +2574,7 @@ describe('Testing Create Direct Chat Modal [User Portal]', () => {
     })),
   });
 
-  test('Test open and close create new direct chat modal', async () => {
+  test('open and close create new direct chat modal', async () => {
     const mock = [
       ...USER_JOINED_ORG_MOCK,
       ...GROUP_CHAT_BY_ID_QUERY_MOCK,
@@ -2611,7 +2611,7 @@ describe('Testing Create Direct Chat Modal [User Portal]', () => {
     fireEvent.click(closeButton);
   });
 
-  test('Test create new group chat', async () => {
+  test('create new group chat', async () => {
     const mock = [
       ...CREATE_GROUP_CHAT_MOCK,
       ...USER_JOINED_ORG_MOCK,
@@ -2688,7 +2688,7 @@ describe('Testing Create Direct Chat Modal [User Portal]', () => {
     });
   }, 3000);
 
-  test('Test add and remove user ', async () => {
+  test('add and remove user', async () => {
     setItem('userId', '1');
     const mock = [
       ...USER_JOINED_ORG_MOCK,
