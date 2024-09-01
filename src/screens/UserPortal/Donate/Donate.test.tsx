@@ -289,6 +289,56 @@ describe('Testing Donate Screen [User Portal]', () => {
     await wait();
   });
 
+  test('displays error toast for donation amount below minimum', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Donate />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    userEvent.type(screen.getByTestId('donationAmount'), '0.5');
+    userEvent.click(screen.getByTestId('donateBtn'));
+
+    await wait();
+
+    expect(toast.error).toHaveBeenCalledWith(
+      'Donation amount must be between 1 and 10000.',
+    );
+  });
+
+  test('displays error toast for donation amount above maximum', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Donate />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    userEvent.type(screen.getByTestId('donationAmount'), '10000001');
+    userEvent.click(screen.getByTestId('donateBtn'));
+
+    await wait();
+
+    expect(toast.error).toHaveBeenCalledWith(
+      'Donation amount must be between 1 and 10000.',
+    );
+  });
+
   test('displays error toast for empty donation amount', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
