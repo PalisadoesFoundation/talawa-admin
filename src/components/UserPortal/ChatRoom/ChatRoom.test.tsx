@@ -1599,6 +1599,75 @@ const GROUP_CHAT_BY_ID_QUERY_MOCK = [
       },
     },
   },
+  {
+    request: {
+      query: GROUP_CHAT_BY_ID,
+      variables: {
+        id: '',
+      },
+    },
+    result: {
+      data: {
+        groupChatById: {
+          _id: '65844efc814dd4003db811c4',
+          createdAt: '2345678903456',
+          title: 'Test Group Chat',
+          messages: [
+            {
+              _id: '1',
+              createdAt: '345678908765',
+              messageContent: 'Hello',
+              replyTo: null,
+              sender: {
+                _id: '2',
+                firstName: 'Test',
+                lastName: 'User',
+                email: 'test@example.com',
+                image: '',
+              },
+            },
+          ],
+          users: [
+            {
+              _id: '1',
+              firstName: 'Disha',
+              lastName: 'Talreja',
+              email: 'disha@example.com',
+              image: '',
+            },
+            {
+              _id: '2',
+              firstName: 'Test',
+              lastName: 'User',
+              email: 'test@example.com',
+              image: '',
+            },
+            {
+              _id: '3',
+              firstName: 'Test',
+              lastName: 'User1',
+              email: 'test1@example.com',
+              image: '',
+            },
+            {
+              _id: '4',
+              firstName: 'Test',
+              lastName: 'User2',
+              email: 'test2@example.com',
+              image: '',
+            },
+            {
+              _id: '5',
+              firstName: 'Test',
+              lastName: 'User4',
+              email: 'test4@example.com',
+              image: '',
+            },
+          ],
+        },
+      },
+    },
+  },
 ];
 
 describe('Testing Chatroom Component [User Portal]', () => {
