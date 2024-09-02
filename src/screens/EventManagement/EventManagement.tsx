@@ -144,6 +144,13 @@ const EventManagement = (): JSX.Element => {
     );
   };
 
+  const handleBack = (): void => {
+    /*istanbul ignore next*/
+    userRole === 'USER'
+      ? navigate(`/user/events/${orgId}`)
+      : navigate(`/orgevents/${orgId}`);
+  };
+
   return (
     <div className="d-flex flex-column">
       <Row className="mx-3 mt-4">
@@ -157,12 +164,7 @@ const EventManagement = (): JSX.Element => {
               <FaChevronLeft
                 cursor={'pointer'}
                 data-testid="backBtn"
-                onClick={() => {
-                  /*istanbul ignore next*/
-                  userRole === 'USER'
-                    ? navigate(`/user/events/${orgId}`)
-                    : navigate(`/orgevents/${orgId}`);
-                }}
+                onClick={handleBack}
               />
             </Button>
             {eventDashboardTabs.map(renderButton)}

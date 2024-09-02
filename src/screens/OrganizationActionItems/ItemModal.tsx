@@ -51,6 +51,25 @@ export interface InterfaceItemModalProps {
 }
 
 /**
+ * Initializes the form state for the `ItemModal` component.
+ *
+ * @param actionItem - The action item to be edited.
+ * @returns
+ */
+
+const initializeFormState = (
+  actionItem: InterfaceActionItemInfo | null,
+): InterfaceFormStateType => ({
+  dueDate: actionItem?.dueDate || new Date(),
+  actionItemCategoryId: actionItem?.actionItemCategory?._id || '',
+  assigneeId: actionItem?.assignee._id || '',
+  preCompletionNotes: actionItem?.preCompletionNotes || '',
+  postCompletionNotes: actionItem?.postCompletionNotes || null,
+  allotedHours: actionItem?.allotedHours || null,
+  isCompleted: actionItem?.isCompleted || false,
+});
+
+/**
  * A modal component for creating action items.
  *
  * @param props - The properties passed to the component.
@@ -72,15 +91,9 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
     useState<InterfaceActionItemCategoryInfo | null>(null);
   const [assignee, setAssignee] = useState<InterfaceMemberInfo | null>(null);
 
-  const [formState, setFormState] = useState<InterfaceFormStateType>({
-    dueDate: new Date(),
-    actionItemCategoryId: '',
-    assigneeId: '',
-    preCompletionNotes: '',
-    postCompletionNotes: null,
-    allotedHours: null,
-    isCompleted: false,
-  });
+  const [formState, setFormState] = useState<InterfaceFormStateType>(
+    initializeFormState(actionItem),
+  );
 
   const {
     dueDate,
@@ -134,6 +147,20 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
   const [updateActionItem] = useMutation(UPDATE_ACTION_ITEM_MUTATION);
 
   /**
+   * Handler function to update the form state.
+   *
+   * @param field - The field to be updated.
+   * @param value - The value to be set.
+   * @returns void
+   */
+  const handleFormChange = (
+    field: keyof InterfaceFormStateType,
+    value: string | number | boolean | Date | undefined | null,
+  ): void => {
+    setFormState((prevState) => ({ ...prevState, [field]: value }));
+  };
+
+  /**
    * Handler function to create a new action item.
    *
    * @param e - The form submit event.
@@ -155,15 +182,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
       });
 
       // Reset form and date after successful creation
-      setFormState({
-        dueDate: new Date(),
-        assigneeId: '',
-        actionItemCategoryId: '',
-        preCompletionNotes: '',
-        postCompletionNotes: null,
-        allotedHours: null,
-        isCompleted: false,
-      });
+      setFormState(initializeFormState(null));
       setActionItemCategory(null);
       setAssignee(null);
 
@@ -225,6 +244,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
         },
       });
 
+      setFormState(initializeFormState(null));
       actionItemsRefetch();
       hide();
       toast.success(t('successfulUpdation'));
@@ -234,46 +254,16 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
   };
 
   useEffect(() => {
-    if (actionItem) {
-      setFormState({
-        dueDate: actionItem.dueDate,
-        actionItemCategoryId: actionItem.actionItemCategory?._id,
-        assigneeId: actionItem.assignee._id,
-        preCompletionNotes: actionItem.preCompletionNotes,
-        postCompletionNotes: actionItem.postCompletionNotes,
-        allotedHours: actionItem.allotedHours,
-        isCompleted: actionItem.isCompleted,
-      });
-    } else {
-      setFormState({
-        dueDate: new Date(),
-        actionItemCategoryId: '',
-        assigneeId: '',
-        preCompletionNotes: '',
-        postCompletionNotes: null,
-        allotedHours: null,
-        isCompleted: false,
-      });
-      setActionItemCategory(null);
-      setAssignee(null);
-    }
-  }, [actionItem]);
-
-  useEffect(() => {
-    if (editMode && actionItemCategories.length > 0) {
-      const category = actionItemCategories.find(
-        (category) => category._id === actionItemCategoryId,
-      );
-      setActionItemCategory(category ?? null);
-    }
-  }, [editMode, actionItemCategories, actionItemCategoryId]);
-
-  useEffect(() => {
-    if (editMode && members.length > 0) {
-      const assignee = members.find((member) => member._id === assigneeId);
-      setAssignee(assignee ?? null);
-    }
-  }, [editMode, members, assigneeId]);
+    setFormState(initializeFormState(actionItem));
+    setActionItemCategory(
+      actionItemCategories.find(
+        (category) => category._id === actionItem?.actionItemCategory?._id,
+      ) || null,
+    );
+    setAssignee(
+      members.find((member) => member._id === actionItem?.assignee._id) || null,
+    );
+  }, [actionItem, actionItemCategories, members]);
 
   return (
     <Modal className={styles.itemModal} show={isOpen} onHide={hide}>
@@ -310,10 +300,10 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
               }
               onChange={(_, newCategory): void => {
                 /* istanbul ignore next */
-                setFormState({
-                  ...formState,
-                  actionItemCategoryId: newCategory?._id ?? '',
-                });
+                handleFormChange(
+                  'actionItemCategoryId',
+                  newCategory?._id ?? '',
+                );
                 setActionItemCategory(newCategory);
               }}
               renderInput={(params) => (
@@ -333,19 +323,14 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                     variant="outlined"
                     className={styles.noOutline}
                     value={allotedHours ?? ''}
-                    onChange={(e) => {
-                      if (e.target.value === '') {
-                        setFormState({
-                          ...formState,
-                          allotedHours: null,
-                        });
-                      } else if (parseInt(e.target.value) > 0) {
-                        setFormState({
-                          ...formState,
-                          allotedHours: parseInt(e.target.value),
-                        });
-                      }
-                    }}
+                    onChange={(e) =>
+                      handleFormChange(
+                        'allotedHours',
+                        e.target.value === '' || parseInt(e.target.value) < 0
+                          ? null
+                          : parseInt(e.target.value),
+                      )
+                    }
                   />
                 </FormControl>
               </>
@@ -368,10 +353,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                   }
                   onChange={(_, newAssignee): void => {
                     /* istanbul ignore next */
-                    setFormState({
-                      ...formState,
-                      assigneeId: newAssignee?._id ?? '',
-                    });
+                    handleFormChange('assigneeId', newAssignee?._id ?? '');
                     setAssignee(newAssignee);
                   }}
                   renderInput={(params) => (
@@ -389,12 +371,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                   value={dayjs(dueDate)}
                   onChange={(date: Dayjs | null): void => {
                     /* istanbul ignore next */
-                    if (date) {
-                      setFormState({
-                        ...formState,
-                        dueDate: date.toDate(),
-                      });
-                    }
+                    if (date) handleFormChange('dueDate', date.toDate());
                   }}
                 />
 
@@ -405,21 +382,13 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                     variant="outlined"
                     className={styles.noOutline}
                     value={allotedHours ?? ''}
-                    onChange={
-                      /* istanbul ignore next */
-                      (e) => {
-                        if (e.target.value === '') {
-                          setFormState({
-                            ...formState,
-                            allotedHours: null,
-                          });
-                        } else if (parseInt(e.target.value) > 0) {
-                          setFormState({
-                            ...formState,
-                            allotedHours: parseInt(e.target.value),
-                          });
-                        }
-                      }
+                    onChange={(e) =>
+                      handleFormChange(
+                        'allotedHours',
+                        e.target.value === '' || parseInt(e.target.value) < 0
+                          ? null
+                          : parseInt(e.target.value),
+                      )
                     }
                   />
                 </FormControl>
@@ -433,10 +402,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                   className={styles.noOutline}
                   value={preCompletionNotes}
                   onChange={(e) =>
-                    setFormState({
-                      ...formState,
-                      preCompletionNotes: e.target.value,
-                    })
+                    handleFormChange('preCompletionNotes', e.target.value)
                   }
                 />
               </FormControl>
@@ -452,10 +418,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                 multiline
                 maxRows={3}
                 onChange={(e) =>
-                  setFormState({
-                    ...formState,
-                    postCompletionNotes: e.target.value,
-                  })
+                  handleFormChange('postCompletionNotes', e.target.value)
                 }
               />
             </FormControl>

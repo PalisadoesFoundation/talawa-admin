@@ -82,6 +82,21 @@ const renderCategoryModal = (
   );
 };
 
+const fillFormAndSubmit = async (
+  name: string,
+  isDisabled: boolean,
+): Promise<void> => {
+  const nameInput = screen.getByLabelText('Name *');
+  const isDisabledSwitch = screen.getByTestId('isDisabledSwitch');
+  const submitBtn = screen.getByTestId('formSubmitButton');
+
+  fireEvent.change(nameInput, { target: { value: name } });
+  if (isDisabled) {
+    userEvent.click(isDisabledSwitch);
+  }
+  userEvent.click(submitBtn);
+};
+
 describe('Testing Action Item Category Modal', () => {
   it('should populate form fields with correct values in edit mode', async () => {
     renderCategoryModal(link1, categoryProps[1]);
@@ -113,13 +128,7 @@ describe('Testing Action Item Category Modal', () => {
 
   it('should edit category', async () => {
     renderCategoryModal(link1, categoryProps[1]);
-    const nameInput = screen.getByLabelText('Name *');
-    const isDisabledSwitch = screen.getByTestId('isDisabledSwitch');
-    const submitBtn = screen.getByTestId('formSubmitButton');
-
-    fireEvent.change(nameInput, { target: { value: 'Category 2' } });
-    userEvent.click(isDisabledSwitch);
-    userEvent.click(submitBtn);
+    await fillFormAndSubmit('Category 2', true);
 
     await waitFor(() => {
       expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
@@ -132,11 +141,7 @@ describe('Testing Action Item Category Modal', () => {
 
   it('Edit only Name', async () => {
     renderCategoryModal(link1, categoryProps[1]);
-    const nameInput = screen.getByLabelText('Name *');
-    const submitBtn = screen.getByTestId('formSubmitButton');
-
-    fireEvent.change(nameInput, { target: { value: 'Category 2' } });
-    userEvent.click(submitBtn);
+    await fillFormAndSubmit('Category 2', false);
 
     await waitFor(() => {
       expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
@@ -149,11 +154,7 @@ describe('Testing Action Item Category Modal', () => {
 
   it('Edit only isDisabled', async () => {
     renderCategoryModal(link1, categoryProps[1]);
-    const isDisabledSwitch = screen.getByTestId('isDisabledSwitch');
-    const submitBtn = screen.getByTestId('formSubmitButton');
-
-    userEvent.click(isDisabledSwitch);
-    userEvent.click(submitBtn);
+    await fillFormAndSubmit('Category 1', true);
 
     await waitFor(() => {
       expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
@@ -166,13 +167,7 @@ describe('Testing Action Item Category Modal', () => {
 
   it('Error in updating category', async () => {
     renderCategoryModal(link3, categoryProps[1]);
-    const nameInput = screen.getByLabelText('Name *');
-    const isDisabledSwitch = screen.getByTestId('isDisabledSwitch');
-    const submitBtn = screen.getByTestId('formSubmitButton');
-
-    fireEvent.change(nameInput, { target: { value: 'Category 2' } });
-    userEvent.click(isDisabledSwitch);
-    userEvent.click(submitBtn);
+    await fillFormAndSubmit('Category 2', true);
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
@@ -181,13 +176,7 @@ describe('Testing Action Item Category Modal', () => {
 
   it('should create category', async () => {
     renderCategoryModal(link1, categoryProps[0]);
-    const nameInput = screen.getByLabelText('Name *');
-    const isDisabledSwitch = screen.getByTestId('isDisabledSwitch');
-    const submitBtn = screen.getByTestId('formSubmitButton');
-
-    fireEvent.change(nameInput, { target: { value: 'Category 2' } });
-    userEvent.click(isDisabledSwitch);
-    userEvent.click(submitBtn);
+    await fillFormAndSubmit('Category 2', true);
 
     await waitFor(() => {
       expect(categoryProps[0].refetchCategories).toHaveBeenCalled();
@@ -200,13 +189,7 @@ describe('Testing Action Item Category Modal', () => {
 
   it('Error in creating category', async () => {
     renderCategoryModal(link3, categoryProps[0]);
-    const nameInput = screen.getByLabelText('Name *');
-    const isDisabledSwitch = screen.getByTestId('isDisabledSwitch');
-    const submitBtn = screen.getByTestId('formSubmitButton');
-
-    fireEvent.change(nameInput, { target: { value: 'Category 2' } });
-    userEvent.click(isDisabledSwitch);
-    userEvent.click(submitBtn);
+    await fillFormAndSubmit('Category 2', true);
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');

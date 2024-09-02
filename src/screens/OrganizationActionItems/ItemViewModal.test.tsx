@@ -128,6 +128,9 @@ describe('Testing ItemViewModal', () => {
     expect(screen.getByText(t.actionItemDetails)).toBeInTheDocument();
     expect(screen.getByTestId('John_avatar')).toBeInTheDocument();
     expect(screen.getByTestId('Wilt_avatar')).toBeInTheDocument();
+    expect(screen.getByLabelText(t.postCompletionNotes)).toBeInTheDocument();
+    expect(screen.getByLabelText(t.allotedHours)).toBeInTheDocument();
+    expect(screen.getByLabelText(t.allotedHours)).toHaveValue('24');
   });
 
   it('should render ItemViewModal with completed item & assignee with null image', () => {
@@ -135,5 +138,10 @@ describe('Testing ItemViewModal', () => {
     expect(screen.getByText(t.actionItemDetails)).toBeInTheDocument();
     expect(screen.getByTestId('Jane_image')).toBeInTheDocument();
     expect(screen.getByTestId('Wilt_image')).toBeInTheDocument();
+    expect(
+      screen.queryByLabelText(t.postCompletionNotes),
+    ).not.toBeInTheDocument();
+    expect(screen.getByLabelText(t.allotedHours)).toBeInTheDocument();
+    expect(screen.getByLabelText(t.allotedHours)).toHaveValue('-');
   });
 });

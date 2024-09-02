@@ -301,6 +301,33 @@ describe('Testing ItemModal', () => {
     });
   });
 
+  it('Try adding negative Allotted Hours', async () => {
+    renderItemModal(link1, itemProps[0]);
+    expect(screen.getAllByText(t.createActionItem)).toHaveLength(2);
+    const allotedHours = screen.getByLabelText(t.allotedHours);
+    fireEvent.change(allotedHours, { target: { value: '-1' } });
+
+    await waitFor(() => {
+      expect(allotedHours).toHaveValue('');
+    });
+
+    fireEvent.change(allotedHours, { target: { value: '' } });
+
+    await waitFor(() => {
+      expect(allotedHours).toHaveValue('');
+    });
+
+    fireEvent.change(allotedHours, { target: { value: '0' } });
+    await waitFor(() => {
+      expect(allotedHours).toHaveValue('0');
+    });
+
+    fireEvent.change(allotedHours, { target: { value: '19' } });
+    await waitFor(() => {
+      expect(allotedHours).toHaveValue('19');
+    });
+  });
+
   it('should fail to Create Action Item', async () => {
     renderItemModal(link2, itemProps[0]);
     // Click Submit

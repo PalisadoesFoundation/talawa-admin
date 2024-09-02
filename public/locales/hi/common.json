@@ -89,7 +89,7 @@
   "pending": "लंबित",
   "completed": "पूरा हुआ",
   "late": "देर से",
-  "createdLatest": "सबसे पहले बनाया",
-  "createdEarliest": "सबसे जल्दी बनाया",
+  "createdLatest": "नवीनतम बनाया गया",
+  "createdEarliest": "सबसे पहले बनाया गया",
   "searchBy": "के द्वारा खोजें {{item}}"
 }

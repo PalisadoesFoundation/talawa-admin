@@ -158,6 +158,7 @@ const CategoryModal: FC<InterfaceActionItemCategoryModal> = ({
           className="p-2"
         >
           {/* Input field to enter amount to be pledged */}
+
           <FormControl fullWidth className="mb-2">
             <TextField
               label={t('actionItemCategoryName')}
