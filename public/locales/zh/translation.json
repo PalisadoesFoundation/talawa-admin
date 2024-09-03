@@ -880,7 +880,10 @@
     "yourPreviousDonations": "您之前的捐款",
     "donate": "捐",
     "nothingToShow": "这里没有什么可显示的。",
-    "success": "捐赠成功"
+    "success": "捐赠成功",
+    "invalidAmount": "请输入捐赠金额的数值。",
+    "donationAmountDescription": "请输入捐款金额的数值。",
+    "donationOutOfRange": "捐款金额必须在 {{min}} 和 {{max}} 之间。"
   },
   "userEvents": {
     "title": "活动",

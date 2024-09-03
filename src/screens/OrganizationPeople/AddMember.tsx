@@ -302,8 +302,8 @@ function AddMember(): JSX.Element {
         <Dropdown.Menu>
           <Dropdown.Item
             id="existingUser"
-            value="existingUser"
-            name="existingUser"
+            data-value="existingUser"
+            data-name="existingUser"
             data-testid="existingUser"
             onClick={(): void => {
               openAddUserModal();
@@ -315,8 +315,8 @@ function AddMember(): JSX.Element {
           </Dropdown.Item>
           <Dropdown.Item
             id="newUser"
-            value="newUser"
-            name="newUser"
+            data-value="newUser"
+            data-name="newUser"
             data-testid="newUser"
             onClick={(): void => {
               openCreateNewUserModal();
