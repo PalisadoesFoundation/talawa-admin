@@ -128,6 +128,9 @@
     "noOrgErrorTitle": "संगठन नहीं मिले",
     "noOrgErrorDescription": "कृपया डैशबोर्ड के माध्यम से एक संगठन बनाएं"
   },
+  "posts": {
+    "title": "पोस्ट"
+  },
   "users": {
     "title": "तलावा भूमिकाएँ",
     "joined_organizations": "संगठनों से जुड़े",

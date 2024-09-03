@@ -195,7 +195,7 @@ function app(): JSX.Element {
           <Route path="/user/chat" element={<Chat />} />
           <Route element={<UserScreen />}>
             <Route path="/user/organizations" element={<Organizations />} />
-            <Route path="/user/organization/:orgId" element={<Posts />} />
+            <Route path="/user/posts/:orgId" element={<Posts />} />
             <Route path="/user/people/:orgId" element={<People />} />
             <Route path="/user/donate/:orgId" element={<Donate />} />
             <Route path="/user/events/:orgId" element={<Events />} />
