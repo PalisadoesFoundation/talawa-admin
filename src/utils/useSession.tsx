@@ -33,6 +33,7 @@ const useSession = (): UseSessionReturnType => {
   let startTime: number;
   let timeoutDuration: number;
   const [sessionTimeout, setSessionTimeout] = useState<number>(30);
+  // const sessionTimeout = 30;
   const sessionTimerRef = useRef<NodeJS.Timeout | null>(null);
   const warningTimerRef = useRef<NodeJS.Timeout | null>(null);
   const navigate = useNavigate();
@@ -47,7 +48,6 @@ const useSession = (): UseSessionReturnType => {
       errorHandler(t, queryError as Error);
     } else {
       const sessionTimeoutData = data?.getCommunityData;
-
       if (sessionTimeoutData) {
         setSessionTimeout(sessionTimeoutData.timeout);
       }
@@ -95,8 +95,8 @@ const useSession = (): UseSessionReturnType => {
       toast.warning(tCommon('sessionWarning'));
     }, warningTimeInMilliseconds);
 
-    sessionTimerRef.current = setTimeout(() => {
-      handleLogout();
+    sessionTimerRef.current = setTimeout(async () => {
+      await handleLogout();
     }, sessionTimeoutInMilliseconds);
   };
 
@@ -108,12 +108,15 @@ const useSession = (): UseSessionReturnType => {
   const startSession = (): void => {
     resetTimers();
     initializeTimers();
+    window.removeEventListener('mousemove', extendSession);
+    window.removeEventListener('keydown', extendSession);
+    document.removeEventListener('visibilitychange', handleVisibilityChange);
     window.addEventListener('mousemove', extendSession);
     window.addEventListener('keydown', extendSession);
     document.addEventListener('visibilitychange', handleVisibilityChange);
   };
 
-  const handleVisibilityChange = (): void => {
+  const handleVisibilityChange = async (): Promise<void> => {
     if (document.visibilityState === 'hidden') {
       window.removeEventListener('mousemove', extendSession);
       window.removeEventListener('keydown', extendSession);
@@ -125,35 +128,37 @@ const useSession = (): UseSessionReturnType => {
       window.addEventListener('keydown', extendSession);
 
       // Calculate remaining time now that the tab is active again
-      const remainingSessionTime = calculateRemainingTime();
+      const elapsedTime = Date.now() - startTime;
+      const remainingTime = timeoutDuration - elapsedTime;
+
+      const remainingSessionTime = Math.max(remainingTime, 0); // Ensures the remaining time is non-negative and measured in ms;
 
       if (remainingSessionTime > 0) {
         // Calculate remaining warning time only if session time is positive
         const remainingWarningTime = Math.max(remainingSessionTime / 2, 0);
-
         initializeTimers(
           remainingSessionTime / 60 / 1000,
           remainingWarningTime / 60 / 1000,
         );
       } else {
         // Handle session expiration immediately if time has run out
-        handleLogout();
+        await handleLogout();
       }
     }
   };
 
-  const calculateRemainingTime = (): number => {
-    const elapsedTime = Date.now() - startTime;
-    const remainingTime = timeoutDuration - elapsedTime;
-
-    return Math.max(remainingTime, 0); // Ensures the remaining time is non-negative and measured in ms;
-  };
-
   useEffect(() => {
-    return () => endSession();
+    return () => {
+      endSession();
+    };
   }, []);
 
-  return { startSession, endSession, handleLogout, extendSession };
+  return {
+    startSession,
+    endSession,
+    handleLogout,
+    extendSession,
+  };
 };
 
 export default useSession;
