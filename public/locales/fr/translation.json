@@ -128,6 +128,9 @@
     "noOrgErrorTitle": "Organisations introuvables",
     "noOrgErrorDescription": "Veuillez créer une organisation via le tableau de bord"
   },
+  "posts": {
+    "title": "Articles"
+  },
   "users": {
     "title": "Rôles Talawa",
     "joined_organizations": "Organisations rejointes",

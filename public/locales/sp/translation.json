@@ -188,6 +188,9 @@
     "noOrgErrorTitle": "Organizaciones no encontradas",
     "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control"
   },
+  "posts": {
+    "title": "Publicaciones"
+  },
   "users": {
     "title": "Roles Talawa",
     "searchByName": "Buscar por nombre",
