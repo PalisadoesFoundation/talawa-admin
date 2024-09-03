@@ -89,6 +89,7 @@ function OrgPeopleOrganizationsCard({
               />
             )}
           </div>
+
           <div className={styles.content}>
             <Tooltip title={name} placement="top-end">
               <h4 className={`${styles.orgName} fw-semibold`}>{name}</h4>
@@ -106,6 +107,7 @@ function OrgPeopleOrganizationsCard({
             </h6>
           </div>
         </div>
+
         <Button
           onClick={handleClick}
           data-testid="manageBtn"
