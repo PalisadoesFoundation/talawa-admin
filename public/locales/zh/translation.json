@@ -128,9 +128,6 @@
     "noOrgErrorTitle": "未找到组织",
     "noOrgErrorDescription": "请通过仪表板创建组织"
   },
-  "posts": {
-    "title": "帖子"
-  },
   "users": {
     "title": "塔拉瓦角色",
     "joined_organizations": "加入组织",
