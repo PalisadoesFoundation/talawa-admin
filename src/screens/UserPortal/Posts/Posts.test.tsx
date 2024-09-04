@@ -236,11 +236,11 @@ async function wait(ms = 100): Promise<void> {
 const renderHomeScreen = (): RenderResult =>
   render(
     <MockedProvider addTypename={false} link={link}>
-      <MemoryRouter initialEntries={['/user/organization/orgId']}>
+      <MemoryRouter initialEntries={['/user/posts/orgId']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
             <Routes>
-              <Route path="/user/organization/:orgId" element={<Home />} />
+              <Route path="/user/posts/:orgId" element={<Home />} />
             </Routes>
           </I18nextProvider>
         </Provider>

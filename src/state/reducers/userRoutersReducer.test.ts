@@ -11,7 +11,7 @@ describe('Testing Routes reducer', () => {
     ).toEqual({
       targets: [
         { name: 'My Organizations', url: 'user/organizations' },
-        { name: 'Posts', url: 'user/organization/undefined' },
+        { name: 'Posts', url: 'user/posts/undefined' },
         { name: 'People', url: 'user/people/undefined' },
         { name: 'Events', url: 'user/events/undefined' },
         { name: 'Donate', url: 'user/donate/undefined' },
@@ -26,7 +26,7 @@ describe('Testing Routes reducer', () => {
         },
         {
           name: 'Posts',
-          comp_id: 'organization',
+          comp_id: 'posts',
           component: 'Posts',
         },
         { name: 'People', comp_id: 'people', component: 'People' },
@@ -51,7 +51,7 @@ describe('Testing Routes reducer', () => {
     ).toEqual({
       targets: [
         { name: 'My Organizations', url: 'user/organizations' },
-        { name: 'Posts', url: 'user/organization/orgId' },
+        { name: 'Posts', url: 'user/posts/orgId' },
         { name: 'People', url: 'user/people/orgId' },
         { name: 'Events', url: 'user/events/orgId' },
         { name: 'Donate', url: 'user/donate/orgId' },
@@ -66,7 +66,7 @@ describe('Testing Routes reducer', () => {
         },
         {
           name: 'Posts',
-          comp_id: 'organization',
+          comp_id: 'posts',
           component: 'Posts',
         },
         { name: 'People', comp_id: 'people', component: 'People' },
