@@ -49,14 +49,33 @@ type Ad = {
   name: string;
   type: 'BANNER' | 'MENU' | 'POPUP';
   mediaUrl: string;
+  endDate: string; // Assuming it's a string in the format 'yyyy-MM-dd'
+  startDate: string; // Assuming it's a string in the format 'yyyy-MM-dd'
+};
+interface InterfaceAdContent {
+  _id: string;
+  name: string;
+  type: string;
+  organization: {
+    _id: string;
+  };
+  mediaUrl: string;
   endDate: string;
   startDate: string;
+
+  comments: InterfacePostComments;
+  likes: InterfacePostLikes;
+}
+
+type AdvertisementsConnection = {
+  edges: {
+    node: InterfaceAdContent;
+  }[];
 };
 
-type InterfacePostComment = {
-  id: string;
+type InterfacePostComments = {
   creator: {
-    id: string;
+    _id: string;
     firstName: string;
     lastName: string;
     email: string;
@@ -66,13 +85,13 @@ type InterfacePostComment = {
     id: string;
   }[];
   text: string;
-};
+}[];
 
-type InterfacePostLike = {
+type InterfacePostLikes = {
   firstName: string;
   lastName: string;
   id: string;
-};
+}[];
 
 type InterfacePostNode = {
   commentCount: number;
@@ -85,31 +104,50 @@ type InterfacePostNode = {
   };
   imageUrl: string | null;
   likeCount: number;
-  likedBy: InterfacePostLike[];
+  likedBy: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+  }[];
   pinned: boolean;
   text: string;
   title: string;
   videoUrl: string | null;
   _id: string;
 
-  comments: InterfacePostComment[];
+  comments: InterfacePostComments;
+  likes: InterfacePostLikes;
 };
 
-export default function Home(): JSX.Element {
+/**
+ * `home` component displays the main feed for a user, including posts, promoted content, and options to create a new post.
+ *
+ * It utilizes Apollo Client for fetching and managing data through GraphQL queries. The component fetches and displays posts from an organization, promoted advertisements, and handles user interactions for creating new posts. It also manages state for displaying modal dialogs and handling file uploads for new posts.
+ *
+ * @returns JSX.Element - The rendered `home` component.
+ */
+export default function home(): JSX.Element {
+  // Translation hook for localized text
   const { t } = useTranslation('translation', { keyPrefix: 'home' });
   const { t: tCommon } = useTranslation('common');
+
+  // Custom hook for accessing local storage
   const { getItem } = useLocalStorage();
-  const [posts, setPosts] = useState<InterfacePostNode[]>([]);
-  const [pinnedPosts, setPinnedPosts] = useState<InterfacePostNode[]>([]);
+  const [posts, setPosts] = useState([]);
+  const [pinnedPosts, setPinnedPosts] = useState([]);
+
   const [showModal, setShowModal] = useState<boolean>(false);
   const [postImg, setPostImg] = useState<string | null>('');
 
+  // Fetching the organization ID from URL parameters
   const { orgId } = useParams();
 
+  // Redirect to user page if organization ID is not available
   if (!orgId) {
     return <Navigate to={'/user'} />;
   }
 
+  // Query hooks for fetching posts, advertisements, and user details
   const {
     data: promotedPostsData,
   }: {
@@ -141,16 +179,14 @@ export default function Home(): JSX.Element {
 
   const user: InterfaceQueryUserListItem | undefined = userData?.user;
 
+  // Effect hook to update posts state when data changes
   useEffect(() => {
     if (data) {
-      setPosts(
-        data.organizations[0].posts.edges.map(
-          (edge: { node: InterfacePostNode }) => edge.node,
-        ),
-      );
+      setPosts(data.organizations[0].posts.edges);
     }
   }, [data]);
 
+  // Effect hook to update advertisements state when data changes
   useEffect(() => {
     if (promotedPostsData && promotedPostsData.organizations) {
       const ads: Ad[] =
@@ -163,9 +199,19 @@ export default function Home(): JSX.Element {
   }, [promotedPostsData]);
 
   useEffect(() => {
-    setPinnedPosts(posts.filter((post) => post.pinned));
+    setPinnedPosts(
+      posts.filter(({ node }: { node: InterfacePostNode }) => {
+        return node.pinned;
+      }),
+    );
   }, [posts]);
 
+  /**
+   * Converts a post node into props for the `PostCard` component.
+   *
+   * @param node - The post node to convert.
+   * @returns The props for the `PostCard` component.
+   */
   const getCardProps = (node: InterfacePostNode): InterfacePostCard => {
     const {
       creator,
@@ -180,26 +226,42 @@ export default function Home(): JSX.Element {
       comments,
     } = node;
 
-    const allLikes: InterfacePostLike[] = likedBy.map((like) => ({
-      firstName: like.firstName,
-      lastName: like.lastName,
-      id: like.id,
-    }));
+    const allLikes: any = [];
 
-    const postComments: InterfacePostComment[] = comments.map((comment) => ({
-      id: comment.id,
-      creator: {
-        id: comment.creator.id,
-        firstName: comment.creator.firstName,
-        lastName: comment.creator.lastName,
-        email: comment.creator.email,
-      },
-      likeCount: comment.likeCount,
-      likedBy: comment.likedBy.map((like) => ({
-        id: like.id,
-      })),
-      text: comment.text,
-    }));
+    likedBy.forEach((value: any) => {
+      const singleLike = {
+        firstName: value.firstName,
+        lastName: value.lastName,
+        id: value._id,
+      };
+      allLikes.push(singleLike);
+    });
+
+    const postComments: any = [];
+
+    comments.forEach((value: any) => {
+      const commentLikes: any = [];
+      value.likedBy.forEach((commentLike: any) => {
+        const singleLike = {
+          id: commentLike._id,
+        };
+        commentLikes.push(singleLike);
+      });
+
+      const comment = {
+        id: value._id,
+        creator: {
+          firstName: value.creator.firstName,
+          lastName: value.creator.lastName,
+          id: value.creator._id,
+          email: value.creator.email,
+        },
+        likeCount: value.likeCount,
+        likedBy: commentLikes,
+        text: value.text,
+      };
+      postComments.push(comment);
+    });
 
     const date = new Date(node.createdAt);
     const formattedDate = new Intl.DateTimeFormat('en-US', {
@@ -231,10 +293,16 @@ export default function Home(): JSX.Element {
     return cardProps;
   };
 
+  /**
+   * Opens the post creation modal.
+   */
   const handlePostButtonClick = (): void => {
     setShowModal(true);
   };
 
+  /**
+   * Closes the post creation modal.
+   */
   const handleModalClose = (): void => {
     setShowModal(false);
   };
@@ -289,7 +357,7 @@ export default function Home(): JSX.Element {
             <h2>{t('feed')}</h2>
             {pinnedPosts.length > 0 && (
               <Carousel responsive={responsive}>
-                {pinnedPosts.map((node) => {
+                {pinnedPosts.map(({ node }: { node: InterfacePostNode }) => {
                   const cardProps = getCardProps(node);
                   return <PostCard key={node._id} {...cardProps} />;
                 })}
@@ -310,37 +378,38 @@ export default function Home(): JSX.Element {
               ))}
             </div>
           )}
-          <p className="fs-5 mt-4 fw-semibold">{t('recentPosts')}</p>
-          {posts.length === 0 ? (
-            <div className="d-flex justify-content-center align-items-center h-100">
-              {loadingPosts ? (
-                <HourglassBottomIcon
-                  className="text-secondary"
-                  fontSize="large"
-                />
-              ) : (
-                <p>{t('noPosts')}</p>
-              )}
+          <p className="fs-5 mt-5">{t(`yourFeed`)}</p>
+          <div className={` ${styles.postsCardsContainer}`}></div>
+          {loadingPosts ? (
+            <div className={`d-flex flex-row justify-content-center`}>
+              <HourglassBottomIcon /> <span>{tCommon('loading')}</span>
             </div>
           ) : (
-            posts.map((node) => {
-              const cardProps = getCardProps(node);
-              return <PostCard key={node._id} {...cardProps} />;
-            })
+            <>
+              {posts.length > 0 ? (
+                <Row className="my-2">
+                  {posts.map(({ node }: { node: InterfacePostNode }) => {
+                    const cardProps = getCardProps(node);
+                    return <PostCard key={node._id} {...cardProps} />;
+                  })}
+                </Row>
+              ) : (
+                <p className="container flex justify-content-center my-4">
+                  {t(`nothingToShowHere`)}
+                </p>
+              )}
+            </>
           )}
+          <StartPostModal
+            show={showModal}
+            onHide={handleModalClose}
+            fetchPosts={refetch}
+            userData={user}
+            organizationId={orgId}
+            img={postImg}
+          />
         </div>
       </div>
-      <StartPostModal
-        show={showModal}
-        onHide={handleModalClose}
-        img={postImg}
-        data-testid="startPostModal"
-        fetchPosts={function (): void {
-          throw new Error('Function not implemented.');
-        }}
-        userData={undefined}
-        organizationId={''}
-      />
     </>
   );
 }
