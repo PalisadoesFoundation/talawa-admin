@@ -193,7 +193,7 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
             data-testid="manageBtn"
             className={styles.joinedBtn}
             onClick={() => {
-              navigate(`/user/organization/${props.id}`);
+              navigate(`/user/posts/${props.id}`);
             }}
           >
             {t('visit')}
