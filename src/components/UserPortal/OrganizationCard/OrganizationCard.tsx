@@ -110,23 +110,23 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
             organizationId: props.id,
           },
         });
-        toast.success(t('MembershipRequestSent'));
+        toast.success(t('MembershipRequestSent') as string);
       } else {
         await joinPublicOrganization({
           variables: {
             organizationId: props.id,
           },
         });
-        toast.success(t('orgJoined'));
+        toast.success(t('orgJoined') as string);
       }
       refetch();
     } catch (error: unknown) {
       /* istanbul ignore next */
       if (error instanceof Error) {
         if (error.message === 'User is already a member') {
-          toast.error(t('AlreadyJoined'));
+          toast.error(t('AlreadyJoined') as string);
         } else {
-          toast.error(t('errorOccured'));
+          toast.error(t('errorOccured') as string);
         }
       }
     }

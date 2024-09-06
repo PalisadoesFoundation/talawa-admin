@@ -57,7 +57,7 @@ const FundDeleteModal: React.FC<InterfaceDeleteFundModal> = ({
       });
       refetchFunds();
       hide();
-      toast.success(t('fundDeleted'));
+      toast.success(t('fundDeleted') as string);
     } catch (error: unknown) {
       toast.error((error as Error).message);
     }

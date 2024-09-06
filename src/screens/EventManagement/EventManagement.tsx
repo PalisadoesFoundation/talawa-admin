@@ -129,7 +129,6 @@ const EventManagement = (): JSX.Element => {
     const props = {
       variant,
       className,
-      key: value,
       style: { height: '2.5rem' },
       size: 'sm' as 'sm' | 'lg',
       onClick: () => setTab(value),
@@ -137,7 +136,7 @@ const EventManagement = (): JSX.Element => {
     };
 
     return (
-      <Button {...props}>
+      <Button key={value} {...props}>
         {icon}
         {translatedText}
       </Button>

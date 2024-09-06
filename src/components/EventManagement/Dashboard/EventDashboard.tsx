@@ -75,6 +75,9 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
     const formattedDate = `${day}${suffix} ${monthNames[monthIndex]} ${year}`;
     return formattedDate;
   }
+  if (!eventData || !eventData.event) {
+    return <Loader />; // Fallback UI while data is loading
+  }
 
   // Render event details
   return (
@@ -86,36 +89,36 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
               <div className={styles.time}>
                 <p>
                   <b className={styles.startTime}>
-                    {eventData.event.startTime !== null
-                      ? `${formatTime(eventData.event.startTime)}`
-                      : ``}
+                    {eventData?.event?.startTime !== null
+                      ? `${formatTime(eventData?.event?.startTime)}`
+                      : ''}
                   </b>{' '}
                   <span className={styles.startDate}>
-                    {formatDate(eventData.event.startDate)}{' '}
+                    {formatDate(eventData?.event?.startDate)}{' '}
                   </span>
                 </p>
                 <p className={styles.to}>{t('to')}</p>
                 <p>
                   <b className={styles.endTime}>
-                    {eventData.event.endTime !== null
-                      ? `${formatTime(eventData.event.endTime)}`
+                    {eventData?.event?.endTime !== null
+                      ? `${formatTime(eventData?.event?.endTime)}`
                       : ``}
                   </b>{' '}
                   <span className={styles.endDate}>
-                    {formatDate(eventData.event.endDate)}{' '}
+                    {formatDate(eventData?.event?.endDate)}{' '}
                   </span>
                 </p>
               </div>
-              <h4 className={styles.titlename}>{eventData.event.title}</h4>
+              <h4 className={styles.titlename}>{eventData?.event?.title}</h4>
               <p className={styles.description}>
-                {eventData.event.description}
+                {eventData?.event?.description}
               </p>
               <p className={styles.toporgloc}>
-                <b>Location:</b> <span>{eventData.event.location}</span>
+                <b>Location:</b> <span>{eventData?.event?.location}</span>
               </p>
               <p className={styles.toporgloc}>
                 <b>Registrants:</b>{' '}
-                <span>{eventData.event.attendees.length}</span>
+                <span>{eventData?.event?.attendees?.length}</span>
               </p>
               <br />
             </div>

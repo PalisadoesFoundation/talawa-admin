@@ -48,7 +48,7 @@ const CampaignDeleteModal: React.FC<InterfaceDeleteCampaignModal> = ({
           id: campaign?._id,
         },
       });
-      toast.success(t('deletedCampaign'));
+      toast.success(t('deletedCampaign') as string);
       refetchCampaign();
       hide();
     } catch (error: unknown) {

@@ -194,7 +194,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
             setItem('Email', email);
             setItem('UserImage', image);
           }
-          toast.success(tCommon('successfullyUpdated'));
+          toast.success(tCommon('successfullyUpdated') as string);
         }
       } catch (error: unknown) {
         if (error instanceof Error) {

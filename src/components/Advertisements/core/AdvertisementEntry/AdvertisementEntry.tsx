@@ -12,12 +12,12 @@ import { toast } from 'react-toastify';
 
 interface InterfaceAddOnEntryProps {
   id: string;
-  name: string;
-  mediaUrl: string;
-  type: string;
-  organizationId: string;
-  startDate: Date;
-  endDate: Date;
+  name?: string;
+  mediaUrl?: string;
+  type?: string;
+  organizationId?: string;
+  startDate?: Date;
+  endDate?: Date;
   setAfter: React.Dispatch<React.SetStateAction<string | null | undefined>>;
 }
 
@@ -28,14 +28,14 @@ interface InterfaceAddOnEntryProps {
  * @param  props - Component properties
  * @returns  The rendered component
  */
-function advertisementEntry({
+function AdvertisementEntry({
   id,
-  name,
-  type,
-  mediaUrl,
-  endDate,
-  organizationId,
-  startDate,
+  name = '',
+  type = '',
+  mediaUrl = '',
+  endDate = new Date(),
+  organizationId = '',
+  startDate = new Date(),
   setAfter,
 }: InterfaceAddOnEntryProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
@@ -75,9 +75,9 @@ function advertisementEntry({
           id: id.toString(),
         },
       });
-      toast.success(t('advertisementDeleted'));
+      toast.success(t('advertisementDeleted') as string);
       setButtonLoading(false);
-      setAfter(null);
+      setAfter?.(null);
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message);
@@ -92,6 +92,7 @@ function advertisementEntry({
   const handleOptionsClick = (): void => {
     setDropdown(!dropdown);
   };
+
   return (
     <>
       <Row data-testid="AdEntry" xs={1} md={2} className="g-4">
@@ -208,7 +209,7 @@ function advertisementEntry({
   );
 }
 
-advertisementEntry.propTypes = {
+AdvertisementEntry.propTypes = {
   name: PropTypes.string,
   type: PropTypes.string,
   organizationId: PropTypes.string,
@@ -217,12 +218,4 @@ advertisementEntry.propTypes = {
   startDate: PropTypes.instanceOf(Date),
 };
 
-advertisementEntry.defaultProps = {
-  name: '',
-  type: '',
-  organizationId: '',
-  mediaUrl: '',
-  endDate: new Date(),
-  startDate: new Date(),
-};
-export default advertisementEntry;
+export default AdvertisementEntry;

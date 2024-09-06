@@ -90,7 +90,7 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
           },
         },
       });
-      toast.success(t('agendaCategoryCreated'));
+      toast.success(t('agendaCategoryCreated') as string);
       setFormState({ name: '', description: '', createdBy: '' });
       refetchAgendaCategory();
       hideCreateModal();

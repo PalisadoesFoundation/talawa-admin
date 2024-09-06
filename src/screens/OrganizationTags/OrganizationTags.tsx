@@ -99,7 +99,7 @@ function OrganizationTags(): JSX.Element {
       });
 
       if (data) {
-        toast.success(t('tagCreationSuccess'));
+        toast.success(t('tagCreationSuccess') as string);
         orgUserTagsRefetch();
         setTagName('');
         setCreateTagModalIsOpen(false);
@@ -123,7 +123,7 @@ function OrganizationTags(): JSX.Element {
 
       orgUserTagsRefetch();
       toggleRemoveUserTagModal();
-      toast.success(t('tagRemovalSuccess'));
+      toast.success(t('tagRemovalSuccess') as string);
     } catch (error: unknown) {
       /* istanbul ignore next */
       if (error instanceof Error) {
