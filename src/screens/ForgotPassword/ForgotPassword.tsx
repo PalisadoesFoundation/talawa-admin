@@ -90,20 +90,16 @@ const ForgotPassword = (): JSX.Element => {
         },
       });
 
-      if (data) {
-        setItem('otpToken', data.otp.otpToken);
-        toast.success(t('OTPsent'));
-        setShowEnterEmail(false);
-      }
+      setItem('otpToken', data.otp.otpToken);
+      toast.success(t('OTPsent'));
+      setShowEnterEmail(false);
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        if (error.message === 'User not found') {
-          toast.warn(tErrors('emailNotRegistered'));
-        } else if (error.message === 'Failed to fetch') {
-          toast.error(tErrors('talawaApiUnavailable'));
-        } else {
-          toast.error(tErrors('errorSendingMail'));
-        }
+      if ((error as Error).message === 'User not found') {
+        toast.warn(tErrors('emailNotRegistered'));
+      } else if ((error as Error).message === 'Failed to fetch') {
+        toast.error(tErrors('talawaApiUnavailable'));
+      } else {
+        toast.error(tErrors('errorSendingMail'));
       }
     }
   };

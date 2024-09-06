@@ -110,21 +110,6 @@ describe('Testing Organization Action Items Screen', () => {
     });
   });
 
-  it('should render Empty Action Item Categories Screen', async () => {
-    renderOrganizationActionItems(link3);
-    await waitFor(() => {
-      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
-      expect(screen.getByText(t.noActionItems)).toBeInTheDocument();
-    });
-  });
-
-  it('should render the Action Item Categories Screen with error', async () => {
-    renderOrganizationActionItems(link2);
-    await waitFor(() => {
-      expect(screen.getByTestId('errorMsg')).toBeInTheDocument();
-    });
-  });
-
   it('should render Organization Action Items screen', async () => {
     renderOrganizationActionItems(link1);
     await waitFor(() => {
@@ -372,6 +357,21 @@ describe('Testing Organization Action Items Screen', () => {
     await waitFor(() => {
       expect(screen.getByText('Category 1')).toBeInTheDocument();
       expect(screen.queryByText('Category 2')).toBeNull();
+    });
+  });
+
+  it('should render Empty Action Item Categories Screen', async () => {
+    renderOrganizationActionItems(link3);
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      expect(screen.getByText(t.noActionItems)).toBeInTheDocument();
+    });
+  });
+
+  it('should render the Action Item Categories Screen with error', async () => {
+    renderOrganizationActionItems(link2);
+    await waitFor(() => {
+      expect(screen.getByTestId('errorMsg')).toBeInTheDocument();
     });
   });
 });
