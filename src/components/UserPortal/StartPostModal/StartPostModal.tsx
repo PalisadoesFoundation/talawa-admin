@@ -93,7 +93,7 @@ const startPostModal = ({
       /* istanbul ignore next */
       if (data) {
         toast.dismiss();
-        toast.success(t('postNowVisibleInFeed'));
+        toast.success(t('postNowVisibleInFeed') as string);
         fetchPosts();
         handleHide();
       }

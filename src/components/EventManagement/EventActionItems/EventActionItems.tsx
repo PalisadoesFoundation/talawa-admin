@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import styles from './EventActionItems.module.css';
 import { DataGrid } from '@mui/x-data-grid';
-import type { GridCellParams } from '@mui/x-data-grid';
+// import type { GridCellParams } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
 import Modal from 'react-bootstrap/Modal';
 import {
@@ -156,7 +156,7 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
       setDueDate(new Date());
       actionItemsRefetch();
       hideCreateModal();
-      toast.success(t('successfulCreation'));
+      toast.success(t('successfulCreation') as string);
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message);
@@ -188,7 +188,7 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
       actionItemsRefetch();
       hideUpdateModal();
       hideActionItemStatusModal();
-      toast.success(t('successfulUpdation'));
+      toast.success(t('successfulUpdation') as string);
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message);
@@ -206,7 +206,7 @@ function eventActionItems(props: { eventId: string }): JSX.Element {
       actionItemsRefetch();
       toggleDeleteModal();
       hidePreviewModal();
-      toast.success(t('successfulDeletion'));
+      toast.success(t('successfulDeletion') as string);
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message);

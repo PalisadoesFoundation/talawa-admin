@@ -1,5 +1,5 @@
-import React from 'react';
-import { act, render, screen, waitFor } from '@testing-library/react';
+import React, { act } from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/react-testing';
 import { ADD_PLUGIN_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -41,7 +41,7 @@ const mocks = [
       query: ADD_PLUGIN_MUTATION,
       variables: {
         pluginName: 'Test Plugin',
-        pluginCreatedBy: 'Test Creator',
+        pluginCreatedBy: 'AdminTest Creator',
         pluginDesc: 'Test Description',
         pluginInstallStatus: false,
         installedOrgs: ['id'],
@@ -52,7 +52,7 @@ const mocks = [
         createPlugin: {
           _id: '1',
           pluginName: 'Test Plugin',
-          pluginCreatedBy: 'Test Creator',
+          pluginCreatedBy: 'AdminTest Creator',
           pluginDesc: 'Test Description',
         },
       },
@@ -100,26 +100,31 @@ describe('Testing AddOnRegister', () => {
           <Provider store={store}>
             <BrowserRouter>
               <I18nextProvider i18n={i18nForTest}>
-                {<AddOnRegister {...props} />}
+                <AddOnRegister {...props} />
               </I18nextProvider>
             </BrowserRouter>
           </Provider>
         </ApolloProvider>,
       );
-
-      await wait(100);
-
-      userEvent.click(screen.getByRole('button', { name: /Add New/i }));
-      userEvent.type(screen.getByPlaceholderText(/Ex: Donations/i), 'myplugin');
-      userEvent.type(
-        screen.getByPlaceholderText(/This Plugin enables UI for/i),
-        'test description',
-      );
-      userEvent.type(
-        screen.getByPlaceholderText(/Ex: john Doe/i),
-        'test creator',
-      );
     });
+    // Wait for the button to be in the document
+    await waitFor(() =>
+      expect(
+        screen.getByRole('button', { name: /Add New/i }),
+      ).toBeInTheDocument(),
+    );
+
+    // Simulate user interactions
+    userEvent.click(screen.getByRole('button', { name: /Add New/i }));
+    userEvent.type(screen.getByPlaceholderText(/Ex: Donations/i), 'myplugin');
+    userEvent.type(
+      screen.getByPlaceholderText(/This Plugin enables UI for/i),
+      'test description',
+    );
+    userEvent.type(
+      screen.getByPlaceholderText(/Ex: john Doe/i),
+      'test creator',
+    );
   });
 
   test('Expect toast.success to be called on successful plugin addition', async () => {
@@ -135,22 +140,22 @@ describe('Testing AddOnRegister', () => {
           </BrowserRouter>
         </MockedProvider>,
       );
-      await waitFor(() => new Promise((resolve) => setTimeout(resolve, 0)));
-
-      userEvent.click(screen.getByRole('button', { name: /Add New/i }));
-      await wait(100);
-      expect(screen.getByTestId('addonregisterBtn')).toBeInTheDocument();
-      userEvent.type(screen.getByTestId('pluginName'), pluginData.pluginName);
-      userEvent.type(
-        screen.getByTestId('pluginCreatedBy'),
-        pluginData.pluginCreatedBy,
-      );
-      userEvent.type(screen.getByTestId('pluginDesc'), pluginData.pluginDesc);
-      userEvent.click(screen.getByTestId('addonregisterBtn'));
-
-      await wait(100);
-      expect(toast.success).toBeCalledWith('Plugin added Successfully');
     });
+    await waitFor(() => new Promise((resolve) => setTimeout(resolve, 0)));
+
+    userEvent.click(screen.getByRole('button', { name: /Add New/i }));
+    await wait(100);
+    expect(screen.getByTestId('addonregisterBtn')).toBeInTheDocument();
+    userEvent.type(screen.getByTestId('pluginName'), pluginData.pluginName);
+    userEvent.type(
+      screen.getByTestId('pluginCreatedBy'),
+      pluginData.pluginCreatedBy,
+    );
+    userEvent.type(screen.getByTestId('pluginDesc'), pluginData.pluginDesc);
+    userEvent.click(screen.getByTestId('addonregisterBtn'));
+
+    await wait(100);
+    expect(toast.success).toBeCalledWith('Plugin added Successfully');
   });
 
   test('Expect the window to reload after successful plugin addition', async () => {
@@ -166,23 +171,24 @@ describe('Testing AddOnRegister', () => {
           </BrowserRouter>
         </MockedProvider>,
       );
-      await waitFor(() => new Promise((resolve) => setTimeout(resolve, 0)));
-
-      userEvent.click(screen.getByRole('button', { name: /Add New/i }));
-      await wait(100);
-      expect(screen.getByTestId('addonregisterBtn')).toBeInTheDocument();
-      userEvent.type(screen.getByTestId('pluginName'), pluginData.pluginName);
-      userEvent.type(
-        screen.getByTestId('pluginCreatedBy'),
-        pluginData.pluginCreatedBy,
-      );
-      userEvent.type(screen.getByTestId('pluginDesc'), pluginData.pluginDesc);
-      userEvent.click(screen.getByTestId('addonregisterBtn'));
-
-      await wait(3000); // Waiting for 3 seconds to reload the page as timeout is set to 2 seconds in the component
-      expect(mockNavigate).toHaveBeenCalledWith(0);
     });
+    await waitFor(() => new Promise((resolve) => setTimeout(resolve, 0)));
+
+    userEvent.click(screen.getByRole('button', { name: /Add New/i }));
+    await wait(100);
+    expect(screen.getByTestId('addonregisterBtn')).toBeInTheDocument();
+    userEvent.type(screen.getByTestId('pluginName'), pluginData.pluginName);
+    userEvent.type(
+      screen.getByTestId('pluginCreatedBy'),
+      pluginData.pluginCreatedBy,
+    );
+    userEvent.type(screen.getByTestId('pluginDesc'), pluginData.pluginDesc);
+    userEvent.click(screen.getByTestId('addonregisterBtn'));
+
+    await wait(3000); // Waiting for 3 seconds to reload the page as timeout is set to 2 seconds in the component
+    expect(mockNavigate).toHaveBeenCalledWith(0);
   });
+
   test('should be redirected to /orglist if orgId is undefined', async () => {
     mockId = undefined;
     render(
@@ -190,7 +196,7 @@ describe('Testing AddOnRegister', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              {<AddOnRegister {...props} />}
+              <AddOnRegister {...props} />
             </I18nextProvider>
           </BrowserRouter>
         </Provider>

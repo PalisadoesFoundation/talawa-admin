@@ -99,7 +99,9 @@ export default function settings(): JSX.Element {
       });
       /* istanbul ignore next */
       if (data) {
-        toast.success(tCommon('updatedSuccessfully', { item: 'Profile' }));
+        toast.success(
+          tCommon('updatedSuccessfully', { item: 'Profile' }) as string,
+        );
         setTimeout(() => {
           window.location.reload();
         }, 500);

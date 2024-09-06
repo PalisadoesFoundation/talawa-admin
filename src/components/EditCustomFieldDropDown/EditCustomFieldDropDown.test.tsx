@@ -1,6 +1,6 @@
 import type { Dispatch, SetStateAction } from 'react';
-import React from 'react';
-import { act, render } from '@testing-library/react';
+import React, { act } from 'react';
+import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import EditOrgCustomFieldDropDown from './EditCustomFieldDropDown';
 import type { InterfaceCustomFieldData } from 'components/OrgProfileFieldSettings/OrgProfileFieldSettings';

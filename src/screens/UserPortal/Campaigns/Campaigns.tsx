@@ -244,8 +244,12 @@ const Campaigns = (): JSX.Element => {
                       {campaign.fundingGoal}
                     </span>
                     <span>Raised: $0</span>
-                    <span>Start Date: {campaign.startDate}</span>
-                    <span>End Date: {campaign.endDate}</span>
+                    <span>
+                      Start Date: {campaign.startDate as unknown as string}
+                    </span>
+                    <span>
+                      End Date: {campaign.endDate as unknown as string}
+                    </span>
                   </div>
                 </div>
                 <div className="d-flex gap-3">

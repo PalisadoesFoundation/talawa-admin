@@ -69,7 +69,7 @@ function deleteOrg(): JSX.Element {
       // If it's a sample organization, use a specific mutation
       removeSampleOrganization()
         .then(() => {
-          toast.success(t('successfullyDeletedSampleOrganization'));
+          toast.success(t('successfullyDeletedSampleOrganization') as string);
           setTimeout(() => {
             navigate('/orglist');
           }, 1000);

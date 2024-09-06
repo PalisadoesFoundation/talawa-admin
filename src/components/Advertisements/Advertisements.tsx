@@ -24,7 +24,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
  *
  */
 
-export default function advertisements(): JSX.Element {
+export default function Advertisements(): JSX.Element {
   // Retrieve the organization ID from URL parameters
   const { orgId: currentOrgId } = useParams();
   // Translation hook for internationalization
@@ -65,7 +65,7 @@ export default function advertisements(): JSX.Element {
   });
 
   // State to manage the list of advertisements
-  const [advertisements, setAdvertisements] = useState(
+  const [advertisements, setAdvertisements] = useState<Ad[]>(
     orgAdvertisementListData?.organizations[0].advertisements?.edges.map(
       (edge: { node: Ad }) => edge.node,
     ) || [],
@@ -77,10 +77,8 @@ export default function advertisements(): JSX.Element {
       const ads: Ad[] =
         orgAdvertisementListData.organizations[0].advertisements?.edges.map(
           (edge) => edge.node,
-        );
-      after
-        ? setAdvertisements([...advertisements, ...ads])
-        : setAdvertisements(ads);
+        ) || [];
+      setAdvertisements(after ? [...advertisements, ...ads] : ads);
     }
   }, [orgAdvertisementListData, after]);
 
@@ -273,7 +271,3 @@ export default function advertisements(): JSX.Element {
     </>
   );
 }
-
-advertisements.defaultProps = {};
-
-advertisements.propTypes = {};
