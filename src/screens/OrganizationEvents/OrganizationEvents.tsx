@@ -196,7 +196,7 @@ function organizationEvents(): JSX.Element {
         });
 
         if (createEventData) {
-          toast.success(t('eventCreated'));
+          toast.success(t('eventCreated') as string);
           refetchEvents();
           hideCreateEventModal();
           setFormState({

@@ -106,7 +106,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
           fundId,
         },
       });
-      toast.success(t('createdCampaign'));
+      toast.success(t('createdCampaign') as string);
       setFormState({
         campaignName: '',
         campaignCurrency: 'USD',
@@ -166,7 +166,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
       });
       refetchCampaign();
       hide();
-      toast.success(t('updatedCampaign'));
+      toast.success(t('updatedCampaign') as string);
     } catch (error: unknown) {
       toast.error((error as Error).message);
     }

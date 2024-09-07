@@ -1,5 +1,5 @@
-import React from 'react';
-import { act, render } from '@testing-library/react';
+import React, { act } from 'react';
+import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
@@ -11,8 +11,8 @@ import { MockedProvider } from '@apollo/react-testing';
 import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import useLocalStorage from 'utils/useLocalstorage';
-import { Provider } from 'react-redux';
-import { store } from 'state/store';
+// import { Provider } from 'react-redux';
+// import { store } from 'state/store';
 const { setItem } = useLocalStorage();
 
 async function wait(ms = 100): Promise<void> {

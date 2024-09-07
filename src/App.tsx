@@ -122,12 +122,12 @@ function app(): JSX.Element {
       ],
       index: number,
     ) => {
-      const extraComponent = plugin[1];
+      const ExtraComponent = plugin[1];
       return (
         <Route
           key={index}
           path={`/plugin/${plugin[0].toLowerCase()}`}
-          element={extraComponent}
+          element={<ExtraComponent />}
         />
       );
     },

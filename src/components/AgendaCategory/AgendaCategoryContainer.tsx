@@ -129,7 +129,7 @@ function agendaCategoryContainer({
 
       agendaCategoryRefetch();
       hideUpdateModal();
-      toast.success(t('agendaCategoryUpdated'));
+      toast.success(t('agendaCategoryUpdated') as string);
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(`Agenda Category Update Failed ${error.message}`);
@@ -153,7 +153,7 @@ function agendaCategoryContainer({
       });
       agendaCategoryRefetch();
       toggleDeleteModal();
-      toast.success(t('agendaCategoryDeleted'));
+      toast.success(t('agendaCategoryDeleted') as string);
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(`Agenda Category Delete Failed, ${error.message}`);

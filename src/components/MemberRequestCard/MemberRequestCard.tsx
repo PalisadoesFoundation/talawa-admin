@@ -14,7 +14,6 @@ import defaultImg from 'assets/images/blank.png';
 import { errorHandler } from 'utils/errorHandler';
 
 interface InterfaceMemberRequestCardProps {
-  key: string; // Unique key for the component (could be omitted in most cases)
   id: string; // Unique identifier for the member
   memberName: string; // Name of the member
   memberLocation: string; // Location of the member
@@ -29,7 +28,7 @@ interface InterfaceMemberRequestCardProps {
  * @param props - Properties for the member request card.
  * @returns JSX element for member request card.
  */
-function memberRequestCard(
+function MemberRequestCard(
   props: InterfaceMemberRequestCardProps,
 ): JSX.Element {
   const [acceptMutation] = useMutation(ACCEPT_ORGANIZATION_REQUEST_MUTATION);
@@ -53,7 +52,7 @@ function memberRequestCard(
       });
 
       /* istanbul ignore next */
-      toast.success(t('memberAdded'));
+      toast.success(t('memberAdded') as string);
       /* istanbul ignore next */
       setTimeout(() => {
         window.location.reload();
@@ -136,5 +135,4 @@ function memberRequestCard(
     </>
   );
 }
-export {};
-export default memberRequestCard;
+export default MemberRequestCard;
