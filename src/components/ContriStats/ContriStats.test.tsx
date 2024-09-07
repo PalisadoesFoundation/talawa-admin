@@ -14,7 +14,6 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 
 describe('Testing Contribution Stats', () => {
   const props = {
-    key: '123',
     id: '234',
     recentAmount: '200',
     highestAmount: '500',

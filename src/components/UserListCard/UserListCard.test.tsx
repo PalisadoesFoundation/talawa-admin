@@ -1,5 +1,5 @@
-import React from 'react';
-import { act, render, screen } from '@testing-library/react';
+import React, { act } from 'react';
+import { render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
@@ -14,7 +14,7 @@ const MOCKS = [
   {
     request: {
       query: ADD_ADMIN_MUTATION,
-      variable: { userid: '784', orgid: '554' },
+      variables: { userid: '784', orgid: '554' },
     },
     result: {
       data: {
@@ -28,6 +28,7 @@ const MOCKS = [
   },
 ];
 const link = new StaticMockLink(MOCKS, true);
+
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -41,7 +42,6 @@ describe('Testing User List Card', () => {
 
   test('Should render props and text elements test for the page component', async () => {
     const props = {
-      key: 123,
       id: '456',
     };
 
@@ -49,7 +49,7 @@ describe('Testing User List Card', () => {
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
-            <UserListCard {...props} />
+            <UserListCard key={123} {...props} />
           </I18nextProvider>
         </BrowserRouter>
       </MockedProvider>,
@@ -62,7 +62,6 @@ describe('Testing User List Card', () => {
 
   test('Should render text elements when props value is not passed', async () => {
     const props = {
-      key: 123,
       id: '456',
     };
 
@@ -70,7 +69,7 @@ describe('Testing User List Card', () => {
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
-            <UserListCard {...props} />
+            <UserListCard key={123} {...props} />
           </I18nextProvider>
         </BrowserRouter>
       </MockedProvider>,

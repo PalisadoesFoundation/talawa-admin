@@ -15,6 +15,14 @@ describe('Testing Addon component', () => {
     children: 'This is a dummy text',
   };
 
+  test('should render with default props', () => {
+    const { getByTestId } = render(<AddOn />);
+    const container = getByTestId('pluginContainer');
+    expect(container).toBeInTheDocument();
+    expect(container).toHaveClass('plugin-container');
+    expect(container).toHaveTextContent('Default text');
+  });
+
   test('should render props and text elements test for the page component', () => {
     const { getByTestId, getByText } = render(
       <MockedProvider addTypename={false} link={link}>

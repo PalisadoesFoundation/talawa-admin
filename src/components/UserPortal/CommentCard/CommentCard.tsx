@@ -92,7 +92,7 @@ function commentCard(props: InterfaceCommentCardProps): JSX.Element {
         }
       } catch (error: unknown) {
         /* istanbul ignore next */
-        toast.error(error);
+        toast.error(error as string);
       }
     } else {
       try {
@@ -109,7 +109,7 @@ function commentCard(props: InterfaceCommentCardProps): JSX.Element {
         }
       } catch (error: unknown) {
         /* istanbul ignore next */
-        toast.error(error);
+        toast.error(error as string);
       }
     }
   };

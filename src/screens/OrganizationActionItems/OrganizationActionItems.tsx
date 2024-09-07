@@ -151,7 +151,7 @@ function organizationActionItems(): JSX.Element {
 
       actionItemsRefetch();
       hideCreateModal();
-      toast.success(t('successfulCreation'));
+      toast.success(t('successfulCreation') as string);
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message);

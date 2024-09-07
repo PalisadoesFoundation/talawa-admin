@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import type { NormalizedCacheObject } from '@apollo/client';
 import {
@@ -131,7 +131,10 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 });
 const fallbackLoader = <div className="loader"></div>;
 
-ReactDOM.render(
+const container = document.getElementById('root');
+const root = createRoot(container!); // Note the use of '!' is to assert the container is not null
+
+root.render(
   <Suspense fallback={fallbackLoader}>
     <ApolloProvider client={client}>
       <BrowserRouter>
@@ -146,5 +149,4 @@ ReactDOM.render(
       </BrowserRouter>
     </ApolloProvider>
   </Suspense>,
-  document.getElementById('root'),
 );

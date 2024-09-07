@@ -92,17 +92,17 @@ const ForgotPassword = (): JSX.Element => {
 
       if (data) {
         setItem('otpToken', data.otp.otpToken);
-        toast.success(t('OTPsent'));
+        toast.success(t('OTPsent') as string);
         setShowEnterEmail(false);
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
         if (error.message === 'User not found') {
-          toast.warn(tErrors('emailNotRegistered'));
+          toast.warn(tErrors('emailNotRegistered') as string);
         } else if (error.message === 'Failed to fetch') {
-          toast.error(tErrors('talawaApiUnavailable'));
+          toast.error(tErrors('talawaApiUnavailable') as string);
         } else {
-          toast.error(tErrors('errorSendingMail'));
+          toast.error(tErrors('errorSendingMail') as string);
         }
       }
     }
@@ -120,7 +120,7 @@ const ForgotPassword = (): JSX.Element => {
     const { userOtp, newPassword, confirmNewPassword } = forgotPassFormData;
 
     if (newPassword !== confirmNewPassword) {
-      toast.error(t('passwordMismatches'));
+      toast.error(t('passwordMismatches') as string);
       return;
     }
 
@@ -141,7 +141,7 @@ const ForgotPassword = (): JSX.Element => {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success(t('passwordChanges'));
+        toast.success(t('passwordChanges') as string);
         setShowEnterEmail(true);
         setForgotPassFormData({
           userOtp: '',

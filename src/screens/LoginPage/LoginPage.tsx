@@ -178,7 +178,7 @@ const loginPage = (): JSX.Element => {
       return data.recaptcha;
     } catch (error) {
       /* istanbul ignore next */
-      toast.error(t('captchaError'));
+      toast.error(t('captchaError') as string);
     }
   };
 
@@ -201,7 +201,7 @@ const loginPage = (): JSX.Element => {
     const isVerified = await verifyRecaptcha(recaptchaToken);
     /* istanbul ignore next */
     if (!isVerified) {
-      toast.error(t('Please_check_the_captcha'));
+      toast.error(t('Please_check_the_captcha') as string);
       return;
     }
     const isValidatedString = (value: string): boolean =>
@@ -242,7 +242,9 @@ const loginPage = (): JSX.Element => {
           /* istanbul ignore next */
           if (signUpData) {
             toast.success(
-              t(role === 'admin' ? 'successfullyRegistered' : 'afterRegister'),
+              t(
+                role === 'admin' ? 'successfullyRegistered' : 'afterRegister',
+              ) as string,
             );
             setShowTab('LOGIN');
             setSignFormState({
@@ -259,20 +261,20 @@ const loginPage = (): JSX.Element => {
           errorHandler(t, error);
         }
       } else {
-        toast.warn(t('passwordMismatches'));
+        toast.warn(t('passwordMismatches') as string);
       }
     } else {
       if (!isValidatedString(signfirstName)) {
-        toast.warn(t('firstName_invalid'));
+        toast.warn(t('firstName_invalid') as string);
       }
       if (!isValidatedString(signlastName)) {
-        toast.warn(t('lastName_invalid'));
+        toast.warn(t('lastName_invalid') as string);
       }
       if (!validatePassword(signPassword)) {
-        toast.warn(t('password_invalid'));
+        toast.warn(t('password_invalid') as string);
       }
       if (signEmail.length < 8) {
-        toast.warn(t('email_invalid'));
+        toast.warn(t('email_invalid') as string);
       }
     }
   };
@@ -282,7 +284,7 @@ const loginPage = (): JSX.Element => {
     const isVerified = await verifyRecaptcha(recaptchaToken);
     /* istanbul ignore next */
     if (!isVerified) {
-      toast.error(t('Please_check_the_captcha'));
+      toast.error(t('Please_check_the_captcha') as string);
       return;
     }
 
@@ -303,7 +305,7 @@ const loginPage = (): JSX.Element => {
           appUserProfile.isSuperAdmin || appUserProfile.adminFor.length !== 0;
 
         if (role === 'admin' && !isAdmin) {
-          toast.warn(tErrors('notAuthorised'));
+          toast.warn(tErrors('notAuthorised') as string);
           return;
         }
         const loggedInUserId = user._id;
@@ -328,7 +330,7 @@ const loginPage = (): JSX.Element => {
         navigate(role === 'admin' ? '/orglist' : '/user/organizations');
         startSession();
       } else {
-        toast.warn(tErrors('notFound'));
+        toast.warn(tErrors('notFound') as string);
       }
     } catch (error) {
       /* istanbul ignore next */

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import 'jest-localstorage-mock';
 import 'jest-location-mock';
@@ -213,53 +213,53 @@ describe('Testing Community Profile Screen', () => {
           </BrowserRouter>
         </MockedProvider>,
       );
-      await wait();
-
-      const communityName = screen.getByPlaceholderText(/Community Name/i);
-      const websiteLink = screen.getByPlaceholderText(/Website Link/i);
-      const logo = screen.getByTestId(/fileInput/i);
-      const facebook = screen.getByTestId(/facebook/i);
-      const instagram = screen.getByTestId(/instagram/i);
-      const X = screen.getByTestId(/X/i);
-      const linkedIn = screen.getByTestId(/linkedIn/i);
-      const github = screen.getByTestId(/github/i);
-      const youtube = screen.getByTestId(/youtube/i);
-      const reddit = screen.getByTestId(/reddit/i);
-      const slack = screen.getByTestId(/slack/i);
-      const saveChangesBtn = screen.getByTestId(/saveChangesBtn/i);
-      const resetChangeBtn = screen.getByTestId(/resetChangesBtn/i);
-
-      userEvent.type(communityName, profileVariables.name);
-      userEvent.type(websiteLink, profileVariables.websiteLink);
-      userEvent.type(facebook, profileVariables.socialUrl);
-      userEvent.type(instagram, profileVariables.socialUrl);
-      userEvent.type(X, profileVariables.socialUrl);
-      userEvent.type(linkedIn, profileVariables.socialUrl);
-      userEvent.type(github, profileVariables.socialUrl);
-      userEvent.type(youtube, profileVariables.socialUrl);
-      userEvent.type(reddit, profileVariables.socialUrl);
-      userEvent.type(slack, profileVariables.socialUrl);
-      userEvent.upload(logo, profileVariables.logo);
-      await wait();
-
-      expect(communityName).toHaveValue(profileVariables.name);
-      expect(websiteLink).toHaveValue(profileVariables.websiteLink);
-      // expect(logo).toBeTruthy();
-      expect(facebook).toHaveValue(profileVariables.socialUrl);
-      expect(instagram).toHaveValue(profileVariables.socialUrl);
-      expect(X).toHaveValue(profileVariables.socialUrl);
-      expect(linkedIn).toHaveValue(profileVariables.socialUrl);
-      expect(github).toHaveValue(profileVariables.socialUrl);
-      expect(youtube).toHaveValue(profileVariables.socialUrl);
-      expect(reddit).toHaveValue(profileVariables.socialUrl);
-      expect(slack).toHaveValue(profileVariables.socialUrl);
-      expect(saveChangesBtn).not.toBeDisabled();
-      expect(resetChangeBtn).not.toBeDisabled();
-      await wait();
-
-      userEvent.click(saveChangesBtn);
-      await wait();
     });
+    await wait();
+
+    const communityName = screen.getByPlaceholderText(/Community Name/i);
+    const websiteLink = screen.getByPlaceholderText(/Website Link/i);
+    const logo = screen.getByTestId(/fileInput/i);
+    const facebook = screen.getByTestId(/facebook/i);
+    const instagram = screen.getByTestId(/instagram/i);
+    const X = screen.getByTestId(/X/i);
+    const linkedIn = screen.getByTestId(/linkedIn/i);
+    const github = screen.getByTestId(/github/i);
+    const youtube = screen.getByTestId(/youtube/i);
+    const reddit = screen.getByTestId(/reddit/i);
+    const slack = screen.getByTestId(/slack/i);
+    const saveChangesBtn = screen.getByTestId(/saveChangesBtn/i);
+    const resetChangeBtn = screen.getByTestId(/resetChangesBtn/i);
+
+    userEvent.type(communityName, profileVariables.name);
+    userEvent.type(websiteLink, profileVariables.websiteLink);
+    userEvent.type(facebook, profileVariables.socialUrl);
+    userEvent.type(instagram, profileVariables.socialUrl);
+    userEvent.type(X, profileVariables.socialUrl);
+    userEvent.type(linkedIn, profileVariables.socialUrl);
+    userEvent.type(github, profileVariables.socialUrl);
+    userEvent.type(youtube, profileVariables.socialUrl);
+    userEvent.type(reddit, profileVariables.socialUrl);
+    userEvent.type(slack, profileVariables.socialUrl);
+    userEvent.upload(logo, profileVariables.logo);
+    await wait();
+
+    expect(communityName).toHaveValue(profileVariables.name);
+    expect(websiteLink).toHaveValue(profileVariables.websiteLink);
+    // expect(logo).toBeTruthy();
+    expect(facebook).toHaveValue(profileVariables.socialUrl);
+    expect(instagram).toHaveValue(profileVariables.socialUrl);
+    expect(X).toHaveValue(profileVariables.socialUrl);
+    expect(linkedIn).toHaveValue(profileVariables.socialUrl);
+    expect(github).toHaveValue(profileVariables.socialUrl);
+    expect(youtube).toHaveValue(profileVariables.socialUrl);
+    expect(reddit).toHaveValue(profileVariables.socialUrl);
+    expect(slack).toHaveValue(profileVariables.socialUrl);
+    expect(saveChangesBtn).not.toBeDisabled();
+    expect(resetChangeBtn).not.toBeDisabled();
+    await wait();
+
+    userEvent.click(saveChangesBtn);
+    await wait();
   });
 
   test('If the queried data has some fields null then the input field should be empty', async () => {

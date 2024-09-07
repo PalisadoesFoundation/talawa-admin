@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { act } from 'react';
 import {
   ApolloClient,
   ApolloLink,
@@ -7,7 +7,7 @@ import {
   InMemoryCache,
 } from '@apollo/client';
 import { MockedProvider } from '@apollo/client/testing';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import 'jest-location-mock';
 
 import type { DocumentNode, NormalizedCacheObject } from '@apollo/client';

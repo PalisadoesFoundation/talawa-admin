@@ -147,7 +147,7 @@ const CommunityProfile = (): JSX.Element => {
           },
         },
       });
-      toast.success(t('profileChangedMsg'));
+      toast.success(t('profileChangedMsg') as string);
     } catch (error: unknown) {
       /* istanbul ignore next */
       errorHandler(t, error as Error);
@@ -180,7 +180,7 @@ const CommunityProfile = (): JSX.Element => {
           resetPreLoginImageryId: preLoginData?._id,
         },
       });
-      toast.success(t(`resetData`));
+      toast.success(t(`resetData`) as string);
     } catch (error: unknown) {
       /* istanbul ignore next */
       errorHandler(t, error as Error);

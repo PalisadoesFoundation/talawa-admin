@@ -137,7 +137,7 @@ const Users = (): JSX.Element => {
     }
 
     if (dataOrgs.organizationsConnection.length === 0) {
-      toast.warning(t('noOrgError'));
+      toast.warning(t('noOrgError') as string);
     }
   }, [dataOrgs]);
 
