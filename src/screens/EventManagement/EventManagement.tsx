@@ -139,14 +139,13 @@ const EventManagement = (): JSX.Element => {
     const props = {
       variant,
       className,
-      key: value,
       size: 'sm' as 'sm' | 'lg',
       onClick: () => handleClick(value),
       'data-testid': `${value}Btn`,
     };
 
     return (
-      <Button {...props}>
+      <Button key={value} {...props}>
         {icon}
         {translatedText}
       </Button>

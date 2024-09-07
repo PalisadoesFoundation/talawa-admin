@@ -1,11 +1,11 @@
 import { MockedProvider } from '@apollo/react-testing';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import React from 'react';
+import React, { act } from 'react';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { ORGANIZATION_POST_LIST } from 'GraphQl/Queries/Queries';
 import { ToastContainer } from 'react-toastify';
@@ -286,25 +286,34 @@ describe('Organisation Post Page', () => {
           </BrowserRouter>
         </MockedProvider>,
       );
-
-      await wait();
-
-      const searchInput = screen.getByTestId('searchByName');
-      expect(searchInput).toHaveAttribute('placeholder', 'Search By Title');
-
-      const inputText = screen.getByTestId('searchBy');
-
-      fireEvent.click(inputText);
-      const toggleText = screen.getByTestId('Text');
-
-      fireEvent.click(toggleText);
-
-      expect(searchInput).toHaveAttribute('placeholder', 'Search By Text');
-      fireEvent.click(inputText);
-      const toggleTite = screen.getByTestId('searchTitle');
-      fireEvent.click(toggleTite);
-      expect(searchInput).toHaveAttribute('placeholder', 'Search By Title');
     });
+    await wait();
+
+    const searchInput = screen.getByTestId('searchByName');
+    expect(searchInput).toHaveAttribute('placeholder', 'Search By Title');
+
+    const inputText = screen.getByTestId('searchBy');
+
+    await act(async () => {
+      fireEvent.click(inputText);
+    });
+
+    const toggleText = screen.getByTestId('Text');
+
+    await act(async () => {
+      fireEvent.click(toggleText);
+    });
+
+    expect(searchInput).toHaveAttribute('placeholder', 'Search By Text');
+    await act(async () => {
+      fireEvent.click(inputText);
+    });
+    const toggleTite = screen.getByTestId('searchTitle');
+    await act(async () => {
+      fireEvent.click(toggleTite);
+    });
+
+    expect(searchInput).toHaveAttribute('placeholder', 'Search By Title');
   });
   test('Testing search latest and oldest toggle', async () => {
     await act(async () => {
@@ -320,25 +329,34 @@ describe('Organisation Post Page', () => {
           </BrowserRouter>
         </MockedProvider>,
       );
-
-      await wait();
-
-      const searchInput = screen.getByTestId('sort');
-      expect(searchInput).toBeInTheDocument();
-
-      const inputText = screen.getByTestId('sortpost');
-
-      fireEvent.click(inputText);
-      const toggleText = screen.getByTestId('latest');
-
-      fireEvent.click(toggleText);
-
-      expect(searchInput).toBeInTheDocument();
-      fireEvent.click(inputText);
-      const toggleTite = screen.getByTestId('oldest');
-      fireEvent.click(toggleTite);
-      expect(searchInput).toBeInTheDocument();
     });
+    await wait();
+
+    const searchInput = screen.getByTestId('sort');
+    expect(searchInput).toBeInTheDocument();
+
+    const inputText = screen.getByTestId('sortpost');
+
+    await act(async () => {
+      fireEvent.click(inputText);
+    });
+
+    const toggleText = screen.getByTestId('latest');
+
+    await act(async () => {
+      fireEvent.click(toggleText);
+    });
+
+    expect(searchInput).toBeInTheDocument();
+    await act(async () => {
+      fireEvent.click(inputText);
+    });
+
+    const toggleTite = screen.getByTestId('oldest');
+    await act(async () => {
+      fireEvent.click(toggleTite);
+    });
+    expect(searchInput).toBeInTheDocument();
   });
   test('After creating a post, the data should be refetched', async () => {
     const refetchMock = jest.fn();
@@ -575,34 +593,43 @@ describe('Organisation Post Page', () => {
           </BrowserRouter>
         </MockedProvider>,
       );
+    });
+    await wait();
 
-      await wait();
-
+    await act(async () => {
       userEvent.click(screen.getByTestId('createPostModalBtn'));
+    });
 
-      const postTitleInput = screen.getByTestId('modalTitle');
+    const postTitleInput = screen.getByTestId('modalTitle');
+    await act(async () => {
       fireEvent.change(postTitleInput, { target: { value: 'Test Post' } });
+    });
 
-      const postInfoTextarea = screen.getByTestId('modalinfo');
+    const postInfoTextarea = screen.getByTestId('modalinfo');
+    await act(async () => {
       fireEvent.change(postInfoTextarea, {
         target: { value: 'Test post information' },
       });
-
-      const videoFile = new File(['video content'], 'video.mp4', {
-        type: 'video/mp4',
-      });
-
-      userEvent.upload(screen.getByTestId('addMediaField'), videoFile);
-
-      // Check if the video is displayed
-      const videoPreview = await screen.findByTestId('videoPreview');
-      expect(videoPreview).toBeInTheDocument();
-
-      // Check if the close button for the video works
-      const closeVideoPreviewButton = screen.getByTestId('mediaCloseButton');
-      fireEvent.click(closeVideoPreviewButton);
-      expect(videoPreview).not.toBeInTheDocument();
     });
+
+    const videoFile = new File(['video content'], 'video.mp4', {
+      type: 'video/mp4',
+    });
+
+    await act(async () => {
+      userEvent.upload(screen.getByTestId('addMediaField'), videoFile);
+    });
+
+    // Check if the video is displayed
+    const videoPreview = await screen.findByTestId('videoPreview');
+    expect(videoPreview).toBeInTheDocument();
+
+    // Check if the close button for the video works
+    const closeVideoPreviewButton = screen.getByTestId('mediaCloseButton');
+    await act(async () => {
+      fireEvent.click(closeVideoPreviewButton);
+    });
+    expect(videoPreview).not.toBeInTheDocument();
   });
   test('Sorting posts by pinned status', async () => {
     // Mocked data representing posts with different pinned statuses

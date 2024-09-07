@@ -1,5 +1,5 @@
-import React from 'react';
-import { act, render, screen, waitFor } from '@testing-library/react';
+import React, { act } from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { ActionItemsWrapper } from './ActionItemsWrapper';
 import { BrowserRouter } from 'react-router-dom';

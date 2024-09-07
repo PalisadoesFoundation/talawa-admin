@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { act } from 'react';
 import {
   render,
   screen,
   waitFor,
-  act,
   waitForElementToBeRemoved,
   fireEvent,
 } from '@testing-library/react';
@@ -35,6 +34,15 @@ jest.mock('react-toastify', () => ({
     error: jest.fn(),
   },
 }));
+
+//temporarily fixes react-beautiful-dnd droppable method's depreciation error
+//needs to be fixed in React 19
+jest.spyOn(console, 'error').mockImplementation((message) => {
+  if (message.includes('Support for defaultProps will be removed')) {
+    return;
+  }
+  console.error(message);
+});
 
 async function wait(ms = 100): Promise<void> {
   await act(async () => {

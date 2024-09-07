@@ -71,7 +71,7 @@ const OrgProfileFieldSettings = (): JSX.Element => {
           ...customFieldData,
         },
       });
-      toast.success(t('fieldSuccessMessage'));
+      toast.success(t('fieldSuccessMessage') as string);
       setCustomFieldData({ type: '', name: '' });
       refetch();
     } catch (error) {
@@ -89,7 +89,7 @@ const OrgProfileFieldSettings = (): JSX.Element => {
         },
       });
 
-      toast.success(t('fieldRemovalSuccess'));
+      toast.success(t('fieldRemovalSuccess') as string);
       refetch();
     } catch (error) {
       toast.error((error as Error).message);

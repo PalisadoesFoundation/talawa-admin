@@ -166,7 +166,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
             ...updatedFields,
           },
         });
-        toast.success(t('pledgeUpdated'));
+        toast.success(t('pledgeUpdated') as string);
         refetchPledge();
         hide();
       } catch (error: unknown) {
@@ -198,7 +198,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           },
         });
 
-        toast.success(t('pledgeCreated'));
+        toast.success(t('pledgeCreated') as string);
         refetchPledge();
         setFormState({
           pledgeUsers: [],

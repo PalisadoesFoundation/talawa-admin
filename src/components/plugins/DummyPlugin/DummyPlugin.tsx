@@ -9,7 +9,7 @@ import AddOn from 'components/AddOn/AddOn';
  *
  * @returns JSX.Element - Renders the `AddOn` component containing a welcome message.
  */
-function dummyPlugin(): JSX.Element {
+function DummyPlugin(): JSX.Element {
   return (
     <AddOn>
       <div>Welcome to the Dummy Plugin!</div>
@@ -17,8 +17,4 @@ function dummyPlugin(): JSX.Element {
   );
 }
 
-dummyPlugin.defaultProps = {};
-
-dummyPlugin.propTypes = {};
-
-export default dummyPlugin;
+export default DummyPlugin;

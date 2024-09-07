@@ -128,7 +128,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
         }
       } catch (error: unknown) {
         /* istanbul ignore next */
-        toast.error(error);
+        toast.error(error as string);
       }
     } else {
       try {
@@ -144,7 +144,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
         }
       } catch (error: unknown) {
         /* istanbul ignore next */
-        toast.error(error);
+        toast.error(error as string);
       }
     }
   };
@@ -245,7 +245,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
 
       props.fetchPosts(); // Refresh the posts
       toggleEditPost();
-      toast.success(tCommon('updatedSuccessfully', { item: 'Post' }));
+      toast.success(tCommon('updatedSuccessfully', { item: 'Post' }) as string);
     } catch (error: unknown) {
       /* istanbul ignore next */
       errorHandler(t, error);

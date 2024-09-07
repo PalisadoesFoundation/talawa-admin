@@ -102,7 +102,7 @@ const Requests = (): JSX.Element => {
     }
 
     if (orgsData.organizationsConnection.length === 0) {
-      toast.warning(t('noOrgError'));
+      toast.warning(t('noOrgError') as string);
     }
   }, [orgsData]);
 

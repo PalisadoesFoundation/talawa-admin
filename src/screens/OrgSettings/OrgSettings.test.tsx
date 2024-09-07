@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -142,7 +142,7 @@ describe('Organisation Settings Page', () => {
     window.location.assign('/orgsetting/123');
     setItem('SuperAdmin', true);
 
-    const { queryByText } = render(
+    const { getAllByText, queryByText } = render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
@@ -158,9 +158,8 @@ describe('Organisation Settings Page', () => {
 
     await waitFor(() => {
       userEvent.click(screen.getByTestId('actionItemCategoriesSettings'));
-      expect(
-        queryByText(translations.actionItemCategories),
-      ).toBeInTheDocument();
+      const elements = getAllByText(translations.actionItemCategories);
+      expect(elements[2]).toBeInTheDocument();
     });
 
     await waitFor(() => {

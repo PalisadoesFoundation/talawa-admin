@@ -87,7 +87,7 @@ function organizationAgendaCategory(): JSX.Element {
           },
         },
       });
-      toast.success(t('agendaCategoryCreated'));
+      toast.success(t('agendaCategoryCreated') as string);
       setFormState({ name: '', description: '', createdBy: '' });
       refetchAgendaCategory();
       hideCreateModal();

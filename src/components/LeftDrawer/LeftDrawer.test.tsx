@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { act } from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import 'jest-localstorage-mock';
@@ -63,102 +63,13 @@ afterEach(() => {
 });
 
 describe('Testing Left Drawer component for SUPERADMIN', () => {
-  test('Component should be rendered properly', () => {
-    setItem('UserImage', '');
-    setItem('UserImage', '');
-    setItem('SuperAdmin', true);
-    setItem('FirstName', 'John');
-    setItem('LastName', 'Doe');
+  test('Component should be rendered properly', async () => {
     setItem('UserImage', '');
     setItem('SuperAdmin', true);
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <LeftDrawer {...propsOrg} />
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
 
-    expect(screen.getByText('My Organizations')).toBeInTheDocument();
-    expect(screen.getByText('Users')).toBeInTheDocument();
-    expect(screen.getByText('Community Profile')).toBeInTheDocument();
-    expect(screen.getByText('Community Profile')).toBeInTheDocument();
-    expect(screen.getByText('Talawa Admin Portal')).toBeInTheDocument();
-
-    const orgsBtn = screen.getByTestId(/orgsBtn/i);
-    const rolesBtn = screen.getByTestId(/rolesBtn/i);
-    const communityProfileBtn = screen.getByTestId(/communityProfileBtn/i);
-
-    orgsBtn.click();
-    expect(
-      orgsBtn.className.includes('text-white btn btn-success'),
-    ).toBeTruthy();
-    expect(rolesBtn.className.includes('text-secondary btn')).toBeTruthy();
-    expect(rolesBtn.className.includes('text-secondary btn')).toBeTruthy();
-    expect(
-      communityProfileBtn.className.includes('text-secondary btn'),
-    ).toBeTruthy();
-
-    // Send to roles screen
-    userEvent.click(rolesBtn);
-    expect(global.window.location.pathname).toContain('/users');
-    userEvent.click(communityProfileBtn);
-  });
-
-  test('Testing Drawer when hideDrawer is null', () => {
-    const tempProps: InterfaceLeftDrawerProps = {
-      ...props,
-      hideDrawer: false,
-    };
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <LeftDrawer {...tempProps} />
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-  });
-  test('Testing Drawer when hideDrawer is false', () => {
-    const tempProps: InterfaceLeftDrawerProps = {
-      ...props,
-      hideDrawer: false,
-    };
-  });
-  test('Testing Drawer when the screen size is less than or equal to 820px', () => {
-    const tempProps: InterfaceLeftDrawerProps = {
-      ...props,
-      hideDrawer: false,
-    };
-    resizeWindow(800);
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <LeftDrawer {...tempProps} />
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    expect(screen.getByText('My Organizations')).toBeInTheDocument();
-    expect(screen.getByText('Talawa Admin Portal')).toBeInTheDocument();
-
-    const orgsBtn = screen.getByTestId(/orgsBtn/i);
-
-    orgsBtn.click();
-    expect(
-      orgsBtn.className.includes('text-white btn btn-success'),
-    ).toBeTruthy();
-  });
-
-  describe('Testing Left Drawer component for ADMIN', () => {
-    test('Components should be rendered properly', () => {
+    await act(async () => {
       render(
         <MockedProvider addTypename={false} link={link}>
           <BrowserRouter>
@@ -168,24 +79,148 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
           </BrowserRouter>
         </MockedProvider>,
       );
-
-      expect(screen.getByText('My Organizations')).toBeInTheDocument();
-      expect(screen.getByText('Talawa Admin Portal')).toBeInTheDocument();
-
-      expect(screen.getAllByText(/admin/i)).toHaveLength(1);
-      expect(screen.getAllByText(/admin/i)).toHaveLength(1);
-
-      const orgsBtn = screen.getByTestId(/orgsBtn/i);
-      orgsBtn.click();
-      expect(
-        orgsBtn.className.includes('text-white btn btn-success'),
-      ).toBeTruthy();
-
-      // These screens arent meant for admins so they should not be present
-      expect(screen.queryByTestId(/rolesBtn/i)).toBeNull();
-
-      userEvent.click(orgsBtn);
-      expect(global.window.location.pathname).toContain('/orglist');
     });
+
+    expect(screen.getByText('My Organizations')).toBeInTheDocument();
+    expect(screen.getByText('Users')).toBeInTheDocument();
+    expect(screen.getByText('Community Profile')).toBeInTheDocument();
+    expect(screen.getByText('Talawa Admin Portal')).toBeInTheDocument();
+
+    const orgsBtn = screen.getByTestId(/orgsBtn/i);
+    const rolesBtn = screen.getByTestId(/rolesBtn/i);
+    const communityProfileBtn = screen.getByTestId(/communityProfileBtn/i);
+
+    await act(async () => {
+      orgsBtn.click();
+    });
+
+    expect(
+      orgsBtn.className.includes('text-white btn btn-success'),
+    ).toBeTruthy();
+    expect(rolesBtn.className.includes('text-secondary btn')).toBeTruthy();
+    expect(
+      communityProfileBtn.className.includes('text-secondary btn'),
+    ).toBeTruthy();
+
+    await act(async () => {
+      userEvent.click(rolesBtn);
+    });
+
+    expect(global.window.location.pathname).toContain('/users');
+
+    await act(async () => {
+      userEvent.click(communityProfileBtn);
+    });
+  });
+
+  test('Testing Drawer when hideDrawer is null', async () => {
+    const tempProps: InterfaceLeftDrawerProps = {
+      ...props,
+      hideDrawer: false,
+    };
+
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LeftDrawer {...tempProps} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+  });
+
+  test('Testing Drawer when hideDrawer is false', async () => {
+    const tempProps: InterfaceLeftDrawerProps = {
+      ...props,
+      hideDrawer: false,
+    };
+
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LeftDrawer {...tempProps} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+  });
+
+  test('Testing Drawer when the screen size is less than or equal to 820px', async () => {
+    const tempProps: InterfaceLeftDrawerProps = {
+      ...props,
+      hideDrawer: false,
+    };
+    resizeWindow(800);
+
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LeftDrawer {...tempProps} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+
+    expect(screen.getByText('My Organizations')).toBeInTheDocument();
+    expect(screen.getByText('Talawa Admin Portal')).toBeInTheDocument();
+
+    const orgsBtn = screen.getByTestId(/orgsBtn/i);
+
+    await act(async () => {
+      orgsBtn.click();
+    });
+
+    expect(
+      orgsBtn.className.includes('text-white btn btn-success'),
+    ).toBeTruthy();
+  });
+});
+
+describe('Testing Left Drawer component for ADMIN', () => {
+  test('Components should be rendered properly', async () => {
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LeftDrawer {...propsOrg} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+
+    expect(screen.getByText('My Organizations')).toBeInTheDocument();
+    expect(screen.getByText('Talawa Admin Portal')).toBeInTheDocument();
+
+    expect(screen.getAllByText(/admin/i)).toHaveLength(1);
+
+    const orgsBtn = screen.getByTestId(/orgsBtn/i);
+
+    await act(async () => {
+      orgsBtn.click();
+    });
+
+    expect(
+      orgsBtn.className.includes('text-white btn btn-success'),
+    ).toBeTruthy();
+
+    // These screens aren't meant for admins, so they should not be present
+    expect(screen.queryByTestId(/rolesBtn/i)).toBeNull();
+
+    await act(async () => {
+      userEvent.click(orgsBtn);
+    });
+
+    expect(global.window.location.pathname).toContain('/orglist');
   });
 });

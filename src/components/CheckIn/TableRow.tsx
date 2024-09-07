@@ -40,11 +40,11 @@ export const TableRow = ({
       },
     })
       .then(() => {
-        toast.success(t('checkedInSuccessfully'));
+        toast.success(t('checkedInSuccessfully') as string);
         refetch();
       })
       .catch((err) => {
-        toast.error(t('errorCheckingIn'));
+        toast.error(t('errorCheckingIn') as string);
         toast.error(err.message);
       });
   };
