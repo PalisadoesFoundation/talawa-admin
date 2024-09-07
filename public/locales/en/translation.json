@@ -283,9 +283,8 @@
     "assignmentDate": "Assignment Date",
     "active": "Active",
     "clearFilters": "Clear Filters",
-    "completed": "Completed",
     "completionDate": "Completion Date",
-    "createActionItem": "Create Action Items",
+    "createActionItem": "Create Action Item",
     "deleteActionItem": "Delete Action Item",
     "deleteActionItemMsg": "Do you want to remove this action item?",
     "details": "Details",
@@ -308,7 +307,14 @@
     "successfulCreation": "Action Item created successfully",
     "successfulUpdation": "Action Item updated successfully",
     "successfulDeletion": "Action Item deleted successfully",
-    "title": "Action Items"
+    "title": "Action Items",
+    "category": "Category",
+    "allotedHours": "Alloted Hours",
+    "latestDueDate": "Latest Due Date",
+    "earliestDueDate": "Earliest Due Date",
+    "updateActionItem": "Update Action Item",
+    "noneUpdated": "None of the fields were updated",
+    "updateStatusMsg": "Are you sure you want to mark this action item as pending?"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "Agenda Category Details",
@@ -601,7 +607,8 @@
     "noData": "No data",
     "otherSettings": "Other Settings",
     "changeLanguage": "Change Language",
-    "manageCustomFields": "Manage Custom Fields"
+    "manageCustomFields": "Manage Custom Fields",
+    "agendaItemCategories": "Agenda Item Categories"
   },
   "deleteOrg": {
     "deleteOrganization": "Delete Organization",
@@ -937,13 +944,18 @@
     "disableButton": "Disable",
     "updateActionItemCategory": "Update",
     "actionItemCategoryName": "Name",
-    "actionItemCategoryDetails": "Action Item Category Details",
+    "categoryDetails": "Category Details",
     "enterName": "Enter Name",
     "successfulCreation": "Action Item Category created successfully",
     "successfulUpdation": "Action Item Category updated successfully",
     "sameNameConflict": "Please change the name to make an update",
     "categoryEnabled": "Action Item Category Enabled",
-    "categoryDisabled": "Action Item Category Disabled"
+    "categoryDisabled": "Action Item Category Disabled",
+    "noActionItemCategories": "No Action Item Categories",
+    "status": "Status",
+    "categoryDeleted": "Action Item Category deleted successfully",
+    "deleteCategory": "Delete Category",
+    "deleteCategoryMsg": "Are you sure you want to delete this Action Item Category?"
   },
   "organizationVenues": {
     "title": "Venues",

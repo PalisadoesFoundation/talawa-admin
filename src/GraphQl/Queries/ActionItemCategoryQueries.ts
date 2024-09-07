@@ -8,11 +8,25 @@ import gql from 'graphql-tag';
  */
 
 export const ACTION_ITEM_CATEGORY_LIST = gql`
-  query ActionItemCategoriesByOrganization($organizationId: ID!) {
-    actionItemCategoriesByOrganization(organizationId: $organizationId) {
+  query ActionItemCategoriesByOrganization(
+    $organizationId: ID!
+    $where: ActionItemCategoryWhereInput
+    $orderBy: ActionItemsOrderByInput
+  ) {
+    actionItemCategoriesByOrganization(
+      organizationId: $organizationId
+      where: $where
+      orderBy: $orderBy
+    ) {
       _id
       name
       isDisabled
+      createdAt
+      creator {
+        _id
+        firstName
+        lastName
+      }
     }
   }
 `;
