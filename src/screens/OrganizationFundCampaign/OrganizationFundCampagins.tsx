@@ -157,10 +157,11 @@ const orgFundCampaign = (): JSX.Element => {
     navigate(`/fundCampaignPledge/${orgId}/${campaignId}`);
   };
 
-  const { campaigns, fundName } = useMemo(() => {
+  const { campaigns, fundName, isArchived } = useMemo(() => {
     const fundName = campaignData?.getFundById?.name || 'Fund';
+    const isArchived = campaignData?.getFundById?.isArchived || false;
     const campaigns = campaignData?.getFundById?.campaigns || [];
-    return { fundName, campaigns };
+    return { fundName, campaigns, isArchived };
   }, [campaignData]);
 
   if (campaignLoading) {
@@ -440,6 +441,7 @@ const orgFundCampaign = (): JSX.Element => {
               className={styles.orgFundCampaignButton}
               onClick={() => handleOpenModal(null, 'create')}
               data-testid="addCampaignBtn"
+              disabled={isArchived}
             >
               <i className={'fa fa-plus me-2'} />
               {t('addCampaign')}

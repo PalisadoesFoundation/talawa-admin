@@ -13,7 +13,6 @@ import React, { useCallback, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import Loader from 'components/Loader/Loader';
 import FundModal from './FundModal';
-import FundDeleteModal from './FundDeleteModal';
 import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
 import styles from './OrganizationFunds.module.css';
 import type { InterfaceFundInfo } from 'utils/interfaces';
@@ -41,7 +40,6 @@ const dataGridStyle = {
 
 enum ModalState {
   SAME = 'same',
-  DELETE = 'delete',
 }
 /**
  * `organizationFunds` component displays a list of funds for a specific organization,
@@ -103,7 +101,6 @@ const organizationFunds = (): JSX.Element => {
     [key in ModalState]: boolean;
   }>({
     [ModalState.SAME]: false,
-    [ModalState.DELETE]: false,
   });
   const [fundModalMode, setFundModalMode] = useState<'edit' | 'create'>(
     'create',
@@ -143,14 +140,6 @@ const organizationFunds = (): JSX.Element => {
       orderBy: sortBy,
     },
   });
-
-  const handleDeleteClick = useCallback(
-    (fund: InterfaceFundInfo): void => {
-      setFund(fund);
-      openModal(ModalState.DELETE);
-    },
-    [openModal],
-  );
 
   const funds = useMemo(() => fundData?.fundsByOrganization ?? [], [fundData]);
 
@@ -277,15 +266,6 @@ const organizationFunds = (): JSX.Element => {
             >
               <i className="fa fa-edit" />
             </Button>
-            <Button
-              size="sm"
-              variant="danger"
-              className="rounded"
-              data-testid="deleteFundBtn"
-              onClick={() => handleDeleteClick(params.row as InterfaceFundInfo)}
-            >
-              <i className="fa fa-trash" />
-            </Button>
           </>
         );
       },
@@ -411,13 +391,6 @@ const organizationFunds = (): JSX.Element => {
         fund={fund}
         orgId={orgId}
         mode={fundModalMode}
-      />
-
-      <FundDeleteModal
-        isOpen={modalState[ModalState.DELETE]}
-        hide={() => closeModal(ModalState.DELETE)}
-        fund={fund}
-        refetchFunds={refetchFunds}
       />
     </div>
   );

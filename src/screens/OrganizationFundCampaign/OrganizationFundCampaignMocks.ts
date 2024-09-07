@@ -19,6 +19,7 @@ export const MOCKS = [
       data: {
         getFundById: {
           name: 'Fund 1',
+          isArchived: false,
           campaigns: [
             {
               _id: 'campaignId1',
@@ -54,6 +55,7 @@ export const MOCKS = [
       data: {
         getFundById: {
           name: 'Fund 1',
+          isArchived: false,
           campaigns: [
             {
               _id: '2',
@@ -81,6 +83,7 @@ export const MOCKS = [
       data: {
         getFundById: {
           name: 'Fund 1',
+          isArchived: false,
           campaigns: [
             {
               _id: '1',
@@ -116,6 +119,7 @@ export const MOCKS = [
       data: {
         getFundById: {
           name: 'Fund 1',
+          isArchived: false,
           campaigns: [
             {
               _id: '2',
@@ -151,6 +155,7 @@ export const MOCKS = [
       data: {
         getFundById: {
           name: 'Fund 1',
+          isArchived: false,
           campaigns: [
             {
               _id: '2',
@@ -186,6 +191,7 @@ export const MOCKS = [
       data: {
         getFundById: {
           name: 'Fund 1',
+          isArchived: false,
           campaigns: [
             {
               _id: '1',
@@ -330,6 +336,7 @@ export const EMPTY_MOCKS = [
       data: {
         getFundById: {
           name: 'Fund 1',
+          isArchived: false,
           campaigns: [],
         },
       },

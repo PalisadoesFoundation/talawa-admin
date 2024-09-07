@@ -281,6 +281,7 @@ export interface InterfaceQueryOrganizationAdvertisementListItem {
 
 export interface InterfaceQueryOrganizationFundCampaigns {
   name: string;
+  isArchived: boolean;
   campaigns: {
     _id: string;
     name: string;

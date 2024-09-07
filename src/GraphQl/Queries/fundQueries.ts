@@ -44,6 +44,7 @@ export const FUND_CAMPAIGN = gql`
   ) {
     getFundById(id: $id, where: $where, orderBy: $orderBy) {
       name
+      isArchived
       campaigns {
         _id
         endDate
