@@ -19,6 +19,7 @@ import {
 import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
 import { MoreVert, Close } from '@mui/icons-material';
+import type { InterfaceUser } from 'components/CheckIn/types';
 
 interface InterfaceChatRoomProps {
   selectedContact: string;
@@ -171,7 +172,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
       const directChatData = chatData.directChatById;
       setDirectChat(directChatData);
       const otherUser = directChatData.users.find(
-        (user: any) => user._id !== userId,
+        (user: InterfaceUser) => user._id !== userId,
       );
       if (otherUser) {
         setChatTitle(`${otherUser.firstName} ${otherUser.lastName}`);

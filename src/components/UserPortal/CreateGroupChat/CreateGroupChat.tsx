@@ -39,7 +39,7 @@ interface InterfaceCreateGroupChatProps {
   groupChatListRefetch: (
     variables?:
       | Partial<{
-          id: any;
+          id: string;
         }>
       | undefined,
   ) => Promise<ApolloQueryResult<any>>;
@@ -110,7 +110,7 @@ export default function CreateGroupChat({
   const [organizations, setOrganizations] = useState([]);
   const [selectedOrganization, setSelectedOrganization] = useState('');
   const [title, setTitle] = useState('');
-  let [userIds, setUserIds] = useState<string[]>([]);
+  const [userIds, setUserIds] = useState<string[]>([]);
 
   const [addUserModalisOpen, setAddUserModalisOpen] = useState(false);
 
@@ -133,7 +133,6 @@ export default function CreateGroupChat({
   );
 
   function reset(): void {
-    setOrganizations([]);
     setTitle('');
     setUserIds([]);
     setSelectedOrganization('');
@@ -144,7 +143,7 @@ export default function CreateGroupChat({
   }, [userIds]);
 
   async function handleCreateGroupChat(): Promise<void> {
-    const groupChat = await createGroupChat({
+    await createGroupChat({
       variables: {
         organizationId: selectedOrganization,
         userIds: [userId, ...userIds],
@@ -190,6 +189,7 @@ export default function CreateGroupChat({
       const organizations =
         joinedOrganizationsData.users[0]?.user?.joinedOrganizations || [];
       setOrganizations(organizations);
+      setSelectedOrganization(organizations[0]?._id);
     }
   }, [joinedOrganizationsData]);
 
@@ -352,10 +352,10 @@ export default function CreateGroupChat({
                                 <Button
                                   variant="danger"
                                   onClick={() => {
-                                    userIds = userIds.filter(
+                                    const updatedUserIds = userIds.filter(
                                       (id) => id !== userDetails.user._id,
                                     );
-                                    setUserIds(userIds);
+                                    setUserIds(updatedUserIds);
                                   }}
                                   data-testid="removeBtn"
                                 >
