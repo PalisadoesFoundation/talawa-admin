@@ -78,9 +78,11 @@ export const TableRow = ({
       window.open(url);
       // istanbul ignore next
       toast.success('PDF generated successfully!');
-    } catch (error) {
-      toast.error(`Error generating pdf: ${error.message}`);
-    }
+    } catch (error: unknown) {
+      const errorMessage = (error instanceof Error) ? error.message : 'Unknown error';
+      toast.error(`Error generating pdf: ${errorMessage}`);
+  }
+
   };
 
   return (
