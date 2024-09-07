@@ -79,7 +79,7 @@ export const TableRow = ({
       // istanbul ignore next
       toast.success('PDF generated successfully!');
     } catch (error) {
-      toast.error('Error generating pdf!');
+      toast.error(`Error generating pdf: ${error.message}`);
     }
   };
 
