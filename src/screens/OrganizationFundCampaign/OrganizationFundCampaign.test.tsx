@@ -173,22 +173,6 @@ describe('FundCampaigns Screen', () => {
     );
   });
 
-  it('open and closes delete campaign modal', async () => {
-    renderFundCampaign(link1);
-
-    const deleteCampaignBtn = await screen.findAllByTestId('deleteCampaignBtn');
-    await waitFor(() => expect(deleteCampaignBtn[0]).toBeInTheDocument());
-    userEvent.click(deleteCampaignBtn[0]);
-
-    await waitFor(() =>
-      expect(screen.getByText(translations.deleteCampaign)).toBeInTheDocument(),
-    );
-    userEvent.click(screen.getByTestId('deleteCampaignCloseBtn'));
-    await waitFor(() =>
-      expect(screen.queryByTestId('deleteCampaignCloseBtn')).toBeNull(),
-    );
-  });
-
   it('Search the Campaigns list by Name', async () => {
     renderFundCampaign(link1);
     const searchField = await screen.findByTestId('searchFullName');

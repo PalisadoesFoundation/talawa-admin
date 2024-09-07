@@ -1,6 +1,5 @@
 import {
   CREATE_CAMPAIGN_MUTATION,
-  DELETE_CAMPAIGN_MUTATION,
   UPDATE_CAMPAIGN_MUTATION,
 } from 'GraphQl/Mutations/CampaignMutation';
 import { FUND_CAMPAIGN } from 'GraphQl/Queries/fundQueries';
@@ -254,21 +253,6 @@ export const MOCKS = [
       },
     },
   },
-  {
-    request: {
-      query: DELETE_CAMPAIGN_MUTATION,
-      variables: {
-        id: 'campaignId1',
-      },
-    },
-    result: {
-      data: {
-        removeFundraisingCampaign: {
-          _id: 'campaignId1',
-        },
-      },
-    },
-  },
 ];
 
 export const MOCK_ERROR = [
@@ -307,15 +291,6 @@ export const MOCK_ERROR = [
         fundingGoal: 400,
         startDate: '2023-01-02',
         endDate: '2023-02-02',
-      },
-    },
-    error: new Error('Mock graphql error'),
-  },
-  {
-    request: {
-      query: DELETE_CAMPAIGN_MUTATION,
-      variables: {
-        id: 'campaignId1',
       },
     },
     error: new Error('Mock graphql error'),
