@@ -1,17 +1,4 @@
-import {
-  FormControl,
-  FormControlLabel,
-  FormHelperText,
-  InputLabel,
-  MenuItem,
-  Paper,
-  RadioGroup,
-  Select,
-  FormLabel,
-  TableBody,
-  Radio,
-} from '@mui/material';
-import type { SelectChangeEvent } from '@mui/material/Select';
+import { Paper, TableBody } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import styles from './CreateGroupChat.module.css';
@@ -29,8 +16,7 @@ import { styled } from '@mui/material/styles';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import { USERS_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
-import { LocalPoliceTwoTone, Search } from '@mui/icons-material';
-import { style } from '@mui/system';
+import { Search } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 
 interface InterfaceCreateGroupChatProps {
