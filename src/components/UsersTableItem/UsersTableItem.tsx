@@ -56,7 +56,9 @@ const UsersTableItem = (props: Props): JSX.Element => {
         },
       });
       if (data) {
-        toast.success(tCommon('removedSuccessfully', { item: 'User' }));
+        toast.success(
+          tCommon('removedSuccessfully', { item: 'User' }) as string,
+        );
         resetAndRefetch();
       }
     } catch (error: unknown) {
@@ -77,7 +79,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         },
       });
       if (data) {
-        toast.success(t('roleUpdated'));
+        toast.success(t('roleUpdated') as string);
         resetAndRefetch();
       }
     } catch (error: unknown) {

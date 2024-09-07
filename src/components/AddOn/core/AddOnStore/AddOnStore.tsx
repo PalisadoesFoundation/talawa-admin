@@ -314,10 +314,4 @@ function addOnStore(): JSX.Element {
   );
 }
 
-// Default values for props if not provided
-addOnStore.defaultProps = {};
-
-// Prop types validation for the component
-addOnStore.propTypes = {};
-
 export default addOnStore;

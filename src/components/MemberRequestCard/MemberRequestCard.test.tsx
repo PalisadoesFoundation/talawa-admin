@@ -1,5 +1,5 @@
-import React from 'react';
-import { act, render, screen } from '@testing-library/react';
+import React, { act } from 'react';
+import { render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
@@ -16,7 +16,7 @@ const MOCKS = [
   {
     request: {
       query: ACCEPT_ORGANIZATION_REQUEST_MUTATION,
-      variable: { id: '123' },
+      variables: { id: '123' },
     },
     result: {
       data: {
@@ -31,7 +31,7 @@ const MOCKS = [
   {
     request: {
       query: REJECT_ORGANIZATION_REQUEST_MUTATION,
-      variable: { id: '234' },
+      variables: { userid: '234' },
     },
     result: {
       data: {
@@ -44,7 +44,9 @@ const MOCKS = [
     },
   },
 ];
+
 const link = new StaticMockLink(MOCKS, true);
+
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -55,7 +57,6 @@ async function wait(ms = 100): Promise<void> {
 
 describe('Testing Member Request Card', () => {
   const props = {
-    key: '123',
     id: '1',
     memberName: 'John Doe',
     memberLocation: 'India',
@@ -89,14 +90,13 @@ describe('Testing Member Request Card', () => {
     expect(screen.getByText(props.email)).toBeInTheDocument();
   });
 
-  it('Should render text elements when props value is not passed', async () => {
+  it('should render text elements when props value is not passed', async () => {
     global.confirm = (): boolean => false;
 
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
           <MemberRequestCard
-            key="123"
             id="1"
             memberName=""
             memberLocation="India"

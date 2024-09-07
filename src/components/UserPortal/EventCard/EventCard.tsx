@@ -103,7 +103,7 @@ function eventCard(props: InterfaceEventCardProps): JSX.Element {
         }
       } catch (error: unknown) {
         /* istanbul ignore next */
-        toast.error(error);
+        toast.error(error as string);
       }
     }
   };

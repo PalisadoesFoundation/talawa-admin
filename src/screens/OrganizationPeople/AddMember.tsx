@@ -101,7 +101,7 @@ function AddMember(): JSX.Element {
           orgid: currentUrl,
         },
       });
-      toast.success(tCommon('addedSuccessfully', { item: 'Member' }));
+      toast.success(tCommon('addedSuccessfully', { item: 'Member' }) as string);
       memberRefetch({
         orgId: currentUrl,
       });
@@ -193,11 +193,11 @@ function AddMember(): JSX.Element {
         createUserVariables.lastName
       )
     ) {
-      toast.error(translateOrgPeople('invalidDetailsMessage'));
+      toast.error(translateOrgPeople('invalidDetailsMessage') as string);
     } else if (
       createUserVariables.password !== createUserVariables.confirmPassword
     ) {
-      toast.error(translateOrgPeople('passwordNotMatch'));
+      toast.error(translateOrgPeople('passwordNotMatch') as string);
     } else {
       try {
         const registeredUser = await registerMutation({

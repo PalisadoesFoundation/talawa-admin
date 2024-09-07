@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import { act, render, screen, waitFor, within } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import userEvent from '@testing-library/user-event';
 import {
@@ -15,6 +15,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import Home from './Posts';
 import useLocalStorage from 'utils/useLocalstorage';
+import { DELETE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 
 const { setItem } = useLocalStorage();
 
@@ -217,6 +218,17 @@ const MOCKS = [
       },
     },
   },
+  {
+    request: {
+      query: DELETE_POST_MUTATION,
+      variables: { id: '6411e54835d7ba2344a78e29' },
+    },
+    result: {
+      data: {
+        removePost: { _id: '6411e54835d7ba2344a78e29' },
+      },
+    },
+  },
 ];
 
 const link = new StaticMockLink(MOCKS, true);
@@ -350,10 +362,11 @@ describe('Testing Home Screen: User Portal', () => {
   test('Checking if refetch works after deleting this post', async () => {
     setItem('userId', '640d98d9eb6a743d75341067');
     renderHomeScreen();
-    await wait();
-
-    userEvent.click(screen.getAllByTestId('dropdown')[1]);
-    userEvent.click(screen.getByTestId('deletePost'));
+    expect(screen.queryAllByTestId('dropdown')).not.toBeNull();
+    const dropdowns = await screen.findAllByTestId('dropdown');
+    userEvent.click(dropdowns[1]);
+    const deleteButton = await screen.findByTestId('deletePost');
+    userEvent.click(deleteButton);
   });
 });
 
@@ -380,11 +393,7 @@ describe('HomeScreen with invalid orgId', () => {
         </MemoryRouter>
       </MockedProvider>,
     );
-
-    // Wait for the navigation to occur
-    await waitFor(() => {
-      const homeEl = screen.getByTestId('homeEl');
-      expect(homeEl).toBeInTheDocument();
-    });
+    const homeEl = await screen.findByTestId('homeEl');
+    expect(homeEl).toBeInTheDocument();
   });
 });

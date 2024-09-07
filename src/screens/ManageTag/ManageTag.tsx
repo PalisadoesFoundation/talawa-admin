@@ -113,7 +113,7 @@ function ManageTag(): JSX.Element {
 
       userTagAssignedMembersRefetch();
       toggleUnassignTagModal();
-      toast.success(t('successfullyUnassigned'));
+      toast.success(t('successfullyUnassigned') as string);
     } catch (error: unknown) {
       /* istanbul ignore next */
       if (error instanceof Error) {

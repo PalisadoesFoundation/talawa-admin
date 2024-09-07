@@ -1,5 +1,5 @@
-import React from 'react';
-import { act, render, screen } from '@testing-library/react';
+import React, { act } from 'react';
+import { render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 
@@ -16,6 +16,7 @@ import Donate from './Donate';
 import userEvent from '@testing-library/user-event';
 import useLocalStorage from 'utils/useLocalstorage';
 import { DONATE_TO_ORGANIZATION } from 'GraphQl/Mutations/mutations';
+import { toast } from 'react-toastify';
 
 const MOCKS = [
   {
@@ -134,6 +135,13 @@ async function wait(ms = 100): Promise<void> {
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useParams: () => ({ orgId: '' }),
+}));
+
+jest.mock('react-toastify', () => ({
+  toast: {
+    error: jest.fn(),
+    success: jest.fn(),
+  },
 }));
 
 describe('Testing Donate Screen [User Portal]', () => {
@@ -279,5 +287,104 @@ describe('Testing Donate Screen [User Portal]', () => {
     userEvent.type(screen.getByTestId('donationAmount'), '123');
     userEvent.click(screen.getByTestId('donateBtn'));
     await wait();
+  });
+
+  test('displays error toast for donation amount below minimum', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Donate />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    userEvent.type(screen.getByTestId('donationAmount'), '0.5');
+    userEvent.click(screen.getByTestId('donateBtn'));
+
+    await wait();
+
+    expect(toast.error).toHaveBeenCalledWith(
+      'Donation amount must be between 1 and 10000000.',
+    );
+  });
+
+  test('displays error toast for donation amount above maximum', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Donate />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    userEvent.type(screen.getByTestId('donationAmount'), '10000001');
+    userEvent.click(screen.getByTestId('donateBtn'));
+
+    await wait();
+
+    expect(toast.error).toHaveBeenCalledWith(
+      'Donation amount must be between 1 and 10000000.',
+    );
+  });
+
+  test('displays error toast for empty donation amount', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Donate />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    userEvent.click(screen.getByTestId('donateBtn'));
+
+    await wait();
+
+    expect(toast.error).toHaveBeenCalledWith(
+      'Please enter a numerical value for the donation amount.',
+    );
+  });
+
+  test('displays error toast for invalid (non-numeric) donation amount', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Donate />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    userEvent.type(screen.getByTestId('donationAmount'), 'abc');
+    userEvent.click(screen.getByTestId('donateBtn'));
+
+    await wait();
+
+    expect(toast.error).toHaveBeenCalledWith(
+      'Please enter a numerical value for the donation amount.',
+    );
   });
 });

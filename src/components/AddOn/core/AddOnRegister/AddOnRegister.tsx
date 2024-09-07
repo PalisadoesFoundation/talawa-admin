@@ -19,6 +19,10 @@ interface InterfaceFormStateTypes {
   installedOrgs: [string] | [];
 }
 
+interface AddOnRegisterProps {
+  createdBy?: string;
+}
+
 /**
  * A React component for registering a new add-on plugin.
  *
@@ -31,7 +35,9 @@ interface InterfaceFormStateTypes {
  *
  * @returns A JSX element containing the button and modal for plugin registration.
  */
-function addOnRegister(): JSX.Element {
+function addOnRegister({
+  createdBy = 'Admin',
+}: AddOnRegisterProps): JSX.Element {
   // Translation hook for the 'addOnRegister' namespace
   const { t } = useTranslation('translation', { keyPrefix: 'addOnRegister' });
   // Translation hook for the 'common' namespace
@@ -59,7 +65,7 @@ function addOnRegister(): JSX.Element {
   // Initial form state
   const [formState, setFormState] = useState<InterfaceFormStateTypes>({
     pluginName: '',
-    pluginCreatedBy: '',
+    pluginCreatedBy: createdBy, // Using the default value here
     pluginDesc: '',
     pluginInstallStatus: false,
     installedOrgs: [currentUrl],
@@ -82,7 +88,7 @@ function addOnRegister(): JSX.Element {
 
     if (data) {
       // Show a success message when the plugin is added
-      toast.success(tCommon('addedSuccessfully', { item: 'Plugin' }));
+      toast.success(tCommon('addedSuccessfully', { item: 'Plugin' }) as string);
       // Refresh the page after 2 seconds
       setTimeout(() => {
         navigate(0);
@@ -187,11 +193,6 @@ function addOnRegister(): JSX.Element {
     </>
   );
 }
-
-// Default values for props if not provided
-addOnRegister.defaultProps = {
-  createdBy: 'Admin',
-};
 
 // Prop types validation for the component
 addOnRegister.propTypes = {
