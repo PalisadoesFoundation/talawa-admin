@@ -157,10 +157,10 @@ const orgFundCampaign = (): JSX.Element => {
     navigate(`/fundCampaignPledge/${orgId}/${campaignId}`);
   };
 
-  const campaigns = useMemo(() => {
-    if (campaignData?.getFundById?.campaigns)
-      return campaignData.getFundById.campaigns;
-    return [];
+  const { campaigns, fundName } = useMemo(() => {
+    const fundName = campaignData?.getFundById?.name || 'Fund';
+    const campaigns = campaignData?.getFundById?.campaigns || [];
+    return { fundName, campaigns };
   }, [campaignData]);
 
   if (campaignLoading) {
@@ -370,9 +370,9 @@ const orgFundCampaign = (): JSX.Element => {
           data-testid="fundsLink"
           onClick={() => navigate(`/orgfunds/${orgId}`)}
         >
-          {tCommon('Funds')}
+          {fundName}
         </Link>
-        <Typography color="text.primary">FundRaising Campaign</Typography>
+        <Typography color="text.primary">{t('title')}</Typography>
       </Breadcrumbs>
 
       <div className={styles.btnsContainer}>

@@ -43,6 +43,7 @@ export const FUND_CAMPAIGN = gql`
     $orderBy: CampaignOrderByInput
   ) {
     getFundById(id: $id, where: $where, orderBy: $orderBy) {
+      name
       campaigns {
         _id
         endDate
@@ -61,6 +62,9 @@ export const FUND_CAMPAIGN_PLEDGE = gql`
     $pledgeOrderBy: PledgeOrderByInput
   ) {
     getFundraisingCampaigns(where: $where, pledgeOrderBy: $pledgeOrderBy) {
+      fundId {
+        name
+      }
       name
       fundingGoal
       currency
