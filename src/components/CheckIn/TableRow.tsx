@@ -7,7 +7,6 @@ import { toast } from 'react-toastify';
 import { generate } from '@pdfme/generator';
 import { tagTemplate } from './tagTemplate';
 import { useTranslation } from 'react-i18next';
-
 /**
  * Component that represents a single row in the check-in table.
  * Allows users to mark themselves as checked in and download a tag if they are already checked in.
@@ -48,7 +47,6 @@ export const TableRow = ({
         toast.error(err.message);
       });
   };
-
   /**
    * Triggers a notification while generating and downloading a PDF tag.
    *
@@ -79,10 +77,10 @@ export const TableRow = ({
       // istanbul ignore next
       toast.success('PDF generated successfully!');
     } catch (error: unknown) {
-      const errorMessage = (error instanceof Error) ? error.message : 'Unknown error';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
       toast.error(`Error generating pdf: ${errorMessage}`);
-  }
-
+    }
   };
 
   return (
