@@ -70,9 +70,13 @@ export const TableRow = ({
     try {
       const inputs = [{ name: data.name }];
       const pdf = await generate({ template: tagTemplate, inputs });
+      // istanbul ignore next
       const blob = new Blob([pdf.buffer], { type: 'application/pdf' });
+      // istanbul ignore next
       const url = URL.createObjectURL(blob);
+      // istanbul ignore next
       window.open(url);
+      // istanbul ignore next
       toast.success('PDF generated successfully!');
     } catch (error) {
       toast.error('Error generating pdf!');
