@@ -286,7 +286,6 @@
     "assignmentDate": "分配日期",
     "active": "积极的",
     "clearFilters": "清除过滤器",
-    "completed": "完全的",
     "completionDate": "完成日期",
     "createActionItem": "创建操作项",
     "deleteActionItem": "删除操作项",
@@ -311,7 +310,14 @@
     "successfulCreation": "操作项创建成功",
     "successfulUpdation": "操作项已成功更新",
     "successfulDeletion": "操作项已成功删除",
-    "title": "行动项目"
+    "title": "行动项目",
+    "category": "类别",
+    "allotedHours": "分配的小时",
+    "latestDueDate": "最晚到期日",
+    "earliestDueDate": "最早到期日",
+    "updateActionItem": "更新操作项",
+    "noneUpdated": "没有更新任何字段",
+    "updateStatusMsg": "您确定要将此操作项标记为待处理吗？"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "议程类别详情",
@@ -600,14 +606,15 @@
   },
   "orgSettings": {
     "title": "设置",
-    "general": "一般的",
-    "actionItemCategories": "行动项目类别",
+    "general": "一般",
+    "actionItemCategories": "操作项目类别",
     "updateOrganization": "更新组织",
     "seeRequest": "查看请求",
     "noData": "没有数据",
     "otherSettings": "其他设置",
-    "changeLanguage": "改变语言",
-    "manageCustomFields": "管理自定义字段"
+    "changeLanguage": "更改语言",
+    "manageCustomFields": "管理自定义字段",
+    "agendaItemCategories": "议程项目类别"
   },
   "deleteOrg": {
     "deleteOrganization": "删除组织",
@@ -938,13 +945,18 @@
     "disableButton": "禁用",
     "updateActionItemCategory": "更新",
     "actionItemCategoryName": "姓名",
-    "actionItemCategoryDetails": "行动项目类别详细信息",
+    "categoryDetails": "类别详情",
     "enterName": "输入名字",
     "successfulCreation": "操作项类别创建成功",
     "successfulUpdation": "行动项目类别已成功更新",
     "sameNameConflict": "请更改名称以进行更新",
     "categoryEnabled": "已启用操作项类别",
-    "categoryDisabled": "操作项类别已禁用"
+    "categoryDisabled": "操作项类别已禁用",
+    "noActionItemCategories": "没有操作项目类别",
+    "status": "地位",
+    "categoryDeleted": "操作项目类别已成功删除",
+    "deleteCategory": "删除类别",
+    "deleteCategoryMsg": "您确定要删除此操作项目类别吗？"
   },
   "organizationVenues": {
     "title": "场地",
