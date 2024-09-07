@@ -7,12 +7,8 @@ import React from 'react';
  * This component currently does not have any additional functionality
  * or properties.
  */
-function dummyPlugin2(): JSX.Element {
+function DummyPlugin2(): JSX.Element {
   return <div></div>;
 }
 
-dummyPlugin2.defaultProps = {};
-
-dummyPlugin2.propTypes = {};
-
-export default dummyPlugin2;
+export default DummyPlugin2;

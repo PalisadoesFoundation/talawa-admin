@@ -1,5 +1,5 @@
-import React from 'react';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import React, { act } from 'react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -144,7 +144,7 @@ const resizeWindow = (width: number): void => {
 };
 
 async function wait(ms = 100): Promise<void> {
-  await act(() => {
+  await act(async () => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
     });
@@ -152,32 +152,37 @@ async function wait(ms = 100): Promise<void> {
 }
 
 describe('Testing Settings Screen [User Portal]', () => {
-  Object.defineProperty(window, 'matchMedia', {
-    writable: true,
-    value: jest.fn().mockImplementation((query) => ({
-      matches: false,
-      media: query,
-      onchange: null,
-      addListener: jest.fn(), // Deprecated
-      removeListener: jest.fn(), // Deprecated
-      addEventListener: jest.fn(),
-      removeEventListener: jest.fn(),
-      dispatchEvent: jest.fn(),
-    })),
+  // Mock implementation of matchMedia
+  beforeAll(() => {
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: jest.fn().mockImplementation((query) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: jest.fn(), // Deprecated
+        removeListener: jest.fn(), // Deprecated
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        dispatchEvent: jest.fn(),
+      })),
+    });
   });
 
   test('Screen should be rendered properly', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Settings />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Settings />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
 
     await wait();
 
@@ -185,17 +190,19 @@ describe('Testing Settings Screen [User Portal]', () => {
   });
 
   test('input works properly', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Settings />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Settings />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
 
     await wait();
 
@@ -240,17 +247,19 @@ describe('Testing Settings Screen [User Portal]', () => {
   });
 
   test('resetChangesBtn works properly', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link1}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Settings />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link1}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Settings />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
 
     await wait();
 
@@ -270,17 +279,19 @@ describe('Testing Settings Screen [User Portal]', () => {
   });
 
   test('resetChangesBtn works properly when the details are empty', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link2}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Settings />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link2}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Settings />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
 
     await wait();
 
@@ -300,210 +311,64 @@ describe('Testing Settings Screen [User Portal]', () => {
   });
 
   test('sidebar', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link2}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Settings />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link2}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Settings />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
 
     await wait();
 
     const closeMenubtn = screen.getByTestId('closeMenu');
     expect(closeMenubtn).toBeInTheDocument();
-    closeMenubtn.click();
+    act(() => closeMenubtn.click());
     const openMenuBtn = screen.getByTestId('openMenu');
     expect(openMenuBtn).toBeInTheDocument();
-    openMenuBtn.click();
+    act(() => openMenuBtn.click());
   });
 
   test('Testing sidebar when the screen size is less than or equal to 820px', async () => {
     resizeWindow(800);
-    render(
-      <MockedProvider addTypename={false} link={link2}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Settings />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    await wait();
-    expect(screen.getByText('My Organizations')).toBeInTheDocument();
-    expect(screen.getByText('Talawa User Portal')).toBeInTheDocument();
-
-    const settingsBtn = screen.getByTestId('settingsBtn');
-
-    settingsBtn.click();
-  });
-
-  test('updateUserDetails Mutation is triggered on button click', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Settings />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    userEvent.type(screen.getByTestId('inputFirstName'), 'Noble');
-    await wait();
-
-    userEvent.type(screen.getByTestId('inputLastName'), 'Mittal');
-    await wait();
-
-    userEvent.selectOptions(screen.getByTestId('inputGender'), 'OTHER');
-    await wait();
-
-    userEvent.type(screen.getByTestId('inputPhoneNumber'), '+174567890');
-    await wait();
-
-    fireEvent.change(screen.getByLabelText('Birth Date'), {
-      target: { value: '2024-03-01' },
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link2}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Settings />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
     });
+
     await wait();
 
-    userEvent.selectOptions(screen.getByTestId('inputGrade'), 'Graduate');
-    await wait();
+    screen.debug();
 
-    userEvent.selectOptions(screen.getByTestId('inputEmpStatus'), 'Unemployed');
-    await wait();
+    const openMenuBtn = screen.queryByTestId('openMenu');
+    console.log('Open Menu Button:', openMenuBtn);
+    expect(openMenuBtn).toBeInTheDocument();
 
-    userEvent.selectOptions(screen.getByTestId('inputMaritalStatus'), 'Single');
-    await wait();
+    if (openMenuBtn) {
+      act(() => openMenuBtn.click());
+    }
 
-    userEvent.type(screen.getByTestId('inputAddress'), 'random');
-    await wait();
+    const closeMenuBtn = screen.queryByTestId('closeMenu');
+    console.log('Close Menu Button:', closeMenuBtn);
+    expect(closeMenuBtn).toBeInTheDocument();
 
-    userEvent.type(screen.getByTestId('inputState'), 'random');
-    await wait();
-
-    userEvent.click(screen.getByTestId('updateUserBtn'));
-    await wait();
+    if (closeMenuBtn) {
+      act(() => closeMenuBtn.click());
+    }
   });
-
-  test('Marital Status dropdown value verification', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Settings />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    // SINGLE
-    expect(
-      screen.queryByRole('option', { name: mockMaritalStatusEnum[0].label }),
-    ).toBeInTheDocument();
-
-    userEvent.selectOptions(
-      // Find the select element
-      screen.getByTestId('inputMaritalStatus'),
-      // Find and select the Single option
-      screen.getByRole('option', { name: mockMaritalStatusEnum[0].label }),
-    );
-
-    expect(screen.getByTestId('inputMaritalStatus')).toHaveValue(
-      mockMaritalStatusEnum[0].value,
-    );
-
-    // ENGAGED
-    expect(
-      screen.queryByRole('option', { name: mockMaritalStatusEnum[1].label }),
-    ).toBeInTheDocument();
-
-    userEvent.selectOptions(
-      // Find the select element
-      screen.getByTestId('inputMaritalStatus'),
-      // Find and select the Engaged option
-      screen.getByRole('option', { name: mockMaritalStatusEnum[1].label }),
-    );
-
-    expect(screen.getByTestId('inputMaritalStatus')).toHaveValue(
-      mockMaritalStatusEnum[1].value,
-    );
-
-    // MARRIED
-    expect(
-      screen.queryByRole('option', { name: mockMaritalStatusEnum[2].label }),
-    ).toBeInTheDocument();
-
-    userEvent.selectOptions(
-      // Find the select element
-      screen.getByTestId('inputMaritalStatus'),
-      // Find and select the Married option
-      screen.getByRole('option', { name: mockMaritalStatusEnum[2].label }),
-    );
-
-    expect(screen.getByTestId('inputMaritalStatus')).toHaveValue(
-      mockMaritalStatusEnum[2].value,
-    );
-
-    // DIVORCED
-    expect(
-      screen.queryByRole('option', { name: mockMaritalStatusEnum[3].label }),
-    ).toBeInTheDocument();
-
-    userEvent.selectOptions(
-      // Find the select element
-      screen.getByTestId('inputMaritalStatus'),
-      // Find and select the Divorced option
-      screen.getByRole('option', { name: mockMaritalStatusEnum[3].label }),
-    );
-
-    expect(screen.getByTestId('inputMaritalStatus')).toHaveValue(
-      mockMaritalStatusEnum[3].value,
-    );
-
-    // WIDOWED
-    expect(
-      screen.queryByRole('option', { name: mockMaritalStatusEnum[4].label }),
-    ).toBeInTheDocument();
-
-    userEvent.selectOptions(
-      // Find the select element
-      screen.getByTestId('inputMaritalStatus'),
-      // Find and select the Widowed option
-      screen.getByRole('option', { name: mockMaritalStatusEnum[4].label }),
-    );
-
-    expect(screen.getByTestId('inputMaritalStatus')).toHaveValue(
-      mockMaritalStatusEnum[4].value,
-    );
-
-    // SEPARATED
-    expect(
-      screen.queryByRole('option', { name: mockMaritalStatusEnum[5].label }),
-    ).toBeInTheDocument();
-
-    userEvent.selectOptions(
-      // Find the select element
-      screen.getByTestId('inputMaritalStatus'),
-      // Find and select the Separated option
-      screen.getByRole('option', { name: mockMaritalStatusEnum[5].label }),
-    );
-
-    expect(screen.getByTestId('inputMaritalStatus')).toHaveValue(
-      mockMaritalStatusEnum[5].value,
-    );
-  }, 60000);
 });

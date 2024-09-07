@@ -61,7 +61,7 @@ const PledgeDeleteModal: React.FC<InterfaceDeletePledgeModal> = ({
       });
       refetchPledge();
       hide();
-      toast.success(t('pledgeDeleted'));
+      toast.success(t('pledgeDeleted') as string);
     } catch (error: unknown) {
       toast.error((error as Error).message);
     }

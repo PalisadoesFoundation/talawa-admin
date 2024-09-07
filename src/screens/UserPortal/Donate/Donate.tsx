@@ -128,6 +128,28 @@ export default function donate(): JSX.Element {
   }, [donationData]);
 
   const donateToOrg = (): void => {
+    // check if the amount is non empty and is a number
+    if (amount === '' || Number.isNaN(Number(amount))) {
+      toast.error(t(`invalidAmount`));
+      return;
+    }
+
+    // check if the amount is non negative and within the range
+    const minDonation = 1;
+    const maxDonation = 10000000;
+    if (
+      Number(amount) <= 0 ||
+      Number(amount) < minDonation ||
+      Number(amount) > maxDonation
+    ) {
+      toast.error(
+        t(`donationOutOfRange`, { min: minDonation, max: maxDonation }),
+      );
+      return;
+    }
+
+    const formattedAmount = Number(amount.trim());
+
     try {
       donate({
         variables: {
@@ -135,12 +157,12 @@ export default function donate(): JSX.Element {
           createDonationOrgId2: organizationId,
           payPalId: 'paypalId',
           nameOfUser: userName,
-          amount: Number(amount),
+          amount: formattedAmount,
           nameOfOrg: organizationDetails.name,
         },
       });
       refetch();
-      toast.success(t(`success`));
+      toast.success(t(`success`) as string);
     } catch (error: unknown) {
       /* istanbul ignore next */
       errorHandler(t, error);
@@ -216,6 +238,9 @@ export default function donate(): JSX.Element {
                 />
               </InputGroup>
             </div>
+            <Form.Text className="text-muted">
+              {t('donationAmountDescription')}
+            </Form.Text>
             <div className={styles.donateActions}>
               <Button
                 size="sm"

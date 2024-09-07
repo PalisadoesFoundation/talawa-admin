@@ -44,7 +44,7 @@ function orgAdminListCard(props: InterfaceOrgPeopleListCardProps): JSX.Element {
         },
       });
       if (data) {
-        toast.success(t('adminRemoved'));
+        toast.success(t('adminRemoved') as string);
         setTimeout(() => {
           window.location.reload();
         }, 2000);

@@ -296,9 +296,11 @@ describe('Testing User Pledge Screen', () => {
       expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
     });
 
-    expect(screen.getByText('Harve Lance')).toBeInTheDocument();
-    expect(screen.queryByText('Jeramy Gracia')).toBeNull();
-    expect(screen.queryByText('Praise Norris')).toBeNull();
+    await waitFor(() => {
+      expect(screen.getByText('Harve Lance')).toBeInTheDocument();
+      expect(screen.queryByText('Jeramy Gracia')).toBeNull();
+      expect(screen.queryByText('Praise Norris')).toBeNull();
+    });
 
     const moreContainer = await screen.findAllByTestId('moreContainer');
     userEvent.click(moreContainer[0]);
