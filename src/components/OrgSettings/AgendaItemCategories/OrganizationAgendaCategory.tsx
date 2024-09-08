@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import type { ChangeEvent } from 'react';
+import type { ChangeEvent, FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
 
 import { WarningAmberRounded } from '@mui/icons-material';
 import { toast } from 'react-toastify';
@@ -17,6 +16,10 @@ import AgendaCategoryCreateModal from './AgendaCategoryCreateModal';
 import styles from './OrganizationAgendaCategory.module.css';
 import Loader from 'components/Loader/Loader';
 
+interface InterfaceAgendaCategoryProps {
+  orgId: string;
+}
+
 /**
  * Component for managing and displaying agenda item categories within an organization.
  *
@@ -24,13 +27,13 @@ import Loader from 'components/Loader/Loader';
  *
  * @returns The rendered component.
  */
-function organizationAgendaCategory(): JSX.Element {
+
+const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
+  orgId,
+}) => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationAgendaCategory',
   });
-
-  // Get the organization ID from URL parameters
-  const { orgId: currentUrl } = useParams();
 
   // State for managing modal visibility and form data
   const [agendaCategoryCreateModalIsOpen, setAgendaCategoryCreateModalIsOpen] =
@@ -56,7 +59,7 @@ function organizationAgendaCategory(): JSX.Element {
     error?: unknown | undefined;
     refetch: () => void;
   } = useQuery(AGENDA_ITEM_CATEGORY_LIST, {
-    variables: { organizationId: currentUrl },
+    variables: { organizationId: orgId },
     notifyOnNetworkStatusChange: true,
   });
 
@@ -81,7 +84,7 @@ function organizationAgendaCategory(): JSX.Element {
       await createAgendaCategory({
         variables: {
           input: {
-            organizationId: currentUrl,
+            organizationId: orgId,
             name: formState.name,
             description: formState.description,
           },
@@ -132,7 +135,7 @@ function organizationAgendaCategory(): JSX.Element {
   }
 
   return (
-    <div className={styles.organizationAgendaCategoryContainer}>
+    <div className={`${styles.organizationAgendaCategoryContainer} mx-4`}>
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
         <div className={`pt-4 mx-4`}>
           <div className={styles.btnsContainer}>
@@ -179,6 +182,6 @@ function organizationAgendaCategory(): JSX.Element {
       />
     </div>
   );
-}
+};
 
 export default organizationAgendaCategory;

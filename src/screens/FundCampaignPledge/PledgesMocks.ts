@@ -6,7 +6,48 @@ import {
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 
+const memberList = {
+  request: {
+    query: MEMBERS_LIST,
+    variables: {
+      id: 'orgId',
+    },
+  },
+  result: {
+    data: {
+      organizations: [
+        {
+          _id: 'orgId',
+          members: [
+            {
+              createdAt: '2023-04-13T04:53:17.742Z',
+              email: 'testuser4@example.com',
+              firstName: 'John',
+              image: 'img-url',
+              lastName: 'Doe',
+              organizationsBlockedBy: [],
+              __typename: 'User',
+              _id: '1',
+            },
+            {
+              createdAt: '2024-04-13T04:53:17.742Z',
+              email: 'testuser2@example.com',
+              firstName: 'Anna',
+              image: null,
+              lastName: 'Bradley',
+              organizationsBlockedBy: [],
+              __typename: 'User',
+              _id: '2',
+            },
+          ],
+        },
+      ],
+    },
+  },
+};
+
 export const MOCKS = [
+  memberList,
   {
     request: {
       query: FUND_CAMPAIGN_PLEDGE,
@@ -39,60 +80,6 @@ export const MOCKS = [
                     firstName: 'John',
                     lastName: 'Doe',
                     image: 'img-url',
-                  },
-                  {
-                    _id: '2',
-                    firstName: 'John',
-                    lastName: 'Doe2',
-                    image: 'img-url2',
-                  },
-                  {
-                    _id: '3',
-                    firstName: 'John',
-                    lastName: 'Doe3',
-                    image: 'img-url3',
-                  },
-                  {
-                    _id: '4',
-                    firstName: 'John',
-                    lastName: 'Doe4',
-                    image: 'img-url4',
-                  },
-                  {
-                    _id: '5',
-                    firstName: 'John',
-                    lastName: 'Doe5',
-                    image: 'img-url5',
-                  },
-                  {
-                    _id: '6',
-                    firstName: 'John',
-                    lastName: 'Doe6',
-                    image: 'img-url6',
-                  },
-                  {
-                    _id: '7',
-                    firstName: 'John',
-                    lastName: 'Doe7',
-                    image: 'img-url7',
-                  },
-                  {
-                    _id: '8',
-                    firstName: 'John',
-                    lastName: 'Doe8',
-                    image: 'img-url8',
-                  },
-                  {
-                    _id: '9',
-                    firstName: 'John',
-                    lastName: 'Doe9',
-                    image: 'img-url9',
-                  },
-                  {
-                    _id: '10',
-                    firstName: 'John',
-                    lastName: 'Doe10',
-                    image: null,
                   },
                 ],
               },
@@ -206,6 +193,60 @@ export const MOCKS = [
                     lastName: 'Doe',
                     image: null,
                   },
+                  {
+                    _id: '2',
+                    firstName: 'John',
+                    lastName: 'Doe2',
+                    image: 'img-url2',
+                  },
+                  {
+                    _id: '3',
+                    firstName: 'John',
+                    lastName: 'Doe3',
+                    image: 'img-url3',
+                  },
+                  {
+                    _id: '4',
+                    firstName: 'John',
+                    lastName: 'Doe4',
+                    image: 'img-url4',
+                  },
+                  {
+                    _id: '5',
+                    firstName: 'John',
+                    lastName: 'Doe5',
+                    image: 'img-url5',
+                  },
+                  {
+                    _id: '6',
+                    firstName: 'John',
+                    lastName: 'Doe6',
+                    image: 'img-url6',
+                  },
+                  {
+                    _id: '7',
+                    firstName: 'John',
+                    lastName: 'Doe7',
+                    image: 'img-url7',
+                  },
+                  {
+                    _id: '8',
+                    firstName: 'John',
+                    lastName: 'Doe8',
+                    image: 'img-url8',
+                  },
+                  {
+                    _id: '9',
+                    firstName: 'John',
+                    lastName: 'Doe9',
+                    image: 'img-url9',
+                  },
+                  {
+                    _id: '10',
+                    firstName: 'John',
+                    lastName: 'Doe10',
+                    image: null,
+                  },
                 ],
               },
               {
@@ -303,6 +344,7 @@ export const MOCKS = [
 ];
 
 export const MOCKS_FUND_CAMPAIGN_PLEDGE_ERROR = [
+  memberList,
   {
     request: {
       query: FUND_CAMPAIGN_PLEDGE,
@@ -318,6 +360,7 @@ export const MOCKS_FUND_CAMPAIGN_PLEDGE_ERROR = [
 ];
 
 export const MOCKS_DELETE_PLEDGE_ERROR = [
+  memberList,
   {
     request: {
       query: DELETE_PLEDGE,
@@ -330,6 +373,7 @@ export const MOCKS_DELETE_PLEDGE_ERROR = [
 ];
 
 export const EMPTY_MOCKS = [
+  memberList,
   {
     request: {
       query: FUND_CAMPAIGN_PLEDGE,
@@ -358,45 +402,7 @@ export const EMPTY_MOCKS = [
 ];
 
 export const PLEDGE_MODAL_MOCKS = [
-  {
-    request: {
-      query: MEMBERS_LIST,
-      variables: {
-        id: 'orgId',
-      },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            _id: 'orgId',
-            members: [
-              {
-                createdAt: '2023-04-13T04:53:17.742Z',
-                email: 'testuser4@example.com',
-                firstName: 'John',
-                image: 'img-url',
-                lastName: 'Doe',
-                organizationsBlockedBy: [],
-                __typename: 'User',
-                _id: '1',
-              },
-              {
-                createdAt: '2024-04-13T04:53:17.742Z',
-                email: 'testuser2@example.com',
-                firstName: 'Anna',
-                image: null,
-                lastName: 'Bradley',
-                organizationsBlockedBy: [],
-                __typename: 'User',
-                _id: '2',
-              },
-            ],
-          },
-        ],
-      },
-    },
-  },
+  memberList,
   {
     request: {
       query: UPDATE_PLEDGE,
