@@ -1,6 +1,5 @@
 import {
   CREATE_FUND_MUTATION,
-  REMOVE_FUND_MUTATION,
   UPDATE_FUND_MUTATION,
 } from 'GraphQl/Mutations/FundMutation';
 import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
@@ -169,21 +168,6 @@ export const MOCKS = [
       },
     },
   },
-  {
-    request: {
-      query: REMOVE_FUND_MUTATION,
-      variables: {
-        id: 'fundId',
-      },
-    },
-    result: {
-      data: {
-        removeFund: {
-          _id: 'fundId',
-        },
-      },
-    },
-  },
 ];
 
 export const NO_FUNDS = [
@@ -226,15 +210,6 @@ export const MOCKS_ERROR = [
         isArchived: false,
         isDefault: true,
         organizationId: 'orgId',
-      },
-    },
-    error: new Error('Mock graphql error'),
-  },
-  {
-    request: {
-      query: REMOVE_FUND_MUTATION,
-      variables: {
-        id: 'fundId',
       },
     },
     error: new Error('Mock graphql error'),

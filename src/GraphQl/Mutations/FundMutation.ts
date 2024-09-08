@@ -69,17 +69,3 @@ export const UPDATE_FUND_MUTATION = gql`
     }
   }
 `;
-
-/**
- * GraphQL mutation to remove a fund.
- *
- * @param id - The ID of the fund being removed.
- * @returns The ID of the removed fund.
- */
-export const REMOVE_FUND_MUTATION = gql`
-  mutation RemoveFund($id: ID!) {
-    removeFund(id: $id) {
-      _id
-    }
-  }
-`;

@@ -62,6 +62,9 @@ export const MOCKS = [
       data: {
         getFundraisingCampaigns: [
           {
+            fundId: {
+              name: 'Fund 1',
+            },
             name: 'Campaign Name',
             fundingGoal: 1000,
             currency: 'USD',
@@ -118,6 +121,9 @@ export const MOCKS = [
       data: {
         getFundraisingCampaigns: [
           {
+            fundId: {
+              name: 'Fund 1',
+            },
             name: 'Campaign Name',
             fundingGoal: 1000,
             currency: 'USD',
@@ -174,6 +180,9 @@ export const MOCKS = [
       data: {
         getFundraisingCampaigns: [
           {
+            fundId: {
+              name: 'Fund 1',
+            },
             name: 'Campaign Name',
             fundingGoal: 1000,
             currency: 'USD',
@@ -284,6 +293,9 @@ export const MOCKS = [
       data: {
         getFundraisingCampaigns: [
           {
+            fundId: {
+              name: 'Fund 1',
+            },
             name: 'Campaign Name',
             fundingGoal: 1000,
             currency: 'USD',
@@ -388,6 +400,9 @@ export const EMPTY_MOCKS = [
       data: {
         getFundraisingCampaigns: [
           {
+            fundId: {
+              name: 'Fund 1',
+            },
             name: 'Campaign Name',
             fundingGoal: 1000,
             currency: 'USD',
