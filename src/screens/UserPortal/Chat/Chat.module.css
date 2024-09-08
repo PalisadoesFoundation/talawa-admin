@@ -232,7 +232,8 @@
   border: 1px solid #a5a5a5;
 }
 
-.selectedBtn, .filterButton:hover {
+.selectedBtn,
+.filterButton:hover {
   border: 1px solid #98e0b6;
   background-color: #98e0b6;
   color: rgb(255, 255, 255);

@@ -191,6 +191,7 @@ export const CHAT_BY_ID = gql`
       _id
       isGroup
       name
+      image
       organization {
         _id
       }
@@ -225,6 +226,7 @@ export const CHAT_BY_ID = gql`
         firstName
         lastName
         email
+        image
       }
       unseenMessagesByUsers
     }
@@ -277,7 +279,7 @@ export const UNREAD_CHAT_LIST = gql`
       _id
       isGroup
       name
-
+      image
       creator {
         _id
         firstName
@@ -318,7 +320,7 @@ export const GROUP_CHAT_LIST = gql`
       _id
       isGroup
       name
-
+      image
       creator {
         _id
         firstName
@@ -368,6 +370,7 @@ export const CHATS_LIST = gql`
       _id
       isGroup
       name
+      image
       creator {
         _id
         firstName

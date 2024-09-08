@@ -5,11 +5,7 @@ import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import styles from './ChatRoom.module.css';
 import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
 import { useTranslation } from 'react-i18next';
-import {
-  CHATS_LIST,
-  CHAT_BY_ID,
-  UNREAD_CHAT_LIST,
-} from 'GraphQl/Queries/PlugInQueries';
+import { CHAT_BY_ID, UNREAD_CHAT_LIST } from 'GraphQl/Queries/PlugInQueries';
 import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery, useSubscription } from '@apollo/client';
 import {
@@ -95,6 +91,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
   const userId = getItem('userId');
   const [chatTitle, setChatTitle] = useState('');
   const [chatSubtitle, setChatSubtitle] = useState('');
+  const [chatImage, setChatImage] = useState('');
   const [newMessage, setNewMessage] = useState('');
   const [chat, setChat] = useState<Chat>();
   const [replyToDirectMessage, setReplyToDirectMessage] =
@@ -166,11 +163,13 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
       if (chat.isGroup) {
         setChatTitle(chat.name);
         setChatSubtitle(`${chat.users.length} members`);
+        setChatImage(chat.image);
       } else {
         const otherUser = chat.users.find((user: any) => user._id !== userId);
         if (otherUser) {
           setChatTitle(`${otherUser.firstName} ${otherUser.lastName}`);
           setChatSubtitle(otherUser.email);
+          setChatImage(otherUser.image);
         }
       }
     }
@@ -223,11 +222,19 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
         <>
           <div className={styles.header}>
             <div className={styles.userInfo}>
-              <Avatar
-                name={chatTitle}
-                alt={chatTitle}
-                avatarStyle={styles.contactImage}
-              />
+              {chatImage ? (
+                <img
+                  src={chatImage}
+                  alt={chatTitle}
+                  className={styles.contactImage}
+                />
+              ) : (
+                <Avatar
+                  name={chatTitle}
+                  alt={chatTitle}
+                  avatarStyle={styles.contactImage}
+                />
+              )}
               <div
                 onClick={() => (chat?.isGroup ? openGroupChatDetails() : null)}
                 className={styles.userDetails}

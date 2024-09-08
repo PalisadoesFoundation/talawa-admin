@@ -151,7 +151,8 @@
 }
 
 .contactImage {
-  height: fit-content;
+  height: 45px !important;
+  border-radius: 100%;
 }
 
 .senderInfo {

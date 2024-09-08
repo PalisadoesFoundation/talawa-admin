@@ -1,7 +1,6 @@
 import React from 'react';
 import styles from './ContactCard.module.css';
 import Avatar from 'components/Avatar/Avatar';
-import { Spa } from '@mui/icons-material';
 import { Badge } from 'react-bootstrap';
 
 interface InterfaceContactCardProps {

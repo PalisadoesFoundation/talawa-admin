@@ -123,6 +123,14 @@ export const MARK_CHAT_MESSAGES_AS_READ = gql`
   }
 `;
 
+export const UPDATE_CHAT = gql`
+  mutation updateChat($input: UpdateChatInput!) {
+    updateChat(input: $input) {
+      _id
+    }
+  }
+`;
+
 export const SEND_MESSAGE_TO_CHAT = gql`
   mutation sendMessageToChat(
     $chatId: ID!

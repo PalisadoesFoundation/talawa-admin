@@ -313,10 +313,10 @@ export default function chat(): JSX.Element {
                               : `${chat.users[0]?.firstName} ${chat.users[0]?.lastName}`
                             : chat.name,
                           image: chat.isGroup
-                            ? userId
+                            ? chat.image
+                            : userId
                               ? chat.users[1]?.image
-                              : chat.users[0]?.image
-                            : chat.image,
+                              : chat.users[0]?.image,
                           setSelectedContact,
                           selectedContact,
                           isGroup: chat.isGroup,

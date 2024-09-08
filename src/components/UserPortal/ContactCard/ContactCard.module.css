@@ -10,8 +10,8 @@
 
 .contactImage {
   width: 45px !important;
-  height: auto !important;
-  border-radius: 10px;
+  height: 45px !important;
+  border-radius: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -21,7 +21,6 @@
   display: flex;
   padding: 0px 10px;
   justify-content: space-between;
-  width: 100%;
   align-items: center;
 }
 

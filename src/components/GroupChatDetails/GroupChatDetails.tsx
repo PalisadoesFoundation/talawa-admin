@@ -1,11 +1,14 @@
 import { Paper, TableBody } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Button, Form, ListGroup, Modal } from 'react-bootstrap';
 import styles from './GroupChatDetails.module.css';
 import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
-import { ADD_USER_TO_GROUP_CHAT } from 'GraphQl/Mutations/OrganizationMutations';
+import {
+  ADD_USER_TO_GROUP_CHAT,
+  UPDATE_CHAT,
+} from 'GraphQl/Mutations/OrganizationMutations';
 import Table from '@mui/material/Table';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
@@ -17,9 +20,11 @@ import { USERS_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
 import { Search } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 import Avatar from 'components/Avatar/Avatar';
 import { ReactComponent as AddIcon } from 'assets/svgs/add.svg';
+import { FiEdit } from 'react-icons/fi';
+import { FaCheck, FaX } from 'react-icons/fa6';
+import convertToBase64 from 'utils/convertToBase64';
 
 interface InterfaceGoroupChatDetailsProps {
   toggleGroupChatDetailsModal: () => void;
@@ -63,11 +68,10 @@ export default function groupChatDetails({
     keyPrefix: 'userChat',
   });
 
-  const { orgId: organizationId } = useParams();
-
-  const userId: string | null = getItem('userId');
-
   const [userName, setUserName] = useState('');
+
+  const [editChatTitle, setEditChatTitle] = useState<boolean>(false);
+  const [chatName, setChatName] = useState<string>(chat.name);
 
   const [addUser] = useMutation(ADD_USER_TO_GROUP_CHAT);
 
@@ -75,7 +79,6 @@ export default function groupChatDetails({
 
   function openAddUserModal(): void {
     setAddUserModalisOpen(true);
-    console.log(addUserModalisOpen);
   }
 
   const toggleAddUserModal = (): void =>
@@ -93,13 +96,12 @@ export default function groupChatDetails({
   });
 
   const addUserToGroupChat = async (userId: string): void => {
-    const add = await addUser({
+    await addUser({
       variables: {
         userId,
         chatId: chat._id,
       },
     });
-    console.log(add);
   };
 
   const handleUserModalSearchChange = (e: React.FormEvent): void => {
@@ -117,6 +119,37 @@ export default function groupChatDetails({
     });
   };
 
+  const [selectedImage, setSelectedImage] = useState('');
+
+  const [updateChat] = useMutation(UPDATE_CHAT, {
+    variables: {
+      input: {
+        _id: chat._id,
+        image: selectedImage ? selectedImage : '',
+        name: chatName,
+      },
+    },
+  });
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleImageClick = (): void => {
+    fileInputRef?.current?.click();
+  };
+
+  const handleImageChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): Promise<void> => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const base64 = await convertToBase64(file);
+      setSelectedImage(base64);
+      await updateChat();
+      await chatRefetch();
+      setSelectedImage('');
+    }
+  };
+
   return (
     <>
       <Modal
@@ -129,13 +162,61 @@ export default function groupChatDetails({
           <Modal.Title>Group info</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          <input
+            type="file"
+            accept="image/*"
+            ref={fileInputRef}
+            style={{ display: 'none' }} // Hide the input
+            onChange={handleImageChange}
+          />
           <div className={styles.groupInfo}>
             {chat?.image ? (
-              <img src={chat?.image} alt="" />
+              <img className={styles.chatImage} src={chat?.image} alt="" />
             ) : (
               <Avatar avatarStyle={styles.groupImage} name={chat.name} />
             )}
-            <h3>{chat?.name}</h3>
+            <button onClick={handleImageClick} className={styles.editImgBtn}>
+              <FiEdit />
+            </button>
+
+            {editChatTitle ? (
+              <div className={styles.editChatNameContainer}>
+                <input
+                  type="text"
+                  value={chatName}
+                  onChange={(e) => {
+                    console.log(e.target.value);
+                    setChatName(e.target.value);
+                  }}
+                />
+                <FaCheck
+                  className={styles.checkIcon}
+                  onClick={async () => {
+                    await updateChat();
+                    setChatName(chat.name);
+                    setEditChatTitle(false);
+                    await chatRefetch();
+                  }}
+                />
+                <FaX
+                  className={styles.cancelIcon}
+                  onClick={() => {
+                    setEditChatTitle(false);
+                    setChatName(chat.name);
+                  }}
+                />
+              </div>
+            ) : (
+              <div className={styles.editChatNameContainer}>
+                <h3>{chat?.name}</h3>
+                <FiEdit
+                  onClick={() => {
+                    setEditChatTitle(true);
+                  }}
+                />
+              </div>
+            )}
+
             <p>{chat?.users.length} Members</p>
             <p>{chat?.description}</p>
           </div>
@@ -238,8 +319,10 @@ export default function groupChatDetails({
                             </StyledTableCell>
                             <StyledTableCell align="center">
                               <Button
-                                onClick={() => {
-                                  addUserToGroupChat(userDetails.user._id);
+                                onClick={async () => {
+                                  await addUserToGroupChat(
+                                    userDetails.user._id,
+                                  );
                                   toggleAddUserModal();
                                   chatRefetch({ id: chat._id });
                                 }}
