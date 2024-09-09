@@ -200,6 +200,7 @@ export const CHAT_BY_ID = gql`
         _id
         createdAt
         messageContent
+        media
         replyTo {
           _id
           createdAt

@@ -1,6 +1,6 @@
 .containerHeight {
-  padding: 1rem 1.5rem 0 calc(300px);
-  height: 100vh;
+  /* padding: 1rem 1.5rem 0 calc(300px); */
+  /* height: 100vh; */
 }
 
 .expand {
@@ -32,7 +32,7 @@
 }
 
 .containerHeight {
-  height: 100vh;
+  height: 88vh;
 }
 
 .mainContainer {
@@ -188,8 +188,8 @@
 /* For tablets */
 @media (max-width: 820px) {
   .containerHeight {
-    height: 100vh;
-    padding: 2rem;
+    /* height: 100vh; */
+    /* padding: 2rem; */
   }
 
   .contract,

@@ -88,7 +88,7 @@ const userSidebar = ({
               </Button>
             )}
           </NavLink>
-          <NavLink to={'/user/chat'} onClick={handleLinkClick}>
+          {/* <NavLink to={'/user/chat'} onClick={handleLinkClick}>
             {({ isActive }) => (
               <Button
                 variant={isActive === true ? 'success' : ''}
@@ -109,7 +109,7 @@ const userSidebar = ({
                 {t('chat')}
               </Button>
             )}
-          </NavLink>
+          </NavLink> */}
         </div>
       </div>
     </>

@@ -17,6 +17,8 @@ import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
 import { MoreVert, Close } from '@mui/icons-material';
 import GroupChatDetails from 'components/GroupChatDetails/GroupChatDetails';
+import { GrAttachment } from 'react-icons/gr';
+import convertToBase64 from 'utils/convertToBase64';
 
 interface InterfaceChatRoomProps {
   selectedContact: string;
@@ -58,6 +60,7 @@ type DirectMessage = {
       }
     | undefined;
   messageContent: string;
+  media: string;
   type: string;
 };
 
@@ -99,6 +102,8 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
   const [groupChatDetailsModalisOpen, setGroupChatDetailsModalisOpen] =
     useState(false);
 
+  const [attachment, setAttachment] = useState('');
+
   const openGroupChatDetails = (): void => {
     setGroupChatDetailsModalisOpen(true);
   };
@@ -115,6 +120,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     variables: {
       chatId: props.selectedContact,
       replyTo: replyToDirectMessage?._id,
+      media: attachment,
       messageContent: newMessage,
       type: 'STRING',
     },
@@ -180,6 +186,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     await chatRefetch();
     setReplyToDirectMessage(null);
     setNewMessage('');
+    setAttachment('');
     await props.chatListRefetch({ id: userId });
   };
 
@@ -205,6 +212,22 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
       .getElementById('chat-area')
       ?.lastElementChild?.scrollIntoView({ block: 'end' });
   });
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleAddAttachment = (): void => {
+    fileInputRef?.current?.click();
+  };
+
+  const handleImageChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): Promise<void> => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const base64 = await convertToBase64(file);
+      setAttachment(base64);
+    }
+  };
 
   return (
     <div
@@ -310,6 +333,13 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                                 </div>
                               </a>
                             )}
+                            {message.media && (
+                              <img
+                                className={styles.messageAttachment}
+                                src={message.media}
+                                alt="attachment"
+                              />
+                            )}
                             {message.messageContent}
                           </span>
                           <div className={styles.messageAttributes}>
@@ -350,6 +380,13 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
             </div>
           </div>
           <div id="messageInput">
+            <input
+              type="file"
+              accept="image/*"
+              ref={fileInputRef}
+              style={{ display: 'none' }} // Hide the input
+              onChange={handleImageChange}
+            />
             {!!replyToDirectMessage?._id && (
               <div className={styles.replyTo}>
                 <div className={styles.replyToMessageContainer}>
@@ -384,14 +421,33 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                 </Button>
               </div>
             )}
+            {attachment && (
+              <div className={styles.attachment}>
+                <img src={attachment as string} alt="attachment" />
+
+                <Button
+                  onClick={() => setAttachment('')}
+                  className={styles.closeBtn}
+                >
+                  <Close />
+                </Button>
+              </div>
+            )}
+
             <InputGroup>
+              <button
+                onClick={handleAddAttachment}
+                className={styles.addAttachmentBtn}
+              >
+                <GrAttachment />
+              </button>
               <Form.Control
                 placeholder={t('sendMessage')}
                 aria-label="Send Message"
                 value={newMessage}
                 data-testid="messageInput"
                 onChange={handleNewMessageChange}
-                className={styles.backgroundWhite}
+                className={styles.sendMessageInput}
               />
               <Button
                 onClick={sendMessage}

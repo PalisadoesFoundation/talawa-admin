@@ -194,7 +194,7 @@ export default function chat(): JSX.Element {
 
   return (
     <>
-      {hideDrawer ? (
+      {/* {hideDrawer ? (
         <Button
           className={styles.opendrawer}
           onClick={(): void => {
@@ -214,8 +214,8 @@ export default function chat(): JSX.Element {
         >
           <i className="fa fa-angle-double-left" aria-hidden="true"></i>
         </Button>
-      )}
-      <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
+      )} */}
+      {/* <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} /> */}
       <div className={`d-flex flex-row ${styles.containerHeight}`}>
         <div data-testid="chat" className={`${styles.mainContainer}`}>
           <div className={styles.contactContainer}>

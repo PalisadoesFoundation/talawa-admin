@@ -135,18 +135,21 @@ export const SEND_MESSAGE_TO_CHAT = gql`
   mutation sendMessageToChat(
     $chatId: ID!
     $replyTo: ID
-    $messageContent: String!
+    $media: String
+    $messageContent: String
     $type: String!
   ) {
     sendMessageToChat(
       chatId: $chatId
       replyTo: $replyTo
       messageContent: $messageContent
+      media: $media
       type: $type
     ) {
       _id
       createdAt
       messageContent
+      media
       replyTo {
         _id
         createdAt
