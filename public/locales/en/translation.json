@@ -1003,7 +1003,8 @@
     "invalidDetailsMessage": "Please provide all required details.",
     "passwordNotMatch": "Passwords do not match.",
     "addMember": "Add Member",
-    "user": "User"
+    "user": "User",
+    "profile": "Profile"
   },
   "eventActionItems": {
     "title": "Action Items",
