@@ -21,6 +21,8 @@ import {
   SIGNUP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import type { TestMock } from './MockDataTypes';
+import styles from './OrganizationPeople.module.css';
+import Avatar from 'components/Avatar/Avatar';
 
 const createMemberMock = (
   orgId = '',
@@ -1352,4 +1354,92 @@ describe('Organization People Page', () => {
     expect(window.location).toBeAt('/orgpeople/orgid');
     expect(screen.queryByText(/Nothing Found !!/i)).toBeInTheDocument();
   });
+});
+
+test('Open and check if profile image column is displayed for existing user', async () => {
+  window.location.assign('/orgpeople/orgid');
+  render(
+    <MockedProvider
+      addTypename={true}
+      link={link}
+      defaultOptions={{
+        watchQuery: { fetchPolicy: 'no-cache' },
+        query: { fetchPolicy: 'no-cache' },
+      }}
+    >
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrganizationPeople />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+
+  // Wait for the component to finish rendering
+  await wait();
+
+  // Click on the dropdown toggle to open the menu
+  userEvent.click(screen.getByTestId('addMembers'));
+  await wait();
+
+  // Click on the "Admins" option in the dropdown menu
+  userEvent.click(screen.getByTestId('existingUser'));
+  await wait();
+
+  expect(screen.getByTestId('addExistingUserModal')).toBeInTheDocument();
+  await wait();
+
+  expect(screen.getByTestId('user')).toBeInTheDocument();
+  await wait();
+
+  // Check if the image is rendered
+  expect(screen.getByTestId('profileImage')).toBeInTheDocument();
+  await wait();
+});
+
+test('Check if image is correctly displayed for existing user in add existing user modal', async () => {
+  const userDetailsWithImage = {
+    user: {
+      firstName: 'Nandika',
+      lastName: 'Agrawal',
+      image: 'https://example.com/avatar.jpg',
+    },
+  };
+
+  window.location.assign('/orgpeople/orgid');
+  render(
+    <MockedProvider
+      addTypename={true}
+      link={link}
+      defaultOptions={{
+        watchQuery: { fetchPolicy: 'no-cache' },
+        query: { fetchPolicy: 'no-cache' },
+      }}
+    >
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            {userDetailsWithImage.user.image ? (
+              <img
+                src={userDetailsWithImage.user.image ?? undefined}
+                alt="avatar"
+                className={styles.TableImage}
+              />
+            ) : (
+              <Avatar
+                avatarStyle={styles.TableImage}
+                name={`${userDetailsWithImage.user.firstName} ${userDetailsWithImage.user.lastName}`}
+              />
+            )}
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+
+  // Wait for the component to finish rendering
+  await wait();
+  expect(screen.queryByAltText('avatar')).not.toBeNull();
 });

@@ -393,7 +393,10 @@ function AddMember(): JSX.Element {
                             <StyledTableCell component="th" scope="row">
                               {index + 1}
                             </StyledTableCell>
-                            <StyledTableCell align="center">
+                            <StyledTableCell
+                              align="center"
+                              data-testid="profileImage"
+                            >
                               {userDetails.user.image ? (
                                 <img
                                   src={userDetails.user.image ?? undefined}
