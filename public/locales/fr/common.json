@@ -82,5 +82,6 @@
   "addedSuccessfully": "{{item}} ajouté avec succès",
   "updatedSuccessfully": "{{item}} mis à jour avec succès",
   "removedSuccessfully": "{{item}} supprimé avec succès",
-  "successfullyUpdated": "Mis à jour avec succès"
+  "successfullyUpdated": "Mis à jour avec succès",
+  "confirm": "Confirmer"
 }

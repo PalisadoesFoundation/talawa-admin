@@ -13,6 +13,8 @@ import { ReactComponent as AngleRightIcon } from 'assets/svgs/angleRight.svg';
 import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
 import styles from './UserSidebarOrg.module.css';
 import Avatar from 'components/Avatar/Avatar';
+import LogoutIcon from '@mui/icons-material/Logout';
+import LeaveConfirmModal from './LeaveConfirmModal';
 
 export interface InterfaceUserSidebarOrgProps {
   orgId: string;
@@ -45,6 +47,7 @@ const UserSidebarOrg = ({
   // Translation hook for internationalization
   const { t } = useTranslation('translation', { keyPrefix: 'userSidebarOrg' });
   const { t: tCommon } = useTranslation('common');
+  const [modalShow, setModalShow] = React.useState(false);
 
   // State for managing dropdown visibility
   const [showDropdown, setShowDropdown] = React.useState(false);
@@ -127,25 +130,44 @@ const UserSidebarOrg = ({
               </button>
             </>
           ) : (
-            <button className={styles.profileContainer} data-testid="OrgBtn">
-              <div className={styles.imageContainer}>
-                {organization.image ? (
-                  <img src={organization.image} alt={`profile picture`} />
-                ) : (
-                  <Avatar
-                    name={organization.name}
-                    alt={'Dummy Organization Picture'}
-                  />
-                )}
-              </div>
-              <div className={styles.profileText}>
-                <span className={styles.primaryText}>{organization.name}</span>
-                <span className={styles.secondaryText}>
-                  {organization.address.city}
-                </span>
-              </div>
-              <AngleRightIcon fill={'var(--bs-secondary)'} />
-            </button>
+            <>
+              <button className={styles.profileContainer} data-testid="OrgBtn">
+                <div className={styles.imageContainer}>
+                  {organization.image ? (
+                    <img src={organization.image} alt={`profile picture`} />
+                  ) : (
+                    <Avatar
+                      name={organization.name}
+                      alt={'Dummy Organization Picture'}
+                    />
+                  )}
+                </div>
+                <div className={styles.profileText}>
+                  <span className={styles.primaryText}>
+                    {organization.name}
+                  </span>
+                  <span className={styles.secondaryText}>
+                    {organization.address.city}
+                  </span>
+                </div>
+                <AngleRightIcon fill={'var(--bs-secondary)'} />
+              </button>
+
+              <button
+                onClick={() => {
+                  setModalShow(true);
+                }}
+                className={styles.leaveOrgContainer}
+              >
+                <LogoutIcon className={styles.leaveIcon} />
+                <span className={styles.primaryText}>{t('leave')}</span>
+              </button>
+              <LeaveConfirmModal
+                orgId={orgId}
+                show={modalShow}
+                onHide={() => setModalShow(false)}
+              />
+            </>
           )}
         </div>
 

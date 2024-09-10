@@ -82,5 +82,6 @@
   "addedSuccessfully": "{{item}} सफलतापूर्वक जोड़ा गया",
   "updatedSuccessfully": "{{item}} सफलतापूर्वक अपडेट किया गया",
   "removedSuccessfully": "{{item}} सफलतापूर्वक हटाया गया",
-  "successfullyUpdated": "सफलतापूर्वक अपडेट किया गया"
+  "successfullyUpdated": "सफलतापूर्वक अपडेट किया गया",
+  "confirm": "पुष्टि करें"
 }

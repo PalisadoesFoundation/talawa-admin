@@ -82,5 +82,6 @@
   "updatedSuccessfully": "{{item}} updated Successfully",
   "removedSuccessfully": "{{item}} removed Successfully",
   "successfullyUpdated": "Successfully Updated",
-  "sort": "Sort"
+  "sort": "Sort",
+  "confirm": "Confirm"
 }
