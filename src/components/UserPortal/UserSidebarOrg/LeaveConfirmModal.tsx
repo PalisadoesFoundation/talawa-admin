@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import { redirect } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-interface InterfaceLeaveConfirmModalProps {
+export interface InterfaceLeaveConfirmModalProps {
   show: boolean;
   onHide: () => void;
   orgId: string;

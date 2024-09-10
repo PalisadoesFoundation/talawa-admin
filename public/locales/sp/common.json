@@ -83,7 +83,7 @@
   "updatedSuccessfully": "{{item}} actualizado con éxito",
   "removedSuccessfully": "{{item}} eliminado con éxito",
   "successfullyUpdated": "Actualizado con éxito",
-  "confirm": "Confirmar"
+  "confirm": "Confirmar",
   "all": "Todos",
   "active": "Activo",
   "disabled": "Deshabilitado",
