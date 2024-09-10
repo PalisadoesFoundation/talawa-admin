@@ -83,6 +83,7 @@
   "updatedSuccessfully": "{{item}} सफलतापूर्वक अपडेट किया गया",
   "removedSuccessfully": "{{item}} सफलतापूर्वक हटाया गया",
   "successfullyUpdated": "सफलतापूर्वक अपडेट किया गया",
+  "confirm": "पुष्टि करें",
   "all": "सभी",
   "active": "सक्रिय",
   "disabled": "अक्षम",

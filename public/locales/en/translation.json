@@ -148,6 +148,7 @@
     "roleUpdated": "Role Updated.",
     "joinNow": "Join Now",
     "visit": "Visit",
+    "leave": "Leave",
     "withdraw": "Widthdraw",
     "removeUserFrom": "Remove User from {{org}}",
     "removeConfirmation": "Are you sure you want to remove '{{name}}' from organization '{{org}}'?"
@@ -765,7 +766,8 @@
     "communityProfile": "Community Profile",
     "logout": "Logout",
     "settings": "Settings",
-    "chat": "Chat"
+    "chat": "Chat",
+    "leave": "Leave Organization"
   },
   "organizationSidebar": {
     "viewAll": "View all",
@@ -1051,5 +1053,12 @@
   },
   "userPledges": {
     "title": "My Pledges"
+  },
+  "orgLeave": {
+    "confirmation": "Are you sure you want to leave the organization? ",
+    "heading": "Leaving organization ?",
+    "description": "Are you sure you want to leave the organization? This action cannot be undone. If the organization requires approval, you will not be able to rejoin without it. Any related data or permissions may also be lost.",
+    "errorOccured": "An error occurred. Please try again later.",
+    "orgLeft": "You have left the organization."
   }
 }

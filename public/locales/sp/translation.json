@@ -227,7 +227,8 @@
     "AlreadyJoined": "Ya eres miembro de esta organización.",
     "errorOccured": "Se produjo un error. Por favor, inténtalo de nuevo más tarde.",
     "removeUserFrom": "Eliminar Usuario de {{org}}",
-    "removeConfirmation": "¿Está seguro de que desea eliminar a '{{name}}' de la organización '{{org}}'?"
+    "removeConfirmation": "¿Está seguro de que desea eliminar a '{{name}}' de la organización '{{org}}'?",
+    "leave": "Dejar"
   },
   "communityProfile": {
     "title": "Perfil de la comunidad",
@@ -961,7 +962,8 @@
     "requests": "Solicitudes",
     "communityProfile": "Perfil de la comunidad",
     "logout": "Cerrar sesión",
-    "settings": "Ajustes"
+    "settings": "Ajustes",
+    "leave": "Dejar la organización"
   },
   "organizationSidebar": {
     "viewAll": "Ver todo",
@@ -1286,5 +1288,12 @@
   },
   "userPledges": {
     "title": "Mis Promesas"
+  },
+  "orgLeave": {
+    "confirmation": "¿Estás segura de que quieres dejar la organización?",
+    "heading": "¿Dejar la organización?",
+    "description": "¿Estás seguro de que quieres dejar la organización? Esta acción no se puede deshacer. Si la organización requiere aprobación, no podrás volver a unirte sin ella. También se pueden perder todos los datos o permisos relacionados.",
+    "errorOccured": "Se produjo un error. Inténtelo de nuevo más tarde.",
+    "orgLeft": "Has abandonado la organización."
   }
 }

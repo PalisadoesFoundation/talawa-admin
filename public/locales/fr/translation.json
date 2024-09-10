@@ -148,6 +148,7 @@
     "roleUpdated": "Rôle mis à jour.",
     "joinNow": "Adhérer maintenant",
     "visit": "Visite",
+    "leave": "partir",
     "withdraw": "Largeur de tirage",
     "removeUserFrom": "Supprimer l'Utilisateur de {{org}}",
     "removeConfirmation": "Êtes-vous sûr de vouloir supprimer '{{name}}' de l'organisation '{{org}}' ?"
@@ -765,7 +766,8 @@
     "viewAll": "Voir tout",
     "talawaUserPortal": "Portail utilisateur Talawa",
     "my organizations": "Mes organisations",
-    "communityProfile": "Profil de la communauté"
+    "communityProfile": "Profil de la communauté",
+    "leave": "Quitter l'organisation"
   },
   "organizationSidebar": {
     "viewAll": "Voir tout",
@@ -1052,5 +1054,12 @@
   },
   "userPledges": {
     "title": "Mes Promesses"
+  },
+  "orgLeave": {
+    "confirmation": "Etes-vous sûr de vouloir quitter l'organisation ? ",
+    "heading": "Quitter l'organisation ?",
+    "description": "Etes-vous sûr de vouloir quitter l'organisation ? Cette action ne peut pas être annulée. Si l'organisation nécessite une approbation, vous ne pourrez pas la rejoindre sans cette approbation. Toutes les données ou autorisations associées peuvent également être perdues.",
+    "errorOccured": "Une erreur s'est produite. Veuillez réessayer plus tard.",
+    "orgLeft": "Vous avez quitté l'organisation."
   }
 }
