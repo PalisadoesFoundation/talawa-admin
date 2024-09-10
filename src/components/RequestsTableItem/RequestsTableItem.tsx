@@ -67,7 +67,7 @@ const RequestsTableItem = (props: Props): JSX.Element => {
       });
       /* istanbul ignore next */
       if (data) {
-        toast.success(t('acceptedSuccessfully'));
+        toast.success(t('acceptedSuccessfully') as string);
         resetAndRefetch();
       }
     } catch (error: unknown) {
@@ -95,7 +95,7 @@ const RequestsTableItem = (props: Props): JSX.Element => {
       });
       /* istanbul ignore next */
       if (data) {
-        toast.success(t('rejectedSuccessfully'));
+        toast.success(t('rejectedSuccessfully') as string);
         resetAndRefetch();
       }
     } catch (error: unknown) {

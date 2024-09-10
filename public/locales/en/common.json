@@ -84,4 +84,13 @@
   "successfullyUpdated": "Successfully Updated",
   "sort": "Sort",
   "confirm": "Confirm"
+  "all": "All",
+  "active": "Active",
+  "disabled": "Disabled",
+  "pending": "Pending",
+  "completed": "Completed",
+  "late": "Late",
+  "createdLatest": "Created Latest",
+  "createdEarliest": "Created Earliest",
+  "searchBy": "Search by {{item}}"
 }

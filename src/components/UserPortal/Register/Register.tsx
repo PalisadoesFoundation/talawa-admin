@@ -57,11 +57,11 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
         registerVariables.lastName
       )
     ) {
-      toast.error(t('invalidDetailsMessage')); // Error if fields are missing
+      toast.error(t('invalidDetailsMessage') as string); // Error if fields are missing
     } else if (
       registerVariables.password !== registerVariables.confirmPassword
     ) {
-      toast.error(t('passwordNotMatch')); // Error if passwords do not match
+      toast.error(t('passwordNotMatch') as string); // Error if passwords do not match
     } else {
       try {
         await registerMutation({
@@ -73,7 +73,7 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
           },
         });
 
-        toast.success(t('afterRegister')); // Success message
+        toast.success(t('afterRegister') as string); // Success message
 
         // Reset form fields
         /* istanbul ignore next */

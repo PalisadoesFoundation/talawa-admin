@@ -84,4 +84,13 @@
   "removedSuccessfully": "{{item}} eliminado con éxito",
   "successfullyUpdated": "Actualizado con éxito",
   "confirm": "Confirmar"
+  "all": "Todos",
+  "active": "Activo",
+  "disabled": "Deshabilitado",
+  "pending": "Pendiente",
+  "completed": "Completado",
+  "late": "Tarde",
+  "createdLatest": "Creado más reciente",
+  "createdEarliest": "Creado más temprano",
+  "searchBy": "Buscar por {{item}}"
 }

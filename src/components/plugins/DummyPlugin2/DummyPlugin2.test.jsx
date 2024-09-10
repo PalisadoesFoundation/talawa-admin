@@ -5,14 +5,14 @@ import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
 import DummyPlugin2 from './DummyPlugin2';
 
-describe('Testing dummy plugin 2', () => {
-  test('should render props and text elements test for the page component', () => {
+describe('Testing DummyPlugin2', () => {
+  test('should render DummyPlugin2 component', () => {
     render(
       <BrowserRouter>
         <Provider store={store}>
           <DummyPlugin2 />
         </Provider>
-      </BrowserRouter>
+      </BrowserRouter>,
     );
   });
 });

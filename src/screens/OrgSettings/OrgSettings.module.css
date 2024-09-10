@@ -1,3 +1,6 @@
+.headerBtn {
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 2px;
+}
 .settingsContainer {
   min-height: 100vh;
 }

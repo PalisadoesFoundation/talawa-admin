@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';

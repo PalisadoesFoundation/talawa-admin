@@ -287,7 +287,6 @@
     "assignmentDate": "असाइनमेंट दिनांक",
     "active": "सक्रिय",
     "clearFilters": "फ़िल्टर साफ़ करें",
-    "completed": "पुरा होना।",
     "completionDate": "पूरा करने की तिथि",
     "createActionItem": "कार्रवाई आइटम बनाएं",
     "deleteActionItem": "क्रिया आइटम हटाएँ",
@@ -312,7 +311,14 @@
     "successfulCreation": "कार्रवाई आइटम सफलतापूर्वक बनाया गया",
     "successfulUpdation": "कार्रवाई आइटम सफलतापूर्वक अपडेट किया गया",
     "successfulDeletion": "कार्रवाई आइटम सफलतापूर्वक हटा दिया गया",
-    "title": "एक्शन आइटम्स"
+    "title": "एक्शन आइटम्स",
+    "category": "श्रेणी",
+    "allotedHours": "आवंटित घंटे",
+    "latestDueDate": "सबसे अधिक नियत तिथि",
+    "earliestDueDate": "सबसे पहले की नियत तिथि",
+    "updateActionItem": "कार्य आइटम अपडेट करें",
+    "noneUpdated": "कोई फ़ील्ड अपडेट नहीं किया गया",
+    "updateStatusMsg": "क्या आप वाकई इस कार्य आइटम को लंबित के रूप में चिह्नित करना चाहते हैं?"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "एजेंडा श्रेणी विवरण",
@@ -600,15 +606,16 @@
     "amount": "मात्रा"
   },
   "orgSettings": {
-    "title": "समायोजन",
+    "title": "सेटिंग्स",
     "general": "सामान्य",
-    "actionItemCategories": "कार्रवाई आइटम श्रेणियाँ",
-    "updateOrganization": "संगठन अद्यतन करें",
+    "actionItemCategories": "कार्य आइटम श्रेणियाँ",
+    "updateOrganization": "संगठन अपडेट करें",
     "seeRequest": "अनुरोध देखें",
     "noData": "कोई डेटा नहीं",
-    "otherSettings": "अन्य सेटिंग",
+    "otherSettings": "अन्य सेटिंग्स",
     "changeLanguage": "भाषा बदलें",
-    "manageCustomFields": "कस्टम फ़ील्ड प्रबंधित करें"
+    "manageCustomFields": "कस्टम फ़ील्ड प्रबंधित करें",
+    "agendaItemCategories": "एजेंडा आइटम श्रेणियाँ"
   },
   "deleteOrg": {
     "deleteOrganization": "संगठन हटाएँ",
@@ -856,7 +863,10 @@
     "yourPreviousDonations": "आपका पिछला दान",
     "donate": "दान करें",
     "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
-    "success": "दान सफल"
+    "success": "दान सफल",
+    "invalidAmount": "कृपया दान राशि के लिए संख्यात्मक मान दर्ज करें.",
+    "donationAmountDescription": "कृपया दान राशि के लिए संख्यात्मक मान दर्ज करें.",
+    "donationOutOfRange": "दान राशि {{min}} और {{max}} के बीच होनी चाहिए."
   },
   "userEvents": {
     "title": "ईवेंट",
@@ -937,13 +947,18 @@
     "disableButton": "अक्षम करना",
     "updateActionItemCategory": "अद्यतन",
     "actionItemCategoryName": "नाम",
-    "actionItemCategoryDetails": "कार्य आइटम श्रेणी विवरण",
+    "categoryDetails": "श्रेणी विवरण",
     "enterName": "नाम दर्ज करें",
     "successfulCreation": "कार्रवाई आइटम श्रेणी सफलतापूर्वक बनाई गई",
     "successfulUpdation": "कार्रवाई आइटम श्रेणी सफलतापूर्वक अपडेट की गई",
     "sameNameConflict": "अपडेट करने के लिए कृपया नाम बदलें",
     "categoryEnabled": "कार्य आइटम श्रेणी सक्षम",
-    "categoryDisabled": "कार्रवाई आइटम श्रेणी अक्षम"
+    "categoryDisabled": "कार्रवाई आइटम श्रेणी अक्षम",
+    "noActionItemCategories": "कोई कार्रवाई आइटम श्रेणी नहीं",
+    "status": "स्थिति",
+    "categoryDeleted": "कार्रवाई आइटम श्रेणी सफलतापूर्वक हटा दी गई",
+    "deleteCategory": "श्रेणी हटाएं",
+    "deleteCategoryMsg": "क्या आप वाकई इस कार्रवाई आइटम श्रेणी को हटाना चाहते हैं?"
   },
   "organizationVenues": {
     "title": "स्थानों",

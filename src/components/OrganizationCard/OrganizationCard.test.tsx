@@ -6,7 +6,6 @@ describe('Testing the Organization Card', () => {
   test('should render props and text elements test for the page component', () => {
     const props = {
       id: '123',
-      key: '456',
       image: 'https://via.placeholder.com/80',
       firstName: 'John',
       lastName: 'Doe',
@@ -24,7 +23,6 @@ describe('Testing the Organization Card', () => {
   test('Should render text elements when props value is not passed', () => {
     const props = {
       id: '123',
-      key: '456',
       image: '',
       firstName: 'John',
       lastName: 'Doe',
