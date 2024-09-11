@@ -21,8 +21,6 @@ import {
   SIGNUP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import type { TestMock } from './MockDataTypes';
-import styles from './OrganizationPeople.module.css';
-import Avatar from 'components/Avatar/Avatar';
 
 const createMemberMock = (
   orgId = '',
@@ -425,7 +423,7 @@ const MOCKS: TestMock[] = [
             user: {
               firstName: 'Vyvyan',
               lastName: 'Kerry',
-              image: null,
+              image: 'tempUrl',
               _id: '65378abd85008f171cf2990d',
               email: 'testadmin1@example.com',
               createdAt: '2023-04-13T04:53:17.742Z',
@@ -1356,7 +1354,7 @@ describe('Organization People Page', () => {
   });
 });
 
-test('Open and check if profile image column is displayed for existing user', async () => {
+test('Open and check if profile image is displayed for existing user', async () => {
   window.location.assign('/orgpeople/orgid');
   render(
     <MockedProvider
@@ -1397,49 +1395,7 @@ test('Open and check if profile image column is displayed for existing user', as
   // Check if the image is rendered
   expect(screen.getByTestId('profileImage')).toBeInTheDocument();
   await wait();
-});
 
-test('Check if image is correctly displayed for existing user in add existing user modal', async () => {
-  const userDetailsWithImage = {
-    user: {
-      firstName: 'Nandika',
-      lastName: 'Agrawal',
-      image: 'https://example.com/avatar.jpg',
-    },
-  };
-
-  window.location.assign('/orgpeople/orgid');
-  render(
-    <MockedProvider
-      addTypename={true}
-      link={link}
-      defaultOptions={{
-        watchQuery: { fetchPolicy: 'no-cache' },
-        query: { fetchPolicy: 'no-cache' },
-      }}
-    >
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            {userDetailsWithImage.user.image ? (
-              <img
-                src={userDetailsWithImage.user.image ?? undefined}
-                alt="avatar"
-                className={styles.TableImage}
-              />
-            ) : (
-              <Avatar
-                avatarStyle={styles.TableImage}
-                name={`${userDetailsWithImage.user.firstName} ${userDetailsWithImage.user.lastName}`}
-              />
-            )}
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
-
-  // Wait for the component to finish rendering
-  await wait();
-  expect(screen.queryByAltText('avatar')).not.toBeNull();
+  const images = await screen.findAllByAltText('avatar');
+  expect(images.length).toBeGreaterThan(0);
 });
