@@ -16,8 +16,8 @@ This document provides instructions on how to set up and start a running instanc
 - [Configuration](#configuration)
   - [Creating .env file](#creating-env-file)
   - [Setting up PORT in .env file](#setting-up-port-in-env-file)
-  - [Setting up REACT_APP_TALAWA_URL in .env file](#setting-up-react_app_talawa_url-in-env-file)
-  - [Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file](#setting-up-react_app_recaptcha_site_key-in-env-file)
+  - [Setting up VITE_APP_TALAWA_URL in .env file](#setting-up-VITE_app_talawa_url-in-env-file)
+  - [Setting up VITE_APP_RECAPTCHA_SITE_KEY in .env file](#setting-up-VITE_app_recaptcha_site_key-in-env-file)
   - [Setting up Compiletime and Runtime logs](#setting-up-compiletime-and-runtime-logs)
 - [Post Configuration Steps](#post-configuration-steps)
   - [Running Talawa-Admin](#running-talawa-admin)
@@ -166,39 +166,39 @@ This `.env` file must be populated with the following environment variables for 
 | Variable                     | Description                                       |
 | ---------------------------- | ------------------------------------------------- |
 | PORT                         | Custom port for Talawa-Admin development purposes |
-| REACT_APP_TALAWA_URL         | URL endpoint for talawa-api graphql service       |
-| REACT_APP_USE_RECAPTCHA      | Whether you want to use reCAPTCHA or not          |
-| REACT_APP_RECAPTCHA_SITE_KEY | Site key for authentication using reCAPTCHA       |
+| VITE_APP_TALAWA_URL         | URL endpoint for talawa-api graphql service       |
+| VITE_APP_USE_RECAPTCHA      | Whether you want to use reCAPTCHA or not          |
+| VITE_APP_RECAPTCHA_SITE_KEY | Site key for authentication using reCAPTCHA       |
 
-Follow the instructions from the sections [Setting up PORT in .env file](#setting-up-port-in-env-file), [Setting up REACT_APP_TALAWA_URL in .env file](#setting-up-REACT_APP_TALAWA_URL-in-env-file), [Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file](#setting-up-REACT_APP_RECAPTCHA_SITE_KEY-in-env-file) and [Setting up Compiletime and Runtime logs](#setting-up-compiletime-and-runtime-logs) to set up these environment variables.
+Follow the instructions from the sections [Setting up PORT in .env file](#setting-up-port-in-env-file), [Setting up VITE_APP_TALAWA_URL in .env file](#setting-up-VITE_APP_TALAWA_URL-in-env-file), [Setting up VITE_APP_RECAPTCHA_SITE_KEY in .env file](#setting-up-VITE_APP_RECAPTCHA_SITE_KEY-in-env-file) and [Setting up Compiletime and Runtime logs](#setting-up-compiletime-and-runtime-logs) to set up these environment variables.
 
 ## Setting up PORT in .env file
 
 Add a custom port number for Talawa-Admin development purposes to the variable named `PORT` in the `.env` file.
 
-## Setting up REACT_APP_TALAWA_URL in .env file
+## Setting up VITE_APP_TALAWA_URL in .env file
 
-Add the endpoint for accessing talawa-api graphql service to the variable named `REACT_APP_TALAWA_URL` in the `.env` file.
+Add the endpoint for accessing talawa-api graphql service to the variable named `VITE_APP_TALAWA_URL` in the `.env` file.
 
 ```
-REACT_APP_TALAWA_URL="http://API-IP-ADRESS:4000/graphql/"
+VITE_APP_TALAWA_URL="http://API-IP-ADRESS:4000/graphql/"
 ```
 
 If you are a software developer working on your local system, then the URL would be:
 
 ```
-REACT_APP_TALAWA_URL="http://localhost:4000/graphql/"
+VITE_APP_TALAWA_URL="http://localhost:4000/graphql/"
 ```
 
 If you are trying to access Talawa Admin from a remote host with the API URL containing "localhost", You will have to change the API URL to
 
 ```
-REACT_APP_TALAWA_URL="http://YOUR-REMOTE-ADDRESS:4000/graphql/"
+VITE_APP_TALAWA_URL="http://YOUR-REMOTE-ADDRESS:4000/graphql/"
 ```
 
 For additional details, please refer  the `How to Access the Talawa-API URL` section in the INSTALLATION.md file found in the [Talawa-API repo](https://github.com/PalisadoesFoundation/talawa-api).
 
-## Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file
+## Setting up VITE_APP_RECAPTCHA_SITE_KEY in .env file
 
 You may not want to setup reCAPTCHA since the project will still work. Moreover, it is recommended to not set it up in development environment.
 
@@ -208,12 +208,12 @@ If you want to setup Google reCAPTCHA now, you may refer to the `RECAPTCHA` sect
 
 `Talawa-admin` needs the `reCAPTCHA site key` for the `reCAPTCHA` service you set up during `talawa-api` installation as shown in this screenshot:
 
-![reCAPTCHA site key](./public/images/REACT_SITE_KEY.webp)
+![reCAPTCHA site key](./public/images/VITE_SITE_KEY.webp)
 
-Copy/paste this `reCAPTCHA site key` to the variable named `REACT_APP_RECAPTCHA_SITE_KEY` in `.env` file.
+Copy/paste this `reCAPTCHA site key` to the variable named `VITE_APP_RECAPTCHA_SITE_KEY` in `.env` file.
 
 ```
-REACT_APP_RECAPTCHA_SITE_KEY="this_is_the_recaptcha_key"
+VITE_APP_RECAPTCHA_SITE_KEY="this_is_the_recaptcha_key"
 ```
 
 ## Setting up Compiletime and Runtime logs

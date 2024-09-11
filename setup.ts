@@ -22,9 +22,9 @@ export async function main(): Promise<void> {
 
   let shouldSetCustomPort: boolean;
 
-  if (process.env.PORT) {
+  if (import.meta.env.PORT) {
     console.log(
-      `\nCustom port for development server already exists with the value:\n${process.env.PORT}`,
+      `\nCustom port for development server already exists with the value:\n${import.meta.env.PORT}`,
     );
     shouldSetCustomPort = true;
   } else {
@@ -50,9 +50,9 @@ export async function main(): Promise<void> {
 
   let shouldSetTalawaApiUrl: boolean;
 
-  if (process.env.REACT_APP_TALAWA_URL) {
+  if (import.meta.env.VITE_APP_TALAWA_URL) {
     console.log(
-      `\nEndpoint for accessing talawa-api graphql service already exists with the value:\n${process.env.REACT_APP_TALAWA_URL}`,
+      `\nEndpoint for accessing talawa-api graphql service already exists with the value:\n${import.meta.env.VITE_APP_TALAWA_URL}`,
     );
     shouldSetTalawaApiUrl = true;
   } else {
@@ -77,12 +77,12 @@ export async function main(): Promise<void> {
 
     const talawaApiUrl = dotenv.parse(
       fs.readFileSync('.env'),
-    ).REACT_APP_TALAWA_URL;
+    ).VITE_APP_TALAWA_URL;
 
     fs.readFile('.env', 'utf8', (err, data) => {
       const result = data.replace(
-        `REACT_APP_TALAWA_URL=${talawaApiUrl}`,
-        `REACT_APP_TALAWA_URL=${endpoint}`,
+        `VITE_APP_TALAWA_URL=${talawaApiUrl}`,
+        `VITE_APP_TALAWA_URL=${endpoint}`,
       );
       fs.writeFileSync('.env', result, 'utf8');
     });
@@ -98,19 +98,19 @@ export async function main(): Promise<void> {
   if (shouldUseRecaptcha) {
     const useRecaptcha = dotenv.parse(
       fs.readFileSync('.env'),
-    ).REACT_APP_USE_RECAPTCHA;
+    ).VITE_APP_USE_RECAPTCHA;
 
     fs.readFile('.env', 'utf8', (err, data) => {
       const result = data.replace(
-        `REACT_APP_USE_RECAPTCHA=${useRecaptcha}`,
-        `REACT_APP_USE_RECAPTCHA=yes`,
+        `VITE_APP_USE_RECAPTCHA=${useRecaptcha}`,
+        `VITE_APP_USE_RECAPTCHA=yes`,
       );
       fs.writeFileSync('.env', result, 'utf8');
     });
     let shouldSetRecaptchaSiteKey: boolean;
-    if (process.env.REACT_APP_RECAPTCHA_SITE_KEY) {
+    if (import.meta.env.VITE_APP_RECAPTCHA_SITE_KEY) {
       console.log(
-        `\nreCAPTCHA site key already exists with the value ${process.env.REACT_APP_RECAPTCHA_SITE_KEY}`,
+        `\nreCAPTCHA site key already exists with the value ${import.meta.env.VITE_APP_RECAPTCHA_SITE_KEY}`,
       );
       shouldSetRecaptchaSiteKey = true;
     } else {
@@ -140,12 +140,12 @@ export async function main(): Promise<void> {
 
       const recaptchaSiteKey = dotenv.parse(
         fs.readFileSync('.env'),
-      ).REACT_APP_RECAPTCHA_SITE_KEY;
+      ).VITE_APP_RECAPTCHA_SITE_KEY;
 
       fs.readFile('.env', 'utf8', (err, data) => {
         const result = data.replace(
-          `REACT_APP_RECAPTCHA_SITE_KEY=${recaptchaSiteKey}`,
-          `REACT_APP_RECAPTCHA_SITE_KEY=${recaptchaSiteKeyInput}`,
+          `VITE_APP_RECAPTCHA_SITE_KEY=${recaptchaSiteKey}`,
+          `VITE_APP_RECAPTCHA_SITE_KEY=${recaptchaSiteKeyInput}`,
         );
         fs.writeFileSync('.env', result, 'utf8');
       });

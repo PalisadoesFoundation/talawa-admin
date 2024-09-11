@@ -14,7 +14,7 @@ import { toast } from 'react-toastify';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import {
   BACKEND_URL,
-  REACT_APP_USE_RECAPTCHA,
+  VITE_APP_USE_RECAPTCHA,
   RECAPTCHA_SITE_KEY,
 } from 'Constant/constant';
 import {
@@ -163,7 +163,7 @@ const loginPage = (): JSX.Element => {
   ): Promise<boolean | void> => {
     try {
       /* istanbul ignore next */
-      if (REACT_APP_USE_RECAPTCHA !== 'yes') {
+      if (VITE_APP_USE_RECAPTCHA !== 'yes') {
         return true;
       }
       const { data } = await recaptcha({
@@ -485,7 +485,7 @@ const loginPage = (): JSX.Element => {
                       {tCommon('forgotPassword')}
                     </Link>
                   </div>
-                  {REACT_APP_USE_RECAPTCHA === 'yes' ? (
+                  {VITE_APP_USE_RECAPTCHA === 'yes' ? (
                     <div className="googleRecaptcha">
                       <ReCAPTCHA
                         className="mt-2"
@@ -829,7 +829,7 @@ const loginPage = (): JSX.Element => {
                       />
                     </div>
                   </div>
-                  {REACT_APP_USE_RECAPTCHA === 'yes' ? (
+                  {VITE_APP_USE_RECAPTCHA === 'yes' ? (
                     <div className="mt-3">
                       <ReCAPTCHA
                         sitekey={
