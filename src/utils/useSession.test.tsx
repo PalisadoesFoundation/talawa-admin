@@ -344,4 +344,201 @@ describe('useSession Hook', () => {
 
     await waitFor(() => expect(errorHandler).toHaveBeenCalled());
   });
+  //dfghjkjhgfds
+
+  test('should remove event listeners on endSession', async () => {
+    const { result } = renderHook(() => useSession(), {
+      wrapper: ({ children }: { children?: ReactNode }) => (
+        <MockedProvider mocks={MOCKS} addTypename={false}>
+          <BrowserRouter>{children}</BrowserRouter>
+        </MockedProvider>
+      ),
+    });
+
+    // Mock the removeEventListener functions for both window and document
+    const removeEventListenerMock = jest.fn();
+
+    // Temporarily replace the real methods with the mock
+    const originalWindowRemoveEventListener = window.removeEventListener;
+    const originalDocumentRemoveEventListener = document.removeEventListener;
+
+    window.removeEventListener = removeEventListenerMock;
+    document.removeEventListener = removeEventListenerMock;
+
+    // await waitForNextUpdate();
+
+    act(() => {
+      result.current.startSession();
+    });
+
+    act(() => {
+      result.current.endSession();
+    });
+
+    // Test that event listeners were removed
+    expect(removeEventListenerMock).toHaveBeenCalledWith(
+      'mousemove',
+      expect.any(Function),
+    );
+    expect(removeEventListenerMock).toHaveBeenCalledWith(
+      'keydown',
+      expect.any(Function),
+    );
+    expect(removeEventListenerMock).toHaveBeenCalledWith(
+      'visibilitychange',
+      expect.any(Function),
+    );
+
+    // Restore the original removeEventListener functions
+    window.removeEventListener = originalWindowRemoveEventListener;
+    document.removeEventListener = originalDocumentRemoveEventListener;
+  });
+
+  test('should call initialize timers when session is still active when the user returns to the tab', async () => {
+    jest.useFakeTimers();
+    jest.spyOn(global, 'setTimeout').mockImplementation(jest.fn());
+
+    const { result } = renderHook(() => useSession(), {
+      wrapper: ({ children }) => (
+        <MockedProvider mocks={MOCKS} addTypename={false}>
+          <BrowserRouter>{children}</BrowserRouter>
+        </MockedProvider>
+      ),
+    });
+
+    jest.advanceTimersByTime(1000);
+
+    // Set initial visibility state to visible
+    Object.defineProperty(document, 'visibilityState', {
+      value: 'visible',
+      writable: true,
+    });
+
+    // Start the session
+    act(() => {
+      result.current.startSession();
+      jest.advanceTimersByTime(10 * 60 * 1000); // Fast-forward
+    });
+
+    // Simulate the user leaving the tab (set visibility to hidden)
+    Object.defineProperty(document, 'visibilityState', {
+      value: 'hidden',
+      writable: true,
+    });
+
+    act(() => {
+      document.dispatchEvent(new Event('visibilitychange'));
+    });
+
+    // Fast-forward time by more than the session timeout
+    act(() => {
+      jest.advanceTimersByTime(5 * 60 * 1000); // Fast-forward
+    });
+
+    // Simulate the user returning to the tab
+    Object.defineProperty(document, 'visibilityState', {
+      value: 'visible',
+      writable: true,
+    });
+
+    act(() => {
+      document.dispatchEvent(new Event('visibilitychange'));
+    });
+
+    jest.advanceTimersByTime(1000);
+
+    expect(global.setTimeout).toHaveBeenCalled();
+
+    // Restore real timers
+    jest.useRealTimers();
+  });
+
+  test('should call handleLogout when session expires due to inactivity away from tab', async () => {
+    jest.useFakeTimers(); // Use fake timers to control time
+
+    const { result } = renderHook(() => useSession(), {
+      wrapper: ({ children }) => (
+        <MockedProvider mocks={MOCKS} addTypename={false}>
+          <BrowserRouter>{children}</BrowserRouter>
+        </MockedProvider>
+      ),
+    });
+
+    jest.advanceTimersByTime(1000);
+
+    // Set initial visibility state to visible
+    Object.defineProperty(document, 'visibilityState', {
+      value: 'visible',
+      writable: true,
+    });
+
+    // Start the session
+    act(() => {
+      result.current.startSession();
+      jest.advanceTimersByTime(10 * 60 * 1000); // Fast-forward
+    });
+
+    // Simulate the user leaving the tab (set visibility to hidden)
+    Object.defineProperty(document, 'visibilityState', {
+      value: 'hidden',
+      writable: true,
+    });
+
+    act(() => {
+      document.dispatchEvent(new Event('visibilitychange'));
+    });
+
+    // Fast-forward time by more than the session timeout
+    act(() => {
+      jest.advanceTimersByTime(32 * 60 * 1000); // Fast-forward by 32 minutes
+    });
+
+    // Simulate the user returning to the tab
+    Object.defineProperty(document, 'visibilityState', {
+      value: 'visible',
+      writable: true,
+    });
+
+    act(() => {
+      document.dispatchEvent(new Event('visibilitychange'));
+    });
+
+    jest.advanceTimersByTime(250);
+
+    await waitFor(() => {
+      expect(global.localStorage.clear).toHaveBeenCalled();
+      expect(toast.warning).toHaveBeenCalledWith('sessionLogout', {
+        autoClose: false,
+      });
+    });
+
+    // Restore real timers
+    jest.useRealTimers();
+  });
+
+  test('should handle logout and revoke token', async () => {
+    jest.useFakeTimers();
+
+    const { result } = renderHook(() => useSession(), {
+      wrapper: ({ children }: { children?: ReactNode }) => (
+        <MockedProvider mocks={MOCKS} addTypename={false}>
+          <BrowserRouter>{children}</BrowserRouter>
+        </MockedProvider>
+      ),
+    });
+
+    act(() => {
+      result.current.startSession();
+      result.current.handleLogout();
+    });
+
+    await waitFor(() => {
+      expect(global.localStorage.clear).toHaveBeenCalled();
+      expect(toast.warning).toHaveBeenCalledWith('sessionLogout', {
+        autoClose: false,
+      });
+    });
+
+    jest.useRealTimers();
+  });
 });
