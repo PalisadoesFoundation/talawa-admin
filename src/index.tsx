@@ -44,6 +44,7 @@ const theme = createTheme({
 });
 import useLocalStorage from 'utils/useLocalstorage';
 import i18n from './utils/i18n';
+import { requestMiddleware, responseMiddleware } from 'utils/timezoneUtils';
 
 const { getItem } = useLocalStorage();
 const authLink = setContext((_, { headers }) => {
@@ -123,7 +124,13 @@ const splitLink = split(
   httpLink,
 );
 
-const combinedLink = ApolloLink.from([errorLink, authLink, splitLink]);
+const combinedLink = ApolloLink.from([
+  errorLink,
+  authLink,
+  requestMiddleware,
+  responseMiddleware,
+  splitLink,
+]);
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),

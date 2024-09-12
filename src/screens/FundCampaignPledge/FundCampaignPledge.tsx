@@ -130,7 +130,7 @@ const fundCampaignPledge = (): JSX.Element => {
     'YYYY-MM-DD',
   ).toDate();
 
-  const { pledges, totalPledged } = useMemo(() => {
+  const { pledges, totalPledged, fundName } = useMemo(() => {
     let totalPledged = 0;
     const pledges =
       pledgeData?.getFundraisingCampaigns[0].pledges.filter((pledge) => {
@@ -141,7 +141,9 @@ const fundCampaignPledge = (): JSX.Element => {
           return fullName.toLowerCase().includes(search);
         });
       }) ?? [];
-    return { pledges, totalPledged };
+    const fundName =
+      pledgeData?.getFundraisingCampaigns[0].fundId.name ?? tCommon('Funds');
+    return { pledges, totalPledged, fundName };
   }, [pledgeData, searchTerm]);
 
   useEffect(() => {
@@ -392,7 +394,7 @@ const fundCampaignPledge = (): JSX.Element => {
             () => history.go(-2)
           }
         >
-          {tCommon('Funds')}
+          {fundName}
         </Link>
         <Link
           underline="hover"
@@ -403,7 +405,7 @@ const fundCampaignPledge = (): JSX.Element => {
             () => history.back()
           }
         >
-          {t('campaigns')}
+          {campaignInfo?.name}
         </Link>
         <Typography color="text.primary">{t('pledges')}</Typography>
       </Breadcrumbs>

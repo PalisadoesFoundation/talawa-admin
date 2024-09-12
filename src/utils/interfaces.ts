@@ -280,6 +280,8 @@ export interface InterfaceQueryOrganizationAdvertisementListItem {
 }
 
 export interface InterfaceQueryOrganizationFundCampaigns {
+  name: string;
+  isArchived: boolean;
   campaigns: {
     _id: string;
     name: string;
@@ -299,6 +301,9 @@ export interface InterfaceUserCampaign {
   currency: string;
 }
 export interface InterfaceQueryFundCampaignsPledges {
+  fundId: {
+    name: string;
+  };
   name: string;
   fundingGoal: number;
   currency: string;

@@ -73,17 +73,3 @@ export const UPDATE_CAMPAIGN_MUTATION = gql`
     }
   }
 `;
-
-/**
- * GraphQL mutation to delete a fund Campaign.
- *
- * @param id - The ID of the campaign being deleted.
- * @returns The ID of the deleted campaign.
- */
-export const DELETE_CAMPAIGN_MUTATION = gql`
-  mutation removeFundraisingCampaign($id: ID!) {
-    removeFundraisingCampaign(id: $id) {
-      _id
-    }
-  }
-`;
