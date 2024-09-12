@@ -20,7 +20,6 @@
     "@mui/x-data-grid": "^7.15.0",
     "@mui/x-date-pickers": "^7.11.1",
     "@pdfme/generator": "^1.2.6",
-    "@testing-library/react-hooks": "^8.0.1",
     "bootstrap": "^5.3.3",
     "customize-cra": "^1.0.0",
     "dayjs": "^1.11.12",
@@ -98,7 +97,7 @@
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@testing-library/jest-dom": "^6.5.0",
-    "@testing-library/react": "^16.0.0",
+    "@testing-library/react": "^16.0.1",
     "@testing-library/user-event": "^12.1.10",
     "@types/inquirer": "^9.0.7",
     "@types/jest": "^26.0.24",
