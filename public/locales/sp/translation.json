@@ -121,7 +121,8 @@
     "spamsThe": "envía correo no deseado",
     "group": "grupo",
     "noNotifications": "No Notificaciones",
-    "close": "Cerca"
+    "close": "Cerca",
+    "Advertisement": "Publicidad"
   },
   "orgList": {
     "title": "Organizaciones Talawa",
@@ -159,7 +160,11 @@
     "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control",
     "noResultsFoundFor": "No se encontraron resultados para ",
     "OR": "O",
-    "sampleOrgSuccess": "Organización de ejemplo creada exitosamente"
+    "sampleOrgSuccess": "Organización de ejemplo creada exitosamente",
+    "manageFeatures": "Gestionar funciones",
+    "manageFeaturesInfo": "Información de gestión de funciones",
+    "goToStore": "Ir a la tienda",
+    "enableEverything": "Habilitar todo"
   },
   "orgListCard": {
     "admins": "Administradores",
@@ -227,7 +232,8 @@
     "AlreadyJoined": "Ya eres miembro de esta organización.",
     "errorOccured": "Se produjo un error. Por favor, inténtalo de nuevo más tarde.",
     "removeUserFrom": "Eliminar Usuario de {{org}}",
-    "removeConfirmation": "¿Está seguro de que desea eliminar a '{{name}}' de la organización '{{org}}'?"
+    "removeConfirmation": "¿Está seguro de que desea eliminar a '{{name}}' de la organización '{{org}}'?",
+    "noOrgError": "Error sin organización"
   },
   "communityProfile": {
     "title": "Perfil de la comunidad",
@@ -292,7 +298,9 @@
     "organization": "Organización",
     "create": "Crear",
     "cancel": "Cancelar",
-    "invalidDetailsMessage": "Ingrese detalles válidos."
+    "invalidDetailsMessage": "Ingrese detalles válidos.",
+    "searchFullName": "Buscar nombre completo",
+    "addMembers": "Agregar miembros"
   },
   "organizationTags": {
     "title": "Etiquetas de Organización",
@@ -668,7 +676,8 @@
     "postDeleted": "Publicación eliminada exitosamente.",
     "postUpdated": "Publicación actualizada exitosamente.",
     "tag": "Su navegador no admite la etiqueta de video",
-    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está en funcionamiento? Compruebe también su conectividad de red."
+    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está en funcionamiento? Compruebe también su conectividad de red.",
+    "pin": "Fijar"
   },
   "blockUnblockUser": {
     "title": "Usuario de bloqueo/desbloqueo de Talawa",
@@ -848,7 +857,9 @@
   "addOnEntry": {
     "enable": "Activada",
     "install": "Instalar",
-    "uninstall": "Desinstalar"
+    "uninstall": "Desinstalar",
+    "uninstallMsg": "Mensaje de desinstalación",
+    "installMsg": "Mensaje de instalación"
   },
   "memberDetail": {
     "title": "Detalles del usuario",
@@ -888,7 +899,9 @@
     "membershipRequests": "Solicitudes de membresía",
     "adminForEvents": "Administrador de eventos",
     "addedAsAdmin": "El usuario se agrega como administrador.",
-    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. Compruebe amablemente su conexión de red y espere un momento."
+    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. Compruebe amablemente su conexión de red y espere un momento.",
+    "deleteUser": "Eliminar usuario",
+    "userType": "Tipo de usuario"
   },
   "userLogin": {
     "login": "Acceso",
@@ -948,7 +961,8 @@
     "selectOrganization": "Seleccionar organización",
     "filter": "Filtrar",
     "organizations": "Organizaciones",
-    "searchByName": "Buscar por nombre"
+    "searchByName": "Buscar por nombre",
+    "searchUsers": "Buscar usuarios"
   },
   "userSidebarOrg": {
     "yourOrganizations": "Tus Organizaciones",
@@ -961,7 +975,8 @@
     "requests": "Solicitudes",
     "communityProfile": "Perfil de la comunidad",
     "logout": "Cerrar sesión",
-    "settings": "Ajustes"
+    "settings": "Ajustes",
+    "chat": "Chat"
   },
   "organizationSidebar": {
     "viewAll": "Ver todo",
@@ -992,7 +1007,8 @@
     "startPost": "Comenzar una publicación",
     "media": "Medios",
     "event": "Evento",
-    "article": "Artículo"
+    "article": "Artículo",
+    "postNowVisibleInFeed": "Publicar ahora visible en el feed"
   },
   "settings": {
     "settings": "Ajustes",
@@ -1129,12 +1145,22 @@
     "endDateGreaterOrEqual": "La fecha de finalización debe ser mayor o igual a la fecha de inicio",
     "advertisementCreated": "Anuncio creado con éxito.",
     "saveChanges": "Guardar Cambios",
-    "endOfResults": "Fin de los resultados"
+    "endOfResults": "Fin de los resultados",
+    "Rname": "Nombre",
+    "Rtype": "Tipo",
+    "RstartDate": "Fecha de inicio",
+    "RendDate": "Fecha de finalización",
+    "RClose": "Cerrar",
+    "addNew": "Agregar nuevo",
+    "EXname": "Nombre",
+    "EXlink": "Enlace",
+    "createAdvertisement": "Crear publicidad"
   },
   "userChat": {
     "chat": "Charlar",
     "search": "Buscar",
-    "contacts": "Contactos"
+    "contacts": "Contactos",
+    "messages": "Mensajes"
   },
   "userChatRoom": {
     "selectContact": "Seleccione un contacto para iniciar una conversación",

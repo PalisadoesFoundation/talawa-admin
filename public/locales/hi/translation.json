@@ -676,7 +676,8 @@
     "pHeading": "प्लग-इन",
     "install": "स्थापित",
     "available": "उपलब्ध",
-    "pMessage": "प्लगइन मौजूद नहीं है"
+    "pMessage": "प्लगइन मौजूद नहीं है",
+    "filter": "फ़िल्टर"
   },
   "addOnEntry": {
     "enable": "सक्रिय",
@@ -765,7 +766,12 @@
     "viewAll": "सभी को देखें",
     "talawaUserPortal": "तलावा उपयोगकर्ता पोर्टल",
     "my organizations": "मेरे संगठन",
-    "communityProfile": "सामुदायिक प्रोफ़ाइल"
+    "communityProfile": "सामुदायिक प्रोफ़ाइल",
+    "users": "उपयोगकर्ता",
+    "requests": "अनुरोध",
+    "logout": "लॉग आउट",
+    "settings": "सेटिंग्स",
+    "chat": "चैट"
   },
   "organizationSidebar": {
     "viewAll": "सभी को देखें",
@@ -920,7 +926,9 @@
   },
   "userChat": {
     "chat": "बात करना",
-    "contacts": "संपर्क"
+    "contacts": "संपर्क",
+    "search": "खोज",
+    "messages": "संदेश"
   },
   "userChatRoom": {
     "selectContact": "बातचीत शुरू करने के लिए एक संपर्क चुनें",

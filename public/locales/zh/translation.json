@@ -676,7 +676,8 @@
     "pHeading": "插件",
     "install": "已安装",
     "available": "可用的",
-    "pMessage": "插件不存在"
+    "pMessage": "插件不存在",
+    "filter": "筛选"
   },
   "addOnEntry": {
     "enable": "启用",
@@ -765,7 +766,12 @@
     "viewAll": "查看全部",
     "talawaUserPortal": "塔拉瓦用户门户",
     "my organizations": "我的组织",
-    "communityProfile": "社区简介"
+    "communityProfile": "社区简介",
+    "users": "用户",
+    "requests": "请求",
+    "logout": "登出",
+    "settings": "设置",
+    "chat": "聊天"
   },
   "organizationSidebar": {
     "viewAll": "查看全部",
@@ -920,7 +926,9 @@
   },
   "userChat": {
     "chat": "聊天",
-    "contacts": "联系方式"
+    "contacts": "联系方式",
+    "search": "搜索",
+    "messages": "消息"
   },
   "userChatRoom": {
     "selectContact": "选择联系人开始对话",

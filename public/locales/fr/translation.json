@@ -676,7 +676,8 @@
     "pHeading": "Plugins",
     "install": "installée",
     "available": "Disponible",
-    "pMessage": "Le plugin n'existe pas"
+    "pMessage": "Le plugin n'existe pas",
+    "filter": "filtrer"
   },
   "addOnEntry": {
     "enable": "Activé",
@@ -765,7 +766,12 @@
     "viewAll": "Voir tout",
     "talawaUserPortal": "Portail utilisateur Talawa",
     "my organizations": "Mes organisations",
-    "communityProfile": "Profil de la communauté"
+    "communityProfile": "Profil de la communauté",
+    "users": "utilisateurs",
+    "requests": "demandes",
+    "logout": "se déconnecter",
+    "settings": "paramètres",
+    "chat": "discussion"
   },
   "organizationSidebar": {
     "viewAll": "Voir tout",
@@ -920,7 +926,9 @@
   },
   "userChat": {
     "chat": "Chat",
-    "contacts": "Contacts"
+    "contacts": "Contacts",
+    "search": "rechercher",
+    "messages": "messages"
   },
   "userChatRoom": {
     "selectContact": "Sélectionnez un contact pour démarrer la conversation",

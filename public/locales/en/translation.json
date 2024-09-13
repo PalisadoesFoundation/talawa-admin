@@ -22,7 +22,25 @@
     "numeric_value_check": "Atleaset one numeric value",
     "special_char_check": "Atleast one special character",
     "selectOrg": "Select an organization",
-    "afterRegister": "Successfully registered. Please wait for admin to approve your request."
+    "afterRegister": "Successfully registered. Please wait for admin to approve your request.",
+    "talawa_portal": "talawa_portal",
+    "login": "login",
+    "register": "register",
+    "firstName": "firstName",
+    "lastName": "lastName",
+    "email": "email",
+    "password": "password",
+    "confirmPassword": "confirmPassword",
+    "forgotPassword": "forgotPassword",
+    "enterEmail": "enterEmail",
+    "enterPassword": "enterPassword",
+    "talawaApiUnavailable": "talawaApiUnavailable",
+    "notAuthorised": "notAuthorised",
+    "notFound": "notFound",
+    "OR": "OR",
+    "admin": "admin",
+    "user": "user",
+    "loading": "loading"
   },
   "userLoginPage": {
     "title": "Talawa Admin",
@@ -38,7 +56,20 @@
     "successfullyRegistered": "Successfully Registered. Please wait until you will be approved.",
     "userLogin": "User Login",
     "afterRegister": "Successfully registered. Please wait for admin to approve your request.",
-    "selectOrg": "Select an organization"
+    "selectOrg": "Select an organization",
+    "talawa_portal": "talawa_portal",
+    "login": "login",
+    "register": "register",
+    "firstName": "firstName",
+    "lastName": "lastName",
+    "email": "email",
+    "password": "password",
+    "confirmPassword": "confirmPassword",
+    "forgotPassword": "forgotPassword",
+    "enterEmail": "enterEmail",
+    "enterPassword": "enterPassword",
+    "talawaApiUnavailable": "talawaApiUnavailable",
+    "notAuthorised": "notAuthorised"
   },
   "latestEvents": {
     "eventCardTitle": "Upcoming Events",
@@ -56,7 +87,11 @@
   "leftDrawer": {
     "my organizations": "My Organizations",
     "requests": "Membership Requests",
-    "communityProfile": "Community Profile"
+    "communityProfile": "Community Profile",
+    "talawaAdminPortal": "talawaAdminPortal",
+    "menu": "menu",
+    "users": "users",
+    "logout": "logout"
   },
   "leftDrawerOrg": {
     "Dashboard": "Dashboard",
@@ -75,7 +110,13 @@
     "notifications": "Notifications",
     "spamsThe": "spams the",
     "group": "group",
-    "noNotifications": "No Notifications"
+    "noNotifications": "No Notifications",
+    "talawaAdminPortal": "talawaAdminPortal",
+    "menu": "menu",
+    "talawa_portal": "talawa_portal",
+    "settings": "settings",
+    "logout": "logout",
+    "close": "close"
   },
   "orgList": {
     "title": "Talawa Organizations",
@@ -105,11 +146,25 @@
     "manageFeaturesInfo": "Creation Successful ! Please select features that you want to enale for this organization from the plugin store.",
     "goToStore": "Go to Plugin Store",
     "enableEverything": "Enable Everything",
-    "sampleOrgSuccess": "Sample Organization Successfully Created"
+    "sampleOrgSuccess": "Sample Organization Successfully Created",
+    "name": "name",
+    "email": "email",
+    "searchByName": "searchByName",
+    "description": "description",
+    "location": "location",
+    "address": "address",
+    "displayImage": "displayImage",
+    "filter": "filter",
+    "cancel": "cancel",
+    "endOfResults": "endOfResults",
+    "noResultsFoundFor": "noResultsFoundFor",
+    "OR": "OR"
   },
   "orgListCard": {
     "manage": "Manage",
-    "sampleOrganization": "Sample Organization"
+    "sampleOrganization": "Sample Organization",
+    "admins": "admins",
+    "members": "members"
   },
   "paginationList": {
     "rowsPerPage": "rows per page",
@@ -126,7 +181,11 @@
     "acceptedSuccessfully": "Request accepted successfully",
     "rejectedSuccessfully": "Request rejected successfully",
     "noOrgErrorTitle": "Organizations Not Found",
-    "noOrgErrorDescription": "Please create an organization through dashboard"
+    "noOrgErrorDescription": "Please create an organization through dashboard",
+    "name": "name",
+    "email": "email",
+    "endOfResults": "endOfResults",
+    "noResultsFoundFor": "noResultsFoundFor"
   },
   "users": {
     "title": "Talawa Roles",
@@ -150,7 +209,25 @@
     "visit": "Visit",
     "withdraw": "Widthdraw",
     "removeUserFrom": "Remove User from {{org}}",
-    "removeConfirmation": "Are you sure you want to remove '{{name}}' from organization '{{org}}'?"
+    "removeConfirmation": "Are you sure you want to remove '{{name}}' from organization '{{org}}'?",
+    "searchByName": "searchByName",
+    "users": "users",
+    "name": "name",
+    "email": "email",
+    "endOfResults": "endOfResults",
+    "admin": "admin",
+    "superAdmin": "superAdmin",
+    "user": "user",
+    "filter": "filter",
+    "noResultsFoundFor": "noResultsFoundFor",
+    "talawaApiUnavailable": "talawaApiUnavailable",
+    "cancel": "cancel",
+    "admins": "admins",
+    "members": "members",
+    "orgJoined": "orgJoined",
+    "MembershipRequestSent": "MembershipRequestSent",
+    "AlreadyJoined": "AlreadyJoined",
+    "errorOccured": "errorOccured"
   },
   "communityProfile": {
     "title": "Community Profile",
@@ -178,7 +255,12 @@
     "latestPosts": "Latest Posts",
     "noPostsPresent": "No Posts Present",
     "membershipRequests": "Membership requests",
-    "noMembershipRequests": "No Membership requests present"
+    "noMembershipRequests": "No Membership requests present",
+    "location": "location",
+    "members": "members",
+    "admins": "admins",
+    "requests": "requests",
+    "talawaApiUnavailable": "talawaApiUnavailable"
   },
   "organizationPeople": {
     "title": "Talawa Members",
@@ -198,7 +280,21 @@
     "enterLastName": "Enter your last name",
     "enterConfirmPassword": "Enter Password to confirm",
     "organization": "Organization",
-    "invalidDetailsMessage": "Please enter valid details."
+    "invalidDetailsMessage": "Please enter valid details.",
+    "members": "members",
+    "admins": "admins",
+    "users": "users",
+    "searchFirstName": "searchFirstName",
+    "searchLastName": "searchLastName",
+    "firstName": "firstName",
+    "lastName": "lastName",
+    "emailAddress": "emailAddress",
+    "enterEmail": "enterEmail",
+    "password": "password",
+    "enterPassword": "enterPassword",
+    "confirmPassword": "confirmPassword",
+    "create": "create",
+    "cancel": "cancel"
   },
   "organizationTags": {
     "title": "Organization Tags",
@@ -232,7 +328,9 @@
   },
   "userListCard": {
     "addAdmin": "Add Admin",
-    "addedAsAdmin": "User is added as admin."
+    "addedAsAdmin": "User is added as admin.",
+    "joined": "joined",
+    "talawaApiUnavailable": "talawaApiUnavailable"
   },
   "orgAdminListCard": {
     "remove": "Remove",
@@ -244,7 +342,11 @@
     "remove": "Remove",
     "removeMember": "Remove Member",
     "removeMemberMsg": "Do you want to remove this member?",
-    "memberRemoved": "The Member is removed"
+    "memberRemoved": "The Member is removed",
+    "joined": "joined",
+    "no": "no",
+    "yes": "yes",
+    "talawaApiUnavailable": "talawaApiUnavailable"
   },
   "organizationEvents": {
     "title": "Events",
@@ -272,7 +374,17 @@
     "never": "Never",
     "on": "On",
     "after": "After",
-    "occurences": "occurences"
+    "occurences": "occurences",
+    "startTime": "startTime",
+    "endTime": "endTime",
+    "eventLocation": "eventLocation",
+    "events": "events",
+    "description": "description",
+    "location": "location",
+    "startDate": "startDate",
+    "endDate": "endDate",
+    "talawaApiUnavailable": "talawaApiUnavailable",
+    "done": "done"
   },
   "organizationActionItems": {
     "actionItemCategory": "Action Item Category",
@@ -314,7 +426,11 @@
     "earliestDueDate": "Earliest Due Date",
     "updateActionItem": "Update Action Item",
     "noneUpdated": "None of the fields were updated",
-    "updateStatusMsg": "Are you sure you want to mark this action item as pending?"
+    "updateStatusMsg": "Are you sure you want to mark this action item as pending?",
+    "close": "close",
+    "eventActionItems": "eventActionItems",
+    "no": "no",
+    "yes": "yes"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "Agenda Category Details",
@@ -391,7 +507,19 @@
     "never": "Never",
     "on": "On",
     "after": "After",
-    "occurences": "occurences"
+    "occurences": "occurences",
+    "startTime": "startTime",
+    "endTime": "endTime",
+    "location": "location",
+    "no": "no",
+    "yes": "yes",
+    "description": "description",
+    "startDate": "startDate",
+    "endDate": "endDate",
+    "registerEvent": "registerEvent",
+    "close": "close",
+    "talawaApiUnavailable": "talawaApiUnavailable",
+    "done": "done"
   },
   "funds": {
     "title": "Funds",
@@ -414,7 +542,8 @@
     "deleteFundMsg": "Are you sure you want to delete this fund?",
     "createdLatest": "Created Latest",
     "createdEarliest": "Created Earliest",
-    "viewCampaigns": "View Campaigns"
+    "viewCampaigns": "View Campaigns",
+    "searchByName": "searchByName"
   },
   "fundCampaign": {
     "title": "Fundraising Campaigns",
@@ -466,7 +595,9 @@
     "pledges": "Pledges",
     "endsOn": "Ends on",
     "raisedAmount": "Raised amount ",
-    "pledgedAmount": "Pledged amount"
+    "pledgedAmount": "Pledged amount",
+    "startDate": "startDate",
+    "endDate": "endDate"
   },
   "orgPost": {
     "title": "Posts",
@@ -882,7 +1013,10 @@
     "publicEvent": "Is Public",
     "registerable": "Is Registerable",
     "monthlyCalendarView": "Monthly Calendar",
-    "yearlyCalendarView": "Yearly Calender"
+    "yearlyCalendarView": "Yearly Calender",
+    "startTime": "startTime",
+    "endTime": "endTime",
+    "enterLocation": "enterLocation"
   },
   "userEventCard": {
     "starts": "Starts",
