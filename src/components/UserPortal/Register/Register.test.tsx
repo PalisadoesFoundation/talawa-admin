@@ -104,7 +104,7 @@ describe('Testing Register Component [User Portal]', () => {
 
     userEvent.click(screen.getByTestId('setLoginBtn'));
 
-    expect(setCurrentMode).toBeCalledWith('login');
+    expect(setCurrentMode).toHaveBeenCalledWith('login');
   });
 
   test('Expect toast.error to be called if email input is empty', async () => {
@@ -124,7 +124,7 @@ describe('Testing Register Component [User Portal]', () => {
 
     userEvent.click(screen.getByTestId('registerBtn'));
 
-    expect(toast.error).toBeCalledWith('Please enter valid details.');
+    expect(toast.error).toHaveBeenCalledWith('Please enter valid details.');
   });
 
   test('Expect toast.error to be called if password input is empty', async () => {
@@ -145,7 +145,7 @@ describe('Testing Register Component [User Portal]', () => {
     userEvent.type(screen.getByTestId('emailInput'), formData.email);
     userEvent.click(screen.getByTestId('registerBtn'));
 
-    expect(toast.error).toBeCalledWith('Please enter valid details.');
+    expect(toast.error).toHaveBeenCalledWith('Please enter valid details.');
   });
 
   test('Expect toast.error to be called if first name input is empty', async () => {
@@ -169,7 +169,7 @@ describe('Testing Register Component [User Portal]', () => {
 
     userEvent.click(screen.getByTestId('registerBtn'));
 
-    expect(toast.error).toBeCalledWith('Please enter valid details.');
+    expect(toast.error).toHaveBeenCalledWith('Please enter valid details.');
   });
 
   test('Expect toast.error to be called if last name input is empty', async () => {
@@ -195,7 +195,7 @@ describe('Testing Register Component [User Portal]', () => {
 
     userEvent.click(screen.getByTestId('registerBtn'));
 
-    expect(toast.error).toBeCalledWith('Please enter valid details.');
+    expect(toast.error).toHaveBeenCalledWith('Please enter valid details.');
   });
 
   test("Expect toast.error to be called if confirmPassword doesn't match with password", async () => {
@@ -223,7 +223,7 @@ describe('Testing Register Component [User Portal]', () => {
 
     userEvent.click(screen.getByTestId('registerBtn'));
 
-    expect(toast.error).toBeCalledWith(
+    expect(toast.error).toHaveBeenCalledWith(
       "Password doesn't match. Confirm Password and try again.",
     );
   });
@@ -260,7 +260,7 @@ describe('Testing Register Component [User Portal]', () => {
 
     await wait();
 
-    expect(toast.success).toBeCalledWith(
+    expect(toast.success).toHaveBeenCalledWith(
       'Successfully registered. Please wait for admin to approve your request.',
     );
   });
