@@ -2,7 +2,7 @@ require('dotenv').config();
 const { spawn } = require('child_process');
 
 //use default react scritps config 
-const react_script_build = 'npm run build';
+const react_script_build = 'npx react-scripts build';
 
 //use custom config overriden by react-app-rewired 
 const react_app_rewired_build = 'npx react-app-rewired build';
