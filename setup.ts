@@ -50,9 +50,9 @@ export async function main(): Promise<void> {
 
   let shouldSetTalawaApiUrl: boolean;
 
-  if (process.env.VITE_APP_TALAWA_URL) {
+  if (process.env.REACT_APP_TALAWA_URL) {
     console.log(
-      `\nEndpoint for accessing talawa-api graphql service already exists with the value:\n${process.env.VITE_APP_TALAWA_URL}`,
+      `\nEndpoint for accessing talawa-api graphql service already exists with the value:\n${process.env.REACT_APP_TALAWA_URL}`,
     );
     shouldSetTalawaApiUrl = true;
   } else {
@@ -77,12 +77,12 @@ export async function main(): Promise<void> {
 
     const talawaApiUrl = dotenv.parse(
       fs.readFileSync('.env'),
-    ).VITE_APP_TALAWA_URL;
+    ).REACT_APP_TALAWA_URL;
 
     fs.readFile('.env', 'utf8', (err, data) => {
       const result = data.replace(
-        `VITE_APP_TALAWA_URL=${talawaApiUrl}`,
-        `VITE_APP_TALAWA_URL=${endpoint}`,
+        `REACT_APP_TALAWA_URL=${talawaApiUrl}`,
+        `REACT_APP_TALAWA_URL=${endpoint}`,
       );
       fs.writeFileSync('.env', result, 'utf8');
     });
@@ -98,19 +98,19 @@ export async function main(): Promise<void> {
   if (shouldUseRecaptcha) {
     const useRecaptcha = dotenv.parse(
       fs.readFileSync('.env'),
-    ).VITE_APP_USE_RECAPTCHA;
+    ).REACT_APP_USE_RECAPTCHA;
 
     fs.readFile('.env', 'utf8', (err, data) => {
       const result = data.replace(
-        `VITE_APP_USE_RECAPTCHA=${useRecaptcha}`,
-        `VITE_APP_USE_RECAPTCHA=yes`,
+        `REACT_APP_USE_RECAPTCHA=${useRecaptcha}`,
+        `REACT_APP_USE_RECAPTCHA=yes`,
       );
       fs.writeFileSync('.env', result, 'utf8');
     });
     let shouldSetRecaptchaSiteKey: boolean;
-    if (process.env.VITE_APP_RECAPTCHA_SITE_KEY) {
+    if (process.env.REACT_APP_RECAPTCHA_SITE_KEY) {
       console.log(
-        `\nreCAPTCHA site key already exists with the value ${process.env.VITE_APP_RECAPTCHA_SITE_KEY}`,
+        `\nreCAPTCHA site key already exists with the value ${process.env.REACT_APP_RECAPTCHA_SITE_KEY}`,
       );
       shouldSetRecaptchaSiteKey = true;
     } else {
@@ -140,12 +140,12 @@ export async function main(): Promise<void> {
 
       const recaptchaSiteKey = dotenv.parse(
         fs.readFileSync('.env'),
-      ).VITE_APP_RECAPTCHA_SITE_KEY;
+      ).REACT_APP_RECAPTCHA_SITE_KEY;
 
       fs.readFile('.env', 'utf8', (err, data) => {
         const result = data.replace(
-          `VITE_APP_RECAPTCHA_SITE_KEY=${recaptchaSiteKey}`,
-          `VITE_APP_RECAPTCHA_SITE_KEY=${recaptchaSiteKeyInput}`,
+          `REACT_APP_RECAPTCHA_SITE_KEY=${recaptchaSiteKey}`,
+          `REACT_APP_RECAPTCHA_SITE_KEY=${recaptchaSiteKeyInput}`,
         );
         fs.writeFileSync('.env', result, 'utf8');
       });

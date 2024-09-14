@@ -218,7 +218,7 @@ jest.mock('react-toastify', () => ({
 
 jest.mock('Constant/constant.ts', () => ({
   ...jest.requireActual('Constant/constant.ts'),
-  VITE_APP_USE_RECAPTCHA: 'yes',
+  REACT_APP_USE_RECAPTCHA: 'yes',
   RECAPTCHA_SITE_KEY: 'xxx',
 }));
 

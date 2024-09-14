@@ -27,7 +27,7 @@ import App from './App';
 import { store } from './state/store';
 import {
   BACKEND_URL,
-  VITE_APP_BACKEND_WEBSOCKET_URL,
+  REACT_APP_BACKEND_WEBSOCKET_URL,
 } from 'Constant/constant';
 import { refreshToken } from 'utils/getRefreshToken';
 import { ThemeProvider, createTheme } from '@mui/material';
@@ -98,7 +98,7 @@ const httpLink = new HttpLink({
 // if didnt work use /subscriptions
 const wsLink = new GraphQLWsLink(
   createClient({
-    url: VITE_APP_BACKEND_WEBSOCKET_URL,
+    url: REACT_APP_BACKEND_WEBSOCKET_URL,
   }),
 );
 

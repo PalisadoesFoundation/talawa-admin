@@ -2,7 +2,7 @@ import {
   AUTH_TOKEN,
   BACKEND_URL,
   RECAPTCHA_SITE_KEY,
-  VITE_APP_USE_RECAPTCHA,
+  REACT_APP_USE_RECAPTCHA,
 } from './constant';
 
 describe('constants', () => {
@@ -11,19 +11,19 @@ describe('constants', () => {
     expect(AUTH_TOKEN).toEqual('');
   });
 
-  it('BACKEND_URL should be equal to VITE_APP_TALAWA_URL environment variable', () => {
-    expect(BACKEND_URL).toEqual(process.env.VITE_APP_TALAWA_URL);
+  it('BACKEND_URL should be equal to REACT_APP_TALAWA_URL environment variable', () => {
+    expect(BACKEND_URL).toEqual(process.env.REACT_APP_TALAWA_URL);
   });
 
-  it('RECAPTCHA_SITE_KEY should be equal to VITE_APP_RECAPTCHA_SITE_KEY environment variable', () => {
+  it('RECAPTCHA_SITE_KEY should be equal to REACT_APP_RECAPTCHA_SITE_KEY environment variable', () => {
     expect(RECAPTCHA_SITE_KEY).toEqual(
-      process.env.VITE_APP_RECAPTCHA_SITE_KEY,
+      process.env.REACT_APP_RECAPTCHA_SITE_KEY,
     );
   });
 
-  it('VITE_APP_USE_RECAPTCHA should be equal to VITE_APP_USE_RECAPTCHA environment variable', () => {
-    expect(VITE_APP_USE_RECAPTCHA).toEqual(
-      process.env.VITE_APP_USE_RECAPTCHA,
+  it('REACT_APP_USE_RECAPTCHA should be equal to REACT_APP_USE_RECAPTCHA environment variable', () => {
+    expect(REACT_APP_USE_RECAPTCHA).toEqual(
+      process.env.REACT_APP_USE_RECAPTCHA,
     );
   });
 });
