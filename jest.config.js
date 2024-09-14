@@ -1,7 +1,8 @@
 export default {
   roots: ['<rootDir>/src'],
   collectCoverageFrom: ['src/**/*.{ts,tsx}', '!src/index.tsx'],
-  setupFiles: ['react-app-polyfill/jsdom'],
+  // setupFiles: ['react-app-polyfill/jsdom'],
+  setupFiles: ['whatwg-fetch'],
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
   testMatch: [
     '<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}',
@@ -39,10 +40,10 @@ export default {
     'jsx',
     'node',
   ],
-  watchPlugins: [
-    'jest-watch-typeahead/filename',
-    'jest-watch-typeahead/testname',
-  ],
+  // watchPlugins: [
+  //   'jest-watch-typeahead/filename',
+  //   'jest-watch-typeahead/testname',
+  // ],
   resetMocks: false,
   coveragePathIgnorePatterns: [
     'src/state/index.ts',
