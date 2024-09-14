@@ -50,6 +50,7 @@
     "react-multi-carousel": "^2.8.5",
     "react-redux": "^7.2.5",
     "react-router-dom": "^6.26.0",
+    "react-scripts": "^5.0.1",
     "react-toastify": "^10.0.5",
     "react-tooltip": "^5.27.1",
     "redux": "^4.1.1",
@@ -64,11 +65,10 @@
     "web-vitals": "^4.2.3"
   },
   "scripts": {
-    "start": "vite",
-    "build": "node ./scripts/config-overrides/custom_build.js",
+    "serve": "cross-env ESLINT_NO_DEV_ERRORS=true vite",
+    "build": "tsc && vite build",
     "preview": "vite preview",
-    "serve": "cross-env ESLINT_NO_DEV_ERRORS=true node ./scripts/config-overrides/custom_start.js",
-    "test": "cross-env NODE_ENV=test node scripts/test.js --env=./scripts/custom-test-env.js --watchAll --coverage",
+    "test": "cross-env NODE_ENV=test jest --env=./scripts/custom-test-env.js --watchAll --coverage",
     "eject": "react-scripts eject",
     "lint:check": "eslint \"**/*.{ts,tsx}\" --max-warnings=0",
     "lint:fix": "eslint --fix \"**/*.{ts,tsx}\"",
