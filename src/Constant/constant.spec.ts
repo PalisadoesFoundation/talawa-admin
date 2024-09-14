@@ -12,18 +12,18 @@ describe('constants', () => {
   });
 
   it('BACKEND_URL should be equal to VITE_APP_TALAWA_URL environment variable', () => {
-    expect(BACKEND_URL).toEqual(import.meta.env.VITE_APP_TALAWA_URL);
+    expect(BACKEND_URL).toEqual(process.env.VITE_APP_TALAWA_URL);
   });
 
   it('RECAPTCHA_SITE_KEY should be equal to VITE_APP_RECAPTCHA_SITE_KEY environment variable', () => {
     expect(RECAPTCHA_SITE_KEY).toEqual(
-      import.meta.env.VITE_APP_RECAPTCHA_SITE_KEY,
+      process.env.VITE_APP_RECAPTCHA_SITE_KEY,
     );
   });
 
   it('VITE_APP_USE_RECAPTCHA should be equal to VITE_APP_USE_RECAPTCHA environment variable', () => {
     expect(VITE_APP_USE_RECAPTCHA).toEqual(
-      import.meta.env.VITE_APP_USE_RECAPTCHA,
+      process.env.VITE_APP_USE_RECAPTCHA,
     );
   });
 });

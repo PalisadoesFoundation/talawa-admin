@@ -9,11 +9,9 @@ export default {
   ],
   testEnvironment: 'jsdom',
   transform: {
-    '^.+\\.(js|jsx|mjs|cjs|ts|tsx)$':
-      'react-scripts/config/jest/babelTransform.js',
-    '^.+\\.(css|scss|sass|less)$': 'jest-preview/transforms/css',
-    '^(?!.*\\.(js|jsx|mjs|cjs|ts|tsx|css|json)$)':
-      'jest-preview/transforms/file',
+    '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',  // Use babel-jest for JavaScript and TypeScript files
+    '^.+\\.(css|scss|sass|less)$': 'jest-preview/transforms/css', // CSS transformations
+    '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': 'jest-preview/transforms/file', // File transformations
   },
   transformIgnorePatterns: [
     '[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|cjs|ts|tsx)$',

@@ -22,9 +22,9 @@ export async function main(): Promise<void> {
 
   let shouldSetCustomPort: boolean;
 
-  if (import.meta.env.PORT) {
+  if (process.env.PORT) {
     console.log(
-      `\nCustom port for development server already exists with the value:\n${import.meta.env.PORT}`,
+      `\nCustom port for development server already exists with the value:\n${process.env.PORT}`,
     );
     shouldSetCustomPort = true;
   } else {
@@ -50,9 +50,9 @@ export async function main(): Promise<void> {
 
   let shouldSetTalawaApiUrl: boolean;
 
-  if (import.meta.env.VITE_APP_TALAWA_URL) {
+  if (process.env.VITE_APP_TALAWA_URL) {
     console.log(
-      `\nEndpoint for accessing talawa-api graphql service already exists with the value:\n${import.meta.env.VITE_APP_TALAWA_URL}`,
+      `\nEndpoint for accessing talawa-api graphql service already exists with the value:\n${process.env.VITE_APP_TALAWA_URL}`,
     );
     shouldSetTalawaApiUrl = true;
   } else {
@@ -108,9 +108,9 @@ export async function main(): Promise<void> {
       fs.writeFileSync('.env', result, 'utf8');
     });
     let shouldSetRecaptchaSiteKey: boolean;
-    if (import.meta.env.VITE_APP_RECAPTCHA_SITE_KEY) {
+    if (process.env.VITE_APP_RECAPTCHA_SITE_KEY) {
       console.log(
-        `\nreCAPTCHA site key already exists with the value ${import.meta.env.VITE_APP_RECAPTCHA_SITE_KEY}`,
+        `\nreCAPTCHA site key already exists with the value ${process.env.VITE_APP_RECAPTCHA_SITE_KEY}`,
       );
       shouldSetRecaptchaSiteKey = true;
     } else {

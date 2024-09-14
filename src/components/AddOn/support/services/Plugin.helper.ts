@@ -9,7 +9,7 @@ class PluginHelper {
    * @returns A promise that resolves to the store data in JSON format.
    */
   fetchStore = async (): Promise<any> => {
-    const result = await fetch(`http://localhost:${import.meta.env.PORT}/store`);
+    const result = await fetch(`http://localhost:${process.env.PORT}/store`);
     return await result.json();
   };
 
