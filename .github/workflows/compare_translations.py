@@ -79,7 +79,7 @@ def compare_translations(default_translation,
     # Check for missing keys in other_translation
     for key in default_translation:
         if key not in other_translation:
-            error_msg = key
+            error_msg = f"Missing Key: '{key}' - This key from '{default_file}' is missing in '{other_file}'."
             errors.append(error_msg)
     # Check for keys in other_translation that don't match any in default_translation
     for key in other_translation:
