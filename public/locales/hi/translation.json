@@ -109,7 +109,9 @@
   },
   "orgListCard": {
     "manage": "प्रबंधित करना",
-    "sampleOrganization": "नमूना संगठन"
+    "sampleOrganization": "नमूना संगठन",
+    "admins": "प्रशासक",
+    "members": "सदस्य"
   },
   "paginationList": {
     "rowsPerPage": "प्रति पृष्ठ पंक्तियाँ",
