@@ -63,7 +63,7 @@
   },
   "scripts": {
     "start": "vite",
-    "build": "tsc && vite build",
+    "build": "node ./scripts/config-overrides/custom_build.js",
     "preview": "vite preview",
     "serve": "cross-env ESLINT_NO_DEV_ERRORS=true node ./scripts/config-overrides/custom_start.js",
     "test": "cross-env NODE_ENV=test node scripts/test.js --env=./scripts/custom-test-env.js --watchAll --coverage",

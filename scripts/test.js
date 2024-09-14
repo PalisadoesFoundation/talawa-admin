@@ -1,9 +1,9 @@
 'use strict';
 
 // Do this as the first thing so that any code reading it knows the right env.
-import.meta.env.BABEL_ENV = 'test';
-import.meta.env.NODE_ENV = 'test';
-import.meta.env.PUBLIC_URL = '';
+process.env.BABEL_ENV = 'test';
+process.env.NODE_ENV = 'test';
+process.env.PUBLIC_URL = '';
 
 // Makes the script crash on unhandled rejections instead of silently
 // ignoring them. In the future, promise rejections that are not handled will
@@ -40,7 +40,7 @@ function isInMercurialRepository() {
 
 // Watch unless on CI or explicitly running all tests
 if (
-  !import.meta.env.CI &&
+  !process.env.CI &&
   argv.indexOf('--watchAll') === -1 &&
   argv.indexOf('--watchAll=false') === -1
 ) {
