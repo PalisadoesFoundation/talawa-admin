@@ -19,7 +19,7 @@
     "@mui/x-charts": "^7.8.0",
     "@mui/x-data-grid": "^7.16.0",
     "@mui/x-date-pickers": "^7.11.1",
-    "@pdfme/generator": "^1.2.6",
+    "@pdfme/generator": "^4.0.2",
     "@vitejs/plugin-react": "^4.3.1",
     "babel-plugin-transform-import-meta": "^2.2.1",
     "bootstrap": "^5.3.3",
