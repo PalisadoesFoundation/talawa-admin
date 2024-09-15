@@ -198,7 +198,18 @@
     "enterLastName": "Entrez votre nom de famille",
     "enterConfirmPassword": "Entrez votre mot de passe pour confirmer",
     "organization": "Organisation",
-    "invalidDetailsMessage": "Veuillez saisir des informations valides."
+    "invalidDetailsMessage": "Veuillez saisir des informations valides.",
+    "firstName": "Prénom",
+    "lastName": "Nom de famille",
+    "emailAddress": "Adresse e-mail",
+    "enterEmail": "Entrez votre adresse e-mail",
+    "password": "Mot de passe",
+    "enterPassword": "Entrez votre mot de passe",
+    "confirmPassword": "Confirmez le mot de passe",
+    "cancel": "Annuler",
+    "create": "Créer",
+    "user": "Utilisateur",
+    "profile": "Profil"
   },
   "organizationTags": {
     "title": "Étiquettes d'Organisation",
