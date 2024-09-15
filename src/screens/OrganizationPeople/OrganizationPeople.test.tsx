@@ -445,6 +445,32 @@ const MOCKS: TestMock[] = [
               __typename: 'User',
             },
           },
+          {
+            user: {
+              firstName: 'Nandika',
+              lastName: 'Agrawal',
+              image: null,
+              _id: '65378abd85008f171cf2990d',
+              email: 'testadmin1@example.com',
+              createdAt: '2023-04-13T04:53:17.742Z',
+              joinedOrganizations: [
+                {
+                  _id: '6537904485008f171cf29924',
+                  name: 'Unity Foundation',
+                  creator: {
+                    _id: '64378abd85008f171cf2990d',
+                    firstName: 'Wilt',
+                    lastName: 'Shepherd',
+                    image: null,
+                    email: 'testsuperadmin@example.com',
+                    createdAt: '2023-04-13T04:53:17.742Z',
+                  },
+                  __typename: 'Organization',
+                },
+              ],
+              __typename: 'User',
+            },
+          },
         ],
       },
     },
@@ -916,10 +942,13 @@ describe('Organization People Page', () => {
     userEvent.click(screen.getByTestId('existingUser'));
     await wait();
 
-    expect(screen.getByTestId('addExistingUserModal')).toBeInTheDocument();
+    expect(
+      screen.getAllByTestId('addExistingUserModal').length,
+    ).toBeGreaterThan(0);
     await wait();
 
-    userEvent.click(screen.getByTestId('addBtn'));
+    const addBtn = screen.getAllByTestId('addBtn');
+    userEvent.click(addBtn[0]);
   });
 
   test('Open and search existing user', async () => {
@@ -1389,13 +1418,18 @@ test('Open and check if profile image is displayed for existing user', async () 
   expect(screen.getByTestId('addExistingUserModal')).toBeInTheDocument();
   await wait();
 
-  expect(screen.getByTestId('user')).toBeInTheDocument();
+  expect(screen.getAllByTestId('user').length).toBeGreaterThan(0);
   await wait();
 
   // Check if the image is rendered
-  expect(screen.getByTestId('profileImage')).toBeInTheDocument();
+  expect(screen.getAllByTestId('profileImage').length).toBeGreaterThan(0);
   await wait();
 
   const images = await screen.findAllByAltText('avatar');
   expect(images.length).toBeGreaterThan(0);
+  await wait();
+
+  const avatarImages = await screen.findAllByAltText('Dummy Avatar');
+  expect(avatarImages.length).toBeGreaterThan(0);
+  await wait();
 });

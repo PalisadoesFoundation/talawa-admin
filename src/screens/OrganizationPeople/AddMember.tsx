@@ -407,6 +407,7 @@ function AddMember(): JSX.Element {
                                 <Avatar
                                   avatarStyle={styles.TableImage}
                                   name={`${userDetails.user.firstName} ${userDetails.user.lastName}`}
+                                  data-testid="avatarImage"
                                 />
                               )}
                             </StyledTableCell>
