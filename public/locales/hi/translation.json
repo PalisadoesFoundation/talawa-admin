@@ -299,6 +299,8 @@
     "password": "पासवर्ड",
     "enterPassword": "पासवर्ड दर्ज करें",
     "confirmPassword": "पासवर्ड की पुष्टि करें",
+    "user": "उपयोगकर्ता",
+    "profile": "प्रोफ़ाइल",
     "create": "बनाएं",
     "cancel": "रद्द करें"
   },
@@ -1251,7 +1253,8 @@
     "confirmPassword": "पासवर्ड की पुष्टि करें",
     "cancel": "रद्द करें",
     "create": "बनाएं",
-    "user": "उपयोगकर्ता"
+    "user": "उपयोगकर्ता",
+    "profile": "प्रोफ़ाइल"
   },
   "eventActionItems": {
     "title": "एक्शन आइटम्स",

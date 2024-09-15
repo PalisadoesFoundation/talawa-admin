@@ -300,7 +300,9 @@
     "cancel": "Cancelar",
     "invalidDetailsMessage": "Ingrese detalles válidos.",
     "addMembers": "Agregar miembros",
-    "searchFullName": "Ingrese el nombre completo"
+    "searchFullName": "Ingrese el nombre completo",
+    "user": "Usuario",
+    "profile": "Perfil"
   },
   "organizationTags": {
     "title": "Etiquetas de Organización",

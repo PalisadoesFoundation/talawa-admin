@@ -1253,7 +1253,8 @@
     "confirmPassword": "Confirmer le mot de passe",
     "cancel": "Annuler",
     "create": "Créer",
-    "user": "Utilisateur"
+    "user": "Utilisateur",
+    "profile": "Profil"
   },
   "eventActionItems": {
     "title": "Éléments d'action",

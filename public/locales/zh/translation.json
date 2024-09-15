@@ -300,7 +300,9 @@
     "enterPassword": "输入你的密码",
     "confirmPassword": "确认密码",
     "cancel": "取消",
-    "create": "创建"
+    "create": "创建",
+    "user": "用户",
+    "profile": "个人资料"
   },
   "organizationTags": {
     "title": "组织标签",
@@ -1250,6 +1252,7 @@
     "confirmPassword": "确认密码",
     "cancel": "取消",
     "create": "创建",
+    "addMember": "添加会员",
     "user": "用户",
     "profile": "个人资料"
   },

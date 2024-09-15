@@ -300,7 +300,9 @@
     "enterPassword": "enterPassword",
     "confirmPassword": "confirmPassword",
     "create": "create",
-    "cancel": "cancel"
+    "cancel": "cancel",
+    "user": "user",
+    "profile": "profile"
   },
   "organizationTags": {
     "title": "Organization Tags",
@@ -1251,7 +1253,8 @@
     "confirmPassword": "confirmPassword",
     "cancel": "cancel",
     "create": "create",
-    "user": "user"
+    "user": "user",
+    "profile": "profile"
   },
   "eventActionItems": {
     "title": "Action Items",
