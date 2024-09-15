@@ -299,8 +299,8 @@
     "create": "Crear",
     "cancel": "Cancelar",
     "invalidDetailsMessage": "Ingrese detalles válidos.",
-    "searchFullName": "Buscar nombre completo",
-    "addMembers": "Agregar miembros"
+    "addMembers": "Agregar miembros",
+    "searchFullName": "Ingrese el nombre completo"
   },
   "organizationTags": {
     "title": "Etiquetas de Organización",
@@ -1252,6 +1252,7 @@
     "invalidDetailsMessage": "Por favor proporcione todos los detalles requeridos.",
     "passwordNotMatch": "Las contraseñas no coinciden.",
     "user": "Usuario",
+    "profile": "Perfil",
     "addMember": "Agregar miembro"
   },
   "eventActionItems": {
