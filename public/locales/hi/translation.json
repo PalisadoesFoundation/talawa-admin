@@ -198,7 +198,16 @@
     "enterLastName": "अपना अंतिम नाम दर्ज करें",
     "enterConfirmPassword": "पुष्टि करने के लिए अपना पासवर्ड दर्ज करें",
     "organization": "संगठन",
-    "invalidDetailsMessage": "कृपया वैध विवरण दर्ज करें."
+    "invalidDetailsMessage": "कृपया वैध विवरण दर्ज करें.",
+    "firstName": "पहला नाम",
+    "lastName": "अंतिम नाम",
+    "emailAddress": "ईमेल पता",
+    "enterEmail": "अपना ईमेल पता दर्ज करें",
+    "password": "पासवर्ड",
+    "enterPassword": "अपना पासवर्ड दर्ज करें",
+    "confirmPassword": "पासवर्ड की पुष्टि करें",
+    "cancel": "रद्द करें",
+    "create": "सृजन करें"
   },
   "organizationTags": {
     "title": "संस्थान टैग",
@@ -994,7 +1003,9 @@
     "organization": "संगठन",
     "invalidDetailsMessage": "कृपया सभी आवश्यक विवरण प्रदान करें।",
     "passwordNotMatch": "सांकेतिक शब्द मेल नहीं खाते।",
-    "addMember": "सदस्य जोड़ें"
+    "addMember": "सदस्य जोड़ें",
+    "user": "उपयोगकर्ता",
+    "profile": "प्रोफ़ाइल"
   },
   "eventActionItems": {
     "title": "एक्शन आइटम्स",

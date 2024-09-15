@@ -198,7 +198,16 @@
     "enterLastName": "Enter your last name",
     "enterConfirmPassword": "Enter Password to confirm",
     "organization": "Organization",
-    "invalidDetailsMessage": "Please enter valid details."
+    "invalidDetailsMessage": "Please enter valid details.",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "emailAddress": "Email Address",
+    "enterEmail": "Enter your email address",
+    "password": "Password",
+    "enterPassword": "Enter your password",
+    "confirmPassword": "Confirm Password",
+    "cancel": "Cancel",
+    "create": "Create"
   },
   "organizationTags": {
     "title": "Organization Tags",
@@ -993,7 +1002,9 @@
     "organization": "Organization",
     "invalidDetailsMessage": "Please provide all required details.",
     "passwordNotMatch": "Passwords do not match.",
-    "addMember": "Add Member"
+    "addMember": "Add Member",
+    "user": "User",
+    "profile": "Profile"
   },
   "eventActionItems": {
     "title": "Action Items",
