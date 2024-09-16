@@ -38,9 +38,13 @@
 }
 
 .imgContianer img {
-  height: 120px;
-  width: 120px;
+  height: 100px;
+  width: 100px;
   border-radius: 50%;
+}
+.profileContainer {
+  align-items: center;
+  justify-content: center;
 }
 
 .profileDetails {
@@ -54,9 +58,6 @@
 @media screen and (max-width: 1280px) and (min-width: 992px) {
   .imgContianer {
     margin: 1rem auto;
-  }
-  .profileContainer {
-    flex-direction: column;
   }
 }
 
