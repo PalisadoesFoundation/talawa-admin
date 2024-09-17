@@ -15,7 +15,7 @@
     "@mui/icons-material": "^5.16.7",
     "@mui/material": "^5.16.7",
     "@mui/private-theming": "^5.15.12",
-    "@mui/system": "^5.14.12",
+    "@mui/system": "^6.1.0",
     "@mui/x-charts": "^7.17.0",
     "@mui/x-data-grid": "^7.16.0",
     "@mui/x-date-pickers": "^7.11.1",
