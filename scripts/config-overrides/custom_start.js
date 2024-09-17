@@ -16,4 +16,3 @@ else {
   // Execute the npm command
   spawn(react_script_start, { stdio: 'inherit', shell: true });
   }
-
