@@ -331,7 +331,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     );
     await wait();
     resizeWindow(800);
-    expect(screen.getByText(/People/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/People/i)[0]).toBeInTheDocument();
 
     const peopelBtn = screen.getByTestId(/People/i);
     userEvent.click(peopelBtn);
