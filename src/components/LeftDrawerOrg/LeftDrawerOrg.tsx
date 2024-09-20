@@ -50,7 +50,7 @@ const leftDrawerOrg = ({
       | undefined;
     loading: boolean;
   } = useQuery(ORGANIZATIONS_LIST, {
-    variables: { id: orgId },
+    variables: { creatorId: orgId },
   });
 
   // Set organization data when query data is available
