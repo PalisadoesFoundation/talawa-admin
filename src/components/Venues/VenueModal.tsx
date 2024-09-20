@@ -77,13 +77,13 @@ const VenueModal = ({
    */
   const handleSubmit = useCallback(async () => {
     if (formState.name.trim().length === 0) {
-      toast.error(t('venueTitleError'));
+      toast.error(t('venueTitleError') as string);
       return;
     }
 
     const capacityNum = parseInt(formState.capacity);
     if (isNaN(capacityNum) || capacityNum <= 0) {
-      toast.error(t('venueCapacityError'));
+      toast.error(t('venueCapacityError') as string);
       return;
     }
 
@@ -100,7 +100,9 @@ const VenueModal = ({
       });
       /* istanbul ignore next */
       if (data) {
-        toast.success(edit ? t('venueUpdated') : t('venueAdded'));
+        toast.success(
+          edit ? (t('venueUpdated') as string) : (t('venueAdded') as string),
+        );
         refetchVenues();
         onHide();
         setFormState({

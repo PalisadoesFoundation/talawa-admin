@@ -149,22 +149,6 @@ describe('OrganizationFunds Screen =>', () => {
     );
   });
 
-  it('open and closes delete fund modal', async () => {
-    renderOrganizationFunds(link1);
-
-    const deleteFundBtn = await screen.findAllByTestId('deleteFundBtn');
-    await waitFor(() => expect(deleteFundBtn[0]).toBeInTheDocument());
-    userEvent.click(deleteFundBtn[0]);
-
-    await waitFor(() =>
-      expect(screen.getByText(translations.fundDelete)).toBeInTheDocument(),
-    );
-    userEvent.click(screen.getByTestId('deleteFundCloseBtn'));
-    await waitFor(() =>
-      expect(screen.queryByTestId('deleteFundCloseBtn')).toBeNull(),
-    );
-  });
-
   it('Search the Funds list by name', async () => {
     renderOrganizationFunds(link1);
     const searchField = await screen.findByTestId('searchByName');

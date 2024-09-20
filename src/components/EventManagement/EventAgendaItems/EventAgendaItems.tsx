@@ -126,7 +126,7 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
       });
       hideCreateModal();
       refetchAgendaItem();
-      toast.success(t('agendaItemCreated'));
+      toast.success(t('agendaItemCreated') as string);
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message);
@@ -153,20 +153,20 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
 
   // Show error message if there is an error loading data
   if (agendaItemError || agendaCategoryError) {
+    const errorMessage =
+      agendaCategoryError?.message ||
+      (agendaItemError as Error)?.message ||
+      'Unknown error';
+
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
         <div className={styles.message}>
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
             Error occurred while loading{' '}
-            {agendaCategoryError
-              ? 'Agenda Categories'
-              : agendaItemError && 'Agenda Items'}
-            Data
+            {agendaCategoryError ? 'Agenda Categories' : 'Agenda Items'} Data
             <br />
-            {agendaCategoryError
-              ? agendaCategoryError.message
-              : agendaItemError && (agendaItemError as Error).message}
+            {errorMessage}
           </h6>
         </div>
       </div>

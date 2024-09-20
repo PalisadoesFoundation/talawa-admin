@@ -1,5 +1,5 @@
-import React from 'react';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import React, { act } from 'react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 
@@ -107,8 +107,8 @@ const MOCKS = [
             startDate: '2023-03-06',
             endDate: '2023-03-06',
             location: 'das',
-            startTime: '00:40:00.000Z',
-            endTime: '02:40:00.000Z',
+            startTime: '00:40:00.000',
+            endTime: '02:40:00.000',
             allDay: false,
             recurring: false,
             isPublic: true,
@@ -199,8 +199,8 @@ const MOCKS = [
         startDate: dayjs(new Date()).format('YYYY-MM-DD'),
         endDate: dayjs(new Date()).format('YYYY-MM-DD'),
         allDay: false,
-        startTime: '08:00:00Z',
-        endTime: '10:00:00Z',
+        startTime: '08:00:00',
+        endTime: '10:00:00',
       },
     },
     result: {

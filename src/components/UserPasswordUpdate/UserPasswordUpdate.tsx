@@ -45,12 +45,12 @@ const UserUpdate: React.FC<
       !formState.newPassword ||
       !formState.confirmNewPassword
     ) {
-      toast.error(t('passCantBeEmpty'));
+      toast.error(t('passCantBeEmpty') as string);
       return;
     }
 
     if (formState.newPassword !== formState.confirmNewPassword) {
-      toast.error(t('passNoMatch'));
+      toast.error(t('passNoMatch') as string);
       return;
     }
 
@@ -64,7 +64,9 @@ const UserUpdate: React.FC<
       });
       /* istanbul ignore next */
       if (data) {
-        toast.success(tCommon('updatedSuccessfully', { item: 'Password' }));
+        toast.success(
+          tCommon('updatedSuccessfully', { item: 'Password' }) as string,
+        );
         setTimeout(() => {
           window.location.reload();
         }, 2000);

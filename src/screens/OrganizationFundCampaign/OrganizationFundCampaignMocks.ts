@@ -1,6 +1,5 @@
 import {
   CREATE_CAMPAIGN_MUTATION,
-  DELETE_CAMPAIGN_MUTATION,
   UPDATE_CAMPAIGN_MUTATION,
 } from 'GraphQl/Mutations/CampaignMutation';
 import { FUND_CAMPAIGN } from 'GraphQl/Queries/fundQueries';
@@ -18,6 +17,8 @@ export const MOCKS = [
     result: {
       data: {
         getFundById: {
+          name: 'Fund 1',
+          isArchived: false,
           campaigns: [
             {
               _id: 'campaignId1',
@@ -52,6 +53,8 @@ export const MOCKS = [
     result: {
       data: {
         getFundById: {
+          name: 'Fund 1',
+          isArchived: false,
           campaigns: [
             {
               _id: '2',
@@ -78,6 +81,8 @@ export const MOCKS = [
     result: {
       data: {
         getFundById: {
+          name: 'Fund 1',
+          isArchived: false,
           campaigns: [
             {
               _id: '1',
@@ -112,6 +117,8 @@ export const MOCKS = [
     result: {
       data: {
         getFundById: {
+          name: 'Fund 1',
+          isArchived: false,
           campaigns: [
             {
               _id: '2',
@@ -146,6 +153,8 @@ export const MOCKS = [
     result: {
       data: {
         getFundById: {
+          name: 'Fund 1',
+          isArchived: false,
           campaigns: [
             {
               _id: '2',
@@ -180,6 +189,8 @@ export const MOCKS = [
     result: {
       data: {
         getFundById: {
+          name: 'Fund 1',
+          isArchived: false,
           campaigns: [
             {
               _id: '1',
@@ -242,21 +253,6 @@ export const MOCKS = [
       },
     },
   },
-  {
-    request: {
-      query: DELETE_CAMPAIGN_MUTATION,
-      variables: {
-        id: 'campaignId1',
-      },
-    },
-    result: {
-      data: {
-        removeFundraisingCampaign: {
-          _id: 'campaignId1',
-        },
-      },
-    },
-  },
 ];
 
 export const MOCK_ERROR = [
@@ -299,15 +295,6 @@ export const MOCK_ERROR = [
     },
     error: new Error('Mock graphql error'),
   },
-  {
-    request: {
-      query: DELETE_CAMPAIGN_MUTATION,
-      variables: {
-        id: 'campaignId1',
-      },
-    },
-    error: new Error('Mock graphql error'),
-  },
 ];
 
 export const EMPTY_MOCKS = [
@@ -323,6 +310,8 @@ export const EMPTY_MOCKS = [
     result: {
       data: {
         getFundById: {
+          name: 'Fund 1',
+          isArchived: false,
           campaigns: [],
         },
       },

@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 interface InterfaceAddOnProps {
-  extras: any;
-  name: string;
-  children: any;
+  extras?: any;
+  name?: string;
+  children?: React.ReactNode;
 }
 
 /**
@@ -19,31 +19,26 @@ interface InterfaceAddOnProps {
  *
  * @returns The JSX element representing the AddOn component.
  */
-function addOn({ children }: InterfaceAddOnProps): JSX.Element {
+function AddOn({
+  children = 'Default text',
+  extras = {},
+  name = '',
+}: InterfaceAddOnProps): JSX.Element {
   return (
-    <>
-      <div className="plugin-container" data-testid="pluginContainer">
-        {children}
-      </div>
-    </>
+    <div className="plugin-container" data-testid="pluginContainer">
+      {children}
+    </div>
   );
 }
 
-// Default props for the AddOn component
-addOn.defaultProps = {
-  extras: {},
-  name: '',
-  children: null,
-};
-
 // PropTypes validation for the AddOn component
-addOn.propTypes = {
+AddOn.propTypes = {
   extras: PropTypes.shape({
     components: PropTypes.shape({}),
     actions: PropTypes.shape({}),
   }),
   name: PropTypes.string,
-  children: PropTypes.any,
+  children: PropTypes.node,
 };
 
-export default addOn;
+export default AddOn;

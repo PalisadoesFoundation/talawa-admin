@@ -81,11 +81,13 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
       },
     })
       .then(() => {
-        toast.success(tCommon('addedSuccessfully', { item: 'Attendee' }));
+        toast.success(
+          tCommon('addedSuccessfully', { item: 'Attendee' }) as string,
+        );
         attendeesRefetch(); // Refresh the list of attendees
       })
       .catch((err) => {
-        toast.error(t('errorAddingAttendee'));
+        toast.error(t('errorAddingAttendee') as string);
         toast.error(err.message);
       });
   };
@@ -100,11 +102,13 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
       },
     })
       .then(() => {
-        toast.success(tCommon('removedSuccessfully', { item: 'Attendee' }));
+        toast.success(
+          tCommon('removedSuccessfully', { item: 'Attendee' }) as string,
+        );
         attendeesRefetch(); // Refresh the list of attendees
       })
       .catch((err) => {
-        toast.error(t('errorRemovingAttendee'));
+        toast.error(t('errorRemovingAttendee') as string);
         toast.error(err.message);
       });
   };

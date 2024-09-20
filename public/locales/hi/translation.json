@@ -1,49 +1,83 @@
 {
   "loginPage": {
-    "title": "तलावा प्रशासन",
-    "fromPalisadoes": "पैलिसाडोज़ फाउंडेशन के स्वयंसेवकों द्वारा एक खुला स्रोत एप्लिकेशन",
+    "title": "तालावा व्यवस्थापक",
+    "fromPalisadoes": "Palisadoes फाउंडेशन स्वयंसेवकों द्वारा विकसित एक ओपन-सोर्स एप्लिकेशन",
     "userLogin": "उपयोगकर्ता लॉगिन",
-    "atleast_8_char_long": "कम से कम 8 अक्षर लंबा",
-    "atleast_6_char_long": "कम से कम 6 अक्षर लंबा",
-    "firstName_invalid": "प्रथम नाम में केवल छोटे और बड़े अक्षर होने चाहिए",
-    "lastName_invalid": "अंतिम नाम में केवल छोटे और बड़े अक्षर होने चाहिए",
-    "password_invalid": "पासवर्ड में कम से कम एक लोअरकेस अक्षर, एक अपरकेस अक्षर, एक संख्यात्मक मान और एक विशेष अक्षर होना चाहिए",
+    "atleast_8_char_long": "कम से कम 8 अक्षर लंबे",
+    "atleast_6_char_long": "कम से कम 6 अक्षर लंबे",
+    "firstName_invalid": "पहला नाम केवल छोटे और बड़े अक्षरों को शामिल कर सकता है",
+    "lastName_invalid": "अंतिम नाम केवल छोटे और बड़े अक्षरों को शामिल कर सकता है",
+    "password_invalid": "पासवर्ड में कम से कम 1 छोटा अक्षर, 1 बड़ा अक्षर, 1 संख्या और 1 विशेष अक्षर होना चाहिए",
     "email_invalid": "ईमेल में कम से कम 8 अक्षर होने चाहिए",
-    "Password_and_Confirm_password_mismatches.": "पासवर्ड और पासवर्ड बेमेल होने की पुष्टि करें।",
-    "doNotOwnAnAccount": "क्या आपके पास कोई खाता नहीं है?",
+    "Password_and_Confirm_password_mismatches.": "पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते।",
+    "doNotOwnAnAccount": "कोई खाता नहीं है?",
     "captchaError": "कैप्चा त्रुटि!",
-    "Please_check_the_captcha": "कृपया, कैप्चा जांचें।",
-    "Something_went_wrong": "कुछ ग़लत हो गया, कृपया कुछ देर बाद प्रयास करें।",
-    "passwordMismatches": "पासवर्ड और पासवर्ड बेमेल होने की पुष्टि करें।",
-    "fillCorrectly": "सभी विवरण सही-सही भरें।",
-    "successfullyRegistered": "पंजीकरण सफलतापूर्वक हो गया है। ",
+    "Please_check_the_captcha": "कृपया कैप्चा जांचें।",
+    "Something_went_wrong": "कुछ गलत हो गया, कृपया बाद में पुनः प्रयास करें।",
+    "passwordMismatches": "पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते।",
+    "fillCorrectly": "सभी विवरण सही ढंग से भरें।",
+    "successfullyRegistered": "सफलतापूर्वक पंजीकृत।",
     "lowercase_check": "कम से कम एक छोटा अक्षर",
     "uppercase_check": "कम से कम एक बड़ा अक्षर",
-    "numeric_value_check": "कम से कम एक संख्यात्मक मान निर्धारित करें",
-    "special_char_check": "कम से कम एक विशेष पात्र",
+    "numeric_value_check": "कम से कम एक संख्या",
+    "special_char_check": "कम से कम एक विशेष अक्षर",
     "selectOrg": "एक संगठन चुनें",
-    "afterRegister": "पंजीकरण सफलतापूर्वक हो गया है। "
+    "afterRegister": "सफलतापूर्वक पंजीकृत।",
+    "talawa_portal": "तालावा पोर्टल",
+    "login": "लॉगिन",
+    "register": "पंजीकरण",
+    "firstName": "पहला नाम",
+    "lastName": "अंतिम नाम",
+    "email": "ईमेल",
+    "password": "पासवर्ड",
+    "confirmPassword": "पुष्टि पासवर्ड",
+    "forgotPassword": "पासवर्ड भूल गए",
+    "enterEmail": "ईमेल दर्ज करें",
+    "enterPassword": "पासवर्ड दर्ज करें",
+    "talawaApiUnavailable": "तालावा एपीआई अनुपलब्ध",
+    "notAuthorised": "अनधिकृत",
+    "notFound": "नहीं मिला",
+    "OR": "या",
+    "admin": "व्यवस्थापक",
+    "user": "उपयोगकर्ता",
+    "loading": "लोड हो रहा है"
   },
   "userLoginPage": {
-    "title": "तलावा प्रशासन",
-    "fromPalisadoes": "पैलिसाडोज़ फाउंडेशन के स्वयंसेवकों द्वारा एक खुला स्रोत एप्लिकेशन",
-    "atleast_8_char_long": "कम से कम 8 अक्षर लंबा",
-    "Password_and_Confirm_password_mismatches.": "पासवर्ड और पासवर्ड बेमेल होने की पुष्टि करें।",
-    "doNotOwnAnAccount": "क्या आपके पास कोई खाता नहीं है?",
+    "title": "तालावा व्यवस्थापक",
+    "fromPalisadoes": "Palisadoes फाउंडेशन स्वयंसेवकों द्वारा विकसित एक ओपन-सोर्स एप्लिकेशन",
+    "atleast_8_char_long": "कम से कम 8 अक्षर लंबे",
+    "Password_and_Confirm_password_mismatches.": "पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते।",
+    "doNotOwnAnAccount": "कोई खाता नहीं है?",
     "captchaError": "कैप्चा त्रुटि!",
-    "Please_check_the_captcha": "कृपया, कैप्चा जांचें।",
-    "Something_went_wrong": "कुछ ग़लत हो गया, कृपया कुछ देर बाद प्रयास करें।",
-    "passwordMismatches": "पासवर्ड और पासवर्ड बेमेल होने की पुष्टि करें।",
-    "fillCorrectly": "सभी विवरण सही-सही भरें।",
-    "successfullyRegistered": "पंजीकरण सफलतापूर्वक हो गया है। ",
+    "Please_check_the_captcha": "कृपया कैप्चा जांचें।",
+    "Something_went_wrong": "कुछ गलत हो गया, कृपया बाद में पुनः प्रयास करें।",
+    "passwordMismatches": "पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते।",
+    "fillCorrectly": "सभी विवरण सही ढंग से भरें।",
+    "successfullyRegistered": "सफलतापूर्वक पंजीकृत।",
     "userLogin": "उपयोगकर्ता लॉगिन",
-    "afterRegister": "पंजीकरण सफलतापूर्वक हो गया है। ",
-    "selectOrg": "एक संगठन चुनें"
+    "afterRegister": "सफलतापूर्वक पंजीकृत।",
+    "selectOrg": "एक संगठन चुनें",
+    "talawa_portal": "तालावा पोर्टल",
+    "login": "लॉगिन",
+    "register": "पंजीकरण",
+    "firstName": "पहला नाम",
+    "lastName": "अंतिम नाम",
+    "email": "ईमेल",
+    "password": "पासवर्ड",
+    "confirmPassword": "पुष्टि पासवर्ड",
+    "forgotPassword": "पासवर्ड भूल गए",
+    "enterEmail": "ईमेल दर्ज करें",
+    "enterPassword": "पासवर्ड दर्ज करें",
+    "talawaApiUnavailable": "तालावा एपीआई अनुपलब्ध",
+    "notAuthorised": "अनधिकृत",
+    "notFound": "नहीं मिला",
+    "OR": "या",
+    "loading": "लोड हो रहा है"
   },
   "latestEvents": {
-    "eventCardTitle": "आगामी कार्यक्रम",
+    "eventCardTitle": "आगामी घटनाएँ",
     "eventCardSeeAll": "सभी देखें",
-    "noEvents": "कोई आगामी ईवेंट नहीं"
+    "noEvents": "कोई आगामी घटनाएँ नहीं हैं"
   },
   "latestPosts": {
     "latestPostsTitle": "नवीनतम पोस्ट",
@@ -51,65 +85,92 @@
     "noPostsCreated": "कोई पोस्ट नहीं बनाई गई"
   },
   "listNavbar": {
-    "roles": "भूमिकाएँ"
+    "roles": "भूमिकाएँ",
+    "talawa_portal": "तालावा पोर्टल",
+    "requests": "अनुरोध",
+    "logout": "लॉगआउट"
   },
   "leftDrawer": {
     "my organizations": "मेरे संगठन",
     "requests": "सदस्यता अनुरोध",
-    "communityProfile": "सामुदायिक प्रोफ़ाइल"
+    "communityProfile": "समुदाय प्रोफ़ाइल",
+    "talawaAdminPortal": "तालावा व्यवस्थापक पोर्टल",
+    "menu": "मेनू",
+    "users": "उपयोगकर्ता",
+    "logout": "लॉगआउट"
   },
   "leftDrawerOrg": {
     "Dashboard": "डैशबोर्ड",
     "People": "लोग",
-    "Events": "आयोजन",
+    "Events": "घटनाएँ",
     "Contributions": "योगदान",
-    "Posts": "पदों",
-    "Block/Unblock": "ब्लॉक/अनब्लॉक करें",
-    "Plugins": "प्लग-इन",
+    "Posts": "पोस्ट",
+    "Block/Unblock": "ब्लॉक/अनब्लॉक",
+    "Plugins": "प्लगइन्स",
     "Plugin Store": "प्लगइन स्टोर",
-    "Advertisement": "विज्ञापनों",
+    "Advertisement": "विज्ञापन",
     "allOrganizations": "सभी संगठन",
-    "yourOrganization": "आपकी संगठन",
-    "notification": "अधिसूचना",
+    "yourOrganization": "आपका संगठन",
+    "notification": "सूचना",
     "language": "भाषा",
-    "notifications": "सूचनाएं",
-    "spamsThe": "स्पैम करता है",
+    "notifications": "सूचनाएँ",
+    "spamsThe": "स्पैम",
     "group": "समूह",
-    "noNotifications": "कोई सूचनाएं नहीं"
+    "noNotifications": "कोई सूचनाएँ नहीं",
+    "talawaAdminPortal": "तालावा व्यवस्थापक पोर्टल",
+    "menu": "मेनू",
+    "talawa_portal": "तालावा पोर्टल",
+    "settings": "सेटिंग्स",
+    "logout": "लॉगआउट",
+    "close": "बंद करें"
   },
   "orgList": {
-    "title": "तलावा संगठन",
+    "title": "तालावा संगठन",
     "you": "आप",
-    "designation": "पद का नाम",
+    "designation": "पदनाम",
     "my organizations": "मेरे संगठन",
     "createOrganization": "संगठन बनाएं",
     "createSampleOrganization": "नमूना संगठन बनाएं",
     "city": "शहर",
-    "countryCode": "कंट्री कोड",
-    "dependentLocality": "आश्रित इलाका",
+    "countryCode": "देश कोड",
+    "dependentLocality": "निर्भर स्थान",
     "line1": "लाइन 1",
     "line2": "लाइन 2",
-    "postalCode": "डाक कोड",
-    "sortingCode": "कोड क्रमबद्ध करना",
-    "state": "राज्य/प्रान्त",
+    "postalCode": "पोस्टल कोड",
+    "sortingCode": "सॉर्टिंग कोड",
+    "state": "राज्य",
     "userRegistrationRequired": "उपयोगकर्ता पंजीकरण आवश्यक",
-    "visibleInSearch": "खोज में दृश्यमान",
+    "visibleInSearch": "खोज में दिखाई दे",
     "enterName": "नाम दर्ज करें",
-    "sort": "क्रम से लगाना",
+    "sort": "प्रकार",
     "Latest": "नवीनतम",
-    "Earliest": "जल्द से जल्द",
-    "noOrgErrorTitle": "संगठन नहीं मिले",
-    "sampleOrgDuplicate": "केवल एक नमूना संगठन को अनुमति दी गई",
-    "noOrgErrorDescription": "कृपया डैशबोर्ड के माध्यम से एक संगठन बनाएं",
-    "manageFeatures": "सुविधाओं को प्रबंधित करें",
-    "manageFeaturesInfo": "सृजन सफल! ",
-    "goToStore": "प्लगइन स्टोर पर जाएँ",
+    "Earliest": "सबसे पहले",
+    "noOrgErrorTitle": "संगठन नहीं मिला",
+    "sampleOrgDuplicate": "केवल एक नमूना संगठन की अनुमति है",
+    "noOrgErrorDescription": "कृपया डैशबोर्ड के माध्यम से संगठन बनाएं",
+    "manageFeatures": "विशेषताएं प्रबंधित करें",
+    "manageFeaturesInfo": "सफलतापूर्वक बनाया गया!",
+    "goToStore": "प्लगइन स्टोर पर जाएं",
     "enableEverything": "सब कुछ सक्षम करें",
-    "sampleOrgSuccess": "नमूना संगठन सफलतापूर्वक बनाया गया"
+    "sampleOrgSuccess": "नमूना संगठन सफलतापूर्वक बनाया गया",
+    "name": "नाम",
+    "email": "ईमेल",
+    "searchByName": "नाम से खोजें",
+    "description": "विवरण",
+    "location": "स्थान",
+    "address": "पता",
+    "displayImage": "छवि प्रदर्शित करें",
+    "filter": "फ़िल्टर",
+    "cancel": "रद्द करें",
+    "endOfResults": "परिणाम समाप्त",
+    "noResultsFoundFor": "कोई परिणाम नहीं मिला",
+    "OR": "या"
   },
   "orgListCard": {
-    "manage": "प्रबंधित करना",
-    "sampleOrganization": "नमूना संगठन"
+    "manage": "प्रबंधित करें",
+    "sampleOrganization": "संगठन नमूना",
+    "admins": "प्रशासक",
+    "members": "सदस्य"
   },
   "paginationList": {
     "rowsPerPage": "प्रति पृष्ठ पंक्तियाँ",
@@ -117,88 +178,131 @@
   },
   "requests": {
     "title": "सदस्यता अनुरोध",
-    "sl_no": "क्र.सं. ",
-    "accept": "स्वीकार करना",
-    "reject": "अस्वीकार करना",
+    "sl_no": "क्रम संख्या",
+    "accept": "स्वीकार करें",
+    "reject": "अस्वीकार करें",
     "searchRequests": "सदस्यता अनुरोध खोजें",
-    "noOrgError": "संगठन नहीं मिला, कृपया डैशबोर्ड के माध्यम से एक संगठन बनाएं",
+    "noOrgError": "संगठन नहीं मिला, कृपया डैशबोर्ड के माध्यम से संगठन बनाएं",
     "noRequestsFound": "कोई सदस्यता अनुरोध नहीं मिला",
     "acceptedSuccessfully": "अनुरोध सफलतापूर्वक स्वीकार किया गया",
-    "rejectedSuccessfully": "अनुरोध सफलतापूर्वक अस्वीकार कर दिया गया",
-    "noOrgErrorTitle": "संगठन नहीं मिले",
-    "noOrgErrorDescription": "कृपया डैशबोर्ड के माध्यम से एक संगठन बनाएं"
+    "rejectedSuccessfully": "अनुरोध सफलतापूर्वक अस्वीकार किया गया",
+    "noOrgErrorTitle": "संगठन नहीं मिला",
+    "noOrgErrorDescription": "कृपया डैशबोर्ड के माध्यम से संगठन बनाएं",
+    "name": "नाम",
+    "email": "ईमेल",
+    "endOfResults": "परिणाम समाप्त",
+    "noResultsFoundFor": "कोई परिणाम नहीं मिला"
   },
   "users": {
-    "title": "तलावा भूमिकाएँ",
-    "joined_organizations": "संगठनों से जुड़े",
+    "title": "तालावा भूमिकाएँ",
+    "joined_organizations": "संगठनों में शामिल हुए",
     "blocked_organizations": "अवरुद्ध संगठन",
-    "orgJoinedBy": "संगठनों से जुड़े",
-    "orgThatBlocked": "वे संगठन जिन्होंने अवरुद्ध किया",
-    "hasNotJoinedAnyOrg": "किसी भी संगठन में शामिल नहीं हुआ है",
-    "isNotBlockedByAnyOrg": "किसी भी संगठन द्वारा अवरुद्ध नहीं किया गया है",
+    "orgJoinedBy": "द्वारा शामिल संगठन",
+    "orgThatBlocked": "अवरुद्ध संगठन",
+    "hasNotJoinedAnyOrg": "किसी भी संगठन में शामिल नहीं हुआ",
+    "isNotBlockedByAnyOrg": "किसी भी संगठन द्वारा अवरुद्ध नहीं किया गया",
     "searchByOrgName": "संगठन के नाम से खोजें",
-    "view": "देखना",
+    "view": "दृश्य",
     "enterName": "नाम दर्ज करें",
-    "loadingUsers": "उपयोगकर्ता लोड हो रहे हैं...",
+    "loadingUsers": "उपयोगकर्ताओं को लोड कर रहा है...",
     "noUserFound": "कोई उपयोगकर्ता नहीं मिला",
-    "sort": "क्रम से लगाना",
-    "Newest": "नवीनतम पहले",
-    "Oldest": "सबसे पुराना पहले",
-    "noOrgError": "संगठन नहीं मिला, कृपया डैशबोर्ड के माध्यम से एक संगठन बनाएं",
-    "roleUpdated": "भूमिका अद्यतन की गई.",
-    "joinNow": "अब शामिल हों",
-    "visit": "मिलने जाना",
-    "withdraw": "चौड़ाई निकालना",
-    "removeUserFrom": "{{org}} से उपयोगकर्ता हटाएं",
-    "removeConfirmation": "क्या आप वाकई '{{org}}' संगठन से '{{name}}' को हटाना चाहते हैं?"
+    "sort": "प्रकार",
+    "Newest": "नवीनतम",
+    "Oldest": "सबसे पुराना",
+    "noOrgError": "संगठन नहीं मिला, कृपया डैशबोर्ड के माध्यम से संगठन बनाएं",
+    "roleUpdated": "भूमिका अपडेट की गई।",
+    "joinNow": "अभी शामिल हों",
+    "visit": "यात्रा",
+    "withdraw": "वापस लें",
+    "removeUserFrom": "{{org}} से उपयोगकर्ता को हटाएं",
+    "removeConfirmation": "क्या आप वाकई '{{name}}' को संगठन '{{org}}' से हटाना चाहते हैं?",
+    "searchByName": "नाम से खोजें",
+    "users": "उपयोगकर्ता",
+    "name": "नाम",
+    "email": "ईमेल",
+    "endOfResults": "परिणाम समाप्त",
+    "admin": "प्रशासक",
+    "superAdmin": "सुपर प्रशासक",
+    "user": "उपयोगकर्ता",
+    "filter": "फ़िल्टर",
+    "noResultsFoundFor": "कोई परिणाम नहीं मिला",
+    "talawaApiUnavailable": "तालावा एपीआई अनुपलब्ध",
+    "cancel": "रद्द करें",
+    "admins": "प्रशासक",
+    "members": "सदस्य",
+    "orgJoined": "संगठन में शामिल",
+    "MembershipRequestSent": "सदस्यता अनुरोध भेजा गया",
+    "AlreadyJoined": "पहले से शामिल",
+    "errorOccured": "त्रुटि हुई"
   },
   "communityProfile": {
-    "title": "सामुदायिक प्रोफ़ाइल",
+    "title": "समुदाय प्रोफ़ाइल",
     "editProfile": "प्रोफ़ाइल संपादित करें",
-    "communityProfileInfo": "ये विवरण आपके और आपके समुदाय के सदस्यों के लिए लॉगिन/साइनअप स्क्रीन पर दिखाई देंगे",
+    "communityProfileInfo": "ये विवरण आपके और आपके समुदाय के सदस्यों के लॉगिन/पंजीकरण स्क्रीन पर दिखाई देंगे",
     "communityName": "समुदाय का नाम",
-    "wesiteLink": "वेबसाइट की लिंक",
-    "logo": "प्रतीक चिन्ह",
+    "wesiteLink": "वेबसाइट लिंक",
+    "logo": "लोगो",
     "social": "सोशल मीडिया लिंक",
-    "url": "यू आर एल दर्ज करो",
-    "profileChangedMsg": "प्रोफ़ाइल विवरण सफलतापूर्वक अपडेट किया गया.",
-    "resetData": "प्रोफ़ाइल विवरण सफलतापूर्वक रीसेट करें।"
+    "url": "यूआरएल दर्ज करें",
+    "profileChangedMsg": "प्रोफ़ाइल विवरण सफलतापूर्वक अपडेट किया गया।",
+    "resetData": "प्रोफ़ाइल विवरण सफलतापूर्वक रीसेट किया गया।"
   },
   "dashboard": {
     "title": "डैशबोर्ड",
     "about": "के बारे में",
-    "deleteThisOrganization": "इस संगठन को हटाएँ",
+    "deleteThisOrganization": "इस संगठन को हटाएं",
     "statistics": "आंकड़े",
-    "posts": "पदों",
-    "events": "आयोजन",
-    "blockedUsers": "रोके गए उपयोगकर्ता",
-    "viewAll": "सभी को देखें",
-    "upcomingEvents": "आगामी कार्यक्रम",
-    "noUpcomingEvents": "कोई आगामी ईवेंट नहीं",
+    "posts": "पोस्ट",
+    "events": "घटनाएँ",
+    "blockedUsers": "अवरुद्ध उपयोगकर्ता",
+    "viewAll": "सभी देखें",
+    "upcomingEvents": "आगामी घटनाएँ",
+    "noUpcomingEvents": "कोई आगामी घटनाएँ नहीं हैं",
     "latestPosts": "नवीनतम पोस्ट",
-    "noPostsPresent": "कोई पोस्ट मौजूद नहीं",
+    "noPostsPresent": "कोई पोस्ट नहीं हैं",
     "membershipRequests": "सदस्यता अनुरोध",
-    "noMembershipRequests": "कोई सदस्यता अनुरोध मौजूद नहीं है"
+    "noMembershipRequests": "कोई सदस्यता अनुरोध नहीं हैं",
+    "location": "स्थान",
+    "members": "सदस्य",
+    "admins": "प्रशासक",
+    "requests": "अनुरोध",
+    "talawaApiUnavailable": "तालावा एपीआई अनुपलब्ध"
   },
   "organizationPeople": {
-    "title": "तलवा सदस्य",
+    "title": "तालावा सदस्य",
     "filterByName": "नाम से फ़िल्टर करें",
-    "filterByLocation": "स्थान के अनुसार फ़िल्टर करें",
-    "filterByEvent": "इवेंट के अनुसार फ़िल्टर करें",
+    "filterByLocation": "स्थान से फ़िल्टर करें",
+    "filterByEvent": "घटना से फ़िल्टर करें",
     "searchName": "नाम दर्ज करें",
-    "searchevent": "इवेंट दर्ज करें",
+    "searchevent": "घटना दर्ज करें",
     "searchFullName": "पूरा नाम दर्ज करें",
     "people": "लोग",
-    "sort": "भूमिका के आधार पर खोजें",
-    "actions": "कार्रवाई",
+    "sort": "भूमिका से खोजें",
+    "actions": "क्रियाएँ",
     "addMembers": "सदस्य जोड़ें",
     "existingUser": "मौजूदा उपयोगकर्ता",
-    "newUser": "नए उपयोगकर्ता",
+    "newUser": "नया उपयोगकर्ता",
     "enterFirstName": "अपना पहला नाम दर्ज करें",
     "enterLastName": "अपना अंतिम नाम दर्ज करें",
-    "enterConfirmPassword": "पुष्टि करने के लिए अपना पासवर्ड दर्ज करें",
+    "enterConfirmPassword": "अपना पासवर्ड पुष्टि के लिए दर्ज करें",
     "organization": "संगठन",
-    "invalidDetailsMessage": "कृपया वैध विवरण दर्ज करें."
+    "invalidDetailsMessage": "कृपया मान्य विवरण दर्ज करें।",
+    "members": "सदस्य",
+    "admins": "प्रशासक",
+    "users": "उपयोगकर्ता",
+    "searchFirstName": "प्रथम नाम खोजें",
+    "searchLastName": "अंतिम नाम खोजें",
+    "firstName": "प्रथम नाम",
+    "lastName": "अंतिम नाम",
+    "emailAddress": "ईमेल पता",
+    "enterEmail": "ईमेल दर्ज करें",
+    "password": "पासवर्ड",
+    "enterPassword": "पासवर्ड दर्ज करें",
+    "confirmPassword": "पासवर्ड की पुष्टि करें",
+    "user": "उपयोगकर्ता",
+    "profile": "प्रोफ़ाइल",
+    "create": "बनाएं",
+    "cancel": "रद्द करें"
   },
   "organizationTags": {
     "title": "संस्थान टैग",
@@ -232,19 +336,29 @@
   },
   "userListCard": {
     "addAdmin": "व्यवस्थापक जोड़ें",
-    "addedAsAdmin": "उपयोगकर्ता को व्यवस्थापक के रूप में जोड़ा गया है."
+    "addedAsAdmin": "उपयोगकर्ता को व्यवस्थापक के रूप में जोड़ा गया है.",
+    "joined": "शामिल हुए",
+    "talawaApiUnavailable": "Talawa API अनुपलब्ध"
   },
   "orgAdminListCard": {
     "remove": "निकालना",
     "removeAdmin": "व्यवस्थापक हटाएँ",
     "removeAdminMsg": "क्या आप इस व्यवस्थापक को हटाना चाहते हैं?",
-    "adminRemoved": "व्यवस्थापक को हटा दिया गया है."
+    "adminRemoved": "व्यवस्थापक को हटा दिया गया है.",
+    "joined": "शामिल हुए",
+    "no": "नहीं",
+    "yes": "हाँ",
+    "talawaApiUnavailable": "Talawa API अनुपलब्ध"
   },
   "orgPeopleListCard": {
     "remove": "निकालना",
     "removeMember": "सदस्य हटाएँ",
     "removeMemberMsg": "क्या आप इस सदस्य को हटाना चाहते हैं?",
-    "memberRemoved": "सदस्य को हटा दिया गया है"
+    "memberRemoved": "सदस्य को हटा दिया गया है",
+    "joined": "शामिल हुए",
+    "no": "नहीं",
+    "yes": "हाँ",
+    "talawaApiUnavailable": "Talawa API अनुपलब्ध"
   },
   "organizationEvents": {
     "title": "आयोजन",
@@ -275,7 +389,14 @@
     "never": "कभी नहीं",
     "on": "पर",
     "after": "बाद",
-    "occurences": "घटनाओं"
+    "occurences": "घटनाओं",
+    "events": "कार्यक्रम",
+    "description": "विवरण",
+    "location": "स्थान",
+    "startDate": "प्रारंभ तिथि",
+    "endDate": "समाप्ति तिथि",
+    "talawaApiUnavailable": "Talawa API अनुपलब्ध",
+    "done": "पूर्ण"
   },
   "organizationActionItems": {
     "actionItemCategory": "कार्य आइटम श्रेणी",
@@ -286,7 +407,6 @@
     "assignmentDate": "असाइनमेंट दिनांक",
     "active": "सक्रिय",
     "clearFilters": "फ़िल्टर साफ़ करें",
-    "completed": "पुरा होना।",
     "completionDate": "पूरा करने की तिथि",
     "createActionItem": "कार्रवाई आइटम बनाएं",
     "deleteActionItem": "क्रिया आइटम हटाएँ",
@@ -311,7 +431,18 @@
     "successfulCreation": "कार्रवाई आइटम सफलतापूर्वक बनाया गया",
     "successfulUpdation": "कार्रवाई आइटम सफलतापूर्वक अपडेट किया गया",
     "successfulDeletion": "कार्रवाई आइटम सफलतापूर्वक हटा दिया गया",
-    "title": "एक्शन आइटम्स"
+    "title": "एक्शन आइटम्स",
+    "category": "श्रेणी",
+    "allotedHours": "आवंटित घंटे",
+    "latestDueDate": "सबसे अधिक नियत तिथि",
+    "earliestDueDate": "सबसे पहले की नियत तिथि",
+    "updateActionItem": "कार्य आइटम अपडेट करें",
+    "noneUpdated": "कोई फ़ील्ड अपडेट नहीं किया गया",
+    "updateStatusMsg": "क्या आप वाकई इस कार्य आइटम को लंबित के रूप में चिह्नित करना चाहते हैं?",
+    "close": "बंद करें",
+    "eventActionItems": "कार्यक्रम कार्रवाई आइटम",
+    "no": "नहीं",
+    "yes": "हाँ"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "एजेंडा श्रेणी विवरण",
@@ -390,7 +521,17 @@
     "never": "कभी नहीं",
     "on": "पर",
     "after": "बाद",
-    "occurences": "घटनाओं"
+    "occurences": "घटनाओं",
+    "location": "स्थान",
+    "no": "नहीं",
+    "yes": "हाँ",
+    "description": "विवरण",
+    "startDate": "प्रारंभ तिथि",
+    "endDate": "समाप्ति तिथि",
+    "registerEvent": "कार्यक्रम के लिए पंजीकरण करें",
+    "close": "बंद करें",
+    "talawaApiUnavailable": "Talawa API अनुपलब्ध",
+    "done": "समाप्त"
   },
   "funds": {
     "title": "फंड",
@@ -466,7 +607,9 @@
     "pledges": "प्रतिज्ञाएँ",
     "endsOn": "पर समाप्त होता है",
     "raisedAmount": "उठाया गया राशि",
-    "pledgedAmount": "प्रतिबद्ध राशि"
+    "pledgedAmount": "प्रतिबद्ध राशि",
+    "startDate": "प्रारंभ तिथि",
+    "endDate": "समाप्ति तिथि"
   },
   "orgPost": {
     "title": "पदों",
@@ -494,7 +637,8 @@
     "postCreatedSuccess": "बधाई हो! ",
     "pinPost": "पिन पद",
     "Next": "अगला पृष्ठ",
-    "Previous": "पिछला पृष्ठ"
+    "Previous": "पिछला पृष्ठ",
+    "cancel": "रद्द करें"
   },
   "postNotFound": {
     "post": "डाक",
@@ -509,7 +653,8 @@
     "user not found!": "उपयोगकर्ता नहीं मिला!",
     "member not found!": "सदस्य अनुपस्थित!",
     "admin not found!": "व्यवस्थापक नहीं मिला!",
-    "roles not found!": "भूमिकाएँ नहीं मिलीं!"
+    "roles not found!": "भूमिकाएँ नहीं मिलीं!",
+    "user": "उपयोगकर्ता"
   },
   "orgPostCard": {
     "author": "लेखक",
@@ -528,7 +673,12 @@
     "postDeleted": "पोस्ट सफलतापूर्वक हटा दी गई.",
     "postUpdated": "पोस्ट सफलतापूर्वक अपडेट किया गया.",
     "tag": " आपका ब्राउज़र में वीडियो टैग समर्थित नहीं है",
-    "pin": "पिन पद"
+    "pin": "पिन पद",
+    "edit": "संपादित करें",
+    "no": "नहीं",
+    "yes": "हाँ",
+    "close": "बंद करें",
+    "talawaApiUnavailable": "Talawa API अनुपलब्ध"
   },
   "blockUnblockUser": {
     "title": "उपयोगकर्ता को ब्लॉक/अनब्लॉक करें",
@@ -544,7 +694,12 @@
     "blockedUsers": "रोके गए उपयोगकर्ता",
     "searchByFirstName": "प्रथम नाम से खोजें",
     "searchByLastName": "अंतिम नाम से खोजें",
-    "noSpammerFound": "कोई स्पैमर नहीं मिला"
+    "noSpammerFound": "कोई स्पैमर नहीं मिला",
+    "searchByName": "नाम से खोजें",
+    "name": "नाम",
+    "email": "ईमेल",
+    "talawaApiUnavailable": "Talawa API अनुपलब्ध",
+    "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला"
   },
   "eventManagement": {
     "title": "इवेंट मैनेजमेंट",
@@ -569,7 +724,10 @@
     "errorSendingMail": "मेल भेजने में त्रुटि.",
     "passwordMismatches": "पासवर्ड और पासवर्ड बेमेल होने की पुष्टि करें।",
     "passwordChanges": "पासवर्ड सफलतापूर्वक बदल गया.",
-    "OTPsent": "ओटीपी आपके पंजीकृत ईमेल पर भेजा जाता है।"
+    "OTPsent": "ओटीपी आपके पंजीकृत ईमेल पर भेजा जाता है।",
+    "forgotPassword": "पासवर्ड भूल गए",
+    "password": "पासवर्ड",
+    "talawaApiUnavailable": "Talawa API अनुपलब्ध"
   },
   "pageNotFound": {
     "404": "404",
@@ -599,15 +757,16 @@
     "amount": "मात्रा"
   },
   "orgSettings": {
-    "title": "समायोजन",
+    "title": "सेटिंग्स",
     "general": "सामान्य",
-    "actionItemCategories": "कार्रवाई आइटम श्रेणियाँ",
-    "updateOrganization": "संगठन अद्यतन करें",
+    "actionItemCategories": "कार्य आइटम श्रेणियाँ",
+    "updateOrganization": "संगठन अपडेट करें",
     "seeRequest": "अनुरोध देखें",
     "noData": "कोई डेटा नहीं",
-    "otherSettings": "अन्य सेटिंग",
+    "otherSettings": "अन्य सेटिंग्स",
     "changeLanguage": "भाषा बदलें",
-    "manageCustomFields": "कस्टम फ़ील्ड प्रबंधित करें"
+    "manageCustomFields": "कस्टम फ़ील्ड प्रबंधित करें",
+    "agendaItemCategories": "एजेंडा आइटम श्रेणियाँ"
   },
   "deleteOrg": {
     "deleteOrganization": "संगठन हटाएँ",
@@ -615,18 +774,30 @@
     "deleteMsg": "क्या आप इस संगठन को हटाना चाहते हैं?",
     "confirmDelete": "हटाने की पुष्टि करें",
     "longDelOrgMsg": "संगठन हटाएं बटन पर क्लिक करने से संगठन अपने ईवेंट, टैग और सभी संबंधित डेटा के साथ स्थायी रूप से हटा दिया जाएगा।",
-    "successfullyDeletedSampleOrganization": "नमूना संगठन सफलतापूर्वक हटा दिया गया"
+    "successfullyDeletedSampleOrganization": "नमूना संगठन सफलतापूर्वक हटा दिया गया",
+    "cancel": "रद्द करें"
   },
   "userUpdate": {
     "appLanguageCode": "डिफ़ॉल्ट भाषा",
-    "userType": "उपयोगकर्ता का प्रकार"
+    "userType": "उपयोगकर्ता का प्रकार",
+    "firstName": "प्रथम नाम",
+    "lastName": "अंतिम नाम",
+    "email": "ईमेल",
+    "password": "पासवर्ड",
+    "admin": "प्रशासक",
+    "superAdmin": "सुपर प्रशासक",
+    "displayImage": "प्रदर्शन छवि",
+    "saveChanges": "परिवर्तन सहेजें",
+    "cancel": "रद्द करें"
   },
   "userPasswordUpdate": {
     "previousPassword": "पिछला पासवर्ड",
     "newPassword": "नया पासवर्ड",
     "confirmNewPassword": "नए पासवर्ड की पुष्टि करें",
     "passCantBeEmpty": "पासवर्ड खाली नहीं हो सकता",
-    "passNoMatch": "नया पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते।"
+    "passNoMatch": "नया पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते।",
+    "saveChanges": "परिवर्तन सहेजें",
+    "cancel": "रद्द करें"
   },
   "orgDelete": {
     "deleteOrg": "संगठन हटाएं"
@@ -634,7 +805,9 @@
   "membershipRequest": {
     "accept": "स्वीकार करना",
     "reject": "अस्वीकार करना",
-    "memberAdded": "यह स्वीकृत है"
+    "memberAdded": "यह स्वीकृत है",
+    "joined": "शामिल हुए",
+    "talawaApiUnavailable": "Talawa API अनुपलब्ध"
   },
   "orgUpdate": {
     "city": "शहर",
@@ -648,7 +821,15 @@
     "userRegistrationRequired": "उपयोगकर्ता पंजीकरण आवश्यक",
     "isVisibleInSearch": "खोज में दृश्यमान",
     "enterNameOrganization": "संगठन का नाम दर्ज करें",
-    "successfulUpdated": "संगठन सफलतापूर्वक अद्यतन किया गया"
+    "successfulUpdated": "संगठन सफलतापूर्वक अद्यतन किया गया",
+    "name": "नाम",
+    "description": "विवरण",
+    "location": "स्थान",
+    "address": "पता",
+    "displayImage": "प्रदर्शन छवि",
+    "saveChanges": "परिवर्तन सहेजें",
+    "cancel": "रद्द करें",
+    "talawaApiUnavailable": "Talawa API अनुपलब्ध"
   },
   "addOnRegister": {
     "addNew": "नया जोड़ो",
@@ -658,7 +839,9 @@
     "pluginDesc": "प्लगइन विवरण",
     "pName": "उदाहरणार्थ: दान",
     "cName": "उदाहरण: जॉन डो",
-    "pDesc": "यह प्लगइन यूआई को सक्षम बनाता है"
+    "pDesc": "यह प्लगइन यूआई को सक्षम बनाता है",
+    "close": "बंद करें",
+    "register": "पंजीकरण करें"
   },
   "addOnStore": {
     "title": "स्टोर पर जोड़ें",
@@ -669,7 +852,8 @@
     "pHeading": "प्लग-इन",
     "install": "स्थापित",
     "available": "उपलब्ध",
-    "pMessage": "प्लगइन मौजूद नहीं है"
+    "pMessage": "प्लगइन मौजूद नहीं है",
+    "filter": "फ़िल्टर"
   },
   "addOnEntry": {
     "enable": "सक्रिय",
@@ -711,7 +895,14 @@
     "membershipRequests": "सदस्यता अनुरोध",
     "adminForEvents": "घटनाओं के लिए व्यवस्थापक",
     "addedAsAdmin": "उपयोगकर्ता को व्यवस्थापक के रूप में जोड़ा गया है.",
-    "userType": "उपयोगकर्ता का प्रकार"
+    "userType": "उपयोगकर्ता का प्रकार",
+    "email": "ईमेल",
+    "displayImage": "प्रदर्शन छवि",
+    "address": "पता",
+    "delete": "हटाएं",
+    "saveChanges": "परिवर्तन सहेजें",
+    "joined": "शामिल हुए",
+    "talawaApiUnavailable": "Talawa API अनुपलब्ध"
   },
   "people": {
     "title": "लोग",
@@ -722,7 +913,14 @@
     "loginIntoYourAccount": "अपने खाते में लॉगिन करें",
     "invalidDetailsMessage": "कृपया एक वैध ईमेल और पासवर्ड दर्ज करें।",
     "notAuthorised": "क्षमा मांगना! ",
-    "invalidCredentials": "दर्ज किए गए क्रेडेंशियल ग़लत हैं. "
+    "invalidCredentials": "दर्ज किए गए क्रेडेंशियल ग़लत हैं. ",
+    "forgotPassword": "पासवर्ड भूल गए",
+    "emailAddress": "ईमेल पता",
+    "enterEmail": "ईमेल दर्ज करें",
+    "password": "पासवर्ड",
+    "enterPassword": "पासवर्ड दर्ज करें",
+    "register": "पंजीकरण करें",
+    "talawaApiUnavailable": "Talawa API अनुपलब्ध"
   },
   "userRegister": {
     "enterFirstName": "अपना पहला नाम दर्ज करें",
@@ -732,7 +930,16 @@
     "login": "लॉग इन करें",
     "afterRegister": "पंजीकरण सफलतापूर्वक हो गया है। ",
     "passwordNotMatch": "पासवर्ड मेल नहीं खाता. ",
-    "invalidDetailsMessage": "कृपया वैध विवरण दर्ज करें."
+    "invalidDetailsMessage": "कृपया वैध विवरण दर्ज करें.",
+    "register": "पंजीकरण करें",
+    "firstName": "प्रथम नाम",
+    "lastName": "अंतिम नाम",
+    "emailAddress": "ईमेल पता",
+    "enterEmail": "ईमेल दर्ज करें",
+    "password": "पासवर्ड",
+    "enterPassword": "पासवर्ड दर्ज करें",
+    "confirmPassword": "पासवर्ड की पुष्टि करें",
+    "talawaApiUnavailable": "Talawa API अनुपलब्ध"
   },
   "userNavbar": {
     "talawa": "तलावा",
@@ -741,7 +948,10 @@
     "events": "आयोजन",
     "chat": "बात करना",
     "donate": "दान करें",
-    "language": "भाषा"
+    "language": "भाषा",
+    "settings": "समायोजन",
+    "logout": "लॉग आउट करें",
+    "close": "बंद करें"
   },
   "userOrganizations": {
     "allOrganizations": "सभी संगठन",
@@ -750,7 +960,10 @@
     "selectOrganization": "एक संगठन चुनें",
     "searchUsers": "उपयोगकर्ता खोजें",
     "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
-    "organizations": "संगठनों"
+    "organizations": "संगठनों",
+    "search": "खोजें",
+    "filter": "फ़िल्टर",
+    "searchByName": "नाम से खोजें"
   },
   "userSidebarOrg": {
     "yourOrganizations": "आपके संगठन",
@@ -758,13 +971,20 @@
     "viewAll": "सभी को देखें",
     "talawaUserPortal": "तलावा उपयोगकर्ता पोर्टल",
     "my organizations": "मेरे संगठन",
-    "communityProfile": "सामुदायिक प्रोफ़ाइल"
+    "communityProfile": "सामुदायिक प्रोफ़ाइल",
+    "users": "उपयोगकर्ता",
+    "requests": "अनुरोध",
+    "logout": "लॉग आउट",
+    "settings": "सेटिंग्स",
+    "chat": "चैट",
+    "menu": "मेनू"
   },
   "organizationSidebar": {
     "viewAll": "सभी को देखें",
     "events": "आयोजन",
     "noEvents": "दिखाने के लिए कोई ईवेंट नहीं",
-    "noMembers": "दिखाने के लिए कोई सदस्य नहीं"
+    "noMembers": "दिखाने के लिए कोई सदस्य नहीं",
+    "members": "सदस्य"
   },
   "postCard": {
     "likes": "पसंद है",
@@ -843,7 +1063,15 @@
     "fullTime": "पूरा समय",
     "partTime": "पार्ट टाईम",
     "selectCountry": "कोई देश चुनें",
-    "enterState": "शहर या राज्य दर्ज करें"
+    "enterState": "शहर या राज्य दर्ज करें",
+    "settings": "समायोजन",
+    "firstName": "प्रथम नाम",
+    "lastName": "अंतिम नाम",
+    "emailAddress": "ईमेल पता",
+    "displayImage": "प्रदर्शन छवि",
+    "address": "पता",
+    "saveChanges": "परिवर्तन सहेजें",
+    "joined": "शामिल हुए"
   },
   "donate": {
     "title": "दान",
@@ -854,7 +1082,11 @@
     "yourPreviousDonations": "आपका पिछला दान",
     "donate": "दान करें",
     "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
-    "success": "दान सफल"
+    "success": "दान सफल",
+    "invalidAmount": "कृपया दान राशि के लिए संख्यात्मक मान दर्ज करें.",
+    "donationAmountDescription": "कृपया दान राशि के लिए संख्यात्मक मान दर्ज करें.",
+    "donationOutOfRange": "दान राशि {{min}} और {{max}} के बीच होनी चाहिए.",
+    "donateTo": "दान करें"
   },
   "userEvents": {
     "title": "ईवेंट",
@@ -875,13 +1107,22 @@
     "publicEvent": "सार्वजनिक है",
     "registerable": "पंजीकरण योग्य है",
     "monthlyCalendarView": "मासिक कैलेंडर",
-    "yearlyCalendarView": "वार्षिक कैलेंडर"
+    "yearlyCalendarView": "वार्षिक कैलेंडर",
+    "search": "खोजें",
+    "cancel": "रद्द करें",
+    "create": "बनाएं",
+    "eventDescription": "कार्यक्रम विवरण",
+    "eventLocation": "कार्यक्रम स्थान",
+    "startDate": "प्रारंभ तिथि",
+    "endDate": "समाप्ति तिथि"
   },
   "userEventCard": {
     "starts": "प्रारंभ होगा",
     "ends": "समाप्त होता है",
     "creator": "निर्माता",
-    "alreadyRegistered": "पहले से ही पंजीकृत"
+    "alreadyRegistered": "पहले से ही पंजीकृत",
+    "location": "स्थान",
+    "register": "पंजीकरण करें"
   },
   "advertisement": {
     "title": "विज्ञापनों",
@@ -906,11 +1147,21 @@
     "editAdvertisement": "विज्ञापन संपादित करें",
     "advertisementDeleted": "विज्ञापन सफलतापूर्वक हटाया गया।",
     "endDateGreaterOrEqual": "समाप्ति तिथि प्रारंभ तिथि से अधिक या उसके बराबर होनी चाहिए",
-    "advertisementCreated": "विज्ञापन सफलतापूर्वक बनाया गया।"
+    "advertisementCreated": "विज्ञापन सफलतापूर्वक बनाया गया।",
+    "pHeading": "विज्ञापन शीर्षक",
+    "delete": "हटाएं",
+    "close": "बंद करें",
+    "no": "नहीं",
+    "yes": "हाँ",
+    "edit": "संपादित करें",
+    "saveChanges": "परिवर्तन सहेजें",
+    "endOfResults": "परिणाम समाप्त"
   },
   "userChat": {
     "chat": "बात करना",
-    "contacts": "संपर्क"
+    "contacts": "संपर्क",
+    "search": "खोज",
+    "messages": "संदेश"
   },
   "userChatRoom": {
     "selectContact": "बातचीत शुरू करने के लिए एक संपर्क चुनें",
@@ -928,20 +1179,28 @@
     "String": "स्ट्रिंग",
     "Boolean": "बूलियन",
     "Date": "तारीख",
-    "Number": "संख्या"
+    "Number": "संख्या",
+    "saveChanges": "परिवर्तन सहेजें"
   },
   "orgActionItemCategories": {
     "enableButton": "सक्षम",
     "disableButton": "अक्षम करना",
     "updateActionItemCategory": "अद्यतन",
     "actionItemCategoryName": "नाम",
-    "actionItemCategoryDetails": "कार्य आइटम श्रेणी विवरण",
+    "categoryDetails": "श्रेणी विवरण",
     "enterName": "नाम दर्ज करें",
     "successfulCreation": "कार्रवाई आइटम श्रेणी सफलतापूर्वक बनाई गई",
     "successfulUpdation": "कार्रवाई आइटम श्रेणी सफलतापूर्वक अपडेट की गई",
     "sameNameConflict": "अपडेट करने के लिए कृपया नाम बदलें",
     "categoryEnabled": "कार्य आइटम श्रेणी सक्षम",
-    "categoryDisabled": "कार्रवाई आइटम श्रेणी अक्षम"
+    "categoryDisabled": "कार्रवाई आइटम श्रेणी अक्षम",
+    "noActionItemCategories": "कोई कार्रवाई आइटम श्रेणी नहीं",
+    "status": "स्थिति",
+    "categoryDeleted": "कार्रवाई आइटम श्रेणी सफलतापूर्वक हटा दी गई",
+    "deleteCategory": "श्रेणी हटाएं",
+    "deleteCategoryMsg": "क्या आप वाकई इस कार्रवाई आइटम श्रेणी को हटाना चाहते हैं?",
+    "createButton": "बटन बनाएं",
+    "editButton": "संपादित बटन"
   },
   "organizationVenues": {
     "title": "स्थानों",
@@ -965,7 +1224,12 @@
     "view": "देखना",
     "venueTitleError": "स्थान का शीर्षक खाली नहीं हो सकता!",
     "venueCapacityError": "क्षमता एक धनात्मक संख्या होनी चाहिए!",
-    "searchBy": "खोज से"
+    "searchBy": "खोज से",
+    "description": "विवरण",
+    "edit": "संपादित करें",
+    "delete": "हटाएं",
+    "name": "नाम",
+    "desc": "विवरण"
   },
   "addMember": {
     "title": "सदस्य जोड़ें",
@@ -979,7 +1243,18 @@
     "organization": "संगठन",
     "invalidDetailsMessage": "कृपया सभी आवश्यक विवरण प्रदान करें।",
     "passwordNotMatch": "सांकेतिक शब्द मेल नहीं खाते।",
-    "addMember": "सदस्य जोड़ें"
+    "addMember": "सदस्य जोड़ें",
+    "firstName": "प्रथम नाम",
+    "lastName": "अंतिम नाम",
+    "emailAddress": "ईमेल पता",
+    "enterEmail": "ईमेल दर्ज करें",
+    "password": "पासवर्ड",
+    "enterPassword": "पासवर्ड दर्ज करें",
+    "confirmPassword": "पासवर्ड की पुष्टि करें",
+    "cancel": "रद्द करें",
+    "create": "बनाएं",
+    "user": "उपयोगकर्ता",
+    "profile": "प्रोफ़ाइल"
   },
   "eventActionItems": {
     "title": "एक्शन आइटम्स",
@@ -1007,7 +1282,9 @@
     "actionItemStatus": "कार्रवाई आइटम स्थिति",
     "actionItemCompleted": "कार्रवाई आइटम पूर्ण हुआ",
     "markCompletion": "पूर्णता को चिह्नित करें",
-    "save": "बचाना"
+    "save": "बचाना",
+    "yes": "हाँ",
+    "no": "नहीं"
   },
   "checkIn": {
     "errorCheckingIn": "चेक-इन में त्रुटि",

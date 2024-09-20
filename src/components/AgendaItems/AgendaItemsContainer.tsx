@@ -145,7 +145,7 @@ function AgendaItemsContainer({
       });
       agendaItemRefetch();
       hideUpdateModal();
-      toast.success(t('agendaItemUpdated'));
+      toast.success(t('agendaItemUpdated') as string);
     } catch (error) {
       if (error instanceof Error) {
         toast.error(`${error.message}`);
@@ -167,7 +167,7 @@ function AgendaItemsContainer({
       });
       agendaItemRefetch();
       toggleDeleteModal();
-      toast.success(t('agendaItemDeleted'));
+      toast.success(t('agendaItemDeleted') as string);
     } catch (error) {
       if (error instanceof Error) {
         toast.error(`${error.message}`);

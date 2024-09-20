@@ -255,8 +255,8 @@ function EventListCardModals({
           startDate: dayjs(eventStartDate).format('YYYY-MM-DD'),
           endDate: dayjs(eventEndDate).format('YYYY-MM-DD'),
           location: formState.location,
-          startTime: !alldaychecked ? formState.startTime + 'Z' : undefined,
-          endTime: !alldaychecked ? formState.endTime + 'Z' : undefined,
+          startTime: !alldaychecked ? formState.startTime : undefined,
+          endTime: !alldaychecked ? formState.endTime : undefined,
           recurrenceStartDate: recurringchecked
             ? recurringEventUpdateType === thisAndFollowingInstances &&
               (instanceDatesChanged || recurrenceRuleChanged)
@@ -284,7 +284,7 @@ function EventListCardModals({
       });
 
       if (data) {
-        toast.success(t('eventUpdated'));
+        toast.success(t('eventUpdated') as string);
         setRecurringEventUpdateModalIsOpen(false);
         hideViewModal();
         if (refetchEvents) {
@@ -323,7 +323,7 @@ function EventListCardModals({
       });
 
       if (data) {
-        toast.success(t('eventDeleted'));
+        toast.success(t('eventDeleted') as string);
         setEventDeleteModalIsOpen(false);
         hideViewModal();
         if (refetchEvents) {

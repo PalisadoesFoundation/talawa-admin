@@ -22,7 +22,25 @@
     "numeric_value_check": "至少设定一个数值",
     "special_char_check": "至少一个特殊字符",
     "selectOrg": "选择一个组织",
-    "afterRegister": "注册成功。"
+    "afterRegister": "注册成功。",
+    "talawa_portal": "塔拉瓦门户",
+    "login": "登录",
+    "register": "注册",
+    "firstName": "名字",
+    "lastName": "姓氏",
+    "email": "电子邮件",
+    "password": "密码",
+    "confirmPassword": "确认密码",
+    "forgotPassword": "忘记密码",
+    "enterEmail": "输入电子邮件",
+    "enterPassword": "输入密码",
+    "talawaApiUnavailable": "塔拉瓦 API 不可用",
+    "notAuthorised": "未授权",
+    "notFound": "未找到",
+    "OR": "或",
+    "admin": "管理员",
+    "user": "用户",
+    "loading": "加载中"
   },
   "userLoginPage": {
     "title": "塔拉瓦管理员",
@@ -38,7 +56,23 @@
     "successfullyRegistered": "注册成功。",
     "userLogin": "用户登录",
     "afterRegister": "注册成功。",
-    "selectOrg": "选择一个组织"
+    "selectOrg": "选择一个组织",
+    "talawa_portal": "塔拉瓦门户",
+    "login": "登录",
+    "register": "注册",
+    "firstName": "名字",
+    "lastName": "姓氏",
+    "email": "电子邮件",
+    "password": "密码",
+    "confirmPassword": "确认密码",
+    "forgotPassword": "忘记密码",
+    "enterEmail": "输入电子邮件",
+    "enterPassword": "输入密码",
+    "talawaApiUnavailable": "塔拉瓦 API 不可用",
+    "notAuthorised": "未授权",
+    "notFound": "未找到",
+    "OR": "或",
+    "loading": "加载中"
   },
   "latestEvents": {
     "eventCardTitle": "即将举行的活动",
@@ -51,12 +85,19 @@
     "noPostsCreated": "没有创建帖子"
   },
   "listNavbar": {
-    "roles": "角色"
+    "roles": "角色",
+    "talawa_portal": "塔拉瓦门户",
+    "requests": "请求",
+    "logout": "退出登录"
   },
   "leftDrawer": {
     "my organizations": "我的组织",
     "requests": "会员申请",
-    "communityProfile": "社区简介"
+    "communityProfile": "社区简介",
+    "talawaAdminPortal": "塔拉瓦管理员门户",
+    "menu": "菜单",
+    "users": "用户",
+    "logout": "退出登录"
   },
   "leftDrawerOrg": {
     "Dashboard": "仪表板",
@@ -75,7 +116,13 @@
     "notifications": "通知",
     "spamsThe": "垃圾邮件",
     "group": "团体",
-    "noNotifications": "无通知"
+    "noNotifications": "无通知",
+    "talawaAdminPortal": "塔拉瓦管理员门户",
+    "menu": "菜单",
+    "talawa_portal": "塔拉瓦门户",
+    "settings": "设置",
+    "logout": "退出登录",
+    "close": "关闭"
   },
   "orgList": {
     "title": "塔拉瓦组织",
@@ -105,11 +152,25 @@
     "manageFeaturesInfo": "创建成功！",
     "goToStore": "前往插件商店",
     "enableEverything": "启用一切",
-    "sampleOrgSuccess": "样本组织已成功创建"
+    "sampleOrgSuccess": "样本组织已成功创建",
+    "name": "名称",
+    "email": "电子邮件",
+    "searchByName": "按名称搜索",
+    "description": "描述",
+    "location": "位置",
+    "address": "地址",
+    "displayImage": "显示图像",
+    "filter": "筛选",
+    "cancel": "取消",
+    "endOfResults": "结果结束",
+    "noResultsFoundFor": "未找到结果",
+    "OR": "或"
   },
   "orgListCard": {
     "manage": "管理",
-    "sampleOrganization": "组织样本"
+    "sampleOrganization": "组织样本",
+    "admins": "管理员",
+    "members": "成员"
   },
   "paginationList": {
     "rowsPerPage": "每页行数",
@@ -126,7 +187,11 @@
     "acceptedSuccessfully": "请求已成功接受",
     "rejectedSuccessfully": "请求被成功拒绝",
     "noOrgErrorTitle": "未找到组织",
-    "noOrgErrorDescription": "请通过仪表板创建组织"
+    "noOrgErrorDescription": "请通过仪表板创建组织",
+    "name": "名称",
+    "email": "电子邮件",
+    "endOfResults": "结果结束",
+    "noResultsFoundFor": "未找到结果"
   },
   "users": {
     "title": "塔拉瓦角色",
@@ -150,7 +215,25 @@
     "visit": "访问",
     "withdraw": "拉幅",
     "removeUserFrom": "从{{org}}中删除用户",
-    "removeConfirmation": "您确定要将'{{name}}'从组织'{{org}}'中删除吗？"
+    "removeConfirmation": "您确定要将'{{name}}'从组织'{{org}}'中删除吗？",
+    "searchByName": "按名称搜索",
+    "users": "用户",
+    "name": "名称",
+    "email": "电子邮件",
+    "endOfResults": "结果结束",
+    "admin": "管理员",
+    "superAdmin": "超级管理员",
+    "user": "用户",
+    "filter": "筛选",
+    "noResultsFoundFor": "未找到结果",
+    "talawaApiUnavailable": "塔拉瓦 API 不可用",
+    "cancel": "取消",
+    "admins": "管理员",
+    "members": "成员",
+    "orgJoined": "已加入组织",
+    "MembershipRequestSent": "会员请求已发送",
+    "AlreadyJoined": "已加入",
+    "errorOccured": "发生错误"
   },
   "communityProfile": {
     "title": "社区简介",
@@ -178,7 +261,12 @@
     "latestPosts": "最新帖子",
     "noPostsPresent": "没有帖子",
     "membershipRequests": "会员请求",
-    "noMembershipRequests": "没有会员请求"
+    "noMembershipRequests": "没有会员请求",
+    "location": "位置",
+    "members": "成员",
+    "admins": "管理员",
+    "requests": "请求",
+    "talawaApiUnavailable": "塔拉瓦 API 不可用"
   },
   "organizationPeople": {
     "title": "塔拉瓦会员",
@@ -198,7 +286,23 @@
     "enterLastName": "输入您的姓氏",
     "enterConfirmPassword": "输入您的密码进行确认",
     "organization": "组织",
-    "invalidDetailsMessage": "请输入有效的详细信息。"
+    "invalidDetailsMessage": "请输入有效的详细信息。",
+    "members": "成员",
+    "admins": "管理员",
+    "users": "用户",
+    "searchFirstName": "按名字搜索",
+    "searchLastName": "按姓氏搜索",
+    "firstName": "名字",
+    "lastName": "姓氏",
+    "emailAddress": "电子邮件地址",
+    "enterEmail": "输入你的电子邮件地址",
+    "password": "密码",
+    "enterPassword": "输入你的密码",
+    "confirmPassword": "确认密码",
+    "cancel": "取消",
+    "create": "创建",
+    "user": "用户",
+    "profile": "个人资料"
   },
   "organizationTags": {
     "title": "组织标签",
@@ -232,19 +336,29 @@
   },
   "userListCard": {
     "addAdmin": "添加管理员",
-    "addedAsAdmin": "用户被添加为管理员。"
+    "addedAsAdmin": "用户被添加为管理员。",
+    "joined": "已加入",
+    "talawaApiUnavailable": "塔拉瓦 API 不可用"
   },
   "orgAdminListCard": {
     "remove": "消除",
     "removeAdmin": "删除管理员",
     "removeAdminMsg": "您想删除该管理员吗？",
-    "adminRemoved": "管理员被删除。"
+    "adminRemoved": "管理员被删除。",
+    "joined": "已加入",
+    "no": "否",
+    "yes": "是",
+    "talawaApiUnavailable": "塔拉瓦 API 不可用"
   },
   "orgPeopleListCard": {
     "remove": "消除",
     "removeMember": "删除会员",
     "removeMemberMsg": "您想删除该成员吗？",
-    "memberRemoved": "该会员已被删除"
+    "memberRemoved": "该会员已被删除",
+    "joined": "已加入",
+    "no": "否",
+    "yes": "是",
+    "talawaApiUnavailable": "塔拉瓦 API 不可用"
   },
   "organizationEvents": {
     "title": "活动",
@@ -275,7 +389,14 @@
     "never": "绝不",
     "on": "在",
     "after": "后",
-    "occurences": "事件"
+    "occurences": "事件",
+    "events": "活动",
+    "description": "描述",
+    "location": "位置",
+    "startDate": "开始日期",
+    "endDate": "结束日期",
+    "talawaApiUnavailable": "塔拉瓦 API 不可用",
+    "done": "完成"
   },
   "organizationActionItems": {
     "actionItemCategory": "行动项目类别",
@@ -286,7 +407,6 @@
     "assignmentDate": "分配日期",
     "active": "积极的",
     "clearFilters": "清除过滤器",
-    "completed": "完全的",
     "completionDate": "完成日期",
     "createActionItem": "创建操作项",
     "deleteActionItem": "删除操作项",
@@ -311,7 +431,18 @@
     "successfulCreation": "操作项创建成功",
     "successfulUpdation": "操作项已成功更新",
     "successfulDeletion": "操作项已成功删除",
-    "title": "行动项目"
+    "title": "行动项目",
+    "category": "类别",
+    "allotedHours": "分配的小时",
+    "latestDueDate": "最晚到期日",
+    "earliestDueDate": "最早到期日",
+    "updateActionItem": "更新操作项",
+    "noneUpdated": "没有更新任何字段",
+    "updateStatusMsg": "您确定要将此操作项标记为待处理吗？",
+    "close": "关闭",
+    "eventActionItems": "活动行动项目",
+    "no": "否",
+    "yes": "是"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "议程类别详情",
@@ -390,7 +521,17 @@
     "never": "绝不",
     "on": "在",
     "after": "后",
-    "occurences": "事件"
+    "occurences": "事件",
+    "location": "位置",
+    "no": "否",
+    "yes": "是",
+    "description": "描述",
+    "startDate": "开始日期",
+    "endDate": "结束日期",
+    "registerEvent": "注册活动",
+    "close": "关闭",
+    "talawaApiUnavailable": "塔拉瓦 API 不可用",
+    "done": "完成"
   },
   "funds": {
     "title": "基金",
@@ -466,7 +607,9 @@
     "pledges": "承诺",
     "endsOn": "结束于",
     "raisedAmount": "募集金額",
-    "pledgedAmount": "承诺金額"
+    "pledgedAmount": "承诺金額",
+    "startDate": "开始日期",
+    "endDate": "结束日期"
   },
   "orgPost": {
     "title": "帖子",
@@ -494,7 +637,8 @@
     "postCreatedSuccess": "恭喜！",
     "pinPost": "针柱",
     "Next": "下一页",
-    "Previous": "上一页"
+    "Previous": "上一页",
+    "cancel": "取消"
   },
   "postNotFound": {
     "post": "邮政",
@@ -509,7 +653,8 @@
     "user not found!": "未找到用户！",
     "member not found!": "未找到会员！",
     "admin not found!": "找不到管理员！",
-    "roles not found!": "未找到角色！"
+    "roles not found!": "未找到角色！",
+    "user": "用户"
   },
   "orgPostCard": {
     "author": "作者",
@@ -528,7 +673,12 @@
     "postDeleted": "帖子删除成功。",
     "postUpdated": "帖子更新成功。",
     "tag": " 您的浏览器不支持video标签",
-    "pin": "针柱"
+    "pin": "针柱",
+    "edit": "编辑",
+    "no": "否",
+    "yes": "是",
+    "close": "关闭",
+    "talawaApiUnavailable": "塔拉瓦 API 不可用"
   },
   "blockUnblockUser": {
     "title": "阻止/取消阻止用户",
@@ -544,7 +694,12 @@
     "blockedUsers": "被阻止的用户",
     "searchByFirstName": "按名字搜索",
     "searchByLastName": "按姓氏搜索",
-    "noSpammerFound": "未发现垃圾邮件发送者"
+    "noSpammerFound": "未发现垃圾邮件发送者",
+    "searchByName": "按名称搜索",
+    "name": "名称",
+    "email": "电子邮件",
+    "talawaApiUnavailable": "塔拉瓦 API 不可用",
+    "noResultsFoundFor": "未找到结果"
   },
   "eventManagement": {
     "title": "事件管理",
@@ -569,7 +724,10 @@
     "errorSendingMail": "发送邮件时出错。",
     "passwordMismatches": "密码和确认密码不匹配。",
     "passwordChanges": "密码修改成功。",
-    "OTPsent": "OTP 已发送至您的注册邮箱。"
+    "OTPsent": "OTP 已发送至您的注册邮箱。",
+    "forgotPassword": "忘记密码",
+    "password": "密码",
+    "talawaApiUnavailable": "塔拉瓦 API 不可用"
   },
   "pageNotFound": {
     "404": "404",
@@ -600,14 +758,15 @@
   },
   "orgSettings": {
     "title": "设置",
-    "general": "一般的",
-    "actionItemCategories": "行动项目类别",
+    "general": "一般",
+    "actionItemCategories": "操作项目类别",
     "updateOrganization": "更新组织",
     "seeRequest": "查看请求",
     "noData": "没有数据",
     "otherSettings": "其他设置",
-    "changeLanguage": "改变语言",
-    "manageCustomFields": "管理自定义字段"
+    "changeLanguage": "更改语言",
+    "manageCustomFields": "管理自定义字段",
+    "agendaItemCategories": "议程项目类别"
   },
   "deleteOrg": {
     "deleteOrganization": "删除组织",
@@ -615,18 +774,30 @@
     "deleteMsg": "您想删除该组织吗？",
     "confirmDelete": "确认删除",
     "longDelOrgMsg": "通过单击“删除组织”按钮，该组织及其事件、标签和所有相关数据将被永久删除。",
-    "successfullyDeletedSampleOrganization": "已成功删除样本组织"
+    "successfullyDeletedSampleOrganization": "已成功删除样本组织",
+    "cancel": "取消"
   },
   "userUpdate": {
     "appLanguageCode": "默认语言",
-    "userType": "用户类型"
+    "userType": "用户类型",
+    "firstName": "名字",
+    "lastName": "姓氏",
+    "email": "电子邮件",
+    "password": "密码",
+    "admin": "管理员",
+    "superAdmin": "超级管理员",
+    "displayImage": "显示图像",
+    "saveChanges": "保存更改",
+    "cancel": "取消"
   },
   "userPasswordUpdate": {
     "previousPassword": "旧密码",
     "newPassword": "新密码",
     "confirmNewPassword": "确认新密码",
     "passCantBeEmpty": "密码不能为空",
-    "passNoMatch": "新密码和确认密码不匹配。"
+    "passNoMatch": "新密码和确认密码不匹配。",
+    "saveChanges": "保存更改",
+    "cancel": "取消"
   },
   "orgDelete": {
     "deleteOrg": "删除组织"
@@ -634,7 +805,9 @@
   "membershipRequest": {
     "accept": "接受",
     "reject": "拒绝",
-    "memberAdded": "它被接受"
+    "memberAdded": "它被接受",
+    "joined": "已加入",
+    "talawaApiUnavailable": "塔拉瓦 API 不可用"
   },
   "orgUpdate": {
     "city": "城市",
@@ -648,7 +821,15 @@
     "userRegistrationRequired": "需要用户注册",
     "isVisibleInSearch": "在搜索中可见",
     "enterNameOrganization": "输入组织名称",
-    "successfulUpdated": "组织更新成功"
+    "successfulUpdated": "组织更新成功",
+    "name": "名称",
+    "description": "描述",
+    "location": "位置",
+    "address": "地址",
+    "displayImage": "显示图像",
+    "saveChanges": "保存更改",
+    "cancel": "取消",
+    "talawaApiUnavailable": "塔拉瓦 API 不可用"
   },
   "addOnRegister": {
     "addNew": "添新",
@@ -658,7 +839,9 @@
     "pluginDesc": "插件说明",
     "pName": "例如：捐款",
     "cName": "例如：约翰·多伊",
-    "pDesc": "该插件启用 UI"
+    "pDesc": "该插件启用 UI",
+    "close": "关闭",
+    "register": "注册"
   },
   "addOnStore": {
     "title": "添加商店",
@@ -669,7 +852,8 @@
     "pHeading": "插件",
     "install": "已安装",
     "available": "可用的",
-    "pMessage": "插件不存在"
+    "pMessage": "插件不存在",
+    "filter": "筛选"
   },
   "addOnEntry": {
     "enable": "启用",
@@ -711,14 +895,28 @@
     "membershipRequests": "会员请求",
     "adminForEvents": "活动管理员",
     "addedAsAdmin": "用户被添加为管理员。",
-    "userType": "用户类型"
+    "userType": "用户类型",
+    "email": "电子邮件",
+    "displayImage": "显示图像",
+    "address": "地址",
+    "delete": "删除",
+    "saveChanges": "保存更改",
+    "joined": "已加入",
+    "talawaApiUnavailable": "塔拉瓦 API 不可用"
   },
   "userLogin": {
     "login": "登录",
     "loginIntoYourAccount": "登录您的帐户",
     "invalidDetailsMessage": "请输入有效的电子邮件和密码。",
     "notAuthorised": "对不起！",
-    "invalidCredentials": "输入的凭据不正确。"
+    "invalidCredentials": "输入的凭据不正确。",
+    "forgotPassword": "忘记密码",
+    "emailAddress": "电子邮件地址",
+    "enterEmail": "输入电子邮件",
+    "password": "密码",
+    "enterPassword": "输入密码",
+    "register": "注册",
+    "talawaApiUnavailable": "塔拉瓦 API 不可用"
   },
   "people": {
     "title": "人们",
@@ -732,7 +930,16 @@
     "login": "登录",
     "afterRegister": "注册成功。",
     "passwordNotMatch": "密码不匹配。",
-    "invalidDetailsMessage": "请输入有效的详细信息。"
+    "invalidDetailsMessage": "请输入有效的详细信息。",
+    "register": "注册",
+    "firstName": "名字",
+    "lastName": "姓氏",
+    "emailAddress": "电子邮件地址",
+    "enterEmail": "输入电子邮件",
+    "password": "密码",
+    "enterPassword": "输入密码",
+    "confirmPassword": "确认密码",
+    "talawaApiUnavailable": "塔拉瓦 API 不可用"
   },
   "userNavbar": {
     "talawa": "塔拉瓦",
@@ -741,7 +948,10 @@
     "events": "活动",
     "chat": "聊天",
     "donate": "捐",
-    "language": "语言"
+    "language": "语言",
+    "settings": "设置",
+    "logout": "退出登录",
+    "close": "关闭"
   },
   "userOrganizations": {
     "allOrganizations": "所有组织",
@@ -750,7 +960,10 @@
     "selectOrganization": "选择一个组织",
     "searchUsers": "搜索用户",
     "nothingToShow": "这里没有什么可显示的。",
-    "organizations": "组织机构"
+    "organizations": "组织机构",
+    "search": "搜索",
+    "filter": "筛选",
+    "searchByName": "按名称搜索"
   },
   "userSidebarOrg": {
     "yourOrganizations": "您的组织",
@@ -758,13 +971,20 @@
     "viewAll": "查看全部",
     "talawaUserPortal": "塔拉瓦用户门户",
     "my organizations": "我的组织",
-    "communityProfile": "社区简介"
+    "communityProfile": "社区简介",
+    "users": "用户",
+    "requests": "请求",
+    "logout": "登出",
+    "settings": "设置",
+    "chat": "聊天",
+    "menu": "菜单"
   },
   "organizationSidebar": {
     "viewAll": "查看全部",
     "events": "活动",
     "noEvents": "没有可显示的活动",
-    "noMembers": "没有可显示的会员"
+    "noMembers": "没有可显示的会员",
+    "members": "成员"
   },
   "postCard": {
     "likes": "喜欢",
@@ -843,7 +1063,15 @@
     "fullTime": "全职",
     "partTime": "兼职",
     "selectCountry": "选择一个国家",
-    "enterState": "输入城市或州"
+    "enterState": "输入城市或州",
+    "settings": "设置",
+    "firstName": "名字",
+    "lastName": "姓氏",
+    "emailAddress": "电子邮件地址",
+    "displayImage": "显示图像",
+    "address": "地址",
+    "saveChanges": "保存更改",
+    "joined": "已加入"
   },
   "donate": {
     "title": "捐款",
@@ -854,7 +1082,11 @@
     "yourPreviousDonations": "您之前的捐款",
     "donate": "捐",
     "nothingToShow": "这里没有什么可显示的。",
-    "success": "捐赠成功"
+    "success": "捐赠成功",
+    "invalidAmount": "请输入捐赠金额的数值。",
+    "donationAmountDescription": "请输入捐款金额的数值。",
+    "donationOutOfRange": "捐款金额必须在 {{min}} 和 {{max}} 之间。",
+    "donateTo": "捐赠给"
   },
   "userEvents": {
     "title": "活动",
@@ -875,13 +1107,22 @@
     "publicEvent": "是公开的",
     "registerable": "可注册",
     "monthlyCalendarView": "月历",
-    "yearlyCalendarView": "年历"
+    "yearlyCalendarView": "年历",
+    "search": "搜索",
+    "cancel": "取消",
+    "create": "创建",
+    "eventDescription": "活动描述",
+    "eventLocation": "活动位置",
+    "startDate": "开始日期",
+    "endDate": "结束日期"
   },
   "userEventCard": {
     "starts": "开始",
     "ends": "结束",
     "creator": "创作者",
-    "alreadyRegistered": "已经注册"
+    "alreadyRegistered": "已经注册",
+    "location": "位置",
+    "register": "注册"
   },
   "advertisement": {
     "title": "广告",
@@ -906,11 +1147,21 @@
     "editAdvertisement": "编辑广告",
     "advertisementDeleted": "广告已成功删除。",
     "endDateGreaterOrEqual": "结束日期应大于或等于开始日期",
-    "advertisementCreated": "广告已成功创建。"
+    "advertisementCreated": "广告已成功创建。",
+    "pHeading": "广告标题",
+    "delete": "删除",
+    "close": "关闭",
+    "no": "否",
+    "yes": "是",
+    "edit": "编辑",
+    "saveChanges": "保存更改",
+    "endOfResults": "结果结束"
   },
   "userChat": {
     "chat": "聊天",
-    "contacts": "联系方式"
+    "contacts": "联系方式",
+    "search": "搜索",
+    "messages": "消息"
   },
   "userChatRoom": {
     "selectContact": "选择联系人开始对话",
@@ -928,20 +1179,28 @@
     "String": "字符串",
     "Boolean": "布尔值",
     "Date": "日期",
-    "Number": "数字"
+    "Number": "数字",
+    "saveChanges": "保存更改"
   },
   "orgActionItemCategories": {
     "enableButton": "使能够",
     "disableButton": "禁用",
     "updateActionItemCategory": "更新",
     "actionItemCategoryName": "姓名",
-    "actionItemCategoryDetails": "行动项目类别详细信息",
+    "categoryDetails": "类别详情",
     "enterName": "输入名字",
     "successfulCreation": "操作项类别创建成功",
     "successfulUpdation": "行动项目类别已成功更新",
     "sameNameConflict": "请更改名称以进行更新",
     "categoryEnabled": "已启用操作项类别",
-    "categoryDisabled": "操作项类别已禁用"
+    "categoryDisabled": "操作项类别已禁用",
+    "noActionItemCategories": "没有操作项目类别",
+    "status": "地位",
+    "categoryDeleted": "操作项目类别已成功删除",
+    "deleteCategory": "删除类别",
+    "deleteCategoryMsg": "您确定要删除此操作项目类别吗？",
+    "createButton": "创建按钮",
+    "editButton": "编辑按钮"
   },
   "organizationVenues": {
     "title": "场地",
@@ -965,7 +1224,12 @@
     "view": "看法",
     "venueTitleError": "场地名称不能为空！",
     "venueCapacityError": "容量必须是正数！",
-    "searchBy": "搜索依据"
+    "searchBy": "搜索依据",
+    "description": "描述",
+    "edit": "编辑",
+    "delete": "删除",
+    "name": "名称",
+    "desc": "描述"
   },
   "addMember": {
     "title": "添加会员",
@@ -979,7 +1243,18 @@
     "organization": "组织",
     "invalidDetailsMessage": "请提供所有必需的详细信息。",
     "passwordNotMatch": "密码不匹配。",
-    "addMember": "添加会员"
+    "firstName": "名字",
+    "lastName": "姓氏",
+    "emailAddress": "电子邮件地址",
+    "enterEmail": "输入电子邮件",
+    "password": "密码",
+    "enterPassword": "输入密码",
+    "confirmPassword": "确认密码",
+    "cancel": "取消",
+    "create": "创建",
+    "addMember": "添加会员",
+    "user": "用户",
+    "profile": "个人资料"
   },
   "eventActionItems": {
     "title": "行动项目",
@@ -1007,7 +1282,9 @@
     "actionItemStatus": "行动项目状态",
     "actionItemCompleted": "行动项目已完成",
     "markCompletion": "标记完成",
-    "save": "节省"
+    "save": "节省",
+    "yes": "是",
+    "no": "否"
   },
   "checkIn": {
     "errorCheckingIn": "签到错误",

@@ -169,11 +169,11 @@ function orgList(): JSX.Element {
   const triggerCreateSampleOrg = (): void => {
     createSampleOrganization()
       .then(() => {
-        toast.success(t('sampleOrgSuccess'));
+        toast.success(t('sampleOrgSuccess') as string);
         window.location.reload();
       })
       .catch(() => {
-        toast.error(t('sampleOrgDuplicate'));
+        toast.error(t('sampleOrgDuplicate') as string);
       });
   };
 
