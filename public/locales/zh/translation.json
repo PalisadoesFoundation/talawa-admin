@@ -766,7 +766,11 @@
     "noData": "没有数据",
     "otherSettings": "其他设置",
     "changeLanguage": "改变语言",
-    "manageCustomFields": "管理自定义字段"
+    "manageCustomFields": "管理自定义字段",
+    "pageName": "设置",
+    "updateYourDetails": "更新您的详细信息",
+    "updateYourPassword": "更新您的密码",
+    "settings": "设置"
   },
   "deleteOrg": {
     "deleteOrganization": "删除组织",

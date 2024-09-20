@@ -436,7 +436,14 @@
     "successfulUpdation": "Ítem de acción actualizado con éxito",
     "successfulDeletion": "Ítem de acción eliminado con éxito",
     "title": "Ítems de acción",
-    "yes": "Sí"
+    "yes": "Sí",
+    "category": "Categoría",
+    "allotedHours": "Horas Asignadas",
+    "latestDueDate": "Fecha de Vencimiento Más Reciente",
+    "earliestDueDate": "Fecha de Vencimiento Más Temprana",
+    "updateActionItem": "Actualizar Elemento de Acción",
+    "noneUpdated": "Ninguno de los campos fue actualizado",
+    "updateStatusMsg": "¿Estás seguro de que deseas marcar este elemento de acción como pendiente?"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "Detalles de la categoría de la agenda",
@@ -1193,7 +1200,12 @@
     "successfulUpdation": "Categoría de elemento de acción actualizada correctamente",
     "sameNameConflict": "Cambie el nombre para realizar una actualización",
     "categoryEnabled": "Categoría de elemento de acción habilitada",
-    "categoryDisabled": "Categoría de elemento de acción deshabilitada"
+    "categoryDisabled": "Categoría de elemento de acción deshabilitada",
+    "noActionItemCategories": "No hay categorías de elementos de acción",
+    "status": "Estado",
+    "categoryDeleted": "Categoría de elemento de acción eliminada",
+    "deleteCategory": "Eliminar categoría",
+    "deleteCategoryMsg": "¿Está seguro de que desea eliminar esta categoría de elemento de acción?"
   },
   "organizationVenues": {
     "title": "Lugares",
