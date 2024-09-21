@@ -163,6 +163,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
       userId: userId,
     },
     onData: (MessageSubscriptionData) => {
+      console.log('MESSAGE SUBS DATA', MessageSubscriptionData);
       if (
         MessageSubscriptionData?.data.data.messageSentToChat &&
         MessageSubscriptionData?.data.data.messageSentToChat

@@ -86,7 +86,7 @@ export default function createDirectChatModal({
       },
     });
     await chatsListRefetch();
-    await toggleCreateDirectChatModal();
+    toggleCreateDirectChatModal();
   };
 
   const {
