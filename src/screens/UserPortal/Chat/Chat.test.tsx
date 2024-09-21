@@ -860,7 +860,7 @@ const CHAT_BY_ID_QUERY_MOCK = [
         },
       },
     },
-  },  
+  },
   {
     request: {
       query: USERS_CONNECTION_LIST,
