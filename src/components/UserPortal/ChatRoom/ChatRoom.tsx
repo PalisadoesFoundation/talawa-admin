@@ -17,7 +17,6 @@ import { MoreVert, Close } from '@mui/icons-material';
 
 interface InterfaceChatRoomProps {
   selectedContact: string;
-  selectedChatType: string;
 }
 
 /**

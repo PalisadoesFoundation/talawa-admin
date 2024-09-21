@@ -128,12 +128,6 @@ export default function chat(): JSX.Element {
   //   handleSearch(value);
   // };
 
-  React.useEffect(() => {
-    if (groupChatList) {
-      setGroupChats(groupChatList.groupChatsByUserId);
-    }
-  }, [groupChatList]);
-
   return (
     <>
       {hideDrawer ? (

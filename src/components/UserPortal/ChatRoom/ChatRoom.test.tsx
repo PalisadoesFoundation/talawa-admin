@@ -6,7 +6,6 @@ import {
   screen,
   fireEvent,
   waitFor,
-  findAllByTestId,
 } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -16,21 +15,11 @@ import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import {
-  CHATS_LIST,
-  CHAT_BY_ID,
-  DIRECT_CHAT_BY_ID,
-  GROUP_CHAT_BY_ID,
-} from 'GraphQl/Queries/PlugInQueries';
+import { CHATS_LIST, CHAT_BY_ID } from 'GraphQl/Queries/PlugInQueries';
 import {
   MESSAGE_SENT_TO_CHAT,
-  MESSAGE_SENT_TO_DIRECT_CHAT,
-  MESSAGE_SENT_TO_GROUP_CHAT,
   SEND_MESSAGE_TO_CHAT,
-  SEND_MESSAGE_TO_DIRECT_CHAT,
-  SEND_MESSAGE_TO_GROUP_CHAT,
 } from 'GraphQl/Mutations/OrganizationMutations';
-import userEvent from '@testing-library/user-event';
 import ChatRoom from './ChatRoom';
 import { useLocalStorage } from 'utils/useLocalstorage';
 
