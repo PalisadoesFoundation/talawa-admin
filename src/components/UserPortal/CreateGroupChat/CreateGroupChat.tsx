@@ -1,15 +1,10 @@
 import {
   FormControl,
-  FormControlLabel,
-  FormHelperText,
   InputLabel,
   MenuItem,
   Paper,
-  RadioGroup,
   Select,
-  FormLabel,
   TableBody,
-  Radio,
 } from '@mui/material';
 import type { SelectChangeEvent } from '@mui/material/Select';
 import React, { useEffect, useState } from 'react';
@@ -21,7 +16,6 @@ import { USER_JOINED_ORGANIZATIONS } from 'GraphQl/Queries/OrganizationQueries';
 import useLocalStorage from 'utils/useLocalstorage';
 import {
   CREATE_CHAT,
-  CREATE_GROUP_CHAT,
 } from 'GraphQl/Mutations/OrganizationMutations';
 import Table from '@mui/material/Table';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
@@ -32,9 +26,9 @@ import { styled } from '@mui/material/styles';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import { USERS_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
-import { LocalPoliceTwoTone, Search } from '@mui/icons-material';
-import { style } from '@mui/system';
+import { Search } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
+
 
 interface InterfaceCreateGroupChatProps {
   toggleCreateGroupChatModal: () => void;
@@ -72,6 +66,10 @@ interface InterfaceOrganization {
   }[];
 }
 
+/**
+ * Styled table cell with custom styles.
+ */
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: ['#31bb6b', '!important'],
@@ -81,6 +79,10 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     fontSize: 14,
   },
 }));
+
+/**
+ * Styled table row with custom styles.
+ */
 
 const StyledTableRow = styled(TableRow)(() => ({
   '&:last-child td, &:last-child th': {
