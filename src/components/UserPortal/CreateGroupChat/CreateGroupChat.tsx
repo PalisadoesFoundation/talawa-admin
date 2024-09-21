@@ -226,7 +226,6 @@ export default function CreateGroupChat({
                   ))}
               </Select>
             </FormControl>
-
             {/* <FormControl fullWidth>
             <InputLabel id="select-org">Select Organization</InputLabel>
             <Select

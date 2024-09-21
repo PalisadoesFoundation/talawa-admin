@@ -846,6 +846,33 @@ const CHAT_BY_ID_QUERY_MOCK = [
               email: 'disha@example.com',
               image: '',
             },
+            appUserProfile: {
+              _id: '64378abd85308f171cf2993d',
+              adminFor: [],
+              isSuperAdmin: false,
+              createdOrganizations: [],
+              createdEvents: [],
+              eventAdmin: [],
+              __typename: 'AppUserProfile',
+            },
+            __typename: 'UserData',
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: USERS_CONNECTION_LIST,
+      variables: {
+        firstName_contains: '',
+        lastName_contains: '',
+      },
+    },
+    result: {
+      data: {
+        users: {
+          user: [
             {
               _id: '2',
               firstName: 'Test',
@@ -858,6 +885,9 @@ const CHAT_BY_ID_QUERY_MOCK = [
       },
     },
   },
+];
+
+const MESSAGE_SENT_TO_GROUP_CHAT_MOCK = [
   {
     request: {
       query: CHAT_BY_ID,
@@ -1674,6 +1704,16 @@ describe('Testing Chat Screen [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
+    screen.debug();
+    await waitFor(() => {
+      const closeMenuBtn = screen.queryByTestId('closeMenu');
+      expect(closeMenuBtn).toBeInTheDocument();
+      if (closeMenuBtn) {
+        closeMenuBtn.click();
+      } else {
+        throw new Error('Close menu button not found');
+      }
+    });
 
     await wait();
 

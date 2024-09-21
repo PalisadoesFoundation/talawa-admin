@@ -4,12 +4,21 @@ import gql from 'graphql-tag';
  * GraphQL mutation to create an action item category.
  *
  * @param name - Name of the ActionItemCategory.
+ * @param isDisabled - Disabled status of the ActionItemCategory.
  * @param organizationId - Organization to which the ActionItemCategory belongs.
  */
 
 export const CREATE_ACTION_ITEM_CATEGORY_MUTATION = gql`
-  mutation CreateActionItemCategory($name: String!, $organizationId: ID!) {
-    createActionItemCategory(name: $name, organizationId: $organizationId) {
+  mutation CreateActionItemCategory(
+    $name: String!
+    $isDisabled: Boolean!
+    $organizationId: ID!
+  ) {
+    createActionItemCategory(
+      name: $name
+      isDisabled: $isDisabled
+      organizationId: $organizationId
+    ) {
       _id
     }
   }

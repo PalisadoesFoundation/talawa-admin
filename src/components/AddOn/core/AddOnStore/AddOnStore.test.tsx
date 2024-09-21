@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { act } from 'react';
 import 'jest-location-mock';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import {
   ApolloClient,
   ApolloProvider,

@@ -515,22 +515,21 @@ describe('Organisations Page testing as Admin', () => {
       );
 
       await wait();
-
-      const searchInput = screen.getByTestId('sort');
-      expect(searchInput).toBeInTheDocument();
-
-      const inputText = screen.getByTestId('sortOrgs');
-
-      fireEvent.click(inputText);
-      const toggleText = screen.getByTestId('latest');
-
-      fireEvent.click(toggleText);
-
-      expect(searchInput).toBeInTheDocument();
-      fireEvent.click(inputText);
-      const toggleTite = screen.getByTestId('oldest');
-      fireEvent.click(toggleTite);
-      expect(searchInput).toBeInTheDocument();
     });
+    const sortDropdown = await waitFor(() => screen.getByTestId('sort'));
+    expect(sortDropdown).toBeInTheDocument();
+
+    const sortToggle = screen.getByTestId('sortOrgs');
+
+    fireEvent.click(sortToggle);
+    const latestOption = await waitFor(() => screen.getByTestId('latest'));
+
+    fireEvent.click(latestOption);
+
+    expect(sortDropdown).toBeInTheDocument();
+    fireEvent.click(sortToggle);
+    const oldestOption = await waitFor(() => screen.getByTestId('oldest'));
+    fireEvent.click(oldestOption);
+    expect(sortDropdown).toBeInTheDocument();
   });
 });

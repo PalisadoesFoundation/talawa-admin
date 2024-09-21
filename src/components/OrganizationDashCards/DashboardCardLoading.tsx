@@ -3,6 +3,10 @@ import { Card, Row } from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import styles from './Dashboardcard.module.css';
 
+/**
+ * Dashboard card loading component is a loading state for the dashboard card. It is used when the data is being fetched.
+ * @returns JSX.Element
+ */
 const dashBoardCardLoading = (): JSX.Element => {
   return (
     <Card className="rounded-4" border="0">

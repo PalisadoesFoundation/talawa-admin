@@ -8,7 +8,6 @@ import {
 } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-
 import { USERS_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -1371,6 +1370,7 @@ const CREATE_CHAT_MUTATION_MOCK = [
     },
   },
 ];
+
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
