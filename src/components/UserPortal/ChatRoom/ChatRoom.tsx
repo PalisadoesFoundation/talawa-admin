@@ -13,7 +13,7 @@ import {
 } from 'GraphQl/Mutations/OrganizationMutations';
 import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
-import { MoreVert, Close } from '@mui/icons-material'
+import { MoreVert, Close } from '@mui/icons-material';
 
 interface InterfaceChatRoomProps {
   selectedContact: string;
