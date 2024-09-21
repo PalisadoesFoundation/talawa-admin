@@ -6,7 +6,48 @@ import {
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 
+const memberList = {
+  request: {
+    query: MEMBERS_LIST,
+    variables: {
+      id: 'orgId',
+    },
+  },
+  result: {
+    data: {
+      organizations: [
+        {
+          _id: 'orgId',
+          members: [
+            {
+              createdAt: '2023-04-13T04:53:17.742Z',
+              email: 'testuser4@example.com',
+              firstName: 'John',
+              image: 'img-url',
+              lastName: 'Doe',
+              organizationsBlockedBy: [],
+              __typename: 'User',
+              _id: '1',
+            },
+            {
+              createdAt: '2024-04-13T04:53:17.742Z',
+              email: 'testuser2@example.com',
+              firstName: 'Anna',
+              image: null,
+              lastName: 'Bradley',
+              organizationsBlockedBy: [],
+              __typename: 'User',
+              _id: '2',
+            },
+          ],
+        },
+      ],
+    },
+  },
+};
+
 export const MOCKS = [
+  memberList,
   {
     request: {
       query: FUND_CAMPAIGN_PLEDGE,
@@ -21,6 +62,9 @@ export const MOCKS = [
       data: {
         getFundraisingCampaigns: [
           {
+            fundId: {
+              name: 'Fund 1',
+            },
             name: 'Campaign Name',
             fundingGoal: 1000,
             currency: 'USD',
@@ -39,6 +83,124 @@ export const MOCKS = [
                     firstName: 'John',
                     lastName: 'Doe',
                     image: 'img-url',
+                  },
+                ],
+              },
+              {
+                _id: '2',
+                amount: 200,
+                currency: 'USD',
+                startDate: '2024-01-01',
+                endDate: '2024-01-09',
+                users: [
+                  {
+                    _id: '2',
+                    firstName: 'Jane',
+                    lastName: 'Doe',
+                    image: null,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: FUND_CAMPAIGN_PLEDGE,
+      variables: {
+        where: {
+          id: 'fundCampaignId',
+        },
+        pledgeOrderBy: 'endDate_ASC',
+      },
+    },
+    result: {
+      data: {
+        getFundraisingCampaigns: [
+          {
+            fundId: {
+              name: 'Fund 1',
+            },
+            name: 'Campaign Name',
+            fundingGoal: 1000,
+            currency: 'USD',
+            startDate: '2024-01-01',
+            endDate: '2024-08-08',
+            pledges: [
+              {
+                _id: '2',
+                amount: 200,
+                currency: 'USD',
+                startDate: '2024-01-01',
+                endDate: '2024-01-09',
+                users: [
+                  {
+                    _id: '2',
+                    firstName: 'Jane',
+                    lastName: 'Doe',
+                    image: null,
+                  },
+                ],
+              },
+              {
+                _id: '1',
+                amount: 100,
+                currency: 'USD',
+                startDate: '2024-01-01',
+                endDate: '2024-01-10',
+                users: [
+                  {
+                    _id: '1',
+                    firstName: 'John',
+                    lastName: 'Doe',
+                    image: null,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: FUND_CAMPAIGN_PLEDGE,
+      variables: {
+        where: {
+          id: 'fundCampaignId',
+        },
+        pledgeOrderBy: 'amount_DESC',
+      },
+    },
+    result: {
+      data: {
+        getFundraisingCampaigns: [
+          {
+            fundId: {
+              name: 'Fund 1',
+            },
+            name: 'Campaign Name',
+            fundingGoal: 1000,
+            currency: 'USD',
+            startDate: '2024-01-01',
+            endDate: '2024-08-08',
+            pledges: [
+              {
+                _id: '2',
+                amount: 200,
+                currency: 'USD',
+                startDate: '2024-01-01',
+                endDate: '2024-01-09',
+                users: [
+                  {
+                    _id: '2',
+                    firstName: 'Jane',
+                    lastName: 'Doe',
+                    image: null,
                   },
                   {
                     _id: '2',
@@ -97,118 +259,6 @@ export const MOCKS = [
                 ],
               },
               {
-                _id: '2',
-                amount: 200,
-                currency: 'USD',
-                startDate: '2024-01-01',
-                endDate: '2024-01-09',
-                users: [
-                  {
-                    _id: '2',
-                    firstName: 'Jane',
-                    lastName: 'Doe',
-                    image: null,
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: FUND_CAMPAIGN_PLEDGE,
-      variables: {
-        where: {
-          id: 'fundCampaignId',
-        },
-        pledgeOrderBy: 'endDate_ASC',
-      },
-    },
-    result: {
-      data: {
-        getFundraisingCampaigns: [
-          {
-            name: 'Campaign Name',
-            fundingGoal: 1000,
-            currency: 'USD',
-            startDate: '2024-01-01',
-            endDate: '2024-08-08',
-            pledges: [
-              {
-                _id: '2',
-                amount: 200,
-                currency: 'USD',
-                startDate: '2024-01-01',
-                endDate: '2024-01-09',
-                users: [
-                  {
-                    _id: '2',
-                    firstName: 'Jane',
-                    lastName: 'Doe',
-                    image: null,
-                  },
-                ],
-              },
-              {
-                _id: '1',
-                amount: 100,
-                currency: 'USD',
-                startDate: '2024-01-01',
-                endDate: '2024-01-10',
-                users: [
-                  {
-                    _id: '1',
-                    firstName: 'John',
-                    lastName: 'Doe',
-                    image: null,
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: FUND_CAMPAIGN_PLEDGE,
-      variables: {
-        where: {
-          id: 'fundCampaignId',
-        },
-        pledgeOrderBy: 'amount_DESC',
-      },
-    },
-    result: {
-      data: {
-        getFundraisingCampaigns: [
-          {
-            name: 'Campaign Name',
-            fundingGoal: 1000,
-            currency: 'USD',
-            startDate: '2024-01-01',
-            endDate: '2024-08-08',
-            pledges: [
-              {
-                _id: '2',
-                amount: 200,
-                currency: 'USD',
-                startDate: '2024-01-01',
-                endDate: '2024-01-09',
-                users: [
-                  {
-                    _id: '2',
-                    firstName: 'Jane',
-                    lastName: 'Doe',
-                    image: null,
-                  },
-                ],
-              },
-              {
                 _id: '1',
                 amount: 100,
                 currency: 'USD',
@@ -243,6 +293,9 @@ export const MOCKS = [
       data: {
         getFundraisingCampaigns: [
           {
+            fundId: {
+              name: 'Fund 1',
+            },
             name: 'Campaign Name',
             fundingGoal: 1000,
             currency: 'USD',
@@ -303,6 +356,7 @@ export const MOCKS = [
 ];
 
 export const MOCKS_FUND_CAMPAIGN_PLEDGE_ERROR = [
+  memberList,
   {
     request: {
       query: FUND_CAMPAIGN_PLEDGE,
@@ -318,6 +372,7 @@ export const MOCKS_FUND_CAMPAIGN_PLEDGE_ERROR = [
 ];
 
 export const MOCKS_DELETE_PLEDGE_ERROR = [
+  memberList,
   {
     request: {
       query: DELETE_PLEDGE,
@@ -330,6 +385,7 @@ export const MOCKS_DELETE_PLEDGE_ERROR = [
 ];
 
 export const EMPTY_MOCKS = [
+  memberList,
   {
     request: {
       query: FUND_CAMPAIGN_PLEDGE,
@@ -344,6 +400,9 @@ export const EMPTY_MOCKS = [
       data: {
         getFundraisingCampaigns: [
           {
+            fundId: {
+              name: 'Fund 1',
+            },
             name: 'Campaign Name',
             fundingGoal: 1000,
             currency: 'USD',
@@ -358,45 +417,7 @@ export const EMPTY_MOCKS = [
 ];
 
 export const PLEDGE_MODAL_MOCKS = [
-  {
-    request: {
-      query: MEMBERS_LIST,
-      variables: {
-        id: 'orgId',
-      },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            _id: 'orgId',
-            members: [
-              {
-                createdAt: '2023-04-13T04:53:17.742Z',
-                email: 'testuser4@example.com',
-                firstName: 'John',
-                image: 'img-url',
-                lastName: 'Doe',
-                organizationsBlockedBy: [],
-                __typename: 'User',
-                _id: '1',
-              },
-              {
-                createdAt: '2024-04-13T04:53:17.742Z',
-                email: 'testuser2@example.com',
-                firstName: 'Anna',
-                image: null,
-                lastName: 'Bradley',
-                organizationsBlockedBy: [],
-                __typename: 'User',
-                _id: '2',
-              },
-            ],
-          },
-        ],
-      },
-    },
-  },
+  memberList,
   {
     request: {
       query: UPDATE_PLEDGE,
