@@ -319,7 +319,7 @@ export default function organizations(): JSX.Element {
           <div className="mt-4">
             <InputGroup className={styles.maxWidth}>
               <Form.Control
-                placeholder={t('searchUsers')}
+                placeholder={t('searchOrganizations')}
                 id="searchUserOrgs"
                 type="text"
                 className={`${styles.borderNone} ${styles.backgroundWhite}`}
