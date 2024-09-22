@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
@@ -423,6 +423,32 @@ const MOCKS: TestMock[] = [
             user: {
               firstName: 'Vyvyan',
               lastName: 'Kerry',
+              image: 'tempUrl',
+              _id: '65378abd85008f171cf2990d',
+              email: 'testadmin1@example.com',
+              createdAt: '2023-04-13T04:53:17.742Z',
+              joinedOrganizations: [
+                {
+                  _id: '6537904485008f171cf29924',
+                  name: 'Unity Foundation',
+                  creator: {
+                    _id: '64378abd85008f171cf2990d',
+                    firstName: 'Wilt',
+                    lastName: 'Shepherd',
+                    image: null,
+                    email: 'testsuperadmin@example.com',
+                    createdAt: '2023-04-13T04:53:17.742Z',
+                  },
+                  __typename: 'Organization',
+                },
+              ],
+              __typename: 'User',
+            },
+          },
+          {
+            user: {
+              firstName: 'Nandika',
+              lastName: 'Agrawal',
               image: null,
               _id: '65378abd85008f171cf2990d',
               email: 'testadmin1@example.com',
@@ -916,10 +942,13 @@ describe('Organization People Page', () => {
     userEvent.click(screen.getByTestId('existingUser'));
     await wait();
 
-    expect(screen.getByTestId('addExistingUserModal')).toBeInTheDocument();
+    expect(
+      screen.getAllByTestId('addExistingUserModal').length,
+    ).toBeGreaterThan(0);
     await wait();
 
-    userEvent.click(screen.getByTestId('addBtn'));
+    const addBtn = screen.getAllByTestId('addBtn');
+    userEvent.click(addBtn[0]);
   });
 
   test('Open and search existing user', async () => {
@@ -1352,4 +1381,55 @@ describe('Organization People Page', () => {
     expect(window.location).toBeAt('/orgpeople/orgid');
     expect(screen.queryByText(/Nothing Found !!/i)).toBeInTheDocument();
   });
+});
+
+test('Open and check if profile image is displayed for existing user', async () => {
+  window.location.assign('/orgpeople/orgid');
+  render(
+    <MockedProvider
+      addTypename={true}
+      link={link}
+      defaultOptions={{
+        watchQuery: { fetchPolicy: 'no-cache' },
+        query: { fetchPolicy: 'no-cache' },
+      }}
+    >
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrganizationPeople />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+
+  // Wait for the component to finish rendering
+  await wait();
+
+  // Click on the dropdown toggle to open the menu
+  userEvent.click(screen.getByTestId('addMembers'));
+  await wait();
+
+  // Click on the "Admins" option in the dropdown menu
+  userEvent.click(screen.getByTestId('existingUser'));
+  await wait();
+
+  expect(screen.getByTestId('addExistingUserModal')).toBeInTheDocument();
+  await wait();
+
+  expect(screen.getAllByTestId('user').length).toBeGreaterThan(0);
+  await wait();
+
+  // Check if the image is rendered
+  expect(screen.getAllByTestId('profileImage').length).toBeGreaterThan(0);
+  await wait();
+
+  const images = await screen.findAllByAltText('avatar');
+  expect(images.length).toBeGreaterThan(0);
+  await wait();
+
+  const avatarImages = await screen.findAllByAltText('Dummy Avatar');
+  expect(avatarImages.length).toBeGreaterThan(0);
+  await wait();
 });

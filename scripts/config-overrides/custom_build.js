@@ -14,4 +14,3 @@ if (process.env.ALLOW_LOGS === "YES") {
 else {
   spawn(react_script_build, { stdio: 'inherit', shell: true });
 }
-

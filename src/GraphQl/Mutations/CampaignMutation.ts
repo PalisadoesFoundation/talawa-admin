@@ -15,6 +15,7 @@ import gql from 'graphql-tag';
 export const CREATE_CAMPAIGN_MUTATION = gql`
   mutation createFundraisingCampaign(
     $fundId: ID!
+    $organizationId: ID!
     $name: String!
     $fundingGoal: Float!
     $startDate: Date!
@@ -24,6 +25,7 @@ export const CREATE_CAMPAIGN_MUTATION = gql`
     createFundraisingCampaign(
       data: {
         fundId: $fundId
+        organizationId: $organizationId
         name: $name
         fundingGoal: $fundingGoal
         startDate: $startDate
@@ -67,20 +69,6 @@ export const UPDATE_CAMPAIGN_MUTATION = gql`
         currency: $currency
       }
     ) {
-      _id
-    }
-  }
-`;
-
-/**
- * GraphQL mutation to delete a fund Campaign.
- *
- * @param id - The ID of the campaign being deleted.
- * @returns The ID of the deleted campaign.
- */
-export const DELETE_CAMPAIGN_MUTATION = gql`
-  mutation removeFundraisingCampaign($id: ID!) {
-    removeFundraisingCampaign(id: $id) {
       _id
     }
   }

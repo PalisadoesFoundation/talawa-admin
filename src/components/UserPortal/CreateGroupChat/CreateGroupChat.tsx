@@ -1,17 +1,4 @@
-import {
-  FormControl,
-  FormControlLabel,
-  FormHelperText,
-  InputLabel,
-  MenuItem,
-  Paper,
-  RadioGroup,
-  Select,
-  FormLabel,
-  TableBody,
-  Radio,
-} from '@mui/material';
-import type { SelectChangeEvent } from '@mui/material/Select';
+import { Paper, TableBody } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import styles from './CreateGroupChat.module.css';
@@ -19,10 +6,7 @@ import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
 import { USER_JOINED_ORGANIZATIONS } from 'GraphQl/Queries/OrganizationQueries';
 import useLocalStorage from 'utils/useLocalstorage';
-import {
-  CREATE_CHAT,
-  CREATE_GROUP_CHAT,
-} from 'GraphQl/Mutations/OrganizationMutations';
+import { CREATE_CHAT } from 'GraphQl/Mutations/OrganizationMutations';
 import Table from '@mui/material/Table';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
@@ -32,8 +16,7 @@ import { styled } from '@mui/material/styles';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import { USERS_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
-import { LocalPoliceTwoTone, Search } from '@mui/icons-material';
-import { style } from '@mui/system';
+import { Search } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 
 interface InterfaceCreateGroupChatProps {
@@ -42,10 +25,10 @@ interface InterfaceCreateGroupChatProps {
   chatsListRefetch: (
     variables?:
       | Partial<{
-          id: any;
+          id: string;
         }>
       | undefined,
-  ) => Promise<ApolloQueryResult<any>>;
+  ) => Promise<ApolloQueryResult<unknown>>;
 }
 
 interface InterfaceOrganization {
@@ -106,7 +89,7 @@ export default function CreateGroupChat({
   const [organizations, setOrganizations] = useState([]);
   const [selectedOrganization, setSelectedOrganization] = useState('');
   const [title, setTitle] = useState('');
-  let [userIds, setUserIds] = useState<string[]>([]);
+  const [userIds, setUserIds] = useState<string[]>([]);
 
   const [addUserModalisOpen, setAddUserModalisOpen] = useState(false);
 
@@ -140,7 +123,7 @@ export default function CreateGroupChat({
   }, [userIds]);
 
   async function handleCreateGroupChat(): Promise<void> {
-    const chat = await createChat({
+    await createChat({
       variables: {
         organizationId: selectedOrganization,
         userIds: [userId, ...userIds],
@@ -349,10 +332,10 @@ export default function CreateGroupChat({
                                 <Button
                                   variant="danger"
                                   onClick={() => {
-                                    userIds = userIds.filter(
+                                    const updatedUserIds = userIds.filter(
                                       (id) => id !== userDetails.user._id,
                                     );
-                                    setUserIds(userIds);
+                                    setUserIds(updatedUserIds);
                                   }}
                                   data-testid="removeBtn"
                                 >

@@ -1,7 +1,13 @@
 import React from 'react';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
-import { I18nextProvider, useTranslation } from 'react-i18next';
+import { I18nextProvider } from 'react-i18next';
 
 import {
   USERS_CONNECTION_LIST,
@@ -1572,7 +1578,7 @@ describe('Testing Chat Screen [User Portal]', () => {
     ).toBeInTheDocument();
   });
 
-  test('Test create new direct chat', async () => {
+  test('create new direct chat', async () => {
     const mock = [
       ...USER_JOINED_ORG_MOCK,
       ...GROUP_CHAT_BY_ID_QUERY_MOCK,
@@ -1612,7 +1618,7 @@ describe('Testing Chat Screen [User Portal]', () => {
     fireEvent.click(closeButton);
   });
 
-  test('Test create new group chat', async () => {
+  test('Create new group chat', async () => {
     const mock = [
       ...USER_JOINED_ORG_MOCK,
       ...GROUP_CHAT_BY_ID_QUERY_MOCK,
@@ -1709,12 +1715,16 @@ describe('Testing Chat Screen [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await wait();
-    expect(screen.getByText('My Organizations')).toBeInTheDocument();
-    expect(screen.getByText('Talawa User Portal')).toBeInTheDocument();
-
-    const chatBtn = screen.getByTestId('chatBtn');
-
-    chatBtn.click();
+    screen.debug();
+    await waitFor(() => {
+      expect(screen.getByText('My Organizations')).toBeInTheDocument();
+      expect(screen.getByText('Talawa User Portal')).toBeInTheDocument();
+    });
+    await waitFor(() => {
+      const chatBtn = screen.getByTestId('chatBtn');
+      act(() => {
+        chatBtn.click();
+      });
+    });
   });
 });

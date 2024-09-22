@@ -14,7 +14,7 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import i18n from 'utils/i18nForTest';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
@@ -26,7 +26,7 @@ import EventAgendaItems from './EventAgendaItems';
 import {
   MOCKS,
   MOCKS_ERROR_QUERY,
-  MOCKS_ERROR_MUTATION,
+  // MOCKS_ERROR_MUTATION,
 } from './EventAgendaItemsMocks';
 
 jest.mock('react-toastify', () => ({
@@ -41,6 +41,15 @@ jest.mock('react-router-dom', () => ({
   useParams: () => ({ eventId: '123' }),
 }));
 
+//temporarily fixes react-beautiful-dnd droppable method's depreciation error
+//needs to be fixed in React 19
+jest.spyOn(console, 'error').mockImplementation((message) => {
+  if (message.includes('Support for defaultProps will be removed')) {
+    return;
+  }
+  console.error(message);
+});
+
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -51,7 +60,7 @@ async function wait(ms = 100): Promise<void> {
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR_QUERY, true);
-const link3 = new StaticMockLink(MOCKS_ERROR_MUTATION, true);
+// const link3 = new StaticMockLink(MOCKS_ERROR_MUTATION, true);
 
 const translations = JSON.parse(
   JSON.stringify(i18n.getDataByLanguage('en')?.translation.agendaItems),

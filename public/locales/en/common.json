@@ -81,5 +81,15 @@
   "addedSuccessfully": "{{item}} added Successfully",
   "updatedSuccessfully": "{{item}} updated Successfully",
   "removedSuccessfully": "{{item}} removed Successfully",
-  "successfullyUpdated": "Successfully Updated"
+  "successfullyUpdated": "Successfully Updated",
+  "sort": "Sort",
+  "all": "All",
+  "active": "Active",
+  "disabled": "Disabled",
+  "pending": "Pending",
+  "completed": "Completed",
+  "late": "Late",
+  "createdLatest": "Created Latest",
+  "createdEarliest": "Created Earliest",
+  "searchBy": "Search by {{item}}"
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { act } from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 
@@ -72,7 +72,9 @@ describe('Testing CollapsibleDropdown component', () => {
     const nonActiveDropdownBtn = screen.getByText('SubCategory 2');
 
     // Check if dropdown is rendered with correct classes
-    activeDropdownBtn.click();
+    act(() => {
+      fireEvent.click(activeDropdownBtn);
+    });
     expect(parentDropdownBtn).toBeInTheDocument();
     expect(parentDropdownBtn).toHaveClass('text-white');
     expect(parentDropdownBtn).toHaveClass('btn-success');
@@ -88,15 +90,21 @@ describe('Testing CollapsibleDropdown component', () => {
     expect(nonActiveDropdownBtn).toHaveClass('btn-light');
 
     // Check if dropdown is collapsed after clicking on it
-    fireEvent.click(parentDropdownBtn);
+    act(() => {
+      fireEvent.click(parentDropdownBtn);
+    });
     expect(props.setShowDropdown).toHaveBeenCalledWith(false);
 
     // Check if dropdown is expanded after clicking on it again
-    fireEvent.click(parentDropdownBtn);
+    act(() => {
+      fireEvent.click(parentDropdownBtn);
+    });
     expect(props.setShowDropdown).toHaveBeenCalledWith(true);
 
-    // Click on non active dropdown button and check if it navigates to the correct url
-    nonActiveDropdownBtn.click();
+    // Click on non-active dropdown button and check if it navigates to the correct URL
+    act(() => {
+      fireEvent.click(nonActiveDropdownBtn);
+    });
     expect(window.location.pathname).toBe('/sub-category-2');
   });
 });

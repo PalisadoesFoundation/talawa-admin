@@ -10,7 +10,6 @@ import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 
 import {
-  DIRECT_CHATS_LIST,
   USERS_CONNECTION_LIST,
   USER_JOINED_ORGANIZATIONS,
 } from 'GraphQl/Queries/Queries';
@@ -18,22 +17,12 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
-import { StaticMockLink } from 'utils/StaticMockLink';
 import Chat from '../../../screens/UserPortal/Chat/Chat';
 import {
   CREATE_CHAT,
-  CREATE_GROUP_CHAT,
   MESSAGE_SENT_TO_CHAT,
-  MESSAGE_SENT_TO_DIRECT_CHAT,
-  MESSAGE_SENT_TO_GROUP_CHAT,
 } from 'GraphQl/Mutations/OrganizationMutations';
-import {
-  CHATS_LIST,
-  CHAT_BY_ID,
-  DIRECT_CHAT_BY_ID,
-  GROUP_CHAT_BY_ID,
-  GROUP_CHAT_LIST,
-} from 'GraphQl/Queries/PlugInQueries';
+import { CHATS_LIST, CHAT_BY_ID } from 'GraphQl/Queries/PlugInQueries';
 import useLocalStorage from 'utils/useLocalstorage';
 
 const { setItem } = useLocalStorage();
@@ -1766,7 +1755,7 @@ describe('Testing Create Group Chat Modal [User Portal]', () => {
     })),
   });
 
-  test('Test open and close create new direct chat modal', async () => {
+  test('open and close create new direct chat modal', async () => {
     const mock = [
       ...USER_JOINED_ORG_MOCK,
       ...GROUP_CHAT_BY_ID_QUERY_MOCK,
@@ -1804,7 +1793,7 @@ describe('Testing Create Group Chat Modal [User Portal]', () => {
     fireEvent.click(closeButton);
   });
 
-  test('Test create new group chat', async () => {
+  test('create new group chat', async () => {
     const mock = [
       ...USER_JOINED_ORG_MOCK,
       ...GROUP_CHAT_BY_ID_QUERY_MOCK,
@@ -1881,7 +1870,7 @@ describe('Testing Create Group Chat Modal [User Portal]', () => {
     });
   }, 3000);
 
-  test('Test add and remove user ', async () => {
+  test('add and remove user', async () => {
     setItem('userId', '1');
     const mock = [
       ...USER_JOINED_ORG_MOCK,

@@ -1,12 +1,6 @@
-import React from 'react';
+import React, { act } from 'react';
 import type { RenderResult } from '@testing-library/react';
-import {
-  act,
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-} from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
@@ -57,6 +51,8 @@ const translations = {
 const renderEventListCard = (
   props: InterfaceEventListCardProps,
 ): RenderResult => {
+  const { key, ...restProps } = props; // Destructure the key and separate other props
+
   return render(
     <MockedProvider addTypename={false} link={link}>
       <MemoryRouter initialEntries={['/orgevents/orgId']}>
@@ -66,11 +62,11 @@ const renderEventListCard = (
               <Routes>
                 <Route
                   path="/orgevents/:orgId"
-                  element={<EventListCard {...props} />}
+                  element={<EventListCard key={key} {...restProps} />}
                 />
                 <Route
                   path="/event/:orgId/"
-                  element={<EventListCard {...props} />}
+                  element={<EventListCard key={key} {...restProps} />}
                 />
                 <Route
                   path="/event/:orgId/:eventId"
@@ -878,6 +874,8 @@ describe('Testing Event List Card', () => {
   });
 
   test('should show an error toast when the delete event mutation fails', async () => {
+    // Destructure key from props[1] and pass it separately to avoid spreading it
+    const { key, ...otherProps } = props[1];
     render(
       <MockedProvider addTypename={false} link={link2}>
         <MemoryRouter initialEntries={['/orgevents/orgId']}>
@@ -887,11 +885,11 @@ describe('Testing Event List Card', () => {
                 <Routes>
                   <Route
                     path="/orgevents/:orgId"
-                    element={<EventListCard {...props[1]} />}
+                    element={<EventListCard key={key} {...otherProps} />}
                   />
                   <Route
                     path="/event/:orgId/"
-                    element={<EventListCard {...props[1]} />}
+                    element={<EventListCard key={key} {...otherProps} />}
                   />
                 </Routes>
               </I18nextProvider>

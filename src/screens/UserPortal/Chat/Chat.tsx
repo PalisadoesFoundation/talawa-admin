@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { Button, Dropdown } from 'react-bootstrap';
-import { SearchOutlined, Search } from '@mui/icons-material';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import ContactCard from 'components/UserPortal/ContactCard/ContactCard';
 import ChatRoom from 'components/UserPortal/ChatRoom/ChatRoom';

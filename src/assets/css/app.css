@@ -2401,8 +2401,8 @@ textarea.form-control-lg {
 
 .form-check-input {
   --bs-form-check-bg: #f2f2f2;
-  width: 1em;
-  height: 1em;
+  width: 1.3em;
+  height: 1.3em;
   margin-top: 0.25em;
   vertical-align: top;
   background-color: var(--bs-form-check-bg);

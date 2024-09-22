@@ -442,7 +442,6 @@ describe('MemberDetail', () => {
   test('should display warnings for blank form submission', async () => {
     jest.spyOn(toast, 'warning');
     const props = {
-      key: '123',
       id: '1',
       toggleStateValue: jest.fn(),
     };
@@ -452,7 +451,7 @@ describe('MemberDetail', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <MemberDetail {...props} />
+              <MemberDetail key="123" {...props} />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -467,6 +466,7 @@ describe('MemberDetail', () => {
     expect(toast.warning).toHaveBeenCalledWith('Last Name cannot be blank!');
     expect(toast.warning).toHaveBeenCalledWith('Email cannot be blank!');
   });
+
   test('display admin', async () => {
     const props = {
       id: 'rishav-jha-mech',

@@ -5,10 +5,7 @@ import styles from './CreateDirectChat.module.css';
 import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
-import {
-  CREATE_CHAT,
-  CREATE_DIRECT_CHAT,
-} from 'GraphQl/Mutations/OrganizationMutations';
+import { CREATE_CHAT } from 'GraphQl/Mutations/OrganizationMutations';
 import Table from '@mui/material/Table';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
@@ -25,15 +22,19 @@ import { useParams } from 'react-router-dom';
 interface InterfaceCreateDirectChatProps {
   toggleCreateDirectChatModal: () => void;
   createDirectChatModalisOpen: boolean;
+
   chatsListRefetch: (
     variables?:
       | Partial<{
-          id: any;
+          id: string;
         }>
       | undefined,
-  ) => Promise<ApolloQueryResult<any>>;
+  ) => Promise<ApolloQueryResult<unknown>>;
 }
 
+/**
+ * Styled table cell with custom styles.
+ */
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: ['#31bb6b', '!important'],
@@ -44,6 +45,9 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
+/**
+ * Styled table row with custom styles.
+ */
 const StyledTableRow = styled(TableRow)(() => ({
   '&:last-child td, &:last-child th': {
     border: 0,

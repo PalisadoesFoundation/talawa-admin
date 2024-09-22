@@ -20,6 +20,18 @@ interface InterfaceChatRoomProps {
   selectedContact: string;
 }
 
+/**
+ * A chat room component that displays messages and a message input field.
+ *
+ * This component shows a list of messages between the user and a selected contact.
+ * If no contact is selected, it displays a placeholder with an icon and a message asking the user to select a contact.
+ *
+ * @param  props - The properties passed to the component.
+ * @param selectedContact - The ID or name of the currently selected contact. If empty, a placeholder is shown.
+ *
+ * @returns The rendered chat room component.
+ */
+
 type DirectMessage = {
   _id: string;
   createdAt: Date;
@@ -53,7 +65,7 @@ type DirectMessage = {
 
 type Chat = {
   _id: string;
-  isGroup: Boolean;
+  isGroup: boolean;
   name?: string;
   image?: string;
   messages: DirectMessage[];
@@ -66,6 +78,7 @@ type Chat = {
 };
 
 export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
+  // Translation hook for text in different languages
   const { t } = useTranslation('translation', {
     keyPrefix: 'userChatRoom',
   });
@@ -86,6 +99,13 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
   const [replyToDirectMessage, setReplyToDirectMessage] =
     useState<DirectMessage | null>(null);
 
+  /**
+   * Handles changes to the new message input field.
+   *
+   * Updates the state with the current value of the input field whenever it changes.
+   *
+   * @param e - The event triggered by the input field change.
+   */
   const handleNewMessageChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const newMessageValue = e.target.value;
     setNewMessage(newMessageValue);
@@ -107,21 +127,13 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     },
   });
 
-  const {
-    data: chatData,
-    loading: chatLoading,
-    refetch: chatRefetch,
-  } = useQuery(CHAT_BY_ID, {
+  const { data: chatData, refetch: chatRefetch } = useQuery(CHAT_BY_ID, {
     variables: {
       id: props.selectedContact,
     },
   });
 
-  const {
-    data: chatListData,
-    loading: chatListLoading,
-    refetch: chatListRefetch,
-  } = useQuery(CHATS_LIST, {
+  const { refetch: chatListRefetch } = useQuery(CHATS_LIST, {
     variables: {
       id: userId,
     },
@@ -142,7 +154,9 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
         setChatTitle(chat.name);
         setChatSubtitle(`${chat.users.length} members`);
       } else {
-        const otherUser = chat.users.find((user: any) => user._id !== userId);
+        const otherUser = chat.users.find(
+          (user: { _id: string }) => user._id !== userId,
+        );
         if (otherUser) {
           setChatTitle(`${otherUser.firstName} ${otherUser.lastName}`);
           setChatSubtitle(otherUser.email);
@@ -162,10 +176,10 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     variables: {
       userId: userId,
     },
-    onData: async (MessageSubscriptionData) => {
+    onData: async (messageSubscriptionData) => {
       if (
-        MessageSubscriptionData?.data.data.messageSentToChat &&
-        MessageSubscriptionData?.data.data.messageSentToChat
+        messageSubscriptionData?.data.data.messageSentToChat &&
+        messageSubscriptionData?.data.data.messageSentToChat
           .chatMessageBelongsTo['_id'] == props.selectedContact
       ) {
         await markChatMessagesAsRead();

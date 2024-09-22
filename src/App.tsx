@@ -14,12 +14,14 @@ import OrgList from 'screens/OrgList/OrgList';
 import OrgPost from 'screens/OrgPost/OrgPost';
 import OrgSettings from 'screens/OrgSettings/OrgSettings';
 import OrganizationActionItems from 'screens/OrganizationActionItems/OrganizationActionItems';
-import OrganizationAgendaCategory from 'screens/OrganizationAgendaCategory/OrganizationAgendaCategory';
 import OrganizationDashboard from 'screens/OrganizationDashboard/OrganizationDashboard';
 import OrganizationEvents from 'screens/OrganizationEvents/OrganizationEvents';
 import OrganizaitionFundCampiagn from 'screens/OrganizationFundCampaign/OrganizationFundCampagins';
 import OrganizationFunds from 'screens/OrganizationFunds/OrganizationFunds';
 import OrganizationPeople from 'screens/OrganizationPeople/OrganizationPeople';
+import OrganizationTags from 'screens/OrganizationTags/OrganizationTags';
+import ManageTag from 'screens/ManageTag/ManageTag';
+import SubTags from 'screens/SubTags/SubTags';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import Requests from 'screens/Requests/Requests';
 import Users from 'screens/Users/Users';
@@ -34,7 +36,6 @@ import Posts from 'screens/UserPortal/Posts/Posts';
 import Organizations from 'screens/UserPortal/Organizations/Organizations';
 import People from 'screens/UserPortal/People/People';
 import Settings from 'screens/UserPortal/Settings/Settings';
-// import UserLoginPage from 'screens/UserPortal/UserLoginPage/UserLoginPage';
 import Chat from 'screens/UserPortal/Chat/Chat';
 import { useQuery } from '@apollo/client';
 import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
@@ -45,8 +46,27 @@ import FundCampaignPledge from 'screens/FundCampaignPledge/FundCampaignPledge';
 import useLocalStorage from 'utils/useLocalstorage';
 import UserScreen from 'screens/UserPortal/UserScreen/UserScreen';
 import EventDashboardScreen from 'components/EventDashboardScreen/EventDashboardScreen';
+import Campaigns from 'screens/UserPortal/Campaigns/Campaigns';
+import Pledges from 'screens/UserPortal/Pledges/Pledges';
 
 const { setItem } = useLocalStorage();
+
+/**
+ * This is the main function for our application. It sets up all the routes and components,
+ * defining how the user can navigate through the app. The function uses React Router's `Routes`
+ * and `Route` components to map different URL paths to corresponding screens and components.
+ *
+ * ## Important Details
+ * - **UseEffect Hook**: This hook checks user authentication status using the `CHECK_AUTH` GraphQL query.
+ * - **Plugins**: It dynamically loads additional routes for any installed plugins.
+ * - **Routes**:
+ *   - The root route ("/") takes the user to the `LoginPage`.
+ *   - Protected routes are wrapped with the `SecuredRoute` component to ensure they are only accessible to authenticated users.
+ *   - Admin and Super Admin routes allow access to organization and user management screens.
+ *   - User portal routes allow end-users to interact with organizations, settings, chat, events, etc.
+ *
+ * @returns  The rendered routes and components of the application.
+ */
 
 function app(): JSX.Element {
   /*const { updatePluginLinks, updateInstalled } = bindActionCreators(
@@ -100,12 +120,12 @@ function app(): JSX.Element {
       ],
       index: number,
     ) => {
-      const extraComponent = plugin[1];
+      const ExtraComponent = plugin[1];
       return (
         <Route
           key={index}
           path={`/plugin/${plugin[0].toLowerCase()}`}
-          element={extraComponent}
+          element={<ExtraComponent />}
         />
       );
     },
@@ -126,6 +146,12 @@ function app(): JSX.Element {
             <Route path="/requests/:orgId" element={<Requests />} />
             <Route path="/orgdash/:orgId" element={<OrganizationDashboard />} />
             <Route path="/orgpeople/:orgId" element={<OrganizationPeople />} />
+            <Route path="/orgtags/:orgId" element={<OrganizationTags />} />
+            <Route
+              path="orgtags/:orgId/managetag/:tagId"
+              element={<ManageTag />}
+            />
+            <Route path="orgtags/:orgId/subtags/:tagId" element={<SubTags />} />
             <Route path="/member/:orgId" element={<MemberDetail />} />
             <Route path="/orgevents/:orgId" element={<OrganizationEvents />} />
             <Route
@@ -135,10 +161,6 @@ function app(): JSX.Element {
             <Route
               path="/orgactionitems/:orgId"
               element={<OrganizationActionItems />}
-            />
-            <Route
-              path="/orgagendacategory/:orgId"
-              element={<OrganizationAgendaCategory />}
             />
             <Route path="/orgfunds/:orgId" element={<OrganizationFunds />} />
             <Route
@@ -171,6 +193,8 @@ function app(): JSX.Element {
             <Route path="/user/people/:orgId" element={<People />} />
             <Route path="/user/donate/:orgId" element={<Donate />} />
             <Route path="/user/events/:orgId" element={<Events />} />
+            <Route path="/user/campaigns/:orgId" element={<Campaigns />} />
+            <Route path="/user/pledges/:orgId" element={<Pledges />} />
             <Route element={<EventDashboardScreen />}>
               <Route
                 path="/user/event/:orgId/:eventId"

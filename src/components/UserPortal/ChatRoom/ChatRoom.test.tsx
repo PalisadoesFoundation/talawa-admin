@@ -6,7 +6,6 @@ import {
   screen,
   fireEvent,
   waitFor,
-  findAllByTestId,
 } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -15,28 +14,15 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
-import { StaticMockLink } from 'utils/StaticMockLink';
-import {
-  CHATS_LIST,
-  CHAT_BY_ID,
-  DIRECT_CHAT_BY_ID,
-  GROUP_CHAT_BY_ID,
-} from 'GraphQl/Queries/PlugInQueries';
+import { CHATS_LIST, CHAT_BY_ID } from 'GraphQl/Queries/PlugInQueries';
 import {
   MESSAGE_SENT_TO_CHAT,
-  MESSAGE_SENT_TO_DIRECT_CHAT,
-  MESSAGE_SENT_TO_GROUP_CHAT,
   SEND_MESSAGE_TO_CHAT,
-  SEND_MESSAGE_TO_DIRECT_CHAT,
-  SEND_MESSAGE_TO_GROUP_CHAT,
 } from 'GraphQl/Mutations/OrganizationMutations';
-import userEvent from '@testing-library/user-event';
 import ChatRoom from './ChatRoom';
 import { useLocalStorage } from 'utils/useLocalstorage';
 
 const { setItem } = useLocalStorage();
-
-const link = new StaticMockLink([], true);
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -983,7 +969,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
     await wait();
   });
 
-  test('Test send message direct chat', async () => {
+  test('send message direct chat', async () => {
     setItem('userId', '2');
     const mocks = [
       ...MESSAGE_SENT_TO_CHAT_MOCK,
@@ -1047,7 +1033,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
     await wait();
   });
 
-  test('Test send message group chat', async () => {
+  test('send message group chat', async () => {
     const mocks = [
       ...MESSAGE_SENT_TO_CHAT_MOCK,
       ...CHAT_BY_ID_QUERY_MOCK,
