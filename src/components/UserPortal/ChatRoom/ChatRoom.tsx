@@ -64,7 +64,7 @@ type DirectMessage = {
 
 type Chat = {
   _id: string;
-  isGroup: Boolean;
+  isGroup: boolean;
   name?: string;
   image?: string;
   messages: DirectMessage[];
@@ -95,7 +95,6 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
   const [chatSubtitle, setChatSubtitle] = useState('');
   const [newMessage, setNewMessage] = useState('');
   const [chat, setChat] = useState<Chat>();
-  const [groupChat, setGroupChat] = useState<Chat>();
   const [replyToDirectMessage, setReplyToDirectMessage] =
     useState<DirectMessage | null>(null);
 
@@ -120,11 +119,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     },
   });
 
-  const {
-    data: chatData,
-    loading: chatLoading,
-    refetch: chatRefetch,
-  } = useQuery(CHAT_BY_ID, {
+  const { data: chatData, refetch: chatRefetch } = useQuery(CHAT_BY_ID, {
     variables: {
       id: props.selectedContact,
     },
@@ -142,7 +137,9 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
         setChatTitle(chat.name);
         setChatSubtitle(`${chat.users.length} members`);
       } else {
-        const otherUser = chat.users.find((user: any) => user._id !== userId);
+        const otherUser = chat.users.find(
+          (user: { _id: string }) => user._id !== userId,
+        );
         if (otherUser) {
           setChatTitle(`${otherUser.firstName} ${otherUser.lastName}`);
           setChatSubtitle(otherUser.email);
@@ -162,11 +159,10 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     variables: {
       userId: userId,
     },
-    onData: (MessageSubscriptionData) => {
-      console.log('MESSAGE SUBS DATA', MessageSubscriptionData);
+    onData: (messageSubscriptionData) => {
       if (
-        MessageSubscriptionData?.data.data.messageSentToChat &&
-        MessageSubscriptionData?.data.data.messageSentToChat
+        messageSubscriptionData?.data.data.messageSentToChat &&
+        messageSubscriptionData?.data.data.messageSentToChat
           .chatMessageBelongsTo['_id'] == props.selectedContact
       ) {
         chatRefetch();
@@ -250,6 +246,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                               ? styles.messageSent
                               : styles.messageReceived
                           }
+                          data-testid="message"
                           key={message._id}
                           id={message._id}
                         >
@@ -276,7 +273,10 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                             {message.messageContent}
                           </span>
                           <div className={styles.messageAttributes}>
-                            <Dropdown style={{ cursor: 'pointer' }}>
+                            <Dropdown
+                              data-testid="moreOptions"
+                              style={{ cursor: 'pointer' }}
+                            >
                               <Dropdown.Toggle
                                 className={styles.customToggle}
                                 data-testid={'dropdown'}
@@ -288,7 +288,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                                   onClick={() => {
                                     setReplyToDirectMessage(message);
                                   }}
-                                  data-testid="replyToMessage"
+                                  data-testid="replyBtn"
                                 >
                                   Reply
                                 </Dropdown.Item>
@@ -314,7 +314,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
           </div>
           <div id="messageInput">
             {!!replyToDirectMessage?._id && (
-              <div className={styles.replyTo}>
+              <div data-testid="replyMsg" className={styles.replyTo}>
                 <div className={styles.replyToMessageContainer}>
                   <div className={styles.userDetails}>
                     <Avatar
@@ -340,6 +340,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                 </div>
 
                 <Button
+                  data-testid="closeReply"
                   onClick={() => setReplyToDirectMessage(null)}
                   className={styles.closeBtn}
                 >
