@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './UserNavbar.module.css';
-import TalawaImage from 'assets/images/talawa-logo-200x200.png';
+import TalawaImage from 'assets/images/talawa-logo-600x600.png';
 import { Container, Dropdown, Navbar } from 'react-bootstrap';
 import { languages } from 'utils/languages';
 import i18next from 'i18next';
