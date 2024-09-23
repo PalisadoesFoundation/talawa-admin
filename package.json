@@ -132,7 +132,7 @@
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-react": "^7.35.0",
     "eslint-plugin-tsdoc": "^0.3.0",
-    "husky": "^8.0.3",
+    "husky": "^9.1.6",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^27.4.5",
     "jest-localstorage-mock": "^2.4.19",
