@@ -23,8 +23,8 @@ import {
   SIGNUP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { GET_COMMUNITY_DATA, ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
-import { ReactComponent as PalisadoesLogo } from 'assets/svgs/palisadoes.svg';
-import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
+import PalisadoesLogo from 'assets/svgs/palisadoes.svg?react';
+import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
 import LoginPortalToggle from 'components/LoginPortalToggle/LoginPortalToggle';
 import { errorHandler } from 'utils/errorHandler';
