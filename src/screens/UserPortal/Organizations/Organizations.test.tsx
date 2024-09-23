@@ -534,6 +534,7 @@ describe('Testing Organizations Screen [User Portal]', () => {
     await wait();
     const dropdown = screen.getByTestId('table-pagination');
     userEvent.click(dropdown);
+    expect(screen.queryByText('-1')).not.toBeInTheDocument();
     expect(screen.getByText('5')).toBeInTheDocument();
     expect(screen.getByText('10')).toBeInTheDocument();
     expect(screen.getByText('30')).toBeInTheDocument();

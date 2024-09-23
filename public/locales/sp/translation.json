@@ -964,7 +964,8 @@
     "filter": "Filtrar",
     "organizations": "Organizaciones",
     "searchByName": "Buscar por nombre",
-    "searchUsers": "Buscar usuarios"
+    "searchUsers": "Buscar usuarios",
+    "searchOrganizations": "Buscar organizaciones"
   },
   "userSidebarOrg": {
     "yourOrganizations": "Tus Organizaciones",
