@@ -8,7 +8,7 @@ import {
   FORGOT_PASSWORD_MUTATION,
   GENERATE_OTP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import { ReactComponent as KeyLogo } from 'assets/svgs/key.svg';
+import KeyLogo from 'assets/svgs/key.svg?react';
 
 import ArrowRightAlt from '@mui/icons-material/ArrowRightAlt';
 import Loader from 'components/Loader/Loader';
