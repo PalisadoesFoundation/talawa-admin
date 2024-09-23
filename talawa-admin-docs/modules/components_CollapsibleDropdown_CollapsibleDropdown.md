@@ -20,8 +20,8 @@
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name             | Type                                                                                                                               |
+| :--------------- | :--------------------------------------------------------------------------------------------------------------------------------- |
 | `«destructured»` | [`InterfaceCollapsibleDropdown`](../interfaces/components_CollapsibleDropdown_CollapsibleDropdown.InterfaceCollapsibleDropdown.md) |
 
 #### Returns

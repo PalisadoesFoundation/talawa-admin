@@ -16,7 +16,7 @@
 
 #### Parameters
 
-| Name | Type |
+| Name    | Type    |
 | :------ | :------ |
 | `props` | `Props` |
 

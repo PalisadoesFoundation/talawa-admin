@@ -65,31 +65,34 @@ First you need a local copy of `talawa-admin`. Run the following command in the 
 
 1. On your computer, navigate to the folder where you want to setup the repository.
 2. Open a `cmd` (Windows) or `terminal` (Linux or MacOS) session in this folder.
-    1. An easy way to do this is to right-click and choose appropriate option based on your OS.
+   1. An easy way to do this is to right-click and choose appropriate option based on your OS.
 3. **For Our Open Source Contributor Software Developers:**
-    1. Next, we'll fork and clone the `talawa-admin` repository.
-    1. In your web browser, navigate to [https://github.com/PalisadoesFoundation/talawa-admin/](https://github.com/PalisadoesFoundation/talawa-admin/) and click on the `fork` button. It is placed on the right corner opposite the repository name `PalisadoesFoundation/talawa-admin`.
 
-       ![Image with fork](public/markdown/images/install1.png)
+   1. Next, we'll fork and clone the `talawa-admin` repository.
+   1. In your web browser, navigate to [https://github.com/PalisadoesFoundation/talawa-admin/](https://github.com/PalisadoesFoundation/talawa-admin/) and click on the `fork` button. It is placed on the right corner opposite the repository name `PalisadoesFoundation/talawa-admin`.
 
-    2. You should now see `talawa-admin` under your repositories. It will be marked as forked from `PalisadoesFoundation/talawa-admin`
+      ![Image with fork](public/markdown/images/install1.png)
 
-       ![Image of user's clone](public/markdown/images/install2.png)
+   1. You should now see `talawa-admin` under your repositories. It will be marked as forked from `PalisadoesFoundation/talawa-admin`
 
-    3. Clone the repository to your local computer (replacing the values in `{{}}`):
-        ```bash
-        $ git clone https://github.com/{{YOUR GITHUB USERNAME}}/talawa-admin.git
-        cd talawa-admin
-        git checkout develop
-        ```
-        - **Note:** Make sure to check out the `develop` branch
-    4. You now have a local copy of the code files. For more detailed instructions on contributing code, and managing the versions of this repository with `git`, checkout our [CONTRIBUTING.md](./CONTRIBUTING.md) file.
+      ![Image of user's clone](public/markdown/images/install2.png)
+
+   1. Clone the repository to your local computer (replacing the values in `{{}}`):
+      ```bash
+      $ git clone https://github.com/{{YOUR GITHUB USERNAME}}/talawa-admin.git
+      cd talawa-admin
+      git checkout develop
+      ```
+      - **Note:** Make sure to check out the `develop` branch
+   1. You now have a local copy of the code files. For more detailed instructions on contributing code, and managing the versions of this repository with `git`, checkout our [CONTRIBUTING.md](./CONTRIBUTING.md) file.
+
 4. **Talawa Administrators:**
-      1. Clone the repository to your local computer using this command:
 
-          ```bash
-          $ git clone https://github.com/PalisadoesFoundation/talawa-admin.git
-          ```
+   1. Clone the repository to your local computer using this command:
+
+      ```bash
+      $ git clone https://github.com/PalisadoesFoundation/talawa-admin.git
+      ```
 
 ## Install node.js
 
@@ -98,26 +101,26 @@ Best way to install and manage `node.js` is making use of node version managers.
 Follow these steps to install the `node.js` packages in Windows, Linux and MacOS.
 
 1. For Windows:
-    1. first install `node.js` from their website at https://nodejs.org
-        1. When installing, don't click the option to install the `necessary tools`. These are not needed in our case. 
-    2. then install [fnm](https://github.com/Schniz/fnm). Please read all the steps in this section first.
-        1. All the commands listed on this page will need to be run in a Windows terminal session in the `talawa-admin` directory.
-        2. Install `fnm` using the `winget` option listed on the page.
-        3. Setup `fnm` to automatically set the version of `node.js` to the version required for the repository using these steps:
-            1. First, refer to the `fnm` web page's section on `Shell Setup` recommendations.
-            2. Open a `Windows PowerShell` terminal window
-            3. Run the recommended `Windows PowerShell` command to open `notepad`.
-            4. Paste the recommended string into `notepad`
-            5. Save the document.
-            6. Exit `notepad`
-            7. Exit PowerShell
-            8. This will ensure that you are always using the correct version of `node.js`
+   1. first install `node.js` from their website at https://nodejs.org
+      1. When installing, don't click the option to install the `necessary tools`. These are not needed in our case.
+   2. then install [fnm](https://github.com/Schniz/fnm). Please read all the steps in this section first.
+      1. All the commands listed on this page will need to be run in a Windows terminal session in the `talawa-admin` directory.
+      2. Install `fnm` using the `winget` option listed on the page.
+      3. Setup `fnm` to automatically set the version of `node.js` to the version required for the repository using these steps:
+         1. First, refer to the `fnm` web page's section on `Shell Setup` recommendations.
+         2. Open a `Windows PowerShell` terminal window
+         3. Run the recommended `Windows PowerShell` command to open `notepad`.
+         4. Paste the recommended string into `notepad`
+         5. Save the document.
+         6. Exit `notepad`
+         7. Exit PowerShell
+         8. This will ensure that you are always using the correct version of `node.js`
 2. For Linux and MacOS, use the terminal window.
    1. install `node.js`
    2. then install `fnm`
-         1. Refer to the installation page's section on the `Shell Setup` recommendations.
-         2. Run the respective recommended commands to setup your node environment
-         3. This will ensure that you are always using the correct version of `node.js`
+      1. Refer to the installation page's section on the `Shell Setup` recommendations.
+      2. Run the respective recommended commands to setup your node environment
+      3. This will ensure that you are always using the correct version of `node.js`
 
 ## Install TypeScript
 
@@ -196,7 +199,7 @@ If you are trying to access Talawa Admin from a remote host with the API URL con
 REACT_APP_TALAWA_URL="http://YOUR-REMOTE-ADDRESS:4000/graphql/"
 ```
 
-For additional details, please refer  the `How to Access the Talawa-API URL` section in the INSTALLATION.md file found in the [Talawa-API repo](https://github.com/PalisadoesFoundation/talawa-api).
+For additional details, please refer the `How to Access the Talawa-API URL` section in the INSTALLATION.md file found in the [Talawa-API repo](https://github.com/PalisadoesFoundation/talawa-api).
 
 ## Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file
 

@@ -16,8 +16,8 @@
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name    | Type                                                                                 |
+| :------ | :----------------------------------------------------------------------------------- |
 | `props` | [`InterfaceModalProp`](../interfaces/components_CheckIn_types.InterfaceModalProp.md) |
 
 #### Returns

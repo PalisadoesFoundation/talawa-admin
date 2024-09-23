@@ -6,13 +6,13 @@
 
 ### Variables
 
-- [ADD\_ON\_ENTRY\_MOCK](components_AddOn_core_AddOnEntry_AddOnEntryMocks.md#add_on_entry_mock)
+- [ADD_ON_ENTRY_MOCK](components_AddOn_core_AddOnEntry_AddOnEntryMocks.md#add_on_entry_mock)
 
 ## Variables
 
-### ADD\_ON\_ENTRY\_MOCK
+### ADD_ON_ENTRY_MOCK
 
-• `Const` **ADD\_ON\_ENTRY\_MOCK**: \{ `request`: \{ `query`: `DocumentNode` = UPDATE\_INSTALL\_STATUS\_PLUGIN\_MUTATION; `variables`: \{ `id`: `string` = '1'; `orgId`: `string` = 'undefined' \}  \} ; `result`: \{ `data`: \{ `updatePluginStatus`: \{ `_id`: `string` = '123'; `pluginCreatedBy`: `string` = 'John Doe'; `pluginDesc`: `string` = 'This is a sample plugin description.'; `pluginName`: `string` = 'Sample Plugin'; `uninstalledOrgs`: `never`[] = [] \} = updatePluginStatus \}  \}  \}[]
+• `Const` **ADD_ON_ENTRY_MOCK**: \{ `request`: \{ `query`: `DocumentNode` = UPDATE_INSTALL_STATUS_PLUGIN_MUTATION; `variables`: \{ `id`: `string` = '1'; `orgId`: `string` = 'undefined' \} \} ; `result`: \{ `data`: \{ `updatePluginStatus`: \{ `_id`: `string` = '123'; `pluginCreatedBy`: `string` = 'John Doe'; `pluginDesc`: `string` = 'This is a sample plugin description.'; `pluginName`: `string` = 'Sample Plugin'; `uninstalledOrgs`: `never`[] = [] \} = updatePluginStatus \} \} \}[]
 
 #### Defined in
 

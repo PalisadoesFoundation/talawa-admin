@@ -21,7 +21,7 @@
 
 [src/components/LeftDrawerEvent/LeftDrawerEventWrapper.tsx:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/LeftDrawerEvent/LeftDrawerEventWrapper.tsx#L15)
 
-___
+---
 
 ### event
 
@@ -29,13 +29,13 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `_id` | `string` |
-| `description` | `string` |
-| `organization` | \{ `_id`: `string`  \} |
-| `organization._id` | `string` |
-| `title` | `string` |
+| Name               | Type                  |
+| :----------------- | :-------------------- |
+| `_id`              | `string`              |
+| `description`      | `string`              |
+| `organization`     | \{ `_id`: `string` \} |
+| `organization._id` | `string`              |
+| `title`            | `string`              |
 
 #### Defined in
 

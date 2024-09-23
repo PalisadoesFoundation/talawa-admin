@@ -20,8 +20,8 @@
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name    | Type                                                                                                         |
+| :------ | :----------------------------------------------------------------------------------------------------------- |
 | `props` | [`InterfaceOrgListCardProps`](../interfaces/components_OrgListCard_OrgListCard.InterfaceOrgListCardProps.md) |
 
 #### Returns

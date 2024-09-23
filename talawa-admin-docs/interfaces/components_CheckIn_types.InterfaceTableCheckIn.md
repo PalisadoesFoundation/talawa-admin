@@ -18,13 +18,13 @@
 
 ### checkIn
 
-• **checkIn**: ``null`` \| \{ `_id`: `string` ; `allotedRoom`: `string` ; `allotedSeat`: `string` ; `time`: `string`  \}
+• **checkIn**: `null` \| \{ `_id`: `string` ; `allotedRoom`: `string` ; `allotedSeat`: `string` ; `time`: `string` \}
 
 #### Defined in
 
 [src/components/CheckIn/types.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/CheckIn/types.ts#L35)
 
-___
+---
 
 ### eventId
 
@@ -34,7 +34,7 @@ ___
 
 [src/components/CheckIn/types.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/CheckIn/types.ts#L41)
 
-___
+---
 
 ### id
 
@@ -44,7 +44,7 @@ ___
 
 [src/components/CheckIn/types.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/CheckIn/types.ts#L32)
 
-___
+---
 
 ### name
 
@@ -54,7 +54,7 @@ ___
 
 [src/components/CheckIn/types.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/CheckIn/types.ts#L33)
 
-___
+---
 
 ### userId
 

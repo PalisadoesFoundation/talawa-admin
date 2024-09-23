@@ -20,8 +20,8 @@
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name             | Type                                                                                                                             |
+| :--------------- | :------------------------------------------------------------------------------------------------------------------------------- |
 | `«destructured»` | [`InterfaceSuperAdminScreenProps`](../interfaces/components_SuperAdminScreen_SuperAdminScreen.InterfaceSuperAdminScreenProps.md) |
 
 #### Returns

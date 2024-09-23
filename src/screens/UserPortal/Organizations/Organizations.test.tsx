@@ -540,8 +540,6 @@ describe('Testing Organizations Screen [User Portal]', () => {
     expect(screen.getByText('All')).toBeInTheDocument();
   });
 
-
-
   test('Search input has correct placeholder text', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>

@@ -16,12 +16,12 @@
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `props` | `Object` |
-| `props.count?` | `number` |
-| `props.icon` | `ReactNode` |
-| `props.title` | `string` |
+| Name           | Type        |
+| :------------- | :---------- |
+| `props`        | `Object`    |
+| `props.count?` | `number`    |
+| `props.icon`   | `ReactNode` |
+| `props.title`  | `string`    |
 
 #### Returns
 

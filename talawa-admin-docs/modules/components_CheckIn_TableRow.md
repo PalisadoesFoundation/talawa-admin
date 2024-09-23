@@ -16,11 +16,11 @@
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `«destructured»` | `Object` |
-| › `data` | [`InterfaceTableCheckIn`](../interfaces/components_CheckIn_types.InterfaceTableCheckIn.md) |
-| › `refetch` | () =\> `void` |
+| Name             | Type                                                                                       |
+| :--------------- | :----------------------------------------------------------------------------------------- |
+| `«destructured»` | `Object`                                                                                   |
+| › `data`         | [`InterfaceTableCheckIn`](../interfaces/components_CheckIn_types.InterfaceTableCheckIn.md) |
+| › `refetch`      | () =\> `void`                                                                              |
 
 #### Returns
 

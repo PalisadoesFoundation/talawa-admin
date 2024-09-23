@@ -18,9 +18,9 @@
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `_id` | `string` |
+| Name                     | Type                                                                                 |
+| :----------------------- | :----------------------------------------------------------------------------------- |
+| `_id`                    | `string`                                                                             |
 | `attendeesCheckInStatus` | [`InterfaceAttendeeCheckIn`](components_CheckIn_types.InterfaceAttendeeCheckIn.md)[] |
 
 #### Defined in

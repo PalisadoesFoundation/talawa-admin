@@ -1069,7 +1069,12 @@ type Query {
     skip: Int
     where: EventWhereInput
   ): [Event!]!
-  advertisementsConnection(after: String, before: String, first: PositiveInt, last: PositiveInt): AdvertisementsConnection
+  advertisementsConnection(
+    after: String
+    before: String
+    first: PositiveInt
+    last: PositiveInt
+  ): AdvertisementsConnection
   getDonationById(id: ID!): Donation!
   getDonationByOrgId(orgId: ID!): [Donation]
   getDonationByOrgIdConnection(
@@ -1126,7 +1131,7 @@ type Query {
     skip: Int
     where: UserWhereInput
   ): [UserData]!
-  venue(id:ID!):[Venue]
+  venue(id: ID!): [Venue]
 }
 
 input RecaptchaVerification {
@@ -1431,7 +1436,7 @@ input UserInput {
   firstName: String!
   lastName: String!
   password: String!
-  selectedOrganization : ID!
+  selectedOrganization: ID!
 }
 
 enum UserOrderByInput {

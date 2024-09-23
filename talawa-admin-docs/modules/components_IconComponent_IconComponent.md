@@ -20,8 +20,8 @@
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name    | Type                                                                                                       |
+| :------ | :--------------------------------------------------------------------------------------------------------- |
 | `props` | [`InterfaceIconComponent`](../interfaces/components_IconComponent_IconComponent.InterfaceIconComponent.md) |
 
 #### Returns
