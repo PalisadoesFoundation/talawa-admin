@@ -14,6 +14,20 @@ interface InterfaceLeaveConfirmModalProps {
   onHide: () => void;
   orgId: string;
 }
+
+/**
+ * LeaveConfirmModal component for user to leave an organization.
+ *
+ * Provides:
+ * - Modal to confirm leaving an organization.
+ *
+ * @param orgId - ID of the current organization. 
+ * @param show - Boolean indicating if the modal should be shown.
+ * @param onHide - Function to hide the modal.
+ *
+ * @returns JSX.Element - The rendered LeaveConfirmModal component.
+ */
+
 const LeaveConfirmModal: FC<InterfaceLeaveConfirmModalProps> = ({
   onHide,
   show,
