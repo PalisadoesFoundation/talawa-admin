@@ -83,5 +83,5 @@
   "updatedSuccessfully": "{{item}} 更新成功",
   "removedSuccessfully": "{{item}} 删除成功",
   "successfullyUpdated": "更新成功",
-  "confirm" : "确认"
+  "confirm": "确认"
 }
