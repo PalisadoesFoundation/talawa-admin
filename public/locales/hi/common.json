@@ -83,13 +83,5 @@
   "updatedSuccessfully": "{{item}} सफलतापूर्वक अपडेट किया गया",
   "removedSuccessfully": "{{item}} सफलतापूर्वक हटाया गया",
   "successfullyUpdated": "सफलतापूर्वक अपडेट किया गया",
-  "all": "सभी",
-  "active": "सक्रिय",
-  "disabled": "अक्षम",
-  "pending": "लंबित",
-  "completed": "पूरा हुआ",
-  "late": "देर से",
-  "createdLatest": "नवीनतम बनाया गया",
-  "createdEarliest": "सबसे पहले बनाया गया",
-  "searchBy": "के द्वारा खोजें {{item}}"
+  "confirm": "पुष्टि करें"
 }

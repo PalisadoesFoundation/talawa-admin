@@ -148,6 +148,7 @@
     "roleUpdated": "Rôle mis à jour.",
     "joinNow": "Adhérer maintenant",
     "visit": "Visite",
+    "leave": "partir",
     "withdraw": "Largeur de tirage",
     "removeUserFrom": "Supprimer l'Utilisateur de {{org}}",
     "removeConfirmation": "Êtes-vous sûr de vouloir supprimer '{{name}}' de l'organisation '{{org}}' ?"
@@ -286,6 +287,7 @@
     "assignmentDate": "Date d'affectation",
     "active": "Actif",
     "clearFilters": "Effacer les filtres",
+    "completed": "Complété",
     "completionDate": "Date d'achèvement",
     "createActionItem": "Créer un élément d'action",
     "deleteActionItem": "Supprimer l'élément d'action",
@@ -310,14 +312,7 @@
     "successfulCreation": "Élément d'action créé avec succès",
     "successfulUpdation": "Élément d'action mis à jour avec succès",
     "successfulDeletion": "Élément d'action supprimé avec succès",
-    "title": "Éléments d'action",
-    "category": "Catégorie",
-    "allotedHours": "Heures allouées",
-    "latestDueDate": "Date d'échéance la plus récente",
-    "earliestDueDate": "Date d'échéance la plus ancienne",
-    "updateActionItem": "Mettre à jour l'élément d'action",
-    "noneUpdated": "Aucun des champs n'a été mis à jour",
-    "updateStatusMsg": "Êtes-vous sûr de vouloir marquer cet élément d'action comme en attente?"
+    "title": "Éléments d'action"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "Détails de la catégorie d'ordre du jour",
@@ -610,11 +605,10 @@
     "actionItemCategories": "Catégories d'éléments d'action",
     "updateOrganization": "Mettre à jour l'organisation",
     "seeRequest": "Voir la demande",
-    "noData": "Aucune donnée",
-    "otherSettings": "Autres paramètres",
+    "noData": "Pas de données",
+    "otherSettings": "Autres réglages",
     "changeLanguage": "Changer de langue",
-    "manageCustomFields": "Gérer les champs personnalisés",
-    "agendaItemCategories": "Catégories d'éléments d'agenda"
+    "manageCustomFields": "Gérer les champs personnalisés"
   },
   "deleteOrg": {
     "deleteOrganization": "Supprimer l'organisation",
@@ -765,7 +759,8 @@
     "viewAll": "Voir tout",
     "talawaUserPortal": "Portail utilisateur Talawa",
     "my organizations": "Mes organisations",
-    "communityProfile": "Profil de la communauté"
+    "communityProfile": "Profil de la communauté",
+    "leave": "Quitter l'organisation"
   },
   "organizationSidebar": {
     "viewAll": "Voir tout",
@@ -861,10 +856,7 @@
     "yourPreviousDonations": "Vos dons précédents",
     "donate": "Faire un don",
     "nothingToShow": "Rien à montrer ici.",
-    "success": "Don réussi",
-    "invalidAmount": "Veuillez saisir une valeur numérique pour le montant du don.",
-    "donationAmountDescription": "Veuillez saisir la valeur numérique du montant du don.",
-    "donationOutOfRange": "Le montant du don doit être compris entre {{min}} et {{max}}."
+    "success": "Don réussi"
   },
   "userEvents": {
     "title": "Événements",
@@ -945,18 +937,13 @@
     "disableButton": "Désactiver",
     "updateActionItemCategory": "Mise à jour",
     "actionItemCategoryName": "Nom",
-    "categoryDetails": "Détails de la catégorie",
+    "actionItemCategoryDetails": "Détails de la catégorie d'élément d'action",
     "enterName": "Entrez le nom",
     "successfulCreation": "Catégorie d'élément d'action créée avec succès",
     "successfulUpdation": "Catégorie d'élément d'action mise à jour avec succès",
     "sameNameConflict": "Veuillez changer le nom pour effectuer une mise à jour",
     "categoryEnabled": "Catégorie d'élément d'action activée",
-    "categoryDisabled": "Catégorie d'élément d'action désactivée",
-    "noActionItemCategories": "Aucune catégorie d'élément d'action",
-    "status": "Statut",
-    "categoryDeleted": "Catégorie d'élément d'action supprimée avec succès",
-    "deleteCategory": "Supprimer la catégorie",
-    "deleteCategoryMsg": "Êtes-vous sûr de vouloir supprimer cette catégorie d'élément d'action ?"
+    "categoryDisabled": "Catégorie d'élément d'action désactivée"
   },
   "organizationVenues": {
     "title": "Lieux",
@@ -1052,5 +1039,12 @@
   },
   "userPledges": {
     "title": "Mes Promesses"
+  },
+  "orgLeave": {
+    "confirmation": "Etes-vous sûr de vouloir quitter l'organisation ? ",
+    "heading": "Quitter l'organisation ?",
+    "description": "Etes-vous sûr de vouloir quitter l'organisation ? Cette action ne peut pas être annulée. Si l'organisation nécessite une approbation, vous ne pourrez pas la rejoindre sans cette approbation. Toutes les données ou autorisations associées peuvent également être perdues.",
+    "errorOccured": "Une erreur s'est produite. Veuillez réessayer plus tard.",
+    "orgLeft": "Vous avez quitté l'organisation."
   }
 }

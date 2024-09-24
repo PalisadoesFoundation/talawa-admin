@@ -150,7 +150,8 @@
     "visit": "मिलने जाना",
     "withdraw": "चौड़ाई निकालना",
     "removeUserFrom": "{{org}} से उपयोगकर्ता हटाएं",
-    "removeConfirmation": "क्या आप वाकई '{{org}}' संगठन से '{{name}}' को हटाना चाहते हैं?"
+    "removeConfirmation": "क्या आप वाकई '{{org}}' संगठन से '{{name}}' को हटाना चाहते हैं?",
+    "leave": "छोड़ो"
   },
   "communityProfile": {
     "title": "सामुदायिक प्रोफ़ाइल",
@@ -286,6 +287,7 @@
     "assignmentDate": "असाइनमेंट दिनांक",
     "active": "सक्रिय",
     "clearFilters": "फ़िल्टर साफ़ करें",
+    "completed": "पुरा होना।",
     "completionDate": "पूरा करने की तिथि",
     "createActionItem": "कार्रवाई आइटम बनाएं",
     "deleteActionItem": "क्रिया आइटम हटाएँ",
@@ -310,14 +312,7 @@
     "successfulCreation": "कार्रवाई आइटम सफलतापूर्वक बनाया गया",
     "successfulUpdation": "कार्रवाई आइटम सफलतापूर्वक अपडेट किया गया",
     "successfulDeletion": "कार्रवाई आइटम सफलतापूर्वक हटा दिया गया",
-    "title": "एक्शन आइटम्स",
-    "category": "श्रेणी",
-    "allotedHours": "आवंटित घंटे",
-    "latestDueDate": "सबसे अधिक नियत तिथि",
-    "earliestDueDate": "सबसे पहले की नियत तिथि",
-    "updateActionItem": "कार्य आइटम अपडेट करें",
-    "noneUpdated": "कोई फ़ील्ड अपडेट नहीं किया गया",
-    "updateStatusMsg": "क्या आप वाकई इस कार्य आइटम को लंबित के रूप में चिह्नित करना चाहते हैं?"
+    "title": "एक्शन आइटम्स"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "एजेंडा श्रेणी विवरण",
@@ -605,16 +600,15 @@
     "amount": "मात्रा"
   },
   "orgSettings": {
-    "title": "सेटिंग्स",
+    "title": "समायोजन",
     "general": "सामान्य",
-    "actionItemCategories": "कार्य आइटम श्रेणियाँ",
-    "updateOrganization": "संगठन अपडेट करें",
+    "actionItemCategories": "कार्रवाई आइटम श्रेणियाँ",
+    "updateOrganization": "संगठन अद्यतन करें",
     "seeRequest": "अनुरोध देखें",
     "noData": "कोई डेटा नहीं",
-    "otherSettings": "अन्य सेटिंग्स",
+    "otherSettings": "अन्य सेटिंग",
     "changeLanguage": "भाषा बदलें",
-    "manageCustomFields": "कस्टम फ़ील्ड प्रबंधित करें",
-    "agendaItemCategories": "एजेंडा आइटम श्रेणियाँ"
+    "manageCustomFields": "कस्टम फ़ील्ड प्रबंधित करें"
   },
   "deleteOrg": {
     "deleteOrganization": "संगठन हटाएँ",
@@ -765,7 +759,8 @@
     "viewAll": "सभी को देखें",
     "talawaUserPortal": "तलावा उपयोगकर्ता पोर्टल",
     "my organizations": "मेरे संगठन",
-    "communityProfile": "सामुदायिक प्रोफ़ाइल"
+    "communityProfile": "सामुदायिक प्रोफ़ाइल",
+    "leave": "संगठन छोड़ें"
   },
   "organizationSidebar": {
     "viewAll": "सभी को देखें",
@@ -861,10 +856,7 @@
     "yourPreviousDonations": "आपका पिछला दान",
     "donate": "दान करें",
     "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
-    "success": "दान सफल",
-    "invalidAmount": "कृपया दान राशि के लिए संख्यात्मक मान दर्ज करें.",
-    "donationAmountDescription": "कृपया दान राशि के लिए संख्यात्मक मान दर्ज करें.",
-    "donationOutOfRange": "दान राशि {{min}} और {{max}} के बीच होनी चाहिए."
+    "success": "दान सफल"
   },
   "userEvents": {
     "title": "ईवेंट",
@@ -945,18 +937,13 @@
     "disableButton": "अक्षम करना",
     "updateActionItemCategory": "अद्यतन",
     "actionItemCategoryName": "नाम",
-    "categoryDetails": "श्रेणी विवरण",
+    "actionItemCategoryDetails": "कार्य आइटम श्रेणी विवरण",
     "enterName": "नाम दर्ज करें",
     "successfulCreation": "कार्रवाई आइटम श्रेणी सफलतापूर्वक बनाई गई",
     "successfulUpdation": "कार्रवाई आइटम श्रेणी सफलतापूर्वक अपडेट की गई",
     "sameNameConflict": "अपडेट करने के लिए कृपया नाम बदलें",
     "categoryEnabled": "कार्य आइटम श्रेणी सक्षम",
-    "categoryDisabled": "कार्रवाई आइटम श्रेणी अक्षम",
-    "noActionItemCategories": "कोई कार्रवाई आइटम श्रेणी नहीं",
-    "status": "स्थिति",
-    "categoryDeleted": "कार्रवाई आइटम श्रेणी सफलतापूर्वक हटा दी गई",
-    "deleteCategory": "श्रेणी हटाएं",
-    "deleteCategoryMsg": "क्या आप वाकई इस कार्रवाई आइटम श्रेणी को हटाना चाहते हैं?"
+    "categoryDisabled": "कार्रवाई आइटम श्रेणी अक्षम"
   },
   "organizationVenues": {
     "title": "स्थानों",
@@ -1052,5 +1039,12 @@
   },
   "userPledges": {
     "title": "मेरी प्रतिज्ञाएँ"
+  },
+  "orgLeave": {
+    "confirmation": "क्या आप वाकई संगठन छोड़ना चाहते हैं?",
+    "heading": "संगठन छोड़ रहे हैं?",
+    "description": "क्या आप वाकई संगठन छोड़ना चाहते हैं? इस एक्शन को वापस नहीं किया जा सकता। यदि संगठन को अनुमोदन की आवश्यकता है, तो आप इसके बिना पुनः शामिल नहीं हो पाएंगे। कोई भी संबंधित डेटा या अनुमतियाँ भी खो सकती हैं।",
+    "errorOccured": "एक त्रुटि पाई गई। कृपया बाद में पुन: प्रयास करें।",
+    "orgLeft": "आपने संगठन छोड़ दिया है."
   }
 }
