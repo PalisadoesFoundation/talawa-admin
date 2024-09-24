@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "types": ["vite/client", "vite-plugin-svgr/client", "node"],
     "baseUrl": "src",
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],

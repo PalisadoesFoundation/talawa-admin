@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
 
 import styles from './PageNotFound.module.css';
-import Logo from 'assets/images/talawa-logo-200x200.png';
+import Logo from 'assets/images/talawa-logo-600x600.png';
 
 /**
  * The `PageNotFound` component displays a 404 error page when a user navigates to a non-existent route.
