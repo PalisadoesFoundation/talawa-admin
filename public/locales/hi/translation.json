@@ -1202,7 +1202,8 @@
     "deleteCategory": "श्रेणी हटाएं",
     "deleteCategoryMsg": "क्या आप वाकई इस कार्रवाई आइटम श्रेणी को हटाना चाहते हैं?",
     "createButton": "बटन बनाएं",
-    "editButton": "संपादित बटन"
+    "editButton": "संपादित बटन",
+    "categoryDetails": "श्रेणी विवरण"
   },
   "organizationVenues": {
     "title": "स्थानों",

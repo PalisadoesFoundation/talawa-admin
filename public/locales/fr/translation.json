@@ -1202,7 +1202,8 @@
     "deleteCategory": "Supprimer la catégorie",
     "deleteCategoryMsg": "Êtes-vous sûr de vouloir supprimer cette catégorie d'élément d'action ?",
     "createButton": "Créer",
-    "editButton": "Modifier"
+    "editButton": "Modifier",
+    "categoryDetails": "Détails de la catégorie"
   },
   "organizationVenues": {
     "title": "Lieux",

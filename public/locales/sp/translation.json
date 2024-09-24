@@ -1203,7 +1203,8 @@
     "status": "Estado",
     "categoryDeleted": "Categoría del Ítem de Acción eliminada con éxito",
     "deleteCategory": "Eliminar Categoría",
-    "deleteCategoryMsg": "¿Está seguro de que desea eliminar esta Categoría del Ítem de Acción?"
+    "deleteCategoryMsg": "¿Está seguro de que desea eliminar esta Categoría del Ítem de Acción?",
+    "categoryDetails": "Detalles de la categoría"
   },
   "organizationVenues": {
     "title": "Lugares",

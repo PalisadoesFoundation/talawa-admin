@@ -1202,7 +1202,8 @@
     "deleteCategory": "删除类别",
     "deleteCategoryMsg": "您确定要删除此操作项目类别吗？",
     "createButton": "创建按钮",
-    "editButton": "编辑按钮"
+    "editButton": "编辑按钮",
+    "categoryDetails": "类别详情"
   },
   "organizationVenues": {
     "title": "场地",
