@@ -233,7 +233,8 @@
     "orgJoined": "已加入组织",
     "MembershipRequestSent": "会员请求已发送",
     "AlreadyJoined": "已加入",
-    "errorOccured": "发生错误"
+    "errorOccured": "发生错误",
+    "leave": "离开"
   },
   "communityProfile": {
     "title": "社区简介",
@@ -766,8 +767,7 @@
     "noData": "没有数据",
     "otherSettings": "其他设置",
     "changeLanguage": "更改语言",
-    "manageCustomFields": "管理自定义字段",
-    "agendaItemCategories": "议程项目类别"
+    "manageCustomFields": "管理自定义字段"
   },
   "deleteOrg": {
     "deleteOrganization": "删除组织",
@@ -978,7 +978,8 @@
     "logout": "登出",
     "settings": "设置",
     "chat": "聊天",
-    "menu": "菜单"
+    "menu": "菜单",
+    "leave": "离开"
   },
   "organizationSidebar": {
     "viewAll": "查看全部",
@@ -1315,5 +1316,12 @@
   },
   "userPledges": {
     "title": "我的承诺"
+  },
+  "orgLeave": {
+    "confirmation": "您确定要离开该组织吗？",
+    "heading": "离开组织？",
+    "description": "您确定要离开该组织吗？此操作无法撤销。如果该组织需要批准，您将无法在没有批准的情况下重新加入。任何相关的数据或权限可能也会丢失。",
+    "errorOccured": "发生错误。请稍后再试。",
+    "orgLeft": "您已离开该组织。"
   }
 }
