@@ -21,7 +21,7 @@ interface InterfaceLeaveConfirmModalProps {
  * Provides:
  * - Modal to confirm leaving an organization.
  *
- * @param orgId - ID of the current organization. 
+ * @param orgId - ID of the current organization.
  * @param show - Boolean indicating if the modal should be shown.
  * @param onHide - Function to hide the modal.
  *
