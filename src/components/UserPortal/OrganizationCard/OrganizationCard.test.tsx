@@ -238,6 +238,16 @@ describe('Testing OrganizationCard Component [User Portal]', () => {
 
     // Modal should be shown
     expect(screen.getByText('Leaving organization ?')).toBeInTheDocument(); // Adjust this as per your modal content
+
+    const closeButton = screen.getByText('Cancel'); // Assuming the modal has a "Close" button, adjust as per your modal content
+    fireEvent.click(closeButton);
+
+    await wait();
+
+    // Assert that the modal is no longer in the document
+    expect(
+      screen.queryByText('Leaving organization ?'),
+    ).not.toBeInTheDocument();
   });
 
   test('Component should be rendered properly if organization Image is not undefined', async () => {
