@@ -204,6 +204,42 @@ describe('Testing OrganizationCard Component [User Portal]', () => {
     await wait();
   });
 
+  test('should navigate to organization page and open leave confirmation modal', async () => {
+    const cardProps = {
+      ...props,
+      membershipRequestStatus: 'accepted', // Set status to accepted
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationCard {...cardProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Assert that "Visit" and "Leave" buttons are present
+    expect(screen.getByTestId('manageBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('leaveBtn')).toBeInTheDocument();
+
+    // Click the "Visit" button and assert the navigate function is called
+    fireEvent.click(screen.getByTestId('manageBtn'));
+    expect(window.location.pathname).toBe(`/user/organization/${cardProps.id}`); // Simulate navigation
+
+    // Click the "Leave" button and assert that the modal opens
+    fireEvent.click(screen.getByTestId('leaveBtn'));
+    await wait();
+
+    // Modal should be shown
+    expect(screen.getByText('Leaving organization ?')).toBeInTheDocument(); // Adjust this as per your modal content
+  });
+
   test('Component should be rendered properly if organization Image is not undefined', async () => {
     props = {
       ...props,
