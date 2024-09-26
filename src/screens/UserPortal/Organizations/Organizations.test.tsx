@@ -556,7 +556,7 @@ describe('Testing Organizations Screen [User Portal]', () => {
 
     await wait();
 
-    const searchInput = screen.getByPlaceholderText('Search organizations');
+    const searchInput = screen.getByPlaceholderText('Search Organization');
     expect(searchInput).toBeInTheDocument();
   });
 });
