@@ -60,7 +60,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   });
 
   const isMounted = useRef(false);
-  const [state, setState] = useState({});
 
   const location = useLocation();
   const { getItem } = useLocalStorage();
@@ -110,7 +109,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         {translatedText}
       </Button>
     );
-
   };
 
   if (loading) {
