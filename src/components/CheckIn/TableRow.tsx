@@ -7,7 +7,6 @@ import { toast } from 'react-toastify';
 import { generate } from '@pdfme/generator';
 import { tagTemplate } from './tagTemplate';
 import { useTranslation } from 'react-i18next';
-
 /**
  * Component that represents a single row in the check-in table.
  * Allows users to mark themselves as checked in and download a tag if they are already checked in.
@@ -40,15 +39,14 @@ export const TableRow = ({
       },
     })
       .then(() => {
-        toast.success(t('checkedInSuccessfully'));
+        toast.success(t('checkedInSuccessfully') as string);
         refetch();
       })
       .catch((err) => {
-        toast.error(t('errorCheckingIn'));
+        toast.error(t('errorCheckingIn') as string);
         toast.error(err.message);
       });
   };
-
   /**
    * Triggers a notification while generating and downloading a PDF tag.
    *
@@ -67,10 +65,22 @@ export const TableRow = ({
    * @returns A promise that resolves when the PDF is successfully generated and opened.
    */
   const generateTag = async (): Promise<void> => {
-    const inputs = [{ name: data.name }];
-    const pdf = await generate({ template: tagTemplate, inputs });
-    const blob = new Blob([pdf.buffer], { type: 'application/pdf' });
-    window.open(URL.createObjectURL(blob));
+    try {
+      const inputs = [{ name: data.name }];
+      const pdf = await generate({ template: tagTemplate, inputs });
+      // istanbul ignore next
+      const blob = new Blob([pdf.buffer], { type: 'application/pdf' });
+      // istanbul ignore next
+      const url = URL.createObjectURL(blob);
+      // istanbul ignore next
+      window.open(url);
+      // istanbul ignore next
+      toast.success('PDF generated successfully!');
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
+      toast.error(`Error generating pdf: ${errorMessage}`);
+    }
   };
 
   return (

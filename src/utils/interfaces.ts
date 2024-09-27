@@ -11,6 +11,8 @@ export interface InterfaceActionItemCategoryInfo {
   _id: string;
   name: string;
   isDisabled: boolean;
+  createdAt: string;
+  creator: { _id: string; firstName: string; lastName: string };
 }
 
 export interface InterfaceActionItemCategoryList {
@@ -23,18 +25,20 @@ export interface InterfaceActionItemInfo {
     _id: string;
     firstName: string;
     lastName: string;
+    image: string | null;
   };
   assigner: {
     _id: string;
     firstName: string;
     lastName: string;
+    image: string | null;
   };
   actionItemCategory: {
     _id: string;
     name: string;
   };
   preCompletionNotes: string;
-  postCompletionNotes: string;
+  postCompletionNotes: string | null;
   assignmentDate: Date;
   dueDate: Date;
   completionDate: Date;
@@ -42,12 +46,13 @@ export interface InterfaceActionItemInfo {
   event: {
     _id: string;
     title: string;
-  };
+  } | null;
   creator: {
     _id: string;
     firstName: string;
     lastName: string;
   };
+  allotedHours: number | null;
 }
 
 export interface InterfaceActionItemList {
@@ -287,6 +292,8 @@ export interface InterfaceQueryOrganizationAdvertisementListItem {
 }
 
 export interface InterfaceQueryOrganizationFundCampaigns {
+  name: string;
+  isArchived: boolean;
   campaigns: {
     _id: string;
     name: string;
@@ -306,6 +313,9 @@ export interface InterfaceUserCampaign {
   currency: string;
 }
 export interface InterfaceQueryFundCampaignsPledges {
+  fundId: {
+    name: string;
+  };
   name: string;
   fundingGoal: number;
   currency: string;
@@ -566,4 +576,9 @@ export interface InterfaceAgendaItemList {
 
 export interface InterfaceMapType {
   [key: string]: string;
+}
+
+export interface InterfaceCustomFieldData {
+  type: string;
+  name: string;
 }

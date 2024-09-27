@@ -1,5 +1,5 @@
 import { MockedProvider } from '@apollo/react-testing';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 
 import userEvent from '@testing-library/user-event';
@@ -15,7 +15,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import useLocalStorage from 'utils/useLocalstorage';
 import Organizations from './Organizations';
-import React from 'react';
+import React, { act } from 'react';
 const { getItem } = useLocalStorage();
 
 const MOCKS = [
@@ -440,7 +440,7 @@ describe('Testing Organizations Screen [User Portal]', () => {
     expect(joinNowButtons.length).toBeGreaterThan(0);
   });
 
-  test('Mode is changed to created organizations', async () => {
+  test('Mode is changed to created organisations', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -476,14 +476,22 @@ describe('Testing Organizations Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
-    const closeMenubtn = screen.getByTestId('closeMenu');
-    expect(closeMenubtn).toBeInTheDocument();
-    closeMenubtn.click();
-    const openMenuBtn = screen.getByTestId('openMenu');
-    expect(openMenuBtn).toBeInTheDocument();
-    openMenuBtn.click();
+    await waitFor(() => {
+      const closeMenuBtn = screen.getByTestId('closeMenu');
+      expect(closeMenuBtn).toBeInTheDocument();
+    });
+    await act(async () => {
+      const closeMenuBtn = screen.getByTestId('closeMenu');
+      closeMenuBtn.click();
+    });
+    await waitFor(() => {
+      const openMenuBtn = screen.getByTestId('openMenu');
+      expect(openMenuBtn).toBeInTheDocument();
+    });
+    await act(async () => {
+      const openMenuBtn = screen.getByTestId('openMenu');
+      openMenuBtn.click();
+    });
   });
 
   test('Testing sidebar when the screen size is less than or equal to 820px', async () => {
@@ -500,12 +508,15 @@ describe('Testing Organizations Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
-    expect(screen.getByText('My Organizations')).toBeInTheDocument();
-    expect(screen.getByText('Talawa User Portal')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('My Organizations')).toBeInTheDocument();
+      expect(screen.getByText('Talawa User Portal')).toBeInTheDocument();
+    });
 
-    const settingsBtn = screen.getByTestId('settingsBtn');
+    await act(async () => {
+      const settingsBtn = screen.getByTestId('settingsBtn');
 
-    settingsBtn.click();
+      settingsBtn.click();
+    });
   });
 });

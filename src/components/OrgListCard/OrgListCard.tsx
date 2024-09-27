@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReactComponent as FlaskIcon } from 'assets/svgs/flask.svg';
+import FlaskIcon from 'assets/svgs/flask.svg?react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import styles from './OrgListCard.module.css';

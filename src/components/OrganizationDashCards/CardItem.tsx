@@ -1,9 +1,9 @@
 import React from 'react';
-import { ReactComponent as EventsIcon } from 'assets/svgs/cardItemEvent.svg';
-import { ReactComponent as PostsIcon } from 'assets/svgs/post.svg';
-import { ReactComponent as MarkerIcon } from 'assets/svgs/cardItemLocation.svg';
-import { ReactComponent as DateIcon } from 'assets/svgs/cardItemDate.svg';
-import { ReactComponent as UserIcon } from 'assets/svgs/user.svg';
+import EventsIcon from 'assets/svgs/cardItemEvent.svg?react';
+import PostsIcon from 'assets/svgs/post.svg?react';
+import MarkerIcon from 'assets/svgs/cardItemLocation.svg?react';
+import DateIcon from 'assets/svgs/cardItemDate.svg?react';
+import UserIcon from 'assets/svgs/user.svg?react';
 import dayjs from 'dayjs';
 import styles from './CardItem.module.css';
 import { PersonAddAlt1Rounded } from '@mui/icons-material';

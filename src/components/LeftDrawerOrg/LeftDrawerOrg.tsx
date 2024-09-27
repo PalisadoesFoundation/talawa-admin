@@ -9,8 +9,8 @@ import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
-import { ReactComponent as AngleRightIcon } from 'assets/svgs/angleRight.svg';
-import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
+import AngleRightIcon from 'assets/svgs/angleRight.svg?react';
+import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import styles from './LeftDrawerOrg.module.css';
 import Avatar from 'components/Avatar/Avatar';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -41,7 +41,8 @@ const leftDrawerOrg = ({
   const { getItem } = useLocalStorage();
   const isSuperAdmin = getItem('SuperAdmin');
 
-  const [showDropdown, setShowDropdown] = React.useState(false);
+  const { t: tErrors } = useTranslation('errors');
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const [organization, setOrganization] =
     useState<InterfaceQueryOrganizationsListObject>();
@@ -61,7 +62,6 @@ const leftDrawerOrg = ({
     let isMounted = true;
     if (data && isMounted) {
       setOrganization(data?.organizations[0]);
-      console.log(targets, 'targets');
     }
     return () => {
       isMounted = false;
@@ -98,7 +98,7 @@ const leftDrawerOrg = ({
         </div>
 
         {/* Organization Section */}
-        <div className={styles.organizationContainer}>
+        <div className={`${styles.organizationContainer} pe-3`}>
           {loading ? (
             <>
               <button
@@ -115,7 +115,7 @@ const leftDrawerOrg = ({
                 <div className="px-3">
                   <WarningAmberOutlined />
                 </div>
-                Error Occured while loading the Organization
+                {tErrors('errorLoading', { entity: 'Organization' })}
               </button>
             </>
           ) : (
@@ -126,6 +126,7 @@ const leftDrawerOrg = ({
                 ) : (
                   <Avatar
                     name={organization.name}
+                    containerStyle={styles.avatarContainer}
                     alt={'Dummy Organization Picture'}
                   />
                 )}
@@ -142,10 +143,10 @@ const leftDrawerOrg = ({
         </div>
 
         {/* Options List */}
+        <h5 className={`${styles.titleHeader} text-secondary`}>
+          {tCommon('menu')}
+        </h5>
         <div className={styles.optionList}>
-          <h5 className={`${styles.titleHeader} text-secondary`}>
-            {tCommon('menu')}
-          </h5>
           {targets.map(({ name, url }, index) => {
             return url ? (
               <NavLink to={url} key={name} onClick={handleLinkClick}>

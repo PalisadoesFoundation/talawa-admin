@@ -78,13 +78,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     };
   }, [getItem, t]);
 
-  // useEffect(() => {
-  //   const superAdmin = getItem('SuperAdmin');
-  //   superAdmin
-  //     ? (document.title = t('title_superadmin'))
-  //     : (document.title = t('title'));
-  // }, [getItem, t]);
-
   const { data: user, loading: loading } = useQuery(USER_DETAILS, {
     variables: { id: currentUrl },
   });
@@ -117,6 +110,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         {translatedText}
       </Button>
     );
+
   };
 
   if (loading) {

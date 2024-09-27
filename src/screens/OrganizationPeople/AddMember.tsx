@@ -32,6 +32,7 @@ import type {
   InterfaceQueryUserListItem,
 } from 'utils/interfaces';
 import styles from './OrganizationPeople.module.css';
+import Avatar from 'components/Avatar/Avatar';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -107,7 +108,7 @@ function AddMember(): JSX.Element {
           orgid: currentUrl,
         },
       });
-      toast.success(tCommon('addedSuccessfully', { item: 'Member' }));
+      toast.success(tCommon('addedSuccessfully', { item: 'Member' }) as string);
       memberRefetch({
         orgId: currentUrl,
       });
@@ -199,11 +200,11 @@ function AddMember(): JSX.Element {
         createUserVariables.lastName
       )
     ) {
-      toast.error(translateOrgPeople('invalidDetailsMessage'));
+      toast.error(translateOrgPeople('invalidDetailsMessage') as string);
     } else if (
       createUserVariables.password !== createUserVariables.confirmPassword
     ) {
-      toast.error(translateOrgPeople('passwordNotMatch'));
+      toast.error(translateOrgPeople('passwordNotMatch') as string);
     } else {
       try {
         const registeredUser = await registerMutation({
@@ -373,6 +374,9 @@ function AddMember(): JSX.Element {
                     <TableRow>
                       <StyledTableCell>#</StyledTableCell>
                       <StyledTableCell align="center">
+                        {translateAddMember('profile')}
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
                         {translateAddMember('user')}
                       </StyledTableCell>
                       <StyledTableCell align="center">
@@ -394,6 +398,24 @@ function AddMember(): JSX.Element {
                           >
                             <StyledTableCell component="th" scope="row">
                               {index + 1}
+                            </StyledTableCell>
+                            <StyledTableCell
+                              align="center"
+                              data-testid="profileImage"
+                            >
+                              {userDetails.user.image ? (
+                                <img
+                                  src={userDetails.user.image ?? undefined}
+                                  alt="avatar"
+                                  className={styles.TableImage}
+                                />
+                              ) : (
+                                <Avatar
+                                  avatarStyle={styles.TableImage}
+                                  name={`${userDetails.user.firstName} ${userDetails.user.lastName}`}
+                                  data-testid="avatarImage"
+                                />
+                              )}
                             </StyledTableCell>
                             <StyledTableCell align="center">
                               <Link

@@ -170,8 +170,8 @@ function organizationEvents(): JSX.Element {
             endDate: dayjs(endDate).format('YYYY-MM-DD'),
             allDay: alldaychecked,
             location: formState.location,
-            startTime: !alldaychecked ? formState.startTime + 'Z' : undefined,
-            endTime: !alldaychecked ? formState.endTime + 'Z' : undefined,
+            startTime: !alldaychecked ? formState.startTime : undefined,
+            endTime: !alldaychecked ? formState.endTime : undefined,
             recurrenceStartDate: recurringchecked
               ? dayjs(recurrenceStartDate).format('YYYY-MM-DD')
               : undefined,
@@ -196,7 +196,7 @@ function organizationEvents(): JSX.Element {
         });
 
         if (createEventData) {
-          toast.success(t('eventCreated'));
+          toast.success(t('eventCreated') as string);
           refetchEvents();
           hideCreateEventModal();
           setFormState({

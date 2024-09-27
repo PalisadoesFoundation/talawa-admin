@@ -107,7 +107,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
         taxDeductible: false,
         isArchived: false,
       });
-      toast.success(t('fundCreated'));
+      toast.success(t('fundCreated') as string);
       refetchFunds();
       hide();
     } catch (error: unknown) {
@@ -155,7 +155,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
       });
       refetchFunds();
       hide();
-      toast.success(t('fundUpdated'));
+      toast.success(t('fundUpdated') as string);
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message);

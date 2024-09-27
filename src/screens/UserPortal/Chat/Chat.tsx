@@ -8,7 +8,7 @@ import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import ContactCard from 'components/UserPortal/ContactCard/ContactCard';
 import ChatRoom from 'components/UserPortal/ChatRoom/ChatRoom';
 import useLocalStorage from 'utils/useLocalstorage';
-import { ReactComponent as NewChat } from 'assets/svgs/newChat.svg';
+import NewChat from 'assets/svgs/newChat.svg?react';
 import Accordion from 'react-bootstrap/Accordion';
 import styles from './Chat.module.css';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';

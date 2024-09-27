@@ -12,9 +12,9 @@ import {
 import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';
 import styles from './AgendaCategoryContainer.module.css';
 
-import AgendaCategoryDeleteModal from 'screens/OrganizationAgendaCategory/AgendaCategoryDeleteModal';
-import AgendaCategoryPreviewModal from 'screens/OrganizationAgendaCategory/AgendaCategoryPreviewModal';
-import AgendaCategoryUpdateModal from 'screens/OrganizationAgendaCategory/AgendaCategoryUpdateModal';
+import AgendaCategoryDeleteModal from 'components/OrgSettings/AgendaItemCategories/AgendaCategoryDeleteModal';
+import AgendaCategoryPreviewModal from 'components/OrgSettings/AgendaItemCategories/AgendaCategoryPreviewModal';
+import AgendaCategoryUpdateModal from 'components/OrgSettings/AgendaItemCategories/AgendaCategoryUpdateModal';
 
 /**
  * Component for displaying and managing agenda item categories.
@@ -129,7 +129,7 @@ function agendaCategoryContainer({
 
       agendaCategoryRefetch();
       hideUpdateModal();
-      toast.success(t('agendaCategoryUpdated'));
+      toast.success(t('agendaCategoryUpdated') as string);
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(`Agenda Category Update Failed ${error.message}`);
@@ -153,7 +153,7 @@ function agendaCategoryContainer({
       });
       agendaCategoryRefetch();
       toggleDeleteModal();
-      toast.success(t('agendaCategoryDeleted'));
+      toast.success(t('agendaCategoryDeleted') as string);
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(`Agenda Category Delete Failed, ${error.message}`);
