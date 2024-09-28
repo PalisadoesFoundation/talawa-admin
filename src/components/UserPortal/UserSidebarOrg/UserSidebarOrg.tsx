@@ -154,6 +154,7 @@ const UserSidebarOrg = ({
               </button>
 
               <button
+                data-testid="leaveOrgButton"
                 onClick={() => {
                   setModalShow(true);
                 }}
