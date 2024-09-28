@@ -963,7 +963,8 @@
     "organizations": "संगठनों",
     "search": "खोजें",
     "filter": "फ़िल्टर",
-    "searchByName": "नाम से खोजें"
+    "searchByName": "नाम से खोजें",
+    "searchOrganizations": "संगठनों खोजें"
   },
   "userSidebarOrg": {
     "yourOrganizations": "आपके संगठन",
