@@ -155,7 +155,7 @@ describe('MemberDetail', () => {
 
   test('Title should be User Details for Super Admin', async () => {
     setItem('SuperAdmin', true);
-    
+
     await act(async () => {
       renderMemberDetail();
     });
