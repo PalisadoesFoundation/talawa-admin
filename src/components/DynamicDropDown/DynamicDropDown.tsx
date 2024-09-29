@@ -31,7 +31,7 @@ const DynamicDropDown = (props: InterfaceChangeDropDownProps): JSX.Element => {
       data-testid={`${props.fieldName.toLowerCase()}-dropdown-container`}
     >
       <Dropdown.Toggle
-        className={`${props?.btnStyle ?? ''} ${styles.dropwdownToggle}`}
+        className={`${props?.btnStyle ?? 'w-100'} ${styles.dropwdownToggle}`}
         data-testid={`${props.fieldName.toLowerCase()}-dropdown-btn`}
       >
         {getLabel(props.formState[props.fieldName])}

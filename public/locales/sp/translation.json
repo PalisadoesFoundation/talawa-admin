@@ -816,6 +816,8 @@
     "state": "Estado",
     "city": "Ciudad",
     "personalInfoHeading": "Información Personal",
+    "viewAll": "Ver todo",
+    "eventsAttended": "Eventos Asistidos",
     "contactInfoHeading": "Información de Contacto",
     "actionsHeading": "Acciones",
     "personalDetailsHeading": "Detalles del perfil",

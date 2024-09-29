@@ -532,6 +532,9 @@ export const USER_DETAILS = gql`
     user(id: $id) {
       user {
         _id
+        eventsAttended {
+          _id
+        }
         joinedOrganizations {
           _id
         }

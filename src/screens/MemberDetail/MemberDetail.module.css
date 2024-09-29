@@ -10,6 +10,13 @@
   height: 100%;
 }
 
+.editIcon {
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  cursor: pointer;
+}
+
 .sidebar:after {
   content: '';
   background-color: #f7f7f7;
@@ -55,6 +62,11 @@
   width: 60%;
 }
 
+.contact {
+  min-height: 47.4rem;
+  width: 100%;
+}
+
 .sidebarsticky > input {
   text-decoration: none;
   margin-bottom: 50px;
@@ -87,6 +99,10 @@
   padding-bottom: 5px;
   border-bottom: 3px solid #31bb6b;
   width: 60%;
+}
+.cardBody{
+  max-height: 72vh;
+  overflow-y: scroll;
 }
 
 .admindetails {
@@ -238,7 +254,6 @@
   padding: 10px 10px;
   border-radius: 5px;
   background-color: #31bb6b;
-  width: 100%;
   font-size: 16px;
   color: white;
   outline: none;
@@ -247,7 +262,23 @@
   transition:
     transform 0.2s,
     box-shadow 0.2s;
-  width: 100%;
+}
+.whiteregbtn {
+  margin: 1rem 0 0;
+  margin-right: 2px;
+  margin-top: 10px;
+  border: 1px solid #31bb6b;
+  padding: 10px 10px;
+  border-radius: 5px;
+  background-color: white;
+  font-size: 16px;
+  color: #31bb6b;
+  outline: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 
 .loader,
@@ -453,17 +484,124 @@
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
 }
+.eventContainer {
+  display: flex;
+  align-items: start;
+
+}
+
+.eventDetailsBox {
+  position: relative;
+  box-sizing: border-box;
+  background: #ffffff;
+  width: 66%;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  margin-bottom: 0;
+  margin-top: 20px;
+  
+}
+.ctacards {
+  padding: 20px;
+  width: 100%;
+  display: flex;
+  margin: 0 4px;
+  justify-content: space-between;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  align-items: center;
+  border-radius: 20px;
+
+}
+.ctacards span {
+  color:rgb(181, 181, 181);
+  font-size: small;
+}
+/* .eventDetailsBox::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 6px;
+  background-color: #31bb6b;
+  border-radius: 20px;
+} */
+
+.time {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  padding-bottom: 0px;
+  width: 33%;
+
+  box-sizing: border-box;
+  background: #ffffff;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  margin-bottom: 0;
+  margin-top: 20px;
+  margin-left: 10px;
+}
+
+.startTime,
+.endTime {
+  display: flex;
+  font-size: 20px;
+}
+
+.to {
+  padding-right: 10px;
+}
+
+.startDate,
+.endDate {
+  color: #808080;
+  font-size: 14px;
+}
+
+.titlename {
+  font-weight: 600;
+  font-size: 25px;
+  padding: 15px;
+  padding-bottom: 0px;
+  width: 50%;
+}
+
+.description {
+  color: #737373;
+  font-weight: 300;
+  font-size: 14px;
+  word-wrap: break-word;
+  padding: 15px;
+  padding-bottom: 0px;
+}
+
+.toporgloc {
+  font-size: 16px;
+  padding: 15px;
+  padding-bottom: 0px;
+}
+
+.toporgloc span {
+  color: #737373;
+}
 
 .inputColor {
   background: #f1f3f6;
 }
-
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 .width60 {
   width: 60%;
 }
 
 .maxWidth40 {
   max-width: 40%;
+}
+.maxWidth50 {
+  max-width: 50%;
 }
 
 .allRound {

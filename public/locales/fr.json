@@ -788,6 +788,8 @@
     "state": "État",
     "city": "Ville",
     "personalInfoHeading": "Informations personnelles",
+    "viewAll": "Voir tout",
+    "eventsAttended": "Événements attenus",
     "contactInfoHeading": "Coordonnées",
     "actionsHeading": "Actions",
     "personalDetailsHeading": "Détails du profil",

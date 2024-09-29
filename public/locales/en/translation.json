@@ -630,6 +630,8 @@
     "state": "State",
     "city": "City",
     "personalInfoHeading": "Personal Information",
+    "viewAll": "View All",
+    "eventsAttended": "Events Attended",
     "contactInfoHeading": "Contact Information",
     "actionsHeading": "Actions",
     "personalDetailsHeading": "Profile Details",

@@ -632,6 +632,8 @@
     "state": "État",
     "city": "Ville",
     "personalInfoHeading": "Informations personnelles",
+    "eventsAttended": "Événements attenus",
+    "viewAll": "Voir tout",
     "contactInfoHeading": "Coordonnées",
     "actionsHeading": "Actions",
     "personalDetailsHeading": "Détails du profil",
