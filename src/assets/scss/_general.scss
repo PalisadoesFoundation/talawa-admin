@@ -1,0 +1,63 @@
+:root {
+  --bs-body-font-family: Arial, Helvetica, sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  overflow-x: hidden;
+}
+
+body {
+  background-color: var(--bs-body-bg);
+}
+
+#root {
+  min-height: 100vh;
+  background-color: #f2f7ff;
+}
+
+input[type='checkbox'] {
+  transform: scale(1.5);
+}
+.form-switch {
+  padding-left: 3rem;
+}
+input[type='file']::file-selector-button {
+  background: var(--bs-gray-400);
+}
+
+.shimmer {
+  animation-duration: 2.2s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: shimmer;
+  animation-timing-function: linear;
+  background: var(--bs-gray-200);
+  background: linear-gradient(to right, #f6f6f6 8%, #f0f0f0 18%, #f6f6f6 33%);
+  background-size: 1200px 100%;
+}
+
+@-webkit-keyframes shimmer {
+  0% {
+    background-position: -100% 0;
+  }
+
+  100% {
+    background-position: 100% 0;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1200px 0;
+  }
+
+  100% {
+    background-position: 1200px 0;
+  }
+}
