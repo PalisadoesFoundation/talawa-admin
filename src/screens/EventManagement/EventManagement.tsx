@@ -3,12 +3,12 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import styles from './EventManagement.module.css';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { ReactComponent as AngleLeftIcon } from 'assets/svgs/angleLeft.svg';
-import { ReactComponent as EventDashboardIcon } from 'assets/svgs/eventDashboard.svg';
+import AngleLeftIcon from 'assets/svgs/angleLeft.svg?react';
+import EventDashboardIcon from 'assets/svgs/eventDashboard.svg?react';
 import EventRegistrantsIcon from 'assets/svgs/people.svg?react';
-import { ReactComponent as EventActionsIcon } from 'assets/svgs/settings.svg';
+import EventActionsIcon from 'assets/svgs/settings.svg?react';
 import EventAgendaItemsIcon from 'assets/svgs/agenda-items.svg?react';
-import { ReactComponent as EventStatisticsIcon } from 'assets/svgs/eventStats.svg';
+import EventStatisticsIcon from 'assets/svgs/eventStats.svg?react';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
 import EventDashboard from 'components/EventManagement/Dashboard/EventDashboard';
@@ -163,9 +163,10 @@ const EventManagement = (): JSX.Element => {
           data-testid="backBtn"
           onClick={() => {
             /*istanbul ignore next*/
-            userRole === 'USER'
-              ? navigate(`/user/events/${orgId}`)
-              : navigate(`/orgevents/${orgId}`);
+            (() =>
+              userRole === 'USER'
+                ? navigate(`/user/events/${orgId}`)
+                : navigate(`/orgevents/${orgId}`))();
           }}
           className="mt-1"
         />

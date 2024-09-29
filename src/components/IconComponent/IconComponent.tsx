@@ -4,11 +4,11 @@ import {
   NewspaperOutlined,
 } from '@mui/icons-material';
 import ActionItemIcon from 'assets/svgs/actionItem.svg?react';
-import { ReactComponent as AgendaCategoryIcon } from 'assets/svgs/agenda-category-icon.svg';
+import AgendaCategoryIcon from 'assets/svgs/agenda-category-icon.svg?react';
 import BlockUserIcon from 'assets/svgs/blockUser.svg?react';
 import CheckInRegistrantsIcon from 'assets/svgs/checkInRegistrants.svg?react';
 import DashboardIcon from 'assets/svgs/dashboard.svg?react';
-import { ReactComponent as EventStatsIcon } from 'assets/svgs/eventStats.svg';
+import EventStatsIcon from 'assets/svgs/eventStats.svg?react';
 import EventsIcon from 'assets/svgs/events.svg?react';
 import FundsIcon from 'assets/svgs/funds.svg?react';
 import ListEventRegistrantsIcon from 'assets/svgs/listEventRegistrants.svg?react';
