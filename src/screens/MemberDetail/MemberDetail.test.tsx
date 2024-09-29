@@ -132,7 +132,9 @@ describe('MemberDetail', () => {
   global.alert = jest.fn();
 
   test('Should render the elements', async () => {
-    renderMemberDetail();
+    await act(async () => {
+      renderMemberDetail();
+    });
 
     await waitFor(() => {
       expect(screen.getByTestId('container')).toBeInTheDocument();
@@ -153,7 +155,10 @@ describe('MemberDetail', () => {
 
   test('Title should be User Details for Super Admin', async () => {
     setItem('SuperAdmin', true);
-    renderMemberDetail();
+    
+    await act(async () => {
+      renderMemberDetail();
+    });
 
     await waitFor(() => {
       expect(screen.getByTestId('container')).toBeInTheDocument();
@@ -163,25 +168,39 @@ describe('MemberDetail', () => {
   });
 
   test('Should change tab', async () => {
-    renderMemberDetail();
+    await act(async () => {
+      renderMemberDetail();
+    });
 
     await waitFor(() => {
       expect(screen.getByTestId('container')).toBeInTheDocument();
     });
 
-    const tab = screen.getByTestId('organizationsBtn');
-    tab.click();
+    await act(async () => {
+      const tab = screen.getByTestId('organizationsBtn');
+      tab.click();
+    });
 
-    expect(screen.getByTestId('memberorganizationTab')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('memberorganizationTab')).toBeInTheDocument();
+    });
 
-    const tab1 = screen.getByTestId('eventsBtn');
-    tab1.click();
+    await act(async () => {
+      const tab1 = screen.getByTestId('eventsBtn');
+      tab1.click();
+    });
 
-    expect(screen.getByTestId('eventsTab')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('eventsTab')).toBeInTheDocument();
+    });
 
-    const tab2 = screen.getByTestId('tagsBtn');
-    tab2.click();
+    await act(async () => {
+      const tab2 = screen.getByTestId('tagsBtn');
+      tab2.click();
+    });
 
-    expect(screen.getByTestId('tagsTab')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('tagsTab')).toBeInTheDocument();
+    });
   });
 });

@@ -623,7 +623,6 @@
     "raisedAmount": "Monto recaudado",
     "pledgedAmount": "Monto comprometido"
   },
-
   "orgPost": {
     "title": "Publicaciones de Talawa",
     "searchPost": "Buscar Publicación",
@@ -880,15 +879,14 @@
     "organizations": "Organizaciones",
     "events": "Eventos",
     "tags": "Etiquetas",
-    "title": "Detalles del Usuario"
+    "title_superadmin": "Detalles del usuario",
+    "title": "Detalles del miembro"
   },
   "memberOrganization": {
     "sort": "Ordenar",
     "noOrgError": "Organizaciones no encontradas, por favor crea una organización a través del panel de control",
     "noOrgErrorTitle": "Organizaciones no encontradas",
-    "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control",
-    "noResultsFoundFor": "No se encontraron resultados para",
-    "endOfResults": "Fin de los resultados"
+    "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control"
   },
   "orgMemberDetail": {
     "title": "Detalles del usuario",

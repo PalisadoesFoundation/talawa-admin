@@ -280,7 +280,8 @@
     "talawaApiUnavailable": "तालावा एपीआई अनुपलब्ध"
   },
   "organizationPeople": {
-    "title": "तालावा सदस्य",
+    "title": "सदस्य",
+    "title_superadmin": "उपयोगकर्ता",
     "filterByName": "नाम से फ़िल्टर करें",
     "filterByLocation": "स्थान से फ़िल्टर करें",
     "filterByEvent": "घटना से फ़िल्टर करें",
@@ -878,7 +879,8 @@
     "organizations": "संगठन",
     "events": "घटनाएँ",
     "tags": "टैग",
-    "title": "उपयोगकर्ता विवरण"
+    "title_superadmin": "उपयोगकर्ता विवरण",
+    "title": "सदस्य विवरण"
   },
   "orgMemberDetail": {
     "title": "उपयोगकर्ता विवरण",

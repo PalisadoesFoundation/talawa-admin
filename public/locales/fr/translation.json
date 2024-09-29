@@ -280,7 +280,8 @@
     "talawaApiUnavailable": "API Talawa indisponible"
   },
   "organizationPeople": {
-    "title": "Membres Talawa",
+    "title": "Membres",
+    "title_superadmin": "Utilisateurs",
     "filterByName": "Filtrer par nom",
     "filterByLocation": "Filtrer par emplacement",
     "filterByEvent": "Filtrer par événement",
@@ -878,7 +879,8 @@
     "organizations": "Organisations",
     "events": "Événements",
     "tags": "Balises",
-    "title": "Détails de l'utilisateur"
+    "title_superadmin": "Détails de l'utilisateur",
+    "title": "Détails du membre"
   },
   "orgMemberDetail": {
     "title": "Détails de l'utilisateur",

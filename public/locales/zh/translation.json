@@ -281,6 +281,7 @@
   },
   "organizationPeople": {
     "title": "塔拉瓦会员",
+    "title_superadmin": "塔拉瓦用户",
     "filterByName": "按名称过滤",
     "filterByLocation": "按地点过滤",
     "filterByEvent": "按事件过滤",
@@ -878,9 +879,9 @@
     "organizations": "组织",
     "events": "活动",
     "tags": "标签",
-    "title": "用户详情"
+    "title_superadmin": "用户详情",
+    "title": "成员详情"
   },
-
   "orgMemberDetail": {
     "title": "用户详情",
     "addAdmin": "添加管理员",
@@ -923,7 +924,6 @@
     "joined": "已加入",
     "talawaApiUnavailable": "塔拉瓦 API 不可用"
   },
-
   "memberOrganization": {
     "sort": "按角色搜索",
     "noOrgError": "未找到组织，请通过仪表板创建组织",
