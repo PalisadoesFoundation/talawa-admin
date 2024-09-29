@@ -8,6 +8,9 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
+/**
+ * Interface defining the form state for the `addOnRegister` component.
+ */
 interface InterfaceFormStateTypes {
   pluginName: string;
   pluginCreatedBy: string;
@@ -16,30 +19,62 @@ interface InterfaceFormStateTypes {
   installedOrgs: [string] | [];
 }
 
-function addOnRegister(): JSX.Element {
+interface AddOnRegisterProps {
+  createdBy?: string;
+}
+
+/**
+ * A React component for registering a new add-on plugin.
+ *
+ * This component:
+ * - Displays a button to open a modal for plugin registration.
+ * - Contains a form in the modal for entering plugin details.
+ * - Uses GraphQL mutation to register the plugin.
+ * - Uses `react-i18next` for localization and `react-toastify` for notifications.
+ * - Redirects to the organization list page if no `orgId` is found in the URL.
+ *
+ * @returns A JSX element containing the button and modal for plugin registration.
+ */
+function addOnRegister({
+  createdBy = 'Admin',
+}: AddOnRegisterProps): JSX.Element {
+  // Translation hook for the 'addOnRegister' namespace
   const { t } = useTranslation('translation', { keyPrefix: 'addOnRegister' });
+  // Translation hook for the 'common' namespace
   const { t: tCommon } = useTranslation('common');
 
+  // Get the organization ID from the URL parameters
   const { orgId: currentUrl } = useParams();
   const navigate = useNavigate();
+
+  // Redirect to the organization list if no organization ID is found
   if (!currentUrl) {
     return <Navigate to={'/orglist'} />;
   }
 
+  // State to manage the visibility of the modal
   const [show, setShow] = useState(false);
 
+  // Functions to show and hide the modal
   const handleClose = (): void => setShow(false);
   const handleShow = (): void => setShow(true);
+
+  // GraphQL mutation hook for adding a plugin
   const [create] = useMutation(ADD_PLUGIN_MUTATION);
 
+  // Initial form state
   const [formState, setFormState] = useState<InterfaceFormStateTypes>({
     pluginName: '',
-    pluginCreatedBy: '',
+    pluginCreatedBy: createdBy, // Using the default value here
     pluginDesc: '',
     pluginInstallStatus: false,
     installedOrgs: [currentUrl],
   });
 
+  /**
+   * Handles the registration of the plugin.
+   * Sends the form data to the GraphQL mutation and displays a success message.
+   */
   const handleRegister = async (): Promise<void> => {
     const { data } = await create({
       variables: {
@@ -52,14 +87,18 @@ function addOnRegister(): JSX.Element {
     });
 
     if (data) {
-      toast.success(tCommon('addedSuccessfully', { item: 'Plugin' }));
+      // Show a success message when the plugin is added
+      toast.success(tCommon('addedSuccessfully', { item: 'Plugin' }) as string);
+      // Refresh the page after 2 seconds
       setTimeout(() => {
         navigate(0);
       }, 2000);
     }
   };
+
   return (
     <>
+      {/* Button to open the modal */}
       <Button
         className={styles.modalbtn}
         variant="primary"
@@ -69,12 +108,14 @@ function addOnRegister(): JSX.Element {
         {t('addNew')}
       </Button>
 
+      {/* Modal for plugin registration */}
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title> {t('addPlugin')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
+            {/* Form group for plugin name */}
             <Form.Group className="mb-3" controlId="registerForm.PluginName">
               <Form.Label>{t('pluginName')}</Form.Label>
               <Form.Control
@@ -109,6 +150,7 @@ function addOnRegister(): JSX.Element {
                 }}
               />
             </Form.Group>
+            {/* Form group for plugin description */}
             <Form.Group className="mb-3" controlId="registerForm.PluginURL">
               <Form.Label>{t('pluginDesc')}</Form.Label>
               <Form.Control
@@ -130,6 +172,7 @@ function addOnRegister(): JSX.Element {
           </Form>
         </Modal.Body>
         <Modal.Footer>
+          {/* Button to close the modal */}
           <Button
             variant="secondary"
             onClick={handleClose}
@@ -137,6 +180,7 @@ function addOnRegister(): JSX.Element {
           >
             {tCommon('close')}
           </Button>
+          {/* Button to register the plugin */}
           <Button
             variant="primary"
             onClick={handleRegister}
@@ -150,10 +194,7 @@ function addOnRegister(): JSX.Element {
   );
 }
 
-addOnRegister.defaultProps = {
-  createdBy: 'Admin',
-};
-
+// Prop types validation for the component
 addOnRegister.propTypes = {
   createdBy: PropTypes.string,
 };

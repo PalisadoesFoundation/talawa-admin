@@ -1,5 +1,5 @@
-import React from 'react';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import React, { act } from 'react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 
@@ -250,7 +250,7 @@ describe('Testing OrganizationCard Component [User Portal]', () => {
     fireEvent.click(screen.getByTestId('joinBtn'));
     await wait();
 
-    expect(toast.success).toHaveBeenCalledWith('users.MembershipRequestSent');
+    expect(toast.success).toHaveBeenCalledWith('MembershipRequestSent');
   });
 
   test('send membership request to public org', async () => {

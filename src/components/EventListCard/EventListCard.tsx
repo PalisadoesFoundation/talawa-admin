@@ -5,6 +5,9 @@ import { Navigate, useParams } from 'react-router-dom';
 import EventListCardModals from './EventListCardModals';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
 
+/**
+ * Props for the EventListCard component.
+ */
 export interface InterfaceEventListCardProps {
   refetchEvents?: () => void;
   userRole?: string;
@@ -33,6 +36,12 @@ export interface InterfaceEventListCardProps {
   };
 }
 
+/**
+ * Component that displays an event card with a modal for event details.
+ *
+ * @param props - The props for the EventListCard component.
+ * @returns  The rendered EventListCard component.
+ */
 function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'eventListCard',
@@ -42,14 +51,22 @@ function eventListCard(props: InterfaceEventListCardProps): JSX.Element {
   const [eventModalIsOpen, setEventModalIsOpen] = useState(false);
 
   const { orgId } = useParams();
+
+  // Redirect to home if orgId is not present
   if (!orgId) {
     return <Navigate to={'/'} replace />;
   }
 
+  /**
+   * Opens the event modal.
+   */
   const showViewModal = (): void => {
     setEventModalIsOpen(true);
   };
 
+  /**
+   * Closes the event modal.
+   */
   const hideViewModal = (): void => {
     setEventModalIsOpen(false);
   };

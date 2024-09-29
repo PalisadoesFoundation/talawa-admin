@@ -9,6 +9,7 @@ If you are new to contributing to open source, please read the Open Source Guide
 <!-- toc -->
 
 - [Code of Conduct](#code-of-conduct)
+- [Videos](#videos)
 - [Ways to Contribute](#ways-to-contribute)
   - [Our Development Process](#our-development-process)
     - [Issues](#issues)
@@ -31,6 +32,7 @@ No one should fear voicing their opinion. Respones must be respectful.
 
 1. Visit our [YouTube Channel playlists](https://www.youtube.com/@PalisadoesOrganization/playlists) for more insights
    1. The "[Getting Started - Developers](https://www.youtube.com/watch?v=YpBUoHxEeyg&list=PLv50qHwThlJUIzscg9a80a9-HmAlmUdCF&index=1)" videos are extremely helpful for new open source contributors.
+
 ## Ways to Contribute
 
 If you are ready to start contributing code right away, get ready!

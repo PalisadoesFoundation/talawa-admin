@@ -13,36 +13,58 @@ import dayjs from 'dayjs';
 import convertToBase64 from 'utils/convertToBase64';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
 import { useParams } from 'react-router-dom';
+
+/**
+ * Props for the `advertisementRegister` component.
+ */
 interface InterfaceAddOnRegisterProps {
-  id?: string; // organizationId
-  createdBy?: string; // User
-  formStatus?: string;
-  idEdit?: string;
-  nameEdit?: string;
-  typeEdit?: string;
-  orgIdEdit?: string;
-  advertisementMediaEdit?: string;
-  endDateEdit?: Date;
-  startDateEdit?: Date;
-  setAfter: React.Dispatch<React.SetStateAction<string | null | undefined>>;
-}
-interface InterfaceFormStateTypes {
-  name: string;
-  advertisementMedia: string;
-  type: string;
-  startDate: Date;
-  endDate: Date;
-  organizationId: string | undefined;
+  id?: string; // Optional organization ID
+  createdBy?: string; // Optional user who created the advertisement
+  formStatus?: string; // Determines if the form is in register or edit mode
+  idEdit?: string; // ID of the advertisement to edit
+  nameEdit?: string; // Name of the advertisement to edit
+  typeEdit?: string; // Type of the advertisement to edit
+  orgIdEdit?: string; // Organization ID associated with the advertisement
+  advertisementMediaEdit?: string; // Media URL of the advertisement to edit
+  endDateEdit?: Date; // End date of the advertisement to edit
+  startDateEdit?: Date; // Start date of the advertisement to edit
+  setAfter: React.Dispatch<React.SetStateAction<string | null | undefined>>; // Function to update parent state
 }
 
+/**
+ * State for the advertisement form.
+ */
+interface InterfaceFormStateTypes {
+  name: string; // Name of the advertisement
+  advertisementMedia: string; // Base64-encoded media of the advertisement
+  type: string; // Type of advertisement (e.g., BANNER, POPUP)
+  startDate: Date; // Start date of the advertisement
+  endDate: Date; // End date of the advertisement
+  organizationId: string | undefined; // Organization ID
+}
+
+/**
+ * Component for registering or editing an advertisement.
+ *
+ * @param props - Contains form status, advertisement details, and a function to update parent state.
+ * @returns A JSX element that renders a form inside a modal for creating or editing an advertisement.
+ *
+ * @example
+ * ```tsx
+ * <AdvertisementRegister
+ *   formStatus="register"
+ *   setAfter={(value) => console.log(value)}
+ * />
+ * ```
+ */
 function advertisementRegister({
-  formStatus,
+  formStatus = 'register',
   idEdit,
-  nameEdit,
-  typeEdit,
-  advertisementMediaEdit,
-  endDateEdit,
-  startDateEdit,
+  nameEdit = '',
+  typeEdit = 'BANNER',
+  advertisementMediaEdit = '',
+  endDateEdit = new Date(),
+  startDateEdit = new Date(),
   setAfter,
 }: InterfaceAddOnRegisterProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
@@ -52,8 +74,9 @@ function advertisementRegister({
   const { orgId: currentOrg } = useParams();
 
   const [show, setShow] = useState(false);
-  const handleClose = (): void => setShow(false);
-  const handleShow = (): void => setShow(true);
+  const handleClose = (): void => setShow(false); // Closes the modal
+  const handleShow = (): void => setShow(true); // Shows the modal
+
   const [create] = useMutation(ADD_ADVERTISEMENT_MUTATION, {
     refetchQueries: [
       {
@@ -62,6 +85,7 @@ function advertisementRegister({
       },
     ],
   });
+
   const [updateAdvertisement] = useMutation(UPDATE_ADVERTISEMENT_MUTATION, {
     refetchQueries: [
       {
@@ -70,8 +94,8 @@ function advertisementRegister({
       },
     ],
   });
-  //getting organizationId from URL
 
+  // Initialize form state
   const [formState, setFormState] = useState<InterfaceFormStateTypes>({
     name: '',
     advertisementMedia: '',
@@ -81,7 +105,7 @@ function advertisementRegister({
     organizationId: currentOrg,
   });
 
-  //if set to edit set the formState by edit variables
+  // Set form state if editing
   useEffect(() => {
     if (formStatus === 'edit') {
       setFormState((prevState) => ({
@@ -103,12 +127,15 @@ function advertisementRegister({
     endDateEdit,
     currentOrg,
   ]);
-
+  /**
+   * Handles advertisement registration.
+   * Validates the date range and performs the mutation to create an advertisement.
+   */
   const handleRegister = async (): Promise<void> => {
     try {
       console.log('At handle register', formState);
       if (formState.endDate < formState.startDate) {
-        toast.error(t('endDateGreaterOrEqual'));
+        toast.error(t('endDateGreaterOrEqual') as string);
         return;
       }
       const { data } = await create({
@@ -123,7 +150,7 @@ function advertisementRegister({
       });
 
       if (data) {
-        toast.success(t('advertisementCreated'));
+        toast.success(t('advertisementCreated') as string);
         setFormState({
           name: '',
           advertisementMedia: '',
@@ -137,12 +164,19 @@ function advertisementRegister({
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(
-          tErrors('errorOccurredCouldntCreate', { entity: 'advertisement' }),
+          tErrors('errorOccurredCouldntCreate', {
+            entity: 'advertisement',
+          }) as string,
         );
         console.log('error occured', error.message);
       }
     }
   };
+
+  /**
+   * Handles advertisement update.
+   * Validates the date range and performs the mutation to update the advertisement.
+   */
   const handleUpdate = async (): Promise<void> => {
     try {
       const updatedFields: Partial<InterfaceFormStateTypes> = {};
@@ -158,7 +192,7 @@ function advertisementRegister({
         updatedFields.type = formState.type;
       }
       if (formState.endDate < formState.startDate) {
-        toast.error(t('endDateGreaterOrEqual'));
+        toast.error(t('endDateGreaterOrEqual') as string);
         return;
       }
       const startDateFormattedString = dayjs(formState.startDate).format(
@@ -199,7 +233,7 @@ function advertisementRegister({
 
       if (data) {
         toast.success(
-          tCommon('updatedSuccessfully', { item: 'Advertisement' }),
+          tCommon('updatedSuccessfully', { item: 'Advertisement' }) as string,
         );
         handleClose();
         setAfter(null);
@@ -397,16 +431,6 @@ function advertisementRegister({
     </>
   );
 }
-
-advertisementRegister.defaultProps = {
-  name: '',
-  advertisementMedia: '',
-  type: 'BANNER',
-  startDate: new Date(),
-  endDate: new Date(),
-  organizationId: '',
-  formStatus: 'register',
-};
 
 advertisementRegister.propTypes = {
   name: PropTypes.string,

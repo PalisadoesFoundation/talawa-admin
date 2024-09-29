@@ -121,7 +121,8 @@
     "spamsThe": "envía correo no deseado",
     "group": "grupo",
     "noNotifications": "No Notificaciones",
-    "close": "Cerca"
+    "close": "Cerca",
+    "Advertisement": "Publicidad"
   },
   "orgList": {
     "title": "Organizaciones Talawa",
@@ -159,7 +160,11 @@
     "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control",
     "noResultsFoundFor": "No se encontraron resultados para ",
     "OR": "O",
-    "sampleOrgSuccess": "Organización de ejemplo creada exitosamente"
+    "sampleOrgSuccess": "Organización de ejemplo creada exitosamente",
+    "manageFeatures": "Gestionar funciones",
+    "manageFeaturesInfo": "Información de gestión de funciones",
+    "goToStore": "Ir a la tienda",
+    "enableEverything": "Habilitar todo"
   },
   "orgListCard": {
     "admins": "Administradores",
@@ -227,7 +232,8 @@
     "AlreadyJoined": "Ya eres miembro de esta organización.",
     "errorOccured": "Se produjo un error. Por favor, inténtalo de nuevo más tarde.",
     "removeUserFrom": "Eliminar Usuario de {{org}}",
-    "removeConfirmation": "¿Está seguro de que desea eliminar a '{{name}}' de la organización '{{org}}'?"
+    "removeConfirmation": "¿Está seguro de que desea eliminar a '{{name}}' de la organización '{{org}}'?",
+    "noOrgError": "Error sin organización"
   },
   "communityProfile": {
     "title": "Perfil de la comunidad",
@@ -292,7 +298,41 @@
     "organization": "Organización",
     "create": "Crear",
     "cancel": "Cancelar",
-    "invalidDetailsMessage": "Ingrese detalles válidos."
+    "invalidDetailsMessage": "Ingrese detalles válidos.",
+    "addMembers": "Agregar miembros",
+    "searchFullName": "Ingrese el nombre completo",
+    "user": "Usuario",
+    "profile": "Perfil"
+  },
+  "organizationTags": {
+    "title": "Etiquetas de Organización",
+    "createTag": "Crear una nueva etiqueta",
+    "manageTag": "Gestionar",
+    "editTag": "Editar",
+    "removeTag": "Eliminar",
+    "tagDetails": "Detalles de la Etiqueta",
+    "tagName": "Nombre",
+    "tagType": "Tipo",
+    "tagNamePlaceholder": "Escribe el nombre de la etiqueta",
+    "tagCreationSuccess": "Nueva etiqueta creada con éxito",
+    "tagUpdationSuccess": "Etiqueta actualizada con éxito",
+    "tagRemovalSuccess": "Etiqueta eliminada con éxito",
+    "noTagsFound": "No se encontraron etiquetas",
+    "removeUserTag": "Eliminar Etiqueta",
+    "removeUserTagMessage": "¿Desea eliminar esta etiqueta?",
+    "addChildTag": "Agregar una Sub Etiqueta"
+  },
+  "manageTag": {
+    "title": "Detalles de la Etiqueta",
+    "addPeopleToTag": "Agregar Personas a la etiqueta",
+    "viewProfile": "Ver",
+    "noAssignedMembersFound": "Ningún miembro asignado",
+    "unassignUserTag": "Desasignar Etiqueta",
+    "unassignUserTagMessage": "¿Desea eliminar la etiqueta de este usuario?",
+    "successfullyUnassigned": "Etiqueta desasignada del usuario",
+    "addPeople": "Agregar Personas",
+    "add": "Agregar",
+    "subTags": "Subetiquetas"
   },
   "userListCard": {
     "joined": "Unido",
@@ -370,7 +410,6 @@
     "active": "Activo",
     "clearFilters": "Borrar filtros",
     "close": "Cerrar",
-    "completed": "Completado",
     "completionDate": "Fecha de finalización",
     "createActionItem": "Crear ítem de acción",
     "deleteActionItem": "Eliminar ítem de acción",
@@ -396,7 +435,14 @@
     "successfulUpdation": "Ítem de acción actualizado con éxito",
     "successfulDeletion": "Ítem de acción eliminado con éxito",
     "title": "Ítems de acción",
-    "yes": "Sí"
+    "yes": "Sí",
+    "category": "Categoría",
+    "allotedHours": "Horas asignadas",
+    "latestDueDate": "Fecha de vencimiento más reciente",
+    "earliestDueDate": "Fecha de vencimiento más antigua",
+    "updateActionItem": "Actualizar elemento de acción",
+    "noneUpdated": "Ninguno de los campos se actualizó",
+    "updateStatusMsg": "¿Está seguro de que desea marcar este elemento de acción como pendiente?"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "Detalles de la categoría de la agenda",
@@ -632,7 +678,8 @@
     "postDeleted": "Publicación eliminada exitosamente.",
     "postUpdated": "Publicación actualizada exitosamente.",
     "tag": "Su navegador no admite la etiqueta de video",
-    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está en funcionamiento? Compruebe también su conectividad de red."
+    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está en funcionamiento? Compruebe también su conectividad de red.",
+    "pin": "Fijar"
   },
   "blockUnblockUser": {
     "title": "Usuario de bloqueo/desbloqueo de Talawa",
@@ -711,19 +758,16 @@
     "amount": "Monto"
   },
   "orgSettings": {
-    "title": "Configuración Talawa",
-    "pageName": "Configuración",
+    "title": "Configuración",
     "general": "General",
     "actionItemCategories": "Categorías de elementos de acción",
-    "updateYourDetails": "Actualiza tus datos",
-    "updateYourPassword": "Actualice su contraseña",
-    "updateOrganization": "Actualizar Organización",
-    "seeRequest": "Ver Solicitud",
-    "settings": "Ajustes",
+    "updateOrganization": "Actualizar organización",
+    "seeRequest": "Ver solicitud",
     "noData": "Sin datos",
-    "otherSettings": "Otras Configuraciones",
-    "changeLanguage": "Cambiar Idioma",
-    "manageCustomFields": "Gestionar Campos Personalizados"
+    "otherSettings": "Otras configuraciones",
+    "changeLanguage": "Cambiar idioma",
+    "manageCustomFields": "Administrar campos personalizados",
+    "agendaItemCategories": "Categorías de elementos de agenda"
   },
   "deleteOrg": {
     "deleteOrganization": "Eliminar organización",
@@ -815,7 +859,9 @@
   "addOnEntry": {
     "enable": "Activada",
     "install": "Instalar",
-    "uninstall": "Desinstalar"
+    "uninstall": "Desinstalar",
+    "uninstallMsg": "Mensaje de desinstalación",
+    "installMsg": "Mensaje de instalación"
   },
   "memberDetail": {
     "title": "Detalles del usuario",
@@ -855,7 +901,9 @@
     "membershipRequests": "Solicitudes de membresía",
     "adminForEvents": "Administrador de eventos",
     "addedAsAdmin": "El usuario se agrega como administrador.",
-    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. Compruebe amablemente su conexión de red y espere un momento."
+    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. Compruebe amablemente su conexión de red y espere un momento.",
+    "deleteUser": "Eliminar usuario",
+    "userType": "Tipo de usuario"
   },
   "userLogin": {
     "login": "Acceso",
@@ -870,6 +918,10 @@
     "notAuthorised": "¡Lo siento! usted no está autorizado!",
     "invalidCredentials": "Las credenciales ingresadas son incorrectas. Ingrese credenciales válidas.",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. Compruebe amablemente su conexión de red y espere un momento."
+  },
+  "people": {
+    "title": "Gente",
+    "searchUsers": "Buscar usuarios"
   },
   "userRegister": {
     "register": "Registro",
@@ -911,7 +963,9 @@
     "selectOrganization": "Seleccionar organización",
     "filter": "Filtrar",
     "organizations": "Organizaciones",
-    "searchByName": "Buscar por nombre"
+    "searchByName": "Buscar por nombre",
+    "searchUsers": "Buscar usuarios",
+    "searchOrganizations": "Buscar Organizaciones"
   },
   "userSidebarOrg": {
     "yourOrganizations": "Tus Organizaciones",
@@ -924,7 +978,8 @@
     "requests": "Solicitudes",
     "communityProfile": "Perfil de la comunidad",
     "logout": "Cerrar sesión",
-    "settings": "Ajustes"
+    "settings": "Ajustes",
+    "chat": "Chat"
   },
   "organizationSidebar": {
     "viewAll": "Ver todo",
@@ -941,15 +996,22 @@
     "postedOn": "Publicado el {{date}}"
   },
   "home": {
-    "feed": "Alimentar",
-    "pinnedPosts": "Ver publicaciones fijadas",
-    "somethingOnYourMind": "¿Algo en tu mente?",
-    "addPost": "Agregar publicación",
+    "posts": "Publicaciones",
+    "post": "Publicación",
+    "title": "Publicaciones",
+    "textArea": "¿Tienes algo en mente?",
+    "feed": "Feed",
+    "loading": "Cargando",
+    "pinnedPosts": "Publicaciones fijadas",
+    "yourFeed": "Tu feed",
+    "nothingToShowHere": "No hay nada que mostrar aquí",
+    "somethingOnYourMind": "¿Tienes algo en mente?",
+    "addPost": "Añadir publicación",
     "startPost": "Comenzar una publicación",
     "media": "Medios",
     "event": "Evento",
     "article": "Artículo",
-    "postNowVisibleInFeed": "La publicación ahora es visible en el feed"
+    "postNowVisibleInFeed": "Publicar ahora visible en el feed"
   },
   "settings": {
     "settings": "Ajustes",
@@ -1014,6 +1076,7 @@
     "joined": "Unido"
   },
   "donate": {
+    "title": "Donaciones",
     "donations": "Donaciones",
     "searchDonations": "Buscar donaciones",
     "donateForThe": "Donar para el",
@@ -1022,9 +1085,13 @@
     "yourPreviousDonations": "Tus donaciones anteriores",
     "donate": "Donar",
     "nothingToShow": "Nada que mostrar aquí.",
-    "success": "Donación exitosa"
+    "success": "Donación exitosa",
+    "invalidAmount": "Ingrese un valor numérico para el monto de la donación.",
+    "donationAmountDescription": "Ingrese el valor numérico del monto de la donación.",
+    "donationOutOfRange": "El monto de la donación debe estar entre {{min}} y {{max}}."
   },
   "userEvents": {
+    "title": "Eventos",
     "nothingToShow": "No hay nada que mostrar aquí.",
     "search": "Buscar",
     "createEvent": "Crear evento",
@@ -1081,12 +1148,22 @@
     "endDateGreaterOrEqual": "La fecha de finalización debe ser mayor o igual a la fecha de inicio",
     "advertisementCreated": "Anuncio creado con éxito.",
     "saveChanges": "Guardar Cambios",
-    "endOfResults": "Fin de los resultados"
+    "endOfResults": "Fin de los resultados",
+    "Rname": "Nombre",
+    "Rtype": "Tipo",
+    "RstartDate": "Fecha de inicio",
+    "RendDate": "Fecha de finalización",
+    "RClose": "Cerrar",
+    "addNew": "Agregar nuevo",
+    "EXname": "Nombre",
+    "EXlink": "Enlace",
+    "createAdvertisement": "Crear publicidad"
   },
   "userChat": {
     "chat": "Charlar",
     "search": "Buscar",
-    "contacts": "Contactos"
+    "contacts": "Contactos",
+    "messages": "Mensajes"
   },
   "userChatRoom": {
     "selectContact": "Seleccione un contacto para iniciar una conversación",
@@ -1114,13 +1191,18 @@
     "disableButton": "Inhabilitar",
     "updateActionItemCategory": "Actualizar",
     "actionItemCategoryName": "Nombre",
-    "actionItemCategoryDetails": "Detalles de la categoría de elemento de acción",
+    "categoryDetails": "Detalles de la categoría",
     "enterName": "Introduzca el nombre",
     "successfulCreation": "Categoría de elemento de acción creada correctamente",
     "successfulUpdation": "Categoría de elemento de acción actualizada correctamente",
     "sameNameConflict": "Cambie el nombre para realizar una actualización",
     "categoryEnabled": "Categoría de elemento de acción habilitada",
-    "categoryDisabled": "Categoría de elemento de acción deshabilitada"
+    "categoryDisabled": "Categoría de elemento de acción deshabilitada",
+    "noActionItemCategories": "No hay categorías de elementos de acción",
+    "status": "Estado",
+    "categoryDeleted": "Categoría de elemento de acción eliminada con éxito",
+    "deleteCategory": "Eliminar categoría",
+    "deleteCategoryMsg": "¿Está seguro de que desea eliminar esta categoría de elemento de acción?"
   },
   "organizationVenues": {
     "title": "Lugares",
@@ -1173,6 +1255,7 @@
     "invalidDetailsMessage": "Por favor proporcione todos los detalles requeridos.",
     "passwordNotMatch": "Las contraseñas no coinciden.",
     "user": "Usuario",
+    "profile": "Perfil",
     "addMember": "Agregar miembro"
   },
   "eventActionItems": {
@@ -1212,5 +1295,26 @@
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error al agregar asistente",
     "errorRemovingAttendee": "Error al eliminar asistente"
+  },
+  "userCampaigns": {
+    "title": "Campañas de recaudación de fondos",
+    "searchByName": "Buscar por nombre...",
+    "searchBy": "Buscar por",
+    "pledgers": "Contribuyentes",
+    "campaigns": "Campañas",
+    "myPledges": "Mis Promesas",
+    "lowestAmount": "Monto más bajo",
+    "highestAmount": "Monto más alto",
+    "lowestGoal": "Meta más baja",
+    "highestGoal": "Meta más alta",
+    "latestEndDate": "Fecha de finalización más tardía",
+    "earliestEndDate": "Fecha de finalización más temprana",
+    "addPledge": "Añadir Promesa",
+    "viewPledges": "Ver Promesas",
+    "noPledges": "No se encontraron promesas",
+    "noCampaigns": "No se encontraron campañas"
+  },
+  "userPledges": {
+    "title": "Mis Promesas"
   }
 }

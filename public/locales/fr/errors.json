@@ -6,5 +6,6 @@
   "errorSendingMail": "Erreur lors de l'envoi du courrier",
   "emailNotRegistered": "Email non enregistré",
   "notFoundMsg": "Oops! ",
-  "errorOccurredCouldntCreate": "Une erreur s'est produite. Impossible de créer {{entity}}"
+  "errorOccurredCouldntCreate": "Une erreur s'est produite. Impossible de créer {{entity}}",
+  "errorLoading": "Une erreur s'est produite lors du chargement des données {{entity}}"
 }

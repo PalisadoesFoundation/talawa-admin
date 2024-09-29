@@ -13,7 +13,6 @@ import React, { useCallback, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import Loader from 'components/Loader/Loader';
 import CampaignModal from './CampaignModal';
-import CampaignDeleteModal from './CampaignDeleteModal';
 import { FUND_CAMPAIGN } from 'GraphQl/Queries/fundQueries';
 import styles from './OrganizationFundCampaign.module.css';
 import { currencySymbols } from 'utils/currency';
@@ -43,11 +42,38 @@ const dataGridStyle = {
   },
 };
 
-enum ModalState {
-  SAME = 'same',
-  DELETE = 'delete',
-}
-
+/**
+ * `orgFundCampaign` component displays a list of fundraising campaigns for a specific fund within an organization.
+ * It allows users to search, sort, view and edit campaigns.
+ *
+ * ### Functionality
+ * - Displays a data grid with campaigns information, including their names, start and end dates, funding goals, and actions.
+ * - Provides search functionality to filter campaigns by name.
+ * - Offers sorting options based on funding goal and end date.
+ * - Opens modals for creating or editing campaigns.
+ *
+ *
+ * ### State
+ * - `campaign`: The current campaign being edited or deleted.
+ * - `searchTerm`: The term used for searching campaigns by name.
+ * - `sortBy`: The current sorting criteria for campaigns.
+ * - `modalState`: An object indicating the visibility of different modals (`same` for create/edit).
+ * - `campaignModalMode`: Determines if the modal is in 'edit' or 'create' mode.
+ *
+ * ### Methods
+ * - `handleOpenModal(campaign: InterfaceCampaignInfo | null, mode: 'edit' | 'create')`: Opens the modal for creating or editing a campaign.
+ * - `handleClick(campaignId: string)`: Navigates to the pledge details page for a specific campaign.
+ *
+ * ### GraphQL Queries
+ * - Uses `FUND_CAMPAIGN` query to fetch the list of campaigns based on the provided fund ID, search term, and sorting criteria.
+ *
+ * ### Rendering
+ * - Renders a `DataGrid` component with campaigns information.
+ * - Displays modals for creating and editing campaigns.
+ * - Shows error and loading states using `Loader` and error message components.
+ *
+ * @returns The rendered component including breadcrumbs, search and filter controls, data grid, and modals.
+ */
 const orgFundCampaign = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'fundCampaign',
@@ -65,36 +91,18 @@ const orgFundCampaign = (): JSX.Element => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState<string | null>(null);
 
-  const [modalState, setModalState] = useState<{
-    [key in ModalState]: boolean;
-  }>({
-    [ModalState.SAME]: false,
-    [ModalState.DELETE]: false,
-  });
+  const [modalState, setModalState] = useState<boolean>(false);
   const [campaignModalMode, setCampaignModalMode] = useState<'edit' | 'create'>(
     'create',
   );
-  const openModal = (modal: ModalState): void =>
-    setModalState((prevState) => ({ ...prevState, [modal]: true }));
-
-  const closeModal = (modal: ModalState): void =>
-    setModalState((prevState) => ({ ...prevState, [modal]: false }));
 
   const handleOpenModal = useCallback(
     (campaign: InterfaceCampaignInfo | null, mode: 'edit' | 'create'): void => {
       setCampaign(campaign);
       setCampaignModalMode(mode);
-      openModal(ModalState.SAME);
+      setModalState(true);
     },
-    [openModal],
-  );
-
-  const handleDeleteClick = useCallback(
-    (campaign: InterfaceCampaignInfo): void => {
-      setCampaign(campaign);
-      openModal(ModalState.DELETE);
-    },
-    [openModal],
+    [],
   );
 
   const {
@@ -123,10 +131,11 @@ const orgFundCampaign = (): JSX.Element => {
     navigate(`/fundCampaignPledge/${orgId}/${campaignId}`);
   };
 
-  const campaigns = useMemo(() => {
-    if (campaignData?.getFundById?.campaigns)
-      return campaignData.getFundById.campaigns;
-    return [];
+  const { campaigns, fundName, isArchived } = useMemo(() => {
+    const fundName = campaignData?.getFundById?.name || 'Fund';
+    const isArchived = campaignData?.getFundById?.isArchived || false;
+    const campaigns = campaignData?.getFundById?.campaigns || [];
+    return { fundName, campaigns, isArchived };
   }, [campaignData]);
 
   if (campaignLoading) {
@@ -165,7 +174,6 @@ const orgFundCampaign = (): JSX.Element => {
       field: 'campaignName',
       headerName: 'Campaign Name',
       flex: 2,
-      minWidth: 150,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -186,7 +194,6 @@ const orgFundCampaign = (): JSX.Element => {
       field: 'startDate',
       headerName: 'Start Date',
       flex: 1,
-      minWidth: 150,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -198,7 +205,6 @@ const orgFundCampaign = (): JSX.Element => {
     {
       field: 'endDate',
       headerName: 'End Date',
-      minWidth: 150,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -238,6 +244,31 @@ const orgFundCampaign = (): JSX.Element => {
       },
     },
     {
+      field: 'fundingRaised',
+      headerName: 'Raised',
+      flex: 1,
+      minWidth: 100,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      renderCell: (params: GridCellParams) => {
+        return (
+          <div
+            className="d-flex justify-content-center fw-bold"
+            data-testid="goalCell"
+          >
+            {
+              currencySymbols[
+                params.row.campaign.currency as keyof typeof currencySymbols
+              ]
+            }
+            0
+          </div>
+        );
+      },
+    },
+    {
       field: 'action',
       headerName: 'Action',
       flex: 1,
@@ -262,17 +293,6 @@ const orgFundCampaign = (): JSX.Element => {
               }
             >
               <i className="fa fa-edit" />
-            </Button>
-            <Button
-              size="sm"
-              variant="danger"
-              className="rounded"
-              data-testid="deleteCampaignBtn"
-              onClick={() =>
-                handleDeleteClick(params.row.campaign as InterfaceCampaignInfo)
-              }
-            >
-              <i className="fa fa-trash" />
             </Button>
           </>
         );
@@ -314,9 +334,9 @@ const orgFundCampaign = (): JSX.Element => {
           data-testid="fundsLink"
           onClick={() => navigate(`/orgfunds/${orgId}`)}
         >
-          {tCommon('Funds')}
+          {fundName}
         </Link>
-        <Typography color="text.primary">FundRaising Campaign</Typography>
+        <Typography color="text.primary">{t('title')}</Typography>
       </Breadcrumbs>
 
       <div className={styles.btnsContainer}>
@@ -384,6 +404,7 @@ const orgFundCampaign = (): JSX.Element => {
               className={styles.orgFundCampaignButton}
               onClick={() => handleOpenModal(null, 'create')}
               data-testid="addCampaignBtn"
+              disabled={isArchived}
             >
               <i className={'fa fa-plus me-2'} />
               {t('addCampaign')}
@@ -394,7 +415,7 @@ const orgFundCampaign = (): JSX.Element => {
 
       <DataGrid
         disableColumnMenu
-        columnBufferPx={7}
+        columnBufferPx={8}
         hideFooter={true}
         getRowId={(row) => row.campaign._id}
         slots={{
@@ -418,19 +439,13 @@ const orgFundCampaign = (): JSX.Element => {
 
       {/* Create Campaign ModalState */}
       <CampaignModal
-        isOpen={modalState[ModalState.SAME]}
-        hide={() => closeModal(ModalState.SAME)}
+        isOpen={modalState}
+        hide={() => setModalState(false)}
         refetchCampaign={refetchCampaign}
         fundId={fundId}
+        orgId={orgId}
         campaign={campaign}
         mode={campaignModalMode}
-      />
-
-      <CampaignDeleteModal
-        isOpen={modalState[ModalState.DELETE]}
-        hide={() => closeModal(ModalState.DELETE)}
-        campaign={campaign}
-        refetchCampaign={refetchCampaign}
       />
     </div>
   );

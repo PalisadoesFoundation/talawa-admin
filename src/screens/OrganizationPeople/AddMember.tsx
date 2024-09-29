@@ -31,6 +31,7 @@ import type {
   InterfaceQueryUserListItem,
 } from 'utils/interfaces';
 import styles from './OrganizationPeople.module.css';
+import Avatar from 'components/Avatar/Avatar';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -48,6 +49,15 @@ const StyledTableRow = styled(TableRow)(() => ({
   },
 }));
 
+/**
+ * AddMember component is used to add new members to the organization by selecting from
+ * the existing users or creating a new user.
+ * It uses the following queries and mutations:
+ *  ORGANIZATIONS_LIST,
+ *  ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+ *  USERS_CONNECTION_LIST,
+ *  ADD_MEMBER_MUTATION,SIGNUP_MUTATION.
+ */
 function AddMember(): JSX.Element {
   const { t: translateOrgPeople } = useTranslation('translation', {
     keyPrefix: 'organizationPeople',
@@ -92,7 +102,7 @@ function AddMember(): JSX.Element {
           orgid: currentUrl,
         },
       });
-      toast.success(tCommon('addedSuccessfully', { item: 'Member' }));
+      toast.success(tCommon('addedSuccessfully', { item: 'Member' }) as string);
       memberRefetch({
         orgId: currentUrl,
       });
@@ -184,11 +194,11 @@ function AddMember(): JSX.Element {
         createUserVariables.lastName
       )
     ) {
-      toast.error(translateOrgPeople('invalidDetailsMessage'));
+      toast.error(translateOrgPeople('invalidDetailsMessage') as string);
     } else if (
       createUserVariables.password !== createUserVariables.confirmPassword
     ) {
-      toast.error(translateOrgPeople('passwordNotMatch'));
+      toast.error(translateOrgPeople('passwordNotMatch') as string);
     } else {
       try {
         const registeredUser = await registerMutation({
@@ -287,8 +297,8 @@ function AddMember(): JSX.Element {
         <Dropdown.Menu>
           <Dropdown.Item
             id="existingUser"
-            value="existingUser"
-            name="existingUser"
+            data-value="existingUser"
+            data-name="existingUser"
             data-testid="existingUser"
             onClick={(): void => {
               openAddUserModal();
@@ -300,8 +310,8 @@ function AddMember(): JSX.Element {
           </Dropdown.Item>
           <Dropdown.Item
             id="newUser"
-            value="newUser"
-            name="newUser"
+            data-value="newUser"
+            data-name="newUser"
             data-testid="newUser"
             onClick={(): void => {
               openCreateNewUserModal();
@@ -358,6 +368,9 @@ function AddMember(): JSX.Element {
                     <TableRow>
                       <StyledTableCell>#</StyledTableCell>
                       <StyledTableCell align="center">
+                        {translateAddMember('profile')}
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
                         {translateAddMember('user')}
                       </StyledTableCell>
                       <StyledTableCell align="center">
@@ -379,6 +392,24 @@ function AddMember(): JSX.Element {
                           >
                             <StyledTableCell component="th" scope="row">
                               {index + 1}
+                            </StyledTableCell>
+                            <StyledTableCell
+                              align="center"
+                              data-testid="profileImage"
+                            >
+                              {userDetails.user.image ? (
+                                <img
+                                  src={userDetails.user.image ?? undefined}
+                                  alt="avatar"
+                                  className={styles.TableImage}
+                                />
+                              ) : (
+                                <Avatar
+                                  avatarStyle={styles.TableImage}
+                                  name={`${userDetails.user.firstName} ${userDetails.user.lastName}`}
+                                  data-testid="avatarImage"
+                                />
+                              )}
                             </StyledTableCell>
                             <StyledTableCell align="center">
                               <Link

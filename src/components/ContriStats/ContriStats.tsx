@@ -4,14 +4,20 @@ import { useTranslation } from 'react-i18next';
 import styles from './ContriStats.module.css';
 
 interface InterfaceContriStatsProps {
-  key: string;
   id: string;
   recentAmount: string;
   highestAmount: string;
   totalAmount: string;
 }
 
-function contriStats(props: InterfaceContriStatsProps): JSX.Element {
+/**
+ * A component that displays contribution statistics.
+ *
+ * @param props - The properties passed to the component, including `recentAmount`, `highestAmount`, and `totalAmount`.
+ *
+ * @returns JSX.Element - The rendered component displaying the contribution stats.
+ */
+function ContriStats(props: InterfaceContriStatsProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'contriStats',
   });
@@ -30,4 +36,4 @@ function contriStats(props: InterfaceContriStatsProps): JSX.Element {
     </>
   );
 }
-export default contriStats;
+export default ContriStats;
