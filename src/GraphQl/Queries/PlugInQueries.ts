@@ -141,6 +141,25 @@ export const DIRECT_CHAT_BY_ID = gql`
         _id
         createdAt
         messageContent
+        replyTo {
+          _id
+          createdAt
+          messageContent
+          receiver {
+            _id
+            firstName
+            lastName
+            email
+            image
+          }
+          sender {
+            _id
+            firstName
+            lastName
+            email
+            image
+          }
+        }
         receiver {
           _id
           firstName
@@ -176,6 +195,18 @@ export const GROUP_CHAT_BY_ID = gql`
         _id
         createdAt
         messageContent
+        replyTo {
+          _id
+          createdAt
+          messageContent
+          sender {
+            _id
+            firstName
+            lastName
+            email
+            image
+          }
+        }
         sender {
           _id
           firstName
@@ -194,30 +225,6 @@ export const GROUP_CHAT_BY_ID = gql`
     }
   }
 `;
-
-// directChatByChatId
-
-// export const GROUP_CHAT_MESSAGES_BY_CHAT_ID = gql`
-//   query directChatsMessagesByChatID($id: ID!) {
-//     directChatsMessagesByChatID(id: $id) {
-//       _id
-//       createdAt
-//       messageContent
-//       receiver {
-//         _id
-//         firstName
-//         lastName
-//         email
-//       }
-//       sender {
-//         _id
-//         firstName
-//         lastName
-//         email
-//       }
-//     }
-//   }
-// `;
 
 export const DIRECT_CHATS_LIST = gql`
   query DirectChatsByUserID($id: ID!) {
