@@ -27,7 +27,7 @@
     "customize-cra": "^1.0.0",
     "dayjs": "^1.11.12",
     "dotenv": "^16.4.5",
-    "flag-icons": "^6.6.6",
+    "flag-icons": "^7.2.3",
     "graphql": "^16.9.0",
     "graphql-tag": "^2.12.6",
     "graphql-ws": "^5.16.0",
