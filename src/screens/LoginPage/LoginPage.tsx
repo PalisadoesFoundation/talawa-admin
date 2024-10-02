@@ -202,8 +202,7 @@ const loginPage = (): JSX.Element => {
       toast.error(t('Please_check_the_captcha') as string);
       return;
     }
-    // const isValidatedString = (value: string): boolean =>
-    //   /^[a-zA-Z]+$/.test(value);
+
     const isValidName = (value: string): boolean => {
       // Allow letters, spaces, and hyphens, but not consecutive spaces or hyphens
       return /^[a-zA-Z]+(?:[-\s][a-zA-Z]+)*$/.test(value.trim());
