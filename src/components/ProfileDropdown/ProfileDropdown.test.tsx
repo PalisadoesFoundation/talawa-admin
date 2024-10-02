@@ -1,5 +1,5 @@
-import React from 'react';
-import { act, render, screen } from '@testing-library/react';
+import React, { act } from 'react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import ProfileDropdown from './ProfileDropdown';

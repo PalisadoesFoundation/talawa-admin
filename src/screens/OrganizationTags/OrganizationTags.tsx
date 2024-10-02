@@ -2,6 +2,7 @@ import { useMutation, useQuery, type ApolloError } from '@apollo/client';
 import { Search, WarningAmberRounded } from '@mui/icons-material';
 import SortIcon from '@mui/icons-material/Sort';
 import Loader from 'components/Loader/Loader';
+import IconComponent from 'components/IconComponent/IconComponent';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import type { ChangeEvent } from 'react';
 import React, { useState } from 'react';
@@ -15,6 +16,7 @@ import { toast } from 'react-toastify';
 import type { InterfaceQueryOrganizationUserTags } from 'utils/interfaces';
 import styles from './OrganizationTags.module.css';
 import { DataGrid } from '@mui/x-data-grid';
+import { dataGridStyle } from 'utils/organizationTagsUtils';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
 import { ORGANIZATION_USER_TAGS_LIST } from 'GraphQl/Queries/OrganizationQueries';
@@ -23,26 +25,12 @@ import {
   REMOVE_USER_TAG,
 } from 'GraphQl/Mutations/TagMutations';
 
-const dataGridStyle = {
-  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-    outline: 'none !important',
-  },
-  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-    outline: 'none',
-  },
-  '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-root': {
-    borderRadius: '0.5rem',
-  },
-  '& .MuiDataGrid-main': {
-    borderRadius: '0.5rem',
-  },
-};
+/**
+ * Component that renders the Organization Tags screen when the app navigates to '/orgtags/:orgId'.
+ *
+ * This component does not accept any props and is responsible for displaying
+ * the content associated with the corresponding route.
+ */
 
 function OrganizationTags(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -52,7 +40,7 @@ function OrganizationTags(): JSX.Element {
 
   const [createTagModalIsOpen, setCreateTagModalIsOpen] = useState(false);
 
-  const { orgId: currentUrl } = useParams();
+  const { orgId } = useParams();
   const navigate = useNavigate();
   const [after, setAfter] = useState<string | null | undefined>(null);
   const [before, setBefore] = useState<string | null | undefined>(null);
@@ -88,7 +76,7 @@ function OrganizationTags(): JSX.Element {
     refetch: () => void;
   } = useQuery(ORGANIZATION_USER_TAGS_LIST, {
     variables: {
-      id: currentUrl,
+      id: orgId,
       after: after,
       before: before,
       first: first,
@@ -106,12 +94,12 @@ function OrganizationTags(): JSX.Element {
       const { data } = await create({
         variables: {
           name: tagName,
-          organizationId: currentUrl,
+          organizationId: orgId,
         },
       });
 
       if (data) {
-        toast.success(t('tagCreationSuccess'));
+        toast.success(t('tagCreationSuccess') as string);
         orgUserTagsRefetch();
         setTagName('');
         setCreateTagModalIsOpen(false);
@@ -120,7 +108,6 @@ function OrganizationTags(): JSX.Element {
       /* istanbul ignore next */
       if (error instanceof Error) {
         toast.error(error.message);
-        console.log(error.message);
       }
     }
   };
@@ -136,12 +123,11 @@ function OrganizationTags(): JSX.Element {
 
       orgUserTagsRefetch();
       toggleRemoveUserTagModal();
-      toast.success(t('tagRemovalSuccess'));
+      toast.success(t('tagRemovalSuccess') as string);
     } catch (error: unknown) {
       /* istanbul ignore next */
       if (error instanceof Error) {
         toast.error(error.message);
-        console.log(error.message);
       }
     }
   };
@@ -180,12 +166,16 @@ function OrganizationTags(): JSX.Element {
     setTagSerialNumber(tagSerialNumber - 1);
   };
 
-  const userTagsList =
-    orgUserTagsData?.organizations[0].userTags.edges.map((edge) => edge.node) ||
-    [];
+  const userTagsList = orgUserTagsData?.organizations[0].userTags.edges.map(
+    (edge) => edge.node,
+  );
 
-  const handleClick = (tagId: string): void => {
-    navigate(`/orgtags/${currentUrl}/managetag/${tagId}`);
+  const redirectToManageTag = (tagId: string): void => {
+    navigate(`/orgtags/${orgId}/managetag/${tagId}`);
+  };
+
+  const redirectToSubTags = (tagId: string): void => {
+    navigate(`/orgtags/${orgId}/subTags/${tagId}`);
   };
 
   const toggleRemoveUserTagModal = (): void => {
@@ -215,7 +205,11 @@ function OrganizationTags(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <div className={styles.subTagsLink} data-testid="tagName">
+          <div
+            className={styles.subTagsLink}
+            data-testid="tagName"
+            onClick={() => redirectToSubTags(params.row._id)}
+          >
             {params.row.name}
 
             <i className={'ms-2 fa fa-caret-right'} />
@@ -236,7 +230,7 @@ function OrganizationTags(): JSX.Element {
         return (
           <Link
             className="text-secondary"
-            to={`/orgtags/${currentUrl}/orgtagchildtags/${params.row._id}`}
+            to={`/orgtags/${orgId}/orgtagchildtags/${params.row._id}`}
           >
             {params.row.childTags.totalCount}
           </Link>
@@ -256,7 +250,7 @@ function OrganizationTags(): JSX.Element {
         return (
           <Link
             className="text-secondary"
-            to={`/orgtags/${currentUrl}/orgtagdetails/${params.row._id}`}
+            to={`/orgtags/${orgId}/orgtagdetails/${params.row._id}`}
           >
             {params.row.usersAssignedTo.totalCount}
           </Link>
@@ -278,7 +272,7 @@ function OrganizationTags(): JSX.Element {
             <Button
               size="sm"
               className="btn btn-primary rounded mt-3"
-              onClick={() => handleClick(params.row._id)}
+              onClick={() => redirectToManageTag(params.row._id)}
               data-testid="manageTagBtn"
             >
               {t('manageTag')}
@@ -357,33 +351,44 @@ function OrganizationTags(): JSX.Element {
             </Button>
           </div>
 
-          <DataGrid
-            disableColumnMenu
-            columnBufferPx={7}
-            hideFooter={true}
-            getRowId={(row) => row._id}
-            slots={{
-              noRowsOverlay: /* istanbul ignore next */ () => (
-                <Stack
-                  height="100%"
-                  alignItems="center"
-                  justifyContent="center"
-                >
-                  {t('noTagsFound')}
-                </Stack>
-              ),
-            }}
-            sx={dataGridStyle}
-            getRowClassName={() => `${styles.rowBackground}`}
-            autoHeight
-            rowHeight={65}
-            rows={userTagsList.map((fund, index) => ({
-              id: index + 1,
-              ...fund,
-            }))}
-            columns={columns}
-            isRowSelectable={() => false}
-          />
+          <div>
+            <div className="bg-white light border border-bottom-0 rounded-top mb-0 py-2 d-flex align-items-center">
+              <div className="ms-3 my-1">
+                <IconComponent name="Tag" />
+              </div>
+
+              <div className={`fs-4 ms-3 my-1 ${styles.tagsBreadCrumbs}`}>
+                {'Tags'}
+              </div>
+            </div>
+            <DataGrid
+              disableColumnMenu
+              columnBufferPx={7}
+              hideFooter={true}
+              getRowId={(row) => row._id}
+              slots={{
+                noRowsOverlay: /* istanbul ignore next */ () => (
+                  <Stack
+                    height="100%"
+                    alignItems="center"
+                    justifyContent="center"
+                  >
+                    {t('noTagsFound')}
+                  </Stack>
+                ),
+              }}
+              sx={dataGridStyle}
+              getRowClassName={() => `${styles.rowBackground}`}
+              autoHeight
+              rowHeight={65}
+              rows={userTagsList?.map((fund, index) => ({
+                id: index + 1,
+                ...fund,
+              }))}
+              columns={columns}
+              isRowSelectable={() => false}
+            />
+          </div>
         </div>
 
         <div className="row m-md-3 d-flex justify-content-center w-100">

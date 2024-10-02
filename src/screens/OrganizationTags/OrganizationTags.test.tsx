@@ -63,7 +63,7 @@ const renderOrganizationTags = (link: ApolloLink): RenderResult => {
                 element={<div data-testid="manageTagScreen"></div>}
               />
               <Route
-                path="/orgtags/:orgId/orgtagChildTags/:tagId"
+                path="/orgtags/:orgId/subtags/:tagId"
                 element={<div data-testid="subTagsScreen"></div>}
               />
             </Routes>
@@ -149,6 +149,21 @@ describe('Organisation Tags Page', () => {
     await waitForElementToBeRemoved(() =>
       screen.queryByTestId('removeUserTagModalCloseBtn'),
     );
+  });
+
+  test('navigates to sub tags screen after clicking on a tag', async () => {
+    renderOrganizationTags(link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('tagName')[0]).toBeInTheDocument();
+    });
+    userEvent.click(screen.getAllByTestId('tagName')[0]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('subTagsScreen')).toBeInTheDocument();
+    });
   });
 
   test('navigates to manage tag page after clicking manage tag option', async () => {

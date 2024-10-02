@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import styles from './AddOnEntry.module.css';
 import { Button, Card, Spinner } from 'react-bootstrap';
 import { UPDATE_INSTALL_STATUS_PLUGIN_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -13,12 +12,12 @@ import { Navigate, useParams } from 'react-router-dom';
  */
 interface InterfaceAddOnEntryProps {
   id: string;
-  enabled: boolean;
-  title: string;
-  description: string;
+  enabled?: boolean; // Optional props
+  title?: string; // Optional props
+  description?: string; // Optional props
   createdBy: string;
-  component: string;
-  modified: any;
+  component?: string; // Optional props
+  modified?: any; // Optional props
   uninstalledOrgs: string[];
   getInstalledPlugins: () => any;
 }
@@ -46,11 +45,14 @@ interface InterfaceAddOnEntryProps {
  */
 function addOnEntry({
   id,
-  title,
-  description,
+  title = 'No title provided', // Default parameter
+  description = 'Description not available', // Default parameter
   createdBy,
   uninstalledOrgs,
   getInstalledPlugins,
+  // enabled = false, // Default parameter
+  // component = '', // Default parameter
+  // modified = null, // Default parameter
 }: InterfaceAddOnEntryProps): JSX.Element {
   // Translation hook with namespace 'addOnEntry'
   const { t } = useTranslation('translation', { keyPrefix: 'addOnEntry' });
@@ -146,22 +148,5 @@ function addOnEntry({
     </>
   );
 }
-
-// Default prop values for the component
-addOnEntry.defaultProps = {
-  enabled: false,
-  configurable: true,
-  title: '',
-  description: '',
-  isInstalled: false,
-};
-
-addOnEntry.propTypes = {
-  enabled: PropTypes.bool,
-  configurable: PropTypes.bool,
-  title: PropTypes.string,
-  description: PropTypes.string,
-  isInstalled: PropTypes.bool,
-};
 
 export default addOnEntry;

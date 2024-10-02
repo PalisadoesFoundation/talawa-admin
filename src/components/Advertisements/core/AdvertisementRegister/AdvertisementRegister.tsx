@@ -58,13 +58,13 @@ interface InterfaceFormStateTypes {
  * ```
  */
 function advertisementRegister({
-  formStatus,
+  formStatus = 'register',
   idEdit,
-  nameEdit,
-  typeEdit,
-  advertisementMediaEdit,
-  endDateEdit,
-  startDateEdit,
+  nameEdit = '',
+  typeEdit = 'BANNER',
+  advertisementMediaEdit = '',
+  endDateEdit = new Date(),
+  startDateEdit = new Date(),
   setAfter,
 }: InterfaceAddOnRegisterProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
@@ -135,7 +135,7 @@ function advertisementRegister({
     try {
       console.log('At handle register', formState);
       if (formState.endDate < formState.startDate) {
-        toast.error(t('endDateGreaterOrEqual'));
+        toast.error(t('endDateGreaterOrEqual') as string);
         return;
       }
       const { data } = await create({
@@ -150,7 +150,7 @@ function advertisementRegister({
       });
 
       if (data) {
-        toast.success(t('advertisementCreated'));
+        toast.success(t('advertisementCreated') as string);
         setFormState({
           name: '',
           advertisementMedia: '',
@@ -164,7 +164,9 @@ function advertisementRegister({
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(
-          tErrors('errorOccurredCouldntCreate', { entity: 'advertisement' }),
+          tErrors('errorOccurredCouldntCreate', {
+            entity: 'advertisement',
+          }) as string,
         );
         console.log('error occured', error.message);
       }
@@ -190,7 +192,7 @@ function advertisementRegister({
         updatedFields.type = formState.type;
       }
       if (formState.endDate < formState.startDate) {
-        toast.error(t('endDateGreaterOrEqual'));
+        toast.error(t('endDateGreaterOrEqual') as string);
         return;
       }
       const startDateFormattedString = dayjs(formState.startDate).format(
@@ -231,7 +233,7 @@ function advertisementRegister({
 
       if (data) {
         toast.success(
-          tCommon('updatedSuccessfully', { item: 'Advertisement' }),
+          tCommon('updatedSuccessfully', { item: 'Advertisement' }) as string,
         );
         handleClose();
         setAfter(null);
@@ -429,16 +431,6 @@ function advertisementRegister({
     </>
   );
 }
-
-advertisementRegister.defaultProps = {
-  name: '',
-  advertisementMedia: '',
-  type: 'BANNER',
-  startDate: new Date(),
-  endDate: new Date(),
-  organizationId: '',
-  formStatus: 'register',
-};
 
 advertisementRegister.propTypes = {
   name: PropTypes.string,

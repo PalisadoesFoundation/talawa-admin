@@ -115,14 +115,14 @@ export default function events(): JSX.Element {
           endDate: dayjs(endDate).format('YYYY-MM-DD'),
           allDay: isAllDay,
           location: eventLocation,
-          startTime: !isAllDay ? startTime + 'Z' : null,
-          endTime: !isAllDay ? endTime + 'Z' : null,
+          startTime: !isAllDay ? startTime : null,
+          endTime: !isAllDay ? endTime : null,
         },
       });
 
       /* istanbul ignore next */
       if (createEventData) {
-        toast.success(t('eventCreated'));
+        toast.success(t('eventCreated') as string);
         refetch();
         setEventTitle('');
         setEventDescription('');

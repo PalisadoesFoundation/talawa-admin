@@ -84,7 +84,7 @@ const renderManageTag = (link: ApolloLink): RenderResult => {
                 element={<ManageTag />}
               />
               <Route
-                path="/orgtags/:orgId/orgtagSubTags/:tagId"
+                path="/orgtags/:orgId/subtags/:tagId"
                 element={<div data-testid="subTagsScreen"></div>}
               />
               <Route
@@ -223,9 +223,11 @@ describe('Organisation Tags Page', () => {
     await wait();
 
     await waitFor(() => {
-      expect(screen.getAllByTestId('goToManageTag')[0]).toBeInTheDocument();
+      expect(
+        screen.getAllByTestId('redirectToManageTag')[0],
+      ).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('goToManageTag')[0]);
+    userEvent.click(screen.getAllByTestId('redirectToManageTag')[0]);
 
     await waitFor(() => {
       expect(screen.getByTestId('addPeopleToTagBtn')).toBeInTheDocument();

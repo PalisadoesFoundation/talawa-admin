@@ -134,3 +134,8 @@
 .subTagsLink:hover i {
   visibility: visible;
 }
+
+.tagsBreadCrumbs {
+  color: var(--bs-gray);
+  cursor: pointer;
+}

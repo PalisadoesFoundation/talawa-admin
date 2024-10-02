@@ -11,6 +11,8 @@ export interface InterfaceActionItemCategoryInfo {
   _id: string;
   name: string;
   isDisabled: boolean;
+  createdAt: string;
+  creator: { _id: string; firstName: string; lastName: string };
 }
 
 export interface InterfaceActionItemCategoryList {
@@ -23,18 +25,20 @@ export interface InterfaceActionItemInfo {
     _id: string;
     firstName: string;
     lastName: string;
+    image: string | null;
   };
   assigner: {
     _id: string;
     firstName: string;
     lastName: string;
+    image: string | null;
   };
   actionItemCategory: {
     _id: string;
     name: string;
   };
   preCompletionNotes: string;
-  postCompletionNotes: string;
+  postCompletionNotes: string | null;
   assignmentDate: Date;
   dueDate: Date;
   completionDate: Date;
@@ -42,12 +46,13 @@ export interface InterfaceActionItemInfo {
   event: {
     _id: string;
     title: string;
-  };
+  } | null;
   creator: {
     _id: string;
     firstName: string;
     lastName: string;
   };
+  allotedHours: number | null;
 }
 
 export interface InterfaceActionItemList {
@@ -204,29 +209,31 @@ export interface InterfaceQueryOrganizationPostListItem {
   };
 }
 
-export interface InterfaceQueryOrganizationUserTags {
-  userTags: {
-    edges: {
-      node: {
-        _id: string;
-        name: string;
-        usersAssignedTo: {
-          totalCount: number;
-        };
-        childTags: {
-          totalCount: number;
-        };
+interface InterfaceTagData {
+  edges: {
+    node: {
+      _id: string;
+      name: string;
+      usersAssignedTo: {
+        totalCount: number;
       };
-      cursor: string;
-    }[];
-    pageInfo: {
-      startCursor: string;
-      endCursor: string;
-      hasNextPage: boolean;
-      hasPreviousPage: boolean;
+      childTags: {
+        totalCount: number;
+      };
     };
-    totalCount: number;
+    cursor: string;
+  }[];
+  pageInfo: {
+    startCursor: string;
+    endCursor: string;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
   };
+  totalCount: number;
+}
+
+export interface InterfaceQueryOrganizationUserTags {
+  userTags: InterfaceTagData;
 }
 
 export interface InterfaceQueryUserTagsAssignedMembers {
@@ -247,6 +254,11 @@ export interface InterfaceQueryUserTagsAssignedMembers {
     };
     totalCount: number;
   };
+}
+
+export interface InterfaceQueryUserTagChildTags {
+  name: string;
+  childTags: InterfaceTagData;
 }
 
 export interface InterfaceQueryOrganizationAdvertisementListItem {
@@ -273,6 +285,8 @@ export interface InterfaceQueryOrganizationAdvertisementListItem {
 }
 
 export interface InterfaceQueryOrganizationFundCampaigns {
+  name: string;
+  isArchived: boolean;
   campaigns: {
     _id: string;
     name: string;
@@ -292,6 +306,9 @@ export interface InterfaceUserCampaign {
   currency: string;
 }
 export interface InterfaceQueryFundCampaignsPledges {
+  fundId: {
+    name: string;
+  };
   name: string;
   fundingGoal: number;
   currency: string;
@@ -548,4 +565,9 @@ export interface InterfaceAgendaItemList {
 
 export interface InterfaceMapType {
   [key: string]: string;
+}
+
+export interface InterfaceCustomFieldData {
+  type: string;
+  name: string;
 }

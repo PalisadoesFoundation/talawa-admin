@@ -67,7 +67,6 @@ const PaginationList = ({
       <Hidden smDown initialWidth={'lg'}>
         <TablePagination
           rowsPerPageOptions={[
-            -1,
             5,
             10,
             30,

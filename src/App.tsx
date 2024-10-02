@@ -14,7 +14,6 @@ import OrgList from 'screens/OrgList/OrgList';
 import OrgPost from 'screens/OrgPost/OrgPost';
 import OrgSettings from 'screens/OrgSettings/OrgSettings';
 import OrganizationActionItems from 'screens/OrganizationActionItems/OrganizationActionItems';
-import OrganizationAgendaCategory from 'screens/OrganizationAgendaCategory/OrganizationAgendaCategory';
 import OrganizationDashboard from 'screens/OrganizationDashboard/OrganizationDashboard';
 import OrganizationEvents from 'screens/OrganizationEvents/OrganizationEvents';
 import OrganizaitionFundCampiagn from 'screens/OrganizationFundCampaign/OrganizationFundCampagins';
@@ -22,6 +21,7 @@ import OrganizationFunds from 'screens/OrganizationFunds/OrganizationFunds';
 import OrganizationPeople from 'screens/OrganizationPeople/OrganizationPeople';
 import OrganizationTags from 'screens/OrganizationTags/OrganizationTags';
 import ManageTag from 'screens/ManageTag/ManageTag';
+import SubTags from 'screens/SubTags/SubTags';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import Requests from 'screens/Requests/Requests';
 import Users from 'screens/Users/Users';
@@ -36,7 +36,6 @@ import Posts from 'screens/UserPortal/Posts/Posts';
 import Organizations from 'screens/UserPortal/Organizations/Organizations';
 import People from 'screens/UserPortal/People/People';
 import Settings from 'screens/UserPortal/Settings/Settings';
-// import UserLoginPage from 'screens/UserPortal/UserLoginPage/UserLoginPage';
 import Chat from 'screens/UserPortal/Chat/Chat';
 import { useQuery } from '@apollo/client';
 import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
@@ -121,12 +120,12 @@ function app(): JSX.Element {
       ],
       index: number,
     ) => {
-      const extraComponent = plugin[1];
+      const ExtraComponent = plugin[1];
       return (
         <Route
           key={index}
           path={`/plugin/${plugin[0].toLowerCase()}`}
-          element={extraComponent}
+          element={<ExtraComponent />}
         />
       );
     },
@@ -152,6 +151,7 @@ function app(): JSX.Element {
               path="orgtags/:orgId/managetag/:tagId"
               element={<ManageTag />}
             />
+            <Route path="orgtags/:orgId/subtags/:tagId" element={<SubTags />} />
             <Route path="/member/:orgId" element={<MemberDetail />} />
             <Route path="/orgevents/:orgId" element={<OrganizationEvents />} />
             <Route
@@ -161,10 +161,6 @@ function app(): JSX.Element {
             <Route
               path="/orgactionitems/:orgId"
               element={<OrganizationActionItems />}
-            />
-            <Route
-              path="/orgagendacategory/:orgId"
-              element={<OrganizationAgendaCategory />}
             />
             <Route path="/orgfunds/:orgId" element={<OrganizationFunds />} />
             <Route

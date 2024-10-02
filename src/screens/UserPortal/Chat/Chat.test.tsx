@@ -1,5 +1,5 @@
-import React from 'react';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import React, { act } from 'react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 
@@ -2259,15 +2259,26 @@ describe('Testing Chat Screen [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
+    screen.debug();
+    await waitFor(() => {
+      const closeMenuBtn = screen.queryByTestId('closeMenu');
+      expect(closeMenuBtn).toBeInTheDocument();
+      if (closeMenuBtn) {
+        closeMenuBtn.click();
+      } else {
+        throw new Error('Close menu button not found');
+      }
+    });
 
-    await wait();
-
-    const closeMenubtn = screen.getByTestId('closeMenu');
-    expect(closeMenubtn).toBeInTheDocument();
-    closeMenubtn.click();
-    const openMenuBtn = screen.getByTestId('openMenu');
-    expect(openMenuBtn).toBeInTheDocument();
-    openMenuBtn.click();
+    await waitFor(() => {
+      const openMenuBtn = screen.queryByTestId('openMenu');
+      expect(openMenuBtn).toBeInTheDocument();
+      if (openMenuBtn) {
+        openMenuBtn.click();
+      } else {
+        throw new Error('Open menu button not found');
+      }
+    });
   });
 
   test('Testing sidebar when the screen size is less than or equal to 820px', async () => {
@@ -2293,12 +2304,16 @@ describe('Testing Chat Screen [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await wait();
-    expect(screen.getByText('My Organizations')).toBeInTheDocument();
-    expect(screen.getByText('Talawa User Portal')).toBeInTheDocument();
-
-    const chatBtn = screen.getByTestId('chatBtn');
-
-    chatBtn.click();
+    screen.debug();
+    await waitFor(() => {
+      expect(screen.getByText('My Organizations')).toBeInTheDocument();
+      expect(screen.getByText('Talawa User Portal')).toBeInTheDocument();
+    });
+    await waitFor(() => {
+      const chatBtn = screen.getByTestId('chatBtn');
+      act(() => {
+        chatBtn.click();
+      });
+    });
   });
 });

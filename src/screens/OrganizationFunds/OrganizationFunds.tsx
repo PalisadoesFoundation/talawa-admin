@@ -13,7 +13,6 @@ import React, { useCallback, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import Loader from 'components/Loader/Loader';
 import FundModal from './FundModal';
-import FundDeleteModal from './FundDeleteModal';
 import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
 import styles from './OrganizationFunds.module.css';
 import type { InterfaceFundInfo } from 'utils/interfaces';
@@ -39,24 +38,20 @@ const dataGridStyle = {
   },
 };
 
-enum ModalState {
-  SAME = 'same',
-  DELETE = 'delete',
-}
 /**
  * `organizationFunds` component displays a list of funds for a specific organization,
- * allowing users to search, sort, view, edit, and delete funds.
+ * allowing users to search, sort, view and edit funds.
  *
  * This component utilizes the `DataGrid` from Material-UI to present the list of funds in a tabular format,
  * and includes functionality for filtering and sorting. It also handles the opening and closing of modals
- * for creating, editing, and deleting funds.
+ * for creating and editing.
  *
  * It includes:
  * - A search input field to filter funds by name.
  * - A dropdown menu to sort funds by creation date.
  * - A button to create a new fund.
  * - A table to display the list of funds with columns for fund details and actions.
- * - Modals for creating, editing, and deleting funds.
+ * - Modals for creating and editing funds.
  *
  * ### GraphQL Queries
  * - `FUND_LIST`: Fetches a list of funds for the given organization, filtered and sorted based on the provided parameters.
@@ -68,14 +63,11 @@ enum ModalState {
  * - `fund`: The currently selected fund for editing or deletion.
  * - `searchTerm`: The current search term used for filtering funds.
  * - `sortBy`: The current sorting order for funds.
- * - `modalState`: The state of the modals (edit/create or delete).
+ * - `modalState`: The state of the modals (edit/create).
  * - `fundModalMode`: The mode of the fund modal (edit or create).
  *
  * ### Methods
- * - `openModal(modal: ModalState)`: Opens the specified modal.
- * - `closeModal(modal: ModalState)`: Closes the specified modal.
  * - `handleOpenModal(fund: InterfaceFundInfo | null, mode: 'edit' | 'create')`: Opens the fund modal with the given fund and mode.
- * - `handleDeleteClick(fund: InterfaceFundInfo)`: Opens the delete modal for the specified fund.
  * - `handleClick(fundId: string)`: Navigates to the campaign page for the specified fund.
  *
  * @returns The rendered component.
@@ -99,29 +91,18 @@ const organizationFunds = (): JSX.Element => {
     'createdAt_DESC',
   );
 
-  const [modalState, setModalState] = useState<{
-    [key in ModalState]: boolean;
-  }>({
-    [ModalState.SAME]: false,
-    [ModalState.DELETE]: false,
-  });
+  const [modalState, setModalState] = useState<boolean>(false);
   const [fundModalMode, setFundModalMode] = useState<'edit' | 'create'>(
     'create',
   );
-
-  const openModal = (modal: ModalState): void =>
-    setModalState((prevState) => ({ ...prevState, [modal]: true }));
-
-  const closeModal = (modal: ModalState): void =>
-    setModalState((prevState) => ({ ...prevState, [modal]: false }));
 
   const handleOpenModal = useCallback(
     (fund: InterfaceFundInfo | null, mode: 'edit' | 'create'): void => {
       setFund(fund);
       setFundModalMode(mode);
-      openModal(ModalState.SAME);
+      setModalState(true);
     },
-    [openModal],
+    [],
   );
 
   const {
@@ -143,14 +124,6 @@ const organizationFunds = (): JSX.Element => {
       orderBy: sortBy,
     },
   });
-
-  const handleDeleteClick = useCallback(
-    (fund: InterfaceFundInfo): void => {
-      setFund(fund);
-      openModal(ModalState.DELETE);
-    },
-    [openModal],
-  );
 
   const funds = useMemo(() => fundData?.fundsByOrganization ?? [], [fundData]);
 
@@ -277,15 +250,6 @@ const organizationFunds = (): JSX.Element => {
             >
               <i className="fa fa-edit" />
             </Button>
-            <Button
-              size="sm"
-              variant="danger"
-              className="rounded"
-              data-testid="deleteFundBtn"
-              onClick={() => handleDeleteClick(params.row as InterfaceFundInfo)}
-            >
-              <i className="fa fa-trash" />
-            </Button>
           </>
         );
       },
@@ -405,19 +369,12 @@ const organizationFunds = (): JSX.Element => {
         isRowSelectable={() => false}
       />
       <FundModal
-        isOpen={modalState[ModalState.SAME]}
-        hide={() => closeModal(ModalState.SAME)}
+        isOpen={modalState}
+        hide={() => setModalState(false)}
         refetchFunds={refetchFunds}
         fund={fund}
         orgId={orgId}
         mode={fundModalMode}
-      />
-
-      <FundDeleteModal
-        isOpen={modalState[ModalState.DELETE]}
-        hide={() => closeModal(ModalState.DELETE)}
-        fund={fund}
-        refetchFunds={refetchFunds}
       />
     </div>
   );
