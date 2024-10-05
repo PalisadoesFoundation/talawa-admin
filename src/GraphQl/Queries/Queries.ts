@@ -337,8 +337,8 @@ export const EVENT_FEEDBACKS = gql`
 
 // Query to take the Organization with data
 export const ORGANIZATIONS_LIST = gql`
-  query Organizations($id: ID!) {
-    organizations(id: $id) {
+  query OrganizationsByCreator($creatorId: ID!) {
+    organizations(where: { creatorId: $creatorId }) {
       _id
       image
       creator {
