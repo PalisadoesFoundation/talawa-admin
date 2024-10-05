@@ -705,10 +705,11 @@
     "title": "इवेंट मैनेजमेंट",
     "dashboard": "डैशबोर्ड",
     "registrants": "कुलसचिव",
-    "eventActions": "घटना क्रियाएँ",
-    "eventAgendas": "इवेंट एजेंडा",
-    "eventStats": "घटना सांख्यिकी",
-    "to": "को"
+    "actions": "कार्य",
+    "agendas": "एजेंडे",
+    "statistics": "आँकड़े",
+    "to": "को",
+    "volunteers": "स्वयंसेवक"
   },
   "forgotPassword": {
     "title": "तलावा पासवर्ड भूल गए",

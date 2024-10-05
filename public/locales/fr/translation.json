@@ -705,10 +705,11 @@
     "title": "Gestion d'événements",
     "dashboard": "Tableau de bord",
     "registrants": "Inscrits",
-    "eventActions": "Actions d'événement",
-    "eventAgendas": "Ordres du jour des événements",
-    "eventStats": "Statistiques des événements",
-    "to": "À"
+    "actions": "Actions",
+    "agendas": "Ordres du jour",
+    "statistics": "Statistiques",
+    "to": "À",
+    "volunteers": "Bénévoles"
   },
   "forgotPassword": {
     "title": "Talawa Mot de passe oublié",

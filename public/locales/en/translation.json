@@ -705,10 +705,11 @@
     "title": "Event Management",
     "dashboard": "Dashboard",
     "registrants": "Registrants",
-    "eventActions": "Event Actions",
-    "eventAgendas": "Event Agendas",
-    "eventStats": "Event Statistics",
-    "to": "TO"
+    "actions": "Actions",
+    "agendas": "Agendas",
+    "statistics": "Statistics",
+    "to": "TO",
+    "volunteers": "Volunteers"
   },
   "forgotPassword": {
     "title": "Talawa Forgot Password",
@@ -1315,5 +1316,14 @@
   },
   "userPledges": {
     "title": "My Pledges"
+  },
+  "eventVolunteers": {
+    "volunteers": "Volunteers",
+    "volunteerGroups": "Volunteer Groups",
+    "individuals": "Individuals",
+    "groups": "Groups",
+    "status": "Status",
+    "noVolunteers": "No Volunteers",
+    "noVolunteerGroups": "No Volunteer Groups"
   }
 }

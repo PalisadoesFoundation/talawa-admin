@@ -706,10 +706,11 @@
     "title": "Gestión de eventos",
     "dashboard": "Tablero",
     "registrants": "Inscritos",
-    "eventActions": "Acciones del evento",
-    "eventAgendas": "Agendas de eventos",
-    "eventStats": "Estadísticas del evento",
-    "to": "A"
+    "actions": "Acciones",
+    "agendas": "Agendas",
+    "statistics": "Estadísticas",
+    "to": "A",
+    "volunteers": "Voluntarios"
   },
   "forgotPassword": {
     "title": "Talawa olvidó su contraseña",
