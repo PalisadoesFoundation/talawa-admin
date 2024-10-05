@@ -63,7 +63,6 @@
 }
 
 .contact {
-  min-height: 47.4rem;
   width: 100%;
 }
 
@@ -100,7 +99,7 @@
   border-bottom: 3px solid #31bb6b;
   width: 60%;
 }
-.cardBody{
+.cardBody {
   max-height: 72vh;
   overflow-y: scroll;
 }
@@ -487,7 +486,6 @@
 .eventContainer {
   display: flex;
   align-items: start;
-
 }
 
 .eventDetailsBox {
@@ -499,7 +497,6 @@
   border-radius: 20px;
   margin-bottom: 0;
   margin-top: 20px;
-  
 }
 .ctacards {
   padding: 20px;
@@ -510,10 +507,9 @@
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
   align-items: center;
   border-radius: 20px;
-
 }
 .ctacards span {
-  color:rgb(181, 181, 181);
+  color: rgb(181, 181, 181);
   font-size: small;
 }
 /* .eventDetailsBox::before {

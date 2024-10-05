@@ -3,15 +3,14 @@ import { useMutation, useQuery } from '@apollo/client';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
-import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import styles from './MemberDetail.module.css';
 import { languages } from 'utils/languages';
 import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
-import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
+import { EVENT_DETAILS, USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import CardItemLoading from 'components/OrganizationDashCards/CardItemLoading';
-import { Card } from 'react-bootstrap';
+import { Card, Row, Col } from 'react-bootstrap';
 import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
@@ -23,7 +22,6 @@ import {
   LocalizationProvider,
 } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { Form } from 'react-bootstrap';
 import convertToBase64 from 'utils/convertToBase64';
 import sanitizeHtml from 'sanitize-html';
 import type { Dayjs } from 'dayjs';
@@ -35,11 +33,11 @@ import {
   employmentStatusEnum,
 } from 'utils/formEnumFields';
 import DynamicDropDown from 'components/DynamicDropDown/DynamicDropDown';
+import type { InterfaceEvent } from 'components/EventManagement/EventAttendance/InterfaceEvents';
 
 type MemberDetailProps = {
   id?: string;
 };
-
 
 const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const { t } = useTranslation('translation', {
@@ -128,43 +126,28 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     };
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const { name, value } = e.target;
-    // setFormState({
-    //   ...formState,
-    //   [name]: value,
-    // });
-    // console.log(name, value);
+  const handleChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): Promise<void> => {
+    const { name, files } = e.target;
+    if (name === 'photo' && files && files[0]) {
+      const file = files[0];
+      const base64 = await convertToBase64(file);
+      setFormState((prevState) => ({
+        ...prevState,
+        image: base64 as string,
+      }));
+    } else {
+      const { value } = e.target;
+      setFormState((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
     setisUpdated(true);
-    setFormState((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-    // console.log(formState);
   };
-
-  // const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-  //   const { name, value } = e.target;
-  //   setFormState({
-  //     ...formState,
-  //     phoneNumber: {
-  //       ...formState.phoneNumber,
-  //       [name]: value,
-  //     },
-  //   });
-  //   // console.log(formState);
-  // };
   const handleEventsAttendedModal = (): void => {
     setShow(!show);
-  };
-  const handleToggleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    // console.log(e.target.checked);
-    const { name, checked } = e.target;
-    setFormState((prevState) => ({
-      ...prevState,
-      [name]: checked,
-    }));
-    // console.log(formState);
   };
 
   const loginLink = async (): Promise<void> => {
@@ -238,12 +221,12 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       state: userData?.user?.address?.state || '',
       birthDate: userData?.user?.birthDate || '2024-03-14',
       grade: userData?.user?.educationGrade || '',
-      pluginCreationAllowed: userData?.appUserProfile?.pluginCreationAllowed || false,
+      pluginCreationAllowed:
+        userData?.appUserProfile?.pluginCreationAllowed || false,
     });
     setisUpdated(false);
   };
-
-
+  console.log(userData);
   if (loading) {
     return <Loader />;
   }
@@ -256,396 +239,287 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   });
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      {
-        show && <MemberAttendedEventsModal eventsAttended={userData?.user?.eventsAttended} show={show} setShow={setShow} />
-      }
-      <div className={`my-4 ${styles.mainpageright}`}>
-        <div className="d-flex flex-row">
-          <div className={`left d-flex flex-column ${styles.maxWidth50}`}>
-            {/* Personal */}
-            <div className={`personal bg-white border ${styles.allRound}`}>
-              <div
-                className={`d-flex border-bottom bg-primary justify-content-between py-3 px-4 ${styles.topRadius}`}
+      {show && (
+        <MemberAttendedEventsModal
+          eventsAttended={userData?.user?.eventsAttended}
+          show={show}
+          setShow={setShow}
+        />
+      )}
+      <Row className="g-4 mt-1">
+        <Col md={6}>
+          <Card className={`${styles.allRound}`}>
+            <Card.Header
+              className={`bg-success text-white py-3 px-4 d-flex justify-content-between align-items-center ${styles.topRadius}`}
+            >
+              <h3 className="m-0">{t('personalDetailsHeading')}</h3>
+              <Button
+                variant="light"
+                size="sm"
+                disabled
+                className="rounded-pill fw-bolder"
               >
-                <h3 className='text-white fs-2 me-3'>{t('personalDetailsHeading')}</h3>
+                {userData?.appUserProfile?.isSuperAdmin
+                  ? 'Super Admin'
+                  : userData?.appUserProfile?.adminFor.length > 0
+                    ? 'Admin'
+                    : 'User'}
+              </Button>
+            </Card.Header>
+            <Card.Body className="py-3 px-3">
+              <div className="text-center mb-3">
+                {formState?.image ? (
+                  <div className="position-relative d-inline-block">
+                    <img
+                      className="rounded-circle"
+                      style={{ width: '55px', aspectRatio: '1/1' }}
+                      src={formState.image}
+                      alt="User"
+                      data-testid="userImagePresent"
+                    />
+                    <i
+                      className="fas fa-edit position-absolute bottom-0 right-0 p-1 bg-white rounded-circle"
+                      onClick={handleEditIconClick}
+                      style={{ cursor: 'pointer' }}
+                      title="Edit profile picture"
+                    />
+                  </div>
+                ) : (
+                  <div className="position-relative d-inline-block">
+                    <Avatar
+                      name={`${formState.firstName} ${formState.lastName}`}
+                      alt="User Image"
+                      size={150}
+                      dataTestId="userImageAbsent"
+                      radius={150}
+                    />
+                    <i
+                      className="fas fa-edit position-absolute bottom-0 right-0 p-1 bg-white rounded-circle"
+                      onClick={handleEditIconClick}
+                      style={{ cursor: 'pointer' }}
+                    />
+                  </div>
+                )}
+                <input
+                  type="file"
+                  id="orgphoto"
+                  name="photo"
+                  accept="image/*"
+                  onChange={handleChange}
+                  data-testid="organisationImage"
+                  ref={fileInputRef}
+                  style={{ display: 'none' }}
+                />
               </div>
-              <div className="d-flex flex-row flex-wrap p-4">
-                <div className="d-flex flex-column position-relative  align-items-center text-center w-100">
-                  {formState.image ? (
-                    <div className="position-relative">
-                      <img
-                        className={`rounded-circle`}
-                        style={{ width: '50px', aspectRatio: '1/1' }}
-                        src={sanitizedSrc}
-                        data-testid="userImagePresent"
-                      />
-                      <i
-                        className="fas fa-edit position-absolute bottom-0 right-0 p-1 bg-white rounded-circle"
-                        onClick={handleEditIconClick}
-                        style={{ cursor: 'pointer' }}
-                        title="Edit profile picture"
-                      />
-                    </div>
-                  ) : (
-                    <div className="position-relative">
-                      <Avatar
-                        name={`${userData?.user?.firstName} ${userData?.user?.lastName}`}
-                        alt="User Image"
-                        size={50}
-                        dataTestId="userImageAbsent"
-                        radius={50}
-                      />
-                      <i
-                        className="fas fa-edit position-absolute bottom-0 right-0 p-1 bg-white rounded-circle"
-                        onClick={handleEditIconClick}
-                        style={{ cursor: 'pointer' }}
-                      />
-                    </div>
-                  )}
+              <Row className="g-3">
+                <Col md={6}>
+                  <label htmlFor="firstName" className="form-label">
+                    {tCommon('firstName')}
+                  </label>
                   <input
-                    type="file"
-                    id="orgphoto"
-                    name="photo"
-                    accept="image/*"
-                    onChange={async (e: React.ChangeEvent): Promise<void> => {
-                      const target = e.target as HTMLInputElement;
-                      const image = target.files && target.files[0];
-                      if (image)
-                        setFormState({
-                          ...formState,
-                          image: await convertToBase64(image),
-                        });
-                    }}
-                    data-testid="organisationImage"
-                    ref={fileInputRef}
-                    style={{ display: 'none' }}
+                    id="firstName"
+                    value={formState.firstName}
+                    className={`form-control ${styles.inputColor}`}
+                    type="text"
+                    name="firstName"
+                    onChange={handleChange}
+                    required
+                    placeholder={tCommon('firstName')}
                   />
-                  <p className='text-center mt-2 fw-bold'>
-                    {userData?.user?.firstName} {userData?.user?.lastName}
-                  </p>
-
-                  <p className="p-0 m-0 fs-6">
-                    {userData?.appUserProfile?.isSuperAdmin
-                      ? 'Super Admin'
-                      : userData?.appUserProfile?.adminFor.length > 0
-                        ? 'Admin'
-                        : 'User'}
-                  </p>
-                </div>
-                <div className='w-100 d-flex justify-content-between'>
-                  <div className='w-100 mr-2'>
-                    <p className="my-0 mx-2">{tCommon('firstName')}</p>
-                    <input
-                      value={formState.firstName}
-                      className={`rounded w-100 border-0 p-2 m-2 ${styles.inputColor}`}
-                      type="text"
-                      name="firstName"
-                      onChange={handleChange}
-                      required
-                      placeholder={tCommon('firstName')}
-                    />
-                  </div>
-                  <div className='w-100 mx-2'>
-                    <p className="my-0 ">{tCommon('lastName')}</p>
-                    <input
-                      value={formState.lastName}
-                      className={`rounded w-100 border-0 p-2 m-2 ${styles.inputColor}`}
-                      type="text"
-                      name="lastName"
-                      onChange={handleChange}
-                      required
-                      placeholder={tCommon('lastName')}
-                    />
-                  </div>
-                  <div className='w-100'>
-                    <p className="my-0 ">{t('gender')}</p>
-                    <div className="w-100">
-                      <DynamicDropDown
-                        formState={formState}
-                        setFormState={setFormState}
-                        fieldOptions={genderEnum} // Pass your options array here
-                        fieldName="gender" // Label for the field
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className='w-100 d-flex justify-content-between mt-2'>
-                  <div className='w-100'>
-                    <p className="my-0 mx-2">{t('birthDate')}</p>
-                    <div className='w-100'>
-                      <DatePicker
-                        // label={t('birthDate')}
-                        className={`${styles.datebox} w-100`}
-                        value={dayjs(formState.birthDate)}
-                        onChange={handleDateChange}
-                        data-testid="birthDate"
-                        slotProps={{
-                          textField: {
-                            inputProps: {
-                              'data-testid': 'birthDate',
-                            },
-                          },
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <div className='w-100'>
-                    <p className="my-0 mx-2">{t('educationGrade')}</p>
-                    <DynamicDropDown
-                      formState={formState}
-                      setFormState={setFormState}
-                      fieldOptions={educationGradeEnum} // Pass your options array here
-                      fieldName="grade" // Label for the field
-                    />
-                  </div>
-                </div>
-                <div className='w-100 d-flex  justify-content-between mt-2'>
-                  <div className='w-100'>
-                    <p className="my-0 mx-2">{t('employmentStatus')}</p>
-                    <DynamicDropDown
-                      formState={formState}
-                      setFormState={setFormState}
-                      fieldOptions={employmentStatusEnum}
-                      fieldName="empStatus"
-                    />
-                  </div>
-                  <div className='w-100'>
-                    <p className="my-0 mx-2">{t('maritalStatus')}</p>
-                    <DynamicDropDown
-                      formState={formState}
-                      setFormState={setFormState}
-                      fieldOptions={maritalStatusEnum}
-                      fieldName="maritalStatus"
-                    />
-                  </div>
-                </div>
-              </div>
-              {isUpdated && <div className="d-flex justify-content-end my-2"
-                style={{ paddingRight: '20px' }}
-              >
-                <Button
-                  type="button"
-                  className={styles.whiteregbtn}
-                  value="savechanges"
-                  onClick={resetChanges}
-                >
-                  Reset Changes
-                </Button>
-                <Button
-                  type="button"
-                  className={styles.greenregbtn}
-                  value="savechanges"
-                  onClick={loginLink}
-                >
-                  {tCommon('saveChanges')}
-                </Button>
-              </div>}
-
-            </div>
-            <div className={`${styles.contact} bg-white mt-3 border ${styles.allRound}`}>
-              <div
-                className={`d-flex border-bottom  bg-primary justify-content-between py-3 px-4 ${styles.topRadius}`}
-              >
-                <h3 className='text-white'>{t('eventsAttended')}</h3>
-                <Button
-                  style={{ borderRadius: '20px', alignSelf: 'flex-start' }}
-                  size="sm"
-                  variant="light"
-                  data-testid="viewAllEvents"
-                  onClick={() => { handleEventsAttendedModal() }}
-                >
-                  {t('viewAll')}
-                </Button>
-              </div>
-              <Card border="0" className="rounded-4">
-                <Card.Body className={styles.cardBody}>
-                  {loadingEvents ? (
-                    [...Array(4)].map((_, index) => {
-                      return <CardItemLoading key={index} />;
-                    })
-                  ) : userData?.user?.eventsAttended.length === 0 ? (
-                    <div className={styles.emptyContainer}>
-                      <h6>{t('noEventsAttended')}</h6>
-                    </div>
-                  ) : (
-                    userData?.user?.eventsAttended.map((event: any) => (
-                      <EventsAttendedByMember eventsId={event._id} />
-                    ))
-                  )}
-                </Card.Body>
-              </Card>
-            </div>
-            {/* Contact Info */}
-
-            {/* <div className={`personal mt-4 bg-white border ${styles.allRound}`}>
-              <div
-                className={`d-flex flex-column border-bottom py-3 px-4 ${styles.topRadius}`}
-              >
-                <h3>{t('actionsHeading')}</h3>
-              </div>
-              <div className="p-3">
-                <div className="toggles">
-                  <div className="d-flex flex-row">
-                    <input
-                      type="checkbox"
-                      name="pluginCreationAllowed"
-                      className={`mx-2 ${styles.noOutline}`}
-                      checked={formState.pluginCreationAllowed}
-                      onChange={handleToggleChange} // API not supporting this feature
-                      data-testid="pluginCreationAllowed"
-                      placeholder="pluginCreationAllowed"
-                    />
-                    <p className="p-0 m-0">
-                      {`${t('pluginCreationAllowed')} (API not supported yet)`}
-                    </p>
-                  </div>
-                </div>
-                <div className="buttons d-flex flex-row gap-3 mt-2">
-                  <div className={styles.dispflex}>
-                    <div>
-                      <label>
-                        {t('appLanguageCode')} <br />
-                        {`(API not supported yet)`}
-                        <select
-                          className="form-control"
-                          data-testid="applangcode"
-                          onChange={(e): void => {
-                            setFormState({
-                              ...formState,
-                              appLanguageCode: e.target.value,
-                            });
-                          }}
-                        >
-                          {languages.map((language, index: number) => (
-                            <option key={index} value={language.code}>
-                              {language.name}
-                            </option>
-                          ))}
-                        </select>
-                      </label>
-                    </div>
-                  </div>
-                  <div className="d-flex flex-column">
-                    <label htmlFor="">
-                      {t('deleteUser')}
-                      <br />
-                      {`(API not supported yet)`}
-                    </label>
-                    <Button className="btn btn-danger" data-testid="deleteBtn">
-                      {t('deleteUser')}
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div> */}
-          </div>
-
-          <div
-            className={`right d-flex h-50 flex-column mx-auto px-3 ${styles.maxWidth50}`}
-          >
-            <div className={`contact bg-white border ${styles.allRound}`}>
-              <div
-                className={`d-flex border-bottom bg-primary justify-content-between py-3 px-4 ${styles.topRadius}`}
-              >
-                <h3 className='text-white'>{t('contactInfoHeading')}</h3>
-              </div>
-              <div className="d-flex flex-row flex-wrap py-3 px-3">
-                <div className='d-flex w-100 '>
-                  <div className='w-100'>
-                    <p className="my-0 mx-2">{t('phone')}</p>
-                    <input
-                      value={formState.phoneNumber}
-                      className={`rounded border-0 p-2 m-2 w-100 ${styles.inputColor}`}
-                      type="number"
-                      name="phoneNumber"
-                      onChange={handleChange}
-                      placeholder={t('phone')}
-                    />
-                  </div>
-                  <div className="w-100 p-2 mx-2">
-                    <p className="my-0">{tCommon('email')}</p>
-                    <input
-                      value={formState.email}
-                      className={`w-100 rounded border-0 p-2 ${styles.inputColor}`}
-                      type="email"
-                      name="email"
-                      onChange={handleChange}
-                      required
-                      placeholder={tCommon('email')}
-                    />
-                  </div>
-                </div>
-
-                <div className="p-2 w-100 ">
-                  <p className="my-0">{tCommon('address')}</p>
+                </Col>
+                <Col md={6}>
+                  <label htmlFor="lastName" className="form-label">
+                    {tCommon('lastName')}
+                  </label>
                   <input
-                    value={formState.address}
-                    className={`w-100 rounded border-0 p-2 ${styles.inputColor}`}
+                    id="lastName"
+                    value={formState.lastName}
+                    className={`form-control ${styles.inputColor}`}
+                    type="text"
+                    name="lastName"
+                    onChange={handleChange}
+                    required
+                    placeholder={tCommon('lastName')}
+                  />
+                </Col>
+                <Col md={6}>
+                  <label htmlFor="gender" className="form-label">
+                    {t('gender')}
+                  </label>
+                  <DynamicDropDown
+                    formState={formState}
+                    setFormState={setFormState}
+                    fieldOptions={genderEnum}
+                    fieldName="gender"
+                  />
+                </Col>
+                <Col md={6}>
+                  <label htmlFor="birthDate" className="form-label">
+                    {t('birthDate')}
+                  </label>
+                  <DatePicker
+                    className={`${styles.datebox} w-100`}
+                    value={dayjs(formState.birthDate)}
+                    onChange={handleDateChange}
+                    data-testid="birthDate"
+                    slotProps={{
+                      textField: {
+                        inputProps: {
+                          'data-testid': 'birthDate',
+                        },
+                      },
+                    }}
+                  />
+                </Col>
+                <Col md={6}>
+                  <label htmlFor="grade" className="form-label">
+                    {t('educationGrade')}
+                  </label>
+                  <DynamicDropDown
+                    formState={formState}
+                    setFormState={setFormState}
+                    fieldOptions={educationGradeEnum}
+                    fieldName="grade"
+                  />
+                </Col>
+                <Col md={6}>
+                  <label htmlFor="empStatus" className="form-label">
+                    {t('employmentStatus')}
+                  </label>
+                  <DynamicDropDown
+                    formState={formState}
+                    setFormState={setFormState}
+                    fieldOptions={employmentStatusEnum}
+                    fieldName="empStatus"
+                  />
+                </Col>
+                <Col md={6}>
+                  <label htmlFor="maritalStatus" className="form-label">
+                    {t('maritalStatus')}
+                  </label>
+                  <DynamicDropDown
+                    formState={formState}
+                    setFormState={setFormState}
+                    fieldOptions={maritalStatusEnum}
+                    fieldName="maritalStatus"
+                  />
+                </Col>
+              </Row>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={6}>
+          <Card className={`${styles.allRound}`}>
+            <Card.Header
+              className={`bg-success text-white py-3 px-4 ${styles.topRadius}`}
+            >
+              <h3 className="m-0">{t('contactInfoHeading')}</h3>
+            </Card.Header>
+            <Card.Body className="py-3 px-3">
+              <Row className="g-3">
+                <Col md={12}>
+                  <label htmlFor="email" className="form-label">
+                    {tCommon('email')}
+                  </label>
+                  <input
+                    id="email"
+                    value={formState.email}
+                    className={`form-control ${styles.inputColor}`}
                     type="email"
+                    name="email"
+                    onChange={handleChange}
+                    required
+                    placeholder={tCommon('email')}
+                  />
+                </Col>
+                <Col md={12}>
+                  <label htmlFor="phoneNumber" className="form-label">
+                    {t('phone')}
+                  </label>
+                  <input
+                    id="phoneNumber"
+                    value={formState.phoneNumber}
+                    className={`form-control ${styles.inputColor}`}
+                    type="tel"
+                    name="phoneNumber"
+                    onChange={handleChange}
+                    placeholder={t('phone')}
+                  />
+                </Col>
+                <Col md={12}>
+                  <label htmlFor="address" className="form-label">
+                    {tCommon('address')}
+                  </label>
+                  <input
+                    id="address"
+                    value={formState.address}
+                    className={`form-control ${styles.inputColor}`}
+                    type="text"
                     name="address"
                     onChange={handleChange}
-                  // placeholder={tCommon('address')}
                   />
-                </div>
-                <div className="w-100 d-flex">
-                  <div className="w-100 p-2">
-                    <p className="my-0">{t('countryCode')}</p>
-                    <input
-                      value={formState.country}
-                      className={`w-100 rounded border-0 p-2 ${styles.inputColor}`}
-                      type="text"
-                      name="country"
-                      onChange={handleChange}
-                      placeholder={t('countryCode')}
-                    />
-                  </div>
-                  <div className="w-100 p-2">
-                    <p className="my-0">{t('city')}</p>
-                    <input
-                      value={formState.city}
-                      className={`w-100 rounded border-0 p-2 ${styles.inputColor}`}
-                      type="text"
-                      name="city"
-                      onChange={handleChange}
-                      placeholder={t('city')}
-                    />
-                  </div>
-                  <div className="w-100 p-2">
-                    <p className="my-0">{t('state')}</p>
-                    <input
-                      value={formState.state}
-                      className={`w-100 rounded border-0 p-2 ${styles.inputColor}`}
-                      type="text"
-                      name="state"
-                      onChange={handleChange}
-                    // placeholder={t('state')}
-                    />
-                  </div>
-                </div>
-              </div>
-              {isUpdated && <div className="d-flex justify-content-end my-2"
-                style={{ paddingRight: '20px' }}
-              >
-                <Button
-                  type="button"
-                  className={styles.whiteregbtn}
-                  value="savechanges"
-                  onClick={resetChanges}
-                >
-                  Reset Changes
-                </Button>
-                <Button
-                  type="button"
-                  className={styles.greenregbtn}
-                  value="savechanges"
-                  onClick={loginLink}
-                >
-                  {tCommon('saveChanges')}
-                </Button>
-              </div>}
-            </div>
-            {/* Actions */}
-            {/* <div className={`personal mt-4 bg-white border ${styles.allRound}`}>
+                </Col>
+                <Col md={12}>
+                  <label htmlFor="country" className="form-label">
+                    {t('countryCode')}
+                  </label>
+                  <input
+                    id="country"
+                    value={formState.country}
+                    className={`form-control ${styles.inputColor}`}
+                    type="text"
+                    name="country"
+                    onChange={handleChange}
+                    placeholder={t('countryCode')}
+                  />
+                </Col>
+                <Col md={6}>
+                  <label htmlFor="city" className="form-label">
+                    {t('city')}
+                  </label>
+                  <input
+                    id="city"
+                    value={formState.city}
+                    className={`form-control ${styles.inputColor}`}
+                    type="text"
+                    name="city"
+                    onChange={handleChange}
+                    placeholder={t('city')}
+                  />
+                </Col>
+                <Col md={6}>
+                  <label htmlFor="state" className="form-label">
+                    {t('state')}
+                  </label>
+                  <input
+                    id="state"
+                    value={formState.state}
+                    className={`form-control ${styles.inputColor}`}
+                    type="text"
+                    name="state"
+                    onChange={handleChange}
+                  />
+                </Col>
+              </Row>
+            </Card.Body>
+          </Card>
+        </Col>
+        {isUpdated && (
+          <Col md={12}>
+            <Card.Footer className="bg-white border-top-0 d-flex justify-content-end gap-2 py-3 px-2">
+              <Button variant="outline-secondary" onClick={resetChanges}>
+                Reset Changes
+              </Button>
+              <Button variant="success" onClick={loginLink}>
+                {tCommon('saveChanges')}
+              </Button>
+            </Card.Footer>
+          </Col>
+        )}
+      </Row>
+
+      {/* Actions */}
+      {/* <div className={`personal mt-4 bg-white border ${styles.allRound}`}>
               <div
                 className={`d-flex flex-column border-bottom py-3 px-4 ${styles.topRadius}`}
               >
@@ -706,7 +580,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 </div>
               </div>
             </div> */}
-            {/* <div className="buttons mt-4">
+      {/* <div className="buttons mt-4">
               <Button
                 type="button"
                 className={styles.greenregbtn}
@@ -716,10 +590,39 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 {tCommon('saveChanges')}
               </Button>
             </div> */}
-
-          </div>
-        </div>
-      </div>
+      <Card className={`${styles.contact} ${styles.allRound} mt-3`}>
+        <Card.Header
+          className={`bg-primary d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius}`}
+        >
+          <h3 className="text-white m-0">{t('eventsAttended')}</h3>
+          <Button
+            style={{ borderRadius: '20px' }}
+            size="sm"
+            variant="light"
+            data-testid="viewAllEvents"
+            onClick={handleEventsAttendedModal}
+          >
+            {t('viewAll')}
+          </Button>
+        </Card.Header>
+        <Card.Body
+          className={`${styles.cardBody} ${styles.scrollableCardBody}`}
+        >
+          {loadingEvents ? (
+            [...Array(8)].map((_, index) => <CardItemLoading key={index} />)
+          ) : userData?.user?.eventsAttended.length === 0 ? (
+            <div className={styles.emptyContainer}>
+              <h6>{t('noEventsAttended')}</h6>
+            </div>
+          ) : (
+            userData?.user?.eventsAttended
+              .slice(0, 5)
+              .map((event: InterfaceEvent, index: number) => (
+                <EventsAttendedByMember eventsId={event._id} key={index} />
+              ))
+          )}
+        </Card.Body>
+      </Card>
     </LocalizationProvider>
   );
 };

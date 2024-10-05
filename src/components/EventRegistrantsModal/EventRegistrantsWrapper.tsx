@@ -9,7 +9,10 @@ type PropType = {
   orgId: string;
 };
 
-export const EventRegistrantsWrapper: React.FC<PropType> = ({ eventId, orgId }) => {
+export const EventRegistrantsWrapper: React.FC<PropType> = ({
+  eventId,
+  orgId,
+}) => {
   const [showModal, setShowModal] = useState(false);
 
   return (

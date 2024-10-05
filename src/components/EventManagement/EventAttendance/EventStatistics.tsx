@@ -37,7 +37,7 @@ export const AttendanceStatisticsModal: React.FC<
   const filteredRecurringEvents = useMemo(
     () =>
       recurringData?.getRecurringEvents.filter(
-        (event: InterfaceEvent) => new Date(event.startDate) >= currentDate,
+        (event: InterfaceEvent) => currentDate,
       ) || [],
     [recurringData, currentDate],
   );
@@ -246,7 +246,7 @@ export const AttendanceStatisticsModal: React.FC<
     if (eventId && orgId && eventData?.event?.baseRecurringEvent?._id) {
       loadRecurringEvents({
         variables: {
-          baseRecurringEventId: eventData.event.baseRecurringEvent._id,
+          baseRecurringEventId: eventData?.event?.baseRecurringEvent?._id,
         },
       });
     }
@@ -257,6 +257,7 @@ export const AttendanceStatisticsModal: React.FC<
       show={show}
       onHide={handleClose}
       className="attendance-modal"
+      centered
       size={isEventRecurring ? 'xl' : undefined}
     >
       <Modal.Header closeButton className="bg-success">
@@ -319,7 +320,7 @@ export const AttendanceStatisticsModal: React.FC<
                   </Button>
                 </OverlayTrigger>
                 <Button
-                  className="p-0 ms-2"
+                  className="p-1 ms-2"
                   onClick={() => handleDateChange(new Date())}
                 >
                   Today

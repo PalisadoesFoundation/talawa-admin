@@ -309,7 +309,6 @@ function EventAttendance(): JSX.Element {
                       },
                     },
                   }}
-                  arrow
                   title={member.eventsAttended?.map((event: InterfaceEvent) => (
                     <AttendedEventList key={event._id} eventId={event._id} />
                   ))}
