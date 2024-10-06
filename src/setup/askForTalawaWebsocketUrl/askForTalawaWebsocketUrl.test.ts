@@ -10,7 +10,7 @@ describe('askForTalawaWebsocketUrl', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-
+  
   test('should return the provided endpoint when user enters it', async () => {
     const mockPrompt = jest.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
       endpoint: 'ws://example.com/graphql/',
