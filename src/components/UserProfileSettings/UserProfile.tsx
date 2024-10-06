@@ -86,7 +86,7 @@ const UserProfile: React.FC<InterfaceUserProfile> = ({
                   : email}
               </span>
               <ReactTooltip id="email" />
-              <span className="d-flex">
+              <span className="d-flex mt-2">
                 <CalendarMonthOutlinedIcon />
                 <span className="d-flex align-end">
                   {tCommon('joined')} {joinedDate(createdAt)}
