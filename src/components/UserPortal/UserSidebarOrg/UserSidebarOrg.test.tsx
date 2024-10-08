@@ -462,7 +462,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await wait();
@@ -483,8 +483,8 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
 
     // Check if the modal is closed (no longer in the document)
     await wait();
-    expect(screen.queryByText('Leaving organization ?')).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('Leaving organization ?'),
+    ).not.toBeInTheDocument();
   });
-
-
 });
