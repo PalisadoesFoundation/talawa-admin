@@ -34,8 +34,6 @@ const translations = {
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
 };
 
-console.log(translations.errorOccured);
-
 const renderLeaveConfirmModal = (
   onHide: () => void,
   mocks: any,
@@ -82,7 +80,6 @@ describe('LeaveConfirmModal', () => {
     renderLeaveConfirmModal(onHide, mocks);
 
     const confirmButton = screen.getByText(translations.confirm);
-    console.log(confirmButton);
     fireEvent.click(confirmButton);
 
     await waitFor(() => {

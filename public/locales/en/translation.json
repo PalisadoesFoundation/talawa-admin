@@ -214,7 +214,7 @@
     "joinNow": "Join Now",
     "visit": "Visit",
     "leave": "Leave",
-    "withdraw": "Widthdraw",
+    "withdraw": "Withdraw",
     "removeUserFrom": "Remove User from {{org}}",
     "removeConfirmation": "Are you sure you want to remove '{{name}}' from organization '{{org}}'?",
     "searchByName": "searchByName",

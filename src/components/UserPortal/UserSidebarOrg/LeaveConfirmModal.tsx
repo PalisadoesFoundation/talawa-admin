@@ -52,7 +52,6 @@ const LeaveConfirmModal: FC<InterfaceLeaveConfirmModalProps> = ({
           organizationId: orgId,
         },
       });
-      console.log(data);
       onHide();
       toast.success(t('orgLeft'));
       navigate('/user/organizations');
