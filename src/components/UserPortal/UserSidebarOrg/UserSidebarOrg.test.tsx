@@ -446,4 +446,45 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
       </MockedProvider>,
     );
   });
+
+  test('LeaveConfirmModal should open and close correctly', async () => {
+    setItem('UserImage', '');
+    setItem('SuperAdmin', true);
+    setItem('FirstName', 'John');
+    setItem('LastName', 'Doe');
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserSidebarOrg {...props} hideDrawer={null} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>
+    );
+
+    await wait();
+
+    // Ensure the Leave button is rendered
+    const leaveButton = screen.getByTestId('leaveOrgButton');
+    expect(leaveButton).toBeInTheDocument();
+
+    // Simulate clicking the Leave button
+    userEvent.click(leaveButton);
+
+    // Check if the modal appears
+    expect(screen.getByText('Leaving organization ?')).toBeInTheDocument();
+
+    // Find and click the close button
+    const closeButton = screen.getByText('Cancel');
+    userEvent.click(closeButton);
+
+    // Check if the modal is closed (no longer in the document)
+    await wait();
+    expect(screen.queryByText('Leaving organization ?')).not.toBeInTheDocument();
+  });
+
+
 });
