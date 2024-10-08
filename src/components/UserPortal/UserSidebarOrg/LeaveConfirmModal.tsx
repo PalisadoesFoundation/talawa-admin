@@ -6,7 +6,7 @@ import { LEAVE_ORGANIZATION } from 'GraphQl/Mutations/OrganizationMutations';
 import { USER_ORGANIZATION_CONNECTION } from 'GraphQl/Queries/OrganizationQueries';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
-import { redirect } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 interface InterfaceLeaveConfirmModalProps {
@@ -37,6 +37,7 @@ const LeaveConfirmModal: FC<InterfaceLeaveConfirmModalProps> = ({
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgLeave',
   });
+  const navigate = useNavigate();
 
   const [leaveOrganization] = useMutation(LEAVE_ORGANIZATION, {
     refetchQueries: [
@@ -46,14 +47,15 @@ const LeaveConfirmModal: FC<InterfaceLeaveConfirmModalProps> = ({
 
   async function leaveOrg(): Promise<void> {
     try {
-      await leaveOrganization({
+      const data = await leaveOrganization({
         variables: {
           organizationId: orgId,
         },
       });
+      console.log(data);
       onHide();
       toast.success(t('orgLeft'));
-      redirect(`/user/organizations`);
+      navigate('/user/organizations');
     } catch (error: unknown) {
       /* istanbul ignore next */
       if (error instanceof Error) {

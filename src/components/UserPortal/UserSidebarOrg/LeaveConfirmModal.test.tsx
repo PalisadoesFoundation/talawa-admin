@@ -1,9 +1,17 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  RenderResult,
+} from '@testing-library/react';
 import LeaveConfirmModal from './LeaveConfirmModal';
 import { MockedProvider } from '@apollo/client/testing';
 import { LEAVE_ORGANIZATION } from 'GraphQl/Mutations/OrganizationMutations';
 import { toast } from 'react-toastify';
+import i18n from 'utils/i18nForTest';
+import { I18nextProvider } from 'react-i18next';
 
 jest.mock('react-toastify', () => ({
   toast: {
@@ -12,15 +20,38 @@ jest.mock('react-toastify', () => ({
   },
 }));
 
+const mockNavigate = jest.fn();
+
 jest.mock('react-router-dom', () => ({
-  redirect: jest.fn(),
+  useNavigate: () => mockNavigate,
 }));
 
-jest.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key: string) => key,
-  }),
-}));
+const translations = {
+  ...JSON.parse(
+    JSON.stringify(i18n.getDataByLanguage('en')?.translation.orgLeave ?? {}),
+  ),
+  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
+  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
+};
+
+console.log(translations.errorOccured);
+
+const renderLeaveConfirmModal = (
+  onHide: () => void,
+  mocks: any,
+): RenderResult => {
+  return render(
+    <MockedProvider mocks={mocks} addTypename={false}>
+      <I18nextProvider i18n={i18n}>
+        <LeaveConfirmModal
+          show={true}
+          onHide={onHide}
+          orgId="6437904485008f171cf29924"
+        />
+      </I18nextProvider>
+    </MockedProvider>,
+  );
+};
 
 const mocks = [
   {
@@ -40,36 +71,24 @@ describe('LeaveConfirmModal', () => {
   const onHide = jest.fn();
 
   it('calls onHide when cancel button is clicked', () => {
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <LeaveConfirmModal
-          show={true}
-          onHide={onHide}
-          orgId="6437904485008f171cf29924"
-        />
-      </MockedProvider>,
-    );
+    renderLeaveConfirmModal(onHide, mocks);
 
-    fireEvent.click(screen.getByText('cancel'));
+    const cancelButton = screen.getByText(translations.cancel);
+    fireEvent.click(cancelButton);
     expect(onHide).toHaveBeenCalled();
   });
 
   it('calls leaveOrganization mutation and handles success', async () => {
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <LeaveConfirmModal
-          show={true}
-          onHide={onHide}
-          orgId="6437904485008f171cf29924"
-        />
-      </MockedProvider>,
-    );
+    renderLeaveConfirmModal(onHide, mocks);
 
-    fireEvent.click(screen.getByText('confirm'));
+    const confirmButton = screen.getByText(translations.confirm);
+    console.log(confirmButton);
+    fireEvent.click(confirmButton);
 
     await waitFor(() => {
       expect(toast.success);
       expect(onHide).toHaveBeenCalled();
+      // expect(mockNavigate).toHaveBeenCalledWith('/user/organizations');
     });
   });
 
@@ -80,24 +99,16 @@ describe('LeaveConfirmModal', () => {
           query: LEAVE_ORGANIZATION,
           variables: { organizationId: '6437904485008f171cf29924' },
         },
-        error: new Error('An error occurred. Please try again later.'),
+        error: new Error(translations.errorOccured),
       },
     ];
 
-    render(
-      <MockedProvider mocks={errorMocks} addTypename={false}>
-        <LeaveConfirmModal
-          show={true}
-          onHide={onHide}
-          orgId="6437904485008f171cf29924"
-        />
-      </MockedProvider>,
-    );
+    renderLeaveConfirmModal(onHide, errorMocks);
 
-    fireEvent.click(screen.getByText('confirm'));
+    fireEvent.click(screen.getByText(translations.confirm));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('errorOccured');
+      expect(toast.error).toHaveBeenCalledWith(translations.errorOccured);
       expect(onHide).toHaveBeenCalled();
     });
   });
