@@ -216,6 +216,7 @@
     "withdraw": "वापस लें",
     "removeUserFrom": "{{org}} से उपयोगकर्ता को हटाएं",
     "removeConfirmation": "क्या आप वाकई '{{name}}' को संगठन '{{org}}' से हटाना चाहते हैं?",
+    "leave": "छोड़ो",
     "searchByName": "नाम से खोजें",
     "users": "उपयोगकर्ता",
     "name": "नाम",
@@ -407,6 +408,7 @@
     "assignmentDate": "असाइनमेंट दिनांक",
     "active": "सक्रिय",
     "clearFilters": "फ़िल्टर साफ़ करें",
+    "completed": "पुरा होना।",
     "completionDate": "पूरा करने की तिथि",
     "createActionItem": "कार्रवाई आइटम बनाएं",
     "deleteActionItem": "क्रिया आइटम हटाएँ",
@@ -757,16 +759,15 @@
     "amount": "मात्रा"
   },
   "orgSettings": {
-    "title": "सेटिंग्स",
+    "title": "समायोजन",
     "general": "सामान्य",
-    "actionItemCategories": "कार्य आइटम श्रेणियाँ",
-    "updateOrganization": "संगठन अपडेट करें",
+    "actionItemCategories": "कार्रवाई आइटम श्रेणियाँ",
+    "updateOrganization": "संगठन अद्यतन करें",
     "seeRequest": "अनुरोध देखें",
     "noData": "कोई डेटा नहीं",
-    "otherSettings": "अन्य सेटिंग्स",
+    "otherSettings": "अन्य सेटिंग",
     "changeLanguage": "भाषा बदलें",
-    "manageCustomFields": "कस्टम फ़ील्ड प्रबंधित करें",
-    "agendaItemCategories": "एजेंडा आइटम श्रेणियाँ"
+    "manageCustomFields": "कस्टम फ़ील्ड प्रबंधित करें"
   },
   "deleteOrg": {
     "deleteOrganization": "संगठन हटाएँ",
@@ -973,6 +974,7 @@
     "talawaUserPortal": "तलावा उपयोगकर्ता पोर्टल",
     "my organizations": "मेरे संगठन",
     "communityProfile": "सामुदायिक प्रोफ़ाइल",
+    "leave": "संगठन छोड़ें",
     "users": "उपयोगकर्ता",
     "requests": "अनुरोध",
     "logout": "लॉग आउट",
@@ -1188,7 +1190,7 @@
     "disableButton": "अक्षम करना",
     "updateActionItemCategory": "अद्यतन",
     "actionItemCategoryName": "नाम",
-    "categoryDetails": "श्रेणी विवरण",
+    "actionItemCategoryDetails": "कार्य आइटम श्रेणी विवरण",
     "enterName": "नाम दर्ज करें",
     "successfulCreation": "कार्रवाई आइटम श्रेणी सफलतापूर्वक बनाई गई",
     "successfulUpdation": "कार्रवाई आइटम श्रेणी सफलतापूर्वक अपडेट की गई",
@@ -1201,7 +1203,8 @@
     "deleteCategory": "श्रेणी हटाएं",
     "deleteCategoryMsg": "क्या आप वाकई इस कार्रवाई आइटम श्रेणी को हटाना चाहते हैं?",
     "createButton": "बटन बनाएं",
-    "editButton": "संपादित बटन"
+    "editButton": "संपादित बटन",
+    "categoryDetails": "श्रेणी विवरण"
   },
   "organizationVenues": {
     "title": "स्थानों",
@@ -1315,5 +1318,12 @@
   },
   "userPledges": {
     "title": "मेरी प्रतिज्ञाएँ"
+  },
+  "orgLeave": {
+    "confirmation": "क्या आप वाकई संगठन छोड़ना चाहते हैं?",
+    "heading": "संगठन छोड़ रहे हैं?",
+    "description": "क्या आप वाकई संगठन छोड़ना चाहते हैं? इस एक्शन को वापस नहीं किया जा सकता। यदि संगठन को अनुमोदन की आवश्यकता है, तो आप इसके बिना पुनः शामिल नहीं हो पाएंगे। कोई भी संबंधित डेटा या अनुमतियाँ भी खो सकती हैं।",
+    "errorOccured": "एक त्रुटि पाई गई। कृपया बाद में पुन: प्रयास करें।",
+    "orgLeft": "आपने संगठन छोड़ दिया है."
   }
 }

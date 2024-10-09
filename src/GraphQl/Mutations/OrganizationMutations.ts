@@ -283,6 +283,14 @@ export const JOIN_PUBLIC_ORGANIZATION = gql`
   }
 `;
 
+export const LEAVE_ORGANIZATION = gql`
+  mutation ($organizationId: ID!) {
+    leaveOrganization(organizationId: $organizationId) {
+      _id
+    }
+  }
+`;
+
 export const CANCEL_MEMBERSHIP_REQUEST = gql`
   mutation ($membershipRequestId: ID!) {
     cancelMembershipRequest(membershipRequestId: $membershipRequestId) {
