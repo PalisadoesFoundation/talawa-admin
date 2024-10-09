@@ -36,9 +36,15 @@ def has_eslint_disable(file_path):
     Returns:
         bool: True if eslint-disable statement is found, False otherwise.
     """
-    with open(file_path, 'r') as file:
-        content = file.read()
-        return re.search(r'//\s*eslint-disable', content)
+    eslint_disable_pattern = re.compile(r'//\s*eslint-disable(?:-next-line|-line)?', re.IGNORECASE)
+    
+    try:
+        with open(file_path, 'r', encoding='utf-8') as file:
+            content = file.read()
+            return bool(eslint_disable_pattern.search(content))
+    except Exception as e:
+        print(f"Error reading file {file_path}: {e}")
+        return False
 
 def check_eslint(directory):
     """
@@ -72,7 +78,6 @@ def arg_parser_resolver():
 
     Returns:
         result: Parsed argument object
-
     """
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -98,7 +103,6 @@ def main():
     Raises:
         SystemExit: If an error occurs during execution.
     """
-
     args = arg_parser_resolver()
 
     if not os.path.exists(args.directory):
