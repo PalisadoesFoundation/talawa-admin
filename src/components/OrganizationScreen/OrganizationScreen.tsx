@@ -10,6 +10,7 @@ import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from './OrganizationScreen.module.css';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import { Button } from 'react-bootstrap';
+import useLocalStorage from 'utils/useLocalstorage';
 import type { InterfaceMapType } from 'utils/interfaces';
 
 /**
@@ -27,6 +28,20 @@ const OrganizationScreen = (): JSX.Element => {
   const location = useLocation();
   const titleKey: string | undefined = map[location.pathname.split('/')[1]];
   const { t } = useTranslation('translation', { keyPrefix: titleKey });
+
+  const { getItem } = useLocalStorage();
+  const isSuperAdmin = getItem('SuperAdmin');
+
+  const title = t(
+    isSuperAdmin &&
+      (titleKey == 'memberDetail' || titleKey == 'organizationPeople')
+      ? 'title_superadmin'
+      : 'title',
+  );
+
+  useEffect(() => {
+    document.title = title;
+  }, [title]);
 
   // State to manage visibility of the side drawer
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
@@ -50,7 +65,7 @@ const OrganizationScreen = (): JSX.Element => {
   // Update targets whenever the organization ID changes
   useEffect(() => {
     dispatch(updateTargets(orgId));
-  }, [orgId]); // Added orgId to the dependency array
+  }, [orgId]);
 
   // Handle screen resizing to show/hide the side drawer
   const handleResize = (): void => {
@@ -62,6 +77,7 @@ const OrganizationScreen = (): JSX.Element => {
   // Set up event listener for window resize
   useEffect(() => {
     handleResize();
+
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
@@ -111,7 +127,7 @@ const OrganizationScreen = (): JSX.Element => {
       >
         <div className="d-flex justify-content-between align-items-center">
           <div style={{ flex: 1 }}>
-            <h1>{t('title')}</h1>
+            <h1 data-testid="title">{title}</h1>
           </div>
           <ProfileDropdown />
         </div>

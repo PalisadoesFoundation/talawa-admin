@@ -172,6 +172,17 @@
     "manage": "Administrar",
     "sampleOrganization": "Organización de muestra"
   },
+  "orgPeopleOrganizationsCard": {
+    "manage": "Gestionar",
+    "notMember": "El usuario no es miembro",
+    "unblock": "Desbloquear",
+    "block": "Bloquear",
+    "blockedSuccessfully": "Usuario bloqueado con éxito",
+    "unBlockedSuccessfully": "Usuario desbloqueado exitosamente",
+    "blockedUser": "Usuario bloqueado",
+    "roleUpdated": "Rol actualizado.",
+    "memberRemoved": "El miembro ha sido eliminado"
+  },
   "paginationList": {
     "rowsPerPage": "filas por página",
     "all": "Todos"
@@ -269,7 +280,8 @@
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
   },
   "organizationPeople": {
-    "title": "Miembros Talawa",
+    "title": "Miembros",
+    "title_superadmin": "Usuarios",
     "filterByName": "Filtrar por nombre",
     "filterByLocation": "Filtrar por Ubicación",
     "filterByEvent": "Filtrar por Evento",
@@ -611,7 +623,6 @@
     "raisedAmount": "Monto recaudado",
     "pledgedAmount": "Monto comprometido"
   },
-
   "orgPost": {
     "title": "Publicaciones de Talawa",
     "searchPost": "Buscar Publicación",
@@ -864,6 +875,20 @@
     "installMsg": "Mensaje de instalación"
   },
   "memberDetail": {
+    "overview": "Resumen",
+    "organizations": "Organizaciones",
+    "events": "Eventos",
+    "tags": "Etiquetas",
+    "title_superadmin": "Detalles del usuario",
+    "title": "Detalles del miembro"
+  },
+  "memberOrganization": {
+    "sort": "Ordenar",
+    "noOrgError": "Organizaciones no encontradas, por favor crea una organización a través del panel de control",
+    "noOrgErrorTitle": "Organizaciones no encontradas",
+    "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control"
+  },
+  "orgMemberDetail": {
     "title": "Detalles del usuario",
     "addAdmin": "Agregar administrador",
     "alreadyIsAdmin": "El Miembro ya es Administrador",

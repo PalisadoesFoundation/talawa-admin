@@ -172,6 +172,17 @@
     "admins": "Administrateurs",
     "members": "Membres"
   },
+  "orgPeopleOrganizationsCard": {
+    "manage": "Gérer",
+    "notMember": "L'utilisateur n'est pas un membre",
+    "unblock": "Débloquer",
+    "block": "Bloc",
+    "blockedSuccessfully": "Utilisateur bloqué avec succès",
+    "unBlockedSuccessfully": "Utilisateur débloqué avec succès",
+    "blockedUser": "Utilisateur bloqué",
+    "roleUpdated": "Rôle mis à jour.",
+    "memberRemoved": "Le membre est supprimé"
+  },
   "paginationList": {
     "rowsPerPage": "lignes par page",
     "all": "Tous"
@@ -269,7 +280,8 @@
     "talawaApiUnavailable": "API Talawa indisponible"
   },
   "organizationPeople": {
-    "title": "Membres Talawa",
+    "title": "Membres",
+    "title_superadmin": "Utilisateurs",
     "filterByName": "Filtrer par nom",
     "filterByLocation": "Filtrer par emplacement",
     "filterByEvent": "Filtrer par événement",
@@ -863,6 +875,14 @@
     "installMsg": "Cette fonctionnalité est désormais activée dans votre organisation"
   },
   "memberDetail": {
+    "overview": "Aperçu",
+    "organizations": "Organisations",
+    "events": "Événements",
+    "tags": "Balises",
+    "title_superadmin": "Détails de l'utilisateur",
+    "title": "Détails du membre"
+  },
+  "orgMemberDetail": {
     "title": "Détails de l'utilisateur",
     "addAdmin": "Ajouter un administrateur",
     "alreadyIsAdmin": "Le membre est déjà un administrateur",
@@ -904,9 +924,11 @@
     "joined": "Rejoint",
     "talawaApiUnavailable": "API Talawa non disponible"
   },
-  "people": {
-    "title": "Personnes",
-    "searchUsers": "Rechercher des utilisateurs"
+  "memberOrganization": {
+    "sort": "Trier",
+    "noOrgError": "Organisations non trouvées, veuillez créer une organisation via le tableau de bord",
+    "noOrgErrorTitle": "Organisations non trouvées",
+    "noOrgErrorDescription": "Veuillez créer une organisation via le tableau de bord"
   },
   "userLogin": {
     "login": "Se connecter",
@@ -921,6 +943,10 @@
     "enterPassword": "Entrer le mot de passe",
     "register": "Inscription",
     "talawaApiUnavailable": "API Talawa non disponible"
+  },
+  "people": {
+    "title": "Personnes",
+    "searchUsers": "Rechercher des utilisateurs"
   },
   "userRegister": {
     "enterFirstName": "Entrez votre prénom",
