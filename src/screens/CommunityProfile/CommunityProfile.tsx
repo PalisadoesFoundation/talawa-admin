@@ -20,6 +20,7 @@ import {
 import convertToBase64 from 'utils/convertToBase64';
 import styles from './CommunityProfile.module.css';
 import { errorHandler } from 'utils/errorHandler';
+import UpdateSession from '../../components/UpdateSession/UpdateSession';
 
 /**
  * `CommunityProfile` component allows users to view and update their community profile details.
@@ -208,212 +209,218 @@ const CommunityProfile = (): JSX.Element => {
   }
 
   return (
-    <Card border="0" className={`${styles.card} "rounded-4 my-4 shadow-sm"`}>
-      <div className={styles.cardHeader}>
-        <div className={styles.cardTitle}>{t('editProfile')}</div>
-      </div>
-      <Card.Body>
-        <div className="mb-3">{t('communityProfileInfo')}</div>
-        <Form onSubmit={handleOnSubmit}>
-          <Form.Group>
-            <Form.Label className={styles.formLabel}>
-              {t('communityName')}
-            </Form.Label>
-            <Form.Control
-              type="text"
-              id="communityName"
-              name="name"
-              value={profileVariable.name}
-              onChange={handleOnChange}
-              className="mb-3"
-              placeholder={t('communityName')}
-              autoComplete="off"
-              required
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label className={styles.formLabel}>
-              {t('wesiteLink')}
-            </Form.Label>
-            <Form.Control
-              type="url"
-              id="websiteLink"
-              name="websiteLink"
-              value={profileVariable.websiteLink}
-              onChange={handleOnChange}
-              className="mb-3"
-              placeholder={t('wesiteLink')}
-              autoComplete="off"
-              required
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label className={styles.formLabel}>{t('logo')}</Form.Label>
-            <Form.Control
-              accept="image/*"
-              multiple={false}
-              type="file"
-              id="logo"
-              name="logo"
-              data-testid="fileInput"
-              onChange={async (
-                e: React.ChangeEvent<HTMLInputElement>,
-              ): Promise<void> => {
-                setProfileVariable((prevInput) => ({
-                  ...prevInput,
-                  logo: '',
-                }));
-                const target = e.target as HTMLInputElement;
-                const file = target.files && target.files[0];
-                const base64file = file && (await convertToBase64(file));
-                setProfileVariable({
-                  ...profileVariable,
-                  logoUrl: base64file ?? '',
-                });
-              }}
-              className="mb-3"
-              autoComplete="off"
-              required
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label className={styles.formLabel}>{t('social')}</Form.Label>
-            {/* Social media inputs */}
-            <div className="mb-3 d-flex align-items-center gap-3">
-              <img src={FacebookLogo} alt="Facebook Logo" />
+    <>
+      <Card border="0" className={`${styles.card} "rounded-4 my-4 shadow-sm"`}>
+        <div className={styles.cardHeader}>
+          <div className={styles.cardTitle}>{t('editProfile')}</div>
+        </div>
+        <Card.Body>
+          <div className="mb-3">{t('communityProfileInfo')}</div>
+          <Form onSubmit={handleOnSubmit}>
+            <Form.Group>
+              <Form.Label className={styles.formLabel}>
+                {t('communityName')}
+              </Form.Label>
+              <Form.Control
+                type="text"
+                id="communityName"
+                name="name"
+                value={profileVariable.name}
+                onChange={handleOnChange}
+                className="mb-3"
+                placeholder={t('communityName')}
+                autoComplete="off"
+                required
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label className={styles.formLabel}>
+                {t('wesiteLink')}
+              </Form.Label>
               <Form.Control
                 type="url"
-                id="facebook"
-                name="facebook"
-                data-testid="facebook"
-                className={styles.socialInput}
-                value={profileVariable.facebook}
+                id="websiteLink"
+                name="websiteLink"
+                value={profileVariable.websiteLink}
                 onChange={handleOnChange}
-                placeholder={t('url')}
+                className="mb-3"
+                placeholder={t('wesiteLink')}
                 autoComplete="off"
+                required
               />
-            </div>
-            <div className="mb-3 d-flex align-items-center gap-3">
-              <img src={InstagramLogo} alt="Instagram Logo" />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label className={styles.formLabel}>{t('logo')}</Form.Label>
               <Form.Control
-                type="url"
-                id="instagram"
-                name="instagram"
-                data-testid="instagram"
-                className={styles.socialInput}
-                value={profileVariable.instagram}
-                onChange={handleOnChange}
-                placeholder={t('url')}
+                accept="image/*"
+                multiple={false}
+                type="file"
+                id="logo"
+                name="logo"
+                data-testid="fileInput"
+                onChange={async (
+                  e: React.ChangeEvent<HTMLInputElement>,
+                ): Promise<void> => {
+                  setProfileVariable((prevInput) => ({
+                    ...prevInput,
+                    logo: '',
+                  }));
+                  const target = e.target as HTMLInputElement;
+                  const file = target.files?.[0];
+                  const base64file = file && (await convertToBase64(file));
+                  setProfileVariable({
+                    ...profileVariable,
+                    logoUrl: base64file ?? '',
+                  });
+                }}
+                className="mb-3"
                 autoComplete="off"
+                required
               />
-            </div>
-            <div className="mb-3 d-flex align-items-center gap-3">
-              <img src={XLogo} alt="X Logo" />
-              <Form.Control
-                type="url"
-                id="X"
-                name="X"
-                data-testid="X"
-                className={styles.socialInput}
-                value={profileVariable.X}
-                onChange={handleOnChange}
-                placeholder={t('url')}
-                autoComplete="off"
-              />
-            </div>
-            <div className="mb-3 d-flex align-items-center gap-3">
-              <img src={LinkedInLogo} alt="LinkedIn Logo" />
-              <Form.Control
-                type="url"
-                id="linkedIn"
-                name="linkedIn"
-                data-testid="linkedIn"
-                className={styles.socialInput}
-                value={profileVariable.linkedIn}
-                onChange={handleOnChange}
-                placeholder={t('url')}
-                autoComplete="off"
-              />
-            </div>
-            <div className="mb-3 d-flex align-items-center gap-3">
-              <img src={GithubLogo} alt="Github Logo" />
-              <Form.Control
-                type="url"
-                id="github"
-                name="github"
-                data-testid="github"
-                className={styles.socialInput}
-                value={profileVariable.github}
-                onChange={handleOnChange}
-                placeholder={t('url')}
-                autoComplete="off"
-              />
-            </div>
-            <div className="mb-3 d-flex align-items-center gap-3">
-              <img src={YoutubeLogo} alt="Youtube Logo" />
-              <Form.Control
-                type="url"
-                id="youtube"
-                name="youtube"
-                data-testid="youtube"
-                className={styles.socialInput}
-                value={profileVariable.youtube}
-                onChange={handleOnChange}
-                placeholder={t('url')}
-                autoComplete="off"
-              />
-            </div>
-            <div className="mb-3 d-flex align-items-center gap-3">
-              <img src={RedditLogo} alt="Reddit Logo" />
-              <Form.Control
-                type="url"
-                id="reddit"
-                name="reddit"
-                data-testid="reddit"
-                className={styles.socialInput}
-                value={profileVariable.reddit}
-                onChange={handleOnChange}
-                placeholder={t('url')}
-                autoComplete="off"
-              />
-            </div>
-            <div className="mb-3 d-flex align-items-center gap-3">
-              <img src={SlackLogo} alt="Slack Logo" />
-              <Form.Control
-                type="url"
-                id="slack"
-                name="slack"
-                data-testid="slack"
-                className={styles.socialInput}
-                value={profileVariable.slack}
-                onChange={handleOnChange}
-                placeholder={t('url')}
-                autoComplete="off"
-              />
-            </div>
-          </Form.Group>
-          <div
-            className={`${styles.btn} d-flex justify-content-end gap-3 my-3`}
-          >
-            <Button
-              variant="outline-success"
-              onClick={resetData}
-              data-testid="resetChangesBtn"
-              disabled={isDisabled()}
+            </Form.Group>
+            <Form.Group>
+              <Form.Label className={styles.formLabel}>
+                {t('social')}
+              </Form.Label>
+              {/* Social media inputs */}
+              <div className="mb-3 d-flex align-items-center gap-3">
+                <img src={FacebookLogo} alt="Facebook Logo" />
+                <Form.Control
+                  type="url"
+                  id="facebook"
+                  name="facebook"
+                  data-testid="facebook"
+                  className={styles.socialInput}
+                  value={profileVariable.facebook}
+                  onChange={handleOnChange}
+                  placeholder={t('url')}
+                  autoComplete="off"
+                />
+              </div>
+              <div className="mb-3 d-flex align-items-center gap-3">
+                <img src={InstagramLogo} alt="Instagram Logo" />
+                <Form.Control
+                  type="url"
+                  id="instagram"
+                  name="instagram"
+                  data-testid="instagram"
+                  className={styles.socialInput}
+                  value={profileVariable.instagram}
+                  onChange={handleOnChange}
+                  placeholder={t('url')}
+                  autoComplete="off"
+                />
+              </div>
+              <div className="mb-3 d-flex align-items-center gap-3">
+                <img src={XLogo} alt="X Logo" />
+                <Form.Control
+                  type="url"
+                  id="X"
+                  name="X"
+                  data-testid="X"
+                  className={styles.socialInput}
+                  value={profileVariable.X}
+                  onChange={handleOnChange}
+                  placeholder={t('url')}
+                  autoComplete="off"
+                />
+              </div>
+              <div className="mb-3 d-flex align-items-center gap-3">
+                <img src={LinkedInLogo} alt="LinkedIn Logo" />
+                <Form.Control
+                  type="url"
+                  id="linkedIn"
+                  name="linkedIn"
+                  data-testid="linkedIn"
+                  className={styles.socialInput}
+                  value={profileVariable.linkedIn}
+                  onChange={handleOnChange}
+                  placeholder={t('url')}
+                  autoComplete="off"
+                />
+              </div>
+              <div className="mb-3 d-flex align-items-center gap-3">
+                <img src={GithubLogo} alt="Github Logo" />
+                <Form.Control
+                  type="url"
+                  id="github"
+                  name="github"
+                  data-testid="github"
+                  className={styles.socialInput}
+                  value={profileVariable.github}
+                  onChange={handleOnChange}
+                  placeholder={t('url')}
+                  autoComplete="off"
+                />
+              </div>
+              <div className="mb-3 d-flex align-items-center gap-3">
+                <img src={YoutubeLogo} alt="Youtube Logo" />
+                <Form.Control
+                  type="url"
+                  id="youtube"
+                  name="youtube"
+                  data-testid="youtube"
+                  className={styles.socialInput}
+                  value={profileVariable.youtube}
+                  onChange={handleOnChange}
+                  placeholder={t('url')}
+                  autoComplete="off"
+                />
+              </div>
+              <div className="mb-3 d-flex align-items-center gap-3">
+                <img src={RedditLogo} alt="Reddit Logo" />
+                <Form.Control
+                  type="url"
+                  id="reddit"
+                  name="reddit"
+                  data-testid="reddit"
+                  className={styles.socialInput}
+                  value={profileVariable.reddit}
+                  onChange={handleOnChange}
+                  placeholder={t('url')}
+                  autoComplete="off"
+                />
+              </div>
+              <div className="mb-3 d-flex align-items-center gap-3">
+                <img src={SlackLogo} alt="Slack Logo" />
+                <Form.Control
+                  type="url"
+                  id="slack"
+                  name="slack"
+                  data-testid="slack"
+                  className={styles.socialInput}
+                  value={profileVariable.slack}
+                  onChange={handleOnChange}
+                  placeholder={t('url')}
+                  autoComplete="off"
+                />
+              </div>
+            </Form.Group>
+            <div
+              className={`${styles.btn} d-flex justify-content-end gap-3 my-3`}
             >
-              {tCommon('resetChanges')}
-            </Button>
-            <Button
-              type="submit"
-              data-testid="saveChangesBtn"
-              disabled={isDisabled()}
-            >
-              {tCommon('saveChanges')}
-            </Button>
-          </div>
-        </Form>
-      </Card.Body>
-    </Card>
+              <Button
+                variant="outline-success"
+                onClick={resetData}
+                data-testid="resetChangesBtn"
+                disabled={isDisabled()}
+              >
+                {tCommon('resetChanges')}
+              </Button>
+              <Button
+                type="submit"
+                data-testid="saveChangesBtn"
+                disabled={isDisabled()}
+              >
+                {tCommon('saveChanges')}
+              </Button>
+            </div>
+          </Form>
+        </Card.Body>
+      </Card>
+
+      <UpdateSession />
+    </>
   );
 };
 

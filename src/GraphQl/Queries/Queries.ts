@@ -777,6 +777,14 @@ export const GET_COMMUNITY_DATA = gql`
   }
 `;
 
+export const GET_COMMUNITY_SESSION_TIMEOUT_DATA = gql`
+  query getCommunityData {
+    getCommunityData {
+      timeout
+    }
+  }
+`;
+
 // get the list of Action Item Categories
 export { ACTION_ITEM_CATEGORY_LIST } from './ActionItemCategoryQueries';
 

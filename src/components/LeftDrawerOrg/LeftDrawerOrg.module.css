@@ -7,19 +7,10 @@
   z-index: 100;
   display: flex;
   flex-direction: column;
-  padding: 0.8rem 0rem 0 1rem;
+  padding: 0.8rem 1rem 0 1rem;
   background-color: var(--bs-white);
   transition: 0.5s;
   font-family: var(--bs-leftDrawer-font-family);
-}
-
-.avatarContainer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 1rem 0;
-  width: 75%;
-  height: 75%;
 }
 
 .activeDrawer {
@@ -70,8 +61,6 @@
 
 .leftDrawer .optionList {
   height: 100%;
-  overflow-y: scroll;
-  padding-bottom: 1.5rem;
 }
 
 .leftDrawer .optionList button {
@@ -125,7 +114,6 @@
 
 .leftDrawer .imageContainer {
   width: 68px;
-  margin-left: 0.75rem;
   margin-right: 8px;
 }
 
@@ -163,7 +151,7 @@
 @media (max-width: 1120px) {
   .leftDrawer {
     width: calc(250px + 2rem);
-    padding: 1rem 0rem 0 1rem;
+    padding: 1rem 1rem 0 1rem;
   }
 }
 
@@ -198,7 +186,7 @@
 }
 @media (max-height: 650px) {
   .leftDrawer {
-    padding: 0.5rem 0rem 0 0.8rem;
+    padding: 0.5rem 0.8rem 0 0.8rem;
     width: calc(250px);
   }
   .leftDrawer .talawaText {
@@ -225,7 +213,7 @@
   }
   .leftDrawer .imageContainer {
     width: 40px;
-    margin-left: 0.75rem;
+    margin-left: 5px;
     margin-right: 12px;
   }
   .leftDrawer .imageContainer img {

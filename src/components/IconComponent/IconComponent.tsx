@@ -4,9 +4,11 @@ import {
   NewspaperOutlined,
 } from '@mui/icons-material';
 import ActionItemIcon from 'assets/svgs/actionItem.svg?react';
+import AgendaCategoryIcon from 'assets/svgs/agenda-category-icon.svg?react';
 import BlockUserIcon from 'assets/svgs/blockUser.svg?react';
 import CheckInRegistrantsIcon from 'assets/svgs/checkInRegistrants.svg?react';
 import DashboardIcon from 'assets/svgs/dashboard.svg?react';
+import EventStatsIcon from 'assets/svgs/eventStats.svg?react';
 import EventsIcon from 'assets/svgs/events.svg?react';
 import FundsIcon from 'assets/svgs/funds.svg?react';
 import ListEventRegistrantsIcon from 'assets/svgs/listEventRegistrants.svg?react';
@@ -66,6 +68,13 @@ const iconComponent = (props: InterfaceIconComponent): JSX.Element => {
           data-testid="Icon-Component-ActionItemIcon"
         />
       );
+    case 'Agenda Items Category':
+      return (
+        <AgendaCategoryIcon
+          {...props}
+          data-testid="Icon-Component-AgendaCategoryIcon"
+        />
+      );
     case 'Posts':
       return <PostsIcon {...props} data-testid="Icon-Component-PostsIcon" />;
     case 'Block/Unblock':
@@ -100,6 +109,13 @@ const iconComponent = (props: InterfaceIconComponent): JSX.Element => {
       return (
         <CheckInRegistrantsIcon
           data-testid="Icon-Component-Check-In-Registrants"
+          stroke={props.fill}
+        />
+      );
+    case 'Event Stats':
+      return (
+        <EventStatsIcon
+          data-testid="Icon-Component-Event-Stats"
           stroke={props.fill}
         />
       );

@@ -646,6 +646,12 @@ export const UPDATE_COMMUNITY = gql`
   }
 `;
 
+export const UPDATE_SESSION_TIMEOUT = gql`
+  mutation updateSessionTimeout($timeout: Int!) {
+    updateSessionTimeout(timeout: $timeout)
+  }
+`;
+
 export const RESET_COMMUNITY = gql`
   mutation resetCommunity {
     resetCommunity

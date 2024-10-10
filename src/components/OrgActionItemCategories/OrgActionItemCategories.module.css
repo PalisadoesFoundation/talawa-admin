@@ -1,0 +1,33 @@
+.addButton {
+  width: 7em;
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+}
+
+.createModal {
+  margin-top: 20vh;
+  margin-left: 13vw;
+  max-width: 80vw;
+}
+
+.icon {
+  transform: scale(1.5);
+  color: var(--bs-danger);
+  margin-bottom: 1rem;
+}
+
+.message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.titlemodal {
+  color: var(--bs-gray-600);
+  font-weight: 600;
+  font-size: 20px;
+  margin-top: 1rem;
+  width: 65%;
+}

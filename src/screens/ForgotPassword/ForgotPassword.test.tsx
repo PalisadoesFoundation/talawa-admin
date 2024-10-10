@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import 'jest-localstorage-mock';
 import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 
 import { GENERATE_OTP_MUTATION } from 'GraphQl/Mutations/mutations';
 import { store } from 'state/store';
@@ -18,14 +18,6 @@ import i18n from 'utils/i18nForTest';
 import useLocalStorage from 'utils/useLocalstorage';
 
 const { setItem, removeItem } = useLocalStorage();
-
-jest.mock('react-toastify', () => ({
-  toast: {
-    success: jest.fn(),
-    error: jest.fn(),
-    warn: jest.fn(),
-  },
-}));
 
 const MOCKS = [
   {
@@ -167,9 +159,7 @@ describe('Testing Forgot Password screen', () => {
     );
 
     userEvent.click(screen.getByText('Get OTP'));
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
-    });
+    await wait();
   });
 
   test('Testing forgot password functionality', async () => {
@@ -304,6 +294,7 @@ describe('Testing Forgot Password screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
+              <ToastContainer />
               <ForgotPassword />
             </I18nextProvider>
           </Provider>
@@ -319,9 +310,11 @@ describe('Testing Forgot Password screen', () => {
     );
 
     userEvent.click(screen.getByText('Get OTP'));
-    await waitFor(() => {
-      expect(toast.warn).toHaveBeenCalledWith(translations.emailNotRegistered);
-    });
+    await wait();
+
+    expect(
+      await screen.findByText(translations.emailNotRegistered),
+    ).toBeInTheDocument();
   });
 
   test('Testing forgot password functionality, when there is an error except unregistered email and api failure', async () => {
@@ -330,6 +323,7 @@ describe('Testing Forgot Password screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
+              <ToastContainer />
               <ForgotPassword />
             </I18nextProvider>
           </Provider>
@@ -337,9 +331,11 @@ describe('Testing Forgot Password screen', () => {
       </MockedProvider>,
     );
     userEvent.click(screen.getByText('Get OTP'));
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(translations.errorSendingMail);
-    });
+    await wait();
+
+    expect(
+      await screen.findByText(translations.errorSendingMail),
+    ).toBeInTheDocument();
   });
 
   test('Testing forgot password functionality, when talawa api failed', async () => {
@@ -351,6 +347,7 @@ describe('Testing Forgot Password screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
+              <ToastContainer />
               <ForgotPassword />
             </I18nextProvider>
           </Provider>
@@ -365,11 +362,11 @@ describe('Testing Forgot Password screen', () => {
       formData.email,
     );
     userEvent.click(screen.getByText('Get OTP'));
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(
-        translations.talawaApiUnavailable,
-      );
-    });
+    await wait();
+
+    expect(
+      await screen.findByText(translations.talawaApiUnavailable),
+    ).toBeInTheDocument();
   });
 
   test('Testing forgot password functionality, when otp token is not present', async () => {

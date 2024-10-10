@@ -12,9 +12,9 @@ import {
 import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';
 import styles from './AgendaCategoryContainer.module.css';
 
-import AgendaCategoryDeleteModal from 'components/OrgSettings/AgendaItemCategories/AgendaCategoryDeleteModal';
-import AgendaCategoryPreviewModal from 'components/OrgSettings/AgendaItemCategories/AgendaCategoryPreviewModal';
-import AgendaCategoryUpdateModal from 'components/OrgSettings/AgendaItemCategories/AgendaCategoryUpdateModal';
+import AgendaCategoryDeleteModal from 'screens/OrganizationAgendaCategory/AgendaCategoryDeleteModal';
+import AgendaCategoryPreviewModal from 'screens/OrganizationAgendaCategory/AgendaCategoryPreviewModal';
+import AgendaCategoryUpdateModal from 'screens/OrganizationAgendaCategory/AgendaCategoryUpdateModal';
 
 /**
  * Component for displaying and managing agenda item categories.

@@ -1,23 +1,35 @@
 import React from 'react';
-import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import type { RenderResult } from '@testing-library/react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  act,
+  waitForElementToBeRemoved,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import 'jest-localstorage-mock';
+import { MockedProvider } from '@apollo/client/testing';
+import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
+import i18n from 'utils/i18nForTest';
+import { toast } from 'react-toastify';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import i18n from 'utils/i18nForTest';
-import OrganizationActionItems from 'screens/OrganizationActionItems/OrganizationActionItems';
-import type { ApolloLink } from '@apollo/client';
+
+import OrganizationActionItems from './OrganizationActionItems';
 import {
-  MOCKS,
-  MOCKS_EMPTY,
-  MOCKS_ERROR,
-} from './OrganizationActionItem.mocks';
+  MOCKS_ERROR_ACTION_ITEM_CATEGORY_LIST_QUERY,
+  MOCKS_ERROR_ACTION_ITEM_LIST_QUERY,
+  MOCKS_ERROR_MEMBERS_LIST_QUERY,
+  MOCKS_ERROR_MUTATIONS,
+} from './OrganizationActionItemsErrorMocks';
+import { MOCKS } from './OrganizationActionItemMocks';
 
 jest.mock('react-toastify', () => ({
   toast: {
@@ -34,10 +46,29 @@ jest.mock('@mui/x-date-pickers/DateTimePicker', () => {
   };
 });
 
-const link1 = new StaticMockLink(MOCKS);
-const link2 = new StaticMockLink(MOCKS_ERROR);
-const link3 = new StaticMockLink(MOCKS_EMPTY);
-const t = {
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({ orgId: '123' }),
+}));
+
+async function wait(ms = 100): Promise<void> {
+  await act(() => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  });
+}
+
+const link = new StaticMockLink(MOCKS, true);
+const link2 = new StaticMockLink(
+  MOCKS_ERROR_ACTION_ITEM_CATEGORY_LIST_QUERY,
+  true,
+);
+const link3 = new StaticMockLink(MOCKS_ERROR_MEMBERS_LIST_QUERY, true);
+const link4 = new StaticMockLink(MOCKS_ERROR_ACTION_ITEM_LIST_QUERY, true);
+const link5 = new StaticMockLink(MOCKS_ERROR_MUTATIONS, true);
+
+const translations = {
   ...JSON.parse(
     JSON.stringify(
       i18n.getDataByLanguage('en')?.translation.organizationActionItems ?? {},
@@ -47,331 +78,542 @@ const t = {
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
 };
 
-const renderOrganizationActionItems = (link: ApolloLink): RenderResult => {
-  return render(
-    <MockedProvider addTypename={false} link={link}>
-      <MemoryRouter initialEntries={['/orgactionitems/orgId']}>
+describe('Testing Action Item Categories Component', () => {
+  const formData = {
+    actionItemCategory: 'ActionItemCategory 1',
+    assignee: 'Harve Lance',
+    preCompletionNotes: 'pre completion notes',
+    dueDate: '02/14/2024',
+  };
+
+  test('Component loads correctly', async () => {
+    const { getByText } = render(
+      <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <BrowserRouter>
             <I18nextProvider i18n={i18n}>
-              <Routes>
-                <Route
-                  path="/orgactionitems/:orgId"
-                  element={<OrganizationActionItems />}
-                />
-                <Route
-                  path="/"
-                  element={<div data-testid="paramsError"></div>}
-                />
-              </Routes>
+              {<OrganizationActionItems />}
             </I18nextProvider>
-          </LocalizationProvider>
+          </BrowserRouter>
         </Provider>
-      </MemoryRouter>
-    </MockedProvider>,
-  );
-};
-
-describe('Testing Organization Action Items Screen', () => {
-  beforeAll(() => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: 'orgId', eventId: 'eventId' }),
-    }));
-  });
-
-  afterAll(() => {
-    jest.clearAllMocks();
-  });
-
-  it('should redirect to fallback URL if URL params are undefined', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link1}>
-        <MemoryRouter initialEntries={['/orgactionitems/']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18n}>
-              <Routes>
-                <Route
-                  path="/orgactionitems/"
-                  element={<OrganizationActionItems />}
-                />
-                <Route
-                  path="/"
-                  element={<div data-testid="paramsError"></div>}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
       </MockedProvider>,
     );
+
+    await wait();
+
     await waitFor(() => {
-      expect(screen.getByTestId('paramsError')).toBeInTheDocument();
+      expect(getByText(translations.create)).toBeInTheDocument();
     });
   });
 
-  it('should render Organization Action Items screen', async () => {
-    renderOrganizationActionItems(link1);
+  test('render error component on unsuccessful action item category list query', async () => {
+    const { queryByText } = render(
+      <MockedProvider addTypename={false} link={link2}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18n}>
+              {<OrganizationActionItems />}
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    await wait();
+
     await waitFor(() => {
-      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-      expect(screen.getByText('Jane Doe')).toBeInTheDocument();
+      expect(queryByText(translations.create)).not.toBeInTheDocument();
     });
   });
 
-  it('Sort Action Items descending by dueDate', async () => {
-    renderOrganizationActionItems(link1);
+  test('render error component on unsuccessful members list query', async () => {
+    const { queryByText } = render(
+      <MockedProvider addTypename={false} link={link3}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18n}>
+              {<OrganizationActionItems />}
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
 
-    const sortBtn = await screen.findByTestId('sort');
-    expect(sortBtn).toBeInTheDocument();
+    await wait();
 
-    // Sort by dueDate_DESC
-    fireEvent.click(sortBtn);
     await waitFor(() => {
-      expect(screen.getByTestId('dueDate_DESC')).toBeInTheDocument();
+      expect(queryByText(translations.create)).not.toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('dueDate_DESC'));
+  });
+
+  test('render error component on unsuccessful action item list query', async () => {
+    const { queryByText } = render(
+      <MockedProvider addTypename={false} link={link4}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18n}>
+              {<OrganizationActionItems />}
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    await wait();
+
     await waitFor(() => {
-      expect(screen.getAllByTestId('categoryName')[0]).toHaveTextContent(
-        'Category 2',
+      expect(queryByText(translations.create)).not.toBeInTheDocument();
+    });
+  });
+
+  test('sorts action items in earliest or latest first order based on orderBy', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18n}>
+              {<OrganizationActionItems />}
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('sortActionItems')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('sortActionItems'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('earliest')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('earliest'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('sortActionItems')).toHaveTextContent(
+        translations.earliest,
+      );
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('sortActionItems')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('sortActionItems'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('latest')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('latest'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('sortActionItems')).toHaveTextContent(
+        translations.latest,
       );
     });
   });
 
-  it('Sort Action Items ascending by dueDate', async () => {
-    renderOrganizationActionItems(link1);
+  test('applies and then clears filters one by one', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18n}>
+              {<OrganizationActionItems />}
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
 
-    const sortBtn = await screen.findByTestId('sort');
-    expect(sortBtn).toBeInTheDocument();
+    await wait();
 
-    // Sort by dueDate_ASC
-    fireEvent.click(sortBtn);
     await waitFor(() => {
-      expect(screen.getByTestId('dueDate_ASC')).toBeInTheDocument();
+      expect(screen.getByTestId('sortActionItems')).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('dueDate_ASC'));
+    userEvent.click(screen.getByTestId('sortActionItems'));
+
     await waitFor(() => {
-      expect(screen.getAllByTestId('categoryName')[0]).toHaveTextContent(
-        'Category 1',
+      expect(screen.getByTestId('earliest')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('earliest'));
+
+    // all the action items ordered by earliest first
+    await waitFor(() => {
+      expect(screen.getByTestId('sortActionItems')).toHaveTextContent(
+        translations.earliest,
+      );
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('selectActionItemStatus')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('selectActionItemStatus'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('activeActionItems')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('activeActionItems'));
+
+    // all the action items that are active
+    await waitFor(() => {
+      expect(screen.getByTestId('selectActionItemStatus')).toHaveTextContent(
+        translations.active,
+      );
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('selectActionItemStatus')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('selectActionItemStatus'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('completedActionItems')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('completedActionItems'));
+
+    // all the action items that are completed
+    await waitFor(() => {
+      expect(screen.getByTestId('selectActionItemStatus')).toHaveTextContent(
+        translations.completed,
+      );
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('selectActionItemCategory'),
+      ).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('selectActionItemCategory'));
+
+    await waitFor(() => {
+      expect(
+        screen.getAllByTestId('actionItemCategory')[0],
+      ).toBeInTheDocument();
+    });
+    userEvent.click(screen.getAllByTestId('actionItemCategory')[0]);
+
+    // action items belonging to this action item category
+    await waitFor(() => {
+      expect(screen.getByTestId('selectActionItemCategory')).toHaveTextContent(
+        'ActionItemCategory 1',
+      );
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('clearActionItemCategoryFilter'),
+      ).toBeInTheDocument();
+    });
+    // remove the action item category filter
+    userEvent.click(screen.getByTestId('clearActionItemCategoryFilter'));
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('clearActionItemCategoryFilter'),
+      ).not.toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('clearActionItemStatusFilter'),
+      ).toBeInTheDocument();
+    });
+    // remove the action item status filter
+    userEvent.click(screen.getByTestId('clearActionItemStatusFilter'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('selectActionItemStatus')).toHaveTextContent(
+        translations.status,
+      );
+      expect(screen.getByTestId('selectActionItemCategory')).toHaveTextContent(
+        translations.actionItemCategory,
       );
     });
   });
 
-  it('Filter Action Items by status (All/Pending)', async () => {
-    renderOrganizationActionItems(link1);
-
-    const filterBtn = await screen.findByTestId('filter');
-    expect(filterBtn).toBeInTheDocument();
-
-    // Filter by All
-    fireEvent.click(filterBtn);
-    await waitFor(() => {
-      expect(screen.getByTestId('statusAll')).toBeInTheDocument();
-    });
-    fireEvent.click(screen.getByTestId('statusAll'));
-
-    await waitFor(() => {
-      expect(screen.getByText('Category 1')).toBeInTheDocument();
-      expect(screen.getByText('Category 2')).toBeInTheDocument();
-    });
-
-    // Filter by Pending
-    fireEvent.click(filterBtn);
-    await waitFor(() => {
-      expect(screen.getByTestId('statusPending')).toBeInTheDocument();
-    });
-    fireEvent.click(screen.getByTestId('statusPending'));
-    await waitFor(() => {
-      expect(screen.queryByText('Category 1')).toBeNull();
-      expect(screen.getByText('Category 2')).toBeInTheDocument();
-    });
-  });
-
-  it('Filter Action Items by status (Completed)', async () => {
-    renderOrganizationActionItems(link1);
-
-    const filterBtn = await screen.findByTestId('filter');
-    expect(filterBtn).toBeInTheDocument();
-
-    fireEvent.click(filterBtn);
-    await waitFor(() => {
-      expect(screen.getByTestId('statusCompleted')).toBeInTheDocument();
-    });
-    fireEvent.click(screen.getByTestId('statusCompleted'));
-    await waitFor(() => {
-      expect(screen.getByText('Category 1')).toBeInTheDocument();
-      expect(screen.queryByText('Category 2')).toBeNull();
-    });
-  });
-
-  it('open and close Item modal (create)', async () => {
-    renderOrganizationActionItems(link1);
-
-    const addItemBtn = await screen.findByTestId('createActionItemBtn');
-    expect(addItemBtn).toBeInTheDocument();
-    userEvent.click(addItemBtn);
-
-    await waitFor(() =>
-      expect(screen.getAllByText(t.createActionItem)).toHaveLength(2),
+  test('applies and then clears all the filters', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18n}>
+              {<OrganizationActionItems />}
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
     );
-    userEvent.click(screen.getByTestId('modalCloseBtn'));
-    await waitFor(() =>
-      expect(screen.queryByTestId('modalCloseBtn')).toBeNull(),
-    );
-  });
 
-  it('open and close Item modal (view)', async () => {
-    renderOrganizationActionItems(link1);
+    await wait();
 
-    const viewItemBtn = await screen.findByTestId('viewItemBtn1');
-    expect(viewItemBtn).toBeInTheDocument();
-    userEvent.click(viewItemBtn);
-
-    await waitFor(() =>
-      expect(screen.getByText(t.actionItemDetails)).toBeInTheDocument(),
-    );
-    userEvent.click(screen.getByTestId('modalCloseBtn'));
-    await waitFor(() =>
-      expect(screen.queryByTestId('modalCloseBtn')).toBeNull(),
-    );
-  });
-
-  it('open and closes Item modal (edit)', async () => {
-    renderOrganizationActionItems(link1);
-
-    const editItemBtn = await screen.findByTestId('editItemBtn1');
-    await waitFor(() => expect(editItemBtn).toBeInTheDocument());
-    userEvent.click(editItemBtn);
-
-    await waitFor(() =>
-      expect(screen.getAllByText(t.updateActionItem)).toHaveLength(2),
-    );
-    userEvent.click(screen.getByTestId('modalCloseBtn'));
-    await waitFor(() =>
-      expect(screen.queryByTestId('modalCloseBtn')).toBeNull(),
-    );
-  });
-
-  it('open and closes Item modal (delete)', async () => {
-    renderOrganizationActionItems(link1);
-
-    const deleteItemBtn = await screen.findByTestId('deleteItemBtn1');
-    expect(deleteItemBtn).toBeInTheDocument();
-    userEvent.click(deleteItemBtn);
-
-    await waitFor(() =>
-      expect(screen.getByText(t.deleteActionItem)).toBeInTheDocument(),
-    );
-    userEvent.click(screen.getByTestId('modalCloseBtn'));
-    await waitFor(() =>
-      expect(screen.queryByTestId('modalCloseBtn')).toBeNull(),
-    );
-  });
-
-  it('open and closes Item modal (update status)', async () => {
-    renderOrganizationActionItems(link1);
-
-    const statusCheckbox = await screen.findByTestId('statusCheckbox1');
-    expect(statusCheckbox).toBeInTheDocument();
-    userEvent.click(statusCheckbox);
-
-    await waitFor(() =>
-      expect(screen.getByText(t.actionItemStatus)).toBeInTheDocument(),
-    );
-    userEvent.click(screen.getByTestId('modalCloseBtn'));
-    await waitFor(() =>
-      expect(screen.queryByTestId('modalCloseBtn')).toBeNull(),
-    );
-  });
-
-  it('Search action items by assignee', async () => {
-    renderOrganizationActionItems(link1);
-
-    const searchByToggle = await screen.findByTestId('searchByToggle');
-    expect(searchByToggle).toBeInTheDocument();
-
-    userEvent.click(searchByToggle);
     await waitFor(() => {
-      expect(screen.getByTestId('assignee')).toBeInTheDocument();
+      expect(screen.getByTestId('sortActionItems')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('sortActionItems'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('earliest')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('earliest'));
+
+    // all the action items ordered by earliest first
+    await waitFor(() => {
+      expect(screen.getByTestId('sortActionItems')).toHaveTextContent(
+        translations.earliest,
+      );
     });
 
-    userEvent.click(screen.getByTestId('assignee'));
-
-    const searchInput = await screen.findByTestId('searchBy');
-    expect(searchInput).toBeInTheDocument();
-
-    userEvent.type(searchInput, 'John');
-    userEvent.click(screen.getByTestId('searchBtn'));
     await waitFor(() => {
-      expect(screen.getByText('Category 1')).toBeInTheDocument();
-      expect(screen.queryByText('Category 2')).toBeNull();
+      expect(screen.getByTestId('selectActionItemStatus')).toBeInTheDocument();
     });
-  });
+    userEvent.click(screen.getByTestId('selectActionItemStatus'));
 
-  it('Search action items by category', async () => {
-    renderOrganizationActionItems(link1);
-
-    const searchByToggle = await screen.findByTestId('searchByToggle');
-    expect(searchByToggle).toBeInTheDocument();
-
-    userEvent.click(searchByToggle);
     await waitFor(() => {
-      expect(screen.getByTestId('category')).toBeInTheDocument();
+      expect(screen.getByTestId('activeActionItems')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('activeActionItems'));
+
+    // all the action items that are active
+    await waitFor(() => {
+      expect(screen.getByTestId('selectActionItemStatus')).toHaveTextContent(
+        translations.active,
+      );
     });
 
-    userEvent.click(screen.getByTestId('category'));
-
-    const searchInput = await screen.findByTestId('searchBy');
-    expect(searchInput).toBeInTheDocument();
-
-    userEvent.type(searchInput, 'Category 1');
-    userEvent.click(screen.getByTestId('searchBtn'));
     await waitFor(() => {
-      expect(screen.getByText('Category 1')).toBeInTheDocument();
-      expect(screen.queryByText('Category 2')).toBeNull();
+      expect(screen.getByTestId('selectActionItemStatus')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('selectActionItemStatus'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('completedActionItems')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('completedActionItems'));
+
+    // all the action items that are completed
+    await waitFor(() => {
+      expect(screen.getByTestId('selectActionItemStatus')).toHaveTextContent(
+        translations.completed,
+      );
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('selectActionItemCategory'),
+      ).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('selectActionItemCategory'));
+
+    await waitFor(() => {
+      expect(
+        screen.getAllByTestId('actionItemCategory')[0],
+      ).toBeInTheDocument();
+    });
+    userEvent.click(screen.getAllByTestId('actionItemCategory')[0]);
+
+    // action items belonging to this action item category
+    await waitFor(() => {
+      expect(screen.getByTestId('selectActionItemCategory')).toHaveTextContent(
+        'ActionItemCategory 1',
+      );
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('clearFilters')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('clearFilters'));
+
+    // filters cleared, all the action items belonging to the organization
+    await waitFor(() => {
+      expect(screen.getByTestId('sortActionItems')).toHaveTextContent(
+        translations.latest,
+      );
+      expect(screen.getByTestId('selectActionItemStatus')).toHaveTextContent(
+        translations.status,
+      );
+      expect(screen.getByTestId('selectActionItemCategory')).toHaveTextContent(
+        translations.actionItemCategory,
+      );
     });
   });
 
-  it('Search action items by name and clear the input by backspace', async () => {
-    renderOrganizationActionItems(link1);
+  test('opens and closes the create action item modal', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <I18nextProvider i18n={i18n}>
+                {<OrganizationActionItems />}
+              </I18nextProvider>
+            </LocalizationProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
 
-    const searchInput = await screen.findByTestId('searchBy');
-    expect(searchInput).toBeInTheDocument();
+    await wait();
 
-    // Clear the search input by backspace
-    userEvent.type(searchInput, 'A{backspace}');
     await waitFor(() => {
-      expect(screen.getByText('Category 1')).toBeInTheDocument();
-      expect(screen.getByText('Category 2')).toBeInTheDocument();
+      expect(screen.getByTestId('createActionItemBtn')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('createActionItemBtn'));
+
+    await waitFor(() => {
+      return expect(
+        screen.findByTestId('createActionItemModalCloseBtn'),
+      ).resolves.toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('createActionItemModalCloseBtn'));
+
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId('createActionItemModalCloseBtn'),
+    );
+  });
+
+  test('creates new action item', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <I18nextProvider i18n={i18n}>
+                {<OrganizationActionItems />}
+              </I18nextProvider>
+            </LocalizationProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('createActionItemBtn')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('createActionItemBtn'));
+
+    await waitFor(() => {
+      return expect(
+        screen.findByTestId('createActionItemModalCloseBtn'),
+      ).resolves.toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('formSelectActionItemCategory'),
+      ).toBeInTheDocument();
+    });
+
+    userEvent.selectOptions(
+      screen.getByTestId('formSelectActionItemCategory'),
+      formData.actionItemCategory,
+    );
+
+    userEvent.selectOptions(
+      screen.getByTestId('formSelectAssignee'),
+      formData.assignee,
+    );
+
+    userEvent.type(
+      screen.getByPlaceholderText(translations.preCompletionNotes),
+      formData.preCompletionNotes,
+    );
+
+    const dueDatePicker = screen.getByLabelText(translations.dueDate);
+    fireEvent.change(dueDatePicker, {
+      target: { value: formData.dueDate },
+    });
+
+    userEvent.click(screen.getByTestId('createActionItemFormSubmitBtn'));
+
+    await waitFor(() => {
+      expect(toast.success).toBeCalledWith(translations.successfulCreation);
     });
   });
 
-  it('Search action items by name on press of ENTER', async () => {
-    renderOrganizationActionItems(link1);
+  test('toasts error on unsuccessful creation', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link5}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <I18nextProvider i18n={i18n}>
+                {<OrganizationActionItems />}
+              </I18nextProvider>
+            </LocalizationProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
 
-    const searchInput = await screen.findByTestId('searchBy');
-    expect(searchInput).toBeInTheDocument();
+    await wait();
 
-    userEvent.type(searchInput, 'John');
-    userEvent.type(searchInput, '{enter}');
     await waitFor(() => {
-      expect(screen.getByText('Category 1')).toBeInTheDocument();
-      expect(screen.queryByText('Category 2')).toBeNull();
+      expect(screen.getByTestId('createActionItemBtn')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('createActionItemBtn'));
+
+    await waitFor(() => {
+      return expect(
+        screen.findByTestId('createActionItemModalCloseBtn'),
+      ).resolves.toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('formSelectActionItemCategory'),
+      ).toBeInTheDocument();
+    });
+
+    userEvent.selectOptions(
+      screen.getByTestId('formSelectActionItemCategory'),
+      formData.actionItemCategory,
+    );
+
+    userEvent.selectOptions(
+      screen.getByTestId('formSelectAssignee'),
+      formData.assignee,
+    );
+
+    userEvent.type(
+      screen.getByPlaceholderText(translations.preCompletionNotes),
+      formData.preCompletionNotes,
+    );
+
+    const dueDatePicker = screen.getByLabelText(translations.dueDate);
+    fireEvent.change(dueDatePicker, {
+      target: { value: formData.dueDate },
+    });
+
+    userEvent.click(screen.getByTestId('createActionItemFormSubmitBtn'));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
     });
   });
 
-  it('should render Empty Action Item Categories Screen', async () => {
-    renderOrganizationActionItems(link3);
-    await waitFor(() => {
-      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
-      expect(screen.getByText(t.noActionItems)).toBeInTheDocument();
-    });
-  });
+  test('Testing Only Action Items Displaying', async () => {
+    const mockApp = render(
+      <MockedProvider addTypename={false} link={link}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <I18nextProvider i18n={i18n}>
+                {<OrganizationActionItems />}
+              </I18nextProvider>
+            </LocalizationProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
 
-  it('should render the Action Item Categories Screen with error', async () => {
-    renderOrganizationActionItems(link2);
-    await waitFor(() => {
-      expect(screen.getByTestId('errorMsg')).toBeInTheDocument();
-    });
+    await waitFor(mockApp.asFragment);
+
+    const actionItem = screen.getByText(/John Doe/i);
+
+    expect(actionItem).toContainHTML('John Doe');
   });
 });

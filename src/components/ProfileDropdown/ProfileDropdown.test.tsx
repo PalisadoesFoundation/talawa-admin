@@ -9,6 +9,7 @@ import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
+import { GET_COMMUNITY_SESSION_TIMEOUT_DATA } from 'GraphQl/Queries/Queries';
 
 const { setItem } = useLocalStorage();
 const MOCKS = [
@@ -21,6 +22,19 @@ const MOCKS = [
         revokeRefreshTokenForUser: true,
       },
     },
+  },
+  {
+    request: {
+      query: GET_COMMUNITY_SESSION_TIMEOUT_DATA,
+    },
+    result: {
+      data: {
+        getCommunityData: {
+          timeout: 30,
+        },
+      },
+    },
+    delay: 1000,
   },
 ];
 
@@ -104,13 +118,16 @@ describe('ProfileDropdown Component', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
+
     await act(async () => {
       userEvent.click(screen.getByTestId('togDrop'));
     });
 
     userEvent.click(screen.getByTestId('logoutBtn'));
+
     expect(global.window.location.pathname).toBe('/');
   });
+
   describe('Member screen routing testing', () => {
     test('member screen', async () => {
       render(

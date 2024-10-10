@@ -1,0 +1,53 @@
+.actionItemsModal {
+  margin: auto;
+  max-width: 85%;
+}
+
+button .iconWrapper {
+  width: 32px;
+  padding-right: 4px;
+  margin-right: 4px;
+}
+
+button .iconWrapperSm {
+  width: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.errorIcon {
+  transform: scale(1.5);
+  color: var(--bs-danger);
+  margin-bottom: 1rem;
+}
+
+.greenregbtn {
+  margin: 1rem 0 0;
+  margin-top: 0;
+  margin-right: 4px;
+  border: 1px solid var(--bs-gray-300);
+  box-shadow: 0 2px 2px var(--bs-gray-300);
+  padding: 10px 10px;
+  border-radius: 5px;
+  background-color: var(--bs-primary);
+  width: 100%;
+  font-size: 16px;
+  color: var(--bs-white);
+  outline: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+  max-width: 100px;
+}
+
+.message {
+  margin-top: 15%;
+  margin-bottom: 15%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}

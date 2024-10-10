@@ -1,107 +1,170 @@
-import React from 'react';
+import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import type { RenderResult } from '@testing-library/react';
 import { render, screen, waitFor } from '@testing-library/react';
 import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 
+import { DELETE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import OrgSettings from './OrgSettings';
+import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import userEvent from '@testing-library/user-event';
-import type { ApolloLink } from '@apollo/client';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { MOCKS } from './OrgSettings.mocks';
+import useLocalStorage from 'utils/useLocalstorage';
 
-const link1 = new StaticMockLink(MOCKS);
+const { setItem } = useLocalStorage();
 
-const renderOrganisationSettings = (link: ApolloLink): RenderResult => {
-  return render(
-    <MockedProvider addTypename={false} link={link}>
-      <MemoryRouter initialEntries={['/orgsetting/orgId']}>
-        <Provider store={store}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route path="/orgsetting/:orgId" element={<OrgSettings />} />
-                <Route
-                  path="/"
-                  element={<div data-testid="paramsError"></div>}
-                />
-              </Routes>
-            </I18nextProvider>
-          </LocalizationProvider>
-        </Provider>
-      </MemoryRouter>
-    </MockedProvider>,
-  );
-};
+const MOCKS = [
+  {
+    request: {
+      query: ORGANIZATIONS_LIST,
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            _id: '123',
+            image: null,
+            name: 'Palisadoes',
+            description: 'Equitable Access to STEM Education Jobs',
+            location: 'Jamaica',
+            isPublic: true,
+            visibleInSearch: false,
+            creator: {
+              firstName: 'John',
+              lastName: 'Doe',
+              email: 'johndoe@example.com',
+            },
+            members: {
+              _id: '123',
+              firstName: 'John',
+              lastName: 'Doe',
+              email: 'johndoe@gmail.com',
+            },
+            admins: [
+              {
+                _id: '123',
+                firstName: 'John',
+                lastName: 'Doe',
+                email: 'johndoe@gmail.com',
+              },
+            ],
+            membershipRequests: {
+              _id: '456',
+              user: {
+                firstName: 'Sam',
+                lastName: 'Smith',
+                email: 'samsmith@gmail.com',
+              },
+            },
+            blockedUsers: [],
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: DELETE_ORGANIZATION_MUTATION,
+    },
+    result: {
+      data: {
+        removeOrganization: [
+          {
+            _id: 123,
+          },
+        ],
+      },
+    },
+  },
+];
+
+const link = new StaticMockLink(MOCKS, true);
+
+async function wait(ms = 100): Promise<void> {
+  await act(() => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  });
+}
+
+const translations = JSON.parse(
+  JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.orgSettings),
+);
+
+afterEach(() => {
+  localStorage.clear();
+});
 
 describe('Organisation Settings Page', () => {
-  beforeAll(() => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: 'orgId' }),
-    }));
+  test('correct mock data should be queried', async () => {
+    const dataQuery1 = MOCKS[1]?.result?.data?.removeOrganization;
+    expect(dataQuery1).toEqual([
+      {
+        _id: 123,
+      },
+    ]);
   });
 
-  afterAll(() => {
-    jest.clearAllMocks();
-  });
-
-  it('should redirect to fallback URL if URL params are undefined', async () => {
+  test('should render props and text elements test for the screen', async () => {
+    window.location.assign('/orgsetting/123');
+    setItem('SuperAdmin', true);
     render(
-      <MockedProvider addTypename={false} link={link1}>
-        <MemoryRouter initialEntries={['/orgsetting/']}>
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route path="/orgsetting/" element={<OrgSettings />} />
-                <Route
-                  path="/"
-                  element={<div data-testid="paramsError"></div>}
-                />
-              </Routes>
+              <OrgSettings />
             </I18nextProvider>
           </Provider>
-        </MemoryRouter>
+        </BrowserRouter>
       </MockedProvider>,
     );
-    await waitFor(() => {
-      expect(screen.getByTestId('paramsError')).toBeInTheDocument();
-    });
+
+    await wait();
+
+    expect(screen.getAllByText(/Delete Organization/i)).toHaveLength(3);
+    expect(
+      screen.getByText(
+        /By clicking on Delete Organization button the organization will be permanently deleted along with its events, tags and all related data/i,
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/Other Settings/i)).toBeInTheDocument();
+    expect(screen.getByText(/Change Language/i)).toBeInTheDocument();
+    expect(window.location).toBeAt('/orgsetting/123');
   });
 
-  test('should render the organisation settings page', async () => {
-    renderOrganisationSettings(link1);
+  test('should render appropriate settings based on the orgSetting state', async () => {
+    window.location.assign('/orgsetting/123');
+    setItem('SuperAdmin', true);
+
+    const { getAllByText, queryByText } = render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgSettings />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
 
     await waitFor(() => {
-      expect(screen.getByTestId('generalSettings')).toBeInTheDocument();
-      expect(
-        screen.getByTestId('actionItemCategoriesSettings'),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByTestId('agendaItemCategoriesSettings'),
-      ).toBeInTheDocument();
+      userEvent.click(screen.getByTestId('actionItemCategoriesSettings'));
+      const elements = getAllByText(translations.actionItemCategories);
+      expect(elements[2]).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('generalSettings'));
 
     await waitFor(() => {
-      expect(screen.getByTestId('generalTab')).toBeInTheDocument();
-    });
-
-    userEvent.click(screen.getByTestId('actionItemCategoriesSettings'));
-    await waitFor(() => {
-      expect(screen.getByTestId('actionItemCategoriesTab')).toBeInTheDocument();
-    });
-
-    userEvent.click(screen.getByTestId('agendaItemCategoriesSettings'));
-    await waitFor(() => {
-      expect(screen.getByTestId('agendaItemCategoriesTab')).toBeInTheDocument();
+      userEvent.click(screen.getByTestId('generalSettings'));
+      expect(queryByText(translations.updateOrganization)).toBeInTheDocument();
     });
   });
 });
