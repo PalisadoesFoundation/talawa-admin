@@ -1,24 +1,36 @@
 import React from 'react';
 import { Dropdown } from 'react-bootstrap';
 import styles from './DynamicDropDown.module.css';
+import type { InterfaceMember } from 'components/EventManagement/EventAttendance/InterfaceEvents';
 
 interface InterfaceChangeDropDownProps {
   parentContainerStyle?: string;
   btnStyle?: string;
   btnTextStyle?: string;
-  setFormState: React.Dispatch<React.SetStateAction<any>>;
+  setFormState: React.Dispatch<React.SetStateAction<InterfaceMember>>;
   formState: any;
-  fieldOptions: { value: string; label: string }[]; // Field options for dropdown
-  fieldName: string; // Field name for labeling
+  fieldOptions: { value: string; label: string }[];
+  fieldName: string;
+  handleChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
 const DynamicDropDown = (props: InterfaceChangeDropDownProps): JSX.Element => {
   const handleFieldChange = (value: string): void => {
-    props.setFormState({ ...props.formState, [props.fieldName]: value });
+    if (props?.handleChange) {
+      const event = {
+        target: {
+          name: props?.fieldName,
+          value: value,
+        },
+      } as React.ChangeEvent<HTMLSelectElement>;
+      props?.handleChange(event);
+    } else {
+      props?.setFormState({ ...props?.formState, [props?.fieldName]: value });
+    }
   };
 
   const getLabel = (value: string): string => {
-    const selectedOption = props.fieldOptions.find(
+    const selectedOption = props?.fieldOptions.find(
       (option) => option.value === value,
     );
     return selectedOption ? selectedOption.label : `None`;
@@ -26,23 +38,23 @@ const DynamicDropDown = (props: InterfaceChangeDropDownProps): JSX.Element => {
 
   return (
     <Dropdown
-      title={`Select ${props.fieldName}`}
+      title={`Select ${props?.fieldName}`}
       className={`${props?.parentContainerStyle ?? ''} m-2`}
-      data-testid={`${props.fieldName.toLowerCase()}-dropdown-container`}
+      data-testid={`${props?.fieldName.toLowerCase()}-dropdown-container`}
     >
       <Dropdown.Toggle
         className={`${props?.btnStyle ?? 'w-100'} ${styles.dropwdownToggle}`}
-        data-testid={`${props.fieldName.toLowerCase()}-dropdown-btn`}
+        data-testid={`${props?.fieldName.toLowerCase()}-dropdown-btn`}
       >
-        {getLabel(props.formState[props.fieldName])}
+        {getLabel(props?.formState[props?.fieldName])}
       </Dropdown.Toggle>
       <Dropdown.Menu>
-        {props.fieldOptions.map((option, index: number) => (
+        {props?.fieldOptions.map((option, index: number) => (
           <Dropdown.Item
-            key={`${props.fieldName.toLowerCase()}-dropdown-item-${index}`}
+            key={`${props?.fieldName.toLowerCase()}-dropdown-item-${index}`}
             className={`dropdown-item`}
             onClick={() => handleFieldChange(option.value)}
-            data-testid={`change-${props.fieldName.toLowerCase()}-btn-${option.value}`}
+            data-testid={`change-${props?.fieldName.toLowerCase()}-btn-${option.value}`}
           >
             {option.label}
           </Dropdown.Item>

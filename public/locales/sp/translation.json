@@ -925,6 +925,8 @@
   },
   "settings": {
     "settings": "Ajustes",
+    "eventAttended":"Événements Assistés",
+    "noEventsAttended":"Ningún evento asistido",
     "profileSettings": "Configuración de perfil",
     "firstName": "Nombre de pila",
     "lastName": "Apellido",

@@ -16,6 +16,23 @@
   left: 20px;
   cursor: pointer;
 }
+.selectWrapper {
+  position: relative;
+}
+
+.selectWithChevron {
+  appearance: none;
+  padding-right: 30px;
+}
+
+.selectWrapper::after {
+  content: '\25BC';
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
 
 .sidebar:after {
   content: '';

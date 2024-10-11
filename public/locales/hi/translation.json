@@ -718,6 +718,8 @@
     "article": "लेख"
   },
   "settings": {
+    "noEventsAttended": "कोई कार्यक्रम में उपस्थित नहीं",
+    "eventAttended": "भाग लिए गए कार्यक्रम",
     "profileSettings": "पार्श्वचित्र समायोजन",
     "gender": "लिंग",
     "phoneNumber": "फ़ोन नंबर",

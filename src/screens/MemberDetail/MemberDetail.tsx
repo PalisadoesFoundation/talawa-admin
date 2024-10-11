@@ -127,18 +127,22 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   }, []);
 
   const handleChange = async (
-    e: React.ChangeEvent<HTMLInputElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ): Promise<void> => {
-    const { name, files } = e.target;
-    if (name === 'photo' && files && files[0]) {
-      const file = files[0];
+    const { name, value } = e.target;
+    if (
+      name === 'photo' &&
+      'files' in e.target &&
+      e.target.files &&
+      e.target.files[0]
+    ) {
+      const file = e.target.files[0];
       const base64 = await convertToBase64(file);
       setFormState((prevState) => ({
         ...prevState,
         image: base64 as string,
       }));
     } else {
-      const { value } = e.target;
       setFormState((prevState) => ({
         ...prevState,
         [name]: value,
@@ -351,6 +355,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     setFormState={setFormState}
                     fieldOptions={genderEnum}
                     fieldName="gender"
+                    handleChange={handleChange}
                   />
                 </Col>
                 <Col md={6}>
@@ -380,6 +385,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     setFormState={setFormState}
                     fieldOptions={educationGradeEnum}
                     fieldName="grade"
+                    handleChange={handleChange}
                   />
                 </Col>
                 <Col md={6}>
@@ -391,6 +397,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     setFormState={setFormState}
                     fieldOptions={employmentStatusEnum}
                     fieldName="empStatus"
+                    handleChange={handleChange}
                   />
                 </Col>
                 <Col md={6}>
@@ -402,6 +409,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     setFormState={setFormState}
                     fieldOptions={maritalStatusEnum}
                     fieldName="maritalStatus"
+                    handleChange={handleChange}
                   />
                 </Col>
               </Row>
@@ -459,20 +467,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     onChange={handleChange}
                   />
                 </Col>
-                <Col md={12}>
-                  <label htmlFor="country" className="form-label">
-                    {t('countryCode')}
-                  </label>
-                  <input
-                    id="country"
-                    value={formState.country}
-                    className={`form-control ${styles.inputColor}`}
-                    type="text"
-                    name="country"
-                    onChange={handleChange}
-                    placeholder={t('countryCode')}
-                  />
-                </Col>
                 <Col md={6}>
                   <label htmlFor="city" className="form-label">
                     {t('city')}
@@ -498,6 +492,20 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     type="text"
                     name="state"
                     onChange={handleChange}
+                  />
+                </Col>
+                <Col md={12}>
+                  <label htmlFor="country" className="form-label">
+                    {t('countryCode')}
+                  </label>
+                  <input
+                    id="country"
+                    value={formState.country}
+                    className={`form-control ${styles.inputColor}`}
+                    type="text"
+                    name="country"
+                    onChange={handleChange}
+                    placeholder={t('countryCode')}
                   />
                 </Col>
               </Row>

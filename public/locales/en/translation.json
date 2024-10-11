@@ -716,6 +716,8 @@
     "article": "Article"
   },
   "settings": {
+    "eventAttended":"Events Attended",
+    "noEventsAttended":"No Events Attended",
     "profileSettings": "Profile Settings",
     "gender": "Gender",
     "phoneNumber": "Phone Number",

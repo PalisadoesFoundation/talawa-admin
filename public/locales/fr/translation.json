@@ -718,6 +718,8 @@
     "article": "Article"
   },
   "settings": {
+    "eventAttended":"Événements Assistés",
+    "noEventsAttended":"Aucun événement assisté",
     "profileSettings": "Paramètres de profil",
     "gender": "Genre",
     "phoneNumber": "Numéro de téléphone",

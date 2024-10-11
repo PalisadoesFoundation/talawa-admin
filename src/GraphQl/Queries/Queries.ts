@@ -23,6 +23,9 @@ export const CHECK_AUTH = gql`
         state
         countryCode
       }
+      eventsAttended {
+        _id
+      }
     }
   }
 `;
