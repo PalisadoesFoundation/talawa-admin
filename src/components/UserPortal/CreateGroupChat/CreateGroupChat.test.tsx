@@ -10,7 +10,6 @@ import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 
 import {
-  DIRECT_CHATS_LIST,
   USERS_CONNECTION_LIST,
   USER_JOINED_ORGANIZATIONS,
 } from 'GraphQl/Queries/Queries';

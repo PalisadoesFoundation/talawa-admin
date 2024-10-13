@@ -9,6 +9,7 @@ import { CHAT_BY_ID, UNREAD_CHAT_LIST } from 'GraphQl/Queries/PlugInQueries';
 import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery, useSubscription } from '@apollo/client';
 import {
+  EDIT_CHAT_MESSAGE,
   MARK_CHAT_MESSAGES_AS_READ,
   MESSAGE_SENT_TO_CHAT,
   SEND_MESSAGE_TO_CHAT,
@@ -99,6 +100,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
   const [chat, setChat] = useState<Chat>();
   const [replyToDirectMessage, setReplyToDirectMessage] =
     useState<DirectMessage | null>(null);
+  const [editMessage, setEditMessage] = useState<DirectMessage | null>(null);
   const [groupChatDetailsModalisOpen, setGroupChatDetailsModalisOpen] =
     useState(false);
 
@@ -123,6 +125,14 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
       media: attachment,
       messageContent: newMessage,
       type: 'STRING',
+    },
+  });
+
+  const [editChatMessage] = useMutation(EDIT_CHAT_MESSAGE, {
+    variables: {
+      messageId: editMessage?._id,
+      messageContent: newMessage,
+      chatId: props.selectedContact,
     },
   });
 
@@ -182,7 +192,11 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
   }, [chatData]);
 
   const sendMessage = async (): Promise<void> => {
-    await sendMessageToChat();
+    if (editMessage) {
+      await editChatMessage();
+    } else {
+      await sendMessageToChat();
+    }
     await chatRefetch();
     setReplyToDirectMessage(null);
     setNewMessage('');
@@ -358,6 +372,15 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                                   data-testid="replyToMessage"
                                 >
                                   Reply
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                  onClick={() => {
+                                    setEditMessage(message);
+                                    setNewMessage(message.messageContent);
+                                  }}
+                                  data-testid="replyToMessage"
+                                >
+                                  Edit
                                 </Dropdown.Item>
                               </Dropdown.Menu>
                             </Dropdown>

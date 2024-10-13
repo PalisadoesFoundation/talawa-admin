@@ -1,28 +1,11 @@
-import {
-  FormControl,
-  FormControlLabel,
-  FormHelperText,
-  InputLabel,
-  MenuItem,
-  Paper,
-  RadioGroup,
-  Select,
-  FormLabel,
-  TableBody,
-  Radio,
-} from '@mui/material';
-import type { SelectChangeEvent } from '@mui/material/Select';
-import React, { useEffect, useState } from 'react';
+import { Paper, TableBody } from '@mui/material';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import styles from './CreateGroupChat.module.css';
 import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
-import { USER_JOINED_ORGANIZATIONS } from 'GraphQl/Queries/OrganizationQueries';
 import useLocalStorage from 'utils/useLocalstorage';
-import {
-  CREATE_CHAT,
-  CREATE_GROUP_CHAT,
-} from 'GraphQl/Mutations/OrganizationMutations';
+import { CREATE_CHAT } from 'GraphQl/Mutations/OrganizationMutations';
 import Table from '@mui/material/Table';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
@@ -32,9 +15,12 @@ import { styled } from '@mui/material/styles';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import { USERS_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
-import { LocalPoliceTwoTone, Search } from '@mui/icons-material';
-import { style } from '@mui/system';
+import { Search } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
+import convertToBase64 from 'utils/convertToBase64';
+import Avatar from 'components/Avatar/Avatar';
+import { FiEdit } from 'react-icons/fi';
 
 interface InterfaceCreateGroupChatProps {
   toggleCreateGroupChatModal: () => void;
@@ -48,29 +34,29 @@ interface InterfaceCreateGroupChatProps {
   ) => Promise<ApolloQueryResult<any>>;
 }
 
-interface InterfaceOrganization {
-  _id: string;
-  name: string;
-  image: string;
-  description: string;
-  admins: [];
-  members: [];
-  address: {
-    city: string;
-    countryCode: string;
-    line1: string;
-    postalCode: string;
-    state: string;
-  };
-  membershipRequestStatus: string;
-  userRegistrationRequired: boolean;
-  membershipRequests: {
-    _id: string;
-    user: {
-      _id: string;
-    };
-  }[];
-}
+// interface InterfaceOrganization {
+//   _id: string;
+//   name: string;
+//   image: string;
+//   description: string;
+//   admins: [];
+//   members: [];
+//   address: {
+//     city: string;
+//     countryCode: string;
+//     line1: string;
+//     postalCode: string;
+//     state: string;
+//   };
+//   membershipRequestStatus: string;
+//   userRegistrationRequired: boolean;
+//   membershipRequests: {
+//     _id: string;
+//     user: {
+//       _id: string;
+//     };
+//   }[];
+// }
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -103,12 +89,13 @@ export default function CreateGroupChat({
 
   const [createChat] = useMutation(CREATE_CHAT);
 
-  const [organizations, setOrganizations] = useState([]);
-  const [selectedOrganization, setSelectedOrganization] = useState(
-    organizations[0]?._id,
-  );
+  // const [organizations, setOrganizations] = useState([]);
+  // const [selectedOrganization, setSelectedOrganization] = useState(
+  //   organizations[0]?._id,
+  // );
   const [title, setTitle] = useState('');
-  let [userIds, setUserIds] = useState<string[]>([]);
+  const [description, setDescription] = useState('');
+  const [userIds, setUserIds] = useState<string[]>([]);
 
   const [addUserModalisOpen, setAddUserModalisOpen] = useState(false);
 
@@ -119,22 +106,14 @@ export default function CreateGroupChat({
   const toggleAddUserModal = /* istanbul ignore next */ (): void =>
     setAddUserModalisOpen(!addUserModalisOpen);
 
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
-    setSelectedOrganization(event.target.value as string);
-  };
-
-  const { data: joinedOrganizationsData } = useQuery(
-    USER_JOINED_ORGANIZATIONS,
-    {
-      variables: { id: userId },
-    },
-  );
+  // const handleChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
+  //   setSelectedOrganization(event.target.value as string);
+  // };
+  const { orgId: currentOrg } = useParams();
 
   function reset(): void {
-    setOrganizations([]);
     setTitle('');
     setUserIds([]);
-    setSelectedOrganization('');
   }
 
   useEffect(() => {
@@ -144,10 +123,11 @@ export default function CreateGroupChat({
   async function handleCreateGroupChat(): Promise<void> {
     await createChat({
       variables: {
-        organizationId: selectedOrganization,
+        organizationId: currentOrg,
         userIds: [userId, ...userIds],
         name: title,
         isGroup: true,
+        image: selectedImage,
       },
     });
     chatsListRefetch();
@@ -184,13 +164,23 @@ export default function CreateGroupChat({
     });
   };
 
-  useEffect(() => {
-    if (joinedOrganizationsData && joinedOrganizationsData.users.length > 0) {
-      const organizations =
-        joinedOrganizationsData.users[0]?.user?.joinedOrganizations || [];
-      setOrganizations(organizations);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleImageClick = (): void => {
+    fileInputRef?.current?.click();
+  };
+
+  const handleImageChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): Promise<void> => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const base64 = await convertToBase64(file);
+      setSelectedImage(base64);
     }
-  }, [joinedOrganizationsData]);
+  };
 
   return (
     <>
@@ -204,53 +194,26 @@ export default function CreateGroupChat({
           <Modal.Title>New Group</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          <input
+            type="file"
+            accept="image/*"
+            ref={fileInputRef}
+            style={{ display: 'none' }} // Hide the input
+            onChange={handleImageChange}
+          />
+          <div className={styles.groupInfo}>
+            {selectedImage ? (
+              <img className={styles.chatImage} src={selectedImage} alt="" />
+            ) : (
+              <Avatar avatarStyle={styles.groupImage} name={title} />
+            )}
+            <button onClick={handleImageClick} className={styles.editImgBtn}>
+              <FiEdit />
+            </button>
+          </div>
           <Form>
-            <Form.Group controlId="registerForm.Rtype">
-              <Form.Label>Select Organization</Form.Label>
-              <Form.Select
-                aria-label={'Select Organization'}
-                value={selectedOrganization}
-                onChange={(e) => handleChange(e)}
-              >
-                {organizations &&
-                  organizations.length &&
-                  organizations.map((organization: InterfaceOrganization) => (
-                    <option
-                      data-testid="selectOptions"
-                      key={organization._id}
-                      value={organization._id}
-                    >
-                      {`${organization.name}(${organization.address?.city},${organization.address?.state},${organization.address?.countryCode})`}
-                    </option>
-                  ))}
-              </Form.Select>
-            </Form.Group>
-
-            {/* <FormControl fullWidth>
-            <InputLabel id="select-org">Select Organization</InputLabel>
-            <Select
-              labelId="select-org"
-              id="select-org"
-              data-testid="orgSelect"
-              label="Select Organization"
-              value={selectedOrganization}
-              onChange={handleChange}
-            >
-              {organizations &&
-                organizations.length &&
-                organizations.map((organization: InterfaceOrganization) => (
-                  <MenuItem
-                    data-testid="selectOptions"
-                    key={organization._id}
-                    value={organization._id}
-                  >
-                    {`${organization.name}(${organization.address?.city},${organization.address?.state},${organization.address?.countryCode})`}
-                  </MenuItem>
-                ))}
-            </Select>
-          </FormControl> */}
             <Form.Group className="mb-3" controlId="registerForm.Rname">
-              <Form.Label>Group name</Form.Label>
+              <Form.Label>Title</Form.Label>
               <Form.Control
                 type="text"
                 placeholder={'Group name'}
@@ -260,6 +223,20 @@ export default function CreateGroupChat({
                 value={title}
                 onChange={(e): void => {
                   setTitle(e.target.value);
+                }}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="registerForm.Rname">
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder={'Group Description'}
+                autoComplete="off"
+                required
+                data-tsetid="groupDescriptionInput"
+                value={description}
+                onChange={(e): void => {
+                  setDescription(e.target.value);
                 }}
               />
             </Form.Group>
@@ -351,10 +328,10 @@ export default function CreateGroupChat({
                                 <Button
                                   variant="danger"
                                   onClick={() => {
-                                    userIds = userIds.filter(
+                                    const updatedUserIds = userIds.filter(
                                       (id) => id !== userDetails.user._id,
                                     );
-                                    setUserIds(userIds);
+                                    setUserIds(updatedUserIds);
                                   }}
                                   data-testid="removeBtn"
                                 >

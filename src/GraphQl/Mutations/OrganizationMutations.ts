@@ -91,6 +91,7 @@ export const CREATE_CHAT = gql`
     $organizationId: ID
     $isGroup: Boolean!
     $name: String
+    $image: String
   ) {
     createChat(
       data: {
@@ -98,6 +99,7 @@ export const CREATE_CHAT = gql`
         organizationId: $organizationId
         isGroup: $isGroup
         name: $name
+        image: $image
       }
     ) {
       _id
@@ -127,6 +129,26 @@ export const UPDATE_CHAT = gql`
   mutation updateChat($input: UpdateChatInput!) {
     updateChat(input: $input) {
       _id
+    }
+  }
+`;
+
+export const EDIT_CHAT_MESSAGE = gql`
+  mutation updateChatMessage(
+    $messageId: ID!
+    $messageContent: String!
+    $chatId: ID!
+  ) {
+    updateChatMessage(
+      input: {
+        messageId: $messageId
+        messageContent: $messageContent
+        chatId: $chatId
+      }
+    ) {
+      _id
+      messageContent
+      updatedAt
     }
   }
 `;
