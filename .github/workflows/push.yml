@@ -21,6 +21,8 @@ env:
   
 jobs:
   Code-Coverage:
+    if: ${{ github.actor != 'dependabot[bot]' }}
+    name: Test and Calculate Code Coverage
     runs-on: ubuntu-latest
     strategy:
       matrix:
