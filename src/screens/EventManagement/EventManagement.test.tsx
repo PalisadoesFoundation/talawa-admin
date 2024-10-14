@@ -68,7 +68,7 @@ describe('Event Management', () => {
     expect(dashboardTab).toBeInTheDocument();
 
     const dashboardButton = screen.getByTestId('dashboardBtn');
-    userEvent.click(dashboardButton);
+    await userEvent.click(dashboardButton);
 
     expect(dashboardTab).toBeInTheDocument();
   });
@@ -77,7 +77,7 @@ describe('Event Management', () => {
     renderEventManagement();
 
     const backButton = screen.getByTestId('backBtn');
-    userEvent.click(backButton);
+    await userEvent.click(backButton);
     await waitFor(() => {
       const eventsScreen = screen.getByTestId('eventsScreen');
       expect(eventsScreen).toBeInTheDocument();
@@ -88,25 +88,25 @@ describe('Event Management', () => {
     renderEventManagement();
 
     const registrantsButton = screen.getByTestId('registrantsBtn');
-    userEvent.click(registrantsButton);
+    await userEvent.click(registrantsButton);
 
     const registrantsTab = screen.getByTestId('eventRegistrantsTab');
     expect(registrantsTab).toBeInTheDocument();
 
     const eventActionsButton = screen.getByTestId('eventActionsBtn');
-    userEvent.click(eventActionsButton);
+    await userEvent.click(eventActionsButton);
 
     const eventActionsTab = screen.getByTestId('eventActionsTab');
     expect(eventActionsTab).toBeInTheDocument();
 
     const eventAgendasButton = screen.getByTestId('eventAgendasBtn');
-    userEvent.click(eventAgendasButton);
+    await userEvent.click(eventAgendasButton);
 
     const eventAgendasTab = screen.getByTestId('eventAgendasTab');
     expect(eventAgendasTab).toBeInTheDocument();
 
     const eventStatsButton = screen.getByTestId('eventStatsBtn');
-    userEvent.click(eventStatsButton);
+    await userEvent.click(eventStatsButton);
 
     const eventStatsTab = screen.getByTestId('eventStatsTab');
     expect(eventStatsTab).toBeInTheDocument();

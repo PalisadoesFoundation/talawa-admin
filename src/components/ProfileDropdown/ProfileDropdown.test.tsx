@@ -1,5 +1,5 @@
 import React, { act } from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import ProfileDropdown from './ProfileDropdown';
@@ -104,11 +104,9 @@ describe('ProfileDropdown Component', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await act(async () => {
-      userEvent.click(screen.getByTestId('togDrop'));
-    });
+    await userEvent.click(screen.getByTestId('togDrop'));
 
-    userEvent.click(screen.getByTestId('logoutBtn'));
+    await userEvent.click(screen.getByTestId('logoutBtn'));
     expect(global.window.location.pathname).toBe('/');
   });
   describe('Member screen routing testing', () => {
@@ -120,11 +118,9 @@ describe('ProfileDropdown Component', () => {
           </BrowserRouter>
         </MockedProvider>,
       );
-      await act(async () => {
-        userEvent.click(screen.getByTestId('togDrop'));
-      });
+      await userEvent.click(screen.getByTestId('togDrop'));
 
-      userEvent.click(screen.getByTestId('profileBtn'));
+      await userEvent.click(screen.getByTestId('profileBtn'));
       expect(global.window.location.pathname).toBe('/user/settings');
     });
   });

@@ -57,7 +57,7 @@ describe('Testing User List Card', () => {
 
     await wait();
 
-    userEvent.click(screen.getByText(/Add Admin/i));
+    await userEvent.click(screen.getByText(/Add Admin/i));
   });
 
   test('Should render text elements when props value is not passed', async () => {
@@ -76,6 +76,6 @@ describe('Testing User List Card', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByText(/Add Admin/i));
+    await userEvent.click(screen.getByText(/Add Admin/i));
   });
 });

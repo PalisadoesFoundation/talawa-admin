@@ -88,18 +88,18 @@ describe('Organisation Settings Page', () => {
         screen.getByTestId('agendaItemCategoriesSettings'),
       ).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('generalSettings'));
+    await userEvent.click(screen.getByTestId('generalSettings'));
 
     await waitFor(() => {
       expect(screen.getByTestId('generalTab')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('actionItemCategoriesSettings'));
+    await userEvent.click(screen.getByTestId('actionItemCategoriesSettings'));
     await waitFor(() => {
       expect(screen.getByTestId('actionItemCategoriesTab')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('agendaItemCategoriesSettings'));
+    await userEvent.click(screen.getByTestId('agendaItemCategoriesSettings'));
     await waitFor(() => {
       expect(screen.getByTestId('agendaItemCategoriesTab')).toBeInTheDocument();
     });

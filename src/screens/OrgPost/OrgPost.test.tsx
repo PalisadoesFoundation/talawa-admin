@@ -1,5 +1,5 @@
 import { MockedProvider } from '@apollo/react-testing';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
@@ -228,23 +228,35 @@ describe('Organisation Post Page', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('createPostModalBtn'));
+    await userEvent.click(screen.getByTestId('createPostModalBtn'));
 
-    userEvent.type(screen.getByTestId('modalTitle'), formData.posttitle);
+    await userEvent.type(screen.getByTestId('modalTitle'), formData.posttitle);
 
-    userEvent.type(screen.getByTestId('modalinfo'), formData.postinfo);
-    userEvent.upload(screen.getByTestId('addMediaField'), formData.postImage);
-    userEvent.upload(screen.getByTestId('addMediaField'), formData.postVideo);
-    userEvent.upload(screen.getByTestId('addMediaField'), formData.postImage);
-    userEvent.upload(screen.getByTestId('addMediaField'), formData.postVideo);
-    userEvent.click(screen.getByTestId('pinPost'));
+    await userEvent.type(screen.getByTestId('modalinfo'), formData.postinfo);
+    await userEvent.upload(
+      screen.getByTestId('addMediaField'),
+      formData.postImage,
+    );
+    await userEvent.upload(
+      screen.getByTestId('addMediaField'),
+      formData.postVideo,
+    );
+    await userEvent.upload(
+      screen.getByTestId('addMediaField'),
+      formData.postImage,
+    );
+    await userEvent.upload(
+      screen.getByTestId('addMediaField'),
+      formData.postVideo,
+    );
+    await userEvent.click(screen.getByTestId('pinPost'));
     expect(screen.getByTestId('pinPost')).toBeChecked();
 
-    userEvent.click(screen.getByTestId('createPostBtn'));
+    await userEvent.click(screen.getByTestId('createPostBtn'));
 
     await wait();
 
-    userEvent.click(screen.getByTestId('closeOrganizationModal'));
+    await userEvent.click(screen.getByTestId('closeOrganizationModal'));
   }, 15000);
 
   test('Testing search functionality', async () => {
@@ -267,10 +279,13 @@ describe('Organisation Post Page', () => {
       });
     }
     await debounceWait();
-    userEvent.type(screen.getByPlaceholderText(/Search By/i), 'postone{enter}');
+    await userEvent.type(
+      screen.getByPlaceholderText(/Search By/i),
+      'postone{enter}',
+    );
     await debounceWait();
     const sortDropdown = screen.getByTestId('sort');
-    userEvent.click(sortDropdown);
+    await userEvent.click(sortDropdown);
   });
   test('Testing search text and title toggle', async () => {
     await act(async () => {
@@ -358,6 +373,7 @@ describe('Organisation Post Page', () => {
     });
     expect(searchInput).toBeInTheDocument();
   });
+
   test('After creating a post, the data should be refetched', async () => {
     const refetchMock = jest.fn();
 
@@ -376,11 +392,11 @@ describe('Organisation Post Page', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('createPostModalBtn'));
+    await userEvent.click(screen.getByTestId('createPostModalBtn'));
 
     // Fill in post form fields...
 
-    userEvent.click(screen.getByTestId('createPostBtn'));
+    await userEvent.click(screen.getByTestId('createPostBtn'));
 
     await wait();
 
@@ -402,7 +418,7 @@ describe('Organisation Post Page', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByTestId('createPostModalBtn'));
+    await userEvent.click(screen.getByTestId('createPostModalBtn'));
 
     const postTitleInput = screen.getByTestId('modalTitle');
     fireEvent.change(postTitleInput, { target: { value: 'Test Post' } });
@@ -431,7 +447,7 @@ describe('Organisation Post Page', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByTestId('createPostModalBtn'));
+    await userEvent.click(screen.getByTestId('createPostModalBtn'));
 
     const postTitleInput = screen.getByTestId('modalTitle');
     fireEvent.change(postTitleInput, { target: { value: 'Test Post' } });
@@ -446,7 +462,7 @@ describe('Organisation Post Page', () => {
       type: 'image/png',
     });
     const imageInput = screen.getByTestId('addMediaField');
-    userEvent.upload(imageInput, imageFile);
+    await userEvent.upload(imageInput, imageFile);
 
     // Check if the image is displayed
     const imagePreview = await screen.findByAltText('Post Image Preview');
@@ -477,13 +493,13 @@ describe('Organisation Post Page', () => {
 
     const createPostModalBtn = screen.getByTestId('createPostModalBtn');
 
-    userEvent.click(createPostModalBtn);
+    await userEvent.click(createPostModalBtn);
 
     const modalTitle = screen.getByTestId('modalOrganizationHeader');
     expect(modalTitle).toBeInTheDocument();
 
     const closeButton = screen.getByTestId(/modalOrganizationHeader/i);
-    userEvent.click(closeButton);
+    await userEvent.click(closeButton);
 
     await wait();
 
@@ -505,7 +521,7 @@ describe('Organisation Post Page', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByTestId('createPostModalBtn'));
+    await userEvent.click(screen.getByTestId('createPostModalBtn'));
 
     // Check if input fields and buttons are present
     expect(screen.getByTestId('modalTitle')).toBeInTheDocument();
@@ -528,7 +544,7 @@ describe('Organisation Post Page', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByTestId('createPostModalBtn'));
+    await userEvent.click(screen.getByTestId('createPostModalBtn'));
 
     // Simulate user input
     fireEvent.change(screen.getByTestId('modalTitle'), {
@@ -558,7 +574,7 @@ describe('Organisation Post Page', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByTestId('createPostModalBtn'));
+    await userEvent.click(screen.getByTestId('createPostModalBtn'));
 
     const postTitleInput = screen.getByTestId('modalTitle');
     fireEvent.change(postTitleInput, { target: { value: 'Test Post' } });
@@ -571,7 +587,7 @@ describe('Organisation Post Page', () => {
       type: 'image/png',
     });
     const input = screen.getByTestId('addMediaField');
-    userEvent.upload(input, file);
+    await userEvent.upload(input, file);
 
     await screen.findByAltText('Post Image Preview');
     expect(screen.getByAltText('Post Image Preview')).toBeInTheDocument();
@@ -579,31 +595,27 @@ describe('Organisation Post Page', () => {
     const closeButton = screen.getByTestId('mediaCloseButton');
     fireEvent.click(closeButton);
   }, 15000);
+
   test('Create post, preview image, and close preview', async () => {
-    await act(async () => {
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <ToastContainer />
-                <OrgPost />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-    });
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <OrgPost />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
     await wait();
 
-    await act(async () => {
-      userEvent.click(screen.getByTestId('createPostModalBtn'));
-    });
+    userEvent.click(screen.getByTestId('createPostModalBtn'));
 
-    const postTitleInput = screen.getByTestId('modalTitle');
-    await act(async () => {
-      fireEvent.change(postTitleInput, { target: { value: 'Test Post' } });
-    });
+    // Wait for the post title input to appear
+    const postTitleInput = await screen.findByTestId('modalTitle');
+    fireEvent.change(postTitleInput, { target: { value: 'Test Post' } });
 
     const postInfoTextarea = screen.getByTestId('modalinfo');
     await act(async () => {
@@ -631,6 +643,7 @@ describe('Organisation Post Page', () => {
     });
     expect(videoPreview).not.toBeInTheDocument();
   });
+
   test('Sorting posts by pinned status', async () => {
     // Mocked data representing posts with different pinned statuses
     const mockedPosts = [
@@ -670,20 +683,20 @@ describe('Organisation Post Page', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      const sortedPosts = screen.getAllByTestId('post-item');
 
-    const sortedPosts = screen.getAllByTestId('post-item');
-
-    // Assert that the posts are sorted correctly
-    expect(sortedPosts).toHaveLength(mockedPosts.length);
-    expect(sortedPosts[0]).toHaveTextContent(
-      'postoneThis is the first po... Aditya Shelke',
-    );
-    expect(sortedPosts[1]).toHaveTextContent(
-      'posttwoTis is the post two Aditya Shelke',
-    );
-    expect(sortedPosts[2]).toHaveTextContent(
-      'posttwoTis is the post two Aditya Shelke',
-    );
+      // Assert that the posts are sorted correctly
+      expect(sortedPosts).toHaveLength(mockedPosts.length);
+      expect(sortedPosts[0]).toHaveTextContent(
+        'postoneThis is the first po... Aditya Shelke',
+      );
+      expect(sortedPosts[1]).toHaveTextContent(
+        'posttwoTis is the post two Aditya Shelke',
+      );
+      expect(sortedPosts[2]).toHaveTextContent(
+        'posttwoTis is the post two Aditya Shelke',
+      );
+    });
   });
 });

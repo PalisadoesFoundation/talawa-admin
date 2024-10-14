@@ -312,7 +312,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
       </MockedProvider>,
     );
     await wait();
-    userEvent.click(screen.getByText('People'));
+    await userEvent.click(screen.getByText('People'));
     expect(global.window.location.pathname).toContain('/user/people/123');
   });
 
@@ -334,7 +334,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     expect(screen.getAllByText(/People/i)[0]).toBeInTheDocument();
 
     const peopelBtn = screen.getByTestId(/People/i);
-    userEvent.click(peopelBtn);
+    await userEvent.click(peopelBtn);
     await wait();
     expect(window.location.pathname).toContain('user/people/123');
   });

@@ -279,7 +279,7 @@ describe('Testing PostCard Component [User Portal]', () => {
     );
     await wait();
 
-    userEvent.click(screen.getByTestId('dropdown'));
+    await userEvent.click(screen.getByTestId('dropdown'));
     await wait();
     expect(screen.getByText('Edit')).toBeInTheDocument();
     expect(screen.getByText('Delete')).toBeInTheDocument();
@@ -328,17 +328,17 @@ describe('Testing PostCard Component [User Portal]', () => {
     );
     await wait();
 
-    userEvent.click(screen.getByTestId('dropdown'));
-    userEvent.click(screen.getByTestId('editPost'));
+    await userEvent.click(screen.getByTestId('dropdown'));
+    await userEvent.click(screen.getByTestId('editPost'));
     await wait();
 
     expect(screen.getByTestId('editPostModalTitle')).toBeInTheDocument();
-    userEvent.clear(screen.getByTestId('postInput'));
-    userEvent.type(screen.getByTestId('postInput'), 'Edited Post');
-    userEvent.click(screen.getByTestId('editPostBtn'));
+    await userEvent.clear(screen.getByTestId('postInput'));
+    await userEvent.type(screen.getByTestId('postInput'), 'Edited Post');
+    await userEvent.click(screen.getByTestId('editPostBtn'));
     await wait();
 
-    expect(toast.success).toBeCalledWith('Post updated Successfully');
+    expect(toast.success).toHaveBeenCalledWith('Post updated Successfully');
   });
 
   test('Delete post should work properly', async () => {
@@ -384,11 +384,13 @@ describe('Testing PostCard Component [User Portal]', () => {
     );
     await wait();
 
-    userEvent.click(screen.getByTestId('dropdown'));
-    userEvent.click(screen.getByTestId('deletePost'));
+    await userEvent.click(screen.getByTestId('dropdown'));
+    await userEvent.click(screen.getByTestId('deletePost'));
     await wait();
 
-    expect(toast.success).toBeCalledWith('Successfully deleted the Post.');
+    expect(toast.success).toHaveBeenCalledWith(
+      'Successfully deleted the Post.',
+    );
   });
 
   test('Component should be rendered properly if user has liked the post', async () => {
@@ -486,8 +488,8 @@ describe('Testing PostCard Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('viewPostBtn'));
-    userEvent.click(screen.getByTestId('likePostBtn'));
+    await userEvent.click(screen.getByTestId('viewPostBtn'));
+    await userEvent.click(screen.getByTestId('likePostBtn'));
 
     if (beforeUserId) {
       setItem('userId', beforeUserId);
@@ -539,8 +541,8 @@ describe('Testing PostCard Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('viewPostBtn'));
-    userEvent.click(screen.getByTestId('likePostBtn'));
+    await userEvent.click(screen.getByTestId('viewPostBtn'));
+    await userEvent.click(screen.getByTestId('likePostBtn'));
 
     if (beforeUserId) {
       setItem('userId', beforeUserId);
@@ -632,10 +634,10 @@ describe('Testing PostCard Component [User Portal]', () => {
 
     const randomComment = 'testComment';
 
-    userEvent.click(screen.getByTestId('viewPostBtn'));
+    await userEvent.click(screen.getByTestId('viewPostBtn'));
 
-    userEvent.type(screen.getByTestId('commentInput'), randomComment);
-    userEvent.click(screen.getByTestId('createCommentBtn'));
+    await userEvent.type(screen.getByTestId('commentInput'), randomComment);
+    await userEvent.click(screen.getByTestId('createCommentBtn'));
 
     await wait();
   });
@@ -716,9 +718,9 @@ describe('Testing PostCard Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    userEvent.click(screen.getByTestId('viewPostBtn'));
+    await userEvent.click(screen.getByTestId('viewPostBtn'));
 
-    userEvent.click(screen.getAllByTestId('likeCommentBtn')[0]);
+    await userEvent.click(screen.getAllByTestId('likeCommentBtn')[0]);
 
     await wait();
 
@@ -803,9 +805,9 @@ describe('Testing PostCard Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    userEvent.click(screen.getByTestId('viewPostBtn'));
+    await userEvent.click(screen.getByTestId('viewPostBtn'));
 
-    userEvent.click(screen.getAllByTestId('likeCommentBtn')[0]);
+    await userEvent.click(screen.getAllByTestId('likeCommentBtn')[0]);
 
     await wait();
 
@@ -855,7 +857,7 @@ describe('Testing PostCard Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('viewPostBtn'));
+    await userEvent.click(screen.getByTestId('viewPostBtn'));
     expect(screen.findAllByText('Comments')).not.toBeNull();
   });
 });

@@ -180,7 +180,7 @@ describe('Testing User Campaigns Screen', () => {
     const searchCampaigns = await screen.findByTestId('searchCampaigns');
     expect(searchCampaigns).toBeInTheDocument();
 
-    userEvent.click(screen.getByTestId('filter'));
+    await userEvent.click(screen.getByTestId('filter'));
     await waitFor(() => {
       expect(screen.getByTestId('fundingGoal_ASC')).toBeInTheDocument();
     });

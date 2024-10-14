@@ -128,8 +128,10 @@ describe('Testing StartPostModal Component: User Portal', () => {
     renderStartPostModal(true, null);
     await wait();
 
-    userEvent.click(screen.getByTestId('createPostBtn'));
-    expect(toastSpy).toBeCalledWith("Can't create a post with an empty body.");
+    await userEvent.click(screen.getByTestId('createPostBtn'));
+    expect(toastSpy).toHaveBeenCalledWith(
+      "Can't create a post with an empty body.",
+    );
   });
 
   test('On valid post submission Info toast should be shown', async () => {
@@ -137,13 +139,15 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await wait();
 
     const randomPostInput = 'This is dummy text';
-    userEvent.type(screen.getByTestId('postInput'), randomPostInput);
+    await userEvent.type(screen.getByTestId('postInput'), randomPostInput);
     expect(screen.queryByText(randomPostInput)).toBeInTheDocument();
 
-    userEvent.click(screen.getByTestId('createPostBtn'));
+    await userEvent.click(screen.getByTestId('createPostBtn'));
 
-    expect(toast.error).not.toBeCalledWith();
-    expect(toast.info).toBeCalledWith('Processing your post. Please wait.');
+    expect(toast.error).not.toHaveBeenCalledWith();
+    expect(toast.info).toHaveBeenCalledWith(
+      'Processing your post. Please wait.',
+    );
     // await wait();
     // expect(toast.success).toBeCalledWith(
     //   'Your post is now visible in the feed.',

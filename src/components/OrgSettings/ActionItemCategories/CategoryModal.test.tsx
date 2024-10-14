@@ -92,9 +92,9 @@ const fillFormAndSubmit = async (
 
   fireEvent.change(nameInput, { target: { value: name } });
   if (isDisabled) {
-    userEvent.click(isDisabledSwitch);
+    await userEvent.click(isDisabledSwitch);
   }
-  userEvent.click(submitBtn);
+  await userEvent.click(submitBtn);
 };
 
 describe('Testing Action Item Category Modal', () => {
@@ -122,8 +122,8 @@ describe('Testing Action Item Category Modal', () => {
     renderCategoryModal(link1, categoryProps[1]);
     const isDisabledSwitch = screen.getByTestId('isDisabledSwitch');
     expect(isDisabledSwitch).not.toBeChecked();
-    userEvent.click(isDisabledSwitch);
-    expect(isDisabledSwitch).toBeChecked();
+    await userEvent.click(isDisabledSwitch);
+    await waitFor(() => expect(isDisabledSwitch).toBeChecked());
   });
 
   it('should edit category', async () => {
@@ -199,7 +199,7 @@ describe('Testing Action Item Category Modal', () => {
   it('Try to edit without changing any field', async () => {
     renderCategoryModal(link1, categoryProps[1]);
     const submitBtn = screen.getByTestId('formSubmitButton');
-    userEvent.click(submitBtn);
+    await userEvent.click(submitBtn);
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(translations.sameNameConflict);

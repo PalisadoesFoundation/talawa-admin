@@ -110,7 +110,7 @@ describe('Testing User Table Item', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByTestId('acceptMembershipRequestBtn123'));
+    await userEvent.click(screen.getByTestId('acceptMembershipRequestBtn123'));
   });
 
   test('Reject MembershipRequest Button works properly', async () => {
@@ -142,6 +142,6 @@ describe('Testing User Table Item', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByTestId('rejectMembershipRequestBtn123'));
+    await userEvent.click(screen.getByTestId('rejectMembershipRequestBtn123'));
   });
 });
