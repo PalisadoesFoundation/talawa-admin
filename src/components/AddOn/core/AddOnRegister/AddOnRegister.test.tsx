@@ -94,19 +94,19 @@ describe('Testing AddOnRegister', () => {
   };
 
   test('should render modal and take info to add plugin for registered organization', async () => {
-    await act(async () => {
-      render(
-        <ApolloProvider client={client}>
-          <Provider store={store}>
-            <BrowserRouter>
-              <I18nextProvider i18n={i18nForTest}>
-                <AddOnRegister {...props} />
-              </I18nextProvider>
-            </BrowserRouter>
-          </Provider>
-        </ApolloProvider>,
-      );
-    });
+    // Render the component with all required providers
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AddOnRegister />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
     // Wait for the button to be in the document
     await waitFor(() =>
       expect(
@@ -115,13 +115,26 @@ describe('Testing AddOnRegister', () => {
     );
 
     // Simulate user interactions
-    userEvent.click(screen.getByRole('button', { name: /Add New/i }));
-    userEvent.type(screen.getByPlaceholderText(/Ex: Donations/i), 'myplugin');
-    userEvent.type(
+    await userEvent.click(screen.getByRole('button', { name: /Add New/i }));
+
+    // Make sure the placeholders exist before interacting with them
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText(/Ex: Donations/i)).toBeInTheDocument();
+      expect(
+        screen.getByPlaceholderText(/This Plugin enables UI for/i),
+      ).toBeInTheDocument();
+      expect(screen.getByPlaceholderText(/Ex: john Doe/i)).toBeInTheDocument();
+    });
+
+    await userEvent.type(
+      screen.getByPlaceholderText(/Ex: Donations/i),
+      'myplugin',
+    );
+    await userEvent.type(
       screen.getByPlaceholderText(/This Plugin enables UI for/i),
       'test description',
     );
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(/Ex: john Doe/i),
       'test creator',
     );
@@ -143,16 +156,22 @@ describe('Testing AddOnRegister', () => {
     });
     await waitFor(() => new Promise((resolve) => setTimeout(resolve, 0)));
 
-    userEvent.click(screen.getByRole('button', { name: /Add New/i }));
+    await userEvent.click(screen.getByRole('button', { name: /Add New/i }));
     await wait(100);
     expect(screen.getByTestId('addonregisterBtn')).toBeInTheDocument();
-    userEvent.type(screen.getByTestId('pluginName'), pluginData.pluginName);
-    userEvent.type(
+    await userEvent.type(
+      screen.getByTestId('pluginName'),
+      pluginData.pluginName,
+    );
+    await userEvent.type(
       screen.getByTestId('pluginCreatedBy'),
       pluginData.pluginCreatedBy,
     );
-    userEvent.type(screen.getByTestId('pluginDesc'), pluginData.pluginDesc);
-    userEvent.click(screen.getByTestId('addonregisterBtn'));
+    await userEvent.type(
+      screen.getByTestId('pluginDesc'),
+      pluginData.pluginDesc,
+    );
+    await userEvent.click(screen.getByTestId('addonregisterBtn'));
 
     await wait(100);
     expect(toast.success).toHaveBeenCalledWith('Plugin added Successfully');
@@ -174,16 +193,22 @@ describe('Testing AddOnRegister', () => {
     });
     await waitFor(() => new Promise((resolve) => setTimeout(resolve, 0)));
 
-    userEvent.click(screen.getByRole('button', { name: /Add New/i }));
+    await userEvent.click(screen.getByRole('button', { name: /Add New/i }));
     await wait(100);
     expect(screen.getByTestId('addonregisterBtn')).toBeInTheDocument();
-    userEvent.type(screen.getByTestId('pluginName'), pluginData.pluginName);
-    userEvent.type(
+    await userEvent.type(
+      screen.getByTestId('pluginName'),
+      pluginData.pluginName,
+    );
+    await userEvent.type(
       screen.getByTestId('pluginCreatedBy'),
       pluginData.pluginCreatedBy,
     );
-    userEvent.type(screen.getByTestId('pluginDesc'), pluginData.pluginDesc);
-    userEvent.click(screen.getByTestId('addonregisterBtn'));
+    await userEvent.type(
+      screen.getByTestId('pluginDesc'),
+      pluginData.pluginDesc,
+    );
+    await userEvent.click(screen.getByTestId('addonregisterBtn'));
 
     await wait(3000); // Waiting for 3 seconds to reload the page as timeout is set to 2 seconds in the component
     expect(mockNavigate).toHaveBeenCalledWith(0);

@@ -250,10 +250,10 @@ describe('Testing AddOnStore Component', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByText('Installed'));
+    await userEvent.click(screen.getByText('Installed'));
 
     await wait();
-    userEvent.click(screen.getByText('Available'));
+    await userEvent.click(screen.getByText('Available'));
   });
 
   test('check the working search bar when on Available tab', async () => {
@@ -274,7 +274,7 @@ describe('Testing AddOnStore Component', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByText('Available'));
+    await userEvent.click(screen.getByText('Available'));
 
     await wait();
     let searchText = '';
@@ -318,7 +318,7 @@ describe('Testing AddOnStore Component', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByText('Installed'));
+    await userEvent.click(screen.getByText('Installed'));
 
     expect(screen.getByText('Filters')).toBeInTheDocument();
     expect(screen.getByLabelText('Enabled')).toBeInTheDocument();
@@ -347,7 +347,7 @@ describe('Testing AddOnStore Component', () => {
       </ApolloProvider>,
     );
     await wait();
-    userEvent.click(screen.getByText('Installed'));
+    await userEvent.click(screen.getByText('Installed'));
 
     await wait();
     let searchText = '';

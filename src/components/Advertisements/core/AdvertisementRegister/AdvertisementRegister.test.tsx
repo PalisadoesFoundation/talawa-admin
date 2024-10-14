@@ -533,7 +533,6 @@ describe('Testing Advertisement Register Component', () => {
   });
 
   test('Throws error when the end date is less than the start date while editing the advertisement', async () => {
-    jest.useFakeTimers();
     const { getByText, getByLabelText, queryByText } = render(
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
@@ -557,8 +556,18 @@ describe('Testing Advertisement Register Component', () => {
       </MockedProvider>,
     );
 
+    await waitFor(() =>
+      expect(queryByText(translations.edit)).toBeInTheDocument(),
+    );
+
+    // Simulate clicking the edit button
     fireEvent.click(getByText(translations.edit));
-    expect(queryByText(translations.editAdvertisement)).toBeInTheDocument();
+
+    // Ensure the edit advertisement form appears
+    await waitFor(() =>
+      expect(queryByText(translations.editAdvertisement)).toBeInTheDocument(),
+    );
+
     fireEvent.change(getByLabelText(translations.Rname), {
       target: { value: 'Test Advertisement' },
     });
@@ -570,7 +579,7 @@ describe('Testing Advertisement Register Component', () => {
       type: 'video/mp4',
     });
     const mediaInput = screen.getByTestId('advertisementMedia');
-    userEvent.upload(mediaInput, mediaFile);
+    await userEvent.upload(mediaInput, mediaFile);
 
     const mediaPreview = await screen.findByTestId('mediaPreview');
     expect(mediaPreview).toBeInTheDocument();
@@ -596,11 +605,9 @@ describe('Testing Advertisement Register Component', () => {
         'End Date should be greater than or equal to Start Date',
       );
     });
-    jest.useRealTimers();
   });
 
   test('Media preview renders correctly', async () => {
-    jest.useFakeTimers();
     render(
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
@@ -627,15 +634,19 @@ describe('Testing Advertisement Register Component', () => {
     const mediaFile = new File(['video content'], 'test.mp4', {
       type: 'video/mp4',
     });
-    const mediaInput = screen.getByTestId('advertisementMedia');
-    userEvent.upload(mediaInput, mediaFile);
 
-    const mediaPreview = await screen.findByTestId('mediaPreview');
-    expect(mediaPreview).toBeInTheDocument();
+    const mediaInput = screen.getByTestId('advertisementMedia');
+    await userEvent.upload(mediaInput, mediaFile);
+
+    const mediaPreview = screen.queryByTestId('mediaPreview');
+    expect(mediaPreview).toBeInTheDocument(); // Ensure it is in the document
 
     const closeButton = await screen.findByTestId('closePreview');
     fireEvent.click(closeButton);
-    expect(mediaPreview).not.toBeInTheDocument();
+
+    await waitFor(() => {
+      const mediaPreview = screen.queryByTestId('mediaPreview');
+      expect(mediaPreview).not.toBeInTheDocument(); // Ensure it is removed from the document
+    });
   });
-  jest.useRealTimers();
 });

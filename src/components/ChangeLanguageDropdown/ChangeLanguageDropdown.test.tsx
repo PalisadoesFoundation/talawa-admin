@@ -71,7 +71,7 @@ describe('Testing Change Language Dropdown', () => {
     getByTestId('language-dropdown-btn').className.includes('');
     getByTestId('dropdown-btn-0').className.includes('');
 
-    userEvent.click(getByTestId('dropdown-btn-0'));
+    await userEvent.click(getByTestId('dropdown-btn-0'));
     await wait();
 
     languages.map((language) => {
@@ -136,23 +136,23 @@ describe('Testing Change Language Dropdown', () => {
       </MockedProvider>,
     );
 
-    userEvent.click(getByTestId('language-dropdown-btn'));
+    await userEvent.click(getByTestId('language-dropdown-btn'));
     await wait();
     const changeLanguageBtn = getByTestId(`change-language-btn-fr`);
     await wait();
     expect(changeLanguageBtn).toBeInTheDocument();
     await wait();
-    userEvent.click(changeLanguageBtn);
+    await userEvent.click(changeLanguageBtn);
     await wait();
     expect(cookies.get('i18next')).toBe('fr');
     await wait();
-    userEvent.click(getByTestId('language-dropdown-btn'));
+    await userEvent.click(getByTestId('language-dropdown-btn'));
     await wait();
     const changeLanguageBtnHi = getByTestId(`change-language-btn-hi`);
     await wait();
     expect(changeLanguageBtnHi).toBeInTheDocument();
     await wait();
-    userEvent.click(changeLanguageBtnHi);
+    await userEvent.click(changeLanguageBtnHi);
     await wait();
   });
 });

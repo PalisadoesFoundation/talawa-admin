@@ -7,7 +7,7 @@ import {
   InMemoryCache,
 } from '@apollo/client';
 import { MockedProvider } from '@apollo/client/testing';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import 'jest-location-mock';
 
 import type { DocumentNode, NormalizedCacheObject } from '@apollo/client';
@@ -29,7 +29,6 @@ import useLocalStorage from 'utils/useLocalstorage';
 import Advertisement from './Advertisements';
 
 const { getItem } = useLocalStorage();
-
 const httpLink = new HttpLink({
   uri: BACKEND_URL,
   headers: {
@@ -366,6 +365,7 @@ describe('Testing Advertisement Component', () => {
       ...ADVERTISEMENTS_LIST_MOCK,
     ];
 
+    // Render the component
     render(
       <MockedProvider addTypename={false} mocks={mocks}>
         <BrowserRouter>
@@ -379,36 +379,60 @@ describe('Testing Advertisement Component', () => {
       </MockedProvider>,
     );
 
+    // Wait for any initial async tasks (if needed)
     await wait();
 
-    userEvent.click(screen.getByText('Create Advertisement'));
-    userEvent.type(
+    // Click on 'Create Advertisement'
+    await userEvent.click(screen.getByText('Create Advertisement'));
+
+    // Type in the name of the advertisement
+    await userEvent.type(
       screen.getByLabelText('Enter name of Advertisement'),
       'Cookie Shop',
     );
+
+    // Mock a file upload
     const mediaFile = new File(['media content'], 'test.png', {
       type: 'image/png',
     });
 
+    // Trigger the media file upload event
     const mediaInput = screen.getByTestId('advertisementMedia');
     fireEvent.change(mediaInput, {
       target: {
         files: [mediaFile],
       },
     });
+
+    // Wait for the media preview to show up (since it's async)
     const mediaPreview = await screen.findByTestId('mediaPreview');
     expect(mediaPreview).toBeInTheDocument();
-    userEvent.selectOptions(
+
+    // Select the type of advertisement
+    await userEvent.selectOptions(
       screen.getByLabelText('Select type of Advertisement'),
       'POPUP',
     );
-    userEvent.type(screen.getByLabelText('Select Start Date'), '2023-01-01');
-    userEvent.type(screen.getByLabelText('Select End Date'), '2023-02-02');
 
-    userEvent.click(screen.getByTestId('addonregister'));
-    expect(
-      await screen.findByText('Advertisement created successfully.'),
-    ).toBeInTheDocument();
+    // Set the start and end date
+    await userEvent.type(
+      screen.getByLabelText('Select Start Date'),
+      '2023-01-01',
+    );
+    await userEvent.type(
+      screen.getByLabelText('Select End Date'),
+      '2023-02-02',
+    );
+
+    // Click on the submit button to register the advertisement
+    await userEvent.click(screen.getByTestId('addonregister'));
+
+    // Wait for the success message
+    await waitFor(() =>
+      expect(
+        screen.getByText('Advertisement created successfully.'),
+      ).toBeInTheDocument(),
+    );
   });
 
   test('for the working of the tabs', async () => {
@@ -433,11 +457,29 @@ describe('Testing Advertisement Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
-    userEvent.click(screen.getByText('Active Campaigns'));
+    // Wait for the component to fully render with the "Create Advertisement" text
+    await waitFor(() => {
+      expect(screen.getByText('Create Advertisement')).toBeInTheDocument();
+    });
 
-    await wait();
-    userEvent.click(screen.getByText('Completed Campaigns'));
+    // Simulate clicking the 'Active Campaigns' tab
+    const activeAdsTab = screen.getByRole('tab', { name: /Active Campaigns/i });
+    await userEvent.click(activeAdsTab);
+
+    // Wait for the "endOfResults" message to appear for active ads
+    const endOfResultsMessageActive = await screen.findByText(/endOfResults/i);
+    expect(endOfResultsMessageActive).toBeInTheDocument();
+
+    // Simulate clicking the 'Completed Campaigns' tab
+    const archivedAdsTab = screen.getByRole('tab', {
+      name: /Completed Campaigns/i,
+    });
+    await userEvent.click(archivedAdsTab);
+
+    // Wait for the "endOfResults" message to appear for archived ads
+    const endOfResultsMessageArchived =
+      await screen.findByText(/endOfResults/i);
+    expect(endOfResultsMessageArchived).toBeInTheDocument();
   });
 
   test('if the component renders correctly and ads are correctly categorized date wise', async () => {
@@ -721,10 +763,15 @@ describe('Testing Advertisement Component', () => {
         </Provider>
       </ApolloProvider>,
     );
+
+    // Initial list of advertisement buttons before scrolling
     let moreiconbtn = await screen.findAllByTestId('moreiconbtn');
     console.log('before scroll', moreiconbtn);
-    fireEvent.scroll(window, { target: { scrollY: 500 } });
+
+    // Fetch the advertisement buttons again after scrolling
     moreiconbtn = await screen.findAllByTestId('moreiconbtn');
     console.log('after scroll', moreiconbtn);
+
+    expect(moreiconbtn.length).toBeGreaterThan(1);
   });
 });

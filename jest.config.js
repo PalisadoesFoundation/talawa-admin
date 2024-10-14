@@ -23,7 +23,7 @@ export default {
   ],
   moduleNameMapper: {
     '^react-native$': 'react-native-web',
-    '^@mui/(.*)$': '<rootDir>/node_modules/@mui/$1',
+    '^@mui/(.*)$': '<rootDir>/node_modules/@mui/$1', // Ensure this is correct
     '^@dicebear/core$': '<rootDir>/scripts/__mocks__/@dicebear/core.ts',
     '^@dicebear/collection$':
       '<rootDir>/scripts/__mocks__/@dicebear/collection.ts',
@@ -65,4 +65,5 @@ export default {
     '<rootDir>/build/',
     '<rootDir>/public/',
   ],
+  
 };

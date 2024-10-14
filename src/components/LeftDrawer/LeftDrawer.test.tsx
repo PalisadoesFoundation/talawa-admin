@@ -1,5 +1,5 @@
 import React, { act } from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import 'jest-localstorage-mock';
 import { I18nextProvider } from 'react-i18next';
@@ -106,7 +106,9 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
       userEvent.click(rolesBtn);
     });
 
-    expect(global.window.location.pathname).toContain('/users');
+    await waitFor(() =>
+      expect(global.window.location.pathname).toContain('/users'),
+    );
 
     await act(async () => {
       userEvent.click(communityProfileBtn);
@@ -206,9 +208,7 @@ describe('Testing Left Drawer component for ADMIN', () => {
 
     const orgsBtn = screen.getByTestId(/orgsBtn/i);
 
-    await act(async () => {
-      orgsBtn.click();
-    });
+    await orgsBtn.click();
 
     expect(
       orgsBtn.className.includes('text-white btn btn-success'),

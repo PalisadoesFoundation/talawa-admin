@@ -132,16 +132,18 @@ describe('Testing Agenda Categories Component', () => {
     await waitFor(() => {
       expect(screen.getByTestId('createAgendaCategoryBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('createAgendaCategoryBtn'));
+    await userEvent.click(screen.getByTestId('createAgendaCategoryBtn'));
 
     await waitFor(() => {
       return expect(
         screen.findByTestId('createAgendaCategoryModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('createAgendaCategoryModalCloseBtn'));
+    await userEvent.click(
+      screen.getByTestId('createAgendaCategoryModalCloseBtn'),
+    );
 
-    await waitForElementToBeRemoved(() =>
+    await waitFor(() =>
       screen.queryByTestId('createAgendaCategoryModalCloseBtn'),
     );
   });
@@ -165,7 +167,7 @@ describe('Testing Agenda Categories Component', () => {
     await waitFor(() => {
       expect(screen.getByTestId('createAgendaCategoryBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('createAgendaCategoryBtn'));
+    await userEvent.click(screen.getByTestId('createAgendaCategoryBtn'));
 
     await waitFor(() => {
       return expect(
@@ -173,16 +175,18 @@ describe('Testing Agenda Categories Component', () => {
       ).resolves.toBeInTheDocument();
     });
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(translations.name),
       formData.name,
     );
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(translations.description),
       formData.description,
     );
-    userEvent.click(screen.getByTestId('createAgendaCategoryFormSubmitBtn'));
+    await userEvent.click(
+      screen.getByTestId('createAgendaCategoryFormSubmitBtn'),
+    );
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(

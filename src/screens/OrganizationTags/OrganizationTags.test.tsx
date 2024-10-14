@@ -1,14 +1,7 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import {
-  act,
-  cleanup,
-  render,
-  screen,
-  waitFor,
-  waitForElementToBeRemoved,
-} from '@testing-library/react';
+import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
@@ -115,18 +108,16 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('createTagBtn'));
+    await userEvent.click(screen.getByTestId('createTagBtn'));
 
     await waitFor(() => {
       return expect(
         screen.findByTestId('closeCreateTagModal'),
       ).resolves.toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('closeCreateTagModal'));
+    await userEvent.click(screen.getByTestId('closeCreateTagModal'));
 
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('closeCreateTagModal'),
-    );
+    await waitFor(() => screen.queryByTestId('closeCreateTagModal'));
   });
 
   test('opens and closes the remove tag modal', async () => {
@@ -137,18 +128,16 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getAllByTestId('removeUserTagBtn')[0]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('removeUserTagBtn')[0]);
+    await userEvent.click(screen.getAllByTestId('removeUserTagBtn')[0]);
 
     await waitFor(() => {
       return expect(
         screen.findByTestId('removeUserTagModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('removeUserTagModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('removeUserTagModalCloseBtn'));
 
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('removeUserTagModalCloseBtn'),
-    );
+    await waitFor(() => screen.queryByTestId('removeUserTagModalCloseBtn'));
   });
 
   test('navigates to sub tags screen after clicking on a tag', async () => {
@@ -159,7 +148,7 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getAllByTestId('tagName')[0]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('tagName')[0]);
+    await userEvent.click(screen.getAllByTestId('tagName')[0]);
 
     await waitFor(() => {
       expect(screen.getByTestId('subTagsScreen')).toBeInTheDocument();
@@ -174,7 +163,7 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getAllByTestId('manageTagBtn')[0]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('manageTagBtn')[0]);
+    await userEvent.click(screen.getAllByTestId('manageTagBtn')[0]);
 
     await waitFor(() => {
       expect(screen.getByTestId('manageTagScreen')).toBeInTheDocument();
@@ -189,7 +178,7 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('nextPagBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('nextPagBtn'));
+    await userEvent.click(screen.getByTestId('nextPagBtn'));
 
     await waitFor(() => {
       expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent('6');
@@ -198,7 +187,7 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('previousPageBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('previousPageBtn'));
+    await userEvent.click(screen.getByTestId('previousPageBtn'));
 
     await waitFor(() => {
       expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent('1');
@@ -213,14 +202,14 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('createTagBtn'));
+    await userEvent.click(screen.getByTestId('createTagBtn'));
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(translations.tagNamePlaceholder),
       '7',
     );
 
-    userEvent.click(screen.getByTestId('createTagSubmitBtn'));
+    await userEvent.click(screen.getByTestId('createTagSubmitBtn'));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(
@@ -237,9 +226,9 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getAllByTestId('removeUserTagBtn')[0]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('removeUserTagBtn')[0]);
+    await userEvent.click(screen.getAllByTestId('removeUserTagBtn')[0]);
 
-    userEvent.click(screen.getByTestId('removeUserTagSubmitBtn'));
+    await userEvent.click(screen.getByTestId('removeUserTagSubmitBtn'));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(

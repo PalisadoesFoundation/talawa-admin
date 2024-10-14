@@ -124,18 +124,16 @@ describe('Testing Agenda Items components', () => {
         screen.getAllByTestId('editAgendaItemModalBtn')[0],
       ).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('editAgendaItemModalBtn')[0]);
+    await userEvent.click(screen.getAllByTestId('editAgendaItemModalBtn')[0]);
 
     await waitFor(() => {
       return expect(
         screen.findByTestId('updateAgendaItemModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('updateAgendaItemModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('updateAgendaItemModalCloseBtn'));
 
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('updateAgendaItemModalCloseBtn'),
-    );
+    await waitFor(() => screen.queryByTestId('updateAgendaItemModalCloseBtn'));
   });
 
   test('opens and closes the preview modal correctly', async () => {
@@ -158,18 +156,18 @@ describe('Testing Agenda Items components', () => {
         screen.getAllByTestId('previewAgendaItemModalBtn')[0],
       ).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('previewAgendaItemModalBtn')[0]);
+    await userEvent.click(
+      screen.getAllByTestId('previewAgendaItemModalBtn')[0],
+    );
 
     await waitFor(() => {
       return expect(
         screen.findByTestId('previewAgendaItemModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('previewAgendaItemModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('previewAgendaItemModalCloseBtn'));
 
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('previewAgendaItemModalCloseBtn'),
-    );
+    await waitFor(() => screen.queryByTestId('previewAgendaItemModalCloseBtn'));
   });
 
   test('opens and closes the update and delete modals through the preview modal', async () => {
@@ -192,7 +190,9 @@ describe('Testing Agenda Items components', () => {
         screen.getAllByTestId('previewAgendaItemModalBtn')[0],
       ).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('previewAgendaItemModalBtn')[0]);
+    await userEvent.click(
+      screen.getAllByTestId('previewAgendaItemModalBtn')[0],
+    );
 
     await waitFor(() => {
       return expect(
@@ -205,36 +205,36 @@ describe('Testing Agenda Items components', () => {
         screen.getByTestId('previewAgendaItemModalDeleteBtn'),
       ).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('previewAgendaItemModalDeleteBtn'));
+    await userEvent.click(
+      screen.getByTestId('previewAgendaItemModalDeleteBtn'),
+    );
 
     await waitFor(() => {
       return expect(
         screen.findByTestId('deleteAgendaItemCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('deleteAgendaItemCloseBtn'));
+    await userEvent.click(screen.getByTestId('deleteAgendaItemCloseBtn'));
 
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('deleteAgendaItemCloseBtn'),
-    );
+    await waitFor(() => screen.queryByTestId('deleteAgendaItemCloseBtn'));
 
     await waitFor(() => {
       expect(
         screen.getByTestId('previewAgendaItemModalUpdateBtn'),
       ).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('previewAgendaItemModalUpdateBtn'));
+    await userEvent.click(
+      screen.getByTestId('previewAgendaItemModalUpdateBtn'),
+    );
 
     await waitFor(() => {
       return expect(
         screen.findByTestId('updateAgendaItemModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('updateAgendaItemModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('updateAgendaItemModalCloseBtn'));
 
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('updateAgendaItemModalCloseBtn'),
-    );
+    await waitFor(() => screen.queryByTestId('updateAgendaItemModalCloseBtn'));
   });
 
   test('updates an agenda Items and toasts success', async () => {
@@ -259,7 +259,7 @@ describe('Testing Agenda Items components', () => {
         screen.getAllByTestId('editAgendaItemModalBtn')[0],
       ).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('editAgendaItemModalBtn')[0]);
+    await userEvent.click(screen.getAllByTestId('editAgendaItemModalBtn')[0]);
 
     const title = screen.getByPlaceholderText(translations.enterTitle);
     const description = screen.getByPlaceholderText(
@@ -267,15 +267,15 @@ describe('Testing Agenda Items components', () => {
     );
 
     fireEvent.change(title, { target: { value: '' } });
-    userEvent.type(title, formData.title);
+    await userEvent.type(title, formData.title);
 
     fireEvent.change(description, { target: { value: '' } });
-    userEvent.type(description, formData.description);
+    await userEvent.type(description, formData.description);
 
     await waitFor(() => {
       expect(screen.getByTestId('updateAgendaItemBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('updateAgendaItemBtn'));
+    await userEvent.click(screen.getByTestId('updateAgendaItemBtn'));
 
     await waitFor(() => {
       // expect(toast.success).toBeCalledWith(translations.agendaItemUpdated);
@@ -304,7 +304,7 @@ describe('Testing Agenda Items components', () => {
         screen.getAllByTestId('editAgendaItemModalBtn')[0],
       ).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('editAgendaItemModalBtn')[0]);
+    await userEvent.click(screen.getAllByTestId('editAgendaItemModalBtn')[0]);
 
     const titleInput = screen.getByLabelText(translations.title);
     const descriptionInput = screen.getByLabelText(translations.description);
@@ -312,13 +312,13 @@ describe('Testing Agenda Items components', () => {
     fireEvent.change(descriptionInput, {
       target: { value: '' },
     });
-    userEvent.type(titleInput, formData.title);
-    userEvent.type(descriptionInput, formData.description);
+    await userEvent.type(titleInput, formData.title);
+    await userEvent.type(descriptionInput, formData.description);
 
     await waitFor(() => {
       expect(screen.getByTestId('updateAgendaItemBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('updateAgendaItemBtn'));
+    await userEvent.click(screen.getByTestId('updateAgendaItemBtn'));
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();
@@ -347,7 +347,9 @@ describe('Testing Agenda Items components', () => {
         screen.getAllByTestId('previewAgendaItemModalBtn')[0],
       ).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('previewAgendaItemModalBtn')[0]);
+    await userEvent.click(
+      screen.getAllByTestId('previewAgendaItemModalBtn')[0],
+    );
 
     await waitFor(() => {
       return expect(
@@ -360,7 +362,9 @@ describe('Testing Agenda Items components', () => {
         screen.getByTestId('previewAgendaItemModalDeleteBtn'),
       ).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('previewAgendaItemModalDeleteBtn'));
+    await userEvent.click(
+      screen.getByTestId('previewAgendaItemModalDeleteBtn'),
+    );
 
     await waitFor(() => {
       return expect(
@@ -368,7 +372,7 @@ describe('Testing Agenda Items components', () => {
       ).resolves.toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('deleteAgendaItemBtn'));
+    await userEvent.click(screen.getByTestId('deleteAgendaItemBtn'));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(
@@ -397,7 +401,9 @@ describe('Testing Agenda Items components', () => {
         screen.getAllByTestId('previewAgendaItemModalBtn')[0],
       ).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('previewAgendaItemModalBtn')[0]);
+    await userEvent.click(
+      screen.getAllByTestId('previewAgendaItemModalBtn')[0],
+    );
 
     await waitFor(() => {
       return expect(
@@ -410,14 +416,16 @@ describe('Testing Agenda Items components', () => {
         screen.getByTestId('previewAgendaItemModalDeleteBtn'),
       ).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('previewAgendaItemModalDeleteBtn'));
+    await userEvent.click(
+      screen.getByTestId('previewAgendaItemModalDeleteBtn'),
+    );
 
     await waitFor(() => {
       return expect(
         screen.findByTestId('deleteAgendaItemCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('deleteAgendaItemBtn'));
+    await userEvent.click(screen.getByTestId('deleteAgendaItemBtn'));
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();

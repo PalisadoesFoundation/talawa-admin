@@ -128,7 +128,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     renderStartPostModal(true, null);
     await wait();
 
-    userEvent.click(screen.getByTestId('createPostBtn'));
+    await userEvent.click(screen.getByTestId('createPostBtn'));
     expect(toastSpy).toHaveBeenCalledWith(
       "Can't create a post with an empty body.",
     );
@@ -139,10 +139,10 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await wait();
 
     const randomPostInput = 'This is dummy text';
-    userEvent.type(screen.getByTestId('postInput'), randomPostInput);
+    await userEvent.type(screen.getByTestId('postInput'), randomPostInput);
     expect(screen.queryByText(randomPostInput)).toBeInTheDocument();
 
-    userEvent.click(screen.getByTestId('createPostBtn'));
+    await userEvent.click(screen.getByTestId('createPostBtn'));
 
     expect(toast.error).not.toHaveBeenCalledWith();
     expect(toast.info).toHaveBeenCalledWith(

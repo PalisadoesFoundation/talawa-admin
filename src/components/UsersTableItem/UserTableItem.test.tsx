@@ -1331,9 +1331,9 @@ describe('Testing User Table Item', () => {
       `changeRoleInOrg${'abc'}`,
     ) as HTMLSelectElement;
     expect(changeRoleBtn).toBeInTheDocument();
-    userEvent.selectOptions(changeRoleBtn, 'ADMIN');
+    await userEvent.selectOptions(changeRoleBtn, 'ADMIN');
     await wait();
-    userEvent.selectOptions(changeRoleBtn, 'USER');
+    await userEvent.selectOptions(changeRoleBtn, 'USER');
     await wait();
     expect(changeRoleBtn.value).toBe(`USER?abc`);
     await wait();

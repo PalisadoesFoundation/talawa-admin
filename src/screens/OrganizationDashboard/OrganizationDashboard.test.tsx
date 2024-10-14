@@ -96,14 +96,14 @@ describe('Organisation Dashboard Page', () => {
     const eventBtn = screen.getAllByText('Events');
     const blockUserBtn = screen.getByText('Blocked Users');
     const requestBtn = screen.getByText('Requests');
-    userEvent.click(peopleBtn);
-    userEvent.click(adminBtn);
-    userEvent.click(postBtn[0]);
-    userEvent.click(eventBtn[0]);
-    userEvent.click(postBtn[0]);
-    userEvent.click(eventBtn[0]);
-    userEvent.click(blockUserBtn);
-    userEvent.click(requestBtn);
+    await userEvent.click(peopleBtn);
+    await userEvent.click(adminBtn);
+    await userEvent.click(postBtn[0]);
+    await userEvent.click(eventBtn[0]);
+    await userEvent.click(postBtn[0]);
+    await userEvent.click(eventBtn[0]);
+    await userEvent.click(blockUserBtn);
+    await userEvent.click(requestBtn);
   });
 
   test('Testing buttons and checking empty events, posts and membership requests', async () => {
@@ -126,8 +126,8 @@ describe('Organisation Dashboard Page', () => {
     const viewPostsBtn = screen.getByTestId('viewAllPosts');
     const viewMSBtn = screen.getByTestId('viewAllMembershipRequests');
 
-    userEvent.click(viewEventsBtn);
-    userEvent.click(viewPostsBtn);
+    await userEvent.click(viewEventsBtn);
+    await userEvent.click(viewPostsBtn);
     fireEvent.click(viewMSBtn);
     expect(toast.success).toHaveBeenCalledWith('Coming soon!');
 

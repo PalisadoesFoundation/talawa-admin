@@ -53,7 +53,7 @@ afterEach(() => {
 
 describe('Testing Requests screen', () => {
   test('Component should be rendered properly', async () => {
-    const loadMoreRequests = jest.fn();
+    // const loadMoreRequests = jest.fn();
     render(
       <MockedProvider addTypename={false} link={link7}>
         <BrowserRouter>
@@ -141,25 +141,25 @@ describe('Testing Requests screen', () => {
     await wait();
     const searchBtn = screen.getByTestId('searchButton');
     const search1 = 'John';
-    userEvent.type(screen.getByTestId(/searchByName/i), search1);
-    userEvent.click(searchBtn);
+    await userEvent.type(screen.getByTestId(/searchByName/i), search1);
+    await userEvent.click(searchBtn);
     await wait();
 
     const search2 = 'Pete{backspace}{backspace}{backspace}{backspace}';
-    userEvent.type(screen.getByTestId(/searchByName/i), search2);
+    await userEvent.type(screen.getByTestId(/searchByName/i), search2);
 
     const search3 =
       'John{backspace}{backspace}{backspace}{backspace}Sam{backspace}{backspace}{backspace}';
-    userEvent.type(screen.getByTestId(/searchByName/i), search3);
+    await userEvent.type(screen.getByTestId(/searchByName/i), search3);
 
     const search4 = 'Sam{backspace}{backspace}P{backspace}';
-    userEvent.type(screen.getByTestId(/searchByName/i), search4);
+    await userEvent.type(screen.getByTestId(/searchByName/i), search4);
 
     const search5 = 'Xe';
-    userEvent.type(screen.getByTestId(/searchByName/i), search5);
-    userEvent.clear(screen.getByTestId(/searchByName/i));
-    userEvent.type(screen.getByTestId(/searchByName/i), '');
-    userEvent.click(searchBtn);
+    await userEvent.type(screen.getByTestId(/searchByName/i), search5);
+    await userEvent.clear(screen.getByTestId(/searchByName/i));
+    // await userEvent.type(screen.getByTestId(/searchByName/i),'');
+    await userEvent.click(searchBtn);
     await wait();
   });
 
@@ -179,9 +179,7 @@ describe('Testing Requests screen', () => {
     await wait();
 
     const search = 'hello{enter}';
-    await act(() =>
-      userEvent.type(screen.getByTestId(/searchByName/i), search),
-    );
+    await userEvent.type(screen.getByTestId(/searchByName/i), search);
   });
 
   test('Testing Request data is not present', async () => {

@@ -302,37 +302,40 @@ describe('Testing Events Screen [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('createEventModalBtn'));
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     const randomEventTitle = 'testEventTitle';
     const randomEventDescription = 'testEventDescription';
     const randomEventLocation = 'testEventLocation';
 
-    userEvent.type(screen.getByTestId('eventTitleInput'), randomEventTitle);
-    userEvent.type(
+    await userEvent.type(
+      screen.getByTestId('eventTitleInput'),
+      randomEventTitle,
+    );
+    await userEvent.type(
       screen.getByTestId('eventDescriptionInput'),
       randomEventDescription,
     );
-    userEvent.type(
+    await userEvent.type(
       screen.getByTestId('eventLocationInput'),
       randomEventLocation,
     );
 
-    userEvent.click(screen.getByTestId('publicEventCheck'));
-    userEvent.click(screen.getByTestId('publicEventCheck'));
+    await userEvent.click(screen.getByTestId('publicEventCheck'));
+    await userEvent.click(screen.getByTestId('publicEventCheck'));
 
-    userEvent.click(screen.getByTestId('registerableEventCheck'));
-    userEvent.click(screen.getByTestId('registerableEventCheck'));
+    await userEvent.click(screen.getByTestId('registerableEventCheck'));
+    await userEvent.click(screen.getByTestId('registerableEventCheck'));
 
-    userEvent.click(screen.getByTestId('recurringEventCheck'));
-    userEvent.click(screen.getByTestId('recurringEventCheck'));
+    await userEvent.click(screen.getByTestId('recurringEventCheck'));
+    await userEvent.click(screen.getByTestId('recurringEventCheck'));
 
-    userEvent.click(screen.getByTestId('recurringEventCheck'));
-    userEvent.click(screen.getByTestId('recurringEventCheck'));
+    await userEvent.click(screen.getByTestId('recurringEventCheck'));
+    await userEvent.click(screen.getByTestId('recurringEventCheck'));
 
-    userEvent.click(screen.getByTestId('allDayEventCheck'));
+    await userEvent.click(screen.getByTestId('allDayEventCheck'));
 
-    userEvent.click(screen.getByTestId('createEventBtn'));
+    await userEvent.click(screen.getByTestId('createEventBtn'));
 
     await wait();
 
@@ -359,23 +362,26 @@ describe('Testing Events Screen [User Portal]', () => {
     );
     await wait();
 
-    userEvent.click(screen.getByTestId('createEventModalBtn'));
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     const randomEventTitle = 'testEventTitle';
     const randomEventDescription = 'testEventDescription';
     const randomEventLocation = 'testEventLocation';
 
-    userEvent.type(screen.getByTestId('eventTitleInput'), randomEventTitle);
-    userEvent.type(
+    await userEvent.type(
+      screen.getByTestId('eventTitleInput'),
+      randomEventTitle,
+    );
+    await userEvent.type(
       screen.getByTestId('eventDescriptionInput'),
       randomEventDescription,
     );
-    userEvent.type(
+    await userEvent.type(
       screen.getByTestId('eventLocationInput'),
       randomEventLocation,
     );
 
-    userEvent.click(screen.getByTestId('createEventBtn'));
+    await userEvent.click(screen.getByTestId('createEventBtn'));
 
     await wait();
 
@@ -437,7 +443,7 @@ describe('Testing Events Screen [User Portal]', () => {
     const startTime = '02:00 PM';
     const endTime = '06:00 PM';
 
-    userEvent.click(screen.getByTestId('createEventModalBtn'));
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     expect(endDate).not.toBeNull();
     const endDateDatePicker = screen.getByLabelText('End Date');
@@ -456,7 +462,7 @@ describe('Testing Events Screen [User Portal]', () => {
     expect(endDateDatePicker).toHaveValue(endDate);
     expect(startDateDatePicker).toHaveValue(startDate);
 
-    userEvent.click(screen.getByTestId('allDayEventCheck'));
+    await userEvent.click(screen.getByTestId('allDayEventCheck'));
 
     expect(endTime).not.toBeNull();
     const endTimePicker = screen.getByLabelText('End Time');
@@ -494,7 +500,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('createEventModalBtn'));
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     const endDateDatePicker = screen.getByLabelText('End Date');
     const startDateDatePicker = screen.getByLabelText('Start Date');
@@ -506,7 +512,7 @@ describe('Testing Events Screen [User Portal]', () => {
       target: { value: null },
     });
 
-    userEvent.click(screen.getByTestId('allDayEventCheck'));
+    await userEvent.click(screen.getByTestId('allDayEventCheck'));
 
     const endTimePicker = screen.getByLabelText('End Time');
     const startTimePicker = screen.getByLabelText('Start Time');

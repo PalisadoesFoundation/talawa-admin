@@ -79,8 +79,8 @@ describe('Testing Member Request Card', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByText(/Accept/i));
-    userEvent.click(screen.getByText(/Reject/i));
+    await userEvent.click(screen.getByText(/Accept/i));
+    await userEvent.click(screen.getByText(/Reject/i));
 
     expect(screen.getByAltText(/userImage/i)).toBeInTheDocument();
     expect(screen.getByText(/Joined:/i)).toBeInTheDocument();
@@ -109,8 +109,8 @@ describe('Testing Member Request Card', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByText(/Accept/i));
-    userEvent.click(screen.getByText(/Reject/i));
+    await userEvent.click(screen.getByText(/Accept/i));
+    await userEvent.click(screen.getByText(/Reject/i));
 
     expect(screen.getByAltText(/userImage/i)).toBeInTheDocument();
     expect(screen.getByText(/Joined:/i)).toBeInTheDocument();

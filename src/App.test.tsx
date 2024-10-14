@@ -1,6 +1,7 @@
 import React, { act } from 'react';
 import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
+import { WarningAmberOutlined } from '@mui/icons-material';
 import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
@@ -105,7 +106,6 @@ describe('Testing the App Component', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-
     await wait();
   });
 });

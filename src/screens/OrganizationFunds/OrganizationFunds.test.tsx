@@ -116,15 +116,15 @@ describe('OrganizationFunds Screen =>', () => {
 
     const createFundBtn = await screen.findByTestId('createFundBtn');
     expect(createFundBtn).toBeInTheDocument();
-    userEvent.click(createFundBtn);
+    await userEvent.click(createFundBtn);
 
     await waitFor(() =>
       expect(screen.getAllByText(translations.fundCreate)).toHaveLength(3),
     );
-    userEvent.click(screen.getByTestId('fundModalCloseBtn'));
-    await waitFor(() =>
-      expect(screen.queryByTestId('fundModalCloseBtn')).toBeNull(),
-    );
+    await userEvent.click(screen.getByTestId('fundModalCloseBtn'));
+    await waitFor(() => {
+      expect(screen.queryByTestId('fundModalCloseBtn')).toBeNull();
+    });
   });
 
   it('open and close update fund modal', async () => {
@@ -136,14 +136,14 @@ describe('OrganizationFunds Screen =>', () => {
 
     const editFundBtn = await screen.findAllByTestId('editFundBtn');
     await waitFor(() => expect(editFundBtn[0]).toBeInTheDocument());
-    userEvent.click(editFundBtn[0]);
+    await userEvent.click(editFundBtn[0]);
 
     await waitFor(() =>
       expect(
         screen.getAllByText(translations.fundUpdate)[0],
       ).toBeInTheDocument(),
     );
-    userEvent.click(screen.getByTestId('fundModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('fundModalCloseBtn'));
     await waitFor(() =>
       expect(screen.queryByTestId('fundModalCloseBtn')).toBeNull(),
     );

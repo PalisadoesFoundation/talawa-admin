@@ -151,18 +151,16 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('addPeopleToTagBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('addPeopleToTagBtn'));
+    await userEvent.click(screen.getByTestId('addPeopleToTagBtn'));
 
     await waitFor(() => {
       return expect(
         screen.findByTestId('closeAddPeopleToTagModal'),
       ).resolves.toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('closeAddPeopleToTagModal'));
+    await userEvent.click(screen.getByTestId('closeAddPeopleToTagModal'));
 
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('closeAddPeopleToTagModal'),
-    );
+    await waitFor(() => screen.queryByTestId('closeAddPeopleToTagModal'));
   });
 
   test('opens and closes the unassign tag modal', async () => {
@@ -173,18 +171,16 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getAllByTestId('unassignTagBtn')[0]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('unassignTagBtn')[0]);
+    await userEvent.click(screen.getAllByTestId('unassignTagBtn')[0]);
 
     await waitFor(() => {
       return expect(
         screen.findByTestId('unassignTagModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('unassignTagModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('unassignTagModalCloseBtn'));
 
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('unassignTagModalCloseBtn'),
-    );
+    await waitFor(() => screen.queryByTestId('unassignTagModalCloseBtn'));
   });
 
   test("navigates to the member's profile after clicking the view option", async () => {
@@ -195,7 +191,7 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getAllByTestId('viewProfileBtn')[0]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('viewProfileBtn')[0]);
+    await userEvent.click(screen.getAllByTestId('viewProfileBtn')[0]);
 
     await waitFor(() => {
       expect(screen.getByTestId('memberProfileScreen')).toBeInTheDocument();
@@ -210,7 +206,7 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('subTagsBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('subTagsBtn'));
+    await userEvent.click(screen.getByTestId('subTagsBtn'));
 
     await waitFor(() => {
       expect(screen.getByTestId('subTagsScreen')).toBeInTheDocument();
@@ -227,7 +223,7 @@ describe('Organisation Tags Page', () => {
         screen.getAllByTestId('redirectToManageTag')[0],
       ).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('redirectToManageTag')[0]);
+    await userEvent.click(screen.getAllByTestId('redirectToManageTag')[0]);
 
     await waitFor(() => {
       expect(screen.getByTestId('addPeopleToTagBtn')).toBeInTheDocument();
@@ -242,7 +238,7 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('allTagsBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('allTagsBtn'));
+    await userEvent.click(screen.getByTestId('allTagsBtn'));
 
     await waitFor(() => {
       expect(screen.getByTestId('organizationTagsScreen')).toBeInTheDocument();
@@ -257,7 +253,7 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('nextPagBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('nextPagBtn'));
+    await userEvent.click(screen.getByTestId('nextPagBtn'));
 
     await waitFor(() => {
       expect(screen.getAllByTestId('memberName')[0]).toHaveTextContent(
@@ -268,7 +264,7 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('previousPageBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('previousPageBtn'));
+    await userEvent.click(screen.getByTestId('previousPageBtn'));
 
     await waitFor(() => {
       expect(screen.getAllByTestId('memberName')[0]).toHaveTextContent(
@@ -285,9 +281,9 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getAllByTestId('unassignTagBtn')[0]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('unassignTagBtn')[0]);
+    await userEvent.click(screen.getAllByTestId('unassignTagBtn')[0]);
 
-    userEvent.click(screen.getByTestId('unassignTagModalSubmitBtn'));
+    await userEvent.click(screen.getByTestId('unassignTagModalSubmitBtn'));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(
