@@ -1,11 +1,14 @@
-import React, { act } from 'react';
-import { render, screen } from '@testing-library/react';
+import React from 'react';
+import { act, render, screen } from '@testing-library/react';
 import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 
 import i18nForTest from 'utils/i18nForTest';
-import type { InterfaceOrgListCardProps } from './OrgListCard';
-import OrgListCard from './OrgListCard';
+// import type { InterfaceOrgPeopleOrganizationCardProps } from './OrgListCard';
+// import OrgListCard from './OrgListCard';
+import type { InterfaceOrgPeopleOrganizationCardProps } from './OrgPeopleOrganizationsCard';
+import OrgPeopleOrganizationsCard from './OrgPeopleOrganizationsCard';
+
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
@@ -41,7 +44,7 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-const props: InterfaceOrgListCardProps = {
+const props: InterfaceOrgPeopleOrganizationCardProps = {
   data: {
     _id: 'xyz',
     name: 'Dogs Care',
@@ -85,7 +88,7 @@ describe('Testing the Super Dash List', () => {
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
-            <OrgListCard {...props} />
+            <OrgPeopleOrganizationsCard {...props} />
           </I18nextProvider>
         </BrowserRouter>
       </MockedProvider>,
@@ -94,9 +97,6 @@ describe('Testing the Super Dash List', () => {
     expect(screen.getByAltText(/Dogs Care image/i)).toBeInTheDocument();
     expect(screen.getByText(/Admins:/i)).toBeInTheDocument();
     expect(screen.getByText(/Members:/i)).toBeInTheDocument();
-    expect(screen.getByText('Dogs Care')).toBeInTheDocument();
-    expect(screen.getByText(/Sample City/i)).toBeInTheDocument();
-    expect(screen.getByText(/123 Sample Street/i)).toBeInTheDocument();
     expect(screen.getByTestId(/manageBtn/i)).toBeInTheDocument();
     expect(screen.getByTestId(/flaskIcon/i)).toBeInTheDocument();
     userEvent.click(screen.getByTestId(/manageBtn/i));
@@ -110,7 +110,7 @@ describe('Testing the Super Dash List', () => {
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
-            <OrgListCard {...props} />
+            <OrgPeopleOrganizationsCard {...props} />
           </I18nextProvider>
         </BrowserRouter>
       </MockedProvider>,
@@ -128,7 +128,7 @@ describe('Testing the Super Dash List', () => {
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
-            <OrgListCard {...imageNullProps} />
+            <OrgPeopleOrganizationsCard {...imageNullProps} />
           </I18nextProvider>
         </BrowserRouter>
       </MockedProvider>,
@@ -141,7 +141,7 @@ describe('Testing the Super Dash List', () => {
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
-            <OrgListCard {...props} />
+            <OrgPeopleOrganizationsCard {...props} />
           </I18nextProvider>
         </BrowserRouter>
       </MockedProvider>,

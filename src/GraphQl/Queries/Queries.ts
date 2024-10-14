@@ -98,6 +98,13 @@ export const ORGANIZATION_CONNECTION_LIST = gql`
         sortingCode
         state
       }
+      blockedUsers {
+        _id
+        firstName
+        lastName
+        email
+      }
+      description
     }
   }
 `;
