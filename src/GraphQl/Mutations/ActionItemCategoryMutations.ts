@@ -8,8 +8,16 @@ import gql from 'graphql-tag';
  */
 
 export const CREATE_ACTION_ITEM_CATEGORY_MUTATION = gql`
-  mutation CreateActionItemCategory($name: String!, $organizationId: ID!) {
-    createActionItemCategory(name: $name, organizationId: $organizationId) {
+  mutation CreateActionItemCategory(
+    $isDisabled: Boolean!
+    $name: String!
+    $organizationId: ID!
+  ) {
+    createActionItemCategory(
+      isDisabled: $isDisabled
+      name: $name
+      organizationId: $organizationId
+    ) {
       _id
     }
   }

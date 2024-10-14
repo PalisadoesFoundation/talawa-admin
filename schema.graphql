@@ -650,6 +650,7 @@ type Mutation {
     data: CreateActionItemInput!
   ): ActionItem!
   createActionItemCategory(
+    isDisabled: Boolean!
     name: String!
     organizationId: ID!
   ): ActionItemCategory!
