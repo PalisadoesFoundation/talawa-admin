@@ -36,7 +36,11 @@ export const MOCKS = [
   {
     request: {
       query: CREATE_ACTION_ITEM_CATEGORY_MUTATION,
-      variables: { name: 'ActionItemCategory 4', organizationId: '123' },
+      variables: {
+        isDisabled: false,
+        name: 'ActionItemCategory 4',
+        organizationId: '123',
+      },
     },
     result: {
       data: {
@@ -137,7 +141,11 @@ export const MOCKS_ERROR_MUTATIONS = [
   {
     request: {
       query: CREATE_ACTION_ITEM_CATEGORY_MUTATION,
-      variables: { name: 'ActionItemCategory 4', organizationId: '123' },
+      variables: {
+        isDisabled: false,
+        name: 'ActionItemCategory 4',
+        organizationId: '123',
+      },
     },
     error: new Error('Mock Graphql Error'),
   },
