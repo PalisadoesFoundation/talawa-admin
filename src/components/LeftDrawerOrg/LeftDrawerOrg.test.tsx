@@ -390,7 +390,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     );
     await wait();
     expect(
-      screen.getByText(/Error occured while loading Organization data/i),
+      screen.getByText(/Error Occured while loading the Organization/i),
     ).toBeInTheDocument();
   });
 
