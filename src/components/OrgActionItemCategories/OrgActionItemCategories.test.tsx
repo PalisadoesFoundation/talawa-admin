@@ -154,11 +154,15 @@ describe('Testing Action Item Categories Component', () => {
         'ActionItemCategory 4',
       );
 
+      // userEvent.click(screen.getByTestId('disabledStatusToggle')); // Toggle the disabled status
+
       userEvent.click(screen.getByTestId('formSubmitButton'));
     });
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.successfulCreation);
+      expect(toast.success).toHaveBeenCalledWith(
+        translations.successfulCreation,
+      );
     });
   });
 
@@ -226,7 +230,9 @@ describe('Testing Action Item Categories Component', () => {
     });
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.successfulUpdation);
+      expect(toast.success).toHaveBeenCalledWith(
+        translations.successfulUpdation,
+      );
     });
   });
 
@@ -300,7 +306,7 @@ describe('Testing Action Item Categories Component', () => {
     });
 
     await waitFor(() => {
-      expect(toast.error).toBeCalledWith(translations.sameNameConflict);
+      expect(toast.error).toHaveBeenCalledWith(translations.sameNameConflict);
     });
   });
 
@@ -325,7 +331,7 @@ describe('Testing Action Item Categories Component', () => {
     });
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.categoryDisabled);
+      expect(toast.success).toHaveBeenCalledWith(translations.categoryDisabled);
     });
 
     await waitFor(() => {
@@ -333,7 +339,7 @@ describe('Testing Action Item Categories Component', () => {
     });
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.categoryEnabled);
+      expect(toast.success).toHaveBeenCalledWith(translations.categoryEnabled);
     });
   });
 

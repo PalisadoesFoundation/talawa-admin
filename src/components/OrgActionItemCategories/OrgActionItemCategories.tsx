@@ -34,6 +34,7 @@ const OrgActionItemCategories = (): JSX.Element => {
   const [categoryId, setCategoryId] = useState(''); // Current category ID for updating
   const [name, setName] = useState(''); // Category name for creation or update
   const [currName, setCurrName] = useState(''); // Current category name (used for comparison)
+  const [disabledStatus, setDisabledStatus] = useState(false);
 
   // Fetch organization ID from URL params
   const { orgId: currentUrl } = useParams();
@@ -73,6 +74,7 @@ const OrgActionItemCategories = (): JSX.Element => {
     try {
       await createActionItemCategory({
         variables: {
+          isDisabled: disabledStatus,
           name,
           organizationId: currentUrl,
         },
@@ -80,7 +82,7 @@ const OrgActionItemCategories = (): JSX.Element => {
 
       setName('');
       refetch();
-
+      setDisabledStatus(false);
       setModalIsOpen(false);
 
       toast.success(t('successfulCreation') as string);
@@ -290,6 +292,18 @@ const OrgActionItemCategories = (): JSX.Element => {
                 setName(e.target.value);
               }}
             />
+
+            {/* Toggle for Disabled Status */}
+            <Form.Check
+              className="mt-3"
+              type="switch"
+              id="disabledStatusToggle"
+              label={'disabledStatus'}
+              checked={disabledStatus}
+              onChange={(e): void => setDisabledStatus(e.target.checked)}
+              data-testid="disabledStatusToggle"
+            />
+
             <Button
               type="submit"
               className={styles.greenregbtn}
