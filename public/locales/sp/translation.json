@@ -410,6 +410,7 @@
     "active": "Activo",
     "clearFilters": "Borrar filtros",
     "close": "Cerrar",
+    "completed": "Completado",
     "completionDate": "Fecha de finalización",
     "createActionItem": "Crear ítem de acción",
     "deleteActionItem": "Eliminar ítem de acción",
@@ -437,12 +438,12 @@
     "title": "Ítems de acción",
     "yes": "Sí",
     "category": "Categoría",
-    "allotedHours": "Horas asignadas",
-    "latestDueDate": "Fecha de vencimiento más reciente",
-    "earliestDueDate": "Fecha de vencimiento más antigua",
-    "updateActionItem": "Actualizar elemento de acción",
-    "noneUpdated": "Ninguno de los campos se actualizó",
-    "updateStatusMsg": "¿Está seguro de que desea marcar este elemento de acción como pendiente?"
+    "allotedHours": "Horas Asignadas",
+    "latestDueDate": "Fecha de Vencimiento Más Reciente",
+    "earliestDueDate": "Fecha de Vencimiento Más Temprana",
+    "updateActionItem": "Actualizar Elemento de Acción",
+    "noneUpdated": "Ninguno de los campos fue actualizado",
+    "updateStatusMsg": "¿Estás seguro de que deseas marcar este elemento de acción como pendiente?"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "Detalles de la categoría de la agenda",
@@ -758,16 +759,19 @@
     "amount": "Monto"
   },
   "orgSettings": {
-    "title": "Configuración",
+    "title": "Configuración Talawa",
+    "pageName": "Configuración",
     "general": "General",
     "actionItemCategories": "Categorías de elementos de acción",
-    "updateOrganization": "Actualizar organización",
-    "seeRequest": "Ver solicitud",
+    "updateYourDetails": "Actualiza tus datos",
+    "updateYourPassword": "Actualice su contraseña",
+    "updateOrganization": "Actualizar Organización",
+    "seeRequest": "Ver Solicitud",
+    "settings": "Ajustes",
     "noData": "Sin datos",
-    "otherSettings": "Otras configuraciones",
-    "changeLanguage": "Cambiar idioma",
-    "manageCustomFields": "Administrar campos personalizados",
-    "agendaItemCategories": "Categorías de elementos de agenda"
+    "otherSettings": "Otras Configuraciones",
+    "changeLanguage": "Cambiar Idioma",
+    "manageCustomFields": "Gestionar Campos Personalizados"
   },
   "deleteOrg": {
     "deleteOrganization": "Eliminar organización",
@@ -964,7 +968,8 @@
     "filter": "Filtrar",
     "organizations": "Organizaciones",
     "searchByName": "Buscar por nombre",
-    "searchUsers": "Buscar usuarios"
+    "searchUsers": "Buscar usuarios",
+    "searchOrganizations": "Buscar Organizaciones"
   },
   "userSidebarOrg": {
     "yourOrganizations": "Tus Organizaciones",
@@ -1190,7 +1195,7 @@
     "disableButton": "Inhabilitar",
     "updateActionItemCategory": "Actualizar",
     "actionItemCategoryName": "Nombre",
-    "categoryDetails": "Detalles de la categoría",
+    "actionItemCategoryDetails": "Detalles de la categoría de elemento de acción",
     "enterName": "Introduzca el nombre",
     "successfulCreation": "Categoría de elemento de acción creada correctamente",
     "successfulUpdation": "Categoría de elemento de acción actualizada correctamente",
@@ -1199,7 +1204,7 @@
     "categoryDisabled": "Categoría de elemento de acción deshabilitada",
     "noActionItemCategories": "No hay categorías de elementos de acción",
     "status": "Estado",
-    "categoryDeleted": "Categoría de elemento de acción eliminada con éxito",
+    "categoryDeleted": "Categoría de elemento de acción eliminada",
     "deleteCategory": "Eliminar categoría",
     "deleteCategoryMsg": "¿Está seguro de que desea eliminar esta categoría de elemento de acción?"
   },

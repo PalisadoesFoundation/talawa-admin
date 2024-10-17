@@ -82,14 +82,7 @@
   "updatedSuccessfully": "{{item}} updated Successfully",
   "removedSuccessfully": "{{item}} removed Successfully",
   "successfullyUpdated": "Successfully Updated",
-  "sort": "Sort",
-  "all": "All",
-  "active": "Active",
-  "disabled": "Disabled",
-  "pending": "Pending",
-  "completed": "Completed",
-  "late": "Late",
-  "createdLatest": "Created Latest",
-  "createdEarliest": "Created Earliest",
-  "searchBy": "Search by {{item}}"
+  "sessionWarning": "Your session will expire soon due to inactivity. Please interact with the page to extend your session.",
+  "sessionLogOut": "Your session has expired due to inactivity. Please log in again to continue.",
+  "sort": "Sort"
 }

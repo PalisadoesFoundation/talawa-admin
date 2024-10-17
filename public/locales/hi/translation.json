@@ -407,6 +407,7 @@
     "assignmentDate": "असाइनमेंट दिनांक",
     "active": "सक्रिय",
     "clearFilters": "फ़िल्टर साफ़ करें",
+    "completed": "पुरा होना।",
     "completionDate": "पूरा करने की तिथि",
     "createActionItem": "कार्रवाई आइटम बनाएं",
     "deleteActionItem": "क्रिया आइटम हटाएँ",
@@ -757,16 +758,19 @@
     "amount": "मात्रा"
   },
   "orgSettings": {
-    "title": "सेटिंग्स",
+    "title": "समायोजन",
     "general": "सामान्य",
-    "actionItemCategories": "कार्य आइटम श्रेणियाँ",
-    "updateOrganization": "संगठन अपडेट करें",
+    "actionItemCategories": "कार्रवाई आइटम श्रेणियाँ",
+    "updateOrganization": "संगठन अद्यतन करें",
     "seeRequest": "अनुरोध देखें",
     "noData": "कोई डेटा नहीं",
-    "otherSettings": "अन्य सेटिंग्स",
+    "otherSettings": "अन्य सेटिंग",
     "changeLanguage": "भाषा बदलें",
     "manageCustomFields": "कस्टम फ़ील्ड प्रबंधित करें",
-    "agendaItemCategories": "एजेंडा आइटम श्रेणियाँ"
+    "pageName": "सेटिंग्स",
+    "updateYourDetails": "अपनी जानकारी अपडेट करें",
+    "updateYourPassword": "अपना पासवर्ड अपडेट करें",
+    "settings": "सेटिंग्स"
   },
   "deleteOrg": {
     "deleteOrganization": "संगठन हटाएँ",
@@ -963,7 +967,8 @@
     "organizations": "संगठनों",
     "search": "खोजें",
     "filter": "फ़िल्टर",
-    "searchByName": "नाम से खोजें"
+    "searchByName": "नाम से खोजें",
+    "searchOrganizations": "संगठनों खोजें"
   },
   "userSidebarOrg": {
     "yourOrganizations": "आपके संगठन",
@@ -1187,7 +1192,7 @@
     "disableButton": "अक्षम करना",
     "updateActionItemCategory": "अद्यतन",
     "actionItemCategoryName": "नाम",
-    "categoryDetails": "श्रेणी विवरण",
+    "actionItemCategoryDetails": "कार्य आइटम श्रेणी विवरण",
     "enterName": "नाम दर्ज करें",
     "successfulCreation": "कार्रवाई आइटम श्रेणी सफलतापूर्वक बनाई गई",
     "successfulUpdation": "कार्रवाई आइटम श्रेणी सफलतापूर्वक अपडेट की गई",
