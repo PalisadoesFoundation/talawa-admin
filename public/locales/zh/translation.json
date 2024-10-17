@@ -964,7 +964,8 @@
     "organizations": "组织机构",
     "search": "搜索",
     "filter": "筛选",
-    "searchByName": "按名称搜索"
+    "searchByName": "按名称搜索",
+    "searchOrganizations": "搜索组织"
   },
   "userSidebarOrg": {
     "yourOrganizations": "您的组织",
