@@ -5,12 +5,10 @@ import Avatar from 'components/Avatar/Avatar';
 interface InterfaceContactCardProps {
   id: string;
   title: string;
-  subtitle: string;
   image: string;
   selectedContact: string;
   setSelectedContact: React.Dispatch<React.SetStateAction<string>>;
-  type: string;
-  setSelectedChatType: React.Dispatch<React.SetStateAction<string>>;
+  isGroup: boolean;
 }
 
 /**
@@ -33,18 +31,9 @@ interface InterfaceContactCardProps {
  * @returns  The rendered contact card component.
  */
 function contactCard(props: InterfaceContactCardProps): JSX.Element {
-  // Full name of the contact
-
-  /**
-   * Updates the selected contact and its name when the card is clicked.
-   */
-
   const handleSelectedContactChange = (): void => {
     props.setSelectedContact(props.id);
-    props.setSelectedChatType(props.type);
   };
-
-  // State to track if the contact card is selected
   const [isSelected, setIsSelected] = React.useState(
     props.selectedContact === props.id,
   );
@@ -78,7 +67,6 @@ function contactCard(props: InterfaceContactCardProps): JSX.Element {
         )}
         <div className={styles.contactNameContainer}>
           <b>{props.title}</b>
-          <small className={styles.grey}>{props.subtitle}</small>
         </div>
       </div>
     </>
