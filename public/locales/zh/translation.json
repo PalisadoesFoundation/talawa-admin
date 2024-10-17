@@ -760,14 +760,18 @@
   },
   "orgSettings": {
     "title": "设置",
-    "general": "一般",
-    "actionItemCategories": "操作项目类别",
+    "general": "一般的",
+    "actionItemCategories": "行动项目类别",
     "updateOrganization": "更新组织",
     "seeRequest": "查看请求",
     "noData": "没有数据",
     "otherSettings": "其他设置",
-    "changeLanguage": "更改语言",
-    "manageCustomFields": "管理自定义字段"
+    "changeLanguage": "改变语言",
+    "manageCustomFields": "管理自定义字段",
+    "pageName": "设置",
+    "updateYourDetails": "更新您的详细信息",
+    "updateYourPassword": "更新您的密码",
+    "settings": "设置"
   },
   "deleteOrg": {
     "deleteOrganization": "删除组织",

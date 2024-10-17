@@ -767,7 +767,11 @@
     "noData": "Pas de données",
     "otherSettings": "Autres réglages",
     "changeLanguage": "Changer de langue",
-    "manageCustomFields": "Gérer les champs personnalisés"
+    "manageCustomFields": "Gérer les champs personnalisés",
+    "pageName": "Paramètres",
+    "updateYourDetails": "Mettre à jour vos détails",
+    "updateYourPassword": "Mettre à jour votre mot de passe",
+    "settings": "Paramètres"
   },
   "deleteOrg": {
     "deleteOrganization": "Supprimer l'organisation",

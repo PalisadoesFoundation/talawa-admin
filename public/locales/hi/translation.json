@@ -767,7 +767,11 @@
     "noData": "कोई डेटा नहीं",
     "otherSettings": "अन्य सेटिंग",
     "changeLanguage": "भाषा बदलें",
-    "manageCustomFields": "कस्टम फ़ील्ड प्रबंधित करें"
+    "manageCustomFields": "कस्टम फ़ील्ड प्रबंधित करें",
+    "pageName": "सेटिंग्स",
+    "updateYourDetails": "अपनी जानकारी अपडेट करें",
+    "updateYourPassword": "अपना पासवर्ड अपडेट करें",
+    "settings": "सेटिंग्स"
   },
   "deleteOrg": {
     "deleteOrganization": "संगठन हटाएँ",

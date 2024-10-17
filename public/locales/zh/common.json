@@ -84,4 +84,6 @@
   "removedSuccessfully": "{{item}} 删除成功",
   "successfullyUpdated": "更新成功",
   "confirm": "确认"
+  "sessionWarning": "由于不活动，您的会话即将过期。请与页面互动以延长您的会话。",
+  "sessionLogOut": "由于不活动，您的会话已过期。请重新登录以继续。"
 }

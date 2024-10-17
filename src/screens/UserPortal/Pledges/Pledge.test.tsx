@@ -126,6 +126,20 @@ describe('Testing User Pledge Screen', () => {
     });
   });
 
+  it('should render the Campaign Pledge screen with error', async () => {
+    renderMyPledges(link2);
+    await waitFor(() => {
+      expect(screen.getByTestId('errorMsg')).toBeInTheDocument();
+    });
+  });
+
+  it('renders the empty pledge component', async () => {
+    renderMyPledges(link3);
+    await waitFor(() =>
+      expect(screen.getByText(translations.noPledges)).toBeInTheDocument(),
+    );
+  });
+
   it('check if user image renders', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
@@ -336,20 +350,6 @@ describe('Testing User Pledge Screen', () => {
     userEvent.click(screen.getByTestId('pledgeModalCloseBtn'));
     await waitFor(() =>
       expect(screen.queryByTestId('pledgeModalCloseBtn')).toBeNull(),
-    );
-  });
-
-  it('should render the Campaign Pledge screen with error', async () => {
-    renderMyPledges(link2);
-    await waitFor(() => {
-      expect(screen.getByTestId('errorMsg')).toBeInTheDocument();
-    });
-  });
-
-  it('renders the empty pledge component', async () => {
-    renderMyPledges(link3);
-    await waitFor(() =>
-      expect(screen.getByText(translations.noPledges)).toBeInTheDocument(),
     );
   });
 });
