@@ -319,8 +319,8 @@ export default function organizations(): JSX.Element {
           <div className="mt-4">
             <InputGroup className={styles.maxWidth}>
               <Form.Control
-                placeholder={t('searchUsers')}
-                id="searchUserOrgs"
+                placeholder={t('searchOrganizations')}
+                id="searchOrganizations"
                 type="text"
                 className={`${styles.borderNone} ${styles.backgroundWhite}`}
                 onKeyUp={handleSearchByEnter}

@@ -83,13 +83,6 @@
   "updatedSuccessfully": "{{item}} 更新成功",
   "removedSuccessfully": "{{item}} 删除成功",
   "successfullyUpdated": "更新成功",
-  "all": "全部",
-  "active": "活跃",
-  "disabled": "禁用",
-  "pending": "待处理",
-  "completed": "已完成",
-  "late": "迟到",
-  "createdLatest": "最近创建",
-  "createdEarliest": "最早创建",
-  "searchBy": "搜索依据 {{item}}"
+  "sessionWarning": "由于不活动，您的会话即将过期。请与页面互动以延长您的会话。",
+  "sessionLogOut": "由于不活动，您的会话已过期。请重新登录以继续。"
 }

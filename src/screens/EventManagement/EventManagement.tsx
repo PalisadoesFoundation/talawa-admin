@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import styles from './EventManagement.module.css';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { FaChevronLeft, FaTasks } from 'react-icons/fa';
-import { MdOutlineDashboard } from 'react-icons/md';
-import { ReactComponent as EventRegistrantsIcon } from 'assets/svgs/people.svg';
-import { IoMdStats } from 'react-icons/io';
-import { ReactComponent as EventAgendaItemsIcon } from 'assets/svgs/agenda-items.svg';
+import AngleLeftIcon from 'assets/svgs/angleLeft.svg?react';
+import EventDashboardIcon from 'assets/svgs/eventDashboard.svg?react';
+import EventRegistrantsIcon from 'assets/svgs/people.svg?react';
+import EventActionsIcon from 'assets/svgs/settings.svg?react';
+import EventAgendaItemsIcon from 'assets/svgs/agenda-items.svg?react';
+import EventStatisticsIcon from 'assets/svgs/eventStats.svg?react';
 import { useTranslation } from 'react-i18next';
-import { Button, Dropdown } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import EventDashboard from 'components/EventManagement/Dashboard/EventDashboard';
-import OrganizationActionItems from 'screens/OrganizationActionItems/OrganizationActionItems';
+import EventActionItems from 'components/EventManagement/EventActionItems/EventActionItems';
 import EventAgendaItems from 'components/EventManagement/EventAgendaItems/EventAgendaItems';
 import useLocalStorage from 'utils/useLocalstorage';
 
@@ -25,7 +27,7 @@ const eventDashboardTabs: {
 }[] = [
   {
     value: 'dashboard',
-    icon: <MdOutlineDashboard size={18} className="me-1" />,
+    icon: <EventDashboardIcon width={26} height={26} className="me-1" />,
   },
   {
     value: 'registrants',
@@ -33,7 +35,7 @@ const eventDashboardTabs: {
   },
   {
     value: 'eventActions',
-    icon: <FaTasks size={16} className="me-1" />,
+    icon: <EventActionsIcon width={23} height={23} className="me-1" />,
   },
   {
     value: 'eventAgendas',
@@ -41,7 +43,7 @@ const eventDashboardTabs: {
   },
   {
     value: 'eventStats',
-    icon: <IoMdStats size={20} className="me-2" />,
+    icon: <EventStatisticsIcon width={23} height={23} className="me-2" />,
   },
 ];
 
@@ -106,6 +108,15 @@ const EventManagement = (): JSX.Element => {
   const [tab, setTab] = useState<TabOptions>('dashboard');
 
   /**
+   * Handles tab button clicks to update the selected tab.
+   *
+   * @param value - The value representing the tab to select
+   */
+  const handleClick = (value: TabOptions): void => {
+    setTab(value);
+  };
+
+  /**
    * Renders a button for each tab with the appropriate icon and label.
    *
    * @param value - The tab value
@@ -122,16 +133,14 @@ const EventManagement = (): JSX.Element => {
     const selected = tab === value;
     const variant = selected ? 'success' : 'light';
     const translatedText = t(value);
-
     const className = selected
-      ? 'px-4 d-flex align-items-center shadow'
-      : 'text-secondary bg-white px-4 d-flex align-items-center rounded shadow';
+      ? 'px-4'
+      : 'text-secondary border-secondary-subtle px-4';
     const props = {
       variant,
       className,
-      style: { height: '2.5rem' },
       size: 'sm' as 'sm' | 'lg',
-      onClick: () => setTab(value),
+      onClick: () => handleClick(value),
       'data-testid': `${value}Btn`,
     };
 
@@ -143,102 +152,67 @@ const EventManagement = (): JSX.Element => {
     );
   };
 
-  const handleBack = (): void => {
-    /*istanbul ignore next*/
-    userRole === 'USER'
-      ? navigate(`/user/events/${orgId}`)
-      : navigate(`/orgevents/${orgId}`);
-  };
-
   return (
-    <div className="d-flex flex-column">
-      <Row className="mx-3 mt-4">
-        <Col>
-          <div className="d-none d-md-flex gap-3">
-            <Button
-              size="sm"
-              variant="light"
-              className="d-flex text-secondary bg-white align-items-center px-3 shadow"
-            >
-              <FaChevronLeft
-                cursor={'pointer'}
-                data-testid="backBtn"
-                onClick={handleBack}
-              />
-            </Button>
-            {eventDashboardTabs.map(renderButton)}
-          </div>
-
-          <Dropdown
-            className="d-md-none"
-            data-testid="tabsDropdownContainer"
-            drop="down"
-          >
-            <Dropdown.Toggle
-              variant="success"
-              id="dropdown-basic"
-              data-testid="tabsDropdownToggle"
-            >
-              <span className="me-1">{t(tab)}</span>
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              {/* Render dropdown items for each settings category */}
-              {eventDashboardTabs.map(({ value, icon }, index) => (
-                <Dropdown.Item
-                  key={index}
-                  onClick={
-                    /* istanbul ignore next */
-                    () => setTab(value)
-                  }
-                  className={`d-flex gap-2 ${tab === value && 'text-secondary'}`}
-                >
-                  {icon} {t(value)}
-                </Dropdown.Item>
-              ))}
-            </Dropdown.Menu>
-          </Dropdown>
+    <div className={`${styles.content} mt-3 p-4`}>
+      <div className="d-flex ml-3">
+        <AngleLeftIcon
+          cursor={'pointer'}
+          width={28}
+          height={28}
+          fill={'var(--bs-secondary)'}
+          data-testid="backBtn"
+          onClick={() => {
+            /*istanbul ignore next*/
+            (() =>
+              userRole === 'USER'
+                ? navigate(`/user/events/${orgId}`)
+                : navigate(`/orgevents/${orgId}`))();
+          }}
+          className="mt-1"
+        />
+        <div className="d-flex ms-3 gap-4 mt-1">
+          {eventDashboardTabs.map(renderButton)}
+        </div>
+      </div>
+      <Row>
+        <Col className="pt-4">
+          {/* Render content based on the selected tab */}
+          {(() => {
+            switch (tab) {
+              case 'dashboard':
+                return (
+                  <div data-testid="eventDashboadTab">
+                    <EventDashboard eventId={eventId} />
+                  </div>
+                );
+              case 'registrants':
+                return (
+                  <div data-testid="eventRegistrantsTab">
+                    <h2>Event Registrants</h2>
+                  </div>
+                );
+              case 'eventActions':
+                return (
+                  <div data-testid="eventActionsTab">
+                    <EventActionItems eventId={eventId} />
+                  </div>
+                );
+              case 'eventAgendas':
+                return (
+                  <div data-testid="eventAgendasTab">
+                    <EventAgendaItems eventId={eventId} />
+                  </div>
+                );
+              case 'eventStats':
+                return (
+                  <div data-testid="eventStatsTab">
+                    <h2>Event Statistics</h2>
+                  </div>
+                );
+            }
+          })()}
         </Col>
-
-        <Row className="mt-3">
-          <hr />
-        </Row>
       </Row>
-
-      {/* Render content based on the selected settings category */}
-      {(() => {
-        switch (tab) {
-          case 'dashboard':
-            return (
-              <div data-testid="eventDashboadTab">
-                <EventDashboard eventId={eventId} />
-              </div>
-            );
-          case 'registrants':
-            return (
-              <div data-testid="eventRegistrantsTab">
-                <h2>Event Registrants</h2>
-              </div>
-            );
-          case 'eventActions':
-            return (
-              <div data-testid="eventActionsTab" className="mx-4">
-                <OrganizationActionItems />
-              </div>
-            );
-          case 'eventAgendas':
-            return (
-              <div data-testid="eventAgendasTab">
-                <EventAgendaItems eventId={eventId} />
-              </div>
-            );
-          case 'eventStats':
-            return (
-              <div data-testid="eventStatsTab">
-                <h2>Event Statistics</h2>
-              </div>
-            );
-        }
-      })()}
     </div>
   );
 };
