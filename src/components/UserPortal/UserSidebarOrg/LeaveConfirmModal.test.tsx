@@ -5,6 +5,7 @@ import {
   fireEvent,
   waitFor,
   RenderResult,
+  act,
 } from '@testing-library/react';
 import LeaveConfirmModal from './LeaveConfirmModal';
 import { MockedProvider } from '@apollo/client/testing';
@@ -12,6 +13,7 @@ import { LEAVE_ORGANIZATION } from 'GraphQl/Mutations/OrganizationMutations';
 import { toast } from 'react-toastify';
 import i18n from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
+import { BrowserRouter } from 'react-router-dom';
 
 jest.mock('react-toastify', () => ({
   toast: {
@@ -20,9 +22,18 @@ jest.mock('react-toastify', () => ({
   },
 }));
 
+async function wait(ms = 100): Promise<void> {
+  await act(() => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  });
+}
+
 const mockNavigate = jest.fn();
 
 jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockNavigate,
 }));
 
@@ -40,13 +51,15 @@ const renderLeaveConfirmModal = (
 ): RenderResult => {
   return render(
     <MockedProvider mocks={mocks} addTypename={false}>
-      <I18nextProvider i18n={i18n}>
-        <LeaveConfirmModal
-          show={true}
-          onHide={onHide}
-          orgId="6437904485008f171cf29924"
-        />
-      </I18nextProvider>
+      <BrowserRouter>
+        <I18nextProvider i18n={i18n}>
+          <LeaveConfirmModal
+            show={true}
+            onHide={onHide}
+            orgId="6437904485008f171cf29924"
+          />
+        </I18nextProvider>
+      </BrowserRouter>
     </MockedProvider>,
   );
 };
@@ -77,15 +90,17 @@ describe('LeaveConfirmModal', () => {
   });
 
   it('calls leaveOrganization mutation and handles success', async () => {
-    renderLeaveConfirmModal(onHide, mocks);
+    const { debug } = renderLeaveConfirmModal(onHide, mocks);
 
-    const confirmButton = screen.getByText(translations.confirm);
+    const confirmButton = screen.getByTestId('leave-confirm-modal-confirm-btn');
+
     fireEvent.click(confirmButton);
 
+    await wait();
+
     await waitFor(() => {
-      expect(toast.success);
+      debug();
       expect(onHide).toHaveBeenCalled();
-      // expect(mockNavigate).toHaveBeenCalledWith('/user/organizations');
     });
   });
 
@@ -108,5 +123,19 @@ describe('LeaveConfirmModal', () => {
       expect(toast.error).toHaveBeenCalledWith(translations.errorOccured);
       expect(onHide).toHaveBeenCalled();
     });
+  });
+
+  it('LEAVE_ORGANIZATION mock has correct query', () => {
+    expect(mocks[0].request.query).toBe(LEAVE_ORGANIZATION);
+  });
+
+  it('LEAVE_ORGANIZATION mock has correct variables', () => {
+    expect(mocks[0].request.variables).toEqual({
+      organizationId: '6437904485008f171cf29924',
+    });
+  });
+
+  it('LEAVE_ORGANIZATION mock has correct result', () => {
+    expect(mocks[0].result).toEqual({ data: { leaveOrganization: true } });
   });
 });

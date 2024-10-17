@@ -47,16 +47,14 @@ const LeaveConfirmModal: FC<InterfaceLeaveConfirmModalProps> = ({
 
   async function leaveOrg(): Promise<void> {
     try {
-      const data = await leaveOrganization({
+      await leaveOrganization({
         variables: {
           organizationId: orgId,
         },
       });
       onHide();
-      toast.success(t('orgLeft'));
       navigate('/user/organizations');
     } catch (error: unknown) {
-      /* istanbul ignore next */
       if (error instanceof Error) {
         toast.error(t('errorOccured'));
       }
@@ -82,7 +80,12 @@ const LeaveConfirmModal: FC<InterfaceLeaveConfirmModalProps> = ({
         <Button variant="danger" onClick={onHide}>
           {tCommon('cancel')}
         </Button>
-        <Button onClick={leaveOrg}>{tCommon('confirm')}</Button>
+        <Button
+          data-testid="leave-confirm-modal-confirm-btn"
+          onClick={leaveOrg}
+        >
+          {tCommon('confirm')}
+        </Button>
       </Modal.Footer>
     </Modal>
   );
