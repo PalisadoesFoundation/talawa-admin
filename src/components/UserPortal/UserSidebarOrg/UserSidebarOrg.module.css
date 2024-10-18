@@ -109,6 +109,31 @@
   background-color: var(--bs-white);
 }
 
+.leftDrawer .leaveOrgContainer {
+  display: flex;
+  align-items: center;
+  height: 30px;
+  background-color: white;
+  width: 100%;
+  border-radius: 16px;
+  border: none;
+}
+
+.leftDrawer .leaveOrgContainer:focus {
+  outline: none;
+  border: none;
+}
+
+.leftDrawer .leaveOrgContainer .primaryText {
+  color: red;
+}
+
+.leftDrawer .leaveOrgContainer .leaveIcon {
+  transform: scale(1.5);
+  color: var(--bs-danger);
+  margin-right: 20px;
+}
+
 .leftDrawer .profileContainer:focus {
   outline: none;
 }

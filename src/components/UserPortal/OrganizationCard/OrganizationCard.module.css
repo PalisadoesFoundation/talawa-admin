@@ -58,6 +58,13 @@
   width: 8rem;
 }
 
+.leaveBtn {
+  display: flex;
+  justify-content: space-around;
+  width: 8rem; /* You can adjust the width based on your needs */
+  margin-right: 9rem;
+}
+
 .orgName {
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -139,9 +146,17 @@
     margin-left: auto;
     display: block;
   }
+
+  .orgCard .btnContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
   .joinBtn,
   .joinedBtn,
-  .withdrawBtn {
+  .withdrawBtn,
+  .leaveBtn {
     display: flex;
     justify-content: space-around;
     width: 100%;
