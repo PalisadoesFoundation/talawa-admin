@@ -213,7 +213,8 @@
     "roleUpdated": "Role Updated.",
     "joinNow": "Join Now",
     "visit": "Visit",
-    "withdraw": "Widthdraw",
+    "leave": "Leave",
+    "withdraw": "Withdraw",
     "removeUserFrom": "Remove User from {{org}}",
     "removeConfirmation": "Are you sure you want to remove '{{name}}' from organization '{{org}}'?",
     "searchByName": "searchByName",
@@ -982,6 +983,7 @@
     "logout": "Logout",
     "settings": "Settings",
     "chat": "Chat",
+    "leave": "Leave Organization",
     "menu": "menu"
   },
   "organizationSidebar": {
@@ -1205,7 +1207,8 @@
     "deleteCategory": "Delete Category",
     "deleteCategoryMsg": "Are you sure you want to delete this Action Item Category?",
     "createButton": "createButton",
-    "editButton": "editButton"
+    "editButton": "editButton",
+    "categoryDetails": "categoryDetails"
   },
   "organizationVenues": {
     "title": "Venues",
@@ -1319,5 +1322,12 @@
   },
   "userPledges": {
     "title": "My Pledges"
+  },
+  "orgLeave": {
+    "confirmation": "Are you sure you want to leave the organization? ",
+    "heading": "Leaving organization ?",
+    "description": "Are you sure you want to leave the organization? This action cannot be undone. If the organization requires approval, you will not be able to rejoin without it. Any related data or permissions may also be lost.",
+    "errorOccured": "An error occurred. Please try again later.",
+    "orgLeft": "You have left the organization."
   }
 }

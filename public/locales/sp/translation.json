@@ -233,6 +233,7 @@
     "errorOccured": "Se produjo un error. Por favor, inténtalo de nuevo más tarde.",
     "removeUserFrom": "Eliminar Usuario de {{org}}",
     "removeConfirmation": "¿Está seguro de que desea eliminar a '{{name}}' de la organización '{{org}}'?",
+    "leave": "Dejar",
     "noOrgError": "Error sin organización"
   },
   "communityProfile": {
@@ -760,13 +761,13 @@
   },
   "orgSettings": {
     "title": "Configuración Talawa",
-    "pageName": "Configuración",
     "general": "General",
     "actionItemCategories": "Categorías de elementos de acción",
-    "updateYourDetails": "Actualiza tus datos",
-    "updateYourPassword": "Actualice su contraseña",
     "updateOrganization": "Actualizar Organización",
     "seeRequest": "Ver Solicitud",
+    "pageName": "Configuración",
+    "updateYourDetails": "Actualiza tus datos",
+    "updateYourPassword": "Actualice su contraseña",
     "settings": "Ajustes",
     "noData": "Sin datos",
     "otherSettings": "Otras Configuraciones",
@@ -983,6 +984,7 @@
     "communityProfile": "Perfil de la comunidad",
     "logout": "Cerrar sesión",
     "settings": "Ajustes",
+    "leave": "Dejar la organización",
     "chat": "Chat"
   },
   "organizationSidebar": {
@@ -1090,8 +1092,8 @@
     "donate": "Donar",
     "nothingToShow": "Nada que mostrar aquí.",
     "success": "Donación exitosa",
-    "invalidAmount": "Ingrese un valor numérico para el monto de la donación.",
-    "donationAmountDescription": "Ingrese el valor numérico del monto de la donación.",
+    "invalidAmount": "Por favor, ingrese un valor numérico para el monto de la donación.",
+    "donationAmountDescription": "Por favor, ingrese el valor numérico para el monto de la donación.",
     "donationOutOfRange": "El monto de la donación debe estar entre {{min}} y {{max}}."
   },
   "userEvents": {
@@ -1202,11 +1204,12 @@
     "sameNameConflict": "Cambie el nombre para realizar una actualización",
     "categoryEnabled": "Categoría de elemento de acción habilitada",
     "categoryDisabled": "Categoría de elemento de acción deshabilitada",
-    "noActionItemCategories": "No hay categorías de elementos de acción",
+    "noActionItemCategories": "No hay Categorías del Ítem de Acción",
     "status": "Estado",
-    "categoryDeleted": "Categoría de elemento de acción eliminada",
-    "deleteCategory": "Eliminar categoría",
-    "deleteCategoryMsg": "¿Está seguro de que desea eliminar esta categoría de elemento de acción?"
+    "categoryDeleted": "Categoría del Ítem de Acción eliminada con éxito",
+    "deleteCategory": "Eliminar Categoría",
+    "deleteCategoryMsg": "¿Está seguro de que desea eliminar esta Categoría del Ítem de Acción?",
+    "categoryDetails": "Detalles de la categoría"
   },
   "organizationVenues": {
     "title": "Lugares",
@@ -1320,5 +1323,12 @@
   },
   "userPledges": {
     "title": "Mis Promesas"
+  },
+  "orgLeave": {
+    "confirmation": "¿Estás segura de que quieres dejar la organización?",
+    "heading": "¿Dejar la organización?",
+    "description": "¿Estás seguro de que quieres dejar la organización? Esta acción no se puede deshacer. Si la organización requiere aprobación, no podrás volver a unirte sin ella. También se pueden perder todos los datos o permisos relacionados.",
+    "errorOccured": "Se produjo un error. Inténtelo de nuevo más tarde.",
+    "orgLeft": "Has abandonado la organización."
   }
 }

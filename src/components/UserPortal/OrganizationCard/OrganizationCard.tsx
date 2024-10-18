@@ -17,6 +17,7 @@ import {
 import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
 import { useNavigate } from 'react-router-dom';
+import LeaveConfirmModal from '../UserSidebarOrg/LeaveConfirmModal';
 
 const { getItem } = useLocalStorage();
 
@@ -77,6 +78,7 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
   const { t: tCommon } = useTranslation('common');
 
   const navigate = useNavigate();
+  const [modalShow, setModalShow] = React.useState(false);
 
   // Mutations for handling organization memberships
   const [sendMembershipRequest] = useMutation(SEND_MEMBERSHIP_REQUEST, {
@@ -188,16 +190,33 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
           </div>
         </div>
         {props.membershipRequestStatus === 'accepted' && (
-          <Button
-            variant="success"
-            data-testid="manageBtn"
-            className={styles.joinedBtn}
-            onClick={() => {
-              navigate(`/user/organization/${props.id}`);
-            }}
-          >
-            {t('visit')}
-          </Button>
+          <div className={styles.btnContainer}>
+            <Button
+              variant="success"
+              data-testid="manageBtn"
+              className={styles.joinedBtn}
+              onClick={() => {
+                navigate(`/user/organization/${props.id}`);
+              }}
+            >
+              {t('visit')}
+            </Button>
+            <Button
+              variant="danger"
+              data-testid="leaveBtn"
+              className={styles.leaveBtn}
+              onClick={() => {
+                setModalShow(true);
+              }}
+            >
+              {t('leave')}
+            </Button>
+            <LeaveConfirmModal
+              orgId={props.id}
+              show={modalShow}
+              onHide={() => setModalShow(false)}
+            />
+          </div>
         )}
 
         {props.membershipRequestStatus === 'pending' && (
