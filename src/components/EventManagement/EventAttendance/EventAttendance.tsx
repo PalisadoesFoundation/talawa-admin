@@ -89,7 +89,7 @@ function EventAttendance(): JSX.Element {
       );
       setFilteredAttendees(updatedAttendees);
     }
-  }, [sortOrder, filteringBy, memberData, searchText]);
+  }, [sortOrder, filteringBy, memberData, searchText]);  
 
   const sortAttendees = (attendees: InterfaceMember[]): InterfaceMember[] => {
     return [...attendees].sort((a, b) => {
@@ -227,6 +227,7 @@ function EventAttendance(): JSX.Element {
                 <span className="ms-2">Filter: {filteringBy}</span>
               </>
             }
+            data-testid="sort-dropdown"
             onSelect={(eventKey) =>
               setFilteringBy(eventKey as 'This Month' | 'This Year' | 'All')
             }

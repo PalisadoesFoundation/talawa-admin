@@ -1,20 +1,41 @@
 import React from 'react';
 import { Dropdown } from 'react-bootstrap';
 import styles from './DynamicDropDown.module.css';
-import type { InterfaceMember } from 'components/EventManagement/EventAttendance/InterfaceEvents';
-
-interface InterfaceChangeDropDownProps {
+import { InterfaceUser } from 'components/CheckIn/types';
+interface InterfaceMember {
+  createdAt: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  gender: string;
+  eventsAttended?: {
+    _id: string;
+  }[];
+  birthDate: Date;
+  __typename: string;
+  _id: string;
+  tagsAssignedWith: {
+    edges: {
+      node: {
+        name: string;
+      };
+    }[];
+  };
+}
+interface InterfaceChangeDropDownProps<T> {
   parentContainerStyle?: string;
   btnStyle?: string;
   btnTextStyle?: string;
-  setFormState: React.Dispatch<React.SetStateAction<InterfaceMember>>;
-  formState: any;
+  setFormState: React.Dispatch<React.SetStateAction<T>>;
+  formState: T;
   fieldOptions: { value: string; label: string }[];
   fieldName: string;
   handleChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
-const DynamicDropDown = (props: InterfaceChangeDropDownProps): JSX.Element => {
+const DynamicDropDown = <T extends Record<string, any>>(
+  props: InterfaceChangeDropDownProps<T>
+): JSX.Element => {
   const handleFieldChange = (value: string): void => {
     if (props?.handleChange) {
       const event = {

@@ -66,7 +66,7 @@ export default function settings(): JSX.Element {
     state: '',
     country: '',
     image: '',
-    eventsAttended: '',
+    eventsAttended: [] as InterfaceEvent[],
   });
   console.log(userDetails);
   const originalImageState = React.useRef<string>('');
@@ -593,12 +593,6 @@ export default function settings(): JSX.Element {
               </Card>
             </Col>
             <Col lg={5} className="d-none d-lg-block">
-              {/* <UserProfile
-                firstName={userDetails.firstName}
-                lastName={userDetails.lastName}
-                email={userDetails.email}
-                image={userDetails.image}
-              /> */}
               <DeleteUser />
               <OtherSettings />
             </Col>

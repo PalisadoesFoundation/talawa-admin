@@ -17,10 +17,11 @@ const mockAttendees = [
     email: 'johndoe@example.com',
     gender: 'male',
     eventsAttended: [{ _id: 'event1' }, { _id: 'event2' }],
+    createdAt: '2023-01-01',
     birthDate: new Date('1990-01-01'),
     __typename: 'User',
     tagsAssignedWith: {
-      edges: [],
+      edges: [{ node: { name: 'Tag1' } }],
     },
   },
   {
@@ -30,6 +31,7 @@ const mockAttendees = [
     email: 'janesmith@example.com',
     gender: 'female',
     eventsAttended: [],
+    createdAt: '2023-06-01',
     birthDate: new Date('1985-05-05'),
     __typename: 'Admin',
     tagsAssignedWith: {
@@ -71,7 +73,6 @@ describe('EventAttendance Component', () => {
 
   test('renders EventAttendance component', async () => {
     renderComponent();
-
     await waitFor(() => {
       expect(screen.getByText('Historical Statistics')).toBeInTheDocument();
       expect(screen.getByText('Sort')).toBeInTheDocument();
@@ -81,7 +82,6 @@ describe('EventAttendance Component', () => {
 
   test('displays correct table headers', async () => {
     renderComponent();
-
     await waitFor(() => {
       expect(screen.getByText('#')).toBeInTheDocument();
       expect(screen.getByText('Member Name')).toBeInTheDocument();
@@ -93,55 +93,102 @@ describe('EventAttendance Component', () => {
 
   test('displays correct member information', async () => {
     renderComponent();
-
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
       expect(screen.getByText('Jane Smith')).toBeInTheDocument();
       expect(screen.getByText('Member')).toBeInTheDocument();
       expect(screen.getByText('Admin')).toBeInTheDocument();
-      expect(screen.getAllByText('0').length).toBeGreaterThan(0);
-      expect(screen.getAllByText('2').length).toBeGreaterThan(0);
-    });
-  });
-
-  test('displays correct number of table rows', async () => {
-    renderComponent();
-
-    await waitFor(() => {
-      const rows = screen.getAllByTestId('row');
-      expect(rows.length).toBeGreaterThan(2);
+      expect(screen.getByText('2')).toBeInTheDocument();
+      expect(screen.getByText('0')).toBeInTheDocument();
+      expect(screen.getByText('Tag1')).toBeInTheDocument();
+      expect(screen.getByText('None')).toBeInTheDocument();
     });
   });
 
   test('filters attendees by search text', async () => {
     renderComponent();
-
     await waitFor(() => {
       const searchInput = screen.getByPlaceholderText('Search member');
       fireEvent.change(searchInput, { target: { value: 'John' } });
       expect(screen.getByText('John Doe')).toBeInTheDocument();
-      expect(screen.queryByText('Jane Smith')).toBeNull();
+      expect(screen.queryByText('Jane Smith')).not.toBeInTheDocument();
     });
   });
 
   test('sorts attendees by name', async () => {
     renderComponent();
-
     await waitFor(() => {
       const sortButton = screen.getByText('Sort');
       fireEvent.click(sortButton);
-      const firstAttendee = screen.getAllByTestId('row')[1];
-      expect(firstAttendee).toHaveTextContent('John Doe');
+      fireEvent.click(screen.getByText('Descending'));
+      const rows = screen.getAllByRole('row');
+      expect(rows[1]).toHaveTextContent('John Doe');
+      expect(rows[2]).toHaveTextContent('Jane Smith');
+    });
+  });
+
+  test('filters attendees by date range', async () => {
+    renderComponent();
+    await waitFor(() => {
+      const filterButton = screen.getByText('Filter: All');
+      fireEvent.click(filterButton);
+      fireEvent.click(screen.getByText('This Month'));
+      expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
+      expect(screen.getByText('Jane Smith')).toBeInTheDocument();
     });
   });
 
   test('shows modal with attendance statistics', async () => {
     renderComponent();
-
     await waitFor(() => {
       const statsButton = screen.getByText('Historical Statistics');
       fireEvent.click(statsButton);
       expect(screen.getByText('Attendance Rate')).toBeInTheDocument();
+    });
+  });
+
+  test('displays tooltip with attended events', async () => {
+    renderComponent();
+    await waitFor(() => {
+      const eventsAttendedCell = screen.getByText('2');
+      fireEvent.mouseOver(eventsAttendedCell);
+      expect(screen.getByRole('tooltip')).toBeInTheDocument();
+    });
+  });
+
+  test('handles empty attendees list', async () => {
+    const emptyMock = [
+      {
+        request: {
+          query: EVENT_ATTENDEES,
+          variables: { id: 'event123' },
+        },
+        result: {
+          data: {
+            event: {
+              _id: 'event123',
+              attendees: [],
+            },
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={emptyMock} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <EventAttendance />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
+      expect(screen.queryByText('Jane Smith')).not.toBeInTheDocument();
     });
   });
 });
