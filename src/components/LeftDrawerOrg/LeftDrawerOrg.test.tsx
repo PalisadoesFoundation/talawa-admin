@@ -77,7 +77,7 @@ const MOCKS = [
   },
   {
     request: {
-      query: ORGANIZATIONS_LIST,
+      query: ORGANIZATIONS_LIST_BY_CREATOR_ID,
       variables: { id: '123' },
     },
     result: {
@@ -140,7 +140,7 @@ const MOCKS = [
 const MOCKS_WITH_IMAGE = [
   {
     request: {
-      query: ORGANIZATIONS_LIST,
+      query: ORGANIZATIONS_LIST_BY_CREATOR_ID,
       variables: { id: '123' },
     },
     result: {
@@ -204,7 +204,7 @@ const MOCKS_WITH_IMAGE = [
 const MOCKS_EMPTY = [
   {
     request: {
-      query: ORGANIZATIONS_LIST,
+      query: ORGANIZATIONS_LIST_BY_CREATOR_ID,
       variables: { id: '123' },
     },
     result: {
