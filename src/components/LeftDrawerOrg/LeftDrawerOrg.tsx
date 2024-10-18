@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { WarningAmberOutlined } from '@mui/icons-material';
-import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
+import { ORGANIZATIONS_LIST_BY_CREATOR_ID } from 'GraphQl/Queries/Queries';
 import CollapsibleDropdown from 'components/CollapsibleDropdown/CollapsibleDropdown';
 import IconComponent from 'components/IconComponent/IconComponent';
 import React, { useEffect, useState } from 'react';
@@ -49,7 +49,7 @@ const leftDrawerOrg = ({
       | { organizations: InterfaceQueryOrganizationsListObject[] }
       | undefined;
     loading: boolean;
-  } = useQuery(ORGANIZATIONS_LIST, {
+  } = useQuery(ORGANIZATIONS_LIST_BY_CREATOR_ID, {
     variables: { creatorId: orgId },
   });
 
