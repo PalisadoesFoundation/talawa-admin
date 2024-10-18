@@ -1,5 +1,5 @@
 import React, { act } from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen , waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import 'jest-localstorage-mock';
 import { I18nextProvider } from 'react-i18next';
@@ -304,8 +304,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await wait();
-    expect(screen.getByTestId(/orgBtn/i)).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByTestId(/OrgBtn/i)).toBeInTheDocument());
   });
 
   test('Testing Menu Buttons', async () => {
