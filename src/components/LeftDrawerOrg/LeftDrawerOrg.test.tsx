@@ -1,5 +1,5 @@
 import React, { act } from 'react';
-import { fireEvent, render, screen , waitFor} from '@testing-library/react';
+import { fireEvent, render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import 'jest-localstorage-mock';
 import { I18nextProvider } from 'react-i18next';
