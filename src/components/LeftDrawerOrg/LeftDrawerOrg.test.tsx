@@ -11,7 +11,7 @@ import LeftDrawerOrg from './LeftDrawerOrg';
 import { Provider } from 'react-redux';
 import { MockedProvider } from '@apollo/react-testing';
 import { store } from 'state/store';
-import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
+import { ORGANIZATIONS_LIST_BY_CREATOR_ID } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -305,7 +305,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
       </MockedProvider>,
     );
     await waitFor(() =>
-      expect(screen.getByTestId(/OrgBtn/i)).toBeInTheDocument(),
+      expect(screen.getByTestId(/orgBtn/i)).toBeInTheDocument(),
     );
   });
 
