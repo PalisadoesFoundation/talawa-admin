@@ -11,7 +11,7 @@ import LeftDrawerOrg from './LeftDrawerOrg';
 import { Provider } from 'react-redux';
 import { MockedProvider } from '@apollo/react-testing';
 import { store } from 'state/store';
-import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
+import { ORGANIZATIONS_LIST_BY_CREATOR_ID } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -77,7 +77,7 @@ const MOCKS = [
   },
   {
     request: {
-      query: ORGANIZATIONS_LIST,
+      query: ORGANIZATIONS_LIST_BY_CREATOR_ID,
       variables: { id: '123' },
     },
     result: {
@@ -140,7 +140,7 @@ const MOCKS = [
 const MOCKS_WITH_IMAGE = [
   {
     request: {
-      query: ORGANIZATIONS_LIST,
+      query: ORGANIZATIONS_LIST_BY_CREATOR_ID,
       variables: { id: '123' },
     },
     result: {
@@ -204,7 +204,7 @@ const MOCKS_WITH_IMAGE = [
 const MOCKS_EMPTY = [
   {
     request: {
-      query: ORGANIZATIONS_LIST,
+      query: ORGANIZATIONS_LIST_BY_CREATOR_ID,
       variables: { id: '123' },
     },
     result: {

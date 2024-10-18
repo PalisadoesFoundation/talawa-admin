@@ -336,6 +336,62 @@ export const EVENT_FEEDBACKS = gql`
 `;
 
 // Query to take the Organization with data
+export const ORGANIZATIONS_LIST_BY_CREATOR_ID = gql`
+  query OrganizationsByCreator($creatorId: ID!) {
+    organizations(where: { creatorId: $creatorId }) {
+      _id
+      image
+      creator {
+        firstName
+        lastName
+        email
+      }
+      name
+      description
+      address {
+        city
+        countryCode
+        dependentLocality
+        line1
+        line2
+        postalCode
+        sortingCode
+        state
+      }
+      userRegistrationRequired
+      visibleInSearch
+      members {
+        _id
+        firstName
+        lastName
+        email
+      }
+      admins {
+        _id
+        firstName
+        lastName
+        email
+        createdAt
+      }
+      membershipRequests {
+        _id
+        user {
+          firstName
+          lastName
+          email
+        }
+      }
+      blockedUsers {
+        _id
+        firstName
+        lastName
+        email
+      }
+    }
+  }
+`;
+
+// Query to take the Organization with data
 export const ORGANIZATIONS_LIST = gql`
   query Organizations($id: ID!) {
     organizations(id: $id) {
