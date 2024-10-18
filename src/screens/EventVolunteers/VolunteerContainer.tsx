@@ -3,8 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router-dom';
 import styles from './EventVolunteers.module.css';
 import { HiUserGroup, HiUser } from 'react-icons/hi2';
-import Volunteers from './Volunteers';
-import VolunteerGroups from './VolunteerGroups';
+import Volunteers from './Volunteers/Volunteers';
+import VolunteerGroups from './VolunteerGroups/VolunteerGroups';
+import { FaRegFile } from 'react-icons/fa6';
+import Requests from './Requests/Requests';
 
 /**
  * Container Component for Volunteer or VolunteerGroups as per selection.
@@ -25,7 +27,7 @@ function volunteerContainer(): JSX.Element {
     return <Navigate to={'/'} replace />;
   }
 
-  const [dataType, setDataType] = useState<'individual' | 'group'>(
+  const [dataType, setDataType] = useState<'individual' | 'group' | 'requests'>(
     'individual',
   );
 
@@ -33,13 +35,15 @@ function volunteerContainer(): JSX.Element {
     <div>
       <div className="mt-2 mb-4 d-flex justify-content-between">
         <span className={styles.titlemodal}>
-          {t(`${dataType === 'group' ? 'volunteerGroups' : 'volunteers'}`)}
+          {t(
+            `${dataType === 'group' ? 'volunteerGroups' : dataType === 'individual' ? 'volunteers' : 'requests'}`,
+          )}
         </span>
         <div className="d-flex justify-content-center">
           <div
             className={`btn-group ${styles.toggleGroup}`}
             role="group"
-            aria-label="Toggle between Pledged and Raised amounts"
+            aria-label="Basic radio toggle button group"
           >
             <input
               type="radio"
@@ -59,7 +63,7 @@ function volunteerContainer(): JSX.Element {
 
             <input
               type="radio"
-              className={`btn-check`}
+              className={`btn-check ${styles.toggleBtn}`}
               name="btnradio"
               id="groupsRadio"
               onChange={() => setDataType('group')}
@@ -72,11 +76,33 @@ function volunteerContainer(): JSX.Element {
               <HiUserGroup className="me-1" />
               {t('groups')}
             </label>
+
+            <input
+              type="radio"
+              className={`btn-check ${styles.toggleBtn}`}
+              name="btnradio"
+              id="requestsRadio"
+              onChange={() => setDataType('requests')}
+              checked={dataType === 'requests'}
+            />
+            <label
+              className={`btn btn-outline-primary ${styles.toggleBtn}`}
+              htmlFor="requestsRadio"
+            >
+              <FaRegFile className="me-1 mb-1" />
+              {t('requests')}
+            </label>
           </div>
         </div>
       </div>
 
-      {dataType === 'individual' ? <Volunteers /> : <VolunteerGroups />}
+      {dataType === 'individual' ? (
+        <Volunteers />
+      ) : dataType === 'group' ? (
+        <VolunteerGroups />
+      ) : (
+        <Requests />
+      )}
     </div>
   );
 }

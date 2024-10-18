@@ -1,34 +1,31 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Dropdown, Form } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router-dom';
 
-import {
-  Circle,
-  FilterAltOutlined,
-  Search,
-  Sort,
-  WarningAmberRounded,
-} from '@mui/icons-material';
+import { Search, Sort, WarningAmberRounded } from '@mui/icons-material';
 
 import { useQuery } from '@apollo/client';
-import { ACTION_ITEM_LIST } from 'GraphQl/Queries/Queries';
 
-import type { InterfaceActionItemList } from 'utils/interfaces';
+import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
 import Loader from 'components/Loader/Loader';
 import {
   DataGrid,
   type GridCellParams,
   type GridColDef,
 } from '@mui/x-data-grid';
-import { Chip, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
-import styles from './EventVolunteers.module.css';
+import styles from '../EventVolunteers.module.css';
+import { EVENT_VOLUNTEER_GROUP_LIST } from 'GraphQl/Queries/EventVolunteerQueries';
+import VolunteerGroupModal from './VolunteerGroupModal';
+import VolunteerGroupDeleteModal from './VolunteerGroupDeleteModal';
+import VolunteerGroupViewModal from './VolunteerGroupViewModal';
 
-enum ItemStatus {
-  Pending = 'pending',
-  Completed = 'completed',
-  Late = 'late',
+enum ModalState {
+  SAME = 'same',
+  DELETE = 'delete',
+  VIEW = 'view',
 }
 
 const dataGridStyle = {
@@ -53,10 +50,8 @@ const dataGridStyle = {
 };
 
 /**
- * Component for managing and displaying action items within an organization.
- *
- * This component allows users to view, filter, sort, and create action items. It also handles fetching and displaying related data such as action item categories and members.
- *
+ * Component for managing volunteer groups for an event.
+ * This component allows users to view, filter, sort, and create action items. It also provides a modal for creating and editing action items.
  * @returns The rendered component.
  */
 function volunteerGroups(): JSX.Element {
@@ -69,60 +64,86 @@ function volunteerGroups(): JSX.Element {
   // Get the organization ID from URL parameters
   const { orgId, eventId } = useParams();
 
-  if (!orgId) {
+  if (!orgId || !eventId) {
     return <Navigate to={'/'} replace />;
   }
 
+  const [group, setGroup] = useState<InterfaceVolunteerGroupInfo | null>(null);
+  const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
   const [searchValue, setSearchValue] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [sortBy, setSortBy] = useState<'dueDate_ASC' | 'dueDate_DESC' | null>(
+  const [sortBy, setSortBy] = useState<'member_ASC' | 'member_DESC' | null>(
     null,
   );
-  const [status, setStatus] = useState<ItemStatus | null>(null);
-  const [searchBy, setSearchBy] = useState<'assignee' | 'category'>('assignee');
+  const [searchBy, setSearchBy] = useState<'leader' | 'group'>('group');
+  const [modalState, setModalState] = useState<{
+    [key in ModalState]: boolean;
+  }>({
+    [ModalState.SAME]: false,
+    [ModalState.DELETE]: false,
+    [ModalState.VIEW]: false,
+  });
 
   /**
-   * Query to fetch action items for the organization based on filters and sorting.
+   * Query to fetch the list of volunteer groups for the event.
    */
   const {
-    data: actionItemsData,
-    loading: actionItemsLoading,
-    error: actionItemsError,
+    data: groupsData,
+    loading: groupsLoading,
+    error: groupsError,
+    refetch: refetchGroups,
   }: {
-    data: InterfaceActionItemList | undefined;
+    data?: {
+      getEventVolunteerGroups: InterfaceVolunteerGroupInfo[];
+    };
     loading: boolean;
     error?: Error | undefined;
-  } = useQuery(ACTION_ITEM_LIST, {
+    refetch: () => void;
+  } = useQuery(EVENT_VOLUNTEER_GROUP_LIST, {
     variables: {
-      organizationId: orgId,
-      eventId: eventId,
-      orderBy: sortBy,
       where: {
-        assigneeName: searchBy === 'assignee' ? searchTerm : undefined,
-        categoryName: searchBy === 'category' ? searchTerm : undefined,
-        is_completed:
-          status === null ? undefined : status === ItemStatus.Completed,
+        eventId: eventId,
+        leaderName: searchBy === 'leader' ? searchTerm : null,
+        name_contains: searchBy === 'group' ? searchTerm : null,
       },
+      orderBy: sortBy,
     },
   });
 
-  const actionItems = useMemo(
-    () => actionItemsData?.actionItemsByOrganization || [],
-    [actionItemsData],
+  const openModal = (modal: ModalState): void =>
+    setModalState((prevState) => ({ ...prevState, [modal]: true }));
+
+  const closeModal = (modal: ModalState): void =>
+    setModalState((prevState) => ({ ...prevState, [modal]: false }));
+
+  const handleModalClick = useCallback(
+    (group: InterfaceVolunteerGroupInfo | null, modal: ModalState): void => {
+      if (modal === ModalState.SAME) {
+        setModalMode(group ? 'edit' : 'create');
+      }
+      setGroup(group);
+      openModal(modal);
+    },
+    [openModal],
   );
 
-  if (actionItemsLoading) {
+  const groups = useMemo(
+    () => groupsData?.getEventVolunteerGroups || [],
+    [groupsData],
+  );
+
+  if (groupsLoading) {
     return <Loader size="xl" />;
   }
 
-  if (actionItemsError) {
+  if (groupsError) {
     return (
       <div className={styles.message} data-testid="errorMsg">
         <WarningAmberRounded className={styles.icon} fontSize="large" />
         <h6 className="fw-bold text-danger text-center">
-          {tErrors('errorLoading', { entity: 'Action Items' })}
+          {tErrors('errorLoading', { entity: 'Volunteer Groups' })}
           <br />
-          {`${actionItemsError.message}`}
+          {`${groupsError.message}`}
         </h6>
       </div>
     );
@@ -139,7 +160,27 @@ function volunteerGroups(): JSX.Element {
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        const { _id, firstName, lastName, image } = params.row.assignee;
+        return (
+          <div
+            className="d-flex justify-content-center fw-bold"
+            data-testid="groupName"
+          >
+            {params.row.name}
+          </div>
+        );
+      },
+    },
+    {
+      field: 'leader',
+      headerName: 'Leader',
+      flex: 1,
+      align: 'center',
+      minWidth: 100,
+      headerAlign: 'center',
+      sortable: false,
+      headerClassName: `${styles.tableHeader}`,
+      renderCell: (params: GridCellParams) => {
+        const { _id, firstName, lastName, image } = params.row.leader;
         return (
           <div
             className="d-flex fw-bold align-items-center ms-2"
@@ -163,27 +204,7 @@ function volunteerGroups(): JSX.Element {
                 />
               </div>
             )}
-            {params.row.assignee.firstName + ' ' + params.row.assignee.lastName}
-          </div>
-        );
-      },
-    },
-    {
-      field: 'leader',
-      headerName: 'Leader',
-      flex: 1,
-      align: 'center',
-      minWidth: 100,
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div
-            className="d-flex justify-content-center fw-bold"
-            data-testid="categoryName"
-          >
-            {params.row.actionItemCategory?.name}
+            {firstName + ' ' + lastName}
           </div>
         );
       },
@@ -198,13 +219,31 @@ function volunteerGroups(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <Chip
-            icon={<Circle className={styles.chipIcon} />}
-            label={params.row.isCompleted ? 'Completed' : 'Pending'}
-            variant="outlined"
-            color="primary"
-            className={`${styles.chip} ${params.row.isCompleted ? styles.active : styles.pending}`}
-          />
+          <div
+            className="d-flex justify-content-center fw-bold"
+            data-testid="groupActions"
+          >
+            {params.row.assignments.length}
+          </div>
+        );
+      },
+    },
+    {
+      field: 'members',
+      headerName: 'No. of Members',
+      flex: 1,
+      align: 'center',
+      headerAlign: 'center',
+      sortable: false,
+      headerClassName: `${styles.tableHeader}`,
+      renderCell: (params: GridCellParams) => {
+        return (
+          <div
+            className="d-flex justify-content-center fw-bold"
+            data-testid="groupActions"
+          >
+            {params.row.volunteers.length}
+          </div>
         );
       },
     },
@@ -225,8 +264,8 @@ function volunteerGroups(): JSX.Element {
               size="sm"
               style={{ minWidth: '32px' }}
               className="me-2 rounded"
-              data-testid={`viewItemBtn${params.row.id}`}
-              onClick={() => console.log('View Button Clicked')}
+              data-testid={`viewGroupBtn${params.row.id}`}
+              onClick={() => handleModalClick(params.row, ModalState.VIEW)}
             >
               <i className="fa fa-info" />
             </Button>
@@ -234,7 +273,7 @@ function volunteerGroups(): JSX.Element {
               variant="success"
               size="sm"
               className="me-2 rounded"
-              data-testid={`editItemBtn${params.row.id}`}
+              data-testid={`editGroupBtn${params.row.id}`}
               onClick={() => console.log('Edit Button Clicked')}
             >
               <i className="fa fa-edit" />
@@ -243,8 +282,8 @@ function volunteerGroups(): JSX.Element {
               size="sm"
               variant="danger"
               className="rounded"
-              data-testid={`deleteItemBtn${params.row.id}`}
-              onClick={() => console.log('Delete Button Clicked')}
+              data-testid={`deleteGroupBtn${params.row.id}`}
+              onClick={() => handleModalClick(params.row, ModalState.DELETE)}
             >
               <i className="fa fa-trash" />
             </Button>
@@ -302,16 +341,16 @@ function volunteerGroups(): JSX.Element {
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item
-                  onClick={() => setSearchBy('assignee')}
-                  data-testid="assignee"
+                  onClick={() => setSearchBy('leader')}
+                  data-testid="leader"
                 >
-                  {t('assignee')}
+                  {t('leader')}
                 </Dropdown.Item>
                 <Dropdown.Item
-                  onClick={() => setSearchBy('category')}
-                  data-testid="category"
+                  onClick={() => setSearchBy('group')}
+                  data-testid="group"
                 >
-                  {t('category')}
+                  {t('group')}
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
@@ -327,47 +366,16 @@ function volunteerGroups(): JSX.Element {
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item
-                  onClick={() => setSortBy('dueDate_DESC')}
-                  data-testid="dueDate_DESC"
+                  onClick={() => setSortBy('member_DESC')}
+                  data-testid="member_DESC"
                 >
-                  {t('latestDueDate')}
+                  {t('mostMembers')}
                 </Dropdown.Item>
                 <Dropdown.Item
-                  onClick={() => setSortBy('dueDate_ASC')}
-                  data-testid="dueDate_ASC"
+                  onClick={() => setSortBy('member_ASC')}
+                  data-testid="member_ASC"
                 >
-                  {t('earliestDueDate')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="success"
-                id="dropdown-basic"
-                className={styles.dropdown}
-                data-testid="filter"
-              >
-                <FilterAltOutlined className={'me-1'} />
-                {t('status')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => setStatus(null)}
-                  data-testid="statusAll"
-                >
-                  {tCommon('all')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setStatus(ItemStatus.Pending)}
-                  data-testid="statusPending"
-                >
-                  {tCommon('pending')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setStatus(ItemStatus.Completed)}
-                  data-testid="statusCompleted"
-                >
-                  {tCommon('completed')}
+                  {t('leastMembers')}
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
@@ -375,7 +383,7 @@ function volunteerGroups(): JSX.Element {
           <div>
             <Button
               variant="success"
-              onClick={() => console.log('Create Button Clicked')}
+              onClick={() => handleModalClick(null, ModalState.SAME)}
               style={{ marginTop: '11px' }}
               data-testid="createActionItemBtn"
             >
@@ -386,7 +394,7 @@ function volunteerGroups(): JSX.Element {
         </div>
       </div>
 
-      {/* Table with Action Items */}
+      {/* Table with Volunteer Groups */}
       <DataGrid
         disableColumnMenu
         columnBufferPx={7}
@@ -403,13 +411,38 @@ function volunteerGroups(): JSX.Element {
         getRowClassName={() => `${styles.rowBackground}`}
         autoHeight
         rowHeight={65}
-        rows={actionItems.map((actionItem, index) => ({
+        rows={groups.map((group, index) => ({
           id: index + 1,
-          ...actionItem,
+          ...group,
         }))}
         columns={columns}
         isRowSelectable={() => false}
       />
+
+      <VolunteerGroupModal
+        isOpen={modalState[ModalState.SAME]}
+        hide={() => closeModal(ModalState.SAME)}
+        refetchGroups={refetchGroups}
+        eventId={eventId}
+        orgId={orgId}
+        group={group}
+        mode={modalMode}
+      />
+
+      <VolunteerGroupDeleteModal
+        isOpen={modalState[ModalState.DELETE]}
+        hide={() => closeModal(ModalState.DELETE)}
+        refetchGroups={refetchGroups}
+        group={group}
+      />
+
+      {group && (
+        <VolunteerGroupViewModal
+          isOpen={modalState[ModalState.VIEW]}
+          hide={() => closeModal(ModalState.VIEW)}
+          group={group}
+        />
+      )}
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Dropdown, Form } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router-dom';
@@ -12,9 +12,6 @@ import {
 } from '@mui/icons-material';
 
 import { useQuery } from '@apollo/client';
-import { ACTION_ITEM_LIST } from 'GraphQl/Queries/Queries';
-
-import type { InterfaceActionItemList } from 'utils/interfaces';
 import Loader from 'components/Loader/Loader';
 import {
   DataGrid,
@@ -23,12 +20,23 @@ import {
 } from '@mui/x-data-grid';
 import { Chip, Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
-import styles from './EventVolunteers.module.css';
+import styles from '../EventVolunteers.module.css';
+import { EVENT_VOLUNTEER_LIST } from 'GraphQl/Queries/EventVolunteerQueries';
+import { InterfaceEventVolunteerInfo } from 'utils/interfaces';
+import VolunteerCreateModal from './VolunteerCreateModal';
+import VolunteerDeleteModal from './VolunteerDeleteModal';
+import VolunteerViewModal from './VolunteerViewModal';
 
-enum ItemStatus {
+enum VolunteerStatus {
+  All = 'all',
   Pending = 'pending',
-  Completed = 'completed',
-  Late = 'late',
+  Accepted = 'accepted',
+}
+
+enum ModalState {
+  ADD = 'add',
+  DELETE = 'delete',
+  VIEW = 'view',
 }
 
 const dataGridStyle = {
@@ -69,60 +77,89 @@ function volunteers(): JSX.Element {
   // Get the organization ID from URL parameters
   const { orgId, eventId } = useParams();
 
-  if (!orgId) {
+  if (!orgId || !eventId) {
     return <Navigate to={'/'} replace />;
   }
 
+  const [volunteer, setVolunteer] =
+    useState<InterfaceEventVolunteerInfo | null>(null);
   const [searchValue, setSearchValue] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [sortBy, setSortBy] = useState<'dueDate_ASC' | 'dueDate_DESC' | null>(
-    null,
+  const [sortBy, setSortBy] = useState<
+    'hoursVolunteered_ASC' | 'hoursVolunteered_DESC' | null
+  >(null);
+  const [status, setStatus] = useState<VolunteerStatus>(VolunteerStatus.All);
+  const [modalState, setModalState] = useState<{
+    [key in ModalState]: boolean;
+  }>({
+    [ModalState.ADD]: false,
+    [ModalState.DELETE]: false,
+    [ModalState.VIEW]: false,
+  });
+
+  const openModal = (modal: ModalState): void => {
+    setModalState((prevState) => ({ ...prevState, [modal]: true }));
+  };
+
+  const closeModal = (modal: ModalState): void => {
+    setModalState((prevState) => ({ ...prevState, [modal]: false }));
+  };
+
+  const handleOpenModal = useCallback(
+    (
+      volunteer: InterfaceEventVolunteerInfo | null,
+      modalType: ModalState,
+    ): void => {
+      setVolunteer(volunteer);
+      openModal(modalType);
+    },
+    [openModal],
   );
-  const [status, setStatus] = useState<ItemStatus | null>(null);
-  const [searchBy] = useState<'assignee' | 'category'>('assignee');
 
   /**
-   * Query to fetch action items for the organization based on filters and sorting.
+   * Query to fetch event volunteers for the event.
    */
   const {
-    data: actionItemsData,
-    loading: actionItemsLoading,
-    error: actionItemsError,
+    data: volunteersData,
+    loading: volunteersLoading,
+    error: volunteersError,
+    refetch: refetchVolunteers,
   }: {
-    data: InterfaceActionItemList | undefined;
+    data?: {
+      getEventVolunteers: InterfaceEventVolunteerInfo[];
+    };
     loading: boolean;
     error?: Error | undefined;
-  } = useQuery(ACTION_ITEM_LIST, {
+    refetch: () => void;
+  } = useQuery(EVENT_VOLUNTEER_LIST, {
     variables: {
-      organizationId: orgId,
-      eventId: eventId,
-      orderBy: sortBy,
       where: {
-        assigneeName: searchBy === 'assignee' ? searchTerm : undefined,
-        categoryName: searchBy === 'category' ? searchTerm : undefined,
-        is_completed:
-          status === null ? undefined : status === ItemStatus.Completed,
+        eventId: eventId,
+        hasAccepted:
+          status === VolunteerStatus.All
+            ? undefined
+            : status === VolunteerStatus.Accepted,
+        name_contains: searchTerm,
       },
+      orderBy: sortBy,
     },
   });
 
-  const actionItems = useMemo(
-    () => actionItemsData?.actionItemsByOrganization || [],
-    [actionItemsData],
+  const volunteers = useMemo(
+    () => volunteersData?.getEventVolunteers || [],
+    [volunteersData],
   );
 
-  if (actionItemsLoading) {
+  if (volunteersLoading) {
     return <Loader size="xl" />;
   }
 
-  if (actionItemsError) {
+  if (volunteersError) {
     return (
       <div className={styles.message} data-testid="errorMsg">
         <WarningAmberRounded className={styles.icon} fontSize="large" />
         <h6 className="fw-bold text-danger text-center">
-          {tErrors('errorLoading', { entity: 'Action Items' })}
-          <br />
-          {`${actionItemsError.message}`}
+          {tErrors('errorLoading', { entity: 'Volunteers' })}
         </h6>
       </div>
     );
@@ -133,22 +170,22 @@ function volunteers(): JSX.Element {
       field: 'volunteer',
       headerName: 'Volunteer',
       flex: 1,
-      align: 'left',
+      align: 'center',
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        const { _id, firstName, lastName, image } = params.row.assignee;
+        const { _id, firstName, lastName, image } = params.row.user;
         return (
           <div
-            className="d-flex fw-bold align-items-center ms-2"
+            className="d-flex fw-bold align-items-center justify-content-center ms-2"
             data-testid="assigneeName"
           >
             {image ? (
               <img
                 src={image}
-                alt="Assignee"
+                alt="volunteer"
                 data-testid={`image${_id + 1}`}
                 className={styles.TableImage}
               />
@@ -163,7 +200,7 @@ function volunteers(): JSX.Element {
                 />
               </div>
             )}
-            {params.row.assignee.firstName + ' ' + params.row.assignee.lastName}
+            {params.row.user.firstName + ' ' + params.row.user.lastName}
           </div>
         );
       },
@@ -179,18 +216,19 @@ function volunteers(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <div
-            className="d-flex justify-content-center fw-bold"
-            data-testid="categoryName"
-          >
-            {params.row.actionItemCategory?.name}
-          </div>
+          <Chip
+            icon={<Circle className={styles.chipIcon} />}
+            label={params.row.hasAccepted ? 'Accepted' : 'Pending'}
+            variant="outlined"
+            color="primary"
+            className={`${styles.chip} ${params.row.hasAccepted ? styles.active : styles.pending}`}
+          />
         );
       },
     },
     {
       field: 'hours',
-      headerName: 'No. of Hours Volunteered',
+      headerName: 'Hours Volunteered',
       flex: 1,
       align: 'center',
       headerAlign: 'center',
@@ -198,13 +236,12 @@ function volunteers(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <Chip
-            icon={<Circle className={styles.chipIcon} />}
-            label={params.row.isCompleted ? 'Completed' : 'Pending'}
-            variant="outlined"
-            color="primary"
-            className={`${styles.chip} ${params.row.isCompleted ? styles.active : styles.pending}`}
-          />
+          <div
+            className="d-flex justify-content-center fw-bold"
+            data-testid="categoryName"
+          >
+            {params.row.hoursVolunteered ?? '-'}
+          </div>
         );
       },
     },
@@ -218,7 +255,12 @@ function volunteers(): JSX.Element {
       flex: 1,
       renderCell: (params: GridCellParams) => {
         return (
-          <div data-testid="allotedHours">{params.row.allotedHours ?? '-'}</div>
+          <div
+            className="d-flex justify-content-center fw-bold"
+            data-testid="actionNos"
+          >
+            {params.row.assignments.length}
+          </div>
         );
       },
     },
@@ -240,25 +282,16 @@ function volunteers(): JSX.Element {
               style={{ minWidth: '32px' }}
               className="me-2 rounded"
               data-testid={`viewItemBtn${params.row.id}`}
-              onClick={() => console.log('View Action Item')}
+              onClick={() => handleOpenModal(params.row, ModalState.VIEW)}
             >
               <i className="fa fa-info" />
-            </Button>
-            <Button
-              variant="success"
-              size="sm"
-              className="me-2 rounded"
-              data-testid={`editItemBtn${params.row.id}`}
-              onClick={() => console.log('Edit Action Item')}
-            >
-              <i className="fa fa-edit" />
             </Button>
             <Button
               size="sm"
               variant="danger"
               className="rounded"
               data-testid={`deleteItemBtn${params.row.id}`}
-              onClick={() => console.log('Delete Action Item')}
+              onClick={() => handleOpenModal(params.row, ModalState.DELETE)}
             >
               <i className="fa fa-trash" />
             </Button>
@@ -307,7 +340,6 @@ function volunteers(): JSX.Element {
             <Dropdown>
               <Dropdown.Toggle
                 variant="success"
-                id="dropdown-basic"
                 className={styles.dropdown}
                 data-testid="sort"
               >
@@ -316,23 +348,22 @@ function volunteers(): JSX.Element {
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item
-                  onClick={() => setSortBy('dueDate_DESC')}
-                  data-testid="dueDate_DESC"
+                  onClick={() => setSortBy('hoursVolunteered_DESC')}
+                  data-testid="hoursVolunteered_DESC"
                 >
-                  {t('latestDueDate')}
+                  {t('mostHoursVolunteered')}
                 </Dropdown.Item>
                 <Dropdown.Item
-                  onClick={() => setSortBy('dueDate_ASC')}
-                  data-testid="dueDate_ASC"
+                  onClick={() => setSortBy('hoursVolunteered_ASC')}
+                  data-testid="hoursVolunteered_ASC"
                 >
-                  {t('earliestDueDate')}
+                  {t('leastHoursVolunteered')}
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
             <Dropdown>
               <Dropdown.Toggle
                 variant="success"
-                id="dropdown-basic"
                 className={styles.dropdown}
                 data-testid="filter"
               >
@@ -341,22 +372,22 @@ function volunteers(): JSX.Element {
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item
-                  onClick={() => setStatus(null)}
+                  onClick={() => setStatus(VolunteerStatus.All)}
                   data-testid="statusAll"
                 >
                   {tCommon('all')}
                 </Dropdown.Item>
                 <Dropdown.Item
-                  onClick={() => setStatus(ItemStatus.Pending)}
+                  onClick={() => setStatus(VolunteerStatus.Pending)}
                   data-testid="statusPending"
                 >
                   {tCommon('pending')}
                 </Dropdown.Item>
                 <Dropdown.Item
-                  onClick={() => setStatus(ItemStatus.Completed)}
-                  data-testid="statusCompleted"
+                  onClick={() => setStatus(VolunteerStatus.Accepted)}
+                  data-testid="statusAccepted"
                 >
-                  {tCommon('completed')}
+                  {t('accepted')}
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
@@ -364,18 +395,18 @@ function volunteers(): JSX.Element {
           <div>
             <Button
               variant="success"
-              onClick={() => console.log('Create Action Item')}
+              onClick={() => handleOpenModal(null, ModalState.ADD)}
               style={{ marginTop: '11px' }}
-              data-testid="createActionItemBtn"
+              data-testid="addVolunteerBtn"
             >
               <i className={'fa fa-plus me-2'} />
-              {tCommon('create')}
+              {t('add')}
             </Button>
           </div>
         </div>
       </div>
 
-      {/* Table with Action Items */}
+      {/* Table with Volunteers */}
       <DataGrid
         disableColumnMenu
         columnBufferPx={7}
@@ -392,13 +423,35 @@ function volunteers(): JSX.Element {
         getRowClassName={() => `${styles.rowBackground}`}
         autoHeight
         rowHeight={65}
-        rows={actionItems.map((actionItem, index) => ({
+        rows={volunteers.map((volunteer, index) => ({
           id: index + 1,
-          ...actionItem,
+          ...volunteer,
         }))}
         columns={columns}
         isRowSelectable={() => false}
       />
+
+      <VolunteerCreateModal
+        isOpen={modalState[ModalState.ADD]}
+        hide={() => closeModal(ModalState.ADD)}
+        eventId={eventId}
+        orgId={orgId}
+        refetchVolunteers={refetchVolunteers}
+      />
+
+      <VolunteerDeleteModal
+        isOpen={modalState[ModalState.DELETE]}
+        hide={() => closeModal(ModalState.DELETE)}
+        volunteer={volunteer}
+        refetchVolunteers={refetchVolunteers}
+      />
+      {volunteer && (
+        <VolunteerViewModal
+          isOpen={modalState[ModalState.VIEW]}
+          hide={() => closeModal(ModalState.VIEW)}
+          volunteer={volunteer}
+        />
+      )}
     </div>
   );
 }
