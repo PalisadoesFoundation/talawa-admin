@@ -28,7 +28,7 @@ import { store } from './state/store';
 import {
   BACKEND_URL,
   REACT_APP_BACKEND_WEBSOCKET_URL,
-} from 'Constant/constant';
+} from './Constant/constant';
 import { refreshToken } from 'utils/getRefreshToken';
 import { ThemeProvider, createTheme } from '@mui/material';
 import { ApolloLink } from '@apollo/client/core';
