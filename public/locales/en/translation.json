@@ -228,6 +228,7 @@
     "recurringEvent": "Recurring Event",
     "isPublic": "Is Public",
     "isRegistrable": "Is Registrable",
+    "createChat": "Create Chat",
     "createEvent": "Create Event",
     "enterFilter": "Enter Filter",
     "enterTitle": "Enter Title",
@@ -341,6 +342,7 @@
     "recurringEvent": "Recurring Event",
     "isPublic": "Is Public",
     "isRegistrable": "Is Registrable",
+    "createChat": "Create Chat",
     "updatePost": "Update Post",
     "eventDetails": "Event Details",
     "eventDeleted": "Event deleted successfully.",
@@ -836,6 +838,7 @@
     "enterDescription": "Enter Description",
     "publicEvent": "Is Public",
     "registerable": "Is Registerable",
+    "createChat": "Create Chat",
     "monthlyCalendarView": "Monthly Calendar",
     "yearlyCalendarView": "Yearly Calender"
   },
