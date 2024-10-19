@@ -1,4 +1,12 @@
-import { Paper, TableBody } from '@mui/material';
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  TableBody,
+} from '@mui/material';
+import type { SelectChangeEvent } from '@mui/material/Select';
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import styles from './CreateGroupChat.module.css';
@@ -55,6 +63,10 @@ interface InterfaceOrganization {
   }[];
 }
 
+/**
+ * Styled table cell with custom styles.
+ */
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: ['#31bb6b', '!important'],
@@ -64,6 +76,10 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     fontSize: 14,
   },
 }));
+
+/**
+ * Styled table row with custom styles.
+ */
 
 const StyledTableRow = styled(TableRow)(() => ({
   '&:last-child td, &:last-child th': {
@@ -100,7 +116,7 @@ export default function CreateGroupChat({
   const toggleAddUserModal = /* istanbul ignore next */ (): void =>
     setAddUserModalisOpen(!addUserModalisOpen);
 
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
+  const handleChange = (event: SelectChangeEvent<string>): void => {
     setSelectedOrganization(event.target.value as string);
   };
 
@@ -170,6 +186,7 @@ export default function CreateGroupChat({
       const organizations =
         joinedOrganizationsData.users[0]?.user?.joinedOrganizations || [];
       setOrganizations(organizations);
+      console.log(organizations);
     }
   }, [joinedOrganizationsData]);
 
@@ -186,50 +203,51 @@ export default function CreateGroupChat({
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <Form.Group controlId="registerForm.Rtype">
-              <Form.Label>Select Organization</Form.Label>
-              <Form.Select
-                aria-label={'Select Organization'}
+            {/* <FormControl fullWidth>
+              <InputLabel id="select-org">Select Organization</InputLabel>
+              <Select
+                labelId="select-org"
+                id="select-org"
+                data-testid="orgSelect"
+                label="Select Organization"
                 value={selectedOrganization}
                 onChange={(e) => handleChange(e)}
               >
-                {organizations &&
-                  organizations.length &&
+                {organizations?.length &&
                   organizations.map((organization: InterfaceOrganization) => (
-                    <option
+                    <MenuItem
                       data-testid="selectOptions"
                       key={organization._id}
                       value={organization._id}
                     >
                       {`${organization.name}(${organization.address?.city},${organization.address?.state},${organization.address?.countryCode})`}
-                    </option>
+                    </MenuItem>
                   ))}
-              </Form.Select>
-            </Form.Group>
-
-            {/* <FormControl fullWidth>
-            <InputLabel id="select-org">Select Organization</InputLabel>
-            <Select
-              labelId="select-org"
-              id="select-org"
-              data-testid="orgSelect"
-              label="Select Organization"
-              value={selectedOrganization}
-              onChange={handleChange}
-            >
-              {organizations &&
-                organizations.length &&
-                organizations.map((organization: InterfaceOrganization) => (
-                  <MenuItem
-                    data-testid="selectOptions"
-                    key={organization._id}
-                    value={organization._id}
-                  >
-                    {`${organization.name}(${organization.address?.city},${organization.address?.state},${organization.address?.countryCode})`}
-                  </MenuItem>
-                ))}
-            </Select>
-          </FormControl> */}
+              </Select>
+            </FormControl> */}
+            <FormControl fullWidth>
+              <InputLabel id="select-org">Select Organization</InputLabel>
+              <Select
+                labelId="select-org"
+                id="select-org"
+                data-testid="orgSelect"
+                label="Select Organization"
+                value={selectedOrganization}
+                onChange={handleChange}
+              >
+                {organizations &&
+                  organizations.length &&
+                  organizations.map((organization: InterfaceOrganization) => (
+                    <MenuItem
+                      data-testid="selectOptions"
+                      key={organization._id}
+                      value={organization._id}
+                    >
+                      {`${organization.name}(${organization.address?.city},${organization.address?.state},${organization.address?.countryCode})`}
+                    </MenuItem>
+                  ))}
+              </Select>
+            </FormControl>
             <Form.Group className="mb-3" controlId="registerForm.Rname">
               <Form.Label>Group name</Form.Label>
               <Form.Control

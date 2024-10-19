@@ -83,13 +83,6 @@
   "updatedSuccessfully": "{{item}} mis à jour avec succès",
   "removedSuccessfully": "{{item}} supprimé avec succès",
   "successfullyUpdated": "Mis à jour avec succès",
-  "all": "Tous",
-  "active": "Actif",
-  "disabled": "Désactivé",
-  "pending": "En attente",
-  "completed": "Complété",
-  "late": "En retard",
-  "createdLatest": "Créé le plus récemment",
-  "createdEarliest": "Créé le plus tôt",
-  "searchBy": "Rechercher par {{item}}"
+  "sessionWarning": "Votre session expirera bientôt en raison de l'inactivité. Veuillez interagir avec la page pour prolonger votre session.",
+  "sessionLogOut": "Votre session a expiré en raison de l'inactivité. Veuillez vous reconnecter pour continuer."
 }

@@ -1,71 +1,31 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useState } from 'react';
+import type { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Dropdown, Form } from 'react-bootstrap';
-import { Navigate, useParams } from 'react-router-dom';
+import { Button, Dropdown } from 'react-bootstrap';
+import { useParams } from 'react-router-dom';
 
-import {
-  Circle,
-  FilterAltOutlined,
-  Search,
-  Sort,
-  WarningAmberRounded,
-} from '@mui/icons-material';
+import SortIcon from '@mui/icons-material/Sort';
+import { WarningAmberRounded } from '@mui/icons-material';
 import dayjs from 'dayjs';
+import { toast } from 'react-toastify';
 
-import { useQuery } from '@apollo/client';
-import { ACTION_ITEM_LIST } from 'GraphQl/Queries/Queries';
+import { useMutation, useQuery } from '@apollo/client';
+import {
+  ACTION_ITEM_CATEGORY_LIST,
+  ACTION_ITEM_LIST,
+  MEMBERS_LIST,
+} from 'GraphQl/Queries/Queries';
+import { CREATE_ACTION_ITEM_MUTATION } from 'GraphQl/Mutations/mutations';
 
 import type {
-  InterfaceActionItemInfo,
+  InterfaceActionItemCategoryList,
   InterfaceActionItemList,
+  InterfaceMembersList,
 } from 'utils/interfaces';
+import ActionItemsContainer from 'components/ActionItems/ActionItemsContainer';
+import ActionItemCreateModal from './ActionItemCreateModal';
 import styles from './OrganizationActionItems.module.css';
 import Loader from 'components/Loader/Loader';
-import {
-  DataGrid,
-  type GridCellParams,
-  type GridColDef,
-} from '@mui/x-data-grid';
-import { Chip, Stack } from '@mui/material';
-import ItemViewModal from './ItemViewModal';
-import ItemModal from './ItemModal';
-import ItemDeleteModal from './ItemDeleteModal';
-import Avatar from 'components/Avatar/Avatar';
-import ItemUpdateStatusModal from './ItemUpdateStatusModal';
-
-enum ItemStatus {
-  Pending = 'pending',
-  Completed = 'completed',
-  Late = 'late',
-}
-
-enum ModalState {
-  SAME = 'same',
-  DELETE = 'delete',
-  VIEW = 'view',
-  STATUS = 'status',
-}
-
-const dataGridStyle = {
-  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-    outline: 'none !important',
-  },
-  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-    outline: 'none',
-  },
-  '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-root': {
-    borderRadius: '0.5rem',
-  },
-  '& .MuiDataGrid-main': {
-    borderRadius: '0.5rem',
-  },
-};
 
 /**
  * Component for managing and displaying action items within an organization.
@@ -79,51 +39,57 @@ function organizationActionItems(): JSX.Element {
     keyPrefix: 'organizationActionItems',
   });
   const { t: tCommon } = useTranslation('common');
-  const { t: tErrors } = useTranslation('errors');
 
   // Get the organization ID from URL parameters
-  const { orgId, eventId } = useParams();
+  const { orgId: currentUrl } = useParams();
 
-  if (!orgId) {
-    return <Navigate to={'/'} replace />;
-  }
+  // State for managing modal visibility and form data
+  const [actionItemCreateModalIsOpen, setActionItemCreateModalIsOpen] =
+    useState(false);
+  const [dueDate, setDueDate] = useState<Date | null>(new Date());
+  const [orderBy, setOrderBy] = useState<'Latest' | 'Earliest'>('Latest');
+  const [actionItemStatus, setActionItemStatus] = useState('');
+  const [actionItemCategoryId, setActionItemCategoryId] = useState('');
+  const [actionItemCategoryName, setActionItemCategoryName] = useState('');
 
-  const [actionItem, setActionItem] = useState<InterfaceActionItemInfo | null>(
-    null,
-  );
-  const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
-  const [searchValue, setSearchValue] = useState<string>('');
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  const [sortBy, setSortBy] = useState<'dueDate_ASC' | 'dueDate_DESC' | null>(
-    null,
-  );
-  const [status, setStatus] = useState<ItemStatus | null>(null);
-  const [searchBy, setSearchBy] = useState<'assignee' | 'category'>('assignee');
-  const [modalState, setModalState] = useState<{
-    [key in ModalState]: boolean;
-  }>({
-    [ModalState.SAME]: false,
-    [ModalState.DELETE]: false,
-    [ModalState.VIEW]: false,
-    [ModalState.STATUS]: false,
+  const [formState, setFormState] = useState({
+    actionItemCategoryId: '',
+    assigneeId: '',
+    preCompletionNotes: '',
   });
 
-  const openModal = (modal: ModalState): void =>
-    setModalState((prevState) => ({ ...prevState, [modal]: true }));
-
-  const closeModal = (modal: ModalState): void =>
-    setModalState((prevState) => ({ ...prevState, [modal]: false }));
-
-  const handleModalClick = useCallback(
-    (actionItem: InterfaceActionItemInfo | null, modal: ModalState): void => {
-      if (modal === ModalState.SAME) {
-        setModalMode(actionItem ? 'edit' : 'create');
-      }
-      setActionItem(actionItem);
-      openModal(modal);
+  /**
+   * Query to fetch action item categories for the organization.
+   */
+  const {
+    data: actionItemCategoriesData,
+    loading: actionItemCategoriesLoading,
+    error: actionItemCategoriesError,
+  }: {
+    data: InterfaceActionItemCategoryList | undefined;
+    loading: boolean;
+    error?: Error | undefined;
+  } = useQuery(ACTION_ITEM_CATEGORY_LIST, {
+    variables: {
+      organizationId: currentUrl,
     },
-    [openModal],
-  );
+    notifyOnNetworkStatusChange: true,
+  });
+
+  /**
+   * Query to fetch members of the organization.
+   */
+  const {
+    data: membersData,
+    loading: membersLoading,
+    error: membersError,
+  }: {
+    data: InterfaceMembersList | undefined;
+    loading: boolean;
+    error?: Error | undefined;
+  } = useQuery(MEMBERS_LIST, {
+    variables: { id: currentUrl },
+  });
 
   /**
    * Query to fetch action items for the organization based on filters and sorting.
@@ -140,407 +106,335 @@ function organizationActionItems(): JSX.Element {
     refetch: () => void;
   } = useQuery(ACTION_ITEM_LIST, {
     variables: {
-      organizationId: orgId,
-      eventId: eventId,
-      orderBy: sortBy,
-      where: {
-        assigneeName: searchBy === 'assignee' ? searchTerm : undefined,
-        categoryName: searchBy === 'category' ? searchTerm : undefined,
-        is_completed:
-          status === null ? undefined : status === ItemStatus.Completed,
-      },
+      organizationId: currentUrl,
+      actionItemCategoryId,
+      orderBy: orderBy === 'Latest' ? 'createdAt_DESC' : 'createdAt_ASC',
+      isActive: actionItemStatus === 'Active' ? true : false,
+      isCompleted: actionItemStatus === 'Completed' ? true : false,
     },
+    notifyOnNetworkStatusChange: true,
   });
 
-  const actionItems = useMemo(
-    () => actionItemsData?.actionItemsByOrganization || [],
-    [actionItemsData],
-  );
+  /**
+   * Mutation to create a new action item.
+   */
+  const [createActionItem] = useMutation(CREATE_ACTION_ITEM_MUTATION);
 
-  if (actionItemsLoading) {
+  /**
+   * Handler function to create a new action item.
+   *
+   * @param e - The form submit event.
+   * @returns A promise that resolves when the action item is created.
+   */
+  const createActionItemHandler = async (
+    e: ChangeEvent<HTMLFormElement>,
+  ): Promise<void> => {
+    e.preventDefault();
+    try {
+      await createActionItem({
+        variables: {
+          assigneeId: formState.assigneeId,
+          actionItemCategoryId: formState.actionItemCategoryId,
+          preCompletionNotes: formState.preCompletionNotes,
+          dueDate: dayjs(dueDate).format('YYYY-MM-DD'),
+        },
+      });
+
+      // Reset form and date after successful creation
+      setFormState({
+        assigneeId: '',
+        actionItemCategoryId: '',
+        preCompletionNotes: '',
+      });
+
+      setDueDate(new Date());
+
+      actionItemsRefetch();
+      hideCreateModal();
+      toast.success(t('successfulCreation') as string);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+        console.log(error.message);
+      }
+    }
+  };
+
+  /**
+   * Toggles the visibility of the create action item modal.
+   */
+  const showCreateModal = (): void => {
+    setActionItemCreateModalIsOpen(!actionItemCreateModalIsOpen);
+  };
+
+  /**
+   * Hides the create action item modal.
+   */
+  const hideCreateModal = (): void => {
+    setActionItemCreateModalIsOpen(!actionItemCreateModalIsOpen);
+  };
+
+  /**
+   * Handles sorting action items by date.
+   *
+   * @param sort - The sorting order ('Latest' or 'Earliest').
+   */
+  const handleSorting = (sort: string): void => {
+    if (sort === 'Latest') {
+      setOrderBy('Latest');
+    } else {
+      setOrderBy('Earliest');
+    }
+  };
+
+  /**
+   * Filters action items by status.
+   *
+   * @param status - The status to filter by ('Active' or 'Completed').
+   */
+  const handleStatusFilter = (status: string): void => {
+    if (status === 'Active') {
+      setActionItemStatus('Active');
+    } else {
+      setActionItemStatus('Completed');
+    }
+  };
+
+  /**
+   * Clears all filters applied to the action items.
+   */
+  const handleClearFilters = (): void => {
+    setActionItemCategoryId('');
+    setActionItemCategoryName('');
+    setActionItemStatus('');
+    setOrderBy('Latest');
+  };
+
+  if (actionItemCategoriesLoading || membersLoading || actionItemsLoading) {
     return <Loader size="xl" />;
   }
 
-  if (actionItemsError) {
+  if (actionItemCategoriesError || membersError || actionItemsError) {
     return (
-      <div className={styles.message} data-testid="errorMsg">
-        <WarningAmberRounded className={styles.icon} fontSize="large" />
-        <h6 className="fw-bold text-danger text-center">
-          {tErrors('errorLoading', { entity: 'Action Items' })}
-          <br />
-          {`${actionItemsError.message}`}
-        </h6>
+      <div className={`${styles.container} bg-white rounded-4 my-3`}>
+        <div className={styles.message}>
+          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <h6 className="fw-bold text-danger text-center">
+            Error occured while loading{' '}
+            {actionItemCategoriesError
+              ? 'Action Item Categories'
+              : membersError
+                ? 'Members List'
+                : 'Action Items List'}{' '}
+            Data
+            <br />
+            {actionItemCategoriesError
+              ? actionItemCategoriesError.message
+              : membersError
+                ? membersError.message
+                : actionItemsError?.message}
+          </h6>
+        </div>
       </div>
     );
   }
 
-  const columns: GridColDef[] = [
-    {
-      field: 'assignee',
-      headerName: 'Assignee',
-      flex: 1,
-      align: 'left',
-      minWidth: 100,
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        const { _id, firstName, lastName, image } = params.row.assignee;
-        return (
-          <div
-            className="d-flex fw-bold align-items-center ms-2"
-            data-testid="assigneeName"
-          >
-            {image ? (
-              <img
-                src={image}
-                alt="Assignee"
-                data-testid={`image${_id + 1}`}
-                className={styles.TableImage}
-              />
-            ) : (
-              <div className={styles.avatarContainer}>
-                <Avatar
-                  key={_id + '1'}
-                  containerStyle={styles.imageContainer}
-                  avatarStyle={styles.TableImage}
-                  name={firstName + ' ' + lastName}
-                  alt={firstName + ' ' + lastName}
-                />
-              </div>
-            )}
-            {params.row.assignee.firstName + ' ' + params.row.assignee.lastName}
-          </div>
-        );
-      },
-    },
-    {
-      field: 'itemCategory',
-      headerName: 'Item Category',
-      flex: 1,
-      align: 'center',
-      minWidth: 100,
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div
-            className="d-flex justify-content-center fw-bold"
-            data-testid="categoryName"
-          >
-            {params.row.actionItemCategory?.name}
-          </div>
-        );
-      },
-    },
-    {
-      field: 'status',
-      headerName: 'Status',
-      flex: 1,
-      align: 'center',
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <Chip
-            icon={<Circle className={styles.chipIcon} />}
-            label={params.row.isCompleted ? 'Completed' : 'Pending'}
-            variant="outlined"
-            color="primary"
-            className={`${styles.chip} ${params.row.isCompleted ? styles.active : styles.pending}`}
-          />
-        );
-      },
-    },
-    {
-      field: 'allotedHours',
-      headerName: 'Alloted Hours',
-      align: 'center',
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      flex: 1,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div data-testid="allotedHours">{params.row.allotedHours ?? '-'}</div>
-        );
-      },
-    },
-    {
-      field: 'dueDate',
-      headerName: 'Due Date',
-      align: 'center',
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      flex: 1,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div data-testid="createdOn">
-            {dayjs(params.row.dueDate).format('DD/MM/YYYY')}
-          </div>
-        );
-      },
-    },
-    {
-      field: 'options',
-      headerName: 'Options',
-      align: 'center',
-      flex: 1,
-      minWidth: 100,
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <>
-            <Button
-              variant="success"
-              size="sm"
-              style={{ minWidth: '32px' }}
-              className="me-2 rounded"
-              data-testid={`viewItemBtn${params.row.id}`}
-              onClick={() => handleModalClick(params.row, ModalState.VIEW)}
-            >
-              <i className="fa fa-info" />
-            </Button>
-            <Button
-              variant="success"
-              size="sm"
-              className="me-2 rounded"
-              data-testid={`editItemBtn${params.row.id}`}
-              onClick={() => handleModalClick(params.row, ModalState.SAME)}
-            >
-              <i className="fa fa-edit" />
-            </Button>
-            <Button
-              size="sm"
-              variant="danger"
-              className="rounded"
-              data-testid={`deleteItemBtn${params.row.id}`}
-              onClick={() => handleModalClick(params.row, ModalState.DELETE)}
-            >
-              <i className="fa fa-trash" />
-            </Button>
-          </>
-        );
-      },
-    },
-    {
-      field: 'completed',
-      headerName: 'Completed',
-      align: 'center',
-      flex: 1,
-      minWidth: 100,
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div className="d-flex align-items-center justify-content-center mt-3">
-            <Form.Check
-              type="checkbox"
-              data-testid={`statusCheckbox${params.row.id}`}
-              checked={params.row.isCompleted}
-              onChange={() => handleModalClick(params.row, ModalState.STATUS)}
-            />
-          </div>
-        );
-      },
-    },
-  ];
+  const actionItemCategories =
+    actionItemCategoriesData?.actionItemCategoriesByOrganization.filter(
+      (category) => !category.isDisabled,
+    );
+
+  const actionItemOnly = actionItemsData?.actionItemsByOrganization.filter(
+    (item) => item.event == null,
+  );
 
   return (
-    <div className="mt-3">
-      {/* Header with search, filter  and Create Button */}
-      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-        <div className={`${styles.input} mb-1`}>
-          <Form.Control
-            type="name"
-            placeholder={tCommon('searchBy', {
-              item: searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
-            })}
-            autoComplete="off"
-            required
-            className={styles.inputField}
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-            onKeyUp={(e) => {
-              if (e.key === 'Enter') {
-                setSearchTerm(searchValue);
-              } else if (e.key === 'Backspace' && searchValue === '') {
-                setSearchTerm('');
-              }
-            }}
-            data-testid="searchBy"
-          />
-          <Button
-            tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center`}
-            onClick={() => setSearchTerm(searchValue)}
-            style={{ marginBottom: '10px' }}
-            data-testid="searchBtn"
-          >
-            <Search />
-          </Button>
-        </div>
-        <div className="d-flex gap-3 mb-1">
-          <div className="d-flex justify-space-between align-items-center gap-3">
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="success"
-                id="dropdown-basic"
-                className={styles.dropdown}
-                data-testid="searchByToggle"
-              >
-                <Sort className={'me-1'} />
-                {tCommon('searchBy', { item: '' })}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => setSearchBy('assignee')}
-                  data-testid="assignee"
-                >
-                  {t('assignee')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSearchBy('category')}
-                  data-testid="category"
-                >
-                  {t('category')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="success"
-                id="dropdown-basic"
-                className={styles.dropdown}
+    <div className={styles.organizationActionItemsContainer}>
+      <div className={`${styles.container} bg-white rounded-4 my-3`}>
+        <div className={`pt-4 mx-4`}>
+          <div className={styles.btnsContainer}>
+            <div className={styles.btnsBlock}>
+              <Dropdown
+                aria-expanded="false"
+                title="Sort Action Items"
                 data-testid="sort"
+                className={styles.dropdownToggle}
               >
-                <Sort className={'me-1'} />
-                {tCommon('sort')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => setSortBy('dueDate_DESC')}
-                  data-testid="dueDate_DESC"
+                <Dropdown.Toggle
+                  variant="outline-success"
+                  data-testid="sortActionItems"
                 >
-                  {t('latestDueDate')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSortBy('dueDate_ASC')}
-                  data-testid="dueDate_ASC"
-                >
-                  {t('earliestDueDate')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="success"
-                id="dropdown-basic"
-                className={styles.dropdown}
-                data-testid="filter"
+                  <div className="d-none d-md-inline">
+                    <SortIcon className={'me-1'} />
+                  </div>
+                  {orderBy === 'Latest' ? t('latest') : t('earliest')}
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item
+                    onClick={(): void => handleSorting('Latest')}
+                    data-testid="latest"
+                  >
+                    {t('latest')}
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={(): void => handleSorting('Earliest')}
+                    data-testid="earliest"
+                  >
+                    {t('earliest')}
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+
+              <Dropdown
+                aria-expanded="false"
+                title="Action Item Categories"
+                data-testid="actionItemCategories"
+                className={styles.dropdownToggle}
               >
-                <FilterAltOutlined className={'me-1'} />
-                {t('status')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => setStatus(null)}
-                  data-testid="statusAll"
+                <Dropdown.Toggle
+                  variant={
+                    actionItemCategoryName === ''
+                      ? 'outline-success'
+                      : 'success'
+                  }
+                  data-testid="selectActionItemCategory"
                 >
-                  {tCommon('all')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setStatus(ItemStatus.Pending)}
-                  data-testid="statusPending"
+                  <div className="d-lg-none">
+                    {actionItemCategoryName === ''
+                      ? t('actionItemCategory')
+                      : actionItemCategoryName}
+                  </div>
+                  <div className="d-none d-lg-inline">
+                    {t('actionItemCategory')}
+                  </div>
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  {actionItemCategories?.map((category, index) => (
+                    <Dropdown.Item
+                      key={index}
+                      data-testid="actionItemCategory"
+                      onClick={() => {
+                        setActionItemCategoryId(category._id);
+                        setActionItemCategoryName(category.name);
+                      }}
+                    >
+                      {category.name}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
+
+              <Dropdown
+                aria-expanded="false"
+                title="Action Item Status"
+                data-testid="actionItemStatus"
+                className={styles.dropdownToggle}
+              >
+                <Dropdown.Toggle
+                  variant={
+                    actionItemStatus === '' ? 'outline-success' : 'success'
+                  }
+                  data-testid="selectActionItemStatus"
                 >
-                  {tCommon('pending')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setStatus(ItemStatus.Completed)}
-                  data-testid="statusCompleted"
-                >
-                  {tCommon('completed')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
-          <div>
+                  <div className="d-lg-none">
+                    {actionItemStatus === '' ? t('status') : actionItemStatus}
+                  </div>
+                  <div className="d-none d-lg-inline">{t('status')}</div>
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item
+                    onClick={(): void => handleStatusFilter('Active')}
+                    data-testid="activeActionItems"
+                  >
+                    {t('active')}
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={(): void => handleStatusFilter('Completed')}
+                    data-testid="completedActionItems"
+                  >
+                    {t('completed')}
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
+
+            <div className=" d-none d-lg-inline flex-grow-1 d-flex align-items-center border bg-light-subtle rounded-3">
+              {!actionItemCategoryName && !actionItemStatus && (
+                <div className="lh-lg mt-2 text-center fw-semibold text-body-tertiary">
+                  {tCommon('noFiltersApplied')}
+                </div>
+              )}
+
+              {actionItemCategoryName !== '' && (
+                <div className="badge text-bg-secondary bg-dark-subtle bg-gradient lh-lg mt-2 ms-2 text-body-secondary">
+                  {actionItemCategoryName}
+                  <i
+                    className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary pe-auto`}
+                    onClick={() => {
+                      setActionItemCategoryName('');
+                      setActionItemCategoryId('');
+                    }}
+                    data-testid="clearActionItemCategoryFilter"
+                  />
+                </div>
+              )}
+
+              {actionItemStatus !== '' && (
+                <div className="badge text-bg-secondary bg-dark-subtle bg-gradient lh-lg mt-2 ms-2 text-secondary-emphasis">
+                  {actionItemStatus}
+                  <i
+                    className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary pe-auto`}
+                    onClick={() => setActionItemStatus('')}
+                    data-testid="clearActionItemStatusFilter"
+                  />
+                </div>
+              )}
+            </div>
+
             <Button
               variant="success"
-              onClick={() => handleModalClick(null, ModalState.SAME)}
-              style={{ marginTop: '11px' }}
+              onClick={handleClearFilters}
+              data-testid="clearFilters"
+              className={styles.clearFiltersBtn}
+            >
+              <i className="fa fa-broom me-2"></i>
+              {t('clearFilters')}
+            </Button>
+            <Button
+              variant="success"
+              onClick={showCreateModal}
               data-testid="createActionItemBtn"
+              className={styles.createActionItemButton}
             >
               <i className={'fa fa-plus me-2'} />
               {tCommon('create')}
             </Button>
           </div>
         </div>
+
+        <hr />
+
+        <ActionItemsContainer
+          actionItemsConnection={`Organization`}
+          actionItemsData={actionItemOnly}
+          membersData={membersData?.organizations[0].members}
+          actionItemsRefetch={actionItemsRefetch}
+        />
       </div>
 
-      {/* Table with Action Items */}
-      <DataGrid
-        disableColumnMenu
-        columnBufferPx={7}
-        hideFooter={true}
-        getRowId={(row) => row._id}
-        slots={{
-          noRowsOverlay: () => (
-            <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('noActionItems')}
-            </Stack>
-          ),
-        }}
-        sx={dataGridStyle}
-        getRowClassName={() => `${styles.rowBackground}`}
-        autoHeight
-        rowHeight={65}
-        rows={actionItems.map((actionItem, index) => ({
-          id: index + 1,
-          ...actionItem,
-        }))}
-        columns={columns}
-        isRowSelectable={() => false}
+      {/* Create Modal */}
+      <ActionItemCreateModal
+        actionItemCreateModalIsOpen={actionItemCreateModalIsOpen}
+        hideCreateModal={hideCreateModal}
+        formState={formState}
+        setFormState={setFormState}
+        createActionItemHandler={createActionItemHandler}
+        t={t}
+        actionItemCategories={actionItemCategories}
+        membersData={membersData?.organizations[0].members}
+        dueDate={dueDate}
+        setDueDate={setDueDate}
       />
-
-      {/* Item Modal (Create/Edit) */}
-      <ItemModal
-        isOpen={modalState[ModalState.SAME]}
-        hide={() => closeModal(ModalState.SAME)}
-        orgId={orgId}
-        actionItemsRefetch={actionItemsRefetch}
-        actionItem={actionItem}
-        editMode={modalMode === 'edit'}
-      />
-
-      <ItemDeleteModal
-        isOpen={modalState[ModalState.DELETE]}
-        hide={() => closeModal(ModalState.DELETE)}
-        actionItem={actionItem}
-        actionItemsRefetch={actionItemsRefetch}
-      />
-
-      <ItemUpdateStatusModal
-        actionItem={actionItem}
-        isOpen={modalState[ModalState.STATUS]}
-        hide={() => closeModal(ModalState.STATUS)}
-        actionItemsRefetch={actionItemsRefetch}
-      />
-
-      {/* View Modal */}
-      {actionItem && (
-        <ItemViewModal
-          isOpen={modalState[ModalState.VIEW]}
-          hide={() => closeModal(ModalState.VIEW)}
-          item={actionItem}
-        />
-      )}
     </div>
   );
 }

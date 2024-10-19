@@ -1,21 +1,18 @@
 import React, { useState } from 'react';
-import { Button, Dropdown, Row, Col } from 'react-bootstrap';
+import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
+import DeleteOrg from 'components/DeleteOrg/DeleteOrg';
+import OrgUpdate from 'components/OrgUpdate/OrgUpdate';
+import { Button, Card, Dropdown, Form } from 'react-bootstrap';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import styles from './OrgSettings.module.css';
-import OrgActionItemCategories from 'components/OrgSettings/ActionItemCategories/OrgActionItemCategories';
-import OrganizationAgendaCategory from 'components/OrgSettings/AgendaItemCategories/OrganizationAgendaCategory';
-import { Navigate, useParams } from 'react-router-dom';
-import GeneralSettings from 'components/OrgSettings/General/GeneralSettings';
+import OrgProfileFieldSettings from 'components/OrgProfileFieldSettings/OrgProfileFieldSettings';
+import OrgActionItemCategories from 'components/OrgActionItemCategories/OrgActionItemCategories';
+import { useParams } from 'react-router-dom';
 
 // Type representing the different settings categories available
-type SettingType = 'general' | 'actionItemCategories' | 'agendaItemCategories';
-
-// List of available settings categories
-const settingtabs: SettingType[] = [
-  'general',
-  'actionItemCategories',
-  'agendaItemCategories',
-];
+type SettingType = 'general' | 'actionItemCategories';
 
 /**
  * The `orgSettings` component provides a user interface for managing various settings related to an organization.
@@ -32,7 +29,11 @@ function orgSettings(): JSX.Element {
     keyPrefix: 'orgSettings',
   });
 
-  const [tab, setTab] = useState<SettingType>('general');
+  // List of available settings categories
+  const orgSettings: SettingType[] = ['general', 'actionItemCategories'];
+
+  // State to manage the currently selected settings category
+  const [orgSetting, setOrgSetting] = useState<SettingType>('general');
 
   // Set the document title using the translated title for this page
   document.title = t('title');
@@ -40,89 +41,130 @@ function orgSettings(): JSX.Element {
   // Get the organization ID from the URL parameters
   const { orgId } = useParams();
 
-  if (!orgId) {
-    return <Navigate to={'/'} replace />;
-  }
-
   return (
-    <div className="d-flex flex-column">
-      <Row className="mx-3 mt-3">
-        <Col>
-          <div className={styles.settingsTabs}>
-            {/* Render buttons for each settings category */}
-            {settingtabs.map((setting, index) => (
-              <Button
-                key={index}
-                className={`me-3 border rounded-3 ${styles.headerBtn}`}
-                variant={tab === setting ? `success` : `none`}
-                onClick={() => setTab(setting)}
-                data-testid={`${setting}Settings`}
-              >
-                {t(setting)}
-              </Button>
-            ))}
-          </div>
-
-          {/* Dropdown menu for selecting settings category */}
-          <Dropdown
-            className={styles.settingsDropdown}
-            data-testid="settingsDropdownContainer"
-            drop="down"
-          >
-            <Dropdown.Toggle
-              variant="success"
-              id="dropdown-basic"
-              data-testid="settingsDropdownToggle"
-            >
-              <span className="me-1">{t(tab)}</span>
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              {/* Render dropdown items for each settings category */}
-              {settingtabs.map((setting, index) => (
-                <Dropdown.Item
+    <>
+      <div
+        className={`${styles.settingsContainer} mt-4 bg-white rounded-4 mb-3`}
+      >
+        <Row className="mx-3 mt-4">
+          <Col>
+            <div className={styles.settingsTabs}>
+              {/* Render buttons for each settings category */}
+              {orgSettings.map((setting, index) => (
+                <Button
                   key={index}
-                  onClick={
-                    /* istanbul ignore next */
-                    () => setTab(setting)
-                  }
-                  className={tab === setting ? 'text-secondary' : ''}
+                  className="me-3 border rounded-3"
+                  variant={orgSetting === setting ? `success` : `none`}
+                  onClick={() => setOrgSetting(setting)}
+                  data-testid={`${setting}Settings`}
                 >
                   {t(setting)}
-                </Dropdown.Item>
+                </Button>
               ))}
-            </Dropdown.Menu>
-          </Dropdown>
-        </Col>
+            </div>
 
-        <Row className="mt-3">
-          <hr />
+            {/* Dropdown menu for selecting settings category */}
+            <Dropdown
+              className={styles.settingsDropdown}
+              data-testid="settingsDropdownContainer"
+              drop="down"
+            >
+              <Dropdown.Toggle
+                variant="success"
+                id="dropdown-basic"
+                data-testid="settingsDropdownToggle"
+              >
+                <span className="me-1">{t(orgSetting)}</span>
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                {/* Render dropdown items for each settings category */}
+                {orgSettings.map((setting, index) => (
+                  <Dropdown.Item
+                    key={index}
+                    onClick={
+                      /* istanbul ignore next */
+                      () => setOrgSetting(setting)
+                    }
+                    className={orgSetting === setting ? 'text-secondary' : ''}
+                  >
+                    {t(setting)}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+          </Col>
+
+          <Row className="mt-3">
+            <hr />
+          </Row>
         </Row>
-      </Row>
 
-      {/* Render content based on the selected settings category */}
-      {(() => {
-        switch (tab) {
-          case 'general':
-            return (
-              <div data-testid="generalTab">
-                <GeneralSettings orgId={orgId} />
+        {/* Render content based on the selected settings category */}
+        {orgSetting === 'general' && (
+          <Row className={`${styles.settingsBody} mt-3`}>
+            <Col lg={7}>
+              <Card className="rounded-4 mb-4 mx-auto shadow-sm border border-light-subtle">
+                <div className={styles.cardHeader}>
+                  <div className={styles.cardTitle}>
+                    {t('updateOrganization')}
+                  </div>
+                </div>
+                <Card.Body className={styles.cardBody}>
+                  {/* Render organization update component if orgId is available */}
+                  {orgId && <OrgUpdate orgId={orgId} />}
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col lg={5}>
+              <DeleteOrg />
+              <Card className="rounded-4 mb-4 mx-auto shadow-sm border border-light-subtle">
+                <div className={styles.cardHeader}>
+                  <div className={styles.cardTitle}>{t('otherSettings')}</div>
+                </div>
+                <Card.Body className={styles.cardBody}>
+                  <div className={styles.textBox}>
+                    <Form.Label className={'text-secondary fw-bold'}>
+                      {t('changeLanguage')}
+                    </Form.Label>
+                    {/* Render language change dropdown component */}
+                    <ChangeLanguageDropDown />
+                  </div>
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col lg={7}>
+              <Card className="rounded-4 mb-4 mx-auto shadow-sm border border-light-subtle">
+                <div className={styles.cardHeader}>
+                  <div className={styles.cardTitle}>
+                    {t('manageCustomFields')}
+                  </div>
+                </div>
+                <Card.Body className={styles.cardBody}>
+                  {/* Render organization profile field settings component if orgId is available */}
+                  {orgId && <OrgProfileFieldSettings />}
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+        )}
+
+        {orgSetting === 'actionItemCategories' && (
+          <Row
+            className={`${styles.actionItemStyles} mt-3 mb-3 mx-4 position-relative shadow-sm rounded-4`}
+          >
+            <div className={`${styles.cardHeader} border rounded-top-4`}>
+              <div className={`${styles.cardTitle} pt-1 pb-2`}>
+                {t('actionItemCategories')}
               </div>
-            );
-          case 'actionItemCategories':
-            return (
-              <div data-testid="actionItemCategoriesTab">
-                <OrgActionItemCategories orgId={orgId} />
-              </div>
-            );
-          case 'agendaItemCategories':
-            return (
-              <div data-testid="agendaItemCategoriesTab">
-                <OrganizationAgendaCategory orgId={orgId} />
-              </div>
-            );
-        }
-      })()}
-    </div>
+            </div>
+            <div className="bg-light-subtle border border-top-0 rounded-bottom-4">
+              {/* Render action item categories component if orgId is available */}
+              {orgId && <OrgActionItemCategories />}
+            </div>
+          </Row>
+        )}
+      </div>
+    </>
   );
 }
 

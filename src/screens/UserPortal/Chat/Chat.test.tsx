@@ -851,7 +851,34 @@ const CHAT_BY_ID_QUERY_MOCK = [
               lastName: 'Talreja',
               email: 'disha@example.com',
               image: '',
+              appUserProfile: {
+                _id: '64378abd85308f171cf2993d',
+                adminFor: [],
+                isSuperAdmin: false,
+                createdOrganizations: [],
+                createdEvents: [],
+                eventAdmin: [],
+                __typename: 'AppUserProfile',
+              },
+              __typename: 'UserData',
             },
+          ],
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: USERS_CONNECTION_LIST,
+      variables: {
+        firstName_contains: '',
+        lastName_contains: '',
+      },
+    },
+    result: {
+      data: {
+        users: {
+          user: [
             {
               _id: '2',
               firstName: 'Test',
@@ -864,6 +891,9 @@ const CHAT_BY_ID_QUERY_MOCK = [
       },
     },
   },
+];
+
+const MESSAGE_SENT_TO_GROUP_CHAT_MOCK = [
   {
     request: {
       query: CHAT_BY_ID,
@@ -1618,7 +1648,7 @@ describe('Testing Chat Screen [User Portal]', () => {
     fireEvent.click(closeButton);
   });
 
-  test('Create new group chat', async () => {
+  test('Test create new group chat', async () => {
     const mock = [
       ...USER_JOINED_ORG_MOCK,
       ...GROUP_CHAT_BY_ID_QUERY_MOCK,
@@ -1653,6 +1683,7 @@ describe('Testing Chat Screen [User Portal]', () => {
     fireEvent.click(newGroupChatBtn);
     const closeButton = screen.getByRole('button', { name: /close/i });
     expect(closeButton).toBeInTheDocument();
+
     fireEvent.click(closeButton);
   });
 
@@ -1680,15 +1711,16 @@ describe('Testing Chat Screen [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-
-    await wait();
-
-    const closeMenubtn = screen.getByTestId('closeMenu');
-    expect(closeMenubtn).toBeInTheDocument();
-    closeMenubtn.click();
-    const openMenuBtn = screen.getByTestId('openMenu');
-    expect(openMenuBtn).toBeInTheDocument();
-    openMenuBtn.click();
+    screen.debug();
+    await waitFor(async () => {
+      const closeMenuBtn = await screen.findByTestId('closeMenu');
+      expect(closeMenuBtn).toBeInTheDocument();
+      if (closeMenuBtn) {
+        closeMenuBtn.click();
+      } else {
+        throw new Error('Close menu button not found');
+      }
+    });
   });
 
   test('Testing sidebar when the screen size is less than or equal to 820px', async () => {
@@ -1715,16 +1747,12 @@ describe('Testing Chat Screen [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    screen.debug();
-    await waitFor(() => {
-      expect(screen.getByText('My Organizations')).toBeInTheDocument();
-      expect(screen.getByText('Talawa User Portal')).toBeInTheDocument();
-    });
-    await waitFor(() => {
-      const chatBtn = screen.getByTestId('chatBtn');
-      act(() => {
-        chatBtn.click();
-      });
-    });
+    await wait();
+    expect(screen.getByText('My Organizations')).toBeInTheDocument();
+    expect(screen.getByText('Talawa User Portal')).toBeInTheDocument();
+
+    expect(await screen.findByTestId('openMenu')).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('openMenu'));
+    expect(await screen.findByTestId('closeMenu')).toBeInTheDocument();
   });
 });

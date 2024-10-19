@@ -3,22 +3,24 @@ import {
   ContactPageOutlined,
   NewspaperOutlined,
 } from '@mui/icons-material';
-import { ReactComponent as ActionItemIcon } from 'assets/svgs/actionItem.svg';
-import { ReactComponent as BlockUserIcon } from 'assets/svgs/blockUser.svg';
-import { ReactComponent as CheckInRegistrantsIcon } from 'assets/svgs/checkInRegistrants.svg';
-import { ReactComponent as DashboardIcon } from 'assets/svgs/dashboard.svg';
-import { ReactComponent as EventsIcon } from 'assets/svgs/events.svg';
-import { ReactComponent as FundsIcon } from 'assets/svgs/funds.svg';
-import { ReactComponent as ListEventRegistrantsIcon } from 'assets/svgs/listEventRegistrants.svg';
-import { ReactComponent as OrganizationsIcon } from 'assets/svgs/organizations.svg';
-import { ReactComponent as PeopleIcon } from 'assets/svgs/people.svg';
-import { ReactComponent as TagsIcon } from 'assets/svgs/tags.svg';
-import { ReactComponent as TagIcon } from 'assets/svgs/tag.svg';
-import { ReactComponent as PluginsIcon } from 'assets/svgs/plugins.svg';
-import { ReactComponent as PostsIcon } from 'assets/svgs/posts.svg';
-import { ReactComponent as SettingsIcon } from 'assets/svgs/settings.svg';
-import { ReactComponent as VenueIcon } from 'assets/svgs/venues.svg';
-import { ReactComponent as RequestsIcon } from 'assets/svgs/requests.svg';
+import ActionItemIcon from 'assets/svgs/actionItem.svg?react';
+import AgendaCategoryIcon from 'assets/svgs/agenda-category-icon.svg?react';
+import BlockUserIcon from 'assets/svgs/blockUser.svg?react';
+import CheckInRegistrantsIcon from 'assets/svgs/checkInRegistrants.svg?react';
+import DashboardIcon from 'assets/svgs/dashboard.svg?react';
+import EventStatsIcon from 'assets/svgs/eventStats.svg?react';
+import EventsIcon from 'assets/svgs/events.svg?react';
+import FundsIcon from 'assets/svgs/funds.svg?react';
+import ListEventRegistrantsIcon from 'assets/svgs/listEventRegistrants.svg?react';
+import OrganizationsIcon from 'assets/svgs/organizations.svg?react';
+import PeopleIcon from 'assets/svgs/people.svg?react';
+import TagsIcon from 'assets/svgs/tags.svg?react';
+import TagIcon from 'assets/svgs/tag.svg?react';
+import PluginsIcon from 'assets/svgs/plugins.svg?react';
+import PostsIcon from 'assets/svgs/posts.svg?react';
+import SettingsIcon from 'assets/svgs/settings.svg?react';
+import VenueIcon from 'assets/svgs/venues.svg?react';
+import RequestsIcon from 'assets/svgs/requests.svg?react';
 
 import React from 'react';
 
@@ -66,6 +68,13 @@ const iconComponent = (props: InterfaceIconComponent): JSX.Element => {
           data-testid="Icon-Component-ActionItemIcon"
         />
       );
+    case 'Agenda Items Category':
+      return (
+        <AgendaCategoryIcon
+          {...props}
+          data-testid="Icon-Component-AgendaCategoryIcon"
+        />
+      );
     case 'Posts':
       return <PostsIcon {...props} data-testid="Icon-Component-PostsIcon" />;
     case 'Block/Unblock':
@@ -100,6 +109,13 @@ const iconComponent = (props: InterfaceIconComponent): JSX.Element => {
       return (
         <CheckInRegistrantsIcon
           data-testid="Icon-Component-Check-In-Registrants"
+          stroke={props.fill}
+        />
+      );
+    case 'Event Stats':
+      return (
+        <EventStatsIcon
+          data-testid="Icon-Component-Event-Stats"
           stroke={props.fill}
         />
       );

@@ -1,9 +1,10 @@
 import LeftDrawerOrg from 'components/LeftDrawerOrg/LeftDrawerOrg';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Navigate, Outlet, useLocation, useParams } from 'react-router-dom';
 import { updateTargets } from 'state/action-creators';
+import { useAppDispatch } from 'state/hooks';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from './OrganizationScreen.module.css';
@@ -44,7 +45,7 @@ const OrganizationScreen = (): JSX.Element => {
   } = useSelector((state: RootState) => state.appRoutes);
   const { targets } = appRoutes;
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   // Update targets whenever the organization ID changes
   useEffect(() => {

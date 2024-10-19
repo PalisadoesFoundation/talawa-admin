@@ -5,7 +5,7 @@ import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import styles from './ChatRoom.module.css';
 import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
 import { useTranslation } from 'react-i18next';
-import { CHATS_LIST, CHAT_BY_ID } from 'GraphQl/Queries/PlugInQueries';
+import { CHAT_BY_ID, CHATS_LIST } from 'GraphQl/Queries/PlugInQueries';
 import { useMutation, useQuery, useSubscription } from '@apollo/client';
 import {
   MARK_CHAT_MESSAGES_AS_READ,
@@ -266,6 +266,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                               ? styles.messageSent
                               : styles.messageReceived
                           }
+                          data-testid="message"
                           key={message._id}
                           id={message._id}
                         >
@@ -292,7 +293,10 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                             {message.messageContent}
                           </span>
                           <div className={styles.messageAttributes}>
-                            <Dropdown style={{ cursor: 'pointer' }}>
+                            <Dropdown
+                              data-testid="moreOptions"
+                              style={{ cursor: 'pointer' }}
+                            >
                               <Dropdown.Toggle
                                 className={styles.customToggle}
                                 data-testid={'dropdown'}
@@ -304,7 +308,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                                   onClick={() => {
                                     setReplyToDirectMessage(message);
                                   }}
-                                  data-testid="replyToMessage"
+                                  data-testid="replyBtn"
                                 >
                                   Reply
                                 </Dropdown.Item>
@@ -330,7 +334,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
           </div>
           <div id="messageInput">
             {!!replyToDirectMessage?._id && (
-              <div className={styles.replyTo}>
+              <div data-testid="replyMsg" className={styles.replyTo}>
                 <div className={styles.replyToMessageContainer}>
                   <div className={styles.userDetails}>
                     <Avatar
@@ -356,6 +360,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                 </div>
 
                 <Button
+                  data-testid="closeReply"
                   onClick={() => setReplyToDirectMessage(null)}
                   className={styles.closeBtn}
                 >

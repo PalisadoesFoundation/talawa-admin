@@ -85,6 +85,17 @@ describe('Testing Campaign Pledge Screen', () => {
     jest.clearAllMocks();
   });
 
+  afterEach(() => {
+    cleanup();
+  });
+
+  it('should render the Campaign Pledge screen', async () => {
+    renderFundCampaignPledge(link1);
+    await waitFor(() => {
+      expect(screen.getByTestId('searchPledger')).toBeInTheDocument();
+    });
+  });
+
   it('should redirect to fallback URL if URL params are undefined', async () => {
     render(
       <MockedProvider addTypename={false} link={link1}>
@@ -108,13 +119,6 @@ describe('Testing Campaign Pledge Screen', () => {
     );
     await waitFor(() => {
       expect(screen.getByTestId('paramsError')).toBeInTheDocument();
-    });
-  });
-
-  it('should render the Campaign Pledge screen', async () => {
-    renderFundCampaignPledge(link1);
-    await waitFor(() => {
-      expect(screen.getByTestId('searchPledger')).toBeInTheDocument();
     });
   });
 
@@ -208,19 +212,6 @@ describe('Testing Campaign Pledge Screen', () => {
     renderFundCampaignPledge(link1);
     await waitFor(() => {
       expect(screen.getByTestId('searchPledger')).toBeInTheDocument();
-    });
-    const searchPledger = await screen.findByTestId('searchPledger');
-    expect(searchPledger).toBeInTheDocument();
-
-    fireEvent.click(screen.getByTestId('filter'));
-    await waitFor(() => {
-      expect(screen.getByTestId('amount_DESC')).toBeInTheDocument();
-    });
-    fireEvent.click(screen.getByTestId('amount_DESC'));
-
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-      expect(screen.queryByText('Jane Doe')).toBeInTheDocument();
     });
 
     expect(screen.getByText('John Doe')).toBeInTheDocument();

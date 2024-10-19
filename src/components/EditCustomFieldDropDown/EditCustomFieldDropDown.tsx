@@ -2,8 +2,8 @@ import React from 'react';
 import type { SetStateAction, Dispatch } from 'react';
 import { Dropdown } from 'react-bootstrap';
 import availableFieldTypes from 'utils/fieldTypes';
+import type { InterfaceCustomFieldData } from 'components/OrgProfileFieldSettings/OrgProfileFieldSettings';
 import { useTranslation } from 'react-i18next';
-import type { InterfaceCustomFieldData } from 'utils/interfaces';
 
 /**
  * Props for the EditOrgCustomFieldDropDown component.
