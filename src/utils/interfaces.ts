@@ -28,7 +28,9 @@ export interface InterfaceActionItemCategoryList {
 
 export interface InterfaceActionItemInfo {
   _id: string;
-  assignee: InterfaceUserInfo;
+  assigneeType: 'EventVolunteer' | 'EventVolunteerGroup';
+  assignee: InterfaceEventVolunteerInfo | null;
+  assigneeGroup: InterfaceVolunteerGroupInfo | null;
   assigner: InterfaceUserInfo;
   actionItemCategory: {
     _id: string;
@@ -38,7 +40,7 @@ export interface InterfaceActionItemInfo {
   postCompletionNotes: string | null;
   assignmentDate: Date;
   dueDate: Date;
-  completionDate: Date;
+  completionDate: Date | null;
   isCompleted: boolean;
   event: {
     _id: string;

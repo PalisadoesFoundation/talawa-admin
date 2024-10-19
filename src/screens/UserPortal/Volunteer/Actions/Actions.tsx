@@ -3,23 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { Button, Dropdown, Form } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router-dom';
 
-import {
-  Circle,
-  FilterAltOutlined,
-  Search,
-  Sort,
-  WarningAmberRounded,
-} from '@mui/icons-material';
+import { Circle, Search, Sort, WarningAmberRounded } from '@mui/icons-material';
 import dayjs from 'dayjs';
 
 import { useQuery } from '@apollo/client';
-import { ACTION_ITEM_LIST } from 'GraphQl/Queries/Queries';
 
-import type {
-  InterfaceActionItemInfo,
-  InterfaceActionItemList,
-} from 'utils/interfaces';
-import styles from './OrganizationActionItems.module.css';
+import type { InterfaceActionItemInfo } from 'utils/interfaces';
+import styles from 'screens/OrganizationActionItems/OrganizationActionItems.module.css';
 import Loader from 'components/Loader/Loader';
 import {
   DataGrid,
@@ -27,21 +17,13 @@ import {
   type GridColDef,
 } from '@mui/x-data-grid';
 import { Chip, Stack } from '@mui/material';
-import ItemViewModal from './ItemViewModal';
-import ItemModal from './ItemModal';
-import ItemDeleteModal from './ItemDeleteModal';
+import ItemViewModal from 'screens/OrganizationActionItems/ItemViewModal';
 import Avatar from 'components/Avatar/Avatar';
-import ItemUpdateStatusModal from './ItemUpdateStatusModal';
-
-enum ItemStatus {
-  Pending = 'pending',
-  Completed = 'completed',
-  Late = 'late',
-}
+import ItemUpdateStatusModal from 'screens/OrganizationActionItems/ItemUpdateStatusModal';
+import { ACTION_ITEMS_BY_USER } from 'GraphQl/Queries/ActionItemQueries';
+import useLocalStorage from 'utils/useLocalstorage';
 
 enum ModalState {
-  SAME = 'same',
-  DELETE = 'delete',
   VIEW = 'view',
   STATUS = 'status',
 }
@@ -74,7 +56,7 @@ const dataGridStyle = {
  *
  * @returns The rendered component.
  */
-function organizationActionItems(): JSX.Element {
+function actions(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationActionItems',
   });
@@ -82,28 +64,26 @@ function organizationActionItems(): JSX.Element {
   const { t: tErrors } = useTranslation('errors');
 
   // Get the organization ID from URL parameters
-  const { orgId, eventId } = useParams();
+  const { orgId } = useParams();
+  const { getItem } = useLocalStorage();
+  const userId = getItem('userId');
 
-  if (!orgId || !eventId) {
+  if (!orgId || !userId) {
     return <Navigate to={'/'} replace />;
   }
 
   const [actionItem, setActionItem] = useState<InterfaceActionItemInfo | null>(
     null,
   );
-  const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
   const [searchValue, setSearchValue] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [sortBy, setSortBy] = useState<'dueDate_ASC' | 'dueDate_DESC' | null>(
     null,
   );
-  const [status, setStatus] = useState<ItemStatus | null>(null);
   const [searchBy, setSearchBy] = useState<'assignee' | 'category'>('assignee');
   const [modalState, setModalState] = useState<{
     [key in ModalState]: boolean;
   }>({
-    [ModalState.SAME]: false,
-    [ModalState.DELETE]: false,
     [ModalState.VIEW]: false,
     [ModalState.STATUS]: false,
   });
@@ -116,9 +96,6 @@ function organizationActionItems(): JSX.Element {
 
   const handleModalClick = useCallback(
     (actionItem: InterfaceActionItemInfo | null, modal: ModalState): void => {
-      if (modal === ModalState.SAME) {
-        setModalMode(actionItem ? 'edit' : 'create');
-      }
       setActionItem(actionItem);
       openModal(modal);
     },
@@ -134,26 +111,25 @@ function organizationActionItems(): JSX.Element {
     error: actionItemsError,
     refetch: actionItemsRefetch,
   }: {
-    data: InterfaceActionItemList | undefined;
+    data?: {
+      actionItemsByUser: InterfaceActionItemInfo[];
+    };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => void;
-  } = useQuery(ACTION_ITEM_LIST, {
+  } = useQuery(ACTION_ITEMS_BY_USER, {
     variables: {
-      organizationId: orgId,
-      eventId: eventId,
+      userId,
       orderBy: sortBy,
       where: {
         assigneeName: searchBy === 'assignee' ? searchTerm : undefined,
         categoryName: searchBy === 'category' ? searchTerm : undefined,
-        is_completed:
-          status === null ? undefined : status === ItemStatus.Completed,
       },
     },
   });
 
   const actionItems = useMemo(
-    () => actionItemsData?.actionItemsByOrganization || [],
+    () => actionItemsData?.actionItemsByUser || [],
     [actionItemsData],
   );
 
@@ -332,24 +308,6 @@ function organizationActionItems(): JSX.Element {
             >
               <i className="fa fa-info" />
             </Button>
-            <Button
-              variant="success"
-              size="sm"
-              className="me-2 rounded"
-              data-testid={`editItemBtn${params.row.id}`}
-              onClick={() => handleModalClick(params.row, ModalState.SAME)}
-            >
-              <i className="fa fa-edit" />
-            </Button>
-            <Button
-              size="sm"
-              variant="danger"
-              className="rounded"
-              data-testid={`deleteItemBtn${params.row.id}`}
-              onClick={() => handleModalClick(params.row, ModalState.DELETE)}
-            >
-              <i className="fa fa-trash" />
-            </Button>
           </>
         );
       },
@@ -464,48 +422,6 @@ function organizationActionItems(): JSX.Element {
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="success"
-                id="dropdown-basic"
-                className={styles.dropdown}
-                data-testid="filter"
-              >
-                <FilterAltOutlined className={'me-1'} />
-                {t('status')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => setStatus(null)}
-                  data-testid="statusAll"
-                >
-                  {tCommon('all')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setStatus(ItemStatus.Pending)}
-                  data-testid="statusPending"
-                >
-                  {tCommon('pending')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setStatus(ItemStatus.Completed)}
-                  data-testid="statusCompleted"
-                >
-                  {tCommon('completed')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
-          <div>
-            <Button
-              variant="success"
-              onClick={() => handleModalClick(null, ModalState.SAME)}
-              style={{ marginTop: '11px' }}
-              data-testid="createActionItemBtn"
-            >
-              <i className={'fa fa-plus me-2'} />
-              {tCommon('create')}
-            </Button>
           </div>
         </div>
       </div>
@@ -535,24 +451,6 @@ function organizationActionItems(): JSX.Element {
         isRowSelectable={() => false}
       />
 
-      {/* Item Modal (Create/Edit) */}
-      <ItemModal
-        isOpen={modalState[ModalState.SAME]}
-        hide={() => closeModal(ModalState.SAME)}
-        orgId={orgId}
-        eventId={eventId}
-        actionItemsRefetch={actionItemsRefetch}
-        actionItem={actionItem}
-        editMode={modalMode === 'edit'}
-      />
-
-      <ItemDeleteModal
-        isOpen={modalState[ModalState.DELETE]}
-        hide={() => closeModal(ModalState.DELETE)}
-        actionItem={actionItem}
-        actionItemsRefetch={actionItemsRefetch}
-      />
-
       <ItemUpdateStatusModal
         actionItem={actionItem}
         isOpen={modalState[ModalState.STATUS]}
@@ -572,4 +470,4 @@ function organizationActionItems(): JSX.Element {
   );
 }
 
-export default organizationActionItems;
+export default actions;

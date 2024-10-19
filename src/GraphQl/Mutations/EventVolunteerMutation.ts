@@ -53,9 +53,20 @@ export const CREATE_VOLUNTEER_GROUP = gql`
   }
 `;
 
+/**
+ * GraphQL mutation to update an event volunteer group.
+ * @param id - The ID of the event volunteer group being updated.
+ * @param data - The data required to update an event volunteer group.
+ * @returns The ID of the updated event volunteer group.
+ *
+ */
+
 export const UPDATE_VOLUNTEER_GROUP = gql`
-  mutation CreateEventVolunteerGroup($data: EventVolunteerGroupInput!) {
-    createEventVolunteerGroup(data: $data) {
+  mutation UpdateEventVolunteerGroup(
+    $id: ID!
+    $data: UpdateEventVolunteerGroupInput!
+  ) {
+    updateEventVolunteerGroup(id: $id, data: $data) {
       _id
     }
   }

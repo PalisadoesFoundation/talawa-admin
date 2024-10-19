@@ -442,7 +442,12 @@
     "close": "close",
     "eventActionItems": "eventActionItems",
     "no": "no",
-    "yes": "yes"
+    "yes": "yes",
+    "individuals": "Individuals",
+    "groups": "Groups",
+    "assignTo": "Assign To",
+    "volunteers": "Volunteers",
+    "volunteerGroups": "Volunteer Groups"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "Agenda Category Details",

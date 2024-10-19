@@ -9,6 +9,7 @@ import { TbCalendarEvent } from 'react-icons/tb';
 import { FaRegEnvelopeOpen } from 'react-icons/fa6';
 import UpcomingEvents from './UpcomingEvents/UpcomingEvents';
 import Invitations from './Invitations/Invitations';
+import Actions from './Actions/Actions';
 
 /**
  * List of tabs for the volunteer dashboard.
@@ -27,11 +28,6 @@ const volunteerDashboardTabs: {
     value: 'invitations',
     icon: <FaRegEnvelopeOpen size={18} className="me-1" />,
   },
-
-  //   {
-  //     value: 'groups',
-  //     icon: <EventRegistrantsIcon width={23} height={23} className="me-1" />,
-  //   },
   {
     value: 'actions',
     icon: <FaTasks size={18} className="me-2" />,
@@ -53,11 +49,6 @@ type TabOptions = 'upcomingEvents' | 'invitations' | 'actions';
  * - Managing volunteer groups
  *
  * @returns JSX.Element - The `VolunteerManagement` component.
- *
- * @example
- * ```tsx
- * <VolunteerManagement />
- * ```
  */
 const VolunteerManagement = (): JSX.Element => {
   // Translation hook for internationalization
@@ -195,22 +186,10 @@ const VolunteerManagement = (): JSX.Element => {
                 <Invitations />
               </div>
             );
-          //   case 'groups':
-          //     return (
-          //       <div
-          //         data-testid="groupsTab"
-          //         className="bg-white p-4 pt-2 rounded-4 shadow"
-          //       >
-          //         <h2>Groups</h2>
-          //       </div>
-          //     );
           case 'actions':
             return (
-              <div
-                data-testid="actionsTab"
-                className="bg-white p-4 pt-2 rounded-4 shadow"
-              >
-                <h2>Actions</h2>
+              <div data-testid="actionsTab">
+                <Actions />
               </div>
             );
         }

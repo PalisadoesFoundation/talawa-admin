@@ -52,7 +52,11 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
       await updateActionItem({
         variables: {
           actionItemId: actionItem?._id,
-          assigneeId: actionItem?.assignee?._id,
+          assigneeId:
+            actionItem?.assigneeType === 'EventVolunteer'
+              ? actionItem?.assignee?._id
+              : actionItem?.assigneeGroup?._id,
+          assigneeType: actionItem?.assigneeType,
           postCompletionNotes: isCompleted ? '' : postCompletionNotes,
           isCompleted: !isCompleted,
         },

@@ -15,7 +15,7 @@ import { Autocomplete, FormControl, TextField } from '@mui/material';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import {
   CREATE_VOLUNTEER_GROUP,
-  // UPDATE_VOLUNTEER_GROUP,
+  UPDATE_VOLUNTEER_GROUP,
 } from 'GraphQl/Mutations/EventVolunteerMutation';
 
 export interface InterfaceVolunteerGroupModal {
@@ -83,7 +83,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
   });
   const [members, setMembers] = useState<InterfaceUserInfo[]>([]);
 
-  // const [updateVolunteerGroup] = useMutation(UPDATE_VOLUNTEER_GROUP);
+  const [updateVolunteerGroup] = useMutation(UPDATE_VOLUNTEER_GROUP);
   const [createVolunteerGroup] = useMutation(CREATE_VOLUNTEER_GROUP);
 
   const { data: memberData } = useQuery(MEMBERS_LIST, {
@@ -115,32 +115,26 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
     async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
       e.preventDefault();
 
-      // const updatedFields: {
-      //   [key: string]: number | string | string[] | undefined;
-      // } = {};
-      // checks if there are changes to the pledge and adds them to the updatedFields object
-      // if (pledgeAmount !== pledge?.amount) {
-      //   updatedFields.amount = pledgeAmount;
-      // }
-      // if (pledgeCurrency !== pledge?.currency) {
-      //   updatedFields.currency = pledgeCurrency;
-      // }
-      // if (startDate !== dayjs(pledge?.startDate).format('YYYY-MM-DD')) {
-      //   updatedFields.startDate = startDate;
-      // }
-      // if (endDate !== dayjs(pledge?.endDate).format('YYYY-MM-DD')) {
-      //   updatedFields.endDate = endDate;
-      // }
-      // if (pledgeUsers !== pledge?.users) {
-      //   updatedFields.users = pledgeUsers.map((user) => user._id);
-      // }
+      const updatedFields: {
+        [key: string]: number | string | undefined | null;
+      } = {};
+
+      if (name !== group?.name) {
+        updatedFields.name = name;
+      }
+      if (description !== group?.description) {
+        updatedFields.description = description;
+      }
+      if (volunteersRequired !== group?.volunteersRequired) {
+        updatedFields.volunteersRequired = volunteersRequired;
+      }
       try {
-        // await updatePledge({
-        //   variables: {
-        //     id: pledge?._id,
-        //     ...updatedFields,
-        //   },
-        // });
+        await updateVolunteerGroup({
+          variables: {
+            id: group?._id,
+            data: { ...updatedFields, eventId },
+          },
+        });
         toast.success(t('volunteerGroupUpdated'));
         refetchGroups();
         hide();
@@ -248,6 +242,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
               data-testid="leaderSelect"
               options={members}
               value={leader}
+              disabled={mode === 'edit'}
               isOptionEqualToValue={(option, value) => option._id === value._id}
               filterSelectedOptions={true}
               getOptionLabel={(member: InterfaceUserInfo): string =>
@@ -293,6 +288,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
               getOptionLabel={(member: InterfaceUserInfo): string =>
                 `${member.firstName} ${member.lastName}`
               }
+              disabled={mode === 'edit'}
               onChange={
                 /*istanbul ignore next*/
                 (_, newUsers): void => {

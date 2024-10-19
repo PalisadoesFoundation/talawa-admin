@@ -274,7 +274,7 @@ function volunteerGroups(): JSX.Element {
               size="sm"
               className="me-2 rounded"
               data-testid={`editGroupBtn${params.row.id}`}
-              onClick={() => console.log('Edit Button Clicked')}
+              onClick={() => handleModalClick(params.row, ModalState.SAME)}
             >
               <i className="fa fa-edit" />
             </Button>

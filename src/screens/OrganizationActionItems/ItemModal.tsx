@@ -10,8 +10,8 @@ import type {
   InterfaceActionItemCategoryInfo,
   InterfaceActionItemCategoryList,
   InterfaceActionItemInfo,
-  InterfaceMemberInfo,
-  InterfaceMembersList,
+  InterfaceEventVolunteerInfo,
+  InterfaceVolunteerGroupInfo,
 } from 'utils/interfaces';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
@@ -21,14 +21,19 @@ import {
   UPDATE_ACTION_ITEM_MUTATION,
 } from 'GraphQl/Mutations/ActionItemMutations';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/ActionItemCategoryQueries';
-import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import { Autocomplete, FormControl, TextField } from '@mui/material';
+import {
+  EVENT_VOLUNTEER_GROUP_LIST,
+  EVENT_VOLUNTEER_LIST,
+} from 'GraphQl/Queries/EventVolunteerQueries';
+import { HiUser, HiUserGroup } from 'react-icons/hi2';
 
 /**
  * Interface for the form state used in the `ItemModal` component.
  */
 interface InterfaceFormStateType {
   dueDate: Date;
+  assigneeType: 'EventVolunteer' | 'EventVolunteerGroup';
   actionItemCategoryId: string;
   assigneeId: string;
   eventId?: string;
@@ -45,6 +50,7 @@ export interface InterfaceItemModalProps {
   isOpen: boolean;
   hide: () => void;
   orgId: string;
+  eventId: string;
   actionItemsRefetch: () => void;
   actionItem: InterfaceActionItemInfo | null;
   editMode: boolean;
@@ -62,7 +68,8 @@ const initializeFormState = (
 ): InterfaceFormStateType => ({
   dueDate: actionItem?.dueDate || new Date(),
   actionItemCategoryId: actionItem?.actionItemCategory?._id || '',
-  assigneeId: actionItem?.assignee._id || '',
+  assigneeId: actionItem?.assignee?._id || actionItem?.assigneeGroup?._id || '',
+  assigneeType: actionItem?.assigneeType || 'EventVolunteer',
   preCompletionNotes: actionItem?.preCompletionNotes || '',
   postCompletionNotes: actionItem?.postCompletionNotes || null,
   allotedHours: actionItem?.allotedHours || null,
@@ -79,6 +86,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
   isOpen,
   hide,
   orgId,
+  eventId,
   actionItem,
   editMode,
   actionItemsRefetch,
@@ -89,7 +97,11 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
 
   const [actionItemCategory, setActionItemCategory] =
     useState<InterfaceActionItemCategoryInfo | null>(null);
-  const [assignee, setAssignee] = useState<InterfaceMemberInfo | null>(null);
+  const [assignee, setAssignee] = useState<InterfaceEventVolunteerInfo | null>(
+    null,
+  );
+  const [assigneeGroup, setAssigneeGroup] =
+    useState<InterfaceVolunteerGroupInfo | null>(null);
 
   const [formState, setFormState] = useState<InterfaceFormStateType>(
     initializeFormState(actionItem),
@@ -97,6 +109,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
 
   const {
     dueDate,
+    assigneeType,
     actionItemCategoryId,
     assigneeId,
     preCompletionNotes,
@@ -120,24 +133,56 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
   });
 
   /**
-   * Query to fetch members of the organization.
+   * Query to fetch event volunteers for the event.
    */
   const {
-    data: membersData,
+    data: volunteersData,
   }: {
-    data: InterfaceMembersList | undefined;
-  } = useQuery(MEMBERS_LIST, {
-    variables: { id: orgId },
+    data?: {
+      getEventVolunteers: InterfaceEventVolunteerInfo[];
+    };
+  } = useQuery(EVENT_VOLUNTEER_LIST, {
+    variables: {
+      where: {
+        eventId: eventId,
+        hasAccepted: true,
+      },
+    },
   });
+
+  /**
+   * Query to fetch the list of volunteer groups for the event.
+   */
+  const {
+    data: groupsData,
+  }: {
+    data?: {
+      getEventVolunteerGroups: InterfaceVolunteerGroupInfo[];
+    };
+    loading: boolean;
+    error?: Error | undefined;
+    refetch: () => void;
+  } = useQuery(EVENT_VOLUNTEER_GROUP_LIST, {
+    variables: {
+      where: {
+        eventId: eventId,
+      },
+    },
+  });
+
+  const volunteers = useMemo(
+    () => volunteersData?.getEventVolunteers || [],
+    [volunteersData],
+  );
+
+  const groups = useMemo(
+    () => groupsData?.getEventVolunteerGroups || [],
+    [groupsData],
+  );
 
   const actionItemCategories = useMemo(
     () => actionItemCategoriesData?.actionItemCategoriesByOrganization || [],
     [actionItemCategoriesData],
-  );
-
-  const members = useMemo(
-    () => membersData?.organizations[0].members || [],
-    [membersData],
   );
 
   /**
@@ -171,13 +216,16 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
   ): Promise<void> => {
     e.preventDefault();
     try {
+      const dDate = dayjs(dueDate).format('YYYY-MM-DD');
       await createActionItem({
         variables: {
-          assigneeId: assignee?._id,
+          dDate: dDate,
+          assigneeId: assigneeId,
+          assigneeType: assigneeType,
           actionItemCategoryId: actionItemCategory?._id,
           preCompletionNotes: preCompletionNotes,
           allotedHours: allotedHours,
-          dueDate: dayjs(dueDate).format('YYYY-MM-DD'),
+          eventId: eventId,
         },
       });
 
@@ -211,8 +259,23 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
       if (actionItemCategoryId !== actionItem?.actionItemCategory?._id) {
         updatedFields.actionItemCategoryId = actionItemCategoryId;
       }
-      if (assigneeId !== actionItem?.assignee._id) {
+
+      if (
+        assigneeId !== actionItem?.assignee?._id &&
+        assigneeType === 'EventVolunteer'
+      ) {
         updatedFields.assigneeId = assigneeId;
+      }
+
+      if (
+        assigneeId !== actionItem?.assigneeGroup?._id &&
+        assigneeType === 'EventVolunteerGroup'
+      ) {
+        updatedFields.assigneeId = assigneeId;
+      }
+
+      if (assigneeType !== actionItem?.assigneeType) {
+        updatedFields.assigneeType = assigneeType;
       }
 
       if (preCompletionNotes !== actionItem?.preCompletionNotes) {
@@ -240,6 +303,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
         variables: {
           actionItemId: actionItem?._id,
           assigneeId: assigneeId,
+          assigneeType: assigneeType,
           ...updatedFields,
         },
       });
@@ -261,9 +325,15 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
       ) || null,
     );
     setAssignee(
-      members.find((member) => member._id === actionItem?.assignee._id) || null,
+      volunteers.find(
+        (volunteer) => volunteer._id === actionItem?.assignee?._id,
+      ) || null,
     );
-  }, [actionItem, actionItemCategories, members]);
+    setAssigneeGroup(
+      groups.find((group) => group._id === actionItem?.assigneeGroup?._id) ||
+        null,
+    );
+  }, [actionItem, actionItemCategories, volunteers, groups]);
 
   return (
     <Modal className={styles.itemModal} show={isOpen} onHide={hide}>
@@ -338,29 +408,103 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
           </Form.Group>
           {!isCompleted && (
             <>
-              <Form.Group className="mb-3 w-100">
-                <Autocomplete
-                  className={`${styles.noOutline} w-100`}
-                  data-testid="memberSelect"
-                  options={members}
-                  value={assignee}
-                  isOptionEqualToValue={(option, value) =>
-                    option._id === value._id
+              <Form.Label className="my-0 py-0">{t('assignTo')}</Form.Label>
+              <div
+                className={`btn-group ${styles.toggleGroup} mt-0`}
+                role="group"
+                aria-label="Basic radio toggle button group"
+              >
+                <input
+                  type="radio"
+                  className={`btn-check ${styles.toggleBtn}`}
+                  name="btnradio"
+                  id="individualRadio"
+                  checked={assigneeType === 'EventVolunteer'}
+                  onChange={() =>
+                    handleFormChange('assigneeType', 'EventVolunteer')
                   }
-                  filterSelectedOptions={true}
-                  getOptionLabel={(member: InterfaceMemberInfo): string =>
-                    `${member.firstName} ${member.lastName}`
-                  }
-                  onChange={(_, newAssignee): void => {
-                    /* istanbul ignore next */
-                    handleFormChange('assigneeId', newAssignee?._id ?? '');
-                    setAssignee(newAssignee);
-                  }}
-                  renderInput={(params) => (
-                    <TextField {...params} label={t('assignee')} required />
-                  )}
                 />
-              </Form.Group>
+                <label
+                  className={`btn btn-outline-primary ${styles.toggleBtn}`}
+                  htmlFor="individualRadio"
+                >
+                  <HiUser className="me-1" />
+                  {t('individuals')}
+                </label>
+
+                <input
+                  type="radio"
+                  className={`btn-check ${styles.toggleBtn}`}
+                  name="btnradio"
+                  id="groupsRadio"
+                  onChange={() =>
+                    handleFormChange('assigneeType', 'EventVolunteerGroup')
+                  }
+                  checked={assigneeType === 'EventVolunteerGroup'}
+                />
+                <label
+                  className={`btn btn-outline-primary ${styles.toggleBtn}`}
+                  htmlFor="groupsRadio"
+                >
+                  <HiUserGroup className="me-1" />
+                  {t('groups')}
+                </label>
+              </div>
+              {assigneeType === 'EventVolunteer' ? (
+                <Form.Group className="mb-3 w-100">
+                  <Autocomplete
+                    className={`${styles.noOutline} w-100`}
+                    data-testid="volunteerSelect"
+                    options={volunteers}
+                    value={assignee}
+                    isOptionEqualToValue={(option, value) =>
+                      option._id === value._id
+                    }
+                    filterSelectedOptions={true}
+                    getOptionLabel={(
+                      volunteer: InterfaceEventVolunteerInfo,
+                    ): string =>
+                      `${volunteer.user.firstName} ${volunteer.user.lastName}`
+                    }
+                    onChange={(_, newAssignee): void => {
+                      /* istanbul ignore next */
+                      handleFormChange('assigneeId', newAssignee?._id ?? '');
+                      setAssignee(newAssignee);
+                    }}
+                    renderInput={(params) => (
+                      <TextField {...params} label={t('volunteers')} required />
+                    )}
+                  />
+                </Form.Group>
+              ) : (
+                <Form.Group className="mb-3 w-100">
+                  <Autocomplete
+                    className={`${styles.noOutline} w-100`}
+                    data-testid="volunteerGroupSelect"
+                    options={groups}
+                    value={assigneeGroup}
+                    isOptionEqualToValue={(option, value) =>
+                      option._id === value._id
+                    }
+                    filterSelectedOptions={true}
+                    getOptionLabel={(
+                      group: InterfaceVolunteerGroupInfo,
+                    ): string => `${group.name}`}
+                    onChange={(_, newAssignee): void => {
+                      /* istanbul ignore next */
+                      handleFormChange('assigneeId', newAssignee?._id ?? '');
+                      setAssigneeGroup(newAssignee);
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label={t('volunteerGroups')}
+                        required
+                      />
+                    )}
+                  />
+                </Form.Group>
+              )}
 
               <Form.Group className="d-flex gap-3 mx-auto  mb-3">
                 {/* Date Calendar Component to select due date of an action item */}

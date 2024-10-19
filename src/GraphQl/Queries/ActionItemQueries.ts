@@ -27,10 +27,18 @@ export const ACTION_ITEM_LIST = gql`
       _id
       assignee {
         _id
-        firstName
-        lastName
-        image
+        user {
+          _id
+          firstName
+          lastName
+          image
+        }
       }
+      assigneeGroup {
+        _id
+        name
+      }
+      assigneeType
       assigner {
         _id
         firstName
@@ -66,9 +74,20 @@ export const ACTION_ITEM_LIST_BY_EVENTS = gql`
     actionItemsByEvent(eventId: $eventId) {
       _id
       assignee {
-        _id
-        firstName
-        lastName
+        ... on EventVolunteer {
+          _id
+          user {
+            _id
+            firstName
+            lastName
+            image
+          }
+        }
+        ... on EventVolunteerGroup {
+          _id
+          name
+        }
+        __typename
       }
       assigner {
         _id
@@ -94,6 +113,58 @@ export const ACTION_ITEM_LIST_BY_EVENTS = gql`
         firstName
         lastName
       }
+    }
+  }
+`;
+
+export const ACTION_ITEMS_BY_USER = gql`
+  query ActionItemsByUser(
+    $userId: ID!
+    $where: ActionItemWhereInput
+    $orderBy: ActionItemsOrderByInput
+  ) {
+    actionItemsByUser(userId: $userId, where: $where, orderBy: $orderBy) {
+      _id
+      assignee {
+        _id
+        user {
+          _id
+          firstName
+          lastName
+          image
+        }
+      }
+      assigneeGroup {
+        _id
+        name
+      }
+      assigneeType
+      assigner {
+        _id
+        firstName
+        lastName
+        image
+      }
+      actionItemCategory {
+        _id
+        name
+      }
+      preCompletionNotes
+      postCompletionNotes
+      assignmentDate
+      dueDate
+      completionDate
+      isCompleted
+      event {
+        _id
+        title
+      }
+      creator {
+        _id
+        firstName
+        lastName
+      }
+      allotedHours
     }
   }
 `;
