@@ -17,7 +17,6 @@ describe('Testing Routes reducer', () => {
         { name: 'Events', url: '/orgevents/undefined' },
         { name: 'Venues', url: '/orgvenues/undefined' },
         { name: 'Action Items', url: '/orgactionitems/undefined' },
-        { name: 'Agenda Items Category', url: '/orgagendacategory/undefined' },
         { name: 'Posts', url: '/orgpost/undefined' },
         {
           name: 'Block/Unblock',
@@ -70,11 +69,6 @@ describe('Testing Routes reducer', () => {
           comp_id: 'orgactionitems',
           component: 'OrganizationActionItems',
         },
-        {
-          name: 'Agenda Items Category',
-          comp_id: 'orgagendacategory',
-          component: 'OrganizationAgendaCategory',
-        },
         { name: 'Posts', comp_id: 'orgpost', component: 'OrgPost' },
         { name: 'Block/Unblock', comp_id: 'blockuser', component: 'BlockUser' },
         {
@@ -126,7 +120,6 @@ describe('Testing Routes reducer', () => {
         { name: 'Events', url: '/orgevents/orgId' },
         { name: 'Venues', url: '/orgvenues/orgId' },
         { name: 'Action Items', url: '/orgactionitems/orgId' },
-        { name: 'Agenda Items Category', url: '/orgagendacategory/orgId' },
         { name: 'Posts', url: '/orgpost/orgId' },
         { name: 'Block/Unblock', url: '/blockuser/orgId' },
         { name: 'Advertisement', url: '/orgads/orgId' },
@@ -176,11 +169,6 @@ describe('Testing Routes reducer', () => {
           comp_id: 'orgactionitems',
           component: 'OrganizationActionItems',
         },
-        {
-          name: 'Agenda Items Category',
-          comp_id: 'orgagendacategory',
-          component: 'OrganizationAgendaCategory',
-        },
         { name: 'Posts', comp_id: 'orgpost', component: 'OrgPost' },
         { name: 'Block/Unblock', comp_id: 'blockuser', component: 'BlockUser' },
         {
@@ -228,7 +216,6 @@ describe('Testing Routes reducer', () => {
         { name: 'Events', url: '/orgevents/undefined' },
         { name: 'Venues', url: '/orgvenues/undefined' },
         { name: 'Action Items', url: '/orgactionitems/undefined' },
-        { name: 'Agenda Items Category', url: '/orgagendacategory/undefined' },
         { name: 'Posts', url: '/orgpost/undefined' },
         {
           name: 'Block/Unblock',
@@ -283,11 +270,6 @@ describe('Testing Routes reducer', () => {
           name: 'Action Items',
           comp_id: 'orgactionitems',
           component: 'OrganizationActionItems',
-        },
-        {
-          name: 'Agenda Items Category',
-          comp_id: 'orgagendacategory',
-          component: 'OrganizationAgendaCategory',
         },
         { name: 'Posts', comp_id: 'orgpost', component: 'OrgPost' },
         { name: 'Block/Unblock', comp_id: 'blockuser', component: 'BlockUser' },
