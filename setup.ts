@@ -6,6 +6,7 @@ import { askForTalawaApiUrl } from './src/setup/askForTalawaApiUrl/askForTalawaA
 import { checkEnvFile } from './src/setup/checkEnvFile/checkEnvFile';
 import { validateRecaptcha } from './src/setup/validateRecaptcha/validateRecaptcha';
 import { askForCustomPort } from './src/setup/askForCustomPort/askForCustomPort';
+import { askForTalawaWebsocketUrl } from './src/setup/askForTalawaWebSocketUrl/askForTalawaWebSocketUrl';
 
 export async function main(): Promise<void> {
   console.log('Welcome to the Talawa Admin setup! 🚀');
@@ -83,6 +84,45 @@ export async function main(): Promise<void> {
       const result = data.replace(
         `REACT_APP_TALAWA_URL=${talawaApiUrl}`,
         `REACT_APP_TALAWA_URL=${endpoint}`,
+      );
+      fs.writeFileSync('.env', result, 'utf8');
+    });
+  }
+
+  let shouldSetTalawaWebsocketUrl: boolean;
+
+  if (process.env.REACT_APP_BACKEND_WEBSOCKET_URL) {
+    console.log(
+      `\nTalawa WebSocket endpoint already exists: ${process.env.REACT_APP_BACKEND_WEBSOCKET_URL}`,
+    );
+    shouldSetTalawaWebsocketUrl = true;
+  } else {
+    const { shouldSetTalawaWebsocketUrlResponse } = await inquirer.prompt({
+      type: 'confirm',
+      name: 'shouldSetTalawaWebsocketUrlResponse',
+      message: 'Would you like to set up the Talawa WebSocket endpoint?',
+      default: true,
+    });
+    shouldSetTalawaWebsocketUrl = shouldSetTalawaWebsocketUrlResponse;
+  }
+
+  if (shouldSetTalawaWebsocketUrl) {
+    let isConnected = false;
+    let endpoint = '';
+
+    while (!isConnected) {
+      endpoint = await askForTalawaWebsocketUrl();
+      const url = new URL(endpoint);
+      isConnected = await checkConnection(url.origin);
+    }
+
+    const websocketUrl = dotenv.parse(
+      fs.readFileSync('.env'),
+    ).REACT_APP_BACKEND_WEBSOCKET_URL;
+    fs.readFile('.env', 'utf8', (err, data) => {
+      const result = data.replace(
+        `REACT_APP_BACKEND_WEBSOCKET_URL=${websocketUrl}`,
+        `REACT_APP_BACKEND_WEBSOCKET_URL=${endpoint}`,
       );
       fs.writeFileSync('.env', result, 'utf8');
     });
