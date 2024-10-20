@@ -155,14 +155,17 @@ describe('Testing User Campaigns Screen', () => {
 
   it('Check if All details are rendered correctly', async () => {
     renderCampaigns(link1);
+
+    const detailContainer = await screen.findByTestId('detailContainer1');
+    const detailContainer2 = await screen.findByTestId('detailContainer2');
     await waitFor(() => {
-      const detailContainer = screen.getByTestId('detailContainer1');
+      expect(detailContainer).toBeInTheDocument();
+      expect(detailContainer2).toBeInTheDocument();
       expect(detailContainer).toHaveTextContent('School Campaign');
       expect(detailContainer).toHaveTextContent('$22000');
       expect(detailContainer).toHaveTextContent('2024-07-28');
       expect(detailContainer).toHaveTextContent('2025-08-31');
       expect(detailContainer).toHaveTextContent('Active');
-      const detailContainer2 = screen.getByTestId('detailContainer2');
       expect(detailContainer2).toHaveTextContent('Hospital Campaign');
       expect(detailContainer2).toHaveTextContent('$9000');
       expect(detailContainer2).toHaveTextContent('2024-07-28');
@@ -291,18 +294,6 @@ describe('Testing User Campaigns Screen', () => {
     });
   });
 
-  it('Redirect to My Pledges screen', async () => {
-    renderCampaigns(link1);
-
-    const myPledgesBtn = await screen.findByText(cTranslations.myPledges);
-    expect(myPledgesBtn).toBeInTheDocument();
-    userEvent.click(myPledgesBtn);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('pledgeScreen')).toBeInTheDocument();
-    });
-  });
-
   it('open and closes add pledge modal', async () => {
     renderCampaigns(link1);
 
@@ -317,5 +308,17 @@ describe('Testing User Campaigns Screen', () => {
     await waitFor(() =>
       expect(screen.queryByTestId('pledgeModalCloseBtn')).toBeNull(),
     );
+  });
+
+  it('Redirect to My Pledges screen', async () => {
+    renderCampaigns(link1);
+
+    const myPledgesBtn = await screen.findByText(cTranslations.myPledges);
+    expect(myPledgesBtn).toBeInTheDocument();
+    userEvent.click(myPledgesBtn);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('pledgeScreen')).toBeInTheDocument();
+    });
   });
 });

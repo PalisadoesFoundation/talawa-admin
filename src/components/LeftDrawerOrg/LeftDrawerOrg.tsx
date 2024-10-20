@@ -37,7 +37,8 @@ const leftDrawerOrg = ({
   setHideDrawer,
 }: InterfaceLeftDrawerProps): JSX.Element => {
   const { t: tCommon } = useTranslation('common');
-  const [showDropdown, setShowDropdown] = React.useState(false);
+  const { t: tErrors } = useTranslation('errors');
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const [organization, setOrganization] =
     useState<InterfaceQueryOrganizationsListObject>();
@@ -58,7 +59,6 @@ const leftDrawerOrg = ({
     let isMounted = true;
     if (data && isMounted) {
       setOrganization(data?.organizations[0]);
-      console.log(targets, 'targets');
     }
     return () => {
       isMounted = false;
@@ -95,7 +95,7 @@ const leftDrawerOrg = ({
         </div>
 
         {/* Organization Section */}
-        <div className={styles.organizationContainer}>
+        <div className={`${styles.organizationContainer} pe-3`}>
           {loading ? (
             <>
               <button
@@ -112,7 +112,7 @@ const leftDrawerOrg = ({
                 <div className="px-3">
                   <WarningAmberOutlined />
                 </div>
-                Error Occured while loading the Organization
+                {tErrors('errorLoading', { entity: 'Organization' })}
               </button>
             </>
           ) : (
@@ -123,6 +123,7 @@ const leftDrawerOrg = ({
                 ) : (
                   <Avatar
                     name={organization.name}
+                    containerStyle={styles.avatarContainer}
                     alt={'Dummy Organization Picture'}
                   />
                 )}
@@ -139,10 +140,10 @@ const leftDrawerOrg = ({
         </div>
 
         {/* Options List */}
+        <h5 className={`${styles.titleHeader} text-secondary`}>
+          {tCommon('menu')}
+        </h5>
         <div className={styles.optionList}>
-          <h5 className={`${styles.titleHeader} text-secondary`}>
-            {tCommon('menu')}
-          </h5>
           {targets.map(({ name, url }, index) => {
             return url ? (
               <NavLink to={url} key={name} onClick={handleLinkClick}>
