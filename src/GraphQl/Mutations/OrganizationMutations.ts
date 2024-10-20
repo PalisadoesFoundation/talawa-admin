@@ -315,6 +315,24 @@ export const MESSAGE_SENT_TO_DIRECT_CHAT = gql`
   }
 `;
 
+export const GENERATE_NOTIFICATION = gql`
+  subscription generateNotification($userId: ID!) {
+    generateNotification(userId: $userId) {
+      _id
+      notificationTemplateId {
+        content
+      }
+      toUserId {
+        _id
+      }
+      fromUserId {
+        _id
+      }
+      variables
+    }
+  }
+`;
+
 export const MESSAGE_SENT_TO_CHAT = gql`
   subscription messageSentToChat($userId: ID!) {
     messageSentToChat(userId: $userId) {

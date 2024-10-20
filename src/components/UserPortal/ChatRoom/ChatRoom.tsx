@@ -12,6 +12,7 @@ import {
   EDIT_CHAT_MESSAGE,
   MARK_CHAT_MESSAGES_AS_READ,
   MESSAGE_SENT_TO_CHAT,
+  GENERATE_NOTIFICATION,
   SEND_MESSAGE_TO_CHAT,
 } from 'GraphQl/Mutations/OrganizationMutations';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -209,6 +210,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
       userId: userId,
     },
     onData: async (messageSubscriptionData) => {
+      console.log(messageSubscriptionData, 'messageSubscriptionData');
       if (
         messageSubscriptionData?.data.data.messageSentToChat &&
         messageSubscriptionData?.data.data.messageSentToChat
@@ -221,6 +223,16 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
       unreadChatListRefetch();
     },
   });
+
+  useSubscription(GENERATE_NOTIFICATION, {
+    variables: {
+      userId: userId,
+    },
+    onData: async (notificationSubscriptionData) => {
+      console.log('notificationSubscriptionData', notificationSubscriptionData);
+    },
+  });
+
   useEffect(() => {
     document
       .getElementById('chat-area')
