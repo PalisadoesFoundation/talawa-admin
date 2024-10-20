@@ -1,15 +1,10 @@
 import {
   FormControl,
-  FormControlLabel,
-  FormHelperText,
   InputLabel,
   MenuItem,
   Paper,
-  RadioGroup,
   Select,
-  FormLabel,
   TableBody,
-  Radio,
 } from '@mui/material';
 import type { SelectChangeEvent } from '@mui/material/Select';
 import React, { useEffect, useState } from 'react';
@@ -19,7 +14,7 @@ import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
 import { USER_JOINED_ORGANIZATIONS } from 'GraphQl/Queries/OrganizationQueries';
 import useLocalStorage from 'utils/useLocalstorage';
-import { CREATE_GROUP_CHAT } from 'GraphQl/Mutations/OrganizationMutations';
+import { CREATE_CHAT } from 'GraphQl/Mutations/OrganizationMutations';
 import Table from '@mui/material/Table';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
@@ -29,14 +24,13 @@ import { styled } from '@mui/material/styles';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import { USERS_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
-import { LocalPoliceTwoTone, Search } from '@mui/icons-material';
-import { style } from '@mui/system';
+import { Search } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 
 interface InterfaceCreateGroupChatProps {
   toggleCreateGroupChatModal: () => void;
   createGroupChatModalisOpen: boolean;
-  groupChatListRefetch: (
+  chatsListRefetch: (
     variables?:
       | Partial<{
           id: any;
@@ -69,6 +63,10 @@ interface InterfaceOrganization {
   }[];
 }
 
+/**
+ * Styled table cell with custom styles.
+ */
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: ['#31bb6b', '!important'],
@@ -79,6 +77,10 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
+/**
+ * Styled table row with custom styles.
+ */
+
 const StyledTableRow = styled(TableRow)(() => ({
   '&:last-child td, &:last-child th': {
     border: 0,
@@ -87,17 +89,10 @@ const StyledTableRow = styled(TableRow)(() => ({
 
 const { getItem } = useLocalStorage();
 
-/**
- *
- * @param toggleCreateGroupChatModal - function to toggle the create group chat modal
- * @param createGroupChatModalisOpen - boolean to check if the create group chat modal is open
- * @param groupChatListRefetch - function to refetch the group chat list
- * @returns - returns the create group chat modal
- */
 export default function CreateGroupChat({
   toggleCreateGroupChatModal,
   createGroupChatModalisOpen,
-  groupChatListRefetch,
+  chatsListRefetch,
 }: InterfaceCreateGroupChatProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userChat',
@@ -105,12 +100,12 @@ export default function CreateGroupChat({
 
   const userId: string | null = getItem('userId');
 
-  const [createGroupChat] = useMutation(CREATE_GROUP_CHAT);
+  const [createChat] = useMutation(CREATE_CHAT);
 
   const [organizations, setOrganizations] = useState([]);
   const [selectedOrganization, setSelectedOrganization] = useState('');
   const [title, setTitle] = useState('');
-  let [userIds, setUserIds] = useState<string[]>([]);
+  const [userIds, setUserIds] = useState<string[]>([]);
 
   const [addUserModalisOpen, setAddUserModalisOpen] = useState(false);
 
@@ -121,7 +116,7 @@ export default function CreateGroupChat({
   const toggleAddUserModal = /* istanbul ignore next */ (): void =>
     setAddUserModalisOpen(!addUserModalisOpen);
 
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
+  const handleChange = (event: SelectChangeEvent<string>): void => {
     setSelectedOrganization(event.target.value as string);
   };
 
@@ -144,14 +139,15 @@ export default function CreateGroupChat({
   }, [userIds]);
 
   async function handleCreateGroupChat(): Promise<void> {
-    const groupChat = await createGroupChat({
+    await createChat({
       variables: {
         organizationId: selectedOrganization,
         userIds: [userId, ...userIds],
-        title,
+        name: title,
+        isGroup: true,
       },
     });
-    groupChatListRefetch();
+    chatsListRefetch();
     toggleAddUserModal();
     toggleCreateGroupChatModal();
     reset();
@@ -190,6 +186,7 @@ export default function CreateGroupChat({
       const organizations =
         joinedOrganizationsData.users[0]?.user?.joinedOrganizations || [];
       setOrganizations(organizations);
+      console.log(organizations);
     }
   }, [joinedOrganizationsData]);
 
@@ -206,50 +203,51 @@ export default function CreateGroupChat({
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <Form.Group controlId="registerForm.Rtype">
-              <Form.Label>Select Organization</Form.Label>
-              <Form.Select
-                aria-label={'Select Organization'}
+            {/* <FormControl fullWidth>
+              <InputLabel id="select-org">Select Organization</InputLabel>
+              <Select
+                labelId="select-org"
+                id="select-org"
+                data-testid="orgSelect"
+                label="Select Organization"
                 value={selectedOrganization}
                 onChange={(e) => handleChange(e)}
               >
-                {organizations &&
-                  organizations.length &&
+                {organizations?.length &&
                   organizations.map((organization: InterfaceOrganization) => (
-                    <option
+                    <MenuItem
                       data-testid="selectOptions"
                       key={organization._id}
                       value={organization._id}
                     >
                       {`${organization.name}(${organization.address?.city},${organization.address?.state},${organization.address?.countryCode})`}
-                    </option>
+                    </MenuItem>
                   ))}
-              </Form.Select>
-            </Form.Group>
-
-            {/* <FormControl fullWidth>
-            <InputLabel id="select-org">Select Organization</InputLabel>
-            <Select
-              labelId="select-org"
-              id="select-org"
-              data-testid="orgSelect"
-              label="Select Organization"
-              value={selectedOrganization}
-              onChange={handleChange}
-            >
-              {organizations &&
-                organizations.length &&
-                organizations.map((organization: InterfaceOrganization) => (
-                  <MenuItem
-                    data-testid="selectOptions"
-                    key={organization._id}
-                    value={organization._id}
-                  >
-                    {`${organization.name}(${organization.address?.city},${organization.address?.state},${organization.address?.countryCode})`}
-                  </MenuItem>
-                ))}
-            </Select>
-          </FormControl> */}
+              </Select>
+            </FormControl> */}
+            <FormControl fullWidth>
+              <InputLabel id="select-org">Select Organization</InputLabel>
+              <Select
+                labelId="select-org"
+                id="select-org"
+                data-testid="orgSelect"
+                label="Select Organization"
+                value={selectedOrganization}
+                onChange={handleChange}
+              >
+                {organizations &&
+                  organizations.length &&
+                  organizations.map((organization: InterfaceOrganization) => (
+                    <MenuItem
+                      data-testid="selectOptions"
+                      key={organization._id}
+                      value={organization._id}
+                    >
+                      {`${organization.name}(${organization.address?.city},${organization.address?.state},${organization.address?.countryCode})`}
+                    </MenuItem>
+                  ))}
+              </Select>
+            </FormControl>
             <Form.Group className="mb-3" controlId="registerForm.Rname">
               <Form.Label>Group name</Form.Label>
               <Form.Control
@@ -352,10 +350,10 @@ export default function CreateGroupChat({
                                 <Button
                                   variant="danger"
                                   onClick={() => {
-                                    userIds = userIds.filter(
+                                    const updatedUserIds = userIds.filter(
                                       (id) => id !== userDetails.user._id,
                                     );
-                                    setUserIds(userIds);
+                                    setUserIds(updatedUserIds);
                                   }}
                                   data-testid="removeBtn"
                                 >
