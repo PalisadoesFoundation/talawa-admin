@@ -186,7 +186,6 @@ export default function CreateGroupChat({
       const organizations =
         joinedOrganizationsData.users[0]?.user?.joinedOrganizations || [];
       setOrganizations(organizations);
-      console.log(organizations);
     }
   }, [joinedOrganizationsData]);
 

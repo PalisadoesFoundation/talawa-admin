@@ -19,10 +19,93 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import Chat from './Chat';
 import useLocalStorage from 'utils/useLocalstorage';
-import { MESSAGE_SENT_TO_CHAT } from 'GraphQl/Mutations/OrganizationMutations';
+import { MARK_CHAT_MESSAGES_AS_READ, MESSAGE_SENT_TO_CHAT } from 'GraphQl/Mutations/OrganizationMutations';
 import { CHATS_LIST, CHAT_BY_ID } from 'GraphQl/Queries/PlugInQueries';
 
 const { setItem } = useLocalStorage();
+
+const MARK_CHAT_MESSAGES_AS_READ_MOCK = [
+  {
+    request: {
+      query: MARK_CHAT_MESSAGES_AS_READ,
+      variables: {
+        userId: null,
+        chatId: '',
+      },
+    },
+    result: {
+      data: {
+        markChatMessagesAsRead: {
+          _id: '1',
+        }
+      }
+    }
+  },
+  {
+    request: {
+      query: MARK_CHAT_MESSAGES_AS_READ,
+      variables: {
+        userId: null,
+        chatId: '',
+      },
+    },
+    result: {
+      data: {
+        markChatMessagesAsRead: {
+          _id: '1',
+        }
+      }
+    }
+  },
+  {
+    request: {
+      query: MARK_CHAT_MESSAGES_AS_READ,
+      variables: {
+        userId: '1',
+        chatId: '',
+      },
+    },
+    result: {
+      data: {
+        markChatMessagesAsRead: {
+          _id: '1',
+        }
+      }
+    }
+  },
+  {
+    request: {
+      query: MARK_CHAT_MESSAGES_AS_READ,
+      variables: {
+        userId: '1',
+        chatId: '',
+      },
+    },
+    result: {
+      data: {
+        markChatMessagesAsRead: {
+          _id: '1',
+        }
+      }
+    }
+  },
+  {
+    request: {
+      query: MARK_CHAT_MESSAGES_AS_READ,
+      variables: {
+        userId: '1',
+        chatId: '',
+      },
+    },
+    result: {
+      data: {
+        markChatMessagesAsRead: {
+          _id: '1',
+        }
+      }
+    }
+  }
+]
 
 const USER_JOINED_ORG_MOCK = [
   {
@@ -800,6 +883,10 @@ const CHAT_BY_ID_QUERY_MOCK = [
               image: '',
             },
           ],
+          unseenMessagesByUsers: {
+            '1': 1,
+            '2': 1,
+          }
         },
       },
     },
@@ -863,6 +950,9 @@ const CHAT_BY_ID_QUERY_MOCK = [
               __typename: 'UserData',
             },
           ],
+          unseenMessagesByUsers: {
+            '1': 1,
+          }
         },
       },
     },
@@ -879,69 +969,6 @@ const CHAT_BY_ID_QUERY_MOCK = [
       data: {
         users: {
           user: [
-            {
-              _id: '2',
-              firstName: 'Test',
-              lastName: 'User',
-              email: 'test@example.com',
-              image: '',
-            },
-          ],
-        },
-      },
-    },
-  },
-];
-
-const MESSAGE_SENT_TO_GROUP_CHAT_MOCK = [
-  {
-    request: {
-      query: CHAT_BY_ID,
-      variables: {
-        id: '',
-      },
-    },
-    result: {
-      data: {
-        chatById: {
-          _id: '1',
-          isGroup: false,
-          creator: {
-            _id: '64378abd85008f171cf2990d',
-            firstName: 'Wilt',
-            lastName: 'Shepherd',
-            image: null,
-            email: 'testsuperadmin@example.com',
-            createdAt: '2023-04-13T04:53:17.742Z',
-            __typename: 'User',
-          },
-          organization: null,
-          name: '',
-          createdAt: '2345678903456',
-          messages: [
-            {
-              _id: '345678',
-              createdAt: '345678908765',
-              messageContent: 'Hello',
-              replyTo: null,
-              type: 'STRING',
-              sender: {
-                _id: '2',
-                firstName: 'Test',
-                lastName: 'User',
-                email: 'test@example.com',
-                image: '',
-              },
-            },
-          ],
-          users: [
-            {
-              _id: '1',
-              firstName: 'Disha',
-              lastName: 'Talreja',
-              email: 'disha@example.com',
-              image: '',
-            },
             {
               _id: '2',
               firstName: 'Test',
@@ -1038,6 +1065,508 @@ const CHATS_LIST_MOCK = [
                 image: '',
               },
             ],
+            unseenMessagesByUsers: {
+              '1': 1,
+              '2': 1,
+              '3': 1,
+              '4': 1,
+              '5': 1,
+            }
+          },
+          {
+            _id: '65844efc814ddgh4003db811c4',
+            isGroup: true,
+            creator: {
+              _id: '64378abd85008f171cf2990d',
+              firstName: 'Wilt',
+              lastName: 'Shepherd',
+              image: null,
+              email: 'testsuperadmin@example.com',
+              createdAt: '2023-04-13T04:53:17.742Z',
+              __typename: 'User',
+            },
+            organization: {
+              _id: 'pw3ertyuiophgfre45678',
+              name: 'rtyu',
+            },
+            createdAt: '2345678903456',
+            name: 'Test Group Chat',
+            messages: [
+              {
+                _id: '345678',
+                createdAt: '345678908765',
+                messageContent: 'Hello',
+                replyTo: null,
+                type: 'STRING',
+                sender: {
+                  _id: '2',
+                  firstName: 'Test',
+                  lastName: 'User',
+                  email: 'test@example.com',
+                  image: '',
+                },
+              },
+            ],
+            users: [
+              {
+                _id: '1',
+                firstName: 'Disha',
+                lastName: 'Talreja',
+                email: 'disha@example.com',
+                image: '',
+              },
+              {
+                _id: '2',
+                firstName: 'Test',
+                lastName: 'User',
+                email: 'test@example.com',
+                image: '',
+              },
+              {
+                _id: '3',
+                firstName: 'Test',
+                lastName: 'User1',
+                email: 'test1@example.com',
+                image: '',
+              },
+              {
+                _id: '4',
+                firstName: 'Test',
+                lastName: 'User2',
+                email: 'test2@example.com',
+                image: '',
+              },
+              {
+                _id: '5',
+                firstName: 'Test',
+                lastName: 'User4',
+                email: 'test4@example.com',
+                image: '',
+              },
+            ],
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: CHATS_LIST,
+      variables: {
+        id: null,
+      },
+    },
+    result: {
+      data: {
+        chatsByUserId: [
+          {
+            _id: '65844efc814dd40fgh03db811c4',
+            isGroup: true,
+            creator: {
+              _id: '64378abd85008f171cf2990d',
+              firstName: 'Wilt',
+              lastName: 'Shepherd',
+              image: null,
+              email: 'testsuperadmin@example.com',
+              createdAt: '2023-04-13T04:53:17.742Z',
+              __typename: 'User',
+            },
+            organization: {
+              _id: 'pw3ertyuiophgfre45678',
+              name: 'rtyu',
+            },
+            createdAt: '2345678903456',
+            name: 'Test Group Chat',
+            messages: [
+              {
+                _id: '345678',
+                createdAt: '345678908765',
+                messageContent: 'Hello',
+                replyTo: null,
+                type: 'STRING',
+                sender: {
+                  _id: '2',
+                  firstName: 'Test',
+                  lastName: 'User',
+                  email: 'test@example.com',
+                  image: '',
+                },
+              },
+            ],
+            users: [
+              {
+                _id: '1',
+                firstName: 'Disha',
+                lastName: 'Talreja',
+                email: 'disha@example.com',
+                image: '',
+              },
+              {
+                _id: '2',
+                firstName: 'Test',
+                lastName: 'User',
+                email: 'test@example.com',
+                image: '',
+              },
+              {
+                _id: '3',
+                firstName: 'Test',
+                lastName: 'User1',
+                email: 'test1@example.com',
+                image: '',
+              },
+              {
+                _id: '4',
+                firstName: 'Test',
+                lastName: 'User2',
+                email: 'test2@example.com',
+                image: '',
+              },
+              {
+                _id: '5',
+                firstName: 'Test',
+                lastName: 'User4',
+                email: 'test4@example.com',
+                image: '',
+              },
+            ],
+            unseenMessagesByUsers: {
+              '1': 1,
+              '2': 1,
+              '3': 1,
+              '4': 1,
+              '5': 1,
+            }
+          },
+          {
+            _id: '65844efc814ddgh4003db811c4',
+            isGroup: true,
+            creator: {
+              _id: '64378abd85008f171cf2990d',
+              firstName: 'Wilt',
+              lastName: 'Shepherd',
+              image: null,
+              email: 'testsuperadmin@example.com',
+              createdAt: '2023-04-13T04:53:17.742Z',
+              __typename: 'User',
+            },
+            organization: {
+              _id: 'pw3ertyuiophgfre45678',
+              name: 'rtyu',
+            },
+            createdAt: '2345678903456',
+            name: 'Test Group Chat',
+            messages: [
+              {
+                _id: '345678',
+                createdAt: '345678908765',
+                messageContent: 'Hello',
+                replyTo: null,
+                type: 'STRING',
+                sender: {
+                  _id: '2',
+                  firstName: 'Test',
+                  lastName: 'User',
+                  email: 'test@example.com',
+                  image: '',
+                },
+              },
+            ],
+            users: [
+              {
+                _id: '1',
+                firstName: 'Disha',
+                lastName: 'Talreja',
+                email: 'disha@example.com',
+                image: '',
+              },
+              {
+                _id: '2',
+                firstName: 'Test',
+                lastName: 'User',
+                email: 'test@example.com',
+                image: '',
+              },
+              {
+                _id: '3',
+                firstName: 'Test',
+                lastName: 'User1',
+                email: 'test1@example.com',
+                image: '',
+              },
+              {
+                _id: '4',
+                firstName: 'Test',
+                lastName: 'User2',
+                email: 'test2@example.com',
+                image: '',
+              },
+              {
+                _id: '5',
+                firstName: 'Test',
+                lastName: 'User4',
+                email: 'test4@example.com',
+                image: '',
+              },
+            ],
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: CHATS_LIST,
+      variables: {
+        id: null,
+      },
+    },
+    result: {
+      data: {
+        chatsByUserId: [
+          {
+            _id: '65844efc814dd40fgh03db811c4',
+            isGroup: true,
+            creator: {
+              _id: '64378abd85008f171cf2990d',
+              firstName: 'Wilt',
+              lastName: 'Shepherd',
+              image: null,
+              email: 'testsuperadmin@example.com',
+              createdAt: '2023-04-13T04:53:17.742Z',
+              __typename: 'User',
+            },
+            organization: {
+              _id: 'pw3ertyuiophgfre45678',
+              name: 'rtyu',
+            },
+            createdAt: '2345678903456',
+            name: 'Test Group Chat',
+            messages: [
+              {
+                _id: '345678',
+                createdAt: '345678908765',
+                messageContent: 'Hello',
+                replyTo: null,
+                type: 'STRING',
+                sender: {
+                  _id: '2',
+                  firstName: 'Test',
+                  lastName: 'User',
+                  email: 'test@example.com',
+                  image: '',
+                },
+              },
+            ],
+            users: [
+              {
+                _id: '1',
+                firstName: 'Disha',
+                lastName: 'Talreja',
+                email: 'disha@example.com',
+                image: '',
+              },
+              {
+                _id: '2',
+                firstName: 'Test',
+                lastName: 'User',
+                email: 'test@example.com',
+                image: '',
+              },
+              {
+                _id: '3',
+                firstName: 'Test',
+                lastName: 'User1',
+                email: 'test1@example.com',
+                image: '',
+              },
+              {
+                _id: '4',
+                firstName: 'Test',
+                lastName: 'User2',
+                email: 'test2@example.com',
+                image: '',
+              },
+              {
+                _id: '5',
+                firstName: 'Test',
+                lastName: 'User4',
+                email: 'test4@example.com',
+                image: '',
+              },
+            ],
+            unseenMessagesByUsers: {
+              '1': 1,
+              '2': 1,
+              '3': 1,
+              '4': 1,
+              '5': 1,
+            }
+          },
+          {
+            _id: '65844efc814ddgh4003db811c4',
+            isGroup: true,
+            creator: {
+              _id: '64378abd85008f171cf2990d',
+              firstName: 'Wilt',
+              lastName: 'Shepherd',
+              image: null,
+              email: 'testsuperadmin@example.com',
+              createdAt: '2023-04-13T04:53:17.742Z',
+              __typename: 'User',
+            },
+            organization: {
+              _id: 'pw3ertyuiophgfre45678',
+              name: 'rtyu',
+            },
+            createdAt: '2345678903456',
+            name: 'Test Group Chat',
+            messages: [
+              {
+                _id: '345678',
+                createdAt: '345678908765',
+                messageContent: 'Hello',
+                replyTo: null,
+                type: 'STRING',
+                sender: {
+                  _id: '2',
+                  firstName: 'Test',
+                  lastName: 'User',
+                  email: 'test@example.com',
+                  image: '',
+                },
+              },
+            ],
+            users: [
+              {
+                _id: '1',
+                firstName: 'Disha',
+                lastName: 'Talreja',
+                email: 'disha@example.com',
+                image: '',
+              },
+              {
+                _id: '2',
+                firstName: 'Test',
+                lastName: 'User',
+                email: 'test@example.com',
+                image: '',
+              },
+              {
+                _id: '3',
+                firstName: 'Test',
+                lastName: 'User1',
+                email: 'test1@example.com',
+                image: '',
+              },
+              {
+                _id: '4',
+                firstName: 'Test',
+                lastName: 'User2',
+                email: 'test2@example.com',
+                image: '',
+              },
+              {
+                _id: '5',
+                firstName: 'Test',
+                lastName: 'User4',
+                email: 'test4@example.com',
+                image: '',
+              },
+            ],
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: CHATS_LIST,
+      variables: {
+        id: null,
+      },
+    },
+    result: {
+      data: {
+        chatsByUserId: [
+          {
+            _id: '65844efc814dd40fgh03db811c4',
+            isGroup: true,
+            creator: {
+              _id: '64378abd85008f171cf2990d',
+              firstName: 'Wilt',
+              lastName: 'Shepherd',
+              image: null,
+              email: 'testsuperadmin@example.com',
+              createdAt: '2023-04-13T04:53:17.742Z',
+              __typename: 'User',
+            },
+            organization: {
+              _id: 'pw3ertyuiophgfre45678',
+              name: 'rtyu',
+            },
+            createdAt: '2345678903456',
+            name: 'Test Group Chat',
+            messages: [
+              {
+                _id: '345678',
+                createdAt: '345678908765',
+                messageContent: 'Hello',
+                replyTo: null,
+                type: 'STRING',
+                sender: {
+                  _id: '2',
+                  firstName: 'Test',
+                  lastName: 'User',
+                  email: 'test@example.com',
+                  image: '',
+                },
+              },
+            ],
+            users: [
+              {
+                _id: '1',
+                firstName: 'Disha',
+                lastName: 'Talreja',
+                email: 'disha@example.com',
+                image: '',
+              },
+              {
+                _id: '2',
+                firstName: 'Test',
+                lastName: 'User',
+                email: 'test@example.com',
+                image: '',
+              },
+              {
+                _id: '3',
+                firstName: 'Test',
+                lastName: 'User1',
+                email: 'test1@example.com',
+                image: '',
+              },
+              {
+                _id: '4',
+                firstName: 'Test',
+                lastName: 'User2',
+                email: 'test2@example.com',
+                image: '',
+              },
+              {
+                _id: '5',
+                firstName: 'Test',
+                lastName: 'User4',
+                email: 'test4@example.com',
+                image: '',
+              },
+            ],
+            unseenMessagesByUsers: {
+              '1': 1,
+              '2': 1,
+              '3': 1,
+              '4': 1,
+              '5': 1,
+            }
           },
           {
             _id: '65844efc814ddgh4003db811c4',
@@ -1196,6 +1725,13 @@ const CHATS_LIST_MOCK = [
                 image: '',
               },
             ],
+            unseenMessagesByUsers: {
+              '1': 1,
+              '2': 1,
+              '3': 1,
+              '4': 1,
+              '5': 1,
+            }
           },
           {
             _id: 'ujhgtrdtyuiop',
@@ -1354,6 +1890,508 @@ const CHATS_LIST_MOCK = [
                 image: '',
               },
             ],
+            unseenMessagesByUsers: {
+              '1': 1,
+              '2': 1,
+              '3': 1,
+              '4': 1,
+              '5': 1,
+            }
+          },
+          {
+            _id: '65844ewsedrffc814dd4003db811c4',
+            isGroup: true,
+            creator: {
+              _id: '64378abd85008f171cf2990d',
+              firstName: 'Wilt',
+              lastName: 'Shepherd',
+              image: null,
+              email: 'testsuperadmin@example.com',
+              createdAt: '2023-04-13T04:53:17.742Z',
+              __typename: 'User',
+            },
+            organization: {
+              _id: 'pw3ertyuiophgfre45678',
+              name: 'rtyu',
+            },
+            createdAt: '2345678903456',
+            name: 'Test Group Chat',
+            messages: [
+              {
+                _id: '345678',
+                createdAt: '345678908765',
+                messageContent: 'Hello',
+                replyTo: null,
+                type: 'STRING',
+                sender: {
+                  _id: '2',
+                  firstName: 'Test',
+                  lastName: 'User',
+                  email: 'test@example.com',
+                  image: '',
+                },
+              },
+            ],
+            users: [
+              {
+                _id: '1',
+                firstName: 'Disha',
+                lastName: 'Talreja',
+                email: 'disha@example.com',
+                image: '',
+              },
+              {
+                _id: '2',
+                firstName: 'Test',
+                lastName: 'User',
+                email: 'test@example.com',
+                image: '',
+              },
+              {
+                _id: '3',
+                firstName: 'Test',
+                lastName: 'User1',
+                email: 'test1@example.com',
+                image: '',
+              },
+              {
+                _id: '4',
+                firstName: 'Test',
+                lastName: 'User2',
+                email: 'test2@example.com',
+                image: '',
+              },
+              {
+                _id: '5',
+                firstName: 'Test',
+                lastName: 'User4',
+                email: 'test4@example.com',
+                image: '',
+              },
+            ],
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: CHATS_LIST,
+      variables: {
+        id: '1',
+      },
+    },
+    result: {
+      data: {
+        chatsByUserId: [
+          {
+            _id: '65844efc814dhjmkdftyd4003db811c4',
+            isGroup: true,
+            creator: {
+              _id: '64378abd85008f171cf2990d',
+              firstName: 'Wilt',
+              lastName: 'Shepherd',
+              image: null,
+              email: 'testsuperadmin@example.com',
+              createdAt: '2023-04-13T04:53:17.742Z',
+              __typename: 'User',
+            },
+            organization: {
+              _id: 'pw3ertyuiophgfre45678',
+              name: 'rtyu',
+            },
+            createdAt: '2345678903456',
+            name: 'Test Group Chat',
+            messages: [
+              {
+                _id: '345678',
+                createdAt: '345678908765',
+                messageContent: 'Hello',
+                replyTo: null,
+                type: 'STRING',
+                sender: {
+                  _id: '2',
+                  firstName: 'Test',
+                  lastName: 'User',
+                  email: 'test@example.com',
+                  image: '',
+                },
+              },
+            ],
+            users: [
+              {
+                _id: '1',
+                firstName: 'Disha',
+                lastName: 'Talreja',
+                email: 'disha@example.com',
+                image: '',
+              },
+              {
+                _id: '2',
+                firstName: 'Test',
+                lastName: 'User',
+                email: 'test@example.com',
+                image: '',
+              },
+              {
+                _id: '3',
+                firstName: 'Test',
+                lastName: 'User1',
+                email: 'test1@example.com',
+                image: '',
+              },
+              {
+                _id: '4',
+                firstName: 'Test',
+                lastName: 'User2',
+                email: 'test2@example.com',
+                image: '',
+              },
+              {
+                _id: '5',
+                firstName: 'Test',
+                lastName: 'User4',
+                email: 'test4@example.com',
+                image: '',
+              },
+            ],
+            unseenMessagesByUsers: {
+              '1': 1,
+              '2': 1,
+              '3': 1,
+              '4': 1,
+              '5': 1,
+            }
+          },
+          {
+            _id: '65844ewsedrffc814dd4003db811c4',
+            isGroup: true,
+            creator: {
+              _id: '64378abd85008f171cf2990d',
+              firstName: 'Wilt',
+              lastName: 'Shepherd',
+              image: null,
+              email: 'testsuperadmin@example.com',
+              createdAt: '2023-04-13T04:53:17.742Z',
+              __typename: 'User',
+            },
+            organization: {
+              _id: 'pw3ertyuiophgfre45678',
+              name: 'rtyu',
+            },
+            createdAt: '2345678903456',
+            name: 'Test Group Chat',
+            messages: [
+              {
+                _id: '345678',
+                createdAt: '345678908765',
+                messageContent: 'Hello',
+                replyTo: null,
+                type: 'STRING',
+                sender: {
+                  _id: '2',
+                  firstName: 'Test',
+                  lastName: 'User',
+                  email: 'test@example.com',
+                  image: '',
+                },
+              },
+            ],
+            users: [
+              {
+                _id: '1',
+                firstName: 'Disha',
+                lastName: 'Talreja',
+                email: 'disha@example.com',
+                image: '',
+              },
+              {
+                _id: '2',
+                firstName: 'Test',
+                lastName: 'User',
+                email: 'test@example.com',
+                image: '',
+              },
+              {
+                _id: '3',
+                firstName: 'Test',
+                lastName: 'User1',
+                email: 'test1@example.com',
+                image: '',
+              },
+              {
+                _id: '4',
+                firstName: 'Test',
+                lastName: 'User2',
+                email: 'test2@example.com',
+                image: '',
+              },
+              {
+                _id: '5',
+                firstName: 'Test',
+                lastName: 'User4',
+                email: 'test4@example.com',
+                image: '',
+              },
+            ],
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: CHATS_LIST,
+      variables: {
+        id: '1',
+      },
+    },
+    result: {
+      data: {
+        chatsByUserId: [
+          {
+            _id: '65844efc814dhjmkdftyd4003db811c4',
+            isGroup: true,
+            creator: {
+              _id: '64378abd85008f171cf2990d',
+              firstName: 'Wilt',
+              lastName: 'Shepherd',
+              image: null,
+              email: 'testsuperadmin@example.com',
+              createdAt: '2023-04-13T04:53:17.742Z',
+              __typename: 'User',
+            },
+            organization: {
+              _id: 'pw3ertyuiophgfre45678',
+              name: 'rtyu',
+            },
+            createdAt: '2345678903456',
+            name: 'Test Group Chat',
+            messages: [
+              {
+                _id: '345678',
+                createdAt: '345678908765',
+                messageContent: 'Hello',
+                replyTo: null,
+                type: 'STRING',
+                sender: {
+                  _id: '2',
+                  firstName: 'Test',
+                  lastName: 'User',
+                  email: 'test@example.com',
+                  image: '',
+                },
+              },
+            ],
+            users: [
+              {
+                _id: '1',
+                firstName: 'Disha',
+                lastName: 'Talreja',
+                email: 'disha@example.com',
+                image: '',
+              },
+              {
+                _id: '2',
+                firstName: 'Test',
+                lastName: 'User',
+                email: 'test@example.com',
+                image: '',
+              },
+              {
+                _id: '3',
+                firstName: 'Test',
+                lastName: 'User1',
+                email: 'test1@example.com',
+                image: '',
+              },
+              {
+                _id: '4',
+                firstName: 'Test',
+                lastName: 'User2',
+                email: 'test2@example.com',
+                image: '',
+              },
+              {
+                _id: '5',
+                firstName: 'Test',
+                lastName: 'User4',
+                email: 'test4@example.com',
+                image: '',
+              },
+            ],
+            unseenMessagesByUsers: {
+              '1': 1,
+              '2': 1,
+              '3': 1,
+              '4': 1,
+              '5': 1,
+            }
+          },
+          {
+            _id: '65844ewsedrffc814dd4003db811c4',
+            isGroup: true,
+            creator: {
+              _id: '64378abd85008f171cf2990d',
+              firstName: 'Wilt',
+              lastName: 'Shepherd',
+              image: null,
+              email: 'testsuperadmin@example.com',
+              createdAt: '2023-04-13T04:53:17.742Z',
+              __typename: 'User',
+            },
+            organization: {
+              _id: 'pw3ertyuiophgfre45678',
+              name: 'rtyu',
+            },
+            createdAt: '2345678903456',
+            name: 'Test Group Chat',
+            messages: [
+              {
+                _id: '345678',
+                createdAt: '345678908765',
+                messageContent: 'Hello',
+                replyTo: null,
+                type: 'STRING',
+                sender: {
+                  _id: '2',
+                  firstName: 'Test',
+                  lastName: 'User',
+                  email: 'test@example.com',
+                  image: '',
+                },
+              },
+            ],
+            users: [
+              {
+                _id: '1',
+                firstName: 'Disha',
+                lastName: 'Talreja',
+                email: 'disha@example.com',
+                image: '',
+              },
+              {
+                _id: '2',
+                firstName: 'Test',
+                lastName: 'User',
+                email: 'test@example.com',
+                image: '',
+              },
+              {
+                _id: '3',
+                firstName: 'Test',
+                lastName: 'User1',
+                email: 'test1@example.com',
+                image: '',
+              },
+              {
+                _id: '4',
+                firstName: 'Test',
+                lastName: 'User2',
+                email: 'test2@example.com',
+                image: '',
+              },
+              {
+                _id: '5',
+                firstName: 'Test',
+                lastName: 'User4',
+                email: 'test4@example.com',
+                image: '',
+              },
+            ],
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: CHATS_LIST,
+      variables: {
+        id: '1',
+      },
+    },
+    result: {
+      data: {
+        chatsByUserId: [
+          {
+            _id: '65844efc814dhjmkdftyd4003db811c4',
+            isGroup: true,
+            creator: {
+              _id: '64378abd85008f171cf2990d',
+              firstName: 'Wilt',
+              lastName: 'Shepherd',
+              image: null,
+              email: 'testsuperadmin@example.com',
+              createdAt: '2023-04-13T04:53:17.742Z',
+              __typename: 'User',
+            },
+            organization: {
+              _id: 'pw3ertyuiophgfre45678',
+              name: 'rtyu',
+            },
+            createdAt: '2345678903456',
+            name: 'Test Group Chat',
+            messages: [
+              {
+                _id: '345678',
+                createdAt: '345678908765',
+                messageContent: 'Hello',
+                replyTo: null,
+                type: 'STRING',
+                sender: {
+                  _id: '2',
+                  firstName: 'Test',
+                  lastName: 'User',
+                  email: 'test@example.com',
+                  image: '',
+                },
+              },
+            ],
+            users: [
+              {
+                _id: '1',
+                firstName: 'Disha',
+                lastName: 'Talreja',
+                email: 'disha@example.com',
+                image: '',
+              },
+              {
+                _id: '2',
+                firstName: 'Test',
+                lastName: 'User',
+                email: 'test@example.com',
+                image: '',
+              },
+              {
+                _id: '3',
+                firstName: 'Test',
+                lastName: 'User1',
+                email: 'test1@example.com',
+                image: '',
+              },
+              {
+                _id: '4',
+                firstName: 'Test',
+                lastName: 'User2',
+                email: 'test2@example.com',
+                image: '',
+              },
+              {
+                _id: '5',
+                firstName: 'Test',
+                lastName: 'User4',
+                email: 'test4@example.com',
+                image: '',
+              },
+            ],
+            unseenMessagesByUsers: {
+              '1': 1,
+              '2': 1,
+              '3': 1,
+              '4': 1,
+              '5': 1,
+            }
           },
           {
             _id: '65844ewsedrffc814dd4003db811c4',
@@ -1514,6 +2552,13 @@ const GROUP_CHAT_BY_ID_QUERY_MOCK = [
               image: '',
             },
           ],
+          unseenMessagesByUsers: {
+            '1': 0,
+            '2': 0,
+            '3': 0,
+            '4': 0,
+            '5': 0,
+          }
         },
       },
     },
@@ -1559,6 +2604,7 @@ describe('Testing Chat Screen [User Portal]', () => {
       ...CHAT_BY_ID_QUERY_MOCK,
       ...CHATS_LIST_MOCK,
       ...UserConnectionListMock,
+      ...MARK_CHAT_MESSAGES_AS_READ_MOCK
     ];
 
     render(
@@ -1585,6 +2631,7 @@ describe('Testing Chat Screen [User Portal]', () => {
       ...CHAT_BY_ID_QUERY_MOCK,
       ...CHATS_LIST_MOCK,
       ...UserConnectionListMock,
+      ...MARK_CHAT_MESSAGES_AS_READ_MOCK
     ];
 
     render(
@@ -1617,6 +2664,7 @@ describe('Testing Chat Screen [User Portal]', () => {
       ...CHAT_BY_ID_QUERY_MOCK,
       ...CHATS_LIST_MOCK,
       ...UserConnectionListMock,
+      ...MARK_CHAT_MESSAGES_AS_READ_MOCK
     ];
     render(
       <MockedProvider addTypename={false} mocks={mock}>
@@ -1658,6 +2706,7 @@ describe('Testing Chat Screen [User Portal]', () => {
       ...CHAT_BY_ID_QUERY_MOCK,
       ...CHATS_LIST_MOCK,
       ...UserConnectionListMock,
+      ...MARK_CHAT_MESSAGES_AS_READ_MOCK
     ];
     render(
       <MockedProvider addTypename={false} mocks={mock}>
@@ -1697,6 +2746,7 @@ describe('Testing Chat Screen [User Portal]', () => {
       ...CHAT_BY_ID_QUERY_MOCK,
       ...CHATS_LIST_MOCK,
       ...UserConnectionListMock,
+      ...MARK_CHAT_MESSAGES_AS_READ_MOCK
     ];
     setItem('userId', '1');
 
@@ -1734,6 +2784,7 @@ describe('Testing Chat Screen [User Portal]', () => {
       ...CHAT_BY_ID_QUERY_MOCK,
       ...CHATS_LIST_MOCK,
       ...UserConnectionListMock,
+      ...MARK_CHAT_MESSAGES_AS_READ_MOCK
     ];
     resizeWindow(800);
     render(

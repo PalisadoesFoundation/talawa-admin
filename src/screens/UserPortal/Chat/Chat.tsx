@@ -118,8 +118,6 @@ export default function chat(): JSX.Element {
     markChatMessagesAsRead().then(() => {
       chatsListRefetch({ id: userId });
     });
-
-    console.log(chats);
   }, [selectedContact]);
 
   React.useEffect(() => {
@@ -131,7 +129,6 @@ export default function chat(): JSX.Element {
         };
         return parsedChat;
       });
-      console.log('Chat LIST ', chatList);
       setChats(chatList);
     }
   }, [chatsListData]);
