@@ -41,7 +41,6 @@ const MESSAGE_SENT_TO_CHAT_MOCK = [
     },
     result: {
       data: {
-
         messageSentToChat: {
           _id: '668ec1f1364e03ac47a151',
           createdAt: '2024-07-10T17:16:33.248Z',

@@ -118,7 +118,6 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     },
   });
 
-
   const { data: chatData, refetch: chatRefetch } = useQuery(CHAT_BY_ID, {
     variables: {
       id: props.selectedContact,
@@ -169,7 +168,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
       } else {
         chatRefetch({
           id: messageSubscriptionData?.data.data.messageSentToChat
-          .chatMessageBelongsTo['_id']
+            .chatMessageBelongsTo['_id'],
         });
       }
     },
