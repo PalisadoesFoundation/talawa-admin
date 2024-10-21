@@ -169,8 +169,8 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
         chatRefetch();
       } else {
         chatRefetch({
-          id: directMessageSubscriptionData?.data.data.messageSentToDirectChat
-            .directChatMessageBelongsTo['_id'],
+          id: messageSubscriptionData?.data.data.messageSentToChat
+          .chatMessageBelongsTo['_id']
         });
       }
     },
