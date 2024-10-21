@@ -120,6 +120,10 @@ export async function main(): Promise<void> {
       fs.readFileSync('.env'),
     ).REACT_APP_BACKEND_WEBSOCKET_URL;
     fs.readFile('.env', 'utf8', (err, data) => {
+      if (err) {
+        console.error('Error reading .env file:', err);
+        process.exit(1);
+      }
       const result = data.replace(
         `REACT_APP_BACKEND_WEBSOCKET_URL=${websocketUrl}`,
         `REACT_APP_BACKEND_WEBSOCKET_URL=${endpoint}`,
