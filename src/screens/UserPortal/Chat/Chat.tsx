@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { DIRECT_CHATS_LIST } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { Button, Dropdown } from 'react-bootstrap';
@@ -8,23 +7,20 @@ import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import ContactCard from 'components/UserPortal/ContactCard/ContactCard';
 import ChatRoom from 'components/UserPortal/ChatRoom/ChatRoom';
 import useLocalStorage from 'utils/useLocalstorage';
-import { ReactComponent as NewChat } from 'assets/svgs/newChat.svg';
-import Accordion from 'react-bootstrap/Accordion';
+import NewChat from 'assets/svgs/newChat.svg?react';
 import styles from './Chat.module.css';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
-import { GROUP_CHAT_LIST } from 'GraphQl/Queries/PlugInQueries';
+import { CHATS_LIST } from 'GraphQl/Queries/PlugInQueries';
 import CreateGroupChat from '../../../components/UserPortal/CreateGroupChat/CreateGroupChat';
 import CreateDirectChat from 'components/UserPortal/CreateDirectChat/CreateDirectChat';
 
 interface InterfaceContactCardProps {
   id: string;
   title: string;
-  subtitle: string;
   image: string;
   selectedContact: string;
   setSelectedContact: React.Dispatch<React.SetStateAction<string>>;
-  type: string;
-  setSelectedChatType: React.Dispatch<React.SetStateAction<string>>;
+  isGroup: boolean;
 }
 /**
  * The `chat` component provides a user interface for interacting with contacts and chat rooms within an organization.
@@ -59,6 +55,10 @@ export default function chat(): JSX.Element {
   const { t: tCommon } = useTranslation('common');
 
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
+  const [chats, setChats] = useState<any>([]);
+  const [selectedContact, setSelectedContact] = useState('');
+  const { getItem } = useLocalStorage();
+  const userId = getItem('userId');
 
   const handleResize = (): void => {
     if (window.innerWidth <= 820) {
@@ -73,13 +73,6 @@ export default function chat(): JSX.Element {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
-
-  const [selectedContact, setSelectedContact] = useState('');
-  const [contacts, setContacts] = useState([]);
-  const [groupChats, setGroupChats] = useState([]);
-  const [selectChatType, setSelectedChatType] = useState('');
-  const { getItem } = useLocalStorage();
-  const userId = getItem('userId');
 
   const [createDirectChatModalisOpen, setCreateDirectChatModalisOpen] =
     useState(false);
@@ -103,24 +96,20 @@ export default function chat(): JSX.Element {
   };
 
   const {
-    data: contactData,
-    loading: contactLoading,
-    refetch: contactRefetch,
-  } = useQuery(DIRECT_CHATS_LIST, {
+    data: chatsListData,
+    loading: chatsListLoading,
+    refetch: chatsListRefetch,
+  } = useQuery(CHATS_LIST, {
     variables: {
       id: userId,
     },
   });
 
-  const {
-    data: groupChatList,
-    loading: groupChatListLoading,
-    refetch: groupChatListRefetch,
-  } = useQuery(GROUP_CHAT_LIST, {
-    variables: {
-      id: userId,
-    },
-  });
+  React.useEffect(() => {
+    if (chatsListData) {
+      setChats(chatsListData.chatsByUserId);
+    }
+  }, [chatsListData]);
 
   // const handleSearch = (value: string): void => {
   //   setFilterName(value);
@@ -138,18 +127,6 @@ export default function chat(): JSX.Element {
   //     (document.getElementById('searchChats') as HTMLInputElement)?.value || '';
   //   handleSearch(value);
   // };
-
-  React.useEffect(() => {
-    if (contactData) {
-      setContacts(contactData.directChatsByUserID);
-    }
-  }, [contactData]);
-
-  React.useEffect(() => {
-    if (groupChatList) {
-      setGroupChats(groupChatList.groupChatsByUserId);
-    }
-  }, [groupChatList]);
 
   return (
     <>
@@ -209,88 +186,47 @@ export default function chat(): JSX.Element {
               </Dropdown>
             </div>
             <div className={styles.contactListContainer}>
-              {contactLoading || groupChatListLoading ? (
+              {chatsListLoading ? (
                 <div className={`d-flex flex-row justify-content-center`}>
                   <HourglassBottomIcon /> <span>Loading...</span>
                 </div>
               ) : (
-                <div>
-                  <Accordion flush defaultActiveKey={['0', '1']} alwaysOpen>
-                    {!!contacts.length && (
-                      <Accordion.Item eventKey="0">
-                        <Accordion.Header
+                <div
+                  data-testid="contactCardContainer"
+                  className={styles.contactCardContainer}
+                >
+                  {!!chats.length &&
+                    chats.map((chat: any) => {
+                      const cardProps: InterfaceContactCardProps = {
+                        id: chat._id,
+                        title: !chat.isGroup
+                          ? chat.users[0]?._id === userId
+                            ? `${chat.users[1]?.firstName} ${chat.users[1]?.lastName}`
+                            : `${chat.users[0]?.firstName} ${chat.users[0]?.lastName}`
+                          : chat.name,
+                        image: chat.isGroup
+                          ? userId
+                            ? chat.users[1]?.image
+                            : chat.users[0]?.image
+                          : chat.image,
+                        setSelectedContact,
+                        selectedContact,
+                        isGroup: chat.isGroup,
+                      };
+                      return (
+                        <ContactCard
                           data-testid="chatContact"
-                          className={styles.chatType}
-                        >
-                          DIRECT CHATS
-                        </Accordion.Header>
-                        <Accordion.Body className={styles.accordionBody}>
-                          {contacts.map((contact: any) => {
-                            const cardProps: InterfaceContactCardProps = {
-                              id: contact._id,
-                              title:
-                                contact.users[0]?._id === userId
-                                  ? `${contact.users[1]?.firstName} ${contact.users[1]?.lastName}`
-                                  : `${contact.users[0]?.firstName} ${contact.users[0]?.lastName}`,
-                              subtitle: userId
-                                ? contact.users[1]?.email
-                                : contact.users[0]?.email,
-                              image: userId
-                                ? contact.users[1]?.image
-                                : contact.users[0]?.image,
-                              setSelectedContact,
-                              selectedContact,
-                              type: 'direct',
-                              setSelectedChatType,
-                            };
-                            return (
-                              <ContactCard
-                                data-testid="contact-card"
-                                {...cardProps}
-                                key={contact._id}
-                              />
-                            );
-                          })}
-                        </Accordion.Body>
-                      </Accordion.Item>
-                    )}
-                    {!!groupChats.length && (
-                      <Accordion.Item eventKey="1">
-                        <Accordion.Header className={styles.chatType}>
-                          GROUP CHATS
-                        </Accordion.Header>
-                        <Accordion.Body className={styles.accordionBody}>
-                          {groupChats.map((chat: any) => {
-                            const cardProps: InterfaceContactCardProps = {
-                              id: chat._id,
-                              title: chat.title,
-                              subtitle: `${chat.users.length} ${chat.users.length > 1 ? 'members' : 'member'}`,
-                              image: '',
-                              setSelectedContact,
-                              selectedContact,
-                              type: 'group',
-                              setSelectedChatType,
-                            };
-                            return (
-                              <ContactCard
-                                {...cardProps}
-                                key={chat._id}
-                              ></ContactCard>
-                            );
-                          })}
-                        </Accordion.Body>
-                      </Accordion.Item>
-                    )}
-                  </Accordion>
+                          {...cardProps}
+                          key={chat._id}
+                        />
+                      );
+                    })}
                 </div>
               )}
             </div>
           </div>
           <div className={styles.chatContainer} id="chat-container">
-            <ChatRoom
-              selectedContact={selectedContact}
-              selectedChatType={selectChatType}
-            />
+            <ChatRoom selectedContact={selectedContact} />
           </div>
         </div>
       </div>
@@ -298,14 +234,14 @@ export default function chat(): JSX.Element {
         <CreateGroupChat
           toggleCreateGroupChatModal={toggleCreateGroupChatModal}
           createGroupChatModalisOpen={createGroupChatModalisOpen}
-          groupChatListRefetch={groupChatListRefetch}
+          chatsListRefetch={chatsListRefetch}
         ></CreateGroupChat>
       )}
       {createDirectChatModalisOpen && (
         <CreateDirectChat
           toggleCreateDirectChatModal={toggleCreateDirectChatModal}
           createDirectChatModalisOpen={createDirectChatModalisOpen}
-          contactRefetch={contactRefetch}
+          chatsListRefetch={chatsListRefetch}
         ></CreateDirectChat>
       )}
     </>

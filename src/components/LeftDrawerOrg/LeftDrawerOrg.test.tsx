@@ -344,8 +344,8 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     );
     await wait();
     resizeWindow(800);
-    expect(screen.getByText(/Dashboard/i)).toBeInTheDocument();
-    expect(screen.getByText(/People/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Dashboard/i)[0]).toBeInTheDocument();
+    expect(screen.getAllByText(/People/i)[0]).toBeInTheDocument();
 
     const peopelBtn = screen.getByTestId(/People/i);
     userEvent.click(peopelBtn);
@@ -390,7 +390,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     );
     await wait();
     expect(
-      screen.getByText(/Error Occured while loading the Organization/i),
+      screen.getByText(/Error occured while loading Organization data/i),
     ).toBeInTheDocument();
   });
 

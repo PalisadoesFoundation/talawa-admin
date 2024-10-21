@@ -82,5 +82,16 @@
   "addedSuccessfully": "{{item}} agregado con éxito",
   "updatedSuccessfully": "{{item}} actualizado con éxito",
   "removedSuccessfully": "{{item}} eliminado con éxito",
-  "successfullyUpdated": "Actualizado con éxito"
+  "successfullyUpdated": "Actualizado con éxito",
+  "sessionWarning": "Su sesión expirará pronto debido a la inactividad. Por favor, interactúe con la página para extender su sesión.",
+  "sessionLogOut": "Su sesión ha expirado debido a la inactividad. Por favor, inicie sesión nuevamente para continuar.",
+  "all": "Todos",
+  "active": "Activo",
+  "disabled": "Deshabilitado",
+  "pending": "Pendiente",
+  "completed": "Completado",
+  "late": "Tarde",
+  "createdLatest": "Creado más reciente",
+  "createdEarliest": "Creado más temprano",
+  "searchBy": "Buscar por {{item}}"
 }

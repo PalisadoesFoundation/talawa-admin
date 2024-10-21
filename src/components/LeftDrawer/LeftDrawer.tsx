@@ -2,10 +2,10 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
-import { ReactComponent as OrganizationsIcon } from 'assets/svgs/organizations.svg';
-import { ReactComponent as RolesIcon } from 'assets/svgs/roles.svg';
-import { ReactComponent as SettingsIcon } from 'assets/svgs/settings.svg';
-import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
+import OrganizationsIcon from 'assets/svgs/organizations.svg?react';
+import RolesIcon from 'assets/svgs/roles.svg?react';
+import SettingsIcon from 'assets/svgs/settings.svg?react';
+import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import styles from './LeftDrawer.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 

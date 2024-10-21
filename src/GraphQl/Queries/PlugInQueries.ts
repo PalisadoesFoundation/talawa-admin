@@ -185,6 +185,51 @@ export const DIRECT_CHAT_BY_ID = gql`
   }
 `;
 
+export const CHAT_BY_ID = gql`
+  query chatById($id: ID!) {
+    chatById(id: $id) {
+      _id
+      isGroup
+      name
+      organization {
+        _id
+      }
+      createdAt
+      messages {
+        _id
+        createdAt
+        messageContent
+        replyTo {
+          _id
+          createdAt
+          messageContent
+          type
+          sender {
+            _id
+            firstName
+            lastName
+            email
+            image
+          }
+        }
+        sender {
+          _id
+          firstName
+          lastName
+          email
+          image
+        }
+      }
+      users {
+        _id
+        firstName
+        lastName
+        email
+      }
+    }
+  }
+`;
+
 export const GROUP_CHAT_BY_ID = gql`
   query groupChatById($id: ID!) {
     groupChatById(id: $id) {
@@ -214,6 +259,46 @@ export const GROUP_CHAT_BY_ID = gql`
           email
           image
         }
+      }
+      users {
+        _id
+        firstName
+        lastName
+        email
+        image
+      }
+    }
+  }
+`;
+
+export const CHATS_LIST = gql`
+  query ChatsByUserId($id: ID!) {
+    chatsByUserId(id: $id) {
+      _id
+      isGroup
+      name
+
+      creator {
+        _id
+        firstName
+        lastName
+        email
+      }
+      messages {
+        _id
+        type
+        createdAt
+        messageContent
+        sender {
+          _id
+          firstName
+          lastName
+          email
+        }
+      }
+      organization {
+        _id
+        name
       }
       users {
         _id
