@@ -519,4 +519,44 @@ describe('Testing Organizations Screen [User Portal]', () => {
       settingsBtn.click();
     });
   });
+  test('Rows per Page values', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+    const dropdown = screen.getByTestId('table-pagination');
+    userEvent.click(dropdown);
+    expect(screen.queryByText('-1')).not.toBeInTheDocument();
+    expect(screen.getByText('5')).toBeInTheDocument();
+    expect(screen.getByText('10')).toBeInTheDocument();
+    expect(screen.getByText('30')).toBeInTheDocument();
+    expect(screen.getByText('All')).toBeInTheDocument();
+  });
+
+  test('Search input has correct placeholder text', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const searchInput = screen.getByPlaceholderText('Search Organization');
+    expect(searchInput).toBeInTheDocument();
+  });
 });

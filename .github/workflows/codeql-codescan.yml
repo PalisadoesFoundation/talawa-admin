@@ -20,7 +20,8 @@ on:
       - '**'   
 jobs:
   CodeQL:
-    name: Analyse code with codeQL on push
+    if: ${{ github.actor != 'dependabot[bot]' }}
+    name: Analyse Code With CodeQL
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false

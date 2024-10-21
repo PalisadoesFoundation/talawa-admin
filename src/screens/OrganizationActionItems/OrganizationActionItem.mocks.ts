@@ -9,7 +9,6 @@ import {
   ACTION_ITEM_LIST,
   MEMBERS_LIST,
 } from 'GraphQl/Queries/Queries';
-import { act } from 'react-dom/test-utils';
 
 const baseActionItem = {
   assigner: {

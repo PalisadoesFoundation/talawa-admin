@@ -963,7 +963,8 @@
     "organizations": "Organisations",
     "search": "Rechercher",
     "filter": "Filtrer",
-    "searchByName": "Rechercher par nom"
+    "searchByName": "Rechercher par nom",
+    "searchOrganizations": "Rechercher Organisations"
   },
   "userSidebarOrg": {
     "yourOrganizations": "Vos organisations",

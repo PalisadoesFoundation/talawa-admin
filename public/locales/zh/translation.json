@@ -758,13 +758,13 @@
   },
   "orgSettings": {
     "title": "设置",
-    "general": "一般",
-    "actionItemCategories": "操作项目类别",
+    "general": "一般的",
+    "actionItemCategories": "行动项目类别",
     "updateOrganization": "更新组织",
     "seeRequest": "查看请求",
     "noData": "没有数据",
     "otherSettings": "其他设置",
-    "changeLanguage": "更改语言",
+    "changeLanguage": "改变语言",
     "manageCustomFields": "管理自定义字段",
     "agendaItemCategories": "议程项目类别"
   },
@@ -963,7 +963,8 @@
     "organizations": "组织机构",
     "search": "搜索",
     "filter": "筛选",
-    "searchByName": "按名称搜索"
+    "searchByName": "按名称搜索",
+    "searchOrganizations": "搜索组织"
   },
   "userSidebarOrg": {
     "yourOrganizations": "您的组织",

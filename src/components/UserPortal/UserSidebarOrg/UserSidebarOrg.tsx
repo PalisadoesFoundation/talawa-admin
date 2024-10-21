@@ -9,8 +9,8 @@ import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
-import { ReactComponent as AngleRightIcon } from 'assets/svgs/angleRight.svg';
-import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
+import AngleRightIcon from 'assets/svgs/angleRight.svg?react';
+import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import styles from './UserSidebarOrg.module.css';
 import Avatar from 'components/Avatar/Avatar';
 

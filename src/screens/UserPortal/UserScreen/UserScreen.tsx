@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Navigate, Outlet, useLocation, useParams } from 'react-router-dom';
 import { updateTargets } from 'state/action-creators';
+import { useAppDispatch } from 'state/hooks';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from './UserScreen.module.css';
@@ -57,7 +58,7 @@ const UserScreen = (): JSX.Element => {
    */
 
   // Initialize Redux dispatch
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   /**
    * Effect hook to update targets based on the organization ID.
