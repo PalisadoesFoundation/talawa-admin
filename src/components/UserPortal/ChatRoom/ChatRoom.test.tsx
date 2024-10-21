@@ -20,6 +20,7 @@ import {
 } from 'GraphQl/Mutations/OrganizationMutations';
 import ChatRoom from './ChatRoom';
 import { useLocalStorage } from 'utils/useLocalstorage';
+import { StaticMockLink } from 'utils/StaticMockLink';
 
 const { setItem } = useLocalStorage();
 
@@ -1188,7 +1189,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ChatRoom selectedContact="1" selectedChatType="direct" />
+              <ChatRoom selectedContact="1" />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -1261,11 +1262,11 @@ describe('Testing Chatroom Component [User Portal]', () => {
   test('send message direct chat when userId is different', async () => {
     setItem('userId', '8');
     const mocks = [
-      ...SEND_MESSAGE_TO_DIRECT_CHAT_MOCK,
-      ...DIRECT_CHAT_BY_ID_QUERY_MOCK,
       ...GROUP_CHAT_BY_ID_QUERY_MOCK,
-      ...MESSAGE_SENT_TO_DIRECT_CHAT_MOCK,
-      ...MESSAGE_SENT_TO_GROUP_CHAT_MOCK,
+      ...MESSAGE_SENT_TO_CHAT_MOCK,
+      ...CHAT_BY_ID_QUERY_MOCK,
+      ...CHATS_LIST_MOCK,
+      ...SEND_MESSAGE_TO_CHAT_MOCK,
     ];
     const link2 = new StaticMockLink(mocks, true);
     render(
