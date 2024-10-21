@@ -115,7 +115,6 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
       chatId: props.selectedContact,
       replyTo: replyToDirectMessage?._id,
       messageContent: newMessage,
-      type: 'STRING',
     },
   });
 
