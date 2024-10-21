@@ -9,7 +9,7 @@ function isValidWebSocketUrl(url: string): boolean {
   }
 }
 
-export async function askForTalawaWebsocketUrl(): Promise<string> {
+export async function askForTalawaWebSocketUrl(): Promise<string> {
   const { endpoint } = await inquirer.prompt([
     {
       type: 'input',

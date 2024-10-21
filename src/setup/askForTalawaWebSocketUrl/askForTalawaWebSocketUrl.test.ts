@@ -1,11 +1,11 @@
 import inquirer from 'inquirer';
-import { askForTalawaWebsocketUrl } from './askForTalawaWebSocketUrl';
+import { askForTalawaWebSocketUrl } from './askForTalawaWebSocketUrl';
 
 jest.mock('inquirer', () => ({
   prompt: jest.fn(),
 }));
 
-describe('askForTalawaWebsocketUrl', () => {
+describe('askForTalawaWebSocketUrl', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -15,7 +15,7 @@ describe('askForTalawaWebsocketUrl', () => {
       endpoint: 'ws://example.com/graphql/',
     });
 
-    const result = await askForTalawaWebsocketUrl();
+    const result = await askForTalawaWebSocketUrl();
 
     expect(mockPrompt).toHaveBeenCalledWith([
       {
@@ -35,7 +35,7 @@ describe('askForTalawaWebsocketUrl', () => {
       endpoint: '',
     });
 
-    const result = await askForTalawaWebsocketUrl();
+    const result = await askForTalawaWebSocketUrl();
 
     expect(mockPrompt).toHaveBeenCalledWith([
       {
@@ -54,7 +54,7 @@ describe('askForTalawaWebsocketUrl', () => {
     const mockError = new Error('Prompt failed');
     jest.spyOn(inquirer, 'prompt').mockRejectedValueOnce(mockError);
 
-    await expect(askForTalawaWebsocketUrl()).rejects.toThrow('Prompt failed');
+    await expect(askForTalawaWebSocketUrl()).rejects.toThrow('Prompt failed');
   });
 
   test('should handle empty user input and use the default value', async () => {
@@ -62,7 +62,7 @@ describe('askForTalawaWebsocketUrl', () => {
       endpoint: '',
     });
 
-    const result = await askForTalawaWebsocketUrl();
+    const result = await askForTalawaWebSocketUrl();
 
     expect(mockPrompt).toHaveBeenCalledWith([
       {
@@ -82,7 +82,7 @@ describe('askForTalawaWebsocketUrl', () => {
       endpoint: '12345',
     });
 
-    const result = await askForTalawaWebsocketUrl();
+    const result = await askForTalawaWebSocketUrl();
 
     expect(mockPrompt).toHaveBeenCalledWith([
       {
