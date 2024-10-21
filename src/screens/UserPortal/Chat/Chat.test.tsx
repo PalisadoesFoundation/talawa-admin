@@ -893,69 +893,6 @@ const CHAT_BY_ID_QUERY_MOCK = [
   },
 ];
 
-const MESSAGE_SENT_TO_GROUP_CHAT_MOCK = [
-  {
-    request: {
-      query: CHAT_BY_ID,
-      variables: {
-        id: '',
-      },
-    },
-    result: {
-      data: {
-        chatById: {
-          _id: '1',
-          isGroup: false,
-          creator: {
-            _id: '64378abd85008f171cf2990d',
-            firstName: 'Wilt',
-            lastName: 'Shepherd',
-            image: null,
-            email: 'testsuperadmin@example.com',
-            createdAt: '2023-04-13T04:53:17.742Z',
-            __typename: 'User',
-          },
-          organization: null,
-          name: '',
-          createdAt: '2345678903456',
-          messages: [
-            {
-              _id: '345678',
-              createdAt: '345678908765',
-              messageContent: 'Hello',
-              replyTo: null,
-              type: 'STRING',
-              sender: {
-                _id: '2',
-                firstName: 'Test',
-                lastName: 'User',
-                email: 'test@example.com',
-                image: '',
-              },
-            },
-          ],
-          users: [
-            {
-              _id: '1',
-              firstName: 'Disha',
-              lastName: 'Talreja',
-              email: 'disha@example.com',
-              image: '',
-            },
-            {
-              _id: '2',
-              firstName: 'Test',
-              lastName: 'User',
-              email: 'test@example.com',
-              image: '',
-            },
-          ],
-        },
-      },
-    },
-  },
-];
-
 const CHATS_LIST_MOCK = [
   {
     request: {

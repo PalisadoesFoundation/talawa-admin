@@ -33,7 +33,7 @@ interface InterfaceCreateGroupChatProps {
   chatsListRefetch: (
     variables?:
       | Partial<{
-          id: any;
+          id: string;
         }>
       | undefined,
   ) => Promise<ApolloQueryResult<any>>;
@@ -128,7 +128,6 @@ export default function CreateGroupChat({
   );
 
   function reset(): void {
-    setOrganizations([]);
     setTitle('');
     setUserIds([]);
     setSelectedOrganization('');
@@ -186,7 +185,6 @@ export default function CreateGroupChat({
       const organizations =
         joinedOrganizationsData.users[0]?.user?.joinedOrganizations || [];
       setOrganizations(organizations);
-      console.log(organizations);
     }
   }, [joinedOrganizationsData]);
 

@@ -115,7 +115,6 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
       chatId: props.selectedContact,
       replyTo: replyToDirectMessage?._id,
       messageContent: newMessage,
-      type: 'STRING',
     },
   });
 
@@ -166,6 +165,11 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
           .chatMessageBelongsTo['_id'] == props.selectedContact
       ) {
         chatRefetch();
+      } else {
+        chatRefetch({
+          id: messageSubscriptionData?.data.data.messageSentToChat
+            .chatMessageBelongsTo['_id'],
+        });
       }
     },
   });
