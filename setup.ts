@@ -6,7 +6,7 @@ import { askForTalawaApiUrl } from './src/setup/askForTalawaApiUrl/askForTalawaA
 import { checkEnvFile } from './src/setup/checkEnvFile/checkEnvFile';
 import { validateRecaptcha } from './src/setup/validateRecaptcha/validateRecaptcha';
 import { askForCustomPort } from './src/setup/askForCustomPort/askForCustomPort';
-import { askForTalawaWebsocketUrl } from './src/setup/askForTalawaWebSocketUrl/askForTalawaWebSocketUrl';
+import { askForTalawaWebSocketUrl } from './src/setup/askForTalawaWebSocketUrl/askForTalawaWebSocketUrl';
 
 export async function main(): Promise<void> {
   console.log('Welcome to the Talawa Admin setup! 🚀');
