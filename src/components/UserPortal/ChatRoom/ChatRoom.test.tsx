@@ -49,7 +49,6 @@ const MESSAGE_SENT_TO_CHAT_MOCK = [
             _id: '1',
           },
           messageContent: 'Test ',
-          type: 'STRING',
           replyTo: null,
           sender: {
             _id: '64378abd85008f171cf2990d',
@@ -79,7 +78,6 @@ const MESSAGE_SENT_TO_CHAT_MOCK = [
             _id: '1',
           },
           replyTo: null,
-          type: 'STRING',
           sender: {
             _id: '64378abd85008f171cf2990d',
             firstName: 'Wilt',
@@ -108,7 +106,6 @@ const MESSAGE_SENT_TO_CHAT_MOCK = [
             _id: '1',
           },
           replyTo: null,
-          type: 'STRING',
           sender: {
             _id: '64378abd85008f171cf2990d',
             firstName: 'Wilt',
@@ -153,7 +150,6 @@ const CHAT_BY_ID_QUERY_MOCK = [
               createdAt: '345678908765',
               messageContent: 'Hello',
               replyTo: null,
-              type: 'STRING',
               sender: {
                 _id: '2',
                 firstName: 'Test',
@@ -213,7 +209,6 @@ const CHAT_BY_ID_QUERY_MOCK = [
               createdAt: '345678908765',
               messageContent: 'Hello',
               replyTo: null,
-              type: 'STRING',
               sender: {
                 _id: '2',
                 firstName: 'Test',
@@ -273,7 +268,6 @@ const CHAT_BY_ID_QUERY_MOCK = [
               createdAt: '345678908765',
               messageContent: 'Hello',
               replyTo: null,
-              type: 'STRING',
               sender: {
                 _id: '2',
                 firstName: 'Test',
@@ -340,7 +334,6 @@ const CHATS_LIST_MOCK = [
                 createdAt: '345678908765',
                 messageContent: 'Hello',
                 replyTo: null,
-                type: 'STRING',
                 sender: {
                   _id: '2',
                   firstName: 'Test',
@@ -412,7 +405,6 @@ const CHATS_LIST_MOCK = [
                 createdAt: '345678908765',
                 messageContent: 'Hello',
                 replyTo: null,
-                type: 'STRING',
                 sender: {
                   _id: '2',
                   firstName: 'Test',
@@ -498,7 +490,6 @@ const CHATS_LIST_MOCK = [
                 createdAt: '345678908765',
                 messageContent: 'Hello',
                 replyTo: null,
-                type: 'STRING',
                 sender: {
                   _id: '2',
                   firstName: 'Test',
@@ -570,7 +561,6 @@ const CHATS_LIST_MOCK = [
                 createdAt: '345678908765',
                 messageContent: 'Hello',
                 replyTo: null,
-                type: 'STRING',
                 sender: {
                   _id: '2',
                   firstName: 'Test',
@@ -656,7 +646,6 @@ const CHATS_LIST_MOCK = [
                 createdAt: '345678908765',
                 messageContent: 'Hello',
                 replyTo: null,
-                type: 'STRING',
                 sender: {
                   _id: '2',
                   firstName: 'Test',
@@ -728,7 +717,6 @@ const CHATS_LIST_MOCK = [
                 createdAt: '345678908765',
                 messageContent: 'Hello',
                 replyTo: null,
-                type: 'STRING',
                 sender: {
                   _id: '2',
                   firstName: 'Test',
@@ -816,7 +804,6 @@ const GROUP_CHAT_BY_ID_QUERY_MOCK = [
               createdAt: '345678908765',
               messageContent: 'Hello',
               replyTo: null,
-              type: 'STRING',
               sender: {
                 _id: '2',
                 firstName: 'Test',
@@ -900,7 +887,6 @@ const GROUP_CHAT_BY_ID_QUERY_MOCK = [
               createdAt: '345678908765',
               messageContent: 'Hello',
               replyTo: null,
-              type: 'STRING',
               sender: {
                 _id: '2',
                 firstName: 'Test',
@@ -984,7 +970,6 @@ const GROUP_CHAT_BY_ID_QUERY_MOCK = [
               createdAt: '345678908765',
               messageContent: 'Hello',
               replyTo: null,
-              type: 'STRING',
               sender: {
                 _id: '2',
                 firstName: 'Test',
@@ -1042,10 +1027,90 @@ const SEND_MESSAGE_TO_CHAT_MOCK = [
     request: {
       query: SEND_MESSAGE_TO_CHAT,
       variables: {
+        "chatId": "1",
+        "replyTo": "4",
+        "messageContent": "Test reply message"
+      }
+    },
+    result: {
+      data: {
+        sendMessageToChat: {
+          _id: '668ec1f1364e03ac47a151',
+          createdAt: '2024-07-10T17:16:33.248Z',
+          messageContent: 'Test ',
+          replyTo: null,
+          sender: {
+            _id: '64378abd85008f171cf2990d',
+            firstName: 'Wilt',
+            lastName: 'Shepherd',
+            image: '',
+          },
+          updatedAt: '2024-07-10',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: SEND_MESSAGE_TO_CHAT,
+      variables: {
+        "chatId": "1",
+        "replyTo": "4",
+        "messageContent": "Test reply message"
+      }
+    },
+    result: {
+      data: {
+        sendMessageToChat: {
+          _id: '668ec1f1364e03ac47a151',
+          createdAt: '2024-07-10T17:16:33.248Z',
+          messageContent: 'Test ',
+          replyTo: null,
+          sender: {
+            _id: '64378abd85008f171cf2990d',
+            firstName: 'Wilt',
+            lastName: 'Shepherd',
+            image: '',
+          },
+          updatedAt: '2024-07-10',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: SEND_MESSAGE_TO_CHAT,
+      variables: {
+        "chatId": "1",
+        "replyTo": "1",
+        "messageContent": "Test reply message"
+      }
+    },
+    result: {
+      data: {
+        sendMessageToChat: {
+          _id: '668ec1f1364e03ac47a151',
+          createdAt: '2024-07-10T17:16:33.248Z',
+          messageContent: 'Test ',
+          replyTo: null,
+          sender: {
+            _id: '64378abd85008f171cf2990d',
+            firstName: 'Wilt',
+            lastName: 'Shepherd',
+            image: '',
+          },
+          updatedAt: '2024-07-10',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: SEND_MESSAGE_TO_CHAT,
+      variables: {
         chatId: '1',
         replyTo: undefined,
         messageContent: 'Hello',
-        type: 'STRING',
       },
     },
     result: {
@@ -1054,7 +1119,6 @@ const SEND_MESSAGE_TO_CHAT_MOCK = [
           _id: '668ec1f1364e03ac47a151',
           createdAt: '2024-07-10T17:16:33.248Z',
           messageContent: 'Test ',
-          type: 'STRING',
           replyTo: null,
           sender: {
             _id: '64378abd85008f171cf2990d',
@@ -1074,7 +1138,6 @@ const SEND_MESSAGE_TO_CHAT_MOCK = [
         chatId: '1',
         replyTo: '345678',
         messageContent: 'Test reply message',
-        type: 'STRING',
       },
     },
     result: {
@@ -1083,7 +1146,6 @@ const SEND_MESSAGE_TO_CHAT_MOCK = [
           _id: '668ec1f1364e03ac47a151',
           createdAt: '2024-07-10T17:16:33.248Z',
           messageContent: 'Test ',
-          type: 'STRING',
           replyTo: null,
           sender: {
             _id: '64378abd85008f171cf2990d',
@@ -1103,7 +1165,6 @@ const SEND_MESSAGE_TO_CHAT_MOCK = [
         chatId: '1',
         replyTo: undefined,
         messageContent: 'Test message',
-        type: 'STRING',
       },
     },
     result: {
@@ -1112,7 +1173,6 @@ const SEND_MESSAGE_TO_CHAT_MOCK = [
           _id: '668ec1f1364e03ac47a151',
           createdAt: '2024-07-10T17:16:33.248Z',
           messageContent: 'Test ',
-          type: 'STRING',
           replyTo: null,
           sender: {
             _id: '64378abd85008f171cf2990d',
@@ -1216,7 +1276,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
       expect(input.value).toBeFalsy();
     });
 
-    const messages = await screen.findAllByTestId('directChatMsg');
+    const messages = await screen.findAllByTestId('message');
 
     console.log('MESSAGES', messages);
 
@@ -1301,7 +1361,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
       expect(input.value).toBeFalsy();
     });
 
-    const messages = await screen.findAllByTestId('directChatMsg');
+    const messages = await screen.findAllByTestId('message');
 
     console.log('MESSAGES', messages);
 
