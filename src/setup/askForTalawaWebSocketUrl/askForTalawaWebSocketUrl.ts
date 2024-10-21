@@ -1,6 +1,6 @@
 import inquirer from 'inquirer';
 
-function isValidWebSocketUrl(url: string): boolean {
+export function isValidWebSocketUrl(url: string): boolean {
   try {
     const parsedUrl = new URL(url);
     return parsedUrl.protocol === 'ws:' || parsedUrl.protocol === 'wss:';

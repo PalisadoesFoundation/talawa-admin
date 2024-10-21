@@ -1,9 +1,87 @@
-import inquirer from 'inquirer';
+import inquirer, { InputQuestion, QuestionCollection } from 'inquirer';
 import { askForTalawaWebSocketUrl } from './askForTalawaWebSocketUrl';
+import { isValidWebSocketUrl } from './askForTalawaWebSocketUrl';
 
 jest.mock('inquirer', () => ({
   prompt: jest.fn(),
 }));
+
+describe('Checkes validity of WebSocket URL', () => {
+  test('should return true for a valid ws:// URL', () => {
+    const validUrl = 'ws://example.com/graphql/';
+    expect(isValidWebSocketUrl(validUrl)).toBe(true);
+  });
+
+  test('should return true for a valid wss:// URL', () => {
+    const validUrl = 'wss://example.com/graphql/';
+    expect(isValidWebSocketUrl(validUrl)).toBe(true);
+  });
+
+  test('should return false for an invalid WebSocket URL', () => {
+    const invalidUrl = 'http://example.com/graphql/';
+    expect(isValidWebSocketUrl(invalidUrl)).toBe(false);
+  });
+
+  test('should return false for a malformed URL', () => {
+    const malformedUrl = 'not-a-valid-url';
+    expect(isValidWebSocketUrl(malformedUrl)).toBe(false);
+  });
+
+  test('should return false for an empty string', () => {
+    const emptyUrl = '';
+    expect(isValidWebSocketUrl(emptyUrl)).toBe(false);
+  });
+});
+
+describe('askForTalawaWebSocketUrl validation', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('should return an error message for invalid WebSocket URLs', async () => {
+    const mockPrompt = jest
+      .spyOn(inquirer, 'prompt')
+      .mockImplementation(async (questions: QuestionCollection) => {
+        const validate = (questions as InputQuestion[])[0].validate!;
+        const result = validate('http://invalid-url');
+        expect(result).toBe(
+          'Please enter a valid WebSocket URL (starting with ws:// or wss://).',
+        );
+        return { endpoint: 'http://invalid-url' };
+      });
+
+    await askForTalawaWebSocketUrl();
+    expect(mockPrompt).toHaveBeenCalled();
+  });
+
+  test('should return true for valid WebSocket URLs', async () => {
+    const mockPrompt = jest
+      .spyOn(inquirer, 'prompt')
+      .mockImplementation(async (questions: QuestionCollection) => {
+        const validate = (questions as InputQuestion[])[0].validate!;
+        const result = validate('ws://valid-url.com');
+        expect(result).toBe(true);
+        return { endpoint: 'ws://valid-url.com' };
+      });
+
+    await askForTalawaWebSocketUrl();
+    expect(mockPrompt).toHaveBeenCalled();
+  });
+
+  test('should return true for empty input (default behavior)', async () => {
+    const mockPrompt = jest
+      .spyOn(inquirer, 'prompt')
+      .mockImplementation(async (questions: QuestionCollection) => {
+        const validate = (questions as InputQuestion[])[0].validate!;
+        const result = validate('');
+        expect(result).toBe(true);
+        return { endpoint: '' };
+      });
+
+    await askForTalawaWebSocketUrl();
+    expect(mockPrompt).toHaveBeenCalled();
+  });
+});
 
 describe('askForTalawaWebSocketUrl', () => {
   beforeEach(() => {
