@@ -76,7 +76,7 @@ describe('Testing Agenda Categories Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
-              {<OrganizationAgendaCategory />}
+              {<OrganizationAgendaCategory orgId="123" />}
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
@@ -96,7 +96,7 @@ describe('Testing Agenda Categories Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
-              {<OrganizationAgendaCategory />}
+              {<OrganizationAgendaCategory orgId="123" />}
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
@@ -119,7 +119,7 @@ describe('Testing Agenda Categories Component', () => {
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <I18nextProvider i18n={i18n}>
-                {<OrganizationAgendaCategory />}
+                {<OrganizationAgendaCategory orgId="123" />}
               </I18nextProvider>
             </LocalizationProvider>
           </BrowserRouter>
@@ -152,7 +152,7 @@ describe('Testing Agenda Categories Component', () => {
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <I18nextProvider i18n={i18n}>
-                {<OrganizationAgendaCategory />}
+                {<OrganizationAgendaCategory orgId="123" />}
               </I18nextProvider>
             </LocalizationProvider>
           </BrowserRouter>

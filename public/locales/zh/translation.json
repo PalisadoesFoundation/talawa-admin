@@ -407,7 +407,6 @@
     "assignmentDate": "分配日期",
     "active": "积极的",
     "clearFilters": "清除过滤器",
-    "completed": "完全的",
     "completionDate": "完成日期",
     "createActionItem": "创建操作项",
     "deleteActionItem": "删除操作项",
@@ -767,10 +766,7 @@
     "otherSettings": "其他设置",
     "changeLanguage": "改变语言",
     "manageCustomFields": "管理自定义字段",
-    "pageName": "设置",
-    "updateYourDetails": "更新您的详细信息",
-    "updateYourPassword": "更新您的密码",
-    "settings": "设置"
+    "agendaItemCategories": "议程项目类别"
   },
   "deleteOrg": {
     "deleteOrganization": "删除组织",
@@ -1192,7 +1188,7 @@
     "disableButton": "禁用",
     "updateActionItemCategory": "更新",
     "actionItemCategoryName": "姓名",
-    "actionItemCategoryDetails": "行动项目类别详细信息",
+    "categoryDetails": "类别详情",
     "enterName": "输入名字",
     "successfulCreation": "操作项类别创建成功",
     "successfulUpdation": "行动项目类别已成功更新",
