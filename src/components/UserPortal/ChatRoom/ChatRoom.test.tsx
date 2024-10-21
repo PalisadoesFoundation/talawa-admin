@@ -1027,10 +1027,10 @@ const SEND_MESSAGE_TO_CHAT_MOCK = [
     request: {
       query: SEND_MESSAGE_TO_CHAT,
       variables: {
-        "chatId": "1",
-        "replyTo": "4",
-        "messageContent": "Test reply message"
-      }
+        chatId: '1',
+        replyTo: '4',
+        messageContent: 'Test reply message',
+      },
     },
     result: {
       data: {
@@ -1054,10 +1054,10 @@ const SEND_MESSAGE_TO_CHAT_MOCK = [
     request: {
       query: SEND_MESSAGE_TO_CHAT,
       variables: {
-        "chatId": "1",
-        "replyTo": "4",
-        "messageContent": "Test reply message"
-      }
+        chatId: '1',
+        replyTo: '4',
+        messageContent: 'Test reply message',
+      },
     },
     result: {
       data: {
@@ -1081,10 +1081,10 @@ const SEND_MESSAGE_TO_CHAT_MOCK = [
     request: {
       query: SEND_MESSAGE_TO_CHAT,
       variables: {
-        "chatId": "1",
-        "replyTo": "1",
-        "messageContent": "Test reply message"
-      }
+        chatId: '1',
+        replyTo: '1',
+        messageContent: 'Test reply message',
+      },
     },
     result: {
       data: {
