@@ -1,5 +1,5 @@
 import React, { act } from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import 'jest-localstorage-mock';
 import { I18nextProvider } from 'react-i18next';
@@ -8,7 +8,7 @@ import { BrowserRouter } from 'react-router-dom';
 import i18nForTest from 'utils/i18nForTest';
 import type { InterfaceLeftDrawerProps } from './LeftDrawerOrg';
 import LeftDrawerOrg from './LeftDrawerOrg';
-import { Provider } from 'react-redux';
+import { Provider } from 'react-redux'; 
 import { MockedProvider } from '@apollo/react-testing';
 import { store } from 'state/store';
 import { ORGANIZATIONS_LIST_BY_CREATOR_ID } from 'GraphQl/Queries/Queries';
@@ -19,45 +19,45 @@ import useLocalStorage from 'utils/useLocalstorage';
 const { setItem } = useLocalStorage();
 
 const props: InterfaceLeftDrawerProps = {
-  orgId: '64378abd85008f171cf2990d',
+  orgId: '123',
   targets: [
     {
       name: 'Dashboard',
-      url: '/orgdash/6437904485008f171cf29924',
+      url: '/orgdash/123',
     },
     {
       name: 'People',
-      url: '/orgpeople/6437904485008f171cf29924',
+      url: '/orgpeople/123',
     },
     {
       name: 'Events',
-      url: '/orgevents/6437904485008f171cf29924',
+      url: '/orgevents/123',
     },
     {
       name: 'Posts',
-      url: '/orgpost/6437904485008f171cf29924',
+      url: '/orgpost/123',
     },
     {
       name: 'Block/Unblock',
-      url: '/blockuser/6437904485008f171cf29924',
+      url: '/blockuser/123',
     },
     {
       name: 'Plugins',
       subTargets: [
         {
           name: 'Plugin Store',
-          url: '/orgstore/6437904485008f171cf29924',
+          url: '/orgstore/123',
           icon: 'fa-store',
         },
       ],
     },
     {
       name: 'Settings',
-      url: '/orgsetting/6437904485008f171cf29924',
+      url: '/orgsetting/123',
     },
     {
       name: 'All Organizations',
-      url: '/orglist/6437904485008f171cf29924',
+      url: '/orglist/123',
     },
   ],
   hideDrawer: false,
@@ -78,48 +78,58 @@ const MOCKS = [
   {
     request: {
       query: ORGANIZATIONS_LIST_BY_CREATOR_ID,
-      variables: { id: '64378abd85008f171cf2990d' },
+      variables: { id: '123' },
     },
     result: {
       data: {
         organizations: [
           {
-            _id: '6437904485008f171cf29924',
+            _id: '123',
             image: null,
-            name: 'Unity Foundation',
-            description:
-              'A foundation aimed at uniting the world and making it a better place for all.',
+            creator: {
+              firstName: 'John',
+              lastName: 'Doe',
+              email: 'JohnDoe@example.com',
+            },
+            name: 'Test Organization',
+            description: 'Testing this organization',
             address: {
-              city: 'Bronx',
-              countryCode: 'US',
+              city: 'Delhi',
+              countryCode: 'IN',
               dependentLocality: 'Some Dependent Locality',
               line1: '123 Random Street',
               line2: 'Apartment 456',
-              postalCode: '10451',
+              postalCode: '110001',
               sortingCode: 'ABC-123',
-              state: 'NYC',
+              state: 'Delhi',
             },
-            userRegistrationRequired: false,
+            userRegistrationRequired: true,
             visibleInSearch: true,
             members: [
-              '64378abd85008f171cf2990d',
-              '658930fd2caa9d8d6908745c',
-              '6589386a2caa9d8d69087484',
-              '6589387e2caa9d8d69087485',
-              '6589388b2caa9d8d69087486',
-              '6589389d2caa9d8d69087487',
-              '658938a62caa9d8d69087488',
-              '658938b02caa9d8d69087489',
-              '658938ba2caa9d8d6908748a',
+              {
+                _id: 'john123',
+                firstName: 'John',
+                lastName: 'Doe',
+                email: 'JohnDoe@example.com',
+              },
+              {
+                _id: 'jane123',
+                firstName: 'Jane',
+                lastName: 'Doe',
+                email: 'JaneDoe@example.com',
+              },
             ],
-            admins: ['64378abd85008f171cf2990d'],
-            groupChats: [],
-            posts: [],
-            pinnedPosts: [],
+            admins: [
+              {
+                _id: 'john123',
+                firstName: 'John',
+                lastName: 'Doe',
+                email: 'JohnDoe@example.com',
+                createdAt: '12-03-2024',
+              },
+            ],
             membershipRequests: [],
             blockedUsers: [],
-            creatorId: '64378abd85008f171cf2990d',
-            createdAt: '2023-04-13T05:16:52.827Z',
           },
         ],
       },
@@ -131,49 +141,59 @@ const MOCKS_WITH_IMAGE = [
   {
     request: {
       query: ORGANIZATIONS_LIST_BY_CREATOR_ID,
-      variables: { id: '64378abd85008f171cf2990d' },
+      variables: { id: '123' },
     },
     result: {
       data: {
         organizations: [
           {
-            _id: '6437904485008f171cf29924',
+            _id: '123',
             image:
-              'https://api.dicebear.com/5.x/initials/svg?seed=Unity%20Foundation', // Unity Foundation image
-            name: 'Unity Foundation',
-            description:
-              'A foundation aimed at uniting the world and making it a better place for all.',
+              'https://api.dicebear.com/5.x/initials/svg?seed=Test%20Organization',
+            creator: {
+              firstName: 'John',
+              lastName: 'Doe',
+              email: 'JohnDoe@example.com',
+            },
+            name: 'Test Organization',
+            description: 'Testing this organization',
             address: {
-              city: 'Bronx',
-              countryCode: 'US',
+              city: 'Delhi',
+              countryCode: 'IN',
               dependentLocality: 'Some Dependent Locality',
               line1: '123 Random Street',
               line2: 'Apartment 456',
-              postalCode: '10451',
+              postalCode: '110001',
               sortingCode: 'ABC-123',
-              state: 'NYC',
+              state: 'Delhi',
             },
-            userRegistrationRequired: false,
+            userRegistrationRequired: true,
             visibleInSearch: true,
             members: [
-              '64378abd85008f171cf2990d',
-              '658930fd2caa9d8d6908745c',
-              '6589386a2caa9d8d69087484',
-              '6589387e2caa9d8d69087485',
-              '6589388b2caa9d8d69087486',
-              '6589389d2caa9d8d69087487',
-              '658938a62caa9d8d69087488',
-              '658938b02caa9d8d69087489',
-              '658938ba2caa9d8d6908748a',
+              {
+                _id: 'john123',
+                firstName: 'John',
+                lastName: 'Doe',
+                email: 'JohnDoe@example.com',
+              },
+              {
+                _id: 'jane123',
+                firstName: 'Jane',
+                lastName: 'Doe',
+                email: 'JaneDoe@example.com',
+              },
             ],
-            admins: ['64378abd85008f171cf2990d'],
-            groupChats: [],
-            posts: [],
-            pinnedPosts: [],
+            admins: [
+              {
+                _id: 'john123',
+                firstName: 'John',
+                lastName: 'Doe',
+                email: 'JohnDoe@example.com',
+                createdAt: '12-03-2024',
+              },
+            ],
             membershipRequests: [],
             blockedUsers: [],
-            creatorId: '64378abd85008f171cf2990d',
-            createdAt: '2023-04-13T05:16:52.827Z',
           },
         ],
       },
@@ -185,7 +205,7 @@ const MOCKS_EMPTY = [
   {
     request: {
       query: ORGANIZATIONS_LIST_BY_CREATOR_ID,
-      variables: { id: '64378abd85008f171cf2990d' },
+      variables: { id: '123' },
     },
     result: {
       data: {
@@ -284,8 +304,9 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await wait();
-    expect(await screen.findByTestId(/orgBtn/i)).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByTestId(/orgBtn/i)).toBeInTheDocument(),
+    );
   });
 
   test('Testing Menu Buttons', async () => {
@@ -306,9 +327,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     );
     await wait();
     userEvent.click(screen.getByText('Dashboard'));
-    expect(global.window.location.pathname).toContain(
-      '/orgdash/6437904485008f171cf29924',
-    );
+    expect(global.window.location.pathname).toContain('/orgdash/123');
   });
 
   test('Testing when screen size is less than 820px', async () => {
@@ -332,9 +351,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     const peopelBtn = screen.getByTestId(/People/i);
     userEvent.click(peopelBtn);
     await wait();
-    expect(window.location.pathname).toContain(
-      '/orgpeople/6437904485008f171cf29924',
-    );
+    expect(window.location.pathname).toContain('/orgpeople/123');
   });
 
   test('Testing when image is present for Organization', async () => {
@@ -374,7 +391,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     );
     await wait();
     expect(
-      screen.getByText(/Error occured while loading Organization data/i),
+      screen.getByText(/Error Occured while loading the Organization/i),
     ).toBeInTheDocument();
   });
 
