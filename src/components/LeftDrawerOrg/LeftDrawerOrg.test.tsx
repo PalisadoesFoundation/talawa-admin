@@ -285,7 +285,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
       </MockedProvider>,
     );
     await wait();
-    expect(screen.getByTestId(/orgBtn/i)).toBeInTheDocument();
+    expect(await screen.findByTestId(/orgBtn/i)).toBeInTheDocument();
   });
 
   test('Testing Menu Buttons', async () => {
