@@ -8,7 +8,7 @@ import { BrowserRouter } from 'react-router-dom';
 import i18nForTest from 'utils/i18nForTest';
 import type { InterfaceLeftDrawerProps } from './LeftDrawerOrg';
 import LeftDrawerOrg from './LeftDrawerOrg';
-import { Provider } from 'react-redux'; 
+import { Provider } from 'react-redux';
 import { MockedProvider } from '@apollo/react-testing';
 import { store } from 'state/store';
 import { ORGANIZATIONS_LIST_BY_CREATOR_ID } from 'GraphQl/Queries/Queries';
