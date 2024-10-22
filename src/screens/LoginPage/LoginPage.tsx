@@ -173,8 +173,7 @@ const loginPage = (): JSX.Element => {
       });
 
       return data.recaptcha;
-    } catch (error) {
-      console.error(error);
+    } catch {
       /* istanbul ignore next */
       toast.error(t('captchaError') as string);
     }
