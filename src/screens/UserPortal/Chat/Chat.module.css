@@ -78,9 +78,11 @@
   border-bottom: 2px solid black;
 }
 
-.contactListContainer {
-  /* flex-grow: 1; */
-  /* margin: 15px 10px; */
+.contactCardContainer {
+  padding: 10px 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .chatHeadingContainer {
