@@ -19,45 +19,45 @@ import useLocalStorage from 'utils/useLocalstorage';
 const { setItem } = useLocalStorage();
 
 const props: InterfaceLeftDrawerProps = {
-  orgId: '123',
+  orgId: '64378abd85008f171cf2990d',
   targets: [
     {
       name: 'Dashboard',
-      url: '/orgdash/123',
+      url: '/orgdash/6437904485008f171cf29924',
     },
     {
       name: 'People',
-      url: '/orgpeople/123',
+      url: '/orgpeople/6437904485008f171cf29924',
     },
     {
       name: 'Events',
-      url: '/orgevents/123',
+      url: '/orgevents/6437904485008f171cf29924',
     },
     {
       name: 'Posts',
-      url: '/orgpost/123',
+      url: '/orgpost/6437904485008f171cf29924',
     },
     {
       name: 'Block/Unblock',
-      url: '/blockuser/123',
+      url: '/blockuser/6437904485008f171cf29924',
     },
     {
       name: 'Plugins',
       subTargets: [
         {
           name: 'Plugin Store',
-          url: '/orgstore/123',
+          url: '/orgstore/6437904485008f171cf29924',
           icon: 'fa-store',
         },
       ],
     },
     {
       name: 'Settings',
-      url: '/orgsetting/123',
+      url: '/orgsetting/6437904485008f171cf29924',
     },
     {
       name: 'All Organizations',
-      url: '/orglist/123',
+      url: '/orglist/6437904485008f171cf29924',
     },
   ],
   hideDrawer: false,
@@ -78,58 +78,47 @@ const MOCKS = [
   {
     request: {
       query: ORGANIZATIONS_LIST_BY_CREATOR_ID,
-      variables: { id: '123' },
+      variables: { id: '64378abd85008f171cf2990d' },
     },
     result: {
       data: {
         organizations: [
           {
-            _id: '123',
+            _id: '6437904485008f171cf29924',
             image: null,
-            creator: {
-              firstName: 'John',
-              lastName: 'Doe',
-              email: 'JohnDoe@example.com',
-            },
-            name: 'Test Organization',
-            description: 'Testing this organization',
+            name: 'Unity Foundation',
+            description: 'A foundation aimed at uniting the world and making it a better place for all.',
             address: {
-              city: 'Delhi',
-              countryCode: 'IN',
+              city: 'Bronx',
+              countryCode: 'US',
               dependentLocality: 'Some Dependent Locality',
               line1: '123 Random Street',
               line2: 'Apartment 456',
-              postalCode: '110001',
+              postalCode: '10451',
               sortingCode: 'ABC-123',
-              state: 'Delhi',
+              state: 'NYC',
             },
-            userRegistrationRequired: true,
+            userRegistrationRequired: false,
             visibleInSearch: true,
             members: [
-              {
-                _id: 'john123',
-                firstName: 'John',
-                lastName: 'Doe',
-                email: 'JohnDoe@example.com',
-              },
-              {
-                _id: 'jane123',
-                firstName: 'Jane',
-                lastName: 'Doe',
-                email: 'JaneDoe@example.com',
-              },
+              '64378abd85008f171cf2990d',
+              '658930fd2caa9d8d6908745c',
+              '6589386a2caa9d8d69087484',
+              '6589387e2caa9d8d69087485',
+              '6589388b2caa9d8d69087486',
+              '6589389d2caa9d8d69087487',
+              '658938a62caa9d8d69087488',
+              '658938b02caa9d8d69087489',
+              '658938ba2caa9d8d6908748a',
             ],
-            admins: [
-              {
-                _id: 'john123',
-                firstName: 'John',
-                lastName: 'Doe',
-                email: 'JohnDoe@example.com',
-                createdAt: '12-03-2024',
-              },
-            ],
+            admins: ['64378abd85008f171cf2990d'],
+            groupChats: [],
+            posts: [],
+            pinnedPosts: [],
             membershipRequests: [],
             blockedUsers: [],
+            creatorId: '64378abd85008f171cf2990d',
+            createdAt: '2023-04-13T05:16:52.827Z',
           },
         ],
       },
@@ -141,59 +130,47 @@ const MOCKS_WITH_IMAGE = [
   {
     request: {
       query: ORGANIZATIONS_LIST_BY_CREATOR_ID,
-      variables: { id: '123' },
+      variables: { id: '64378abd85008f171cf2990d' },
     },
     result: {
       data: {
         organizations: [
           {
-            _id: '123',
-            image:
-              'https://api.dicebear.com/5.x/initials/svg?seed=Test%20Organization',
-            creator: {
-              firstName: 'John',
-              lastName: 'Doe',
-              email: 'JohnDoe@example.com',
-            },
-            name: 'Test Organization',
-            description: 'Testing this organization',
+            _id: '6437904485008f171cf29924',
+            image: 'https://api.dicebear.com/5.x/initials/svg?seed=Unity%20Foundation', // Unity Foundation image
+            name: 'Unity Foundation',
+            description: 'A foundation aimed at uniting the world and making it a better place for all.',
             address: {
-              city: 'Delhi',
-              countryCode: 'IN',
+              city: 'Bronx',
+              countryCode: 'US',
               dependentLocality: 'Some Dependent Locality',
               line1: '123 Random Street',
               line2: 'Apartment 456',
-              postalCode: '110001',
+              postalCode: '10451',
               sortingCode: 'ABC-123',
-              state: 'Delhi',
+              state: 'NYC',
             },
-            userRegistrationRequired: true,
+            userRegistrationRequired: false,
             visibleInSearch: true,
             members: [
-              {
-                _id: 'john123',
-                firstName: 'John',
-                lastName: 'Doe',
-                email: 'JohnDoe@example.com',
-              },
-              {
-                _id: 'jane123',
-                firstName: 'Jane',
-                lastName: 'Doe',
-                email: 'JaneDoe@example.com',
-              },
+              '64378abd85008f171cf2990d',
+              '658930fd2caa9d8d6908745c',
+              '6589386a2caa9d8d69087484',
+              '6589387e2caa9d8d69087485',
+              '6589388b2caa9d8d69087486',
+              '6589389d2caa9d8d69087487',
+              '658938a62caa9d8d69087488',
+              '658938b02caa9d8d69087489',
+              '658938ba2caa9d8d6908748a',
             ],
-            admins: [
-              {
-                _id: 'john123',
-                firstName: 'John',
-                lastName: 'Doe',
-                email: 'JohnDoe@example.com',
-                createdAt: '12-03-2024',
-              },
-            ],
+            admins: ['64378abd85008f171cf2990d'],
+            groupChats: [],
+            posts: [],
+            pinnedPosts: [],
             membershipRequests: [],
             blockedUsers: [],
+            creatorId: '64378abd85008f171cf2990d',
+            createdAt: '2023-04-13T05:16:52.827Z',
           },
         ],
       },
@@ -205,7 +182,7 @@ const MOCKS_EMPTY = [
   {
     request: {
       query: ORGANIZATIONS_LIST_BY_CREATOR_ID,
-      variables: { id: '123' },
+      variables: { id: '64378abd85008f171cf2990d' },
     },
     result: {
       data: {
@@ -326,7 +303,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     );
     await wait();
     userEvent.click(screen.getByText('Dashboard'));
-    expect(global.window.location.pathname).toContain('/orgdash/123');
+    expect(global.window.location.pathname).toContain('/orgdash/6437904485008f171cf29924');
   });
 
   test('Testing when screen size is less than 820px', async () => {
@@ -350,7 +327,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     const peopelBtn = screen.getByTestId(/People/i);
     userEvent.click(peopelBtn);
     await wait();
-    expect(window.location.pathname).toContain('/orgpeople/123');
+    expect(window.location.pathname).toContain('/orgpeople/6437904485008f171cf29924');
   });
 
   test('Testing when image is present for Organization', async () => {
