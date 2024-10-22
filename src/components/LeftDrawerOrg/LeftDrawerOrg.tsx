@@ -116,7 +116,7 @@ const leftDrawerOrg = ({
               </button>
             </>
           ) : (
-            <button className={styles.profileContainer} data-testid="OrgBtn">
+            <button className={styles.profileContainer} data-testid="orgBtn">
               <div className={styles.imageContainer}>
                 {organization.image ? (
                   <img src={organization.image} alt={`profile picture`} />
