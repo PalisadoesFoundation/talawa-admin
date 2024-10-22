@@ -87,7 +87,8 @@ const MOCKS = [
             _id: '6437904485008f171cf29924',
             image: null,
             name: 'Unity Foundation',
-            description: 'A foundation aimed at uniting the world and making it a better place for all.',
+            description:
+              'A foundation aimed at uniting the world and making it a better place for all.',
             address: {
               city: 'Bronx',
               countryCode: 'US',
@@ -137,9 +138,11 @@ const MOCKS_WITH_IMAGE = [
         organizations: [
           {
             _id: '6437904485008f171cf29924',
-            image: 'https://api.dicebear.com/5.x/initials/svg?seed=Unity%20Foundation', // Unity Foundation image
+            image:
+              'https://api.dicebear.com/5.x/initials/svg?seed=Unity%20Foundation', // Unity Foundation image
             name: 'Unity Foundation',
-            description: 'A foundation aimed at uniting the world and making it a better place for all.',
+            description:
+              'A foundation aimed at uniting the world and making it a better place for all.',
             address: {
               city: 'Bronx',
               countryCode: 'US',
@@ -303,7 +306,9 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     );
     await wait();
     userEvent.click(screen.getByText('Dashboard'));
-    expect(global.window.location.pathname).toContain('/orgdash/6437904485008f171cf29924');
+    expect(global.window.location.pathname).toContain(
+      '/orgdash/6437904485008f171cf29924',
+    );
   });
 
   test('Testing when screen size is less than 820px', async () => {
@@ -327,7 +332,9 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     const peopelBtn = screen.getByTestId(/People/i);
     userEvent.click(peopelBtn);
     await wait();
-    expect(window.location.pathname).toContain('/orgpeople/6437904485008f171cf29924');
+    expect(window.location.pathname).toContain(
+      '/orgpeople/6437904485008f171cf29924',
+    );
   });
 
   test('Testing when image is present for Organization', async () => {
