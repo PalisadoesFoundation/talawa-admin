@@ -1159,14 +1159,17 @@
     "endOfResults": "परिणाम समाप्त"
   },
   "userChat": {
+    "add": "जोड़ें",
     "chat": "बात करना",
     "contacts": "संपर्क",
     "search": "खोज",
-    "messages": "संदेश"
+    "messages": "संदेश",
+    "create": "बनाएं"
   },
   "userChatRoom": {
     "selectContact": "बातचीत शुरू करने के लिए एक संपर्क चुनें",
-    "sendMessage": "मेसेज भेजें"
+    "sendMessage": "मेसेज भेजें",
+    "reply": "जवाब"
   },
   "orgProfileField": {
     "loading": "लोड हो रहा है...",

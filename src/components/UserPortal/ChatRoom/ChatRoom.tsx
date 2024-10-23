@@ -186,7 +186,10 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
         chatRefetch();
         chatListRefetch();
       } else {
-        chatListRefetch();
+        chatRefetch({
+          id: messageSubscriptionData?.data.data.messageSentToChat
+            .chatMessageBelongsTo['_id'],
+        });
       }
     },
   });
@@ -310,7 +313,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                                   }}
                                   data-testid="replyBtn"
                                 >
-                                  Reply
+                                  {t('reply')}
                                 </Dropdown.Item>
                               </Dropdown.Menu>
                             </Dropdown>

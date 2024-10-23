@@ -128,7 +128,6 @@ export default function CreateGroupChat({
   );
 
   function reset(): void {
-    setOrganizations([]);
     setTitle('');
     setUserIds([]);
     setSelectedOrganization('');
@@ -368,7 +367,7 @@ export default function CreateGroupChat({
                                   }}
                                   data-testid="addBtn"
                                 >
-                                  Add
+                                  {t('add')}
                                 </Button>
                               )}
                             </StyledTableCell>
@@ -386,7 +385,7 @@ export default function CreateGroupChat({
             onClick={handleCreateGroupChat}
             data-testid="createBtn"
           >
-            Create
+            {t('create')}
           </Button>
         </Modal.Body>
       </Modal>

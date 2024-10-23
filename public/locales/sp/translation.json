@@ -1160,14 +1160,17 @@
     "createAdvertisement": "Crear publicidad"
   },
   "userChat": {
+    "add": "Agregar",
     "chat": "Charlar",
     "search": "Buscar",
     "contacts": "Contactos",
-    "messages": "Mensajes"
+    "messages": "Mensajes",
+    "create": "crear"
   },
   "userChatRoom": {
     "selectContact": "Seleccione un contacto para iniciar una conversación",
-    "sendMessage": "Enviar mensaje"
+    "sendMessage": "Enviar mensaje",
+    "reply": "responder"
   },
   "orgProfileField": {
     "loading": "Cargando..",

@@ -1159,14 +1159,17 @@
     "endOfResults": "结果结束"
   },
   "userChat": {
+    "add": "添加",
     "chat": "聊天",
     "contacts": "联系方式",
     "search": "搜索",
-    "messages": "消息"
+    "messages": "消息",
+    "create": "创造"
   },
   "userChatRoom": {
     "selectContact": "选择联系人开始对话",
-    "sendMessage": "发信息"
+    "sendMessage": "发信息",
+    "reply": "回复"
   },
   "orgProfileField": {
     "loading": "加载中...",

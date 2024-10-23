@@ -7,7 +7,7 @@ import {
   fireEvent,
   waitFor,
 } from '@testing-library/react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockSubscriptionLink, MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -21,6 +21,7 @@ import {
 } from 'GraphQl/Mutations/OrganizationMutations';
 import ChatRoom from './ChatRoom';
 import { useLocalStorage } from 'utils/useLocalstorage';
+import { StaticMockLink } from 'utils/StaticMockLink';
 
 const { setItem } = useLocalStorage();
 
@@ -49,7 +50,6 @@ const MESSAGE_SENT_TO_CHAT_MOCK = [
             _id: '1',
           },
           messageContent: 'Test ',
-          type: 'STRING',
           replyTo: null,
           sender: {
             _id: '64378abd85008f171cf2990d',
@@ -79,7 +79,6 @@ const MESSAGE_SENT_TO_CHAT_MOCK = [
             _id: '1',
           },
           replyTo: null,
-          type: 'STRING',
           sender: {
             _id: '64378abd85008f171cf2990d',
             firstName: 'Wilt',
@@ -108,7 +107,6 @@ const MESSAGE_SENT_TO_CHAT_MOCK = [
             _id: '1',
           },
           replyTo: null,
-          type: 'STRING',
           sender: {
             _id: '64378abd85008f171cf2990d',
             firstName: 'Wilt',
@@ -149,11 +147,10 @@ const CHAT_BY_ID_QUERY_MOCK = [
           name: '',
           messages: [
             {
-              _id: '345678',
+              _id: '4',
               createdAt: '345678908765',
               messageContent: 'Hello',
               replyTo: null,
-              type: 'STRING',
               sender: {
                 _id: '2',
                 firstName: 'Test',
@@ -213,11 +210,10 @@ const CHAT_BY_ID_QUERY_MOCK = [
           createdAt: '2345678903456',
           messages: [
             {
-              _id: '345678',
+              _id: '4',
               createdAt: '345678908765',
               messageContent: 'Hello',
               replyTo: null,
-              type: 'STRING',
               sender: {
                 _id: '2',
                 firstName: 'Test',
@@ -277,11 +273,10 @@ const CHAT_BY_ID_QUERY_MOCK = [
           createdAt: '2345678903456',
           messages: [
             {
-              _id: '345678',
+              _id: '4',
               createdAt: '345678908765',
               messageContent: 'Hello',
               replyTo: null,
-              type: 'STRING',
               sender: {
                 _id: '2',
                 firstName: 'Test',
@@ -352,7 +347,6 @@ const CHATS_LIST_MOCK = [
                 createdAt: '345678908765',
                 messageContent: 'Hello',
                 replyTo: null,
-                type: 'STRING',
                 sender: {
                   _id: '2',
                   firstName: 'Test',
@@ -431,7 +425,6 @@ const CHATS_LIST_MOCK = [
                 createdAt: '345678908765',
                 messageContent: 'Hello',
                 replyTo: null,
-                type: 'STRING',
                 sender: {
                   _id: '2',
                   firstName: 'Test',
@@ -1265,7 +1258,7 @@ const CHATS_LIST_MOCK = [
               '3': 0,
               '4': 0,
               '5': 0,
-            })
+            }),
           },
           {
             _id: '65844efc814ddgh4003db811c4',
@@ -1344,7 +1337,7 @@ const CHATS_LIST_MOCK = [
               '3': 0,
               '4': 0,
               '5': 0,
-            })
+            }),
           },
         ],
       },
@@ -1728,7 +1721,6 @@ const CHATS_LIST_MOCK = [
                 createdAt: '345678908765',
                 messageContent: 'Hello',
                 replyTo: null,
-                type: 'STRING',
                 sender: {
                   _id: '2',
                   firstName: 'Test',
@@ -1807,7 +1799,6 @@ const CHATS_LIST_MOCK = [
                 createdAt: '345678908765',
                 messageContent: 'Hello',
                 replyTo: null,
-                type: 'STRING',
                 sender: {
                   _id: '2',
                   firstName: 'Test',
@@ -1900,7 +1891,6 @@ const CHATS_LIST_MOCK = [
                 createdAt: '345678908765',
                 messageContent: 'Hello',
                 replyTo: null,
-                type: 'STRING',
                 sender: {
                   _id: '2',
                   firstName: 'Test',
@@ -1979,7 +1969,6 @@ const CHATS_LIST_MOCK = [
                 createdAt: '345678908765',
                 messageContent: 'Hello',
                 replyTo: null,
-                type: 'STRING',
                 sender: {
                   _id: '2',
                   firstName: 'Test',
@@ -2032,7 +2021,7 @@ const CHATS_LIST_MOCK = [
               '3': 0,
               '4': 0,
               '5': 0,
-            })
+            }),
           },
         ],
       },
@@ -2070,11 +2059,10 @@ const GROUP_CHAT_BY_ID_QUERY_MOCK = [
           name: 'Test Group Chat',
           messages: [
             {
-              _id: '345678',
+              _id: '2',
               createdAt: '345678908765',
               messageContent: 'Hello',
               replyTo: null,
-              type: 'STRING',
               sender: {
                 _id: '2',
                 firstName: 'Test',
@@ -2127,7 +2115,7 @@ const GROUP_CHAT_BY_ID_QUERY_MOCK = [
             '3': 0,
             '4': 0,
             '5': 0,
-          })
+          }),
         },
       },
     },
@@ -2218,7 +2206,7 @@ const GROUP_CHAT_BY_ID_QUERY_MOCK = [
             '3': 0,
             '4': 0,
             '5': 0,
-          })
+          }),
         },
       },
     },
@@ -2309,7 +2297,173 @@ const GROUP_CHAT_BY_ID_QUERY_MOCK = [
             '3': 0,
             '4': 0,
             '5': 0,
-          })
+          }),
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: CHAT_BY_ID,
+      variables: {
+        id: '1',
+      },
+    },
+    result: {
+      data: {
+        chatById: {
+          _id: '65844efc814dd4003db811c4',
+          isGroup: true,
+          creator: {
+            _id: '64378abd85008f171cf2990d',
+            firstName: 'Wilt',
+            lastName: 'Shepherd',
+            image: null,
+            email: 'testsuperadmin@example.com',
+            createdAt: '2023-04-13T04:53:17.742Z',
+            __typename: 'User',
+          },
+          organization: {
+            _id: 'pw3ertyuiophgfre45678',
+            name: 'rtyu',
+          },
+          createdAt: '2345678903456',
+          name: 'Test Group Chat',
+          messages: [
+            {
+              _id: '1',
+              createdAt: '345678908765',
+              messageContent: 'Hello',
+              replyTo: null,
+              sender: {
+                _id: '2',
+                firstName: 'Test',
+                lastName: 'User',
+                email: 'test@example.com',
+                image: '',
+              },
+            },
+          ],
+          users: [
+            {
+              _id: '1',
+              firstName: 'Disha',
+              lastName: 'Talreja',
+              email: 'disha@example.com',
+              image: '',
+            },
+            {
+              _id: '2',
+              firstName: 'Test',
+              lastName: 'User',
+              email: 'test@example.com',
+              image: '',
+            },
+            {
+              _id: '3',
+              firstName: 'Test',
+              lastName: 'User1',
+              email: 'test1@example.com',
+              image: '',
+            },
+            {
+              _id: '4',
+              firstName: 'Test',
+              lastName: 'User2',
+              email: 'test2@example.com',
+              image: '',
+            },
+            {
+              _id: '5',
+              firstName: 'Test',
+              lastName: 'User4',
+              email: 'test4@example.com',
+              image: '',
+            },
+          ],
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: CHAT_BY_ID,
+      variables: {
+        id: '1',
+      },
+    },
+    result: {
+      data: {
+        chatById: {
+          _id: '65844efc814dd4003db811c4',
+          isGroup: true,
+          creator: {
+            _id: '64378abd85008f171cf2990d',
+            firstName: 'Wilt',
+            lastName: 'Shepherd',
+            image: null,
+            email: 'testsuperadmin@example.com',
+            createdAt: '2023-04-13T04:53:17.742Z',
+            __typename: 'User',
+          },
+          organization: {
+            _id: 'pw3ertyuiophgfre45678',
+            name: 'rtyu',
+          },
+          createdAt: '2345678903456',
+          name: 'Test Group Chat',
+          messages: [
+            {
+              _id: '1',
+              createdAt: '345678908765',
+              messageContent: 'Hello',
+              replyTo: null,
+              sender: {
+                _id: '2',
+                firstName: 'Test',
+                lastName: 'User',
+                email: 'test@example.com',
+                image: '',
+              },
+            },
+          ],
+          users: [
+            {
+              _id: '1',
+              firstName: 'Disha',
+              lastName: 'Talreja',
+              email: 'disha@example.com',
+              image: '',
+            },
+            {
+              _id: '2',
+              firstName: 'Test',
+              lastName: 'User',
+              email: 'test@example.com',
+              image: '',
+            },
+            {
+              _id: '3',
+              firstName: 'Test',
+              lastName: 'User1',
+              email: 'test1@example.com',
+              image: '',
+            },
+            {
+              _id: '4',
+              firstName: 'Test',
+              lastName: 'User2',
+              email: 'test2@example.com',
+              image: '',
+            },
+            {
+              _id: '5',
+              firstName: 'Test',
+              lastName: 'User4',
+              email: 'test4@example.com',
+              image: '',
+            },
+          ],
         },
       },
     },
@@ -2322,9 +2476,8 @@ const SEND_MESSAGE_TO_CHAT_MOCK = [
       query: SEND_MESSAGE_TO_CHAT,
       variables: {
         chatId: '1',
-        replyTo: undefined,
-        messageContent: 'Hello',
-        type: 'STRING',
+        replyTo: '4',
+        messageContent: 'Test reply message',
       },
     },
     result: {
@@ -2333,7 +2486,87 @@ const SEND_MESSAGE_TO_CHAT_MOCK = [
           _id: '668ec1f1364e03ac47a151',
           createdAt: '2024-07-10T17:16:33.248Z',
           messageContent: 'Test ',
-          type: 'STRING',
+          replyTo: null,
+          sender: {
+            _id: '64378abd85008f171cf2990d',
+            firstName: 'Wilt',
+            lastName: 'Shepherd',
+            image: '',
+          },
+          updatedAt: '2024-07-10',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: SEND_MESSAGE_TO_CHAT,
+      variables: {
+        chatId: '1',
+        replyTo: '4',
+        messageContent: 'Test reply message',
+      },
+    },
+    result: {
+      data: {
+        sendMessageToChat: {
+          _id: '668ec1f1364e03ac47a151',
+          createdAt: '2024-07-10T17:16:33.248Z',
+          messageContent: 'Test ',
+          replyTo: null,
+          sender: {
+            _id: '64378abd85008f171cf2990d',
+            firstName: 'Wilt',
+            lastName: 'Shepherd',
+            image: '',
+          },
+          updatedAt: '2024-07-10',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: SEND_MESSAGE_TO_CHAT,
+      variables: {
+        chatId: '1',
+        replyTo: '1',
+        messageContent: 'Test reply message',
+      },
+    },
+    result: {
+      data: {
+        sendMessageToChat: {
+          _id: '668ec1f1364e03ac47a151',
+          createdAt: '2024-07-10T17:16:33.248Z',
+          messageContent: 'Test ',
+          replyTo: null,
+          sender: {
+            _id: '64378abd85008f171cf2990d',
+            firstName: 'Wilt',
+            lastName: 'Shepherd',
+            image: '',
+          },
+          updatedAt: '2024-07-10',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: SEND_MESSAGE_TO_CHAT,
+      variables: {
+        chatId: '1',
+        replyTo: undefined,
+        messageContent: 'Hello',
+      },
+    },
+    result: {
+      data: {
+        sendMessageToChat: {
+          _id: '668ec1f1364e03ac47a151',
+          createdAt: '2024-07-10T17:16:33.248Z',
+          messageContent: 'Test ',
           replyTo: null,
           sender: {
             _id: '64378abd85008f171cf2990d',
@@ -2353,7 +2586,6 @@ const SEND_MESSAGE_TO_CHAT_MOCK = [
         chatId: '1',
         replyTo: '345678',
         messageContent: 'Test reply message',
-        type: 'STRING',
       },
     },
     result: {
@@ -2362,7 +2594,6 @@ const SEND_MESSAGE_TO_CHAT_MOCK = [
           _id: '668ec1f1364e03ac47a151',
           createdAt: '2024-07-10T17:16:33.248Z',
           messageContent: 'Test ',
-          type: 'STRING',
           replyTo: null,
           sender: {
             _id: '64378abd85008f171cf2990d',
@@ -2382,7 +2613,6 @@ const SEND_MESSAGE_TO_CHAT_MOCK = [
         chatId: '1',
         replyTo: undefined,
         messageContent: 'Test message',
-        type: 'STRING',
       },
     },
     result: {
@@ -2391,7 +2621,6 @@ const SEND_MESSAGE_TO_CHAT_MOCK = [
           _id: '668ec1f1364e03ac47a151',
           createdAt: '2024-07-10T17:16:33.248Z',
           messageContent: 'Test ',
-          type: 'STRING',
           replyTo: null,
           sender: {
             _id: '64378abd85008f171cf2990d',
@@ -2419,9 +2648,9 @@ const MARK_CHAT_MESSAGES_AS_READ_MOCK = [
       data: {
         markChatMessagesAsRead: {
           _id: '1',
-        }
-      }
-    }
+        },
+      },
+    },
   },
   {
     request: {
@@ -2435,9 +2664,9 @@ const MARK_CHAT_MESSAGES_AS_READ_MOCK = [
       data: {
         markChatMessagesAsRead: {
           _id: '1',
-        }
-      }
-    }
+        },
+      },
+    },
   },
   {
     request: {
@@ -2451,9 +2680,9 @@ const MARK_CHAT_MESSAGES_AS_READ_MOCK = [
       data: {
         markChatMessagesAsRead: {
           _id: '1',
-        }
-      }
-    }
+        },
+      },
+    },
   },
   {
     request: {
@@ -2467,73 +2696,9 @@ const MARK_CHAT_MESSAGES_AS_READ_MOCK = [
       data: {
         markChatMessagesAsRead: {
           _id: '1',
-        }
-      }
-    }
-  },
-  {
-    request: {
-      query: MARK_CHAT_MESSAGES_AS_READ,
-      variables: {
-        userId: null,
-        chatId: '',
+        },
       },
     },
-    result: {
-      data: {
-        markChatMessagesAsRead: {
-          _id: '1',
-        }
-      }
-    }
-  },
-  {
-    request: {
-      query: MARK_CHAT_MESSAGES_AS_READ,
-      variables: {
-        userId: "2",
-        chatId: '1',
-      },
-    },
-    result: {
-      data: {
-        markChatMessagesAsRead: {
-          _id: '1',
-        }
-      }
-    }
-  },
-  {
-    request: {
-      query: MARK_CHAT_MESSAGES_AS_READ,
-      variables: {
-        userId: "2",
-        chatId: '1',
-      },
-    },
-    result: {
-      data: {
-        markChatMessagesAsRead: {
-          _id: '1',
-        }
-      }
-    }
-  },
-  {
-    request: {
-      query: MARK_CHAT_MESSAGES_AS_READ,
-      variables: {
-        userId: "2",
-        chatId: '1',
-      },
-    },
-    result: {
-      data: {
-        markChatMessagesAsRead: {
-          _id: '1',
-        }
-      }
-    }
   },
   {
     request: {
@@ -2547,9 +2712,73 @@ const MARK_CHAT_MESSAGES_AS_READ_MOCK = [
       data: {
         markChatMessagesAsRead: {
           _id: '1',
-        }
-      }
-    }
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: MARK_CHAT_MESSAGES_AS_READ,
+      variables: {
+        userId: '2',
+        chatId: '1',
+      },
+    },
+    result: {
+      data: {
+        markChatMessagesAsRead: {
+          _id: '1',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: MARK_CHAT_MESSAGES_AS_READ,
+      variables: {
+        userId: '2',
+        chatId: '1',
+      },
+    },
+    result: {
+      data: {
+        markChatMessagesAsRead: {
+          _id: '1',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: MARK_CHAT_MESSAGES_AS_READ,
+      variables: {
+        userId: '2',
+        chatId: '1',
+      },
+    },
+    result: {
+      data: {
+        markChatMessagesAsRead: {
+          _id: '1',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: MARK_CHAT_MESSAGES_AS_READ,
+      variables: {
+        userId: null,
+        chatId: '',
+      },
+    },
+    result: {
+      data: {
+        markChatMessagesAsRead: {
+          _id: '1',
+        },
+      },
+    },
   },
   {
     request: {
@@ -2563,9 +2792,9 @@ const MARK_CHAT_MESSAGES_AS_READ_MOCK = [
       data: {
         markChatMessagesAsRead: {
           _id: '1',
-        }
-      }
-    }
+        },
+      },
+    },
   },
   {
     request: {
@@ -2579,9 +2808,9 @@ const MARK_CHAT_MESSAGES_AS_READ_MOCK = [
       data: {
         markChatMessagesAsRead: {
           _id: '1',
-        }
-      }
-    }
+        },
+      },
+    },
   },
   {
     request: {
@@ -2595,12 +2824,11 @@ const MARK_CHAT_MESSAGES_AS_READ_MOCK = [
       data: {
         markChatMessagesAsRead: {
           _id: '1',
-        }
-      }
-    }
-  }
-]
-
+        },
+      },
+    },
+  },
+];
 
 describe('Testing Chatroom Component [User Portal]', () => {
   window.HTMLElement.prototype.scrollIntoView = jest.fn();
@@ -2612,7 +2840,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
       ...CHATS_LIST_MOCK,
       ...GROUP_CHAT_BY_ID_QUERY_MOCK,
       ...SEND_MESSAGE_TO_CHAT_MOCK,
-      ...MARK_CHAT_MESSAGES_AS_READ_MOCK
+      ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
     ];
     render(
       <MockedProvider addTypename={false} mocks={mocks}>
@@ -2630,16 +2858,17 @@ describe('Testing Chatroom Component [User Portal]', () => {
   });
 
   test('Selected contact is direct chat', async () => {
+    const link = new MockSubscriptionLink();
     const mocks = [
       ...MESSAGE_SENT_TO_CHAT_MOCK,
       ...CHAT_BY_ID_QUERY_MOCK,
       ...CHATS_LIST_MOCK,
       ...GROUP_CHAT_BY_ID_QUERY_MOCK,
       ...SEND_MESSAGE_TO_CHAT_MOCK,
-      ...MARK_CHAT_MESSAGES_AS_READ_MOCK
+      ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
     ];
     render(
-      <MockedProvider addTypename={false} mocks={mocks}>
+      <MockedProvider addTypename={false} mocks={mocks} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -2660,10 +2889,11 @@ describe('Testing Chatroom Component [User Portal]', () => {
       ...CHATS_LIST_MOCK,
       ...GROUP_CHAT_BY_ID_QUERY_MOCK,
       ...SEND_MESSAGE_TO_CHAT_MOCK,
-      ...MARK_CHAT_MESSAGES_AS_READ_MOCK
+      ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
     ];
+    const link2 = new StaticMockLink(mocks, true);
     render(
-      <MockedProvider addTypename={false} mocks={mocks}>
+      <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -2690,6 +2920,136 @@ describe('Testing Chatroom Component [User Portal]', () => {
     act(() => {
       fireEvent.click(sendBtn);
     });
+    await waitFor(() => {
+      expect(input.value).toBeFalsy();
+    });
+
+    const messages = await screen.findAllByTestId('message');
+
+    console.log('MESSAGES', messages);
+
+    expect(messages.length).not.toBe(0);
+
+    act(() => {
+      fireEvent.mouseOver(messages[0]);
+    });
+
+    await waitFor(async () => {
+      expect(await screen.findByTestId('moreOptions')).toBeInTheDocument();
+    });
+
+    const moreOptionsBtn = await screen.findByTestId('dropdown');
+    act(() => {
+      fireEvent.click(moreOptionsBtn);
+    });
+
+    const replyBtn = await screen.findByTestId('replyBtn');
+
+    act(() => {
+      fireEvent.click(replyBtn);
+    });
+
+    const replyMsg = await screen.findByTestId('replyMsg');
+
+    await waitFor(() => {
+      expect(replyMsg).toBeInTheDocument();
+    });
+
+    act(() => {
+      fireEvent.change(input, { target: { value: 'Test reply message' } });
+    });
+    expect(input.value).toBe('Test reply message');
+
+    act(() => {
+      fireEvent.click(sendBtn);
+    });
+
+    await wait(400);
+  });
+
+  test('send message direct chat when userId is different', async () => {
+    setItem('userId', '8');
+    const mocks = [
+      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
+      ...MESSAGE_SENT_TO_CHAT_MOCK,
+      ...CHAT_BY_ID_QUERY_MOCK,
+      ...CHATS_LIST_MOCK,
+      ...SEND_MESSAGE_TO_CHAT_MOCK,
+    ];
+    const link2 = new StaticMockLink(mocks, true);
+    render(
+      <MockedProvider addTypename={false} link={link2}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ChatRoom selectedContact="1" />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+
+    const input = (await screen.findByTestId(
+      'messageInput',
+    )) as HTMLInputElement;
+
+    act(() => {
+      fireEvent.change(input, { target: { value: 'Hello' } });
+    });
+    expect(input.value).toBe('Hello');
+
+    const sendBtn = await screen.findByTestId('sendMessage');
+
+    expect(sendBtn).toBeInTheDocument();
+    act(() => {
+      fireEvent.click(sendBtn);
+    });
+    await waitFor(() => {
+      expect(input.value).toBeFalsy();
+    });
+
+    const messages = await screen.findAllByTestId('message');
+
+    console.log('MESSAGES', messages);
+
+    expect(messages.length).not.toBe(0);
+
+    act(() => {
+      fireEvent.mouseOver(messages[0]);
+    });
+
+    await waitFor(async () => {
+      expect(await screen.findByTestId('moreOptions')).toBeInTheDocument();
+    });
+
+    const moreOptionsBtn = await screen.findByTestId('dropdown');
+    act(() => {
+      fireEvent.click(moreOptionsBtn);
+    });
+
+    const replyBtn = await screen.findByTestId('replyBtn');
+
+    act(() => {
+      fireEvent.click(replyBtn);
+    });
+
+    const replyMsg = await screen.findByTestId('replyMsg');
+
+    await waitFor(() => {
+      expect(replyMsg).toBeInTheDocument();
+    });
+
+    act(() => {
+      fireEvent.change(input, { target: { value: 'Test reply message' } });
+    });
+    expect(input.value).toBe('Test reply message');
+
+    act(() => {
+      fireEvent.click(sendBtn);
+    });
+
+    await wait(400);
   });
 
   test('Selected contact is group chat', async () => {
@@ -2699,7 +3059,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
       ...CHATS_LIST_MOCK,
       ...GROUP_CHAT_BY_ID_QUERY_MOCK,
       ...SEND_MESSAGE_TO_CHAT_MOCK,
-      ...MARK_CHAT_MESSAGES_AS_READ_MOCK
+      ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
     ];
     render(
       <MockedProvider addTypename={false} mocks={mocks}>
@@ -2722,7 +3082,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
       ...CHATS_LIST_MOCK,
       ...GROUP_CHAT_BY_ID_QUERY_MOCK,
       ...SEND_MESSAGE_TO_CHAT_MOCK,
-      ...MARK_CHAT_MESSAGES_AS_READ_MOCK
+      ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
     ];
     render(
       <MockedProvider addTypename={false} mocks={mocks}>
@@ -2801,7 +3161,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
       ...CHATS_LIST_MOCK,
       ...GROUP_CHAT_BY_ID_QUERY_MOCK,
       ...SEND_MESSAGE_TO_CHAT_MOCK,
-      ...MARK_CHAT_MESSAGES_AS_READ_MOCK
+      ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
     ];
     render(
       <MockedProvider addTypename={false} mocks={mocks}>

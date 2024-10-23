@@ -22,7 +22,6 @@ import { useParams } from 'react-router-dom';
 interface InterfaceCreateDirectChatProps {
   toggleCreateDirectChatModal: () => void;
   createDirectChatModalisOpen: boolean;
-
   chatsListRefetch: (
     variables?:
       | Partial<{
@@ -35,6 +34,7 @@ interface InterfaceCreateDirectChatProps {
 /**
  * Styled table cell with custom styles.
  */
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: ['#31bb6b', '!important'],
@@ -48,6 +48,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 /**
  * Styled table row with custom styles.
  */
+
 const StyledTableRow = styled(TableRow)(() => ({
   '&:last-child td, &:last-child th': {
     border: 0,
@@ -82,7 +83,7 @@ export default function createDirectChatModal({
       },
     });
     await chatsListRefetch();
-    await toggleCreateDirectChatModal();
+    toggleCreateDirectChatModal();
   };
 
   const {
@@ -191,7 +192,7 @@ export default function createDirectChatModal({
                                 }}
                                 data-testid="addBtn"
                               >
-                                Add
+                                {t('add')}
                               </Button>
                             </StyledTableCell>
                           </StyledTableRow>

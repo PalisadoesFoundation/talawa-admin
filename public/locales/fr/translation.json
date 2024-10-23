@@ -1159,14 +1159,17 @@
     "endOfResults": "Fin des résultats"
   },
   "userChat": {
+    "add": "Ajouter",
     "chat": "Chat",
     "contacts": "Contacts",
     "search": "rechercher",
-    "messages": "messages"
+    "messages": "messages",
+    "create": "créer"
   },
   "userChatRoom": {
     "selectContact": "Sélectionnez un contact pour démarrer la conversation",
-    "sendMessage": "Envoyer le message"
+    "sendMessage": "Envoyer le message",
+    "reply": "répondre"
   },
   "orgProfileField": {
     "loading": "Chargement...",
