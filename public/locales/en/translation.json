@@ -1,4 +1,16 @@
 {
+  "leaderboard": {
+    "title": "Leaderboard",
+    "searchByVolunteer": "Search By Volunteer",
+    "mostHours": "Most Hours",
+    "leastHours": "Least Hours",
+    "timeFrame": "Time Frame",
+    "allTime": "All Time",
+    "weekly": "This Week",
+    "monthly": "This Month",
+    "yearly": "This Year",
+    "noVolunteers": "No Volunteers Found!"
+  },
   "loginPage": {
     "title": "Talawa Admin",
     "fromPalisadoes": "An open source application by Palisadoes Foundation volunteers",
@@ -266,7 +278,9 @@
     "members": "members",
     "admins": "admins",
     "requests": "requests",
-    "talawaApiUnavailable": "talawaApiUnavailable"
+    "talawaApiUnavailable": "talawaApiUnavailable",
+    "volunteerRankings": "Volunteer Rankings",
+    "noVolunteers": "No Volunteers Found!"
   },
   "organizationPeople": {
     "title": "Talawa Members",
@@ -1361,7 +1375,9 @@
     "latest": "Latest",
     "earliest": "Earliest",
     "requestAccepted": "Request accepted successfully",
-    "requestRejected": "Request rejected successfully"
+    "requestRejected": "Request rejected successfully",
+    "details": "Details",
+    "manageGroup": "Manage Group"
   },
   "userVolunteer": {
     "title": "Volunteership",

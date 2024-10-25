@@ -283,3 +283,9 @@ input[type='radio']:checked + label {
 input[type='radio']:checked + label:hover {
   color: black !important;
 }
+
+.rankings {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  width: 50px;
+}
