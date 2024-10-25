@@ -1164,7 +1164,9 @@
     "contacts": "联系方式",
     "search": "搜索",
     "messages": "消息",
-    "create": "创造"
+    "create": "创造",
+    "newChat": "新聊天",
+    "newGroupChat": "新群聊"
   },
   "userChatRoom": {
     "selectContact": "选择联系人开始对话",

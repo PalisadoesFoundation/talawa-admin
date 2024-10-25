@@ -1165,7 +1165,9 @@
     "search": "Buscar",
     "contacts": "Contactos",
     "messages": "Mensajes",
-    "create": "crear"
+    "create": "crear",
+    "newChat": "nueva charla",
+    "newGroupChat": "Nuevo chat grupal"
   },
   "userChatRoom": {
     "selectContact": "Seleccione un contacto para iniciar una conversación",

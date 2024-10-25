@@ -1164,7 +1164,9 @@
     "contacts": "संपर्क",
     "search": "खोज",
     "messages": "संदेश",
-    "create": "बनाएं"
+    "create": "बनाएं",
+    "newChat": "नई चैट",
+    "newGroupChat": "नया समूह चैट"
   },
   "userChatRoom": {
     "selectContact": "बातचीत शुरू करने के लिए एक संपर्क चुनें",

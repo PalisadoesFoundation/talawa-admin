@@ -886,10 +886,10 @@ const CHAT_BY_ID_QUERY_MOCK = [
               image: '',
             },
           ],
-          unseenMessagesByUsers: {
+          unseenMessagesByUsers: JSON.stringify({
             '1': 1,
             '2': 1,
-          },
+          }),
         },
       },
     },
@@ -953,9 +953,9 @@ const CHAT_BY_ID_QUERY_MOCK = [
               __typename: 'UserData',
             },
           ],
-          unseenMessagesByUsers: {
+          unseenMessagesByUsers: JSON.stringify({
             '1': 1,
-          },
+          }),
         },
       },
     },
@@ -998,7 +998,7 @@ const CHATS_LIST_MOCK = [
       data: {
         chatsByUserId: [
           {
-            _id: '65844efc814dd40fgh03db811c4',
+            _id: '65844efc814dd40sassxaasfgh03db811c4',
             isGroup: true,
             creator: {
               _id: '64378abd85008f171cf2990d',
@@ -1068,16 +1068,16 @@ const CHATS_LIST_MOCK = [
                 image: '',
               },
             ],
-            unseenMessagesByUsers: {
+            unseenMessagesByUsers: JSON.stringify({
               '1': 1,
               '2': 1,
               '3': 1,
               '4': 1,
               '5': 1,
-            },
+            }),
           },
           {
-            _id: '65844efc814ddgh4003db811c4',
+            _id: '65844efc8q14ddgh4003db811c4',
             isGroup: true,
             creator: {
               _id: '64378abd85008f171cf2990d',
@@ -1147,6 +1147,13 @@ const CHATS_LIST_MOCK = [
                 image: '',
               },
             ],
+            unseenMessagesByUsers: JSON.stringify({
+              '1': 1,
+              '2': 1,
+              '3': 1,
+              '4': 1,
+              '5': 1,
+            }),
           },
         ],
       },
@@ -1233,13 +1240,13 @@ const CHATS_LIST_MOCK = [
                 image: '',
               },
             ],
-            unseenMessagesByUsers: {
+            unseenMessagesByUsers: JSON.stringify({
               '1': 1,
               '2': 1,
               '3': 1,
               '4': 1,
               '5': 1,
-            },
+            }),
           },
           {
             _id: '65844efc814ddgh4003db811c4',
@@ -1312,6 +1319,13 @@ const CHATS_LIST_MOCK = [
                 image: '',
               },
             ],
+            unseenMessagesByUsers: JSON.stringify({
+              '1': 1,
+              '2': 1,
+              '3': 1,
+              '4': 1,
+              '5': 1,
+            }),
           },
         ],
       },
@@ -1328,7 +1342,7 @@ const CHATS_LIST_MOCK = [
       data: {
         chatsByUserId: [
           {
-            _id: '65844efc814dd40fgh03db811c4',
+            _id: '65844efc814dd40fggfdh03db811c4',
             isGroup: true,
             creator: {
               _id: '64378abd85008f171cf2990d',
@@ -1398,13 +1412,13 @@ const CHATS_LIST_MOCK = [
                 image: '',
               },
             ],
-            unseenMessagesByUsers: {
+            unseenMessagesByUsers: JSON.stringify({
               '1': 1,
               '2': 1,
               '3': 1,
               '4': 1,
               '5': 1,
-            },
+            }),
           },
           {
             _id: '65844efc814ddgh4003db811c4',
@@ -1477,6 +1491,13 @@ const CHATS_LIST_MOCK = [
                 image: '',
               },
             ],
+            unseenMessagesByUsers: JSON.stringify({
+              '1': 1,
+              '2': 1,
+              '3': 1,
+              '4': 1,
+              '5': 1,
+            }),
           },
         ],
       },
@@ -1493,7 +1514,7 @@ const CHATS_LIST_MOCK = [
       data: {
         chatsByUserId: [
           {
-            _id: '65844efc814dd40fgh03db811c4',
+            _id: '65844efc814dd40wasxfgh03db811c4',
             isGroup: true,
             creator: {
               _id: '64378abd85008f171cf2990d',
@@ -1563,13 +1584,13 @@ const CHATS_LIST_MOCK = [
                 image: '',
               },
             ],
-            unseenMessagesByUsers: {
+            unseenMessagesByUsers: JSON.stringify({
               '1': 1,
               '2': 1,
               '3': 1,
               '4': 1,
               '5': 1,
-            },
+            }),
           },
           {
             _id: '65844efc814ddgh4003db811c4',
@@ -1642,6 +1663,13 @@ const CHATS_LIST_MOCK = [
                 image: '',
               },
             ],
+            unseenMessagesByUsers: JSON.stringify({
+              '1': 1,
+              '2': 1,
+              '3': 1,
+              '4': 1,
+              '5': 1,
+            }),
           },
         ],
       },
@@ -1728,13 +1756,13 @@ const CHATS_LIST_MOCK = [
                 image: '',
               },
             ],
-            unseenMessagesByUsers: {
+            unseenMessagesByUsers: JSON.stringify({
               '1': 1,
               '2': 1,
               '3': 1,
               '4': 1,
               '5': 1,
-            },
+            }),
           },
           {
             _id: 'ujhgtrdtyuiop',
@@ -1807,6 +1835,13 @@ const CHATS_LIST_MOCK = [
                 image: '',
               },
             ],
+            unseenMessagesByUsers: JSON.stringify({
+              '1': 1,
+              '2': 1,
+              '3': 1,
+              '4': 1,
+              '5': 1,
+            }),
           },
         ],
       },
@@ -1893,13 +1928,13 @@ const CHATS_LIST_MOCK = [
                 image: '',
               },
             ],
-            unseenMessagesByUsers: {
+            unseenMessagesByUsers: JSON.stringify({
               '1': 1,
               '2': 1,
               '3': 1,
               '4': 1,
               '5': 1,
-            },
+            }),
           },
           {
             _id: '65844ewsedrffc814dd4003db811c4',
@@ -1972,6 +2007,13 @@ const CHATS_LIST_MOCK = [
                 image: '',
               },
             ],
+            unseenMessagesByUsers: JSON.stringify({
+              '1': 1,
+              '2': 1,
+              '3': 1,
+              '4': 1,
+              '5': 1,
+            }),
           },
         ],
       },
@@ -2058,13 +2100,13 @@ const CHATS_LIST_MOCK = [
                 image: '',
               },
             ],
-            unseenMessagesByUsers: {
+            unseenMessagesByUsers: JSON.stringify({
               '1': 1,
               '2': 1,
               '3': 1,
               '4': 1,
               '5': 1,
-            },
+            }),
           },
           {
             _id: '65844ewsedrffc814dd4003db811c4',
@@ -2137,6 +2179,13 @@ const CHATS_LIST_MOCK = [
                 image: '',
               },
             ],
+            unseenMessagesByUsers: JSON.stringify({
+              '1': 1,
+              '2': 1,
+              '3': 1,
+              '4': 1,
+              '5': 1,
+            }),
           },
         ],
       },
@@ -2223,13 +2272,13 @@ const CHATS_LIST_MOCK = [
                 image: '',
               },
             ],
-            unseenMessagesByUsers: {
+            unseenMessagesByUsers: JSON.stringify({
               '1': 1,
               '2': 1,
               '3': 1,
               '4': 1,
               '5': 1,
-            },
+            }),
           },
           {
             _id: '65844ewsedrffc814dd4003db811c4',
@@ -2302,6 +2351,13 @@ const CHATS_LIST_MOCK = [
                 image: '',
               },
             ],
+            unseenMessagesByUsers: JSON.stringify({
+              '1': 1,
+              '2': 1,
+              '3': 1,
+              '4': 1,
+              '5': 1,
+            }),
           },
         ],
       },
@@ -2388,13 +2444,13 @@ const CHATS_LIST_MOCK = [
                 image: '',
               },
             ],
-            unseenMessagesByUsers: {
+            unseenMessagesByUsers: JSON.stringify({
               '1': 1,
               '2': 1,
               '3': 1,
               '4': 1,
               '5': 1,
-            },
+            }),
           },
           {
             _id: '65844ewsedrffc814dd4003db811c4',
@@ -2467,6 +2523,13 @@ const CHATS_LIST_MOCK = [
                 image: '',
               },
             ],
+            unseenMessagesByUsers: JSON.stringify({
+              '1': 1,
+              '2': 1,
+              '3': 1,
+              '4': 1,
+              '5': 1,
+            }),
           },
         ],
       },
@@ -2555,13 +2618,13 @@ const GROUP_CHAT_BY_ID_QUERY_MOCK = [
               image: '',
             },
           ],
-          unseenMessagesByUsers: {
-            '1': 0,
-            '2': 0,
-            '3': 0,
-            '4': 0,
-            '5': 0,
-          },
+          unseenMessagesByUsers: JSON.stringify({
+            '1': 1,
+            '2': 1,
+            '3': 1,
+            '4': 1,
+            '5': 1,
+          }),
         },
       },
     },

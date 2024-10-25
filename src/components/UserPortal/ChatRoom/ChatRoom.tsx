@@ -60,7 +60,6 @@ type DirectMessage = {
       }
     | undefined;
   messageContent: string;
-  type: string;
 };
 
 type Chat = {
@@ -75,6 +74,7 @@ type Chat = {
     lastName: string;
     email: string;
   }[];
+  unseenMessagesByUsers: JSON;
 };
 
 export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
@@ -116,7 +116,6 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
       chatId: props.selectedContact,
       replyTo: replyToDirectMessage?._id,
       messageContent: newMessage,
-      type: 'STRING',
     },
   });
 

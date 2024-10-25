@@ -22,7 +22,7 @@ interface InterfaceContactCardProps {
   setSelectedContact: React.Dispatch<React.SetStateAction<string>>;
   isGroup: boolean;
   unseenMessages: number;
-  lastMessage: any;
+  lastMessage: string;
 }
 /**
  * The `chat` component provides a user interface for interacting with contacts and chat rooms within an organization.
@@ -50,14 +50,60 @@ interface InterfaceContactCardProps {
  *
  * @returns  The rendered `chat` component.
  */
+
+type DirectMessage = {
+  _id: string;
+  createdAt: Date;
+  sender: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    image: string;
+  };
+  replyTo:
+    | {
+        _id: string;
+        createdAt: Date;
+        sender: {
+          _id: string;
+          firstName: string;
+          lastName: string;
+          image: string;
+        };
+        messageContent: string;
+        receiver: {
+          _id: string;
+          firstName: string;
+          lastName: string;
+        };
+      }
+    | undefined;
+  messageContent: string;
+};
+
+type Chat = {
+  _id: string;
+  isGroup: boolean;
+  name: string;
+  image: string;
+  messages: DirectMessage[];
+  users: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    image: string;
+  }[];
+  unseenMessagesByUsers: string;
+};
 export default function chat(): JSX.Element {
   const { t } = useTranslation('translation', {
-    keyPrefix: 'chat',
+    keyPrefix: 'userChat',
   });
   const { t: tCommon } = useTranslation('common');
 
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
-  const [chats, setChats] = useState<any>([]);
+  const [chats, setChats] = useState<Chat[]>([]);
   const [selectedContact, setSelectedContact] = useState('');
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
@@ -122,14 +168,7 @@ export default function chat(): JSX.Element {
 
   React.useEffect(() => {
     if (chatsListData && chatsListData?.chatsByUserId.length) {
-      const chatList = chatsListData.chatsByUserId.map((chat: any) => {
-        const parsedChat = {
-          ...chat,
-          unseenMessagesByUsers: JSON.parse(chat.unseenMessagesByUsers),
-        };
-        return parsedChat;
-      });
-      setChats(chatList);
+      setChats(chatsListData.chatsByUserId);
     }
   }, [chatsListData]);
 
@@ -180,7 +219,7 @@ export default function chat(): JSX.Element {
             <div
               className={`d-flex justify-content-between ${styles.addChatContainer}`}
             >
-              <h4>Messages</h4>
+              <h4>{t('messages')}</h4>
               <Dropdown style={{ cursor: 'pointer' }}>
                 <Dropdown.Toggle
                   className={styles.customToggle}
@@ -193,13 +232,13 @@ export default function chat(): JSX.Element {
                     onClick={openCreateDirectChatModal}
                     data-testid="newDirectChat"
                   >
-                    New Chat
+                    {t('newChat')}
                   </Dropdown.Item>
                   <Dropdown.Item
                     onClick={openCreateGroupChatModal}
                     data-testid="newGroupChat"
                   >
-                    New Group Chat
+                    {t('newGroupChat')}
                   </Dropdown.Item>
                   <Dropdown.Item href="#/action-3">
                     Starred Messages
@@ -210,7 +249,7 @@ export default function chat(): JSX.Element {
             <div className={styles.contactListContainer}>
               {chatsListLoading ? (
                 <div className={`d-flex flex-row justify-content-center`}>
-                  <HourglassBottomIcon /> <span>Loading...</span>
+                  <HourglassBottomIcon /> <span>{tCommon('loading')}</span>
                 </div>
               ) : (
                 <div
@@ -218,7 +257,7 @@ export default function chat(): JSX.Element {
                   className={styles.contactCardContainer}
                 >
                   {!!chats.length &&
-                    chats.map((chat: any) => {
+                    chats.map((chat: Chat) => {
                       const cardProps: InterfaceContactCardProps = {
                         id: chat._id,
                         title: !chat.isGroup
@@ -234,7 +273,9 @@ export default function chat(): JSX.Element {
                         setSelectedContact,
                         selectedContact,
                         isGroup: chat.isGroup,
-                        unseenMessages: chat.unseenMessagesByUsers[userId],
+                        unseenMessages: JSON.parse(chat.unseenMessagesByUsers)[
+                          userId
+                        ],
                         lastMessage:
                           chat.messages[chat.messages.length - 1]
                             ?.messageContent,
