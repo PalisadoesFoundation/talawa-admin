@@ -11,6 +11,8 @@ import type {
   InterfaceActionItemCategoryList,
   InterfaceActionItemInfo,
   InterfaceEventVolunteerInfo,
+  InterfaceMemberInfo,
+  InterfaceMembersList,
   InterfaceVolunteerGroupInfo,
 } from 'utils/interfaces';
 import { useTranslation } from 'react-i18next';
@@ -27,13 +29,14 @@ import {
   EVENT_VOLUNTEER_LIST,
 } from 'GraphQl/Queries/EventVolunteerQueries';
 import { HiUser, HiUserGroup } from 'react-icons/hi2';
+import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 
 /**
  * Interface for the form state used in the `ItemModal` component.
  */
 interface InterfaceFormStateType {
   dueDate: Date;
-  assigneeType: 'EventVolunteer' | 'EventVolunteerGroup';
+  assigneeType: 'EventVolunteer' | 'EventVolunteerGroup' | 'User';
   actionItemCategoryId: string;
   assigneeId: string;
   eventId?: string;
@@ -50,7 +53,7 @@ export interface InterfaceItemModalProps {
   isOpen: boolean;
   hide: () => void;
   orgId: string;
-  eventId: string;
+  eventId: string | undefined;
   actionItemsRefetch: () => void;
   actionItem: InterfaceActionItemInfo | null;
   editMode: boolean;
@@ -68,8 +71,12 @@ const initializeFormState = (
 ): InterfaceFormStateType => ({
   dueDate: actionItem?.dueDate || new Date(),
   actionItemCategoryId: actionItem?.actionItemCategory?._id || '',
-  assigneeId: actionItem?.assignee?._id || actionItem?.assigneeGroup?._id || '',
-  assigneeType: actionItem?.assigneeType || 'EventVolunteer',
+  assigneeId:
+    actionItem?.assignee?._id ||
+    actionItem?.assigneeGroup?._id ||
+    actionItem?.assigneeUser?._id ||
+    '',
+  assigneeType: actionItem?.assigneeType || 'User',
   preCompletionNotes: actionItem?.preCompletionNotes || '',
   postCompletionNotes: actionItem?.postCompletionNotes || null,
   allotedHours: actionItem?.allotedHours || null,
@@ -102,6 +109,10 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
   );
   const [assigneeGroup, setAssigneeGroup] =
     useState<InterfaceVolunteerGroupInfo | null>(null);
+
+  const [assigneeUser, setAssigneeUser] = useState<InterfaceMemberInfo | null>(
+    null,
+  );
 
   const [formState, setFormState] = useState<InterfaceFormStateType>(
     initializeFormState(actionItem),
@@ -170,6 +181,22 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
     },
   });
 
+  /**
+   * Query to fetch members of the organization.
+   */
+  const {
+    data: membersData,
+  }: {
+    data: InterfaceMembersList | undefined;
+  } = useQuery(MEMBERS_LIST, {
+    variables: { id: orgId },
+  });
+
+  const members = useMemo(
+    () => membersData?.organizations[0].members || [],
+    [membersData],
+  );
+
   const volunteers = useMemo(
     () => volunteersData?.getEventVolunteers || [],
     [volunteersData],
@@ -225,7 +252,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
           actionItemCategoryId: actionItemCategory?._id,
           preCompletionNotes: preCompletionNotes,
           allotedHours: allotedHours,
-          eventId: eventId,
+          ...(eventId && { eventId }),
         },
       });
 
@@ -270,6 +297,13 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
       if (
         assigneeId !== actionItem?.assigneeGroup?._id &&
         assigneeType === 'EventVolunteerGroup'
+      ) {
+        updatedFields.assigneeId = assigneeId;
+      }
+
+      if (
+        assigneeId !== actionItem?.assigneeUser?._id &&
+        assigneeType === 'User'
       ) {
         updatedFields.assigneeId = assigneeId;
       }
@@ -333,7 +367,11 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
       groups.find((group) => group._id === actionItem?.assigneeGroup?._id) ||
         null,
     );
-  }, [actionItem, actionItemCategories, volunteers, groups]);
+    setAssigneeUser(
+      members.find((member) => member._id === actionItem?.assigneeUser?._id) ||
+        null,
+    );
+  }, [actionItem, actionItemCategories, volunteers, groups, members]);
 
   return (
     <Modal className={styles.itemModal} show={isOpen} onHide={hide}>
@@ -408,48 +446,53 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
           </Form.Group>
           {!isCompleted && (
             <>
-              <Form.Label className="my-0 py-0">{t('assignTo')}</Form.Label>
-              <div
-                className={`btn-group ${styles.toggleGroup} mt-0`}
-                role="group"
-                aria-label="Basic radio toggle button group"
-              >
-                <input
-                  type="radio"
-                  className={`btn-check ${styles.toggleBtn}`}
-                  name="btnradio"
-                  id="individualRadio"
-                  checked={assigneeType === 'EventVolunteer'}
-                  onChange={() =>
-                    handleFormChange('assigneeType', 'EventVolunteer')
-                  }
-                />
-                <label
-                  className={`btn btn-outline-primary ${styles.toggleBtn}`}
-                  htmlFor="individualRadio"
-                >
-                  <HiUser className="me-1" />
-                  {t('individuals')}
-                </label>
+              {assigneeType !== 'User' && (
+                <>
+                  <Form.Label className="my-0 py-0">{t('assignTo')}</Form.Label>
+                  <div
+                    className={`btn-group ${styles.toggleGroup} mt-0`}
+                    role="group"
+                    aria-label="Basic radio toggle button group"
+                  >
+                    <input
+                      type="radio"
+                      className={`btn-check ${styles.toggleBtn}`}
+                      name="btnradio"
+                      id="individualRadio"
+                      checked={assigneeType === 'EventVolunteer'}
+                      onChange={() =>
+                        handleFormChange('assigneeType', 'EventVolunteer')
+                      }
+                    />
+                    <label
+                      className={`btn btn-outline-primary ${styles.toggleBtn}`}
+                      htmlFor="individualRadio"
+                    >
+                      <HiUser className="me-1" />
+                      {t('individuals')}
+                    </label>
 
-                <input
-                  type="radio"
-                  className={`btn-check ${styles.toggleBtn}`}
-                  name="btnradio"
-                  id="groupsRadio"
-                  onChange={() =>
-                    handleFormChange('assigneeType', 'EventVolunteerGroup')
-                  }
-                  checked={assigneeType === 'EventVolunteerGroup'}
-                />
-                <label
-                  className={`btn btn-outline-primary ${styles.toggleBtn}`}
-                  htmlFor="groupsRadio"
-                >
-                  <HiUserGroup className="me-1" />
-                  {t('groups')}
-                </label>
-              </div>
+                    <input
+                      type="radio"
+                      className={`btn-check ${styles.toggleBtn}`}
+                      name="btnradio"
+                      id="groupsRadio"
+                      onChange={() =>
+                        handleFormChange('assigneeType', 'EventVolunteerGroup')
+                      }
+                      checked={assigneeType === 'EventVolunteerGroup'}
+                    />
+                    <label
+                      className={`btn btn-outline-primary ${styles.toggleBtn}`}
+                      htmlFor="groupsRadio"
+                    >
+                      <HiUserGroup className="me-1" />
+                      {t('groups')}
+                    </label>
+                  </div>
+                </>
+              )}
+
               {assigneeType === 'EventVolunteer' ? (
                 <Form.Group className="mb-3 w-100">
                   <Autocomplete
@@ -476,7 +519,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                     )}
                   />
                 </Form.Group>
-              ) : (
+              ) : assigneeType === 'EventVolunteerGroup' ? (
                 <Form.Group className="mb-3 w-100">
                   <Autocomplete
                     className={`${styles.noOutline} w-100`}
@@ -501,6 +544,30 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                         label={t('volunteerGroups')}
                         required
                       />
+                    )}
+                  />
+                </Form.Group>
+              ) : (
+                <Form.Group className="mb-3 w-100">
+                  <Autocomplete
+                    className={`${styles.noOutline} w-100`}
+                    data-testid="memberSelect"
+                    options={members}
+                    value={assigneeUser}
+                    isOptionEqualToValue={(option, value) =>
+                      option._id === value._id
+                    }
+                    filterSelectedOptions={true}
+                    getOptionLabel={(member: InterfaceMemberInfo): string =>
+                      `${member.firstName} ${member.lastName}`
+                    }
+                    onChange={(_, newAssignee): void => {
+                      /* istanbul ignore next */
+                      handleFormChange('assigneeId', newAssignee?._id ?? '');
+                      setAssigneeUser(newAssignee);
+                    }}
+                    renderInput={(params) => (
+                      <TextField {...params} label={t('assignee')} required />
                     )}
                   />
                 </Form.Group>

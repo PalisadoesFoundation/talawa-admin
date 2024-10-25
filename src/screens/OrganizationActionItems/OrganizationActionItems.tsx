@@ -84,7 +84,7 @@ function organizationActionItems(): JSX.Element {
   // Get the organization ID from URL parameters
   const { orgId, eventId } = useParams();
 
-  if (!orgId || !eventId) {
+  if (!orgId) {
     return <Navigate to={'/'} replace />;
   }
 
@@ -186,11 +186,11 @@ function organizationActionItems(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         const { _id, firstName, lastName, image } =
-          params.row.assignee?.user || {};
+          params.row.assigneeUser || params.row.assignee?.user || {};
 
         return (
           <>
-            {params.row.assigneeType === 'EventVolunteer' ? (
+            {params.row.assigneeType !== 'EventVolunteerGroup' ? (
               <>
                 <div
                   className="d-flex fw-bold align-items-center ms-2"

@@ -79,6 +79,9 @@ export const EVENT_VOLUNTEER_GROUP_LIST = gql`
         allotedHours
         isCompleted
       }
+      event {
+        _id
+      }
     }
   }
 `;
@@ -109,6 +112,22 @@ export const USER_VOLUNTEER_MEMBERSHIP = gql`
       group {
         _id
         name
+      }
+    }
+  }
+`;
+
+export const VOLUNTEER_RANKING = gql`
+  query GetVolunteerRanks($orgId: ID!, $where: VolunteerRankWhereInput!) {
+    getVolunteerRanks(orgId: $orgId, where: $where) {
+      rank
+      hoursVolunteered
+      user {
+        _id
+        lastName
+        firstName
+        image
+        email
       }
     }
   }

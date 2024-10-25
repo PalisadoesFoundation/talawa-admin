@@ -18,6 +18,7 @@ import OrganizationDashboard from 'screens/OrganizationDashboard/OrganizationDas
 import OrganizationEvents from 'screens/OrganizationEvents/OrganizationEvents';
 import OrganizaitionFundCampiagn from 'screens/OrganizationFundCampaign/OrganizationFundCampagins';
 import OrganizationFunds from 'screens/OrganizationFunds/OrganizationFunds';
+import FundCampaignPledge from 'screens/FundCampaignPledge/FundCampaignPledge';
 import OrganizationPeople from 'screens/OrganizationPeople/OrganizationPeople';
 import OrganizationTags from 'screens/OrganizationTags/OrganizationTags';
 import ManageTag from 'screens/ManageTag/ManageTag';
@@ -27,6 +28,7 @@ import Requests from 'screens/Requests/Requests';
 import Users from 'screens/Users/Users';
 import CommunityProfile from 'screens/CommunityProfile/CommunityProfile';
 import OrganizationVenues from 'screens/OrganizationVenues/OrganizationVenues';
+import Leaderboard from 'screens/Leaderboard/Leaderboard';
 
 import React, { useEffect } from 'react';
 // User Portal Components
@@ -41,7 +43,6 @@ import { useQuery } from '@apollo/client';
 import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
 import Advertisements from 'components/Advertisements/Advertisements';
 import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/SecuredRouteForUser';
-import FundCampaignPledge from 'screens/FundCampaignPledge/FundCampaignPledge';
 
 import useLocalStorage from 'utils/useLocalstorage';
 import UserScreen from 'screens/UserPortal/UserScreen/UserScreen';
@@ -179,6 +180,7 @@ function app(): JSX.Element {
             <Route path="/orgads/:orgId" element={<Advertisements />} />
             <Route path="/blockuser/:orgId" element={<BlockUser />} />
             <Route path="/orgvenues/:orgId" element={<OrganizationVenues />} />
+            <Route path="/leaderboard/:orgId" element={<Leaderboard />} />
             {extraRoutes}
           </Route>
         </Route>

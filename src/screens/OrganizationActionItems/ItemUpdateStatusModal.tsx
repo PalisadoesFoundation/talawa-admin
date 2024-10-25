@@ -55,7 +55,9 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
           assigneeId:
             actionItem?.assigneeType === 'EventVolunteer'
               ? actionItem?.assignee?._id
-              : actionItem?.assigneeGroup?._id,
+              : actionItem?.assigneeType === 'EventVolunteerGroup'
+                ? actionItem?.assigneeGroup?._id
+                : actionItem?.assigneeUser?._id,
           assigneeType: actionItem?.assigneeType,
           postCompletionNotes: isCompleted ? '' : postCompletionNotes,
           isCompleted: !isCompleted,

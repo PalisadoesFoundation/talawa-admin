@@ -6,10 +6,11 @@ import { FaChevronLeft, FaTasks } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 import { Button, Dropdown } from 'react-bootstrap';
 import { TbCalendarEvent } from 'react-icons/tb';
-import { FaRegEnvelopeOpen } from 'react-icons/fa6';
+import { FaRegEnvelopeOpen, FaUserGroup } from 'react-icons/fa6';
 import UpcomingEvents from './UpcomingEvents/UpcomingEvents';
 import Invitations from './Invitations/Invitations';
 import Actions from './Actions/Actions';
+import Groups from './Groups/Groups';
 
 /**
  * List of tabs for the volunteer dashboard.
@@ -32,12 +33,16 @@ const volunteerDashboardTabs: {
     value: 'actions',
     icon: <FaTasks size={18} className="me-2" />,
   },
+  {
+    value: 'groups',
+    icon: <FaUserGroup size={18} className="me-2" />,
+  },
 ];
 
 /**
  * Tab options for the volunteer management component.
  */
-type TabOptions = 'upcomingEvents' | 'invitations' | 'actions';
+type TabOptions = 'upcomingEvents' | 'invitations' | 'actions' | 'groups';
 
 /**
  * `VolunteerManagement` component handles the display and navigation of different event management sections.
@@ -190,6 +195,12 @@ const VolunteerManagement = (): JSX.Element => {
             return (
               <div data-testid="actionsTab">
                 <Actions />
+              </div>
+            );
+          case 'groups':
+            return (
+              <div data-testid="groupsTab">
+                <Groups />
               </div>
             );
         }

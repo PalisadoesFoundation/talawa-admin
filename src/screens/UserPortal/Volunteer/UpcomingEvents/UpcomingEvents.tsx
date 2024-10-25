@@ -12,15 +12,14 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-} from '@mui/material';
-import { Circle, Search, Sort, WarningAmberRounded } from '@mui/icons-material';
-import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
   Chip,
   Stack,
 } from '@mui/material';
+import { Circle, Search, Sort, WarningAmberRounded } from '@mui/icons-material';
+
 import { GridExpandMoreIcon } from '@mui/x-data-grid';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useMutation, useQuery } from '@apollo/client';
@@ -30,6 +29,7 @@ import Loader from 'components/Loader/Loader';
 import { USER_EVENTS_VOLUNTEER } from 'GraphQl/Queries/PlugInQueries';
 import { CREATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
 import { toast } from 'react-toastify';
+import { FaCheck } from 'react-icons/fa';
 
 /**
  * The `UpcomingEvents` component displays list of upcoming events for the user to volunteer.
@@ -59,7 +59,6 @@ const UpcomingEvents = (): JSX.Element => {
   const [searchValue, setSearchValue] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [searchBy, setSearchBy] = useState<'title' | 'location'>('title');
-  const [_, setSortBy] = useState<'endDate_ASC' | 'endDate_DESC' | null>(null);
 
   const [createVolunteerMembership] = useMutation(CREATE_VOLUNTEER_MEMBERSHIP);
 
@@ -197,31 +196,6 @@ const UpcomingEvents = (): JSX.Element => {
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
-            <Dropdown>
-              <Dropdown.Toggle
-                variant="success"
-                id="dropdown-basic"
-                className={styles.dropdown}
-                data-testid="filter"
-              >
-                <Sort className={'me-1'} />
-                {tCommon('sort')}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => setSortBy('endDate_DESC')}
-                  data-testid="endDate_DESC"
-                >
-                  {t('latestEndDate')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => setSortBy('endDate_ASC')}
-                  data-testid="endDate_ASC"
-                >
-                  {t('earliestEndDate')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
           </div>
         </div>
       </div>
@@ -288,7 +262,12 @@ const UpcomingEvents = (): JSX.Element => {
                       disabled={isVolunteered || new Date(endDate) < new Date()}
                       onClick={() => handleVolunteer(_id, null, 'requested')}
                     >
-                      <IoIosHand className="me-1" size={21} />
+                      {isVolunteered ? (
+                        <FaCheck className="me-1" />
+                      ) : (
+                        <IoIosHand className="me-1" size={21} />
+                      )}
+
                       {t(isVolunteered ? 'volunteered' : 'volunteer')}
                     </Button>
                   </div>

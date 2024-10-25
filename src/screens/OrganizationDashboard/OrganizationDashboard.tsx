@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Button, Card } from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
@@ -21,13 +21,18 @@ import CardItemLoading from 'components/OrganizationDashCards/CardItemLoading';
 import DashBoardCard from 'components/OrganizationDashCards/DashboardCard';
 import DashboardCardLoading from 'components/OrganizationDashCards/DashboardCardLoading';
 import { useNavigate, useParams } from 'react-router-dom';
+import gold from 'assets/images/gold.png';
+import silver from 'assets/images/silver.png';
+import bronze from 'assets/images/bronze.png';
 import { toast } from 'react-toastify';
 import type {
   InterfaceQueryOrganizationEventListItem,
   InterfaceQueryOrganizationPostListItem,
   InterfaceQueryOrganizationsListObject,
+  InterfaceVolunteerRank,
 } from 'utils/interfaces';
 import styles from './OrganizationDashboard.module.css';
+import { VOLUNTEER_RANKING } from 'GraphQl/Queries/EventVolunteerQueries';
 
 /**
  * Component for displaying the organization dashboard.
@@ -40,11 +45,13 @@ function organizationDashboard(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'dashboard' });
   const { t: tCommon } = useTranslation('common');
   document.title = t('title');
-  const { orgId: currentUrl } = useParams();
-  const peopleLink = `/orgpeople/${currentUrl}`;
-  const postsLink = `/orgpost/${currentUrl}`;
-  const eventsLink = `/orgevents/${currentUrl}`;
-  const blockUserLink = `/blockuser/${currentUrl}`;
+  const { orgId } = useParams();
+
+  const leaderboardLink = `/leaderboard/${orgId}`;
+  const peopleLink = `/orgpeople/${orgId}`;
+  const postsLink = `/orgpost/${orgId}`;
+  const eventsLink = `/orgevents/${orgId}`;
+  const blockUserLink = `/blockuser/${orgId}`;
   const requestLink = '/requests';
 
   const navigate = useNavigate();
@@ -66,8 +73,35 @@ function organizationDashboard(): JSX.Element {
     loading: boolean;
     error?: ApolloError;
   } = useQuery(ORGANIZATIONS_LIST, {
-    variables: { id: currentUrl },
+    variables: { id: orgId },
   });
+
+  /**
+   * Query to fetch vvolunteer rankings.
+   */
+  const {
+    data: rankingsData,
+    loading: rankingsLoading,
+  }: {
+    data?: {
+      getVolunteerRanks: InterfaceVolunteerRank[];
+    };
+    loading: boolean;
+  } = useQuery(VOLUNTEER_RANKING, {
+    variables: {
+      orgId,
+      where: {
+        order_by: 'hours_DESC',
+        time_frame: 'allTime',
+        limit: 3,
+      },
+    },
+  });
+
+  const rankings = useMemo(
+    () => rankingsData?.getVolunteerRanks || [],
+    [rankingsData],
+  );
 
   /**
    * Query to fetch posts for the organization.
@@ -83,7 +117,7 @@ function organizationDashboard(): JSX.Element {
     loading: boolean;
     error?: ApolloError;
   } = useQuery(ORGANIZATION_POST_LIST, {
-    variables: { id: currentUrl, first: 10 },
+    variables: { id: orgId, first: 10 },
   });
 
   /**
@@ -95,7 +129,7 @@ function organizationDashboard(): JSX.Element {
     error: errorEvent,
   } = useQuery(ORGANIZATION_EVENT_CONNECTION_LIST, {
     variables: {
-      organization_id: currentUrl,
+      organization_id: orgId,
     },
   });
 
@@ -325,44 +359,109 @@ function organizationDashboard(): JSX.Element {
           </Row>
         </Col>
         <Col xl={4}>
-          <Card border="0" className="rounded-4">
-            <div className={styles.cardHeader}>
-              <div className={styles.cardTitle}>{t('membershipRequests')}</div>
-              <Button
-                size="sm"
-                variant="light"
-                data-testid="viewAllMembershipRequests"
-                onClick={(): void => {
-                  toast.success('Coming soon!');
-                }}
-              >
-                {t('viewAll')}
-              </Button>
-            </div>
-            <Card.Body className={styles.cardBody}>
-              {loadingOrgData ? (
-                [...Array(4)].map((_, index) => {
-                  return <CardItemLoading key={index} />;
-                })
-              ) : data?.organizations[0].membershipRequests.length == 0 ? (
-                <div className={styles.emptyContainer}>
-                  <h6>{t('noMembershipRequests')}</h6>
+          <Row className="mb-4">
+            <Card border="0" className="rounded-4" style={{ height: '220px' }}>
+              <div className={styles.cardHeader}>
+                <div className={styles.cardTitle}>
+                  {t('membershipRequests')}
                 </div>
-              ) : (
-                data?.organizations[0]?.membershipRequests
-                  .slice(0, 8)
-                  .map((request) => {
+                <Button
+                  size="sm"
+                  variant="light"
+                  data-testid="viewAllMembershipRequests"
+                  onClick={(): void => {
+                    toast.success('Coming soon!');
+                  }}
+                >
+                  {t('viewAll')}
+                </Button>
+              </div>
+              <Card.Body
+                className={styles.cardBody}
+                style={{ height: '150px' }}
+              >
+                {loadingOrgData ? (
+                  [...Array(4)].map((_, index) => {
+                    return <CardItemLoading key={index} />;
+                  })
+                ) : data?.organizations[0].membershipRequests.length == 0 ? (
+                  <div
+                    className={styles.emptyContainer}
+                    style={{ height: '150px' }}
+                  >
+                    <h6>{t('noMembershipRequests')}</h6>
+                  </div>
+                ) : (
+                  data?.organizations[0]?.membershipRequests
+                    .slice(0, 8)
+                    .map((request) => {
+                      return (
+                        <CardItem
+                          type="MembershipRequest"
+                          key={request._id}
+                          title={`${request.user.firstName} ${request.user.lastName}`}
+                        />
+                      );
+                    })
+                )}
+              </Card.Body>
+            </Card>
+          </Row>
+          <Row>
+            <Card border="0" className="rounded-4">
+              <div className={styles.cardHeader}>
+                <div className={styles.cardTitle}>{t('volunteerRankings')}</div>
+                <Button
+                  size="sm"
+                  variant="light"
+                  data-testid="viewAllLeadeboard"
+                  onClick={(): void => navigate(leaderboardLink)}
+                >
+                  {t('viewAll')}
+                </Button>
+              </div>
+              <Card.Body className={styles.cardBody} style={{ padding: '0px' }}>
+                {rankingsLoading ? (
+                  [...Array(3)].map((_, index) => {
+                    return <CardItemLoading key={index} />;
+                  })
+                ) : rankings.length == 0 ? (
+                  <div className={styles.emptyContainer}>
+                    <h6>{t('noVolunteers')}</h6>
+                  </div>
+                ) : (
+                  rankings.map(({ rank, user, hoursVolunteered }, index) => {
                     return (
-                      <CardItem
-                        type="MembershipRequest"
-                        key={request._id}
-                        title={`${request.user.firstName} ${request.user.lastName}`}
-                      />
+                      <>
+                        <div className="d-flex ms-4 mt-1 mb-3">
+                          <div className="fw-bold me-2">
+                            {rank <= 3 ? (
+                              <img
+                                src={
+                                  rank === 1
+                                    ? gold
+                                    : rank === 2
+                                      ? silver
+                                      : bronze
+                                }
+                                alt="gold"
+                                className={styles.rankings}
+                              />
+                            ) : (
+                              rank
+                            )}
+                          </div>
+                          <div className="me-2 mt-2">{`${user.firstName} ${user.lastName}`}</div>
+                          <div className="mt-2">- {hoursVolunteered} hours</div>
+                        </div>
+                        {index < 2 && <hr />}
+                      </>
                     );
                   })
-              )}
-            </Card.Body>
-          </Card>
+                )}
+              </Card.Body>
+            </Card>
+          </Row>
         </Col>
       </Row>
     </>

@@ -38,6 +38,12 @@ export const ACTION_ITEM_LIST = gql`
         _id
         name
       }
+      assigneeUser {
+        _id
+        firstName
+        lastName
+        image
+      }
       assigneeType
       assigner {
         _id

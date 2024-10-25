@@ -28,9 +28,10 @@ export interface InterfaceActionItemCategoryList {
 
 export interface InterfaceActionItemInfo {
   _id: string;
-  assigneeType: 'EventVolunteer' | 'EventVolunteerGroup';
+  assigneeType: 'EventVolunteer' | 'EventVolunteerGroup' | 'User';
   assignee: InterfaceEventVolunteerInfo | null;
   assigneeGroup: InterfaceVolunteerGroupInfo | null;
+  assigneeUser: InterfaceUserInfo | null;
   assigner: InterfaceUserInfo;
   actionItemCategory: {
     _id: string;
@@ -581,6 +582,9 @@ export interface InterfaceVolunteerGroupInfo {
   _id: string;
   name: string;
   description: string;
+  event: {
+    _id: string;
+  };
   volunteersRequired: number;
   createdAt: string;
   creator: InterfaceUserInfo;
@@ -650,5 +654,17 @@ export interface InterfaceVolunteerMembership {
   group: {
     _id: string;
     name: string;
+  };
+}
+
+export interface InterfaceVolunteerRank {
+  rank: number;
+  hoursVolunteered: number;
+  user: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    image: string | null;
   };
 }
