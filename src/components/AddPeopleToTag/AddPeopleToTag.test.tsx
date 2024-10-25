@@ -153,12 +153,17 @@ describe('Organisation Tags Page', () => {
     // Find the infinite scroll div by test ID or another selector
     const scrollableDiv = screen.getByTestId('scrollableDiv');
 
+    const initialMemberDataLength = screen.getAllByTestId('memberName').length;
+
     // Set scroll position to the bottom
     fireEvent.scroll(scrollableDiv, {
       target: { scrollY: scrollableDiv.scrollHeight },
     });
 
     await waitFor(() => {
+      const finalMemberDataLength = screen.getAllByTestId('memberName').length;
+      expect(finalMemberDataLength).toBeGreaterThan(initialMemberDataLength);
+
       expect(getByText(translations.addPeople)).toBeInTheDocument();
     });
   });

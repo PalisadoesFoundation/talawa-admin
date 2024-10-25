@@ -92,7 +92,7 @@ export const USER_TAG_SUB_TAGS = gql`
  */
 
 export const USER_TAGS_MEMBERS_TO_ASSIGN_TO = gql`
-  query UserTagDetails(
+  query GetMembersToAssignTo(
     $id: ID!
     $after: String
     $before: String
