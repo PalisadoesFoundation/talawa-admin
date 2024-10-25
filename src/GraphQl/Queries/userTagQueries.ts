@@ -85,6 +85,48 @@ export const USER_TAG_SUB_TAGS = gql`
 `;
 
 /**
+ * GraphQL query to retrieve organization members that aren't assigned a certain tag.
+ *
+ * @param id - The ID of the tag.
+ * @returns The list of organization members.
+ */
+
+export const USER_TAGS_MEMBERS_TO_ASSIGN_TO = gql`
+  query UserTagDetails(
+    $id: ID!
+    $after: String
+    $before: String
+    $first: PositiveInt
+    $last: PositiveInt
+  ) {
+    getUserTag(id: $id) {
+      name
+      usersToAssignTo(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+      ) {
+        edges {
+          node {
+            _id
+            firstName
+            lastName
+          }
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+        totalCount
+      }
+    }
+  }
+`;
+
+/**
  * GraphQL query to retrieve the ancestor tags of a certain tag.
  *
  * @param id - The ID of the current tag.

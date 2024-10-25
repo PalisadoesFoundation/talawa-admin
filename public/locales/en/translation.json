@@ -332,7 +332,10 @@
     "successfullyUnassigned": "Tag unassigned from user",
     "addPeople": "Add People",
     "add": "Add",
-    "subTags": "Sub Tags"
+    "subTags": "Sub Tags",
+    "assignedToAll": "Tag Assigned to All",
+    "successfullyAssignedToPeople": "Tag assigned successfully",
+    "assignPeople": "Assign"
   },
   "userListCard": {
     "addAdmin": "Add Admin",

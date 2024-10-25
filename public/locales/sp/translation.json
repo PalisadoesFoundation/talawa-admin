@@ -332,7 +332,10 @@
     "successfullyUnassigned": "Etiqueta desasignada del usuario",
     "addPeople": "Agregar Personas",
     "add": "Agregar",
-    "subTags": "Subetiquetas"
+    "subTags": "Subetiquetas",
+    "assignedToAll": "Etiqueta asignada a todos",
+    "successfullyAssignedToPeople": "Etiqueta asignada con éxito",
+    "assignPeople": "Asignar"
   },
   "userListCard": {
     "joined": "Unido",

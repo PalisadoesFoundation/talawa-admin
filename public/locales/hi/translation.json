@@ -332,7 +332,10 @@
     "successfullyUnassigned": "उपयोगकर्ता से टैग हटा दिया गया",
     "addPeople": "लोगों को जोड़ें",
     "add": "जोड़ें",
-    "subTags": "उप-टैग्स"
+    "subTags": "उप-टैग्स",
+    "assignedToAll": "सभी को टैग असाइन किया गया",
+    "successfullyAssignedToPeople": "टैग सफलतापूर्वक असाइन किया गया",
+    "assignPeople": "असाइन करें"
   },
   "userListCard": {
     "addAdmin": "व्यवस्थापक जोड़ें",
