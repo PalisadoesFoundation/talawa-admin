@@ -15,8 +15,9 @@ export const CREATE_ACTION_ITEM_MUTATION = gql`
   mutation CreateActionItem(
     $actionItemCategoryId: ID!
     $assigneeId: ID!
+    $assigneeType: String!
     $preCompletionNotes: String
-    $dueDate: Date
+    $dDate: Date
     $eventId: ID
     $allotedHours: Float
   ) {
@@ -24,8 +25,9 @@ export const CREATE_ACTION_ITEM_MUTATION = gql`
       actionItemCategoryId: $actionItemCategoryId
       data: {
         assigneeId: $assigneeId
+        assigneeType: $assigneeType
         preCompletionNotes: $preCompletionNotes
-        dueDate: $dueDate
+        dueDate: $dDate
         eventId: $eventId
         allotedHours: $allotedHours
       }
@@ -51,6 +53,7 @@ export const UPDATE_ACTION_ITEM_MUTATION = gql`
   mutation UpdateActionItem(
     $actionItemId: ID!
     $assigneeId: ID!
+    $assigneeType: String!
     $preCompletionNotes: String
     $postCompletionNotes: String
     $dueDate: Date
@@ -62,6 +65,7 @@ export const UPDATE_ACTION_ITEM_MUTATION = gql`
       id: $actionItemId
       data: {
         assigneeId: $assigneeId
+        assigneeType: $assigneeType
         preCompletionNotes: $preCompletionNotes
         postCompletionNotes: $postCompletionNotes
         dueDate: $dueDate

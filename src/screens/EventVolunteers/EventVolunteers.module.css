@@ -1,3 +1,30 @@
+/* Toggle Btn */
+.toggleGroup {
+  width: 50%;
+  min-width: 20rem;
+  margin: 0.5rem 0rem;
+}
+
+.toggleBtn {
+  padding: 0rem;
+  height: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.toggleBtn:hover {
+  color: #31bb6b !important;
+}
+
+input[type='radio']:checked + label {
+  background-color: #31bb6a50 !important;
+}
+
+input[type='radio']:checked + label:hover {
+  color: black !important;
+}
+
 .actionItemsContainer {
   height: 90vh;
 }
@@ -232,54 +259,8 @@ hr {
   height: 26px;
 }
 
-/* Toggle Btn */
-.toggleGroup {
-  width: 50%;
-  min-width: 20rem;
-  margin: 0.5rem 0rem;
-}
-
-.toggleBtn {
-  padding: 0rem;
-  height: 2rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.toggleBtn:hover {
-  color: #31bb6b !important;
-}
-
-input[type='radio']:checked + label {
-  background-color: #31bb6a50 !important;
-}
-
-input[type='radio']:checked + label:hover {
-  color: black !important;
-} /* Toggle Btn */
-.toggleGroup {
-  width: 50%;
-  min-width: 20rem;
-  margin: 0.5rem 0rem;
-}
-
-.toggleBtn {
-  padding: 0rem;
-  height: 2rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.toggleBtn:hover {
-  color: #31bb6b !important;
-}
-
-input[type='radio']:checked + label {
-  background-color: #31bb6a50 !important;
-}
-
-input[type='radio']:checked + label:hover {
-  color: black !important;
+/* Modal Table (Groups & Assignments) */
+.modalTable {
+  max-height: 220px;
+  overflow-y: auto;
 }

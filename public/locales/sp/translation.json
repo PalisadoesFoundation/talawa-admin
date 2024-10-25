@@ -706,10 +706,11 @@
     "title": "Gestión de eventos",
     "dashboard": "Tablero",
     "registrants": "Inscritos",
-    "eventActions": "Acciones del evento",
-    "eventAgendas": "Agendas de eventos",
-    "eventStats": "Estadísticas del evento",
-    "to": "A"
+    "actions": "Acciones",
+    "agendas": "Agendas",
+    "statistics": "Estadísticas",
+    "to": "A",
+    "volunteers": "Voluntarios"
   },
   "forgotPassword": {
     "title": "Talawa olvidó su contraseña",
@@ -1316,5 +1317,40 @@
   },
   "userPledges": {
     "title": "Mis Promesas"
+  },
+  "eventVolunteers": {
+    "volunteers": "Voluntarios",
+    "volunteer": "Voluntario",
+    "volunteerGroups": "Grupos de voluntarios",
+    "individuals": "Individuos",
+    "groups": "Grupos",
+    "status": "Estado",
+    "noVolunteers": "No hay voluntarios",
+    "noVolunteerGroups": "No hay grupos de voluntarios",
+    "add": "Añadir",
+    "mostHoursVolunteered": "Más horas voluntarias",
+    "leastHoursVolunteered": "Menos horas voluntarias",
+    "accepted": "Aceptado",
+    "addVolunteer": "Añadir voluntario",
+    "removeVolunteer": "Eliminar voluntario",
+    "volunteerAdded": "Voluntario añadido con éxito",
+    "volunteerRemoved": "Voluntario eliminado con éxito",
+    "volunteerGroupCreated": "Grupo de voluntarios creado con éxito",
+    "volunteerGroupUpdated": "Grupo de voluntarios actualizado con éxito",
+    "volunteerGroupDeleted": "Grupo de voluntarios eliminado con éxito",
+    "removeVolunteerMsg": "¿Estás seguro de que quieres eliminar este voluntario?",
+    "deleteVolunteerGroupMsg": "¿Estás seguro de que quieres eliminar este grupo de voluntarios?",
+    "mostMembers": "Más miembros",
+    "leastMembers": "Menos miembros",
+    "leader": "Líder",
+    "group": "Grupo",
+    "createGroup": "Crear grupo",
+    "updateGroup": "Actualizar grupo",
+    "deleteGroup": "Eliminar grupo",
+    "volunteersRequired": "Voluntarios requeridos",
+    "volunteerDetails": "Detalles del voluntario",
+    "hoursVolunteered": "Horas voluntarias",
+    "groupDetails": "Detalles del grupo",
+    "creator": "Creador"
   }
 }

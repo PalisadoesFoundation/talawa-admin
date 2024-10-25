@@ -705,10 +705,11 @@
     "title": "事件管理",
     "dashboard": "仪表板",
     "registrants": "注册者",
-    "eventActions": "事件动作",
-    "eventAgendas": "活动议程",
-    "eventStats": "事件统计",
-    "to": "到"
+    "actions": "行动",
+    "agendas": "议程",
+    "statistics": "统计数据",
+    "to": "到",
+    "volunteers": "志愿者"
   },
   "forgotPassword": {
     "title": "塔拉瓦 忘记密码",
@@ -1315,5 +1316,40 @@
   },
   "userPledges": {
     "title": "我的承诺"
+  },
+  "eventVolunteers": {
+    "volunteers": "志愿者",
+    "volunteer": "志愿者",
+    "volunteerGroups": "志愿者小组",
+    "individuals": "个人",
+    "groups": "小组",
+    "status": "状态",
+    "noVolunteers": "没有志愿者",
+    "noVolunteerGroups": "没有志愿者小组",
+    "add": "添加",
+    "mostHoursVolunteered": "最多志愿小时",
+    "leastHoursVolunteered": "最少志愿小时",
+    "accepted": "已接受",
+    "addVolunteer": "添加志愿者",
+    "removeVolunteer": "移除志愿者",
+    "volunteerAdded": "志愿者添加成功",
+    "volunteerRemoved": "志愿者移除成功",
+    "volunteerGroupCreated": "志愿者小组创建成功",
+    "volunteerGroupUpdated": "志愿者小组更新成功",
+    "volunteerGroupDeleted": "志愿者小组删除成功",
+    "removeVolunteerMsg": "您确定要移除此志愿者吗？",
+    "deleteVolunteerGroupMsg": "您确定要删除此志愿者小组吗？",
+    "mostMembers": "最多成员",
+    "leastMembers": "最少成员",
+    "leader": "领导",
+    "group": "小组",
+    "createGroup": "创建小组",
+    "updateGroup": "更新小组",
+    "deleteGroup": "删除小组",
+    "volunteersRequired": "需要志愿者",
+    "volunteerDetails": "志愿者详情",
+    "hoursVolunteered": "志愿小时",
+    "groupDetails": "小组详情",
+    "creator": "创建者"
   }
 }

@@ -7,6 +7,13 @@ export interface InterfaceUserType {
   };
 }
 
+export interface InterfaceUserInfo {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  image?: string;
+}
+
 export interface InterfaceActionItemCategoryInfo {
   _id: string;
   name: string;
@@ -21,18 +28,10 @@ export interface InterfaceActionItemCategoryList {
 
 export interface InterfaceActionItemInfo {
   _id: string;
-  assignee: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-    image: string | null;
-  };
-  assigner: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-    image: string | null;
-  };
+  assigneeType: 'EventVolunteer' | 'EventVolunteerGroup';
+  assignee: InterfaceEventVolunteerInfo | null;
+  assigneeGroup: InterfaceVolunteerGroupInfo | null;
+  assigner: InterfaceUserInfo;
   actionItemCategory: {
     _id: string;
     name: string;
@@ -41,17 +40,13 @@ export interface InterfaceActionItemInfo {
   postCompletionNotes: string | null;
   assignmentDate: Date;
   dueDate: Date;
-  completionDate: Date;
+  completionDate: Date | null;
   isCompleted: boolean;
   event: {
     _id: string;
     title: string;
   } | null;
-  creator: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-  };
+  creator: InterfaceUserInfo;
   allotedHours: number | null;
 }
 
@@ -343,7 +338,7 @@ export interface InterfacePledgeInfo {
   currency: string;
   endDate: string;
   startDate: string;
-  users: InterfacePledger[];
+  users: InterfaceUserInfo[];
 }
 export interface InterfaceQueryOrganizationEventListItem {
   _id: string;
@@ -483,7 +478,7 @@ export interface InterfacePostCard {
 }
 
 export interface InterfaceCreatePledge {
-  pledgeUsers: InterfacePledger[];
+  pledgeUsers: InterfaceUserInfo[];
   pledgeAmount: number;
   pledgeCurrency: string;
   pledgeStartDate: Date;
@@ -503,13 +498,6 @@ export interface InterfaceQueryMembershipRequestsListItem {
       };
     }[];
   }[];
-}
-
-export interface InterfacePledger {
-  _id: string;
-  firstName: string;
-  lastName: string;
-  image: string | null;
 }
 
 export interface InterfaceAgendaItemCategoryInfo {
@@ -570,4 +558,97 @@ export interface InterfaceMapType {
 export interface InterfaceCustomFieldData {
   type: string;
   name: string;
+}
+
+export interface InterfaceEventVolunteerInfo {
+  _id: string;
+  hasAccepted: boolean;
+  hoursVolunteered: number;
+  user: InterfaceUserInfo;
+  assignments: {
+    _id: string;
+  }[];
+  groups: {
+    _id: string;
+    name: string;
+    volunteers: {
+      _id: string;
+    }[];
+  }[];
+}
+
+export interface InterfaceVolunteerGroupInfo {
+  _id: string;
+  name: string;
+  description: string;
+  volunteersRequired: number;
+  createdAt: string;
+  creator: InterfaceUserInfo;
+  leader: InterfaceUserInfo;
+  volunteers: {
+    _id: string;
+    user: InterfaceUserInfo;
+  }[];
+  assignments: {
+    _id: string;
+    actionItemCategory: {
+      _id: string;
+      name: string;
+    };
+    allotedHours: number;
+    isCompleted: boolean;
+  }[];
+}
+
+export interface InterfaceCreateVolunteerGroup {
+  name: string;
+  description: string | null;
+  leader: InterfaceUserInfo | null;
+  volunteersRequired: number | null;
+  volunteerUsers: InterfaceUserInfo[];
+}
+
+export interface InterfaceUserEvents {
+  _id: string;
+  title: string;
+  description: string;
+  startDate: string;
+  endDate: string;
+  location: string;
+  startTime: string;
+  endTime: string;
+  allDay: boolean;
+  recurring: boolean;
+  volunteerGroups: {
+    _id: string;
+    name: string;
+    volunteersRequired: number;
+    description: string;
+    volunteers: { _id: string }[];
+  }[];
+  volunteers: {
+    _id: string;
+    user: {
+      _id: string;
+    };
+  }[];
+}
+
+export interface InterfaceVolunteerMembership {
+  _id: string;
+  status: string;
+  createdAt: string;
+  event: {
+    _id: string;
+    title: string;
+    startDate: string;
+  };
+  volunteer: {
+    _id: string;
+    user: InterfaceUserInfo;
+  };
+  group: {
+    _id: string;
+    name: string;
+  };
 }
