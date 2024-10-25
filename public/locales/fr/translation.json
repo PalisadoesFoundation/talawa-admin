@@ -335,7 +335,11 @@
     "subTags": "Sous-étiquettes",
     "assignedToAll": "Étiquette attribuée à tous",
     "successfullyAssignedToPeople": "Étiquette attribuée avec succès",
-    "assignPeople": "Attribuer"
+    "assignPeople": "Attribuer",
+    "errorOccurredWhileLoadingMembers": "Erreur survenue lors du chargement des membres",
+    "userName": "Nom d'utilisateur",
+    "actions": "Actions",
+    "noOneSelected": "Personne sélectionnée"
   },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",

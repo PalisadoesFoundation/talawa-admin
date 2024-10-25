@@ -176,7 +176,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
         <div className={styles.errorMessage}>
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
-            Error occured while loading members
+            {t('errorOccurredWhileLoadingMembers')}
             <br />
             {userTagsMembersToAssignToError.message}
           </h6>
@@ -200,7 +200,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
     },
     {
       field: 'userName',
-      headerName: 'User Name',
+      headerName: t('userName'),
       flex: 2,
       minWidth: 100,
       sortable: false,
@@ -215,7 +215,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
     },
     {
       field: 'actions',
-      headerName: 'Actions',
+      headerName: t('actions'),
       flex: 1,
       align: 'center',
       minWidth: 100,
@@ -270,7 +270,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                 >
                   {assignToMembers.length === 0 ? (
                     <div className="text-center text-body-tertiary">
-                      No one selected
+                      {t('noOneSelected')}
                     </div>
                   ) : (
                     assignToMembers.map((member) => (

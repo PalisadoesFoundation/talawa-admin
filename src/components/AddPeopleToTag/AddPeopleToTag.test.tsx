@@ -1,4 +1,4 @@
-import React, { act } from 'react';
+import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
 import {
@@ -26,11 +26,10 @@ import { MOCKS, MOCKS_ERROR } from './AddPeopleToTagsMocks';
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR, true);
 
-async function wait(ms = 500): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
+async function wait(): Promise<void> {
+  await waitFor(() => {
+    // The waitFor utility automatically uses optimal timing
+    return Promise.resolve();
   });
 }
 

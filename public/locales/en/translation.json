@@ -335,7 +335,11 @@
     "subTags": "Sub Tags",
     "assignedToAll": "Tag Assigned to All",
     "successfullyAssignedToPeople": "Tag assigned successfully",
-    "assignPeople": "Assign"
+    "assignPeople": "Assign",
+    "errorOccurredWhileLoadingMembers": "Error occured while loading members",
+    "userName": "User Name",
+    "actions": "Actions",
+    "noOneSelected": "No One Selected"
   },
   "userListCard": {
     "addAdmin": "Add Admin",
