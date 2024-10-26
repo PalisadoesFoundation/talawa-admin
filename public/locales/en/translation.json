@@ -335,11 +335,21 @@
     "subTags": "Sub Tags",
     "assignedToAll": "Tag Assigned to All",
     "successfullyAssignedToPeople": "Tag assigned successfully",
-    "assignPeople": "Assign",
     "errorOccurredWhileLoadingMembers": "Error occured while loading members",
     "userName": "User Name",
     "actions": "Actions",
-    "noOneSelected": "No One Selected"
+    "noOneSelected": "No One Selected",
+    "assignToTags": "Assign to Tags",
+    "removeFromTags": "Remove from Tags",
+    "assign": "Assign",
+    "remove": "Remove",
+    "successfullyAssignedToTags": "Successfully Assigned to Tags",
+    "successfullyRemovedFromTags": "Successfully Removed from Tags",
+    "errorOccurredWhileLoadingOrganizationUserTags": "Error occured while loading organization tags",
+    "removeUserTag": "Delete Tag",
+    "removeUserTagMessage": "Do you want to delete this tag? It delete all the sub tags and all the associations.",
+    "tagDetails": "Tag Details",
+    "tagName": "Name"
   },
   "userListCard": {
     "addAdmin": "Add Admin",

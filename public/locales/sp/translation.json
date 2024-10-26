@@ -335,11 +335,21 @@
     "subTags": "Subetiquetas",
     "assignedToAll": "Etiqueta asignada a todos",
     "successfullyAssignedToPeople": "Etiqueta asignada con éxito",
-    "assignPeople": "Asignar",
     "errorOccurredWhileLoadingMembers": "Error al cargar los miembros",
     "userName": "Nombre de usuario",
     "actions": "Acciones",
-    "noOneSelected": "Nadie seleccionado"
+    "noOneSelected": "Nadie seleccionado",
+    "assignToTags": "Asignar a etiquetas",
+    "removeFromTags": "Eliminar de etiquetas",
+    "assign": "Asignar",
+    "remove": "Eliminar",
+    "successfullyAssignedToTags": "Asignado a etiquetas con éxito",
+    "successfullyRemovedFromTags": "Eliminado de etiquetas con éxito",
+    "errorOccurredWhileLoadingOrganizationUserTags": "Error al cargar las etiquetas de la organización",
+    "removeUserTag": "Eliminar etiqueta",
+    "removeUserTagMessage": "¿Desea eliminar esta etiqueta? Esto eliminará todas las subetiquetas y todas las asociaciones.",
+    "tagDetails": "Detalles de la etiqueta",
+    "tagName": "Nombre"
   },
   "userListCard": {
     "joined": "Unido",

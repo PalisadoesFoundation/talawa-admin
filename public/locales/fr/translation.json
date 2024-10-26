@@ -330,7 +330,6 @@
     "unassignUserTag": "Désassigner l'étiquette",
     "unassignUserTagMessage": "Voulez-vous retirer l'étiquette de cet utilisateur?",
     "successfullyUnassigned": "Étiquette retirée de l'utilisateur",
-    "addPeople": "Ajouter des personnes",
     "add": "Ajouter",
     "subTags": "Sous-étiquettes",
     "assignedToAll": "Étiquette attribuée à tous",
@@ -339,7 +338,18 @@
     "errorOccurredWhileLoadingMembers": "Erreur survenue lors du chargement des membres",
     "userName": "Nom d'utilisateur",
     "actions": "Actions",
-    "noOneSelected": "Personne sélectionnée"
+    "noOneSelected": "Personne sélectionnée",
+    "assignToTags": "Attribuer aux tags",
+    "removeFromTags": "Retirer des tags",
+    "assign": "Attribuer",
+    "remove": "Retirer",
+    "successfullyAssignedToTags": "Attribué aux tags avec succès",
+    "successfullyRemovedFromTags": "Retiré des tags avec succès",
+    "errorOccurredWhileLoadingOrganizationUserTags": "Erreur lors du chargement des tags de l'organisation",
+    "removeUserTag": "Supprimer le tag",
+    "removeUserTagMessage": "Voulez-vous supprimer ce tag ? Cela supprimera tous les sous-tags et toutes les associations.",
+    "tagDetails": "Détails du tag",
+    "tagName": "Nom"
   },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",

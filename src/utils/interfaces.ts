@@ -209,18 +209,20 @@ export interface InterfaceQueryOrganizationPostListItem {
   };
 }
 
-interface InterfaceTagData {
+export interface InterfaceTagData {
+  _id: string;
+  name: string;
+  usersAssignedTo: {
+    totalCount: number;
+  };
+  childTags: {
+    totalCount: number;
+  };
+}
+
+interface InterfaceTagNodeData {
   edges: {
-    node: {
-      _id: string;
-      name: string;
-      usersAssignedTo: {
-        totalCount: number;
-      };
-      childTags: {
-        totalCount: number;
-      };
-    };
+    node: InterfaceTagData;
     cursor: string;
   }[];
   pageInfo: {
@@ -250,17 +252,17 @@ interface InterfaceTagMembersData {
 }
 
 export interface InterfaceQueryOrganizationUserTags {
-  userTags: InterfaceTagData;
+  userTags: InterfaceTagNodeData;
+}
+
+export interface InterfaceQueryUserTagChildTags {
+  name: string;
+  childTags: InterfaceTagNodeData;
 }
 
 export interface InterfaceQueryUserTagsAssignedMembers {
   name: string;
   usersAssignedTo: InterfaceTagMembersData;
-}
-
-export interface InterfaceQueryUserTagChildTags {
-  name: string;
-  childTags: InterfaceTagData;
 }
 
 export interface InterfaceQueryUserTagsMembersToAssignTo {

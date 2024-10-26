@@ -23,3 +23,6 @@ export const dataGridStyle = {
 };
 
 export const ADD_PEOPLE_TO_TAGS_QUERY_LIMIT = 7;
+export const TAGS_QUERY_LIMIT = 10;
+
+export type TagActionType = 'assignToTags' | 'removeFromTags';
