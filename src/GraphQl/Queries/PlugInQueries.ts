@@ -155,6 +155,92 @@ export const CHAT_BY_ID = gql`
   }
 `;
 
+export const GROUP_CHAT_LIST = gql`
+  query groupChatsByUserId {
+    getGroupChatsByUserId {
+      _id
+      isGroup
+      name
+      creator {
+        _id
+        firstName
+        lastName
+        email
+      }
+      messages {
+        _id
+        createdAt
+        messageContent
+        media
+        receiver {
+          _id
+          firstName
+          lastName
+          email
+        }
+        sender {
+          _id
+          firstName
+          lastName
+          email
+        }
+      }
+      organization {
+        _id
+        name
+      }
+      users {
+        _id
+        firstName
+        lastName
+        email
+        image
+      }
+      unseenMessagesByUsers
+    }
+  }
+`;
+
+export const UNREAD_CHAT_LIST = gql`
+  query unreadChatList {
+    getUnreadChatsByUserId {
+      _id
+      isGroup
+      name
+      creator {
+        _id
+        firstName
+        lastName
+        email
+      }
+      messages {
+        _id
+        createdAt
+        messageContent
+        media
+        sender {
+          _id
+          firstName
+          lastName
+          email
+        }
+      }
+      organization {
+        _id
+        name
+      }
+      users {
+        _id
+        firstName
+        lastName
+        email
+        image
+      }
+      unseenMessagesByUsers
+    }
+  }
+`;
+
 export const CHATS_LIST = gql`
   query ChatsByUserId($id: ID!, $searchString: String) {
     chatsByUserId(
