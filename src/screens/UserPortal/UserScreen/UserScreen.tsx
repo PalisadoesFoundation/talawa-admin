@@ -133,7 +133,7 @@ const UserScreen = (): JSX.Element => {
             {/* Before  */}
             {/* <h1>{titleKey !== 'home' ? t('title') : ''}</h1>   */}
             {/* After  */}
-            <h1>{titleKey !== 'home' ? t('title') : 'Posts'}</h1>
+            <h1>{titleKey !== 'home' ? t('title') : t('title')}</h1>
           </div>
           <ProfileDropdown />
         </div>
