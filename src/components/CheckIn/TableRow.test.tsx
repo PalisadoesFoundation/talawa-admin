@@ -13,7 +13,11 @@ import { MockedProvider } from '@apollo/react-testing';
 import { checkInMutationSuccess, checkInMutationUnsuccess } from './mocks';
 
 describe('Testing Table Row for CheckIn Table', () => {
-  test('If the user in not checked in, button to check in should be displayed, and the user should be able to check in succesfully', async () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('If the user is not checked in, button to check in should be displayed, and the user should be able to check in successfully', async () => {
     const props = {
       data: {
         id: `123`,
@@ -25,7 +29,7 @@ describe('Testing Table Row for CheckIn Table', () => {
       refetch: jest.fn(),
     };
 
-    const { queryByText } = render(
+    const { findByText } = render(
       <BrowserRouter>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <MockedProvider addTypename={false} mocks={checkInMutationSuccess}>
@@ -40,31 +44,29 @@ describe('Testing Table Row for CheckIn Table', () => {
       </BrowserRouter>,
     );
 
-    await waitFor(() => expect(queryByText('Check In')).toBeInTheDocument());
+    expect(await findByText('Check In')).toBeInTheDocument();
 
-    fireEvent.click(queryByText('Check In') as Element);
+    fireEvent.click(await findByText('Check In'));
 
-    await waitFor(() =>
-      expect(queryByText('Checked in successfully')).toBeInTheDocument(),
-    );
+    expect(await findByText('Checked in successfully')).toBeInTheDocument();
   });
 
-  test('If the user in checked in, option to download tag should be shown', async () => {
+  test('If the user is checked in, the option to download tag should be shown', async () => {
     const props = {
       data: {
-        id: `123`,
-        name: `John Doe`,
-        userId: `user123`,
+        id: '123',
+        name: 'John Doe',
+        userId: 'user123',
         checkIn: {
           _id: '123',
           time: '12:00:00',
         },
-        eventId: `event123`,
+        eventId: 'event123',
       },
       refetch: jest.fn(),
     };
 
-    const { queryByText } = render(
+    const { findByText } = render(
       <BrowserRouter>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <MockedProvider addTypename={false} mocks={checkInMutationSuccess}>
@@ -79,26 +81,22 @@ describe('Testing Table Row for CheckIn Table', () => {
       </BrowserRouter>,
     );
 
-    // Stubbing functions required by the @pdfme to show pdfs
-    global.URL.createObjectURL = jest.fn();
+    global.URL.createObjectURL = jest.fn(() => 'mockURL');
     global.window.open = jest.fn();
 
-    await waitFor(() => expect(queryByText('Checked In')).toBeInTheDocument());
-    await waitFor(() =>
-      expect(queryByText('Download Tag')).toBeInTheDocument(),
-    );
+    expect(await findByText('Checked In')).toBeInTheDocument();
+    expect(await findByText('Download Tag')).toBeInTheDocument();
 
-    fireEvent.click(queryByText('Download Tag') as Element);
+    fireEvent.click(await findByText('Download Tag'));
 
-    await waitFor(() =>
-      expect(queryByText('Generating pdf...')).toBeInTheDocument(),
-    );
-    await waitFor(() => {
-      expect(queryByText('PDF generated successfully!')).toBeInTheDocument();
-    });
+    expect(await findByText('Generating pdf...')).toBeInTheDocument();
+    expect(await findByText('PDF generated successfully!')).toBeInTheDocument();
+
+    // Cleanup mocks
+    jest.clearAllMocks();
   });
 
-  test('Upon failing of check in mutation, the appropiate error message should be shown', async () => {
+  test('Upon failing of check in mutation, the appropriate error message should be shown', async () => {
     const props = {
       data: {
         id: `123`,
@@ -110,7 +108,7 @@ describe('Testing Table Row for CheckIn Table', () => {
       refetch: jest.fn(),
     };
 
-    const { queryByText } = render(
+    const { findByText } = render(
       <BrowserRouter>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <MockedProvider addTypename={false} mocks={checkInMutationUnsuccess}>
@@ -125,13 +123,11 @@ describe('Testing Table Row for CheckIn Table', () => {
       </BrowserRouter>,
     );
 
-    await waitFor(() => expect(queryByText('Check In')).toBeInTheDocument());
+    expect(await findByText('Check In')).toBeInTheDocument();
 
-    fireEvent.click(queryByText('Check In') as Element);
+    fireEvent.click(await findByText('Check In'));
 
-    await waitFor(() =>
-      expect(queryByText('Error checking in')).toBeInTheDocument(),
-    );
-    await waitFor(() => expect(queryByText('Oops')).toBeInTheDocument());
+    expect(await findByText('Error checking in')).toBeInTheDocument();
+    expect(await findByText('Oops')).toBeInTheDocument();
   });
 });

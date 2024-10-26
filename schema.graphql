@@ -161,6 +161,15 @@ input CommentInput {
   text: String!
 }
 
+type Community {
+  _id: ID!
+  logoUrl: String
+  name: String!
+  socialMediaUrls: SocialMediaUrls
+  timeout: Int
+  websiteLink: String
+}
+
 union ConnectionError = InvalidCursor | MaximumValueError
 
 type ConnectionPageInfo {
@@ -667,6 +676,7 @@ type Mutation {
     data: CreateActionItemInput!
   ): ActionItem!
   createActionItemCategory(
+    isDisabled: Boolean!
     name: String!
     organizationId: ID!
   ): ActionItemCategory!
@@ -798,6 +808,7 @@ type Mutation {
   ): Organization!
   updatePluginStatus(id: ID!, orgId: ID!): Plugin!
   updatePost(data: PostUpdateInput, id: ID!): Post!
+  updateSessionTimeout(timeout: Int!): Boolean!
   updateUserPassword(data: UpdateUserPasswordInput!): UserData!
   updateUserProfile(data: UpdateUserInput, file: String): User!
   updateUserRoleInOrganization(

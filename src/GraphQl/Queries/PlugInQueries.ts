@@ -108,90 +108,12 @@ export const ORGANIZATION_EVENTS_CONNECTION = gql`
 
 // directChatsMessagesByChatID(id: ID!): [DirectChatMessage]
 
-export const DIRECT_CHAT_MESSAGES_BY_CHAT_ID = gql`
-  query directChatsMessagesByChatID($id: ID!) {
-    directChatsMessagesByChatID(id: $id) {
-      _id
-      createdAt
-      messageContent
-      receiver {
-        _id
-        firstName
-        lastName
-        email
-        image
-      }
-      sender {
-        _id
-        firstName
-        lastName
-        email
-        image
-      }
-    }
-  }
-`;
-
-export const DIRECT_CHAT_BY_ID = gql`
-  query directChatById($id: ID!) {
-    directChatById(id: $id) {
-      _id
-      createdAt
-      messages {
-        _id
-        createdAt
-        messageContent
-        replyTo {
-          _id
-          createdAt
-          messageContent
-          receiver {
-            _id
-            firstName
-            lastName
-            email
-            image
-          }
-          sender {
-            _id
-            firstName
-            lastName
-            email
-            image
-          }
-        }
-        receiver {
-          _id
-          firstName
-          lastName
-          email
-          image
-        }
-        sender {
-          _id
-          firstName
-          lastName
-          email
-          image
-        }
-      }
-      users {
-        _id
-        firstName
-        lastName
-        email
-      }
-    }
-  }
-`;
-
 export const CHAT_BY_ID = gql`
   query chatById($id: ID!) {
     chatById(id: $id) {
       _id
       isGroup
       name
-      image
       organization {
         _id
       }
@@ -205,7 +127,6 @@ export const CHAT_BY_ID = gql`
           _id
           createdAt
           messageContent
-          type
           sender {
             _id
             firstName
@@ -221,128 +142,6 @@ export const CHAT_BY_ID = gql`
           email
           image
         }
-      }
-      users {
-        _id
-        firstName
-        lastName
-        email
-        image
-      }
-      unseenMessagesByUsers
-    }
-  }
-`;
-
-export const GROUP_CHAT_BY_ID = gql`
-  query groupChatById($id: ID!) {
-    groupChatById(id: $id) {
-      _id
-      createdAt
-      title
-      messages {
-        _id
-        createdAt
-        messageContent
-        replyTo {
-          _id
-          createdAt
-          messageContent
-          sender {
-            _id
-            firstName
-            lastName
-            email
-            image
-          }
-        }
-        sender {
-          _id
-          firstName
-          lastName
-          email
-          image
-        }
-      }
-      users {
-        _id
-        firstName
-        lastName
-        email
-        image
-      }
-    }
-  }
-`;
-export const UNREAD_CHAT_LIST = gql`
-  query unreadChatList {
-    getUnreadChatsByUserId {
-      _id
-      isGroup
-      name
-      image
-      creator {
-        _id
-        firstName
-        lastName
-        email
-      }
-      messages {
-        _id
-        type
-        createdAt
-        messageContent
-        sender {
-          _id
-          firstName
-          lastName
-          email
-        }
-      }
-      organization {
-        _id
-        name
-      }
-      users {
-        _id
-        firstName
-        lastName
-        email
-        image
-      }
-      unseenMessagesByUsers
-    }
-  }
-`;
-
-export const GROUP_CHAT_LIST = gql`
-  query groupChatsByUserId {
-    getGroupChatsByUserId {
-      _id
-      isGroup
-      name
-      image
-      creator {
-        _id
-        firstName
-        lastName
-        email
-      }
-      messages {
-        _id
-        type
-        createdAt
-        messageContent
-        sender {
-          _id
-          firstName
-          lastName
-          email
-        }
-      }
-      organization {
-        _id
-        name
       }
       users {
         _id

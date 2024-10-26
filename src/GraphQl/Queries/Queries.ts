@@ -8,6 +8,7 @@ export const CHECK_AUTH = gql`
       _id
       firstName
       lastName
+      createdAt
       image
       email
       birthDate
@@ -766,12 +767,20 @@ export const GET_COMMUNITY_DATA = gql`
         facebook
         gitHub
         instagram
-        twitter
+        X
         linkedIn
         youTube
         reddit
         slack
       }
+    }
+  }
+`;
+
+export const GET_COMMUNITY_SESSION_TIMEOUT_DATA = gql`
+  query getCommunityData {
+    getCommunityData {
+      timeout
     }
   }
 `;

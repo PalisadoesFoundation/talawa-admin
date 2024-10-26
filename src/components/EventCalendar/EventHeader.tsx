@@ -5,12 +5,24 @@ import styles from './EventCalendar.module.css';
 import { ViewType } from '../../screens/OrganizationEvents/OrganizationEvents';
 import { useTranslation } from 'react-i18next';
 
+/**
+ * Props for the EventHeader component.
+ */
 interface InterfaceEventHeaderProps {
   viewType: ViewType;
   handleChangeView: (item: string | null) => void;
   showInviteModal: () => void;
 }
 
+/**
+ * EventHeader component displays the header for the event calendar.
+ * It includes a search field, view type dropdown, event type dropdown, and a button to create an event.
+ *
+ * @param viewType - The current view type of the calendar.
+ * @param handleChangeView - Function to handle changing the view type.
+ * @param showInviteModal - Function to show the invite modal for creating an event.
+ * @returns JSX.Element - The rendered EventHeader component.
+ */
 function eventHeader({
   viewType,
   handleChangeView,
@@ -34,6 +46,11 @@ function eventHeader({
             required
             className={styles.inputField}
             value={eventName}
+            /**
+             * Updates the event name state when the input value changes.
+             *
+             * @param e - The event object from the input change.
+             */
             /*istanbul ignore next*/
             onChange={(e) => setEventName(e.target.value)}
           />

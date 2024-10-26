@@ -8,7 +8,6 @@ import {
 } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-
 import { USERS_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -1396,7 +1395,7 @@ describe('Testing Create Direct Chat Modal [User Portal]', () => {
     })),
   });
 
-  test('Test open and close create new direct chat modal', async () => {
+  test('open and close create new direct chat modal', async () => {
     const mock = [
       ...GROUP_CHAT_BY_ID_QUERY_MOCK,
       ...MESSAGE_SENT_TO_CHAT_MOCK,
@@ -1446,7 +1445,7 @@ describe('Testing Create Direct Chat Modal [User Portal]', () => {
     fireEvent.click(closeButton);
   });
 
-  test('Test create new direct chat', async () => {
+  test('create new direct chat', async () => {
     setItem('userId', '1');
     const mock = [
       ...GROUP_CHAT_BY_ID_QUERY_MOCK,
@@ -1490,5 +1489,7 @@ describe('Testing Create Direct Chat Modal [User Portal]', () => {
     fireEvent.click(closeButton);
 
     await new Promise(process.nextTick);
+
+    await wait();
   });
 });

@@ -57,6 +57,12 @@ const components: ComponentType[] = [
   { name: 'Events', comp_id: 'events', component: 'Events' },
   { name: 'Donate', comp_id: 'donate', component: 'Donate' },
   { name: 'Chat', comp_id: 'chat', component: 'Chat' },
+  {
+    name: 'Campaigns',
+    comp_id: 'campaigns',
+    component: 'Campaigns',
+  },
+  { name: 'My Pledges', comp_id: 'pledges', component: 'Pledges' },
 ];
 
 const generateRoutes = (

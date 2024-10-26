@@ -2,22 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { Button, Dropdown } from 'react-bootstrap';
-import { SearchOutlined, Search } from '@mui/icons-material';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import ContactCard from 'components/UserPortal/ContactCard/ContactCard';
 import ChatRoom from 'components/UserPortal/ChatRoom/ChatRoom';
 import useLocalStorage from 'utils/useLocalstorage';
-import { ReactComponent as NewChat } from 'assets/svgs/newChat.svg';
+import CreateGroupChat from '../../../components/UserPortal/CreateGroupChat/CreateGroupChat';
+import CreateDirectChat from 'components/UserPortal/CreateDirectChat/CreateDirectChat';
+import { MARK_CHAT_MESSAGES_AS_READ } from 'GraphQl/Mutations/OrganizationMutations';
+import NewChat from 'assets/svgs/newChat.svg?react';
 import styles from './Chat.module.css';
-import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import {
   CHATS_LIST,
   GROUP_CHAT_LIST,
   UNREAD_CHAT_LIST,
 } from 'GraphQl/Queries/PlugInQueries';
-import CreateGroupChat from '../../../components/UserPortal/CreateGroupChat/CreateGroupChat';
-import CreateDirectChat from 'components/UserPortal/CreateDirectChat/CreateDirectChat';
-import { MARK_CHAT_MESSAGES_AS_READ } from 'GraphQl/Mutations/OrganizationMutations';
 
 interface InterfaceContactCardProps {
   id: string;
@@ -27,7 +25,7 @@ interface InterfaceContactCardProps {
   setSelectedContact: React.Dispatch<React.SetStateAction<string>>;
   isGroup: boolean;
   unseenMessages: number;
-  lastMessage: any;
+  lastMessage: string;
 }
 
 export default function chat(): JSX.Element {
@@ -40,7 +38,6 @@ export default function chat(): JSX.Element {
   const [chats, setChats] = useState<any>([]);
   const [selectedContact, setSelectedContact] = useState('');
   const [filterType, setFilterType] = useState('all');
-  const [searchName, setsearchName] = useState('');
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
 
@@ -136,17 +133,11 @@ export default function chat(): JSX.Element {
     },
   });
 
-  const {
-    data: groupChatListData,
-    loading: groupChatListLoading,
-    refetch: groupChatListRefetch,
-  } = useQuery(GROUP_CHAT_LIST);
+  const { data: groupChatListData, refetch: groupChatListRefetch } =
+    useQuery(GROUP_CHAT_LIST);
 
-  const {
-    data: unreadChatListData,
-    loading: unreadChatListLoading,
-    refetch: unreadChatListRefetch,
-  } = useQuery(UNREAD_CHAT_LIST);
+  const { data: unreadChatListData, refetch: unreadChatListRefetch } =
+    useQuery(UNREAD_CHAT_LIST);
 
   const [markChatMessagesAsRead] = useMutation(MARK_CHAT_MESSAGES_AS_READ, {
     variables: {
@@ -175,22 +166,6 @@ export default function chat(): JSX.Element {
       setChats(chatList);
     }
   }, [chatsListData]);
-
-  const handleSearch = (value: string): void => {
-    setsearchName(value);
-    chatsListRefetch();
-  };
-  const handleSearchByEnter = (e: any): void => {
-    if (e.key === 'Enter') {
-      const { value } = e.target;
-      handleSearch(value);
-    }
-  };
-  const handleSearchByBtnClick = (): void => {
-    const value =
-      (document.getElementById('searchChats') as HTMLInputElement)?.value || '';
-    handleSearch(value);
-  };
 
   return (
     <>

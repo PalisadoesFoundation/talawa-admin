@@ -34,6 +34,10 @@ interface InterfaceCreateDirectChatProps {
   ) => Promise<ApolloQueryResult<any>>;
 }
 
+/**
+ * Styled table cell with custom styles.
+ */
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: ['#31bb6b', '!important'],
@@ -43,6 +47,10 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     fontSize: 14,
   },
 }));
+
+/**
+ * Styled table row with custom styles.
+ */
 
 const StyledTableRow = styled(TableRow)(() => ({
   '&:last-child td, &:last-child th': {
@@ -78,7 +86,7 @@ export default function createDirectChatModal({
       },
     });
     await chatsListRefetch();
-    await toggleCreateDirectChatModal();
+    toggleCreateDirectChatModal();
   };
 
   const {

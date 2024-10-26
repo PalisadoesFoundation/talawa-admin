@@ -8,6 +8,18 @@ export interface InterfaceTableLoader {
   noOfCols?: number;
 }
 
+/**
+ * The TableLoader component displays a loading skeleton for tables.
+ * It shows a specified number of rows and columns as placeholders
+ * with a shimmering effect to indicate loading content.
+ *
+ * @param props - The properties for the TableLoader component.
+ * @param noOfRows - The number of rows to display.
+ * @param headerTitles - Optional. The titles for the table headers.
+ * @param noOfCols - Optional. The number of columns if headerTitles is not provided.
+ *
+ * @returns The JSX element representing the table loader.
+ */
 const tableLoader = (props: InterfaceTableLoader): JSX.Element => {
   const { noOfRows, headerTitles, noOfCols } = props;
 

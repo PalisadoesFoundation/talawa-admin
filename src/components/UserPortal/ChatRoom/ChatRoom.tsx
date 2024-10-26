@@ -27,11 +27,11 @@ interface InterfaceChatRoomProps {
   chatListRefetch: (
     variables?:
       | Partial<{
-          id: any;
+          id: string;
           searchString: string;
         }>
       | undefined,
-  ) => Promise<ApolloQueryResult<any>>;
+  ) => Promise<ApolloQueryResult<{ chatList: Chat[] }>>;
 }
 
 type DirectMessage = {
@@ -81,6 +81,7 @@ type Chat = {
 };
 
 export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
+  // Translation hook for text in different languages
   const { t } = useTranslation('translation', {
     keyPrefix: 'userChatRoom',
   });
@@ -114,6 +115,13 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
   const toggleGroupChatDetailsModal = (): void =>
     setGroupChatDetailsModalisOpen(!groupChatDetailsModalisOpen);
 
+  /**
+   * Handles changes to the new message input field.
+   *
+   * Updates the state with the current value of the input field whenever it changes.
+   *
+   * @param e - The event triggered by the input field change.
+   */
   const handleNewMessageChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const newMessageValue = e.target.value;
     setNewMessage(newMessageValue);
@@ -144,11 +152,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     },
   });
 
-  const {
-    data: chatData,
-    loading: chatLoading,
-    refetch: chatRefetch,
-  } = useQuery(CHAT_BY_ID, {
+  const { data: chatData, refetch: chatRefetch } = useQuery(CHAT_BY_ID, {
     variables: {
       id: props.selectedContact,
     },
@@ -182,7 +186,9 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
         setChatSubtitle(`${chat.users.length} members`);
         setChatImage(chat.image);
       } else {
-        const otherUser = chat.users.find((user: any) => user._id !== userId);
+        const otherUser = chat.users.find(
+          (user: { _id: string }) => user._id !== userId,
+        );
         if (otherUser) {
           setChatTitle(`${otherUser.firstName} ${otherUser.lastName}`);
           setChatSubtitle(otherUser.email);
@@ -449,6 +455,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                 </div>
 
                 <Button
+                  data-testid="closeReply"
                   onClick={() => setReplyToDirectMessage(null)}
                   className={styles.closeBtn}
                 >

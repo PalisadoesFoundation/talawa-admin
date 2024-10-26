@@ -1,5 +1,5 @@
-import React from 'react';
-import { act, render, screen } from '@testing-library/react';
+import React, { act } from 'react';
+import { render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
@@ -20,7 +20,7 @@ const MOCKS = [
   {
     request: {
       query: UPDATE_USER_PASSWORD_MUTATION,
-      variable: {
+      variables: {
         previousPassword: 'anshgoyal',
         newPassword: 'anshgoyalansh',
         confirmNewPassword: 'anshgoyalansh',
@@ -49,15 +49,10 @@ async function wait(ms = 5): Promise<void> {
 }
 
 describe('Testing User Password Update', () => {
-  const props = {
-    key: '123',
-    id: '1',
-  };
-
   const formData = {
     previousPassword: 'Palisadoes',
     newPassword: 'ThePalisadoesFoundation',
-    wrongPassword: 'This is wrong passoword',
+    wrongPassword: 'This is wrong password',
     confirmNewPassword: 'ThePalisadoesFoundation',
   };
 
@@ -67,7 +62,7 @@ describe('Testing User Password Update', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <UserPasswordUpdate {...props} />
+          <UserPasswordUpdate id="1" key="123" />
         </I18nextProvider>
       </MockedProvider>,
     );
@@ -102,7 +97,7 @@ describe('Testing User Password Update', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <UserPasswordUpdate {...props} />
+          <UserPasswordUpdate id="1" key="123" />
         </I18nextProvider>
       </MockedProvider>,
     );
@@ -117,7 +112,7 @@ describe('Testing User Password Update', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <UserPasswordUpdate {...props} />
+          <UserPasswordUpdate id="1" key="123" />
         </I18nextProvider>
       </MockedProvider>,
     );

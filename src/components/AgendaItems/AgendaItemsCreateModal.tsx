@@ -28,6 +28,18 @@ interface InterfaceAgendaItemsCreateModalProps {
   agendaItemCategories: InterfaceAgendaItemCategoryInfo[] | undefined;
 }
 
+/**
+ * Component for creating a new agenda item.
+ * Displays a modal form where users can input details for a new agenda item, including title, description, duration, categories, URLs, and attachments.
+ *
+ * @param agendaItemCreateModalIsOpen - Boolean flag indicating if the modal is open.
+ * @param hideCreateModal - Function to close the modal.
+ * @param formState - Current state of the form fields.
+ * @param setFormState - Function to update the form state.
+ * @param createAgendaItemHandler - Function to handle form submission.
+ * @param t - Function for translating text based on keys.
+ * @param agendaItemCategories - List of agenda item categories for selection.
+ */
 const AgendaItemsCreateModal: React.FC<
   InterfaceAgendaItemsCreateModalProps
 > = ({
@@ -42,6 +54,7 @@ const AgendaItemsCreateModal: React.FC<
   const [newUrl, setNewUrl] = useState('');
 
   useEffect(() => {
+    // Ensure URLs and attachments do not have empty or invalid entries
     setFormState((prevState) => ({
       ...prevState,
       urls: prevState.urls.filter((url) => url.trim() !== ''),
@@ -49,13 +62,23 @@ const AgendaItemsCreateModal: React.FC<
     }));
   }, []);
 
-  // Function to validate URL
+  /**
+   * Validates if a given URL is in a correct format.
+   *
+   * @param url - URL string to validate.
+   * @returns True if the URL is valid, false otherwise.
+   */
   const isValidUrl = (url: string): boolean => {
     // Regular expression for basic URL validation
     const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
     return urlRegex.test(url);
   };
 
+  /**
+   * Handles adding a new URL to the form state.
+   *
+   * Checks if the URL is valid before adding it.
+   */
   const handleAddUrl = (): void => {
     if (newUrl.trim() !== '' && isValidUrl(newUrl.trim())) {
       setFormState({
@@ -68,6 +91,11 @@ const AgendaItemsCreateModal: React.FC<
     }
   };
 
+  /**
+   * Handles removing a URL from the form state.
+   *
+   * @param url - URL to remove.
+   */
   const handleRemoveUrl = (url: string): void => {
     setFormState({
       ...formState,
@@ -75,6 +103,11 @@ const AgendaItemsCreateModal: React.FC<
     });
   };
 
+  /**
+   * Handles file selection and converts files to base64 before updating the form state.
+   *
+   * @param e - File input change event.
+   */
   const handleFileChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
@@ -99,6 +132,11 @@ const AgendaItemsCreateModal: React.FC<
     }
   };
 
+  /**
+   * Handles removing an attachment from the form state.
+   *
+   * @param attachment - Attachment to remove.
+   */
   const handleRemoveAttachment = (attachment: string): void => {
     setFormState({
       ...formState,
@@ -136,7 +174,6 @@ const AgendaItemsCreateModal: React.FC<
                   formState.agendaItemCategoryIds.includes(category._id),
                 ) || []
               }
-              // isOptionEqualToValue={(option, value) => option._id === value._id}
               filterSelectedOptions={true}
               getOptionLabel={(
                 category: InterfaceAgendaItemCategoryInfo,

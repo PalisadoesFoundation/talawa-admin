@@ -1,5 +1,5 @@
-import { Paper, TableBody } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
+import { Paper, TableBody } from '@mui/material';
 import { Button, Form, Modal } from 'react-bootstrap';
 import styles from './CreateGroupChat.module.css';
 import type { ApolloQueryResult } from '@apollo/client';
@@ -28,7 +28,7 @@ interface InterfaceCreateGroupChatProps {
   chatsListRefetch: (
     variables?:
       | Partial<{
-          id: any;
+          id: string;
         }>
       | undefined,
   ) => Promise<ApolloQueryResult<any>>;
@@ -67,6 +67,10 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     fontSize: 14,
   },
 }));
+
+/**
+ * Styled table row with custom styles.
+ */
 
 const StyledTableRow = styled(TableRow)(() => ({
   '&:last-child td, &:last-child th': {

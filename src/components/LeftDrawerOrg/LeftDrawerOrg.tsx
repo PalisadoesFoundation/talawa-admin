@@ -9,8 +9,8 @@ import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
-import { ReactComponent as AngleRightIcon } from 'assets/svgs/angleRight.svg';
-import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
+import AngleRightIcon from 'assets/svgs/angleRight.svg?react';
+import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import styles from './LeftDrawerOrg.module.css';
 import Avatar from 'components/Avatar/Avatar';
 
@@ -21,6 +21,15 @@ export interface InterfaceLeftDrawerProps {
   setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
+/**
+ * LeftDrawerOrg component for displaying organization details and navigation options.
+ *
+ * @param orgId - ID of the current organization.
+ * @param targets - List of navigation targets.
+ * @param hideDrawer - Determines if the drawer should be hidden or shown.
+ * @param setHideDrawer - Function to update the visibility state of the drawer.
+ * @returns JSX element for the left navigation drawer with organization details.
+ */
 const leftDrawerOrg = ({
   targets,
   orgId,
@@ -28,7 +37,8 @@ const leftDrawerOrg = ({
   setHideDrawer,
 }: InterfaceLeftDrawerProps): JSX.Element => {
   const { t: tCommon } = useTranslation('common');
-  const [showDropdown, setShowDropdown] = React.useState(false);
+  const { t: tErrors } = useTranslation('errors');
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const [organization, setOrganization] =
     useState<InterfaceQueryOrganizationsListObject>();
@@ -43,18 +53,21 @@ const leftDrawerOrg = ({
   } = useQuery(ORGANIZATIONS_LIST, {
     variables: { id: orgId },
   });
-  // Set organization data
+
+  // Set organization data when query data is available
   useEffect(() => {
     let isMounted = true;
     if (data && isMounted) {
       setOrganization(data?.organizations[0]);
-      console.log(targets, 'targets');
     }
     return () => {
       isMounted = false;
     };
   }, [data]);
 
+  /**
+   * Handles link click to hide the drawer on smaller screens.
+   */
   const handleLinkClick = (): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer(true);
@@ -82,7 +95,7 @@ const leftDrawerOrg = ({
         </div>
 
         {/* Organization Section */}
-        <div className={styles.organizationContainer}>
+        <div className={`${styles.organizationContainer} pe-3`}>
           {loading ? (
             <>
               <button
@@ -99,7 +112,7 @@ const leftDrawerOrg = ({
                 <div className="px-3">
                   <WarningAmberOutlined />
                 </div>
-                Error Occured while loading the Organization
+                {tErrors('errorLoading', { entity: 'Organization' })}
               </button>
             </>
           ) : (
@@ -110,6 +123,7 @@ const leftDrawerOrg = ({
                 ) : (
                   <Avatar
                     name={organization.name}
+                    containerStyle={styles.avatarContainer}
                     alt={'Dummy Organization Picture'}
                   />
                 )}
@@ -126,10 +140,10 @@ const leftDrawerOrg = ({
         </div>
 
         {/* Options List */}
+        <h5 className={`${styles.titleHeader} text-secondary`}>
+          {tCommon('menu')}
+        </h5>
         <div className={styles.optionList}>
-          <h5 className={`${styles.titleHeader} text-secondary`}>
-            {tCommon('menu')}
-          </h5>
           {targets.map(({ name, url }, index) => {
             return url ? (
               <NavLink to={url} key={name} onClick={handleLinkClick}>

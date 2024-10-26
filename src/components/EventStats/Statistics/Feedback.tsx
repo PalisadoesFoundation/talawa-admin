@@ -6,6 +6,7 @@ import {
 } from '@mui/x-charts/PieChart';
 import Card from 'react-bootstrap/Card';
 
+// Props for the FeedbackStats component
 type ModalPropType = {
   data: {
     event: {
@@ -16,13 +17,22 @@ type ModalPropType = {
   };
 };
 
+// Type representing individual feedback
 type FeedbackType = {
   _id: string;
   rating: number;
   review: string | null;
 };
 
+/**
+ * Component that displays a pie chart of feedback ratings for an event.
+ * Shows how many people gave each rating.
+ *
+ * @param data - Data containing event feedback to be displayed in the chart.
+ * @returns JSX element representing the feedback analysis card with a pie chart.
+ */
 export const FeedbackStats = ({ data }: ModalPropType): JSX.Element => {
+  // Colors for the pie chart slices, from green (high ratings) to red (low ratings)
   const ratingColors = [
     '#57bb8a', // Green
     '#94bd77',
@@ -32,6 +42,7 @@ export const FeedbackStats = ({ data }: ModalPropType): JSX.Element => {
     '#dd776e', // Red
   ];
 
+  // Count the number of feedbacks for each rating
   const count: Record<number, number> = {};
 
   data.event.feedback.forEach((feedback: FeedbackType) => {
@@ -39,6 +50,7 @@ export const FeedbackStats = ({ data }: ModalPropType): JSX.Element => {
     else count[feedback.rating] = 1;
   });
 
+  // Prepare data for the pie chart
   const chartData = [];
   for (let rating = 0; rating <= 5; rating++) {
     if (rating in count)

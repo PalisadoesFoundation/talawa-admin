@@ -115,8 +115,6 @@ export const ADD_USER_TO_GROUP_CHAT = gql`
   }
 `;
 
-// markChatMessagesAsRead(chatId: ID!, userId: ID!): Chat
-
 export const MARK_CHAT_MESSAGES_AS_READ = gql`
   mutation markChatMessagesAsRead($chatId: ID!, $userId: ID!) {
     markChatMessagesAsRead(chatId: $chatId, userId: $userId) {
@@ -159,14 +157,12 @@ export const SEND_MESSAGE_TO_CHAT = gql`
     $replyTo: ID
     $media: String
     $messageContent: String
-    $type: String!
   ) {
     sendMessageToChat(
       chatId: $chatId
       replyTo: $replyTo
       messageContent: $messageContent
       media: $media
-      type: $type
     ) {
       _id
       createdAt
@@ -193,146 +189,6 @@ export const SEND_MESSAGE_TO_CHAT = gql`
   }
 `;
 
-export const SEND_MESSAGE_TO_DIRECT_CHAT = gql`
-  mutation sendMessageToDirectChat(
-    $chatId: ID!
-    $replyTo: ID
-    $messageContent: String!
-  ) {
-    sendMessageToDirectChat(
-      chatId: $chatId
-      replyTo: $replyTo
-      messageContent: $messageContent
-    ) {
-      _id
-      createdAt
-      messageContent
-      replyTo {
-        _id
-        createdAt
-        messageContent
-        receiver {
-          _id
-          firstName
-          lastName
-        }
-        sender {
-          _id
-          firstName
-          lastName
-        }
-        updatedAt
-      }
-      receiver {
-        _id
-        firstName
-        lastName
-      }
-      sender {
-        _id
-        firstName
-        lastName
-      }
-      updatedAt
-    }
-  }
-`;
-
-export const SEND_MESSAGE_TO_GROUP_CHAT = gql`
-  mutation sendMessageToGroupChat(
-    $chatId: ID!
-    $replyTo: ID
-    $messageContent: String!
-  ) {
-    sendMessageToGroupChat(
-      chatId: $chatId
-      replyTo: $replyTo
-      messageContent: $messageContent
-    ) {
-      _id
-      createdAt
-      messageContent
-      replyTo {
-        _id
-        createdAt
-        messageContent
-        sender {
-          _id
-          firstName
-          lastName
-        }
-        updatedAt
-      }
-      sender {
-        _id
-        firstName
-        lastName
-      }
-      updatedAt
-    }
-  }
-`;
-
-export const CREATE_MESSAGE_CHAT = gql`
-  mutation createMessageChat($receiver: ID!, $messageContent: String!) {
-    createMessageChat(data: { receiver: $receiver, message: $messageContent }) {
-      _id
-      createdAt
-      message
-      languageBarrier
-      receiver {
-        _id
-      }
-      sender {
-        _id
-      }
-      updatedAt
-    }
-  }
-`;
-
-export const MESSAGE_SENT_TO_DIRECT_CHAT = gql`
-  subscription messageSentToDirectChat($userId: ID!) {
-    messageSentToDirectChat(userId: $userId) {
-      _id
-      createdAt
-      directChatMessageBelongsTo {
-        _id
-      }
-      messageContent
-      receiver {
-        _id
-        firstName
-        lastName
-      }
-      sender {
-        _id
-        firstName
-        lastName
-      }
-      updatedAt
-    }
-  }
-`;
-
-export const GENERATE_NOTIFICATION = gql`
-  subscription generateNotification($userId: ID!) {
-    generateNotification(userId: $userId) {
-      _id
-      notificationTemplateId {
-        content
-      }
-      toUserId {
-        _id
-      }
-      fromUserId {
-        _id
-      }
-      variables
-    }
-  }
-`;
-
 export const MESSAGE_SENT_TO_CHAT = gql`
   subscription messageSentToChat($userId: ID!) {
     messageSentToChat(userId: $userId) {
@@ -353,7 +209,6 @@ export const MESSAGE_SENT_TO_CHAT = gql`
         }
         updatedAt
       }
-      type
       sender {
         _id
         firstName
@@ -364,24 +219,6 @@ export const MESSAGE_SENT_TO_CHAT = gql`
   }
 `;
 
-export const MESSAGE_SENT_TO_GROUP_CHAT = gql`
-  subscription messageSentToGroupChat($userId: ID!) {
-    messageSentToGroupChat(userId: $userId) {
-      _id
-      createdAt
-      groupChatMessageBelongsTo {
-        _id
-      }
-      messageContent
-      sender {
-        _id
-        firstName
-        lastName
-      }
-      updatedAt
-    }
-  }
-`;
 //Plugin WebSocket listner
 
 /**

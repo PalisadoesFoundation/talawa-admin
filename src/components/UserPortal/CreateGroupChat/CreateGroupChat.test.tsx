@@ -5,6 +5,7 @@ import {
   render,
   screen,
   waitFor,
+  within,
 } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -17,23 +18,14 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
-import { StaticMockLink } from 'utils/StaticMockLink';
 import Chat from '../../../screens/UserPortal/Chat/Chat';
 import {
   CREATE_CHAT,
-  CREATE_GROUP_CHAT,
   MESSAGE_SENT_TO_CHAT,
-  MESSAGE_SENT_TO_DIRECT_CHAT,
-  MESSAGE_SENT_TO_GROUP_CHAT,
 } from 'GraphQl/Mutations/OrganizationMutations';
-import {
-  CHATS_LIST,
-  CHAT_BY_ID,
-  DIRECT_CHAT_BY_ID,
-  GROUP_CHAT_BY_ID,
-  GROUP_CHAT_LIST,
-} from 'GraphQl/Queries/PlugInQueries';
+import { CHATS_LIST, CHAT_BY_ID } from 'GraphQl/Queries/PlugInQueries';
 import useLocalStorage from 'utils/useLocalstorage';
+import userEvent from '@testing-library/user-event';
 
 const { setItem } = useLocalStorage();
 
@@ -51,6 +43,150 @@ const USER_JOINED_ORG_MOCK = [
           {
             user: {
               joinedOrganizations: [
+                {
+                  __typename: 'Organization',
+                  _id: '6401ff65ce8e8406b8f07af2',
+                  name: 'Test Org 1',
+                  image: '',
+                  description: 'New Desc',
+                  address: {
+                    city: 'abc',
+                    countryCode: '123',
+                    postalCode: '456',
+                    state: 'def',
+                    dependentLocality: 'ghi',
+                    line1: 'asdfg',
+                    line2: 'dfghj',
+                    sortingCode: '4567',
+                  },
+                  createdAt: '1234567890',
+                  userRegistrationRequired: true,
+                  creator: {
+                    __typename: 'User',
+                    firstName: 'John',
+                    lastName: 'Doe',
+                  },
+                  members: [
+                    {
+                      _id: '56gheqyr7deyfuiwfewifruy8',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                  admins: [
+                    {
+                      _id: '45gj5678jk45678fvgbhnr4rtgh',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                  membershipRequests: [
+                    {
+                      _id: '56gheqyr7deyfuiwfewifruy8',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                },
+                {
+                  __typename: 'Organization',
+                  _id: '6401ff65ce8e8406b8f07af2',
+                  name: 'Test Org 1',
+                  image: '',
+                  description: 'New Desc',
+                  address: {
+                    city: 'abc',
+                    countryCode: '123',
+                    postalCode: '456',
+                    state: 'def',
+                    dependentLocality: 'ghi',
+                    line1: 'asdfg',
+                    line2: 'dfghj',
+                    sortingCode: '4567',
+                  },
+                  createdAt: '1234567890',
+                  userRegistrationRequired: true,
+                  creator: {
+                    __typename: 'User',
+                    firstName: 'John',
+                    lastName: 'Doe',
+                  },
+                  members: [
+                    {
+                      _id: '56gheqyr7deyfuiwfewifruy8',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                  admins: [
+                    {
+                      _id: '45gj5678jk45678fvgbhnr4rtgh',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                  membershipRequests: [
+                    {
+                      _id: '56gheqyr7deyfuiwfewifruy8',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                },
+                {
+                  __typename: 'Organization',
+                  _id: '6401ff65ce8e8406b8f07af2',
+                  name: 'Test Org 1',
+                  image: '',
+                  description: 'New Desc',
+                  address: {
+                    city: 'abc',
+                    countryCode: '123',
+                    postalCode: '456',
+                    state: 'def',
+                    dependentLocality: 'ghi',
+                    line1: 'asdfg',
+                    line2: 'dfghj',
+                    sortingCode: '4567',
+                  },
+                  createdAt: '1234567890',
+                  userRegistrationRequired: true,
+                  creator: {
+                    __typename: 'User',
+                    firstName: 'John',
+                    lastName: 'Doe',
+                  },
+                  members: [
+                    {
+                      _id: '56gheqyr7deyfuiwfewifruy8',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                  admins: [
+                    {
+                      _id: '45gj5678jk45678fvgbhnr4rtgh',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                  membershipRequests: [
+                    {
+                      _id: '56gheqyr7deyfuiwfewifruy8',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                },
                 {
                   __typename: 'Organization',
                   _id: '6401ff65ce8e8406b8f07af2',
@@ -122,6 +258,54 @@ const USER_JOINED_ORG_MOCK = [
                 {
                   __typename: 'Organization',
                   _id: '6401ff65ce8e8406b8f07af2',
+                  name: 'Test org',
+                  image: '',
+                  description: 'New Desc',
+                  address: {
+                    city: 'abc',
+                    countryCode: '123',
+                    postalCode: '456',
+                    state: 'def',
+                    dependentLocality: 'ghi',
+                    line1: 'asdfg',
+                    line2: 'dfghj',
+                    sortingCode: '4567',
+                  },
+                  createdAt: '1234567890',
+                  userRegistrationRequired: true,
+                  creator: {
+                    __typename: 'User',
+                    firstName: 'John',
+                    lastName: 'Doe',
+                  },
+                  members: [
+                    {
+                      _id: '56gheqyr7deyfuiwfewifruy8',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                  admins: [
+                    {
+                      _id: '45gj5678jk45678fvgbhnr4rtgh',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                  membershipRequests: [
+                    {
+                      _id: '56gheqyr7deyfuiwfewifruy8',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                },
+                {
+                  __typename: 'Organization',
+                  _id: 'qsxhgjhbmnbkhlk,njgjfhgv',
                   name: 'Any Organization',
                   image: '',
                   description: 'New Desc',
@@ -189,7 +373,55 @@ const USER_JOINED_ORG_MOCK = [
               joinedOrganizations: [
                 {
                   __typename: 'Organization',
-                  _id: '6401ff65ce8e8406b8f07af2',
+                  _id: '6401ff65ce8e8406b8fhgjhnm07af2',
+                  name: 'Test org',
+                  image: '',
+                  description: 'New Desc',
+                  address: {
+                    city: 'abc',
+                    countryCode: '123',
+                    postalCode: '456',
+                    state: 'def',
+                    dependentLocality: 'ghi',
+                    line1: 'asdfg',
+                    line2: 'dfghj',
+                    sortingCode: '4567',
+                  },
+                  createdAt: '1234567890',
+                  userRegistrationRequired: true,
+                  creator: {
+                    __typename: 'User',
+                    firstName: 'John',
+                    lastName: 'Doe',
+                  },
+                  members: [
+                    {
+                      _id: '56gheqyr7deyfuiwfewifruy8',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                  admins: [
+                    {
+                      _id: '45gj5678jk45678fvgbhnr4rtgh',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                  membershipRequests: [
+                    {
+                      _id: '56gheqyr7deyfuiwfewifruy8',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                },
+                {
+                  __typename: 'Organization',
+                  _id: '6401ff65ce8egfhbn8406b8f07af2',
                   name: 'Any Organization',
                   image: '',
                   description: 'New Desc',
@@ -255,6 +487,170 @@ const USER_JOINED_ORG_MOCK = [
           {
             user: {
               joinedOrganizations: [
+                {
+                  __typename: 'Organization',
+                  _id: '6401ff65fghce8e8406b8f07af2',
+                  name: 'Test org',
+                  image: '',
+                  description: 'New Desc',
+                  address: {
+                    city: 'abc',
+                    countryCode: '123',
+                    postalCode: '456',
+                    state: 'def',
+                    dependentLocality: 'ghi',
+                    line1: 'asdfg',
+                    line2: 'dfghj',
+                    sortingCode: '4567',
+                  },
+                  createdAt: '1234567890',
+                  userRegistrationRequired: true,
+                  creator: {
+                    __typename: 'User',
+                    firstName: 'John',
+                    lastName: 'Doe',
+                  },
+                  members: [
+                    {
+                      _id: '56gheqyr7deyfuiwfewifruy8',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                  admins: [
+                    {
+                      _id: '45gj5678jk45678fvgbhnr4rtgh',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                  membershipRequests: [
+                    {
+                      _id: '56gheqyr7deyfuiwfewifruy8',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                },
+                {
+                  __typename: 'Organization',
+                  _id: '6401ff65ce8e8406b8jygjgf07af2',
+                  name: 'Any Organization',
+                  image: '',
+                  description: 'New Desc',
+                  address: {
+                    city: 'abc',
+                    countryCode: '123',
+                    postalCode: '456',
+                    state: 'def',
+                    dependentLocality: 'ghi',
+                    line1: 'asdfg',
+                    line2: 'dfghj',
+                    sortingCode: '4567',
+                  },
+                  createdAt: '1234567890',
+                  userRegistrationRequired: true,
+                  creator: {
+                    __typename: 'User',
+                    firstName: 'John',
+                    lastName: 'Doe',
+                  },
+                  members: [
+                    {
+                      _id: '56gheqyr7deyfuiwfewifruy8',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                  admins: [
+                    {
+                      _id: '45gj5678jk45678fvgbhnr4rtgh',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                  membershipRequests: [
+                    {
+                      _id: '56gheqyr7deyfuiwfewifruy8',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: USER_JOINED_ORGANIZATIONS,
+      variables: {
+        id: null,
+      },
+    },
+    result: {
+      data: {
+        users: [
+          {
+            user: {
+              joinedOrganizations: [
+                {
+                  __typename: 'Organization',
+                  _id: '6401ff65cehgh8e8406b8f07af2',
+                  name: 'Test org',
+                  image: '',
+                  description: 'New Desc',
+                  address: {
+                    city: 'abc',
+                    countryCode: '123',
+                    postalCode: '456',
+                    state: 'def',
+                    dependentLocality: 'ghi',
+                    line1: 'asdfg',
+                    line2: 'dfghj',
+                    sortingCode: '4567',
+                  },
+                  createdAt: '1234567890',
+                  userRegistrationRequired: true,
+                  creator: {
+                    __typename: 'User',
+                    firstName: 'John',
+                    lastName: 'Doe',
+                  },
+                  members: [
+                    {
+                      _id: '56gheqyr7deyfuiwfewifruy8',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                  admins: [
+                    {
+                      _id: '45gj5678jk45678fvgbhnr4rtgh',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                  membershipRequests: [
+                    {
+                      _id: '56gheqyr7deyfuiwfewifruy8',
+                      user: {
+                        _id: '45ydeg2yet721rtgdu32ry',
+                      },
+                    },
+                  ],
+                },
                 {
                   __typename: 'Organization',
                   _id: '6401ff65ce8e8406b8f07af2',
@@ -325,8 +721,8 @@ const USER_JOINED_ORG_MOCK = [
               joinedOrganizations: [
                 {
                   __typename: 'Organization',
-                  _id: '6401ff65ce8e8406b8f07af2',
-                  name: 'Any Organization',
+                  _id: '6401ff65ce8e8406nbmnmb8f07af2',
+                  name: 'Test org',
                   image: '',
                   description: 'New Desc',
                   address: {
@@ -371,29 +767,9 @@ const USER_JOINED_ORG_MOCK = [
                     },
                   ],
                 },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_JOINED_ORGANIZATIONS,
-      variables: {
-        id: null,
-      },
-    },
-    result: {
-      data: {
-        users: [
-          {
-            user: {
-              joinedOrganizations: [
                 {
                   __typename: 'Organization',
-                  _id: '6401ff65ce8e8406b8f07af2',
+                  _id: '6401ff65ce8e8406b8fnnmm07af2',
                   name: 'Any Organization',
                   image: '',
                   description: 'New Desc',
@@ -1655,7 +2031,94 @@ const CREATE_CHAT_MUTATION = [
     request: {
       query: CREATE_CHAT,
       variables: {
-        organizationId: '6401ff65ce8e8406b8f07af2',
+        organizationId: '6401ff65ce8e8406b8jygjgf07af2',
+        userIds: [null],
+        name: 'Test Group',
+        isGroup: true,
+      },
+    },
+    result: {
+      data: {
+        createChat: {
+          _id: '65844efc814dd4003db811c4',
+          isGroup: true,
+          creator: {
+            _id: '64378abd85008f171cf2990d',
+            firstName: 'Wilt',
+            lastName: 'Shepherd',
+            image: null,
+            email: 'testsuperadmin@example.com',
+            createdAt: '2023-04-13T04:53:17.742Z',
+            __typename: 'User',
+          },
+          organization: {
+            _id: 'pw3ertyuiophgfre45678',
+            name: 'rtyu',
+          },
+          createdAt: '2345678903456',
+          name: 'Test Group Chat',
+          messages: [
+            {
+              _id: '345678',
+              createdAt: '345678908765',
+              messageContent: 'Hello',
+              replyTo: null,
+              type: 'STRING',
+              sender: {
+                _id: '2',
+                firstName: 'Test',
+                lastName: 'User',
+                email: 'test@example.com',
+                image: '',
+              },
+            },
+          ],
+          users: [
+            {
+              _id: '1',
+              firstName: 'Disha',
+              lastName: 'Talreja',
+              email: 'disha@example.com',
+              image: '',
+            },
+            {
+              _id: '2',
+              firstName: 'Test',
+              lastName: 'User',
+              email: 'test@example.com',
+              image: '',
+            },
+            {
+              _id: '3',
+              firstName: 'Test',
+              lastName: 'User1',
+              email: 'test1@example.com',
+              image: '',
+            },
+            {
+              _id: '4',
+              firstName: 'Test',
+              lastName: 'User2',
+              email: 'test2@example.com',
+              image: '',
+            },
+            {
+              _id: '5',
+              firstName: 'Test',
+              lastName: 'User4',
+              email: 'test4@example.com',
+              image: '',
+            },
+          ],
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: CREATE_CHAT,
+      variables: {
+        organizationId: '',
         userIds: [null],
         name: 'Test Group',
         isGroup: true,
@@ -1765,7 +2228,7 @@ describe('Testing Create Group Chat Modal [User Portal]', () => {
     })),
   });
 
-  test('Test open and close create new direct chat modal', async () => {
+  test('open and close create new direct chat modal', async () => {
     const mock = [
       ...USER_JOINED_ORG_MOCK,
       ...GROUP_CHAT_BY_ID_QUERY_MOCK,
@@ -1803,7 +2266,7 @@ describe('Testing Create Group Chat Modal [User Portal]', () => {
     fireEvent.click(closeButton);
   });
 
-  test('Test create new group chat', async () => {
+  test('create new group chat', async () => {
     const mock = [
       ...USER_JOINED_ORG_MOCK,
       ...GROUP_CHAT_BY_ID_QUERY_MOCK,
@@ -1880,7 +2343,7 @@ describe('Testing Create Group Chat Modal [User Portal]', () => {
     });
   }, 3000);
 
-  test('Test add and remove user ', async () => {
+  test('add and remove user', async () => {
     setItem('userId', '1');
     const mock = [
       ...USER_JOINED_ORG_MOCK,

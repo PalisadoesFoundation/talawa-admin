@@ -15,6 +15,7 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { useTranslation } from 'react-i18next';
 
+// Props for the EventRegistrantsModal component
 type ModalPropType = {
   show: boolean;
   eventId: string;
@@ -22,23 +23,38 @@ type ModalPropType = {
   handleClose: () => void;
 };
 
+// User information interface
 interface InterfaceUser {
   _id: string;
   firstName: string;
   lastName: string;
 }
 
+/**
+ * Modal component for managing event registrants.
+ * Allows adding and removing attendees from an event.
+ *
+ * @param show - Whether the modal is visible or not.
+ * @param eventId - The ID of the event.
+ * @param orgId - The ID of the organization.
+ * @param handleClose - Function to close the modal.
+ * @returns JSX element representing the modal.
+ */
 export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
   const { eventId, orgId, handleClose, show } = props;
   const [member, setMember] = useState<InterfaceUser | null>(null);
 
+  // Hooks for mutation operations
   const [addRegistrantMutation] = useMutation(ADD_EVENT_ATTENDEE);
   const [removeRegistrantMutation] = useMutation(REMOVE_EVENT_ATTENDEE);
 
+  // Translation hooks
   const { t } = useTranslation('translation', {
     keyPrefix: 'eventRegistrantsModal',
   });
   const { t: tCommon } = useTranslation('common');
+
+  // Query hooks to fetch event attendees and organization members
   const {
     data: attendeesData,
     loading: attendeesLoading,
@@ -51,6 +67,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
     variables: { id: orgId },
   });
 
+  // Function to add a new registrant to the event
   const addRegistrant = (): void => {
     if (member == null) {
       toast.warning('Please choose an user to add first!');
@@ -64,15 +81,18 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
       },
     })
       .then(() => {
-        toast.success(tCommon('addedSuccessfully', { item: 'Attendee' }));
-        attendeesRefetch();
+        toast.success(
+          tCommon('addedSuccessfully', { item: 'Attendee' }) as string,
+        );
+        attendeesRefetch(); // Refresh the list of attendees
       })
       .catch((err) => {
-        toast.error(t('errorAddingAttendee'));
+        toast.error(t('errorAddingAttendee') as string);
         toast.error(err.message);
       });
   };
 
+  // Function to remove a registrant from the event
   const deleteRegistrant = (userId: string): void => {
     toast.warn('Removing the attendee...');
     removeRegistrantMutation({
@@ -82,16 +102,18 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
       },
     })
       .then(() => {
-        toast.success(tCommon('removedSuccessfully', { item: 'Attendee' }));
-        attendeesRefetch();
+        toast.success(
+          tCommon('removedSuccessfully', { item: 'Attendee' }) as string,
+        );
+        attendeesRefetch(); // Refresh the list of attendees
       })
       .catch((err) => {
-        toast.error(t('errorRemovingAttendee'));
+        toast.error(t('errorRemovingAttendee') as string);
         toast.error(err.message);
       });
   };
 
-  // Render the loading screen
+  // Show a loading screen if data is still being fetched
   if (attendeesLoading || memberLoading) {
     return (
       <>

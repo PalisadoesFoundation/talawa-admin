@@ -30,7 +30,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: '22.x'
 
       - name: Install Dependencies
         run: npm install
@@ -56,8 +56,11 @@ jobs:
         if: steps.changed-files.outputs.only_changed != 'true'
         env: 
           CHANGED_FILES: ${{ steps.changed_files.outputs.all_changed_files }}
-        run: npx eslint ${CHANGED_FILES} 
+        run: npx eslint ${CHANGED_FILES} && python .github/workflows/eslint_disable_check.py
         
+      - name: Check for TSDoc comments
+        run: npm run check-tsdoc # Run the TSDoc check script
+
       - name: Check for localStorage Usage
         run: |
           chmod +x scripts/githooks/check-localstorage-usage.js
@@ -77,6 +80,7 @@ jobs:
           exit 1
 
   Check-Unauthorized-Changes:
+    if: ${{ github.actor != 'dependabot[bot]' }}
     name: Checks if no unauthorized files are changed
     runs-on: ubuntu-latest
     steps:
@@ -119,6 +123,7 @@ jobs:
           exit 1
 
   Count-Changed-Files:
+    if: ${{ github.actor != 'dependabot[bot]' }}
     name: Checks if number of files changed is acceptable
     runs-on: ubuntu-latest
     steps:
@@ -173,7 +178,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: '22.x'
 
       - name: Install Dependencies
         run: npm install
@@ -209,6 +214,7 @@ jobs:
           min_coverage: 95.0
 
   Graphql-Inspector:
+    if: ${{ github.actor != 'dependabot[bot]' }}
     name: Runs Introspection on the GitHub talawa-api repo on the schema.graphql file
     runs-on: ubuntu-latest
     steps:
@@ -218,7 +224,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: '22.x'
 
       - name: resolve dependency
         run: npm install -g @graphql-inspector/cli
@@ -236,6 +242,7 @@ jobs:
         run: graphql-inspector validate './src/GraphQl/**/*.ts' './talawa-api/schema.graphql'
 
   Check-Target-Branch:
+    if: ${{ github.actor != 'dependabot[bot]' }}
     name: Check Target Branch
     runs-on: ubuntu-latest
     steps:
