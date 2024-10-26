@@ -349,7 +349,9 @@
     "removeUserTag": "टैग हटाएं",
     "removeUserTagMessage": "क्या आप इस टैग को हटाना चाहते हैं? यह सभी उप-टैग्स और सभी संबंधों को हटा देगा।",
     "tagDetails": "टैग विवरण",
-    "tagName": "नाम"
+    "tagName": "नाम",
+    "tagUpdationSuccess": "टैग सफलतापूर्वक अपडेट की गई",
+    "tagRemovalSuccess": "टैग सफलतापूर्वक हटाई गई"
   },
   "userListCard": {
     "addAdmin": "व्यवस्थापक जोड़ें",

@@ -59,8 +59,7 @@ const cache = new InMemoryCache({
       fields: {
         getUserTag: {
           keyArgs: false,
-          merge(existing = {}, incoming) {
-            console.log(existing);
+          merge(_, incoming) {
             return incoming;
           },
         },
@@ -188,6 +187,94 @@ describe('Manage Tag Page', () => {
     );
   });
 
+  test('opens and closes the assignToTags modal', async () => {
+    renderManageTag(link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('assignToTags')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('assignToTags'));
+
+    await waitFor(() => {
+      return expect(
+        screen.findByTestId('closeTagActionsModalBtn'),
+      ).resolves.toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('closeTagActionsModalBtn'));
+
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId('closeTagActionsModalBtn'),
+    );
+  });
+
+  test('opens and closes the removeFromTags modal', async () => {
+    renderManageTag(link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('removeFromTags')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('removeFromTags'));
+
+    await waitFor(() => {
+      return expect(
+        screen.findByTestId('closeTagActionsModalBtn'),
+      ).resolves.toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('closeTagActionsModalBtn'));
+
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId('closeTagActionsModalBtn'),
+    );
+  });
+
+  test('opens and closes the edit tag modal', async () => {
+    renderManageTag(link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('editTag')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('editTag'));
+
+    await waitFor(() => {
+      return expect(
+        screen.findByTestId('closeEditTagModalBtn'),
+      ).resolves.toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('closeEditTagModalBtn'));
+
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId('closeEditTagModalBtn'),
+    );
+  });
+
+  test('opens and closes the remove tag modal', async () => {
+    renderManageTag(link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('removeTag')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('removeTag'));
+
+    await waitFor(() => {
+      return expect(
+        screen.findByTestId('removeUserTagModalCloseBtn'),
+      ).resolves.toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('removeUserTagModalCloseBtn'));
+
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId('removeUserTagModalCloseBtn'),
+    );
+  });
+
   test("navigates to the member's profile after clicking the view option", async () => {
     renderManageTag(link);
 
@@ -294,6 +381,53 @@ describe('Manage Tag Page', () => {
       expect(toast.success).toHaveBeenCalledWith(
         translations.successfullyUnassigned,
       );
+    });
+  });
+
+  test('successfully edits the tag name', async () => {
+    renderManageTag(link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('editTag')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('editTag'));
+
+    const tagNameInput = screen.getByTestId('tagNameInput');
+    await userEvent.clear(tagNameInput);
+    await userEvent.type(tagNameInput, 'tag 1 edited');
+    expect(tagNameInput).toHaveValue('tag 1 edited');
+
+    userEvent.click(screen.getByTestId('editTagSubmitBtn'));
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith(
+        translations.tagUpdationSuccess,
+      );
+    });
+  });
+
+  test('successfully removes the tag and redirects to orgTags page', async () => {
+    renderManageTag(link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('removeTag')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('removeTag'));
+
+    userEvent.click(screen.getByTestId('removeUserTagSubmitBtn'));
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith(
+        translations.tagRemovalSuccess,
+      );
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('organizationTagsScreen')).toBeInTheDocument();
     });
   });
 });

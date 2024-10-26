@@ -349,7 +349,11 @@
     "removeUserTag": "Delete Tag",
     "removeUserTagMessage": "Do you want to delete this tag? It delete all the sub tags and all the associations.",
     "tagDetails": "Tag Details",
-    "tagName": "Name"
+    "tagName": "Name",
+    "tagUpdationSuccess": "Tag updated successfully",
+    "tagRemovalSuccess": "Tag deleted successfully",
+    "noTagSelected": "No Tag Selected",
+    "fetchMore": "fetch more"
   },
   "userListCard": {
     "addAdmin": "Add Admin",

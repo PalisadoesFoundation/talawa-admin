@@ -349,7 +349,9 @@
     "removeUserTag": "删除标签",
     "removeUserTagMessage": "您要删除此标签吗？这将删除所有子标签和所有关联。",
     "tagDetails": "标签详情",
-    "tagName": "名称"
+    "tagName": "名称",
+    "tagUpdationSuccess": "标签更新成功",
+    "tagRemovalSuccess": "标签删除成功"
   },
   "userListCard": {
     "addAdmin": "添加管理员",

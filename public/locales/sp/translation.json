@@ -349,7 +349,9 @@
     "removeUserTag": "Eliminar etiqueta",
     "removeUserTagMessage": "¿Desea eliminar esta etiqueta? Esto eliminará todas las subetiquetas y todas las asociaciones.",
     "tagDetails": "Detalles de la etiqueta",
-    "tagName": "Nombre"
+    "tagName": "Nombre",
+    "tagUpdationSuccess": "Etiqueta actualizada con éxito",
+    "tagRemovalSuccess": "Etiqueta eliminada con éxito"
   },
   "userListCard": {
     "joined": "Unido",

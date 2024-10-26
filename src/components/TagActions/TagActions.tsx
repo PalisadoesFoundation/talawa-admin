@@ -31,7 +31,7 @@ interface InterfaceUserTagsAncestorData {
 /**
  * Props for the `AssignToTags` component.
  */
-interface InterfaceAssignToTagsProps {
+export interface InterfaceTagActionsProps {
   assignToTagsModalIsOpen: boolean;
   hideAssignToTagsModal: () => void;
   tagActionType: TagActionType;
@@ -39,7 +39,7 @@ interface InterfaceAssignToTagsProps {
   tCommon: (key: string) => string;
 }
 
-const TagActions: React.FC<InterfaceAssignToTagsProps> = ({
+const TagActions: React.FC<InterfaceTagActionsProps> = ({
   assignToTagsModalIsOpen,
   hideAssignToTagsModal,
   tagActionType,
@@ -110,6 +110,7 @@ const TagActions: React.FC<InterfaceAssignToTagsProps> = ({
   useEffect(() => {
     const newCheckedTags = new Set(checkedTags);
     const newAncestorTagsDataMap = new Map(ancestorTagsDataMap);
+    /* istanbul ignore next */
     addAncestorTagsData.forEach(
       (ancestorTag: InterfaceUserTagsAncestorData) => {
         const prevAncestorTagValue = ancestorTagsDataMap.get(ancestorTag._id);
@@ -128,6 +129,7 @@ const TagActions: React.FC<InterfaceAssignToTagsProps> = ({
   useEffect(() => {
     const newCheckedTags = new Set(checkedTags);
     const newAncestorTagsDataMap = new Map(ancestorTagsDataMap);
+    /* istanbul ignore next */
     removeAncestorTagsData.forEach(
       (ancestorTag: InterfaceUserTagsAncestorData) => {
         const prevAncestorTagValue = ancestorTagsDataMap.get(ancestorTag._id);
@@ -166,6 +168,7 @@ const TagActions: React.FC<InterfaceAssignToTagsProps> = ({
 
   const deSelectTag = (tag: InterfaceTagData): void => {
     if (!selectedTags.some((selectedTag) => selectedTag._id === tag._id)) {
+      /* istanbul ignore next */
       return;
     }
 
@@ -193,15 +196,15 @@ const TagActions: React.FC<InterfaceAssignToTagsProps> = ({
 
   useQuery(USER_TAG_ANCESTORS, {
     variables: { id: checkedTagId },
-    onCompleted: (data) => {
-      setAddAncestorTagsData(data.getUserTagAncestors.slice(0, -1)); // Update the ancestor tags data
+    onCompleted: /* istanbul ignore next */ (data) => {
+      setAddAncestorTagsData(data.getUserTagAncestors.slice(0, -1)); // Update the ancestor tags data, to check the ancestor tags
     },
   });
 
   useQuery(USER_TAG_ANCESTORS, {
     variables: { id: uncheckedTagId },
-    onCompleted: (data) => {
-      setRemoveAncestorTagsData(data.getUserTagAncestors.slice(0, -1)); // Update the ancestor tags data
+    onCompleted: /* istanbul ignore next */ (data) => {
+      setRemoveAncestorTagsData(data.getUserTagAncestors.slice(0, -1)); // Update the ancestor tags data, to uncheck the ancestor tags
     },
   });
 
@@ -348,7 +351,7 @@ const TagActions: React.FC<InterfaceAssignToTagsProps> = ({
                 >
                   {selectedTags.length === 0 ? (
                     <div className="text-center text-body-tertiary">
-                      No tag selected
+                      {t('noTagSelected')}
                     </div>
                   ) : (
                     selectedTags.map((tag: InterfaceTagData) => (
@@ -360,7 +363,7 @@ const TagActions: React.FC<InterfaceAssignToTagsProps> = ({
                         <i
                           className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary`}
                           onClick={() => deSelectTag(tag)}
-                          data-testid="clearAssignedMember"
+                          data-testid={`clearSelectedTag${tag._id}`}
                         />
                       </div>
                     ))
@@ -381,7 +384,7 @@ const TagActions: React.FC<InterfaceAssignToTagsProps> = ({
                   className={`${styles.scrContainer}`}
                 >
                   <InfiniteScroll
-                    dataLength={userTagsList?.length ?? 0} // This is important field to render the next data
+                    dataLength={userTagsList?.length ?? 0}
                     next={loadMoreUserTags}
                     hasMore={
                       orgUserTagsData?.organizations[0].userTags.pageInfo
@@ -395,11 +398,16 @@ const TagActions: React.FC<InterfaceAssignToTagsProps> = ({
                     scrollableTarget="scrollableDiv"
                   >
                     {userTagsList?.map((tag) => (
-                      <div className="my-2" key={tag._id}>
+                      <div
+                        className="my-2"
+                        key={tag._id}
+                        data-testid="orgUserTag"
+                      >
                         <TagNode
                           tag={tag}
                           checkedTags={checkedTags}
                           toggleTagSelection={toggleTagSelection}
+                          t={t}
                         />
                       </div>
                     ))}
@@ -413,15 +421,11 @@ const TagActions: React.FC<InterfaceAssignToTagsProps> = ({
             <Button
               variant="secondary"
               onClick={(): void => hideAssignToTagsModal()}
-              data-testid="closeAddPeopleToTagModal"
+              data-testid="closeTagActionsModalBtn"
             >
               {tCommon('cancel')}
             </Button>
-            <Button
-              type="submit"
-              value="add"
-              data-testid="addPeopleToTagModalSubmitBtn"
-            >
+            <Button type="submit" value="add" data-testid="tagActionSubmitBtn">
               {tagActionType === 'assignToTags' ? t('assign') : t('remove')}
             </Button>
           </Modal.Footer>

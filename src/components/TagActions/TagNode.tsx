@@ -13,12 +13,14 @@ interface InterfaceTagNodeProps {
   tag: InterfaceTagData;
   checkedTags: Set<string>;
   toggleTagSelection: (tag: InterfaceTagData, isSelected: boolean) => void;
+  t: (key: string) => string;
 }
 
 const TagNode: React.FC<InterfaceTagNodeProps> = ({
   tag,
   checkedTags,
   toggleTagSelection,
+  t,
 }) => {
   const [expanded, setExpanded] = useState(false);
 
@@ -114,6 +116,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
               onClick={handleTagClick}
               className="me-3"
               style={{ cursor: 'pointer' }}
+              data-testid={`expandSubTags${tag._id}`}
             >
               {expanded ? '▼' : '▶'}
             </span>
@@ -123,6 +126,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
               checked={checkedTags.has(tag._id)}
               className="me-2"
               onChange={handleCheckboxChange}
+              data-testid={`checkTag${tag._id}`}
             />
             <i className="fa fa-folder mx-2" />{' '}
           </>
@@ -135,6 +139,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
               checked={checkedTags.has(tag._id)}
               className="ms-1 me-2"
               onChange={handleCheckboxChange}
+              data-testid={`checkTag${tag._id}`}
             />
             <i className="fa fa-tag mx-2" />{' '}
           </>
@@ -158,6 +163,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
               tag={tag}
               checkedTags={checkedTags}
               toggleTagSelection={toggleTagSelection}
+              t={t}
             />
           ))}
           {subTagsData?.getUserTag.childTags.pageInfo.hasNextPage && (
@@ -166,7 +172,12 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
               className="ms-4 mt-0 mb-3"
               onClick={loadMoreSubTags}
             >
-              <span className="fw-lighter fst-italic">...fetch more</span>
+              <span
+                className="fw-lighter fst-italic"
+                data-testid={`fetchMoreSubTagsOf${tag._id}`}
+              >
+                ...{t('fetchMore')}
+              </span>
               <i className={'mx-2 fa fa-angle-double-down'} />
             </div>
           )}

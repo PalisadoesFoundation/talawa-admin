@@ -349,7 +349,9 @@
     "removeUserTag": "Supprimer le tag",
     "removeUserTagMessage": "Voulez-vous supprimer ce tag ? Cela supprimera tous les sous-tags et toutes les associations.",
     "tagDetails": "Détails du tag",
-    "tagName": "Nom"
+    "tagName": "Nom",
+    "tagUpdationSuccess": "Étiquette mise à jour avec succès",
+    "tagRemovalSuccess": "Étiquette supprimée avec succès"
   },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",

@@ -176,7 +176,7 @@ function ManageTag(): JSX.Element {
       });
 
       if (data) {
-        toast.success(t('tagCreationSuccess') as string);
+        toast.success(t('tagUpdationSuccess'));
         userTagAssignedMembersRefetch();
         orgUserTagsAncestorsRefetch();
         setEditTagModalIsOpen(false);
@@ -506,6 +506,7 @@ function ManageTag(): JSX.Element {
                     showAssignToTagsModal();
                   }}
                   className="ms-5 mt-2 mb-2 btn btn-primary btn-sm w-75"
+                  data-testid="assignToTags"
                 >
                   {t('assignToTags')}
                 </div>
@@ -515,6 +516,7 @@ function ManageTag(): JSX.Element {
                     showAssignToTagsModal();
                   }}
                   className="ms-5 mb-3 btn btn-danger btn-sm w-75"
+                  data-testid="removeFromTags"
                 >
                   {t('removeFromTags')}
                 </div>
@@ -526,6 +528,7 @@ function ManageTag(): JSX.Element {
                     setEditTagModalIsOpen(true);
                   }}
                   className="ms-5 mt-3 mb-2 btn btn-primary btn-sm w-75"
+                  data-testid="editTag"
                 >
                   {tCommon('edit')}
                 </div>
@@ -534,6 +537,7 @@ function ManageTag(): JSX.Element {
                     setRemoveTagModalIsOpen(true);
                   }}
                   className="ms-5 mb-2 btn btn-danger btn-sm w-75"
+                  data-testid="removeTag"
                 >
                   {tCommon('remove')}
                 </div>
@@ -635,15 +639,11 @@ function ManageTag(): JSX.Element {
             <Button
               variant="secondary"
               onClick={(): void => hideEditTagModal()}
-              data-testid="closeCreateTagModal"
+              data-testid="closeEditTagModalBtn"
             >
               {tCommon('cancel')}
             </Button>
-            <Button
-              type="submit"
-              value="invite"
-              data-testid="createTagSubmitBtn"
-            >
+            <Button type="submit" value="invite" data-testid="editTagSubmitBtn">
               {tCommon('edit')}
             </Button>
           </Modal.Footer>
