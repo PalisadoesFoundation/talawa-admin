@@ -351,7 +351,9 @@
     "tagDetails": "标签详情",
     "tagName": "名称",
     "tagUpdationSuccess": "标签更新成功",
-    "tagRemovalSuccess": "标签删除成功"
+    "tagRemovalSuccess": "标签删除成功",
+    "noTagSelected": "未选择标签",
+    "fetchMore": "加载更多"
   },
   "userListCard": {
     "addAdmin": "添加管理员",
