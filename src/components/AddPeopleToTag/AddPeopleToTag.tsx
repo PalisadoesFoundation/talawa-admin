@@ -10,7 +10,10 @@ import { Modal, Form, Button } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import type { InterfaceQueryUserTagsMembersToAssignTo } from 'utils/interfaces';
 import styles from './AddPeopleToTag.module.css';
-import { dataGridStyle } from 'utils/organizationTagsUtils';
+import {
+  ADD_PEOPLE_TO_TAGS_QUERY_LIMIT,
+  dataGridStyle,
+} from 'utils/organizationTagsUtils';
 import { Stack } from '@mui/material';
 import { toast } from 'react-toastify';
 import { ADD_PEOPLE_TO_TAG } from 'GraphQl/Mutations/TagMutations';
@@ -80,7 +83,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
   } = useQuery(USER_TAGS_MEMBERS_TO_ASSIGN_TO, {
     variables: {
       id: currentTagId,
-      first: 7,
+      first: ADD_PEOPLE_TO_TAGS_QUERY_LIMIT,
     },
     skip: !addPeopleToTagModalIsOpen,
   });
@@ -88,7 +91,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
   const loadMoreMembersToAssignTo = (): void => {
     fetchMoreMembersToAssignTo({
       variables: {
-        first: 7, // Load 7 more items
+        first: ADD_PEOPLE_TO_TAGS_QUERY_LIMIT,
         after:
           userTagsMembersToAssignToData?.getUserTag.usersToAssignTo.pageInfo
             .endCursor, // Fetch after the last loaded cursor
