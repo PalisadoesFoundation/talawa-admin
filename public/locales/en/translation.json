@@ -1162,14 +1162,19 @@
     "endOfResults": "endOfResults"
   },
   "userChat": {
+    "add": "Add",
     "chat": "Chat",
     "search": "Search",
     "messages": "Messages",
-    "contacts": "Contacts"
+    "contacts": "Contacts",
+    "create": "Create",
+    "newChat": "New Chat",
+    "newGroupChat": "New Group Chat"
   },
   "userChatRoom": {
     "selectContact": "Select a contact to start conversation",
-    "sendMessage": "Send Message"
+    "sendMessage": "Send Message",
+    "reply": "Reply"
   },
   "orgProfileField": {
     "loading": "Loading...",

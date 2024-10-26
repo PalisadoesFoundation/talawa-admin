@@ -31,32 +31,12 @@ interface InterfaceCreateGroupChatProps {
           id: string;
         }>
       | undefined,
-  ) => Promise<ApolloQueryResult<any>>;
+  ) => Promise<ApolloQueryResult<unknown>>;
 }
 
-// interface InterfaceOrganization {
-//   _id: string;
-//   name: string;
-//   image: string;
-//   description: string;
-//   admins: [];
-//   members: [];
-//   address: {
-//     city: string;
-//     countryCode: string;
-//     line1: string;
-//     postalCode: string;
-//     state: string;
-//   };
-//   membershipRequestStatus: string;
-//   userRegistrationRequired: boolean;
-//   membershipRequests: {
-//     _id: string;
-//     user: {
-//       _id: string;
-//     };
-//   }[];
-// }
+/**
+ * Styled table cell with custom styles.
+ */
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -351,7 +331,7 @@ export default function CreateGroupChat({
                                   }}
                                   data-testid="addBtn"
                                 >
-                                  Add
+                                  {t('add')}
                                 </Button>
                               )}
                             </StyledTableCell>
@@ -369,7 +349,7 @@ export default function CreateGroupChat({
             onClick={handleCreateGroupChat}
             data-testid="createBtn"
           >
-            Create
+            {t('create')}
           </Button>
         </Modal.Body>
       </Modal>

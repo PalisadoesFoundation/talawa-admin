@@ -108,28 +108,6 @@ const userSidebar = ({
               </Button>
             )}
           </NavLink>
-          {/* <NavLink to={'/user/chat'} onClick={handleLinkClick}>
-            {({ isActive }) => (
-              <Button
-                variant={isActive === true ? 'success' : ''}
-                className={`${
-                  isActive === true ? 'text-white' : 'text-secondary'
-                }`}
-                data-testid="chatBtn"
-              >
-                <div className={styles.iconWrapper}>
-                  <ChatIcon
-                    stroke={`${
-                      isActive === true
-                        ? 'var(--bs-white)'
-                        : 'var(--bs-secondary)'
-                    }`}
-                  />
-                </div>
-                {t('chat')}
-              </Button>
-            )}
-          </NavLink> */}
         </div>
       </div>
     </>

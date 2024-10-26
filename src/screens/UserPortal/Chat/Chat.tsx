@@ -6,16 +6,12 @@ import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import ContactCard from 'components/UserPortal/ContactCard/ContactCard';
 import ChatRoom from 'components/UserPortal/ChatRoom/ChatRoom';
 import useLocalStorage from 'utils/useLocalstorage';
+import NewChat from 'assets/svgs/newChat.svg?react';
+import styles from './Chat.module.css';
+import { CHATS_LIST } from 'GraphQl/Queries/PlugInQueries';
 import CreateGroupChat from '../../../components/UserPortal/CreateGroupChat/CreateGroupChat';
 import CreateDirectChat from 'components/UserPortal/CreateDirectChat/CreateDirectChat';
 import { MARK_CHAT_MESSAGES_AS_READ } from 'GraphQl/Mutations/OrganizationMutations';
-import NewChat from 'assets/svgs/newChat.svg?react';
-import styles from './Chat.module.css';
-import {
-  CHATS_LIST,
-  GROUP_CHAT_LIST,
-  UNREAD_CHAT_LIST,
-} from 'GraphQl/Queries/PlugInQueries';
 
 interface InterfaceContactCardProps {
   id: string;
@@ -27,15 +23,86 @@ interface InterfaceContactCardProps {
   unseenMessages: number;
   lastMessage: string;
 }
+/**
+ * The `chat` component provides a user interface for interacting with contacts and chat rooms within an organization.
+ * It features a contact list with search functionality and displays the chat room for the selected contact.
+ * The component uses GraphQL to fetch and manage contact data, and React state to handle user interactions.
+ *
+ * ## Features:
+ * - **Search Contacts:** Allows users to search for contacts by their first name.
+ * - **Contact List:** Displays a list of contacts with their details and a profile image.
+ * - **Chat Room:** Shows the chat room for the selected contact.
+ *
+ * ## GraphQL Queries:
+ * - `ORGANIZATIONS_MEMBER_CONNECTION_LIST`: Fetches a list of members within an organization, with optional filtering based on the first name.
+ *
+ * ## Event Handlers:
+ * - `handleSearch`: Updates the filterName state and refetches the contact data based on the search query.
+ * - `handleSearchByEnter`: Handles search input when the Enter key is pressed.
+ * - `handleSearchByBtnClick`: Handles search input when the search button is clicked.
+ *
+ * ## Rendering:
+ * - Displays a search input field and a search button for filtering contacts.
+ * - Shows a list of contacts with their details and profile images.
+ * - Renders a chat room component for the selected contact.
+ * - Displays a loading indicator while contact data is being fetched.
+ *
+ * @returns  The rendered `chat` component.
+ */
 
+type DirectMessage = {
+  _id: string;
+  createdAt: Date;
+  sender: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    image: string;
+  };
+  replyTo:
+    | {
+        _id: string;
+        createdAt: Date;
+        sender: {
+          _id: string;
+          firstName: string;
+          lastName: string;
+          image: string;
+        };
+        messageContent: string;
+        receiver: {
+          _id: string;
+          firstName: string;
+          lastName: string;
+        };
+      }
+    | undefined;
+  messageContent: string;
+};
+
+type Chat = {
+  _id: string;
+  isGroup: boolean;
+  name: string;
+  image: string;
+  messages: DirectMessage[];
+  users: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    image: string;
+  }[];
+  unseenMessagesByUsers: string;
+};
 export default function chat(): JSX.Element {
   const { t } = useTranslation('translation', {
-    keyPrefix: 'chat',
+    keyPrefix: 'userChat',
   });
   const { t: tCommon } = useTranslation('common');
 
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
-  const [chats, setChats] = useState<any>([]);
+  const [chats, setChats] = useState<Chat[]>([]);
   const [selectedContact, setSelectedContact] = useState('');
   const [filterType, setFilterType] = useState('all');
   const { getItem } = useLocalStorage();
@@ -59,44 +126,19 @@ export default function chat(): JSX.Element {
     if (filterType === 'all') {
       chatsListRefetch();
       if (chatsListData && chatsListData.chatsByUserId) {
-        const chatList = chatsListData.chatsByUserId.map((chat: any) => {
-          const parsedChat = {
-            ...chat,
-            unseenMessagesByUsers: JSON.parse(chat.unseenMessagesByUsers),
-          };
-          return parsedChat;
-        });
-        setChats(chatList);
+        setChats(chatsListData.chatsByUserId);
       }
     } else if (filterType === 'unread') {
       unreadChatListRefetch();
       if (unreadChatListData && unreadChatListData.getUnreadChatsByUserId) {
-        const chatList = unreadChatListData.getUnreadChatsByUserId.map(
-          (chat: any) => {
-            const parsedChat = {
-              ...chat,
-              unseenMessagesByUsers: JSON.parse(chat.unseenMessagesByUsers),
-            };
-            return parsedChat;
-          },
-        );
-        setChats(chatList);
+        setChats(unreadChatListData.getUnreadChatsByUserId);
       }
       console.log(unreadChatListData);
     } else if (filterType === 'group') {
       groupChatListRefetch();
       console.log(groupChatListData);
       if (groupChatListData && groupChatListData.getGroupChatsByUserId) {
-        const chatList = groupChatListData.getGroupChatsByUserId.map(
-          (chat: any) => {
-            const parsedChat = {
-              ...chat,
-              unseenMessagesByUsers: JSON.parse(chat.unseenMessagesByUsers),
-            };
-            return parsedChat;
-          },
-        );
-        setChats(chatList);
+        setChats(groupChatListData.getGroupChatsByUserId);
       }
     }
   }, [filterType]);
@@ -154,16 +196,7 @@ export default function chat(): JSX.Element {
 
   React.useEffect(() => {
     if (chatsListData && chatsListData?.chatsByUserId.length) {
-      console.log('Unseeen Messages', chatsListData.chatsByUserId);
-      const chatList = chatsListData.chatsByUserId.map((chat: any) => {
-        const parsedChat = {
-          ...chat,
-          unseenMessagesByUsers: JSON.parse(chat.unseenMessagesByUsers),
-        };
-        return parsedChat;
-      });
-      console.log('Chat LIST ', chatList);
-      setChats(chatList);
+      setChats(chatsListData.chatsByUserId);
     }
   }, [chatsListData]);
 
@@ -197,7 +230,7 @@ export default function chat(): JSX.Element {
             <div
               className={`d-flex justify-content-between ${styles.addChatContainer}`}
             >
-              <h4>Messages</h4>
+              <h4>{t('messages')}</h4>
               <Dropdown style={{ cursor: 'pointer' }}>
                 <Dropdown.Toggle
                   className={styles.customToggle}
@@ -210,13 +243,13 @@ export default function chat(): JSX.Element {
                     onClick={openCreateDirectChatModal}
                     data-testid="newDirectChat"
                   >
-                    New Chat
+                    {t('newChat')}
                   </Dropdown.Item>
                   <Dropdown.Item
                     onClick={openCreateGroupChatModal}
                     data-testid="newGroupChat"
                   >
-                    New Group Chat
+                    {t('newGroupChat')}
                   </Dropdown.Item>
                   <Dropdown.Item href="#/action-3">
                     Starred Messages
@@ -227,7 +260,7 @@ export default function chat(): JSX.Element {
             <div className={styles.contactListContainer}>
               {chatsListLoading ? (
                 <div className={`d-flex flex-row justify-content-center`}>
-                  <HourglassBottomIcon /> <span>Loading...</span>
+                  <HourglassBottomIcon /> <span>{tCommon('loading')}</span>
                 </div>
               ) : (
                 <>
@@ -279,7 +312,7 @@ export default function chat(): JSX.Element {
                     className={styles.contactCardContainer}
                   >
                     {!!chats.length &&
-                      chats.map((chat: any) => {
+                      chats.map((chat: Chat) => {
                         const cardProps: InterfaceContactCardProps = {
                           id: chat._id,
                           title: !chat.isGroup
@@ -295,7 +328,9 @@ export default function chat(): JSX.Element {
                           setSelectedContact,
                           selectedContact,
                           isGroup: chat.isGroup,
-                          unseenMessages: chat.unseenMessagesByUsers[userId],
+                          unseenMessages: JSON.parse(
+                            chat.unseenMessagesByUsers,
+                          )[userId],
                           lastMessage:
                             chat.messages[chat.messages.length - 1]
                               ?.messageContent,

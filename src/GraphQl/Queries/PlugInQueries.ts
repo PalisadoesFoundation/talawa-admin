@@ -179,7 +179,6 @@ export const CHATS_LIST = gql`
       }
       messages {
         _id
-        type
         createdAt
         messageContent
         sender {

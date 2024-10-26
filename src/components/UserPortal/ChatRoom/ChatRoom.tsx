@@ -34,6 +34,18 @@ interface InterfaceChatRoomProps {
   ) => Promise<ApolloQueryResult<{ chatList: Chat[] }>>;
 }
 
+/**
+ * A chat room component that displays messages and a message input field.
+ *
+ * This component shows a list of messages between the user and a selected contact.
+ * If no contact is selected, it displays a placeholder with an icon and a message asking the user to select a contact.
+ *
+ * @param  props - The properties passed to the component.
+ * @param selectedContact - The ID or name of the currently selected contact. If empty, a placeholder is shown.
+ *
+ * @returns The rendered chat room component.
+ */
+
 type DirectMessage = {
   _id: string;
   createdAt: Date;
@@ -63,7 +75,6 @@ type DirectMessage = {
     | undefined;
   messageContent: string;
   media: string;
-  type: string;
 };
 
 type Chat = {
@@ -78,6 +89,7 @@ type Chat = {
     lastName: string;
     email: string;
   }[];
+  unseenMessagesByUsers: JSON;
 };
 
 export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
@@ -133,7 +145,6 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
       replyTo: replyToDirectMessage?._id,
       media: attachment,
       messageContent: newMessage,
-      type: 'STRING',
     },
   });
 
@@ -216,14 +227,18 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
       userId: userId,
     },
     onData: async (messageSubscriptionData) => {
-      console.log(messageSubscriptionData, 'messageSubscriptionData');
       if (
         messageSubscriptionData?.data.data.messageSentToChat &&
         messageSubscriptionData?.data.data.messageSentToChat
           .chatMessageBelongsTo['_id'] == props.selectedContact
       ) {
         await markChatMessagesAsRead();
-        await chatRefetch();
+        chatRefetch();
+      } else {
+        chatRefetch({
+          id: messageSubscriptionData?.data.data.messageSentToChat
+            .chatMessageBelongsTo['_id'],
+        });
       }
       props.chatListRefetch();
       unreadChatListRefetch();
@@ -238,7 +253,6 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
       console.log('notificationSubscriptionData', notificationSubscriptionData);
     },
   });
-
   useEffect(() => {
     document
       .getElementById('chat-area')
@@ -342,6 +356,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                               ? styles.messageSent
                               : styles.messageReceived
                           }
+                          data-testid="message"
                           key={message._id}
                           id={message._id}
                         >
@@ -375,7 +390,10 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                             {message.messageContent}
                           </span>
                           <div className={styles.messageAttributes}>
-                            <Dropdown style={{ cursor: 'pointer' }}>
+                            <Dropdown
+                              data-testid="moreOptions"
+                              style={{ cursor: 'pointer' }}
+                            >
                               <Dropdown.Toggle
                                 className={styles.customToggle}
                                 data-testid={'dropdown'}
@@ -387,9 +405,9 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                                   onClick={() => {
                                     setReplyToDirectMessage(message);
                                   }}
-                                  data-testid="replyToMessage"
+                                  data-testid="replyBtn"
                                 >
-                                  Reply
+                                  {t('reply')}
                                 </Dropdown.Item>
                                 <Dropdown.Item
                                   onClick={() => {
@@ -429,7 +447,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
               onChange={handleImageChange}
             />
             {!!replyToDirectMessage?._id && (
-              <div className={styles.replyTo}>
+              <div data-testid="replyMsg" className={styles.replyTo}>
                 <div className={styles.replyToMessageContainer}>
                   <div className={styles.userDetails}>
                     <Avatar
