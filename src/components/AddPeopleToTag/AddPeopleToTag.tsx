@@ -16,6 +16,7 @@ import { toast } from 'react-toastify';
 import { ADD_PEOPLE_TO_TAG } from 'GraphQl/Mutations/TagMutations';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { WarningAmberRounded } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Props for the `AddPeopleToTag` component.
@@ -42,6 +43,8 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
   tCommon,
 }) => {
   const { tagId: currentTagId } = useParams();
+
+  const { t: tErrors } = useTranslation('error');
 
   const [assignToMembers, setAssignToMembers] = useState<InterfaceMemberData[]>(
     [],
@@ -164,9 +167,9 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
       }
     } catch (error: unknown) {
       /* istanbul ignore next */
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
+      const errorMessage =
+        error instanceof Error ? error.message : tErrors('unknownError');
+      toast.error(errorMessage);
     }
   };
 
