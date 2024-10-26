@@ -130,7 +130,10 @@ const UserScreen = (): JSX.Element => {
       >
         <div className="d-flex justify-content-between align-items-center">
           <div style={{ flex: 1 }}>
-            <h1>{titleKey !== 'home' ? t('title') : ''}</h1>
+            {/* Before  */}
+            {/* <h1>{titleKey !== 'home' ? t('title') : ''}</h1>   */}
+            {/* After  */}
+            <h1>{titleKey !== 'home' ? t('title') : 'Posts'}</h1>
           </div>
           <ProfileDropdown />
         </div>
