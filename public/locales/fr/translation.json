@@ -330,6 +330,7 @@
     "unassignUserTag": "Désassigner l'étiquette",
     "unassignUserTagMessage": "Voulez-vous retirer l'étiquette de cet utilisateur?",
     "successfullyUnassigned": "Étiquette retirée de l'utilisateur",
+    "addPeople": "Ajouter des personnes",
     "add": "Ajouter",
     "subTags": "Sous-étiquettes",
     "assignedToAll": "Étiquette attribuée à tous",
