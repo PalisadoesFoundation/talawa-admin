@@ -16,7 +16,7 @@ import { toast } from 'react-toastify';
 import type { InterfaceQueryUserTagChildTags } from 'utils/interfaces';
 import styles from './SubTags.module.css';
 import { DataGrid } from '@mui/x-data-grid';
-import { dataGridStyle } from 'utils/organizationTagsUtils';
+import { dataGridStyle, TAGS_QUERY_LIMIT } from 'utils/organizationTagsUtils';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
 import {
@@ -27,6 +27,7 @@ import {
   USER_TAG_ANCESTORS,
   USER_TAG_SUB_TAGS,
 } from 'GraphQl/Queries/userTagQueries';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 /**
  * Component that renders the SubTags screen when the app navigates to '/orgtags/:orgId/subtags/:tagId'.
@@ -47,11 +48,6 @@ function SubTags(): JSX.Element {
 
   const navigate = useNavigate();
 
-  const [after, setAfter] = useState<string | null | undefined>(null);
-  const [before, setBefore] = useState<string | null | undefined>(null);
-  const [first, setFirst] = useState<number | null>(5);
-  const [last, setLast] = useState<number | null>(null);
-
   const [tagName, setTagName] = useState<string>('');
 
   const [removeUserTagId, setRemoveUserTagId] = useState(null);
@@ -69,9 +65,10 @@ function SubTags(): JSX.Element {
 
   const {
     data: subTagsData,
-    loading: subTagsLoading,
     error: subTagsError,
+    loading: subTagsLoading,
     refetch: subTagsRefetch,
+    fetchMore: fetchMoreSubTags,
   }: {
     data?: {
       getUserTag: InterfaceQueryUserTagChildTags;
@@ -79,15 +76,56 @@ function SubTags(): JSX.Element {
     loading: boolean;
     error?: ApolloError;
     refetch: () => void;
+    fetchMore: (options: {
+      variables: {
+        first: number;
+        after?: string;
+      };
+      updateQuery: (
+        previousResult: { getUserTag: InterfaceQueryUserTagChildTags },
+        options: {
+          fetchMoreResult?: { getUserTag: InterfaceQueryUserTagChildTags };
+        },
+      ) => { getUserTag: InterfaceQueryUserTagChildTags };
+    }) => void;
   } = useQuery(USER_TAG_SUB_TAGS, {
     variables: {
       id: parentTagId,
-      after: after,
-      before: before,
-      first: first,
-      last: last,
+      first: TAGS_QUERY_LIMIT,
     },
   });
+
+  const loadMoreSubTags = (): void => {
+    fetchMoreSubTags({
+      variables: {
+        first: TAGS_QUERY_LIMIT,
+        after: subTagsData?.getUserTag.childTags.pageInfo.endCursor,
+      },
+      updateQuery: (
+        prevResult: { getUserTag: InterfaceQueryUserTagChildTags },
+        {
+          fetchMoreResult,
+        }: {
+          fetchMoreResult?: { getUserTag: InterfaceQueryUserTagChildTags };
+        },
+      ) => {
+        if (!fetchMoreResult) return prevResult;
+
+        return {
+          getUserTag: {
+            ...fetchMoreResult.getUserTag,
+            childTags: {
+              ...fetchMoreResult.getUserTag.childTags,
+              edges: [
+                ...prevResult.getUserTag.childTags.edges,
+                ...fetchMoreResult.getUserTag.childTags.edges,
+              ],
+            },
+          },
+        };
+      },
+    });
+  };
 
   const {
     data: orgUserTagAncestorsData,
@@ -162,20 +200,6 @@ function SubTags(): JSX.Element {
   if (createUserTagLoading || subTagsLoading || orgUserTagsAncestorsLoading) {
     return <Loader />;
   }
-
-  const handleNextPage = (): void => {
-    setAfter(subTagsData?.getUserTag.childTags.pageInfo.endCursor);
-    setBefore(null);
-    setFirst(5);
-    setLast(null);
-  };
-
-  const handlePreviousPage = (): void => {
-    setBefore(subTagsData?.getUserTag.childTags.pageInfo.startCursor);
-    setAfter(null);
-    setFirst(null);
-    setLast(5);
-  };
 
   if (subTagsError || orgUserTagsAncestorsError) {
     return (
@@ -394,7 +418,7 @@ function SubTags(): JSX.Element {
             </div>
           </div>
 
-          <div>
+          <div className="mb-4">
             <div className="bg-white light border border-bottom-0 rounded-top mb-0 py-2 d-flex align-items-center">
               <div className="ms-3 my-1">
                 <IconComponent name="Tag" />
@@ -424,58 +448,46 @@ function SubTags(): JSX.Element {
                 </div>
               ))}
             </div>
-            <DataGrid
-              disableColumnMenu
-              columnBufferPx={7}
-              hideFooter={true}
-              getRowId={(row) => row._id}
-              slots={{
-                noRowsOverlay: /* istanbul ignore next */ () => (
-                  <Stack
-                    height="100%"
-                    alignItems="center"
-                    justifyContent="center"
-                  >
-                    {t('noTagsFound')}
-                  </Stack>
-                ),
-              }}
-              sx={dataGridStyle}
-              getRowClassName={() => `${styles.rowBackground}`}
-              autoHeight
-              rowHeight={65}
-              rows={userTagsList?.map((fund, index) => ({
-                id: index + 1,
-                ...fund,
-              }))}
-              columns={columns}
-              isRowSelectable={() => false}
-            />
-          </div>
-        </div>
-
-        <div className="row m-md-3 d-flex justify-content-center w-100">
-          <div className="col-auto">
-            <Button
-              onClick={handlePreviousPage}
-              className="btn-sm"
-              disabled={
-                !subTagsData?.getUserTag.childTags.pageInfo.hasPreviousPage
+            <InfiniteScroll
+              dataLength={userTagsList?.length ?? 0}
+              next={loadMoreSubTags}
+              hasMore={
+                subTagsData?.getUserTag.childTags.pageInfo.hasNextPage ?? false
               }
-              data-testid="previousPageBtn"
+              loader={
+                <div className="simpleLoader">
+                  <div className="spinner" />
+                </div>
+              }
             >
-              <i className={'mx-2 fa fa-caret-left'} />
-            </Button>
-          </div>
-          <div className="col-auto">
-            <Button
-              onClick={handleNextPage}
-              className="btn-sm"
-              disabled={!subTagsData?.getUserTag.childTags.pageInfo.hasNextPage}
-              data-testid="nextPagBtn"
-            >
-              <i className={'mx-2 fa fa-caret-right'} />
-            </Button>
+              <DataGrid
+                disableColumnMenu
+                columnBufferPx={7}
+                hideFooter={true}
+                getRowId={(row) => row._id}
+                slots={{
+                  noRowsOverlay: /* istanbul ignore next */ () => (
+                    <Stack
+                      height="100%"
+                      alignItems="center"
+                      justifyContent="center"
+                    >
+                      {t('noTagsFound')}
+                    </Stack>
+                  ),
+                }}
+                sx={dataGridStyle}
+                getRowClassName={() => `${styles.rowBackground}`}
+                autoHeight
+                rowHeight={65}
+                rows={userTagsList?.map((fund, index) => ({
+                  id: index + 1,
+                  ...fund,
+                }))}
+                columns={columns}
+                isRowSelectable={() => false}
+              />
+            </InfiniteScroll>
           </div>
         </div>
       </Row>

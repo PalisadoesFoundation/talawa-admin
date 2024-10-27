@@ -17,7 +17,10 @@ import type { InterfaceQueryUserTagsAssignedMembers } from 'utils/interfaces';
 import styles from './ManageTag.module.css';
 import { DataGrid } from '@mui/x-data-grid';
 import type { TagActionType } from 'utils/organizationTagsUtils';
-import { dataGridStyle } from 'utils/organizationTagsUtils';
+import {
+  ADD_PEOPLE_TO_TAGS_QUERY_LIMIT,
+  dataGridStyle,
+} from 'utils/organizationTagsUtils';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
 import {
@@ -31,6 +34,7 @@ import {
 } from 'GraphQl/Queries/userTagQueries';
 import AddPeopleToTag from 'components/AddPeopleToTag/AddPeopleToTag';
 import TagActions from 'components/TagActions/TagActions';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 /**
  * Component that renders the Manage Tag screen when the app navigates to '/orgtags/:orgId/managetag/:tagId'.
@@ -56,10 +60,6 @@ function ManageTag(): JSX.Element {
 
   const { orgId, tagId: currentTagId } = useParams();
   const navigate = useNavigate();
-  const [after, setAfter] = useState<string | null | undefined>(null);
-  const [before, setBefore] = useState<string | null | undefined>(null);
-  const [first, setFirst] = useState<number | null>(5);
-  const [last, setLast] = useState<number | null>(null);
 
   const [unassignUserId, setUnassignUserId] = useState(null);
 
@@ -96,6 +96,7 @@ function ManageTag(): JSX.Element {
     loading: userTagAssignedMembersLoading,
     error: userTagAssignedMembersError,
     refetch: userTagAssignedMembersRefetch,
+    fetchMore: fetchMoreAssignedMembers,
   }: {
     data?: {
       getUserTag: InterfaceQueryUserTagsAssignedMembers;
@@ -103,15 +104,64 @@ function ManageTag(): JSX.Element {
     loading: boolean;
     error?: ApolloError;
     refetch: () => void;
+    fetchMore: (options: {
+      variables: {
+        after?: string | null;
+        first?: number | null;
+      };
+      updateQuery?: (
+        previousQueryResult: {
+          getUserTag: InterfaceQueryUserTagsAssignedMembers;
+        },
+        options: {
+          fetchMoreResult: {
+            getUserTag: InterfaceQueryUserTagsAssignedMembers;
+          };
+        },
+      ) => { getUserTag: InterfaceQueryUserTagsAssignedMembers };
+    }) => Promise<unknown>;
   } = useQuery(USER_TAGS_ASSIGNED_MEMBERS, {
     variables: {
       id: currentTagId,
-      after: after,
-      before: before,
-      first: first,
-      last: last,
+      first: ADD_PEOPLE_TO_TAGS_QUERY_LIMIT,
     },
   });
+
+  const loadMoreAssignedMembers = (): void => {
+    fetchMoreAssignedMembers({
+      variables: {
+        first: ADD_PEOPLE_TO_TAGS_QUERY_LIMIT,
+        after:
+          userTagAssignedMembersData?.getUserTag.usersAssignedTo.pageInfo
+            .endCursor, // Fetch after the last loaded cursor
+      },
+      updateQuery: (
+        prevResult: { getUserTag: InterfaceQueryUserTagsAssignedMembers },
+        {
+          fetchMoreResult,
+        }: {
+          fetchMoreResult: {
+            getUserTag: InterfaceQueryUserTagsAssignedMembers;
+          };
+        },
+      ) => {
+        if (!fetchMoreResult) return prevResult;
+
+        return {
+          getUserTag: {
+            ...fetchMoreResult.getUserTag,
+            usersAssignedTo: {
+              ...fetchMoreResult.getUserTag.usersAssignedTo,
+              edges: [
+                ...prevResult.getUserTag.usersAssignedTo.edges,
+                ...fetchMoreResult.getUserTag.usersAssignedTo.edges,
+              ],
+            },
+          },
+        };
+      },
+    });
+  };
 
   const {
     data: orgUserTagAncestorsData,
@@ -244,24 +294,6 @@ function ManageTag(): JSX.Element {
 
   const redirectToManageTag = (tagId: string): void => {
     navigate(`/orgtags/${orgId}/managetag/${tagId}`);
-  };
-
-  const handleNextPage = (): void => {
-    setAfter(
-      userTagAssignedMembersData?.getUserTag.usersAssignedTo.pageInfo.endCursor,
-    );
-    setBefore(null);
-    setFirst(5);
-    setLast(null);
-  };
-  const handlePreviousPage = (): void => {
-    setBefore(
-      userTagAssignedMembersData?.getUserTag.usersAssignedTo.pageInfo
-        .startCursor,
-    );
-    setAfter(null);
-    setFirst(null);
-    setLast(5);
   };
 
   const toggleUnassignTagModal = (): void => {
@@ -405,7 +437,7 @@ function ManageTag(): JSX.Element {
             </div>
           </div>
 
-          <Row>
+          <Row className="mb-4">
             <Col xs={9}>
               <div className="bg-white light border border-bottom-0 rounded-top mb-0 py-2 d-flex align-items-center">
                 <div className="ms-3 my-1">
@@ -437,62 +469,49 @@ function ManageTag(): JSX.Element {
                   </div>
                 ))}
               </div>
-              <DataGrid
-                disableColumnMenu
-                columnBufferPx={7}
-                hideFooter={true}
-                getRowId={(row) => row._id}
-                slots={{
-                  noRowsOverlay: /* istanbul ignore next */ () => (
-                    <Stack
-                      height="100%"
-                      alignItems="center"
-                      justifyContent="center"
-                    >
-                      {t('noAssignedMembersFound')}
-                    </Stack>
-                  ),
-                }}
-                sx={dataGridStyle}
-                getRowClassName={() => `${styles.rowBackground}`}
-                autoHeight
-                rowHeight={65}
-                rows={userTagAssignedMembers?.map((assignedMembers, index) => ({
-                  id: index + 1,
-                  ...assignedMembers,
-                }))}
-                columns={columns}
-                isRowSelectable={() => false}
-              />
-
-              <div className="row m-md-3 d-flex justify-content-center w-100">
-                <div className="col-auto">
-                  <Button
-                    onClick={handlePreviousPage}
-                    className="btn-sm"
-                    disabled={
-                      !userTagAssignedMembersData?.getUserTag.usersAssignedTo
-                        .pageInfo.hasPreviousPage
-                    }
-                    data-testid="previousPageBtn"
-                  >
-                    <i className={'mx-2 fa fa-caret-left'} />
-                  </Button>
-                </div>
-                <div className="col-auto">
-                  <Button
-                    onClick={handleNextPage}
-                    className="btn-sm"
-                    disabled={
-                      !userTagAssignedMembersData?.getUserTag.usersAssignedTo
-                        .pageInfo.hasNextPage
-                    }
-                    data-testid="nextPagBtn"
-                  >
-                    <i className={'mx-2 fa fa-caret-right'} />
-                  </Button>
-                </div>
-              </div>
+              <InfiniteScroll
+                dataLength={userTagAssignedMembers?.length ?? 0} // This is important field to render the next data
+                next={loadMoreAssignedMembers}
+                hasMore={
+                  userTagAssignedMembersData?.getUserTag.usersAssignedTo
+                    .pageInfo.hasNextPage ?? false
+                }
+                loader={
+                  <div className="simpleLoader">
+                    <div className="spinner" />
+                  </div>
+                }
+              >
+                <DataGrid
+                  disableColumnMenu
+                  columnBufferPx={7}
+                  hideFooter={true}
+                  getRowId={(row) => row._id}
+                  slots={{
+                    noRowsOverlay: /* istanbul ignore next */ () => (
+                      <Stack
+                        height="100%"
+                        alignItems="center"
+                        justifyContent="center"
+                      >
+                        {t('noAssignedMembersFound')}
+                      </Stack>
+                    ),
+                  }}
+                  sx={dataGridStyle}
+                  getRowClassName={() => `${styles.rowBackground}`}
+                  autoHeight
+                  rowHeight={65}
+                  rows={userTagAssignedMembers?.map(
+                    (assignedMembers, index) => ({
+                      id: index + 1,
+                      ...assignedMembers,
+                    }),
+                  )}
+                  columns={columns}
+                  isRowSelectable={() => false}
+                />
+              </InfiniteScroll>
             </Col>
 
             <Col className="ms-auto" xs={3}>

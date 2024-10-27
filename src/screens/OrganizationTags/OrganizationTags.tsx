@@ -16,7 +16,7 @@ import { toast } from 'react-toastify';
 import type { InterfaceQueryOrganizationUserTags } from 'utils/interfaces';
 import styles from './OrganizationTags.module.css';
 import { DataGrid } from '@mui/x-data-grid';
-import { dataGridStyle } from 'utils/organizationTagsUtils';
+import { dataGridStyle, TAGS_QUERY_LIMIT } from 'utils/organizationTagsUtils';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
 import { ORGANIZATION_USER_TAGS_LIST } from 'GraphQl/Queries/OrganizationQueries';
@@ -24,6 +24,7 @@ import {
   CREATE_USER_TAG,
   REMOVE_USER_TAG,
 } from 'GraphQl/Mutations/TagMutations';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 /**
  * Component that renders the Organization Tags screen when the app navigates to '/orgtags/:orgId'.
@@ -42,11 +43,6 @@ function OrganizationTags(): JSX.Element {
 
   const { orgId } = useParams();
   const navigate = useNavigate();
-  const [after, setAfter] = useState<string | null | undefined>(null);
-  const [before, setBefore] = useState<string | null | undefined>(null);
-  const [first, setFirst] = useState<number | null>(5);
-  const [last, setLast] = useState<number | null>(null);
-  const [tagSerialNumber, setTagSerialNumber] = useState(0);
 
   const [tagName, setTagName] = useState<string>('');
 
@@ -67,6 +63,7 @@ function OrganizationTags(): JSX.Element {
     loading: orgUserTagsLoading,
     error: orgUserTagsError,
     refetch: orgUserTagsRefetch,
+    fetchMore: orgUserTagsFetchMore,
   }: {
     data?: {
       organizations: InterfaceQueryOrganizationUserTags[];
@@ -74,15 +71,63 @@ function OrganizationTags(): JSX.Element {
     loading: boolean;
     error?: ApolloError;
     refetch: () => void;
+    fetchMore: (options: {
+      variables: {
+        first: number;
+        after?: string;
+      };
+      updateQuery: (
+        previousResult: { organizations: InterfaceQueryOrganizationUserTags[] },
+        options: {
+          fetchMoreResult?: {
+            organizations: InterfaceQueryOrganizationUserTags[];
+          };
+        },
+      ) => { organizations: InterfaceQueryOrganizationUserTags[] };
+    }) => void;
   } = useQuery(ORGANIZATION_USER_TAGS_LIST, {
     variables: {
       id: orgId,
-      after: after,
-      before: before,
-      first: first,
-      last: last,
+      first: TAGS_QUERY_LIMIT,
     },
   });
+
+  const loadMoreUserTags = (): void => {
+    orgUserTagsFetchMore({
+      variables: {
+        first: TAGS_QUERY_LIMIT,
+        after: orgUserTagsData?.organizations[0].userTags.pageInfo.endCursor,
+      },
+      updateQuery: (
+        prevResult: { organizations: InterfaceQueryOrganizationUserTags[] },
+        {
+          fetchMoreResult,
+        }: {
+          fetchMoreResult?: {
+            organizations: InterfaceQueryOrganizationUserTags[];
+          };
+        },
+      ) => {
+        if (!fetchMoreResult) return prevResult;
+
+        return {
+          organizations: [
+            {
+              ...prevResult.organizations[0],
+              userTags: {
+                ...prevResult.organizations[0].userTags,
+                edges: [
+                  ...prevResult.organizations[0].userTags.edges,
+                  ...fetchMoreResult.organizations[0].userTags.edges,
+                ],
+                pageInfo: fetchMoreResult.organizations[0].userTags.pageInfo,
+              },
+            },
+          ],
+        };
+      },
+    });
+  };
 
   const [create, { loading: createUserTagLoading }] =
     useMutation(CREATE_USER_TAG);
@@ -151,21 +196,6 @@ function OrganizationTags(): JSX.Element {
     );
   }
 
-  const handleNextPage = (): void => {
-    setAfter(orgUserTagsData?.organizations[0].userTags.pageInfo.endCursor);
-    setBefore(null);
-    setFirst(5);
-    setLast(null);
-    setTagSerialNumber(tagSerialNumber + 1);
-  };
-  const handlePreviousPage = (): void => {
-    setBefore(orgUserTagsData?.organizations[0].userTags.pageInfo.startCursor);
-    setAfter(null);
-    setFirst(null);
-    setLast(5);
-    setTagSerialNumber(tagSerialNumber - 1);
-  };
-
   const userTagsList = orgUserTagsData?.organizations[0].userTags.edges.map(
     (edge) => edge.node,
   );
@@ -193,7 +223,7 @@ function OrganizationTags(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
-        return <div>{tagSerialNumber * 5 + params.row.id}</div>;
+        return <div>{params.row.id}</div>;
       },
     },
     {
@@ -351,7 +381,7 @@ function OrganizationTags(): JSX.Element {
             </Button>
           </div>
 
-          <div>
+          <div className="mb-4">
             <div className="bg-white light border border-bottom-0 rounded-top mb-0 py-2 d-flex align-items-center">
               <div className="ms-3 my-1">
                 <IconComponent name="Tag" />
@@ -361,61 +391,47 @@ function OrganizationTags(): JSX.Element {
                 {'Tags'}
               </div>
             </div>
-            <DataGrid
-              disableColumnMenu
-              columnBufferPx={7}
-              hideFooter={true}
-              getRowId={(row) => row._id}
-              slots={{
-                noRowsOverlay: /* istanbul ignore next */ () => (
-                  <Stack
-                    height="100%"
-                    alignItems="center"
-                    justifyContent="center"
-                  >
-                    {t('noTagsFound')}
-                  </Stack>
-                ),
-              }}
-              sx={dataGridStyle}
-              getRowClassName={() => `${styles.rowBackground}`}
-              autoHeight
-              rowHeight={65}
-              rows={userTagsList?.map((fund, index) => ({
-                id: index + 1,
-                ...fund,
-              }))}
-              columns={columns}
-              isRowSelectable={() => false}
-            />
-          </div>
-        </div>
-
-        <div className="row m-md-3 d-flex justify-content-center w-100">
-          <div className="col-auto">
-            <Button
-              onClick={handlePreviousPage}
-              className="btn-sm"
-              data-testid="previousPageBtn"
-              disabled={
-                !orgUserTagsData?.organizations[0].userTags.pageInfo
-                  .hasPreviousPage
+            <InfiniteScroll
+              dataLength={userTagsList?.length ?? 0}
+              next={loadMoreUserTags}
+              hasMore={
+                orgUserTagsData?.organizations[0].userTags.pageInfo
+                  .hasNextPage ?? false
+              }
+              loader={
+                <div className="simpleLoader">
+                  <div className="spinner" />
+                </div>
               }
             >
-              <i className={'mx-2 fa fa-caret-left'} />
-            </Button>
-          </div>
-          <div className="col-auto">
-            <Button
-              onClick={handleNextPage}
-              className="btn-sm"
-              data-testid="nextPagBtn"
-              disabled={
-                !orgUserTagsData?.organizations[0].userTags.pageInfo.hasNextPage
-              }
-            >
-              <i className={'mx-2 fa fa-caret-right'} />
-            </Button>
+              <DataGrid
+                disableColumnMenu
+                columnBufferPx={7}
+                hideFooter={true}
+                getRowId={(row) => row._id}
+                slots={{
+                  noRowsOverlay: /* istanbul ignore next */ () => (
+                    <Stack
+                      height="100%"
+                      alignItems="center"
+                      justifyContent="center"
+                    >
+                      {t('noTagsFound')}
+                    </Stack>
+                  ),
+                }}
+                sx={dataGridStyle}
+                getRowClassName={() => `${styles.rowBackground}`}
+                autoHeight
+                rowHeight={65}
+                rows={userTagsList?.map((fund, index) => ({
+                  id: index + 1,
+                  ...fund,
+                }))}
+                columns={columns}
+                isRowSelectable={() => false}
+              />
+            </InfiniteScroll>
           </div>
         </div>
       </Row>
