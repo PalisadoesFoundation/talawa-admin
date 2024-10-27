@@ -102,6 +102,16 @@ const StyledTableRow = styled(TableRow)(() => ({
   },
 }));
 
+/**
+ * Component for displaying and managing group chat details.
+ *
+ * @param props - The component props.
+ * @param toggleGroupChatDetailsModal - Function to toggle the group chat details modal.
+ * @param groupChatDetailsModalisOpen - Boolean indicating if the group chat details modal is open.
+ * @param chat - The chat object containing details about the group chat.
+ * @param chatRefetch - Function to refetch the chat data.
+ * @returns The rendered component.
+ */
 export default function groupChatDetails({
   toggleGroupChatDetailsModal,
   groupChatDetailsModalisOpen,
