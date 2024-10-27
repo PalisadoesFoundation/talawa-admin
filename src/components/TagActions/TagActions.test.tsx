@@ -195,17 +195,17 @@ describe('Organisation Tags Page', () => {
     userEvent.click(screen.getByTestId('expandSubTags1'));
 
     await waitFor(() => {
-      expect(screen.getByTestId('subTagsScrollableDiv')).toBeInTheDocument();
+      expect(screen.getByTestId('subTagsScrollableDiv1')).toBeInTheDocument();
     });
     // Find the infinite scroll div for subtags by test ID or another selector
-    const subTagsScrollableDiv = screen.getByTestId('subTagsScrollableDiv');
+    const subTagsScrollableDiv1 = screen.getByTestId('subTagsScrollableDiv1');
 
     const initialTagsDataLength =
       screen.getAllByTestId('orgUserSubTags').length;
 
     // Set scroll position to the bottom
-    fireEvent.scroll(subTagsScrollableDiv, {
-      target: { scrollY: subTagsScrollableDiv.scrollHeight },
+    fireEvent.scroll(subTagsScrollableDiv1, {
+      target: { scrollY: subTagsScrollableDiv1.scrollHeight },
     });
 
     await waitFor(() => {
