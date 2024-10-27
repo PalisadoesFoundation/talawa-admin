@@ -9,6 +9,7 @@ import type { InterfaceOrganizationSubTagsQuery } from 'utils/organizationTagsUt
 import { TAGS_QUERY_PAGE_SIZE } from 'utils/organizationTagsUtils';
 import styles from './TagActions.module.css';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 
 interface InterfaceTagNodeProps {
   tag: InterfaceTagData;
@@ -141,7 +142,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
             id={`subTagsScrollableDiv${tag._id}`}
             data-testid={`subTagsScrollableDiv${tag._id}`}
             style={{
-              height: 300,
+              maxHeight: 300,
               overflow: 'auto',
             }}
             className={`${styles.scrContainer}`}
@@ -152,11 +153,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
               hasMore={
                 subTagsData?.getUserTag.childTags.pageInfo.hasNextPage ?? false
               }
-              loader={
-                <div className="simpleLoader">
-                  <div className="spinner" />
-                </div>
-              }
+              loader={<InfiniteScrollLoader />}
               scrollableTarget={`subTagsScrollableDiv${tag._id}`}
             >
               {subTagsList.map((tag: InterfaceTagData) => (

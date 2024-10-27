@@ -20,6 +20,7 @@ import { ADD_PEOPLE_TO_TAG } from 'GraphQl/Mutations/TagMutations';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
+import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 
 /**
  * Props for the `AddPeopleToTag` component.
@@ -280,7 +281,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                   id="scrollableDiv"
                   data-testid="scrollableDiv"
                   style={{
-                    height: 300,
+                    maxHeight: 300,
                     overflow: 'auto',
                   }}
                 >
@@ -291,11 +292,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                       userTagsMembersToAssignToData?.getUserTag.usersToAssignTo
                         .pageInfo.hasNextPage ?? false
                     }
-                    loader={
-                      <div className="simpleLoader">
-                        <div className="spinner" />
-                      </div>
-                    }
+                    loader={<InfiniteScrollLoader />}
                     scrollableTarget="scrollableDiv"
                   >
                     <DataGrid

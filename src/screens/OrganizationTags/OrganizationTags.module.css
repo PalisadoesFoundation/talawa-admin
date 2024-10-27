@@ -144,6 +144,6 @@
   scrollbar-width: auto;
   scrollbar-color: var(--bs-gray-400) var(--bs-white);
 
-  height: calc(100vh - 18rem);
+  max-height: calc(100vh - 18rem);
   overflow: auto;
 }

@@ -29,6 +29,7 @@ import {
   USER_TAG_SUB_TAGS,
 } from 'GraphQl/Queries/userTagQueries';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 
 /**
  * Component that renders the SubTags screen when the app navigates to '/orgtags/:orgId/subtags/:tagId'.
@@ -397,11 +398,7 @@ function SubTags(): JSX.Element {
                   subTagsData?.getUserTag.childTags.pageInfo.hasNextPage ??
                   false
                 }
-                loader={
-                  <div className="simpleLoader">
-                    <div className="spinner" />
-                  </div>
-                }
+                loader={<InfiniteScrollLoader />}
                 scrollableTarget="subTagsScrollableDiv"
               >
                 <DataGrid

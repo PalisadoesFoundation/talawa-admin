@@ -38,6 +38,7 @@ import {
 import AddPeopleToTag from 'components/AddPeopleToTag/AddPeopleToTag';
 import TagActions from 'components/TagActions/TagActions';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 
 /**
  * Component that renders the Manage Tag screen when the app navigates to '/orgtags/:orgId/managetag/:tagId'.
@@ -461,11 +462,7 @@ function ManageTag(): JSX.Element {
                     userTagAssignedMembersData?.getUserTag.usersAssignedTo
                       .pageInfo.hasNextPage ?? false
                   }
-                  loader={
-                    <div className="simpleLoader">
-                      <div className="spinner" />
-                    </div>
-                  }
+                  loader={<InfiniteScrollLoader />}
                   scrollableTarget="manageTagScrollableDiv"
                 >
                   <DataGrid

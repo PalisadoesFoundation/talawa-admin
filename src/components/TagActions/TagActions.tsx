@@ -24,6 +24,7 @@ import { TAGS_QUERY_PAGE_SIZE } from 'utils/organizationTagsUtils';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { WarningAmberRounded } from '@mui/icons-material';
 import TagNode from './TagNode';
+import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 
 interface InterfaceUserTagsAncestorData {
   _id: string;
@@ -359,7 +360,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                   id="scrollableDiv"
                   data-testid="scrollableDiv"
                   style={{
-                    height: 300,
+                    maxHeight: 300,
                     overflow: 'auto',
                   }}
                   className={`${styles.scrContainer}`}
@@ -371,11 +372,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                       orgUserTagsData?.organizations[0].userTags.pageInfo
                         .hasNextPage ?? false
                     }
-                    loader={
-                      <div className="simpleLoader">
-                        <div className="spinner" />
-                      </div>
-                    }
+                    loader={<InfiniteScrollLoader />}
                     scrollableTarget="scrollableDiv"
                   >
                     {userTagsList?.map((tag) => (

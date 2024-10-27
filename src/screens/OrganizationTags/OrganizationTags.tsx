@@ -26,6 +26,7 @@ import { Stack } from '@mui/material';
 import { ORGANIZATION_USER_TAGS_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 
 /**
  * Component that renders the Organization Tags screen when the app navigates to '/orgtags/:orgId'.
@@ -341,11 +342,7 @@ function OrganizationTags(): JSX.Element {
                   orgUserTagsData?.organizations[0].userTags.pageInfo
                     .hasNextPage ?? false
                 }
-                loader={
-                  <div className="simpleLoader">
-                    <div className="spinner" />
-                  </div>
-                }
+                loader={<InfiniteScrollLoader />}
                 scrollableTarget="orgUserTagsScrollableDiv"
               >
                 <DataGrid
