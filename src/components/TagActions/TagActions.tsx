@@ -35,16 +35,16 @@ interface InterfaceUserTagsAncestorData {
  * Props for the `AssignToTags` component.
  */
 export interface InterfaceTagActionsProps {
-  assignToTagsModalIsOpen: boolean;
-  hideAssignToTagsModal: () => void;
+  tagActionsModalIsOpen: boolean;
+  hideTagActionsModal: () => void;
   tagActionType: TagActionType;
   t: (key: string) => string;
   tCommon: (key: string) => string;
 }
 
 const TagActions: React.FC<InterfaceTagActionsProps> = ({
-  assignToTagsModalIsOpen,
-  hideAssignToTagsModal,
+  tagActionsModalIsOpen,
+  hideTagActionsModal,
   tagActionType,
   t,
   tCommon,
@@ -61,7 +61,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
       id: orgId,
       first: TAGS_QUERY_PAGE_SIZE,
     },
-    skip: !assignToTagsModalIsOpen,
+    skip: !tagActionsModalIsOpen,
   });
 
   const loadMoreUserTags = (): void => {
@@ -244,7 +244,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
 
       if (data) {
         toast.success(t('successfullyAssignedToTags'));
-        hideAssignToTagsModal();
+        hideTagActionsModal();
       }
     } catch (error: unknown) {
       /* istanbul ignore next */
@@ -271,7 +271,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
 
       if (data) {
         toast.success(t('successfullyRemovedFromTags'));
-        hideAssignToTagsModal();
+        hideTagActionsModal();
       }
     } catch (error: unknown) {
       /* istanbul ignore next */
@@ -299,8 +299,8 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   return (
     <>
       <Modal
-        show={assignToTagsModalIsOpen}
-        onHide={hideAssignToTagsModal}
+        show={tagActionsModalIsOpen}
+        onHide={hideTagActionsModal}
         backdrop="static"
         aria-labelledby="contained-modal-title-vcenter"
         centered
@@ -398,7 +398,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
           <Modal.Footer>
             <Button
               variant="secondary"
-              onClick={(): void => hideAssignToTagsModal()}
+              onClick={(): void => hideTagActionsModal()}
               data-testid="closeTagActionsModalBtn"
             >
               {tCommon('cancel')}

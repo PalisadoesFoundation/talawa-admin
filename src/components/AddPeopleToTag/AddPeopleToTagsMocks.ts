@@ -13,7 +13,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        getUserTag: {
+        getUsersToAssignTo: {
           name: 'tag1',
           usersToAssignTo: {
             edges: [
@@ -121,7 +121,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        getUserTag: {
+        getUsersToAssignTo: {
           name: 'tag1',
           usersToAssignTo: {
             edges: [

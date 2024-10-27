@@ -25,7 +25,7 @@ import {
   MOCKS_ERROR_SUB_TAGS,
   MOCKS_ERROR_TAG_ANCESTORS,
 } from './SubTagsMocks';
-import { InMemoryCache, type ApolloLink } from '@apollo/client';
+import { type ApolloLink } from '@apollo/client';
 
 const translations = {
   ...JSON.parse(
@@ -56,24 +56,24 @@ jest.mock('react-toastify', () => ({
   },
 }));
 
-const cache = new InMemoryCache({
-  typePolicies: {
-    Query: {
-      fields: {
-        getUserTag: {
-          keyArgs: false,
-          merge(_, incoming) {
-            return incoming;
-          },
-        },
-      },
-    },
-  },
-});
+// const cache = new InMemoryCache({
+//   typePolicies: {
+//     Query: {
+//       fields: {
+//         getUserTag: {
+//           keyArgs: false,
+//           merge(_, incoming) {
+//             return incoming;
+//           },
+//         },
+//       },
+//     },
+//   },
+// });
 
 const renderSubTags = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider cache={cache} link={link}>
+    <MockedProvider link={link}>
       <MemoryRouter initialEntries={['/orgtags/123/subtags/1']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
@@ -104,7 +104,6 @@ describe('Organisation Tags Page', () => {
       ...jest.requireActual('react-router-dom'),
       useParams: () => ({ orgId: 'orgId' }),
     }));
-    cache.reset();
   });
 
   afterEach(() => {

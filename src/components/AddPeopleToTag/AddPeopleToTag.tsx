@@ -67,6 +67,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
         first: TAGS_QUERY_PAGE_SIZE,
       },
       skip: !addPeopleToTagModalIsOpen,
+      fetchPolicy: 'no-cache',
     },
   );
 
@@ -75,29 +76,31 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
       variables: {
         first: TAGS_QUERY_PAGE_SIZE,
         after:
-          userTagsMembersToAssignToData?.getUserTag.usersToAssignTo.pageInfo
-            .endCursor, // Fetch after the last loaded cursor
+          userTagsMembersToAssignToData?.getUsersToAssignTo.usersToAssignTo
+            .pageInfo.endCursor, // Fetch after the last loaded cursor
       },
       updateQuery: (
-        prevResult: { getUserTag: InterfaceQueryUserTagsMembersToAssignTo },
+        prevResult: {
+          getUsersToAssignTo: InterfaceQueryUserTagsMembersToAssignTo;
+        },
         {
           fetchMoreResult,
         }: {
           fetchMoreResult: {
-            getUserTag: InterfaceQueryUserTagsMembersToAssignTo;
+            getUsersToAssignTo: InterfaceQueryUserTagsMembersToAssignTo;
           };
         },
       ) => {
         if (!fetchMoreResult) return prevResult;
 
         return {
-          getUserTag: {
-            ...fetchMoreResult.getUserTag,
+          getUsersToAssignTo: {
+            ...fetchMoreResult.getUsersToAssignTo,
             usersToAssignTo: {
-              ...fetchMoreResult.getUserTag.usersToAssignTo,
+              ...fetchMoreResult.getUsersToAssignTo.usersToAssignTo,
               edges: [
-                ...prevResult.getUserTag.usersToAssignTo.edges,
-                ...fetchMoreResult.getUserTag.usersToAssignTo.edges,
+                ...prevResult.getUsersToAssignTo.usersToAssignTo.edges,
+                ...fetchMoreResult.getUsersToAssignTo.usersToAssignTo.edges,
               ],
             },
           },
@@ -106,8 +109,13 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
     });
   };
 
+  // const userTagMembersToAssignTo =
+  //   userTagsMembersToAssignToData?.getUsersToAssignTo.usersToAssignTo.edges.map(
+  //     (edge) => edge.node,
+  //   );
+
   const userTagMembersToAssignTo =
-    userTagsMembersToAssignToData?.getUserTag.usersToAssignTo.edges.map(
+    userTagsMembersToAssignToData?.getUsersToAssignTo.usersToAssignTo.edges.map(
       (edge) => edge.node,
     );
 
@@ -289,8 +297,8 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                     dataLength={userTagMembersToAssignTo?.length ?? 0} // This is important field to render the next data
                     next={loadMoreMembersToAssignTo}
                     hasMore={
-                      userTagsMembersToAssignToData?.getUserTag.usersToAssignTo
-                        .pageInfo.hasNextPage ?? false
+                      userTagsMembersToAssignToData?.getUsersToAssignTo
+                        .usersToAssignTo.pageInfo.hasNextPage ?? false
                     }
                     loader={<InfiniteScrollLoader />}
                     scrollableTarget="scrollableDiv"

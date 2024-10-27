@@ -230,7 +230,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        getUserTag: {
+        getChildTags: {
           name: 'userTag 1',
           childTags: {
             edges: [
@@ -388,7 +388,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        getUserTag: {
+        getChildTags: {
           name: 'tag1',
           childTags: {
             edges: [

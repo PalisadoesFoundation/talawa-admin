@@ -62,7 +62,7 @@ export interface InterfaceOrganizationTagsQuery {
 
 export interface InterfaceOrganizationSubTagsQuery {
   data?: {
-    getUserTag: InterfaceQueryUserTagChildTags;
+    getChildTags: InterfaceQueryUserTagChildTags;
   };
   loading: boolean;
   error?: ApolloError;
@@ -73,17 +73,17 @@ export interface InterfaceOrganizationSubTagsQuery {
       after?: string;
     };
     updateQuery: (
-      previousResult: { getUserTag: InterfaceQueryUserTagChildTags },
+      previousResult: { getChildTags: InterfaceQueryUserTagChildTags },
       options: {
-        fetchMoreResult?: { getUserTag: InterfaceQueryUserTagChildTags };
+        fetchMoreResult?: { getChildTags: InterfaceQueryUserTagChildTags };
       },
-    ) => { getUserTag: InterfaceQueryUserTagChildTags };
+    ) => { getChildTags: InterfaceQueryUserTagChildTags };
   }) => void;
 }
 
 export interface InterfaceTagAssignedMembersQuery {
   data?: {
-    getUserTag: InterfaceQueryUserTagsAssignedMembers;
+    getAssignedUsers: InterfaceQueryUserTagsAssignedMembers;
   };
   loading: boolean;
   error?: ApolloError;
@@ -95,20 +95,20 @@ export interface InterfaceTagAssignedMembersQuery {
     };
     updateQuery?: (
       previousQueryResult: {
-        getUserTag: InterfaceQueryUserTagsAssignedMembers;
+        getAssignedUsers: InterfaceQueryUserTagsAssignedMembers;
       },
       options: {
         fetchMoreResult: {
-          getUserTag: InterfaceQueryUserTagsAssignedMembers;
+          getAssignedUsers: InterfaceQueryUserTagsAssignedMembers;
         };
       },
-    ) => { getUserTag: InterfaceQueryUserTagsAssignedMembers };
+    ) => { getAssignedUsers: InterfaceQueryUserTagsAssignedMembers };
   }) => Promise<unknown>;
 }
 
 export interface InterfaceTagUsersToAssignToQuery {
   data?: {
-    getUserTag: InterfaceQueryUserTagsMembersToAssignTo;
+    getUsersToAssignTo: InterfaceQueryUserTagsMembersToAssignTo;
   };
   loading: boolean;
   error?: ApolloError;
@@ -119,13 +119,13 @@ export interface InterfaceTagUsersToAssignToQuery {
     };
     updateQuery?: (
       previousQueryResult: {
-        getUserTag: InterfaceQueryUserTagsMembersToAssignTo;
+        getUsersToAssignTo: InterfaceQueryUserTagsMembersToAssignTo;
       },
       options: {
         fetchMoreResult: {
-          getUserTag: InterfaceQueryUserTagsMembersToAssignTo;
+          getUsersToAssignTo: InterfaceQueryUserTagsMembersToAssignTo;
         };
       },
-    ) => { getUserTag: InterfaceQueryUserTagsMembersToAssignTo };
+    ) => { getUsersToAssignTo: InterfaceQueryUserTagsMembersToAssignTo };
   }) => Promise<unknown>;
 }

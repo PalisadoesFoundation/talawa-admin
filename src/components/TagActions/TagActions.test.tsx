@@ -50,15 +50,15 @@ const translations = {
 
 const props: InterfaceTagActionsProps[] = [
   {
-    assignToTagsModalIsOpen: true,
-    hideAssignToTagsModal: () => {},
+    tagActionsModalIsOpen: true,
+    hideTagActionsModal: () => {},
     tagActionType: 'assignToTags',
     t: (key: string) => translations[key],
     tCommon: (key: string) => translations[key],
   },
   {
-    assignToTagsModalIsOpen: true,
-    hideAssignToTagsModal: () => {},
+    tagActionsModalIsOpen: true,
+    hideTagActionsModal: () => {},
     tagActionType: 'removeFromTags',
     t: (key: string) => translations[key],
     tCommon: (key: string) => translations[key],
@@ -117,6 +117,31 @@ describe('Organisation Tags Page', () => {
 
     await waitFor(() => {
       expect(getByText(translations.remove)).toBeInTheDocument();
+    });
+  });
+
+  test('Component calls hideTagActionsModal when modal is closed', async () => {
+    const hideTagActionsModalMock = jest.fn();
+
+    const props2: InterfaceTagActionsProps = {
+      tagActionsModalIsOpen: true,
+      hideTagActionsModal: hideTagActionsModalMock,
+      tagActionType: 'assignToTags',
+      t: (key: string) => key,
+      tCommon: (key: string) => key,
+    };
+
+    renderTagActionsModal(props2, link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('closeTagActionsModalBtn')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('closeTagActionsModalBtn'));
+
+    await waitFor(() => {
+      expect(hideTagActionsModalMock).toHaveBeenCalled();
     });
   });
 

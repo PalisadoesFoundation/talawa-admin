@@ -78,26 +78,26 @@ function SubTags(): JSX.Element {
     fetchMoreSubTags({
       variables: {
         first: TAGS_QUERY_PAGE_SIZE,
-        after: subTagsData?.getUserTag.childTags.pageInfo.endCursor,
+        after: subTagsData?.getChildTags.childTags.pageInfo.endCursor,
       },
       updateQuery: (
-        prevResult: { getUserTag: InterfaceQueryUserTagChildTags },
+        prevResult: { getChildTags: InterfaceQueryUserTagChildTags },
         {
           fetchMoreResult,
         }: {
-          fetchMoreResult?: { getUserTag: InterfaceQueryUserTagChildTags };
+          fetchMoreResult?: { getChildTags: InterfaceQueryUserTagChildTags };
         },
       ) => {
         if (!fetchMoreResult) return prevResult;
 
         return {
-          getUserTag: {
-            ...fetchMoreResult.getUserTag,
+          getChildTags: {
+            ...fetchMoreResult.getChildTags,
             childTags: {
-              ...fetchMoreResult.getUserTag.childTags,
+              ...fetchMoreResult.getChildTags.childTags,
               edges: [
-                ...prevResult.getUserTag.childTags.edges,
-                ...fetchMoreResult.getUserTag.childTags.edges,
+                ...prevResult.getChildTags.childTags.edges,
+                ...fetchMoreResult.getChildTags.childTags.edges,
               ],
             },
           },
@@ -178,7 +178,7 @@ function SubTags(): JSX.Element {
     );
   }
 
-  const userTagsList = subTagsData?.getUserTag.childTags.edges.map(
+  const userTagsList = subTagsData?.getChildTags.childTags.edges.map(
     (edge) => edge.node,
   );
 
@@ -341,7 +341,7 @@ function SubTags(): JSX.Element {
                 data-testid="manageCurrentTagBtn"
                 className="mx-4"
               >
-                {`${t('manageTag')} ${subTagsData?.getUserTag.name}`}
+                {`${t('manageTag')} ${subTagsData?.getChildTags.name}`}
               </Button>
 
               <Button
@@ -395,7 +395,7 @@ function SubTags(): JSX.Element {
                 dataLength={userTagsList?.length ?? 0}
                 next={loadMoreSubTags}
                 hasMore={
-                  subTagsData?.getUserTag.childTags.pageInfo.hasNextPage ??
+                  subTagsData?.getChildTags.childTags.pageInfo.hasNextPage ??
                   false
                 }
                 loader={<InfiniteScrollLoader />}

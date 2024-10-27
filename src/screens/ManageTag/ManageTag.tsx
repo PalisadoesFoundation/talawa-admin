@@ -57,7 +57,7 @@ function ManageTag(): JSX.Element {
 
   const [addPeopleToTagModalIsOpen, setAddPeopleToTagModalIsOpen] =
     useState(false);
-  const [assignToTagsModalIsOpen, setAssignToTagsModalIsOpen] = useState(false);
+  const [tagActionsModalIsOpen, setTagActionsModalIsOpen] = useState(false);
 
   const [editTagModalIsOpen, setEditTagModalIsOpen] = useState(false);
   const [removeTagModalIsOpen, setRemoveTagModalIsOpen] = useState(false);
@@ -84,11 +84,11 @@ function ManageTag(): JSX.Element {
   };
 
   const showAssignToTagsModal = (): void => {
-    setAssignToTagsModalIsOpen(true);
+    setTagActionsModalIsOpen(true);
   };
 
-  const hideAssignToTagsModal = (): void => {
-    setAssignToTagsModalIsOpen(false);
+  const hideTagActionsModal = (): void => {
+    setTagActionsModalIsOpen(false);
   };
 
   const hideEditTagModal = (): void => {
@@ -113,29 +113,29 @@ function ManageTag(): JSX.Element {
       variables: {
         first: TAGS_QUERY_PAGE_SIZE,
         after:
-          userTagAssignedMembersData?.getUserTag.usersAssignedTo.pageInfo
-            .endCursor, // Fetch after the last loaded cursor
+          userTagAssignedMembersData?.getAssignedUsers.usersAssignedTo.pageInfo
+            .endCursor,
       },
       updateQuery: (
-        prevResult: { getUserTag: InterfaceQueryUserTagsAssignedMembers },
+        prevResult: { getAssignedUsers: InterfaceQueryUserTagsAssignedMembers },
         {
           fetchMoreResult,
         }: {
           fetchMoreResult: {
-            getUserTag: InterfaceQueryUserTagsAssignedMembers;
+            getAssignedUsers: InterfaceQueryUserTagsAssignedMembers;
           };
         },
       ) => {
         if (!fetchMoreResult) return prevResult;
 
         return {
-          getUserTag: {
-            ...fetchMoreResult.getUserTag,
+          getAssignedUsers: {
+            ...fetchMoreResult.getAssignedUsers,
             usersAssignedTo: {
-              ...fetchMoreResult.getUserTag.usersAssignedTo,
+              ...fetchMoreResult.getAssignedUsers.usersAssignedTo,
               edges: [
-                ...prevResult.getUserTag.usersAssignedTo.edges,
-                ...fetchMoreResult.getUserTag.usersAssignedTo.edges,
+                ...prevResult.getAssignedUsers.usersAssignedTo.edges,
+                ...fetchMoreResult.getAssignedUsers.usersAssignedTo.edges,
               ],
             },
           },
@@ -192,7 +192,7 @@ function ManageTag(): JSX.Element {
   const [newTagName, setNewTagName] = useState<string>('');
 
   useEffect(() => {
-    setNewTagName(userTagAssignedMembersData?.getUserTag.name ?? '');
+    setNewTagName(userTagAssignedMembersData?.getAssignedUsers.name ?? '');
   }, [userTagAssignedMembersData]);
 
   const editTag = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
@@ -263,7 +263,7 @@ function ManageTag(): JSX.Element {
   }
 
   const userTagAssignedMembers =
-    userTagAssignedMembersData?.getUserTag.usersAssignedTo.edges.map(
+    userTagAssignedMembersData?.getAssignedUsers.usersAssignedTo.edges.map(
       (edge) => edge.node,
     );
 
@@ -459,7 +459,7 @@ function ManageTag(): JSX.Element {
                   dataLength={userTagAssignedMembers?.length ?? 0} // This is important field to render the next data
                   next={loadMoreAssignedMembers}
                   hasMore={
-                    userTagAssignedMembersData?.getUserTag.usersAssignedTo
+                    userTagAssignedMembersData?.getAssignedUsers.usersAssignedTo
                       .pageInfo.hasNextPage ?? false
                   }
                   loader={<InfiniteScrollLoader />}
@@ -561,8 +561,8 @@ function ManageTag(): JSX.Element {
 
       {/* Assign People To Tags Modal */}
       <TagActions
-        assignToTagsModalIsOpen={assignToTagsModalIsOpen}
-        hideAssignToTagsModal={hideAssignToTagsModal}
+        tagActionsModalIsOpen={tagActionsModalIsOpen}
+        hideTagActionsModal={hideTagActionsModal}
         tagActionType={tagActionType}
         t={t}
         tCommon={tCommon}

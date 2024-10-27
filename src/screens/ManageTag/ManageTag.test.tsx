@@ -25,7 +25,7 @@ import {
   MOCKS_ERROR_ASSIGNED_MEMBERS,
   MOCKS_ERROR_TAG_ANCESTORS,
 } from './ManageTagMocks';
-import { InMemoryCache, type ApolloLink } from '@apollo/client';
+import { type ApolloLink } from '@apollo/client';
 
 const translations = {
   ...JSON.parse(
@@ -54,24 +54,19 @@ jest.mock('react-toastify', () => ({
   },
 }));
 
-const cache = new InMemoryCache({
-  typePolicies: {
-    Query: {
-      fields: {
-        getUserTag: {
-          keyArgs: false,
-          merge(_, incoming) {
-            return incoming;
-          },
-        },
-      },
-    },
-  },
+/* eslint-disable @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports */
+jest.mock('../../components/AddPeopleToTag/AddPeopleToTag', () => {
+  return require('./ManageTagMockComponents/MockAddPeopleToTag').default;
 });
+
+jest.mock('../../components/TagActions/TagActions', () => {
+  return require('./ManageTagMockComponents/MockTagActions').default;
+});
+/* eslint-enable @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports */
 
 const renderManageTag = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider cache={cache} addTypename={false} link={link}>
+    <MockedProvider addTypename={false} link={link}>
       <MemoryRouter initialEntries={['/orgtags/123/manageTag/1']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
@@ -106,7 +101,6 @@ describe('Manage Tag Page', () => {
       ...jest.requireActual('react-router-dom'),
       useParams: () => ({ orgId: 'orgId' }),
     }));
-    cache.reset();
   });
 
   afterEach(() => {
@@ -147,23 +141,23 @@ describe('Manage Tag Page', () => {
   test('opens and closes the add people to tag modal', async () => {
     renderManageTag(link);
 
-    await wait();
-
     await waitFor(() => {
       expect(screen.getByTestId('addPeopleToTagBtn')).toBeInTheDocument();
     });
+
     userEvent.click(screen.getByTestId('addPeopleToTagBtn'));
 
     await waitFor(() => {
-      return expect(
-        screen.findByTestId('closeAddPeopleToTagModal'),
-      ).resolves.toBeInTheDocument();
+      expect(screen.getByTestId('addPeopleToTagModal')).toBeInTheDocument();
     });
+
     userEvent.click(screen.getByTestId('closeAddPeopleToTagModal'));
 
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('closeAddPeopleToTagModal'),
-    );
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('addPeopleToTagModal'),
+      ).not.toBeInTheDocument();
+    });
   });
 
   test('opens and closes the unassign tag modal', async () => {
@@ -191,45 +185,51 @@ describe('Manage Tag Page', () => {
   test('opens and closes the assignToTags modal', async () => {
     renderManageTag(link);
 
-    await wait();
-
+    // Wait for the assignToTags button to be present
     await waitFor(() => {
       expect(screen.getByTestId('assignToTags')).toBeInTheDocument();
     });
+
+    // Click the assignToTags button to open the modal
     userEvent.click(screen.getByTestId('assignToTags'));
 
+    // Wait for the close button in the modal to be present
     await waitFor(() => {
-      return expect(
-        screen.findByTestId('closeTagActionsModalBtn'),
-      ).resolves.toBeInTheDocument();
+      expect(screen.getByTestId('closeTagActionsModalBtn')).toBeInTheDocument();
     });
+
+    // Click the close button to close the modal
     userEvent.click(screen.getByTestId('closeTagActionsModalBtn'));
 
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('closeTagActionsModalBtn'),
-    );
+    // Wait for the modal to be removed from the document
+    await waitFor(() => {
+      expect(screen.queryByTestId('tagActionsModal')).not.toBeInTheDocument();
+    });
   });
 
   test('opens and closes the removeFromTags modal', async () => {
     renderManageTag(link);
 
-    await wait();
-
+    // Wait for the removeFromTags button to be present
     await waitFor(() => {
       expect(screen.getByTestId('removeFromTags')).toBeInTheDocument();
     });
+
+    // Click the removeFromTags button to open the modal
     userEvent.click(screen.getByTestId('removeFromTags'));
 
+    // Wait for the close button in the modal to be present
     await waitFor(() => {
-      return expect(
-        screen.findByTestId('closeTagActionsModalBtn'),
-      ).resolves.toBeInTheDocument();
+      expect(screen.getByTestId('closeTagActionsModalBtn')).toBeInTheDocument();
     });
+
+    // Click the close button to close the modal
     userEvent.click(screen.getByTestId('closeTagActionsModalBtn'));
 
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('closeTagActionsModalBtn'),
-    );
+    // Wait for the modal to be removed from the document
+    await waitFor(() => {
+      expect(screen.queryByTestId('tagActionsModal')).not.toBeInTheDocument();
+    });
   });
 
   test('opens and closes the edit tag modal', async () => {

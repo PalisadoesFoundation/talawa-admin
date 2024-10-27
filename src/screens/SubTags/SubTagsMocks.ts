@@ -16,7 +16,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        getUserTag: {
+        getChildTags: {
           name: 'userTag 1',
           childTags: {
             edges: [
@@ -174,7 +174,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        getUserTag: {
+        getChildTags: {
           name: 'tag1',
           childTags: {
             edges: [
@@ -232,7 +232,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        getUserTag: {
+        getChildTags: {
           name: 'subTag 1',
           childTags: {
             edges: [
@@ -340,7 +340,7 @@ export const MOCKS_ERROR_TAG_ANCESTORS = [
     },
     result: {
       data: {
-        getUserTag: {
+        getChildTags: {
           name: 'tag1',
           childTags: {
             edges: [],

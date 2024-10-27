@@ -42,26 +42,26 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
     fetchMoreSubTags({
       variables: {
         first: TAGS_QUERY_PAGE_SIZE,
-        after: subTagsData?.getUserTag.childTags.pageInfo.endCursor,
+        after: subTagsData?.getChildTags.childTags.pageInfo.endCursor,
       },
       updateQuery: (
-        prevResult: { getUserTag: InterfaceQueryUserTagChildTags },
+        prevResult: { getChildTags: InterfaceQueryUserTagChildTags },
         {
           fetchMoreResult,
         }: {
-          fetchMoreResult?: { getUserTag: InterfaceQueryUserTagChildTags };
+          fetchMoreResult?: { getChildTags: InterfaceQueryUserTagChildTags };
         },
       ) => {
         if (!fetchMoreResult) return prevResult;
 
         return {
-          getUserTag: {
-            ...fetchMoreResult.getUserTag,
+          getChildTags: {
+            ...fetchMoreResult.getChildTags,
             childTags: {
-              ...fetchMoreResult.getUserTag.childTags,
+              ...fetchMoreResult.getChildTags.childTags,
               edges: [
-                ...prevResult.getUserTag.childTags.edges,
-                ...fetchMoreResult.getUserTag.childTags.edges,
+                ...prevResult.getChildTags.childTags.edges,
+                ...fetchMoreResult.getChildTags.childTags.edges,
               ],
             },
           },
@@ -70,7 +70,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
     });
   };
 
-  const subTagsList = subTagsData?.getUserTag.childTags.edges.map(
+  const subTagsList = subTagsData?.getChildTags.childTags.edges.map(
     (edge) => edge.node,
   );
 
@@ -151,7 +151,8 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
               dataLength={subTagsList?.length ?? 0}
               next={loadMoreSubTags}
               hasMore={
-                subTagsData?.getUserTag.childTags.pageInfo.hasNextPage ?? false
+                subTagsData?.getChildTags.childTags.pageInfo.hasNextPage ??
+                false
               }
               loader={<InfiniteScrollLoader />}
               scrollableTarget={`subTagsScrollableDiv${tag._id}`}
