@@ -1,4 +1,4 @@
-import { useMutation, useQuery, type ApolloError } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { Search, WarningAmberRounded } from '@mui/icons-material';
 import SortIcon from '@mui/icons-material/Sort';
 import Loader from 'components/Loader/Loader';
@@ -16,7 +16,11 @@ import { toast } from 'react-toastify';
 import type { InterfaceQueryOrganizationUserTags } from 'utils/interfaces';
 import styles from './OrganizationTags.module.css';
 import { DataGrid } from '@mui/x-data-grid';
-import { dataGridStyle, TAGS_QUERY_LIMIT } from 'utils/organizationTagsUtils';
+import type { InterfaceOrganizationTagsQuery } from 'utils/organizationTagsUtils';
+import {
+  dataGridStyle,
+  TAGS_QUERY_PAGE_SIZE,
+} from 'utils/organizationTagsUtils';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
 import { ORGANIZATION_USER_TAGS_LIST } from 'GraphQl/Queries/OrganizationQueries';
@@ -64,38 +68,17 @@ function OrganizationTags(): JSX.Element {
     error: orgUserTagsError,
     refetch: orgUserTagsRefetch,
     fetchMore: orgUserTagsFetchMore,
-  }: {
-    data?: {
-      organizations: InterfaceQueryOrganizationUserTags[];
-    };
-    loading: boolean;
-    error?: ApolloError;
-    refetch: () => void;
-    fetchMore: (options: {
-      variables: {
-        first: number;
-        after?: string;
-      };
-      updateQuery: (
-        previousResult: { organizations: InterfaceQueryOrganizationUserTags[] },
-        options: {
-          fetchMoreResult?: {
-            organizations: InterfaceQueryOrganizationUserTags[];
-          };
-        },
-      ) => { organizations: InterfaceQueryOrganizationUserTags[] };
-    }) => void;
-  } = useQuery(ORGANIZATION_USER_TAGS_LIST, {
+  }: InterfaceOrganizationTagsQuery = useQuery(ORGANIZATION_USER_TAGS_LIST, {
     variables: {
       id: orgId,
-      first: TAGS_QUERY_LIMIT,
+      first: TAGS_QUERY_PAGE_SIZE,
     },
   });
 
   const loadMoreUserTags = (): void => {
     orgUserTagsFetchMore({
       variables: {
-        first: TAGS_QUERY_LIMIT,
+        first: TAGS_QUERY_PAGE_SIZE,
         after: orgUserTagsData?.organizations[0].userTags.pageInfo.endCursor,
       },
       updateQuery: (

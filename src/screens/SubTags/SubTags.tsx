@@ -16,7 +16,11 @@ import { toast } from 'react-toastify';
 import type { InterfaceQueryUserTagChildTags } from 'utils/interfaces';
 import styles from './SubTags.module.css';
 import { DataGrid } from '@mui/x-data-grid';
-import { dataGridStyle, TAGS_QUERY_LIMIT } from 'utils/organizationTagsUtils';
+import type { InterfaceOrganizationSubTagsQuery } from 'utils/organizationTagsUtils';
+import {
+  dataGridStyle,
+  TAGS_QUERY_PAGE_SIZE,
+} from 'utils/organizationTagsUtils';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
 import {
@@ -69,36 +73,17 @@ function SubTags(): JSX.Element {
     loading: subTagsLoading,
     refetch: subTagsRefetch,
     fetchMore: fetchMoreSubTags,
-  }: {
-    data?: {
-      getUserTag: InterfaceQueryUserTagChildTags;
-    };
-    loading: boolean;
-    error?: ApolloError;
-    refetch: () => void;
-    fetchMore: (options: {
-      variables: {
-        first: number;
-        after?: string;
-      };
-      updateQuery: (
-        previousResult: { getUserTag: InterfaceQueryUserTagChildTags },
-        options: {
-          fetchMoreResult?: { getUserTag: InterfaceQueryUserTagChildTags };
-        },
-      ) => { getUserTag: InterfaceQueryUserTagChildTags };
-    }) => void;
-  } = useQuery(USER_TAG_SUB_TAGS, {
+  }: InterfaceOrganizationSubTagsQuery = useQuery(USER_TAG_SUB_TAGS, {
     variables: {
       id: parentTagId,
-      first: TAGS_QUERY_LIMIT,
+      first: TAGS_QUERY_PAGE_SIZE,
     },
   });
 
   const loadMoreSubTags = (): void => {
     fetchMoreSubTags({
       variables: {
-        first: TAGS_QUERY_LIMIT,
+        first: TAGS_QUERY_PAGE_SIZE,
         after: subTagsData?.getUserTag.childTags.pageInfo.endCursor,
       },
       updateQuery: (

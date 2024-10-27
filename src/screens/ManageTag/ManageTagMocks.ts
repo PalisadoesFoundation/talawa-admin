@@ -9,7 +9,7 @@ import {
   USER_TAGS_ASSIGNED_MEMBERS,
   USER_TAGS_MEMBERS_TO_ASSIGN_TO,
 } from 'GraphQl/Queries/userTagQueries';
-import { TAGS_QUERY_LIMIT } from 'utils/organizationTagsUtils';
+import { TAGS_QUERY_PAGE_SIZE } from 'utils/organizationTagsUtils';
 
 export const MOCKS = [
   {
@@ -312,7 +312,7 @@ export const MOCKS = [
       query: ORGANIZATION_USER_TAGS_LIST,
       variables: {
         id: '123',
-        first: TAGS_QUERY_LIMIT,
+        first: TAGS_QUERY_PAGE_SIZE,
       },
     },
     result: {

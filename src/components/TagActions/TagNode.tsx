@@ -1,4 +1,3 @@
-import type { ApolloError } from '@apollo/client';
 import { useQuery } from '@apollo/client';
 import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
 import React, { useState } from 'react';
@@ -6,7 +5,8 @@ import type {
   InterfaceQueryUserTagChildTags,
   InterfaceTagData,
 } from 'utils/interfaces';
-import { TAGS_QUERY_LIMIT } from 'utils/organizationTagsUtils';
+import type { InterfaceOrganizationSubTagsQuery } from 'utils/organizationTagsUtils';
+import { TAGS_QUERY_PAGE_SIZE } from 'utils/organizationTagsUtils';
 import styles from './TagActions.module.css';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
@@ -29,55 +29,18 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
     data: subTagsData,
     loading: subTagsLoading,
     fetchMore: fetchMoreSubTags,
-  }: {
-    data?: {
-      getUserTag: InterfaceQueryUserTagChildTags;
-    };
-    loading: boolean;
-    error?: ApolloError;
-    refetch: () => void;
-    fetchMore: (options: {
-      variables: {
-        first: number;
-        after?: string;
-      };
-      updateQuery: (
-        previousResult: { getUserTag: InterfaceQueryUserTagChildTags },
-        options: {
-          fetchMoreResult?: { getUserTag: InterfaceQueryUserTagChildTags };
-        },
-      ) => { getUserTag: InterfaceQueryUserTagChildTags };
-    }) => void;
-  } = useQuery(USER_TAG_SUB_TAGS, {
+  }: InterfaceOrganizationSubTagsQuery = useQuery(USER_TAG_SUB_TAGS, {
     variables: {
       id: tag._id,
-      first: TAGS_QUERY_LIMIT,
+      first: TAGS_QUERY_PAGE_SIZE,
     },
     skip: !expanded,
   });
 
-  const subTagsList = subTagsData?.getUserTag.childTags.edges.map(
-    (edge) => edge.node,
-  );
-
-  const handleTagClick = (): void => {
-    if (!expanded) {
-      setExpanded(true);
-    } else {
-      setExpanded(false); // collapse on second click
-    }
-  };
-
-  const handleCheckboxChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ): void => {
-    toggleTagSelection(tag, e.target.checked);
-  };
-
   const loadMoreSubTags = (): void => {
     fetchMoreSubTags({
       variables: {
-        first: TAGS_QUERY_LIMIT,
+        first: TAGS_QUERY_PAGE_SIZE,
         after: subTagsData?.getUserTag.childTags.pageInfo.endCursor,
       },
       updateQuery: (
@@ -104,6 +67,24 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
         };
       },
     });
+  };
+
+  const subTagsList = subTagsData?.getUserTag.childTags.edges.map(
+    (edge) => edge.node,
+  );
+
+  const handleTagClick = (): void => {
+    if (!expanded) {
+      setExpanded(true);
+    } else {
+      setExpanded(false); // collapse on second click
+    }
+  };
+
+  const handleCheckboxChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): void => {
+    toggleTagSelection(tag, e.target.checked);
   };
 
   return (

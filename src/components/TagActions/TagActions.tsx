@@ -1,4 +1,3 @@
-import type { ApolloError } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
 import Loader from 'components/Loader/Loader';
 import { USER_TAG_ANCESTORS } from 'GraphQl/Queries/userTagQueries';
@@ -17,8 +16,11 @@ import {
   REMOVE_FROM_TAGS,
 } from 'GraphQl/Mutations/TagMutations';
 import { toast } from 'react-toastify';
-import type { TagActionType } from 'utils/organizationTagsUtils';
-import { TAGS_QUERY_LIMIT } from 'utils/organizationTagsUtils';
+import type {
+  InterfaceOrganizationTagsQuery,
+  TagActionType,
+} from 'utils/organizationTagsUtils';
+import { TAGS_QUERY_PAGE_SIZE } from 'utils/organizationTagsUtils';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { WarningAmberRounded } from '@mui/icons-material';
 import TagNode from './TagNode';
@@ -53,34 +55,50 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
     loading: orgUserTagsLoading,
     error: orgUserTagsError,
     fetchMore: orgUserTagsFetchMore,
-  }: {
-    data?: {
-      organizations: InterfaceQueryOrganizationUserTags[];
-    };
-    loading: boolean;
-    error?: ApolloError;
-    refetch: () => void;
-    fetchMore: (options: {
+  }: InterfaceOrganizationTagsQuery = useQuery(ORGANIZATION_USER_TAGS_LIST, {
+    variables: {
+      id: orgId,
+      first: TAGS_QUERY_PAGE_SIZE,
+    },
+    skip: !assignToTagsModalIsOpen,
+  });
+
+  const loadMoreUserTags = (): void => {
+    orgUserTagsFetchMore({
       variables: {
-        first: number;
-        after?: string;
-      };
+        first: TAGS_QUERY_PAGE_SIZE,
+        after: orgUserTagsData?.organizations[0].userTags.pageInfo.endCursor,
+      },
       updateQuery: (
-        previousResult: { organizations: InterfaceQueryOrganizationUserTags[] },
-        options: {
+        prevResult: { organizations: InterfaceQueryOrganizationUserTags[] },
+        {
+          fetchMoreResult,
+        }: {
           fetchMoreResult?: {
             organizations: InterfaceQueryOrganizationUserTags[];
           };
         },
-      ) => { organizations: InterfaceQueryOrganizationUserTags[] };
-    }) => void;
-  } = useQuery(ORGANIZATION_USER_TAGS_LIST, {
-    variables: {
-      id: orgId,
-      first: TAGS_QUERY_LIMIT,
-    },
-    skip: !assignToTagsModalIsOpen,
-  });
+      ) => {
+        if (!fetchMoreResult) return prevResult;
+
+        return {
+          organizations: [
+            {
+              ...prevResult.organizations[0],
+              userTags: {
+                ...prevResult.organizations[0].userTags,
+                edges: [
+                  ...prevResult.organizations[0].userTags.edges,
+                  ...fetchMoreResult.organizations[0].userTags.edges,
+                ],
+                pageInfo: fetchMoreResult.organizations[0].userTags.pageInfo,
+              },
+            },
+          ],
+        };
+      },
+    });
+  };
 
   const userTagsList = orgUserTagsData?.organizations[0].userTags.edges.map(
     (edge) => edge.node,
@@ -207,43 +225,6 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
       setRemoveAncestorTagsData(data.getUserTagAncestors.slice(0, -1)); // Update the ancestor tags data, to uncheck the ancestor tags
     },
   });
-
-  const loadMoreUserTags = (): void => {
-    orgUserTagsFetchMore({
-      variables: {
-        first: TAGS_QUERY_LIMIT,
-        after: orgUserTagsData?.organizations[0].userTags.pageInfo.endCursor,
-      },
-      updateQuery: (
-        prevResult: { organizations: InterfaceQueryOrganizationUserTags[] },
-        {
-          fetchMoreResult,
-        }: {
-          fetchMoreResult?: {
-            organizations: InterfaceQueryOrganizationUserTags[];
-          };
-        },
-      ) => {
-        if (!fetchMoreResult) return prevResult;
-
-        return {
-          organizations: [
-            {
-              ...prevResult.organizations[0],
-              userTags: {
-                ...prevResult.organizations[0].userTags,
-                edges: [
-                  ...prevResult.organizations[0].userTags.edges,
-                  ...fetchMoreResult.organizations[0].userTags.edges,
-                ],
-                pageInfo: fetchMoreResult.organizations[0].userTags.pageInfo,
-              },
-            },
-          ],
-        };
-      },
-    });
-  };
 
   const [assignToTags] = useMutation(ASSIGN_TO_TAGS);
 

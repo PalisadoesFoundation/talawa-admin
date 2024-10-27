@@ -4,7 +4,7 @@ import {
 } from 'GraphQl/Mutations/TagMutations';
 import { ORGANIZATION_USER_TAGS_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
-import { TAGS_QUERY_LIMIT } from 'utils/organizationTagsUtils';
+import { TAGS_QUERY_PAGE_SIZE } from 'utils/organizationTagsUtils';
 
 export const MOCKS = [
   {
@@ -12,7 +12,7 @@ export const MOCKS = [
       query: ORGANIZATION_USER_TAGS_LIST,
       variables: {
         id: '123',
-        first: TAGS_QUERY_LIMIT,
+        first: TAGS_QUERY_PAGE_SIZE,
       },
     },
     result: {
@@ -170,7 +170,7 @@ export const MOCKS = [
       query: ORGANIZATION_USER_TAGS_LIST,
       variables: {
         id: '123',
-        first: TAGS_QUERY_LIMIT,
+        first: TAGS_QUERY_PAGE_SIZE,
         after: '10',
       },
     },
@@ -225,7 +225,7 @@ export const MOCKS = [
       query: USER_TAG_SUB_TAGS,
       variables: {
         id: '1',
-        first: TAGS_QUERY_LIMIT,
+        first: TAGS_QUERY_PAGE_SIZE,
       },
     },
     result: {
@@ -383,7 +383,7 @@ export const MOCKS = [
       variables: {
         id: '1',
         after: '10',
-        first: TAGS_QUERY_LIMIT,
+        first: TAGS_QUERY_PAGE_SIZE,
       },
     },
     result: {

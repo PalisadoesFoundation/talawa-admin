@@ -1,4 +1,3 @@
-import type { ApolloError } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { DataGrid } from '@mui/x-data-grid';
@@ -10,8 +9,9 @@ import { Modal, Form, Button } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import type { InterfaceQueryUserTagsMembersToAssignTo } from 'utils/interfaces';
 import styles from './AddPeopleToTag.module.css';
+import type { InterfaceTagUsersToAssignToQuery } from 'utils/organizationTagsUtils';
 import {
-  ADD_PEOPLE_TO_TAGS_QUERY_LIMIT,
+  TAGS_QUERY_PAGE_SIZE,
   dataGridStyle,
 } from 'utils/organizationTagsUtils';
 import { Stack } from '@mui/material';
@@ -58,40 +58,21 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
     loading: userTagsMembersToAssignToLoading,
     error: userTagsMembersToAssignToError,
     fetchMore: fetchMoreMembersToAssignTo,
-  }: {
-    data?: {
-      getUserTag: InterfaceQueryUserTagsMembersToAssignTo;
-    };
-    loading: boolean;
-    error?: ApolloError;
-    fetchMore: (options: {
+  }: InterfaceTagUsersToAssignToQuery = useQuery(
+    USER_TAGS_MEMBERS_TO_ASSIGN_TO,
+    {
       variables: {
-        after?: string | null;
-        first?: number | null;
-      };
-      updateQuery?: (
-        previousQueryResult: {
-          getUserTag: InterfaceQueryUserTagsMembersToAssignTo;
-        },
-        options: {
-          fetchMoreResult: {
-            getUserTag: InterfaceQueryUserTagsMembersToAssignTo;
-          };
-        },
-      ) => { getUserTag: InterfaceQueryUserTagsMembersToAssignTo };
-    }) => Promise<unknown>;
-  } = useQuery(USER_TAGS_MEMBERS_TO_ASSIGN_TO, {
-    variables: {
-      id: currentTagId,
-      first: ADD_PEOPLE_TO_TAGS_QUERY_LIMIT,
+        id: currentTagId,
+        first: TAGS_QUERY_PAGE_SIZE,
+      },
+      skip: !addPeopleToTagModalIsOpen,
     },
-    skip: !addPeopleToTagModalIsOpen,
-  });
+  );
 
   const loadMoreMembersToAssignTo = (): void => {
     fetchMoreMembersToAssignTo({
       variables: {
-        first: ADD_PEOPLE_TO_TAGS_QUERY_LIMIT,
+        first: TAGS_QUERY_PAGE_SIZE,
         after:
           userTagsMembersToAssignToData?.getUserTag.usersToAssignTo.pageInfo
             .endCursor, // Fetch after the last loaded cursor

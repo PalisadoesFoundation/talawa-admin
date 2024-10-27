@@ -16,9 +16,12 @@ import { toast } from 'react-toastify';
 import type { InterfaceQueryUserTagsAssignedMembers } from 'utils/interfaces';
 import styles from './ManageTag.module.css';
 import { DataGrid } from '@mui/x-data-grid';
-import type { TagActionType } from 'utils/organizationTagsUtils';
+import type {
+  InterfaceTagAssignedMembersQuery,
+  TagActionType,
+} from 'utils/organizationTagsUtils';
 import {
-  ADD_PEOPLE_TO_TAGS_QUERY_LIMIT,
+  TAGS_QUERY_PAGE_SIZE,
   dataGridStyle,
 } from 'utils/organizationTagsUtils';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
@@ -97,40 +100,17 @@ function ManageTag(): JSX.Element {
     error: userTagAssignedMembersError,
     refetch: userTagAssignedMembersRefetch,
     fetchMore: fetchMoreAssignedMembers,
-  }: {
-    data?: {
-      getUserTag: InterfaceQueryUserTagsAssignedMembers;
-    };
-    loading: boolean;
-    error?: ApolloError;
-    refetch: () => void;
-    fetchMore: (options: {
-      variables: {
-        after?: string | null;
-        first?: number | null;
-      };
-      updateQuery?: (
-        previousQueryResult: {
-          getUserTag: InterfaceQueryUserTagsAssignedMembers;
-        },
-        options: {
-          fetchMoreResult: {
-            getUserTag: InterfaceQueryUserTagsAssignedMembers;
-          };
-        },
-      ) => { getUserTag: InterfaceQueryUserTagsAssignedMembers };
-    }) => Promise<unknown>;
-  } = useQuery(USER_TAGS_ASSIGNED_MEMBERS, {
+  }: InterfaceTagAssignedMembersQuery = useQuery(USER_TAGS_ASSIGNED_MEMBERS, {
     variables: {
       id: currentTagId,
-      first: ADD_PEOPLE_TO_TAGS_QUERY_LIMIT,
+      first: TAGS_QUERY_PAGE_SIZE,
     },
   });
 
   const loadMoreAssignedMembers = (): void => {
     fetchMoreAssignedMembers({
       variables: {
-        first: ADD_PEOPLE_TO_TAGS_QUERY_LIMIT,
+        first: TAGS_QUERY_PAGE_SIZE,
         after:
           userTagAssignedMembersData?.getUserTag.usersAssignedTo.pageInfo
             .endCursor, // Fetch after the last loaded cursor
