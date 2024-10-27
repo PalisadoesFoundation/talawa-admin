@@ -1166,7 +1166,9 @@
     "messages": "messages",
     "create": "créer",
     "newChat": "nouvelle discussion",
-    "newGroupChat": "Nouvelle discussion de groupe"
+    "newGroupChat": "Nouvelle discussion de groupe",
+    "groupInfo": "Informations sur le groupe",
+    "members": "Membres"
   },
   "userChatRoom": {
     "selectContact": "Sélectionnez un contact pour démarrer la conversation",

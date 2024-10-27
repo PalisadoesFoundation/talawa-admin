@@ -1169,7 +1169,9 @@
     "contacts": "Contacts",
     "create": "Create",
     "newChat": "New Chat",
-    "newGroupChat": "New Group Chat"
+    "newGroupChat": "New Group Chat",
+    "groupInfo": "Group Info",
+    "members": "Members"
   },
   "userChatRoom": {
     "selectContact": "Select a contact to start conversation",

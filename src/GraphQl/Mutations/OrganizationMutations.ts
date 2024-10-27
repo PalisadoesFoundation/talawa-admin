@@ -57,7 +57,6 @@ export const REMOVE_SAMPLE_ORGANIZATION_MUTATION = gql`
  * @returns The created direct chat object.
  */
 
-
 export const CREATE_CHAT = gql`
   mutation createChat(
     $userIds: [ID!]!

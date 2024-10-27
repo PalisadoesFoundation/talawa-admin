@@ -6,7 +6,6 @@ import {
   screen,
   fireEvent,
   waitFor,
-  findAllByTestId,
 } from '@testing-library/react';
 import { MockedProvider, MockSubscriptionLink } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -3566,7 +3565,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ChatRoom selectedContact="" />
+              <ChatRoom selectedContact="" chatListRefetch={jest.fn()} />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>

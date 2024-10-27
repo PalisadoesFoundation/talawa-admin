@@ -12,7 +12,6 @@ import {
   EDIT_CHAT_MESSAGE,
   MARK_CHAT_MESSAGES_AS_READ,
   MESSAGE_SENT_TO_CHAT,
-  GENERATE_NOTIFICATION,
   SEND_MESSAGE_TO_CHAT,
 } from 'GraphQl/Mutations/OrganizationMutations';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -90,6 +89,7 @@ type Chat = {
     email: string;
   }[];
   unseenMessagesByUsers: JSON;
+  description: string;
 };
 
 export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
@@ -245,14 +245,6 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     },
   });
 
-  useSubscription(GENERATE_NOTIFICATION, {
-    variables: {
-      userId: userId,
-    },
-    onData: async (notificationSubscriptionData) => {
-      console.log('notificationSubscriptionData', notificationSubscriptionData);
-    },
-  });
   useEffect(() => {
     document
       .getElementById('chat-area')
@@ -521,7 +513,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
           </div>
         </>
       )}
-      {groupChatDetailsModalisOpen && (
+      {groupChatDetailsModalisOpen && chat && (
         <GroupChatDetails
           toggleGroupChatDetailsModal={toggleGroupChatDetailsModal}
           groupChatDetailsModalisOpen={groupChatDetailsModalisOpen}

@@ -1166,7 +1166,9 @@
     "messages": "消息",
     "create": "创造",
     "newChat": "新聊天",
-    "newGroupChat": "新群聊"
+    "newGroupChat": "新群聊",
+    "groupInfo": "集团信息",
+    "members": "会员"
   },
   "userChatRoom": {
     "selectContact": "选择联系人开始对话",

@@ -7,7 +7,7 @@ import {
   waitFor,
 } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
-import { I18nextProvider, useTranslation } from 'react-i18next';
+import { I18nextProvider } from 'react-i18next';
 import { USERS_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -2753,10 +2753,6 @@ const MARK_CHAT_MESSAGES_AS_READ_MOCK = [
     },
   },
 ];
-<<<<<<< HEAD
-=======
-
->>>>>>> da51531085565c98ffff15d257ac661b00eeab23
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {

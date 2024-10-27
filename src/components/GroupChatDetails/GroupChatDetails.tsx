@@ -4,7 +4,6 @@ import { Button, Form, ListGroup, Modal } from 'react-bootstrap';
 import styles from './GroupChatDetails.module.css';
 import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
-import useLocalStorage from 'utils/useLocalstorage';
 import {
   ADD_USER_TO_GROUP_CHAT,
   UPDATE_CHAT,
@@ -21,15 +20,62 @@ import Loader from 'components/Loader/Loader';
 import { Search } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import Avatar from 'components/Avatar/Avatar';
-import { ReactComponent as AddIcon } from 'assets/svgs/add.svg';
+import AddIcon from 'assets/svgs/add.svg';
 import { FiEdit } from 'react-icons/fi';
 import { FaCheck, FaX } from 'react-icons/fa6';
 import convertToBase64 from 'utils/convertToBase64';
 
+type DirectMessage = {
+  _id: string;
+  createdAt: Date;
+  sender: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    image: string;
+  };
+  replyTo:
+    | {
+        _id: string;
+        createdAt: Date;
+        sender: {
+          _id: string;
+          firstName: string;
+          lastName: string;
+          image: string;
+        };
+        messageContent: string;
+        receiver: {
+          _id: string;
+          firstName: string;
+          lastName: string;
+        };
+      }
+    | undefined;
+  messageContent: string;
+  media: string;
+};
+
+type Chat = {
+  _id: string;
+  isGroup: boolean;
+  name?: string;
+  image?: string;
+  messages: DirectMessage[];
+  users: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+  }[];
+  unseenMessagesByUsers: JSON;
+  description: string;
+};
+
 interface InterfaceGoroupChatDetailsProps {
   toggleGroupChatDetailsModal: () => void;
   groupChatDetailsModalisOpen: boolean;
-  chat: any;
+  chat: Chat;
   chatRefetch: (
     variables?:
       | Partial<{
@@ -37,7 +83,7 @@ interface InterfaceGoroupChatDetailsProps {
           searchString: string;
         }>
       | undefined,
-  ) => Promise<ApolloQueryResult<any>>;
+  ) => Promise<ApolloQueryResult<{ chat: Chat }>>;
 }
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -56,8 +102,6 @@ const StyledTableRow = styled(TableRow)(() => ({
   },
 }));
 
-const { getItem } = useLocalStorage();
-
 export default function groupChatDetails({
   toggleGroupChatDetailsModal,
   groupChatDetailsModalisOpen,
@@ -71,7 +115,7 @@ export default function groupChatDetails({
   const [userName, setUserName] = useState('');
 
   const [editChatTitle, setEditChatTitle] = useState<boolean>(false);
-  const [chatName, setChatName] = useState<string>(chat.name);
+  const [chatName, setChatName] = useState<string>(chat?.name || '');
 
   const [addUser] = useMutation(ADD_USER_TO_GROUP_CHAT);
 
@@ -95,7 +139,7 @@ export default function groupChatDetails({
     },
   });
 
-  const addUserToGroupChat = async (userId: string): void => {
+  const addUserToGroupChat = async (userId: string): Promise<void> => {
     await addUser({
       variables: {
         userId,
@@ -159,7 +203,7 @@ export default function groupChatDetails({
         contentClassName={styles.modalContent}
       >
         <Modal.Header closeButton data-testid="createDirectChat">
-          <Modal.Title>Group info</Modal.Title>
+          <Modal.Title>{t('groupInfo')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <input
@@ -173,7 +217,7 @@ export default function groupChatDetails({
             {chat?.image ? (
               <img className={styles.chatImage} src={chat?.image} alt="" />
             ) : (
-              <Avatar avatarStyle={styles.groupImage} name={chat.name} />
+              <Avatar avatarStyle={styles.groupImage} name={chat.name || ''} />
             )}
             <button onClick={handleImageClick} className={styles.editImgBtn}>
               <FiEdit />
@@ -185,7 +229,6 @@ export default function groupChatDetails({
                   type="text"
                   value={chatName}
                   onChange={(e) => {
-                    console.log(e.target.value);
                     setChatName(e.target.value);
                   }}
                 />
@@ -193,7 +236,7 @@ export default function groupChatDetails({
                   className={styles.checkIcon}
                   onClick={async () => {
                     await updateChat();
-                    setChatName(chat.name);
+                    setChatName(chat.name || '');
                     setEditChatTitle(false);
                     await chatRefetch();
                   }}
@@ -202,7 +245,7 @@ export default function groupChatDetails({
                   className={styles.cancelIcon}
                   onClick={() => {
                     setEditChatTitle(false);
-                    setChatName(chat.name);
+                    setChatName(chat.name || '');
                   }}
                 />
               </div>
@@ -217,12 +260,16 @@ export default function groupChatDetails({
               </div>
             )}
 
-            <p>{chat?.users.length} Members</p>
+            <p>
+              {chat?.users.length} {t('members')}
+            </p>
             <p>{chat?.description}</p>
           </div>
 
           <div>
-            <h5>{chat.users.length} members</h5>
+            <h5>
+              {chat.users.length} {t('members')}
+            </h5>
             <ListGroup className={styles.memberList} variant="flush">
               <ListGroup.Item
                 className={styles.listItem}
@@ -230,17 +277,23 @@ export default function groupChatDetails({
                   openAddUserModal();
                 }}
               >
-                <AddIcon /> Add member
+                <AddIcon /> {t('addMember')}
               </ListGroup.Item>
-              {chat.users.map((user: any) => (
-                <ListGroup.Item className={styles.listItem} key={user._id}>
-                  <Avatar
-                    avatarStyle={styles.membersImage}
-                    name={user.firstName + ' ' + user.lastName}
-                  />
-                  {user.firstName} {user.lastName}
-                </ListGroup.Item>
-              ))}
+              {chat.users.map(
+                (user: {
+                  _id: string;
+                  firstName: string;
+                  lastName: string;
+                }) => (
+                  <ListGroup.Item className={styles.listItem} key={user._id}>
+                    <Avatar
+                      avatarStyle={styles.membersImage}
+                      name={user.firstName + ' ' + user.lastName}
+                    />
+                    {user.firstName} {user.lastName}
+                  </ListGroup.Item>
+                ),
+              )}
             </ListGroup>
           </div>
         </Modal.Body>
@@ -328,7 +381,7 @@ export default function groupChatDetails({
                                 }}
                                 data-testid="addBtn"
                               >
-                                Add
+                                {t('add')}
                               </Button>
                             </StyledTableCell>
                           </StyledTableRow>

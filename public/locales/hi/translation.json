@@ -1166,7 +1166,9 @@
     "messages": "संदेश",
     "create": "बनाएं",
     "newChat": "नई चैट",
-    "newGroupChat": "नया समूह चैट"
+    "newGroupChat": "नया समूह चैट",
+    "groupInfo": "समूह जानकारी",
+    "members": "सदस्यों"
   },
   "userChatRoom": {
     "selectContact": "बातचीत शुरू करने के लिए एक संपर्क चुनें",
