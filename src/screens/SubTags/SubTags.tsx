@@ -357,7 +357,7 @@ function SubTags(): JSX.Element {
           </div>
 
           <div className="mb-4">
-            <div className="bg-white light border border-bottom-0 rounded-top mb-0 py-2 d-flex align-items-center">
+            <div className="bg-white light border rounded-top mb-0 py-2 d-flex align-items-center">
               <div className="ms-3 my-1">
                 <IconComponent name="Tag" />
               </div>
