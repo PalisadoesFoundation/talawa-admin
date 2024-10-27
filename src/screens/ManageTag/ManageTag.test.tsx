@@ -4,6 +4,7 @@ import type { RenderResult } from '@testing-library/react';
 import {
   act,
   cleanup,
+  fireEvent,
   render,
   screen,
   waitFor,
@@ -80,11 +81,11 @@ const renderManageTag = (link: ApolloLink): RenderResult => {
                 element={<div data-testid="organizationTagsScreen"></div>}
               />
               <Route
-                path="/orgtags/:orgId/managetag/:tagId"
+                path="/orgtags/:orgId/manageTag/:tagId"
                 element={<ManageTag />}
               />
               <Route
-                path="/orgtags/:orgId/subtags/:tagId"
+                path="/orgtags/:orgId/subTags/:tagId"
                 element={<div data-testid="subTagsScreen"></div>}
               />
               <Route
@@ -337,31 +338,32 @@ describe('Manage Tag Page', () => {
     });
   });
 
-  test('paginates between different pages', async () => {
-    renderManageTag(link);
+  test('Fetches more assigned members with infinite scroll', async () => {
+    const { getByText } = renderManageTag(link);
 
     await wait();
 
     await waitFor(() => {
-      expect(screen.getByTestId('nextPagBtn')).toBeInTheDocument();
+      expect(getByText(translations.addPeopleToTag)).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('nextPagBtn'));
+
+    // Get the initial number of tags loaded
+    const initialAssignedMembersDataLength =
+      screen.getAllByTestId('viewProfileBtn').length;
+
+    // Set scroll position to the bottom of the window
+    fireEvent.scroll(window, {
+      target: { scrollY: document.documentElement.scrollHeight },
+    });
 
     await waitFor(() => {
-      expect(screen.getAllByTestId('memberName')[0]).toHaveTextContent(
-        'member 6',
+      const finalAssignedMembersDataLength =
+        screen.getAllByTestId('viewProfileBtn').length;
+      expect(finalAssignedMembersDataLength).toBeGreaterThan(
+        initialAssignedMembersDataLength,
       );
-    });
 
-    await waitFor(() => {
-      expect(screen.getByTestId('previousPageBtn')).toBeInTheDocument();
-    });
-    userEvent.click(screen.getByTestId('previousPageBtn'));
-
-    await waitFor(() => {
-      expect(screen.getAllByTestId('memberName')[0]).toHaveTextContent(
-        'member 1',
-      );
+      expect(getByText(translations.addPeopleToTag)).toBeInTheDocument();
     });
   });
 

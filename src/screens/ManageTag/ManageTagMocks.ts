@@ -17,10 +17,7 @@ export const MOCKS = [
       query: USER_TAGS_ASSIGNED_MEMBERS,
       variables: {
         id: '1',
-        after: null,
-        before: null,
-        first: 5,
-        last: null,
+        first: TAGS_QUERY_PAGE_SIZE,
       },
     },
     result: {
@@ -69,36 +66,6 @@ export const MOCKS = [
                 },
                 cursor: '5',
               },
-            ],
-            pageInfo: {
-              startCursor: '1',
-              endCursor: '5',
-              hasNextPage: true,
-              hasPreviousPage: false,
-            },
-            totalCount: 6,
-          },
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_TAGS_ASSIGNED_MEMBERS,
-      variables: {
-        id: '1',
-        after: '5',
-        before: null,
-        first: 5,
-        last: null,
-      },
-    },
-    result: {
-      data: {
-        getUserTag: {
-          name: 'tag1',
-          usersAssignedTo: {
-            edges: [
               {
                 node: {
                   _id: '6',
@@ -107,14 +74,46 @@ export const MOCKS = [
                 },
                 cursor: '6',
               },
+              {
+                node: {
+                  _id: '7',
+                  firstName: 'member',
+                  lastName: '7',
+                },
+                cursor: '7',
+              },
+              {
+                node: {
+                  _id: '8',
+                  firstName: 'member',
+                  lastName: '8',
+                },
+                cursor: '8',
+              },
+              {
+                node: {
+                  _id: '9',
+                  firstName: 'member',
+                  lastName: '9',
+                },
+                cursor: '9',
+              },
+              {
+                node: {
+                  _id: '10',
+                  firstName: 'member',
+                  lastName: '10',
+                },
+                cursor: '10',
+              },
             ],
             pageInfo: {
-              startCursor: '6',
-              endCursor: '6',
-              hasNextPage: false,
-              hasPreviousPage: true,
+              startCursor: '1',
+              endCursor: '10',
+              hasNextPage: true,
+              hasPreviousPage: false,
             },
-            totalCount: 6,
+            totalCount: 12,
           },
         },
       },
@@ -125,10 +124,8 @@ export const MOCKS = [
       query: USER_TAGS_ASSIGNED_MEMBERS,
       variables: {
         id: '1',
-        after: null,
-        before: '6',
-        first: null,
-        last: 5,
+        first: TAGS_QUERY_PAGE_SIZE,
+        after: '10',
       },
     },
     result: {
@@ -139,52 +136,28 @@ export const MOCKS = [
             edges: [
               {
                 node: {
-                  _id: '1',
+                  _id: '11',
                   firstName: 'member',
-                  lastName: '1',
+                  lastName: '11',
                 },
-                cursor: '1',
+                cursor: '11',
               },
               {
                 node: {
-                  _id: '2',
+                  _id: '12',
                   firstName: 'member',
-                  lastName: '2',
+                  lastName: '12',
                 },
-                cursor: '2',
-              },
-              {
-                node: {
-                  _id: '3',
-                  firstName: 'member',
-                  lastName: '3',
-                },
-                cursor: '3',
-              },
-              {
-                node: {
-                  _id: '4',
-                  firstName: 'member',
-                  lastName: '4',
-                },
-                cursor: '4',
-              },
-              {
-                node: {
-                  _id: '5',
-                  firstName: 'member',
-                  lastName: '5',
-                },
-                cursor: '5',
+                cursor: '12',
               },
             ],
             pageInfo: {
-              startCursor: '1',
-              endCursor: '5',
-              hasNextPage: true,
-              hasPreviousPage: false,
+              startCursor: '11',
+              endCursor: '12',
+              hasNextPage: false,
+              hasPreviousPage: true,
             },
-            totalCount: 6,
+            totalCount: 12,
           },
         },
       },
@@ -195,7 +168,7 @@ export const MOCKS = [
       query: USER_TAGS_MEMBERS_TO_ASSIGN_TO,
       variables: {
         id: '1',
-        first: 7,
+        first: TAGS_QUERY_PAGE_SIZE,
       },
     },
     result: {
@@ -260,11 +233,35 @@ export const MOCKS = [
                 },
                 cursor: '7',
               },
+              {
+                node: {
+                  _id: '8',
+                  firstName: 'member',
+                  lastName: '8',
+                },
+                cursor: '8',
+              },
+              {
+                node: {
+                  _id: '9',
+                  firstName: 'member',
+                  lastName: '9',
+                },
+                cursor: '9',
+              },
+              {
+                node: {
+                  _id: '10',
+                  firstName: 'member',
+                  lastName: '10',
+                },
+                cursor: '10',
+              },
             ],
             pageInfo: {
               startCursor: '1',
-              endCursor: '7',
-              hasNextPage: true,
+              endCursor: '10',
+              hasNextPage: false,
               hasPreviousPage: false,
             },
             totalCount: 10,
@@ -504,10 +501,7 @@ export const MOCKS_ERROR_ASSIGNED_MEMBERS = [
       query: USER_TAGS_ASSIGNED_MEMBERS,
       variables: {
         id: '1',
-        after: null,
-        before: null,
-        first: 5,
-        last: null,
+        first: TAGS_QUERY_PAGE_SIZE,
       },
     },
     error: new Error('Mock Graphql Error'),
@@ -533,10 +527,7 @@ export const MOCKS_ERROR_TAG_ANCESTORS = [
       query: USER_TAGS_ASSIGNED_MEMBERS,
       variables: {
         id: '1',
-        after: null,
-        before: null,
-        first: 5,
-        last: null,
+        first: TAGS_QUERY_PAGE_SIZE,
       },
     },
     result: {
@@ -547,11 +538,11 @@ export const MOCKS_ERROR_TAG_ANCESTORS = [
             edges: [],
             pageInfo: {
               startCursor: '1',
-              endCursor: '5',
-              hasNextPage: true,
+              endCursor: '1',
+              hasNextPage: false,
               hasPreviousPage: false,
             },
-            totalCount: 6,
+            totalCount: 1,
           },
         },
       },
