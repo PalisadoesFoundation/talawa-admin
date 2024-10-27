@@ -138,8 +138,8 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
       {expanded && subTagsList && (
         <div style={{ marginLeft: '20px' }}>
           <div
-            id="subTagsScrollableDiv"
-            data-testid="subTagsScrollableDiv"
+            id={`subTagsScrollableDiv${tag._id}`}
+            data-testid={`subTagsScrollableDiv${tag._id}`}
             style={{
               height: 300,
               overflow: 'auto',
@@ -157,7 +157,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
                   <div className="spinner" />
                 </div>
               }
-              scrollableTarget="subTagsScrollableDiv"
+              scrollableTarget={`subTagsScrollableDiv${tag._id}`}
             >
               {subTagsList.map((tag: InterfaceTagData) => (
                 <div key={tag._id} data-testid="orgUserSubTags">
