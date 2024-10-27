@@ -9,13 +9,12 @@
 }
 
 .subtleBlueGrey {
-  color: #7c9beb; 
-  text-decoration: none; 
+  color: #7c9beb;
+  text-decoration: none;
 }
 
-
 .subtleBlueGrey:hover {
-  color: #5F7E91; 
+  color: #5f7e91;
   text-decoration: underline;
 }
 .dropdown {
@@ -30,27 +29,22 @@
 
 .dropdown:hover,
 .dropdown:focus,
-.dropdown:active 
-.dropdown:focus-visible
-.dropdown.show 
-{
+.dropdown:active .dropdown:focus-visible .dropdown.show {
   background-color: transparent !important;
   border: 1px solid #555555;
-  color:#555555 !important;
-  
+  color: #555555 !important;
 }
 .dropdown:focus,
 .dropdown:focus-visible,
-.dropdown:active
-.dropdown.show  {
-  background-color: white !important; 
-  color: black !important; 
+.dropdown:active .dropdown.show {
+  background-color: white !important;
+  color: black !important;
   outline: none !important;
 }
 
 .dropdownItem {
-  background-color: white !important; 
-  color: #555555 !important; 
+  background-color: white !important;
+  color: #555555 !important;
   border: none !important;
 }
 
@@ -90,8 +84,6 @@
   position: relative;
 }
 
-
-
 .btnsContainer .input button {
   width: 52px;
 }
@@ -100,18 +92,18 @@
   margin-top: 10px;
   margin-bottom: 10px;
   background-color: white;
-  box-shadow: 0 1px 1px #DDDDDD;
+  box-shadow: 0 1px 1px #dddddd;
 }
 .inputFieldModal {
   margin-bottom: 10px;
   background-color: white;
-  box-shadow: 0 1px 1px #DDDDDD;
+  box-shadow: 0 1px 1px #dddddd;
 }
 .inputField > button {
   padding-top: 10px;
   padding-bottom: 10px;
 }
-.TableImage { 
+.TableImage {
   object-fit: cover;
   margin-top: 15px !important;
   width: 50px !important;
@@ -119,7 +111,6 @@
   border-radius: 100% !important;
 }
 .tableHead {
-
   color: white;
   border-radius: 20px !important;
   padding: 20px;
