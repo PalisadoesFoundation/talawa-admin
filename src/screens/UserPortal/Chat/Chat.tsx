@@ -175,7 +175,6 @@ export default function chat(): JSX.Element {
   } = useQuery(CHATS_LIST, {
     variables: {
       id: userId,
-      searchString: 'l',
     },
   });
 

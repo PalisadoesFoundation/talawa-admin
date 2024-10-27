@@ -27,7 +27,6 @@ interface InterfaceChatRoomProps {
     variables?:
       | Partial<{
           id: string;
-          searchString: string;
         }>
       | undefined,
   ) => Promise<ApolloQueryResult<{ chatList: Chat[] }>>;

@@ -80,7 +80,6 @@ interface InterfaceGoroupChatDetailsProps {
     variables?:
       | Partial<{
           id: string;
-          searchString: string;
         }>
       | undefined,
   ) => Promise<ApolloQueryResult<{ chat: Chat }>>;
