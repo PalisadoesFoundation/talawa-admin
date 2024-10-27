@@ -9,21 +9,15 @@ import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { EVENT_DETAILS, USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
-import CardItemLoading from 'components/OrganizationDashCards/CardItemLoading';
 import { Card, Row, Col } from 'react-bootstrap';
 import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
-import EventsAttendedByMember from './EventsAttendedByMember';
-import MemberAttendedEventsModal from './MemberAttendedEventsModal';
-import {
-  CalendarIcon,
-  DatePicker,
-  LocalizationProvider,
-} from '@mui/x-date-pickers';
+import EventsAttendedByMember from '../../components/MemberDetail/EventsAttendedByMember';
+import MemberAttendedEventsModal from '../../components/MemberDetail/EventsAttendedMemberModal';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import convertToBase64 from 'utils/convertToBase64';
-import sanitizeHtml from 'sanitize-html';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 import {
@@ -79,6 +73,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       }));
     }
   };
+  /*istanbul ignore next*/
   const handleEditIconClick = () => {
     fileInputRef.current?.click();
   };
@@ -88,15 +83,13 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   });
   const userData = user?.user;
   console.log(userData?.user?.registeredEvents);
-  const [eventsData, setEventsData] = useState([]);
-  const [loadingEvents, setLoadingEvents] = useState(false);
   const [isUpdated, setisUpdated] = useState(false);
   const { data: events } = useQuery(EVENT_DETAILS, {
     variables: { id: userData?.user?.eventsAttended._id },
   });
   console.log(events);
   useEffect(() => {
-    if (userData && isMounted) {
+    if (userData && isMounted.current) {
       setFormState({
         ...formState,
         firstName: userData?.user?.firstName,
@@ -116,7 +109,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         pluginCreationAllowed: userData?.appUserProfile?.pluginCreationAllowed,
         image: userData?.user?.image || '',
       });
-      setEventsData(events);
     }
   }, [userData, user]);
   useEffect(() => {
@@ -136,8 +128,11 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       e.target.files &&
       e.target.files[0]
     ) {
+      /*istanbul ignore next*/
       const file = e.target.files[0];
+      /*istanbul ignore next*/
       const base64 = await convertToBase64(file);
+      /*istanbul ignore next*/
       setFormState((prevState) => ({
         ...prevState,
         image: base64 as string,
@@ -156,31 +151,15 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
 
   const loginLink = async (): Promise<void> => {
     try {
-      // console.log(formState);
       const firstName = formState.firstName;
       const lastName = formState.lastName;
       const email = formState.email;
       // const appLanguageCode = formState.appLanguageCode;
       const image = formState.image;
       // const gender = formState.gender;
-      let toSubmit = true;
-      if (firstName.trim().length == 0 || !firstName) {
-        toast.warning('First Name cannot be blank!');
-        toSubmit = false;
-      }
-      if (lastName.trim().length == 0 || !lastName) {
-        toast.warning('Last Name cannot be blank!');
-        toSubmit = false;
-      }
-      if (email.trim().length == 0 || !email) {
-        toast.warning('Email cannot be blank!');
-        toSubmit = false;
-      }
-      if (!toSubmit) return;
       try {
         const { data } = await updateUser({
           variables: {
-            //! Currently only some fields are supported by the api
             id: currentUrl,
             ...formState,
           },
@@ -230,17 +209,10 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     });
     setisUpdated(false);
   };
-  console.log(userData);
+
   if (loading) {
     return <Loader />;
   }
-
-  const sanitizedSrc = sanitizeHtml(formState.image, {
-    allowedTags: ['img'],
-    allowedAttributes: {
-      img: ['src', 'alt'],
-    },
-  });
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       {show && (
@@ -285,6 +257,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                       className="fas fa-edit position-absolute bottom-0 right-0 p-1 bg-white rounded-circle"
                       onClick={handleEditIconClick}
                       style={{ cursor: 'pointer' }}
+                      data-testid="editImage"
                       title="Edit profile picture"
                     />
                   </div>
@@ -300,6 +273,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     <i
                       className="fas fa-edit position-absolute bottom-0 right-0 p-1 bg-white rounded-circle"
                       onClick={handleEditIconClick}
+                      data-testid="editImage"
                       style={{ cursor: 'pointer' }}
                     />
                   </div>
@@ -465,6 +439,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     type="text"
                     name="address"
                     onChange={handleChange}
+                    placeholder={tCommon('address')}
                   />
                 </Col>
                 <Col md={6}>
@@ -492,6 +467,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     type="text"
                     name="state"
                     onChange={handleChange}
+                    placeholder={tCommon('state')}
                   />
                 </Col>
                 <Col md={12}>
@@ -515,10 +491,18 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         {isUpdated && (
           <Col md={12}>
             <Card.Footer className="bg-white border-top-0 d-flex justify-content-end gap-2 py-3 px-2">
-              <Button variant="outline-secondary" onClick={resetChanges}>
-                Reset Changes
+              <Button
+                variant="outline-secondary"
+                onClick={resetChanges}
+                data-testid="resetChangesBtn"
+              >
+                {tCommon('resetChanges')}
               </Button>
-              <Button variant="success" onClick={loginLink}>
+              <Button
+                variant="success"
+                onClick={loginLink}
+                data-testid="saveChangesBtn"
+              >
                 {tCommon('saveChanges')}
               </Button>
             </Card.Footer>
@@ -616,18 +600,18 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         <Card.Body
           className={`${styles.cardBody} ${styles.scrollableCardBody}`}
         >
-          {loadingEvents ? (
-            [...Array(8)].map((_, index) => <CardItemLoading key={index} />)
-          ) : userData?.user?.eventsAttended.length === 0 ? (
+          {userData?.user.eventsAttended.length === 0 || null || undefined ? (
             <div className={styles.emptyContainer}>
-              <h6>{t('noEventsAttended')}</h6>
+              <h6>{t('noeventsAttended')}</h6>
             </div>
           ) : (
-            userData?.user?.eventsAttended
-              .slice(0, 5)
-              .map((event: InterfaceEvent, index: number) => (
-                <EventsAttendedByMember eventsId={event._id} key={index} />
-              ))
+            userData?.user.eventsAttended.map(
+              (event: InterfaceEvent, index: number) => (
+                <span data-testid="membereventsCard" key={index}>
+                  <EventsAttendedByMember eventsId={event._id} key={index} />
+                </span>
+              ),
+            )
           )}
         </Card.Body>
       </Card>

@@ -613,6 +613,7 @@
   "memberDetail": {
     "title": "Détails de l'utilisateur",
     "addAdmin": "Ajouter un administrateur",
+    "noeventsAttended": "Aucun événement assisté",
     "alreadyIsAdmin": "Le membre est déjà un administrateur",
     "organizations": "Organisations",
     "events": "Événements",
@@ -718,8 +719,8 @@
     "article": "Article"
   },
   "settings": {
-    "eventAttended":"Événements Assistés",
-    "noEventsAttended":"Aucun événement assisté",
+    "eventAttended": "Événements Assistés",
+    "noeventsAttended": "Aucun événement assisté",
     "profileSettings": "Paramètres de profil",
     "gender": "Genre",
     "phoneNumber": "Numéro de téléphone",

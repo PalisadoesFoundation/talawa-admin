@@ -613,6 +613,7 @@
   "memberDetail": {
     "title": "उपयोगकर्ता विवरण",
     "addAdmin": "व्यवस्थापक जोड़ें",
+    "noeventsAttended": "कोई कार्यक्रम में भाग नहीं लिया",
     "alreadyIsAdmin": "सदस्य पहले से ही एक व्यवस्थापक है",
     "organizations": "संगठनों",
     "events": "आयोजन",
@@ -718,7 +719,7 @@
     "article": "लेख"
   },
   "settings": {
-    "noEventsAttended": "कोई कार्यक्रम में उपस्थित नहीं",
+    "noeventsAttended": "कोई कार्यक्रम में उपस्थित नहीं",
     "eventAttended": "भाग लिए गए कार्यक्रम",
     "profileSettings": "पार्श्वचित्र समायोजन",
     "gender": "लिंग",

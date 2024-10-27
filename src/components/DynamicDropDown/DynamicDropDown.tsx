@@ -1,27 +1,7 @@
 import React from 'react';
 import { Dropdown } from 'react-bootstrap';
 import styles from './DynamicDropDown.module.css';
-import { InterfaceUser } from 'components/CheckIn/types';
-interface InterfaceMember {
-  createdAt: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  gender: string;
-  eventsAttended?: {
-    _id: string;
-  }[];
-  birthDate: Date;
-  __typename: string;
-  _id: string;
-  tagsAssignedWith: {
-    edges: {
-      node: {
-        name: string;
-      };
-    }[];
-  };
-}
+
 interface InterfaceChangeDropDownProps<T> {
   parentContainerStyle?: string;
   btnStyle?: string;
@@ -34,7 +14,7 @@ interface InterfaceChangeDropDownProps<T> {
 }
 
 const DynamicDropDown = <T extends Record<string, any>>(
-  props: InterfaceChangeDropDownProps<T>
+  props: InterfaceChangeDropDownProps<T>,
 ): JSX.Element => {
   const handleFieldChange = (value: string): void => {
     if (props?.handleChange) {
@@ -69,7 +49,9 @@ const DynamicDropDown = <T extends Record<string, any>>(
       >
         {getLabel(props?.formState[props?.fieldName])}
       </Dropdown.Toggle>
-      <Dropdown.Menu>
+      <Dropdown.Menu
+        data-testid={`${props?.fieldName.toLowerCase()}-dropdown-menu`}
+      >
         {props?.fieldOptions.map((option, index: number) => (
           <Dropdown.Item
             key={`${props?.fieldName.toLowerCase()}-dropdown-item-${index}`}

@@ -611,6 +611,7 @@
   "memberDetail": {
     "title": "User Details",
     "addAdmin": "Add Admin",
+    "noeventsAttended": "No Events Attended",
     "alreadyIsAdmin": "Member is already an Admin",
     "organizations": "Organizations",
     "events": "Events",
@@ -716,8 +717,8 @@
     "article": "Article"
   },
   "settings": {
-    "eventAttended":"Events Attended",
-    "noEventsAttended":"No Events Attended",
+    "eventAttended": "Events Attended",
+    "noeventsAttended": "No Events Attended",
     "profileSettings": "Profile Settings",
     "gender": "Gender",
     "phoneNumber": "Phone Number",

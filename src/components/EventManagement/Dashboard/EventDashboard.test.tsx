@@ -1,6 +1,6 @@
 import React from 'react';
 import type { RenderResult } from '@testing-library/react';
-import { render, act } from '@testing-library/react';
+import { render, act, fireEvent } from '@testing-library/react';
 import EventDashboard from './EventDashboard';
 import { BrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -64,20 +64,34 @@ const renderEventDashboard = (mockLink: ApolloLink): RenderResult => {
 
 describe('Testing Event Dashboard Screen', () => {
   test('The page should display event details correctly and also show the time if provided', async () => {
-    const { queryByText, queryAllByText } = renderEventDashboard(mockWithTime);
+    const { getByTestId, queryByText } = renderEventDashboard(mockWithTime);
 
     await wait();
 
-    expect(queryAllByText('Event Title').length).toBe(1);
-    expect(queryAllByText('Event Description').length).toBe(1);
-    expect(queryByText('India')).toBeInTheDocument();
+    expect(getByTestId('event-title')).toBeInTheDocument();
+    expect(getByTestId('event-description')).toBeInTheDocument();
+    expect(getByTestId('event-location')).toHaveTextContent('India');
 
-    await wait();
+    expect(getByTestId('registrations-card')).toBeInTheDocument();
+    expect(getByTestId('attendees-card')).toBeInTheDocument();
+    expect(getByTestId('feedback-card')).toBeInTheDocument();
+    expect(getByTestId('feedback-rating')).toHaveTextContent('4/5');
+
+    const editButton = getByTestId('edit-event-button');
+    fireEvent.click(editButton);
+    expect(getByTestId('event-title')).toBeInTheDocument();
   });
 
   test('The page should display event details correctly and should not show the time if it is null', async () => {
-    const { queryAllByText } = renderEventDashboard(mockWithoutTime);
+    const { getByTestId } = renderEventDashboard(mockWithoutTime);
     await wait();
-    expect(queryAllByText('Event Title').length).toBe(1);
+
+    expect(getByTestId('event-title')).toBeInTheDocument();
+    expect(getByTestId('event-time')).toBeInTheDocument();
+  });
+
+  test('Should show loader while data is being fetched', () => {
+    const { getByTestId } = renderEventDashboard(mockWithTime);
+    expect(getByTestId('spinner')).toBeInTheDocument();
   });
 });

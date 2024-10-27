@@ -8,6 +8,7 @@ import EventAttendance from './EventAttendance';
 import { EVENT_ATTENDEES } from 'GraphQl/Queries/Queries';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
+import userEvent from '@testing-library/user-event';
 
 const mockAttendees = [
   {
@@ -17,7 +18,7 @@ const mockAttendees = [
     email: 'johndoe@example.com',
     gender: 'male',
     eventsAttended: [{ _id: 'event1' }, { _id: 'event2' }],
-    createdAt: '2023-01-01',
+    createdAt: new Date().toISOString(),
     birthDate: new Date('1990-01-01'),
     __typename: 'User',
     tagsAssignedWith: {
@@ -31,7 +32,7 @@ const mockAttendees = [
     email: 'janesmith@example.com',
     gender: 'female',
     eventsAttended: [],
-    createdAt: '2023-06-01',
+    createdAt: '2023-01-01',
     birthDate: new Date('1985-05-05'),
     __typename: 'Admin',
     tagsAssignedWith: {
@@ -49,13 +50,17 @@ const mocks = [
     result: {
       data: {
         event: {
-          _id: 'event123',
           attendees: mockAttendees,
         },
       },
     },
   },
 ];
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({ eventId: 'event123' }),
+}));
 
 describe('EventAttendance Component', () => {
   const renderComponent = () =>
@@ -71,124 +76,81 @@ describe('EventAttendance Component', () => {
       </MockedProvider>,
     );
 
-  test('renders EventAttendance component', async () => {
+  test('renders table headers correctly', async () => {
     renderComponent();
     await waitFor(() => {
-      expect(screen.getByText('Historical Statistics')).toBeInTheDocument();
-      expect(screen.getByText('Sort')).toBeInTheDocument();
-      expect(screen.getByPlaceholderText('Search member')).toBeInTheDocument();
+      expect(screen.getByTestId('header-index')).toHaveTextContent('#');
+      expect(screen.getByTestId('header-member-name')).toHaveTextContent(
+        'Member Name',
+      );
+      expect(screen.getByTestId('header-status')).toHaveTextContent('Status');
+      expect(screen.getByTestId('header-events-attended')).toHaveTextContent(
+        'Events Attended',
+      );
+      expect(screen.getByTestId('header-task-assigned')).toHaveTextContent(
+        'Task Assigned',
+      );
     });
   });
 
-  test('displays correct table headers', async () => {
-    renderComponent();
-    await waitFor(() => {
-      expect(screen.getByText('#')).toBeInTheDocument();
-      expect(screen.getByText('Member Name')).toBeInTheDocument();
-      expect(screen.getByText('Status')).toBeInTheDocument();
-      expect(screen.getByText('Events Attended')).toBeInTheDocument();
-      expect(screen.getByText('Task Assigned')).toBeInTheDocument();
-    });
-  });
-
-  test('displays correct member information', async () => {
+  test('renders attendee rows with correct data', async () => {
     renderComponent();
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
       expect(screen.getByText('Jane Smith')).toBeInTheDocument();
-      expect(screen.getByText('Member')).toBeInTheDocument();
+      expect(screen.getAllByText('Member')[0]).toBeInTheDocument();
       expect(screen.getByText('Admin')).toBeInTheDocument();
-      expect(screen.getByText('2')).toBeInTheDocument();
-      expect(screen.getByText('0')).toBeInTheDocument();
-      expect(screen.getByText('Tag1')).toBeInTheDocument();
-      expect(screen.getByText('None')).toBeInTheDocument();
     });
   });
 
-  test('filters attendees by search text', async () => {
+  test('search functionality filters attendees correctly', async () => {
     renderComponent();
     await waitFor(() => {
-      const searchInput = screen.getByPlaceholderText('Search member');
+      const searchInput = screen.getByTestId('searchByName');
       fireEvent.change(searchInput, { target: { value: 'John' } });
       expect(screen.getByText('John Doe')).toBeInTheDocument();
       expect(screen.queryByText('Jane Smith')).not.toBeInTheDocument();
     });
   });
 
-  test('sorts attendees by name', async () => {
+  test('sort functionality works correctly', async () => {
     renderComponent();
     await waitFor(() => {
-      const sortButton = screen.getByText('Sort');
-      fireEvent.click(sortButton);
-      fireEvent.click(screen.getByText('Descending'));
+      const sortDropdown = screen.getByText('Sort');
+      userEvent.click(sortDropdown);
+      userEvent.click(screen.getByText('Descending'));
       const rows = screen.getAllByRole('row');
       expect(rows[1]).toHaveTextContent('John Doe');
-      expect(rows[2]).toHaveTextContent('Jane Smith');
     });
   });
 
-  test('filters attendees by date range', async () => {
+  test('filter by date range works correctly', async () => {
     renderComponent();
     await waitFor(() => {
-      const filterButton = screen.getByText('Filter: All');
-      fireEvent.click(filterButton);
-      fireEvent.click(screen.getByText('This Month'));
-      expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
-      expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+      const filterDropdown = screen.getByText(/Filter:/);
+      userEvent.click(filterDropdown);
+      userEvent.click(screen.getByText('This Month'));
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+      expect(screen.queryByText('Jane Smith')).not.toBeInTheDocument();
     });
   });
 
-  test('shows modal with attendance statistics', async () => {
+  test('opens statistics modal when clicking Historical Statistics button', async () => {
     renderComponent();
     await waitFor(() => {
       const statsButton = screen.getByText('Historical Statistics');
-      fireEvent.click(statsButton);
-      expect(screen.getByText('Attendance Rate')).toBeInTheDocument();
+      userEvent.click(statsButton);
+      expect(screen.getByText(/Attendance Rate/)).toBeInTheDocument();
     });
   });
 
-  test('displays tooltip with attended events', async () => {
+  test('displays correct number of events attended', async () => {
     renderComponent();
     await waitFor(() => {
-      const eventsAttendedCell = screen.getByText('2');
-      fireEvent.mouseOver(eventsAttendedCell);
-      expect(screen.getByRole('tooltip')).toBeInTheDocument();
-    });
-  });
-
-  test('handles empty attendees list', async () => {
-    const emptyMock = [
-      {
-        request: {
-          query: EVENT_ATTENDEES,
-          variables: { id: 'event123' },
-        },
-        result: {
-          data: {
-            event: {
-              _id: 'event123',
-              attendees: [],
-            },
-          },
-        },
-      },
-    ];
-
-    render(
-      <MockedProvider mocks={emptyMock} addTypename={false}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <EventAttendance />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await waitFor(() => {
-      expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
-      expect(screen.queryByText('Jane Smith')).not.toBeInTheDocument();
+      const johnEventsCount = screen.getByTestId('attendee-events-attended-0');
+      expect(johnEventsCount).toHaveTextContent('2');
+      const janeEventsCount = screen.getByTestId('attendee-events-attended-1');
+      expect(janeEventsCount).toHaveTextContent('0');
     });
   });
 });

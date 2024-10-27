@@ -32,7 +32,6 @@ export const AttendanceStatisticsModal: React.FC<
     useLazyQuery(RECURRING_EVENTS);
 
   const isEventRecurring = eventData?.event?.recurring;
-
   const currentDate = selectedDate || new Date();
   const filteredRecurringEvents = useMemo(
     () =>
@@ -41,7 +40,7 @@ export const AttendanceStatisticsModal: React.FC<
       ) || [],
     [recurringData, currentDate],
   );
-
+  console.log(recurringData);
   const totalEvents = filteredRecurringEvents.length;
   const totalPages = Math.ceil(totalEvents / eventsPerPage);
 
@@ -241,7 +240,6 @@ export const AttendanceStatisticsModal: React.FC<
       loadEventDetails({ variables: { id: eventId } });
     }
   }, [eventId, loadEventDetails]);
-
   useEffect(() => {
     if (eventId && orgId && eventData?.event?.baseRecurringEvent?._id) {
       loadRecurringEvents({
@@ -251,7 +249,6 @@ export const AttendanceStatisticsModal: React.FC<
       });
     }
   }, [eventId, orgId, eventData, loadRecurringEvents]);
-
   return (
     <Modal
       show={show}
@@ -259,9 +256,12 @@ export const AttendanceStatisticsModal: React.FC<
       className="attendance-modal"
       centered
       size={isEventRecurring ? 'xl' : undefined}
+      data-testid="attendance-modal"
     >
       <Modal.Header closeButton className="bg-success">
-        <Modal.Title className="text-white">Attendance Statistics</Modal.Title>
+        <Modal.Title className="text-white" data-testid="modal-title">
+          Attendance Statistics
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body
         className="w-100 d-flex flex-column align-items-center position-relative"
@@ -320,6 +320,7 @@ export const AttendanceStatisticsModal: React.FC<
                   </Button>
                 </OverlayTrigger>
                 <Button
+                  data-testid="today-button"
                   className="p-1 ms-2"
                   onClick={() => handleDateChange(new Date())}
                 >
@@ -367,6 +368,7 @@ export const AttendanceStatisticsModal: React.FC<
           <div className="text-success position-relative d-flex flex-column align-items-center justify-content-start w-50">
             <ButtonGroup className="mt-2 pb-2 p-2">
               <Button
+                data-testid="gender-button"
                 variant={selectedCategory === 'Gender' ? 'success' : 'light'}
                 className="border border-success p-2 pl-2"
                 onClick={() => handleCategoryChange('Gender')}
@@ -374,6 +376,7 @@ export const AttendanceStatisticsModal: React.FC<
                 Gender
               </Button>
               <Button
+                data-testid="age-button"
                 variant={selectedCategory === 'Age' ? 'success' : 'light'}
                 className="border border-success border-left-0 p-2"
                 onClick={() => handleCategoryChange('Age')}
@@ -429,7 +432,7 @@ export const AttendanceStatisticsModal: React.FC<
         </div>
       </Modal.Body>
       <Modal.Footer className="p-0 m-2">
-        <Dropdown onSelect={handleExport}>
+        <Dropdown data-testid="export-dropdown" onSelect={handleExport}>
           <Dropdown.Toggle
             className="p-2 m-2"
             variant="info"
@@ -438,11 +441,23 @@ export const AttendanceStatisticsModal: React.FC<
             Export Data
           </Dropdown.Toggle>
           <Dropdown.Menu>
-            <Dropdown.Item eventKey="trends">Trends</Dropdown.Item>
-            <Dropdown.Item eventKey="demographics">Demographics</Dropdown.Item>
+            <Dropdown.Item data-testid="trends-export" eventKey="trends">
+              Trends
+            </Dropdown.Item>
+            <Dropdown.Item
+              data-testid="demographics-export"
+              eventKey="demographics"
+            >
+              Demographics
+            </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
-        <Button className="p-2 m-2" variant="secondary" onClick={handleClose}>
+        <Button
+          className="p-2 m-2"
+          variant="secondary"
+          onClick={handleClose}
+          data-testid="close-button"
+        >
           Close
         </Button>
       </Modal.Footer>

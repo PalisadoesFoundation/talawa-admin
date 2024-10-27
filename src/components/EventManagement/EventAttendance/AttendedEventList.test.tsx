@@ -41,7 +41,7 @@ describe('Testing AttendedEventList', () => {
             <AttendedEventList {...props} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     expect(queryByText('Loading...')).toBeInTheDocument();
@@ -71,7 +71,7 @@ describe('Testing AttendedEventList', () => {
             <AttendedEventList {...props} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await waitFor(() => {
@@ -89,7 +89,7 @@ describe('Testing AttendedEventList', () => {
             <AttendedEventList {...props} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await waitFor(() => {

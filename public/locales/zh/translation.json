@@ -613,6 +613,7 @@
   "memberDetail": {
     "title": "用户详细信息",
     "addAdmin": "添加管理员",
+    "noeventsAttended": "未参加任何活动",
     "alreadyIsAdmin": "会员已经是管理员",
     "organizations": "组织机构",
     "events": "活动",
@@ -718,8 +719,8 @@
     "article": "文章"
   },
   "settings": {
-    "noEventsAttended": "未参加任何活动",
-    "eventAttended":"参加的活动",
+    "noeventsAttended": "未参加任何活动",
+    "eventAttended": "参加的活动",
     "profileSettings": "配置文件设置",
     "gender": "性别",
     "phoneNumber": "电话号码",

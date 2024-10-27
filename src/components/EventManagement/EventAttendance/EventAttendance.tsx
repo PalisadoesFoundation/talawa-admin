@@ -24,7 +24,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { AttendanceStatisticsModal } from './EventStatistics';
 import AttendedEventList from './AttendedEventList';
-import { maxHeight, styled } from '@mui/system';
+import { styled } from '@mui/system';
 
 interface InterfaceMember {
   createdAt: string;
@@ -55,7 +55,6 @@ function EventAttendance(): JSX.Element {
   const { t } = useTranslation();
   const { eventId } = useParams<{ eventId: string }>();
   const { orgId: currentUrl } = useParams();
-  const [searchText, setSearchText] = useState<string>('');
   const [filteredAttendees, setFilteredAttendees] = useState<InterfaceMember[]>(
     [],
   );
@@ -81,15 +80,6 @@ function EventAttendance(): JSX.Element {
       id: eventId,
     });
   }, [eventId, memberRefetch]);
-
-  useEffect(() => {
-    if (memberData?.event?.attendees) {
-      const updatedAttendees = filterAndSortAttendees(
-        memberData.event.attendees,
-      );
-      setFilteredAttendees(updatedAttendees);
-    }
-  }, [sortOrder, filteringBy, memberData, searchText]);  
 
   const sortAttendees = (attendees: InterfaceMember[]): InterfaceMember[] => {
     return [...attendees].sort((a, b) => {
@@ -131,17 +121,33 @@ function EventAttendance(): JSX.Element {
   };
 
   const searchEventAttendees = (value: string): void => {
-    setSearchText(value);
-    const searchValueLower = value.toLowerCase();
+    const searchValueLower = value.toLowerCase().trim();
+
     const filtered =
-      memberData?.event?.attendees?.filter(
-        (attendee: InterfaceMember) =>
+      memberData?.event?.attendees?.filter((attendee: InterfaceMember) => {
+        const fullName =
+          `${attendee.firstName} ${attendee.lastName}`.toLowerCase();
+        return (
           attendee.firstName?.toLowerCase().includes(searchValueLower) ||
           attendee.lastName?.toLowerCase().includes(searchValueLower) ||
-          attendee.email?.toLowerCase().includes(searchValueLower),
-      ) ?? [];
-    setFilteredAttendees(filterAndSortAttendees(filtered));
+          attendee.email?.toLowerCase().includes(searchValueLower) ||
+          fullName.includes(searchValueLower)
+        );
+      }) ?? [];
+
+    // Filter and sort the attendees based on the search results
+    const finalFiltered = filterAndSortAttendees(filtered);
+    setFilteredAttendees(finalFiltered);
   };
+  useEffect(() => {
+    if (memberData?.event?.attendees) {
+      // If there's a search term, filter and sort based on it
+      const updatedAttendees = filterAndSortAttendees(
+        memberData.event.attendees,
+      );
+      setFilteredAttendees(updatedAttendees);
+    }
+  }, [sortOrder, filteringBy, memberData]);
 
   const showModal = (): void => setShow(true);
   const handleClose = (): void => setShow(false);
@@ -263,27 +269,57 @@ function EventAttendance(): JSX.Element {
       <TableContainer component={Paper} className="mt-3">
         <Table aria-label="customized table">
           <TableHead>
-            <TableRow className="" data-testid="row">
-              <TableCell className={styles.customcell}>#</TableCell>
-              <TableCell className={styles.customcell}>
+            <TableRow className="" data-testid="table-header-row">
+              <TableCell
+                className={styles.customcell}
+                data-testid="header-index"
+              >
+                #
+              </TableCell>
+              <TableCell
+                className={styles.customcell}
+                data-testid="header-member-name"
+              >
                 {t('Member Name')}
               </TableCell>
-              <TableCell className={styles.customcell}>{t('Status')}</TableCell>
-              <TableCell className={styles.customcell}>
+              <TableCell
+                className={styles.customcell}
+                data-testid="header-status"
+              >
+                {t('Status')}
+              </TableCell>
+              <TableCell
+                className={styles.customcell}
+                data-testid="header-events-attended"
+              >
                 {t('Events Attended')}
               </TableCell>
-              <TableCell className={styles.customcell}>
+              <TableCell
+                className={styles.customcell}
+                data-testid="header-task-assigned"
+              >
                 {t('Task Assigned')}
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {filteredAttendees.map((member: InterfaceMember, index: number) => (
-              <StyledTableRow key={index} className="my-6">
-                <StyledTableCell component="th" scope="row">
+              <StyledTableRow
+                key={index}
+                data-testid={`attendee-row-${index}`}
+                className="my-6"
+              >
+                <StyledTableCell
+                  component="th"
+                  scope="row"
+                  data-testid={`attendee-index-${index}`}
+                >
                   {index + 1}
                 </StyledTableCell>
-                <StyledTableCell align="left">
+                <StyledTableCell
+                  align="left"
+                  data-testid={`attendee-name-${index}`}
+                >
                   <Link
                     to={`/member/${currentUrl}`}
                     state={{ id: member._id }}
@@ -292,7 +328,10 @@ function EventAttendance(): JSX.Element {
                     {member.firstName} {member.lastName}
                   </Link>
                 </StyledTableCell>
-                <StyledTableCell align="left">
+                <StyledTableCell
+                  align="left"
+                  data-testid={`attendee-status-${index}`}
+                >
                   {member.__typename === 'User' ? t('Member') : t('Admin')}
                 </StyledTableCell>
                 <Tooltip
@@ -314,7 +353,10 @@ function EventAttendance(): JSX.Element {
                     <AttendedEventList key={event._id} eventId={event._id} />
                   ))}
                 >
-                  <StyledTableCell align="left">
+                  <StyledTableCell
+                    align="left"
+                    data-testid={`attendee-events-attended-${index}`}
+                  >
                     <a href="#">
                       {member.eventsAttended
                         ? member.eventsAttended.length
@@ -322,11 +364,14 @@ function EventAttendance(): JSX.Element {
                     </a>
                   </StyledTableCell>
                 </Tooltip>
-                <StyledTableCell align="left">
+                <StyledTableCell
+                  align="left"
+                  data-testid={`attendee-task-assigned-${index}`}
+                >
                   {member.tagsAssignedWith ? (
                     member.tagsAssignedWith.edges.map(
-                      (edge: { node: { name: string } }, index: number) => (
-                        <div key={index}>{edge.node.name}</div>
+                      (edge: { node: { name: string } }, tagIndex: number) => (
+                        <div key={tagIndex}>{edge.node.name}</div>
                       ),
                     )
                   ) : (

@@ -61,6 +61,7 @@ const Mocks1 = [
             countryCode: 'IN',
             line1: 'random',
           },
+          eventsAttended: [{ _id: 'event1' }, { _id: 'event2' }],
           phone: {
             mobile: '+174567890',
           },
@@ -87,6 +88,7 @@ const Mocks2 = [
           maritalStatus: '',
           educationGrade: '',
           employmentStatus: '',
+          eventsAttended: [],
           birthDate: '',
           address: {
             state: '',
@@ -177,7 +179,7 @@ describe('Testing Settings Screen [User Portal]', () => {
     await wait();
     userEvent.type(screen.getByTestId('inputPhoneNumber'), '1234567890');
     await wait();
-    userEvent.selectOptions(screen.getByTestId('inputGrade'), 'Grade 1');
+    userEvent.selectOptions(screen.getByTestId('inputGrade'), 'Grade-1');
     await wait();
     userEvent.selectOptions(screen.getByTestId('inputEmpStatus'), 'Unemployed');
     await wait();
@@ -206,7 +208,7 @@ describe('Testing Settings Screen [User Portal]', () => {
     const files = [imageFile];
     userEvent.upload(fileInp, files);
     await wait();
-    expect(screen.getAllByAltText('profile picture')[0]).toBeInTheDocument();
+    expect(screen.getByTestId('profile-picture')).toBeInTheDocument();
   });
 
   test('resetChangesBtn works properly', async () => {
@@ -223,7 +225,8 @@ describe('Testing Settings Screen [User Portal]', () => {
     );
 
     await wait();
-
+    userEvent.type(screen.getByTestId('inputAddress'), 'random');
+    await wait();
     userEvent.click(screen.getByTestId('resetChangesBtn'));
     await wait();
     expect(screen.getByTestId('inputFirstName')).toHaveValue('John');
@@ -253,7 +256,8 @@ describe('Testing Settings Screen [User Portal]', () => {
     );
 
     await wait();
-
+    userEvent.type(screen.getByTestId('inputAddress'), 'random');
+    await wait();
     userEvent.click(screen.getByTestId('resetChangesBtn'));
     await wait();
     expect(screen.getByTestId('inputFirstName')).toHaveValue('');
@@ -363,5 +367,71 @@ describe('Testing Settings Screen [User Portal]', () => {
 
     userEvent.click(screen.getByTestId('updateUserBtn'));
     await wait();
+  });
+
+  test('renders events attended card correctly', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link2}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Settings />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+    // Check if the card title is rendered
+    expect(screen.getByText('Events Attended')).toBeInTheDocument();
+    await wait(1000);
+    // Check for empty state immediately
+    expect(screen.getByText('No Events Attended')).toBeInTheDocument();
+  });
+
+  test('renders events attended card correctly with events', async () => {
+    const mockEventsAttended = [
+      { _id: '1', title: 'Event 1' },
+      { _id: '2', title: 'Event 2' },
+    ];
+
+    const MocksWithEvents = [
+      {
+        ...Mocks1[0],
+        result: {
+          data: {
+            checkAuth: {
+              ...Mocks1[0].result.data.checkAuth,
+              eventsAttended: mockEventsAttended,
+            },
+          },
+        },
+      },
+    ];
+
+    const linkWithEvents = new StaticMockLink(MocksWithEvents, true);
+
+    render(
+      <MockedProvider addTypename={false} link={linkWithEvents}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Settings />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait(1000);
+
+    expect(screen.getByText('Events Attended')).toBeInTheDocument();
+    const eventsCards = screen.getAllByTestId('usereventsCard');
+    expect(eventsCards.length).toBe(2);
+
+    eventsCards.forEach((card) => {
+      expect(card).toBeInTheDocument();
+      expect(card.children.length).toBe(1);
+    });
   });
 });

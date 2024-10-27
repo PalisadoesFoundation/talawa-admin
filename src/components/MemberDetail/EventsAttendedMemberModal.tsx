@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { useQuery } from '@apollo/client';
-import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import {
   Table,
   TableBody,
@@ -9,24 +7,38 @@ import {
   TableHead,
   TableRow,
   Paper,
-  CircularProgress,
   Pagination,
 } from '@mui/material';
 import { Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
-import styles from './MemberDetail.module.css';
+import styles from '../../screens/MemberDetail/MemberDetail.module.css';
+import { CustomTableCell } from './customTableCell';
 
-function MemberAttendedEventsModal({ eventsAttended, setShow, show }) {
+interface InterfaceEvent {
+  _id: string;
+}
+
+interface InterfaceEventsAttendedMemberModalProps {
+  eventsAttended: InterfaceEvent[];
+  setShow: (show: boolean) => void;
+  show: boolean;
+}
+
+const EventsAttendedMemberModal: React.FC<
+  InterfaceEventsAttendedMemberModalProps
+> = ({ eventsAttended, setShow, show }) => {
   const { t } = useTranslation();
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState<number>(1);
   const eventsPerPage = 5;
 
-  const handleClose = () => {
+  const handleClose = (): void => {
     setShow(false);
   };
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = (
+    event: React.ChangeEvent<unknown>,
+    newPage: number,
+  ): void => {
     setPage(newPage);
   };
 
@@ -43,7 +55,7 @@ function MemberAttendedEventsModal({ eventsAttended, setShow, show }) {
       </Modal.Header>
       <Modal.Body>
         {eventsAttended.length === 0 ? (
-          <p>{t('noEventsAttended')}</p>
+          <p>{t('noeventsAttended')}</p>
         ) : (
           <>
             <h5 className="text-end">
@@ -52,7 +64,7 @@ function MemberAttendedEventsModal({ eventsAttended, setShow, show }) {
               {eventsAttended.length} Events
             </h5>
             <TableContainer component={Paper} className="mt-3">
-              <Table aria-label="customized table" striped hover>
+              <Table aria-label="customized table">
                 <TableHead>
                   <TableRow data-testid="row">
                     <TableCell className={styles.customcell}>
@@ -89,62 +101,6 @@ function MemberAttendedEventsModal({ eventsAttended, setShow, show }) {
       </Modal.Body>
     </Modal>
   );
-}
-
-const CustomTableCell = ({ eventId }) => {
-  const { data, loading, error } = useQuery(EVENT_DETAILS, {
-    variables: {
-      id: eventId,
-    },
-  });
-
-  if (loading)
-    return (
-      <TableRow>
-        <TableCell colSpan={4}>
-          <CircularProgress />
-        </TableCell>
-      </TableRow>
-    );
-  if (error)
-    return (
-      <TableRow>
-        <TableCell colSpan={4}>Error: {error.message}</TableCell>
-      </TableRow>
-    );
-
-  const event = data?.event;
-
-  if (!event) {
-    return (
-      <TableRow>
-        <TableCell colSpan={4} align="center">
-          No event found
-        </TableCell>
-      </TableRow>
-    );
-  }
-
-  return (
-    <TableRow className="my-6">
-      <TableCell align="left">
-        <Link
-          to={`/event/${event.organization._id}/${event._id}`}
-          state={{ id: event._id }}
-          className={styles.membername}
-        >
-          {event.title}
-        </Link>
-      </TableCell>
-      <TableCell align="left">
-        {new Date(event.startDate).toLocaleDateString()}
-      </TableCell>
-      <TableCell align="left">{event.recurring ? 'Yes' : 'No'}</TableCell>
-      <TableCell align="left">
-        {event.attendees ? event.attendees.length : '0'}
-      </TableCell>
-    </TableRow>
-  );
 };
 
-export default MemberAttendedEventsModal;
+export default EventsAttendedMemberModal;

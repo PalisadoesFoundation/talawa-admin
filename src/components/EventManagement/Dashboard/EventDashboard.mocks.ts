@@ -21,6 +21,7 @@ export const MOCKS_WITH_TIME = [
           endTime: '09:00:00',
           allDay: false,
           location: 'India',
+          recurring: true,
           organization: {
             _id: 'org1',
             members: [{ _id: 'user1', firstName: 'John', lastName: 'Doe' }],
@@ -52,6 +53,7 @@ export const MOCKS_WITHOUT_TIME = [
           startTime: null,
           endTime: null,
           allDay: false,
+          recurring: false,
           location: 'India',
           organization: {
             _id: 'org1',

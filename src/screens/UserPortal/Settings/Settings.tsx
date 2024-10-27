@@ -21,7 +21,7 @@ import OtherSettings from 'components/UserProfileSettings/OtherSettings';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import Avatar from 'components/Avatar/Avatar';
-import EventsAttendedByMember from 'screens/MemberDetail/EventsAttendedByMember';
+import EventsAttendedByMember from 'components/MemberDetail/EventsAttendedByMember';
 import CardItemLoading from 'components/OrganizationDashCards/CardItemLoading';
 import type { InterfaceEvent } from 'components/EventManagement/EventAttendance/InterfaceEvents';
 
@@ -51,7 +51,6 @@ export default function settings(): JSX.Element {
 
   const { data } = useQuery(CHECK_AUTH, { fetchPolicy: 'network-only' });
   const [updateUserDetails] = useMutation(UPDATE_USER_MUTATION);
-  const [loadingEvents, setLoadingEvents] = useState(false);
   const [userDetails, setUserDetails] = React.useState({
     firstName: '',
     lastName: '',
@@ -180,7 +179,7 @@ export default function settings(): JSX.Element {
       originalImageState.current = image;
     }
   }, [data]);
-
+  console.log(userDetails.eventsAttended.length);
   return (
     <>
       {hideDrawer ? (
@@ -242,20 +241,21 @@ export default function settings(): JSX.Element {
                               }}
                               src={userDetails.image}
                               alt="User"
-                              data-testid="userImagePresent"
+                              data-testid="profile-picture"
                             />
                           ) : (
                             <Avatar
                               name={`${userDetails.firstName} ${userDetails.lastName}`}
                               alt="User Image"
                               size={250}
-                              dataTestId="userImageAbsent"
+                              dataTestId="profile-picture"
                               radius={250}
                             />
                           )}
                           <i
                             className="fas fa-edit position-absolute bottom-0 right-0 p-2 bg-white rounded-circle"
                             onClick={handleImageUpload}
+                            data-testid="uploadImageBtn"
                             style={{ cursor: 'pointer', fontSize: '1.2rem' }}
                             title="Edit profile picture"
                           />
@@ -608,16 +608,19 @@ export default function settings(): JSX.Element {
             <Card.Body
               className={`${styles.cardBody} ${styles.scrollableCardBody}`}
             >
-              {loadingEvents ? (
-                [...Array(8)].map((_, index) => <CardItemLoading key={index} />)
-              ) : userDetails.eventsAttended.length === 0 ? (
+              {userDetails.eventsAttended.length === 0 || null || undefined ? (
                 <div className={styles.emptyContainer}>
-                  <h6>{t('noEventsAttended')}</h6>
+                  <h6>{t('noeventsAttended')}</h6>
                 </div>
               ) : (
-                userDetails?.eventsAttended?.map(
+                userDetails.eventsAttended.map(
                   (event: InterfaceEvent, index: number) => (
-                    <EventsAttendedByMember eventsId={event._id} key={index} />
+                    <span data-testid="usereventsCard" key={index}>
+                      <EventsAttendedByMember
+                        eventsId={event._id}
+                        key={index}
+                      />
+                    </span>
                   ),
                 )
               )}

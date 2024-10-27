@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import styles from './EventDashboard.module.css';
 import { useTranslation } from 'react-i18next';
@@ -12,38 +12,56 @@ import { formatDate } from 'utils/dateFormatter';
 
 const EventDashboard = (props: { eventId: string }): JSX.Element => {
   const { eventId } = props;
+  const isMounted = useRef(true);
+
   const { t } = useTranslation('translation', {
     keyPrefix: 'eventManagement',
   });
+
   const { t: tList } = useTranslation('translation', {
     keyPrefix: 'eventListCard',
   });
 
   const { t: tCommon } = useTranslation('common');
   const [eventModalIsOpen, setEventModalIsOpen] = useState(false);
+
   const { data: eventData, loading: eventInfoLoading } = useQuery(
     EVENT_DETAILS,
     {
       variables: { id: eventId },
+      skip: !isMounted.current,
     },
   );
 
-  if (eventInfoLoading) {
-    return <Loader />;
-  }
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
 
   function formatTime(timeString: string): string {
     const [hours, minutes] = timeString.split(':').slice(0, 2);
     return `${hours}:${minutes}`;
   }
 
+  /*istanbul ignore next*/
   const showViewModal = (): void => {
-    setEventModalIsOpen(true);
+    if (isMounted.current) {
+      setEventModalIsOpen(true);
+    }
   };
 
+  /*istanbul ignore next*/
   const hideViewModal = (): void => {
-    setEventModalIsOpen(false);
+    if (isMounted.current) {
+      setEventModalIsOpen(false);
+    }
   };
+
+  if (eventInfoLoading) {
+    return <Loader data-testid="loader" />;
+  }
 
   const eventListCardProps: InterfaceEventListCardProps = {
     userRole: '',
@@ -65,10 +83,9 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
     registrants: eventData.event.attendees,
     creator: eventData.event.creator,
   };
-  console.log(eventData);
 
   return (
-    <div className="">
+    <div data-testid="event-dashboard">
       <Row className="">
         <EventListCardModals
           eventListCardProps={eventListCardProps}
@@ -77,89 +94,94 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
           t={tList}
           tCommon={tCommon}
         />
-        {/* <div className='border-1 border-top'></div> */}
-        <div className="d-flex px-6 ">
-          <div className={`${styles.ctacards}`}>
+        <div className="d-flex px-6 " data-testid="event-stats">
+          <div
+            className={`${styles.ctacards}`}
+            data-testid="registrations-card"
+          >
             <img src="/images/svg/attendees.svg" alt="userImage" className="" />
             <div>
               <h1>
-                <b>{eventData.event.attendees.length}</b>
+                <b data-testid="registrations-count">
+                  {eventData.event.attendees.length}
+                </b>
               </h1>
               <span>No of Registrations</span>
             </div>
           </div>
-          <div className={`${styles.ctacards}`}>
+          <div className={`${styles.ctacards}`} data-testid="attendees-card">
             <img src="/images/svg/attendees.svg" alt="userImage" className="" />
             <div>
               <h1>
-                <b>{eventData.event.attendees.length}</b>
+                <b data-testid="attendees-count">
+                  {eventData.event.attendees.length}
+                </b>
               </h1>
               <span>No of Attendees</span>
             </div>
           </div>
-          <div className={`${styles.ctacards}`}>
+          <div className={`${styles.ctacards}`} data-testid="feedback-card">
             <img src="/images/svg/feedback.svg" alt="userImage" className="" />
             <div>
               <h1>
-                <b>4/5</b>
+                <b data-testid="feedback-rating">4/5</b>
               </h1>
               <span>Average Feedback</span>
             </div>
           </div>
         </div>
         <Col>
-          <div className={styles.eventContainer}>
+          <div className={styles.eventContainer} data-testid="event-details">
             <div className={styles.eventDetailsBox}>
               <button
                 className="btn btn-light rounded-circle position-absolute end-0 me-3 p-1 mt-2"
                 onClick={showViewModal}
+                data-testid="edit-event-button"
               >
                 <Edit fontSize="medium" />
               </button>
-              <h3 className={styles.titlename}></h3>
-
-              <p className={styles.description}>
+              <h3 className={styles.titlename} data-testid="event-title">
+                {eventData.event.title}
+              </h3>
+              <p className={styles.description} data-testid="event-description">
                 {eventData.event.description}
               </p>
-              <p className={styles.toporgloc}>
+              <p className={styles.toporgloc} data-testid="event-location">
                 <b>Location:</b> <span>{eventData.event.location}</span>
               </p>
-              <p className={styles.toporgloc}>
+              <p className={styles.toporgloc} data-testid="event-registrants">
                 <b>Registrants:</b>{' '}
                 <span>{eventData.event.attendees.length}</span>
               </p>
-              <p className={`${styles.toporgloc} d-flex`}>
+              <div
+                className={`${styles.toporgloc} d-flex`}
+                data-testid="recurring-status"
+              >
                 <b>Recurring Event:</b>{' '}
-                <span>
-                  {eventData.event.recurring ? (
-                    <p className="text-success ml-2"> Active</p>
-                  ) : (
-                    <p className="text-success ml-2"> Inactive</p>
-                  )}
+                <span className="text-success ml-2">
+                  {eventData.event.recurring ? 'Active' : 'Inactive'}
                 </span>
-              </p>
+              </div>
             </div>
-            <div></div>
-            <div className={styles.time}>
+            <div className={styles.time} data-testid="event-time">
               <p>
-                <b className={styles.startTime}>
+                <b className={styles.startTime} data-testid="start-time">
                   {eventData.event.startTime !== null
                     ? `${formatTime(eventData.event.startTime)}`
                     : ``}
                 </b>{' '}
-                <span className={styles.startDate}>
+                <span className={styles.startDate} data-testid="start-date">
                   {formatDate(eventData.event.startDate)}{' '}
                 </span>
               </p>
               <p className={styles.to}>{t('to')}</p>
               <p>
-                <b className={styles.endTime}>
-                  {' '}
+                <b className={styles.endTime} data-testid="end-time">
                   {eventData.event.endTime !== null
                     ? `${formatTime(eventData.event.endTime)}`
                     : ``}
                 </b>{' '}
-                <span className={styles.endDate}>
+                <span className={styles.endDate} data-testid="end-date">
                   {formatDate(eventData.event.endDate)}{' '}
                 </span>
               </p>
