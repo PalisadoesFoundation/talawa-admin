@@ -332,7 +332,14 @@
     "successfullyUnassigned": "Etiqueta desasignada del usuario",
     "addPeople": "Agregar Personas",
     "add": "Agregar",
-    "subTags": "Subetiquetas"
+    "subTags": "Subetiquetas",
+    "assignedToAll": "Etiqueta asignada a todos",
+    "successfullyAssignedToPeople": "Etiqueta asignada con éxito",
+    "assignPeople": "Asignar",
+    "errorOccurredWhileLoadingMembers": "Error al cargar los miembros",
+    "userName": "Nombre de usuario",
+    "actions": "Acciones",
+    "noOneSelected": "Nadie seleccionado"
   },
   "userListCard": {
     "joined": "Unido",

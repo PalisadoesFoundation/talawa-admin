@@ -60,6 +60,7 @@ const cache = new InMemoryCache({
         getUserTag: {
           keyArgs: false,
           merge(existing = {}, incoming) {
+            console.log(existing);
             return incoming;
           },
         },
@@ -99,7 +100,7 @@ const renderManageTag = (link: ApolloLink): RenderResult => {
   );
 };
 
-describe('Organisation Tags Page', () => {
+describe('Manage Tag Page', () => {
   beforeEach(() => {
     jest.mock('react-router-dom', () => ({
       ...jest.requireActual('react-router-dom'),
@@ -290,7 +291,9 @@ describe('Organisation Tags Page', () => {
     userEvent.click(screen.getByTestId('unassignTagModalSubmitBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.successfullyUnassigned);
+      expect(toast.success).toHaveBeenCalledWith(
+        translations.successfullyUnassigned,
+      );
     });
   });
 });
