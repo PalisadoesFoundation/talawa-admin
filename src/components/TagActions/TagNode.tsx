@@ -10,6 +10,9 @@ import { TAGS_QUERY_LIMIT } from 'utils/organizationTagsUtils';
 import styles from './TagActions.module.css';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
+/**
+ * Props for the `AssignToTags` component.
+ */
 interface InterfaceTagNodeProps {
   tag: InterfaceTagData;
   checkedTags: Set<string>;
@@ -17,6 +20,9 @@ interface InterfaceTagNodeProps {
   t: (key: string) => string;
 }
 
+/**
+ * Renders the Tags which can be expanded to list subtags.
+ */
 const TagNode: React.FC<InterfaceTagNodeProps> = ({
   tag,
   checkedTags,
