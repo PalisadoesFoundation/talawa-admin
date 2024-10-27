@@ -352,8 +352,7 @@
     "tagName": "Name",
     "tagUpdationSuccess": "Tag updated successfully",
     "tagRemovalSuccess": "Tag deleted successfully",
-    "noTagSelected": "No Tag Selected",
-    "fetchMore": "fetch more"
+    "noTagSelected": "No Tag Selected"
   },
   "userListCard": {
     "addAdmin": "Add Admin",

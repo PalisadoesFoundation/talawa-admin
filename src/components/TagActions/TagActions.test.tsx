@@ -194,11 +194,25 @@ describe('Organisation Tags Page', () => {
     });
     userEvent.click(screen.getByTestId('expandSubTags1'));
 
-    // fetch more of its subtags
     await waitFor(() => {
-      expect(screen.getByTestId('fetchMoreSubTagsOf1')).toBeInTheDocument();
+      expect(screen.getByTestId('subTagsScrollableDiv')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('fetchMoreSubTagsOf1'));
+    // Find the infinite scroll div for subtags by test ID or another selector
+    const subTagsScrollableDiv = screen.getByTestId('subTagsScrollableDiv');
+
+    const initialTagsDataLength =
+      screen.getAllByTestId('orgUserSubTags').length;
+
+    // Set scroll position to the bottom
+    fireEvent.scroll(subTagsScrollableDiv, {
+      target: { scrollY: subTagsScrollableDiv.scrollHeight },
+    });
+
+    await waitFor(() => {
+      const finalTagsDataLength =
+        screen.getAllByTestId('orgUserSubTags').length;
+      expect(finalTagsDataLength).toBeGreaterThan(initialTagsDataLength);
+    });
 
     // select subtags 1 & 2
     await waitFor(() => {
