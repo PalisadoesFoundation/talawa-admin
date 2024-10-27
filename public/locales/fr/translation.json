@@ -396,7 +396,8 @@
     "startDate": "Date de début",
     "endDate": "Date de fin",
     "talawaApiUnavailable": "API Talawa indisponible",
-    "done": "Fait"
+    "done": "Fait",
+    "createChat": "Créer une discussion"
   },
   "organizationActionItems": {
     "actionItemCategory": "Catégorie d'élément d'action",
@@ -531,7 +532,8 @@
     "registerEvent": "Inscrire à l'événement",
     "close": "Fermer",
     "talawaApiUnavailable": "API Talawa non disponible",
-    "done": "Terminé"
+    "done": "Terminé",
+    "createChat": "Créer une discussion"
   },
   "funds": {
     "title": "Fonds",
@@ -1115,7 +1117,8 @@
     "eventDescription": "Description de l'événement",
     "eventLocation": "Lieu de l'événement",
     "startDate": "Date de début",
-    "endDate": "Date de fin"
+    "endDate": "Date de fin",
+    "createChat": "Créer une discussion"
   },
   "userEventCard": {
     "starts": "Départs",

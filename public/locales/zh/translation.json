@@ -396,7 +396,8 @@
     "startDate": "开始日期",
     "endDate": "结束日期",
     "talawaApiUnavailable": "塔拉瓦 API 不可用",
-    "done": "完成"
+    "done": "完成",
+    "createChat": "创建聊天"
   },
   "organizationActionItems": {
     "actionItemCategory": "行动项目类别",
@@ -531,7 +532,8 @@
     "registerEvent": "注册活动",
     "close": "关闭",
     "talawaApiUnavailable": "塔拉瓦 API 不可用",
-    "done": "完成"
+    "done": "完成",
+    "createChat": "创建聊天"
   },
   "funds": {
     "title": "基金",
@@ -1115,7 +1117,8 @@
     "eventDescription": "活动描述",
     "eventLocation": "活动位置",
     "startDate": "开始日期",
-    "endDate": "结束日期"
+    "endDate": "结束日期",
+    "createChat": "创建聊天"
   },
   "userEventCard": {
     "starts": "开始",

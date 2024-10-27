@@ -396,7 +396,8 @@
     "on": "En",
     "after": "Después de",
     "occurences": "ocurrencias",
-    "done": "Hecho"
+    "done": "Hecho",
+    "createChat": "Crear chat"
   },
   "organizationActionItems": {
     "actionItemCategory": "Categoría del ítem de acción",
@@ -531,7 +532,8 @@
     "on": "En",
     "after": "Después de",
     "occurences": "ocurrencias",
-    "done": "Hecho"
+    "done": "Hecho",
+    "createChat": "Crear chat"
   },
   "funds": {
     "title": "Fondos",
@@ -1116,7 +1118,8 @@
     "publicEvent": "Es público",
     "registerable": "Es registrable",
     "monthlyCalendarView": "Calendario mensual",
-    "yearlyCalendarView": "Calendario anual"
+    "yearlyCalendarView": "Calendario anual",
+    "createChat": "Crear chat"
   },
   "userEventCard": {
     "location": "Ubicación",
