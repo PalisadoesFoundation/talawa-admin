@@ -270,6 +270,11 @@ export interface InterfaceQueryUserTagsMembersToAssignTo {
   usersToAssignTo: InterfaceTagMembersData;
 }
 
+export interface InterfaceQueryUserTagsMembersToAssignTo {
+  name: string;
+  usersToAssignTo: InterfaceTagMembersData;
+}
+
 export interface InterfaceQueryOrganizationAdvertisementListItem {
   advertisements: {
     edges: {
