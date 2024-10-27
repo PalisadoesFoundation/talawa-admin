@@ -83,6 +83,8 @@
   "updatedSuccessfully": "{{item}} mis à jour avec succès",
   "removedSuccessfully": "{{item}} supprimé avec succès",
   "successfullyUpdated": "Mis à jour avec succès",
+  "sessionWarning": "Votre session expirera bientôt en raison de l'inactivité. Veuillez interagir avec la page pour prolonger votre session.",
+  "sessionLogOut": "Votre session a expiré en raison de l'inactivité. Veuillez vous reconnecter pour continuer.",
   "all": "Tous",
   "active": "Actif",
   "disabled": "Désactivé",

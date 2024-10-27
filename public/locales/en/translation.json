@@ -1259,7 +1259,7 @@
   },
   "eventActionItems": {
     "title": "Action Items",
-    "createActionItem": "Create Action Items",
+    "createActionItem": "Create Action Item",
     "actionItemCategory": "Action Item Category",
     "selectActionItemCategory": "Select an action item category",
     "selectAssignee": "Select an assignee",
