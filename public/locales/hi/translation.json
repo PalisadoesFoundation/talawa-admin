@@ -352,8 +352,7 @@
     "tagName": "नाम",
     "tagUpdationSuccess": "टैग सफलतापूर्वक अपडेट की गई",
     "tagRemovalSuccess": "टैग सफलतापूर्वक हटाई गई",
-    "noTagSelected": "कोई टैग चयनित नहीं",
-    "fetchMore": "और लोड करें"
+    "noTagSelected": "कोई टैग चयनित नहीं"
   },
   "userListCard": {
     "addAdmin": "व्यवस्थापक जोड़ें",

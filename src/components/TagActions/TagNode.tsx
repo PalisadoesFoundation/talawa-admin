@@ -8,6 +8,7 @@ import type {
 } from 'utils/interfaces';
 import { TAGS_QUERY_LIMIT } from 'utils/organizationTagsUtils';
 import styles from './TagActions.module.css';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 interface InterfaceTagNodeProps {
   tag: InterfaceTagData;
@@ -74,37 +75,35 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
   };
 
   const loadMoreSubTags = (): void => {
-    if (subTagsData?.getUserTag.childTags.pageInfo.hasNextPage) {
-      fetchMoreSubTags({
-        variables: {
-          first: TAGS_QUERY_LIMIT,
-          after: subTagsData.getUserTag.childTags.pageInfo.endCursor,
+    fetchMoreSubTags({
+      variables: {
+        first: TAGS_QUERY_LIMIT,
+        after: subTagsData?.getUserTag.childTags.pageInfo.endCursor,
+      },
+      updateQuery: (
+        prevResult: { getUserTag: InterfaceQueryUserTagChildTags },
+        {
+          fetchMoreResult,
+        }: {
+          fetchMoreResult?: { getUserTag: InterfaceQueryUserTagChildTags };
         },
-        updateQuery: (
-          prevResult: { getUserTag: InterfaceQueryUserTagChildTags },
-          {
-            fetchMoreResult,
-          }: {
-            fetchMoreResult?: { getUserTag: InterfaceQueryUserTagChildTags };
-          },
-        ) => {
-          if (!fetchMoreResult) return prevResult;
+      ) => {
+        if (!fetchMoreResult) return prevResult;
 
-          return {
-            getUserTag: {
-              ...fetchMoreResult.getUserTag,
-              childTags: {
-                ...fetchMoreResult.getUserTag.childTags,
-                edges: [
-                  ...prevResult.getUserTag.childTags.edges,
-                  ...fetchMoreResult.getUserTag.childTags.edges,
-                ],
-              },
+        return {
+          getUserTag: {
+            ...fetchMoreResult.getUserTag,
+            childTags: {
+              ...fetchMoreResult.getUserTag.childTags,
+              edges: [
+                ...prevResult.getUserTag.childTags.edges,
+                ...fetchMoreResult.getUserTag.childTags.edges,
+              ],
             },
-          };
-        },
-      });
-    }
+          },
+        };
+      },
+    });
   };
 
   return (
@@ -157,30 +156,40 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
       )}
       {expanded && subTagsList && (
         <div style={{ marginLeft: '20px' }}>
-          {subTagsList.map((tag: InterfaceTagData) => (
-            <TagNode
-              key={tag._id}
-              tag={tag}
-              checkedTags={checkedTags}
-              toggleTagSelection={toggleTagSelection}
-              t={t}
-            />
-          ))}
-          {subTagsData?.getUserTag.childTags.pageInfo.hasNextPage && (
-            <div
-              style={{ cursor: 'pointer' }}
-              className="ms-4 mt-0 mb-3"
-              onClick={loadMoreSubTags}
+          <div
+            id="subTagsScrollableDiv"
+            data-testid="subTagsScrollableDiv"
+            style={{
+              height: 300,
+              overflow: 'auto',
+            }}
+            className={`${styles.scrContainer}`}
+          >
+            <InfiniteScroll
+              dataLength={subTagsList?.length ?? 0}
+              next={loadMoreSubTags}
+              hasMore={
+                subTagsData?.getUserTag.childTags.pageInfo.hasNextPage ?? false
+              }
+              loader={
+                <div className="simpleLoader">
+                  <div className="spinner" />
+                </div>
+              }
+              scrollableTarget="subTagsScrollableDiv"
             >
-              <span
-                className="fw-lighter fst-italic"
-                data-testid={`fetchMoreSubTagsOf${tag._id}`}
-              >
-                ...{t('fetchMore')}
-              </span>
-              <i className={'mx-2 fa fa-angle-double-down'} />
-            </div>
-          )}
+              {subTagsList.map((tag: InterfaceTagData) => (
+                <div key={tag._id} data-testid="orgUserSubTags">
+                  <TagNode
+                    tag={tag}
+                    checkedTags={checkedTags}
+                    toggleTagSelection={toggleTagSelection}
+                    t={t}
+                  />
+                </div>
+              ))}
+            </InfiniteScroll>
+          </div>
         </div>
       )}
     </div>

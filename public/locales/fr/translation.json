@@ -352,8 +352,7 @@
     "tagName": "Nom",
     "tagUpdationSuccess": "Étiquette mise à jour avec succès",
     "tagRemovalSuccess": "Étiquette supprimée avec succès",
-    "noTagSelected": "Aucun tag sélectionné",
-    "fetchMore": "charger plus"
+    "noTagSelected": "Aucun tag sélectionné"
   },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",

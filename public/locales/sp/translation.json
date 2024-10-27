@@ -352,8 +352,7 @@
     "tagName": "Nombre",
     "tagUpdationSuccess": "Etiqueta actualizada con éxito",
     "tagRemovalSuccess": "Etiqueta eliminada con éxito",
-    "noTagSelected": "Ninguna etiqueta seleccionada",
-    "fetchMore": "cargar más"
+    "noTagSelected": "Ninguna etiqueta seleccionada"
   },
   "userListCard": {
     "joined": "Unido",
