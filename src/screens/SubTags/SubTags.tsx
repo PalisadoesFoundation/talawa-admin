@@ -23,10 +23,7 @@ import {
 } from 'utils/organizationTagsUtils';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
-import {
-  CREATE_USER_TAG,
-  REMOVE_USER_TAG,
-} from 'GraphQl/Mutations/TagMutations';
+import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import {
   USER_TAG_ANCESTORS,
   USER_TAG_SUB_TAGS,
@@ -53,10 +50,6 @@ function SubTags(): JSX.Element {
   const navigate = useNavigate();
 
   const [tagName, setTagName] = useState<string>('');
-
-  const [removeUserTagId, setRemoveUserTagId] = useState(null);
-  const [removeUserTagModalIsOpen, setRemoveUserTagModalIsOpen] =
-    useState(false);
 
   const showAddSubTagModal = (): void => {
     setAddSubTagModalIsOpen(true);
@@ -162,26 +155,6 @@ function SubTags(): JSX.Element {
     }
   };
 
-  const [removeUserTag] = useMutation(REMOVE_USER_TAG);
-  const handleRemoveUserTag = async (): Promise<void> => {
-    try {
-      await removeUserTag({
-        variables: {
-          id: removeUserTagId,
-        },
-      });
-
-      subTagsRefetch();
-      toggleRemoveUserTagModal();
-      toast.success(t('tagRemovalSuccess') as string);
-    } catch (error: unknown) {
-      /* istanbul ignore next */
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
-    }
-  };
-
   if (createUserTagLoading || subTagsLoading || orgUserTagsAncestorsLoading) {
     return <Loader />;
   }
@@ -215,14 +188,7 @@ function SubTags(): JSX.Element {
   };
 
   const redirectToSubTags = (tagId: string): void => {
-    navigate(`/orgtags/${orgId}/subtags/${tagId}`);
-  };
-
-  const toggleRemoveUserTagModal = (): void => {
-    if (removeUserTagModalIsOpen) {
-      setRemoveUserTagId(null);
-    }
-    setRemoveUserTagModalIsOpen(!removeUserTagModalIsOpen);
+    navigate(`/orgtags/${orgId}/subTags/${tagId}`);
   };
 
   const columns: GridColDef[] = [
@@ -272,7 +238,7 @@ function SubTags(): JSX.Element {
         return (
           <Link
             className="text-secondary"
-            to={`/orgtags/${orgId}/subtags/${params.row._id}`}
+            to={`/orgtags/${orgId}/subTags/${params.row._id}`}
           >
             {params.row.childTags.totalCount}
           </Link>
@@ -292,7 +258,7 @@ function SubTags(): JSX.Element {
         return (
           <Link
             className="text-secondary"
-            to={`/orgtags/${orgId}/orgtagdetails/${params.row._id}`}
+            to={`/orgtags/${orgId}/manageTag/${params.row._id}`}
           >
             {params.row.usersAssignedTo.totalCount}
           </Link>
@@ -310,28 +276,14 @@ function SubTags(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <div className="d-flex justify-content-center align-items-center">
-            <Button
-              size="sm"
-              className="btn btn-primary rounded mt-3"
-              onClick={() => redirectToManageTag(params.row._id)}
-              data-testid="manageTagBtn"
-            >
-              {t('manageTag')}
-            </Button>
-
-            <Button
-              size="sm"
-              className="ms-2 btn btn-danger rounded mt-3"
-              onClick={() => {
-                setRemoveUserTagId(params.row._id);
-                toggleRemoveUserTagModal();
-              }}
-              data-testid="removeUserTagBtn"
-            >
-              {t('removeTag')}
-            </Button>
-          </div>
+          <Button
+            size="sm"
+            variant="outline-primary"
+            onClick={() => redirectToManageTag(params.row._id)}
+            data-testid="manageTagBtn"
+          >
+            {t('manageTag')}
+          </Button>
         );
       },
     },
@@ -523,44 +475,6 @@ function SubTags(): JSX.Element {
             </Button>
           </Modal.Footer>
         </Form>
-      </Modal>
-
-      {/* Remove User Tag Modal */}
-      <Modal
-        size="sm"
-        id={`deleteActionItemModal`}
-        show={removeUserTagModalIsOpen}
-        onHide={toggleRemoveUserTagModal}
-        backdrop="static"
-        keyboard={false}
-        className={styles.actionItemModal}
-        centered
-      >
-        <Modal.Header closeButton className="bg-primary">
-          <Modal.Title className="text-white" id={`removeUserTag`}>
-            {t('removeUserTag')}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{t('removeUserTagMessage')}</Modal.Body>
-        <Modal.Footer>
-          <Button
-            type="button"
-            className="btn btn-danger"
-            data-dismiss="modal"
-            onClick={toggleRemoveUserTagModal}
-            data-testid="removeUserTagModalCloseBtn"
-          >
-            {tCommon('no')}
-          </Button>
-          <Button
-            type="button"
-            className="btn btn-success"
-            onClick={handleRemoveUserTag}
-            data-testid="removeUserTagSubmitBtn"
-          >
-            {tCommon('yes')}
-          </Button>
-        </Modal.Footer>
       </Modal>
     </>
   );

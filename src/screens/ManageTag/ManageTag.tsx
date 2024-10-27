@@ -273,7 +273,7 @@ function ManageTag(): JSX.Element {
   };
 
   const redirectToManageTag = (tagId: string): void => {
-    navigate(`/orgtags/${orgId}/managetag/${tagId}`);
+    navigate(`/orgtags/${orgId}/manageTag/${tagId}`);
   };
 
   const toggleUnassignTagModal = (): void => {
@@ -322,20 +322,20 @@ function ManageTag(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <div className="d-flex justify-content-center align-items-center">
+          <div>
             <Link
               to={`/member/${orgId}`}
               state={{ id: params.row._id }}
-              className={styles.membername}
               data-testid="viewProfileBtn"
             >
-              <div className="btn btn-sm btn-primary">{t('viewProfile')}</div>
+              <div className="btn btn-sm btn-primary me-3">
+                {t('viewProfile')}
+              </div>
             </Link>
 
             <Button
               size="sm"
               variant="danger"
-              className={`ms-2`}
               onClick={() => {
                 setUnassignUserId(params.row._id);
                 toggleUnassignTagModal();
