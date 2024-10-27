@@ -7,15 +7,63 @@
   width: 670px;
   max-width: 680px;
 }
+
+.subtleBlueGrey {
+  color: #7c9beb; 
+  text-decoration: none; 
+}
+
+
+.subtleBlueGrey:hover {
+  color: #5F7E91; 
+  text-decoration: underline;
+}
 .dropdown {
   background-color: white;
-  border: 1px solid #31bb6b;
+  border: 1px solid #555555;
   position: relative;
   display: inline-block;
   margin-top: 10px;
   margin-bottom: 10px;
-  color: #31bb6b;
+  color: #555555;
 }
+
+.dropdown:hover,
+.dropdown:focus,
+.dropdown:active 
+.dropdown:focus-visible
+.dropdown.show 
+{
+  background-color: transparent !important;
+  border: 1px solid #555555;
+  color:#555555 !important;
+  
+}
+.dropdown:focus,
+.dropdown:focus-visible,
+.dropdown:active
+.dropdown.show  {
+  background-color: white !important; 
+  color: black !important; 
+  outline: none !important;
+}
+
+.dropdownItem {
+  background-color: white !important; 
+  color: #555555 !important; 
+  border: none !important;
+}
+
+/* Override Bootstrap's hover, focus, and active styles for dropdown items */
+.dropdownItem:hover,
+.dropdownItem:focus,
+.dropdownItem:active {
+  background-color: white !important; /* Keep the background white */
+  color: #555555 !important; /* Keep the text color as default */
+  outline: none !important;
+  box-shadow: none !important; /* Remove any shadow */
+}
+
 .input {
   flex: 1;
   position: relative;
@@ -42,9 +90,7 @@
   position: relative;
 }
 
-/* input {
-  outline: 1px solid var(--bs-gray-400);
-} */
+
 
 .btnsContainer .input button {
   width: 52px;
@@ -54,25 +100,26 @@
   margin-top: 10px;
   margin-bottom: 10px;
   background-color: white;
-  box-shadow: 0 1px 1px #31bb6b;
+  box-shadow: 0 1px 1px #DDDDDD;
 }
 .inputFieldModal {
   margin-bottom: 10px;
   background-color: white;
-  box-shadow: 0 1px 1px #31bb6b;
+  box-shadow: 0 1px 1px #DDDDDD;
 }
 .inputField > button {
   padding-top: 10px;
   padding-bottom: 10px;
 }
-.TableImage {
+.TableImage { 
   object-fit: cover;
+  margin-top: 15px !important;
   width: 50px !important;
   height: 50px !important;
   border-radius: 100% !important;
 }
 .tableHead {
-  background-color: #31bb6b !important;
+
   color: white;
   border-radius: 20px !important;
   padding: 20px;
@@ -95,7 +142,7 @@
 }
 .tableHeader {
   background-color: var(--bs-primary);
-  color: var(--bs-white);
+  color: var(--bs-greyish-black);
   font-size: 16px;
 }
 

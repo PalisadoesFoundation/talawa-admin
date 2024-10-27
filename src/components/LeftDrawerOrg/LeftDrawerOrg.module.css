@@ -8,7 +8,7 @@
   display: flex;
   flex-direction: column;
   padding: 0.8rem 0rem 0 1rem;
-  background-color: var(--bs-white);
+  background-color: #F6F8FC;
   transition: 0.5s;
   font-family: var(--bs-leftDrawer-font-family);
 }
@@ -105,7 +105,7 @@
 }
 
 .leftDrawer .organizationContainer .profileContainer {
-  background-color: #31bb6b33;
+  background-color: #E0E9FF;
   padding-right: 10px;
 }
 
@@ -155,7 +155,7 @@
 .leftDrawer .profileContainer .profileText .secondaryText {
   font-size: 0.8rem;
   font-weight: 400;
-  color: var(--bs-secondary);
+  /* color: var(--bs-secondary); */
   display: block;
   text-transform: capitalize;
 }

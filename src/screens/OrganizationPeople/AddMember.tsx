@@ -1,5 +1,5 @@
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
-import { Search } from '@mui/icons-material';
+import { Check, Close, Search } from '@mui/icons-material';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -33,10 +33,10 @@ import type {
 import styles from './OrganizationPeople.module.css';
 import Avatar from 'components/Avatar/Avatar';
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
+const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: ['#31bb6b', '!important'],
-    color: theme.palette.common.white,
+    backgroundColor: ['#EAEBEF', '!important'],
+    color: '#555555',
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
@@ -357,8 +357,13 @@ function AddMember(): JSX.Element {
                     type="submit"
                     data-testid="submitBtn"
                     className={`position-absolute z-10 bottom-10 end-0  d-flex justify-content-center align-items-center `}
+                    style={{
+                      marginBottom: '10px',
+                      backgroundColor: '#A8C7FA',
+                      border: '1px #555555 solid',
+                    }}
                   >
-                    <Search />
+                    <Search style={{ color: '#555555' }} />
                   </Button>
                 </Form>
               </div>
@@ -413,7 +418,7 @@ function AddMember(): JSX.Element {
                             </StyledTableCell>
                             <StyledTableCell align="center">
                               <Link
-                                className={styles.membername}
+                                className={`${styles.membername} ${styles.subtleBlueGrey}`}
                                 to={{
                                   pathname: `/member/${currentUrl}`,
                                 }}
@@ -431,6 +436,10 @@ function AddMember(): JSX.Element {
                                   createMember(userDetails.user._id);
                                 }}
                                 data-testid="addBtn"
+                                style={{
+                                  backgroundColor: '#A8C7FA',
+                                  border: '#555555 solid 1px',
+                                }}
                               >
                                 Add
                               </Button>
@@ -559,7 +568,18 @@ function AddMember(): JSX.Element {
               variant="danger"
               onClick={closeCreateNewUserModal}
               data-testid="closeBtn"
+              style={{
+                backgroundColor: '#F8D6DC',
+                color: '#555555',
+              }}
             >
+              <Close
+                style={{
+                  color: '#FF4D4F',
+                  marginRight: '5px',
+                }}
+              />
+
               {translateOrgPeople('cancel')}
             </Button>
             <Button
@@ -567,7 +587,19 @@ function AddMember(): JSX.Element {
               variant="success"
               onClick={handleCreateUser}
               data-testid="createBtn"
+              style={{
+                backgroundColor: '#A8C7FA',
+                border: '#555555 solid 1px',
+                marginLeft: '10px',
+                color: '#555555',
+              }}
             >
+              <Check
+                style={{
+                  color: '#555555', // Green color for the tick icon
+                  marginRight: '5px',
+                }}
+              />
               {translateOrgPeople('create')}
             </Button>
           </div>
