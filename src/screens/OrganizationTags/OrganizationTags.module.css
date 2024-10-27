@@ -139,3 +139,11 @@
   color: var(--bs-gray);
   cursor: pointer;
 }
+
+.orgUserTagsScrollableDiv {
+  scrollbar-width: auto;
+  scrollbar-color: var(--bs-gray-400) var(--bs-white);
+
+  height: calc(100vh - 18rem);
+  overflow: auto;
+}

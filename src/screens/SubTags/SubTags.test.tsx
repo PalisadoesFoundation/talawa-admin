@@ -248,13 +248,15 @@ describe('Organisation Tags Page', () => {
       expect(getByText(translations.addChildTag)).toBeInTheDocument();
     });
 
+    const subTagsScrollableDiv = screen.getByTestId('subTagsScrollableDiv');
+
     // Get the initial number of tags loaded
     const initialSubTagsDataLength =
       screen.getAllByTestId('manageTagBtn').length;
 
-    // Set scroll position to the bottom of the window
-    fireEvent.scroll(window, {
-      target: { scrollY: document.documentElement.scrollHeight },
+    // Set scroll position to the bottom
+    fireEvent.scroll(subTagsScrollableDiv, {
+      target: { scrollY: subTagsScrollableDiv.scrollHeight },
     });
 
     await waitFor(() => {

@@ -385,46 +385,54 @@ function SubTags(): JSX.Element {
                 </div>
               ))}
             </div>
-            <InfiniteScroll
-              dataLength={userTagsList?.length ?? 0}
-              next={loadMoreSubTags}
-              hasMore={
-                subTagsData?.getUserTag.childTags.pageInfo.hasNextPage ?? false
-              }
-              loader={
-                <div className="simpleLoader">
-                  <div className="spinner" />
-                </div>
-              }
+            <div
+              id="subTagsScrollableDiv"
+              data-testid="subTagsScrollableDiv"
+              className={styles.subTagsScrollableDiv}
             >
-              <DataGrid
-                disableColumnMenu
-                columnBufferPx={7}
-                hideFooter={true}
-                getRowId={(row) => row._id}
-                slots={{
-                  noRowsOverlay: /* istanbul ignore next */ () => (
-                    <Stack
-                      height="100%"
-                      alignItems="center"
-                      justifyContent="center"
-                    >
-                      {t('noTagsFound')}
-                    </Stack>
-                  ),
-                }}
-                sx={dataGridStyle}
-                getRowClassName={() => `${styles.rowBackground}`}
-                autoHeight
-                rowHeight={65}
-                rows={userTagsList?.map((fund, index) => ({
-                  id: index + 1,
-                  ...fund,
-                }))}
-                columns={columns}
-                isRowSelectable={() => false}
-              />
-            </InfiniteScroll>
+              <InfiniteScroll
+                dataLength={userTagsList?.length ?? 0}
+                next={loadMoreSubTags}
+                hasMore={
+                  subTagsData?.getUserTag.childTags.pageInfo.hasNextPage ??
+                  false
+                }
+                loader={
+                  <div className="simpleLoader">
+                    <div className="spinner" />
+                  </div>
+                }
+                scrollableTarget="subTagsScrollableDiv"
+              >
+                <DataGrid
+                  disableColumnMenu
+                  columnBufferPx={7}
+                  hideFooter={true}
+                  getRowId={(row) => row._id}
+                  slots={{
+                    noRowsOverlay: /* istanbul ignore next */ () => (
+                      <Stack
+                        height="100%"
+                        alignItems="center"
+                        justifyContent="center"
+                      >
+                        {t('noTagsFound')}
+                      </Stack>
+                    ),
+                  }}
+                  sx={dataGridStyle}
+                  getRowClassName={() => `${styles.rowBackground}`}
+                  autoHeight
+                  rowHeight={65}
+                  rows={userTagsList?.map((fund, index) => ({
+                    id: index + 1,
+                    ...fund,
+                  }))}
+                  columns={columns}
+                  isRowSelectable={() => false}
+                />
+              </InfiniteScroll>
+            </div>
           </div>
         </div>
       </Row>

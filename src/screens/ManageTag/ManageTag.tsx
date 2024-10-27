@@ -449,49 +449,56 @@ function ManageTag(): JSX.Element {
                   </div>
                 ))}
               </div>
-              <InfiniteScroll
-                dataLength={userTagAssignedMembers?.length ?? 0} // This is important field to render the next data
-                next={loadMoreAssignedMembers}
-                hasMore={
-                  userTagAssignedMembersData?.getUserTag.usersAssignedTo
-                    .pageInfo.hasNextPage ?? false
-                }
-                loader={
-                  <div className="simpleLoader">
-                    <div className="spinner" />
-                  </div>
-                }
+              <div
+                id="manageTagScrollableDiv"
+                data-testid="manageTagScrollableDiv"
+                className={styles.manageTagScrollableDiv}
               >
-                <DataGrid
-                  disableColumnMenu
-                  columnBufferPx={7}
-                  hideFooter={true}
-                  getRowId={(row) => row._id}
-                  slots={{
-                    noRowsOverlay: /* istanbul ignore next */ () => (
-                      <Stack
-                        height="100%"
-                        alignItems="center"
-                        justifyContent="center"
-                      >
-                        {t('noAssignedMembersFound')}
-                      </Stack>
-                    ),
-                  }}
-                  sx={dataGridStyle}
-                  getRowClassName={() => `${styles.rowBackground}`}
-                  autoHeight
-                  rowHeight={65}
-                  rows={userTagAssignedMembers?.map(
-                    (assignedMembers, index) => ({
-                      id: index + 1,
-                      ...assignedMembers,
-                    }),
-                  )}
-                  columns={columns}
-                  isRowSelectable={() => false}
-                />
-              </InfiniteScroll>
+                <InfiniteScroll
+                  dataLength={userTagAssignedMembers?.length ?? 0} // This is important field to render the next data
+                  next={loadMoreAssignedMembers}
+                  hasMore={
+                    userTagAssignedMembersData?.getUserTag.usersAssignedTo
+                      .pageInfo.hasNextPage ?? false
+                  }
+                  loader={
+                    <div className="simpleLoader">
+                      <div className="spinner" />
+                    </div>
+                  }
+                  scrollableTarget="manageTagScrollableDiv"
+                >
+                  <DataGrid
+                    disableColumnMenu
+                    columnBufferPx={7}
+                    hideFooter={true}
+                    getRowId={(row) => row._id}
+                    slots={{
+                      noRowsOverlay: /* istanbul ignore next */ () => (
+                        <Stack
+                          height="100%"
+                          alignItems="center"
+                          justifyContent="center"
+                        >
+                          {t('noAssignedMembersFound')}
+                        </Stack>
+                      ),
+                    }}
+                    sx={dataGridStyle}
+                    getRowClassName={() => `${styles.rowBackground}`}
+                    autoHeight
+                    rowHeight={65}
+                    rows={userTagAssignedMembers?.map(
+                      (assignedMembers, index) => ({
+                        id: index + 1,
+                        ...assignedMembers,
+                      }),
+                    )}
+                    columns={columns}
+                    isRowSelectable={() => false}
+                  />
+                </InfiniteScroll>
+              </div>
             </Col>
 
             <Col className="ms-auto" xs={3}>

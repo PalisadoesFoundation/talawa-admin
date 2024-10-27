@@ -347,13 +347,15 @@ describe('Manage Tag Page', () => {
       expect(getByText(translations.addPeopleToTag)).toBeInTheDocument();
     });
 
+    const manageTagScrollableDiv = screen.getByTestId('manageTagScrollableDiv');
+
     // Get the initial number of tags loaded
     const initialAssignedMembersDataLength =
       screen.getAllByTestId('viewProfileBtn').length;
 
-    // Set scroll position to the bottom of the window
-    fireEvent.scroll(window, {
-      target: { scrollY: document.documentElement.scrollHeight },
+    // Set scroll position to the bottom
+    fireEvent.scroll(manageTagScrollableDiv, {
+      target: { scrollY: manageTagScrollableDiv.scrollHeight },
     });
 
     await waitFor(() => {

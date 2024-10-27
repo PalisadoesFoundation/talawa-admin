@@ -117,3 +117,11 @@
   font-weight: 600;
   text-decoration: underline;
 }
+
+.manageTagScrollableDiv {
+  scrollbar-width: auto;
+  scrollbar-color: var(--bs-gray-400) var(--bs-white);
+
+  height: calc(100vh - 18rem);
+  overflow: auto;
+}
