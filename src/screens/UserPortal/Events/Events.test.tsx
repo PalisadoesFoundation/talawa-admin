@@ -19,6 +19,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ThemeProvider } from 'react-bootstrap';
 import { createTheme } from '@mui/material';
 import useLocalStorage from 'utils/useLocalstorage';
+import { create } from 'domain';
 
 const { setItem, getItem } = useLocalStorage();
 
@@ -82,6 +83,7 @@ const MOCKS = [
             recurring: false,
             isPublic: true,
             isRegisterable: false,
+            createChat: false,
             creator: {
               _id: '63d649417ffe6e4d5174ea32',
               firstName: 'Noble',
@@ -113,6 +115,7 @@ const MOCKS = [
             recurring: false,
             isPublic: true,
             isRegisterable: true,
+            createChat: true,
             creator: {
               _id: '63d649417ffe6e4d5174ea32',
               firstName: 'Noble',
@@ -163,6 +166,7 @@ const MOCKS = [
             recurring: false,
             isPublic: true,
             isRegisterable: false,
+            createChat: false,
             creator: {
               _id: '63d649417ffe6e4d5174ea32',
               firstName: 'Noble',
@@ -191,10 +195,200 @@ const MOCKS = [
       variables: {
         title: 'testEventTitle',
         description: 'testEventDescription',
+        isPublic: true,
+        recurring: false,
+        isRegisterable: true,
+        organizationId: '',
+        startDate: dayjs(new Date()).format('YYYY-MM-DD'),
+        endDate: dayjs(new Date()).format('YYYY-MM-DD'),
+        allDay: true,
+        location: 'testEventLocation',
+        startTime: null,
+        endTime: null,
+        createChat: false,
+      },
+    },
+    result: {
+      data: {
+        createEvent: {
+          _id: '2',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: CREATE_EVENT_MUTATION,
+      variables: {
+        title: 'testEventTitle',
+        description: 'testEventDescription',
+        isPublic: true,
+        recurring: false,
+        isRegisterable: true,
+        organizationId: '',
+        startDate: dayjs(new Date()).format('YYYY-MM-DD'),
+        endDate: dayjs(new Date()).format('YYYY-MM-DD'),
+        allDay: true,
+        location: 'testEventLocation',
+        startTime: null,
+        endTime: null,
+        createChat: false,
+      },
+    },
+    result: {
+      data: {
+        createEvent: {
+          _id: '2',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: CREATE_EVENT_MUTATION,
+      variables: {
+        title: 'testEventTitle',
+        description: 'testEventDescription',
+        isPublic: true,
+        recurring: false,
+        isRegisterable: true,
+        organizationId: '',
+        startDate: dayjs(new Date()).format('YYYY-MM-DD'),
+        endDate: dayjs(new Date()).format('YYYY-MM-DD'),
+        allDay: true,
+        location: 'testEventLocation',
+        startTime: null,
+        endTime: null,
+        createChat: false,
+      },
+    },
+    result: {
+      data: {
+        createEvent: {
+          _id: '2',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: CREATE_EVENT_MUTATION,
+      variables: {
+        title: 'testEventTitle',
+        description: 'testEventDescription',
         location: 'testEventLocation',
         isPublic: true,
         recurring: false,
         isRegisterable: true,
+        createChat: false,
+        organizationId: '',
+        startDate: dayjs(new Date()).format('YYYY-MM-DD'),
+        endDate: dayjs(new Date()).format('YYYY-MM-DD'),
+        allDay: false,
+        startTime: '08:00:00',
+        endTime: '10:00:00',
+      },
+    },
+    result: {
+      data: {
+        createEvent: {
+          _id: '2',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: CREATE_EVENT_MUTATION,
+      variables: {
+        title: 'testEventTitle',
+        description: 'testEventDescription',
+        isPublic: true,
+        recurring: false,
+        isRegisterable: true,
+        organizationId: '',
+        startDate: '2024-10-27',
+        endDate: '2024-10-27',
+        allDay: false,
+        location: 'testEventLocation',
+        startTime: '08:00:00Z',
+        endTime: '10:00:00Z',
+        createChat: false,
+      },
+    },
+    result: {
+      data: {
+        createEvent: {
+          _id: '2',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: CREATE_EVENT_MUTATION,
+      variables: {
+        title: 'testEventTitle',
+        description: 'testEventDescription',
+        isPublic: true,
+        recurring: false,
+        isRegisterable: true,
+        organizationId: '',
+        startDate: dayjs(new Date()).format('YYYY-MM-DD'),
+        endDate: dayjs(new Date()).format('YYYY-MM-DD'),
+        allDay: false,
+        location: 'testEventLocation',
+        startTime: '08:00:00Z',
+        endTime: '10:00:00Z',
+        createChat: false,
+      },
+    },
+    result: {
+      data: {
+        createEvent: {
+          _id: '2',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: CREATE_EVENT_MUTATION,
+      variables: {
+        title: 'testEventTitle',
+        description: 'testEventDescription',
+        isPublic: true,
+        recurring: false,
+        isRegisterable: true,
+        organizationId: '',
+        startDate: dayjs(new Date()).format('YYYY-MM-DD'),
+        endDate: dayjs(new Date()).format('YYYY-MM-DD'),
+        allDay: false,
+        location: 'testEventLocation',
+        startTime: '08:00:00Z',
+        endTime: '10:00:00Z',
+        createChat: false,
+      },
+    },
+    result: {
+      data: {
+        createEvent: {
+          _id: '2',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: CREATE_EVENT_MUTATION,
+      variables: {
+        title: 'testEventTitle',
+        description: 'testEventDescription',
+        location: 'testEventLocation',
+        isPublic: true,
+        recurring: false,
+        isRegisterable: true,
+        createChat: false,
         organizationId: '',
         startDate: dayjs(new Date()).format('YYYY-MM-DD'),
         endDate: dayjs(new Date()).format('YYYY-MM-DD'),
@@ -221,6 +415,34 @@ const MOCKS = [
         isPublic: true,
         recurring: false,
         isRegisterable: true,
+        createChat: false,
+        organizationId: '',
+        startDate: dayjs(new Date()).format('YYYY-MM-DD'),
+        endDate: dayjs(new Date()).format('YYYY-MM-DD'),
+        allDay: false,
+        startTime: '08:00:00',
+        endTime: '10:00:00',
+      },
+    },
+    result: {
+      data: {
+        createEvent: {
+          _id: '2',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: CREATE_EVENT_MUTATION,
+      variables: {
+        title: 'testEventTitle',
+        description: 'testEventDescription',
+        location: 'testEventLocation',
+        isPublic: true,
+        recurring: false,
+        isRegisterable: true,
+        createChat: true,
         organizationId: '',
         startDate: dayjs(new Date()).format('YYYY-MM-DD'),
         endDate: dayjs(new Date()).format('YYYY-MM-DD'),
@@ -330,13 +552,18 @@ describe('Testing Events Screen [User Portal]', () => {
     userEvent.click(screen.getByTestId('recurringEventCheck'));
     userEvent.click(screen.getByTestId('recurringEventCheck'));
 
+    userEvent.click(screen.getByTestId('createChatCheck'));
+    userEvent.click(screen.getByTestId('createChatCheck'));
+
     userEvent.click(screen.getByTestId('allDayEventCheck'));
 
     userEvent.click(screen.getByTestId('createEventBtn'));
 
     await wait();
 
-    expect(toast.success).toBeCalledWith(
+    await wait();
+
+    expect(toast.success).toHaveBeenCalledWith(
       'Event created and posted successfully.',
     );
   });
@@ -379,7 +606,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
     await wait();
 
-    expect(toast.success).toBeCalledWith(
+    expect(toast.success).toHaveBeenCalledWith(
       'Event created and posted successfully.',
     );
   });

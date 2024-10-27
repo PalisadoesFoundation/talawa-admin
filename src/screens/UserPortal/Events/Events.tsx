@@ -136,6 +136,7 @@ export default function events(): JSX.Element {
       }
       setCreateEventmodalisOpen(false);
     } catch (error: unknown) {
+      console.error('create event error', error);
       /* istanbul ignore next */
       errorHandler(t, error);
     }
@@ -399,7 +400,7 @@ export default function events(): JSX.Element {
                       className="me-4"
                       id="chat"
                       type="checkbox"
-                      data-testid="createChat"
+                      data-testid="createChatCheck"
                       checked={createChatCheck}
                       onChange={(): void =>
                         setCreateChatCheck(!createChatCheck)

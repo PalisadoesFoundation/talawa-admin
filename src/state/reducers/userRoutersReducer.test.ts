@@ -15,6 +15,7 @@ describe('Testing Routes reducer', () => {
         { name: 'People', url: 'user/people/undefined' },
         { name: 'Events', url: 'user/events/undefined' },
         { name: 'Donate', url: 'user/donate/undefined' },
+        { name: 'Chat', url: 'user/chat/undefined' },
         { name: 'Campaigns', url: 'user/campaigns/undefined' },
         { name: 'My Pledges', url: 'user/pledges/undefined' },
       ],
@@ -32,6 +33,7 @@ describe('Testing Routes reducer', () => {
         { name: 'People', comp_id: 'people', component: 'People' },
         { name: 'Events', comp_id: 'events', component: 'Events' },
         { name: 'Donate', comp_id: 'donate', component: 'Donate' },
+        { name: 'Chat', comp_id: 'chat', component: 'Chat' },
         {
           name: 'Campaigns',
           comp_id: 'campaigns',
@@ -55,6 +57,7 @@ describe('Testing Routes reducer', () => {
         { name: 'People', url: 'user/people/orgId' },
         { name: 'Events', url: 'user/events/orgId' },
         { name: 'Donate', url: 'user/donate/orgId' },
+        { name: 'Chat', url: 'user/chat/orgId' },
         { name: 'Campaigns', url: 'user/campaigns/orgId' },
         { name: 'My Pledges', url: 'user/pledges/orgId' },
       ],
@@ -72,6 +75,7 @@ describe('Testing Routes reducer', () => {
         { name: 'People', comp_id: 'people', component: 'People' },
         { name: 'Events', comp_id: 'events', component: 'Events' },
         { name: 'Donate', comp_id: 'donate', component: 'Donate' },
+        { name: 'Chat', comp_id: 'chat', component: 'Chat' },
         {
           name: 'Campaigns',
           comp_id: 'campaigns',

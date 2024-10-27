@@ -203,7 +203,7 @@ export default function CreateGroupChat({
                 placeholder={'Group name'}
                 autoComplete="off"
                 required
-                data-tsetid="groupTitleInput"
+                data-testid="groupTitleInput"
                 value={title}
                 onChange={(e): void => {
                   setTitle(e.target.value);

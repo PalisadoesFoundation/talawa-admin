@@ -205,28 +205,6 @@ export default function chat(): JSX.Element {
 
   return (
     <>
-      {/* {hideDrawer ? (
-        <Button
-          className={styles.opendrawer}
-          onClick={(): void => {
-            setHideDrawer(!hideDrawer);
-          }}
-          data-testid="openMenu"
-        >
-          <i className="fa fa-angle-double-right" aria-hidden="true"></i>
-        </Button>
-      ) : (
-        <Button
-          className={styles.collapseSidebarButton}
-          onClick={(): void => {
-            setHideDrawer(!hideDrawer);
-          }}
-          data-testid="closeMenu"
-        >
-          <i className="fa fa-angle-double-left" aria-hidden="true"></i>
-        </Button>
-      )} */}
-      {/* <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} /> */}
       <div className={`d-flex flex-row ${styles.containerHeight}`}>
         <div data-testid="chat" className={`${styles.mainContainer}`}>
           <div className={styles.contactContainer}>
