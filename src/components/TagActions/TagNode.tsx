@@ -159,7 +159,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
           </div>
         </div>
       )}
-      {expanded && subTagsList && (
+      {expanded && subTagsList?.length && (
         <div style={{ marginLeft: '20px' }}>
           <div
             id={`subTagsScrollableDiv${tag._id}`}
