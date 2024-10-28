@@ -28,7 +28,7 @@
 }
 
 .scrollContainer {
-  max-height: 100px; /* Adjust as needed */
+  max-height: 100px;
   overflow-y: auto;
   margin-bottom: 1rem;
 }
@@ -38,16 +38,10 @@
   align-items: center;
   padding: 5px 10px;
   border-radius: 12px;
-  background-color: #f8f9fa; /* Light background */
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  max-width: calc(100% - 30px); /* Ensure it fits within the container */
+  box-shadow: 0 1px 3px var(--bs-gray-400);
+  max-width: calc(100% - 2rem);
 }
 
 .removeFilterIcon {
   cursor: pointer;
-}
-
-.scrollContainer {
-  max-height: 350px; /* Set your desired max height */
-  overflow-y: auto; /* Enable vertical scrolling */
 }

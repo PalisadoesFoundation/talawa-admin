@@ -165,7 +165,6 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
               maxHeight: 300,
               overflow: 'auto',
             }}
-            className={`${styles.scrContainer}`}
           >
             <InfiniteScroll
               dataLength={subTagsList?.length ?? 0}

@@ -328,7 +328,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                   )}
                 </div>
 
-                <div className={`mt-4 mb-2 fs-5 ${styles.allTagsHeading}`}>
+                <div className="mt-4 mb-2 fs-5 fw-semibold text-dark-emphasis">
                   {t('allTags')}
                 </div>
 
@@ -339,7 +339,6 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                     maxHeight: 300,
                     overflow: 'auto',
                   }}
-                  className={`${styles.scrContainer}`}
                 >
                   <InfiniteScroll
                     dataLength={userTagsList?.length ?? 0}
