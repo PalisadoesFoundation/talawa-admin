@@ -353,7 +353,11 @@
     "tagUpdationSuccess": "Etiqueta actualizada con éxito",
     "tagRemovalSuccess": "Etiqueta eliminada con éxito",
     "noTagSelected": "Ninguna etiqueta seleccionada",
-    "changeNameToEdit": "Cambia el nombre para hacer una actualización"
+    "changeNameToEdit": "Cambia el nombre para hacer una actualización",
+    "selectTag": "Seleccionar etiqueta",
+    "collapse": "Colapsar",
+    "expand": "Expandir",
+    "tagNamePlaceholder": "Escribe el nombre de la etiqueta"
   },
   "userListCard": {
     "joined": "Unido",

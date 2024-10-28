@@ -628,7 +628,7 @@ function ManageTag(): JSX.Element {
             <Form.Label htmlFor="tagName">{t('tagName')}</Form.Label>
             <Form.Control
               type="name"
-              id="orgname"
+              id="tagName"
               className="mb-3"
               placeholder={t('tagNamePlaceholder')}
               data-testid="tagNameInput"

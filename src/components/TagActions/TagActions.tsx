@@ -87,7 +87,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   );
 
   const [checkedTagId, setCheckedTagId] = useState<string | null>(null);
-  const [uncheckedTagId, setUnheckedTagId] = useState<string | null>(null);
+  const [uncheckedTagId, setUncheckedTagId] = useState<string | null>(null);
 
   // tags that we have selected to assigned
   const [selectedTags, setSelectedTags] = useState<InterfaceTagData[]>([]);
@@ -148,11 +148,11 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
 
   const addAncestorTags = (tagId: string): void => {
     setCheckedTagId(tagId);
-    setUnheckedTagId(null);
+    setUncheckedTagId(null);
   };
 
   const removeAncestorTags = (tagId: string): void => {
-    setUnheckedTagId(tagId);
+    setUncheckedTagId(tagId);
     setCheckedTagId(null);
   };
 
@@ -315,13 +315,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
               : t('removeFromTags')}
           </Modal.Title>
         </Modal.Header>
-        <Form
-          onSubmitCapture={(e) =>
-            tagActionType === 'assignToTags'
-              ? handleTagAction(e)
-              : handleTagAction(e)
-          }
-        >
+        <Form onSubmitCapture={handleTagAction}>
           <Modal.Body className="pb-0">
             {orgUserTagsLoading ? (
               <Loader size="sm" />
@@ -341,10 +335,11 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                         className={`badge bg-dark-subtle text-secondary-emphasis lh-lg my-2 ms-2 d-flex align-items-center ${styles.tagBadge}`}
                       >
                         {tag.name}
-                        <i
-                          className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary`}
+                        <button
+                          className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary border-0 bg-transparent`}
                           onClick={() => deSelectTag(tag)}
                           data-testid={`clearSelectedTag${tag._id}`}
+                          aria-label={t('remove')}
                         />
                       </div>
                     ))

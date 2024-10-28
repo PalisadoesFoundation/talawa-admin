@@ -353,7 +353,11 @@
     "tagUpdationSuccess": "Tag updated successfully",
     "tagRemovalSuccess": "Tag deleted successfully",
     "noTagSelected": "No Tag Selected",
-    "changeNameToEdit": "Change the name to make an update"
+    "changeNameToEdit": "Change the name to make an update",
+    "selectTag": "Select Tag",
+    "collapse": "Collapse",
+    "expand": "Expand",
+    "tagNamePlaceholder": "Write the name of the tag"
   },
   "userListCard": {
     "addAdmin": "Add Admin",

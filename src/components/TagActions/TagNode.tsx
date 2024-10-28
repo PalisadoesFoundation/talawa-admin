@@ -11,7 +11,7 @@ import styles from './TagActions.module.css';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 /**
- * Props for the `AssignToTags` component.
+ * Props for the `TagNode` component.
  */
 interface InterfaceTagNodeProps {
   tag: InterfaceTagData;
@@ -122,6 +122,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
               className="me-3"
               style={{ cursor: 'pointer' }}
               data-testid={`expandSubTags${tag._id}`}
+              aria-label={expanded ? t('collapse') : t('expand')}
             >
               {expanded ? '▼' : '▶'}
             </span>
@@ -132,6 +133,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
               className="me-2"
               onChange={handleCheckboxChange}
               data-testid={`checkTag${tag._id}`}
+              aria-label={t('selectTag')}
             />
             <i className="fa fa-folder mx-2" />{' '}
           </>
@@ -145,6 +147,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
               className="ms-1 me-2"
               onChange={handleCheckboxChange}
               data-testid={`checkTag${tag._id}`}
+              aria-label={tag.name}
             />
             <i className="fa fa-tag mx-2" />{' '}
           </>

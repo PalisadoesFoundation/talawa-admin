@@ -353,7 +353,11 @@
     "tagUpdationSuccess": "Étiquette mise à jour avec succès",
     "tagRemovalSuccess": "Étiquette supprimée avec succès",
     "noTagSelected": "Aucun tag sélectionné",
-    "changeNameToEdit": "Modifiez le nom pour faire une mise à jour"
+    "changeNameToEdit": "Modifiez le nom pour faire une mise à jour",
+    "selectTag": "Sélectionner le tag",
+    "collapse": "Réduire",
+    "expand": "Développer",
+    "tagNamePlaceholder": "Écrire le nom du tag"
   },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",
