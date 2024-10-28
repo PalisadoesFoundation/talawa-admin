@@ -9,6 +9,7 @@ import type {
 import { TAGS_QUERY_LIMIT } from 'utils/organizationTagsUtils';
 import styles from './TagActions.module.css';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { WarningAmberRounded } from '@mui/icons-material';
 
 /**
  * Props for the `TagNode` component.
@@ -34,6 +35,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
   const {
     data: subTagsData,
     loading: subTagsLoading,
+    error: subTagsError,
     fetchMore: fetchMoreSubTags,
   }: {
     data?: {
@@ -61,6 +63,19 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
     },
     skip: !expanded,
   });
+
+  if (subTagsError) {
+    return (
+      <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
+        <div className={styles.errorMessage}>
+          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <h6 className="fw-bold text-danger text-center">
+            {t('errorOccurredWhileLoadingSubTags')}
+          </h6>
+        </div>
+      </div>
+    );
+  }
 
   const subTagsList = subTagsData?.getUserTag.childTags.edges.map(
     (edge) => edge.node,

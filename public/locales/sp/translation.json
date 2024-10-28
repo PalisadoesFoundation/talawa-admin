@@ -346,6 +346,7 @@
     "successfullyAssignedToTags": "Asignado a etiquetas con éxito",
     "successfullyRemovedFromTags": "Eliminado de etiquetas con éxito",
     "errorOccurredWhileLoadingOrganizationUserTags": "Error al cargar las etiquetas de la organización",
+    "errorOccurredWhileLoadingSubTags": "Ocurrió un error al cargar las subetiquetas",
     "removeUserTag": "Eliminar etiqueta",
     "removeUserTagMessage": "¿Desea eliminar esta etiqueta? Esto eliminará todas las subetiquetas y todas las asociaciones.",
     "tagDetails": "Detalles de la etiqueta",

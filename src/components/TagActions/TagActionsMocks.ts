@@ -452,7 +452,7 @@ export const MOCKS = [
   },
 ];
 
-export const MOCKS_ERROR = [
+export const MOCKS_ERROR_ORGANIZATION_TAGS_QUERY = [
   {
     request: {
       query: ORGANIZATION_USER_TAGS_LIST,
@@ -461,6 +461,73 @@ export const MOCKS_ERROR = [
         first: TAGS_QUERY_LIMIT,
       },
     },
-    error: new Error('Mock Graphql Error'),
+    error: new Error('Mock Graphql Error for organization root tags query'),
+  },
+];
+
+export const MOCKS_ERROR_SUBTAGS_QUERY = [
+  {
+    request: {
+      query: ORGANIZATION_USER_TAGS_LIST,
+      variables: {
+        id: '123',
+        first: TAGS_QUERY_LIMIT,
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            userTags: {
+              edges: [
+                {
+                  node: {
+                    _id: '1',
+                    name: 'userTag 1',
+                    usersAssignedTo: {
+                      totalCount: 5,
+                    },
+                    childTags: {
+                      totalCount: 11,
+                    },
+                  },
+                  cursor: '1',
+                },
+                {
+                  node: {
+                    _id: '2',
+                    name: 'userTag 2',
+                    usersAssignedTo: {
+                      totalCount: 5,
+                    },
+                    childTags: {
+                      totalCount: 0,
+                    },
+                  },
+                  cursor: '2',
+                },
+              ],
+              pageInfo: {
+                startCursor: '1',
+                endCursor: '2',
+                hasNextPage: false,
+                hasPreviousPage: false,
+              },
+              totalCount: 2,
+            },
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: USER_TAG_SUB_TAGS,
+      variables: {
+        id: '1',
+        first: TAGS_QUERY_LIMIT,
+      },
+    },
+    error: new Error('Mock Graphql Error for subTags query'),
   },
 ];

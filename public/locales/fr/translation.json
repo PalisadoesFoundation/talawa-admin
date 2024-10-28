@@ -346,6 +346,7 @@
     "successfullyAssignedToTags": "Attribué aux tags avec succès",
     "successfullyRemovedFromTags": "Retiré des tags avec succès",
     "errorOccurredWhileLoadingOrganizationUserTags": "Erreur lors du chargement des tags de l'organisation",
+    "errorOccurredWhileLoadingSubTags": "Une erreur s'est produite lors du chargement des sous-tags",
     "removeUserTag": "Supprimer le tag",
     "removeUserTagMessage": "Voulez-vous supprimer ce tag ? Cela supprimera tous les sous-tags et toutes les associations.",
     "tagDetails": "Détails du tag",
