@@ -357,7 +357,8 @@
     "selectTag": "选择标签",
     "collapse": "收起",
     "expand": "展开",
-    "tagNamePlaceholder": "输入标签名称"
+    "tagNamePlaceholder": "输入标签名称",
+    "allTags": "所有标签"
   },
   "userListCard": {
     "addAdmin": "添加管理员",

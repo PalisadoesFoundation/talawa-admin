@@ -627,7 +627,7 @@ function ManageTag(): JSX.Element {
           <Modal.Body>
             <Form.Label htmlFor="tagName">{t('tagName')}</Form.Label>
             <Form.Control
-              type="name"
+              type="text"
               id="tagName"
               className="mb-3"
               placeholder={t('tagNamePlaceholder')}

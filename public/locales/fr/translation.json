@@ -357,7 +357,8 @@
     "selectTag": "Sélectionner le tag",
     "collapse": "Réduire",
     "expand": "Développer",
-    "tagNamePlaceholder": "Écrire le nom du tag"
+    "tagNamePlaceholder": "Écrire le nom du tag",
+    "allTags": "Tous les tags"
   },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",

@@ -67,11 +67,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
   );
 
   const handleTagClick = (): void => {
-    if (!expanded) {
-      setExpanded(true);
-    } else {
-      setExpanded(false); // collapse on second click
-    }
+    setExpanded(!expanded);
   };
 
   const handleCheckboxChange = (

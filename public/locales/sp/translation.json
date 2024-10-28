@@ -357,7 +357,8 @@
     "selectTag": "Seleccionar etiqueta",
     "collapse": "Colapsar",
     "expand": "Expandir",
-    "tagNamePlaceholder": "Escribe el nombre de la etiqueta"
+    "tagNamePlaceholder": "Escribe el nombre de la etiqueta",
+    "allTags": "Todas las etiquetas"
   },
   "userListCard": {
     "joined": "Unido",

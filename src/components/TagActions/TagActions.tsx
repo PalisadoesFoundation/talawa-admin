@@ -315,7 +315,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
               : t('removeFromTags')}
           </Modal.Title>
         </Modal.Header>
-        <Form onSubmitCapture={handleTagAction}>
+        <Form onSubmit={handleTagAction}>
           <Modal.Body className="pb-0">
             {orgUserTagsLoading ? (
               <Loader size="sm" />
@@ -347,7 +347,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                 </div>
 
                 <div className={`mt-4 mb-2 fs-5 ${styles.allTagsHeading}`}>
-                  All Tags
+                  {t('allTags')}
                 </div>
 
                 <div

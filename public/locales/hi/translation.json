@@ -357,7 +357,8 @@
     "selectTag": "टैग चुनें",
     "collapse": "संक्षिप्त करें",
     "expand": "विस्तारित करें",
-    "tagNamePlaceholder": "टैग का नाम लिखें"
+    "tagNamePlaceholder": "टैग का नाम लिखें",
+    "allTags": "सभी टैग"
   },
   "userListCard": {
     "addAdmin": "व्यवस्थापक जोड़ें",
