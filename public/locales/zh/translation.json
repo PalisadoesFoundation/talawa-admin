@@ -332,7 +332,14 @@
     "successfullyUnassigned": "标签已从用户中取消分配",
     "addPeople": "添加人员",
     "add": "添加",
-    "subTags": "子标签"
+    "subTags": "子标签",
+    "assignedToAll": "标签分配给所有人",
+    "successfullyAssignedToPeople": "标签分配成功",
+    "assignPeople": "分配",
+    "errorOccurredWhileLoadingMembers": "加载成员时出错",
+    "userName": "用户名",
+    "actions": "操作",
+    "noOneSelected": "未选择任何人"
   },
   "userListCard": {
     "addAdmin": "添加管理员",
@@ -758,13 +765,13 @@
   },
   "orgSettings": {
     "title": "设置",
-    "general": "一般",
-    "actionItemCategories": "操作项目类别",
+    "general": "一般的",
+    "actionItemCategories": "行动项目类别",
     "updateOrganization": "更新组织",
     "seeRequest": "查看请求",
     "noData": "没有数据",
     "otherSettings": "其他设置",
-    "changeLanguage": "更改语言",
+    "changeLanguage": "改变语言",
     "manageCustomFields": "管理自定义字段",
     "agendaItemCategories": "议程项目类别"
   },

@@ -5,7 +5,10 @@ import styles from './CreateDirectChat.module.css';
 import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
-import { CREATE_DIRECT_CHAT } from 'GraphQl/Mutations/OrganizationMutations';
+import {
+  CREATE_CHAT,
+  CREATE_DIRECT_CHAT,
+} from 'GraphQl/Mutations/OrganizationMutations';
 import Table from '@mui/material/Table';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
@@ -19,19 +22,10 @@ import { Search } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-/**
- * Props for the CreateDirectChat component.
- */
 interface InterfaceCreateDirectChatProps {
   toggleCreateDirectChatModal: () => void;
   createDirectChatModalisOpen: boolean;
-  /**
-   * Function to refetch the contact list.
-   *
-   * @param variables - Optional variables to filter the contact list.
-   * @returns Promise with ApolloQueryResult.
-   */
-  contactRefetch: (
+  chatsListRefetch: (
     variables?:
       | Partial<{
           id: any;
@@ -43,6 +37,7 @@ interface InterfaceCreateDirectChatProps {
 /**
  * Styled table cell with custom styles.
  */
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: ['#31bb6b', '!important'],
@@ -56,6 +51,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 /**
  * Styled table row with custom styles.
  */
+
 const StyledTableRow = styled(TableRow)(() => ({
   '&:last-child td, &:last-child th': {
     border: 0,
@@ -64,16 +60,10 @@ const StyledTableRow = styled(TableRow)(() => ({
 
 const { getItem } = useLocalStorage();
 
-/**
- * Component for creating a direct chat with a selected user.
- *
- * @param props - The props for the CreateDirectChat component.
- * @returns JSX.Element
- */
-export default function groupChat({
+export default function createDirectChatModal({
   toggleCreateDirectChatModal,
   createDirectChatModalisOpen,
-  contactRefetch,
+  chatsListRefetch,
 }: InterfaceCreateDirectChatProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userChat',
@@ -85,23 +75,17 @@ export default function groupChat({
 
   const [userName, setUserName] = useState('');
 
-  const [createDirectChat] = useMutation(CREATE_DIRECT_CHAT);
+  const [createChat] = useMutation(CREATE_CHAT);
 
-  /**
-   * Handles the creation of a direct chat with a selected user.
-   *
-   * @param id - The ID of the user to start a direct chat with.
-   * @returns Promise<void>
-   */
   const handleCreateDirectChat = async (id: string): Promise<void> => {
-    console.log(organizationId);
-    await createDirectChat({
+    await createChat({
       variables: {
         organizationId,
         userIds: [userId, id],
+        isGroup: false,
       },
     });
-    contactRefetch();
+    await chatsListRefetch();
     toggleCreateDirectChatModal();
   };
 
@@ -116,12 +100,6 @@ export default function groupChat({
     },
   });
 
-  /**
-   * Handles changes in the user search input and refetches the user list.
-   *
-   * @param e - The form event.
-   * @returns void
-   */
   const handleUserModalSearchChange = (e: React.FormEvent): void => {
     e.preventDefault();
     /* istanbul ignore next */

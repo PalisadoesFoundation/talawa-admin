@@ -332,7 +332,14 @@
     "successfullyUnassigned": "Tag unassigned from user",
     "addPeople": "Add People",
     "add": "Add",
-    "subTags": "Sub Tags"
+    "subTags": "Sub Tags",
+    "assignedToAll": "Tag Assigned to All",
+    "successfullyAssignedToPeople": "Tag assigned successfully",
+    "assignPeople": "Assign",
+    "errorOccurredWhileLoadingMembers": "Error occured while loading members",
+    "userName": "User Name",
+    "actions": "Actions",
+    "noOneSelected": "No One Selected"
   },
   "userListCard": {
     "addAdmin": "Add Admin",
@@ -1259,7 +1266,7 @@
   },
   "eventActionItems": {
     "title": "Action Items",
-    "createActionItem": "Create Action Items",
+    "createActionItem": "Create Action Item",
     "actionItemCategory": "Action Item Category",
     "selectActionItemCategory": "Select an action item category",
     "selectAssignee": "Select an assignee",

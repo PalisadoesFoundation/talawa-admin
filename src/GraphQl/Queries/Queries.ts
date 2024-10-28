@@ -777,6 +777,14 @@ export const GET_COMMUNITY_DATA = gql`
   }
 `;
 
+export const GET_COMMUNITY_SESSION_TIMEOUT_DATA = gql`
+  query getCommunityData {
+    getCommunityData {
+      timeout
+    }
+  }
+`;
+
 // get the list of Action Item Categories
 export { ACTION_ITEM_CATEGORY_LIST } from './ActionItemCategoryQueries';
 
@@ -792,7 +800,6 @@ export { AGENDA_ITEM_CATEGORY_LIST } from './AgendaCategoryQueries';
 // to take the list of the blocked users
 export {
   ADVERTISEMENTS_GET,
-  DIRECT_CHATS_LIST,
   IS_SAMPLE_ORGANIZATION_QUERY,
   ORGANIZATION_CUSTOM_FIELDS,
   ORGANIZATION_EVENTS_CONNECTION,
