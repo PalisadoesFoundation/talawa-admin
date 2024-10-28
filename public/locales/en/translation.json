@@ -345,14 +345,21 @@
     "remove": "Remove",
     "successfullyAssignedToTags": "Successfully Assigned to Tags",
     "successfullyRemovedFromTags": "Successfully Removed from Tags",
-    "errorOccurredWhileLoadingOrganizationUserTags": "Error occured while loading organization tags",
+    "errorOccurredWhileLoadingOrganizationUserTags": "Error occurred while loading organization tags",
+    "errorOccurredWhileLoadingSubTags": "Error occurred while loading subTags tags",
     "removeUserTag": "Delete Tag",
     "removeUserTagMessage": "Do you want to delete this tag? It delete all the sub tags and all the associations.",
     "tagDetails": "Tag Details",
     "tagName": "Name",
     "tagUpdationSuccess": "Tag updated successfully",
     "tagRemovalSuccess": "Tag deleted successfully",
-    "noTagSelected": "No Tag Selected"
+    "noTagSelected": "No Tag Selected",
+    "changeNameToEdit": "Change the name to make an update",
+    "selectTag": "Select Tag",
+    "collapse": "Collapse",
+    "expand": "Expand",
+    "tagNamePlaceholder": "Write the name of the tag",
+    "allTags": "All Tags"
   },
   "userListCard": {
     "addAdmin": "Add Admin",

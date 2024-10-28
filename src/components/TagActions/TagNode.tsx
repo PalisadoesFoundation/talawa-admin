@@ -10,7 +10,11 @@ import { TAGS_QUERY_PAGE_SIZE } from 'utils/organizationTagsUtils';
 import styles from './TagActions.module.css';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
+import { WarningAmberRounded } from '@mui/icons-material';
 
+/**
+ * Props for the `TagNode` component.
+ */
 interface InterfaceTagNodeProps {
   tag: InterfaceTagData;
   checkedTags: Set<string>;
@@ -18,6 +22,9 @@ interface InterfaceTagNodeProps {
   t: (key: string) => string;
 }
 
+/**
+ * Renders the Tags which can be expanded to list subtags.
+ */
 const TagNode: React.FC<InterfaceTagNodeProps> = ({
   tag,
   checkedTags,
@@ -29,6 +36,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
   const {
     data: subTagsData,
     loading: subTagsLoading,
+    error: subTagsError,
     fetchMore: fetchMoreSubTags,
   }: InterfaceOrganizationSubTagsQuery = useQuery(USER_TAG_SUB_TAGS, {
     variables: {
@@ -70,16 +78,25 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
     });
   };
 
+  if (subTagsError) {
+    return (
+      <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
+        <div className={styles.errorMessage}>
+          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <h6 className="fw-bold text-danger text-center">
+            {t('errorOccurredWhileLoadingSubTags')}
+          </h6>
+        </div>
+      </div>
+    );
+  }
+
   const subTagsList = subTagsData?.getChildTags.childTags.edges.map(
     (edge) => edge.node,
   );
 
   const handleTagClick = (): void => {
-    if (!expanded) {
-      setExpanded(true);
-    } else {
-      setExpanded(false); // collapse on second click
-    }
+    setExpanded(!expanded);
   };
 
   const handleCheckboxChange = (
@@ -98,6 +115,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
               className="me-3"
               style={{ cursor: 'pointer' }}
               data-testid={`expandSubTags${tag._id}`}
+              aria-label={expanded ? t('collapse') : t('expand')}
             >
               {expanded ? '▼' : '▶'}
             </span>
@@ -108,6 +126,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
               className="me-2"
               onChange={handleCheckboxChange}
               data-testid={`checkTag${tag._id}`}
+              aria-label={t('selectTag')}
             />
             <i className="fa fa-folder mx-2" />{' '}
           </>
@@ -121,6 +140,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
               className="ms-1 me-2"
               onChange={handleCheckboxChange}
               data-testid={`checkTag${tag._id}`}
+              aria-label={tag.name}
             />
             <i className="fa fa-tag mx-2" />{' '}
           </>
@@ -136,7 +156,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
           </div>
         </div>
       )}
-      {expanded && subTagsList && (
+      {expanded && subTagsList?.length && (
         <div style={{ marginLeft: '20px' }}>
           <div
             id={`subTagsScrollableDiv${tag._id}`}

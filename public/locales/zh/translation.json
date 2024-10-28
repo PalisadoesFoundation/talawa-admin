@@ -346,13 +346,20 @@
     "successfullyAssignedToTags": "成功分配到标签",
     "successfullyRemovedFromTags": "成功从标签中移除",
     "errorOccurredWhileLoadingOrganizationUserTags": "加载组织标签时出错",
+    "errorOccurredWhileLoadingSubTags": "加载子标签时发生错误",
     "removeUserTag": "删除标签",
     "removeUserTagMessage": "您要删除此标签吗？这将删除所有子标签和所有关联。",
     "tagDetails": "标签详情",
     "tagName": "名称",
     "tagUpdationSuccess": "标签更新成功",
     "tagRemovalSuccess": "标签删除成功",
-    "noTagSelected": "未选择标签"
+    "noTagSelected": "未选择标签",
+    "changeNameToEdit": "更改名称以进行更新",
+    "selectTag": "选择标签",
+    "collapse": "收起",
+    "expand": "展开",
+    "tagNamePlaceholder": "输入标签名称",
+    "allTags": "所有标签"
   },
   "userListCard": {
     "addAdmin": "添加管理员",

@@ -366,8 +366,8 @@ export const MOCKS = [
               },
             ],
             pageInfo: {
-              startCursor: '1',
-              endCursor: '10',
+              startCursor: 'subTag1',
+              endCursor: 'subTag10',
               hasNextPage: true,
               hasPreviousPage: false,
             },
@@ -382,14 +382,14 @@ export const MOCKS = [
       query: USER_TAG_SUB_TAGS,
       variables: {
         id: '1',
-        after: '10',
+        after: 'subTag10',
         first: TAGS_QUERY_PAGE_SIZE,
       },
     },
     result: {
       data: {
         getChildTags: {
-          name: 'tag1',
+          name: 'userTag 1',
           childTags: {
             edges: [
               {
@@ -407,8 +407,8 @@ export const MOCKS = [
               },
             ],
             pageInfo: {
-              startCursor: '11',
-              endCursor: '11',
+              startCursor: 'subTag11',
+              endCursor: 'subTag11',
               hasNextPage: false,
               hasPreviousPage: true,
             },
@@ -452,18 +452,82 @@ export const MOCKS = [
   },
 ];
 
-export const MOCKS_ERROR = [
+export const MOCKS_ERROR_ORGANIZATION_TAGS_QUERY = [
   {
     request: {
       query: ORGANIZATION_USER_TAGS_LIST,
       variables: {
         id: '123',
-        after: null,
-        before: null,
-        first: 5,
-        last: null,
+        first: TAGS_QUERY_PAGE_SIZE,
       },
     },
-    error: new Error('Mock Graphql Error'),
+    error: new Error('Mock Graphql Error for organization root tags query'),
+  },
+];
+
+export const MOCKS_ERROR_SUBTAGS_QUERY = [
+  {
+    request: {
+      query: ORGANIZATION_USER_TAGS_LIST,
+      variables: {
+        id: '123',
+        first: TAGS_QUERY_PAGE_SIZE,
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            userTags: {
+              edges: [
+                {
+                  node: {
+                    _id: '1',
+                    name: 'userTag 1',
+                    usersAssignedTo: {
+                      totalCount: 5,
+                    },
+                    childTags: {
+                      totalCount: 11,
+                    },
+                  },
+                  cursor: '1',
+                },
+                {
+                  node: {
+                    _id: '2',
+                    name: 'userTag 2',
+                    usersAssignedTo: {
+                      totalCount: 5,
+                    },
+                    childTags: {
+                      totalCount: 0,
+                    },
+                  },
+                  cursor: '2',
+                },
+              ],
+              pageInfo: {
+                startCursor: '1',
+                endCursor: '2',
+                hasNextPage: false,
+                hasPreviousPage: false,
+              },
+              totalCount: 2,
+            },
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: USER_TAG_SUB_TAGS,
+      variables: {
+        id: '1',
+        first: TAGS_QUERY_PAGE_SIZE,
+      },
+    },
+    error: new Error('Mock Graphql Error for subTags query'),
   },
 ];

@@ -7,6 +7,7 @@ import {
   fireEvent,
   cleanup,
   waitFor,
+  act,
 } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
@@ -21,15 +22,21 @@ import type { ApolloLink } from '@apollo/client';
 import type { InterfaceTagActionsProps } from './TagActions';
 import TagActions from './TagActions';
 import i18n from 'utils/i18nForTest';
-import { MOCKS, MOCKS_ERROR } from './TagActionsMocks';
+import {
+  MOCKS,
+  MOCKS_ERROR_ORGANIZATION_TAGS_QUERY,
+  MOCKS_ERROR_SUBTAGS_QUERY,
+} from './TagActionsMocks';
 
 const link = new StaticMockLink(MOCKS, true);
-const link2 = new StaticMockLink(MOCKS_ERROR, true);
+const link2 = new StaticMockLink(MOCKS_ERROR_ORGANIZATION_TAGS_QUERY, true);
+const link3 = new StaticMockLink(MOCKS_ERROR_SUBTAGS_QUERY, true);
 
-async function wait(): Promise<void> {
-  await waitFor(() => {
-    // The waitFor utility automatically uses optimal timing
-    return Promise.resolve();
+async function wait(ms = 500): Promise<void> {
+  await act(() => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
   });
 }
 
@@ -152,6 +159,24 @@ describe('Organisation Tags Page', () => {
 
     await waitFor(() => {
       expect(queryByText(translations.assign)).not.toBeInTheDocument();
+    });
+  });
+
+  test('Renders error component when when subTags query is unsuccessful', async () => {
+    const { getByText } = renderTagActionsModal(props[0], link3);
+
+    await wait();
+
+    // expand tag 1 to list its subtags
+    await waitFor(() => {
+      expect(screen.getByTestId('expandSubTags1')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('expandSubTags1'));
+
+    await waitFor(() => {
+      expect(
+        getByText(translations.errorOccurredWhileLoadingSubTags),
+      ).toBeInTheDocument();
     });
   });
 
