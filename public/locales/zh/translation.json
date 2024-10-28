@@ -352,7 +352,8 @@
     "tagName": "名称",
     "tagUpdationSuccess": "标签更新成功",
     "tagRemovalSuccess": "标签删除成功",
-    "noTagSelected": "未选择标签"
+    "noTagSelected": "未选择标签",
+    "changeNameToEdit": "更改名称以进行更新"
   },
   "userListCard": {
     "addAdmin": "添加管理员",

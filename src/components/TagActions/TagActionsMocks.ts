@@ -366,8 +366,8 @@ export const MOCKS = [
               },
             ],
             pageInfo: {
-              startCursor: '1',
-              endCursor: '10',
+              startCursor: 'subTag1',
+              endCursor: 'subTag10',
               hasNextPage: true,
               hasPreviousPage: false,
             },
@@ -382,7 +382,7 @@ export const MOCKS = [
       query: USER_TAG_SUB_TAGS,
       variables: {
         id: '1',
-        after: '10',
+        after: 'subTag10',
         first: TAGS_QUERY_LIMIT,
       },
     },
@@ -407,8 +407,8 @@ export const MOCKS = [
               },
             ],
             pageInfo: {
-              startCursor: '11',
-              endCursor: '11',
+              startCursor: 'subTag11',
+              endCursor: 'subTag11',
               hasNextPage: false,
               hasPreviousPage: true,
             },
@@ -458,10 +458,7 @@ export const MOCKS_ERROR = [
       query: ORGANIZATION_USER_TAGS_LIST,
       variables: {
         id: '123',
-        after: null,
-        before: null,
-        first: 5,
-        last: null,
+        first: TAGS_QUERY_LIMIT,
       },
     },
     error: new Error('Mock Graphql Error'),

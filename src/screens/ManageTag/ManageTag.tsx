@@ -87,6 +87,10 @@ function ManageTag(): JSX.Element {
     setAssignToTagsModalIsOpen(false);
   };
 
+  const showEditTagModal = (): void => {
+    setEditTagModalIsOpen(true);
+  };
+
   const hideEditTagModal = (): void => {
     setEditTagModalIsOpen(false);
   };
@@ -159,6 +163,7 @@ function ManageTag(): JSX.Element {
   const [edit] = useMutation(UPDATE_USER_TAG);
 
   const [newTagName, setNewTagName] = useState<string>('');
+  const currentTagName = userTagAssignedMembersData?.getUserTag.name ?? '';
 
   useEffect(() => {
     setNewTagName(userTagAssignedMembersData?.getUserTag.name ?? '');
@@ -166,6 +171,11 @@ function ManageTag(): JSX.Element {
 
   const editTag = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
+
+    if (newTagName === currentTagName) {
+      toast.info(t('changeNameToEdit'));
+      return;
+    }
 
     try {
       const { data } = await edit({
@@ -524,18 +534,14 @@ function ManageTag(): JSX.Element {
                 <hr className="mb-1 mt-2" />
 
                 <div
-                  onClick={() => {
-                    setEditTagModalIsOpen(true);
-                  }}
+                  onClick={showEditTagModal}
                   className="ms-5 mt-3 mb-2 btn btn-primary btn-sm w-75"
                   data-testid="editTag"
                 >
                   {tCommon('edit')}
                 </div>
                 <div
-                  onClick={() => {
-                    setRemoveTagModalIsOpen(true);
-                  }}
+                  onClick={toggleRemoveUserTagModal}
                   className="ms-5 mb-2 btn btn-danger btn-sm w-75"
                   data-testid="removeTag"
                 >

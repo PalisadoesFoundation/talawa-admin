@@ -82,7 +82,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
     skip: !assignToTagsModalIsOpen,
   });
 
-  const userTagsList = orgUserTagsData?.organizations[0].userTags.edges.map(
+  const userTagsList = orgUserTagsData?.organizations[0]?.userTags.edges.map(
     (edge) => edge.node,
   );
 
@@ -246,49 +246,32 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   };
 
   const [assignToTags] = useMutation(ASSIGN_TO_TAGS);
-
-  const assignToSelectedTags = async (
-    e: FormEvent<HTMLFormElement>,
-  ): Promise<void> => {
-    e.preventDefault();
-
-    try {
-      const { data } = await assignToTags({
-        variables: {
-          currentTagId,
-          selectedTagIds: selectedTags.map((selectedTag) => selectedTag._id),
-        },
-      });
-
-      if (data) {
-        toast.success(t('successfullyAssignedToTags'));
-        hideAssignToTagsModal();
-      }
-    } catch (error: unknown) {
-      /* istanbul ignore next */
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
-    }
-  };
-
   const [removeFromTags] = useMutation(REMOVE_FROM_TAGS);
 
-  const removeFromSelectedTags = async (
+  const handleTagAction = async (
     e: FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
 
+    const mutationObject = {
+      variables: {
+        currentTagId,
+        selectedTagIds: selectedTags.map((selectedTag) => selectedTag._id),
+      },
+    };
+
     try {
-      const { data } = await removeFromTags({
-        variables: {
-          currentTagId,
-          selectedTagIds: selectedTags.map((selectedTag) => selectedTag._id),
-        },
-      });
+      const { data } =
+        tagActionType === 'assignToTags'
+          ? await assignToTags(mutationObject)
+          : await removeFromTags(mutationObject);
 
       if (data) {
-        toast.success(t('successfullyRemovedFromTags'));
+        if (tagActionType === 'assignToTags') {
+          toast.success(t('successfullyAssignedToTags'));
+        } else {
+          toast.success(t('successfullyRemovedFromTags'));
+        }
         hideAssignToTagsModal();
       }
     } catch (error: unknown) {
@@ -306,8 +289,6 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
             {t('errorOccurredWhileLoadingOrganizationUserTags')}
-            <br />
-            {orgUserTagsError.message}
           </h6>
         </div>
       </div>
@@ -337,8 +318,8 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
         <Form
           onSubmitCapture={(e) =>
             tagActionType === 'assignToTags'
-              ? assignToSelectedTags(e)
-              : removeFromSelectedTags(e)
+              ? handleTagAction(e)
+              : handleTagAction(e)
           }
         >
           <Modal.Body className="pb-0">

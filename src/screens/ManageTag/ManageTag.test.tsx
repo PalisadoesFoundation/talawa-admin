@@ -49,6 +49,7 @@ async function wait(ms = 500): Promise<void> {
 jest.mock('react-toastify', () => ({
   toast: {
     success: jest.fn(),
+    info: jest.fn(),
     error: jest.fn(),
   },
 }));
@@ -393,6 +394,12 @@ describe('Manage Tag Page', () => {
       expect(screen.getByTestId('editTag')).toBeInTheDocument();
     });
     userEvent.click(screen.getByTestId('editTag'));
+
+    userEvent.click(screen.getByTestId('editTagSubmitBtn'));
+
+    await waitFor(() => {
+      expect(toast.info).toHaveBeenCalledWith(translations.changeNameToEdit);
+    });
 
     const tagNameInput = screen.getByTestId('tagNameInput');
     await userEvent.clear(tagNameInput);

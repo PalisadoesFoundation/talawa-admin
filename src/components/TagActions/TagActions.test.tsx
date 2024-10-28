@@ -7,6 +7,7 @@ import {
   fireEvent,
   cleanup,
   waitFor,
+  act,
 } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
@@ -26,10 +27,11 @@ import { MOCKS, MOCKS_ERROR } from './TagActionsMocks';
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR, true);
 
-async function wait(): Promise<void> {
-  await waitFor(() => {
-    // The waitFor utility automatically uses optimal timing
-    return Promise.resolve();
+async function wait(ms = 500): Promise<void> {
+  await act(() => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
   });
 }
 
