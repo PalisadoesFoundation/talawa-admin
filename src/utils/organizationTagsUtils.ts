@@ -21,3 +21,5 @@ export const dataGridStyle = {
     borderRadius: '0.1rem',
   },
 };
+
+export const ADD_PEOPLE_TO_TAGS_QUERY_LIMIT = 7;

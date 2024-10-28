@@ -72,3 +72,18 @@ export const REMOVE_USER_TAG = gql`
     }
   }
 `;
+
+/**
+ * GraphQL mutation to add people to tag.
+ *
+ * @param tagId - Id of the tag to be assigned.
+ * @param userIds - Ids of the users to assign to.
+ */
+
+export const ADD_PEOPLE_TO_TAG = gql`
+  mutation AddPeopleToUserTag($tagId: ID!, $userIds: [ID!]!) {
+    addPeopleToUserTag(input: { tagId: $tagId, userIds: $userIds }) {
+      _id
+    }
+  }
+`;

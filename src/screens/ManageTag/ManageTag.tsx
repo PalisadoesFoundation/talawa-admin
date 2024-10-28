@@ -23,6 +23,7 @@ import {
   USER_TAG_ANCESTORS,
   USER_TAGS_ASSIGNED_MEMBERS,
 } from 'GraphQl/Queries/userTagQueries';
+import AddPeopleToTag from 'components/AddPeopleToTag/AddPeopleToTag';
 
 /**
  * Component that renders the Manage Tag screen when the app navigates to '/orgtags/:orgId/managetag/:tagId'.
@@ -432,41 +433,13 @@ function ManageTag(): JSX.Element {
       </Row>
 
       {/* Add People To Tag Modal */}
-      <Modal
-        show={addPeopleToTagModalIsOpen}
-        onHide={hideAddPeopleToTagModal}
-        backdrop="static"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
-        <Modal.Header
-          className="bg-primary"
-          data-testid="modalOrganizationHeader"
-          closeButton
-        >
-          <Modal.Title className="text-white">{t('addPeople')}</Modal.Title>
-        </Modal.Header>
-        <Form>
-          <Modal.Body></Modal.Body>
-
-          <Modal.Footer>
-            <Button
-              variant="secondary"
-              onClick={(): void => hideAddPeopleToTagModal()}
-              data-testid="closeAddPeopleToTagModal"
-            >
-              {tCommon('cancel')}
-            </Button>
-            <Button
-              type="submit"
-              value="add"
-              data-testid="addPeopleToTagModalSubmitBtn"
-            >
-              {t('add')}
-            </Button>
-          </Modal.Footer>
-        </Form>
-      </Modal>
+      <AddPeopleToTag
+        addPeopleToTagModalIsOpen={addPeopleToTagModalIsOpen}
+        hideAddPeopleToTagModal={hideAddPeopleToTagModal}
+        refetchAssignedMembersData={userTagAssignedMembersRefetch}
+        t={t}
+        tCommon={tCommon}
+      />
 
       {/* Unassign Tag Modal */}
       <Modal
