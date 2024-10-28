@@ -88,10 +88,21 @@ export async function main(): Promise<void> {
     });
 
     const websocketUrl = endpoint.replace(/^http(s)?:\/\//, 'ws$1://');
-    fs.appendFileSync(
-      '.env',
-      `REACT_APP_BACKEND_WEBSOCKET_URL=${websocketUrl}\n`,
-    );
+    const currentWebSocketUrl = dotenv.parse(
+      fs.readFileSync('.env'),
+    ).REACT_APP_BACKEND_WEBSOCKET_URL;
+
+    fs.readFile('.env', 'utf8', (err, data) => {
+      if (err) {
+        console.error('Error reading .env file:', err);
+        process.exit(1);
+      }
+      const result = data.replace(
+        `REACT_APP_BACKEND_WEBSOCKET_URL=${currentWebSocketUrl}`,
+        `REACT_APP_BACKEND_WEBSOCKET_URL=${websocketUrl}`,
+      );
+      fs.writeFileSync('.env', result, 'utf8');
+    });
   }
 
   const { shouldUseRecaptcha } = await inquirer.prompt({
