@@ -232,33 +232,40 @@ interface InterfaceTagData {
   totalCount: number;
 }
 
+interface InterfaceTagMembersData {
+  edges: {
+    node: {
+      _id: string;
+      firstName: string;
+      lastName: string;
+    };
+  }[];
+  pageInfo: {
+    startCursor: string;
+    endCursor: string;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+  };
+  totalCount: number;
+}
+
 export interface InterfaceQueryOrganizationUserTags {
   userTags: InterfaceTagData;
 }
 
 export interface InterfaceQueryUserTagsAssignedMembers {
   name: string;
-  usersAssignedTo: {
-    edges: {
-      node: {
-        _id: string;
-        firstName: string;
-        lastName: string;
-      };
-    }[];
-    pageInfo: {
-      startCursor: string;
-      endCursor: string;
-      hasNextPage: boolean;
-      hasPreviousPage: boolean;
-    };
-    totalCount: number;
-  };
+  usersAssignedTo: InterfaceTagMembersData;
 }
 
 export interface InterfaceQueryUserTagChildTags {
   name: string;
   childTags: InterfaceTagData;
+}
+
+export interface InterfaceQueryUserTagsMembersToAssignTo {
+  name: string;
+  usersToAssignTo: InterfaceTagMembersData;
 }
 
 export interface InterfaceQueryOrganizationAdvertisementListItem {
