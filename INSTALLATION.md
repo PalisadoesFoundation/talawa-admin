@@ -203,7 +203,7 @@ REACT_APP_TALAWA_URL="http://YOUR-REMOTE-ADDRESS:4000/graphql/"
 
 ## Setting up REACT_APP_BACKEND_WEBSOCKET_URL in .env file
 
-Add the endpoint for accessing talawa-api graphql service to the variable named `REACT_APP_BACKEND_WEBSOCKET_URL` in the `.env` file.
+The endpoint for accessing talawa-api WebSocket graphql service for handling subscriptions is automatically added to the variable named `REACT_APP_BACKEND_WEBSOCKET_URL` in the `.env` file.
 
 ```
 REACT_APP_BACKEND_WEBSOCKET_URL="ws://API-IP-ADRESS:4000/graphql/"
