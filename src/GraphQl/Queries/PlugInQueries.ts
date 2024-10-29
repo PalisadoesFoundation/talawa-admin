@@ -150,6 +150,13 @@ export const CHAT_BY_ID = gql`
         email
         image
       }
+      admins {
+        _id
+        firstName
+        lastName
+        email
+        image
+      }
       unseenMessagesByUsers
     }
   }
@@ -172,12 +179,6 @@ export const GROUP_CHAT_LIST = gql`
         createdAt
         messageContent
         media
-        receiver {
-          _id
-          firstName
-          lastName
-          email
-        }
         sender {
           _id
           firstName
@@ -190,6 +191,13 @@ export const GROUP_CHAT_LIST = gql`
         name
       }
       users {
+        _id
+        firstName
+        lastName
+        email
+        image
+      }
+      admins {
         _id
         firstName
         lastName
@@ -230,6 +238,13 @@ export const UNREAD_CHAT_LIST = gql`
         name
       }
       users {
+        _id
+        firstName
+        lastName
+        email
+        image
+      }
+      admins {
         _id
         firstName
         lastName
@@ -279,6 +294,13 @@ export const CHATS_LIST = gql`
         name
       }
       users {
+        _id
+        firstName
+        lastName
+        email
+        image
+      }
+      admins {
         _id
         firstName
         lastName

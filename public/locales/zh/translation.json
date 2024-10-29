@@ -1171,7 +1171,8 @@
     "newChat": "新聊天",
     "newGroupChat": "新群聊",
     "groupInfo": "集团信息",
-    "members": "会员"
+    "members": "会员",
+    "addMembers": "Add Members"
   },
   "userChatRoom": {
     "selectContact": "选择联系人开始对话",

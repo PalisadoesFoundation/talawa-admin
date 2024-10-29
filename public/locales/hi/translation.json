@@ -1171,7 +1171,8 @@
     "newChat": "नई चैट",
     "newGroupChat": "नया समूह चैट",
     "groupInfo": "समूह जानकारी",
-    "members": "सदस्यों"
+    "members": "सदस्यों",
+    "addMembers": "Add Members"
   },
   "userChatRoom": {
     "selectContact": "बातचीत शुरू करने के लिए एक संपर्क चुनें",

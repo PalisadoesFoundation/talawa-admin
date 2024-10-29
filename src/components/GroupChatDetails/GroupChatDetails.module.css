@@ -20,6 +20,17 @@
   gap: 10px;
 }
 
+.groupMembersList {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.groupMembersList p {
+  margin: 0;
+  color: #959595;
+}
+
 .membersImage {
   width: 40px !important;
 }
@@ -74,4 +85,10 @@
 .checkIcon {
   color: rgb(42, 197, 42);
   cursor: pointer;
+}
+
+.chatUserDetails {
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }

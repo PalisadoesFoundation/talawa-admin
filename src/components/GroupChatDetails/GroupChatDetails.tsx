@@ -17,13 +17,13 @@ import { styled } from '@mui/material/styles';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import { USERS_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
-import { Search } from '@mui/icons-material';
+import { Search, Add } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import Avatar from 'components/Avatar/Avatar';
-import AddIcon from 'assets/svgs/add.svg';
 import { FiEdit } from 'react-icons/fi';
 import { FaCheck, FaX } from 'react-icons/fa6';
 import convertToBase64 from 'utils/convertToBase64';
+import useLocalStorage from 'utils/useLocalstorage';
 
 type DirectMessage = {
   _id: string;
@@ -62,6 +62,12 @@ type Chat = {
   name?: string;
   image?: string;
   messages: DirectMessage[];
+  admins: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+  }[];
   users: {
     _id: string;
     firstName: string;
@@ -122,6 +128,9 @@ export default function groupChatDetails({
   });
 
   const [userName, setUserName] = useState('');
+  const { getItem } = useLocalStorage();
+
+  const userId = getItem('userId');
 
   const [editChatTitle, setEditChatTitle] = useState<boolean>(false);
   const [chatName, setChatName] = useState<string>(chat?.name || '');
@@ -280,27 +289,42 @@ export default function groupChatDetails({
               {chat.users.length} {t('members')}
             </h5>
             <ListGroup className={styles.memberList} variant="flush">
-              <ListGroup.Item
-                className={styles.listItem}
-                onClick={() => {
-                  openAddUserModal();
-                }}
-              >
-                <AddIcon /> {t('addMember')}
-              </ListGroup.Item>
+              {chat.admins.map((admin) => admin._id).includes(userId) && (
+                <ListGroup.Item
+                  className={styles.listItem}
+                  onClick={() => {
+                    openAddUserModal();
+                  }}
+                >
+                  <Add /> {t('addMembers')}
+                </ListGroup.Item>
+              )}
               {chat.users.map(
                 (user: {
                   _id: string;
                   firstName: string;
                   lastName: string;
                 }) => (
-                  <ListGroup.Item className={styles.listItem} key={user._id}>
-                    <Avatar
-                      avatarStyle={styles.membersImage}
-                      name={user.firstName + ' ' + user.lastName}
-                    />
-                    {user.firstName} {user.lastName}
-                  </ListGroup.Item>
+                  <>
+                    <ListGroup.Item
+                      className={styles.groupMembersList}
+                      key={user._id}
+                    >
+                      <div className={styles.chatUserDetails}>
+                        <Avatar
+                          avatarStyle={styles.membersImage}
+                          name={user.firstName + ' ' + user.lastName}
+                        />
+                        {user.firstName} {user.lastName}
+                      </div>
+
+                      <div>
+                        {chat.admins
+                          .map((admin) => admin._id)
+                          .includes(user._id) && <p>Admin</p>}
+                      </div>
+                    </ListGroup.Item>
+                  </>
                 ),
               )}
             </ListGroup>

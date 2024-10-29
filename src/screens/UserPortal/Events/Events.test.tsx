@@ -19,9 +19,8 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ThemeProvider } from 'react-bootstrap';
 import { createTheme } from '@mui/material';
 import useLocalStorage from 'utils/useLocalstorage';
-import { create } from 'domain';
 
-const { setItem, getItem } = useLocalStorage();
+const { setItem } = useLocalStorage();
 
 jest.mock('react-toastify', () => ({
   toast: {

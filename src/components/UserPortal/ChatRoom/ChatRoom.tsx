@@ -81,6 +81,12 @@ type Chat = {
   name?: string;
   image?: string;
   messages: DirectMessage[];
+  admins: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+  }[];
   users: {
     _id: string;
     firstName: string;
