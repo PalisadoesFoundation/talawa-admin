@@ -87,7 +87,7 @@ describe('Testing LeftDrawer in OrganizationScreen', () => {
     );
 
     const titleElement = screen.getByRole('heading', { level: 1 });
-    expect(titleElement).toHaveTextContent('');
+    expect(titleElement).toHaveTextContent('Posts');
   });
 
   test('renders the correct title based on the titleKey', () => {

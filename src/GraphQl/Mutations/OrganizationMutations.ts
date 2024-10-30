@@ -119,17 +119,6 @@ export const SEND_MESSAGE_TO_CHAT = gql`
       _id
       createdAt
       messageContent
-      replyTo {
-        _id
-        createdAt
-        messageContent
-        sender {
-          _id
-          firstName
-          lastName
-        }
-        updatedAt
-      }
       sender {
         _id
         firstName
