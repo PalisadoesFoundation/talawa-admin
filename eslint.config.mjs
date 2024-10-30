@@ -137,7 +137,7 @@ export default [
         files: ["./src/typeDefs/**/*.graphql"],
 
         plugins: {
-            "@graphql-eslint": graphqlEslint,
+            "@graphql-eslint": parser,
         },
 
         languageOptions: {
