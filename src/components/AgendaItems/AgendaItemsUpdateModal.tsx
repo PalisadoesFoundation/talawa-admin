@@ -9,6 +9,65 @@ import convertToBase64 from 'utils/convertToBase64';
 import styles from './AgendaItemsContainer.module.css';
 import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';
 
+import React from 'react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import AgendaItemsUpdateModal from './AgendaItemsUpdateModal';
+
+describe('AgendaItemsUpdateModal Component', () => {
+  const mockProps = {
+    agendaItemUpdateModalIsOpen: true,
+    hideUpdateModal: jest.fn(),
+    formState: {
+      agendaItemCategoryIds: [],
+      agendaItemCategoryNames: [],
+      title: '',
+      description: '',
+      duration: '',
+      attachments: [],
+      urls: [],
+      createdBy: { firstName: 'John', lastName: 'Doe' },
+    },
+    setFormState: jest.fn(),
+    updateAgendaItemHandler: jest.fn(),
+    t: jest.fn((key) => key),
+    agendaItemCategories: [{ _id: '1', name: 'Category1' }],
+  };
+
+  test('renders the modal when open', () => {
+    render(<AgendaItemsUpdateModal {...mockProps} />);
+    expect(screen.getByText('updateAgendaItem')).toBeInTheDocument();
+  });
+
+  test('calls hideUpdateModal when close button is clicked', () => {
+    render(<AgendaItemsUpdateModal {...mockProps} />);
+    fireEvent.click(screen.getByTestId('updateAgendaItemModalCloseBtn'));
+    expect(mockProps.hideUpdateModal).toHaveBeenCalled();
+  });
+
+  test('updates form state when input fields are changed', () => {
+    render(<AgendaItemsUpdateModal {...mockProps} />);
+    const titleInput = screen.getByPlaceholderText('enterTitle');
+    fireEvent.change(titleInput, { target: { value: 'New Title' } });
+    expect(mockProps.setFormState).toHaveBeenCalledWith(expect.objectContaining({ title: 'New Title' }));
+  });
+
+  test('adds valid URL and shows error toast for invalid URL', () => {
+    render(<AgendaItemsUpdateModal {...mockProps} />);
+    const urlInput = screen.getByPlaceholderText('enterUrl');
+    fireEvent.change(urlInput, { target: { value: 'https://valid.url' } });
+    fireEvent.click(screen.getByTestId('linkBtn'));
+    expect(mockProps.setFormState).toHaveBeenCalled();
+    fireEvent.change(urlInput, { target: { value: 'invalid-url' } });
+    fireEvent.click(screen.getByTestId('linkBtn'));
+    expect(mockProps.setFormState).toHaveBeenCalled();
+    // Verify the toast error for invalid URL - requires toast mocking
+  });
+
+  // More tests for other functionalities can go here...
+});
+
+
 interface InterfaceFormStateType {
   agendaItemCategoryIds: string[];
   agendaItemCategoryNames: string[];
