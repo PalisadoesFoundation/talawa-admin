@@ -1,6 +1,6 @@
 import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import { ORGANIZATION_USER_TAGS_LIST } from 'GraphQl/Queries/OrganizationQueries';
-import { TAGS_QUERY_PAGE_SIZE } from 'utils/organizationTagsUtils';
+import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 
 export const MOCKS = [
   {
@@ -8,7 +8,7 @@ export const MOCKS = [
       query: ORGANIZATION_USER_TAGS_LIST,
       variables: {
         id: '123',
-        first: TAGS_QUERY_PAGE_SIZE,
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
       },
     },
     result: {
@@ -166,7 +166,7 @@ export const MOCKS = [
       query: ORGANIZATION_USER_TAGS_LIST,
       variables: {
         id: '123',
-        first: TAGS_QUERY_PAGE_SIZE,
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after: '10',
       },
     },
@@ -240,7 +240,7 @@ export const MOCKS_ERROR = [
       query: ORGANIZATION_USER_TAGS_LIST,
       variables: {
         id: '123',
-        first: TAGS_QUERY_PAGE_SIZE,
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
       },
     },
     error: new Error('Mock Graphql Error'),

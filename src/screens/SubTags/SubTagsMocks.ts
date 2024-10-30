@@ -3,7 +3,7 @@ import {
   USER_TAG_ANCESTORS,
   USER_TAG_SUB_TAGS,
 } from 'GraphQl/Queries/userTagQueries';
-import { TAGS_QUERY_PAGE_SIZE } from 'utils/organizationTagsUtils';
+import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 
 export const MOCKS = [
   {
@@ -11,7 +11,7 @@ export const MOCKS = [
       query: USER_TAG_SUB_TAGS,
       variables: {
         id: '1',
-        first: TAGS_QUERY_PAGE_SIZE,
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
       },
     },
     result: {
@@ -169,7 +169,7 @@ export const MOCKS = [
       variables: {
         id: '1',
         after: '10',
-        first: TAGS_QUERY_PAGE_SIZE,
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
       },
     },
     result: {
@@ -227,7 +227,7 @@ export const MOCKS = [
       query: USER_TAG_SUB_TAGS,
       variables: {
         id: 'subTag1',
-        first: TAGS_QUERY_PAGE_SIZE,
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
       },
     },
     result: {
@@ -309,7 +309,7 @@ export const MOCKS_ERROR_SUB_TAGS = [
       query: USER_TAG_SUB_TAGS,
       variables: {
         id: '1',
-        first: TAGS_QUERY_PAGE_SIZE,
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
       },
     },
     error: new Error('Mock Graphql Error'),
@@ -335,7 +335,7 @@ export const MOCKS_ERROR_TAG_ANCESTORS = [
       query: USER_TAG_SUB_TAGS,
       variables: {
         id: '1',
-        first: TAGS_QUERY_PAGE_SIZE,
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
       },
     },
     result: {

@@ -19,7 +19,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import type { InterfaceOrganizationTagsQuery } from 'utils/organizationTagsUtils';
 import {
   dataGridStyle,
-  TAGS_QUERY_PAGE_SIZE,
+  TAGS_QUERY_DATA_CHUNK_SIZE,
 } from 'utils/organizationTagsUtils';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
@@ -66,14 +66,14 @@ function OrganizationTags(): JSX.Element {
   }: InterfaceOrganizationTagsQuery = useQuery(ORGANIZATION_USER_TAGS_LIST, {
     variables: {
       id: orgId,
-      first: TAGS_QUERY_PAGE_SIZE,
+      first: TAGS_QUERY_DATA_CHUNK_SIZE,
     },
   });
 
   const loadMoreUserTags = (): void => {
     orgUserTagsFetchMore({
       variables: {
-        first: TAGS_QUERY_PAGE_SIZE,
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after: orgUserTagsData?.organizations[0].userTags.pageInfo.endCursor,
       },
       updateQuery: (

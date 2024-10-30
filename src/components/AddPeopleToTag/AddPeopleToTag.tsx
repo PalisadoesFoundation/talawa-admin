@@ -11,7 +11,7 @@ import type { InterfaceQueryUserTagsMembersToAssignTo } from 'utils/interfaces';
 import styles from './AddPeopleToTag.module.css';
 import type { InterfaceTagUsersToAssignToQuery } from 'utils/organizationTagsUtils';
 import {
-  TAGS_QUERY_PAGE_SIZE,
+  TAGS_QUERY_DATA_CHUNK_SIZE,
   dataGridStyle,
 } from 'utils/organizationTagsUtils';
 import { Stack } from '@mui/material';
@@ -64,7 +64,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
     {
       variables: {
         id: currentTagId,
-        first: TAGS_QUERY_PAGE_SIZE,
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
       },
       skip: !addPeopleToTagModalIsOpen,
       fetchPolicy: 'no-cache',
@@ -74,7 +74,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
   const loadMoreMembersToAssignTo = (): void => {
     fetchMoreMembersToAssignTo({
       variables: {
-        first: TAGS_QUERY_PAGE_SIZE,
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after:
           userTagsMembersToAssignToData?.getUsersToAssignTo.usersToAssignTo
             .pageInfo.endCursor, // Fetch after the last loaded cursor

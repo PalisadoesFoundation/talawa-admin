@@ -19,7 +19,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import type { InterfaceOrganizationSubTagsQuery } from 'utils/organizationTagsUtils';
 import {
   dataGridStyle,
-  TAGS_QUERY_PAGE_SIZE,
+  TAGS_QUERY_DATA_CHUNK_SIZE,
 } from 'utils/organizationTagsUtils';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
@@ -70,14 +70,14 @@ function SubTags(): JSX.Element {
   }: InterfaceOrganizationSubTagsQuery = useQuery(USER_TAG_SUB_TAGS, {
     variables: {
       id: parentTagId,
-      first: TAGS_QUERY_PAGE_SIZE,
+      first: TAGS_QUERY_DATA_CHUNK_SIZE,
     },
   });
 
   const loadMoreSubTags = (): void => {
     fetchMoreSubTags({
       variables: {
-        first: TAGS_QUERY_PAGE_SIZE,
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after: subTagsData?.getChildTags.childTags.pageInfo.endCursor,
       },
       updateQuery: (

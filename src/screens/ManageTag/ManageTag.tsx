@@ -20,7 +20,7 @@ import type {
   TagActionType,
 } from 'utils/organizationTagsUtils';
 import {
-  TAGS_QUERY_PAGE_SIZE,
+  TAGS_QUERY_DATA_CHUNK_SIZE,
   dataGridStyle,
 } from 'utils/organizationTagsUtils';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
@@ -106,14 +106,14 @@ function ManageTag(): JSX.Element {
   }: InterfaceTagAssignedMembersQuery = useQuery(USER_TAGS_ASSIGNED_MEMBERS, {
     variables: {
       id: currentTagId,
-      first: TAGS_QUERY_PAGE_SIZE,
+      first: TAGS_QUERY_DATA_CHUNK_SIZE,
     },
   });
 
   const loadMoreAssignedMembers = (): void => {
     fetchMoreAssignedMembers({
       variables: {
-        first: TAGS_QUERY_PAGE_SIZE,
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after:
           userTagAssignedMembersData?.getAssignedUsers.usersAssignedTo.pageInfo
             .endCursor,

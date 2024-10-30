@@ -20,7 +20,7 @@ import type {
   InterfaceOrganizationTagsQuery,
   TagActionType,
 } from 'utils/organizationTagsUtils';
-import { TAGS_QUERY_PAGE_SIZE } from 'utils/organizationTagsUtils';
+import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { WarningAmberRounded } from '@mui/icons-material';
 import TagNode from './TagNode';
@@ -59,7 +59,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   }: InterfaceOrganizationTagsQuery = useQuery(ORGANIZATION_USER_TAGS_LIST, {
     variables: {
       id: orgId,
-      first: TAGS_QUERY_PAGE_SIZE,
+      first: TAGS_QUERY_DATA_CHUNK_SIZE,
     },
     skip: !tagActionsModalIsOpen,
   });
@@ -67,7 +67,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   const loadMoreUserTags = (): void => {
     orgUserTagsFetchMore({
       variables: {
-        first: TAGS_QUERY_PAGE_SIZE,
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after: orgUserTagsData?.organizations[0].userTags.pageInfo.endCursor,
       },
       updateQuery: (

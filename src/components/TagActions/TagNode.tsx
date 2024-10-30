@@ -6,7 +6,7 @@ import type {
   InterfaceTagData,
 } from 'utils/interfaces';
 import type { InterfaceOrganizationSubTagsQuery } from 'utils/organizationTagsUtils';
-import { TAGS_QUERY_PAGE_SIZE } from 'utils/organizationTagsUtils';
+import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import styles from './TagActions.module.css';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
@@ -41,7 +41,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
   }: InterfaceOrganizationSubTagsQuery = useQuery(USER_TAG_SUB_TAGS, {
     variables: {
       id: tag._id,
-      first: TAGS_QUERY_PAGE_SIZE,
+      first: TAGS_QUERY_DATA_CHUNK_SIZE,
     },
     skip: !expanded,
   });
@@ -49,7 +49,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
   const loadMoreSubTags = (): void => {
     fetchMoreSubTags({
       variables: {
-        first: TAGS_QUERY_PAGE_SIZE,
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after: subTagsData?.getChildTags.childTags.pageInfo.endCursor,
       },
       updateQuery: (

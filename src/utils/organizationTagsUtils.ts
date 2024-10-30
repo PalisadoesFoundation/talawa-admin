@@ -30,8 +30,8 @@ export const dataGridStyle = {
   },
 };
 
-// the page limit for tag related queries
-export const TAGS_QUERY_PAGE_SIZE = 10;
+// the data chunk size for tag related queries
+export const TAGS_QUERY_DATA_CHUNK_SIZE = 10;
 
 // the tag action type
 export type TagActionType = 'assignToTags' | 'removeFromTags';
