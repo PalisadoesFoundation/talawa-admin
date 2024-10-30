@@ -22,7 +22,25 @@
     "numeric_value_check": "Au moins une valeur numérique",
     "special_char_check": "Au moins un caractère spécial",
     "selectOrg": "Sélectionnez une organisation",
-    "afterRegister": "Enregistré avec succès. "
+    "afterRegister": "Enregistré avec succès. ",
+    "talawa_portal": "Portail Talawa",
+    "login": "Connexion",
+    "register": "S'inscrire",
+    "firstName": "Prénom",
+    "lastName": "Nom de famille",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "forgotPassword": "Mot de passe oublié",
+    "enterEmail": "Entrer l'e-mail",
+    "enterPassword": "Entrer le mot de passe",
+    "talawaApiUnavailable": "API Talawa indisponible",
+    "notAuthorised": "Non autorisé",
+    "notFound": "Non trouvé",
+    "OR": "OU",
+    "admin": "Administrateur",
+    "user": "Utilisateur",
+    "loading": "Chargement"
   },
   "userLoginPage": {
     "title": "Administrateur Talawa",
@@ -38,7 +56,23 @@
     "successfullyRegistered": "Enregistré avec succès. ",
     "userLogin": "Utilisateur en ligne",
     "afterRegister": "Enregistré avec succès. ",
-    "selectOrg": "Sélectionnez une organisation"
+    "selectOrg": "Sélectionnez une organisation",
+    "talawa_portal": "Portail Talawa",
+    "login": "Connexion",
+    "register": "S'inscrire",
+    "firstName": "Prénom",
+    "lastName": "Nom de famille",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "forgotPassword": "Mot de passe oublié",
+    "enterEmail": "Entrer l'e-mail",
+    "enterPassword": "Entrer le mot de passe",
+    "talawaApiUnavailable": "API Talawa indisponible",
+    "notAuthorised": "Non autorisé",
+    "notFound": "Non trouvé",
+    "OR": "OU",
+    "loading": "Chargement"
   },
   "latestEvents": {
     "eventCardTitle": "évènements à venir",
@@ -51,12 +85,19 @@
     "noPostsCreated": "Aucun message créé"
   },
   "listNavbar": {
-    "roles": "Les rôles"
+    "roles": "Les rôles",
+    "talawa_portal": "Portail Talawa",
+    "requests": "Demandes",
+    "logout": "Déconnexion"
   },
   "leftDrawer": {
     "my organizations": "Mes organisations",
     "requests": "Demandes d'adhésion",
-    "communityProfile": "Profil de la communauté"
+    "communityProfile": "Profil de la communauté",
+    "talawaAdminPortal": "Portail Administrateur Talawa",
+    "menu": "Menu",
+    "users": "Utilisateurs",
+    "logout": "Déconnexion"
   },
   "leftDrawerOrg": {
     "Dashboard": "Tableau de bord",
@@ -75,7 +116,13 @@
     "notifications": "Notifications",
     "spamsThe": "spamme le",
     "group": "groupe",
-    "noNotifications": "Aucune notification"
+    "noNotifications": "Aucune notification",
+    "talawaAdminPortal": "Portail Administrateur Talawa",
+    "menu": "Menu",
+    "talawa_portal": "Portail Talawa",
+    "settings": "Paramètres",
+    "logout": "Déconnexion",
+    "close": "Fermer"
   },
   "orgList": {
     "title": "Organisations Talawa",
@@ -105,11 +152,25 @@
     "manageFeaturesInfo": "Création réussie ! ",
     "goToStore": "Accédez à la boutique de plugins",
     "enableEverything": "Activer tout",
-    "sampleOrgSuccess": "Exemple d'organisation créée avec succès"
+    "sampleOrgSuccess": "Exemple d'organisation créée avec succès",
+    "name": "Nom",
+    "email": "E-mail",
+    "searchByName": "Rechercher par nom",
+    "description": "Description",
+    "location": "Emplacement",
+    "address": "Adresse",
+    "displayImage": "Image d'affichage",
+    "filter": "Filtrer",
+    "cancel": "Annuler",
+    "endOfResults": "Fin des résultats",
+    "noResultsFoundFor": "Aucun résultat trouvé pour",
+    "OR": "OU"
   },
   "orgListCard": {
     "manage": "Gérer",
-    "sampleOrganization": "Exemple d'organisation"
+    "sampleOrganization": "Exemple d'organisation",
+    "admins": "Administrateurs",
+    "members": "Membres"
   },
   "paginationList": {
     "rowsPerPage": "lignes par page",
@@ -126,7 +187,11 @@
     "acceptedSuccessfully": "Demande acceptée avec succès",
     "rejectedSuccessfully": "Demande rejetée avec succès",
     "noOrgErrorTitle": "Organisations introuvables",
-    "noOrgErrorDescription": "Veuillez créer une organisation via le tableau de bord"
+    "noOrgErrorDescription": "Veuillez créer une organisation via le tableau de bord",
+    "name": "Nom",
+    "email": "E-mail",
+    "endOfResults": "Fin des résultats",
+    "noResultsFoundFor": "Aucun résultat trouvé pour"
   },
   "users": {
     "title": "Rôles Talawa",
@@ -150,7 +215,25 @@
     "visit": "Visite",
     "withdraw": "Largeur de tirage",
     "removeUserFrom": "Supprimer l'Utilisateur de {{org}}",
-    "removeConfirmation": "Êtes-vous sûr de vouloir supprimer '{{name}}' de l'organisation '{{org}}' ?"
+    "removeConfirmation": "Êtes-vous sûr de vouloir supprimer '{{name}}' de l'organisation '{{org}}' ?",
+    "searchByName": "Rechercher par nom",
+    "users": "Utilisateurs",
+    "name": "Nom",
+    "email": "E-mail",
+    "endOfResults": "Fin des résultats",
+    "admin": "Administrateur",
+    "superAdmin": "Super Administrateur",
+    "user": "Utilisateur",
+    "filter": "Filtrer",
+    "noResultsFoundFor": "Aucun résultat trouvé pour",
+    "talawaApiUnavailable": "API Talawa indisponible",
+    "cancel": "Annuler",
+    "admins": "Administrateurs",
+    "members": "Membres",
+    "orgJoined": "Organisation Rejointe",
+    "MembershipRequestSent": "Demande d'adhésion envoyée",
+    "AlreadyJoined": "Déjà rejoint",
+    "errorOccured": "Une erreur s'est produite"
   },
   "communityProfile": {
     "title": "Profil de la communauté",
@@ -178,7 +261,12 @@
     "latestPosts": "Derniers messages",
     "noPostsPresent": "Aucun message présent",
     "membershipRequests": "Demandes d'adhésion",
-    "noMembershipRequests": "Aucune demande d'adhésion présente"
+    "noMembershipRequests": "Aucune demande d'adhésion présente",
+    "location": "Emplacement",
+    "members": "Membres",
+    "admins": "Administrateurs",
+    "requests": "Demandes",
+    "talawaApiUnavailable": "API Talawa indisponible"
   },
   "organizationPeople": {
     "title": "Membres Talawa",
@@ -198,23 +286,106 @@
     "enterLastName": "Entrez votre nom de famille",
     "enterConfirmPassword": "Entrez votre mot de passe pour confirmer",
     "organization": "Organisation",
-    "invalidDetailsMessage": "Veuillez saisir des informations valides."
+    "user": "Utilisateur",
+    "profile": "Profil",
+    "invalidDetailsMessage": "Veuillez saisir des informations valides.",
+    "members": "Membres",
+    "admins": "Administrateurs",
+    "users": "Utilisateurs",
+    "searchFirstName": "Rechercher par prénom",
+    "searchLastName": "Rechercher par nom de famille",
+    "firstName": "Prénom",
+    "lastName": "Nom de famille",
+    "emailAddress": "Adresse e-mail",
+    "enterEmail": "Entrer l'e-mail",
+    "password": "Mot de passe",
+    "enterPassword": "Entrer le mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "create": "Créer",
+    "cancel": "Annuler"
+  },
+  "organizationTags": {
+    "title": "Étiquettes d'Organisation",
+    "createTag": "Créer une nouvelle étiquette",
+    "manageTag": "Gérer",
+    "editTag": "Modifier",
+    "removeTag": "Supprimer",
+    "tagDetails": "Détails de l'Étiquette",
+    "tagName": "Nom",
+    "tagType": "Type",
+    "tagNamePlaceholder": "Écrire le nom de l'étiquette",
+    "tagCreationSuccess": "Nouvelle étiquette créée avec succès",
+    "tagUpdationSuccess": "Étiquette mise à jour avec succès",
+    "tagRemovalSuccess": "Étiquette supprimée avec succès",
+    "noTagsFound": "Aucune étiquette trouvée",
+    "removeUserTag": "Supprimer l'Étiquette",
+    "removeUserTagMessage": "Voulez-vous supprimer cette étiquette ?",
+    "addChildTag": "Ajouter une Sous-Étiquette"
+  },
+  "manageTag": {
+    "title": "Détails de l'étiquette",
+    "addPeopleToTag": "Ajouter des personnes à l'étiquette",
+    "viewProfile": "Voir",
+    "noAssignedMembersFound": "Aucun membre assigné",
+    "unassignUserTag": "Désassigner l'étiquette",
+    "unassignUserTagMessage": "Voulez-vous retirer l'étiquette de cet utilisateur?",
+    "successfullyUnassigned": "Étiquette retirée de l'utilisateur",
+    "addPeople": "Ajouter des personnes",
+    "add": "Ajouter",
+    "subTags": "Sous-étiquettes",
+    "assignedToAll": "Étiquette attribuée à tous",
+    "successfullyAssignedToPeople": "Étiquette attribuée avec succès",
+    "errorOccurredWhileLoadingMembers": "Erreur survenue lors du chargement des membres",
+    "userName": "Nom d'utilisateur",
+    "actions": "Actions",
+    "noOneSelected": "Personne sélectionnée",
+    "assignToTags": "Attribuer aux étiquettes",
+    "removeFromTags": "Retirer des étiquettes",
+    "assign": "Attribuer",
+    "remove": "Retirer",
+    "successfullyAssignedToTags": "Attribué aux étiquettes avec succès",
+    "successfullyRemovedFromTags": "Retiré des étiquettes avec succès",
+    "errorOccurredWhileLoadingOrganizationUserTags": "Erreur lors du chargement des étiquettes de l'organisation",
+    "errorOccurredWhileLoadingSubTags": "Une erreur s'est produite lors du chargement des sous-étiquettes",
+    "removeUserTag": "Supprimer l'étiquette",
+    "removeUserTagMessage": "Voulez-vous supprimer cette étiquette ? Cela supprimera toutes les sous-étiquettes et toutes les associations.",
+    "tagDetails": "Détails de l'étiquette",
+    "tagName": "Nom de l'étiquette",
+    "tagUpdationSuccess": "Étiquette mise à jour avec succès",
+    "tagRemovalSuccess": "Étiquette supprimée avec succès",
+    "noTagSelected": "Aucune étiquette sélectionnée",
+    "changeNameToEdit": "Modifiez le nom pour faire une mise à jour",
+    "selectTag": "Sélectionner l'étiquette",
+    "collapse": "Réduire",
+    "expand": "Développer",
+    "tagNamePlaceholder": "Écrire le nom de l'étiquette",
+    "allTags": "Toutes les étiquettes"
   },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",
-    "addedAsAdmin": "L'utilisateur est ajouté en tant qu'administrateur."
+    "addedAsAdmin": "L'utilisateur est ajouté en tant qu'administrateur.",
+    "joined": "Rejoint",
+    "talawaApiUnavailable": "API Talawa indisponible"
   },
   "orgAdminListCard": {
     "remove": "Retirer",
     "removeAdmin": "Supprimer l'administrateur",
     "removeAdminMsg": "Voulez-vous supprimer cet administrateur ?",
-    "adminRemoved": "L'administrateur est supprimé."
+    "adminRemoved": "L'administrateur est supprimé.",
+    "joined": "Rejoint",
+    "no": "Non",
+    "yes": "Oui",
+    "talawaApiUnavailable": "API Talawa indisponible"
   },
   "orgPeopleListCard": {
     "remove": "Retirer",
     "removeMember": "Supprimer un membre",
     "removeMemberMsg": "Voulez-vous supprimer ce membre ?",
-    "memberRemoved": "Le membre est supprimé"
+    "memberRemoved": "Le membre est supprimé",
+    "joined": "Rejoint",
+    "no": "Non",
+    "yes": "Oui",
+    "talawaApiUnavailable": "API Talawa indisponible"
   },
   "organizationEvents": {
     "title": "Événements",
@@ -245,7 +416,14 @@
     "never": "Jamais",
     "on": "Sur",
     "after": "Après",
-    "occurences": "événements"
+    "occurences": "événements",
+    "events": "Événements",
+    "description": "Description",
+    "location": "Emplacement",
+    "startDate": "Date de début",
+    "endDate": "Date de fin",
+    "talawaApiUnavailable": "API Talawa indisponible",
+    "done": "Fait"
   },
   "organizationActionItems": {
     "actionItemCategory": "Catégorie d'élément d'action",
@@ -256,7 +434,6 @@
     "assignmentDate": "Date d'affectation",
     "active": "Actif",
     "clearFilters": "Effacer les filtres",
-    "completed": "Complété",
     "completionDate": "Date d'achèvement",
     "createActionItem": "Créer un élément d'action",
     "deleteActionItem": "Supprimer l'élément d'action",
@@ -267,6 +444,7 @@
     "editActionItem": "Modifier l'élément d'action",
     "isCompleted": "Complété",
     "latest": "Dernier",
+    "makeActive": "Actif",
     "noActionItems": "Aucune action",
     "options": "Possibilités",
     "preCompletionNotes": "Notes préalables à l'achèvement",
@@ -280,7 +458,18 @@
     "successfulCreation": "Élément d'action créé avec succès",
     "successfulUpdation": "Élément d'action mis à jour avec succès",
     "successfulDeletion": "Élément d'action supprimé avec succès",
-    "title": "Éléments d'action"
+    "title": "Éléments d'action",
+    "category": "Catégorie",
+    "allotedHours": "Heures allouées",
+    "latestDueDate": "Date d'échéance la plus récente",
+    "earliestDueDate": "Date d'échéance la plus ancienne",
+    "updateActionItem": "Mettre à jour l'élément d'action",
+    "noneUpdated": "Aucun des champs n'a été mis à jour",
+    "updateStatusMsg": "Êtes-vous sûr de vouloir marquer cet élément d'action comme en attente?",
+    "close": "Fermer",
+    "eventActionItems": "Éléments d'action d'événement",
+    "no": "Non",
+    "yes": "Oui"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "Détails de la catégorie d'ordre du jour",
@@ -298,6 +487,40 @@
     "agendaCategoryDeleted": "Catégorie d'ordre du jour supprimée avec succès",
     "deleteAgendaCategory": "Supprimer la catégorie d'ordre du jour",
     "deleteAgendaCategoryMsg": "Souhaitez-vous supprimer cette catégorie d'ordre du jour ?"
+  },
+  "agendaItems": {
+    "agendaItemDetails": "Détails du point de l'ordre du jour",
+    "updateAgendaItem": "Mettre à jour le point de l'ordre du jour",
+    "title": "Titre",
+    "enterTitle": "Entrer le titre",
+    "sequence": "Ordre",
+    "description": "Description",
+    "enterDescription": "Entrer la description",
+    "category": "Catégorie de l'ordre du jour",
+    "attachments": "Pièces jointes",
+    "attachmentLimit": "Ajouter un fichier image ou vidéo jusqu'à 10 Mo",
+    "fileSizeExceedsLimit": "La taille du fichier dépasse la limite de 10 Mo",
+    "urls": "URL",
+    "url": "Ajouter un lien vers l'URL",
+    "enterUrl": "https://example.com",
+    "invalidUrl": "Veuillez saisir une URL valide",
+    "link": "Lien",
+    "createdBy": "Créé par",
+    "regular": "Régulier",
+    "note": "Note",
+    "duration": "Durée",
+    "enterDuration": "mm:ss",
+    "options": "Options",
+    "createAgendaItem": "Créer un point à l'ordre du jour",
+    "noAgendaItems": "Aucun point à l'ordre du jour",
+    "selectAgendaItemCategory": "Sélectionner une catégorie de point de l'ordre du jour",
+    "update": "Mettre à jour",
+    "delete": "Supprimer",
+    "agendaItemCreated": "Point de l'ordre du jour créé avec succès",
+    "agendaItemUpdated": "Point de l'ordre du jour mis à jour avec succès",
+    "agendaItemDeleted": "Point de l'ordre du jour supprimé avec succès",
+    "deleteAgendaItem": "Supprimer le point de l'ordre du jour",
+    "deleteAgendaItemMsg": "Voulez-vous supprimer ce point de l'ordre du jour ?"
   },
   "eventListCard": {
     "deleteEvent": "Supprimer l'événement",
@@ -325,62 +548,68 @@
     "never": "Jamais",
     "on": "Sur",
     "after": "Après",
-    "occurences": "événements"
+    "occurences": "événements",
+    "location": "Lieu",
+    "no": "Non",
+    "yes": "Oui",
+    "description": "Description",
+    "startDate": "Date de début",
+    "endDate": "Date de fin",
+    "registerEvent": "Inscrire à l'événement",
+    "close": "Fermer",
+    "talawaApiUnavailable": "API Talawa non disponible",
+    "done": "Terminé"
   },
   "funds": {
     "title": "Fonds",
     "createFund": "Créer un fonds",
     "fundName": "Nom du fonds",
-    "fundId": "ID du fonds",
-    "fundOptions": "Options",
-    "noFunds": "Aucun fonds trouvé",
-    "fundDetails": "Détails du fonds",
-    "taxDeductible": "Déductible d'impôts",
-    "enterfundName": "Entrez le nom du fonds",
-    "enterfundId": "Entrez l'ID du fonds",
-    "default": "Fonds de défaut",
+    "fundId": "ID de référence du fonds",
+    "taxDeductible": "Déductible d'impôt",
+    "default": "Par défaut",
     "archived": "Archivé",
-    "nonArchive": "Non archivé",
     "fundCreate": "Créer un fonds",
     "fundUpdate": "Mettre à jour le fonds",
     "fundDelete": "Supprimer le fonds",
-    "manageFund": "Gérer le fonds",
-    "searchFullName": "Rechercher par nom",
+    "searchByName": "Rechercher par nom",
     "noFundsFound": "Aucun fonds trouvé",
     "createdBy": "Créé par",
-    "createdOn": "Créé sur",
+    "createdOn": "Créé le",
     "status": "Statut",
-    "archiveFund": "Fonds d'archives",
-    "archiveFundMsg": "Lors de l'archivage, ce fonds le supprimera de la liste des fonds. Cette action peut être annulée.",
     "fundCreated": "Fonds créé avec succès",
     "fundUpdated": "Fonds mis à jour avec succès",
     "fundDeleted": "Fonds supprimé avec succès",
-    "fundArchived": "Fonds archivé avec succès",
-    "fundUnarchived": "Fonds désarchivé avec succès",
-    "deleteFundMsg": "Voulez-vous supprimer ce fonds ?"
+    "deleteFundMsg": "Êtes-vous sûr de vouloir supprimer ce fonds ?",
+    "createdLatest": "Créé le plus récemment",
+    "createdEarliest": "Créé le plus tôt",
+    "viewCampaigns": "Voir les campagnes"
   },
   "fundCampaign": {
     "title": "Campagnes de collecte de fonds",
     "campaignName": "Nom de la campagne",
-    "campaignOptions": "Possibilités",
+    "campaignOptions": "Options",
     "fundingGoal": "Objectif de financement",
     "addCampaign": "Ajouter une campagne",
     "createdCampaign": "Campagne créée avec succès",
     "updatedCampaign": "Campagne mise à jour avec succès",
     "deletedCampaign": "Campagne supprimée avec succès",
-    "deleteCampaignMsg": "Êtes-vous sûr de vouloir supprimer cette campagne ?",
+    "deleteCampaignMsg": "Êtes-vous sûr de vouloir supprimer cette campagne ?",
     "noCampaigns": "Aucune campagne trouvée",
-    "createCampaign": "Créer une campagne de financement",
-    "updateCampaign": "Mettre à jour la campagne de financement",
-    "manageCampaign": "Gérer la campagne de financement",
-    "deleteCampaign": "Supprimer la campagne de financement",
+    "createCampaign": "Créer une campagne",
+    "updateCampaign": "Mettre à jour la campagne",
+    "deleteCampaign": "Supprimer la campagne",
     "currency": "Devise",
-    "selectCurrency": "Sélectionnez la devise",
-    "searchFullName": "Rechercher par nom"
+    "selectCurrency": "Sélectionner la devise",
+    "searchFullName": "Rechercher par nom",
+    "viewPledges": "Voir les promesses de dons",
+    "noCampaignsFound": "Aucune campagne trouvée",
+    "latestEndDate": "Dernière date de fin",
+    "earliestEndDate": "Date de fin la plus ancienne",
+    "lowestGoal": "Objectif le plus bas",
+    "highestGoal": "Objectif le plus élevé"
   },
   "pledges": {
     "title": "Engagements de campagne de financement",
-    "volunteers": "Bénévoles",
     "pledgeAmount": "Montant de la promesse de don",
     "pledgeOptions": "Possibilités",
     "pledgeCreated": "Engagement créé avec succès",
@@ -396,12 +625,18 @@
     "editPledge": "Modifier l'engagement",
     "deletePledgeMsg": "Etes-vous sûr de vouloir supprimer cet engagement ?",
     "noPledges": "Aucun engagement trouvé",
-    "sort": "Trier",
-    "searchVolunteer": "Rechercher par bénévole",
+    "searchPledger": "Rechercher par les bailleurs de fonds",
     "highestAmount": "Montant le plus élevé",
     "lowestAmount": "Montant le plus bas",
     "latestEndDate": "Date de fin la plus récente",
-    "earliestEndDate": "Date de fin la plus proche"
+    "earliestEndDate": "Date de fin la plus proche",
+    "campaigns": "Campagnes",
+    "pledges": "Promesses de dons",
+    "endsOn": "Se termine le",
+    "raisedAmount": "Montant collecté",
+    "pledgedAmount": "Montant promis",
+    "startDate": "Date de début",
+    "endDate": "Date de fin"
   },
   "orgPost": {
     "title": "Des postes",
@@ -429,7 +664,8 @@
     "postCreatedSuccess": "Toutes nos félicitations! ",
     "pinPost": "Épingler le message",
     "Next": "Page suivante",
-    "Previous": "Page précédente"
+    "Previous": "Page précédente",
+    "cancel": "Annuler"
   },
   "postNotFound": {
     "post": "Poste",
@@ -444,7 +680,8 @@
     "user not found!": "Utilisateur non trouvé!",
     "member not found!": "Membre introuvable!",
     "admin not found!": "Administrateur introuvable !",
-    "roles not found!": "Rôles introuvables !"
+    "roles not found!": "Rôles introuvables !",
+    "user": "Utilisateur"
   },
   "orgPostCard": {
     "author": "Auteur",
@@ -463,7 +700,12 @@
     "postDeleted": "Message supprimé avec succès.",
     "postUpdated": "Post mis à jour avec succès.",
     "tag": " Votre navigateur ne prend pas en charge la balise vidéo",
-    "pin": "Épingler le message"
+    "pin": "Épingler le message",
+    "edit": "Modifier",
+    "no": "Non",
+    "yes": "Oui",
+    "close": "Fermer",
+    "talawaApiUnavailable": "API Talawa non disponible"
   },
   "blockUnblockUser": {
     "title": "Bloquer/débloquer un utilisateur",
@@ -479,13 +721,19 @@
     "blockedUsers": "Utilisateurs bloqués",
     "searchByFirstName": "Recherche par prénom",
     "searchByLastName": "Rechercher par nom de famille",
-    "noSpammerFound": "Aucun spammeur trouvé"
+    "noSpammerFound": "Aucun spammeur trouvé",
+    "searchByName": "Rechercher par nom",
+    "name": "Nom",
+    "email": "Email",
+    "talawaApiUnavailable": "API Talawa non disponible",
+    "noResultsFoundFor": "Aucun résultat trouvé pour"
   },
   "eventManagement": {
     "title": "Gestion d'événements",
     "dashboard": "Tableau de bord",
     "registrants": "Inscrits",
     "eventActions": "Actions d'événement",
+    "eventAgendas": "Ordres du jour des événements",
     "eventStats": "Statistiques des événements",
     "to": "À"
   },
@@ -503,7 +751,10 @@
     "errorSendingMail": "Erreur lors de l'envoi du courrier.",
     "passwordMismatches": "Mot de passe et Confirmer les incompatibilités de mot de passe.",
     "passwordChanges": "Le mot de passe a été modifié avec succès.",
-    "OTPsent": "OTP est envoyé à votre adresse e-mail enregistrée."
+    "OTPsent": "OTP est envoyé à votre adresse e-mail enregistrée.",
+    "forgotPassword": "Mot de passe oublié",
+    "password": "Mot de passe",
+    "talawaApiUnavailable": "API Talawa non disponible"
   },
   "pageNotFound": {
     "404": "404",
@@ -538,10 +789,11 @@
     "actionItemCategories": "Catégories d'éléments d'action",
     "updateOrganization": "Mettre à jour l'organisation",
     "seeRequest": "Voir la demande",
-    "noData": "Pas de données",
-    "otherSettings": "Autres réglages",
+    "noData": "Aucune donnée",
+    "otherSettings": "Autres paramètres",
     "changeLanguage": "Changer de langue",
-    "manageCustomFields": "Gérer les champs personnalisés"
+    "manageCustomFields": "Gérer les champs personnalisés",
+    "agendaItemCategories": "Catégories d'éléments d'agenda"
   },
   "deleteOrg": {
     "deleteOrganization": "Supprimer l'organisation",
@@ -549,16 +801,30 @@
     "deleteMsg": "Voulez-vous supprimer cette organisation ?",
     "confirmDelete": "Confirmation de la suppression",
     "longDelOrgMsg": "En cliquant sur le bouton Supprimer l'organisation, l'organisation sera définitivement supprimée ainsi que ses événements, balises et toutes les données associées.",
-    "successfullyDeletedSampleOrganization": "Exemple d'organisation supprimé avec succès"
+    "successfullyDeletedSampleOrganization": "Exemple d'organisation supprimé avec succès",
+    "cancel": "Annuler"
   },
   "userUpdate": {
     "appLanguageCode": "Langage par défaut",
-    "userType": "Type d'utilisateur"
+    "userType": "Type d'utilisateur",
+    "firstName": "Prénom",
+    "lastName": "Nom de famille",
+    "email": "Email",
+    "password": "Mot de passe",
+    "admin": "Admin",
+    "superAdmin": "Super Admin",
+    "displayImage": "Image d'affichage",
+    "saveChanges": "Enregistrer les modifications",
+    "cancel": "Annuler"
   },
   "userPasswordUpdate": {
     "previousPassword": "Mot de passe précédent",
     "newPassword": "nouveau mot de passe",
-    "confirmNewPassword": "Confirmer le nouveau mot de passe"
+    "confirmNewPassword": "Confirmer le nouveau mot de passe",
+    "passCantBeEmpty": "Le mot de passe ne peut pas être vide",
+    "passNoMatch": "Le nouveau mot de passe et la confirmation du mot de passe ne correspondent pas.",
+    "saveChanges": "Enregistrer les modifications",
+    "cancel": "Annuler"
   },
   "orgDelete": {
     "deleteOrg": "Supprimer l'organisation"
@@ -566,7 +832,9 @@
   "membershipRequest": {
     "accept": "Accepter",
     "reject": "Rejeter",
-    "memberAdded": "c'est accepté"
+    "memberAdded": "c'est accepté",
+    "joined": "Rejoint",
+    "talawaApiUnavailable": "API Talawa non disponible"
   },
   "orgUpdate": {
     "city": "Ville",
@@ -580,7 +848,15 @@
     "userRegistrationRequired": "Inscription de l'utilisateur requise",
     "isVisibleInSearch": "Visible dans la recherche",
     "enterNameOrganization": "Entrez le nom de l'organisation",
-    "successfulUpdated": "Organisation mise à jour avec succès"
+    "successfulUpdated": "Organisation mise à jour avec succès",
+    "name": "Nom",
+    "description": "Description",
+    "location": "Lieu",
+    "address": "Adresse",
+    "displayImage": "Image d'affichage",
+    "saveChanges": "Enregistrer les modifications",
+    "cancel": "Annuler",
+    "talawaApiUnavailable": "API Talawa non disponible"
   },
   "addOnRegister": {
     "addNew": "Ajouter un nouveau",
@@ -590,7 +866,9 @@
     "pluginDesc": "Description du plugin",
     "pName": "Ex : Dons",
     "cName": "Ex : John Doe",
-    "pDesc": "Ce plugin active l'interface utilisateur pour"
+    "pDesc": "Ce plugin active l'interface utilisateur pour",
+    "close": "Fermer",
+    "register": "Inscription"
   },
   "addOnStore": {
     "title": "Ajouter sur la boutique",
@@ -601,7 +879,8 @@
     "pHeading": "Plugins",
     "install": "installée",
     "available": "Disponible",
-    "pMessage": "Le plugin n'existe pas"
+    "pMessage": "Le plugin n'existe pas",
+    "filter": "filtrer"
   },
   "addOnEntry": {
     "enable": "Activé",
@@ -646,14 +925,32 @@
     "membershipRequests": "Demandes d'adhésion",
     "adminForEvents": "Administrateur pour les événements",
     "addedAsAdmin": "L'utilisateur est ajouté en tant qu'administrateur.",
-    "userType": "Type d'utilisateur"
+    "userType": "Type d'utilisateur",
+    "email": "Email",
+    "displayImage": "Image d'affichage",
+    "address": "Adresse",
+    "delete": "Supprimer",
+    "saveChanges": "Enregistrer les modifications",
+    "joined": "Rejoint",
+    "talawaApiUnavailable": "API Talawa non disponible"
+  },
+  "people": {
+    "title": "Personnes",
+    "searchUsers": "Rechercher des utilisateurs"
   },
   "userLogin": {
     "login": "Se connecter",
     "loginIntoYourAccount": "Connectez-vous à votre compte",
     "invalidDetailsMessage": "Veuillez entrer un email et un mot de passe valides.",
     "notAuthorised": "Désolé! ",
-    "invalidCredentials": "Les informations d'identification saisies sont incorrectes. "
+    "invalidCredentials": "Les informations d'identification saisies sont incorrectes. ",
+    "forgotPassword": "Mot de passe oublié",
+    "emailAddress": "Adresse email",
+    "enterEmail": "Entrer l'email",
+    "password": "Mot de passe",
+    "enterPassword": "Entrer le mot de passe",
+    "register": "Inscription",
+    "talawaApiUnavailable": "API Talawa non disponible"
   },
   "userRegister": {
     "enterFirstName": "Entrez votre prénom",
@@ -663,7 +960,16 @@
     "login": "Se connecter",
     "afterRegister": "Enregistré avec succès. ",
     "passwordNotMatch": "Le mot de passe ne correspond pas. ",
-    "invalidDetailsMessage": "Veuillez saisir des informations valides."
+    "invalidDetailsMessage": "Veuillez saisir des informations valides.",
+    "register": "Inscription",
+    "firstName": "Prénom",
+    "lastName": "Nom de famille",
+    "emailAddress": "Adresse email",
+    "enterEmail": "Entrer l'email",
+    "password": "Mot de passe",
+    "enterPassword": "Entrer le mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "talawaApiUnavailable": "API Talawa non disponible"
   },
   "userNavbar": {
     "talawa": "Talawa",
@@ -672,7 +978,10 @@
     "events": "Événements",
     "chat": "Chat",
     "donate": "Faire un don",
-    "language": "Langue"
+    "language": "Langue",
+    "settings": "Paramètres",
+    "logout": "Déconnexion",
+    "close": "Fermer"
   },
   "userOrganizations": {
     "allOrganizations": "Toutes les organisations",
@@ -681,7 +990,11 @@
     "selectOrganization": "Sélectionnez une organisation",
     "searchUsers": "Rechercher des utilisateurs",
     "nothingToShow": "Rien à montrer ici.",
-    "organizations": "Organisations"
+    "organizations": "Organisations",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "searchByName": "Rechercher par nom",
+    "searchOrganizations": "Rechercher Organisations"
   },
   "userSidebarOrg": {
     "yourOrganizations": "Vos organisations",
@@ -689,17 +1002,27 @@
     "viewAll": "Voir tout",
     "talawaUserPortal": "Portail utilisateur Talawa",
     "my organizations": "Mes organisations",
-    "communityProfile": "Profil de la communauté"
+    "communityProfile": "Profil de la communauté",
+    "users": "utilisateurs",
+    "requests": "demandes",
+    "logout": "se déconnecter",
+    "settings": "paramètres",
+    "chat": "discussion",
+    "menu": "Menu"
   },
   "organizationSidebar": {
     "viewAll": "Voir tout",
     "events": "Événements",
     "noEvents": "Aucun événement à afficher",
-    "noMembers": "Aucun membre à afficher"
+    "noMembers": "Aucun membre à afficher",
+    "members": "Membres"
   },
   "postCard": {
     "likes": "Aime",
-    "comments": "commentaires"
+    "comments": "commentaires",
+    "viewPost": "Voir le message",
+    "editPost": "Modifier le message",
+    "postedOn": "Publié le {{date}}"
   },
   "home": {
     "posts": "Des postes",
@@ -716,7 +1039,8 @@
     "startPost": "Démarrer un message",
     "media": "Médias",
     "event": "Événement",
-    "article": "Article"
+    "article": "Article",
+    "postNowVisibleInFeed": "Le post est maintenant visible dans le fil d'actualité"
   },
   "settings": {
     "eventAttended": "Événements Assistés",
@@ -752,7 +1076,7 @@
     "widowed": "Veuf",
     "divorced": "Divorcé",
     "engaged": "Engagé",
-    "seperated": "Séparé",
+    "separated": "Séparé",
     "grade1": "1re année",
     "grade2": "2e année",
     "grade3": "3e année",
@@ -772,9 +1096,18 @@
     "fullTime": "À temps plein",
     "partTime": "À temps partiel",
     "selectCountry": "Choisissez un pays",
-    "enterState": "Entrez la ville ou l'état"
+    "enterState": "Entrez la ville ou l'état",
+    "settings": "Paramètres",
+    "firstName": "Prénom",
+    "lastName": "Nom de famille",
+    "emailAddress": "Adresse email",
+    "displayImage": "Image d'affichage",
+    "address": "Adresse",
+    "saveChanges": "Enregistrer les modifications",
+    "joined": "Rejoint"
   },
   "donate": {
+    "title": "Des dons",
     "donations": "Des dons",
     "searchDonations": "Rechercher des dons",
     "donateForThe": "Faites un don pour le",
@@ -782,9 +1115,14 @@
     "yourPreviousDonations": "Vos dons précédents",
     "donate": "Faire un don",
     "nothingToShow": "Rien à montrer ici.",
-    "success": "Don réussi"
+    "success": "Don réussi",
+    "invalidAmount": "Veuillez saisir une valeur numérique pour le montant du don.",
+    "donationAmountDescription": "Veuillez saisir la valeur numérique du montant du don.",
+    "donationOutOfRange": "Le montant du don doit être compris entre {{min}} et {{max}}.",
+    "donateTo": "Faire un don à"
   },
   "userEvents": {
+    "title": "Événements",
     "nothingToShow": "Rien à montrer ici.",
     "createEvent": "Créer un évènement",
     "recurring": "Événement récurrent",
@@ -802,13 +1140,22 @@
     "publicEvent": "est public",
     "registerable": "Est enregistrable",
     "monthlyCalendarView": "Calendrier mensuel",
-    "yearlyCalendarView": "Calendrier annuel"
+    "yearlyCalendarView": "Calendrier annuel",
+    "search": "Rechercher",
+    "cancel": "Annuler",
+    "create": "Créer",
+    "eventDescription": "Description de l'événement",
+    "eventLocation": "Lieu de l'événement",
+    "startDate": "Date de début",
+    "endDate": "Date de fin"
   },
   "userEventCard": {
     "starts": "Départs",
     "ends": "Prend fin",
     "creator": "Créateur",
-    "alreadyRegistered": "Déjà enregistré"
+    "alreadyRegistered": "Déjà enregistré",
+    "location": "Lieu",
+    "register": "Inscription"
   },
   "advertisement": {
     "title": "Annonces",
@@ -830,11 +1177,24 @@
     "deleteAdvertisement": "Supprimer la publicité",
     "deleteAdvertisementMsg": "Voulez-vous supprimer cette publicité ?",
     "view": "Voir",
-    "editAdvertisement": "Modifier l'annonce"
+    "editAdvertisement": "Modifier l'annonce",
+    "advertisementDeleted": "Publicité supprimée avec succès.",
+    "endDateGreaterOrEqual": "La date de fin doit être supérieure ou égale à la date de début",
+    "advertisementCreated": "Publicité créée avec succès.",
+    "pHeading": "Titre principal",
+    "delete": "Supprimer",
+    "close": "Fermer",
+    "no": "Non",
+    "yes": "Oui",
+    "edit": "Modifier",
+    "saveChanges": "Enregistrer les modifications",
+    "endOfResults": "Fin des résultats"
   },
   "userChat": {
     "chat": "Chat",
-    "contacts": "Contacts"
+    "contacts": "Contacts",
+    "search": "rechercher",
+    "messages": "messages"
   },
   "userChatRoom": {
     "selectContact": "Sélectionnez un contact pour démarrer la conversation",
@@ -852,20 +1212,28 @@
     "String": "Chaîne",
     "Boolean": "Booléen",
     "Date": "Date",
-    "Number": "Nombre"
+    "Number": "Nombre",
+    "saveChanges": "Enregistrer les modifications"
   },
   "orgActionItemCategories": {
     "enableButton": "Activer",
     "disableButton": "Désactiver",
     "updateActionItemCategory": "Mise à jour",
     "actionItemCategoryName": "Nom",
-    "actionItemCategoryDetails": "Détails de la catégorie d'élément d'action",
+    "categoryDetails": "Détails de la catégorie",
     "enterName": "Entrez le nom",
     "successfulCreation": "Catégorie d'élément d'action créée avec succès",
     "successfulUpdation": "Catégorie d'élément d'action mise à jour avec succès",
     "sameNameConflict": "Veuillez changer le nom pour effectuer une mise à jour",
     "categoryEnabled": "Catégorie d'élément d'action activée",
-    "categoryDisabled": "Catégorie d'élément d'action désactivée"
+    "categoryDisabled": "Catégorie d'élément d'action désactivée",
+    "noActionItemCategories": "Aucune catégorie d'élément d'action",
+    "status": "Statut",
+    "categoryDeleted": "Catégorie d'élément d'action supprimée avec succès",
+    "deleteCategory": "Supprimer la catégorie",
+    "deleteCategoryMsg": "Êtes-vous sûr de vouloir supprimer cette catégorie d'élément d'action ?",
+    "createButton": "Créer",
+    "editButton": "Modifier"
   },
   "organizationVenues": {
     "title": "Lieux",
@@ -889,7 +1257,12 @@
     "view": "Voir",
     "venueTitleError": "Le titre du lieu ne peut pas être vide !",
     "venueCapacityError": "La capacité doit être un nombre positif !",
-    "searchBy": "Recherché par"
+    "searchBy": "Recherché par",
+    "description": "Description",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "name": "Nom",
+    "desc": "Description"
   },
   "addMember": {
     "title": "Ajouter un membre",
@@ -903,7 +1276,18 @@
     "organization": "Organisation",
     "invalidDetailsMessage": "Veuillez fournir tous les détails requis.",
     "passwordNotMatch": "Les mots de passe ne correspondent pas.",
-    "addMember": "Ajouter un membre"
+    "addMember": "Ajouter un membre",
+    "firstName": "Prénom",
+    "lastName": "Nom de famille",
+    "emailAddress": "Adresse email",
+    "enterEmail": "Entrer l'email",
+    "password": "Mot de passe",
+    "enterPassword": "Entrer le mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "cancel": "Annuler",
+    "create": "Créer",
+    "user": "Utilisateur",
+    "profile": "Profil"
   },
   "eventActionItems": {
     "title": "Éléments d'action",
@@ -911,8 +1295,8 @@
     "actionItemCategory": "Catégorie d'élément d'action",
     "selectActionItemCategory": "Sélectionnez une catégorie d'élément d'action",
     "selectAssignee": "Sélectionnez un responsable",
-    "preCompletionNotes": "Notes préalables à l'achèvement",
-    "postCompletionNotes": "Notes post-achèvement",
+    "preCompletionNotes": "Remarques",
+    "postCompletionNotes": "Notes d'achèvement",
     "actionItemDetails": "Détails de l'action",
     "dueDate": "Date d'échéance",
     "completionDate": "Date d'achèvement",
@@ -923,6 +1307,45 @@
     "successfulCreation": "Élément d'action créé avec succès",
     "successfulUpdation": "Élément d'action mis à jour avec succès",
     "notes": "Remarques",
-    "save": "Sauvegarder"
+    "assignee": "Cessionnaire",
+    "assigner": "Assigner",
+    "assignmentDate": "Date d'affectation",
+    "status": "Statut",
+    "actionItemActive": "Actif",
+    "actionItemStatus": "Statut de l'action",
+    "actionItemCompleted": "Élément d'action terminé",
+    "markCompletion": "Marquer l'achèvement",
+    "save": "Sauvegarder",
+    "yes": "Oui",
+    "no": "Non"
+  },
+  "checkIn": {
+    "errorCheckingIn": "Erreur lors de l'enregistrement",
+    "checkedInSuccessfully": "Enregistrement réussi"
+  },
+  "eventRegistrantsModal": {
+    "errorAddingAttendee": "Erreur lors de l'ajout du participant",
+    "errorRemovingAttendee": "Erreur lors de la suppression du participant"
+  },
+  "userCampaigns": {
+    "title": "Campagnes de financement",
+    "searchByName": "Rechercher par nom...",
+    "searchBy": "Rechercher par",
+    "pledgers": "Contributeurs",
+    "campaigns": "Campagnes",
+    "myPledges": "Mes Promesses",
+    "lowestAmount": "Montant le plus bas",
+    "highestAmount": "Montant le plus élevé",
+    "lowestGoal": "Objectif le plus bas",
+    "highestGoal": "Objectif le plus élevé",
+    "latestEndDate": "Date de fin la plus tardive",
+    "earliestEndDate": "Date de fin la plus proche",
+    "addPledge": "Ajouter une promesse",
+    "viewPledges": "Voir les promesses",
+    "noPledges": "Aucune promesse trouvée",
+    "noCampaigns": "Aucune campagne trouvée"
+  },
+  "userPledges": {
+    "title": "Mes Promesses"
   }
 }

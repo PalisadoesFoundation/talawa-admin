@@ -1,0 +1,77 @@
+.errorContainer {
+  min-height: 100vh;
+}
+
+.errorMessage {
+  margin-top: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.errorIcon {
+  transform: scale(1.5);
+  color: var(--bs-danger);
+  margin-bottom: 1rem;
+}
+
+.tableHeader {
+  background-color: var(--bs-primary);
+  color: var(--bs-white);
+  font-size: 1rem;
+}
+
+.rowBackground {
+  background-color: var(--bs-white);
+  max-height: 120px;
+}
+
+.scrollContainer {
+  max-height: 100px; /* Adjust as needed */
+  overflow-y: auto;
+  margin-bottom: 1rem;
+}
+
+.memberBadge {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 12px;
+  background-color: #f8f9fa; /* Light background */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  max-width: calc(100% - 30px); /* Ensure it fits within the container */
+}
+
+.removeFilterIcon {
+  cursor: pointer;
+}
+
+.scrollContainer {
+  max-height: 350px; /* Set your desired max height */
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+/* SimpleLoader.css */
+.simple-loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-top-color: #3498db;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

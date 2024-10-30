@@ -1,5 +1,5 @@
-import React from 'react';
-import { act, render, screen } from '@testing-library/react';
+import React, { act } from 'react';
+import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router-dom';
@@ -33,6 +33,7 @@ const MOCKS = [
           _id: '123',
           firstName: 'John',
           lastName: 'Doe',
+          createdAt: '2023-04-13T04:53:17.742+00:00',
           image: 'john.jpg',
           email: 'johndoe@gmail.com',
           birthDate: '1990-01-01',

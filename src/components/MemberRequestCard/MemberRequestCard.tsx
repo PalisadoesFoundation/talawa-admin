@@ -14,16 +14,21 @@ import defaultImg from 'assets/images/blank.png';
 import { errorHandler } from 'utils/errorHandler';
 
 interface InterfaceMemberRequestCardProps {
-  key: string;
-  id: string;
-  memberName: string;
-  memberLocation: string;
-  joinDate: string;
-  memberImage: string;
-  email: string;
+  id: string; // Unique identifier for the member
+  memberName: string; // Name of the member
+  memberLocation: string; // Location of the member
+  joinDate: string; // Date when the member joined
+  memberImage: string; // URL for the member's image
+  email: string; // Email of the member
 }
 
-function memberRequestCard(
+/**
+ * Component for displaying and managing member requests.
+ *
+ * @param props - Properties for the member request card.
+ * @returns JSX element for member request card.
+ */
+function MemberRequestCard(
   props: InterfaceMemberRequestCardProps,
 ): JSX.Element {
   const [acceptMutation] = useMutation(ACCEPT_ORGANIZATION_REQUEST_MUTATION);
@@ -34,6 +39,10 @@ function memberRequestCard(
   });
   const { t: tCommon } = useTranslation('common');
 
+  /**
+   * Handles accepting a member request.
+   * Displays a success message and reloads the page.
+   */
   const addMember = async (): Promise<void> => {
     try {
       await acceptMutation({
@@ -43,7 +52,7 @@ function memberRequestCard(
       });
 
       /* istanbul ignore next */
-      toast.success(t('memberAdded'));
+      toast.success(t('memberAdded') as string);
       /* istanbul ignore next */
       setTimeout(() => {
         window.location.reload();
@@ -54,6 +63,10 @@ function memberRequestCard(
     }
   };
 
+  /**
+   * Handles rejecting a member request.
+   * Confirms rejection and reloads the page if confirmed.
+   */
   const rejectMember = async (): Promise<void> => {
     const sure = window.confirm('Are you sure you want to Reject Request ?');
     if (sure) {
@@ -118,9 +131,8 @@ function memberRequestCard(
           </Col>
         </Row>
       </div>
-      <hr></hr>
+      <hr />
     </>
   );
 }
-export {};
-export default memberRequestCard;
+export default MemberRequestCard;

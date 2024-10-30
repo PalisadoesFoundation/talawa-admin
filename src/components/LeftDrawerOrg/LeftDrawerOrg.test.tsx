@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { act } from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import 'jest-localstorage-mock';
@@ -12,7 +12,6 @@ import { Provider } from 'react-redux';
 import { MockedProvider } from '@apollo/react-testing';
 import { store } from 'state/store';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
-import { act } from 'react-dom/test-utils';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -24,41 +23,41 @@ const props: InterfaceLeftDrawerProps = {
   targets: [
     {
       name: 'Dashboard',
-      url: '/orgdash/id=123',
+      url: '/orgdash/123',
     },
     {
       name: 'People',
-      url: '/orgpeople/id=123',
+      url: '/orgpeople/123',
     },
     {
       name: 'Events',
-      url: '/orgevents/id=123',
+      url: '/orgevents/123',
     },
     {
       name: 'Posts',
-      url: '/orgpost/id=123',
+      url: '/orgpost/123',
     },
     {
       name: 'Block/Unblock',
-      url: '/blockuser/id=123',
+      url: '/blockuser/123',
     },
     {
       name: 'Plugins',
       subTargets: [
         {
           name: 'Plugin Store',
-          url: '/orgstore/id=123',
+          url: '/orgstore/123',
           icon: 'fa-store',
         },
       ],
     },
     {
       name: 'Settings',
-      url: '/orgsetting/id=123',
+      url: '/orgsetting/123',
     },
     {
       name: 'All Organizations',
-      url: '/orglist/id=123',
+      url: '/orglist/123',
     },
   ],
   hideDrawer: false,
@@ -327,7 +326,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     );
     await wait();
     userEvent.click(screen.getByText('Dashboard'));
-    expect(global.window.location.pathname).toContain('/orgdash/id=123');
+    expect(global.window.location.pathname).toContain('/orgdash/123');
   });
 
   test('Testing when screen size is less than 820px', async () => {
@@ -345,13 +344,13 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     );
     await wait();
     resizeWindow(800);
-    expect(screen.getByText(/Dashboard/i)).toBeInTheDocument();
-    expect(screen.getByText(/People/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Dashboard/i)[0]).toBeInTheDocument();
+    expect(screen.getAllByText(/People/i)[0]).toBeInTheDocument();
 
     const peopelBtn = screen.getByTestId(/People/i);
     userEvent.click(peopelBtn);
     await wait();
-    expect(window.location.pathname).toContain('/orgpeople/id=123');
+    expect(window.location.pathname).toContain('/orgpeople/123');
   });
 
   test('Testing when image is present for Organization', async () => {
@@ -391,7 +390,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     );
     await wait();
     expect(
-      screen.getByText(/Error Occured while loading the Organization/i),
+      screen.getByText(/Error occured while loading Organization data/i),
     ).toBeInTheDocument();
   });
 

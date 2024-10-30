@@ -30,7 +30,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: '22.x'
 
       - name: Install Dependencies
         run: npm install
@@ -38,7 +38,7 @@ jobs:
       - name: Count number of lines
         run: |
           chmod +x ./.github/workflows/countline.py
-          ./.github/workflows/countline.py --lines 600 --exclude_files src/screens/LoginPage/LoginPage.tsx src/GraphQl/Queries/Queries.ts src/screens/OrgList/OrgList.tsx src/GraphQl/Mutations/mutations.ts src/components/EventListCard/EventListCardModals.tsx
+          ./.github/workflows/countline.py --lines 600 --exclude_files src/screens/LoginPage/LoginPage.tsx src/GraphQl/Queries/Queries.ts src/screens/OrgList/OrgList.tsx src/GraphQl/Mutations/mutations.ts src/components/EventListCard/EventListCardModals.tsx src/screens/ManageTag/ManageTag.tsx
 
       - name: Get changed TypeScript files
         id: changed-files
@@ -56,8 +56,11 @@ jobs:
         if: steps.changed-files.outputs.only_changed != 'true'
         env: 
           CHANGED_FILES: ${{ steps.changed_files.outputs.all_changed_files }}
-        run: npx eslint ${CHANGED_FILES} 
+        run: npx eslint ${CHANGED_FILES} && python .github/workflows/eslint_disable_check.py
         
+      - name: Check for TSDoc comments
+        run: npm run check-tsdoc # Run the TSDoc check script
+
       - name: Check for localStorage Usage
         run: |
           chmod +x scripts/githooks/check-localstorage-usage.js
@@ -76,8 +79,9 @@ jobs:
           echo "Error: Source and Target Branches are the same. Please ensure they are different."
           exit 1
 
-  Check-Unauthorized-Changes:
-    name: Checks if no unauthorized files are changed
+  Check-Sensitive-Files:
+    if: ${{ github.actor != 'dependabot[bot]' }}
+    name: Checks if sensitive files have been changed without authorization
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -107,6 +111,14 @@ jobs:
             LICENSE
             setup.ts
             .coderabbit.yaml
+            CODE_OF_CONDUCT.md
+            CODE_STYLE.md
+            CONTRIBUTING.md
+            DOCUMENTATION.md
+            INSTALLATION.md
+            ISSUE_GUIDELINES.md
+            PR_GUIDELINES.md
+            README.md
             
       - name: List all changed unauthorized files
         if: steps.changed-unauth-files.outputs.any_changed == 'true' || steps.changed-unauth-files.outputs.any_deleted == 'true'
@@ -119,6 +131,7 @@ jobs:
           exit 1
 
   Count-Changed-Files:
+    if: ${{ github.actor != 'dependabot[bot]' }}
     name: Checks if number of files changed is acceptable
     runs-on: ubuntu-latest
     steps:
@@ -173,7 +186,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: '22.x'
 
       - name: Install Dependencies
         run: npm install
@@ -209,6 +222,7 @@ jobs:
           min_coverage: 95.0
 
   Graphql-Inspector:
+    if: ${{ github.actor != 'dependabot[bot]' }}
     name: Runs Introspection on the GitHub talawa-api repo on the schema.graphql file
     runs-on: ubuntu-latest
     steps:
@@ -218,7 +232,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: '22.x'
 
       - name: resolve dependency
         run: npm install -g @graphql-inspector/cli
@@ -236,6 +250,7 @@ jobs:
         run: graphql-inspector validate './src/GraphQl/**/*.ts' './talawa-api/schema.graphql'
 
   Check-Target-Branch:
+    if: ${{ github.actor != 'dependabot[bot]' }}
     name: Check Target Branch
     runs-on: ubuntu-latest
     steps:

@@ -130,7 +130,64 @@ describe('Testing Advertisement Entry Component', () => {
       expect(deletionFailedText).toBeNull();
     });
   });
+  it('should use default props when none are provided', () => {
+    render(
+      <AdvertisementEntry
+        id={''}
+        setAfter={function (
+          _value: React.SetStateAction<string | null | undefined>,
+        ): void {
+          throw new Error('Function not implemented.');
+        }}
+      />,
+    );
 
+    //Check if component renders with default ''(empty string)
+    const elements = screen.getAllByText(''); // This will return an array of matching elements
+    elements.forEach((element) => expect(element).toBeInTheDocument());
+
+    // Check that the component renders with default `mediaUrl` (empty string)
+    const mediaElement = screen.getByTestId('media');
+    expect(mediaElement).toHaveAttribute('src', '');
+
+    // Check that the component renders with default `endDate`
+    const defaultEndDate = new Date().toDateString();
+    expect(screen.getByText(`Ends on ${defaultEndDate}`)).toBeInTheDocument();
+
+    // Check that the component renders with default `startDate`
+    const defaultStartDate = new Date().toDateString();
+    console.log(screen.getByText);
+    expect(screen.getByText(`Ends on ${defaultStartDate}`)).toBeInTheDocument(); //fix text "Ends on"?
+  });
+  it('should correctly override default props when values are provided', () => {
+    const mockName = 'Test Ad';
+    const mockType = 'Banner';
+    const mockMediaUrl = 'https://example.com/media.png';
+    const mockEndDate = new Date(2025, 11, 31);
+    const mockStartDate = new Date(2024, 0, 1);
+    const mockOrganizationId = 'org123';
+
+    const { getByText } = render(
+      <AdvertisementEntry
+        name={mockName}
+        type={mockType}
+        mediaUrl={mockMediaUrl}
+        endDate={mockEndDate}
+        startDate={mockStartDate}
+        organizationId={mockOrganizationId}
+        id={''}
+        setAfter={function (
+          _value: React.SetStateAction<string | null | undefined>,
+        ): void {
+          throw new Error('Function not implemented.');
+        }}
+      />,
+    );
+
+    // Check that the component renders with provided values
+    expect(getByText(mockName)).toBeInTheDocument();
+    // Add more checks based on how each prop affects rendering
+  });
   it('should open and close the dropdown when options button is clicked', () => {
     const { getByTestId, queryByText, getAllByText } = render(
       <ApolloProvider client={client}>

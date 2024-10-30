@@ -69,17 +69,13 @@ const components: ComponentType[] = [
   { name: 'My Organizations', comp_id: 'orglist', component: 'OrgList' },
   { name: 'Dashboard', comp_id: 'orgdash', component: 'OrganizationDashboard' },
   { name: 'People', comp_id: 'orgpeople', component: 'OrganizationPeople' },
+  { name: 'Tags', comp_id: 'orgtags', component: 'OrganizationTags' },
   { name: 'Events', comp_id: 'orgevents', component: 'OrganizationEvents' },
   { name: 'Venues', comp_id: 'orgvenues', component: 'OrganizationVenues' },
   {
     name: 'Action Items',
     comp_id: 'orgactionitems',
     component: 'OrganizationActionItems',
-  },
-  {
-    name: 'Agenda Items Category',
-    comp_id: 'orgagendacategory',
-    component: 'OrganizationAgendaCategory',
   },
   { name: 'Posts', comp_id: 'orgpost', component: 'OrgPost' },
   { name: 'Block/Unblock', comp_id: 'blockuser', component: 'BlockUser' },

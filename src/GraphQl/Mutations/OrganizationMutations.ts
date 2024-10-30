@@ -57,8 +57,26 @@ export const REMOVE_SAMPLE_ORGANIZATION_MUTATION = gql`
  * @returns The created direct chat object.
  */
 
+export const CREATE_GROUP_CHAT = gql`
+  mutation createGroupChat(
+    $userIds: [ID!]!
+    $organizationId: ID!
+    $title: String!
+  ) {
+    createGroupChat(
+      data: {
+        userIds: $userIds
+        organizationId: $organizationId
+        title: $title
+      }
+    ) {
+      _id
+    }
+  }
+`;
+
 export const CREATE_DIRECT_CHAT = gql`
-  mutation createDirectChat($userIds: [ID!]!, $organizationId: ID!) {
+  mutation createDirectChat($userIds: [ID!]!, $organizationId: ID) {
     createDirectChat(
       data: { userIds: $userIds, organizationId: $organizationId }
     ) {
@@ -66,6 +84,110 @@ export const CREATE_DIRECT_CHAT = gql`
     }
   }
 `;
+
+export const CREATE_CHAT = gql`
+  mutation createChat(
+    $userIds: [ID!]!
+    $organizationId: ID
+    $isGroup: Boolean!
+    $name: String
+  ) {
+    createChat(
+      data: {
+        userIds: $userIds
+        organizationId: $organizationId
+        isGroup: $isGroup
+        name: $name
+      }
+    ) {
+      _id
+    }
+  }
+`;
+
+export const SEND_MESSAGE_TO_CHAT = gql`
+  mutation sendMessageToChat(
+    $chatId: ID!
+    $replyTo: ID
+    $messageContent: String!
+  ) {
+    sendMessageToChat(
+      chatId: $chatId
+      replyTo: $replyTo
+      messageContent: $messageContent
+    ) {
+      _id
+      createdAt
+      messageContent
+      replyTo {
+        _id
+        createdAt
+        messageContent
+        sender {
+          _id
+          firstName
+          lastName
+        }
+        updatedAt
+      }
+      sender {
+        _id
+        firstName
+        lastName
+      }
+      updatedAt
+    }
+  }
+`;
+
+export const CREATE_MESSAGE_CHAT = gql`
+  mutation createMessageChat($receiver: ID!, $messageContent: String!) {
+    createMessageChat(data: { receiver: $receiver, message: $messageContent }) {
+      _id
+      createdAt
+      message
+      languageBarrier
+      receiver {
+        _id
+      }
+      sender {
+        _id
+      }
+      updatedAt
+    }
+  }
+`;
+
+export const MESSAGE_SENT_TO_CHAT = gql`
+  subscription messageSentToChat($userId: ID!) {
+    messageSentToChat(userId: $userId) {
+      _id
+      createdAt
+      chatMessageBelongsTo {
+        _id
+      }
+      messageContent
+      replyTo {
+        _id
+        createdAt
+        messageContent
+        sender {
+          _id
+          firstName
+          lastName
+        }
+        updatedAt
+      }
+      sender {
+        _id
+        firstName
+        lastName
+      }
+      updatedAt
+    }
+  }
+`;
+
 //Plugin WebSocket listner
 
 /**

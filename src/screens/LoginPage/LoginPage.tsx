@@ -23,10 +23,9 @@ import {
   SIGNUP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { GET_COMMUNITY_DATA, ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
-import { ReactComponent as PalisadoesLogo } from 'assets/svgs/palisadoes.svg';
-import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
+import PalisadoesLogo from 'assets/svgs/palisadoes.svg?react';
+import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
-import Loader from 'components/Loader/Loader';
 import LoginPortalToggle from 'components/LoginPortalToggle/LoginPortalToggle';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -34,6 +33,15 @@ import { socialMediaLinks } from '../../constants';
 import styles from './LoginPage.module.css';
 import type { InterfaceQueryOrganizationListObject } from 'utils/interfaces';
 import { Autocomplete, TextField } from '@mui/material';
+import useSession from 'utils/useSession';
+import i18n from 'utils/i18n';
+
+/**
+ * LoginPage component is used to render the login page of the application where user can login or register
+ * to the application using email and password. The component also provides the functionality to switch between login and
+ * register form.
+ *
+ */
 
 const loginPage = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
@@ -56,7 +64,6 @@ const loginPage = (): JSX.Element => {
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const [showTab, setShowTab] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
   const [role, setRole] = useState<'admin' | 'user'>('admin');
-  const [componentLoader, setComponentLoader] = useState(true);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [signformState, setSignFormState] = useState({
     signfirstName: '',
@@ -105,25 +112,24 @@ const loginPage = (): JSX.Element => {
     const isLoggedIn = getItem('IsLoggedIn');
     if (isLoggedIn == 'TRUE') {
       navigate(getItem('userId') !== null ? '/user/organizations' : '/orglist');
+      extendSession();
     }
-    setComponentLoader(false);
   }, []);
 
   const togglePassword = (): void => setShowPassword(!showPassword);
   const toggleConfirmPassword = (): void =>
     setShowConfirmPassword(!showConfirmPassword);
 
-  const { data, loading, refetch } = useQuery(GET_COMMUNITY_DATA);
+  const { data, refetch } = useQuery(GET_COMMUNITY_DATA);
   useEffect(() => {
     // refetching the data if the pre-login data updates
     refetch();
   }, [data]);
   const [login, { loading: loginLoading }] = useMutation(LOGIN_MUTATION);
   const [signup, { loading: signinLoading }] = useMutation(SIGNUP_MUTATION);
-  const [recaptcha, { loading: recaptchaLoading }] =
-    useMutation(RECAPTCHA_MUTATION);
+  const [recaptcha] = useMutation(RECAPTCHA_MUTATION);
   const { data: orgData } = useQuery(ORGANIZATION_LIST);
-
+  const { startSession, extendSession } = useSession();
   useEffect(() => {
     if (orgData) {
       const options = orgData.organizations.map(
@@ -172,7 +178,7 @@ const loginPage = (): JSX.Element => {
       return data.recaptcha;
     } catch (error) {
       /* istanbul ignore next */
-      toast.error(t('captchaError'));
+      toast.error(t('captchaError') as string);
     }
   };
 
@@ -195,7 +201,7 @@ const loginPage = (): JSX.Element => {
     const isVerified = await verifyRecaptcha(recaptchaToken);
     /* istanbul ignore next */
     if (!isVerified) {
-      toast.error(t('Please_check_the_captcha'));
+      toast.error(t('Please_check_the_captcha') as string);
       return;
     }
     const isValidatedString = (value: string): boolean =>
@@ -236,7 +242,9 @@ const loginPage = (): JSX.Element => {
           /* istanbul ignore next */
           if (signUpData) {
             toast.success(
-              t(role === 'admin' ? 'successfullyRegistered' : 'afterRegister'),
+              t(
+                role === 'admin' ? 'successfullyRegistered' : 'afterRegister',
+              ) as string,
             );
             setShowTab('LOGIN');
             setSignFormState({
@@ -253,20 +261,20 @@ const loginPage = (): JSX.Element => {
           errorHandler(t, error);
         }
       } else {
-        toast.warn(t('passwordMismatches'));
+        toast.warn(t('passwordMismatches') as string);
       }
     } else {
       if (!isValidatedString(signfirstName)) {
-        toast.warn(t('firstName_invalid'));
+        toast.warn(t('firstName_invalid') as string);
       }
       if (!isValidatedString(signlastName)) {
-        toast.warn(t('lastName_invalid'));
+        toast.warn(t('lastName_invalid') as string);
       }
       if (!validatePassword(signPassword)) {
-        toast.warn(t('password_invalid'));
+        toast.warn(t('password_invalid') as string);
       }
       if (signEmail.length < 8) {
-        toast.warn(t('email_invalid'));
+        toast.warn(t('email_invalid') as string);
       }
     }
   };
@@ -276,7 +284,7 @@ const loginPage = (): JSX.Element => {
     const isVerified = await verifyRecaptcha(recaptchaToken);
     /* istanbul ignore next */
     if (!isVerified) {
-      toast.error(t('Please_check_the_captcha'));
+      toast.error(t('Please_check_the_captcha') as string);
       return;
     }
 
@@ -290,13 +298,14 @@ const loginPage = (): JSX.Element => {
 
       /* istanbul ignore next */
       if (loginData) {
+        i18n.changeLanguage(loginData.login.appUserProfile.appLanguageCode);
         const { login } = loginData;
         const { user, appUserProfile } = login;
         const isAdmin: boolean =
           appUserProfile.isSuperAdmin || appUserProfile.adminFor.length !== 0;
 
         if (role === 'admin' && !isAdmin) {
-          toast.warn(tErrors('notAuthorised'));
+          toast.warn(tErrors('notAuthorised') as string);
           return;
         }
         const loggedInUserId = user._id;
@@ -319,8 +328,9 @@ const loginPage = (): JSX.Element => {
         }
 
         navigate(role === 'admin' ? '/orglist' : '/user/organizations');
+        startSession();
       } else {
-        toast.warn(tErrors('notFound'));
+        toast.warn(tErrors('notFound') as string);
       }
     } catch (error) {
       /* istanbul ignore next */
@@ -328,15 +338,6 @@ const loginPage = (): JSX.Element => {
     }
   };
 
-  if (
-    componentLoader ||
-    loginLoading ||
-    signinLoading ||
-    recaptchaLoading ||
-    loading
-  ) {
-    return <Loader />;
-  }
   const socialIconsList = socialMediaLinks.map(({ href, logo, tag }, index) =>
     data?.getCommunityData ? (
       data.getCommunityData?.socialMediaUrls?.[tag] && (
@@ -427,6 +428,7 @@ const loginPage = (): JSX.Element => {
                   <div className="position-relative">
                     <Form.Control
                       type="email"
+                      disabled={loginLoading}
                       placeholder={tCommon('enterEmail')}
                       required
                       value={formState.email}
@@ -463,6 +465,7 @@ const loginPage = (): JSX.Element => {
                           password: e.target.value,
                         });
                       }}
+                      disabled={loginLoading}
                       autoComplete="current-password"
                     />
                     <Button
@@ -502,6 +505,7 @@ const loginPage = (): JSX.Element => {
                     <></>
                   )}
                   <Button
+                    disabled={loginLoading}
                     type="submit"
                     className="mt-3 mb-3 w-100"
                     value="Login"
@@ -542,6 +546,7 @@ const loginPage = (): JSX.Element => {
                       <div>
                         <Form.Label>{tCommon('firstName')}</Form.Label>
                         <Form.Control
+                          disabled={signinLoading}
                           type="text"
                           id="signfirstname"
                           className="mb-3"
@@ -561,6 +566,7 @@ const loginPage = (): JSX.Element => {
                       <div>
                         <Form.Label>{tCommon('lastName')}</Form.Label>
                         <Form.Control
+                          disabled={signinLoading}
                           type="text"
                           id="signlastname"
                           className="mb-3"
@@ -581,6 +587,7 @@ const loginPage = (): JSX.Element => {
                     <Form.Label>{tCommon('email')}</Form.Label>
                     <div className="position-relative">
                       <Form.Control
+                        disabled={signinLoading}
                         type="email"
                         data-testid="signInEmail"
                         className="mb-3"
@@ -608,6 +615,7 @@ const loginPage = (): JSX.Element => {
                     <Form.Label>{tCommon('password')}</Form.Label>
                     <div className="position-relative">
                       <Form.Control
+                        disabled={signinLoading}
                         type={showPassword ? 'text' : 'password'}
                         data-testid="passwordField"
                         placeholder={tCommon('password')}
@@ -762,6 +770,7 @@ const loginPage = (): JSX.Element => {
                     <Form.Label>{tCommon('confirmPassword')}</Form.Label>
                     <div className="position-relative">
                       <Form.Control
+                        disabled={signinLoading}
                         type={showConfirmPassword ? 'text' : 'password'}
                         placeholder={tCommon('confirmPassword')}
                         required
@@ -843,6 +852,7 @@ const loginPage = (): JSX.Element => {
                     className="mt-4 w-100 mb-3"
                     value="Register"
                     data-testid="registrationBtn"
+                    disabled={signinLoading}
                   >
                     {tCommon('register')}
                   </Button>

@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import type { NormalizedCacheObject } from '@apollo/client';
 import {
@@ -25,7 +25,6 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import App from './App';
 import { store } from './state/store';
-import './utils/i18n';
 import {
   BACKEND_URL,
   REACT_APP_BACKEND_WEBSOCKET_URL,
@@ -44,14 +43,17 @@ const theme = createTheme({
   },
 });
 import useLocalStorage from 'utils/useLocalstorage';
+import i18n from './utils/i18n';
+import { requestMiddleware, responseMiddleware } from 'utils/timezoneUtils';
 
 const { getItem } = useLocalStorage();
-
 const authLink = setContext((_, { headers }) => {
+  const lng = i18n.language;
   return {
     headers: {
       ...headers,
       authorization: 'Bearer ' + getItem('token') || '',
+      'Accept-Language': lng,
     },
   };
 });
@@ -99,6 +101,12 @@ const wsLink = new GraphQLWsLink(
     url: REACT_APP_BACKEND_WEBSOCKET_URL,
   }),
 );
+
+// const wsLink = new GraphQLWsLink(
+//   createClient({
+//     url: 'ws://localhost:4000/subscriptions',
+//   }),
+// );
 // The split function takes three parameters:
 //
 // * A function that's called for each operation to execute
@@ -116,7 +124,13 @@ const splitLink = split(
   httpLink,
 );
 
-const combinedLink = ApolloLink.from([errorLink, authLink, splitLink]);
+const combinedLink = ApolloLink.from([
+  errorLink,
+  authLink,
+  requestMiddleware,
+  responseMiddleware,
+  splitLink,
+]);
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
@@ -124,7 +138,10 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 });
 const fallbackLoader = <div className="loader"></div>;
 
-ReactDOM.render(
+const container = document.getElementById('root');
+const root = createRoot(container!); // Note the use of '!' is to assert the container is not null
+
+root.render(
   <Suspense fallback={fallbackLoader}>
     <ApolloProvider client={client}>
       <BrowserRouter>
@@ -139,5 +156,4 @@ ReactDOM.render(
       </BrowserRouter>
     </ApolloProvider>
   </Suspense>,
-  document.getElementById('root'),
 );

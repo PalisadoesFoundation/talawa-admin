@@ -1,41 +1,84 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Navigate, Outlet, useLocation, useParams } from 'react-router-dom';
 import { updateTargets } from 'state/action-creators';
+import { useAppDispatch } from 'state/hooks';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from './UserScreen.module.css';
 import { Button } from 'react-bootstrap';
 import UserSidebarOrg from 'components/UserPortal/UserSidebarOrg/UserSidebarOrg';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
+import type { InterfaceMapType } from 'utils/interfaces';
+import { useTranslation } from 'react-i18next';
 
+const map: InterfaceMapType = {
+  organization: 'home',
+  people: 'people',
+  events: 'userEvents',
+  donate: 'donate',
+  campaigns: 'userCampaigns',
+  pledges: 'userPledges',
+};
+
+/**
+ * The UserScreen component serves as a container for user-specific pages
+ * within an organization context. It provides layout and sidebar navigation
+ * functionality based on the current organization ID and user roles.
+ *
+ * @returns The UserScreen component.
+ */
 const UserScreen = (): JSX.Element => {
+  // Get the current location path for debugging or conditional rendering
   const location = useLocation();
-  const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
+
+  /**
+   * State to manage the visibility of the sidebar (drawer).
+   */
+
   const { orgId } = useParams();
 
+  // Redirect to home if orgId is not present
   if (!orgId) {
     return <Navigate to={'/'} replace />;
   }
 
-  const appRoutes: {
+  const titleKey: string | undefined = map[location.pathname.split('/')[2]];
+  const { t } = useTranslation('translation', { keyPrefix: titleKey });
+
+  const userRoutes: {
     targets: TargetsType[];
   } = useSelector((state: RootState) => state.userRoutes);
-  const { targets } = appRoutes;
 
-  console.log(location.pathname.split('/'));
+  const { targets } = userRoutes;
+  const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
 
-  const dispatch = useDispatch();
+  /**
+   * Retrieves the organization ID from the URL parameters.
+   */
+
+  // Initialize Redux dispatch
+  const dispatch = useAppDispatch();
+
+  /**
+   * Effect hook to update targets based on the organization ID.
+   * This hook is triggered when the orgId changes.
+   */
   useEffect(() => {
     dispatch(updateTargets(orgId));
-  }, [orgId]); // Added orgId to the dependency array
+  }, [orgId]);
 
+  /**
+   * Handles window resize events to toggle the sidebar visibility
+   * based on the screen width.
+   */
   const handleResize = (): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer(!hideDrawer);
     }
   };
 
+  // Set up event listener for window resize and clean up on unmount
   useEffect(() => {
     handleResize();
     window.addEventListener('resize', handleResize);
@@ -85,7 +128,10 @@ const UserScreen = (): JSX.Element => {
         } `}
         data-testid="mainpageright"
       >
-        <div className="d-flex justify-content-end align-items-center">
+        <div className="d-flex justify-content-between align-items-center">
+          <div style={{ flex: 1 }}>
+            <h1>{titleKey !== 'home' ? t('title') : ''}</h1>
+          </div>
           <ProfileDropdown />
         </div>
         <Outlet />

@@ -11,7 +11,6 @@
 }
 
 .mainContainer {
-  padding: 20px;
   max-height: 100%;
   overflow: auto;
 }
@@ -63,7 +62,7 @@
   height: 40px;
   bottom: 0;
   z-index: 9999;
-  width: calc(300px + 2rem);
+  width: calc(300px);
   background-color: rgba(245, 245, 245, 0.7);
   color: black;
   border: none;

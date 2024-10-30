@@ -445,31 +445,6 @@ describe('MemberDetail', () => {
     // expect(screen.getByText(/Display Image/i)).toBeInTheDocument();
   });
 
-  // test('should display warnings for blank form submission', async () => {
-  //   jest.spyOn(toast, 'warning');
-  //   const props = {
-  //     key: '123',
-  //     id: '1',
-  //     toggleStateValue: jest.fn(),
-  //   };
-
-  //   render(
-  //     <MockedProvider addTypename={false} link={link2}>
-  //       <BrowserRouter>
-  //         <Provider store={store}>
-  //           <I18nextProvider i18n={i18nForTest}>
-  //             <MemberDetail {...props} />
-  //           </I18nextProvider>
-  //         </Provider>
-  //       </BrowserRouter>
-  //     </MockedProvider>,
-  //   );
-
-  //   await wait();
-  //   expect(toast.warning).toHaveBeenCalledWith('First Name cannot be blank!');
-  //   expect(toast.warning).toHaveBeenCalledWith('Last Name cannot be blank!');
-  //   expect(toast.warning).toHaveBeenCalledWith('Email cannot be blank!');
-  // });
   test('display admin', async () => {
     const props = {
       id: 'rishav-jha-mech',

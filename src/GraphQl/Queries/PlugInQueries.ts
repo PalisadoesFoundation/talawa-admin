@@ -106,10 +106,59 @@ export const ORGANIZATION_EVENTS_CONNECTION = gql`
  * @returns The list of direct chats associated with the user, including details such as ID, creator, messages, organization, and participating users.
  */
 
-export const DIRECT_CHATS_LIST = gql`
-  query DirectChatsByUserID($id: ID!) {
-    directChatsByUserID(id: $id) {
+// directChatsMessagesByChatID(id: ID!): [DirectChatMessage]
+
+export const CHAT_BY_ID = gql`
+  query chatById($id: ID!) {
+    chatById(id: $id) {
       _id
+      isGroup
+      name
+      organization {
+        _id
+      }
+      createdAt
+      messages {
+        _id
+        createdAt
+        messageContent
+        replyTo {
+          _id
+          createdAt
+          messageContent
+          sender {
+            _id
+            firstName
+            lastName
+            email
+            image
+          }
+        }
+        sender {
+          _id
+          firstName
+          lastName
+          email
+          image
+        }
+      }
+      users {
+        _id
+        firstName
+        lastName
+        email
+      }
+    }
+  }
+`;
+
+export const CHATS_LIST = gql`
+  query ChatsByUserId($id: ID!) {
+    chatsByUserId(id: $id) {
+      _id
+      isGroup
+      name
+
       creator {
         _id
         firstName
@@ -120,12 +169,6 @@ export const DIRECT_CHATS_LIST = gql`
         _id
         createdAt
         messageContent
-        receiver {
-          _id
-          firstName
-          lastName
-          email
-        }
         sender {
           _id
           firstName

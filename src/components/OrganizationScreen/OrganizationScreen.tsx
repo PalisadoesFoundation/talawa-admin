@@ -10,39 +10,59 @@ import {
   useMatch,
 } from 'react-router-dom';
 import { updateTargets } from 'state/action-creators';
+import { useAppDispatch } from 'state/hooks';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from './OrganizationScreen.module.css';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import { Button } from 'react-bootstrap';
+ import type { InterfaceMapType } from 'utils/interfaces';
 import { useQuery } from '@apollo/client';
 import { ORGANIZATION_EVENT_LIST } from 'GraphQl/Queries/Queries';
-
 interface InterfaceEvent {
   _id: string;
   title: string;
 }
 
+/**
+ * Component for the organization screen
+ *
+ * This component displays the organization screen and handles the layout
+ * including a side drawer, header, and main content area. It adjusts
+ * the layout based on the screen size and shows the appropriate content
+ * based on the route.
+ *
+ * @returns JSX.Element representing the organization screen
+ */
 const OrganizationScreen = (): JSX.Element => {
+  // Get the current location to determine the translation key
   const location = useLocation();
   const titleKey: string | undefined = map[location.pathname.split('/')[1]];
   const { t } = useTranslation('translation', { keyPrefix: titleKey });
+
+  // State to manage visibility of the side drawer
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
+
+  // Get the organization ID from the URL parameters
   const { orgId } = useParams();
   const [eventName, setEventName] = useState<string | null>(null);
 
   const isEventPath = useMatch('/event/:orgId/:eventId');
 
+  // If no organization ID is found, navigate back to the home page
   if (!orgId) {
     return <Navigate to={'/'} replace />;
   }
 
+  // Get the application routes from the Redux store
   const appRoutes: {
     targets: TargetsType[];
   } = useSelector((state: RootState) => state.appRoutes);
   const { targets } = appRoutes;
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+
+  // Update targets whenever the organization ID changes
   useEffect(() => {
     dispatch(updateTargets(orgId));
   }, [orgId]);
@@ -63,12 +83,14 @@ const OrganizationScreen = (): JSX.Element => {
     }
   }, [isEventPath, eventsData]);
 
+  // Handle screen resizing to show/hide the side drawer
   const handleResize = (): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer(!hideDrawer);
     }
   };
 
+  // Set up event listener for window resize
   useEffect(() => {
     handleResize();
     window.addEventListener('resize', handleResize);
@@ -133,13 +155,13 @@ const OrganizationScreen = (): JSX.Element => {
 
 export default OrganizationScreen;
 
-interface InterfaceMapType {
-  [key: string]: string;
-}
-
+/**
+ * Mapping object to get translation keys based on route
+ */
 const map: InterfaceMapType = {
   orgdash: 'dashboard',
   orgpeople: 'organizationPeople',
+  orgtags: 'organizationTags',
   requests: 'requests',
   orgads: 'advertisement',
   member: 'memberDetail',

@@ -4,25 +4,35 @@ import { Button } from 'react-bootstrap';
 import IconComponent from 'components/IconComponent/IconComponent';
 import styles from './EventRegistrantsWrapper.module.css';
 
+// Props for the EventRegistrantsWrapper component
 type PropType = {
   eventId: string;
   orgId: string;
 };
 
-export const EventRegistrantsWrapper: React.FC<PropType> = ({
+/**
+ * Wrapper component that displays a button to show the event registrants modal.
+ *
+ * @param eventId - The ID of the event.
+ * @param orgId - The ID of the organization.
+ * @returns JSX element representing the wrapper with a button to show the modal.
+ */
+export const EventRegistrantsWrapper = ({
   eventId,
   orgId,
-}) => {
+}: PropType): JSX.Element => {
+  // State to control the visibility of the modal
   const [showModal, setShowModal] = useState(false);
 
   return (
     <>
+      {/* Button to open the event registrants modal */}
       <Button
         variant="light"
         className="text-secondary"
         aria-label="showAttendees"
         onClick={(): void => {
-          setShowModal(true);
+          setShowModal(true); // Show the modal when button is clicked
         }}
       >
         <div className={styles.iconWrapper}>
@@ -34,11 +44,12 @@ export const EventRegistrantsWrapper: React.FC<PropType> = ({
         Show Registrants
       </Button>
 
+      {/* Render the EventRegistrantsModal if showModal is true */}
       {showModal && (
         <EventRegistrantsModal
           show={showModal}
           handleClose={(): void => {
-            setShowModal(false);
+            setShowModal(false); // Hide the modal when closed
           }}
           eventId={eventId}
           orgId={orgId}

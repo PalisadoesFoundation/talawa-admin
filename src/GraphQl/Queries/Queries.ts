@@ -8,6 +8,7 @@ export const CHECK_AUTH = gql`
       _id
       firstName
       lastName
+      createdAt
       image
       email
       birthDate
@@ -489,7 +490,6 @@ export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
     $orgId: ID!
     $firstName_contains: String
     $lastName_contains: String
-    $event_title_contains: String
     $first: Int
     $skip: Int
   ) {
@@ -500,7 +500,6 @@ export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
       where: {
         firstName_contains: $firstName_contains
         lastName_contains: $lastName_contains
-        event_title_contains: $event_title_contains
       }
     ) {
       edges {
@@ -831,12 +830,20 @@ export const GET_COMMUNITY_DATA = gql`
         facebook
         gitHub
         instagram
-        twitter
+        X
         linkedIn
         youTube
         reddit
         slack
       }
+    }
+  }
+`;
+
+export const GET_COMMUNITY_SESSION_TIMEOUT_DATA = gql`
+  query getCommunityData {
+    getCommunityData {
+      timeout
     }
   }
 `;
@@ -847,11 +854,15 @@ export { ACTION_ITEM_CATEGORY_LIST } from './ActionItemCategoryQueries';
 // get the list of Action Items
 export { ACTION_ITEM_LIST } from './ActionItemQueries';
 
+export {
+  AgendaItemByEvent,
+  AgendaItemByOrganization,
+} from './AgendaItemQueries';
+
 export { AGENDA_ITEM_CATEGORY_LIST } from './AgendaCategoryQueries';
 // to take the list of the blocked users
 export {
   ADVERTISEMENTS_GET,
-  DIRECT_CHATS_LIST,
   IS_SAMPLE_ORGANIZATION_QUERY,
   ORGANIZATION_CUSTOM_FIELDS,
   ORGANIZATION_EVENTS_CONNECTION,

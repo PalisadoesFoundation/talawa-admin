@@ -10,6 +10,13 @@ import EventListCardModals from 'components/EventListCard/EventListCardModals';
 import type { InterfaceEventListCardProps } from 'components/EventListCard/EventListCard';
 import { formatDate } from 'utils/dateFormatter';
 
+/**
+ * Component that displays event details.
+ *
+ * @param  props - The props for the EventDashboard component.
+ * @param eventId - The ID of the event to fetch and display.
+ * @returns The rendered EventDashboard component.
+ */
 const EventDashboard = (props: { eventId: string }): JSX.Element => {
   const { eventId } = props;
   const isMounted = useRef(true);
@@ -40,6 +47,12 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
     };
   }, []);
 
+  /**
+   * Formats a time string (HH:MM) to a more readable format.
+   *
+   * @param  timeString - The time string to format.
+   * @returns - The formatted time string.
+   */
   function formatTime(timeString: string): string {
     const [hours, minutes] = timeString.split(':').slice(0, 2);
     return `${hours}:${minutes}`;
@@ -84,6 +97,11 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
     creator: eventData.event.creator,
   };
 
+  if (!eventData || !eventData.event) {
+    return <Loader />; // Fallback UI while data is loading
+  }
+
+  // Render event details
   return (
     <div data-testid="event-dashboard">
       <Row className="">
@@ -151,7 +169,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
               </p>
               <p className={styles.toporgloc} data-testid="event-registrants">
                 <b>Registrants:</b>{' '}
-                <span>{eventData.event.attendees.length}</span>
+                <span>{eventData?.event?.attendees?.length}</span>
               </p>
               <div
                 className={`${styles.toporgloc} d-flex`}
