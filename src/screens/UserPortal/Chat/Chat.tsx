@@ -137,10 +137,8 @@ export default function chat(): JSX.Element {
       if (unreadChatListData && unreadChatListData.getUnreadChatsByUserId) {
         setChats(unreadChatListData.getUnreadChatsByUserId);
       }
-      console.log(unreadChatListData);
     } else if (filterType === 'group') {
       groupChatListRefetch();
-      console.log(groupChatListData);
       if (groupChatListData && groupChatListData.getGroupChatsByUserId) {
         setChats(groupChatListData.getGroupChatsByUserId);
       }
@@ -251,6 +249,7 @@ export default function chat(): JSX.Element {
                       onClick={() => {
                         setFilterType('all');
                       }}
+                      data-testid="allChat"
                       className={[
                         styles.filterButton,
                         filterType === 'all' && styles.selectedBtn,
@@ -261,6 +260,7 @@ export default function chat(): JSX.Element {
                       All
                     </Button>
                     <Button
+                      data-testid="unreadChat"
                       onClick={() => {
                         setFilterType('unread');
                       }}
@@ -277,6 +277,7 @@ export default function chat(): JSX.Element {
                       onClick={() => {
                         setFilterType('group');
                       }}
+                      data-testid="groupChat"
                       className={[
                         styles.filterButton,
                         filterType === 'group' && styles.selectedBtn,

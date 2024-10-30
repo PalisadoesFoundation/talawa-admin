@@ -74,7 +74,7 @@ type Chat = {
     lastName: string;
     email: string;
   }[];
-  unseenMessagesByUsers: JSON;
+  unseenMessagesByUsers: string;
   description: string;
 };
 
@@ -183,15 +183,7 @@ export default function groupChatDetails({
 
   const [selectedImage, setSelectedImage] = useState('');
 
-  const [updateChat] = useMutation(UPDATE_CHAT, {
-    variables: {
-      input: {
-        _id: chat._id,
-        image: selectedImage ? selectedImage : '',
-        name: chatName,
-      },
-    },
-  });
+  const [updateChat] = useMutation(UPDATE_CHAT);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -215,12 +207,12 @@ export default function groupChatDetails({
   return (
     <>
       <Modal
-        data-testid="createDirectChatModal"
+        data-testid="groupChatDetailsModal"
         show={groupChatDetailsModalisOpen}
         onHide={toggleGroupChatDetailsModal}
         contentClassName={styles.modalContent}
       >
-        <Modal.Header closeButton data-testid="createDirectChat">
+        <Modal.Header closeButton data-testid="groupChatDetails">
           <Modal.Title>{t('groupInfo')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -230,6 +222,7 @@ export default function groupChatDetails({
             ref={fileInputRef}
             style={{ display: 'none' }} // Hide the input
             onChange={handleImageChange}
+            data-testid="fileInput"
           />
           <div className={styles.groupInfo}>
             {chat?.image ? (
@@ -237,7 +230,11 @@ export default function groupChatDetails({
             ) : (
               <Avatar avatarStyle={styles.groupImage} name={chat.name || ''} />
             )}
-            <button onClick={handleImageClick} className={styles.editImgBtn}>
+            <button
+              data-testid="editImageBtn"
+              onClick={handleImageClick}
+              className={styles.editImgBtn}
+            >
               <FiEdit />
             </button>
 
@@ -246,20 +243,30 @@ export default function groupChatDetails({
                 <input
                   type="text"
                   value={chatName}
+                  data-testid="chatNameInput"
                   onChange={(e) => {
                     setChatName(e.target.value);
                   }}
                 />
                 <FaCheck
+                  data-testid="updateTitleBtn"
                   className={styles.checkIcon}
                   onClick={async () => {
-                    await updateChat();
-                    setChatName(chat.name || '');
+                    await updateChat({
+                      variables: {
+                        input: {
+                          _id: chat._id,
+                          image: selectedImage ? selectedImage : '',
+                          name: chatName,
+                        },
+                      },
+                    });
                     setEditChatTitle(false);
                     await chatRefetch();
                   }}
                 />
                 <FaX
+                  data-testid="cancelEditBtn"
                   className={styles.cancelIcon}
                   onClick={() => {
                     setEditChatTitle(false);
@@ -271,6 +278,7 @@ export default function groupChatDetails({
               <div className={styles.editChatNameContainer}>
                 <h3>{chat?.name}</h3>
                 <FiEdit
+                  data-testid="editTitleBtn"
                   onClick={() => {
                     setEditChatTitle(true);
                   }}
@@ -291,6 +299,7 @@ export default function groupChatDetails({
             <ListGroup className={styles.memberList} variant="flush">
               {chat.admins.map((admin) => admin._id).includes(userId) && (
                 <ListGroup.Item
+                  data-testid="addMembers"
                   className={styles.listItem}
                   onClick={() => {
                     openAddUserModal();
@@ -305,26 +314,26 @@ export default function groupChatDetails({
                   firstName: string;
                   lastName: string;
                 }) => (
-                  <>
-                    <ListGroup.Item
-                      className={styles.groupMembersList}
-                      key={user._id}
-                    >
-                      <div className={styles.chatUserDetails}>
-                        <Avatar
-                          avatarStyle={styles.membersImage}
-                          name={user.firstName + ' ' + user.lastName}
-                        />
-                        {user.firstName} {user.lastName}
-                      </div>
+                  <ListGroup.Item
+                    className={styles.groupMembersList}
+                    key={user._id}
+                  >
+                    <div className={styles.chatUserDetails}>
+                      <Avatar
+                        avatarStyle={styles.membersImage}
+                        name={user.firstName + ' ' + user.lastName}
+                      />
+                      {user.firstName} {user.lastName}
+                    </div>
 
-                      <div>
-                        {chat.admins
-                          .map((admin) => admin._id)
-                          .includes(user._id) && <p>Admin</p>}
-                      </div>
-                    </ListGroup.Item>
-                  </>
+                    <div>
+                      {chat.admins
+                        .map((admin) => admin._id)
+                        .includes(user._id) && (
+                        <p key={`admin-${user._id}`}>Admin</p>
+                      )}
+                    </div>
+                  </ListGroup.Item>
                 ),
               )}
             </ListGroup>
@@ -364,7 +373,7 @@ export default function groupChatDetails({
                   />
                   <Button
                     type="submit"
-                    data-testid="submitBtn"
+                    data-testid="searchBtn"
                     className={`position-absolute z-10 bottom-10 end-0  d-flex justify-content-center align-items-center `}
                   >
                     <Search />
@@ -381,7 +390,8 @@ export default function groupChatDetails({
                       <StyledTableCell align="center">{'Chat'}</StyledTableCell>
                     </TableRow>
                   </TableHead>
-                  <TableBody>
+                  <TableBody data-testid="userList">
+                    {console.log(allUsersData)}
                     {allUsersData &&
                       allUsersData.users.length > 0 &&
                       allUsersData.users.map(
@@ -412,7 +422,7 @@ export default function groupChatDetails({
                                   toggleAddUserModal();
                                   chatRefetch({ id: chat._id });
                                 }}
-                                data-testid="addBtn"
+                                data-testid="addUserBtn"
                               >
                                 {t('add')}
                               </Button>

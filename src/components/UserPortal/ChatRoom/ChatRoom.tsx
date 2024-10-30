@@ -93,7 +93,7 @@ type Chat = {
     lastName: string;
     email: string;
   }[];
-  unseenMessagesByUsers: JSON;
+  unseenMessagesByUsers: string;
   description: string;
 };
 

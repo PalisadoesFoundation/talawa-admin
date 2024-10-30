@@ -1340,6 +1340,15 @@ const CHAT_BY_ID_QUERY_MOCK = [
               image: '',
             },
           ],
+          admins: [
+            {
+              _id: '1',
+              firstName: 'Disha',
+              lastName: 'Talreja',
+              email: 'disha@example.com',
+              image: '',
+            },
+          ],
           unseenMessagesByUsers: JSON.stringify({
             '1': 1,
             '2': 1,
@@ -1404,6 +1413,15 @@ const CHAT_BY_ID_QUERY_MOCK = [
               image: '',
             },
           ],
+          admins: [
+            {
+              _id: '1',
+              firstName: 'Disha',
+              lastName: 'Talreja',
+              email: 'disha@example.com',
+              image: '',
+            },
+          ],
           unseenMessagesByUsers: JSON.stringify({
             '1': 1,
             '2': 1,
@@ -1465,6 +1483,15 @@ const CHAT_BY_ID_QUERY_MOCK = [
               firstName: 'Test',
               lastName: 'User',
               email: 'test@example.com',
+              image: '',
+            },
+          ],
+          admins: [
+            {
+              _id: '1',
+              firstName: 'Disha',
+              lastName: 'Talreja',
+              email: 'disha@example.com',
               image: '',
             },
           ],
@@ -4425,6 +4452,15 @@ const GROUP_CHAT_BY_ID_QUERY_MOCK = [
               firstName: 'Test',
               lastName: 'User4',
               email: 'test4@example.com',
+              image: '',
+            },
+          ],
+          admins: [
+            {
+              _id: '1',
+              firstName: 'Disha',
+              lastName: 'Talreja',
+              email: 'disha@example.com',
               image: '',
             },
           ],
