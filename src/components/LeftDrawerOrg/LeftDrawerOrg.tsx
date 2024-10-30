@@ -42,7 +42,13 @@ const leftDrawerOrg = ({
   const location = useLocation();
   const { getItem } = useLocalStorage();
   const userId = getItem('id');
-  const id = location.pathname.split('/')[2] || '';
+  const getIdFromPath = (pathname: string): string => {
+    const segments = pathname.split('/');
+    // Index 2 represents the ID in paths like /member/{userId}
+    return segments.length > 2 ? segments[2] : '';
+  };
+
+  const id = getIdFromPath(location.pathname);
   // if param id is equal to userId, then it is a profile page
   const [isProfilePage, setIsProfilePage] = useState(id === userId);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -62,9 +68,9 @@ const leftDrawerOrg = ({
 
   // Check if the current page is admin profile page
   useEffect(() => {
-    const newId = location.pathname.split('/')[2] || '';
+    const newId = getIdFromPath(location.pathname);
     setIsProfilePage(newId === userId);
-  }, [location]);
+  }, [location, userId]);
 
   // Set organization data when query data is available
   useEffect(() => {
