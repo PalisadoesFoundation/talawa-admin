@@ -315,7 +315,15 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                           </Stack>
                         ),
                       }}
-                      sx={dataGridStyle}
+                      sx={{
+                        ...dataGridStyle,
+                        '& .MuiDataGrid-topContainer': {
+                          position: 'static',
+                        },
+                        '& .MuiDataGrid-virtualScrollerContent': {
+                          marginTop: '0',
+                        },
+                      }}
                       getRowClassName={() => `${styles.rowBackground}`}
                       autoHeight
                       rowHeight={65}
