@@ -60,8 +60,9 @@ function ManageTag(): JSX.Element {
   const [addPeopleToTagModalIsOpen, setAddPeopleToTagModalIsOpen] =
     useState(false);
   const [tagActionsModalIsOpen, setTagActionsModalIsOpen] = useState(false);
-  const [editTagModalIsOpen, setEditTagModalIsOpen] = useState(false);
-  const [removeTagModalIsOpen, setRemoveTagModalIsOpen] = useState(false);
+  const [editUserTagModalIsOpen, setEditUserTagModalIsOpen] = useState(false);
+  const [removeUserTagModalIsOpen, setRemoveUserTagModalIsOpen] =
+    useState(false);
 
   const { orgId, tagId: currentTagId } = useParams();
   const navigate = useNavigate();
@@ -72,7 +73,7 @@ function ManageTag(): JSX.Element {
     useState<TagActionType>('assignToTags');
 
   const toggleRemoveUserTagModal = (): void => {
-    setRemoveTagModalIsOpen(!removeTagModalIsOpen);
+    setRemoveUserTagModalIsOpen(!removeUserTagModalIsOpen);
   };
 
   const showAddPeopleToTagModal = (): void => {
@@ -92,11 +93,11 @@ function ManageTag(): JSX.Element {
   };
 
   const showEditTagModal = (): void => {
-    setEditTagModalIsOpen(true);
+    setEditUserTagModalIsOpen(true);
   };
 
-  const hideEditTagModal = (): void => {
-    setEditTagModalIsOpen(false);
+  const hideEditUserTagModal = (): void => {
+    setEditUserTagModalIsOpen(false);
   };
 
   const {
@@ -223,7 +224,7 @@ function ManageTag(): JSX.Element {
         toast.success(t('tagUpdationSuccess'));
         userTagAssignedMembersRefetch();
         orgUserTagsAncestorsRefetch();
-        setEditTagModalIsOpen(false);
+        setEditUserTagModalIsOpen(false);
       }
     } catch (error: unknown) {
       /* istanbul ignore next */
@@ -584,8 +585,8 @@ function ManageTag(): JSX.Element {
       />
       {/* Edit User Tag Modal */}
       <EditUserTagModal
-        editTagModalIsOpen={editTagModalIsOpen}
-        hideEditTagModal={hideEditTagModal}
+        editUserTagModalIsOpen={editUserTagModalIsOpen}
+        hideEditUserTagModal={hideEditUserTagModal}
         newTagName={newTagName}
         setNewTagName={setNewTagName}
         handleEditUserTag={handleEditUserTag}
@@ -594,7 +595,7 @@ function ManageTag(): JSX.Element {
       />
       {/* Remove User Tag Modal */}
       <RemoveUserTagModal
-        removeTagModalIsOpen={removeTagModalIsOpen}
+        removeUserTagModalIsOpen={removeUserTagModalIsOpen}
         toggleRemoveUserTagModal={toggleRemoveUserTagModal}
         handleRemoveUserTag={handleRemoveUserTag}
         t={t}

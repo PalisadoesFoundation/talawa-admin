@@ -6,7 +6,7 @@ import { Button, Modal } from 'react-bootstrap';
  */
 
 export interface InterfaceRemoveUserTagModalProps {
-  removeTagModalIsOpen: boolean;
+  removeUserTagModalIsOpen: boolean;
   toggleRemoveUserTagModal: () => void;
   handleRemoveUserTag: () => Promise<void>;
   t: (key: string) => string;
@@ -14,7 +14,7 @@ export interface InterfaceRemoveUserTagModalProps {
 }
 
 const RemoveUserTagModal: React.FC<InterfaceRemoveUserTagModalProps> = ({
-  removeTagModalIsOpen,
+  removeUserTagModalIsOpen,
   toggleRemoveUserTagModal,
   handleRemoveUserTag,
   t,
@@ -25,7 +25,7 @@ const RemoveUserTagModal: React.FC<InterfaceRemoveUserTagModalProps> = ({
       <Modal
         size="sm"
         id={`deleteActionItemModal`}
-        show={removeTagModalIsOpen}
+        show={removeUserTagModalIsOpen}
         onHide={toggleRemoveUserTagModal}
         backdrop="static"
         keyboard={false}

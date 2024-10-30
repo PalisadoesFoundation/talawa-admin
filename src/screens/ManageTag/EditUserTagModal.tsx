@@ -7,8 +7,8 @@ import { Button, Form, Modal } from 'react-bootstrap';
  */
 
 export interface InterfaceEditUserTagModalProps {
-  editTagModalIsOpen: boolean;
-  hideEditTagModal: () => void;
+  editUserTagModalIsOpen: boolean;
+  hideEditUserTagModal: () => void;
   newTagName: string;
   setNewTagName: (state: React.SetStateAction<string>) => void;
   handleEditUserTag: (e: FormEvent<HTMLFormElement>) => Promise<void>;
@@ -17,8 +17,8 @@ export interface InterfaceEditUserTagModalProps {
 }
 
 const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
-  editTagModalIsOpen,
-  hideEditTagModal,
+  editUserTagModalIsOpen,
+  hideEditUserTagModal,
   newTagName,
   handleEditUserTag,
   setNewTagName,
@@ -28,8 +28,8 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
   return (
     <>
       <Modal
-        show={editTagModalIsOpen}
-        onHide={hideEditTagModal}
+        show={editUserTagModalIsOpen}
+        onHide={hideEditUserTagModal}
         backdrop="static"
         aria-labelledby="contained-modal-title-vcenter"
         centered
@@ -62,7 +62,7 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
           <Modal.Footer>
             <Button
               variant="secondary"
-              onClick={(): void => hideEditTagModal()}
+              onClick={(): void => hideEditUserTagModal()}
               data-testid="closeEditTagModalBtn"
             >
               {tCommon('cancel')}
