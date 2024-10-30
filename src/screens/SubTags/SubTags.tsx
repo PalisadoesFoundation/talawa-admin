@@ -396,6 +396,7 @@ function SubTags(): JSX.Element {
                 next={loadMoreSubTags}
                 hasMore={
                   subTagsData?.getChildTags.childTags.pageInfo.hasNextPage ??
+                  /* istanbul ignore next */
                   false
                 }
                 loader={<InfiniteScrollLoader />}

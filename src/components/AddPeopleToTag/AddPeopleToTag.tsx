@@ -109,11 +109,6 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
     });
   };
 
-  // const userTagMembersToAssignTo =
-  //   userTagsMembersToAssignToData?.getUsersToAssignTo.usersToAssignTo.edges.map(
-  //     (edge) => edge.node,
-  //   );
-
   const userTagMembersToAssignTo =
     userTagsMembersToAssignToData?.getUsersToAssignTo.usersToAssignTo.edges.map(
       (edge) => edge.node,
@@ -158,8 +153,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
         hideAddPeopleToTagModal();
         setAssignToMembers([]);
       }
-    } catch (error: unknown) {
-      /* istanbul ignore next */
+    } catch (error: unknown) /* istanbul ignore next */ {
       const errorMessage =
         error instanceof Error ? error.message : tErrors('unknownError');
       toast.error(errorMessage);

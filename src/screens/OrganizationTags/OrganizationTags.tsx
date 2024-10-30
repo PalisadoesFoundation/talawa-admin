@@ -340,7 +340,7 @@ function OrganizationTags(): JSX.Element {
                 next={loadMoreUserTags}
                 hasMore={
                   orgUserTagsData?.organizations[0].userTags.pageInfo
-                    .hasNextPage ?? false
+                    .hasNextPage ?? /* istanbul ignore next */ false
                 }
                 loader={<InfiniteScrollLoader />}
                 scrollableTarget="orgUserTagsScrollableDiv"

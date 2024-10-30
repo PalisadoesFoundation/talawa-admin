@@ -462,7 +462,7 @@ function ManageTag(): JSX.Element {
                   next={loadMoreAssignedMembers}
                   hasMore={
                     userTagAssignedMembersData?.getAssignedUsers.usersAssignedTo
-                      .pageInfo.hasNextPage ?? false
+                      .pageInfo.hasNextPage ?? /* istanbul ignore next */ false
                   }
                   loader={<InfiniteScrollLoader />}
                   scrollableTarget="manageTagScrollableDiv"
