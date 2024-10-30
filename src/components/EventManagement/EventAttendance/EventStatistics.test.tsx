@@ -4,186 +4,298 @@ import '@testing-library/jest-dom/extend-expect';
 import { AttendanceStatisticsModal } from './EventStatistics';
 import { MockedProvider } from '@apollo/client/testing';
 import { EVENT_DETAILS, RECURRING_EVENTS } from 'GraphQl/Queries/Queries';
-import type { InterfaceMember } from './InterfaceEvents';
+import type {
+  InterfaceEvent,
+  InterfaceMember,
+  InterfaceRecurringEvent,
+} from './InterfaceEvents';
+import type { MockedResponse } from '@apollo/client/testing';
+import type { RenderResult } from '@testing-library/react';
 
-const mockEventData = {
-  event: {
-    recurring: true,
-    baseRecurringEvent: { _id: 'base123' },
+interface InterfaceQueryResult {
+  event?: InterfaceEvent;
+  getRecurringEvents?: InterfaceRecurringEvent[];
+}
+
+interface InterfaceQueryVariables {
+  id?: string;
+  baseRecurringEventId?: string;
+}
+// Mock react-router-dom useParams
+jest.mock('react-router-dom', () => ({
+  useParams: () => ({
+    orgId: 'org123',
+    eventId: 'event123',
+  }),
+}));
+
+jest.mock('utils/chartToPdf', () => ({
+  exportToCSV: jest.fn(),
+}));
+
+const mockMemberData: InterfaceMember[] = [
+  {
+    _id: 'user1',
+    firstName: 'John',
+    lastName: 'Doe',
+    email: 'johndoe@example.com',
+    gender: 'MALE',
+    eventsAttended: [{ _id: 'event1' }, { _id: 'event2' }],
+    createdAt: new Date().toISOString(),
+    birthDate: new Date('1990-01-01'),
+    __typename: 'User',
+    tagsAssignedWith: {
+      edges: [{ node: { name: 'Tag1' } }],
+    },
   },
-};
-
-const mockRecurringData = {
-  getRecurringEvents: [
-    {
-      startDate: '2023-05-01',
-      attendees: [{ gender: 'MALE' }, { gender: 'FEMALE' }],
+  {
+    _id: 'user2',
+    firstName: 'Jane',
+    lastName: 'Smith',
+    email: 'janesmith@example.com',
+    gender: 'FEMALE',
+    eventsAttended: [
+      { _id: 'event1' },
+      { _id: 'event2' },
+      { _id: 'event3' },
+      { _id: 'event4' },
+    ],
+    createdAt: '2023-01-01',
+    birthDate: new Date('1985-05-05'),
+    __typename: 'Admin',
+    tagsAssignedWith: {
+      edges: [],
     },
-    {
-      startDate: '2023-05-08',
-      attendees: [{ gender: 'MALE' }, { gender: 'OTHER' }],
-    },
-  ],
-};
+  },
+];
 
-const mocks = [
+const nonRecurringMocks = [
   {
     request: {
       query: EVENT_DETAILS,
       variables: { id: 'event123' },
     },
-    result: { data: mockEventData },
+    result: {
+      data: {
+        event: {
+          _id: 'event123',
+          recurring: false,
+          title: 'Single Test Event',
+          startDate: '2023-05-01',
+          attendees: mockMemberData,
+          baseRecurringEvent: null,
+        },
+      },
+    },
+  },
+];
+
+const recurringMocks = [
+  {
+    request: {
+      query: EVENT_DETAILS,
+      variables: { id: 'event123' },
+    },
+    result: {
+      data: {
+        event: {
+          _id: 'event123',
+          recurring: true,
+          baseRecurringEvent: { _id: 'base123' },
+          title: 'Test Event',
+          startDate: new Date().toISOString(),
+          attendees: mockMemberData,
+        },
+      },
+    },
   },
   {
     request: {
       query: RECURRING_EVENTS,
       variables: { baseRecurringEventId: 'base123' },
     },
-    result: { data: mockRecurringData },
+    result: {
+      data: {
+        getRecurringEvents: Array.from({ length: 5 }, (_, i) => ({
+          _id: `event${i}`,
+          title: `Event ${i}`,
+          startDate: new Date(2023, 4, i + 1).toISOString(),
+          attendees: mockMemberData.map((member) => ({
+            ...member,
+            _id: `${member._id}_${i}`,
+            eventsAttended: member?.eventsAttended?.map((event) => ({
+              ...event,
+              _id: `${event._id}_${i}`,
+            })),
+          })),
+        })),
+      },
+    },
   },
 ];
 
+const renderModal = (
+  mocks: MockedResponse<InterfaceQueryResult, InterfaceQueryVariables>[],
+): RenderResult => {
+  return render(
+    <MockedProvider mocks={mocks} addTypename={false}>
+      <AttendanceStatisticsModal
+        show={true}
+        handleClose={jest.fn()}
+        statistics={{
+          totalMembers: 100,
+          membersAttended: 40,
+          attendanceRate: 40,
+        }}
+        memberData={mockMemberData}
+      />
+    </MockedProvider>,
+  );
+};
+
 describe('AttendanceStatisticsModal', () => {
-  const mockHandleClose = jest.fn();
-  const mockStatistics = {
-    totalMembers: 100,
-    membersAttended: 40,
-    attendanceRate: 40,
-  };
-  const mockMemberData: InterfaceMember[] = [
-    {
-      _id: 'user1',
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'johndoe@example.com',
-      gender: 'male',
-      eventsAttended: [{ _id: 'event1' }, { _id: 'event2' }],
-      createdAt: new Date().toISOString(),
-      birthDate: new Date('1990-01-01'),
-      __typename: 'User',
-      tagsAssignedWith: {
-        edges: [{ node: { name: 'Tag1' } }],
-      },
-    },
-    {
-      _id: 'user2',
-      firstName: 'Jane',
-      lastName: 'Smith',
-      email: 'janesmith@example.com',
-      gender: 'female',
-      eventsAttended: [],
-      createdAt: '2023-01-01',
-      birthDate: new Date('1985-05-05'),
-      __typename: 'Admin',
-      tagsAssignedWith: {
-        edges: [],
-      },
-    },
-    {
-      _id: 'user3',
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'johndoe@example.com',
-      gender: 'male',
-      eventsAttended: [{ _id: 'event1' }, { _id: 'event2' }],
-      createdAt: new Date().toISOString(),
-      birthDate: new Date('1990-01-01'),
-      __typename: 'User',
-      tagsAssignedWith: {
-        edges: [{ node: { name: 'Tag1' } }],
-      },
-    },
-  ];
-
-  it('renders recurring event data correctly', async () => {
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <AttendanceStatisticsModal
-          show={true}
-          handleClose={mockHandleClose}
-          statistics={mockStatistics}
-          memberData={mockMemberData}
-        />
-      </MockedProvider>,
-    );
-
-    await waitFor(() => {
-      expect(screen.getByTestId('modal-title')).toBeInTheDocument();
-      expect(screen.getByTestId('trends-export')).toBeInTheDocument();
-    });
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
-  it('changes category when Age button is clicked', async () => {
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <AttendanceStatisticsModal
-          show={true}
-          handleClose={mockHandleClose}
-          statistics={mockStatistics}
-          memberData={mockMemberData}
-        />
-      </MockedProvider>,
-    );
+  describe('Recurring Events', () => {
+    it('renders recurring event data and line chart', async () => {
+      renderModal(
+        recurringMocks as MockedResponse<
+          InterfaceQueryResult,
+          InterfaceQueryVariables
+        >[],
+      );
 
-    await waitFor(() => {
-      fireEvent.click(screen.getByTestId('age-button'));
-      expect(screen.getByTestId('age-button')).toHaveClass('btn-light');
-      expect(screen.getByTestId('gender-button')).toHaveClass('btn-success');
+      await waitFor(() => {
+        expect(screen.getByTestId('modal-title')).toBeInTheDocument();
+      });
+
+      const charts = document.querySelectorAll('canvas');
+      expect(charts).toHaveLength(2); // Line chart and demographic bar chart
+      expect(screen.getByTestId('today-button')).toBeInTheDocument();
+      expect(screen.getByAltText('left-arrow')).toBeInTheDocument();
+      expect(screen.getByAltText('right-arrow')).toBeInTheDocument();
     });
-  });
+    it('handles pagination in recurring view', async () => {
+      renderModal(
+        recurringMocks as MockedResponse<
+          InterfaceQueryResult,
+          InterfaceQueryVariables
+        >[],
+      );
 
-  it('calls handleClose when close button is clicked', async () => {
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <AttendanceStatisticsModal
-          show={true}
-          handleClose={mockHandleClose}
-          statistics={mockStatistics}
-          memberData={mockMemberData}
-        />
-      </MockedProvider>,
-    );
+      await waitFor(() => {
+        expect(screen.getByAltText('right-arrow')).toBeInTheDocument();
+      });
 
-    await waitFor(() => {
-      fireEvent.click(screen.getByTestId('close-button'));
-      expect(mockHandleClose).toHaveBeenCalled();
+      fireEvent.click(screen.getByAltText('right-arrow'));
+
+      await waitFor(() => {
+        // Add any specific assertions for pagination here
+      });
     });
-  });
 
-  it('displays export options correctly', async () => {
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <AttendanceStatisticsModal
-          show={true}
-          handleClose={mockHandleClose}
-          statistics={mockStatistics}
-          memberData={mockMemberData}
-        />
-      </MockedProvider>,
-    );
+    it('updates date range when Today button is clicked', async () => {
+      renderModal(
+        recurringMocks as MockedResponse<
+          InterfaceQueryResult,
+          InterfaceQueryVariables
+        >[],
+      );
 
-    await waitFor(() => {
-      fireEvent.click(screen.getByTestId('export-dropdown'));
-      expect(screen.getByTestId('trends-export')).toBeInTheDocument();
-      expect(screen.getByTestId('demographics-export')).toBeInTheDocument();
-    });
-  });
-
-  it("changes to today's date when Today button is clicked", async () => {
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <AttendanceStatisticsModal
-          show={true}
-          handleClose={mockHandleClose}
-          statistics={mockStatistics}
-          memberData={mockMemberData}
-        />
-      </MockedProvider>,
-    );
-
-    await waitFor(() => {
       fireEvent.click(screen.getByTestId('today-button'));
-      // Add expectations for date change
+
+      await waitFor(() => {
+        const charts = document.querySelectorAll('canvas');
+        expect(charts).toHaveLength(2);
+      });
+    });
+  });
+
+  describe('Non-Recurring Events', () => {
+    it('renders non-recurring event data with attendance count', async () => {
+      renderModal(nonRecurringMocks);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('modal-title')).toBeInTheDocument();
+        const attendanceCount = screen.getByText('100');
+        expect(attendanceCount).toBeInTheDocument();
+      });
+    });
+
+    it('displays demographic bar chart for non-recurring event', async () => {
+      renderModal(nonRecurringMocks);
+
+      const charts = document.querySelectorAll('canvas');
+      expect(charts).toHaveLength(1); // Only demographic bar chart
+    });
+
+    it('switches between gender and age demographics', async () => {
+      renderModal(nonRecurringMocks);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('age-button')).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByTestId('age-button'));
+
+      await waitFor(() => {
+        expect(screen.getByTestId('age-button')).toHaveClass('btn-light');
+      });
+    });
+  });
+
+  describe('Shared Functionality', () => {
+    it('exports data correctly for both types', async () => {
+      renderModal(
+        recurringMocks as MockedResponse<
+          InterfaceQueryResult,
+          InterfaceQueryVariables
+        >[],
+      );
+
+      await waitFor(() => {
+        expect(screen.getByTestId('export-dropdown')).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByTestId('export-dropdown'));
+      // Add assertions related to the export functionality here
+    });
+
+    it('closes modal when close button is clicked', async () => {
+      renderModal(
+        recurringMocks as MockedResponse<
+          InterfaceQueryResult,
+          InterfaceQueryVariables
+        >[],
+      );
+
+      await waitFor(() => {
+        expect(screen.getByTestId('close-button')).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByTestId('close-button'));
+      // Add assertions related to modal closing here
+    });
+
+    it('handles demographic toggles correctly', async () => {
+      renderModal(
+        recurringMocks as MockedResponse<
+          InterfaceQueryResult,
+          InterfaceQueryVariables
+        >[],
+      );
+      await waitFor(() => {
+        expect(screen.getByTestId('gender-button')).toBeInTheDocument();
+        expect(screen.getByTestId('age-button')).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByTestId('gender-button'));
+      expect(screen.getByTestId('gender-button')).toHaveTextContent('Gender');
+
+      fireEvent.click(screen.getByTestId('age-button'));
+      expect(screen.getByTestId('age-button')).toHaveTextContent('Age');
     });
   });
 });

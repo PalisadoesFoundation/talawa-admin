@@ -11,13 +11,14 @@ interface InterfaceEventsAttended {
 }
 
 const AttendedEventList: React.FC<InterfaceEventsAttended> = ({ eventId }) => {
+  const { orgId: currentOrg } = useParams();
   const { data, loading } = useQuery(EVENT_DETAILS, {
     variables: { id: eventId },
   });
 
-  if (loading) return <p>Loading...</p>;
-  const { orgId: currentOrg } = useParams();
   const event = data?.event;
+
+  if (loading) return <p>Loading...</p>;
 
   return (
     <React.Fragment>
@@ -25,10 +26,11 @@ const AttendedEventList: React.FC<InterfaceEventsAttended> = ({ eventId }) => {
         <TableBody className="bg-primary">
           {event && (
             <TableRow key={event._id} className="bg-white rounded">
-              <Link to={`/event/${currentOrg}/${event._id}`}>
-                <TableCell
-                  style={{ color: 'blue' }}
+              <TableCell>
+                <Link
+                  to={`/event/${currentOrg}/${event._id}`}
                   className="d-flex justify-items-center align-items-center"
+                  style={{ color: 'blue', textDecoration: 'none' }}
                 >
                   <DateIcon
                     title="Event Date"
@@ -41,8 +43,8 @@ const AttendedEventList: React.FC<InterfaceEventsAttended> = ({ eventId }) => {
                     <div>{event.title}</div>
                     <div>{formatDate(event.startDate)}</div>
                   </div>
-                </TableCell>
-              </Link>
+                </Link>
+              </TableCell>
             </TableRow>
           )}
         </TableBody>

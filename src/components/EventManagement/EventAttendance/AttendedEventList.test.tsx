@@ -6,12 +6,30 @@ import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
+import { formatDate } from 'utils/dateFormatter';
 
 const mockEvent = {
   _id: 'event123',
   title: 'Test Event',
-  startDate: '2023-06-15T10:00:00Z',
   description: 'This is a test event description',
+  startDate: '2023-05-01',
+  endDate: '2023-05-02',
+  startTime: '09:00:00',
+  endTime: '17:00:00',
+  allDay: false,
+  location: 'Test Location',
+  recurring: true,
+  baseRecurringEvent: {
+    _id: 'recurringEvent123',
+  },
+  organization: {
+    _id: 'org456',
+    members: [
+      { _id: 'member1', firstName: 'John', lastName: 'Doe' },
+      { _id: 'member2', firstName: 'Jane', lastName: 'Smith' },
+    ],
+  },
+  attendees: [{ _id: 'user1' }, { _id: 'user2' }],
 };
 
 const mocks = [
@@ -48,7 +66,7 @@ describe('Testing AttendedEventList', () => {
 
     await waitFor(() => {
       expect(queryByText('Test Event')).toBeInTheDocument();
-      expect(queryByText('Jun 15, 2023')).toBeInTheDocument();
+      expect(queryByText(formatDate(mockEvent.startDate))).toBeInTheDocument();
       expect(queryByTitle('Event Date')).toBeInTheDocument();
     });
   });

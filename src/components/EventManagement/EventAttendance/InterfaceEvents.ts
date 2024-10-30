@@ -65,3 +65,13 @@ export interface InterfaceEvent {
   }[];
   __typename: string;
 }
+
+export interface InterfaceRecurringEvent {
+  _id: string;
+  title: string;
+  startDate: string;
+  attendees: {
+    _id: string;
+    gender: string;
+  }[];
+}

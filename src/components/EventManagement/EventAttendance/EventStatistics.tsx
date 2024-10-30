@@ -255,7 +255,7 @@ export const AttendanceStatisticsModal: React.FC<
       onHide={handleClose}
       className="attendance-modal"
       centered
-      size={isEventRecurring ? 'xl' : undefined}
+      size={isEventRecurring ? 'xl' : 'lg'}
       data-testid="attendance-modal"
     >
       <Modal.Header closeButton className="bg-success">
@@ -441,9 +441,11 @@ export const AttendanceStatisticsModal: React.FC<
             Export Data
           </Dropdown.Toggle>
           <Dropdown.Menu>
-            <Dropdown.Item data-testid="trends-export" eventKey="trends">
-              Trends
-            </Dropdown.Item>
+            {isEventRecurring && (
+              <Dropdown.Item data-testid="trends-export" eventKey="trends">
+                Trends
+              </Dropdown.Item>
+            )}
             <Dropdown.Item
               data-testid="demographics-export"
               eventKey="demographics"

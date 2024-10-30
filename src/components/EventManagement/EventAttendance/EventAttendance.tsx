@@ -4,7 +4,6 @@ import {
   Paper,
   TableBody,
   TableCell,
-  tableCellClasses,
   TableContainer,
   TableHead,
   TableRow,
@@ -24,7 +23,6 @@ import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { AttendanceStatisticsModal } from './EventStatistics';
 import AttendedEventList from './AttendedEventList';
-import { styled } from '@mui/system';
 
 interface InterfaceMember {
   createdAt: string;
@@ -158,29 +156,6 @@ function EventAttendance(): JSX.Element {
   ).length;
   const attendanceRate =
     totalMembers > 0 ? (membersAttended / totalMembers) * 100 : 0;
-
-  const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-    },
-  }));
-
-  const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    '&:nth-of-type(odd)': {
-      backgroundColor: '#90EE90', // Light green color for odd rows
-    },
-    '&:nth-of-type(even)': {
-      backgroundColor: '#90EE90', // White color for even rows
-    },
-    // hide last border
-    '&:last-child td, &:last-child th': {
-      border: 0,
-    },
-  }));
   return (
     <div className="">
       <AttendanceStatisticsModal
@@ -195,6 +170,7 @@ function EventAttendance(): JSX.Element {
           <Button
             className={`border-1 bg-white text-success ${styles.actionBtn}`}
             onClick={showModal}
+            data-testid="stats-modal"
           >
             Historical Statistics
           </Button>
@@ -220,6 +196,7 @@ function EventAttendance(): JSX.Element {
           </div>
 
           <DropdownButton
+            data-testid="filter-dropdown"
             className={`border-1 mx-4`}
             title={
               <>
@@ -233,7 +210,6 @@ function EventAttendance(): JSX.Element {
                 <span className="ms-2">Filter: {filteringBy}</span>
               </>
             }
-            data-testid="sort-dropdown"
             onSelect={(eventKey) =>
               setFilteringBy(eventKey as 'This Month' | 'This Year' | 'All')
             }
@@ -243,6 +219,7 @@ function EventAttendance(): JSX.Element {
             <Dropdown.Item eventKey="All">All</Dropdown.Item>
           </DropdownButton>
           <DropdownButton
+            data-testid="sort-dropdown"
             className={`border-1 `}
             title={
               <>
@@ -304,22 +281,19 @@ function EventAttendance(): JSX.Element {
           </TableHead>
           <TableBody>
             {filteredAttendees.map((member: InterfaceMember, index: number) => (
-              <StyledTableRow
+              <TableRow
                 key={index}
                 data-testid={`attendee-row-${index}`}
                 className="my-6"
               >
-                <StyledTableCell
+                <TableCell
                   component="th"
                   scope="row"
                   data-testid={`attendee-index-${index}`}
                 >
                   {index + 1}
-                </StyledTableCell>
-                <StyledTableCell
-                  align="left"
-                  data-testid={`attendee-name-${index}`}
-                >
+                </TableCell>
+                <TableCell align="left" data-testid={`attendee-name-${index}`}>
                   <Link
                     to={`/member/${currentUrl}`}
                     state={{ id: member._id }}
@@ -327,13 +301,13 @@ function EventAttendance(): JSX.Element {
                   >
                     {member.firstName} {member.lastName}
                   </Link>
-                </StyledTableCell>
-                <StyledTableCell
+                </TableCell>
+                <TableCell
                   align="left"
                   data-testid={`attendee-status-${index}`}
                 >
                   {member.__typename === 'User' ? t('Member') : t('Admin')}
-                </StyledTableCell>
+                </TableCell>
                 <Tooltip
                   componentsProps={{
                     tooltip: {
@@ -349,11 +323,17 @@ function EventAttendance(): JSX.Element {
                       },
                     },
                   }}
-                  title={member.eventsAttended?.map((event: InterfaceEvent) => (
-                    <AttendedEventList key={event._id} eventId={event._id} />
-                  ))}
+                  title={member.eventsAttended?.map(
+                    (event: InterfaceEvent, index) => (
+                      <AttendedEventList
+                        key={event._id}
+                        eventId={event._id}
+                        data-testid={`attendee-events-attended-${index}`}
+                      />
+                    ),
+                  )}
                 >
-                  <StyledTableCell
+                  <TableCell
                     align="left"
                     data-testid={`attendee-events-attended-${index}`}
                   >
@@ -362,9 +342,9 @@ function EventAttendance(): JSX.Element {
                         ? member.eventsAttended.length
                         : '0'}
                     </a>
-                  </StyledTableCell>
+                  </TableCell>
                 </Tooltip>
-                <StyledTableCell
+                <TableCell
                   align="left"
                   data-testid={`attendee-task-assigned-${index}`}
                 >
@@ -377,8 +357,8 @@ function EventAttendance(): JSX.Element {
                   ) : (
                     <div>None</div>
                   )}
-                </StyledTableCell>
-              </StyledTableRow>
+                </TableCell>
+              </TableRow>
             ))}
           </TableBody>
         </Table>
