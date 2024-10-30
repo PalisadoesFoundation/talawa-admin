@@ -47,7 +47,6 @@ const leftDrawerOrg = ({
     // Index 2 represents the ID in paths like /member/{userId}
     return segments.length > 2 ? segments[2] : '';
   };
-  // if param id is equal to userId, then it is a profile page
   const [isProfilePage, setIsProfilePage] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [organization, setOrganization] =
@@ -68,6 +67,7 @@ const leftDrawerOrg = ({
   useEffect(() => {
     // id could be userId or orgId
     const id = getIdFromPath(location.pathname);
+    // if param id is equal to userId, then it is a profile page
     setIsProfilePage(id === userId);
   }, [location, userId]);
 
