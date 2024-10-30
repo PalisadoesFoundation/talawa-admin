@@ -416,16 +416,16 @@ function ManageTag(): JSX.Element {
               >
                 {t('subTags')}
               </Button>
-              <Button
-                variant="success"
-                onClick={showAddPeopleToTagModal}
-                data-testid="addPeopleToTagBtn"
-                className="ms-auto"
-              >
-                <i className={'fa fa-plus me-2'} />
-                {t('addPeopleToTag')}
-              </Button>
             </div>
+            <Button
+              variant="success"
+              onClick={showAddPeopleToTagModal}
+              data-testid="addPeopleToTagBtn"
+              className="ms-auto"
+            >
+              <i className={'fa fa-plus me-2'} />
+              {t('addPeopleToTag')}
+            </Button>
           </div>
 
           <Row className="mb-4">
@@ -463,7 +463,7 @@ function ManageTag(): JSX.Element {
                 className={styles.manageTagScrollableDiv}
               >
                 <InfiniteScroll
-                  dataLength={userTagAssignedMembers?.length ?? 0} // This is important field to render the next data
+                  dataLength={userTagAssignedMembers?.length ?? 0}
                   next={loadMoreAssignedMembers}
                   hasMore={
                     userTagAssignedMembersData?.getAssignedUsers.usersAssignedTo
@@ -508,13 +508,13 @@ function ManageTag(): JSX.Element {
               <div className="bg-secondary text-white rounded-top mb-0 py-2 fw-semibold ms-2">
                 <div className="ms-3 fs-5">{'Actions'}</div>
               </div>
-              <div className="bg-white rounded-bottom mb-0 py-2 fw-semibold ms-2">
+              <div className="d-flex flex-column align-items-center bg-white rounded-bottom mb-0 py-2 fw-semibold ms-2">
                 <div
                   onClick={() => {
                     setTagActionType('assignToTags');
                     showAssignToTagsModal();
                   }}
-                  className="ms-5 mt-2 mb-2 btn btn-primary btn-sm w-75"
+                  className="my-2 btn btn-primary btn-sm w-75"
                   data-testid="assignToTags"
                 >
                   {t('assignToTags')}
@@ -524,22 +524,30 @@ function ManageTag(): JSX.Element {
                     setTagActionType('removeFromTags');
                     showAssignToTagsModal();
                   }}
-                  className="ms-5 mb-3 btn btn-danger btn-sm w-75"
+                  className="mb-1 btn btn-danger btn-sm w-75"
                   data-testid="removeFromTags"
                 >
                   {t('removeFromTags')}
                 </div>
-                <hr className="mb-1 mt-2" />
+
+                <hr
+                  style={{
+                    borderColor: 'lightgray',
+                    borderWidth: '2px',
+                    width: '85%',
+                  }}
+                />
+
                 <div
                   onClick={showEditTagModal}
-                  className="ms-5 mt-3 mb-2 btn btn-primary btn-sm w-75"
+                  className="mt-1 mb-2 btn btn-primary btn-sm w-75"
                   data-testid="editUserTag"
                 >
                   {tCommon('edit')}
                 </div>
                 <div
                   onClick={toggleRemoveUserTagModal}
-                  className="ms-5 mb-2 btn btn-danger btn-sm w-75"
+                  className="mb-2 btn btn-danger btn-sm w-75"
                   data-testid="removeTag"
                 >
                   {tCommon('remove')}
