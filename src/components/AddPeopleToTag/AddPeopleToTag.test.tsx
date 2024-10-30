@@ -74,7 +74,7 @@ const renderAddPeopleToTagModal = (
           <I18nextProvider i18n={i18n}>
             <Routes>
               <Route
-                path="/orgtags/:orgId/managetag/:tagId"
+                path="/orgtags/:orgId/manageTag/:tagId"
                 element={<AddPeopleToTag {...props} />}
               />
             </Routes>

@@ -113,7 +113,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
   const userTagMembersToAssignTo =
     userTagsMembersToAssignToData?.getUsersToAssignTo.usersToAssignTo.edges.map(
       (edge) => edge.node,
-    );
+    ) ?? /* istanbul ignore next */ [];
 
   const handleAddOrRemoveMember = (member: InterfaceMemberData): void => {
     setAssignToMembers((prevMembers) => {

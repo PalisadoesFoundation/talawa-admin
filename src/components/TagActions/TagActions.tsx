@@ -102,9 +102,10 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
     });
   };
 
-  const userTagsList = orgUserTagsData?.organizations[0]?.userTags.edges.map(
-    (edge) => edge.node,
-  );
+  const userTagsList =
+    orgUserTagsData?.organizations[0]?.userTags.edges.map(
+      (edge) => edge.node,
+    ) ?? /* istanbul ignore next */ [];
 
   const [checkedTagId, setCheckedTagId] = useState<string | null>(null);
   const [uncheckedTagId, setUncheckedTagId] = useState<string | null>(null);

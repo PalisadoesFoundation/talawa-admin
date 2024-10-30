@@ -92,9 +92,9 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
     );
   }
 
-  const subTagsList = subTagsData?.getChildTags.childTags.edges.map(
-    (edge) => edge.node,
-  );
+  const subTagsList =
+    subTagsData?.getChildTags.childTags.edges.map((edge) => edge.node) ??
+    /* istanbul ignore next */ [];
 
   const handleTagClick = (): void => {
     setExpanded(!expanded);

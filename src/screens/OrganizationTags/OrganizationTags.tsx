@@ -367,9 +367,9 @@ function OrganizationTags(): JSX.Element {
                   getRowClassName={() => `${styles.rowBackground}`}
                   autoHeight
                   rowHeight={65}
-                  rows={userTagsList?.map((fund, index) => ({
+                  rows={userTagsList?.map((userTag, index) => ({
                     id: index + 1,
-                    ...fund,
+                    ...userTag,
                   }))}
                   columns={columns}
                   isRowSelectable={() => false}

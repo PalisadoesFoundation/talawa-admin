@@ -146,4 +146,5 @@
 
   max-height: calc(100vh - 18rem);
   overflow: auto;
+  position: sticky;
 }

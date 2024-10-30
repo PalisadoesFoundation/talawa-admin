@@ -28,6 +28,14 @@ export const dataGridStyle = {
   '& .MuiDataGrid-main': {
     borderRadius: '0.1rem',
   },
+  '& .MuiDataGrid-topContainer': {
+    position: 'fixed',
+    top: 259,
+    zIndex: 1,
+  },
+  '& .MuiDataGrid-virtualScrollerContent': {
+    marginTop: 6.5,
+  },
 };
 
 // the data chunk size for tag related queries

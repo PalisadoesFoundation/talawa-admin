@@ -26,6 +26,7 @@ const RemoveUserTagModal: React.FC<InterfaceRemoveUserTagModalProps> = ({
       <Modal
         size="sm"
         id="removeUserTagModal"
+        aria-describedby="removeUserTagMessage"
         show={removeUserTagModalIsOpen}
         onHide={toggleRemoveUserTagModal}
         backdrop="static"
@@ -33,11 +34,13 @@ const RemoveUserTagModal: React.FC<InterfaceRemoveUserTagModalProps> = ({
         centered
       >
         <Modal.Header closeButton className="bg-primary">
-          <Modal.Title className="text-white" id={`deleteActionItem`}>
+          <Modal.Title className="text-white" id="removeUserTag">
             {t('removeUserTag')}
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body>{t('removeUserTagMessage')}</Modal.Body>
+        <Modal.Body id="removeUserTagMessage">
+          {t('removeUserTagMessage')}
+        </Modal.Body>
         <Modal.Footer>
           <Button
             type="button"

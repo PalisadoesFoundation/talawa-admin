@@ -43,7 +43,14 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
         >
           <Modal.Title className="text-white">{t('tagDetails')}</Modal.Title>
         </Modal.Header>
-        <Form onSubmitCapture={handleEditUserTag}>
+        <Form
+          onSubmitCapture={(e: FormEvent<HTMLFormElement>): void => {
+            e.preventDefault();
+            if (newTagName.trim()) {
+              handleEditUserTag(e);
+            }
+          }}
+        >
           <Modal.Body>
             <Form.Label htmlFor="tagName">{t('tagName')}</Form.Label>
             <Form.Control

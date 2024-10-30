@@ -178,9 +178,9 @@ function SubTags(): JSX.Element {
     );
   }
 
-  const userTagsList = subTagsData?.getChildTags.childTags.edges.map(
-    (edge) => edge.node,
-  );
+  const subTagsList =
+    subTagsData?.getChildTags.childTags.edges.map((edge) => edge.node) ??
+    /* istanbul ignore next */ [];
 
   const orgUserTagAncestors = orgUserTagAncestorsData?.getUserTagAncestors;
 
@@ -343,17 +343,16 @@ function SubTags(): JSX.Element {
               >
                 {`${t('manageTag')} ${subTagsData?.getChildTags.name}`}
               </Button>
-
-              <Button
-                variant="success"
-                onClick={showAddSubTagModal}
-                data-testid="addSubTagBtn"
-                className="ms-auto"
-              >
-                <i className={'fa fa-plus me-2'} />
-                {t('addChildTag')}
-              </Button>
             </div>
+            <Button
+              variant="success"
+              onClick={showAddSubTagModal}
+              data-testid="addSubTagBtn"
+              className="ms-auto"
+            >
+              <i className={'fa fa-plus me-2'} />
+              {t('addChildTag')}
+            </Button>
           </div>
 
           <div className="mb-4">
@@ -392,7 +391,7 @@ function SubTags(): JSX.Element {
               className={styles.subTagsScrollableDiv}
             >
               <InfiniteScroll
-                dataLength={userTagsList?.length ?? 0}
+                dataLength={subTagsList?.length ?? 0}
                 next={loadMoreSubTags}
                 hasMore={
                   subTagsData?.getChildTags.childTags.pageInfo.hasNextPage ??
@@ -422,9 +421,9 @@ function SubTags(): JSX.Element {
                   getRowClassName={() => `${styles.rowBackground}`}
                   autoHeight
                   rowHeight={65}
-                  rows={userTagsList?.map((fund, index) => ({
+                  rows={subTagsList?.map((subTag, index) => ({
                     id: index + 1,
-                    ...fund,
+                    ...subTag,
                   }))}
                   columns={columns}
                   isRowSelectable={() => false}

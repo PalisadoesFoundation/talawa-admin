@@ -276,7 +276,7 @@ function ManageTag(): JSX.Element {
   const userTagAssignedMembers =
     userTagAssignedMembersData?.getAssignedUsers.usersAssignedTo.edges.map(
       (edge) => edge.node,
-    );
+    ) ?? /* istanbul ignore next */ [];
   const orgUserTagAncestors = orgUserTagAncestorsData?.getUserTagAncestors;
 
   const redirectToSubTags = (tagId: string): void => {
