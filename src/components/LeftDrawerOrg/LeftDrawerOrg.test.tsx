@@ -291,8 +291,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
   test('Testing Profile Page & Organization Detail Modal', async () => {
     setItem('UserImage', '');
     setItem('SuperAdmin', true);
-    setItem('FirstName', 'John');
-    setItem('LastName', 'Doe');
+    setItem('id', '1234');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -306,6 +305,9 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     );
     await wait();
     expect(screen.getByTestId(/orgBtn/i)).toBeInTheDocument();
+    expect(
+      screen.queryByText(/Error occured while loading Organization data/i),
+    ).not.toBeInTheDocument();
   });
 
   test('Testing Menu Buttons', async () => {

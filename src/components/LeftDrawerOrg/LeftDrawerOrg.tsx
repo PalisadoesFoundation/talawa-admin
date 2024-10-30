@@ -6,13 +6,14 @@ import IconComponent from 'components/IconComponent/IconComponent';
 import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
 import AngleRightIcon from 'assets/svgs/angleRight.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import styles from './LeftDrawerOrg.module.css';
 import Avatar from 'components/Avatar/Avatar';
+import useLocalStorage from 'utils/useLocalstorage';
 
 export interface InterfaceLeftDrawerProps {
   orgId: string;
@@ -38,8 +39,13 @@ const leftDrawerOrg = ({
 }: InterfaceLeftDrawerProps): JSX.Element => {
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
+  const location = useLocation();
+  const { getItem } = useLocalStorage();
+  const userId = getItem('id');
+  const id = location.pathname.split('/')[2] || '';
+  // if param id is equal to userId, then it is a profile page
+  const [isProfilePage, setIsProfilePage] = useState(id === userId);
   const [showDropdown, setShowDropdown] = useState(false);
-
   const [organization, setOrganization] =
     useState<InterfaceQueryOrganizationsListObject>();
   const {
@@ -54,16 +60,24 @@ const leftDrawerOrg = ({
     variables: { id: orgId },
   });
 
+  // Check if the current page is admin profile page
+  useEffect(() => {
+    const newId = location.pathname.split('/')[2] || '';
+    setIsProfilePage(newId === userId);
+  }, [location]);
+
   // Set organization data when query data is available
   useEffect(() => {
     let isMounted = true;
     if (data && isMounted) {
       setOrganization(data?.organizations[0]);
+    } else {
+      setOrganization(undefined);
     }
     return () => {
       isMounted = false;
     };
-  }, [data]);
+  }, [data, location]);
 
   /**
    * Handles link click to hide the drawer on smaller screens.
@@ -104,17 +118,19 @@ const leftDrawerOrg = ({
               />
             </>
           ) : organization == undefined ? (
-            <>
-              <button
-                className={`${styles.profileContainer} bg-danger text-start text-white`}
-                disabled
-              >
-                <div className="px-3">
-                  <WarningAmberOutlined />
-                </div>
-                {tErrors('errorLoading', { entity: 'Organization' })}
-              </button>
-            </>
+            !isProfilePage && (
+              <>
+                <button
+                  className={`${styles.profileContainer} bg-danger text-start text-white`}
+                  disabled
+                >
+                  <div className="px-3">
+                    <WarningAmberOutlined />
+                  </div>
+                  {tErrors('errorLoading', { entity: 'Organization' })}
+                </button>
+              </>
+            )
           ) : (
             <button className={styles.profileContainer} data-testid="OrgBtn">
               <div className={styles.imageContainer}>
