@@ -47,10 +47,8 @@ const leftDrawerOrg = ({
     // Index 2 represents the ID in paths like /member/{userId}
     return segments.length > 2 ? segments[2] : '';
   };
-
-  const id = getIdFromPath(location.pathname);
   // if param id is equal to userId, then it is a profile page
-  const [isProfilePage, setIsProfilePage] = useState(id === userId);
+  const [isProfilePage, setIsProfilePage] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [organization, setOrganization] =
     useState<InterfaceQueryOrganizationsListObject>();
@@ -68,8 +66,9 @@ const leftDrawerOrg = ({
 
   // Check if the current page is admin profile page
   useEffect(() => {
-    const newId = getIdFromPath(location.pathname);
-    setIsProfilePage(newId === userId);
+    // id could be userId or orgId
+    const id = getIdFromPath(location.pathname);
+    setIsProfilePage(id === userId);
   }, [location, userId]);
 
   // Set organization data when query data is available
