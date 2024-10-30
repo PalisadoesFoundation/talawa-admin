@@ -125,17 +125,15 @@ const leftDrawerOrg = ({
             </>
           ) : organization == undefined ? (
             !isProfilePage && (
-              <>
-                <button
-                  className={`${styles.profileContainer} bg-danger text-start text-white`}
-                  disabled
-                >
-                  <div className="px-3">
-                    <WarningAmberOutlined />
-                  </div>
-                  {tErrors('errorLoading', { entity: 'Organization' })}
-                </button>
-              </>
+              <button
+                className={`${styles.profileContainer} bg-danger text-start text-white`}
+                disabled
+              >
+                <div className="px-3">
+                  <WarningAmberOutlined />
+                </div>
+                {tErrors('errorLoading', { entity: 'Organization' })}
+              </button>
             )
           ) : (
             <button className={styles.profileContainer} data-testid="OrgBtn">
