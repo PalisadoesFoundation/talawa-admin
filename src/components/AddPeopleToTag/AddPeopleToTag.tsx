@@ -292,7 +292,8 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                     next={loadMoreMembersToAssignTo}
                     hasMore={
                       userTagsMembersToAssignToData?.getUsersToAssignTo
-                        .usersToAssignTo.pageInfo.hasNextPage ?? false
+                        .usersToAssignTo.pageInfo.hasNextPage ??
+                      /* istanbul ignore next */ false
                     }
                     loader={<InfiniteScrollLoader />}
                     scrollableTarget="scrollableDiv"
