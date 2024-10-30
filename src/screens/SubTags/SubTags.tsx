@@ -406,7 +406,7 @@ function SubTags(): JSX.Element {
                   disableColumnMenu
                   columnBufferPx={7}
                   hideFooter={true}
-                  getRowId={(row) => row._id}
+                  getRowId={(row) => row.id}
                   slots={{
                     noRowsOverlay: /* istanbul ignore next */ () => (
                       <Stack

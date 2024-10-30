@@ -21,6 +21,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
+import type { TFunction } from 'i18next';
 
 /**
  * Props for the `AddPeopleToTag` component.
@@ -29,8 +30,8 @@ export interface InterfaceAddPeopleToTagProps {
   addPeopleToTagModalIsOpen: boolean;
   hideAddPeopleToTagModal: () => void;
   refetchAssignedMembersData: () => void;
-  t: (key: string) => string;
-  tCommon: (key: string) => string;
+  t: TFunction<'translation', 'manageTag'>;
+  tCommon: TFunction<'common', undefined>;
 }
 
 interface InterfaceMemberData {
@@ -302,7 +303,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                       disableColumnMenu
                       columnBufferPx={7}
                       hideFooter={true}
-                      getRowId={(row) => row._id}
+                      getRowId={(row) => row.id}
                       slots={{
                         noRowsOverlay: /* istanbul ignore next */ () => (
                           <Stack

@@ -12,9 +12,18 @@ const MockTagActions: React.FC<InterfaceTagActionsProps> = ({
   return (
     <>
       {tagActionsModalIsOpen && (
-        <div data-testid="tagActionsModal">
+        <div
+          data-testid="tagActionsModal"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modalTitle"
+        >
+          <h2 id="modalTitle" className="sr-only">
+            Tag Actions
+          </h2>
           <button
             data-testid="closeTagActionsModalBtn"
+            aria-label="Close modal"
             onClick={hideTagActionsModal}
           >
             Close

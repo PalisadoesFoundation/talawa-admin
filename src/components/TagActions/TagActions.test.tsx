@@ -27,6 +27,7 @@ import {
   MOCKS_ERROR_ORGANIZATION_TAGS_QUERY,
   MOCKS_ERROR_SUBTAGS_QUERY,
 } from './TagActionsMocks';
+import type { TFunction } from 'i18next';
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR_ORGANIZATION_TAGS_QUERY, true);
@@ -60,15 +61,27 @@ const props: InterfaceTagActionsProps[] = [
     tagActionsModalIsOpen: true,
     hideTagActionsModal: () => {},
     tagActionType: 'assignToTags',
-    t: (key: string) => translations[key],
-    tCommon: (key: string) => translations[key],
+    t: ((key: string) => translations[key]) as TFunction<
+      'translation',
+      'manageTag'
+    >,
+    tCommon: ((key: string) => translations[key]) as TFunction<
+      'common',
+      undefined
+    >,
   },
   {
     tagActionsModalIsOpen: true,
     hideTagActionsModal: () => {},
     tagActionType: 'removeFromTags',
-    t: (key: string) => translations[key],
-    tCommon: (key: string) => translations[key],
+    t: ((key: string) => translations[key]) as TFunction<
+      'translation',
+      'manageTag'
+    >,
+    tCommon: ((key: string) => translations[key]) as TFunction<
+      'common',
+      undefined
+    >,
   },
 ];
 
@@ -134,8 +147,14 @@ describe('Organisation Tags Page', () => {
       tagActionsModalIsOpen: true,
       hideTagActionsModal: hideTagActionsModalMock,
       tagActionType: 'assignToTags',
-      t: (key: string) => key,
-      tCommon: (key: string) => key,
+      t: ((key: string) => translations[key]) as TFunction<
+        'translation',
+        'manageTag'
+      >,
+      tCommon: ((key: string) => translations[key]) as TFunction<
+        'common',
+        undefined
+      >,
     };
 
     renderTagActionsModal(props2, link);

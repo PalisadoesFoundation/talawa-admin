@@ -22,6 +22,7 @@ import type { InterfaceAddPeopleToTagProps } from './AddPeopleToTag';
 import AddPeopleToTag from './AddPeopleToTag';
 import i18n from 'utils/i18nForTest';
 import { MOCKS, MOCKS_ERROR } from './AddPeopleToTagsMocks';
+import type { TFunction } from 'i18next';
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR, true);
@@ -52,8 +53,14 @@ const props: InterfaceAddPeopleToTagProps = {
   addPeopleToTagModalIsOpen: true,
   hideAddPeopleToTagModal: () => {},
   refetchAssignedMembersData: () => {},
-  t: (key: string) => translations[key],
-  tCommon: (key: string) => translations[key],
+  t: ((key: string) => translations[key]) as TFunction<
+    'translation',
+    'manageTag'
+  >,
+  tCommon: ((key: string) => translations[key]) as TFunction<
+    'common',
+    undefined
+  >,
 };
 
 const renderAddPeopleToTagModal = (

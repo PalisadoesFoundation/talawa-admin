@@ -74,7 +74,9 @@ function OrganizationTags(): JSX.Element {
     orgUserTagsFetchMore({
       variables: {
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        after: orgUserTagsData?.organizations[0].userTags.pageInfo.endCursor,
+        after:
+          orgUserTagsData?.organizations?.[0]?.userTags?.pageInfo?.endCursor ??
+          null,
       },
       updateQuery: (
         prevResult: { organizations: InterfaceQueryOrganizationUserTags[] },
@@ -339,8 +341,8 @@ function OrganizationTags(): JSX.Element {
                 dataLength={userTagsList?.length ?? 0}
                 next={loadMoreUserTags}
                 hasMore={
-                  orgUserTagsData?.organizations[0].userTags.pageInfo
-                    .hasNextPage ?? /* istanbul ignore next */ false
+                  orgUserTagsData?.organizations?.[0]?.userTags?.pageInfo
+                    ?.hasNextPage ?? /* istanbul ignore next */ false
                 }
                 loader={<InfiniteScrollLoader />}
                 scrollableTarget="orgUserTagsScrollableDiv"
@@ -349,7 +351,7 @@ function OrganizationTags(): JSX.Element {
                   disableColumnMenu
                   columnBufferPx={7}
                   hideFooter={true}
-                  getRowId={(row) => row._id}
+                  getRowId={(row) => row.id}
                   slots={{
                     noRowsOverlay: /* istanbul ignore next */ () => (
                       <Stack

@@ -40,7 +40,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import EditUserTagModal from './EditUserTagModal';
 import RemoveUserTagModal from './RemoveUserTagModal';
-import UnassignUserTagModal from './UnasisgnUserTagModal';
+import UnassignUserTagModal from './UnassignUserTagModal';
 
 /**
  * Component that renders the Manage Tag screen when the app navigates to '/orgtags/:orgId/managetag/:tagId'.
@@ -55,7 +55,7 @@ function ManageTag(): JSX.Element {
   });
   const { t: tCommon } = useTranslation('common');
 
-  const [unassignUserTagModalIsOpen, setUnassignTagModalIsOpen] =
+  const [unassignUserTagModalIsOpen, setUnassignUserTagModalIsOpen] =
     useState(false);
   const [addPeopleToTagModalIsOpen, setAddPeopleToTagModalIsOpen] =
     useState(false);
@@ -290,7 +290,7 @@ function ManageTag(): JSX.Element {
     if (unassignUserTagModalIsOpen) {
       setUnassignUserId(null);
     }
-    setUnassignTagModalIsOpen(!unassignUserTagModalIsOpen);
+    setUnassignUserTagModalIsOpen(!unassignUserTagModalIsOpen);
   };
 
   const columns: GridColDef[] = [
@@ -471,7 +471,7 @@ function ManageTag(): JSX.Element {
                     disableColumnMenu
                     columnBufferPx={7}
                     hideFooter={true}
-                    getRowId={(row) => row._id}
+                    getRowId={(row) => row.id}
                     slots={{
                       noRowsOverlay: /* istanbul ignore next */ () => (
                         <Stack

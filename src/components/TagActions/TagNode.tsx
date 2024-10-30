@@ -11,6 +11,7 @@ import styles from './TagActions.module.css';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import { WarningAmberRounded } from '@mui/icons-material';
+import type { TFunction } from 'i18next';
 
 /**
  * Props for the `TagNode` component.
@@ -19,7 +20,7 @@ interface InterfaceTagNodeProps {
   tag: InterfaceTagData;
   checkedTags: Set<string>;
   toggleTagSelection: (tag: InterfaceTagData, isSelected: boolean) => void;
-  t: (key: string) => string;
+  t: TFunction<'translation', 'manageTag'>;
 }
 
 /**

@@ -25,6 +25,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { WarningAmberRounded } from '@mui/icons-material';
 import TagNode from './TagNode';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
+import type { TFunction } from 'i18next';
 
 interface InterfaceUserTagsAncestorData {
   _id: string;
@@ -38,8 +39,8 @@ export interface InterfaceTagActionsProps {
   tagActionsModalIsOpen: boolean;
   hideTagActionsModal: () => void;
   tagActionType: TagActionType;
-  t: (key: string) => string;
-  tCommon: (key: string) => string;
+  t: TFunction<'translation', 'manageTag'>;
+  tCommon: TFunction<'common', undefined>;
 }
 
 const TagActions: React.FC<InterfaceTagActionsProps> = ({

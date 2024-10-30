@@ -5,6 +5,10 @@ import type { InterfaceAddPeopleToTagProps } from '../../../components/AddPeople
  * Component that mocks the AddPeopleToTag component for the Manage Tag screen.
  */
 
+const TEST_IDS = {
+  MODAL: 'addPeopleToTagModal',
+  CLOSE_BUTTON: 'closeAddPeopleToTagModal',
+} as const;
 const MockAddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
   addPeopleToTagModalIsOpen,
   hideAddPeopleToTagModal,
@@ -12,10 +16,20 @@ const MockAddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
   return (
     <>
       {addPeopleToTagModalIsOpen && (
-        <div data-testid="addPeopleToTagModal">
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modal-title"
+          data-testid={TEST_IDS.MODAL}
+        >
+          <h2 id="modal-title" className="sr-only">
+            Add People to Tag
+          </h2>
           <button
-            data-testid="closeAddPeopleToTagModal"
+            type="button"
+            data-testid={TEST_IDS.CLOSE_BUTTON}
             onClick={hideAddPeopleToTagModal}
+            aria-label="Close modal"
           >
             Close
           </button>

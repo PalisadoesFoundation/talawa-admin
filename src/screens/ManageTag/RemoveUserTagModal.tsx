@@ -1,3 +1,4 @@
+import type { TFunction } from 'i18next';
 import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
 
@@ -9,8 +10,8 @@ export interface InterfaceRemoveUserTagModalProps {
   removeUserTagModalIsOpen: boolean;
   toggleRemoveUserTagModal: () => void;
   handleRemoveUserTag: () => Promise<void>;
-  t: (key: string) => string;
-  tCommon: (key: string) => string;
+  t: TFunction<'translation', 'manageTag'>;
+  tCommon: TFunction<'common', undefined>;
 }
 
 const RemoveUserTagModal: React.FC<InterfaceRemoveUserTagModalProps> = ({
@@ -24,7 +25,7 @@ const RemoveUserTagModal: React.FC<InterfaceRemoveUserTagModalProps> = ({
     <>
       <Modal
         size="sm"
-        id={`deleteActionItemModal`}
+        id="removeUserTagModal"
         show={removeUserTagModalIsOpen}
         onHide={toggleRemoveUserTagModal}
         backdrop="static"
@@ -42,6 +43,8 @@ const RemoveUserTagModal: React.FC<InterfaceRemoveUserTagModalProps> = ({
             type="button"
             className="btn btn-danger"
             data-dismiss="modal"
+            role="button"
+            aria-label={tCommon('no')}
             onClick={toggleRemoveUserTagModal}
             data-testid="removeUserTagModalCloseBtn"
           >
@@ -50,6 +53,8 @@ const RemoveUserTagModal: React.FC<InterfaceRemoveUserTagModalProps> = ({
           <Button
             type="button"
             className="btn btn-success"
+            role="button"
+            aria-label={tCommon('yes')}
             onClick={handleRemoveUserTag}
             data-testid="removeUserTagSubmitBtn"
           >

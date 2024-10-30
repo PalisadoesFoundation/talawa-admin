@@ -1,3 +1,4 @@
+import type { TFunction } from 'i18next';
 import type { FormEvent } from 'react';
 import React from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
@@ -12,8 +13,8 @@ export interface InterfaceEditUserTagModalProps {
   newTagName: string;
   setNewTagName: (state: React.SetStateAction<string>) => void;
   handleEditUserTag: (e: FormEvent<HTMLFormElement>) => Promise<void>;
-  t: (key: string) => string;
-  tCommon: (key: string) => string;
+  t: TFunction<'translation', 'manageTag'>;
+  tCommon: TFunction<'common', undefined>;
 }
 
 const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
@@ -32,6 +33,7 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
         onHide={hideEditUserTagModal}
         backdrop="static"
         aria-labelledby="contained-modal-title-vcenter"
+        aria-describedby="tag-edit-modal-description"
         centered
       >
         <Modal.Header

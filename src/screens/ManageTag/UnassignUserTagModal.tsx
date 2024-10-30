@@ -1,3 +1,4 @@
+import type { TFunction } from 'i18next';
 import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
 
@@ -9,8 +10,8 @@ export interface InterfaceUnassignUserTagModalProps {
   unassignUserTagModalIsOpen: boolean;
   toggleUnassignUserTagModal: () => void;
   handleUnassignUserTag: () => Promise<void>;
-  t: (key: string) => string;
-  tCommon: (key: string) => string;
+  t: TFunction<'translation', 'manageTag'>;
+  tCommon: TFunction<'common', undefined>;
 }
 
 const UnassignUserTagModal: React.FC<InterfaceUnassignUserTagModalProps> = ({
@@ -24,14 +25,19 @@ const UnassignUserTagModal: React.FC<InterfaceUnassignUserTagModalProps> = ({
     <>
       <Modal
         size="sm"
-        id={`unassignTagModal`}
+        id="unassignTagModal"
         show={unassignUserTagModalIsOpen}
         onHide={toggleUnassignUserTagModal}
         backdrop="static"
         keyboard={false}
         centered
+        aria-labelledby="unassignTagModalTitle"
       >
-        <Modal.Header closeButton className="bg-primary">
+        <Modal.Header
+          closeButton
+          className="bg-primary"
+          aria-label={t('closeModal')}
+        >
           <Modal.Title className="text-white" id={`unassignTag`}>
             {t('unassignUserTag')}
           </Modal.Title>
@@ -44,14 +50,24 @@ const UnassignUserTagModal: React.FC<InterfaceUnassignUserTagModalProps> = ({
             data-dismiss="modal"
             onClick={toggleUnassignUserTagModal}
             data-testid="unassignTagModalCloseBtn"
+            aria-label={tCommon('no')}
           >
             {tCommon('no')}
           </Button>
           <Button
             type="button"
             className="btn btn-success"
-            onClick={handleUnassignUserTag}
+            onClick={async (e) => {
+              const btn = e.currentTarget;
+              btn.disabled = true;
+              try {
+                await handleUnassignUserTag();
+              } finally {
+                btn.disabled = false;
+              }
+            }}
             data-testid="unassignTagModalSubmitBtn"
+            aria-label={tCommon('yes')}
           >
             {tCommon('yes')}
           </Button>

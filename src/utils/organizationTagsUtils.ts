@@ -36,96 +36,71 @@ export const TAGS_QUERY_DATA_CHUNK_SIZE = 10;
 // the tag action type
 export type TagActionType = 'assignToTags' | 'removeFromTags';
 
-// interfaces for tag queries
-export interface InterfaceOrganizationTagsQuery {
+// Interfaces for tag queries:
+// 1. Base interface for Apollo query results
+interface InterfaceBaseQueryResult {
+  loading: boolean;
+  error?: ApolloError;
+  refetch?: () => void;
+}
+
+// 2. Generic pagination options
+interface InterfacePaginationVariables {
+  after?: string | null;
+  first?: number | null;
+}
+
+// 3. Generic fetch more options
+interface InterfaceBaseFetchMoreOptions<T> {
+  variables: InterfacePaginationVariables;
+  updateQuery?: (prev: T, options: { fetchMoreResult: T }) => T;
+}
+
+// 4. Query interfaces
+export interface InterfaceOrganizationTagsQuery
+  extends InterfaceBaseQueryResult {
   data?: {
     organizations: InterfaceQueryOrganizationUserTags[];
   };
-  loading: boolean;
-  error?: ApolloError;
-  refetch: () => void;
-  fetchMore: (options: {
-    variables: {
-      first: number;
-      after?: string;
-    };
-    updateQuery: (
-      previousResult: { organizations: InterfaceQueryOrganizationUserTags[] },
-      options: {
-        fetchMoreResult?: {
-          organizations: InterfaceQueryOrganizationUserTags[];
-        };
-      },
-    ) => { organizations: InterfaceQueryOrganizationUserTags[] };
-  }) => void;
+  fetchMore: (
+    options: InterfaceBaseFetchMoreOptions<{
+      organizations: InterfaceQueryOrganizationUserTags[];
+    }>,
+  ) => void;
 }
 
-export interface InterfaceOrganizationSubTagsQuery {
+export interface InterfaceOrganizationSubTagsQuery
+  extends InterfaceBaseQueryResult {
   data?: {
     getChildTags: InterfaceQueryUserTagChildTags;
   };
-  loading: boolean;
-  error?: ApolloError;
-  refetch: () => void;
-  fetchMore: (options: {
-    variables: {
-      first: number;
-      after?: string;
-    };
-    updateQuery: (
-      previousResult: { getChildTags: InterfaceQueryUserTagChildTags },
-      options: {
-        fetchMoreResult?: { getChildTags: InterfaceQueryUserTagChildTags };
-      },
-    ) => { getChildTags: InterfaceQueryUserTagChildTags };
-  }) => void;
+  fetchMore: (
+    options: InterfaceBaseFetchMoreOptions<{
+      getChildTags: InterfaceQueryUserTagChildTags;
+    }>,
+  ) => void;
 }
 
-export interface InterfaceTagAssignedMembersQuery {
+export interface InterfaceTagAssignedMembersQuery
+  extends InterfaceBaseQueryResult {
   data?: {
     getAssignedUsers: InterfaceQueryUserTagsAssignedMembers;
   };
-  loading: boolean;
-  error?: ApolloError;
-  refetch: () => void;
-  fetchMore: (options: {
-    variables: {
-      after?: string | null;
-      first?: number | null;
-    };
-    updateQuery?: (
-      previousQueryResult: {
-        getAssignedUsers: InterfaceQueryUserTagsAssignedMembers;
-      },
-      options: {
-        fetchMoreResult: {
-          getAssignedUsers: InterfaceQueryUserTagsAssignedMembers;
-        };
-      },
-    ) => { getAssignedUsers: InterfaceQueryUserTagsAssignedMembers };
-  }) => Promise<unknown>;
+  fetchMore: (
+    options: InterfaceBaseFetchMoreOptions<{
+      getAssignedUsers: InterfaceQueryUserTagsAssignedMembers;
+    }>,
+  ) => void;
 }
 
-export interface InterfaceTagUsersToAssignToQuery {
+export interface InterfaceTagUsersToAssignToQuery
+  extends InterfaceBaseQueryResult {
   data?: {
     getUsersToAssignTo: InterfaceQueryUserTagsMembersToAssignTo;
   };
-  loading: boolean;
-  error?: ApolloError;
-  fetchMore: (options: {
-    variables: {
-      after?: string | null;
-      first?: number | null;
-    };
-    updateQuery?: (
-      previousQueryResult: {
-        getUsersToAssignTo: InterfaceQueryUserTagsMembersToAssignTo;
-      },
-      options: {
-        fetchMoreResult: {
-          getUsersToAssignTo: InterfaceQueryUserTagsMembersToAssignTo;
-        };
-      },
-    ) => { getUsersToAssignTo: InterfaceQueryUserTagsMembersToAssignTo };
-  }) => Promise<unknown>;
+  fetchMore: (
+    options: InterfaceBaseFetchMoreOptions<{
+      getUsersToAssignTo: InterfaceQueryUserTagsMembersToAssignTo;
+    }>,
+  ) => void;
 }
