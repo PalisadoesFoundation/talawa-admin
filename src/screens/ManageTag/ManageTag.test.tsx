@@ -239,9 +239,9 @@ describe('Manage Tag Page', () => {
     await wait();
 
     await waitFor(() => {
-      expect(screen.getByTestId('editTag')).toBeInTheDocument();
+      expect(screen.getByTestId('editUserTag')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('editTag'));
+    userEvent.click(screen.getByTestId('editUserTag'));
 
     await waitFor(() => {
       return expect(
@@ -395,9 +395,9 @@ describe('Manage Tag Page', () => {
     await wait();
 
     await waitFor(() => {
-      expect(screen.getByTestId('editTag')).toBeInTheDocument();
+      expect(screen.getByTestId('editUserTag')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('editTag'));
+    userEvent.click(screen.getByTestId('editUserTag'));
 
     userEvent.click(screen.getByTestId('editTagSubmitBtn'));
 

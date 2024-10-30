@@ -1,6 +1,10 @@
 import React from 'react';
 import type { InterfaceAddPeopleToTagProps } from '../../../components/AddPeopleToTag/AddPeopleToTag';
 
+/**
+ * Component that mocks the AddPeopleToTag component for the Manage Tag screen.
+ */
+
 const MockAddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
   addPeopleToTagModalIsOpen,
   hideAddPeopleToTagModal,
