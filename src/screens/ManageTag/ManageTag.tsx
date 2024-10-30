@@ -79,23 +79,20 @@ function ManageTag(): JSX.Element {
   const showAddPeopleToTagModal = (): void => {
     setAddPeopleToTagModalIsOpen(true);
   };
-
   const hideAddPeopleToTagModal = (): void => {
     setAddPeopleToTagModalIsOpen(false);
   };
 
-  const showAssignToTagsModal = (): void => {
+  const showTagActionsModal = (): void => {
     setTagActionsModalIsOpen(true);
   };
-
   const hideTagActionsModal = (): void => {
     setTagActionsModalIsOpen(false);
   };
 
-  const showEditTagModal = (): void => {
+  const showEditUserTagModal = (): void => {
     setEditUserTagModalIsOpen(true);
   };
-
   const hideEditUserTagModal = (): void => {
     setEditUserTagModalIsOpen(false);
   };
@@ -280,13 +277,11 @@ function ManageTag(): JSX.Element {
     userTagAssignedMembersData?.getAssignedUsers.usersAssignedTo.edges.map(
       (edge) => edge.node,
     );
-
   const orgUserTagAncestors = orgUserTagAncestorsData?.getUserTagAncestors;
 
   const redirectToSubTags = (tagId: string): void => {
     navigate(`/orgtags/${orgId}/subTags/${tagId}`);
   };
-
   const redirectToManageTag = (tagId: string): void => {
     navigate(`/orgtags/${orgId}/manageTag/${tagId}`);
   };
@@ -428,7 +423,6 @@ function ManageTag(): JSX.Element {
               {t('addPeopleToTag')}
             </Button>
           </div>
-
           <Row className="mb-4">
             <Col xs={9}>
               <div className="bg-white light border rounded-top mb-0 py-2 d-flex align-items-center">
@@ -513,7 +507,7 @@ function ManageTag(): JSX.Element {
                 <div
                   onClick={() => {
                     setTagActionType('assignToTags');
-                    showAssignToTagsModal();
+                    showTagActionsModal();
                   }}
                   className="my-2 btn btn-primary btn-sm w-75"
                   data-testid="assignToTags"
@@ -523,14 +517,13 @@ function ManageTag(): JSX.Element {
                 <div
                   onClick={() => {
                     setTagActionType('removeFromTags');
-                    showAssignToTagsModal();
+                    showTagActionsModal();
                   }}
                   className="mb-1 btn btn-danger btn-sm w-75"
                   data-testid="removeFromTags"
                 >
                   {t('removeFromTags')}
                 </div>
-
                 <hr
                   style={{
                     borderColor: 'lightgray',
@@ -538,9 +531,8 @@ function ManageTag(): JSX.Element {
                     width: '85%',
                   }}
                 />
-
                 <div
-                  onClick={showEditTagModal}
+                  onClick={showEditUserTagModal}
                   className="mt-1 mb-2 btn btn-primary btn-sm w-75"
                   data-testid="editUserTag"
                 >
