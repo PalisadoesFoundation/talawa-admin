@@ -5,10 +5,7 @@ import styles from './CreateDirectChat.module.css';
 import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
-import {
-  CREATE_CHAT,
-  CREATE_DIRECT_CHAT,
-} from 'GraphQl/Mutations/OrganizationMutations';
+import { CREATE_CHAT } from 'GraphQl/Mutations/OrganizationMutations';
 import Table from '@mui/material/Table';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
