@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Button } from 'react-bootstrap';
 import defaultImg from 'assets/images/defaultImg.png';
-import { ReactComponent as PeopleIcon } from 'assets/svgs/people.svg';
+import PeopleIcon from 'assets/svgs/people.svg?react';
 import styles from 'screens/OrganizationVenues/OrganizationVenues.module.css';
 import { useTranslation } from 'react-i18next';
 import type { InterfaceQueryVenueListItem } from 'utils/interfaces';

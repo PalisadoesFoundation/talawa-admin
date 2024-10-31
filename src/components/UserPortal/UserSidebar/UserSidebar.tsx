@@ -2,10 +2,10 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
-import { ReactComponent as OrganizationsIcon } from 'assets/svgs/organizations.svg';
-import { ReactComponent as SettingsIcon } from 'assets/svgs/settings.svg';
-import { ReactComponent as ChatIcon } from 'assets/svgs/chat.svg';
-import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
+import OrganizationsIcon from 'assets/svgs/organizations.svg?react';
+import SettingsIcon from 'assets/svgs/settings.svg?react';
+import ChatIcon from 'assets/svgs/chat.svg?react';
+import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import styles from './UserSidebar.module.css';
 
 export interface InterfaceUserSidebarProps {

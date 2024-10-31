@@ -57,17 +57,19 @@ export const REMOVE_SAMPLE_ORGANIZATION_MUTATION = gql`
  * @returns The created direct chat object.
  */
 
-export const CREATE_GROUP_CHAT = gql`
-  mutation createGroupChat(
+export const CREATE_CHAT = gql`
+  mutation createChat(
     $userIds: [ID!]!
-    $organizationId: ID!
-    $title: String!
+    $organizationId: ID
+    $isGroup: Boolean!
+    $name: String
   ) {
-    createGroupChat(
+    createChat(
       data: {
         userIds: $userIds
         organizationId: $organizationId
-        title: $title
+        isGroup: $isGroup
+        name: $name
       }
     ) {
       _id
@@ -75,26 +77,30 @@ export const CREATE_GROUP_CHAT = gql`
   }
 `;
 
-export const CREATE_DIRECT_CHAT = gql`
-  mutation createDirectChat($userIds: [ID!]!, $organizationId: ID) {
-    createDirectChat(
-      data: { userIds: $userIds, organizationId: $organizationId }
+export const SEND_MESSAGE_TO_CHAT = gql`
+  mutation sendMessageToChat(
+    $chatId: ID!
+    $replyTo: ID
+    $messageContent: String!
+  ) {
+    sendMessageToChat(
+      chatId: $chatId
+      replyTo: $replyTo
+      messageContent: $messageContent
     ) {
       _id
-    }
-  }
-`;
-
-export const SEND_MESSAGE_TO_DIRECT_CHAT = gql`
-  mutation sendMessageToDirectChat($chatId: ID!, $messageContent: String!) {
-    sendMessageToDirectChat(chatId: $chatId, messageContent: $messageContent) {
-      _id
       createdAt
       messageContent
-      receiver {
+      replyTo {
         _id
-        firstName
-        lastName
+        createdAt
+        messageContent
+        sender {
+          _id
+          firstName
+          lastName
+        }
+        updatedAt
       }
       sender {
         _id
@@ -106,53 +112,25 @@ export const SEND_MESSAGE_TO_DIRECT_CHAT = gql`
   }
 `;
 
-export const SEND_MESSAGE_TO_GROUP_CHAT = gql`
-  mutation sendMessageToGroupChat($chatId: ID!, $messageContent: String!) {
-    sendMessageToGroupChat(chatId: $chatId, messageContent: $messageContent) {
+export const MESSAGE_SENT_TO_CHAT = gql`
+  subscription messageSentToChat($userId: ID!) {
+    messageSentToChat(userId: $userId) {
       _id
       createdAt
-      messageContent
-      sender {
-        _id
-        firstName
-        lastName
-      }
-      updatedAt
-    }
-  }
-`;
-
-export const CREATE_MESSAGE_CHAT = gql`
-  mutation createMessageChat($receiver: ID!, $messageContent: String!) {
-    createMessageChat(data: { receiver: $receiver, message: $messageContent }) {
-      _id
-      createdAt
-      message
-      languageBarrier
-      receiver {
-        _id
-      }
-      sender {
-        _id
-      }
-      updatedAt
-    }
-  }
-`;
-
-export const MESSAGE_SENT_TO_DIRECT_CHAT = gql`
-  subscription messageSentToDirectChat($userId: ID!) {
-    messageSentToDirectChat(userId: $userId) {
-      _id
-      createdAt
-      directChatMessageBelongsTo {
+      chatMessageBelongsTo {
         _id
       }
       messageContent
-      receiver {
+      replyTo {
         _id
-        firstName
-        lastName
+        createdAt
+        messageContent
+        sender {
+          _id
+          firstName
+          lastName
+        }
+        updatedAt
       }
       sender {
         _id
@@ -164,24 +142,6 @@ export const MESSAGE_SENT_TO_DIRECT_CHAT = gql`
   }
 `;
 
-export const MESSAGE_SENT_TO_GROUP_CHAT = gql`
-  subscription messageSentToGroupChat($userId: ID!) {
-    messageSentToGroupChat(userId: $userId) {
-      _id
-      createdAt
-      groupChatMessageBelongsTo {
-        _id
-      }
-      messageContent
-      sender {
-        _id
-        firstName
-        lastName
-      }
-      updatedAt
-    }
-  }
-`;
 //Plugin WebSocket listner
 
 /**

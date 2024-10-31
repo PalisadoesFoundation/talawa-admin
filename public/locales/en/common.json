@@ -82,6 +82,8 @@
   "updatedSuccessfully": "{{item}} updated Successfully",
   "removedSuccessfully": "{{item}} removed Successfully",
   "successfullyUpdated": "Successfully Updated",
+  "sessionWarning": "Your session will expire soon due to inactivity. Please interact with the page to extend your session.",
+  "sessionLogOut": "Your session has expired due to inactivity. Please log in again to continue.",
   "sort": "Sort",
   "all": "All",
   "active": "Active",

@@ -646,6 +646,12 @@ export const UPDATE_COMMUNITY = gql`
   }
 `;
 
+export const UPDATE_SESSION_TIMEOUT = gql`
+  mutation updateSessionTimeout($timeout: Int!) {
+    updateSessionTimeout(timeout: $timeout)
+  }
+`;
+
 export const RESET_COMMUNITY = gql`
   mutation resetCommunity {
     resetCommunity
@@ -719,7 +725,6 @@ export {
 // Changes the role of a user in an organization
 export {
   ADD_CUSTOM_FIELD,
-  CREATE_DIRECT_CHAT,
   CREATE_SAMPLE_ORGANIZATION_MUTATION,
   JOIN_PUBLIC_ORGANIZATION,
   PLUGIN_SUBSCRIPTION,

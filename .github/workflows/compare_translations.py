@@ -88,6 +88,31 @@ def compare_translations(default_translation,
             errors.append(error_msg)
     return errors
 
+def flatten_json(nested_json, parent_key=""):
+    """
+    Flattens a nested JSON, concatenating keys to represent the hierarchy.
+
+    Args:
+        nested_json (dict): The JSON object to flatten.
+        parent_key (str): The base key for recursion (used to track key hierarchy).
+
+    Returns:
+        dict: A flattened dictionary with concatenated keys.
+    """
+    flat_dict = {}
+
+    for key, value in nested_json.items():
+        # Create the new key by concatenating parent and current key
+        new_key = f"{parent_key}.{key}" if parent_key else key
+        
+        if isinstance(value, dict):
+            # Recursively flatten the nested dictionary
+            flat_dict.update(flatten_json(value, new_key))
+        else:
+            # Assign the value to the flattened key
+            flat_dict[new_key] = value
+
+    return flat_dict
 
 def load_translation(filepath):
     """Load translation from a file.
@@ -104,7 +129,8 @@ def load_translation(filepath):
             if not content.strip():
                 raise ValueError(f"File {filepath} is empty.")
             translation = json.loads(content)
-        return translation
+            flattened_translation = flatten_json(translation)
+        return flattened_translation
     except json.JSONDecodeError as e:
         raise ValueError(f"Error decoding JSON from file {filepath}: {e}")
 
@@ -170,7 +196,7 @@ def main():
         "--directory",
         type=str,
         nargs="?",
-        default=os.path.join(os.getcwd(), "locales"),
+        default=os.path.join(os.getcwd(), "public/locales"),
         help="Directory containing translation files(relative to the root directory).",
     )
     args = parser.parse_args()

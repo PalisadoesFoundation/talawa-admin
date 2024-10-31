@@ -11,11 +11,11 @@ import {
   ORGANIZATION_EVENT_CONNECTION_LIST,
   ORGANIZATION_POST_LIST,
 } from 'GraphQl/Queries/Queries';
-import { ReactComponent as AdminsIcon } from 'assets/svgs/admin.svg';
-import { ReactComponent as BlockedUsersIcon } from 'assets/svgs/blockedUser.svg';
-import { ReactComponent as EventsIcon } from 'assets/svgs/events.svg';
-import { ReactComponent as PostsIcon } from 'assets/svgs/post.svg';
-import { ReactComponent as UsersIcon } from 'assets/svgs/users.svg';
+import AdminsIcon from 'assets/svgs/admin.svg?react';
+import BlockedUsersIcon from 'assets/svgs/blockedUser.svg?react';
+import EventsIcon from 'assets/svgs/events.svg?react';
+import PostsIcon from 'assets/svgs/post.svg?react';
+import UsersIcon from 'assets/svgs/users.svg?react';
 import CardItem from 'components/OrganizationDashCards/CardItem';
 import CardItemLoading from 'components/OrganizationDashCards/CardItemLoading';
 import DashBoardCard from 'components/OrganizationDashCards/DashboardCard';
