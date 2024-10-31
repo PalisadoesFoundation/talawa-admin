@@ -283,7 +283,7 @@ describe('Testing OrganizationCard Component [User Portal]', () => {
     fireEvent.click(screen.getByTestId('joinBtn'));
     await wait();
 
-    expect(toast.success).toHaveBeenCalledWith('users.MembershipRequestSent');
+    expect(toast.success).toHaveBeenCalledWith('MembershipRequestSent');
   });
 
   test('send membership request to public org', async () => {

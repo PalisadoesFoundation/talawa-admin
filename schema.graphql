@@ -161,6 +161,15 @@ input CommentInput {
   text: String!
 }
 
+type Community {
+  _id: ID!
+  logoUrl: String
+  name: String!
+  socialMediaUrls: SocialMediaUrls
+  timeout: Int
+  websiteLink: String
+}
+
 union ConnectionError = InvalidCursor | MaximumValueError
 
 type ConnectionPageInfo {
@@ -527,6 +536,32 @@ enum MaritalStatus {
   WIDOWED
 }
 
+type Chat {
+  _id: ID!
+  isGroup: Boolean!
+  name: String
+  createdAt: DateTime!
+  creator: User
+  messages: [ChatMessage]
+  organization: Organization
+  updatedAt: DateTime!
+  users: [User!]!
+  admins: [User]
+  lastMessageId: String
+}
+
+type ChatMessage {
+  _id: ID!
+  createdAt: DateTime!
+  chatMessageBelongsTo: Chat!
+  messageContent: String!
+  type: String!
+  replyTo: ChatMessage
+  sender: User!
+  deletedBy: [User]
+  updatedAt: DateTime!
+}
+
 type MaximumLengthError implements FieldError {
   message: String!
   path: [String!]!
@@ -641,6 +676,7 @@ type Mutation {
     data: CreateActionItemInput!
   ): ActionItem!
   createActionItemCategory(
+    isDisabled: Boolean!
     name: String!
     organizationId: ID!
   ): ActionItemCategory!
@@ -655,6 +691,7 @@ type Mutation {
   ): Advertisement!
   createAgendaCategory(input: CreateAgendaCategoryInput!): AgendaCategory!
   createComment(data: CommentInput!, postId: ID!): Comment
+  createChat(data: chatInput!): Chat!
   createDirectChat(data: createChatInput!): DirectChat!
   createDonation(
     amount: Float!
@@ -729,6 +766,7 @@ type Mutation {
   revokeRefreshTokenForUser: Boolean!
   saveFcmToken(token: String): Boolean!
   sendMembershipRequest(organizationId: ID!): MembershipRequest!
+  sendMessageToChat(chatId: ID!, messageContent: String!, type: String!, replyTo: ID): ChatMessage!
   sendMessageToDirectChat(
     chatId: ID!
     messageContent: String!
@@ -769,6 +807,7 @@ type Mutation {
   ): Organization!
   updatePluginStatus(id: ID!, orgId: ID!): Plugin!
   updatePost(data: PostUpdateInput, id: ID!): Post!
+  updateSessionTimeout(timeout: Int!): Boolean!
   updateUserPassword(data: UpdateUserPasswordInput!): UserData!
   updateUserProfile(data: UpdateUserInput, file: String): User!
   updateUserRoleInOrganization(
@@ -1055,6 +1094,8 @@ type Query {
   checkAuth: User!
   customDataByOrganization(organizationId: ID!): [UserCustomData!]!
   customFieldsByOrganization(id: ID!): [OrganizationCustomField]
+  chatById(id: ID!): Chat!
+  chatsByUserId(id: ID!): [Chat]
   directChatsByUserID(id: ID!): [DirectChat]
   directChatsMessagesByChatID(id: ID!): [DirectChatMessage]
   directChatById(id: ID!): DirectChat
@@ -1155,6 +1196,7 @@ enum Status {
 
 type Subscription {
   directMessageChat: MessageChat
+  messageSentToChat(userId: ID!): ChatMessage
   messageSentToDirectChat(userId: ID!): DirectChatMessage
   messageSentToGroupChat(userId: ID!): GroupChatMessage
   onPluginUpdate: Plugin
@@ -1581,4 +1623,11 @@ input VenueInput {
 input createUserFamilyInput {
   title: String!
   userIds: [ID!]!
+}
+
+input chatInput {
+  isGroup: Boolean!
+  organizationId: ID
+  userIds: [ID!]!
+  name: String
 }
