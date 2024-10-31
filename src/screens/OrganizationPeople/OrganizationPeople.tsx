@@ -262,7 +262,6 @@ function organizationPeople(): JSX.Element {
             className={styles.deleteButton}
           >
             <Delete />
-            <span className={styles.visuallyHidden}>Remove</span>
           </Button>
         ) : (
           <Button
