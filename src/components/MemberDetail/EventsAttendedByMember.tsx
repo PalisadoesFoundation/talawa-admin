@@ -2,6 +2,7 @@ import React from 'react';
 import { useQuery } from '@apollo/client';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import EventAttendedCard from './EventsAttendedCardItem';
+import { Spinner } from 'react-bootstrap';
 
 interface InterfaceEventsAttendedByMember {
   eventsId: string;
@@ -18,22 +19,33 @@ function EventsAttendedByMember({
     variables: { id: eventsId },
   });
 
-  if (loading) return <div data-testid="loading">Loading...</div>;
-  if (error) return <div data-testid="error">Error: {error.message}</div>;
+  if (loading)
+    return (
+      <div data-testid="loading" className="loading-state">
+        <Spinner />
+        <p>Loading event details...</p>
+      </div>
+    );
+  if (error)
+    return (
+      <div data-testid="error" className="error-state">
+        <p>Unable to load event details. Please try again later.</p>
+      </div>
+    );
+
+  const { organization, _id, startDate, title, location } = events.event;
 
   return (
-    <React.Fragment>
-      <EventAttendedCard
-        data-testid="EventsAttendedCard"
-        type="Event"
-        orgId={events?.event?.organization._id}
-        eventId={events?.event?._id}
-        key={events?.event?._id}
-        startdate={events?.event?.startDate}
-        title={events?.event?.title}
-        location={events?.event?.location}
-      />
-    </React.Fragment>
+    <EventAttendedCard
+      data-testid="EventsAttendedCard"
+      type="Event"
+      orgId={organization._id}
+      eventId={_id}
+      key={_id}
+      startdate={startDate}
+      title={title}
+      location={location}
+    />
   );
 }
 

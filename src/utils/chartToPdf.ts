@@ -21,15 +21,21 @@ export const exportToCSV = (data: CSVData, filename: string): void => {
         row
           .map((cell) => {
             const cellStr = String(cell);
-            return cellStr.includes(',') ? `"${cellStr}"` : cellStr;
+            // Escape double quotes by doubling them
+            const escapedCell = cellStr.replace(/"/g, '""');
+            // Enclose cell in double quotes if it contains commas, newlines, or double quotes
+            return /[",\n]/.test(escapedCell)
+              ? `"${escapedCell}"`
+              : escapedCell;
           })
           .join(','),
       )
       .join('\n');
-  const encodedUri = encodeURI(csvContent);
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   try {
-    link.setAttribute('href', encodedUri);
+    link.setAttribute('href', url);
     link.setAttribute('download', finalFilename);
     document.body.appendChild(link);
     link.click();
@@ -37,6 +43,7 @@ export const exportToCSV = (data: CSVData, filename: string): void => {
     if (link.parentNode === document.body) {
       document.body.removeChild(link);
     }
+    URL.revokeObjectURL(url); // Clean up the URL object
   }
 };
 
@@ -84,12 +91,7 @@ export const exportDemographicsToCSV = (
   }
 
   const heading = `${selectedCategory} Demographics`;
-  const headers = [
-    selectedCategory,
-    'Count',
-    'Age Distribution',
-    'Gender Distribution',
-  ];
+  const headers = [selectedCategory, 'Count'];
   const data: CSVData = [
     [heading],
     [],

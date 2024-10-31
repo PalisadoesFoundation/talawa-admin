@@ -78,6 +78,15 @@ const DynamicDropDown = <T extends Record<string, unknown>>({
       <Dropdown.Menu
         data-testid={`${fieldName.toLowerCase()}-dropdown-menu`}
         role="listbox"
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            const focused = document.activeElement;
+            if (focused instanceof HTMLElement) {
+              focused.click();
+            }
+          }
+        }}
       >
         {fieldOptions.map((option, index: number) => (
           <Dropdown.Item

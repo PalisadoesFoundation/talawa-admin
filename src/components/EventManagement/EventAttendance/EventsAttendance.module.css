@@ -11,6 +11,23 @@
   padding-top: 10px !important;
   padding-bottom: 10px !important;
 }
+
+.customTooltip {
+  background-color: white;
+  font-size: 2em;
+  max-height: 170px;
+  overflow-y: scroll;
+  scrollbar-color: white;
+  border: 1px solid green;
+  border-radius: 6px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+.membername {
+  color:blue;
+}
+.eventsAttended{
+  color:blue;
+}
 .actionBtn {
   /* color:#39a440 !important; */
   background-color: #ffffff !important;

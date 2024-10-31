@@ -12,6 +12,8 @@ export const CustomTableCell: React.FC<{ eventId: string }> = ({ eventId }) => {
     },
     errorPolicy: 'all',
     fetchPolicy: 'cache-first',
+    nextFetchPolicy: 'cache-and-network',
+    pollInterval: 30000,
   });
 
   if (loading)
@@ -24,22 +26,20 @@ export const CustomTableCell: React.FC<{ eventId: string }> = ({ eventId }) => {
     );
 
   if (error) {
-    /*istanbul ignore next*/
     return (
       <TableRow data-testid="error-state">
         <TableCell colSpan={4} align="center">
-          {`Error loading event details: ${error.message}`}
+          {`Unable to load event details. Please try again later.`}
         </TableCell>
       </TableRow>
     );
   }
   const event = data?.event;
-  /*istanbul ignore next*/
   if (!event) {
     return (
       <TableRow data-testid="no-event-state">
         <TableCell colSpan={4} align="center">
-          No event found
+          Event not found or has been deleted
         </TableCell>
       </TableRow>
     );

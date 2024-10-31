@@ -91,7 +91,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     variables: { id: currentUrl },
   });
   const userData = user?.user;
-  console.log(userData?.user?.registeredEvents);
   const [isUpdated, setisUpdated] = useState(false);
   useEffect(() => {
     if (userData && isMounted.current) {
@@ -514,79 +513,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
           </Col>
         )}
       </Row>
-
-      {/* Actions */}
-      {/* <div className={`personal mt-4 bg-white border ${styles.allRound}`}>
-              <div
-                className={`d-flex flex-column border-bottom py-3 px-4 ${styles.topRadius}`}
-              >
-                <h3>{t('actionsHeading')}</h3>
-              </div>
-              <div className="p-3">
-                <div className="toggles">
-                  <div className="d-flex flex-row">
-                    <input
-                      type="checkbox"
-                      name="pluginCreationAllowed"
-                      className={`mx-2 ${styles.noOutline}`}
-                      checked={formState.pluginCreationAllowed}
-                      onChange={handleToggleChange} // API not supporting this feature
-                      data-testid="pluginCreationAllowed"
-                      placeholder="pluginCreationAllowed"
-                    />
-                    <p className="p-0 m-0">
-                      {`${t('pluginCreationAllowed')} (API not supported yet)`}
-                    </p>
-                  </div>
-                </div>
-                <div className="buttons d-flex flex-row gap-3 mt-2">
-                  <div className={styles.dispflex}>
-                    <div>
-                      <label>
-                        {t('appLanguageCode')} <br />
-                        <select
-                          className="form-control"
-                          data-testid="applangcode"
-                          onChange={(e): void => {
-                            setFormState({
-                              ...formState,
-                              appLanguageCode: e.target.value,
-                            });
-                          }}
-                          value={formState.appLanguageCode}
-                        >
-                          {languages.map((language, index: number) => (
-                            <option key={index} value={language.code}>
-                              {language.name}
-                            </option>
-                          ))}
-                        </select>
-                      </label>
-                    </div>
-                  </div>
-                  <div className="d-flex flex-column">
-                    <label htmlFor="">
-                      {t('deleteUser')}
-                      <br />
-                      {`(API not supported yet)`}
-                    </label>
-                    <Button className="btn btn-danger" data-testid="deleteBtn">
-                      {t('deleteUser')}
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div> */}
-      {/* <div className="buttons mt-4">
-              <Button
-                type="button"
-                className={styles.greenregbtn}
-                value="savechanges"
-                onClick={loginLink}
-              >
-                {tCommon('saveChanges')}
-              </Button>
-            </div> */}
       <Card className={`${styles.contact} ${styles.allRound} mt-3`}>
         <Card.Header
           className={`bg-primary d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius}`}
@@ -605,12 +531,12 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         <Card.Body
           className={`${styles.cardBody} ${styles.scrollableCardBody}`}
         >
-          {userData?.user.eventsAttended.length === 0 || null || undefined ? (
+          {!userData?.user.eventsAttended?.length ? (
             <div className={styles.emptyContainer}>
               <h6>{t('noeventsAttended')}</h6>
             </div>
           ) : (
-            userData?.user.eventsAttended.map(
+            userData.user.eventsAttended.map(
               (event: InterfaceEvent, index: number) => (
                 <span data-testid="membereventsCard" key={index}>
                   <EventsAttendedByMember eventsId={event._id} key={index} />

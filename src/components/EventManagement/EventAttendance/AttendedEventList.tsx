@@ -15,12 +15,9 @@ const AttendedEventList: React.FC<InterfaceEventsAttended> = ({ eventId }) => {
     variables: { id: eventId },
     fetchPolicy: 'cache-first',
     errorPolicy: 'all',
-    onError: (error) => {
-      console.error('Failed to fetch event details:', error);
-    },
   });
 
-  if (error) {
+  if (error || data?.error) {
     return <p>Error loading event details. Please try again later.</p>;
   }
 

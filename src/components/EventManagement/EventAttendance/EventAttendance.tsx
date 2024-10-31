@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Search } from '@mui/icons-material';
 import {
   Paper,
@@ -64,20 +64,19 @@ function EventAttendance(): JSX.Element {
   >('All');
   const [show, setShow] = useState(false);
 
-  const { data: memberData, refetch: memberRefetch } = useLazyQuery(
-    EVENT_ATTENDEES,
-    {
+  const [getEventAttendees, { data: memberData, loading, error }] =
+    useLazyQuery(EVENT_ATTENDEES, {
       variables: {
         id: eventId,
       },
-    },
-  )[1];
+    });
 
   useEffect(() => {
-    memberRefetch({
-      id: eventId,
-    });
-  }, [eventId, memberRefetch]);
+    getEventAttendees();
+  }, [eventId, getEventAttendees]);
+
+  if (loading) return <p> {t('loading')}</p>;
+  if (error) return <p>{error.message} </p>;
 
   const sortAttendees = (attendees: InterfaceMember[]): InterfaceMember[] => {
     return [...attendees].sort((a, b) => {
@@ -150,17 +149,23 @@ function EventAttendance(): JSX.Element {
   const showModal = (): void => setShow(true);
   const handleClose = (): void => setShow(false);
 
-  const totalMembers = filteredAttendees.length;
-  const membersAttended = filteredAttendees.filter(
-    (member) => member?.eventsAttended && member.eventsAttended.length > 0,
-  ).length;
-  const attendanceRate =
-    totalMembers > 0 ? (membersAttended / totalMembers) * 100 : 0;
+  const statistics = useMemo(() => {
+    const totalMembers = filteredAttendees.length;
+    const membersAttended = filteredAttendees.filter(
+      (member) => member?.eventsAttended && member.eventsAttended.length > 0,
+    ).length;
+    const attendanceRate =
+      totalMembers > 0
+        ? Number(((membersAttended / totalMembers) * 100).toFixed(2))
+        : 0;
+
+    return { totalMembers, membersAttended, attendanceRate };
+  }, [filteredAttendees]);
   return (
     <div className="">
       <AttendanceStatisticsModal
         show={show}
-        statistics={{ totalMembers, membersAttended, attendanceRate }}
+        statistics={statistics}
         handleClose={handleClose}
         memberData={filteredAttendees}
       />
@@ -336,11 +341,11 @@ function EventAttendance(): JSX.Element {
                     align="left"
                     data-testid={`attendee-events-attended-${index}`}
                   >
-                    <a href="#">
+                    <span className={styles.eventsAttended}>
                       {member.eventsAttended
                         ? member.eventsAttended.length
                         : '0'}
-                    </a>
+                    </span>
                   </TableCell>
                 </Tooltip>
                 <TableCell

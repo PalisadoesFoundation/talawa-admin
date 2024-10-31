@@ -58,4 +58,3 @@ const EventAttendedCard = (props: InterfaceCardItem): JSX.Element => {
 };
 
 export default EventAttendedCard;
-a;

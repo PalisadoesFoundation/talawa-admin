@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, within } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import EventAttendedCard from './EventsAttendedCardItem';
 
@@ -45,33 +45,18 @@ describe('EventAttendedCard', () => {
   });
 
   it('renders link with correct path', () => {
-    render(
-      <BrowserRouter>
-        <EventAttendedCard {...mockProps} />
-      </BrowserRouter>,
-    );
-
+    renderComponent();
     const link = screen.getByRole('link');
     expect(link).toHaveAttribute('href', '/event/org123/event456');
   });
 
   it('renders location icon', () => {
-    render(
-      <BrowserRouter>
-        <EventAttendedCard {...mockProps} />
-      </BrowserRouter>,
-    );
-
+    renderComponent();
     expect(screen.getByTestId('LocationOnIcon')).toBeInTheDocument();
   });
 
   it('renders chevron right icon', () => {
-    render(
-      <BrowserRouter>
-        <EventAttendedCard {...mockProps} />
-      </BrowserRouter>,
-    );
-
+    renderComponent();
     expect(screen.getByTestId('ChevronRightIcon')).toBeInTheDocument();
   });
 });
