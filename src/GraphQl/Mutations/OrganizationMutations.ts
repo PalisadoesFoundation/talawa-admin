@@ -57,8 +57,6 @@ export const REMOVE_SAMPLE_ORGANIZATION_MUTATION = gql`
  * @returns The created direct chat object.
  */
 
-
-
 export const CREATE_CHAT = gql`
   mutation createChat(
     $userIds: [ID!]!
@@ -113,7 +111,6 @@ export const SEND_MESSAGE_TO_CHAT = gql`
     }
   }
 `;
-
 
 export const MESSAGE_SENT_TO_CHAT = gql`
   subscription messageSentToChat($userId: ID!) {
