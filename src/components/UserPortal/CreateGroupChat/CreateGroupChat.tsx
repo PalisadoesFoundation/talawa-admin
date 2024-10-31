@@ -184,6 +184,7 @@ export default function CreateGroupChat({
             ref={fileInputRef}
             style={{ display: 'none' }} // Hide the input
             onChange={handleImageChange}
+            data-testid="fileInput"
           />
           <div className={styles.groupInfo}>
             {selectedImage ? (
@@ -191,7 +192,11 @@ export default function CreateGroupChat({
             ) : (
               <Avatar avatarStyle={styles.groupImage} name={title} />
             )}
-            <button onClick={handleImageClick} className={styles.editImgBtn}>
+            <button
+              data-testid="editImageBtn"
+              onClick={handleImageClick}
+              className={styles.editImgBtn}
+            >
               <FiEdit />
             </button>
           </div>

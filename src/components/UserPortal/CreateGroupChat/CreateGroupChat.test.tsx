@@ -5529,12 +5529,6 @@ describe('Testing Create Group Chat Modal [User Portal]', () => {
       expect(groupTitleInput.value).toBe('Test Group');
     });
 
-    // const orgSelect = screen.getByLabelText('Select Organization');
-
-    // fireEvent.change(orgSelect, {
-    //   target: { value: '6401ff65ce8e8406b8f07af2' },
-    // });
-
     const nextBtn = await screen.findByTestId('nextBtn');
 
     act(() => {

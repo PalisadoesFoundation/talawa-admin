@@ -577,31 +577,6 @@ describe('GroupChatDetails', () => {
     );
 
     await wait();
-    await act(async () => {
-      fireEvent.click(await screen.findByTestId('editImageBtn'));
-    });
-
-    // await waitFor(async () => {
-    //   expect(await screen.findByTestId('uploadImage')).toBeInTheDocument();
-    // });
-
-    // await act(async () => {
-    //   fireEvent.change(await screen.findByTestId('uploadImage'), {
-    //     target: {
-    //       files: [
-    //         new File(['(⌐□_□)'], 'chucknorris.png', {
-    //           type: 'image/png',
-    //         }),
-    //       ],
-    //     },
-    //   });
-    // });
-
-    // await act(async () => {
-    //   fireEvent.click(await screen.findByTestId('updateImageBtn'));
-    // });
-
-    // await wait();
 
     await waitFor(
       async () => {
