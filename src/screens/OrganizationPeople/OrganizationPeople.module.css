@@ -1,8 +1,14 @@
+:root {
+  --dropdown-border-color: #555555;
+  --dropdown-text-color: #555555;
+}
+
 @media screen and (max-width: 575.5px) {
   .mainpageright {
     width: 98%;
   }
 }
+
 .modalContent {
   width: 670px;
   max-width: 680px;
@@ -17,23 +23,23 @@
   color: #5f7e91;
   text-decoration: underline;
 }
+
 .dropdown {
   background-color: white;
-  border: 1px solid #555555;
+  border: 1px solid var(--dropdown-border-color);
+  color: var(--dropdown-text-color);
   position: relative;
   display: inline-block;
   margin-top: 10px;
   margin-bottom: 10px;
-  color: #555555;
 }
 
-.dropdown:hover,
-.dropdown:focus,
-.dropdown:active .dropdown:focus-visible .dropdown.show {
+.dropdown:is(:hover, :focus, :active, :focus-visible, .show) {
   background-color: transparent !important;
-  border: 1px solid #555555;
-  color: #555555 !important;
+  border: 1px solid var(--dropdown-border-color);
+  color: var(--dropdown-text-color) !important;
 }
+
 .dropdown:focus,
 .dropdown:focus-visible,
 .dropdown:active .dropdown.show {
@@ -52,10 +58,13 @@
 .dropdownItem:hover,
 .dropdownItem:focus,
 .dropdownItem:active {
-  background-color: white !important; /* Keep the background white */
-  color: #555555 !important; /* Keep the text color as default */
+  background-color: white !important;
+  /* Keep the background white */
+  color: #555555 !important;
+  /* Keep the text color as default */
   outline: none !important;
-  box-shadow: none !important; /* Remove any shadow */
+  box-shadow: none !important;
+  /* Remove any shadow */
 }
 
 .input {
@@ -88,21 +97,55 @@
   width: 52px;
 }
 
+.deleteButton {
+  background-color: #f8d6dc;
+  color: #ff4d4f;
+  border: none;
+  padding: 5px 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
 .inputField {
   margin-top: 10px;
   margin-bottom: 10px;
   background-color: white;
   box-shadow: 0 1px 1px #dddddd;
 }
+
 .inputFieldModal {
   margin-bottom: 10px;
   background-color: white;
   box-shadow: 0 1px 1px #dddddd;
 }
+
 .inputField > button {
   padding-top: 10px;
   padding-bottom: 10px;
 }
+
+.searchButton {
+  margin-bottom: 10px;
+  background-color: #a8c7fa;
+  border-color: #555555;
+}
+
+.searchIcon {
+  color: #555555;
+}
+
 .TableImage {
   object-fit: cover;
   margin-top: 15px !important;
@@ -110,6 +153,7 @@
   height: 50px !important;
   border-radius: 100% !important;
 }
+
 .tableHead {
   color: white;
   border-radius: 20px !important;
@@ -128,9 +172,11 @@
   margin-right: -15px;
   margin-bottom: 20px;
 }
+
 .rowBackground {
   background-color: var(--bs-white);
 }
+
 .tableHeader {
   background-color: var(--bs-primary);
   color: var(--bs-greyish-black);
@@ -142,16 +188,19 @@
     -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
   }
+
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
 }
+
 @keyframes load8 {
   0% {
     -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
   }
+
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);

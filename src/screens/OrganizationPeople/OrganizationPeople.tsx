@@ -258,14 +258,11 @@ function organizationPeople(): JSX.Element {
           <Button
             onClick={() => toggleRemoveAdminModal(params.row._id)}
             data-testid="removeAdminModalBtn"
-            style={{
-              backgroundColor: '#F8D6DC', // Red background color
-              color: 'white', // White text/icon color
-              border: 'none', // Remove default border
-              padding: '5px 20px', // Adjust padding for icon
-            }}
+            aria-label="Remove admin"
+            className={styles.deleteButton}
           >
-            <Delete style={{ color: '#FF4D4F' }} />
+            <Delete />
+            <span className={styles.visuallyHidden}>Remove</span>
           </Button>
         ) : (
           <Button
@@ -304,11 +301,10 @@ function organizationPeople(): JSX.Element {
                 />
                 <Button
                   type="submit"
-                  className={`position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center `}
-                  style={{ marginBottom: '10px', backgroundColor: '#A8C7FA' }}
+                  className={`${styles.searchButton} position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center`}
                   data-testid={'searchbtn'}
                 >
-                  <Search style={{ color: '#555555' }} />
+                  <Search className={styles.searchIcon} />
                 </Button>
               </Form>
             </div>
@@ -401,19 +397,23 @@ function organizationPeople(): JSX.Element {
               borderRadius: '20px',
               backgroundColor: '#EAEBEF',
               '& .MuiDataGrid-row': {
-                backgroundColor: '#eff1f7', // Apply background to rows
-              },
-              '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-                outline: 'none !important',
-              },
-              '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-                outline: 'none',
+                backgroundColor: '#eff1f7',
+                '&:focus-within': {
+                  outline: '2px solid #000',
+                  outlineOffset: '-2px',
+                },
               },
               '& .MuiDataGrid-row:hover': {
                 backgroundColor: '#EAEBEF',
+                boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
               },
               '& .MuiDataGrid-row.Mui-hovered': {
                 backgroundColor: '#EAEBEF',
+                boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
+              },
+              '& .MuiDataGrid-cell:focus': {
+                outline: '2px solid #000',
+                outlineOffset: '-2px',
               },
             }}
             getRowClassName={() => `${styles.rowBackground}`}
