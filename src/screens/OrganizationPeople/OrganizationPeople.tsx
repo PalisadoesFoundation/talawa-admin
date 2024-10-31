@@ -344,7 +344,9 @@ function organizationPeople(): JSX.Element {
                       setState(0);
                     }}
                   >
-                    <label htmlFor="memberslist">{tCommon('members')}</label>
+                    <Form.Label htmlFor="memberslist">
+                      {tCommon('members')}
+                    </Form.Label>
                   </Dropdown.Item>
                   <Dropdown.Item
                     d-inline
@@ -358,7 +360,9 @@ function organizationPeople(): JSX.Element {
                       setState(1);
                     }}
                   >
-                    <label htmlFor="adminslist">{tCommon('admins')}</label>
+                    <Form.Label htmlFor="adminslist">
+                      {tCommon('admins')}
+                    </Form.Label>
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
