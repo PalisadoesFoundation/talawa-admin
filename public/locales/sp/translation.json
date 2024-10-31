@@ -423,7 +423,8 @@
     "on": "En",
     "after": "Después de",
     "occurences": "ocurrencias",
-    "done": "Hecho"
+    "done": "Hecho",
+    "createChat": "Crear chat"
   },
   "organizationActionItems": {
     "actionItemCategory": "Categoría del ítem de acción",
@@ -558,7 +559,8 @@
     "on": "En",
     "after": "Después de",
     "occurences": "ocurrencias",
-    "done": "Hecho"
+    "done": "Hecho",
+    "createChat": "Crear chat"
   },
   "funds": {
     "title": "Fondos",
@@ -1143,7 +1145,8 @@
     "publicEvent": "Es público",
     "registerable": "Es registrable",
     "monthlyCalendarView": "Calendario mensual",
-    "yearlyCalendarView": "Calendario anual"
+    "yearlyCalendarView": "Calendario anual",
+    "createChat": "Crear chat"
   },
   "userEventCard": {
     "location": "Ubicación",
@@ -1187,14 +1190,22 @@
     "createAdvertisement": "Crear publicidad"
   },
   "userChat": {
+    "add": "Agregar",
     "chat": "Charlar",
     "search": "Buscar",
     "contacts": "Contactos",
-    "messages": "Mensajes"
+    "messages": "Mensajes",
+    "create": "crear",
+    "newChat": "nueva charla",
+    "newGroupChat": "Nuevo chat grupal",
+    "groupInfo": "Información del grupo",
+    "members": "Miembros",
+    "addMembers": "Add Members"
   },
   "userChatRoom": {
     "selectContact": "Seleccione un contacto para iniciar una conversación",
-    "sendMessage": "Enviar mensaje"
+    "sendMessage": "Enviar mensaje",
+    "reply": "responder"
   },
   "orgProfileField": {
     "loading": "Cargando..",

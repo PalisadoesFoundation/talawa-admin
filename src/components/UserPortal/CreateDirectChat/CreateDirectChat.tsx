@@ -25,10 +25,10 @@ interface InterfaceCreateDirectChatProps {
   chatsListRefetch: (
     variables?:
       | Partial<{
-          id: any;
+          id: string;
         }>
       | undefined,
-  ) => Promise<ApolloQueryResult<any>>;
+  ) => Promise<ApolloQueryResult<unknown>>;
 }
 
 /**
@@ -192,7 +192,7 @@ export default function createDirectChatModal({
                                 }}
                                 data-testid="addBtn"
                               >
-                                Add
+                                {t('add')}
                               </Button>
                             </StyledTableCell>
                           </StyledTableRow>

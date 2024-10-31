@@ -1,0 +1,94 @@
+.groupInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.memberList {
+  max-height: 300px;
+  overflow: scroll;
+}
+
+.memberList::-webkit-scrollbar {
+  display: none;
+}
+
+.listItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.groupMembersList {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.groupMembersList p {
+  margin: 0;
+  color: #959595;
+}
+
+.membersImage {
+  width: 40px !important;
+}
+
+.groupImage {
+  margin-bottom: 10px;
+}
+
+.editImgBtn {
+  padding: 2px 6px 6px 8px;
+  border-radius: 100%;
+  background-color: white;
+  border: 1px solid #959595;
+  color: #959595;
+  outline: none;
+  position: relative;
+  top: -40px;
+  left: 40px;
+}
+
+.chatImage {
+  height: 120px;
+  border-radius: 100%;
+  width: 120px;
+}
+
+.editChatNameContainer {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.editChatNameContainer input {
+  border: none;
+  border-bottom: 1px solid rgb(171, 171, 171);
+  outline: none;
+  padding: 0px 5px;
+}
+
+.editChatNameContainer h3 {
+  margin: 0;
+}
+
+.cancelIcon {
+  color: rgb(197, 42, 42);
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.checkIcon {
+  color: rgb(42, 197, 42);
+  cursor: pointer;
+}
+
+.chatUserDetails {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}

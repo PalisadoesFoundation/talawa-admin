@@ -63,6 +63,7 @@ export default function events(): JSX.Element {
   const [endTime, setEndTime] = React.useState('10:00:00');
   const [viewType, setViewType] = React.useState<ViewType>(ViewType.MONTH);
   const [createEventModal, setCreateEventmodalisOpen] = React.useState(false);
+  const [createChatCheck, setCreateChatCheck] = React.useState(false);
   const { orgId: organizationId } = useParams();
 
   // Query to fetch events for the organization
@@ -115,8 +116,9 @@ export default function events(): JSX.Element {
           endDate: dayjs(endDate).format('YYYY-MM-DD'),
           allDay: isAllDay,
           location: eventLocation,
-          startTime: !isAllDay ? startTime : null,
-          endTime: !isAllDay ? endTime : null,
+          startTime: !isAllDay ? startTime + 'Z' : null,
+          endTime: !isAllDay ? endTime + 'Z' : null,
+          createChat: createChatCheck,
         },
       });
 
@@ -134,6 +136,7 @@ export default function events(): JSX.Element {
       }
       setCreateEventmodalisOpen(false);
     } catch (error: unknown) {
+      console.error('create event error', error);
       /* istanbul ignore next */
       errorHandler(t, error);
     }
@@ -387,6 +390,21 @@ export default function events(): JSX.Element {
                       checked={isRegisterable}
                       data-testid="registerableEventCheck"
                       onChange={(): void => setIsRegisterable(!isRegisterable)}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <div className={styles.dispflex}>
+                    <label htmlFor="createChat">{t('createChat')}?</label>
+                    <Form.Switch
+                      className="me-4"
+                      id="chat"
+                      type="checkbox"
+                      data-testid="createChatCheck"
+                      checked={createChatCheck}
+                      onChange={(): void =>
+                        setCreateChatCheck(!createChatCheck)
+                      }
                     />
                   </div>
                 </div>

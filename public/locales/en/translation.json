@@ -399,6 +399,7 @@
     "recurringEvent": "Recurring Event",
     "isPublic": "Is Public",
     "isRegistrable": "Is Registrable",
+    "createChat": "Create Chat",
     "createEvent": "Create Event",
     "enterFilter": "Enter Filter",
     "enterTitle": "Enter Title",
@@ -532,6 +533,7 @@
     "recurringEvent": "Recurring Event",
     "isPublic": "Is Public",
     "isRegistrable": "Is Registrable",
+    "createChat": "Create Chat",
     "updatePost": "Update Post",
     "eventDetails": "Event Details",
     "eventDeleted": "Event deleted successfully.",
@@ -1131,6 +1133,7 @@
     "enterDescription": "Enter Description",
     "publicEvent": "Is Public",
     "registerable": "Is Registerable",
+    "createChat": "Create Chat",
     "monthlyCalendarView": "Monthly Calendar",
     "yearlyCalendarView": "Yearly Calender",
     "startTime": "startTime",
@@ -1186,14 +1189,22 @@
     "endOfResults": "endOfResults"
   },
   "userChat": {
+    "add": "Add",
     "chat": "Chat",
     "search": "Search",
     "messages": "Messages",
-    "contacts": "Contacts"
+    "contacts": "Contacts",
+    "create": "Create",
+    "newChat": "New Chat",
+    "newGroupChat": "New Group Chat",
+    "groupInfo": "Group Info",
+    "members": "Members",
+    "addMembers": "Add Members"
   },
   "userChatRoom": {
     "selectContact": "Select a contact to start conversation",
-    "sendMessage": "Send Message"
+    "sendMessage": "Send Message",
+    "reply": "Reply"
   },
   "orgProfileField": {
     "loading": "Loading...",
