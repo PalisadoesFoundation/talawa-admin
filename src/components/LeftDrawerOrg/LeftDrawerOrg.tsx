@@ -44,8 +44,8 @@ const leftDrawerOrg = ({
   const userId = getItem('id');
   const getIdFromPath = (pathname: string): string => {
     const segments = pathname.split('/');
-    // Index 2 represents the ID in paths like /member/{userId}
-    return segments.length > 2 ? segments[2] : '';
+    // Index 2 represents the ID in paths like /member/{userId}, /orgdash/{orgId}
+    return segments[2];
   };
   const [isProfilePage, setIsProfilePage] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
