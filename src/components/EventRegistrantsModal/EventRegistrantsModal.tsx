@@ -134,10 +134,10 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
       const refetchInterval = setInterval(() => {
         Promise.all([
           attendeesRefetch().catch((err) =>
-            toast.error('Failed to refresh attendees list:', err),
+            toast.error(`Failed to refresh attendees list: ${err.message}`),
           ),
           memberRefetch().catch((err) =>
-            toast.error('Failed to refresh members list:', err),
+            toast.error(`Failed to refresh members list: ${err.message}`),
           ),
         ]);
       }, 5000);
@@ -193,18 +193,18 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
               setMember(newMember);
             }}
             noOptionsText={
-                <div className="d-flex ">
-                  <p className="me-2">No Registrations found</p>
-                  <a
-                    className="underline"
-                    href="#"
-                    onClick={() => {
-                      setOpen(true);
-                    }}
-                  >
-                    Add Onspot Registration
-                  </a>
-                </div>
+              <div className="d-flex ">
+                <p className="me-2">No Registrations found</p>
+                <a
+                  className="underline"
+                  href="#"
+                  onClick={() => {
+                    setOpen(true);
+                  }}
+                >
+                  Add Onspot Registration
+                </a>
+              </div>
             }
             options={memberData.organizations[0].members}
             getOptionLabel={(member: InterfaceUser): string =>

@@ -90,25 +90,15 @@ function EventAttendance(): JSX.Element {
 
   const filterAttendees = (attendees: InterfaceMember[]): InterfaceMember[] => {
     const now = new Date();
-
-    if (filteringBy === 'All') {
-      return attendees;
-    }
-
-    return attendees.filter((attendee) => {
-      const attendeeDate = new Date(attendee.createdAt);
-
-      if (filteringBy === 'This Month') {
-        return (
-          attendeeDate.getMonth() === now.getMonth() &&
-          attendeeDate.getFullYear() === now.getFullYear()
-        );
-      } else if (filteringBy === 'This Year') {
-        return attendeeDate.getFullYear() === now.getFullYear();
-      }
-
-      return true;
-    });
+    return filteringBy === 'All'
+      ? attendees
+      : attendees.filter((attendee) => {
+          const attendeeDate = new Date(attendee.createdAt);
+          const isSameYear = attendeeDate.getFullYear() === now.getFullYear();
+          return filteringBy === 'This Month'
+            ? isSameYear && attendeeDate.getMonth() === now.getMonth()
+            : isSameYear;
+        });
   };
 
   const filterAndSortAttendees = (

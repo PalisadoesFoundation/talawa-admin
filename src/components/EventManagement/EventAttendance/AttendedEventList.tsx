@@ -26,10 +26,15 @@ const AttendedEventList: React.FC<InterfaceEventsAttended> = ({ eventId }) => {
   if (loading) return <p>Loading...</p>;
   return (
     <React.Fragment>
-      <Table className="bg-primary">
+      <Table className="bg-primary" aria-label="Attended events list">
         <TableBody className="bg-primary">
           {event && (
-            <TableRow key={event._id} className="bg-white rounded">
+            <TableRow
+              key={event._id}
+              className="bg-white rounded"
+              role="row"
+              aria-label={`Event: ${event.title}`}
+            >
               <TableCell>
                 <Link
                   to={`/event/${currentOrg}/${event._id}`}
@@ -56,5 +61,4 @@ const AttendedEventList: React.FC<InterfaceEventsAttended> = ({ eventId }) => {
     </React.Fragment>
   );
 };
-
 export default AttendedEventList;

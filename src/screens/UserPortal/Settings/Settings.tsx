@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './Settings.module.css';
 import { Button, Card, Col, Form, Row } from 'react-bootstrap';
@@ -22,7 +22,6 @@ import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import Avatar from 'components/Avatar/Avatar';
 import EventsAttendedByMember from 'components/MemberDetail/EventsAttendedByMember';
-import CardItemLoading from 'components/OrganizationDashCards/CardItemLoading';
 import type { InterfaceEvent } from 'components/EventManagement/EventAttendance/InterfaceEvents';
 
 /**
@@ -289,9 +288,9 @@ export default function settings(): JSX.Element {
                             <Avatar
                               name={`${userDetails.firstName} ${userDetails.lastName}`}
                               alt="User Image"
-                              size={250}
+                              size={60}
                               dataTestId="profile-picture"
-                              radius={250}
+                              radius={150}
                             />
                           )}
                           <i
@@ -300,6 +299,12 @@ export default function settings(): JSX.Element {
                             data-testid="uploadImageBtn"
                             style={{ cursor: 'pointer', fontSize: '1.2rem' }}
                             title="Edit profile picture"
+                            role="button"
+                            aria-label="Edit profile picture"
+                            tabIndex={0}
+                            onKeyDown={(e) =>
+                              e.key === 'Enter' && handleImageUpload()
+                            }
                           />
                         </div>
                       </div>

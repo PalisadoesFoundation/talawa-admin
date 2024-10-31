@@ -12,21 +12,9 @@
   padding-bottom: 10px !important;
 }
 
-.customTooltip {
-  background-color: white;
-  font-size: 2em;
-  max-height: 170px;
-  overflow-y: scroll;
-  scrollbar-color: white;
-  border: 1px solid green;
-  border-radius: 6px;
-  box-shadow: 0 0 5px rgba(0,0,0,0.1);
-}
+.eventsAttended,
 .membername {
-  color:blue;
-}
-.eventsAttended{
-  color:blue;
+  color: blue;
 }
 .actionBtn {
   /* color:#39a440 !important; */
@@ -36,17 +24,6 @@
 .actionBtn:focus,
 .actionBtn:active {
   color: #39a440 !important;
-}
-
-/* Add this to your CSS file */
-.small-doughnut {
-  width: 200px; /* Adjust as needed */
-  height: 200px; /* Adjust as needed */
-}
-
-.large-doughnut {
-  width: 400px; /* Adjust as needed */
-  height: 400px; /* Adjust as needed */
 }
 
 .table-body > .table-row {

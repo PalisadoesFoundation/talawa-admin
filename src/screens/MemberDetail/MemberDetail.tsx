@@ -263,6 +263,12 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                       style={{ cursor: 'pointer' }}
                       data-testid="editImage"
                       title="Edit profile picture"
+                      role="button"
+                      aria-label="Edit profile picture"
+                      tabIndex={0}
+                      onKeyDown={(e) =>
+                        e.key === 'Enter' && handleEditIconClick()
+                      }
                     />
                   </div>
                 ) : (
@@ -349,6 +355,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                       textField: {
                         inputProps: {
                           'data-testid': 'birthDate',
+                          'aria-label': t('birthDate'),
                         },
                       },
                     }}
