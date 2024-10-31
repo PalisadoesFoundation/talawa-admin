@@ -1,5 +1,3 @@
-import React from 'react';
-
 export interface InterfaceAttendanceStatisticsModalProps {
   show: boolean;
   handleClose: () => void;

@@ -24,8 +24,9 @@
   font-weight: 600;
 }
 .scrollableCardBody {
-  height: 220px;
-  overflow-y: scroll;
+  max-height: min(220px, 50vh);
+  overflow-y: auto;
+  scroll-behavior: smooth;
 }
 .cardHeader {
   padding: 1.25rem 1rem 1rem 1rem;
@@ -139,6 +140,10 @@
   .containerHeight {
     height: 100vh;
     padding: 2rem;
+  }
+
+  .scrollableCardBody {
+    max-height: 40vh;
   }
 
   .contract,

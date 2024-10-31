@@ -10,9 +10,16 @@ interface InterfaceEventsAttendedByMember {
 function EventsAttendedByMember({
   eventsId,
 }: InterfaceEventsAttendedByMember): JSX.Element {
-  const { data: events } = useQuery(EVENT_DETAILS, {
+  const {
+    data: events,
+    loading,
+    error,
+  } = useQuery(EVENT_DETAILS, {
     variables: { id: eventsId },
   });
+
+  if (loading) return <div data-testid="loading">Loading...</div>;
+  if (error) return <div data-testid="error">Error: {error.message}</div>;
 
   return (
     <React.Fragment>

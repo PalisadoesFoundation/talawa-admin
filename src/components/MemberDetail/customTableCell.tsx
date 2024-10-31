@@ -10,11 +10,13 @@ export const CustomTableCell: React.FC<{ eventId: string }> = ({ eventId }) => {
     variables: {
       id: eventId,
     },
+    errorPolicy: 'all',
+    fetchPolicy: 'cache-first',
   });
 
   if (loading)
     return (
-      <TableRow>
+      <TableRow data-testid="loading-state">
         <TableCell colSpan={4}>
           <CircularProgress />
         </TableCell>
@@ -24,16 +26,18 @@ export const CustomTableCell: React.FC<{ eventId: string }> = ({ eventId }) => {
   if (error) {
     /*istanbul ignore next*/
     return (
-      <tr>
-        <td>Error loading event details</td>
-      </tr>
+      <TableRow data-testid="error-state">
+        <TableCell colSpan={4} align="center">
+          {`Error loading event details: ${error.message}`}
+        </TableCell>
+      </TableRow>
     );
   }
   const event = data?.event;
   /*istanbul ignore next*/
   if (!event) {
     return (
-      <TableRow>
+      <TableRow data-testid="no-event-state">
         <TableCell colSpan={4} align="center">
           No event found
         </TableCell>
@@ -46,18 +50,22 @@ export const CustomTableCell: React.FC<{ eventId: string }> = ({ eventId }) => {
       <TableCell align="left">
         <Link
           to={`/event/${event.organization._id}/${event._id}`}
-          state={{ id: event._id }}
           className={styles.membername}
         >
           {event.title}
         </Link>
       </TableCell>
       <TableCell align="left">
-        {new Date(event.startDate).toLocaleDateString()}
+        {new Date(event.startDate).toLocaleDateString(undefined, {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          timeZone: 'UTC',
+        })}
       </TableCell>
       <TableCell align="left">{event.recurring ? 'Yes' : 'No'}</TableCell>
       <TableCell align="left">
-        {event.attendees ? event.attendees.length : '0'}
+        <span title="Number of attendees">{event.attendees?.length ?? 0}</span>
       </TableCell>
     </TableRow>
   );

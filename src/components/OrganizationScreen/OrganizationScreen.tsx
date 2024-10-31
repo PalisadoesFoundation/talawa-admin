@@ -1,7 +1,7 @@
 import LeftDrawerOrg from 'components/LeftDrawerOrg/LeftDrawerOrg';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
   Navigate,
   Outlet,
@@ -16,7 +16,7 @@ import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from './OrganizationScreen.module.css';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import { Button } from 'react-bootstrap';
- import type { InterfaceMapType } from 'utils/interfaces';
+import type { InterfaceMapType } from 'utils/interfaces';
 import { useQuery } from '@apollo/client';
 import { ORGANIZATION_EVENT_LIST } from 'GraphQl/Queries/Queries';
 interface InterfaceEvent {
@@ -72,12 +72,17 @@ const OrganizationScreen = (): JSX.Element => {
   });
 
   useEffect(() => {
-    if (isEventPath && eventsData) {
+    if (isEventPath?.params.eventId && eventsData?.eventsByOrganization) {
       const eventId = isEventPath.params.eventId;
       const event = eventsData.eventsByOrganization.find(
         (e: InterfaceEvent) => e._id === eventId,
       );
-      setEventName(event ? event.title : null);
+      if (!event) {
+        console.warn(`Event with id ${eventId} not found`);
+        setEventName(null);
+        return;
+      }
+      setEventName(event.title);
     } else {
       setEventName(null);
     }

@@ -164,7 +164,6 @@ function EventAttendance(): JSX.Element {
         handleClose={handleClose}
         memberData={filteredAttendees}
       />
-      <div className="border-1 border-top pb-4"></div>
       <div className="d-flex justify-content-between">
         <div className="d-flex w-100">
           <Button

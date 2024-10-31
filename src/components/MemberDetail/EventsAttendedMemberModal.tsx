@@ -16,20 +16,26 @@ import { CustomTableCell } from './customTableCell';
 
 interface InterfaceEvent {
   _id: string;
+  name: string;
+  date: string;
+  isRecurring: boolean;
+  attendees: number;
 }
 
 interface InterfaceEventsAttendedMemberModalProps {
   eventsAttended: InterfaceEvent[];
   setShow: (show: boolean) => void;
   show: boolean;
+  eventsPerPage?: number;
 }
 
 const EventsAttendedMemberModal: React.FC<
   InterfaceEventsAttendedMemberModalProps
-> = ({ eventsAttended, setShow, show }) => {
-  const { t } = useTranslation();
+> = ({ eventsAttended, setShow, show, eventsPerPage = 5 }) => {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'memberDetail',
+  });
   const [page, setPage] = useState<number>(1);
-  const eventsPerPage = 5;
 
   const handleClose = (): void => {
     setShow(false);
@@ -42,11 +48,16 @@ const EventsAttendedMemberModal: React.FC<
     setPage(newPage);
   };
 
-  const paginatedEvents = eventsAttended.slice(
-    (page - 1) * eventsPerPage,
-    page * eventsPerPage,
+  const totalPages = useMemo(
+    () => Math.ceil(eventsAttended.length / eventsPerPage),
+    [eventsAttended.length, eventsPerPage],
   );
-  const totalPages = Math.ceil(eventsAttended.length / eventsPerPage);
+
+  const paginatedEvents = useMemo(
+    () =>
+      eventsAttended.slice((page - 1) * eventsPerPage, page * eventsPerPage),
+    [eventsAttended, page, eventsPerPage],
+  );
 
   return (
     <Modal show={show} onHide={handleClose} centered size="lg">
@@ -89,12 +100,19 @@ const EventsAttendedMemberModal: React.FC<
               </Table>
             </TableContainer>
             <div className="d-flex justify-content-center mt-3">
-              <Pagination
-                count={totalPages}
-                page={page}
-                onChange={handleChangePage}
-                color="primary"
-              />
+              <div className="d-flex justify-content-center mt-3">
+                <Pagination
+                  count={totalPages}
+                  page={page}
+                  onChange={handleChangePage}
+                  color="primary"
+                  aria-label="Events navigation"
+                  getItemAriaLabel={(type, page) => {
+                    if (type === 'page') return `Go to page ${page}`;
+                    return `Go to ${type} page`;
+                  }}
+                />
+              </div>
             </div>
           </>
         )}

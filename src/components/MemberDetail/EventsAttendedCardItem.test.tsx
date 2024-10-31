@@ -1,10 +1,19 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import EventAttendedCard from './EventsAttendedCardItem';
 
+interface InterfaceEventAttendedCardProps {
+  type: 'Event';
+  title: string;
+  startdate: string;
+  time: string;
+  location: string;
+  orgId: string;
+  eventId: string;
+}
 describe('EventAttendedCard', () => {
-  const mockProps = {
+  const mockProps: InterfaceEventAttendedCardProps = {
     type: 'Event' as const,
     title: 'Test Event',
     startdate: '2023-05-15',
@@ -14,12 +23,20 @@ describe('EventAttendedCard', () => {
     eventId: 'event456',
   };
 
-  it('renders event details correctly', () => {
-    render(
+  const renderComponent = (props = mockProps): React.ReactElement => {
+    return render(
       <BrowserRouter>
-        <EventAttendedCard {...mockProps} />
+        <EventAttendedCard {...props} />
       </BrowserRouter>,
     );
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('renders event details correctly', () => {
+    renderComponent();
 
     expect(screen.getByText('Test Event')).toBeInTheDocument();
     expect(screen.getByText('MAY')).toBeInTheDocument();

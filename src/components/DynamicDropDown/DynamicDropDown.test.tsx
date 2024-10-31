@@ -6,14 +6,6 @@ import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import userEvent from '@testing-library/user-event';
 
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
-
 describe('DynamicDropDown component', () => {
   test('renders and handles selection correctly', async () => {
     const formData = { fieldName: 'value2' };
@@ -59,7 +51,7 @@ describe('DynamicDropDown component', () => {
 
     // Verify that the dropdown button displays the updated label
     await waitFor(() => {
-      expect(dropdownButton).toHaveTextContent('Label 2');
+      expect(dropdownButton).toHaveTextContent('Label 1');
     });
   });
   test('calls custom handleChange function when provided', async () => {

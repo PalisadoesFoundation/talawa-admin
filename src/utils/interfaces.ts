@@ -553,7 +553,8 @@ export interface InterfaceFormData {
   email: string;
   phoneNo: string;
   gender: string;
-  
+}
+
 export interface InterfaceAgendaItemInfo {
   _id: string;
   title: string;

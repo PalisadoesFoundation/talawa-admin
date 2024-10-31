@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import styles from './EventDashboard.module.css';
 import { useTranslation } from 'react-i18next';
@@ -19,33 +19,17 @@ import { formatDate } from 'utils/dateFormatter';
  */
 const EventDashboard = (props: { eventId: string }): JSX.Element => {
   const { eventId } = props;
-  const isMounted = useRef(true);
-
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'eventManagement',
-  });
-
-  const { t: tList } = useTranslation('translation', {
-    keyPrefix: 'eventListCard',
-  });
-
-  const { t: tCommon } = useTranslation('common');
+  const { t } = useTranslation(['translation', 'common']);
+  // const tEventManagement = (key: string): string => t(`eventManagement.${key}`);
+  const tEventList = (key: string): string => t(`eventListCard.${key}`);
   const [eventModalIsOpen, setEventModalIsOpen] = useState(false);
 
   const { data: eventData, loading: eventInfoLoading } = useQuery(
     EVENT_DETAILS,
     {
       variables: { id: eventId },
-      skip: !isMounted.current,
     },
   );
-
-  useEffect(() => {
-    isMounted.current = true;
-    return () => {
-      isMounted.current = false;
-    };
-  }, []);
 
   /**
    * Formats a time string (HH:MM) to a more readable format.
@@ -58,18 +42,12 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
     return `${hours}:${minutes}`;
   }
 
-  /*istanbul ignore next*/
   const showViewModal = (): void => {
-    if (isMounted.current) {
-      setEventModalIsOpen(true);
-    }
+    setEventModalIsOpen(true);
   };
 
-  /*istanbul ignore next*/
   const hideViewModal = (): void => {
-    if (isMounted.current) {
-      setEventModalIsOpen(false);
-    }
+    setEventModalIsOpen(false);
   };
 
   if (eventInfoLoading) {
@@ -109,10 +87,10 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
           eventListCardProps={eventListCardProps}
           eventModalIsOpen={eventModalIsOpen}
           hideViewModal={hideViewModal}
-          t={tList}
-          tCommon={tCommon}
+          t={tEventList}
+          tCommon={t}
         />
-        <div className="d-flex px-6 " data-testid="event-stats">
+        <div className="d-flex px-6" data-testid="event-stats">
           <div
             className={`${styles.ctacards}`}
             data-testid="registrations-card"

@@ -223,7 +223,9 @@ describe('Organisation Tags Page', () => {
     userEvent.click(screen.getByTestId('createTagSubmitBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.tagCreationSuccess);
+      expect(toast.success).toHaveBeenCalledWith(
+        translations.tagCreationSuccess,
+      );
     });
   });
 
@@ -240,7 +242,9 @@ describe('Organisation Tags Page', () => {
     userEvent.click(screen.getByTestId('removeUserTagSubmitBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.tagRemovalSuccess);
+      expect(toast.success).toHaveBeenCalledWith(
+        translations.tagRemovalSuccess,
+      );
     });
   });
 });

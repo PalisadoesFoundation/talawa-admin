@@ -4,22 +4,29 @@ import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
 import { Link, useParams } from 'react-router-dom';
 import { formatDate } from 'utils/dateFormatter';
-import { ReactComponent as DateIcon } from 'assets/svgs/cardItemDate.svg';
-
+import DateIcon from 'assets/svgs/cardItemDate.svg?react';
 interface InterfaceEventsAttended {
   eventId: string;
 }
 
 const AttendedEventList: React.FC<InterfaceEventsAttended> = ({ eventId }) => {
   const { orgId: currentOrg } = useParams();
-  const { data, loading } = useQuery(EVENT_DETAILS, {
+  const { data, loading, error } = useQuery(EVENT_DETAILS, {
     variables: { id: eventId },
+    fetchPolicy: 'cache-first',
+    errorPolicy: 'all',
+    onError: (error) => {
+      console.error('Failed to fetch event details:', error);
+    },
   });
+
+  if (error) {
+    return <p>Error loading event details. Please try again later.</p>;
+  }
 
   const event = data?.event;
 
   if (loading) return <p>Loading...</p>;
-
   return (
     <React.Fragment>
       <Table className="bg-primary">

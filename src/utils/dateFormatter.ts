@@ -1,26 +1,33 @@
 export function formatDate(dateString: string): string {
+  if (!dateString) {
+    throw new Error('Date string is required');
+  }
   const date = new Date(dateString);
+  if (isNaN(date.getTime())) {
+    throw new Error('Invalid date string provided');
+  }
   const day = date.getDate();
-  const monthIndex = date.getMonth();
   const year = date.getFullYear();
 
-  const suffixes = ['th', 'st', 'nd', 'rd'];
-  const suffix = suffixes[day % 10 > 3 ? 0 : day % 10];
+  const getSuffix = (day: number): string => {
+    if (day >= 11 && day <= 13) return 'th';
+    const lastDigit = day % 10;
+    switch (lastDigit) {
+      case 1:
+        return 'st';
+      case 2:
+        return 'nd';
+      case 3:
+        return 'rd';
+      default:
+        return 'th';
+    }
+  };
+  const suffix = getSuffix(day);
 
-  const monthNames = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-  ];
+  const monthName = new Intl.DateTimeFormat('en', { month: 'short' }).format(
+    date,
+  );
 
-  return `${day}${suffix} ${monthNames[monthIndex]} ${year}`;
+  return `${day}${suffix} ${monthName} ${year}`;
 }

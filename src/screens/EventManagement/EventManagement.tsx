@@ -5,6 +5,7 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { FaChevronLeft, FaTasks } from 'react-icons/fa';
 import { MdOutlineDashboard } from 'react-icons/md';
 import EventRegistrantsIcon from 'assets/svgs/people.svg?react';
+import { BsPersonCheck } from 'react-icons/bs';
 import { IoMdStats } from 'react-icons/io';
 import EventAgendaItemsIcon from 'assets/svgs/agenda-items.svg?react';
 import { useTranslation } from 'react-i18next';
@@ -14,8 +15,6 @@ import OrganizationActionItems from 'screens/OrganizationActionItems/Organizatio
 import EventAgendaItems from 'components/EventManagement/EventAgendaItems/EventAgendaItems';
 import useLocalStorage from 'utils/useLocalstorage';
 import EventAttendance from 'components/EventManagement/EventAttendance/EventAttendance';
-import { ReactComponent as EventAttendanceIcon } from 'assets/svgs/Attendance.svg';
-import { EventRegistrantsWrapper } from 'components/EventRegistrantsModal/EventRegistrantsWrapper';
 
 /**
  * List of tabs for the event dashboard.
@@ -36,7 +35,7 @@ const eventDashboardTabs: {
   },
   {
     value: 'attendance',
-    icon: <EventAttendanceIcon width={23} height={23} className="me-1" />,
+    icon: <BsPersonCheck size={20} className="me-1" />,
   },
   {
     value: 'eventActions',
@@ -58,10 +57,10 @@ const eventDashboardTabs: {
 type TabOptions =
   | 'dashboard'
   | 'registrants'
-  | 'eventActions'
   | 'attendance'
+  | 'eventActions'
   | 'eventAgendas'
-  | 'eventStats'
+  | 'eventStats';
 
 /**
  * `EventManagement` component handles the display and navigation of different event management sections.
@@ -159,62 +158,52 @@ const EventManagement = (): JSX.Element => {
   };
 
   return (
-    <div className={`${styles.content} mt-3 p-4`}>
-      <div className="d-flex ml-3">
-        <AngleLeftIcon
-          cursor={'pointer'}
-          width={28}
-          height={28}
-          fill={'var(--bs-secondary)'}
-          data-testid="backBtn"
-          onClick={() => {
-            /*istanbul ignore next*/
-            userRole === 'USER'
-              ? navigate(`/user/events/${orgId}`)
-              : navigate(`/orgevents/${orgId}`);
-          }}
-          className="mt-1"
-        />
-        <div className="d-flex ms-3 gap-4 mt-1">
-          {eventDashboardTabs.map(renderButton)}
-        </div>
-      </div>
-      <Row>
-        <Col className="pt-4">
-          {(() => {
-            switch (tab) {
-              case 'dashboard':
-                return (
-                  <div data-testid="eventDashboadTab">
-                    <EventDashboard eventId={eventId} />
-                  </div>
-                );
-              case 'registrants':
-                return (
-                  <div data-testid="eventRegistrantsTab">
-                    <EventRegistrantsWrapper eventId={eventId} orgId={orgId} />
-                  </div>
-                );
-              case 'eventActions':
-                return (
-                  <div data-testid="eventActionsTab">
-                    <EventActionItems eventId={eventId} />
-                  </div>
-                );
-              case 'eventStats':
-                return (
-                  <div data-testid="eventStatsTab">
-                    <h2>Event Statistics</h2>
-                  </div>
-                );
-              case 'attendance':
-                return (
-                  <div data-testid="eventAttendanceTab">
-                    <EventAttendance />
-                  </div>
-                );
-            }
-          })()}
+    <div className="d-flex flex-column">
+      <Row className="mx-3 mt-4">
+        <Col>
+          <div className="d-none d-md-flex gap-3">
+            <Button
+              size="sm"
+              variant="light"
+              className="d-flex text-secondary bg-white align-items-center px-3 shadow"
+            >
+              <FaChevronLeft
+                cursor={'pointer'}
+                data-testid="backBtn"
+                onClick={handleBack}
+              />
+            </Button>
+            {eventDashboardTabs.map(renderButton)}
+          </div>
+
+          <Dropdown
+            className="d-md-none"
+            data-testid="tabsDropdownContainer"
+            drop="down"
+          >
+            <Dropdown.Toggle
+              variant="success"
+              id="dropdown-basic"
+              data-testid="tabsDropdownToggle"
+            >
+              <span className="me-1">{t(tab)}</span>
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              {/* Render dropdown items for each settings category */}
+              {eventDashboardTabs.map(({ value, icon }, index) => (
+                <Dropdown.Item
+                  key={index}
+                  onClick={
+                    /* istanbul ignore next */
+                    () => setTab(value)
+                  }
+                  className={`d-flex gap-2 ${tab === value && 'text-secondary'}`}
+                >
+                  {icon} {t(value)}
+                </Dropdown.Item>
+              ))}
+            </Dropdown.Menu>
+          </Dropdown>
         </Col>
 
         <Row className="mt-3">
@@ -235,6 +224,12 @@ const EventManagement = (): JSX.Element => {
             return (
               <div data-testid="eventRegistrantsTab">
                 <h2>Event Registrants</h2>
+              </div>
+            );
+          case 'attendance':
+            return (
+              <div data-testid="eventAttendanceTab" className="mx-4">
+                <EventAttendance />
               </div>
             );
           case 'eventActions':

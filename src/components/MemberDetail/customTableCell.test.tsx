@@ -1,10 +1,9 @@
 import React from 'react';
-import { queryByText, render, screen, waitFor } from '@testing-library/react';
-import { MockedProvider, wait } from '@apollo/client/testing';
+import { render, screen, waitFor } from '@testing-library/react';
+import { MockedProvider } from '@apollo/client/testing';
 import { BrowserRouter } from 'react-router-dom';
 import { CustomTableCell } from './customTableCell';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
-import { toast } from 'react-toastify';
 
 jest.mock('react-toastify', () => ({
   toast: {

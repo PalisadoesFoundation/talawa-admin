@@ -64,7 +64,7 @@ const renderEventDashboard = (mockLink: ApolloLink): RenderResult => {
 
 describe('Testing Event Dashboard Screen', () => {
   test('The page should display event details correctly and also show the time if provided', async () => {
-    const { getByTestId, queryByText } = renderEventDashboard(mockWithTime);
+    const { getByTestId } = renderEventDashboard(mockWithTime);
 
     await wait();
 
@@ -90,8 +90,16 @@ describe('Testing Event Dashboard Screen', () => {
     expect(getByTestId('event-time')).toBeInTheDocument();
   });
 
-  test('Should show loader while data is being fetched', () => {
-    const { getByTestId } = renderEventDashboard(mockWithTime);
+  test('Should show loader while data is being fetched', async () => {
+    const { getByTestId, queryByTestId } = renderEventDashboard(mockWithTime);
     expect(getByTestId('spinner')).toBeInTheDocument();
+    // Wait for loading to complete
+    await wait();
+
+    // Verify spinner is gone
+    expect(queryByTestId('spinner')).not.toBeInTheDocument();
+
+    // Verify content is visible
+    expect(getByTestId('event-title')).toBeInTheDocument();
   });
 });

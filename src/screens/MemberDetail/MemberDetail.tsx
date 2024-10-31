@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom';
 import styles from './MemberDetail.module.css';
 import { languages } from 'utils/languages';
 import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
-import { EVENT_DETAILS, USER_DETAILS } from 'GraphQl/Queries/Queries';
+import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import { Card, Row, Col } from 'react-bootstrap';
@@ -83,20 +83,16 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     }
   };
   /*istanbul ignore next*/
-  const handleEditIconClick = () => {
+  const handleEditIconClick = (): void => {
     fileInputRef.current?.click();
   };
   const [updateUser] = useMutation(UPDATE_USER_MUTATION);
-  const { data: user, loading: loading } = useQuery(USER_DETAILS, {
-    variables: { id: currentUrl }, // For testing we are sending the id as a prop
+  const { data: user, loading } = useQuery(USER_DETAILS, {
+    variables: { id: currentUrl },
   });
   const userData = user?.user;
   console.log(userData?.user?.registeredEvents);
   const [isUpdated, setisUpdated] = useState(false);
-  const { data: events } = useQuery(EVENT_DETAILS, {
-    variables: { id: userData?.user?.eventsAttended._id },
-  });
-  console.log(events);
   useEffect(() => {
     if (userData && isMounted.current) {
       setFormState({
@@ -106,7 +102,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         email: userData?.user?.email,
         appLanguageCode: userData?.appUserProfile?.appLanguageCode,
         gender: userData?.user?.gender,
-        birthDate: userData?.user?.birthDate || '2020-03-14',
+        birthDate: userData?.user?.birthDate || ' ',
         grade: userData?.user?.educationGrade,
         empStatus: userData?.user?.employmentStatus,
         maritalStatus: userData?.user?.maritalStatus,
@@ -211,7 +207,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       country: userData?.user?.address?.countryCode || '',
       city: userData?.user?.address?.city || '',
       state: userData?.user?.address?.state || '',
-      birthDate: userData?.user?.birthDate || '2024-03-14',
+      birthDate: userData?.user?.birthDate || '',
       grade: userData?.user?.educationGrade || '',
       pluginCreationAllowed:
         userData?.appUserProfile?.pluginCreationAllowed || false,
@@ -275,7 +271,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     <Avatar
                       name={`${formState.firstName} ${formState.lastName}`}
                       alt="User Image"
-                      size={150}
+                      size={55}
                       dataTestId="userImageAbsent"
                       radius={150}
                     />

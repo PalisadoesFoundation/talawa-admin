@@ -1,12 +1,7 @@
 import React from 'react';
 import dayjs from 'dayjs';
 import { Card, Row, Col } from 'react-bootstrap';
-import {
-  ChevronRight,
-  LocationOn,
-  PinDrop,
-  PinRounded,
-} from '@mui/icons-material';
+import { ChevronRight, LocationOn } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 
 export interface InterfaceCardItem {
@@ -21,7 +16,7 @@ export interface InterfaceCardItem {
 }
 
 const EventAttendedCard = (props: InterfaceCardItem): JSX.Element => {
-  const { title, startdate, time, location, orgId, eventId } = props;
+  const { title, startdate, location, orgId, eventId } = props;
 
   return (
     <Card className="border-0 py-1 rounded-0">
@@ -29,12 +24,18 @@ const EventAttendedCard = (props: InterfaceCardItem): JSX.Element => {
         <Row className="align-items-center">
           <Col xs={3} md={2} className="text-center">
             <div className="text-secondary">
-              <div className="fs-6 fw-normal">
-                {dayjs(startdate).format('MMM').toUpperCase()}
-              </div>
-              <div className="fs-1 fw-semibold">
-                {dayjs(startdate).format('D')}
-              </div>
+              {startdate && dayjs(startdate).isValid() ? (
+                <>
+                  <div className="fs-6 fw-normal">
+                    {dayjs(startdate).format('MMM').toUpperCase()}
+                  </div>
+                  <div className="fs-1 fw-semibold">
+                    {dayjs(startdate).format('D')}
+                  </div>
+                </>
+              ) : (
+                <div className="fs-6 fw-normal">Date N/A</div>
+              )}
             </div>
           </Col>
           <Col xs={7} md={9} className="mb-3">
@@ -57,3 +58,4 @@ const EventAttendedCard = (props: InterfaceCardItem): JSX.Element => {
 };
 
 export default EventAttendedCard;
+a;

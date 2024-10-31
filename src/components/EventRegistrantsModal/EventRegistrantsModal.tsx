@@ -16,7 +16,6 @@ import Autocomplete from '@mui/material/Autocomplete';
 import AddOnSpotAttendee from './AddOnSpotAttendee';
 import { useTranslation } from 'react-i18next';
 
-
 // Props for the EventRegistrantsModal component
 type ModalPropType = {
   show: boolean;
@@ -54,7 +53,6 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
   const [open, setOpen] = useState(false);
 
   // Hooks for mutation operations
-  const [addRegistrantMutation] = useMutation(ADD_EVENT_ATTENDEE);
   const [removeRegistrantMutation] = useMutation(REMOVE_EVENT_ATTENDEE);
 
   // Translation hooks
@@ -78,7 +76,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
     refetch: memberRefetch,
   } = useQuery(MEMBERS_LIST, {
     variables: { id: orgId },
-    pollInterval: 500,
+    pollInterval: 5000,
   });
 
   // Function to add a new registrant to the event
@@ -134,14 +132,19 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
   useEffect(() => {
     if (show) {
       const refetchInterval = setInterval(() => {
-        attendeesRefetch();
-        memberRefetch();
+        Promise.all([
+          attendeesRefetch().catch((err) =>
+            toast.error('Failed to refresh attendees list:', err),
+          ),
+          memberRefetch().catch((err) =>
+            toast.error('Failed to refresh members list:', err),
+          ),
+        ]);
       }, 5000);
 
       return () => clearInterval(refetchInterval);
     }
   }, [show, attendeesRefetch, memberRefetch]);
-
   if (attendeesLoading || memberLoading) {
     return (
       <>
