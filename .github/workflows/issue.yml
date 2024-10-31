@@ -39,7 +39,6 @@ jobs:
               repo,
               issue_number
             });
-            console.log(labels.data, labels.data.reduce((a, c)=>console.log(c.name, c.name in ["security", "ui/ux", "dependencies"]), false))
             if(labels.data.reduce((a, c)=>a||["dependencies"].includes(c.name), false))
               await github.rest.issues.addLabels({
                 owner: context.repo.owner,
