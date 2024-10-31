@@ -217,7 +217,6 @@ export default function settings(): JSX.Element {
       originalImageState.current = image;
     }
   }, [data]);
-  console.log(userDetails.eventsAttended.length);
   return (
     <>
       {hideDrawer ? (
@@ -660,16 +659,11 @@ export default function settings(): JSX.Element {
                   <h6>{t('noeventsAttended')}</h6>
                 </div>
               ) : (
-                userDetails.eventsAttended.map(
-                  (event: InterfaceEvent, index: number) => (
-                    <span data-testid="usereventsCard" key={index}>
-                      <EventsAttendedByMember
-                        eventsId={event._id}
-                        key={index}
-                      />
-                    </span>
-                  ),
-                )
+                userDetails.eventsAttended.map((event: InterfaceEvent) => (
+                  <span data-testid="usereventsCard" key={event._id}>
+                    <EventsAttendedByMember eventsId={event._id} />
+                  </span>
+                ))
               )}
             </Card.Body>
           </Card>

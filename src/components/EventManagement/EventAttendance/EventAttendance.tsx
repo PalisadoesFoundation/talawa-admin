@@ -48,6 +48,11 @@ interface InterfaceEvent {
   _id: string;
   // title: string;
 }
+enum FilterPeriod {
+  ThisMonth = 'This Month',
+  ThisYear = 'This Year',
+  All = 'All',
+}
 
 function EventAttendance(): JSX.Element {
   const { t } = useTranslation();
@@ -59,9 +64,9 @@ function EventAttendance(): JSX.Element {
   const [sortOrder, setSortOrder] = useState<'ascending' | 'descending'>(
     'ascending',
   );
-  const [filteringBy, setFilteringBy] = useState<
-    'This Month' | 'This Year' | 'All'
-  >('All');
+  const [filteringBy, setFilteringBy] = useState<FilterPeriod>(
+    FilterPeriod.All,
+  );
   const [show, setShow] = useState(false);
 
   const [getEventAttendees, { data: memberData, loading, error }] =
@@ -204,9 +209,7 @@ function EventAttendance(): JSX.Element {
                 <span className="ms-2">Filter: {filteringBy}</span>
               </>
             }
-            onSelect={(eventKey) =>
-              setFilteringBy(eventKey as 'This Month' | 'This Year' | 'All')
-            }
+            onSelect={(eventKey) => setFilteringBy(eventKey as FilterPeriod)}
           >
             <Dropdown.Item eventKey="This Month">This Month</Dropdown.Item>
             <Dropdown.Item eventKey="This Year">This Year</Dropdown.Item>

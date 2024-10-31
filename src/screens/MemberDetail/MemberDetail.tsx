@@ -436,6 +436,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     type="tel"
                     name="phoneNumber"
                     onChange={handleChange}
+                    pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                     placeholder={t('phone')}
                   />
                 </Col>

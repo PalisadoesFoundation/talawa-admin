@@ -21,7 +21,7 @@ const AttendedEventList: React.FC<InterfaceEventsAttended> = ({ eventId }) => {
     return <p>Error loading event details. Please try again later.</p>;
   }
 
-  const event = data?.event;
+  const event = data?.event ?? null;
 
   if (loading) return <p>Loading...</p>;
   return (
