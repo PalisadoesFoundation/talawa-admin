@@ -30,7 +30,7 @@ import type {
   InterfaceQueryOrganizationsListObject,
   InterfaceQueryUserListItem,
 } from 'utils/interfaces';
-import styles from './OrganizationPeople.module.css';
+import styles from '../../style/app.module.css';
 import Avatar from 'components/Avatar/Avatar';
 
 const StyledTableCell = styled(TableCell)(() => ({

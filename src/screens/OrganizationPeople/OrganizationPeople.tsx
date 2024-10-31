@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import AddMember from './AddMember';
-import styles from './OrganizationPeople.module.css';
+import styles from '../../style/app.module.css';
 import { DataGrid } from '@mui/x-data-grid';
 import type { GridColDef, GridCellParams } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
@@ -268,14 +268,10 @@ function organizationPeople(): JSX.Element {
           <Button
             onClick={() => toggleRemoveMemberModal(params.row._id)}
             data-testid="removeMemberModalBtn"
-            style={{
-              backgroundColor: '#F8D6DC', // Red background color
-              color: 'white', // White text/icon color
-              border: 'none', // Remove default border
-              padding: '5px 20px', // Adjust padding for icon
-            }}
+            aria-label="Remove member"
+            className={styles.deleteButton}
           >
-            <Delete style={{ color: '#FF4D4F' }} />
+            <Delete />
           </Button>
         );
       },

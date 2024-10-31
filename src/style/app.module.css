@@ -40,14 +40,6 @@
   color: var(--dropdown-text-color) !important;
 }
 
-.dropdown:focus,
-.dropdown:focus-visible,
-.dropdown:active .dropdown.show {
-  background-color: white !important;
-  color: black !important;
-  outline: none !important;
-}
-
 .dropdownItem {
   background-color: white !important;
   color: #555555 !important;
