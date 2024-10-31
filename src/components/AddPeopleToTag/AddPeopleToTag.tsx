@@ -365,7 +365,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
               variant="primary"
               data-testid="assignPeopleBtn"
             >
-              {t('assignPeople')}
+              {t('assign')}
             </Button>
           </Modal.Footer>
         </Form>

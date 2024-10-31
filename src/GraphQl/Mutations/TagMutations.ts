@@ -87,3 +87,37 @@ export const ADD_PEOPLE_TO_TAG = gql`
     }
   }
 `;
+
+/**
+ * GraphQL mutation to assign people to multiple tags.
+ *
+ * @param currentTagId - Id of the current tag.
+ * @param selectedTagIds - Ids of the selected tags to be assined.
+ */
+
+export const ASSIGN_TO_TAGS = gql`
+  mutation AssignToUserTags($currentTagId: ID!, $selectedTagIds: [ID!]!) {
+    assignToUserTags(
+      input: { currentTagId: $currentTagId, selectedTagIds: $selectedTagIds }
+    ) {
+      _id
+    }
+  }
+`;
+
+/**
+ * GraphQL mutation to remove people from multiple tags.
+ *
+ * @param currentTagId - Id of the current tag.
+ * @param selectedTagIds - Ids of the selected tags to be removed from.
+ */
+
+export const REMOVE_FROM_TAGS = gql`
+  mutation RemoveFromUserTags($currentTagId: ID!, $selectedTagIds: [ID!]!) {
+    removeFromUserTags(
+      input: { currentTagId: $currentTagId, selectedTagIds: $selectedTagIds }
+    ) {
+      _id
+    }
+  }
+`;
