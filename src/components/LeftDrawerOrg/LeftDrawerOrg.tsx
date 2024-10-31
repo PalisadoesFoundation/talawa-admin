@@ -43,6 +43,7 @@ const leftDrawerOrg = ({
   const { getItem } = useLocalStorage();
   const userId = getItem('id');
   const getIdFromPath = (pathname: string): string => {
+    if (!pathname) return '';
     const segments = pathname.split('/');
     // Index 2 represents the ID in paths like /member/{userId}
     return segments.length > 2 ? segments[2] : '';
@@ -82,7 +83,7 @@ const leftDrawerOrg = ({
     return () => {
       isMounted = false;
     };
-  }, [data, location]);
+  }, [data]);
 
   /**
    * Handles link click to hide the drawer on smaller screens.
