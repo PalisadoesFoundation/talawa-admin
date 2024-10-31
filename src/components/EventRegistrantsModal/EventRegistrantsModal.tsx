@@ -193,7 +193,6 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
               setMember(newMember);
             }}
             noOptionsText={
-              <>
                 <div className="d-flex ">
                   <p className="me-2">No Registrations found</p>
                   <a
@@ -206,7 +205,6 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
                     Add Onspot Registration
                   </a>
                 </div>
-              </>
             }
             options={memberData.organizations[0].members}
             getOptionLabel={(member: InterfaceUser): string =>
