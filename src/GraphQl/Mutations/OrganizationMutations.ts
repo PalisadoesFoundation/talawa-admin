@@ -57,34 +57,6 @@ export const REMOVE_SAMPLE_ORGANIZATION_MUTATION = gql`
  * @returns The created direct chat object.
  */
 
-export const CREATE_GROUP_CHAT = gql`
-  mutation createGroupChat(
-    $userIds: [ID!]!
-    $organizationId: ID!
-    $title: String!
-  ) {
-    createGroupChat(
-      data: {
-        userIds: $userIds
-        organizationId: $organizationId
-        title: $title
-      }
-    ) {
-      _id
-    }
-  }
-`;
-
-export const CREATE_DIRECT_CHAT = gql`
-  mutation createDirectChat($userIds: [ID!]!, $organizationId: ID) {
-    createDirectChat(
-      data: { userIds: $userIds, organizationId: $organizationId }
-    ) {
-      _id
-    }
-  }
-`;
-
 export const CREATE_CHAT = gql`
   mutation createChat(
     $userIds: [ID!]!
@@ -134,24 +106,6 @@ export const SEND_MESSAGE_TO_CHAT = gql`
         _id
         firstName
         lastName
-      }
-      updatedAt
-    }
-  }
-`;
-
-export const CREATE_MESSAGE_CHAT = gql`
-  mutation createMessageChat($receiver: ID!, $messageContent: String!) {
-    createMessageChat(data: { receiver: $receiver, message: $messageContent }) {
-      _id
-      createdAt
-      message
-      languageBarrier
-      receiver {
-        _id
-      }
-      sender {
-        _id
       }
       updatedAt
     }
