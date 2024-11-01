@@ -1385,8 +1385,6 @@
     "volunteerGroupDeleted": "Groupe de bénévoles supprimé avec succès",
     "removeVolunteerMsg": "Êtes-vous sûr de vouloir supprimer ce bénévole?",
     "deleteVolunteerGroupMsg": "Êtes-vous sûr de vouloir supprimer ce groupe de bénévoles?",
-    "mostMembers": "Plus de Membres",
-    "leastMembers": "Moins de Membres",
     "leader": "Chef",
     "group": "Groupe",
     "createGroup": "Créer un Groupe",
@@ -1404,7 +1402,9 @@
     "requestAccepted": "Demande acceptée avec succès",
     "requestRejected": "Demande rejetée avec succès",
     "details": "Détails",
-    "manageGroup": "Gérer le Groupe"
+    "manageGroup": "Gérer le Groupe",
+    "mostVolunteers": "Le plus de bénévoles",
+    "leastVolunteers": "Le moins de bénévoles"
   },
   "userVolunteer": {
     "title": "Volontariat",

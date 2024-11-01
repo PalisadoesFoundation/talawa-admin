@@ -73,9 +73,9 @@ function groups(): JSX.Element {
   const [group, setGroup] = useState<InterfaceVolunteerGroupInfo | null>(null);
   const [searchValue, setSearchValue] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [sortBy, setSortBy] = useState<'members_ASC' | 'members_DESC' | null>(
-    null,
-  );
+  const [sortBy, setSortBy] = useState<
+    'volunteers_ASC' | 'volunteers_DESC' | null
+  >(null);
   const [searchBy, setSearchBy] = useState<'leader' | 'group'>('group');
   const [modalState, setModalState] = useState<{
     [key in ModalState]: boolean;
@@ -218,18 +218,15 @@ function groups(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <div
-            className="d-flex justify-content-center fw-bold"
-            data-testid="groupActions"
-          >
+          <div className="d-flex justify-content-center fw-bold">
             {params.row.assignments.length}
           </div>
         );
       },
     },
     {
-      field: 'members',
-      headerName: 'No. of Members',
+      field: 'volunteers',
+      headerName: 'No. of Volunteers',
       flex: 1,
       align: 'center',
       headerAlign: 'center',
@@ -237,10 +234,7 @@ function groups(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <div
-            className="d-flex justify-content-center fw-bold"
-            data-testid="groupActions"
-          >
+          <div className="d-flex justify-content-center fw-bold">
             {params.row.volunteers.length}
           </div>
         );
@@ -263,7 +257,7 @@ function groups(): JSX.Element {
               size="sm"
               style={{ minWidth: '32px' }}
               className="me-2 rounded"
-              data-testid={`viewGroupBtn`}
+              data-testid="viewGroupBtn"
               onClick={() => handleModalClick(params.row, ModalState.VIEW)}
             >
               <i className="fa fa-info" />
@@ -273,7 +267,7 @@ function groups(): JSX.Element {
                 variant="success"
                 size="sm"
                 className="me-2 rounded"
-                data-testid={`editGroupBtn`}
+                data-testid="editGroupBtn"
                 onClick={() => handleModalClick(params.row, ModalState.EDIT)}
               >
                 <i className="fa fa-edit" />
@@ -358,16 +352,16 @@ function groups(): JSX.Element {
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item
-                  onClick={() => setSortBy('members_DESC')}
-                  data-testid="members_DESC"
+                  onClick={() => setSortBy('volunteers_DESC')}
+                  data-testid="volunteers_DESC"
                 >
-                  {t('mostMembers')}
+                  {t('mostVolunteers')}
                 </Dropdown.Item>
                 <Dropdown.Item
-                  onClick={() => setSortBy('members_ASC')}
-                  data-testid="members_ASC"
+                  onClick={() => setSortBy('volunteers_ASC')}
+                  data-testid="volunteers_ASC"
                 >
-                  {t('leastMembers')}
+                  {t('leastVolunteers')}
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>

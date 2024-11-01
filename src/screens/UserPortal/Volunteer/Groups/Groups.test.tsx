@@ -110,9 +110,9 @@ describe('Testing Groups Screen', () => {
 
     // Sort by members_DESC
     fireEvent.click(sortBtn);
-    const membersDESC = await screen.findByTestId('members_DESC');
-    expect(membersDESC).toBeInTheDocument();
-    fireEvent.click(membersDESC);
+    const volunteersDESC = await screen.findByTestId('volunteers_DESC');
+    expect(volunteersDESC).toBeInTheDocument();
+    fireEvent.click(volunteersDESC);
 
     let groupName = await screen.findAllByTestId('groupName');
     expect(groupName[0]).toHaveTextContent('Group 1');
@@ -121,9 +121,9 @@ describe('Testing Groups Screen', () => {
     sortBtn = await screen.findByTestId('sort');
     expect(sortBtn).toBeInTheDocument();
     fireEvent.click(sortBtn);
-    const membersASC = await screen.findByTestId('members_ASC');
-    expect(membersASC).toBeInTheDocument();
-    fireEvent.click(membersASC);
+    const volunteersASC = await screen.findByTestId('volunteers_ASC');
+    expect(volunteersASC).toBeInTheDocument();
+    fireEvent.click(volunteersASC);
 
     groupName = await screen.findAllByTestId('groupName');
     expect(groupName[0]).toHaveTextContent('Group 2');

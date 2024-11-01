@@ -1385,8 +1385,6 @@
     "volunteerGroupDeleted": "志愿者小组已成功删除",
     "removeVolunteerMsg": "您确定要移除此志愿者吗？",
     "deleteVolunteerGroupMsg": "您确定要删除此志愿者小组吗？",
-    "mostMembers": "最多成员",
-    "leastMembers": "最少成员",
     "leader": "领导",
     "group": "小组",
     "createGroup": "创建小组",
@@ -1404,7 +1402,9 @@
     "requestAccepted": "请求已成功接受",
     "requestRejected": "请求已成功拒绝",
     "details": "详情",
-    "manageGroup": "管理小组"
+    "manageGroup": "管理小组",
+    "mostVolunteers": "最多的志愿者",
+    "leastVolunteers": "最少的志愿者"
   },
   "userVolunteer": {
     "title": "志愿服务",

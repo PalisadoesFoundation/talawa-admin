@@ -1385,8 +1385,6 @@
     "volunteerGroupDeleted": "स्वयंसेवक समूह सफलतापूर्वक हटाया गया",
     "removeVolunteerMsg": "क्या आप वाकई इस स्वयंसेवक को हटाना चाहते हैं?",
     "deleteVolunteerGroupMsg": "क्या आप वाकई इस स्वयंसेवक समूह को हटाना चाहते हैं?",
-    "mostMembers": "सबसे अधिक सदस्य",
-    "leastMembers": "सबसे कम सदस्य",
     "leader": "नेता",
     "group": "समूह",
     "createGroup": "समूह बनाएं",
@@ -1404,7 +1402,9 @@
     "requestAccepted": "अनुरोध सफलतापूर्वक स्वीकृत",
     "requestRejected": "अनुरोध सफलतापूर्वक अस्वीकृत",
     "details": "विवरण",
-    "manageGroup": "समूह प्रबंधित करें"
+    "manageGroup": "समूह प्रबंधित करें",
+    "mostVolunteers": "सबसे अधिक स्वयंसेवक",
+    "leastVolunteers": "सबसे कम स्वयंसेवक"
   },
   "userVolunteer": {
     "title": "स्वयंसेवकता",

@@ -139,7 +139,7 @@ export const MOCKS = [
           leaderName: null,
           name_contains: '',
         },
-        orderBy: 'members_DESC',
+        orderBy: 'volunteers_DESC',
       },
     },
     result: {
@@ -158,7 +158,7 @@ export const MOCKS = [
           leaderName: null,
           name_contains: '',
         },
-        orderBy: 'members_ASC',
+        orderBy: 'volunteers_ASC',
       },
     },
     result: {

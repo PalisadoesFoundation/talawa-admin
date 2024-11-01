@@ -72,9 +72,9 @@ function volunteerGroups(): JSX.Element {
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
   const [searchValue, setSearchValue] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [sortBy, setSortBy] = useState<'members_ASC' | 'members_DESC' | null>(
-    null,
-  );
+  const [sortBy, setSortBy] = useState<
+    'volunteers_ASC' | 'volunteers_DESC' | null
+  >(null);
   const [searchBy, setSearchBy] = useState<'leader' | 'group'>('group');
   const [modalState, setModalState] = useState<{
     [key in ModalState]: boolean;
@@ -219,18 +219,15 @@ function volunteerGroups(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <div
-            className="d-flex justify-content-center fw-bold"
-            data-testid="groupActions"
-          >
+          <div className="d-flex justify-content-center fw-bold">
             {params.row.assignments.length}
           </div>
         );
       },
     },
     {
-      field: 'members',
-      headerName: 'No. of Members',
+      field: 'volunteers',
+      headerName: 'No. of Volunteers',
       flex: 1,
       align: 'center',
       headerAlign: 'center',
@@ -238,10 +235,7 @@ function volunteerGroups(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <div
-            className="d-flex justify-content-center fw-bold"
-            data-testid="groupActions"
-          >
+          <div className="d-flex justify-content-center fw-bold">
             {params.row.volunteers.length}
           </div>
         );
@@ -366,16 +360,16 @@ function volunteerGroups(): JSX.Element {
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item
-                  onClick={() => setSortBy('members_DESC')}
-                  data-testid="members_DESC"
+                  onClick={() => setSortBy('volunteers_DESC')}
+                  data-testid="volunteers_DESC"
                 >
-                  {t('mostMembers')}
+                  {t('mostVolunteers')}
                 </Dropdown.Item>
                 <Dropdown.Item
-                  onClick={() => setSortBy('members_ASC')}
-                  data-testid="members_ASC"
+                  onClick={() => setSortBy('volunteers_ASC')}
+                  data-testid="volunteers_ASC"
                 >
-                  {t('leastMembers')}
+                  {t('leastVolunteers')}
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>

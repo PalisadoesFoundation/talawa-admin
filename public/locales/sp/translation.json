@@ -1386,8 +1386,6 @@
     "volunteerGroupDeleted": "Grupo de voluntarios eliminado con éxito",
     "removeVolunteerMsg": "¿Está seguro de que desea eliminar a este Voluntario?",
     "deleteVolunteerGroupMsg": "¿Está seguro de que desea eliminar este Grupo de Voluntarios?",
-    "mostMembers": "Más Miembros",
-    "leastMembers": "Menos Miembros",
     "leader": "Líder",
     "group": "Grupo",
     "createGroup": "Crear Grupo",
@@ -1405,7 +1403,9 @@
     "requestAccepted": "Solicitud aceptada con éxito",
     "requestRejected": "Solicitud rechazada con éxito",
     "details": "Detalles",
-    "manageGroup": "Gestionar Grupo"
+    "manageGroup": "Gestionar Grupo",
+    "mostVolunteers": "La mayoría de voluntarios",
+    "leastVolunteers": "Menos voluntarios"
   },
   "userVolunteer": {
     "title": "Voluntariado",

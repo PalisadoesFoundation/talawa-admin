@@ -312,7 +312,7 @@ function requests(): JSX.Element {
       {/* Table with Volunteer Membership Requests */}
       <DataGrid
         disableColumnMenu
-        columnBufferPx={7}
+        columnBufferPx={5}
         hideFooter={true}
         getRowId={(row) => row._id}
         slots={{

@@ -1385,8 +1385,6 @@
     "volunteerGroupDeleted": "Volunteer group deleted successfully",
     "removeVolunteerMsg": "Are you sure you want to remove this Volunteer?",
     "deleteVolunteerGroupMsg": "Are you sure you want to delete this Volunteer Group?",
-    "mostMembers": "Most Members",
-    "leastMembers": "Least Members",
     "leader": "Leader",
     "group": "Group",
     "createGroup": "Create Group",
@@ -1404,7 +1402,9 @@
     "requestAccepted": "Request accepted successfully",
     "requestRejected": "Request rejected successfully",
     "details": "Details",
-    "manageGroup": "Manage Group"
+    "manageGroup": "Manage Group",
+    "mostVolunteers": "Most Volunteers",
+    "leastVolunteers": "Least Volunteers"
   },
   "userVolunteer": {
     "title": "Volunteership",
