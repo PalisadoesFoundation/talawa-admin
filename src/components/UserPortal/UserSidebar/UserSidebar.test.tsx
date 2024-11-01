@@ -441,7 +441,9 @@ describe('Testing UserSidebar Component [User Portal]', () => {
       renderUserSidebar('properId', link);
       await wait();
     });
-    expect(screen.getByText(i18nForTest.t('common:settings'))).toBeInTheDocument();
+    expect(
+      screen.getByText(i18nForTest.t('common:settings')),
+    ).toBeInTheDocument();
   });
 
   test('handleLinkClick closes the sidebar on mobile view', async () => {
@@ -458,14 +460,14 @@ describe('Testing UserSidebar Component [User Portal]', () => {
     beforeEach(() => {
       jest.clearAllMocks();
     });
-  
+
     test('Clicking a link when window width <= 820px should close the drawer', () => {
       // Set window width to 820px
       act(() => {
         window.innerWidth = 820;
         window.dispatchEvent(new Event('resize'));
       });
-  
+
       render(
         <MockedProvider addTypename={false}>
           <BrowserRouter>
@@ -475,17 +477,17 @@ describe('Testing UserSidebar Component [User Portal]', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
-        </MockedProvider>
+        </MockedProvider>,
       );
-  
+
       // Simulate link click to trigger handleLinkClick
       const linkElement = screen.getByText('My Organizations'); // Adjust text if different
       fireEvent.click(linkElement);
-  
+
       // Check if setHideDrawer was called with `true`
       expect(props.setHideDrawer).toHaveBeenCalledWith(true);
     });
-  
+
     test('Drawer visibility based on hideDrawer prop', () => {
       const { rerender } = render(
         <MockedProvider addTypename={false}>
@@ -496,23 +498,25 @@ describe('Testing UserSidebar Component [User Portal]', () => {
               </I18nextProvider>
             </Provider>
           </BrowserRouter>
-        </MockedProvider>
+        </MockedProvider>,
       );
-  
+
       // Check for `hideElemByDefault` when hideDrawer is null
-      expect(screen.getByTestId('leftDrawerContainer')).toHaveClass('hideElemByDefault');
-  
+      expect(screen.getByTestId('leftDrawerContainer')).toHaveClass(
+        'hideElemByDefault',
+      );
+
       // Rerender with hideDrawer set to true and verify `inactiveDrawer`
-      rerender(
-        <UserSidebar {...props} hideDrawer={true} />
+      rerender(<UserSidebar {...props} hideDrawer={true} />);
+      expect(screen.getByTestId('leftDrawerContainer')).toHaveClass(
+        'inactiveDrawer',
       );
-      expect(screen.getByTestId('leftDrawerContainer')).toHaveClass('inactiveDrawer');
-  
+
       // Rerender with hideDrawer set to false and verify `activeDrawer`
-      rerender(
-        <UserSidebar {...props} hideDrawer={false} />
+      rerender(<UserSidebar {...props} hideDrawer={false} />);
+      expect(screen.getByTestId('leftDrawerContainer')).toHaveClass(
+        'activeDrawer',
       );
-      expect(screen.getByTestId('leftDrawerContainer')).toHaveClass('activeDrawer');
     });
   });
 });
