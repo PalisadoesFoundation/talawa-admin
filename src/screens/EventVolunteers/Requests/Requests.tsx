@@ -12,7 +12,6 @@ import {
   type GridCellParams,
   type GridColDef,
 } from '@mui/x-data-grid';
-import { Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 import styles from '../EventVolunteers.module.css';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
@@ -310,29 +309,29 @@ function requests(): JSX.Element {
       </div>
 
       {/* Table with Volunteer Membership Requests */}
-      <DataGrid
-        disableColumnMenu
-        columnBufferPx={5}
-        hideFooter={true}
-        getRowId={(row) => row._id}
-        slots={{
-          noRowsOverlay: () => (
-            <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('noRequests')}
-            </Stack>
-          ),
-        }}
-        sx={dataGridStyle}
-        getRowClassName={() => `${styles.rowBackground}`}
-        autoHeight
-        rowHeight={65}
-        rows={requests.map((request, index) => ({
-          id: index + 1,
-          ...request,
-        }))}
-        columns={columns}
-        isRowSelectable={() => false}
-      />
+
+      {requests.length > 0 ? (
+        <DataGrid
+          disableColumnMenu
+          columnBufferPx={5}
+          hideFooter={true}
+          getRowId={(row) => row._id}
+          sx={dataGridStyle}
+          getRowClassName={() => `${styles.rowBackground}`}
+          autoHeight
+          rowHeight={65}
+          rows={requests.map((request, index) => ({
+            id: index + 1,
+            ...request,
+          }))}
+          columns={columns}
+          isRowSelectable={() => false}
+        />
+      ) : (
+        <div className="d-flex justify-content-center align-items-center mt-5">
+          <h5>{t('noRequests')}</h5>
+        </div>
+      )}
     </div>
   );
 }
