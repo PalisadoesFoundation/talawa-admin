@@ -277,6 +277,12 @@ describe('Organisation Tags Page', () => {
     });
     userEvent.click(screen.getByTestId('createTagBtn'));
 
+    userEvent.click(screen.getByTestId('createTagSubmitBtn'));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(translations.enterTagName);
+    });
+
     userEvent.type(
       screen.getByPlaceholderText(translations.tagNamePlaceholder),
       'userTag 12',

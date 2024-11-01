@@ -320,7 +320,8 @@
     "noTagsFound": "未找到标签",
     "removeUserTag": "删除标签",
     "removeUserTagMessage": "您确定要删除此标签吗？",
-    "addChildTag": "添加子标签"
+    "addChildTag": "添加子标签",
+    "enterTagName": "输入标签名称"
   },
   "manageTag": {
     "title": "标签详情",

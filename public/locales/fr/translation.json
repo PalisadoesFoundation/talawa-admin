@@ -320,7 +320,8 @@
     "noTagsFound": "Aucune étiquette trouvée",
     "removeUserTag": "Supprimer l'Étiquette",
     "removeUserTagMessage": "Voulez-vous supprimer cette étiquette ?",
-    "addChildTag": "Ajouter une Sous-Étiquette"
+    "addChildTag": "Ajouter une Sous-Étiquette",
+    "enterTagName": "Entrez le nom du étiquette"
   },
   "manageTag": {
     "title": "Détails de l'étiquette",

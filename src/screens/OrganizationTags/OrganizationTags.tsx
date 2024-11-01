@@ -127,6 +127,11 @@ function OrganizationTags(): JSX.Element {
   const createTag = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
+    if (!tagName.trim()) {
+      toast.error(t('enterTagName'));
+      return;
+    }
+
     try {
       const { data } = await create({
         variables: {
@@ -136,7 +141,7 @@ function OrganizationTags(): JSX.Element {
       });
 
       if (data) {
-        toast.success(t('tagCreationSuccess') as string);
+        toast.success(t('tagCreationSuccess'));
         orgUserTagsRefetch();
         setTagName('');
         setCreateTagModalIsOpen(false);
@@ -435,7 +440,7 @@ function OrganizationTags(): JSX.Element {
               required
               value={tagName}
               onChange={(e): void => {
-                setTagName(e.target.value.trim());
+                setTagName(e.target.value);
               }}
             />
           </Modal.Body>

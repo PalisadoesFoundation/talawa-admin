@@ -320,7 +320,8 @@
     "noTagsFound": "कोई टैग नहीं मिला",
     "removeUserTag": "टैग हटाएँ",
     "removeUserTagMessage": "क्या आप इस टैग को हटाना चाहते हैं?",
-    "addChildTag": "उप-टैग जोड़ें"
+    "addChildTag": "उप-टैग जोड़ें",
+    "enterTagName": "टैग का नाम दर्ज करें"
   },
   "manageTag": {
     "title": "टैग विवरण",
