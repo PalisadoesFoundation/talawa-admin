@@ -10,7 +10,6 @@ import { toast } from 'react-toastify';
 import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
 import useLocalStorage from 'utils/useLocalstorage';
 import {
-  countryOptions,
   educationGradeEnum,
   employmentStatusEnum,
   genderEnum,
@@ -21,8 +20,9 @@ import OtherSettings from 'components/UserProfileSettings/OtherSettings';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import Avatar from 'components/Avatar/Avatar';
-import EventsAttendedByMember from 'components/MemberDetail/EventsAttendedByMember';
 import type { InterfaceEvent } from 'components/EventManagement/EventAttendance/InterfaceEvents';
+import { EventsAttendedByUser } from 'components/UserPortal/UserProfile/EventsAttendedByUser';
+import UserAddressFields from 'components/UserPortal/UserProfile/UserAddressFields';
 
 /**
  * The Settings component allows users to view and update their profile settings.
@@ -35,7 +35,7 @@ export default function settings(): JSX.Element {
     keyPrefix: 'settings',
   });
   const { t: tCommon } = useTranslation('common');
-  const [isUpdated, setisUpdated] = useState<boolean | null>(null);
+  const [isUpdated, setisUpdated] = useState<boolean>(false);
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
 
   /**
@@ -144,7 +144,7 @@ export default function settings(): JSX.Element {
    * Resets the user details to the values fetched from the server.
    */
   const handleResetChanges = (): void => {
-    setisUpdated(!isUpdated);
+    setisUpdated(false);
     /* istanbul ignore next */
     if (data) {
       const {
@@ -541,76 +541,12 @@ export default function settings(): JSX.Element {
                       </Form.Control>
                     </Col>
                   </Row>
-                  <Row className="mb-1">
-                    <Col lg={4}>
-                      <Form.Label
-                        htmlFor="address"
-                        className={`${styles.cardLabel}`}
-                      >
-                        {tCommon('address')}
-                      </Form.Label>
-                      <Form.Control
-                        type="text"
-                        placeholder="Eg: lane 123, Main Street"
-                        id="address"
-                        value={userDetails.address}
-                        onChange={(e) =>
-                          handleFieldChange('address', e.target.value)
-                        }
-                        className={`${styles.cardControl}`}
-                        data-testid="inputAddress"
-                      />
-                    </Col>
-                    <Col lg={4}>
-                      <Form.Label
-                        htmlFor="inputState"
-                        className={`${styles.cardLabel}`}
-                      >
-                        {t('state')}
-                      </Form.Label>
-                      <Form.Control
-                        type="text"
-                        id="inputState"
-                        placeholder={t('enterState')}
-                        value={userDetails.state}
-                        onChange={(e) =>
-                          handleFieldChange('state', e.target.value)
-                        }
-                        className={`${styles.cardControl}`}
-                        data-testid="inputState"
-                      />
-                    </Col>
-                    <Col lg={4}>
-                      <Form.Label
-                        htmlFor="country"
-                        className={`${styles.cardLabel}`}
-                      >
-                        {t('country')}
-                      </Form.Label>
-                      <Form.Control
-                        as="select"
-                        id="country"
-                        value={userDetails.country}
-                        onChange={(e) =>
-                          handleFieldChange('country', e.target.value)
-                        }
-                        className={`${styles.cardControl}`}
-                        data-testid="inputCountry"
-                      >
-                        <option value="" disabled>
-                          {t('selectCountry')}
-                        </option>
-                        {countryOptions.map((country) => (
-                          <option
-                            key={country.value.toUpperCase()}
-                            value={country.value.toUpperCase()}
-                          >
-                            {country.label}
-                          </option>
-                        ))}
-                      </Form.Control>
-                    </Col>
-                  </Row>
+                  <UserAddressFields
+                    tCommon={tCommon}
+                    t={t}
+                    handleFieldChange={handleFieldChange}
+                    userDetails={userDetails}
+                  />
                   {isUpdated && (
                     <div
                       style={{
@@ -647,26 +583,7 @@ export default function settings(): JSX.Element {
               <OtherSettings />
             </Col>
           </Row>
-          <Card border="0" className="rounded-4 mb-4">
-            <div className={`${styles.cardHeader}`}>
-              <div className={`${styles.cardTitle}`}>{t('eventAttended')}</div>
-            </div>
-            <Card.Body
-              className={`${styles.cardBody} ${styles.scrollableCardBody}`}
-            >
-              {userDetails.eventsAttended.length === 0 || null || undefined ? (
-                <div className={styles.emptyContainer}>
-                  <h6>{t('noeventsAttended')}</h6>
-                </div>
-              ) : (
-                userDetails.eventsAttended.map((event: InterfaceEvent) => (
-                  <span data-testid="usereventsCard" key={event._id}>
-                    <EventsAttendedByMember eventsId={event._id} />
-                  </span>
-                ))
-              )}
-            </Card.Body>
-          </Card>
+          <EventsAttendedByUser userDetails={userDetails} t={t} />
         </div>
       </div>
     </>

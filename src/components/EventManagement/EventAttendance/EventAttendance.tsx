@@ -23,31 +23,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { AttendanceStatisticsModal } from './EventStatistics';
 import AttendedEventList from './AttendedEventList';
-
-interface InterfaceMember {
-  createdAt: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  gender: string;
-  eventsAttended?: {
-    _id: string;
-  }[];
-  birthDate: Date;
-  __typename: string;
-  _id: string;
-  tagsAssignedWith: {
-    edges: {
-      node: {
-        name: string;
-      };
-    }[];
-  };
-}
-interface InterfaceEvent {
-  _id: string;
-  // title: string;
-}
+import type { InterfaceMember } from './InterfaceEvents';
 enum FilterPeriod {
   ThisMonth = 'This Month',
   ThisYear = 'This Year',
@@ -68,20 +44,6 @@ function EventAttendance(): JSX.Element {
     FilterPeriod.All,
   );
   const [show, setShow] = useState(false);
-
-  const [getEventAttendees, { data: memberData, loading, error }] =
-    useLazyQuery(EVENT_ATTENDEES, {
-      variables: {
-        id: eventId,
-      },
-    });
-
-  useEffect(() => {
-    getEventAttendees();
-  }, [eventId, getEventAttendees]);
-
-  if (loading) return <p> {t('loading')}</p>;
-  if (error) return <p>{error.message} </p>;
 
   const sortAttendees = (attendees: InterfaceMember[]): InterfaceMember[] => {
     return [...attendees].sort((a, b) => {
@@ -115,8 +77,8 @@ function EventAttendance(): JSX.Element {
   const searchEventAttendees = (value: string): void => {
     const searchValueLower = value.toLowerCase().trim();
 
-    const filtered =
-      memberData?.event?.attendees?.filter((attendee: InterfaceMember) => {
+    const filtered = (memberData?.event?.attendees ?? []).filter(
+      (attendee: InterfaceMember) => {
         const fullName =
           `${attendee.firstName} ${attendee.lastName}`.toLowerCase();
         return (
@@ -125,22 +87,12 @@ function EventAttendance(): JSX.Element {
           attendee.email?.toLowerCase().includes(searchValueLower) ||
           fullName.includes(searchValueLower)
         );
-      }) ?? [];
+      },
+    );
 
-    // Filter and sort the attendees based on the search results
     const finalFiltered = filterAndSortAttendees(filtered);
     setFilteredAttendees(finalFiltered);
   };
-  useEffect(() => {
-    if (memberData?.event?.attendees) {
-      // If there's a search term, filter and sort based on it
-      const updatedAttendees = filterAndSortAttendees(
-        memberData.event.attendees,
-      );
-      setFilteredAttendees(updatedAttendees);
-    }
-  }, [sortOrder, filteringBy, memberData]);
-
   const showModal = (): void => setShow(true);
   const handleClose = (): void => setShow(false);
 
@@ -156,6 +108,30 @@ function EventAttendance(): JSX.Element {
 
     return { totalMembers, membersAttended, attendanceRate };
   }, [filteredAttendees]);
+
+  const [getEventAttendees, { data: memberData, loading, error }] =
+    useLazyQuery(EVENT_ATTENDEES, {
+      variables: {
+        id: eventId,
+      },
+    });
+
+  useEffect(() => {
+    if (memberData?.event?.attendees) {
+      const updatedAttendees = filterAndSortAttendees(
+        memberData.event.attendees,
+      );
+      setFilteredAttendees(updatedAttendees);
+    }
+  }, [sortOrder, filteringBy, memberData]);
+
+  useEffect(() => {
+    getEventAttendees();
+  }, [eventId, getEventAttendees]);
+
+  if (loading) return <p>{t('loading')}</p>;
+  if (error) return <p>{error.message}</p>;
+
   return (
     <div className="">
       <AttendanceStatisticsModal
@@ -321,7 +297,7 @@ function EventAttendance(): JSX.Element {
                     },
                   }}
                   title={member.eventsAttended?.map(
-                    (event: InterfaceEvent, index) => (
+                    (event: { _id: string }, index: number) => (
                       <AttendedEventList
                         key={event._id}
                         eventId={event._id}

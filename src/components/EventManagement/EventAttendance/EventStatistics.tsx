@@ -14,9 +14,11 @@ import { useParams } from 'react-router-dom';
 import { EVENT_DETAILS, RECURRING_EVENTS } from 'GraphQl/Queries/Queries';
 import { useLazyQuery } from '@apollo/client';
 import { exportToCSV } from 'utils/chartToPdf';
+import type { TooltipItem } from 'chart.js';
 import type {
   InterfaceAttendanceStatisticsModalProps,
   InterfaceEvent,
+  InterfaceRecurringEvent,
 } from './InterfaceEvents';
 
 export const AttendanceStatisticsModal: React.FC<
@@ -26,21 +28,26 @@ export const AttendanceStatisticsModal: React.FC<
   const { orgId, eventId } = useParams();
   const [currentPage, setCurrentPage] = useState(0);
   const eventsPerPage = 10;
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const [loadEventDetails, { data: eventData }] = useLazyQuery(EVENT_DETAILS);
   const [loadRecurringEvents, { data: recurringData }] =
     useLazyQuery(RECURRING_EVENTS);
-
   const isEventRecurring = eventData?.event?.recurring;
-  const currentDate = selectedDate || new Date();
+  const currentEventIndex = useMemo(() => {
+    if (!recurringData?.getRecurringEvents || !eventId) return -1;
+    return recurringData.getRecurringEvents.findIndex(
+      (event: InterfaceEvent) => event._id === eventId,
+    );
+  }, [recurringData, eventId]);
+  useEffect(() => {
+    if (currentEventIndex >= 0) {
+      const newPage = Math.floor(currentEventIndex / eventsPerPage);
+      setCurrentPage(newPage);
+    }
+  }, [currentEventIndex, eventsPerPage]);
   const filteredRecurringEvents = useMemo(
-    () =>
-      recurringData?.getRecurringEvents.filter(
-        (event: InterfaceEvent) => currentDate,
-      ) || [],
-    [recurringData, currentDate],
+    () => recurringData?.getRecurringEvents || [],
+    [recurringData],
   );
-  console.log(recurringData);
   const totalEvents = filteredRecurringEvents.length;
   const totalPages = Math.ceil(totalEvents / eventsPerPage);
 
@@ -48,7 +55,7 @@ export const AttendanceStatisticsModal: React.FC<
     const startIndex = currentPage * eventsPerPage;
     const endIndex = Math.min(startIndex + eventsPerPage, totalEvents);
     return filteredRecurringEvents.slice(startIndex, endIndex);
-  }, [filteredRecurringEvents, currentPage, eventsPerPage]);
+  }, [filteredRecurringEvents, currentPage, eventsPerPage, totalEvents]);
 
   const attendeeCounts = useMemo(
     () =>
@@ -57,16 +64,37 @@ export const AttendanceStatisticsModal: React.FC<
       ),
     [paginatedRecurringEvents],
   );
-
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: { y: { beginAtZero: true } },
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: (context: TooltipItem<'line'>) => {
+            const label = context.dataset.label || '';
+            const value = context.parsed.y;
+            const isCurrentEvent =
+              paginatedRecurringEvents[context.dataIndex]._id === eventId;
+            return isCurrentEvent
+              ? `${label}: ${value} (Current Event)`
+              : `${label}: ${value}`;
+          },
+        },
+      },
+    },
+  };
   const eventLabels = useMemo(
     () =>
-      paginatedRecurringEvents.map((event: InterfaceEvent) =>
-        new Date(event.startDate).toLocaleDateString('en-US', {
+      paginatedRecurringEvents.map((event: InterfaceEvent) => {
+        const date = new Date(event.startDate).toLocaleDateString('en-US', {
           month: 'short',
           day: 'numeric',
-        }),
-      ),
-    [paginatedRecurringEvents],
+        });
+        // Highlight the current event in the label
+        return event._id === eventId ? `→ ${date}` : date;
+      }),
+    [paginatedRecurringEvents, eventId],
   );
 
   const maleCounts = useMemo(
@@ -110,6 +138,13 @@ export const AttendanceStatisticsModal: React.FC<
           data: attendeeCounts,
           fill: true,
           borderColor: '#008000',
+          pointRadius: paginatedRecurringEvents.map(
+            (event: InterfaceRecurringEvent) => (event._id === eventId ? 8 : 3),
+          ),
+          pointBackgroundColor: paginatedRecurringEvents.map(
+            (event: InterfaceRecurringEvent) =>
+              event._id === eventId ? '#008000' : 'transparent',
+          ),
         },
         {
           label: 'Male Attendees',
@@ -145,10 +180,10 @@ export const AttendanceStatisticsModal: React.FC<
   }, [currentPage, totalPages]);
 
   const handleDateChange = useCallback((date: Date | null) => {
-    setSelectedDate(date);
-    setCurrentPage(0);
+    if (date) {
+      setCurrentPage(0);
+    }
   }, []);
-
   const categoryLabels = useMemo(
     () =>
       selectedCategory === 'Gender'
@@ -279,12 +314,7 @@ export const AttendanceStatisticsModal: React.FC<
             >
               <Line
                 data={chartData}
-                options={{
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  scales: { y: { beginAtZero: true } },
-                  animation: false,
-                }}
+                options={chartOptions}
                 style={{ paddingBottom: '30px' }}
               />
               <div

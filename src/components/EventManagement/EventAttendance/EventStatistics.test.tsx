@@ -75,18 +75,6 @@ const nonRecurringMocks = [
       query: EVENT_DETAILS,
       variables: { id: 'event123' },
     },
-    result: {
-      data: {
-        event: {
-          _id: 'event123',
-          recurring: false,
-          title: 'Single Test Event',
-          startDate: '2023-05-01',
-          attendees: mockMemberData,
-          baseRecurringEvent: null,
-        },
-      },
-    },
   },
 ];
 
@@ -106,6 +94,7 @@ const recurringMocks = [
           startDate: new Date().toISOString(),
           attendees: mockMemberData,
         },
+        getRecurringEvents: undefined, // Explicitly set undefined here
       },
     },
   },
@@ -184,7 +173,6 @@ describe('AttendanceStatisticsModal', () => {
           InterfaceQueryVariables
         >[],
       );
-
       await waitFor(() => {
         expect(screen.getByAltText('right-arrow')).toBeInTheDocument();
       });
@@ -227,12 +215,19 @@ describe('AttendanceStatisticsModal', () => {
     it('displays demographic bar chart for non-recurring event', async () => {
       renderModal(nonRecurringMocks);
 
-      const charts = document.querySelectorAll('canvas');
-      expect(charts).toHaveLength(1); // Only demographic bar chart
+      await waitFor(() => {
+        const charts = document.querySelectorAll('canvas');
+        expect(charts).toHaveLength(1); // Only demographic bar chart
+      });
     });
 
     it('switches between gender and age demographics', async () => {
-      renderModal(nonRecurringMocks);
+      renderModal(
+        nonRecurringMocks as MockedResponse<
+          InterfaceQueryResult,
+          InterfaceQueryVariables
+        >[],
+      );
 
       await waitFor(() => {
         expect(screen.getByTestId('age-button')).toBeInTheDocument();
