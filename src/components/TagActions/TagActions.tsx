@@ -1,6 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client';
 import Loader from 'components/Loader/Loader';
-import { USER_TAG_ANCESTORS } from 'GraphQl/Queries/userTagQueries';
 import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
@@ -107,9 +106,6 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
       (edge) => edge.node,
     ) ?? /* istanbul ignore next */ [];
 
-  const [checkedTagId, setCheckedTagId] = useState<string | null>(null);
-  const [uncheckedTagId, setUncheckedTagId] = useState<string | null>(null);
-
   // tags that we have selected to assigned
   const [selectedTags, setSelectedTags] = useState<InterfaceTagData[]>([]);
 
@@ -167,22 +163,13 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
     setAncestorTagsDataMap(newAncestorTagsDataMap);
   }, [removeAncestorTagsData]);
 
-  const addAncestorTags = (tagId: string): void => {
-    setCheckedTagId(tagId);
-    setUncheckedTagId(null);
-  };
-
-  const removeAncestorTags = (tagId: string): void => {
-    setUncheckedTagId(tagId);
-    setCheckedTagId(null);
-  };
-
   const selectTag = (tag: InterfaceTagData): void => {
     const newCheckedTags = new Set(checkedTags);
 
     setSelectedTags((selectedTags) => [...selectedTags, tag]);
     newCheckedTags.add(tag._id);
-    addAncestorTags(tag._id);
+
+    setAddAncestorTagsData(new Set(tag.ancestorTags));
 
     setCheckedTags(newCheckedTags);
   };
@@ -199,7 +186,8 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
       selectedTags.filter((selectedTag) => selectedTag._id !== tag._id),
     );
     newCheckedTags.delete(tag._id);
-    removeAncestorTags(tag._id);
+
+    setRemoveAncestorTagsData(new Set(tag.ancestorTags));
 
     setCheckedTags(newCheckedTags);
   };
@@ -214,20 +202,6 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
       deSelectTag(tag);
     }
   };
-
-  useQuery(USER_TAG_ANCESTORS, {
-    variables: { id: checkedTagId },
-    onCompleted: /* istanbul ignore next */ (data) => {
-      setAddAncestorTagsData(data.getUserTagAncestors.slice(0, -1)); // Update the ancestor tags data, to check the ancestor tags
-    },
-  });
-
-  useQuery(USER_TAG_ANCESTORS, {
-    variables: { id: uncheckedTagId },
-    onCompleted: /* istanbul ignore next */ (data) => {
-      setRemoveAncestorTagsData(data.getUserTagAncestors.slice(0, -1)); // Update the ancestor tags data, to uncheck the ancestor tags
-    },
-  });
 
   const [assignToTags] = useMutation(ASSIGN_TO_TAGS);
   const [removeFromTags] = useMutation(REMOVE_FROM_TAGS);

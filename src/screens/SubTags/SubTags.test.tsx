@@ -20,11 +20,7 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import SubTags from './SubTags';
-import {
-  MOCKS,
-  MOCKS_ERROR_SUB_TAGS,
-  MOCKS_ERROR_TAG_ANCESTORS,
-} from './SubTagsMocks';
+import { MOCKS, MOCKS_ERROR_SUB_TAGS } from './SubTagsMocks';
 import { type ApolloLink } from '@apollo/client';
 
 const translations = {
@@ -39,7 +35,6 @@ const translations = {
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR_SUB_TAGS, true);
-const link3 = new StaticMockLink(MOCKS_ERROR_TAG_ANCESTORS, true);
 
 async function wait(ms = 500): Promise<void> {
   await act(() => {
@@ -56,25 +51,10 @@ jest.mock('react-toastify', () => ({
   },
 }));
 
-// const cache = new InMemoryCache({
-//   typePolicies: {
-//     Query: {
-//       fields: {
-//         getUserTag: {
-//           keyArgs: false,
-//           merge(_, incoming) {
-//             return incoming;
-//           },
-//         },
-//       },
-//     },
-//   },
-// });
-
 const renderSubTags = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider link={link}>
-      <MemoryRouter initialEntries={['/orgtags/123/subtags/1']}>
+    <MockedProvider addTypename={false} link={link}>
+      <MemoryRouter initialEntries={['/orgtags/123/subTags/1']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
             <Routes>
@@ -123,16 +103,6 @@ describe('Organisation Tags Page', () => {
 
   test('render error component on unsuccessful subtags query', async () => {
     const { queryByText } = renderSubTags(link2);
-
-    await wait();
-
-    await waitFor(() => {
-      expect(queryByText(translations.addChildTag)).not.toBeInTheDocument();
-    });
-  });
-
-  test('renders error component on unsuccessful userTag ancestors query', async () => {
-    const { queryByText } = renderSubTags(link3);
 
     await wait();
 

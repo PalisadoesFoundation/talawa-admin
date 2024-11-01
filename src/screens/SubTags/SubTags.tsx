@@ -1,4 +1,4 @@
-import { useMutation, useQuery, type ApolloError } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { Search, WarningAmberRounded } from '@mui/icons-material';
 import SortIcon from '@mui/icons-material/Sort';
 import Loader from 'components/Loader/Loader';
@@ -24,10 +24,7 @@ import {
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
 import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
-import {
-  USER_TAG_ANCESTORS,
-  USER_TAG_SUB_TAGS,
-} from 'GraphQl/Queries/userTagQueries';
+import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 
@@ -106,26 +103,6 @@ function SubTags(): JSX.Element {
     });
   };
 
-  const {
-    data: orgUserTagAncestorsData,
-    loading: orgUserTagsAncestorsLoading,
-    error: orgUserTagsAncestorsError,
-  }: {
-    data?: {
-      getUserTagAncestors: {
-        _id: string;
-        name: string;
-      }[];
-    };
-    loading: boolean;
-    error?: ApolloError;
-    refetch: () => void;
-  } = useQuery(USER_TAG_ANCESTORS, {
-    variables: {
-      id: parentTagId,
-    },
-  });
-
   const [create, { loading: createUserTagLoading }] =
     useMutation(CREATE_USER_TAG);
 
@@ -156,22 +133,17 @@ function SubTags(): JSX.Element {
     }
   };
 
-  if (createUserTagLoading || subTagsLoading || orgUserTagsAncestorsLoading) {
+  if (createUserTagLoading || subTagsLoading) {
     return <Loader />;
   }
 
-  if (subTagsError || orgUserTagsAncestorsError) {
+  if (subTagsError) {
     return (
       <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
         <div className={styles.errorMessage}>
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
-            Error occured while loading{' '}
-            {subTagsError ? 'sub tags' : 'tag ancestors'}
-            <br />
-            {subTagsError
-              ? subTagsError.message
-              : orgUserTagsAncestorsError?.message}
+            Error occured while loading sub tags
           </h6>
         </div>
       </div>
@@ -182,7 +154,17 @@ function SubTags(): JSX.Element {
     subTagsData?.getChildTags.childTags.edges.map((edge) => edge.node) ??
     /* istanbul ignore next */ [];
 
-  const orgUserTagAncestors = orgUserTagAncestorsData?.getUserTagAncestors;
+  const parentTagName = subTagsData?.getChildTags.name;
+
+  // get the ancestorTags array and push the current tag in it
+  // used for the tag breadcrumbs
+  const orgUserTagAncestors = [
+    ...(subTagsData?.getChildTags.ancestorTags ?? []),
+    {
+      _id: parentTagId,
+      name: parentTagName,
+    },
+  ];
 
   const redirectToManageTag = (tagId: string): void => {
     navigate(`/orgtags/${orgId}/manageTag/${tagId}`);

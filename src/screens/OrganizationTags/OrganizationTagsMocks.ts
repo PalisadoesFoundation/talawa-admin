@@ -21,12 +21,14 @@ export const MOCKS = [
                   node: {
                     _id: '1',
                     name: 'userTag 1',
+                    parentTag: null,
                     usersAssignedTo: {
                       totalCount: 5,
                     },
                     childTags: {
                       totalCount: 11,
                     },
+                    ancestorTags: [],
                   },
                   cursor: '1',
                 },
@@ -34,12 +36,14 @@ export const MOCKS = [
                   node: {
                     _id: '2',
                     name: 'userTag 2',
+                    parentTag: null,
                     usersAssignedTo: {
                       totalCount: 5,
                     },
                     childTags: {
                       totalCount: 0,
                     },
+                    ancestorTags: [],
                   },
                   cursor: '2',
                 },
@@ -47,12 +51,14 @@ export const MOCKS = [
                   node: {
                     _id: '3',
                     name: 'userTag 3',
+                    parentTag: null,
                     usersAssignedTo: {
                       totalCount: 0,
                     },
                     childTags: {
                       totalCount: 5,
                     },
+                    ancestorTags: [],
                   },
                   cursor: '3',
                 },
@@ -60,12 +66,14 @@ export const MOCKS = [
                   node: {
                     _id: '4',
                     name: 'userTag 4',
+                    parentTag: null,
                     usersAssignedTo: {
                       totalCount: 0,
                     },
                     childTags: {
                       totalCount: 0,
                     },
+                    ancestorTags: [],
                   },
                   cursor: '4',
                 },
@@ -73,12 +81,14 @@ export const MOCKS = [
                   node: {
                     _id: '5',
                     name: 'userTag 5',
+                    parentTag: null,
                     usersAssignedTo: {
                       totalCount: 5,
                     },
                     childTags: {
                       totalCount: 5,
                     },
+                    ancestorTags: [],
                   },
                   cursor: '5',
                 },
@@ -86,12 +96,14 @@ export const MOCKS = [
                   node: {
                     _id: '6',
                     name: 'userTag 6',
+                    parentTag: null,
                     usersAssignedTo: {
                       totalCount: 6,
                     },
                     childTags: {
                       totalCount: 6,
                     },
+                    ancestorTags: [],
                   },
                   cursor: '6',
                 },
@@ -99,12 +111,14 @@ export const MOCKS = [
                   node: {
                     _id: '7',
                     name: 'userTag 7',
+                    parentTag: null,
                     usersAssignedTo: {
                       totalCount: 7,
                     },
                     childTags: {
                       totalCount: 7,
                     },
+                    ancestorTags: [],
                   },
                   cursor: '7',
                 },
@@ -112,12 +126,14 @@ export const MOCKS = [
                   node: {
                     _id: '8',
                     name: 'userTag 8',
+                    parentTag: null,
                     usersAssignedTo: {
                       totalCount: 8,
                     },
                     childTags: {
                       totalCount: 8,
                     },
+                    ancestorTags: [],
                   },
                   cursor: '8',
                 },
@@ -125,12 +141,14 @@ export const MOCKS = [
                   node: {
                     _id: '9',
                     name: 'userTag 9',
+                    parentTag: null,
                     usersAssignedTo: {
                       totalCount: 9,
                     },
                     childTags: {
                       totalCount: 9,
                     },
+                    ancestorTags: [],
                   },
                   cursor: '9',
                 },
@@ -138,12 +156,14 @@ export const MOCKS = [
                   node: {
                     _id: '10',
                     name: 'userTag 10',
+                    parentTag: null,
                     usersAssignedTo: {
                       totalCount: 10,
                     },
                     childTags: {
                       totalCount: 10,
                     },
+                    ancestorTags: [],
                   },
                   cursor: '10',
                 },
@@ -180,12 +200,14 @@ export const MOCKS = [
                   node: {
                     _id: '11',
                     name: 'userTag 11',
+                    parentTag: null,
                     usersAssignedTo: {
                       totalCount: 5,
                     },
                     childTags: {
                       totalCount: 5,
                     },
+                    ancestorTags: [],
                   },
                   cursor: '11',
                 },
@@ -193,12 +215,14 @@ export const MOCKS = [
                   node: {
                     _id: '12',
                     name: 'userTag 12',
+                    parentTag: null,
                     usersAssignedTo: {
                       totalCount: 5,
                     },
                     childTags: {
                       totalCount: 0,
                     },
+                    ancestorTags: [],
                   },
                   cursor: '12',
                 },

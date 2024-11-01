@@ -1,6 +1,6 @@
 import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
-import { useMutation, useQuery, type ApolloError } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { Search, WarningAmberRounded } from '@mui/icons-material';
 import SortIcon from '@mui/icons-material/Sort';
 import Loader from 'components/Loader/Loader';
@@ -30,10 +30,7 @@ import {
   UNASSIGN_USER_TAG,
   UPDATE_USER_TAG,
 } from 'GraphQl/Mutations/TagMutations';
-import {
-  USER_TAG_ANCESTORS,
-  USER_TAGS_ASSIGNED_MEMBERS,
-} from 'GraphQl/Queries/userTagQueries';
+import { USER_TAGS_ASSIGNED_MEMBERS } from 'GraphQl/Queries/userTagQueries';
 import AddPeopleToTag from 'components/AddPeopleToTag/AddPeopleToTag';
 import TagActions from 'components/TagActions/TagActions';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -108,6 +105,7 @@ function ManageTag(): JSX.Element {
       id: currentTagId,
       first: TAGS_QUERY_DATA_CHUNK_SIZE,
     },
+    fetchPolicy: 'no-cache',
   });
 
   const loadMoreAssignedMembers = (): void => {
@@ -145,27 +143,6 @@ function ManageTag(): JSX.Element {
       },
     });
   };
-
-  const {
-    data: orgUserTagAncestorsData,
-    loading: orgUserTagsAncestorsLoading,
-    refetch: orgUserTagsAncestorsRefetch,
-    error: orgUserTagsAncestorsError,
-  }: {
-    data?: {
-      getUserTagAncestors: {
-        _id: string;
-        name: string;
-      }[];
-    };
-    loading: boolean;
-    error?: ApolloError;
-    refetch: () => void;
-  } = useQuery(USER_TAG_ANCESTORS, {
-    variables: {
-      id: currentTagId,
-    },
-  });
 
   const [unassignUserTag] = useMutation(UNASSIGN_USER_TAG);
 
@@ -220,7 +197,6 @@ function ManageTag(): JSX.Element {
       if (data) {
         toast.success(t('tagUpdationSuccess'));
         userTagAssignedMembersRefetch();
-        orgUserTagsAncestorsRefetch();
         setEditUserTagModalIsOpen(false);
       }
     } catch (error: unknown) {
@@ -251,22 +227,17 @@ function ManageTag(): JSX.Element {
     }
   };
 
-  if (userTagAssignedMembersLoading || orgUserTagsAncestorsLoading) {
+  if (userTagAssignedMembersLoading) {
     return <Loader />;
   }
 
-  if (userTagAssignedMembersError || orgUserTagsAncestorsError) {
+  if (userTagAssignedMembersError) {
     return (
       <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
         <div className={styles.errorMessage}>
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
-            Error occured while loading{' '}
-            {userTagAssignedMembersError ? 'assigned users' : 'tag ancestors'}
-            <br />
-            {userTagAssignedMembersError
-              ? userTagAssignedMembersError.message
-              : orgUserTagsAncestorsError?.message}
+            Error occured while loading assigned users
           </h6>
         </div>
       </div>
@@ -277,7 +248,16 @@ function ManageTag(): JSX.Element {
     userTagAssignedMembersData?.getAssignedUsers.usersAssignedTo.edges.map(
       (edge) => edge.node,
     ) ?? /* istanbul ignore next */ [];
-  const orgUserTagAncestors = orgUserTagAncestorsData?.getUserTagAncestors;
+
+  // get the ancestorTags array and push the current tag in it
+  // used for the tag breadcrumbs
+  const orgUserTagAncestors = [
+    ...(userTagAssignedMembersData?.getAssignedUsers.ancestorTags ?? []),
+    {
+      _id: currentTagId,
+      name: currentTagName,
+    },
+  ];
 
   const redirectToSubTags = (tagId: string): void => {
     navigate(`/orgtags/${orgId}/subTags/${tagId}`);

@@ -68,7 +68,6 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
       },
       skip: !addPeopleToTagModalIsOpen,
-      fetchPolicy: 'no-cache',
     },
   );
 
@@ -281,8 +280,8 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                 </div>
 
                 <div
-                  id="scrollableDiv"
-                  data-testid="scrollableDiv"
+                  id="addPeopleToTagScrollableDiv"
+                  data-testid="addPeopleToTagScrollableDiv"
                   style={{
                     maxHeight: 300,
                     overflow: 'auto',
@@ -297,7 +296,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                       /* istanbul ignore next */ false
                     }
                     loader={<InfiniteScrollLoader />}
-                    scrollableTarget="scrollableDiv"
+                    scrollableTarget="addPeopleToTagScrollableDiv"
                   >
                     <DataGrid
                       disableColumnMenu

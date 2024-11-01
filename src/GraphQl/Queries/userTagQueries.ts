@@ -38,6 +38,10 @@ export const USER_TAGS_ASSIGNED_MEMBERS = gql`
         }
         totalCount
       }
+      ancestorTags {
+        _id
+        name
+      }
     }
   }
 `;
@@ -70,6 +74,10 @@ export const USER_TAG_SUB_TAGS = gql`
             childTags(first: $first, last: $last) {
               totalCount
             }
+            ancestorTags {
+              _id
+              name
+            }
           }
         }
         pageInfo {
@@ -79,6 +87,10 @@ export const USER_TAG_SUB_TAGS = gql`
           hasPreviousPage
         }
         totalCount
+      }
+      ancestorTags {
+        _id
+        name
       }
     }
   }
@@ -122,22 +134,6 @@ export const USER_TAGS_MEMBERS_TO_ASSIGN_TO = gql`
         }
         totalCount
       }
-    }
-  }
-`;
-
-/**
- * GraphQL query to retrieve the ancestor tags of a certain tag.
- *
- * @param id - The ID of the current tag.
- * @returns The list of ancestor tags.
- */
-
-export const USER_TAG_ANCESTORS = gql`
-  query GetUserTagAncestors($id: ID!) {
-    getUserTagAncestors(id: $id) {
-      _id
-      name
     }
   }
 `;

@@ -96,11 +96,18 @@ export const ORGANIZATION_USER_TAGS_LIST = gql`
           node {
             _id
             name
+            parentTag {
+              _id
+            }
             usersAssignedTo(first: $first, last: $last) {
               totalCount
             }
             childTags(first: $first, last: $last) {
               totalCount
+            }
+            ancestorTags {
+              _id
+              name
             }
           }
           cursor

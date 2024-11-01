@@ -1,8 +1,5 @@
 import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
-import {
-  USER_TAG_ANCESTORS,
-  USER_TAG_SUB_TAGS,
-} from 'GraphQl/Queries/userTagQueries';
+import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 
 export const MOCKS = [
@@ -30,6 +27,12 @@ export const MOCKS = [
                   childTags: {
                     totalCount: 5,
                   },
+                  ancestorTags: [
+                    {
+                      _id: '1',
+                      name: 'userTag 1',
+                    },
+                  ],
                 },
                 cursor: 'subTag1',
               },
@@ -43,6 +46,12 @@ export const MOCKS = [
                   childTags: {
                     totalCount: 0,
                   },
+                  ancestorTags: [
+                    {
+                      _id: '1',
+                      name: 'userTag 1',
+                    },
+                  ],
                 },
                 cursor: 'subTag2',
               },
@@ -56,6 +65,12 @@ export const MOCKS = [
                   childTags: {
                     totalCount: 5,
                   },
+                  ancestorTags: [
+                    {
+                      _id: '1',
+                      name: 'userTag 1',
+                    },
+                  ],
                 },
                 cursor: 'subTag3',
               },
@@ -69,6 +84,12 @@ export const MOCKS = [
                   childTags: {
                     totalCount: 0,
                   },
+                  ancestorTags: [
+                    {
+                      _id: '1',
+                      name: 'userTag 1',
+                    },
+                  ],
                 },
                 cursor: 'subTag4',
               },
@@ -82,6 +103,12 @@ export const MOCKS = [
                   childTags: {
                     totalCount: 5,
                   },
+                  ancestorTags: [
+                    {
+                      _id: '1',
+                      name: 'userTag 1',
+                    },
+                  ],
                 },
                 cursor: 'subTag5',
               },
@@ -95,6 +122,12 @@ export const MOCKS = [
                   childTags: {
                     totalCount: 5,
                   },
+                  ancestorTags: [
+                    {
+                      _id: '1',
+                      name: 'userTag 1',
+                    },
+                  ],
                 },
                 cursor: 'subTag6',
               },
@@ -108,6 +141,12 @@ export const MOCKS = [
                   childTags: {
                     totalCount: 5,
                   },
+                  ancestorTags: [
+                    {
+                      _id: '1',
+                      name: 'userTag 1',
+                    },
+                  ],
                 },
                 cursor: 'subTag7',
               },
@@ -121,6 +160,12 @@ export const MOCKS = [
                   childTags: {
                     totalCount: 5,
                   },
+                  ancestorTags: [
+                    {
+                      _id: '1',
+                      name: 'userTag 1',
+                    },
+                  ],
                 },
                 cursor: 'subTag8',
               },
@@ -134,6 +179,12 @@ export const MOCKS = [
                   childTags: {
                     totalCount: 5,
                   },
+                  ancestorTags: [
+                    {
+                      _id: '1',
+                      name: 'userTag 1',
+                    },
+                  ],
                 },
                 cursor: 'subTag9',
               },
@@ -147,6 +198,12 @@ export const MOCKS = [
                   childTags: {
                     totalCount: 5,
                   },
+                  ancestorTags: [
+                    {
+                      _id: '1',
+                      name: 'userTag 1',
+                    },
+                  ],
                 },
                 cursor: 'subTag10',
               },
@@ -159,6 +216,7 @@ export const MOCKS = [
             },
             totalCount: 11,
           },
+          ancestorTags: [],
         },
       },
     },
@@ -175,7 +233,7 @@ export const MOCKS = [
     result: {
       data: {
         getChildTags: {
-          name: 'tag1',
+          name: 'userTag 1',
           childTags: {
             edges: [
               {
@@ -188,6 +246,12 @@ export const MOCKS = [
                   childTags: {
                     totalCount: 0,
                   },
+                  ancestorTags: [
+                    {
+                      _id: '1',
+                      name: 'userTag 1',
+                    },
+                  ],
                 },
                 cursor: 'subTag11',
               },
@@ -200,25 +264,8 @@ export const MOCKS = [
             },
             totalCount: 11,
           },
+          ancestorTags: [],
         },
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_TAG_ANCESTORS,
-      variables: {
-        id: '1',
-      },
-    },
-    result: {
-      data: {
-        getUserTagAncestors: [
-          {
-            _id: '1',
-            name: 'tag1',
-          },
-        ],
       },
     },
   },
@@ -246,6 +293,16 @@ export const MOCKS = [
                   childTags: {
                     totalCount: 5,
                   },
+                  ancestorTags: [
+                    {
+                      _id: '1',
+                      name: 'userTag 1',
+                    },
+                    {
+                      _id: 'subTag1',
+                      name: 'subTag 1',
+                    },
+                  ],
                 },
                 cursor: 'subTag1.1',
               },
@@ -258,29 +315,13 @@ export const MOCKS = [
             },
             totalCount: 1,
           },
+          ancestorTags: [
+            {
+              _id: '1',
+              name: 'userTag 1',
+            },
+          ],
         },
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_TAG_ANCESTORS,
-      variables: {
-        id: 'subTag1',
-      },
-    },
-    result: {
-      data: {
-        getUserTagAncestors: [
-          {
-            _id: '1',
-            name: 'tag 1',
-          },
-          {
-            _id: 'subTag1',
-            name: 'subTag 1',
-          },
-        ],
       },
     },
   },
@@ -310,57 +351,6 @@ export const MOCKS_ERROR_SUB_TAGS = [
       variables: {
         id: '1',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
-      },
-    },
-    error: new Error('Mock Graphql Error'),
-  },
-  {
-    request: {
-      query: USER_TAG_ANCESTORS,
-      variables: {
-        id: '1',
-      },
-    },
-    result: {
-      data: {
-        getUserTagAncestors: [],
-      },
-    },
-  },
-];
-
-export const MOCKS_ERROR_TAG_ANCESTORS = [
-  {
-    request: {
-      query: USER_TAG_SUB_TAGS,
-      variables: {
-        id: '1',
-        first: TAGS_QUERY_DATA_CHUNK_SIZE,
-      },
-    },
-    result: {
-      data: {
-        getChildTags: {
-          name: 'tag1',
-          childTags: {
-            edges: [],
-            pageInfo: {
-              startCursor: '0',
-              endCursor: '0',
-              hasNextPage: false,
-              hasPreviousPage: false,
-            },
-            totalCount: 0,
-          },
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_TAG_ANCESTORS,
-      variables: {
-        id: '1',
       },
     },
     error: new Error('Mock Graphql Error'),

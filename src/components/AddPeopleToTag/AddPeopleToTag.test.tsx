@@ -157,13 +157,15 @@ describe('Organisation Tags Page', () => {
     });
 
     // Find the infinite scroll div by test ID or another selector
-    const scrollableDiv = screen.getByTestId('scrollableDiv');
+    const addPeopleToTagScrollableDiv = screen.getByTestId(
+      'addPeopleToTagScrollableDiv',
+    );
 
     const initialMemberDataLength = screen.getAllByTestId('memberName').length;
 
     // Set scroll position to the bottom
-    fireEvent.scroll(scrollableDiv, {
-      target: { scrollY: scrollableDiv.scrollHeight },
+    fireEvent.scroll(addPeopleToTagScrollableDiv, {
+      target: { scrollY: addPeopleToTagScrollableDiv.scrollHeight },
     });
 
     await waitFor(() => {

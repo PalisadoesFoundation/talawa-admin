@@ -20,11 +20,7 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import ManageTag from './ManageTag';
-import {
-  MOCKS,
-  MOCKS_ERROR_ASSIGNED_MEMBERS,
-  MOCKS_ERROR_TAG_ANCESTORS,
-} from './ManageTagMocks';
+import { MOCKS, MOCKS_ERROR_ASSIGNED_MEMBERS } from './ManageTagMocks';
 import { type ApolloLink } from '@apollo/client';
 
 const translations = {
@@ -37,7 +33,6 @@ const translations = {
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR_ASSIGNED_MEMBERS, true);
-const link3 = new StaticMockLink(MOCKS_ERROR_TAG_ANCESTORS, true);
 
 async function wait(ms = 500): Promise<void> {
   await act(() => {
@@ -121,16 +116,6 @@ describe('Manage Tag Page', () => {
 
   test('renders error component on unsuccessful userTag assigned members query', async () => {
     const { queryByText } = renderManageTag(link2);
-
-    await wait();
-
-    await waitFor(() => {
-      expect(queryByText(translations.addPeopleToTag)).not.toBeInTheDocument();
-    });
-  });
-
-  test('renders error component on unsuccessful userTag ancestors query', async () => {
-    const { queryByText } = renderManageTag(link3);
 
     await wait();
 
