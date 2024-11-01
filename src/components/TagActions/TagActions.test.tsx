@@ -343,6 +343,16 @@ describe('Organisation Tags Page', () => {
 
     await wait();
 
+    // gives error if no tag is selected
+    await waitFor(() => {
+      expect(screen.getByTestId('tagActionSubmitBtn')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('tagActionSubmitBtn'));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(translations.noTagSelected);
+    });
+
     // select userTags 2 & 3 and assign them
     await waitFor(() => {
       expect(screen.getByTestId('checkTag2')).toBeInTheDocument();

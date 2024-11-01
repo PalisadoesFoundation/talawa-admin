@@ -274,6 +274,16 @@ describe('Organisation Tags Page', () => {
 
     await wait();
 
+    // gives error if no user is selected
+    await waitFor(() => {
+      expect(screen.getByTestId('assignPeopleBtn')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('assignPeopleBtn'));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(translations.noOneSelected);
+    });
+
     await waitFor(() => {
       expect(screen.getAllByTestId('selectMemberBtn')[0]).toBeInTheDocument();
     });

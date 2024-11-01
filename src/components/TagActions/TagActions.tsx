@@ -213,6 +213,11 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   ): Promise<void> => {
     e.preventDefault();
 
+    if (!selectedTags.length) {
+      toast.error(t('noTagSelected'));
+      return;
+    }
+
     const mutationObject = {
       variables: {
         currentTagId,

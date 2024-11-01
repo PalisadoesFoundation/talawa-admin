@@ -147,6 +147,11 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
   ): Promise<void> => {
     e.preventDefault();
 
+    if (!assignToMembers.length) {
+      toast.error(t('noOneSelected'));
+      return;
+    }
+
     try {
       const { data } = await addPeople({
         variables: {
