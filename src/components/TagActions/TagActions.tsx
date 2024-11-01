@@ -1,4 +1,3 @@
-import type { ApolloError } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
 import Loader from 'components/Loader/Loader';
 import { USER_TAG_ANCESTORS } from 'GraphQl/Queries/userTagQueries';
@@ -17,11 +16,16 @@ import {
   REMOVE_FROM_TAGS,
 } from 'GraphQl/Mutations/TagMutations';
 import { toast } from 'react-toastify';
-import type { TagActionType } from 'utils/organizationTagsUtils';
-import { TAGS_QUERY_LIMIT } from 'utils/organizationTagsUtils';
+import type {
+  InterfaceOrganizationTagsQuery,
+  TagActionType,
+} from 'utils/organizationTagsUtils';
+import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { WarningAmberRounded } from '@mui/icons-material';
 import TagNode from './TagNode';
+import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
+import type { TFunction } from 'i18next';
 
 interface InterfaceUserTagsAncestorData {
   _id: string;
@@ -32,16 +36,16 @@ interface InterfaceUserTagsAncestorData {
  * Props for the `AssignToTags` component.
  */
 export interface InterfaceTagActionsProps {
-  assignToTagsModalIsOpen: boolean;
-  hideAssignToTagsModal: () => void;
+  tagActionsModalIsOpen: boolean;
+  hideTagActionsModal: () => void;
   tagActionType: TagActionType;
-  t: (key: string) => string;
-  tCommon: (key: string) => string;
+  t: TFunction<'translation', 'manageTag'>;
+  tCommon: TFunction<'common', undefined>;
 }
 
 const TagActions: React.FC<InterfaceTagActionsProps> = ({
-  assignToTagsModalIsOpen,
-  hideAssignToTagsModal,
+  tagActionsModalIsOpen,
+  hideTagActionsModal,
   tagActionType,
   t,
   tCommon,
@@ -53,38 +57,55 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
     loading: orgUserTagsLoading,
     error: orgUserTagsError,
     fetchMore: orgUserTagsFetchMore,
-  }: {
-    data?: {
-      organizations: InterfaceQueryOrganizationUserTags[];
-    };
-    loading: boolean;
-    error?: ApolloError;
-    refetch: () => void;
-    fetchMore: (options: {
+  }: InterfaceOrganizationTagsQuery = useQuery(ORGANIZATION_USER_TAGS_LIST, {
+    variables: {
+      id: orgId,
+      first: TAGS_QUERY_DATA_CHUNK_SIZE,
+    },
+    skip: !tagActionsModalIsOpen,
+  });
+
+  const loadMoreUserTags = (): void => {
+    orgUserTagsFetchMore({
       variables: {
-        first: number;
-        after?: string;
-      };
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        after: orgUserTagsData?.organizations[0].userTags.pageInfo.endCursor,
+      },
       updateQuery: (
-        previousResult: { organizations: InterfaceQueryOrganizationUserTags[] },
-        options: {
+        prevResult: { organizations: InterfaceQueryOrganizationUserTags[] },
+        {
+          fetchMoreResult,
+        }: {
           fetchMoreResult?: {
             organizations: InterfaceQueryOrganizationUserTags[];
           };
         },
-      ) => { organizations: InterfaceQueryOrganizationUserTags[] };
-    }) => void;
-  } = useQuery(ORGANIZATION_USER_TAGS_LIST, {
-    variables: {
-      id: orgId,
-      first: TAGS_QUERY_LIMIT,
-    },
-    skip: !assignToTagsModalIsOpen,
-  });
+      ) => {
+        if (!fetchMoreResult) return prevResult;
 
-  const userTagsList = orgUserTagsData?.organizations[0]?.userTags.edges.map(
-    (edge) => edge.node,
-  );
+        return {
+          organizations: [
+            {
+              ...prevResult.organizations[0],
+              userTags: {
+                ...prevResult.organizations[0].userTags,
+                edges: [
+                  ...prevResult.organizations[0].userTags.edges,
+                  ...fetchMoreResult.organizations[0].userTags.edges,
+                ],
+                pageInfo: fetchMoreResult.organizations[0].userTags.pageInfo,
+              },
+            },
+          ],
+        };
+      },
+    });
+  };
+
+  const userTagsList =
+    orgUserTagsData?.organizations[0]?.userTags.edges.map(
+      (edge) => edge.node,
+    ) ?? /* istanbul ignore next */ [];
 
   const [checkedTagId, setCheckedTagId] = useState<string | null>(null);
   const [uncheckedTagId, setUncheckedTagId] = useState<string | null>(null);
@@ -208,43 +229,6 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
     },
   });
 
-  const loadMoreUserTags = (): void => {
-    orgUserTagsFetchMore({
-      variables: {
-        first: TAGS_QUERY_LIMIT,
-        after: orgUserTagsData?.organizations[0].userTags.pageInfo.endCursor,
-      },
-      updateQuery: (
-        prevResult: { organizations: InterfaceQueryOrganizationUserTags[] },
-        {
-          fetchMoreResult,
-        }: {
-          fetchMoreResult?: {
-            organizations: InterfaceQueryOrganizationUserTags[];
-          };
-        },
-      ) => {
-        if (!fetchMoreResult) return prevResult;
-
-        return {
-          organizations: [
-            {
-              ...prevResult.organizations[0],
-              userTags: {
-                ...prevResult.organizations[0].userTags,
-                edges: [
-                  ...prevResult.organizations[0].userTags.edges,
-                  ...fetchMoreResult.organizations[0].userTags.edges,
-                ],
-                pageInfo: fetchMoreResult.organizations[0].userTags.pageInfo,
-              },
-            },
-          ],
-        };
-      },
-    });
-  };
-
   const [assignToTags] = useMutation(ASSIGN_TO_TAGS);
   const [removeFromTags] = useMutation(REMOVE_FROM_TAGS);
 
@@ -272,7 +256,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
         } else {
           toast.success(t('successfullyRemovedFromTags'));
         }
-        hideAssignToTagsModal();
+        hideTagActionsModal();
       }
     } catch (error: unknown) {
       /* istanbul ignore next */
@@ -298,8 +282,8 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   return (
     <>
       <Modal
-        show={assignToTagsModalIsOpen}
-        onHide={hideAssignToTagsModal}
+        show={tagActionsModalIsOpen}
+        onHide={hideTagActionsModal}
         backdrop="static"
         aria-labelledby="contained-modal-title-vcenter"
         centered
@@ -346,7 +330,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                   )}
                 </div>
 
-                <div className={`mt-4 mb-2 fs-5 ${styles.allTagsHeading}`}>
+                <div className="mt-4 mb-2 fs-5 fw-semibold text-dark-emphasis">
                   {t('allTags')}
                 </div>
 
@@ -354,10 +338,9 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                   id="scrollableDiv"
                   data-testid="scrollableDiv"
                   style={{
-                    height: 300,
+                    maxHeight: 300,
                     overflow: 'auto',
                   }}
-                  className={`${styles.scrContainer}`}
                 >
                   <InfiniteScroll
                     dataLength={userTagsList?.length ?? 0}
@@ -366,11 +349,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                       orgUserTagsData?.organizations[0].userTags.pageInfo
                         .hasNextPage ?? false
                     }
-                    loader={
-                      <div className="simpleLoader">
-                        <div className="spinner" />
-                      </div>
-                    }
+                    loader={<InfiniteScrollLoader />}
                     scrollableTarget="scrollableDiv"
                   >
                     {userTagsList?.map((tag) => (
@@ -396,7 +375,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
           <Modal.Footer>
             <Button
               variant="secondary"
-              onClick={(): void => hideAssignToTagsModal()}
+              onClick={(): void => hideTagActionsModal()}
               data-testid="closeTagActionsModalBtn"
             >
               {tCommon('cancel')}

@@ -148,10 +148,10 @@ function app(): JSX.Element {
             <Route path="/orgpeople/:orgId" element={<OrganizationPeople />} />
             <Route path="/orgtags/:orgId" element={<OrganizationTags />} />
             <Route
-              path="orgtags/:orgId/managetag/:tagId"
+              path="orgtags/:orgId/manageTag/:tagId"
               element={<ManageTag />}
             />
-            <Route path="orgtags/:orgId/subtags/:tagId" element={<SubTags />} />
+            <Route path="orgtags/:orgId/subTags/:tagId" element={<SubTags />} />
             <Route path="/member/:orgId" element={<MemberDetail />} />
             <Route path="/orgevents/:orgId" element={<OrganizationEvents />} />
             <Route
