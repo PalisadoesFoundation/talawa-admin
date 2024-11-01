@@ -499,14 +499,14 @@ describe('Testing UserSidebar Component [User Portal]', () => {
                 </I18nextProvider>
               </Provider>
             </BrowserRouter>
-          </MockedProvider>
+          </MockedProvider>,
         );
-    
+
         // Check for `hideElemByDefault` class when hideDrawer is null
         expect(screen.getByTestId('leftDrawerContainer')).toHaveClass(
-          styles.hideElemByDefault
+          styles.hideElemByDefault,
         );
-    
+
         // Rerender with hideDrawer set to true and verify `inactiveDrawer`
         rerender(
           <MockedProvider addTypename={false}>
@@ -517,12 +517,12 @@ describe('Testing UserSidebar Component [User Portal]', () => {
                 </I18nextProvider>
               </Provider>
             </BrowserRouter>
-          </MockedProvider>
+          </MockedProvider>,
         );
         expect(screen.getByTestId('leftDrawerContainer')).toHaveClass(
-          styles.inactiveDrawer
+          styles.inactiveDrawer,
         );
-    
+
         // Rerender with hideDrawer set to false and verify `activeDrawer`
         rerender(
           <MockedProvider addTypename={false}>
@@ -533,10 +533,10 @@ describe('Testing UserSidebar Component [User Portal]', () => {
                 </I18nextProvider>
               </Provider>
             </BrowserRouter>
-          </MockedProvider>
+          </MockedProvider>,
         );
         expect(screen.getByTestId('leftDrawerContainer')).toHaveClass(
-          styles.activeDrawer
+          styles.activeDrawer,
         );
       });
     });
