@@ -70,7 +70,7 @@ export const ACTION_ITEM_LIST = gql`
         firstName
         lastName
       }
-      allotedHours
+      allottedHours
     }
   }
 `;
@@ -170,7 +170,7 @@ export const ACTION_ITEMS_BY_USER = gql`
         firstName
         lastName
       }
-      allotedHours
+      allottedHours
     }
   }
 `;

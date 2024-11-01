@@ -90,7 +90,7 @@ const itemProps: InterfaceItemModalProps[] = [
       completionDate: new Date('2044-09-03'),
       isCompleted: true,
       event: null,
-      allotedHours: 24,
+      allottedHours: 24,
       assigner: {
         _id: 'userId2',
         firstName: 'Wilt',
@@ -133,7 +133,7 @@ const itemProps: InterfaceItemModalProps[] = [
       completionDate: new Date('2044-10-03'),
       isCompleted: false,
       event: null,
-      allotedHours: null,
+      allottedHours: null,
       assigner: {
         _id: 'userId2',
         firstName: 'Wilt',
@@ -186,7 +186,7 @@ const itemProps: InterfaceItemModalProps[] = [
         _id: 'eventId',
         title: 'Event 1',
       },
-      allotedHours: null,
+      allottedHours: null,
       assigner: {
         _id: 'userId2',
         firstName: 'Wilt',
@@ -260,7 +260,7 @@ const itemProps: InterfaceItemModalProps[] = [
         _id: 'eventId',
         title: 'Event 1',
       },
-      allotedHours: null,
+      allottedHours: null,
       assigner: {
         _id: 'userId2',
         firstName: 'Wilt',
@@ -326,12 +326,12 @@ describe('Testing ItemModal', () => {
     });
 
     // Select Allotted Hours (try all options)
-    const allotedHours = screen.getByLabelText(t.allotedHours);
-    const allotedHoursOptions = ['', '-1', '9'];
+    const allottedHours = screen.getByLabelText(t.allottedHours);
+    const allottedHoursOptions = ['', '-1', '9'];
 
-    allotedHoursOptions.forEach((option) => {
-      fireEvent.change(allotedHours, { target: { value: option } });
-      expect(allotedHours).toHaveValue(parseInt(option) > 0 ? option : '');
+    allottedHoursOptions.forEach((option) => {
+      fireEvent.change(allottedHours, { target: { value: option } });
+      expect(allottedHours).toHaveValue(parseInt(option) > 0 ? option : '');
     });
 
     // Add Pre Completion Notes
@@ -388,12 +388,12 @@ describe('Testing ItemModal', () => {
     });
 
     // Select Allotted Hours (try all options)
-    const allotedHours = screen.getByLabelText(t.allotedHours);
-    const allotedHoursOptions = ['', '-1', '9'];
+    const allottedHours = screen.getByLabelText(t.allottedHours);
+    const allottedHoursOptions = ['', '-1', '9'];
 
-    allotedHoursOptions.forEach((option) => {
-      fireEvent.change(allotedHours, { target: { value: option } });
-      expect(allotedHours).toHaveValue(parseInt(option) > 0 ? option : '');
+    allottedHoursOptions.forEach((option) => {
+      fireEvent.change(allottedHours, { target: { value: option } });
+      expect(allottedHours).toHaveValue(parseInt(option) > 0 ? option : '');
     });
 
     // Add Pre Completion Notes
@@ -450,12 +450,12 @@ describe('Testing ItemModal', () => {
     });
 
     // Select Allotted Hours (try all options)
-    const allotedHours = screen.getByLabelText(t.allotedHours);
-    const allotedHoursOptions = ['', '-1', '9'];
+    const allottedHours = screen.getByLabelText(t.allottedHours);
+    const allottedHoursOptions = ['', '-1', '9'];
 
-    allotedHoursOptions.forEach((option) => {
-      fireEvent.change(allotedHours, { target: { value: option } });
-      expect(allotedHours).toHaveValue(parseInt(option) > 0 ? option : '');
+    allottedHoursOptions.forEach((option) => {
+      fireEvent.change(allottedHours, { target: { value: option } });
+      expect(allottedHours).toHaveValue(parseInt(option) > 0 ? option : '');
     });
 
     // Add Pre Completion Notes
@@ -490,12 +490,12 @@ describe('Testing ItemModal', () => {
     fireEvent.click(categoryOption);
 
     // Update Allotted Hours (try all options)
-    const allotedHours = screen.getByLabelText(t.allotedHours);
-    const allotedHoursOptions = ['', '-1', '19'];
+    const allottedHours = screen.getByLabelText(t.allottedHours);
+    const allottedHoursOptions = ['', '-1', '19'];
 
-    allotedHoursOptions.forEach((option) => {
-      fireEvent.change(allotedHours, { target: { value: option } });
-      expect(allotedHours).toHaveValue(parseInt(option) > 0 ? option : '');
+    allottedHoursOptions.forEach((option) => {
+      fireEvent.change(allottedHours, { target: { value: option } });
+      expect(allottedHours).toHaveValue(parseInt(option) > 0 ? option : '');
     });
 
     // Update Post Completion Notes
@@ -547,12 +547,12 @@ describe('Testing ItemModal', () => {
     fireEvent.click(volunteerOption);
 
     // Update Allotted Hours (try all options)
-    const allotedHours = screen.getByLabelText(t.allotedHours);
-    const allotedHoursOptions = ['', '-1', '19'];
+    const allottedHours = screen.getByLabelText(t.allottedHours);
+    const allottedHoursOptions = ['', '-1', '19'];
 
-    allotedHoursOptions.forEach((option) => {
-      fireEvent.change(allotedHours, { target: { value: option } });
-      expect(allotedHours).toHaveValue(parseInt(option) > 0 ? option : '');
+    allottedHoursOptions.forEach((option) => {
+      fireEvent.change(allottedHours, { target: { value: option } });
+      expect(allottedHours).toHaveValue(parseInt(option) > 0 ? option : '');
     });
 
     // Click Submit
@@ -599,12 +599,12 @@ describe('Testing ItemModal', () => {
     fireEvent.click(groupOption);
 
     // Update Allotted Hours (try all options)
-    const allotedHours = screen.getByLabelText(t.allotedHours);
-    const allotedHoursOptions = ['', '-1', '19'];
+    const allottedHours = screen.getByLabelText(t.allottedHours);
+    const allottedHoursOptions = ['', '-1', '19'];
 
-    allotedHoursOptions.forEach((option) => {
-      fireEvent.change(allotedHours, { target: { value: option } });
-      expect(allotedHours).toHaveValue(parseInt(option) > 0 ? option : '');
+    allottedHoursOptions.forEach((option) => {
+      fireEvent.change(allottedHours, { target: { value: option } });
+      expect(allottedHours).toHaveValue(parseInt(option) > 0 ? option : '');
     });
 
     // Click Submit
@@ -651,12 +651,12 @@ describe('Testing ItemModal', () => {
     fireEvent.click(groupOption);
 
     // Update Allotted Hours (try all options)
-    const allotedHours = screen.getByLabelText(t.allotedHours);
-    const allotedHoursOptions = ['', '-1', '19'];
+    const allottedHours = screen.getByLabelText(t.allottedHours);
+    const allottedHoursOptions = ['', '-1', '19'];
 
-    allotedHoursOptions.forEach((option) => {
-      fireEvent.change(allotedHours, { target: { value: option } });
-      expect(allotedHours).toHaveValue(parseInt(option) > 0 ? option : '');
+    allottedHoursOptions.forEach((option) => {
+      fireEvent.change(allottedHours, { target: { value: option } });
+      expect(allottedHours).toHaveValue(parseInt(option) > 0 ? option : '');
     });
 
     // Click Submit
@@ -696,12 +696,12 @@ describe('Testing ItemModal', () => {
     fireEvent.click(memberOption);
 
     // Update Allotted Hours (try all options)
-    const allotedHours = screen.getByLabelText(t.allotedHours);
-    const allotedHoursOptions = ['', '-1', '19'];
+    const allottedHours = screen.getByLabelText(t.allottedHours);
+    const allottedHoursOptions = ['', '-1', '19'];
 
-    allotedHoursOptions.forEach((option) => {
-      fireEvent.change(allotedHours, { target: { value: option } });
-      expect(allotedHours).toHaveValue(parseInt(option) > 0 ? option : '');
+    allottedHoursOptions.forEach((option) => {
+      fireEvent.change(allottedHours, { target: { value: option } });
+      expect(allottedHours).toHaveValue(parseInt(option) > 0 ? option : '');
     });
 
     // Update Due Date
@@ -729,27 +729,27 @@ describe('Testing ItemModal', () => {
   it('Try adding negative Allotted Hours', async () => {
     renderItemModal(link1, itemProps[0]);
     expect(screen.getAllByText(t.createActionItem)).toHaveLength(2);
-    const allotedHours = screen.getByLabelText(t.allotedHours);
-    fireEvent.change(allotedHours, { target: { value: '-1' } });
+    const allottedHours = screen.getByLabelText(t.allottedHours);
+    fireEvent.change(allottedHours, { target: { value: '-1' } });
 
     await waitFor(() => {
-      expect(allotedHours).toHaveValue('');
+      expect(allottedHours).toHaveValue('');
     });
 
-    fireEvent.change(allotedHours, { target: { value: '' } });
+    fireEvent.change(allottedHours, { target: { value: '' } });
 
     await waitFor(() => {
-      expect(allotedHours).toHaveValue('');
+      expect(allottedHours).toHaveValue('');
     });
 
-    fireEvent.change(allotedHours, { target: { value: '0' } });
+    fireEvent.change(allottedHours, { target: { value: '0' } });
     await waitFor(() => {
-      expect(allotedHours).toHaveValue('0');
+      expect(allottedHours).toHaveValue('0');
     });
 
-    fireEvent.change(allotedHours, { target: { value: '19' } });
+    fireEvent.change(allottedHours, { target: { value: '19' } });
     await waitFor(() => {
-      expect(allotedHours).toHaveValue('19');
+      expect(allottedHours).toHaveValue('19');
     });
   });
 

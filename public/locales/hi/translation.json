@@ -474,7 +474,7 @@
     "successfulDeletion": "क्रिया वस्तु सफलतापूर्वक हटाई गई",
     "title": "क्रिया वस्तुएँ",
     "category": "श्रेणी",
-    "allotedHours": "आवंटित घंटे",
+    "allottedHours": "आवंटित घंटे",
     "latestDueDate": "नवीनतम समाप्ति तिथि",
     "earliestDueDate": "प्रारंभिक समाप्ति तिथि",
     "updateActionItem": "क्रिया वस्तु अपडेट करें",

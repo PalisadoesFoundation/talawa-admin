@@ -8,7 +8,7 @@ import gql from 'graphql-tag';
  * @param preCompletionNotes - Notes prior to completion.
  * @param dueDate - Due date.
  * @param eventId - Event to which the ActionItem is related.
- * @param allotedHours - Hours alloted for the ActionItem.
+ * @param allottedHours - Hours allotted for the ActionItem.
  */
 
 export const CREATE_ACTION_ITEM_MUTATION = gql`
@@ -19,7 +19,7 @@ export const CREATE_ACTION_ITEM_MUTATION = gql`
     $preCompletionNotes: String
     $dDate: Date
     $eventId: ID
-    $allotedHours: Float
+    $allottedHours: Float
   ) {
     createActionItem(
       actionItemCategoryId: $actionItemCategoryId
@@ -29,7 +29,7 @@ export const CREATE_ACTION_ITEM_MUTATION = gql`
         preCompletionNotes: $preCompletionNotes
         dueDate: $dDate
         eventId: $eventId
-        allotedHours: $allotedHours
+        allottedHours: $allottedHours
       }
     ) {
       _id
@@ -59,7 +59,7 @@ export const UPDATE_ACTION_ITEM_MUTATION = gql`
     $dueDate: Date
     $completionDate: Date
     $isCompleted: Boolean
-    $allotedHours: Float
+    $allottedHours: Float
   ) {
     updateActionItem(
       id: $actionItemId
@@ -70,7 +70,7 @@ export const UPDATE_ACTION_ITEM_MUTATION = gql`
         postCompletionNotes: $postCompletionNotes
         dueDate: $dueDate
         completionDate: $completionDate
-        allotedHours: $allotedHours
+        allottedHours: $allottedHours
         isCompleted: $isCompleted
       }
     ) {

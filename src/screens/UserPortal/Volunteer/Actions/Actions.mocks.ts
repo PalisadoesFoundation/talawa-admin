@@ -38,7 +38,7 @@ const action1 = {
     firstName: 'Wilt',
     lastName: 'Shepherd',
   },
-  allotedHours: 8,
+  allottedHours: 8,
 };
 
 const action2 = {
@@ -74,7 +74,7 @@ const action2 = {
     firstName: 'Wilt',
     lastName: 'Shepherd',
   },
-  allotedHours: 8,
+  allottedHours: 8,
 };
 
 const action3 = {
@@ -115,7 +115,7 @@ const action3 = {
     firstName: 'Wilt',
     lastName: 'Shepherd',
   },
-  allotedHours: null,
+  allottedHours: null,
 };
 
 export const MOCKS = [

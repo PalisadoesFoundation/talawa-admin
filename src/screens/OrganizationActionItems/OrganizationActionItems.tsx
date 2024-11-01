@@ -281,8 +281,8 @@ function organizationActionItems(): JSX.Element {
       },
     },
     {
-      field: 'allotedHours',
-      headerName: 'Alloted Hours',
+      field: 'allottedHours',
+      headerName: 'Allotted Hours',
       align: 'center',
       headerAlign: 'center',
       sortable: false,
@@ -290,7 +290,9 @@ function organizationActionItems(): JSX.Element {
       flex: 1,
       renderCell: (params: GridCellParams) => {
         return (
-          <div data-testid="allotedHours">{params.row.allotedHours ?? '-'}</div>
+          <div data-testid="allottedHours">
+            {params.row.allottedHours ?? '-'}
+          </div>
         );
       },
     },

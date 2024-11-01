@@ -101,7 +101,7 @@ const itemProps: InterfaceViewModalProps[] = [
       completionDate: new Date('2044-09-03'),
       isCompleted: true,
       event: null,
-      allotedHours: 24,
+      allottedHours: 24,
       assigner: userWithoutImage,
       creator: userWithoutImage,
     },
@@ -123,7 +123,7 @@ const itemProps: InterfaceViewModalProps[] = [
       completionDate: new Date('2044-10-03'),
       isCompleted: false,
       event: null,
-      allotedHours: null,
+      allottedHours: null,
       assigner: userWithImage,
       creator: userWithoutImage,
     },
@@ -145,7 +145,7 @@ const itemProps: InterfaceViewModalProps[] = [
       completionDate: new Date('2044-10-03'),
       isCompleted: false,
       event: null,
-      allotedHours: null,
+      allottedHours: null,
       assigner: userWithImage,
       creator: userWithoutImage,
     },
@@ -167,7 +167,7 @@ const itemProps: InterfaceViewModalProps[] = [
       completionDate: new Date('2044-10-03'),
       isCompleted: false,
       event: null,
-      allotedHours: null,
+      allottedHours: null,
       assigner: userWithoutImage,
       creator: userWithoutImage,
     },
@@ -193,7 +193,7 @@ const itemProps: InterfaceViewModalProps[] = [
       completionDate: new Date('2044-10-03'),
       isCompleted: false,
       event: null,
-      allotedHours: null,
+      allottedHours: null,
       assigner: userWithoutImage,
       creator: userWithoutImage,
     },
@@ -233,8 +233,8 @@ describe('Testing ItemViewModal', () => {
     expect(screen.getByTestId('assignee_avatar')).toBeInTheDocument();
     expect(screen.getByTestId('assigner_avatar')).toBeInTheDocument();
     expect(screen.getByLabelText(t.postCompletionNotes)).toBeInTheDocument();
-    expect(screen.getByLabelText(t.allotedHours)).toBeInTheDocument();
-    expect(screen.getByLabelText(t.allotedHours)).toHaveValue('24');
+    expect(screen.getByLabelText(t.allottedHours)).toBeInTheDocument();
+    expect(screen.getByLabelText(t.allottedHours)).toHaveValue('24');
   });
 
   it('should render ItemViewModal with completed item & assignee with image', () => {
@@ -245,8 +245,8 @@ describe('Testing ItemViewModal', () => {
     expect(
       screen.queryByLabelText(t.postCompletionNotes),
     ).not.toBeInTheDocument();
-    expect(screen.getByLabelText(t.allotedHours)).toBeInTheDocument();
-    expect(screen.getByLabelText(t.allotedHours)).toHaveValue('-');
+    expect(screen.getByLabelText(t.allottedHours)).toBeInTheDocument();
+    expect(screen.getByLabelText(t.allottedHours)).toHaveValue('-');
   });
 
   it('should render ItemViewModal with assigneeUser with image', () => {

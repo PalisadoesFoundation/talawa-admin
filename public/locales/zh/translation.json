@@ -474,7 +474,7 @@
     "successfulDeletion": "行动项删除成功",
     "title": "行动项",
     "category": "类别",
-    "allotedHours": "分配的小时",
+    "allottedHours": "分配的小时",
     "latestDueDate": "最新截止日期",
     "earliestDueDate": "最早截止日期",
     "updateActionItem": "更新行动项",

@@ -59,7 +59,7 @@ export const itemWithVolunteer: InterfaceActionItemInfo = {
   completionDate: new Date('2044-09-03'),
   isCompleted: true,
   event: null,
-  allotedHours: 24,
+  allottedHours: 24,
   actionItemCategory: actionItemCategory1,
   ...baseActionItem,
 };
@@ -89,7 +89,7 @@ export const itemWithVolunteerImage: InterfaceActionItemInfo = {
   completionDate: new Date('2044-09-03'),
   isCompleted: true,
   event: null,
-  allotedHours: 24,
+  allottedHours: 24,
   actionItemCategory: actionItemCategory1,
   ...baseActionItem,
 };
@@ -112,7 +112,7 @@ export const itemWithUser: InterfaceActionItemInfo = {
   completionDate: new Date('2044-10-03'),
   isCompleted: false,
   event: null,
-  allotedHours: null,
+  allottedHours: null,
   actionItemCategory: actionItemCategory2,
   ...baseActionItem,
 };
@@ -135,7 +135,7 @@ export const itemWithUserImage: InterfaceActionItemInfo = {
   completionDate: new Date('2044-10-03'),
   isCompleted: false,
   event: null,
-  allotedHours: null,
+  allottedHours: null,
   actionItemCategory: actionItemCategory2,
   ...baseActionItem,
 };
@@ -176,7 +176,7 @@ export const itemWithGroup: InterfaceActionItemInfo = {
   completionDate: new Date('2044-09-03'),
   isCompleted: true,
   event: null,
-  allotedHours: 24,
+  allottedHours: 24,
   actionItemCategory: actionItemCategory1,
   ...baseActionItem,
 };

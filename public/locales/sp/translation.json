@@ -474,7 +474,7 @@
     "successfulDeletion": "Acción eliminada con éxito",
     "title": "Acciones",
     "category": "Categoría",
-    "allotedHours": "Horas Asignadas",
+    "allottedHours": "Horas Asignadas",
     "latestDueDate": "Fecha de Vencimiento Más Reciente",
     "earliestDueDate": "Fecha de Vencimiento Más Antigua",
     "updateActionItem": "Actualizar Acción",

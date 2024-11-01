@@ -48,7 +48,7 @@ export interface InterfaceActionItemInfo {
     title: string;
   } | null;
   creator: InterfaceUserInfo;
-  allotedHours: number | null;
+  allottedHours: number | null;
 }
 
 export interface InterfaceActionItemList {
@@ -613,7 +613,7 @@ export interface InterfaceVolunteerGroupInfo {
       _id: string;
       name: string;
     };
-    allotedHours: number;
+    allottedHours: number;
     isCompleted: boolean;
   }[];
 }

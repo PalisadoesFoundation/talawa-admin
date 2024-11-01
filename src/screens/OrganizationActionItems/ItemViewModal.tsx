@@ -47,7 +47,7 @@ const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
     isCompleted,
     postCompletionNotes,
     preCompletionNotes,
-    allotedHours,
+    allottedHours,
   } = item;
 
   return (
@@ -192,10 +192,10 @@ const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
             />
 
             <TextField
-              label={t('allotedHours')}
+              label={t('allottedHours')}
               variant="outlined"
               className={`${styles.noOutline} w-100`}
-              value={allotedHours ?? '-'}
+              value={allottedHours ?? '-'}
               disabled
             />
           </Form.Group>

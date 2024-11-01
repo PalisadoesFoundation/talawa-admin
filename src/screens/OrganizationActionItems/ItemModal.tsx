@@ -42,7 +42,7 @@ interface InterfaceFormStateType {
   eventId?: string;
   preCompletionNotes: string;
   postCompletionNotes: string | null;
-  allotedHours: number | null;
+  allottedHours: number | null;
   isCompleted: boolean;
 }
 
@@ -79,7 +79,7 @@ const initializeFormState = (
   assigneeType: actionItem?.assigneeType || 'User',
   preCompletionNotes: actionItem?.preCompletionNotes || '',
   postCompletionNotes: actionItem?.postCompletionNotes || null,
-  allotedHours: actionItem?.allotedHours || null,
+  allottedHours: actionItem?.allottedHours || null,
   isCompleted: actionItem?.isCompleted || false,
 });
 
@@ -125,7 +125,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
     assigneeId,
     preCompletionNotes,
     postCompletionNotes,
-    allotedHours,
+    allottedHours,
     isCompleted,
   } = formState;
 
@@ -248,7 +248,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
           assigneeType: assigneeType,
           actionItemCategoryId: actionItemCategory?._id,
           preCompletionNotes: preCompletionNotes,
-          allotedHours: allotedHours,
+          allottedHours: allottedHours,
           ...(eventId && { eventId }),
         },
       });
@@ -317,8 +317,8 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
         updatedFields.postCompletionNotes = postCompletionNotes;
       }
 
-      if (allotedHours !== actionItem?.allotedHours) {
-        updatedFields.allotedHours = allotedHours;
+      if (allottedHours !== actionItem?.allottedHours) {
+        updatedFields.allottedHours = allottedHours;
       }
 
       if (dueDate !== actionItem?.dueDate) {
@@ -421,16 +421,16 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
             />
             {isCompleted && (
               <>
-                {/* Input text Component to add alloted Hours for action item  */}
+                {/* Input text Component to add allotted Hours for action item  */}
                 <FormControl>
                   <TextField
-                    label={t('allotedHours')}
+                    label={t('allottedHours')}
                     variant="outlined"
                     className={styles.noOutline}
-                    value={allotedHours ?? ''}
+                    value={allottedHours ?? ''}
                     onChange={(e) =>
                       handleFormChange(
-                        'allotedHours',
+                        'allottedHours',
                         e.target.value === '' || parseInt(e.target.value) < 0
                           ? null
                           : parseInt(e.target.value),
@@ -583,16 +583,16 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                   }}
                 />
 
-                {/* Input text Component to add alloted Hours for action item  */}
+                {/* Input text Component to add allotted Hours for action item  */}
                 <FormControl>
                   <TextField
-                    label={t('allotedHours')}
+                    label={t('allottedHours')}
                     variant="outlined"
                     className={styles.noOutline}
-                    value={allotedHours ?? ''}
+                    value={allottedHours ?? ''}
                     onChange={(e) =>
                       handleFormChange(
-                        'allotedHours',
+                        'allottedHours',
                         e.target.value === '' || parseInt(e.target.value) < 0
                           ? null
                           : parseInt(e.target.value),

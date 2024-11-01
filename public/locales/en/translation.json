@@ -474,7 +474,7 @@
     "successfulDeletion": "Action Item deleted successfully",
     "title": "Action Items",
     "category": "Category",
-    "allotedHours": "Alloted Hours",
+    "allottedHours": "Allotted Hours",
     "latestDueDate": "Latest Due Date",
     "earliestDueDate": "Earliest Due Date",
     "updateActionItem": "Update Action Item",

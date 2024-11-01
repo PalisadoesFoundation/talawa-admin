@@ -76,7 +76,7 @@ export const EVENT_VOLUNTEER_GROUP_LIST = gql`
           _id
           name
         }
-        allotedHours
+        allottedHours
         isCompleted
       }
       event {

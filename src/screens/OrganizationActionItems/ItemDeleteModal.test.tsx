@@ -58,7 +58,7 @@ const itemProps: InterfaceItemDeleteModalProps = {
     completionDate: new Date('2044-09-03'),
     isCompleted: true,
     event: null,
-    allotedHours: 24,
+    allottedHours: 24,
     assigner: {
       _id: 'userId2',
       firstName: 'Wilt',
