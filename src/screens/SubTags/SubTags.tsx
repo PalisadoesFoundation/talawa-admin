@@ -16,17 +16,20 @@ import { toast } from 'react-toastify';
 import type { InterfaceQueryUserTagChildTags } from 'utils/interfaces';
 import styles from './SubTags.module.css';
 import { DataGrid } from '@mui/x-data-grid';
-import { dataGridStyle } from 'utils/organizationTagsUtils';
+import type { InterfaceOrganizationSubTagsQuery } from 'utils/organizationTagsUtils';
+import {
+  dataGridStyle,
+  TAGS_QUERY_DATA_CHUNK_SIZE,
+} from 'utils/organizationTagsUtils';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
-import {
-  CREATE_USER_TAG,
-  REMOVE_USER_TAG,
-} from 'GraphQl/Mutations/TagMutations';
+import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import {
   USER_TAG_ANCESTORS,
   USER_TAG_SUB_TAGS,
 } from 'GraphQl/Queries/userTagQueries';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 
 /**
  * Component that renders the SubTags screen when the app navigates to '/orgtags/:orgId/subtags/:tagId'.
@@ -47,16 +50,7 @@ function SubTags(): JSX.Element {
 
   const navigate = useNavigate();
 
-  const [after, setAfter] = useState<string | null | undefined>(null);
-  const [before, setBefore] = useState<string | null | undefined>(null);
-  const [first, setFirst] = useState<number | null>(5);
-  const [last, setLast] = useState<number | null>(null);
-
   const [tagName, setTagName] = useState<string>('');
-
-  const [removeUserTagId, setRemoveUserTagId] = useState(null);
-  const [removeUserTagModalIsOpen, setRemoveUserTagModalIsOpen] =
-    useState(false);
 
   const showAddSubTagModal = (): void => {
     setAddSubTagModalIsOpen(true);
@@ -69,25 +63,48 @@ function SubTags(): JSX.Element {
 
   const {
     data: subTagsData,
-    loading: subTagsLoading,
     error: subTagsError,
+    loading: subTagsLoading,
     refetch: subTagsRefetch,
-  }: {
-    data?: {
-      getUserTag: InterfaceQueryUserTagChildTags;
-    };
-    loading: boolean;
-    error?: ApolloError;
-    refetch: () => void;
-  } = useQuery(USER_TAG_SUB_TAGS, {
+    fetchMore: fetchMoreSubTags,
+  }: InterfaceOrganizationSubTagsQuery = useQuery(USER_TAG_SUB_TAGS, {
     variables: {
       id: parentTagId,
-      after: after,
-      before: before,
-      first: first,
-      last: last,
+      first: TAGS_QUERY_DATA_CHUNK_SIZE,
     },
   });
+
+  const loadMoreSubTags = (): void => {
+    fetchMoreSubTags({
+      variables: {
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        after: subTagsData?.getChildTags.childTags.pageInfo.endCursor,
+      },
+      updateQuery: (
+        prevResult: { getChildTags: InterfaceQueryUserTagChildTags },
+        {
+          fetchMoreResult,
+        }: {
+          fetchMoreResult?: { getChildTags: InterfaceQueryUserTagChildTags };
+        },
+      ) => {
+        if (!fetchMoreResult) return prevResult;
+
+        return {
+          getChildTags: {
+            ...fetchMoreResult.getChildTags,
+            childTags: {
+              ...fetchMoreResult.getChildTags.childTags,
+              edges: [
+                ...prevResult.getChildTags.childTags.edges,
+                ...fetchMoreResult.getChildTags.childTags.edges,
+              ],
+            },
+          },
+        };
+      },
+    });
+  };
 
   const {
     data: orgUserTagAncestorsData,
@@ -139,43 +156,9 @@ function SubTags(): JSX.Element {
     }
   };
 
-  const [removeUserTag] = useMutation(REMOVE_USER_TAG);
-  const handleRemoveUserTag = async (): Promise<void> => {
-    try {
-      await removeUserTag({
-        variables: {
-          id: removeUserTagId,
-        },
-      });
-
-      subTagsRefetch();
-      toggleRemoveUserTagModal();
-      toast.success(t('tagRemovalSuccess') as string);
-    } catch (error: unknown) {
-      /* istanbul ignore next */
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
-    }
-  };
-
   if (createUserTagLoading || subTagsLoading || orgUserTagsAncestorsLoading) {
     return <Loader />;
   }
-
-  const handleNextPage = (): void => {
-    setAfter(subTagsData?.getUserTag.childTags.pageInfo.endCursor);
-    setBefore(null);
-    setFirst(5);
-    setLast(null);
-  };
-
-  const handlePreviousPage = (): void => {
-    setBefore(subTagsData?.getUserTag.childTags.pageInfo.startCursor);
-    setAfter(null);
-    setFirst(null);
-    setLast(5);
-  };
 
   if (subTagsError || orgUserTagsAncestorsError) {
     return (
@@ -195,9 +178,9 @@ function SubTags(): JSX.Element {
     );
   }
 
-  const userTagsList = subTagsData?.getUserTag.childTags.edges.map(
-    (edge) => edge.node,
-  );
+  const subTagsList =
+    subTagsData?.getChildTags.childTags.edges.map((edge) => edge.node) ??
+    /* istanbul ignore next */ [];
 
   const orgUserTagAncestors = orgUserTagAncestorsData?.getUserTagAncestors;
 
@@ -206,14 +189,7 @@ function SubTags(): JSX.Element {
   };
 
   const redirectToSubTags = (tagId: string): void => {
-    navigate(`/orgtags/${orgId}/subtags/${tagId}`);
-  };
-
-  const toggleRemoveUserTagModal = (): void => {
-    if (removeUserTagModalIsOpen) {
-      setRemoveUserTagId(null);
-    }
-    setRemoveUserTagModalIsOpen(!removeUserTagModalIsOpen);
+    navigate(`/orgtags/${orgId}/subTags/${tagId}`);
   };
 
   const columns: GridColDef[] = [
@@ -263,7 +239,7 @@ function SubTags(): JSX.Element {
         return (
           <Link
             className="text-secondary"
-            to={`/orgtags/${orgId}/subtags/${params.row._id}`}
+            to={`/orgtags/${orgId}/subTags/${params.row._id}`}
           >
             {params.row.childTags.totalCount}
           </Link>
@@ -283,7 +259,7 @@ function SubTags(): JSX.Element {
         return (
           <Link
             className="text-secondary"
-            to={`/orgtags/${orgId}/orgtagdetails/${params.row._id}`}
+            to={`/orgtags/${orgId}/manageTag/${params.row._id}`}
           >
             {params.row.usersAssignedTo.totalCount}
           </Link>
@@ -301,28 +277,14 @@ function SubTags(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <div className="d-flex justify-content-center align-items-center">
-            <Button
-              size="sm"
-              className="btn btn-primary rounded mt-3"
-              onClick={() => redirectToManageTag(params.row._id)}
-              data-testid="manageTagBtn"
-            >
-              {t('manageTag')}
-            </Button>
-
-            <Button
-              size="sm"
-              className="ms-2 btn btn-danger rounded mt-3"
-              onClick={() => {
-                setRemoveUserTagId(params.row._id);
-                toggleRemoveUserTagModal();
-              }}
-              data-testid="removeUserTagBtn"
-            >
-              {t('removeTag')}
-            </Button>
-          </div>
+          <Button
+            size="sm"
+            variant="outline-primary"
+            onClick={() => redirectToManageTag(params.row._id)}
+            data-testid="manageTagBtn"
+          >
+            {t('manageTag')}
+          </Button>
         );
       },
     },
@@ -379,23 +341,22 @@ function SubTags(): JSX.Element {
                 data-testid="manageCurrentTagBtn"
                 className="mx-4"
               >
-                {`${t('manageTag')} ${subTagsData?.getUserTag.name}`}
-              </Button>
-
-              <Button
-                variant="success"
-                onClick={showAddSubTagModal}
-                data-testid="addSubTagBtn"
-                className="ms-auto"
-              >
-                <i className={'fa fa-plus me-2'} />
-                {t('addChildTag')}
+                {`${t('manageTag')} ${subTagsData?.getChildTags.name}`}
               </Button>
             </div>
+            <Button
+              variant="success"
+              onClick={showAddSubTagModal}
+              data-testid="addSubTagBtn"
+              className="ms-auto"
+            >
+              <i className={'fa fa-plus me-2'} />
+              {t('addChildTag')}
+            </Button>
           </div>
 
-          <div>
-            <div className="bg-white light border border-bottom-0 rounded-top mb-0 py-2 d-flex align-items-center">
+          <div className="mb-4">
+            <div className="bg-white light border rounded-top mb-0 py-2 d-flex align-items-center">
               <div className="ms-3 my-1">
                 <IconComponent name="Tag" />
               </div>
@@ -424,58 +385,51 @@ function SubTags(): JSX.Element {
                 </div>
               ))}
             </div>
-            <DataGrid
-              disableColumnMenu
-              columnBufferPx={7}
-              hideFooter={true}
-              getRowId={(row) => row._id}
-              slots={{
-                noRowsOverlay: /* istanbul ignore next */ () => (
-                  <Stack
-                    height="100%"
-                    alignItems="center"
-                    justifyContent="center"
-                  >
-                    {t('noTagsFound')}
-                  </Stack>
-                ),
-              }}
-              sx={dataGridStyle}
-              getRowClassName={() => `${styles.rowBackground}`}
-              autoHeight
-              rowHeight={65}
-              rows={userTagsList?.map((fund, index) => ({
-                id: index + 1,
-                ...fund,
-              }))}
-              columns={columns}
-              isRowSelectable={() => false}
-            />
-          </div>
-        </div>
-
-        <div className="row m-md-3 d-flex justify-content-center w-100">
-          <div className="col-auto">
-            <Button
-              onClick={handlePreviousPage}
-              className="btn-sm"
-              disabled={
-                !subTagsData?.getUserTag.childTags.pageInfo.hasPreviousPage
-              }
-              data-testid="previousPageBtn"
+            <div
+              id="subTagsScrollableDiv"
+              data-testid="subTagsScrollableDiv"
+              className={styles.subTagsScrollableDiv}
             >
-              <i className={'mx-2 fa fa-caret-left'} />
-            </Button>
-          </div>
-          <div className="col-auto">
-            <Button
-              onClick={handleNextPage}
-              className="btn-sm"
-              disabled={!subTagsData?.getUserTag.childTags.pageInfo.hasNextPage}
-              data-testid="nextPagBtn"
-            >
-              <i className={'mx-2 fa fa-caret-right'} />
-            </Button>
+              <InfiniteScroll
+                dataLength={subTagsList?.length ?? 0}
+                next={loadMoreSubTags}
+                hasMore={
+                  subTagsData?.getChildTags.childTags.pageInfo.hasNextPage ??
+                  /* istanbul ignore next */
+                  false
+                }
+                loader={<InfiniteScrollLoader />}
+                scrollableTarget="subTagsScrollableDiv"
+              >
+                <DataGrid
+                  disableColumnMenu
+                  columnBufferPx={7}
+                  hideFooter={true}
+                  getRowId={(row) => row.id}
+                  slots={{
+                    noRowsOverlay: /* istanbul ignore next */ () => (
+                      <Stack
+                        height="100%"
+                        alignItems="center"
+                        justifyContent="center"
+                      >
+                        {t('noTagsFound')}
+                      </Stack>
+                    ),
+                  }}
+                  sx={dataGridStyle}
+                  getRowClassName={() => `${styles.rowBackground}`}
+                  autoHeight
+                  rowHeight={65}
+                  rows={subTagsList?.map((subTag, index) => ({
+                    id: index + 1,
+                    ...subTag,
+                  }))}
+                  columns={columns}
+                  isRowSelectable={() => false}
+                />
+              </InfiniteScroll>
+            </div>
           </div>
         </div>
       </Row>
@@ -526,44 +480,6 @@ function SubTags(): JSX.Element {
             </Button>
           </Modal.Footer>
         </Form>
-      </Modal>
-
-      {/* Remove User Tag Modal */}
-      <Modal
-        size="sm"
-        id={`deleteActionItemModal`}
-        show={removeUserTagModalIsOpen}
-        onHide={toggleRemoveUserTagModal}
-        backdrop="static"
-        keyboard={false}
-        className={styles.actionItemModal}
-        centered
-      >
-        <Modal.Header closeButton className="bg-primary">
-          <Modal.Title className="text-white" id={`removeUserTag`}>
-            {t('removeUserTag')}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{t('removeUserTagMessage')}</Modal.Body>
-        <Modal.Footer>
-          <Button
-            type="button"
-            className="btn btn-danger"
-            data-dismiss="modal"
-            onClick={toggleRemoveUserTagModal}
-            data-testid="removeUserTagModalCloseBtn"
-          >
-            {tCommon('no')}
-          </Button>
-          <Button
-            type="button"
-            className="btn btn-success"
-            onClick={handleRemoveUserTag}
-            data-testid="removeUserTagSubmitBtn"
-          >
-            {tCommon('yes')}
-          </Button>
-        </Modal.Footer>
       </Modal>
     </>
   );
