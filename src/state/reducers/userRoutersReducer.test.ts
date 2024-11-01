@@ -14,10 +14,10 @@ describe('Testing Routes reducer', () => {
         { name: 'Posts', url: 'user/organization/undefined' },
         { name: 'People', url: 'user/people/undefined' },
         { name: 'Events', url: 'user/events/undefined' },
+        { name: 'Volunteer', url: 'user/volunteer/undefined' },
         { name: 'Donate', url: 'user/donate/undefined' },
         { name: 'Campaigns', url: 'user/campaigns/undefined' },
         { name: 'My Pledges', url: 'user/pledges/undefined' },
-        { name: 'Volunteer', url: 'user/volunteer/undefined' },
       ],
       components: [
         {
@@ -32,6 +32,11 @@ describe('Testing Routes reducer', () => {
         },
         { name: 'People', comp_id: 'people', component: 'People' },
         { name: 'Events', comp_id: 'events', component: 'Events' },
+        {
+          name: 'Volunteer',
+          comp_id: 'volunteer',
+          component: 'VolunteerManagement',
+        },
         { name: 'Donate', comp_id: 'donate', component: 'Donate' },
         {
           name: 'Campaigns',
@@ -39,11 +44,6 @@ describe('Testing Routes reducer', () => {
           component: 'Campaigns',
         },
         { name: 'My Pledges', comp_id: 'pledges', component: 'Pledges' },
-        {
-          name: 'Volunteer',
-          comp_id: 'volunteer',
-          component: 'VolunteerManagement',
-        },
       ],
     });
   });
@@ -60,10 +60,10 @@ describe('Testing Routes reducer', () => {
         { name: 'Posts', url: 'user/organization/orgId' },
         { name: 'People', url: 'user/people/orgId' },
         { name: 'Events', url: 'user/events/orgId' },
+        { name: 'Volunteer', url: 'user/volunteer/orgId' },
         { name: 'Donate', url: 'user/donate/orgId' },
         { name: 'Campaigns', url: 'user/campaigns/orgId' },
         { name: 'My Pledges', url: 'user/pledges/orgId' },
-        { name: 'Volunteer', url: 'user/volunteer/orgId' },
       ],
       components: [
         {
@@ -78,6 +78,11 @@ describe('Testing Routes reducer', () => {
         },
         { name: 'People', comp_id: 'people', component: 'People' },
         { name: 'Events', comp_id: 'events', component: 'Events' },
+        {
+          name: 'Volunteer',
+          comp_id: 'volunteer',
+          component: 'VolunteerManagement',
+        },
         { name: 'Donate', comp_id: 'donate', component: 'Donate' },
         {
           name: 'Campaigns',
@@ -85,11 +90,6 @@ describe('Testing Routes reducer', () => {
           component: 'Campaigns',
         },
         { name: 'My Pledges', comp_id: 'pledges', component: 'Pledges' },
-        {
-          name: 'Volunteer',
-          comp_id: 'volunteer',
-          component: 'VolunteerManagement',
-        },
       ],
     });
   });

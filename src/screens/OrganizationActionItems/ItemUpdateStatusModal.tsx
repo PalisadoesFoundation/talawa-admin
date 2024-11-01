@@ -12,7 +12,7 @@ export interface InterfaceItemUpdateStatusModalProps {
   isOpen: boolean;
   hide: () => void;
   actionItemsRefetch: () => void;
-  actionItem: InterfaceActionItemInfo | null;
+  actionItem: InterfaceActionItemInfo;
 }
 
 const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
@@ -26,11 +26,17 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
   });
   const { t: tCommon } = useTranslation('common');
 
-  const [isCompleted, setIsCompleted] = useState<boolean>(
-    actionItem?.isCompleted ?? false,
-  );
+  const {
+    _id,
+    isCompleted,
+    assignee,
+    assigneeGroup,
+    assigneeUser,
+    assigneeType,
+  } = actionItem;
+
   const [postCompletionNotes, setPostCompletionNotes] = useState<string>(
-    actionItem?.postCompletionNotes ?? '',
+    actionItem.postCompletionNotes ?? '',
   );
 
   /**
@@ -51,14 +57,14 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
     try {
       await updateActionItem({
         variables: {
-          actionItemId: actionItem?._id,
+          actionItemId: _id,
           assigneeId:
-            actionItem?.assigneeType === 'EventVolunteer'
-              ? actionItem?.assignee?._id
-              : actionItem?.assigneeType === 'EventVolunteerGroup'
-                ? actionItem?.assigneeGroup?._id
-                : actionItem?.assigneeUser?._id,
-          assigneeType: actionItem?.assigneeType,
+            assigneeType === 'EventVolunteer'
+              ? assignee?._id
+              : assigneeType === 'EventVolunteerGroup'
+                ? assigneeGroup?._id
+                : assigneeUser?._id,
+          assigneeType,
           postCompletionNotes: isCompleted ? '' : postCompletionNotes,
           isCompleted: !isCompleted,
         },
@@ -73,10 +79,7 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
   };
 
   useEffect(() => {
-    if (actionItem) {
-      setIsCompleted(actionItem?.isCompleted);
-      setPostCompletionNotes(actionItem?.postCompletionNotes ?? '');
-    }
+    setPostCompletionNotes(actionItem.postCompletionNotes ?? '');
   }, [actionItem]);
 
   return (

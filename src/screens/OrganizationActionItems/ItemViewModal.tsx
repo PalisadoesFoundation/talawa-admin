@@ -39,6 +39,7 @@ const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
     actionItemCategory,
     assignee,
     assigneeGroup,
+    assigneeUser,
     assigneeType,
     assigner,
     completionDate,
@@ -81,52 +82,46 @@ const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
                 label={t('assignee')}
                 variant="outlined"
                 className={styles.noOutline}
+                data-testid="assignee_input"
                 value={
                   assigneeType === 'EventVolunteer'
-                    ? assignee?.user?.firstName + ' ' + assignee?.user?.lastName
-                    : assigneeGroup?.name
+                    ? `${assignee?.user?.firstName} ${assignee?.user?.lastName}`
+                    : assigneeType === 'EventVolunteerGroup'
+                      ? assigneeGroup?.name
+                      : `${assigneeUser?.firstName} ${assigneeUser?.lastName}`
                 }
                 disabled
                 InputProps={{
                   startAdornment: (
                     <>
-                      {assignee && assignee.user.image ? (
+                      {assignee?.user?.image || assigneeUser?.image ? (
                         <img
-                          src={assignee.user.image}
+                          src={
+                            (assignee?.user?.image ||
+                              assigneeUser?.image) as string
+                          }
                           alt="Assignee"
-                          data-testid={`${assignee.user.firstName}_image`}
+                          data-testid={`assignee_image`}
                           className={styles.TableImage}
                         />
-                      ) : assignee ? (
-                        <div className={styles.avatarContainer}>
-                          <Avatar
-                            key={assignee._id + '1'}
-                            containerStyle={styles.imageContainer}
-                            avatarStyle={styles.TableImage}
-                            dataTestId={`${assignee.user.firstName}_avatar`}
-                            name={
-                              assignee.user.firstName +
-                              ' ' +
-                              assignee.user.lastName
-                            }
-                            alt={
-                              assignee.user.firstName +
-                              ' ' +
-                              assignee.user.lastName
-                            }
-                          />
-                        </div>
+                      ) : assignee || assigneeUser ? (
+                        <Avatar
+                          key={assignee?._id || assigneeUser?._id}
+                          containerStyle={styles.imageContainer}
+                          avatarStyle={styles.TableImage}
+                          dataTestId={`assignee_avatar`}
+                          name={`${assignee?.user.firstName || assigneeUser?.firstName} ${assignee?.user.lastName || assigneeUser?.lastName}`}
+                          alt={`assignee_avatar`}
+                        />
                       ) : (
-                        <div className={styles.avatarContainer}>
-                          <Avatar
-                            key={assigneeGroup?._id + '1'}
-                            containerStyle={styles.imageContainer}
-                            avatarStyle={styles.TableImage}
-                            dataTestId={`${assigneeGroup?.name}_avatar`}
-                            name={assigneeGroup?.name ?? ''}
-                            alt={assigneeGroup?.name}
-                          />
-                        </div>
+                        <Avatar
+                          key={assigneeGroup?._id}
+                          containerStyle={styles.imageContainer}
+                          avatarStyle={styles.TableImage}
+                          dataTestId={`assigneeGroup_avatar`}
+                          name={assigneeGroup?.name as string}
+                          alt={`assigneeGroup_avatar`}
+                        />
                       )}
                     </>
                   ),
@@ -146,8 +141,8 @@ const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
                       {assigner.image ? (
                         <img
                           src={assigner.image}
-                          alt="Assignee"
-                          data-testid={`${assigner.firstName}_image`}
+                          alt="Assigner"
+                          data-testid={`assigner_image`}
                           className={styles.TableImage}
                         />
                       ) : (
@@ -156,9 +151,9 @@ const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
                             key={assigner._id + '1'}
                             containerStyle={styles.imageContainer}
                             avatarStyle={styles.TableImage}
-                            dataTestId={`${assigner.firstName}_avatar`}
+                            dataTestId={`assigner_avatar`}
                             name={assigner.firstName + ' ' + assigner.lastName}
-                            alt={assigner.firstName + ' ' + assigner.lastName}
+                            alt={`assigner_avatar`}
                           />
                         </div>
                       )}

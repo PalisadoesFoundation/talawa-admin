@@ -25,6 +25,8 @@ export interface InterfaceVolunteerCreateModal {
  * @param isOpen - Indicates whether the modal is open.
  * @param hide - Function to close the modal.
  * @param eventId - The ID of the event associated with volunteer.
+ * @param orgId - The ID of the organization associated with volunteer.
+ * @param refetchVolunteers - Function to refetch the volunteers after adding a volunteer.
  *
  * @returns The rendered modal component.
  *
@@ -64,7 +66,6 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
 
   useEffect(() => {
     if (memberData) {
-      /*istanbul ignore next*/
       setMembers(memberData.organizations[0].members);
     }
   }, [memberData]);
@@ -102,7 +103,7 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
           variant="danger"
           onClick={hide}
           className={styles.modalCloseBtn}
-          data-testid="volunteerCreateModalCloseBtn"
+          data-testid="modalCloseBtn"
         >
           <i className="fa fa-times"></i>
         </Button>
@@ -113,7 +114,7 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
           onSubmitCapture={addVolunteerHandler}
           className="p-3"
         >
-          {/* A Multi-select dropdown enables admin to select more than one pledger for participating in a pledge */}
+          {/* A Multi-select dropdown enables admin to invite a member as volunteer  */}
           <Form.Group className="d-flex mb-3 w-100">
             <Autocomplete
               className={`${styles.noOutline} w-100`}
@@ -139,7 +140,7 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
           <Button
             type="submit"
             className={styles.greenregbtn}
-            data-testid="submitVolunteerBtn"
+            data-testid="submitBtn"
           >
             {t('addVolunteer')}
           </Button>

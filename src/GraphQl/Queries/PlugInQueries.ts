@@ -106,7 +106,7 @@ export const USER_EVENTS_VOLUNTEER = gql`
     $location_contains: String
     $first: Int
     $skip: Int
-    $currentDate: DateTime
+    $upcomingOnly: Boolean
   ) {
     eventsByOrganizationConnection(
       where: {
@@ -116,7 +116,7 @@ export const USER_EVENTS_VOLUNTEER = gql`
       }
       first: $first
       skip: $skip
-      currentDate: $currentDate
+      upcomingOnly: $upcomingOnly
     ) {
       _id
       title

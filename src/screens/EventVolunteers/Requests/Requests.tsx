@@ -16,7 +16,7 @@ import { Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 import styles from '../EventVolunteers.module.css';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
-import { InterfaceVolunteerMembership } from 'utils/interfaces';
+import type { InterfaceVolunteerMembership } from 'utils/interfaces';
 import dayjs from 'dayjs';
 import { UPDATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
 import { toast } from 'react-toastify';
@@ -166,7 +166,7 @@ function requests(): JSX.Element {
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        const { _id, firstName, lastName, image } = params.row.volunteer.user;
+        const { firstName, lastName, image } = params.row.volunteer.user;
         return (
           <div
             className="d-flex fw-bold align-items-center justify-content-center ms-2"
@@ -176,13 +176,13 @@ function requests(): JSX.Element {
               <img
                 src={image}
                 alt="volunteer"
-                data-testid={`image${_id + 1}`}
+                data-testid={`volunteer_image`}
                 className={styles.TableImage}
               />
             ) : (
               <div className={styles.avatarContainer}>
                 <Avatar
-                  key={_id + '1'}
+                  key="volunteer_avatar"
                   containerStyle={styles.imageContainer}
                   avatarStyle={styles.TableImage}
                   name={firstName + ' ' + lastName}
@@ -225,7 +225,7 @@ function requests(): JSX.Element {
               size="sm"
               style={{ minWidth: '32px' }}
               className="me-2 rounded"
-              data-testid={`acceptBtn${params.row.id}`}
+              data-testid="acceptBtn"
               onClick={() => updateMembershipStatus(params.row._id, 'accepted')}
             >
               <i className="fa fa-check" />
@@ -234,7 +234,7 @@ function requests(): JSX.Element {
               size="sm"
               variant="danger"
               className="rounded"
-              data-testid={`rejectBtn${params.row.id}`}
+              data-testid={`rejectBtn`}
               onClick={() => updateMembershipStatus(params.row._id, 'rejected')}
             >
               <FaXmark size={18} fontWeight={900} />

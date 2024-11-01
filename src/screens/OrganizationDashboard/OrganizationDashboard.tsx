@@ -20,7 +20,7 @@ import CardItem from 'components/OrganizationDashCards/CardItem';
 import CardItemLoading from 'components/OrganizationDashCards/CardItemLoading';
 import DashBoardCard from 'components/OrganizationDashCards/DashboardCard';
 import DashboardCardLoading from 'components/OrganizationDashCards/DashboardCardLoading';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import gold from 'assets/images/gold.png';
 import silver from 'assets/images/silver.png';
 import bronze from 'assets/images/bronze.png';
@@ -44,8 +44,13 @@ import { VOLUNTEER_RANKING } from 'GraphQl/Queries/EventVolunteerQueries';
 function organizationDashboard(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'dashboard' });
   const { t: tCommon } = useTranslation('common');
+  const { t: tErrors } = useTranslation('errors');
   document.title = t('title');
   const { orgId } = useParams();
+
+  if (!orgId) {
+    return <Navigate to={'/'} replace />;
+  }
 
   const leaderboardLink = `/leaderboard/${orgId}`;
   const peopleLink = `/orgpeople/${orgId}`;
@@ -82,17 +87,19 @@ function organizationDashboard(): JSX.Element {
   const {
     data: rankingsData,
     loading: rankingsLoading,
+    error: errorRankings,
   }: {
     data?: {
       getVolunteerRanks: InterfaceVolunteerRank[];
     };
     loading: boolean;
+    error?: ApolloError;
   } = useQuery(VOLUNTEER_RANKING, {
     variables: {
       orgId,
       where: {
-        order_by: 'hours_DESC',
-        time_frame: 'allTime',
+        orderBy: 'hours_DESC',
+        timeFrame: 'allTime',
         limit: 3,
       },
     },
@@ -156,11 +163,11 @@ function organizationDashboard(): JSX.Element {
    * UseEffect to handle errors and navigate if necessary.
    */
   useEffect(() => {
-    if (errorOrg || errorPost || errorEvent) {
-      console.log('error', errorPost?.message);
-      navigate('/orglist');
+    if (errorOrg || errorPost || errorEvent || errorRankings) {
+      toast.error(tErrors('errorLoading', { entity: '' }));
+      navigate('/');
     }
-  }, [errorOrg, errorPost, errorEvent]);
+  }, [errorOrg, errorPost, errorEvent, errorRankings]);
 
   return (
     <>
@@ -170,7 +177,12 @@ function organizationDashboard(): JSX.Element {
             <Row style={{ display: 'flex' }}>
               {[...Array(6)].map((_, index) => {
                 return (
-                  <Col xs={6} sm={4} className="mb-4" key={index}>
+                  <Col
+                    xs={6}
+                    sm={4}
+                    className="mb-4"
+                    key={`orgLoading_${index}`}
+                  >
                     <DashboardCardLoading />
                   </Col>
                 );
@@ -287,7 +299,7 @@ function organizationDashboard(): JSX.Element {
                 <Card.Body className={styles.cardBody}>
                   {loadingEvent ? (
                     [...Array(4)].map((_, index) => {
-                      return <CardItemLoading key={index} />;
+                      return <CardItemLoading key={`eventLoading_${index}`} />;
                     })
                   ) : upcomingEvents.length == 0 ? (
                     <div className={styles.emptyContainer}>
@@ -329,7 +341,7 @@ function organizationDashboard(): JSX.Element {
                 <Card.Body className={styles.cardBody}>
                   {loadingPost ? (
                     [...Array(4)].map((_, index) => {
-                      return <CardItemLoading key={index} />;
+                      return <CardItemLoading key={`postLoading_${index}`} />;
                     })
                   ) : postData?.organizations[0].posts.totalCount == 0 ? (
                     /* eslint-disable */
@@ -382,7 +394,7 @@ function organizationDashboard(): JSX.Element {
               >
                 {loadingOrgData ? (
                   [...Array(4)].map((_, index) => {
-                    return <CardItemLoading key={index} />;
+                    return <CardItemLoading key={`requestsLoading_${index}`} />;
                   })
                 ) : data?.organizations[0].membershipRequests.length == 0 ? (
                   <div
@@ -423,7 +435,7 @@ function organizationDashboard(): JSX.Element {
               <Card.Body className={styles.cardBody} style={{ padding: '0px' }}>
                 {rankingsLoading ? (
                   [...Array(3)].map((_, index) => {
-                    return <CardItemLoading key={index} />;
+                    return <CardItemLoading key={`rankingLoading_${index}`} />;
                   })
                 ) : rankings.length == 0 ? (
                   <div className={styles.emptyContainer}>
@@ -432,7 +444,7 @@ function organizationDashboard(): JSX.Element {
                 ) : (
                   rankings.map(({ rank, user, hoursVolunteered }, index) => {
                     return (
-                      <>
+                      <div key={`ranking_${index}`}>
                         <div className="d-flex ms-4 mt-1 mb-3">
                           <div className="fw-bold me-2">
                             {rank <= 3 ? (
@@ -455,7 +467,7 @@ function organizationDashboard(): JSX.Element {
                           <div className="mt-2">- {hoursVolunteered} hours</div>
                         </div>
                         {index < 2 && <hr />}
-                      </>
+                      </div>
                     );
                   })
                 )}

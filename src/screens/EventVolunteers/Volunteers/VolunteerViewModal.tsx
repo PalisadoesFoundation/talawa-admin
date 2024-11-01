@@ -59,7 +59,7 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
           variant="danger"
           onClick={hide}
           className={styles.modalCloseBtn}
-          data-testid="volunteerViewModalCloseBtn"
+          data-testid="modalCloseBtn"
         >
           <i className="fa fa-times"></i>
         </Button>
@@ -82,7 +82,7 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
                         <img
                           src={user.image}
                           alt="Volunteer"
-                          data-testid={`${user.firstName}_image`}
+                          data-testid="volunteer_image"
                           className={styles.TableImage}
                         />
                       ) : (
@@ -91,7 +91,7 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
                             key={user._id + '1'}
                             containerStyle={styles.imageContainer}
                             avatarStyle={styles.TableImage}
-                            dataTestId={`${user.firstName}_avatar`}
+                            dataTestId="volunteer_avatar"
                             name={user.firstName + ' ' + user.lastName}
                             alt={user.firstName + ' ' + user.lastName}
                           />

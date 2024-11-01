@@ -72,7 +72,7 @@ function volunteerGroups(): JSX.Element {
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
   const [searchValue, setSearchValue] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [sortBy, setSortBy] = useState<'member_ASC' | 'member_DESC' | null>(
+  const [sortBy, setSortBy] = useState<'members_ASC' | 'members_DESC' | null>(
     null,
   );
   const [searchBy, setSearchBy] = useState<'leader' | 'group'>('group');
@@ -264,7 +264,7 @@ function volunteerGroups(): JSX.Element {
               size="sm"
               style={{ minWidth: '32px' }}
               className="me-2 rounded"
-              data-testid={`viewGroupBtn${params.row.id}`}
+              data-testid="viewGroupBtn"
               onClick={() => handleModalClick(params.row, ModalState.VIEW)}
             >
               <i className="fa fa-info" />
@@ -273,7 +273,7 @@ function volunteerGroups(): JSX.Element {
               variant="success"
               size="sm"
               className="me-2 rounded"
-              data-testid={`editGroupBtn${params.row.id}`}
+              data-testid="editGroupBtn"
               onClick={() => handleModalClick(params.row, ModalState.SAME)}
             >
               <i className="fa fa-edit" />
@@ -282,7 +282,7 @@ function volunteerGroups(): JSX.Element {
               size="sm"
               variant="danger"
               className="rounded"
-              data-testid={`deleteGroupBtn${params.row.id}`}
+              data-testid="deleteGroupBtn"
               onClick={() => handleModalClick(params.row, ModalState.DELETE)}
             >
               <i className="fa fa-trash" />
@@ -366,14 +366,14 @@ function volunteerGroups(): JSX.Element {
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item
-                  onClick={() => setSortBy('member_DESC')}
-                  data-testid="member_DESC"
+                  onClick={() => setSortBy('members_DESC')}
+                  data-testid="members_DESC"
                 >
                   {t('mostMembers')}
                 </Dropdown.Item>
                 <Dropdown.Item
-                  onClick={() => setSortBy('member_ASC')}
-                  data-testid="member_ASC"
+                  onClick={() => setSortBy('members_ASC')}
+                  data-testid="members_ASC"
                 >
                   {t('leastMembers')}
                 </Dropdown.Item>
@@ -385,7 +385,7 @@ function volunteerGroups(): JSX.Element {
               variant="success"
               onClick={() => handleModalClick(null, ModalState.SAME)}
               style={{ marginTop: '11px' }}
-              data-testid="createActionItemBtn"
+              data-testid="createGroupBtn"
             >
               <i className={'fa fa-plus me-2'} />
               {tCommon('create')}
@@ -429,19 +429,21 @@ function volunteerGroups(): JSX.Element {
         mode={modalMode}
       />
 
-      <VolunteerGroupDeleteModal
-        isOpen={modalState[ModalState.DELETE]}
-        hide={() => closeModal(ModalState.DELETE)}
-        refetchGroups={refetchGroups}
-        group={group}
-      />
-
       {group && (
-        <VolunteerGroupViewModal
-          isOpen={modalState[ModalState.VIEW]}
-          hide={() => closeModal(ModalState.VIEW)}
-          group={group}
-        />
+        <>
+          <VolunteerGroupViewModal
+            isOpen={modalState[ModalState.VIEW]}
+            hide={() => closeModal(ModalState.VIEW)}
+            group={group}
+          />
+
+          <VolunteerGroupDeleteModal
+            isOpen={modalState[ModalState.DELETE]}
+            hide={() => closeModal(ModalState.DELETE)}
+            refetchGroups={refetchGroups}
+            group={group}
+          />
+        </>
       )}
     </div>
   );

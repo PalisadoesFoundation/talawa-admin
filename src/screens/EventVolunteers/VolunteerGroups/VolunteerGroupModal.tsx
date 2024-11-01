@@ -110,7 +110,6 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
   const { name, description, leader, volunteerUsers, volunteersRequired } =
     formState;
 
-  /*istanbul ignore next*/
   const updateGroupHandler = useCallback(
     async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
       e.preventDefault();
@@ -197,7 +196,6 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
       </Modal.Header>
       <Modal.Body>
         <Form
-          data-testid="pledgeForm"
           onSubmitCapture={
             mode === 'edit' ? updateGroupHandler : createGroupHandler
           }
@@ -309,7 +307,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
                 label={t('volunteersRequired')}
                 variant="outlined"
                 className={styles.noOutline}
-                value={volunteersRequired}
+                value={volunteersRequired ?? ''}
                 onChange={(e) => {
                   if (parseInt(e.target.value) > 0) {
                     setFormState({
@@ -327,11 +325,11 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
             </FormControl>
           </Form.Group>
 
-          {/* Button to submit the pledge form */}
+          {/* Button to submit the volunteer group form */}
           <Button
             type="submit"
             className={styles.greenregbtn}
-            data-testid="submitPledgeBtn"
+            data-testid="submitBtn"
           >
             {t(mode === 'edit' ? 'updateGroup' : 'createGroup')}
           </Button>

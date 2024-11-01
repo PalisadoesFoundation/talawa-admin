@@ -85,7 +85,7 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
                   label={tCommon('volunteersRequired')}
                   variant="outlined"
                   className={styles.noOutline}
-                  value={volunteersRequired}
+                  value={volunteersRequired ?? '-'}
                   disabled
                 />
               </FormControl>
@@ -122,7 +122,7 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
                         <img
                           src={leader.image}
                           alt="Volunteer"
-                          data-testid={`${leader.firstName}_image`}
+                          data-testid="leader_image"
                           className={styles.TableImage}
                         />
                       ) : (
@@ -131,7 +131,7 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
                             key={leader._id + '1'}
                             containerStyle={styles.imageContainer}
                             avatarStyle={styles.TableImage}
-                            dataTestId={`${leader.firstName}_avatar`}
+                            dataTestId="leader_avatar"
                             name={leader.firstName + ' ' + leader.lastName}
                             alt={leader.firstName + ' ' + leader.lastName}
                           />
@@ -157,7 +157,7 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
                         <img
                           src={creator.image}
                           alt="Volunteer"
-                          data-testid={`${creator.firstName}_image`}
+                          data-testid="creator_image"
                           className={styles.TableImage}
                         />
                       ) : (
@@ -166,7 +166,7 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
                             key={creator._id + '1'}
                             containerStyle={styles.imageContainer}
                             avatarStyle={styles.TableImage}
-                            dataTestId={`${creator.firstName}_avatar`}
+                            dataTestId="creator_avatar"
                             name={creator.firstName + ' ' + creator.lastName}
                             alt={creator.firstName + ' ' + creator.lastName}
                           />

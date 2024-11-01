@@ -47,6 +47,7 @@ const itemProps: InterfaceItemModalProps[] = [
     isOpen: true,
     hide: jest.fn(),
     orgId: 'orgId',
+    eventId: undefined,
     actionItemsRefetch: jest.fn(),
     editMode: false,
     actionItem: null,
@@ -55,11 +56,24 @@ const itemProps: InterfaceItemModalProps[] = [
     isOpen: true,
     hide: jest.fn(),
     orgId: 'orgId',
+    eventId: 'eventId',
+    actionItemsRefetch: jest.fn(),
+    editMode: false,
+    actionItem: null,
+  },
+  {
+    isOpen: true,
+    hide: jest.fn(),
+    orgId: 'orgId',
+    eventId: undefined,
     actionItemsRefetch: jest.fn(),
     editMode: true,
     actionItem: {
       _id: 'actionItemId1',
-      assignee: {
+      assignee: null,
+      assigneeGroup: null,
+      assigneeType: 'User',
+      assigneeUser: {
         _id: 'userId1',
         firstName: 'Harve',
         lastName: 'Lance',
@@ -81,7 +95,7 @@ const itemProps: InterfaceItemModalProps[] = [
         _id: 'userId2',
         firstName: 'Wilt',
         lastName: 'Shepherd',
-        image: null,
+        image: undefined,
       },
       creator: {
         _id: 'userId2',
@@ -94,11 +108,15 @@ const itemProps: InterfaceItemModalProps[] = [
     isOpen: true,
     hide: jest.fn(),
     orgId: 'orgId',
+    eventId: undefined,
     actionItemsRefetch: jest.fn(),
     editMode: true,
     actionItem: {
       _id: 'actionItemId2',
-      assignee: {
+      assignee: null,
+      assigneeGroup: null,
+      assigneeType: 'User',
+      assigneeUser: {
         _id: 'userId2',
         firstName: 'Wilt',
         lastName: 'Shepherd',
@@ -115,6 +133,133 @@ const itemProps: InterfaceItemModalProps[] = [
       completionDate: new Date('2044-10-03'),
       isCompleted: false,
       event: null,
+      allotedHours: null,
+      assigner: {
+        _id: 'userId2',
+        firstName: 'Wilt',
+        lastName: 'Shepherd',
+        image: 'wilt-image',
+      },
+      creator: {
+        _id: 'userId2',
+        firstName: 'Wilt',
+        lastName: 'Shepherd',
+      },
+    },
+  },
+  {
+    isOpen: true,
+    hide: jest.fn(),
+    orgId: 'orgId',
+    eventId: 'eventId',
+    actionItemsRefetch: jest.fn(),
+    editMode: true,
+    actionItem: {
+      _id: 'actionItemId2',
+      assigneeType: 'EventVolunteer',
+      assignee: {
+        _id: 'volunteerId1',
+        hasAccepted: true,
+        hoursVolunteered: 0,
+        user: {
+          _id: 'userId1',
+          firstName: 'Teresa',
+          lastName: 'Bradley',
+          image: null,
+        },
+        assignments: [],
+        groups: [],
+      },
+      assigneeGroup: null,
+      assigneeUser: null,
+      actionItemCategory: {
+        _id: 'categoryId2',
+        name: 'Category 2',
+      },
+      preCompletionNotes: 'Notes 2',
+      postCompletionNotes: null,
+      assignmentDate: new Date('2024-08-27'),
+      dueDate: new Date('2044-09-30'),
+      completionDate: new Date('2044-10-03'),
+      isCompleted: false,
+      event: {
+        _id: 'eventId',
+        title: 'Event 1',
+      },
+      allotedHours: null,
+      assigner: {
+        _id: 'userId2',
+        firstName: 'Wilt',
+        lastName: 'Shepherd',
+        image: 'wilt-image',
+      },
+      creator: {
+        _id: 'userId2',
+        firstName: 'Wilt',
+        lastName: 'Shepherd',
+      },
+    },
+  },
+  {
+    isOpen: true,
+    hide: jest.fn(),
+    orgId: 'orgId',
+    eventId: 'eventId',
+    actionItemsRefetch: jest.fn(),
+    editMode: true,
+    actionItem: {
+      _id: 'actionItemId2',
+      assigneeType: 'EventVolunteerGroup',
+      assigneeGroup: {
+        _id: 'groupId1',
+        name: 'group1',
+        description: 'desc',
+        volunteersRequired: 10,
+        createdAt: '2024-10-27T15:34:15.889Z',
+        creator: {
+          _id: 'userId2',
+          firstName: 'Wilt',
+          lastName: 'Shepherd',
+          image: null,
+        },
+        leader: {
+          _id: 'userId1',
+          firstName: 'Teresa',
+          lastName: 'Bradley',
+          image: null,
+        },
+        volunteers: [
+          {
+            _id: 'volunteerId1',
+            user: {
+              _id: 'userId1',
+              firstName: 'Teresa',
+              lastName: 'Bradley',
+              image: null,
+            },
+          },
+        ],
+        assignments: [],
+        event: {
+          _id: 'eventId',
+        },
+      },
+      assignee: null,
+      assigneeUser: null,
+      actionItemCategory: {
+        _id: 'categoryId2',
+        name: 'Category 2',
+      },
+      preCompletionNotes: 'Notes 2',
+      postCompletionNotes: null,
+      assignmentDate: new Date('2024-08-27'),
+      dueDate: new Date('2044-09-30'),
+      completionDate: new Date('2044-10-03'),
+      isCompleted: false,
+      event: {
+        _id: 'eventId',
+        title: 'Event 1',
+      },
       allotedHours: null,
       assigner: {
         _id: 'userId2',
@@ -151,7 +296,7 @@ const renderItemModal = (
 };
 
 describe('Testing ItemModal', () => {
-  it('Create Action Item', async () => {
+  it('Create Action Item (for Member)', async () => {
     renderItemModal(link1, itemProps[0]);
     expect(screen.getAllByText(t.createActionItem)).toHaveLength(2);
 
@@ -206,8 +351,132 @@ describe('Testing ItemModal', () => {
     });
   });
 
-  it('Update Action Item (completed)', async () => {
+  it('Create Action Item (for Volunteer)', async () => {
     renderItemModal(link1, itemProps[1]);
+    expect(screen.getAllByText(t.createActionItem)).toHaveLength(2);
+
+    // Select Category 1
+    const categorySelect = await screen.findByTestId('categorySelect');
+    expect(categorySelect).toBeInTheDocument();
+    const inputField = within(categorySelect).getByRole('combobox');
+    fireEvent.mouseDown(inputField);
+
+    const categoryOption = await screen.findByText('Category 1');
+    expect(categoryOption).toBeInTheDocument();
+    fireEvent.click(categoryOption);
+
+    // Select Volunteer Role
+    const groupRadio = await screen.findByText(t.groups);
+    const individualRadio = await screen.findByText(t.individuals);
+    expect(groupRadio).toBeInTheDocument();
+    expect(individualRadio).toBeInTheDocument();
+    fireEvent.click(individualRadio);
+
+    // Select Individual Volunteer
+    const volunteerSelect = await screen.findByTestId('volunteerSelect');
+    expect(volunteerSelect).toBeInTheDocument();
+    const volunteerInputField = within(volunteerSelect).getByRole('combobox');
+    fireEvent.mouseDown(volunteerInputField);
+
+    const volunteerOption = await screen.findByText('Teresa Bradley');
+    expect(volunteerOption).toBeInTheDocument();
+    fireEvent.click(volunteerOption);
+
+    // Select Due Date
+    fireEvent.change(screen.getByLabelText(t.dueDate), {
+      target: { value: '02/01/2044' },
+    });
+
+    // Select Allotted Hours (try all options)
+    const allotedHours = screen.getByLabelText(t.allotedHours);
+    const allotedHoursOptions = ['', '-1', '9'];
+
+    allotedHoursOptions.forEach((option) => {
+      fireEvent.change(allotedHours, { target: { value: option } });
+      expect(allotedHours).toHaveValue(parseInt(option) > 0 ? option : '');
+    });
+
+    // Add Pre Completion Notes
+    fireEvent.change(screen.getByLabelText(t.preCompletionNotes), {
+      target: { value: 'Notes' },
+    });
+
+    // Click Submit
+    const submitButton = screen.getByTestId('submitBtn');
+    expect(submitButton).toBeInTheDocument();
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(itemProps[1].actionItemsRefetch).toHaveBeenCalled();
+      expect(itemProps[1].hide).toHaveBeenCalled();
+      expect(toast.success).toHaveBeenCalledWith(t.successfulCreation);
+    });
+  });
+
+  it('Create Action Item (for Group)', async () => {
+    renderItemModal(link1, itemProps[1]);
+    expect(screen.getAllByText(t.createActionItem)).toHaveLength(2);
+
+    // Select Category 1
+    const categorySelect = await screen.findByTestId('categorySelect');
+    expect(categorySelect).toBeInTheDocument();
+    const inputField = within(categorySelect).getByRole('combobox');
+    fireEvent.mouseDown(inputField);
+
+    const categoryOption = await screen.findByText('Category 1');
+    expect(categoryOption).toBeInTheDocument();
+    fireEvent.click(categoryOption);
+
+    // Select Volunteer Role
+    const groupRadio = await screen.findByText(t.groups);
+    const individualRadio = await screen.findByText(t.individuals);
+    expect(groupRadio).toBeInTheDocument();
+    expect(individualRadio).toBeInTheDocument();
+    fireEvent.click(groupRadio);
+
+    // Select Individual Volunteer
+    const groupSelect = await screen.findByTestId('volunteerGroupSelect');
+    expect(groupSelect).toBeInTheDocument();
+    const groupInputField = within(groupSelect).getByRole('combobox');
+    fireEvent.mouseDown(groupInputField);
+
+    const groupOption = await screen.findByText('group1');
+    expect(groupOption).toBeInTheDocument();
+    fireEvent.click(groupOption);
+
+    // Select Due Date
+    fireEvent.change(screen.getByLabelText(t.dueDate), {
+      target: { value: '02/01/2044' },
+    });
+
+    // Select Allotted Hours (try all options)
+    const allotedHours = screen.getByLabelText(t.allotedHours);
+    const allotedHoursOptions = ['', '-1', '9'];
+
+    allotedHoursOptions.forEach((option) => {
+      fireEvent.change(allotedHours, { target: { value: option } });
+      expect(allotedHours).toHaveValue(parseInt(option) > 0 ? option : '');
+    });
+
+    // Add Pre Completion Notes
+    fireEvent.change(screen.getByLabelText(t.preCompletionNotes), {
+      target: { value: 'Notes' },
+    });
+
+    // Click Submit
+    const submitButton = screen.getByTestId('submitBtn');
+    expect(submitButton).toBeInTheDocument();
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(itemProps[1].actionItemsRefetch).toHaveBeenCalled();
+      expect(itemProps[1].hide).toHaveBeenCalled();
+      expect(toast.success).toHaveBeenCalledWith(t.successfulCreation);
+    });
+  });
+
+  it('Update Action Item (completed)', async () => {
+    renderItemModal(link1, itemProps[2]);
     expect(screen.getAllByText(t.updateActionItem)).toHaveLength(2);
 
     // Update Category
@@ -240,14 +509,170 @@ describe('Testing ItemModal', () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(itemProps[1].actionItemsRefetch).toHaveBeenCalled();
-      expect(itemProps[1].hide).toHaveBeenCalled();
+      expect(itemProps[2].actionItemsRefetch).toHaveBeenCalled();
+      expect(itemProps[2].hide).toHaveBeenCalled();
+      expect(toast.success).toHaveBeenCalledWith(t.successfulUpdation);
+    });
+  });
+
+  it('Update Action Item (Volunteer)', async () => {
+    renderItemModal(link1, itemProps[4]);
+    expect(screen.getAllByText(t.updateActionItem)).toHaveLength(2);
+
+    // Update Category
+    const categorySelect = await screen.findByTestId('categorySelect');
+    expect(categorySelect).toBeInTheDocument();
+    const inputField = within(categorySelect).getByRole('combobox');
+    fireEvent.mouseDown(inputField);
+
+    const categoryOption = await screen.findByText('Category 1');
+    expect(categoryOption).toBeInTheDocument();
+    fireEvent.click(categoryOption);
+
+    // Select Volunteer Role
+    const groupRadio = await screen.findByText(t.groups);
+    const individualRadio = await screen.findByText(t.individuals);
+    expect(groupRadio).toBeInTheDocument();
+    expect(individualRadio).toBeInTheDocument();
+    fireEvent.click(individualRadio);
+
+    // Select Individual Volunteer
+    const volunteerSelect = await screen.findByTestId('volunteerSelect');
+    expect(volunteerSelect).toBeInTheDocument();
+    const volunteerInputField = within(volunteerSelect).getByRole('combobox');
+    fireEvent.mouseDown(volunteerInputField);
+
+    const volunteerOption = await screen.findByText('Bruce Graza');
+    expect(volunteerOption).toBeInTheDocument();
+    fireEvent.click(volunteerOption);
+
+    // Update Allotted Hours (try all options)
+    const allotedHours = screen.getByLabelText(t.allotedHours);
+    const allotedHoursOptions = ['', '-1', '19'];
+
+    allotedHoursOptions.forEach((option) => {
+      fireEvent.change(allotedHours, { target: { value: option } });
+      expect(allotedHours).toHaveValue(parseInt(option) > 0 ? option : '');
+    });
+
+    // Click Submit
+    const submitButton = screen.getByTestId('submitBtn');
+    expect(submitButton).toBeInTheDocument();
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(itemProps[4].actionItemsRefetch).toHaveBeenCalled();
+      expect(itemProps[4].hide).toHaveBeenCalled();
+      expect(toast.success).toHaveBeenCalledWith(t.successfulUpdation);
+    });
+  });
+
+  it('Update Action Item (Group)', async () => {
+    renderItemModal(link1, itemProps[5]);
+    expect(screen.getAllByText(t.updateActionItem)).toHaveLength(2);
+
+    // Update Category
+    const categorySelect = await screen.findByTestId('categorySelect');
+    expect(categorySelect).toBeInTheDocument();
+    const inputField = within(categorySelect).getByRole('combobox');
+    fireEvent.mouseDown(inputField);
+
+    const categoryOption = await screen.findByText('Category 1');
+    expect(categoryOption).toBeInTheDocument();
+    fireEvent.click(categoryOption);
+
+    // Select Volunteer Role
+    const groupRadio = await screen.findByText(t.groups);
+    const individualRadio = await screen.findByText(t.individuals);
+    expect(groupRadio).toBeInTheDocument();
+    expect(individualRadio).toBeInTheDocument();
+    fireEvent.click(groupRadio);
+
+    // Select Individual Volunteer
+    const groupSelect = await screen.findByTestId('volunteerGroupSelect');
+    expect(groupSelect).toBeInTheDocument();
+    const groupInputField = within(groupSelect).getByRole('combobox');
+    fireEvent.mouseDown(groupInputField);
+
+    const groupOption = await screen.findByText('group2');
+    expect(groupOption).toBeInTheDocument();
+    fireEvent.click(groupOption);
+
+    // Update Allotted Hours (try all options)
+    const allotedHours = screen.getByLabelText(t.allotedHours);
+    const allotedHoursOptions = ['', '-1', '19'];
+
+    allotedHoursOptions.forEach((option) => {
+      fireEvent.change(allotedHours, { target: { value: option } });
+      expect(allotedHours).toHaveValue(parseInt(option) > 0 ? option : '');
+    });
+
+    // Click Submit
+    const submitButton = screen.getByTestId('submitBtn');
+    expect(submitButton).toBeInTheDocument();
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(itemProps[5].actionItemsRefetch).toHaveBeenCalled();
+      expect(itemProps[5].hide).toHaveBeenCalled();
+      expect(toast.success).toHaveBeenCalledWith(t.successfulUpdation);
+    });
+  });
+
+  it('Update Action Item (Volunteer -> Group)', async () => {
+    renderItemModal(link1, itemProps[4]);
+    expect(screen.getAllByText(t.updateActionItem)).toHaveLength(2);
+
+    // Update Category
+    const categorySelect = await screen.findByTestId('categorySelect');
+    expect(categorySelect).toBeInTheDocument();
+    const inputField = within(categorySelect).getByRole('combobox');
+    fireEvent.mouseDown(inputField);
+
+    const categoryOption = await screen.findByText('Category 1');
+    expect(categoryOption).toBeInTheDocument();
+    fireEvent.click(categoryOption);
+
+    // Select Volunteer Role
+    const groupRadio = await screen.findByText(t.groups);
+    const individualRadio = await screen.findByText(t.individuals);
+    expect(groupRadio).toBeInTheDocument();
+    expect(individualRadio).toBeInTheDocument();
+    fireEvent.click(groupRadio);
+
+    // Select Individual Volunteer
+    const groupSelect = await screen.findByTestId('volunteerGroupSelect');
+    expect(groupSelect).toBeInTheDocument();
+    const groupInputField = within(groupSelect).getByRole('combobox');
+    fireEvent.mouseDown(groupInputField);
+
+    const groupOption = await screen.findByText('group2');
+    expect(groupOption).toBeInTheDocument();
+    fireEvent.click(groupOption);
+
+    // Update Allotted Hours (try all options)
+    const allotedHours = screen.getByLabelText(t.allotedHours);
+    const allotedHoursOptions = ['', '-1', '19'];
+
+    allotedHoursOptions.forEach((option) => {
+      fireEvent.change(allotedHours, { target: { value: option } });
+      expect(allotedHours).toHaveValue(parseInt(option) > 0 ? option : '');
+    });
+
+    // Click Submit
+    const submitButton = screen.getByTestId('submitBtn');
+    expect(submitButton).toBeInTheDocument();
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(itemProps[4].actionItemsRefetch).toHaveBeenCalled();
+      expect(itemProps[4].hide).toHaveBeenCalled();
       expect(toast.success).toHaveBeenCalledWith(t.successfulUpdation);
     });
   });
 
   it('Update Action Item (not completed)', async () => {
-    renderItemModal(link1, itemProps[2]);
+    renderItemModal(link1, itemProps[3]);
     expect(screen.getAllByText(t.updateActionItem)).toHaveLength(2);
 
     // Update Category
@@ -295,8 +720,8 @@ describe('Testing ItemModal', () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(itemProps[2].actionItemsRefetch).toHaveBeenCalled();
-      expect(itemProps[2].hide).toHaveBeenCalled();
+      expect(itemProps[3].actionItemsRefetch).toHaveBeenCalled();
+      expect(itemProps[3].hide).toHaveBeenCalled();
       expect(toast.success).toHaveBeenCalledWith(t.successfulUpdation);
     });
   });
@@ -341,7 +766,7 @@ describe('Testing ItemModal', () => {
   });
 
   it('No Fields Updated while Updating', async () => {
-    renderItemModal(link2, itemProps[1]);
+    renderItemModal(link2, itemProps[2]);
     // Click Submit
     const submitButton = screen.getByTestId('submitBtn');
     expect(submitButton).toBeInTheDocument();
@@ -353,7 +778,7 @@ describe('Testing ItemModal', () => {
   });
 
   it('should fail to Update Action Item', async () => {
-    renderItemModal(link2, itemProps[1]);
+    renderItemModal(link2, itemProps[2]);
     expect(screen.getAllByText(t.updateActionItem)).toHaveLength(2);
 
     // Update Post Completion Notes

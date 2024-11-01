@@ -10,7 +10,7 @@ import { DELETE_VOLUNTEER } from 'GraphQl/Mutations/EventVolunteerMutation';
 export interface InterfaceDeleteVolunteerModal {
   isOpen: boolean;
   hide: () => void;
-  volunteer: InterfaceEventVolunteerInfo | null;
+  volunteer: InterfaceEventVolunteerInfo;
   refetchVolunteers: () => void;
 }
 
@@ -56,7 +56,7 @@ const VolunteerDeleteModal: React.FC<InterfaceDeleteVolunteerModal> = ({
     try {
       await deleteVolunteer({
         variables: {
-          id: volunteer?._id,
+          id: volunteer._id,
         },
       });
       refetchVolunteers();

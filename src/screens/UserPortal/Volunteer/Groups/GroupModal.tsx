@@ -36,7 +36,7 @@ export interface InterfaceGroupModal {
   isOpen: boolean;
   hide: () => void;
   eventId: string;
-  group: InterfaceVolunteerGroupInfo | null;
+  group: InterfaceVolunteerGroupInfo;
   refetchGroups: () => void;
 }
 
@@ -63,7 +63,7 @@ export interface InterfaceGroupModal {
  * - A submit button to create or update the pledge.
  *
  * On form submission, the component either:
- * - Calls `updateVoluneerGroup` mutation to update an existing pledge, or
+ * - Calls `updateVoluneerGroup` mutation to update an existing group, or
  *
  * Success or error messages are displayed using toast notifications based on the result of the mutation.
  */
@@ -82,11 +82,11 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
 
   const [modalType, setModalType] = useState<'details' | 'requests'>('details');
   const [formState, setFormState] = useState<InterfaceCreateVolunteerGroup>({
-    name: group?.name ?? '',
-    description: group?.description ?? '',
-    leader: group?.leader ?? null,
-    volunteerUsers: group?.volunteers.map((volunteer) => volunteer.user) ?? [],
-    volunteersRequired: group?.volunteersRequired ?? null,
+    name: group.name,
+    description: group.description ?? '',
+    leader: group.leader,
+    volunteerUsers: group.volunteers.map((volunteer) => volunteer.user),
+    volunteersRequired: group.volunteersRequired ?? null,
   });
 
   const [updateVolunteerGroup] = useMutation(UPDATE_VOLUNTEER_GROUP);
@@ -129,6 +129,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
     variables: {
       where: {
         eventId,
+        groupId: group._id,
         status: 'requested',
       },
     },
@@ -141,18 +142,16 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
 
   useEffect(() => {
     setFormState({
-      name: group?.name ?? '',
-      description: group?.description ?? '',
-      leader: group?.leader ?? null,
-      volunteerUsers:
-        group?.volunteers.map((volunteer) => volunteer.user) ?? [],
-      volunteersRequired: group?.volunteersRequired ?? null,
+      name: group.name,
+      description: group.description ?? '',
+      leader: group.leader,
+      volunteerUsers: group.volunteers.map((volunteer) => volunteer.user),
+      volunteersRequired: group.volunteersRequired ?? null,
     });
   }, [group]);
 
   const { name, description, volunteersRequired } = formState;
 
-  /*istanbul ignore next*/
   const updateGroupHandler = useCallback(
     async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
       e.preventDefault();
@@ -181,6 +180,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
         refetchGroups();
         hide();
       } catch (error: unknown) {
+        console.log(error);
         toast.error((error as Error).message);
       }
     },
@@ -253,6 +253,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                   variant="outlined"
                   className={styles.noOutline}
                   value={name}
+                  data-testid="nameInput"
                   onChange={(e) =>
                     setFormState({ ...formState, name: e.target.value })
                   }
@@ -282,7 +283,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                   label={t('volunteersRequired')}
                   variant="outlined"
                   className={styles.noOutline}
-                  value={volunteersRequired}
+                  value={volunteersRequired ?? ''}
                   onChange={(e) => {
                     if (parseInt(e.target.value) > 0) {
                       setFormState({
@@ -304,7 +305,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
             <Button
               type="submit"
               className={styles.greenregbtn}
-              data-testid="submitPledgeBtn"
+              data-testid="submitBtn"
             >
               {t('updateGroup')}
             </Button>
@@ -343,6 +344,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                             component="th"
                             scope="row"
                             className="d-flex gap-1 align-items-center"
+                            data-testid="userName"
                           >
                             {image ? (
                               <img
@@ -371,9 +373,12 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                                 size="sm"
                                 style={{ minWidth: '32px' }}
                                 className="me-2 rounded"
-                                data-testid={`acceptBtn${_id}`}
+                                data-testid={`acceptBtn`}
                                 onClick={() =>
-                                  updateMembershipStatus(_id, 'accepted')
+                                  updateMembershipStatus(
+                                    request._id,
+                                    'accepted',
+                                  )
                                 }
                               >
                                 <i className="fa fa-check" />
@@ -382,9 +387,12 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                                 size="sm"
                                 variant="danger"
                                 className="rounded"
-                                data-testid={`rejectBtn${_id}`}
+                                data-testid={`rejectBtn`}
                                 onClick={() =>
-                                  updateMembershipStatus(_id, 'rejected')
+                                  updateMembershipStatus(
+                                    request._id,
+                                    'rejected',
+                                  )
                                 }
                               >
                                 <FaXmark size={18} fontWeight={900} />

@@ -228,11 +228,11 @@ function organizationActionItems(): JSX.Element {
                       key={_id + '1'}
                       containerStyle={styles.imageContainer}
                       avatarStyle={styles.TableImage}
-                      name={params.row.assigneeGroup?.name ?? ''}
-                      alt={params.row.assigneeGroup?.name ?? ''}
+                      name={params.row.assigneeGroup?.name as string}
+                      alt={'assigneeGroup_avatar'}
                     />
                   </div>
-                  {params.row.assigneeGroup?.name ?? ''}
+                  {params.row.assigneeGroup?.name as string}
                 </div>
               </>
             )}
@@ -546,27 +546,29 @@ function organizationActionItems(): JSX.Element {
         editMode={modalMode === 'edit'}
       />
 
-      <ItemDeleteModal
-        isOpen={modalState[ModalState.DELETE]}
-        hide={() => closeModal(ModalState.DELETE)}
-        actionItem={actionItem}
-        actionItemsRefetch={actionItemsRefetch}
-      />
-
-      <ItemUpdateStatusModal
-        actionItem={actionItem}
-        isOpen={modalState[ModalState.STATUS]}
-        hide={() => closeModal(ModalState.STATUS)}
-        actionItemsRefetch={actionItemsRefetch}
-      />
-
       {/* View Modal */}
       {actionItem && (
-        <ItemViewModal
-          isOpen={modalState[ModalState.VIEW]}
-          hide={() => closeModal(ModalState.VIEW)}
-          item={actionItem}
-        />
+        <>
+          <ItemViewModal
+            isOpen={modalState[ModalState.VIEW]}
+            hide={() => closeModal(ModalState.VIEW)}
+            item={actionItem}
+          />
+
+          <ItemUpdateStatusModal
+            actionItem={actionItem}
+            isOpen={modalState[ModalState.STATUS]}
+            hide={() => closeModal(ModalState.STATUS)}
+            actionItemsRefetch={actionItemsRefetch}
+          />
+
+          <ItemDeleteModal
+            isOpen={modalState[ModalState.DELETE]}
+            hide={() => closeModal(ModalState.DELETE)}
+            actionItem={actionItem}
+            actionItemsRefetch={actionItemsRefetch}
+          />
+        </>
       )}
     </div>
   );

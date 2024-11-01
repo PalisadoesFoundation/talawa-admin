@@ -22,7 +22,7 @@ import { Chip, Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 import styles from '../EventVolunteers.module.css';
 import { EVENT_VOLUNTEER_LIST } from 'GraphQl/Queries/EventVolunteerQueries';
-import { InterfaceEventVolunteerInfo } from 'utils/interfaces';
+import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
 import VolunteerCreateModal from './VolunteerCreateModal';
 import VolunteerDeleteModal from './VolunteerDeleteModal';
 import VolunteerViewModal from './VolunteerViewModal';
@@ -61,9 +61,9 @@ const dataGridStyle = {
 };
 
 /**
- * Component for managing and displaying action items within an organization.
+ * Component for managing and displaying event volunteers realted to an event.
  *
- * This component allows users to view, filter, sort, and create action items. It also handles fetching and displaying related data such as action item categories and members.
+ * This component allows users to view, filter, sort, and create volunteers. It also handles fetching and displaying related data such as volunteer acceptance status, etc.
  *
  * @returns The rendered component.
  */
@@ -180,19 +180,20 @@ function volunteers(): JSX.Element {
         return (
           <div
             className="d-flex fw-bold align-items-center justify-content-center ms-2"
-            data-testid="assigneeName"
+            data-testid="volunteerName"
           >
             {image ? (
               <img
                 src={image}
                 alt="volunteer"
-                data-testid={`image${_id + 1}`}
+                data-testid="volunteer_image"
                 className={styles.TableImage}
               />
             ) : (
               <div className={styles.avatarContainer}>
                 <Avatar
                   key={_id + '1'}
+                  dataTestId="volunteer_avatar"
                   containerStyle={styles.imageContainer}
                   avatarStyle={styles.TableImage}
                   name={firstName + ' ' + lastName}
@@ -200,7 +201,7 @@ function volunteers(): JSX.Element {
                 />
               </div>
             )}
-            {params.row.user.firstName + ' ' + params.row.user.lastName}
+            {firstName + ' ' + lastName}
           </div>
         );
       },
@@ -281,7 +282,7 @@ function volunteers(): JSX.Element {
               size="sm"
               style={{ minWidth: '32px' }}
               className="me-2 rounded"
-              data-testid={`viewItemBtn${params.row.id}`}
+              data-testid="viewItemBtn"
               onClick={() => handleOpenModal(params.row, ModalState.VIEW)}
             >
               <i className="fa fa-info" />
@@ -290,7 +291,7 @@ function volunteers(): JSX.Element {
               size="sm"
               variant="danger"
               className="rounded"
-              data-testid={`deleteItemBtn${params.row.id}`}
+              data-testid="deleteItemBtn"
               onClick={() => handleOpenModal(params.row, ModalState.DELETE)}
             >
               <i className="fa fa-trash" />
@@ -439,18 +440,20 @@ function volunteers(): JSX.Element {
         refetchVolunteers={refetchVolunteers}
       />
 
-      <VolunteerDeleteModal
-        isOpen={modalState[ModalState.DELETE]}
-        hide={() => closeModal(ModalState.DELETE)}
-        volunteer={volunteer}
-        refetchVolunteers={refetchVolunteers}
-      />
       {volunteer && (
-        <VolunteerViewModal
-          isOpen={modalState[ModalState.VIEW]}
-          hide={() => closeModal(ModalState.VIEW)}
-          volunteer={volunteer}
-        />
+        <>
+          <VolunteerViewModal
+            isOpen={modalState[ModalState.VIEW]}
+            hide={() => closeModal(ModalState.VIEW)}
+            volunteer={volunteer}
+          />
+          <VolunteerDeleteModal
+            isOpen={modalState[ModalState.DELETE]}
+            hide={() => closeModal(ModalState.DELETE)}
+            volunteer={volunteer}
+            refetchVolunteers={refetchVolunteers}
+          />
+        </>
       )}
     </div>
   );

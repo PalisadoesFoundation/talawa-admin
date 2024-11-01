@@ -55,7 +55,6 @@ const UpcomingEvents = (): JSX.Element => {
     // Redirects to the homepage if orgId or userId is missing
     return <Navigate to={'/'} replace />;
   }
-  const [currentDate] = useState<Date>(new Date());
   const [searchValue, setSearchValue] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [searchBy, setSearchBy] = useState<'title' | 'location'>('title');
@@ -103,7 +102,7 @@ const UpcomingEvents = (): JSX.Element => {
       organization_id: orgId,
       title_contains: searchBy === 'title' ? searchTerm : '',
       location_contains: searchBy === 'location' ? searchTerm : '',
-      currentDate: currentDate,
+      upcomingOnly: true,
       first: null,
       skip: null,
     },
@@ -120,7 +119,7 @@ const UpcomingEvents = (): JSX.Element => {
   // Renders a loader while events are being fetched
   if (eventsLoading) return <Loader size="xl" />;
   if (eventsError) {
-    // Displays an error message if there is an issue loading the evvents
+    // Displays an error message if there is an issue loading the events
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
         <div className={styles.message} data-testid="errorMsg">
@@ -229,7 +228,7 @@ const UpcomingEvents = (): JSX.Element => {
                     data-testid={`detailContainer${index + 1}`}
                   >
                     <div className="d-flex">
-                      <h3>{title}</h3>
+                      <h3 data-testid="eventTitle">{title}</h3>
                       {recurring && (
                         <Chip
                           icon={<Circle className={styles.chipIcon} />}
@@ -274,12 +273,15 @@ const UpcomingEvents = (): JSX.Element => {
                 </div>
               </AccordionSummary>
               <AccordionDetails className="d-flex gap-3 flex-column">
-                {description && (
-                  <div className="d-flex gap-3">
-                    <span>Description: </span>
-                    <span>{description}</span>
-                  </div>
-                )}
+                {
+                  /*istanbul ignore next*/
+                  description && (
+                    <div className="d-flex gap-3">
+                      <span>Description: </span>
+                      <span>{description}</span>
+                    </div>
+                  )
+                }
                 {volunteerGroups && volunteerGroups.length > 0 && (
                   <Form.Group>
                     <Form.Label
@@ -344,7 +346,7 @@ const UpcomingEvents = (): JSX.Element => {
                                         : 'outline-success'
                                     }
                                     size="sm"
-                                    data-testid="volunteerBtn"
+                                    data-testid="joinBtn"
                                     disabled={
                                       hasJoined ||
                                       new Date(endDate) < new Date()

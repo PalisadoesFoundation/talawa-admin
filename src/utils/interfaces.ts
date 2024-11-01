@@ -11,7 +11,7 @@ export interface InterfaceUserInfo {
   _id: string;
   firstName: string;
   lastName: string;
-  image?: string;
+  image?: string | null;
 }
 
 export interface InterfaceActionItemCategoryInfo {
@@ -564,7 +564,7 @@ export interface InterfaceCustomFieldData {
 export interface InterfaceEventVolunteerInfo {
   _id: string;
   hasAccepted: boolean;
-  hoursVolunteered: number;
+  hoursVolunteered: number | null;
   user: InterfaceUserInfo;
   assignments: {
     _id: string;
@@ -581,11 +581,11 @@ export interface InterfaceEventVolunteerInfo {
 export interface InterfaceVolunteerGroupInfo {
   _id: string;
   name: string;
-  description: string;
+  description: string | null;
   event: {
     _id: string;
   };
-  volunteersRequired: number;
+  volunteersRequired: number | null;
   createdAt: string;
   creator: InterfaceUserInfo;
   leader: InterfaceUserInfo;

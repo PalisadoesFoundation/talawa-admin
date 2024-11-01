@@ -114,8 +114,8 @@ describe('Testing Organization Action Items Screen', () => {
     renderOrganizationActionItems(link1);
     await waitFor(() => {
       expect(screen.getByTestId('searchBy')).toBeInTheDocument();
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-      expect(screen.getByText('Jane Doe')).toBeInTheDocument();
+      expect(screen.getAllByText('John Doe')).toHaveLength(2);
+      expect(screen.getAllByText('Jane Doe')).toHaveLength(2);
     });
   });
 
@@ -171,8 +171,8 @@ describe('Testing Organization Action Items Screen', () => {
     fireEvent.click(screen.getByTestId('statusAll'));
 
     await waitFor(() => {
-      expect(screen.getByText('Category 1')).toBeInTheDocument();
-      expect(screen.getByText('Category 2')).toBeInTheDocument();
+      expect(screen.getAllByText('Category 1')).toHaveLength(3);
+      expect(screen.getAllByText('Category 2')).toHaveLength(2);
     });
 
     // Filter by Pending
@@ -341,8 +341,8 @@ describe('Testing Organization Action Items Screen', () => {
     // Clear the search input by backspace
     userEvent.type(searchInput, 'A{backspace}');
     await waitFor(() => {
-      expect(screen.getByText('Category 1')).toBeInTheDocument();
-      expect(screen.getByText('Category 2')).toBeInTheDocument();
+      expect(screen.getAllByText('Category 1')).toHaveLength(3);
+      expect(screen.getAllByText('Category 2')).toHaveLength(2);
     });
   });
 

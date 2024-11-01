@@ -151,7 +151,7 @@ const Invitations = (): JSX.Element => {
                 setSearchTerm('');
               }
             }}
-            data-testid="searchInvitations"
+            data-testid="searchBy"
           />
           <Button
             tabIndex={-1}
@@ -237,7 +237,7 @@ const Invitations = (): JSX.Element => {
               key={index}
             >
               <div className="d-flex flex-column gap-2">
-                <div className="fw-bold">
+                <div className="fw-bold" data-testid="inviteSubject">
                   {invite.group ? (
                     <>Invitation to join volunteer group</>
                   ) : (

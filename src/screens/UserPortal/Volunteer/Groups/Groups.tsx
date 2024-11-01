@@ -73,7 +73,7 @@ function groups(): JSX.Element {
   const [group, setGroup] = useState<InterfaceVolunteerGroupInfo | null>(null);
   const [searchValue, setSearchValue] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [sortBy, setSortBy] = useState<'member_ASC' | 'member_DESC' | null>(
+  const [sortBy, setSortBy] = useState<'members_ASC' | 'members_DESC' | null>(
     null,
   );
   const [searchBy, setSearchBy] = useState<'leader' | 'group'>('group');
@@ -103,7 +103,8 @@ function groups(): JSX.Element {
     variables: {
       where: {
         eventId: undefined,
-        userId: userId,
+        userId,
+        orgId,
         leaderName: searchBy === 'leader' ? searchTerm : null,
         name_contains: searchBy === 'group' ? searchTerm : null,
       },
@@ -182,7 +183,7 @@ function groups(): JSX.Element {
         return (
           <div
             className="d-flex fw-bold align-items-center ms-2"
-            data-testid="assigneeName"
+            data-testid="leaderName"
           >
             {image ? (
               <img
@@ -262,7 +263,7 @@ function groups(): JSX.Element {
               size="sm"
               style={{ minWidth: '32px' }}
               className="me-2 rounded"
-              data-testid={`viewGroupBtn${params.row.id}`}
+              data-testid={`viewGroupBtn`}
               onClick={() => handleModalClick(params.row, ModalState.VIEW)}
             >
               <i className="fa fa-info" />
@@ -272,7 +273,7 @@ function groups(): JSX.Element {
                 variant="success"
                 size="sm"
                 className="me-2 rounded"
-                data-testid={`editGroupBtn${params.row.id}`}
+                data-testid={`editGroupBtn`}
                 onClick={() => handleModalClick(params.row, ModalState.EDIT)}
               >
                 <i className="fa fa-edit" />
@@ -357,14 +358,14 @@ function groups(): JSX.Element {
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item
-                  onClick={() => setSortBy('member_DESC')}
-                  data-testid="member_DESC"
+                  onClick={() => setSortBy('members_DESC')}
+                  data-testid="members_DESC"
                 >
                   {t('mostMembers')}
                 </Dropdown.Item>
                 <Dropdown.Item
-                  onClick={() => setSortBy('member_ASC')}
-                  data-testid="member_ASC"
+                  onClick={() => setSortBy('members_ASC')}
+                  data-testid="members_ASC"
                 >
                   {t('leastMembers')}
                 </Dropdown.Item>

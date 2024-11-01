@@ -100,9 +100,9 @@ function leaderboard(): JSX.Element {
     variables: {
       orgId,
       where: {
-        order_by: sortBy,
-        time_frame: timeFrame,
-        name_contains: searchTerm,
+        orderBy: sortBy,
+        timeFrame: timeFrame,
+        nameContains: searchTerm,
       },
     },
   });
@@ -171,7 +171,7 @@ function leaderboard(): JSX.Element {
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        const { _id, firstName, lastName, image } = params.row.user || {};
+        const { _id, firstName, lastName, image } = params.row.user;
 
         return (
           <>

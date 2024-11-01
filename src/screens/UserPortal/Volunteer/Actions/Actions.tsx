@@ -122,6 +122,7 @@ function actions(): JSX.Element {
       userId,
       orderBy: sortBy,
       where: {
+        orgId,
         assigneeName: searchBy === 'assignee' ? searchTerm : undefined,
         categoryName: searchBy === 'category' ? searchTerm : undefined,
       },
@@ -204,11 +205,11 @@ function actions(): JSX.Element {
                       key={_id + '1'}
                       containerStyle={styles.imageContainer}
                       avatarStyle={styles.TableImage}
-                      name={params.row.assigneeGroup?.name ?? ''}
-                      alt={params.row.assigneeGroup?.name ?? ''}
+                      name={params.row.assigneeGroup?.name as string}
+                      alt={params.row.assigneeGroup?.name as string}
                     />
                   </div>
-                  {params.row.assigneeGroup?.name ?? ''}
+                  {params.row.assigneeGroup?.name as string}
                 </div>
               </>
             )}
@@ -303,7 +304,7 @@ function actions(): JSX.Element {
               size="sm"
               style={{ minWidth: '32px' }}
               className="me-2 rounded"
-              data-testid={`viewItemBtn${params.row.id}`}
+              data-testid={`viewItemBtn`}
               onClick={() => handleModalClick(params.row, ModalState.VIEW)}
             >
               <i className="fa fa-info" />
@@ -326,7 +327,7 @@ function actions(): JSX.Element {
           <div className="d-flex align-items-center justify-content-center mt-3">
             <Form.Check
               type="checkbox"
-              data-testid={`statusCheckbox${params.row.id}`}
+              data-testid={`statusCheckbox`}
               checked={params.row.isCompleted}
               onChange={() => handleModalClick(params.row, ModalState.STATUS)}
             />
@@ -451,20 +452,22 @@ function actions(): JSX.Element {
         isRowSelectable={() => false}
       />
 
-      <ItemUpdateStatusModal
-        actionItem={actionItem}
-        isOpen={modalState[ModalState.STATUS]}
-        hide={() => closeModal(ModalState.STATUS)}
-        actionItemsRefetch={actionItemsRefetch}
-      />
-
       {/* View Modal */}
       {actionItem && (
-        <ItemViewModal
-          isOpen={modalState[ModalState.VIEW]}
-          hide={() => closeModal(ModalState.VIEW)}
-          item={actionItem}
-        />
+        <>
+          <ItemViewModal
+            isOpen={modalState[ModalState.VIEW]}
+            hide={() => closeModal(ModalState.VIEW)}
+            item={actionItem}
+          />
+
+          <ItemUpdateStatusModal
+            actionItem={actionItem}
+            isOpen={modalState[ModalState.STATUS]}
+            hide={() => closeModal(ModalState.STATUS)}
+            actionItemsRefetch={actionItemsRefetch}
+          />
+        </>
       )}
     </div>
   );

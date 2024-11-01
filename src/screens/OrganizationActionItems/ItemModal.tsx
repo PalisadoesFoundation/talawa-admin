@@ -170,9 +170,6 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
     data?: {
       getEventVolunteerGroups: InterfaceVolunteerGroupInfo[];
     };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
   } = useQuery(EVENT_VOLUNTEER_GROUP_LIST, {
     variables: {
       where: {
@@ -446,7 +443,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
           </Form.Group>
           {!isCompleted && (
             <>
-              {assigneeType !== 'User' && (
+              {eventId && (
                 <>
                   <Form.Label className="my-0 py-0">{t('assignTo')}</Form.Label>
                   <div

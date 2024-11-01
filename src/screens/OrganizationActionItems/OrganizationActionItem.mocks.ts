@@ -5,69 +5,186 @@ import {
   UPDATE_ACTION_ITEM_MUTATION,
 } from 'GraphQl/Mutations/ActionItemMutations';
 import {
+  EVENT_VOLUNTEER_GROUP_LIST,
+  EVENT_VOLUNTEER_LIST,
+} from 'GraphQl/Queries/EventVolunteerQueries';
+import {
   ACTION_ITEM_CATEGORY_LIST,
   ACTION_ITEM_LIST,
   MEMBERS_LIST,
 } from 'GraphQl/Queries/Queries';
+import type { InterfaceActionItemInfo } from 'utils/interfaces';
+
+const actionItemCategory1 = {
+  _id: 'actionItemCategoryId1',
+  name: 'Category 1',
+};
+
+const actionItemCategory2 = {
+  _id: 'actionItemCategoryId2',
+  name: 'Category 2',
+};
 
 const baseActionItem = {
   assigner: {
-    _id: 'userId2',
+    _id: 'userId',
     firstName: 'Wilt',
     lastName: 'Shepherd',
     image: null,
   },
   creator: {
-    _id: 'userId2',
+    _id: 'userId',
     firstName: 'Wilt',
     lastName: 'Shepherd',
+    image: null,
     __typename: 'User',
   },
 };
 
-const actionItem1 = {
+const itemWithVolunteer: InterfaceActionItemInfo = {
   _id: 'actionItemId1',
+  assigneeType: 'EventVolunteer',
   assignee: {
-    _id: 'userId1',
-    firstName: 'John',
-    lastName: 'Doe',
-    image: null,
+    _id: 'volunteerId1',
+    hasAccepted: true,
+    hoursVolunteered: 12,
+    assignments: [],
+    groups: [],
+    user: {
+      _id: 'userId1',
+      firstName: 'John',
+      lastName: 'Doe',
+      image: null,
+    },
   },
-  actionItemCategory: {
-    _id: 'actionItemCategoryId1',
-    name: 'Category 1',
-  },
+  assigneeUser: null,
+  assigneeGroup: null,
   preCompletionNotes: 'Notes 1',
   postCompletionNotes: 'Cmp Notes 1',
-  assignmentDate: '2024-08-27',
-  dueDate: '2044-08-30',
-  completionDate: '2044-09-03',
+  assignmentDate: new Date('2024-08-27'),
+  dueDate: new Date('2044-08-30'),
+  completionDate: new Date('2044-09-03'),
   isCompleted: true,
   event: null,
   allotedHours: 24,
+  actionItemCategory: actionItemCategory1,
   ...baseActionItem,
 };
 
-const actionItem2 = {
-  _id: 'actionItemId2',
+const itemWithVolunteerImage: InterfaceActionItemInfo = {
+  _id: 'actionItemId1b',
+  assigneeType: 'EventVolunteer',
   assignee: {
+    _id: 'volunteerId1',
+    hasAccepted: true,
+    hoursVolunteered: 12,
+    assignments: [],
+    groups: [],
+    user: {
+      _id: 'userId1',
+      firstName: 'John',
+      lastName: 'Doe',
+      image: 'user-image',
+    },
+  },
+  assigneeUser: null,
+  assigneeGroup: null,
+  preCompletionNotes: 'Notes 1',
+  postCompletionNotes: 'Cmp Notes 1',
+  assignmentDate: new Date('2024-08-27'),
+  dueDate: new Date('2044-08-30'),
+  completionDate: new Date('2044-09-03'),
+  isCompleted: true,
+  event: null,
+  allotedHours: 24,
+  actionItemCategory: actionItemCategory1,
+  ...baseActionItem,
+};
+
+const itemWithUser: InterfaceActionItemInfo = {
+  _id: 'actionItemId2',
+  assigneeType: 'User',
+  assigneeUser: {
     _id: 'userId1',
     firstName: 'Jane',
     lastName: 'Doe',
-    image: 'image-url',
+    image: null,
   },
-  actionItemCategory: {
-    _id: 'actionItemCategoryId2',
-    name: 'Category 2',
-  },
+  assignee: null,
+  assigneeGroup: null,
   preCompletionNotes: 'Notes 2',
   postCompletionNotes: null,
-  assignmentDate: '2024-08-27',
-  dueDate: '2044-09-30',
-  completionDate: '2044-10-03',
+  assignmentDate: new Date('2024-08-27'),
+  dueDate: new Date('2044-09-30'),
+  completionDate: new Date('2044-10-03'),
   isCompleted: false,
   event: null,
   allotedHours: null,
+  actionItemCategory: actionItemCategory2,
+  ...baseActionItem,
+};
+
+const itemWithUserImage: InterfaceActionItemInfo = {
+  _id: 'actionItemId2b',
+  assigneeType: 'User',
+  assigneeUser: {
+    _id: 'userId1',
+    firstName: 'Jane',
+    lastName: 'Doe',
+    image: 'user-image',
+  },
+  assignee: null,
+  assigneeGroup: null,
+  preCompletionNotes: 'Notes 2',
+  postCompletionNotes: null,
+  assignmentDate: new Date('2024-08-27'),
+  dueDate: new Date('2044-09-30'),
+  completionDate: new Date('2044-10-03'),
+  isCompleted: false,
+  event: null,
+  allotedHours: null,
+  actionItemCategory: actionItemCategory2,
+  ...baseActionItem,
+};
+
+const itemWithGroup: InterfaceActionItemInfo = {
+  _id: 'actionItemId3',
+  assigneeType: 'EventVolunteerGroup',
+  assigneeUser: null,
+  assignee: null,
+  assigneeGroup: {
+    _id: 'volunteerGroupId1',
+    name: 'Group 1',
+    description: 'Group 1 Description',
+    volunteersRequired: 10,
+    event: {
+      _id: 'eventId1',
+    },
+    assignments: [],
+    volunteers: [],
+    createdAt: '2024-08-27',
+    creator: {
+      _id: 'userId1',
+      firstName: 'John',
+      lastName: 'Doe',
+      image: undefined,
+    },
+    leader: {
+      _id: 'userId1',
+      firstName: 'John',
+      lastName: 'Doe',
+      image: undefined,
+    },
+  },
+  preCompletionNotes: 'Notes 1',
+  postCompletionNotes: 'Cmp Notes 1',
+  assignmentDate: new Date('2024-08-27'),
+  dueDate: new Date('2044-08-30'),
+  completionDate: new Date('2044-09-03'),
+  isCompleted: true,
+  event: null,
+  allotedHours: 24,
+  actionItemCategory: actionItemCategory1,
   ...baseActionItem,
 };
 
@@ -106,6 +223,152 @@ const memberListQuery = {
     },
   },
 };
+
+const volunteerListQuery = [
+  {
+    request: {
+      query: EVENT_VOLUNTEER_LIST,
+      variables: { where: { eventId: 'eventId', hasAccepted: true } },
+    },
+    result: {
+      data: {
+        getEventVolunteers: [
+          {
+            _id: 'volunteerId1',
+            hasAccepted: true,
+            hoursVolunteered: 0,
+            user: {
+              _id: 'userId1',
+              firstName: 'Teresa',
+              lastName: 'Bradley',
+              image: null,
+            },
+            assignments: [],
+            groups: [
+              {
+                _id: 'groupId1',
+                name: 'group1',
+                volunteers: [
+                  {
+                    _id: 'volunteerId1',
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            _id: 'volunteerId2',
+            hasAccepted: true,
+            hoursVolunteered: 0,
+            user: {
+              _id: 'userId3',
+              firstName: 'Bruce',
+              lastName: 'Graza',
+              image: null,
+            },
+            assignments: [],
+            groups: [],
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: EVENT_VOLUNTEER_LIST,
+      variables: { where: { hasAccepted: true } },
+    },
+    result: {
+      data: {
+        getEventVolunteers: [],
+      },
+    },
+  },
+];
+
+const groupListQuery = [
+  {
+    request: {
+      query: EVENT_VOLUNTEER_GROUP_LIST,
+      variables: { where: { eventId: 'eventId' } },
+    },
+    result: {
+      data: {
+        getEventVolunteerGroups: [
+          {
+            _id: 'groupId1',
+            name: 'group1',
+            description: 'desc',
+            volunteersRequired: 10,
+            createdAt: '2024-10-27T15:34:15.889Z',
+            creator: {
+              _id: 'userId2',
+              firstName: 'Wilt',
+              lastName: 'Shepherd',
+              image: null,
+            },
+            leader: {
+              _id: 'userId1',
+              firstName: 'Teresa',
+              lastName: 'Bradley',
+              image: null,
+            },
+            volunteers: [
+              {
+                _id: 'volunteerId1',
+                user: {
+                  _id: 'userId1',
+                  firstName: 'Teresa',
+                  lastName: 'Bradley',
+                  image: null,
+                },
+              },
+            ],
+            assignments: [],
+            event: {
+              _id: 'eventId',
+            },
+          },
+          {
+            _id: 'groupId2',
+            name: 'group2',
+            description: 'desc',
+            volunteersRequired: 10,
+            createdAt: '2024-10-27T15:34:15.889Z',
+            creator: {
+              _id: 'userId2',
+              firstName: 'Wilt',
+              lastName: 'Shepherd',
+              image: null,
+            },
+            leader: {
+              _id: 'userId1',
+              firstName: 'Teresa',
+              lastName: 'Bradley',
+              image: null,
+            },
+            volunteers: [],
+            assignments: [],
+            event: {
+              _id: 'eventId',
+            },
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: EVENT_VOLUNTEER_GROUP_LIST,
+      variables: { where: { eventId: undefined } },
+    },
+    result: {
+      data: {
+        getEventVolunteerGroups: [],
+      },
+    },
+  },
+];
 
 const actionItemCategoryListQuery = {
   request: {
@@ -159,7 +422,13 @@ export const MOCKS = [
     },
     result: {
       data: {
-        actionItemsByOrganization: [actionItem1, actionItem2],
+        actionItemsByOrganization: [
+          itemWithVolunteer,
+          itemWithUser,
+          itemWithGroup,
+          itemWithVolunteerImage,
+          itemWithUserImage,
+        ],
       },
     },
   },
@@ -176,7 +445,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        actionItemsByOrganization: [actionItem1, actionItem2],
+        actionItemsByOrganization: [itemWithVolunteer, itemWithUser],
       },
     },
   },
@@ -193,7 +462,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        actionItemsByOrganization: [actionItem1, actionItem2],
+        actionItemsByOrganization: [itemWithVolunteer, itemWithUser],
       },
     },
   },
@@ -210,7 +479,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        actionItemsByOrganization: [actionItem2, actionItem1],
+        actionItemsByOrganization: [itemWithUser, itemWithVolunteer],
       },
     },
   },
@@ -228,7 +497,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        actionItemsByOrganization: [actionItem1],
+        actionItemsByOrganization: [itemWithVolunteer],
       },
     },
   },
@@ -246,7 +515,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        actionItemsByOrganization: [actionItem2],
+        actionItemsByOrganization: [itemWithUser],
       },
     },
   },
@@ -263,7 +532,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        actionItemsByOrganization: [actionItem1],
+        actionItemsByOrganization: [itemWithVolunteer],
       },
     },
   },
@@ -280,7 +549,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        actionItemsByOrganization: [actionItem1],
+        actionItemsByOrganization: [itemWithVolunteer],
       },
     },
   },
@@ -305,6 +574,7 @@ export const MOCKS = [
       variables: {
         actionItemId: 'actionItemId1',
         assigneeId: 'userId1',
+        assigneeType: 'User',
         postCompletionNotes: '',
         isCompleted: false,
       },
@@ -323,6 +593,7 @@ export const MOCKS = [
       variables: {
         actionItemId: 'actionItemId1',
         assigneeId: 'userId1',
+        assigneeType: 'User',
         actionItemCategoryId: 'categoryId2',
         postCompletionNotes: 'Cmp Notes 2',
         allotedHours: 19,
@@ -340,8 +611,28 @@ export const MOCKS = [
     request: {
       query: UPDATE_ACTION_ITEM_MUTATION,
       variables: {
+        actionItemId: 'actionItemId1',
+        assigneeId: 'volunteerGroupId1',
+        assigneeType: 'EventVolunteerGroup',
+        postCompletionNotes: 'Cmp Notes 1',
+        isCompleted: true,
+      },
+    },
+    result: {
+      data: {
+        updateActionItem: {
+          _id: 'actionItemId1',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: UPDATE_ACTION_ITEM_MUTATION,
+      variables: {
         actionItemId: 'actionItemId2',
         assigneeId: 'userId1',
+        assigneeType: 'User',
         actionItemCategoryId: 'categoryId1',
         preCompletionNotes: 'Notes 3',
         allotedHours: 19,
@@ -376,13 +667,114 @@ export const MOCKS = [
   },
   {
     request: {
+      query: UPDATE_ACTION_ITEM_MUTATION,
+      variables: {
+        actionItemId: 'actionItemId2',
+        assigneeId: 'volunteerId2',
+        assigneeType: 'EventVolunteer',
+        actionItemCategoryId: 'categoryId1',
+        allotedHours: 19,
+      },
+    },
+    result: {
+      data: {
+        updateActionItem: {
+          _id: 'actionItemId1',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: UPDATE_ACTION_ITEM_MUTATION,
+      variables: {
+        actionItemId: 'actionItemId2',
+        assigneeId: 'groupId2',
+        assigneeType: 'EventVolunteerGroup',
+        actionItemCategoryId: 'categoryId1',
+        allotedHours: 19,
+      },
+    },
+    result: {
+      data: {
+        updateActionItem: {
+          _id: 'actionItemId1',
+        },
+      },
+    },
+  },
+  {
+    request: {
       query: CREATE_ACTION_ITEM_MUTATION,
       variables: {
         assigneeId: 'userId1',
+        assigneeType: 'User',
         actionItemCategoryId: 'categoryId1',
         preCompletionNotes: 'Notes',
         allotedHours: 9,
-        dueDate: '2044-01-02',
+        dDate: '2044-01-02',
+      },
+    },
+    result: {
+      data: {
+        createActionItem: {
+          _id: 'actionItemId1',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: CREATE_ACTION_ITEM_MUTATION,
+      variables: {
+        assigneeId: 'userId1',
+        assigneeType: 'User',
+        actionItemCategoryId: 'categoryId1',
+        preCompletionNotes: 'Notes',
+        allotedHours: 9,
+        dDate: '2044-01-02',
+      },
+    },
+    result: {
+      data: {
+        createActionItem: {
+          _id: 'actionItemId1',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: CREATE_ACTION_ITEM_MUTATION,
+      variables: {
+        assigneeId: 'volunteerId1',
+        assigneeType: 'EventVolunteer',
+        actionItemCategoryId: 'categoryId1',
+        preCompletionNotes: 'Notes',
+        allotedHours: 9,
+        dDate: '2044-01-02',
+        eventId: 'eventId',
+      },
+    },
+    result: {
+      data: {
+        createActionItem: {
+          _id: 'actionItemId1',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: CREATE_ACTION_ITEM_MUTATION,
+      variables: {
+        assigneeId: 'groupId1',
+        assigneeType: 'EventVolunteerGroup',
+        actionItemCategoryId: 'categoryId1',
+        preCompletionNotes: 'Notes',
+        allotedHours: 9,
+        dDate: '2044-01-02',
+        eventId: 'eventId',
       },
     },
     result: {
@@ -395,6 +787,8 @@ export const MOCKS = [
   },
   memberListQuery,
   actionItemCategoryListQuery,
+  ...volunteerListQuery,
+  ...groupListQuery,
 ];
 
 export const MOCKS_ERROR = [
@@ -425,7 +819,8 @@ export const MOCKS_ERROR = [
       query: UPDATE_ACTION_ITEM_MUTATION,
       variables: {
         actionItemId: 'actionItemId1',
-        assigneeId: 'userId1',
+        assigneeId: 'volunteerId1',
+        assigneeType: 'EventVolunteer',
         postCompletionNotes: '',
         isCompleted: false,
       },
@@ -436,9 +831,11 @@ export const MOCKS_ERROR = [
     request: {
       query: CREATE_ACTION_ITEM_MUTATION,
       variables: {
+        assigneeId: '',
+        assigneeType: 'User',
         preCompletionNotes: '',
         allotedHours: null,
-        dueDate: dayjs().format('YYYY-MM-DD'),
+        dDate: dayjs().format('YYYY-MM-DD'),
       },
     },
     error: new Error('Mock Graphql Error'),
@@ -449,6 +846,7 @@ export const MOCKS_ERROR = [
       variables: {
         actionItemId: 'actionItemId1',
         assigneeId: 'userId1',
+        assigneeType: 'User',
         postCompletionNotes: 'Cmp Notes 2',
       },
     },
@@ -456,6 +854,8 @@ export const MOCKS_ERROR = [
   },
   memberListQuery,
   actionItemCategoryListQuery,
+  ...volunteerListQuery,
+  ...groupListQuery,
 ];
 
 export const MOCKS_EMPTY = [
@@ -478,4 +878,6 @@ export const MOCKS_EMPTY = [
   },
   memberListQuery,
   actionItemCategoryListQuery,
+  ...volunteerListQuery,
+  ...groupListQuery,
 ];

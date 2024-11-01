@@ -38,11 +38,14 @@ const itemProps: InterfaceItemDeleteModalProps = {
   actionItemsRefetch: jest.fn(),
   actionItem: {
     _id: 'actionItemId1',
-    assignee: {
+    assignee: null,
+    assigneeGroup: null,
+    assigneeType: 'User',
+    assigneeUser: {
       _id: 'userId1',
       firstName: 'John',
       lastName: 'Doe',
-      image: null,
+      image: undefined,
     },
     actionItemCategory: {
       _id: 'actionItemCategoryId1',
@@ -60,7 +63,7 @@ const itemProps: InterfaceItemDeleteModalProps = {
       _id: 'userId2',
       firstName: 'Wilt',
       lastName: 'Shepherd',
-      image: null,
+      image: undefined,
     },
     creator: {
       _id: 'userId2',

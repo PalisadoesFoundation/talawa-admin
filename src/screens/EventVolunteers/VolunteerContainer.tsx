@@ -56,6 +56,7 @@ function volunteerContainer(): JSX.Element {
             <label
               className={`btn btn-outline-primary ${styles.toggleBtn}`}
               htmlFor="individualRadio"
+              data-testid="individualRadio"
             >
               <HiUser className="me-1" />
               {t('individuals')}
@@ -72,6 +73,7 @@ function volunteerContainer(): JSX.Element {
             <label
               className={`btn btn-outline-primary ${styles.toggleBtn}`}
               htmlFor="groupsRadio"
+              data-testid="groupsRadio"
             >
               <HiUserGroup className="me-1" />
               {t('groups')}
@@ -88,6 +90,7 @@ function volunteerContainer(): JSX.Element {
             <label
               className={`btn btn-outline-primary ${styles.toggleBtn}`}
               htmlFor="requestsRadio"
+              data-testid="requestsRadio"
             >
               <FaRegFile className="me-1 mb-1" />
               {t('requests')}

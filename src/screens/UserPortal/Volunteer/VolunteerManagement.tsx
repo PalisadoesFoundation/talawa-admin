@@ -63,9 +63,8 @@ const VolunteerManagement = (): JSX.Element => {
 
   // Extract organization ID from URL parameters
   const { orgId } = useParams();
-  /*istanbul ignore next*/
+
   if (!orgId) {
-    // Redirect if event ID or organization ID is missing
     return <Navigate to={'/'} />;
   }
 

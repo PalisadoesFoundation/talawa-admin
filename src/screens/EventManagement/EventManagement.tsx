@@ -5,11 +5,11 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { FaChevronLeft, FaTasks } from 'react-icons/fa';
 import { MdOutlineDashboard } from 'react-icons/md';
 import EventRegistrantsIcon from 'assets/svgs/people.svg?react';
-import { IoMdStats } from 'react-icons/io';
+import { IoMdStats, IoIosHand } from 'react-icons/io';
 import EventAgendaItemsIcon from 'assets/svgs/agenda-items.svg?react';
 import { useTranslation } from 'react-i18next';
 import { Button, Dropdown } from 'react-bootstrap';
-import { IoIosHand } from 'react-icons/io';
+
 import EventDashboard from 'components/EventManagement/Dashboard/EventDashboard';
 import OrganizationActionItems from 'screens/OrganizationActionItems/OrganizationActionItems';
 import VolunteerContainer from 'screens/EventVolunteers/VolunteerContainer';
@@ -217,7 +217,7 @@ const EventManagement = (): JSX.Element => {
         switch (tab) {
           case 'dashboard':
             return (
-              <div data-testid="eventDashboadTab">
+              <div data-testid="eventDashboardTab">
                 <EventDashboard eventId={eventId} />
               </div>
             );
