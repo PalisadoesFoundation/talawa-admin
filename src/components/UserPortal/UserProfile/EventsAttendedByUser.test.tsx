@@ -2,7 +2,15 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { EventsAttendedByUser } from './EventsAttendedByUser';
 
-const mockT = (key: string): string => key;
+const mockT = (key: string, params?: Record<string, string>): string => {
+  if (params) {
+    return Object.entries(params).reduce(
+      (acc, [key, value]) => acc.replace(`{{${key}}}`, value),
+      key,
+    );
+  }
+  return key;
+};
 
 describe('EventsAttendedByUser Component', () => {
   const mockUserWithEvents = {

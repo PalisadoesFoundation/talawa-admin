@@ -1044,6 +1044,18 @@
     "article": "Artículo",
     "postNowVisibleInFeed": "Publicar ahora visible en el feed"
   },
+
+  "eventAttendance": {
+    "historical_statistics": "Estadísticas históricas",
+    "Search member": "Buscar miembro",
+    "Member Name": "Nombre del miembro",
+    "Status": "Estado",
+    "Events Attended": "Eventos asistidos",
+    "Task Assigned": "Tarea asignada",
+    "Member": "Miembro",
+    "Admin": "Administrador",
+    "loading": "Cargando..."
+  },
   "settings": {
     "settings": "Ajustes",
     "eventAttended": "Événements Assistés",

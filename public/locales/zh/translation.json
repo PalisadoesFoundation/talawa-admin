@@ -1042,6 +1042,17 @@
     "article": "文章",
     "postNowVisibleInFeed": "帖子现在在动态中可见"
   },
+  "eventAttendance": {
+    "historical_statistics": "历史统计",
+    "Search member": "搜索成员",
+    "Member Name": "成员姓名",
+    "Status": "状态",
+    "Events Attended": "参加的活动",
+    "Task Assigned": "分配的任务",
+    "Member": "成员",
+    "Admin": "管理员",
+    "loading": "加载中..."
+  },
   "settings": {
     "noeventsAttended": "未参加任何活动",
     "eventAttended": "参加的活动",

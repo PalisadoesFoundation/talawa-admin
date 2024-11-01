@@ -321,8 +321,7 @@ export default function settings(): JSX.Element {
                           async (
                             e: React.ChangeEvent<HTMLInputElement>,
                           ): Promise<void> => {
-                            const target = e.target as HTMLInputElement;
-                            const file = target.files && target.files[0];
+                            const file = e.target?.files?.[0];
                             if (file) {
                               const image = await convertToBase64(file);
                               setUserDetails({ ...userDetails, image });

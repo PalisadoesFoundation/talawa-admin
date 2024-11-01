@@ -65,14 +65,17 @@ export const UserAddressFields: React.FC<InterfaceUserAddressFieldsProps> = ({
           <option value="" disabled>
             {t('selectCountry')}
           </option>
-          {countryOptions.map((country) => (
-            <option
-              key={country.value.toUpperCase()}
-              value={country.value.toUpperCase()}
-            >
-              {country.label}
-            </option>
-          ))}
+          {[...countryOptions]
+            .sort((a, b) => a.label.localeCompare(b.label))
+            .map((country) => (
+              <option
+                key={country.value.toUpperCase()}
+                value={country.value.toUpperCase()}
+                aria-label={`Select ${country.label} as your country`}
+              >
+                {country.label}
+              </option>
+            ))}
         </Form.Control>
       </Col>
     </Row>

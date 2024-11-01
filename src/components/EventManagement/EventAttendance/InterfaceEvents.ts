@@ -7,6 +7,7 @@ export interface InterfaceAttendanceStatisticsModalProps {
     attendanceRate: number;
   };
   memberData: InterfaceMember[];
+  t: (key: string) => string;
 }
 
 export interface InterfaceMember {

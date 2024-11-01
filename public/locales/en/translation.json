@@ -739,6 +739,17 @@
     "attendance": "Attendance",
     "to": "TO"
   },
+  "eventAttendance": {
+    "historical_statistics": "Historical Statistics",
+    "Search member": "Search member",
+    "Member Name": "Member Name",
+    "Status": "Status",
+    "Events Attended": "Events Attended",
+    "Task Assigned": "Task Assigned",
+    "Member": "Member",
+    "Admin": "Admin",
+    "loading": "Loading..."
+  },
   "forgotPassword": {
     "title": "Talawa Forgot Password",
     "registeredEmail": "Registered Email",

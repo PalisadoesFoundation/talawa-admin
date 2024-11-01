@@ -31,7 +31,9 @@ enum FilterPeriod {
 }
 
 function EventAttendance(): JSX.Element {
-  const { t } = useTranslation();
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'eventAttendance',
+  });
   const { eventId } = useParams<{ eventId: string }>();
   const { orgId: currentUrl } = useParams();
   const [filteredAttendees, setFilteredAttendees] = useState<InterfaceMember[]>(
@@ -114,6 +116,10 @@ function EventAttendance(): JSX.Element {
       variables: {
         id: eventId,
       },
+      fetchPolicy: 'cache-and-network',
+      nextFetchPolicy: 'cache-first',
+      errorPolicy: 'all',
+      notifyOnNetworkStatusChange: true,
     });
 
   useEffect(() => {
@@ -139,6 +145,7 @@ function EventAttendance(): JSX.Element {
         statistics={statistics}
         handleClose={handleClose}
         memberData={filteredAttendees}
+        t={t}
       />
       <div className="d-flex justify-content-between">
         <div className="d-flex w-100">
@@ -147,7 +154,7 @@ function EventAttendance(): JSX.Element {
             onClick={showModal}
             data-testid="stats-modal"
           >
-            Historical Statistics
+            {t('historical_statistics')}
           </Button>
         </div>
         <div className="d-flex justify-content-between align-items-end w-100 ">
@@ -217,12 +224,14 @@ function EventAttendance(): JSX.Element {
       </div>
       {/* <h3>{totalMembers}</h3> */}
       <TableContainer component={Paper} className="mt-3">
-        <Table aria-label="customized table">
+        <Table aria-label={t('event_attendance_table')} role="grid">
           <TableHead>
-            <TableRow className="" data-testid="table-header-row">
+            <TableRow className="" data-testid="table-header-row" role="row">
               <TableCell
                 className={styles.customcell}
                 data-testid="header-index"
+                role="columnheader"
+                aria-sort="none"
               >
                 #
               </TableCell>

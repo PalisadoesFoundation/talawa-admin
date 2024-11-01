@@ -1042,6 +1042,17 @@
     "article": "Article",
     "postNowVisibleInFeed": "Le post est maintenant visible dans le fil d'actualité"
   },
+  "eventAttendance": {
+    "historical_statistics": "Statistiques historiques",
+    "Search member": "Rechercher un membre",
+    "Member Name": "Nom du membre",
+    "Status": "Statut",
+    "Events Attended": "Événements assistés",
+    "Task Assigned": "Tâche assignée",
+    "Member": "Membre",
+    "Admin": "Administrateur",
+    "loading": "Chargement..."
+  },
   "settings": {
     "eventAttended": "Événements Assistés",
     "noeventsAttended": "Aucun événement assisté",

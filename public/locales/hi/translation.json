@@ -1042,7 +1042,17 @@
     "article": "लेख",
     "postNowVisibleInFeed": "पोस्ट अब फीड में दिखाई दे रहा है"
   },
-  "settings": {
+  "eventAttendance": {
+    "historical_statistics": "ऐतिहासिक आंकड़े",
+    "Search member": "सदस्य खोजें",
+    "Member Name": "सदस्य का नाम",
+    "Status": "स्थिति",
+    "Events Attended": "भाग लिए गए कार्यक्रम",
+    "Task Assigned": "सौंपा गया कार्य",
+    "Member": "सदस्य",
+    "Admin": "व्यवस्थापक",
+    "loading": "लोड हो रहा है"
+  },  "settings": {
     "noeventsAttended": "कोई कार्यक्रम में उपस्थित नहीं",
     "eventAttended": "भाग लिए गए कार्यक्रम",
     "profileSettings": "पार्श्वचित्र समायोजन",

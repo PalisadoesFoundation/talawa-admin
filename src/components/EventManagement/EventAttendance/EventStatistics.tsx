@@ -14,16 +14,22 @@ import { useParams } from 'react-router-dom';
 import { EVENT_DETAILS, RECURRING_EVENTS } from 'GraphQl/Queries/Queries';
 import { useLazyQuery } from '@apollo/client';
 import { exportToCSV } from 'utils/chartToPdf';
-import type { TooltipItem } from 'chart.js';
+import type { ChartOptions, TooltipItem } from 'chart.js';
 import type {
   InterfaceAttendanceStatisticsModalProps,
   InterfaceEvent,
   InterfaceRecurringEvent,
 } from './InterfaceEvents';
+import { toast } from 'react-toastify';
 
+const CHART_COLORS = {
+  primary: '#1f77b4', // Color-blind friendly blue
+  secondary: '#ff7f0e', // Color-blind friendly orange
+  tertiary: '#2ca02c', // Color-blind friendly green
+};
 export const AttendanceStatisticsModal: React.FC<
   InterfaceAttendanceStatisticsModalProps
-> = ({ show, handleClose, statistics, memberData }): JSX.Element => {
+> = ({ show, handleClose, statistics, memberData, t }): JSX.Element => {
   const [selectedCategory, setSelectedCategory] = useState('Gender');
   const { orgId, eventId } = useParams();
   const [currentPage, setCurrentPage] = useState(0);
@@ -64,9 +70,10 @@ export const AttendanceStatisticsModal: React.FC<
       ),
     [paginatedRecurringEvents],
   );
-  const chartOptions = {
+  const chartOptions: ChartOptions<'line'> = {
     responsive: true,
     maintainAspectRatio: false,
+    animation: false,
     scales: { y: { beginAtZero: true } },
     plugins: {
       tooltip: {
@@ -257,19 +264,28 @@ export const AttendanceStatisticsModal: React.FC<
     exportToCSV(data, `${selectedCategory.toLowerCase()}_demographics.csv`);
   }, [selectedCategory, categoryLabels, categoryData]);
 
-  const handleExport = (eventKey: string | null): number | void => {
+  const handleExport = (eventKey: string | null): void => {
     switch (eventKey) {
       case 'trends':
-        exportTrendsToCSV();
+        try {
+          exportTrendsToCSV();
+        } catch (error) {
+          console.error('Failed to export trends:', error);
+          toast.error('Failed to export trends');
+        }
         break;
       case 'demographics':
-        exportDemographicsToCSV();
+        try {
+          exportDemographicsToCSV();
+        } catch (error) {
+          console.error('Failed to export demographics:', error);
+          toast.error('Failed to export demographics');
+        }
         break;
       default:
-        return 0;
+        return;
     }
   };
-
   useEffect(() => {
     if (eventId) {
       loadEventDetails({ variables: { id: eventId } });
@@ -295,7 +311,7 @@ export const AttendanceStatisticsModal: React.FC<
     >
       <Modal.Header closeButton className="bg-success">
         <Modal.Title className="text-white" data-testid="modal-title">
-          Attendance Statistics
+          {t('historical_statistics')}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body

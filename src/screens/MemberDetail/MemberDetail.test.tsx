@@ -623,9 +623,9 @@ describe('MemberDetail', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await wait(1000);
-    // Check if the card title is rendered
-    expect(screen.getByText('Events Attended')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Events Attended')).toBeInTheDocument();
+    });
     // Check for empty state immediately
     expect(screen.getByText('No Events Attended')).toBeInTheDocument();
   });
