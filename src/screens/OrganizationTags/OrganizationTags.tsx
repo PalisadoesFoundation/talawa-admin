@@ -435,7 +435,7 @@ function OrganizationTags(): JSX.Element {
               required
               value={tagName}
               onChange={(e): void => {
-                setTagName(e.target.value);
+                setTagName(e.target.value.trim());
               }}
             />
           </Modal.Body>
