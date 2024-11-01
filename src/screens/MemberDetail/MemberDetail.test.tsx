@@ -16,7 +16,6 @@ import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import MemberDetail, { getLanguageName, prettyDate } from './MemberDetail';
-import { toast } from 'react-toastify';
 
 const MOCKS1 = [
   {

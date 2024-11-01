@@ -152,9 +152,8 @@ const EventManagement = (): JSX.Element => {
 
   const handleBack = (): void => {
     /*istanbul ignore next*/
-    userRole === 'USER'
-      ? navigate(`/user/events/${orgId}`)
-      : navigate(`/orgevents/${orgId}`);
+    const route = userRole === 'USER' ? 'user/events' : 'orgevents';
+    navigate(`/${route}/${orgId}`);
   };
 
   return (
@@ -197,7 +196,7 @@ const EventManagement = (): JSX.Element => {
                     /* istanbul ignore next */
                     () => setTab(value)
                   }
-                  className={`d-flex gap-2 ${tab === value && 'text-secondary'}`}
+                  className={`d-flex gap-2 ${tab === value ? 'text-secondary' : ''}`}
                 >
                   {icon} {t(value)}
                 </Dropdown.Item>
@@ -250,10 +249,11 @@ const EventManagement = (): JSX.Element => {
                 <h2>Event Statistics</h2>
               </div>
             );
+          default:
+            return null;
         }
       })()}
     </div>
   );
 };
-
 export default EventManagement;

@@ -109,33 +109,6 @@ const Mocks2 = [
   },
 ];
 
-const mockMaritalStatusEnum = [
-  {
-    value: 'SINGLE',
-    label: 'Single',
-  },
-  {
-    value: 'ENGAGED',
-    label: 'Engaged',
-  },
-  {
-    value: 'MARRIED',
-    label: 'Married',
-  },
-  {
-    value: 'DIVORCED',
-    label: 'Divorced',
-  },
-  {
-    value: 'WIDOWED',
-    label: 'Widowed',
-  },
-  {
-    value: 'SEPARATED',
-    label: 'Separated',
-  },
-];
-
 const link = new StaticMockLink(MOCKS, true);
 const link1 = new StaticMockLink(Mocks1, true);
 const link2 = new StaticMockLink(Mocks2, true);
