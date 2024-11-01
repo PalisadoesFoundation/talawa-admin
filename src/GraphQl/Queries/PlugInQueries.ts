@@ -100,13 +100,11 @@ export const ORGANIZATION_EVENTS_CONNECTION = gql`
 `;
 
 /**
- * GraphQL query to retrieve a list of direct chats based on user ID.
+ * GraphQL query to retrieve a list of chats based on user ID.
  *
- * @param id - The ID of the user for which direct chats are being retrieved.
- * @returns The list of direct chats associated with the user, including details such as ID, creator, messages, organization, and participating users.
+ * @param id - The ID of the user for which chats are being retrieved.
+ * @returns The list of chats associated with the user, including details such as ID, creator, messages, organization, and participating users.
  */
-
-// directChatsMessagesByChatID(id: ID!): [DirectChatMessage]
 
 export const CHAT_BY_ID = gql`
   query chatById($id: ID!) {
