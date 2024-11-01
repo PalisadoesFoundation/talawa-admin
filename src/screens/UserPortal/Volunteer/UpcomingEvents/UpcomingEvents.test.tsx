@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -44,6 +44,14 @@ const t = {
   ),
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
+};
+
+const debounceWait = async (ms = 350): Promise<void> => {
+  await act(() => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  });
 };
 
 const renderUpcomingEvents = (link: ApolloLink): RenderResult => {
@@ -118,7 +126,7 @@ describe('Testing Upcoming Events Screen', () => {
     expect(searchInput).toBeInTheDocument();
   });
 
-  it('Search by event title and clear the input by backspace', async () => {
+  it('Search by event title', async () => {
     renderUpcomingEvents(link1);
     const searchInput = await screen.findByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
@@ -131,27 +139,8 @@ describe('Testing Upcoming Events Screen', () => {
     expect(searchByTitle).toBeInTheDocument();
     userEvent.click(searchByTitle);
 
-    // Clear the search input by backspace
-    userEvent.type(searchInput, '1{backspace}');
-
-    const eventTitle = await screen.findAllByTestId('eventTitle');
-    expect(eventTitle[0]).toHaveTextContent('Event 1');
-  });
-
-  it('Search by event title on press of ENTER', async () => {
-    renderUpcomingEvents(link1);
-    const searchInput = await screen.findByTestId('searchBy');
-    expect(searchInput).toBeInTheDocument();
-
-    const searchToggle = await screen.findByTestId('searchByToggle');
-    expect(searchToggle).toBeInTheDocument();
-    userEvent.click(searchToggle);
-
-    const searchByTitle = await screen.findByTestId('title');
-    expect(searchByTitle).toBeInTheDocument();
-    userEvent.click(searchByTitle);
-
-    userEvent.type(searchInput, '1{enter}');
+    userEvent.type(searchInput, '1');
+    await debounceWait();
 
     const eventTitle = await screen.findAllByTestId('eventTitle');
     expect(eventTitle[0]).toHaveTextContent('Event 1');
@@ -172,7 +161,7 @@ describe('Testing Upcoming Events Screen', () => {
 
     // Search by name on press of ENTER
     userEvent.type(searchInput, 'M');
-    userEvent.click(screen.getByTestId('searchBtn'));
+    await debounceWait();
 
     const eventTitle = await screen.findAllByTestId('eventTitle');
     expect(eventTitle[0]).toHaveTextContent('Event 1');

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -30,6 +30,14 @@ const t = {
   ),
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
+};
+
+const debounceWait = async (ms = 350): Promise<void> => {
+  await act(() => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  });
 };
 
 const renderActions = (link: ApolloLink): RenderResult => {
@@ -133,19 +141,7 @@ describe('Testing Actions Screen', () => {
     expect(assigneeName[0]).toHaveTextContent('Teresa Bradley');
   });
 
-  it('Search by Assignee name and clear the input by backspace', async () => {
-    renderActions(link1);
-    const searchInput = await screen.findByTestId('searchBy');
-    expect(searchInput).toBeInTheDocument();
-
-    // Clear the search input by backspace
-    userEvent.type(searchInput, '1{backspace}');
-
-    const assigneeName = await screen.findAllByTestId('assigneeName');
-    expect(assigneeName[0]).toHaveTextContent('Teresa Bradley');
-  });
-
-  it('Search by Assignee name on press of ENTER', async () => {
+  it('Search by Assignee name', async () => {
     renderActions(link1);
     const searchInput = await screen.findByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
@@ -158,13 +154,14 @@ describe('Testing Actions Screen', () => {
     expect(searchByAssignee).toBeInTheDocument();
     userEvent.click(searchByAssignee);
 
-    userEvent.type(searchInput, '1{enter}');
+    userEvent.type(searchInput, '1');
+    await debounceWait();
 
     const assigneeName = await screen.findAllByTestId('assigneeName');
     expect(assigneeName[0]).toHaveTextContent('Group 1');
   });
 
-  it('Search by Category name on click of search button', async () => {
+  it('Search by Category name', async () => {
     renderActions(link1);
     const searchInput = await screen.findByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
@@ -179,7 +176,7 @@ describe('Testing Actions Screen', () => {
 
     // Search by name on press of ENTER
     userEvent.type(searchInput, '1');
-    userEvent.click(await screen.findByTestId('searchBtn'));
+    await debounceWait();
 
     const assigneeName = await screen.findAllByTestId('assigneeName');
     expect(assigneeName[0]).toHaveTextContent('Teresa Bradley');

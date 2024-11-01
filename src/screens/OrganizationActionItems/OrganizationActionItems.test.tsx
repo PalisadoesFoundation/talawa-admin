@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -45,6 +45,14 @@ const t = {
   ),
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
+};
+
+const debounceWait = async (ms = 350): Promise<void> => {
+  await act(() => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  });
 };
 
 const renderOrganizationActionItems = (link: ApolloLink): RenderResult => {
@@ -301,7 +309,8 @@ describe('Testing Organization Action Items Screen', () => {
     expect(searchInput).toBeInTheDocument();
 
     userEvent.type(searchInput, 'John');
-    userEvent.click(screen.getByTestId('searchBtn'));
+    await debounceWait();
+
     await waitFor(() => {
       expect(screen.getByText('Category 1')).toBeInTheDocument();
       expect(screen.queryByText('Category 2')).toBeNull();
@@ -325,35 +334,8 @@ describe('Testing Organization Action Items Screen', () => {
     expect(searchInput).toBeInTheDocument();
 
     userEvent.type(searchInput, 'Category 1');
-    userEvent.click(screen.getByTestId('searchBtn'));
-    await waitFor(() => {
-      expect(screen.getByText('Category 1')).toBeInTheDocument();
-      expect(screen.queryByText('Category 2')).toBeNull();
-    });
-  });
+    await debounceWait();
 
-  it('Search action items by name and clear the input by backspace', async () => {
-    renderOrganizationActionItems(link1);
-
-    const searchInput = await screen.findByTestId('searchBy');
-    expect(searchInput).toBeInTheDocument();
-
-    // Clear the search input by backspace
-    userEvent.type(searchInput, 'A{backspace}');
-    await waitFor(() => {
-      expect(screen.getAllByText('Category 1')).toHaveLength(3);
-      expect(screen.getAllByText('Category 2')).toHaveLength(2);
-    });
-  });
-
-  it('Search action items by name on press of ENTER', async () => {
-    renderOrganizationActionItems(link1);
-
-    const searchInput = await screen.findByTestId('searchBy');
-    expect(searchInput).toBeInTheDocument();
-
-    userEvent.type(searchInput, 'John');
-    userEvent.type(searchInput, '{enter}');
     await waitFor(() => {
       expect(screen.getByText('Category 1')).toBeInTheDocument();
       expect(screen.queryByText('Category 2')).toBeNull();

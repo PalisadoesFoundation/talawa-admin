@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -26,6 +26,14 @@ const t = {
   ),
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
+};
+
+const debounceWait = async (ms = 350): Promise<void> => {
+  await act(() => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  });
 };
 
 const renderVolunteerGroups = (link: ApolloLink): RenderResult => {
@@ -124,19 +132,7 @@ describe('Testing VolunteerGroups Screen', () => {
     expect(groupName[0]).toHaveTextContent('Group 2');
   });
 
-  it('Search by Groups and clear the input by backspace', async () => {
-    renderVolunteerGroups(link1);
-    const searchInput = await screen.findByTestId('searchBy');
-    expect(searchInput).toBeInTheDocument();
-
-    // Clear the search input by backspace
-    userEvent.type(searchInput, '1{backspace}');
-
-    const groupName = await screen.findAllByTestId('groupName');
-    expect(groupName[0]).toHaveTextContent('Group 1');
-  });
-
-  it('Search by Groups on press of ENTER', async () => {
+  it('Search by Groups', async () => {
     renderVolunteerGroups(link1);
     const searchInput = await screen.findByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
@@ -149,13 +145,14 @@ describe('Testing VolunteerGroups Screen', () => {
     expect(searchByGroup).toBeInTheDocument();
     userEvent.click(searchByGroup);
 
-    userEvent.type(searchInput, '1{enter}');
+    userEvent.type(searchInput, '1');
+    await debounceWait();
 
     const groupName = await screen.findAllByTestId('groupName');
     expect(groupName[0]).toHaveTextContent('Group 1');
   });
 
-  it('Search by Leader on click of search button', async () => {
+  it('Search by Leader', async () => {
     renderVolunteerGroups(link1);
     const searchInput = await screen.findByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
@@ -170,7 +167,7 @@ describe('Testing VolunteerGroups Screen', () => {
 
     // Search by name on press of ENTER
     userEvent.type(searchInput, 'Bruce');
-    userEvent.click(await screen.findByTestId('searchBtn'));
+    await debounceWait();
 
     const groupName = await screen.findAllByTestId('groupName');
     expect(groupName[0]).toHaveTextContent('Group 1');

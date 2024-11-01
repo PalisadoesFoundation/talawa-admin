@@ -14,6 +14,20 @@ export interface InterfaceUserInfo {
   image?: string | null;
 }
 
+// Base interface for common event properties
+export interface InterfaceBaseEvent {
+  _id: string;
+  title: string;
+  description: string;
+  startDate: string;
+  endDate: string;
+  location: string;
+  startTime: string;
+  endTime: string;
+  allDay: boolean;
+  recurring: boolean;
+}
+
 export interface InterfaceActionItemCategoryInfo {
   _id: string;
   name: string;
@@ -355,17 +369,8 @@ export interface InterfacePledgeInfo {
   startDate: string;
   users: InterfaceUserInfo[];
 }
-export interface InterfaceQueryOrganizationEventListItem {
-  _id: string;
-  title: string;
-  description: string;
-  startDate: string;
-  endDate: string;
-  location: string;
-  startTime: string;
-  endTime: string;
-  allDay: boolean;
-  recurring: boolean;
+export interface InterfaceQueryOrganizationEventListItem
+  extends InterfaceBaseEvent {
   isPublic: boolean;
   isRegisterable: boolean;
 }
@@ -626,17 +631,7 @@ export interface InterfaceCreateVolunteerGroup {
   volunteerUsers: InterfaceUserInfo[];
 }
 
-export interface InterfaceUserEvents {
-  _id: string;
-  title: string;
-  description: string;
-  startDate: string;
-  endDate: string;
-  location: string;
-  startTime: string;
-  endTime: string;
-  allDay: boolean;
-  recurring: boolean;
+export interface InterfaceUserEvents extends InterfaceBaseEvent {
   volunteerGroups: {
     _id: string;
     name: string;

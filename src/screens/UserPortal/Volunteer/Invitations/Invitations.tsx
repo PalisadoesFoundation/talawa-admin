@@ -11,7 +11,7 @@ import {
 } from '@mui/icons-material';
 import { TbCalendarEvent } from 'react-icons/tb';
 import { FaUserGroup } from 'react-icons/fa6';
-import { Stack } from '@mui/material';
+import { debounce, Stack } from '@mui/material';
 
 import useLocalStorage from 'utils/useLocalstorage';
 import { useMutation, useQuery } from '@apollo/client';
@@ -51,6 +51,11 @@ const Invitations = (): JSX.Element => {
     // Redirects to the homepage if orgId or userId is missing
     return <Navigate to={'/'} replace />;
   }
+
+  const debouncedSearch = useMemo(
+    () => debounce((value: string) => setSearchTerm(value), 300),
+    [],
+  );
 
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [searchValue, setSearchValue] = useState<string>('');
@@ -143,13 +148,9 @@ const Invitations = (): JSX.Element => {
             required
             className={styles.inputField}
             value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-            onKeyUp={(e) => {
-              if (e.key === 'Enter') {
-                setSearchTerm(searchValue);
-              } else if (e.key === 'Backspace' && searchValue === '') {
-                setSearchTerm('');
-              }
+            onChange={(e) => {
+              setSearchValue(e.target.value);
+              debouncedSearch(e.target.value);
             }}
             data-testid="searchBy"
           />
@@ -157,7 +158,6 @@ const Invitations = (): JSX.Element => {
             tabIndex={-1}
             className={`position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center`}
             data-testid="searchBtn"
-            onClick={() => setSearchTerm(searchValue)}
           >
             <Search />
           </Button>

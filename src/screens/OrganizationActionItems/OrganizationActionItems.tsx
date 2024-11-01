@@ -26,7 +26,7 @@ import {
   type GridCellParams,
   type GridColDef,
 } from '@mui/x-data-grid';
-import { Chip, Stack } from '@mui/material';
+import { Chip, debounce, Stack } from '@mui/material';
 import ItemViewModal from './ItemViewModal';
 import ItemModal from './ItemModal';
 import ItemDeleteModal from './ItemDeleteModal';
@@ -155,6 +155,11 @@ function organizationActionItems(): JSX.Element {
   const actionItems = useMemo(
     () => actionItemsData?.actionItemsByOrganization || [],
     [actionItemsData],
+  );
+
+  const debouncedSearch = useMemo(
+    () => debounce((value: string) => setSearchTerm(value), 300),
+    [],
   );
 
   if (actionItemsLoading) {
@@ -394,20 +399,15 @@ function organizationActionItems(): JSX.Element {
             required
             className={styles.inputField}
             value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-            onKeyUp={(e) => {
-              if (e.key === 'Enter') {
-                setSearchTerm(searchValue);
-              } else if (e.key === 'Backspace' && searchValue === '') {
-                setSearchTerm('');
-              }
+            onChange={(e) => {
+              setSearchValue(e.target.value);
+              debouncedSearch(e.target.value);
             }}
             data-testid="searchBy"
           />
           <Button
             tabIndex={-1}
             className={`position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center`}
-            onClick={() => setSearchTerm(searchValue)}
             style={{ marginBottom: '10px' }}
             data-testid="searchBtn"
           >

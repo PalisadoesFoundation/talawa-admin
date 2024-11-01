@@ -14,7 +14,7 @@ import {
   type GridCellParams,
   type GridColDef,
 } from '@mui/x-data-grid';
-import { Stack } from '@mui/material';
+import { debounce, Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 import styles from '../EventVolunteers.module.css';
 import { EVENT_VOLUNTEER_GROUP_LIST } from 'GraphQl/Queries/EventVolunteerQueries';
@@ -125,6 +125,11 @@ function volunteerGroups(): JSX.Element {
       openModal(modal);
     },
     [openModal],
+  );
+
+  const debouncedSearch = useMemo(
+    () => debounce((value: string) => setSearchTerm(value), 300),
+    [],
   );
 
   const groups = useMemo(
@@ -301,20 +306,15 @@ function volunteerGroups(): JSX.Element {
             required
             className={styles.inputField}
             value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-            onKeyUp={(e) => {
-              if (e.key === 'Enter') {
-                setSearchTerm(searchValue);
-              } else if (e.key === 'Backspace' && searchValue === '') {
-                setSearchTerm('');
-              }
+            onChange={(e) => {
+              setSearchValue(e.target.value);
+              debouncedSearch(e.target.value);
             }}
             data-testid="searchBy"
           />
           <Button
             tabIndex={-1}
             className={`position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center`}
-            onClick={() => setSearchTerm(searchValue)}
             style={{ marginBottom: '10px' }}
             data-testid="searchBtn"
           >

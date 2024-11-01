@@ -17,6 +17,7 @@ import {
   AccordionSummary,
   Chip,
   Stack,
+  debounce,
 } from '@mui/material';
 import { Circle, Search, Sort, WarningAmberRounded } from '@mui/icons-material';
 
@@ -60,6 +61,11 @@ const UpcomingEvents = (): JSX.Element => {
   const [searchBy, setSearchBy] = useState<'title' | 'location'>('title');
 
   const [createVolunteerMembership] = useMutation(CREATE_VOLUNTEER_MEMBERSHIP);
+
+  const debouncedSearch = useMemo(
+    () => debounce((value: string) => setSearchTerm(value), 300),
+    [],
+  );
 
   const handleVolunteer = async (
     eventId: string,
@@ -149,13 +155,9 @@ const UpcomingEvents = (): JSX.Element => {
             required
             className={styles.inputField}
             value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-            onKeyUp={(e) => {
-              if (e.key === 'Enter') {
-                setSearchTerm(searchValue);
-              } else if (e.key === 'Backspace' && searchValue === '') {
-                setSearchTerm('');
-              }
+            onChange={(e) => {
+              setSearchValue(e.target.value);
+              debouncedSearch(e.target.value);
             }}
             data-testid="searchBy"
           />
@@ -163,7 +165,6 @@ const UpcomingEvents = (): JSX.Element => {
             tabIndex={-1}
             className={`position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center`}
             data-testid="searchBtn"
-            onClick={() => setSearchTerm(searchValue)}
           >
             <Search />
           </Button>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -43,6 +43,14 @@ const t = {
   ),
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
+};
+
+const debounceWait = async (ms = 350): Promise<void> => {
+  await act(() => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  });
 };
 
 const renderInvitations = (link: ApolloLink): RenderResult => {
@@ -210,44 +218,14 @@ describe('Testing Invvitations Screen', () => {
     );
   });
 
-  it('Search Invitations by event title and clear the input by backspace', async () => {
-    renderInvitations(link1);
-    const searchInput = await screen.findByTestId('searchBy');
-    expect(searchInput).toBeInTheDocument();
-
-    // Clear the search input by backspace
-    userEvent.type(searchInput, '1{backspace}');
-
-    const inviteSubject = await screen.findAllByTestId('inviteSubject');
-    expect(inviteSubject).toHaveLength(2);
-  });
-
-  it('Search Invitations by event title  on press of ENTER', async () => {
+  it('Search Invitations', async () => {
     renderInvitations(link1);
     const searchInput = await screen.findByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
 
     // Search by name on press of ENTER
     userEvent.type(searchInput, '1');
-    userEvent.type(searchInput, '{enter}');
-
-    await waitFor(() => {
-      const inviteSubject = screen.getAllByTestId('inviteSubject');
-      expect(inviteSubject).toHaveLength(1);
-      expect(inviteSubject[0]).toHaveTextContent(
-        'Invitation to volunteer for event',
-      );
-    });
-  });
-
-  it('Search Invitations by event title on click of search button', async () => {
-    renderInvitations(link1);
-    const searchInput = await screen.findByTestId('searchBy');
-    expect(searchInput).toBeInTheDocument();
-
-    // Search by name on press of ENTER
-    userEvent.type(searchInput, '1');
-    userEvent.click(screen.getByTestId('searchBtn'));
+    await debounceWait();
 
     await waitFor(() => {
       const inviteSubject = screen.getAllByTestId('inviteSubject');

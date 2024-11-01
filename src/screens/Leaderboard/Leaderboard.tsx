@@ -21,7 +21,7 @@ import {
   type GridCellParams,
   type GridColDef,
 } from '@mui/x-data-grid';
-import { Stack } from '@mui/material';
+import { debounce, Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 import { VOLUNTEER_RANKING } from 'GraphQl/Queries/EventVolunteerQueries';
 import { useQuery } from '@apollo/client';
@@ -106,6 +106,11 @@ function leaderboard(): JSX.Element {
       },
     },
   });
+
+  const debouncedSearch = useMemo(
+    () => debounce((value: string) => setSearchTerm(value), 300),
+    [],
+  );
 
   const rankings = useMemo(
     () => rankingsData?.getVolunteerRanks || [],
@@ -253,20 +258,15 @@ function leaderboard(): JSX.Element {
             required
             className={styles.inputField}
             value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-            onKeyUp={(e) => {
-              if (e.key === 'Enter') {
-                setSearchTerm(searchValue);
-              } else if (e.key === 'Backspace' && searchValue === '') {
-                setSearchTerm('');
-              }
+            onChange={(e) => {
+              setSearchValue(e.target.value);
+              debouncedSearch(e.target.value);
             }}
             data-testid="searchBy"
           />
           <Button
             tabIndex={-1}
             className={`position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center`}
-            onClick={() => setSearchTerm(searchValue)}
             style={{ marginBottom: '10px' }}
             data-testid="searchBtn"
           >

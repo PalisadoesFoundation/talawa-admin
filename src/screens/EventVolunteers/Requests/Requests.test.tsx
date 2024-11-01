@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -27,6 +27,14 @@ jest.mock('react-toastify', () => ({
     error: jest.fn(),
   },
 }));
+
+const debounceWait = async (ms = 350): Promise<void> => {
+  await act(() => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  });
+};
 
 const link1 = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(ERROR_MOCKS);
@@ -138,21 +146,7 @@ describe('Testing Requests Screen', () => {
     expect(volunteerName[0]).toHaveTextContent('John Doe');
   });
 
-  it('Search Requests by volunteerName and clear the input by backspace', async () => {
-    renderRequests(link1);
-
-    const searchInput = await screen.findByTestId('searchBy');
-    expect(searchInput).toBeInTheDocument();
-
-    // Clear the search input by backspace
-    userEvent.type(searchInput, 'T{backspace}');
-    await waitFor(() => {
-      const volunteerName = screen.getAllByTestId('volunteerName');
-      expect(volunteerName[0]).toHaveTextContent('John Doe');
-    });
-  });
-
-  it('Search Requests by volunteer name on press of ENTER', async () => {
+  it('Search Requests by volunteer name', async () => {
     renderRequests(link1);
 
     const searchInput = await screen.findByTestId('searchBy');
@@ -160,23 +154,7 @@ describe('Testing Requests Screen', () => {
 
     // Search by name on press of ENTER
     userEvent.type(searchInput, 'T');
-    userEvent.type(searchInput, '{enter}');
-
-    await waitFor(() => {
-      const volunteerName = screen.getAllByTestId('volunteerName');
-      expect(volunteerName[0]).toHaveTextContent('Teresa Bradley');
-    });
-  });
-
-  it('Search Requests by volunteer name on click of search button', async () => {
-    renderRequests(link1);
-
-    const searchInput = await screen.findByTestId('searchBy');
-    expect(searchInput).toBeInTheDocument();
-
-    // Search by name on press of ENTER
-    userEvent.type(searchInput, 'T');
-    userEvent.click(screen.getByTestId('searchBtn'));
+    await debounceWait();
 
     await waitFor(() => {
       const volunteerName = screen.getAllByTestId('volunteerName');

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -24,6 +24,14 @@ const t = {
   ),
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
+};
+
+const debounceWait = async (ms = 350): Promise<void> => {
+  await act(() => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  });
 };
 
 const renderLeaderboard = (link: ApolloLink): RenderResult => {
@@ -207,21 +215,7 @@ describe('Testing Leaderboard Screen', () => {
     expect(userName).toHaveLength(3);
   });
 
-  it('Search Volunteers and clear the input by backspace', async () => {
-    renderLeaderboard(link1);
-
-    const searchInput = await screen.findByTestId('searchBy');
-    expect(searchInput).toBeInTheDocument();
-
-    // Clear the search input by backspace
-    userEvent.type(searchInput, 'T{backspace}');
-    await waitFor(() => {
-      const userName = screen.getAllByTestId('userName');
-      expect(userName).toHaveLength(4);
-    });
-  });
-
-  it('Search Volunteers on press of ENTER', async () => {
+  it('Search Volunteers', async () => {
     renderLeaderboard(link1);
 
     const searchInput = await screen.findByTestId('searchBy');
@@ -229,23 +223,7 @@ describe('Testing Leaderboard Screen', () => {
 
     // Search by name on press of ENTER
     userEvent.type(searchInput, 'T');
-    userEvent.type(searchInput, '{enter}');
-
-    await waitFor(() => {
-      const userName = screen.getAllByTestId('userName');
-      expect(userName).toHaveLength(1);
-    });
-  });
-
-  it('Search Volunteers on click of search button', async () => {
-    renderLeaderboard(link1);
-
-    const searchInput = await screen.findByTestId('searchBy');
-    expect(searchInput).toBeInTheDocument();
-
-    // Search by name on press of ENTER
-    userEvent.type(searchInput, 'T');
-    userEvent.click(screen.getByTestId('searchBtn'));
+    await debounceWait();
 
     await waitFor(() => {
       const userName = screen.getAllByTestId('userName');
