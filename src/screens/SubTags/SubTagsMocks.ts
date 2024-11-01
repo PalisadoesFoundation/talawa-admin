@@ -1,33 +1,28 @@
-import {
-  CREATE_USER_TAG,
-  REMOVE_USER_TAG,
-} from 'GraphQl/Mutations/TagMutations';
+import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import {
   USER_TAG_ANCESTORS,
   USER_TAG_SUB_TAGS,
 } from 'GraphQl/Queries/userTagQueries';
+import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 
 export const MOCKS = [
   {
     request: {
       query: USER_TAG_SUB_TAGS,
       variables: {
-        id: 'tag1',
-        after: null,
-        before: null,
-        first: 5,
-        last: null,
+        id: '1',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
       },
     },
     result: {
       data: {
-        getUserTag: {
-          name: 'tag1',
+        getChildTags: {
+          name: 'userTag 1',
           childTags: {
             edges: [
               {
                 node: {
-                  _id: '1',
+                  _id: 'subTag1',
                   name: 'subTag 1',
                   usersAssignedTo: {
                     totalCount: 5,
@@ -36,11 +31,11 @@ export const MOCKS = [
                     totalCount: 5,
                   },
                 },
-                cursor: '1',
+                cursor: 'subTag1',
               },
               {
                 node: {
-                  _id: '2',
+                  _id: 'subTag2',
                   name: 'subTag 2',
                   usersAssignedTo: {
                     totalCount: 5,
@@ -49,11 +44,11 @@ export const MOCKS = [
                     totalCount: 0,
                   },
                 },
-                cursor: '2',
+                cursor: 'subTag2',
               },
               {
                 node: {
-                  _id: '3',
+                  _id: 'subTag3',
                   name: 'subTag 3',
                   usersAssignedTo: {
                     totalCount: 0,
@@ -62,11 +57,11 @@ export const MOCKS = [
                     totalCount: 5,
                   },
                 },
-                cursor: '3',
+                cursor: 'subTag3',
               },
               {
                 node: {
-                  _id: '4',
+                  _id: 'subTag4',
                   name: 'subTag 4',
                   usersAssignedTo: {
                     totalCount: 0,
@@ -75,11 +70,11 @@ export const MOCKS = [
                     totalCount: 0,
                   },
                 },
-                cursor: '4',
+                cursor: 'subTag4',
               },
               {
                 node: {
-                  _id: '5',
+                  _id: 'subTag5',
                   name: 'subTag 5',
                   usersAssignedTo: {
                     totalCount: 5,
@@ -88,85 +83,25 @@ export const MOCKS = [
                     totalCount: 5,
                   },
                 },
-                cursor: '5',
+                cursor: 'subTag5',
               },
-            ],
-            pageInfo: {
-              startCursor: '1',
-              endCursor: '5',
-              hasNextPage: true,
-              hasPreviousPage: false,
-            },
-            totalCount: 6,
-          },
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_TAG_SUB_TAGS,
-      variables: {
-        id: 'tag1',
-        after: '5',
-        before: null,
-        first: 5,
-        last: null,
-      },
-    },
-    result: {
-      data: {
-        getUserTag: {
-          name: 'tag1',
-          childTags: {
-            edges: [
               {
                 node: {
-                  _id: '6',
+                  _id: 'subTag6',
                   name: 'subTag 6',
                   usersAssignedTo: {
-                    totalCount: 0,
+                    totalCount: 5,
                   },
                   childTags: {
-                    totalCount: 0,
+                    totalCount: 5,
                   },
                 },
-                cursor: '6',
+                cursor: 'subTag6',
               },
-            ],
-            pageInfo: {
-              startCursor: '6',
-              endCursor: '6',
-              hasNextPage: false,
-              hasPreviousPage: true,
-            },
-            totalCount: 6,
-          },
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_TAG_SUB_TAGS,
-      variables: {
-        id: 'tag1',
-        after: null,
-        before: '6',
-        first: null,
-        last: 5,
-      },
-    },
-    result: {
-      data: {
-        getUserTag: {
-          name: 'tag1',
-          childTags: {
-            edges: [
               {
                 node: {
-                  _id: '1',
-                  name: 'subTag 1',
+                  _id: 'subTag7',
+                  name: 'subTag 7',
                   usersAssignedTo: {
                     totalCount: 5,
                   },
@@ -174,51 +109,12 @@ export const MOCKS = [
                     totalCount: 5,
                   },
                 },
-                cursor: '1',
+                cursor: 'subTag7',
               },
               {
                 node: {
-                  _id: '2',
-                  name: 'subTag 2',
-                  usersAssignedTo: {
-                    totalCount: 5,
-                  },
-                  childTags: {
-                    totalCount: 0,
-                  },
-                },
-                cursor: '2',
-              },
-              {
-                node: {
-                  _id: '3',
-                  name: 'subTag 3',
-                  usersAssignedTo: {
-                    totalCount: 0,
-                  },
-                  childTags: {
-                    totalCount: 5,
-                  },
-                },
-                cursor: '3',
-              },
-              {
-                node: {
-                  _id: '4',
-                  name: 'subTag 4',
-                  usersAssignedTo: {
-                    totalCount: 0,
-                  },
-                  childTags: {
-                    totalCount: 0,
-                  },
-                },
-                cursor: '4',
-              },
-              {
-                node: {
-                  _id: '5',
-                  name: 'subTag 5',
+                  _id: 'subTag8',
+                  name: 'subTag 8',
                   usersAssignedTo: {
                     totalCount: 5,
                   },
@@ -226,16 +122,42 @@ export const MOCKS = [
                     totalCount: 5,
                   },
                 },
-                cursor: '5',
+                cursor: 'subTag8',
+              },
+              {
+                node: {
+                  _id: 'subTag9',
+                  name: 'subTag 9',
+                  usersAssignedTo: {
+                    totalCount: 5,
+                  },
+                  childTags: {
+                    totalCount: 5,
+                  },
+                },
+                cursor: 'subTag9',
+              },
+              {
+                node: {
+                  _id: 'subTag10',
+                  name: 'subTag 10',
+                  usersAssignedTo: {
+                    totalCount: 5,
+                  },
+                  childTags: {
+                    totalCount: 5,
+                  },
+                },
+                cursor: 'subTag10',
               },
             ],
             pageInfo: {
               startCursor: '1',
-              endCursor: '5',
+              endCursor: '10',
               hasNextPage: true,
               hasPreviousPage: false,
             },
-            totalCount: 6,
+            totalCount: 11,
           },
         },
       },
@@ -246,25 +168,37 @@ export const MOCKS = [
       query: USER_TAG_SUB_TAGS,
       variables: {
         id: '1',
-        after: null,
-        before: null,
-        first: 5,
-        last: null,
+        after: '10',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
       },
     },
     result: {
       data: {
-        getUserTag: {
-          name: 'subTag 1',
+        getChildTags: {
+          name: 'tag1',
           childTags: {
-            edges: [],
+            edges: [
+              {
+                node: {
+                  _id: 'subTag11',
+                  name: 'subTag 11',
+                  usersAssignedTo: {
+                    totalCount: 0,
+                  },
+                  childTags: {
+                    totalCount: 0,
+                  },
+                },
+                cursor: 'subTag11',
+              },
+            ],
             pageInfo: {
-              startCursor: null,
-              endCursor: null,
+              startCursor: '11',
+              endCursor: '11',
               hasNextPage: false,
-              hasPreviousPage: false,
+              hasPreviousPage: true,
             },
-            totalCount: 0,
+            totalCount: 11,
           },
         },
       },
@@ -274,7 +208,7 @@ export const MOCKS = [
     request: {
       query: USER_TAG_ANCESTORS,
       variables: {
-        id: 'tag1',
+        id: '1',
       },
     },
     result: {
@@ -290,20 +224,60 @@ export const MOCKS = [
   },
   {
     request: {
+      query: USER_TAG_SUB_TAGS,
+      variables: {
+        id: 'subTag1',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+      },
+    },
+    result: {
+      data: {
+        getChildTags: {
+          name: 'subTag 1',
+          childTags: {
+            edges: [
+              {
+                node: {
+                  _id: 'subTag1.1',
+                  name: 'subTag 1.1',
+                  usersAssignedTo: {
+                    totalCount: 5,
+                  },
+                  childTags: {
+                    totalCount: 5,
+                  },
+                },
+                cursor: 'subTag1.1',
+              },
+            ],
+            pageInfo: {
+              startCursor: 'subTag1.1',
+              endCursor: 'subTag1.1',
+              hasNextPage: false,
+              hasPreviousPage: false,
+            },
+            totalCount: 1,
+          },
+        },
+      },
+    },
+  },
+  {
+    request: {
       query: USER_TAG_ANCESTORS,
       variables: {
-        id: '1',
+        id: 'subTag1',
       },
     },
     result: {
       data: {
         getUserTagAncestors: [
           {
-            _id: 'tag1',
+            _id: '1',
             name: 'tag 1',
           },
           {
-            _id: '1',
+            _id: 'subTag1',
             name: 'subTag 1',
           },
         ],
@@ -314,30 +288,15 @@ export const MOCKS = [
     request: {
       query: CREATE_USER_TAG,
       variables: {
-        name: 'subTag 7',
+        name: 'subTag 12',
         organizationId: '123',
-        parentTagId: 'tag1',
+        parentTagId: '1',
       },
     },
     result: {
       data: {
         createUserTag: {
-          _id: '7',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: REMOVE_USER_TAG,
-      variables: {
-        id: '1',
-      },
-    },
-    result: {
-      data: {
-        removeUserTag: {
-          _id: '1',
+          _id: 'subTag12',
         },
       },
     },
@@ -349,11 +308,8 @@ export const MOCKS_ERROR_SUB_TAGS = [
     request: {
       query: USER_TAG_SUB_TAGS,
       variables: {
-        id: 'tag1',
-        after: null,
-        before: null,
-        first: 5,
-        last: null,
+        id: '1',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
       },
     },
     error: new Error('Mock Graphql Error'),
@@ -362,7 +318,7 @@ export const MOCKS_ERROR_SUB_TAGS = [
     request: {
       query: USER_TAG_ANCESTORS,
       variables: {
-        id: 'tag1',
+        id: '1',
       },
     },
     result: {
@@ -378,26 +334,23 @@ export const MOCKS_ERROR_TAG_ANCESTORS = [
     request: {
       query: USER_TAG_SUB_TAGS,
       variables: {
-        id: 'tag1',
-        after: null,
-        before: null,
-        first: 5,
-        last: null,
+        id: '1',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
       },
     },
     result: {
       data: {
-        getUserTag: {
+        getChildTags: {
           name: 'tag1',
           childTags: {
             edges: [],
             pageInfo: {
-              startCursor: '1',
-              endCursor: '5',
-              hasNextPage: true,
+              startCursor: '0',
+              endCursor: '0',
+              hasNextPage: false,
               hasPreviousPage: false,
             },
-            totalCount: 6,
+            totalCount: 0,
           },
         },
       },
@@ -407,7 +360,7 @@ export const MOCKS_ERROR_TAG_ANCESTORS = [
     request: {
       query: USER_TAG_ANCESTORS,
       variables: {
-        id: 'tag1',
+        id: '1',
       },
     },
     error: new Error('Mock Graphql Error'),
