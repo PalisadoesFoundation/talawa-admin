@@ -3,7 +3,7 @@ import type { RenderResult } from '@testing-library/react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
-
+import styles from './UserSidebar.module.css';
 import {
   USER_DETAILS,
   USER_JOINED_ORGANIZATIONS,
@@ -488,35 +488,57 @@ describe('Testing UserSidebar Component [User Portal]', () => {
       expect(props.setHideDrawer).toHaveBeenCalledWith(true);
     });
 
-    test('Drawer visibility based on hideDrawer prop', () => {
-      const { rerender } = render(
-        <MockedProvider addTypename={false}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <UserSidebar {...props} hideDrawer={null} />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      // Check for `hideElemByDefault` when hideDrawer is null
-      expect(screen.getByTestId('leftDrawerContainer')).toHaveClass(
-        'hideElemByDefault',
-      );
-
-      // Rerender with hideDrawer set to true and verify `inactiveDrawer`
-      rerender(<UserSidebar {...props} hideDrawer={true} />);
-      expect(screen.getByTestId('leftDrawerContainer')).toHaveClass(
-        'inactiveDrawer',
-      );
-
-      // Rerender with hideDrawer set to false and verify `activeDrawer`
-      rerender(<UserSidebar {...props} hideDrawer={false} />);
-      expect(screen.getByTestId('leftDrawerContainer')).toHaveClass(
-        'activeDrawer',
-      );
+    describe('UserSidebar', () => {
+      test('Drawer visibility based on hideDrawer prop', () => {
+        const { rerender } = render(
+          <MockedProvider addTypename={false}>
+            <BrowserRouter>
+              <Provider store={store}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <UserSidebar {...props} hideDrawer={null} />
+                </I18nextProvider>
+              </Provider>
+            </BrowserRouter>
+          </MockedProvider>
+        );
+    
+        // Check for `hideElemByDefault` class when hideDrawer is null
+        expect(screen.getByTestId('leftDrawerContainer')).toHaveClass(
+          styles.hideElemByDefault
+        );
+    
+        // Rerender with hideDrawer set to true and verify `inactiveDrawer`
+        rerender(
+          <MockedProvider addTypename={false}>
+            <BrowserRouter>
+              <Provider store={store}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <UserSidebar {...props} hideDrawer={true} />
+                </I18nextProvider>
+              </Provider>
+            </BrowserRouter>
+          </MockedProvider>
+        );
+        expect(screen.getByTestId('leftDrawerContainer')).toHaveClass(
+          styles.inactiveDrawer
+        );
+    
+        // Rerender with hideDrawer set to false and verify `activeDrawer`
+        rerender(
+          <MockedProvider addTypename={false}>
+            <BrowserRouter>
+              <Provider store={store}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <UserSidebar {...props} hideDrawer={false} />
+                </I18nextProvider>
+              </Provider>
+            </BrowserRouter>
+          </MockedProvider>
+        );
+        expect(screen.getByTestId('leftDrawerContainer')).toHaveClass(
+          styles.activeDrawer
+        );
+      });
     });
   });
 });
