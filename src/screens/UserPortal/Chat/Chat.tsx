@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { Button, Dropdown } from 'react-bootstrap';
-import { SearchOutlined, Search } from '@mui/icons-material';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import ContactCard from 'components/UserPortal/ContactCard/ContactCard';
 import ChatRoom from 'components/UserPortal/ChatRoom/ChatRoom';
@@ -13,6 +12,7 @@ import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import { CHATS_LIST } from 'GraphQl/Queries/PlugInQueries';
 import CreateGroupChat from '../../../components/UserPortal/CreateGroupChat/CreateGroupChat';
 import CreateDirectChat from 'components/UserPortal/CreateDirectChat/CreateDirectChat';
+import { MARK_CHAT_MESSAGES_AS_READ } from 'GraphQl/Mutations/OrganizationMutations';
 
 interface InterfaceContactCardProps {
   id: string;
@@ -21,6 +21,8 @@ interface InterfaceContactCardProps {
   selectedContact: string;
   setSelectedContact: React.Dispatch<React.SetStateAction<string>>;
   isGroup: boolean;
+  unseenMessages: number;
+  lastMessage: string;
 }
 /**
  * The `chat` component provides a user interface for interacting with contacts and chat rooms within an organization.
@@ -48,14 +50,60 @@ interface InterfaceContactCardProps {
  *
  * @returns  The rendered `chat` component.
  */
+
+type DirectMessage = {
+  _id: string;
+  createdAt: Date;
+  sender: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    image: string;
+  };
+  replyTo:
+    | {
+        _id: string;
+        createdAt: Date;
+        sender: {
+          _id: string;
+          firstName: string;
+          lastName: string;
+          image: string;
+        };
+        messageContent: string;
+        receiver: {
+          _id: string;
+          firstName: string;
+          lastName: string;
+        };
+      }
+    | undefined;
+  messageContent: string;
+};
+
+type Chat = {
+  _id: string;
+  isGroup: boolean;
+  name: string;
+  image: string;
+  messages: DirectMessage[];
+  users: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    image: string;
+  }[];
+  unseenMessagesByUsers: string;
+};
 export default function chat(): JSX.Element {
   const { t } = useTranslation('translation', {
-    keyPrefix: 'chat',
+    keyPrefix: 'userChat',
   });
   const { t: tCommon } = useTranslation('common');
 
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
-  const [chats, setChats] = useState<any>([]);
+  const [chats, setChats] = useState<Chat[]>([]);
   const [selectedContact, setSelectedContact] = useState('');
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
@@ -105,8 +153,21 @@ export default function chat(): JSX.Element {
     },
   });
 
+  const [markChatMessagesAsRead] = useMutation(MARK_CHAT_MESSAGES_AS_READ, {
+    variables: {
+      chatId: selectedContact,
+      userId: userId,
+    },
+  });
+
+  useEffect(() => {
+    markChatMessagesAsRead().then(() => {
+      chatsListRefetch({ id: userId });
+    });
+  }, [selectedContact]);
+
   React.useEffect(() => {
-    if (chatsListData) {
+    if (chatsListData && chatsListData?.chatsByUserId.length) {
       setChats(chatsListData.chatsByUserId);
     }
   }, [chatsListData]);
@@ -158,7 +219,7 @@ export default function chat(): JSX.Element {
             <div
               className={`d-flex justify-content-between ${styles.addChatContainer}`}
             >
-              <h4>Messages</h4>
+              <h4>{t('messages')}</h4>
               <Dropdown style={{ cursor: 'pointer' }}>
                 <Dropdown.Toggle
                   className={styles.customToggle}
@@ -171,13 +232,13 @@ export default function chat(): JSX.Element {
                     onClick={openCreateDirectChatModal}
                     data-testid="newDirectChat"
                   >
-                    New Chat
+                    {t('newChat')}
                   </Dropdown.Item>
                   <Dropdown.Item
                     onClick={openCreateGroupChatModal}
                     data-testid="newGroupChat"
                   >
-                    New Group Chat
+                    {t('newGroupChat')}
                   </Dropdown.Item>
                   <Dropdown.Item href="#/action-3">
                     Starred Messages
@@ -188,7 +249,7 @@ export default function chat(): JSX.Element {
             <div className={styles.contactListContainer}>
               {chatsListLoading ? (
                 <div className={`d-flex flex-row justify-content-center`}>
-                  <HourglassBottomIcon /> <span>Loading...</span>
+                  <HourglassBottomIcon /> <span>{tCommon('loading')}</span>
                 </div>
               ) : (
                 <div
@@ -196,7 +257,7 @@ export default function chat(): JSX.Element {
                   className={styles.contactCardContainer}
                 >
                   {!!chats.length &&
-                    chats.map((chat: any) => {
+                    chats.map((chat: Chat) => {
                       const cardProps: InterfaceContactCardProps = {
                         id: chat._id,
                         title: !chat.isGroup
@@ -212,6 +273,12 @@ export default function chat(): JSX.Element {
                         setSelectedContact,
                         selectedContact,
                         isGroup: chat.isGroup,
+                        unseenMessages: JSON.parse(chat.unseenMessagesByUsers)[
+                          userId
+                        ],
+                        lastMessage:
+                          chat.messages[chat.messages.length - 1]
+                            ?.messageContent,
                       };
                       return (
                         <ContactCard

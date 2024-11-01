@@ -77,6 +77,14 @@ export const CREATE_CHAT = gql`
   }
 `;
 
+export const MARK_CHAT_MESSAGES_AS_READ = gql`
+  mutation markChatMessagesAsRead($chatId: ID!, $userId: ID!) {
+    markChatMessagesAsRead(chatId: $chatId, userId: $userId) {
+      _id
+    }
+  }
+`;
+
 export const SEND_MESSAGE_TO_CHAT = gql`
   mutation sendMessageToChat(
     $chatId: ID!
@@ -132,6 +140,7 @@ export const MESSAGE_SENT_TO_CHAT = gql`
         }
         updatedAt
       }
+      type
       sender {
         _id
         firstName

@@ -32,6 +32,8 @@ let props = {
   type: '',
   setSelectedContact: jest.fn(),
   setSelectedChatType: jest.fn(),
+  unseenMessages: 2,
+  lastMessage: '',
 };
 
 describe('Testing ContactCard Component [User Portal]', () => {

@@ -36,7 +36,7 @@ interface InterfaceCreateGroupChatProps {
           id: string;
         }>
       | undefined,
-  ) => Promise<ApolloQueryResult<any>>;
+  ) => Promise<ApolloQueryResult<unknown>>;
 }
 
 interface InterfaceOrganization {
@@ -367,7 +367,7 @@ export default function CreateGroupChat({
                                   }}
                                   data-testid="addBtn"
                                 >
-                                  Add
+                                  {t('add')}
                                 </Button>
                               )}
                             </StyledTableCell>
@@ -385,7 +385,7 @@ export default function CreateGroupChat({
             onClick={handleCreateGroupChat}
             data-testid="createBtn"
           >
-            Create
+            {t('create')}
           </Button>
         </Modal.Body>
       </Modal>
