@@ -1,7 +1,6 @@
 import { useMutation, useQuery } from '@apollo/client';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { DataGrid } from '@mui/x-data-grid';
-import Loader from 'components/Loader/Loader';
 import { USER_TAGS_MEMBERS_TO_ASSIGN_TO } from 'GraphQl/Queries/userTagQueries';
 import type { ChangeEvent } from 'react';
 import React, { useState } from 'react';
@@ -55,6 +54,11 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
     [],
   );
 
+  const [memberToAssignToSearchFirstName, setMemberToAssignToSearchFirstName] =
+    useState('');
+  const [memberToAssignToSearchLastName, setMemberToAssignToSearchLastName] =
+    useState('');
+
   const {
     data: userTagsMembersToAssignToData,
     loading: userTagsMembersToAssignToLoading,
@@ -66,6 +70,10 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
       variables: {
         id: currentTagId,
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: {
+          firstName: { starts_with: memberToAssignToSearchFirstName },
+          lastName: { starts_with: memberToAssignToSearchLastName },
+        },
       },
       skip: !addPeopleToTagModalIsOpen,
     },
@@ -251,39 +259,74 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
         </Modal.Header>
         <Form onSubmitCapture={addPeopleToCurrentTag}>
           <Modal.Body>
+            <div
+              className={`d-flex flex-wrap align-items-center border border-2 border-dark-subtle bg-light-subtle rounded-3 p-2 ${styles.scrollContainer}`}
+            >
+              {assignToMembers.length === 0 ? (
+                <div className="text-center text-body-tertiary mx-auto">
+                  {t('noOneSelected')}
+                </div>
+              ) : (
+                assignToMembers.map((member) => (
+                  <div
+                    key={member._id}
+                    className={`badge bg-dark-subtle text-secondary-emphasis lh-lg my-2 ms-2 d-flex align-items-center ${styles.memberBadge}`}
+                  >
+                    {member.firstName} {member.lastName}
+                    <i
+                      className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary`}
+                      onClick={() => removeMember(member._id)}
+                      data-testid="clearSelectedMember"
+                    />
+                  </div>
+                ))
+              )}
+            </div>
+
+            <div className="my-3 d-flex">
+              <div className="me-2 position-relative">
+                <i className="fa fa-search position-absolute text-body-tertiary end-0 top-50 translate-middle" />
+                <Form.Control
+                  type="text"
+                  id="userName"
+                  className="bg-light"
+                  placeholder={tCommon('firstName')}
+                  onChange={(e) =>
+                    setMemberToAssignToSearchFirstName(e.target.value.trim())
+                  }
+                  data-testid="searchByName"
+                  autoComplete="off"
+                  required
+                />
+              </div>
+              <div className="mx-2 position-relative">
+                <i className="fa fa-search position-absolute text-body-tertiary end-0 top-50 translate-middle" />
+                <Form.Control
+                  type="text"
+                  id="userName"
+                  className="bg-light"
+                  placeholder={tCommon('lastName')}
+                  onChange={(e) =>
+                    setMemberToAssignToSearchLastName(e.target.value.trim())
+                  }
+                  data-testid="searchByName"
+                  autoComplete="off"
+                  required
+                />
+              </div>
+            </div>
+
             {userTagsMembersToAssignToLoading ? (
-              <Loader size="sm" />
+              <div className={styles.loadingDiv}>
+                <InfiniteScrollLoader />
+              </div>
             ) : (
               <>
-                <div
-                  className={`d-flex flex-wrap align-items-center border bg-light-subtle rounded-3 p-2 ${styles.scrollContainer}`}
-                >
-                  {assignToMembers.length === 0 ? (
-                    <div className="text-center text-body-tertiary">
-                      {t('noOneSelected')}
-                    </div>
-                  ) : (
-                    assignToMembers.map((member) => (
-                      <div
-                        key={member._id}
-                        className={`badge bg-dark-subtle text-secondary-emphasis lh-lg my-2 ms-2 d-flex align-items-center ${styles.memberBadge}`}
-                      >
-                        {member.firstName} {member.lastName}
-                        <i
-                          className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary`}
-                          onClick={() => removeMember(member._id)}
-                          data-testid="clearSelectedMember"
-                        />
-                      </div>
-                    ))
-                  )}
-                </div>
-
                 <div
                   id="addPeopleToTagScrollableDiv"
                   data-testid="addPeopleToTagScrollableDiv"
                   style={{
-                    maxHeight: 300,
+                    height: 300,
                     overflow: 'auto',
                   }}
                 >

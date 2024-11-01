@@ -14,6 +14,8 @@ export const USER_TAGS_ASSIGNED_MEMBERS = gql`
     $before: String
     $first: PositiveInt
     $last: PositiveInt
+    $where: UserTagUsersAssignedToWhereInput
+    $sortedBy: UserTagUsersAssignedToSortedByInput
   ) {
     getAssignedUsers: getUserTag(id: $id) {
       name
@@ -22,6 +24,8 @@ export const USER_TAGS_ASSIGNED_MEMBERS = gql`
         before: $before
         first: $first
         last: $last
+        where: $where
+        sortedBy: $sortedBy
       ) {
         edges {
           node {
@@ -60,10 +64,19 @@ export const USER_TAG_SUB_TAGS = gql`
     $before: String
     $first: PositiveInt
     $last: PositiveInt
+    $where: UserTagWhereInput
+    $sortedBy: UserTagSortedByInput
   ) {
     getChildTags: getUserTag(id: $id) {
       name
-      childTags(after: $after, before: $before, first: $first, last: $last) {
+      childTags(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        where: $where
+        sortedBy: $sortedBy
+      ) {
         edges {
           node {
             _id
@@ -110,6 +123,7 @@ export const USER_TAGS_MEMBERS_TO_ASSIGN_TO = gql`
     $before: String
     $first: PositiveInt
     $last: PositiveInt
+    $where: UserTagUsersToAssignToWhereInput
   ) {
     getUsersToAssignTo: getUserTag(id: $id) {
       name
@@ -118,6 +132,7 @@ export const USER_TAGS_MEMBERS_TO_ASSIGN_TO = gql`
         before: $before
         first: $first
         last: $last
+        where: $where
       ) {
         edges {
           node {
