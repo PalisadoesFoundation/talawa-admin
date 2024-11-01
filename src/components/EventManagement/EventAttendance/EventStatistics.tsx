@@ -22,11 +22,6 @@ import type {
 } from './InterfaceEvents';
 import { toast } from 'react-toastify';
 
-const CHART_COLORS = {
-  primary: '#1f77b4', // Color-blind friendly blue
-  secondary: '#ff7f0e', // Color-blind friendly orange
-  tertiary: '#2ca02c', // Color-blind friendly green
-};
 export const AttendanceStatisticsModal: React.FC<
   InterfaceAttendanceStatisticsModalProps
 > = ({ show, handleClose, statistics, memberData, t }): JSX.Element => {

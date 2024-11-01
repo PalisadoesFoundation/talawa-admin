@@ -94,7 +94,6 @@ const recurringMocks = [
           startDate: new Date().toISOString(),
           attendees: mockMemberData,
         },
-        getRecurringEvents: undefined, // Explicitly set undefined here
       },
     },
   },
@@ -109,14 +108,19 @@ const recurringMocks = [
           _id: `event${i}`,
           title: `Event ${i}`,
           startDate: new Date(2023, 4, i + 1).toISOString(),
+          endDate: new Date(2023, 4, i + 1).toISOString(),
+          frequency: 'WEEKLY',
+          interval: 1,
           attendees: mockMemberData.map((member) => ({
-            ...member,
             _id: `${member._id}_${i}`,
-            eventsAttended: member?.eventsAttended?.map((event) => ({
-              ...event,
-              _id: `${event._id}_${i}`,
-            })),
+            gender: member.gender as
+              | 'MALE'
+              | 'FEMALE'
+              | 'OTHER'
+              | 'PREFER_NOT_TO_SAY',
           })),
+          isPublic: true,
+          isRegisterable: true,
         })),
       },
     },
@@ -137,6 +141,7 @@ const renderModal = (
           attendanceRate: 40,
         }}
         memberData={mockMemberData}
+        t={(key: string) => key}
       />
     </MockedProvider>,
   );
@@ -255,7 +260,6 @@ describe('AttendanceStatisticsModal', () => {
       });
 
       fireEvent.click(screen.getByTestId('export-dropdown'));
-      // Add assertions related to the export functionality here
     });
 
     it('closes modal when close button is clicked', async () => {

@@ -14,7 +14,7 @@ export interface InterfaceMember {
   createdAt: string;
   firstName: string;
   lastName: string;
-  email: string;
+  email: `${string}@${string}.${string}`;
   gender: string;
   eventsAttended?: {
     _id: string;
@@ -69,8 +69,13 @@ export interface InterfaceRecurringEvent {
   _id: string;
   title: string;
   startDate: string;
+  endDate: string;
+  frequency: InterfaceEvent['recurrenceRule']['frequency'];
+  interval: InterfaceEvent['recurrenceRule']['interval'];
   attendees: {
     _id: string;
-    gender: string;
+    gender: 'MALE' | 'FEMALE' | 'OTHER' | 'PREFER_NOT_TO_SAY';
   }[];
+  isPublic: boolean;
+  isRegisterable: boolean;
 }
