@@ -1,5 +1,4 @@
 import { useMutation, useQuery } from '@apollo/client';
-import Loader from 'components/Loader/Loader';
 import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
@@ -51,6 +50,8 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
 }) => {
   const { orgId, tagId: currentTagId } = useParams();
 
+  const [tagSearchName, setTagSearchName] = useState('');
+
   const {
     data: orgUserTagsData,
     loading: orgUserTagsLoading,
@@ -60,6 +61,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
     variables: {
       id: orgId,
       first: TAGS_QUERY_DATA_CHUNK_SIZE,
+      where: { name: { starts_with: tagSearchName } },
     },
     skip: !tagActionsModalIsOpen,
   });
@@ -80,7 +82,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
           };
         },
       ) => {
-        if (!fetchMoreResult) return prevResult;
+        if (!fetchMoreResult) /* istanbul ignore next */ return prevResult;
 
         return {
           organizations: [
@@ -275,44 +277,58 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
         </Modal.Header>
         <Form onSubmit={handleTagAction}>
           <Modal.Body className="pb-0">
+            <div
+              className={`d-flex flex-wrap align-items-center border border-2 border-dark-subtle bg-light-subtle rounded-3 p-2 ${styles.scrollContainer}`}
+            >
+              {selectedTags.length === 0 ? (
+                <div className="text-body-tertiary mx-auto">
+                  {t('noTagSelected')}
+                </div>
+              ) : (
+                selectedTags.map((tag: InterfaceTagData) => (
+                  <div
+                    key={tag._id}
+                    className={`badge bg-dark-subtle text-secondary-emphasis lh-lg my-2 ms-2 d-flex align-items-center ${styles.tagBadge}`}
+                  >
+                    {tag.name}
+                    <button
+                      className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary border-0 bg-transparent`}
+                      onClick={() => deSelectTag(tag)}
+                      data-testid={`clearSelectedTag${tag._id}`}
+                      aria-label={t('remove')}
+                    />
+                  </div>
+                ))
+              )}
+            </div>
+
+            <div className="mt-3 position-relative">
+              <i className="fa fa-search position-absolute text-body-tertiary end-0 top-50 translate-middle" />
+              <Form.Control
+                type="text"
+                id="userName"
+                className="bg-light"
+                placeholder={tCommon('searchByName')}
+                onChange={(e) => setTagSearchName(e.target.value.trim())}
+                data-testid="searchByName"
+                autoComplete="off"
+              />
+            </div>
+
+            <div className="mt-3 mb-2 fs-5 fw-semibold text-dark-emphasis">
+              {t('allTags')}
+            </div>
             {orgUserTagsLoading ? (
-              <Loader size="sm" />
+              <div className={styles.loadingDiv}>
+                <InfiniteScrollLoader />
+              </div>
             ) : (
               <>
-                <div
-                  className={`d-flex flex-wrap align-items-center border bg-light-subtle rounded-3 p-2 ${styles.scrollContainer}`}
-                >
-                  {selectedTags.length === 0 ? (
-                    <div className="text-center text-body-tertiary">
-                      {t('noTagSelected')}
-                    </div>
-                  ) : (
-                    selectedTags.map((tag: InterfaceTagData) => (
-                      <div
-                        key={tag._id}
-                        className={`badge bg-dark-subtle text-secondary-emphasis lh-lg my-2 ms-2 d-flex align-items-center ${styles.tagBadge}`}
-                      >
-                        {tag.name}
-                        <button
-                          className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary border-0 bg-transparent`}
-                          onClick={() => deSelectTag(tag)}
-                          data-testid={`clearSelectedTag${tag._id}`}
-                          aria-label={t('remove')}
-                        />
-                      </div>
-                    ))
-                  )}
-                </div>
-
-                <div className="mt-4 mb-2 fs-5 fw-semibold text-dark-emphasis">
-                  {t('allTags')}
-                </div>
-
                 <div
                   id="scrollableDiv"
                   data-testid="scrollableDiv"
                   style={{
-                    maxHeight: 300,
+                    height: 300,
                     overflow: 'auto',
                   }}
                 >
@@ -327,17 +343,36 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                     scrollableTarget="scrollableDiv"
                   >
                     {userTagsList?.map((tag) => (
-                      <div
-                        className="my-2"
-                        key={tag._id}
-                        data-testid="orgUserTag"
-                      >
-                        <TagNode
-                          tag={tag}
-                          checkedTags={checkedTags}
-                          toggleTagSelection={toggleTagSelection}
-                          t={t}
-                        />
+                      <div key={tag._id} className="position-relative w-100">
+                        <div
+                          className="d-inline-block w-100"
+                          data-testid="orgUserTag"
+                        >
+                          <TagNode
+                            tag={tag}
+                            checkedTags={checkedTags}
+                            toggleTagSelection={toggleTagSelection}
+                            t={t}
+                          />
+                        </div>
+
+                        {/* Ancestor tags breadcrumbs positioned at the end of TagNode */}
+                        {tag.parentTag && (
+                          <div className="position-absolute end-0 top-0 d-flex flex-row mt-2 me-3 pt-0 text-secondary">
+                            <>{'('}</>
+                            {tag.ancestorTags?.map((ancestorTag) => (
+                              <span
+                                key={ancestorTag._id}
+                                className="ms-2 my-0"
+                                data-testid="ancestorTagsBreadCrumbs"
+                              >
+                                {ancestorTag.name}
+                                <i className="ms-2 fa fa-caret-right" />
+                              </span>
+                            ))}
+                            <>{')'}</>
+                          </div>
+                        )}
                       </div>
                     ))}
                   </InfiniteScroll>

@@ -13,6 +13,7 @@ export const MOCKS = [
       variables: {
         id: '123',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: { name: { starts_with: '' } },
       },
     },
     result: {
@@ -192,6 +193,7 @@ export const MOCKS = [
         id: '123',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after: '10',
+        where: { name: { starts_with: '' } },
       },
     },
     result: {
@@ -238,6 +240,79 @@ export const MOCKS = [
                 hasPreviousPage: true,
               },
               totalCount: 12,
+            },
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: ORGANIZATION_USER_TAGS_LIST,
+      variables: {
+        id: '123',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: { name: { starts_with: 'searchUserTag' } },
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            userTags: {
+              edges: [
+                {
+                  node: {
+                    _id: '1',
+                    name: 'searchUserTag 1',
+                    parentTag: {
+                      _id: '1',
+                    },
+                    usersAssignedTo: {
+                      totalCount: 5,
+                    },
+                    childTags: {
+                      totalCount: 5,
+                    },
+                    ancestorTags: [
+                      {
+                        _id: '1',
+                        name: 'userTag 1',
+                      },
+                    ],
+                  },
+                  cursor: '1',
+                },
+                {
+                  node: {
+                    _id: '2',
+                    name: 'searchUserTag 2',
+                    parentTag: {
+                      _id: '1',
+                    },
+                    usersAssignedTo: {
+                      totalCount: 5,
+                    },
+                    childTags: {
+                      totalCount: 0,
+                    },
+                    ancestorTags: [
+                      {
+                        _id: '1',
+                        name: 'userTag 1',
+                      },
+                    ],
+                  },
+                  cursor: '2',
+                },
+              ],
+              pageInfo: {
+                startCursor: '1',
+                endCursor: '2',
+                hasNextPage: false,
+                hasPreviousPage: false,
+              },
+              totalCount: 2,
             },
           },
         ],
@@ -551,6 +626,7 @@ export const MOCKS_ERROR_ORGANIZATION_TAGS_QUERY = [
       variables: {
         id: '123',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: { name: { starts_with: '' } },
       },
     },
     error: new Error('Mock Graphql Error for organization root tags query'),
@@ -564,6 +640,7 @@ export const MOCKS_ERROR_SUBTAGS_QUERY = [
       variables: {
         id: '123',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: { name: { starts_with: '' } },
       },
     },
     result: {

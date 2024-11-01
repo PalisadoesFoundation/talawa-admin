@@ -88,7 +88,7 @@ describe('Organisation Tags Page', () => {
     cleanup();
   });
 
-  test('Component loads correctly', async () => {
+  test('component loads correctly', async () => {
     const { getByText } = renderOrganizationTags(link);
 
     await wait();
@@ -160,7 +160,85 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  test('Fetches more tags with infinite scroll', async () => {
+  test('searchs for tags where the name matches the provided search input', async () => {
+    renderOrganizationTags(link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(
+        screen.getByPlaceholderText(translations.searchByName),
+      ).toBeInTheDocument();
+    });
+    const input = screen.getByPlaceholderText(translations.searchByName);
+    fireEvent.change(input, { target: { value: 'searchUserTag' } });
+
+    // should render the two searched tags from the mock data
+    // where name starts with "searchUserTag"
+    await waitFor(() => {
+      const buttons = screen.getAllByTestId('manageTagBtn');
+      expect(buttons.length).toEqual(2);
+    });
+  });
+
+  test('fetches the tags by the sort order, i.e. latest or oldest first', async () => {
+    renderOrganizationTags(link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(
+        screen.getByPlaceholderText(translations.searchByName),
+      ).toBeInTheDocument();
+    });
+    const input = screen.getByPlaceholderText(translations.searchByName);
+    fireEvent.change(input, { target: { value: 'searchUserTag' } });
+
+    // should render the two searched tags from the mock data
+    // where name starts with "searchUserTag"
+    await waitFor(() => {
+      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent(
+        'searchUserTag 1',
+      );
+    });
+
+    // now change the sorting order
+    await waitFor(() => {
+      expect(screen.getByTestId('sortTags')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('sortTags'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('oldest')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('oldest'));
+
+    // returns the tags in reverse order
+    await waitFor(() => {
+      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent(
+        'searchUserTag 2',
+      );
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('sortTags')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('sortTags'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('latest')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('latest'));
+
+    // reverse the order again
+    await waitFor(() => {
+      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent(
+        'searchUserTag 1',
+      );
+    });
+  });
+
+  test('fetches more tags with infinite scroll', async () => {
     const { getByText } = renderOrganizationTags(link);
 
     await wait();

@@ -13,7 +13,10 @@ import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import type { InterfaceQueryOrganizationUserTags } from 'utils/interfaces';
+import type {
+  InterfaceQueryOrganizationUserTags,
+  InterfaceTagData,
+} from 'utils/interfaces';
 import styles from './OrganizationTags.module.css';
 import { DataGrid } from '@mui/x-data-grid';
 import type {
@@ -84,6 +87,7 @@ function OrganizationTags(): JSX.Element {
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after:
           orgUserTagsData?.organizations?.[0]?.userTags?.pageInfo?.endCursor ??
+          /* istanbul ignore next */
           null,
       },
       updateQuery: (
@@ -96,7 +100,7 @@ function OrganizationTags(): JSX.Element {
           };
         },
       ) => {
-        if (!fetchMoreResult) return prevResult;
+        if (!fetchMoreResult) /* istanbul ignore next */ return prevResult;
 
         return {
           organizations: [
@@ -192,16 +196,29 @@ function OrganizationTags(): JSX.Element {
       minWidth: 100,
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
+      renderCell: (params: GridCellParams<InterfaceTagData>) => {
         return (
-          <div
-            className={styles.subTagsLink}
-            data-testid="tagName"
-            onClick={() => redirectToSubTags(params.row._id)}
-          >
-            {params.row.name}
+          <div className="d-flex">
+            {params.row.parentTag &&
+              params.row.ancestorTags?.map((tag) => (
+                <div
+                  key={tag._id}
+                  className={styles.tagsBreadCrumbs}
+                  data-testid="ancestorTagsBreadCrumbs"
+                >
+                  {tag.name}
+                  <i className={'mx-2 fa fa-caret-right'} />
+                </div>
+              ))}
 
-            <i className={'ms-2 fa fa-caret-right'} />
+            <div
+              className={styles.subTagsLink}
+              data-testid="tagName"
+              onClick={() => redirectToSubTags(params.row._id)}
+            >
+              {params.row.name}
+              <i className={'ms-2 fa fa-caret-right'} />
+            </div>
           </div>
         );
       },
@@ -285,7 +302,6 @@ function OrganizationTags(): JSX.Element {
                 data-testid="searchByName"
                 onChange={(e) => setTagSearchName(e.target.value.trim())}
                 autoComplete="off"
-                required
               />
             </div>
             <div className={styles.btnsBlock}>

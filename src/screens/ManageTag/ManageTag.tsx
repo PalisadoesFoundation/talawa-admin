@@ -142,7 +142,7 @@ function ManageTag(): JSX.Element {
           };
         },
       ) => {
-        if (!fetchMoreResult) return prevResult;
+        if (!fetchMoreResult) /* istanbul ignore next */ return prevResult;
 
         return {
           getAssignedUsers: {
@@ -378,7 +378,6 @@ function ManageTag(): JSX.Element {
                 }
                 data-testid="searchByName"
                 autoComplete="off"
-                required
               />
             </div>
             <div className={styles.btnsBlock}>

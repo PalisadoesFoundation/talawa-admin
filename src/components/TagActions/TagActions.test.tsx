@@ -199,6 +199,27 @@ describe('Organisation Tags Page', () => {
     });
   });
 
+  test('searchs for tags where the name matches the provided search input', async () => {
+    renderTagActionsModal(props[0], link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(
+        screen.getByPlaceholderText(translations.searchByName),
+      ).toBeInTheDocument();
+    });
+    const input = screen.getByPlaceholderText(translations.searchByName);
+    fireEvent.change(input, { target: { value: 'searchUserTag' } });
+
+    // should render the two searched tags from the mock data
+    // where name starts with "searchUserTag"
+    await waitFor(() => {
+      const tags = screen.getAllByTestId('orgUserTag');
+      expect(tags.length).toEqual(2);
+    });
+  });
+
   test('Renders more members with infinite scroll', async () => {
     const { getByText } = renderTagActionsModal(props[0], link);
 

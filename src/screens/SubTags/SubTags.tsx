@@ -93,7 +93,7 @@ function SubTags(): JSX.Element {
           fetchMoreResult?: { getChildTags: InterfaceQueryUserTagChildTags };
         },
       ) => {
-        if (!fetchMoreResult) return prevResult;
+        if (!fetchMoreResult) /* istanbul ignore next */ return prevResult;
 
         return {
           getChildTags: {
@@ -291,7 +291,6 @@ function SubTags(): JSX.Element {
                 onChange={(e) => setTagSearchName(e.target.value.trim())}
                 data-testid="searchByName"
                 autoComplete="off"
-                required
               />
             </div>
             <div className={styles.btnsBlock}>
@@ -302,7 +301,7 @@ function SubTags(): JSX.Element {
               >
                 <Dropdown.Toggle
                   variant="outline-success"
-                  data-testid="sortTag"
+                  data-testid="sortTags"
                 >
                   <SortIcon className={'me-1'} />
                   {tCommon('sort')}

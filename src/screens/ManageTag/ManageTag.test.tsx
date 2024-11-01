@@ -324,6 +324,84 @@ describe('Manage Tag Page', () => {
     });
   });
 
+  test('searchs for tags where the name matches the provided search input', async () => {
+    renderManageTag(link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(
+        screen.getByPlaceholderText(translations.searchByName),
+      ).toBeInTheDocument();
+    });
+    const input = screen.getByPlaceholderText(translations.searchByName);
+    fireEvent.change(input, { target: { value: 'assigned user' } });
+
+    // should render the two users from the mock data
+    // where firstName starts with "assigned" and lastName starts with "user"
+    await waitFor(() => {
+      const buttons = screen.getAllByTestId('viewProfileBtn');
+      expect(buttons.length).toEqual(2);
+    });
+  });
+
+  test('fetches the tags by the sort order, i.e. latest or oldest first', async () => {
+    renderManageTag(link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(
+        screen.getByPlaceholderText(translations.searchByName),
+      ).toBeInTheDocument();
+    });
+    const input = screen.getByPlaceholderText(translations.searchByName);
+    fireEvent.change(input, { target: { value: 'assigned user' } });
+
+    // should render the two searched tags from the mock data
+    // where name starts with "searchUserTag"
+    await waitFor(() => {
+      expect(screen.getAllByTestId('memberName')[0]).toHaveTextContent(
+        'assigned user1',
+      );
+    });
+
+    // now change the sorting order
+    await waitFor(() => {
+      expect(screen.getByTestId('sortPeople')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('sortPeople'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('oldest')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('oldest'));
+
+    // returns the tags in reverse order
+    await waitFor(() => {
+      expect(screen.getAllByTestId('memberName')[0]).toHaveTextContent(
+        'assigned user2',
+      );
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('sortPeople')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('sortPeople'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('latest')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('latest'));
+
+    // reverse the order again
+    await waitFor(() => {
+      expect(screen.getAllByTestId('memberName')[0]).toHaveTextContent(
+        'assigned user1',
+      );
+    });
+  });
+
   test('Fetches more assigned members with infinite scroll', async () => {
     const { getByText } = renderManageTag(link);
 

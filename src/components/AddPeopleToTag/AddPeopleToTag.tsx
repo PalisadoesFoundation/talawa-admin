@@ -99,7 +99,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
           };
         },
       ) => {
-        if (!fetchMoreResult) return prevResult;
+        if (!fetchMoreResult) /* istanbul ignore next */ return prevResult;
 
         return {
           getUsersToAssignTo: {
@@ -263,7 +263,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
               className={`d-flex flex-wrap align-items-center border border-2 border-dark-subtle bg-light-subtle rounded-3 p-2 ${styles.scrollContainer}`}
             >
               {assignToMembers.length === 0 ? (
-                <div className="text-center text-body-tertiary mx-auto">
+                <div className="text-body-tertiary mx-auto">
                   {t('noOneSelected')}
                 </div>
               ) : (
@@ -294,9 +294,8 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                   onChange={(e) =>
                     setMemberToAssignToSearchFirstName(e.target.value.trim())
                   }
-                  data-testid="searchByName"
+                  data-testid="searchByFirstName"
                   autoComplete="off"
-                  required
                 />
               </div>
               <div className="mx-2 position-relative">
@@ -309,9 +308,8 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                   onChange={(e) =>
                     setMemberToAssignToSearchLastName(e.target.value.trim())
                   }
-                  data-testid="searchByName"
+                  data-testid="searchByLastName"
                   autoComplete="off"
-                  required
                 />
               </div>
             </div>

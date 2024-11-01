@@ -9,6 +9,8 @@ export const MOCKS = [
       variables: {
         id: '123',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: { name: { starts_with: '' } },
+        sortedBy: { id: 'DESCENDING' },
       },
     },
     result: {
@@ -188,6 +190,8 @@ export const MOCKS = [
         id: '123',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after: '10',
+        where: { name: { starts_with: '' } },
+        sortedBy: { id: 'DESCENDING' },
       },
     },
     result: {
@@ -242,6 +246,154 @@ export const MOCKS = [
   },
   {
     request: {
+      query: ORGANIZATION_USER_TAGS_LIST,
+      variables: {
+        id: '123',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: { name: { starts_with: 'searchUserTag' } },
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            userTags: {
+              edges: [
+                {
+                  node: {
+                    _id: 'searchUserTag1',
+                    name: 'searchUserTag 1',
+                    parentTag: {
+                      _id: '1',
+                    },
+                    usersAssignedTo: {
+                      totalCount: 5,
+                    },
+                    childTags: {
+                      totalCount: 5,
+                    },
+                    ancestorTags: [
+                      {
+                        _id: '1',
+                        name: 'userTag 1',
+                      },
+                    ],
+                  },
+                  cursor: 'searchUserTag1',
+                },
+                {
+                  node: {
+                    _id: 'searchUserTag2',
+                    name: 'searchUserTag 2',
+                    parentTag: {
+                      _id: '1',
+                    },
+                    usersAssignedTo: {
+                      totalCount: 5,
+                    },
+                    childTags: {
+                      totalCount: 0,
+                    },
+                    ancestorTags: [
+                      {
+                        _id: '1',
+                        name: 'userTag 1',
+                      },
+                    ],
+                  },
+                  cursor: 'searchUserTag2',
+                },
+              ],
+              pageInfo: {
+                startCursor: 'searchUserTag1',
+                endCursor: 'searchUserTag2',
+                hasNextPage: false,
+                hasPreviousPage: false,
+              },
+              totalCount: 2,
+            },
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: ORGANIZATION_USER_TAGS_LIST,
+      variables: {
+        id: '123',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: { name: { starts_with: 'searchUserTag' } },
+        sortedBy: { id: 'ASCENDING' },
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            userTags: {
+              edges: [
+                {
+                  node: {
+                    _id: 'searchUserTag2',
+                    name: 'searchUserTag 2',
+                    parentTag: {
+                      _id: '1',
+                    },
+                    usersAssignedTo: {
+                      totalCount: 5,
+                    },
+                    childTags: {
+                      totalCount: 5,
+                    },
+                    ancestorTags: [
+                      {
+                        _id: '1',
+                        name: 'userTag 1',
+                      },
+                    ],
+                  },
+                  cursor: 'searchUserTag2',
+                },
+                {
+                  node: {
+                    _id: 'searchUserTag1',
+                    name: 'searchUserTag 1',
+                    parentTag: {
+                      _id: '1',
+                    },
+                    usersAssignedTo: {
+                      totalCount: 5,
+                    },
+                    childTags: {
+                      totalCount: 0,
+                    },
+                    ancestorTags: [
+                      {
+                        _id: '1',
+                        name: 'userTag 1',
+                      },
+                    ],
+                  },
+                  cursor: 'searchUserTag1',
+                },
+              ],
+              pageInfo: {
+                startCursor: 'searchUserTag2',
+                endCursor: 'searchUserTag1',
+                hasNextPage: false,
+                hasPreviousPage: false,
+              },
+              totalCount: 2,
+            },
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
       query: CREATE_USER_TAG,
       variables: {
         name: 'userTag 12',
@@ -265,6 +417,8 @@ export const MOCKS_ERROR = [
       variables: {
         id: '123',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: { name: { starts_with: '' } },
+        sortedBy: { id: 'DESCENDING' },
       },
     },
     error: new Error('Mock Graphql Error'),
