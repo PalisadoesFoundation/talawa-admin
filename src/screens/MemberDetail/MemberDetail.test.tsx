@@ -645,14 +645,14 @@ describe('MemberDetail', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await wait();
     expect(screen.getByText('Events Attended')).toBeInTheDocument();
-    await wait();
-    const eventsCards = screen.getAllByTestId('membereventsCard');
-    expect(eventsCards.length).toBe(2);
-    eventsCards.forEach((card) => {
-      expect(card).toBeInTheDocument();
-      expect(card.children.length).toBe(1);
+    await waitFor(() => {
+      const eventsCards = screen.getAllByTestId('membereventsCard');
+      expect(eventsCards.length).toBe(2);
+      eventsCards.forEach((card) => {
+        expect(card).toBeInTheDocument();
+        expect(card.children.length).toBe(1);
+      });
     });
   });
   test('opens "Events Attended List" modal when View All button is clicked', async () => {

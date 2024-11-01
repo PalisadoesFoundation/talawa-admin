@@ -12,6 +12,7 @@ interface InterfaceEventAttendedCardProps {
   orgId: string;
   eventId: string;
 }
+
 describe('EventAttendedCard', () => {
   const mockProps: InterfaceEventAttendedCardProps = {
     type: 'Event' as const,
@@ -23,8 +24,8 @@ describe('EventAttendedCard', () => {
     eventId: 'event456',
   };
 
-  const renderComponent = (props = mockProps): React.ReactElement => {
-    return render(
+  const renderComponent = (props = mockProps): void => {
+    render(
       <BrowserRouter>
         <EventAttendedCard {...props} />
       </BrowserRouter>,

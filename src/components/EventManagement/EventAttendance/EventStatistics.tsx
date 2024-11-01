@@ -89,10 +89,25 @@ export const AttendanceStatisticsModal: React.FC<
   const eventLabels = useMemo(
     () =>
       paginatedRecurringEvents.map((event: InterfaceEvent) => {
-        const date = new Date(event.startDate).toLocaleDateString('en-US', {
-          month: 'short',
-          day: 'numeric',
-        });
+        const date = (() => {
+          try {
+            const eventDate = new Date(event.startDate);
+            if (isNaN(eventDate.getTime())) {
+              console.error(`Invalid date for event: ${event._id}`);
+              return 'Invalid date';
+            }
+            return eventDate.toLocaleDateString('en-US', {
+              month: 'short',
+              day: 'numeric',
+            });
+          } catch (error) {
+            console.error(
+              `Error formatting date for event: ${event._id}`,
+              error,
+            );
+            return 'Invalid date';
+          }
+        })();
         // Highlight the current event in the label
         return event._id === eventId ? `→ ${date}` : date;
       }),
@@ -342,6 +357,8 @@ export const AttendanceStatisticsModal: React.FC<
               <div
                 className="d-flex position-absolute bottom-1 end-50 translate-middle-y"
                 style={{ paddingBottom: '2.0rem' }}
+                role="navigation"
+                aria-label="Chart page navigation"
               >
                 <OverlayTrigger
                   placement="bottom"
@@ -351,6 +368,7 @@ export const AttendanceStatisticsModal: React.FC<
                     className="p-0"
                     onClick={handlePreviousPage}
                     disabled={currentPage === 0}
+                    aria-label="Previous page"
                   >
                     <img
                       src="/images/svg/arrow-left.svg"
@@ -364,6 +382,7 @@ export const AttendanceStatisticsModal: React.FC<
                   data-testid="today-button"
                   className="p-1 ms-2"
                   onClick={() => handleDateChange(new Date())}
+                  aria-label="Go to today"
                 >
                   Today
                 </Button>
@@ -371,7 +390,12 @@ export const AttendanceStatisticsModal: React.FC<
                   placement="bottom"
                   overlay={<Tooltip id="tooltip-next">Next Page</Tooltip>}
                 >
-                  <Button className="p-0 ms-2" onClick={handleNextPage}>
+                  <Button
+                    className="p-0 ms-2"
+                    onClick={handleNextPage}
+                    disabled={currentPage >= totalPages - 1}
+                    aria-label="Next page"
+                  >
                     <img
                       src="/images/svg/arrow-right.svg"
                       alt="right-arrow"

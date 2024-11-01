@@ -894,7 +894,7 @@
   "memberDetail": {
     "title": "Detalles del usuario",
     "addAdmin": "Agregar administrador",
-    "noeventsAttended": "No Events Attended",
+    "noeventsAttended": "No hay eventos asistidos",
     "alreadyIsAdmin": "El Miembro ya es Administrador",
     "organizations": "Organizaciones",
     "events": "Eventos",
