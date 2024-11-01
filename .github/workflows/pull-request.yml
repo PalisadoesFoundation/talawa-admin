@@ -97,6 +97,7 @@ jobs:
             .node-version
             .husky/**
             scripts/**
+            schema.graphql
             package.json
             tsconfig.json
             .gitignore
