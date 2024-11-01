@@ -1052,7 +1052,8 @@
     "Member": "सदस्य",
     "Admin": "व्यवस्थापक",
     "loading": "लोड हो रहा है"
-  },  "settings": {
+  },
+  "settings": {
     "noeventsAttended": "कोई कार्यक्रम में उपस्थित नहीं",
     "eventAttended": "भाग लिए गए कार्यक्रम",
     "profileSettings": "पार्श्वचित्र समायोजन",
