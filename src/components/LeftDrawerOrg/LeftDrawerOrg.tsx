@@ -3,7 +3,7 @@ import { WarningAmberOutlined } from '@mui/icons-material';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import CollapsibleDropdown from 'components/CollapsibleDropdown/CollapsibleDropdown';
 import IconComponent from 'components/IconComponent/IconComponent';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { NavLink, useLocation } from 'react-router-dom';
@@ -50,8 +50,9 @@ const leftDrawerOrg = ({
   };
   const [isProfilePage, setIsProfilePage] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [organization, setOrganization] =
-    useState<InterfaceQueryOrganizationsListObject>();
+  const [organization, setOrganization] = useState<
+    InterfaceQueryOrganizationsListObject | undefined
+  >(undefined);
   const {
     data,
     loading,
@@ -64,12 +65,15 @@ const leftDrawerOrg = ({
     variables: { id: orgId },
   });
 
+  // Get the ID from the current path
+  const pathId = useMemo(
+    () => getIdFromPath(location.pathname),
+    [location.pathname],
+  );
   // Check if the current page is admin profile page
   useEffect(() => {
-    // id could be userId or orgId
-    const id = getIdFromPath(location.pathname);
     // if param id is equal to userId, then it is a profile page
-    setIsProfilePage(id === userId);
+    setIsProfilePage(pathId === userId);
   }, [location, userId]);
 
   // Set organization data when query data is available
