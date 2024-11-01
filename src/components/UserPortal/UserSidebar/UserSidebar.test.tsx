@@ -368,35 +368,40 @@ describe('Testing UserSidebar Component [User Portal]', () => {
     jest.clearAllMocks();
   });
 
-  test('Component should be rendered properly', async () => {
+  test('Component should render properly with user data', async () => {
     await act(async () => {
       renderUserSidebar('properId', link);
       await wait();
     });
+    expect(screen.getByText('Talawa User Portal')).toBeInTheDocument();
   });
 
-  test('Component should be rendered properly when userImage is present', async () => {
+  test('Logo and title are displayed', async () => {
     await act(async () => {
-      renderUserSidebar('imagePresent', link);
+      renderUserSidebar('properId', link);
       await wait();
     });
+    expect(screen.getByText('Talawa User Portal')).toBeInTheDocument();
+    expect(screen.getByTestId('leftDrawerContainer')).toBeVisible();
   });
 
-  test('Component should be rendered properly when organizationImage is present', async () => {
-    await act(async () => {
-      renderUserSidebar('imagePresent', link);
-      await wait();
-    });
-  });
-
-  test('Component should be rendered properly when joinedOrganizations list is empty', async () => {
+  test('Component should render properly when joinedOrganizations list is empty', async () => {
     await act(async () => {
       renderUserSidebar('orgEmpty', link);
       await wait();
     });
+    expect(screen.getByText('My Organizations')).toBeInTheDocument();
   });
 
-  test('Testing Drawer when the screen size is less than or equal to 820px', async () => {
+  test('Component should render with organization image present', async () => {
+    await act(async () => {
+      renderUserSidebar('imagePresent', link);
+      await wait();
+    });
+    expect(screen.getByText('Settings')).toBeInTheDocument();
+  });
+
+  test('Component renders correctly on smaller screen and toggles drawer', async () => {
     await act(async () => {
       resizeWindow(800);
       render(
@@ -411,28 +416,103 @@ describe('Testing UserSidebar Component [User Portal]', () => {
         </MockedProvider>,
       );
     });
-    expect(screen.getByText('My Organizations')).toBeInTheDocument();
-    expect(screen.getByText('Settings')).toBeInTheDocument();
-    expect(screen.getByText('Talawa User Portal')).toBeInTheDocument();
-    const settingsBtn = screen.getByText('Settings');
+    const orgsBtn = screen.getByTestId('orgsBtn');
+    act(() => orgsBtn.click());
+    expect(props.setHideDrawer).toHaveBeenCalledWith(true);
+  });
 
-    const orgsBtn = screen.getAllByTestId(/orgsBtn/i);
+  test('Button styles change correctly on active route', async () => {
+    await act(async () => {
+      renderUserSidebar('properId', link);
+      await wait();
+    });
 
-    act(() => {
-      orgsBtn[0].click();
+    const orgsBtn = screen.getByTestId('orgsBtn');
+    const settingsBtn = screen.getByTestId('settingsBtn');
+
+    fireEvent.click(orgsBtn);
+    expect(orgsBtn).toHaveClass('text-white btn btn-success');
+    fireEvent.click(settingsBtn);
+    expect(settingsBtn).toHaveClass('text-white btn btn-success');
+  });
+
+  test('Translation hook displays the correct text', async () => {
+    await act(async () => {
+      renderUserSidebar('properId', link);
+      await wait();
     });
-    await waitFor(() =>
-      expect(
-        orgsBtn[0].className.includes('text-white btn btn-success'),
-      ).toBeTruthy(),
-    );
-    act(() => {
-      settingsBtn.click();
+    expect(screen.getByText(i18nForTest.t('common:settings'))).toBeInTheDocument();
+  });
+
+  test('handleLinkClick closes the sidebar on mobile view', async () => {
+    resizeWindow(800);
+    await act(async () => {
+      renderUserSidebar('properId', link);
+      await wait();
     });
-    await waitFor(() =>
-      expect(
-        settingsBtn.className.includes('text-white btn btn-success'),
-      ).toBeTruthy(),
-    );
+    const chatBtn = screen.getByTestId('chatBtn');
+    fireEvent.click(chatBtn);
+    expect(props.setHideDrawer).toHaveBeenCalledWith(true);
+  });
+  describe('UserSidebar Drawer Visibility Tests', () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+  
+    test('Clicking a link when window width <= 820px should close the drawer', () => {
+      // Set window width to 820px
+      act(() => {
+        window.innerWidth = 820;
+        window.dispatchEvent(new Event('resize'));
+      });
+  
+      render(
+        <MockedProvider addTypename={false}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <UserSidebar {...props} />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
+  
+      // Simulate link click to trigger handleLinkClick
+      const linkElement = screen.getByText('My Organizations'); // Adjust text if different
+      fireEvent.click(linkElement);
+  
+      // Check if setHideDrawer was called with `true`
+      expect(props.setHideDrawer).toHaveBeenCalledWith(true);
+    });
+  
+    test('Drawer visibility based on hideDrawer prop', () => {
+      const { rerender } = render(
+        <MockedProvider addTypename={false}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <UserSidebar {...props} hideDrawer={null} />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
+  
+      // Check for `hideElemByDefault` when hideDrawer is null
+      expect(screen.getByTestId('leftDrawerContainer')).toHaveClass('hideElemByDefault');
+  
+      // Rerender with hideDrawer set to true and verify `inactiveDrawer`
+      rerender(
+        <UserSidebar {...props} hideDrawer={true} />
+      );
+      expect(screen.getByTestId('leftDrawerContainer')).toHaveClass('inactiveDrawer');
+  
+      // Rerender with hideDrawer set to false and verify `activeDrawer`
+      rerender(
+        <UserSidebar {...props} hideDrawer={false} />
+      );
+      expect(screen.getByTestId('leftDrawerContainer')).toHaveClass('activeDrawer');
+    });
   });
 });
