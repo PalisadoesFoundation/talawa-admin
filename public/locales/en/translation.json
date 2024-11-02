@@ -334,7 +334,6 @@
     "addPeople": "Add People",
     "add": "Add",
     "subTags": "Sub Tags",
-    "assignedToAll": "Tag Assigned to All",
     "successfullyAssignedToPeople": "Tag assigned successfully",
     "errorOccurredWhileLoadingMembers": "Error occured while loading members",
     "userName": "User Name",
@@ -360,7 +359,8 @@
     "collapse": "Collapse",
     "expand": "Expand",
     "tagNamePlaceholder": "Write the name of the tag",
-    "allTags": "All Tags"
+    "allTags": "All Tags",
+    "noMoreMembersFound": "No more members found"
   },
   "userListCard": {
     "addAdmin": "Add Admin",

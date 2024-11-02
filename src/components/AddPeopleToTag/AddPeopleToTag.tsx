@@ -363,7 +363,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                             alignItems="center"
                             justifyContent="center"
                           >
-                            {t('assignedToAll')}
+                            {t('noMoreMembersFound')}
                           </Stack>
                         ),
                       }}

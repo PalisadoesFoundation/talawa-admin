@@ -304,7 +304,9 @@ function SubTags(): JSX.Element {
                   data-testid="sortTags"
                 >
                   <SortIcon className={'me-1'} />
-                  {tCommon('sort')}
+                  {tagSortOrder === 'DESCENDING'
+                    ? tCommon('Latest')
+                    : tCommon('Oldest')}
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item

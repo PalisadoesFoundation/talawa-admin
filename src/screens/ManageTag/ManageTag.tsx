@@ -380,7 +380,9 @@ function ManageTag(): JSX.Element {
                   data-testid="sortPeople"
                 >
                   <SortIcon className={'me-1'} />
-                  {tCommon('sort')}
+                  {assignedMemberSortOrder === 'DESCENDING'
+                    ? tCommon('Latest')
+                    : tCommon('Oldest')}
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item
