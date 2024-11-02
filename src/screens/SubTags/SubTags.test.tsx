@@ -20,12 +20,8 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import SubTags from './SubTags';
-import {
-  MOCKS,
-  MOCKS_ERROR_SUB_TAGS,
-  MOCKS_ERROR_TAG_ANCESTORS,
-} from './SubTagsMocks';
-import { type ApolloLink } from '@apollo/client';
+import { MOCKS, MOCKS_ERROR_SUB_TAGS } from './SubTagsMocks';
+import { InMemoryCache, type ApolloLink } from '@apollo/client';
 
 const translations = {
   ...JSON.parse(
@@ -39,7 +35,6 @@ const translations = {
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR_SUB_TAGS, true);
-const link3 = new StaticMockLink(MOCKS_ERROR_TAG_ANCESTORS, true);
 
 async function wait(ms = 500): Promise<void> {
   await act(() => {
@@ -56,25 +51,37 @@ jest.mock('react-toastify', () => ({
   },
 }));
 
-// const cache = new InMemoryCache({
-//   typePolicies: {
-//     Query: {
-//       fields: {
-//         getUserTag: {
-//           keyArgs: false,
-//           merge(_, incoming) {
-//             return incoming;
-//           },
-//         },
-//       },
-//     },
-//   },
-// });
+const cache = new InMemoryCache({
+  typePolicies: {
+    Query: {
+      fields: {
+        getUserTag: {
+          merge(existing = {}, incoming) {
+            const merged = {
+              ...existing,
+              ...incoming,
+              childTags: {
+                ...existing.childTags,
+                ...incoming.childTags,
+                edges: [
+                  ...(existing.childTags?.edges || []),
+                  ...(incoming.childTags?.edges || []),
+                ],
+              },
+            };
+
+            return merged;
+          },
+        },
+      },
+    },
+  },
+});
 
 const renderSubTags = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider link={link}>
-      <MemoryRouter initialEntries={['/orgtags/123/subtags/1']}>
+    <MockedProvider cache={cache} addTypename={false} link={link}>
+      <MemoryRouter initialEntries={['/orgtags/123/subTags/1']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
             <Routes>
@@ -104,6 +111,7 @@ describe('Organisation Tags Page', () => {
       ...jest.requireActual('react-router-dom'),
       useParams: () => ({ orgId: 'orgId' }),
     }));
+    cache.reset();
   });
 
   afterEach(() => {
@@ -123,16 +131,6 @@ describe('Organisation Tags Page', () => {
 
   test('render error component on unsuccessful subtags query', async () => {
     const { queryByText } = renderSubTags(link2);
-
-    await wait();
-
-    await waitFor(() => {
-      expect(queryByText(translations.addChildTag)).not.toBeInTheDocument();
-    });
-  });
-
-  test('renders error component on unsuccessful userTag ancestors query', async () => {
-    const { queryByText } = renderSubTags(link3);
 
     await wait();
 
@@ -235,6 +233,84 @@ describe('Organisation Tags Page', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('manageTagScreen')).toBeInTheDocument();
+    });
+  });
+
+  test('searchs for tags where the name matches the provided search input', async () => {
+    renderSubTags(link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(
+        screen.getByPlaceholderText(translations.searchByName),
+      ).toBeInTheDocument();
+    });
+    const input = screen.getByPlaceholderText(translations.searchByName);
+    fireEvent.change(input, { target: { value: 'searchSubTag' } });
+
+    // should render the two searched tags from the mock data
+    // where name starts with "searchUserTag"
+    await waitFor(() => {
+      const buttons = screen.getAllByTestId('manageTagBtn');
+      expect(buttons.length).toEqual(2);
+    });
+  });
+
+  test('fetches the tags by the sort order, i.e. latest or oldest first', async () => {
+    renderSubTags(link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(
+        screen.getByPlaceholderText(translations.searchByName),
+      ).toBeInTheDocument();
+    });
+    const input = screen.getByPlaceholderText(translations.searchByName);
+    fireEvent.change(input, { target: { value: 'searchSubTag' } });
+
+    // should render the two searched tags from the mock data
+    // where name starts with "searchUserTag"
+    await waitFor(() => {
+      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent(
+        'searchSubTag 1',
+      );
+    });
+
+    // now change the sorting order
+    await waitFor(() => {
+      expect(screen.getByTestId('sortTags')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('sortTags'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('oldest')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('oldest'));
+
+    // returns the tags in reverse order
+    await waitFor(() => {
+      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent(
+        'searchSubTag 2',
+      );
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('sortTags')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('sortTags'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('latest')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('latest'));
+
+    // reverse the order again
+    await waitFor(() => {
+      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent(
+        'searchSubTag 1',
+      );
     });
   });
 

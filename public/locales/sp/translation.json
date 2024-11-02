@@ -320,7 +320,8 @@
     "noTagsFound": "No se encontraron etiquetas",
     "removeUserTag": "Eliminar Etiqueta",
     "removeUserTagMessage": "¿Desea eliminar esta etiqueta?",
-    "addChildTag": "Agregar una Sub Etiqueta"
+    "addChildTag": "Agregar una Sub Etiqueta",
+    "enterTagName": "Ingrese el nombre de la etiqueta"
   },
   "manageTag": {
     "title": "Detalles de la Etiqueta",
@@ -333,7 +334,6 @@
     "addPeople": "Agregar Personas",
     "add": "Agregar",
     "subTags": "Subetiquetas",
-    "assignedToAll": "Etiqueta asignada a todos",
     "successfullyAssignedToPeople": "Etiqueta asignada con éxito",
     "errorOccurredWhileLoadingMembers": "Error al cargar los miembros",
     "userName": "Nombre de usuario",
@@ -359,7 +359,8 @@
     "collapse": "Colapsar",
     "expand": "Expandir",
     "tagNamePlaceholder": "Escribe el nombre de la etiqueta",
-    "allTags": "Todas las etiquetas"
+    "allTags": "Todas las etiquetas",
+    "noMoreMembersFound": "No se encontraron más miembros"
   },
   "userListCard": {
     "joined": "Unido",

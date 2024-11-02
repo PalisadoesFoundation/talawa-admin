@@ -199,6 +199,27 @@ describe('Organisation Tags Page', () => {
     });
   });
 
+  test('searchs for tags where the name matches the provided search input', async () => {
+    renderTagActionsModal(props[0], link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(
+        screen.getByPlaceholderText(translations.searchByName),
+      ).toBeInTheDocument();
+    });
+    const input = screen.getByPlaceholderText(translations.searchByName);
+    fireEvent.change(input, { target: { value: 'searchUserTag' } });
+
+    // should render the two searched tags from the mock data
+    // where name starts with "searchUserTag"
+    await waitFor(() => {
+      const tags = screen.getAllByTestId('orgUserTag');
+      expect(tags.length).toEqual(2);
+    });
+  });
+
   test('Renders more members with infinite scroll', async () => {
     const { getByText } = renderTagActionsModal(props[0], link);
 
@@ -315,6 +336,21 @@ describe('Organisation Tags Page', () => {
       expect(screen.getByTestId('expandSubTags1')).toBeInTheDocument();
     });
     userEvent.click(screen.getByTestId('expandSubTags1'));
+  });
+
+  test('Toasts error when no tag is selected while assigning', async () => {
+    renderTagActionsModal(props[0], link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('tagActionSubmitBtn')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('tagActionSubmitBtn'));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(translations.noTagSelected);
+    });
   });
 
   test('Successfully assigns to tags', async () => {
