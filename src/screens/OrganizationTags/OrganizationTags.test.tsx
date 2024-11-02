@@ -4,6 +4,7 @@ import type { RenderResult } from '@testing-library/react';
 import {
   act,
   cleanup,
+  fireEvent,
   render,
   screen,
   waitFor,
@@ -59,11 +60,11 @@ const renderOrganizationTags = (link: ApolloLink): RenderResult => {
             <Routes>
               <Route path="/orgtags/:orgId" element={<OrganizationTags />} />
               <Route
-                path="/orgtags/:orgId/managetag/:tagId"
+                path="/orgtags/:orgId/manageTag/:tagId"
                 element={<div data-testid="manageTagScreen"></div>}
               />
               <Route
-                path="/orgtags/:orgId/subtags/:tagId"
+                path="/orgtags/:orgId/subTags/:tagId"
                 element={<div data-testid="subTagsScreen"></div>}
               />
             </Routes>
@@ -103,7 +104,7 @@ describe('Organisation Tags Page', () => {
     await wait();
 
     await waitFor(() => {
-      expect(queryByText(translations.create)).not.toBeInTheDocument();
+      expect(queryByText(translations.createTag)).not.toBeInTheDocument();
     });
   });
 
@@ -126,28 +127,6 @@ describe('Organisation Tags Page', () => {
 
     await waitForElementToBeRemoved(() =>
       screen.queryByTestId('closeCreateTagModal'),
-    );
-  });
-
-  test('opens and closes the remove tag modal', async () => {
-    renderOrganizationTags(link);
-
-    await wait();
-
-    await waitFor(() => {
-      expect(screen.getAllByTestId('removeUserTagBtn')[0]).toBeInTheDocument();
-    });
-    userEvent.click(screen.getAllByTestId('removeUserTagBtn')[0]);
-
-    await waitFor(() => {
-      return expect(
-        screen.findByTestId('removeUserTagModalCloseBtn'),
-      ).resolves.toBeInTheDocument();
-    });
-    userEvent.click(screen.getByTestId('removeUserTagModalCloseBtn'));
-
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('removeUserTagModalCloseBtn'),
     );
   });
 
@@ -181,27 +160,32 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  test('paginates between different pages', async () => {
-    renderOrganizationTags(link);
+  test('Fetches more tags with infinite scroll', async () => {
+    const { getByText } = renderOrganizationTags(link);
 
     await wait();
 
     await waitFor(() => {
-      expect(screen.getByTestId('nextPagBtn')).toBeInTheDocument();
-    });
-    userEvent.click(screen.getByTestId('nextPagBtn'));
-
-    await waitFor(() => {
-      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent('6');
+      expect(getByText(translations.createTag)).toBeInTheDocument();
     });
 
-    await waitFor(() => {
-      expect(screen.getByTestId('previousPageBtn')).toBeInTheDocument();
+    const orgUserTagsScrollableDiv = screen.getByTestId(
+      'orgUserTagsScrollableDiv',
+    );
+
+    // Get the initial number of tags loaded
+    const initialTagsDataLength = screen.getAllByTestId('manageTagBtn').length;
+
+    // Set scroll position to the bottom
+    fireEvent.scroll(orgUserTagsScrollableDiv, {
+      target: { scrollY: orgUserTagsScrollableDiv.scrollHeight },
     });
-    userEvent.click(screen.getByTestId('previousPageBtn'));
 
     await waitFor(() => {
-      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent('1');
+      const finalTagsDataLength = screen.getAllByTestId('manageTagBtn').length;
+      expect(finalTagsDataLength).toBeGreaterThan(initialTagsDataLength);
+
+      expect(getByText(translations.createTag)).toBeInTheDocument();
     });
   });
 
@@ -217,30 +201,15 @@ describe('Organisation Tags Page', () => {
 
     userEvent.type(
       screen.getByPlaceholderText(translations.tagNamePlaceholder),
-      '7',
+      'userTag 12',
     );
 
     userEvent.click(screen.getByTestId('createTagSubmitBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.tagCreationSuccess);
-    });
-  });
-
-  test('removes a user tag', async () => {
-    renderOrganizationTags(link);
-
-    await wait();
-
-    await waitFor(() => {
-      expect(screen.getAllByTestId('removeUserTagBtn')[0]).toBeInTheDocument();
-    });
-    userEvent.click(screen.getAllByTestId('removeUserTagBtn')[0]);
-
-    userEvent.click(screen.getByTestId('removeUserTagSubmitBtn'));
-
-    await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.tagRemovalSuccess);
+      expect(toast.success).toHaveBeenCalledWith(
+        translations.tagCreationSuccess,
+      );
     });
   });
 });
