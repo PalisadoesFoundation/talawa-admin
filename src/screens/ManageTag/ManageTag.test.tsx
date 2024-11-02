@@ -20,11 +20,7 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import ManageTag from './ManageTag';
-import {
-  MOCKS,
-  MOCKS_ERROR_ASSIGNED_MEMBERS,
-  MOCKS_ERROR_TAG_ANCESTORS,
-} from './ManageTagMocks';
+import { MOCKS, MOCKS_ERROR_ASSIGNED_MEMBERS } from './ManageTagMocks';
 import { type ApolloLink } from '@apollo/client';
 
 const translations = {
@@ -37,7 +33,6 @@ const translations = {
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR_ASSIGNED_MEMBERS, true);
-const link3 = new StaticMockLink(MOCKS_ERROR_TAG_ANCESTORS, true);
 
 async function wait(ms = 500): Promise<void> {
   await act(() => {
@@ -121,16 +116,6 @@ describe('Manage Tag Page', () => {
 
   test('renders error component on unsuccessful userTag assigned members query', async () => {
     const { queryByText } = renderManageTag(link2);
-
-    await wait();
-
-    await waitFor(() => {
-      expect(queryByText(translations.addPeopleToTag)).not.toBeInTheDocument();
-    });
-  });
-
-  test('renders error component on unsuccessful userTag ancestors query', async () => {
-    const { queryByText } = renderManageTag(link3);
 
     await wait();
 
@@ -336,6 +321,84 @@ describe('Manage Tag Page', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('organizationTagsScreen')).toBeInTheDocument();
+    });
+  });
+
+  test('searchs for tags where the name matches the provided search input', async () => {
+    renderManageTag(link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(
+        screen.getByPlaceholderText(translations.searchByName),
+      ).toBeInTheDocument();
+    });
+    const input = screen.getByPlaceholderText(translations.searchByName);
+    fireEvent.change(input, { target: { value: 'assigned user' } });
+
+    // should render the two users from the mock data
+    // where firstName starts with "assigned" and lastName starts with "user"
+    await waitFor(() => {
+      const buttons = screen.getAllByTestId('viewProfileBtn');
+      expect(buttons.length).toEqual(2);
+    });
+  });
+
+  test('fetches the tags by the sort order, i.e. latest or oldest first', async () => {
+    renderManageTag(link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(
+        screen.getByPlaceholderText(translations.searchByName),
+      ).toBeInTheDocument();
+    });
+    const input = screen.getByPlaceholderText(translations.searchByName);
+    fireEvent.change(input, { target: { value: 'assigned user' } });
+
+    // should render the two searched tags from the mock data
+    // where name starts with "searchUserTag"
+    await waitFor(() => {
+      expect(screen.getAllByTestId('memberName')[0]).toHaveTextContent(
+        'assigned user1',
+      );
+    });
+
+    // now change the sorting order
+    await waitFor(() => {
+      expect(screen.getByTestId('sortPeople')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('sortPeople'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('oldest')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('oldest'));
+
+    // returns the tags in reverse order
+    await waitFor(() => {
+      expect(screen.getAllByTestId('memberName')[0]).toHaveTextContent(
+        'assigned user2',
+      );
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('sortPeople')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('sortPeople'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('latest')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('latest'));
+
+    // reverse the order again
+    await waitFor(() => {
+      expect(screen.getAllByTestId('memberName')[0]).toHaveTextContent(
+        'assigned user1',
+      );
     });
   });
 

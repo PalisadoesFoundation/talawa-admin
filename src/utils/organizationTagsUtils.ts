@@ -44,6 +44,9 @@ export const TAGS_QUERY_DATA_CHUNK_SIZE = 10;
 // the tag action type
 export type TagActionType = 'assignToTags' | 'removeFromTags';
 
+// the sortedByType
+export type SortedByType = 'ASCENDING' | 'DESCENDING';
+
 // Interfaces for tag queries:
 // 1. Base interface for Apollo query results
 interface InterfaceBaseQueryResult {
