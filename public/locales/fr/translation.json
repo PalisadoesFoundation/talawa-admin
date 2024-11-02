@@ -334,7 +334,8 @@
     "noTagsFound": "Aucune étiquette trouvée",
     "removeUserTag": "Supprimer l'Étiquette",
     "removeUserTagMessage": "Voulez-vous supprimer cette étiquette ?",
-    "addChildTag": "Ajouter une Sous-Étiquette"
+    "addChildTag": "Ajouter une Sous-Étiquette",
+    "enterTagName": "Entrez le nom de l'étiquette"
   },
   "manageTag": {
     "title": "Détails de l'étiquette",
@@ -347,7 +348,6 @@
     "addPeople": "Ajouter des personnes",
     "add": "Ajouter",
     "subTags": "Sous-étiquettes",
-    "assignedToAll": "Étiquette attribuée à tous",
     "successfullyAssignedToPeople": "Étiquette attribuée avec succès",
     "errorOccurredWhileLoadingMembers": "Erreur survenue lors du chargement des membres",
     "userName": "Nom d'utilisateur",
@@ -373,7 +373,8 @@
     "collapse": "Réduire",
     "expand": "Développer",
     "tagNamePlaceholder": "Écrire le nom de l'étiquette",
-    "allTags": "Toutes les étiquettes"
+    "allTags": "Toutes les étiquettes",
+    "noMoreMembersFound": "Aucun autre membre trouvé"
   },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",

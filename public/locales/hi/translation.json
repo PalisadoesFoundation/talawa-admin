@@ -334,7 +334,8 @@
     "noTagsFound": "कोई टैग नहीं मिला",
     "removeUserTag": "टैग हटाएँ",
     "removeUserTagMessage": "क्या आप इस टैग को हटाना चाहते हैं?",
-    "addChildTag": "उप-टैग जोड़ें"
+    "addChildTag": "उप-टैग जोड़ें",
+    "enterTagName": "टैग का नाम दर्ज करें"
   },
   "manageTag": {
     "title": "टैग विवरण",
@@ -347,7 +348,6 @@
     "addPeople": "लोगों को जोड़ें",
     "add": "जोड़ें",
     "subTags": "उप-टैग्स",
-    "assignedToAll": "सभी को टैग असाइन किया गया",
     "successfullyAssignedToPeople": "टैग सफलतापूर्वक असाइन किया गया",
     "errorOccurredWhileLoadingMembers": "सदस्यों को लोड करते समय त्रुटि हुई",
     "userName": "उपयोगकर्ता नाम",
@@ -373,7 +373,8 @@
     "collapse": "संक्षिप्त करें",
     "expand": "विस्तारित करें",
     "tagNamePlaceholder": "टैग का नाम लिखें",
-    "allTags": "सभी टैग"
+    "allTags": "सभी टैग",
+    "noMoreMembersFound": "कोई और सदस्य नहीं मिला"
   },
   "userListCard": {
     "addAdmin": "व्यवस्थापक जोड़ें",

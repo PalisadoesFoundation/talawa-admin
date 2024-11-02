@@ -1,7 +1,7 @@
 import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
-import { useMutation, useQuery, type ApolloError } from '@apollo/client';
-import { Search, WarningAmberRounded } from '@mui/icons-material';
+import { useMutation, useQuery } from '@apollo/client';
+import { WarningAmberRounded } from '@mui/icons-material';
 import SortIcon from '@mui/icons-material/Sort';
 import Loader from 'components/Loader/Loader';
 import IconComponent from 'components/IconComponent/IconComponent';
@@ -17,6 +17,7 @@ import styles from './ManageTag.module.css';
 import { DataGrid } from '@mui/x-data-grid';
 import type {
   InterfaceTagAssignedMembersQuery,
+  SortedByType,
   TagActionType,
 } from 'utils/organizationTagsUtils';
 import {
@@ -30,10 +31,7 @@ import {
   UNASSIGN_USER_TAG,
   UPDATE_USER_TAG,
 } from 'GraphQl/Mutations/TagMutations';
-import {
-  USER_TAG_ANCESTORS,
-  USER_TAGS_ASSIGNED_MEMBERS,
-} from 'GraphQl/Queries/userTagQueries';
+import { USER_TAGS_ASSIGNED_MEMBERS } from 'GraphQl/Queries/userTagQueries';
 import AddPeopleToTag from 'components/AddPeopleToTag/AddPeopleToTag';
 import TagActions from 'components/TagActions/TagActions';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -43,10 +41,7 @@ import RemoveUserTagModal from './RemoveUserTagModal';
 import UnassignUserTagModal from './UnassignUserTagModal';
 
 /**
- * Component that renders the Manage Tag screen when the app navigates to '/orgtags/:orgId/managetag/:tagId'.
- *
- * This component does not accept any props and is responsible for displaying
- * the content associated with the corresponding route.
+ * Component that renders the Manage Tag screen when the app navigates to '/orgtags/:orgId/manageTag/:tagId'.
  */
 
 function ManageTag(): JSX.Element {
@@ -54,6 +49,8 @@ function ManageTag(): JSX.Element {
     keyPrefix: 'manageTag',
   });
   const { t: tCommon } = useTranslation('common');
+  const { orgId, tagId: currentTagId } = useParams();
+  const navigate = useNavigate();
 
   const [unassignUserTagModalIsOpen, setUnassignUserTagModalIsOpen] =
     useState(false);
@@ -63,11 +60,15 @@ function ManageTag(): JSX.Element {
   const [editUserTagModalIsOpen, setEditUserTagModalIsOpen] = useState(false);
   const [removeUserTagModalIsOpen, setRemoveUserTagModalIsOpen] =
     useState(false);
-
-  const { orgId, tagId: currentTagId } = useParams();
-  const navigate = useNavigate();
   const [unassignUserId, setUnassignUserId] = useState(null);
-
+  const [assignedMemberSearchInput, setAssignedMemberSearchInput] =
+    useState('');
+  const [assignedMemberSearchFirstName, setAssignedMemberSearchFirstName] =
+    useState('');
+  const [assignedMemberSearchLastName, setAssignedMemberSearchLastName] =
+    useState('');
+  const [assignedMemberSortOrder, setAssignedMemberSortOrder] =
+    useState<SortedByType>('DESCENDING');
   // a state to specify whether we're assigning to tags or removing from tags
   const [tagActionType, setTagActionType] =
     useState<TagActionType>('assignToTags');
@@ -75,21 +76,18 @@ function ManageTag(): JSX.Element {
   const toggleRemoveUserTagModal = (): void => {
     setRemoveUserTagModalIsOpen(!removeUserTagModalIsOpen);
   };
-
   const showAddPeopleToTagModal = (): void => {
     setAddPeopleToTagModalIsOpen(true);
   };
   const hideAddPeopleToTagModal = (): void => {
     setAddPeopleToTagModalIsOpen(false);
   };
-
   const showTagActionsModal = (): void => {
     setTagActionsModalIsOpen(true);
   };
   const hideTagActionsModal = (): void => {
     setTagActionsModalIsOpen(false);
   };
-
   const showEditUserTagModal = (): void => {
     setEditUserTagModalIsOpen(true);
   };
@@ -107,7 +105,13 @@ function ManageTag(): JSX.Element {
     variables: {
       id: currentTagId,
       first: TAGS_QUERY_DATA_CHUNK_SIZE,
+      where: {
+        firstName: { starts_with: assignedMemberSearchFirstName },
+        lastName: { starts_with: assignedMemberSearchLastName },
+      },
+      sortedBy: { id: assignedMemberSortOrder },
     },
+    fetchPolicy: 'no-cache',
   });
 
   const loadMoreAssignedMembers = (): void => {
@@ -128,7 +132,7 @@ function ManageTag(): JSX.Element {
           };
         },
       ) => {
-        if (!fetchMoreResult) return prevResult;
+        if (!fetchMoreResult) /* istanbul ignore next */ return prevResult;
 
         return {
           getAssignedUsers: {
@@ -146,26 +150,14 @@ function ManageTag(): JSX.Element {
     });
   };
 
-  const {
-    data: orgUserTagAncestorsData,
-    loading: orgUserTagsAncestorsLoading,
-    refetch: orgUserTagsAncestorsRefetch,
-    error: orgUserTagsAncestorsError,
-  }: {
-    data?: {
-      getUserTagAncestors: {
-        _id: string;
-        name: string;
-      }[];
-    };
-    loading: boolean;
-    error?: ApolloError;
-    refetch: () => void;
-  } = useQuery(USER_TAG_ANCESTORS, {
-    variables: {
-      id: currentTagId,
-    },
-  });
+  useEffect(() => {
+    const [firstName, ...lastNameParts] = assignedMemberSearchInput
+      .trim()
+      .split(/\s+/);
+    const lastName = lastNameParts.join(' '); // Joins everything after the first word
+    setAssignedMemberSearchFirstName(firstName);
+    setAssignedMemberSearchLastName(lastName);
+  }, [assignedMemberSearchInput]);
 
   const [unassignUserTag] = useMutation(UNASSIGN_USER_TAG);
 
@@ -220,7 +212,6 @@ function ManageTag(): JSX.Element {
       if (data) {
         toast.success(t('tagUpdationSuccess'));
         userTagAssignedMembersRefetch();
-        orgUserTagsAncestorsRefetch();
         setEditUserTagModalIsOpen(false);
       }
     } catch (error: unknown) {
@@ -251,22 +242,13 @@ function ManageTag(): JSX.Element {
     }
   };
 
-  if (userTagAssignedMembersLoading || orgUserTagsAncestorsLoading) {
-    return <Loader />;
-  }
-
-  if (userTagAssignedMembersError || orgUserTagsAncestorsError) {
+  if (userTagAssignedMembersError) {
     return (
       <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
         <div className={styles.errorMessage}>
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
-            Error occured while loading{' '}
-            {userTagAssignedMembersError ? 'assigned users' : 'tag ancestors'}
-            <br />
-            {userTagAssignedMembersError
-              ? userTagAssignedMembersError.message
-              : orgUserTagsAncestorsError?.message}
+            Error occured while loading assigned users
           </h6>
         </div>
       </div>
@@ -277,7 +259,16 @@ function ManageTag(): JSX.Element {
     userTagAssignedMembersData?.getAssignedUsers.usersAssignedTo.edges.map(
       (edge) => edge.node,
     ) ?? /* istanbul ignore next */ [];
-  const orgUserTagAncestors = orgUserTagAncestorsData?.getUserTagAncestors;
+
+  // get the ancestorTags array and push the current tag in it
+  // used for the tag breadcrumbs
+  const orgUserTagAncestors = [
+    ...(userTagAssignedMembersData?.getAssignedUsers.ancestorTags ?? []),
+    {
+      _id: currentTagId,
+      name: currentTagName,
+    },
+  ];
 
   const redirectToSubTags = (tagId: string): void => {
     navigate(`/orgtags/${orgId}/subTags/${tagId}`);
@@ -285,7 +276,6 @@ function ManageTag(): JSX.Element {
   const redirectToManageTag = (tagId: string): void => {
     navigate(`/orgtags/${orgId}/manageTag/${tagId}`);
   };
-
   const toggleUnassignUserTagModal = (): void => {
     if (unassignUserTagModalIsOpen) {
       setUnassignUserId(null);
@@ -366,21 +356,18 @@ function ManageTag(): JSX.Element {
         <div className={styles.mainpageright}>
           <div className={styles.btnsContainer}>
             <div className={styles.input}>
+              <i className="fa fa-search position-absolute text-body-tertiary end-0 top-50 translate-middle" />
               <Form.Control
                 type="text"
                 id="userName"
                 className="bg-white"
-                placeholder={tCommon('search')}
+                placeholder={tCommon('searchByName')}
+                onChange={(e) =>
+                  setAssignedMemberSearchInput(e.target.value.trim())
+                }
                 data-testid="searchByName"
                 autoComplete="off"
-                required
               />
-              <Button
-                tabIndex={-1}
-                className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
-              >
-                <Search />
-              </Button>
             </div>
             <div className={styles.btnsBlock}>
               <Dropdown
@@ -393,13 +380,21 @@ function ManageTag(): JSX.Element {
                   data-testid="sortPeople"
                 >
                   <SortIcon className={'me-1'} />
-                  {tCommon('sort')}
+                  {assignedMemberSortOrder === 'DESCENDING'
+                    ? tCommon('Latest')
+                    : tCommon('Oldest')}
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-                  <Dropdown.Item data-testid="latest">
+                  <Dropdown.Item
+                    data-testid="latest"
+                    onClick={() => setAssignedMemberSortOrder('DESCENDING')}
+                  >
                     {tCommon('Latest')}
                   </Dropdown.Item>
-                  <Dropdown.Item data-testid="oldest">
+                  <Dropdown.Item
+                    data-testid="oldest"
+                    onClick={() => setAssignedMemberSortOrder('ASCENDING')}
+                  >
                     {tCommon('Oldest')}
                   </Dropdown.Item>
                 </Dropdown.Menu>
@@ -423,131 +418,137 @@ function ManageTag(): JSX.Element {
               {t('addPeopleToTag')}
             </Button>
           </div>
-          <Row className="mb-4">
-            <Col xs={9}>
-              <div className="bg-white light border rounded-top mb-0 py-2 d-flex align-items-center">
-                <div className="ms-3 my-1">
-                  <IconComponent name="Tag" />
-                </div>
-                <div
-                  onClick={() => navigate(`/orgtags/${orgId}`)}
-                  className={`fs-6 ms-3 my-1 ${styles.tagsBreadCrumbs}`}
-                  data-testid="allTagsBtn"
-                >
-                  {'Tags'}
-                  <i className={'mx-2 fa fa-caret-right'} />
-                </div>
-                {orgUserTagAncestors?.map((tag, index) => (
-                  <div
-                    key={index}
-                    className={`ms-2 my-1 ${tag._id === currentTagId ? `fs-4 fw-semibold text-secondary` : `${styles.tagsBreadCrumbs} fs-6`}`}
-                    onClick={() => redirectToManageTag(tag._id as string)}
-                    data-testid="redirectToManageTag"
-                  >
-                    {tag.name}
-                    {orgUserTagAncestors.length - 1 !== index && (
-                      /* istanbul ignore next */
-                      <i className={'mx-2 fa fa-caret-right'} />
-                    )}
+
+          {userTagAssignedMembersLoading ? (
+            <Loader />
+          ) : (
+            <Row className="mb-4">
+              <Col xs={9}>
+                <div className="bg-white light border rounded-top mb-0 py-2 d-flex align-items-center">
+                  <div className="ms-3 my-1">
+                    <IconComponent name="Tag" />
                   </div>
-                ))}
-              </div>
-              <div
-                id="manageTagScrollableDiv"
-                data-testid="manageTagScrollableDiv"
-                className={styles.manageTagScrollableDiv}
-              >
-                <InfiniteScroll
-                  dataLength={userTagAssignedMembers?.length ?? 0}
-                  next={loadMoreAssignedMembers}
-                  hasMore={
-                    userTagAssignedMembersData?.getAssignedUsers.usersAssignedTo
-                      .pageInfo.hasNextPage ?? /* istanbul ignore next */ false
-                  }
-                  loader={<InfiniteScrollLoader />}
-                  scrollableTarget="manageTagScrollableDiv"
+                  <div
+                    onClick={() => navigate(`/orgtags/${orgId}`)}
+                    className={`fs-6 ms-3 my-1 ${styles.tagsBreadCrumbs}`}
+                    data-testid="allTagsBtn"
+                  >
+                    {'Tags'}
+                    <i className={'mx-2 fa fa-caret-right'} />
+                  </div>
+                  {orgUserTagAncestors?.map((tag, index) => (
+                    <div
+                      key={index}
+                      className={`ms-2 my-1 ${tag._id === currentTagId ? `fs-4 fw-semibold text-secondary` : `${styles.tagsBreadCrumbs} fs-6`}`}
+                      onClick={() => redirectToManageTag(tag._id as string)}
+                      data-testid="redirectToManageTag"
+                    >
+                      {tag.name}
+                      {orgUserTagAncestors.length - 1 !== index && (
+                        /* istanbul ignore next */
+                        <i className={'mx-2 fa fa-caret-right'} />
+                      )}
+                    </div>
+                  ))}
+                </div>
+                <div
+                  id="manageTagScrollableDiv"
+                  data-testid="manageTagScrollableDiv"
+                  className={styles.manageTagScrollableDiv}
                 >
-                  <DataGrid
-                    disableColumnMenu
-                    columnBufferPx={7}
-                    hideFooter={true}
-                    getRowId={(row) => row.id}
-                    slots={{
-                      noRowsOverlay: /* istanbul ignore next */ () => (
-                        <Stack
-                          height="100%"
-                          alignItems="center"
-                          justifyContent="center"
-                        >
-                          {t('noAssignedMembersFound')}
-                        </Stack>
-                      ),
+                  <InfiniteScroll
+                    dataLength={userTagAssignedMembers?.length ?? 0}
+                    next={loadMoreAssignedMembers}
+                    hasMore={
+                      userTagAssignedMembersData?.getAssignedUsers
+                        .usersAssignedTo.pageInfo.hasNextPage ??
+                      /* istanbul ignore next */ false
+                    }
+                    loader={<InfiniteScrollLoader />}
+                    scrollableTarget="manageTagScrollableDiv"
+                  >
+                    <DataGrid
+                      disableColumnMenu
+                      columnBufferPx={7}
+                      hideFooter={true}
+                      getRowId={(row) => row.id}
+                      slots={{
+                        noRowsOverlay: /* istanbul ignore next */ () => (
+                          <Stack
+                            height="100%"
+                            alignItems="center"
+                            justifyContent="center"
+                          >
+                            {t('noAssignedMembersFound')}
+                          </Stack>
+                        ),
+                      }}
+                      sx={dataGridStyle}
+                      getRowClassName={() => `${styles.rowBackground}`}
+                      autoHeight
+                      rowHeight={65}
+                      rows={userTagAssignedMembers?.map(
+                        (assignedMembers, index) => ({
+                          id: index + 1,
+                          ...assignedMembers,
+                        }),
+                      )}
+                      columns={columns}
+                      isRowSelectable={() => false}
+                    />
+                  </InfiniteScroll>
+                </div>
+              </Col>
+              <Col className="ms-auto" xs={3}>
+                <div className="bg-secondary text-white rounded-top mb-0 py-2 fw-semibold ms-2">
+                  <div className="ms-3 fs-5">{'Actions'}</div>
+                </div>
+                <div className="d-flex flex-column align-items-center bg-white rounded-bottom mb-0 py-2 fw-semibold ms-2">
+                  <div
+                    onClick={() => {
+                      setTagActionType('assignToTags');
+                      showTagActionsModal();
                     }}
-                    sx={dataGridStyle}
-                    getRowClassName={() => `${styles.rowBackground}`}
-                    autoHeight
-                    rowHeight={65}
-                    rows={userTagAssignedMembers?.map(
-                      (assignedMembers, index) => ({
-                        id: index + 1,
-                        ...assignedMembers,
-                      }),
-                    )}
-                    columns={columns}
-                    isRowSelectable={() => false}
+                    className="my-2 btn btn-primary btn-sm w-75"
+                    data-testid="assignToTags"
+                  >
+                    {t('assignToTags')}
+                  </div>
+                  <div
+                    onClick={() => {
+                      setTagActionType('removeFromTags');
+                      showTagActionsModal();
+                    }}
+                    className="mb-1 btn btn-danger btn-sm w-75"
+                    data-testid="removeFromTags"
+                  >
+                    {t('removeFromTags')}
+                  </div>
+                  <hr
+                    style={{
+                      borderColor: 'lightgray',
+                      borderWidth: '2px',
+                      width: '85%',
+                    }}
                   />
-                </InfiniteScroll>
-              </div>
-            </Col>
-            <Col className="ms-auto" xs={3}>
-              <div className="bg-secondary text-white rounded-top mb-0 py-2 fw-semibold ms-2">
-                <div className="ms-3 fs-5">{'Actions'}</div>
-              </div>
-              <div className="d-flex flex-column align-items-center bg-white rounded-bottom mb-0 py-2 fw-semibold ms-2">
-                <div
-                  onClick={() => {
-                    setTagActionType('assignToTags');
-                    showTagActionsModal();
-                  }}
-                  className="my-2 btn btn-primary btn-sm w-75"
-                  data-testid="assignToTags"
-                >
-                  {t('assignToTags')}
+                  <div
+                    onClick={showEditUserTagModal}
+                    className="mt-1 mb-2 btn btn-primary btn-sm w-75"
+                    data-testid="editUserTag"
+                  >
+                    {tCommon('edit')}
+                  </div>
+                  <div
+                    onClick={toggleRemoveUserTagModal}
+                    className="mb-2 btn btn-danger btn-sm w-75"
+                    data-testid="removeTag"
+                  >
+                    {tCommon('remove')}
+                  </div>
                 </div>
-                <div
-                  onClick={() => {
-                    setTagActionType('removeFromTags');
-                    showTagActionsModal();
-                  }}
-                  className="mb-1 btn btn-danger btn-sm w-75"
-                  data-testid="removeFromTags"
-                >
-                  {t('removeFromTags')}
-                </div>
-                <hr
-                  style={{
-                    borderColor: 'lightgray',
-                    borderWidth: '2px',
-                    width: '85%',
-                  }}
-                />
-                <div
-                  onClick={showEditUserTagModal}
-                  className="mt-1 mb-2 btn btn-primary btn-sm w-75"
-                  data-testid="editUserTag"
-                >
-                  {tCommon('edit')}
-                </div>
-                <div
-                  onClick={toggleRemoveUserTagModal}
-                  className="mb-2 btn btn-danger btn-sm w-75"
-                  data-testid="removeTag"
-                >
-                  {tCommon('remove')}
-                </div>
-              </div>
-            </Col>
-          </Row>
+              </Col>
+            </Row>
+          )}
         </div>
       </Row>
 

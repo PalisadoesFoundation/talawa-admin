@@ -334,7 +334,8 @@
     "noTagsFound": "No tags found",
     "removeUserTag": "Delete Tag",
     "removeUserTagMessage": "Do you want to delete this tag?",
-    "addChildTag": "Add a Sub Tag"
+    "addChildTag": "Add a Sub Tag",
+    "enterTagName": "Enter Tag Name"
   },
   "manageTag": {
     "title": "Tag Details",
@@ -347,7 +348,6 @@
     "addPeople": "Add People",
     "add": "Add",
     "subTags": "Sub Tags",
-    "assignedToAll": "Tag Assigned to All",
     "successfullyAssignedToPeople": "Tag assigned successfully",
     "errorOccurredWhileLoadingMembers": "Error occured while loading members",
     "userName": "User Name",
@@ -373,7 +373,8 @@
     "collapse": "Collapse",
     "expand": "Expand",
     "tagNamePlaceholder": "Write the name of the tag",
-    "allTags": "All Tags"
+    "allTags": "All Tags",
+    "noMoreMembersFound": "No more members found"
   },
   "userListCard": {
     "addAdmin": "Add Admin",
