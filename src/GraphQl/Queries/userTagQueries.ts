@@ -15,7 +15,7 @@ export const USER_TAGS_ASSIGNED_MEMBERS = gql`
     $first: PositiveInt
     $last: PositiveInt
   ) {
-    getUserTag(id: $id) {
+    getAssignedUsers: getUserTag(id: $id) {
       name
       usersAssignedTo(
         after: $after
@@ -57,7 +57,7 @@ export const USER_TAG_SUB_TAGS = gql`
     $first: PositiveInt
     $last: PositiveInt
   ) {
-    getUserTag(id: $id) {
+    getChildTags: getUserTag(id: $id) {
       name
       childTags(after: $after, before: $before, first: $first, last: $last) {
         edges {
@@ -70,6 +70,48 @@ export const USER_TAG_SUB_TAGS = gql`
             childTags(first: $first, last: $last) {
               totalCount
             }
+          }
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+        totalCount
+      }
+    }
+  }
+`;
+
+/**
+ * GraphQL query to retrieve organization members that aren't assigned a certain tag.
+ *
+ * @param id - The ID of the tag.
+ * @returns The list of organization members.
+ */
+
+export const USER_TAGS_MEMBERS_TO_ASSIGN_TO = gql`
+  query GetMembersToAssignTo(
+    $id: ID!
+    $after: String
+    $before: String
+    $first: PositiveInt
+    $last: PositiveInt
+  ) {
+    getUsersToAssignTo: getUserTag(id: $id) {
+      name
+      usersToAssignTo(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+      ) {
+        edges {
+          node {
+            _id
+            firstName
+            lastName
           }
         }
         pageInfo {

@@ -1,18 +1,11 @@
-import {
-  REMOVE_USER_TAG,
-  UNASSIGN_USER_TAG,
-  UPDATE_USER_TAG,
-} from 'GraphQl/Mutations/TagMutations';
-import {
-  USER_TAG_ANCESTORS,
-  USER_TAGS_ASSIGNED_MEMBERS,
-} from 'GraphQl/Queries/userTagQueries';
+import { ADD_PEOPLE_TO_TAG } from 'GraphQl/Mutations/TagMutations';
+import { USER_TAGS_MEMBERS_TO_ASSIGN_TO } from 'GraphQl/Queries/userTagQueries';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 
 export const MOCKS = [
   {
     request: {
-      query: USER_TAGS_ASSIGNED_MEMBERS,
+      query: USER_TAGS_MEMBERS_TO_ASSIGN_TO,
       variables: {
         id: '1',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
@@ -20,9 +13,9 @@ export const MOCKS = [
     },
     result: {
       data: {
-        getAssignedUsers: {
+        getUsersToAssignTo: {
           name: 'tag1',
-          usersAssignedTo: {
+          usersToAssignTo: {
             edges: [
               {
                 node: {
@@ -119,7 +112,7 @@ export const MOCKS = [
   },
   {
     request: {
-      query: USER_TAGS_ASSIGNED_MEMBERS,
+      query: USER_TAGS_MEMBERS_TO_ASSIGN_TO,
       variables: {
         id: '1',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
@@ -128,9 +121,9 @@ export const MOCKS = [
     },
     result: {
       data: {
-        getAssignedUsers: {
+        getUsersToAssignTo: {
           name: 'tag1',
-          usersAssignedTo: {
+          usersToAssignTo: {
             edges: [
               {
                 node: {
@@ -163,64 +156,15 @@ export const MOCKS = [
   },
   {
     request: {
-      query: USER_TAG_ANCESTORS,
-      variables: {
-        id: '1',
-      },
-    },
-    result: {
-      data: {
-        getUserTagAncestors: [
-          {
-            _id: '1',
-            name: 'tag1',
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: UNASSIGN_USER_TAG,
+      query: ADD_PEOPLE_TO_TAG,
       variables: {
         tagId: '1',
-        userId: '1',
+        userIds: ['1', '3', '5'],
       },
     },
     result: {
       data: {
-        unassignUserTag: {
-          _id: '1',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: UPDATE_USER_TAG,
-      variables: {
-        tagId: '1',
-        name: 'tag 1 edited',
-      },
-    },
-    result: {
-      data: {
-        updateUserTag: {
-          _id: '1',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: REMOVE_USER_TAG,
-      variables: {
-        id: '1',
-      },
-    },
-    result: {
-      data: {
-        removeUserTag: {
+        addPeopleToUserTag: {
           _id: '1',
         },
       },
@@ -228,64 +172,13 @@ export const MOCKS = [
   },
 ];
 
-export const MOCKS_ERROR_ASSIGNED_MEMBERS = [
+export const MOCKS_ERROR = [
   {
     request: {
-      query: USER_TAGS_ASSIGNED_MEMBERS,
+      query: USER_TAGS_MEMBERS_TO_ASSIGN_TO,
       variables: {
         id: '1',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
-      },
-    },
-    error: new Error('Mock Graphql Error'),
-  },
-  {
-    request: {
-      query: USER_TAG_ANCESTORS,
-      variables: {
-        id: '1',
-      },
-    },
-    result: {
-      data: {
-        getUserTagAncestors: [],
-      },
-    },
-  },
-];
-
-export const MOCKS_ERROR_TAG_ANCESTORS = [
-  {
-    request: {
-      query: USER_TAGS_ASSIGNED_MEMBERS,
-      variables: {
-        id: '1',
-        first: TAGS_QUERY_DATA_CHUNK_SIZE,
-      },
-    },
-    result: {
-      data: {
-        getAssignedUsers: {
-          name: 'tag1',
-          usersAssignedTo: {
-            edges: [],
-            pageInfo: {
-              startCursor: '1',
-              endCursor: '1',
-              hasNextPage: false,
-              hasPreviousPage: false,
-            },
-            totalCount: 1,
-          },
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_TAG_ANCESTORS,
-      variables: {
-        id: '1',
       },
     },
     error: new Error('Mock Graphql Error'),

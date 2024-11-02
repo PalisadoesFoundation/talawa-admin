@@ -50,40 +50,12 @@ export const REMOVE_SAMPLE_ORGANIZATION_MUTATION = gql`
 `;
 
 /**
- * GraphQL mutation to create a direct chat between users in an organization.
+ * GraphQL mutation to create a chat between users in an organization.
  *
  * @param userIds - An array of user IDs participating in the direct chat.
  * @param organizationId - The ID of the organization where the direct chat is created.
  * @returns The created direct chat object.
  */
-
-export const CREATE_GROUP_CHAT = gql`
-  mutation createGroupChat(
-    $userIds: [ID!]!
-    $organizationId: ID!
-    $title: String!
-  ) {
-    createGroupChat(
-      data: {
-        userIds: $userIds
-        organizationId: $organizationId
-        title: $title
-      }
-    ) {
-      _id
-    }
-  }
-`;
-
-export const CREATE_DIRECT_CHAT = gql`
-  mutation createDirectChat($userIds: [ID!]!, $organizationId: ID) {
-    createDirectChat(
-      data: { userIds: $userIds, organizationId: $organizationId }
-    ) {
-      _id
-    }
-  }
-`;
 
 export const CREATE_CHAT = gql`
   mutation createChat(
@@ -134,24 +106,6 @@ export const SEND_MESSAGE_TO_CHAT = gql`
         _id
         firstName
         lastName
-      }
-      updatedAt
-    }
-  }
-`;
-
-export const CREATE_MESSAGE_CHAT = gql`
-  mutation createMessageChat($receiver: ID!, $messageContent: String!) {
-    createMessageChat(data: { receiver: $receiver, message: $messageContent }) {
-      _id
-      createdAt
-      message
-      languageBarrier
-      receiver {
-        _id
-      }
-      sender {
-        _id
       }
       updatedAt
     }
