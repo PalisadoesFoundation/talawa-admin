@@ -4,6 +4,7 @@ import type { RenderResult } from '@testing-library/react';
 import {
   act,
   cleanup,
+  fireEvent,
   render,
   screen,
   waitFor,
@@ -24,7 +25,7 @@ import {
   MOCKS_ERROR_SUB_TAGS,
   MOCKS_ERROR_TAG_ANCESTORS,
 } from './SubTagsMocks';
-import { InMemoryCache, type ApolloLink } from '@apollo/client';
+import { type ApolloLink } from '@apollo/client';
 
 const translations = {
   ...JSON.parse(
@@ -55,25 +56,25 @@ jest.mock('react-toastify', () => ({
   },
 }));
 
-const cache = new InMemoryCache({
-  typePolicies: {
-    Query: {
-      fields: {
-        getUserTag: {
-          keyArgs: false,
-          merge(existing = {}, incoming) {
-            return incoming;
-          },
-        },
-      },
-    },
-  },
-});
+// const cache = new InMemoryCache({
+//   typePolicies: {
+//     Query: {
+//       fields: {
+//         getUserTag: {
+//           keyArgs: false,
+//           merge(_, incoming) {
+//             return incoming;
+//           },
+//         },
+//       },
+//     },
+//   },
+// });
 
 const renderSubTags = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider cache={cache} link={link}>
-      <MemoryRouter initialEntries={['/orgtags/123/subtags/tag1']}>
+    <MockedProvider link={link}>
+      <MemoryRouter initialEntries={['/orgtags/123/subtags/1']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
             <Routes>
@@ -82,11 +83,11 @@ const renderSubTags = (link: ApolloLink): RenderResult => {
                 element={<div data-testid="orgtagsScreen"></div>}
               />
               <Route
-                path="/orgtags/:orgId/managetag/:tagId"
+                path="/orgtags/:orgId/manageTag/:tagId"
                 element={<div data-testid="manageTagScreen"></div>}
               />
               <Route
-                path="/orgtags/:orgId/subtags/:tagId"
+                path="/orgtags/:orgId/subTags/:tagId"
                 element={<SubTags />}
               />
             </Routes>
@@ -103,7 +104,6 @@ describe('Organisation Tags Page', () => {
       ...jest.requireActual('react-router-dom'),
       useParams: () => ({ orgId: 'orgId' }),
     }));
-    cache.reset();
   });
 
   afterEach(() => {
@@ -160,28 +160,6 @@ describe('Organisation Tags Page', () => {
 
     await waitForElementToBeRemoved(() =>
       screen.queryByTestId('addSubTagModalCloseBtn'),
-    );
-  });
-
-  test('opens and closes the remove tag modal', async () => {
-    renderSubTags(link);
-
-    await wait();
-
-    await waitFor(() => {
-      expect(screen.getAllByTestId('removeUserTagBtn')[0]).toBeInTheDocument();
-    });
-    userEvent.click(screen.getAllByTestId('removeUserTagBtn')[0]);
-
-    await waitFor(() => {
-      return expect(
-        screen.findByTestId('removeUserTagModalCloseBtn'),
-      ).resolves.toBeInTheDocument();
-    });
-    userEvent.click(screen.getByTestId('removeUserTagModalCloseBtn'));
-
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('removeUserTagModalCloseBtn'),
     );
   });
 
@@ -260,27 +238,32 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  test('paginates between different pages', async () => {
-    renderSubTags(link);
+  test('Fetches more sub tags with infinite scroll', async () => {
+    const { getByText } = renderSubTags(link);
 
     await wait();
 
     await waitFor(() => {
-      expect(screen.getByTestId('nextPagBtn')).toBeInTheDocument();
-    });
-    userEvent.click(screen.getByTestId('nextPagBtn'));
-
-    await waitFor(() => {
-      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent('subTag 6');
+      expect(getByText(translations.addChildTag)).toBeInTheDocument();
     });
 
-    await waitFor(() => {
-      expect(screen.getByTestId('previousPageBtn')).toBeInTheDocument();
+    const subTagsScrollableDiv = screen.getByTestId('subTagsScrollableDiv');
+
+    // Get the initial number of tags loaded
+    const initialSubTagsDataLength =
+      screen.getAllByTestId('manageTagBtn').length;
+
+    // Set scroll position to the bottom
+    fireEvent.scroll(subTagsScrollableDiv, {
+      target: { scrollY: subTagsScrollableDiv.scrollHeight },
     });
-    userEvent.click(screen.getByTestId('previousPageBtn'));
 
     await waitFor(() => {
-      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent('subTag 1');
+      const finalSubTagsDataLength =
+        screen.getAllByTestId('manageTagBtn').length;
+      expect(finalSubTagsDataLength).toBeGreaterThan(initialSubTagsDataLength);
+
+      expect(getByText(translations.addChildTag)).toBeInTheDocument();
     });
   });
 
@@ -296,30 +279,15 @@ describe('Organisation Tags Page', () => {
 
     userEvent.type(
       screen.getByPlaceholderText(translations.tagNamePlaceholder),
-      'subTag 7',
+      'subTag 12',
     );
 
     userEvent.click(screen.getByTestId('addSubTagSubmitBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.tagCreationSuccess);
-    });
-  });
-
-  test('removes a sub tag', async () => {
-    renderSubTags(link);
-
-    await wait();
-
-    await waitFor(() => {
-      expect(screen.getAllByTestId('removeUserTagBtn')[0]).toBeInTheDocument();
-    });
-    userEvent.click(screen.getAllByTestId('removeUserTagBtn')[0]);
-
-    userEvent.click(screen.getByTestId('removeUserTagSubmitBtn'));
-
-    await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.tagRemovalSuccess);
+      expect(toast.success).toHaveBeenCalledWith(
+        translations.tagCreationSuccess,
+      );
     });
   });
 });

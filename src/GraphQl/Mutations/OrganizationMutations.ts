@@ -50,7 +50,7 @@ export const REMOVE_SAMPLE_ORGANIZATION_MUTATION = gql`
 `;
 
 /**
- * GraphQL mutation to create a direct chat between users in an organization.
+ * GraphQL mutation to create a chat between users in an organization.
  *
  * @param userIds - An array of user IDs participating in the direct chat.
  * @param organizationId - The ID of the organization where the direct chat is created.
