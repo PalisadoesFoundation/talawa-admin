@@ -41,10 +41,7 @@ import RemoveUserTagModal from './RemoveUserTagModal';
 import UnassignUserTagModal from './UnassignUserTagModal';
 
 /**
- * Component that renders the Manage Tag screen when the app navigates to '/orgtags/:orgId/managetag/:tagId'.
- *
- * This component does not accept any props and is responsible for displaying
- * the content associated with the corresponding route.
+ * Component that renders the Manage Tag screen when the app navigates to '/orgtags/:orgId/manageTag/:tagId'.
  */
 
 function ManageTag(): JSX.Element {
@@ -52,6 +49,8 @@ function ManageTag(): JSX.Element {
     keyPrefix: 'manageTag',
   });
   const { t: tCommon } = useTranslation('common');
+  const { orgId, tagId: currentTagId } = useParams();
+  const navigate = useNavigate();
 
   const [unassignUserTagModalIsOpen, setUnassignUserTagModalIsOpen] =
     useState(false);
@@ -61,21 +60,15 @@ function ManageTag(): JSX.Element {
   const [editUserTagModalIsOpen, setEditUserTagModalIsOpen] = useState(false);
   const [removeUserTagModalIsOpen, setRemoveUserTagModalIsOpen] =
     useState(false);
-
-  const { orgId, tagId: currentTagId } = useParams();
-  const navigate = useNavigate();
   const [unassignUserId, setUnassignUserId] = useState(null);
-
   const [assignedMemberSearchInput, setAssignedMemberSearchInput] =
     useState('');
   const [assignedMemberSearchFirstName, setAssignedMemberSearchFirstName] =
     useState('');
   const [assignedMemberSearchLastName, setAssignedMemberSearchLastName] =
     useState('');
-
   const [assignedMemberSortOrder, setAssignedMemberSortOrder] =
     useState<SortedByType>('DESCENDING');
-
   // a state to specify whether we're assigning to tags or removing from tags
   const [tagActionType, setTagActionType] =
     useState<TagActionType>('assignToTags');
@@ -83,21 +76,18 @@ function ManageTag(): JSX.Element {
   const toggleRemoveUserTagModal = (): void => {
     setRemoveUserTagModalIsOpen(!removeUserTagModalIsOpen);
   };
-
   const showAddPeopleToTagModal = (): void => {
     setAddPeopleToTagModalIsOpen(true);
   };
   const hideAddPeopleToTagModal = (): void => {
     setAddPeopleToTagModalIsOpen(false);
   };
-
   const showTagActionsModal = (): void => {
     setTagActionsModalIsOpen(true);
   };
   const hideTagActionsModal = (): void => {
     setTagActionsModalIsOpen(false);
   };
-
   const showEditUserTagModal = (): void => {
     setEditUserTagModalIsOpen(true);
   };
@@ -286,7 +276,6 @@ function ManageTag(): JSX.Element {
   const redirectToManageTag = (tagId: string): void => {
     navigate(`/orgtags/${orgId}/manageTag/${tagId}`);
   };
-
   const toggleUnassignUserTagModal = (): void => {
     if (unassignUserTagModalIsOpen) {
       setUnassignUserId(null);
