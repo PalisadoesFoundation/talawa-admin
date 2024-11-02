@@ -1,10 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-interface InterfaceAddOnProps {
-  extras?: any;
-  name?: string;
-  children?: React.ReactNode;
+/**
+ * Props for the AddOnSpotAttendee component that handles on-spot event registration
+ */
+export interface InterfaceAddOnSpotAttendeeProps {
+  /** Controls the visibility of the attendee registration modal */
+  show: boolean;
+  /** Callback function to close the modal */
+  handleClose: () => void;
+  /** Callback function to refresh the members list after successful registration */
+  reloadMembers: () => void;
 }
 
 /**
