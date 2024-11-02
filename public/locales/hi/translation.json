@@ -728,7 +728,7 @@
     "name": "नाम",
     "email": "ईमेल",
     "talawaApiUnavailable": "Talawa API अनुपलब्ध",
-    "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला"
+    "noResultsFoundFor": "के लिए कोई परिaणाम नहीं मिला"
   },
   "eventManagement": {
     "title": "इवेंट मैनेजमेंट",
