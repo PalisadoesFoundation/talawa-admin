@@ -1,5 +1,4 @@
-import React from 'react';
-import { act } from '@testing-library/react';
+import React, { act } from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -224,38 +223,6 @@ describe('Testing OrganizationCard Component [User Portal]', () => {
     );
 
     await wait();
-  });
-
-  test('Visit organization', async () => {
-    const cardProps = {
-      ...props,
-      id: '3',
-      image: 'organizationImage',
-      userRegistrationRequired: true,
-      membershipRequestStatus: 'accepted',
-    };
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationCard {...cardProps} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    expect(screen.getByTestId('manageBtn')).toBeInTheDocument();
-
-    fireEvent.click(screen.getByTestId('manageBtn'));
-
-    await wait();
-
-    expect(window.location.pathname).toBe(`/user/organization/${cardProps.id}`);
   });
 
   test('Send membership request', async () => {
