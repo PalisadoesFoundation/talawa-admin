@@ -3,10 +3,7 @@ import {
   UNASSIGN_USER_TAG,
   UPDATE_USER_TAG,
 } from 'GraphQl/Mutations/TagMutations';
-import {
-  USER_TAG_ANCESTORS,
-  USER_TAGS_ASSIGNED_MEMBERS,
-} from 'GraphQl/Queries/userTagQueries';
+import { USER_TAGS_ASSIGNED_MEMBERS } from 'GraphQl/Queries/userTagQueries';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 
 export const MOCKS = [
@@ -16,6 +13,11 @@ export const MOCKS = [
       variables: {
         id: '1',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: {
+          firstName: { starts_with: '' },
+          lastName: { starts_with: '' },
+        },
+        sortedBy: { id: 'DESCENDING' },
       },
     },
     result: {
@@ -113,6 +115,7 @@ export const MOCKS = [
             },
             totalCount: 12,
           },
+          ancestorTags: [],
         },
       },
     },
@@ -124,6 +127,11 @@ export const MOCKS = [
         id: '1',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after: '10',
+        where: {
+          firstName: { starts_with: '' },
+          lastName: { starts_with: '' },
+        },
+        sortedBy: { id: 'DESCENDING' },
       },
     },
     result: {
@@ -157,25 +165,106 @@ export const MOCKS = [
             },
             totalCount: 12,
           },
+          ancestorTags: [],
         },
       },
     },
   },
   {
     request: {
-      query: USER_TAG_ANCESTORS,
+      query: USER_TAGS_ASSIGNED_MEMBERS,
       variables: {
         id: '1',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: {
+          firstName: { starts_with: 'assigned' },
+          lastName: { starts_with: 'user' },
+        },
+        sortedBy: { id: 'DESCENDING' },
       },
     },
     result: {
       data: {
-        getUserTagAncestors: [
-          {
-            _id: '1',
-            name: 'tag1',
+        getAssignedUsers: {
+          name: 'tag1',
+          usersAssignedTo: {
+            edges: [
+              {
+                node: {
+                  _id: '1',
+                  firstName: 'assigned',
+                  lastName: 'user1',
+                },
+                cursor: '1',
+              },
+              {
+                node: {
+                  _id: '2',
+                  firstName: 'assigned',
+                  lastName: 'user2',
+                },
+                cursor: '2',
+              },
+            ],
+            pageInfo: {
+              startCursor: '1',
+              endCursor: '2',
+              hasNextPage: false,
+              hasPreviousPage: false,
+            },
+            totalCount: 2,
           },
-        ],
+          ancestorTags: [],
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: USER_TAGS_ASSIGNED_MEMBERS,
+      variables: {
+        id: '1',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: {
+          firstName: { starts_with: 'assigned' },
+          lastName: { starts_with: 'user' },
+        },
+        sortedBy: { id: 'ASCENDING' },
+      },
+    },
+    result: {
+      data: {
+        getAssignedUsers: {
+          name: 'tag1',
+          usersAssignedTo: {
+            edges: [
+              {
+                node: {
+                  _id: '2',
+                  firstName: 'assigned',
+                  lastName: 'user2',
+                },
+                cursor: '2',
+              },
+              {
+                node: {
+                  _id: '1',
+                  firstName: 'assigned',
+                  lastName: 'user1',
+                },
+                cursor: '1',
+              },
+            ],
+            pageInfo: {
+              startCursor: '2',
+              endCursor: '1',
+              hasNextPage: false,
+              hasPreviousPage: false,
+            },
+            totalCount: 2,
+          },
+          ancestorTags: [],
+        },
       },
     },
   },
@@ -235,57 +324,11 @@ export const MOCKS_ERROR_ASSIGNED_MEMBERS = [
       variables: {
         id: '1',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
-      },
-    },
-    error: new Error('Mock Graphql Error'),
-  },
-  {
-    request: {
-      query: USER_TAG_ANCESTORS,
-      variables: {
-        id: '1',
-      },
-    },
-    result: {
-      data: {
-        getUserTagAncestors: [],
-      },
-    },
-  },
-];
-
-export const MOCKS_ERROR_TAG_ANCESTORS = [
-  {
-    request: {
-      query: USER_TAGS_ASSIGNED_MEMBERS,
-      variables: {
-        id: '1',
-        first: TAGS_QUERY_DATA_CHUNK_SIZE,
-      },
-    },
-    result: {
-      data: {
-        getAssignedUsers: {
-          name: 'tag1',
-          usersAssignedTo: {
-            edges: [],
-            pageInfo: {
-              startCursor: '1',
-              endCursor: '1',
-              hasNextPage: false,
-              hasPreviousPage: false,
-            },
-            totalCount: 1,
-          },
+        where: {
+          firstName: { starts_with: '' },
+          lastName: { starts_with: '' },
         },
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_TAG_ANCESTORS,
-      variables: {
-        id: '1',
+        sortedBy: { id: 'DESCENDING' },
       },
     },
     error: new Error('Mock Graphql Error'),
