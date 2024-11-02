@@ -9,6 +9,10 @@ export const MOCKS = [
       variables: {
         id: '1',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: {
+          firstName: { starts_with: '' },
+          lastName: { starts_with: '' },
+        },
       },
     },
     result: {
@@ -117,6 +121,10 @@ export const MOCKS = [
         id: '1',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after: '10',
+        where: {
+          firstName: { starts_with: '' },
+          lastName: { starts_with: '' },
+        },
       },
     },
     result: {
@@ -156,6 +164,100 @@ export const MOCKS = [
   },
   {
     request: {
+      query: USER_TAGS_MEMBERS_TO_ASSIGN_TO,
+      variables: {
+        id: '1',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: {
+          firstName: { starts_with: 'usersToAssignTo' },
+          lastName: { starts_with: '' },
+        },
+      },
+    },
+    result: {
+      data: {
+        getUsersToAssignTo: {
+          name: 'tag1',
+          usersToAssignTo: {
+            edges: [
+              {
+                node: {
+                  _id: '1',
+                  firstName: 'usersToAssignTo',
+                  lastName: 'user1',
+                },
+                cursor: '1',
+              },
+              {
+                node: {
+                  _id: '2',
+                  firstName: 'usersToAssignTo',
+                  lastName: 'user2',
+                },
+                cursor: '2',
+              },
+            ],
+            pageInfo: {
+              startCursor: '1',
+              endCursor: '2',
+              hasNextPage: false,
+              hasPreviousPage: false,
+            },
+            totalCount: 2,
+          },
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: USER_TAGS_MEMBERS_TO_ASSIGN_TO,
+      variables: {
+        id: '1',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: {
+          firstName: { starts_with: '' },
+          lastName: { starts_with: 'userToAssignTo' },
+        },
+      },
+    },
+    result: {
+      data: {
+        getUsersToAssignTo: {
+          name: 'tag1',
+          usersToAssignTo: {
+            edges: [
+              {
+                node: {
+                  _id: '1',
+                  firstName: 'first',
+                  lastName: 'userToAssignTo',
+                },
+                cursor: '1',
+              },
+              {
+                node: {
+                  _id: '2',
+                  firstName: 'second',
+                  lastName: 'userToAssignTo',
+                },
+                cursor: '2',
+              },
+            ],
+            pageInfo: {
+              startCursor: '1',
+              endCursor: '2',
+              hasNextPage: false,
+              hasPreviousPage: false,
+            },
+            totalCount: 2,
+          },
+        },
+      },
+    },
+  },
+  {
+    request: {
       query: ADD_PEOPLE_TO_TAG,
       variables: {
         tagId: '1',
@@ -179,6 +281,10 @@ export const MOCKS_ERROR = [
       variables: {
         id: '1',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: {
+          firstName: { starts_with: '' },
+          lastName: { starts_with: '' },
+        },
       },
     },
     error: new Error('Mock Graphql Error'),

@@ -212,12 +212,17 @@ export interface InterfaceQueryOrganizationPostListItem {
 export interface InterfaceTagData {
   _id: string;
   name: string;
+  parentTag: { _id: string };
   usersAssignedTo: {
     totalCount: number;
   };
   childTags: {
     totalCount: number;
   };
+  ancestorTags: {
+    _id: string;
+    name: string;
+  }[];
 }
 
 interface InterfaceTagNodeData {
@@ -258,16 +263,19 @@ export interface InterfaceQueryOrganizationUserTags {
 export interface InterfaceQueryUserTagChildTags {
   name: string;
   childTags: InterfaceTagNodeData;
+  ancestorTags: {
+    _id: string;
+    name: string;
+  }[];
 }
 
 export interface InterfaceQueryUserTagsAssignedMembers {
   name: string;
   usersAssignedTo: InterfaceTagMembersData;
-}
-
-export interface InterfaceQueryUserTagsMembersToAssignTo {
-  name: string;
-  usersToAssignTo: InterfaceTagMembersData;
+  ancestorTags: {
+    _id: string;
+    name: string;
+  }[];
 }
 
 export interface InterfaceQueryUserTagsMembersToAssignTo {
