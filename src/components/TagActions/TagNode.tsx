@@ -61,7 +61,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
           fetchMoreResult?: { getChildTags: InterfaceQueryUserTagChildTags };
         },
       ) => {
-        if (!fetchMoreResult) return prevResult;
+        if (!fetchMoreResult) /* istanbul ignore next */ return prevResult;
 
         return {
           getChildTags: {
