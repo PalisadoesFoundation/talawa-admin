@@ -8,7 +8,17 @@ import {
   Dropdown,
 } from 'react-bootstrap';
 import 'react-datepicker/dist/react-datepicker.css';
-import 'chart.js/auto';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip as ChartToolTip,
+  Legend,
+} from 'chart.js';
 import { Bar, Line } from 'react-chartjs-2';
 import { useParams } from 'react-router-dom';
 import { EVENT_DETAILS, RECURRING_EVENTS } from 'GraphQl/Queries/Queries';
@@ -21,6 +31,16 @@ import type {
   InterfaceRecurringEvent,
 } from './InterfaceEvents';
 import { toast } from 'react-toastify';
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  ChartToolTip,
+  Legend,
+);
 
 export const AttendanceStatisticsModal: React.FC<
   InterfaceAttendanceStatisticsModalProps
@@ -92,7 +112,7 @@ export const AttendanceStatisticsModal: React.FC<
         const date = (() => {
           try {
             const eventDate = new Date(event.startDate);
-            if (isNaN(eventDate.getTime())) {
+            if (Number.isNaN(eventDate.getTime())) {
               console.error(`Invalid date for event: ${event._id}`);
               return 'Invalid date';
             }
@@ -218,12 +238,19 @@ export const AttendanceStatisticsModal: React.FC<
             memberData.filter((member) => member.gender === 'OTHER').length,
           ]
         : [
-            memberData.filter(
-              (member) =>
-                new Date().getFullYear() -
-                  new Date(member.birthDate).getFullYear() <
-                18,
-            ).length,
+            memberData.filter((member) => {
+              const today = new Date();
+              const birthDate = new Date(member.birthDate);
+              let age = today.getFullYear() - birthDate.getFullYear();
+              const monthDiff = today.getMonth() - birthDate.getMonth();
+              if (
+                monthDiff < 0 ||
+                (monthDiff === 0 && today.getDate() < birthDate.getDate())
+              ) {
+                age--;
+              }
+              return age < 18;
+            }).length,
             memberData.filter((member) => {
               const age =
                 new Date().getFullYear() -
@@ -462,20 +489,20 @@ export const AttendanceStatisticsModal: React.FC<
                         : 'Age Distribution',
                     data: categoryData,
                     backgroundColor: [
-                      'rgba(40, 167, 69, 0.2)',
-                      'rgba(57, 255, 20, 0.2)',
-                      'rgba(255, 99, 132, 0.2)',
-                      'rgba(54, 162, 235, 0.2)',
-                      'rgba(255, 206, 86, 0.2)',
-                      'rgba(153, 102, 255, 0.2)',
+                      'rgba(31, 119, 180, 0.2)', // Blue
+                      'rgba(255, 127, 14, 0.2)', // Orange
+                      'rgba(44, 160, 44, 0.2)', // Green
+                      'rgba(214, 39, 40, 0.2)', // Red
+                      'rgba(148, 103, 189, 0.2)', // Purple
+                      'rgba(140, 86, 75, 0.2)', // Brown
                     ],
                     borderColor: [
-                      'rgba(40, 167, 69, 1)',
-                      'rgba(57, 255, 20, 0.2)',
-                      'rgba(255, 99, 132, 1)',
-                      'rgba(54, 162, 235, 1)',
-                      'rgba(255, 206, 86, 1)',
-                      'rgba(153, 102, 255, 1)',
+                      'rgba(31, 119, 180, 1)',
+                      'rgba(255, 127, 14, 1)',
+                      'rgba(44, 160, 44, 1)',
+                      'rgba(214, 39, 40, 1)',
+                      'rgba(148, 103, 189, 1)',
+                      'rgba(140, 86, 75, 1)',
                     ],
                     borderWidth: 2,
                   },
