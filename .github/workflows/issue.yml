@@ -33,25 +33,25 @@ jobs:
           script: |
             const { owner, repo } = context.repo;
             const issue_number = context.issue.number;
-
-            const labels = await github.rest.issues.listLabelsOnIssue({
+            const apiParams = {
               owner,
               repo,
               issue_number
-            });
+            };
+            const labels = await github.rest.issues.listLabelsOnIssue(apiParams);
             if(labels.data.reduce((a, c)=>a||["dependencies"].includes(c.name), false))
               await github.rest.issues.addLabels({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: context.issue.number,
-                labels: ["good first issue", "security"]  
+                labels: ["good first issue", "security"]
               });
             else if(labels.data.reduce((a, c)=>a||["security", "ui/ux"].includes(c.name), false))
               await github.rest.issues.addLabels({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: context.issue.number,
-                labels: ["good first issue"]  
+                labels: ["good first issue"]
               });
 
 
