@@ -3,7 +3,7 @@ import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { DataGrid } from '@mui/x-data-grid';
 import { USER_TAGS_MEMBERS_TO_ASSIGN_TO } from 'GraphQl/Queries/userTagQueries';
 import type { ChangeEvent } from 'react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import type { InterfaceQueryUserTagsMembersToAssignTo } from 'utils/interfaces';
@@ -63,6 +63,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
     data: userTagsMembersToAssignToData,
     loading: userTagsMembersToAssignToLoading,
     error: userTagsMembersToAssignToError,
+    refetch: userTagsMembersToAssignToRefetch,
     fetchMore: fetchMoreMembersToAssignTo,
   }: InterfaceTagUsersToAssignToQuery = useQuery(
     USER_TAGS_MEMBERS_TO_ASSIGN_TO,
@@ -78,6 +79,12 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
       skip: !addPeopleToTagModalIsOpen,
     },
   );
+
+  useEffect(() => {
+    setMemberToAssignToSearchFirstName('');
+    setMemberToAssignToSearchLastName('');
+    userTagsMembersToAssignToRefetch();
+  }, [addPeopleToTagModalIsOpen]);
 
   const loadMoreMembersToAssignTo = (): void => {
     fetchMoreMembersToAssignTo({

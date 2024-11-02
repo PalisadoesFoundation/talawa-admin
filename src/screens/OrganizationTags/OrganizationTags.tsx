@@ -5,7 +5,7 @@ import Loader from 'components/Loader/Loader';
 import IconComponent from 'components/IconComponent/IconComponent';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import type { ChangeEvent } from 'react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -120,6 +120,10 @@ function OrganizationTags(): JSX.Element {
       },
     });
   };
+
+  useEffect(() => {
+    orgUserTagsRefetch();
+  }, []);
 
   const [create, { loading: createUserTagLoading }] =
     useMutation(CREATE_USER_TAG);
