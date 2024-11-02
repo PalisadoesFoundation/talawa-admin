@@ -393,6 +393,7 @@
     "filterByTitle": "按标题过滤",
     "filterByLocation": "按地点过滤",
     "filterByDescription": "按描述过滤",
+    "searchMemberName": "搜索成员名称",
     "addEvent": "添加事件",
     "eventDetails": "活动详情",
     "eventTitle": "标题",
@@ -735,6 +736,7 @@
     "registrants": "注册者",
     "eventActions": "事件动作",
     "eventAgendas": "活动议程",
+    "attendance": "出席",
     "eventStats": "事件统计",
     "to": "到"
   },

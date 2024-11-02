@@ -400,6 +400,7 @@
     "description": "Descripción",
     "location": "Ubicación",
     "startDate": "Fecha de inicio",
+    "searchMemberName": "Buscar nombre de miembro",
     "endDate": "Fecha final",
     "startTime": "Hora de inicio",
     "endTime": "Hora de finalización",
@@ -1077,7 +1078,7 @@
   "settings": {
     "settings": "Ajustes",
     "eventAttended": "Événements Assistés",
-    "noEventsAttended": "Ningún evento asistido",
+    "noeventsAttended": "No hay eventos asistidos",
     "profileSettings": "Configuración de perfil",
     "firstName": "Nombre de pila",
     "lastName": "Apellido",

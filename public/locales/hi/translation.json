@@ -395,6 +395,7 @@
     "filterByDescription": "विवरण के अनुसार फ़िल्टर करें",
     "addEvent": "कार्यक्रम जोड़ें",
     "eventDetails": "घटना की जानकारी",
+    "searchMemberName": "सदस्य का नाम खोजें",
     "eventTitle": "शीर्षक",
     "startTime": "समय शुरू",
     "endTime": "अंत समय",
@@ -736,6 +737,7 @@
     "eventActions": "घटना क्रियाएँ",
     "eventAgendas": "इवेंट एजेंडा",
     "eventStats": "घटना सांख्यिकी",
+    "attendance": "उपस्थिति",
     "to": "को"
   },
   "forgotPassword": {
