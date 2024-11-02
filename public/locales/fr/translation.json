@@ -400,6 +400,7 @@
     "endTime": "Heure de fin",
     "allDay": "Toute la journée",
     "recurringEvent": "Événement récurrent",
+    "searchMemberName": "Rechercher le nom du membre",
     "isPublic": "est public",
     "isRegistrable": "Est enregistrable",
     "createEvent": "Créer un évènement",
@@ -734,6 +735,7 @@
     "dashboard": "Tableau de bord",
     "registrants": "Inscrits",
     "eventActions": "Actions d'événement",
+    "attendance": "Présence",
     "eventAgendas": "Ordres du jour des événements",
     "eventStats": "Statistiques des événements",
     "to": "À"
