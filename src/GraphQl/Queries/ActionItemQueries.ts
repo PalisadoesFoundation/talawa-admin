@@ -75,54 +75,6 @@ export const ACTION_ITEM_LIST = gql`
   }
 `;
 
-export const ACTION_ITEM_LIST_BY_EVENTS = gql`
-  query actionItemsByEvent($eventId: ID!) {
-    actionItemsByEvent(eventId: $eventId) {
-      _id
-      assignee {
-        ... on EventVolunteer {
-          _id
-          user {
-            _id
-            firstName
-            lastName
-            image
-          }
-        }
-        ... on EventVolunteerGroup {
-          _id
-          name
-        }
-        __typename
-      }
-      assigner {
-        _id
-        firstName
-        lastName
-      }
-      actionItemCategory {
-        _id
-        name
-      }
-      preCompletionNotes
-      postCompletionNotes
-      assignmentDate
-      dueDate
-      completionDate
-      isCompleted
-      event {
-        _id
-        title
-      }
-      creator {
-        _id
-        firstName
-        lastName
-      }
-    }
-  }
-`;
-
 export const ACTION_ITEMS_BY_USER = gql`
   query ActionItemsByUser(
     $userId: ID!
