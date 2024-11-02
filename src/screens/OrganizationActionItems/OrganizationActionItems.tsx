@@ -172,8 +172,6 @@ function organizationActionItems(): JSX.Element {
         <WarningAmberRounded className={styles.icon} fontSize="large" />
         <h6 className="fw-bold text-danger text-center">
           {tErrors('errorLoading', { entity: 'Action Items' })}
-          <br />
-          {`${actionItemsError.message}`}
         </h6>
       </div>
     );

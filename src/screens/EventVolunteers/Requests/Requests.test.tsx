@@ -28,7 +28,7 @@ jest.mock('react-toastify', () => ({
   },
 }));
 
-const debounceWait = async (ms = 350): Promise<void> => {
+const debounceWait = async (ms = 300): Promise<void> => {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);

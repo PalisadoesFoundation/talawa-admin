@@ -1434,6 +1434,9 @@
     "receivedEarliest": "Recibido en Primer Lugar",
     "invitationAccepted": "Invitación aceptada con éxito",
     "invitationRejected": "Invitación rechazada con éxito",
-    "volunteerSuccess": "Solicitud de voluntariado realizada con éxito"
+    "volunteerSuccess": "Solicitud de voluntariado realizada con éxito",
+    "recurring": "Recurrente",
+    "groupInvitationSubject": "Invitación a unirse al grupo de voluntarios",
+    "eventInvitationSubject": "Invitación a ser voluntario para el evento"
   }
 }

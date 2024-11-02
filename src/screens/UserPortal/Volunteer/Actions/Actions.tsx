@@ -149,8 +149,6 @@ function actions(): JSX.Element {
         <WarningAmberRounded className={styles.icon} fontSize="large" />
         <h6 className="fw-bold text-danger text-center">
           {tErrors('errorLoading', { entity: 'Action Items' })}
-          <br />
-          {`${actionItemsError.message}`}
         </h6>
       </div>
     );
@@ -378,7 +376,6 @@ function actions(): JSX.Element {
             <Dropdown>
               <Dropdown.Toggle
                 variant="success"
-                id="dropdown-basic"
                 className={styles.dropdown}
                 data-testid="searchByToggle"
               >
@@ -403,7 +400,6 @@ function actions(): JSX.Element {
             <Dropdown>
               <Dropdown.Toggle
                 variant="success"
-                id="dropdown-basic"
                 className={styles.dropdown}
                 data-testid="sort"
               >
@@ -446,10 +442,7 @@ function actions(): JSX.Element {
         getRowClassName={() => `${styles.rowBackground}`}
         autoHeight
         rowHeight={65}
-        rows={actionItems.map((actionItem, index) => ({
-          id: index + 1,
-          ...actionItem,
-        }))}
+        rows={actionItems}
         columns={columns}
         isRowSelectable={() => false}
       />

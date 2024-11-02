@@ -1433,6 +1433,9 @@
     "receivedEarliest": "सबसे पहले प्राप्त",
     "invitationAccepted": "निमंत्रण सफलतापूर्वक स्वीकार किया गया",
     "invitationRejected": "निमंत्रण सफलतापूर्वक अस्वीकृत",
-    "volunteerSuccess": "स्वयंसेवक के रूप में अनुरोध सफलतापूर्वक किया गया"
+    "volunteerSuccess": "स्वयंसेवक के रूप में अनुरोध सफलतापूर्वक किया गया",
+    "recurring": "पुनरावृत्ति",
+    "groupInvitationSubject": "स्वयंसेवक समूह में शामिल होने के लिए निमंत्रण",
+    "eventInvitationSubject": "कार्यक्रम के लिए स्वयंसेवक बनने का निमंत्रण"
   }
 }

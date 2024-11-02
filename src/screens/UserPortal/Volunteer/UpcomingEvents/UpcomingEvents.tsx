@@ -132,8 +132,6 @@ const UpcomingEvents = (): JSX.Element => {
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
             {tErrors('errorLoading', { entity: 'Events' })}
-            <br />
-            {eventsError.message}
           </h6>
         </div>
       </div>
@@ -233,7 +231,7 @@ const UpcomingEvents = (): JSX.Element => {
                       {recurring && (
                         <Chip
                           icon={<Circle className={styles.chipIcon} />}
-                          label={'Recurring' as unknown as string}
+                          label={t('recurring')}
                           variant="outlined"
                           color="primary"
                           className={`${styles.chip} ${styles.active}`}

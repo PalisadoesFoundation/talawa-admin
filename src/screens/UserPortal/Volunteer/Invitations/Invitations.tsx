@@ -127,8 +127,6 @@ const Invitations = (): JSX.Element => {
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
             {tErrors('errorLoading', { entity: 'Volunteership Invitations' })}
-            <br />
-            {invitationError.message}
           </h6>
         </div>
       </div>
@@ -230,69 +228,67 @@ const Invitations = (): JSX.Element => {
           {t('noInvitations')}
         </Stack>
       ) : (
-        invitations.map(
-          (invite: InterfaceVolunteerMembership, index: number) => (
-            <div
-              className="bg-white p-4  rounded shadow-sm d-flex justify-content-between mb-3"
-              key={index}
-            >
-              <div className="d-flex flex-column gap-2">
-                <div className="fw-bold" data-testid="inviteSubject">
-                  {invite.group ? (
-                    <>Invitation to join volunteer group</>
-                  ) : (
-                    <>Invitation to volunteer for event</>
-                  )}
-                </div>
-                <div className="d-flex gap-3">
-                  {invite.group && (
-                    <>
-                      <div>
-                        <FaUserGroup className="mb-1 me-1" color="grey" />
-                        <span className="text-muted">Group:</span>{' '}
-                        <span>{invite.group.name} </span>
-                      </div>
-                      |
-                    </>
-                  )}
-                  <div>
-                    <TbCalendarEvent
-                      className="mb-1 me-1"
-                      color="grey"
-                      size={20}
-                    />
-                    <span className="text-muted">Event:</span>{' '}
-                    <span>{invite.event.title}</span>
-                  </div>
-                  |
-                  <div>
-                    <FaRegClock className="mb-1 me-1" color="grey" />
-                    <span className="text-muted">Received:</span>{' '}
-                    {new Date(invite.createdAt).toLocaleString()}
-                  </div>
-                </div>
+        invitations.map((invite: InterfaceVolunteerMembership) => (
+          <div
+            className="bg-white p-4  rounded shadow-sm d-flex justify-content-between mb-3"
+            key={invite._id}
+          >
+            <div className="d-flex flex-column gap-2">
+              <div className="fw-bold" data-testid="inviteSubject">
+                {invite.group ? (
+                  <>{t('groupInvitationSubject')}</>
+                ) : (
+                  <>{t('eventInvitationSubject')}</>
+                )}
               </div>
-              <div className="d-flex gap-2">
-                <Button
-                  variant="outline-success"
-                  size="sm"
-                  data-testid="acceptBtn"
-                  onClick={() => updateMembershipStatus(invite._id, 'accepted')}
-                >
-                  {t('accept')}
-                </Button>
-                <Button
-                  variant="outline-danger"
-                  size="sm"
-                  data-testid="rejectBtn"
-                  onClick={() => updateMembershipStatus(invite._id, 'rejected')}
-                >
-                  {t('reject')}
-                </Button>
+              <div className="d-flex gap-3">
+                {invite.group && (
+                  <>
+                    <div>
+                      <FaUserGroup className="mb-1 me-1" color="grey" />
+                      <span className="text-muted">Group:</span>{' '}
+                      <span>{invite.group.name} </span>
+                    </div>
+                    |
+                  </>
+                )}
+                <div>
+                  <TbCalendarEvent
+                    className="mb-1 me-1"
+                    color="grey"
+                    size={20}
+                  />
+                  <span className="text-muted">Event:</span>{' '}
+                  <span>{invite.event.title}</span>
+                </div>
+                |
+                <div>
+                  <FaRegClock className="mb-1 me-1" color="grey" />
+                  <span className="text-muted">Received:</span>{' '}
+                  {new Date(invite.createdAt).toLocaleString()}
+                </div>
               </div>
             </div>
-          ),
-        )
+            <div className="d-flex gap-2">
+              <Button
+                variant="outline-success"
+                size="sm"
+                data-testid="acceptBtn"
+                onClick={() => updateMembershipStatus(invite._id, 'accepted')}
+              >
+                {t('accept')}
+              </Button>
+              <Button
+                variant="outline-danger"
+                size="sm"
+                data-testid="rejectBtn"
+                onClick={() => updateMembershipStatus(invite._id, 'rejected')}
+              >
+                {t('reject')}
+              </Button>
+            </div>
+          </div>
+        ))
       )}
     </>
   );

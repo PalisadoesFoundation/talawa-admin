@@ -1433,6 +1433,9 @@
     "receivedEarliest": "最早收到",
     "invitationAccepted": "邀请已成功接受",
     "invitationRejected": "邀请已成功拒绝",
-    "volunteerSuccess": "志愿请求成功"
+    "volunteerSuccess": "志愿请求成功",
+    "recurring": "重复",
+    "groupInvitationSubject": "邀请加入志愿者小组",
+    "eventInvitationSubject": "邀请参加活动志愿服务"
   }
 }

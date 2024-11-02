@@ -1433,6 +1433,9 @@
     "receivedEarliest": "Reçu en Premier",
     "invitationAccepted": "Invitation acceptée avec succès",
     "invitationRejected": "Invitation rejetée avec succès",
-    "volunteerSuccess": "Demande de bénévolat envoyée avec succès"
+    "volunteerSuccess": "Demande de bénévolat envoyée avec succès",
+    "recurring": "Récurrent",
+    "groupInvitationSubject": "Invitation à rejoindre le groupe de bénévoles",
+    "eventInvitationSubject": "Invitation à faire du bénévolat pour l'événement"
   }
 }

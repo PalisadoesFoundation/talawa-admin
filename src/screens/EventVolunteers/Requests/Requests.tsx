@@ -139,8 +139,6 @@ function requests(): JSX.Element {
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
             {tErrors('errorLoading', { entity: 'Volunteership Requests' })}
-            <br />
-            {requestsError.message}
           </h6>
         </div>
       </div>

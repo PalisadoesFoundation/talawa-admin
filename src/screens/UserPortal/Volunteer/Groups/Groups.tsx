@@ -146,8 +146,6 @@ function groups(): JSX.Element {
         <WarningAmberRounded className={styles.icon} fontSize="large" />
         <h6 className="fw-bold text-danger text-center">
           {tErrors('errorLoading', { entity: 'Volunteer Groups' })}
-          <br />
-          {`${groupsError.message}`}
         </h6>
       </div>
     );

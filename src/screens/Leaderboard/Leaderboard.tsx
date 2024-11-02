@@ -55,9 +55,11 @@ const dataGridStyle = {
 };
 
 /**
- * Component for managing and displaying action items within an organization.
+ * Component to display the leaderboard of volunteers.
  *
- * This component allows users to view, filter, sort, and create action items. It also handles fetching and displaying related data such as action item categories and members.
+ * This component shows a leaderboard of volunteers ranked by hours contributed,
+ * with features for filtering by time frame and sorting by hours. It displays
+ * volunteer details including rank, name, email, and hours volunteered.
  *
  * @returns The rendered component.
  */
@@ -127,8 +129,6 @@ function leaderboard(): JSX.Element {
         <WarningAmberRounded className={styles.icon} fontSize="large" />
         <h6 className="fw-bold text-danger text-center">
           {tErrors('errorLoading', { entity: 'Volunteer Rankings' })}
-          <br />
-          {`${rankingsError.message}`}
         </h6>
       </div>
     );
