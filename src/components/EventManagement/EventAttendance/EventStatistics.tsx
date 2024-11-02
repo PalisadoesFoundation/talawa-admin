@@ -41,6 +41,11 @@ ChartJS.register(
   ChartToolTip,
   Legend,
 );
+/**
+ * Component to display statistical information about event attendance
+ * Shows metrics like total attendees, filtering options, and attendance trends
+ * @returns JSX element with event statistics dashboard
+ */
 
 export const AttendanceStatisticsModal: React.FC<
   InterfaceAttendanceStatisticsModalProps

@@ -3,7 +3,17 @@ import dayjs from 'dayjs';
 import { Card, Row, Col } from 'react-bootstrap';
 import { MdChevronRight, MdLocationOn } from 'react-icons/md';
 import { Link } from 'react-router-dom';
-
+/**
+ * Card component to display individual event attendance information
+ * Shows event details including title, date, location and organization
+ * @param type - Type of event
+ * @param orgId - Organization ID
+ * @param eventId - Event ID
+ * @param startdate - Event start date
+ * @param title - Event title
+ * @param location - Event location
+ * @returns Card component with formatted event information
+ */
 export interface InterfaceCardItem {
   type: 'Event' | 'Post' | 'MembershipRequest';
   title: string;

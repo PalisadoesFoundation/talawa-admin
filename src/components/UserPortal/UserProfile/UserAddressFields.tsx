@@ -13,7 +13,14 @@ interface InterfaceUserAddressFieldsProps {
     country: string;
   };
 }
-
+/**
+ * Form component containing address-related input fields for user profile
+ * Includes fields for address, city, state, and country
+ * @param formState - Current form state containing address fields
+ * @param setFormState - Function to update form state
+ * @param setisUpdated - Function to track form changes
+ * @returns Form group with address input fields
+ */
 export const UserAddressFields: React.FC<InterfaceUserAddressFieldsProps> = ({
   tCommon,
   t,
