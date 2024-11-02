@@ -18,16 +18,22 @@
   scale: 1.5;
 }
 
-.previewImage {
-  overflow: hidden;
+.preview {
   display: flex;
+  position: relative;
+  width: 100%;
+  margin-top: 10px;
   justify-content: center;
-  align-items: center;
-  margin-bottom: 1rem;
+  overflow: hidden;
+  border-radius: 1rem;
 }
-
-.previewImage img {
-  border-radius: 8px;
+.preview img {
+  width: 400px;
+  height: auto;
+}
+.preview video {
+  width: 400px;
+  height: auto;
 }
 
 .icons {

@@ -3,7 +3,6 @@ import { Close, MoreVert, PushPin } from '@mui/icons-material';
 import {
   DELETE_POST_MUTATION,
   TOGGLE_PINNED_POST,
-  UPDATE_POST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import AboutImg from 'assets/images/defaultImg.png';
 import type { ChangeEvent } from 'react';
@@ -11,10 +10,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Form, Button, Card, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfacePostForm } from 'utils/interfaces';
 import styles from './OrgPostCard.module.css';
+import useLocalStorage from 'utils/useLocalstorage';
 interface InterfaceOrgPostCardProps {
   postID: string;
   id: string;
@@ -24,6 +23,7 @@ interface InterfaceOrgPostCardProps {
   postPhoto: string | null;
   postVideo: string | null;
   pinned: boolean;
+  refetch?: () => void;
 }
 export default function OrgPostCard(
   props: InterfaceOrgPostCardProps,
@@ -35,12 +35,10 @@ export default function OrgPostCard(
   const [postformState, setPostFormState] = useState<InterfacePostForm>({
     posttitle: '',
     postinfo: '',
-    postphoto: '',
-    postvideo: '',
+    mediaFile: null,
     pinned: false,
   });
-  const [postPhotoUpdated, setPostPhotoUpdated] = useState(false);
-  const [postVideoUpdated, setPostVideoUpdated] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [togglePost, setPostToggle] = useState('Read more');
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -49,6 +47,8 @@ export default function OrgPostCard(
   const [playing, setPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [toggle] = useMutation(TOGGLE_PINNED_POST);
+  const { getItem } = useLocalStorage();
+
   const togglePostPin = async (id: string, pinned: boolean): Promise<void> => {
     try {
       const { data } = await toggle({
@@ -76,12 +76,10 @@ export default function OrgPostCard(
     setPostFormState({
       posttitle: postTitle,
       postinfo: postInfo,
-      postphoto: postPhoto,
-      postvideo: postVideo,
+      mediaFile: null,
       pinned: pinned,
     });
-    setPostPhotoUpdated(false);
-    setPostVideoUpdated(false);
+    setPreviewUrl(postPhoto || postVideo);
     setShowEditModal((prev) => !prev);
   };
   const toggleShowDeleteModal = (): void => setShowDeleteModal((prev) => !prev);
@@ -99,32 +97,26 @@ export default function OrgPostCard(
   const handleMoreOptionsClick = (): void => {
     setMenuVisible(true);
   };
-  const clearImageInput = (): void => {
+  const clearMediaInput = (e: React.MouseEvent<HTMLButtonElement>): void => {
+    e.preventDefault();
     setPostFormState({
       ...postformState,
-      postphoto: '',
+      mediaFile: null,
     });
-    setPostPhotoUpdated(true);
-    const fileInput = document.getElementById(
+    setPreviewUrl('');
+    const imageInput = document.getElementById(
       'postImageUrl',
     ) as HTMLInputElement;
-    if (fileInput) {
-      fileInput.value = '';
-    }
-  };
-  const clearVideoInput = (): void => {
-    setPostFormState({
-      ...postformState,
-      postvideo: '',
-    });
-    setPostVideoUpdated(true);
-    const fileInput = document.getElementById(
+    const videoInput = document.getElementById(
       'postVideoUrl',
     ) as HTMLInputElement;
-    if (fileInput) {
-      fileInput.value = '';
+    if (imageInput) {
+      imageInput.value = '';
+    } else if (videoInput) {
+      videoInput.value = '';
     }
   };
+
   function handletoggleClick(): void {
     if (togglePost === 'Read more') {
       setPostToggle('hide');
@@ -139,8 +131,7 @@ export default function OrgPostCard(
     setShowEditModal(true);
     setPostFormState({
       ...postformState,
-      postphoto: postPhoto,
-      postvideo: postVideo,
+      mediaFile: null,
     });
   }
   function handleDeleteModal(): void {
@@ -152,17 +143,17 @@ export default function OrgPostCard(
     setPostFormState({
       posttitle: props.postTitle,
       postinfo: props.postInfo,
-      postphoto: props.postPhoto,
-      postvideo: props.postVideo,
+      mediaFile: null,
       pinned: props.pinned,
     });
+    setPreviewUrl(props.postPhoto || props.postVideo);
   }, []);
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgPostCard',
   });
   const { t: tCommon } = useTranslation('common');
   const [deletePostMutation] = useMutation(DELETE_POST_MUTATION);
-  const [updatePostMutation] = useMutation(UPDATE_POST_MUTATION);
+
   const deletePost = async (): Promise<void> => {
     try {
       const { data } = await deletePostMutation({
@@ -190,36 +181,80 @@ export default function OrgPostCard(
       [name]: value,
     }));
   };
+
   const updatePostHandler = async (
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
+
+    const {
+      posttitle: _posttitle,
+      postinfo: _postinfo,
+      mediaFile,
+      pinned,
+    } = postformState;
+
+    const posttitle = _posttitle.trim();
+    const postinfo = _postinfo.trim();
+
     try {
-      const { data } = await updatePostMutation({
-        variables: {
-          id: props.id,
-          title: postformState.posttitle,
-          text: postformState.postinfo,
-          ...(postPhotoUpdated && {
-            imageUrl: postformState.postphoto,
-          }),
-          ...(postVideoUpdated && {
-            videoUrl: postformState.postvideo,
-          }),
+      if (!posttitle || !postinfo) {
+        throw new Error(t('noTitleAndDescription'));
+      }
+
+      const formData = new FormData();
+      formData.append('title', posttitle);
+      formData.append('text', postinfo);
+      formData.append('pinned', String(pinned));
+
+      if (mediaFile) {
+        formData.append('file', mediaFile);
+      }
+
+      const accessToken = getItem('token');
+
+      const response = await fetch(
+        `${process.env.REACT_APP_TALAWA_REST_URL}/update-post/${props.id}`,
+        {
+          method: 'POST',
+          body: formData,
+          headers: { Authorization: `Bearer ${accessToken}` },
         },
-      });
+      );
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data?.error || t('postCreationFailed'));
+      }
+
       if (data) {
         toast.success(t('postUpdated') as string);
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
+        setPostFormState({
+          posttitle: '',
+          postinfo: '',
+          mediaFile: null,
+          pinned: false,
+        });
+        setShowEditModal(false);
+        props.refetch && props.refetch();
       }
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
+      errorHandler(t, error);
     }
   };
+
+  const handleMediaChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const file = e.target.files?.[0] || null;
+    setPostFormState((prev) => ({ ...prev, mediaFile: file }));
+
+    if (file) {
+      const newPreviewUrl = URL.createObjectURL(file);
+      setPreviewUrl(newPreviewUrl);
+    } else {
+      setPreviewUrl('');
+    }
+  };
+
   return (
     <>
       <div
@@ -329,7 +364,7 @@ export default function OrgPostCard(
             <div className={styles.modalContent}>
               {props.postPhoto && (
                 <div className={styles.modalImage}>
-                  <img src={props.postPhoto} alt="Post Image" />
+                  <img src={props.postPhoto} alt={t('postImage')} />
                 </div>
               )}
               {props.postVideo && (
@@ -342,7 +377,7 @@ export default function OrgPostCard(
               {!props.postPhoto && !props.postVideo && (
                 <div className={styles.modalImage}>
                   {' '}
-                  <img src={AboutImg} alt="Post Image" />
+                  <img src={AboutImg} alt={t('postImage')} />
                 </div>
               )}
               <div className={styles.modalInfo}>
@@ -494,7 +529,7 @@ export default function OrgPostCard(
               data-testid="updateText"
               required
             />
-            {!props.postPhoto && (
+            {props.postPhoto && (
               <>
                 <Form.Label htmlFor="postPhoto">{t('image')}</Form.Label>
                 <Form.Control
@@ -505,45 +540,23 @@ export default function OrgPostCard(
                   type="file"
                   placeholder={t('image')}
                   multiple={false}
-                  onChange={async (
-                    e: React.ChangeEvent<HTMLInputElement>,
-                  ): Promise<void> => {
-                    setPostFormState((prevPostFormState) => ({
-                      ...prevPostFormState,
-                      postphoto: '',
-                    }));
-                    setPostPhotoUpdated(true);
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      setPostFormState({
-                        ...postformState,
-                        postphoto: await convertToBase64(file),
-                      });
-                    }
-                  }}
+                  onChange={handleMediaChange}
                 />
-                {props.postPhoto && (
-                  <>
-                    {postformState.postphoto && (
-                      <div className={styles.preview}>
-                        <img
-                          src={postformState.postphoto}
-                          alt="Post Image Preview"
-                        />
-                        <button
-                          className={styles.closeButtonP}
-                          onClick={clearImageInput}
-                          data-testid="closeimage"
-                        >
-                          <i className="fa fa-times"></i>
-                        </button>
-                      </div>
-                    )}
-                  </>
+                {previewUrl && (
+                  <div className={styles.preview}>
+                    <img src={previewUrl || ''} alt={t('postImage')} />
+                    <button
+                      className={styles.closeButtonP}
+                      onClick={clearMediaInput}
+                      data-testid="closeimage"
+                    >
+                      <i className="fa fa-times"></i>
+                    </button>
+                  </div>
                 )}
               </>
             )}
-            {!props.postVideo && (
+            {props.postVideo && (
               <>
                 <Form.Label htmlFor="postvideo">{t('video')}</Form.Label>
                 <Form.Control
@@ -554,35 +567,18 @@ export default function OrgPostCard(
                   type="file"
                   placeholder={t('video')}
                   multiple={false}
-                  onChange={async (
-                    e: React.ChangeEvent<HTMLInputElement>,
-                  ): Promise<void> => {
-                    setPostFormState((prevPostFormState) => ({
-                      ...prevPostFormState,
-                      postvideo: '',
-                    }));
-                    setPostVideoUpdated(true);
-                    const target = e.target as HTMLInputElement;
-                    const file = target.files && target.files[0];
-                    if (file) {
-                      const videoBase64 = await convertToBase64(file);
-                      setPostFormState({
-                        ...postformState,
-                        postvideo: videoBase64,
-                      });
-                    }
-                  }}
+                  onChange={handleMediaChange}
                 />
-                {postformState.postvideo && (
+                {previewUrl && (
                   <div className={styles.preview}>
                     <video controls>
-                      <source src={postformState.postvideo} type="video/mp4" />
+                      <source src={previewUrl || ''} type="video/mp4" />
                       {t('tag')}
                     </video>
                     <button
                       className={styles.closeButtonP}
                       data-testid="closePreview"
-                      onClick={clearVideoInput}
+                      onClick={clearMediaInput}
                     >
                       <i className="fa fa-times"></i>
                     </button>

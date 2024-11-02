@@ -11,7 +11,6 @@
   width: 100%;
   padding-inline: 0;
   padding-block: 0;
-  flex-direction: row;
   gap: 0.5rem;
   align-items: center;
   background-color: white;
@@ -20,12 +19,10 @@
 
 .creator {
   display: flex;
-  width: 100%;
-  padding-inline: 1rem;
-  padding-block: 0;
-  flex-direction: row;
-  gap: 0.5rem;
   align-items: center;
+  width: 100%;
+  margin-left: 0.5rem;
+  gap: 0.5rem;
 }
 .creator p {
   margin-bottom: 0;
@@ -34,6 +31,11 @@
 .creator svg {
   width: 2rem;
   height: 2rem;
+}
+.creator img {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 100%;
 }
 
 .customToggle {
@@ -177,7 +179,25 @@
   background-color: #f1f3f6;
 }
 
-.postImage {
-  height: 300px;
+.postImage,
+.postVideo {
+  width: 20rem;
+  aspect-ratio: 1.5;
   object-fit: cover;
+  border-radius: 0;
+}
+
+.mediaContainer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.editPostImage,
+.editPostVideo {
+  width: 100%;
+  object-fit: cover;
+  border-radius: 0;
 }

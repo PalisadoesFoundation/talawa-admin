@@ -14,6 +14,13 @@
   justify-content: center;
 }
 
+.creator img {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 100%;
+  object-fit: cover;
+}
+
 .personImage {
   border-radius: 50%;
   margin-right: 20px;

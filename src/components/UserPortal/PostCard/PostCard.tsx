@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
@@ -21,6 +21,9 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import CommentIcon from '@mui/icons-material/Comment';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import VideocamIcon from '@mui/icons-material/Videocam';
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+import ClearIcon from '@mui/icons-material/Clear';
 
 import type { InterfacePostCard } from 'utils/interfaces';
 import {
@@ -28,7 +31,6 @@ import {
   DELETE_POST_MUTATION,
   LIKE_POST,
   UNLIKE_POST,
-  UPDATE_POST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import CommentCard from '../CommentCard/CommentCard';
 import { errorHandler } from 'utils/errorHandler';
@@ -43,6 +45,7 @@ interface InterfaceCommentCardProps {
     firstName: string;
     lastName: string;
     email: string;
+    image: string;
   };
   likeCount: number;
   likedBy: {
@@ -80,15 +83,21 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
   const likedByUser = props.likedBy.some((likedBy) => likedBy.id === userId);
 
   // State variables
-  const [comments, setComments] = React.useState(props.comments);
-  const [numComments, setNumComments] = React.useState(props.commentCount);
+  const [comments, setComments] = useState(props.comments);
+  const [numComments, setNumComments] = useState(props.commentCount);
 
-  const [likes, setLikes] = React.useState(props.likeCount);
-  const [isLikedByUser, setIsLikedByUser] = React.useState(likedByUser);
-  const [commentInput, setCommentInput] = React.useState('');
-  const [viewPost, setViewPost] = React.useState(false);
-  const [showEditPost, setShowEditPost] = React.useState(false);
-  const [postContent, setPostContent] = React.useState<string>(props.text);
+  const [likes, setLikes] = useState(props.likeCount);
+  const [isLikedByUser, setIsLikedByUser] = useState(likedByUser);
+  const [commentInput, setCommentInput] = useState('');
+  const [viewPost, setViewPost] = useState(false);
+  const [showEditPost, setShowEditPost] = useState(false);
+  const [postContent, setPostContent] = useState<string>(props.text);
+  const [editedMedia, setEditedMedia] = useState<File | null>(null);
+  const [editedMediaType, setEditedMediaType] = useState<
+    'image' | 'video' | null
+  >(null);
+  const [mediaPreviewUrl, setMediaPreviewUrl] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Post creator's full name
   const postCreator = `${props.creator.firstName} ${props.creator.lastName}`;
@@ -98,14 +107,13 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
   const [unLikePost, { loading: unlikeLoading }] = useMutation(UNLIKE_POST);
   const [create, { loading: commentLoading }] =
     useMutation(CREATE_COMMENT_POST);
-  const [editPost] = useMutation(UPDATE_POST_MUTATION);
   const [deletePost] = useMutation(DELETE_POST_MUTATION);
 
   // Toggle the view post modal
-  const toggleViewPost = (): void => setViewPost(!viewPost);
+  const toggleViewPost = (): void => setViewPost((prev) => !prev);
 
   // Toggle the edit post modal
-  const toggleEditPost = (): void => setShowEditPost(!showEditPost);
+  const toggleEditPost = (): void => setShowEditPost((prev) => !prev);
 
   // Handle input changes for the post content
   const handlePostInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -217,6 +225,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
             firstName: createEventData.createComment.creator.firstName,
             lastName: createEventData.createComment.creator.lastName,
             email: createEventData.createComment.creator.email,
+            image: createEventData.createComment.creator.image,
           },
           likeCount: createEventData.createComment.likeCount,
           likedBy: createEventData.createComment.likedBy,
@@ -234,26 +243,42 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
   };
 
   // Edit the post
-  const handleEditPost = (): void => {
+  const handleEditPost = async () => {
     try {
-      editPost({
-        variables: {
-          id: props.id,
-          text: postContent,
-        },
-      });
+      const formData = new FormData();
+      formData.append('id', props.id);
+      formData.append('text', postContent);
+      if (editedMedia) {
+        formData.append('file', editedMedia);
+      }
 
-      props.fetchPosts(); // Refresh the posts
+      const accessToken = getItem('token');
+
+      const response = await fetch(
+        `${process.env.REACT_APP_TALAWA_REST_URL}/update-post/${props.id}`,
+        {
+          method: 'POST',
+          body: formData,
+          headers: { Authorization: `Bearer ${accessToken}` },
+        },
+      );
+
+      if (!response.ok) {
+        const res = await response.json();
+        throw new Error(res?.error || t('postUpdationFailed'));
+      }
+
       toggleEditPost();
-      toast.success(tCommon('updatedSuccessfully', { item: 'Post' }) as string);
-    } catch (error: unknown) {
-      /* istanbul ignore next */
+      handleClearMedia();
+      toast.success(tCommon('updatedSuccessfully', { item: 'Post' }));
+      props.fetchPosts();
+    } catch (error) {
       errorHandler(t, error);
     }
   };
 
   // Delete the post
-  const handleDeletePost = (): void => {
+  const handleDeletePost = async (): Promise<void> => {
     try {
       deletePost({
         variables: {
@@ -261,20 +286,53 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
         },
       });
 
-      props.fetchPosts(); // Refresh the posts
-      toast.success('Successfully deleted the Post.');
+      toast.success(t('deletionSuccessfull'));
+      props.fetchPosts();
     } catch (error: unknown) {
       /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
 
+  const handleMediaChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Check file type
+    const isImage = file.type.startsWith('image/');
+    const isVideo = file.type.startsWith('video/');
+
+    if (!isImage && !isVideo) {
+      toast.error(t('noMediaSelected'));
+      return;
+    }
+
+    // Create preview URL
+    const previewUrl = URL.createObjectURL(file);
+    setMediaPreviewUrl(previewUrl);
+    setEditedMedia(file);
+    setEditedMediaType(isImage ? 'image' : 'video');
+  };
+
+  const handleClearMedia = () => {
+    setEditedMedia(null);
+    setEditedMediaType(null);
+    setMediaPreviewUrl(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
   return (
-    <Col key={props.id} className="d-flex justify-content-center my-2">
+    <Col key={props.id} className="d-flex col-auto my-2">
       <Card className={`${styles.cardStyles}`}>
-        <Card.Header className={`${styles.cardHeader}`}>
+        <Card.Header className={`${styles.cardHeader} py-2`}>
           <div className={`${styles.creator}`}>
-            <AccountCircleIcon className="my-2" />
+            {props?.creator?.image ? (
+              <img src={props?.creator?.image} alt="creator image" />
+            ) : (
+              <AccountCircleIcon className="my-2" />
+            )}
             <p>{postCreator}</p>
           </div>
           <Dropdown style={{ cursor: 'pointer' }}>
@@ -300,21 +358,32 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
                 />
                 {tCommon('delete')}
               </Dropdown.Item>
-              {/* <Dropdown.Item href="#/action-3">Pin Post</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">Report</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">Share</Dropdown.Item> */}
             </Dropdown.Menu>
           </Dropdown>
         </Card.Header>
-        <Card.Img
-          className={styles.postImage}
-          variant="top"
-          src={
-            props.image === '' || props.image === null
-              ? UserDefault
-              : props.image
-          }
-        />
+        {props.image ? (
+          <Card.Img
+            className={styles.postImage}
+            variant="top"
+            src={
+              props.image === '' || props.image === null
+                ? UserDefault
+                : props.image
+            }
+          />
+        ) : props.video ? (
+          <div className={styles.videoContainer}>
+            <video
+              className={styles.postVideo}
+              controls
+              data-testid="post-video"
+            >
+              <source src={props.video} type="video/mp4" />
+            </video>
+          </div>
+        ) : (
+          ''
+        )}
         <Card.Body className="pb-0">
           <Card.Title className={`${styles.cardTitle}`}>
             {props.title}
@@ -340,24 +409,50 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
           </div>
         </Card.Footer>
       </Card>
-      <Modal show={viewPost} onHide={toggleViewPost} size="xl" centered>
+      <Modal
+        show={viewPost}
+        onHide={toggleViewPost}
+        size="xl"
+        centered
+        className="overflow-hidden"
+      >
         <Modal.Body className="d-flex w-100 p-0" style={{ minHeight: '80vh' }}>
-          <div className="w-50 d-flex  align-items-center justify-content-center">
-            <img
-              src={
-                props.image === '' || props.image === null
-                  ? UserDefault
-                  : props.image
-              }
-              alt="postImg"
-              className="w-100"
-            />
-          </div>
+          {props.image ? (
+            <div className={`w-50 ${styles.mediaContainer}`}>
+              <img
+                className={styles.editPostImage}
+                src={
+                  props.image === '' || props.image === null
+                    ? UserDefault
+                    : props.image
+                }
+                alt="postImg"
+              />
+            </div>
+          ) : props.video ? (
+            <div className={`w-50 ${styles.mediaContainer}`}>
+              <video className={styles.editPostVideo} controls>
+                <source src={props.video} type="video/mp4" />
+              </video>
+            </div>
+          ) : (
+            ''
+          )}
           <div className="w-50 p-2 position-relative">
             <div className="d-flex justify-content-between align-items-center">
               <div className={`${styles.cardHeader} p-0`}>
-                <AccountCircleIcon className="my-2" />
-                <p>{postCreator}</p>
+                <div className={`${styles.creator} my-1`}>
+                  {props?.creator?.image ? (
+                    <img
+                      className={styles.editPostImage}
+                      src={props?.creator?.image}
+                      alt="postImg"
+                    />
+                  ) : (
+                    <AccountCircleIcon className="my-2" />
+                  )}
+                  <p>{postCreator}</p>
+                </div>
               </div>
               <div style={{ cursor: 'pointer' }}>
                 <MoreVertIcon />
@@ -380,6 +475,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
                       firstName: comment.creator.firstName,
                       lastName: comment.creator.lastName,
                       email: comment.creator.email,
+                      image: comment.creator.image,
                     },
                     likeCount: comment.likeCount,
                     likedBy: comment.likedBy,
@@ -390,7 +486,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
                   return <CommentCard key={index} {...cardProps} />;
                 })
               ) : (
-                <p>No comments to show.</p>
+                <p>{t('noComments')}</p>
               )}
             </div>
             <div className={styles.modalFooter}>
@@ -463,6 +559,78 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
             onChange={handlePostInput}
             value={postContent}
           />
+          <div className="mt-3">
+            <div className="d-flex gap-2 mb-2">
+              <Button
+                variant="outline-primary"
+                size="sm"
+                onClick={() => {
+                  if (fileInputRef?.current) {
+                    return fileInputRef.current.click();
+                  }
+                }}
+              >
+                {editedMediaType === 'video' ? (
+                  <VideocamIcon className="me-1" />
+                ) : (
+                  <AddPhotoAlternateIcon className="me-1" />
+                )}
+                Change Media
+              </Button>
+              {(mediaPreviewUrl || props.image || props.video) && (
+                <Button
+                  variant="outline-danger"
+                  size="sm"
+                  onClick={handleClearMedia}
+                >
+                  <ClearIcon className="me-1" />
+                  Remove Media
+                </Button>
+              )}
+            </div>
+
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleMediaChange}
+              accept="image/*,video/*"
+              className="d-none"
+            />
+
+            <div className="media-preview mt-2">
+              {mediaPreviewUrl ? (
+                editedMediaType === 'image' ? (
+                  <img
+                    src={mediaPreviewUrl}
+                    alt="Preview"
+                    className="img-fluid rounded"
+                    style={{ maxHeight: '200px' }}
+                  />
+                ) : (
+                  <video
+                    src={mediaPreviewUrl}
+                    controls
+                    className="img-fluid rounded"
+                    style={{ maxHeight: '200px' }}
+                  />
+                )
+              ) : props.image ? (
+                <img
+                  src={props.image}
+                  alt="Current"
+                  className="img-fluid rounded"
+                  style={{ maxHeight: '200px' }}
+                />
+              ) : props.video ? (
+                <video
+                  src={props.video}
+                  controls
+                  className="img-fluid rounded"
+                  style={{ maxHeight: '200px' }}
+                />
+              ) : null}
+            </div>
+          </div>
         </Modal.Body>
         <ModalFooter>
           <Button

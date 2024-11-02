@@ -640,7 +640,9 @@
     "postCreatedSuccess": "¡Felicidades! Has publicado algo.",
     "pinPost": "Fijar publicación",
     "Next": "Siguiente página",
-    "Previous": "Página anterior"
+    "Previous": "Página anterior",
+    "noTitleAndDescription": "No se puede crear una publicación con un cuerpo vacío.",
+    "postCreationFailed": "Error al crear la publicación."
   },
   "postNotFound": {
     "post": "Publicaciones",
@@ -680,7 +682,10 @@
     "postUpdated": "Publicación actualizada exitosamente.",
     "tag": "Su navegador no admite la etiqueta de video",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está en funcionamiento? Compruebe también su conectividad de red.",
-    "pin": "Fijar"
+    "pin": "Fijar",
+    "noTitleAndDescription": "El título y la descripción no pueden estar vacíos.",
+    "postCreationFailed": "Error al crear la publicación.",
+    "postImage": "Imagen de publicación"
   },
   "blockUnblockUser": {
     "title": "Usuario de bloqueo/desbloqueo de Talawa",
@@ -997,7 +1002,11 @@
     "comments": "Comentarios",
     "viewPost": "Ver publicación",
     "editPost": "Editar publicación",
-    "postedOn": "Publicado el {{date}}"
+    "postedOn": "Publicado el {{date}}",
+    "postUpdationFailed": "Error al actualizar la publicación.",
+    "deletionSuccessfull": "Publicación eliminada con éxito.",
+    "noMediaSelected": "Por favor, seleccione una imagen o un archivo de video.",
+    "noComments": "No hay comentarios para mostrar."
   },
   "home": {
     "posts": "Publicaciones",
@@ -1015,7 +1024,9 @@
     "media": "Medios",
     "event": "Evento",
     "article": "Artículo",
-    "postNowVisibleInFeed": "Publicar ahora visible en el feed"
+    "postNowVisibleInFeed": "Publicar ahora visible en el feed",
+    "noTitleAndDescription": "No se puede crear una publicación con un cuerpo vacío.",
+    "postCreationFailed": "Error al crear la publicación."
   },
   "settings": {
     "settings": "Ajustes",

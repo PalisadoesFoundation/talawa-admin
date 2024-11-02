@@ -1,28 +1,31 @@
+import { useEffect, useState } from 'react';
+import { Navigate, useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
+import Carousel from 'react-multi-carousel';
+import { Button, Row } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
+
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
-import SendIcon from '@mui/icons-material/Send';
+
 import {
   ORGANIZATION_ADVERTISEMENT_LIST,
   ORGANIZATION_POST_LIST,
   USER_DETAILS,
 } from 'GraphQl/Queries/Queries';
+
 import PostCard from 'components/UserPortal/PostCard/PostCard';
+import PromotedPost from 'components/UserPortal/PromotedPost/PromotedPost';
+import StartPostModal from 'components/UserPortal/StartPostModal/StartPostModal';
+
+import useLocalStorage from 'utils/useLocalstorage';
+
 import type {
   InterfacePostCard,
   InterfaceQueryOrganizationAdvertisementListItem,
   InterfaceQueryUserListItem,
 } from 'utils/interfaces';
-import PromotedPost from 'components/UserPortal/PromotedPost/PromotedPost';
-import StartPostModal from 'components/UserPortal/StartPostModal/StartPostModal';
-import React, { useEffect, useState } from 'react';
-import { Button, Col, Form, Row } from 'react-bootstrap';
-import { useTranslation } from 'react-i18next';
 
-import { Navigate, useParams } from 'react-router-dom';
-import useLocalStorage from 'utils/useLocalstorage';
 import styles from './Posts.module.css';
-import convertToBase64 from 'utils/convertToBase64';
-import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 
 const responsive = {
@@ -79,6 +82,7 @@ type InterfacePostComments = {
     firstName: string;
     lastName: string;
     email: string;
+    image: string;
   };
   likeCount: number;
   likedBy: {
@@ -101,8 +105,24 @@ type InterfacePostNode = {
     firstName: string;
     lastName: string;
     _id: string;
+    image: string;
   };
-  imageUrl: string | null;
+  file: {
+    _id: string;
+    fileName: string;
+    mimeType: string;
+    size: Number;
+    hash: {
+      value: string;
+      algorithm: string;
+    };
+    uri: string;
+    metadata: {
+      objectKey: string;
+    };
+    visibility: string;
+    status: string;
+  };
   likeCount: number;
   likedBy: {
     _id: string;
@@ -216,8 +236,7 @@ export default function home(): JSX.Element {
     const {
       creator,
       _id,
-      imageUrl,
-      videoUrl,
+      file,
       title,
       text,
       likeCount,
@@ -255,6 +274,7 @@ export default function home(): JSX.Element {
           lastName: value.creator.lastName,
           id: value.creator._id,
           email: value.creator.email,
+          image: value.creator.image,
         },
         likeCount: value.likeCount,
         likedBy: commentLikes,
@@ -277,10 +297,11 @@ export default function home(): JSX.Element {
         firstName: creator.firstName,
         lastName: creator.lastName,
         email: creator.email,
+        image: creator.image,
       },
       postedAt: formattedDate,
-      image: imageUrl,
-      video: videoUrl,
+      image: file?.mimeType.startsWith('image/') ? file.uri : '',
+      video: file?.mimeType.startsWith('video/') ? file.uri : '',
       title,
       text,
       likeCount,
@@ -291,13 +312,6 @@ export default function home(): JSX.Element {
     };
 
     return cardProps;
-  };
-
-  /**
-   * Opens the post creation modal.
-   */
-  const handlePostButtonClick = (): void => {
-    setShowModal(true);
   };
 
   /**
@@ -313,38 +327,13 @@ export default function home(): JSX.Element {
         <div className={`${styles.colorLight} ${styles.mainContainer}`}>
           <h1>{t('posts')}</h1>
           <div className={`${styles.postContainer}`}>
-            <div className={`${styles.heading}`}>{t('startPost')}</div>
             <div className={styles.postInputContainer}>
-              <Row className="d-flex gap-1">
-                <Col className={styles.maxWidth}>
-                  <Form.Control
-                    type="file"
-                    accept="image/*"
-                    multiple={false}
-                    className={styles.inputArea}
-                    data-testid="postImageInput"
-                    autoComplete="off"
-                    onChange={async (
-                      e: React.ChangeEvent<HTMLInputElement>,
-                    ): Promise<void> => {
-                      setPostImg('');
-                      const target = e.target as HTMLInputElement;
-                      const file = target.files && target.files[0];
-                      const base64file = file && (await convertToBase64(file));
-                      setPostImg(base64file);
-                    }}
-                  />
-                </Col>
-              </Row>
-            </div>
-            <div className="d-flex justify-content-end">
               <Button
-                size="sm"
-                data-testid={'postBtn'}
-                onClick={handlePostButtonClick}
-                className="px-4 py-sm-2"
+                variant="light"
+                className={`${styles.startPostBtn} w-100 text-start text-muted py-3 d-flex align-items-center gap-2 border`}
+                onClick={() => setShowModal(true)}
               >
-                {t('post')} <SendIcon />
+                Start a post, with text or media
               </Button>
             </div>
           </div>

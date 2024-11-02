@@ -639,7 +639,9 @@
     "pinPost": "पिन पद",
     "Next": "अगला पृष्ठ",
     "Previous": "पिछला पृष्ठ",
-    "cancel": "रद्द करें"
+    "cancel": "रद्द करें",
+    "noTitleAndDescription": "रिक्त सामग्री के साथ पोस्ट नहीं बनाई जा सकती।",
+    "postCreationFailed": "पोस्ट बनाने में विफल।"
   },
   "postNotFound": {
     "post": "डाक",
@@ -679,7 +681,10 @@
     "no": "नहीं",
     "yes": "हाँ",
     "close": "बंद करें",
-    "talawaApiUnavailable": "Talawa API अनुपलब्ध"
+    "talawaApiUnavailable": "Talawa API अनुपलब्ध",
+    "noTitleAndDescription": "शीर्षक और विवरण खाली नहीं हो सकते।",
+    "postCreationFailed": "पोस्ट बनाने में विफल।",
+    "postImage": "पोस्ट छवि"
   },
   "blockUnblockUser": {
     "title": "उपयोगकर्ता को ब्लॉक/अनब्लॉक करें",
@@ -996,7 +1001,11 @@
     "comments": "टिप्पणियाँ",
     "viewPost": "पोस्ट देखें",
     "editPost": "पोस्ट संपादित करें",
-    "postedOn": "{{date}} को पोस्ट किया गया"
+    "postedOn": "{{date}} को पोस्ट किया गया",
+    "postUpdationFailed": "पोस्ट अपडेट करने में विफल।",
+    "deletionSuccessfull": "पोस्ट सफलतापूर्वक हटाई गई।",
+    "noMediaSelected": "कृपया एक छवि या वीडियो फ़ाइल चुनें।",
+    "noComments": "दिखाने के लिए कोई टिप्पणी नहीं है।"
   },
   "home": {
     "title": "पदों",
@@ -1014,7 +1023,9 @@
     "media": "मिडिया",
     "event": "आयोजन",
     "article": "लेख",
-    "postNowVisibleInFeed": "पोस्ट अब फीड में दिखाई दे रहा है"
+    "postNowVisibleInFeed": "पोस्ट अब फीड में दिखाई दे रहा है",
+    "noTitleAndDescription": "रिक्त सामग्री के साथ पोस्ट नहीं बनाई जा सकती।",
+    "postCreationFailed": "पोस्ट बनाने में विफल।"
   },
   "settings": {
     "profileSettings": "पार्श्वचित्र समायोजन",

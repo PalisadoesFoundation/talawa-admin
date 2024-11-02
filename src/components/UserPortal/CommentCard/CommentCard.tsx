@@ -17,6 +17,7 @@ interface InterfaceCommentCardProps {
     firstName: string;
     lastName: string;
     email: string;
+    image?: string;
   };
   likeCount: number;
   likedBy: {
@@ -117,8 +118,12 @@ function commentCard(props: InterfaceCommentCardProps): JSX.Element {
   return (
     <div className={styles.mainContainer}>
       <div className={styles.personDetails}>
-        <div className="d-flex align-items-center gap-2">
-          <AccountCircleIcon className="my-2" />
+        <div className={`${styles.creator} d-flex align-items-center gap-2`}>
+          {props?.creator?.image ? (
+            <img src={props?.creator?.image} alt="creator image" />
+          ) : (
+            <AccountCircleIcon className="my-2" />
+          )}
           <b>{creatorName}</b>
         </div>
         <span>{props.text}</span>

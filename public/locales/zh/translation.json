@@ -639,7 +639,9 @@
     "pinPost": "针柱",
     "Next": "下一页",
     "Previous": "上一页",
-    "cancel": "取消"
+    "cancel": "取消",
+    "noTitleAndDescription": "无法创建内容为空的帖子。",
+    "postCreationFailed": "创建帖子失败。"
   },
   "postNotFound": {
     "post": "邮政",
@@ -679,7 +681,10 @@
     "no": "否",
     "yes": "是",
     "close": "关闭",
-    "talawaApiUnavailable": "塔拉瓦 API 不可用"
+    "talawaApiUnavailable": "塔拉瓦 API 不可用",
+    "noTitleAndDescription": "标题和描述不能为空。",
+    "postCreationFailed": "创建帖子失败。",
+    "postImage": "帖子图片"
   },
   "blockUnblockUser": {
     "title": "阻止/取消阻止用户",
@@ -996,7 +1001,11 @@
     "comments": "评论",
     "viewPost": "查看帖子",
     "editPost": "编辑帖子",
-    "postedOn": "发布于 {{date}}"
+    "postedOn": "发布于 {{date}}",
+    "postUpdationFailed": "更新帖子失败。",
+    "deletionSuccessfull": "成功删除帖子。",
+    "noMediaSelected": "请选择图片或视频文件。",
+    "noComments": "没有评论可显示。"
   },
   "home": {
     "title": "帖子",
@@ -1014,7 +1023,9 @@
     "media": "媒体",
     "event": "事件",
     "article": "文章",
-    "postNowVisibleInFeed": "帖子现在在动态中可见"
+    "postNowVisibleInFeed": "帖子现在在动态中可见",
+    "noTitleAndDescription": "无法创建内容为空的帖子。",
+    "postCreationFailed": "创建帖子失败。"
   },
   "settings": {
     "profileSettings": "配置文件设置",

@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import type { ChangeEvent } from 'react';
+import React, { useEffect, useState, type ChangeEvent } from 'react';
 import { Button, Form, Image, Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-
+import ImageIcon from '@mui/icons-material/Image';
 import { errorHandler } from 'utils/errorHandler';
 import UserDefault from '../../../assets/images/defaultImg.png';
 import styles from './StartPostModal.module.css';
-import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
+import convertToBase64 from 'utils/convertToBase64';
+import useLocalStorage from 'utils/useLocalstorage';
 
 interface InterfaceStartPostModalProps {
   show: boolean;
@@ -20,24 +20,7 @@ interface InterfaceStartPostModalProps {
   img: string | null;
 }
 
-/**
- * A modal component for creating a new post.
- *
- * This modal includes:
- * - A form where users can input the content of the post.
- * - A preview of the image if provided.
- * - User's profile image and name displayed in the modal header.
- *
- * @param show - Whether the modal is visible.
- * @param onHide - Function to call when the modal is hidden.
- * @param fetchPosts - Function to refresh the posts after creating a new one.
- * @param userData - User data to display in the modal header.
- * @param organizationId - The ID of the organization for the post.
- * @param img - The URL of the image to be included in the post.
- *
- * @returns JSX.Element - The rendered modal component.
- */
-const startPostModal = ({
+const StartPostModal = ({
   show,
   onHide,
   fetchPosts,
@@ -45,60 +28,94 @@ const startPostModal = ({
   organizationId,
   img,
 }: InterfaceStartPostModalProps): JSX.Element => {
-  // Translation hook for internationalization
   const { t } = useTranslation('translation', { keyPrefix: 'home' });
+  const [postformState, setPostFormState] = useState<{
+    postinfo: string;
+    mediaFile: File | null;
+  }>({
+    postinfo: '',
+    mediaFile: null,
+  });
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
-  // State to manage the content of the post
-  const [postContent, setPostContent] = useState<string>('');
+  const { getItem } = useLocalStorage();
 
-  // Mutation hook for creating a new post
-  const [createPost] = useMutation(CREATE_POST_MUTATION);
+  useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
 
-  /**
-   * Updates the state with the content of the post as the user types.
-   *
-   * @param e - Change event from the textarea input.
-   */
-  const handlePostInput = (e: ChangeEvent<HTMLInputElement>): void => {
-    setPostContent(e.target.value);
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ): void => {
+    const { name, value } = e.target;
+    setPostFormState((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  /**
-   * Hides the modal and clears the post content.
-   */
+  const handleMediaChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const file = e.target.files?.[0] || null;
+    setPostFormState((prev) => ({ ...prev, mediaFile: file }));
+
+    if (file) {
+      const newPreviewUrl = URL.createObjectURL(file);
+      setPreviewUrl(newPreviewUrl);
+    } else {
+      setPreviewUrl(null);
+    }
+  };
+
   const handleHide = (): void => {
-    setPostContent('');
+    setPostFormState({
+      postinfo: '',
+      mediaFile: null,
+    });
+    setPreviewUrl(null);
     onHide();
   };
 
-  /**
-   * Handles the creation of a new post by calling the mutation.
-   * Displays a toast notification based on the outcome.
-   */
   const handlePost = async (): Promise<void> => {
     try {
-      if (!postContent) {
+      if (!postformState.postinfo) {
         throw new Error("Can't create a post with an empty body.");
       }
-      toast.info('Processing your post. Please wait.');
 
-      const { data } = await createPost({
-        variables: {
-          title: '',
-          text: postContent,
-          organizationId: organizationId,
-          file: img,
+      const formData = new FormData();
+      formData.append('text', postformState.postinfo);
+      formData.append('organizationId', organizationId);
+
+      if (postformState.mediaFile) {
+        formData.append('file', postformState.mediaFile);
+      }
+
+      const accessToken = getItem('token');
+
+      const response = await fetch(
+        `${process.env.REACT_APP_TALAWA_REST_URL}/create-post`,
+        {
+          method: 'POST',
+          body: formData,
+          headers: { Authorization: `Bearer ${accessToken}` },
         },
-      });
-      /* istanbul ignore next */
+      );
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data?.error || t('postCreationFailed'));
+      }
+
       if (data) {
         toast.dismiss();
-        toast.success(t('postNowVisibleInFeed') as string);
+        toast.success(t('postNowVisibleInFeed'));
         fetchPosts();
         handleHide();
       }
     } catch (error: unknown) {
-      /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
@@ -113,12 +130,8 @@ const startPostModal = ({
       centered
       data-testid="startPostModal"
     >
-      <Modal.Header
-        className="bg-primary"
-        closeButton
-        data-testid="modalHeader"
-      >
-        <Modal.Title className="text-white">
+      <Modal.Header closeButton data-testid="modalHeader">
+        <Modal.Title>
           <span className="d-flex gap-2 align-items-center">
             <span className={styles.userImage}>
               <Image
@@ -126,48 +139,77 @@ const startPostModal = ({
                 roundedCircle
                 className="mt-2"
                 data-testid="userImage"
+                width={40}
+                height={40}
               />
             </span>
             <span>{`${userData?.user?.firstName} ${userData?.user?.lastName}`}</span>
           </span>
         </Modal.Title>
       </Modal.Header>
-      <Form>
-        <Modal.Body>
+
+      <Modal.Body>
+        <Form>
           <Form.Control
-            type="text"
             as="textarea"
             rows={3}
-            id="orgname"
-            className={styles.postInput}
+            name="postinfo"
+            className={`${styles.postInput} border-0`}
             data-testid="postInput"
             autoComplete="off"
             required
-            onChange={handlePostInput}
+            onChange={handleInputChange}
             placeholder={t('somethingOnYourMind')}
-            value={postContent}
+            value={postformState.postinfo}
           />
-          {img && (
-            <div className={styles.previewImage}>
-              <Image src={img} alt="Post Image Preview" />
+
+          {previewUrl && postformState.mediaFile && (
+            <div className={styles.preview}>
+              {postformState.mediaFile.type.startsWith('image/') ? (
+                <Image src={previewUrl} alt="Post Image Preview" fluid />
+              ) : (
+                <video controls data-testid="videoPreview">
+                  <source
+                    src={previewUrl}
+                    type={postformState.mediaFile.type}
+                  />
+                  ({t('tag')})
+                </video>
+              )}
             </div>
           )}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            size="sm"
-            variant="success"
-            className="px-4"
-            value="invite"
-            data-testid="createPostBtn"
-            onClick={handlePost}
-          >
-            {t('addPost')}
-          </Button>
-        </Modal.Footer>
-      </Form>
+
+          <div className="d-flex justify-content-between align-items-center mt-3">
+            <Button
+              variant="outline-secondary"
+              onClick={() => document.getElementById('modalFileInput')?.click()}
+              className="d-flex align-items-center gap-2"
+            >
+              <ImageIcon />
+              Add Media
+            </Button>
+            <Form.Control
+              type="file"
+              id="modalFileInput"
+              className="d-none"
+              accept="image/*,video/*"
+              multiple={false}
+              onChange={handleMediaChange}
+            />
+
+            <Button
+              variant="primary"
+              onClick={handlePost}
+              disabled={!postformState.postinfo.trim()}
+              data-testid="createPostBtn"
+            >
+              Post
+            </Button>
+          </div>
+        </Form>
+      </Modal.Body>
     </Modal>
   );
 };
 
-export default startPostModal;
+export default StartPostModal;

@@ -158,8 +158,7 @@ export interface InterfaceQueryOrganizationListObject {
 export interface InterfacePostForm {
   posttitle: string;
   postinfo: string;
-  postphoto: string | null;
-  postvideo: string | null;
+  mediaFile: File | null;
   pinned: boolean;
 }
 export interface InterfaceQueryOrganizationPostListItem {
@@ -169,8 +168,22 @@ export interface InterfaceQueryOrganizationPostListItem {
         _id: string;
         title: string;
         text: string;
-        imageUrl: string | null;
-        videoUrl: string | null;
+        file: {
+          _id: string;
+          fileName: string;
+          mimeType: string;
+          size: number;
+          hash: {
+            value: string;
+            algorithm: string;
+          };
+          uri: string;
+          metadata: {
+            objectKey: string;
+          };
+          visibility: string;
+          status: string;
+        };
         creator: {
           _id: string;
           firstName: string;
@@ -447,6 +460,7 @@ export interface InterfacePostCard {
     lastName: string;
     email: string;
     id: string;
+    image: string;
   };
   postedAt: string;
   image: string | null;
@@ -462,6 +476,7 @@ export interface InterfacePostCard {
       firstName: string;
       lastName: string;
       email: string;
+      image: string;
     };
     likeCount: number;
     likedBy: {

@@ -27,13 +27,28 @@ export const ORGANIZATION_POST_LIST = gql`
             _id
             title
             text
-            imageUrl
-            videoUrl
+            file {
+              _id
+              fileName
+              mimeType
+              size
+              hash {
+                value
+                algorithm
+              }
+              uri
+              metadata {
+                objectKey
+              }
+              visibility
+              status
+            }
             creator {
               _id
               firstName
               lastName
               email
+              image
             }
             createdAt
             likeCount
@@ -48,6 +63,9 @@ export const ORGANIZATION_POST_LIST = gql`
               text
               creator {
                 _id
+                firstName
+                lastName
+                image
               }
               createdAt
               likeCount

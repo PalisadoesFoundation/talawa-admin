@@ -127,21 +127,7 @@
 }
 
 .startPostBtn {
-  width: 100%;
-  border-radius: 25px;
-  background-color: transparent;
-  /* border: 1px solid #acacac; */
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-  outline: none;
-  border: none;
-  color: #000;
-  font-weight: 900;
-}
-
-.startPostBtn:hover {
-  background-color: #00000010;
-  border: 0;
-  color: #000 !important;
+  border-radius: 2rem;
 }
 
 .icons {

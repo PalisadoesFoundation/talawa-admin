@@ -1,7 +1,6 @@
-import { useMutation, useQuery, type ApolloError } from '@apollo/client';
+import { useQuery, type ApolloError } from '@apollo/client';
 import { Search } from '@mui/icons-material';
 import SortIcon from '@mui/icons-material/Sort';
-import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { ORGANIZATION_POST_LIST } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
 import NotFound from 'components/NotFound/NotFound';
@@ -16,18 +15,32 @@ import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryOrganizationPostListItem } from 'utils/interfaces';
 import styles from './OrgPost.module.css';
+import useLocalStorage from 'utils/useLocalstorage';
 
 interface InterfaceOrgPost {
   _id: string;
   title: string;
   text: string;
-  imageUrl: string | null;
-  videoUrl: string | null;
   creator: { _id: string; firstName: string; lastName: string; email: string };
+  file: {
+    _id: string;
+    fileName: string;
+    mimeType: string;
+    size: number;
+    hash: {
+      value: string;
+      algorithm: string;
+    };
+    uri: string;
+    metadata: {
+      objectKey: string;
+    };
+    visibility: string;
+    status: string;
+  };
   pinned: boolean;
   createdAt: string;
   likeCount: number;
@@ -57,23 +70,28 @@ function orgPost(): JSX.Element {
 
   document.title = t('title');
   const [postmodalisOpen, setPostModalIsOpen] = useState(false);
-  const [postformState, setPostFormState] = useState({
+  const [postformState, setPostFormState] = useState<{
+    posttitle: string;
+    postinfo: string;
+    mediaFile: File | null;
+    pinPost: boolean;
+  }>({
     posttitle: '',
     postinfo: '',
-    postImage: '',
-    postVideo: '',
-    addMedia: '',
+    mediaFile: null,
     pinPost: false,
   });
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [sortingOption, setSortingOption] = useState('latest');
-  const [file, setFile] = useState<File | null>(null);
   const { orgId: currentUrl } = useParams();
-  const navigate = useNavigate();
   const [showTitle, setShowTitle] = useState(true);
   const [after, setAfter] = useState<string | null | undefined>(null);
   const [before, setBefore] = useState<string | null | undefined>(null);
   const [first, setFirst] = useState<number | null>(6);
   const [last, setLast] = useState<number | null>(null);
+  const [isCreatingPost, setIsCreatingPost] = useState<boolean>(false);
+
+  const { getItem } = useLocalStorage();
 
   const showInviteModal = (): void => {
     setPostModalIsOpen(true);
@@ -84,9 +102,7 @@ function orgPost(): JSX.Element {
     setPostFormState({
       posttitle: '',
       postinfo: '',
-      postImage: '',
-      postVideo: '',
-      addMedia: '',
+      mediaFile: null,
       pinPost: false,
     });
   };
@@ -94,7 +110,6 @@ function orgPost(): JSX.Element {
   const {
     data: orgPostListData,
     loading: orgPostListLoading,
-    error: orgPostListError,
     refetch,
   }: {
     data?: {
@@ -120,8 +135,8 @@ function orgPost(): JSX.Element {
       last: last,
     },
   });
-  const [create, { loading: createPostLoading }] =
-    useMutation(CREATE_POST_MUTATION);
+  // const [create, { loading: createPostLoading }] =
+  //   useMutation(CREATE_POST_MUTATION);
   const [displayedPosts, setDisplayedPosts] = useState(
     orgPostListData?.organizations[0].posts.edges.map((edge) => edge.node) ||
       [],
@@ -141,12 +156,12 @@ function orgPost(): JSX.Element {
 
   const createPost = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
+    setIsCreatingPost(true);
 
     const {
       posttitle: _posttitle,
       postinfo: _postinfo,
-      postImage,
-      postVideo,
+      mediaFile,
       pinPost,
     } = postformState;
 
@@ -155,64 +170,95 @@ function orgPost(): JSX.Element {
 
     try {
       if (!posttitle || !postinfo) {
-        throw new Error('Text fields cannot be empty strings');
+        throw new Error(t('noTitleAndDescription'));
       }
 
-      const { data } = await create({
-        variables: {
-          title: posttitle,
-          text: postinfo,
-          organizationId: currentUrl,
-          file: postImage || postVideo || postformState.addMedia,
-          pinned: pinPost,
-        },
-      });
+      const formData = new FormData();
+      formData.append('title', posttitle);
+      formData.append('text', postinfo);
+      formData.append('organizationId', currentUrl as string);
+      formData.append('pinned', String(pinPost));
 
-      /* istanbul ignore next */
+      if (mediaFile) {
+        formData.append('file', mediaFile);
+      }
+
+      const accessToken = getItem('token');
+
+      const response = await fetch(
+        `${process.env.REACT_APP_TALAWA_REST_URL}/create-post`,
+        {
+          method: 'POST',
+          body: formData,
+          headers: { Authorization: `Bearer ${accessToken}` },
+        },
+      );
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data?.error || t('postCreationFailed'));
+      }
+
       if (data) {
         toast.success(t('postCreatedSuccess') as string);
         refetch();
         setPostFormState({
           posttitle: '',
           postinfo: '',
-          postImage: '',
-          postVideo: '',
-          addMedia: '',
+          mediaFile: null,
           pinPost: false,
         });
         setPostModalIsOpen(false);
       }
     } catch (error: unknown) {
       errorHandler(t, error);
+    } finally {
+      setIsCreatingPost(false);
     }
   };
 
   useEffect(() => {
-    if (orgPostListError) {
-      navigate('/orglist');
-    }
-  }, [orgPostListError]);
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
 
-  if (createPostLoading || orgPostListLoading) {
+  if (isCreatingPost || orgPostListLoading) {
     return <Loader />;
   }
 
-  const handleAddMediaChange = async (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ): Promise<void> => {
-    setPostFormState((prevPostFormState) => ({
-      ...prevPostFormState,
-      addMedia: '',
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ): void => {
+    const { name, value, type } = e.target;
+    setPostFormState((prev) => ({
+      ...prev,
+      [name]:
+        type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
     }));
+  };
 
-    const selectedFile = e.target.files?.[0];
+  const handleMediaChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const file = e.target.files?.[0] || null;
+    setPostFormState((prev) => ({ ...prev, mediaFile: file }));
 
-    if (selectedFile) {
-      setFile(selectedFile);
-      setPostFormState({
-        ...postformState,
-        addMedia: await convertToBase64(selectedFile),
-      });
+    if (file) {
+      const newPreviewUrl = URL.createObjectURL(file);
+      setPreviewUrl(newPreviewUrl);
+    } else {
+      setPreviewUrl(null);
+    }
+  };
+
+  const clearMedia = (): void => {
+    setPostFormState((prev) => ({ ...prev, mediaFile: null }));
+    setPreviewUrl(null);
+
+    const fileInput = document.getElementById('mediaFile') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
     }
   };
 
@@ -387,9 +433,10 @@ function orgPost(): JSX.Element {
                   _id: string;
                   title: string;
                   text: string;
-                  imageUrl: string | null;
-                  videoUrl: string | null;
-
+                  file: {
+                    mimeType: string;
+                    uri: string;
+                  };
                   creator: { firstName: string; lastName: string };
                   pinned: boolean;
                 }) => (
@@ -399,10 +446,19 @@ function orgPost(): JSX.Element {
                     postTitle={datas.title}
                     postInfo={datas.text}
                     postAuthor={`${datas.creator.firstName} ${datas.creator.lastName}`}
-                    postPhoto={datas?.imageUrl}
-                    postVideo={datas?.videoUrl}
+                    postPhoto={
+                      datas?.file?.mimeType.startsWith('image/')
+                        ? datas?.file.uri
+                        : ''
+                    }
+                    postVideo={
+                      datas?.file?.mimeType.startsWith('video/')
+                        ? datas?.file.uri
+                        : ''
+                    }
                     pinned={datas.pinned}
-                    postID={''}
+                    refetch={() => refetch()}
+                    postID=""
                   />
                 ),
               )
@@ -457,35 +513,27 @@ function orgPost(): JSX.Element {
             <Form.Control
               type="name"
               id="orgname"
+              name="posttitle"
               className="mb-3"
               placeholder={t('postTitle1')}
               data-testid="modalTitle"
               autoComplete="off"
               required
               value={postformState.posttitle}
-              onChange={(e): void => {
-                setPostFormState({
-                  ...postformState,
-                  posttitle: e.target.value,
-                });
-              }}
+              onChange={handleInputChange}
             />
             <Form.Label htmlFor="postinfo">{t('information')}</Form.Label>
             <Form.Control
               type="descrip"
               id="descrip"
+              name="postinfo"
               className="mb-3"
               placeholder={t('information1')}
               data-testid="modalinfo"
               autoComplete="off"
               required
               value={postformState.postinfo}
-              onChange={(e): void => {
-                setPostFormState({
-                  ...postformState,
-                  postinfo: e.target.value,
-                });
-              }}
+              onChange={handleInputChange}
             />
           </Modal.Body>
           <Modal.Body>
@@ -497,39 +545,31 @@ function orgPost(): JSX.Element {
               accept="image/*,video/*"
               placeholder={t('addMedia')}
               multiple={false}
-              onChange={handleAddMediaChange}
+              onChange={handleMediaChange}
               data-testid="addMediaField"
             />
 
-            {postformState.addMedia && file && (
+            {previewUrl && postformState.mediaFile && (
               <div className={styles.preview} data-testid="mediaPreview">
                 {/* Display preview for both image and video */}
-                {file.type.startsWith('image') ? (
+                {postformState.mediaFile.type.startsWith('image/') ? (
                   <img
-                    src={postformState.addMedia}
+                    src={previewUrl}
                     data-testid="imagePreview"
                     alt="Post Image Preview"
                   />
                 ) : (
                   <video controls data-testid="videoPreview">
-                    <source src={postformState.addMedia} type={file.type} />(
-                    {t('tag')})
+                    <source
+                      src={previewUrl}
+                      type={postformState.mediaFile.type}
+                    />
+                    ({t('tag')})
                   </video>
                 )}
                 <button
                   className={styles.closeButton}
-                  onClick={(): void => {
-                    setPostFormState({
-                      ...postformState,
-                      addMedia: '',
-                    });
-                    const fileInput = document.getElementById(
-                      'addMedia',
-                    ) as HTMLInputElement;
-                    if (fileInput) {
-                      fileInput.value = '';
-                    }
-                  }}
+                  onClick={clearMedia}
                   data-testid="mediaCloseButton"
                 >
                   <i className="fa fa-times"></i>

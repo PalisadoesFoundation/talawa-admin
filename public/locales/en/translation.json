@@ -639,7 +639,9 @@
     "pinPost": "Pin post",
     "Next": "Next Page",
     "Previous": "Previous Page",
-    "cancel": "cancel"
+    "cancel": "cancel",
+    "noTitleAndDescription":"Title and description can not be empty.",
+    "postCreationFailed":"Failed to create the post."
   },
   "postNotFound": {
     "post": "Post",
@@ -679,7 +681,10 @@
     "no": "no",
     "yes": "yes",
     "close": "close",
-    "talawaApiUnavailable": "talawaApiUnavailable"
+    "talawaApiUnavailable": "talawaApiUnavailable",
+    "noTitleAndDescription": "Title and description can not be empty.",
+    "postCreationFailed": "Failed to create the post.",
+    "postImage": "Post Image"
   },
   "blockUnblockUser": {
     "title": "Block/Unblock User",
@@ -996,7 +1001,11 @@
     "comments": "Comments",
     "viewPost": "View Post",
     "editPost": "Edit Post",
-    "postedOn": "Posted on {{date}}"
+    "postedOn": "Posted on {{date}}",
+    "postUpdationFailed": "Failed to update the post.",
+    "deletionSuccessfull": "Successfully deleted the post.",
+    "noMediaSelected": "Please select and image or video file.",
+    "noComments": "No comments to show."
   },
   "home": {
     "posts": "Posts",
@@ -1014,7 +1023,9 @@
     "media": "Media",
     "event": "Event",
     "article": "Article",
-    "postNowVisibleInFeed": "Post now visible in feed"
+    "postNowVisibleInFeed": "Post now visible in feed",
+    "noTitleAndDescription": "Can not create a post with an empty body.",
+    "postCreationFailed": "Failed to create the post."
   },
   "settings": {
     "profileSettings": "Profile Settings",

@@ -639,7 +639,9 @@
     "pinPost": "Épingler le message",
     "Next": "Page suivante",
     "Previous": "Page précédente",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "noTitleAndDescription": "Impossible de créer une publication avec un contenu vide.",
+    "postCreationFailed": "Échec de la création de la publication."
   },
   "postNotFound": {
     "post": "Poste",
@@ -679,7 +681,10 @@
     "no": "Non",
     "yes": "Oui",
     "close": "Fermer",
-    "talawaApiUnavailable": "API Talawa non disponible"
+    "talawaApiUnavailable": "API Talawa non disponible",
+    "noTitleAndDescription": "Le titre et la description ne peuvent pas être vides.",
+    "postCreationFailed": "Échec de la création de la publication.",
+    "postImage": "Image de publication"
   },
   "blockUnblockUser": {
     "title": "Bloquer/débloquer un utilisateur",
@@ -996,7 +1001,11 @@
     "comments": "commentaires",
     "viewPost": "Voir le message",
     "editPost": "Modifier le message",
-    "postedOn": "Publié le {{date}}"
+    "postedOn": "Publié le {{date}}",
+    "postUpdationFailed": "Échec de la mise à jour de la publication.",
+    "deletionSuccessfull": "Publication supprimée avec succès.",
+    "noMediaSelected": "Veuillez sélectionner une image ou un fichier vidéo.",
+    "noComments": "Aucun commentaire à afficher."
   },
   "home": {
     "posts": "Des postes",
@@ -1014,7 +1023,9 @@
     "media": "Médias",
     "event": "Événement",
     "article": "Article",
-    "postNowVisibleInFeed": "Le post est maintenant visible dans le fil d'actualité"
+    "postNowVisibleInFeed": "Le post est maintenant visible dans le fil d'actualité",
+    "noTitleAndDescription": "Impossible de créer une publication avec un contenu vide.",
+    "postCreationFailed": "Échec de la création de la publication."
   },
   "settings": {
     "profileSettings": "Paramètres de profil",
