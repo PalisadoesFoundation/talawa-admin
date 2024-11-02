@@ -50,8 +50,8 @@ const MOCKS = [
     request: {
       query: SIGNUP_MUTATION,
       variables: {
-        firstName: 'John',
-        lastName: 'Doe',
+        firstName: 'John Patrick ',
+        lastName: 'Doe ',
         email: 'johndoe@gmail.com',
         password: 'johnDoe',
       },

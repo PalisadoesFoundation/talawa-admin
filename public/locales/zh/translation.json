@@ -320,7 +320,8 @@
     "noTagsFound": "未找到标签",
     "removeUserTag": "删除标签",
     "removeUserTagMessage": "您确定要删除此标签吗？",
-    "addChildTag": "添加子标签"
+    "addChildTag": "添加子标签",
+    "enterTagName": "输入标签名称"
   },
   "manageTag": {
     "title": "标签详情",
@@ -333,7 +334,6 @@
     "addPeople": "添加人员",
     "add": "添加",
     "subTags": "子标签",
-    "assignedToAll": "标签分配给所有人",
     "successfullyAssignedToPeople": "标签分配成功",
     "errorOccurredWhileLoadingMembers": "加载成员时出错",
     "userName": "用户名",
@@ -359,7 +359,8 @@
     "collapse": "收起",
     "expand": "展开",
     "tagNamePlaceholder": "输入标签名称",
-    "allTags": "所有标签"
+    "allTags": "所有标签",
+    "noMoreMembersFound": "未找到更多成员"
   },
   "userListCard": {
     "addAdmin": "添加管理员",
