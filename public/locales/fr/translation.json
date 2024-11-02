@@ -321,7 +321,7 @@
     "removeUserTag": "Supprimer l'Étiquette",
     "removeUserTagMessage": "Voulez-vous supprimer cette étiquette ?",
     "addChildTag": "Ajouter une Sous-Étiquette",
-    "enterTagName": "Entrez le nom du étiquette"
+    "enterTagName": "Entrez le nom de l'étiquette"
   },
   "manageTag": {
     "title": "Détails de l'étiquette",

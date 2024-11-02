@@ -269,12 +269,11 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  test('Assigns tag to multiple people', async () => {
+  test('Toasts error when no one is selected while assigning', async () => {
     renderAddPeopleToTagModal(props, link);
 
     await wait();
 
-    // gives error if no user is selected
     await waitFor(() => {
       expect(screen.getByTestId('assignPeopleBtn')).toBeInTheDocument();
     });
@@ -283,7 +282,14 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(translations.noOneSelected);
     });
+  });
 
+  test('Assigns tag to multiple people', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    await wait();
+
+    // select members and assign them
     await waitFor(() => {
       expect(screen.getAllByTestId('selectMemberBtn')[0]).toBeInTheDocument();
     });

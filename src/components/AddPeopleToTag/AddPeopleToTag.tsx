@@ -300,7 +300,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                 <i className="fa fa-search position-absolute text-body-tertiary end-0 top-50 translate-middle" />
                 <Form.Control
                   type="text"
-                  id="userName"
+                  id="firstName"
                   className="bg-light"
                   placeholder={tCommon('firstName')}
                   onChange={(e) =>
@@ -314,7 +314,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                 <i className="fa fa-search position-absolute text-body-tertiary end-0 top-50 translate-middle" />
                 <Form.Control
                   type="text"
-                  id="userName"
+                  id="lastName"
                   className="bg-light"
                   placeholder={tCommon('lastName')}
                   onChange={(e) =>

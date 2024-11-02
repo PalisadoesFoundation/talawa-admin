@@ -338,12 +338,11 @@ describe('Organisation Tags Page', () => {
     userEvent.click(screen.getByTestId('expandSubTags1'));
   });
 
-  test('Successfully assigns to tags', async () => {
+  test('Toasts error when no tag is selected while assigning', async () => {
     renderTagActionsModal(props[0], link);
 
     await wait();
 
-    // gives error if no tag is selected
     await waitFor(() => {
       expect(screen.getByTestId('tagActionSubmitBtn')).toBeInTheDocument();
     });
@@ -352,6 +351,12 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(translations.noTagSelected);
     });
+  });
+
+  test('Successfully assigns to tags', async () => {
+    renderTagActionsModal(props[0], link);
+
+    await wait();
 
     // select userTags 2 & 3 and assign them
     await waitFor(() => {
