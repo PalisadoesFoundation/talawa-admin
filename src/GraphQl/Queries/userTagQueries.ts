@@ -15,7 +15,7 @@ export const USER_TAGS_ASSIGNED_MEMBERS = gql`
     $first: PositiveInt
     $last: PositiveInt
   ) {
-    getUserTag(id: $id) {
+    getAssignedUsers: getUserTag(id: $id) {
       name
       usersAssignedTo(
         after: $after
@@ -57,7 +57,7 @@ export const USER_TAG_SUB_TAGS = gql`
     $first: PositiveInt
     $last: PositiveInt
   ) {
-    getUserTag(id: $id) {
+    getChildTags: getUserTag(id: $id) {
       name
       childTags(after: $after, before: $before, first: $first, last: $last) {
         edges {
@@ -99,7 +99,7 @@ export const USER_TAGS_MEMBERS_TO_ASSIGN_TO = gql`
     $first: PositiveInt
     $last: PositiveInt
   ) {
-    getUserTag(id: $id) {
+    getUsersToAssignTo: getUserTag(id: $id) {
       name
       usersToAssignTo(
         after: $after

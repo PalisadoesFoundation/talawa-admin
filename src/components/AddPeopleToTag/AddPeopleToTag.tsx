@@ -1,4 +1,3 @@
-import type { ApolloError } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { DataGrid } from '@mui/x-data-grid';
@@ -10,8 +9,9 @@ import { Modal, Form, Button } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import type { InterfaceQueryUserTagsMembersToAssignTo } from 'utils/interfaces';
 import styles from './AddPeopleToTag.module.css';
+import type { InterfaceTagUsersToAssignToQuery } from 'utils/organizationTagsUtils';
 import {
-  ADD_PEOPLE_TO_TAGS_QUERY_LIMIT,
+  TAGS_QUERY_DATA_CHUNK_SIZE,
   dataGridStyle,
 } from 'utils/organizationTagsUtils';
 import { Stack } from '@mui/material';
@@ -20,6 +20,8 @@ import { ADD_PEOPLE_TO_TAG } from 'GraphQl/Mutations/TagMutations';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
+import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
+import type { TFunction } from 'i18next';
 
 /**
  * Props for the `AddPeopleToTag` component.
@@ -28,8 +30,8 @@ export interface InterfaceAddPeopleToTagProps {
   addPeopleToTagModalIsOpen: boolean;
   hideAddPeopleToTagModal: () => void;
   refetchAssignedMembersData: () => void;
-  t: (key: string) => string;
-  tCommon: (key: string) => string;
+  t: TFunction<'translation', 'manageTag'>;
+  tCommon: TFunction<'common', undefined>;
 }
 
 interface InterfaceMemberData {
@@ -58,64 +60,48 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
     loading: userTagsMembersToAssignToLoading,
     error: userTagsMembersToAssignToError,
     fetchMore: fetchMoreMembersToAssignTo,
-  }: {
-    data?: {
-      getUserTag: InterfaceQueryUserTagsMembersToAssignTo;
-    };
-    loading: boolean;
-    error?: ApolloError;
-    fetchMore: (options: {
+  }: InterfaceTagUsersToAssignToQuery = useQuery(
+    USER_TAGS_MEMBERS_TO_ASSIGN_TO,
+    {
       variables: {
-        after?: string | null;
-        first?: number | null;
-      };
-      updateQuery?: (
-        previousQueryResult: {
-          getUserTag: InterfaceQueryUserTagsMembersToAssignTo;
-        },
-        options: {
-          fetchMoreResult: {
-            getUserTag: InterfaceQueryUserTagsMembersToAssignTo;
-          };
-        },
-      ) => { getUserTag: InterfaceQueryUserTagsMembersToAssignTo };
-    }) => Promise<unknown>;
-  } = useQuery(USER_TAGS_MEMBERS_TO_ASSIGN_TO, {
-    variables: {
-      id: currentTagId,
-      first: ADD_PEOPLE_TO_TAGS_QUERY_LIMIT,
+        id: currentTagId,
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+      },
+      skip: !addPeopleToTagModalIsOpen,
+      fetchPolicy: 'no-cache',
     },
-    skip: !addPeopleToTagModalIsOpen,
-  });
+  );
 
   const loadMoreMembersToAssignTo = (): void => {
     fetchMoreMembersToAssignTo({
       variables: {
-        first: ADD_PEOPLE_TO_TAGS_QUERY_LIMIT,
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after:
-          userTagsMembersToAssignToData?.getUserTag.usersToAssignTo.pageInfo
-            .endCursor, // Fetch after the last loaded cursor
+          userTagsMembersToAssignToData?.getUsersToAssignTo.usersToAssignTo
+            .pageInfo.endCursor, // Fetch after the last loaded cursor
       },
       updateQuery: (
-        prevResult: { getUserTag: InterfaceQueryUserTagsMembersToAssignTo },
+        prevResult: {
+          getUsersToAssignTo: InterfaceQueryUserTagsMembersToAssignTo;
+        },
         {
           fetchMoreResult,
         }: {
           fetchMoreResult: {
-            getUserTag: InterfaceQueryUserTagsMembersToAssignTo;
+            getUsersToAssignTo: InterfaceQueryUserTagsMembersToAssignTo;
           };
         },
       ) => {
         if (!fetchMoreResult) return prevResult;
 
         return {
-          getUserTag: {
-            ...fetchMoreResult.getUserTag,
+          getUsersToAssignTo: {
+            ...fetchMoreResult.getUsersToAssignTo,
             usersToAssignTo: {
-              ...fetchMoreResult.getUserTag.usersToAssignTo,
+              ...fetchMoreResult.getUsersToAssignTo.usersToAssignTo,
               edges: [
-                ...prevResult.getUserTag.usersToAssignTo.edges,
-                ...fetchMoreResult.getUserTag.usersToAssignTo.edges,
+                ...prevResult.getUsersToAssignTo.usersToAssignTo.edges,
+                ...fetchMoreResult.getUsersToAssignTo.usersToAssignTo.edges,
               ],
             },
           },
@@ -125,9 +111,9 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
   };
 
   const userTagMembersToAssignTo =
-    userTagsMembersToAssignToData?.getUserTag.usersToAssignTo.edges.map(
+    userTagsMembersToAssignToData?.getUsersToAssignTo.usersToAssignTo.edges.map(
       (edge) => edge.node,
-    );
+    ) ?? /* istanbul ignore next */ [];
 
   const handleAddOrRemoveMember = (member: InterfaceMemberData): void => {
     setAssignToMembers((prevMembers) => {
@@ -168,8 +154,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
         hideAddPeopleToTagModal();
         setAssignToMembers([]);
       }
-    } catch (error: unknown) {
-      /* istanbul ignore next */
+    } catch (error: unknown) /* istanbul ignore next */ {
       const errorMessage =
         error instanceof Error ? error.message : tErrors('unknownError');
       toast.error(errorMessage);
@@ -299,7 +284,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                   id="scrollableDiv"
                   data-testid="scrollableDiv"
                   style={{
-                    height: 300,
+                    maxHeight: 300,
                     overflow: 'auto',
                   }}
                 >
@@ -307,21 +292,18 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                     dataLength={userTagMembersToAssignTo?.length ?? 0} // This is important field to render the next data
                     next={loadMoreMembersToAssignTo}
                     hasMore={
-                      userTagsMembersToAssignToData?.getUserTag.usersToAssignTo
-                        .pageInfo.hasNextPage ?? false
+                      userTagsMembersToAssignToData?.getUsersToAssignTo
+                        .usersToAssignTo.pageInfo.hasNextPage ??
+                      /* istanbul ignore next */ false
                     }
-                    loader={
-                      <div className="simpleLoader">
-                        <div className="spinner" />
-                      </div>
-                    }
+                    loader={<InfiniteScrollLoader />}
                     scrollableTarget="scrollableDiv"
                   >
                     <DataGrid
                       disableColumnMenu
                       columnBufferPx={7}
                       hideFooter={true}
-                      getRowId={(row) => row._id}
+                      getRowId={(row) => row.id}
                       slots={{
                         noRowsOverlay: /* istanbul ignore next */ () => (
                           <Stack
@@ -333,7 +315,15 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                           </Stack>
                         ),
                       }}
-                      sx={dataGridStyle}
+                      sx={{
+                        ...dataGridStyle,
+                        '& .MuiDataGrid-topContainer': {
+                          position: 'static',
+                        },
+                        '& .MuiDataGrid-virtualScrollerContent': {
+                          marginTop: '0',
+                        },
+                      }}
                       getRowClassName={() => `${styles.rowBackground}`}
                       autoHeight
                       rowHeight={65}
