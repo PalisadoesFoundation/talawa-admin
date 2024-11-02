@@ -29,7 +29,11 @@ enum FilterPeriod {
   ThisYear = 'This Year',
   All = 'All',
 }
-
+/**
+ * Component to manage and display event attendance information
+ * Includes filtering and sorting functionality for attendees
+ * @returns JSX element containing the event attendance interface
+ */
 function EventAttendance(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'eventAttendance',

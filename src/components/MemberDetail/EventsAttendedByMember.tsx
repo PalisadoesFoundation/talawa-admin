@@ -3,7 +3,11 @@ import { useQuery } from '@apollo/client';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import EventAttendedCard from './EventsAttendedCardItem';
 import { Spinner } from 'react-bootstrap';
-
+/**
+ * Component to display events attended by a specific member
+ * @param eventsId - ID of the event to fetch and display details for
+ * @returns Event card component with event details
+ */
 interface InterfaceEventsAttendedByMember {
   eventsId: string;
 }

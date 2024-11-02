@@ -8,7 +8,11 @@ import DateIcon from 'assets/svgs/cardItemDate.svg?react';
 interface InterfaceEventsAttended {
   eventId: string;
 }
-
+/**
+ * Component to display a list of events attended by a member
+ * @param eventId - The ID of the event to display details for
+ * @returns A table row containing event details with a link to the event
+ */
 const AttendedEventList: React.FC<InterfaceEventsAttended> = ({ eventId }) => {
   const { orgId: currentOrg } = useParams();
   const { data, loading, error } = useQuery(EVENT_DETAILS, {

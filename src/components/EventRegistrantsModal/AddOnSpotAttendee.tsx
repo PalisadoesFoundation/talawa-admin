@@ -11,7 +11,13 @@ import type {
 } from 'utils/interfaces';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
-
+/**
+ * Modal component for adding on-spot attendees to an event
+ * @param show - Boolean to control modal visibility
+ * @param handleClose - Function to handle modal close
+ * @param reloadMembers - Function to refresh member list after adding attendee
+ * @returns Modal component with form for adding new attendee
+ */
 const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
   show,
   handleClose,

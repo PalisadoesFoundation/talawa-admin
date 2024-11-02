@@ -4,6 +4,11 @@ import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import React from 'react';
 import styles from '../../screens/MemberDetail/MemberDetail.module.css';
 import { Link } from 'react-router-dom';
+/**
+ * Custom table cell component to display event details
+ * @param eventId - ID of the event to fetch and display
+ * @returns TableRow component with event information
+ */
 
 export const CustomTableCell: React.FC<{ eventId: string }> = ({ eventId }) => {
   const { data, loading, error } = useQuery(EVENT_DETAILS, {

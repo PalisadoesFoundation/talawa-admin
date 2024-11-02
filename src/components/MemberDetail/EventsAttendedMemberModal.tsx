@@ -13,7 +13,14 @@ import { Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import styles from '../../screens/MemberDetail/MemberDetail.module.css';
 import { CustomTableCell } from './customTableCell';
-
+/**
+ * Modal component to display paginated list of events attended by a member
+ * @param eventsAttended - Array of events attended by the member
+ * @param setShow - Function to control modal visibility
+ * @param show - Boolean to control modal visibility
+ * @param eventsPerPage - Number of events to display per page
+ * @returns Modal component with paginated events list
+ */
 interface InterfaceEvent {
   _id: string;
   name: string;
