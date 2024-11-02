@@ -1053,6 +1053,23 @@
     "Admin": "Administrateur",
     "loading": "Chargement..."
   },
+  "onSpotAttendee": {
+    "title": "Participant sur place",
+    "enterFirstName": "Entrez le prénom",
+    "enterLastName": "Entrez le nom de famille",
+    "enterEmail": "Entrez l'e-mail",
+    "enterPhoneNo": "Entrez le numéro de téléphone",
+    "selectGender": "Sélectionnez le sexe",
+    "invalidDetailsMessage": "Veuillez remplir tous les champs obligatoires",
+    "orgIdMissing": "L'ID de l'organisation est manquant. Veuillez réessayer.",
+    "attendeeAddedSuccess": "Participant ajouté avec succès!",
+    "addAttendee": "Ajouter",
+    "phoneNumber": "Numéro de téléphone",
+    "addingAttendee": "Ajout en cours...",
+    "male": "Homme",
+    "female": "Femme",
+    "other": "Autre"
+  },
   "settings": {
     "eventAttended": "Événements Assistés",
     "noeventsAttended": "Aucun événement assisté",

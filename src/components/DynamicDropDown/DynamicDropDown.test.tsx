@@ -51,7 +51,7 @@ describe('DynamicDropDown component', () => {
 
     // Verify that the dropdown button displays the updated label
     await waitFor(() => {
-      expect(dropdownButton).toHaveTextContent('Label 1');
+      expect(dropdownButton).toHaveTextContent('Label 2');
     });
   });
   test('calls custom handleChange function when provided', async () => {

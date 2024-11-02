@@ -195,15 +195,14 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
             noOptionsText={
               <div className="d-flex ">
                 <p className="me-2">No Registrations found</p>
-                <a
+                <span
                   className="underline"
-                  href="#"
                   onClick={() => {
                     setOpen(true);
                   }}
                 >
                   Add Onspot Registration
-                </a>
+                </span>
               </div>
             }
             options={memberData.organizations[0].members}

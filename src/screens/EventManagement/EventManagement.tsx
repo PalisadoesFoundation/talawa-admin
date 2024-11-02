@@ -15,7 +15,8 @@ import OrganizationActionItems from 'screens/OrganizationActionItems/Organizatio
 import EventAgendaItems from 'components/EventManagement/EventAgendaItems/EventAgendaItems';
 import useLocalStorage from 'utils/useLocalstorage';
 import EventAttendance from 'components/EventManagement/EventAttendance/EventAttendance';
-
+import AddOnEntry from 'components/AddOn/core/AddOnEntry/AddOnEntry';
+import { EventRegistrantsWrapper } from 'components/EventRegistrantsModal/EventRegistrantsWrapper';
 /**
  * List of tabs for the event dashboard.
  *
@@ -222,7 +223,7 @@ const EventManagement = (): JSX.Element => {
           case 'registrants':
             return (
               <div data-testid="eventRegistrantsTab">
-                <h2>Event Registrants</h2>
+                <EventRegistrantsWrapper eventId={eventId} orgId={orgId}/>
               </div>
             );
           case 'attendance':

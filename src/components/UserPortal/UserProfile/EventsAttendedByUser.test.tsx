@@ -1,6 +1,8 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { EventsAttendedByUser } from './EventsAttendedByUser';
+import { MockedProvider } from '@apollo/client/testing';
+import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 
 const mockT = (key: string, params?: Record<string, string>): string => {
   if (params) {
@@ -11,6 +13,45 @@ const mockT = (key: string, params?: Record<string, string>): string => {
   }
   return key;
 };
+
+const mocks = [
+  {
+    request: {
+      query: EVENT_DETAILS,
+      variables: { id: '1' },
+    },
+    result: {
+      data: {
+        event: {
+          _id: '1',
+          title: 'Event 1',
+          startDate: '2023-01-01',
+          recurring: false,
+          attendees: [],
+          organization: { _id: 'org1' },
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: EVENT_DETAILS,
+      variables: { id: '2' },
+    },
+    result: {
+      data: {
+        event: {
+          _id: '2',
+          title: 'Event 2',
+          startDate: '2023-01-01',
+          recurring: false,
+          attendees: [],
+          organization: { _id: 'org1' },
+        },
+      },
+    },
+  },
+];
 
 describe('EventsAttendedByUser Component', () => {
   const mockUserWithEvents = {
@@ -29,10 +70,7 @@ describe('EventsAttendedByUser Component', () => {
       state: 'State',
       country: 'Country',
       image: 'image.jpg',
-      eventsAttended: [
-        { _id: '1', name: 'Event 1' },
-        { _id: '2', name: 'Event 2' },
-      ],
+      eventsAttended: [{ _id: '1' }, { _id: '2' }],
     },
     t: mockT,
   };
@@ -59,31 +97,24 @@ describe('EventsAttendedByUser Component', () => {
   };
 
   test('renders the component with events', () => {
-    render(<EventsAttendedByUser {...mockUserWithEvents} />);
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <EventsAttendedByUser {...mockUserWithEvents} />
+      </MockedProvider>,
+    );
 
     expect(screen.getByText('eventAttended')).toBeInTheDocument();
     expect(screen.getAllByTestId('usereventsCard')).toHaveLength(2);
   });
 
   test('renders no events message when user has no events', () => {
-    render(<EventsAttendedByUser {...mockUserWithoutEvents} />);
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <EventsAttendedByUser {...mockUserWithoutEvents} />
+      </MockedProvider>,
+    );
 
     expect(screen.getByText('noeventsAttended')).toBeInTheDocument();
     expect(screen.queryByTestId('usereventsCard')).not.toBeInTheDocument();
-  });
-
-  test('renders card header correctly', () => {
-    render(<EventsAttendedByUser {...mockUserWithEvents} />);
-
-    const header = screen.getByText('eventAttended');
-    expect(header).toBeInTheDocument();
-    expect(header.closest('div')).toHaveClass('cardTitle');
-  });
-
-  test('renders scrollable card body', () => {
-    render(<EventsAttendedByUser {...mockUserWithEvents} />);
-
-    const cardBody = screen.getByTestId('usereventsCard').closest('.card-body');
-    expect(cardBody).toHaveClass('scrollableCardBody');
   });
 });

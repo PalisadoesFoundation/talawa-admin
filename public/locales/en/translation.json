@@ -750,6 +750,23 @@
     "Admin": "Admin",
     "loading": "Loading..."
   },
+  "onSpotAttendee": {
+    "title": "On-spot Attendee",
+    "enterFirstName": "Enter First Name",
+    "enterLastName": "Enter Last Name",
+    "enterEmail": "Enter Email",
+    "enterPhoneNo": "Enter Phone Number",
+    "selectGender": "Select Gender",
+    "invalidDetailsMessage": "Please fill in all required fields",
+    "orgIdMissing": "Organization ID is missing. Please try again.",
+    "attendeeAddedSuccess": "Attendee added successfully!",
+    "addAttendee": "Add",
+    "phoneNumber": "Phone No.",
+    "addingAttendee": "Adding...",
+    "male": "Male",
+    "female": "Female",
+    "other": "Other"
+  },
   "forgotPassword": {
     "title": "Talawa Forgot Password",
     "registeredEmail": "Registered Email",

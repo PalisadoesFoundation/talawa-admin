@@ -1053,6 +1053,23 @@
     "Admin": "管理员",
     "loading": "加载中..."
   },
+  "onSpotAttendee": {
+    "title": "现场参与者",
+    "enterFirstName": "输入名字",
+    "enterLastName": "输入姓氏",
+    "enterEmail": "输入电子邮件",
+    "enterPhoneNo": "输入电话号码",
+    "selectGender": "选择性别",
+    "invalidDetailsMessage": "请填写所有必填字段",
+    "orgIdMissing": "组织ID缺失。请重试。",
+    "attendeeAddedSuccess": "参与者添加成功！",
+    "addAttendee": "添加",
+    "phoneNumber": "电话号码",
+    "addingAttendee": "添加中...",
+    "male": "男性",
+    "female": "女性",
+    "other": "其他"
+  },
   "settings": {
     "noeventsAttended": "未参加任何活动",
     "eventAttended": "参加的活动",

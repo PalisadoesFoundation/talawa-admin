@@ -1056,6 +1056,23 @@
     "Admin": "Administrador",
     "loading": "Cargando..."
   },
+  "onSpotAttendee": {
+    "title": "Asistente en el lugar",
+    "enterFirstName": "Ingrese el nombre",
+    "enterLastName": "Ingrese el apellido",
+    "enterEmail": "Ingrese el correo electrónico",
+    "enterPhoneNo": "Ingrese el número de teléfono",
+    "selectGender": "Seleccione el género",
+    "invalidDetailsMessage": "Por favor complete todos los campos requeridos",
+    "orgIdMissing": "Falta el ID de la organización. Por favor, inténtelo de nuevo.",
+    "attendeeAddedSuccess": "¡Asistente agregado exitosamente!",
+    "addAttendee": "Agregar",
+    "phoneNumber": "Número de teléfono",
+    "addingAttendee": "Agregando...",
+    "male": "Masculino",
+    "female": "Femenino",
+    "other": "Otro"
+  },
   "settings": {
     "settings": "Ajustes",
     "eventAttended": "Événements Assistés",

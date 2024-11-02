@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Search } from '@mui/icons-material';
+import { BiSearch as Search } from 'react-icons/bi';
 import {
   Paper,
   TableBody,
@@ -173,7 +173,7 @@ function EventAttendance(): JSX.Element {
               tabIndex={-1}
               className={`position-absolute z-10 bottom-0 end-0 h-100`}
             >
-              <Search />
+              <Search size={20} />
             </Button>
           </div>
 

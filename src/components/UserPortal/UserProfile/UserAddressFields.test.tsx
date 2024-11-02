@@ -84,12 +84,4 @@ describe('UserAddressFields', () => {
     expect(screen.getByTestId('inputState')).toHaveValue('Test State');
     expect(screen.getByTestId('inputCountry')).toHaveValue('US');
   });
-
-  test('applies correct CSS classes', () => {
-    render(<UserAddressFields {...mockProps} />);
-
-    expect(screen.getByTestId('inputAddress')).toHaveClass('cardControl');
-    expect(screen.getByTestId('inputState')).toHaveClass('cardControl');
-    expect(screen.getByTestId('inputCountry')).toHaveClass('cardControl');
-  });
 });

@@ -1,7 +1,7 @@
 import React from 'react';
 import dayjs from 'dayjs';
 import { Card, Row, Col } from 'react-bootstrap';
-import { ChevronRight, LocationOn } from '@mui/icons-material';
+import { MdChevronRight, MdLocationOn } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
 export interface InterfaceCardItem {
@@ -41,13 +41,13 @@ const EventAttendedCard = (props: InterfaceCardItem): JSX.Element => {
           <Col xs={7} md={9} className="mb-3">
             <h5 className="mb-1">{title}</h5>
             <p className="text-muted mb-0 small">
-              <LocationOn className="text-action" />
+              <MdLocationOn className="text-action" size={20} />
               {location}
             </p>
           </Col>
           <Col xs={2} md={1} className="text-end">
             <Link to={`/event/${orgId}/${eventId}`} state={{ id: eventId }}>
-              <ChevronRight className="text-action" color="success" />
+              <MdChevronRight className="text-action" size={20} />
             </Link>
           </Col>
         </Row>

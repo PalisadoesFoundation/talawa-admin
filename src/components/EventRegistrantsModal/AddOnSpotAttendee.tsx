@@ -3,12 +3,14 @@ import React, { useState } from 'react';
 import { Modal, Form, Button, Spinner } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import type {
   InterfaceAddOnSpotAttendeeProps,
   InterfaceFormData,
 } from 'utils/interfaces';
+import { useTranslation } from 'react-i18next';
+import { errorHandler } from 'utils/errorHandler';
 
 const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
   show,
@@ -22,6 +24,28 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
     phoneNo: '',
     gender: '',
   });
+  const { t } = useTranslation('translation', { keyPrefix: 'onSpotAttendee' });
+  const { t: tCommon } = useTranslation('common');
+  const { orgId } = useParams<{ orgId: string }>();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [addSignUp] = useMutation(SIGNUP_MUTATION);
+  const validateForm = (): boolean => {
+    if (!formData.firstName || !formData.lastName || !formData.email) {
+      toast.error(t('invalidDetailsMessage'));
+      return false;
+    }
+    return true;
+  };
+
+  const resetForm = (): void => {
+    setFormData({
+      firstName: '',
+      lastName: '',
+      email: '',
+      phoneNo: '',
+      gender: '',
+    });
+  };
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -32,39 +56,41 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
       | HTMLInputElement
       | HTMLSelectElement
       | HTMLTextAreaElement;
-    setFormData({ ...formData, [target.name]: target.value });
+    setFormData((prev) => ({
+      ...prev,
+      [target.name]: target.value,
+    }));
   };
 
-  const { orgId } = useParams<{ orgId: string }>();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [addSignUp] = useMutation(SIGNUP_MUTATION);
   const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
-    if (!orgId) {
-      toast.error('Organization ID is missing. Please try again.');
+
+    if (!validateForm()) {
       return;
     }
+
     setIsSubmitting(true);
+
     try {
-      await addSignUp({
+      const response = await addSignUp({
         variables: {
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: formData.email,
-          phoneNo: formData.phoneNo,
-          gender: formData.gender,
+          ...formData,
           password: '123456',
-          orgId: orgId,
+          orgId,
         },
       });
-      toast.success('Attendee added successfully!');
-      reloadMembers();
-      handleClose();
+
+      if (response.data?.signUp) {
+        toast.success(t('attendeeAddedSuccess'));
+        resetForm();
+        reloadMembers();
+        handleClose();
+      }
     } catch (error) {
-      console.error('Error signing up:', error);
-      toast.error('Failed to add attendee. Please try again.');
+      /* istanbul ignore next */
+      errorHandler(t, error as Error);
     } finally {
       setIsSubmitting(false);
     }
@@ -73,14 +99,17 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
     <>
       <Modal show={show} onHide={handleClose} backdrop="static" centered>
         <Modal.Header closeButton className="bg-success text-white">
-          <Modal.Title>On-spot Attendee</Modal.Title>
+          <Modal.Title>{t('title')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form onSubmit={handleSubmit}>
+          <Form onSubmit={handleSubmit} data-testid="onspot-attendee-form">
             <div className="d-flex justify-content-between">
               <Form.Group className="mb-1">
-                <Form.Label>First Name</Form.Label>
+                <Form.Label htmlFor="firstName">
+                  {tCommon('firstName')}
+                </Form.Label>
                 <Form.Control
+                  id="firstName"
                   type="text"
                   name="firstName"
                   value={formData.firstName}
@@ -89,8 +118,11 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
                 />
               </Form.Group>
               <Form.Group className="mb-1">
-                <Form.Label>Last Name</Form.Label>
+                <Form.Label htmlFor="lastName">
+                  {tCommon('lastName')}
+                </Form.Label>
                 <Form.Control
+                  id="lastName"
                   type="text"
                   name="lastName"
                   value={formData.lastName}
@@ -99,40 +131,43 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
                 />
               </Form.Group>
             </div>
-            <div className="d-flex justify-content-between">
-              <Form.Group className="mb-3">
-                <Form.Label>Phone no.</Form.Label>
-                <Form.Control
-                  type="tel"
-                  name="phoneNo"
-                  value={formData.phoneNo}
-                  onChange={handleChange}
-                  placeholder="1234567890"
-                />
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Email</Form.Label>
-                <Form.Control
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="abc@gmail.com"
-                />
-              </Form.Group>
-            </div>
             <Form.Group className="mb-3">
-              <Form.Label>Gender</Form.Label>
+              <Form.Label htmlFor="phoneNo">{t('phoneNumber')}</Form.Label>
               <Form.Control
+                id="phoneNo"
+                type="tel"
+                name="phoneNo"
+                value={formData.phoneNo}
+                onChange={handleChange}
+                placeholder="1234567890"
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label htmlFor="email">{tCommon('email')}</Form.Label>
+              <Form.Control
+                id="email"
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="abc@gmail.com"
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label htmlFor="gender">{tCommon('gender')}</Form.Label>
+              <Form.Control
+                id="gender"
                 as="select"
                 name="gender"
                 value={formData.gender}
                 onChange={handleChange}
               >
-                <option value="">Select Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
+                <option value="">{t('selectGender')}</option>
+                <option value="Male">{t('male')}</option>
+                <option value="Female">{t('female')}</option>
+                <option value="Other">{t('other')}</option>
               </Form.Control>
             </Form.Group>
             <br />
@@ -152,7 +187,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
                     aria-hidden="true"
                     className="me-2"
                   />
-                  Adding...
+                  {t('addingAttendee')}
                 </>
               ) : (
                 'Add'
@@ -161,7 +196,6 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
           </Form>
         </Modal.Body>
       </Modal>
-      <ToastContainer position="top-right" autoClose={3000} />
     </>
   );
 };
