@@ -27,3 +27,9 @@
   justify-content: center;
   align-items: center;
 }
+
+.rankings {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  width: 35px;
+}

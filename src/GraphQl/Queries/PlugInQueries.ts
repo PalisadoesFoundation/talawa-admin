@@ -99,6 +99,53 @@ export const ORGANIZATION_EVENTS_CONNECTION = gql`
   }
 `;
 
+export const USER_EVENTS_VOLUNTEER = gql`
+  query UserEventsVolunteer(
+    $organization_id: ID!
+    $title_contains: String
+    $location_contains: String
+    $first: Int
+    $skip: Int
+    $upcomingOnly: Boolean
+  ) {
+    eventsByOrganizationConnection(
+      where: {
+        organization_id: $organization_id
+        title_contains: $title_contains
+        location_contains: $location_contains
+      }
+      first: $first
+      skip: $skip
+      upcomingOnly: $upcomingOnly
+    ) {
+      _id
+      title
+      startDate
+      endDate
+      location
+      startTime
+      endTime
+      allDay
+      recurring
+      volunteerGroups {
+        _id
+        name
+        volunteersRequired
+        description
+        volunteers {
+          _id
+        }
+      }
+      volunteers {
+        _id
+        user {
+          _id
+        }
+      }
+    }
+  }
+`;
+
 /**
  * GraphQL query to retrieve a list of chats based on user ID.
  *
