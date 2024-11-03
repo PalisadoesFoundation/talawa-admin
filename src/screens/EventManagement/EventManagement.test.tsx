@@ -64,7 +64,7 @@ describe('Event Management', () => {
   test('Testing Event Management Screen', async () => {
     renderEventManagement();
 
-    const dashboardTab = await screen.findByTestId('eventDashboadTab');
+    const dashboardTab = await screen.findByTestId('eventDashboardTab');
     expect(dashboardTab).toBeInTheDocument();
 
     const dashboardButton = screen.getByTestId('dashboardBtn');
@@ -72,6 +72,7 @@ describe('Event Management', () => {
 
     expect(dashboardTab).toBeInTheDocument();
   });
+
   test('Testing back button navigation when userType is SuperAdmin', async () => {
     setItem('SuperAdmin', true);
     renderEventManagement();
@@ -93,22 +94,28 @@ describe('Event Management', () => {
     const registrantsTab = screen.getByTestId('eventRegistrantsTab');
     expect(registrantsTab).toBeInTheDocument();
 
-    const eventActionsButton = screen.getByTestId('eventActionsBtn');
+    const eventActionsButton = screen.getByTestId('actionsBtn');
     userEvent.click(eventActionsButton);
 
     const eventActionsTab = screen.getByTestId('eventActionsTab');
     expect(eventActionsTab).toBeInTheDocument();
 
-    const eventAgendasButton = screen.getByTestId('eventAgendasBtn');
+    const eventAgendasButton = screen.getByTestId('agendasBtn');
     userEvent.click(eventAgendasButton);
 
     const eventAgendasTab = screen.getByTestId('eventAgendasTab');
     expect(eventAgendasTab).toBeInTheDocument();
 
-    const eventStatsButton = screen.getByTestId('eventStatsBtn');
+    const eventStatsButton = screen.getByTestId('statisticsBtn');
     userEvent.click(eventStatsButton);
 
     const eventStatsTab = screen.getByTestId('eventStatsTab');
     expect(eventStatsTab).toBeInTheDocument();
+
+    const volunteerButton = screen.getByTestId('volunteersBtn');
+    userEvent.click(volunteerButton);
+
+    const eventVolunteersTab = screen.getByTestId('eventVolunteersTab');
+    expect(eventVolunteersTab).toBeInTheDocument();
   });
 });
