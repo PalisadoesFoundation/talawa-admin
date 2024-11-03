@@ -26,6 +26,7 @@ let props = {
   title: 'Disha Talreja',
   subtitle: 'disha@example.com',
   email: 'noble@mittal.com',
+  isGroup: false,
   image: '',
   selectedContact: '',
   type: '',
@@ -95,6 +96,7 @@ describe('Testing ContactCard Component [User Portal]', () => {
     props = {
       ...props,
       selectedContact: '1',
+      isGroup: true,
     };
     render(
       <MockedProvider addTypename={false} link={link}>

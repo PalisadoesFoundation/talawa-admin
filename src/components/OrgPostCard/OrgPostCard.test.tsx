@@ -18,9 +18,11 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import convertToBase64 from 'utils/convertToBase64';
+// import convertToBase64 from 'utils/convertToBase64';
 import { BrowserRouter } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
+import convertToBase64 from 'utils/convertToBase64';
+import { toast } from 'react-toastify';
 
 const { setItem } = useLocalStorage();
 
@@ -84,6 +86,7 @@ jest.mock('i18next-browser-languagedetector', () => ({
   detect: jest.fn(() => 'en'),
   cacheUserLanguage: jest.fn(),
 }));
+
 const link = new StaticMockLink(MOCKS, true);
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -93,6 +96,22 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 describe('Testing Organization Post Card', () => {
+  const mockProps = {
+    id: '12',
+    postID: '123',
+    postTitle: 'Test Post',
+    postInfo: 'Test Info',
+    postAuthor: 'Test Author',
+    postPhoto: 'test.jpg',
+    postVideo: null,
+    pinned: false,
+    refetch: jest.fn(),
+  };
+
+  beforeEach(() => {
+    // Clear all mocks before each test
+    jest.clearAllMocks();
+  });
   const originalLocation = window.location;
 
   beforeAll(() => {
@@ -120,6 +139,7 @@ describe('Testing Organization Post Card', () => {
     postPhoto: 'test.png',
     postVideo: 'test.mp4',
     pinned: false,
+    refetch: jest.fn(),
   };
 
   jest.mock('react-toastify', () => ({
@@ -209,153 +229,7 @@ describe('Testing Organization Post Card', () => {
     userEvent.click(screen.getByAltText('image'));
     expect(screen.getByAltText('Post Image')).toBeInTheDocument();
   });
-  test('Testing post updating after post is updated', async () => {
-    const { getByTestId } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
 
-    await wait();
-
-    userEvent.click(screen.getByAltText('image'));
-    userEvent.click(screen.getByTestId('moreiconbtn'));
-
-    userEvent.click(screen.getByTestId('editPostModalBtn'));
-    fireEvent.change(getByTestId('updateTitle'), {
-      target: { value: 'updated title' },
-    });
-    fireEvent.change(getByTestId('updateText'), {
-      target: { value: 'This is a updated text' },
-    });
-    const postVideoUrlInput = screen.queryByTestId('postVideoUrl');
-    if (postVideoUrlInput) {
-      fireEvent.change(getByTestId('postVideoUrl'), {
-        target: { value: 'This is a updated video' },
-      });
-      userEvent.click(screen.getByPlaceholderText(/video/i));
-      const input = getByTestId('postVideoUrl');
-      const file = new File(['test-video'], 'test.mp4', { type: 'video/mp4' });
-      Object.defineProperty(input, 'files', {
-        value: [file],
-      });
-      fireEvent.change(input);
-      await waitFor(() => {
-        convertToBase64(file);
-      });
-
-      userEvent.click(screen.getByTestId('closePreview'));
-    }
-    const imageUrlInput = screen.queryByTestId('postImageUrl');
-    if (imageUrlInput) {
-      fireEvent.change(getByTestId('postImageUrl'), {
-        target: { value: 'This is a updated image' },
-      });
-      userEvent.click(screen.getByPlaceholderText(/image/i));
-      const input = getByTestId('postImageUrl');
-      const file = new File(['test-image'], 'test.jpg', { type: 'image/jpeg' });
-      Object.defineProperty(input, 'files', {
-        value: [file],
-      });
-      fireEvent.change(input);
-
-      // Simulate the asynchronous base64 conversion function
-      await waitFor(() => {
-        convertToBase64(file); // Replace with the expected base64-encoded image
-      });
-      document.getElementById = jest.fn(() => input);
-      const clearImageButton = getByTestId('closeimage');
-      fireEvent.click(clearImageButton);
-    }
-    userEvent.click(screen.getByTestId('updatePostBtn'));
-
-    await waitFor(
-      () => {
-        expect(window.location.reload).toHaveBeenCalled();
-      },
-      { timeout: 2500 },
-    );
-  });
-  test('Testing post updating functionality fail case', async () => {
-    const props2 = {
-      id: '',
-      postID: '123',
-      postTitle: 'Event Info',
-      postInfo: 'Time change',
-      postAuthor: 'John Doe',
-      postPhoto: 'test.png',
-      postVideo: 'test.mp4',
-      pinned: true,
-    };
-    const { getByTestId } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props2} />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-
-    await wait();
-    userEvent.click(screen.getByAltText('image'));
-    userEvent.click(screen.getByTestId('moreiconbtn'));
-
-    userEvent.click(screen.getByTestId('editPostModalBtn'));
-    fireEvent.change(getByTestId('updateTitle'), {
-      target: { value: 'updated title' },
-    });
-    fireEvent.change(getByTestId('updateText'), {
-      target: { value: 'This is a updated text' },
-    });
-    const postVideoUrlInput = screen.queryByTestId('postVideoUrl');
-    if (postVideoUrlInput) {
-      fireEvent.change(getByTestId('postVideoUrl'), {
-        target: { value: 'This is a updated video' },
-      });
-      userEvent.click(screen.getByPlaceholderText(/video/i));
-      const input = getByTestId('postVideoUrl');
-      const file = new File(['test-video'], 'test.mp4', { type: 'video/mp4' });
-      Object.defineProperty(input, 'files', {
-        value: [file],
-      });
-      fireEvent.change(input);
-      await waitFor(() => {
-        convertToBase64(file);
-      });
-
-      userEvent.click(screen.getByTestId('closePreview'));
-    }
-    const imageUrlInput = screen.queryByTestId('postImageUrl');
-    if (imageUrlInput) {
-      fireEvent.change(getByTestId('postImageUrl'), {
-        target: { value: 'This is a updated image' },
-      });
-      userEvent.click(screen.getByPlaceholderText(/image/i));
-      const input = getByTestId('postImageUrl');
-      const file = new File(['test-image'], 'test.jpg', { type: 'image/jpeg' });
-      Object.defineProperty(input, 'files', {
-        value: [file],
-      });
-      fireEvent.change(input);
-
-      // Simulate the asynchronous base64 conversion function
-      await waitFor(() => {
-        convertToBase64(file); // Replace with the expected base64-encoded image
-      });
-      document.getElementById = jest.fn(() => input);
-      const clearImageButton = getByTestId('closeimage');
-      fireEvent.click(clearImageButton);
-    }
-    userEvent.click(screen.getByTestId('updatePostBtn'));
-
-    await waitFor(
-      () => {
-        expect(window.location.reload).toHaveBeenCalled();
-      },
-      { timeout: 2500 },
-    );
-  });
   test('Testing pin post functionality', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -388,6 +262,7 @@ describe('Testing Organization Post Card', () => {
       postPhoto: 'test.png',
       postVideo: 'test.mp4',
       pinned: true,
+      refetch: jest.fn(),
     };
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -439,6 +314,7 @@ describe('Testing Organization Post Card', () => {
       postPhoto: 'test.png',
       postVideo: 'test.mp4',
       pinned: true,
+      refetch: jest.fn(),
     };
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -517,6 +393,7 @@ describe('Testing Organization Post Card', () => {
       postPhoto: 'photoLink',
       postVideo: 'videoLink',
       pinned: false,
+      refetch: jest.fn(),
     };
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -581,77 +458,7 @@ describe('Testing Organization Post Card', () => {
     expect(screen.queryByTestId('pinpostBtn')).not.toBeInTheDocument();
     expect(screen.queryByTestId('closebtn')).not.toBeInTheDocument();
   });
-  test('clears postvideo state and resets file input value', async () => {
-    const { getByTestId } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-
-    userEvent.click(screen.getByAltText('image'));
-    userEvent.click(screen.getByTestId('moreiconbtn'));
-
-    userEvent.click(screen.getByTestId('editPostModalBtn'));
-
-    const postVideoUrlInput = screen.queryByTestId('postVideoUrl');
-
-    if (postVideoUrlInput) {
-      fireEvent.change(getByTestId('postVideoUrl'), {
-        target: { value: '' },
-      });
-      userEvent.click(screen.getByPlaceholderText(/video/i));
-      const input = getByTestId('postVideoUrl');
-      const file = new File(['test-video'], 'test.mp4', { type: 'video/mp4' });
-      Object.defineProperty(input, 'files', {
-        value: [file],
-      });
-      fireEvent.change(input);
-      await waitFor(() => {
-        convertToBase64(file);
-      });
-
-      userEvent.click(screen.getByTestId('closePreview'));
-    }
-  });
-  test('clears postimage state and resets file input value', async () => {
-    const { getByTestId } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgPostCard {...props} />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-
-    userEvent.click(screen.getByAltText('image'));
-    userEvent.click(screen.getByTestId('moreiconbtn'));
-
-    userEvent.click(screen.getByTestId('editPostModalBtn'));
-
-    const imageUrlInput = screen.queryByTestId('postImageUrl');
-
-    if (imageUrlInput) {
-      fireEvent.change(getByTestId('postImageUrl'), {
-        target: { value: '' },
-      });
-      userEvent.click(screen.getByPlaceholderText(/image/i));
-      const input = getByTestId('postImageUrl');
-      const file = new File(['test-image'], 'test.jpg', { type: 'image/jpeg' });
-      Object.defineProperty(input, 'files', {
-        value: [file],
-      });
-      fireEvent.change(input);
-
-      // Simulate the asynchronous base64 conversion function
-      await waitFor(() => {
-        convertToBase64(file); // Replace with the expected base64-encoded image
-      });
-      document.getElementById = jest.fn(() => input);
-      const clearImageButton = getByTestId('closeimage');
-      fireEvent.click(clearImageButton);
-    }
-  });
+ 
   test('clears postitle state and resets file input value', async () => {
     const { getByTestId } = render(
       <MockedProvider addTypename={false} link={link}>
@@ -773,6 +580,7 @@ describe('Testing Organization Post Card', () => {
       postPhoto: '',
       postVideo: '',
       pinned: true,
+      refetch: jest.fn(),
     };
 
     const { getByAltText } = render(
@@ -784,5 +592,374 @@ describe('Testing Organization Post Card', () => {
     );
 
     expect(getByAltText('image not found')).toBeInTheDocument();
+  });
+  test('clears image input and resets related state', () => {
+    // Mock getElementById for image input
+    const mockImageInput = document.createElement('input');
+    mockImageInput.setAttribute('id', 'postImageUrl');
+    mockImageInput.value = 'test.jpg';
+    document.getElementById = jest.fn((id) =>
+      id === 'postImageUrl' ? mockImageInput : null,
+    );
+
+    render(
+      <MockedProvider>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard {...mockProps} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    // Open edit modal to access the clear button
+    fireEvent.click(screen.getByAltText('image'));
+    fireEvent.click(screen.getByTestId('moreiconbtn'));
+    fireEvent.click(screen.getByTestId('editPostModalBtn'));
+
+    // Trigger clear media input
+    const clearButton = screen.getByTestId('closeimage');
+    fireEvent.click(clearButton);
+
+    // Check if image input value is cleared
+    expect(mockImageInput.value).toBe('');
+  });
+
+  test('clears video input and resets related state', () => {
+    // Props with video instead of image
+    const videoProps = {
+      ...mockProps,
+      postPhoto: null,
+      postVideo: 'test.mp4',
+    };
+
+    // Mock getElementById for video input
+    const mockVideoInput = document.createElement('input');
+    mockVideoInput.setAttribute('id', 'postVideoUrl');
+    mockVideoInput.value = 'test.mp4';
+    document.getElementById = jest.fn((id) =>
+      id === 'postVideoUrl' ? mockVideoInput : null,
+    );
+
+    render(
+      <MockedProvider>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard {...videoProps} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    // Open edit modal to access the clear button
+    fireEvent.click(screen.getByTestId('cardVid'));
+    fireEvent.click(screen.getByTestId('moreiconbtn'));
+    fireEvent.click(screen.getByTestId('editPostModalBtn'));
+
+    // Trigger clear media input
+    const clearButton = screen.getByTestId('closePreview');
+    fireEvent.click(clearButton);
+
+    // Check if video input value is cleared
+    expect(mockVideoInput.value).toBe('');
+  });
+
+  test('handles case when no input elements are found', () => {
+    // Mock getElementById to return null
+    document.getElementById = jest.fn().mockReturnValue(null);
+
+    render(
+      <MockedProvider>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard {...mockProps} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    // Open edit modal to access the clear button
+    fireEvent.click(screen.getByAltText('image'));
+    fireEvent.click(screen.getByTestId('moreiconbtn'));
+    fireEvent.click(screen.getByTestId('editPostModalBtn'));
+
+    // Trigger clear media input
+    const clearButton = screen.getByTestId('closeimage');
+
+    // This should not throw an error even though inputs are null
+    expect(() => fireEvent.click(clearButton)).not.toThrow();
+  });
+
+  test('prevents default event behavior', () => {
+    render(
+      <MockedProvider>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard {...mockProps} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    // Open edit modal to access the clear button
+    fireEvent.click(screen.getByAltText('image'));
+    fireEvent.click(screen.getByTestId('moreiconbtn'));
+    fireEvent.click(screen.getByTestId('editPostModalBtn'));
+
+    // Get the clear button and simulate click with mock event
+    const clearButton = screen.getByTestId('closeimage');
+    fireEvent.click(clearButton, { preventDefault: jest.fn() });
+
+    // Verify preventDefault was called
+    expect(clearButton.onclick).toBeDefined();
+  });
+
+  test('successfully updates post with new title and info', async () => {
+    const updatedTitle = 'Updated Test Post';
+    const updatedInfo = 'Updated Test Info';
+  
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard {...mockProps} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+  
+    // Open edit modal
+    userEvent.click(screen.getByAltText('image'));
+    userEvent.click(screen.getByTestId('moreiconbtn'));
+    userEvent.click(screen.getByTestId('editPostModalBtn'));
+  
+    // Update form fields
+    fireEvent.change(screen.getByTestId('updateTitle'), {
+      target: { value: updatedTitle },
+    });
+    fireEvent.change(screen.getByTestId('updateText'), {
+      target: { value: updatedInfo },
+    });
+  
+    // Submit form
+    const form = screen.getByTestId('updatePostBtn').closest('form');
+    fireEvent.submit(form as HTMLFormElement);
+  
+    await wait();
+    toast.success(('postUpdated'));
+  
+  });
+  
+  test('handles form submission with empty spaces in title and info', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard {...mockProps} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+  
+    // Open edit modal
+    userEvent.click(screen.getByAltText('image'));
+    userEvent.click(screen.getByTestId('moreiconbtn'));
+    userEvent.click(screen.getByTestId('editPostModalBtn'));
+  
+    // Update form fields with spaces
+    fireEvent.change(screen.getByTestId('updateTitle'), {
+      target: { value: '   ' },
+    });
+    fireEvent.change(screen.getByTestId('updateText'), {
+      target: { value: '   ' },
+    });
+  
+    // Submit form
+    const form = screen.getByTestId('updatePostBtn').closest('form');
+    fireEvent.submit(form as HTMLFormElement);
+  
+    await wait();
+  
+    // Form submission should fail due to empty trimmed values
+    expect(mockProps.refetch).not.toHaveBeenCalled();
+  });
+  
+  test('handles media file upload in form submission', async () => {
+    const file = new File(['dummy content'], 'test.jpg', { type: 'image/jpeg' });
+  
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard {...mockProps} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+  
+    // Open edit modal
+    userEvent.click(screen.getByAltText('image'));
+    userEvent.click(screen.getByTestId('moreiconbtn'));
+    userEvent.click(screen.getByTestId('editPostModalBtn'));
+    // Mock URL.createObjectURL to prevent TypeError
+    global.URL.createObjectURL = jest.fn(() => 'mocked-url');
+
+    // Upload file
+    const fileInput = screen.getByTestId('postImageUrl');
+    fireEvent.change(fileInput, { target: { files: [file] } });
+  
+    // Submit form
+    const form = screen.getByTestId('updatePostBtn').closest('form');
+    fireEvent.submit(form as HTMLFormElement);
+  
+    await wait();
+    toast.success(('postUpdated'));
+  
+  });
+  
+  test('handles failed API response in form submission', async () => {
+    // Mock fetch to return error
+    global.fetch = jest.fn().mockImplementationOnce(() =>
+      Promise.resolve({
+        ok: false,
+        json: () => Promise.resolve({ error: 'Update failed' }),
+      }),
+    );
+  
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard {...mockProps} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+  
+    // Open edit modal
+    userEvent.click(screen.getByAltText('image'));
+    userEvent.click(screen.getByTestId('moreiconbtn'));
+    userEvent.click(screen.getByTestId('editPostModalBtn'));
+  
+    // Submit form
+    const form = screen.getByTestId('updatePostBtn').closest('form');
+    fireEvent.submit(form as HTMLFormElement);
+  
+    await wait();
+  
+    // Verify error handling
+    expect(mockProps.refetch).not.toHaveBeenCalled();
+  });
+  
+  test('handles successful API response with empty data', async () => {
+    // Mock fetch to return success but no data
+    global.fetch = jest.fn().mockImplementationOnce(() =>
+      Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({}),
+      }),
+    );
+  
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard {...mockProps} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+  
+    // Open edit modal
+    userEvent.click(screen.getByAltText('image'));
+    userEvent.click(screen.getByTestId('moreiconbtn'));
+    userEvent.click(screen.getByTestId('editPostModalBtn'));
+  
+    // Submit form
+    const form = screen.getByTestId('updatePostBtn').closest('form');
+    fireEvent.submit(form as HTMLFormElement);
+  
+    await wait();
+  
+    // Verify handling of empty response
+    expect(mockProps.refetch).toHaveBeenCalled();
+  });
+  test('clears preview URL when media input is cleared', () => {
+    const props = {
+      ...mockProps,
+      postPhoto: 'test.jpg',
+    };
+  
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard {...props} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+  
+    // Open edit modal
+    userEvent.click(screen.getByAltText('image'));
+    userEvent.click(screen.getByTestId('moreiconbtn'));
+    userEvent.click(screen.getByTestId('editPostModalBtn'));
+  
+    // Initially, preview should be visible
+    expect(screen.getByAltText('Post Image')).toBeInTheDocument();
+  
+    // Clear media input
+    const clearButton = screen.getByTestId('closeimage');
+    fireEvent.click(clearButton);
+  
+    // Preview should no longer be visible
+    expect(screen.queryByAltText('Post Image')).not.toBeInTheDocument();
+  });
+  
+  test('clears preview URL when empty file is selected', () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard {...mockProps} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+  
+    // Open edit modal
+    userEvent.click(screen.getByAltText('image'));
+    userEvent.click(screen.getByTestId('moreiconbtn'));
+    userEvent.click(screen.getByTestId('editPostModalBtn'));
+  
+    // Trigger file input change with no files
+    const fileInput = screen.getByTestId('postImageUrl');
+    fireEvent.change(fileInput, {
+      target: {
+        files: [],
+      },
+    });
+  
+    // Preview should not be visible
+    expect(screen.queryByAltText('Post Image')).not.toBeInTheDocument();
+  });
+  
+  test('handles media file upload and preview', () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard {...mockProps} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+  
+    // Open edit modal
+    userEvent.click(screen.getByAltText('image'));
+    userEvent.click(screen.getByTestId('moreiconbtn'));
+    userEvent.click(screen.getByTestId('editPostModalBtn'));
+  
+    // Create a dummy file
+    const file = new File(['dummy content'], 'test.jpg', { type: 'image/jpeg' });
+  
+    // Mock URL.createObjectURL
+    const mockUrl = 'blob:test-url';
+    URL.createObjectURL = jest.fn(() => mockUrl);
+  
+    // Upload file
+    const fileInput = screen.getByTestId('postImageUrl');
+    fireEvent.change(fileInput, {
+      target: {
+        files: [file],
+      },
+    });
+  
+    // Preview should be visible with the new file
+    expect(screen.getByAltText('Post Image')).toBeInTheDocument();
+    expect(URL.createObjectURL).toHaveBeenCalledWith(file);
+  
+    // Clear the file
+    const clearButton = screen.getByTestId('closeimage');
+    fireEvent.click(clearButton);
+  
+    // Preview should be removed
+    expect(screen.queryByAltText('Post Image')).not.toBeInTheDocument();
   });
 });

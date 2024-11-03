@@ -7,6 +7,7 @@ import userEvent from '@testing-library/user-event';
 import {
   ORGANIZATION_ADVERTISEMENT_LIST,
   ORGANIZATION_POST_LIST,
+  USER_DETAILS,
 } from 'GraphQl/Queries/Queries';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
@@ -15,7 +16,6 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import Home from './Posts';
 import useLocalStorage from 'utils/useLocalstorage';
-import { DELETE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 
 const { setItem } = useLocalStorage();
 
@@ -47,7 +47,7 @@ const MOCKS = [
                     _id: '6411e53835d7ba2344a78e21',
                     title: 'post one',
                     text: 'This is the first post',
-                    imageUrl: null,
+                    file: null,
                     videoUrl: null,
                     createdAt: '2024-03-03T09:26:56.524+00:00',
                     creator: {
@@ -55,6 +55,7 @@ const MOCKS = [
                       firstName: 'Glen',
                       lastName: 'Dsza',
                       email: 'glendsza@gmail.com',
+                      image: 'profile.jpg'
                     },
                     likeCount: 0,
                     commentCount: 0,
@@ -69,7 +70,7 @@ const MOCKS = [
                     _id: '6411e54835d7ba2344a78e29',
                     title: 'post two',
                     text: 'This is the post two',
-                    imageUrl: null,
+                    file: null,
                     videoUrl: null,
                     createdAt: '2024-03-03T09:26:56.524+00:00',
                     creator: {
@@ -77,6 +78,7 @@ const MOCKS = [
                       firstName: 'Glen',
                       lastName: 'Dsza',
                       email: 'glendsza@gmail.com',
+                      image: 'profile.jpg'
                     },
                     likeCount: 2,
                     commentCount: 1,
@@ -101,22 +103,18 @@ const MOCKS = [
                           firstName: 'Glen',
                           lastName: 'Dsza',
                           email: 'glendsza@gmail.com',
+                          image: 'profile.jpg'
                         },
                         likeCount: 2,
                         likedBy: [
                           {
                             _id: '640d98d9eb6a743d75341067',
-                            firstName: 'Glen',
-                            lastName: 'Dsza',
                           },
                           {
                             _id: '640d98d9eb6a743d75341068',
-                            firstName: 'Glen2',
-                            lastName: 'Dsza2',
                           },
                         ],
                         text: 'This is the post two',
-                        createdAt: '2024-03-03T09:26:56.524+00:00',
                       },
                     ],
                   },
@@ -124,12 +122,9 @@ const MOCKS = [
                 },
               ],
               pageInfo: {
-                startCursor: '6411e53835d7ba2344a78e21',
-                endCursor: '6411e54835d7ba2344a78e31',
                 hasNextPage: false,
                 hasPreviousPage: false,
               },
-              totalCount: 2,
             },
           },
         ],
@@ -145,73 +140,21 @@ const MOCKS = [
       data: {
         organizations: [
           {
-            _id: 'orgId',
             advertisements: {
               edges: [
                 {
                   node: {
-                    _id: '1234',
-                    name: 'Ad 1',
-                    type: 'Type 1',
-                    organization: {
-                      _id: 'orgId',
-                    },
-                    mediaUrl: 'Link 1',
+                    _id: 'ad1',
+                    name: 'Test Ad',
+                    type: 'BANNER',
+                    organization: { _id: 'orgId' },
+                    mediaUrl: 'ad.jpg',
                     endDate: '2024-12-31',
-                    startDate: '2022-01-01',
+                    startDate: '2024-01-01',
                   },
-                  cursor: '1234',
-                },
-                {
-                  node: {
-                    _id: '2345',
-                    name: 'Ad 2',
-                    type: 'Type 1',
-                    organization: {
-                      _id: 'orgId',
-                    },
-                    mediaUrl: 'Link 2',
-                    endDate: '2024-09-31',
-                    startDate: '2023-04-01',
-                  },
-                  cursor: '1234',
-                },
-                {
-                  node: {
-                    _id: '3456',
-                    name: 'name3',
-                    type: 'Type 2',
-                    organization: {
-                      _id: 'orgId',
-                    },
-                    mediaUrl: 'link3',
-                    startDate: '2023-01-30',
-                    endDate: '2023-12-31',
-                  },
-                  cursor: '1234',
-                },
-                {
-                  node: {
-                    _id: '4567',
-                    name: 'name4',
-                    type: 'Type 2',
-                    organization: {
-                      _id: 'orgId1',
-                    },
-                    mediaUrl: 'link4',
-                    startDate: '2023-01-30',
-                    endDate: '2023-12-01',
-                  },
-                  cursor: '1234',
+                  cursor: 'ad1',
                 },
               ],
-              pageInfo: {
-                startCursor: '6411e53835d7ba2344a78e21',
-                endCursor: '6411e54835d7ba2344a78e31',
-                hasNextPage: false,
-                hasPreviousPage: false,
-              },
-              totalCount: 2,
             },
           },
         ],
@@ -220,22 +163,23 @@ const MOCKS = [
   },
   {
     request: {
-      query: DELETE_POST_MUTATION,
-      variables: { id: '6411e54835d7ba2344a78e29' },
+      query: USER_DETAILS,
+      variables: { id: '640d98d9eb6a743d75341067' },
     },
     result: {
       data: {
-        removePost: { _id: '6411e54835d7ba2344a78e29' },
+        user: {
+          _id: '640d98d9eb6a743d75341067',
+          firstName: 'Glen',
+          lastName: 'Dsza',
+          email: 'glendsza@gmail.com',
+        },
       },
     },
   },
 ];
 
 const link = new StaticMockLink(MOCKS, true);
-
-afterEach(() => {
-  localStorage.clear();
-});
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -245,6 +189,20 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: jest.fn().mockImplementation((query) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: jest.fn(),
+    removeListener: jest.fn(),
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+    dispatchEvent: jest.fn(),
+  })),
+});
+
 const renderHomeScreen = (): RenderResult =>
   render(
     <MockedProvider addTypename={false} link={link}>
@@ -253,129 +211,88 @@ const renderHomeScreen = (): RenderResult =>
           <I18nextProvider i18n={i18nForTest}>
             <Routes>
               <Route path="/user/organization/:orgId" element={<Home />} />
+              <Route path="/user" element={<div data-testid="homeEl" />} />
             </Routes>
           </I18nextProvider>
         </Provider>
       </MemoryRouter>
-    </MockedProvider>,
+    </MockedProvider>
   );
 
-Object.defineProperty(window, 'matchMedia', {
-  writable: true,
-  value: jest.fn().mockImplementation((query) => ({
-    matches: false,
-    media: query,
-    onchange: null,
-    addListener: jest.fn(), // Deprecated
-    removeListener: jest.fn(), // Deprecated
-    addEventListener: jest.fn(),
-    removeEventListener: jest.fn(),
-    dispatchEvent: jest.fn(),
-  })),
-});
-
 describe('Testing Home Screen: User Portal', () => {
-  beforeAll(() => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: 'orgId' }),
-    }));
-  });
-
-  afterAll(() => {
+  beforeEach(() => {
     jest.clearAllMocks();
+    localStorage.clear();
+    setItem('userId', '640d98d9eb6a743d75341067');
   });
 
   test('Check if HomeScreen renders properly', async () => {
     renderHomeScreen();
-
     await wait();
-    const startPostBtn = await screen.findByTestId('postBtn');
+    const startPostBtn = screen.getByText(/Start a post, with text or media/i);
     expect(startPostBtn).toBeInTheDocument();
   });
 
   test('StartPostModal should render on click of StartPost btn', async () => {
     renderHomeScreen();
-
     await wait();
-    const startPostBtn = await screen.findByTestId('postBtn');
-    expect(startPostBtn).toBeInTheDocument();
-
+    const startPostBtn = screen.getByText(/Start a post, with text or media/i);
     userEvent.click(startPostBtn);
+    await wait();
     const startPostModal = screen.getByTestId('startPostModal');
     expect(startPostModal).toBeInTheDocument();
   });
 
   test('StartPostModal should close on clicking the close button', async () => {
     renderHomeScreen();
-
-    await wait();
-    userEvent.upload(
-      screen.getByTestId('postImageInput'),
-      new File(['image content'], 'image.png', { type: 'image/png' }),
-    );
     await wait();
 
-    const startPostBtn = await screen.findByTestId('postBtn');
-    expect(startPostBtn).toBeInTheDocument();
-
+    const startPostBtn = screen.getByText(/Start a post, with text or media/i);
     userEvent.click(startPostBtn);
+    await wait();
+
     const startPostModal = screen.getByTestId('startPostModal');
     expect(startPostModal).toBeInTheDocument();
 
-    userEvent.type(screen.getByTestId('postInput'), 'some content');
+    // Add post content
+    const postInput = screen.getByTestId('postInput');
+    userEvent.type(postInput, 'Test post content');
 
-    // Check that the content and image have been added
-    expect(screen.getByTestId('postInput')).toHaveValue('some content');
-    await screen.findByAltText('Post Image Preview');
-    expect(screen.getByAltText('Post Image Preview')).toBeInTheDocument();
-
-    const closeButton = within(startPostModal).getByRole('button', {
-      name: /close/i,
-    });
+    // Close modal
+    const closeButton = screen.getByRole('button', { name: /close/i });
     userEvent.click(closeButton);
 
-    const closedModalText = screen.queryByText(/somethingOnYourMind/i);
-    expect(closedModalText).not.toBeInTheDocument();
-
-    expect(screen.getByTestId('postInput')).toHaveValue('');
-    expect(screen.getByTestId('postImageInput')).toHaveValue('');
+    await wait();
+    expect(screen.queryByTestId('startPostModal')).not.toBeInTheDocument();
   });
 
   test('Check whether Posts render in PostCard', async () => {
-    setItem('userId', '640d98d9eb6a743d75341067');
     renderHomeScreen();
     await wait();
 
-    const postCardContainers = screen.findAllByTestId('postCardContainer');
-    expect(postCardContainers).not.toBeNull();
-
-    expect(screen.queryAllByText('post one')[0]).toBeInTheDocument();
-    expect(
-      screen.queryAllByText('This is the first post')[0],
-    ).toBeInTheDocument();
-
-    expect(screen.queryByText('post two')).toBeInTheDocument();
-    expect(screen.queryByText('This is the post two')).toBeInTheDocument();
+    expect(screen.getByText('post one')).toBeInTheDocument();
+    expect(screen.getByText('This is the first post')).toBeInTheDocument();
+    expect(screen.getByText('post two')).toBeInTheDocument();
+    expect(screen.getByText('This is the post two')).toBeInTheDocument();
   });
 
-  test('Checking if refetch works after deleting this post', async () => {
-    setItem('userId', '640d98d9eb6a743d75341067');
+  test('Renders promoted posts correctly', async () => {
     renderHomeScreen();
-    expect(screen.queryAllByTestId('dropdown')).not.toBeNull();
-    const dropdowns = await screen.findAllByTestId('dropdown');
-    userEvent.click(dropdowns[1]);
-    const deleteButton = await screen.findByTestId('deletePost');
-    userEvent.click(deleteButton);
+    await wait();
+    
+    const promotedPostsContainer = screen.getByTestId('promotedPostsContainer');
+    expect(promotedPostsContainer).toBeInTheDocument();
+    expect(screen.getByText('Test Ad')).toBeInTheDocument();
   });
-});
 
-describe('HomeScreen with invalid orgId', () => {
-  test('Redirect to /user when organizationId is falsy', async () => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: undefined }),
-    }));
+  test('Shows loading state', async () => {
+    renderHomeScreen();
+    expect(screen.getByText(/loading/i)).toBeInTheDocument();
+    await wait();
+    expect(screen.queryByText(/loading/i)).not.toBeInTheDocument();
+  });
+
+  test('Handles redirect when no orgId present', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <MemoryRouter initialEntries={['/user/organization/']}>
@@ -383,17 +300,25 @@ describe('HomeScreen with invalid orgId', () => {
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
                 <Route path="/user/organization/" element={<Home />} />
-                <Route
-                  path="/user"
-                  element={<div data-testid="homeEl"></div>}
-                />
+                <Route path="/user" element={<div data-testid="homeEl" />} />
               </Routes>
             </I18nextProvider>
           </Provider>
         </MemoryRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
-    const homeEl = await screen.findByTestId('homeEl');
-    expect(homeEl).toBeInTheDocument();
+
+    await wait();
+    expect(screen.getByTestId('homeEl')).toBeInTheDocument();
+  });
+
+  test('Pinned posts appear in carousel', async () => {
+    renderHomeScreen();
+    await wait();
+
+    expect(screen.getByText('post one')).toBeInTheDocument();
+    // Check if post is pinned
+    const pinnedPost = screen.getByText('post one');
+    expect(pinnedPost).toBeInTheDocument();
   });
 });

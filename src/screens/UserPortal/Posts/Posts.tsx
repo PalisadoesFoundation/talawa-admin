@@ -111,7 +111,7 @@ type InterfacePostNode = {
     _id: string;
     fileName: string;
     mimeType: string;
-    size: Number;
+    size: number;
     hash: {
       value: string;
       algorithm: string;

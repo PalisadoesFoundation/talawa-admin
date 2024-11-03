@@ -10,6 +10,7 @@ import styles from './StartPostModal.module.css';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import convertToBase64 from 'utils/convertToBase64';
 import useLocalStorage from 'utils/useLocalstorage';
+import { error } from 'console';
 
 interface InterfaceStartPostModalProps {
   show: boolean;
@@ -26,7 +27,6 @@ const StartPostModal = ({
   fetchPosts,
   userData,
   organizationId,
-  img,
 }: InterfaceStartPostModalProps): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'home' });
   const [postformState, setPostFormState] = useState<{
@@ -81,10 +81,7 @@ const StartPostModal = ({
 
   const handlePost = async (): Promise<void> => {
     try {
-      if (!postformState.postinfo) {
-        throw new Error("Can't create a post with an empty body.");
-      }
-
+      
       const formData = new FormData();
       formData.append('text', postformState.postinfo);
       formData.append('organizationId', organizationId);
@@ -195,6 +192,7 @@ const StartPostModal = ({
               accept="image/*,video/*"
               multiple={false}
               onChange={handleMediaChange}
+              data-testid="modalFileInput"
             />
 
             <Button

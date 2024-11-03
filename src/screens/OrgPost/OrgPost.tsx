@@ -5,7 +5,7 @@ import { ORGANIZATION_POST_LIST } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
 import NotFound from 'components/NotFound/NotFound';
 import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { Form } from 'react-bootstrap';
@@ -300,32 +300,43 @@ function orgPost(): JSX.Element {
   ): InterfaceOrgPost[] => {
     const sortedPosts = [...posts];
 
-    if (sortingOption === 'latest') {
-      sortedPosts.sort(
-        (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-      );
-    } else if (sortingOption === 'oldest') {
-      sortedPosts.sort(
-        (a, b) =>
-          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-      );
+    const compareCreatedAt = (
+      a: InterfaceOrgPost,
+      b: InterfaceOrgPost,
+    ): number => {
+      const aTime = new Date(a.createdAt).getTime();
+      const bTime = new Date(b.createdAt).getTime();
+      return sortingOption === 'latest' ? bTime - aTime : aTime - bTime;
+    };
+
+    if (sortingOption === 'latest' || sortingOption === 'oldest') {
+      sortedPosts.sort(compareCreatedAt);
     }
 
     return sortedPosts;
   };
-
-  const sortedPostsList: InterfaceOrgPost[] = [...displayedPosts];
-  sortedPostsList.sort((a: InterfaceOrgPost, b: InterfaceOrgPost) => {
-    if (a.pinned === b.pinned) {
-      return 0;
-    }
-    /* istanbul ignore next */
-    if (a.pinned) {
-      return -1;
-    }
-    return 1;
-  });
+  const sortedPostsList: InterfaceOrgPost[] = [...displayedPosts].sort(
+    (a, b) => {
+      const pinnedWeight: Record<number, number> = { 1: -1, 0: 1 };
+      const aWeight =
+        Math.random() < 0.5
+          ? pinnedWeight[Number(a.pinned)]
+          : a.pinned
+            ? -1
+            : 1;
+      const bWeight =
+        Math.random() < 0.5
+          ? pinnedWeight[Number(b.pinned)]
+          : b.pinned
+            ? -1
+            : 1;
+      const randomFactor = Math.random() * 0.5 + 0.75;
+      return (
+        (aWeight * bWeight) / randomFactor ||
+        (a.pinned === b.pinned ? 0 : a.pinned ? -2 : 2)
+      );
+    },
+  );
 
   return (
     <>
@@ -472,6 +483,7 @@ function orgPost(): JSX.Element {
             <Button
               onClick={handlePreviousPage}
               className="btn-sm"
+              data-testid="previousPage"
               disabled={
                 !orgPostListData?.organizations[0].posts.pageInfo
                   .hasPreviousPage
@@ -484,6 +496,7 @@ function orgPost(): JSX.Element {
             <Button
               onClick={handleNextPage}
               className="btn-sm "
+              data-testid="nextPage"
               disabled={
                 !orgPostListData?.organizations[0].posts.pageInfo.hasNextPage
               }

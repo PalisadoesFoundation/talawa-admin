@@ -23,14 +23,21 @@ interface InterfaceOrgPostCardProps {
   postPhoto: string | null;
   postVideo: string | null;
   pinned: boolean;
-  refetch?: () => void;
+  refetch: () => void;
 }
 export default function OrgPostCard(
   props: InterfaceOrgPostCardProps,
 ): JSX.Element {
   const {
-    postID, // Destructure the key prop from props
-    // ...rest // Spread the rest of the props
+    postID,
+    id,
+    postTitle,
+    postInfo,
+    postAuthor,
+    postPhoto,
+    postVideo,
+    pinned,
+    refetch,
   } = props;
   const [postformState, setPostFormState] = useState<InterfacePostForm>({
     posttitle: '',
@@ -125,7 +132,6 @@ export default function OrgPostCard(
     }
   }
   function handleEditModal(): void {
-    const { postPhoto, postVideo } = props;
     setModalVisible(false);
     setMenuVisible(false);
     setShowEditModal(true);
@@ -141,12 +147,12 @@ export default function OrgPostCard(
   }
   useEffect(() => {
     setPostFormState({
-      posttitle: props.postTitle,
-      postinfo: props.postInfo,
+      posttitle: postTitle,
+      postinfo: postInfo,
       mediaFile: null,
-      pinned: props.pinned,
+      pinned: pinned,
     });
-    setPreviewUrl(props.postPhoto || props.postVideo);
+    setPreviewUrl(postPhoto || postVideo);
   }, []);
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgPostCard',
@@ -158,7 +164,7 @@ export default function OrgPostCard(
     try {
       const { data } = await deletePostMutation({
         variables: {
-          id: props.id,
+          id: id,
         },
       });
       if (data) {
@@ -214,7 +220,7 @@ export default function OrgPostCard(
       const accessToken = getItem('token');
 
       const response = await fetch(
-        `${process.env.REACT_APP_TALAWA_REST_URL}/update-post/${props.id}`,
+        `${process.env.REACT_APP_TALAWA_REST_URL}/update-post/${id}`,
         {
           method: 'POST',
           body: formData,
@@ -236,7 +242,7 @@ export default function OrgPostCard(
           pinned: false,
         });
         setShowEditModal(false);
-        props.refetch && props.refetch();
+        refetch();
       }
     } catch (error: unknown) {
       errorHandler(t, error);
@@ -267,7 +273,7 @@ export default function OrgPostCard(
           onClick={handleCardClick}
           data-testid="cardStructure"
         >
-          {props.postVideo && (
+          {postVideo && (
             <Card
               className={styles.card}
               data-testid="cardVid"
@@ -282,10 +288,10 @@ export default function OrgPostCard(
                 loop={true}
                 playsInline
               >
-                <source src={props?.postVideo} type="video/mp4" />
+                <source src={postVideo} type="video/mp4" />
               </video>
               <Card.Body>
-                {props.pinned && (
+                {pinned && (
                   <PushPin
                     color="success"
                     fontSize="large"
@@ -294,37 +300,33 @@ export default function OrgPostCard(
                   />
                 )}
                 <Card.Title className={styles.title} data-testid="card-title">
-                  {props.postTitle}
+                  {postTitle}
                 </Card.Title>
                 <Card.Text className={styles.text} data-testid="card-text">
-                  {props.postInfo}
+                  {postInfo}
                 </Card.Text>
-                <Card.Link data-testid="card-authour">
-                  {props.postAuthor}
-                </Card.Link>
+                <Card.Link data-testid="card-authour">{postAuthor}</Card.Link>
               </Card.Body>
             </Card>
           )}
-          {props.postPhoto ? (
+          {postPhoto ? (
             <Card className={styles.card}>
               <Card.Img
                 className={styles.postimage}
                 variant="top"
-                src={props.postPhoto}
+                src={postPhoto}
                 alt="image"
               />
               <Card.Body>
-                {props.pinned && (
+                {pinned && (
                   <PushPin color="success" fontSize="large" className="fs-5" />
                 )}
-                <Card.Title className={styles.title}>
-                  {props.postTitle}
-                </Card.Title>
-                <Card.Text className={styles.text}>{props.postInfo}</Card.Text>
-                <Card.Link>{props.postAuthor}</Card.Link>
+                <Card.Title className={styles.title}>{postTitle}</Card.Title>
+                <Card.Text className={styles.text}>{postInfo}</Card.Text>
+                <Card.Link>{postAuthor}</Card.Link>
               </Card.Body>
             </Card>
-          ) : !props.postVideo ? (
+          ) : !postVideo ? (
             <span>
               <Card className={styles.card}>
                 <Card.Img
@@ -334,24 +336,20 @@ export default function OrgPostCard(
                   className={styles.nopostimage}
                 />
                 <Card.Body>
-                  {props.pinned && (
+                  {pinned && (
                     <PushPin
                       color="success"
                       fontSize="large"
                       className="fs-5"
                     />
                   )}
-                  <Card.Title className={styles.title}>
-                    {props.postTitle}
-                  </Card.Title>
+                  <Card.Title className={styles.title}>{postTitle}</Card.Title>
                   <Card.Text className={styles.text}>
-                    {props.postInfo && props.postInfo.length > 20
-                      ? props.postInfo.substring(0, 20) + '...'
-                      : props.postInfo}
+                    {postInfo && postInfo.length > 20
+                      ? postInfo.substring(0, 20) + '...'
+                      : postInfo}
                   </Card.Text>{' '}
-                  <Card.Link className={styles.author}>
-                    {props.postAuthor}
-                  </Card.Link>
+                  <Card.Link className={styles.author}>{postAuthor}</Card.Link>
                 </Card.Body>
               </Card>
             </span>
@@ -362,19 +360,19 @@ export default function OrgPostCard(
         {modalVisible && (
           <div className={styles.modal} data-testid={'imagepreviewmodal'}>
             <div className={styles.modalContent}>
-              {props.postPhoto && (
+              {postPhoto && (
                 <div className={styles.modalImage}>
-                  <img src={props.postPhoto} alt={t('postImage')} />
+                  <img src={postPhoto} alt={t('postImage')} />
                 </div>
               )}
-              {props.postVideo && (
+              {postVideo && (
                 <div className={styles.modalImage}>
                   <video controls autoPlay loop muted>
-                    <source src={props?.postVideo} type="video/mp4" />
+                    <source src={postVideo} type="video/mp4" />
                   </video>
                 </div>
               )}
-              {!props.postPhoto && !props.postVideo && (
+              {!postPhoto && !postVideo && (
                 <div className={styles.modalImage}>
                   {' '}
                   <img src={AboutImg} alt={t('postImage')} />
@@ -382,23 +380,23 @@ export default function OrgPostCard(
               )}
               <div className={styles.modalInfo}>
                 <p>
-                  {t('author')}:<span> {props.postAuthor}</span>
+                  {t('author')}:<span> {postAuthor}</span>
                 </p>
                 <div className={styles.infodiv}>
                   {togglePost === 'Read more' ? (
                     <p data-testid="toggleContent">
-                      {props.postInfo.length > 43
-                        ? props.postInfo.substring(0, 40) + '...'
-                        : props.postInfo}
+                      {postInfo.length > 43
+                        ? postInfo.substring(0, 40) + '...'
+                        : postInfo}
                     </p>
                   ) : (
-                    <p data-testid="toggleContent">{props.postInfo}</p>
+                    <p data-testid="toggleContent">{postInfo}</p>
                   )}
                   <button
                     role="toggleBtn"
                     data-testid="toggleBtn"
                     className={`${
-                      props.postInfo.length > 43
+                      postInfo.length > 43
                         ? styles.toggleClickBtn
                         : styles.toggleClickBtnNone
                     }`}
@@ -431,7 +429,7 @@ export default function OrgPostCard(
               <ul className={styles.menuOptions}>
                 <li
                   data-toggle="modal"
-                  data-target={`#editPostModal${props.id}`}
+                  data-target={`#editPostModal${id}`}
                   onClick={handleEditModal}
                   data-testid="editPostModalBtn"
                 >
@@ -439,7 +437,7 @@ export default function OrgPostCard(
                 </li>
                 <li
                   data-toggle="modal"
-                  data-target={`#deletePostModal${props.id}`}
+                  data-target={`#deletePostModal${id}`}
                   onClick={handleDeleteModal}
                   data-testid="deletePostModalBtn"
                 >
@@ -447,11 +445,9 @@ export default function OrgPostCard(
                 </li>
                 <li
                   data-testid="pinpostBtn"
-                  onClick={(): Promise<void> =>
-                    togglePostPin(props.id, props.pinned)
-                  }
+                  onClick={(): Promise<void> => togglePostPin(id, pinned)}
                 >
-                  {!props.pinned ? 'Pin post' : 'Unpin post'}
+                  {!pinned ? 'Pin post' : 'Unpin post'}
                 </li>
                 <li
                   className={styles.list}
@@ -529,7 +525,7 @@ export default function OrgPostCard(
               data-testid="updateText"
               required
             />
-            {props.postPhoto && (
+            {postPhoto && (
               <>
                 <Form.Label htmlFor="postPhoto">{t('image')}</Form.Label>
                 <Form.Control
@@ -556,7 +552,7 @@ export default function OrgPostCard(
                 )}
               </>
             )}
-            {props.postVideo && (
+            {postVideo && (
               <>
                 <Form.Label htmlFor="postvideo">{t('video')}</Form.Label>
                 <Form.Control

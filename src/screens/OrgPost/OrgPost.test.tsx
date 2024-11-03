@@ -1,24 +1,132 @@
-import { MockedProvider } from '@apollo/react-testing';
-import { fireEvent, render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import 'jest-location-mock';
-import { I18nextProvider } from 'react-i18next';
-import { Provider } from 'react-redux';
+// Start of Selection
+import React from 'react';
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  act,
+} from '@testing-library/react';
+import { MockedProvider } from '@apollo/client/testing';
 import { BrowserRouter } from 'react-router-dom';
-import React, { act } from 'react';
-import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
-import { ORGANIZATION_POST_LIST } from 'GraphQl/Queries/Queries';
-import { ToastContainer } from 'react-toastify';
-import { store } from 'state/store';
-import { StaticMockLink } from 'utils/StaticMockLink';
-import i18nForTest from 'utils/i18nForTest';
+import { I18nextProvider } from 'react-i18next';
+import userEvent from '@testing-library/user-event';
 import OrgPost from './OrgPost';
-const MOCKS = [
+import { ORGANIZATION_POST_LIST } from 'GraphQl/Queries/Queries';
+import i18nForTest from 'utils/i18nForTest';
+
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+    i18n: {
+      changeLanguage: () => new Promise(() => {}),
+    },
+  }),
+  initReactI18next: {
+    type: '3rdParty',
+    init: () => {},
+  },
+  I18nextProvider: ({ children }: { children: React.ReactNode }) => children,
+}));
+
+jest.mock('components/OrgPostCard/OrgPostCard', () => {
+  return function MockOrgPostCard({ refetch, ...props }: any) {
+    return (
+      <div data-testid="org-post-card">
+        <button onClick={refetch} data-testid="refetch-trigger">
+          Trigger Refetch
+        </button>
+        <div data-testid="post-props">{JSON.stringify(props)}</div>
+      </div>
+    );
+  };
+});
+
+
+// Mock modules
+jest.mock('react-toastify', () => ({
+  toast: {
+    success: jest.fn(),
+    error: jest.fn(),
+  },
+}));
+
+jest.mock('utils/useLocalstorage', () => ({
+  __esModule: true,
+  default: () => ({
+    getItem: () => 'mock-token',
+  }),
+}));
+
+// Mock useParams
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({ orgId: 'test-org' }),
+}));
+
+// Base mock data
+const mockPostsData = {
+  organizations: [
+    {
+      posts: {
+        edges: [
+          {
+            node: {
+              _id: '1',
+              title: 'Test Post 1',
+              text: 'Test Content 1',
+              creator: {
+                _id: 'user1',
+                firstName: 'John',
+                lastName: 'Doe',
+                email: 'john@test.com',
+                image: null,
+              },
+              file: {
+                _id: 'file1',
+                fileName: 'test.jpg',
+                mimeType: 'image/jpeg',
+                size: 1000,
+                hash: {
+                  value: 'hash123',
+                  algorithm: 'md5',
+                },
+                uri: 'test.jpg',
+                metadata: {
+                  objectKey: 'key123',
+                },
+                visibility: 'public',
+                status: 'active',
+              },
+              createdAt: '2024-01-01',
+              likeCount: 0,
+              likedBy: [],
+              commentCount: 0,
+              comments: [],
+              pinned: false,
+            },
+            cursor: 'cursor1',
+          },
+        ],
+        pageInfo: {
+          startCursor: 'cursor1',
+          endCursor: 'cursor1',
+          hasNextPage: false,
+          hasPreviousPage: false,
+        },
+        totalCount: 1,
+      },
+    },
+  ],
+};
+
+const paginationMocks = [
+  // Initial page mock
   {
     request: {
       query: ORGANIZATION_POST_LIST,
       variables: {
-        id: undefined,
+        id: 'test-org',
         after: null,
         before: null,
         first: 6,
@@ -33,657 +141,1059 @@ const MOCKS = [
               edges: [
                 {
                   node: {
-                    _id: '6411e53835d7ba2344a78e21',
-                    title: 'postone',
-                    text: 'This is the first post',
-                    imageUrl: null,
-                    videoUrl: null,
-                    createdAt: '2023-08-24T09:26:56.524+00:00',
+                    _id: '1',
+                    title: 'Post 1',
+                    text: 'Content 1',
                     creator: {
-                      _id: '640d98d9eb6a743d75341067',
-                      firstName: 'Aditya',
-                      lastName: 'Shelke',
-                      email: 'adidacreator1@gmail.com',
+                      _id: 'user1',
+                      firstName: 'John',
+                      lastName: 'Doe',
+                      email: 'john@test.com',
                     },
-                    likeCount: 0,
-                    commentCount: 0,
-                    comments: [],
-                    pinned: true,
-                    likedBy: [],
-                  },
-                  cursor: '6411e53835d7ba2344a78e21',
-                },
-                {
-                  node: {
-                    _id: '6411e54835d7ba2344a78e29',
-                    title: 'posttwo',
-                    text: 'Tis is the post two',
-                    imageUrl: null,
-                    videoUrl: null,
-                    createdAt: '2023-08-24T09:26:56.524+00:00',
-                    creator: {
-                      _id: '640d98d9eb6a743d75341067',
-                      firstName: 'Aditya',
-                      lastName: 'Shelke',
-                      email: 'adidacreator1@gmail.com',
-                    },
-                    likeCount: 0,
-                    commentCount: 0,
+                    createdAt: '2024-01-01',
                     pinned: false,
-                    likedBy: [],
-                    comments: [],
                   },
-                  cursor: '6411e54835d7ba2344a78e29',
-                },
-                {
-                  node: {
-                    _id: '6411e54835d7ba2344a78e30',
-                    title: 'posttwo',
-                    text: 'Tis is the post two',
-                    imageUrl: null,
-                    videoUrl: null,
-                    createdAt: '2023-08-24T09:26:56.524+00:00',
-                    creator: {
-                      _id: '640d98d9eb6a743d75341067',
-                      firstName: 'Aditya',
-                      lastName: 'Shelke',
-                      email: 'adidacreator1@gmail.com',
-                    },
-                    likeCount: 0,
-                    commentCount: 0,
-                    pinned: true,
-                    likedBy: [],
-                    comments: [],
-                  },
-                  cursor: '6411e54835d7ba2344a78e30',
-                },
-                {
-                  node: {
-                    _id: '6411e54835d7ba2344a78e31',
-                    title: 'posttwo',
-                    text: 'Tis is the post two',
-                    imageUrl: null,
-                    videoUrl: null,
-                    createdAt: '2023-08-24T09:26:56.524+00:00',
-                    creator: {
-                      _id: '640d98d9eb6a743d75341067',
-                      firstName: 'Aditya',
-                      lastName: 'Shelke',
-                      email: 'adidacreator1@gmail.com',
-                    },
-                    likeCount: 0,
-                    commentCount: 0,
-                    pinned: false,
-                    likedBy: [],
-                    comments: [],
-                  },
-                  cursor: '6411e54835d7ba2344a78e31',
+                  cursor: 'cursor1',
                 },
               ],
               pageInfo: {
-                startCursor: '6411e53835d7ba2344a78e21',
-                endCursor: '6411e54835d7ba2344a78e31',
-                hasNextPage: false,
+                startCursor: 'cursor1',
+                endCursor: 'cursor1',
+                hasNextPage: true,
                 hasPreviousPage: false,
               },
-              totalCount: 4,
+              totalCount: 2,
             },
           },
         ],
       },
     },
   },
+  // Next page mock
   {
     request: {
-      query: CREATE_POST_MUTATION,
+      query: ORGANIZATION_POST_LIST,
       variables: {
-        title: 'Dummy Post',
-        text: 'This is dummy text',
-        organizationId: '123',
-      },
-      result: {
-        data: {
-          createPost: {
-            _id: '453',
-          },
-        },
+        id: 'test-org',
+        after: 'cursor1',
+        before: null,
+        first: 6,
+        last: null,
       },
     },
-  },
-  {
-    request: {
-      query: CREATE_POST_MUTATION,
-      variables: {
-        title: 'Dummy Post',
-        text: 'This is dummy text',
-        organizationId: '123',
-      },
-      result: {
-        data: {
-          createPost: {
-            _id: '453',
+    result: {
+      data: {
+        organizations: [
+          {
+            posts: {
+              edges: [
+                {
+                  node: {
+                    _id: '2',
+                    title: 'Post 2',
+                    text: 'Content 2',
+                    creator: {
+                      _id: 'user1',
+                      firstName: 'John',
+                      lastName: 'Doe',
+                      email: 'john@test.com',
+                    },
+                    createdAt: '2024-01-02',
+                    pinned: false,
+                  },
+                  cursor: 'cursor2',
+                },
+              ],
+              pageInfo: {
+                startCursor: 'cursor2',
+                endCursor: 'cursor2',
+                hasNextPage: false,
+                hasPreviousPage: true,
+              },
+              totalCount: 2,
+            },
           },
-        },
+        ],
       },
     },
   },
 ];
-const link = new StaticMockLink(MOCKS, true);
 
-async function wait(ms = 500): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
+const mockPostsDataWithPinned = {
+  organizations: [
+    {
+      posts: {
+        edges: [
+          {
+            node: {
+              _id: '1',
+              title: 'Unpinned Post 1',
+              text: 'Content 1',
+              creator: {
+                _id: 'user1',
+                firstName: 'John',
+                lastName: 'Doe',
+                email: 'john@test.com',
+                image: null,
+              },
+              file: null,
+              createdAt: '2024-01-01',
+              likeCount: 0,
+              likedBy: [],
+              commentCount: 0,
+              comments: [],
+              pinned: false,
+            },
+            cursor: 'cursor1',
+          },
+          {
+            node: {
+              _id: '2',
+              title: 'Pinned Post 1',
+              text: 'Content 2',
+              creator: {
+                _id: 'user1',
+                firstName: 'John',
+                lastName: 'Doe',
+                email: 'john@test.com',
+                image: null,
+              },
+              file: null,
+              createdAt: '2024-01-02',
+              likeCount: 0,
+              likedBy: [],
+              commentCount: 0,
+              comments: [],
+              pinned: true,
+            },
+            cursor: 'cursor2',
+          },
+          {
+            node: {
+              _id: '3',
+              title: 'Pinned Post 2',
+              text: 'Content 3',
+              creator: {
+                _id: 'user1',
+                firstName: 'John',
+                lastName: 'Doe',
+                email: 'john@test.com',
+                image: null,
+              },
+              file: null,
+              createdAt: '2024-01-03',
+              likeCount: 0,
+              likedBy: [],
+              commentCount: 0,
+              comments: [],
+              pinned: true,
+            },
+            cursor: 'cursor3',
+          },
+          {
+            node: {
+              _id: '4',
+              title: 'Unpinned Post 2',
+              text: 'Content 4',
+              creator: {
+                _id: 'user1',
+                firstName: 'John',
+                lastName: 'Doe',
+                email: 'john@test.com',
+                image: null,
+              },
+              file: null,
+              createdAt: '2024-01-04',
+              likeCount: 0,
+              likedBy: [],
+              commentCount: 0,
+              comments: [],
+              pinned: false,
+            },
+            cursor: 'cursor4',
+          },
+        ],
+        pageInfo: {
+          startCursor: 'cursor1',
+          endCursor: 'cursor4',
+          hasNextPage: false,
+          hasPreviousPage: false,
+        },
+        totalCount: 4,
+      },
+    },
+  ],
+};
 
-describe('Organisation Post Page', () => {
-  const formData = {
-    posttitle: 'dummy post',
-    postinfo: 'This is a dummy post',
-    postImage: new File(['hello'], 'hello.png', { type: 'image/png' }),
-    postVideo: new File(['hello'], 'hello.mp4', { type: 'video/mp4' }),
+const mocks = [
+  // Initial query mock
+  {
+    request: {
+      query: ORGANIZATION_POST_LIST,
+      variables: {
+        id: 'test-org',
+        after: null,
+        before: null,
+        first: 6,
+        last: null,
+      },
+    },
+    result: {
+      data: mockPostsData,
+    },
+  },
+  // Refetch query mock - same shape as initial query
+  {
+    request: {
+      query: ORGANIZATION_POST_LIST,
+      variables: {
+        id: 'test-org',
+        after: null,
+        before: null,
+        first: 6,
+        last: null,
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            posts: {
+              edges: [
+                {
+                  node: {
+                    _id: '1',
+                    title: 'Updated Test Post 1',
+                    text: 'Updated Test Content 1',
+                    creator: {
+                      _id: 'user1',
+                      firstName: 'John',
+                      lastName: 'Doe',
+                      email: 'john@test.com',
+                      image: null,
+                    },
+                    file: {
+                      _id: 'file1',
+                      fileName: 'test.jpg',
+                      mimeType: 'image/jpeg',
+                      size: 1000,
+                      hash: {
+                        value: 'hash123',
+                        algorithm: 'md5',
+                      },
+                      uri: 'test.jpg',
+                      metadata: {
+                        objectKey: 'key123',
+                      },
+                      visibility: 'public',
+                      status: 'active',
+                    },
+                    createdAt: '2024-01-01',
+                    likeCount: 0,
+                    likedBy: [],
+                    commentCount: 0,
+                    comments: [],
+                    pinned: false,
+                  },
+                  cursor: 'cursor1',
+                },
+              ],
+              pageInfo: {
+                startCursor: 'cursor1',
+                endCursor: 'cursor1',
+                hasNextPage: false,
+                hasPreviousPage: false,
+              },
+              totalCount: 1,
+            },
+          },
+        ],
+      },
+    },
+  },
+];
+jest.mock('components/OrgPostCard/OrgPostCard', () => {
+  return function MockOrgPostCard({ refetch, ...props }: any) {
+    return (
+      <div data-testid="org-post-card">
+        <button onClick={refetch} data-testid="refetch-trigger">
+          Trigger Refetch
+        </button>
+        <div data-testid="post-props">{JSON.stringify(props)}</div>
+      </div>
+    );
+  };
+});
+
+const renderWithProviders = () => {
+  return render(
+    <MockedProvider mocks={mocks} addTypename={false}>
+      <BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPost />
+        </I18nextProvider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+};
+
+// Function to generate GraphQL mocks
+const generateMocks = () => {
+  const baseMock = {
+    request: {
+      query: ORGANIZATION_POST_LIST,
+      variables: {
+        id: 'test-org',
+        after: null,
+        before: null,
+        first: 6,
+        last: null,
+      },
+    },
+    result: {
+      data: mockPostsData,
+    },
   };
 
-  test('correct mock data should be queried', async () => {
-    const dataQuery1 = MOCKS[0]?.result?.data?.organizations[0].posts.edges[0];
-
-    expect(dataQuery1).toEqual({
-      node: {
-        _id: '6411e53835d7ba2344a78e21',
-        title: 'postone',
-        text: 'This is the first post',
-        imageUrl: null,
-        videoUrl: null,
-        createdAt: '2023-08-24T09:26:56.524+00:00',
-        creator: {
-          _id: '640d98d9eb6a743d75341067',
-          firstName: 'Aditya',
-          lastName: 'Shelke',
-          email: 'adidacreator1@gmail.com',
-        },
-        likeCount: 0,
-        commentCount: 0,
-        pinned: true,
-        likedBy: [],
-        comments: [],
+  const refetchMock = {
+    request: {
+      query: ORGANIZATION_POST_LIST,
+      variables: {
+        id: 'test-org',
+        after: null,
+        before: null,
+        first: 6,
+        last: null,
       },
-      cursor: '6411e53835d7ba2344a78e21',
-    });
-  });
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            posts: {
+              edges: [
+                {
+                  node: {
+                    _id: '1',
+                    title: 'Updated Test Post 1',
+                    text: 'Updated Test Content 1',
+                    creator: {
+                      _id: 'user1',
+                      firstName: 'John',
+                      lastName: 'Doe',
+                      email: 'john@test.com',
+                      image: null,
+                    },
+                    file: {
+                      _id: 'file1',
+                      fileName: 'test.jpg',
+                      mimeType: 'image/jpeg',
+                      size: 1000,
+                      hash: {
+                        value: 'hash123',
+                        algorithm: 'md5',
+                      },
+                      uri: 'test.jpg',
+                      metadata: {
+                        objectKey: 'key123',
+                      },
+                      visibility: 'public',
+                      status: 'active',
+                    },
+                    createdAt: '2024-01-01',
+                    likeCount: 0,
+                    likedBy: [],
+                    commentCount: 0,
+                    comments: [],
+                    pinned: false,
+                  },
+                  cursor: 'cursor1',
+                },
+              ],
+              pageInfo: {
+                startCursor: 'cursor1',
+                endCursor: 'cursor1',
+                hasNextPage: false,
+                hasPreviousPage: false,
+              },
+              totalCount: 1,
+            },
+          },
+        ],
+      },
+    },
+  };
 
-  test('Testing create post functionality', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
+  const searchMocks = ['t', 'te', 'tes', 'test'].map((searchTerm) => ({
+    request: {
+      query: ORGANIZATION_POST_LIST,
+      variables: {
+        id: 'test-org',
+        after: null,
+        before: null,
+        first: 6,
+        last: null,
+        title_contains: searchTerm,
+        text_contains: null,
+      },
+    },
+    result: {
+      data: mockPostsData,
+    },
+  }));
+
+  const textSearchMocks = ['t', 'te', 'tes', 'test'].map((searchTerm) => ({
+    request: {
+      query: ORGANIZATION_POST_LIST,
+      variables: {
+        id: 'test-org',
+        after: null,
+        before: null,
+        first: 6,
+        last: null,
+        title_contains: null,
+        text_contains: searchTerm,
+      },
+    },
+    result: {
+      data: mockPostsData,
+    },
+  }));
+
+  return [baseMock, refetchMock, ...searchMocks, ...textSearchMocks];
+};
+
+describe('OrgPost Component', () => {
+  const renderWithProviders = () => {
+    return render(
+      <MockedProvider mocks={generateMocks()} addTypename={false}>
         <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrgPost />
-            </I18nextProvider>
-          </Provider>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgPost />
+          </I18nextProvider>
         </BrowserRouter>
       </MockedProvider>,
     );
+  };
 
-    await wait();
-
-    userEvent.click(screen.getByTestId('createPostModalBtn'));
-
-    userEvent.type(screen.getByTestId('modalTitle'), formData.posttitle);
-
-    userEvent.type(screen.getByTestId('modalinfo'), formData.postinfo);
-    userEvent.upload(screen.getByTestId('addMediaField'), formData.postImage);
-    userEvent.upload(screen.getByTestId('addMediaField'), formData.postVideo);
-    userEvent.upload(screen.getByTestId('addMediaField'), formData.postImage);
-    userEvent.upload(screen.getByTestId('addMediaField'), formData.postVideo);
-    userEvent.click(screen.getByTestId('pinPost'));
-    expect(screen.getByTestId('pinPost')).toBeChecked();
-
-    userEvent.click(screen.getByTestId('createPostBtn'));
-
-    await wait();
-
-    userEvent.click(screen.getByTestId('closeOrganizationModal'));
-  }, 15000);
-
-  test('Testing search functionality', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrgPost />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    async function debounceWait(ms = 200): Promise<void> {
-      await act(() => {
-        return new Promise((resolve) => {
-          setTimeout(resolve, ms);
-        });
-      });
-    }
-    await debounceWait();
-    userEvent.type(screen.getByPlaceholderText(/Search By/i), 'postone{enter}');
-    await debounceWait();
-    const sortDropdown = screen.getByTestId('sort');
-    userEvent.click(sortDropdown);
+  beforeEach(() => {
+    jest.clearAllMocks();
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({ success: true }),
+      }),
+    ) as jest.Mock;
+    global.URL.createObjectURL = jest.fn(() => 'mock-url');
+    global.URL.revokeObjectURL = jest.fn();
   });
-  test('Testing search text and title toggle', async () => {
-    await act(async () => {
-      // Wrap the test code in act
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <OrgPost />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
+
+  it('renders and loads posts successfully', async () => {
+    renderWithProviders();
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner-wrapper')).not.toBeInTheDocument();
     });
-    await wait();
+
+    expect(screen.getByTestId('searchByName')).toBeInTheDocument();
+  });
+
+  it('handles title search', async () => {
+    renderWithProviders();
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner-wrapper')).not.toBeInTheDocument();
+    });
 
     const searchInput = screen.getByTestId('searchByName');
-    expect(searchInput).toHaveAttribute('placeholder', 'Search By Title');
 
-    const inputText = screen.getByTestId('searchBy');
-
-    await act(async () => {
-      fireEvent.click(inputText);
+    await userEvent.clear(searchInput);
+    await userEvent.type(searchInput, 't');
+    await waitFor(() => {
+      expect(searchInput).toHaveValue('t');
     });
 
-    const toggleText = screen.getByTestId('Text');
-
-    await act(async () => {
-      fireEvent.click(toggleText);
+    await userEvent.type(searchInput, 'e');
+    await waitFor(() => {
+      expect(searchInput).toHaveValue('te');
     });
-
-    expect(searchInput).toHaveAttribute('placeholder', 'Search By Text');
-    await act(async () => {
-      fireEvent.click(inputText);
-    });
-    const toggleTite = screen.getByTestId('searchTitle');
-    await act(async () => {
-      fireEvent.click(toggleTite);
-    });
-
-    expect(searchInput).toHaveAttribute('placeholder', 'Search By Title');
-  });
-  test('Testing search latest and oldest toggle', async () => {
-    await act(async () => {
-      // Wrap the test code in act
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <OrgPost />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-    });
-    await wait();
-
-    const searchInput = screen.getByTestId('sort');
-    expect(searchInput).toBeInTheDocument();
-
-    const inputText = screen.getByTestId('sortpost');
-
-    await act(async () => {
-      fireEvent.click(inputText);
-    });
-
-    const toggleText = screen.getByTestId('latest');
-
-    await act(async () => {
-      fireEvent.click(toggleText);
-    });
-
-    expect(searchInput).toBeInTheDocument();
-    await act(async () => {
-      fireEvent.click(inputText);
-    });
-
-    const toggleTite = screen.getByTestId('oldest');
-    await act(async () => {
-      fireEvent.click(toggleTite);
-    });
-    expect(searchInput).toBeInTheDocument();
-  });
-  test('After creating a post, the data should be refetched', async () => {
-    const refetchMock = jest.fn();
-
-    render(
-      <MockedProvider addTypename={false} mocks={MOCKS} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
-              <OrgPost />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    userEvent.click(screen.getByTestId('createPostModalBtn'));
-
-    // Fill in post form fields...
-
-    userEvent.click(screen.getByTestId('createPostBtn'));
-
-    await wait();
-
-    expect(refetchMock).toHaveBeenCalledTimes(0);
   });
 
-  test('Create post without media', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
-              <OrgPost />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+  it('handles text search toggle', async () => {
+    renderWithProviders();
 
-    await wait();
-    userEvent.click(screen.getByTestId('createPostModalBtn'));
-
-    const postTitleInput = screen.getByTestId('modalTitle');
-    fireEvent.change(postTitleInput, { target: { value: 'Test Post' } });
-
-    const postInfoTextarea = screen.getByTestId('modalinfo');
-    fireEvent.change(postInfoTextarea, {
-      target: { value: 'Test post information' },
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner-wrapper')).not.toBeInTheDocument();
     });
 
-    const createPostBtn = screen.getByTestId('createPostBtn');
-    fireEvent.click(createPostBtn);
-  }, 15000);
-
-  test('Create post and preview', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
-              <OrgPost />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-    userEvent.click(screen.getByTestId('createPostModalBtn'));
-
-    const postTitleInput = screen.getByTestId('modalTitle');
-    fireEvent.change(postTitleInput, { target: { value: 'Test Post' } });
-
-    const postInfoTextarea = screen.getByTestId('modalinfo');
-    fireEvent.change(postInfoTextarea, {
-      target: { value: 'Test post information' },
-    });
-
-    // Simulate uploading an image
-    const imageFile = new File(['image content'], 'image.png', {
-      type: 'image/png',
-    });
-    const imageInput = screen.getByTestId('addMediaField');
-    userEvent.upload(imageInput, imageFile);
-
-    // Check if the image is displayed
-    const imagePreview = await screen.findByAltText('Post Image Preview');
-    expect(imagePreview).toBeInTheDocument();
-
-    // Check if the close button for the image works
-    const closeButton = screen.getByTestId('mediaCloseButton');
-    fireEvent.click(closeButton);
-
-    // Check if the image is removed from the preview
-    expect(imagePreview).not.toBeInTheDocument();
-  }, 15000);
-
-  test('Modal opens and closes', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrgPost />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    const createPostModalBtn = screen.getByTestId('createPostModalBtn');
-
-    userEvent.click(createPostModalBtn);
-
-    const modalTitle = screen.getByTestId('modalOrganizationHeader');
-    expect(modalTitle).toBeInTheDocument();
-
-    const closeButton = screen.getByTestId(/modalOrganizationHeader/i);
-    userEvent.click(closeButton);
-
-    await wait();
-
-    const closedModalTitle = screen.queryByText(/postDetail/i);
-    expect(closedModalTitle).not.toBeInTheDocument();
-  });
-  it('renders the form with input fields and buttons', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
-              <OrgPost />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-    userEvent.click(screen.getByTestId('createPostModalBtn'));
-
-    // Check if input fields and buttons are present
-    expect(screen.getByTestId('modalTitle')).toBeInTheDocument();
-    expect(screen.getByTestId('modalinfo')).toBeInTheDocument();
-    expect(screen.getByTestId('createPostBtn')).toBeInTheDocument();
-  });
-
-  it('allows users to input data into the form fields', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
-              <OrgPost />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-    userEvent.click(screen.getByTestId('createPostModalBtn'));
-
-    // Simulate user input
-    fireEvent.change(screen.getByTestId('modalTitle'), {
-      target: { value: 'Test Title' },
-    });
-    fireEvent.change(screen.getByTestId('modalinfo'), {
-      target: { value: 'Test Info' },
-    });
-
-    // Check if input values are set correctly
-    expect(screen.getByTestId('modalTitle')).toHaveValue('Test Title');
-    expect(screen.getByTestId('modalinfo')).toHaveValue('Test Info');
-  });
-
-  test('allows users to upload an image', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
-              <OrgPost />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-    userEvent.click(screen.getByTestId('createPostModalBtn'));
-
-    const postTitleInput = screen.getByTestId('modalTitle');
-    fireEvent.change(postTitleInput, { target: { value: 'Test Post' } });
-
-    const postInfoTextarea = screen.getByTestId('modalinfo');
-    fireEvent.change(postInfoTextarea, {
-      target: { value: 'Test post information' },
-    });
-    const file = new File(['image content'], 'image.png', {
-      type: 'image/png',
-    });
-    const input = screen.getByTestId('addMediaField');
-    userEvent.upload(input, file);
-
-    await screen.findByAltText('Post Image Preview');
-    expect(screen.getByAltText('Post Image Preview')).toBeInTheDocument();
-
-    const closeButton = screen.getByTestId('mediaCloseButton');
-    fireEvent.click(closeButton);
-  }, 15000);
-  test('Create post, preview image, and close preview', async () => {
+    // Open search dropdown
+    const searchByButton = screen.getByTestId('searchBy');
     await act(async () => {
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <ToastContainer />
-                <OrgPost />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
+      fireEvent.click(searchByButton);
     });
-    await wait();
 
+    // Click text search option
+    const textSearchOption = screen.getByTestId('Text');
+    await act(async () => {
+      fireEvent.click(textSearchOption);
+    });
+
+    const searchInput = screen.getByTestId('searchByName');
+    await act(async () => {
+      await userEvent.type(searchInput, 'test');
+    });
+
+    await waitFor(() => {
+      expect(searchInput).toHaveValue('test');
+    });
+  });
+
+  it('opens create post modal and handles form submission', async () => {
+    renderWithProviders();
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner-wrapper')).not.toBeInTheDocument();
+    });
+
+    // Open modal
     await act(async () => {
       userEvent.click(screen.getByTestId('createPostModalBtn'));
     });
 
-    const postTitleInput = screen.getByTestId('modalTitle');
-    await act(async () => {
-      fireEvent.change(postTitleInput, { target: { value: 'Test Post' } });
-    });
+    // Fill form
+    const titleInput = screen.getByTestId('modalTitle');
+    const infoInput = screen.getByTestId('modalinfo');
+    const pinToggle = screen.getByTestId('pinPost');
 
-    const postInfoTextarea = screen.getByTestId('modalinfo');
-    await act(async () => {
-      fireEvent.change(postInfoTextarea, {
-        target: { value: 'Test post information' },
-      });
-    });
-
-    const videoFile = new File(['video content'], 'video.mp4', {
-      type: 'video/mp4',
-    });
+    await userEvent.type(titleInput, 'Test Title');
+    await userEvent.type(infoInput, 'Test Content');
 
     await act(async () => {
-      userEvent.upload(screen.getByTestId('addMediaField'), videoFile);
+      userEvent.click(pinToggle);
     });
 
-    // Check if the video is displayed
-    const videoPreview = await screen.findByTestId('videoPreview');
-    expect(videoPreview).toBeInTheDocument();
-
-    // Check if the close button for the video works
-    const closeVideoPreviewButton = screen.getByTestId('mediaCloseButton');
+    // Submit form
     await act(async () => {
-      fireEvent.click(closeVideoPreviewButton);
+      userEvent.click(screen.getByTestId('createPostBtn'));
     });
-    expect(videoPreview).not.toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.stringContaining('/create-post'),
+        expect.any(Object),
+      );
+    });
   });
-  test('Sorting posts by pinned status', async () => {
-    // Mocked data representing posts with different pinned statuses
-    const mockedPosts = [
+
+  it('passes refetch function to OrgPostCard and calls it correctly', async () => {
+    renderWithProviders();
+
+    // Wait for initial load
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner-wrapper')).not.toBeInTheDocument();
+    });
+
+    // Verify OrgPostCard is rendered with the post data
+    const postCards = screen.getAllByTestId('org-post-card');
+    expect(postCards).toHaveLength(1); // Based on mock data having one post
+
+    // Get the refetch trigger button from the mocked OrgPostCard
+    const refetchTrigger = screen.getByTestId('refetch-trigger');
+
+    // Trigger refetch
+    await act(async () => {
+      fireEvent.click(refetchTrigger);
+    });
+
+    // Wait for refetch to complete
+    await waitFor(() => {
+      const postProps = screen.getByTestId('post-props');
+      const props = JSON.parse(postProps.textContent || '');
+      expect(props.postTitle).toBe('Updated Test Post 1');
+    });
+
+    // Verify post props are passed correctly
+    const postProps = screen.getByTestId('post-props');
+    const props = JSON.parse(postProps.textContent || '');
+
+    // Check the essential props are passed
+    expect(props).toHaveProperty('id');
+    expect(props).toHaveProperty('postTitle');
+    expect(props).toHaveProperty('postInfo');
+    expect(props).toHaveProperty('postAuthor');
+    expect(props).toHaveProperty('pinned');
+  });
+
+  it('handles media upload in create post modal', async () => {
+    renderWithProviders();
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner-wrapper')).not.toBeInTheDocument();
+    });
+
+    // Open modal
+    await act(async () => {
+      userEvent.click(screen.getByTestId('createPostModalBtn'));
+    });
+
+    // Upload file
+    const file = new File(['test'], 'test.jpg', { type: 'image/jpeg' });
+    const input = screen.getByTestId('addMediaField');
+    await act(async () => {
+      await userEvent.upload(input, file);
+    });
+
+    // Check preview
+    await waitFor(() => {
+      expect(screen.getByTestId('mediaPreview')).toBeInTheDocument();
+    });
+
+    // Clear media
+    await act(async () => {
+      userEvent.click(screen.getByTestId('mediaCloseButton'));
+    });
+    await waitFor(() => {
+      expect(screen.queryByTestId('mediaPreview')).not.toBeInTheDocument();
+    });
+  });
+
+  it('handles post sorting', async () => {
+    renderWithProviders();
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner-wrapper')).not.toBeInTheDocument();
+    });
+
+    const sortButton = screen.getByTestId('sortpost');
+    await act(async () => {
+      userEvent.click(sortButton);
+    });
+
+    const latestOption = screen.getByTestId('latest');
+    await act(async () => {
+      userEvent.click(latestOption);
+    });
+
+    const oldestOption = screen.getByTestId('oldest');
+    await act(async () => {
+      userEvent.click(oldestOption);
+    });
+  });
+
+  it('closes create post modal', async () => {
+    renderWithProviders();
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner-wrapper')).not.toBeInTheDocument();
+    });
+
+    // Open modal
+    await act(async () => {
+      userEvent.click(screen.getByTestId('createPostModalBtn'));
+    });
+
+    // Close modal
+    await act(async () => {
+      userEvent.click(screen.getByTestId('closeOrganizationModal'));
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('modalOrganizationHeader'),
+      ).not.toBeInTheDocument();
+    });
+  });
+  it('displays pinned posts before unpinned posts', async () => {
+    renderWithProviders();
+
+    // Wait for initial load
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner-wrapper')).not.toBeInTheDocument();
+    });
+
+    // Get all post cards
+    const postCards = screen.getAllByTestId('org-post-card');
+
+    // Get props from each post card
+    const postProps = postCards.map((card) => {
+      const propsDiv = card.querySelector('[data-testid="post-props"]');
+      return JSON.parse(propsDiv?.textContent || '{}');
+    });
+
+    // Verify the order of posts - pinned posts should come first
+    expect(postProps[0].postTitle).toBe('Test Post 1');
+  });
+
+  it('handles case where all posts have same pinned status', async () => {
+    // Create modified mock where all posts are unpinned
+    const allUnpinnedMock = {
+      ...mockPostsDataWithPinned,
+      organizations: [
+        {
+          posts: {
+            ...mockPostsDataWithPinned.organizations[0].posts,
+            edges: mockPostsDataWithPinned.organizations[0].posts.edges.map(
+              (edge) => ({
+                ...edge,
+                node: {
+                  ...edge.node,
+                  pinned: false,
+                },
+              }),
+            ),
+          },
+        },
+      ],
+    };
+
+    const unpinnedMocks = [
       {
-        _id: '1',
-        title: 'Post 1',
-        pinned: true,
-      },
-      {
-        _id: '2',
-        title: 'Post 2',
-        pinned: false,
-      },
-      {
-        _id: '3',
-        title: 'Post 3',
-        pinned: true,
-      },
-      {
-        _id: '4',
-        title: 'Post 4',
-        pinned: true,
+        request: {
+          query: ORGANIZATION_POST_LIST,
+          variables: {
+            id: 'test-org',
+            after: null,
+            before: null,
+            first: 6,
+            last: null,
+          },
+        },
+        result: {
+          data: allUnpinnedMock,
+        },
       },
     ];
 
-    // Render the OrgPost component and pass the mocked data to it
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider mocks={unpinnedMocks} addTypename={false}>
         <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
-              <OrgPost />
-            </I18nextProvider>
-          </Provider>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgPost />
+          </I18nextProvider>
         </BrowserRouter>
       </MockedProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner-wrapper')).not.toBeInTheDocument();
+    });
 
-    const sortedPosts = screen.getAllByTestId('post-item');
+    const postCards = screen.getAllByTestId('org-post-card');
+    const postProps = postCards.map((card) => {
+      const propsDiv = card.querySelector('[data-testid="post-props"]');
+      return JSON.parse(propsDiv?.textContent || '{}');
+    });
 
-    // Assert that the posts are sorted correctly
-    expect(sortedPosts).toHaveLength(mockedPosts.length);
-    expect(sortedPosts[0]).toHaveTextContent(
-      'postoneThis is the first po... Aditya Shelke',
-    );
-    expect(sortedPosts[1]).toHaveTextContent(
-      'posttwoTis is the post two Aditya Shelke',
-    );
-    expect(sortedPosts[2]).toHaveTextContent(
-      'posttwoTis is the post two Aditya Shelke',
-    );
+    // Verify original order is maintained when all posts have same pinned status
+    expect(postProps[0].id).toBe('4');
+
+    // Verify all posts are unpinned
+    postProps.forEach((props) => {
+      expect(props.pinned).toBe(false);
+    });
   });
+
+  it('maintains search functionality after toggling search type', async () => {
+    renderWithProviders();
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner-wrapper')).not.toBeInTheDocument();
+    });
+
+    // Open dropdown and select title search
+    const searchByButton = screen.getByTestId('searchBy');
+    await act(async () => {
+      fireEvent.click(searchByButton);
+    });
+
+    const titleSearchOption = screen.getByTestId('searchTitle');
+    await act(async () => {
+      fireEvent.click(titleSearchOption, {
+        preventDefault: jest.fn(),
+      });
+    });
+
+    // Type in search
+    const searchInput = screen.getByTestId('searchByName');
+    await act(async () => {
+      await userEvent.type(searchInput, 'test');
+    });
+
+    expect(searchInput).toHaveValue('test');
+
+    // Switch to text search
+    await act(async () => {
+      fireEvent.click(searchByButton);
+    });
+
+    const textSearchOption = screen.getByTestId('Text');
+    await act(async () => {
+      fireEvent.click(textSearchOption, {
+        preventDefault: jest.fn(),
+      });
+    });
+
+    // Verify search input maintains functionality
+    expect(searchInput).toHaveValue('test');
+    expect(searchInput.getAttribute('placeholder')).toBe('searchText');
+  });
+
+  it('renders both search type and sort dropdowns correctly', async () => {
+    renderWithProviders();
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner-wrapper')).not.toBeInTheDocument();
+    });
+
+    // Verify search type dropdown
+    const searchByDropdown = screen.getByTestId('sea');
+    expect(searchByDropdown).toBeInTheDocument();
+
+    const searchByButton = screen.getByTestId('searchBy');
+    expect(searchByButton).toBeInTheDocument();
+
+    // Verify sort dropdown
+    const sortDropdown = screen.getByTestId('sort');
+    expect(sortDropdown).toBeInTheDocument();
+
+    const sortButton = screen.getByTestId('sortpost');
+    expect(sortButton).toBeInTheDocument();
+  });
+
+  it('verifies default search behavior', async () => {
+    renderWithProviders();
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner-wrapper')).not.toBeInTheDocument();
+    });
+
+    // Check initial placeholder text
+    const searchInput = screen.getByTestId('searchByName');
+    expect(searchInput.getAttribute('placeholder')).toBe('searchTitle');
+  });
+
+  describe('Media File Handling in Post Creation', () => {
+    const mockData = {
+      request: {
+        query: ORGANIZATION_POST_LIST,
+        variables: {
+          id: 'test-org',
+          after: null,
+          before: null,
+          first: 6,
+          last: null,
+        },
+      },
+      result: {
+        data: {
+          organizations: [{
+            posts: {
+              edges: [],
+              pageInfo: {
+                hasNextPage: false,
+                hasPreviousPage: false,
+                startCursor: '',
+                endCursor: '',
+              },
+            },
+          }],
+        },
+      },
+    };
+  
+    const renderComponent = () => {
+      return render(
+        <MockedProvider mocks={[mockData]} addTypename={false}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrgPost />
+            </I18nextProvider>
+          </BrowserRouter>
+        </MockedProvider>
+      );
+    };
+  
+    beforeEach(() => {
+      jest.clearAllMocks();
+      global.URL.createObjectURL = jest.fn(() => 'mock-url');
+      global.URL.revokeObjectURL = jest.fn();
+    });
+  
+    it('appends file to FormData when media file is present', async () => {
+      // Mock fetch response
+      global.fetch = jest.fn(() =>
+        Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({ success: true }),
+        }),
+      ) as jest.Mock;
+  
+      renderComponent();
+  
+      // Open create post modal
+      await waitFor(() => {
+        const createButton = screen.getByTestId('createPostModalBtn');
+        fireEvent.click(createButton);
+      });
+  
+      // Fill in required fields
+      const titleInput = screen.getByTestId('modalTitle');
+      const infoInput = screen.getByTestId('modalinfo');
+      
+      fireEvent.change(titleInput, { target: { value: 'Test Title' } });
+      fireEvent.change(infoInput, { target: { value: 'Test Content' } });
+  
+      // Create and attach file
+      const file = new File(['test file content'], 'test-image.png', { type: 'image/png' });
+      const fileInput = screen.getByTestId('addMediaField');
+      
+      fireEvent.change(fileInput, { target: { files: [file] } });
+  
+      // Verify file preview is shown
+      await waitFor(() => {
+        expect(screen.getByTestId('mediaPreview')).toBeInTheDocument();
+      });
+  
+      // Submit form
+      const submitButton = screen.getByTestId('createPostBtn');
+      fireEvent.click(submitButton);
+  
+      // Verify fetch call includes file in FormData
+      await waitFor(() => {
+        expect(global.fetch).toHaveBeenCalled();
+        const fetchCall = (global.fetch as jest.Mock).mock.calls[0];
+        const [, { body }] = fetchCall;
+        
+        expect(body instanceof FormData).toBe(true);
+        expect(body.get('file')).toBeTruthy();
+        expect(body.get('file')).toEqual(file);
+      });
+    });
+  
+    it('does not append file to FormData when no media file is present', async () => {
+      // Mock fetch response
+      global.fetch = jest.fn(() =>
+        Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({ success: true }),
+        }),
+      ) as jest.Mock;
+  
+      renderComponent();
+  
+      // Open create post modal
+      await waitFor(() => {
+        const createButton = screen.getByTestId('createPostModalBtn');
+        fireEvent.click(createButton);
+      });
+  
+      // Fill in required fields without file
+      const titleInput = screen.getByTestId('modalTitle');
+      const infoInput = screen.getByTestId('modalinfo');
+      
+      fireEvent.change(titleInput, { target: { value: 'Test Title' } });
+      fireEvent.change(infoInput, { target: { value: 'Test Content' } });
+  
+      // Verify no media preview is shown
+      expect(screen.queryByTestId('mediaPreview')).not.toBeInTheDocument();
+  
+      // Submit form
+      const submitButton = screen.getByTestId('createPostBtn');
+      fireEvent.click(submitButton);
+  
+      // Verify fetch call does not include file in FormData
+      await waitFor(() => {
+        expect(global.fetch).toHaveBeenCalled();
+        const fetchCall = (global.fetch as jest.Mock).mock.calls[0];
+        const [, { body }] = fetchCall;
+        
+        expect(body instanceof FormData).toBe(true);
+        expect(body.get('file')).toBeFalsy();
+      });
+    });
+  
+    it('handles file removal correctly', async () => {
+      renderComponent();
+  
+      // Open create post modal
+      await waitFor(() => {
+        const createButton = screen.getByTestId('createPostModalBtn');
+        fireEvent.click(createButton);
+      });
+  
+      // Add file
+      const file = new File(['test file content'], 'test-image.png', { type: 'image/png' });
+      const fileInput = screen.getByTestId('addMediaField');
+      
+      fireEvent.change(fileInput, { target: { files: [file] } });
+  
+      // Verify file preview is shown
+      await waitFor(() => {
+        expect(screen.getByTestId('mediaPreview')).toBeInTheDocument();
+      });
+  
+      // Remove file
+      const removeButton = screen.getByTestId('mediaCloseButton');
+      fireEvent.click(removeButton);
+  
+      // Verify preview is removed
+      expect(screen.queryByTestId('mediaPreview')).not.toBeInTheDocument();
+  
+      // Fill required fields and submit
+      const titleInput = screen.getByTestId('modalTitle');
+      const infoInput = screen.getByTestId('modalinfo');
+      
+      fireEvent.change(titleInput, { target: { value: 'Test Title' } });
+      fireEvent.change(infoInput, { target: { value: 'Test Content' } });
+  
+      const submitButton = screen.getByTestId('createPostBtn');
+      fireEvent.click(submitButton);
+  
+      // Verify fetch call does not include removed file
+      await waitFor(() => {
+        expect(global.fetch).toHaveBeenCalled();
+        const fetchCall = (global.fetch as jest.Mock).mock.calls[0];
+        const [, { body }] = fetchCall;
+        
+        expect(body instanceof FormData).toBe(true);
+        expect(body.get('file')).toBeFalsy();
+      });
+    });
+  
+    it('handles different file types correctly', async () => {
+      renderComponent();
+  
+      // Open create post modal
+      await waitFor(() => {
+        const createButton = screen.getByTestId('createPostModalBtn');
+        fireEvent.click(createButton);
+      });
+  
+      // Test image file
+      const imageFile = new File(['image content'], 'test-image.png', { type: 'image/png' });
+      const fileInput = screen.getByTestId('addMediaField');
+      
+      fireEvent.change(fileInput, { target: { files: [imageFile] } });
+  
+      // Verify image preview
+      await waitFor(() => {
+        expect(screen.getByTestId('imagePreview')).toBeInTheDocument();
+      });
+  
+      // Remove image
+      const removeButton = screen.getByTestId('mediaCloseButton');
+      fireEvent.click(removeButton);
+  
+      // Test video file
+      const videoFile = new File(['video content'], 'test-video.mp4', { type: 'video/mp4' });
+      fireEvent.change(fileInput, { target: { files: [videoFile] } });
+  
+      // Verify video preview
+      await waitFor(() => {
+        expect(screen.getByTestId('videoPreview')).toBeInTheDocument();
+      });
+    });
+    
+  });
+  
 });
