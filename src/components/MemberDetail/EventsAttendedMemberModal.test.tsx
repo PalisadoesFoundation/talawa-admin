@@ -4,7 +4,6 @@ import { MockedProvider } from '@apollo/client/testing';
 import { BrowserRouter } from 'react-router-dom';
 import EventsAttendedMemberModal from './EventsAttendedMemberModal';
 
-// Mock translations
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => key,
@@ -12,17 +11,23 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-// Mock event data
+jest.mock('./customTableCell', () => ({
+  CustomTableCell: ({ eventId }: { eventId: string }) => (
+    <tr data-testid="event-row">
+      <td>{`Event ${eventId}`}</td>
+      <td>2024-03-14</td>
+      <td>Yes</td>
+      <td>5</td>
+    </tr>
+  ),
+}));
+
 const mockEvents = Array.from({ length: 6 }, (_, index) => ({
-  _id: `event${index + 1}`,
+  _id: `${index + 1}`,
   name: `Event ${index + 1}`,
-  date: new Date().toISOString().split('T')[0],
-  isRecurring: false,
+  date: '2024-03-14',
+  isRecurring: true,
   attendees: 5,
-  description: `Description ${index + 1}`,
-  location: `Location ${index + 1}`,
-  startTime: '10:00',
-  endTime: '11:00',
 }));
 
 describe('EventsAttendedMemberModal', () => {
@@ -70,7 +75,7 @@ describe('EventsAttendedMemberModal', () => {
       </MockedProvider>,
     );
 
-    const eventRows = screen.getAllByTestId('custom-row');
+    const eventRows = screen.getAllByTestId('event-row');
     expect(eventRows).toHaveLength(5);
     expect(screen.getByText('Event 1')).toBeInTheDocument();
     expect(screen.getByText('Event 5')).toBeInTheDocument();
@@ -85,7 +90,7 @@ describe('EventsAttendedMemberModal', () => {
       </MockedProvider>,
     );
 
-    fireEvent.click(screen.getByRole('button', { name: '2' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Go to next page' }));
     expect(screen.getByText('Event 6')).toBeInTheDocument();
   });
 
@@ -114,7 +119,7 @@ describe('EventsAttendedMemberModal', () => {
     );
 
     expect(screen.getByText('Showing 1 - 5 of 6 Events')).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: '2' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Go to next page' }));
     expect(screen.getByText('Showing 6 - 6 of 6 Events')).toBeInTheDocument();
   });
 });

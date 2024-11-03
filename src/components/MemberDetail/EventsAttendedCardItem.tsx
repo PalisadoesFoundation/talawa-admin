@@ -51,13 +51,21 @@ const EventAttendedCard = (props: InterfaceCardItem): JSX.Element => {
           <Col xs={7} md={9} className="mb-3">
             <h5 className="mb-1">{title}</h5>
             <p className="text-muted mb-0 small">
-              <MdLocationOn className="text-action" size={20} />
+              <MdLocationOn
+                className="text-action"
+                size={20}
+                data-testid="LocationOnIcon"
+              />
               {location}
             </p>
           </Col>
           <Col xs={2} md={1} className="text-end">
             <Link to={`/event/${orgId}/${eventId}`} state={{ id: eventId }}>
-              <MdChevronRight className="text-action" size={20} />
+              <MdChevronRight
+                className="text-action"
+                size={20}
+                data-testid="ChevronRightIcon"
+              />
             </Link>
           </Col>
         </Row>

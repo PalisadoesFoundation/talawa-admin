@@ -54,17 +54,7 @@ const mocks = [
     result: {
       data: {
         event: {
-          attendees: mockAttendees.map((attendee) => ({
-            _id: attendee._id,
-            firstName: attendee.firstName,
-            lastName: attendee.lastName,
-            createdAt: attendee.createdAt,
-            gender: attendee.gender,
-            birthDate: attendee.birthDate,
-            eventsAttended: attendee.eventsAttended,
-            tagsAssignedWith: attendee.tagsAssignedWith,
-            __typename: attendee.__typename,
-          })),
+          attendees: mockAttendees,
         },
       },
     },
@@ -177,7 +167,7 @@ jest.mock('react-router-dom', () => ({
 }));
 
 describe('EventAttendance Component', () => {
-  const renderComponent = () =>
+  const renderComponent = (): ReturnType<typeof render> =>
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <BrowserRouter>

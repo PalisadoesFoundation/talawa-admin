@@ -525,7 +525,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         <Card.Header
           className={`bg-primary d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius}`}
         >
-          <h3 className="text-white m-0">{t('eventsAttended')}</h3>
+          <h3 className="text-white m-0" data-testid="eventsAttended-title">
+            {t('eventsAttended')}
+          </h3>
           <Button
             style={{ borderRadius: '20px' }}
             size="sm"

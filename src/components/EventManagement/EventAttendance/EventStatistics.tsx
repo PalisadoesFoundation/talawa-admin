@@ -240,7 +240,12 @@ export const AttendanceStatisticsModal: React.FC<
         ? [
             memberData.filter((member) => member.gender === 'MALE').length,
             memberData.filter((member) => member.gender === 'FEMALE').length,
-            memberData.filter((member) => member.gender === 'OTHER').length,
+            memberData.filter(
+              (member) =>
+                member.gender === 'OTHER' ||
+                member.gender === null ||
+                member.gender === '',
+            ).length,
           ]
         : [
             memberData.filter((member) => {

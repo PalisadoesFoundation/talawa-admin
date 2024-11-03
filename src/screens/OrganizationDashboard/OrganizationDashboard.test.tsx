@@ -120,51 +120,50 @@ describe('Testing Organization Dashboard Screen', () => {
     await waitFor(() => {
       expect(screen.getByTestId('paramsError')).toBeInTheDocument();
     });
-  });
 
-  it('should render Organization Dashboard screen', async () => {
-    renderOrganizationDashboard(link1);
+    it('should render Organization Dashboard screen', async () => {
+      renderOrganizationDashboard(link1);
 
-    // Dashboard cards
-    const membersBtn = await screen.findByText(t.members);
-    expect(membersBtn).toBeInTheDocument();
-    expect(screen.getByText(t.admins)).toBeInTheDocument();
-    expect(screen.getByText(t.posts)).toBeInTheDocument();
-    expect(screen.getByText(t.events)).toBeInTheDocument();
-    expect(screen.getByText(t.blockedUsers)).toBeInTheDocument();
+      // Dashboard cards
+      const membersBtn = await screen.findByText(t.members);
+      expect(membersBtn).toBeInTheDocument();
+      expect(screen.getByText(t.admins)).toBeInTheDocument();
+      expect(screen.getByText(t.posts)).toBeInTheDocument();
+      expect(screen.getByText(t.events)).toBeInTheDocument();
+      expect(screen.getByText(t.blockedUsers)).toBeInTheDocument();
 
-    // Upcoming events
-    expect(screen.getByText(t.upcomingEvents)).toBeInTheDocument();
-    expect(screen.getByText('Event 1')).toBeInTheDocument();
+      // Upcoming events
+      expect(screen.getByText(t.upcomingEvents)).toBeInTheDocument();
+      expect(screen.getByText('Event 1')).toBeInTheDocument();
 
-    // Latest posts
-    expect(screen.getByText(t.latestPosts)).toBeInTheDocument();
-    expect(screen.getByText('postone')).toBeInTheDocument();
+      // Latest posts
+      expect(screen.getByText(t.latestPosts)).toBeInTheDocument();
+      expect(screen.getByText('postone')).toBeInTheDocument();
 
-    // Membership requests
-    expect(screen.getByText(t.membershipRequests)).toBeInTheDocument();
-    expect(screen.getByText('Jane Doe')).toBeInTheDocument();
+      // Membership requests
+      expect(screen.getByText(t.membershipRequests)).toBeInTheDocument();
+      expect(screen.getByText('Jane Doe')).toBeInTheDocument();
 
-    // Volunteer rankings
-    expect(screen.getByText(t.volunteerRankings)).toBeInTheDocument();
-    expect(screen.getByText('Teresa Bradley')).toBeInTheDocument();
-  });
-
-  it('Click People Card', async () => {
-    renderOrganizationDashboard(link1);
-    const membersBtn = await screen.findByText(t.members);
-    expect(membersBtn).toBeInTheDocument();
-
-    userEvent.click(membersBtn);
-    await waitFor(() => {
-      expect(screen.getByTestId('orgpeople')).toBeInTheDocument();
+      // Volunteer rankings
+      expect(screen.getByText(t.volunteerRankings)).toBeInTheDocument();
+      expect(screen.getByText('Teresa Bradley')).toBeInTheDocument();
     });
-  });
 
-  it('Click Admin Card', async () => {
-    renderOrganizationDashboard(link1);
-    const adminsBtn = await screen.findByText(t.admins);
-    expect(adminsBtn).toBeInTheDocument();
+    it('Click People Card', async () => {
+      renderOrganizationDashboard(link1);
+      const membersBtn = await screen.findByText(t.members);
+      expect(membersBtn).toBeInTheDocument();
+
+      userEvent.click(membersBtn);
+      await waitFor(() => {
+        expect(screen.getByTestId('orgpeople')).toBeInTheDocument();
+      });
+    });
+
+    it('Click Admin Card', async () => {
+      renderOrganizationDashboard(link1);
+      const adminsBtn = await screen.findByText(t.admins);
+      expect(adminsBtn).toBeInTheDocument();
     });
   });
 

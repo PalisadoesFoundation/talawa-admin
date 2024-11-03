@@ -65,7 +65,7 @@ describe('CustomTableCell', () => {
     await waitFor(() => screen.getByTestId('custom-row'));
 
     expect(screen.getByText('Test Event')).toBeInTheDocument();
-    expect(screen.getByText('5/1/2023')).toBeInTheDocument();
+    expect(screen.getByText('May 1, 2023')).toBeInTheDocument();
     expect(screen.getByText('Yes')).toBeInTheDocument();
     expect(screen.getByText('2')).toBeInTheDocument();
 

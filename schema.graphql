@@ -1017,6 +1017,7 @@ type Query {
   chatById(id: ID!): Chat!
   chatsByUserId(id: ID!): [Chat]
   event(id: ID!): Event
+  eventsAttendedByUser(id: ID, orderBy: EventOrderByInput): [Event]
   eventVolunteersByEvent(id: ID!): [EventVolunteer]
   eventsByOrganization(id: ID, orderBy: EventOrderByInput): [Event]
   eventsByOrganizationConnection(
@@ -1057,6 +1058,7 @@ type Query {
     where: UserWhereInput
   ): UserConnection!
   plugin(orgId: ID!): [Plugin]
+  getRecurringEvents(baseRecurringEventId: ID!): [Event]
   post(id: ID!): Post
   postsByOrganization(id: ID!, orderBy: PostOrderByInput): [Post]
   postsByOrganizationConnection(
@@ -1309,6 +1311,7 @@ type User {
   phone: UserPhone
   pluginCreationAllowed: Boolean!
   registeredEvents: [Event]
+  eventsAttended: [Event]
   tagsAssignedWith(
     after: String
     before: String

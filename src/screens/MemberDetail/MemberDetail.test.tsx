@@ -190,10 +190,7 @@ const MOCKS2 = [
                 _id: '65e0e2abb92c9f3e29503d4e',
               },
             ],
-            eventsAttended: [
-              { _id: 'event1', name: 'Event 1' },
-              { _id: 'event2', name: 'Event 2' },
-            ],
+            eventsAttended: [{ _id: 'event1' }, { _id: 'event2' }],
             membershipRequests: [],
             organizationsBlockedBy: [],
             registeredEvents: [
@@ -645,7 +642,7 @@ describe('MemberDetail', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    expect(screen.getByText('Events Attended')).toBeInTheDocument();
+    expect(screen.getByTestId('eventsAttended-title')).toBeInTheDocument();
     await waitFor(() => {
       const eventsCards = screen.getAllByTestId('membereventsCard');
       expect(eventsCards.length).toBe(2);
