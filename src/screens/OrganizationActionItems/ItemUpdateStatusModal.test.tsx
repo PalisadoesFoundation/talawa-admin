@@ -39,11 +39,14 @@ const itemProps: InterfaceItemUpdateStatusModalProps[] = [
     actionItemsRefetch: jest.fn(),
     actionItem: {
       _id: 'actionItemId1',
-      assignee: {
+      assignee: null,
+      assigneeGroup: null,
+      assigneeType: 'User',
+      assigneeUser: {
         _id: 'userId1',
         firstName: 'John',
         lastName: 'Doe',
-        image: null,
+        image: undefined,
       },
       actionItemCategory: {
         _id: 'actionItemCategoryId1',
@@ -56,12 +59,85 @@ const itemProps: InterfaceItemUpdateStatusModalProps[] = [
       completionDate: new Date('2044-09-03'),
       isCompleted: true,
       event: null,
-      allotedHours: 24,
+      allottedHours: 24,
       assigner: {
         _id: 'userId2',
         firstName: 'Wilt',
         lastName: 'Shepherd',
-        image: null,
+        image: undefined,
+      },
+      creator: {
+        _id: 'userId2',
+        firstName: 'Wilt',
+        lastName: 'Shepherd',
+      },
+    },
+  },
+  {
+    isOpen: true,
+    hide: jest.fn(),
+    actionItemsRefetch: jest.fn(),
+    actionItem: {
+      _id: 'actionItemId1',
+      assignee: null,
+      assigneeGroup: {
+        _id: 'volunteerGroupId1',
+        name: 'Group 1',
+        description: 'Description 1',
+        event: {
+          _id: 'eventId1',
+        },
+        createdAt: '2024-08-27',
+        creator: {
+          _id: 'userId2',
+          firstName: 'Wilt',
+          lastName: 'Shepherd',
+          image: undefined,
+        },
+        leader: {
+          _id: 'userId1',
+          firstName: 'John',
+          lastName: 'Doe',
+          image: undefined,
+        },
+        volunteersRequired: 10,
+        assignments: [],
+        volunteers: [
+          {
+            _id: 'volunteerId1',
+            user: {
+              _id: 'userId1',
+              firstName: 'John',
+              lastName: 'Doe',
+              image: undefined,
+            },
+          },
+        ],
+      },
+      assigneeType: 'EventVolunteerGroup',
+      assigneeUser: {
+        _id: 'userId1',
+        firstName: 'John',
+        lastName: 'Doe',
+        image: undefined,
+      },
+      actionItemCategory: {
+        _id: 'actionItemCategoryId1',
+        name: 'Category 1',
+      },
+      preCompletionNotes: 'Notes 1',
+      postCompletionNotes: null,
+      assignmentDate: new Date('2024-08-27'),
+      dueDate: new Date('2044-08-30'),
+      completionDate: new Date('2044-09-03'),
+      isCompleted: false,
+      event: null,
+      allottedHours: 24,
+      assigner: {
+        _id: 'userId2',
+        firstName: 'Wilt',
+        lastName: 'Shepherd',
+        image: undefined,
       },
       creator: {
         _id: 'userId2',
@@ -77,11 +153,21 @@ const itemProps: InterfaceItemUpdateStatusModalProps[] = [
     actionItem: {
       _id: 'actionItemId1',
       assignee: {
-        _id: 'userId1',
-        firstName: 'John',
-        lastName: 'Doe',
-        image: null,
+        _id: 'volunteerId1',
+        hasAccepted: true,
+        user: {
+          _id: 'userId1',
+          firstName: 'John',
+          lastName: 'Doe',
+          image: undefined,
+        },
+        assignments: [],
+        groups: [],
+        hoursVolunteered: 0,
       },
+      assigneeGroup: null,
+      assigneeType: 'EventVolunteer',
+      assigneeUser: null,
       actionItemCategory: {
         _id: 'actionItemCategoryId1',
         name: 'Category 1',
@@ -91,14 +177,14 @@ const itemProps: InterfaceItemUpdateStatusModalProps[] = [
       assignmentDate: new Date('2024-08-27'),
       dueDate: new Date('2044-08-30'),
       completionDate: new Date('2044-09-03'),
-      isCompleted: false,
+      isCompleted: true,
       event: null,
-      allotedHours: 24,
+      allottedHours: 24,
       assigner: {
         _id: 'userId2',
         firstName: 'Wilt',
         lastName: 'Shepherd',
-        image: null,
+        image: undefined,
       },
       creator: {
         _id: 'userId2',
@@ -160,7 +246,7 @@ describe('Testing ItemUpdateStatusModal', () => {
   });
 
   it('should fail to Update status of Action Item', async () => {
-    renderItemUpdateStatusModal(link2, itemProps[0]);
+    renderItemUpdateStatusModal(link2, itemProps[2]);
 
     expect(screen.getByText(t.actionItemStatus)).toBeInTheDocument();
     const yesBtn = await screen.findByTestId('yesBtn');

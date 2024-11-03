@@ -1,202 +1,278 @@
+import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { fireEvent, render, screen } from '@testing-library/react';
-import 'jest-location-mock';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import type { RenderResult } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
-
-import userEvent from '@testing-library/user-event';
-import { toast } from 'react-toastify';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import i18nForTest from 'utils/i18nForTest';
-import useLocalStorage from 'utils/useLocalstorage';
+import i18n from 'utils/i18nForTest';
 import OrganizationDashboard from './OrganizationDashboard';
-import { EMPTY_MOCKS, ERROR_MOCKS, MOCKS } from './OrganizationDashboardMocks';
-import React, { act } from 'react';
-const { setItem } = useLocalStorage();
-import type { InterfaceQueryOrganizationEventListItem } from 'utils/interfaces';
-
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
-const link1 = new StaticMockLink(MOCKS, true);
-const link2 = new StaticMockLink(EMPTY_MOCKS, true);
-const link3 = new StaticMockLink(ERROR_MOCKS, true);
+import type { ApolloLink } from '@apollo/client';
+import { MOCKS, EMPTY_MOCKS, ERROR_MOCKS } from './OrganizationDashboardMocks';
+import { toast } from 'react-toastify';
 
 jest.mock('react-toastify', () => ({
   toast: {
     success: jest.fn(),
-    warn: jest.fn(),
     error: jest.fn(),
   },
 }));
-const mockNavgate = jest.fn();
-let mockId: string | undefined = undefined;
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockNavgate,
-  useParams: () => ({ orgId: mockId }),
-}));
 
-beforeEach(() => {
-  setItem('FirstName', 'John');
-  setItem('LastName', 'Doe');
-  setItem(
-    'UserImage',
-    'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
+const link1 = new StaticMockLink(MOCKS);
+const link2 = new StaticMockLink(ERROR_MOCKS);
+const link3 = new StaticMockLink(EMPTY_MOCKS);
+const t = {
+  ...JSON.parse(
+    JSON.stringify(i18n.getDataByLanguage('en')?.translation.dashboard ?? {}),
+  ),
+  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
+  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
+};
+
+const renderOrganizationDashboard = (link: ApolloLink): RenderResult => {
+  return render(
+    <MockedProvider addTypename={false} link={link}>
+      <MemoryRouter initialEntries={['/orgdash/orgId']}>
+        <Provider store={store}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <I18nextProvider i18n={i18n}>
+              <Routes>
+                <Route
+                  path="/orgdash/:orgId"
+                  element={<OrganizationDashboard />}
+                />
+                <Route
+                  path="/orgpeople/:orgId"
+                  element={<div data-testid="orgpeople"></div>}
+                />
+                <Route
+                  path="/orgevents/:orgId"
+                  element={<div data-testid="orgevents"></div>}
+                />
+                <Route
+                  path="/orgpost/:orgId"
+                  element={<div data-testid="orgpost"></div>}
+                />
+                <Route
+                  path="/orgevents/:orgId"
+                  element={<div data-testid="orgevents"></div>}
+                />
+                <Route
+                  path="/blockuser/:orgId"
+                  element={<div data-testid="blockuser"></div>}
+                />
+                <Route
+                  path="/leaderboard/:orgId"
+                  element={<div data-testid="leaderboard"></div>}
+                />
+                <Route
+                  path="/requests"
+                  element={<div data-testid="requests"></div>}
+                />
+                <Route
+                  path="/"
+                  element={<div data-testid="paramsError"></div>}
+                />
+              </Routes>
+            </I18nextProvider>
+          </LocalizationProvider>
+        </Provider>
+      </MemoryRouter>
+    </MockedProvider>,
   );
-});
+};
 
-afterEach(() => {
-  jest.clearAllMocks();
-  localStorage.clear();
-});
+describe('Testing Organization Dashboard Screen', () => {
+  beforeAll(() => {
+    jest.mock('react-router-dom', () => ({
+      ...jest.requireActual('react-router-dom'),
+      useParams: () => ({ orgId: 'orgId' }),
+    }));
+  });
 
-describe('Organisation Dashboard Page', () => {
-  test('Should render props and text elements test for the screen', async () => {
-    await act(async () => {
-      render(
-        <MockedProvider addTypename={false} link={link1}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <OrganizationDashboard />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should redirect to fallback URL if URL params are undefined', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link1}>
+        <MemoryRouter initialEntries={['/orgdash/']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18n}>
+              <Routes>
+                <Route path="/orgdash/" element={<OrganizationDashboard />} />
+                <Route
+                  path="/"
+                  element={<div data-testid="paramsError"></div>}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+    await waitFor(() => {
+      expect(screen.getByTestId('paramsError')).toBeInTheDocument();
     });
+  });
 
-    await wait();
-    expect(screen.getByText('Members')).toBeInTheDocument();
-    expect(screen.getByText('Admins')).toBeInTheDocument();
-    expect(screen.getAllByText('Posts')).toHaveLength(1);
-    expect(screen.getAllByText('Events')).toHaveLength(1);
-    expect(screen.getByText('Blocked Users')).toBeInTheDocument();
-    expect(screen.getByText('Requests')).toBeInTheDocument();
-    expect(screen.getByText('Upcoming Events')).toBeInTheDocument();
-    expect(screen.getByText('Latest Posts')).toBeInTheDocument();
-    expect(screen.getByText('Membership requests')).toBeInTheDocument();
+  it('should render Organization Dashboard screen', async () => {
+    renderOrganizationDashboard(link1);
 
-    // Checking if posts are rendered
+    // Dashboard cards
+    const membersBtn = await screen.findByText(t.members);
+    expect(membersBtn).toBeInTheDocument();
+    expect(screen.getByText(t.admins)).toBeInTheDocument();
+    expect(screen.getByText(t.posts)).toBeInTheDocument();
+    expect(screen.getByText(t.events)).toBeInTheDocument();
+    expect(screen.getByText(t.blockedUsers)).toBeInTheDocument();
+
+    // Upcoming events
+    expect(screen.getByText(t.upcomingEvents)).toBeInTheDocument();
+    expect(screen.getByText('Event 1')).toBeInTheDocument();
+
+    // Latest posts
+    expect(screen.getByText(t.latestPosts)).toBeInTheDocument();
     expect(screen.getByText('postone')).toBeInTheDocument();
 
-    // Checking if membership requests are rendered
+    // Membership requests
+    expect(screen.getByText(t.membershipRequests)).toBeInTheDocument();
     expect(screen.getByText('Jane Doe')).toBeInTheDocument();
 
-    const peopleBtn = screen.getByText('Members');
-    const adminBtn = screen.getByText('Admins');
-    const postBtn = screen.getAllByText('Posts');
-    const eventBtn = screen.getAllByText('Events');
-    const blockUserBtn = screen.getByText('Blocked Users');
-    const requestBtn = screen.getByText('Requests');
-    userEvent.click(peopleBtn);
-    userEvent.click(adminBtn);
-    userEvent.click(postBtn[0]);
-    userEvent.click(eventBtn[0]);
-    userEvent.click(postBtn[0]);
-    userEvent.click(eventBtn[0]);
-    userEvent.click(blockUserBtn);
-    userEvent.click(requestBtn);
+    // Volunteer rankings
+    expect(screen.getByText(t.volunteerRankings)).toBeInTheDocument();
+    expect(screen.getByText('Teresa Bradley')).toBeInTheDocument();
   });
 
-  test('Testing buttons and checking empty events, posts and membership requests', async () => {
-    await act(async () => {
-      render(
-        <MockedProvider addTypename={false} link={link2}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <OrganizationDashboard />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
+  it('Click People Card', async () => {
+    renderOrganizationDashboard(link1);
+    const membersBtn = await screen.findByText(t.members);
+    expect(membersBtn).toBeInTheDocument();
+
+    userEvent.click(membersBtn);
+    await waitFor(() => {
+      expect(screen.getByTestId('orgpeople')).toBeInTheDocument();
     });
-
-    await wait();
-    const viewEventsBtn = screen.getByTestId('viewAllEvents');
-    const viewPostsBtn = screen.getByTestId('viewAllPosts');
-    const viewMSBtn = screen.getByTestId('viewAllMembershipRequests');
-
-    userEvent.click(viewEventsBtn);
-    userEvent.click(viewPostsBtn);
-    fireEvent.click(viewMSBtn);
-    expect(toast.success).toHaveBeenCalledWith('Coming soon!');
-
-    expect(
-      screen.getByText(/No membership requests present/i),
-    ).toBeInTheDocument();
-    expect(screen.getByText(/No upcoming events/i)).toBeInTheDocument();
-    expect(screen.getByText(/No Posts Present/i)).toBeInTheDocument();
   });
 
-  test('Testing error scenario', async () => {
-    await act(async () => {
-      render(
-        <MockedProvider addTypename={false} link={link3}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <OrganizationDashboard />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
+  it('Click Admin Card', async () => {
+    renderOrganizationDashboard(link1);
+    const adminsBtn = await screen.findByText(t.admins);
+    expect(adminsBtn).toBeInTheDocument();
     });
-
-    await wait();
-    expect(mockNavgate).toHaveBeenCalledWith('/orglist');
-  });
-  test('upcomingEvents cardItem component should render when length>0', async () => {
-    mockId = '123';
-    await act(async () => {
-      render(
-        <MockedProvider addTypename={false} link={link1}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <OrganizationDashboard />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-    });
-    screen.getByTestId('cardItem');
   });
 
-  test('event data should get updated using useState function', async () => {
-    mockId = '123';
-    const mockSetState = jest.spyOn(React, 'useState');
-    jest.doMock('react', () => ({
-      ...jest.requireActual('react'),
-      useState: (initial: InterfaceQueryOrganizationEventListItem[]) => [
-        initial,
-        mockSetState,
-      ],
-    }));
-    await act(async () => {
-      render(
-        <MockedProvider addTypename={false} link={link1}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <OrganizationDashboard />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
+  it('Click Post Card', async () => {
+    renderOrganizationDashboard(link1);
+    const postsBtn = await screen.findByText(t.posts);
+    expect(postsBtn).toBeInTheDocument();
+
+    userEvent.click(postsBtn);
+    await waitFor(() => {
+      expect(screen.getByTestId('orgpost')).toBeInTheDocument();
     });
-    expect(mockSetState).toHaveBeenCalled();
+  });
+
+  it('Click Events Card', async () => {
+    renderOrganizationDashboard(link1);
+    const eventsBtn = await screen.findByText(t.events);
+    expect(eventsBtn).toBeInTheDocument();
+
+    userEvent.click(eventsBtn);
+    await waitFor(() => {
+      expect(screen.getByTestId('orgevents')).toBeInTheDocument();
+    });
+  });
+
+  it('Click Blocked Users Card', async () => {
+    renderOrganizationDashboard(link1);
+    const blockedUsersBtn = await screen.findByText(t.blockedUsers);
+    expect(blockedUsersBtn).toBeInTheDocument();
+
+    userEvent.click(blockedUsersBtn);
+    await waitFor(() => {
+      expect(screen.getByTestId('blockuser')).toBeInTheDocument();
+    });
+  });
+
+  it('Click Requests Card', async () => {
+    renderOrganizationDashboard(link1);
+    const requestsBtn = await screen.findByText(t.requests);
+    expect(requestsBtn).toBeInTheDocument();
+
+    userEvent.click(requestsBtn);
+    await waitFor(() => {
+      expect(screen.getByTestId('requests')).toBeInTheDocument();
+    });
+  });
+
+  it('Click View All Events', async () => {
+    renderOrganizationDashboard(link1);
+    const viewAllBtn = await screen.findAllByText(t.viewAll);
+    expect(viewAllBtn[0]).toBeInTheDocument();
+
+    userEvent.click(viewAllBtn[0]);
+    await waitFor(() => {
+      expect(screen.getByTestId('orgevents')).toBeInTheDocument();
+    });
+  });
+
+  it('Click View All Posts', async () => {
+    renderOrganizationDashboard(link1);
+    const viewAllBtn = await screen.findAllByText(t.viewAll);
+    expect(viewAllBtn[1]).toBeInTheDocument();
+
+    userEvent.click(viewAllBtn[1]);
+    await waitFor(() => {
+      expect(screen.getByTestId('orgpost')).toBeInTheDocument();
+    });
+  });
+
+  it('Click View All Requests', async () => {
+    renderOrganizationDashboard(link1);
+    const viewAllBtn = await screen.findAllByText(t.viewAll);
+    expect(viewAllBtn[2]).toBeInTheDocument();
+
+    userEvent.click(viewAllBtn[2]);
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalled();
+    });
+  });
+
+  it('Click View All Leaderboard', async () => {
+    renderOrganizationDashboard(link1);
+    const viewAllBtn = await screen.findAllByText(t.viewAll);
+    expect(viewAllBtn[3]).toBeInTheDocument();
+
+    userEvent.click(viewAllBtn[3]);
+    await waitFor(() => {
+      expect(screen.getByTestId('leaderboard')).toBeInTheDocument();
+    });
+  });
+
+  it('should render Organization Dashboard screen with empty data', async () => {
+    renderOrganizationDashboard(link3);
+
+    await waitFor(() => {
+      expect(screen.getByText(t.noUpcomingEvents)).toBeInTheDocument();
+      expect(screen.getByText(t.noPostsPresent)).toBeInTheDocument();
+      expect(screen.getByText(t.noMembershipRequests)).toBeInTheDocument();
+      expect(screen.getByText(t.noVolunteers)).toBeInTheDocument();
+    });
+  });
+
+  it('should redirectt to / if error occurs', async () => {
+    renderOrganizationDashboard(link2);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+      expect(screen.getByTestId('paramsError')).toBeInTheDocument();
+    });
   });
 });

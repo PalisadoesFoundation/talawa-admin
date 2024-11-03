@@ -6,12 +6,14 @@ import { FaChevronLeft, FaTasks } from 'react-icons/fa';
 import { MdOutlineDashboard } from 'react-icons/md';
 import EventRegistrantsIcon from 'assets/svgs/people.svg?react';
 import { BsPersonCheck } from 'react-icons/bs';
-import { IoMdStats } from 'react-icons/io';
+import { IoMdStats, IoIosHand } from 'react-icons/io';
 import EventAgendaItemsIcon from 'assets/svgs/agenda-items.svg?react';
 import { useTranslation } from 'react-i18next';
 import { Button, Dropdown } from 'react-bootstrap';
+
 import EventDashboard from 'components/EventManagement/Dashboard/EventDashboard';
 import OrganizationActionItems from 'screens/OrganizationActionItems/OrganizationActionItems';
+import VolunteerContainer from 'screens/EventVolunteers/VolunteerContainer';
 import EventAgendaItems from 'components/EventManagement/EventAgendaItems/EventAgendaItems';
 import useLocalStorage from 'utils/useLocalstorage';
 import EventAttendance from 'components/EventManagement/EventAttendance/EventAttendance';
@@ -37,15 +39,19 @@ const eventDashboardTabs: {
     icon: <BsPersonCheck size={20} className="me-1" />,
   },
   {
-    value: 'eventActions',
-    icon: <FaTasks size={16} className="me-1" />,
-  },
-  {
-    value: 'eventAgendas',
+    value: 'agendas',
     icon: <EventAgendaItemsIcon width={23} height={23} className="me-1" />,
   },
   {
-    value: 'eventStats',
+    value: 'actions',
+    icon: <FaTasks size={16} className="me-1" />,
+  },
+  {
+    value: 'volunteers',
+    icon: <IoIosHand size={20} className="me-1" />,
+  },
+  {
+    value: 'statistics',
     icon: <IoMdStats size={20} className="me-2" />,
   },
 ];
@@ -57,9 +63,10 @@ type TabOptions =
   | 'dashboard'
   | 'registrants'
   | 'attendance'
-  | 'eventActions'
-  | 'eventAgendas'
-  | 'eventStats';
+  | 'agendas'
+  | 'actions'
+  | 'volunteers'
+  | 'statistics';
 
 /**
  * `EventManagement` component handles the display and navigation of different event management sections.
@@ -130,13 +137,12 @@ const EventManagement = (): JSX.Element => {
     const translatedText = t(value);
 
     const className = selected
-      ? 'px-4 d-flex align-items-center shadow'
-      : 'text-secondary bg-white px-4 d-flex align-items-center rounded shadow';
+      ? 'px-4 d-flex align-items-center rounded-3 shadow-sm'
+      : 'text-secondary bg-white px-4 d-flex align-items-center rounded-3 shadow-sm';
     const props = {
       variant,
       className,
       style: { height: '2.5rem' },
-      size: 'sm' as 'sm' | 'lg',
       onClick: () => setTab(value),
       'data-testid': `${value}Btn`,
     };
@@ -163,7 +169,7 @@ const EventManagement = (): JSX.Element => {
             <Button
               size="sm"
               variant="light"
-              className="d-flex text-secondary bg-white align-items-center px-3 shadow"
+              className="d-flex text-secondary bg-white align-items-center px-3 shadow-sm rounded-3"
             >
               <FaChevronLeft
                 cursor={'pointer'}
@@ -214,7 +220,7 @@ const EventManagement = (): JSX.Element => {
         switch (tab) {
           case 'dashboard':
             return (
-              <div data-testid="eventDashboadTab">
+              <div data-testid="eventDashboardTab">
                 <EventDashboard eventId={eventId} />
               </div>
             );
@@ -228,22 +234,34 @@ const EventManagement = (): JSX.Element => {
                 <EventAttendance />
               </div>
             );
-          case 'eventActions':
+          case 'actions':
             return (
-              <div data-testid="eventActionsTab" className="mx-4">
+              <div
+                data-testid="eventActionsTab"
+                className="mx-4 bg-white p-4 pt-2 rounded-4 shadow"
+              >
                 <OrganizationActionItems />
               </div>
             );
-          case 'eventAgendas':
+          case 'volunteers':
+            return (
+              <div
+                data-testid="eventVolunteersTab"
+                className="mx-4 bg-white p-4 pt-2 rounded-4 shadow"
+              >
+                <VolunteerContainer />
+              </div>
+            );
+          case 'agendas':
             return (
               <div data-testid="eventAgendasTab">
                 <EventAgendaItems eventId={eventId} />
               </div>
             );
-          case 'eventStats':
+          case 'statistics':
             return (
               <div data-testid="eventStatsTab">
-                <h2>Event Statistics</h2>
+                <h2>Statistics</h2>
               </div>
             );
           default:

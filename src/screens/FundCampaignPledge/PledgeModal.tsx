@@ -6,7 +6,7 @@ import { currencyOptions, currencySymbols } from 'utils/currency';
 import type {
   InterfaceCreatePledge,
   InterfacePledgeInfo,
-  InterfacePledger,
+  InterfaceUserInfo,
 } from 'utils/interfaces';
 import styles from './FundCampaignPledge.module.css';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -91,7 +91,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     pledgeEndDate: new Date(pledge?.endDate ?? new Date()),
     pledgeStartDate: new Date(pledge?.startDate ?? new Date()),
   });
-  const [pledgers, setPledgers] = useState<InterfacePledger[]>([]);
+  const [pledgers, setPledgers] = useState<InterfaceUserInfo[]>([]);
   const [updatePledge] = useMutation(UPDATE_PLEDGE);
   const [createPledge] = useMutation(CREATE_PlEDGE);
 
@@ -235,7 +235,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               value={pledgeUsers}
               isOptionEqualToValue={(option, value) => option._id === value._id}
               filterSelectedOptions={true}
-              getOptionLabel={(member: InterfacePledger): string =>
+              getOptionLabel={(member: InterfaceUserInfo): string =>
                 `${member.firstName} ${member.lastName}`
               }
               onChange={
