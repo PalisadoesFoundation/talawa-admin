@@ -72,16 +72,16 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     country: '',
     pluginCreationAllowed: false,
   });
-  // Handle date change
   const handleDateChange = (date: Dayjs | null): void => {
     if (date) {
       setisUpdated(true);
       setFormState((prevState) => ({
         ...prevState,
-        birthDate: dayjs(date).format('YYYY-MM-DD'), // Convert Dayjs object to JavaScript Date object
+        birthDate: dayjs(date).format('YYYY-MM-DD'),
       }));
     }
   };
+
   /*istanbul ignore next*/
   const handleEditIconClick = (): void => {
     fileInputRef.current?.click();
