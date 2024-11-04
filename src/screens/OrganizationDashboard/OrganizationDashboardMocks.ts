@@ -1,3 +1,4 @@
+import { VOLUNTEER_RANKING } from 'GraphQl/Queries/EventVolunteerQueries';
 import {
   ORGANIZATIONS_LIST,
   ORGANIZATION_EVENT_CONNECTION_LIST,
@@ -8,12 +9,13 @@ export const MOCKS = [
   {
     request: {
       query: ORGANIZATIONS_LIST,
+      variables: { id: 'orgId' },
     },
     result: {
       data: {
         organizations: [
           {
-            _id: 123,
+            _id: 'orgId',
             image: '',
             name: 'Dummy Organization',
             description: 'This is a Dummy Organization',
@@ -53,7 +55,7 @@ export const MOCKS = [
             ],
             membershipRequests: [
               {
-                _id: '456',
+                _id: 'requestId1',
                 user: {
                   firstName: 'Jane',
                   lastName: 'Doe',
@@ -77,7 +79,7 @@ export const MOCKS = [
   {
     request: {
       query: ORGANIZATION_POST_LIST,
-      variables: { first: 10 },
+      variables: { id: 'orgId', first: 10 },
     },
     result: {
       data: {
@@ -87,7 +89,7 @@ export const MOCKS = [
               edges: [
                 {
                   node: {
-                    _id: '6411e53835d7ba2344a78e21',
+                    _id: 'postId1',
                     title: 'postone',
                     text: 'This is the first post',
                     file: {
@@ -149,11 +151,11 @@ export const MOCKS = [
                     ],
                     pinned: true,
                   },
-                  cursor: '6411e53835d7ba2344a78e21',
+                  cursor: 'postId1',
                 },
                 {
                   node: {
-                    _id: '6411e54835d7ba2344a78e29',
+                    _id: 'postId2',
                     title: 'posttwo',
                     text: 'This is post two',
                     file: null,
@@ -191,15 +193,15 @@ export const MOCKS = [
     request: {
       query: ORGANIZATION_EVENT_CONNECTION_LIST,
       variables: {
-        organization_id: '123',
+        organization_id: 'orgId',
       },
     },
     result: {
       data: {
         eventsByOrganizationConnection: [
           {
-            _id: '1',
-            title: 'Sample Event',
+            _id: 'eventId1',
+            title: 'Event 1',
             description: 'Sample Description',
             startDate: '2025-10-29T00:00:00.000Z',
             endDate: '2023-10-29T23:59:59.000Z',
@@ -214,8 +216,8 @@ export const MOCKS = [
             isRegisterable: true,
           },
           {
-            _id: '2',
-            title: 'Sample Event',
+            _id: 'eventId2',
+            title: 'Event 2',
             description: 'Sample Description',
             startDate: '2022-10-29T00:00:00.000Z',
             endDate: '2023-10-29T23:59:59.000Z',
@@ -233,12 +235,76 @@ export const MOCKS = [
       },
     },
   },
+  {
+    request: {
+      query: VOLUNTEER_RANKING,
+      variables: {
+        orgId: 'orgId',
+        where: {
+          orderBy: 'hours_DESC',
+          timeFrame: 'allTime',
+          limit: 3,
+        },
+      },
+    },
+    result: {
+      data: {
+        getVolunteerRanks: [
+          {
+            rank: 1,
+            hoursVolunteered: 5,
+            user: {
+              _id: 'userId1',
+              lastName: 'Bradley',
+              firstName: 'Teresa',
+              image: null,
+              email: 'testuser4@example.com',
+            },
+          },
+          {
+            rank: 2,
+            hoursVolunteered: 4,
+            user: {
+              _id: 'userId2',
+              lastName: 'Garza',
+              firstName: 'Bruce',
+              image: null,
+              email: 'testuser5@example.com',
+            },
+          },
+          {
+            rank: 3,
+            hoursVolunteered: 3,
+            user: {
+              _id: 'userId3',
+              lastName: 'John',
+              firstName: 'Doe',
+              image: null,
+              email: 'testuser6@example.com',
+            },
+          },
+          {
+            rank: 4,
+            hoursVolunteered: 2,
+            user: {
+              _id: 'userId4',
+              lastName: 'Jane',
+              firstName: 'Doe',
+              image: null,
+              email: 'testuser7@example.com',
+            },
+          },
+        ],
+      },
+    },
+  },
 ];
 
 export const EMPTY_MOCKS = [
   {
     request: {
       query: ORGANIZATIONS_LIST,
+      variables: { id: 'orgId' },
     },
     result: {
       data: {
@@ -299,7 +365,7 @@ export const EMPTY_MOCKS = [
   {
     request: {
       query: ORGANIZATION_POST_LIST,
-      variables: { first: 10 },
+      variables: { id: 'orgId', first: 10 },
     },
     result: {
       data: {
@@ -323,10 +389,31 @@ export const EMPTY_MOCKS = [
   {
     request: {
       query: ORGANIZATION_EVENT_CONNECTION_LIST,
+      variables: {
+        organization_id: 'orgId',
+      },
     },
     result: {
       data: {
         eventsByOrganizationConnection: [],
+      },
+    },
+  },
+  {
+    request: {
+      query: VOLUNTEER_RANKING,
+      variables: {
+        orgId: '123',
+        where: {
+          orderBy: 'hours_DESC',
+          timeFrame: 'allTime',
+          limit: 3,
+        },
+      },
+    },
+    result: {
+      data: {
+        getVolunteerRanks: [],
       },
     },
   },
@@ -336,19 +423,38 @@ export const ERROR_MOCKS = [
   {
     request: {
       query: ORGANIZATIONS_LIST,
+      variables: { id: 'orgId' },
     },
     error: new Error('Mock Graphql ORGANIZATIONS_LIST Error'),
   },
   {
     request: {
       query: ORGANIZATION_POST_LIST,
+      variables: { id: 'orgId', first: 10 },
     },
     error: new Error('Mock Graphql ORGANIZATION_POST_LIST Error'),
   },
   {
     request: {
       query: ORGANIZATION_EVENT_CONNECTION_LIST,
+      variables: {
+        organization_id: 'orgId',
+      },
     },
     error: new Error('Mock Graphql ORGANIZATION_EVENT_LIST Error'),
+  },
+  {
+    request: {
+      query: VOLUNTEER_RANKING,
+      variables: {
+        orgId: '123',
+        where: {
+          orderBy: 'hours_DESC',
+          timeFrame: 'allTime',
+          limit: 3,
+        },
+      },
+    },
+    error: new Error('Mock Graphql VOLUNTEER_RANKING Error'),
   },
 ];

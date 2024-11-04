@@ -4,7 +4,7 @@ import styles from './Pledges.module.css';
 import { useTranslation } from 'react-i18next';
 import { Search, Sort, WarningAmberRounded } from '@mui/icons-material';
 import useLocalStorage from 'utils/useLocalstorage';
-import type { InterfacePledgeInfo, InterfacePledger } from 'utils/interfaces';
+import type { InterfacePledgeInfo, InterfaceUserInfo } from 'utils/interfaces';
 import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
 import { type ApolloQueryResult, useQuery } from '@apollo/client';
 import { USER_PLEDGES } from 'GraphQl/Queries/fundQueries';
@@ -81,7 +81,7 @@ const Pledges = (): JSX.Element => {
   }
 
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
-  const [extraUsers, setExtraUsers] = useState<InterfacePledger[]>([]);
+  const [extraUsers, setExtraUsers] = useState<InterfaceUserInfo[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [pledges, setPledges] = useState<InterfacePledgeInfo[]>([]);
   const [pledge, setPledge] = useState<InterfacePledgeInfo | null>(null);
@@ -154,7 +154,7 @@ const Pledges = (): JSX.Element => {
 
   const handleClick = (
     event: React.MouseEvent<HTMLElement>,
-    users: InterfacePledger[],
+    users: InterfaceUserInfo[],
   ): void => {
     setExtraUsers(users);
     setAnchor(anchor ? null : event.currentTarget);
@@ -197,7 +197,7 @@ const Pledges = (): JSX.Element => {
           <div className="d-flex flex-wrap gap-1" style={{ maxHeight: 120 }}>
             {params.row.users
               .slice(0, 2)
-              .map((user: InterfacePledger, index: number) => (
+              .map((user: InterfaceUserInfo, index: number) => (
                 <div className={styles.pledgerContainer} key={index}>
                   {user.image ? (
                     <img
@@ -519,7 +519,7 @@ const Pledges = (): JSX.Element => {
         disablePortal
         className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
       >
-        {extraUsers.map((user: InterfacePledger, index: number) => (
+        {extraUsers.map((user: InterfaceUserInfo, index: number) => (
           <div
             className={styles.pledgerContainer}
             key={index}

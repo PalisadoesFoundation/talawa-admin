@@ -19,6 +19,7 @@ const map: InterfaceMapType = {
   donate: 'donate',
   campaigns: 'userCampaigns',
   pledges: 'userPledges',
+  volunteer: 'userVolunteer',
 };
 
 /**
