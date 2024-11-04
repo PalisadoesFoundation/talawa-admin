@@ -72,7 +72,7 @@ const renderStartPostModal = () => {
           </I18nextProvider>
         </Provider>
       </BrowserRouter>
-    </MockedProvider>
+    </MockedProvider>,
   );
 };
 
@@ -95,10 +95,10 @@ describe('StartPostModal Component', () => {
     });
 
     renderStartPostModal();
-    
+
     const postInput = screen.getByTestId('postInput');
     await userEvent.type(postInput, 'Test post content');
-    
+
     const createPostBtn = screen.getByTestId('createPostBtn');
     await userEvent.click(createPostBtn);
 
@@ -119,10 +119,10 @@ describe('StartPostModal Component', () => {
     });
 
     renderStartPostModal();
-    
+
     const postInput = screen.getByTestId('postInput');
     await userEvent.type(postInput, 'Test post content');
-    
+
     const createPostBtn = screen.getByTestId('createPostBtn');
     await userEvent.click(createPostBtn);
 
@@ -139,10 +139,10 @@ describe('StartPostModal Component', () => {
     });
 
     renderStartPostModal();
-    
+
     const postInput = screen.getByTestId('postInput');
     await userEvent.type(postInput, 'Test post content');
-    
+
     const createPostBtn = screen.getByTestId('createPostBtn');
     await userEvent.click(createPostBtn);
 
@@ -154,10 +154,12 @@ describe('StartPostModal Component', () => {
   // Rest of existing tests...
   it('should reset form state when modal is closed', () => {
     renderStartPostModal();
-    
+
     const postInput = screen.getByTestId('postInput');
-    fireEvent.change(postInput, { target: { name: 'postinfo', value: 'Test content' } });
-    
+    fireEvent.change(postInput, {
+      target: { name: 'postinfo', value: 'Test content' },
+    });
+
     const closeButton = screen.getByRole('button', { name: /close/i });
     fireEvent.click(closeButton);
 
@@ -169,7 +171,9 @@ describe('StartPostModal Component', () => {
     renderStartPostModal();
 
     const fileInput = screen.getByTestId('modalFileInput') as HTMLInputElement;
-    const imageFile = new File(['dummy content'], 'test-image.png', { type: 'image/png' });
+    const imageFile = new File(['dummy content'], 'test-image.png', {
+      type: 'image/png',
+    });
 
     await userEvent.upload(fileInput, imageFile);
 
@@ -184,7 +188,9 @@ describe('StartPostModal Component', () => {
     renderStartPostModal();
 
     const fileInput = screen.getByTestId('modalFileInput') as HTMLInputElement;
-    const videoFile = new File(['dummy content'], 'test-video.mp4', { type: 'video/mp4' });
+    const videoFile = new File(['dummy content'], 'test-video.mp4', {
+      type: 'video/mp4',
+    });
 
     await userEvent.upload(fileInput, videoFile);
 
@@ -201,7 +207,9 @@ describe('StartPostModal Component', () => {
     renderStartPostModal();
 
     const fileInput = screen.getByTestId('modalFileInput') as HTMLInputElement;
-    const imageFile = new File(['dummy content'], 'test-image.png', { type: 'image/png' });
+    const imageFile = new File(['dummy content'], 'test-image.png', {
+      type: 'image/png',
+    });
 
     await userEvent.upload(fileInput, imageFile);
 
@@ -211,7 +219,9 @@ describe('StartPostModal Component', () => {
     await userEvent.upload(fileInput, []);
 
     await waitFor(() => {
-      expect(screen.queryByAltText('Post Image Preview')).not.toBeInTheDocument();
+      expect(
+        screen.queryByAltText('Post Image Preview'),
+      ).not.toBeInTheDocument();
     });
 
     expect(mockRevokeObjectURL).toHaveBeenCalledWith('mocked-preview-url');
@@ -223,7 +233,7 @@ describe('StartPostModal Component', () => {
     jest.clearAllMocks();
     document.getElementById = jest.fn().mockReturnValue({ click: mockClick });
   });
-  
+
   it('should trigger file input click when Add Media button is clicked', () => {
     renderStartPostModal();
 
@@ -236,20 +246,20 @@ describe('StartPostModal Component', () => {
 
   it('should disable post button when post body is empty', () => {
     renderStartPostModal();
-    
+
     const createPostBtn = screen.getByTestId('createPostBtn');
     expect(createPostBtn).toBeDisabled();
 
     const postInput = screen.getByTestId('postInput');
 
-    fireEvent.change(postInput, { 
-      target: { name: 'postinfo', value: 'Test content' } 
+    fireEvent.change(postInput, {
+      target: { name: 'postinfo', value: 'Test content' },
     });
 
     expect(createPostBtn).toBeEnabled();
 
-    fireEvent.change(postInput, { 
-      target: { name: 'postinfo', value: '' } 
+    fireEvent.change(postInput, {
+      target: { name: 'postinfo', value: '' },
     });
 
     expect(createPostBtn).toBeDisabled();
@@ -257,12 +267,12 @@ describe('StartPostModal Component', () => {
 
   it('should consider whitespace-only content as empty', () => {
     renderStartPostModal();
-    
+
     const postInput = screen.getByTestId('postInput');
     const createPostBtn = screen.getByTestId('createPostBtn');
 
-    fireEvent.change(postInput, { 
-      target: { name: 'postinfo', value: '   ' } 
+    fireEvent.change(postInput, {
+      target: { name: 'postinfo', value: '   ' },
     });
 
     expect(createPostBtn).toBeDisabled();
@@ -273,23 +283,24 @@ describe('StartPostModal Component', () => {
       ok: true,
       json: async () => ({ success: true }),
     });
-  
+
     // Setup and render
     renderStartPostModal();
-  
+
     // Select file
     const fileInput = screen.getByTestId('modalFileInput');
     const testFile = new File(['test'], 'test.png', { type: 'image/png' });
     await userEvent.upload(fileInput, testFile);
-  
+
     // Trigger post (which will create FormData and append file)
     const postInput = screen.getByTestId('postInput');
     await userEvent.type(postInput, 'test');
     await userEvent.click(screen.getByTestId('createPostBtn'));
-  
+
     // Verify file was appended to FormData
     await waitFor(() => {
-      const formData = (global.fetch as jest.Mock).mock.calls[0][1].body as FormData;
+      const formData = (global.fetch as jest.Mock).mock.calls[0][1]
+        .body as FormData;
       expect(formData.get('file')).toEqual(testFile);
     });
   });

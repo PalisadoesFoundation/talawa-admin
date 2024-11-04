@@ -1,4 +1,3 @@
-// Start of Selection
 import React from 'react';
 import {
   render,
@@ -41,7 +40,6 @@ jest.mock('components/OrgPostCard/OrgPostCard', () => {
     );
   };
 });
-
 
 // Mock modules
 jest.mock('react-toastify', () => ({
@@ -986,21 +984,23 @@ describe('OrgPost Component', () => {
       },
       result: {
         data: {
-          organizations: [{
-            posts: {
-              edges: [],
-              pageInfo: {
-                hasNextPage: false,
-                hasPreviousPage: false,
-                startCursor: '',
-                endCursor: '',
+          organizations: [
+            {
+              posts: {
+                edges: [],
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: '',
+                  endCursor: '',
+                },
               },
             },
-          }],
+          ],
         },
       },
     };
-  
+
     const renderComponent = () => {
       return render(
         <MockedProvider mocks={[mockData]} addTypename={false}>
@@ -1009,16 +1009,16 @@ describe('OrgPost Component', () => {
               <OrgPost />
             </I18nextProvider>
           </BrowserRouter>
-        </MockedProvider>
+        </MockedProvider>,
       );
     };
-  
+
     beforeEach(() => {
       jest.clearAllMocks();
       global.URL.createObjectURL = jest.fn(() => 'mock-url');
       global.URL.revokeObjectURL = jest.fn();
     });
-  
+
     it('appends file to FormData when media file is present', async () => {
       // Mock fetch response
       global.fetch = jest.fn(() =>
@@ -1027,49 +1027,51 @@ describe('OrgPost Component', () => {
           json: () => Promise.resolve({ success: true }),
         }),
       ) as jest.Mock;
-  
+
       renderComponent();
-  
+
       // Open create post modal
       await waitFor(() => {
         const createButton = screen.getByTestId('createPostModalBtn');
         fireEvent.click(createButton);
       });
-  
+
       // Fill in required fields
       const titleInput = screen.getByTestId('modalTitle');
       const infoInput = screen.getByTestId('modalinfo');
-      
+
       fireEvent.change(titleInput, { target: { value: 'Test Title' } });
       fireEvent.change(infoInput, { target: { value: 'Test Content' } });
-  
+
       // Create and attach file
-      const file = new File(['test file content'], 'test-image.png', { type: 'image/png' });
+      const file = new File(['test file content'], 'test-image.png', {
+        type: 'image/png',
+      });
       const fileInput = screen.getByTestId('addMediaField');
-      
+
       fireEvent.change(fileInput, { target: { files: [file] } });
-  
+
       // Verify file preview is shown
       await waitFor(() => {
         expect(screen.getByTestId('mediaPreview')).toBeInTheDocument();
       });
-  
+
       // Submit form
       const submitButton = screen.getByTestId('createPostBtn');
       fireEvent.click(submitButton);
-  
+
       // Verify fetch call includes file in FormData
       await waitFor(() => {
         expect(global.fetch).toHaveBeenCalled();
         const fetchCall = (global.fetch as jest.Mock).mock.calls[0];
         const [, { body }] = fetchCall;
-        
+
         expect(body instanceof FormData).toBe(true);
         expect(body.get('file')).toBeTruthy();
         expect(body.get('file')).toEqual(file);
       });
     });
-  
+
     it('does not append file to FormData when no media file is present', async () => {
       // Mock fetch response
       global.fetch = jest.fn(() =>
@@ -1078,122 +1080,126 @@ describe('OrgPost Component', () => {
           json: () => Promise.resolve({ success: true }),
         }),
       ) as jest.Mock;
-  
+
       renderComponent();
-  
+
       // Open create post modal
       await waitFor(() => {
         const createButton = screen.getByTestId('createPostModalBtn');
         fireEvent.click(createButton);
       });
-  
+
       // Fill in required fields without file
       const titleInput = screen.getByTestId('modalTitle');
       const infoInput = screen.getByTestId('modalinfo');
-      
+
       fireEvent.change(titleInput, { target: { value: 'Test Title' } });
       fireEvent.change(infoInput, { target: { value: 'Test Content' } });
-  
+
       // Verify no media preview is shown
       expect(screen.queryByTestId('mediaPreview')).not.toBeInTheDocument();
-  
+
       // Submit form
       const submitButton = screen.getByTestId('createPostBtn');
       fireEvent.click(submitButton);
-  
+
       // Verify fetch call does not include file in FormData
       await waitFor(() => {
         expect(global.fetch).toHaveBeenCalled();
         const fetchCall = (global.fetch as jest.Mock).mock.calls[0];
         const [, { body }] = fetchCall;
-        
+
         expect(body instanceof FormData).toBe(true);
         expect(body.get('file')).toBeFalsy();
       });
     });
-  
+
     it('handles file removal correctly', async () => {
       renderComponent();
-  
+
       // Open create post modal
       await waitFor(() => {
         const createButton = screen.getByTestId('createPostModalBtn');
         fireEvent.click(createButton);
       });
-  
+
       // Add file
-      const file = new File(['test file content'], 'test-image.png', { type: 'image/png' });
+      const file = new File(['test file content'], 'test-image.png', {
+        type: 'image/png',
+      });
       const fileInput = screen.getByTestId('addMediaField');
-      
+
       fireEvent.change(fileInput, { target: { files: [file] } });
-  
+
       // Verify file preview is shown
       await waitFor(() => {
         expect(screen.getByTestId('mediaPreview')).toBeInTheDocument();
       });
-  
+
       // Remove file
       const removeButton = screen.getByTestId('mediaCloseButton');
       fireEvent.click(removeButton);
-  
+
       // Verify preview is removed
       expect(screen.queryByTestId('mediaPreview')).not.toBeInTheDocument();
-  
+
       // Fill required fields and submit
       const titleInput = screen.getByTestId('modalTitle');
       const infoInput = screen.getByTestId('modalinfo');
-      
+
       fireEvent.change(titleInput, { target: { value: 'Test Title' } });
       fireEvent.change(infoInput, { target: { value: 'Test Content' } });
-  
+
       const submitButton = screen.getByTestId('createPostBtn');
       fireEvent.click(submitButton);
-  
+
       // Verify fetch call does not include removed file
       await waitFor(() => {
         expect(global.fetch).toHaveBeenCalled();
         const fetchCall = (global.fetch as jest.Mock).mock.calls[0];
         const [, { body }] = fetchCall;
-        
+
         expect(body instanceof FormData).toBe(true);
         expect(body.get('file')).toBeFalsy();
       });
     });
-  
+
     it('handles different file types correctly', async () => {
       renderComponent();
-  
+
       // Open create post modal
       await waitFor(() => {
         const createButton = screen.getByTestId('createPostModalBtn');
         fireEvent.click(createButton);
       });
-  
+
       // Test image file
-      const imageFile = new File(['image content'], 'test-image.png', { type: 'image/png' });
+      const imageFile = new File(['image content'], 'test-image.png', {
+        type: 'image/png',
+      });
       const fileInput = screen.getByTestId('addMediaField');
-      
+
       fireEvent.change(fileInput, { target: { files: [imageFile] } });
-  
+
       // Verify image preview
       await waitFor(() => {
         expect(screen.getByTestId('imagePreview')).toBeInTheDocument();
       });
-  
+
       // Remove image
       const removeButton = screen.getByTestId('mediaCloseButton');
       fireEvent.click(removeButton);
-  
+
       // Test video file
-      const videoFile = new File(['video content'], 'test-video.mp4', { type: 'video/mp4' });
+      const videoFile = new File(['video content'], 'test-video.mp4', {
+        type: 'video/mp4',
+      });
       fireEvent.change(fileInput, { target: { files: [videoFile] } });
-  
+
       // Verify video preview
       await waitFor(() => {
         expect(screen.getByTestId('videoPreview')).toBeInTheDocument();
       });
     });
-    
   });
-  
 });

@@ -68,9 +68,8 @@ export default function OrgPostCard(
         setModalVisible(false);
         setMenuVisible(false);
         toast.success(`${pinned ? 'Post unpinned' : 'Post pinned'}`);
-        setTimeout(() => {
-        }, 2000);
-          window.location.reload();
+        setTimeout(() => {}, 2000);
+        window.location.reload();
       }
     } catch (error: unknown) {
       /* istanbul ignore next */

@@ -243,7 +243,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
   };
 
   // Edit the post
-  const handleEditPost = async () => {
+  const handleEditPost = async (): Promise<void> => {
     try {
       const formData = new FormData();
       formData.append('id', props.id);
@@ -252,6 +252,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
         formData.append('file', editedMedia);
       }
 
+      console.log(formData);
       const accessToken = getItem('token');
 
       const response = await fetch(
@@ -294,7 +295,9 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
     }
   };
 
-  const handleMediaChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMediaChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ): void => {
     const file = event.target.files?.[0];
     if (!file) return;
 
@@ -314,7 +317,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
     setEditedMediaType(isImage ? 'image' : 'video');
   };
 
-  const handleClearMedia = () => {
+  const handleClearMedia = (): void => {
     setEditedMedia(null);
     setEditedMediaType(null);
     setMediaPreviewUrl(null);
@@ -541,7 +544,13 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
           </div>
         </Modal.Body>
       </Modal>
-      <Modal show={showEditPost} onHide={toggleEditPost} size="lg" data-testid="editPostModal" centered>
+      <Modal
+        show={showEditPost}
+        onHide={toggleEditPost}
+        size="lg"
+        data-testid="editPostModal"
+        centered
+      >
         <Modal.Header closeButton className="py-2 ">
           <p className="fs-3" data-testid={'editPostModalTitle'}>
             {t('editPost')}
@@ -571,10 +580,12 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
                 }}
               >
                 {editedMediaType === 'video' ? (
-                <VideocamIcon className="me-1" data-testid="VideocamIcon" />
+                  <VideocamIcon className="me-1" data-testid="VideocamIcon" />
                 ) : (
-                  <AddPhotoAlternateIcon className="me-1" data-testid="AddPhotoAlternateIcon" />
-
+                  <AddPhotoAlternateIcon
+                    className="me-1"
+                    data-testid="AddPhotoAlternateIcon"
+                  />
                 )}
                 Change Media
               </Button>
@@ -596,7 +607,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
               onChange={handleMediaChange}
               accept="image/*,video/*"
               className="d-none"
-              data-testid="file-input" 
+              data-testid="file-input"
             />
 
             <div className="media-preview mt-2">
@@ -639,7 +650,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
             size="sm"
             variant="success"
             className="px-4"
-            data-testid={'editPostBtn'}
+            data-testid="editPostBtn"
             onClick={handleEditPost}
           >
             {t('editPost')}

@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -290,7 +290,9 @@ describe('Testing PostCard Component [User Portal]', () => {
   });
 
   test('Edit post should work properly', async () => {
+    // Setup local storage
     setItem('userId', '2');
+    setItem('token', 'dummy-token');
 
     const cardProps = {
       id: 'postId',
@@ -320,27 +322,16 @@ describe('Testing PostCard Component [User Portal]', () => {
       fetchPosts: jest.fn(),
     };
 
-    const mocks = [
-      {
-        request: {
-          query: UPDATE_POST_MUTATION,
-          variables: {
-            id: 'postId',
-            text: 'Edited Post'
-          }
-        },
-        result: {
-          data: {
-            updatePost: {
-              _id: 'postId'
-            }
-          }
-        }
-      }
-    ];
+    // Mock successful fetch response
+    (global.fetch as jest.Mock).mockImplementationOnce(() =>
+      Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({ message: 'Post updated successfully' }),
+      }),
+    );
 
     render(
-      <MockedProvider addTypename={false} mocks={mocks} link={link}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -350,19 +341,45 @@ describe('Testing PostCard Component [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await wait();
 
-    userEvent.click(screen.getByTestId('dropdown'));
+    // Open edit modal
+    await waitFor(() => {
+      userEvent.click(screen.getByTestId('dropdown'));
+    });
     userEvent.click(screen.getByTestId('editPost'));
-    await wait();
 
-    expect(screen.getByTestId('editPostModalTitle')).toBeInTheDocument();
+    // Verify modal is open
+    await waitFor(() => {
+      expect(screen.getByTestId('editPostModalTitle')).toBeInTheDocument();
+    });
+
+    // Edit post content
     userEvent.clear(screen.getByTestId('postInput'));
     userEvent.type(screen.getByTestId('postInput'), 'Edited Post');
-    userEvent.click(screen.getByTestId('editPostBtn'));
-    await wait();
 
-    expect(toast.success)
+    // Submit edit
+    userEvent.click(screen.getByTestId('editPostBtn'));
+
+    // Verify fetch was called with correct arguments
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalledWith(
+        `${process.env.REACT_APP_TALAWA_REST_URL}/update-post/postId`,
+        {
+          method: 'POST',
+          body: expect.any(FormData),
+          headers: { Authorization: 'Bearer dummy-token' },
+        },
+      );
+    });
+
+    // Verify FormData content
+    const fetchCall = (global.fetch as jest.Mock).mock.calls[0];
+    const formData = fetchCall[1].body;
+    expect(formData.get('id')).toBe('postId');
+    expect(formData.get('text')).toBe('Edited Post');
+
+    // Verify fetchPosts was called to refresh the posts
+    expect(cardProps.fetchPosts).toHaveBeenCalled();
   });
 
   test('Delete post should work properly', async () => {
@@ -413,7 +430,9 @@ describe('Testing PostCard Component [User Portal]', () => {
     userEvent.click(screen.getByTestId('deletePost'));
     await wait();
 
-    expect(toast.success).toBeCalledWith('Successfully deleted the post.');
+    expect(toast.success).toHaveBeenCalledWith(
+      'Successfully deleted the post.',
+    );
   });
 
   test('Component should be rendered properly if user has liked the post', async () => {
@@ -575,12 +594,11 @@ describe('Testing PostCard Component [User Portal]', () => {
     }
   });
 
-  
   test('Change Media button should trigger file input click and show correct icon', async () => {
     // Mock URL.createObjectURL
     const mockCreateObjectURL = jest.fn(() => 'mock-url');
     global.URL.createObjectURL = mockCreateObjectURL;
-  
+
     const cardProps = {
       id: 'postId',
       userImage: 'image.png',
@@ -602,7 +620,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       likedBy: [],
       fetchPosts: jest.fn(),
     };
-  
+
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -614,54 +632,58 @@ describe('Testing PostCard Component [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    
+
     await wait();
-  
+
     // Open edit modal
     userEvent.click(screen.getByTestId('dropdown'));
     userEvent.click(screen.getByTestId('editPost'));
     await wait();
-  
+
     // Get file input and spy on click
     const fileInput = screen.getByTestId('file-input');
     const clickSpy = jest.spyOn(fileInput, 'click');
-  
+
     // Click the Change Media button
     const changeMediaBtn = screen.getByText('Change Media');
     userEvent.click(changeMediaBtn);
-  
+
     // Verify file input was clicked
     expect(clickSpy).toHaveBeenCalled();
-  
+
     // Initially should show photo icon
     expect(screen.getByTestId('AddPhotoAlternateIcon')).toBeInTheDocument();
-  
+
     // Simulate video file upload
-    const videoFile = new File(['dummy content'], 'test.mp4', { type: 'video/mp4' });
-    fireEvent.change(fileInput, { 
-      target: { 
+    const videoFile = new File(['dummy content'], 'test.mp4', {
+      type: 'video/mp4',
+    });
+    fireEvent.change(fileInput, {
+      target: {
         files: [videoFile],
-        type: 'file'
-      } 
+        type: 'file',
+      },
     });
     await wait();
-  
+
     // Should now show video icon
     expect(screen.getByTestId('VideocamIcon')).toBeInTheDocument();
-  
+
     // Simulate image file upload
-    const imageFile = new File(['dummy content'], 'test.jpg', { type: 'image/jpeg' });
-    fireEvent.change(fileInput, { 
-      target: { 
+    const imageFile = new File(['dummy content'], 'test.jpg', {
+      type: 'image/jpeg',
+    });
+    fireEvent.change(fileInput, {
+      target: {
         files: [imageFile],
-        type: 'file'
-      } 
+        type: 'file',
+      },
     });
     await wait();
-  
+
     // Should show photo icon again
     expect(screen.getByTestId('AddPhotoAlternateIcon')).toBeInTheDocument();
-  
+
     // Clean up mock
     if (global.URL && global.URL.createObjectURL) {
       global.URL.createObjectURL = jest.fn();
@@ -671,10 +693,10 @@ describe('Testing PostCard Component [User Portal]', () => {
     // Mock fetch globally
     const mockFetch = jest.fn();
     global.fetch = mockFetch;
-  
+
     // Mock URL.createObjectURL
     global.URL.createObjectURL = jest.fn(() => 'mock-url');
-  
+
     const cardProps = {
       id: 'postId',
       userImage: 'image.png',
@@ -696,7 +718,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       likedBy: [],
       fetchPosts: jest.fn(),
     };
-  
+
     // Render component
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -709,90 +731,91 @@ describe('Testing PostCard Component [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-  
+
     await wait();
-  
+
     // Open edit modal
     userEvent.click(screen.getByTestId('dropdown'));
     userEvent.click(screen.getByTestId('editPost'));
     await wait();
-  
+
     // Test Case 1: Successful update
     mockFetch.mockImplementationOnce(() =>
       Promise.resolve({
         ok: true,
         json: () => Promise.resolve({ message: 'Success' }),
-      })
+      }),
     );
-  
+
     // Edit post and submit
     userEvent.clear(screen.getByTestId('postInput'));
     userEvent.type(screen.getByTestId('postInput'), 'Updated post content');
     userEvent.click(screen.getByTestId('editPostBtn'));
-    
+
     await wait();
-  
+
     // Verify success case
     expect(cardProps.fetchPosts).toHaveBeenCalled();
-    expect(toast.success).toHaveBeenCalledWith('Post updated Successfully'); // Updated expectation
-    // expect(screen.queryByTestId('editPostModal')).not.toBeInTheDocument(); // Modal should be closed
-  
+    expect(toast.success).toHaveBeenCalledWith('Post updated Successfully');
+
     // Reset mocks
     jest.clearAllMocks();
-    
+
     // Test Case 2: Failed update
     // Open edit modal again
     userEvent.click(screen.getByTestId('dropdown'));
     userEvent.click(screen.getByTestId('editPost'));
     await wait();
-  
+
     // Mock fetch to return error
     mockFetch.mockImplementationOnce(() =>
       Promise.resolve({
         ok: false,
-        json: () => Promise.resolve({ error: 'Update failed' || 'Failed to update the post'}),
-      })
+        json: () =>
+          Promise.resolve({
+            error: 'Update failed',
+          }),
+      }),
     );
-  
+
     // Try to edit post
     userEvent.clear(screen.getByTestId('postInput'));
     userEvent.type(screen.getByTestId('postInput'), 'Failed update attempt');
     userEvent.click(screen.getByTestId('editPostBtn'));
-    
+
     await wait();
-  
+
     // Verify error case
     expect(toast.error).toHaveBeenCalledWith('Update failed');
     expect(screen.getByTestId('editPostModalTitle')).toBeInTheDocument(); // Modal should stay open
     expect(cardProps.fetchPosts).not.toHaveBeenCalled();
-  
+
     // Test Case 3: Failed update with no error message
     mockFetch.mockImplementationOnce(() =>
       Promise.resolve({
         ok: false,
         json: () => Promise.resolve({}),
-      })
+      }),
     );
-  
+
     // Try to edit post again
     userEvent.clear(screen.getByTestId('postInput'));
     userEvent.type(screen.getByTestId('postInput'), 'Another failed update');
     userEvent.click(screen.getByTestId('editPostBtn'));
-    
+
     await wait();
-  
+
     // Verify default error message
     expect(toast.error).toHaveBeenCalledWith('Update failed'); // Updated expectation
     expect(screen.getByTestId('editPostModalTitle')).toBeInTheDocument();
-  
   });
   test('handleMediaChange validates file type and shows error for invalid media', async () => {
     // Clear all mocks at the start
     jest.clearAllMocks();
-    
+
     // Mock URL.createObjectURL
     global.URL.createObjectURL = jest.fn(() => 'mock-url');
-  
+
     const cardProps = {
       id: 'postId',
       userImage: 'image.png',
@@ -814,8 +837,8 @@ describe('Testing PostCard Component [User Portal]', () => {
       likedBy: [],
       fetchPosts: jest.fn(),
     };
-  
-    const { container } = render(
+
+    render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
@@ -826,78 +849,90 @@ describe('Testing PostCard Component [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    
+
     await wait();
-  
+
     // Clear mock again before starting test cases
     jest.clearAllMocks();
-  
+
     // Open edit modal
     userEvent.click(screen.getByTestId('dropdown'));
     userEvent.click(screen.getByTestId('editPost'));
     await wait();
-  
+
     const fileInput = screen.getByTestId('file-input');
-  
+
     // Test Case 1: Valid image file
-    const imageFile = new File(['dummy content'], 'test.jpg', { type: 'image/jpeg' });
-    fireEvent.change(fileInput, { 
-      target: { 
+    const imageFile = new File(['dummy content'], 'test.jpg', {
+      type: 'image/jpeg',
+    });
+    fireEvent.change(fileInput, {
+      target: {
         files: [imageFile],
-      } 
+      },
     });
     await wait();
-  
+
     expect(toast.error).toHaveBeenCalledTimes(0);
     expect(screen.getByTestId('AddPhotoAlternateIcon')).toBeInTheDocument();
-  
+
     // Clear mock before next test case
     jest.clearAllMocks();
-  
+
     // Test Case 2: Valid video file
-    const videoFile = new File(['dummy content'], 'test.mp4', { type: 'video/mp4' });
-    fireEvent.change(fileInput, { 
-      target: { 
+    const videoFile = new File(['dummy content'], 'test.mp4', {
+      type: 'video/mp4',
+    });
+    fireEvent.change(fileInput, {
+      target: {
         files: [videoFile],
-      } 
+      },
     });
     await wait();
-  
+
     expect(toast.error).toHaveBeenCalledTimes(0);
     expect(screen.getByTestId('VideocamIcon')).toBeInTheDocument();
-  
+
     // Clear mock before next test case
     jest.clearAllMocks();
-  
+
     // Test Case 3: Invalid file type (PDF)
-    const pdfFile = new File(['dummy content'], 'test.pdf', { type: 'application/pdf' });
-    fireEvent.change(fileInput, { 
-      target: { 
+    const pdfFile = new File(['dummy content'], 'test.pdf', {
+      type: 'application/pdf',
+    });
+    fireEvent.change(fileInput, {
+      target: {
         files: [pdfFile],
-      } 
+      },
     });
     await wait();
-  
+
     expect(toast.error).toHaveBeenCalledTimes(1);
-    expect(toast.error).toHaveBeenCalledWith('Please select and image or video file.');
+    expect(toast.error).toHaveBeenCalledWith(
+      'Please select and image or video file.',
+    );
     // Icons should remain unchanged after invalid file
     expect(screen.getByTestId('VideocamIcon')).toBeInTheDocument();
-  
+
     // Clear mock before next test case
     jest.clearAllMocks();
-  
+
     // Test Case 4: Invalid file type (text)
-    const textFile = new File(['dummy content'], 'test.txt', { type: 'text/plain' });
-    fireEvent.change(fileInput, { 
-      target: { 
+    const textFile = new File(['dummy content'], 'test.txt', {
+      type: 'text/plain',
+    });
+    fireEvent.change(fileInput, {
+      target: {
         files: [textFile],
-      } 
+      },
     });
     await wait();
-  
+
     expect(toast.error).toHaveBeenCalledTimes(1);
-    expect(toast.error).toHaveBeenCalledWith('Please select and image or video file.');
-  
+    expect(toast.error).toHaveBeenCalledWith(
+      'Please select and image or video file.',
+    );
+
     // Cleanup
     if (global.URL && global.URL.createObjectURL) {
       global.URL.createObjectURL = jest.fn();

@@ -18,10 +18,8 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-// import convertToBase64 from 'utils/convertToBase64';
 import { BrowserRouter } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
-import convertToBase64 from 'utils/convertToBase64';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 
@@ -1233,12 +1231,12 @@ describe('Testing Organization Post Card', () => {
 
   test('opens edit modal with video post and verifies state', async () => {
     setItem('id', '123');
-    
+
     const videoProps = {
       ...props,
       postPhoto: null,
       postVideo: 'test-video.mp4',
-      pinned: true
+      pinned: true,
     };
 
     render(
@@ -1250,7 +1248,7 @@ describe('Testing Organization Post Card', () => {
     );
 
     await wait();
-    
+
     // Open the edit modal
     userEvent.click(screen.getByTestId('cardVid'));
     userEvent.click(screen.getByTestId('moreiconbtn'));
@@ -1258,12 +1256,12 @@ describe('Testing Organization Post Card', () => {
 
     // Verify the modal is open
     expect(screen.getByTestId('modalOrganizationHeader')).toBeInTheDocument();
-    
+
     // Verify that the preview URL is set to the video URL
     const videoPreview = screen.getByTestId('videoPreview');
     const source = videoPreview.querySelector('source');
     expect(source).toHaveAttribute('src', 'test-video.mp4');
-    
+
     // Verify form state is initialized correctly
     expect(screen.getByTestId('updateTitle')).toHaveValue(videoProps.postTitle);
     expect(screen.getByTestId('updateText')).toHaveValue(videoProps.postInfo);

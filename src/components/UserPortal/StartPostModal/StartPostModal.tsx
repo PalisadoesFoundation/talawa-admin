@@ -81,7 +81,6 @@ const StartPostModal = ({
 
   const handlePost = async (): Promise<void> => {
     try {
-      
       const formData = new FormData();
       formData.append('text', postformState.postinfo);
       formData.append('organizationId', organizationId);
