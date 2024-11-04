@@ -25,7 +25,7 @@ export default function promotedPost(
 ): JSX.Element {
   return (
     <>
-      <Card className="my-3">
+      <Card className="my-3" data-testid={`promoted-post-${props.id}`}>
         <Card.Header>
           <div className={`${styles.cardHeader}`}>
             {/* Icon indicating promoted content */}

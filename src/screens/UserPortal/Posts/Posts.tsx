@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import Carousel from 'react-multi-carousel';
@@ -209,6 +209,7 @@ export default function home(): JSX.Element {
   // Effect hook to update advertisements state when data changes
   useEffect(() => {
     if (promotedPostsData && promotedPostsData.organizations) {
+      console.log(promotedPostsData.organizations[0].advertisements);
       const ads: Ad[] =
         promotedPostsData.organizations[0].advertisements?.edges.map(
           (edge) => edge.node,
@@ -332,64 +333,86 @@ export default function home(): JSX.Element {
                 variant="light"
                 className={`${styles.startPostBtn} w-100 text-start text-muted py-3 d-flex align-items-center gap-2 border`}
                 onClick={() => setShowModal(true)}
+                data-testid="start-post-button"
               >
                 Start a post, with text or media
               </Button>
             </div>
           </div>
-          <div
-            style={{
-              justifyContent: `space-between`,
-              alignItems: `center`,
-              marginTop: `1rem`,
-            }}
-          >
-            <h2>{t('feed')}</h2>
-            {pinnedPosts.length > 0 && (
-              <Carousel responsive={responsive}>
-                {pinnedPosts.map(({ node }: { node: InterfacePostNode }) => {
-                  const cardProps = getCardProps(node);
-                  return <PostCard key={node._id} {...cardProps} />;
-                })}
-              </Carousel>
-            )}
-          </div>
+          {pinnedPosts.length > 0 && (
+            <div data-testid="pinned-posts-carousel">
+              <div
+                style={{
+                  justifyContent: `space-between`,
+                  alignItems: `center`,
+                  marginTop: `1rem`,
+                }}
+              >
+                <h2>{t('feed')}</h2>
+                <Carousel responsive={responsive}>
+                  {pinnedPosts.map(({ node }: { node: InterfacePostNode }) => {
+                    const cardProps = getCardProps(node);
+                    return (
+                      <div data-testid="pinned-post" key={node._id}>
+                        <PostCard {...cardProps} />
+                      </div>
+                    );
+                  })}
+                </Carousel>
+              </div>
+            </div>
+          )}
 
           {adContent.length > 0 && (
-            <div data-testid="promotedPostsContainer">
+            <div data-testid="promoted-posts-container">
               {adContent.map((post: Ad) => (
-                <PromotedPost
-                  key={post._id}
-                  id={post._id}
-                  image={post.mediaUrl}
-                  title={post.name}
-                  data-testid="postid"
-                />
+                <div data-testid="promoted-post" key={post._id}>
+                  <PromotedPost
+                    id={post._id}
+                    image={post.mediaUrl}
+                    title={post.name}
+                  />
+                </div>
               ))}
             </div>
           )}
+
           <p className="fs-5 mt-5">{t(`yourFeed`)}</p>
-          <div className={` ${styles.postsCardsContainer}`}></div>
-          {loadingPosts ? (
-            <div className={`d-flex flex-row justify-content-center`}>
-              <HourglassBottomIcon /> <span>{tCommon('loading')}</span>
-            </div>
-          ) : (
-            <>
-              {posts.length > 0 ? (
-                <Row className="my-2">
-                  {posts.map(({ node }: { node: InterfacePostNode }) => {
-                    const cardProps = getCardProps(node);
-                    return <PostCard key={node._id} {...cardProps} />;
-                  })}
-                </Row>
-              ) : (
-                <p className="container flex justify-content-center my-4">
-                  {t(`nothingToShowHere`)}
-                </p>
-              )}
-            </>
-          )}
+          <div
+            data-testid="posts-container"
+            className={styles.postsCardsContainer}
+          >
+            {loadingPosts ? (
+              <div
+                className={`d-flex flex-row justify-content-center`}
+                data-testid="loading-indicator"
+              >
+                <HourglassBottomIcon /> <span>{tCommon('loading')}</span>
+              </div>
+            ) : (
+              <>
+                {posts.length > 0 ? (
+                  <Row className="my-2">
+                    {posts.map(({ node }: { node: InterfacePostNode }) => {
+                      const cardProps = getCardProps(node);
+                      return (
+                        <div data-testid="post-card" key={node._id}>
+                          <PostCard {...cardProps} />
+                        </div>
+                      );
+                    })}
+                  </Row>
+                ) : (
+                  <p
+                    className="container flex justify-content-center my-4"
+                    data-testid="no-posts-message"
+                  >
+                    {t(`nothingToShowHere`)}
+                  </p>
+                )}
+              </>
+            )}
+          </div>
           <StartPostModal
             show={showModal}
             onHide={handleModalClose}
