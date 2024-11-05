@@ -3,7 +3,7 @@ import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -13,6 +13,11 @@ import i18nForTest from '../../utils/i18nForTest';
 import { MOCKS } from './OrganizationActionItem.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import ItemViewModal, { type InterfaceViewModalProps } from './ItemViewModal';
+import type {
+  InterfaceEventVolunteerInfo,
+  InterfaceUserInfo,
+  InterfaceVolunteerGroupInfo,
+} from 'utils/interfaces';
 
 jest.mock('react-toastify', () => ({
   toast: {
@@ -28,22 +33,67 @@ const t = JSON.parse(
   ),
 );
 
+const createUser = (
+  id: string,
+  firstName: string,
+  lastName: string,
+  image?: string,
+): InterfaceUserInfo => ({
+  _id: id,
+  firstName,
+  lastName,
+  image,
+});
+
+const createAssignee = (
+  user: ReturnType<typeof createUser>,
+  hasAccepted = true,
+): InterfaceEventVolunteerInfo => ({
+  _id: `${user._id}-assignee`,
+  user,
+  assignments: [],
+  groups: [],
+  hasAccepted,
+  hoursVolunteered: 0,
+});
+
+const createAssigneeGroup = (
+  id: string,
+  name: string,
+  leader: ReturnType<typeof createUser>,
+): InterfaceVolunteerGroupInfo => ({
+  _id: id,
+  name,
+  description: `${name} description`,
+  event: { _id: 'eventId1' },
+  volunteers: [],
+  assignments: [],
+  volunteersRequired: 10,
+  leader,
+  creator: leader,
+  createdAt: '2024-08-27',
+});
+
+const userWithImage = createUser('userId', 'Wilt', 'Shepherd', 'wilt-image');
+const userWithoutImage = createUser('userId', 'Wilt', 'Shepherd');
+const assigneeWithImage = createUser('userId1', 'John', 'Doe', 'image-url');
+const assigneeWithoutImage = createUser('userId1', 'John', 'Doe');
+const actionItemCategory = {
+  _id: 'actionItemCategoryId2',
+  name: 'Category 2',
+};
+
 const itemProps: InterfaceViewModalProps[] = [
   {
     isOpen: true,
     hide: jest.fn(),
     item: {
       _id: 'actionItemId1',
-      assignee: {
-        _id: 'userId1',
-        firstName: 'John',
-        lastName: 'Doe',
-        image: null,
-      },
-      actionItemCategory: {
-        _id: 'actionItemCategoryId1',
-        name: 'Category 1',
-      },
+      assignee: createAssignee(assigneeWithoutImage),
+      assigneeGroup: null,
+      assigneeType: 'EventVolunteer',
+      assigneeUser: null,
+      actionItemCategory,
       preCompletionNotes: 'Notes 1',
       postCompletionNotes: 'Cmp Notes 1',
       assignmentDate: new Date('2024-08-27'),
@@ -51,18 +101,9 @@ const itemProps: InterfaceViewModalProps[] = [
       completionDate: new Date('2044-09-03'),
       isCompleted: true,
       event: null,
-      allotedHours: 24,
-      assigner: {
-        _id: 'userId2',
-        firstName: 'Wilt',
-        lastName: 'Shepherd',
-        image: null,
-      },
-      creator: {
-        _id: 'userId2',
-        firstName: 'Wilt',
-        lastName: 'Shepherd',
-      },
+      allottedHours: 24,
+      assigner: userWithoutImage,
+      creator: userWithoutImage,
     },
   },
   {
@@ -70,16 +111,11 @@ const itemProps: InterfaceViewModalProps[] = [
     hide: jest.fn(),
     item: {
       _id: 'actionItemId2',
-      assignee: {
-        _id: 'userId1',
-        firstName: 'Jane',
-        lastName: 'Doe',
-        image: 'image-url',
-      },
-      actionItemCategory: {
-        _id: 'actionItemCategoryId2',
-        name: 'Category 2',
-      },
+      assignee: createAssignee(assigneeWithImage),
+      assigneeGroup: null,
+      assigneeType: 'EventVolunteer',
+      assigneeUser: null,
+      actionItemCategory,
       preCompletionNotes: 'Notes 2',
       postCompletionNotes: null,
       assignmentDate: new Date('2024-08-27'),
@@ -87,18 +123,79 @@ const itemProps: InterfaceViewModalProps[] = [
       completionDate: new Date('2044-10-03'),
       isCompleted: false,
       event: null,
-      allotedHours: null,
-      assigner: {
-        _id: 'userId2',
-        firstName: 'Wilt',
-        lastName: 'Shepherd',
-        image: 'wilt-image',
-      },
-      creator: {
-        _id: 'userId2',
-        firstName: 'Wilt',
-        lastName: 'Shepherd',
-      },
+      allottedHours: null,
+      assigner: userWithImage,
+      creator: userWithoutImage,
+    },
+  },
+  {
+    isOpen: true,
+    hide: jest.fn(),
+    item: {
+      _id: 'actionItemId2',
+      assignee: null,
+      assigneeGroup: null,
+      assigneeType: 'User',
+      assigneeUser: assigneeWithImage,
+      actionItemCategory,
+      preCompletionNotes: 'Notes 2',
+      postCompletionNotes: null,
+      assignmentDate: new Date('2024-08-27'),
+      dueDate: new Date('2044-09-30'),
+      completionDate: new Date('2044-10-03'),
+      isCompleted: false,
+      event: null,
+      allottedHours: null,
+      assigner: userWithImage,
+      creator: userWithoutImage,
+    },
+  },
+  {
+    isOpen: true,
+    hide: jest.fn(),
+    item: {
+      _id: 'actionItemId2',
+      assignee: null,
+      assigneeGroup: null,
+      assigneeType: 'User',
+      assigneeUser: createUser('userId1', 'Jane', 'Doe'),
+      actionItemCategory,
+      preCompletionNotes: 'Notes 2',
+      postCompletionNotes: null,
+      assignmentDate: new Date('2024-08-27'),
+      dueDate: new Date('2044-09-30'),
+      completionDate: new Date('2044-10-03'),
+      isCompleted: false,
+      event: null,
+      allottedHours: null,
+      assigner: userWithoutImage,
+      creator: userWithoutImage,
+    },
+  },
+  {
+    isOpen: true,
+    hide: jest.fn(),
+    item: {
+      _id: 'actionItemId2',
+      assignee: null,
+      assigneeGroup: createAssigneeGroup(
+        'groupId1',
+        'Group 1',
+        assigneeWithoutImage,
+      ),
+      assigneeType: 'EventVolunteerGroup',
+      assigneeUser: null,
+      actionItemCategory,
+      preCompletionNotes: 'Notes 2',
+      postCompletionNotes: null,
+      assignmentDate: new Date('2024-08-27'),
+      dueDate: new Date('2044-09-30'),
+      completionDate: new Date('2044-10-03'),
+      isCompleted: false,
+      event: null,
+      allottedHours: null,
+      assigner: userWithoutImage,
+      creator: userWithoutImage,
     },
   },
 ];
@@ -126,22 +223,65 @@ describe('Testing ItemViewModal', () => {
   it('should render ItemViewModal with pending item & assignee with null image', () => {
     renderItemViewModal(link1, itemProps[0]);
     expect(screen.getByText(t.actionItemDetails)).toBeInTheDocument();
-    expect(screen.getByTestId('John_avatar')).toBeInTheDocument();
-    expect(screen.getByTestId('Wilt_avatar')).toBeInTheDocument();
+
+    const assigneeInput = screen.getByTestId('assignee_input');
+    expect(assigneeInput).toBeInTheDocument();
+
+    const inputElement = within(assigneeInput).getByRole('textbox');
+    expect(inputElement).toHaveValue('John Doe');
+
+    expect(screen.getByTestId('assignee_avatar')).toBeInTheDocument();
+    expect(screen.getByTestId('assigner_avatar')).toBeInTheDocument();
     expect(screen.getByLabelText(t.postCompletionNotes)).toBeInTheDocument();
-    expect(screen.getByLabelText(t.allotedHours)).toBeInTheDocument();
-    expect(screen.getByLabelText(t.allotedHours)).toHaveValue('24');
+    expect(screen.getByLabelText(t.allottedHours)).toBeInTheDocument();
+    expect(screen.getByLabelText(t.allottedHours)).toHaveValue('24');
   });
 
-  it('should render ItemViewModal with completed item & assignee with null image', () => {
+  it('should render ItemViewModal with completed item & assignee with image', () => {
     renderItemViewModal(link1, itemProps[1]);
     expect(screen.getByText(t.actionItemDetails)).toBeInTheDocument();
-    expect(screen.getByTestId('Jane_image')).toBeInTheDocument();
-    expect(screen.getByTestId('Wilt_image')).toBeInTheDocument();
+    expect(screen.getByTestId('assignee_image')).toBeInTheDocument();
+    expect(screen.getByTestId('assigner_image')).toBeInTheDocument();
     expect(
       screen.queryByLabelText(t.postCompletionNotes),
     ).not.toBeInTheDocument();
-    expect(screen.getByLabelText(t.allotedHours)).toBeInTheDocument();
-    expect(screen.getByLabelText(t.allotedHours)).toHaveValue('-');
+    expect(screen.getByLabelText(t.allottedHours)).toBeInTheDocument();
+    expect(screen.getByLabelText(t.allottedHours)).toHaveValue('-');
+  });
+
+  it('should render ItemViewModal with assigneeUser with image', () => {
+    renderItemViewModal(link1, itemProps[2]);
+    expect(screen.getByText(t.actionItemDetails)).toBeInTheDocument();
+    expect(screen.getByTestId('assignee_image')).toBeInTheDocument();
+    expect(screen.getByTestId('assigner_image')).toBeInTheDocument();
+    const assigneeInput = screen.getByTestId('assignee_input');
+    expect(assigneeInput).toBeInTheDocument();
+
+    const inputElement = within(assigneeInput).getByRole('textbox');
+    expect(inputElement).toHaveValue('John Doe');
+  });
+
+  it('should render ItemViewModal with assigneeUser without image', () => {
+    renderItemViewModal(link1, itemProps[3]);
+    expect(screen.getByText(t.actionItemDetails)).toBeInTheDocument();
+    expect(screen.getByTestId('assignee_avatar')).toBeInTheDocument();
+    expect(screen.getByTestId('assigner_avatar')).toBeInTheDocument();
+    const assigneeInput = screen.getByTestId('assignee_input');
+    expect(assigneeInput).toBeInTheDocument();
+
+    const inputElement = within(assigneeInput).getByRole('textbox');
+    expect(inputElement).toHaveValue('Jane Doe');
+  });
+
+  it('should render ItemViewModal with assigneeGroup', () => {
+    renderItemViewModal(link1, itemProps[4]);
+    expect(screen.getByText(t.actionItemDetails)).toBeInTheDocument();
+    expect(screen.getByTestId('assigneeGroup_avatar')).toBeInTheDocument();
+    expect(screen.getByTestId('assigner_avatar')).toBeInTheDocument();
+    const assigneeInput = screen.getByTestId('assignee_input');
+    expect(assigneeInput).toBeInTheDocument();
+
+    const inputElement = within(assigneeInput).getByRole('textbox');
+    expect(inputElement).toHaveValue('Group 1');
   });
 });
