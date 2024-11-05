@@ -35,8 +35,8 @@ import Avatar from 'components/Avatar/Avatar';
 
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: ['#EAEBEF', '!important'],
-    color: '#555555',
+    backgroundColor: 'var(--table-head-bg, blue)',
+    color: 'var(--table-header-color, black)',
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
@@ -49,15 +49,6 @@ const StyledTableRow = styled(TableRow)(() => ({
   },
 }));
 
-/**
- * AddMember component is used to add new members to the organization by selecting from
- * the existing users or creating a new user.
- * It uses the following queries and mutations:
- *  ORGANIZATIONS_LIST,
- *  ORGANIZATIONS_MEMBER_CONNECTION_LIST,
- *  USERS_CONNECTION_LIST,
- *  ADD_MEMBER_MUTATION,SIGNUP_MUTATION.
- */
 function AddMember(): JSX.Element {
   const { t: translateOrgPeople } = useTranslation('translation', {
     keyPrefix: 'organizationPeople',
@@ -77,7 +68,7 @@ function AddMember(): JSX.Element {
     setAddUserModalIsOpen(true);
   }
 
-  const toggleDialogModal = /* istanbul ignore next */ (): void =>
+  const toggleDialogModal = (): void =>
     setAddUserModalIsOpen(!addUserModalisOpen);
 
   const [createNewUserModalisOpen, setCreateNewUserModalIsOpen] =
@@ -89,7 +80,7 @@ function AddMember(): JSX.Element {
   function closeCreateNewUserModal(): void {
     setCreateNewUserModalIsOpen(false);
   }
-  const toggleCreateNewUserModal = /* istanbul ignore next */ (): void =>
+  const toggleCreateNewUserModal = (): void =>
     setCreateNewUserModalIsOpen(!addUserModalisOpen);
 
   const [addMember] = useMutation(ADD_MEMBER_MUTATION);
@@ -216,7 +207,6 @@ function AddMember(): JSX.Element {
 
         closeCreateNewUserModal();
 
-        /* istanbul ignore next */
         setCreateUserVariables({
           firstName: '',
           lastName: '',
@@ -225,52 +215,40 @@ function AddMember(): JSX.Element {
           confirmPassword: '',
         });
       } catch (error: unknown) {
-        /* istanbul ignore next */
         errorHandler(translateOrgPeople, error);
       }
     }
   };
 
-  /* istanbul ignore next */
   const handleFirstName = (e: ChangeEvent<HTMLInputElement>): void => {
     const firstName = e.target.value;
-
     setCreateUserVariables({ ...createUserVariables, firstName });
   };
 
-  /* istanbul ignore next */
   const handleLastName = (e: ChangeEvent<HTMLInputElement>): void => {
     const lastName = e.target.value;
-
     setCreateUserVariables({ ...createUserVariables, lastName });
   };
 
-  /* istanbul ignore next */
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const email = e.target.value;
-
     setCreateUserVariables({ ...createUserVariables, email });
   };
 
-  /* istanbul ignore next */
   const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const password = e.target.value;
-
     setCreateUserVariables({ ...createUserVariables, password });
   };
 
-  /* istanbul ignore next */
   const handleConfirmPasswordChange = (
     e: ChangeEvent<HTMLInputElement>,
   ): void => {
     const confirmPassword = e.target.value;
-
     setCreateUserVariables({ ...createUserVariables, confirmPassword });
   };
 
   const handleUserModalSearchChange = (e: React.FormEvent): void => {
     e.preventDefault();
-    /* istanbul ignore next */
     const [firstName, lastName] = userName.split(' ');
 
     const newFilterData = {
@@ -322,6 +300,7 @@ function AddMember(): JSX.Element {
         </Dropdown.Menu>
       </Dropdown>
 
+      {/* Existing User Modal */}
       <Modal
         data-testid="addExistingUserModal"
         show={addUserModalisOpen}
@@ -333,9 +312,7 @@ function AddMember(): JSX.Element {
         </Modal.Header>
         <Modal.Body>
           {allUsersLoading ? (
-            <>
-              <Loader />
-            </>
+            <Loader />
           ) : (
             <>
               <div className={styles.input}>
@@ -356,14 +333,9 @@ function AddMember(): JSX.Element {
                   <Button
                     type="submit"
                     data-testid="submitBtn"
-                    className={`position-absolute z-10 bottom-10 end-0  d-flex justify-content-center align-items-center `}
-                    style={{
-                      marginBottom: '10px',
-                      backgroundColor: '#A8C7FA',
-                      border: '1px #555555 solid',
-                    }}
+                    className={styles.searchButton}
                   >
-                    <Search style={{ color: '#555555' }} />
+                    <Search className={styles.searchIcon} />
                   </Button>
                 </Form>
               </div>
@@ -436,10 +408,7 @@ function AddMember(): JSX.Element {
                                   createMember(userDetails.user._id);
                                 }}
                                 data-testid="addBtn"
-                                style={{
-                                  backgroundColor: '#A8C7FA',
-                                  border: '#555555 solid 1px',
-                                }}
+                                className={styles.searchButton}
                               >
                                 Add
                               </Button>
@@ -455,6 +424,7 @@ function AddMember(): JSX.Element {
         </Modal.Body>
       </Modal>
 
+      {/* New User Modal */}
       <Modal
         data-testid="addNewUserModal"
         show={createNewUserModalisOpen}
@@ -556,8 +526,7 @@ function AddMember(): JSX.Element {
               <Form.Control
                 className={styles.borderNone}
                 value={organizationData?.organizations[0]?.name}
-                onChange={handlePasswordChange}
-                data-testid=""
+                data-testid="organizationName"
                 disabled
               />
             </InputGroup>
@@ -569,17 +538,11 @@ function AddMember(): JSX.Element {
               onClick={closeCreateNewUserModal}
               data-testid="closeBtn"
               style={{
-                backgroundColor: '#F8D6DC',
-                color: '#555555',
+                backgroundColor: 'var(--delete-button-bg)',
+                color: 'var(--delete-button-color)',
               }}
             >
-              <Close
-                style={{
-                  color: '#FF4D4F',
-                  marginRight: '5px',
-                }}
-              />
-
+              <Close className={styles.closeButton} />
               {translateOrgPeople('cancel')}
             </Button>
             <Button
@@ -588,18 +551,11 @@ function AddMember(): JSX.Element {
               onClick={handleCreateUser}
               data-testid="createBtn"
               style={{
-                backgroundColor: '#A8C7FA',
-                border: '#555555 solid 1px',
-                marginLeft: '10px',
-                color: '#555555',
+                backgroundColor: 'var(--search-button-bg)',
+                border: '1px solid var(--dropdown-border-color)',
               }}
             >
-              <Check
-                style={{
-                  color: '#555555', // Green color for the tick icon
-                  marginRight: '5px',
-                }}
-              />
+              <Check className={styles.searchIcon} />
               {translateOrgPeople('create')}
             </Button>
           </div>
@@ -610,18 +566,3 @@ function AddMember(): JSX.Element {
 }
 
 export default AddMember;
-// | typeof ORGANIZATIONS_MEMBER_CONNECTION_LIST
-// | typeof ORGANIZATIONS_LIST
-// | typeof USER_LIST_FOR_TABLE
-// | typeof ADD_MEMBER_MUTATION;
-// {
-//   id?: string;
-//   orgId?: string;
-//   orgid?: string;
-//   fristNameContains?: string;
-//   lastNameContains?: string;
-//   firstName_contains?: string;
-//   lastName_contains?: string;
-//   id_not_in?: string[];
-//   userid?: string;
-// };

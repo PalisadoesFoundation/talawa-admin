@@ -1,26 +1,45 @@
 :root {
   --dropdown-border-color: #555555;
   --dropdown-text-color: #555555;
+  --subtle-blue-grey: #7c9beb;
+  --subtle-blue-grey-hover: #5f7e91;
+  --modal-width: 670px;
+  --modal-max-width: 680px;
+  --input-shadow-color: #dddddd;
+  --delete-button-bg: #f8d6dc;
+  --delete-button-color: #ff4d4f;
+  --search-button-bg: #a8c7fa;
+  --search-button-border: #555555;
+  --table-image-size: 50px;
+  --table-head-bg: var(
+    --bs-primary,
+    blue
+  ); /* Assuming var(--bs-primary) is defined elsewhere */
+  --table-head-color: white;
+  --table-header-color: var(--bs-greyish-black, black);
+  --table-head-radius: 20px;
+  --row-background: var(--bs-white, white);
+  --font-size-header: 16px;
 }
 
-@media screen and (max-width: 575.5px) {
-  .mainpageright {
-    width: 98%;
-  }
+.closeButton {
+  color: var(--delete-button-color);
+  margin-right: 5px;
+  background-color: var(--delete-button-bg);
 }
 
 .modalContent {
-  width: 670px;
-  max-width: 680px;
+  width: var(--modal-width);
+  max-width: var(--modal-max-width);
 }
 
 .subtleBlueGrey {
-  color: #7c9beb;
+  color: var(--subtle-blue-grey);
   text-decoration: none;
 }
 
 .subtleBlueGrey:hover {
-  color: #5f7e91;
+  color: var(--subtle-blue-grey-hover);
   text-decoration: underline;
 }
 
@@ -42,21 +61,17 @@
 
 .dropdownItem {
   background-color: white !important;
-  color: #555555 !important;
+  color: var(--dropdown-text-color) !important;
   border: none !important;
 }
 
-/* Override Bootstrap's hover, focus, and active styles for dropdown items */
 .dropdownItem:hover,
 .dropdownItem:focus,
 .dropdownItem:active {
   background-color: white !important;
-  /* Keep the background white */
-  color: #555555 !important;
-  /* Keep the text color as default */
+  color: var(--dropdown-text-color) !important;
   outline: none !important;
   box-shadow: none !important;
-  /* Remove any shadow */
 }
 
 .input {
@@ -66,7 +81,7 @@
 
 .btnsContainer {
   display: flex;
-  margin: 2.5rem 0 2.5rem 0;
+  margin: 2.5rem 0;
 }
 
 .btnsContainer .btnsBlock {
@@ -90,8 +105,8 @@
 }
 
 .deleteButton {
-  background-color: #f8d6dc;
-  color: #ff4d4f;
+  background-color: var(--delete-button-bg);
+  color: var(--delete-button-color);
   border: none;
   padding: 5px 20px;
   display: flex;
@@ -117,13 +132,13 @@
   margin-top: 10px;
   margin-bottom: 10px;
   background-color: white;
-  box-shadow: 0 1px 1px #dddddd;
+  box-shadow: 0 1px 1px var(--input-shadow-color);
 }
 
 .inputFieldModal {
   margin-bottom: 10px;
   background-color: white;
-  box-shadow: 0 1px 1px #dddddd;
+  box-shadow: 0 1px 1px var(--input-shadow-color);
 }
 
 .inputField > button {
@@ -133,31 +148,31 @@
 
 .searchButton {
   margin-bottom: 10px;
-  background-color: #a8c7fa;
-  border-color: #555555;
+  background-color: var(--search-button-bg);
+  border-color: var(--search-button-border);
+}
+.yesButton {
+  background-color: var(--search-button-bg);
+  border-color: var(--search-button-border);
 }
 
 .searchIcon {
-  color: #555555;
+  color: var(--dropdown-text-color);
 }
 
 .TableImage {
   object-fit: cover;
   margin-top: 15px !important;
-  width: 50px !important;
-  height: 50px !important;
+  width: var(--table-image-size) !important;
+  height: var(--table-image-size) !important;
   border-radius: 100% !important;
 }
 
 .tableHead {
-  color: white;
-  border-radius: 20px !important;
+  color: var(--table-head-color);
+  border-radius: var(--table-head-radius) !important;
   padding: 20px;
   margin-top: 20px;
-}
-
-.tableHead :nth-first-child() {
-  border-top-left-radius: 20px;
 }
 
 .mainpageright > hr {
@@ -169,13 +184,13 @@
 }
 
 .rowBackground {
-  background-color: var(--bs-white);
+  background-color: var(--row-background);
 }
 
 .tableHeader {
-  background-color: var(--bs-primary);
-  color: var(--bs-greyish-black);
-  font-size: 16px;
+  background-color: var(--table-head-bg);
+  color: var(--table-header-color);
+  font-size: var(--font-size-header);
 }
 
 @-webkit-keyframes load8 {
@@ -183,7 +198,6 @@
     -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
   }
-
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
@@ -195,7 +209,6 @@
     -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
   }
-
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
