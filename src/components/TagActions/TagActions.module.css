@@ -17,9 +17,8 @@
 }
 
 .scrollContainer {
-  max-height: 100px;
+  height: 100px;
   overflow-y: auto;
-  margin-bottom: 1rem;
 }
 
 .tagBadge {
@@ -33,4 +32,11 @@
 
 .removeFilterIcon {
   cursor: pointer;
+}
+
+.loadingDiv {
+  min-height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

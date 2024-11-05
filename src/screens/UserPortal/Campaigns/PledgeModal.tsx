@@ -6,7 +6,7 @@ import { currencyOptions, currencySymbols } from 'utils/currency';
 import type {
   InterfaceCreatePledge,
   InterfacePledgeInfo,
-  InterfacePledger,
+  InterfaceUserInfo,
 } from 'utils/interfaces';
 import styles from './Campaigns.module.css';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -77,7 +77,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   });
 
   // State to manage the list of pledgers (users who are part of the pledge)
-  const [pledgers, setPledgers] = useState<InterfacePledger[]>([]);
+  const [pledgers, setPledgers] = useState<InterfaceUserInfo[]>([]);
 
   // Mutation to update an existing pledge
   const [updatePledge] = useMutation(UPDATE_PLEDGE);
@@ -252,7 +252,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               readOnly={mode === 'edit' ? true : false}
               isOptionEqualToValue={(option, value) => option._id === value._id}
               filterSelectedOptions={true}
-              getOptionLabel={(member: InterfacePledger): string =>
+              getOptionLabel={(member: InterfaceUserInfo): string =>
                 `${member.firstName} ${member.lastName}`
               }
               onChange={
