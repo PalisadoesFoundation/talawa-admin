@@ -17,11 +17,12 @@ import { store } from 'state/store';
 import userEvent from '@testing-library/user-event';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
-import type { ApolloLink } from '@apollo/client';
+import { InMemoryCache, type ApolloLink } from '@apollo/client';
 import type { InterfaceAddPeopleToTagProps } from './AddPeopleToTag';
 import AddPeopleToTag from './AddPeopleToTag';
 import i18n from 'utils/i18nForTest';
 import { MOCKS, MOCKS_ERROR } from './AddPeopleToTagsMocks';
+import type { TFunction } from 'i18next';
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR, true);
@@ -52,22 +53,55 @@ const props: InterfaceAddPeopleToTagProps = {
   addPeopleToTagModalIsOpen: true,
   hideAddPeopleToTagModal: () => {},
   refetchAssignedMembersData: () => {},
-  t: (key: string) => translations[key],
-  tCommon: (key: string) => translations[key],
+  t: ((key: string) => translations[key]) as TFunction<
+    'translation',
+    'manageTag'
+  >,
+  tCommon: ((key: string) => translations[key]) as TFunction<
+    'common',
+    undefined
+  >,
 };
+
+const cache = new InMemoryCache({
+  typePolicies: {
+    Query: {
+      fields: {
+        getUserTag: {
+          merge(existing = {}, incoming) {
+            const merged = {
+              ...existing,
+              ...incoming,
+              usersToAssignTo: {
+                ...existing.usersToAssignTo,
+                ...incoming.usersToAssignTo,
+                edges: [
+                  ...(existing.usersToAssignTo?.edges || []),
+                  ...(incoming.usersToAssignTo?.edges || []),
+                ],
+              },
+            };
+
+            return merged;
+          },
+        },
+      },
+    },
+  },
+});
 
 const renderAddPeopleToTagModal = (
   props: InterfaceAddPeopleToTagProps,
   link: ApolloLink,
 ): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider cache={cache} addTypename={false} link={link}>
       <MemoryRouter initialEntries={['/orgtags/123/manageTag/1']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
             <Routes>
               <Route
-                path="/orgtags/:orgId/managetag/:tagId"
+                path="/orgtags/:orgId/manageTag/:tagId"
                 element={<AddPeopleToTag {...props} />}
               />
             </Routes>
@@ -84,7 +118,7 @@ describe('Organisation Tags Page', () => {
       ...jest.requireActual('react-router-dom'),
       useParams: () => ({ orgId: 'orgId' }),
     }));
-    // cache.reset();
+    cache.reset();
   });
 
   afterEach(() => {
@@ -140,6 +174,72 @@ describe('Organisation Tags Page', () => {
     userEvent.click(screen.getAllByTestId('deselectMemberBtn')[0]);
   });
 
+  test('searchs for tags where the firstName matches the provided firstName search input', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(
+        screen.getByPlaceholderText(translations.firstName),
+      ).toBeInTheDocument();
+    });
+    const input = screen.getByPlaceholderText(translations.firstName);
+    fireEvent.change(input, { target: { value: 'usersToAssignTo' } });
+
+    // should render the two users from the mock data
+    // where firstName starts with "usersToAssignTo"
+    await waitFor(() => {
+      const members = screen.getAllByTestId('memberName');
+      expect(members.length).toEqual(2);
+    });
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('memberName')[0]).toHaveTextContent(
+        'usersToAssignTo user1',
+      );
+    });
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('memberName')[1]).toHaveTextContent(
+        'usersToAssignTo user2',
+      );
+    });
+  });
+
+  test('searchs for tags where the lastName matches the provided lastName search input', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(
+        screen.getByPlaceholderText(translations.lastName),
+      ).toBeInTheDocument();
+    });
+    const input = screen.getByPlaceholderText(translations.lastName);
+    fireEvent.change(input, { target: { value: 'userToAssignTo' } });
+
+    // should render the two users from the mock data
+    // where lastName starts with "usersToAssignTo"
+    await waitFor(() => {
+      const members = screen.getAllByTestId('memberName');
+      expect(members.length).toEqual(2);
+    });
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('memberName')[0]).toHaveTextContent(
+        'first userToAssignTo',
+      );
+    });
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('memberName')[1]).toHaveTextContent(
+        'second userToAssignTo',
+      );
+    });
+  });
+
   test('Renders more members with infinite scroll', async () => {
     const { getByText } = renderAddPeopleToTagModal(props, link);
 
@@ -150,13 +250,15 @@ describe('Organisation Tags Page', () => {
     });
 
     // Find the infinite scroll div by test ID or another selector
-    const scrollableDiv = screen.getByTestId('scrollableDiv');
+    const addPeopleToTagScrollableDiv = screen.getByTestId(
+      'addPeopleToTagScrollableDiv',
+    );
 
     const initialMemberDataLength = screen.getAllByTestId('memberName').length;
 
     // Set scroll position to the bottom
-    fireEvent.scroll(scrollableDiv, {
-      target: { scrollY: scrollableDiv.scrollHeight },
+    fireEvent.scroll(addPeopleToTagScrollableDiv, {
+      target: { scrollY: addPeopleToTagScrollableDiv.scrollHeight },
     });
 
     await waitFor(() => {
@@ -167,11 +269,27 @@ describe('Organisation Tags Page', () => {
     });
   });
 
+  test('Toasts error when no one is selected while assigning', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('assignPeopleBtn')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('assignPeopleBtn'));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(translations.noOneSelected);
+    });
+  });
+
   test('Assigns tag to multiple people', async () => {
     renderAddPeopleToTagModal(props, link);
 
     await wait();
 
+    // select members and assign them
     await waitFor(() => {
       expect(screen.getAllByTestId('selectMemberBtn')[0]).toBeInTheDocument();
     });

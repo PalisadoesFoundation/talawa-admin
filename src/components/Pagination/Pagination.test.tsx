@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { act } from 'react';
 import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -17,7 +17,7 @@ describe('Testing Pagination component', () => {
     },
   };
 
-  test('Component should be rendered properly on rtl', () => {
+  test('Component should be rendered properly on rtl', async () => {
     render(
       <BrowserRouter>
         <Provider store={store}>
@@ -25,9 +25,10 @@ describe('Testing Pagination component', () => {
         </Provider>
       </BrowserRouter>,
     );
-
-    userEvent.click(screen.getByTestId(/nextPage/i));
-    userEvent.click(screen.getByTestId(/previousPage/i));
+    await act(async () => {
+      userEvent.click(screen.getByTestId(/nextPage/i));
+      userEvent.click(screen.getByTestId(/previousPage/i));
+    });
   });
 });
 
@@ -41,7 +42,7 @@ const props = {
   theme: { direction: 'rtl' },
 };
 
-test('Component should be rendered properly', () => {
+test('Component should be rendered properly', async () => {
   const theme = createTheme({
     direction: 'rtl',
   });
@@ -56,6 +57,8 @@ test('Component should be rendered properly', () => {
     </BrowserRouter>,
   );
 
-  userEvent.click(screen.getByTestId(/nextPage/i));
-  userEvent.click(screen.getByTestId(/previousPage/i));
+  await act(async () => {
+    userEvent.click(screen.getByTestId(/nextPage/i));
+    userEvent.click(screen.getByTestId(/previousPage/i));
+  });
 });
