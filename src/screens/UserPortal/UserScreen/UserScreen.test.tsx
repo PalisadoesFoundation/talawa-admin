@@ -153,6 +153,6 @@ describe('Testing LeftDrawer in OrganizationScreen', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    expect(navigate).toHaveBeenCalledWith('/');
+    expect(window.location.pathname).toEqual('/');
   });
 });
