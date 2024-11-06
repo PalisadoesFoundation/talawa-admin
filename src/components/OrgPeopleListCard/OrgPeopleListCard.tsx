@@ -7,6 +7,8 @@ import { useTranslation } from 'react-i18next';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useParams, Navigate } from 'react-router-dom';
 import { errorHandler } from 'utils/errorHandler';
+import styles from '../../style/app.module.css';
+import { Close } from '@mui/icons-material';
 
 /**
  * Props for the OrgPeopleListCard component
@@ -74,20 +76,28 @@ function orgPeopleListCard(
         <Modal.Header>
           <h5>{t('removeMember')}</h5>
           {/* Button to close the modal */}
-          <Button variant="danger" onClick={props.toggleRemoveModal}>
-            <i className="fa fa-times"></i>
+          <Button
+            variant="danger"
+            onClick={props.toggleRemoveModal}
+            className={styles.closeButton}
+          >
+            <Close className={styles.closeButton} />
           </Button>
         </Modal.Header>
         <Modal.Body>{t('removeMemberMsg')}</Modal.Body>
         <Modal.Footer>
           {/* Button to cancel the removal action */}
-          <Button variant="danger" onClick={props.toggleRemoveModal}>
+          <Button
+            variant="danger"
+            onClick={props.toggleRemoveModal}
+            className={styles.closeButton}
+          >
             {tCommon('no')}
           </Button>
           {/* Button to confirm the removal action */}
           <Button
             type="button"
-            className="btn btn-success"
+            className={styles.yesButton}
             onClick={removeMember}
             data-testid="removeMemberBtn"
           >
