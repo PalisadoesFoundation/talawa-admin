@@ -176,7 +176,7 @@ const loginPage = (): JSX.Element => {
       });
 
       return data.recaptcha;
-    } catch (error) {
+    } catch {
       /* istanbul ignore next */
       toast.error(t('captchaError') as string);
     }
@@ -204,8 +204,11 @@ const loginPage = (): JSX.Element => {
       toast.error(t('Please_check_the_captcha') as string);
       return;
     }
-    const isValidatedString = (value: string): boolean =>
-      /^[a-zA-Z]+$/.test(value);
+
+    const isValidName = (value: string): boolean => {
+      // Allow letters, spaces, and hyphens, but not consecutive spaces or hyphens
+      return /^[a-zA-Z]+(?:[-\s][a-zA-Z]+)*$/.test(value.trim());
+    };
 
     const validatePassword = (password: string): boolean => {
       const lengthCheck = new RegExp('^.{6,}$');
@@ -219,10 +222,10 @@ const loginPage = (): JSX.Element => {
     };
 
     if (
-      isValidatedString(signfirstName) &&
-      isValidatedString(signlastName) &&
-      signfirstName.length > 1 &&
-      signlastName.length > 1 &&
+      isValidName(signfirstName) &&
+      isValidName(signlastName) &&
+      signfirstName.trim().length > 1 &&
+      signlastName.trim().length > 1 &&
       signEmail.length >= 8 &&
       signPassword.length > 1 &&
       validatePassword(signPassword)
@@ -264,10 +267,10 @@ const loginPage = (): JSX.Element => {
         toast.warn(t('passwordMismatches') as string);
       }
     } else {
-      if (!isValidatedString(signfirstName)) {
+      if (!isValidName(signfirstName)) {
         toast.warn(t('firstName_invalid') as string);
       }
-      if (!isValidatedString(signlastName)) {
+      if (!isValidName(signlastName)) {
         toast.warn(t('lastName_invalid') as string);
       }
       if (!validatePassword(signPassword)) {

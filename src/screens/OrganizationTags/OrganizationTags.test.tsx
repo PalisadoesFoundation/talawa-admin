@@ -4,6 +4,7 @@ import type { RenderResult } from '@testing-library/react';
 import {
   act,
   cleanup,
+  fireEvent,
   render,
   screen,
   waitFor,
@@ -59,11 +60,11 @@ const renderOrganizationTags = (link: ApolloLink): RenderResult => {
             <Routes>
               <Route path="/orgtags/:orgId" element={<OrganizationTags />} />
               <Route
-                path="/orgtags/:orgId/managetag/:tagId"
+                path="/orgtags/:orgId/manageTag/:tagId"
                 element={<div data-testid="manageTagScreen"></div>}
               />
               <Route
-                path="/orgtags/:orgId/subtags/:tagId"
+                path="/orgtags/:orgId/subTags/:tagId"
                 element={<div data-testid="subTagsScreen"></div>}
               />
             </Routes>
@@ -87,7 +88,7 @@ describe('Organisation Tags Page', () => {
     cleanup();
   });
 
-  test('Component loads correctly', async () => {
+  test('component loads correctly', async () => {
     const { getByText } = renderOrganizationTags(link);
 
     await wait();
@@ -103,7 +104,7 @@ describe('Organisation Tags Page', () => {
     await wait();
 
     await waitFor(() => {
-      expect(queryByText(translations.create)).not.toBeInTheDocument();
+      expect(queryByText(translations.createTag)).not.toBeInTheDocument();
     });
   });
 
@@ -126,28 +127,6 @@ describe('Organisation Tags Page', () => {
 
     await waitForElementToBeRemoved(() =>
       screen.queryByTestId('closeCreateTagModal'),
-    );
-  });
-
-  test('opens and closes the remove tag modal', async () => {
-    renderOrganizationTags(link);
-
-    await wait();
-
-    await waitFor(() => {
-      expect(screen.getAllByTestId('removeUserTagBtn')[0]).toBeInTheDocument();
-    });
-    userEvent.click(screen.getAllByTestId('removeUserTagBtn')[0]);
-
-    await waitFor(() => {
-      return expect(
-        screen.findByTestId('removeUserTagModalCloseBtn'),
-      ).resolves.toBeInTheDocument();
-    });
-    userEvent.click(screen.getByTestId('removeUserTagModalCloseBtn'));
-
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('removeUserTagModalCloseBtn'),
     );
   });
 
@@ -181,27 +160,110 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  test('paginates between different pages', async () => {
+  test('searchs for tags where the name matches the provided search input', async () => {
     renderOrganizationTags(link);
 
     await wait();
 
     await waitFor(() => {
-      expect(screen.getByTestId('nextPagBtn')).toBeInTheDocument();
+      expect(
+        screen.getByPlaceholderText(translations.searchByName),
+      ).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('nextPagBtn'));
+    const input = screen.getByPlaceholderText(translations.searchByName);
+    fireEvent.change(input, { target: { value: 'searchUserTag' } });
+
+    // should render the two searched tags from the mock data
+    // where name starts with "searchUserTag"
+    await waitFor(() => {
+      const buttons = screen.getAllByTestId('manageTagBtn');
+      expect(buttons.length).toEqual(2);
+    });
+  });
+
+  test('fetches the tags by the sort order, i.e. latest or oldest first', async () => {
+    renderOrganizationTags(link);
+
+    await wait();
 
     await waitFor(() => {
-      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent('6');
+      expect(
+        screen.getByPlaceholderText(translations.searchByName),
+      ).toBeInTheDocument();
+    });
+    const input = screen.getByPlaceholderText(translations.searchByName);
+    fireEvent.change(input, { target: { value: 'searchUserTag' } });
+
+    // should render the two searched tags from the mock data
+    // where name starts with "searchUserTag"
+    await waitFor(() => {
+      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent(
+        'searchUserTag 1',
+      );
+    });
+
+    // now change the sorting order
+    await waitFor(() => {
+      expect(screen.getByTestId('sortTags')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('sortTags'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('oldest')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('oldest'));
+
+    // returns the tags in reverse order
+    await waitFor(() => {
+      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent(
+        'searchUserTag 2',
+      );
     });
 
     await waitFor(() => {
-      expect(screen.getByTestId('previousPageBtn')).toBeInTheDocument();
+      expect(screen.getByTestId('sortTags')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('previousPageBtn'));
+    userEvent.click(screen.getByTestId('sortTags'));
 
     await waitFor(() => {
-      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent('1');
+      expect(screen.getByTestId('latest')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('latest'));
+
+    // reverse the order again
+    await waitFor(() => {
+      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent(
+        'searchUserTag 1',
+      );
+    });
+  });
+
+  test('fetches more tags with infinite scroll', async () => {
+    const { getByText } = renderOrganizationTags(link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(getByText(translations.createTag)).toBeInTheDocument();
+    });
+
+    const orgUserTagsScrollableDiv = screen.getByTestId(
+      'orgUserTagsScrollableDiv',
+    );
+
+    // Get the initial number of tags loaded
+    const initialTagsDataLength = screen.getAllByTestId('manageTagBtn').length;
+
+    // Set scroll position to the bottom
+    fireEvent.scroll(orgUserTagsScrollableDiv, {
+      target: { scrollY: orgUserTagsScrollableDiv.scrollHeight },
+    });
+
+    await waitFor(() => {
+      const finalTagsDataLength = screen.getAllByTestId('manageTagBtn').length;
+      expect(finalTagsDataLength).toBeGreaterThan(initialTagsDataLength);
+
+      expect(getByText(translations.createTag)).toBeInTheDocument();
     });
   });
 
@@ -215,32 +277,23 @@ describe('Organisation Tags Page', () => {
     });
     userEvent.click(screen.getByTestId('createTagBtn'));
 
+    userEvent.click(screen.getByTestId('createTagSubmitBtn'));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(translations.enterTagName);
+    });
+
     userEvent.type(
       screen.getByPlaceholderText(translations.tagNamePlaceholder),
-      '7',
+      'userTag 12',
     );
 
     userEvent.click(screen.getByTestId('createTagSubmitBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.tagCreationSuccess);
-    });
-  });
-
-  test('removes a user tag', async () => {
-    renderOrganizationTags(link);
-
-    await wait();
-
-    await waitFor(() => {
-      expect(screen.getAllByTestId('removeUserTagBtn')[0]).toBeInTheDocument();
-    });
-    userEvent.click(screen.getAllByTestId('removeUserTagBtn')[0]);
-
-    userEvent.click(screen.getByTestId('removeUserTagSubmitBtn'));
-
-    await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.tagRemovalSuccess);
+      expect(toast.success).toHaveBeenCalledWith(
+        translations.tagCreationSuccess,
+      );
     });
   });
 });

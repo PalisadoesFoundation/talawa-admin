@@ -27,6 +27,7 @@ import {
   MOCKS_ERROR_ORGANIZATION_TAGS_QUERY,
   MOCKS_ERROR_SUBTAGS_QUERY,
 } from './TagActionsMocks';
+import type { TFunction } from 'i18next';
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR_ORGANIZATION_TAGS_QUERY, true);
@@ -57,18 +58,30 @@ const translations = {
 
 const props: InterfaceTagActionsProps[] = [
   {
-    assignToTagsModalIsOpen: true,
-    hideAssignToTagsModal: () => {},
+    tagActionsModalIsOpen: true,
+    hideTagActionsModal: () => {},
     tagActionType: 'assignToTags',
-    t: (key: string) => translations[key],
-    tCommon: (key: string) => translations[key],
+    t: ((key: string) => translations[key]) as TFunction<
+      'translation',
+      'manageTag'
+    >,
+    tCommon: ((key: string) => translations[key]) as TFunction<
+      'common',
+      undefined
+    >,
   },
   {
-    assignToTagsModalIsOpen: true,
-    hideAssignToTagsModal: () => {},
+    tagActionsModalIsOpen: true,
+    hideTagActionsModal: () => {},
     tagActionType: 'removeFromTags',
-    t: (key: string) => translations[key],
-    tCommon: (key: string) => translations[key],
+    t: ((key: string) => translations[key]) as TFunction<
+      'translation',
+      'manageTag'
+    >,
+    tCommon: ((key: string) => translations[key]) as TFunction<
+      'common',
+      undefined
+    >,
   },
 ];
 
@@ -83,7 +96,7 @@ const renderTagActionsModal = (
           <I18nextProvider i18n={i18n}>
             <Routes>
               <Route
-                path="/orgtags/:orgId/managetag/:tagId"
+                path="/orgtags/:orgId/manageTag/:tagId"
                 element={<TagActions {...props} />}
               />
             </Routes>
@@ -127,6 +140,37 @@ describe('Organisation Tags Page', () => {
     });
   });
 
+  test('Component calls hideTagActionsModal when modal is closed', async () => {
+    const hideTagActionsModalMock = jest.fn();
+
+    const props2: InterfaceTagActionsProps = {
+      tagActionsModalIsOpen: true,
+      hideTagActionsModal: hideTagActionsModalMock,
+      tagActionType: 'assignToTags',
+      t: ((key: string) => translations[key]) as TFunction<
+        'translation',
+        'manageTag'
+      >,
+      tCommon: ((key: string) => translations[key]) as TFunction<
+        'common',
+        undefined
+      >,
+    };
+
+    renderTagActionsModal(props2, link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('closeTagActionsModalBtn')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('closeTagActionsModalBtn'));
+
+    await waitFor(() => {
+      expect(hideTagActionsModalMock).toHaveBeenCalled();
+    });
+  });
+
   test('Renders error component when when query is unsuccessful', async () => {
     const { queryByText } = renderTagActionsModal(props[0], link2);
 
@@ -152,6 +196,27 @@ describe('Organisation Tags Page', () => {
       expect(
         getByText(translations.errorOccurredWhileLoadingSubTags),
       ).toBeInTheDocument();
+    });
+  });
+
+  test('searchs for tags where the name matches the provided search input', async () => {
+    renderTagActionsModal(props[0], link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(
+        screen.getByPlaceholderText(translations.searchByName),
+      ).toBeInTheDocument();
+    });
+    const input = screen.getByPlaceholderText(translations.searchByName);
+    fireEvent.change(input, { target: { value: 'searchUserTag' } });
+
+    // should render the two searched tags from the mock data
+    // where name starts with "searchUserTag"
+    await waitFor(() => {
+      const tags = screen.getAllByTestId('orgUserTag');
+      expect(tags.length).toEqual(2);
     });
   });
 
@@ -271,6 +336,21 @@ describe('Organisation Tags Page', () => {
       expect(screen.getByTestId('expandSubTags1')).toBeInTheDocument();
     });
     userEvent.click(screen.getByTestId('expandSubTags1'));
+  });
+
+  test('Toasts error when no tag is selected while assigning', async () => {
+    renderTagActionsModal(props[0], link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('tagActionSubmitBtn')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('tagActionSubmitBtn'));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(translations.noTagSelected);
+    });
   });
 
   test('Successfully assigns to tags', async () => {

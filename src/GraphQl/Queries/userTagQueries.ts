@@ -14,14 +14,18 @@ export const USER_TAGS_ASSIGNED_MEMBERS = gql`
     $before: String
     $first: PositiveInt
     $last: PositiveInt
+    $where: UserTagUsersAssignedToWhereInput
+    $sortedBy: UserTagUsersAssignedToSortedByInput
   ) {
-    getUserTag(id: $id) {
+    getAssignedUsers: getUserTag(id: $id) {
       name
       usersAssignedTo(
         after: $after
         before: $before
         first: $first
         last: $last
+        where: $where
+        sortedBy: $sortedBy
       ) {
         edges {
           node {
@@ -37,6 +41,10 @@ export const USER_TAGS_ASSIGNED_MEMBERS = gql`
           hasPreviousPage
         }
         totalCount
+      }
+      ancestorTags {
+        _id
+        name
       }
     }
   }
@@ -56,10 +64,19 @@ export const USER_TAG_SUB_TAGS = gql`
     $before: String
     $first: PositiveInt
     $last: PositiveInt
+    $where: UserTagWhereInput
+    $sortedBy: UserTagSortedByInput
   ) {
-    getUserTag(id: $id) {
+    getChildTags: getUserTag(id: $id) {
       name
-      childTags(after: $after, before: $before, first: $first, last: $last) {
+      childTags(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        where: $where
+        sortedBy: $sortedBy
+      ) {
         edges {
           node {
             _id
@@ -70,6 +87,10 @@ export const USER_TAG_SUB_TAGS = gql`
             childTags(first: $first, last: $last) {
               totalCount
             }
+            ancestorTags {
+              _id
+              name
+            }
           }
         }
         pageInfo {
@@ -79,6 +100,10 @@ export const USER_TAG_SUB_TAGS = gql`
           hasPreviousPage
         }
         totalCount
+      }
+      ancestorTags {
+        _id
+        name
       }
     }
   }
@@ -98,14 +123,16 @@ export const USER_TAGS_MEMBERS_TO_ASSIGN_TO = gql`
     $before: String
     $first: PositiveInt
     $last: PositiveInt
+    $where: UserTagUsersToAssignToWhereInput
   ) {
-    getUserTag(id: $id) {
+    getUsersToAssignTo: getUserTag(id: $id) {
       name
       usersToAssignTo(
         after: $after
         before: $before
         first: $first
         last: $last
+        where: $where
       ) {
         edges {
           node {
@@ -122,22 +149,6 @@ export const USER_TAGS_MEMBERS_TO_ASSIGN_TO = gql`
         }
         totalCount
       }
-    }
-  }
-`;
-
-/**
- * GraphQL query to retrieve the ancestor tags of a certain tag.
- *
- * @param id - The ID of the current tag.
- * @returns The list of ancestor tags.
- */
-
-export const USER_TAG_ANCESTORS = gql`
-  query GetUserTagAncestors($id: ID!) {
-    getUserTagAncestors(id: $id) {
-      _id
-      name
     }
   }
 `;

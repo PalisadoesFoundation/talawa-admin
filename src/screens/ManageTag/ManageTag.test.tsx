@@ -4,6 +4,7 @@ import type { RenderResult } from '@testing-library/react';
 import {
   act,
   cleanup,
+  fireEvent,
   render,
   screen,
   waitFor,
@@ -19,12 +20,8 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import ManageTag from './ManageTag';
-import {
-  MOCKS,
-  MOCKS_ERROR_ASSIGNED_MEMBERS,
-  MOCKS_ERROR_TAG_ANCESTORS,
-} from './ManageTagMocks';
-import { InMemoryCache, type ApolloLink } from '@apollo/client';
+import { MOCKS, MOCKS_ERROR_ASSIGNED_MEMBERS } from './ManageTagMocks';
+import { type ApolloLink } from '@apollo/client';
 
 const translations = {
   ...JSON.parse(
@@ -36,7 +33,6 @@ const translations = {
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR_ASSIGNED_MEMBERS, true);
-const link3 = new StaticMockLink(MOCKS_ERROR_TAG_ANCESTORS, true);
 
 async function wait(ms = 500): Promise<void> {
   await act(() => {
@@ -54,24 +50,19 @@ jest.mock('react-toastify', () => ({
   },
 }));
 
-const cache = new InMemoryCache({
-  typePolicies: {
-    Query: {
-      fields: {
-        getUserTag: {
-          keyArgs: false,
-          merge(_, incoming) {
-            return incoming;
-          },
-        },
-      },
-    },
-  },
+/* eslint-disable @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports */
+jest.mock('../../components/AddPeopleToTag/AddPeopleToTag', () => {
+  return require('./ManageTagMockComponents/MockAddPeopleToTag').default;
 });
+
+jest.mock('../../components/TagActions/TagActions', () => {
+  return require('./ManageTagMockComponents/MockTagActions').default;
+});
+/* eslint-enable @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports */
 
 const renderManageTag = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider cache={cache} addTypename={false} link={link}>
+    <MockedProvider addTypename={false} link={link}>
       <MemoryRouter initialEntries={['/orgtags/123/manageTag/1']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
@@ -81,11 +72,11 @@ const renderManageTag = (link: ApolloLink): RenderResult => {
                 element={<div data-testid="organizationTagsScreen"></div>}
               />
               <Route
-                path="/orgtags/:orgId/managetag/:tagId"
+                path="/orgtags/:orgId/manageTag/:tagId"
                 element={<ManageTag />}
               />
               <Route
-                path="/orgtags/:orgId/subtags/:tagId"
+                path="/orgtags/:orgId/subTags/:tagId"
                 element={<div data-testid="subTagsScreen"></div>}
               />
               <Route
@@ -106,7 +97,6 @@ describe('Manage Tag Page', () => {
       ...jest.requireActual('react-router-dom'),
       useParams: () => ({ orgId: 'orgId' }),
     }));
-    cache.reset();
   });
 
   afterEach(() => {
@@ -134,36 +124,26 @@ describe('Manage Tag Page', () => {
     });
   });
 
-  test('renders error component on unsuccessful userTag ancestors query', async () => {
-    const { queryByText } = renderManageTag(link3);
-
-    await wait();
-
-    await waitFor(() => {
-      expect(queryByText(translations.addPeopleToTag)).not.toBeInTheDocument();
-    });
-  });
-
   test('opens and closes the add people to tag modal', async () => {
     renderManageTag(link);
-
-    await wait();
 
     await waitFor(() => {
       expect(screen.getByTestId('addPeopleToTagBtn')).toBeInTheDocument();
     });
+
     userEvent.click(screen.getByTestId('addPeopleToTagBtn'));
 
     await waitFor(() => {
-      return expect(
-        screen.findByTestId('closeAddPeopleToTagModal'),
-      ).resolves.toBeInTheDocument();
+      expect(screen.getByTestId('addPeopleToTagModal')).toBeInTheDocument();
     });
+
     userEvent.click(screen.getByTestId('closeAddPeopleToTagModal'));
 
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('closeAddPeopleToTagModal'),
-    );
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('addPeopleToTagModal'),
+      ).not.toBeInTheDocument();
+    });
   });
 
   test('opens and closes the unassign tag modal', async () => {
@@ -191,45 +171,51 @@ describe('Manage Tag Page', () => {
   test('opens and closes the assignToTags modal', async () => {
     renderManageTag(link);
 
-    await wait();
-
+    // Wait for the assignToTags button to be present
     await waitFor(() => {
       expect(screen.getByTestId('assignToTags')).toBeInTheDocument();
     });
+
+    // Click the assignToTags button to open the modal
     userEvent.click(screen.getByTestId('assignToTags'));
 
+    // Wait for the close button in the modal to be present
     await waitFor(() => {
-      return expect(
-        screen.findByTestId('closeTagActionsModalBtn'),
-      ).resolves.toBeInTheDocument();
+      expect(screen.getByTestId('closeTagActionsModalBtn')).toBeInTheDocument();
     });
+
+    // Click the close button to close the modal
     userEvent.click(screen.getByTestId('closeTagActionsModalBtn'));
 
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('closeTagActionsModalBtn'),
-    );
+    // Wait for the modal to be removed from the document
+    await waitFor(() => {
+      expect(screen.queryByTestId('tagActionsModal')).not.toBeInTheDocument();
+    });
   });
 
   test('opens and closes the removeFromTags modal', async () => {
     renderManageTag(link);
 
-    await wait();
-
+    // Wait for the removeFromTags button to be present
     await waitFor(() => {
       expect(screen.getByTestId('removeFromTags')).toBeInTheDocument();
     });
+
+    // Click the removeFromTags button to open the modal
     userEvent.click(screen.getByTestId('removeFromTags'));
 
+    // Wait for the close button in the modal to be present
     await waitFor(() => {
-      return expect(
-        screen.findByTestId('closeTagActionsModalBtn'),
-      ).resolves.toBeInTheDocument();
+      expect(screen.getByTestId('closeTagActionsModalBtn')).toBeInTheDocument();
     });
+
+    // Click the close button to close the modal
     userEvent.click(screen.getByTestId('closeTagActionsModalBtn'));
 
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('closeTagActionsModalBtn'),
-    );
+    // Wait for the modal to be removed from the document
+    await waitFor(() => {
+      expect(screen.queryByTestId('tagActionsModal')).not.toBeInTheDocument();
+    });
   });
 
   test('opens and closes the edit tag modal', async () => {
@@ -238,9 +224,9 @@ describe('Manage Tag Page', () => {
     await wait();
 
     await waitFor(() => {
-      expect(screen.getByTestId('editTag')).toBeInTheDocument();
+      expect(screen.getByTestId('editUserTag')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('editTag'));
+    userEvent.click(screen.getByTestId('editUserTag'));
 
     await waitFor(() => {
       return expect(
@@ -338,31 +324,112 @@ describe('Manage Tag Page', () => {
     });
   });
 
-  test('paginates between different pages', async () => {
+  test('searchs for tags where the name matches the provided search input', async () => {
     renderManageTag(link);
 
     await wait();
 
     await waitFor(() => {
-      expect(screen.getByTestId('nextPagBtn')).toBeInTheDocument();
+      expect(
+        screen.getByPlaceholderText(translations.searchByName),
+      ).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('nextPagBtn'));
+    const input = screen.getByPlaceholderText(translations.searchByName);
+    fireEvent.change(input, { target: { value: 'assigned user' } });
+
+    // should render the two users from the mock data
+    // where firstName starts with "assigned" and lastName starts with "user"
+    await waitFor(() => {
+      const buttons = screen.getAllByTestId('viewProfileBtn');
+      expect(buttons.length).toEqual(2);
+    });
+  });
+
+  test('fetches the tags by the sort order, i.e. latest or oldest first', async () => {
+    renderManageTag(link);
+
+    await wait();
 
     await waitFor(() => {
+      expect(
+        screen.getByPlaceholderText(translations.searchByName),
+      ).toBeInTheDocument();
+    });
+    const input = screen.getByPlaceholderText(translations.searchByName);
+    fireEvent.change(input, { target: { value: 'assigned user' } });
+
+    // should render the two searched tags from the mock data
+    // where name starts with "searchUserTag"
+    await waitFor(() => {
       expect(screen.getAllByTestId('memberName')[0]).toHaveTextContent(
-        'member 6',
+        'assigned user1',
+      );
+    });
+
+    // now change the sorting order
+    await waitFor(() => {
+      expect(screen.getByTestId('sortPeople')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('sortPeople'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('oldest')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('oldest'));
+
+    // returns the tags in reverse order
+    await waitFor(() => {
+      expect(screen.getAllByTestId('memberName')[0]).toHaveTextContent(
+        'assigned user2',
       );
     });
 
     await waitFor(() => {
-      expect(screen.getByTestId('previousPageBtn')).toBeInTheDocument();
+      expect(screen.getByTestId('sortPeople')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('previousPageBtn'));
+    userEvent.click(screen.getByTestId('sortPeople'));
 
     await waitFor(() => {
+      expect(screen.getByTestId('latest')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('latest'));
+
+    // reverse the order again
+    await waitFor(() => {
       expect(screen.getAllByTestId('memberName')[0]).toHaveTextContent(
-        'member 1',
+        'assigned user1',
       );
+    });
+  });
+
+  test('Fetches more assigned members with infinite scroll', async () => {
+    const { getByText } = renderManageTag(link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(getByText(translations.addPeopleToTag)).toBeInTheDocument();
+    });
+
+    const manageTagScrollableDiv = screen.getByTestId('manageTagScrollableDiv');
+
+    // Get the initial number of tags loaded
+    const initialAssignedMembersDataLength =
+      screen.getAllByTestId('viewProfileBtn').length;
+
+    // Set scroll position to the bottom
+    fireEvent.scroll(manageTagScrollableDiv, {
+      target: { scrollY: manageTagScrollableDiv.scrollHeight },
+    });
+
+    await waitFor(() => {
+      const finalAssignedMembersDataLength =
+        screen.getAllByTestId('viewProfileBtn').length;
+      expect(finalAssignedMembersDataLength).toBeGreaterThan(
+        initialAssignedMembersDataLength,
+      );
+
+      expect(getByText(translations.addPeopleToTag)).toBeInTheDocument();
     });
   });
 
@@ -391,9 +458,9 @@ describe('Manage Tag Page', () => {
     await wait();
 
     await waitFor(() => {
-      expect(screen.getByTestId('editTag')).toBeInTheDocument();
+      expect(screen.getByTestId('editUserTag')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('editTag'));
+    userEvent.click(screen.getByTestId('editUserTag'));
 
     userEvent.click(screen.getByTestId('editTagSubmitBtn'));
 
