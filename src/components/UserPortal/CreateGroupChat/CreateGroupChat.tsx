@@ -93,10 +93,6 @@ export default function CreateGroupChat({
   createGroupChatModalisOpen,
   chatsListRefetch,
 }: InterfaceCreateGroupChatProps): JSX.Element {
-  // const { t } = useTranslation('translation', {
-  //   keyPrefix: 'userChat',
-  // });
-
   const userId: string | null = getItem('userId');
 
   const [createChat] = useMutation(CREATE_CHAT);
