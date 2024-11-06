@@ -923,7 +923,6 @@ type Post {
   comments: [Comment]
   createdAt: DateTime!
   creator: User
-  imageUrl: String
   likeCount: Int
   likedBy: [User]
   organization: Organization!
@@ -931,7 +930,8 @@ type Post {
   text: String!
   title: String
   updatedAt: DateTime!
-  videoUrl: String
+  imageUrl: URL
+  videoUrl: URL
 }
 
 """
