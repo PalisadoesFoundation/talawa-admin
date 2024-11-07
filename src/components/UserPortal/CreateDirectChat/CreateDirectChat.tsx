@@ -61,10 +61,6 @@ export default function createDirectChatModal({
   createDirectChatModalisOpen,
   chatsListRefetch,
 }: InterfaceCreateDirectChatProps): JSX.Element {
-  // const { t } = useTranslation('translation', {
-  //   keyPrefix: 'userChat',
-  // });
-
   const { orgId: organizationId } = useParams();
 
   const userId: string | null = getItem('userId');
