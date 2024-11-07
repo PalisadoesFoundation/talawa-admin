@@ -44,7 +44,7 @@ const mockMemberData: InterfaceMember[] = [
     birthDate: new Date('1990-01-01'),
     __typename: 'User',
     tagsAssignedWith: {
-      edges: [{ node: { name: 'Tag1' } }],
+      edges: [{ cursor: 'cursor1', node: { name: 'Tag1' } }],
     },
   },
   {
