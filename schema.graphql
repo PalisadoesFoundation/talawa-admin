@@ -1530,4 +1530,5 @@ input chatInput {
   isGroup: Boolean!
   organizationId: ID
   userIds: [ID!]!
-  name: String}
+ name: String
+}
