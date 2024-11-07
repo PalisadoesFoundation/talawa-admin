@@ -1525,10 +1525,9 @@ input createUserFamilyInput {
   title: String!
   userIds: [ID!]!
 }
-
 input chatInput {
   isGroup: Boolean!
   organizationId: ID
   userIds: [ID!]!
   name: String
-}
+ }
