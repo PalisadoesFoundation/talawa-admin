@@ -175,8 +175,11 @@ const leftDrawerOrg = ({
                   <Button
                     key={name}
                     variant={isActive === true ? 'success' : ''}
+                    style={{
+                      backgroundColor: isActive === true ? '#EAEBEF' : '',
+                    }}
                     className={`${
-                      isActive === true ? 'text-white' : 'text-secondary'
+                      isActive === true ? 'text-black' : 'text-secondary'
                     }`}
                   >
                     <div className={styles.iconWrapper}>
@@ -184,7 +187,7 @@ const leftDrawerOrg = ({
                         name={name == 'Membership Requests' ? 'Requests' : name}
                         fill={
                           isActive === true
-                            ? 'var(--bs-white)'
+                            ? 'var(--bs-black)'
                             : 'var(--bs-secondary)'
                         }
                       />

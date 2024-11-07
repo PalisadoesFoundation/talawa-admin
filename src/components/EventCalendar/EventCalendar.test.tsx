@@ -286,13 +286,14 @@ describe('Calendar', () => {
     // expect(todayCell).toHaveClass(styles.day__today);
   });
   it('Should handle window resize in day view', async () => {
+    const date = new Date().toISOString().split('T')[0];
     const multipleEventData = [
       {
         _id: '1',
         title: 'Event 1',
         description: 'This is event 1',
-        startDate: new Date().toISOString().split('T')[0],
-        endDate: new Date().toISOString().split('T')[0],
+        startDate: date,
+        endDate: date,
         location: 'Los Angeles',
         startTime: null,
         endTime: null,
@@ -307,8 +308,8 @@ describe('Calendar', () => {
         _id: '2',
         title: 'Event 2',
         description: 'This is event 2',
-        startDate: new Date().toISOString().split('T')[0],
-        endDate: new Date().toISOString().split('T')[0],
+        startDate: date,
+        endDate: date,
         location: 'Los Angeles',
         startTime: null,
         endTime: null,
@@ -323,8 +324,8 @@ describe('Calendar', () => {
         _id: '3',
         title: 'Event 3',
         description: 'This is event 3',
-        startDate: new Date().toISOString().split('T')[0],
-        endDate: new Date().toISOString().split('T')[0],
+        startDate: date,
+        endDate: date,
         location: 'Los Angeles',
         startTime: '14:00',
         endTime: '16:00',
@@ -339,8 +340,8 @@ describe('Calendar', () => {
         _id: '4',
         title: 'Event 4',
         description: 'This is event 4',
-        startDate: new Date().toISOString().split('T')[0],
-        endDate: new Date().toISOString().split('T')[0],
+        startDate: date,
+        endDate: date,
         location: 'Los Angeles',
         startTime: '14:00',
         endTime: '16:00',
@@ -355,8 +356,8 @@ describe('Calendar', () => {
         _id: '5',
         title: 'Event 5',
         description: 'This is event 5',
-        startDate: new Date().toISOString().split('T')[0],
-        endDate: new Date().toISOString().split('T')[0],
+        startDate: date,
+        endDate: date,
         location: 'Los Angeles',
         startTime: '17:00',
         endTime: '19:00',
@@ -372,14 +373,40 @@ describe('Calendar', () => {
       <Router>
         <MockedProvider addTypename={false} link={link}>
           <I18nextProvider i18n={i18nForTest}>
-            <Calendar eventData={multipleEventData} />
+            <Calendar eventData={multipleEventData} viewType={ViewType.MONTH} />
           </I18nextProvider>
         </MockedProvider>
-        ,
       </Router>,
     );
+
+    // Simulate window resize and check if components respond correctly
     await act(async () => {
-      window.innerWidth = 500;
+      window.innerWidth = 500; // Set the window width to <= 700
+      window.dispatchEvent(new Event('resize'));
+    });
+
+    // Check for "View all" button if there are more than 2 events
+    const viewAllButton = await screen.findAllByTestId('more');
+    console.log('hi', viewAllButton); // This will show the buttons found in the test
+    expect(viewAllButton.length).toBeGreaterThan(0);
+
+    // Simulate clicking the "View all" button to expand the list
+    fireEvent.click(viewAllButton[0]);
+
+    const event5 = screen.queryByText('Event 5');
+    expect(event5).toBeNull();
+
+    const viewLessButtons = screen.getAllByText('View less');
+    expect(viewLessButtons.length).toBeGreaterThan(0);
+
+    // Simulate clicking "View less" to collapse the list
+    fireEvent.click(viewLessButtons[0]);
+    const viewAllButtons = screen.getAllByText('View all');
+    expect(viewAllButtons.length).toBeGreaterThan(0);
+
+    // Reset the window size to avoid side effects for other tests
+    await act(async () => {
+      window.innerWidth = 1024;
       window.dispatchEvent(new Event('resize'));
     });
   });
