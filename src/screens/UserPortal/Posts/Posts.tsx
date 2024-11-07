@@ -214,19 +214,18 @@ export default function home(): JSX.Element {
       id: value._id,
     }));
 
-    const postComments: InterfacePostComments =
-      comments?.map((value) => ({
-        id: value.id,
-        creator: {
-          firstName: value.creator?.firstName ?? '',
-          lastName: value.creator?.lastName ?? '',
-          id: value.creator?.id ?? '',
-          email: value.creator?.email ?? '',
-        },
-        likeCount: value.likeCount,
-        likedBy: value.likedBy?.map((like) => ({ id: like?.id ?? '' })) ?? [],
-        text: value.text,
-      })) ?? [];
+    const postComments: InterfacePostComments = comments?.map((value) => ({
+      id: value.id,
+      creator: {
+        firstName: value.creator?.firstName ?? '',
+        lastName: value.creator?.lastName ?? '',
+        id: value.creator?.id ?? '',
+        email: value.creator?.email ?? '',
+      },
+      likeCount: value.likeCount,
+      likedBy: value.likedBy?.map((like) => ({ id: like?.id ?? '' })) ?? [],
+      text: value.text,
+    }));
 
     const date = new Date(node.createdAt);
     const formattedDate = new Intl.DateTimeFormat('en-US', {
