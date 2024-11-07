@@ -266,86 +266,100 @@ function EventAttendance(): JSX.Element {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredAttendees.map((member: InterfaceMember, index: number) => (
-              <TableRow
-                key={index}
-                data-testid={`attendee-row-${index}`}
-                className="my-6"
-              >
-                <TableCell
-                  component="th"
-                  scope="row"
-                  data-testid={`attendee-index-${index}`}
-                >
-                  {index + 1}
-                </TableCell>
-                <TableCell align="left" data-testid={`attendee-name-${index}`}>
-                  <Link
-                    to={`/member/${currentUrl}`}
-                    state={{ id: member._id }}
-                    className={styles.membername}
-                  >
-                    {member.firstName} {member.lastName}
-                  </Link>
-                </TableCell>
-                <TableCell
-                  align="left"
-                  data-testid={`attendee-status-${index}`}
-                >
-                  {member.__typename === 'User' ? t('Member') : t('Admin')}
-                </TableCell>
-                <Tooltip
-                  componentsProps={{
-                    tooltip: {
-                      sx: {
-                        backgroundColor: 'white',
-                        fontSize: '2em',
-                        maxHeight: '170px',
-                        overflowY: 'scroll',
-                        scrollbarColor: 'white',
-                        border: '1px solid green',
-                        borderRadius: '6px',
-                        boxShadow: '0 0 5px rgba(0,0,0,0.1)',
-                      },
-                    },
-                  }}
-                  title={member.eventsAttended?.map(
-                    (event: { _id: string }, index: number) => (
-                      <AttendedEventList
-                        key={event._id}
-                        eventId={event._id}
-                        data-testid={`attendee-events-attended-${index}`}
-                      />
-                    ),
-                  )}
-                >
-                  <TableCell
-                    align="left"
-                    data-testid={`attendee-events-attended-${index}`}
-                  >
-                    <span className={styles.eventsAttended}>
-                      {member.eventsAttended
-                        ? member.eventsAttended.length
-                        : '0'}
-                    </span>
-                  </TableCell>
-                </Tooltip>
-                <TableCell
-                  align="left"
-                  data-testid={`attendee-task-assigned-${index}`}
-                >
-                  {member.tagsAssignedWith ? (
-                    member.tagsAssignedWith.edges.map(
-                      (edge: { node: { name: string } }, tagIndex: number) => (
-                        <div key={tagIndex}>{edge.node.name}</div>
-                      ),
-                    )
-                  ) : (
-                    <div>None</div>
-                  )}
+            {filteredAttendees.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={5} align="center">
+                  {t('noAttendees')}
                 </TableCell>
               </TableRow>
-            ))}
+            ) : (
+              filteredAttendees.map(
+                (member: InterfaceMember, index: number) => (
+                  <TableRow
+                    key={index}
+                    data-testid={`attendee-row-${index}`}
+                    className="my-6"
+                  >
+                    <TableCell
+                      component="th"
+                      scope="row"
+                      data-testid={`attendee-index-${index}`}
+                    >
+                      {index + 1}
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      data-testid={`attendee-name-${index}`}
+                    >
+                      <Link
+                        to={`/member/${currentUrl}`}
+                        state={{ id: member._id }}
+                        className={styles.membername}
+                      >
+                        {member.firstName} {member.lastName}
+                      </Link>
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      data-testid={`attendee-status-${index}`}
+                    >
+                      {member.__typename === 'User' ? t('Member') : t('Admin')}
+                    </TableCell>
+                    <Tooltip
+                      componentsProps={{
+                        tooltip: {
+                          sx: {
+                            backgroundColor: 'white',
+                            fontSize: '2em',
+                            maxHeight: '170px',
+                            overflowY: 'scroll',
+                            scrollbarColor: 'white',
+                            border: '1px solid green',
+                            borderRadius: '6px',
+                            boxShadow: '0 0 5px rgba(0,0,0,0.1)',
+                          },
+                        },
+                      }}
+                      title={member.eventsAttended?.map(
+                        (event: { _id: string }, index: number) => (
+                          <AttendedEventList
+                            key={event._id}
+                            eventId={event._id}
+                            data-testid={`attendee-events-attended-${index}`}
+                          />
+                        ),
+                      )}
+                    >
+                      <TableCell
+                        align="left"
+                        data-testid={`attendee-events-attended-${index}`}
+                      >
+                        <span className={styles.eventsAttended}>
+                          {member.eventsAttended
+                            ? member.eventsAttended.length
+                            : '0'}
+                        </span>
+                      </TableCell>
+                    </Tooltip>
+                    <TableCell
+                      align="left"
+                      data-testid={`attendee-task-assigned-${index}`}
+                    >
+                      {member.tagsAssignedWith ? (
+                        member.tagsAssignedWith.edges.map(
+                          (
+                            edge: { node: { name: string } },
+                            tagIndex: number,
+                          ) => <div key={tagIndex}>{edge.node.name}</div>,
+                        )
+                      ) : (
+                        <div>None</div>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ),
+              )
+            )}
           </TableBody>
         </Table>
       </TableContainer>

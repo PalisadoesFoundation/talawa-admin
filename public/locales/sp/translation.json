@@ -1076,7 +1076,8 @@
     "Task Assigned": "Tarea asignada",
     "Member": "Miembro",
     "Admin": "Administrador",
-    "loading": "Cargando..."
+    "loading": "Cargando...",
+    "noAttendees": "No se encontraron asistentes"
   },
   "onSpotAttendee": {
     "title": "Asistente en el lugar",

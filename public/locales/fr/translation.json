@@ -1074,7 +1074,8 @@
     "Task Assigned": "Tâche assignée",
     "Member": "Membre",
     "Admin": "Administrateur",
-    "loading": "Chargement..."
+    "loading": "Chargement...",
+    "noAttendees": "Aucun participant trouvé"
   },
   "onSpotAttendee": {
     "title": "Participant sur place",

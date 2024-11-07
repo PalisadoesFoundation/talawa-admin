@@ -1074,7 +1074,8 @@
     "Task Assigned": "分配的任务",
     "Member": "成员",
     "Admin": "管理员",
-    "loading": "加载中..."
+    "loading": "加载中...",
+    "noAttendees": "未找到参与者"
   },
   "onSpotAttendee": {
     "title": "现场参与者",

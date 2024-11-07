@@ -1074,7 +1074,8 @@
     "Task Assigned": "सौंपा गया कार्य",
     "Member": "सदस्य",
     "Admin": "व्यवस्थापक",
-    "loading": "लोड हो रहा है"
+    "loading": "लोड हो रहा है",
+    "noAttendees": "कोई प्रतिभागी नहीं मिला"
   },
   "onSpotAttendee": {
     "title": "ऑन-स्पॉट प्रतिभागी",

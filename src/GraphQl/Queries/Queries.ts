@@ -428,7 +428,13 @@ export const ORGANIZATIONS_LIST = gql`
 
 // Query to take the Members of a particular organization
 export const MEMBERS_LIST = gql`
-  query Organizations($id: ID!) {
+  query Organizations(
+    $id: ID!
+    $after: String
+    $before: String
+    $first: Int
+    $last: Int
+  ) {
     organizations(id: $id) {
       _id
       members {
@@ -439,13 +445,13 @@ export const MEMBERS_LIST = gql`
         email
         createdAt
         gender
-        organizationsBlockedBy {
-          _id
-        }
-        eventsAttended {
-          _id
-        }
-        tagsAssignedWith(organizationId: $id) {
+        tagsAssignedWith(
+          after: $after
+          before: $before
+          first: $first
+          last: $last
+          organizationId: $id
+        ) {
           edges {
             cursor
             node {

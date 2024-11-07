@@ -24,6 +24,7 @@ export interface InterfaceMember {
   _id: string;
   tagsAssignedWith: {
     edges: {
+      cursor: string;
       node: {
         name: string;
       };
