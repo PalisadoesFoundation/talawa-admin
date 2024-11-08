@@ -3,7 +3,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import 'jest-localstorage-mock';
 import { I18nextProvider } from 'react-i18next';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 
 import i18nForTest from 'utils/i18nForTest';
 import type { InterfaceLeftDrawerProps } from './LeftDrawerOrg';
@@ -21,6 +21,10 @@ const { setItem } = useLocalStorage();
 const props: InterfaceLeftDrawerProps = {
   orgId: '123',
   targets: [
+    {
+      name: 'Admin Profile',
+      url: '/member/123',
+    },
     {
       name: 'Dashboard',
       url: '/orgdash/123',
@@ -215,6 +219,20 @@ const MOCKS_EMPTY = [
   },
 ];
 
+const MOCKS_EMPTY_ORGID = [
+  {
+    request: {
+      query: ORGANIZATIONS_LIST,
+      variables: { id: '' },
+    },
+    result: {
+      data: {
+        organizations: [],
+      },
+    },
+  },
+];
+
 const defaultScreens = [
   'Dashboard',
   'People',
@@ -264,6 +282,7 @@ afterEach(() => {
 const link = new StaticMockLink(MOCKS, true);
 const linkImage = new StaticMockLink(MOCKS_WITH_IMAGE, true);
 const linkEmpty = new StaticMockLink(MOCKS_EMPTY, true);
+const linkEmptyOrgId = new StaticMockLink(MOCKS_EMPTY_ORGID, true);
 
 describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
   test('Component should be rendered properly', async () => {
@@ -306,6 +325,29 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     );
     await wait();
     expect(screen.getByTestId(/orgBtn/i)).toBeInTheDocument();
+  });
+
+  test('Should not show org not found error when viewing admin profile', async () => {
+    setItem('UserImage', '');
+    setItem('SuperAdmin', true);
+    setItem('FirstName', 'John');
+    setItem('LastName', 'Doe');
+    setItem('id', '123');
+    render(
+      <MockedProvider addTypename={false} link={linkEmptyOrgId}>
+        <MemoryRouter initialEntries={['/member/123']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LeftDrawerOrg {...props} hideDrawer={null} />
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+    await wait();
+    expect(
+      screen.queryByText(/Error occured while loading Organization data/i),
+    ).not.toBeInTheDocument();
   });
 
   test('Testing Menu Buttons', async () => {

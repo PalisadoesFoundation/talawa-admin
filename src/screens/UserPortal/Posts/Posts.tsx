@@ -52,34 +52,16 @@ type Ad = {
   endDate: string; // Assuming it's a string in the format 'yyyy-MM-dd'
   startDate: string; // Assuming it's a string in the format 'yyyy-MM-dd'
 };
-interface InterfaceAdContent {
-  _id: string;
-  name: string;
-  type: string;
-  organization: {
-    _id: string;
-  };
-  mediaUrl: string;
-  endDate: string;
-  startDate: string;
-
-  comments: InterfacePostComments;
-  likes: InterfacePostLikes;
-}
-
-type AdvertisementsConnection = {
-  edges: {
-    node: InterfaceAdContent;
-  }[];
-};
 
 type InterfacePostComments = {
+  id: string;
   creator: {
-    _id: string;
+    id: string;
     firstName: string;
     lastName: string;
     email: string;
   };
+
   likeCount: number;
   likedBy: {
     id: string;
@@ -226,42 +208,24 @@ export default function home(): JSX.Element {
       comments,
     } = node;
 
-    const allLikes: any = [];
+    const allLikes: InterfacePostLikes = likedBy.map((value) => ({
+      firstName: value.firstName,
+      lastName: value.lastName,
+      id: value._id,
+    }));
 
-    likedBy.forEach((value: any) => {
-      const singleLike = {
-        firstName: value.firstName,
-        lastName: value.lastName,
-        id: value._id,
-      };
-      allLikes.push(singleLike);
-    });
-
-    const postComments: any = [];
-
-    comments.forEach((value: any) => {
-      const commentLikes: any = [];
-      value.likedBy.forEach((commentLike: any) => {
-        const singleLike = {
-          id: commentLike._id,
-        };
-        commentLikes.push(singleLike);
-      });
-
-      const comment = {
-        id: value._id,
-        creator: {
-          firstName: value.creator.firstName,
-          lastName: value.creator.lastName,
-          id: value.creator._id,
-          email: value.creator.email,
-        },
-        likeCount: value.likeCount,
-        likedBy: commentLikes,
-        text: value.text,
-      };
-      postComments.push(comment);
-    });
+    const postComments: InterfacePostComments = comments?.map((value) => ({
+      id: value.id,
+      creator: {
+        firstName: value.creator?.firstName ?? '',
+        lastName: value.creator?.lastName ?? '',
+        id: value.creator?.id ?? '',
+        email: value.creator?.email ?? '',
+      },
+      likeCount: value.likeCount,
+      likedBy: value.likedBy?.map((like) => ({ id: like?.id ?? '' })) ?? [],
+      text: value.text,
+    }));
 
     const date = new Date(node.createdAt);
     const formattedDate = new Intl.DateTimeFormat('en-US', {
@@ -311,7 +275,6 @@ export default function home(): JSX.Element {
     <>
       <div className={`d-flex flex-row ${styles.containerHeight}`}>
         <div className={`${styles.colorLight} ${styles.mainContainer}`}>
-          <h1>{t('posts')}</h1>
           <div className={`${styles.postContainer}`}>
             <div className={`${styles.heading}`}>{t('startPost')}</div>
             <div className={styles.postInputContainer}>

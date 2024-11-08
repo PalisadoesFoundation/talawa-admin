@@ -1234,7 +1234,7 @@ const MESSAGE_SENT_TO_CHAT_MOCK = [
     },
     result: {
       data: {
-        messageSentToGroupChat: {
+        messageSentToChat: {
           _id: '668ec1f1df364e03ac47a151',
           createdAt: '2024-07-10T17:16:33.248Z',
           messageContent: 'Test ',
@@ -1260,7 +1260,7 @@ const MESSAGE_SENT_TO_CHAT_MOCK = [
     },
     result: {
       data: {
-        messageSentToGroupChat: {
+        messageSentToChat: {
           _id: '668ec1f13603ac4697a151',
           createdAt: '2024-07-10T17:16:33.248Z',
           messageContent: 'Test ',
