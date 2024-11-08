@@ -7,7 +7,7 @@ import {
   waitFor,
 } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
-import { I18nextProvider, useTranslation } from 'react-i18next';
+import { I18nextProvider } from 'react-i18next';
 import { USERS_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
