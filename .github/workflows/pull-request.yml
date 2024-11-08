@@ -241,6 +241,35 @@ jobs:
       - name: Validate Documents
         run: graphql-inspector validate './src/GraphQl/**/*.ts' './talawa-api/schema.graphql'
 
+  Docker-Start-Check:
+          name: Check if Talawa Admin app starts in Docker
+          runs-on: ubuntu-latest
+          steps:
+             - name: Checkout the Repository
+             uses: actions/checkout@v4
+        
+             - name: Set up Docker
+             run: |
+                  sudo apt-get update
+                  sudo apt-get install -y docker.io
+        
+              - name: Run Docker Container
+                run: |
+                  docker run -d --name talawa-admin-container -p 8080:8080 talawa-admin-app
+        
+              - name: Check if Talawa Admin App is running
+               run: |
+                nc -z localhost 8080
+        
+                curl --fail --silent http://localhost:8080/index.html || exit 1
+        
+              - name: Stop Docker Container 
+                if: always()
+                run: |
+                 docker stop talawa-admin-app-container
+                 docker rm talawa-admin-app-container
+        
+
   Check-Target-Branch:
     if: ${{ github.actor != 'dependabot[bot]' }}
     name: Check Target Branch
