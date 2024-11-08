@@ -4,7 +4,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import 'jest-location-mock';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, useNavigate } from 'react-router-dom';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import UserScreen from './UserScreen';
@@ -87,7 +87,7 @@ describe('Testing LeftDrawer in OrganizationScreen', () => {
     );
 
     const titleElement = screen.getByRole('heading', { level: 1 });
-    expect(titleElement).toHaveTextContent('');
+    expect(titleElement).toHaveTextContent('Posts');
   });
 
   test('renders the correct title based on the titleKey', () => {
@@ -109,7 +109,7 @@ describe('Testing LeftDrawer in OrganizationScreen', () => {
     expect(titleElement).toHaveTextContent('People');
   });
 
-  test('Testing LeftDrawer in page functionality', async () => {
+  test('LeftDrawer should toggle correctly based on window size and user interaction', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -138,8 +138,10 @@ describe('Testing LeftDrawer in OrganizationScreen', () => {
     expect(icon).toHaveClass('fa fa-angle-double-left');
   });
 
-  test('should be redirected to / if orgId is undefined', async () => {
+  test('should be redirected to root when orgId is undefined', async () => {
     mockID = undefined;
+    const navigate = jest.fn();
+    jest.spyOn({ useNavigate }, 'useNavigate').mockReturnValue(navigate);
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
