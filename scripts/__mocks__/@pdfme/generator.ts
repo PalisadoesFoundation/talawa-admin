@@ -1,3 +1,12 @@
-export const generate = async (): Promise<Uint8Array> => {
-  return new Uint8Array([10, 20, 30, 40, 50]);
+import type { Template } from '@pdfme/common';
+import { generate as pdfmeGenerate } from '@pdfme/generator';
+
+export const generate = async ({
+  template,
+  inputs,
+}: {
+  template: Template;
+  inputs: Record<string, string>[];
+}): Promise<Uint8Array> => {
+  return await pdfmeGenerate({ template: template, inputs });
 };
