@@ -25,7 +25,6 @@ import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import { USERS_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
 import { Search } from '@mui/icons-material';
-import { useTranslation } from 'react-i18next';
 
 interface InterfaceCreateGroupChatProps {
   toggleCreateGroupChatModal: () => void;
@@ -36,7 +35,7 @@ interface InterfaceCreateGroupChatProps {
           id: string;
         }>
       | undefined,
-  ) => Promise<ApolloQueryResult<any>>;
+  ) => Promise<ApolloQueryResult<string>>;
 }
 
 interface InterfaceOrganization {
@@ -94,10 +93,6 @@ export default function CreateGroupChat({
   createGroupChatModalisOpen,
   chatsListRefetch,
 }: InterfaceCreateGroupChatProps): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'userChat',
-  });
-
   const userId: string | null = getItem('userId');
 
   const [createChat] = useMutation(CREATE_CHAT);
