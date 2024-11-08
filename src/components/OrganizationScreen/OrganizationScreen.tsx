@@ -146,4 +146,5 @@ const map: InterfaceMapType = {
   blockuser: 'blockUnblockUser',
   orgvenues: 'organizationVenues',
   event: 'eventManagement',
+  leaderboard: 'leaderboard',
 };

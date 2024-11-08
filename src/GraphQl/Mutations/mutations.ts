@@ -725,7 +725,6 @@ export {
 // Changes the role of a user in an organization
 export {
   ADD_CUSTOM_FIELD,
-  CREATE_DIRECT_CHAT,
   CREATE_SAMPLE_ORGANIZATION_MUTATION,
   JOIN_PUBLIC_ORGANIZATION,
   PLUGIN_SUBSCRIPTION,

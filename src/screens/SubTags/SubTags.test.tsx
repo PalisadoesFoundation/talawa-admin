@@ -4,6 +4,7 @@ import type { RenderResult } from '@testing-library/react';
 import {
   act,
   cleanup,
+  fireEvent,
   render,
   screen,
   waitFor,
@@ -19,11 +20,7 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import SubTags from './SubTags';
-import {
-  MOCKS,
-  MOCKS_ERROR_SUB_TAGS,
-  MOCKS_ERROR_TAG_ANCESTORS,
-} from './SubTagsMocks';
+import { MOCKS, MOCKS_ERROR_SUB_TAGS } from './SubTagsMocks';
 import { InMemoryCache, type ApolloLink } from '@apollo/client';
 
 const translations = {
@@ -38,7 +35,6 @@ const translations = {
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR_SUB_TAGS, true);
-const link3 = new StaticMockLink(MOCKS_ERROR_TAG_ANCESTORS, true);
 
 async function wait(ms = 500): Promise<void> {
   await act(() => {
@@ -60,9 +56,21 @@ const cache = new InMemoryCache({
     Query: {
       fields: {
         getUserTag: {
-          keyArgs: false,
           merge(existing = {}, incoming) {
-            return incoming;
+            const merged = {
+              ...existing,
+              ...incoming,
+              childTags: {
+                ...existing.childTags,
+                ...incoming.childTags,
+                edges: [
+                  ...(existing.childTags?.edges || []),
+                  ...(incoming.childTags?.edges || []),
+                ],
+              },
+            };
+
+            return merged;
           },
         },
       },
@@ -72,8 +80,8 @@ const cache = new InMemoryCache({
 
 const renderSubTags = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider cache={cache} link={link}>
-      <MemoryRouter initialEntries={['/orgtags/123/subtags/tag1']}>
+    <MockedProvider cache={cache} addTypename={false} link={link}>
+      <MemoryRouter initialEntries={['/orgtags/123/subTags/1']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
             <Routes>
@@ -82,11 +90,11 @@ const renderSubTags = (link: ApolloLink): RenderResult => {
                 element={<div data-testid="orgtagsScreen"></div>}
               />
               <Route
-                path="/orgtags/:orgId/managetag/:tagId"
+                path="/orgtags/:orgId/manageTag/:tagId"
                 element={<div data-testid="manageTagScreen"></div>}
               />
               <Route
-                path="/orgtags/:orgId/subtags/:tagId"
+                path="/orgtags/:orgId/subTags/:tagId"
                 element={<SubTags />}
               />
             </Routes>
@@ -131,16 +139,6 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  test('renders error component on unsuccessful userTag ancestors query', async () => {
-    const { queryByText } = renderSubTags(link3);
-
-    await wait();
-
-    await waitFor(() => {
-      expect(queryByText(translations.addChildTag)).not.toBeInTheDocument();
-    });
-  });
-
   test('opens and closes the create tag modal', async () => {
     renderSubTags(link);
 
@@ -160,28 +158,6 @@ describe('Organisation Tags Page', () => {
 
     await waitForElementToBeRemoved(() =>
       screen.queryByTestId('addSubTagModalCloseBtn'),
-    );
-  });
-
-  test('opens and closes the remove tag modal', async () => {
-    renderSubTags(link);
-
-    await wait();
-
-    await waitFor(() => {
-      expect(screen.getAllByTestId('removeUserTagBtn')[0]).toBeInTheDocument();
-    });
-    userEvent.click(screen.getAllByTestId('removeUserTagBtn')[0]);
-
-    await waitFor(() => {
-      return expect(
-        screen.findByTestId('removeUserTagModalCloseBtn'),
-      ).resolves.toBeInTheDocument();
-    });
-    userEvent.click(screen.getByTestId('removeUserTagModalCloseBtn'));
-
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('removeUserTagModalCloseBtn'),
     );
   });
 
@@ -260,27 +236,110 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  test('paginates between different pages', async () => {
+  test('searchs for tags where the name matches the provided search input', async () => {
     renderSubTags(link);
 
     await wait();
 
     await waitFor(() => {
-      expect(screen.getByTestId('nextPagBtn')).toBeInTheDocument();
+      expect(
+        screen.getByPlaceholderText(translations.searchByName),
+      ).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('nextPagBtn'));
+    const input = screen.getByPlaceholderText(translations.searchByName);
+    fireEvent.change(input, { target: { value: 'searchSubTag' } });
+
+    // should render the two searched tags from the mock data
+    // where name starts with "searchUserTag"
+    await waitFor(() => {
+      const buttons = screen.getAllByTestId('manageTagBtn');
+      expect(buttons.length).toEqual(2);
+    });
+  });
+
+  test('fetches the tags by the sort order, i.e. latest or oldest first', async () => {
+    renderSubTags(link);
+
+    await wait();
 
     await waitFor(() => {
-      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent('subTag 6');
+      expect(
+        screen.getByPlaceholderText(translations.searchByName),
+      ).toBeInTheDocument();
+    });
+    const input = screen.getByPlaceholderText(translations.searchByName);
+    fireEvent.change(input, { target: { value: 'searchSubTag' } });
+
+    // should render the two searched tags from the mock data
+    // where name starts with "searchUserTag"
+    await waitFor(() => {
+      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent(
+        'searchSubTag 1',
+      );
+    });
+
+    // now change the sorting order
+    await waitFor(() => {
+      expect(screen.getByTestId('sortTags')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('sortTags'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('oldest')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('oldest'));
+
+    // returns the tags in reverse order
+    await waitFor(() => {
+      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent(
+        'searchSubTag 2',
+      );
     });
 
     await waitFor(() => {
-      expect(screen.getByTestId('previousPageBtn')).toBeInTheDocument();
+      expect(screen.getByTestId('sortTags')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('previousPageBtn'));
+    userEvent.click(screen.getByTestId('sortTags'));
 
     await waitFor(() => {
-      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent('subTag 1');
+      expect(screen.getByTestId('latest')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('latest'));
+
+    // reverse the order again
+    await waitFor(() => {
+      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent(
+        'searchSubTag 1',
+      );
+    });
+  });
+
+  test('Fetches more sub tags with infinite scroll', async () => {
+    const { getByText } = renderSubTags(link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(getByText(translations.addChildTag)).toBeInTheDocument();
+    });
+
+    const subTagsScrollableDiv = screen.getByTestId('subTagsScrollableDiv');
+
+    // Get the initial number of tags loaded
+    const initialSubTagsDataLength =
+      screen.getAllByTestId('manageTagBtn').length;
+
+    // Set scroll position to the bottom
+    fireEvent.scroll(subTagsScrollableDiv, {
+      target: { scrollY: subTagsScrollableDiv.scrollHeight },
+    });
+
+    await waitFor(() => {
+      const finalSubTagsDataLength =
+        screen.getAllByTestId('manageTagBtn').length;
+      expect(finalSubTagsDataLength).toBeGreaterThan(initialSubTagsDataLength);
+
+      expect(getByText(translations.addChildTag)).toBeInTheDocument();
     });
   });
 
@@ -296,30 +355,15 @@ describe('Organisation Tags Page', () => {
 
     userEvent.type(
       screen.getByPlaceholderText(translations.tagNamePlaceholder),
-      'subTag 7',
+      'subTag 12',
     );
 
     userEvent.click(screen.getByTestId('addSubTagSubmitBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.tagCreationSuccess);
-    });
-  });
-
-  test('removes a sub tag', async () => {
-    renderSubTags(link);
-
-    await wait();
-
-    await waitFor(() => {
-      expect(screen.getAllByTestId('removeUserTagBtn')[0]).toBeInTheDocument();
-    });
-    userEvent.click(screen.getAllByTestId('removeUserTagBtn')[0]);
-
-    userEvent.click(screen.getByTestId('removeUserTagSubmitBtn'));
-
-    await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.tagRemovalSuccess);
+      expect(toast.success).toHaveBeenCalledWith(
+        translations.tagCreationSuccess,
+      );
     });
   });
 });

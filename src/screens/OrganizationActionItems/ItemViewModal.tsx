@@ -38,13 +38,16 @@ const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
   const {
     actionItemCategory,
     assignee,
+    assigneeGroup,
+    assigneeUser,
+    assigneeType,
     assigner,
     completionDate,
     dueDate,
     isCompleted,
     postCompletionNotes,
     preCompletionNotes,
-    allotedHours,
+    allottedHours,
   } = item;
 
   return (
@@ -79,29 +82,46 @@ const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
                 label={t('assignee')}
                 variant="outlined"
                 className={styles.noOutline}
-                value={assignee.firstName + ' ' + assignee.lastName}
+                data-testid="assignee_input"
+                value={
+                  assigneeType === 'EventVolunteer'
+                    ? `${assignee?.user?.firstName} ${assignee?.user?.lastName}`
+                    : assigneeType === 'EventVolunteerGroup'
+                      ? assigneeGroup?.name
+                      : `${assigneeUser?.firstName} ${assigneeUser?.lastName}`
+                }
                 disabled
                 InputProps={{
                   startAdornment: (
                     <>
-                      {assignee.image ? (
+                      {assignee?.user?.image || assigneeUser?.image ? (
                         <img
-                          src={assignee.image}
+                          src={
+                            (assignee?.user?.image ||
+                              assigneeUser?.image) as string
+                          }
                           alt="Assignee"
-                          data-testid={`${assignee.firstName}_image`}
+                          data-testid={`assignee_image`}
                           className={styles.TableImage}
                         />
+                      ) : assignee || assigneeUser ? (
+                        <Avatar
+                          key={assignee?._id || assigneeUser?._id}
+                          containerStyle={styles.imageContainer}
+                          avatarStyle={styles.TableImage}
+                          dataTestId={`assignee_avatar`}
+                          name={`${assignee?.user.firstName || assigneeUser?.firstName} ${assignee?.user.lastName || assigneeUser?.lastName}`}
+                          alt={`assignee_avatar`}
+                        />
                       ) : (
-                        <div className={styles.avatarContainer}>
-                          <Avatar
-                            key={assignee._id + '1'}
-                            containerStyle={styles.imageContainer}
-                            avatarStyle={styles.TableImage}
-                            dataTestId={`${assignee.firstName}_avatar`}
-                            name={assignee.firstName + ' ' + assignee.lastName}
-                            alt={assignee.firstName + ' ' + assignee.lastName}
-                          />
-                        </div>
+                        <Avatar
+                          key={assigneeGroup?._id}
+                          containerStyle={styles.imageContainer}
+                          avatarStyle={styles.TableImage}
+                          dataTestId={`assigneeGroup_avatar`}
+                          name={assigneeGroup?.name as string}
+                          alt={`assigneeGroup_avatar`}
+                        />
                       )}
                     </>
                   ),
@@ -121,8 +141,8 @@ const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
                       {assigner.image ? (
                         <img
                           src={assigner.image}
-                          alt="Assignee"
-                          data-testid={`${assigner.firstName}_image`}
+                          alt="Assigner"
+                          data-testid={`assigner_image`}
                           className={styles.TableImage}
                         />
                       ) : (
@@ -131,9 +151,9 @@ const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
                             key={assigner._id + '1'}
                             containerStyle={styles.imageContainer}
                             avatarStyle={styles.TableImage}
-                            dataTestId={`${assigner.firstName}_avatar`}
+                            dataTestId={`assigner_avatar`}
                             name={assigner.firstName + ' ' + assigner.lastName}
-                            alt={assigner.firstName + ' ' + assigner.lastName}
+                            alt={`assigner_avatar`}
                           />
                         </div>
                       )}
@@ -172,10 +192,10 @@ const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
             />
 
             <TextField
-              label={t('allotedHours')}
+              label={t('allottedHours')}
               variant="outlined"
               className={`${styles.noOutline} w-100`}
-              value={allotedHours ?? '-'}
+              value={allottedHours ?? '-'}
               disabled
             />
           </Form.Group>

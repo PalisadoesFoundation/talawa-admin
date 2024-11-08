@@ -1,5 +1,5 @@
 import { useLazyQuery } from '@apollo/client';
-import { Search, Sort } from '@mui/icons-material';
+import { Delete, Search, Sort } from '@mui/icons-material';
 import {
   ORGANIZATIONS_LIST,
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import AddMember from './AddMember';
-import styles from './OrganizationPeople.module.css';
+import styles from '../../style/app.module.css';
 import { DataGrid } from '@mui/x-data-grid';
 import type { GridColDef, GridCellParams } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
@@ -214,7 +214,7 @@ function organizationPeople(): JSX.Element {
           <Link
             to={`/member/${currentUrl}`}
             state={{ id: params.row._id }}
-            className={styles.membername}
+            className={`${styles.membername} ${styles.subtleBlueGrey}`}
           >
             {params.row?.firstName + ' ' + params.row?.lastName}
           </Link>
@@ -258,15 +258,19 @@ function organizationPeople(): JSX.Element {
           <Button
             onClick={() => toggleRemoveAdminModal(params.row._id)}
             data-testid="removeAdminModalBtn"
+            aria-label="Remove admin"
+            className={styles.deleteButton}
           >
-            {tCommon('remove')}
+            <Delete />
           </Button>
         ) : (
           <Button
             onClick={() => toggleRemoveMemberModal(params.row._id)}
             data-testid="removeMemberModalBtn"
+            aria-label="Remove member"
+            className={styles.deleteButton}
           >
-            {tCommon('remove')}
+            <Delete />
           </Button>
         );
       },
@@ -292,11 +296,10 @@ function organizationPeople(): JSX.Element {
                 />
                 <Button
                   type="submit"
-                  className={`position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center `}
-                  style={{ marginBottom: '10px' }}
+                  className={`${styles.searchButton} position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center`}
                   data-testid={'searchbtn'}
                 >
-                  <Search />
+                  <Search className={styles.searchIcon} />
                 </Button>
               </Form>
             </div>
@@ -316,6 +319,7 @@ function organizationPeople(): JSX.Element {
                     d-inline
                     id="userslist"
                     data-value="userslist"
+                    className={styles.dropdownItem}
                     data-name="displaylist"
                     data-testid="users"
                     defaultChecked={state == 2 ? true : false}
@@ -331,6 +335,7 @@ function organizationPeople(): JSX.Element {
                     d-inline
                     id="memberslist"
                     data-value="memberslist"
+                    className={styles.dropdownItem}
                     data-name="displaylist"
                     data-testid="members"
                     defaultChecked={state == 0 ? true : false}
@@ -338,20 +343,25 @@ function organizationPeople(): JSX.Element {
                       setState(0);
                     }}
                   >
-                    <label htmlFor="memberslist">{tCommon('members')}</label>
+                    <Form.Label htmlFor="memberslist">
+                      {tCommon('members')}
+                    </Form.Label>
                   </Dropdown.Item>
                   <Dropdown.Item
                     d-inline
                     id="adminslist"
                     data-value="adminslist"
                     data-name="displaylist"
+                    className={styles.dropdownItem}
                     data-testid="admins"
                     defaultChecked={state == 1 ? true : false}
                     onClick={(): void => {
                       setState(1);
                     }}
                   >
-                    <label htmlFor="adminslist">{tCommon('admins')}</label>
+                    <Form.Label htmlFor="adminslist">
+                      {tCommon('admins')}
+                    </Form.Label>
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
@@ -370,7 +380,6 @@ function organizationPeople(): JSX.Element {
             disableColumnMenu
             columnBufferPx={5}
             hideFooter={true}
-            className={`${styles.datagrid}`}
             getRowId={(row) => row._id}
             slots={{
               noRowsOverlay: () => (
@@ -384,17 +393,26 @@ function organizationPeople(): JSX.Element {
               ),
             }}
             sx={{
-              '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-                outline: 'none !important',
-              },
-              '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-                outline: 'none',
+              borderRadius: '20px',
+              backgroundColor: '#EAEBEF',
+              '& .MuiDataGrid-row': {
+                backgroundColor: '#eff1f7',
+                '&:focus-within': {
+                  outline: '2px solid #000',
+                  outlineOffset: '-2px',
+                },
               },
               '& .MuiDataGrid-row:hover': {
-                backgroundColor: 'transparent',
+                backgroundColor: '#EAEBEF',
+                boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
               },
               '& .MuiDataGrid-row.Mui-hovered': {
-                backgroundColor: 'transparent',
+                backgroundColor: '#EAEBEF',
+                boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
+              },
+              '& .MuiDataGrid-cell:focus': {
+                outline: '2px solid #000',
+                outlineOffset: '-2px',
               },
             }}
             getRowClassName={() => `${styles.rowBackground}`}
