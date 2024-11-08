@@ -1,5 +1,4 @@
 import type { Template } from '@pdfme/common';
-import { generate as pdfmeGenerate } from '@pdfme/generator';
 
 export const generate = async ({
   template,
@@ -8,5 +7,11 @@ export const generate = async ({
   template: Template;
   inputs: Record<string, string>[];
 }): Promise<Uint8Array> => {
-  return await pdfmeGenerate({ template: template, inputs });
+  // return await pdfmeGenerate({ template: template, inputs });
+  const mockLength = Math.min(template.schemas.length, inputs.length);
+  const mockReturnList = [];
+  for (let i = 1; i <= mockLength; i++) {
+    mockReturnList.push(i);
+  }
+  return Promise.resolve(new Uint8Array(mockReturnList));
 };
