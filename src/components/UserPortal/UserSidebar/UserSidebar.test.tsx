@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import type { RenderResult } from '@testing-library/react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import styles from './UserSidebar.module.css';
@@ -15,7 +15,6 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import UserSidebar from './UserSidebar';
 import useLocalStorage from 'utils/useLocalstorage';
-import userEvent from '@testing-library/user-event';
 
 const { setItem } = useLocalStorage();
 
