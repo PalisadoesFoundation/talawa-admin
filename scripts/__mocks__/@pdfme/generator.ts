@@ -7,6 +7,9 @@ export const generate = async ({
   template: Template;
   inputs: Record<string, string>[];
 }): Promise<Uint8Array> => {
+  if (template.schemas.length === 0 || inputs.length === 0) {
+    throw new Error('Template or inputs cannot be empty.');
+  }
   // Generate mock PDF-like header bytes
   const pdfHeader = [0x25, 0x50, 0x44, 0x46]; // %PDF
   // Add some random content based on input size
