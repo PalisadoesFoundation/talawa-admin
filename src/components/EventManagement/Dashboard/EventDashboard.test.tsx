@@ -80,6 +80,8 @@ describe('Testing Event Dashboard Screen', () => {
     const editButton = getByTestId('edit-event-button');
     fireEvent.click(editButton);
     expect(getByTestId('event-title')).toBeInTheDocument();
+    const closeButton = getByTestId('eventModalCloseBtn');
+    fireEvent.click(closeButton);
   });
 
   test('The page should display event details correctly and should not show the time if it is null', async () => {

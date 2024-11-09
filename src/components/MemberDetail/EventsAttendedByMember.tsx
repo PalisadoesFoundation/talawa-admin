@@ -41,8 +41,6 @@ function EventsAttendedByMember({
 
   return (
     <EventAttendedCard
-      data-testid="EventsAttendedCard"
-      type="Event"
       orgId={organization._id}
       eventId={_id}
       key={_id}

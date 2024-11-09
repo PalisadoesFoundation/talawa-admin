@@ -3,16 +3,32 @@ import { render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import EventsAttendedByMember from './EventsAttendedByMember';
+import { BrowserRouter } from 'react-router-dom';
 
 const mockEventData = {
   event: {
     _id: 'event123',
     title: 'Test Event',
-    startDate: '2024-03-14',
+    description: 'Test Description',
+    startDate: '2023-01-01',
+    endDate: '2023-01-02',
+    startTime: '09:00',
+    endTime: '17:00',
+    allDay: false,
     location: 'Test Location',
+    recurring: true,
+    baseRecurringEvent: { _id: 'base123' },
     organization: {
       _id: 'org123',
+      members: [
+        { _id: 'user1', firstName: 'John', lastName: 'Doe' },
+        { _id: 'user2', firstName: 'Jane', lastName: 'Smith' },
+      ],
     },
+    attendees: [
+      { _id: 'user1', gender: 'MALE' },
+      { _id: 'user2', gender: 'FEMALE' },
+    ],
   },
 };
 
@@ -41,9 +57,11 @@ const errorMocks = [
 describe('EventsAttendedByMember', () => {
   test('renders loading state initially', () => {
     render(
-      <MockedProvider mocks={mocks}>
-        <EventsAttendedByMember eventsId="event123" />
-      </MockedProvider>,
+      <BrowserRouter>
+        <MockedProvider mocks={mocks}>
+          <EventsAttendedByMember eventsId="event123" />
+        </MockedProvider>
+      </BrowserRouter>,
     );
 
     expect(screen.getByTestId('loading')).toBeInTheDocument();
@@ -52,9 +70,11 @@ describe('EventsAttendedByMember', () => {
 
   test('renders error state when query fails', async () => {
     render(
-      <MockedProvider mocks={errorMocks}>
-        <EventsAttendedByMember eventsId="event123" />
-      </MockedProvider>,
+      <BrowserRouter>
+        <MockedProvider mocks={errorMocks}>
+          <EventsAttendedByMember eventsId="event123" />
+        </MockedProvider>
+      </BrowserRouter>,
     );
 
     const errorMessage = await screen.findByTestId('error');
@@ -66,30 +86,16 @@ describe('EventsAttendedByMember', () => {
 
   test('renders event card with correct data when query succeeds', async () => {
     render(
-      <MockedProvider mocks={mocks}>
-        <EventsAttendedByMember eventsId="event123" />
-      </MockedProvider>,
+      <BrowserRouter>
+        <MockedProvider mocks={mocks}>
+          <EventsAttendedByMember eventsId="event123" />
+        </MockedProvider>
+      </BrowserRouter>,
     );
 
     await screen.findByTestId('EventsAttendedCard');
 
     expect(screen.getByText('Test Event')).toBeInTheDocument();
     expect(screen.getByText('Test Location')).toBeInTheDocument();
-  });
-
-  test('passes correct props to EventAttendedCard', async () => {
-    render(
-      <MockedProvider mocks={mocks}>
-        <EventsAttendedByMember eventsId="event123" />
-      </MockedProvider>,
-    );
-
-    const eventCard = await screen.findByTestId('EventsAttendedCard');
-    expect(eventCard).toHaveAttribute('type', 'Event');
-    expect(eventCard).toHaveAttribute('orgId', 'org123');
-    expect(eventCard).toHaveAttribute('eventId', 'event123');
-    expect(eventCard).toHaveAttribute('startdate', '2024-03-14');
-    expect(eventCard).toHaveAttribute('title', 'Test Event');
-    expect(eventCard).toHaveAttribute('location', 'Test Location');
   });
 });

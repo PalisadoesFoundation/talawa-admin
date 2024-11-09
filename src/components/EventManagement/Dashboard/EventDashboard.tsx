@@ -75,10 +75,6 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
     creator: eventData.event.creator,
   };
 
-  if (!eventData || !eventData.event) {
-    return <Loader />; // Fallback UI while data is loading
-  }
-
   // Render event details
   return (
     <div data-testid="event-dashboard">

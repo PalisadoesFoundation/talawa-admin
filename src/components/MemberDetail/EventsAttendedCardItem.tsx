@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 /**
  * Card component to display individual event attendance information
  * Shows event details including title, date, location and organization
- * @param type - Type of event
  * @param orgId - Organization ID
  * @param eventId - Event ID
  * @param startdate - Event start date
@@ -15,7 +14,6 @@ import { Link } from 'react-router-dom';
  * @returns Card component with formatted event information
  */
 export interface InterfaceCardItem {
-  type: 'Event' | 'Post' | 'MembershipRequest';
   title: string;
   time?: string;
   startdate?: string;
@@ -29,7 +27,7 @@ const EventAttendedCard = (props: InterfaceCardItem): JSX.Element => {
   const { title, startdate, location, orgId, eventId } = props;
 
   return (
-    <Card className="border-0 py-1 rounded-0">
+    <Card className="border-0 py-1 rounded-0" data-testid="EventsAttendedCard">
       <Card.Body className="p-1">
         <Row className="align-items-center">
           <Col xs={3} md={2} className="text-center">

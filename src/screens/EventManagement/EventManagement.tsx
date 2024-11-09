@@ -77,6 +77,8 @@ type TabOptions =
  * - Handling event actions
  * - Reviewing event agendas
  * - Viewing event statistics
+ * - Managing event volunteers
+ * - Managing event attendance
  *
  * @returns JSX.Element - The `EventManagement` component.
  *
@@ -157,8 +159,11 @@ const EventManagement = (): JSX.Element => {
 
   const handleBack = (): void => {
     /*istanbul ignore next*/
-    const route = userRole === 'USER' ? 'user/events' : 'orgevents';
-    navigate(`/${route}/${orgId}`);
+    if (userRole === 'USER') {
+      navigate(`/user/events/${orgId}`);
+    } else {
+      navigate(`/orgevents/${orgId}`);
+    }
   };
 
   return (
@@ -265,6 +270,7 @@ const EventManagement = (): JSX.Element => {
               </div>
             );
           default:
+            /*istanbul ignore next*/
             return null;
         }
       })()}

@@ -30,7 +30,6 @@ import type {
   InterfaceEvent,
   InterfaceRecurringEvent,
 } from './InterfaceEvents';
-import { toast } from 'react-toastify';
 ChartJS.register(
   CategoryScale,
   LinearScale,
