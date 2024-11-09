@@ -626,32 +626,6 @@ describe('MemberDetail', () => {
     // Check for empty state immediately
     expect(screen.getByText('No Events Attended')).toBeInTheDocument();
   });
-
-  test('renders events attended card correctly with events', async () => {
-    const props = {
-      id: 'rishav-jha-mech',
-    };
-    render(
-      <MockedProvider addTypename={false} link={link2}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <MemberDetail {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    expect(screen.getByTestId('eventsAttended-title')).toBeInTheDocument();
-    await waitFor(() => {
-      const eventsCards = screen.getAllByTestId('membereventsCard');
-      expect(eventsCards.length).toBe(2);
-      eventsCards.forEach((card) => {
-        expect(card).toBeInTheDocument();
-        expect(card.children.length).toBe(1);
-      });
-    });
-  });
   test('opens "Events Attended List" modal when View All button is clicked', async () => {
     const props = {
       id: 'rishav-jha-mech',

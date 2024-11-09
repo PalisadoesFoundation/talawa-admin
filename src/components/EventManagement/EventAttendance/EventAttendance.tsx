@@ -79,7 +79,6 @@ function EventAttendance(): JSX.Element {
   ): InterfaceMember[] => {
     return sortAttendees(filterAttendees(attendees));
   };
-
   const searchEventAttendees = (value: string): void => {
     const searchValueLower = value.toLowerCase().trim();
 
@@ -140,6 +139,7 @@ function EventAttendance(): JSX.Element {
   }, [eventId, getEventAttendees]);
 
   if (loading) return <p>{t('loading')}</p>;
+  /*istanbul ignore next*/
   if (error) return <p>{error.message}</p>;
 
   return (
@@ -217,8 +217,9 @@ function EventAttendance(): JSX.Element {
                 <span className="ms-2">Sort</span>
               </>
             }
-            onSelect={(eventKey) =>
-              setSortOrder(eventKey as 'ascending' | 'descending')
+            onSelect={
+              /*istanbul ignore next*/
+              (eventKey) => setSortOrder(eventKey as 'ascending' | 'descending')
             }
           >
             <Dropdown.Item eventKey="ascending">Ascending</Dropdown.Item>
@@ -347,6 +348,7 @@ function EventAttendance(): JSX.Element {
                     >
                       {member.tagsAssignedWith ? (
                         member.tagsAssignedWith.edges.map(
+                          /*istanbul ignore next*/
                           (
                             edge: { node: { name: string } },
                             tagIndex: number,

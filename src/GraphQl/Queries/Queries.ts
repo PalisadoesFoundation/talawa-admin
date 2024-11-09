@@ -323,14 +323,6 @@ export const EVENT_ATTENDEES = gql`
         eventsAttended {
           _id
         }
-        tagsAssignedWith {
-          edges {
-            node {
-              name
-              _id
-            }
-          }
-        }
       }
     }
   }
@@ -428,13 +420,7 @@ export const ORGANIZATIONS_LIST = gql`
 
 // Query to take the Members of a particular organization
 export const MEMBERS_LIST = gql`
-  query Organizations(
-    $id: ID!
-    $after: String
-    $before: String
-    $first: Int
-    $last: Int
-  ) {
+  query Organizations($id: ID!) {
     organizations(id: $id) {
       _id
       members {
@@ -444,20 +430,8 @@ export const MEMBERS_LIST = gql`
         image
         email
         createdAt
-        gender
-        tagsAssignedWith(
-          after: $after
-          before: $before
-          first: $first
-          last: $last
-          organizationId: $id
-        ) {
-          edges {
-            cursor
-            node {
-              name
-            }
-          }
+        organizationsBlockedBy {
+          _id
         }
       }
     }
@@ -622,7 +596,6 @@ export const ORGANIZATION_EVENT_CONNECTION_LIST = gql`
     $location_contains: String
     $first: Int
     $skip: Int
-    $id_starts_with: ID
   ) {
     eventsByOrganizationConnection(
       where: {
@@ -630,7 +603,6 @@ export const ORGANIZATION_EVENT_CONNECTION_LIST = gql`
         title_contains: $title_contains
         description_contains: $description_contains
         location_contains: $location_contains
-        id_starts_with: $id_starts_with
       }
       first: $first
       skip: $skip

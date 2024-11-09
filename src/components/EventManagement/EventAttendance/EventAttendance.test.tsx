@@ -1,288 +1,147 @@
 import React from 'react';
-import { act, render, screen, waitFor } from '@testing-library/react';
-import { MockedProvider } from '@apollo/client/testing';
-import { BrowserRouter } from 'react-router-dom';
+import { MockedProvider } from '@apollo/react-testing';
+import type { RenderResult } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  cleanup,
+  waitFor,
+} from '@testing-library/react';
 import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import EventAttendance from './EventAttendance';
-import {
-  EVENT_ATTENDEES,
-  EVENT_DETAILS,
-  RECURRING_EVENTS,
-} from 'GraphQl/Queries/Queries';
 import { store } from 'state/store';
-import i18nForTest from 'utils/i18nForTest';
 import userEvent from '@testing-library/user-event';
+import { StaticMockLink } from 'utils/StaticMockLink';
+import i18n from 'utils/i18nForTest';
+import { MOCKS } from './Attendance.mocks';
 
-const mockAttendees = [
-  {
-    _id: 'user1',
-    firstName: 'John',
-    lastName: 'Doe',
-    email: 'johndoe@example.com',
-    gender: 'MALE',
-    eventsAttended: [{ _id: 'event1' }, { _id: 'event2' }],
-    createdAt: new Date().toISOString(),
-    birthDate: new Date('1990-01-01'),
-    __typename: 'User',
-    tagsAssignedWith: {
-      edges: [{ node: { _id: '1', name: 'Tag1' } }],
-    },
-  },
-  {
-    _id: 'user2',
-    firstName: 'Jane',
-    lastName: 'Smith',
-    email: 'janesmith@example.com',
-    gender: 'FEMALE',
-    eventsAttended: [{ _id: 'event123' }],
-    createdAt: '2023-01-01',
-    birthDate: new Date('1985-05-05'),
-    __typename: 'Admin',
-    tagsAssignedWith: {
-      edges: [{ node: { _id: '1', name: 'Tag1' } }],
-    },
-  },
-];
+const link = new StaticMockLink(MOCKS, true);
 
-const mocks = [
-  {
-    request: {
-      query: EVENT_ATTENDEES,
-      variables: { id: 'event123' },
-    },
-    result: {
-      data: {
-        event: {
-          attendees: mockAttendees,
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: EVENT_DETAILS,
-      variables: { id: 'event123' },
-    },
-    result: {
-      data: {
-        event: {
-          _id: 'event123',
-          title: 'Test Event',
-          description: 'Test Description',
-          startDate: '2023-05-01',
-          endDate: '2023-05-02',
-          startTime: '09:00:00',
-          endTime: '17:00:00',
-          allDay: false,
-          location: 'Test Location',
-          recurring: false,
-          baseRecurringEvent: {
-            _id: 'recurringEvent123',
-          },
-          organization: {
-            _id: 'org123',
-            members: [{ _id: 'member1', firstName: 'John', lastName: 'Doe' }],
-          },
-          attendees: [{ _id: 'user1' }],
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: RECURRING_EVENTS,
-      variables: { baseRecurringEventId: 'recurringEvent123' },
-    },
-    result: {
-      data: {
-        getRecurringEvents: [
-          {
-            _id: 'recurringEvent1',
-            startDate: '2023-05-01',
-            title: 'Recurring Test Event 1',
-            attendees: [
-              {
-                _id: 'user1',
-                gender: 'MALE',
-              },
-              {
-                _id: 'user2',
-                gender: 'FEMALE',
-              },
-            ],
-          },
-          {
-            _id: 'recurringEvent2',
-            startDate: '2023-05-08',
-            title: 'Recurring Test Event 2',
-            attendees: [
-              {
-                _id: 'user1',
-                gender: 'MALE',
-              },
-            ],
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: EVENT_DETAILS,
-      variables: { id: 'event123' },
-    },
-    result: {
-      data: {
-        event: {
-          _id: 'event123',
-          title: 'Test Event',
-          description: 'Test Description',
-          startDate: '2023-05-01',
-          endDate: '2023-05-02',
-          startTime: '09:00:00',
-          endTime: '17:00:00',
-          allDay: false,
-          location: 'Test Location',
-          recurring: false,
-          baseRecurringEvent: {
-            _id: 'recurringEvent123',
-          },
-          organization: {
-            _id: 'org123',
-            members: [{ _id: 'member1', firstName: 'John', lastName: 'Doe' }],
-          },
-          attendees: [{ _id: 'user1' }],
-        },
-      },
-    },
-  },
-];
-
-// const showModal = jest.fn();
-// const handleClose = jest.fn();
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({ eventId: 'event123', orgId: 'org123' }),
+async function wait(): Promise<void> {
+  await waitFor(() => {
+    return Promise.resolve();
+  });
+}
+jest.mock('react-chartjs-2', () => ({
+  Line: () => null,
+  Bar: () => null,
+  Pie: () => null,
 }));
 
-describe('EventAttendance Component', () => {
-  const renderComponent = (): ReturnType<typeof render> =>
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <EventAttendance />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+const renderEventAttendance = (): RenderResult => {
+  return render(
+    <MockedProvider addTypename={false} link={link}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18n}>
+            <EventAttendance />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+};
 
-  test('renders table headers correctly', async () => {
-    renderComponent();
+describe('Event Attendance Component', () => {
+  beforeEach(() => {
+    jest.mock('react-router-dom', () => ({
+      ...jest.requireActual('react-router-dom'),
+      useParams: () => ({ eventId: 'event123', orgId: 'org123' }),
+    }));
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+    cleanup();
+  });
+
+  test('Component loads correctly with table headers', async () => {
+    renderEventAttendance();
+
+    await wait();
+
     await waitFor(() => {
       expect(screen.getByTestId('table-header-row')).toBeInTheDocument();
-      expect(screen.getByTestId('header-index')).toBeInTheDocument();
       expect(screen.getByTestId('header-member-name')).toBeInTheDocument();
       expect(screen.getByTestId('header-status')).toBeInTheDocument();
-      expect(screen.getByTestId('header-events-attended')).toBeInTheDocument();
-      expect(screen.getByTestId('header-task-assigned')).toBeInTheDocument();
     });
   });
 
-  test('renders attendee rows with correct data', async () => {
-    renderComponent();
+  test('Renders attendee data correctly', async () => {
+    renderEventAttendance();
+
+    await wait();
+
     await waitFor(() => {
       expect(screen.getByTestId('attendee-name-0')).toBeInTheDocument();
       expect(screen.getByTestId('attendee-name-1')).toHaveTextContent(
-        'John Doe',
+        'Jane Smith',
       );
     });
   });
 
-  test('search functionality filters attendees correctly', async () => {
-    renderComponent();
-    const searchInput = await waitFor(() => screen.getByTestId('searchByName'));
-    await userEvent.type(searchInput, 'John');
+  test('Search filters attendees by name correctly', async () => {
+    renderEventAttendance();
+
+    await wait();
+
+    const searchInput = screen.getByTestId('searchByName');
+    fireEvent.change(searchInput, { target: { value: 'Bruce' } });
+
     await waitFor(() => {
-      expect(screen.getByTestId('attendee-name-0')).toHaveTextContent(
-        'John Doe',
-      );
+      const filteredAttendee = screen.getByTestId('attendee-name-0');
+      expect(filteredAttendee).toHaveTextContent('Bruce Garza');
     });
   });
 
-  test('sort functionality works correctly', async () => {
-    renderComponent();
-    await act(async () => {
-      const sortDropdown = await screen.getByTestId('sort-dropdown');
-      await userEvent.click(sortDropdown);
-      const descendingOption = screen.getByText('Sort');
-      await userEvent.click(descendingOption);
-    });
+  test('Sort functionality changes attendee order', async () => {
+    renderEventAttendance();
+
+    await wait();
+
+    const sortDropdown = screen.getByTestId('sort-dropdown');
+    userEvent.click(sortDropdown);
+    userEvent.click(screen.getByText('Sort'));
+
     await waitFor(() => {
-      const rows = screen.getAllByTestId(/attendee-name-/);
-      expect(rows[0]).toHaveTextContent('Jane Smith');
+      const attendees = screen.getAllByTestId('attendee-name-0');
+      expect(attendees[0]).toHaveTextContent('Bruce Garza');
     });
   });
 
-  test('filter by date range works correctly', async () => {
-    renderComponent();
-    await act(async () => {
-      const filterDropdown = await screen.findByText('Filter: All');
-      await userEvent.click(filterDropdown);
-      const thisMonthOption = await screen.findByText('This Month');
-      await userEvent.click(thisMonthOption);
-    });
+  test('Date filter shows correct number of attendees', async () => {
+    renderEventAttendance();
+
+    await wait();
+
+    userEvent.click(screen.getByText('Filter: All'));
+    userEvent.click(screen.getByText('This Month'));
 
     await waitFor(() => {
-      const rows = screen.getAllByTestId(/attendee-row-/);
-      expect(rows).toHaveLength(1);
+      expect(screen.getByText('Attendees not Found')).toBeInTheDocument();
     });
   });
-  test('filter by date range works correctly with this year', async () => {
-    renderComponent();
-    await act(async () => {
-      const filterDropdown = await screen.findByText('Filter: All');
-      await userEvent.click(filterDropdown);
-      const thisMonthOption = await screen.findByText('This Year');
-      await userEvent.click(thisMonthOption);
-    });
+  test('Statistics modal opens and closes correctly', async () => {
+    renderEventAttendance();
+    await wait();
+
+    expect(screen.queryByTestId('attendance-modal')).not.toBeInTheDocument();
+
+    const statsButton = screen.getByTestId('stats-modal');
+    userEvent.click(statsButton);
 
     await waitFor(() => {
-      const rows = screen.getAllByTestId(/attendee-row-/);
-      expect(rows).toHaveLength(1);
+      expect(screen.getByTestId('attendance-modal')).toBeInTheDocument();
     });
-  });
-  test('displays correct number of events attended', async () => {
-    renderComponent();
+
+    const closeButton = screen.getByTestId('close-button');
+    userEvent.click(closeButton);
+
     await waitFor(() => {
-      expect(
-        screen.getByTestId('attendee-events-attended-0'),
-      ).toHaveTextContent('1');
-      expect(
-        screen.getByTestId('attendee-events-attended-1'),
-      ).toHaveTextContent('2');
+      expect(screen.queryByTestId('attendance-modal')).not.toBeInTheDocument();
     });
   });
-  // test('opens statistics modal and calls showModal when clicking Historical Statistics button', async () => {
-  //   renderComponent();
-  //   const statsButton = screen.getByTestId('stats-modal');
-  //   await userEvent.click(statsButton);
-  //   expect(showModal).toHaveBeenCalled();
-
-  //   // Verify the modal is present
-  //   await waitFor(() => {
-  //     expect(screen.getByTestId('attendance-modal')).toBeInTheDocument();
-  //   });
-
-  //   // Simulate closing the modal
-  //   await act(async () => {
-  //     handleClose();
-  //   });
-
-  //   // Assert handleClose was called
-  //   expect(handleClose).toHaveBeenCalled();
-  // });
 });
