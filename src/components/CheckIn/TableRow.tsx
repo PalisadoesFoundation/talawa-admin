@@ -67,9 +67,10 @@ export const TableRow = ({
   const generateTag = async (): Promise<void> => {
     try {
       const inputs = [];
-      if (data.name) {
-        inputs.push({ name: data.name });
+      if (typeof data.name !== 'string' || !data.name.trim()) {
+        throw new Error('Invalid or empty name provided');
       }
+      inputs.push({ name: data.name.trim() });
       const pdf = await generate({ template: tagTemplate, inputs });
       // istanbul ignore next
       const blob = new Blob([pdf.buffer], { type: 'application/pdf' });

@@ -168,9 +168,7 @@ describe('Testing Table Row for CheckIn Table', () => {
     fireEvent.click(await findByText('Download Tag'));
 
     expect(
-      await findByText(
-        'Error generating pdf: Template or inputs cannot be empty.',
-      ),
+      await findByText('Error generating pdf: Invalid or empty name provided'),
     ).toBeInTheDocument();
   });
 });
