@@ -17,7 +17,6 @@ import VolunteerContainer from 'screens/EventVolunteers/VolunteerContainer';
 import EventAgendaItems from 'components/EventManagement/EventAgendaItems/EventAgendaItems';
 import useLocalStorage from 'utils/useLocalstorage';
 import EventAttendance from 'components/EventManagement/EventAttendance/EventAttendance';
-import { EventRegistrantsWrapper } from 'components/EventRegistrantsModal/EventRegistrantsWrapper';
 /**
  * List of tabs for the event dashboard.
  *
@@ -232,9 +231,7 @@ const EventManagement = (): JSX.Element => {
             );
           case 'registrants':
             return (
-              <div data-testid="eventRegistrantsTab">
-                <EventRegistrantsWrapper eventId={eventId} orgId={orgId} />
-              </div>
+              <div data-testid="eventRegistrantsTab">Event Registrants</div>
             );
           case 'attendance':
             return (
