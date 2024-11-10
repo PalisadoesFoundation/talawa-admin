@@ -1,5 +1,10 @@
 import React from 'react';
-import { fireEvent, render, waitFor } from '@testing-library/react';
+import {
+  fireEvent,
+  queryByLabelText,
+  render,
+  waitFor,
+} from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { EventRegistrantsModal } from './EventRegistrantsModal';
 import { EVENT_ATTENDEES, MEMBERS_LIST } from 'GraphQl/Queries/Queries';
@@ -175,18 +180,19 @@ describe('Testing Event Registrants Modal', () => {
 
     await waitFor(() =>
       expect(
-        queryByText('Please choose an user to add first!'),
+        queryByText('Please choose a user to add first!'),
       ).toBeInTheDocument(),
     );
 
     // Choose a user to add as an attendee
-    const attendeeInput = queryByLabelText('Add an Registrant');
-    fireEvent.change(attendeeInput as Element, {
-      target: { value: 'John Doe' },
-    });
-    fireEvent.keyDown(attendeeInput as HTMLElement, { key: 'ArrowDown' });
-    fireEvent.keyDown(attendeeInput as HTMLElement, { key: 'Enter' });
-
+    const attendeeInput = queryByLabelText('Add a Registrant');
+    if (attendeeInput) {
+      fireEvent.change(attendeeInput, {
+        target: { value: 'John Doe' },
+      });
+      fireEvent.keyDown(attendeeInput, { key: 'ArrowDown' });
+      fireEvent.keyDown(attendeeInput, { key: 'Enter' });
+    }
     fireEvent.click(queryByText('Add Registrant') as Element);
 
     await waitFor(() =>
@@ -228,7 +234,7 @@ describe('Testing Event Registrants Modal', () => {
     );
 
     // Choose a user to add as an attendee
-    const attendeeInput = queryByLabelText('Add an Registrant');
+    const attendeeInput = queryByLabelText('Add a Registrant');
     fireEvent.change(attendeeInput as Element, {
       target: { value: 'John Doe' },
     });
@@ -287,7 +293,7 @@ describe('Testing Event Registrants Modal', () => {
   });
 
   test('Delete attendee mutation must fail properly', async () => {
-    const { queryByText, queryByTestId } = render(
+    const { queryByText, getByLabelText } = render(
       <MockedProvider
         addTypename={false}
         mocks={[
@@ -315,7 +321,8 @@ describe('Testing Event Registrants Modal', () => {
 
     await waitFor(() => expect(queryByText('John Doe')).toBeInTheDocument());
 
-    fireEvent.click(queryByTestId('CancelIcon') as Element);
+    const deleteButton = getByLabelText('Delete');
+    fireEvent.click(deleteButton);
 
     await waitFor(() =>
       expect(queryByText('Removing the attendee...')).toBeInTheDocument(),

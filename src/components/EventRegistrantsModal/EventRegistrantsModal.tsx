@@ -148,7 +148,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
   if (attendeesLoading || memberLoading) {
     return (
       <>
-        <div className={styles.loader}></div>
+        <div className={styles.loader} data-testid="loader"></div>
       </>
     );
   }
@@ -173,7 +173,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
             ? 'There are no registered attendees for this event.'
             : null}
           <Stack direction="row" className="flex-wrap gap-2">
-            {attendeesData.event.attendees.map((attendee: InterfaceUser) => (
+            {attendeesData?.event?.attendees.map((attendee: InterfaceUser) => (
               <Chip
                 avatar={
                   <Avatar>{`${attendee.firstName[0]}${attendee.lastName[0]}`}</Avatar>
@@ -182,6 +182,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
                 variant="outlined"
                 key={attendee._id}
                 onDelete={() => deleteRegistrant(attendee._id)}
+                deleteIcon={<span aria-label="Delete">×</span>}
               />
             ))}
           </Stack>
@@ -220,7 +221,12 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
           <br />
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="success" onClick={addRegistrant} disabled={isAdding}>
+          <Button
+            variant="success"
+            onClick={addRegistrant}
+            disabled={isAdding}
+            data-testid="add-registrant-button"
+          >
             {isAdding ? 'Adding...' : 'Add Registrant'}
           </Button>
         </Modal.Footer>
