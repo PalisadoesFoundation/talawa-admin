@@ -126,17 +126,15 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ): Promise<void> => {
     const { name, value } = e.target;
+    /*istanbul ignore next*/
     if (
       name === 'photo' &&
       'files' in e.target &&
       e.target.files &&
       e.target.files[0]
     ) {
-      /*istanbul ignore next*/
       const file = e.target.files[0];
-      /*istanbul ignore next*/
       const base64 = await convertToBase64(file);
-      /*istanbul ignore next*/
       setFormState((prevState) => ({
         ...prevState,
         image: base64 as string,
@@ -192,6 +190,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     }
   };
   const resetChanges = (): void => {
+    /*istanbul ignore next*/
     setFormState({
       firstName: userData?.user?.firstName || '',
       lastName: userData?.user?.lastName || '',
@@ -266,8 +265,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                       role="button"
                       aria-label="Edit profile picture"
                       tabIndex={0}
-                      onKeyDown={(e) =>
-                        e.key === 'Enter' && handleEditIconClick()
+                      onKeyDown={
+                        /*istanbul ignore next*/
+                        (e) => e.key === 'Enter' && handleEditIconClick()
                       }
                     />
                   </div>

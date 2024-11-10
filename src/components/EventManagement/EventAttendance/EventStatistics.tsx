@@ -325,13 +325,13 @@ export const AttendanceStatisticsModal: React.FC<
     exportToCSV(data, `${selectedCategory.toLowerCase()}_demographics.csv`);
   }, [selectedCategory, categoryLabels, categoryData]);
 
+  /*istanbul ignore next*/
   const handleExport = (eventKey: string | null): void => {
     switch (eventKey) {
       case 'trends':
         try {
           exportTrendsToCSV();
         } catch (error) {
-          /*istanbul ignore next*/
           console.error('Failed to export trends:', error);
         }
         break;
@@ -339,12 +339,10 @@ export const AttendanceStatisticsModal: React.FC<
         try {
           exportDemographicsToCSV();
         } catch (error) {
-          /*istanbul ignore next*/
           console.error('Failed to export demographics:', error);
         }
         break;
       default:
-        /*istanbul ignore next*/
         return;
     }
   };

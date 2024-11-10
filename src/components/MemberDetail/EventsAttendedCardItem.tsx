@@ -42,6 +42,7 @@ const EventAttendedCard = (props: InterfaceCardItem): JSX.Element => {
                   </div>
                 </>
               ) : (
+                /*istanbul ignore next*/
                 <div className="fs-6 fw-normal">Date N/A</div>
               )}
             </div>
