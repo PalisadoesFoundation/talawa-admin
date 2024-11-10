@@ -2,7 +2,6 @@ import { useMutation, useQuery } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import SortIcon from '@mui/icons-material/Sort';
 import Loader from 'components/Loader/Loader';
-import IconComponent from 'components/IconComponent/IconComponent';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
@@ -17,16 +16,13 @@ import type {
   InterfaceQueryOrganizationUserTags,
   InterfaceTagData,
 } from 'utils/interfaces';
-import styles from './OrganizationTags.module.css';
+import styles from '../../style/app.module.css';
 import { DataGrid } from '@mui/x-data-grid';
 import type {
   InterfaceOrganizationTagsQuery,
   SortedByType,
 } from 'utils/organizationTagsUtils';
-import {
-  dataGridStyle,
-  TAGS_QUERY_DATA_CHUNK_SIZE,
-} from 'utils/organizationTagsUtils';
+import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
 import { ORGANIZATION_USER_TAGS_LIST } from 'GraphQl/Queries/OrganizationQueries';
@@ -306,7 +302,7 @@ function OrganizationTags(): JSX.Element {
               <Form.Control
                 type="text"
                 id="tagName"
-                className="bg-white"
+                className={styles.inputField}
                 placeholder={tCommon('searchByName')}
                 data-testid="searchByName"
                 onChange={(e) => setTagSearchName(e.target.value.trim())}
@@ -322,6 +318,7 @@ function OrganizationTags(): JSX.Element {
                 <Dropdown.Toggle
                   variant="outline-success"
                   data-testid="sortTags"
+                  className={styles.dropdown}
                 >
                   <SortIcon className={'me-1'} />
                   {tagSortOrder === 'DESCENDING'
@@ -344,31 +341,23 @@ function OrganizationTags(): JSX.Element {
                 </Dropdown.Menu>
               </Dropdown>
             </div>
-            <Button
-              variant="success"
-              onClick={showCreateTagModal}
-              data-testid="createTagBtn"
-              className="ms-auto"
-            >
-              <i className={'fa fa-plus me-2'} />
-              {t('createTag')}
-            </Button>
+            <div>
+              <Button
+                // variant="success"
+                onClick={showCreateTagModal}
+                data-testid="createTagBtn"
+                className={styles.createButton}
+              >
+                <i className={'fa fa-plus me-2'} />
+                {t('createTag')}
+              </Button>
+            </div>
           </div>
 
           {orgUserTagsLoading || createUserTagLoading ? (
             <Loader />
           ) : (
             <div className="mb-4">
-              <div className="bg-white border light rounded-top mb-0 py-2 d-flex align-items-center">
-                <div className="ms-3 my-1">
-                  <IconComponent name="Tag" />
-                </div>
-
-                <div className={`fs-4 ms-3 my-1 ${styles.tagsBreadCrumbs}`}>
-                  {'Tags'}
-                </div>
-              </div>
-
               <div
                 id="orgUserTagsScrollableDiv"
                 data-testid="orgUserTagsScrollableDiv"
@@ -400,7 +389,29 @@ function OrganizationTags(): JSX.Element {
                         </Stack>
                       ),
                     }}
-                    sx={dataGridStyle}
+                    sx={{
+                      borderRadius: '20px',
+                      backgroundColor: 'var(--tablerow-bg-color)',
+                      '& .MuiDataGrid-row': {
+                        backgroundColor: 'var(--tablerow-bg-color',
+                        '&:focus-within': {
+                          // outline: '2px solid #000',
+                          outlineOffset: '-2px',
+                        },
+                      },
+                      '& .MuiDataGrid-row:hover': {
+                        backgroundColor: '#EAEBEF',
+                        boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
+                      },
+                      '& .MuiDataGrid-row.Mui-hovered': {
+                        backgroundColor: '#EAEBEF',
+                        boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
+                      },
+                      '& .MuiDataGrid-cell:focus': {
+                        // outline: '2px solid #000',
+                        outlineOffset: '-2px',
+                      },
+                    }}
                     getRowClassName={() => `${styles.rowBackground}`}
                     autoHeight
                     rowHeight={65}
@@ -427,11 +438,11 @@ function OrganizationTags(): JSX.Element {
         centered
       >
         <Modal.Header
-          className="bg-primary"
+          className={styles.tableHeader}
           data-testid="modalOrganizationHeader"
           closeButton
         >
-          <Modal.Title className="text-white">{t('tagDetails')}</Modal.Title>
+          <Modal.Title>{t('tagDetails')}</Modal.Title>
         </Modal.Header>
         <Form onSubmitCapture={createTag}>
           <Modal.Body>
@@ -456,6 +467,7 @@ function OrganizationTags(): JSX.Element {
               variant="secondary"
               onClick={(): void => hideCreateTagModal()}
               data-testid="closeCreateTagModal"
+              className={styles.closeButton}
             >
               {tCommon('cancel')}
             </Button>
@@ -463,6 +475,7 @@ function OrganizationTags(): JSX.Element {
               type="submit"
               value="invite"
               data-testid="createTagSubmitBtn"
+              className={styles.addButton}
             >
               {tCommon('create')}
             </Button>

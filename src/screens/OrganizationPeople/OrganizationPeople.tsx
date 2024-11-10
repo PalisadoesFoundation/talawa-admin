@@ -296,7 +296,7 @@ function organizationPeople(): JSX.Element {
                 />
                 <Button
                   type="submit"
-                  className={`${styles.searchButton} position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center`}
+                  className={`${styles.searchButton} `}
                   data-testid={'searchbtn'}
                 >
                   <Search className={styles.searchIcon} />
