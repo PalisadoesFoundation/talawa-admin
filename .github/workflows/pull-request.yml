@@ -274,7 +274,7 @@ jobs:
 
       - name: Check if Talawa Admin App is running
         run: |
-          timeout=60
+          timeout=${HEALTH_CHECK_TIMEOUT:-60}
           while ! nc -z localhost 4321 && [ $timeout -gt 0 ]; do
             sleep 1
             timeout=$((timeout-1))
@@ -283,7 +283,7 @@ jobs:
             echo "Timeout waiting for application to start"
             exit 1
           fi
-          curl --fail --silent http://localhost:4321/ || exit 1
+          curl --fail --silent http://localhost:4321/health || exit 1
     
       - name: Stop Docker Container 
         if: always()
