@@ -41,7 +41,7 @@ const Avatar = ({
       size: size || 128,
       seed: name,
       radius: radius || 0,
-    }).toDataUri();
+    }).toDataUriSync();
   }, [name, size]);
 
   const svg = avatar?.toString();
