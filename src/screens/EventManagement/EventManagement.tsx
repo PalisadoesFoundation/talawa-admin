@@ -5,6 +5,7 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { FaChevronLeft, FaTasks } from 'react-icons/fa';
 import { MdOutlineDashboard } from 'react-icons/md';
 import EventRegistrantsIcon from 'assets/svgs/people.svg?react';
+import { BsPersonCheck } from 'react-icons/bs';
 import { IoMdStats, IoIosHand } from 'react-icons/io';
 import EventAgendaItemsIcon from 'assets/svgs/agenda-items.svg?react';
 import { useTranslation } from 'react-i18next';
@@ -15,7 +16,7 @@ import OrganizationActionItems from 'screens/OrganizationActionItems/Organizatio
 import VolunteerContainer from 'screens/EventVolunteers/VolunteerContainer';
 import EventAgendaItems from 'components/EventManagement/EventAgendaItems/EventAgendaItems';
 import useLocalStorage from 'utils/useLocalstorage';
-
+import EventAttendance from 'components/EventManagement/EventAttendance/EventAttendance';
 /**
  * List of tabs for the event dashboard.
  *
@@ -32,6 +33,10 @@ const eventDashboardTabs: {
   {
     value: 'registrants',
     icon: <EventRegistrantsIcon width={23} height={23} className="me-1" />,
+  },
+  {
+    value: 'attendance',
+    icon: <BsPersonCheck size={20} className="me-1" />,
   },
   {
     value: 'agendas',
@@ -57,6 +62,7 @@ const eventDashboardTabs: {
 type TabOptions =
   | 'dashboard'
   | 'registrants'
+  | 'attendance'
   | 'agendas'
   | 'actions'
   | 'volunteers'
@@ -71,6 +77,8 @@ type TabOptions =
  * - Handling event actions
  * - Reviewing event agendas
  * - Viewing event statistics
+ * - Managing event volunteers
+ * - Managing event attendance
  *
  * @returns JSX.Element - The `EventManagement` component.
  *
@@ -198,7 +206,7 @@ const EventManagement = (): JSX.Element => {
                     /* istanbul ignore next */
                     () => setTab(value)
                   }
-                  className={`d-flex gap-2 ${tab === value && 'text-secondary'}`}
+                  className={`d-flex gap-2 ${tab === value ? 'text-secondary' : ''}`}
                 >
                   {icon} {t(value)}
                 </Dropdown.Item>
@@ -223,8 +231,12 @@ const EventManagement = (): JSX.Element => {
             );
           case 'registrants':
             return (
-              <div data-testid="eventRegistrantsTab">
-                <h2>Event Registrants</h2>
+              <div data-testid="eventRegistrantsTab">Event Registrants</div>
+            );
+          case 'attendance':
+            return (
+              <div data-testid="eventAttendanceTab" className="mx-4">
+                <EventAttendance />
               </div>
             );
           case 'actions':
@@ -257,10 +269,13 @@ const EventManagement = (): JSX.Element => {
                 <h2>Statistics</h2>
               </div>
             );
+          /*istanbul ignore next*/
+          default:
+            /*istanbul ignore next*/
+            return null;
         }
       })()}
     </div>
   );
 };
-
 export default EventManagement;

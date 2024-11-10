@@ -371,7 +371,9 @@ describe('Testing Agenda Items components', () => {
     userEvent.click(screen.getByTestId('deleteAgendaItemBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.agendaItemDeleted);
+      expect(toast.success).toHaveBeenCalledWith(
+        translations.agendaItemDeleted,
+      );
     });
   });
 
