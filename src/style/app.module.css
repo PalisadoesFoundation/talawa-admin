@@ -202,7 +202,8 @@
 .addButton {
   margin-bottom: 10px;
   background-color: var(--search-button-bg);
-  border-color: white;
+  border-color: var(--grey-bg-color);
+  color: #555555;
 }
 
 .addButton:hover {

@@ -12,6 +12,7 @@ import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import IconComponent from 'components/IconComponent/IconComponent';
 import type {
   InterfaceQueryOrganizationUserTags,
   InterfaceTagData,
@@ -284,6 +285,7 @@ function OrganizationTags(): JSX.Element {
             variant="outline-primary"
             onClick={() => redirectToManageTag(params.row._id)}
             data-testid="manageTagBtn"
+            className={styles.addButton}
           >
             {t('manageTag')}
           </Button>
@@ -358,6 +360,16 @@ function OrganizationTags(): JSX.Element {
             <Loader />
           ) : (
             <div className="mb-4">
+              <div className="bg-white border light rounded-top mb-0 py-2 d-flex align-items-center">
+                <div className="ms-3 my-1">
+                  <IconComponent name="Tag" />
+                </div>
+
+                <div className={`fs-4 ms-3 my-1 ${styles.tagsBreadCrumbs}`}>
+                  {'Tags'}
+                </div>
+              </div>
+
               <div
                 id="orgUserTagsScrollableDiv"
                 data-testid="orgUserTagsScrollableDiv"
@@ -391,9 +403,9 @@ function OrganizationTags(): JSX.Element {
                     }}
                     sx={{
                       borderRadius: '20px',
-                      backgroundColor: 'var(--tablerow-bg-color)',
+                      backgroundColor: '#EAEBEF',
                       '& .MuiDataGrid-row': {
-                        backgroundColor: 'var(--tablerow-bg-color',
+                        backgroundColor: '#eff1f7',
                         '&:focus-within': {
                           // outline: '2px solid #000',
                           outlineOffset: '-2px',
