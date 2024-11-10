@@ -120,158 +120,158 @@ describe('Testing Organization Dashboard Screen', () => {
     await waitFor(() => {
       expect(screen.getByTestId('paramsError')).toBeInTheDocument();
     });
-
-    it('should render Organization Dashboard screen', async () => {
-      renderOrganizationDashboard(link1);
-
-      // Dashboard cards
-      const membersBtn = await screen.findByText(t.members);
-      expect(membersBtn).toBeInTheDocument();
-      expect(screen.getByText(t.admins)).toBeInTheDocument();
-      expect(screen.getByText(t.posts)).toBeInTheDocument();
-      expect(screen.getByText(t.events)).toBeInTheDocument();
-      expect(screen.getByText(t.blockedUsers)).toBeInTheDocument();
-
-      // Upcoming events
-      expect(screen.getByText(t.upcomingEvents)).toBeInTheDocument();
-      expect(screen.getByText('Event 1')).toBeInTheDocument();
-
-      // Latest posts
-      expect(screen.getByText(t.latestPosts)).toBeInTheDocument();
-      expect(screen.getByText('postone')).toBeInTheDocument();
-
-      // Membership requests
-      expect(screen.getByText(t.membershipRequests)).toBeInTheDocument();
-      expect(screen.getByText('Jane Doe')).toBeInTheDocument();
-
-      // Volunteer rankings
-      expect(screen.getByText(t.volunteerRankings)).toBeInTheDocument();
-      expect(screen.getByText('Teresa Bradley')).toBeInTheDocument();
-    });
-
-    it('Click People Card', async () => {
-      renderOrganizationDashboard(link1);
-      const membersBtn = await screen.findByText(t.members);
-      expect(membersBtn).toBeInTheDocument();
-
-      userEvent.click(membersBtn);
-      await waitFor(() => {
-        expect(screen.getByTestId('orgpeople')).toBeInTheDocument();
-      });
-    });
-
-    it('Click Admin Card', async () => {
-      renderOrganizationDashboard(link1);
-      const adminsBtn = await screen.findByText(t.admins);
-      expect(adminsBtn).toBeInTheDocument();
-    });
   });
 
-  it('Click Post Card', async () => {
+  it('should render Organization Dashboard screen', async () => {
     renderOrganizationDashboard(link1);
-    const postsBtn = await screen.findByText(t.posts);
-    expect(postsBtn).toBeInTheDocument();
 
-    userEvent.click(postsBtn);
-    await waitFor(() => {
-      expect(screen.getByTestId('orgpost')).toBeInTheDocument();
-    });
+    // Dashboard cards
+    const membersBtn = await screen.findByText(t.members);
+    expect(membersBtn).toBeInTheDocument();
+    expect(screen.getByText(t.admins)).toBeInTheDocument();
+    expect(screen.getByText(t.posts)).toBeInTheDocument();
+    expect(screen.getByText(t.events)).toBeInTheDocument();
+    expect(screen.getByText(t.blockedUsers)).toBeInTheDocument();
+
+    // Upcoming events
+    expect(screen.getByText(t.upcomingEvents)).toBeInTheDocument();
+    expect(screen.getByText('Event 1')).toBeInTheDocument();
+
+    // Latest posts
+    expect(screen.getByText(t.latestPosts)).toBeInTheDocument();
+    expect(screen.getByText('postone')).toBeInTheDocument();
+
+    // Membership requests
+    expect(screen.getByText(t.membershipRequests)).toBeInTheDocument();
+    expect(screen.getByText('Jane Doe')).toBeInTheDocument();
+
+    // Volunteer rankings
+    expect(screen.getByText(t.volunteerRankings)).toBeInTheDocument();
+    expect(screen.getByText('Teresa Bradley')).toBeInTheDocument();
   });
 
-  it('Click Events Card', async () => {
+  it('Click People Card', async () => {
     renderOrganizationDashboard(link1);
-    const eventsBtn = await screen.findByText(t.events);
-    expect(eventsBtn).toBeInTheDocument();
+    const membersBtn = await screen.findByText(t.members);
+    expect(membersBtn).toBeInTheDocument();
 
-    userEvent.click(eventsBtn);
+    userEvent.click(membersBtn);
     await waitFor(() => {
-      expect(screen.getByTestId('orgevents')).toBeInTheDocument();
+      expect(screen.getByTestId('orgpeople')).toBeInTheDocument();
     });
   });
 
-  it('Click Blocked Users Card', async () => {
+  it('Click Admin Card', async () => {
     renderOrganizationDashboard(link1);
-    const blockedUsersBtn = await screen.findByText(t.blockedUsers);
-    expect(blockedUsersBtn).toBeInTheDocument();
-
-    userEvent.click(blockedUsersBtn);
-    await waitFor(() => {
-      expect(screen.getByTestId('blockuser')).toBeInTheDocument();
-    });
+    const adminsBtn = await screen.findByText(t.admins);
+    expect(adminsBtn).toBeInTheDocument();
   });
+});
 
-  it('Click Requests Card', async () => {
-    renderOrganizationDashboard(link1);
-    const requestsBtn = await screen.findByText(t.requests);
-    expect(requestsBtn).toBeInTheDocument();
+it('Click Post Card', async () => {
+  renderOrganizationDashboard(link1);
+  const postsBtn = await screen.findByText(t.posts);
+  expect(postsBtn).toBeInTheDocument();
 
-    userEvent.click(requestsBtn);
-    await waitFor(() => {
-      expect(screen.getByTestId('requests')).toBeInTheDocument();
-    });
+  userEvent.click(postsBtn);
+  await waitFor(() => {
+    expect(screen.getByTestId('orgpost')).toBeInTheDocument();
   });
+});
 
-  it('Click View All Events', async () => {
-    renderOrganizationDashboard(link1);
-    const viewAllBtn = await screen.findAllByText(t.viewAll);
-    expect(viewAllBtn[0]).toBeInTheDocument();
+it('Click Events Card', async () => {
+  renderOrganizationDashboard(link1);
+  const eventsBtn = await screen.findByText(t.events);
+  expect(eventsBtn).toBeInTheDocument();
 
-    userEvent.click(viewAllBtn[0]);
-    await waitFor(() => {
-      expect(screen.getByTestId('orgevents')).toBeInTheDocument();
-    });
+  userEvent.click(eventsBtn);
+  await waitFor(() => {
+    expect(screen.getByTestId('orgevents')).toBeInTheDocument();
   });
+});
 
-  it('Click View All Posts', async () => {
-    renderOrganizationDashboard(link1);
-    const viewAllBtn = await screen.findAllByText(t.viewAll);
-    expect(viewAllBtn[1]).toBeInTheDocument();
+it('Click Blocked Users Card', async () => {
+  renderOrganizationDashboard(link1);
+  const blockedUsersBtn = await screen.findByText(t.blockedUsers);
+  expect(blockedUsersBtn).toBeInTheDocument();
 
-    userEvent.click(viewAllBtn[1]);
-    await waitFor(() => {
-      expect(screen.getByTestId('orgpost')).toBeInTheDocument();
-    });
+  userEvent.click(blockedUsersBtn);
+  await waitFor(() => {
+    expect(screen.getByTestId('blockuser')).toBeInTheDocument();
   });
+});
 
-  it('Click View All Requests', async () => {
-    renderOrganizationDashboard(link1);
-    const viewAllBtn = await screen.findAllByText(t.viewAll);
-    expect(viewAllBtn[2]).toBeInTheDocument();
+it('Click Requests Card', async () => {
+  renderOrganizationDashboard(link1);
+  const requestsBtn = await screen.findByText(t.requests);
+  expect(requestsBtn).toBeInTheDocument();
 
-    userEvent.click(viewAllBtn[2]);
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
-    });
+  userEvent.click(requestsBtn);
+  await waitFor(() => {
+    expect(screen.getByTestId('requests')).toBeInTheDocument();
   });
+});
 
-  it('Click View All Leaderboard', async () => {
-    renderOrganizationDashboard(link1);
-    const viewAllBtn = await screen.findAllByText(t.viewAll);
-    expect(viewAllBtn[3]).toBeInTheDocument();
+it('Click View All Events', async () => {
+  renderOrganizationDashboard(link1);
+  const viewAllBtn = await screen.findAllByText(t.viewAll);
+  expect(viewAllBtn[0]).toBeInTheDocument();
 
-    userEvent.click(viewAllBtn[3]);
-    await waitFor(() => {
-      expect(screen.getByTestId('leaderboard')).toBeInTheDocument();
-    });
+  userEvent.click(viewAllBtn[0]);
+  await waitFor(() => {
+    expect(screen.getByTestId('orgevents')).toBeInTheDocument();
   });
+});
 
-  it('should render Organization Dashboard screen with empty data', async () => {
-    renderOrganizationDashboard(link3);
+it('Click View All Posts', async () => {
+  renderOrganizationDashboard(link1);
+  const viewAllBtn = await screen.findAllByText(t.viewAll);
+  expect(viewAllBtn[1]).toBeInTheDocument();
 
-    await waitFor(() => {
-      expect(screen.getByText(t.noUpcomingEvents)).toBeInTheDocument();
-      expect(screen.getByText(t.noPostsPresent)).toBeInTheDocument();
-      expect(screen.getByText(t.noMembershipRequests)).toBeInTheDocument();
-      expect(screen.getByText(t.noVolunteers)).toBeInTheDocument();
-    });
+  userEvent.click(viewAllBtn[1]);
+  await waitFor(() => {
+    expect(screen.getByTestId('orgpost')).toBeInTheDocument();
   });
+});
 
-  it('should redirectt to / if error occurs', async () => {
-    renderOrganizationDashboard(link2);
+it('Click View All Requests', async () => {
+  renderOrganizationDashboard(link1);
+  const viewAllBtn = await screen.findAllByText(t.viewAll);
+  expect(viewAllBtn[2]).toBeInTheDocument();
 
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
-      expect(screen.getByTestId('paramsError')).toBeInTheDocument();
-    });
+  userEvent.click(viewAllBtn[2]);
+  await waitFor(() => {
+    expect(toast.success).toHaveBeenCalled();
+  });
+});
+
+it('Click View All Leaderboard', async () => {
+  renderOrganizationDashboard(link1);
+  const viewAllBtn = await screen.findAllByText(t.viewAll);
+  expect(viewAllBtn[3]).toBeInTheDocument();
+
+  userEvent.click(viewAllBtn[3]);
+  await waitFor(() => {
+    expect(screen.getByTestId('leaderboard')).toBeInTheDocument();
+  });
+});
+
+it('should render Organization Dashboard screen with empty data', async () => {
+  renderOrganizationDashboard(link3);
+
+  await waitFor(() => {
+    expect(screen.getByText(t.noUpcomingEvents)).toBeInTheDocument();
+    expect(screen.getByText(t.noPostsPresent)).toBeInTheDocument();
+    expect(screen.getByText(t.noMembershipRequests)).toBeInTheDocument();
+    expect(screen.getByText(t.noVolunteers)).toBeInTheDocument();
+  });
+});
+
+it('should redirectt to / if error occurs', async () => {
+  renderOrganizationDashboard(link2);
+
+  await waitFor(() => {
+    expect(toast.error).toHaveBeenCalled();
+    expect(screen.getByTestId('paramsError')).toBeInTheDocument();
   });
 });
