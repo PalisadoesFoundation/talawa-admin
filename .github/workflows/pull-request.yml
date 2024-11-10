@@ -270,12 +270,12 @@ jobs:
     
       - name: Run Docker Container
         run: |
-          docker run -d --name talawa-admin-app-container -p 8080:8080 talawa-admin-app
+          docker run -d --name talawa-admin-app-container -p 4321:4321 talawa-admin-app
 
       - name: Check if Talawa Admin App is running
         run: |
           timeout=60
-          while ! nc -z localhost 8080 && [ $timeout -gt 0 ]; do
+          while ! nc -z localhost 4321 && [ $timeout -gt 0 ]; do
             sleep 1
             timeout=$((timeout-1))
           done
@@ -283,7 +283,7 @@ jobs:
             echo "Timeout waiting for application to start"
             exit 1
           fi
-          curl --fail --silent http://localhost:8080/index.html || exit 1
+          curl --fail --silent http://localhost:4321/ || exit 1
     
       - name: Stop Docker Container 
         if: always()
