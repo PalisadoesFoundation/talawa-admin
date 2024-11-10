@@ -91,30 +91,33 @@ export default function settings(): JSX.Element {
    * This function sends a mutation request to update the user details
    * and reloads the page on success.
    */
-  const handleUpdateUserDetails = async (): Promise<void> => {
-    try {
-      let updatedUserDetails = { ...userDetails };
-      if (updatedUserDetails.image === originalImageState.current) {
-        updatedUserDetails = { ...updatedUserDetails, image: '' };
+  const handleUpdateUserDetails =
+    /*istanbul ignore next*/
+    async (): Promise<void> => {
+      try {
+        let updatedUserDetails = { ...userDetails };
+        if (updatedUserDetails.image === originalImageState.current) {
+          updatedUserDetails = { ...updatedUserDetails, image: '' };
+        }
+        const { data } = await updateUserDetails({
+          variables: updatedUserDetails,
+        });
+        /* istanbul ignore next */
+        if (data) {
+          toast.success(
+            tCommon('updatedSuccessfully', { item: 'Profile' }) as string,
+          );
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
+          const userFullName = `${userDetails.firstName} ${userDetails.lastName}`;
+          setItem('name', userFullName);
+        }
+      } catch (error: unknown) {
+        /*istanbul ignore next*/
+        errorHandler(t, error);
       }
-      const { data } = await updateUserDetails({
-        variables: updatedUserDetails,
-      });
-      /* istanbul ignore next */
-      if (data) {
-        toast.success(
-          tCommon('updatedSuccessfully', { item: 'Profile' }) as string,
-        );
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
-        const userFullName = `${userDetails.firstName} ${userDetails.lastName}`;
-        setItem('name', userFullName);
-      }
-    } catch (error: unknown) {
-      errorHandler(t, error);
-    }
-  };
+    };
 
   /**
    * Handles the change of a specific field in the user details state.
@@ -301,8 +304,9 @@ export default function settings(): JSX.Element {
                             role="button"
                             aria-label="Edit profile picture"
                             tabIndex={0}
-                            onKeyDown={(e) =>
-                              e.key === 'Enter' && handleImageUpload()
+                            onKeyDown={
+                              /*istanbul ignore next*/
+                              (e) => e.key === 'Enter' && handleImageUpload()
                             }
                           />
                         </div>

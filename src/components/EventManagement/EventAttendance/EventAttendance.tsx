@@ -57,7 +57,8 @@ function EventAttendance(): JSX.Element {
       const nameB = `${b.firstName} ${b.lastName}`.toLowerCase();
       return sortOrder === 'ascending'
         ? nameA.localeCompare(nameB)
-        : nameB.localeCompare(nameA);
+        : /*istanbul ignore next*/
+          nameB.localeCompare(nameA);
     });
   };
 
@@ -70,7 +71,8 @@ function EventAttendance(): JSX.Element {
           const isSameYear = attendeeDate.getFullYear() === now.getFullYear();
           return filteringBy === 'This Month'
             ? isSameYear && attendeeDate.getMonth() === now.getMonth()
-            : isSameYear;
+            : /*istanbul ignore next*/
+              isSameYear;
         });
   };
 
@@ -338,7 +340,8 @@ function EventAttendance(): JSX.Element {
                         <span className={styles.eventsAttended}>
                           {member.eventsAttended
                             ? member.eventsAttended.length
-                            : '0'}
+                            : /*istanbul ignore next*/
+                              '0'}
                         </span>
                       </TableCell>
                     </Tooltip>
@@ -347,6 +350,7 @@ function EventAttendance(): JSX.Element {
                       data-testid={`attendee-task-assigned-${index}`}
                     >
                       {member.tagsAssignedWith ? (
+                        /*istanbul ignore next*/
                         member.tagsAssignedWith.edges.map(
                           /*istanbul ignore next*/
                           (

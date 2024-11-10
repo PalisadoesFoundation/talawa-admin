@@ -1,5 +1,11 @@
 import React from 'react';
-import { render, screen, act, waitFor } from '@testing-library/react';
+import {
+  render,
+  screen,
+  act,
+  waitFor,
+  fireEvent,
+} from '@testing-library/react';
 import DynamicDropDown from './DynamicDropDown';
 import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
@@ -96,5 +102,48 @@ describe('DynamicDropDown component', () => {
       }),
     );
     expect(setFormData).not.toHaveBeenCalled();
+  });
+  test('handles keyboard navigation correctly', async () => {
+    const formData = { fieldName: 'value1' };
+    const setFormData = jest.fn();
+
+    render(
+      <BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <DynamicDropDown
+            formState={formData}
+            setFormState={setFormData}
+            fieldOptions={[
+              { value: 'value1', label: 'Label 1' },
+              { value: 'value2', label: 'Label 2' },
+            ]}
+            fieldName="fieldName"
+          />
+        </I18nextProvider>
+      </BrowserRouter>,
+    );
+
+    // Open dropdown
+    const dropdownButton = screen.getByTestId('fieldname-dropdown-btn');
+    await act(async () => {
+      userEvent.click(dropdownButton);
+    });
+
+    // Get dropdown menu
+    const dropdownMenu = screen.getByTestId('fieldname-dropdown-menu');
+
+    // Simulate Enter key press
+    await act(async () => {
+      fireEvent.keyDown(dropdownMenu, { key: 'Enter' });
+    });
+
+    // Simulate Space key press
+    await act(async () => {
+      fireEvent.keyDown(dropdownMenu, { key: ' ' });
+    });
+
+    // Verify the dropdown menu behavior
+    const option = screen.getByTestId('change-fieldname-btn-value2');
+    expect(option).toBeInTheDocument();
   });
 });

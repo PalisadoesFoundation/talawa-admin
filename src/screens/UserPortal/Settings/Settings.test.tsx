@@ -11,7 +11,6 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import Settings from './Settings';
 import userEvent from '@testing-library/user-event';
 import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
-
 const MOCKS = [
   {
     request: {

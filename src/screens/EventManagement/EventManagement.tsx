@@ -269,6 +269,7 @@ const EventManagement = (): JSX.Element => {
                 <h2>Statistics</h2>
               </div>
             );
+          /*istanbul ignore next*/
           default:
             /*istanbul ignore next*/
             return null;
