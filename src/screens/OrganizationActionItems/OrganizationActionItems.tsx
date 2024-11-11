@@ -412,8 +412,8 @@ function organizationActionItems(): JSX.Element {
             <Search />
           </Button>
         </div>
-        <div className="d-flex gap-3 mb-1">
-          <div className="d-flex justify-space-between align-items-center gap-3">
+        <div className="md:d-flex gap-3 mb-1 overflow-auto">
+          <div className="d-flex justify-space-between align-items-center gap-3 overflow-y-auto">
             <Dropdown>
               <Dropdown.Toggle
                 variant="success"
