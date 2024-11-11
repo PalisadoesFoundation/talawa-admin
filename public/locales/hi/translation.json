@@ -955,7 +955,10 @@
     "delete": "हटाएं",
     "saveChanges": "परिवर्तन सहेजें",
     "joined": "शामिल हुए",
-    "talawaApiUnavailable": "Talawa API अनुपलब्ध"
+    "talawaApiUnavailable": "Talawa API अनुपलब्ध",
+    "unassignUserTag": "टैग को हटाएं",
+    "unassignUserTagMessage": "क्या आप इस उपयोगकर्ता से टैग हटाना चाहते हैं?",
+    "successfullyUnassigned": "उपयोगकर्ता से टैग हटा दिया गया"
   },
   "people": {
     "title": "लोग",

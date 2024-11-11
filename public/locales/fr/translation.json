@@ -955,7 +955,10 @@
     "delete": "Supprimer",
     "saveChanges": "Enregistrer les modifications",
     "joined": "Rejoint",
-    "talawaApiUnavailable": "API Talawa non disponible"
+    "talawaApiUnavailable": "API Talawa non disponible",
+    "unassignUserTag": "Désassigner l'étiquette",
+    "unassignUserTagMessage": "Voulez-vous retirer l'étiquette de cet utilisateur?",
+    "successfullyUnassigned": "Étiquette retirée de l'utilisateur"
   },
   "people": {
     "title": "Personnes",

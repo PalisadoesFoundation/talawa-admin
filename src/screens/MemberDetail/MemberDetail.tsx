@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styles from './MemberDetail.module.css';
 import { languages } from 'utils/languages';
 import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -28,6 +28,12 @@ import {
 } from 'utils/formEnumFields';
 import DynamicDropDown from 'components/DynamicDropDown/DynamicDropDown';
 import type { InterfaceEvent } from 'components/EventManagement/EventAttendance/InterfaceEvents';
+import type { InterfaceTagData } from 'utils/interfaces';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
+import UnassignUserTagModal from 'screens/ManageTag/UnassignUserTagModal';
+import { UNASSIGN_USER_TAG } from 'GraphQl/Mutations/TagMutations';
+import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 
 type MemberDetailProps = {
   id?: string;
@@ -53,6 +59,13 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const { getItem, setItem } = useLocalStorage();
   const [show, setShow] = useState(false);
   const currentUrl = location.state?.id || getItem('id') || id;
+
+  const { orgId } = useParams();
+  const navigate = useNavigate();
+
+  const [unassignUserTagModalIsOpen, setUnassignUserTagModalIsOpen] =
+    useState(false);
+
   document.title = t('title');
   const [formState, setFormState] = useState({
     firstName: '',
@@ -87,8 +100,13 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     fileInputRef.current?.click();
   };
   const [updateUser] = useMutation(UPDATE_USER_MUTATION);
-  const { data: user, loading } = useQuery(USER_DETAILS, {
-    variables: { id: currentUrl },
+  const {
+    data: user,
+    loading,
+    refetch: refetchUserDetails,
+    fetchMore: fetchMoreAssignedTags,
+  } = useQuery(USER_DETAILS, {
+    variables: { id: currentUrl, first: TAGS_QUERY_DATA_CHUNK_SIZE },
   });
   const userData = user?.user;
   const [isUpdated, setisUpdated] = useState(false);
@@ -121,6 +139,73 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       isMounted.current = false;
     };
   }, []);
+
+  const tagsAssigned =
+    userData?.user?.tagsAssignedWith.edges.map(
+      (edge: { node: InterfaceTagData; cursor: string }) => edge.node,
+    ) ?? /* istanbul ignore next */ [];
+
+  const loadMoreAssignedTags = (): void => {
+    fetchMoreAssignedTags({
+      variables: {
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        after:
+          user?.user?.user?.tagsAssignedWith?.pageInfo?.endCursor ??
+          /* istanbul ignore next */
+          null,
+      },
+      updateQuery: (prevResult, { fetchMoreResult }) => {
+        if (!fetchMoreResult) /* istanbul ignore next */ return prevResult;
+
+        return {
+          user: {
+            ...prevResult.user,
+            user: {
+              ...prevResult.user.user,
+              tagsAssignedWith: {
+                edges: [
+                  ...prevResult.user.user.tagsAssignedWith.edges,
+                  ...fetchMoreResult.user.user.tagsAssignedWith.edges,
+                ],
+                pageInfo: fetchMoreResult.user.user.tagsAssignedWith.pageInfo,
+                totalCount: fetchMoreResult.user.user.tagsAssignedWith.pageInfo,
+              },
+            },
+          },
+        };
+      },
+    });
+  };
+
+  const [unassignUserTag] = useMutation(UNASSIGN_USER_TAG);
+  const [unassignTagId, setUnassignTagId] = useState<string | null>(null);
+
+  const handleUnassignUserTag = async (): Promise<void> => {
+    try {
+      await unassignUserTag({
+        variables: {
+          tagId: unassignTagId,
+          userId: currentUrl,
+        },
+      });
+
+      refetchUserDetails();
+      toggleUnassignUserTagModal();
+      toast.success(t('successfullyUnassigned'));
+    } catch (error: unknown) {
+      /* istanbul ignore next */
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
+    }
+  };
+
+  const toggleUnassignUserTagModal = (): void => {
+    if (unassignUserTagModalIsOpen) {
+      setUnassignTagId(null);
+    }
+    setUnassignUserTagModalIsOpen(!unassignUserTagModalIsOpen);
+  };
 
   const handleChange = async (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -216,6 +301,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   if (loading) {
     return <Loader />;
   }
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       {show && (
@@ -521,41 +607,136 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
           </Col>
         )}
       </Row>
-      <Card className={`${styles.contact} ${styles.allRound} mt-3`}>
-        <Card.Header
-          className={`bg-primary d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius}`}
-        >
-          <h3 className="text-white m-0" data-testid="eventsAttended-title">
-            {t('eventsAttended')}
-          </h3>
-          <Button
-            style={{ borderRadius: '20px' }}
-            size="sm"
-            variant="light"
-            data-testid="viewAllEvents"
-            onClick={handleEventsAttendedModal}
-          >
-            {t('viewAll')}
-          </Button>
-        </Card.Header>
-        <Card.Body
-          className={`${styles.cardBody} ${styles.scrollableCardBody}`}
-        >
-          {!userData?.user.eventsAttended?.length ? (
-            <div className={styles.emptyContainer}>
-              <h6>{t('noeventsAttended')}</h6>
-            </div>
-          ) : (
-            userData.user.eventsAttended.map(
-              (event: InterfaceEvent, index: number) => (
-                <span data-testid="membereventsCard" key={index}>
-                  <EventsAttendedByMember eventsId={event._id} key={index} />
-                </span>
-              ),
-            )
-          )}
-        </Card.Body>
-      </Card>
+
+      <Row className="mb-4">
+        <Col xs={12} lg={6}>
+          <Card className={`${styles.contact} ${styles.allRound} mt-3`}>
+            <Card.Header
+              className={`bg-primary d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius}`}
+            >
+              <h3 className="text-white m-0" data-testid="eventsAttended-title">
+                {/* {t('eventsAttended')} */}
+                Tags Assigned
+              </h3>
+            </Card.Header>
+            <Card.Body
+              id="tagsAssignedScrollableDiv"
+              data-testid="tagsAssignedScrollableDiv"
+              className={`${styles.cardBody} pe-0`}
+            >
+              {!tagsAssigned.length ? (
+                <div className="w-100 h-100 d-flex justify-content-center align-items-center fw-semibold text-secondary">
+                  {/* <h6>{t('noeventsAttended')}</h6> */}
+                  No Tags Assigned
+                </div>
+              ) : (
+                <InfiniteScroll
+                  dataLength={tagsAssigned?.length ?? 0}
+                  next={loadMoreAssignedTags}
+                  hasMore={
+                    userData?.user?.tagsAssignedWith.pageInfo.hasNextPage ??
+                    /* istanbul ignore next */
+                    false
+                  }
+                  loader={<InfiniteScrollLoader />}
+                  scrollableTarget="tagsAssignedScrollableDiv"
+                >
+                  {tagsAssigned.map((tag: InterfaceTagData, index: number) => (
+                    <div key={tag._id}>
+                      <div className="d-flex justify-content-between my-2 ms-2">
+                        <div
+                          className={styles.tagLink}
+                          data-testid="tagName"
+                          onClick={() =>
+                            navigate(`/orgtags/${orgId}/manageTag/${tag._id}`)
+                          }
+                        >
+                          {tag.parentTag ? (
+                            <>
+                              <i className={'fa fa-angle-double-right'} />
+                              <span className="me-2">...</span>
+                            </>
+                          ) : (
+                            <i className={'me-2 fa fa-angle-right'} />
+                          )}
+                          {tag.name}
+                        </div>
+                        <Button
+                          size="sm"
+                          variant="danger"
+                          onClick={() => {
+                            setUnassignTagId(tag._id);
+                            toggleUnassignUserTagModal();
+                          }}
+                          className="me-2"
+                          data-testid="unassignTagBtn"
+                        >
+                          {'Unassign'}
+                        </Button>
+                      </div>
+                      {index + 1 !== tagsAssigned.length && (
+                        <hr className="mx-0" />
+                      )}
+                    </div>
+                  ))}
+                </InfiniteScroll>
+              )}
+            </Card.Body>
+          </Card>
+        </Col>
+
+        <Col>
+          <Card className={`${styles.contact} ${styles.allRound} mt-3`}>
+            <Card.Header
+              className={`bg-primary d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius}`}
+            >
+              <h3 className="text-white m-0" data-testid="eventsAttended-title">
+                {t('eventsAttended')}
+              </h3>
+              <Button
+                style={{ borderRadius: '20px' }}
+                size="sm"
+                variant="light"
+                data-testid="viewAllEvents"
+                onClick={handleEventsAttendedModal}
+              >
+                {t('viewAll')}
+              </Button>
+            </Card.Header>
+            <Card.Body
+              className={`${styles.cardBody} ${styles.scrollableCardBody}`}
+            >
+              {!userData?.user.eventsAttended?.length ? (
+                <div
+                  className={`${styles.emptyContainer} w-100 h-100 d-flex justify-content-center align-items-center fw-semibold text-secondary`}
+                >
+                  {t('noeventsAttended')}
+                </div>
+              ) : (
+                userData.user.eventsAttended.map(
+                  (event: InterfaceEvent, index: number) => (
+                    <span data-testid="membereventsCard" key={index}>
+                      <EventsAttendedByMember
+                        eventsId={event._id}
+                        key={index}
+                      />
+                    </span>
+                  ),
+                )
+              )}
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+
+      {/* Unassign User Tag Modal */}
+      <UnassignUserTagModal
+        unassignUserTagModalIsOpen={unassignUserTagModalIsOpen}
+        toggleUnassignUserTagModal={toggleUnassignUserTagModal}
+        handleUnassignUserTag={handleUnassignUserTag}
+        t={t}
+        tCommon={tCommon}
+      />
     </LocalizationProvider>
   );
 };

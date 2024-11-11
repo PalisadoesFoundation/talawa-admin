@@ -956,7 +956,10 @@
     "addedAsAdmin": "El usuario se agrega como administrador.",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. Compruebe amablemente su conexión de red y espere un momento.",
     "deleteUser": "Eliminar usuario",
-    "userType": "Tipo de usuario"
+    "userType": "Tipo de usuario",
+    "unassignUserTag": "Desasignar Etiqueta",
+    "unassignUserTagMessage": "¿Desea eliminar la etiqueta de este usuario?",
+    "successfullyUnassigned": "Etiqueta desasignada del usuario"
   },
   "userLogin": {
     "login": "Acceso",

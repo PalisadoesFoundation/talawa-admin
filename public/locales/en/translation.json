@@ -984,7 +984,10 @@
     "delete": "delete",
     "saveChanges": "saveChanges",
     "joined": "joined",
-    "talawaApiUnavailable": "talawaApiUnavailable"
+    "talawaApiUnavailable": "talawaApiUnavailable",
+    "unassignUserTag": "Unassign Tag",
+    "unassignUserTagMessage": "Do you want to remove the tag from this user?",
+    "successfullyUnassigned": "Tag unassigned from user"
   },
   "people": {
     "title": "People",
