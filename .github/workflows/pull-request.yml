@@ -286,24 +286,30 @@ jobs:
 
       - name: Check if Talawa Admin App is running
         run: |
-          echo "Starting health check for application on localhost:4321"
-          timeout=${HEALTH_CHECK_TIMEOUT:-120}
+          timeout="${HEALTH_CHECK_TIMEOUT:-120}"
+          echo "Starting health check with ${timeout}s timeout"
           while ! nc -z localhost 4321 && [ $timeout -gt 0 ]; do
             sleep 1
+
             timeout=$((timeout-1))
+            if [ $((timeout % 10)) -eq 0]; then
+              echo "Still waiting for app to start... ${timeout}s remaining"
+            fi
           done
           if [ $timeout -eq 0 ]; then
             echo "Timeout waiting for application to start"
             exit 1
           fi
+          echo "Port check passed, verifying health endpoint..."
           curl --fail --silent http://localhost:4321/health || exit 1
+          echo "Health check passed successfully"
     
       - name: Stop Docker Container 
         if: always()
         run: |
           docker stop talawa-admin-app-container
           docker rm talawa-admin-app-container
-          exit 1
+
     
 
   Check-Target-Branch:

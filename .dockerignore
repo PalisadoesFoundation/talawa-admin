@@ -1,10 +1,8 @@
 node_modules
 npm-debug.log
 Dockerfile
-.dockerignore
 .git
 .gitignore
-README.md
 .env
 .env.*
 dist
@@ -16,3 +14,12 @@ tests
 __tests__
 *.test.*
 *.spec.*
+# Development files
+*.log
+*.lock
+.DS_Store
+.idea
+.vscode
+# Build artifacts
+build
+out
