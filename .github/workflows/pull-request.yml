@@ -46,7 +46,7 @@ jobs:
       - name: Check formatting
         if: steps.changed-files.outputs.only_changed != 'true'
         run: npm run format:check
-        
+
       - name: Run formatting if check fails
         if: failure()
         run: npm run format
@@ -57,10 +57,10 @@ jobs:
 
       - name: Check for linting errors in modified files
         if: steps.changed-files.outputs.only_changed != 'true'
-        env: 
+        env:
           CHANGED_FILES: ${{ steps.changed_files.outputs.all_changed_files }}
         run: npx eslint ${CHANGED_FILES} && python .github/workflows/eslint_disable_check.py
-        
+
       - name: Check for TSDoc comments
         run: npm run check-tsdoc # Run the TSDoc check script
 
@@ -89,7 +89,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Get Changed Unauthorized files
         id: changed-unauth-files
         uses: tj-actions/changed-files@v40
@@ -123,10 +123,10 @@ jobs:
             ISSUE_GUIDELINES.md
             PR_GUIDELINES.md
             README.md
-            
+
       - name: List all changed unauthorized files
         if: steps.changed-unauth-files.outputs.any_changed == 'true' || steps.changed-unauth-files.outputs.any_deleted == 'true'
-        env: 
+        env:
           CHANGED_UNAUTH_FILES: ${{ steps.changed-unauth-files.outputs.all_changed_files }}
         run: |
           for file in ${CHANGED_UNAUTH_FILES}; do
@@ -147,14 +147,14 @@ jobs:
         uses: tj-actions/changed-files@v40
 
       - name: Echo number of changed files
-        env: 
+        env:
           CHANGED_FILES_COUNT: ${{ steps.changed-files.outputs.all_changed_files_count }}
         run: |
           echo "Number of files changed: $CHANGED_FILES_COUNT"
 
       - name: Check if the number of changed files is less than 100
         if: steps.changed-files.outputs.all_changed_files_count > 100
-        env: 
+        env:
           CHANGED_FILES_COUNT: ${{ steps.changed-files.outputs.all_changed_files_count }}
         run: |
           echo "Error: Too many files (greater than 100) changed in the pull request."
@@ -194,15 +194,15 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
-      
+
       - name: Get changed TypeScript files
         id: changed-files
         uses: tj-actions/changed-files@v40
-          
+
       - name: Run tests
         if: steps.changed-files.outputs.only_changed != 'true'
-        run: npm run test -- --watchAll=false --coverage       
-      
+        run: npm run test -- --watchAll=false --coverage
+
       - name: TypeScript compilation for changed files
         run: |
           for file in ${{ steps.changed-files.outputs.all_files }}; do
@@ -210,7 +210,7 @@ jobs:
               npx tsc --noEmit "$file"
             fi
           done
-        
+
       - name: Present and Upload coverage to Codecov as ${{env.CODECOV_UNIQUE_NAME}}
         uses: codecov/codecov-action@v4
         with:
@@ -222,7 +222,7 @@ jobs:
       - name: Test acceptable level of code coverage
         uses: VeryGoodOpenSource/very_good_coverage@v2
         with:
-          path: "./coverage/lcov.info"
+          path: './coverage/lcov.info'
           min_coverage: 95.0
 
   Graphql-Inspector:
@@ -240,15 +240,15 @@ jobs:
 
       - name: resolve dependency
         run: npm install -g @graphql-inspector/cli
-      
+
       - name: Clone API Repository
         run: |
           # Retrieve the complete branch name directly from the GitHub context
           FULL_BRANCH_NAME=${{ github.base_ref }}
           echo "FULL_Branch_NAME: $FULL_BRANCH_NAME"
-          
+
           # Clone the specified repository using the extracted branch name
-          git clone --branch $FULL_BRANCH_NAME https://github.com/PalisadoesFoundation/talawa-api && ls -a 
+          git clone --branch $FULL_BRANCH_NAME https://github.com/PalisadoesFoundation/talawa-api && ls -a
 
       - name: Validate Documents
         run: graphql-inspector validate './src/GraphQl/**/*.ts' './talawa-api/schema.graphql'
@@ -260,15 +260,14 @@ jobs:
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v4
-    
+
       - name: Set up Docker
         uses: docker/setup-buildx-action@v3
-       with:
-         buildkitd-flags: --debug
-         driver-opts: |
-           image=moby/buildkit:latest
-         cache-from: type=gha
-         cache-to: type=gha,mode=max
+        with:
+          driver-opts: |
+            image=moby/buildkit:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Build Docker image
         run: |
@@ -276,7 +275,7 @@ jobs:
           echo "Building Docker image..."
           docker build -t talawa-admin-app .
           echo "Docker image built successfully"
-    
+
       - name: Run Docker Container
         run: |
           set -e
@@ -303,16 +302,14 @@ jobs:
             exit 1
           fi
           echo "Port check passed, verifying health endpoint..."
-          curl --fail --silent http://localhost:4321/health || exit 1
+          curl --fail --silent http://localhost:4321/ || exit 1
           echo "Health check passed successfully"
-    
-      - name: Stop Docker Container 
+
+      - name: Stop Docker Container
         if: always()
         run: |
           docker stop talawa-admin-app-container
           docker rm talawa-admin-app-container
-
-    
 
   Check-Target-Branch:
     if: ${{ github.actor != 'dependabot[bot]' }}
