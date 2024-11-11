@@ -10,7 +10,7 @@ export interface InterfaceUnassignUserTagModalProps {
   unassignUserTagModalIsOpen: boolean;
   toggleUnassignUserTagModal: () => void;
   handleUnassignUserTag: () => Promise<void>;
-  t: TFunction<'translation', 'manageTag'>;
+  t: TFunction<'translation', 'manageTag' | 'memberDetail'>;
   tCommon: TFunction<'common', undefined>;
 }
 

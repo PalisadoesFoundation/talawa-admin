@@ -510,7 +510,13 @@ export const USER_ORGANIZATION_LIST = gql`
 
 // To take the details of a user
 export const USER_DETAILS = gql`
-  query User($id: ID!) {
+  query User(
+    $id: ID!
+    $after: String
+    $before: String
+    $first: PositiveInt
+    $last: PositiveInt
+  ) {
     user(id: $id) {
       user {
         _id
@@ -538,6 +544,29 @@ export const USER_DETAILS = gql`
           countryCode
           city
           state
+        }
+        tagsAssignedWith(
+          after: $after
+          before: $before
+          first: $first
+          last: $last
+        ) {
+          edges {
+            node {
+              _id
+              name
+              parentTag {
+                _id
+              }
+            }
+          }
+          pageInfo {
+            startCursor
+            endCursor
+            hasNextPage
+            hasPreviousPage
+          }
+          totalCount
         }
         registeredEvents {
           _id
