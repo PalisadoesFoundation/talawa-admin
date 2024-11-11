@@ -22,7 +22,7 @@
     "@mui/x-date-pickers": "^7.22.1",
     "@pdfme/schemas": "^5.1.6",
     "chart.js": "^4.4.6",
-    "@pdfme/generator": "^5.0.0",
+    "@pdfme/generator": "^5.1.7",
     "@reduxjs/toolkit": "^2.3.0",
     "@vitejs/plugin-react": "^4.3.2",
     "babel-plugin-transform-import-meta": "^2.2.1",
