@@ -5,14 +5,15 @@ import styles from './DynamicDropDown.module.css';
 /**
  * Props for the DynamicDropDown component.
  */
-interface InterfaceChangeDropDownProps {
+interface InterfaceChangeDropDownProps<T> {
   parentContainerStyle?: string;
   btnStyle?: string;
   btnTextStyle?: string;
-  setFormState: React.Dispatch<React.SetStateAction<any>>;
-  formState: any;
-  fieldOptions: { value: string; label: string }[]; // Field options for dropdown
-  fieldName: string; // Field name for labeling
+  setFormState: React.Dispatch<React.SetStateAction<T>>;
+  formState: T;
+  fieldOptions: { value: string; label: string }[];
+  fieldName: string;
+  handleChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
 /**
@@ -27,57 +28,74 @@ interface InterfaceChangeDropDownProps {
  * @param formState - Current state of the form, used to determine the selected value.
  * @param fieldOptions - Options to display in the dropdown. Each option has a value and a label.
  * @param fieldName - The name of the field, used for labeling and key identification.
+ * @param handleChange - Optional callback function when selection changes
  * @returns JSX.Element - The rendered dropdown component.
  */
-const DynamicDropDown = ({
+const DynamicDropDown = <T extends Record<string, unknown>>({
   parentContainerStyle = '',
   btnStyle = '',
   setFormState,
   formState,
   fieldOptions,
   fieldName,
-}: InterfaceChangeDropDownProps): JSX.Element => {
-  /**
-   * Updates the form state when a dropdown option is selected.
-   *
-   * @param value - The value of the selected option.
-   */
+  handleChange,
+}: InterfaceChangeDropDownProps<T>): JSX.Element => {
   const handleFieldChange = (value: string): void => {
-    setFormState({ ...formState, [fieldName]: value });
+    if (handleChange) {
+      const event = {
+        target: {
+          name: fieldName,
+          value: value,
+        },
+      } as React.ChangeEvent<HTMLSelectElement>;
+      handleChange(event);
+    } else {
+      setFormState({ ...formState, [fieldName]: value });
+    }
   };
 
-  /**
-   * Retrieves the label for a given value from the options.
-   *
-   * @param value - The value for which to get the label.
-   * @returns The label corresponding to the value, or 'None' if not found.
-   */
   const getLabel = (value: string): string => {
     const selectedOption = fieldOptions.find(
       (option) => option.value === value,
     );
-    return selectedOption ? selectedOption.label : `None`;
+    return selectedOption ? selectedOption.label : 'None';
   };
 
   return (
     <Dropdown
       title={`Select ${fieldName}`}
-      className={`${parentContainerStyle} m-2`}
+      className={`${parentContainerStyle ?? ''} m-2`}
       data-testid={`${fieldName.toLowerCase()}-dropdown-container`}
+      aria-label={`Select ${fieldName}`}
     >
       <Dropdown.Toggle
-        className={`${btnStyle} ${styles.dropwdownToggle}`}
+        className={`${btnStyle ?? 'w-100'} ${styles.dropwdownToggle}`}
         data-testid={`${fieldName.toLowerCase()}-dropdown-btn`}
+        aria-expanded="false"
       >
-        {getLabel(formState[fieldName])}
+        {getLabel(formState[fieldName] as string)}
       </Dropdown.Toggle>
-      <Dropdown.Menu>
+      <Dropdown.Menu
+        data-testid={`${fieldName.toLowerCase()}-dropdown-menu`}
+        role="listbox"
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            const focused = document.activeElement;
+            if (focused instanceof HTMLElement) {
+              focused.click();
+            }
+          }
+        }}
+      >
         {fieldOptions.map((option, index: number) => (
           <Dropdown.Item
             key={`${fieldName.toLowerCase()}-dropdown-item-${index}`}
-            className={`dropdown-item`}
+            className="dropdown-item"
             onClick={() => handleFieldChange(option.value)}
             data-testid={`change-${fieldName.toLowerCase()}-btn-${option.value}`}
+            role="option"
+            aria-selected={option.value === formState[fieldName]}
           >
             {option.label}
           </Dropdown.Item>

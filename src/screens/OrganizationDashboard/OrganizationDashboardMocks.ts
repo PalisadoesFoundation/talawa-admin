@@ -210,6 +210,19 @@ export const MOCKS = [
             endTime: '17:00:00',
             allDay: false,
             recurring: false,
+            attendees: [
+              {
+                _id: 'userId1',
+                createdAt: '2023-01-01T00:00:00.000Z',
+                firstName: 'John',
+                lastName: 'Doe',
+                gender: 'Male',
+                eventsAttended: {
+                  _id: 'eventId1',
+                  endDate: '2023-10-29T23:59:59.000Z',
+                },
+              },
+            ],
             recurrenceRule: null,
             isRecurringEventException: false,
             isPublic: true,
@@ -225,6 +238,19 @@ export const MOCKS = [
             startTime: '08:00:00',
             endTime: '17:00:00',
             allDay: false,
+            attendees: [
+              {
+                _id: 'userId1',
+                createdAt: '2023-01-01T00:00:00.000Z',
+                firstName: 'John',
+                lastName: 'Doe',
+                gender: 'Male',
+                eventsAttended: {
+                  _id: 'eventId1',
+                  endDate: '2023-10-29T23:59:59.000Z',
+                },
+              },
+            ],
             recurring: false,
             recurrenceRule: null,
             isRecurringEventException: false,

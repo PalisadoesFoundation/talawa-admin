@@ -338,7 +338,7 @@ describe('Testing PostCard Component [User Portal]', () => {
     userEvent.click(screen.getByTestId('editPostBtn'));
     await wait();
 
-    expect(toast.success).toBeCalledWith('Post updated Successfully');
+    expect(toast.success).toHaveBeenCalledWith('Post updated Successfully');
   });
 
   test('Delete post should work properly', async () => {
@@ -388,7 +388,9 @@ describe('Testing PostCard Component [User Portal]', () => {
     userEvent.click(screen.getByTestId('deletePost'));
     await wait();
 
-    expect(toast.success).toBeCalledWith('Successfully deleted the Post.');
+    expect(toast.success).toHaveBeenCalledWith(
+      'Successfully deleted the Post.',
+    );
   });
 
   test('Component should be rendered properly if user has liked the post', async () => {

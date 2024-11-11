@@ -282,7 +282,7 @@ describe('Organisation Events Page', () => {
     userEvent.click(screen.getByTestId('createEventBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.eventCreated);
+      expect(toast.success).toHaveBeenCalledWith(translations.eventCreated);
     });
 
     await waitFor(() => {
@@ -371,9 +371,9 @@ describe('Organisation Events Page', () => {
     expect(screen.getByTestId('registrableCheck')).toBeChecked();
 
     userEvent.click(screen.getByTestId('createEventBtn'));
-    expect(toast.warning).toBeCalledWith('Title can not be blank!');
-    expect(toast.warning).toBeCalledWith('Description can not be blank!');
-    expect(toast.warning).toBeCalledWith('Location can not be blank!');
+    expect(toast.warning).toHaveBeenCalledWith('Title can not be blank!');
+    expect(toast.warning).toHaveBeenCalledWith('Description can not be blank!');
+    expect(toast.warning).toHaveBeenCalledWith('Location can not be blank!');
 
     userEvent.click(screen.getByTestId('createEventModalCloseBtn'));
 
@@ -452,7 +452,7 @@ describe('Organisation Events Page', () => {
     userEvent.click(screen.getByTestId('createEventBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.eventCreated);
+      expect(toast.success).toHaveBeenCalledWith(translations.eventCreated);
     });
 
     await waitFor(() => {
