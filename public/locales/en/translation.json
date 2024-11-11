@@ -419,6 +419,7 @@
     "enterTitle": "Enter Title",
     "enterDescrip": "Enter Description",
     "searchEventName": "Search Event Name",
+    "searchMemberName": "Search Member Name",
     "eventType": "Event Type",
     "eventCreated": "Congratulations! The Event is created.",
     "customRecurrence": "Custom Recurrence",
@@ -749,14 +750,44 @@
     "noResultsFoundFor": "noResultsFoundFor"
   },
   "eventManagement": {
-    "title": "Event Management",
+    "title": "Event Management Dashboard",
     "dashboard": "Dashboard",
     "registrants": "Registrants",
+    "attendance": "Attendance",
     "actions": "Actions",
     "agendas": "Agendas",
     "statistics": "Statistics",
     "to": "TO",
     "volunteers": "Volunteers"
+  },
+  "eventAttendance": {
+    "historical_statistics": "Historical Statistics",
+    "Search member": "Search member",
+    "Member Name": "Member Name",
+    "Status": "Status",
+    "Events Attended": "Events Attended",
+    "Task Assigned": "Task Assigned",
+    "Member": "Member",
+    "Admin": "Admin",
+    "loading": "Loading...",
+    "noAttendees": "Attendees not Found"
+  },
+  "onSpotAttendee": {
+    "title": "On-spot Attendee",
+    "enterFirstName": "Enter First Name",
+    "enterLastName": "Enter Last Name",
+    "enterEmail": "Enter Email",
+    "enterPhoneNo": "Enter Phone Number",
+    "selectGender": "Select Gender",
+    "invalidDetailsMessage": "Please fill in all required fields",
+    "orgIdMissing": "Organization ID is missing. Please try again.",
+    "attendeeAddedSuccess": "Attendee added successfully!",
+    "addAttendee": "Add",
+    "phoneNumber": "Phone No.",
+    "addingAttendee": "Adding...",
+    "male": "Male",
+    "female": "Female",
+    "other": "Other"
   },
   "forgotPassword": {
     "title": "Talawa Forgot Password",
@@ -913,6 +944,7 @@
   "memberDetail": {
     "title": "User Details",
     "addAdmin": "Add Admin",
+    "noeventsAttended": "No Events Attended",
     "alreadyIsAdmin": "Member is already an Admin",
     "organizations": "Organizations",
     "events": "Events",
@@ -932,6 +964,8 @@
     "state": "State",
     "city": "City",
     "personalInfoHeading": "Personal Information",
+    "viewAll": "View All",
+    "eventsAttended": "Events Attended",
     "contactInfoHeading": "Contact Information",
     "actionsHeading": "Actions",
     "personalDetailsHeading": "Profile Details",
@@ -1061,6 +1095,8 @@
     "postNowVisibleInFeed": "Post now visible in feed"
   },
   "settings": {
+    "eventAttended": "Events Attended",
+    "noeventsAttended": "No Events Attended",
     "profileSettings": "Profile Settings",
     "gender": "Gender",
     "phoneNumber": "Phone Number",

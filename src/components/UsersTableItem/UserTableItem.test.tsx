@@ -499,12 +499,12 @@ describe('Testing User Table Item', () => {
     fireEvent.click(searchBtn);
     // Click on Creator Link
     fireEvent.click(screen.getByTestId(`creatorabc`));
-    expect(toast.success).toBeCalledWith('Profile Page Coming Soon !');
+    expect(toast.success).toHaveBeenCalledWith('Profile Page Coming Soon !');
 
     // Click on Organization Link
     fireEvent.click(screen.getByText(/Joined Organization 1/i));
-    expect(window.location.replace).toBeCalledWith('/orgdash/abc');
-    expect(mockNavgatePush).toBeCalledWith('/orgdash/abc');
+    expect(window.location.replace).toHaveBeenCalledWith('/orgdash/abc');
+    expect(mockNavgatePush).toHaveBeenCalledWith('/orgdash/abc');
     fireEvent.click(screen.getByTestId(`closeJoinedOrgsBtn${123}`));
   });
 
@@ -693,7 +693,7 @@ describe('Testing User Table Item', () => {
     expect(screen.getByTestId('removeUserFromOrgBtnmno')).toBeInTheDocument();
     // Click on Creator Link
     fireEvent.click(screen.getByTestId(`creatorxyz`));
-    expect(toast.success).toBeCalledWith('Profile Page Coming Soon !');
+    expect(toast.success).toHaveBeenCalledWith('Profile Page Coming Soon !');
 
     // Search for Blocked Organization 1
     const searchBtn = screen.getByTestId(`searchBtnOrgsBlockedBy`);
@@ -720,8 +720,8 @@ describe('Testing User Table Item', () => {
 
     // Click on Organization Link
     fireEvent.click(screen.getByText(/XYZ/i));
-    expect(window.location.replace).toBeCalledWith('/orgdash/xyz');
-    expect(mockNavgatePush).toBeCalledWith('/orgdash/xyz');
+    expect(window.location.replace).toHaveBeenCalledWith('/orgdash/xyz');
+    expect(mockNavgatePush).toHaveBeenCalledWith('/orgdash/xyz');
     fireEvent.click(screen.getByTestId(`closeBlockedByOrgsBtn${123}`));
   });
 

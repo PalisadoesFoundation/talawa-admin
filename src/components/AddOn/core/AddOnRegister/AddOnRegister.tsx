@@ -19,7 +19,7 @@ interface InterfaceFormStateTypes {
   installedOrgs: [string] | [];
 }
 
-interface AddOnRegisterProps {
+interface InterfaceAddOnRegisterProps {
   createdBy?: string;
 }
 
@@ -37,7 +37,7 @@ interface AddOnRegisterProps {
  */
 function addOnRegister({
   createdBy = 'Admin',
-}: AddOnRegisterProps): JSX.Element {
+}: InterfaceAddOnRegisterProps): JSX.Element {
   // Translation hook for the 'addOnRegister' namespace
   const { t } = useTranslation('translation', { keyPrefix: 'addOnRegister' });
   // Translation hook for the 'common' namespace

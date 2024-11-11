@@ -27,8 +27,6 @@ export const ORGANIZATION_POST_LIST = gql`
             _id
             title
             text
-            imageUrl
-            videoUrl
             creator {
               _id
               firstName

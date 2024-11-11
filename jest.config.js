@@ -10,7 +10,10 @@ export default {
   ],
   testEnvironment: 'jsdom',
   transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest', { configFile: "./config/babel.config.cjs" }], // Use babel-jest for JavaScript and TypeScript files
+    '^.+\\.(js|jsx|ts|tsx)$': [
+      'babel-jest',
+      { configFile: './config/babel.config.cjs' },
+    ], // Use babel-jest for JavaScript and TypeScript files
     '^.+\\.(css|scss|sass|less)$': 'jest-preview/transforms/css', // CSS transformations
     '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': 'jest-preview/transforms/file', // File transformations
   },
