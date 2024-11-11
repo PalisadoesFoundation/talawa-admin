@@ -362,7 +362,7 @@ describe('Testing Event List Card', () => {
     userEvent.click(screen.getByTestId('updateEventBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.eventUpdated);
+      expect(toast.success).toHaveBeenCalledWith(translations.eventUpdated);
     });
 
     await waitFor(() => {
@@ -415,7 +415,7 @@ describe('Testing Event List Card', () => {
     userEvent.click(screen.getByTestId('updateEventBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.eventUpdated);
+      expect(toast.success).toHaveBeenCalledWith(translations.eventUpdated);
     });
 
     await waitFor(() => {
@@ -459,7 +459,7 @@ describe('Testing Event List Card', () => {
     userEvent.click(screen.getByTestId('updateEventBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.eventUpdated);
+      expect(toast.success).toHaveBeenCalledWith(translations.eventUpdated);
     });
 
     await waitFor(() => {
@@ -696,7 +696,7 @@ describe('Testing Event List Card', () => {
     });
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.eventUpdated);
+      expect(toast.success).toHaveBeenCalledWith(translations.eventUpdated);
     });
 
     await waitFor(() => {
@@ -762,7 +762,7 @@ describe('Testing Event List Card', () => {
     userEvent.click(screen.getByTestId('updateEventBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.eventUpdated);
+      expect(toast.success).toHaveBeenCalledWith(translations.eventUpdated);
     });
 
     await waitFor(() => {
@@ -823,7 +823,7 @@ describe('Testing Event List Card', () => {
     userEvent.click(screen.getByTestId('deleteEventBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.eventDeleted);
+      expect(toast.success).toHaveBeenCalledWith(translations.eventDeleted);
     });
 
     await waitFor(() => {
@@ -863,7 +863,7 @@ describe('Testing Event List Card', () => {
     userEvent.click(screen.getByTestId('deleteEventBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.eventDeleted);
+      expect(toast.success).toHaveBeenCalledWith(translations.eventDeleted);
     });
 
     await waitFor(() => {
@@ -921,7 +921,7 @@ describe('Testing Event List Card', () => {
     userEvent.click(screen.getByTestId('registerEventBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(
+      expect(toast.success).toHaveBeenCalledWith(
         `Successfully registered for ${props[2].eventName}`,
       );
     });

@@ -155,7 +155,7 @@ describe('Testing AddOnRegister', () => {
     userEvent.click(screen.getByTestId('addonregisterBtn'));
 
     await wait(100);
-    expect(toast.success).toBeCalledWith('Plugin added Successfully');
+    expect(toast.success).toHaveBeenCalledWith('Plugin added Successfully');
   });
 
   test('Expect the window to reload after successful plugin addition', async () => {

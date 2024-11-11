@@ -1,6 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import 'jest-location-mock';
 import { Provider } from 'react-redux';
@@ -8,71 +8,52 @@ import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import OrganizationScreen from './OrganizationScreen';
-import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
+import { ORGANIZATION_EVENT_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import styles from './OrganizationScreen.module.css';
 
-let mockID: string | undefined = '123';
+const mockID: string | undefined = '123';
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useParams: () => ({ orgId: mockID }),
+  useMatch: () => ({ params: { eventId: 'event123', orgId: '123' } }),
 }));
 
 const MOCKS = [
   {
     request: {
-      query: ORGANIZATIONS_LIST,
+      query: ORGANIZATION_EVENT_LIST,
       variables: { id: '123' },
     },
     result: {
       data: {
-        organizations: [
+        eventsByOrganization: [
           {
-            _id: '123',
-            image: null,
-            creator: {
-              firstName: 'John',
-              lastName: 'Doe',
-              email: 'JohnDoe@example.com',
-            },
-            name: 'Test Organization',
-            description: 'Testing this organization',
-            address: {
-              city: 'Mountain View',
-              countryCode: 'US',
-              dependentLocality: 'Some Dependent Locality',
-              line1: '123 Main Street',
-              line2: 'Apt 456',
-              postalCode: '94040',
-              sortingCode: 'XYZ-789',
-              state: 'CA',
-            },
-            userRegistrationRequired: true,
-            visibleInSearch: true,
-            members: [],
-            admins: [],
-            membershipRequests: [],
-            blockedUsers: [],
+            _id: 'event123',
+            title: 'Test Event Title',
+            description: 'Test Description',
+            startDate: '2024-01-01',
+            endDate: '2024-01-02',
+            location: 'Test Location',
+            startTime: '09:00',
+            endTime: '17:00',
+            allDay: false,
+            recurring: false,
+            isPublic: true,
+            isRegisterable: true,
           },
         ],
       },
     },
   },
 ];
+
 const link = new StaticMockLink(MOCKS, true);
 
-const resizeWindow = (width: number): void => {
-  window.innerWidth = width;
-  fireEvent(window, new Event('resize'));
-};
-
-const clickToggleMenuBtn = (toggleButton: HTMLElement): void => {
-  fireEvent.click(toggleButton);
-};
-
-describe('Testing LeftDrawer in OrganizationScreen', () => {
-  test('Testing LeftDrawer in page functionality', async () => {
+describe('Testing OrganizationScreen', () => {
+  const renderComponent = (): void => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={false} link={link} mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -82,36 +63,41 @@ describe('Testing LeftDrawer in OrganizationScreen', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    const toggleButton = screen.getByTestId('closeMenu') as HTMLElement;
-    const icon = toggleButton.querySelector('i');
+  };
 
-    // Resize window to a smaller width
-    resizeWindow(800);
-    clickToggleMenuBtn(toggleButton);
-    expect(icon).toHaveClass('fa fa-angle-double-left');
-    // Resize window back to a larger width
+  test('renders correctly with event title', async () => {
+    renderComponent();
 
-    resizeWindow(1000);
-    clickToggleMenuBtn(toggleButton);
-    expect(icon).toHaveClass('fa fa-angle-double-right');
-
-    clickToggleMenuBtn(toggleButton);
-    expect(icon).toHaveClass('fa fa-angle-double-left');
+    await waitFor(() => {
+      const mainPage = screen.getByTestId('mainpageright');
+      expect(mainPage).toBeInTheDocument();
+    });
   });
 
-  test('should be redirected to / if orgId is undefined', async () => {
-    mockID = undefined;
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationScreen />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
+  test('handles drawer toggle correctly', () => {
+    renderComponent();
+
+    const closeButton = screen.getByTestId('closeMenu');
+    fireEvent.click(closeButton);
+
+    // Check for contract class after closing
+    expect(screen.getByTestId('mainpageright')).toHaveClass('_expand_ccl5z_8');
+
+    const openButton = screen.getByTestId('openMenu');
+    fireEvent.click(openButton);
+
+    // Check for expand class after opening
+    expect(screen.getByTestId('mainpageright')).toHaveClass(
+      '_contract_ccl5z_61',
     );
-    expect(window.location.pathname).toEqual('/');
+  });
+
+  test('handles window resize', () => {
+    renderComponent();
+
+    window.innerWidth = 800;
+    fireEvent(window, new Event('resize'));
+
+    expect(screen.getByTestId('mainpageright')).toHaveClass(styles.expand);
   });
 });

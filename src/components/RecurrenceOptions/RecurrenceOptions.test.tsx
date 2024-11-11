@@ -453,7 +453,7 @@ describe('Testing the creaction of recurring events through recurrence options',
     userEvent.click(screen.getByTestId('createEventBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.eventCreated);
+      expect(toast.success).toHaveBeenCalledWith(translations.eventCreated);
     });
 
     await waitFor(() => {
@@ -575,7 +575,7 @@ describe('Testing the creaction of recurring events through recurrence options',
     userEvent.click(screen.getByTestId('createEventBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.eventCreated);
+      expect(toast.success).toHaveBeenCalledWith(translations.eventCreated);
     });
 
     await waitFor(() => {

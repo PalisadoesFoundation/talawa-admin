@@ -1,35 +1,58 @@
 .eventContainer {
   display: flex;
-  align-items: center;
+  align-items: start;
 }
 
 .eventDetailsBox {
   position: relative;
-  margin-left: 50px;
-  height: 90%;
-  width: 45%;
   box-sizing: border-box;
   background: #ffffff;
-  border: 1px solid #dddddd;
-  border-radius: 8px;
+  width: 66%;
+  padding: 0.3rem;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
   margin-bottom: 0;
+  margin-top: 20px;
 }
-
-.eventDetailsBox::before {
+.ctacards {
+  padding: 20px;
+  width: 100%;
+  display: flex;
+  background-color: #ffffff;
+  margin: 0 4px;
+  justify-content: space-between;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  align-items: center;
+  border-radius: 20px;
+}
+.ctacards span {
+  color: rgb(181, 181, 181);
+  font-size: small;
+}
+/* .eventDetailsBox::before {
   content: '';
   position: absolute;
   top: 0;
   height: 100%;
   width: 6px;
   background-color: #31bb6b;
-  border-radius: 8px;
-}
+  border-radius: 20px;
+} */
 
 .time {
   display: flex;
   justify-content: space-between;
   padding: 15px;
   padding-bottom: 0px;
+  width: 33%;
+
+  box-sizing: border-box;
+  background: #ffffff;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  margin-bottom: 0;
+  margin-top: 20px;
+  margin-left: 10px;
 }
 
 .startTime,
@@ -50,10 +73,13 @@
 
 .titlename {
   font-weight: 600;
-  font-size: 20px;
+  font-size: 25px;
   padding: 15px;
   padding-bottom: 0px;
-  width: 100%;
+  width: 50%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .description {
@@ -67,8 +93,7 @@
 
 .toporgloc {
   font-size: 16px;
-  padding: 15px;
-  padding-bottom: 0px;
+  padding: 0.5rem;
 }
 
 .toporgloc span {

@@ -336,7 +336,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
     await wait();
 
-    expect(toast.success).toBeCalledWith(
+    expect(toast.success).toHaveBeenCalledWith(
       'Event created and posted successfully.',
     );
   });
@@ -379,7 +379,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
     await wait();
 
-    expect(toast.success).toBeCalledWith(
+    expect(toast.success).toHaveBeenCalledWith(
       'Event created and posted successfully.',
     );
   });

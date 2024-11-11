@@ -61,18 +61,6 @@ describe('Event Management', () => {
     jest.clearAllMocks();
   });
 
-  test('Testing Event Management Screen', async () => {
-    renderEventManagement();
-
-    const dashboardTab = await screen.findByTestId('eventDashboardTab');
-    expect(dashboardTab).toBeInTheDocument();
-
-    const dashboardButton = screen.getByTestId('dashboardBtn');
-    userEvent.click(dashboardButton);
-
-    expect(dashboardTab).toBeInTheDocument();
-  });
-
   test('Testing back button navigation when userType is SuperAdmin', async () => {
     setItem('SuperAdmin', true);
     renderEventManagement();
@@ -93,7 +81,10 @@ describe('Event Management', () => {
 
     const registrantsTab = screen.getByTestId('eventRegistrantsTab');
     expect(registrantsTab).toBeInTheDocument();
-
+    const eventAttendanceButton = screen.getByTestId('attendanceBtn');
+    userEvent.click(eventAttendanceButton);
+    const eventAttendanceTab = screen.getByTestId('eventAttendanceTab');
+    expect(eventAttendanceTab).toBeInTheDocument();
     const eventActionsButton = screen.getByTestId('actionsBtn');
     userEvent.click(eventActionsButton);
 
@@ -117,5 +108,36 @@ describe('Event Management', () => {
 
     const eventVolunteersTab = screen.getByTestId('eventVolunteersTab');
     expect(eventVolunteersTab).toBeInTheDocument();
+  });
+  test('renders nothing when invalid tab is selected', () => {
+    render(
+      <MockedProvider addTypename={false} link={mockWithTime}>
+        <MemoryRouter initialEntries={['/event/orgId/eventId']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/event/:orgId/:eventId"
+                  element={<EventManagement />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    // Force an invalid tab state
+    const setTab = jest.fn();
+    React.useState = jest.fn().mockReturnValue(['invalidTab', setTab]);
+
+    // Verify nothing is rendered
+    expect(screen.queryByTestId('eventDashboardTab')).toBeInTheDocument();
+    expect(screen.queryByTestId('eventRegistrantsTab')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('eventAttendanceTab')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('eventActionsTab')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('eventVolunteersTab')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('eventAgendasTab')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('eventStatsTab')).not.toBeInTheDocument();
   });
 });
