@@ -959,8 +959,8 @@
     "unassignUserTag": "Désassigner l'étiquette",
     "unassignUserTagMessage": "Voulez-vous retirer l'étiquette de cet utilisateur?",
     "successfullyUnassigned": "Étiquette retirée de l'utilisateur",
-    "tagsAssigned": "étiquettes assignés",
-    "noTagsAssigned": "Aucun étiquette assigné"
+    "tagsAssigned": "étiquettes assignées",
+    "noTagsAssigned": "Aucune étiquette assignée"
   },
   "people": {
     "title": "Personnes",
