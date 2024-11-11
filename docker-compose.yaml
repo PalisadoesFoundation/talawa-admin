@@ -12,7 +12,8 @@ services:
       test: ['CMD', 'curl', '-f', 'http://localhost:4321']
       interval: 30s
       timeout: 10s
-      retries: 3
+      retries: 5
+      start_period: 40s
     restart: unless-stopped
     deploy:
       resources:
