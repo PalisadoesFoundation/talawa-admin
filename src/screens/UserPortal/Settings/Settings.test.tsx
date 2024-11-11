@@ -371,4 +371,49 @@ describe('Testing Settings Screen [User Portal]', () => {
       act(() => closeMenuBtn.click());
     }
   });
+
+  test('updates user details and test', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link2}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Settings />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+    );
+
+    // Simulate user input
+    await wait();
+    userEvent.type(screen.getByTestId('inputFirstName'), 'John');
+    
+    userEvent.type(screen.getByTestId('inputLastName'), 'Doe');
+    
+    userEvent.selectOptions(screen.getByTestId('inputGender'), 'MALE');
+    
+    userEvent.type(screen.getByTestId('inputPhoneNumber'), '+1234567890');
+    
+    userEvent.type(screen.getByTestId('inputAddress'), '123 Main Street');
+    
+    userEvent.type(screen.getByTestId('inputState'), 'NY');
+    
+    userEvent.selectOptions(screen.getByTestId('inputCountry'), 'US');
+    
+    fireEvent.change(screen.getByLabelText('Birth Date'), {
+      target: { value: '2024-03-01' },
+    });
+    await wait();
+
+    // Click the save button
+    await act(async () => {
+      userEvent.click(screen.getByTestId('updateUserBtn'));
+    });
+   
+
+  
+  });
+
+  
 });
