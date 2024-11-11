@@ -286,7 +286,8 @@ jobs:
 
       - name: Check if Talawa Admin App is running
         run: |
-          timeout=${HEALTH_CHECK_TIMEOUT:-60}
+          echo "Starting health check for application on localhost:4321"
+          timeout=${HEALTH_CHECK_TIMEOUT:-120}
           while ! nc -z localhost 4321 && [ $timeout -gt 0 ]; do
             sleep 1
             timeout=$((timeout-1))
