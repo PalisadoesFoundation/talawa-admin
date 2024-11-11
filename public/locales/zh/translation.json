@@ -958,7 +958,9 @@
     "talawaApiUnavailable": "塔拉瓦 API 不可用",
     "unassignUserTag": "取消分配标签",
     "unassignUserTagMessage": "您想从此用户中删除标签吗？",
-    "successfullyUnassigned": "标签已从用户中取消分配"
+    "successfullyUnassigned": "标签已从用户中取消分配",
+    "tagsAssigned": "已分配标签",
+    "noTagsAssigned": "未分配标签"
   },
   "userLogin": {
     "login": "登录",

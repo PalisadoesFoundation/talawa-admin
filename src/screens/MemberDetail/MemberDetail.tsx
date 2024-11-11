@@ -615,8 +615,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               className={`bg-primary d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius}`}
             >
               <h3 className="text-white m-0" data-testid="eventsAttended-title">
-                {/* {t('eventsAttended')} */}
-                Tags Assigned
+                {t('tagsAssigned')}
               </h3>
             </Card.Header>
             <Card.Body
@@ -626,8 +625,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
             >
               {!tagsAssigned.length ? (
                 <div className="w-100 h-100 d-flex justify-content-center align-items-center fw-semibold text-secondary">
-                  {/* <h6>{t('noeventsAttended')}</h6> */}
-                  No Tags Assigned
+                  {t('noTagsAssigned')}
                 </div>
               ) : (
                 <InfiniteScroll

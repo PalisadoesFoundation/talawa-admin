@@ -959,7 +959,9 @@
     "userType": "Tipo de usuario",
     "unassignUserTag": "Desasignar Etiqueta",
     "unassignUserTagMessage": "¿Desea eliminar la etiqueta de este usuario?",
-    "successfullyUnassigned": "Etiqueta desasignada del usuario"
+    "successfullyUnassigned": "Etiqueta desasignada del usuario",
+    "tagsAssigned": "Etiquetas asignadas",
+    "noTagsAssigned": "No se asignaron etiquetas"
   },
   "userLogin": {
     "login": "Acceso",

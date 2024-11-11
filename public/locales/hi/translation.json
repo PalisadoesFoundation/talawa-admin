@@ -958,7 +958,9 @@
     "talawaApiUnavailable": "Talawa API अनुपलब्ध",
     "unassignUserTag": "टैग को हटाएं",
     "unassignUserTagMessage": "क्या आप इस उपयोगकर्ता से टैग हटाना चाहते हैं?",
-    "successfullyUnassigned": "उपयोगकर्ता से टैग हटा दिया गया"
+    "successfullyUnassigned": "उपयोगकर्ता से टैग हटा दिया गया",
+    "tagsAssigned": "टैग सौंपे गए",
+    "noTagsAssigned": "कोई टैग सौंपा नहीं गया"
   },
   "people": {
     "title": "लोग",

@@ -1,14 +1,17 @@
 import React from 'react';
+import type { RenderResult } from '@testing-library/react';
 import {
   act,
+  cleanup,
   fireEvent,
   render,
   screen,
   waitFor,
+  waitForElementToBeRemoved,
 } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { I18nextProvider } from 'react-i18next';
@@ -16,28 +19,30 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import MemberDetail, { getLanguageName, prettyDate } from './MemberDetail';
 import { MOCKS1, MOCKS2, MOCKS3 } from './MemberDetailMocks';
+import type { ApolloLink } from '@apollo/client';
+import { toast } from 'react-toastify';
 
 const link1 = new StaticMockLink(MOCKS1, true);
 const link2 = new StaticMockLink(MOCKS2, true);
 const link3 = new StaticMockLink(MOCKS3, true);
 
-async function wait(ms = 20): Promise<void> {
+async function wait(ms = 500): Promise<void> {
   await act(() => new Promise((resolve) => setTimeout(resolve, ms)));
 }
 
-// const translations = {
-//   ...JSON.parse(
-//     JSON.stringify(
-//       i18nForTest.getDataByLanguage('en')?.translation.memberDetail ?? {},
-//     ),
-//   ),
-//   ...JSON.parse(
-//     JSON.stringify(i18nForTest.getDataByLanguage('en')?.common ?? {}),
-//   ),
-//   ...JSON.parse(
-//     JSON.stringify(i18nForTest.getDataByLanguage('en')?.errors ?? {}),
-//   ),
-// };
+const translations = {
+  ...JSON.parse(
+    JSON.stringify(
+      i18nForTest.getDataByLanguage('en')?.translation.memberDetail ?? {},
+    ),
+  ),
+  ...JSON.parse(
+    JSON.stringify(i18nForTest.getDataByLanguage('en')?.common ?? {}),
+  ),
+  ...JSON.parse(
+    JSON.stringify(i18nForTest.getDataByLanguage('en')?.errors ?? {}),
+  ),
+};
 
 jest.mock('@mui/x-date-pickers/DateTimePicker', () => {
   return {
@@ -47,30 +52,54 @@ jest.mock('@mui/x-date-pickers/DateTimePicker', () => {
   };
 });
 
-jest.mock('react-toastify');
+jest.mock('react-toastify', () => ({
+  toast: {
+    success: jest.fn(),
+    error: jest.fn(),
+  },
+}));
+
+const props = {
+  id: 'rishav-jha-mech',
+};
+
+const renderMemberDetailScreen = (link: ApolloLink): RenderResult => {
+  return render(
+    <MockedProvider addTypename={false} link={link}>
+      <MemoryRouter initialEntries={['/orgtags/123']}>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Routes>
+              <Route
+                path="/orgtags/:orgId"
+                element={<MemberDetail {...props} />}
+              />
+              <Route
+                path="/orgtags/:orgId/manageTag/:tagId"
+                element={<div data-testid="manageTagScreen"></div>}
+              />
+            </Routes>
+          </I18nextProvider>
+        </Provider>
+      </MemoryRouter>
+    </MockedProvider>,
+  );
+};
 
 describe('MemberDetail', () => {
   global.alert = jest.fn();
 
-  test('should render the elements', async () => {
-    const props = {
-      id: 'rishav-jha-mech',
-    };
+  afterEach(() => {
+    jest.clearAllMocks();
+    cleanup();
+  });
 
-    render(
-      <MockedProvider addTypename={false} link={link2}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <MemberDetail {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+  test('should render the elements', async () => {
+    renderMemberDetailScreen(link1);
+
+    await wait();
 
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
-    await wait();
     expect(screen.getAllByText(/Email/i)).toBeTruthy();
     expect(screen.getAllByText(/First name/i)).toBeTruthy();
     expect(screen.getAllByText(/Last name/i)).toBeTruthy();
@@ -103,10 +132,6 @@ describe('MemberDetail', () => {
   });
 
   test('should render props and text elements test for the page component', async () => {
-    const props = {
-      id: '1',
-    };
-
     const formData = {
       firstName: 'Ansh',
       lastName: 'Goyal',
@@ -119,19 +144,11 @@ describe('MemberDetail', () => {
       phoneNumber: '1234567890',
       birthDate: '03/28/2022',
     };
-    render(
-      <MockedProvider addTypename={false} link={link2}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <MemberDetail {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
+    renderMemberDetailScreen(link2);
+
     await wait();
+
+    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
     expect(screen.getAllByText(/Email/i)).toBeTruthy();
     expect(screen.getByText('User')).toBeInTheDocument();
     const birthDateDatePicker = screen.getByTestId('birthDate');
@@ -139,23 +156,39 @@ describe('MemberDetail', () => {
       target: { value: formData.birthDate },
     });
 
+    userEvent.clear(screen.getByPlaceholderText(/First Name/i));
     userEvent.type(
       screen.getByPlaceholderText(/First Name/i),
       formData.firstName,
     );
+
+    userEvent.clear(screen.getByPlaceholderText(/Last Name/i));
     userEvent.type(
       screen.getByPlaceholderText(/Last Name/i),
       formData.lastName,
     );
+
+    userEvent.clear(screen.getByPlaceholderText(/Address/i));
     userEvent.type(screen.getByPlaceholderText(/Address/i), formData.address);
+
+    userEvent.clear(screen.getByPlaceholderText(/Country Code/i));
     userEvent.type(
       screen.getByPlaceholderText(/Country Code/i),
       formData.countryCode,
     );
+
+    userEvent.clear(screen.getByPlaceholderText(/State/i));
     userEvent.type(screen.getByPlaceholderText(/State/i), formData.state);
+
+    userEvent.clear(screen.getByPlaceholderText(/City/i));
     userEvent.type(screen.getByPlaceholderText(/City/i), formData.city);
+
+    userEvent.clear(screen.getByPlaceholderText(/Email/i));
     userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
+
+    userEvent.clear(screen.getByPlaceholderText(/Phone/i));
     userEvent.type(screen.getByPlaceholderText(/Phone/i), formData.phoneNumber);
+
     // userEvent.click(screen.getByPlaceholderText(/pluginCreationAllowed/i));
     // userEvent.selectOptions(screen.getByTestId('applangcode'), 'Français');
     // userEvent.upload(screen.getByLabelText(/Display Image:/i), formData.image);
@@ -178,65 +211,22 @@ describe('MemberDetail', () => {
   });
 
   test('display admin', async () => {
-    const props = {
-      id: 'rishav-jha-mech',
-    };
-
-    render(
-      <MockedProvider addTypename={false} link={link1}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <MemberDetail {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
+    renderMemberDetailScreen(link1);
     await wait();
+    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
     expect(screen.getByText('Admin')).toBeInTheDocument();
   });
+
   test('display super admin', async () => {
-    const props = {
-      id: 'rishav-jha-mech',
-    };
-
-    render(
-      <MockedProvider addTypename={false} link={link3}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <MemberDetail {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
+    renderMemberDetailScreen(link3);
     await wait();
+    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
     expect(screen.getByText('Super Admin')).toBeInTheDocument();
   });
 
   test('Should display dicebear image if image is null', async () => {
-    const props = {
-      id: 'rishav-jha-mech',
-      from: 'orglist',
-    };
+    renderMemberDetailScreen(link1);
 
-    render(
-      <MockedProvider addTypename={false} link={link1}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <MemberDetail {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
 
     const dicebearUrl = `mocked-data-uri`;
@@ -247,22 +237,7 @@ describe('MemberDetail', () => {
   });
 
   test('Should display image if image is present', async () => {
-    const props = {
-      id: 'rishav-jha-mech',
-      from: 'orglist',
-    };
-
-    render(
-      <MockedProvider addTypename={false} link={link2}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <MemberDetail {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderMemberDetailScreen(link2);
 
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
 
@@ -271,22 +246,9 @@ describe('MemberDetail', () => {
     expect(userImage).toBeInTheDocument();
     expect(userImage.getAttribute('src')).toBe(user?.image);
   });
+
   test('resetChangesBtn works properly', async () => {
-    const props = {
-      id: 'rishav-jha-mech',
-      from: 'orglist',
-    };
-    render(
-      <MockedProvider addTypename={false} link={link1}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <MemberDetail {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderMemberDetailScreen(link1);
 
     await waitFor(() => {
       expect(screen.getByPlaceholderText(/Address/i)).toBeInTheDocument();
@@ -306,27 +268,6 @@ describe('MemberDetail', () => {
     expect(screen.getByTestId('birthDate')).toHaveValue('03/14/2024');
   });
 
-  test('should call setState with 2 when button is clicked', async () => {
-    const props = {
-      id: 'rishav-jha-mech',
-    };
-    render(
-      <MockedProvider addTypename={false} link={link2}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <MemberDetail {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
-
-    waitFor(() => userEvent.click(screen.getByText(/Edit Profile/i)));
-  });
-
   test('should be redirected to / if member id is undefined', async () => {
     render(
       <MockedProvider addTypename={false} link={link2}>
@@ -341,43 +282,18 @@ describe('MemberDetail', () => {
     );
     expect(window.location.pathname).toEqual('/');
   });
+
   test('renders events attended card correctly and show a message', async () => {
-    const props = {
-      id: 'rishav-jha-mech',
-    };
-    render(
-      <MockedProvider addTypename={false} link={link3}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <MemberDetail {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderMemberDetailScreen(link3);
     await waitFor(() => {
       expect(screen.getByText('Events Attended')).toBeInTheDocument();
     });
     // Check for empty state immediately
     expect(screen.getByText('No Events Attended')).toBeInTheDocument();
   });
-  test('opens "Events Attended List" modal when View All button is clicked', async () => {
-    const props = {
-      id: 'rishav-jha-mech',
-    };
 
-    render(
-      <MockedProvider addTypename={false} link={link2}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <MemberDetail {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+  test('opens "Events Attended List" modal when View All button is clicked', async () => {
+    renderMemberDetailScreen(link2);
 
     await wait();
 
@@ -388,5 +304,97 @@ describe('MemberDetail', () => {
     // Check if the modal with the title "Events Attended List" is now visible
     const modalTitle = await screen.findByText('Events Attended List');
     expect(modalTitle).toBeInTheDocument();
+  });
+
+  test('lists all the tags assigned to the user', async () => {
+    renderMemberDetailScreen(link1);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('tagName')).toHaveLength(10);
+    });
+  });
+
+  test('navigates to manage tag screen after clicking manage tag option', async () => {
+    renderMemberDetailScreen(link1);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('tagName')[0]).toBeInTheDocument();
+    });
+    userEvent.click(screen.getAllByTestId('tagName')[0]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('manageTagScreen')).toBeInTheDocument();
+    });
+  });
+
+  test('loads more assigned tags with infinite scroll', async () => {
+    renderMemberDetailScreen(link1);
+
+    await wait();
+
+    // now scroll to the bottom of the div
+    const tagsAssignedScrollableDiv = screen.getByTestId(
+      'tagsAssignedScrollableDiv',
+    );
+
+    // Get the initial number of tags loaded
+    const initialTagsAssignedLength = screen.getAllByTestId('tagName').length;
+
+    // Set scroll position to the bottom
+    fireEvent.scroll(tagsAssignedScrollableDiv, {
+      target: { scrollY: tagsAssignedScrollableDiv.scrollHeight },
+    });
+
+    await waitFor(() => {
+      const finalTagsAssignedLength = screen.getAllByTestId('tagName').length;
+      expect(finalTagsAssignedLength).toBeGreaterThan(
+        initialTagsAssignedLength,
+      );
+    });
+  });
+
+  test('opens and closes the unassign tag modal', async () => {
+    renderMemberDetailScreen(link1);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('unassignTagBtn')[0]).toBeInTheDocument();
+    });
+    userEvent.click(screen.getAllByTestId('unassignTagBtn')[0]);
+
+    await waitFor(() => {
+      return expect(
+        screen.findByTestId('unassignTagModalCloseBtn'),
+      ).resolves.toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('unassignTagModalCloseBtn'));
+
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId('unassignTagModalCloseBtn'),
+    );
+  });
+
+  test('unassigns a tag from a member', async () => {
+    renderMemberDetailScreen(link1);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('unassignTagBtn')[0]).toBeInTheDocument();
+    });
+    userEvent.click(screen.getAllByTestId('unassignTagBtn')[0]);
+
+    userEvent.click(screen.getByTestId('unassignTagModalSubmitBtn'));
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith(
+        translations.successfullyUnassigned,
+      );
+    });
   });
 });

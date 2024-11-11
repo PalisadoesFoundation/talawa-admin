@@ -558,10 +558,6 @@ export const USER_DETAILS = gql`
               parentTag {
                 _id
               }
-              ancestorTags {
-                _id
-                name
-              }
             }
           }
           pageInfo {
