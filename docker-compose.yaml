@@ -5,7 +5,17 @@ services:
       dockerfile: Dockerfile
     environment:
       - REACT_APP_TALAWA_URL=${REACT_APP_TALAWA_URL}
-    # volumes:
-    # - .:/usr/src/app
     ports:
       - 4321:4321
+    user: node
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:4321']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
