@@ -292,12 +292,14 @@ jobs:
             sleep 1
 
             timeout=$((timeout-1))
-            if [ $((timeout % 10)) -eq 0]; then
+            if [ $((timeout % 10)) -eq 0 ]; then
               echo "Still waiting for app to start... ${timeout}s remaining"
             fi
           done
           if [ $timeout -eq 0 ]; then
             echo "Timeout waiting for application to start"
+            echo "Container logs:"
+            docker logs talawa-admin-app-container
             exit 1
           fi
           echo "Port check passed, verifying health endpoint..."

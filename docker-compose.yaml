@@ -9,7 +9,8 @@ services:
       - 4321:4321
     user: node
     healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:4321']
+      test:
+        ['CMD-SHELL', 'wget --spider -q http://localhost:4321/health || exit 1']
       interval: 30s
       timeout: 10s
       retries: 5
