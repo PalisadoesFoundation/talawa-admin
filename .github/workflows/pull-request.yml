@@ -263,14 +263,26 @@ jobs:
     
       - name: Set up Docker
         uses: docker/setup-buildx-action@v3
-        
+       with:
+         buildkitd-flags: --debug
+         driver-opts: |
+           image=moby/buildkit:latest
+         cache-from: type=gha
+         cache-to: type=gha,mode=max
+
       - name: Build Docker image
         run: |
+          set -e
+          echo "Building Docker image..."
           docker build -t talawa-admin-app .
+          echo "Docker image built successfully"
     
       - name: Run Docker Container
         run: |
+          set -e
+          echo "Started Docker container..."
           docker run -d --name talawa-admin-app-container -p 4321:4321 talawa-admin-app
+          echo "Docker container started successfully"
 
       - name: Check if Talawa Admin App is running
         run: |
@@ -290,6 +302,7 @@ jobs:
         run: |
           docker stop talawa-admin-app-container
           docker rm talawa-admin-app-container
+          exit 1
     
 
   Check-Target-Branch:
