@@ -269,7 +269,9 @@ describe('Testing Agenda Category Component', () => {
     userEvent.click(screen.getByTestId('editAgendaCategoryBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.agendaCategoryUpdated);
+      expect(toast.success).toHaveBeenCalledWith(
+        translations.agendaCategoryUpdated,
+      );
     });
   });
 
@@ -362,7 +364,9 @@ describe('Testing Agenda Category Component', () => {
     userEvent.click(screen.getByTestId('deleteAgendaCategoryBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.agendaCategoryDeleted);
+      expect(toast.success).toHaveBeenCalledWith(
+        translations.agendaCategoryDeleted,
+      );
     });
   });
 

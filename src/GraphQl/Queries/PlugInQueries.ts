@@ -99,179 +99,117 @@ export const ORGANIZATION_EVENTS_CONNECTION = gql`
   }
 `;
 
+export const USER_EVENTS_VOLUNTEER = gql`
+  query UserEventsVolunteer(
+    $organization_id: ID!
+    $title_contains: String
+    $location_contains: String
+    $first: Int
+    $skip: Int
+    $upcomingOnly: Boolean
+  ) {
+    eventsByOrganizationConnection(
+      where: {
+        organization_id: $organization_id
+        title_contains: $title_contains
+        location_contains: $location_contains
+      }
+      first: $first
+      skip: $skip
+      upcomingOnly: $upcomingOnly
+    ) {
+      _id
+      title
+      startDate
+      endDate
+      location
+      startTime
+      endTime
+      allDay
+      recurring
+      volunteerGroups {
+        _id
+        name
+        volunteersRequired
+        description
+        volunteers {
+          _id
+        }
+      }
+      volunteers {
+        _id
+        user {
+          _id
+        }
+      }
+    }
+  }
+`;
+
 /**
- * GraphQL query to retrieve a list of direct chats based on user ID.
+ * GraphQL query to retrieve a list of chats based on user ID.
  *
- * @param id - The ID of the user for which direct chats are being retrieved.
- * @returns The list of direct chats associated with the user, including details such as ID, creator, messages, organization, and participating users.
+ * @param id - The ID of the user for which chats are being retrieved.
+ * @returns The list of chats associated with the user, including details such as ID, creator, messages, organization, and participating users.
  */
 
-// directChatsMessagesByChatID(id: ID!): [DirectChatMessage]
-
-export const DIRECT_CHAT_MESSAGES_BY_CHAT_ID = gql`
-  query directChatsMessagesByChatID($id: ID!) {
-    directChatsMessagesByChatID(id: $id) {
+export const CHAT_BY_ID = gql`
+  query chatById($id: ID!) {
+    chatById(id: $id) {
       _id
-      createdAt
-      messageContent
-      receiver {
-        _id
-        firstName
-        lastName
-        email
-        image
-      }
-      sender {
-        _id
-        firstName
-        lastName
-        email
-        image
-      }
-    }
-  }
-`;
-
-export const DIRECT_CHAT_BY_ID = gql`
-  query directChatById($id: ID!) {
-    directChatById(id: $id) {
-      _id
-      createdAt
-      messages {
-        _id
-        createdAt
-        messageContent
-        receiver {
-          _id
-          firstName
-          lastName
-          email
-          image
-        }
-        sender {
-          _id
-          firstName
-          lastName
-          email
-          image
-        }
-      }
-      users {
-        _id
-        firstName
-        lastName
-        email
-      }
-    }
-  }
-`;
-
-export const GROUP_CHAT_BY_ID = gql`
-  query groupChatById($id: ID!) {
-    groupChatById(id: $id) {
-      _id
-      createdAt
-      title
-      messages {
-        _id
-        createdAt
-        messageContent
-        sender {
-          _id
-          firstName
-          lastName
-          email
-          image
-        }
-      }
-      users {
-        _id
-        firstName
-        lastName
-        email
-        image
-      }
-    }
-  }
-`;
-
-// directChatByChatId
-
-// export const GROUP_CHAT_MESSAGES_BY_CHAT_ID = gql`
-//   query directChatsMessagesByChatID($id: ID!) {
-//     directChatsMessagesByChatID(id: $id) {
-//       _id
-//       createdAt
-//       messageContent
-//       receiver {
-//         _id
-//         firstName
-//         lastName
-//         email
-//       }
-//       sender {
-//         _id
-//         firstName
-//         lastName
-//         email
-//       }
-//     }
-//   }
-// `;
-
-export const DIRECT_CHATS_LIST = gql`
-  query DirectChatsByUserID($id: ID!) {
-    directChatsByUserID(id: $id) {
-      _id
-      creator {
-        _id
-        firstName
-        lastName
-        email
-      }
-      messages {
-        _id
-        createdAt
-        messageContent
-        receiver {
-          _id
-          firstName
-          lastName
-          email
-        }
-        sender {
-          _id
-          firstName
-          lastName
-          email
-        }
-      }
+      isGroup
+      name
       organization {
         _id
-        name
+      }
+      createdAt
+      messages {
+        _id
+        createdAt
+        messageContent
+        replyTo {
+          _id
+          createdAt
+          messageContent
+          sender {
+            _id
+            firstName
+            lastName
+            email
+            image
+          }
+        }
+        sender {
+          _id
+          firstName
+          lastName
+          email
+          image
+        }
       }
       users {
         _id
         firstName
         lastName
         email
-        image
       }
     }
   }
 `;
 
-export const GROUP_CHAT_LIST = gql`
-  query GroupChatsByUserID($id: ID!) {
-    groupChatsByUserId(id: $id) {
+export const CHATS_LIST = gql`
+  query ChatsByUserId($id: ID!) {
+    chatsByUserId(id: $id) {
       _id
+      isGroup
+      name
+
       creator {
         _id
         firstName
         lastName
         email
       }
-      title
       messages {
         _id
         createdAt
@@ -297,6 +235,7 @@ export const GROUP_CHAT_LIST = gql`
     }
   }
 `;
+
 /**
  * GraphQL query to check if an organization is a sample organization.
  *

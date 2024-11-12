@@ -10,7 +10,10 @@ export default {
   ],
   testEnvironment: 'jsdom',
   transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest', { configFile: "./config/babel.config.cjs" }], // Use babel-jest for JavaScript and TypeScript files
+    '^.+\\.(js|jsx|ts|tsx)$': [
+      'babel-jest',
+      { configFile: './config/babel.config.cjs' },
+    ], // Use babel-jest for JavaScript and TypeScript files
     '^.+\\.(css|scss|sass|less)$': 'jest-preview/transforms/css', // CSS transformations
     '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': 'jest-preview/transforms/file', // File transformations
   },
@@ -23,10 +26,12 @@ export default {
   ],
   moduleNameMapper: {
     '^react-native$': 'react-native-web',
-    '^@mui/(.*)$': '<rootDir>/node_modules/@mui/$1',
     '^@dicebear/core$': '<rootDir>/scripts/__mocks__/@dicebear/core.ts',
     '^@dicebear/collection$':
       '<rootDir>/scripts/__mocks__/@dicebear/collection.ts',
+    '\\.svg\\?react$': '<rootDir>/scripts/__mocks__/fileMock.js',
+    '\\.svg$': '<rootDir>/scripts/__mocks__/fileMock.js', 
+    '^@pdfme/generator$': '<rootDir>/scripts/__mocks__/@pdfme/generator.ts'
   },
   moduleFileExtensions: [
     'web.js',

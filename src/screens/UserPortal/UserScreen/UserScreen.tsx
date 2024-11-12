@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Navigate, Outlet, useLocation, useParams } from 'react-router-dom';
 import { updateTargets } from 'state/action-creators';
+import { useAppDispatch } from 'state/hooks';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from './UserScreen.module.css';
@@ -18,6 +19,7 @@ const map: InterfaceMapType = {
   donate: 'donate',
   campaigns: 'userCampaigns',
   pledges: 'userPledges',
+  volunteer: 'userVolunteer',
 };
 
 /**
@@ -57,7 +59,7 @@ const UserScreen = (): JSX.Element => {
    */
 
   // Initialize Redux dispatch
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   /**
    * Effect hook to update targets based on the organization ID.
@@ -129,7 +131,7 @@ const UserScreen = (): JSX.Element => {
       >
         <div className="d-flex justify-content-between align-items-center">
           <div style={{ flex: 1 }}>
-            <h1>{titleKey !== 'home' ? t('title') : ''}</h1>
+            <h1>{t('title')}</h1>
           </div>
           <ProfileDropdown />
         </div>

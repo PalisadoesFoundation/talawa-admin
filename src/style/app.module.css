@@ -1,0 +1,216 @@
+:root {
+  --dropdown-border-color: #555555;
+  --dropdown-text-color: #555555;
+  --subtle-blue-grey: #7c9beb;
+  --subtle-blue-grey-hover: #5f7e91;
+  --modal-width: 670px;
+  --modal-max-width: 680px;
+  --input-shadow-color: #dddddd;
+  --delete-button-bg: #f8d6dc;
+  --delete-button-color: #ff4d4f;
+  --search-button-bg: #a8c7fa;
+  --search-button-border: #555555;
+  --table-image-size: 50px;
+  --table-head-bg: var(
+    --bs-primary,
+    blue
+  ); /* Assuming var(--bs-primary) is defined elsewhere */
+  --table-head-color: white;
+  --table-header-color: var(--bs-greyish-black, black);
+  --table-head-radius: 20px;
+  --row-background: var(--bs-white, white);
+  --font-size-header: 16px;
+}
+
+.closeButton {
+  color: var(--delete-button-color);
+  margin-right: 5px;
+  background-color: var(--delete-button-bg);
+}
+
+.modalContent {
+  width: var(--modal-width);
+  max-width: var(--modal-max-width);
+}
+
+.subtleBlueGrey {
+  color: var(--subtle-blue-grey);
+  text-decoration: none;
+}
+
+.subtleBlueGrey:hover {
+  color: var(--subtle-blue-grey-hover);
+  text-decoration: underline;
+}
+
+.dropdown {
+  background-color: white;
+  border: 1px solid var(--dropdown-border-color);
+  color: var(--dropdown-text-color);
+  position: relative;
+  display: inline-block;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.dropdown:is(:hover, :focus, :active, :focus-visible, .show) {
+  background-color: transparent !important;
+  border: 1px solid var(--dropdown-border-color);
+  color: var(--dropdown-text-color) !important;
+}
+
+.dropdownItem {
+  background-color: white !important;
+  color: var(--dropdown-text-color) !important;
+  border: none !important;
+}
+
+.dropdownItem:hover,
+.dropdownItem:focus,
+.dropdownItem:active {
+  background-color: white !important;
+  color: var(--dropdown-text-color) !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.input {
+  flex: 1;
+  position: relative;
+}
+
+.btnsContainer {
+  display: flex;
+  margin: 2.5rem 0;
+}
+
+.btnsContainer .btnsBlock {
+  display: flex;
+}
+
+.btnsContainer .btnsBlock button {
+  margin-left: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btnsContainer .input {
+  flex: 1;
+  position: relative;
+}
+
+.btnsContainer .input button {
+  width: 52px;
+}
+
+.deleteButton {
+  background-color: var(--delete-button-bg);
+  color: var(--delete-button-color);
+  border: none;
+  padding: 5px 20px;
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  margin-right: auto;
+  margin-left: auto;
+  gap: 8px;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.inputField {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: white;
+  box-shadow: 0 1px 1px var(--input-shadow-color);
+}
+
+.inputFieldModal {
+  margin-bottom: 10px;
+  background-color: white;
+  box-shadow: 0 1px 1px var(--input-shadow-color);
+}
+
+.inputField > button {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.searchButton {
+  margin-bottom: 10px;
+  background-color: var(--search-button-bg);
+  border-color: var(--search-button-border);
+}
+.yesButton {
+  background-color: var(--search-button-bg);
+  border-color: var(--search-button-border);
+}
+
+.searchIcon {
+  color: var(--dropdown-text-color);
+}
+
+.TableImage {
+  object-fit: cover;
+  margin-top: 15px !important;
+  width: var(--table-image-size) !important;
+  height: var(--table-image-size) !important;
+  border-radius: 100% !important;
+}
+
+.tableHead {
+  color: var(--table-head-color);
+  border-radius: var(--table-head-radius) !important;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.mainpageright > hr {
+  margin-top: 10px;
+  width: 100%;
+  margin-left: -15px;
+  margin-right: -15px;
+  margin-bottom: 20px;
+}
+
+.rowBackground {
+  background-color: var(--row-background);
+}
+
+.tableHeader {
+  background-color: var(--table-head-bg);
+  color: var(--table-header-color);
+  font-size: var(--font-size-header);
+}
+
+@-webkit-keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}

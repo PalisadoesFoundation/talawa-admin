@@ -1,15 +1,28 @@
 import LeftDrawerOrg from 'components/LeftDrawerOrg/LeftDrawerOrg';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { Navigate, Outlet, useLocation, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import {
+  Navigate,
+  Outlet,
+  useLocation,
+  useParams,
+  useMatch,
+} from 'react-router-dom';
 import { updateTargets } from 'state/action-creators';
+import { useAppDispatch } from 'state/hooks';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from './OrganizationScreen.module.css';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import { Button } from 'react-bootstrap';
 import type { InterfaceMapType } from 'utils/interfaces';
+import { useQuery } from '@apollo/client';
+import { ORGANIZATION_EVENT_LIST } from 'GraphQl/Queries/Queries';
+interface InterfaceEvent {
+  _id: string;
+  title: string;
+}
 
 /**
  * Component for the organization screen
@@ -32,9 +45,13 @@ const OrganizationScreen = (): JSX.Element => {
 
   // Get the organization ID from the URL parameters
   const { orgId } = useParams();
+  const [eventName, setEventName] = useState<string | null>(null);
+
+  const isEventPath = useMatch('/event/:orgId/:eventId');
 
   // If no organization ID is found, navigate back to the home page
   if (!orgId) {
+    /*istanbul ignore next*/
     return <Navigate to={'/'} replace />;
   }
 
@@ -44,12 +61,34 @@ const OrganizationScreen = (): JSX.Element => {
   } = useSelector((state: RootState) => state.appRoutes);
   const { targets } = appRoutes;
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   // Update targets whenever the organization ID changes
   useEffect(() => {
     dispatch(updateTargets(orgId));
-  }, [orgId]); // Added orgId to the dependency array
+  }, [orgId]);
+
+  const { data: eventsData } = useQuery(ORGANIZATION_EVENT_LIST, {
+    variables: { id: orgId },
+  });
+
+  useEffect(() => {
+    if (isEventPath?.params.eventId && eventsData?.eventsByOrganization) {
+      const eventId = isEventPath.params.eventId;
+      const event = eventsData.eventsByOrganization.find(
+        (e: InterfaceEvent) => e._id === eventId,
+      );
+      /*istanbul ignore next*/
+      if (!event) {
+        console.warn(`Event with id ${eventId} not found`);
+        setEventName(null);
+        return;
+      }
+      setEventName(event.title);
+    } else {
+      setEventName(null);
+    }
+  }, [isEventPath, eventsData]);
 
   // Handle screen resizing to show/hide the side drawer
   const handleResize = (): void => {
@@ -111,6 +150,7 @@ const OrganizationScreen = (): JSX.Element => {
         <div className="d-flex justify-content-between align-items-center">
           <div style={{ flex: 1 }}>
             <h1>{t('title')}</h1>
+            {eventName && <h4 className="">{eventName}</h4>}
           </div>
           <ProfileDropdown />
         </div>
@@ -145,4 +185,5 @@ const map: InterfaceMapType = {
   blockuser: 'blockUnblockUser',
   orgvenues: 'organizationVenues',
   event: 'eventManagement',
+  leaderboard: 'leaderboard',
 };
