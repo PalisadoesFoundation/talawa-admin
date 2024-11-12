@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Dropdown, Form } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router-dom';
@@ -88,6 +88,8 @@ function organizationActionItems(): JSX.Element {
     return <Navigate to={'/'} replace />;
   }
 
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 768);
+
   const [actionItem, setActionItem] = useState<InterfaceActionItemInfo | null>(
     null,
   );
@@ -107,6 +109,14 @@ function organizationActionItems(): JSX.Element {
     [ModalState.VIEW]: false,
     [ModalState.STATUS]: false,
   });
+
+  useEffect((): (() => void) => {
+    const handleResize = (): void => setIsSmallScreen(window.innerWidth <= 768);
+
+    window.addEventListener('resize', handleResize);
+
+    return (): void => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const openModal = (modal: ModalState): void =>
     setModalState((prevState) => ({ ...prevState, [modal]: true }));
@@ -405,8 +415,11 @@ function organizationActionItems(): JSX.Element {
           />
           <Button
             tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center`}
-            style={{ marginBottom: '10px' }}
+            className="position-absolute z-10 d-flex justify-content-center align-items-center"
+            style={{
+              right: isSmallScreen ? '0px' : '0px',
+              bottom: isSmallScreen ? '10px' : '50px',
+            }}
             data-testid="searchBtn"
           >
             <Search />
