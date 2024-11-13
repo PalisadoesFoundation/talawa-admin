@@ -1,7 +1,7 @@
 import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
-import { WarningAmberRounded } from '@mui/icons-material';
+import { Search, WarningAmberRounded } from '@mui/icons-material';
 import SortIcon from '@mui/icons-material/Sort';
 import Loader from 'components/Loader/Loader';
 import IconComponent from 'components/IconComponent/IconComponent';
@@ -13,7 +13,7 @@ import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import type { InterfaceQueryUserTagsAssignedMembers } from 'utils/interfaces';
-import styles from './ManageTag.module.css';
+import styles from '../../style/app.module.css';
 import { DataGrid } from '@mui/x-data-grid';
 import type {
   InterfaceTagAssignedMembersQuery,
@@ -356,11 +356,10 @@ function ManageTag(): JSX.Element {
         <div className={styles.mainpageright}>
           <div className={styles.btnsContainer}>
             <div className={styles.input}>
-              <i className="fa fa-search position-absolute text-body-tertiary end-0 top-50 translate-middle" />
               <Form.Control
                 type="text"
                 id="userName"
-                className="bg-white"
+                className={`${styles.inputField} `}
                 placeholder={tCommon('searchByName')}
                 onChange={(e) =>
                   setAssignedMemberSearchInput(e.target.value.trim())
@@ -368,6 +367,13 @@ function ManageTag(): JSX.Element {
                 data-testid="searchByName"
                 autoComplete="off"
               />
+              <Button
+                tabIndex={-1}
+                className={styles.searchButton}
+                data-testid="searchBtn"
+              >
+                <Search />
+              </Button>
             </div>
             <div className={styles.btnsBlock}>
               <Dropdown
@@ -378,6 +384,7 @@ function ManageTag(): JSX.Element {
                 <Dropdown.Toggle
                   variant="outline-success"
                   data-testid="sortPeople"
+                  className={styles.dropdown}
                 >
                   <SortIcon className={'me-1'} />
                   {assignedMemberSortOrder === 'DESCENDING'
@@ -402,7 +409,7 @@ function ManageTag(): JSX.Element {
               <Button
                 variant="success"
                 onClick={() => redirectToSubTags(currentTagId as string)}
-                className="mx-4"
+                className={`${styles.createButton} mb-2`}
                 data-testid="subTagsBtn"
               >
                 {t('subTags')}
@@ -412,7 +419,7 @@ function ManageTag(): JSX.Element {
               variant="success"
               onClick={showAddPeopleToTagModal}
               data-testid="addPeopleToTagBtn"
-              className="ms-auto"
+              className={`${styles.createButton} mb-2 ms-3`}
             >
               <i className={'fa fa-plus me-2'} />
               {t('addPeopleToTag')}
