@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import { act, render, screen, waitFor, within } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import userEvent from '@testing-library/user-event';
 import {
-  ADVERTISEMENTS_GET,
+  ORGANIZATION_ADVERTISEMENT_LIST,
   ORGANIZATION_POST_LIST,
 } from 'GraphQl/Queries/Queries';
 import { Provider } from 'react-redux';
@@ -15,6 +15,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import Home from './Posts';
 import useLocalStorage from 'utils/useLocalstorage';
+import { DELETE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 
 const { setItem } = useLocalStorage();
 
@@ -137,67 +138,94 @@ const MOCKS = [
   },
   {
     request: {
-      query: ADVERTISEMENTS_GET,
-      variables: {},
+      query: ORGANIZATION_ADVERTISEMENT_LIST,
+      variables: { id: 'orgId', first: 6 },
     },
     result: {
       data: {
-        advertisementsConnection: {
-          edges: [
-            {
-              node: {
-                _id: '1234',
-                name: 'Ad 1',
-                type: 'Type 1',
-                organization: {
-                  _id: 'orgId',
+        organizations: [
+          {
+            _id: 'orgId',
+            advertisements: {
+              edges: [
+                {
+                  node: {
+                    _id: '1234',
+                    name: 'Ad 1',
+                    type: 'Type 1',
+                    organization: {
+                      _id: 'orgId',
+                    },
+                    mediaUrl: 'Link 1',
+                    endDate: '2024-12-31',
+                    startDate: '2022-01-01',
+                  },
+                  cursor: '1234',
                 },
-                mediaUrl: 'Link 1',
-                endDate: '2024-12-31',
-                startDate: '2022-01-01',
-              },
-            },
-            {
-              node: {
-                _id: '2345',
-                name: 'Ad 2',
-                type: 'Type 1',
-                organization: {
-                  _id: 'orgId',
+                {
+                  node: {
+                    _id: '2345',
+                    name: 'Ad 2',
+                    type: 'Type 1',
+                    organization: {
+                      _id: 'orgId',
+                    },
+                    mediaUrl: 'Link 2',
+                    endDate: '2024-09-31',
+                    startDate: '2023-04-01',
+                  },
+                  cursor: '1234',
                 },
-                mediaUrl: 'Link 2',
-                endDate: '2024-09-31',
-                startDate: '2023-04-01',
-              },
-            },
-            {
-              node: {
-                _id: '3456',
-                name: 'name3',
-                type: 'Type 2',
-                organization: {
-                  _id: 'orgId',
+                {
+                  node: {
+                    _id: '3456',
+                    name: 'name3',
+                    type: 'Type 2',
+                    organization: {
+                      _id: 'orgId',
+                    },
+                    mediaUrl: 'link3',
+                    startDate: '2023-01-30',
+                    endDate: '2023-12-31',
+                  },
+                  cursor: '1234',
                 },
-                mediaUrl: 'link3',
-                startDate: '2023-01-30',
-                endDate: '2023-12-31',
-              },
-            },
-            {
-              node: {
-                _id: '4567',
-                name: 'name4',
-                type: 'Type 2',
-                organization: {
-                  _id: 'orgId1',
+                {
+                  node: {
+                    _id: '4567',
+                    name: 'name4',
+                    type: 'Type 2',
+                    organization: {
+                      _id: 'orgId1',
+                    },
+                    mediaUrl: 'link4',
+                    startDate: '2023-01-30',
+                    endDate: '2023-12-01',
+                  },
+                  cursor: '1234',
                 },
-                mediaUrl: 'link4',
-                startDate: '2023-01-30',
-                endDate: '2023-12-01',
+              ],
+              pageInfo: {
+                startCursor: '6411e53835d7ba2344a78e21',
+                endCursor: '6411e54835d7ba2344a78e31',
+                hasNextPage: false,
+                hasPreviousPage: false,
               },
+              totalCount: 2,
             },
-          ],
-        },
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: DELETE_POST_MUTATION,
+      variables: { id: '6411e54835d7ba2344a78e29' },
+    },
+    result: {
+      data: {
+        removePost: { _id: '6411e54835d7ba2344a78e29' },
       },
     },
   },
@@ -334,10 +362,11 @@ describe('Testing Home Screen: User Portal', () => {
   test('Checking if refetch works after deleting this post', async () => {
     setItem('userId', '640d98d9eb6a743d75341067');
     renderHomeScreen();
-    await wait();
-
-    userEvent.click(screen.getAllByTestId('dropdown')[1]);
-    userEvent.click(screen.getByTestId('deletePost'));
+    expect(screen.queryAllByTestId('dropdown')).not.toBeNull();
+    const dropdowns = await screen.findAllByTestId('dropdown');
+    userEvent.click(dropdowns[1]);
+    const deleteButton = await screen.findByTestId('deletePost');
+    userEvent.click(deleteButton);
   });
 });
 
@@ -364,11 +393,7 @@ describe('HomeScreen with invalid orgId', () => {
         </MemoryRouter>
       </MockedProvider>,
     );
-
-    // Wait for the navigation to occur
-    await waitFor(() => {
-      const homeEl = screen.getByTestId('homeEl');
-      expect(homeEl).toBeInTheDocument();
-    });
+    const homeEl = await screen.findByTestId('homeEl');
+    expect(homeEl).toBeInTheDocument();
   });
 });

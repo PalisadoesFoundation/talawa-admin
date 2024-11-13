@@ -27,8 +27,6 @@ export const ORGANIZATION_POST_LIST = gql`
             _id
             title
             text
-            imageUrl
-            videoUrl
             creator {
               _id
               firstName
@@ -56,6 +54,68 @@ export const ORGANIZATION_POST_LIST = gql`
               }
             }
             pinned
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+        totalCount
+      }
+    }
+  }
+`;
+
+/**
+ * GraphQL query to retrieve the list of user tags belonging to an organization.
+ *
+ * @param id - ID of the organization.
+ * @param first - Number of tags to retrieve "after" (if provided) a certain tag.
+ * @param after - Id of the last tag on the current page.
+ * @param last - Number of tags to retrieve "before" (if provided) a certain tag.
+ * @param before - Id of the first tag on the current page.
+ * @returns The list of organizations based on the applied filters.
+ */
+
+export const ORGANIZATION_USER_TAGS_LIST = gql`
+  query Organizations(
+    $id: ID!
+    $after: String
+    $before: String
+    $first: PositiveInt
+    $last: PositiveInt
+    $where: UserTagWhereInput
+    $sortedBy: UserTagSortedByInput
+  ) {
+    organizations(id: $id) {
+      userTags(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        where: $where
+        sortedBy: $sortedBy
+      ) {
+        edges {
+          node {
+            _id
+            name
+            parentTag {
+              _id
+            }
+            usersAssignedTo(first: $first, last: $last) {
+              totalCount
+            }
+            childTags(first: $first, last: $last) {
+              totalCount
+            }
+            ancestorTags {
+              _id
+              name
+            }
           }
           cursor
         }

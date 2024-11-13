@@ -1,5 +1,5 @@
-import React from 'react';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import React, { act } from 'react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -11,7 +11,6 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import Settings from './Settings';
 import userEvent from '@testing-library/user-event';
 import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
-
 const MOCKS = [
   {
     request: {
@@ -19,6 +18,7 @@ const MOCKS = [
       variables: {
         firstName: 'Noble',
         lastName: 'Mittal',
+        createdAt: '2021-03-01',
         gender: 'MALE',
         phoneNumber: '+174567890',
         birthDate: '2024-03-01',
@@ -51,6 +51,7 @@ const Mocks1 = [
           email: 'johndoe@gmail.com',
           firstName: 'John',
           lastName: 'Doe',
+          createdAt: '2021-03-01T00:00:00.000Z',
           gender: 'MALE',
           maritalStatus: 'SINGLE',
           educationGrade: 'GRADUATE',
@@ -61,6 +62,7 @@ const Mocks1 = [
             countryCode: 'IN',
             line1: 'random',
           },
+          eventsAttended: [{ _id: 'event1' }, { _id: 'event2' }],
           phone: {
             mobile: '+174567890',
           },
@@ -83,10 +85,12 @@ const Mocks2 = [
           email: 'johndoe@gmail.com',
           firstName: '',
           lastName: '',
+          createdAt: '',
           gender: '',
           maritalStatus: '',
           educationGrade: '',
           employmentStatus: '',
+          eventsAttended: [],
           birthDate: '',
           address: {
             state: '',
@@ -114,7 +118,7 @@ const resizeWindow = (width: number): void => {
 };
 
 async function wait(ms = 100): Promise<void> {
-  await act(() => {
+  await act(async () => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
     });
@@ -122,32 +126,37 @@ async function wait(ms = 100): Promise<void> {
 }
 
 describe('Testing Settings Screen [User Portal]', () => {
-  Object.defineProperty(window, 'matchMedia', {
-    writable: true,
-    value: jest.fn().mockImplementation((query) => ({
-      matches: false,
-      media: query,
-      onchange: null,
-      addListener: jest.fn(), // Deprecated
-      removeListener: jest.fn(), // Deprecated
-      addEventListener: jest.fn(),
-      removeEventListener: jest.fn(),
-      dispatchEvent: jest.fn(),
-    })),
+  // Mock implementation of matchMedia
+  beforeAll(() => {
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: jest.fn().mockImplementation((query) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: jest.fn(), // Deprecated
+        removeListener: jest.fn(), // Deprecated
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        dispatchEvent: jest.fn(),
+      })),
+    });
   });
 
   test('Screen should be rendered properly', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Settings />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Settings />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
 
     await wait();
 
@@ -155,17 +164,19 @@ describe('Testing Settings Screen [User Portal]', () => {
   });
 
   test('input works properly', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Settings />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Settings />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
 
     await wait();
 
@@ -177,7 +188,7 @@ describe('Testing Settings Screen [User Portal]', () => {
     await wait();
     userEvent.type(screen.getByTestId('inputPhoneNumber'), '1234567890');
     await wait();
-    userEvent.selectOptions(screen.getByTestId('inputGrade'), 'Grade 1');
+    userEvent.selectOptions(screen.getByTestId('inputGrade'), 'Grade-1');
     await wait();
     userEvent.selectOptions(screen.getByTestId('inputEmpStatus'), 'Unemployed');
     await wait();
@@ -206,24 +217,27 @@ describe('Testing Settings Screen [User Portal]', () => {
     const files = [imageFile];
     userEvent.upload(fileInp, files);
     await wait();
-    expect(screen.getAllByAltText('profile picture')[0]).toBeInTheDocument();
+    expect(screen.getByTestId('profile-picture')).toBeInTheDocument();
   });
 
   test('resetChangesBtn works properly', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link1}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Settings />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link1}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Settings />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
 
     await wait();
-
+    userEvent.type(screen.getByTestId('inputAddress'), 'random');
+    await wait();
     userEvent.click(screen.getByTestId('resetChangesBtn'));
     await wait();
     expect(screen.getByTestId('inputFirstName')).toHaveValue('John');
@@ -240,20 +254,23 @@ describe('Testing Settings Screen [User Portal]', () => {
   });
 
   test('resetChangesBtn works properly when the details are empty', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link2}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Settings />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link2}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Settings />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
 
     await wait();
-
+    userEvent.type(screen.getByTestId('inputAddress'), 'random');
+    await wait();
     userEvent.click(screen.getByTestId('resetChangesBtn'));
     await wait();
     expect(screen.getByTestId('inputFirstName')).toHaveValue('');
@@ -270,30 +287,68 @@ describe('Testing Settings Screen [User Portal]', () => {
   });
 
   test('sidebar', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link2}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Settings />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link2}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Settings />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
 
     await wait();
 
     const closeMenubtn = screen.getByTestId('closeMenu');
     expect(closeMenubtn).toBeInTheDocument();
-    closeMenubtn.click();
+    act(() => closeMenubtn.click());
     const openMenuBtn = screen.getByTestId('openMenu');
     expect(openMenuBtn).toBeInTheDocument();
-    openMenuBtn.click();
+    act(() => openMenuBtn.click());
   });
 
   test('Testing sidebar when the screen size is less than or equal to 820px', async () => {
     resizeWindow(800);
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link2}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Settings />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+
+    await wait();
+
+    screen.debug();
+
+    const openMenuBtn = screen.queryByTestId('openMenu');
+    console.log('Open Menu Button:', openMenuBtn);
+    expect(openMenuBtn).toBeInTheDocument();
+
+    if (openMenuBtn) {
+      act(() => openMenuBtn.click());
+    }
+
+    const closeMenuBtn = screen.queryByTestId('closeMenu');
+    console.log('Close Menu Button:', closeMenuBtn);
+    expect(closeMenuBtn).toBeInTheDocument();
+
+    if (closeMenuBtn) {
+      act(() => closeMenuBtn.click());
+    }
+  });
+
+  test('renders events attended card correctly', async () => {
     render(
       <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
@@ -306,17 +361,37 @@ describe('Testing Settings Screen [User Portal]', () => {
       </MockedProvider>,
     );
     await wait();
-    expect(screen.getByText('My Organizations')).toBeInTheDocument();
-    expect(screen.getByText('Talawa User Portal')).toBeInTheDocument();
-
-    const settingsBtn = screen.getByTestId('settingsBtn');
-
-    settingsBtn.click();
+    // Check if the card title is rendered
+    expect(screen.getByText('Events Attended')).toBeInTheDocument();
+    await wait(1000);
+    // Check for empty state immediately
+    expect(screen.getByText('No Events Attended')).toBeInTheDocument();
   });
 
-  test('updateUserDetails Mutation is triggered on button click', async () => {
+  test('renders events attended card correctly with events', async () => {
+    const mockEventsAttended = [
+      { _id: '1', title: 'Event 1' },
+      { _id: '2', title: 'Event 2' },
+    ];
+
+    const MocksWithEvents = [
+      {
+        ...Mocks1[0],
+        result: {
+          data: {
+            checkAuth: {
+              ...Mocks1[0].result.data.checkAuth,
+              eventsAttended: mockEventsAttended,
+            },
+          },
+        },
+      },
+    ];
+
+    const linkWithEvents = new StaticMockLink(MocksWithEvents, true);
+
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={false} link={linkWithEvents}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -327,41 +402,15 @@ describe('Testing Settings Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await wait(1000);
 
-    userEvent.type(screen.getByTestId('inputFirstName'), 'Noble');
-    await wait();
+    expect(screen.getByText('Events Attended')).toBeInTheDocument();
+    const eventsCards = screen.getAllByTestId('usereventsCard');
+    expect(eventsCards.length).toBe(2);
 
-    userEvent.type(screen.getByTestId('inputLastName'), 'Mittal');
-    await wait();
-
-    userEvent.selectOptions(screen.getByTestId('inputGender'), 'OTHER');
-    await wait();
-
-    userEvent.type(screen.getByTestId('inputPhoneNumber'), '+174567890');
-    await wait();
-
-    fireEvent.change(screen.getByLabelText('Birth Date'), {
-      target: { value: '2024-03-01' },
+    eventsCards.forEach((card) => {
+      expect(card).toBeInTheDocument();
+      expect(card.children.length).toBe(1);
     });
-    await wait();
-
-    userEvent.selectOptions(screen.getByTestId('inputGrade'), 'Graduate');
-    await wait();
-
-    userEvent.selectOptions(screen.getByTestId('inputEmpStatus'), 'Unemployed');
-    await wait();
-
-    userEvent.selectOptions(screen.getByTestId('inputMaritalStatus'), 'Single');
-    await wait();
-
-    userEvent.type(screen.getByTestId('inputAddress'), 'random');
-    await wait();
-
-    userEvent.type(screen.getByTestId('inputState'), 'random');
-    await wait();
-
-    userEvent.click(screen.getByTestId('updateUserBtn'));
-    await wait();
   });
 });

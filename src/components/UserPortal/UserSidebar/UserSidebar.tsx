@@ -2,9 +2,10 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
-import { ReactComponent as OrganizationsIcon } from 'assets/svgs/organizations.svg';
-import { ReactComponent as SettingsIcon } from 'assets/svgs/settings.svg';
-import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
+import OrganizationsIcon from 'assets/svgs/organizations.svg?react';
+import SettingsIcon from 'assets/svgs/settings.svg?react';
+import ChatIcon from 'assets/svgs/chat.svg?react';
+import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import styles from './UserSidebar.module.css';
 
 export interface InterfaceUserSidebarProps {
@@ -12,12 +13,31 @@ export interface InterfaceUserSidebarProps {
   setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
+/**
+ * Sidebar component for user navigation, including links to organizations and settings.
+ *
+ * Provides:
+ * - A logo and title for the sidebar.
+ * - Navigation buttons for "My Organizations" and "Settings".
+ * - Dynamic styling based on the active route.
+ *
+ * @param hideDrawer - Boolean indicating if the sidebar should be hidden or shown.
+ * @param setHideDrawer - Function to update the `hideDrawer` state.
+ *
+ * @returns JSX.Element - The rendered sidebar component.
+ */
 const userSidebar = ({
   hideDrawer,
   setHideDrawer,
 }: InterfaceUserSidebarProps): JSX.Element => {
+  // Translation hook for internationalization
   const { t } = useTranslation('translation', { keyPrefix: 'userSidebarOrg' });
+  const { t: tCommon } = useTranslation('common');
 
+  /**
+   * Handles click events on navigation links.
+   * Closes the sidebar if the viewport width is 820px or less.
+   */
   const handleLinkClick = (): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer(true);
@@ -36,10 +56,14 @@ const userSidebar = ({
         }`}
         data-testid="leftDrawerContainer"
       >
+        {/* Logo and title */}
         <TalawaLogo className={styles.talawaLogo} />
         <p className={styles.talawaText}>{t('talawaUserPortal')}</p>
-        <h5 className={`${styles.titleHeader} text-secondary`}>{t('menu')}</h5>
+        <h5 className={`${styles.titleHeader} text-secondary`}>
+          {tCommon('menu')}
+        </h5>
         <div className={styles.optionList}>
+          {/* Link to "My Organizations" page */}
           <NavLink to={'/user/organizations'} onClick={handleLinkClick}>
             {({ isActive }) => (
               <Button
@@ -62,6 +86,7 @@ const userSidebar = ({
               </Button>
             )}
           </NavLink>
+          {/* Link to "Settings" page */}
           <NavLink to={'/user/settings'} onClick={handleLinkClick}>
             {({ isActive }) => (
               <Button
@@ -80,7 +105,29 @@ const userSidebar = ({
                     }`}
                   />
                 </div>
-                {t('settings')}
+                {tCommon('settings')}
+              </Button>
+            )}
+          </NavLink>
+          <NavLink to={'/user/chat'} onClick={handleLinkClick}>
+            {({ isActive }) => (
+              <Button
+                variant={isActive === true ? 'success' : ''}
+                className={`${
+                  isActive === true ? 'text-white' : 'text-secondary'
+                }`}
+                data-testid="chatBtn"
+              >
+                <div className={styles.iconWrapper}>
+                  <ChatIcon
+                    stroke={`${
+                      isActive === true
+                        ? 'var(--bs-white)'
+                        : 'var(--bs-secondary)'
+                    }`}
+                  />
+                </div>
+                {t('chat')}
               </Button>
             )}
           </NavLink>

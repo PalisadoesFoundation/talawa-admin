@@ -15,12 +15,21 @@ import { DELETE_VENUE_MUTATION } from 'GraphQl/Mutations/VenueMutations';
 import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 import VenueCard from 'components/Venues/VenueCard';
 
+/**
+ * Component to manage and display the list of organization venues.
+ * Handles searching, sorting, and CRUD operations for venues.
+ */
 function organizationVenues(): JSX.Element {
+  // Translation hooks for i18n support
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationVenues',
   });
+  const { t: tCommon } = useTranslation('common');
 
+  // Setting the document title using the translation hook
   document.title = t('title');
+
+  // State hooks for managing component state
   const [venueModal, setVenueModal] = useState<boolean>(false);
   const [venueModalMode, setVenueModalMode] = useState<'edit' | 'create'>(
     'create',
@@ -32,11 +41,13 @@ function organizationVenues(): JSX.Element {
     useState<InterfaceQueryVenueListItem | null>(null);
   const [venues, setVenues] = useState<InterfaceQueryVenueListItem[]>([]);
 
+  // Getting the organization ID from the URL parameters
   const { orgId } = useParams();
   if (!orgId) {
     return <Navigate to="/orglist" />;
   }
 
+  // GraphQL query for fetching venue data
   const {
     data: venueData,
     loading: venueLoading,
@@ -53,8 +64,13 @@ function organizationVenues(): JSX.Element {
     },
   });
 
+  // GraphQL mutation for deleting a venue
   const [deleteVenue] = useMutation(DELETE_VENUE_MUTATION);
 
+  /**
+   * Handles the deletion of a venue by ID.
+   * @param venueId - The ID of the venue to delete.
+   */
   const handleDelete = async (venueId: string): Promise<void> => {
     try {
       await deleteVenue({
@@ -67,36 +83,57 @@ function organizationVenues(): JSX.Element {
     }
   };
 
+  /**
+   * Updates the search term state when the user types in the search input.
+   * @param event - The input change event.
+   */
   const handleSearchChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ): void => {
     setSearchTerm(event.target.value);
   };
 
+  /**
+   * Updates the sort order state when the user selects a sort option.
+   * @param order - The order to sort venues by (highest or lowest capacity).
+   */
   const handleSortChange = (order: 'highest' | 'lowest'): void => {
     setSortOrder(order);
   };
 
+  /**
+   * Toggles the visibility of the venue modal.
+   */
   const toggleVenueModal = (): void => {
     setVenueModal(!venueModal);
   };
 
+  /**
+   * Shows the edit venue modal with the selected venue data.
+   * @param venueItem - The venue data to edit.
+   */
   const showEditVenueModal = (venueItem: InterfaceQueryVenueListItem): void => {
     setVenueModalMode('edit');
     setEditVenueData(venueItem);
     toggleVenueModal();
   };
 
+  /**
+   * Shows the create venue modal.
+   */
   const showCreateVenueModal = (): void => {
     setVenueModalMode('create');
     setEditVenueData(null);
     toggleVenueModal();
   };
+
+  // Error handling for venue data fetch
   /* istanbul ignore next */
   if (venueError) {
     errorHandler(t, venueError);
   }
 
+  // Updating venues state when venue data changes
   useEffect(() => {
     if (venueData && venueData.getVenueByOrgId) {
       setVenues(venueData.getVenueByOrgId);
@@ -111,7 +148,7 @@ function organizationVenues(): JSX.Element {
             type="name"
             id="searchByName"
             className="bg-white"
-            placeholder={t('searchBy') + ' ' + t(searchBy)}
+            placeholder={t('searchBy') + ' ' + tCommon(searchBy)}
             data-testid="searchBy"
             autoComplete="off"
             required
@@ -150,7 +187,7 @@ function organizationVenues(): JSX.Element {
                   }}
                   data-testid="name"
                 >
-                  {t('name')}
+                  {tCommon('name')}
                 </Dropdown.Item>
                 <Dropdown.Item
                   id="searchDesc"
@@ -160,7 +197,7 @@ function organizationVenues(): JSX.Element {
                   }}
                   data-testid="desc"
                 >
-                  {t('desc')}
+                  {tCommon('description')}
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>

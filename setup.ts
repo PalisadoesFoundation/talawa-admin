@@ -74,18 +74,26 @@ export async function main(): Promise<void> {
       const url = new URL(endpoint);
       isConnected = await checkConnection(url.origin);
     }
+    const envPath = '.env';
+    const currentEnvContent = fs.readFileSync(envPath, 'utf8');
+    const talawaApiUrl = dotenv.parse(currentEnvContent).REACT_APP_TALAWA_URL;
 
-    const talawaApiUrl = dotenv.parse(
-      fs.readFileSync('.env'),
-    ).REACT_APP_TALAWA_URL;
+    const updatedEnvContent = currentEnvContent.replace(
+      `REACT_APP_TALAWA_URL=${talawaApiUrl}`,
+      `REACT_APP_TALAWA_URL=${endpoint}`,
+    );
 
-    fs.readFile('.env', 'utf8', (err, data) => {
-      const result = data.replace(
-        `REACT_APP_TALAWA_URL=${talawaApiUrl}`,
-        `REACT_APP_TALAWA_URL=${endpoint}`,
-      );
-      fs.writeFileSync('.env', result, 'utf8');
-    });
+    fs.writeFileSync(envPath, updatedEnvContent, 'utf8');
+    const websocketUrl = endpoint.replace(/^http(s)?:\/\//, 'ws$1://');
+    const currentWebSocketUrl =
+      dotenv.parse(updatedEnvContent).REACT_APP_BACKEND_WEBSOCKET_URL;
+
+    const finalEnvContent = updatedEnvContent.replace(
+      `REACT_APP_BACKEND_WEBSOCKET_URL=${currentWebSocketUrl}`,
+      `REACT_APP_BACKEND_WEBSOCKET_URL=${websocketUrl}`,
+    );
+
+    fs.writeFileSync(envPath, finalEnvContent, 'utf8');
   }
 
   const { shouldUseRecaptcha } = await inquirer.prompt({

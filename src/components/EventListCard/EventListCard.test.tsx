@@ -1,18 +1,12 @@
-import React from 'react';
+import React, { act } from 'react';
 import type { RenderResult } from '@testing-library/react';
-import {
-  act,
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-} from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import type { InterfaceEventListCardProps } from './EventListCard';
 import EventListCard from './EventListCard';
-import i18nForTest from 'utils/i18nForTest';
+import i18n from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -44,29 +38,35 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-const translations = JSON.parse(
-  JSON.stringify(
-    i18nForTest.getDataByLanguage('en')?.translation.eventListCard,
+const translations = {
+  ...JSON.parse(
+    JSON.stringify(
+      i18n.getDataByLanguage('en')?.translation.eventListCard ?? {},
+    ),
   ),
-);
+  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
+  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
+};
 
 const renderEventListCard = (
   props: InterfaceEventListCardProps,
 ): RenderResult => {
+  const { key, ...restProps } = props; // Destructure the key and separate other props
+
   return render(
     <MockedProvider addTypename={false} link={link}>
       <MemoryRouter initialEntries={['/orgevents/orgId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <I18nextProvider i18n={i18nForTest}>
+            <I18nextProvider i18n={i18n}>
               <Routes>
                 <Route
                   path="/orgevents/:orgId"
-                  element={<EventListCard {...props} />}
+                  element={<EventListCard key={key} {...restProps} />}
                 />
                 <Route
                   path="/event/:orgId/"
-                  element={<EventListCard {...props} />}
+                  element={<EventListCard key={key} {...restProps} />}
                 />
                 <Route
                   path="/event/:orgId/:eventId"
@@ -132,7 +132,7 @@ describe('Testing Event List Card', () => {
   test('Should navigate to "/" if orgId is not defined', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
-        <I18nextProvider i18n={i18nForTest}>
+        <I18nextProvider i18n={i18n}>
           <BrowserRouter>
             <EventListCard
               key="123"
@@ -362,7 +362,7 @@ describe('Testing Event List Card', () => {
     userEvent.click(screen.getByTestId('updateEventBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.eventUpdated);
+      expect(toast.success).toHaveBeenCalledWith(translations.eventUpdated);
     });
 
     await waitFor(() => {
@@ -415,7 +415,7 @@ describe('Testing Event List Card', () => {
     userEvent.click(screen.getByTestId('updateEventBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.eventUpdated);
+      expect(toast.success).toHaveBeenCalledWith(translations.eventUpdated);
     });
 
     await waitFor(() => {
@@ -459,7 +459,7 @@ describe('Testing Event List Card', () => {
     userEvent.click(screen.getByTestId('updateEventBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.eventUpdated);
+      expect(toast.success).toHaveBeenCalledWith(translations.eventUpdated);
     });
 
     await waitFor(() => {
@@ -696,7 +696,7 @@ describe('Testing Event List Card', () => {
     });
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.eventUpdated);
+      expect(toast.success).toHaveBeenCalledWith(translations.eventUpdated);
     });
 
     await waitFor(() => {
@@ -762,7 +762,7 @@ describe('Testing Event List Card', () => {
     userEvent.click(screen.getByTestId('updateEventBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.eventUpdated);
+      expect(toast.success).toHaveBeenCalledWith(translations.eventUpdated);
     });
 
     await waitFor(() => {
@@ -823,7 +823,7 @@ describe('Testing Event List Card', () => {
     userEvent.click(screen.getByTestId('deleteEventBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.eventDeleted);
+      expect(toast.success).toHaveBeenCalledWith(translations.eventDeleted);
     });
 
     await waitFor(() => {
@@ -863,7 +863,7 @@ describe('Testing Event List Card', () => {
     userEvent.click(screen.getByTestId('deleteEventBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.eventDeleted);
+      expect(toast.success).toHaveBeenCalledWith(translations.eventDeleted);
     });
 
     await waitFor(() => {
@@ -874,20 +874,22 @@ describe('Testing Event List Card', () => {
   });
 
   test('should show an error toast when the delete event mutation fails', async () => {
+    // Destructure key from props[1] and pass it separately to avoid spreading it
+    const { key, ...otherProps } = props[1];
     render(
       <MockedProvider addTypename={false} link={link2}>
         <MemoryRouter initialEntries={['/orgevents/orgId']}>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <I18nextProvider i18n={i18nForTest}>
+              <I18nextProvider i18n={i18n}>
                 <Routes>
                   <Route
                     path="/orgevents/:orgId"
-                    element={<EventListCard {...props[1]} />}
+                    element={<EventListCard key={key} {...otherProps} />}
                   />
                   <Route
                     path="/event/:orgId/"
-                    element={<EventListCard {...props[1]} />}
+                    element={<EventListCard key={key} {...otherProps} />}
                   />
                 </Routes>
               </I18nextProvider>
@@ -919,7 +921,7 @@ describe('Testing Event List Card', () => {
     userEvent.click(screen.getByTestId('registerEventBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(
+      expect(toast.success).toHaveBeenCalledWith(
         `Successfully registered for ${props[2].eventName}`,
       );
     });

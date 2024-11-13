@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { act } from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 
 import CollapsibleDropdown from './CollapsibleDropdown';
 import type { InterfaceCollapsibleDropdown } from './CollapsibleDropdown';
+import { store } from 'state/store';
+import { Provider } from 'react-redux';
+import { I18nextProvider } from 'react-i18next';
+import i18nForTest from 'utils/i18nForTest';
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -41,7 +45,11 @@ describe('Testing CollapsibleDropdown component', () => {
   test('Component should be rendered properly', () => {
     render(
       <BrowserRouter>
-        <CollapsibleDropdown {...props} />
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <CollapsibleDropdown {...props} />
+          </I18nextProvider>
+        </Provider>
       </BrowserRouter>,
     );
     expect(screen.getByText('DropDown Category')).toBeInTheDocument();
@@ -52,7 +60,11 @@ describe('Testing CollapsibleDropdown component', () => {
   test('Dropdown should be rendered and functioning correctly', () => {
     render(
       <BrowserRouter>
-        <CollapsibleDropdown {...props} />
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <CollapsibleDropdown {...props} />
+          </I18nextProvider>
+        </Provider>
       </BrowserRouter>,
     );
     const parentDropdownBtn = screen.getByTestId('collapsible-dropdown');
@@ -60,7 +72,9 @@ describe('Testing CollapsibleDropdown component', () => {
     const nonActiveDropdownBtn = screen.getByText('SubCategory 2');
 
     // Check if dropdown is rendered with correct classes
-    activeDropdownBtn.click();
+    act(() => {
+      fireEvent.click(activeDropdownBtn);
+    });
     expect(parentDropdownBtn).toBeInTheDocument();
     expect(parentDropdownBtn).toHaveClass('text-white');
     expect(parentDropdownBtn).toHaveClass('btn-success');
@@ -76,15 +90,21 @@ describe('Testing CollapsibleDropdown component', () => {
     expect(nonActiveDropdownBtn).toHaveClass('btn-light');
 
     // Check if dropdown is collapsed after clicking on it
-    fireEvent.click(parentDropdownBtn);
+    act(() => {
+      fireEvent.click(parentDropdownBtn);
+    });
     expect(props.setShowDropdown).toHaveBeenCalledWith(false);
 
     // Check if dropdown is expanded after clicking on it again
-    fireEvent.click(parentDropdownBtn);
+    act(() => {
+      fireEvent.click(parentDropdownBtn);
+    });
     expect(props.setShowDropdown).toHaveBeenCalledWith(true);
 
-    // Click on non active dropdown button and check if it navigates to the correct url
-    nonActiveDropdownBtn.click();
+    // Click on non-active dropdown button and check if it navigates to the correct URL
+    act(() => {
+      fireEvent.click(nonActiveDropdownBtn);
+    });
     expect(window.location.pathname).toBe('/sub-category-2');
   });
 });

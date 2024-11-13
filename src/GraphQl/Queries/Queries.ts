@@ -8,6 +8,7 @@ export const CHECK_AUTH = gql`
       _id
       firstName
       lastName
+      createdAt
       image
       email
       birthDate
@@ -22,6 +23,9 @@ export const CHECK_AUTH = gql`
         line1
         state
         countryCode
+      }
+      eventsAttended {
+        _id
       }
     }
   }
@@ -108,6 +112,7 @@ export const USER_LIST = gql`
     $lastName_contains: String
     $skip: Int
     $first: Int
+    $order: UserOrderByInput
   ) {
     users(
       where: {
@@ -116,6 +121,7 @@ export const USER_LIST = gql`
       }
       skip: $skip
       first: $first
+      orderBy: $order
     ) {
       user {
         _id
@@ -271,6 +277,10 @@ export const EVENT_DETAILS = gql`
       endTime
       allDay
       location
+      recurring
+      baseRecurringEvent {
+        _id
+      }
       organization {
         _id
         members {
@@ -286,6 +296,20 @@ export const EVENT_DETAILS = gql`
   }
 `;
 
+export const RECURRING_EVENTS = gql`
+  query RecurringEvents($baseRecurringEventId: ID!) {
+    getRecurringEvents(baseRecurringEventId: $baseRecurringEventId) {
+      _id
+      startDate
+      title
+      attendees {
+        _id
+        gender
+      }
+    }
+  }
+`;
+
 export const EVENT_ATTENDEES = gql`
   query Event($id: ID!) {
     event(id: $id) {
@@ -293,6 +317,12 @@ export const EVENT_ATTENDEES = gql`
         _id
         firstName
         lastName
+        createdAt
+        gender
+        birthDate
+        eventsAttended {
+          _id
+        }
       }
     }
   }
@@ -440,7 +470,6 @@ export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
     $orgId: ID!
     $firstName_contains: String
     $lastName_contains: String
-    $event_title_contains: String
     $first: Int
     $skip: Int
   ) {
@@ -451,7 +480,6 @@ export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
       where: {
         firstName_contains: $firstName_contains
         lastName_contains: $lastName_contains
-        event_title_contains: $event_title_contains
       }
     ) {
       edges {
@@ -482,10 +510,19 @@ export const USER_ORGANIZATION_LIST = gql`
 
 // To take the details of a user
 export const USER_DETAILS = gql`
-  query User($id: ID!) {
+  query User(
+    $id: ID!
+    $after: String
+    $before: String
+    $first: PositiveInt
+    $last: PositiveInt
+  ) {
     user(id: $id) {
       user {
         _id
+        eventsAttended {
+          _id
+        }
         joinedOrganizations {
           _id
         }
@@ -507,6 +544,29 @@ export const USER_DETAILS = gql`
           countryCode
           city
           state
+        }
+        tagsAssignedWith(
+          after: $after
+          before: $before
+          first: $first
+          last: $last
+        ) {
+          edges {
+            node {
+              _id
+              name
+              parentTag {
+                _id
+              }
+            }
+          }
+          pageInfo {
+            startCursor
+            endCursor
+            hasNextPage
+            hasPreviousPage
+          }
+          totalCount
         }
         registeredEvents {
           _id
@@ -586,6 +646,17 @@ export const ORGANIZATION_EVENT_CONNECTION_LIST = gql`
       endTime
       allDay
       recurring
+      attendees {
+        _id
+        createdAt
+        firstName
+        lastName
+        gender
+        eventsAttended {
+          _id
+          endDate
+        }
+      }
       recurrenceRule {
         recurrenceStartDate
         recurrenceEndDate
@@ -766,12 +837,20 @@ export const GET_COMMUNITY_DATA = gql`
         facebook
         gitHub
         instagram
-        twitter
+        X
         linkedIn
         youTube
         reddit
         slack
       }
+    }
+  }
+`;
+
+export const GET_COMMUNITY_SESSION_TIMEOUT_DATA = gql`
+  query getCommunityData {
+    getCommunityData {
+      timeout
     }
   }
 `;
@@ -782,10 +861,15 @@ export { ACTION_ITEM_CATEGORY_LIST } from './ActionItemCategoryQueries';
 // get the list of Action Items
 export { ACTION_ITEM_LIST } from './ActionItemQueries';
 
+export {
+  AgendaItemByEvent,
+  AgendaItemByOrganization,
+} from './AgendaItemQueries';
+
+export { AGENDA_ITEM_CATEGORY_LIST } from './AgendaCategoryQueries';
 // to take the list of the blocked users
 export {
   ADVERTISEMENTS_GET,
-  DIRECT_CHATS_LIST,
   IS_SAMPLE_ORGANIZATION_QUERY,
   ORGANIZATION_CUSTOM_FIELDS,
   ORGANIZATION_EVENTS_CONNECTION,

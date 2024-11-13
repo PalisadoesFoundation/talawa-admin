@@ -11,12 +11,22 @@ interface InterfaceUserPasswordUpdateProps {
   id: string;
 }
 
+/**
+ * UserUpdate component allows users to update their passwords.
+ * It handles form submission and communicates with the backend to update the user's password.
+ *
+ * @param props - The properties for the UserUpdate component.
+ * @param id - The ID of the user whose password is being updated.
+ *
+ * @returns The JSX element for updating user password.
+ */
 const UserUpdate: React.FC<
   InterfaceUserPasswordUpdateProps
 > = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userPasswordUpdate',
   });
+  const { t: tCommon } = useTranslation('common');
   const [formState, setFormState] = React.useState({
     previousPassword: '',
     newPassword: '',
@@ -25,18 +35,22 @@ const UserUpdate: React.FC<
 
   const [login] = useMutation(UPDATE_USER_PASSWORD_MUTATION);
 
+  /**
+   * Handles the password update process.
+   * It validates the form inputs and performs the mutation to update the password.
+   */
   const loginLink = async (): Promise<string | void> => {
     if (
       !formState.previousPassword ||
       !formState.newPassword ||
       !formState.confirmNewPassword
     ) {
-      toast.error('The password field cannot be empty.');
+      toast.error(t('passCantBeEmpty') as string);
       return;
     }
 
     if (formState.newPassword !== formState.confirmNewPassword) {
-      toast.error('New and Confirm password do not match.');
+      toast.error(t('passNoMatch') as string);
       return;
     }
 
@@ -50,17 +64,25 @@ const UserUpdate: React.FC<
       });
       /* istanbul ignore next */
       if (data) {
-        toast.success('Successful updated');
+        toast.success(
+          tCommon('updatedSuccessfully', { item: 'Password' }) as string,
+        );
         setTimeout(() => {
           window.location.reload();
         }, 2000);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       /* istanbul ignore next */
-      toast.error(error.toString());
+      if (error instanceof Error) {
+        toast.error(error.toString());
+      }
     }
   };
 
+  /**
+   * Handles canceling the update process.
+   * It reloads the page to reset any changes.
+   */
   /* istanbul ignore next */
   const cancelUpdate = (): void => {
     window.location.reload();
@@ -135,7 +157,7 @@ const UserUpdate: React.FC<
               value="savechanges"
               onClick={loginLink}
             >
-              {t('saveChanges')}
+              {tCommon('saveChanges')}
             </Button>
             <Button
               type="button"
@@ -143,7 +165,7 @@ const UserUpdate: React.FC<
               value="cancelchanges"
               onClick={cancelUpdate}
             >
-              {t('cancel')}
+              {tCommon('cancel')}
             </Button>
           </div>
         </form>

@@ -40,10 +40,24 @@ export enum ViewType {
   YEAR = 'Year View',
 }
 
+/**
+ * Organization Events Page Component to display the events of an organization
+ * and create new events for the organization by the admin or superadmin user.
+ * The component uses the EventCalendar component to display the events and EventHeader component
+ *  to display the view type and create event button.
+ *  The component uses the RecurrenceOptions component to display the recurrence options for the event.
+ *  The component uses the CREATE_EVENT_MUTATION mutation to create a new event for the organization.
+ *  The component uses the ORGANIZATION_EVENT_CONNECTION_LIST and ORGANIZATIONS_LIST queries to fetch the events
+ *  and organization details.
+ *  The component uses the useLocalStorage hook to get the user details from the local storage.
+ *
+ * @returns  JSX.Element to display the Organization Events Page
+ */
 function organizationEvents(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationEvents',
   });
+  const { t: tCommon } = useTranslation('common');
 
   const { getItem } = useLocalStorage();
 
@@ -156,8 +170,8 @@ function organizationEvents(): JSX.Element {
             endDate: dayjs(endDate).format('YYYY-MM-DD'),
             allDay: alldaychecked,
             location: formState.location,
-            startTime: !alldaychecked ? formState.startTime + 'Z' : undefined,
-            endTime: !alldaychecked ? formState.endTime + 'Z' : undefined,
+            startTime: !alldaychecked ? formState.startTime : undefined,
+            endTime: !alldaychecked ? formState.endTime : undefined,
             recurrenceStartDate: recurringchecked
               ? dayjs(recurrenceStartDate).format('YYYY-MM-DD')
               : undefined,
@@ -182,7 +196,7 @@ function organizationEvents(): JSX.Element {
         });
 
         if (createEventData) {
-          toast.success(t('eventCreated'));
+          toast.success(t('eventCreated') as string);
           refetchEvents();
           hideCreateEventModal();
           setFormState({
@@ -293,7 +307,7 @@ function organizationEvents(): JSX.Element {
                 });
               }}
             />
-            <label htmlFor="eventdescrip">{t('description')}</label>
+            <label htmlFor="eventdescrip">{tCommon('description')}</label>
             <Form.Control
               type="eventdescrip"
               id="eventdescrip"
@@ -308,11 +322,11 @@ function organizationEvents(): JSX.Element {
                 });
               }}
             />
-            <label htmlFor="eventLocation">{t('location')}</label>
+            <label htmlFor="eventLocation">{tCommon('enterLocation')}</label>
             <Form.Control
               type="text"
               id="eventLocation"
-              placeholder={t('eventLocation')}
+              placeholder={tCommon('enterLocation')}
               autoComplete="off"
               required
               value={formState.location}
@@ -326,7 +340,7 @@ function organizationEvents(): JSX.Element {
             <div className={styles.datediv}>
               <div>
                 <DatePicker
-                  label={t('startDate')}
+                  label={tCommon('startDate')}
                   className={styles.datebox}
                   value={dayjs(startDate)}
                   onChange={(date: Dayjs | null): void => {
@@ -349,7 +363,7 @@ function organizationEvents(): JSX.Element {
               </div>
               <div>
                 <DatePicker
-                  label={t('endDate')}
+                  label={tCommon('endDate')}
                   className={styles.datebox}
                   value={dayjs(endDate)}
                   onChange={(date: Dayjs | null): void => {
@@ -365,7 +379,7 @@ function organizationEvents(): JSX.Element {
               <div className={styles.datediv}>
                 <div className="mr-3">
                   <TimePicker
-                    label={t('startTime')}
+                    label={tCommon('startTime')}
                     className={styles.datebox}
                     timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
                     value={timeToDayJs(formState.startTime)}
@@ -390,7 +404,7 @@ function organizationEvents(): JSX.Element {
                 </div>
                 <div>
                   <TimePicker
-                    label={t('endTime')}
+                    label={tCommon('endTime')}
                     className={styles.datebox}
                     timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
                     /*istanbul ignore next*/
@@ -470,6 +484,7 @@ function organizationEvents(): JSX.Element {
                 setRecurrenceRuleState={setRecurrenceRuleState}
                 popover={popover}
                 t={t}
+                tCommon={tCommon}
               />
             )}
 

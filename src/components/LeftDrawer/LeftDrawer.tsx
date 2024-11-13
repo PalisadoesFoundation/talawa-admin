@@ -2,27 +2,38 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
-import { ReactComponent as OrganizationsIcon } from 'assets/svgs/organizations.svg';
-import { ReactComponent as RolesIcon } from 'assets/svgs/roles.svg';
-import { ReactComponent as SettingsIcon } from 'assets/svgs/settings.svg';
-import { ReactComponent as TalawaLogo } from 'assets/svgs/talawa.svg';
+import OrganizationsIcon from 'assets/svgs/organizations.svg?react';
+import RolesIcon from 'assets/svgs/roles.svg?react';
+import SettingsIcon from 'assets/svgs/settings.svg?react';
+import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import styles from './LeftDrawer.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 
 export interface InterfaceLeftDrawerProps {
-  hideDrawer: boolean | null;
-  setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
+  hideDrawer: boolean | null; // Controls the visibility of the drawer
+  setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>; // Function to set the visibility state
 }
 
+/**
+ * LeftDrawer component for displaying navigation options.
+ *
+ * @param hideDrawer - Determines if the drawer should be hidden or shown.
+ * @param setHideDrawer - Function to update the visibility state of the drawer.
+ * @returns JSX element for the left navigation drawer.
+ */
 const leftDrawer = ({
   hideDrawer,
   setHideDrawer,
 }: InterfaceLeftDrawerProps): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'leftDrawer' });
+  const { t: tCommon } = useTranslation('common');
 
   const { getItem } = useLocalStorage();
   const superAdmin = getItem('SuperAdmin');
 
+  /**
+   * Handles link click to hide the drawer on smaller screens.
+   */
   const handleLinkClick = (): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer(true);
@@ -42,8 +53,10 @@ const leftDrawer = ({
         data-testid="leftDrawerContainer"
       >
         <TalawaLogo className={styles.talawaLogo} />
-        <p className={styles.talawaText}>{t('talawaAdminPortal')}</p>
-        <h5 className={`${styles.titleHeader} text-secondary`}>{t('menu')}</h5>
+        <p className={styles.talawaText}>{tCommon('talawaAdminPortal')}</p>
+        <h5 className={`${styles.titleHeader} text-secondary`}>
+          {tCommon('menu')}
+        </h5>
         <div className={styles.optionList}>
           <NavLink to={'/orglist'} onClick={handleLinkClick}>
             {({ isActive }) => (
@@ -87,7 +100,7 @@ const leftDrawer = ({
                         }`}
                       />
                     </div>
-                    {t('users')}
+                    {tCommon('users')}
                   </Button>
                 )}
               </NavLink>

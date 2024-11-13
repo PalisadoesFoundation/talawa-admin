@@ -13,40 +13,73 @@ import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
+import type {
+  InterfaceQueryOrganizationEventListItem,
+  InterfaceMemberInfo,
+} from 'utils/interfaces';
 
+/**
+ * OrganizationSidebar displays the sidebar for an organization, showing a list of members and events.
+ *
+ * This component fetches and displays:
+ * - The top 3 members of the organization with their images and names.
+ * - The top 3 upcoming events for the organization with their titles, start, and end dates.
+ *
+ * It includes:
+ * - A link to view all members.
+ * - A link to view all events.
+ *
+ * The sidebar handles loading states and displays appropriate messages while data is being fetched.
+ *
+ * @returns JSX.Element representing the organization sidebar.
+ */
 export default function organizationSidebar(): JSX.Element {
+  // Translation functions for different namespaces
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationSidebar',
   });
+  const { t: tCommon } = useTranslation('common');
 
+  // Extract the organization ID from the URL parameters
   const { orgId: organizationId } = useParams();
-  const [members, setMembers]: any = React.useState([]);
-  const [events, setEvents]: any = React.useState([]);
-  const eventsLink = `/user/events/id=${organizationId}`;
-  const peopleLink = `/user/people/id=${organizationId}`;
+  const [members, setMembers] = React.useState<
+    InterfaceMemberInfo[] | undefined
+  >(undefined);
+  const [events, setEvents] = React.useState<
+    InterfaceQueryOrganizationEventListItem[] | undefined
+  >(undefined);
+  const eventsLink = `/user/events/${organizationId}`;
+  const peopleLink = `/user/people/${organizationId}`;
 
+  // Query to fetch members of the organization
   const { data: memberData, loading: memberLoading } = useQuery(
     ORGANIZATIONS_MEMBER_CONNECTION_LIST,
     {
       variables: {
         orgId: organizationId,
-        first: 3,
-        skip: 0,
+        first: 3, // Fetch top 3 members
+        skip: 0, // No offset
       },
     },
   );
 
+  // Query to fetch events of the organization
   const { data: eventsData, loading: eventsLoading } = useQuery(
     ORGANIZATION_EVENT_CONNECTION_LIST,
     {
       variables: {
         organization_id: organizationId,
-        first: 3,
-        skip: 0,
+        first: 3, // Fetch top 3 upcoming events
+        skip: 0, // No offset
       },
     },
   );
 
+  /**
+   * Effect hook to update members state when memberData is fetched.
+   *
+   * Sets the members state with the data from the query.
+   */
   /* istanbul ignore next */
   useEffect(() => {
     if (memberData) {
@@ -54,6 +87,11 @@ export default function organizationSidebar(): JSX.Element {
     }
   }, [memberData]);
 
+  /**
+   * Effect hook to update events state when eventsData is fetched.
+   *
+   * Sets the events state with the data from the query.
+   */
   /* istanbul ignore next */
   useEffect(() => {
     if (eventsData) {
@@ -63,8 +101,9 @@ export default function organizationSidebar(): JSX.Element {
 
   return (
     <div className={`${styles.mainContainer}`}>
+      {/* Members section */}
       <div className={styles.heading}>
-        <b>{t('members')}</b>
+        <b>{tCommon('members')}</b>
       </div>
       {memberLoading ? (
         <div className={`d-flex flex-row justify-content-center`}>
@@ -72,12 +111,12 @@ export default function organizationSidebar(): JSX.Element {
         </div>
       ) : (
         <ListGroup variant="flush">
-          {members.length ? (
-            members.map((member: any, index: React.Key | null | undefined) => {
+          {members && members.length ? (
+            members.map((member: InterfaceMemberInfo) => {
               const memberName = `${member.firstName} ${member.lastName}`;
               return (
                 <ListGroup.Item
-                  key={index}
+                  key={member._id}
                   action
                   className={`${styles.rounded} ${styles.colorLight} my-1`}
                 >
@@ -99,12 +138,15 @@ export default function organizationSidebar(): JSX.Element {
         </ListGroup>
       )}
 
+      {/* Link to view all members */}
       <div className={styles.alignRight}>
         <Link to={peopleLink} className={styles.link}>
           {t('viewAll')}
           <ChevronRightIcon fontSize="small" className={styles.marginTop} />
         </Link>
       </div>
+
+      {/* Events section */}
       <div className={styles.heading}>
         <b>{t('events')}</b>
       </div>
@@ -114,11 +156,11 @@ export default function organizationSidebar(): JSX.Element {
         </div>
       ) : (
         <ListGroup variant="flush">
-          {events.length ? (
-            events.map((event: any, index: React.Key | null | undefined) => {
+          {events && events.length ? (
+            events.map((event: InterfaceQueryOrganizationEventListItem) => {
               return (
                 <ListGroup.Item
-                  key={index}
+                  key={event._id}
                   action
                   className={`${styles.rounded} ${styles.colorLight} my-1`}
                 >
@@ -145,6 +187,8 @@ export default function organizationSidebar(): JSX.Element {
           )}
         </ListGroup>
       )}
+
+      {/* Link to view all events */}
       <div className={styles.alignRight}>
         <Link to={eventsLink} className={styles.link}>
           {t('viewAll')}

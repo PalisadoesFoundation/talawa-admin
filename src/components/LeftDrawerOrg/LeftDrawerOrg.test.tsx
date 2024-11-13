@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { act } from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import 'jest-localstorage-mock';
 import { I18nextProvider } from 'react-i18next';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 
 import i18nForTest from 'utils/i18nForTest';
 import type { InterfaceLeftDrawerProps } from './LeftDrawerOrg';
@@ -12,7 +12,6 @@ import { Provider } from 'react-redux';
 import { MockedProvider } from '@apollo/react-testing';
 import { store } from 'state/store';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
-import { act } from 'react-dom/test-utils';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -23,42 +22,46 @@ const props: InterfaceLeftDrawerProps = {
   orgId: '123',
   targets: [
     {
+      name: 'Admin Profile',
+      url: '/member/123',
+    },
+    {
       name: 'Dashboard',
-      url: '/orgdash/id=123',
+      url: '/orgdash/123',
     },
     {
       name: 'People',
-      url: '/orgpeople/id=123',
+      url: '/orgpeople/123',
     },
     {
       name: 'Events',
-      url: '/orgevents/id=123',
+      url: '/orgevents/123',
     },
     {
       name: 'Posts',
-      url: '/orgpost/id=123',
+      url: '/orgpost/123',
     },
     {
       name: 'Block/Unblock',
-      url: '/blockuser/id=123',
+      url: '/blockuser/123',
     },
     {
       name: 'Plugins',
       subTargets: [
         {
           name: 'Plugin Store',
-          url: '/orgstore/id=123',
+          url: '/orgstore/123',
           icon: 'fa-store',
         },
       ],
     },
     {
       name: 'Settings',
-      url: '/orgsetting/id=123',
+      url: '/orgsetting/123',
     },
     {
       name: 'All Organizations',
-      url: '/orglist/id=123',
+      url: '/orglist/123',
     },
   ],
   hideDrawer: false,
@@ -216,6 +219,20 @@ const MOCKS_EMPTY = [
   },
 ];
 
+const MOCKS_EMPTY_ORGID = [
+  {
+    request: {
+      query: ORGANIZATIONS_LIST,
+      variables: { id: '' },
+    },
+    result: {
+      data: {
+        organizations: [],
+      },
+    },
+  },
+];
+
 const defaultScreens = [
   'Dashboard',
   'People',
@@ -265,6 +282,7 @@ afterEach(() => {
 const link = new StaticMockLink(MOCKS, true);
 const linkImage = new StaticMockLink(MOCKS_WITH_IMAGE, true);
 const linkEmpty = new StaticMockLink(MOCKS_EMPTY, true);
+const linkEmptyOrgId = new StaticMockLink(MOCKS_EMPTY_ORGID, true);
 
 describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
   test('Component should be rendered properly', async () => {
@@ -309,6 +327,29 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     expect(screen.getByTestId(/orgBtn/i)).toBeInTheDocument();
   });
 
+  test('Should not show org not found error when viewing admin profile', async () => {
+    setItem('UserImage', '');
+    setItem('SuperAdmin', true);
+    setItem('FirstName', 'John');
+    setItem('LastName', 'Doe');
+    setItem('id', '123');
+    render(
+      <MockedProvider addTypename={false} link={linkEmptyOrgId}>
+        <MemoryRouter initialEntries={['/member/123']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LeftDrawerOrg {...props} hideDrawer={null} />
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+    await wait();
+    expect(
+      screen.queryByText(/Error occured while loading Organization data/i),
+    ).not.toBeInTheDocument();
+  });
+
   test('Testing Menu Buttons', async () => {
     setItem('UserImage', '');
     setItem('SuperAdmin', true);
@@ -327,7 +368,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     );
     await wait();
     userEvent.click(screen.getByText('Dashboard'));
-    expect(global.window.location.pathname).toContain('/orgdash/id=123');
+    expect(global.window.location.pathname).toContain('/orgdash/123');
   });
 
   test('Testing when screen size is less than 820px', async () => {
@@ -345,13 +386,13 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     );
     await wait();
     resizeWindow(800);
-    expect(screen.getByText(/Dashboard/i)).toBeInTheDocument();
-    expect(screen.getByText(/People/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Dashboard/i)[0]).toBeInTheDocument();
+    expect(screen.getAllByText(/People/i)[0]).toBeInTheDocument();
 
     const peopelBtn = screen.getByTestId(/People/i);
     userEvent.click(peopelBtn);
     await wait();
-    expect(window.location.pathname).toContain('/orgpeople/id=123');
+    expect(window.location.pathname).toContain('/orgpeople/123');
   });
 
   test('Testing when image is present for Organization', async () => {
@@ -391,7 +432,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     );
     await wait();
     expect(
-      screen.getByText(/Error Occured while loading the Organization/i),
+      screen.getByText(/Error occured while loading Organization data/i),
     ).toBeInTheDocument();
   });
 

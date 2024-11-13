@@ -4,6 +4,7 @@ import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from './CollapsibleDropdown.module.css';
 import IconComponent from 'components/IconComponent/IconComponent';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export interface InterfaceCollapsibleDropdown {
   showDropdown: boolean;
@@ -11,15 +12,26 @@ export interface InterfaceCollapsibleDropdown {
   setShowDropdown: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+/**
+ * A collapsible dropdown component that toggles visibility of sub-targets.
+ *
+ * @param showDropdown - Boolean indicating whether the dropdown is visible or not.
+ * @param target - Object containing the target information, including the name and sub-targets.
+ * @param setShowDropdown - Function to toggle the visibility of the dropdown.
+ *
+ * @returns JSX.Element - The rendered CollapsibleDropdown component.
+ */
 const collapsibleDropdown = ({
   target,
   showDropdown,
   setShowDropdown,
 }: InterfaceCollapsibleDropdown): JSX.Element => {
+  const { t: tCommon } = useTranslation('common');
   const { name, subTargets } = target;
   const navigate = useNavigate();
   const location = useLocation();
   useEffect(() => {
+    // Show dropdown if the current path includes 'orgstore', otherwise hide it.
     if (location.pathname.includes('orgstore')) {
       setShowDropdown(true);
     } else {
@@ -42,7 +54,7 @@ const collapsibleDropdown = ({
             fill={showDropdown ? 'var(--bs-white)' : 'var(--bs-secondary)'}
           />
         </div>
-        {name}
+        {tCommon(name)}
         <i
           className={`ms-auto fa  
           ${showDropdown ? 'var(--bs-white)' : 'var(--bs-secondary)'} 
@@ -72,7 +84,7 @@ const collapsibleDropdown = ({
                       <div className={styles.iconWrapperSm}>
                         <i className={`fa ${stringIcon}`} />
                       </div>
-                      {name}
+                      {tCommon(name || '')}
                       <div className="ms-auto">
                         <i
                           className={`fa me-2 fa-chevron-right ${

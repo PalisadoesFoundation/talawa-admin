@@ -10,6 +10,8 @@ i18n
   .use(LanguageDetector)
   .use(HttpApi)
   .init({
+    ns: ['translation', 'errors', 'common'],
+    defaultNS: 'translation',
     fallbackLng: 'en',
     supportedLngs: languageArray,
     detection: {
@@ -17,7 +19,7 @@ i18n
       caches: ['cookie'],
     },
     backend: {
-      loadPath: '/locales/{{lng}}.json',
+      loadPath: '/locales/{{lng}}/{{ns}}.json',
     },
     // debug: true,
   });

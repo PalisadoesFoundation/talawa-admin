@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Dropdown, Form, Table } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
@@ -29,18 +29,36 @@ interface InterfaceMember {
   __typename: 'User';
 }
 
+/**
+ * Requests component displays and manages a list of users that can be blocked or unblocked.
+ *
+ * This component allows users to search for members by their first name or last name,
+ * toggle between viewing blocked and all members, and perform block/unblock operations.
+ *
+ * @returns JSX.Element - The `Requests` component.
+ *
+ * @example
+ * ```tsx
+ * <Requests />
+ * ```
+ */
 const Requests = (): JSX.Element => {
+  // Translation hooks for internationalization
   const { t } = useTranslation('translation', {
     keyPrefix: 'blockUnblockUser',
   });
+  const { t: tCommon } = useTranslation('common');
 
-  document.title = t('title');
-  const { orgId: currentUrl } = useParams();
+  document.title = t('title'); // Set document title
+  const { orgId: currentUrl } = useParams(); // Get current organization ID from URL
+
+  // State hooks
   const [membersData, setMembersData] = useState<InterfaceMember[]>([]);
   const [searchByFirstName, setSearchByFirstName] = useState<boolean>(true);
   const [searchByName, setSearchByName] = useState<string>('');
   const [showBlockedMembers, setShowBlockedMembers] = useState<boolean>(true);
 
+  // Query to fetch members list
   const {
     data: memberData,
     loading: loadingMembers,
@@ -54,96 +72,116 @@ const Requests = (): JSX.Element => {
     },
   });
 
+  // Mutations for blocking and unblocking users
   const [blockUser] = useMutation(BLOCK_USER_MUTATION);
   const [unBlockUser] = useMutation(UNBLOCK_USER_MUTATION);
 
+  // Effect to update member data based on filters and data changes
   useEffect(() => {
     if (!memberData) {
       setMembersData([]);
       return;
     }
 
-    if (showBlockedMembers == false) {
-      setMembersData(memberData?.organizationsMemberConnection.edges);
+    if (!showBlockedMembers) {
+      setMembersData(memberData?.organizationsMemberConnection.edges || []);
     } else {
       const blockUsers = memberData?.organizationsMemberConnection.edges.filter(
         (user: InterfaceMember) =>
           user.organizationsBlockedBy.some((org) => org._id === currentUrl),
       );
-      setMembersData(blockUsers);
+      setMembersData(blockUsers || []);
     }
-  }, [memberData, showBlockedMembers]);
+  }, [memberData, showBlockedMembers, currentUrl]);
 
-  const handleBlockUser = async (userId: string): Promise<void> => {
-    try {
-      const { data } = await blockUser({
-        variables: {
-          userId,
-          orgId: currentUrl,
-        },
-      });
-      /* istanbul ignore next */
-      if (data) {
-        toast.success(t('blockedSuccessfully'));
-        memberRefetch();
+  // Handler for blocking a user
+  const handleBlockUser = useCallback(
+    async (userId: string): Promise<void> => {
+      try {
+        const { data } = await blockUser({
+          variables: {
+            userId,
+            orgId: currentUrl,
+          },
+        });
+        /* istanbul ignore next */
+        if (data) {
+          toast.success(t('blockedSuccessfully') as string);
+          memberRefetch();
+        }
+      } catch (error: unknown) {
+        /* istanbul ignore next */
+        errorHandler(t, error);
       }
-    } catch (error: any) {
-      /* istanbul ignore next */
-      errorHandler(t, error);
-    }
-  };
+    },
+    [blockUser, currentUrl, memberRefetch, t],
+  );
 
-  const handleUnBlockUser = async (userId: string): Promise<void> => {
-    try {
-      const { data } = await unBlockUser({
-        variables: {
-          userId,
-          orgId: currentUrl,
-        },
-      });
-      /* istanbul ignore next */
-      if (data) {
-        toast.success(t('Un-BlockedSuccessfully'));
-        memberRefetch();
+  // Handler for unblocking a user
+  const handleUnBlockUser = useCallback(
+    async (userId: string): Promise<void> => {
+      try {
+        const { data } = await unBlockUser({
+          variables: {
+            userId,
+            orgId: currentUrl,
+          },
+        });
+        /* istanbul ignore next */
+        if (data) {
+          toast.success(t('Un-BlockedSuccessfully') as string);
+          memberRefetch();
+        }
+      } catch (error: unknown) {
+        /* istanbul ignore next */
+        errorHandler(t, error);
       }
-    } catch (error: any) {
-      /* istanbul ignore next */
-      errorHandler(t, error);
+    },
+    [unBlockUser, currentUrl, memberRefetch, t],
+  );
+
+  // Display error if member query fails
+  useEffect(() => {
+    if (memberError) {
+      toast.error(memberError.message);
     }
-  };
+  }, [memberError]);
 
-  /* istanbul ignore next */
-  if (memberError) {
-    toast.error(memberError.message);
-  }
+  // Search handler
+  const handleSearch = useCallback(
+    (value: string): void => {
+      setSearchByName(value);
+      memberRefetch({
+        orgId: currentUrl,
+        firstName_contains: searchByFirstName ? value : '',
+        lastName_contains: searchByFirstName ? '' : value,
+      });
+    },
+    [searchByFirstName, memberRefetch, currentUrl],
+  );
 
-  const handleSearch = (value: string): void => {
-    setSearchByName(value);
-    memberRefetch({
-      orgId: currentUrl,
-      firstName_contains: searchByFirstName ? value : '',
-      lastName_contains: searchByFirstName ? '' : value,
-    });
-  };
+  // Search by Enter key
+  const handleSearchByEnter = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>): void => {
+      if (e.key === 'Enter') {
+        const { value } = e.currentTarget;
+        handleSearch(value);
+      }
+    },
+    [handleSearch],
+  );
 
-  const handleSearchByEnter = (e: any): void => {
-    if (e.key === 'Enter') {
-      const { value } = e.target;
-      handleSearch(value);
-    }
-  };
-
-  const handleSearchByBtnClick = (): void => {
-    const inputValue =
-      (document.getElementById('searchBlockedUsers') as HTMLInputElement)
-        ?.value || '';
+  // Search button click handler
+  const handleSearchByBtnClick = useCallback((): void => {
+    const inputValue = searchByName;
     handleSearch(inputValue);
-  };
+  }, [handleSearch, searchByName]);
 
+  // Header titles for the table
   const headerTitles: string[] = [
     '#',
-    t('name'),
-    t('email'),
+    tCommon('name'),
+    tCommon('email'),
     t('block_unblock'),
   ];
 
@@ -166,6 +204,8 @@ const Requests = (): JSX.Element => {
                 data-testid="searchByName"
                 autoComplete="off"
                 required
+                value={searchByName}
+                onChange={(e) => setSearchByName(e.target.value)}
                 onKeyUp={handleSearchByEnter}
               />
               <Button
@@ -180,6 +220,7 @@ const Requests = (): JSX.Element => {
           </div>
           <div className={styles.btnsBlock}>
             <div className={styles.largeBtnsWrapper}>
+              {/* Dropdown for filtering members */}
               <Dropdown aria-expanded="false" title="Sort organizations">
                 <Dropdown.Toggle variant="success" data-testid="userFilter">
                   <SortIcon className={'me-1'} />
@@ -202,6 +243,7 @@ const Requests = (): JSX.Element => {
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
+              {/* Dropdown for sorting by name */}
               <Dropdown aria-expanded="false">
                 <Dropdown.Toggle variant="success" data-testid="nameFilter">
                   <SortIcon className={'me-1'} />
@@ -230,15 +272,15 @@ const Requests = (): JSX.Element => {
           </div>
         </div>
         {/* Table */}
-        {loadingMembers == false &&
+        {loadingMembers === false &&
         membersData.length === 0 &&
         searchByName.length > 0 ? (
           <div className={styles.notFound}>
             <h4>
-              {t('noResultsFoundFor')} &quot;{searchByName}&quot;
+              {tCommon('noResultsFoundFor')} &quot;{searchByName}&quot;
             </h4>
           </div>
-        ) : loadingMembers == false && membersData.length === 0 ? (
+        ) : loadingMembers === false && membersData.length === 0 ? (
           <div className={styles.notFound}>
             <h4>{t('noSpammerFound')}</h4>
           </div>
@@ -268,7 +310,7 @@ const Requests = (): JSX.Element => {
                         <td>{user.email}</td>
                         <td>
                           {user.organizationsBlockedBy.some(
-                            (spam: any) => spam._id === currentUrl,
+                            (spam) => spam._id === currentUrl,
                           ) ? (
                             <Button
                               variant="danger"

@@ -7,10 +7,33 @@ export interface InterfaceUserType {
   };
 }
 
+export interface InterfaceUserInfo {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  image?: string | null;
+}
+
+// Base interface for common event properties
+export interface InterfaceBaseEvent {
+  _id: string;
+  title: string;
+  description: string;
+  startDate: string;
+  endDate: string;
+  location: string;
+  startTime: string;
+  endTime: string;
+  allDay: boolean;
+  recurring: boolean;
+}
+
 export interface InterfaceActionItemCategoryInfo {
   _id: string;
   name: string;
   isDisabled: boolean;
+  createdAt: string;
+  creator: { _id: string; firstName: string; lastName: string };
 }
 
 export interface InterfaceActionItemCategoryList {
@@ -19,35 +42,27 @@ export interface InterfaceActionItemCategoryList {
 
 export interface InterfaceActionItemInfo {
   _id: string;
-  assignee: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-  };
-  assigner: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-  };
+  assigneeType: 'EventVolunteer' | 'EventVolunteerGroup' | 'User';
+  assignee: InterfaceEventVolunteerInfo | null;
+  assigneeGroup: InterfaceVolunteerGroupInfo | null;
+  assigneeUser: InterfaceUserInfo | null;
+  assigner: InterfaceUserInfo;
   actionItemCategory: {
     _id: string;
     name: string;
   };
   preCompletionNotes: string;
-  postCompletionNotes: string;
+  postCompletionNotes: string | null;
   assignmentDate: Date;
   dueDate: Date;
-  completionDate: Date;
+  completionDate: Date | null;
   isCompleted: boolean;
   event: {
     _id: string;
     title: string;
-  };
-  creator: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-  };
+  } | null;
+  creator: InterfaceUserInfo;
+  allottedHours: number | null;
 }
 
 export interface InterfaceActionItemList {
@@ -204,6 +219,80 @@ export interface InterfaceQueryOrganizationPostListItem {
   };
 }
 
+export interface InterfaceTagData {
+  _id: string;
+  name: string;
+  parentTag: { _id: string };
+  usersAssignedTo: {
+    totalCount: number;
+  };
+  childTags: {
+    totalCount: number;
+  };
+  ancestorTags: {
+    _id: string;
+    name: string;
+  }[];
+}
+
+interface InterfaceTagNodeData {
+  edges: {
+    node: InterfaceTagData;
+    cursor: string;
+  }[];
+  pageInfo: {
+    startCursor: string;
+    endCursor: string;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+  };
+  totalCount: number;
+}
+
+interface InterfaceTagMembersData {
+  edges: {
+    node: {
+      _id: string;
+      firstName: string;
+      lastName: string;
+    };
+  }[];
+  pageInfo: {
+    startCursor: string;
+    endCursor: string;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+  };
+  totalCount: number;
+}
+
+export interface InterfaceQueryOrganizationUserTags {
+  userTags: InterfaceTagNodeData;
+}
+
+export interface InterfaceQueryUserTagChildTags {
+  name: string;
+  childTags: InterfaceTagNodeData;
+  ancestorTags: {
+    _id: string;
+    name: string;
+  }[];
+}
+
+export interface InterfaceQueryUserTagsAssignedMembers {
+  name: string;
+  usersAssignedTo: InterfaceTagMembersData;
+  ancestorTags: {
+    _id: string;
+    name: string;
+  }[];
+}
+
+export interface InterfaceQueryUserTagsMembersToAssignTo {
+  name: string;
+  usersToAssignTo: InterfaceTagMembersData;
+}
+
 export interface InterfaceQueryOrganizationAdvertisementListItem {
   advertisements: {
     edges: {
@@ -226,20 +315,10 @@ export interface InterfaceQueryOrganizationAdvertisementListItem {
     totalCount: number;
   };
 }
-export interface InterfaceQueryOrganizationFunds {
-  fundsByOrganization: {
-    _id: string;
-    name: string;
-    refrenceNumber: string;
-    taxDeductible: boolean;
-    isArchived: boolean;
-    isDefault: boolean;
-    createdAt: string;
-    organizationId: string;
-    creator: { _id: string; firstName: string; lastName: string };
-  }[];
-}
+
 export interface InterfaceQueryOrganizationFundCampaigns {
+  name: string;
+  isArchived: boolean;
   campaigns: {
     _id: string;
     name: string;
@@ -250,20 +329,24 @@ export interface InterfaceQueryOrganizationFundCampaigns {
     currency: string;
   }[];
 }
-export interface InterfaceQueryFundCampaignsPledges {
+export interface InterfaceUserCampaign {
+  _id: string;
+  name: string;
+  fundingGoal: number;
   startDate: Date;
   endDate: Date;
-  pledges: {
-    _id: string;
-    amount: number;
-    currency: string;
-    endDate: string;
-    startDate: string;
-    users: {
-      _id: string;
-      firstName: string;
-    }[];
-  }[];
+  currency: string;
+}
+export interface InterfaceQueryFundCampaignsPledges {
+  fundId: {
+    name: string;
+  };
+  name: string;
+  fundingGoal: number;
+  currency: string;
+  startDate: Date;
+  endDate: Date;
+  pledges: InterfacePledgeInfo[];
 }
 export interface InterfaceFundInfo {
   _id: string;
@@ -273,6 +356,8 @@ export interface InterfaceFundInfo {
   isArchived: boolean;
   isDefault: boolean;
   createdAt: string;
+  organizationId: string;
+  creator: { _id: string; firstName: string; lastName: string };
 }
 export interface InterfaceCampaignInfo {
   _id: string;
@@ -285,26 +370,15 @@ export interface InterfaceCampaignInfo {
 }
 export interface InterfacePledgeInfo {
   _id: string;
+  campaign?: { _id: string; name: string; endDate: Date };
   amount: number;
   currency: string;
   endDate: string;
   startDate: string;
-  users: {
-    _id: string;
-    firstName: string;
-  }[];
+  users: InterfaceUserInfo[];
 }
-export interface InterfaceQueryOrganizationEventListItem {
-  _id: string;
-  title: string;
-  description: string;
-  startDate: string;
-  endDate: string;
-  location: string;
-  startTime: string;
-  endTime: string;
-  allDay: boolean;
-  recurring: boolean;
+export interface InterfaceQueryOrganizationEventListItem
+  extends InterfaceBaseEvent {
   isPublic: boolean;
   isRegisterable: boolean;
 }
@@ -389,6 +463,9 @@ export interface InterfaceAddress {
 export interface InterfaceCreateFund {
   fundName: string;
   fundRef: string;
+  isDefault: boolean;
+  isArchived: boolean;
+  taxDeductible: boolean;
 }
 
 export interface InterfacePostCard {
@@ -409,7 +486,7 @@ export interface InterfacePostCard {
   comments: {
     id: string;
     creator: {
-      _id: string;
+      id: string;
       firstName: string;
       lastName: string;
       email: string;
@@ -427,15 +504,9 @@ export interface InterfacePostCard {
   }[];
   fetchPosts: () => void;
 }
-export interface InterfaceCreateCampaign {
-  campaignName: string;
-  campaignCurrency: string;
-  campaignGoal: number;
-  campaignStartDate: Date;
-  campaignEndDate: Date;
-}
 
 export interface InterfaceCreatePledge {
+  pledgeUsers: InterfaceUserInfo[];
   pledgeAmount: number;
   pledgeCurrency: string;
   pledgeStartDate: Date;
@@ -455,4 +526,176 @@ export interface InterfaceQueryMembershipRequestsListItem {
       };
     }[];
   }[];
+}
+
+export interface InterfaceAgendaItemCategoryInfo {
+  _id: string;
+  name: string;
+  description: string;
+  createdBy: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+  };
+}
+
+export interface InterfaceAgendaItemCategoryList {
+  agendaItemCategoriesByOrganization: InterfaceAgendaItemCategoryInfo[];
+}
+
+export interface InterfaceAddOnSpotAttendeeProps {
+  show: boolean;
+  handleClose: () => void;
+  reloadMembers: () => void;
+}
+
+export interface InterfaceFormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNo: string;
+  gender: string;
+}
+
+export interface InterfaceAgendaItemInfo {
+  _id: string;
+  title: string;
+  description: string;
+  duration: string;
+  attachments: string[];
+  createdBy: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+  };
+  urls: string[];
+  users: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+  }[];
+  sequence: number;
+  categories: {
+    _id: string;
+    name: string;
+  }[];
+  organization: {
+    _id: string;
+    name: string;
+  };
+  relatedEvent: {
+    _id: string;
+    title: string;
+  };
+}
+
+export interface InterfaceAgendaItemList {
+  agendaItemByEvent: InterfaceAgendaItemInfo[];
+}
+
+export interface InterfaceMapType {
+  [key: string]: string;
+}
+
+export interface InterfaceCustomFieldData {
+  type: string;
+  name: string;
+}
+
+export interface InterfaceEventVolunteerInfo {
+  _id: string;
+  hasAccepted: boolean;
+  hoursVolunteered: number | null;
+  user: InterfaceUserInfo;
+  assignments: {
+    _id: string;
+  }[];
+  groups: {
+    _id: string;
+    name: string;
+    volunteers: {
+      _id: string;
+    }[];
+  }[];
+}
+
+export interface InterfaceVolunteerGroupInfo {
+  _id: string;
+  name: string;
+  description: string | null;
+  event: {
+    _id: string;
+  };
+  volunteersRequired: number | null;
+  createdAt: string;
+  creator: InterfaceUserInfo;
+  leader: InterfaceUserInfo;
+  volunteers: {
+    _id: string;
+    user: InterfaceUserInfo;
+  }[];
+  assignments: {
+    _id: string;
+    actionItemCategory: {
+      _id: string;
+      name: string;
+    };
+    allottedHours: number;
+    isCompleted: boolean;
+  }[];
+}
+
+export interface InterfaceCreateVolunteerGroup {
+  name: string;
+  description: string | null;
+  leader: InterfaceUserInfo | null;
+  volunteersRequired: number | null;
+  volunteerUsers: InterfaceUserInfo[];
+}
+
+export interface InterfaceUserEvents extends InterfaceBaseEvent {
+  volunteerGroups: {
+    _id: string;
+    name: string;
+    volunteersRequired: number;
+    description: string;
+    volunteers: { _id: string }[];
+  }[];
+  volunteers: {
+    _id: string;
+    user: {
+      _id: string;
+    };
+  }[];
+}
+
+export interface InterfaceVolunteerMembership {
+  _id: string;
+  status: string;
+  createdAt: string;
+  event: {
+    _id: string;
+    title: string;
+    startDate: string;
+  };
+  volunteer: {
+    _id: string;
+    user: InterfaceUserInfo;
+  };
+  group: {
+    _id: string;
+    name: string;
+  };
+}
+
+export interface InterfaceVolunteerRank {
+  rank: number;
+  hoursVolunteered: number;
+  user: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    image: string | null;
+  };
 }

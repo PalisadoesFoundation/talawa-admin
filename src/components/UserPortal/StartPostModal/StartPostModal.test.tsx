@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import userEvent from '@testing-library/user-event';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -129,7 +129,9 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await wait();
 
     userEvent.click(screen.getByTestId('createPostBtn'));
-    expect(toastSpy).toBeCalledWith("Can't create a post with an empty body.");
+    expect(toastSpy).toHaveBeenCalledWith(
+      "Can't create a post with an empty body.",
+    );
   });
 
   test('On valid post submission Info toast should be shown', async () => {
@@ -142,8 +144,10 @@ describe('Testing StartPostModal Component: User Portal', () => {
 
     userEvent.click(screen.getByTestId('createPostBtn'));
 
-    expect(toast.error).not.toBeCalledWith();
-    expect(toast.info).toBeCalledWith('Processing your post. Please wait.');
+    expect(toast.error).not.toHaveBeenCalledWith();
+    expect(toast.info).toHaveBeenCalledWith(
+      'Processing your post. Please wait.',
+    );
     // await wait();
     // expect(toast.success).toBeCalledWith(
     //   'Your post is now visible in the feed.',

@@ -1,7 +1,8 @@
 export default {
   roots: ['<rootDir>/src'],
   collectCoverageFrom: ['src/**/*.{ts,tsx}', '!src/index.tsx'],
-  setupFiles: ['react-app-polyfill/jsdom'],
+  // setupFiles: ['react-app-polyfill/jsdom'],
+  setupFiles: ['whatwg-fetch'],
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
   testMatch: [
     '<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}',
@@ -9,11 +10,12 @@ export default {
   ],
   testEnvironment: 'jsdom',
   transform: {
-    '^.+\\.(js|jsx|mjs|cjs|ts|tsx)$':
-      'react-scripts/config/jest/babelTransform.js',
-    '^.+\\.(css|scss|sass|less)$': 'jest-preview/transforms/css',
-    '^(?!.*\\.(js|jsx|mjs|cjs|ts|tsx|css|json)$)':
-      'jest-preview/transforms/file',
+    '^.+\\.(js|jsx|ts|tsx)$': [
+      'babel-jest',
+      { configFile: './config/babel.config.cjs' },
+    ], // Use babel-jest for JavaScript and TypeScript files
+    '^.+\\.(css|scss|sass|less)$': 'jest-preview/transforms/css', // CSS transformations
+    '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': 'jest-preview/transforms/file', // File transformations
   },
   transformIgnorePatterns: [
     '[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|cjs|ts|tsx)$',
@@ -24,10 +26,12 @@ export default {
   ],
   moduleNameMapper: {
     '^react-native$': 'react-native-web',
-    '^@mui/(.*)$': '<rootDir>/node_modules/@mui/$1',
     '^@dicebear/core$': '<rootDir>/scripts/__mocks__/@dicebear/core.ts',
     '^@dicebear/collection$':
       '<rootDir>/scripts/__mocks__/@dicebear/collection.ts',
+    '\\.svg\\?react$': '<rootDir>/scripts/__mocks__/fileMock.js',
+    '\\.svg$': '<rootDir>/scripts/__mocks__/fileMock.js', 
+    '^@pdfme/generator$': '<rootDir>/scripts/__mocks__/@pdfme/generator.ts'
   },
   moduleFileExtensions: [
     'web.js',
@@ -41,10 +45,10 @@ export default {
     'jsx',
     'node',
   ],
-  watchPlugins: [
-    'jest-watch-typeahead/filename',
-    'jest-watch-typeahead/testname',
-  ],
+  // watchPlugins: [
+  //   'jest-watch-typeahead/filename',
+  //   'jest-watch-typeahead/testname',
+  // ],
   resetMocks: false,
   coveragePathIgnorePatterns: [
     'src/state/index.ts',

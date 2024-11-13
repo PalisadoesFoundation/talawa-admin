@@ -1,16 +1,15 @@
 import { useQuery } from '@apollo/client';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import SendIcon from '@mui/icons-material/Send';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import {
-  ADVERTISEMENTS_GET,
+  ORGANIZATION_ADVERTISEMENT_LIST,
   ORGANIZATION_POST_LIST,
   USER_DETAILS,
 } from 'GraphQl/Queries/Queries';
 import PostCard from 'components/UserPortal/PostCard/PostCard';
 import type {
   InterfacePostCard,
+  InterfaceQueryOrganizationAdvertisementListItem,
   InterfaceQueryUserListItem,
 } from 'utils/interfaces';
 import PromotedPost from 'components/UserPortal/PromotedPost/PromotedPost';
@@ -23,39 +22,46 @@ import { Navigate, useParams } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from './Posts.module.css';
 import convertToBase64 from 'utils/convertToBase64';
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
 
-interface InterfaceAdContent {
-  _id: string;
-  name: string;
-  type: string;
-  organization: {
-    _id: string;
-  };
-  mediaUrl: string;
-  endDate: string;
-  startDate: string;
-
-  comments: InterfacePostComments;
-  likes: InterfacePostLikes;
-}
-
-type AdvertisementsConnection = {
-  edges: {
-    node: InterfaceAdContent;
-  }[];
+const responsive = {
+  superLargeDesktop: {
+    breakpoint: { max: 4000, min: 3000 },
+    items: 5,
+  },
+  desktop: {
+    breakpoint: { max: 3000, min: 1024 },
+    items: 3,
+  },
+  tablet: {
+    breakpoint: { max: 1024, min: 600 },
+    items: 2,
+  },
+  mobile: {
+    breakpoint: { max: 600, min: 0 },
+    items: 1,
+  },
 };
 
-interface InterfaceAdConnection {
-  advertisementsConnection?: AdvertisementsConnection;
-}
+type Ad = {
+  _id: string;
+  name: string;
+  type: 'BANNER' | 'MENU' | 'POPUP';
+  mediaUrl: string;
+  endDate: string; // Assuming it's a string in the format 'yyyy-MM-dd'
+  startDate: string; // Assuming it's a string in the format 'yyyy-MM-dd'
+};
 
 type InterfacePostComments = {
+  id: string;
   creator: {
-    _id: string;
+    id: string;
     firstName: string;
     lastName: string;
     email: string;
   };
+
   likeCount: number;
   likedBy: {
     id: string;
@@ -95,25 +101,49 @@ type InterfacePostNode = {
   likes: InterfacePostLikes;
 };
 
+/**
+ * `home` component displays the main feed for a user, including posts, promoted content, and options to create a new post.
+ *
+ * It utilizes Apollo Client for fetching and managing data through GraphQL queries. The component fetches and displays posts from an organization, promoted advertisements, and handles user interactions for creating new posts. It also manages state for displaying modal dialogs and handling file uploads for new posts.
+ *
+ * @returns JSX.Element - The rendered `home` component.
+ */
 export default function home(): JSX.Element {
+  // Translation hook for localized text
   const { t } = useTranslation('translation', { keyPrefix: 'home' });
+  const { t: tCommon } = useTranslation('common');
+
+  // Custom hook for accessing local storage
   const { getItem } = useLocalStorage();
   const [posts, setPosts] = useState([]);
   const [pinnedPosts, setPinnedPosts] = useState([]);
-  const [adContent, setAdContent] = useState<InterfaceAdConnection>({});
-  const [filteredAd, setFilteredAd] = useState<InterfaceAdContent[]>([]);
+
   const [showModal, setShowModal] = useState<boolean>(false);
   const [postImg, setPostImg] = useState<string | null>('');
+
+  // Fetching the organization ID from URL parameters
   const { orgId } = useParams();
 
+  // Redirect to user page if organization ID is not available
   if (!orgId) {
     return <Navigate to={'/user'} />;
   }
 
-  const navbarProps = {
-    currentPage: 'home',
-  };
-  const { data: promotedPostsData } = useQuery(ADVERTISEMENTS_GET);
+  // Query hooks for fetching posts, advertisements, and user details
+  const {
+    data: promotedPostsData,
+  }: {
+    data?: {
+      organizations: InterfaceQueryOrganizationAdvertisementListItem[];
+    };
+    refetch: () => void;
+  } = useQuery(ORGANIZATION_ADVERTISEMENT_LIST, {
+    variables: {
+      id: orgId,
+      first: 6,
+    },
+  });
+
   const {
     data,
     refetch,
@@ -121,6 +151,8 @@ export default function home(): JSX.Element {
   } = useQuery(ORGANIZATION_POST_LIST, {
     variables: { id: orgId, first: 10 },
   });
+
+  const [adContent, setAdContent] = useState<Ad[]>([]);
   const userId: string | null = getItem('userId');
 
   const { data: userData } = useQuery(USER_DETAILS, {
@@ -129,21 +161,24 @@ export default function home(): JSX.Element {
 
   const user: InterfaceQueryUserListItem | undefined = userData?.user;
 
+  // Effect hook to update posts state when data changes
   useEffect(() => {
     if (data) {
       setPosts(data.organizations[0].posts.edges);
     }
   }, [data]);
 
+  // Effect hook to update advertisements state when data changes
   useEffect(() => {
-    if (promotedPostsData) {
-      setAdContent(promotedPostsData);
+    if (promotedPostsData && promotedPostsData.organizations) {
+      const ads: Ad[] =
+        promotedPostsData.organizations[0].advertisements?.edges.map(
+          (edge) => edge.node,
+        ) || [];
+
+      setAdContent(ads);
     }
   }, [promotedPostsData]);
-
-  useEffect(() => {
-    setFilteredAd(filterAdContent(adContent, orgId));
-  }, [adContent]);
 
   useEffect(() => {
     setPinnedPosts(
@@ -153,34 +188,12 @@ export default function home(): JSX.Element {
     );
   }, [posts]);
 
-  const filterAdContent = (
-    data: {
-      advertisementsConnection?: {
-        edges: {
-          node: InterfaceAdContent;
-        }[];
-      };
-    },
-    currentOrgId: string,
-    currentDate: Date = new Date(),
-  ): InterfaceAdContent[] => {
-    const { advertisementsConnection } = data;
-
-    if (advertisementsConnection && advertisementsConnection.edges) {
-      const { edges } = advertisementsConnection;
-
-      return edges
-        .map((edge) => edge.node)
-        .filter(
-          (ad: InterfaceAdContent) =>
-            ad.organization._id === currentOrgId &&
-            new Date(ad.endDate) > currentDate,
-        );
-    }
-
-    return [];
-  };
-
+  /**
+   * Converts a post node into props for the `PostCard` component.
+   *
+   * @param node - The post node to convert.
+   * @returns The props for the `PostCard` component.
+   */
   const getCardProps = (node: InterfacePostNode): InterfacePostCard => {
     const {
       creator,
@@ -195,42 +208,24 @@ export default function home(): JSX.Element {
       comments,
     } = node;
 
-    const allLikes: any = [];
+    const allLikes: InterfacePostLikes = likedBy.map((value) => ({
+      firstName: value.firstName,
+      lastName: value.lastName,
+      id: value._id,
+    }));
 
-    likedBy.forEach((value: any) => {
-      const singleLike = {
-        firstName: value.firstName,
-        lastName: value.lastName,
-        id: value._id,
-      };
-      allLikes.push(singleLike);
-    });
-
-    const postComments: any = [];
-
-    comments.forEach((value: any) => {
-      const commentLikes: any = [];
-      value.likedBy.forEach((commentLike: any) => {
-        const singleLike = {
-          id: commentLike._id,
-        };
-        commentLikes.push(singleLike);
-      });
-
-      const comment = {
-        id: value._id,
-        creator: {
-          firstName: value.creator.firstName,
-          lastName: value.creator.lastName,
-          id: value.creator._id,
-          email: value.creator.email,
-        },
-        likeCount: value.likeCount,
-        likedBy: commentLikes,
-        text: value.text,
-      };
-      postComments.push(comment);
-    });
+    const postComments: InterfacePostComments = comments?.map((value) => ({
+      id: value.id,
+      creator: {
+        firstName: value.creator?.firstName ?? '',
+        lastName: value.creator?.lastName ?? '',
+        id: value.creator?.id ?? '',
+        email: value.creator?.email ?? '',
+      },
+      likeCount: value.likeCount,
+      likedBy: value.likedBy?.map((like) => ({ id: like?.id ?? '' })) ?? [],
+      text: value.text,
+    }));
 
     const date = new Date(node.createdAt);
     const formattedDate = new Intl.DateTimeFormat('en-US', {
@@ -262,10 +257,16 @@ export default function home(): JSX.Element {
     return cardProps;
   };
 
+  /**
+   * Opens the post creation modal.
+   */
   const handlePostButtonClick = (): void => {
     setShowModal(true);
   };
 
+  /**
+   * Closes the post creation modal.
+   */
   const handleModalClose = (): void => {
     setShowModal(false);
   };
@@ -274,7 +275,6 @@ export default function home(): JSX.Element {
     <>
       <div className={`d-flex flex-row ${styles.containerHeight}`}>
         <div className={`${styles.colorLight} ${styles.mainContainer}`}>
-          <h1>{t('posts')}</h1>
           <div className={`${styles.postContainer}`}>
             <div className={`${styles.heading}`}>{t('startPost')}</div>
             <div className={styles.postInputContainer}>
@@ -320,21 +320,18 @@ export default function home(): JSX.Element {
           >
             <h2>{t('feed')}</h2>
             {pinnedPosts.length > 0 && (
-              <div>
-                <p className="fs-5 mt-5">{t(`pinnedPosts`)}</p>
-                <div className={` ${styles.pinnedPostsCardsContainer}`}>
-                  {pinnedPosts.map(({ node }: { node: InterfacePostNode }) => {
-                    const cardProps = getCardProps(node);
-                    return <PostCard key={node._id} {...cardProps} />;
-                  })}
-                </div>
-              </div>
+              <Carousel responsive={responsive}>
+                {pinnedPosts.map(({ node }: { node: InterfacePostNode }) => {
+                  const cardProps = getCardProps(node);
+                  return <PostCard key={node._id} {...cardProps} />;
+                })}
+              </Carousel>
             )}
           </div>
 
-          {filteredAd.length > 0 && (
+          {adContent.length > 0 && (
             <div data-testid="promotedPostsContainer">
-              {filteredAd.map((post: InterfaceAdContent) => (
+              {adContent.map((post: Ad) => (
                 <PromotedPost
                   key={post._id}
                   id={post._id}
@@ -349,7 +346,7 @@ export default function home(): JSX.Element {
           <div className={` ${styles.postsCardsContainer}`}></div>
           {loadingPosts ? (
             <div className={`d-flex flex-row justify-content-center`}>
-              <HourglassBottomIcon /> <span>{t(`loading`)}...</span>
+              <HourglassBottomIcon /> <span>{tCommon('loading')}</span>
             </div>
           ) : (
             <>

@@ -1,5 +1,5 @@
-import React from 'react';
-import { act, render, screen } from '@testing-library/react';
+import React, { act } from 'react';
+import { render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 
@@ -23,13 +23,15 @@ async function wait(ms = 100): Promise<void> {
 
 let props = {
   id: '1',
-  firstName: 'Noble',
-  lastName: 'Mittal',
+  title: 'Disha Talreja',
+  subtitle: 'disha@example.com',
   email: 'noble@mittal.com',
+  isGroup: false,
   image: '',
   selectedContact: '',
+  type: '',
   setSelectedContact: jest.fn(),
-  setSelectedContactName: jest.fn(),
+  setSelectedChatType: jest.fn(),
 };
 
 describe('Testing ContactCard Component [User Portal]', () => {
@@ -94,6 +96,7 @@ describe('Testing ContactCard Component [User Portal]', () => {
     props = {
       ...props,
       selectedContact: '1',
+      isGroup: true,
     };
     render(
       <MockedProvider addTypename={false} link={link}>

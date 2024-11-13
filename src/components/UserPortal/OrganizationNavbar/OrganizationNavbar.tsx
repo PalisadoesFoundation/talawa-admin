@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './OrganizationNavbar.module.css';
-import TalawaImage from 'assets/images/talawa-logo-200x200.png';
+import TalawaImage from 'assets/images/talawa-logo-600x600.png';
 import { Container, Dropdown, Nav, Navbar, Offcanvas } from 'react-bootstrap';
 import { languages } from 'utils/languages';
 import i18next from 'i18next';
@@ -26,15 +26,33 @@ type Plugin = {
   translated: string;
   view: boolean;
 };
+
+/**
+ * Displays the organization navbar with navigation options, user settings, and language selection.
+ *
+ * The navbar includes:
+ * - Organization branding and name.
+ * - Navigation links for various plugins based on user permissions.
+ * - Language dropdown for changing the interface language.
+ * - User dropdown for accessing settings and logging out.
+ *
+ * @param props - The properties for the navbar.
+ * @param currentPage - The current page identifier for highlighting the active navigation link.
+ *
+ * @returns The organization navbar component.
+ */
 function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userNavbar',
   });
+  const { t: tCommon } = useTranslation('common');
 
   const navigate = useNavigate();
 
-  const [organizationDetails, setOrganizationDetails]: any = React.useState({});
-  // const dropDirection: DropDirection = screen.width > 767 ? 'start' : 'down';
+  const [organizationDetails, setOrganizationDetails] = React.useState<{
+    name: string;
+  }>({ name: '' });
+
   const dropDirection: DropDirection = 'start';
 
   const { orgId: organizationId } = useParams();
@@ -50,6 +68,9 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
 
   const { getItem, setItem } = useLocalStorage();
 
+  /**
+   * Handles user logout by clearing local storage and redirecting to the home page.
+   */
   /* istanbul ignore next */
   const handleLogout = (): void => {
     localStorage.clear();
@@ -57,13 +78,15 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
   };
 
   const userName = getItem('name');
+
   React.useEffect(() => {
     if (data) {
-      setOrganizationDetails(data.organizationsConnection[0]);
+      setOrganizationDetails({ name: data.organizationsConnection[0].name });
     }
   }, [data]);
 
   const homeLink = `/user/organization/${organizationId}`;
+
   let plugins: Plugin[] = [
     {
       pluginName: 'People',
@@ -94,15 +117,14 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
     //   view: true,
     // },
   ];
+
   if (getItem('talawaPlugins')) {
     const talawaPlugins: string = getItem('talawaPlugins') || '{}';
     plugins = JSON.parse(talawaPlugins);
   }
 
-  const { data: updatedPluginData } = useSubscription(
-    PLUGIN_SUBSCRIPTION,
-    // { variables: {  } }
-  );
+  const { data: updatedPluginData } = useSubscription(PLUGIN_SUBSCRIPTION);
+
   function getPluginIndex(pluginName: string, pluginsArray: Plugin[]): number {
     return pluginsArray.findIndex((plugin) => plugin.pluginName === pluginName);
   }
@@ -126,6 +148,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
       }
     }
   }
+
   return (
     <Navbar expand={'md'} variant="dark" className={`${styles.colorPrimary}`}>
       <Container fluid>
@@ -222,14 +245,14 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
                   </Dropdown.ItemText>
                   <Dropdown.Item>
                     <Link to="/user/settings" className={styles.link}>
-                      {t('settings')}
+                      {tCommon('settings')}
                     </Link>
                   </Dropdown.Item>
                   <Dropdown.Item
                     onClick={handleLogout}
                     data-testid={`logoutBtn`}
                   >
-                    {t('logout')}
+                    {tCommon('logout')}
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>

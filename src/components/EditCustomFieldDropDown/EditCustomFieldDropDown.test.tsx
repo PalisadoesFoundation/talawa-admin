@@ -1,11 +1,13 @@
 import type { Dispatch, SetStateAction } from 'react';
-import React from 'react';
-import { act, render } from '@testing-library/react';
+import React, { act } from 'react';
+import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import EditOrgCustomFieldDropDown from './EditCustomFieldDropDown';
-import type { InterfaceCustomFieldData } from 'components/OrgProfileFieldSettings/OrgProfileFieldSettings';
 import userEvent from '@testing-library/user-event';
 import availableFieldTypes from 'utils/fieldTypes';
+import { I18nextProvider } from 'react-i18next';
+import i18nForTest from 'utils/i18nForTest';
+import type { InterfaceCustomFieldData } from 'utils/interfaces';
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -39,7 +41,9 @@ describe('Testing Custom Field Dropdown', () => {
 
     const { getByTestId, getByText } = render(
       <BrowserRouter>
-        <EditOrgCustomFieldDropDown {...props} />
+        <I18nextProvider i18n={i18nForTest}>
+          <EditOrgCustomFieldDropDown {...props} />
+        </I18nextProvider>
       </BrowserRouter>,
     );
 

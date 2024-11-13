@@ -6,8 +6,24 @@ import useLocalStorage from 'utils/useLocalstorage';
 import styles from './ProfileDropdown.module.css';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
+import { useTranslation } from 'react-i18next';
+import useSession from 'utils/useSession';
 
+/**
+ * Renders a profile dropdown menu for the user.
+ *
+ * This component displays the user's profile picture or an avatar, their name (truncated if necessary),
+ * and their role (SuperAdmin, Admin, or User). It provides options to view the profile or log out.
+ *
+ * - If a user image is available, it displays that; otherwise, it shows an avatar.
+ * - The displayed name is truncated if it exceeds a specified length.
+ * - The logout function revokes the refresh token and clears local storage before redirecting to the home page.
+ *
+ * @returns JSX.Element - The profile dropdown menu.
+ */
 const profileDropdown = (): JSX.Element => {
+  const { endSession } = useSession();
+  const { t: tCommon } = useTranslation('common');
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
   const { getItem } = useLocalStorage();
   const superAdmin = getItem('SuperAdmin');
@@ -31,6 +47,7 @@ const profileDropdown = (): JSX.Element => {
       console.error('Error revoking refresh token:', error);
     }
     localStorage.clear();
+    endSession();
     navigate('/');
   };
   const MAX_NAME_LENGTH = 20;
@@ -90,14 +107,14 @@ const profileDropdown = (): JSX.Element => {
           }
           aria-label="View Profile"
         >
-          View Profile
+          {tCommon('viewProfile')}
         </Dropdown.Item>
         <Dropdown.Item
           style={{ color: 'red' }}
           onClick={logout}
           data-testid="logoutBtn"
         >
-          Logout
+          {tCommon('logout')}
         </Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>

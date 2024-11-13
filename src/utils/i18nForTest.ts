@@ -4,13 +4,17 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import HttpApi from 'i18next-http-backend';
 
 import { languageArray } from './languages';
-import translationEnglish from '../../public/locales/en.json';
+import translationEnglish from '../../public/locales/en/translation.json';
+import translationCommonEnglish from '../../public/locales/en/common.json';
+import translationErrorEnglish from '../../public/locales/en/errors.json';
 
 i18n
   .use(LanguageDetector)
   .use(HttpApi)
   .use(initReactI18next)
   .init({
+    ns: ['translation', 'errors', 'common'],
+    defaultNS: 'translation',
     fallbackLng: 'en',
     supportedLngs: languageArray,
     detection: {
@@ -20,6 +24,8 @@ i18n
     resources: {
       en: {
         translation: translationEnglish,
+        common: translationCommonEnglish,
+        errors: translationErrorEnglish,
       },
     },
     react: { useSuspense: false },

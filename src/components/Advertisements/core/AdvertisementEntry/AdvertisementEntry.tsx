@@ -12,30 +12,44 @@ import { toast } from 'react-toastify';
 
 interface InterfaceAddOnEntryProps {
   id: string;
-  name: string;
-  mediaUrl: string;
-  type: string;
-  organizationId: string;
-  startDate: Date;
-  endDate: Date;
-  setAfter: (after: string | null) => void;
+  name?: string;
+  mediaUrl?: string;
+  type?: string;
+  organizationId?: string;
+  startDate?: Date;
+  endDate?: Date;
+  setAfter: React.Dispatch<React.SetStateAction<string | null | undefined>>;
 }
-function advertisementEntry({
+
+/**
+ * Component for displaying an advertisement entry.
+ * Allows viewing, editing, and deleting of the advertisement.
+ *
+ * @param  props - Component properties
+ * @returns  The rendered component
+ */
+function AdvertisementEntry({
   id,
-  name,
-  type,
-  mediaUrl,
-  endDate,
-  organizationId,
-  startDate,
+  name = '',
+  type = '',
+  mediaUrl = '',
+  endDate = new Date(),
+  organizationId = '',
+  startDate = new Date(),
   setAfter,
 }: InterfaceAddOnEntryProps): JSX.Element {
   console.log(id, type);
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
+  const { t: tCommon } = useTranslation('common');
+
+  // State for loading button
   const [buttonLoading, setButtonLoading] = useState(false);
+  // State for dropdown menu visibility
   const [dropdown, setDropdown] = useState(false);
+  // State for delete confirmation modal visibility
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
+  // Mutation hook for deleting an advertisement
   const [deleteAdById] = useMutation(DELETE_ADVERTISEMENT_BY_ID, {
     refetchQueries: [
       {
@@ -45,7 +59,15 @@ function advertisementEntry({
     ],
   });
 
+  /**
+   * Toggles the visibility of the delete confirmation modal.
+   */
   const toggleShowDeleteModal = (): void => setShowDeleteModal((prev) => !prev);
+
+  /**
+   * Handles advertisement deletion.
+   * Displays a success or error message based on the result.
+   */
   const onDelete = async (): Promise<void> => {
     setButtonLoading(true);
     try {
@@ -54,19 +76,24 @@ function advertisementEntry({
           id: id.toString(),
         },
       });
-      toast.error('Advertisement Deleted');
+      toast.success(t('advertisementDeleted') as string);
       setButtonLoading(false);
-      setAfter(null);
+      setAfter?.(null);
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message);
-        setButtonLoading(false);
       }
+      setButtonLoading(false);
     }
   };
+
+  /**
+   * Toggles the visibility of the dropdown menu.
+   */
   const handleOptionsClick = (): void => {
     setDropdown(!dropdown);
   };
+
   return (
     <>
       <Row data-testid="AdEntry" xs={1} md={2} className="g-4">
@@ -97,7 +124,7 @@ function advertisementEntry({
                       />
                     </li>
                     <li onClick={toggleShowDeleteModal} data-testid="deletebtn">
-                      {t('delete')}
+                      {tCommon('delete')}
                     </li>
                   </ul>
                 )}
@@ -163,7 +190,7 @@ function advertisementEntry({
                   </Modal.Body>
                   <Modal.Footer>
                     <Button variant="danger" onClick={toggleShowDeleteModal}>
-                      {t('no')}
+                      {tCommon('no')}
                     </Button>
                     <Button
                       type="button"
@@ -173,7 +200,7 @@ function advertisementEntry({
                       }}
                       data-testid="delete_yes"
                     >
-                      {t('yes')}
+                      {tCommon('yes')}
                     </Button>
                   </Modal.Footer>
                 </Modal>
@@ -187,7 +214,7 @@ function advertisementEntry({
   );
 }
 
-advertisementEntry.propTypes = {
+AdvertisementEntry.propTypes = {
   name: PropTypes.string,
   type: PropTypes.string,
   organizationId: PropTypes.string,
@@ -196,12 +223,4 @@ advertisementEntry.propTypes = {
   startDate: PropTypes.instanceOf(Date),
 };
 
-advertisementEntry.defaultProps = {
-  name: '',
-  type: '',
-  organizationId: '',
-  mediaUrl: '',
-  endDate: new Date(),
-  startDate: new Date(),
-};
-export default advertisementEntry;
+export default AdvertisementEntry;

@@ -1,5 +1,5 @@
-import React from 'react';
-import { act, render, screen } from '@testing-library/react';
+import React, { act } from 'react';
+import { render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 
@@ -31,13 +31,14 @@ const MOCKS = [
             _id: 1,
             title: 'Event',
             description: 'Event Test',
-            startDate: '',
-            endDate: '',
+            startDate: '2024-01-01',
+            endDate: '2024-01-02',
             location: 'New Delhi',
             startTime: '02:00',
             endTime: '06:00',
             allDay: false,
             recurring: false,
+            attendees: [],
             recurrenceRule: null,
             isRecurringEventException: false,
             isPublic: true,

@@ -48,15 +48,37 @@ interface InterfaceOrganizationCardProps {
   }[];
 }
 
+/**
+ * Displays an organization card with options to join or manage membership.
+ *
+ * Shows the organization's name, image, description, address, number of admins and members,
+ * and provides buttons for joining, withdrawing membership requests, or visiting the organization page.
+ *
+ * @param props - The properties for the organization card.
+ * @param id - The unique identifier of the organization.
+ * @param name - The name of the organization.
+ * @param image - The URL of the organization's image.
+ * @param description - A description of the organization.
+ * @param admins - The list of admins with their IDs.
+ * @param members - The list of members with their IDs.
+ * @param address - The address of the organization including city, country code, line1, postal code, and state.
+ * @param membershipRequestStatus - The status of the membership request (accepted, pending, or empty).
+ * @param userRegistrationRequired - Indicates if user registration is required to join the organization.
+ * @param membershipRequests - The list of membership requests with user IDs.
+ *
+ * @returns The organization card component.
+ */
 const userId: string | null = getItem('userId');
 
 function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'users',
   });
+  const { t: tCommon } = useTranslation('common');
 
   const navigate = useNavigate();
 
+  // Mutations for handling organization memberships
   const [sendMembershipRequest] = useMutation(SEND_MEMBERSHIP_REQUEST, {
     refetchQueries: [
       { query: USER_ORGANIZATION_CONNECTION, variables: { id: props.id } },
@@ -76,6 +98,10 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
     variables: { id: userId },
   });
 
+  /**
+   * Handles joining the organization. Sends a membership request if registration is required,
+   * otherwise joins the public organization directly. Displays success or error messages.
+   */
   async function joinOrganization(): Promise<void> {
     try {
       if (props.userRegistrationRequired) {
@@ -84,26 +110,31 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
             organizationId: props.id,
           },
         });
-        toast.success(t('MembershipRequestSent'));
+        toast.success(t('MembershipRequestSent') as string);
       } else {
         await joinPublicOrganization({
           variables: {
             organizationId: props.id,
           },
         });
-        toast.success(t('orgJoined'));
+        toast.success(t('orgJoined') as string);
       }
       refetch();
-    } catch (error: any) {
+    } catch (error: unknown) {
       /* istanbul ignore next */
-      if (error.message === 'User is already a member') {
-        toast.error(t('AlreadyJoined'));
-      } else {
-        toast.error(t('errorOccured'));
+      if (error instanceof Error) {
+        if (error.message === 'User is already a member') {
+          toast.error(t('AlreadyJoined') as string);
+        } else {
+          toast.error(t('errorOccured') as string);
+        }
       }
     }
   }
 
+  /**
+   * Handles withdrawing a membership request. Finds the request for the current user and cancels it.
+   */
   async function withdrawMembershipRequest(): Promise<void> {
     const membershipRequest = props.membershipRequests.find(
       (request) => request.user._id === userId,
@@ -150,8 +181,9 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
               </div>
             )}
             <h6 className={styles.orgadmin}>
-              {t('admins')}: <span>{props.admins?.length}</span> &nbsp; &nbsp;
-              &nbsp; {t('members')}: <span>{props.members?.length}</span>
+              {tCommon('admins')}: <span>{props.admins?.length}</span> &nbsp;
+              &nbsp; &nbsp; {tCommon('members')}:{' '}
+              <span>{props.members?.length}</span>
             </h6>
           </div>
         </div>

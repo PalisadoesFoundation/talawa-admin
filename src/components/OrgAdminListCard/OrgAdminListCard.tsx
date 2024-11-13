@@ -12,7 +12,13 @@ interface InterfaceOrgPeopleListCardProps {
   id: string | undefined;
   toggleRemoveModal: () => void;
 }
-
+/**
+ * Component to confirm and handle the removal of an admin.
+ *
+ * @param id - ID of the admin to be removed.
+ * @param toggleRemoveModal - Function to toggle the visibility of the modal.
+ * @returns JSX element for the removal confirmation modal.
+ */
 function orgAdminListCard(props: InterfaceOrgPeopleListCardProps): JSX.Element {
   if (!props.id) {
     return <Navigate to={'/orglist'} />;
@@ -23,7 +29,12 @@ function orgAdminListCard(props: InterfaceOrgPeopleListCardProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgAdminListCard',
   });
+  const { t: tCommon } = useTranslation('common');
 
+  /**
+   * Function to remove the admin from the organization
+   * and display a success message.
+   */
   const removeAdmin = async (): Promise<void> => {
     try {
       const { data } = await remove({
@@ -33,7 +44,7 @@ function orgAdminListCard(props: InterfaceOrgPeopleListCardProps): JSX.Element {
         },
       });
       if (data) {
-        toast.success(t('adminRemoved'));
+        toast.success(t('adminRemoved') as string);
         setTimeout(() => {
           window.location.reload();
         }, 2000);
@@ -55,14 +66,14 @@ function orgAdminListCard(props: InterfaceOrgPeopleListCardProps): JSX.Element {
         <Modal.Body>{t('removeAdminMsg')}</Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={props.toggleRemoveModal}>
-            {t('no')}
+            {tCommon('no')}
           </Button>
           <Button
             variant="success"
             onClick={removeAdmin}
             data-testid="removeAdminBtn"
           >
-            {t('yes')}
+            {tCommon('yes')}
           </Button>
         </Modal.Footer>
       </Modal>

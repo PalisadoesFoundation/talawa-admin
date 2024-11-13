@@ -18,9 +18,52 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import styles from './Users.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
-
+import type { ApolloError } from '@apollo/client';
+/**
+ * The `Users` component is responsible for displaying a list of users in a paginated and sortable format.
+ * It supports search functionality, filtering, and sorting of users. The component integrates with GraphQL
+ * for fetching and managing user data and displays results with infinite scrolling.
+ *
+ * ## Features:
+ * - **Search:** Allows users to search for users by their first name.
+ * - **Sorting:** Provides options to sort users by creation date (newest or oldest).
+ * - **Filtering:** Enables filtering users based on their roles (admin, superadmin, user, etc.).
+ * - **Pagination:** Utilizes infinite scrolling to load more users as the user scrolls down.
+ *
+ * ## GraphQL Queries:
+ * - `USER_LIST`: Fetches a list of users with specified search, sorting, and pagination parameters.
+ * - `ORGANIZATION_CONNECTION_LIST`: Fetches a list of organizations to verify organization existence.
+ *
+ *
+ * ## Component State:
+ * - `isLoading`: Indicates whether the component is currently loading data.
+ * - `hasMore`: Indicates if there are more users to load.
+ * - `isLoadingMore`: Indicates if more users are currently being loaded.
+ * - `searchByName`: The current search query for user names.
+ * - `sortingOption`: The current sorting option (newest or oldest).
+ * - `filteringOption`: The current filtering option (admin, superadmin, user, cancel).
+ * - `displayedUsers`: The list of users currently displayed, filtered and sorted.
+ *
+ * ## Event Handlers:
+ * - `handleSearch`: Handles searching users by name and refetches the user list.
+ * - `handleSearchByEnter`: Handles search input when the Enter key is pressed.
+ * - `handleSearchByBtnClick`: Handles search input when the search button is clicked.
+ * - `resetAndRefetch`: Resets search and refetches the user list with default parameters.
+ * - `loadMoreUsers`: Loads more users when scrolling reaches the end of the list.
+ * - `handleSorting`: Updates sorting option and refetches the user list.
+ * - `handleFiltering`: Updates filtering option and refetches the user list.
+ *
+ * ## Rendering:
+ * - Displays a search input and button for searching users.
+ * - Provides dropdowns for sorting and filtering users.
+ * - Renders a table of users with infinite scrolling support.
+ * - Shows appropriate messages when no users are found or when search yields no results.
+ *
+ * @returns  The rendered `Users` component.
+ */
 const Users = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'users' });
+  const { t: tCommon } = useTranslation('common');
 
   document.title = t('title');
 
@@ -33,43 +76,52 @@ const Users = (): JSX.Element => {
   const [searchByName, setSearchByName] = useState('');
   const [sortingOption, setSortingOption] = useState('newest');
   const [filteringOption, setFilteringOption] = useState('cancel');
-  const superAdmin = getItem('SuperAdmin');
-  const adminFor = getItem('AdminFor');
-  const userRole = superAdmin
+  const userType = getItem('SuperAdmin')
     ? 'SUPERADMIN'
-    : adminFor?.length > 0
+    : getItem('AdminFor')
       ? 'ADMIN'
       : 'USER';
-
   const loggedInUserId = getItem('id');
 
-  const { data, loading, fetchMore, refetch } = useQuery(USER_LIST, {
+  const {
+    data: usersData,
+    loading: loading,
+    fetchMore,
+    refetch: refetchUsers,
+  }: {
+    data?: { users: InterfaceQueryUserListItem[] };
+    loading: boolean;
+    fetchMore: any;
+    refetch: any;
+    error?: ApolloError;
+  } = useQuery(USER_LIST, {
     variables: {
       first: perPageResult,
       skip: 0,
       firstName_contains: '',
       lastName_contains: '',
+      order: sortingOption === 'newest' ? 'createdAt_DESC' : 'createdAt_ASC',
     },
     notifyOnNetworkStatusChange: true,
   });
 
   const { data: dataOrgs } = useQuery(ORGANIZATION_CONNECTION_LIST);
-  const [displayedUsers, setDisplayedUsers] = useState(data?.users || []);
+  const [displayedUsers, setDisplayedUsers] = useState(usersData?.users || []);
 
   // Manage loading more state
   useEffect(() => {
-    if (!data) {
+    if (!usersData) {
       return;
     }
-    if (data.users.length < perPageResult) {
+    if (usersData.users.length < perPageResult) {
       setHasMore(false);
     }
-    if (data && data.users) {
-      let newDisplayedUsers = sortUsers(data.users, sortingOption);
+    if (usersData && usersData.users) {
+      let newDisplayedUsers = sortUsers(usersData.users, sortingOption);
       newDisplayedUsers = filterUsers(newDisplayedUsers, filteringOption);
       setDisplayedUsers(newDisplayedUsers);
     }
-  }, [data, sortingOption, filteringOption]);
+  }, [usersData, sortingOption, filteringOption]);
 
   // To clear the search when the component is unmounted
   useEffect(() => {
@@ -85,13 +137,13 @@ const Users = (): JSX.Element => {
     }
 
     if (dataOrgs.organizationsConnection.length === 0) {
-      toast.warning(t('noOrgError'));
+      toast.warning(t('noOrgError') as string);
     }
   }, [dataOrgs]);
 
   // Send to orgList page if user is not superadmin
   useEffect(() => {
-    if (userRole != 'SUPERADMIN') {
+    if (userType != 'SUPERADMIN') {
       window.location.assign('/orglist');
     }
   }, []);
@@ -111,18 +163,17 @@ const Users = (): JSX.Element => {
       resetAndRefetch();
       return;
     }
-    refetch({
+    refetchUsers({
       firstName_contains: value,
       lastName_contains: '',
       // Later on we can add several search and filter options
     });
+    setHasMore(true);
   };
 
-  const handleSearchByEnter = (
-    e: React.KeyboardEvent<HTMLInputElement>,
-  ): void => {
+  const handleSearchByEnter = (e: any): void => {
     if (e.key === 'Enter') {
-      const { value } = e.currentTarget;
+      const { value } = e.target;
       handleSearch(value);
     }
   };
@@ -136,11 +187,12 @@ const Users = (): JSX.Element => {
   };
   /* istanbul ignore next */
   const resetAndRefetch = (): void => {
-    refetch({
+    refetchUsers({
       first: perPageResult,
       skip: 0,
       firstName_contains: '',
       lastName_contains: '',
+      order: sortingOption === 'newest' ? 'createdAt_DESC' : 'createdAt_ASC',
     });
     setHasMore(true);
   };
@@ -149,8 +201,10 @@ const Users = (): JSX.Element => {
     setIsLoadingMore(true);
     fetchMore({
       variables: {
-        skip: data?.users.length || 0,
+        skip: usersData?.users.length || 0,
+        userType: 'ADMIN',
         filter: searchByName,
+        order: sortingOption === 'newest' ? 'createdAt_DESC' : 'createdAt_ASC',
       },
       updateQuery: (
         prev: { users: InterfaceQueryUserListItem[] } | undefined,
@@ -173,6 +227,8 @@ const Users = (): JSX.Element => {
   };
 
   const handleSorting = (option: string): void => {
+    setDisplayedUsers([]);
+    setHasMore(true);
     setSortingOption(option);
   };
 
@@ -200,6 +256,7 @@ const Users = (): JSX.Element => {
   };
 
   const handleFiltering = (option: string): void => {
+    setDisplayedUsers([]);
     setFilteringOption(option);
   };
 
@@ -234,8 +291,8 @@ const Users = (): JSX.Element => {
 
   const headerTitles: string[] = [
     '#',
-    t('name'),
-    t('email'),
+    tCommon('name'),
+    tCommon('email'),
     t('joined_organizations'),
     t('blocked_organizations'),
   ];
@@ -248,7 +305,7 @@ const Users = (): JSX.Element => {
           <div
             className={styles.input}
             style={{
-              display: userRole === 'SUPERADMIN' ? 'block' : 'none',
+              display: userType === 'SUPERADMIN' ? 'block' : 'none',
             }}
           >
             <Form.Control
@@ -307,33 +364,33 @@ const Users = (): JSX.Element => {
                 data-testid="filterUsers"
               >
                 <FilterListIcon className={'me-1'} />
-                {t('filter')}
+                {tCommon('filter')}
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item
                   data-testid="admin"
                   onClick={(): void => handleFiltering('admin')}
                 >
-                  {t('admin')}
+                  {tCommon('admin')}
                 </Dropdown.Item>
                 <Dropdown.Item
                   data-testid="superAdmin"
                   onClick={(): void => handleFiltering('superAdmin')}
                 >
-                  {t('superAdmin')}
+                  {tCommon('superAdmin')}
                 </Dropdown.Item>
 
                 <Dropdown.Item
                   data-testid="user"
                   onClick={(): void => handleFiltering('user')}
                 >
-                  {t('user')}
+                  {tCommon('user')}
                 </Dropdown.Item>
                 <Dropdown.Item
                   data-testid="cancel"
                   onClick={(): void => handleFiltering('cancel')}
                 >
-                  {t('cancel')}
+                  {tCommon('cancel')}
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
@@ -341,15 +398,17 @@ const Users = (): JSX.Element => {
         </div>
       </div>
       {isLoading == false &&
-      data &&
+      usersData &&
       displayedUsers.length === 0 &&
       searchByName.length > 0 ? (
         <div className={styles.notFound}>
           <h4>
-            {t('noResultsFoundFor')} &quot;{searchByName}&quot;
+            {tCommon('noResultsFoundFor')} &quot;{searchByName}&quot;
           </h4>
         </div>
-      ) : isLoading == false && data && displayedUsers.length === 0 ? (
+      ) : isLoading == false &&
+        usersData === undefined &&
+        displayedUsers.length === 0 ? (
         <div className={styles.notFound}>
           <h4>{t('noUserFound')}</h4>
         </div>
@@ -375,7 +434,7 @@ const Users = (): JSX.Element => {
               data-testid="users-list"
               endMessage={
                 <div className={'w-100 text-center my-4'}>
-                  <h5 className="m-0 ">{t('endOfResults')}</h5>
+                  <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
                 </div>
               }
             >
@@ -392,7 +451,7 @@ const Users = (): JSX.Element => {
                   </tr>
                 </thead>
                 <tbody>
-                  {data &&
+                  {usersData &&
                     displayedUsers.map(
                       (user: InterfaceQueryUserListItem, index: number) => {
                         return (

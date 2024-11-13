@@ -43,6 +43,7 @@ interface InterfaceOrganizationModalProps {
   setFormState: (state: React.SetStateAction<InterfaceFormStateType>) => void;
   createOrg: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
   t: (key: string) => string;
+  tCommon: (key: string) => string;
   userData: InterfaceUserType | undefined;
   triggerCreateSampleOrg: () => void;
 }
@@ -58,6 +59,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
   setFormState,
   createOrg,
   t,
+  tCommon,
   triggerCreateSampleOrg,
 }) => {
   // function to update the state of the parameters inside address.
@@ -92,7 +94,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
       </Modal.Header>
       <Form onSubmitCapture={createOrg}>
         <Modal.Body>
-          <Form.Label htmlFor="orgname">{t('name')}</Form.Label>
+          <Form.Label htmlFor="orgname">{tCommon('name')}</Form.Label>
           <Form.Control
             type="name"
             id="orgname"
@@ -112,12 +114,12 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               }
             }}
           />
-          <Form.Label htmlFor="descrip">{t('description')}</Form.Label>
+          <Form.Label htmlFor="descrip">{tCommon('description')}</Form.Label>
           <Form.Control
             type="descrip"
             id="descrip"
             className="mb-3"
-            placeholder={t('description')}
+            placeholder={tCommon('description')}
             autoComplete="off"
             required
             value={formState.descrip}
@@ -131,7 +133,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               }
             }}
           />
-          <Form.Label>{t('address')}</Form.Label>
+          <Form.Label>{tCommon('address')}</Form.Label>
           <Row className="mb-1">
             <Col sm={6} className="mb-3">
               <Form.Control
@@ -265,7 +267,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               />
             </Col>
           </Row>
-          <Form.Label htmlFor="orgphoto">{t('displayImage')}</Form.Label>
+          <Form.Label htmlFor="orgphoto">{tCommon('displayImage')}</Form.Label>
           <Form.Control
             accept="image/*"
             id="orgphoto"
@@ -297,7 +299,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
 
             <div className="position-relative">
               <hr />
-              <span className={styles.orText}>{t('OR')}</span>
+              <span className={styles.orText}>{tCommon('OR')}</span>
             </div>
             {(adminFor.length > 0 || superAdmin) && (
               <div className={styles.sampleOrgSection}>

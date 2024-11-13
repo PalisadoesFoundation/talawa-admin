@@ -12,12 +12,18 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { Search } from '@mui/icons-material';
 
 export default function advertisements(): JSX.Element {
-  // const [searchText, setSearchText] = React.useState();
   const { orgId: currentOrgId } = useParams();
+  // Translation hook for internationalization
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
+  const { t: tCommon } = useTranslation('common');
+
+  // Set the document title based on the translation
   document.title = t('title');
+
+  // State to manage pagination cursor for infinite scrolling
   const [after, setAfter] = useState<string | null | undefined>(null);
 
+  // Type definition for an advertisement object
   type Ad = {
     _id: string;
     name: string;
@@ -27,6 +33,7 @@ export default function advertisements(): JSX.Element {
     startDate: string;
   };
 
+  // GraphQL query to fetch the list of advertisements
   const {
     data: orgAdvertisementListData,
     refetch,
@@ -34,7 +41,6 @@ export default function advertisements(): JSX.Element {
     data?: {
       organizations: InterfaceQueryOrganizationAdvertisementListItem[];
     };
-    // eslint-disable-next-line
     refetch: any;
   } = useQuery(ORGANIZATION_ADVERTISEMENT_LIST, {
     variables: {
@@ -43,24 +49,28 @@ export default function advertisements(): JSX.Element {
       first: 6,
     },
   });
-  const [advertisements, setAdvertisements] = useState(
+
+  // State to manage the list of advertisements
+  const [advertisements, setAdvertisements] = useState<Ad[]>(
     orgAdvertisementListData?.organizations[0].advertisements?.edges.map(
       (edge: { node: Ad }) => edge.node,
     ) || [],
   );
 
+  // Effect hook to update advertisements list when data changes or pagination cursor changes
   useEffect(() => {
     if (orgAdvertisementListData && orgAdvertisementListData.organizations) {
       const ads: Ad[] =
         orgAdvertisementListData.organizations[0].advertisements?.edges.map(
           (edge) => edge.node,
-        );
-      after
-        ? setAdvertisements([...advertisements, ...ads])
-        : setAdvertisements(ads);
+        ) || [];
+      setAdvertisements(after ? [...advertisements, ...ads] : ads);
     }
   }, [orgAdvertisementListData, after]);
 
+  /**
+   * Fetches more advertisements for infinite scrolling.
+   */
   async function loadMoreAdvertisements(): Promise<void> {
     await refetch();
 
@@ -119,6 +129,7 @@ export default function advertisements(): JSX.Element {
                   next={loadMoreAdvertisements}
                   loader={
                     <>
+                      {/* Skeleton loader while fetching more advertisements */}
                       {[...Array(6)].map((_, index) => (
                         <div key={index} className={styles.itemCard}>
                           <div className={styles.loadingWrapper}>
@@ -147,7 +158,7 @@ export default function advertisements(): JSX.Element {
                       (ad: Ad) => new Date(ad.endDate) > new Date(),
                     ).length !== 0 && (
                       <div className={'w-100 text-center my-4'}>
-                        {/* <h5 className="m-0 ">{t('endOfResults')}</h5> */}
+                        <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
                       </div>
                     )
                   }
@@ -188,16 +199,13 @@ export default function advertisements(): JSX.Element {
                   )}
                 </InfiniteScroll>
               </Tab>
-              <Tab
-                eventKey="archievedAds"
-                title={t('archievedAds')}
-                className="pt-4"
-              >
+              <Tab eventKey="archievedAds" title={t('archievedAds')}>
                 <InfiniteScroll
                   dataLength={advertisements?.length ?? 0}
                   next={loadMoreAdvertisements}
                   loader={
                     <>
+                      {/* Skeleton loader while fetching more advertisements */}
                       {[...Array(6)].map((_, index) => (
                         <div key={index} className={styles.itemCard}>
                           <div className={styles.loadingWrapper}>
@@ -226,7 +234,7 @@ export default function advertisements(): JSX.Element {
                       (ad: Ad) => new Date(ad.endDate) < new Date(),
                     ).length !== 0 && (
                       <div className={'w-100 text-center my-4'}>
-                        {/* <h5 className="m-0 ">{t('endOfResults')}</h5> */}
+                        <h5 className="m-0 ">{t('endOfResults')}</h5>
                       </div>
                     )
                   }
@@ -273,7 +281,3 @@ export default function advertisements(): JSX.Element {
     </>
   );
 }
-
-advertisements.defaultProps = {};
-
-advertisements.propTypes = {};

@@ -1,10 +1,17 @@
 import React from 'react';
 import styles from './CardItem.module.css';
 
+/**
+ * CardItemLoading component is a loading state for the card item. It is used when the data is being fetched.
+ * @returns JSX.Element
+ */
 const cardItemLoading = (): JSX.Element => {
   return (
     <>
-      <div className={`${styles.cardItem} border-bottom`}>
+      <div
+        className={`${styles.cardItem} border-bottom`}
+        data-testid="cardItemLoading"
+      >
         <div className={`${styles.iconWrapper} me-3`}>
           <div className={styles.themeOverlay} />
         </div>

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import styles from './AddOnEntry.module.css';
 import { Button, Card, Spinner } from 'react-bootstrap';
 import { UPDATE_INSTALL_STATUS_PLUGIN_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -8,43 +7,79 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { Navigate, useParams } from 'react-router-dom';
 
+/**
+ * Props for the `addOnEntry` component.
+ */
 interface InterfaceAddOnEntryProps {
   id: string;
-  enabled: boolean;
-  title: string;
-  description: string;
+  enabled?: boolean; // Optional props
+  title?: string; // Optional props
+  description?: string; // Optional props
   createdBy: string;
-  component: string;
-  modified: boolean;
+  component?: string; // Optional props
+  modified?: any; // Optional props
   uninstalledOrgs: string[];
   getInstalledPlugins: () => void;
 }
 
+/**
+ * A React component that represents an add-on entry, displaying its details and allowing installation or uninstallation.
+ *
+ * @param props - The properties for the component.
+ * @returns A JSX element containing the add-on entry.
+ *
+ * @example
+ * ```tsx
+ * <AddOnEntry
+ *   id="1"
+ *   enabled={true}
+ *   title="Sample Add-On"
+ *   description="This is a sample add-on."
+ *   createdBy="Author Name"
+ *   component="SampleComponent"
+ *   modified={new Date()}
+ *   uninstalledOrgs={['org1', 'org2']}
+ *   getInstalledPlugins={() => {}}
+ * />
+ * ```
+ */
 function addOnEntry({
   id,
-  title,
-  description,
+  title = 'No title provided', // Default parameter
+  description = 'Description not available', // Default parameter
   createdBy,
   uninstalledOrgs,
   getInstalledPlugins,
+  // enabled = false, // Default parameter
+  // component = '', // Default parameter
+  // modified = null, // Default parameter
 }: InterfaceAddOnEntryProps): JSX.Element {
-  console.log(id);
+  // Translation hook with namespace 'addOnEntry'
   const { t } = useTranslation('translation', { keyPrefix: 'addOnEntry' });
-  //getting orgId from URL
+
+  // Getting orgId from URL parameters
   const { orgId: currentOrg } = useParams();
   // console.log(currentOrg);
   if (!currentOrg) {
+    // If orgId is not present in the URL, navigate to the org list page
     return <Navigate to={'/orglist'} />;
   }
+
+  // State to manage button loading state
   const [buttonLoading, setButtonLoading] = useState(false);
+  // State to manage local installation status of the add-on
   const [isInstalledLocal, setIsInstalledLocal] = useState(
     uninstalledOrgs.includes(currentOrg),
   );
-  // const [addOrgAsUninstalled] = useMutation(UPDATE_ORG_STATUS_PLUGIN_MUTATION);
+
+  // Mutation hook for updating the install status of the plugin
   const [addOrgAsUninstalled] = useMutation(
     UPDATE_INSTALL_STATUS_PLUGIN_MUTATION,
   );
 
+  /**
+   * Function to toggle the installation status of the plugin.
+   */
   const togglePluginInstall = async (): Promise<void> => {
     setButtonLoading(true);
     await addOrgAsUninstalled({
@@ -54,8 +89,11 @@ function addOnEntry({
       },
     });
 
+    // Toggle the local installation status
     setIsInstalledLocal(!isInstalledLocal);
     setButtonLoading(false);
+
+    // Display a success message based on the new installation status
     const dialog: string = isInstalledLocal
       ? t('installMsg')
       : t('uninstallMsg');
@@ -114,21 +152,5 @@ function addOnEntry({
     </>
   );
 }
-
-addOnEntry.defaultProps = {
-  enabled: false,
-  configurable: true,
-  title: '',
-  description: '',
-  isInstalled: false,
-};
-
-addOnEntry.propTypes = {
-  enabled: PropTypes.bool,
-  configurable: PropTypes.bool,
-  title: PropTypes.string,
-  description: PropTypes.string,
-  isInstalled: PropTypes.bool,
-};
 
 export default addOnEntry;

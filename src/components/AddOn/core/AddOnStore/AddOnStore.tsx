@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react';
 import styles from './AddOnStore.module.css';
 import AddOnEntry from '../AddOnEntry/AddOnEntry';
@@ -23,6 +24,17 @@ interface InterfacePluginHelper {
   component: string;
 }
 
+/**
+ * Component for managing and displaying plugins in the store.
+ *
+ * This component:
+ * - Displays a search input and filter options.
+ * - Uses tabs to switch between available and installed plugins.
+ * - Fetches plugins from a GraphQL endpoint and filters them based on search criteria.
+ * - Utilizes Redux store to manage plugin data.
+ *
+ * @returns A JSX element containing the UI for the add-on store.
+ */
 function addOnStore(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'addOnStore' });
   document.title = t('title');
@@ -39,6 +51,9 @@ function addOnStore(): JSX.Element {
 
   const { orgId } = useParams<{ orgId: string }>();
 
+  /**
+   * Fetches store plugins and updates the Redux store with the plugin data.
+   */
   /* istanbul ignore next */
   const getStorePlugins = async (): Promise<void> => {
     let plugins = await new PluginHelper().fetchStore();
@@ -51,23 +66,36 @@ function addOnStore(): JSX.Element {
     });
     store.dispatch({ type: 'UPDATE_STORE', payload: plugins });
   };
+
+  /**
+   * Sets the list of installed plugins in the component's state.
+   */
   /* istanbul ignore next */
-  const getInstalledPlugins = (): void => {
-    if (data) {
-      setDataList(data.getPlugins);
-    }
+  const getInstalledPlugins: () => any = () => {
+    setDataList(data);
   };
 
-  const updateSelectedTab = (tab: string | null): void => {
+  /**
+   * Updates the currently selected tab and fetches the relevant plugin data.
+   *
+   * @param tab - The key of the selected tab (either 'available' or 'installed').
+   */
+  const updateSelectedTab = (tab: any): void => {
     setIsStore(tab === 'available');
     /* istanbul ignore next */
     isStore ? getStorePlugins() : getInstalledPlugins();
   };
 
-  const filterChange = (eventKey: string): void => {
-    setShowEnabled(eventKey === 'enabled');
+  /**
+   * Handles changes in the filter options.
+   *
+   * @param ev - The event object from the filter change.
+   */
+  const filterChange = (ev: any): void => {
+    setShowEnabled(ev.target.value === 'enabled');
   };
 
+  // Show a loader while the data is being fetched
   /* istanbul ignore next */
   if (loading) {
     return (
@@ -76,6 +104,7 @@ function addOnStore(): JSX.Element {
       </>
     );
   }
+
   return (
     <>
       <Row
@@ -253,9 +282,5 @@ function addOnStore(): JSX.Element {
     </>
   );
 }
-
-addOnStore.defaultProps = {};
-
-addOnStore.propTypes = {};
 
 export default addOnStore;

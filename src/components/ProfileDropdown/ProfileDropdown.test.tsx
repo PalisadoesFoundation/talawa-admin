@@ -1,5 +1,5 @@
-import React from 'react';
-import { act, render, screen } from '@testing-library/react';
+import React, { act } from 'react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import ProfileDropdown from './ProfileDropdown';
@@ -7,6 +7,9 @@ import 'jest-localstorage-mock';
 import { MockedProvider } from '@apollo/react-testing';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
+import { I18nextProvider } from 'react-i18next';
+import i18nForTest from 'utils/i18nForTest';
+import { GET_COMMUNITY_SESSION_TIMEOUT_DATA } from 'GraphQl/Queries/Queries';
 
 const { setItem } = useLocalStorage();
 const MOCKS = [
@@ -19,6 +22,19 @@ const MOCKS = [
         revokeRefreshTokenForUser: true,
       },
     },
+  },
+  {
+    request: {
+      query: GET_COMMUNITY_SESSION_TIMEOUT_DATA,
+    },
+    result: {
+      data: {
+        getCommunityData: {
+          timeout: 30,
+        },
+      },
+    },
+    delay: 1000,
   },
 ];
 
@@ -57,7 +73,9 @@ describe('ProfileDropdown Component', () => {
     render(
       <MockedProvider mocks={MOCKS} addTypename={false}>
         <BrowserRouter>
-          <ProfileDropdown />
+          <I18nextProvider i18n={i18nForTest}>
+            <ProfileDropdown />
+          </I18nextProvider>
         </BrowserRouter>
       </MockedProvider>,
     );
@@ -100,13 +118,16 @@ describe('ProfileDropdown Component', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
+
     await act(async () => {
       userEvent.click(screen.getByTestId('togDrop'));
     });
 
     userEvent.click(screen.getByTestId('logoutBtn'));
+
     expect(global.window.location.pathname).toBe('/');
   });
+
   describe('Member screen routing testing', () => {
     test('member screen', async () => {
       render(

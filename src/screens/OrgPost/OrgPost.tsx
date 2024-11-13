@@ -43,10 +43,17 @@ interface InterfaceOrgPost {
   }[];
 }
 
+/**
+ * This function is used to display the posts of the organization. It displays the posts in a card format.
+ * It also provides the functionality to create a new post. The user can also sort the posts based on the date of creation.
+ * The user can also search for a post based on the title of the post.
+ * @returns JSX.Element which contains the posts of the organization.
+ */
 function orgPost(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgPost',
   });
+  const { t: tCommon } = useTranslation('common');
 
   document.title = t('title');
   const [postmodalisOpen, setPostModalIsOpen] = useState(false);
@@ -95,12 +102,20 @@ function orgPost(): JSX.Element {
     };
     loading: boolean;
     error?: ApolloError;
-    refetch: any;
+    refetch: (filterData?: {
+      id: string | undefined;
+      // title_contains: string | null;
+      // text_contains: string | null;
+      after: string | null | undefined;
+      before: string | null | undefined;
+      first: number | null;
+      last: number | null;
+    }) => void;
   } = useQuery(ORGANIZATION_POST_LIST, {
     variables: {
-      id: currentUrl,
-      after: after,
-      before: before,
+      id: currentUrl as string,
+      after: after ?? null,
+      before: before ?? null,
       first: first,
       last: last,
     },
@@ -155,7 +170,7 @@ function orgPost(): JSX.Element {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success(t('postCreatedSuccess'));
+        toast.success(t('postCreatedSuccess') as string);
         refetch();
         setPostFormState({
           posttitle: '',
@@ -167,7 +182,7 @@ function orgPost(): JSX.Element {
         });
         setPostModalIsOpen(false);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       errorHandler(t, error);
     }
   };
@@ -201,12 +216,16 @@ function orgPost(): JSX.Element {
     }
   };
 
-  const handleSearch = (e: any): void => {
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { value } = e.target;
     const filterData = {
       id: currentUrl,
       title_contains: showTitle ? value : null,
       text_contains: !showTitle ? value : null,
+      after: after || null,
+      before: before || null,
+      first: first || null,
+      last: last || null,
     };
     refetch(filterData);
   };
@@ -290,7 +309,7 @@ function orgPost(): JSX.Element {
                 <Dropdown
                   aria-expanded="false"
                   title="SearchBy"
-                  data-tesid="sea"
+                  data-testid="sea"
                 >
                   <Dropdown.Toggle
                     data-testid="searchBy"
@@ -383,6 +402,7 @@ function orgPost(): JSX.Element {
                     postPhoto={datas?.imageUrl}
                     postVideo={datas?.videoUrl}
                     pinned={datas.pinned}
+                    postID={''}
                   />
                 ),
               )
@@ -539,7 +559,7 @@ function orgPost(): JSX.Element {
               onClick={(): void => hideInviteModal()}
               data-testid="closeOrganizationModal"
             >
-              {t('cancel')}
+              {tCommon('cancel')}
             </Button>
             <Button type="submit" value="invite" data-testid="createPostBtn">
               {t('addPost')}

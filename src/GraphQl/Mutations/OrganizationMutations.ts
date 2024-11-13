@@ -50,22 +50,98 @@ export const REMOVE_SAMPLE_ORGANIZATION_MUTATION = gql`
 `;
 
 /**
- * GraphQL mutation to create a direct chat between users in an organization.
+ * GraphQL mutation to create a chat between users in an organization.
  *
  * @param userIds - An array of user IDs participating in the direct chat.
  * @param organizationId - The ID of the organization where the direct chat is created.
  * @returns The created direct chat object.
  */
 
-export const CREATE_DIRECT_CHAT = gql`
-  mutation createDirectChat($userIds: [ID!]!, $organizationId: ID!) {
-    createDirectChat(
-      data: { userIds: $userIds, organizationId: $organizationId }
+export const CREATE_CHAT = gql`
+  mutation createChat(
+    $userIds: [ID!]!
+    $organizationId: ID
+    $isGroup: Boolean!
+    $name: String
+  ) {
+    createChat(
+      data: {
+        userIds: $userIds
+        organizationId: $organizationId
+        isGroup: $isGroup
+        name: $name
+      }
     ) {
       _id
     }
   }
 `;
+
+export const SEND_MESSAGE_TO_CHAT = gql`
+  mutation sendMessageToChat(
+    $chatId: ID!
+    $replyTo: ID
+    $messageContent: String!
+  ) {
+    sendMessageToChat(
+      chatId: $chatId
+      replyTo: $replyTo
+      messageContent: $messageContent
+    ) {
+      _id
+      createdAt
+      messageContent
+      replyTo {
+        _id
+        createdAt
+        messageContent
+        sender {
+          _id
+          firstName
+          lastName
+        }
+        updatedAt
+      }
+      sender {
+        _id
+        firstName
+        lastName
+      }
+      updatedAt
+    }
+  }
+`;
+
+export const MESSAGE_SENT_TO_CHAT = gql`
+  subscription messageSentToChat($userId: ID!) {
+    messageSentToChat(userId: $userId) {
+      _id
+      createdAt
+      chatMessageBelongsTo {
+        _id
+      }
+      messageContent
+      replyTo {
+        _id
+        createdAt
+        messageContent
+        sender {
+          _id
+          firstName
+          lastName
+        }
+        updatedAt
+      }
+      sender {
+        _id
+        firstName
+        lastName
+      }
+      updatedAt
+    }
+  }
+`;
+
 //Plugin WebSocket listner
 
 /**

@@ -88,6 +88,31 @@ def compare_translations(default_translation,
             errors.append(error_msg)
     return errors
 
+def flatten_json(nested_json, parent_key=""):
+    """
+    Flattens a nested JSON, concatenating keys to represent the hierarchy.
+
+    Args:
+        nested_json (dict): The JSON object to flatten.
+        parent_key (str): The base key for recursion (used to track key hierarchy).
+
+    Returns:
+        dict: A flattened dictionary with concatenated keys.
+    """
+    flat_dict = {}
+
+    for key, value in nested_json.items():
+        # Create the new key by concatenating parent and current key
+        new_key = f"{parent_key}.{key}" if parent_key else key
+        
+        if isinstance(value, dict):
+            # Recursively flatten the nested dictionary
+            flat_dict.update(flatten_json(value, new_key))
+        else:
+            # Assign the value to the flattened key
+            flat_dict[new_key] = value
+
+    return flat_dict
 
 def load_translation(filepath):
     """Load translation from a file.
@@ -98,9 +123,16 @@ def load_translation(filepath):
     Returns:
         translation: Loaded translation
     """
-    with open(filepath, "r", encoding="utf-8") as file:
-        translation = json.load(file)
-    return translation
+    try:
+        with open(filepath, "r", encoding="utf-8") as file:
+            content = file.read()
+            if not content.strip():
+                raise ValueError(f"File {filepath} is empty.")
+            translation = json.loads(content)
+            flattened_translation = flatten_json(translation)
+        return flattened_translation
+    except json.JSONDecodeError as e:
+        raise ValueError(f"Error decoding JSON from file {filepath}: {e}")
 
 
 def check_translations(directory):
@@ -112,26 +144,36 @@ def check_translations(directory):
     Returns:
         None
     """
-    default_file = "en.json"
-    default_translation = load_translation(os.path.join(directory, default_file))
-    translations = os.listdir(directory)
-    translations.remove(default_file)  # Exclude default translation
+    default_language_dir = os.path.join(directory, "en")
+    default_files = ["common.json", "errors.json", "translation.json"]
+    default_translations = {}
+    for file in default_files:
+        file_path = os.path.join(default_language_dir, file)
+        default_translations[file] = load_translation(file_path)
+
+    languages = os.listdir(directory)
+    languages.remove("en")  # Exclude default language directory
+
 
     error_found = False
 
-    for translation_file in translations:
-        other_file = os.path.join(directory, translation_file)
-        other_translation = load_translation(other_file)
+    for language in languages:
+        language_dir = os.path.join(directory, language)
+        for file in default_files:
+            default_translation = default_translations[file]
+            other_file_path = os.path.join(language_dir, file)
+            other_translation = load_translation(other_file_path)
 
-        # Compare translations and get detailed error messages
-        errors = compare_translations(
-            default_translation, other_translation, default_file, translation_file
-        )
-        if errors:
-            error_found = True
-            print(f"File {translation_file} has missing translations for:")
-            for error in errors:
-                print(f"  - {error}")
+            # Compare translations and get detailed error messages
+            errors = compare_translations(
+                default_translation, other_translation, f"en/{file}", f"{language}/{file}"
+            )
+            if errors:
+                error_found = True
+                print(f"File {language}/{file} has missing translations for:")
+                for error in errors:
+                    print(f"  - {error}")
+
 
     if error_found:
         sys.exit(1)  # Exit with an error status code

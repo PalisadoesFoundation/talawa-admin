@@ -8,23 +8,28 @@ import gql from 'graphql-tag';
  * @param preCompletionNotes - Notes prior to completion.
  * @param dueDate - Due date.
  * @param eventId - Event to which the ActionItem is related.
+ * @param allottedHours - Hours allotted for the ActionItem.
  */
 
 export const CREATE_ACTION_ITEM_MUTATION = gql`
   mutation CreateActionItem(
     $actionItemCategoryId: ID!
     $assigneeId: ID!
+    $assigneeType: String!
     $preCompletionNotes: String
-    $dueDate: Date
+    $dDate: Date
     $eventId: ID
+    $allottedHours: Float
   ) {
     createActionItem(
       actionItemCategoryId: $actionItemCategoryId
       data: {
         assigneeId: $assigneeId
+        assigneeType: $assigneeType
         preCompletionNotes: $preCompletionNotes
-        dueDate: $dueDate
+        dueDate: $dDate
         eventId: $eventId
+        allottedHours: $allottedHours
       }
     ) {
       _id
@@ -48,20 +53,24 @@ export const UPDATE_ACTION_ITEM_MUTATION = gql`
   mutation UpdateActionItem(
     $actionItemId: ID!
     $assigneeId: ID!
+    $assigneeType: String!
     $preCompletionNotes: String
     $postCompletionNotes: String
     $dueDate: Date
     $completionDate: Date
     $isCompleted: Boolean
+    $allottedHours: Float
   ) {
     updateActionItem(
       id: $actionItemId
       data: {
         assigneeId: $assigneeId
+        assigneeType: $assigneeType
         preCompletionNotes: $preCompletionNotes
         postCompletionNotes: $postCompletionNotes
         dueDate: $dueDate
         completionDate: $completionDate
+        allottedHours: $allottedHours
         isCompleted: $isCompleted
       }
     ) {

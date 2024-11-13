@@ -14,7 +14,7 @@ import { I18nextProvider } from 'react-i18next';
 
 import OrganizationEvents from './OrganizationEvents';
 import { store } from 'state/store';
-import i18nForTest from 'utils/i18nForTest';
+import i18n from 'utils/i18nForTest';
 import userEvent from '@testing-library/user-event';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
@@ -43,11 +43,15 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-const translations = JSON.parse(
-  JSON.stringify(
-    i18nForTest.getDataByLanguage('en')?.translation.organizationEvents,
+const translations = {
+  ...JSON.parse(
+    JSON.stringify(
+      i18n.getDataByLanguage('en')?.translation.organizationEvents ?? {},
+    ),
   ),
-);
+  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
+  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
+};
 
 jest.mock('@mui/x-date-pickers/DateTimePicker', () => {
   return {
@@ -131,7 +135,7 @@ describe('Organisation Events Page', () => {
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <ThemeProvider theme={theme}>
-                <I18nextProvider i18n={i18nForTest}>
+                <I18nextProvider i18n={i18n}>
                   <OrganizationEvents />
                 </I18nextProvider>
               </ThemeProvider>
@@ -154,7 +158,7 @@ describe('Organisation Events Page', () => {
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <ThemeProvider theme={theme}>
-                <I18nextProvider i18n={i18nForTest}>
+                <I18nextProvider i18n={i18n}>
                   <OrganizationEvents />
                 </I18nextProvider>
               </ThemeProvider>
@@ -178,7 +182,7 @@ describe('Organisation Events Page', () => {
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <ThemeProvider theme={theme}>
-                <I18nextProvider i18n={i18nForTest}>
+                <I18nextProvider i18n={i18n}>
                   <OrganizationEvents />
                 </I18nextProvider>
               </ThemeProvider>
@@ -218,7 +222,7 @@ describe('Organisation Events Page', () => {
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <ThemeProvider theme={theme}>
-                <I18nextProvider i18n={i18nForTest}>
+                <I18nextProvider i18n={i18n}>
                   <OrganizationEvents />
                 </I18nextProvider>
               </ThemeProvider>
@@ -246,10 +250,7 @@ describe('Organisation Events Page', () => {
       screen.getByPlaceholderText(/Enter Description/i),
       formData.description,
     );
-    userEvent.type(
-      screen.getByPlaceholderText(/Enter Location/i),
-      formData.location,
-    );
+    userEvent.type(screen.getByPlaceholderText(/Location/i), formData.location);
 
     const endDatePicker = screen.getByLabelText('End Date');
     const startDatePicker = screen.getByLabelText('Start Date');
@@ -281,7 +282,7 @@ describe('Organisation Events Page', () => {
     userEvent.click(screen.getByTestId('createEventBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.eventCreated);
+      expect(toast.success).toHaveBeenCalledWith(translations.eventCreated);
     });
 
     await waitFor(() => {
@@ -312,7 +313,7 @@ describe('Organisation Events Page', () => {
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <ThemeProvider theme={theme}>
-                <I18nextProvider i18n={i18nForTest}>
+                <I18nextProvider i18n={i18n}>
                   <OrganizationEvents />
                 </I18nextProvider>
               </ThemeProvider>
@@ -339,14 +340,8 @@ describe('Organisation Events Page', () => {
       screen.getByPlaceholderText(/Enter Description/i),
       formData.description,
     );
-    userEvent.type(
-      screen.getByPlaceholderText(/Enter Location/i),
-      formData.location,
-    );
-    userEvent.type(
-      screen.getByPlaceholderText(/Enter Location/i),
-      formData.location,
-    );
+    userEvent.type(screen.getByPlaceholderText(/Location/i), formData.location);
+    userEvent.type(screen.getByPlaceholderText(/Location/i), formData.location);
 
     const endDatePicker = screen.getByLabelText('End Date');
     const startDatePicker = screen.getByLabelText('Start Date');
@@ -376,9 +371,9 @@ describe('Organisation Events Page', () => {
     expect(screen.getByTestId('registrableCheck')).toBeChecked();
 
     userEvent.click(screen.getByTestId('createEventBtn'));
-    expect(toast.warning).toBeCalledWith('Title can not be blank!');
-    expect(toast.warning).toBeCalledWith('Description can not be blank!');
-    expect(toast.warning).toBeCalledWith('Location can not be blank!');
+    expect(toast.warning).toHaveBeenCalledWith('Title can not be blank!');
+    expect(toast.warning).toHaveBeenCalledWith('Description can not be blank!');
+    expect(toast.warning).toHaveBeenCalledWith('Location can not be blank!');
 
     userEvent.click(screen.getByTestId('createEventModalCloseBtn'));
 
@@ -396,7 +391,7 @@ describe('Organisation Events Page', () => {
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <ThemeProvider theme={theme}>
-                <I18nextProvider i18n={i18nForTest}>
+                <I18nextProvider i18n={i18n}>
                   <OrganizationEvents />
                 </I18nextProvider>
               </ThemeProvider>
@@ -425,10 +420,7 @@ describe('Organisation Events Page', () => {
       formData.description,
     );
 
-    userEvent.type(
-      screen.getByPlaceholderText(/Enter Location/i),
-      formData.location,
-    );
+    userEvent.type(screen.getByPlaceholderText(/Location/i), formData.location);
 
     const endDatePicker = screen.getByLabelText('End Date');
     const startDatePicker = screen.getByLabelText('Start Date');
@@ -460,7 +452,7 @@ describe('Organisation Events Page', () => {
     userEvent.click(screen.getByTestId('createEventBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.eventCreated);
+      expect(toast.success).toHaveBeenCalledWith(translations.eventCreated);
     });
 
     await waitFor(() => {

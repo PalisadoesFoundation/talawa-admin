@@ -1,5 +1,6 @@
 import React from 'react';
 import { act, fireEvent, render, screen } from '@testing-library/react';
+
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 
@@ -225,6 +226,38 @@ describe('Testing OrganizationCard Component [User Portal]', () => {
     await wait();
   });
 
+  test('Visit organization', async () => {
+    const cardProps = {
+      ...props,
+      id: '3',
+      image: 'organizationImage',
+      userRegistrationRequired: true,
+      membershipRequestStatus: 'accepted',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationCard {...cardProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    expect(screen.getByTestId('manageBtn')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByTestId('manageBtn'));
+
+    await wait();
+
+    expect(window.location.pathname).toBe(`/user/organization/${cardProps.id}`);
+  });
+
   test('Send membership request', async () => {
     props = {
       ...props,
@@ -250,7 +283,7 @@ describe('Testing OrganizationCard Component [User Portal]', () => {
     fireEvent.click(screen.getByTestId('joinBtn'));
     await wait();
 
-    expect(toast.success).toHaveBeenCalledWith('users.MembershipRequestSent');
+    expect(toast.success).toHaveBeenCalledWith('MembershipRequestSent');
   });
 
   test('send membership request to public org', async () => {

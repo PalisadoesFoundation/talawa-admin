@@ -8,7 +8,7 @@ import {
   FORGOT_PASSWORD_MUTATION,
   GENERATE_OTP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import { ReactComponent as KeyLogo } from 'assets/svgs/key.svg';
+import KeyLogo from 'assets/svgs/key.svg?react';
 
 import ArrowRightAlt from '@mui/icons-material/ArrowRightAlt';
 import Loader from 'components/Loader/Loader';
@@ -19,15 +19,35 @@ import { errorHandler } from 'utils/errorHandler';
 import styles from './ForgotPassword.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 
+/**
+ * `ForgotPassword` component allows users to reset their password.
+ *
+ * It provides two stages:
+ * 1. Entering the registered email to receive an OTP.
+ * 2. Entering the OTP and new password to reset the password.
+ *
+ * @returns JSX.Element - The `ForgotPassword` component.
+ *
+ * @example
+ * ```tsx
+ * <ForgotPassword />
+ * ```
+ */
 const ForgotPassword = (): JSX.Element => {
+  // Translation hook for internationalization
   const { t } = useTranslation('translation', {
     keyPrefix: 'forgotPassword',
   });
+  const { t: tCommon } = useTranslation('common');
+  const { t: tErrors } = useTranslation('errors');
 
+  // Set the page title
   document.title = t('title');
 
+  // Custom hook for accessing local storage
   const { getItem, removeItem, setItem } = useLocalStorage();
 
+  // State hooks for form data and UI
   const [showEnterEmail, setShowEnterEmail] = useState(true);
 
   const [registeredEmail, setregisteredEmail] = useState('');
@@ -38,10 +58,13 @@ const ForgotPassword = (): JSX.Element => {
     confirmNewPassword: '',
   });
 
+  // GraphQL mutations
   const [otp, { loading: otpLoading }] = useMutation(GENERATE_OTP_MUTATION);
   const [forgotPassword, { loading: forgotPasswordLoading }] = useMutation(
     FORGOT_PASSWORD_MUTATION,
   );
+
+  // Check if the user is already logged in
   const isLoggedIn = getItem('IsLoggedIn');
   useEffect(() => {
     if (isLoggedIn == 'TRUE') {
@@ -52,6 +75,11 @@ const ForgotPassword = (): JSX.Element => {
     };
   }, []);
 
+  /**
+   * Handles the form submission for generating OTP.
+   *
+   * @param e - The form submit event
+   */
   const getOTP = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
@@ -62,22 +90,25 @@ const ForgotPassword = (): JSX.Element => {
         },
       });
 
-      if (data) {
-        setItem('otpToken', data.otp.otpToken);
-        toast.success(t('OTPsent'));
-        setShowEnterEmail(false);
-      }
-    } catch (error: any) {
-      if (error.message === 'User not found') {
-        toast.warn(t('emailNotRegistered'));
-      } else if (error.message === 'Failed to fetch') {
-        toast.error(t('talawaApiUnavailable'));
+      setItem('otpToken', data.otp.otpToken);
+      toast.success(t('OTPsent'));
+      setShowEnterEmail(false);
+    } catch (error: unknown) {
+      if ((error as Error).message === 'User not found') {
+        toast.warn(tErrors('emailNotRegistered'));
+      } else if ((error as Error).message === 'Failed to fetch') {
+        toast.error(tErrors('talawaApiUnavailable'));
       } else {
-        toast.error(t('errorSendingMail'));
+        toast.error(tErrors('errorSendingMail'));
       }
     }
   };
 
+  /**
+   * Handles the form submission for resetting the password.
+   *
+   * @param e - The form submit event
+   */
   const submitForgotPassword = async (
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
@@ -85,7 +116,7 @@ const ForgotPassword = (): JSX.Element => {
     const { userOtp, newPassword, confirmNewPassword } = forgotPassFormData;
 
     if (newPassword !== confirmNewPassword) {
-      toast.error(t('passwordMismatches'));
+      toast.error(t('passwordMismatches') as string);
       return;
     }
 
@@ -106,7 +137,7 @@ const ForgotPassword = (): JSX.Element => {
 
       /* istanbul ignore next */
       if (data) {
-        toast.success(t('passwordChanges'));
+        toast.success(t('passwordChanges') as string);
         setShowEnterEmail(true);
         setForgotPassFormData({
           userOtp: '',
@@ -114,16 +145,18 @@ const ForgotPassword = (): JSX.Element => {
           confirmNewPassword: '',
         });
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       setShowEnterEmail(true);
       /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
 
+  // Show loader while performing OTP or password reset operations
   if (otpLoading || forgotPasswordLoading) {
     return <Loader />;
   }
+
   return (
     <>
       <div className={styles.pageWrapper}>
@@ -134,7 +167,9 @@ const ForgotPassword = (): JSX.Element => {
                 <div className={styles.themeOverlay} />
                 <KeyLogo className={styles.keyLogo} fill="var(--bs-primary)" />
               </div>
-              <h3 className="text-center fw-bold">{t('forgotPassword')}</h3>
+              <h3 className="text-center fw-bold">
+                {tCommon('forgotPassword')}
+              </h3>
               {showEnterEmail ? (
                 <div className="mt-4">
                   <Form onSubmit={getOTP}>
@@ -190,7 +225,7 @@ const ForgotPassword = (): JSX.Element => {
                       type="password"
                       className="form-control"
                       id="newPassword"
-                      placeholder={t('password')}
+                      placeholder={tCommon('password')}
                       data-testid="newPassword"
                       name="newPassword"
                       value={forgotPassFormData.newPassword}

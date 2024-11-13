@@ -32,6 +32,7 @@ import OrganizationModal from './OrganizationModal';
 
 function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
+  const { t: tCommon } = useTranslation('common');
   const [dialogModalisOpen, setdialogModalIsOpen] = useState(false);
   const [dialogRedirectOrgId, setDialogRedirectOrgId] = useState('<ORG_ID>');
 
@@ -108,12 +109,6 @@ function orgList(): JSX.Element {
     error: errorList,
     refetch: refetchOrgs,
     fetchMore,
-  }: {
-    data: InterfaceOrgConnectionType | undefined;
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: any;
-    fetchMore: any;
   } = useQuery(ORGANIZATION_CONNECTION_LIST, {
     variables: {
       first: perPageResult,
@@ -174,11 +169,11 @@ function orgList(): JSX.Element {
   const triggerCreateSampleOrg = (): void => {
     createSampleOrganization()
       .then(() => {
-        toast.success(t('sampleOrgSuccess'));
+        toast.success(t('sampleOrgSuccess') as string);
         window.location.reload();
       })
       .catch(() => {
-        toast.error(t('sampleOrgDuplicate'));
+        toast.error(t('sampleOrgDuplicate') as string);
       });
   };
 
@@ -234,7 +229,7 @@ function orgList(): JSX.Element {
         });
         toggleModal();
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       /* istanbul ignore next */
       errorHandler(t, error);
     }
@@ -269,9 +264,11 @@ function orgList(): JSX.Element {
     });
   };
 
-  const handleSearchByEnter = (e: any): void => {
+  const handleSearchByEnter = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ): void => {
     if (e.key === 'Enter') {
-      const { value } = e.target;
+      const { value } = e.currentTarget;
       handleSearch(value);
     }
   };
@@ -345,7 +342,7 @@ function orgList(): JSX.Element {
             type="name"
             id="searchOrgname"
             className="bg-white"
-            placeholder={t('searchByName')}
+            placeholder={tCommon('searchByName')}
             data-testid="searchByName"
             autoComplete="off"
             required
@@ -421,7 +418,7 @@ function orgList(): JSX.Element {
         /* istanbul ignore next */
         <div className={styles.notFound} data-testid="noResultFound">
           <h4 className="m-0">
-            {t('noResultsFoundFor')} &quot;{searchByName}&quot;
+            {tCommon('noResultsFoundFor')} &quot;{searchByName}&quot;
           </h4>
         </div>
       ) : (
@@ -456,29 +453,33 @@ function orgList(): JSX.Element {
             data-testid="organizations-list"
             endMessage={
               <div className={'w-100 text-center my-4'}>
-                <h5 className="m-0 ">{t('endOfResults')}</h5>
+                <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
               </div>
             }
           >
             {userData && superAdmin
-              ? orgsData?.organizationsConnection.map((item) => {
-                  return (
-                    <div key={item._id} className={styles.itemCard}>
-                      <OrgListCard data={item} />
-                    </div>
-                  );
-                })
-              : userData &&
-                adminFor.length > 0 &&
-                orgsData?.organizationsConnection.map((item) => {
-                  if (isAdminForCurrentOrg(item)) {
+              ? orgsData?.organizationsConnection.map(
+                  (item: InterfaceOrgConnectionInfoType) => {
                     return (
                       <div key={item._id} className={styles.itemCard}>
                         <OrgListCard data={item} />
                       </div>
                     );
-                  }
-                })}
+                  },
+                )
+              : userData &&
+                adminFor.length > 0 &&
+                orgsData?.organizationsConnection.map(
+                  (item: InterfaceOrgConnectionInfoType) => {
+                    if (isAdminForCurrentOrg(item)) {
+                      return (
+                        <div key={item._id} className={styles.itemCard}>
+                          <OrgListCard data={item} />
+                        </div>
+                      );
+                    }
+                  },
+                )}
           </InfiniteScroll>
           {isLoading && (
             <>
@@ -525,6 +526,7 @@ function orgList(): JSX.Element {
         setFormState={setFormState}
         createOrg={createOrg}
         t={t}
+        tCommon={tCommon}
         userData={userData}
         triggerCreateSampleOrg={triggerCreateSampleOrg}
       />

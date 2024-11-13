@@ -10,25 +10,38 @@ import { toast } from 'react-toastify';
 import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
 import useLocalStorage from 'utils/useLocalstorage';
 import {
-  countryOptions,
   educationGradeEnum,
   employmentStatusEnum,
   genderEnum,
   maritalStatusEnum,
 } from 'utils/formEnumFields';
-import UserProfile from 'components/UserProfileSettings/UserProfile';
 import DeleteUser from 'components/UserProfileSettings/DeleteUser';
 import OtherSettings from 'components/UserProfileSettings/OtherSettings';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
+import Avatar from 'components/Avatar/Avatar';
+import type { InterfaceEvent } from 'components/EventManagement/EventAttendance/InterfaceEvents';
+import { EventsAttendedByUser } from 'components/UserPortal/UserProfile/EventsAttendedByUser';
+import UserAddressFields from 'components/UserPortal/UserProfile/UserAddressFields';
 
+/**
+ * The Settings component allows users to view and update their profile settings.
+ * It includes functionality to handle image uploads, reset changes, and save updated user details.
+ *
+ * @returns The Settings component.
+ */
 export default function settings(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'settings',
   });
-
+  const { t: tCommon } = useTranslation('common');
+  const [isUpdated, setisUpdated] = useState<boolean>(false);
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
 
+  /**
+   * Handler to adjust sidebar visibility based on window width.
+   * This function is invoked on window resize and when the component mounts.
+   */
   const handleResize = (): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer(!hideDrawer);
@@ -44,13 +57,12 @@ export default function settings(): JSX.Element {
   }, []);
 
   const { setItem } = useLocalStorage();
-
   const { data } = useQuery(CHECK_AUTH, { fetchPolicy: 'network-only' });
   const [updateUserDetails] = useMutation(UPDATE_USER_MUTATION);
-
   const [userDetails, setUserDetails] = React.useState({
     firstName: '',
     lastName: '',
+    createdAt: '',
     gender: '',
     email: '',
     phoneNumber: '',
@@ -62,10 +74,24 @@ export default function settings(): JSX.Element {
     state: '',
     country: '',
     image: '',
+    eventsAttended: [] as InterfaceEvent[],
   });
 
+  /**
+   * Ref to store the original image URL for comparison during updates.
+   */
   const originalImageState = React.useRef<string>('');
+  /**
+   * Ref to access the file input element for image uploads.
+   */
   const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+  /**
+   * Handles the update of user details.
+   * This function sends a mutation request to update the user details
+   * and reloads the page on success.
+   */
+  /*istanbul ignore next*/
   const handleUpdateUserDetails = async (): Promise<void> => {
     try {
       let updatedUserDetails = { ...userDetails };
@@ -77,38 +103,56 @@ export default function settings(): JSX.Element {
       });
       /* istanbul ignore next */
       if (data) {
-        toast.success('Your details have been updated.');
+        toast.success(
+          tCommon('updatedSuccessfully', { item: 'Profile' }) as string,
+        );
         setTimeout(() => {
           window.location.reload();
         }, 500);
-
         const userFullName = `${userDetails.firstName} ${userDetails.lastName}`;
         setItem('name', userFullName);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
+      /*istanbul ignore next*/
       errorHandler(t, error);
     }
   };
 
+  /**
+   * Handles the change of a specific field in the user details state.
+   *
+   * @param fieldName - The name of the field to be updated.
+   * @param value - The new value for the field.
+   */
   const handleFieldChange = (fieldName: string, value: string): void => {
+    setisUpdated(true);
     setUserDetails((prevState) => ({
       ...prevState,
       [fieldName]: value,
     }));
   };
 
+  /**
+   * Triggers the file input click event to open the file picker dialog.
+   */
   const handleImageUpload = (): void => {
+    setisUpdated(true);
     if (fileInputRef.current) {
       (fileInputRef.current as HTMLInputElement).click();
     }
   };
 
+  /**
+   * Resets the user details to the values fetched from the server.
+   */
   const handleResetChanges = (): void => {
+    setisUpdated(false);
     /* istanbul ignore next */
     if (data) {
       const {
         firstName,
         lastName,
+        createdAt,
         gender,
         phone,
         birthDate,
@@ -122,6 +166,7 @@ export default function settings(): JSX.Element {
         ...userDetails,
         firstName: firstName || '',
         lastName: lastName || '',
+        createdAt: createdAt || '',
         gender: gender || '',
         phoneNumber: phone?.mobile || '',
         birthDate: birthDate || '',
@@ -135,12 +180,13 @@ export default function settings(): JSX.Element {
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     /* istanbul ignore next */
     if (data) {
       const {
         firstName,
         lastName,
+        createdAt,
         gender,
         email,
         phone,
@@ -150,11 +196,13 @@ export default function settings(): JSX.Element {
         maritalStatus,
         address,
         image,
+        eventsAttended,
       } = data.checkAuth;
 
       setUserDetails({
         firstName,
         lastName,
+        createdAt,
         gender,
         email,
         phoneNumber: phone?.mobile || '',
@@ -165,12 +213,12 @@ export default function settings(): JSX.Element {
         address: address?.line1 || '',
         state: address?.state || '',
         country: address?.countryCode || '',
+        eventsAttended,
         image,
       });
       originalImageState.current = image;
     }
   }, [data]);
-
   return (
     <>
       {hideDrawer ? (
@@ -205,19 +253,14 @@ export default function settings(): JSX.Element {
         }`}
       >
         <div className={`${styles.mainContainer}`}>
-          <div className="d-flex justify-content-end align-items-center">
+          <div className="d-flex justify-content-between align-items-center">
+            <div style={{ flex: 1 }}>
+              <h1>{tCommon('settings')}</h1>
+            </div>
             <ProfileDropdown />
           </div>
-          <h3>{t('settings')}</h3>
+          <h3>{tCommon('settings')}</h3>
           <Row>
-            <Col lg={5} className="d-lg-none">
-              <UserProfile
-                firstName={userDetails.firstName}
-                lastName={userDetails.lastName}
-                email={userDetails.email}
-                image={userDetails.image}
-              />
-            </Col>
             <Col lg={7}>
               <Card border="0" className="rounded-4 mb-4">
                 <div className={`${styles.cardHeader}`}>
@@ -227,12 +270,76 @@ export default function settings(): JSX.Element {
                 </div>
                 <Card.Body className={`${styles.cardBody}`}>
                   <Row className="mb-1">
+                    <Col lg={12} className="mb-2">
+                      <div className="text-center mb-3">
+                        <div className="position-relative d-inline-block">
+                          {userDetails?.image ? (
+                            <img
+                              className="rounded-circle"
+                              style={{
+                                width: '60px',
+                                height: '60px',
+                                objectFit: 'cover',
+                              }}
+                              src={userDetails.image}
+                              alt="User"
+                              data-testid="profile-picture"
+                            />
+                          ) : (
+                            <Avatar
+                              name={`${userDetails.firstName} ${userDetails.lastName}`}
+                              alt="User Image"
+                              size={60}
+                              dataTestId="profile-picture"
+                              radius={150}
+                            />
+                          )}
+                          <i
+                            className="fas fa-edit position-absolute bottom-0 right-0 p-2 bg-white rounded-circle"
+                            onClick={handleImageUpload}
+                            data-testid="uploadImageBtn"
+                            style={{ cursor: 'pointer', fontSize: '1.2rem' }}
+                            title="Edit profile picture"
+                            role="button"
+                            aria-label="Edit profile picture"
+                            tabIndex={0}
+                            onKeyDown={
+                              /*istanbul ignore next*/
+                              (e) => e.key === 'Enter' && handleImageUpload()
+                            }
+                          />
+                        </div>
+                      </div>
+                      <Form.Control
+                        accept="image/*"
+                        id="postphoto"
+                        name="photo"
+                        type="file"
+                        className={styles.cardControl}
+                        data-testid="fileInput"
+                        multiple={false}
+                        ref={fileInputRef}
+                        onChange={
+                          /* istanbul ignore next */
+                          async (
+                            e: React.ChangeEvent<HTMLInputElement>,
+                          ): Promise<void> => {
+                            const file = e.target?.files?.[0];
+                            if (file) {
+                              const image = await convertToBase64(file);
+                              setUserDetails({ ...userDetails, image });
+                            }
+                          }
+                        }
+                        style={{ display: 'none' }}
+                      />
+                    </Col>
                     <Col lg={4}>
                       <Form.Label
                         htmlFor="inputFirstName"
                         className={`${styles.cardLabel}`}
                       >
-                        {t('firstName')}
+                        {tCommon('firstName')}
                       </Form.Label>
                       <Form.Control
                         type="text"
@@ -250,7 +357,7 @@ export default function settings(): JSX.Element {
                         htmlFor="inputLastName"
                         className={`${styles.cardLabel}`}
                       >
-                        {t('lastName')}
+                        {tCommon('lastName')}
                       </Form.Label>
                       <Form.Control
                         type="text"
@@ -285,7 +392,7 @@ export default function settings(): JSX.Element {
                         </option>
                         {genderEnum.map((g) => (
                           <option key={g.value.toLowerCase()} value={g.value}>
-                            {t(g.label)}
+                            {g.label}
                           </option>
                         ))}
                       </Form.Control>
@@ -297,7 +404,7 @@ export default function settings(): JSX.Element {
                         htmlFor="inputEmail"
                         className={`${styles.cardLabel}`}
                       >
-                        {t('emailAddress')}
+                        {tCommon('emailAddress')}
                       </Form.Label>
                       <Form.Control
                         type="email"
@@ -328,49 +435,6 @@ export default function settings(): JSX.Element {
                     </Col>
                     <Col lg={4}>
                       <Form.Label
-                        htmlFor="postphoto"
-                        className={`${styles.cardLabel}`}
-                      >
-                        {t('displayImage')}
-                      </Form.Label>
-                      <div>
-                        <Button
-                          className={`${styles.cardButton}`}
-                          onClick={handleImageUpload}
-                          data-testid="uploadImageBtn"
-                        >
-                          {t('chooseFile')}
-                        </Button>
-                        <Form.Control
-                          accept="image/*"
-                          id="postphoto"
-                          name="photo"
-                          type="file"
-                          className={styles.cardControl}
-                          data-testid="fileInput"
-                          multiple={false}
-                          ref={fileInputRef}
-                          onChange={
-                            /* istanbul ignore next */
-                            async (
-                              e: React.ChangeEvent<HTMLInputElement>,
-                            ): Promise<void> => {
-                              const target = e.target as HTMLInputElement;
-                              const file = target.files && target.files[0];
-                              if (file) {
-                                const image = await convertToBase64(file);
-                                setUserDetails({ ...userDetails, image });
-                              }
-                            }
-                          }
-                          style={{ display: 'none' }}
-                        />
-                      </div>
-                    </Col>
-                  </Row>
-                  <Row className="mb-1">
-                    <Col lg={4}>
-                      <Form.Label
                         htmlFor="birthDate"
                         className={`${styles.cardLabel}`}
                       >
@@ -386,6 +450,8 @@ export default function settings(): JSX.Element {
                         className={`${styles.cardControl}`}
                       />
                     </Col>
+                  </Row>
+                  <Row className="mb-1">
                     <Col lg={4}>
                       <Form.Label
                         htmlFor="grade"
@@ -411,13 +477,11 @@ export default function settings(): JSX.Element {
                             key={grade.value.toLowerCase()}
                             value={grade.value}
                           >
-                            {t(grade.label)}
+                            {grade.label}
                           </option>
                         ))}
                       </Form.Control>
                     </Col>
-                  </Row>
-                  <Row className="mb-1">
                     <Col lg={4}>
                       <Form.Label
                         htmlFor="empStatus"
@@ -443,7 +507,7 @@ export default function settings(): JSX.Element {
                             key={status.value.toLowerCase()}
                             value={status.value}
                           >
-                            {t(status.label)}
+                            {status.label}
                           </option>
                         ))}
                       </Form.Control>
@@ -473,114 +537,46 @@ export default function settings(): JSX.Element {
                             key={status.value.toLowerCase()}
                             value={status.value}
                           >
-                            {t(status.label)}
+                            {status.label}
                           </option>
                         ))}
                       </Form.Control>
                     </Col>
                   </Row>
-                  <Row className="mb-1">
-                    <Col lg={4}>
-                      <Form.Label
-                        htmlFor="address"
-                        className={`${styles.cardLabel}`}
-                      >
-                        {t('address')}
-                      </Form.Label>
-                      <Form.Control
-                        type="text"
-                        placeholder="Eg: lane 123, Main Street"
-                        id="address"
-                        value={userDetails.address}
-                        onChange={(e) =>
-                          handleFieldChange('address', e.target.value)
-                        }
-                        className={`${styles.cardControl}`}
-                        data-testid="inputAddress"
-                      />
-                    </Col>
-                    <Col lg={4}>
-                      <Form.Label
-                        htmlFor="inputState"
-                        className={`${styles.cardLabel}`}
-                      >
-                        {t('state')}
-                      </Form.Label>
-                      <Form.Control
-                        type="text"
-                        id="inputState"
-                        placeholder={t('enterState')}
-                        value={userDetails.state}
-                        onChange={(e) =>
-                          handleFieldChange('state', e.target.value)
-                        }
-                        className={`${styles.cardControl}`}
-                        data-testid="inputState"
-                      />
-                    </Col>
-                    <Col lg={4}>
-                      <Form.Label
-                        htmlFor="country"
-                        className={`${styles.cardLabel}`}
-                      >
-                        {t('country')}
-                      </Form.Label>
-                      <Form.Control
-                        as="select"
-                        id="country"
-                        value={userDetails.country}
-                        onChange={(e) =>
-                          handleFieldChange('country', e.target.value)
-                        }
-                        className={`${styles.cardControl}`}
-                        data-testid="inputCountry"
-                      >
-                        <option value="" disabled>
-                          {t('selectCountry')}
-                        </option>
-                        {countryOptions.map((country) => (
-                          <option
-                            key={country.value.toUpperCase()}
-                            value={country.value.toUpperCase()}
-                          >
-                            {country.label}
-                          </option>
-                        ))}
-                      </Form.Control>
-                    </Col>
-                  </Row>
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      marginTop: '1.5em',
-                    }}
-                  >
-                    <Button
-                      onClick={handleResetChanges}
-                      variant="outline-success"
-                      data-testid="resetChangesBtn"
+                  <UserAddressFields
+                    tCommon={tCommon}
+                    t={t}
+                    handleFieldChange={handleFieldChange}
+                    userDetails={userDetails}
+                  />
+                  {isUpdated && (
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        marginTop: '1.5em',
+                      }}
                     >
-                      {t('resetChanges')}
-                    </Button>
-                    <Button
-                      onClick={handleUpdateUserDetails}
-                      data-testid="updateUserBtn"
-                      className={`${styles.cardButton}`}
-                    >
-                      {t('saveChanges')}
-                    </Button>
-                  </div>
+                      <Button
+                        onClick={handleResetChanges}
+                        variant="outline-success"
+                        data-testid="resetChangesBtn"
+                      >
+                        {t('resetChanges')}
+                      </Button>
+                      <Button
+                        onClick={handleUpdateUserDetails}
+                        data-testid="updateUserBtn"
+                        className={`${styles.cardButton}`}
+                      >
+                        {tCommon('saveChanges')}
+                      </Button>
+                    </div>
+                  )}
                 </Card.Body>
               </Card>
             </Col>
             <Col lg={5} className="d-none d-lg-block">
-              <UserProfile
-                firstName={userDetails.firstName}
-                lastName={userDetails.lastName}
-                email={userDetails.email}
-                image={userDetails.image}
-              />
               <DeleteUser />
               <OtherSettings />
             </Col>
@@ -589,6 +585,7 @@ export default function settings(): JSX.Element {
               <OtherSettings />
             </Col>
           </Row>
+          <EventsAttendedByUser userDetails={userDetails} t={t} />
         </div>
       </div>
     </>

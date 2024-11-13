@@ -1,5 +1,5 @@
-import React from 'react';
-import { act, render, screen, waitFor } from '@testing-library/react';
+import React, { act } from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
 import type { RenderResult } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
@@ -57,7 +57,12 @@ const renderOrgAdminListCard = (props: {
     </MockedProvider>,
   );
 };
-
+jest.mock('i18next-browser-languagedetector', () => ({
+  init: jest.fn(),
+  type: 'languageDetector',
+  detect: jest.fn(() => 'en'),
+  cacheUserLanguage: jest.fn(),
+}));
 describe('Testing Organization Admin List Card', () => {
   global.alert = jest.fn();
 
