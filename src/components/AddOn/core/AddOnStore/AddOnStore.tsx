@@ -47,7 +47,6 @@ function addOnStore(): JSX.Element {
   const { data, loading } = useQuery<{ getPlugins: InterfacePluginHelper[] }>(
     PLUGIN_GET,
   );
-  console.log(data);
 
   const { orgId } = useParams<{ orgId: string }>();
 
@@ -71,8 +70,8 @@ function addOnStore(): JSX.Element {
    * Sets the list of installed plugins in the component's state.
    */
   /* istanbul ignore next */
-  const getInstalledPlugins: () => any = () => {
-    setDataList(data);
+  const getInstalledPlugins: () => void = () => {
+    setDataList(data?.getPlugins ?? []);
   };
 
   /**
@@ -83,7 +82,11 @@ function addOnStore(): JSX.Element {
   const updateSelectedTab = (tab: any): void => {
     setIsStore(tab === 'available');
     /* istanbul ignore next */
-    isStore ? getStorePlugins() : getInstalledPlugins();
+    if (isStore) {
+      getStorePlugins();
+    } else {
+      getInstalledPlugins();
+    }
   };
 
   /**
