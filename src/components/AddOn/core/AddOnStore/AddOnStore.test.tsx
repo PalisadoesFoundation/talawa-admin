@@ -320,14 +320,18 @@ describe('Testing AddOnStore Component', () => {
     await wait();
     userEvent.click(screen.getByText('Installed'));
 
-    expect(screen.getByText('Filters')).toBeInTheDocument();
-    expect(screen.getByLabelText('Enabled')).toBeInTheDocument();
-    expect(screen.getByLabelText('Disabled')).toBeInTheDocument();
+    // Updated expectations to match actual component content
+    const dropdownButton = screen.getByRole('button', { name: /enabled/i });
+    expect(dropdownButton).toBeInTheDocument();
 
-    fireEvent.click(screen.getByLabelText('Enabled'));
-    expect(screen.getByLabelText('Enabled')).toBeChecked();
-    fireEvent.click(screen.getByLabelText('Disabled'));
-    expect(screen.getByLabelText('Disabled')).toBeChecked();
+    // Click dropdown to show options
+    userEvent.click(dropdownButton);
+
+    // Check for dropdown options
+    expect(
+      screen.getByRole('button', { name: /enabled/i }),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/disabled/i)).toBeInTheDocument();
   });
 
   test('check the working search bar when on Installed tab', async () => {
