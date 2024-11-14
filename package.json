@@ -146,7 +146,7 @@
     "jest-preview": "^0.3.1",
     "lint-staged": "^15.2.8",
     "postcss-modules": "^6.0.0",
-    "sass": "^1.80.6",
+    "sass": "^1.80.7",
     "tsx": "^4.19.1",
     "vite-plugin-svgr": "^4.2.0",
     "whatwg-fetch": "^3.6.20"
