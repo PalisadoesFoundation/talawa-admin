@@ -34,15 +34,9 @@ export default function advertisements(): JSX.Element {
   };
 
   // GraphQL query to fetch the list of advertisements
-  const {
-    data: orgAdvertisementListData,
-    refetch,
-  }: {
-    data?: {
-      organizations: InterfaceQueryOrganizationAdvertisementListItem[];
-    };
-    refetch: any;
-  } = useQuery(ORGANIZATION_ADVERTISEMENT_LIST, {
+  const { data: orgAdvertisementListData, refetch } = useQuery<{
+    organizations: InterfaceQueryOrganizationAdvertisementListItem[];
+  }>(ORGANIZATION_ADVERTISEMENT_LIST, {
     variables: {
       id: currentOrgId,
       after: after,

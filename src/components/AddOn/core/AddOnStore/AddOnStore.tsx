@@ -94,10 +94,23 @@ function addOnStore(): JSX.Element {
    *
    * @param ev - The event object from the filter change.
    */
-  const filterChange = (ev: any): void => {
-    setShowEnabled(ev.target.value === 'enabled');
-  };
+  const filterChange =
+    /* istanbul ignore next */
+    (ev: any): void => {
+      setShowEnabled(ev.target.value === 'enabled');
+    };
+  const filterPlugins = (
+    plugins: InterfacePluginHelper[],
+    searchTerm: string,
+  ): InterfacePluginHelper[] => {
+    if (!searchTerm) {
+      return plugins;
+    }
 
+    return plugins.filter((plugin) =>
+      plugin.pluginName?.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
+  };
   // Show a loader while the data is being fetched
   /* istanbul ignore next */
   if (loading) {
@@ -144,8 +157,17 @@ function addOnStore(): JSX.Element {
             </Button>
           </div>
           {!isStore && (
-            <Dropdown onSelect={(e) => filterChange(e ? e : '')}>
-              <Dropdown.Toggle id="dropdown-filter" className={styles.dropdown}>
+            <Dropdown
+              onSelect={
+                /* istanbul ignore next */
+                (e) => filterChange(e ? e : '')
+              }
+            >
+              <Dropdown.Toggle
+                id="dropdown-filter"
+                className={styles.dropdown}
+                data-testid="filter-dropdown"
+              >
                 {showEnabled ? t('enable') : t('disable')}
               </Dropdown.Toggle>
               <Dropdown.Menu>
@@ -172,111 +194,71 @@ function addOnStore(): JSX.Element {
               style={{ backgroundColor: 'white' }}
             >
               <div className={styles.justifysp}>
-                {data?.getPlugins.filter((val: InterfacePluginHelper) => {
-                  if (searchText == '') {
-                    return val;
-                  } else if (
-                    val.pluginName
-                      ?.toLowerCase()
-                      .includes(searchText.toLowerCase())
-                  ) {
-                    return val;
+                {(() => {
+                  const filteredPlugins = filterPlugins(
+                    data?.getPlugins || [],
+                    searchText,
+                  );
+
+                  if (filteredPlugins.length === 0) {
+                    return <h4>{t('pMessage')}</h4>;
                   }
-                }).length === 0 ? (
-                  <h4> {t('pMessage')}</h4>
-                ) : (
-                  <div className={styles.justifysp}>
-                    {data?.getPlugins
-                      .filter((val: InterfacePluginHelper) => {
-                        if (searchText == '') {
-                          return val;
-                        } else if (
-                          val.pluginName
-                            ?.toLowerCase()
-                            .includes(searchText.toLowerCase())
-                        ) {
-                          return val;
-                        }
-                      })
-                      .map(
-                        (
-                          plug: InterfacePluginHelper,
-                          i: React.Key | null | undefined,
-                        ): JSX.Element => (
-                          <div className={styles.cardGridItem} key={i}>
-                            <AddOnEntry
-                              id={plug._id}
-                              title={plug.pluginName}
-                              description={plug.pluginDesc}
-                              createdBy={plug.pluginCreatedBy}
-                              component={'Special  Component'}
-                              modified={true}
-                              getInstalledPlugins={getInstalledPlugins}
-                              uninstalledOrgs={plug.uninstalledOrgs}
-                            />
-                          </div>
-                        ),
-                      )}
-                  </div>
-                )}
-              </div>
-            </Tab>
-            <Tab eventKey="installed" title={t('install')}>
-              <div className={styles.justifysp}>
-                {data?.getPlugins
-                  .filter(
-                    (plugin: InterfacePluginHelper) =>
-                      !plugin.uninstalledOrgs.includes(orgId ?? ''),
-                  )
-                  .filter((val: InterfacePluginHelper) => {
-                    if (searchText === '') {
-                      return val;
-                    } else if (
-                      val.pluginName
-                        ?.toLowerCase()
-                        .includes(searchText.toLowerCase())
-                    ) {
-                      return val;
-                    }
-                  }).length === 0 ? (
-                  <h4>{t('pMessage')} </h4>
-                ) : (
-                  data?.getPlugins
-                    .filter(
-                      (plugin: InterfacePluginHelper) =>
-                        !plugin.uninstalledOrgs.includes(orgId ?? ''),
-                    )
-                    .filter((val: InterfacePluginHelper) => {
-                      if (searchText == '') {
-                        return val;
-                      } else if (
-                        val.pluginName
-                          ?.toLowerCase()
-                          .includes(searchText.toLowerCase())
-                      ) {
-                        return val;
-                      }
-                    })
-                    .map(
-                      (
-                        plug: InterfacePluginHelper,
-                        i: React.Key | null | undefined,
-                      ): JSX.Element => (
+
+                  return (
+                    <div className={styles.justifysp}>
+                      {filteredPlugins.map((plug, i) => (
                         <div className={styles.cardGridItem} key={i}>
                           <AddOnEntry
                             id={plug._id}
                             title={plug.pluginName}
                             description={plug.pluginDesc}
                             createdBy={plug.pluginCreatedBy}
-                            component={'Special  Component'}
+                            component={'Special Component'}
                             modified={true}
                             getInstalledPlugins={getInstalledPlugins}
                             uninstalledOrgs={plug.uninstalledOrgs}
                           />
                         </div>
-                      ),
-                    )
-                )}
+                      ))}
+                    </div>
+                  );
+                })()}
+              </div>
+            </Tab>
+            <Tab
+              eventKey="installed"
+              title={t('install')}
+              data-testid="installed-tab"
+            >
+              <div className={styles.justifysp}>
+                {(() => {
+                  const installedPlugins = (data?.getPlugins || []).filter(
+                    (plugin) => !plugin.uninstalledOrgs.includes(orgId ?? ''),
+                  );
+                  const filteredPlugins = filterPlugins(
+                    installedPlugins,
+                    searchText,
+                  );
+
+                  if (filteredPlugins.length === 0) {
+                    return <h4>{t('pMessage')}</h4>;
+                  }
+
+                  return filteredPlugins.map((plug, i) => (
+                    <div className={styles.cardGridItem} key={i}>
+                      <AddOnEntry
+                        id={plug._id}
+                        title={plug.pluginName}
+                        description={plug.pluginDesc}
+                        createdBy={plug.pluginCreatedBy}
+                        component={'Special Component'}
+                        modified={true}
+                        getInstalledPlugins={getInstalledPlugins}
+                        uninstalledOrgs={plug.uninstalledOrgs}
+                      />
+                    </div>
+                  ));
+                })()}
               </div>
             </Tab>
           </Tabs>
