@@ -41,7 +41,19 @@ const queryMockWithRegistrant = [
     result: {
       data: {
         event: {
-          attendees: [{ _id: 'user1', firstName: 'John', lastName: 'Doe' }],
+          attendees: [
+            {
+              _id: 'user1',
+              firstName: 'John',
+              lastName: 'Doe',
+              createdAt: '2023-01-01',
+              gender: 'Male',
+              birthDate: '1990-01-01',
+              eventsAttended: {
+                _id: 'event123',
+              },
+            },
+          ],
         },
       },
     },
@@ -64,12 +76,30 @@ const queryMockOrgMembers = [
                 _id: 'user1',
                 firstName: 'John',
                 lastName: 'Doe',
-                email: 'johndoe@palisadoes.com',
-                image: '',
-                createdAt: '12/12/22',
+                image: null,
+                email: 'johndoe@example.com',
+                createdAt: '2023-01-01',
                 organizationsBlockedBy: [],
               },
             ],
+          },
+        ],
+      },
+    },
+  },
+];
+const queryMockWithoutOrgMembers = [
+  {
+    request: {
+      query: MEMBERS_LIST,
+      variables: { id: 'org123' },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            _id: 'org123',
+            members: [],
           },
         ],
       },
@@ -287,7 +317,7 @@ describe('Testing Event Registrants Modal', () => {
   });
 
   test('Delete attendee mutation must fail properly', async () => {
-    const { queryByText, queryByTestId } = render(
+    const { queryByText, getByTestId } = render(
       <MockedProvider
         addTypename={false}
         mocks={[
@@ -315,7 +345,8 @@ describe('Testing Event Registrants Modal', () => {
 
     await waitFor(() => expect(queryByText('John Doe')).toBeInTheDocument());
 
-    fireEvent.click(queryByTestId('CancelIcon') as Element);
+    const deleteButton = getByTestId('CancelIcon');
+    fireEvent.click(deleteButton);
 
     await waitFor(() =>
       expect(queryByText('Removing the attendee...')).toBeInTheDocument(),
@@ -324,5 +355,49 @@ describe('Testing Event Registrants Modal', () => {
     await waitFor(() =>
       expect(queryByText('Error removing attendee')).toBeInTheDocument(),
     );
+  });
+  test('Autocomplete functionality works correctly', async () => {
+    const { getByTitle, getByText, getByPlaceholderText } = render(
+      <MockedProvider
+        addTypename={false}
+        mocks={[...queryMockWithoutRegistrant, ...queryMockWithoutOrgMembers]}
+      >
+        <BrowserRouter>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <ToastContainer />
+                <EventRegistrantsModal {...props} />
+              </I18nextProvider>
+            </Provider>
+          </LocalizationProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for loading state to finish
+    await waitFor(() => {
+      const autocomplete = getByPlaceholderText(
+        'Choose the user that you want to add',
+      );
+      expect(autocomplete).toBeInTheDocument();
+    });
+
+    // Test empty state with no options
+    const autocomplete = getByPlaceholderText(
+      'Choose the user that you want to add',
+    );
+    fireEvent.change(autocomplete, { target: { value: 'NonexistentUser' } });
+
+    await waitFor(() => {
+      expect(getByText('No Registrations found')).toBeInTheDocument();
+      expect(getByText('Add Onspot Registration')).toBeInTheDocument();
+    });
+
+    // Test clicking "Add Onspot Registration"
+    fireEvent.click(getByText('Add Onspot Registration'));
+    expect(getByText('Add Onspot Registration')).toBeInTheDocument();
+    const closeButton = getByTitle('Close');
+    fireEvent.click(closeButton);
   });
 });

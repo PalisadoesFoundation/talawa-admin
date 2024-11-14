@@ -202,124 +202,124 @@ const countryOptions = [
 const educationGradeEnum = [
   {
     value: 'NO_GRADE',
-    label: 'noGrade',
+    label: 'No-Grade',
   },
   {
     value: 'PRE_KG',
-    label: 'preKg',
+    label: 'Pre-Kg',
   },
   {
     value: 'KG',
-    label: 'kg',
+    label: 'Kg',
   },
   {
     value: 'GRADE_1',
-    label: 'grade1',
+    label: 'Grade-1',
   },
   {
     value: 'GRADE_2',
-    label: 'grade2',
+    label: 'Grade-2',
   },
   {
     value: 'GRADE_3',
-    label: 'grade3',
+    label: 'Grade-3',
   },
   {
     value: 'GRADE_4',
-    label: 'grade4',
+    label: 'Grade-4',
   },
   {
     value: 'GRADE_5',
-    label: 'grade5',
+    label: 'Grade-5',
   },
   {
     value: 'GRADE_6',
-    label: 'grade6',
+    label: 'Grade-6',
   },
   {
     value: 'GRADE_7',
-    label: 'grade7',
+    label: 'Grade-7',
   },
   {
     value: 'GRADE_8',
-    label: 'grade8',
+    label: 'Grade-8',
   },
   {
     value: 'GRADE_9',
-    label: 'grade9',
+    label: 'Grade-9',
   },
   {
     value: 'GRADE_10',
-    label: 'grade10',
+    label: 'Grade-10',
   },
   {
     value: 'GRADE_11',
-    label: 'grade11',
+    label: 'Grade-11',
   },
   {
     value: 'GRADE_12',
-    label: 'grade12',
+    label: 'Grade-12',
   },
   {
     value: 'GRADUATE',
-    label: 'graduate',
+    label: 'Graduate',
   },
 ];
 
 const maritalStatusEnum = [
   {
     value: 'SINGLE',
-    label: 'single',
+    label: 'Single',
   },
   {
     value: 'ENGAGED',
-    label: 'engaged',
+    label: 'Engaged',
   },
   {
     value: 'MARRIED',
-    label: 'married',
+    label: 'Married',
   },
   {
     value: 'DIVORCED',
-    label: 'divorced',
+    label: 'Divorced',
   },
   {
     value: 'WIDOWED',
-    label: 'widowed',
+    label: 'Widowed',
   },
   {
     value: 'SEPARATED',
-    label: 'separated',
+    label: 'Separated',
   },
 ];
 
 const genderEnum = [
   {
     value: 'MALE',
-    label: 'male',
+    label: 'Male',
   },
   {
     value: 'FEMALE',
-    label: 'female',
+    label: 'Female',
   },
   {
     value: 'OTHER',
-    label: 'other',
+    label: 'Other',
   },
 ];
 
 const employmentStatusEnum = [
   {
     value: 'FULL_TIME',
-    label: 'fullTime',
+    label: 'Full-Time',
   },
   {
     value: 'PART_TIME',
-    label: 'partTime',
+    label: 'Part-Time',
   },
   {
     value: 'UNEMPLOYED',
-    label: 'unemployed',
+    label: 'Unemployed',
   },
 ];
 

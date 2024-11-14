@@ -1,4 +1,4 @@
-import { useMutation, useQuery, type ApolloError } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { Search, WarningAmberRounded } from '@mui/icons-material';
 import SortIcon from '@mui/icons-material/Sort';
 import Loader from 'components/Loader/Loader';
@@ -14,19 +14,22 @@ import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import type { InterfaceQueryUserTagChildTags } from 'utils/interfaces';
-import styles from './SubTags.module.css';
+import styles from '../../style/app.module.css';
 import { DataGrid } from '@mui/x-data-grid';
-import { dataGridStyle } from 'utils/organizationTagsUtils';
+import type {
+  InterfaceOrganizationSubTagsQuery,
+  SortedByType,
+} from 'utils/organizationTagsUtils';
+import {
+  dataGridStyle,
+  TAGS_QUERY_DATA_CHUNK_SIZE,
+} from 'utils/organizationTagsUtils';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
-import {
-  CREATE_USER_TAG,
-  REMOVE_USER_TAG,
-} from 'GraphQl/Mutations/TagMutations';
-import {
-  USER_TAG_ANCESTORS,
-  USER_TAG_SUB_TAGS,
-} from 'GraphQl/Queries/userTagQueries';
+import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
+import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 
 /**
  * Component that renders the SubTags screen when the app navigates to '/orgtags/:orgId/subtags/:tagId'.
@@ -47,16 +50,10 @@ function SubTags(): JSX.Element {
 
   const navigate = useNavigate();
 
-  const [after, setAfter] = useState<string | null | undefined>(null);
-  const [before, setBefore] = useState<string | null | undefined>(null);
-  const [first, setFirst] = useState<number | null>(5);
-  const [last, setLast] = useState<number | null>(null);
-
   const [tagName, setTagName] = useState<string>('');
 
-  const [removeUserTagId, setRemoveUserTagId] = useState(null);
-  const [removeUserTagModalIsOpen, setRemoveUserTagModalIsOpen] =
-    useState(false);
+  const [tagSearchName, setTagSearchName] = useState('');
+  const [tagSortOrder, setTagSortOrder] = useState<SortedByType>('DESCENDING');
 
   const showAddSubTagModal = (): void => {
     setAddSubTagModalIsOpen(true);
@@ -69,45 +66,50 @@ function SubTags(): JSX.Element {
 
   const {
     data: subTagsData,
-    loading: subTagsLoading,
     error: subTagsError,
+    loading: subTagsLoading,
     refetch: subTagsRefetch,
-  }: {
-    data?: {
-      getUserTag: InterfaceQueryUserTagChildTags;
-    };
-    loading: boolean;
-    error?: ApolloError;
-    refetch: () => void;
-  } = useQuery(USER_TAG_SUB_TAGS, {
+    fetchMore: fetchMoreSubTags,
+  }: InterfaceOrganizationSubTagsQuery = useQuery(USER_TAG_SUB_TAGS, {
     variables: {
       id: parentTagId,
-      after: after,
-      before: before,
-      first: first,
-      last: last,
+      first: TAGS_QUERY_DATA_CHUNK_SIZE,
+      where: { name: { starts_with: tagSearchName } },
+      sortedBy: { id: tagSortOrder },
     },
   });
 
-  const {
-    data: orgUserTagAncestorsData,
-    loading: orgUserTagsAncestorsLoading,
-    error: orgUserTagsAncestorsError,
-  }: {
-    data?: {
-      getUserTagAncestors: {
-        _id: string;
-        name: string;
-      }[];
-    };
-    loading: boolean;
-    error?: ApolloError;
-    refetch: () => void;
-  } = useQuery(USER_TAG_ANCESTORS, {
-    variables: {
-      id: parentTagId,
-    },
-  });
+  const loadMoreSubTags = (): void => {
+    fetchMoreSubTags({
+      variables: {
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        after: subTagsData?.getChildTags.childTags.pageInfo.endCursor,
+      },
+      updateQuery: (
+        prevResult: { getChildTags: InterfaceQueryUserTagChildTags },
+        {
+          fetchMoreResult,
+        }: {
+          fetchMoreResult?: { getChildTags: InterfaceQueryUserTagChildTags };
+        },
+      ) => {
+        if (!fetchMoreResult) /* istanbul ignore next */ return prevResult;
+
+        return {
+          getChildTags: {
+            ...fetchMoreResult.getChildTags,
+            childTags: {
+              ...fetchMoreResult.getChildTags.childTags,
+              edges: [
+                ...prevResult.getChildTags.childTags.edges,
+                ...fetchMoreResult.getChildTags.childTags.edges,
+              ],
+            },
+          },
+        };
+      },
+    });
+  };
 
   const [create, { loading: createUserTagLoading }] =
     useMutation(CREATE_USER_TAG);
@@ -139,81 +141,41 @@ function SubTags(): JSX.Element {
     }
   };
 
-  const [removeUserTag] = useMutation(REMOVE_USER_TAG);
-  const handleRemoveUserTag = async (): Promise<void> => {
-    try {
-      await removeUserTag({
-        variables: {
-          id: removeUserTagId,
-        },
-      });
-
-      subTagsRefetch();
-      toggleRemoveUserTagModal();
-      toast.success(t('tagRemovalSuccess') as string);
-    } catch (error: unknown) {
-      /* istanbul ignore next */
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
-    }
-  };
-
-  if (createUserTagLoading || subTagsLoading || orgUserTagsAncestorsLoading) {
-    return <Loader />;
-  }
-
-  const handleNextPage = (): void => {
-    setAfter(subTagsData?.getUserTag.childTags.pageInfo.endCursor);
-    setBefore(null);
-    setFirst(5);
-    setLast(null);
-  };
-
-  const handlePreviousPage = (): void => {
-    setBefore(subTagsData?.getUserTag.childTags.pageInfo.startCursor);
-    setAfter(null);
-    setFirst(null);
-    setLast(5);
-  };
-
-  if (subTagsError || orgUserTagsAncestorsError) {
+  if (subTagsError) {
     return (
       <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
         <div className={styles.errorMessage}>
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
-            Error occured while loading{' '}
-            {subTagsError ? 'sub tags' : 'tag ancestors'}
-            <br />
-            {subTagsError
-              ? subTagsError.message
-              : orgUserTagsAncestorsError?.message}
+            Error occured while loading sub tags
           </h6>
         </div>
       </div>
     );
   }
 
-  const userTagsList = subTagsData?.getUserTag.childTags.edges.map(
-    (edge) => edge.node,
-  );
+  const subTagsList =
+    subTagsData?.getChildTags.childTags.edges.map((edge) => edge.node) ??
+    /* istanbul ignore next */ [];
 
-  const orgUserTagAncestors = orgUserTagAncestorsData?.getUserTagAncestors;
+  const parentTagName = subTagsData?.getChildTags.name;
+
+  // get the ancestorTags array and push the current tag in it
+  // used for the tag breadcrumbs
+  const orgUserTagAncestors = [
+    ...(subTagsData?.getChildTags.ancestorTags ?? []),
+    {
+      _id: parentTagId,
+      name: parentTagName,
+    },
+  ];
 
   const redirectToManageTag = (tagId: string): void => {
     navigate(`/orgtags/${orgId}/manageTag/${tagId}`);
   };
 
   const redirectToSubTags = (tagId: string): void => {
-    navigate(`/orgtags/${orgId}/subtags/${tagId}`);
-  };
-
-  const toggleRemoveUserTagModal = (): void => {
-    if (removeUserTagModalIsOpen) {
-      setRemoveUserTagId(null);
-    }
-    setRemoveUserTagModalIsOpen(!removeUserTagModalIsOpen);
+    navigate(`/orgtags/${orgId}/subTags/${tagId}`);
   };
 
   const columns: GridColDef[] = [
@@ -263,7 +225,7 @@ function SubTags(): JSX.Element {
         return (
           <Link
             className="text-secondary"
-            to={`/orgtags/${orgId}/subtags/${params.row._id}`}
+            to={`/orgtags/${orgId}/subTags/${params.row._id}`}
           >
             {params.row.childTags.totalCount}
           </Link>
@@ -283,7 +245,7 @@ function SubTags(): JSX.Element {
         return (
           <Link
             className="text-secondary"
-            to={`/orgtags/${orgId}/orgtagdetails/${params.row._id}`}
+            to={`/orgtags/${orgId}/manageTag/${params.row._id}`}
           >
             {params.row.usersAssignedTo.totalCount}
           </Link>
@@ -301,28 +263,14 @@ function SubTags(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <div className="d-flex justify-content-center align-items-center">
-            <Button
-              size="sm"
-              className="btn btn-primary rounded mt-3"
-              onClick={() => redirectToManageTag(params.row._id)}
-              data-testid="manageTagBtn"
-            >
-              {t('manageTag')}
-            </Button>
-
-            <Button
-              size="sm"
-              className="ms-2 btn btn-danger rounded mt-3"
-              onClick={() => {
-                setRemoveUserTagId(params.row._id);
-                toggleRemoveUserTagModal();
-              }}
-              data-testid="removeUserTagBtn"
-            >
-              {t('removeTag')}
-            </Button>
-          </div>
+          <Button
+            size="sm"
+            variant="outline-primary"
+            onClick={() => redirectToManageTag(params.row._id)}
+            data-testid="manageTagBtn"
+          >
+            {t('manageTag')}
+          </Button>
         );
       },
     },
@@ -330,153 +278,159 @@ function SubTags(): JSX.Element {
 
   return (
     <>
-      <Row className={styles.head}>
-        <div className={styles.mainpageright}>
-          <div className={styles.btnsContainer}>
-            <div className={styles.input}>
+      <Row>
+        <div>
+          <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
+            <div className={`${styles.input} mb-1`}>
               <Form.Control
                 type="text"
                 id="tagName"
-                className="bg-white"
-                placeholder={tCommon('search')}
+                className={`${styles.inputField} `}
+                placeholder={tCommon('searchByName')}
+                onChange={(e) => setTagSearchName(e.target.value.trim())}
                 data-testid="searchByName"
                 autoComplete="off"
-                required
               />
               <Button
                 tabIndex={-1}
-                className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+                className={styles.searchButton}
+                data-testid="searchBtn"
               >
                 <Search />
               </Button>
             </div>
-            <div className={styles.btnsBlock}>
-              <Dropdown
-                aria-expanded="false"
-                title="Sort Tag"
-                data-testid="sort"
+
+            <Dropdown
+              title="Sort Tag"
+              // className={styles.dropdown}
+              // className="ms-4 mb-4"
+              data-testid="sort"
+            >
+              <Dropdown.Toggle
+                data-testid="sortTags"
+                // className="color-red"
+                className={styles.dropdown}
               >
-                <Dropdown.Toggle
-                  variant="outline-success"
-                  data-testid="sortTag"
+                <SortIcon className={'me-1'} />
+                {tagSortOrder === 'DESCENDING'
+                  ? tCommon('Latest')
+                  : tCommon('Oldest')}
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item
+                  data-testid="latest"
+                  onClick={() => setTagSortOrder('DESCENDING')}
                 >
-                  <SortIcon className={'me-1'} />
-                  {tCommon('sort')}
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item data-testid="latest">
-                    {tCommon('Latest')}
-                  </Dropdown.Item>
-                  <Dropdown.Item data-testid="oldest">
-                    {tCommon('Oldest')}
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
+                  {tCommon('Latest')}
+                </Dropdown.Item>
+                <Dropdown.Item
+                  data-testid="oldest"
+                  onClick={() => setTagSortOrder('ASCENDING')}
+                >
+                  {tCommon('Oldest')}
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
 
-              <Button
-                variant="success"
-                onClick={() => redirectToManageTag(parentTagId as string)}
-                data-testid="manageCurrentTagBtn"
-                className="mx-4"
-              >
-                {`${t('manageTag')} ${subTagsData?.getUserTag.name}`}
-              </Button>
+            <Button
+              onClick={() => redirectToManageTag(parentTagId as string)}
+              data-testid="manageCurrentTagBtn"
+              className={`${styles.createButton} mb-3`}
+            >
+              {`${t('manageTag')} ${subTagsData?.getChildTags.name}`}
+            </Button>
 
-              <Button
-                variant="success"
-                onClick={showAddSubTagModal}
-                data-testid="addSubTagBtn"
-                className="ms-auto"
-              >
-                <i className={'fa fa-plus me-2'} />
-                {t('addChildTag')}
-              </Button>
-            </div>
+            <Button
+              variant="success"
+              onClick={showAddSubTagModal}
+              data-testid="addSubTagBtn"
+              className={`${styles.createButton} mb-3`}
+            >
+              <i className={'fa fa-plus me-2'} />
+              {t('addChildTag')}
+            </Button>
           </div>
 
-          <div>
-            <div className="bg-white light border border-bottom-0 rounded-top mb-0 py-2 d-flex align-items-center">
-              <div className="ms-3 my-1">
-                <IconComponent name="Tag" />
-              </div>
-
-              <div
-                onClick={() => navigate(`/orgtags/${orgId}`)}
-                className={`fs-6 ms-3 my-1 ${styles.tagsBreadCrumbs}`}
-                data-testid="allTagsBtn"
-              >
-                {'Tags'}
-                <i className={'mx-2 fa fa-caret-right'} />
-              </div>
-
-              {orgUserTagAncestors?.map((tag, index) => (
-                <div
-                  key={index}
-                  className={`ms-2 my-1 ${tag._id === parentTagId ? `fs-4 fw-semibold text-secondary` : `${styles.tagsBreadCrumbs} fs-6`}`}
-                  onClick={() => redirectToSubTags(tag._id as string)}
-                  data-testid="redirectToSubTags"
-                >
-                  {tag.name}
-
-                  {orgUserTagAncestors.length - 1 !== index && (
-                    <i className={'mx-2 fa fa-caret-right'} />
-                  )}
+          {subTagsLoading || createUserTagLoading ? (
+            <Loader />
+          ) : (
+            <div className="mb-2 ">
+              <div className="bg-white light border rounded-top mb-0 py-2 d-flex align-items-center">
+                <div className="ms-3 my-1">
+                  <IconComponent name="Tag" />
                 </div>
-              ))}
-            </div>
-            <DataGrid
-              disableColumnMenu
-              columnBufferPx={7}
-              hideFooter={true}
-              getRowId={(row) => row._id}
-              slots={{
-                noRowsOverlay: /* istanbul ignore next */ () => (
-                  <Stack
-                    height="100%"
-                    alignItems="center"
-                    justifyContent="center"
-                  >
-                    {t('noTagsFound')}
-                  </Stack>
-                ),
-              }}
-              sx={dataGridStyle}
-              getRowClassName={() => `${styles.rowBackground}`}
-              autoHeight
-              rowHeight={65}
-              rows={userTagsList?.map((fund, index) => ({
-                id: index + 1,
-                ...fund,
-              }))}
-              columns={columns}
-              isRowSelectable={() => false}
-            />
-          </div>
-        </div>
 
-        <div className="row m-md-3 d-flex justify-content-center w-100">
-          <div className="col-auto">
-            <Button
-              onClick={handlePreviousPage}
-              className="btn-sm"
-              disabled={
-                !subTagsData?.getUserTag.childTags.pageInfo.hasPreviousPage
-              }
-              data-testid="previousPageBtn"
-            >
-              <i className={'mx-2 fa fa-caret-left'} />
-            </Button>
-          </div>
-          <div className="col-auto">
-            <Button
-              onClick={handleNextPage}
-              className="btn-sm"
-              disabled={!subTagsData?.getUserTag.childTags.pageInfo.hasNextPage}
-              data-testid="nextPagBtn"
-            >
-              <i className={'mx-2 fa fa-caret-right'} />
-            </Button>
-          </div>
+                <div
+                  onClick={() => navigate(`/orgtags/${orgId}`)}
+                  className={`fs-6 ms-3 my-1 ${styles.tagsBreadCrumbs}`}
+                  data-testid="allTagsBtn"
+                >
+                  {'Tags'}
+                  <i className={'mx-2 fa fa-caret-right'} />
+                </div>
+
+                {orgUserTagAncestors?.map((tag, index) => (
+                  <div
+                    key={index}
+                    className={`ms-2  ${tag._id === parentTagId ? `fs-4 fw-semibold text-secondary` : `${styles.tagsBreadCrumbs} fs-6`}`}
+                    onClick={() => redirectToSubTags(tag._id as string)}
+                    data-testid="redirectToSubTags"
+                  >
+                    {tag.name}
+
+                    {orgUserTagAncestors.length - 1 !== index && (
+                      <i className={'mx-2 fa fa-caret-right'} />
+                    )}
+                  </div>
+                ))}
+              </div>
+              <div
+                id="subTagsScrollableDiv"
+                data-testid="subTagsScrollableDiv"
+                className={styles.subTagsScrollableDiv}
+              >
+                <InfiniteScroll
+                  dataLength={subTagsList?.length ?? 0}
+                  next={loadMoreSubTags}
+                  hasMore={
+                    subTagsData?.getChildTags.childTags.pageInfo.hasNextPage ??
+                    /* istanbul ignore next */
+                    false
+                  }
+                  loader={<InfiniteScrollLoader />}
+                  scrollableTarget="subTagsScrollableDiv"
+                >
+                  <DataGrid
+                    disableColumnMenu
+                    columnBufferPx={7}
+                    hideFooter={true}
+                    getRowId={(row) => row.id}
+                    slots={{
+                      noRowsOverlay: /* istanbul ignore next */ () => (
+                        <Stack
+                          height="100%"
+                          alignItems="center"
+                          justifyContent="center"
+                        >
+                          {t('noTagsFound')}
+                        </Stack>
+                      ),
+                    }}
+                    sx={dataGridStyle}
+                    getRowClassName={() => `${styles.rowBackground}`}
+                    autoHeight
+                    rowHeight={65}
+                    rows={subTagsList?.map((subTag, index) => ({
+                      id: index + 1,
+                      ...subTag,
+                    }))}
+                    columns={columns}
+                    isRowSelectable={() => false}
+                  />
+                </InfiniteScroll>
+              </div>
+            </div>
+          )}
         </div>
       </Row>
 
@@ -489,11 +443,11 @@ function SubTags(): JSX.Element {
         centered
       >
         <Modal.Header
-          className="bg-primary"
+          className={styles.tableHeader}
           data-testid="tagHeader"
           closeButton
         >
-          <Modal.Title className="text-white">{t('tagDetails')}</Modal.Title>
+          <Modal.Title>{t('tagDetails')}</Modal.Title>
         </Modal.Header>
         <Form onSubmitCapture={addSubTag}>
           <Modal.Body>
@@ -518,52 +472,20 @@ function SubTags(): JSX.Element {
               variant="secondary"
               onClick={(): void => hideAddSubTagModal()}
               data-testid="addSubTagModalCloseBtn"
+              className={styles.closeButton}
             >
               {tCommon('cancel')}
             </Button>
-            <Button type="submit" value="add" data-testid="addSubTagSubmitBtn">
+            <Button
+              type="submit"
+              value="add"
+              data-testid="addSubTagSubmitBtn"
+              className={styles.addButton}
+            >
               {tCommon('create')}
             </Button>
           </Modal.Footer>
         </Form>
-      </Modal>
-
-      {/* Remove User Tag Modal */}
-      <Modal
-        size="sm"
-        id={`deleteActionItemModal`}
-        show={removeUserTagModalIsOpen}
-        onHide={toggleRemoveUserTagModal}
-        backdrop="static"
-        keyboard={false}
-        className={styles.actionItemModal}
-        centered
-      >
-        <Modal.Header closeButton className="bg-primary">
-          <Modal.Title className="text-white" id={`removeUserTag`}>
-            {t('removeUserTag')}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{t('removeUserTagMessage')}</Modal.Body>
-        <Modal.Footer>
-          <Button
-            type="button"
-            className="btn btn-danger"
-            data-dismiss="modal"
-            onClick={toggleRemoveUserTagModal}
-            data-testid="removeUserTagModalCloseBtn"
-          >
-            {tCommon('no')}
-          </Button>
-          <Button
-            type="button"
-            className="btn btn-success"
-            onClick={handleRemoveUserTag}
-            data-testid="removeUserTagSubmitBtn"
-          >
-            {tCommon('yes')}
-          </Button>
-        </Modal.Footer>
       </Modal>
     </>
   );

@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, render, waitFor } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import { TableRow } from './TableRow';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -129,5 +129,46 @@ describe('Testing Table Row for CheckIn Table', () => {
 
     expect(await findByText('Error checking in')).toBeInTheDocument();
     expect(await findByText('Oops')).toBeInTheDocument();
+  });
+
+  test('If PDF generation fails, the error message should be shown', async () => {
+    const props = {
+      data: {
+        id: `123`,
+        name: '',
+        userId: `user123`,
+        checkIn: {
+          _id: '123',
+          time: '12:00:00',
+        },
+        eventId: `event123`,
+      },
+      refetch: jest.fn(),
+    };
+
+    const { findByText } = render(
+      <BrowserRouter>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <MockedProvider addTypename={false} mocks={checkInMutationSuccess}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <ToastContainer />
+                <TableRow {...props} />
+              </I18nextProvider>
+            </Provider>
+          </MockedProvider>
+        </LocalizationProvider>
+      </BrowserRouter>,
+    );
+
+    // Mocking the PDF generation function to throw an error
+    global.URL.createObjectURL = jest.fn(() => 'mockURL');
+    global.window.open = jest.fn();
+
+    fireEvent.click(await findByText('Download Tag'));
+
+    expect(
+      await findByText('Error generating pdf: Invalid or empty name provided'),
+    ).toBeInTheDocument();
   });
 });

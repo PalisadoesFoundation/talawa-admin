@@ -558,6 +558,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                 /*istanbul ignore next*/
                 <button
                   className={styles.btn__more}
+                  data-testid="more"
                   /*istanbul ignore next*/
                   onClick={() => {
                     toggleExpand(index);

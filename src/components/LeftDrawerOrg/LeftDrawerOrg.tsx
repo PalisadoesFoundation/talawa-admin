@@ -3,16 +3,17 @@ import { WarningAmberOutlined } from '@mui/icons-material';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import CollapsibleDropdown from 'components/CollapsibleDropdown/CollapsibleDropdown';
 import IconComponent from 'components/IconComponent/IconComponent';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
 import AngleRightIcon from 'assets/svgs/angleRight.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import styles from './LeftDrawerOrg.module.css';
 import Avatar from 'components/Avatar/Avatar';
+import useLocalStorage from 'utils/useLocalstorage';
 
 export interface InterfaceLeftDrawerProps {
   orgId: string;
@@ -38,10 +39,20 @@ const leftDrawerOrg = ({
 }: InterfaceLeftDrawerProps): JSX.Element => {
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
+  const location = useLocation();
+  const { getItem } = useLocalStorage();
+  const userId = getItem('id');
+  const getIdFromPath = (pathname: string): string => {
+    if (!pathname) return '';
+    const segments = pathname.split('/');
+    // Index 2 (third segment) represents the ID in paths like /member/{userId}
+    return segments.length > 2 ? segments[2] : '';
+  };
+  const [isProfilePage, setIsProfilePage] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
-
-  const [organization, setOrganization] =
-    useState<InterfaceQueryOrganizationsListObject>();
+  const [organization, setOrganization] = useState<
+    InterfaceQueryOrganizationsListObject | undefined
+  >(undefined);
   const {
     data,
     loading,
@@ -54,11 +65,24 @@ const leftDrawerOrg = ({
     variables: { id: orgId },
   });
 
+  // Get the ID from the current path
+  const pathId = useMemo(
+    () => getIdFromPath(location.pathname),
+    [location.pathname],
+  );
+  // Check if the current page is admin profile page
+  useEffect(() => {
+    // if param id is equal to userId, then it is a profile page
+    setIsProfilePage(pathId === userId);
+  }, [location, userId]);
+
   // Set organization data when query data is available
   useEffect(() => {
     let isMounted = true;
     if (data && isMounted) {
       setOrganization(data?.organizations[0]);
+    } else {
+      setOrganization(undefined);
     }
     return () => {
       isMounted = false;
@@ -104,7 +128,7 @@ const leftDrawerOrg = ({
               />
             </>
           ) : organization == undefined ? (
-            <>
+            !isProfilePage && (
               <button
                 className={`${styles.profileContainer} bg-danger text-start text-white`}
                 disabled
@@ -114,7 +138,7 @@ const leftDrawerOrg = ({
                 </div>
                 {tErrors('errorLoading', { entity: 'Organization' })}
               </button>
-            </>
+            )
           ) : (
             <button className={styles.profileContainer} data-testid="OrgBtn">
               <div className={styles.imageContainer}>
@@ -151,8 +175,11 @@ const leftDrawerOrg = ({
                   <Button
                     key={name}
                     variant={isActive === true ? 'success' : ''}
+                    style={{
+                      backgroundColor: isActive === true ? '#EAEBEF' : '',
+                    }}
                     className={`${
-                      isActive === true ? 'text-white' : 'text-secondary'
+                      isActive === true ? 'text-black' : 'text-secondary'
                     }`}
                   >
                     <div className={styles.iconWrapper}>
@@ -160,7 +187,7 @@ const leftDrawerOrg = ({
                         name={name == 'Membership Requests' ? 'Requests' : name}
                         fill={
                           isActive === true
-                            ? 'var(--bs-white)'
+                            ? 'var(--bs-black)'
                             : 'var(--bs-secondary)'
                         }
                       />
