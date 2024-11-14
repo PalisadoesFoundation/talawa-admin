@@ -17,7 +17,7 @@
     "@mui/material": "^6.1.6",
     "@mui/private-theming": "^6.1.6",
     "@mui/system": "^6.1.6",
-    "@mui/x-charts": "^7.22.1",
+    "@mui/x-charts": "^7.22.2",
     "@mui/x-data-grid": "^7.22.1",
     "@mui/x-date-pickers": "^7.22.1",
     "@pdfme/schemas": "^5.1.6",
