@@ -14,8 +14,8 @@ This document provides instructions on how to set up and start a running instanc
   - [Install TypeScript](#install-typescript)
   - [Install Required Packages](#install-required-packages)
 - [Installation using Docker](#installation-using-docker)
-  - [Build the Docker Image:](#build-the-docker-image)
-  - [Run the Docker container:](#run-the-docker-container)
+  - [Development Setup](#development-setup)
+  - [Production Setup](#production-setup)
 - [Configuration](#configuration)
   - [Creating .env file](#creating-env-file)
   - [Setting up PORT in .env file](#setting-up-port-in-env-file)
@@ -150,9 +150,17 @@ The prerequisites are now installed. The next step will be to get the app up and
 
 # Installation using Docker
 
+1. Install Docker on your system:
+   - [Docker Desktop for Windows/Mac](https://www.docker.com/products/docker-desktop)
+   - [Docker Engine for Linux](https://docs.docker.com/engine/install/)
+
+## Development Setup
+
 If you prefer to use Docker, you can install the app using the following command:
 
-## Build the Docker Image:
+1.  Create a `.env` file as described in the Configuration section
+
+2.  Build the Docker Image:
 
 Run the following command to build the Docker image:
 
@@ -160,7 +168,7 @@ Run the following command to build the Docker image:
 docker build -t talawa-admin .
 ```
 
-## Run the Docker container:
+3.  Run the Docker container:
 
 After the build is complete, run the Docker container using this command:
 
@@ -168,7 +176,23 @@ After the build is complete, run the Docker container using this command:
 docker run -p 4321:4321 talawa-admin
 ```
 
-This will expose the container's port 4321 on your local machine, making the application accessible at http://localhost:4321.
+The application will be accessible at `http://localhost:4321`
+
+## Production Setup
+
+1. Build the Docker image:
+
+   ```bash
+   docker build -t talawa-admin .
+   ```
+
+2. Run the container:
+   ```bash
+   docker run -p 4321:4321 \
+     -e REACT_APP_TALAWA_URL=http://your-api-url:4000/graphql/ \
+     -e REACT_APP_BACKEND_WEBSOCKET_URL=ws://your-api-url:4000/graphql/ \
+     talawa-admin
+   ```
 
 # Configuration
 
