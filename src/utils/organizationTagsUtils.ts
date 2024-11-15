@@ -30,7 +30,7 @@ export const dataGridStyle = {
   },
   '& .MuiDataGrid-topContainer': {
     position: 'fixed',
-    top: 259,
+    top: 290,
     zIndex: 1,
   },
   '& .MuiDataGrid-virtualScrollerContent': {

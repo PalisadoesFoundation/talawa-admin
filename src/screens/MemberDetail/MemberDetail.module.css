@@ -117,7 +117,7 @@
   width: 60%;
 }
 .cardBody {
-  max-height: 72vh;
+  height: 35vh;
   overflow-y: scroll;
 }
 
@@ -671,4 +671,16 @@ input::file-selector-button {
 
 .Outline {
   outline: 1px solid var(--bs-gray-400);
+}
+
+.tagLink {
+  font-weight: 600;
+  color: var(--bs-gray-700);
+  cursor: pointer;
+}
+
+.tagLink:hover {
+  font-weight: 800;
+  color: var(--bs-blue);
+  text-decoration: underline;
 }

@@ -38,7 +38,7 @@ jobs:
       - name: Count number of lines
         run: |
           chmod +x ./.github/workflows/countline.py
-          ./.github/workflows/countline.py --lines 600 --exclude_files src/screens/LoginPage/LoginPage.tsx src/GraphQl/Queries/Queries.ts src/screens/OrgList/OrgList.tsx src/GraphQl/Mutations/mutations.ts src/components/EventListCard/EventListCardModals.tsx src/components/TagActions/TagActionsMocks.ts src/utils/interfaces.ts
+          ./.github/workflows/countline.py --lines 600 --exclude_files src/screens/LoginPage/LoginPage.tsx src/GraphQl/Queries/Queries.ts src/screens/OrgList/OrgList.tsx src/GraphQl/Mutations/mutations.ts src/components/EventListCard/EventListCardModals.tsx src/components/TagActions/TagActionsMocks.ts src/utils/interfaces.ts src/screens/MemberDetail/MemberDetail.tsx
 
       - name: Get changed TypeScript files
         id: changed-files
@@ -316,7 +316,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check if the target branch is develop
-        if: github.event.pull_request.base.ref != 'develop'
+        if: github.event.pull_request.base.ref != 'develop-postgres'
         run: |
-          echo "Error: Pull request target branch must be 'develop'. Please refer PR_GUIDELINES.md"
+          echo "Error: Pull request target branch must be 'develop-postgres'. Please refer PR_GUIDELINES.md"
           exit 1
