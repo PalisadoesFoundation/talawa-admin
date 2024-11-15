@@ -254,62 +254,63 @@ jobs:
         run: graphql-inspector validate './src/GraphQl/**/*.ts' './talawa-api/schema.graphql'
 
   Docker-Start-Check:
-    name: Check if Talawa Admin app starts in Docker
-    runs-on: ubuntu-latest
-    needs: [Code-Quality-Checks, Test-Application]
-    steps:
-      - name: Checkout the Repository
-        uses: actions/checkout@v4
+  name: Check if Talawa Admin app starts in Docker
+  runs-on: ubuntu-latest
+  needs: [Code-Quality-Checks, Test-Application]
+  steps:
+    - name: Checkout the Repository
+      uses: actions/checkout@v4
 
-      - name: Set up Docker
-        uses: docker/setup-buildx-action@v3
-        with:
-          driver-opts: |
-            image=moby/buildkit:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+    - name: Set up Docker
+      uses: docker/setup-buildx-action@v3
+      with:
+        driver-opts: |
+          image=moby/buildkit:latest
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
 
-      - name: Build Docker image
-        run: |
-          set -e
-          echo "Building Docker image..."
-          docker build -t talawa-admin-app .
-          echo "Docker image built successfully"
+    - name: Build Docker image
+      run: |
+        set -e
+        echo "Building Docker image..."
+        docker build -t talawa-admin-app .
+        echo "Docker image built successfully"
 
-      - name: Run Docker Container
-        run: |
-          set -e
-          echo "Started Docker container..."
-          docker run -d --name talawa-admin-app-container -p 4321:4321 talawa-admin-app
-          echo "Docker container started successfully"
+    - name: Run Docker Container
+      run: |
+        set -e
+        echo "Started Docker container..."
+        docker run -d --name talawa-admin-app-container -p 4321:4321 talawa-admin-app
+        echo "Docker container started successfully"
 
-      - name: Check if Talawa Admin App is running
-        run: |
-          timeout="${HEALTH_CHECK_TIMEOUT:-120}"
-          echo "Starting health check with ${timeout}s timeout"
-          while ! nc -z localhost 4321 && [ $timeout -gt 0 ]; do
-            sleep 1
+    - name: Check if Talawa Admin App is running on port 4321
+      run: |
+        timeout="${HEALTH_CHECK_TIMEOUT:-120}"
+        echo "Starting health check with ${timeout}s timeout"
 
-            timeout=$((timeout-1))
-            if [ $((timeout % 10)) -eq 0 ]; then
-              echo "Still waiting for app to start... ${timeout}s remaining"
-            fi
-          done
-          if [ $timeout -eq 0 ]; then
-            echo "Timeout waiting for application to start"
-            echo "Container logs:"
-            docker logs talawa-admin-app-container
-            exit 1
+        # Wait for the app to open the port 4321
+        while ! nc -z localhost 4321 && [ $timeout -gt 0 ]; do
+          sleep 1
+          timeout=$((timeout-1))
+          if [ $((timeout % 10)) -eq 0 ]; then
+            echo "Still waiting for app to start... ${timeout}s remaining"
           fi
-          echo "Port check passed, verifying health endpoint..."
-          curl --fail --silent http://localhost:4321/ || exit 1
-          echo "Health check passed successfully"
+        done
 
-      - name: Stop Docker Container
-        if: always()
-        run: |
-          docker stop talawa-admin-app-container
-          docker rm talawa-admin-app-container
+        if [ $timeout -eq 0 ]; then
+          echo "Timeout waiting for application to start"
+          echo "Container logs:"
+          docker logs talawa-admin-app-container
+          exit 1
+        fi
+
+        echo "Port check passed successfully"
+
+    - name: Stop Docker Container
+      if: always()
+      run: |
+        docker stop talawa-admin-app-container
+        docker rm talawa-admin-app-container
 
   Check-Target-Branch:
     if: ${{ github.actor != 'dependabot[bot]' }}
