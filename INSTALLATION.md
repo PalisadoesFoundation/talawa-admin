@@ -13,6 +13,9 @@ This document provides instructions on how to set up and start a running instanc
   - [Install node.js](#install-nodejs)
   - [Install TypeScript](#install-typescript)
   - [Install Required Packages](#install-required-packages)
+- [Installation using Docker](#installation-using-docker)
+  - [Build the Docker Image:](#build-the-docker-image)
+  - [Run the Docker container:](#run-the-docker-container)
 - [Configuration](#configuration)
   - [Creating .env file](#creating-env-file)
   - [Setting up PORT in .env file](#setting-up-port-in-env-file)
@@ -144,6 +147,28 @@ npm install
 ```
 
 The prerequisites are now installed. The next step will be to get the app up and running.
+
+# Installation using Docker
+
+If you prefer to use Docker, you can install the app using the following command:
+
+## Build the Docker Image:
+
+Run the following command to build the Docker image:
+
+```
+docker build -t talawa-admin .
+```
+
+## Run the Docker container:
+
+After the build is complete, run the Docker container using this command:
+
+```
+docker run -p 4321:4321 talawa-admin
+```
+
+This will expose the container's port 4321 on your local machine, making the application accessible at http://localhost:4321.
 
 # Configuration
 
