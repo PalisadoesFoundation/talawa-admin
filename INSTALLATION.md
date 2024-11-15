@@ -14,6 +14,7 @@ This document provides instructions on how to set up and start a running instanc
   - [Install TypeScript](#install-typescript)
   - [Install Required Packages](#install-required-packages)
 - [Installation using Docker](#installation-using-docker)
+  - [Prerequisites](#prerequisites-1)
   - [Development Setup](#development-setup)
   - [Production Setup](#production-setup)
 - [Configuration](#configuration)
@@ -149,6 +150,8 @@ npm install
 The prerequisites are now installed. The next step will be to get the app up and running.
 
 # Installation using Docker
+
+## Prerequisites
 
 1. Install Docker on your system:
    - [Docker Desktop for Windows/Mac](https://www.docker.com/products/docker-desktop)
