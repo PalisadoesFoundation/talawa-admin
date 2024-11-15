@@ -15,8 +15,7 @@ This document provides instructions on how to set up and start a running instanc
   - [Install Required Packages](#install-required-packages)
 - [Installation using Docker](#installation-using-docker)
   - [Prerequisites](#prerequisites-1)
-  - [Development Setup](#development-setup)
-  - [Production Setup](#production-setup)
+    - [Development Setup](#development-setup)
 - [Configuration](#configuration)
   - [Creating .env file](#creating-env-file)
   - [Setting up PORT in .env file](#setting-up-port-in-env-file)
@@ -157,7 +156,7 @@ The prerequisites are now installed. The next step will be to get the app up and
    - [Docker Desktop for Windows/Mac](https://www.docker.com/products/docker-desktop)
    - [Docker Engine for Linux](https://docs.docker.com/engine/install/)
 
-## Development Setup
+### Development Setup
 
 If you prefer to use Docker, you can install the app using the following command:
 
@@ -180,22 +179,6 @@ docker run -p 4321:4321 talawa-admin
 ```
 
 The application will be accessible at `http://localhost:4321`
-
-## Production Setup
-
-1. Build the Docker image:
-
-   ```bash
-   docker build -t talawa-admin .
-   ```
-
-2. Run the container:
-   ```bash
-   docker run -p 4321:4321 \
-     -e REACT_APP_TALAWA_URL=http://your-api-url:4000/graphql/ \
-     -e REACT_APP_BACKEND_WEBSOCKET_URL=ws://your-api-url:4000/graphql/ \
-     talawa-admin
-   ```
 
 # Configuration
 
