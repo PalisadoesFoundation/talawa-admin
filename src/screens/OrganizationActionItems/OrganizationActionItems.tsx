@@ -19,7 +19,7 @@ import type {
   InterfaceActionItemInfo,
   InterfaceActionItemList,
 } from 'utils/interfaces';
-import styles from './OrganizationActionItems.module.css';
+import styles from '../../style/app.module.css';
 import Loader from 'components/Loader/Loader';
 import {
   DataGrid,
@@ -45,27 +45,6 @@ enum ModalState {
   VIEW = 'view',
   STATUS = 'status',
 }
-
-const dataGridStyle = {
-  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-    outline: 'none !important',
-  },
-  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-    outline: 'none',
-  },
-  '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-root': {
-    borderRadius: '0.5rem',
-  },
-  '& .MuiDataGrid-main': {
-    borderRadius: '0.5rem',
-  },
-};
 
 /**
  * Component for managing and displaying action items within an organization.
@@ -328,10 +307,10 @@ function organizationActionItems(): JSX.Element {
         return (
           <>
             <Button
-              variant="success"
+              // variant="success"
               size="sm"
               style={{ minWidth: '32px' }}
-              className="me-2 rounded"
+              className={styles.infoButton}
               data-testid={`viewItemBtn${params.row.id}`}
               onClick={() => handleModalClick(params.row, ModalState.VIEW)}
             >
@@ -340,7 +319,7 @@ function organizationActionItems(): JSX.Element {
             <Button
               variant="success"
               size="sm"
-              className="me-2 rounded"
+              className={styles.infoButton}
               data-testid={`editItemBtn${params.row.id}`}
               onClick={() => handleModalClick(params.row, ModalState.SAME)}
             >
@@ -349,7 +328,7 @@ function organizationActionItems(): JSX.Element {
             <Button
               size="sm"
               variant="danger"
-              className="rounded"
+              className={styles.actionItemDeleteButton}
               data-testid={`deleteItemBtn${params.row.id}`}
               onClick={() => handleModalClick(params.row, ModalState.DELETE)}
             >
@@ -374,6 +353,7 @@ function organizationActionItems(): JSX.Element {
             <Form.Check
               type="checkbox"
               data-testid={`statusCheckbox${params.row.id}`}
+              className={styles.checkboxButton}
               checked={params.row.isCompleted}
               onChange={() => handleModalClick(params.row, ModalState.STATUS)}
             />
@@ -405,15 +385,14 @@ function organizationActionItems(): JSX.Element {
           />
           <Button
             tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center`}
-            style={{ marginBottom: '10px' }}
+            className={styles.searchButton}
             data-testid="searchBtn"
           >
             <Search />
           </Button>
         </div>
-        <div className="d-flex gap-3 mb-1">
-          <div className="d-flex justify-space-between align-items-center gap-3">
+        <div className="md:d-flex gap-3 mb-1 overflow-auto">
+          <div className="d-flex justify-space-between align-items-center gap-3 overflow-y-auto">
             <Dropdown>
               <Dropdown.Toggle
                 variant="success"
@@ -500,7 +479,7 @@ function organizationActionItems(): JSX.Element {
             <Button
               variant="success"
               onClick={() => handleModalClick(null, ModalState.SAME)}
-              style={{ marginTop: '11px' }}
+              className={styles.createButton}
               data-testid="createActionItemBtn"
             >
               <i className={'fa fa-plus me-2'} />
@@ -523,7 +502,29 @@ function organizationActionItems(): JSX.Element {
             </Stack>
           ),
         }}
-        sx={dataGridStyle}
+        sx={{
+          borderRadius: '20px',
+          backgroundColor: 'EAEBEF)',
+          '& .MuiDataGrid-row': {
+            backgroundColor: '#eff1f7',
+            '&:focus-within': {
+              // outline: '2px solid #000',
+              outlineOffset: '-2px',
+            },
+          },
+          '& .MuiDataGrid-row:hover': {
+            backgroundColor: '#EAEBEF',
+            boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
+          },
+          '& .MuiDataGrid-row.Mui-hovered': {
+            backgroundColor: '#EAEBEF',
+            boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
+          },
+          '& .MuiDataGrid-cell:focus': {
+            // outline: '2px solid #000',
+            // outlineOffset: '-2px',
+          },
+        }}
         getRowClassName={() => `${styles.rowBackground}`}
         autoHeight
         rowHeight={65}
