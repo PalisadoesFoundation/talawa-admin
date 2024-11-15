@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import type { ChangeEvent, FC } from 'react';
-import styles from './OrganizationActionItems.module.css';
+import styles from '../../style/app.module.css';
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
@@ -379,7 +379,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
         <Button
           variant="danger"
           onClick={hide}
-          className={styles.modalCloseBtn}
+          className={styles.closeButton}
           data-testid="modalCloseBtn"
         >
           <i className="fa fa-times"></i>
@@ -634,7 +634,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
 
           <Button
             type="submit"
-            className={styles.greenregbtn}
+            className={styles.addButton}
             data-testid="submitBtn"
           >
             {editMode ? t('updateActionItem') : t('createActionItem')}

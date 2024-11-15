@@ -2,7 +2,7 @@ import React, { type FC, type FormEvent, useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { FormControl, TextField } from '@mui/material';
-import styles from './OrganizationActionItems.module.css';
+import styles from '../../style/app.module.css';
 import { useMutation } from '@apollo/client';
 import { UPDATE_ACTION_ITEM_MUTATION } from 'GraphQl/Mutations/ActionItemMutations';
 import { toast } from 'react-toastify';
@@ -89,7 +89,7 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
         <Button
           variant="danger"
           onClick={hide}
-          className={styles.modalCloseBtn}
+          className={styles.closeButton}
           data-testid="modalCloseBtn"
         >
           <i className="fa fa-times"></i>
@@ -123,7 +123,7 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
           ) : (
             <Button
               type="submit"
-              className={styles.greenregbtn}
+              className={styles.addButton}
               data-testid="createBtn"
             >
               {t('markCompletion')}
