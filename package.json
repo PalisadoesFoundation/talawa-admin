@@ -117,7 +117,7 @@
     "@types/inquirer": "^9.0.7",
     "@types/jest": "^26.0.24",
     "@types/js-cookie": "^3.0.6",
-    "@types/node": "^22.5.4",
+    "@types/node": "^22.9.0",
     "@types/node-fetch": "^2.6.10",
     "@types/react": "^18.3.12",
     "@types/react-beautiful-dnd": "^13.1.8",
