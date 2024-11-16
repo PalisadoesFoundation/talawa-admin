@@ -23,7 +23,7 @@
     "@pdfme/generator": "^5.2.3",
     "@pdfme/schemas": "^5.1.6",
     "@reduxjs/toolkit": "^2.3.0",
-    "@vitejs/plugin-react": "^4.3.2",
+    "@vitejs/plugin-react": "^4.3.3",
     "babel-plugin-transform-import-meta": "^2.2.1",
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.6",
