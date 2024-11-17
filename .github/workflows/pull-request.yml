@@ -267,8 +267,6 @@ jobs:
         with:
           driver-opts: |
             image=moby/buildkit:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
 
       - name: Build Docker image
         run: |

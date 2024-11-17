@@ -16,25 +16,6 @@ This document provides instructions on how to set up and start a running instanc
 - [Installation using Docker](#installation-using-docker)
   - [Prerequisites](#prerequisites-1)
     - [Development Setup](#development-setup)
-- [Configuration](#configuration)
-  - [Creating .env file](#creating-env-file)
-  - [Setting up PORT in .env file](#setting-up-port-in-env-file)
-  - [Setting up REACT_APP_TALAWA_URL in .env file](#setting-up-react_app_talawa_url-in-env-file)
-  - [Setting up REACT_APP_BACKEND_WEBSOCKET_URL in .env file](#setting-up-react_app_backend_websocket_url-in-env-file)
-  - [Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file](#setting-up-react_app_recaptcha_site_key-in-env-file)
-  - [Setting up Compiletime and Runtime logs](#setting-up-compiletime-and-runtime-logs)
-- [Post Configuration Steps](#post-configuration-steps)
-  - [Running Talawa-Admin](#running-talawa-admin)
-  - [Accessing Talawa-Admin](#accessing-talawa-admin)
-  - [Talawa-Admin Registration](#talawa-admin-registration)
-  - [Talawa-Admin Login](#talawa-admin-login)
-- [Testing](#testing)
-  - [Running tests](#running-tests)
-  - [Debugging tests](#debugging-tests)
-  - [Linting code files](#linting-code-files)
-  - [Husky for Git Hooks](#husky-for-git-hooks)
-      - [pre-commit hook](#pre-commit-hook)
-      - [post-merge hook](#post-merge-hook)
 
 <!-- tocstop -->
 
@@ -166,17 +147,17 @@ If you prefer to use Docker, you can install the app using the following command
 
 Run the following command to build the Docker image:
 
-```
+````bash
 docker build -t talawa-admin .
-```
+```bash
 
 3.  Run the Docker container:
 
 After the build is complete, run the Docker container using this command:
 
-```
+```bash
 docker run -p 4321:4321 talawa-admin
-```
+```bash
 
 The application will be accessible at `http://localhost:4321`
 
@@ -186,9 +167,9 @@ It's important to configure Talawa-Admin. Here's how to do it.
 
 You can use our interactive setup script for the configuration. Use the following command for the same.
 
-```
+```bash
 npm run setup
-```
+```bash
 
 All the options in "setup" can be done manually as well and here's how to do it. - [Creating .env file](#creating-env-file)
 
@@ -196,8 +177,10 @@ All the options in "setup" can be done manually as well and here's how to do it.
 
 A file named .env is required in the root directory of talawa-admin for storing environment variables used at runtime. It is not a part of the repo and you will have to create it. For a sample of `.env` file there is a file named `.env.example` in the root directory. Create a new `.env` file by copying the contents of the `.env.example` into `.env` file. Use this command:
 
-```
+````
+
 cp .env.example .env
+
 ```
 
 This `.env` file must be populated with the following environment variables for `talawa-admin` to work:
@@ -221,19 +204,25 @@ Add a custom port number for Talawa-Admin development purposes to the variable n
 Add the endpoint for accessing talawa-api graphql service to the variable named `REACT_APP_TALAWA_URL` in the `.env` file.
 
 ```
+
 REACT_APP_TALAWA_URL="http://API-IP-ADRESS:4000/graphql/"
+
 ```
 
 If you are a software developer working on your local system, then the URL would be:
 
 ```
+
 REACT_APP_TALAWA_URL="http://localhost:4000/graphql/"
+
 ```
 
 If you are trying to access Talawa Admin from a remote host with the API URL containing "localhost", You will have to change the API URL to
 
 ```
+
 REACT_APP_TALAWA_URL="http://YOUR-REMOTE-ADDRESS:4000/graphql/"
+
 ```
 
 ## Setting up REACT_APP_BACKEND_WEBSOCKET_URL in .env file
@@ -241,19 +230,25 @@ REACT_APP_TALAWA_URL="http://YOUR-REMOTE-ADDRESS:4000/graphql/"
 The endpoint for accessing talawa-api WebSocket graphql service for handling subscriptions is automatically added to the variable named `REACT_APP_BACKEND_WEBSOCKET_URL` in the `.env` file.
 
 ```
+
 REACT_APP_BACKEND_WEBSOCKET_URL="ws://API-IP-ADRESS:4000/graphql/"
+
 ```
 
 If you are a software developer working on your local system, then the URL would be:
 
 ```
+
 REACT_APP_BACKEND_WEBSOCKET_URL="ws://localhost:4000/graphql/"
+
 ```
 
 If you are trying to access Talawa Admin from a remote host with the API URL containing "localhost", You will have to change the API URL to
 
 ```
+
 REACT_APP_BACKEND_WEBSOCKET_URL="ws://YOUR-REMOTE-ADDRESS:4000/graphql/"
+
 ```
 
 For additional details, please refer the `How to Access the Talawa-API URL` section in the INSTALLATION.md file found in the [Talawa-API repo](https://github.com/PalisadoesFoundation/talawa-api).
@@ -273,7 +268,9 @@ If you want to setup Google reCAPTCHA now, you may refer to the `RECAPTCHA` sect
 Copy/paste this `reCAPTCHA site key` to the variable named `REACT_APP_RECAPTCHA_SITE_KEY` in `.env` file.
 
 ```
+
 REACT_APP_RECAPTCHA_SITE_KEY="this_is_the_recaptcha_key"
+
 ```
 
 ## Setting up Compiletime and Runtime logs
@@ -289,7 +286,9 @@ It's now time to start Talawa-Admin and get it running
 Run the following command to start `talawa-admin` development server:
 
 ```
+
 npm run serve
+
 ```
 
 ## Accessing Talawa-Admin
@@ -297,13 +296,17 @@ npm run serve
 By default `talawa-admin` runs on port `4321` on your system's localhost. It is available on the following endpoint:
 
 ```
+
 http://localhost:4321/
+
 ```
 
 If you have specified a custom port number in your `.env` file, Talawa-Admin will run on the following endpoint:
 
 ```
+
 http://localhost:${{customPort}}/
+
 ```
 
 Replace `${{customPort}}` with the actual custom port number you have configured in your `.env` file.
@@ -325,7 +328,9 @@ It is important to test our code. If you are a contributor, please follow these 
 You can run the tests for `talawa-admin` using this command:
 
 ```
+
 npm run test
+
 ```
 
 ## Debugging tests
@@ -333,8 +338,10 @@ npm run test
 You can see the output of failing tests in broswer by running `jest-preview` package before running your tests
 
 ```
+
 npm run jest-preview
 npm run test
+
 ```
 
 You don't need to re-run the `npm run jest-preview` command each time, simply run the `npm run test` command if the Jest Preview server is already running in the background, it'll automatically detect any failing tests and show the preview at `http://localhost:3336` as shown in this screenshot -
@@ -346,7 +353,9 @@ You don't need to re-run the `npm run jest-preview` command each time, simply ru
 You can lint your code files using this command:
 
 ```
+
 npm run lint:fix
+
 ```
 
 ## Husky for Git Hooks
@@ -370,3 +379,4 @@ If you don't want this hook to run, you can manually opt out of this using the `
         git pull --no-verify
 
 <br/>
+```
