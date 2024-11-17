@@ -147,7 +147,7 @@ If you prefer to use Docker, you can install the app using the following command
 
 Run the following command to build the Docker image:
 
-````bash
+```bash
 docker build -t talawa-admin .
 
 
