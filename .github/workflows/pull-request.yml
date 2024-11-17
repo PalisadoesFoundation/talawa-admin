@@ -286,16 +286,16 @@ jobs:
         run: |
           timeout="${HEALTH_CHECK_TIMEOUT:-120}"
           echo "Starting health check with ${timeout}s timeout"
-          while ! nc -z localhost 4321 && [ $timeout -gt 0 ]; do
+          while ! nc -z localhost 4321 && [ "$timeout" -gt 0 ]; do
             sleep 1
 
             timeout=$((timeout-1))
-            if [ $((timeout % 10)) -eq 0 ]; then
+            if [ "$((timeout % 10))" -eq 0 ]; then
               echo "Still waiting for app to start... ${timeout}s remaining"
             fi
           done
 
-          if [ $timeout -eq 0 ]; then
+          if [ "$timeout" -eq 0 ]; then
             echo "Timeout waiting for application to start"
             echo "Container logs:"
             docker logs talawa-admin-app-container

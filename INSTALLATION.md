@@ -149,7 +149,7 @@ Run the following command to build the Docker image:
 
 ````bash
 docker build -t talawa-admin .
-```bash
+
 
 3.  Run the Docker container:
 
@@ -157,7 +157,7 @@ After the build is complete, run the Docker container using this command:
 
 ```bash
 docker run -p 4321:4321 talawa-admin
-```bash
+
 
 The application will be accessible at `http://localhost:4321`
 
@@ -169,7 +169,7 @@ You can use our interactive setup script for the configuration. Use the followin
 
 ```bash
 npm run setup
-```bash
+
 
 All the options in "setup" can be done manually as well and here's how to do it. - [Creating .env file](#creating-env-file)
 
