@@ -46,7 +46,39 @@ const askAndUpdatePort = async (): Promise<void> => {
 
   if (shouldSetCustomPortResponse) {
     const customPort = await askForCustomPort();
+    if (customPort < 1024 || customPort > 65535) {
+      throw new Error('Port must be between 1024 and 65535');
+    }
+
     updateEnvFile('PORT', String(customPort));
+  }
+};
+
+const askAndSetDockerOption = async (): Promise<void> => {
+  const { useDocker } = await inquirer.prompt({
+    type: 'confirm',
+    name: 'useDocker',
+    message: 'Would you like to set up with Docker?',
+    default: false,
+  });
+
+  if (useDocker) {
+    console.log('Setting up with Docker...');
+    updateEnvFile('USE_DOCKER', 'YES');
+    const dockerUrl = process.env.REACT_APP_TALAWA_URL?.replace(
+      'localhost',
+      'host.docker.internal',
+    );
+    if (dockerUrl) {
+      updateEnvFile('REACT_APP_DOCKER_TALAWA_URL', dockerUrl);
+    } else {
+      console.warn(
+        '⚠️ Docker URL setup skipped as no Talawa API URL was provided.',
+      );
+    }
+  } else {
+    console.log('Setting up without Docker...');
+    updateEnvFile('USE_DOCKER', 'NO');
   }
 };
 
@@ -60,18 +92,30 @@ const askAndUpdateTalawaApiUrl = async (): Promise<void> => {
   });
 
   if (shouldSetTalawaApiUrlResponse) {
-    let endpoint = ' ';
+    let endpoint = '';
     let isConnected = false;
 
     while (!isConnected) {
       endpoint = await askForTalawaApiUrl();
       const url = new URL(endpoint);
+      if (!['http:', 'https:'].includes(url.protocol)) {
+        throw new Error('Invalid URL protocol.Must be http or https');
+      }
       isConnected = await checkConnection(url.origin);
     }
 
     updateEnvFile('REACT_APP_TALAWA_URL', endpoint);
     const websocketUrl = endpoint.replace(/^http(s)?:\/\//, 'ws$1://');
+    try {
+      new URL(websocketUrl);
+    } catch {
+      throw new Error('Invalid WebSocket URL generated');
+    }
     updateEnvFile('REACT_APP_BACKEND_WEBSOCKET_URL', websocketUrl);
+    if (endpoint.includes('localhost')) {
+      const dockerUrl = endpoint.replace('localhost', 'host.docker.internal');
+      updateEnvFile('REACT_APP_DOCKER_TALAWA_URL', dockerUrl);
+    }
   }
 };
 
@@ -120,18 +164,25 @@ const askAndSetLogErrors = async (): Promise<void> => {
 
 // Main function to run the setup process
 export async function main(): Promise<void> {
-  console.log('Welcome to the Talawa Admin setup! 🚀');
+  try {
+    console.log('Welcome to the Talawa Admin setup! 🚀');
 
-  handleEnvFile();
+    handleEnvFile();
 
-  await askAndUpdatePort();
-  await askAndUpdateTalawaApiUrl();
-  await askAndSetRecaptcha();
-  await askAndSetLogErrors();
+    await askAndSetDockerOption();
+    await askAndUpdatePort();
+    await askAndUpdateTalawaApiUrl();
+    await askAndSetRecaptcha();
+    await askAndSetLogErrors();
 
-  console.log(
-    '\nCongratulations! Talawa Admin has been successfully set up! 🥂🎉',
-  );
+    console.log(
+      '\nCongratulations! Talawa Admin has been successfully set up! 🥂🎉',
+    );
+  } catch (error) {
+    console.error('\n❌ Setup failed:', error);
+    console.log('\nPlease try again or contact support if the issue persists.');
+    process.exit(1);
+  }
 }
 
 main();
