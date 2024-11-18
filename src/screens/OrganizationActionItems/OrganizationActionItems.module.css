@@ -41,6 +41,22 @@ actionItemsContainer {
   margin-bottom: 1rem;
 }
 
+.searchButton {
+  position: absolute;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  right: 0;
+  bottom: 50px;
+}
+
+@media (max-width: 768px) {
+  .searchButton {
+    bottom: 10px;
+  }
+}
+
 .greenregbtn {
   margin: 1rem 0 0;
   margin-top: 15px;
