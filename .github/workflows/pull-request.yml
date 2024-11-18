@@ -42,7 +42,7 @@ jobs:
 
       - name: Get changed TypeScript files
         id: changed-files
-        uses: tj-actions/changed-files@v40
+        uses: tj-actions/changed-files@v45
       - name: Check formatting
         if: steps.changed-files.outputs.only_changed != 'true'
         run: npm run format:check
@@ -58,7 +58,7 @@ jobs:
       - name: Check for linting errors in modified files
         if: steps.changed-files.outputs.only_changed != 'true'
         env:
-          CHANGED_FILES: ${{ steps.changed_files.outputs.all_changed_files }}
+          CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
         run: npx eslint ${CHANGED_FILES} && python .github/workflows/eslint_disable_check.py
 
       - name: Check for TSDoc comments
@@ -92,9 +92,10 @@ jobs:
 
       - name: Get Changed Unauthorized files
         id: changed-unauth-files
-        uses: tj-actions/changed-files@v40
+        uses: tj-actions/changed-files@v45
         with:
           files: |
+            .env*
             .github/**
             env.example
             .node-version
@@ -123,6 +124,12 @@ jobs:
             ISSUE_GUIDELINES.md
             PR_GUIDELINES.md
             README.md
+            *.pem
+            *.key
+            *.cert
+            *.password
+            *.secret
+            *.credentials
 
       - name: List all changed unauthorized files
         if: steps.changed-unauth-files.outputs.any_changed == 'true' || steps.changed-unauth-files.outputs.any_deleted == 'true'
@@ -144,7 +151,7 @@ jobs:
 
       - name: Get changed files
         id: changed-files
-        uses: tj-actions/changed-files@v40
+        uses: tj-actions/changed-files@v45
 
       - name: Echo number of changed files
         env:
@@ -197,7 +204,7 @@ jobs:
 
       - name: Get changed TypeScript files
         id: changed-files
-        uses: tj-actions/changed-files@v40
+        uses: tj-actions/changed-files@v45
 
       - name: Run tests
         if: steps.changed-files.outputs.only_changed != 'true'
@@ -205,7 +212,7 @@ jobs:
 
       - name: TypeScript compilation for changed files
         run: |
-          for file in ${{ steps.changed-files.outputs.all_files }}; do
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
             if [[ "$file" == *.ts || "$file" == *.tsx ]]; then
               npx tsc --noEmit "$file"
             fi
@@ -220,7 +227,7 @@ jobs:
           name: '${{env.CODECOV_UNIQUE_NAME}}'
 
       - name: Test acceptable level of code coverage
-        uses: VeryGoodOpenSource/very_good_coverage@v2
+        uses: VeryGoodOpenSource/very_good_coverage@v3
         with:
           path: './coverage/lcov.info'
           min_coverage: 95.0
