@@ -155,11 +155,31 @@ docker build -t talawa-admin .
 
 After the build is complete, run the Docker container using this command:
 
+For Linux/MacOS
 ```bash
-docker run -p 4321:4321 talawa-admin
+docker run -d \
+  --name talawa-admin \
+  -p 4321:4321 \
+  -v $(pwd)/.env:/app/.env \
+  talawa-admin
+
 ```bash
 
+For Windows
+docker run -d `
+  --name talawa-admin `
+  -p 4321:4321 `
+  -v ${PWD}\.env:/app/.env `
+  talawa-admin
+
+
 The application will be accessible at `http://localhost:4321`
+
+4. Managing the container:
+
+To stop the container:
+```bash
+docker stop talawa-admin
 
 # Configuration
 
