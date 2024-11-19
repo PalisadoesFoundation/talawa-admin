@@ -23,6 +23,12 @@ Thanks for submitting a pull request! Please provide enough information so that 
 
 Fixes #<!--Add related issue number here.-->
 
+**Code Quality Checklist:**
+
+- [ ] I have implemented all relevant CodeRabbit AI suggestions
+- [ ] I have written tests for the changes made in this PR
+- [ ] The test coverage meets or exceeds the current coverage threshold (~90-95%)
+
 **Did you add tests for your changes?**
 
 <!--Yes or No. Note: Add unit tests or automation tests for your code.-->
