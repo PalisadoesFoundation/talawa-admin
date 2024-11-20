@@ -58,6 +58,6 @@ Fixes #<!--Add related issue number here.-->
 
 <!--Add extra information about this PR here-->
 
-**Have you read the [contributing guide](https://github.com/PalisadoesFoundation/talawa-api/blob/master/CONTRIBUTING.md)?**
+**Have you read the [contributing guide](https://github.com/PalisadoesFoundation/talawa-admin/blob/master/CONTRIBUTING.md)?**
 
 <!--Yes or No-->
