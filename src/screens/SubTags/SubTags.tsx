@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client';
-import { WarningAmberRounded } from '@mui/icons-material';
+import { Search, WarningAmberRounded } from '@mui/icons-material';
 import SortIcon from '@mui/icons-material/Sort';
 import Loader from 'components/Loader/Loader';
 import IconComponent from 'components/IconComponent/IconComponent';
@@ -14,7 +14,7 @@ import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import type { InterfaceQueryUserTagChildTags } from 'utils/interfaces';
-import styles from './SubTags.module.css';
+import styles from '../../style/app.module.css';
 import { DataGrid } from '@mui/x-data-grid';
 import type {
   InterfaceOrganizationSubTagsQuery,
@@ -278,66 +278,73 @@ function SubTags(): JSX.Element {
 
   return (
     <>
-      <Row className={styles.head}>
-        <div className={styles.mainpageright}>
-          <div className={styles.btnsContainer}>
-            <div className={styles.input}>
-              <i className="fa fa-search position-absolute text-body-tertiary end-0 top-50 translate-middle" />
+      <Row>
+        <div>
+          <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
+            <div className={`${styles.input} mb-1`}>
               <Form.Control
                 type="text"
                 id="tagName"
-                className="bg-white"
+                className={`${styles.inputField} `}
                 placeholder={tCommon('searchByName')}
                 onChange={(e) => setTagSearchName(e.target.value.trim())}
                 data-testid="searchByName"
                 autoComplete="off"
               />
-            </div>
-            <div className={styles.btnsBlock}>
-              <Dropdown
-                aria-expanded="false"
-                title="Sort Tag"
-                data-testid="sort"
-              >
-                <Dropdown.Toggle
-                  variant="outline-success"
-                  data-testid="sortTags"
-                >
-                  <SortIcon className={'me-1'} />
-                  {tagSortOrder === 'DESCENDING'
-                    ? tCommon('Latest')
-                    : tCommon('Oldest')}
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item
-                    data-testid="latest"
-                    onClick={() => setTagSortOrder('DESCENDING')}
-                  >
-                    {tCommon('Latest')}
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    data-testid="oldest"
-                    onClick={() => setTagSortOrder('ASCENDING')}
-                  >
-                    {tCommon('Oldest')}
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-
               <Button
-                variant="success"
-                onClick={() => redirectToManageTag(parentTagId as string)}
-                data-testid="manageCurrentTagBtn"
-                className="mx-4"
+                tabIndex={-1}
+                className={styles.searchButton}
+                data-testid="searchBtn"
               >
-                {`${t('manageTag')} ${subTagsData?.getChildTags.name}`}
+                <Search />
               </Button>
             </div>
+
+            <Dropdown
+              title="Sort Tag"
+              // className={styles.dropdown}
+              // className="ms-4 mb-4"
+              data-testid="sort"
+            >
+              <Dropdown.Toggle
+                data-testid="sortTags"
+                // className="color-red"
+                className={styles.dropdown}
+              >
+                <SortIcon className={'me-1'} />
+                {tagSortOrder === 'DESCENDING'
+                  ? tCommon('Latest')
+                  : tCommon('Oldest')}
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item
+                  data-testid="latest"
+                  onClick={() => setTagSortOrder('DESCENDING')}
+                >
+                  {tCommon('Latest')}
+                </Dropdown.Item>
+                <Dropdown.Item
+                  data-testid="oldest"
+                  onClick={() => setTagSortOrder('ASCENDING')}
+                >
+                  {tCommon('Oldest')}
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+
+            <Button
+              onClick={() => redirectToManageTag(parentTagId as string)}
+              data-testid="manageCurrentTagBtn"
+              className={`${styles.createButton} mb-3`}
+            >
+              {`${t('manageTag')} ${subTagsData?.getChildTags.name}`}
+            </Button>
+
             <Button
               variant="success"
               onClick={showAddSubTagModal}
               data-testid="addSubTagBtn"
-              className="ms-auto"
+              className={`${styles.createButton} mb-3`}
             >
               <i className={'fa fa-plus me-2'} />
               {t('addChildTag')}
@@ -347,7 +354,7 @@ function SubTags(): JSX.Element {
           {subTagsLoading || createUserTagLoading ? (
             <Loader />
           ) : (
-            <div className="mb-4">
+            <div className="mb-2 ">
               <div className="bg-white light border rounded-top mb-0 py-2 d-flex align-items-center">
                 <div className="ms-3 my-1">
                   <IconComponent name="Tag" />
@@ -365,7 +372,7 @@ function SubTags(): JSX.Element {
                 {orgUserTagAncestors?.map((tag, index) => (
                   <div
                     key={index}
-                    className={`ms-2 my-1 ${tag._id === parentTagId ? `fs-4 fw-semibold text-secondary` : `${styles.tagsBreadCrumbs} fs-6`}`}
+                    className={`ms-2  ${tag._id === parentTagId ? `fs-4 fw-semibold text-secondary` : `${styles.tagsBreadCrumbs} fs-6`}`}
                     onClick={() => redirectToSubTags(tag._id as string)}
                     data-testid="redirectToSubTags"
                   >
@@ -436,11 +443,11 @@ function SubTags(): JSX.Element {
         centered
       >
         <Modal.Header
-          className="bg-primary"
+          className={styles.tableHeader}
           data-testid="tagHeader"
           closeButton
         >
-          <Modal.Title className="text-white">{t('tagDetails')}</Modal.Title>
+          <Modal.Title>{t('tagDetails')}</Modal.Title>
         </Modal.Header>
         <Form onSubmitCapture={addSubTag}>
           <Modal.Body>
@@ -465,10 +472,16 @@ function SubTags(): JSX.Element {
               variant="secondary"
               onClick={(): void => hideAddSubTagModal()}
               data-testid="addSubTagModalCloseBtn"
+              className={styles.closeButton}
             >
               {tCommon('cancel')}
             </Button>
-            <Button type="submit" value="add" data-testid="addSubTagSubmitBtn">
+            <Button
+              type="submit"
+              value="add"
+              data-testid="addSubTagSubmitBtn"
+              className={styles.addButton}
+            >
               {tCommon('create')}
             </Button>
           </Modal.Footer>

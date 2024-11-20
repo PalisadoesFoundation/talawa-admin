@@ -417,8 +417,9 @@ function AddMember(): JSX.Element {
                                   createMember(userDetails.user._id);
                                 }}
                                 data-testid="addBtn"
-                                className={styles.searchButton}
+                                className={styles.addButton}
                               >
+                                <i className={'fa fa-plus me-2'} />
                                 Add
                               </Button>
                             </StyledTableCell>
