@@ -52,6 +52,7 @@ export default function people(): JSX.Element {
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
   const [members, setMembers] = useState([]);
   const [mode, setMode] = useState<number>(0);
+  const [updatedMembers, setUpdatedMembers] = useState([]);
 
   // Extracting organization ID from URL parameters
   const { orgId: organizationId } = useParams();
@@ -135,10 +136,21 @@ export default function people(): JSX.Element {
   };
 
   useEffect(() => {
-    if (data) {
-      setMembers(data.organizationsMemberConnection.edges);
+    if (data && data2) {
+      const adminIds = data2.organizations[0].admins.map((admin: any) => admin._id);
+  
+      const updatedMembers = data.organizationsMemberConnection.edges.map((member: InterfaceMember) => {
+        const isAdmin = adminIds.includes(member._id);
+        return {
+          ...member,
+          userType: isAdmin ? 'Admin' : 'User',
+        };
+      });
+      setUpdatedMembers(updatedMembers);
+      setMembers(updatedMembers);
     }
-  }, [data]);
+  }, [data, data2]);
+  
 
   /**
    * Updates the list of members based on the selected filter mode.
@@ -147,11 +159,12 @@ export default function people(): JSX.Element {
   useEffect(() => {
     if (mode == 0) {
       if (data) {
-        setMembers(data.organizationsMemberConnection.edges);
+        setMembers(updatedMembers);
       }
     } else if (mode == 1) {
       if (data2) {
-        setMembers(data2.organizations[0].admins);
+        const admins = data2.organizations[0].admins.map((admin: any) => { return { ...admin, userType: 'Admin' } });
+        setMembers(admins);
       }
     }
   }, [mode]);
