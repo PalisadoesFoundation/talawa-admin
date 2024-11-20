@@ -137,8 +137,11 @@ export default function people(): JSX.Element {
 
   useEffect(() => {
     if (data && data2) {
+      interface Admin {
+        _id: string;
+      }
       const adminIds = data2.organizations[0].admins.map(
-        (admin: any) => admin._id,
+        (admin: Admin) => admin._id,
       );
 
       const updatedMembers = data.organizationsMemberConnection.edges.map(
@@ -166,9 +169,12 @@ export default function people(): JSX.Element {
       }
     } else if (mode == 1) {
       if (data2) {
-        const admins = data2.organizations[0].admins.map((admin: any) => {
-          return { ...admin, userType: 'Admin' };
-        });
+        const admins = data2.organizations[0].admins.map(
+          (admin: InterfaceMember) => ({
+            ...admin,
+            userType: 'Admin' as const,
+          }),
+        );
         setMembers(admins);
       }
     }
