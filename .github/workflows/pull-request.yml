@@ -336,7 +336,7 @@ jobs:
         if: always()
         run: |
           if [ -f .pidfile_dev ]; then
-            kill $(cat .pidfile_dev)
+            kill "$(cat .pidfile_dev)"
           fi
 
   Docker-Start-Check:
