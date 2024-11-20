@@ -9,6 +9,7 @@ We employ the following branching strategy to simplify the development process a
 NOTE!!!
 
 ONLY SUBMIT PRS AGAINST OUR `DEVELOP` BRANCH. THE DEFAULT IS `MAIN`, SO YOU WILL HAVE TO MODIFY THIS BEFORE SUBMITTING YOUR PR FOR REVIEW. PRS MADE AGAINST `MAIN` WILL BE CLOSED.
+
 -->
 
 <!--
@@ -22,16 +23,6 @@ Thanks for submitting a pull request! Please provide enough information so that 
 **Issue Number:**
 
 Fixes #<!--Add related issue number here.-->
-
-**Code Quality Checklist:**
-
-- [ ] I have implemented all relevant CodeRabbit AI suggestions
-- [ ] I have written tests for the changes made in this PR
-- [ ] The test coverage meets or exceeds the current coverage threshold (~90-95%)
-
-**Did you add tests for your changes?**
-
-<!--Yes or No. Note: Add unit tests or automation tests for your code.-->
 
 **Snapshots/Videos:**
 
@@ -50,10 +41,23 @@ Fixes #<!--Add related issue number here.-->
 
 <!-- If this PR introduces a breaking change, please describe the impact and a migration path for existing applications. -->
 
+## Checklist
+
+### CodeRabbit AI Review
+- [ ] I have reviewed and addressed all critical issues flagged by CodeRabbit AI
+- [ ] I have implemented or provided justification for each non-critical suggestion
+- [ ] I have documented my reasoning in the PR comments where CodeRabbit AI suggestions were not implemented
+
+### Test Coverage
+- [ ] I have written tests for all new changes/features
+- [ ] I have verified that test coverage meets or exceeds 95%
+- [ ] I have run the test suite locally and all tests pass
+
+
 **Other information**
 
 <!--Add extra information about this PR here-->
 
-**Have you read the [contributing guide](https://github.com/PalisadoesFoundation/talawa-admin/blob/master/CONTRIBUTING.md)?**
+**Have you read the [contributing guide](https://github.com/PalisadoesFoundation/talawa-api/blob/master/CONTRIBUTING.md)?**
 
 <!--Yes or No-->
