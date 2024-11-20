@@ -289,7 +289,7 @@ jobs:
         run: |
           timeout=120
           echo "Starting production health check with ${timeout}s timeout"
-          while ! nc -z localhost 4321 && [ $timeout -gt 0 ]; do
+          while ! nc -z localhost 4173 && [ $timeout -gt 0 ]; do
             sleep 1
             timeout=$((timeout-1))
             if [ $((timeout % 10)) -eq 0 ]; then
