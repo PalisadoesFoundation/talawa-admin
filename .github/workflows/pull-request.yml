@@ -306,7 +306,7 @@ jobs:
       - name: Stop Production App
         run: |
           if [ -f .pidfile_prod ]; then
-            kill $(cat .pidfile_prod)
+            kill "$(cat .pidfile_prod)"
           fi
 
       - name: Start Development App
