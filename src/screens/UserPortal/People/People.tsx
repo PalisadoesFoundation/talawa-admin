@@ -50,9 +50,9 @@ export default function people(): JSX.Element {
 
   // State for managing the number of rows per page in pagination
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
-  const [members, setMembers] = useState([]);
+  const [members, setMembers] = useState<InterfaceMember[]>([]);
   const [mode, setMode] = useState<number>(0);
-  const [updatedMembers, setUpdatedMembers] = useState([]);
+  const [updatedMembers, setUpdatedMembers] = useState<InterfaceMember[]>([]);
 
   // Extracting organization ID from URL parameters
   const { orgId: organizationId } = useParams();
@@ -137,38 +137,58 @@ export default function people(): JSX.Element {
 
   useEffect(() => {
     if (data && data2) {
-      interface Admin {
+      // Ensure organization exists
+      const organization = data2.organizations?.[0];
+      if (!organization) {
+        console.error('Failed to load organization data');
+        return;
+      }
+
+      interface InterfaceAdmin {
         _id: string;
       }
-      const adminIds = data2.organizations[0].admins.map(
-        (admin: Admin) => admin._id,
+      const adminIds = organization.admins.map(
+        (admin: InterfaceAdmin) => admin._id,
       );
-
-      const updatedMembers = data.organizationsMemberConnection.edges.map(
-        (member: InterfaceMember) => {
-          const isAdmin = adminIds.includes(member._id);
-          return {
-            ...member,
-            userType: isAdmin ? 'Admin' : 'User',
-          };
-        },
-      );
-      setUpdatedMembers(updatedMembers);
-      setMembers(updatedMembers);
+      try {
+        const updatedMembers = data.organizationsMemberConnection.edges.map(
+          (member: InterfaceMember) => {
+            const isAdmin = adminIds.includes(member._id);
+            return {
+              ...member,
+              userType: isAdmin ? 'Admin' : 'User',
+            };
+          },
+        );
+        setUpdatedMembers(updatedMembers);
+        setMembers(updatedMembers);
+      } catch (error) {
+        console.error('Failed to process member data:', error);
+      }
     }
   }, [data, data2]);
 
+  const FILTER_MODES = {
+    ALL_MEMBERS: 0,
+    ADMINS: 1,
+  } as const;
+  
   /**
    * Updates the list of members based on the selected filter mode.
    */
   /* istanbul ignore next */
   useEffect(() => {
-    if (mode == 0) {
+    if (mode === FILTER_MODES.ALL_MEMBERS) {
       if (data) {
         setMembers(updatedMembers);
       }
-    } else if (mode == 1) {
+    } else if (mode === FILTER_MODES.ADMINS) {
       if (data2) {
+        const organization = data2.organizations?.[0];
+        if (!organization) {
+          console.error('Organization not found');
+          return;
+        }
         const admins = data2.organizations[0].admins.map(
           (admin: InterfaceMember) => ({
             ...admin,
