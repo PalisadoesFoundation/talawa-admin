@@ -55,6 +55,7 @@
     "import/no-duplicates": "error",
     "tsdoc/syntax": "error",
     "@typescript-eslint/ban-ts-comment": "error",
+    "@typescript-eslint/no-unused-vars": "error",
     "@typescript-eslint/no-explicit-any": "error",
     "@typescript-eslint/no-inferrable-types": "error",
     "@typescript-eslint/no-non-null-asserted-optional-chain": "error",
