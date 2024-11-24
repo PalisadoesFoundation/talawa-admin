@@ -237,7 +237,7 @@ describe('Testing People Screen [User Portal]', () => {
     );
 
     await wait();
-    expect(screen.getByText('Admin')).toBeInTheDocument();
-    expect(screen.getByText('User')).toBeInTheDocument();
+    expect(screen.queryByText('Admin')).toBeInTheDocument();
+    expect(screen.queryByText('User')).toBeInTheDocument();
   });
 });
