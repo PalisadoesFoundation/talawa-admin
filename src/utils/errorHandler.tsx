@@ -28,7 +28,8 @@ export const errorHandler = (a: unknown, error: unknown): void => {
         toast.error(tErrors('invalidMaritalStatus'));
         break;
       default:
-        toast.error(errorMessage);
+        console.log(errorMessage);
+        toast.error(tErrors('defaultError'));
     }
   } else {
     toast.error(tErrors('unknownError', { msg: error }) as string);
