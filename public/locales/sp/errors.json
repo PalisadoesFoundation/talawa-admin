@@ -11,5 +11,6 @@
   "invalidPhoneNumber": "Por favor, introduzca un número de teléfono válido",
   "invalidEducationGrade": "Por favor seleccione un grado de educación válido",
   "invalidEmploymentStatus": "Por favor seleccione un estado de empleo válido",
-  "invalidMaritalStatus": "Por favor seleccione un estado civil válido"
+  "invalidMaritalStatus": "Por favor seleccione un estado civil válido",
+  "defaultError": "Algo salió mal. Inténtalo de nuevo más tarde."
 }
