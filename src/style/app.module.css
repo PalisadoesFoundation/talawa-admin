@@ -274,6 +274,7 @@
 .addButton:hover {
   background-color: #286fe0;
   border-color: var(--search-button-border);
+  /* color: #555555; */
 }
 
 .modalbtn {
