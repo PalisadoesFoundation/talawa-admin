@@ -1,5 +1,24 @@
 # Contains the PDF file of the Tag as JSON string, thus does not need to be linted
 
 src/components/CheckIn/tagTemplate.ts
+
+node_modules/
+
+dist/
+build/
+
+tests/
+
+\*.log
+
+.eslintignore
+.eslintrc.js
+jest.config.js
+tsconfig.json
+
+\*.swp
+.vscode/
+
 Dockerfile
-\*.md
+.dockerignore
+.git/
