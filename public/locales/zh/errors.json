@@ -11,5 +11,6 @@
   "invalidPhoneNumber": "请选择一个有效的电话号码",
   "invalidEducationGrade": "请选择教育年级",
   "invalidEmploymentStatus": "请选择有效的就业状况",
-  "invalidMaritalStatus": "请选择有效的婚姻状况"
+  "invalidMaritalStatus": "请选择有效的婚姻状况",
+  "defaultError": "出了点问题。请稍后重试。"
 }
