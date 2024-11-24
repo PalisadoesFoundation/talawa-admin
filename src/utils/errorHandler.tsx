@@ -10,13 +10,25 @@ import i18n from './i18n';
 export const errorHandler = (a: unknown, error: unknown): void => {
   const tErrors: TFunction = i18n.getFixedT(null, 'errors');
   if (error instanceof Error) {
-    switch (error.message) {
-      case 'Failed to fetch':
-        toast.error(tErrors('talawaApiUnavailable') as string);
+    const errorMessage = error.message;
+    switch (true) {
+      case errorMessage === 'Failed to fetch':
+        toast.error(tErrors('talawaApiUnavailable'));
         break;
-      // Add more cases as needed
+      case errorMessage.includes('Value is not a valid phone number'):
+        toast.error(tErrors('invalidPhoneNumber'));
+        break;
+      case errorMessage.includes('does not exist in "EducationGrade"'):
+        toast.error(tErrors('invalidEducationGrade'));
+        break;
+      case errorMessage.includes('does not exist in "EmploymentStatus"'):
+        toast.error(tErrors('invalidEmploymentStatus'));
+        break;
+      case errorMessage.includes('does not exist in "MaritalStatus"'):
+        toast.error(tErrors('invalidMaritalStatus'));
+        break;
       default:
-        toast.error(error.message);
+        toast.error(errorMessage);
     }
   } else {
     toast.error(tErrors('unknownError', { msg: error }) as string);
