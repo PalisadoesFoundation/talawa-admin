@@ -172,7 +172,7 @@ export default function people(): JSX.Element {
     ALL_MEMBERS: 0,
     ADMINS: 1,
   } as const;
-  
+
   /**
    * Updates the list of members based on the selected filter mode.
    */
@@ -189,12 +189,10 @@ export default function people(): JSX.Element {
           console.error('Organization not found');
           return;
         }
-        const admins = data2.organizations[0].admins.map(
-          (admin: InterfaceMember) => ({
-            ...admin,
-            userType: 'Admin' as const,
-          }),
-        );
+        const admins = organization.admins.map((admin: InterfaceMember) => ({
+          ...admin,
+          userType: 'Admin' as const,
+        }));
         setMembers(admins);
       }
     }
