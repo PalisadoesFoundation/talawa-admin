@@ -444,10 +444,7 @@ const loginPage = (): JSX.Element => {
                       autoComplete="username"
                       data-testid="loginEmail"
                     />
-                    <Button
-                      tabIndex={-1}
-                      className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
-                    >
+                    <Button tabIndex={-1} className={styles.email_button}>
                       <EmailOutlinedIcon />
                     </Button>
                   </div>
@@ -474,7 +471,7 @@ const loginPage = (): JSX.Element => {
                     <Button
                       onClick={togglePassword}
                       data-testid="showLoginPassword"
-                      className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+                      className={styles.email_button}
                     >
                       {showPassword ? (
                         <i className="fas fa-eye"></i>
@@ -510,7 +507,7 @@ const loginPage = (): JSX.Element => {
                   <Button
                     disabled={loginLoading}
                     type="submit"
-                    className="mt-3 mb-3 w-100"
+                    className={styles.login_btn}
                     value="Login"
                     data-testid="loginBtn"
                   >
@@ -523,7 +520,7 @@ const loginPage = (): JSX.Element => {
                   <Button
                     variant="outline-secondary"
                     value="Register"
-                    className="mt-3 mb-3 w-100"
+                    className={styles.reg_btn}
                     data-testid="goToRegisterPortion"
                     onClick={(): void => {
                       setShowTab('REGISTER');

@@ -1,3 +1,21 @@
+:root {
+  --dropdown-border-color: #555555;
+  --dropdown-text-color: #555555;
+  --dropdown-hover-color: #eff1f7;
+  --grey-bg-color: #eaebef;
+  --subtle-blue-grey: #7c9beb;
+  --subtle-blue-grey-hover: #5f7e91;
+  --modal-width: 670px;
+  --modal-max-width: 680px;
+  --input-shadow-color: #dddddd;
+  --delete-button-bg: #f8d6dc;
+  --delete-button-color: #ff4d4f;
+  --search-button-bg: #a8c7fa;
+  --search-button-border: #555555;
+  --table-image-size: 50px;
+  --table-head-bg: var(--bs-primary, blue);
+}
+
 .login_background {
   min-height: 100vh;
 }
@@ -70,6 +88,40 @@
   z-index: 100;
   background: var(--bs-white);
   color: var(--bs-secondary);
+}
+
+.email_button {
+  position: absolute;
+  z-index: 10;
+  bottom: 0;
+  right: 0;
+  height: 100%;
+  display: flex;
+  background-color: var(--search-button-bg);
+  border-color: var(--search-button-border);
+  justify-content: center;
+  align-items: center;
+}
+
+.login_btn {
+  background-color: var(--search-button-bg);
+  border-color: var(--search-button-border);
+  margin-top: 1rem;
+  /* mt-3: Bootstrap margin spacing utility (3 = 1rem) */
+  margin-bottom: 1rem;
+  /* mb-3: Bootstrap margin spacing utility (3 = 1rem) */
+  width: 100%;
+}
+
+.reg_btn {
+  background-color: var(--dropdown-border-color);
+  border-color: var(--dropdown-border-color);
+  margin-top: 1rem;
+  color: white;
+  /* mt-3: Bootstrap margin spacing utility (3 = 1rem) */
+  margin-bottom: 1rem;
+  /* mb-3: Bootstrap margin spacing utility (3 = 1rem) */
+  width: 100%;
 }
 
 @media (max-width: 992px) {
