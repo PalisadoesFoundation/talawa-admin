@@ -59,7 +59,13 @@ jobs:
         if: steps.changed-files.outputs.only_changed != 'true'
         env:
           CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-        run: npx eslint ${CHANGED_FILES} && python .github/workflows/eslint_disable_check.py
+        run: |
+          CHANGED_JS_TS_FILES=$(echo "${CHANGED_FILES}" | grep -E '\.(js|jsx|ts|tsx)$')
+          if [ -n "$CHANGED_JS_TS_FILES" ]; then
+           npx eslint --ext .js,.jsx,.ts,.tsx ${CHANGED_JS_TS_FILES} && python .github/workflows/eslint_disable_check.py
+          else 
+          echo "No JavaScript/TypeScript files to lint."
+          fi
 
       - name: Check for TSDoc comments
         run: npm run check-tsdoc # Run the TSDoc check script
