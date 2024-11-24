@@ -231,7 +231,10 @@ const Requests = (): JSX.Element => {
   return (
     <>
       {/* Buttons Container */}
-      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
+      <div
+        className={`${styles.btnsContainer} gap-4 flex-wrap`}
+        data-testid="testComp"
+      >
         <div className={`${styles.input} mb-1`}>
           <div
             style={{
