@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 interface InterfaceAddOnProps {
-  extras?: any;
+  extras?: string;
   name?: string;
   children?: React.ReactNode;
 }
@@ -21,8 +21,6 @@ interface InterfaceAddOnProps {
  */
 function AddOn({
   children = 'Default text',
-  extras = {},
-  name = '',
 }: InterfaceAddOnProps): JSX.Element {
   return (
     <div className="plugin-container" data-testid="pluginContainer">

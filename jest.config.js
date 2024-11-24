@@ -30,8 +30,8 @@ export default {
     '^@dicebear/collection$':
       '<rootDir>/scripts/__mocks__/@dicebear/collection.ts',
     '\\.svg\\?react$': '<rootDir>/scripts/__mocks__/fileMock.js',
-    '\\.svg$': '<rootDir>/scripts/__mocks__/fileMock.js', 
-    '^@pdfme/generator$': '<rootDir>/scripts/__mocks__/@pdfme/generator.ts'
+    '\\.svg$': '<rootDir>/scripts/__mocks__/fileMock.js',
+    '^@pdfme/generator$': '<rootDir>/scripts/__mocks__/@pdfme/generator.ts',
   },
   moduleFileExtensions: [
     'web.js',
