@@ -1,11 +1,10 @@
 import React, { act } from 'react';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Pagination from './Pagination';
 import { store } from 'state/store';
-import userEvent from '@testing-library/user-event';
 
 describe('Testing Pagination component', () => {
   const props = {
@@ -26,8 +25,8 @@ describe('Testing Pagination component', () => {
       </BrowserRouter>,
     );
     await act(async () => {
-      userEvent.click(screen.getByTestId(/nextPage/i));
-      userEvent.click(screen.getByTestId(/previousPage/i));
+      fireEvent.click(screen.getByTestId(/nextPage/i));
+      fireEvent.click(screen.getByTestId(/previousPage/i));
     });
   });
 });
@@ -58,7 +57,7 @@ test('Component should be rendered properly', async () => {
   );
 
   await act(async () => {
-    userEvent.click(screen.getByTestId(/nextPage/i));
-    userEvent.click(screen.getByTestId(/previousPage/i));
+    fireEvent.click(screen.getByTestId(/nextPage/i));
+    fireEvent.click(screen.getByTestId(/previousPage/i));
   });
 });

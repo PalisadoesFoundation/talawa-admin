@@ -81,14 +81,16 @@ describe('Testing OrganizationScreen', () => {
     fireEvent.click(closeButton);
 
     // Check for contract class after closing
-    expect(screen.getByTestId('mainpageright')).toHaveClass('_expand_ccl5z_8');
+    expect(screen.getByTestId('mainpageright')).toHaveClass(
+      '_pageContainer_ccl5z_1 _expand_ccl5z_15',
+    );
 
     const openButton = screen.getByTestId('openMenu');
     fireEvent.click(openButton);
 
     // Check for expand class after opening
     expect(screen.getByTestId('mainpageright')).toHaveClass(
-      '_contract_ccl5z_61',
+      '_pageContainer_ccl5z_1 _contract_ccl5z_121',
     );
   });
 

@@ -188,7 +188,9 @@ describe('Testing People Screen [User Portal]', () => {
 
     await wait();
     const searchBtn = screen.getByTestId('searchBtn');
-    userEvent.type(screen.getByTestId('searchInput'), '');
+    const searchInput = screen.getByTestId('searchInput');
+    // Check that the input is initially empty
+    expect(searchInput).toHaveValue('');
     userEvent.click(searchBtn);
     await wait();
     userEvent.type(screen.getByTestId('searchInput'), 'j');
