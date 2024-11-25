@@ -19,12 +19,5 @@
     "jsx": "react-jsx"
   },
   "include": ["src", "src/App.tsx", "setup.ts"],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "vitest.config.ts",
-    "**/*.spec.ts",
-    "**/*.spec.tsx",
-    "**/__tests__/*"
-  ]
+  "exclude": ["node_modules", "dist", "vitest.config.ts"]
 }
