@@ -6,6 +6,7 @@ import { askForTalawaApiUrl } from './src/setup/askForTalawaApiUrl/askForTalawaA
 import { checkEnvFile } from './src/setup/checkEnvFile/checkEnvFile';
 import { validateRecaptcha } from './src/setup/validateRecaptcha/validateRecaptcha';
 import { askForCustomPort } from './src/setup/askForCustomPort/askForCustomPort';
+import { askForDocker } from 'setup/askForDocker/askForDocker';
 
 // Update the .env file with new values
 const updateEnvFile = (key: string, value: string): void => {
@@ -20,6 +21,28 @@ const updateEnvFile = (key: string, value: string): void => {
   } else {
     fs.appendFileSync('.env', `\n${key}=${value}`, 'utf8');
   }
+};
+// Function to update the docker environment file
+const updateDockerEnvFile = (key: string, value: string): void => {
+  const envFilePath = './.env';
+
+  let envContent = '';
+  if (fs.existsSync(envFilePath)) {
+    envContent = fs.readFileSync(envFilePath, 'utf-8');
+  }
+
+  const lines = envContent.split('\n').filter(Boolean);
+  const updatedContent = lines.map((line) =>
+    line.startsWith(`${key}=`) ? `${key}=${value}` : line,
+  );
+
+  // Add the key if it doesn't exist
+  if (!lines.some((line) => line.startsWith(`${key}=`))) {
+    updatedContent.push(`${key}=${value}`);
+  }
+
+  fs.writeFileSync(envFilePath, updatedContent.join('\n'));
+  console.log(`Updated .env file: ${key}=${value}`);
 };
 
 // Handle .env file creation or validation
@@ -40,7 +63,8 @@ const askAndUpdatePort = async (): Promise<void> => {
   const { shouldSetCustomPortResponse } = await inquirer.prompt({
     type: 'confirm',
     name: 'shouldSetCustomPortResponse',
-    message: 'Would you like to set up a custom port?',
+    message:
+      'Would you like to set up a custom port for running talawa-admin without docker ?',
     default: true,
   });
 
@@ -50,10 +74,39 @@ const askAndUpdatePort = async (): Promise<void> => {
       throw new Error('Port must be between 1024 and 65535');
     }
 
-    updateEnvFile('PORT', String(customPort));
+    updateDockerEnvFile('PORT', String(customPort));
   }
 };
 
+// Generate Docker file
+const generateDockerfile = (port: string): void => {
+  const dockerfileContent = `
+  # Stage 1: Build
+  FROM node:20.10.0-alpine AS build
+  
+  # Set working directory
+  WORKDIR /usr/src/app
+  
+  # Copy package files and install dependencies
+  COPY package*.json ./ 
+  RUN npm install
+  
+  # Copy source code and build
+  COPY . . 
+  RUN npm run build
+  
+  # Expose the specified port
+  EXPOSE ${port}
+  
+  # Start the application
+  CMD ["npm", "run", "serve"]
+  `;
+
+  fs.writeFileSync('Dockerfile', dockerfileContent);
+  console.log(`Dockerfile generated successfully with port ${port}! 🚀`);
+};
+
+// Function to manage Docker setup
 const askAndSetDockerOption = async (): Promise<void> => {
   const { useDocker } = await inquirer.prompt({
     type: 'confirm',
@@ -64,21 +117,49 @@ const askAndSetDockerOption = async (): Promise<void> => {
 
   if (useDocker) {
     console.log('Setting up with Docker...');
-    updateEnvFile('USE_DOCKER', 'YES');
-    const dockerUrl = process.env.REACT_APP_TALAWA_URL?.replace(
-      'localhost',
-      'host.docker.internal',
-    );
-    if (dockerUrl) {
-      updateEnvFile('REACT_APP_DOCKER_TALAWA_URL', dockerUrl);
-    } else {
-      console.warn(
-        '⚠️ Docker URL setup skipped as no Talawa API URL was provided.',
+    updateDockerEnvFile('USE_DOCKER', 'YES');
+
+    const dockerConfig = await askForDocker(); // Prompt for Docker configuration
+
+    // Ensure Docker config is valid
+    if (dockerConfig.dockerAppPort && dockerConfig.containerName) {
+      generateDockerfile(dockerConfig.dockerAppPort);
+
+      const defaultPort = dockerConfig.dockerAppPort;
+      const containerName = dockerConfig.containerName;
+
+      console.log(`
+  ✨ **Next Steps**:
+  1.  To build the Docker image, use:
+     \`docker build -t ${containerName} .\`
+
+  2. The default Docker application port is **${defaultPort}**. You can run the container with this default port using:
+     \`docker run -d -p ${defaultPort}:${defaultPort} ${containerName}\`
+  
+  3. To use a custom port (e.g., 5000), you can override the default port by running:
+     \`docker run -d -p 5000:${defaultPort} ${containerName}\`
+  
+  4. If you don’t specify a custom port, the default exposed port (4321) will be used.
+  `);
+
+      const dockerUrl = process.env.REACT_APP_TALAWA_URL?.replace(
+        'localhost',
+        'host.docker.internal',
       );
+
+      if (dockerUrl) {
+        updateDockerEnvFile('REACT_APP_DOCKER_TALAWA_URL', dockerUrl);
+      } else {
+        console.warn(
+          '⚠️ Docker URL setup skipped as no Talawa API URL was provided.',
+        );
+      }
+    } else {
+      console.warn('⚠️ Docker setup incomplete due to missing configuration.');
     }
   } else {
     console.log('Setting up without Docker...');
-    updateEnvFile('USE_DOCKER', 'NO');
+    updateDockerEnvFile('USE_DOCKER', 'NO');
   }
 };
 
