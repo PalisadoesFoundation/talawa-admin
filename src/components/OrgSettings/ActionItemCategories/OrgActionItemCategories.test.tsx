@@ -61,10 +61,10 @@ const renderActionItemCategories = (
 describe('Testing Organisation Action Item Categories', () => {
   it('should render the Action Item Categories Screen', async () => {
     renderActionItemCategories(link1, 'orgId');
-    await waitFor(() => {
+    await waitFor(async () => {
       expect(screen.getByTestId('searchByName')).toBeInTheDocument();
-      expect(screen.getByText('Category 1')).toBeInTheDocument();
-      expect(screen.getByText('Category 2')).toBeInTheDocument();
+      expect(await screen.findByText('Category 1')).toBeInTheDocument();
+      expect(await screen.findByText('Category 2')).toBeInTheDocument();
     });
   });
 

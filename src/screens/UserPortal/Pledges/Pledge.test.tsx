@@ -88,10 +88,10 @@ describe('Testing User Pledge Screen', () => {
 
   it('should render the Campaign Pledge screen', async () => {
     renderMyPledges(link1);
-    await waitFor(() => {
+    await waitFor(async () => {
       expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
-      expect(screen.getByText('Harve Lance')).toBeInTheDocument();
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
+      expect(await screen.findByText('Harve Lance')).toBeInTheDocument();
+      expect(await screen.findByText('John Doe')).toBeInTheDocument();
     });
   });
 
