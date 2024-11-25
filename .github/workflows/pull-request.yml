@@ -210,11 +210,13 @@ jobs:
         if: steps.changed-files.outputs.only_changed != 'true'
         run: |
           npm run test
+        exit 1
 
       - name: Run Vitest Tests
         if: steps.changed-files.outputs.only_changed != 'true'
         run: |
           npm run test:vitest:coverage
+        exit 1
 
       - name: TypeScript compilation for changed files
         run: |
