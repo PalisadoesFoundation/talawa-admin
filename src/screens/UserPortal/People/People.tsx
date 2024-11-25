@@ -50,7 +50,7 @@ export default function people(): JSX.Element {
 
   // State for managing the number of rows per page in pagination
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
-  const [members, setMembers] = useState<InterfaceMember[]>([]);
+  const [members, setMembers] = useState([]);
   const [mode, setMode] = useState<number>(0);
   const [updatedMembers, setUpdatedMembers] = useState<InterfaceMember[]>([]);
 
@@ -180,7 +180,7 @@ export default function people(): JSX.Element {
   useEffect(() => {
     if (mode === FILTER_MODES.ALL_MEMBERS) {
       if (data) {
-        setMembers(updatedMembers);
+        setMembers(updatedMembers as []);
       }
     } else if (mode === FILTER_MODES.ADMINS) {
       if (data2) {
