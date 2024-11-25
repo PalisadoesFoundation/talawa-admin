@@ -209,12 +209,12 @@ jobs:
       - name: Run Jest Tests
         if: steps.changed-files.outputs.only_changed != 'true'
         run: |
-          npm run test || exit 1
+          npm run test -- --watchAll=false --coverage
 
       - name: Run Vitest Tests
         if: steps.changed-files.outputs.only_changed != 'true'
         run: |
-          npm run test:vitest:coverage || exit 1
+          npm run test:vitest:coverage
 
       - name: TypeScript compilation for changed files
         run: |
