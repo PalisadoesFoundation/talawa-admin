@@ -212,7 +212,7 @@ jobs:
 
       - name: TypeScript compilation for changed files
         run: |
-          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+          for file in ${{ steps.changed-files.outputs.all_files }}; do
             if [[ "$file" == *.ts || "$file" == *.tsx ]]; then
               npx tsc --noEmit "$file"
             fi
