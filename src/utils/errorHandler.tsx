@@ -27,10 +27,13 @@ export const errorHandler = (a: unknown, error: unknown): void => {
       case errorMessage.includes('does not exist in "MaritalStatus"'):
         toast.error(tErrors('invalidMaritalStatus'));
         break;
+      case errorMessage.includes('status code 400'):
+        toast.error(tErrors('error400'));
+        break;
       // Add more cases as needed
       default:
         console.log(errorMessage);
-        toast.error('An unknown error occurred. Please try again later.');
+        toast.error(tErrors('defaultError'));
     }
   } else {
     toast.error(tErrors('unknownError', { msg: error }) as string);

@@ -12,5 +12,6 @@
   "invalidEducationGrade": "Please select a valid education grade",
   "invalidEmploymentStatus": "Please select a valid employment status",
   "invalidMaritalStatus": "Please select a valid marital status",
+  "error400": "Response not successful. Received status code 400 from server",
   "defaultError": "Something went wrong. Please try again later"
 }
