@@ -1,3 +1,9 @@
+/**
+ * Unit tests for the AddOn component.
+ *
+ * This file contains tests for the AddOn component to ensure it behaves as expected
+ * under various scenarios.
+ */
 import React from 'react';
 import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
