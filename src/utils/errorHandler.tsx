@@ -11,29 +11,21 @@ export const errorHandler = (a: unknown, error: unknown): void => {
   const tErrors: TFunction = i18n.getFixedT(null, 'errors');
   if (error instanceof Error) {
     const errorMessage = error.message;
-    switch (true) {
-      case errorMessage === 'Failed to fetch':
-        toast.error(tErrors('talawaApiUnavailable'));
-        break;
-      case errorMessage.includes('Value is not a valid phone number'):
-        toast.error(tErrors('invalidPhoneNumber'));
-        break;
-      case errorMessage.includes('does not exist in "EducationGrade"'):
-        toast.error(tErrors('invalidEducationGrade'));
-        break;
-      case errorMessage.includes('does not exist in "EmploymentStatus"'):
-        toast.error(tErrors('invalidEmploymentStatus'));
-        break;
-      case errorMessage.includes('does not exist in "MaritalStatus"'):
-        toast.error(tErrors('invalidMaritalStatus'));
-        break;
-      case errorMessage.includes('status code 400'):
-        toast.error(tErrors('error400'));
-        break;
-      // Add more cases as needed
-      default:
-        console.log(errorMessage);
-        toast.error(tErrors('defaultError'));
+    if (errorMessage === 'Failed to fetch') {
+      toast.error(tErrors('talawaApiUnavailable'));
+    } else if (errorMessage.includes('Value is not a valid phone number')) {
+      toast.error(tErrors('invalidPhoneNumber'));
+    } else if (errorMessage.includes('does not exist in "EducationGrade"')) {
+      toast.error(tErrors('invalidEducationGrade'));
+    } else if (errorMessage.includes('does not exist in "EmploymentStatus"')) {
+      toast.error(tErrors('invalidEmploymentStatus'));
+    } else if (errorMessage.includes('does not exist in "MaritalStatus"')) {
+      toast.error(tErrors('invalidMaritalStatus'));
+    } else if (errorMessage.includes('status code 400')) {
+      toast.error(tErrors('error400'));
+    } else {
+      console.log(errorMessage); // log error for debugging
+      toast.error(tErrors('defaultError'));
     }
   } else {
     toast.error(tErrors('unknownError', { msg: error }) as string);
