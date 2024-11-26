@@ -219,8 +219,7 @@ jobs:
       - name: Merge Coverage Reports
         if: steps.changed-files.outputs.only_changed != 'true'
         run: |
-          npx nyc merge ./coverage ./coverage-vitest ./merged-coverage
-          mv ./merged-coverage/coverage-final.json ./coverage/coverage-final.json
+          npx nyc merge ./coverage ./coverage-vitest ./coverage
 
       - name: TypeScript compilation for changed files
         run: |
@@ -237,6 +236,7 @@ jobs:
           verbose: true
           fail_ci_if_error: false
           name: '${{env.CODECOV_UNIQUE_NAME}}'
+          path: './coverage/lcov.info'
 
       - name: Test acceptable level of code coverage
         uses: VeryGoodOpenSource/very_good_coverage@v3
