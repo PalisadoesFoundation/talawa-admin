@@ -202,7 +202,7 @@ jobs:
       - name: Run Jest Tests
         if: steps.changed-files.outputs.only_changed != 'true'
         env:
-          NODE_V8_COVERAGE: './.nyc_output'
+          NODE_V8_COVERAGE: './coverage/jest'
         run: |
           mkdir -p ./.nyc_output
           npm run test -- --watchAll=false --coverage
@@ -210,13 +210,14 @@ jobs:
       - name: Run Vitest Tests
         if: steps.changed-files.outputs.only_changed != 'true'
         env:
-          NODE_V8_COVERAGE: './.nyc_output'
+          NODE_V8_COVERAGE: './coverage/vitest'
         run: |
           npm run test:vitest:coverage
 
       - name: Merge Coverage Reports
         if: steps.changed-files.outputs.only_changed != 'true'
         run: |
+          mkdir -p coverage
           npx lcov-result-merger 'coverage/*/lcov.info' > 'coverage/lcov.info'     
       
       - name: TypeScript compilation for changed files

@@ -68,6 +68,6 @@ export default {
     '<rootDir>/build/',
     '<rootDir>/public/',
   ],
-  coverageDirectory: './.nyc_output',
+  coverageDirectory: './coverage/jest',
   coverageReporters: ['text', 'html', 'text-summary', 'lcov'],
 };

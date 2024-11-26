@@ -18,7 +18,7 @@ export default defineConfig({
     coverage: {
       enabled: true,
       provider: 'istanbul',
-      reportsDirectory: './.nyc_output',
+      reportsDirectory: './coverage/vitest',
       exclude: [
         'node_modules',
         'dist',
