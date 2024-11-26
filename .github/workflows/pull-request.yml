@@ -58,8 +58,8 @@ jobs:
       - name: Check for linting errors in modified files
         if: steps.changed-files.outputs.only_changed != 'true'
         env: 
-          CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-        run: npx eslint "${CHANGED_FILES}" && python .github/workflows/eslint_disable_check.py
+          CHANGED_FILES: ${{ steps.changed_files.outputs.all_changed_files }}
+        run: npx eslint ${CHANGED_FILES} && python .github/workflows/eslint_disable_check.py
         
       - name: Check for TSDoc comments
         run: npm run check-tsdoc # Run the TSDoc check script
