@@ -216,6 +216,12 @@ jobs:
         run: |
           npm run test:vitest:coverage
 
+      - name: Merge Coverage Reports
+        if: steps.changed-files.outputs.only_changed != 'true'
+        run: |
+          npx nyc merge ./coverage ./coverage-vitest ./merged-coverage
+          mv ./merged-coverage/coverage-final.json ./coverage/coverage-final.json
+
       - name: TypeScript compilation for changed files
         run: |
           for file in ${{ steps.changed-files.outputs.all_files }}; do
