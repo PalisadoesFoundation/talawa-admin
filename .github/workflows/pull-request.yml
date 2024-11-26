@@ -206,22 +206,26 @@ jobs:
         id: changed-files
         uses: tj-actions/changed-files@v45
 
-      - name: Run Jest Tests
+     - name: Run Jest Tests
         if: steps.changed-files.outputs.only_changed != 'true'
+        env:
+          NODE_V8_COVERAGE: './.nyc_output'
         run: |
           npm run test -- --watchAll=false --coverage
 
       - name: Run Vitest Tests
         if: steps.changed-files.outputs.only_changed != 'true'
+        env:
+          NODE_V8_COVERAGE: './.nyc_output'
         run: |
           npm run test:vitest:coverage
 
       - name: Merge Coverage Reports
         if: steps.changed-files.outputs.only_changed != 'true'
         run: |
-          npx nyc merge ./coverage ./coverage-vitest ./merged-coverage
-          mv ./merged-coverage/coverage-final.json ./coverage/coverage-final.json
-
+          npx nyc merge
+          mv coverage.json ./coverage/lcov.info
+          
       - name: TypeScript compilation for changed files
         run: |
           for file in ${{ steps.changed-files.outputs.all_files }}; do

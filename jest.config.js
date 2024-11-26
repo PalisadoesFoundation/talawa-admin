@@ -68,4 +68,5 @@ export default {
     '<rootDir>/build/',
     '<rootDir>/public/',
   ],
+  coverageDirectory: './.nyc_output',
 };
