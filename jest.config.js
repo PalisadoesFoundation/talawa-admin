@@ -69,4 +69,5 @@ export default {
     '<rootDir>/public/',
   ],
   coverageDirectory: './.nyc_output',
+  coverageReporters: ['text', 'html', 'text-summary', 'lcov'],
 };
