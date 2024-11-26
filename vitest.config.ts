@@ -15,7 +15,6 @@ export default defineConfig({
     include: ['src/**/*.spec.{js,jsx,ts,tsx}'],
     globals: true,
     environment: 'jsdom',
-    setupFiles: ['src/test/setup.ts'],
     coverage: {
       enabled: true,
       provider: 'istanbul',
