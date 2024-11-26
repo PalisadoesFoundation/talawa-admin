@@ -204,7 +204,7 @@ jobs:
         env:
           NODE_V8_COVERAGE: './coverage/jest'
         run: |
-          mkdir -p ./.nyc_output
+          mkdir -p ./coverage/jest
           npm run test -- --watchAll=false --coverage
 
       - name: Run Vitest Tests
@@ -212,13 +212,17 @@ jobs:
         env:
           NODE_V8_COVERAGE: './coverage/vitest'
         run: |
+          mkdir -p ./coverage/vitest
           npm run test:vitest:coverage
 
       - name: Merge Coverage Reports
         if: steps.changed-files.outputs.only_changed != 'true'
         run: |
           mkdir -p coverage
-          npx lcov-result-merger 'coverage/*/lcov.info' > 'coverage/lcov.info'     
+          if ! npx lcov-result-merger 'coverage/*/lcov.info' > 'coverage/lcov.info'; then
+            echo "Failed to merge coverage reports"
+            exit 1
+          fi     
       
       - name: TypeScript compilation for changed files
         run: |

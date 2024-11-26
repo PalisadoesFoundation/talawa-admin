@@ -1,6 +1,16 @@
 export default {
   roots: ['<rootDir>/src'],
-  collectCoverageFrom: ['src/**/*.{ts,tsx}', '!src/index.tsx'],
+  collectCoverageFrom: [
+    'src/**/*.{ts,tsx}',
+    '!src/index.tsx',
+    '!node_modules',
+    '!dist',
+    '!**/*.{spec,test}.{js,jsx,ts,tsx}',
+    '!coverage/**',
+    '!**/index.{js,ts}',
+    '!**/*.d.ts',
+    '!src/test/**',
+    '!vitest.config.ts',],
   // setupFiles: ['react-app-polyfill/jsdom'],
   setupFiles: ['whatwg-fetch'],
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
