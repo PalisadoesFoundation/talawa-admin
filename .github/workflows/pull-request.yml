@@ -204,7 +204,6 @@ jobs:
         env:
           NODE_V8_COVERAGE: './coverage/jest'
         run: |
-          mkdir -p ./coverage/jest
           npm run test -- --watchAll=false --coverage
 
       - name: Run Vitest Tests
@@ -212,7 +211,6 @@ jobs:
         env:
           NODE_V8_COVERAGE: './coverage/vitest'
         run: |
-          mkdir -p ./coverage/vitest
           npm run test:vitest:coverage
 
       - name: Merge Coverage Reports
