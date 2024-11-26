@@ -4,6 +4,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import type { RenderResult } from '@testing-library/react';
 import {
+  act,
   cleanup,
   fireEvent,
   render,
@@ -90,9 +91,9 @@ describe('Testing User Pledge Screen', () => {
     renderMyPledges(link1);
     await waitFor(() => {
       expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
-      expect(screen.getByText('Harve Lance')).toBeInTheDocument();
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
+    expect(await screen.findByText('Harve Lance')).toBeInTheDocument();
+    expect(await screen.findByText('John Doe')).toBeInTheDocument();
   });
 
   it('should redirect to fallback URL if userId is null in LocalStorage', async () => {
@@ -324,7 +325,7 @@ describe('Testing User Pledge Screen', () => {
   });
 
   it('open and closes update pledge modal', async () => {
-    renderMyPledges(link1);
+    act(() => renderMyPledges(link1));
 
     const editPledgeBtn = await screen.findAllByTestId('editPledgeBtn');
     await waitFor(() => expect(editPledgeBtn[0]).toBeInTheDocument());

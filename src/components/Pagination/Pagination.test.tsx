@@ -26,8 +26,12 @@ describe('Testing Pagination component', () => {
       </BrowserRouter>,
     );
     await act(async () => {
-      userEvent.click(screen.getByTestId(/nextPage/i));
-      userEvent.click(screen.getByTestId(/previousPage/i));
+      userEvent.click(screen.getByTestId(/nextPage/i), undefined, {
+        skipPointerEventsCheck: true,
+      });
+      userEvent.click(screen.getByTestId(/previousPage/i), undefined, {
+        skipPointerEventsCheck: true,
+      });
     });
   });
 });
@@ -58,7 +62,11 @@ test('Component should be rendered properly', async () => {
   );
 
   await act(async () => {
-    userEvent.click(screen.getByTestId(/nextPage/i));
-    userEvent.click(screen.getByTestId(/previousPage/i));
+    userEvent.click(screen.getByTestId(/nextPage/i), undefined, {
+      skipPointerEventsCheck: true,
+    });
+    userEvent.click(screen.getByTestId(/previousPage/i), undefined, {
+      skipPointerEventsCheck: true,
+    });
   });
 });

@@ -1,7 +1,7 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, waitFor, within } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import userEvent from '@testing-library/user-event';
 import {
@@ -295,7 +295,7 @@ describe('Testing Home Screen: User Portal', () => {
   });
 
   test('StartPostModal should render on click of StartPost btn', async () => {
-    renderHomeScreen();
+    act(() => renderHomeScreen());
 
     await wait();
     const startPostBtn = await screen.findByTestId('postBtn');
@@ -307,7 +307,7 @@ describe('Testing Home Screen: User Portal', () => {
   });
 
   test('StartPostModal should close on clicking the close button', async () => {
-    renderHomeScreen();
+    act(() => renderHomeScreen());
 
     await wait();
     userEvent.upload(
@@ -344,7 +344,7 @@ describe('Testing Home Screen: User Portal', () => {
 
   test('Check whether Posts render in PostCard', async () => {
     setItem('userId', '640d98d9eb6a743d75341067');
-    renderHomeScreen();
+    act(() => renderHomeScreen());
     await wait();
 
     const postCardContainers = screen.findAllByTestId('postCardContainer');

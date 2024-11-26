@@ -53,6 +53,7 @@ afterEach(() => {
 
 describe('Testing Requests screen', () => {
   test('Component should be rendered properly', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const loadMoreRequests = jest.fn();
     render(
       <MockedProvider addTypename={false} link={link7}>
@@ -158,7 +159,7 @@ describe('Testing Requests screen', () => {
     const search5 = 'Xe';
     userEvent.type(screen.getByTestId(/searchByName/i), search5);
     userEvent.clear(screen.getByTestId(/searchByName/i));
-    userEvent.type(screen.getByTestId(/searchByName/i), '');
+    expect(screen.getByTestId(/searchByName/i)).toHaveValue('');
     userEvent.click(searchBtn);
     await wait();
   });
@@ -179,9 +180,9 @@ describe('Testing Requests screen', () => {
     await wait();
 
     const search = 'hello{enter}';
-    await act(() =>
-      userEvent.type(screen.getByTestId(/searchByName/i), search),
-    );
+    await act(async () => {
+      userEvent.type(screen.getByTestId(/searchByName/i), search);
+    });
   });
 
   test('Testing Request data is not present', async () => {

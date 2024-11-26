@@ -1,7 +1,13 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -63,9 +69,9 @@ describe('Testing Organisation Action Item Categories', () => {
     renderActionItemCategories(link1, 'orgId');
     await waitFor(() => {
       expect(screen.getByTestId('searchByName')).toBeInTheDocument();
-      expect(screen.getByText('Category 1')).toBeInTheDocument();
-      expect(screen.getByText('Category 2')).toBeInTheDocument();
     });
+    expect(await screen.findByText('Category 1')).toBeInTheDocument();
+    expect(await screen.findByText('Category 2')).toBeInTheDocument();
   });
 
   it('Sort the Categories (asc/desc) by createdAt', async () => {
@@ -165,7 +171,9 @@ describe('Testing Organisation Action Item Categories', () => {
   });
 
   it('open and closes Edit Category modal', async () => {
-    renderActionItemCategories(link1, 'orgId');
+    act(() => {
+      renderActionItemCategories(link1, 'orgId');
+    });
 
     const editCategoryBtn = await screen.findByTestId('editCategoryBtn1');
     await waitFor(() => expect(editCategoryBtn).toBeInTheDocument());

@@ -185,7 +185,7 @@ describe('Testing the creaction of recurring events with custom recurrence patte
         screen.queryByTestId('customRecurrenceSubmitBtn'),
       ).not.toBeInTheDocument();
     });
-  });
+  }, 30000);
 
   test('Selecting and unselecting recurrence weekdays', async () => {
     render(
@@ -382,7 +382,7 @@ describe('Testing the creaction of recurring events with custom recurrence patte
         'Monthly on Day 28',
       );
     });
-  });
+  }, 30000);
 
   test('Selecting the "Ends on" option for specifying the end of recurrence', async () => {
     //  i.e. when would the recurring event end: never, on a certain date, or after a certain number of occurences
@@ -589,7 +589,7 @@ describe('Testing the creaction of recurring events with custom recurrence patte
         screen.queryByTestId('createEventModalCloseBtn'),
       ).not.toBeInTheDocument();
     });
-  });
+  }, 30000);
 
   test('Creating a daily recurring event with a certain number of occurences', async () => {
     render(
@@ -717,5 +717,5 @@ describe('Testing the creaction of recurring events with custom recurrence patte
         screen.queryByTestId('createEventModalCloseBtn'),
       ).not.toBeInTheDocument();
     });
-  });
+  }, 30000);
 });

@@ -410,7 +410,7 @@ describe('Testing Users screen', () => {
     const search5 = 'Xe';
     userEvent.type(screen.getByTestId(/searchByName/i), search5);
     userEvent.clear(screen.getByTestId(/searchByName/i));
-    userEvent.type(screen.getByTestId(/searchByName/i), '');
+    expect(screen.getByTestId(/searchByName/i)).toHaveValue('');
     userEvent.click(searchBtn);
     await wait();
   });

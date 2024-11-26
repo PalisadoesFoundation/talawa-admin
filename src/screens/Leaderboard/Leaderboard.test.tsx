@@ -73,23 +73,25 @@ describe('Testing Leaderboard Screen', () => {
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link1}>
-        <MemoryRouter initialEntries={['/leaderboard/']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18n}>
-              <Routes>
-                <Route path="/leaderboard/" element={<Leaderboard />} />
-                <Route
-                  path="/"
-                  element={<div data-testid="paramsError"></div>}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link1}>
+          <MemoryRouter initialEntries={['/leaderboard/']}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18n}>
+                <Routes>
+                  <Route path="/leaderboard/" element={<Leaderboard />} />
+                  <Route
+                    path="/"
+                    element={<div data-testid="paramsError"></div>}
+                  />
+                </Routes>
+              </I18nextProvider>
+            </Provider>
+          </MemoryRouter>
+        </MockedProvider>,
+      );
+    });
     await waitFor(() => {
       expect(screen.getByTestId('paramsError')).toBeInTheDocument();
     });

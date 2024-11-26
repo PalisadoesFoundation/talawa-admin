@@ -4,6 +4,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import type { RenderResult } from '@testing-library/react';
 import {
+  act,
   fireEvent,
   render,
   screen,
@@ -352,7 +353,9 @@ describe('Testing ItemModal', () => {
   });
 
   it('Create Action Item (for Volunteer)', async () => {
-    renderItemModal(link1, itemProps[1]);
+    await act(async () => {
+      renderItemModal(link1, itemProps[1]);
+    });
     expect(screen.getAllByText(t.createActionItem)).toHaveLength(2);
 
     // Select Category 1
