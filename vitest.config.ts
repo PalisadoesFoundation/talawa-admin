@@ -19,7 +19,7 @@ export default defineConfig({
       enabled: true,
       provider: 'istanbul',
       reportsDirectory: './coverage',
-      exclude: ['node_modules', 'dist'],
+      exclude: ['node_modules', 'dist', '**/*.spec.{js,jsx,ts,tsx}'],
       reporter: ['text', 'html', 'text-summary', 'lcov'],
     },
   },
