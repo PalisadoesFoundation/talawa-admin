@@ -113,7 +113,7 @@
     "@babel/preset-typescript": "^7.26.0",
     "@testing-library/jest-dom": "^6.5.0",
     "@testing-library/react": "^16.0.1",
-    "@testing-library/user-event": "^12.1.10",
+    "@testing-library/user-event": "^13.5.0",
     "@types/inquirer": "^9.0.7",
     "@types/jest": "^26.0.24",
     "@types/js-cookie": "^3.0.6",
