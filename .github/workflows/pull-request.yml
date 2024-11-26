@@ -218,7 +218,7 @@ jobs:
         if: steps.changed-files.outputs.only_changed != 'true'
         run: |
           mkdir -p ./coverage
-          npx nyc merge || exit 1
+          npx nyc merge ./.nyc_output || exit 1
           mv coverage.json ./coverage/lcov.info     
       
       - name: TypeScript compilation for changed files
