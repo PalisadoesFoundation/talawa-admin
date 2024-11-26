@@ -219,7 +219,8 @@ jobs:
       - name: Merge Coverage Reports
         if: steps.changed-files.outputs.only_changed != 'true'
         run: |
-          npx nyc merge ./coverage ./coverage-vitest ./coverage
+          npx nyc merge ./coverage ./coverage-vitest ./merged-coverage
+          mv ./merged-coverage/coverage-final.json ./coverage/coverage-final.json
 
       - name: TypeScript compilation for changed files
         run: |
