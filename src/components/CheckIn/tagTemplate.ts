@@ -1,6 +1,6 @@
 import { Template } from '@pdfme/common';
 
-export const tagTemplate = {
+export const tagTemplate:Template = {
   schemas: [
     [
       {
