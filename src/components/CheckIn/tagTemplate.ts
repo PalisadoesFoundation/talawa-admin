@@ -5,7 +5,6 @@ export const tagTemplate:Template = {
     [
       {
         type: 'text', // Field type
-        content: '', // Optional content
         position: { x: 14.91, y: 27.03 }, // Position on the page
         width: 58.55, // Width of the field
         height: 5.67, // Height of the field
