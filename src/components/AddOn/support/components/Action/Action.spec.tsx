@@ -1,7 +1,13 @@
+/**
+ * Unit tests for the Action component.
+ *
+ * This file contains tests for the Action component to ensure it behaves as expected
+ * under various scenarios.
+ */
 import React from 'react';
 import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { describe, test, expect } from 'vitest'; // Import from Vitest
+import { describe, test, expect } from 'vitest';
 
 import { store } from 'state/store';
 import Action from './Action';
