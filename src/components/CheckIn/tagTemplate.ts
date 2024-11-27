@@ -4,7 +4,6 @@ export const tagTemplate:Template = {
   schemas: [
     [
       {
-        name: 'textField1', // Name of the field
         type: 'text', // Field type
         content: '', // Optional content
         position: { x: 14.91, y: 27.03 }, // Position on the page
