@@ -1,19 +1,20 @@
 import { Template } from '@pdfme/common';
-  
-  
-  export const tagTemplate: Template = {
+
+export const tagTemplate: Template = {
   schemas: [
     {
-      type: 'text', // Field type
-      position: { x: 14.91, y: 27.03 }, // Position on the page
-      width: 58.55, // Width of the field
-      height: 5.67, // Height of the field
-      alignment: 'center', // Alignment
-      fontSize: 16, // Font size
-      characterSpacing: 0, // Character spacing
-      lineHeight: 1, // Line height
-      fontName: 'Roboto', // Font name
-      fontColor: '#08780b', // Font color
+      name: {
+        type: 'text',
+        position: { x: 14.91, y: 27.03 },
+        width: 58.55,
+        height: 5.67,
+        alignment: 'center',
+        fontSize: 16,
+        characterSpacing: 0,
+        lineHeight: 1,
+        fontName: 'Roboto',
+        fontColor: '#08780b',
+      },
     },
   ],
   basePdf:
