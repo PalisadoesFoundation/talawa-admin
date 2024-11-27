@@ -18,5 +18,6 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src", "src/App.tsx", "setup.ts"]
+  "include": ["src", "src/App.tsx", "setup.ts"],
+  "exclude": ["node_modules", "dist", "vitest.config.ts"]
 }
