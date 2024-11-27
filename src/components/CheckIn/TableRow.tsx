@@ -9,21 +9,6 @@ import { tagTemplate } from './tagTemplate';
 import { useTranslation } from 'react-i18next';
 
 /**
- * Type for schema inputs to match the `tagTemplate`.
- */
-interface InterfaceSchemaInput {
-  name: string;
-  type: 'text';
-  content: string;
-  position: { x: number; y: number };
-  width: number;
-  height: number;
-  alignment?: 'center' | 'left' | 'right';
-  fontSize?: number;
-  dynamicFontSize?: boolean;
-}
-
-/**
  * Component that represents a single row in the check-in table.
  * Allows users to mark themselves as checked in and download a tag if they are already checked in.
  *
@@ -42,10 +27,6 @@ export const TableRow = ({
   const [checkInMutation] = useMutation(MARK_CHECKIN);
   const { t } = useTranslation('translation', { keyPrefix: 'checkIn' });
 
-  /**
-   * Marks the user as checked in for the event.
-   * Displays success or error messages based on the result of the mutation.
-   */
   const markCheckIn = (): void => {
     checkInMutation({
       variables: {
@@ -63,11 +44,6 @@ export const TableRow = ({
       });
   };
 
-  /**
-   * Triggers a notification while generating and downloading a PDF tag.
-   *
-   * @returns A promise that resolves when the PDF is generated and opened.
-   */
   const notify = (): Promise<void> =>
     toast.promise(generateTag, {
       pending: t('generatingPdf') || 'Generating PDF...',
@@ -75,31 +51,13 @@ export const TableRow = ({
       error: t('pdfGenerationError') || 'Error generating PDF!',
     });
 
-  /**
-   * Generates a PDF tag based on the provided data and opens it in a new tab.
-   *
-   * @returns A promise that resolves when the PDF is successfully generated and opened.
-   */
   const generateTag = async (): Promise<void> => {
     try {
-      const inputs: InterfaceSchemaInput[] = [];
-
-      // Validate and push data into inputs
       if (!data.name || typeof data.name !== 'string' || !data.name.trim()) {
         throw new Error(t('invalidName') || 'Invalid or empty name provided');
       }
 
-      inputs.push({
-        name: data.name.trim(),
-        type: 'text',
-        content: data.name.trim(),
-        position: { x: 10, y: 20 },
-        width: 200,
-        height: 50,
-        alignment: 'center',
-        fontSize: 12,
-        dynamicFontSize: true,
-      });
+      const inputs: Record<string, string>[] = [{ name: data.name.trim() }];
 
       const pdf = await generate({ template: tagTemplate, inputs });
 
