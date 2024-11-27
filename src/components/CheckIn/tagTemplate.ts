@@ -1,4 +1,7 @@
-import { Template }export const tagTemplate: Template = {
+import { Template } from '@pdfme/common';
+  
+  
+  export const tagTemplate: Template = {
   schemas: [
     {
       type: 'text', // Field type
