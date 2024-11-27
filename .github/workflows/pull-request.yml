@@ -279,7 +279,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check if the target branch is develop
-        if: github.event.pull_request.base.ref != 'develop'
+        if: github.event.pull_request.base.ref != 'develop-postgres'
         run: |
-          echo "Error: Pull request target branch must be 'develop'. Please refer PR_GUIDELINES.md"
+          echo "Error: Pull request target branch must be 'develop-postgres'. Please refer PR_GUIDELINES.md"
           exit 1
