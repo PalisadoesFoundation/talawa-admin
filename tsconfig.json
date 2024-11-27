@@ -19,5 +19,5 @@
     "jsx": "preserve"
   },
   "include": ["src", "src/App.tsx", "setup.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "dist", "vitest.config.ts"]
 }
