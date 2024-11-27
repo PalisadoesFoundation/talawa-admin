@@ -14,7 +14,6 @@ export const tagTemplate:Template = {
         lineHeight: 1, // Line height
         fontName: 'Roboto', // Font name
         fontColor: '#08780b', // Font color
-        __isSplit: false, // Optional splitting flag
       },
     ],
   ],
