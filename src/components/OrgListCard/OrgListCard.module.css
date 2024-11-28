@@ -55,6 +55,9 @@
   display: flex;
   justify-content: space-around;
   width: 8rem;
+  background-color: var(--grey-bg-color) !important;
+  color: black !important;
+  border: 1px solid var(--dropdown-border-color);
 }
 
 .orgName {
