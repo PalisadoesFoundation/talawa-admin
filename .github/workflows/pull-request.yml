@@ -279,7 +279,7 @@ jobs:
 
       - name: Validate Documents
         run: graphql-inspector validate './src/GraphQl/**/*.ts' './talawa-api/schema.graphql'
-    Start-App-Without-Docker:
+  Start-App-Without-Docker:
     name: Check if Talawa Admin app starts (No Docker)
     runs-on: ubuntu-latest
     needs: [Code-Quality-Checks, Test-Application]
