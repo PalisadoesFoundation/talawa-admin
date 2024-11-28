@@ -13,5 +13,5 @@
   "invalidEmploymentStatus": "Por favor seleccione un estado de empleo válido",
   "invalidMaritalStatus": "Por favor seleccione un estado civil válido",
   "error400": "No se pudo procesar su solicitud. Por favor, verifique la información ingresada",
-  "defaultError": "Algo salió mal. Inténtalo de nuevo más tarde."
+  "defaultError": "Algo salió mal. Inténtalo de nuevo más tarde o contacta a soporte si el problema persiste."
 }
