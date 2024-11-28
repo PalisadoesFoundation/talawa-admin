@@ -55,7 +55,7 @@ function eventHeader({
             onChange={(e) => setEventName(e.target.value)}
           />
           <Button
-            className={`position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center `}
+            className={styles.searchbutton}
             style={{ marginBottom: '10px' }}
           >
             <Search />
@@ -112,7 +112,7 @@ function eventHeader({
           </div>
           <Button
             variant="success"
-            className={styles.addbtn}
+            className={styles.createButton}
             onClick={showInviteModal}
             data-testid="createEventModalBtn"
           >
