@@ -222,4 +222,23 @@ describe('Testing People Screen [User Portal]', () => {
     expect(screen.queryByText('Noble Admin')).toBeInTheDocument();
     expect(screen.queryByText('Noble Mittal')).not.toBeInTheDocument();
   });
+
+  
+  test('Members should be rendered with correct user type', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <People />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    expect(screen.queryByText('Admin')).toBeInTheDocument();
+    expect(screen.queryByText('User')).toBeInTheDocument();
+  });
 });
