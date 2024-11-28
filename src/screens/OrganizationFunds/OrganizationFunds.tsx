@@ -14,27 +14,30 @@ import dayjs from 'dayjs';
 import Loader from 'components/Loader/Loader';
 import FundModal from './FundModal';
 import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
-import styles from './OrganizationFunds.module.css';
+import styles from '../../style/app.module.css';
 import type { InterfaceFundInfo } from 'utils/interfaces';
 
 const dataGridStyle = {
-  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-    outline: 'none !important',
-  },
-  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-    outline: 'none',
+  borderRadius: '20px',
+  backgroundColor: '#EAEBEF',
+  '& .MuiDataGrid-row': {
+    backgroundColor: '#eff1f7',
+    '&:focus-within': {
+      outline: '2px solid #000',
+      outlineOffset: '-2px',
+    },
   },
   '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'transparent',
+    backgroundColor: '#EAEBEF',
+    boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
   },
   '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'transparent',
+    backgroundColor: '#EAEBEF',
+    boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
   },
-  '& .MuiDataGrid-root': {
-    borderRadius: '0.5rem',
-  },
-  '& .MuiDataGrid-main': {
-    borderRadius: '0.5rem',
+  '& .MuiDataGrid-cell:focus': {
+    outline: '2px solid #000',
+    outlineOffset: '-2px',
   },
 };
 
@@ -242,7 +245,8 @@ const organizationFunds = (): JSX.Element => {
             <Button
               variant="success"
               size="sm"
-              className="me-2 rounded"
+              // className="me-2 rounded"
+              className={styles.editButton}
               data-testid="editFundBtn"
               onClick={() =>
                 handleOpenModal(params.row as InterfaceFundInfo, 'edit')
@@ -266,9 +270,8 @@ const organizationFunds = (): JSX.Element => {
       renderCell: (params: GridCellParams) => {
         return (
           <Button
-            variant="outline-success"
             size="sm"
-            className="rounded"
+            className={styles.editButton}
             onClick={() => handleClick(params.row._id as string)}
             data-testid="viewBtn"
           >
@@ -296,11 +299,11 @@ const organizationFunds = (): JSX.Element => {
           />
           <Button
             tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center`}
+            className={`${styles.searchButton} `}
             style={{ marginBottom: '9px' }}
             data-testid="searchBtn"
           >
-            <Search />
+            <Search className={styles.searchIcon} />
           </Button>
         </div>
         <div className="d-flex gap-4 mb-1">
@@ -335,6 +338,7 @@ const organizationFunds = (): JSX.Element => {
             <Button
               variant="success"
               onClick={() => handleOpenModal(null, 'create')}
+              className={styles.createButton}
               style={{ marginTop: '11px' }}
               data-testid="createFundBtn"
             >

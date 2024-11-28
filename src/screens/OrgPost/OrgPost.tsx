@@ -19,7 +19,7 @@ import { toast } from 'react-toastify';
 import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryOrganizationPostListItem } from 'utils/interfaces';
-import styles from './OrgPost.module.css';
+import styles from '../../style/app.module.css';
 
 interface InterfaceOrgPost {
   _id: string;
@@ -290,17 +290,14 @@ function orgPost(): JSX.Element {
               <Form.Control
                 type="text"
                 id="posttitle"
-                className="bg-white"
+                className={styles.inputField}
                 placeholder={showTitle ? t('searchTitle') : t('searchText')}
                 data-testid="searchByName"
                 autoComplete="off"
                 onChange={debouncedHandleSearch}
                 required
               />
-              <Button
-                tabIndex={-1}
-                className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
-              >
+              <Button tabIndex={-1} className={`${styles.searchButton} `}>
                 <Search />
               </Button>
             </div>
@@ -313,7 +310,7 @@ function orgPost(): JSX.Element {
                 >
                   <Dropdown.Toggle
                     data-testid="searchBy"
-                    variant="outline-success"
+                    className={styles.dropdown}
                   >
                     <SortIcon className={'me-1'} />
                     {t('searchBy')}
@@ -349,6 +346,7 @@ function orgPost(): JSX.Element {
                   <Dropdown.Toggle
                     variant="outline-success"
                     data-testid="sortpost"
+                    className={styles.dropdown}
                   >
                     <SortIcon className={'me-1'} />
                     {t('sortPost')}
@@ -374,6 +372,7 @@ function orgPost(): JSX.Element {
                 variant="success"
                 onClick={showInviteModal}
                 data-testid="createPostModalBtn"
+                className={`${styles.createButton} mb-2`}
               >
                 <i className={'fa fa-plus me-2'} />
                 {t('createPost')}
@@ -415,7 +414,7 @@ function orgPost(): JSX.Element {
           <div className="col-auto">
             <Button
               onClick={handlePreviousPage}
-              className="btn-sm"
+              className={`${styles.createButton} btn-sm `}
               disabled={
                 !orgPostListData?.organizations[0].posts.pageInfo
                   .hasPreviousPage
@@ -427,7 +426,7 @@ function orgPost(): JSX.Element {
           <div className="col-auto">
             <Button
               onClick={handleNextPage}
-              className="btn-sm "
+              className={`${styles.createButton} btn-sm `}
               disabled={
                 !orgPostListData?.organizations[0].posts.pageInfo.hasNextPage
               }
@@ -444,12 +443,8 @@ function orgPost(): JSX.Element {
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
-        <Modal.Header
-          className="bg-primary"
-          data-testid="modalOrganizationHeader"
-          closeButton
-        >
-          <Modal.Title className="text-white">{t('postDetails')}</Modal.Title>
+        <Modal.Header data-testid="modalOrganizationHeader" closeButton>
+          <Modal.Title>{t('postDetails')}</Modal.Title>
         </Modal.Header>
         <Form onSubmitCapture={createPost}>
           <Modal.Body>
@@ -556,12 +551,18 @@ function orgPost(): JSX.Element {
           <Modal.Footer>
             <Button
               variant="secondary"
+              className={styles.closeButton}
               onClick={(): void => hideInviteModal()}
               data-testid="closeOrganizationModal"
             >
               {tCommon('cancel')}
             </Button>
-            <Button type="submit" value="invite" data-testid="createPostBtn">
+            <Button
+              type="submit"
+              value="invite"
+              data-testid="createPostBtn"
+              className={`${styles.addButton} mt-2`}
+            >
               {t('addPost')}
             </Button>
           </Modal.Footer>
