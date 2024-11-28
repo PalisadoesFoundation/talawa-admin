@@ -245,7 +245,6 @@ jobs:
           fail_ci_if_error: false
           files: './coverage/lcov.info'
           name: '${{env.CODECOV_UNIQUE_NAME}}'
-          fail_ci_if_error: false
 
       - name: Test acceptable level of code coverage
         uses: VeryGoodOpenSource/very_good_coverage@v3
