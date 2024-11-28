@@ -12,6 +12,6 @@
   "invalidEducationGrade": "Por favor seleccione un grado de educación válido",
   "invalidEmploymentStatus": "Por favor seleccione un estado de empleo válido",
   "invalidMaritalStatus": "Por favor seleccione un estado civil válido",
-  "error400": "Respuesta no exitosa. Se recibió el código de estado 400 del servidor",
+  "error400": "No se pudo procesar su solicitud. Por favor, verifique la información ingresada",
   "defaultError": "Algo salió mal. Inténtalo de nuevo más tarde."
 }
