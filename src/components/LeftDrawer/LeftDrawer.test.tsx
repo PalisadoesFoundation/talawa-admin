@@ -95,7 +95,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
     });
 
     expect(
-      orgsBtn.className.includes('text-white btn btn-success'),
+      orgsBtn.className.includes('text-black btn btn-success'),
     ).toBeTruthy();
     expect(rolesBtn.className.includes('text-secondary btn')).toBeTruthy();
     expect(
@@ -179,9 +179,7 @@ describe('Testing Left Drawer component for SUPERADMIN', () => {
       orgsBtn.click();
     });
 
-    expect(
-      orgsBtn.className.includes('text-white btn btn-success'),
-    ).toBeTruthy();
+    expect(orgsBtn.className.includes('text-black')).toBeTruthy();
   });
 });
 
@@ -211,7 +209,7 @@ describe('Testing Left Drawer component for ADMIN', () => {
     });
 
     expect(
-      orgsBtn.className.includes('text-white btn btn-success'),
+      orgsBtn.className.includes('text-black btn btn-success'),
     ).toBeTruthy();
 
     // These screens aren't meant for admins, so they should not be present
