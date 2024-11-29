@@ -24,7 +24,7 @@ export const errorHandler = (a: unknown, error: unknown): void => {
     } else if (errorMessage.includes('status code 400')) {
       toast.error(tErrors('error400'));
     } else {
-      toast.error(tErrors('defaultError'));
+      toast.error(errorMessage);
     }
   } else {
     toast.error(tErrors('unknownError', { msg: error }) as string);
