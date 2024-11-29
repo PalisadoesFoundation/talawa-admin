@@ -22,3 +22,5 @@ tsconfig.json
 Dockerfile
 .dockerignore
 .git/
+
+\*.md
