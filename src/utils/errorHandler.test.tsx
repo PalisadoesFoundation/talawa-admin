@@ -28,27 +28,14 @@ describe('Test if errorHandler is working properly', () => {
     expect(toast.error).toHaveBeenCalledWith(tErrors('invalidPhoneNumber'));
   });
 
-  it('should call toast.error with the correct message if error message contains this substring "Value does not exist in "EducationGrade""', () => {
-    const error = new Error('This value does not exist in "EducationGrade"');
+  test.each([
+    ['EducationGrade', 'invalidEducationGrade'],
+    ['EmploymentStatus', 'invalidEmploymentStatus'],
+    ['MaritalStatus', 'invalidMaritalStatus'],
+  ])('should handle invalid %s error', (field, expectedKey) => {
+    const error = new Error(`This value does not exist in "${field}"`);
     errorHandler(t, error);
-
-    expect(toast.error).toHaveBeenCalledWith(tErrors('invalidEducationGrade'));
-  });
-
-  it('should call toast.error with the correct message if error message contains this substring "Value does not exist in "EmploymentStatus"', () => {
-    const error = new Error('This value does not exist in "EmploymentStatus"');
-    errorHandler(t, error);
-
-    expect(toast.error).toHaveBeenCalledWith(
-      tErrors('invalidEmploymentStatus'),
-    );
-  });
-
-  it('should call toast.error with the correct message if error message contains this substring "Value does not exist in "MaritalStatus"', () => {
-    const error = new Error('This value does not exist in "MaritalStatus"');
-    errorHandler(t, error);
-
-    expect(toast.error).toHaveBeenCalledWith(tErrors('invalidMaritalStatus'));
+    expect(toast.error).toHaveBeenCalledWith(tErrors(expectedKey));
   });
 
   it('should call toast.error with the correct message if error message contains this substring "status code 400"', () => {
