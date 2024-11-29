@@ -12,6 +12,5 @@
   "invalidEducationGrade": "请选择教育年级",
   "invalidEmploymentStatus": "请选择有效的就业状况",
   "invalidMaritalStatus": "请选择有效的婚姻状况",
-  "error400": "无法处理您的请求，请检查输入是否正确",
-  "defaultError": "出了点问题。请稍后重试。"
+  "error400": "响应不成功. 从服务器收到状态代码 400"
 }
