@@ -12,6 +12,5 @@
   "invalidEducationGrade": "Veuillez sélectionner un niveau d'études valide",
   "invalidEmploymentStatus": "Veuillez sélectionner un statut d'emploi valide",
   "invalidMaritalStatus": "Veuillez sélectionner un état matrimonial valide",
-  "error400": "La requête n'a pas pu être traitée. Veuillez vérifier vos informations",
-  "defaultError": "Une erreur s'est produite. Veuillez réessayer ultérieurement"
+  "error400": "Réponse non réussie. Code d'état 400 reçu du serveur"
 }
