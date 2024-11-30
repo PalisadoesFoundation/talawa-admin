@@ -27,7 +27,7 @@ import type {
   InterfaceUserType,
 } from 'utils/interfaces';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from './OrgList.module.css';
+import styles from '../../style/app.module.css';
 import OrganizationModal from './OrganizationModal';
 
 function orgList(): JSX.Element {
@@ -341,7 +341,7 @@ function orgList(): JSX.Element {
           <Form.Control
             type="name"
             id="searchOrgname"
-            className="bg-white"
+            className={'bg-white'}
             placeholder={tCommon('searchByName')}
             data-testid="searchByName"
             autoComplete="off"
@@ -350,7 +350,7 @@ function orgList(): JSX.Element {
           />
           <Button
             tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+            className={styles.search}
             onClick={handleSearchByBtnClick}
             data-testid="searchBtn"
           >
@@ -365,6 +365,7 @@ function orgList(): JSX.Element {
               data-testid="sort"
             >
               <Dropdown.Toggle
+                className={styles.dropdown}
                 variant={
                   sortingState.option === '' ? 'outline-success' : 'success'
                 }
@@ -533,7 +534,7 @@ function orgList(): JSX.Element {
       {/* Plugin Notification Modal after Org is Created */}
       <Modal show={dialogModalisOpen} onHide={toggleDialogModal}>
         <Modal.Header
-          className="bg-primary"
+          className={styles.createButton}
           closeButton
           data-testid="pluginNotificationHeader"
         >
@@ -550,7 +551,7 @@ function orgList(): JSX.Element {
 
               <div className={styles.pluginStoreBtnContainer}>
                 <Link
-                  className={`btn btn-primary ${styles.pluginStoreBtn}`}
+                  className={`btn  ${styles.pluginStoreBtn}`}
                   data-testid="goToStore"
                   to={`orgstore/id=${dialogRedirectOrgId}`}
                 >

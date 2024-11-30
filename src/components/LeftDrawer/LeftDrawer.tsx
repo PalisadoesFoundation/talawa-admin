@@ -63,17 +63,20 @@ const leftDrawer = ({
               <Button
                 variant={isActive === true ? 'success' : ''}
                 className={`${
-                  isActive === true ? 'text-white' : 'text-secondary'
+                  isActive === true ? 'text-black' : 'text-secondary'
                 }`}
+                style={{
+                  backgroundColor: isActive === true ? '#EAEBEF' : '',
+                }}
                 data-testid="orgsBtn"
               >
                 <div className={styles.iconWrapper}>
                   <OrganizationsIcon
-                    stroke={`${
+                    fill={
                       isActive === true
-                        ? 'var(--bs-white)'
+                        ? 'var(--bs-black)'
                         : 'var(--bs-secondary)'
-                    }`}
+                    }
                   />
                 </div>
                 {t('my organizations')}
