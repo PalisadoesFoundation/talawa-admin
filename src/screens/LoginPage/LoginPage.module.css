@@ -72,6 +72,40 @@
   color: var(--bs-secondary);
 }
 
+.email_button {
+  position: absolute;
+  z-index: 10;
+  bottom: 0;
+  right: 0;
+  height: 100%;
+  display: flex;
+  background-color: var(--search-button-bg);
+  border-color: var(--search-button-border);
+  justify-content: center;
+  align-items: center;
+}
+
+.login_btn {
+  background-color: var(--search-button-bg);
+  border-color: var(--search-button-border);
+  margin-top: 1rem;
+  /* mt-3: Bootstrap margin spacing utility (3 = 1rem) */
+  margin-bottom: 1rem;
+  /* mb-3: Bootstrap margin spacing utility (3 = 1rem) */
+  width: 100%;
+}
+
+.reg_btn {
+  background-color: var(--dropdown-border-color);
+  border-color: var(--dropdown-border-color);
+  margin-top: 1rem;
+  color: white;
+  /* mt-3: Bootstrap margin spacing utility (3 = 1rem) */
+  margin-bottom: 1rem;
+  /* mb-3: Bootstrap margin spacing utility (3 = 1rem) */
+  width: 100%;
+}
+
 @media (max-width: 992px) {
   .row .left_portion {
     padding: 0 2rem;
