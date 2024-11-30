@@ -32,6 +32,9 @@ This document provides instructions on how to set up and start a running instanc
   - [Husky for Git Hooks](#husky-for-git-hooks)
       - [pre-commit hook](#pre-commit-hook)
       - [post-merge hook](#post-merge-hook)
+- [Installation using Docker](#installation-using-docker)
+  - [Prerequisites](#prerequisites-1)
+    - [Development Setup](#development-setup)
 
 <!-- tocstop -->
 
@@ -145,15 +148,50 @@ npm install
 
 The prerequisites are now installed. The next step will be to get the app up and running.
 
+
+# Installation using Docker
+
+## Prerequisites
+
+1. Install Docker on your system:
+   - [Docker Desktop for Windows/Mac](https://www.docker.com/products/docker-desktop)
+   - [Docker Engine for Linux](https://docs.docker.com/engine/install/)
+
+### Development Setup
+
+If you prefer to use Docker, you can install the app using the following command:
+
+1.  Create a `.env` file as described in the Configuration section
+
+2.  Build the Docker Image:
+
+Run the following command to build the Docker image:
+
+````bash
+docker build -t talawa-admin .
+```bash
+
+3.  Run the Docker container:
+
+After the build is complete, run the Docker container using this command:
+
+```bash
+docker run -p 4321:4321 talawa-admin
+```bash
+
+The application will be accessible at `http://localhost:4321`
+
+
 # Configuration
 
 It's important to configure Talawa-Admin. Here's how to do it.
 
 You can use our interactive setup script for the configuration. Use the following command for the same.
 
-```
+```bash
 npm run setup
-```
+```bash
+
 
 All the options in "setup" can be done manually as well and here's how to do it. - [Creating .env file](#creating-env-file)
 
@@ -163,7 +201,7 @@ A file named .env is required in the root directory of talawa-admin for storing 
 
 ```
 cp .env.example .env
-```
+````
 
 This `.env` file must be populated with the following environment variables for `talawa-admin` to work:
 
