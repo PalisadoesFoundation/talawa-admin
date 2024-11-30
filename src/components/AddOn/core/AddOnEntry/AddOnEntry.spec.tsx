@@ -24,7 +24,7 @@ import { BACKEND_URL } from 'Constant/constant';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
 import userEvent from '@testing-library/user-event';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider, wait } from '@apollo/react-testing';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { ADD_ON_ENTRY_MOCK } from './AddOnEntryMocks';
 import { ToastContainer } from 'react-toastify';
@@ -187,6 +187,40 @@ describe('Testing AddOnEntry', () => {
     expect(
       await findByText('This feature is now enabled in your organization'),
     ).toBeInTheDocument();
+  });
+
+  it('Check if uninstalled orgs includes current org', async () => {
+    const props = {
+      id: '1',
+      title: 'Test Addon',
+      description: 'Test addon description',
+      createdBy: 'Test User',
+      component: 'string',
+      installed: true,
+      configurable: true,
+      modified: true,
+      isInstalled: true,
+      uninstalledOrgs: ['undefined'],
+      enabled: true,
+      getInstalledPlugins: (): { sample: string } => {
+        return { sample: 'sample' };
+      },
+    };
+
+    const { getByTestId } = render(
+      <MockedProvider addTypename={false} link={link}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              {<AddOnEntry {...props} />}
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+    await wait(100);
+    const btn = getByTestId('AddOnEntry_btn_install');
+    expect(btn.innerHTML).toMatch(/install/i);
   });
 
   test('should redirect to /orglist if orgId is undefined', async () => {
