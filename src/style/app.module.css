@@ -1,31 +1,3 @@
-:root {
-  --dropdown-border-color: #555555;
-  --dropdown-text-color: #555555;
-  --dropdown-hover-color: #eff1f7;
-  --grey-bg-color: #eaebef;
-  --subtle-blue-grey: #7c9beb;
-  --subtle-blue-grey-hover: #5f7e91;
-  --modal-width: 670px;
-  --modal-max-width: 680px;
-  --input-shadow-color: #dddddd;
-  --delete-button-bg: #f8d6dc;
-  --delete-button-color: #ff4d4f;
-  --search-button-bg: #a8c7fa;
-  --search-button-border: #555555;
-  --table-image-size: 50px;
-  --table-head-bg: var(
-    --bs-primary,
-    blue
-  ); /* Assuming var(--bs-primary) is defined elsewhere */
-  --table-head-color: white;
-  --table-header-color: var(--bs-greyish-black, black);
-  --table-head-radius: 20px;
-  --table-bg-color: #eaebef;
-  --tablerow-bg-color: #eff1f7;
-  --row-background: var(--bs-white, white);
-  --font-size-header: 16px;
-}
-
 .noOutline input {
   outline: none;
 }
@@ -94,13 +66,16 @@
 }
 
 .input {
-  flex: 1;
-
+  flex: 3;
   position: relative;
 }
 
 .btnsContainer {
   display: flex;
+  margin: 2.5rem 0;
+  align-items: center;
+  gap: 10px;
+  /* Adjust spacing between items */
   margin: 2.5rem 0;
 }
 
@@ -122,6 +97,52 @@
 
 .btnsContainer .input button {
   width: 52px;
+}
+
+.inputField {
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+  background-color: white;
+  box-shadow: 0 1px 1px var(--input-shadow-color);
+}
+
+.btnsContainerBlockAndUnblock {
+  display: flex;
+  margin: 2.5rem 0 2.5rem 0;
+}
+
+.btnsContainerBlockAndUnblock .btnsBlockBlockAndUnblock {
+  display: flex;
+}
+
+.btnsContainerBlockAndUnblock .btnsBlockBlockAndUnblock button {
+  margin-left: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btnsContainerBlockAndUnblock .inputContainerBlockAndUnblock {
+  flex: 1;
+  position: relative;
+}
+
+.btnsContainerBlockAndUnblock .inputBlockAndUnblock {
+  width: 70%;
+  position: relative;
+}
+
+.btnsContainerBlockAndUnblock input {
+  outline: 1px solid var(--bs-gray-400);
+}
+
+.btnsContainerBlockAndUnblock .inputContainerBlockAndUnblock button {
+  width: 52px;
+}
+
+.largeBtnsWrapper {
+  display: flex;
 }
 
 .deleteButton {
@@ -168,13 +189,6 @@
   border: 0;
 }
 
-.inputField {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  background-color: white;
-  box-shadow: 0 1px 1px var(--input-shadow-color);
-}
-
 .inputFieldModal {
   margin-bottom: 10px;
   background-color: white;
@@ -199,6 +213,31 @@
   align-items: center;
 }
 
+.searchButton:hover {
+  background-color: var(--search-button-bg);
+  border-color: var(--search-button-border);
+}
+
+.search {
+  position: absolute;
+  z-index: 10;
+  background-color: var(--search-button-bg);
+  border-color: var(--search-button-border);
+  bottom: 0;
+  right: 0;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.editButton {
+  background-color: var(--search-button-bg);
+  border-color: var(--search-button-border);
+  color: #555555;
+  margin-left: 2;
+}
+
 .addButton {
   margin-bottom: 10px;
   background-color: var(--search-button-bg);
@@ -209,6 +248,17 @@
 .addButton:hover {
   background-color: #286fe0;
   border-color: var(--search-button-border);
+  /* color: #555555; */
+}
+
+.modalbtn {
+  margin-top: 1rem;
+  display: flex !important;
+  margin-left: auto;
+  align-items: center;
+  background-color: var(--grey-bg-color) !important;
+  color: black !important;
+  border: 1px solid var(--dropdown-border-color) !important;
 }
 
 .yesButton {
@@ -216,7 +266,7 @@
   border-color: var(--search-button-border);
 }
 
-.searchIcon {
+.mainpageright {
   color: var(--dropdown-text-color);
 }
 
@@ -328,15 +378,6 @@
   position: sticky;
 }
 
-/* .checkboxButton{
-  background-color: transparent;
-}
-
-.checkboxButton:checked{
-  background-color: var(--subtle-blue-grey);
-  color:white
-} */
-
 input[type='checkbox']:checked + label {
   background-color: var(--subtle-blue-grey) !important;
 }
@@ -384,6 +425,7 @@ hr {
   display: flex;
   justify-content: flex-end;
 }
+
 .icon {
   margin: 1px;
 }
@@ -428,6 +470,30 @@ hr {
   color: var(--bs-primary) !important;
 }
 
+.custom_table {
+  border-radius: 20px;
+  background-color: var(--grey-bg-color);
+}
+
+.custom_table tbody tr {
+  background-color: var(--dropdown-hover-color);
+}
+
+.custom_table tbody tr:hover {
+  background-color: var(--grey-bg-color);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+.custom_table tbody tr:focus-within {
+  outline: 2px solid #000;
+  outline-offset: -2px;
+}
+
+.custom_table tbody td:focus {
+  outline: 2px solid #000;
+  outline-offset: -2px;
+}
+
 @media (max-width: 520px) {
   .btnsContainer {
     margin-bottom: 0;
@@ -454,20 +520,50 @@ hr {
   }
 }
 
-@media (max-width: 1120px) {
-  .contract {
-    padding-left: calc(250px + 2rem + 1.5rem);
-  }
+.listBox {
+  width: 100%;
+  flex: 1;
+}
 
-  .listBox .itemCard {
-    width: 100%;
-  }
+.listTable {
+  width: 100%;
+  box-sizing: border-box;
+  background: #ffffff;
+  border: 1px solid #0000001f;
+  border-radius: 24px;
+}
+
+.listBox .customTable {
+  margin-bottom: 0%;
+}
+
+.requestsTable thead th {
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #000000;
+  border-bottom: 1px solid #dddddd;
+  padding: 1.5rem;
+}
+
+.notFound {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 @media (max-width: 1020px) {
   .btnsContainer {
     flex-direction: column;
     margin: 1.5rem 0;
+  }
+
+  .btnsContainer .input {
+    width: 100%;
   }
 
   .btnsContainer .btnsBlock {
@@ -484,11 +580,22 @@ hr {
   }
 }
 
+@media (max-width: 1120px) {
+  .contract {
+    padding-left: calc(250px + 2rem + 1.5rem);
+  }
+
+  .listBox .itemCard {
+    width: 100%;
+  }
+}
+
 @-webkit-keyframes load8 {
   0% {
     -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
   }
+
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
@@ -500,6 +607,7 @@ hr {
     -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
   }
+
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
