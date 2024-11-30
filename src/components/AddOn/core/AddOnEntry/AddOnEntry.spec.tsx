@@ -1,3 +1,9 @@
+/**
+ * Unit tests for the AddOnEntry component.
+ *
+ * This file contains tests for the AddOnEntry component to ensure it behaves as expected
+ * under various scenarios.
+ */
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
