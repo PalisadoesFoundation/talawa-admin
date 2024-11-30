@@ -340,3 +340,40 @@
   background: rgba(146, 200, 141, 0.5);
   border-radius: 10px;
 }
+.listContainer {
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.holidayIndicator {
+  background-color: gray;
+  border-radius: 5px;
+  width: 20px;
+  height: 12px;
+  display: inline-block;
+}
+
+.holidayText {
+  font-size: 14px;
+  color: #555555;
+}
+.eventsLegend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.organizationIndicator {
+  background-color: #42a5f5;
+  border-radius: 5px;
+  width: 20px;
+  height: 12px;
+  display: inline-block;
+}
+
+.legendText {
+  font-size: 14px;
+  color: #555555;
+}

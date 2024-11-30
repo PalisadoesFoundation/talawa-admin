@@ -363,8 +363,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                 {holidays
                   ?.filter(
                     (holiday) =>
-                      parseInt(holiday.date.slice(0, 2), 10) - 1 ===
-                      currentMonth,
+                      dayjs(holiday.date, 'MM-DD').month() === currentMonth,
                   )
                   .map((holiday, index) => (
                     <li
@@ -416,45 +415,15 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                   gap: '12px',
                 }}
               >
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                  }}
-                >
-                  <span
-                    style={{
-                      backgroundColor: 'gray',
-                      borderRadius: '5px',
-                      width: '20px',
-                      height: '12px',
-                      display: 'inline-block',
-                    }}
-                  ></span>
-                  <span style={{ fontSize: '14px', color: '#555555' }}>
-                    Holidays
-                  </span>
+                <div className={styles.listContainer}>
+                  <span className={styles.holidayIndicator}></span>
+                  <span className={styles.holidayText}>Holidays</span>
                 </div>
 
                 {/* Events Created by Organization */}
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                  }}
-                >
-                  <span
-                    style={{
-                      backgroundColor: '#42a5f5',
-                      borderRadius: '5px',
-                      width: '20px',
-                      height: '12px',
-                      display: 'inline-block',
-                    }}
-                  ></span>
-                  <span style={{ fontSize: '14px', color: '#555555' }}>
+                <div className={styles.eventsLegend}>
+                  <span className={styles.organizationIndicator}></span>
+                  <span className={styles.legendText}>
                     Events Created by Organization
                   </span>
                 </div>
