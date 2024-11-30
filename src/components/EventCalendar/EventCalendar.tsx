@@ -7,7 +7,7 @@ import styles from './EventCalendar.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 import HolidayCard from '../HolidayCards/HolidayCard';
-import { holidays, hours, months, weekdays } from './constants';
+import { holidays, months, weekdays } from './constants';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
 import YearlyEventCalender from './YearlyEventCalender';
 interface InterfaceEventListCardProps {
@@ -74,7 +74,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   );
   const [expanded, setExpanded] = useState<number>(-1);
   const [windowWidth, setWindowWidth] = useState<number>(window.screen.width);
-  console.log(hours);
   useEffect(() => {
     function handleResize(): void {
       setWindowWidth(window.screen.width);
@@ -649,7 +648,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       )}
       <div className={`${styles.calendar__scroll} customScroll`}>
         {viewType == ViewType.MONTH ? (
-          <div>
+          <>
             <div className={styles.calendar__weekdays}>
               {weekdays.map((weekday, index) => (
                 <div key={index} className={styles.weekday}>
@@ -658,18 +657,14 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
               ))}
             </div>
             <div className={styles.calendar__days}>{renderDays()}</div>
-          </div>
+          </>
+        ) : viewType == ViewType.YEAR ? (
+          <YearlyEventCalender eventData={eventData} />
         ) : (
-          // <YearlyEventCalender eventData={eventData} />
-          <div>
-            {viewType == ViewType.YEAR ? (
-              <YearlyEventCalender eventData={eventData} />
-            ) : (
-              <div className={styles.calendar__hours}>{renderHours()}</div>
-            )}
-          </div>
+          <div className={styles.calendar__hours}>{renderHours()}</div>
         )}
       </div>
+
       <div>
         {viewType == ViewType.YEAR ? (
           <YearlyEventCalender eventData={eventData} />
