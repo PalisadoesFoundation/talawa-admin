@@ -1,16 +1,15 @@
+/* eslint-disable react/jsx-key */
 import EventListCard from 'components/EventListCard/EventListCard';
 import dayjs from 'dayjs';
 import Button from 'react-bootstrap/Button';
 import React, { useState, useEffect } from 'react';
 import styles from './EventCalendar.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
-import CurrentHourIndicator from 'components/CurrentHourIndicator/CurrentHourIndicator';
 import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 import HolidayCard from '../HolidayCards/HolidayCard';
 import { holidays, hours, months, weekdays } from './constants';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
 import YearlyEventCalender from './YearlyEventCalender';
-
 interface InterfaceEventListCardProps {
   userRole?: string;
   key?: string;
@@ -75,7 +74,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   );
   const [expanded, setExpanded] = useState<number>(-1);
   const [windowWidth, setWindowWidth] = useState<number>(window.screen.width);
-
+  console.log(hours);
   useEffect(() => {
     function handleResize(): void {
       setWindowWidth(window.screen.width);
@@ -320,112 +319,171 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             </div>
           </div>
         </div>
-        {hours.map((hour, index) => {
-          const timeEventsList: JSX.Element[] =
-            events
-              ?.filter((datas) => {
-                const currDate = new Date(
-                  currentYear,
-                  currentMonth,
-                  currentDate,
-                );
-
-                if (
-                  parseInt(datas.startTime?.slice(0, 2) as string).toString() ==
-                    (index % 24).toString() &&
-                  datas.startDate == dayjs(currDate).format('YYYY-MM-DD')
-                ) {
-                  return datas;
-                }
-              })
-              .map((datas: InterfaceEventListCardProps) => {
-                const attendees: { _id: string }[] = [];
-                datas.attendees?.forEach((attendee: { _id: string }) => {
-                  const r = {
-                    _id: attendee._id,
-                  };
-
-                  attendees.push(r);
-                });
-
-                return (
-                  <EventListCard
-                    refetchEvents={refetchEvents}
-                    userRole={userRole}
-                    key={datas._id}
-                    id={datas._id}
-                    eventLocation={datas.location}
-                    eventName={datas.title}
-                    eventDescription={datas.description}
-                    startDate={datas.startDate}
-                    endDate={datas.endDate}
-                    startTime={datas.startTime}
-                    endTime={datas.endTime}
-                    allDay={datas.allDay}
-                    recurring={datas.recurring}
-                    recurrenceRule={datas.recurrenceRule}
-                    isRecurringEventException={datas.isRecurringEventException}
-                    isPublic={datas.isPublic}
-                    isRegisterable={datas.isRegisterable}
-                    registrants={attendees}
-                    creator={datas.creator}
-                  />
-                );
-              }) || [];
-          /*istanbul ignore next*/
-          return (
-            <div key={hour} className={styles.calendar_hour_block}>
-              <div className={styles.calendar_hour_text_container}>
-                <p className={styles.calendar_hour_text}>{`${hour}`}</p>
-              </div>
-              <div className={styles.dummyWidth}></div>
-              <div
-                className={
-                  timeEventsList?.length > 0
-                    ? styles.event_list_parent_current
-                    : styles.event_list_parent
-                }
+        {
+          // Render Holidays and Events Section for the Current Month
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'flex-start',
+              padding: '20px',
+              gap: '20px',
+              backgroundColor: '#f9f9f9',
+            }}
+          >
+            {/* Holidays Card */}
+            <div
+              style={{
+                flex: 1,
+                padding: '20px',
+                backgroundColor: '#fff8e1',
+                borderRadius: '10px',
+                boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+              }}
+            >
+              <h3
+                style={{
+                  fontSize: '16px',
+                  fontWeight: '600',
+                  color: '#333333',
+                  marginBottom: '15px',
+                }}
               >
-                {index % 24 == new Date().getHours() &&
-                  new Date().getDate() == currentDate && (
-                    <CurrentHourIndicator />
-                  )}
-                <div
-                  className={
-                    expanded === index
-                      ? styles.expand_list_container
-                      : styles.list_container
-                  }
-                  style={{ width: 'fit-content' }}
-                >
-                  <div
-                    className={
-                      expanded === index
-                        ? styles.expand_event_list
-                        : styles.event_list
-                    }
-                  >
-                    {/*istanbul ignore next*/}
-                    {expanded === index
-                      ? timeEventsList
-                      : timeEventsList?.slice(0, 1)}
-                  </div>
-                  {(timeEventsList?.length > 1 ||
-                    (windowWidth <= 700 && timeEventsList?.length > 0)) && (
-                    <button
-                      className={styles.btn__more}
-                      onClick={() => {
-                        toggleExpand(index);
+                Holidays
+              </h3>
+              <ul
+                style={{
+                  listStyle: 'none',
+                  padding: '0',
+                  margin: '0',
+                }}
+              >
+                {/* Filter holidays to show only those in the current month */}
+                {holidays
+                  ?.filter(
+                    (holiday) =>
+                      parseInt(holiday.date.slice(0, 2), 10) - 1 ===
+                      currentMonth,
+                  )
+                  .map((holiday, index) => (
+                    <li
+                      key={index}
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        marginBottom: '10px',
+                        fontSize: '14px',
+                        color: '#555555',
                       }}
                     >
-                      {expanded === index ? 'View less' : 'View all'}
-                    </button>
-                  )}
+                      {/* Show month name and holiday date */}
+                      <span style={{ fontWeight: '500', color: '#ff9800' }}>
+                        {months[parseInt(holiday.date.slice(0, 2), 10) - 1]}{' '}
+                        {holiday.date.slice(3)}
+                      </span>
+                      <span>{holiday.name}</span>
+                    </li>
+                  ))}
+              </ul>
+            </div>
+
+            {/* Events Card */}
+            <div
+              style={{
+                flex: 1,
+                padding: '20px',
+                backgroundColor: '#ffffff',
+                borderRadius: '10px',
+                boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+              }}
+            >
+              <h3
+                style={{
+                  fontSize: '16px',
+                  fontWeight: '600',
+                  color: '#333333',
+                  marginBottom: '15px',
+                }}
+              >
+                Events
+              </h3>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '12px',
+                }}
+              >
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                  }}
+                >
+                  <span
+                    style={{
+                      backgroundColor: 'gray',
+                      borderRadius: '5px',
+                      width: '20px',
+                      height: '12px',
+                      display: 'inline-block',
+                    }}
+                  ></span>
+                  <span style={{ fontSize: '14px', color: '#555555' }}>
+                    Holidays
+                  </span>
+                </div>
+
+                {/* Events Created by Organization */}
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                  }}
+                >
+                  <span
+                    style={{
+                      backgroundColor: '#42a5f5',
+                      borderRadius: '5px',
+                      width: '20px',
+                      height: '12px',
+                      display: 'inline-block',
+                    }}
+                  ></span>
+                  <span style={{ fontSize: '14px', color: '#555555' }}>
+                    Events Created by Organization
+                  </span>
+                </div>
+
+                {/* Events Created by User */}
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                  }}
+                >
+                  <span
+                    style={{
+                      backgroundColor: '#8bc34a',
+                      borderRadius: '5px',
+                      width: '20px',
+                      height: '12px',
+                      display: 'inline-block',
+                    }}
+                  ></span>
+                  <span style={{ fontSize: '14px', color: '#555555' }}>
+                    Events Created by User
+                  </span>
                 </div>
               </div>
             </div>
-          );
-        })}
+          </div>
+        }
       </>
     );
   };
