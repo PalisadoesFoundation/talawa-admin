@@ -72,14 +72,10 @@
 
 .btnsContainer {
   display: flex;
-  align-items: center;
-  gap: 10px;
   /* Adjust spacing between items */
   margin: 2.5rem 0;
   align-items: center;
   gap: 10px;
-  /* Adjust spacing between items */
-  margin: 2.5rem 0;
 }
 
 .btnsContainer .btnsBlock {
@@ -617,11 +613,6 @@ hr {
   }
 }
 
-.btnsContainer {
-  display: flex;
-  margin: 2rem 0;
-}
-
 .btnsContainer .btnsBlock {
   display: flex;
   width: max-content;
@@ -729,6 +720,15 @@ hr {
   color: var(--bs-blue);
   font-weight: 500;
   cursor: pointer;
+  /* Prevent layout shift */
+  &::after {
+    display: block;
+    content: attr(data-text);
+    font-weight: 600;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+  }
 }
 
 .subTagsLink i {
@@ -747,6 +747,15 @@ hr {
 .tagsBreadCrumbs {
   color: var(--bs-gray);
   cursor: pointer;
+  /* Prevent layout shift */
+  &::after {
+    display: block;
+    content: attr(data-text);
+    font-weight: 600;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+  }
 }
 
 .tagsBreadCrumbs:hover {
