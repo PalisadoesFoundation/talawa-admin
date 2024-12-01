@@ -475,11 +475,15 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                 }
               >
                 <div>{holidayList}</div>
-                {expanded === index
-                  ? allEventsList
-                  : holidayList?.length > 0
-                    ? allEventsList?.slice(0, 1)
-                    : allEventsList?.slice(0, 2)}
+                {(() => {
+                  if (expanded === index) {
+                    return allEventsList;
+                  } else if (holidayList?.length > 0) {
+                    return allEventsList?.slice(0, 1);
+                  } else {
+                    return allEventsList?.slice(0, 2);
+                  }
+                })()}
               </div>
               {(allEventsList?.length > 2 ||
                 (windowWidth <= 700 && allEventsList?.length > 0)) && (

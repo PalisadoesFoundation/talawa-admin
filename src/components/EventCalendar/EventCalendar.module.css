@@ -425,11 +425,11 @@
   width: fit-content;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--indicator-spacing);
 }
 
 .holidayIndicator {
-  background-color: rgba(0, 0, 0, 0.15);
+  background-color: var(--holiday-indicator-color);
   border-radius: 5px;
   width: 20px;
   height: 12px;
@@ -452,7 +452,7 @@
 }
 
 .organizationIndicator {
-  background-color: rgba(82, 172, 255, 0.5);
+  background-color: var(--organization-indicator-color);
   border-radius: 5px;
   width: 20px;
   height: 12px;
@@ -479,14 +479,24 @@
     font-size: 12px;
   }
 }
+
+:root {
+  --container-padding: 20px;
+  --container-gap: 20px;
+  --container-bg: rgba(249, 249, 249, 1);
+  --holiday-indicator-color: rgba(0, 0, 0, 0.15);
+  --organization-indicator-color: rgba(82, 172, 255, 0.5);
+  --indicator-spacing: 8px;
+}
+
 .container {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
-  padding: 20px;
-  gap: 20px;
-  background-color: #f9f9f9;
+  padding: var(--container-padding);
+  gap: var(--container-gap);
+  background-color: var(--container-bg);
 }
 
 .holidays_card {
@@ -545,7 +555,7 @@
 }
 
 .user_indicator {
-  background-color: #8bc34a;
+  background-color: rgba(139, 195, 74, 1);
   border-radius: 5px;
   width: 20px;
   height: 12px;
