@@ -341,6 +341,11 @@
   transform: scale(1.5);
   color: var(--bs-danger);
   margin-bottom: 1rem;
+  /* Add error icon for non-color indication */
+  &::before {
+    content: '⚠️';
+    margin-right: 0.5rem;
+  }
 }
 
 .subTagsLink {
@@ -690,10 +695,6 @@ hr {
   }
 }
 
-.errorContainer {
-  min-height: 100vh;
-}
-
 .errorMessage {
   margin-top: 25%;
   display: flex;
@@ -702,20 +703,15 @@ hr {
   flex-direction: column;
 }
 
-.errorIcon {
-  transform: scale(1.5);
-  color: var(--bs-danger);
-  margin-bottom: 1rem;
-}
-
 .tableHeader {
-  background-color: var(--bs-primary);
+  background-color: var(--bs-primary-text-emphasis);
   color: var(--bs-white);
   font-size: 1rem;
 }
 .rowBackground {
   background-color: var(--bs-white);
   max-height: 120px;
+  overflow-y: auto;
 }
 
 .subTagsLink {
