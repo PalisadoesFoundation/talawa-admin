@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react';
 import styles from './AddOnStore.module.css';
 import AddOnEntry from '../AddOnEntry/AddOnEntry';
@@ -79,10 +78,10 @@ function addOnStore(): JSX.Element {
    *
    * @param tab - The key of the selected tab (either 'available' or 'installed').
    */
-  const updateSelectedTab = (tab: any): void => {
+  const updateSelectedTab = (tab: string): void => {
     setIsStore(tab === 'available');
     /* istanbul ignore next */
-    if (isStore) {
+    if (tab === 'available') {
       getStorePlugins();
     } else {
       getInstalledPlugins();
@@ -94,11 +93,10 @@ function addOnStore(): JSX.Element {
    *
    * @param ev - The event object from the filter change.
    */
-  const filterChange =
-    /* istanbul ignore next */
-    (ev: any): void => {
-      setShowEnabled(ev.target.value === 'enabled');
-    };
+  const filterChange = (ev: React.ChangeEvent<HTMLSelectElement>): void => {
+    setShowEnabled(ev.target.value === 'enabled');
+  };
+
   const filterPlugins = (
     plugins: InterfacePluginHelper[],
     searchTerm: string,
@@ -111,6 +109,7 @@ function addOnStore(): JSX.Element {
       plugin.pluginName?.toLowerCase().includes(searchTerm.toLowerCase()),
     );
   };
+
   // Show a loader while the data is being fetched
   /* istanbul ignore next */
   if (loading) {
@@ -160,7 +159,10 @@ function addOnStore(): JSX.Element {
             <Dropdown
               onSelect={
                 /* istanbul ignore next */
-                (e) => filterChange(e ? e : '')
+                (e) =>
+                  filterChange(
+                    e as unknown as React.ChangeEvent<HTMLSelectElement>,
+                  )
               }
             >
               <Dropdown.Toggle
@@ -186,7 +188,11 @@ function addOnStore(): JSX.Element {
             defaultActiveKey="available"
             id="uncontrolled-tab-example"
             className="mb-3 mt-3"
-            onSelect={updateSelectedTab}
+            onSelect={(eventKey) => {
+              if (eventKey) {
+                updateSelectedTab(eventKey);
+              }
+            }}
           >
             <Tab
               eventKey="available"
