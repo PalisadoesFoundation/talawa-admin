@@ -17,7 +17,7 @@ interface InterfaceAddOnEntryProps {
   description?: string; // Optional props
   createdBy: string;
   component?: string; // Optional props
-  modified?: any; // Optional props
+  modified?: boolean; // Optional props
   uninstalledOrgs: string[];
   getInstalledPlugins: () => void;
 }
