@@ -76,6 +76,10 @@
   gap: 10px;
   /* Adjust spacing between items */
   margin: 2.5rem 0;
+  align-items: center;
+  gap: 10px;
+  /* Adjust spacing between items */
+  margin: 2.5rem 0;
 }
 
 .btnsContainer .btnsBlock {

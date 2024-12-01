@@ -12,6 +12,7 @@ export default {
     '!src/test/**',
     '!vitest.config.ts',
   ],
+
   // setupFiles: ['react-app-polyfill/jsdom'],
   setupFiles: ['whatwg-fetch'],
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
