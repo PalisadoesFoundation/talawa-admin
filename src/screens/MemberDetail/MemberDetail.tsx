@@ -3,7 +3,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import styles from './MemberDetail.module.css';
+import styles from '../../style/app.module.css';
 import { languages } from 'utils/languages';
 import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
