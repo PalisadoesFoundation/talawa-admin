@@ -421,3 +421,57 @@
   background: rgba(146, 200, 141, 0.5);
   border-radius: 10px;
 }
+.listContainer {
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.holidayIndicator {
+  background-color: rgba(0, 0, 0, 0.15);
+  border-radius: 5px;
+  width: 20px;
+  height: 12px;
+  display: inline-block;
+}
+
+.holidayText {
+  font-size: 14px;
+  color: #555555;
+}
+.eventsLegend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.organizationIndicator {
+  background-color: rgba(82, 172, 255, 0.5);
+  border-radius: 5px;
+  width: 20px;
+  height: 12px;
+  display: inline-block;
+}
+
+.legendText {
+  font-size: 14px;
+  color: #555555;
+}
+@media only screen and (max-width: 700px) {
+  .listContainer,
+  .eventsLegend {
+    gap: 4px;
+  }
+
+  .holidayIndicator,
+  .organizationIndicator {
+    width: 16px;
+    height: 10px;
+  }
+
+  .holidayText,
+  .legendText {
+    font-size: 12px;
+  }
+}
