@@ -18,7 +18,6 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import styles from './Users.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
-import type { ApolloError } from '@apollo/client';
 /**
  * The `Users` component is responsible for displaying a list of users in a paginated and sortable format.
  * It supports search functionality, filtering, and sorting of users. The component integrates with GraphQL
@@ -88,13 +87,16 @@ const Users = (): JSX.Element => {
     loading: loading,
     fetchMore,
     refetch: refetchUsers,
-  }: {
-    data?: { users: InterfaceQueryUserListItem[] };
-    loading: boolean;
-    fetchMore: any;
-    refetch: any;
-    error?: ApolloError;
-  } = useQuery(USER_LIST, {
+  } = useQuery<
+    { users: InterfaceQueryUserListItem[] },
+    {
+      first: number;
+      skip: number;
+      firstName_contains: string;
+      lastName_contains: string;
+      order: string;
+    }
+  >(USER_LIST, {
     variables: {
       first: perPageResult,
       skip: 0,
@@ -171,9 +173,11 @@ const Users = (): JSX.Element => {
     setHasMore(true);
   };
 
-  const handleSearchByEnter = (e: any): void => {
+  const handleSearchByEnter = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ): void => {
     if (e.key === 'Enter') {
-      const { value } = e.target;
+      const { value } = e.target as HTMLInputElement;
       handleSearch(value);
     }
   };
@@ -207,27 +211,29 @@ const Users = (): JSX.Element => {
         order: sortingOption === 'newest' ? 'createdAt_DESC' : 'createdAt_ASC',
       },
       updateQuery: (
-        prev: { users: InterfaceQueryUserListItem[] } | undefined,
+        prev: { users: InterfaceQueryUserListItem[] },
         {
           fetchMoreResult,
         }: {
           fetchMoreResult: { users: InterfaceQueryUserListItem[] } | undefined;
         },
-      ): { users: InterfaceQueryUserListItem[] } | undefined => {
+      ): { users: InterfaceQueryUserListItem[] } => {
         setIsLoadingMore(false);
         if (!fetchMoreResult) return prev;
         if (fetchMoreResult.users.length < perPageResult) {
           setHasMore(false);
         }
         return {
-          users: [...(prev?.users || []), ...(fetchMoreResult.users || [])],
+          users: [...prev.users, ...fetchMoreResult.users],
         };
       },
     });
   };
 
   const handleSorting = (option: string): void => {
-    setDisplayedUsers([]);
+    if (sortingOption !== option) {
+      setDisplayedUsers([]);
+    }
     setHasMore(true);
     setSortingOption(option);
   };
@@ -256,7 +262,9 @@ const Users = (): JSX.Element => {
   };
 
   const handleFiltering = (option: string): void => {
-    setDisplayedUsers([]);
+    if (filteringOption !== option) {
+      setDisplayedUsers([]);
+    }
     setFilteringOption(option);
   };
 
@@ -414,63 +422,57 @@ const Users = (): JSX.Element => {
         </div>
       ) : (
         <div className={styles.listBox}>
-          {isLoading ? (
-            <TableLoader headerTitles={headerTitles} noOfRows={perPageResult} />
-          ) : (
-            <InfiniteScroll
-              dataLength={
-                /* istanbul ignore next */
-                displayedUsers.length ?? 0
-              }
-              next={loadMoreUsers}
-              loader={
-                <TableLoader
-                  noOfCols={headerTitles.length}
-                  noOfRows={perPageResult}
-                />
-              }
-              hasMore={hasMore}
-              className={styles.listBox}
-              data-testid="users-list"
-              endMessage={
-                <div className={'w-100 text-center my-4'}>
-                  <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
-                </div>
-              }
-            >
-              <Table className="mb-0" responsive>
-                <thead>
-                  <tr>
-                    {headerTitles.map((title: string, index: number) => {
+          <InfiniteScroll
+            dataLength={
+              /* istanbul ignore next */
+              displayedUsers.length ?? 0
+            }
+            next={loadMoreUsers}
+            loader={
+              <TableLoader
+                noOfCols={headerTitles.length}
+                noOfRows={perPageResult}
+              />
+            }
+            hasMore={hasMore}
+            className={styles.listBox}
+            data-testid="users-list"
+            endMessage={
+              <div className={'w-100 text-center my-4'}>
+                <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
+              </div>
+            }
+          >
+            <Table className="mb-0" responsive>
+              <thead>
+                <tr>
+                  {headerTitles.map((title: string, index: number) => {
+                    return (
+                      <th key={index} scope="col">
+                        {title}
+                      </th>
+                    );
+                  })}
+                </tr>
+              </thead>
+              <tbody>
+                {usersData &&
+                  displayedUsers.map(
+                    (user: InterfaceQueryUserListItem, index: number) => {
                       return (
-                        <th key={index} scope="col">
-                          {title}
-                        </th>
+                        <UsersTableItem
+                          key={user.user._id}
+                          index={index}
+                          resetAndRefetch={resetAndRefetch}
+                          user={user}
+                          loggedInUserId={loggedInUserId ? loggedInUserId : ''}
+                        />
                       );
-                    })}
-                  </tr>
-                </thead>
-                <tbody>
-                  {usersData &&
-                    displayedUsers.map(
-                      (user: InterfaceQueryUserListItem, index: number) => {
-                        return (
-                          <UsersTableItem
-                            key={user.user._id}
-                            index={index}
-                            resetAndRefetch={resetAndRefetch}
-                            user={user}
-                            loggedInUserId={
-                              loggedInUserId ? loggedInUserId : ''
-                            }
-                          />
-                        );
-                      },
-                    )}
-                </tbody>
-              </Table>
-            </InfiniteScroll>
-          )}
+                    },
+                  )}
+              </tbody>
+            </Table>
+          </InfiniteScroll>
         </div>
       )}
     </>
