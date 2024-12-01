@@ -353,13 +353,15 @@
   visibility: hidden;
 }
 
-.subTagsLink:hover {
+.subTagsLink:hover,
+.subTagsLink:focus {
   color: var(--subtle-blue-grey-hover);
   font-weight: 600;
   text-decoration: underline;
 }
 
-.subTagsLink:hover i {
+.subTagsLink:hover i,
+.subTagsLink:focus i {
   visibility: visible;
 }
 
@@ -735,15 +737,6 @@ hr {
   visibility: hidden;
 }
 
-.subTagsLink:hover {
-  font-weight: 600;
-  text-decoration: underline;
-}
-
-.subTagsLink:hover i {
-  visibility: visible;
-}
-
 .tagsBreadCrumbs {
   color: var(--bs-gray);
   cursor: pointer;
@@ -758,7 +751,8 @@ hr {
   }
 }
 
-.tagsBreadCrumbs:hover {
+.tagsBreadCrumbs:hover,
+.tagsBreadCrumbs:focus {
   color: var(--bs-blue);
   font-weight: 600;
   text-decoration: underline;
