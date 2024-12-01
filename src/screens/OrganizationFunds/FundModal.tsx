@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import type { InterfaceCreateFund, InterfaceFundInfo } from 'utils/interfaces';
-import styles from './OrganizationFunds.module.css';
+import styles from '../../style/app.module.css';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import {
@@ -173,7 +173,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
           <Button
             variant="danger"
             onClick={hide}
-            className={styles.modalCloseBtn}
+            className={styles.closeButton}
             data-testid="fundModalCloseBtn"
           >
             <i className="fa fa-times"></i>
@@ -272,7 +272,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
             </div>
             <Button
               type="submit"
-              className={styles.greenregbtn}
+              className={styles.addButton}
               data-testid="createFundFormSubmitBtn"
             >
               {t(mode === 'create' ? 'fundCreate' : 'fundUpdate')}

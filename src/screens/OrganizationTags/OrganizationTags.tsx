@@ -348,7 +348,7 @@ function OrganizationTags(): JSX.Element {
                 // variant="success"
                 onClick={showCreateTagModal}
                 data-testid="createTagBtn"
-                className={styles.createButton}
+                className={`${styles.createButton} mb-2`}
               >
                 <i className={'fa fa-plus me-2'} />
                 {t('createTag')}
