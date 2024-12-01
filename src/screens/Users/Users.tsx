@@ -84,11 +84,11 @@ const Users = (): JSX.Element => {
 
   const {
     data: usersData,
-    loading: loading,
+    loading,
     fetchMore,
     refetch: refetchUsers,
   } = useQuery<
-    { users: InterfaceQueryUserListItem[] },
+    { users?: InterfaceQueryUserListItem[] },
     {
       first: number;
       skip: number;
@@ -112,17 +112,15 @@ const Users = (): JSX.Element => {
 
   // Manage loading more state
   useEffect(() => {
-    if (!usersData) {
-      return;
-    }
+    if (!usersData?.users) return;
+
     if (usersData.users.length < perPageResult) {
       setHasMore(false);
     }
-    if (usersData && usersData.users) {
-      let newDisplayedUsers = sortUsers(usersData.users, sortingOption);
-      newDisplayedUsers = filterUsers(newDisplayedUsers, filteringOption);
-      setDisplayedUsers(newDisplayedUsers);
-    }
+
+    let newDisplayedUsers = sortUsers(usersData.users, sortingOption);
+    newDisplayedUsers = filterUsers(newDisplayedUsers, filteringOption);
+    setDisplayedUsers(newDisplayedUsers);
   }, [usersData, sortingOption, filteringOption]);
 
   // To clear the search when the component is unmounted
@@ -202,29 +200,31 @@ const Users = (): JSX.Element => {
   };
   /* istanbul ignore next */
   const loadMoreUsers = (): void => {
+    if (!usersData?.users) return;
     setIsLoadingMore(true);
     fetchMore({
       variables: {
-        skip: usersData?.users.length || 0,
+        skip: usersData.users.length || 0,
         userType: 'ADMIN',
         filter: searchByName,
         order: sortingOption === 'newest' ? 'createdAt_DESC' : 'createdAt_ASC',
       },
       updateQuery: (
-        prev: { users: InterfaceQueryUserListItem[] },
+        prev: { users?: InterfaceQueryUserListItem[] },
         {
           fetchMoreResult,
         }: {
-          fetchMoreResult: { users: InterfaceQueryUserListItem[] } | undefined;
+          fetchMoreResult?: { users: InterfaceQueryUserListItem[] };
         },
       ): { users: InterfaceQueryUserListItem[] } => {
         setIsLoadingMore(false);
-        if (!fetchMoreResult) return prev;
+        if (!fetchMoreResult || !fetchMoreResult.users)
+          return { users: prev.users || [] };
         if (fetchMoreResult.users.length < perPageResult) {
           setHasMore(false);
         }
         return {
-          users: [...prev.users, ...fetchMoreResult.users],
+          users: [...(prev.users || []), ...fetchMoreResult.users],
         };
       },
     });
