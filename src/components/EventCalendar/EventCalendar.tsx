@@ -1,7 +1,7 @@
 import EventListCard from 'components/EventListCard/EventListCard';
 import dayjs from 'dayjs';
+import React, { useMemo, useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
-import React, { useState, useEffect } from 'react';
 import styles from './EventCalendar.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
@@ -221,7 +221,13 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         setExpanded(index);
       }
     };
-
+    const filteredHolidays = useMemo(
+      () =>
+        holidays?.filter(
+          (holiday) => dayjs(holiday.date, 'MM-DD').month() === currentMonth,
+        ),
+      [holidays, currentMonth],
+    );
     /*istanbul ignore next*/
     const allDayEventsList: JSX.Element[] =
       events
@@ -323,20 +329,9 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           <div className={styles.holidays_card}>
             <h3 className={styles.card_title}>Holidays</h3>
             <ul className={styles.holiday_list}>
-              {holidays
-                ?.filter(
-                  (holiday) =>
-                    dayjs(holiday.date, 'MM-DD').month() === currentMonth,
-                )
-                .map((holiday, index) => (
-                  <li key={index} className={styles.holiday_item}>
-                    <span className={styles.holiday_date}>
-                      {months[parseInt(holiday.date.slice(0, 2), 10) - 1]}{' '}
-                      {holiday.date.slice(3)}
-                    </span>
-                    <span>{holiday.name}</span>
-                  </li>
-                ))}
+              {filteredHolidays?.map((holiday, index) => (
+                <li key={index}>{holiday.name}</li>
+              ))}
             </ul>
           </div>
           <div className={styles.events_card}>
@@ -475,15 +470,11 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                 }
               >
                 <div>{holidayList}</div>
-                {(() => {
-                  if (expanded === index) {
-                    return allEventsList;
-                  } else if (holidayList?.length > 0) {
-                    return allEventsList?.slice(0, 1);
-                  } else {
-                    return allEventsList?.slice(0, 2);
-                  }
-                })()}
+                {expanded === index
+                  ? allEventsList
+                  : holidayList?.length > 0
+                    ? allEventsList?.slice(0, 1)
+                    : allEventsList?.slice(0, 2)}
               </div>
               {(allEventsList?.length > 2 ||
                 (windowWidth <= 700 && allEventsList?.length > 0)) && (

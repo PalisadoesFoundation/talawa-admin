@@ -276,7 +276,8 @@
   padding: 5px;
   width: fit-content;
   display: flex;
-  flex-direction: row;
+  align-items: center;
+  gap: var(--indicator-spacing);
 }
 
 .event_list_hour {
@@ -316,7 +317,7 @@
   flex-grow: 1;
 }
 
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: var(--mobile-breakpoint)) {
   .event_list {
     display: none;
   }
@@ -421,19 +422,16 @@
   background: rgba(146, 200, 141, 0.5);
   border-radius: 10px;
 }
-.list_container_new {
-  width: fit-content;
-  display: flex;
-  align-items: center;
-  gap: var(--indicator-spacing);
-}
 
-.holidayIndicator {
-  background-color: var(--holiday-indicator-color);
+.baseIndicator {
   border-radius: 5px;
   width: 20px;
   height: 12px;
   display: inline-block;
+}
+.holidayIndicator {
+  composes: baseIndicator;
+  background-color: var(--holiday-indicator-color);
 }
 
 .commonText {
@@ -452,11 +450,8 @@
 }
 
 .organizationIndicator {
+  composes: baseIndicator;
   background-color: var(--organization-indicator-color);
-  border-radius: 5px;
-  width: 20px;
-  height: 12px;
-  display: inline-block;
 }
 
 .legendText {
@@ -466,7 +461,7 @@
   .list_container_new,
   .eventsLegend {
     gap: 4px;
-  }
+}
 
   .holidayIndicator,
   .organizationIndicator {
@@ -487,8 +482,14 @@
   --holiday-indicator-color: rgba(0, 0, 0, 0.15);
   --organization-indicator-color: rgba(82, 172, 255, 0.5);
   --indicator-spacing: 8px;
+  --mobile-breakpoint: 700px;
+  --user-indicator-color: rgba(139, 195, 74, 1);
+  --holiday-card-bg: #fff8e1;
+  --holiday-date-color: #ff9800;
+  --text-color-primary: #333333;
+  --text-color-secondary: #555555;
+  --card-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
-
 .container {
   display: flex;
   flex-direction: row;
@@ -504,7 +505,7 @@
   padding: 20px;
   background-color: #fff8e1;
   border-radius: 10px;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--card-shadow);
 }
 
 .card_title {
@@ -539,7 +540,7 @@
   padding: 20px;
   background-color: #ffffff;
   border-radius: 10px;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--card-shadow);
 }
 
 .legend {
@@ -555,14 +556,10 @@
 }
 
 .user_indicator {
+  composes: baseIndicator;
   background-color: rgba(139, 195, 74, 1);
-  border-radius: 5px;
-  width: 20px;
-  height: 12px;
-  display: inline-block;
 }
 
 .user_legend_text {
-  font-size: 14px;
-  color: #555555;
+  composes: commonText;
 }
