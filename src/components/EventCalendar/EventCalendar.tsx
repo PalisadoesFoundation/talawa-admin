@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-key */
 import EventListCard from 'components/EventListCard/EventListCard';
 import dayjs from 'dayjs';
 import Button from 'react-bootstrap/Button';
@@ -318,140 +317,50 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             </div>
           </div>
         </div>
-        {
-          // Render Holidays and Events Section for the Current Month
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'flex-start',
-              padding: '20px',
-              gap: '20px',
-              backgroundColor: '#f9f9f9',
-            }}
-          >
-            {/* Holidays Card */}
-            <div
-              style={{
-                flex: 1,
-                padding: '20px',
-                backgroundColor: '#fff8e1',
-                borderRadius: '10px',
-                boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
-              }}
-            >
-              <h3
-                style={{
-                  fontSize: '16px',
-                  fontWeight: '600',
-                  color: '#333333',
-                  marginBottom: '15px',
-                }}
-              >
-                Holidays
-              </h3>
-              <ul
-                style={{
-                  listStyle: 'none',
-                  padding: '0',
-                  margin: '0',
-                }}
-              >
-                {/* Filter holidays to show only those in the current month */}
-                {holidays
-                  ?.filter(
-                    (holiday) =>
-                      dayjs(holiday.date, 'MM-DD').month() === currentMonth,
-                  )
-                  .map((holiday, index) => (
-                    <li
-                      key={index}
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        marginBottom: '10px',
-                        fontSize: '14px',
-                        color: '#555555',
-                      }}
-                    >
-                      {/* Show month name and holiday date */}
-                      <span style={{ fontWeight: '500', color: '#ff9800' }}>
-                        {months[parseInt(holiday.date.slice(0, 2), 10) - 1]}{' '}
-                        {holiday.date.slice(3)}
-                      </span>
-                      <span>{holiday.name}</span>
-                    </li>
-                  ))}
-              </ul>
-            </div>
 
-            {/* Events Card */}
-            <div
-              style={{
-                flex: 1,
-                padding: '20px',
-                backgroundColor: '#ffffff',
-                borderRadius: '10px',
-                boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
-              }}
-            >
-              <h3
-                style={{
-                  fontSize: '16px',
-                  fontWeight: '600',
-                  color: '#333333',
-                  marginBottom: '15px',
-                }}
-              >
-                Events
-              </h3>
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '12px',
-                }}
-              >
-                <div className={styles.listContainer}>
-                  <span className={styles.holidayIndicator}></span>
-                  <span className={styles.holidayText}>Holidays</span>
-                </div>
-
-                {/* Events Created by Organization */}
-                <div className={styles.eventsLegend}>
-                  <span className={styles.organizationIndicator}></span>
-                  <span className={styles.legendText}>
-                    Events Created by Organization
-                  </span>
-                </div>
-
-                {/* Events Created by User */}
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                  }}
-                >
-                  <span
-                    style={{
-                      backgroundColor: '#8bc34a',
-                      borderRadius: '5px',
-                      width: '20px',
-                      height: '12px',
-                      display: 'inline-block',
-                    }}
-                  ></span>
-                  <span style={{ fontSize: '14px', color: '#555555' }}>
-                    Events Created by User
-                  </span>
-                </div>
+        <div className={styles.container}>
+          {/* Holidays Card */}
+          <div className={styles.holidays_card}>
+            <h3 className={styles.card_title}>Holidays</h3>
+            <ul className={styles.holiday_list}>
+              {holidays
+                ?.filter(
+                  (holiday) =>
+                    dayjs(holiday.date, 'MM-DD').month() === currentMonth,
+                )
+                .map((holiday, index) => (
+                  <li key={index} className={styles.holiday_item}>
+                    <span className={styles.holiday_date}>
+                      {months[parseInt(holiday.date.slice(0, 2), 10) - 1]}{' '}
+                      {holiday.date.slice(3)}
+                    </span>
+                    <span>{holiday.name}</span>
+                  </li>
+                ))}
+            </ul>
+          </div>
+          <div className={styles.events_card}>
+            <h3 className={styles.card_title}>Events</h3>
+            <div className={styles.legend}>
+              <div className={styles.list_container_new}>
+                <span className={styles.holidayIndicator}></span>
+                <span className={styles.holidayText}>Holidays</span>
+              </div>
+              <div className={styles.eventsLegend}>
+                <span className={styles.organizationIndicator}></span>
+                <span className={styles.legendText}>
+                  Events Created by Organization
+                </span>
+              </div>
+              <div className={styles.user_events}>
+                <span className={styles.user_indicator}></span>
+                <span className={styles.user_legend_text}>
+                  Events Created by User
+                </span>
               </div>
             </div>
           </div>
-        }
+        </div>
       </>
     );
   };
@@ -483,22 +392,20 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     return days.map((date, index) => {
       const className = [
         date.getDay() === 0 || date.getDay() === 6 ? styles.day_weekends : '',
-        date.toLocaleDateString() === today.toLocaleDateString() //Styling for today day cell
+        date.toLocaleDateString() === today.toLocaleDateString()
           ? styles.day__today
           : '',
-        date.getMonth() !== currentMonth ? styles.day__outside : '', //Styling for days outside the current month
+        date.getMonth() !== currentMonth ? styles.day__outside : '',
         selectedDate?.getTime() === date.getTime() ? styles.day__selected : '',
         styles.day,
       ].join(' ');
       const toggleExpand = (index: number): void => {
-        /*istanbul ignore next*/
         if (expanded === index) {
           setExpanded(-1);
         } else {
           setExpanded(index);
         }
       };
-      /*istanbul ignore next*/
       const allEventsList: JSX.Element[] =
         events
           ?.filter((datas) => {
@@ -562,38 +469,28 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             >
               <div
                 className={
-                  /*istanbul ignore next*/
                   expanded === index
                     ? styles.expand_event_list
                     : styles.event_list
                 }
               >
                 <div>{holidayList}</div>
-                {
-                  /*istanbul ignore next*/
-                  expanded === index
-                    ? allEventsList
-                    : holidayList?.length > 0
-                      ? /*istanbul ignore next*/
-                        allEventsList?.slice(0, 1)
-                      : allEventsList?.slice(0, 2)
-                }
+                {expanded === index
+                  ? allEventsList
+                  : holidayList?.length > 0
+                    ? allEventsList?.slice(0, 1)
+                    : allEventsList?.slice(0, 2)}
               </div>
               {(allEventsList?.length > 2 ||
                 (windowWidth <= 700 && allEventsList?.length > 0)) && (
-                /*istanbul ignore next*/
                 <button
                   className={styles.btn__more}
                   data-testid="more"
-                  /*istanbul ignore next*/
                   onClick={() => {
                     toggleExpand(index);
                   }}
                 >
-                  {
-                    /*istanbul ignore next*/
-                    expanded === index ? 'View less' : 'View all'
-                  }
+                  {expanded === index ? 'View less' : 'View all'}
                 </button>
               )}
             </div>
