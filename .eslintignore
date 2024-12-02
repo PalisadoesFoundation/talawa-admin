@@ -11,3 +11,7 @@ tsconfig.json
 Dockerfile
 .dockerignore
 .git/
+
+**/\*.yml
+**/_.dockerfile
+\*\*/_.py \*_/_.md
