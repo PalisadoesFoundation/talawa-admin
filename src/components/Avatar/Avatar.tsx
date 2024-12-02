@@ -50,7 +50,7 @@ const Avatar = ({
     }
 
     return createAvatar(initials, {
-      size: size,
+      size: size || 128,
       seed: name,
       radius: radius || 0,
     }).toDataUri();
@@ -65,8 +65,8 @@ const Avatar = ({
         alt={alt}
         className={avatarStyle ? avatarStyle : ''}
         data-testid={dataTestId ? dataTestId : ''}
-        height={size}
-        width={size}
+        height={size || 128}
+        width={size || 128}
       />
     </div>
   );
