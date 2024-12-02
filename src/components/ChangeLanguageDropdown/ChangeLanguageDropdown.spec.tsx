@@ -1,3 +1,9 @@
+/**
+ * Unit tests for the ChangeLanguageDropdown component.
+ *
+ * This file contains tests for the ChangeLanguageDropdown component to ensure it behaves as expected
+ * under various scenarios.
+ */
 import React from 'react';
 import { describe, test, expect } from 'vitest';
 import { render } from '@testing-library/react';
