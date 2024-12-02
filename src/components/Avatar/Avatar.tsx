@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { createAvatar } from '@dicebear/core';
 import { initials } from '@dicebear/collection';
 import styles from 'components/Avatar/Avatar.module.css';
@@ -12,7 +12,6 @@ interface InterfaceAvatarProps {
   dataTestId?: string;
   radius?: number;
   customUrl?: string;
-  loading?: boolean;  
 }
 
 /**
@@ -37,17 +36,23 @@ const Avatar = ({
   dataTestId,
   radius,
   customUrl,
-  
 }: InterfaceAvatarProps): JSX.Element => {
+
+  const [src, setSrc] = useState<string | null>(customUrl || '');
+
   // Memoize the avatar creation to avoid unnecessary recalculations
   const avatar = useMemo(() => {
     if (customUrl) {
-      // Use the custom URL if provided
-      return customUrl;
+         try {
+          new URL(customUrl);
+            return customUrl;
+        } catch (e) {
+          console.warn('Invalid custom URL provided to Avatar component');
+      }
     }
 
     return createAvatar(initials, {
-      size: size ,
+      size: size,
       seed: name,
       radius: radius || 0,
     }).toDataUri();

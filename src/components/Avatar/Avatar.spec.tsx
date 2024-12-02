@@ -51,7 +51,7 @@ describe('Testing Avatar component', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     const avatarElement = getByAltText(testAlt);
@@ -62,10 +62,10 @@ describe('Testing Avatar component', () => {
   // Test for custom style and data-testid
   test('should render with custom style and data-testid', () => {
     const testName = 'Jane Doe';
-    const testAlt = 'Dummy Avatar';  // Default alt text
+    const testAlt = 'Dummy Avatar'; // Default alt text
     const testStyle = 'custom-avatar-style';
     const testDataTestId = 'custom-avatar-test-id';
-  
+
     const { getByAltText } = render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -79,9 +79,9 @@ describe('Testing Avatar component', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
-  
+
     const avatarElement = getByAltText(testAlt); // Expect 'Dummy Avatar' instead of 'Jane Doe'
     expect(avatarElement).toBeInTheDocument();
     expect(avatarElement.getAttribute('src')).toBeDefined();
@@ -100,7 +100,7 @@ describe('Testing Avatar component', () => {
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
     );
   };
 
@@ -132,7 +132,7 @@ describe('Testing Avatar component', () => {
       renderAvatar({ name: 'Test User', size });
 
       const avatarElement = screen.getByAltText('Dummy Avatar');
-      expect(avatarElement).toHaveAttribute('width');  // Expect the fallback size of 128
+      expect(avatarElement).toHaveAttribute('width'); // Expect the fallback size of 128
       expect(avatarElement).toHaveAttribute('height'); // Expect the fallback size of 128
     });
   });
@@ -140,10 +140,10 @@ describe('Testing Avatar component', () => {
   // Custom URL Test
   test('uses custom URL when provided', () => {
     const customUrl = 'https://example.com/custom-avatar.png';
-  
-    renderAvatar({ 
-      name: 'John Doe', 
-      customUrl 
+
+    renderAvatar({
+      name: 'John Doe',
+      customUrl,
     });
 
     const avatarElement = screen.getByAltText('Dummy Avatar');
@@ -152,12 +152,30 @@ describe('Testing Avatar component', () => {
 
   // Fallback to generated avatar when custom URL is invalid
   test('falls back to generated avatar when custom URL is invalid', () => {
-    renderAvatar({ 
-      name: 'John Doe', 
-      customUrl: '' 
+    renderAvatar({
+      name: 'John Doe',
+      customUrl: '',
     });
 
     const avatarElement = screen.getByAltText('Dummy Avatar');
     expect(avatarElement.getAttribute('src')).toContain('data:image/svg+xml');
   });
+
+  test('handles network errors for custom URL', async () => {
+    const invalidUrl = 'https://invalid-url.com/avatar.png';
+    renderAvatar({
+      name: 'John Doe',
+      customUrl: invalidUrl,
+    });
+  
+    const avatarElement = screen.getByAltText('Dummy Avatar');
+  
+    // Simulate network error
+    avatarElement.dispatchEvent(new Event('error'));
+  
+    // Verify fallback to generated avatar
+    expect(avatarElement.getAttribute('src')).toContain('data:image/svg+xml');
+  });
+  
+  
 });
