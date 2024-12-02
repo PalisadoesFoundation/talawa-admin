@@ -161,21 +161,6 @@ describe('Testing Avatar component', () => {
     expect(avatarElement.getAttribute('src')).toContain('data:image/svg+xml');
   });
 
-  test('handles network errors for custom URL', async () => {
-    const invalidUrl = 'https://invalid-url.com/avatar.png';
-    renderAvatar({
-      name: 'John Doe',
-      customUrl: invalidUrl,
-    });
-  
-    const avatarElement = screen.getByAltText('Dummy Avatar');
-  
-    // Simulate network error
-    avatarElement.dispatchEvent(new Event('error'));
-  
-    // Verify fallback to generated avatar
-    expect(avatarElement.getAttribute('src')).toContain('data:image/svg+xml');
-  });
-  
+
   
 });

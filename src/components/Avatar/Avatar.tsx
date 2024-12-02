@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { createAvatar } from '@dicebear/core';
 import { initials } from '@dicebear/collection';
 import styles from 'components/Avatar/Avatar.module.css';
@@ -37,9 +37,7 @@ const Avatar = ({
   radius,
   customUrl,
 }: InterfaceAvatarProps): JSX.Element => {
-
-  const [src, setSrc] = useState<string | null>(customUrl || '');
-
+  
   // Memoize the avatar creation to avoid unnecessary recalculations
   const avatar = useMemo(() => {
     if (customUrl) {
