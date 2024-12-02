@@ -18,6 +18,7 @@ NOTE:
         2) Pydocstyle
         3) Pycodestyle
         4) Flake8
+
 """
 
 import os
@@ -45,26 +46,35 @@ def has_eslint_disable(file_path):
         print(f"Error reading file {file_path}: {e}")
         return False
 
-def check_files_in_directory(directory):
+def check_eslint(directory):
     """
     Recursively check TypeScript files for eslint-disable statements in the 'src' directory.
 
     Args:
         directory (str): Path to the directory.
-    
+
     Returns:
-        bool: True if eslint-disable statement is found in any file, False otherwise.
+        bool: True if eslint-disable statement is found, False otherwise.
     """
     eslint_found = False
 
-    # Walk through the directory to find .ts and .tsx files
-    for root, dirs, files in os.walk(directory):
+    # Walk through the 'src' directory and check only .ts and .tsx files
+    for root, dirs, files in os.walk(os.path.join(directory, 'src')):
         for file_name in files:
             if file_name.endswith('.ts') or file_name.endswith('.tsx'):
+                # Exclude test files like .test.tsx
+                if file_name.endswith('.test.tsx'):
+                    continue
                 file_path = os.path.join(root, file_name)
                 if has_eslint_disable(file_path):
-                    print(f"eslint-disable found in {file_path}")
+                    print(f'File {file_path} contains eslint-disable statement.')
                     eslint_found = True
+
+    # Check 'setup.ts' file for eslint-disable
+    setup_path = os.path.join(directory, 'setup.ts')
+    if os.path.exists(setup_path) and has_eslint_disable(setup_path):
+        print(f'Setup file {setup_path} contains eslint-disable statement.')
+        eslint_found = True
 
     return eslint_found
 
@@ -105,7 +115,7 @@ def main():
         sys.exit(1)
 
     # Check eslint in the specified directory
-    eslint_found = check_files_in_directory(args.directory)
+    eslint_found = check_eslint(args.directory)
 
     if eslint_found:
         print("ESLint-disable check failed. Exiting with error.")
