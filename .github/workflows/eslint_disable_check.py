@@ -58,19 +58,14 @@ def check_eslint(directory):
     """
     eslint_found = False
 
-    # Walk through the 'src' directory and check only .ts and .tsx files
     for root, dirs, files in os.walk(os.path.join(directory, 'src')):
         for file_name in files:
-            if file_name.endswith('.ts') or file_name.endswith('.tsx'):
-                # Exclude test files like .test.tsx
-                if file_name.endswith('.test.tsx'):
-                    continue
+            if file_name.endswith('.tsx') and not file_name.endswith('.test.tsx'):
                 file_path = os.path.join(root, file_name)
                 if has_eslint_disable(file_path):
                     print(f'File {file_path} contains eslint-disable statement.')
                     eslint_found = True
 
-    # Check 'setup.ts' file for eslint-disable
     setup_path = os.path.join(directory, 'setup.ts')
     if os.path.exists(setup_path) and has_eslint_disable(setup_path):
         print(f'Setup file {setup_path} contains eslint-disable statement.')
