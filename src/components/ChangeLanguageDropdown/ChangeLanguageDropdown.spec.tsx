@@ -1,4 +1,5 @@
-import React, { act } from 'react';
+import React from 'react';
+import { describe, test, expect } from 'vitest';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
@@ -16,10 +17,8 @@ import useLocalStorage from 'utils/useLocalstorage';
 const { setItem } = useLocalStorage();
 
 async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
+  await new Promise((resolve) => {
+    setTimeout(resolve, ms);
   });
 }
 
@@ -51,6 +50,7 @@ const MOCKS = [
 ];
 
 const link = new StaticMockLink(MOCKS, true);
+
 describe('Testing Change Language Dropdown', () => {
   test('Component Should be rendered properly', async () => {
     const { getByTestId } = render(
@@ -71,7 +71,7 @@ describe('Testing Change Language Dropdown', () => {
     getByTestId('language-dropdown-btn').className.includes('');
     getByTestId('dropdown-btn-0').className.includes('');
 
-    userEvent.click(getByTestId('dropdown-btn-0'));
+    await userEvent.click(getByTestId('dropdown-btn-0'));
     await wait();
 
     languages.map((language) => {
@@ -136,23 +136,23 @@ describe('Testing Change Language Dropdown', () => {
       </MockedProvider>,
     );
 
-    userEvent.click(getByTestId('language-dropdown-btn'));
+    await userEvent.click(getByTestId('language-dropdown-btn'));
     await wait();
     const changeLanguageBtn = getByTestId(`change-language-btn-fr`);
     await wait();
     expect(changeLanguageBtn).toBeInTheDocument();
     await wait();
-    userEvent.click(changeLanguageBtn);
+    await userEvent.click(changeLanguageBtn);
     await wait();
     expect(cookies.get('i18next')).toBe('fr');
     await wait();
-    userEvent.click(getByTestId('language-dropdown-btn'));
+    await userEvent.click(getByTestId('language-dropdown-btn'));
     await wait();
     const changeLanguageBtnHi = getByTestId(`change-language-btn-hi`);
     await wait();
     expect(changeLanguageBtnHi).toBeInTheDocument();
     await wait();
-    userEvent.click(changeLanguageBtnHi);
+    await userEvent.click(changeLanguageBtnHi);
     await wait();
   });
 });
