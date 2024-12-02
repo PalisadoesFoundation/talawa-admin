@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import styles from './VenueModal.module.css';
+import styles from '../../style/app.module.css';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
@@ -162,8 +162,7 @@ const VenueModal = ({
         <Button
           variant="danger"
           onClick={onHide}
-          className="p-3 d-flex justify-content-center align-items-center"
-          style={{ width: '40px', height: '40px' }}
+          className={styles.closeButton}
           data-testid="createVenueModalCloseBtn"
         >
           <i className="fa fa-times" />
@@ -261,7 +260,7 @@ const VenueModal = ({
 
           <Button
             type="submit"
-            className={styles.greenregbtn}
+            className={styles.addButton}
             value={edit ? 'editVenue' : 'createVenue'}
             data-testid={edit ? 'updateVenueBtn' : 'createVenueBtn'}
             onClick={handleSubmit}

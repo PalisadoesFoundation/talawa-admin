@@ -223,7 +223,6 @@ describe('Testing People Screen [User Portal]', () => {
     expect(screen.queryByText('Noble Mittal')).not.toBeInTheDocument();
   });
 
-  
   test('Members should be rendered with correct user type', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
