@@ -28,7 +28,7 @@ interface InterfaceAvatarProps {
  * @returns JSX.Element - The rendered avatar image component.
  */
 const Avatar = ({
-  name,
+  name = 'Guest',
   alt = 'Dummy Avatar',
   size,
   avatarStyle,
