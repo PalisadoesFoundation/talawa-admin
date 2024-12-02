@@ -8,12 +8,12 @@ import { store } from 'state/store';
 import PageNotFound from './PageNotFound';
 import i18nForTest from 'utils/i18nForTest';
 import useLocalStorage from 'utils/useLocalstorage';
+import { describe, test, expect } from 'vitest';
 
 const { setItem } = useLocalStorage();
 
 describe('Testing Page not found component', () => {
   test('Component should be rendered properly for User', () => {
-    //setItem('AdminFor', undefined);
     render(
       <BrowserRouter>
         <Provider store={store}>
@@ -39,6 +39,7 @@ describe('Testing Page not found component', () => {
         __typename: 'Organization',
       },
     ]);
+
     render(
       <BrowserRouter>
         <Provider store={store}>
