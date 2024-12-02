@@ -59,7 +59,20 @@ jobs:
         if: steps.changed-files.outputs.only_changed != 'true'
         env:
           CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-        run: npx eslint ${CHANGED_FILES} && python .github/workflows/eslint_disable_check.py
+        run: |
+          # Filter files to include only .ts and .tsx files
+          TS_FILES=$(echo "$CHANGED_FILES" | grep -E '\.(ts|tsx)$')
+
+          # Check if there are any TypeScript files to lint
+          if [ -n "$TS_FILES" ]; then
+            # Run linting on the changed TypeScript files
+            npx eslint $TS_FILES
+
+            # Run the Python script for eslint-disable check on the TypeScript files
+            python .github/workflows/eslint_disable_check.py
+          else
+            echo "No .ts or .tsx files to lint."
+          fi
 
       - name: Check for TSDoc comments
         run: npm run check-tsdoc # Run the TSDoc check script
