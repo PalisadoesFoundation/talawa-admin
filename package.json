@@ -23,6 +23,7 @@
     "@pdfme/generator": "^5.2.3",
     "@pdfme/schemas": "^5.1.6",
     "@reduxjs/toolkit": "^2.3.0",
+    "@testing-library/dom": "^10.4.0",
     "@vitejs/plugin-react": "^4.3.3",
     "babel-plugin-transform-import-meta": "^2.2.1",
     "bootstrap": "^5.3.3",
@@ -156,7 +157,7 @@
     "sass": "^1.80.7",
     "tsx": "^4.19.1",
     "vite-plugin-svgr": "^4.2.0",
-    "vitest": "^2.1.5",
+    "vitest": "^2.1.8",
     "whatwg-fetch": "^3.6.20"
   },
   "resolutions": {
