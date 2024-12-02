@@ -276,7 +276,8 @@
   padding: 5px;
   width: fit-content;
   display: flex;
-  flex-direction: row;
+  align-items: center;
+  gap: var(--indicator-spacing);
 }
 
 .event_list_hour {
@@ -316,7 +317,7 @@
   flex-grow: 1;
 }
 
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: var(--mobile-breakpoint)) {
   .event_list {
     display: none;
   }
@@ -331,7 +332,7 @@
   }
 }
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: var(--small-mobile-breakpoint)) {
   .btn__more {
     font-size: 12px;
   }
@@ -421,25 +422,27 @@
   background: rgba(146, 200, 141, 0.5);
   border-radius: 10px;
 }
-.listContainer {
-  width: fit-content;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
 
-.holidayIndicator {
-  background-color: rgba(0, 0, 0, 0.15);
+.baseIndicator {
   border-radius: 5px;
   width: 20px;
   height: 12px;
   display: inline-block;
 }
+.holidayIndicator {
+  composes: baseIndicator;
+  background-color: var(--holiday-indicator-color);
+}
+
+.commonText {
+  font-size: 14px;
+  color: var(--text-color-secondary);
+}
 
 .holidayText {
-  font-size: 14px;
-  color: #555555;
+  composes: commonText;
 }
+
 .eventsLegend {
   display: flex;
   align-items: center;
@@ -447,22 +450,18 @@
 }
 
 .organizationIndicator {
-  background-color: rgba(82, 172, 255, 0.5);
-  border-radius: 5px;
-  width: 20px;
-  height: 12px;
-  display: inline-block;
+  composes: baseIndicator;
+  background-color: var(--organization-indicator-color);
 }
 
 .legendText {
-  font-size: 14px;
-  color: #555555;
+  composes: commonText;
 }
 @media only screen and (max-width: 700px) {
-  .listContainer,
+  .list_container_new,
   .eventsLegend {
     gap: 4px;
-  }
+}
 
   .holidayIndicator,
   .organizationIndicator {
@@ -474,4 +473,94 @@
   .legendText {
     font-size: 12px;
   }
+}
+
+:root {
+  --container-padding: 20px;
+  --container-gap: 20px;
+  --container-bg: rgba(249, 249, 249, 1);
+  --holiday-indicator-color: rgba(0, 0, 0, 0.15);
+  --organization-indicator-color: rgba(82, 172, 255, 0.5);
+  --indicator-spacing: 8px;
+  --mobile-breakpoint: 700px;
+  --small-mobile-breakpoint: 500px;
+  --user-indicator-color: rgba(139, 195, 74, 1);
+  --holiday-card-bg: #fff8e1;
+  --holiday-date-color: #ff9800;
+  --text-color-primary: #333333;
+  --text-color-secondary: #555555;
+  --card-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: var(--container-padding);
+  gap: var(--container-gap);
+  background-color: var(--container-bg);
+}
+
+.holidays_card {
+  flex: 1;
+  padding: 20px;
+  background-color: var(--holiday-card-bg);
+  border-radius: 10px;
+  box-shadow: var(--card-shadow);
+}
+
+.card_title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-color-primary);
+  margin-bottom: 15px;
+}
+
+.holiday_list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.holiday_item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: var(--text-color-secondary);
+}
+
+.holiday_date {
+  font-weight: 500;
+  color: var(--holiday-date-color);
+}
+
+.events_card {
+  flex: 1;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: var(--card-shadow);
+}
+
+.legend {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.user_events {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.user_indicator {
+  composes: baseIndicator;
+  background-color: var(--user-indicator-color);
+}
+
+.user_legend_text {
+  composes: commonText;
 }
