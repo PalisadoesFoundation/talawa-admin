@@ -556,6 +556,42 @@ hr {
   flex-direction: column;
 }
 
+.cardHeader {
+  padding: 1.25rem 1rem 1rem 1rem;
+  border-bottom: 1px solid var(--bs-gray-200);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.cardHeader .cardTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.cardBody {
+  min-height: 180px;
+  padding-top: 0;
+  max-height: 570px;
+  overflow-y: scroll;
+  width: 100%;
+  max-width: 400px;
+}
+
+.cardBody .emptyContainer {
+  display: flex;
+  height: 180px;
+  justify-content: center;
+  align-items: center;
+}
+
+.cardBody .rankings {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  width: 35px;
+}
+
 @media (max-width: 1020px) {
   .btnsContainer {
     flex-direction: column;
