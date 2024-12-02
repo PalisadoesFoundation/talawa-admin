@@ -7,7 +7,6 @@ tsconfig.json
 
 \*.swp
 .vscode/
-\*.md
 
 Dockerfile
 .dockerignore
