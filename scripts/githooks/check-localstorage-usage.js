@@ -93,9 +93,4 @@ if (filesWithLocalStorage.length > 0) {
   );
 
   process.exit(1);
-} else {
-  console.log('No localStorage usage detected. All checks passed.');
 }
-
-// Ensure the script exits cleanly
-return;
