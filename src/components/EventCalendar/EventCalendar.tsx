@@ -1,6 +1,6 @@
 import EventListCard from 'components/EventListCard/EventListCard';
 import dayjs from 'dayjs';
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import styles from './EventCalendar.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
@@ -221,13 +221,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         setExpanded(index);
       }
     };
-    const filteredHolidays = useMemo(
-      () =>
-        holidays?.filter(
-          (holiday) => dayjs(holiday.date, 'MM-DD').month() === currentMonth,
-        ),
-      [holidays, currentMonth],
-    );
     /*istanbul ignore next*/
     const allDayEventsList: JSX.Element[] =
       events
@@ -275,7 +268,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             />
           );
         }) || [];
-
     return (
       <>
         <div className={styles.calendar_hour_block}>
@@ -296,7 +288,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                   ? styles.expand_list_container
                   : styles.list_container
               }
-              style={{ width: 'fit-content' }}
             >
               <div
                 className={
@@ -313,9 +304,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                 (windowWidth <= 700 && allDayEventsList?.length > 0)) && (
                 <button
                   className={styles.btn__more}
-                  onClick={() => {
-                    toggleExpand(-100);
-                  }}
+                  onClick={() => toggleExpand(-100)}
                 >
                   {expanded === -100 ? 'View less' : 'View all'}
                 </button>
@@ -324,44 +313,43 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           </div>
         </div>
 
-        <div className={styles.container}>
-          {/* Holidays Card */}
+        <div className={styles.calendar_infocards}>
           <div className={styles.holidays_card}>
             <h3 className={styles.card_title}>Holidays</h3>
-            <ul className={styles.holiday_list}>
-              {filteredHolidays?.map((holiday, index) => (
-                <li key={index}>{holiday.name}</li>
-              ))}
+            <ul className={styles.card_list}>
+              {holidays
+                ?.filter(
+                  (holiday) =>
+                    dayjs(holiday.date, 'MM-DD').month() === currentMonth,
+                )
+                .map((holiday, index) => (
+                  <li className={styles.card_list_item} key={index}>
+                    <span className={styles.holiday_date}>
+                      {months[parseInt(holiday.date.slice(0, 2), 10) - 1]}{' '}
+                      {holiday.date.slice(3)}
+                    </span>
+                    <span>{holiday.name}</span>
+                  </li>
+                ))}
             </ul>
           </div>
+
           <div className={styles.events_card}>
             <h3 className={styles.card_title}>Events</h3>
             <div className={styles.legend}>
-              <div className={styles.list_container_new}>
-                <span
-                  className={styles.holidayIndicator}
-                  role="img"
-                  aria-label="Holiday indicator"
-                ></span>
+              <div className={styles.listContainer}>
+                <span className={styles.holidayIndicator}></span>
                 <span className={styles.holidayText}>Holidays</span>
               </div>
               <div className={styles.eventsLegend}>
-                <span
-                  className={styles.organizationIndicator}
-                  role="img"
-                  aria-label="Organization event indicator"
-                ></span>
+                <span className={styles.organizationIndicator}></span>
                 <span className={styles.legendText}>
                   Events Created by Organization
                 </span>
               </div>
-              <div className={styles.user_events}>
-                <span
-                  className={styles.user_indicator}
-                  role="img"
-                  aria-label="User event indicator"
-                ></span>
-                <span className={styles.user_legend_text}>
+              <div className={styles.eventsLegend}>
+                <span className={styles.userEvents__color}></span>
+                <span className={styles.legendText}>
                   Events Created by User
                 </span>
               </div>
@@ -461,16 +449,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         .map((holiday) => {
           return <HolidayCard key={holiday.name} holidayName={holiday.name} />;
         });
-      const getVisibleEvents = (
-        expanded: boolean,
-        holidayList: JSX.Element[],
-        allEventsList: JSX.Element[],
-        // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-      ) => {
-        if (expanded) return allEventsList;
-        const maxEvents = holidayList?.length > 0 ? 1 : 2;
-        return allEventsList?.slice(0, maxEvents);
-      };
+
       return (
         <div
           key={index}
@@ -492,11 +471,15 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                 }
               >
                 <div>{holidayList}</div>
-                {getVisibleEvents(
-                  expanded === index,
-                  holidayList,
-                  allEventsList,
-                )}
+                {
+                  /*istanbul ignore next*/
+                  expanded === index
+                    ? allEventsList
+                    : holidayList?.length > 0
+                      ? /*istanbul ignore next*/
+                        allEventsList?.slice(0, 1)
+                      : allEventsList?.slice(0, 2)
+                }
               </div>
               {(allEventsList?.length > 2 ||
                 (windowWidth <= 700 && allEventsList?.length > 0)) && (
