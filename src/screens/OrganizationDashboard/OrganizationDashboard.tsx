@@ -41,7 +41,7 @@ import { VOLUNTEER_RANKING } from 'GraphQl/Queries/EventVolunteerQueries';
  *
  * @returns The rendered component.
  */
-function organizationDashboard(): JSX.Element {
+function OrganizationDashboard(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'dashboard' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
@@ -483,4 +483,4 @@ function organizationDashboard(): JSX.Element {
   );
 }
 
-export default organizationDashboard;
+export default OrganizationDashboard;

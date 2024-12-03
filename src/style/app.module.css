@@ -577,6 +577,8 @@ hr {
   overflow-y: scroll;
   width: 100%;
   max-width: 400px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
 }
 
 .cardBody .emptyContainer {
