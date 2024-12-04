@@ -92,7 +92,7 @@
 }
 
 .btnsContainer .input {
-  width: 70%; 
+  width: 70%;
   position: relative;
 }
 
@@ -101,7 +101,7 @@
 }
 
 .btnsContainer input {
-  outline: 1px solid var(--bs-gray-400); 
+  outline: 1px solid var(--bs-gray-400);
 }
 
 .listBox {
