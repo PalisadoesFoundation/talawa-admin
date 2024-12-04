@@ -125,24 +125,30 @@ The process of proposing a change to Talawa Admin can be summarized as:
       1. _General Information_
          1. The current code coverage of the repo is: [![codecov](https://codecov.io/gh/PalisadoesFoundation/talawa-admin/branch/develop/graph/badge.svg?token=II0R0RREES)](https://codecov.io/gh/PalisadoesFoundation/talawa-admin)
          2. You can determine the percentage test coverage of your code by running these two commands in sequence:
+
             ```
             npm install
             npm run test --watchAll=false --coverage
             genhtml coverage/lcov.info -o coverage
             ```
+
          3. The output of the `npm run test` command will give you a tablular coverage report per file
          4. The overall coverage rate will be visible on the penultimate line of the `genhtml` command's output.
          5. The `genhtml` command is part of the Linux `lcov` package. Similar packages can be found for Windows and MacOS.
          6. The currently acceptable coverage rate can be found in the [GitHub Pull Request file](.github/workflows/pull-requests.yml). Search for the value below the line containing `min_coverage`.
       2. _Testing Individual Files_
          1. You can test an individual file by running this command:
+
             ```
             npm run test --watchAll=false /path/to/test/file
             ```
+
          2. You can get the test coverage report for that file by running this command. The report will list all tests in the suite. Those tests that are not run will have zero values. You will need to look for the output line relevant to your test file.
+
             ```
             npm run test --watchAll=false --coverage /path/to/test/file
             ```
+
       3. _Creating your code coverage account_
 
          1. You can also see your code coverage online for your fork of the repo. This is provided by `codecov.io`
