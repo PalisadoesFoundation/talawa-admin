@@ -80,6 +80,7 @@
     "test:vitest:coverage": "vitest run --coverage",
     "test": "cross-env NODE_ENV=test jest --env=./scripts/custom-test-env.js --watchAll --coverage",
     "eject": "react-scripts eject",
+    "lint": "eslint --ext .ts,.tsx src",
     "lint:check": "eslint \"**/*.{ts,tsx}\" --max-warnings=0 && python .github/workflows/eslint_disable_check.py",
     "lint:fix": "eslint --fix \"**/*.{ts,tsx}\"",
     "format:fix": "prettier --write \"**/*.{ts,tsx,json,scss,css}\"",
