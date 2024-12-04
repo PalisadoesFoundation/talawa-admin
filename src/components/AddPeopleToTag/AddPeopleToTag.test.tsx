@@ -293,19 +293,20 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getAllByTestId('selectMemberBtn')[0]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
+    const user = userEvent.setup();
+    await user.click(screen.getAllByTestId('selectMemberBtn')[0]);
 
     await waitFor(() => {
       expect(screen.getAllByTestId('selectMemberBtn')[1]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('selectMemberBtn')[1]);
+    await user.click(screen.getAllByTestId('selectMemberBtn')[1]);
 
     await waitFor(() => {
       expect(screen.getAllByTestId('selectMemberBtn')[2]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('selectMemberBtn')[2]);
+    await user.click(screen.getAllByTestId('selectMemberBtn')[2]);
 
-    userEvent.click(screen.getByTestId('assignPeopleBtn'));
+    await user.click(screen.getByTestId('assignPeopleBtn'));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(

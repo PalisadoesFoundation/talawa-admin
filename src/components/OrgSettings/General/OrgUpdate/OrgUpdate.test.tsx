@@ -137,15 +137,21 @@ describe('Testing Organization Update', () => {
     fireEvent.change(dependentLocality, { target: { value: '' } });
 
     // Mocking filling form behaviour
-    userEvent.type(name, formData.name);
-    userEvent.type(des, formData.description);
-    userEvent.type(city, formData.address.city);
+    fireEvent.change(name, { target: { value: formData.name } });
+    fireEvent.change(des, { target: { value: formData.description } });
+    fireEvent.change(city, { target: { value: formData.address.city } });
     userEvent.selectOptions(countryCode, formData.address.countryCode);
-    userEvent.type(line1, formData.address.line1);
-    userEvent.type(line2, formData.address.line2);
-    userEvent.type(postalCode, formData.address.postalCode);
-    userEvent.type(dependentLocality, formData.address.dependentLocality);
-    userEvent.type(sortingCode, formData.address.sortingCode);
+    fireEvent.change(line1, { target: { value: formData.address.line1 } });
+    fireEvent.change(line2, { target: { value: formData.address.line2 } });
+    fireEvent.change(postalCode, {
+      target: { value: formData.address.postalCode },
+    });
+    fireEvent.change(dependentLocality, {
+      target: { value: formData.address.dependentLocality },
+    });
+    fireEvent.change(sortingCode, {
+      target: { value: formData.address.sortingCode },
+    });
     userEvent.upload(displayImage, formData.displayImage);
     userEvent.click(userRegistrationRequired);
     userEvent.click(isVisible);

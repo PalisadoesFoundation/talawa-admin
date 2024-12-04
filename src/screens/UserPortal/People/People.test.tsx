@@ -1,5 +1,5 @@
 import React, { act } from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import {
@@ -134,17 +134,19 @@ describe('Testing People Screen [User Portal]', () => {
   });
 
   test('Screen should be rendered properly', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <People />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <People />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
 
     await wait();
 
@@ -152,65 +154,77 @@ describe('Testing People Screen [User Portal]', () => {
   });
 
   test('Search works properly by pressing enter', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <People />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <People />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
 
     await wait();
 
     userEvent.type(screen.getByTestId('searchInput'), 'j{enter}');
     await wait();
-
-    expect(screen.queryByText('John Cena')).toBeInTheDocument();
-    expect(screen.queryByText('Noble Mittal')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByText('John Cena')).toBeInTheDocument();
+      expect(screen.queryByText('Noble Mittal')).not.toBeInTheDocument();
+    });
   });
 
   test('Search works properly by clicking search Btn', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <People />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <People />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
 
     await wait();
     const searchBtn = screen.getByTestId('searchBtn');
-    userEvent.type(screen.getByTestId('searchInput'), '');
-    userEvent.click(searchBtn);
+    expect(screen.getByTestId('searchInput')).toHaveValue('');
+
+    const user = userEvent.setup();
+
+    await user.click(searchBtn);
     await wait();
-    userEvent.type(screen.getByTestId('searchInput'), 'j');
-    userEvent.click(searchBtn);
+    await user.type(screen.getByTestId('searchInput'), 'j');
+    await user.click(searchBtn);
     await wait();
 
-    expect(screen.queryByText('John Cena')).toBeInTheDocument();
-    expect(screen.queryByText('Noble Mittal')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByText('John Cena')).toBeInTheDocument();
+      expect(screen.queryByText('Noble Mittal')).not.toBeInTheDocument();
+    });
   });
 
   test('Mode is changed to Admins', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <People />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <People />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
 
     await wait();
 
@@ -219,7 +233,9 @@ describe('Testing People Screen [User Portal]', () => {
     userEvent.click(screen.getByTestId('modeBtn1'));
     await wait();
 
-    expect(screen.queryByText('Noble Admin')).toBeInTheDocument();
-    expect(screen.queryByText('Noble Mittal')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByText('Noble Admin')).toBeInTheDocument();
+      expect(screen.queryByText('Noble Mittal')).not.toBeInTheDocument();
+    });
   });
 });

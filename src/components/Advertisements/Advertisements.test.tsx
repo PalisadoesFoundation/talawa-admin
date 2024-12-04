@@ -381,11 +381,10 @@ describe('Testing Advertisement Component', () => {
 
     await wait();
 
-    userEvent.click(screen.getByText('Create Advertisement'));
-    userEvent.type(
-      screen.getByLabelText('Enter name of Advertisement'),
-      'Cookie Shop',
-    );
+    fireEvent.click(screen.getByText('Create Advertisement'));
+    fireEvent.change(screen.getByLabelText('Enter name of Advertisement'), {
+      target: { value: 'Cookie Shop' },
+    });
     const mediaFile = new File(['media content'], 'test.png', {
       type: 'image/png',
     });
@@ -398,14 +397,17 @@ describe('Testing Advertisement Component', () => {
     });
     const mediaPreview = await screen.findByTestId('mediaPreview');
     expect(mediaPreview).toBeInTheDocument();
-    userEvent.selectOptions(
-      screen.getByLabelText('Select type of Advertisement'),
-      'POPUP',
-    );
-    userEvent.type(screen.getByLabelText('Select Start Date'), '2023-01-01');
-    userEvent.type(screen.getByLabelText('Select End Date'), '2023-02-02');
+    fireEvent.change(screen.getByLabelText('Select type of Advertisement'), {
+      target: { value: 'POPUP' },
+    });
+    fireEvent.change(screen.getByLabelText('Select Start Date'), {
+      target: { value: '2023-01-01' },
+    });
+    fireEvent.change(screen.getByLabelText('Select End Date'), {
+      target: { value: '2023-02-02' },
+    });
 
-    userEvent.click(screen.getByTestId('addonregister'));
+    fireEvent.click(screen.getByTestId('addonregister'));
     expect(
       await screen.findByText('Advertisement created successfully.'),
     ).toBeInTheDocument();

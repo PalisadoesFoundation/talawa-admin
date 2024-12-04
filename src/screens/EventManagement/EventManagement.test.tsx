@@ -1,6 +1,6 @@
 import React from 'react';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
@@ -8,7 +8,6 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import EventManagement from './EventManagement';
-import userEvent from '@testing-library/user-event';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { MOCKS_WITH_TIME } from 'components/EventManagement/Dashboard/EventDashboard.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -66,7 +65,7 @@ describe('Event Management', () => {
     renderEventManagement();
 
     const backButton = screen.getByTestId('backBtn');
-    userEvent.click(backButton);
+    fireEvent.click(backButton);
     await waitFor(() => {
       const eventsScreen = screen.getByTestId('eventsScreen');
       expect(eventsScreen).toBeInTheDocument();
@@ -77,34 +76,34 @@ describe('Event Management', () => {
     renderEventManagement();
 
     const registrantsButton = screen.getByTestId('registrantsBtn');
-    userEvent.click(registrantsButton);
+    fireEvent.click(registrantsButton);
 
     const registrantsTab = screen.getByTestId('eventRegistrantsTab');
     expect(registrantsTab).toBeInTheDocument();
     const eventAttendanceButton = screen.getByTestId('attendanceBtn');
-    userEvent.click(eventAttendanceButton);
+    fireEvent.click(eventAttendanceButton);
     const eventAttendanceTab = screen.getByTestId('eventAttendanceTab');
     expect(eventAttendanceTab).toBeInTheDocument();
     const eventActionsButton = screen.getByTestId('actionsBtn');
-    userEvent.click(eventActionsButton);
+    fireEvent.click(eventActionsButton);
 
     const eventActionsTab = screen.getByTestId('eventActionsTab');
     expect(eventActionsTab).toBeInTheDocument();
 
     const eventAgendasButton = screen.getByTestId('agendasBtn');
-    userEvent.click(eventAgendasButton);
+    fireEvent.click(eventAgendasButton);
 
     const eventAgendasTab = screen.getByTestId('eventAgendasTab');
     expect(eventAgendasTab).toBeInTheDocument();
 
     const eventStatsButton = screen.getByTestId('statisticsBtn');
-    userEvent.click(eventStatsButton);
+    fireEvent.click(eventStatsButton);
 
     const eventStatsTab = screen.getByTestId('eventStatsTab');
     expect(eventStatsTab).toBeInTheDocument();
 
     const volunteerButton = screen.getByTestId('volunteersBtn');
-    userEvent.click(volunteerButton);
+    fireEvent.click(volunteerButton);
 
     const eventVolunteersTab = screen.getByTestId('eventVolunteersTab');
     expect(eventVolunteersTab).toBeInTheDocument();

@@ -28,6 +28,14 @@ jest.mock('@mui/x-date-pickers/DateTimePicker', () => {
   };
 });
 
+async function wait(ms = 100): Promise<void> {
+  await act(() => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  });
+}
+
 const link1 = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(MOCKS_EMPTY);
 const link3 = new StaticMockLink(MOCKS_ERROR);
@@ -183,13 +191,18 @@ describe('Testing Organisation Action Item Categories', () => {
   });
 
   it('Search categories by name', async () => {
-    renderActionItemCategories(link1, 'orgId');
+    await act(async () => {
+      renderActionItemCategories(link1, 'orgId');
+    });
 
     const searchInput = await screen.findByTestId('searchByName');
     expect(searchInput).toBeInTheDocument();
 
-    userEvent.type(searchInput, 'Category 1');
-    userEvent.click(screen.getByTestId('searchBtn'));
+    const user = userEvent.setup();
+
+    await user.type(searchInput, 'Category 1');
+    await user.click(screen.getByTestId('searchBtn'));
+    await wait();
     await waitFor(() => {
       expect(screen.getByText('Category 1')).toBeInTheDocument();
       expect(screen.queryByText('Category 2')).toBeNull();
@@ -204,9 +217,10 @@ describe('Testing Organisation Action Item Categories', () => {
 
     // Clear the search input by backspace
     userEvent.type(searchInput, 'A{backspace}');
+    await wait();
     await waitFor(() => {
       expect(screen.getByText('Category 1')).toBeInTheDocument();
-      expect(screen.getByText('Category 2')).toBeInTheDocument();
+      expect(screen.queryByText('Category 2')).toBeInTheDocument();
     });
   });
 
@@ -216,8 +230,11 @@ describe('Testing Organisation Action Item Categories', () => {
     const searchInput = await screen.findByTestId('searchByName');
     expect(searchInput).toBeInTheDocument();
 
-    userEvent.type(searchInput, 'Category 1');
-    userEvent.type(searchInput, '{enter}');
+    const user = userEvent.setup();
+
+    await user.type(searchInput, 'Category 1');
+    await user.type(searchInput, '{enter}');
+
     await waitFor(() => {
       expect(screen.getByText('Category 1')).toBeInTheDocument();
       expect(screen.queryByText('Category 2')).toBeNull();

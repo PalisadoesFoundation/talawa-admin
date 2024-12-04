@@ -1,13 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/client/testing';
-import {
-  render,
-  screen,
-  act,
-  within,
-  fireEvent,
-  waitFor,
-} from '@testing-library/react';
+import { render, screen, act, within, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import 'jest-localstorage-mock';
 import 'jest-location-mock';
@@ -79,10 +72,8 @@ jest.mock('utils/errorHandler', () => ({
 }));
 
 describe('Testing UpdateTimeout Component', () => {
-  let consoleWarnSpy: jest.SpyInstance;
-
   beforeEach(() => {
-    consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
+    jest.spyOn(console, 'warn').mockImplementation();
   });
 
   afterEach(() => {
@@ -101,10 +92,11 @@ describe('Testing UpdateTimeout Component', () => {
     const slider = await screen.findByTestId('slider-thumb');
 
     // Simulate dragging to minimum value
-    userEvent.click(slider, {
+    fireEvent.mouseDown(slider, {
       // Simulate clicking on the slider to focus
       clientX: -999, // Adjust the clientX to simulate different slider positions
     });
+    fireEvent.mouseUp(slider, { clientX: -999 }); // Simulate releasing the mouse
 
     expect(mockOnValueChange).toHaveBeenCalledWith(15); // Adjust based on slider min value
   });
@@ -121,11 +113,11 @@ describe('Testing UpdateTimeout Component', () => {
     const slider = await screen.findByTestId('slider-thumb');
 
     // Simulate dragging to maximum value
-    userEvent.click(slider, {
+    fireEvent.mouseDown(slider, {
       // Simulate clicking on the slider to focus
       clientX: 999, // Adjust the clientX to simulate different slider positions
     });
-
+    fireEvent.mouseUp(slider, { clientX: 999 }); // Simulate releasing the mouse
     expect(mockOnValueChange).toHaveBeenCalledWith(60); // Adjust based on slider max value
   });
 
@@ -141,11 +133,11 @@ describe('Testing UpdateTimeout Component', () => {
     const slider = await screen.findByTestId('slider-thumb');
 
     // Simulate invalid value handling
-    userEvent.click(slider, {
+    fireEvent.mouseDown(slider, {
       // Simulate clicking on the slider to focus
       clientX: 0, // Adjust the clientX to simulate different slider positions
     });
-
+    fireEvent.mouseUp(slider, { clientX: 0 }); // Simulate releasing the mouse
     // Ensure onValueChange is not called with invalid values
     expect(mockOnValueChange).not.toHaveBeenCalled();
   });
@@ -163,7 +155,17 @@ describe('Testing UpdateTimeout Component', () => {
     const slider = await screen.findByTestId('slider-thumb');
 
     // Simulate slider interaction
-    userEvent.type(slider, '45'); // Simulate typing value
+    fireEvent.mouseDown(slider, {
+      clientX: 0,
+      buttons: 1,
+    });
+
+    fireEvent.mouseMove(slider, {
+      clientX: 300,
+      buttons: 1,
+    });
+
+    fireEvent.mouseUp(slider);
 
     // Assert that the callback was called with the expected value
     expect(mockOnValueChange).toHaveBeenCalledWith(expect.any(Number)); // Adjust as needed
@@ -217,7 +219,7 @@ describe('Testing UpdateTimeout Component', () => {
     await wait();
 
     const submitButton = screen.getByTestId('update-button');
-    userEvent.click(submitButton);
+    fireEvent.submit(submitButton);
 
     // Wait for the toast success call
 

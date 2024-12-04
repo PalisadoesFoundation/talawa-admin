@@ -235,45 +235,52 @@ describe('Organisations Page testing as SuperAdmin', () => {
       JSON.stringify([{ name: 'adi', _id: '1234', image: '' }]),
     );
 
-    userEvent.click(screen.getByTestId(/createOrganizationBtn/i));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId(/createOrganizationBtn/i));
 
-    userEvent.type(screen.getByTestId(/modalOrganizationName/i), formData.name);
-    userEvent.type(
+    await user.type(
+      screen.getByTestId(/modalOrganizationName/i),
+      formData.name,
+    );
+    await user.type(
       screen.getByPlaceholderText(/Description/i),
       formData.description,
     );
-    userEvent.type(screen.getByPlaceholderText(/City/i), formData.address.city);
-    userEvent.type(
+    await user.type(
+      screen.getByPlaceholderText(/City/i),
+      formData.address.city,
+    );
+    await user.type(
       screen.getByPlaceholderText(/Postal Code/i),
       formData.address.postalCode,
     );
-    userEvent.type(
+    await user.type(
       screen.getByPlaceholderText(/State \/ Province/i),
       formData.address.state,
     );
 
-    userEvent.selectOptions(
+    await user.selectOptions(
       screen.getByTestId('countrycode'),
       formData.address.countryCode,
     );
-    userEvent.type(
+    await user.type(
       screen.getByPlaceholderText(/Line 1/i),
       formData.address.line1,
     );
-    userEvent.type(
+    await user.type(
       screen.getByPlaceholderText(/Line 2/i),
       formData.address.line2,
     );
-    userEvent.type(
+    await user.type(
       screen.getByPlaceholderText(/Sorting Code/i),
       formData.address.sortingCode,
     );
-    userEvent.type(
+    await user.type(
       screen.getByPlaceholderText(/Dependent Locality/i),
       formData.address.dependentLocality,
     );
-    userEvent.click(screen.getByTestId(/userRegistrationRequired/i));
-    userEvent.click(screen.getByTestId(/visibleInSearch/i));
+    await user.click(screen.getByTestId(/userRegistrationRequired/i));
+    await user.click(screen.getByTestId(/visibleInSearch/i));
 
     expect(screen.getByTestId(/modalOrganizationName/i)).toHaveValue(
       formData.name,
@@ -303,13 +310,11 @@ describe('Organisations Page testing as SuperAdmin', () => {
     expect(screen.getByTestId(/visibleInSearch/i)).toBeChecked();
     expect(screen.getByLabelText(/Display Image/i)).toBeTruthy();
     const displayImage = screen.getByTestId('organisationImage');
-    userEvent.upload(displayImage, formData.image);
-    userEvent.click(screen.getByTestId(/submitOrganizationForm/i));
-    await waitFor(() => {
-      expect(
-        screen.queryByText(/Congratulation the Organization is created/i),
-      ).toBeInTheDocument();
-    });
+    await user.upload(displayImage, formData.image);
+    fireEvent.submit(screen.getByTestId(/submitOrganizationForm/i));
+    expect(
+      await screen.findByText(/Congratulation the Organization is created/i),
+    ).toBeInTheDocument();
   });
 
   test('Plugin Notification model should work properly', async () => {
@@ -337,44 +342,51 @@ describe('Organisations Page testing as SuperAdmin', () => {
       JSON.stringify([{ name: 'adi', _id: '1234', image: '' }]),
     );
 
-    userEvent.click(screen.getByTestId(/createOrganizationBtn/i));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId(/createOrganizationBtn/i));
 
-    userEvent.type(screen.getByTestId(/modalOrganizationName/i), formData.name);
-    userEvent.type(
+    await user.type(
+      screen.getByTestId(/modalOrganizationName/i),
+      formData.name,
+    );
+    await user.type(
       screen.getByPlaceholderText(/Description/i),
       formData.description,
     );
-    userEvent.type(screen.getByPlaceholderText(/City/i), formData.address.city);
-    userEvent.type(
+    await user.type(
+      screen.getByPlaceholderText(/City/i),
+      formData.address.city,
+    );
+    await user.type(
       screen.getByPlaceholderText(/State \/ Province/i),
       formData.address.state,
     );
-    userEvent.type(
+    await user.type(
       screen.getByPlaceholderText(/Postal Code/i),
       formData.address.postalCode,
     );
-    userEvent.selectOptions(
+    await user.selectOptions(
       screen.getByTestId('countrycode'),
       formData.address.countryCode,
     );
-    userEvent.type(
+    await user.type(
       screen.getByPlaceholderText(/Line 1/i),
       formData.address.line1,
     );
-    userEvent.type(
+    await user.type(
       screen.getByPlaceholderText(/Line 2/i),
       formData.address.line2,
     );
-    userEvent.type(
+    await user.type(
       screen.getByPlaceholderText(/Sorting Code/i),
       formData.address.sortingCode,
     );
-    userEvent.type(
+    await user.type(
       screen.getByPlaceholderText(/Dependent Locality/i),
       formData.address.dependentLocality,
     );
-    userEvent.click(screen.getByTestId(/userRegistrationRequired/i));
-    userEvent.click(screen.getByTestId(/visibleInSearch/i));
+    await user.click(screen.getByTestId(/userRegistrationRequired/i));
+    await user.click(screen.getByTestId(/visibleInSearch/i));
 
     expect(screen.getByTestId(/modalOrganizationName/i)).toHaveValue(
       formData.name,
@@ -404,7 +416,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     expect(screen.getByTestId(/visibleInSearch/i)).toBeChecked();
     expect(screen.getByLabelText(/Display Image/i)).toBeTruthy();
 
-    userEvent.click(screen.getByTestId(/submitOrganizationForm/i));
+    await user.click(screen.getByTestId(/submitOrganizationForm/i));
     // await act(async () => {
     //   await new Promise((resolve) => setTimeout(resolve, 1000));
     // });
@@ -417,7 +429,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
       screen.findByTestId(/pluginNotificationHeader/i);
     });
     // userEvent.click(screen.getByTestId(/enableEverythingForm/i));
-    userEvent.click(screen.getByTestId(/enableEverythingForm/i));
+    await user.click(screen.getByTestId(/enableEverythingForm/i));
   });
 
   test('Testing create sample organization working properly', async () => {
@@ -438,8 +450,9 @@ describe('Organisations Page testing as SuperAdmin', () => {
       </MockedProvider>,
     );
     await wait();
-    userEvent.click(screen.getByTestId(/createOrganizationBtn/i));
-    userEvent.click(screen.getByTestId(/createSampleOrganizationBtn/i));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId(/createOrganizationBtn/i));
+    await user.click(screen.getByTestId(/createSampleOrganizationBtn/i));
     await waitFor(() =>
       expect(
         screen.queryByText(/Sample Organization Successfully created/i),
@@ -463,8 +476,9 @@ describe('Organisations Page testing as SuperAdmin', () => {
       </MockedProvider>,
     );
     await wait();
-    userEvent.click(screen.getByTestId(/createOrganizationBtn/i));
-    userEvent.click(screen.getByTestId(/createSampleOrganizationBtn/i));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId(/createOrganizationBtn/i));
+    await user.click(screen.getByTestId(/createSampleOrganizationBtn/i));
     await waitFor(() =>
       expect(
         screen.queryByText(/Only one sample organization allowed/i),

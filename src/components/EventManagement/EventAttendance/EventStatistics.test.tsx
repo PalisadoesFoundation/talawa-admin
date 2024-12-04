@@ -172,18 +172,17 @@ describe('AttendanceStatisticsModal', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      const genderButton = screen.getByTestId('gender-button');
-      const ageButton = screen.getByTestId('age-button');
+    const genderButton = screen.getByTestId('gender-button');
+    const ageButton = screen.getByTestId('age-button');
 
-      userEvent.click(ageButton);
-      expect(ageButton).toHaveClass('btn-success');
-      expect(genderButton).toHaveClass('btn-light');
+    const user = userEvent.setup();
+    await user.click(ageButton);
+    expect(ageButton).toHaveClass('btn-success');
+    expect(genderButton).toHaveClass('btn-light');
 
-      userEvent.click(genderButton);
-      expect(genderButton).toHaveClass('btn-success');
-      expect(ageButton).toHaveClass('btn-light');
-    });
+    await user.click(genderButton);
+    expect(genderButton).toHaveClass('btn-success');
+    expect(ageButton).toHaveClass('btn-light');
   });
 
   test('handles data demographics export functionality', async () => {

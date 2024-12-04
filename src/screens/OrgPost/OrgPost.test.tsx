@@ -228,23 +228,24 @@ describe('Organisation Post Page', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('createPostModalBtn'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('createPostModalBtn'));
 
-    userEvent.type(screen.getByTestId('modalTitle'), formData.posttitle);
+    await user.type(screen.getByTestId('modalTitle'), formData.posttitle);
 
-    userEvent.type(screen.getByTestId('modalinfo'), formData.postinfo);
-    userEvent.upload(screen.getByTestId('addMediaField'), formData.postImage);
-    userEvent.upload(screen.getByTestId('addMediaField'), formData.postVideo);
-    userEvent.upload(screen.getByTestId('addMediaField'), formData.postImage);
-    userEvent.upload(screen.getByTestId('addMediaField'), formData.postVideo);
-    userEvent.click(screen.getByTestId('pinPost'));
+    await user.type(screen.getByTestId('modalinfo'), formData.postinfo);
+    await user.upload(screen.getByTestId('addMediaField'), formData.postImage);
+    await user.upload(screen.getByTestId('addMediaField'), formData.postVideo);
+    await user.upload(screen.getByTestId('addMediaField'), formData.postImage);
+    await user.upload(screen.getByTestId('addMediaField'), formData.postVideo);
+    await user.click(screen.getByTestId('pinPost'));
     expect(screen.getByTestId('pinPost')).toBeChecked();
 
-    userEvent.click(screen.getByTestId('createPostBtn'));
+    await user.click(screen.getByTestId('createPostBtn'));
 
     await wait();
 
-    userEvent.click(screen.getByTestId('closeOrganizationModal'));
+    await user.click(screen.getByTestId('closeOrganizationModal'));
   }, 15000);
 
   test('Testing search functionality', async () => {
@@ -267,10 +268,14 @@ describe('Organisation Post Page', () => {
       });
     }
     await debounceWait();
-    userEvent.type(screen.getByPlaceholderText(/Search By/i), 'postone{enter}');
+    const user = userEvent.setup();
+    await user.type(
+      screen.getByPlaceholderText(/Search By/i),
+      'postone{enter}',
+    );
     await debounceWait();
     const sortDropdown = screen.getByTestId('sort');
-    userEvent.click(sortDropdown);
+    await user.click(sortDropdown);
   });
   test('Testing search text and title toggle', async () => {
     await act(async () => {
@@ -294,24 +299,17 @@ describe('Organisation Post Page', () => {
 
     const inputText = screen.getByTestId('searchBy');
 
-    await act(async () => {
-      fireEvent.click(inputText);
-    });
+    const user = userEvent.setup();
+    await user.click(inputText);
 
     const toggleText = screen.getByTestId('Text');
 
-    await act(async () => {
-      fireEvent.click(toggleText);
-    });
+    await user.click(toggleText);
 
     expect(searchInput).toHaveAttribute('placeholder', 'Search By Text');
-    await act(async () => {
-      fireEvent.click(inputText);
-    });
+    await user.click(inputText);
     const toggleTite = screen.getByTestId('searchTitle');
-    await act(async () => {
-      fireEvent.click(toggleTite);
-    });
+    await user.click(toggleTite);
 
     expect(searchInput).toHaveAttribute('placeholder', 'Search By Title');
   });
@@ -337,25 +335,18 @@ describe('Organisation Post Page', () => {
 
     const inputText = screen.getByTestId('sortpost');
 
-    await act(async () => {
-      fireEvent.click(inputText);
-    });
+    const user = userEvent.setup();
+    await user.click(inputText);
 
     const toggleText = screen.getByTestId('latest');
 
-    await act(async () => {
-      fireEvent.click(toggleText);
-    });
+    await user.click(toggleText);
 
     expect(searchInput).toBeInTheDocument();
-    await act(async () => {
-      fireEvent.click(inputText);
-    });
+    await user.click(inputText);
 
     const toggleTite = screen.getByTestId('oldest');
-    await act(async () => {
-      fireEvent.click(toggleTite);
-    });
+    await user.click(toggleTite);
     expect(searchInput).toBeInTheDocument();
   });
   test('After creating a post, the data should be refetched', async () => {
@@ -376,11 +367,12 @@ describe('Organisation Post Page', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('createPostModalBtn'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('createPostModalBtn'));
 
     // Fill in post form fields...
 
-    userEvent.click(screen.getByTestId('createPostBtn'));
+    await user.click(screen.getByTestId('createPostBtn'));
 
     await wait();
 
@@ -402,7 +394,8 @@ describe('Organisation Post Page', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByTestId('createPostModalBtn'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('createPostModalBtn'));
 
     const postTitleInput = screen.getByTestId('modalTitle');
     fireEvent.change(postTitleInput, { target: { value: 'Test Post' } });
@@ -413,7 +406,7 @@ describe('Organisation Post Page', () => {
     });
 
     const createPostBtn = screen.getByTestId('createPostBtn');
-    fireEvent.click(createPostBtn);
+    await user.click(createPostBtn);
   }, 15000);
 
   test('Create post and preview', async () => {
@@ -431,7 +424,8 @@ describe('Organisation Post Page', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByTestId('createPostModalBtn'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('createPostModalBtn'));
 
     const postTitleInput = screen.getByTestId('modalTitle');
     fireEvent.change(postTitleInput, { target: { value: 'Test Post' } });
@@ -446,7 +440,7 @@ describe('Organisation Post Page', () => {
       type: 'image/png',
     });
     const imageInput = screen.getByTestId('addMediaField');
-    userEvent.upload(imageInput, imageFile);
+    await user.upload(imageInput, imageFile);
 
     // Check if the image is displayed
     const imagePreview = await screen.findByAltText('Post Image Preview');
@@ -454,7 +448,7 @@ describe('Organisation Post Page', () => {
 
     // Check if the close button for the image works
     const closeButton = screen.getByTestId('mediaCloseButton');
-    fireEvent.click(closeButton);
+    await user.click(closeButton);
 
     // Check if the image is removed from the preview
     expect(imagePreview).not.toBeInTheDocument();
@@ -477,13 +471,14 @@ describe('Organisation Post Page', () => {
 
     const createPostModalBtn = screen.getByTestId('createPostModalBtn');
 
-    userEvent.click(createPostModalBtn);
+    const user = userEvent.setup();
+    await user.click(createPostModalBtn);
 
     const modalTitle = screen.getByTestId('modalOrganizationHeader');
     expect(modalTitle).toBeInTheDocument();
 
     const closeButton = screen.getByTestId(/modalOrganizationHeader/i);
-    userEvent.click(closeButton);
+    await user.click(closeButton);
 
     await wait();
 
@@ -505,7 +500,8 @@ describe('Organisation Post Page', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByTestId('createPostModalBtn'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('createPostModalBtn'));
 
     // Check if input fields and buttons are present
     expect(screen.getByTestId('modalTitle')).toBeInTheDocument();
@@ -528,7 +524,8 @@ describe('Organisation Post Page', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByTestId('createPostModalBtn'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('createPostModalBtn'));
 
     // Simulate user input
     fireEvent.change(screen.getByTestId('modalTitle'), {
@@ -558,7 +555,8 @@ describe('Organisation Post Page', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByTestId('createPostModalBtn'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('createPostModalBtn'));
 
     const postTitleInput = screen.getByTestId('modalTitle');
     fireEvent.change(postTitleInput, { target: { value: 'Test Post' } });
@@ -571,13 +569,13 @@ describe('Organisation Post Page', () => {
       type: 'image/png',
     });
     const input = screen.getByTestId('addMediaField');
-    userEvent.upload(input, file);
+    await user.upload(input, file);
 
     await screen.findByAltText('Post Image Preview');
     expect(screen.getByAltText('Post Image Preview')).toBeInTheDocument();
 
     const closeButton = screen.getByTestId('mediaCloseButton');
-    fireEvent.click(closeButton);
+    await user.click(closeButton);
   }, 15000);
   test('Create post, preview image, and close preview', async () => {
     await act(async () => {
@@ -596,9 +594,8 @@ describe('Organisation Post Page', () => {
     });
     await wait();
 
-    await act(async () => {
-      userEvent.click(screen.getByTestId('createPostModalBtn'));
-    });
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('createPostModalBtn'));
 
     const postTitleInput = screen.getByTestId('modalTitle');
     await act(async () => {
@@ -616,9 +613,7 @@ describe('Organisation Post Page', () => {
       type: 'video/mp4',
     });
 
-    await act(async () => {
-      userEvent.upload(screen.getByTestId('addMediaField'), videoFile);
-    });
+    await user.upload(screen.getByTestId('addMediaField'), videoFile);
 
     // Check if the video is displayed
     const videoPreview = await screen.findByTestId('videoPreview');
@@ -626,9 +621,7 @@ describe('Organisation Post Page', () => {
 
     // Check if the close button for the video works
     const closeVideoPreviewButton = screen.getByTestId('mediaCloseButton');
-    await act(async () => {
-      fireEvent.click(closeVideoPreviewButton);
-    });
+    await user.click(closeVideoPreviewButton);
     expect(videoPreview).not.toBeInTheDocument();
   });
   test('Sorting posts by pinned status', async () => {

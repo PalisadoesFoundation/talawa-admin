@@ -230,17 +230,18 @@ describe('Testing Community Profile Screen', () => {
     const saveChangesBtn = screen.getByTestId(/saveChangesBtn/i);
     const resetChangeBtn = screen.getByTestId(/resetChangesBtn/i);
 
-    userEvent.type(communityName, profileVariables.name);
-    userEvent.type(websiteLink, profileVariables.websiteLink);
-    userEvent.type(facebook, profileVariables.socialUrl);
-    userEvent.type(instagram, profileVariables.socialUrl);
-    userEvent.type(X, profileVariables.socialUrl);
-    userEvent.type(linkedIn, profileVariables.socialUrl);
-    userEvent.type(github, profileVariables.socialUrl);
-    userEvent.type(youtube, profileVariables.socialUrl);
-    userEvent.type(reddit, profileVariables.socialUrl);
-    userEvent.type(slack, profileVariables.socialUrl);
-    userEvent.upload(logo, profileVariables.logo);
+    const user = userEvent.setup();
+    await user.type(communityName, profileVariables.name);
+    await user.type(websiteLink, profileVariables.websiteLink);
+    await user.type(facebook, profileVariables.socialUrl);
+    await user.type(instagram, profileVariables.socialUrl);
+    await user.type(X, profileVariables.socialUrl);
+    await user.type(linkedIn, profileVariables.socialUrl);
+    await user.type(github, profileVariables.socialUrl);
+    await user.type(youtube, profileVariables.socialUrl);
+    await user.type(reddit, profileVariables.socialUrl);
+    await user.type(slack, profileVariables.socialUrl);
+    await user.upload(logo, profileVariables.logo);
     await wait();
 
     expect(communityName).toHaveValue(profileVariables.name);
@@ -258,7 +259,7 @@ describe('Testing Community Profile Screen', () => {
     expect(resetChangeBtn).not.toBeDisabled();
     await wait();
 
-    userEvent.click(saveChangesBtn);
+    await user.click(saveChangesBtn);
     await wait();
   });
 

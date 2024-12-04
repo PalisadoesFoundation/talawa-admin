@@ -117,8 +117,9 @@ describe('Event Attendance Component', () => {
 
     await wait();
 
-    userEvent.click(screen.getByText('Filter: All'));
-    userEvent.click(screen.getByText('This Month'));
+    const user = userEvent.setup();
+    await user.click(screen.getByText('Filter: All'));
+    await user.click(screen.getByText('This Month'));
 
     await waitFor(() => {
       expect(screen.getByText('Attendees not Found')).toBeInTheDocument();

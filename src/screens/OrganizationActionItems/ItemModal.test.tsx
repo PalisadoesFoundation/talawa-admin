@@ -758,7 +758,7 @@ describe('Testing ItemModal', () => {
     // Click Submit
     const submitButton = screen.getByTestId('submitBtn');
     expect(submitButton).toBeInTheDocument();
-    fireEvent.click(submitButton);
+    fireEvent.submit(submitButton);
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
@@ -770,7 +770,7 @@ describe('Testing ItemModal', () => {
     // Click Submit
     const submitButton = screen.getByTestId('submitBtn');
     expect(submitButton).toBeInTheDocument();
-    fireEvent.click(submitButton);
+    fireEvent.submit(submitButton);
 
     await waitFor(() => {
       expect(toast.warning).toHaveBeenCalledWith(t.noneUpdated);
@@ -789,7 +789,7 @@ describe('Testing ItemModal', () => {
     // Click Submit
     const submitButton = screen.getByTestId('submitBtn');
     expect(submitButton).toBeInTheDocument();
-    fireEvent.click(submitButton);
+    fireEvent.submit(submitButton);
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');

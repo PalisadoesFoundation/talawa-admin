@@ -70,9 +70,10 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('languageIcon'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('languageIcon'));
 
-    userEvent.click(screen.getByTestId('changeLanguageBtn0'));
+    await user.click(screen.getByTestId('changeLanguageBtn0'));
 
     await wait();
 
@@ -94,9 +95,10 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('languageIcon'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('languageIcon'));
 
-    userEvent.click(screen.getByTestId('changeLanguageBtn1'));
+    await user.click(screen.getByTestId('changeLanguageBtn1'));
 
     await wait();
 
@@ -118,9 +120,10 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('languageIcon'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('languageIcon'));
 
-    userEvent.click(screen.getByTestId('changeLanguageBtn2'));
+    await user.click(screen.getByTestId('changeLanguageBtn2'));
 
     await wait();
 
@@ -142,9 +145,9 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('languageIcon'));
-
-    userEvent.click(screen.getByTestId('changeLanguageBtn3'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('languageIcon'));
+    await user.click(screen.getByTestId('changeLanguageBtn3'));
 
     await wait();
 
@@ -166,9 +169,10 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('languageIcon'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('languageIcon'));
 
-    userEvent.click(screen.getByTestId('changeLanguageBtn4'));
+    await user.click(screen.getByTestId('changeLanguageBtn4'));
 
     await wait();
 
@@ -190,7 +194,8 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('logoutDropdown'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('logoutDropdown'));
     expect(screen.getByText('Settings')).toBeInTheDocument();
     expect(screen.getByTestId('logoutBtn')).toBeInTheDocument();
   });
@@ -210,8 +215,9 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('logoutDropdown'));
-    userEvent.click(screen.getByText('Settings'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('logoutDropdown'));
+    await user.click(screen.getByText('Settings'));
     expect(window.location.pathname).toBe('/user/settings');
   });
 });

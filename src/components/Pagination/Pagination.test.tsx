@@ -1,4 +1,4 @@
-import React, { act } from 'react';
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -25,10 +25,9 @@ describe('Testing Pagination component', () => {
         </Provider>
       </BrowserRouter>,
     );
-    await act(async () => {
-      userEvent.click(screen.getByTestId(/nextPage/i));
-      userEvent.click(screen.getByTestId(/previousPage/i));
-    });
+
+    userEvent.click(screen.getByTestId(/nextPage/i));
+    userEvent.click(screen.getByTestId(/previousPage/i));
   });
 });
 
@@ -57,8 +56,6 @@ test('Component should be rendered properly', async () => {
     </BrowserRouter>,
   );
 
-  await act(async () => {
-    userEvent.click(screen.getByTestId(/nextPage/i));
-    userEvent.click(screen.getByTestId(/previousPage/i));
-  });
+  userEvent.click(screen.getByTestId(/nextPage/i));
+  userEvent.click(screen.getByTestId(/previousPage/i));
 });

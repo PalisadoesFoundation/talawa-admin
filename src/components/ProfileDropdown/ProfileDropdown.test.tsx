@@ -1,4 +1,4 @@
-import React, { act } from 'react';
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
@@ -119,11 +119,9 @@ describe('ProfileDropdown Component', () => {
       </MockedProvider>,
     );
 
-    await act(async () => {
-      userEvent.click(screen.getByTestId('togDrop'));
-    });
-
-    userEvent.click(screen.getByTestId('logoutBtn'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('togDrop'));
+    await user.click(screen.getByTestId('logoutBtn'));
 
     expect(global.window.location.pathname).toBe('/');
   });
@@ -137,11 +135,9 @@ describe('ProfileDropdown Component', () => {
           </BrowserRouter>
         </MockedProvider>,
       );
-      await act(async () => {
-        userEvent.click(screen.getByTestId('togDrop'));
-      });
-
-      userEvent.click(screen.getByTestId('profileBtn'));
+      const user = userEvent.setup();
+      await user.click(screen.getByTestId('togDrop'));
+      await user.click(screen.getByTestId('profileBtn'));
       expect(global.window.location.pathname).toBe('/user/settings');
     });
   });

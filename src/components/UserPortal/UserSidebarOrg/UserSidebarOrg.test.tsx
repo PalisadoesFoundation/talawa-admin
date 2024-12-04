@@ -312,7 +312,8 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
       </MockedProvider>,
     );
     await wait();
-    userEvent.click(screen.getByText('People'));
+    const user = userEvent.setup();
+    await user.click(screen.getByText('People'));
     expect(global.window.location.pathname).toContain('/user/people/123');
   });
 

@@ -252,21 +252,22 @@ describe('Testing Agenda Category Component', () => {
         screen.getAllByTestId('editAgendCategoryModalBtn')[0],
       ).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('editAgendCategoryModalBtn')[0]);
+    const user = userEvent.setup();
+    await user.click(screen.getAllByTestId('editAgendCategoryModalBtn')[0]);
 
     const name = screen.getByPlaceholderText(translations.name);
     const description = screen.getByPlaceholderText(translations.description);
 
     fireEvent.change(name, { target: { value: '' } });
-    userEvent.type(name, formData.name);
+    await user.type(name, formData.name);
 
     fireEvent.change(description, { target: { value: '' } });
-    userEvent.type(description, formData.description);
+    await user.type(description, formData.description);
 
     await waitFor(() => {
       expect(screen.getByTestId('editAgendaCategoryBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('editAgendaCategoryBtn'));
+    await user.click(screen.getByTestId('editAgendaCategoryBtn'));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(
@@ -297,7 +298,8 @@ describe('Testing Agenda Category Component', () => {
         screen.getAllByTestId('editAgendCategoryModalBtn')[0],
       ).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('editAgendCategoryModalBtn')[0]);
+    const user = userEvent.setup();
+    await user.click(screen.getAllByTestId('editAgendCategoryModalBtn')[0]);
 
     const nameInput = screen.getByLabelText(translations.name);
     const descriptionInput = screen.getByLabelText(translations.description);
@@ -305,13 +307,13 @@ describe('Testing Agenda Category Component', () => {
     fireEvent.change(descriptionInput, {
       target: { value: '' },
     });
-    userEvent.type(nameInput, formData.name);
-    userEvent.type(descriptionInput, formData.description);
+    await user.type(nameInput, formData.name);
+    await user.type(descriptionInput, formData.description);
 
     await waitFor(() => {
       expect(screen.getByTestId('editAgendaCategoryBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('editAgendaCategoryBtn'));
+    await user.click(screen.getByTestId('editAgendaCategoryBtn'));
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();

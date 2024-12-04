@@ -275,20 +275,21 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('createTagBtn'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('createTagBtn'));
 
-    userEvent.click(screen.getByTestId('createTagSubmitBtn'));
+    fireEvent.submit(screen.getByTestId('createTagSubmitBtn'));
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(translations.enterTagName);
     });
 
-    userEvent.type(
+    await user.type(
       screen.getByPlaceholderText(translations.tagNamePlaceholder),
       'userTag 12',
     );
 
-    userEvent.click(screen.getByTestId('createTagSubmitBtn'));
+    await user.click(screen.getByTestId('createTagSubmitBtn'));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(

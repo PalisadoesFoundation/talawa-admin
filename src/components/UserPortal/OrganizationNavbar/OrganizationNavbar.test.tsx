@@ -234,7 +234,8 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     const peoplePlugin = screen.getByText('People');
     expect(peoplePlugin).toBeInTheDocument();
 
-    userEvent.click(peoplePlugin);
+    const user = userEvent.setup();
+    await user.click(peoplePlugin);
 
     await wait();
     expect(history.location.pathname).toBe(`/user/people/${organizationId}`);
@@ -255,9 +256,10 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('languageIcon'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('languageIcon'));
 
-    userEvent.click(screen.getByTestId('changeLanguageBtn0'));
+    await user.click(screen.getByTestId('changeLanguageBtn0'));
 
     await wait();
 
@@ -285,9 +287,10 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('languageIcon'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('languageIcon'));
 
-    userEvent.click(screen.getByTestId('changeLanguageBtn1'));
+    await user.click(screen.getByTestId('changeLanguageBtn1'));
 
     await wait();
 
@@ -309,9 +312,10 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('languageIcon'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('languageIcon'));
 
-    userEvent.click(screen.getByTestId('changeLanguageBtn2'));
+    await user.click(screen.getByTestId('changeLanguageBtn2'));
 
     await wait();
 
@@ -333,9 +337,10 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('languageIcon'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('languageIcon'));
 
-    userEvent.click(screen.getByTestId('changeLanguageBtn3'));
+    await user.click(screen.getByTestId('changeLanguageBtn3'));
 
     await wait();
 
@@ -357,9 +362,10 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('languageIcon'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('languageIcon'));
 
-    userEvent.click(screen.getByTestId('changeLanguageBtn4'));
+    await user.click(screen.getByTestId('changeLanguageBtn4'));
 
     await wait();
 

@@ -102,7 +102,8 @@ describe('Testing Register Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('setLoginBtn'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('setLoginBtn'));
 
     expect(setCurrentMode).toHaveBeenCalledWith('login');
   });
@@ -122,7 +123,8 @@ describe('Testing Register Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('registerBtn'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('registerBtn'));
 
     expect(toast.error).toHaveBeenCalledWith('Please enter valid details.');
   });
@@ -213,15 +215,16 @@ describe('Testing Register Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.type(screen.getByTestId('passwordInput'), formData.password);
+    const user = userEvent.setup();
+    await user.type(screen.getByTestId('passwordInput'), formData.password);
 
-    userEvent.type(screen.getByTestId('emailInput'), formData.email);
+    await user.type(screen.getByTestId('emailInput'), formData.email);
 
-    userEvent.type(screen.getByTestId('firstNameInput'), formData.firstName);
+    await user.type(screen.getByTestId('firstNameInput'), formData.firstName);
 
-    userEvent.type(screen.getByTestId('lastNameInput'), formData.lastName);
+    await user.type(screen.getByTestId('lastNameInput'), formData.lastName);
 
-    userEvent.click(screen.getByTestId('registerBtn'));
+    await user.click(screen.getByTestId('registerBtn'));
 
     expect(toast.error).toHaveBeenCalledWith(
       "Password doesn't match. Confirm Password and try again.",
@@ -243,20 +246,21 @@ describe('Testing Register Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.type(screen.getByTestId('passwordInput'), formData.password);
+    const user = userEvent.setup();
+    await user.type(screen.getByTestId('passwordInput'), formData.password);
 
-    userEvent.type(
+    await user.type(
       screen.getByTestId('confirmPasswordInput'),
       formData.confirmPassword,
     );
 
-    userEvent.type(screen.getByTestId('emailInput'), formData.email);
+    await user.type(screen.getByTestId('emailInput'), formData.email);
 
-    userEvent.type(screen.getByTestId('firstNameInput'), formData.firstName);
+    await user.type(screen.getByTestId('firstNameInput'), formData.firstName);
 
-    userEvent.type(screen.getByTestId('lastNameInput'), formData.lastName);
+    await user.type(screen.getByTestId('lastNameInput'), formData.lastName);
 
-    userEvent.click(screen.getByTestId('registerBtn'));
+    await user.click(screen.getByTestId('registerBtn'));
 
     await wait();
 
