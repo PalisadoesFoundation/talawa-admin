@@ -4,19 +4,3 @@ src/components/CheckIn/tagTemplate.ts
 package.json
 package-lock.json
 tsconfig.json
-
-\*.swp
-.vscode/
-
-Dockerfile
-.dockerignore
-.git/
-
-**/\*.yml
-**/_.dockerfile
-\*\*/_.py \*_/_.md
-
-\*.md
-Dockerfile
-.eslintignore
-node_modules/
