@@ -4,7 +4,6 @@
     "node": true,
     "es6": true
   },
-
   "extends": [
     "plugin:react/recommended",
     "eslint:recommended",
@@ -26,7 +25,6 @@
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
-
   "plugins": [
     "react",
     "@typescript-eslint",
@@ -76,13 +74,11 @@
     "camelcase": "off",
     "@typescript-eslint/naming-convention": [
       "error",
-
       {
         "selector": "interface",
         "format": ["PascalCase"],
         "prefix": ["Interface", "TestInterface"]
       },
-
       {
         "selector": ["typeAlias", "typeLike", "enum"],
         "format": ["PascalCase"]
@@ -112,24 +108,19 @@
         "format": ["camelCase"],
         "leadingUnderscore": "require"
       },
-
       {
         "selector": "variable",
         "modifiers": ["exported"],
         "format": null
       }
     ],
-
     "react/jsx-pascal-case": [
       "error",
       { "allowAllCaps": false, "allowNamespace": false }
     ],
-
     "react/jsx-equals-spacing": ["warn", "never"],
     "react/no-this-in-sfc": "error",
-
     "jest/expect-expect": 0,
-
     "react/no-unstable-nested-components": ["error", { "allowAsProps": true }],
     "react/function-component-definition": [
       0,
@@ -137,11 +128,33 @@
     ],
     "prettier/prettier": "error"
   },
-
   "settings": {
     "react": {
       "version": "detect"
     }
   },
-  "ignorePatterns": ["**/*.css", "**/*.scss", "**/*.less", "**/*.json"]
+  "ignorePatterns": [
+    "**/*.css",
+    "**/*.scss",
+    "**/*.less",
+    "**/*.json",
+    "**/*.md",
+    "**/*.js",
+    "**/*.test.js",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.spec.js",
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "**/*.d.ts",
+    "**/*.config.js",
+    "**/*.config.ts",
+    "**/*.babel.js",
+    "**/*.eslint.js",
+    "**/node_modules/**",
+    "**/build/**",
+    "**/dist/**",
+    "**/coverage/**",
+    "**/public/**"
+  ]
 }

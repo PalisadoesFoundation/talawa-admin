@@ -15,3 +15,8 @@ Dockerfile
 **/\*.yml
 **/_.dockerfile
 \*\*/_.py \*_/_.md
+
+\*.md
+Dockerfile
+.eslintignore
+node_modules/

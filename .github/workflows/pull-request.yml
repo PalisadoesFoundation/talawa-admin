@@ -66,7 +66,7 @@ jobs:
           # Check if there are any TypeScript files to lint
           if [ -n "$TS_FILES" ]; then
             # Run linting on the changed TypeScript files
-            npx eslint "${TS_FILES}" --ignore-pattern '{**/*.yml,**/*.dockerfile,**/*.py,**/*.md}'
+            npx eslint "${TS_FILES}" --ext .ts,.tsx --ignore-pattern '{**/*.yml,**/*.dockerfile,**/*.py,**/*.md}'
 
 
 
