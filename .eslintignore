@@ -1,4 +1,15 @@
+# Contains the PDF file of the Tag as JSON string, thus does not need to be linted
+
 src/components/CheckIn/tagTemplate.ts
 package.json
 package-lock.json
 tsconfig.json
+
+Dockerfile
+
+_.yml
+_.yaml
+
+\*.md
+
+package.json
