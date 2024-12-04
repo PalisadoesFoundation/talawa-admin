@@ -25,7 +25,7 @@ code style should not be changed and must be followed.
 
 - Typescript
 
-- React.js 
+- React.js
 
 - CSS module
 
@@ -43,7 +43,6 @@ code style should not be changed and must be followed.
 
 - Should make use of React hooks where appropriate
 
-
 ## Code Style and Naming Conventions
 
 - All React components *must* be written in PascalCase, with their file names, and associated CSS modules being written in PascalCase
@@ -55,13 +54,15 @@ code style should not be changed and must be followed.
 - Use of custom classes directly are refrained, use of modular css is encouraged along with bootstrap classes
 
 **Wrong way ❌**
+
 ```
 <div className="myCustomClass">...</div>
 <div className={`${styles.myCustomClass1} myCustomClass2`}>...</div> // No using personal custom classes directly, here you should  not use myCustomClass2
 .container{...} // No changing the property of already existing classes reserved by boostrap directly in css files
 ```
 
-**Correct ways ✅** 
+**Correct ways ✅**
+
 ```
 <div className={styles.myCustomClass}>...</div> // Use custom class defined in modular css file
 <div className={`${styles.myCustomClass} relative bg-danger`}>...</div> // Use classes already defined in Bootstrap
@@ -74,7 +75,8 @@ code style should not be changed and must be followed.
 
 **Wrong way ❌**
 
-Using plain Bootstrap classes and attributes without leveraging the React-Bootstrap library should be refrained. While it may work for basic functionality, it doesn't fully integrate with React and may cause issues when dealing with more complex state management or component interactions. 
+Using plain Bootstrap classes and attributes without leveraging the React-Bootstrap library should be refrained. While it may work for basic functionality, it doesn't fully integrate with React and may cause issues when dealing with more complex state management or component interactions.
+
 ```
     <div class="dropdown">
         <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -87,11 +89,11 @@ Using plain Bootstrap classes and attributes without leveraging the React-Bootst
         </ul>
     </div>
 ```
-    
 
 **Correct way ✅**
 
 It's recommended to use the React-Bootstrap library for seamless integration of Bootstrap components in a React application.
+
 ```
 import Dropdown from 'react-bootstrap/Dropdown';
 
@@ -114,10 +116,9 @@ function BasicExample() {
 export default BasicExample;
 ```
 
+## Test and Code Linting
 
-## Test and Code Linting 
-
-Unit tests must be written for *all* code submissions to the repository, 
+Unit tests must be written for *all* code submissions to the repository,
 the code submitted must also be linted ESLint and formatted with Prettier.
 
 ## Folder/Directory Structure
@@ -125,16 +126,17 @@ the code submitted must also be linted ESLint and formatted with Prettier.
 ### Sub Directories of `src`
 
 `assets` - This houses all of the static assets used in the project
-  - `css` - This houses all of the css files used in the project
-  - `images` - This houses all of the images used in the project
-  - `scss` - This houses all of the scss files used in the project
-    - `components -` All Sass files for components
-    - `content -` All Sass files for content
-    - `forms -` All Sass files for forms
-    - `_talawa.scss` - Partial Sass file for Talawa
-    - `_utilities.scss` - Partial Sass file for utilities
-    - `_variables.scss` - Partial Sass file for variables
-    - `app.scss` - Main Sass file for the app, imports all other partial Sass files
+
+- `css` - This houses all of the css files used in the project
+- `images` - This houses all of the images used in the project
+- `scss` - This houses all of the scss files used in the project
+  - `components -` All Sass files for components
+  - `content -` All Sass files for content
+  - `forms -` All Sass files for forms
+  - `_talawa.scss` - Partial Sass file for Talawa
+  - `_utilities.scss` - Partial Sass file for utilities
+  - `_variables.scss` - Partial Sass file for variables
+  - `app.scss` - Main Sass file for the app, imports all other partial Sass files
 
 `components`  - The directory for base components that will be used in the various views/screens
 
@@ -148,7 +150,6 @@ the code submitted must also be linted ESLint and formatted with Prettier.
 
 `utils` - This holds the utility functions that do not fall into any of the other categories
 
-
 ## Imports
 
 Absolute imports have been set up for the project, so imports may be done directly from `src`.
@@ -161,10 +162,9 @@ import Navbar from 'components/Navbar/Navbar';
 
 Imports should be grouped in the following order:
 
-  - React imports
-  - Third party imports
-  - Local imports
-
+- React imports
+- Third party imports
+- Local imports
 
 If there is more than one import from a single library, they should be grouped together
   
@@ -213,7 +213,6 @@ Follow this [link](https://getbootstrap.com/docs/5.3/customize/sass/) to learn h
   - **_table.scss**
   - **_typography.scss**
 
-
 - `src/assets/scss/forms/{'{partialFile}'}.scss` - where the {'{partialFile}'} are the following files
   - **_check-radios.scss**
   - **_floating-label.scss**
@@ -245,9 +244,11 @@ To watch the Sass file for changes and compile it automatically, run the followi
 ```
 npx sass src/assets/scss/app.scss src/assets/css/app.css --watch
 ```
+
 The `src/assets/css/app.css.map` file associates the generated CSS code with the original SCSS code. It allows you to see your SCSS code in the browser's developer tools for debugging.
 
 To skip generating the map file, run
+
 ```
 npx sass --no-source-map src/assets/scss/app.scss src/assets/css/app.css
 ```
