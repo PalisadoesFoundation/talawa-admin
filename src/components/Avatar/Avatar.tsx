@@ -4,13 +4,14 @@ import { initials } from '@dicebear/collection';
 import styles from 'components/Avatar/Avatar.module.css';
 
 interface InterfaceAvatarProps {
-  name: string;
+  name?: string;
   alt?: string;
   size?: number;
   containerStyle?: string;
   avatarStyle?: string;
   dataTestId?: string;
   radius?: number;
+  customUrl?: string;
 }
 
 /**
@@ -27,16 +28,26 @@ interface InterfaceAvatarProps {
  * @returns JSX.Element - The rendered avatar image component.
  */
 const Avatar = ({
-  name,
+  name = 'Guest',
   alt = 'Dummy Avatar',
   size,
   avatarStyle,
   containerStyle,
   dataTestId,
   radius,
+  customUrl,
 }: InterfaceAvatarProps): JSX.Element => {
   // Memoize the avatar creation to avoid unnecessary recalculations
   const avatar = useMemo(() => {
+    if (customUrl) {
+      try {
+        new URL(customUrl);
+        return customUrl;
+      } catch {
+        console.warn('Invalid custom URL provided to Avatar component');
+      }
+    }
+
     return createAvatar(initials, {
       size: size || 128,
       seed: name,
@@ -53,6 +64,8 @@ const Avatar = ({
         alt={alt}
         className={avatarStyle ? avatarStyle : ''}
         data-testid={dataTestId ? dataTestId : ''}
+        height={size || 128}
+        width={size || 128}
       />
     </div>
   );
