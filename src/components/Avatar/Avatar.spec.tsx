@@ -146,16 +146,19 @@ describe('Testing Avatar component', () => {
   });
 
   // Custom URL Test
-  test('uses custom URL when provided', () => {
-    const customUrl = 'https://example.com/custom-avatar.png';
+  test('uses valid customUrl', () => {
+    const url = 'https://example.com/avatar.png';
+    const { getByAltText } = renderAvatar({ customUrl: url });
 
-    renderAvatar({
-      name: 'John Doe',
-      customUrl,
-    });
+    const avatar = getByAltText('Dummy Avatar');
+    expect(avatar).toHaveAttribute('src', url);
+  });
 
-    const avatarElement = screen.getByAltText('Dummy Avatar');
-    expect(avatarElement.getAttribute('src')).toBe(customUrl);
+  test('falls back on invalid customUrl', () => {
+    const { getByAltText } = renderAvatar({ customUrl: 'invalid-url' });
+
+    const avatar = getByAltText('Dummy Avatar');
+    expect(avatar.getAttribute('src')).toContain('data:image/svg+xml');
   });
 
   // Fallback to generated avatar when custom URL is invalid
