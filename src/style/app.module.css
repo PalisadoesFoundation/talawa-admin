@@ -600,13 +600,13 @@ hr {
   display: none;
 }
 
-@media (min-width: 577px) {
+@media (min-width: 576px) {
   .settingsDropdown {
     display: none;
   }
 }
 
-@media (min-width: 577px) {
+@media (min-width: 576px) {
   .settingsTabs {
     display: block;
   }
