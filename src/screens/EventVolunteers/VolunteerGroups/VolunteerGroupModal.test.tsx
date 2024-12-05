@@ -189,7 +189,7 @@ describe('Testing VolunteerGroupModal', () => {
 
     const submitBtn = screen.getByTestId('submitBtn');
     expect(submitBtn).toBeInTheDocument();
-    userEvent.click(submitBtn);
+    fireEvent.submit(submitBtn);
 
     waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(t.volunteerGroupCreated);
@@ -239,7 +239,7 @@ describe('Testing VolunteerGroupModal', () => {
 
     const submitBtn = screen.getByTestId('submitBtn');
     expect(submitBtn).toBeInTheDocument();
-    userEvent.click(submitBtn);
+    fireEvent.submit(submitBtn);
 
     waitFor(() => {
       expect(toast.error).toHaveBeenCalled();
@@ -267,7 +267,7 @@ describe('Testing VolunteerGroupModal', () => {
 
     const submitBtn = screen.getByTestId('submitBtn');
     expect(submitBtn).toBeInTheDocument();
-    userEvent.click(submitBtn);
+    fireEvent.submit(submitBtn);
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(t.volunteerGroupUpdated);
@@ -297,7 +297,7 @@ describe('Testing VolunteerGroupModal', () => {
 
     const submitBtn = screen.getByTestId('submitBtn');
     expect(submitBtn).toBeInTheDocument();
-    userEvent.click(submitBtn);
+    fireEvent.submit(submitBtn);
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();
@@ -340,7 +340,7 @@ describe('Testing VolunteerGroupModal', () => {
 
     const submitBtn = screen.getByTestId('submitBtn');
     expect(submitBtn).toBeInTheDocument();
-    userEvent.click(submitBtn);
+    fireEvent.submit(submitBtn);
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalled();

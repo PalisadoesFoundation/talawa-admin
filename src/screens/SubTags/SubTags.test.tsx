@@ -282,12 +282,13 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('sortTags')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('sortTags'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('sortTags'));
 
     await waitFor(() => {
       expect(screen.getByTestId('oldest')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('oldest'));
+    await user.click(screen.getByTestId('oldest'));
 
     // returns the tags in reverse order
     await waitFor(() => {
@@ -299,12 +300,12 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('sortTags')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('sortTags'));
+    await user.click(screen.getByTestId('sortTags'));
 
     await waitFor(() => {
       expect(screen.getByTestId('latest')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('latest'));
+    await user.click(screen.getByTestId('latest'));
 
     // reverse the order again
     await waitFor(() => {
@@ -351,14 +352,16 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('addSubTagBtn'));
 
-    userEvent.type(
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('addSubTagBtn'));
+    await wait();
+    await user.type(
       screen.getByPlaceholderText(translations.tagNamePlaceholder),
       'subTag 12',
     );
 
-    userEvent.click(screen.getByTestId('addSubTagSubmitBtn'));
+    await user.click(screen.getByTestId('addSubTagSubmitBtn'));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(

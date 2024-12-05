@@ -62,8 +62,8 @@ jest.mock('components/AddOn/support/services/Plugin.helper', () => ({
     ]),
     generateLinks: jest.fn().mockImplementation((plugins) => {
       return plugins
-        .filter((plugin: { enabled: any }) => plugin.enabled)
-        .map((installedPlugin: { pluginName: any; component: string }) => {
+        .filter((plugin: { enabled: unknown }) => plugin.enabled)
+        .map((installedPlugin: { pluginName: unknown; component: string }) => {
           return {
             name: installedPlugin.pluginName,
             url: `/plugin/${installedPlugin.component.toLowerCase()}`,
@@ -318,7 +318,8 @@ describe('Testing AddOnStore Component', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByText('Installed'));
+    const user = userEvent.setup();
+    await user.click(screen.getByText('Installed'));
 
     expect(screen.getByText('Filters')).toBeInTheDocument();
     expect(screen.getByLabelText('Enabled')).toBeInTheDocument();

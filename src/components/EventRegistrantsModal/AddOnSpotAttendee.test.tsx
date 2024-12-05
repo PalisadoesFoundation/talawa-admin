@@ -101,9 +101,10 @@ describe('AddOnSpotAttendee Component', () => {
     const lastNameInput = screen.getByLabelText('Last Name');
     const emailInput = screen.getByLabelText('Email');
 
-    userEvent.type(firstNameInput, 'John');
-    userEvent.type(lastNameInput, 'Doe');
-    userEvent.type(emailInput, 'john@example.com');
+    const user = userEvent.setup();
+    await user.type(firstNameInput, 'John');
+    await user.type(lastNameInput, 'Doe');
+    await user.type(emailInput, 'john@example.com');
 
     expect(firstNameInput).toHaveValue('John');
     expect(lastNameInput).toHaveValue('Doe');
@@ -113,10 +114,11 @@ describe('AddOnSpotAttendee Component', () => {
   it('submits form successfully and calls necessary callbacks', async () => {
     renderAddOnSpotAttendee();
 
-    userEvent.type(screen.getByLabelText('First Name'), 'John');
-    userEvent.type(screen.getByLabelText('Last Name'), 'Doe');
-    userEvent.type(screen.getByLabelText('Email'), 'john@example.com');
-    userEvent.type(screen.getByLabelText('Phone No.'), '1234567890');
+    const user = userEvent.setup();
+    await user.type(screen.getByLabelText('First Name'), 'John');
+    await user.type(screen.getByLabelText('Last Name'), 'Doe');
+    await user.type(screen.getByLabelText('Email'), 'john@example.com');
+    await user.type(screen.getByLabelText('Phone No.'), '1234567890');
     const genderSelect = screen.getByLabelText('Gender');
     fireEvent.change(genderSelect, { target: { value: 'Male' } });
 

@@ -1,7 +1,7 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, waitFor, within } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import userEvent from '@testing-library/user-event';
 import {
@@ -301,7 +301,8 @@ describe('Testing Home Screen: User Portal', () => {
     const startPostBtn = await screen.findByTestId('postBtn');
     expect(startPostBtn).toBeInTheDocument();
 
-    userEvent.click(startPostBtn);
+    const user = userEvent.setup();
+    await user.click(startPostBtn);
     const startPostModal = screen.getByTestId('startPostModal');
     expect(startPostModal).toBeInTheDocument();
   });
@@ -310,20 +311,25 @@ describe('Testing Home Screen: User Portal', () => {
     renderHomeScreen();
 
     await wait();
-    userEvent.upload(
-      screen.getByTestId('postImageInput'),
-      new File(['image content'], 'image.png', { type: 'image/png' }),
-    );
+    fireEvent.change(screen.getByTestId('postImageInput'), {
+      target: {
+        files: [
+          new File(['image content'], 'image.png', { type: 'image/png' }),
+        ],
+      },
+    });
     await wait();
 
     const startPostBtn = await screen.findByTestId('postBtn');
     expect(startPostBtn).toBeInTheDocument();
 
-    userEvent.click(startPostBtn);
+    fireEvent.click(startPostBtn);
     const startPostModal = screen.getByTestId('startPostModal');
     expect(startPostModal).toBeInTheDocument();
 
-    userEvent.type(screen.getByTestId('postInput'), 'some content');
+    fireEvent.change(screen.getByTestId('postInput'), {
+      target: { value: 'some content' },
+    });
 
     // Check that the content and image have been added
     expect(screen.getByTestId('postInput')).toHaveValue('some content');
@@ -333,7 +339,7 @@ describe('Testing Home Screen: User Portal', () => {
     const closeButton = within(startPostModal).getByRole('button', {
       name: /close/i,
     });
-    userEvent.click(closeButton);
+    fireEvent.click(closeButton);
 
     const closedModalText = screen.queryByText(/somethingOnYourMind/i);
     expect(closedModalText).not.toBeInTheDocument();

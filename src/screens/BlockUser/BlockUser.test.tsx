@@ -372,16 +372,15 @@ describe('Testing Block/Unblock user screen', () => {
       </MockedProvider>,
     );
 
-    await act(async () => {
-      userEvent.click(screen.getByTestId('userFilter'));
-    });
-    userEvent.click(screen.getByTestId('showMembers'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('userFilter'));
+    await user.click(screen.getByTestId('showMembers'));
     await wait();
 
     expect(screen.getByTestId('unBlockUser123')).toBeInTheDocument();
     expect(screen.getByTestId('blockUser456')).toBeInTheDocument();
 
-    userEvent.click(screen.getByTestId('unBlockUser123'));
+    await user.click(screen.getByTestId('unBlockUser123'));
     await wait();
 
     expect(screen.getByTestId('blockUser123')).toBeInTheDocument();
@@ -404,17 +403,16 @@ describe('Testing Block/Unblock user screen', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await act(async () => {
-      userEvent.click(screen.getByTestId('userFilter'));
-    });
-    userEvent.click(screen.getByTestId('showMembers'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('userFilter'));
+    await user.click(screen.getByTestId('showMembers'));
 
     await wait();
 
     expect(screen.getByTestId('unBlockUser123')).toBeInTheDocument();
     expect(screen.getByTestId('blockUser456')).toBeInTheDocument();
 
-    userEvent.click(screen.getByTestId('blockUser456'));
+    await user.click(screen.getByTestId('blockUser456'));
     await wait();
 
     expect(screen.getByTestId('blockUser123')).toBeInTheDocument();
@@ -437,10 +435,9 @@ describe('Testing Block/Unblock user screen', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await act(async () => {
-      userEvent.click(screen.getByTestId('userFilter'));
-    });
-    userEvent.click(screen.getByTestId('showMembers'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('userFilter'));
+    await user.click(screen.getByTestId('showMembers'));
 
     await wait();
 
@@ -448,13 +445,11 @@ describe('Testing Block/Unblock user screen', () => {
     expect(screen.getByText('Sam Smith')).toBeInTheDocument();
 
     // Open Dropdown
-    await act(async () => {
-      userEvent.click(screen.getByTestId('nameFilter'));
-    });
+    await user.click(screen.getByTestId('nameFilter'));
     // Select option and enter first name
-    userEvent.click(screen.getByTestId('searchByFirstName'));
+    await user.click(screen.getByTestId('searchByFirstName'));
     const firstNameInput = screen.getByPlaceholderText(/Search by First Name/i);
-    userEvent.type(firstNameInput, 'john{enter}');
+    await user.type(firstNameInput, 'john{enter}');
 
     await wait(700);
 
@@ -479,10 +474,9 @@ describe('Testing Block/Unblock user screen', () => {
       </MockedProvider>,
     );
 
-    await act(async () => {
-      userEvent.click(screen.getByTestId('userFilter'));
-    });
-    userEvent.click(screen.getByTestId('showMembers'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('userFilter'));
+    await user.click(screen.getByTestId('showMembers'));
 
     await wait();
 
@@ -490,13 +484,11 @@ describe('Testing Block/Unblock user screen', () => {
     expect(screen.getByText('Sam Smith')).toBeInTheDocument();
 
     // Open Dropdown
-    await act(async () => {
-      userEvent.click(screen.getByTestId('nameFilter'));
-    });
+    await user.click(screen.getByTestId('nameFilter'));
     // Select option and enter last name
-    userEvent.click(screen.getByTestId('searchByLastName'));
+    await user.click(screen.getByTestId('searchByLastName'));
     const lastNameInput = screen.getByPlaceholderText(/Search by Last Name/i);
-    userEvent.type(lastNameInput, 'doe{enter}');
+    await user.type(lastNameInput, 'doe{enter}');
 
     await wait(700);
 
@@ -541,10 +533,10 @@ describe('Testing Block/Unblock user screen', () => {
       </MockedProvider>,
     );
     await wait();
-    await act(async () => {
-      userEvent.click(screen.getByTestId('userFilter'));
-    });
-    userEvent.click(screen.getByTestId('showMembers'));
+
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('userFilter'));
+    await user.click(screen.getByTestId('showMembers'));
 
     await wait(700);
 
@@ -571,11 +563,9 @@ describe('Testing Block/Unblock user screen', () => {
       </MockedProvider>,
     );
 
-    await act(async () => {
-      userEvent.click(screen.getByTestId('userFilter'));
-    });
-
-    userEvent.click(screen.getByTestId('showBlockedMembers'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('userFilter'));
+    await user.click(screen.getByTestId('showBlockedMembers'));
     await wait();
 
     expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -598,10 +588,9 @@ describe('Testing Block/Unblock user screen', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await act(async () => {
-      userEvent.click(screen.getByTestId('userFilter'));
-    });
-    userEvent.click(screen.getByTestId('showMembers'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('userFilter'));
+    await user.click(screen.getByTestId('showMembers'));
 
     await wait();
 

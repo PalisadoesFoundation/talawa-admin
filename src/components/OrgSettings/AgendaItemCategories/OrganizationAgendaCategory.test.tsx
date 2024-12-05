@@ -5,6 +5,7 @@ import {
   waitFor,
   act,
   waitForElementToBeRemoved,
+  fireEvent,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import 'jest-localstorage-mock';
@@ -24,7 +25,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import OrganizationAgendaCategory from './OrganizationAgendaCategory';
 import {
   MOCKS_ERROR_AGENDA_ITEM_CATEGORY_LIST_QUERY,
-  MOCKS_ERROR_MUTATION,
+  // MOCKS_ERROR_MUTATION,
 } from './OrganizationAgendaCategoryErrorMocks';
 import { MOCKS } from './OrganizationAgendaCategoryMocks';
 
@@ -53,7 +54,7 @@ const link2 = new StaticMockLink(
   MOCKS_ERROR_AGENDA_ITEM_CATEGORY_LIST_QUERY,
   true,
 );
-const link3 = new StaticMockLink(MOCKS_ERROR_MUTATION, true);
+// const link3 = new StaticMockLink(MOCKS_ERROR_MUTATION, true);
 
 const translations = {
   ...JSON.parse(
@@ -165,7 +166,8 @@ describe('Testing Agenda Categories Component', () => {
     await waitFor(() => {
       expect(screen.getByTestId('createAgendaCategoryBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('createAgendaCategoryBtn'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('createAgendaCategoryBtn'));
 
     await waitFor(() => {
       return expect(
@@ -173,16 +175,16 @@ describe('Testing Agenda Categories Component', () => {
       ).resolves.toBeInTheDocument();
     });
 
-    userEvent.type(
+    await user.type(
       screen.getByPlaceholderText(translations.name),
       formData.name,
     );
 
-    userEvent.type(
+    await user.type(
       screen.getByPlaceholderText(translations.description),
       formData.description,
     );
-    userEvent.click(screen.getByTestId('createAgendaCategoryFormSubmitBtn'));
+    fireEvent.submit(screen.getByTestId('createAgendaCategoryFormSubmitBtn'));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(

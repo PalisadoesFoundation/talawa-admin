@@ -628,7 +628,11 @@ describe('Testing Advertisement Register Component', () => {
       type: 'video/mp4',
     });
     const mediaInput = screen.getByTestId('advertisementMedia');
-    userEvent.upload(mediaInput, mediaFile);
+    fireEvent.change(mediaInput, {
+      target: {
+        files: [mediaFile],
+      },
+    });
 
     const mediaPreview = await screen.findByTestId('mediaPreview');
     expect(mediaPreview).toBeInTheDocument();

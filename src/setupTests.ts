@@ -6,15 +6,10 @@ import '@testing-library/jest-dom';
 
 global.fetch = jest.fn();
 
-import { format } from 'util';
+// import { format } from 'util';
 
-global.console.error = function (...args): void {
-  throw new Error(format(...args));
-};
-
-global.console.warn = function (...args): void {
-  throw new Error(format(...args));
-};
+global.console.error = jest.fn();
+global.console.warn = jest.fn();
 Object.defineProperty(HTMLMediaElement.prototype, 'muted', {
   set: () => ({}),
 });

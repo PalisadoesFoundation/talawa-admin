@@ -148,13 +148,14 @@ describe('Testing Actions Screen', () => {
 
     const searchToggle = await screen.findByTestId('searchByToggle');
     expect(searchToggle).toBeInTheDocument();
-    userEvent.click(searchToggle);
+    const user = userEvent.setup();
+    await user.click(searchToggle);
 
     const searchByAssignee = await screen.findByTestId('assignee');
     expect(searchByAssignee).toBeInTheDocument();
-    userEvent.click(searchByAssignee);
+    await user.click(searchByAssignee);
 
-    userEvent.type(searchInput, '1');
+    await user.type(searchInput, '1');
     await debounceWait();
 
     const assigneeName = await screen.findAllByTestId('assigneeName');
@@ -168,14 +169,15 @@ describe('Testing Actions Screen', () => {
 
     const searchToggle = await screen.findByTestId('searchByToggle');
     expect(searchToggle).toBeInTheDocument();
-    userEvent.click(searchToggle);
+    const user = userEvent.setup();
+    await user.click(searchToggle);
 
     const searchByCategory = await screen.findByTestId('category');
     expect(searchByCategory).toBeInTheDocument();
-    userEvent.click(searchByCategory);
+    await user.click(searchByCategory);
 
     // Search by name on press of ENTER
-    userEvent.type(searchInput, '1');
+    await user.type(searchInput, '1');
     await debounceWait();
 
     const assigneeName = await screen.findAllByTestId('assigneeName');
@@ -203,19 +205,21 @@ describe('Testing Actions Screen', () => {
     renderActions(link1);
 
     const checkbox = await screen.findAllByTestId('statusCheckbox');
-    userEvent.click(checkbox[0]);
+    const user = userEvent.setup();
+    await user.click(checkbox[0]);
 
     expect(await screen.findByText(t.actionItemStatus)).toBeInTheDocument();
-    userEvent.click(await screen.findByTestId('modalCloseBtn'));
+    await user.click(await screen.findByTestId('modalCloseBtn'));
   });
 
   it('Open and close ItemViewModal', async () => {
     renderActions(link1);
 
     const viewItemBtn = await screen.findAllByTestId('viewItemBtn');
-    userEvent.click(viewItemBtn[0]);
+    const user = userEvent.setup();
+    await user.click(viewItemBtn[0]);
 
     expect(await screen.findByText(t.actionItemDetails)).toBeInTheDocument();
-    userEvent.click(await screen.findByTestId('modalCloseBtn'));
+    await user.click(await screen.findByTestId('modalCloseBtn'));
   });
 });

@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  render,
-  screen,
-  waitFor,
-  act,
-  waitForElementToBeRemoved,
-} from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import 'jest-localstorage-mock';
 import { MockedProvider } from '@apollo/client/testing';
@@ -43,8 +37,11 @@ jest.mock('react-router-dom', () => ({
 
 //temporarily fixes react-beautiful-dnd droppable method's depreciation error
 //needs to be fixed in React 19
-jest.spyOn(console, 'error').mockImplementation((message) => {
-  if (message.includes('Support for defaultProps will be removed')) {
+jest.spyOn(console, 'error').mockImplementation((message: unknown) => {
+  if (
+    typeof message === 'string' &&
+    message.includes('Support for defaultProps will be removed')
+  ) {
     return;
   }
   console.error(message);
@@ -143,17 +140,20 @@ describe('Testing Agenda Items Components', () => {
     await waitFor(() => {
       expect(screen.getByTestId('createAgendaItemBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('createAgendaItemBtn'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('createAgendaItemBtn'));
 
     await waitFor(() => {
       return expect(
         screen.findByTestId('createAgendaItemModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('createAgendaItemModalCloseBtn'));
+    await user.click(screen.getByTestId('createAgendaItemModalCloseBtn'));
 
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('createAgendaItemModalCloseBtn'),
+    await waitFor(() =>
+      expect(
+        screen.queryByTestId('createAgendaItemModalCloseBtn'),
+      ).not.toBeInTheDocument(),
     );
   });
   test('creates new agenda item', async () => {

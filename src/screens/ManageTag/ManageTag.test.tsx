@@ -105,13 +105,11 @@ describe('Manage Tag Page', () => {
   });
 
   test('Component loads correctly', async () => {
-    const { getByText } = renderManageTag(link);
+    const { findByText } = await act(() => renderManageTag(link));
 
     await wait();
 
-    await waitFor(() => {
-      expect(getByText(translations.addPeopleToTag)).toBeInTheDocument();
-    });
+    expect(await findByText(translations.addPeopleToTag)).toBeInTheDocument();
   });
 
   test('renders error component on unsuccessful userTag assigned members query', async () => {
@@ -125,19 +123,19 @@ describe('Manage Tag Page', () => {
   });
 
   test('opens and closes the add people to tag modal', async () => {
-    renderManageTag(link);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('addPeopleToTagBtn')).toBeInTheDocument();
+    await act(async () => {
+      renderManageTag(link);
     });
 
-    userEvent.click(screen.getByTestId('addPeopleToTagBtn'));
+    expect(await screen.findByTestId('addPeopleToTagBtn')).toBeInTheDocument();
 
-    await waitFor(() => {
-      expect(screen.getByTestId('addPeopleToTagModal')).toBeInTheDocument();
-    });
+    userEvent.click(await screen.findByTestId('addPeopleToTagBtn'));
 
-    userEvent.click(screen.getByTestId('closeAddPeopleToTagModal'));
+    expect(
+      await screen.findByTestId('addPeopleToTagModal'),
+    ).toBeInTheDocument();
+
+    userEvent.click(await screen.findByTestId('closeAddPeopleToTagModal'));
 
     await waitFor(() => {
       expect(
@@ -147,7 +145,9 @@ describe('Manage Tag Page', () => {
   });
 
   test('opens and closes the unassign tag modal', async () => {
-    renderManageTag(link);
+    await act(async () => {
+      renderManageTag(link);
+    });
 
     await wait();
 
@@ -169,7 +169,9 @@ describe('Manage Tag Page', () => {
   });
 
   test('opens and closes the assignToTags modal', async () => {
-    renderManageTag(link);
+    await act(async () => {
+      renderManageTag(link);
+    });
 
     // Wait for the assignToTags button to be present
     await waitFor(() => {
@@ -194,7 +196,9 @@ describe('Manage Tag Page', () => {
   });
 
   test('opens and closes the removeFromTags modal', async () => {
-    renderManageTag(link);
+    await act(async () => {
+      renderManageTag(link);
+    });
 
     // Wait for the removeFromTags button to be present
     await waitFor(() => {
@@ -219,7 +223,9 @@ describe('Manage Tag Page', () => {
   });
 
   test('opens and closes the edit tag modal', async () => {
-    renderManageTag(link);
+    await act(async () => {
+      renderManageTag(link);
+    });
 
     await wait();
 
@@ -241,7 +247,9 @@ describe('Manage Tag Page', () => {
   });
 
   test('opens and closes the remove tag modal', async () => {
-    renderManageTag(link);
+    await act(async () => {
+      renderManageTag(link);
+    });
 
     await wait();
 
@@ -263,7 +271,9 @@ describe('Manage Tag Page', () => {
   });
 
   test("navigates to the member's profile after clicking the view option", async () => {
-    renderManageTag(link);
+    await act(async () => {
+      renderManageTag(link);
+    });
 
     await wait();
 
@@ -278,7 +288,9 @@ describe('Manage Tag Page', () => {
   });
 
   test('navigates to the subTags screen after clicking the subTags option', async () => {
-    renderManageTag(link);
+    await act(async () => {
+      renderManageTag(link);
+    });
 
     await wait();
 
@@ -293,7 +305,9 @@ describe('Manage Tag Page', () => {
   });
 
   test('navigates to the manageTag screen after clicking a tag in the breadcrumbs', async () => {
-    renderManageTag(link);
+    await act(async () => {
+      renderManageTag(link);
+    });
 
     await wait();
 
@@ -310,7 +324,9 @@ describe('Manage Tag Page', () => {
   });
 
   test('navigates to organization tags screen screen after clicking tha all tags option in the breadcrumbs', async () => {
-    renderManageTag(link);
+    await act(async () => {
+      renderManageTag(link);
+    });
 
     await wait();
 
@@ -325,7 +341,9 @@ describe('Manage Tag Page', () => {
   });
 
   test('searchs for tags where the name matches the provided search input', async () => {
-    renderManageTag(link);
+    await act(async () => {
+      renderManageTag(link);
+    });
 
     await wait();
 
@@ -346,7 +364,9 @@ describe('Manage Tag Page', () => {
   });
 
   test('fetches the tags by the sort order, i.e. latest or oldest first', async () => {
-    renderManageTag(link);
+    await act(async () => {
+      renderManageTag(link);
+    });
 
     await wait();
 
@@ -403,7 +423,7 @@ describe('Manage Tag Page', () => {
   });
 
   test('Fetches more assigned members with infinite scroll', async () => {
-    const { getByText } = renderManageTag(link);
+    const { getByText } = await act(() => renderManageTag(link));
 
     await wait();
 
@@ -434,7 +454,9 @@ describe('Manage Tag Page', () => {
   });
 
   test('unassigns a tag from a member', async () => {
-    renderManageTag(link);
+    await act(async () => {
+      renderManageTag(link);
+    });
 
     await wait();
 
@@ -443,7 +465,7 @@ describe('Manage Tag Page', () => {
     });
     userEvent.click(screen.getAllByTestId('unassignTagBtn')[0]);
 
-    userEvent.click(screen.getByTestId('unassignTagModalSubmitBtn'));
+    userEvent.click(await screen.findByTestId('unassignTagModalSubmitBtn'));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(
@@ -453,7 +475,9 @@ describe('Manage Tag Page', () => {
   });
 
   test('successfully edits the tag name', async () => {
-    renderManageTag(link);
+    await act(async () => {
+      renderManageTag(link);
+    });
 
     await wait();
 
@@ -462,7 +486,7 @@ describe('Manage Tag Page', () => {
     });
     userEvent.click(screen.getByTestId('editUserTag'));
 
-    userEvent.click(screen.getByTestId('editTagSubmitBtn'));
+    userEvent.click(await screen.findByTestId('editTagSubmitBtn'));
 
     await waitFor(() => {
       expect(toast.info).toHaveBeenCalledWith(translations.changeNameToEdit);
@@ -483,7 +507,9 @@ describe('Manage Tag Page', () => {
   });
 
   test('successfully removes the tag and redirects to orgTags page', async () => {
-    renderManageTag(link);
+    await act(async () => {
+      renderManageTag(link);
+    });
 
     await wait();
 
@@ -492,7 +518,7 @@ describe('Manage Tag Page', () => {
     });
     userEvent.click(screen.getByTestId('removeTag'));
 
-    userEvent.click(screen.getByTestId('removeUserTagSubmitBtn'));
+    userEvent.click(await screen.findByTestId('removeUserTagSubmitBtn'));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(
@@ -500,8 +526,8 @@ describe('Manage Tag Page', () => {
       );
     });
 
-    await waitFor(() => {
-      expect(screen.getByTestId('organizationTagsScreen')).toBeInTheDocument();
-    });
+    expect(
+      await screen.findByTestId('organizationTagsScreen'),
+    ).toBeInTheDocument();
   });
 });

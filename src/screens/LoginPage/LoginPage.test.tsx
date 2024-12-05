@@ -628,10 +628,11 @@ describe('Testing Login Page Screen', () => {
     // password should be hidden
     expect(input.type).toBe('password');
     // click the toggle button to show password
-    userEvent.click(toggleText);
+    const user = userEvent.setup();
+    await user.click(toggleText);
     expect(input.type).toBe('text');
     // click the toggle button to hide password
-    userEvent.click(toggleText);
+    await user.click(toggleText);
     expect(input.type).toBe('password');
 
     await wait();
@@ -659,10 +660,11 @@ describe('Testing Login Page Screen', () => {
     // password should be hidden
     expect(input.type).toBe('password');
     // click the toggle button to show password
-    userEvent.click(toggleText);
+    const user = userEvent.setup();
+    await user.click(toggleText);
     expect(input.type).toBe('text');
     // click the toggle button to hide password
-    userEvent.click(toggleText);
+    await user.click(toggleText);
     expect(input.type).toBe('password');
 
     await wait();
@@ -690,10 +692,11 @@ describe('Testing Login Page Screen', () => {
     // password should be hidden
     expect(input.type).toBe('password');
     // click the toggle button to show password
-    userEvent.click(toggleText);
+    const user = userEvent.setup();
+    await user.click(toggleText);
     expect(input.type).toBe('text');
     // click the toggle button to hide password
-    userEvent.click(toggleText);
+    await user.click(toggleText);
     expect(input.type).toBe('password');
 
     await wait();
@@ -734,9 +737,10 @@ describe('Testing Login Page Screen', () => {
     );
     await wait();
 
-    userEvent.click(screen.getByTestId('goToRegisterPortion'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('goToRegisterPortion'));
 
-    userEvent.type(screen.getByPlaceholderText('Password'), password.password);
+    await user.type(screen.getByPlaceholderText('Password'), password.password);
 
     expect(screen.getByTestId('passwordField')).toHaveFocus();
 
@@ -763,9 +767,10 @@ describe('Testing Login Page Screen', () => {
     );
     await wait();
 
-    userEvent.click(screen.getByTestId('goToRegisterPortion'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('goToRegisterPortion'));
 
-    userEvent.type(screen.getByPlaceholderText('Password'), password.password);
+    await user.type(screen.getByPlaceholderText('Password'), password.password);
 
     expect(screen.getByTestId('passwordField')).toHaveFocus();
 
@@ -792,11 +797,12 @@ describe('Testing Login Page Screen', () => {
     );
     await wait();
 
-    userEvent.click(screen.getByTestId('goToRegisterPortion'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('goToRegisterPortion'));
 
     expect(screen.getByPlaceholderText('Password')).not.toHaveFocus();
 
-    userEvent.type(screen.getByPlaceholderText('Password'), password.password);
+    await user.type(screen.getByPlaceholderText('Password'), password.password);
 
     expect(password.password.length).toBeLessThan(8);
 
@@ -821,13 +827,14 @@ describe('Testing Login Page Screen', () => {
     );
     await wait();
 
-    userEvent.click(screen.getByTestId('goToRegisterPortion'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('goToRegisterPortion'));
 
     await wait();
 
     expect(screen.getByPlaceholderText('Password')).not.toHaveFocus();
 
-    userEvent.type(screen.getByPlaceholderText('Password'), password.password);
+    await user.type(screen.getByPlaceholderText('Password'), password.password);
 
     expect(password.password.length).toBeGreaterThanOrEqual(8);
 
@@ -851,7 +858,8 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
     const userLink = screen.getByText(/User/i);
-    userEvent.click(userLink);
+    const user = userEvent.setup();
+    await user.click(userLink);
     await wait();
     expect(screen.getByText(/User Login/i)).toBeInTheDocument();
     expect(window.location).toBeAt('/user/organizations');

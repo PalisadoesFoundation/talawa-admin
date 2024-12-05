@@ -42,15 +42,12 @@ describe('DynamicDropDown component', () => {
     expect(dropdownButton).toHaveTextContent('Label 2');
 
     // Open the dropdown menu
-    await act(async () => {
-      userEvent.click(dropdownButton);
-    });
+    const user = userEvent.setup();
+    await user.click(dropdownButton);
 
     // Select the first option in the dropdown
     const optionElement = screen.getByTestId('change-fieldname-btn-TEST');
-    await act(async () => {
-      userEvent.click(optionElement);
-    });
+    await user.click(optionElement);
 
     // Verify that the setFormData function was called with the correct arguments
     expect(setFormData).toHaveBeenCalledWith({ fieldName: 'TEST' });
@@ -83,14 +80,11 @@ describe('DynamicDropDown component', () => {
     );
 
     const dropdownButton = screen.getByTestId('fieldname-dropdown-btn');
-    await act(async () => {
-      userEvent.click(dropdownButton);
-    });
+    const user = userEvent.setup();
+    await user.click(dropdownButton);
 
     const optionElement = screen.getByTestId('change-fieldname-btn-value2');
-    await act(async () => {
-      userEvent.click(optionElement);
-    });
+    await user.click(optionElement);
 
     expect(customHandleChange).toHaveBeenCalledTimes(1);
     expect(customHandleChange).toHaveBeenCalledWith(
@@ -125,9 +119,8 @@ describe('DynamicDropDown component', () => {
 
     // Open dropdown
     const dropdownButton = screen.getByTestId('fieldname-dropdown-btn');
-    await act(async () => {
-      userEvent.click(dropdownButton);
-    });
+    const user = userEvent.setup();
+    await user.click(dropdownButton);
 
     // Get dropdown menu
     const dropdownMenu = screen.getByTestId('fieldname-dropdown-menu');

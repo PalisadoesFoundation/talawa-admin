@@ -102,7 +102,8 @@ describe('Testing User Password Update', () => {
       </MockedProvider>,
     );
 
-    userEvent.click(screen.getByText(/Save Changes/i));
+    const user = userEvent.setup();
+    await user.click(screen.getByText(/Save Changes/i));
 
     await wait();
     expect(mockToast.error).toHaveBeenCalledWith(`Password can't be empty`);
@@ -118,21 +119,21 @@ describe('Testing User Password Update', () => {
     );
 
     await wait();
-
-    userEvent.type(
+    const user = userEvent.setup();
+    await user.type(
       screen.getByPlaceholderText(/Previous Password/i),
       formData.previousPassword,
     );
-    userEvent.type(
+    await user.type(
       screen.getAllByPlaceholderText(/New Password/i)[0],
       formData.wrongPassword,
     );
-    userEvent.type(
+    await user.type(
       screen.getByPlaceholderText(/Confirm New Password/i),
       formData.confirmNewPassword,
     );
 
-    userEvent.click(screen.getByText(/Save Changes/i));
+    await user.click(screen.getByText(/Save Changes/i));
 
     expect(screen.getByText(/Cancel/i)).toBeTruthy();
     await wait();

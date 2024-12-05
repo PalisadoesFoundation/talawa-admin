@@ -304,8 +304,9 @@ describe('Testing Donate Screen [User Portal]', () => {
 
     await wait();
 
-    userEvent.type(screen.getByTestId('donationAmount'), '0.5');
-    userEvent.click(screen.getByTestId('donateBtn'));
+    const user = userEvent.setup();
+    await user.type(screen.getByTestId('donationAmount'), '0.5');
+    await user.click(screen.getByTestId('donateBtn'));
 
     await wait();
 
@@ -329,8 +330,9 @@ describe('Testing Donate Screen [User Portal]', () => {
 
     await wait();
 
-    userEvent.type(screen.getByTestId('donationAmount'), '10000001');
-    userEvent.click(screen.getByTestId('donateBtn'));
+    const user = userEvent.setup();
+    await user.type(screen.getByTestId('donationAmount'), '10000001');
+    await user.click(screen.getByTestId('donateBtn'));
 
     await wait();
 

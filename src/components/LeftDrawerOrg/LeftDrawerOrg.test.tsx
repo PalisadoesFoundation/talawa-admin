@@ -367,7 +367,8 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
       </MockedProvider>,
     );
     await wait();
-    userEvent.click(screen.getByText('Dashboard'));
+    const user = userEvent.setup();
+    await user.click(screen.getByText('Dashboard'));
     expect(global.window.location.pathname).toContain('/orgdash/123');
   });
 

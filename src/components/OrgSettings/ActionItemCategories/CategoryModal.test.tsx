@@ -122,7 +122,8 @@ describe('Testing Action Item Category Modal', () => {
     renderCategoryModal(link1, categoryProps[1]);
     const isDisabledSwitch = screen.getByTestId('isDisabledSwitch');
     expect(isDisabledSwitch).not.toBeChecked();
-    userEvent.click(isDisabledSwitch);
+    const user = userEvent.setup();
+    await user.click(isDisabledSwitch);
     expect(isDisabledSwitch).toBeChecked();
   });
 

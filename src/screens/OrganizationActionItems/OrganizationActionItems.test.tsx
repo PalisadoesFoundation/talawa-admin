@@ -217,12 +217,13 @@ describe('Testing Organization Action Items Screen', () => {
 
     const addItemBtn = await screen.findByTestId('createActionItemBtn');
     expect(addItemBtn).toBeInTheDocument();
-    userEvent.click(addItemBtn);
+    const user = userEvent.setup();
+    await user.click(addItemBtn);
 
     await waitFor(() =>
       expect(screen.getAllByText(t.createActionItem)).toHaveLength(2),
     );
-    userEvent.click(screen.getByTestId('modalCloseBtn'));
+    await user.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() =>
       expect(screen.queryByTestId('modalCloseBtn')).toBeNull(),
     );
@@ -233,12 +234,13 @@ describe('Testing Organization Action Items Screen', () => {
 
     const viewItemBtn = await screen.findByTestId('viewItemBtn1');
     expect(viewItemBtn).toBeInTheDocument();
-    userEvent.click(viewItemBtn);
+    const user = userEvent.setup();
+    await user.click(viewItemBtn);
 
     await waitFor(() =>
       expect(screen.getByText(t.actionItemDetails)).toBeInTheDocument(),
     );
-    userEvent.click(screen.getByTestId('modalCloseBtn'));
+    await user.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() =>
       expect(screen.queryByTestId('modalCloseBtn')).toBeNull(),
     );
@@ -249,12 +251,13 @@ describe('Testing Organization Action Items Screen', () => {
 
     const editItemBtn = await screen.findByTestId('editItemBtn1');
     await waitFor(() => expect(editItemBtn).toBeInTheDocument());
-    userEvent.click(editItemBtn);
+    const user = userEvent.setup();
+    await user.click(editItemBtn);
 
     await waitFor(() =>
       expect(screen.getAllByText(t.updateActionItem)).toHaveLength(2),
     );
-    userEvent.click(screen.getByTestId('modalCloseBtn'));
+    await user.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() =>
       expect(screen.queryByTestId('modalCloseBtn')).toBeNull(),
     );
@@ -265,12 +268,13 @@ describe('Testing Organization Action Items Screen', () => {
 
     const deleteItemBtn = await screen.findByTestId('deleteItemBtn1');
     expect(deleteItemBtn).toBeInTheDocument();
-    userEvent.click(deleteItemBtn);
+    const user = userEvent.setup();
+    await user.click(deleteItemBtn);
 
     await waitFor(() =>
       expect(screen.getByText(t.deleteActionItem)).toBeInTheDocument(),
     );
-    userEvent.click(screen.getByTestId('modalCloseBtn'));
+    await user.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() =>
       expect(screen.queryByTestId('modalCloseBtn')).toBeNull(),
     );
@@ -281,12 +285,13 @@ describe('Testing Organization Action Items Screen', () => {
 
     const statusCheckbox = await screen.findByTestId('statusCheckbox1');
     expect(statusCheckbox).toBeInTheDocument();
-    userEvent.click(statusCheckbox);
+    const user = userEvent.setup();
+    await user.click(statusCheckbox);
 
     await waitFor(() =>
       expect(screen.getByText(t.actionItemStatus)).toBeInTheDocument(),
     );
-    userEvent.click(screen.getByTestId('modalCloseBtn'));
+    await user.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() =>
       expect(screen.queryByTestId('modalCloseBtn')).toBeNull(),
     );
@@ -298,17 +303,18 @@ describe('Testing Organization Action Items Screen', () => {
     const searchByToggle = await screen.findByTestId('searchByToggle');
     expect(searchByToggle).toBeInTheDocument();
 
-    userEvent.click(searchByToggle);
+    const user = userEvent.setup();
+    await user.click(searchByToggle);
     await waitFor(() => {
       expect(screen.getByTestId('assignee')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('assignee'));
+    await user.click(screen.getByTestId('assignee'));
 
     const searchInput = await screen.findByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
 
-    userEvent.type(searchInput, 'John');
+    await user.type(searchInput, 'John');
     await debounceWait();
 
     await waitFor(() => {
@@ -323,17 +329,18 @@ describe('Testing Organization Action Items Screen', () => {
     const searchByToggle = await screen.findByTestId('searchByToggle');
     expect(searchByToggle).toBeInTheDocument();
 
-    userEvent.click(searchByToggle);
+    const user = userEvent.setup();
+    await user.click(searchByToggle);
     await waitFor(() => {
       expect(screen.getByTestId('category')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('category'));
+    await user.click(screen.getByTestId('category'));
 
     const searchInput = await screen.findByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
 
-    userEvent.type(searchInput, 'Category 1');
+    await user.type(searchInput, 'Category 1');
     await debounceWait();
 
     await waitFor(() => {

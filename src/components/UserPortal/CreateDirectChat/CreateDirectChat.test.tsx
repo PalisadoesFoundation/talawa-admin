@@ -20,6 +20,7 @@ import {
 } from 'GraphQl/Mutations/OrganizationMutations';
 import { CHATS_LIST, CHAT_BY_ID } from 'GraphQl/Queries/PlugInQueries';
 import useLocalStorage from 'utils/useLocalstorage';
+import userEvent from '@testing-library/user-event';
 
 const { setItem } = useLocalStorage();
 
@@ -1421,10 +1422,12 @@ describe('Testing Create Direct Chat Modal [User Portal]', () => {
 
     const dropdown = await screen.findByTestId('dropdown');
     expect(dropdown).toBeInTheDocument();
-    fireEvent.click(dropdown);
+
+    const user = userEvent.setup();
+    await user.click(dropdown);
     const newDirectChatBtn = await screen.findByTestId('newDirectChat');
     expect(newDirectChatBtn).toBeInTheDocument();
-    fireEvent.click(newDirectChatBtn);
+    await user.click(newDirectChatBtn);
 
     const submitBtn = await screen.findByTestId('submitBtn');
     expect(submitBtn).toBeInTheDocument();
@@ -1434,16 +1437,16 @@ describe('Testing Create Direct Chat Modal [User Portal]', () => {
     )) as HTMLInputElement;
     expect(searchInput).toBeInTheDocument();
 
-    fireEvent.change(searchInput, { target: { value: 'Disha' } });
+    await user.type(searchInput, 'Disha');
 
     expect(searchInput.value).toBe('Disha');
 
-    fireEvent.click(submitBtn);
+    await user.click(submitBtn);
 
     const closeButton = screen.getByRole('button', { name: /close/i });
     expect(closeButton).toBeInTheDocument();
 
-    fireEvent.click(closeButton);
+    await user.click(closeButton);
   });
 
   test('create new direct chat', async () => {

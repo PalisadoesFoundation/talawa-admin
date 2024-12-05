@@ -108,19 +108,20 @@ describe('Volunteer Management', () => {
     renderVolunteerManagement();
 
     const invitationsBtn = screen.getByTestId('invitationsBtn');
-    userEvent.click(invitationsBtn);
+    const user = userEvent.setup();
+    await user.click(invitationsBtn);
 
     const invitationsTab = screen.getByTestId('invitationsTab');
     expect(invitationsTab).toBeInTheDocument();
 
     const actionsBtn = screen.getByTestId('actionsBtn');
-    userEvent.click(actionsBtn);
+    await user.click(actionsBtn);
 
     const actionsTab = screen.getByTestId('actionsTab');
     expect(actionsTab).toBeInTheDocument();
 
     const groupsBtn = screen.getByTestId('groupsBtn');
-    userEvent.click(groupsBtn);
+    await user.click(groupsBtn);
 
     const groupsTab = screen.getByTestId('groupsTab');
     expect(groupsTab).toBeInTheDocument();

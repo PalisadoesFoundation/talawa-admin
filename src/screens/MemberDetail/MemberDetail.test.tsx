@@ -156,45 +156,50 @@ describe('MemberDetail', () => {
       target: { value: formData.birthDate },
     });
 
-    userEvent.clear(screen.getByPlaceholderText(/First Name/i));
-    userEvent.type(
+    const user = userEvent.setup();
+
+    await user.clear(screen.getByPlaceholderText(/First Name/i));
+    await user.type(
       screen.getByPlaceholderText(/First Name/i),
       formData.firstName,
     );
 
-    userEvent.clear(screen.getByPlaceholderText(/Last Name/i));
-    userEvent.type(
+    await user.clear(screen.getByPlaceholderText(/Last Name/i));
+    await user.type(
       screen.getByPlaceholderText(/Last Name/i),
       formData.lastName,
     );
 
-    userEvent.clear(screen.getByPlaceholderText(/Address/i));
-    userEvent.type(screen.getByPlaceholderText(/Address/i), formData.address);
+    await user.clear(screen.getByPlaceholderText(/Address/i));
+    await user.type(screen.getByPlaceholderText(/Address/i), formData.address);
 
-    userEvent.clear(screen.getByPlaceholderText(/Country Code/i));
-    userEvent.type(
+    await user.clear(screen.getByPlaceholderText(/Country Code/i));
+    await user.type(
       screen.getByPlaceholderText(/Country Code/i),
       formData.countryCode,
     );
 
-    userEvent.clear(screen.getByPlaceholderText(/State/i));
-    userEvent.type(screen.getByPlaceholderText(/State/i), formData.state);
+    await user.clear(screen.getByPlaceholderText(/State/i));
+    await user.type(screen.getByPlaceholderText(/State/i), formData.state);
 
-    userEvent.clear(screen.getByPlaceholderText(/City/i));
-    userEvent.type(screen.getByPlaceholderText(/City/i), formData.city);
+    await user.clear(screen.getByPlaceholderText(/City/i));
+    await user.type(screen.getByPlaceholderText(/City/i), formData.city);
 
-    userEvent.clear(screen.getByPlaceholderText(/Email/i));
-    userEvent.type(screen.getByPlaceholderText(/Email/i), formData.email);
+    await user.clear(screen.getByPlaceholderText(/Email/i));
+    await user.type(screen.getByPlaceholderText(/Email/i), formData.email);
 
-    userEvent.clear(screen.getByPlaceholderText(/Phone/i));
-    userEvent.type(screen.getByPlaceholderText(/Phone/i), formData.phoneNumber);
+    await user.clear(screen.getByPlaceholderText(/Phone/i));
+    await user.type(
+      screen.getByPlaceholderText(/Phone/i),
+      formData.phoneNumber,
+    );
 
     // userEvent.click(screen.getByPlaceholderText(/pluginCreationAllowed/i));
     // userEvent.selectOptions(screen.getByTestId('applangcode'), 'Français');
     // userEvent.upload(screen.getByLabelText(/Display Image:/i), formData.image);
     await wait();
 
-    userEvent.click(screen.getByText(/Save Changes/i));
+    await user.click(screen.getByText(/Save Changes/i));
 
     expect(screen.getByPlaceholderText(/First Name/i)).toHaveValue(
       formData.firstName,
@@ -254,10 +259,11 @@ describe('MemberDetail', () => {
       expect(screen.getByPlaceholderText(/Address/i)).toBeInTheDocument();
     });
 
-    userEvent.type(screen.getByPlaceholderText(/Address/i), 'random');
-    userEvent.type(screen.getByPlaceholderText(/State/i), 'random');
+    const user = userEvent.setup();
+    await user.type(screen.getByPlaceholderText(/Address/i), 'random');
+    await user.type(screen.getByPlaceholderText(/State/i), 'random');
 
-    userEvent.click(screen.getByTestId('resetChangesBtn'));
+    await user.click(screen.getByTestId('resetChangesBtn'));
     await wait();
     expect(screen.getByPlaceholderText(/First Name/i)).toHaveValue('Aditya');
     expect(screen.getByPlaceholderText(/Last Name/i)).toHaveValue('Agarwal');
@@ -387,9 +393,10 @@ describe('MemberDetail', () => {
     await waitFor(() => {
       expect(screen.getAllByTestId('unassignTagBtn')[0]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('unassignTagBtn')[0]);
+    const user = userEvent.setup();
+    await user.click(screen.getAllByTestId('unassignTagBtn')[0]);
 
-    userEvent.click(screen.getByTestId('unassignTagModalSubmitBtn'));
+    await user.click(screen.getByTestId('unassignTagModalSubmitBtn'));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(
