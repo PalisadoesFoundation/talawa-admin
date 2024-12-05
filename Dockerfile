@@ -1,15 +1,22 @@
-FROM node:20.10.0 AS build
-
-WORKDIR /usr/src/app
+# Step 1: Build Stage
+FROM node:20.10.0-alpine AS builder
+WORKDIR /talawa-admin
 
 COPY package*.json ./
-
 RUN npm install
 
 COPY . .
 
-RUN npm run build
+ENV NODE_ENV=production
 
-EXPOSE 4321
+RUN yarn build
 
-CMD ["npm", "run", "serve"]
+#Step 2: Production
+FROM nginx:1.27.3-alpine AS production
+
+ENV NODE_ENV=production
+
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=builder /talawa-admin/build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
