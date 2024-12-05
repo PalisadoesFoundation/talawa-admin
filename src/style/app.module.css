@@ -239,7 +239,7 @@
 .editButton {
   background-color: var(--search-button-bg);
   border-color: var(--search-button-border);
-  color: #555555;
+  color: var(--high-contrast-text);
   margin-left: 2;
 }
 
@@ -247,7 +247,7 @@
   margin-bottom: 10px;
   background-color: var(--search-button-bg);
   border-color: var(--grey-bg-color);
-  color: #555555;
+  color: var(--high-contrast-text);
 }
 
 .addButton:hover {
@@ -448,7 +448,7 @@ hr {
   flex-direction: row;
   font-weight: 900;
   font-size: 16px;
-  color: rgb(80, 80, 80);
+  color: var(--high-contrast-text);
 }
 
 .rankings {
