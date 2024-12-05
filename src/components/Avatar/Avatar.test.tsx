@@ -48,5 +48,3 @@ describe('Avatar component', () => {
     expect(avatarElement.getAttribute('data-testid')).toBe(testDataTestId);
   });
 });
-
-// test
