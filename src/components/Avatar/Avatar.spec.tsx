@@ -12,6 +12,16 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 const link = new StaticMockLink([], true);
 
+/**
+ * Avatar.spec.tsx
+ * description:  Test suite for the Avatar component.
+ * This file contains all the unit tests for the Avatar component, covering
+ * different test cases like rendering with props, handling custom styles,
+ * verifying behavior for invalid/valid sizes, and handling undefined names.
+ *
+
+ */
+
 vi.mock('state/store', () => ({
   store: {
     getState: vi.fn(() => ({
