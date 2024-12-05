@@ -10,11 +10,8 @@ import { store } from 'state/store';
 import Avatar from './Avatar';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-
-// Setup mock for StaticMockLink
 const link = new StaticMockLink([], true);
 
-// Mock store and i18nForTest
 vi.mock('state/store', () => ({
   store: {
     getState: vi.fn(() => ({
