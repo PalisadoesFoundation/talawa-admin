@@ -44,7 +44,7 @@ const Avatar = ({
         new URL(customUrl);
         return customUrl;
       } catch {
-        console.warn('Invalid custom URL provided to Avatar component');
+        // console.warn('Invalid custom URL provided to Avatar component');
       }
     }
 
