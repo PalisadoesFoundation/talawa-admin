@@ -3,6 +3,7 @@ import { Template } from '@pdfme/common';
 export const tagTemplate: Template = {
   schemas: [
     {
+      // @ts-ignore:
       name: {
         type: 'text',
         position: { x: 14.91, y: 27.03 },
