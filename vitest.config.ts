@@ -1,4 +1,5 @@
-import { defineConfig } from 'vite';
+
+import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import tsconfigPaths from 'vite-tsconfig-paths';
@@ -15,6 +16,7 @@ export default defineConfig({
     include: ['src/**/*.spec.{js,jsx,ts,tsx}'],
     globals: true,
     environment: 'jsdom',
+    setupFiles: 'vitest.setup.ts',
     coverage: {
       enabled: true,
       provider: 'istanbul',
