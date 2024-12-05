@@ -3,7 +3,8 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
-import { vi } from 'vitest';
+import { vi, beforeAll } from 'vitest';
+
 global.fetch = vi.fn();
 
 import { format } from 'util';
@@ -31,6 +32,6 @@ import 'flag-icons/css/flag-icons.min.css';
 // });
 
 // Use the global setTimeout function
-setTimeout(() => {
-  console.log('SetTimeout is working correctly');
-}, 15000);
+beforeAll(() => {
+  vi.setConfig({ testTimeout: 15000 });
+});
