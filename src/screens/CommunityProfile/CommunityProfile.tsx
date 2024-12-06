@@ -90,7 +90,7 @@ const CommunityProfile = (): JSX.Element => {
   React.useEffect(() => {
     const preLoginData: PreLoginImageryDataType | undefined =
       data?.getCommunityData;
-    preLoginData &&
+    if (preLoginData) {
       setProfileVariable({
         name: preLoginData.name ?? '',
         websiteLink: preLoginData.websiteLink ?? '',
@@ -104,6 +104,7 @@ const CommunityProfile = (): JSX.Element => {
         reddit: preLoginData.socialMediaUrls.reddit ?? '',
         slack: preLoginData.socialMediaUrls.slack ?? '',
       });
+    }
   }, [data]);
 
   /**

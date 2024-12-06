@@ -1,6 +1,6 @@
 import EventListCard from 'components/EventListCard/EventListCard';
 import dayjs from 'dayjs';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Button from 'react-bootstrap/Button';
 import styles from './EventCalendar.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
@@ -135,7 +135,19 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       setCurrentMonth(currentMonth - 1);
     }
   };
-
+  const filteredHolidays = useMemo(
+    () =>
+      holidays?.filter((holiday) => {
+        try {
+          return dayjs(holiday.date, 'MM-DD').month() === currentMonth;
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (e) {
+          console.error(`Invalid date format for holiday: ${holiday.name}`);
+          return false;
+        }
+      }),
+    [holidays, currentMonth],
+  );
   /**
    * Moves the calendar view to the next month.
    */
@@ -317,20 +329,15 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           <div className={styles.holidays_card}>
             <h3 className={styles.card_title}>Holidays</h3>
             <ul className={styles.card_list}>
-              {holidays
-                ?.filter(
-                  (holiday) =>
-                    dayjs(holiday.date, 'MM-DD').month() === currentMonth,
-                )
-                .map((holiday, index) => (
-                  <li className={styles.card_list_item} key={index}>
-                    <span className={styles.holiday_date}>
-                      {months[parseInt(holiday.date.slice(0, 2), 10) - 1]}{' '}
-                      {holiday.date.slice(3)}
-                    </span>
-                    <span>{holiday.name}</span>
-                  </li>
-                ))}
+              {filteredHolidays.map((holiday, index) => (
+                <li className={styles.card_list_item} key={index}>
+                  <span className={styles.holiday_date}>
+                    {months[parseInt(holiday.date.slice(0, 2), 10) - 1]}{' '}
+                    {holiday.date.slice(3)}
+                  </span>
+                  <span>{holiday.name}</span>
+                </li>
+              ))}
             </ul>
           </div>
 
