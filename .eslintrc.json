@@ -133,8 +133,10 @@
 
     // All tests must need not have an assertion
     "jest/expect-expect": 0,
-    "jest/no-standalone-expect": "off",
-
+    "jest/no-standalone-expect": [
+      "error",
+      { "additionalTestBlockFunctions": ["test", "it"] }
+    ],
     // Enforce Strictly functional components
     "react/no-unstable-nested-components": ["error", { "allowAsProps": true }],
     "react/function-component-definition": [
