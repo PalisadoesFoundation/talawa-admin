@@ -1,0 +1,19 @@
+[Unit]
+Description=Talawa Admin: Web application for enterprise use
+After=network.target
+
+[Service]
+User=dhruv
+Group=dhruv
+WorkingDirectory=/home/dhruv/gsoc/talawa-admin
+Environment=NODE_ENV=production
+Environment=PORT=5173
+ExecStartPre=/bin/bash -c '. "$NVM_DIR/nvm.sh" && npm install'
+ExecStart=/bin/bash -c '. "$NVM_DIR/nvm.sh" && npm run serve'
+Restart=on-failure
+RestartSec=10s
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
