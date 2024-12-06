@@ -47,7 +47,7 @@ interface InterfaceCalendarProps {
   viewType?: ViewType;
 }
 
-enum Role {
+export enum Role {
   USER = 'USER',
   SUPERADMIN = 'SUPERADMIN',
   ADMIN = 'ADMIN',
@@ -130,7 +130,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
    * Moves the calendar view to the previous month.
    */
   const handlePrevMonth = (): void => {
-    /*istanbul ignore next*/
     if (currentMonth === 0) {
       setCurrentMonth(11);
       setCurrentYear(currentYear - 1);
@@ -143,7 +142,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
    * Moves the calendar view to the next month.
    */
   const handleNextMonth = (): void => {
-    /*istanbul ignore next*/
     if (currentMonth === 11) {
       setCurrentMonth(0);
       setCurrentYear(currentYear + 1);
