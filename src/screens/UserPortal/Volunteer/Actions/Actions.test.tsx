@@ -15,6 +15,7 @@ import Actions from './Actions';
 import type { ApolloLink } from '@apollo/client';
 import { MOCKS, EMPTY_MOCKS, ERROR_MOCKS } from './Actions.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
+import { describe, it, beforeAll, beforeEach, afterAll, vi } from 'vitest';
 
 const { setItem } = useLocalStorage();
 
@@ -64,10 +65,13 @@ const renderActions = (link: ApolloLink): RenderResult => {
 
 describe('Testing Actions Screen', () => {
   beforeAll(() => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: 'orgId' }),
-    }));
+    vi.mock('react-router-dom', async () => {
+      const actual = await vi.importActual('react-router-dom');
+      return {
+        ...actual,
+        useNavigate: vi.fn(() => () => {}),
+      };
+    });
   });
 
   beforeEach(() => {
@@ -75,7 +79,7 @@ describe('Testing Actions Screen', () => {
   });
 
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
