@@ -30,7 +30,7 @@ export default defineConfig({
         '**/index.{js,ts}',
         '**/*.d.ts',
         'src/test/**',
-        'vitest.config.ts',
+        'src/setupTests.ts',
       ],
       reporter: ['text', 'html', 'text-summary', 'lcov'],
     },
