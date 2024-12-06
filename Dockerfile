@@ -9,7 +9,7 @@ COPY . .
 
 ENV NODE_ENV=production
 
-RUN yarn build
+RUN npm run build
 
 #Step 2: Production
 FROM nginx:1.27.3-alpine AS production
