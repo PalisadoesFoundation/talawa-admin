@@ -16,7 +16,7 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './vitest.setup.ts',
     include: [
-      'src/screens/UserPortal/Volunteer/Actions/*.test.{js,jsx,ts,tsx}',
+      'src/screens/UserPortal/Volunteer/Actions/*.{spec,test}.{js,jsx,ts,tsx}',
     ],
     coverage: {
       enabled: true,
