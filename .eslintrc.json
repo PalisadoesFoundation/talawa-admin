@@ -2,7 +2,8 @@
   "env": {
     "browser": true,
     "node": true,
-    "es6": true
+    "es6": true,
+    "jest": true
   },
 
   // Specify the rulesets from other ESLint Plugins tobe used
@@ -132,6 +133,7 @@
 
     // All tests must need not have an assertion
     "jest/expect-expect": 0,
+    "jest/no-standalone-expect": "off",
 
     // Enforce Strictly functional components
     "react/no-unstable-nested-components": ["error", { "allowAsProps": true }],
