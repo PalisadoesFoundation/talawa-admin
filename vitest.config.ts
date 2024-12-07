@@ -14,6 +14,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
+    setupFiles: ['./scripts/vitest-setup.ts'],
     include: [
       'src/screens/UserPortal/Volunteer/Actions/*.{spec,test}.{js,jsx,ts,tsx}',
     ],

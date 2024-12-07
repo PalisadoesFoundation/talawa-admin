@@ -1,1 +1,3 @@
-export const initials = jest.fn();
+import { vi } from 'vitest';
+
+export const initials = vi.fn();

@@ -11,7 +11,7 @@ export async function main(): Promise<void> {
   console.log('Welcome to the Talawa Admin setup! 🚀');
 
   if (!fs.existsSync('.env')) {
-    fs.openSync('.env', 'w');
+    fs.openSync('.env', 'w', 0o666);
     const config = dotenv.parse(fs.readFileSync('.env.example'));
     for (const key in config) {
       fs.appendFileSync('.env', `${key}=${config[key]}\n`);
@@ -42,10 +42,9 @@ export async function main(): Promise<void> {
 
     const port = dotenv.parse(fs.readFileSync('.env')).PORT;
 
-    fs.readFile('.env', 'utf8', (err, data) => {
-      const result = data.replace(`PORT=${port}`, `PORT=${customPort}`);
-      fs.writeFileSync('.env', result, 'utf8');
-    });
+    const data = await fs.promises.readFile('.env', 'utf8');
+    const result = data.replace(`PORT=${port}`, `PORT=${customPort}`);
+    await fs.promises.writeFile('.env', result, 'utf8');
   }
 
   let shouldSetTalawaApiUrl: boolean;

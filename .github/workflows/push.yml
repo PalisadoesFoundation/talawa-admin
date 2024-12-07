@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [22.x]
+        node-version: [20.x]  # Current LTS version
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -51,7 +51,7 @@ jobs:
       - if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
         name: List the state of node modules
         run: npm install
-      - run: npm run test -- --watchAll=false --coverage
+      - run: npm run test:vitest
       - name: Present and upload coverage to Codecov as ${{env.CODECOV_UNIQUE_NAME}}
         uses: codecov/codecov-action@v4
         with:

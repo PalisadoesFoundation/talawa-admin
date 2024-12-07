@@ -551,12 +551,6 @@ type MinimumValueError implements FieldError {
   path: [String!]!
 }
 
-enum AdvertisementType {
-  BANNER
-  MENU
-  POPUP
-}
-
 input CreateAdvertisementInput {
   endDate: Date!
   name: String!
@@ -617,11 +611,11 @@ type Mutation {
   createAdmin(data: UserAndOrganizationInput!): AppUserProfile!
   createAdvertisement(
     endDate: Date!
-    link: String!
+    mediaUrl: URL!
     name: String!
     orgId: ID!
     startDate: Date!
-    type: String!
+    type: AdvertisementType!
   ): Advertisement!
   createAgendaCategory(input: CreateAgendaCategoryInput!): AgendaCategory!
   createComment(data: CommentInput!, postId: ID!): Comment
@@ -694,7 +688,12 @@ type Mutation {
   revokeRefreshTokenForUser: Boolean!
   saveFcmToken(token: String): Boolean!
   sendMembershipRequest(organizationId: ID!): MembershipRequest!
-  sendMessageToChat(chatId: ID!, messageContent: String!, type: String!, replyTo: ID): ChatMessage!
+  sendMessageToChat(
+    chatId: ID!
+    messageContent: String!
+    type: String!
+    replyTo: ID
+  ): ChatMessage!
   signUp(data: UserInput!, file: String): AuthData!
   togglePostPin(id: ID!, title: String): Post!
   unassignUserTag(input: ToggleUserTagAssignInput!): User
@@ -1026,7 +1025,12 @@ type Query {
     skip: Int
     where: EventWhereInput
   ): [Event!]!
-  advertisementsConnection(after: String, before: String, first: PositiveInt, last: PositiveInt): AdvertisementsConnection
+  advertisementsConnection(
+    after: String
+    before: String
+    first: PositiveInt
+    last: PositiveInt
+  ): AdvertisementsConnection
   getDonationById(id: ID!): Donation!
   getDonationByOrgId(orgId: ID!): [Donation]
   getDonationByOrgIdConnection(
@@ -1084,7 +1088,7 @@ type Query {
     skip: Int
     where: UserWhereInput
   ): [UserData]!
-  venue(id:ID!):[Venue]
+  venue(id: ID!): Venue
 }
 
 input RecaptchaVerification {
@@ -1388,7 +1392,7 @@ input UserInput {
   firstName: String!
   lastName: String!
   password: String!
-  selectedOrganization : ID!
+  selectedOrganization: ID!
 }
 
 enum UserOrderByInput {
@@ -1402,12 +1406,6 @@ enum UserOrderByInput {
   lastName_DESC
   createdAt_ASC
   createdAt_DESC
-}
-
-type UserPhone {
-  home: PhoneNumber
-  mobile: PhoneNumber
-  work: PhoneNumber
 }
 
 input UserPhoneInput {
