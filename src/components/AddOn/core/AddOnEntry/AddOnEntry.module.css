@@ -7,8 +7,12 @@
   margin-left: auto;
   display: flex !important;
   align-items: center;
+  background-color: transparent;
+  color: #31bb6b;
 }
-
+.card {
+  border: 4px solid green;
+}
 .entryaction i {
   margin-right: 8px;
 }
