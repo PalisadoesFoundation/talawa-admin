@@ -20,12 +20,16 @@
 
 .admedia {
   object-fit: cover;
-  height: 20rem;
+  height: 16rem;
 }
 
 .buttons {
   display: flex;
   justify-content: flex-end;
+}
+
+.card {
+  width: 28rem;
 }
 
 .dropdownButton {

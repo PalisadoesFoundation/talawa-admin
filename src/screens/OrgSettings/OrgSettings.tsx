@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Dropdown, Row, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import styles from './OrgSettings.module.css';
+import styles from 'style/app.module.css';
 import OrgActionItemCategories from 'components/OrgSettings/ActionItemCategories/OrgActionItemCategories';
 import OrganizationAgendaCategory from 'components/OrgSettings/AgendaItemCategories/OrganizationAgendaCategory';
 import { Navigate, useParams } from 'react-router-dom';
@@ -26,7 +26,7 @@ const settingtabs: SettingType[] = [
  *
  * @returns The rendered component displaying the organization settings.
  */
-function orgSettings(): JSX.Element {
+function OrgSettings(): JSX.Element {
   // Translation hook for internationalization
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgSettings',
@@ -126,4 +126,4 @@ function orgSettings(): JSX.Element {
   );
 }
 
-export default orgSettings;
+export default OrgSettings;
