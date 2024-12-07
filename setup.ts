@@ -10,14 +10,20 @@ import { askForCustomPort } from './src/setup/askForCustomPort/askForCustomPort'
 export async function main(): Promise<void> {
   console.log('Welcome to the Talawa Admin setup! 🚀');
 
-  if (!fs.existsSync('.env')) {
-    fs.openSync('.env', 'w', 0o666);
-    const config = dotenv.parse(fs.readFileSync('.env.example'));
-    for (const key in config) {
-      fs.appendFileSync('.env', `${key}=${config[key]}\n`);
+  try {
+    if (!fs.existsSync('.env')) {
+      await fs.promises.open('.env', 'w', 0o666);
+      const config = dotenv.parse(await fs.promises.readFile('.env.example'));
+      const envContent = Object.entries(config)
+        .map(([key, value]) => `${key}=${value}`)
+        .join('\n');
+      await fs.promises.writeFile('.env', envContent + '\n');
+    } else {
+      checkEnvFile();
     }
-  } else {
-    checkEnvFile();
+  } catch (error) {
+    console.error('Failed to setup environment file:', error);
+    process.exit(1);
   }
 
   let shouldSetCustomPort: boolean;
@@ -70,7 +76,16 @@ export async function main(): Promise<void> {
 
     while (!isConnected) {
       endpoint = await askForTalawaApiUrl();
-      const url = new URL(endpoint);
+
+      // Validate and parse URL directly
+      let url;
+      try {
+        url = new URL(endpoint);
+      } catch {
+        console.error('Invalid URL. Please provide a valid Talawa API URL.');
+        continue;
+      }
+
       isConnected = await checkConnection(url.origin);
     }
     const envPath = '.env';
@@ -107,13 +122,18 @@ export async function main(): Promise<void> {
       fs.readFileSync('.env'),
     ).REACT_APP_USE_RECAPTCHA;
 
-    fs.readFile('.env', 'utf8', (err, data) => {
+    try {
+      const data = await fs.promises.readFile('.env', 'utf8');
       const result = data.replace(
         `REACT_APP_USE_RECAPTCHA=${useRecaptcha}`,
         `REACT_APP_USE_RECAPTCHA=yes`,
       );
-      fs.writeFileSync('.env', result, 'utf8');
-    });
+      await fs.promises.writeFile('.env', result, 'utf8');
+    } catch (error) {
+      console.error('Failed to update ReCAPTCHA configuration:', error);
+      process.exit(1);
+    }
+
     let shouldSetRecaptchaSiteKey: boolean;
     if (process.env.REACT_APP_RECAPTCHA_SITE_KEY) {
       console.log(
@@ -149,13 +169,17 @@ export async function main(): Promise<void> {
         fs.readFileSync('.env'),
       ).REACT_APP_RECAPTCHA_SITE_KEY;
 
-      fs.readFile('.env', 'utf8', (err, data) => {
+      try {
+        const data = await fs.promises.readFile('.env', 'utf8');
         const result = data.replace(
           `REACT_APP_RECAPTCHA_SITE_KEY=${recaptchaSiteKey}`,
           `REACT_APP_RECAPTCHA_SITE_KEY=${recaptchaSiteKeyInput}`,
         );
-        fs.writeFileSync('.env', result, 'utf8');
-      });
+        await fs.promises.writeFile('.env', result, 'utf8');
+      } catch (error) {
+        console.error('Failed to update ReCAPTCHA configuration:', error);
+        process.exit(1);
+      }
     }
   }
 

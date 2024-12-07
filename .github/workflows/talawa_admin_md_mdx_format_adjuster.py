@@ -52,16 +52,23 @@ def process_file(filepath):
     Returns:
         None, writes the processed content back to the file only if there are changes.
     """
-    with open(filepath, 'r', encoding='utf-8') as file:
-        content = file.read()
+    try:
+        with open(filepath, 'r', encoding='utf-8') as file:
+            content = file.read()
+    except IOError as e:
+        print(f"Error reading file {filepath}: {e}")
+        return
 
     # Escape MDX characters
     new_content = escape_mdx_characters(content)
 
     # Write the processed content back to the file only if there is a change
     if new_content != content:
-        with open(filepath, 'w', encoding='utf-8') as file:
-            file.write(new_content)
+        try:
+            with open(filepath, 'w', encoding='utf-8') as file:
+                file.write(new_content)
+        except IOError as e:
+            print(f"Error writing file {filepath}: {e}")
 
 def main():
     """

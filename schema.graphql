@@ -779,13 +779,6 @@ type OrganizationCustomField {
   type: String!
 }
 
-type OrganizationCustomField {
-  _id: ID!
-  name: String!
-  organizationId: String!
-  type: String!
-}
-
 type OrganizationInfoNode {
   _id: ID!
   apiUrl: URL!

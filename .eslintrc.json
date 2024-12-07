@@ -3,7 +3,7 @@
     "browser": true,
     "node": true,
     "es6": true,
-    "jest": true
+    "vitest": true
   },
 
   // Specify the rulesets from other ESLint Plugins tobe used
@@ -33,7 +33,6 @@
   "plugins": [
     "react",
     "@typescript-eslint",
-    "jest",
     "import",
     "eslint-plugin-tsdoc",
     "prettier"
@@ -131,12 +130,6 @@
     "react/jsx-equals-spacing": ["warn", "never"],
     "react/no-this-in-sfc": "error",
 
-    // All tests must need not have an assertion
-    "jest/expect-expect": 0,
-    "jest/no-standalone-expect": [
-      "error",
-      { "additionalTestBlockFunctions": ["test", "it"] }
-    ],
     // Enforce Strictly functional components
     "react/no-unstable-nested-components": ["error", { "allowAsProps": true }],
     "react/function-component-definition": [

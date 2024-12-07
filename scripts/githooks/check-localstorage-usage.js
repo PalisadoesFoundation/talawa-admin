@@ -20,10 +20,10 @@ const containsSkipComment = (file) => {
 const getModifiedFiles = () => {
   try {
     if (scanEntireRepo) {
-      const result = execSync('git ls-files | grep ".tsx\\?$"', {
+      const result = execSync('git ls-files "*.ts" "*.tsx"', {
         encoding: 'utf-8',
       });
-      return result.trim().split('\n');
+      return result.trim().split(/\r?\n/).filter(Boolean);
     }
 
     const result = execSync('git diff --cached --name-only', {
@@ -59,8 +59,17 @@ const checkLocalStorageUsage = (file) => {
   }
 
   try {
-    if (existsSync(file)) {
-      const content = readFileSync(file, 'utf-8');
+    const absolutePath = path.resolve(file);
+    if (existsSync(absolutePath)) {
+      // Quick check if file might be binary
+      const buffer = readFileSync(absolutePath, { flag: 'r' });
+
+      if (buffer.includes(0)) {
+        console.log(`Skipping binary file: ${file}`);
+        return;
+      }
+
+      const content = buffer.toString('utf-8');
 
       if (
         content.includes('localStorage.getItem') ||
@@ -73,7 +82,13 @@ const checkLocalStorageUsage = (file) => {
       console.log(`File ${file} does not exist.`);
     }
   } catch (error) {
-    console.error(`Error reading file ${file}:`, error.message);
+    if (error.code === 'ENOENT') {
+      console.error(`File not found: ${file}`);
+    } else if (error.code === 'EACCES') {
+      console.error(`Permission denied: ${file}`);
+    } else {
+      console.error(`Error reading file ${file}:`, error.message);
+    }
   }
 };
 

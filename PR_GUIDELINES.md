@@ -43,10 +43,11 @@ npm run format:check
 
 ## Testing
 
-1. All pull requests must have test units. If, for some reason, it is not possible to add tests, please let us know and explain why. In that case, you'll need to tell us what steps you followed to manually test your changes.
-1. Please read our [CONTRIBUTING.md](CONTRIBUTING.md) document for details on our testing policy.
+1. All pull requests must include Vitest test units. If, for some reason, it is not possible to add tests, please let us know and explain why. In that case, you'll need to tell us what steps you followed to manually test your changes.
+1. Please read our [CONTRIBUTING.md](CONTRIBUTING.md) document for details on our Vitest testing policy.
 
 ## Pull Request Processing
+
 These are key guidelines for the procedure:
 
 ### Only submit PRs against our `develop` branch, not the default `main` branch

@@ -192,7 +192,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22.x'
+          node-version: '20.x'
 
       - name: Install Dependencies
         run: npm install
@@ -247,6 +247,11 @@ jobs:
         run: |
           # Retrieve the complete branch name directly from the GitHub context
           FULL_BRANCH_NAME=${{ github.base_ref }}
+          # Validate branch name
+          if [[ ! $FULL_BRANCH_NAME =~ ^[a-zA-Z0-9_/-]+$ ]]; then
+            echo "Invalid branch name"
+            exit 1
+          fi
           echo "FULL_Branch_NAME: $FULL_BRANCH_NAME"
           
           # Clone the specified repository using the extracted branch name
