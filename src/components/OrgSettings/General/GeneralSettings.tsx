@@ -1,6 +1,6 @@
 import React, { type FC } from 'react';
 import { Card, Col, Form, Row } from 'react-bootstrap';
-import styles from 'screens/OrgSettings/OrgSettings.module.css';
+import styles from '../../../../src/style/app.module.css';
 import OrgProfileFieldSettings from './OrgProfileFieldSettings/OrgProfileFieldSettings';
 import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
 import DeleteOrg from './DeleteOrg/DeleteOrg';

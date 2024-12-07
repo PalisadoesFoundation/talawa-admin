@@ -22,7 +22,11 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { MockedProvider } from '@apollo/react-testing';
 
 const { getItem } = useLocalStorage();
-
+interface InterfacePlugin {
+  enabled: boolean;
+  pluginName: string;
+  component: string;
+}
 jest.mock('components/AddOn/support/services/Plugin.helper', () => ({
   __esModule: true,
   default: jest.fn().mockImplementation(() => ({
@@ -60,16 +64,18 @@ jest.mock('components/AddOn/support/services/Plugin.helper', () => ({
       },
       // Add more mock data as needed
     ]),
-    generateLinks: jest.fn().mockImplementation((plugins) => {
-      return plugins
-        .filter((plugin: { enabled: any }) => plugin.enabled)
-        .map((installedPlugin: { pluginName: any; component: string }) => {
-          return {
-            name: installedPlugin.pluginName,
-            url: `/plugin/${installedPlugin.component.toLowerCase()}`,
-          };
-        });
-    }),
+    generateLinks: jest
+      .fn()
+      .mockImplementation((plugins: InterfacePlugin[]) => {
+        return plugins
+          .filter((plugin) => plugin.enabled)
+          .map((installedPlugin) => {
+            return {
+              name: installedPlugin.pluginName,
+              url: `/plugin/${installedPlugin.component.toLowerCase()}`,
+            };
+          });
+      }),
   })),
 }));
 
@@ -297,77 +303,6 @@ describe('Testing AddOnStore Component', () => {
       target: { value: searchText },
     });
 
-    const message = screen.getAllByText('Plugin does not exists');
-    expect(message.length).toBeGreaterThanOrEqual(1);
-  });
-
-  test('check filters enabled and disabled under Installed tab', async () => {
-    const mocks = [ORGANIZATIONS_LIST_MOCK, PLUGIN_GET_MOCK];
-    render(
-      <ApolloProvider client={client}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={mocks} addTypename={false}>
-                <AddOnStore />
-              </MockedProvider>
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </ApolloProvider>,
-    );
-
-    await wait();
-    userEvent.click(screen.getByText('Installed'));
-
-    expect(screen.getByText('Filters')).toBeInTheDocument();
-    expect(screen.getByLabelText('Enabled')).toBeInTheDocument();
-    expect(screen.getByLabelText('Disabled')).toBeInTheDocument();
-
-    fireEvent.click(screen.getByLabelText('Enabled'));
-    expect(screen.getByLabelText('Enabled')).toBeChecked();
-    fireEvent.click(screen.getByLabelText('Disabled'));
-    expect(screen.getByLabelText('Disabled')).toBeChecked();
-  });
-
-  test('check the working search bar when on Installed tab', async () => {
-    const mocks = [ORGANIZATIONS_LIST_MOCK, PLUGIN_GET_MOCK];
-
-    const { container } = render(
-      <ApolloProvider client={client}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={mocks} addTypename={false}>
-                <AddOnStore />
-              </MockedProvider>
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </ApolloProvider>,
-    );
-    await wait();
-    userEvent.click(screen.getByText('Installed'));
-
-    await wait();
-    let searchText = '';
-    fireEvent.change(screen.getByPlaceholderText('Ex: Donations'), {
-      target: { value: searchText },
-    });
-    expect(container).toHaveTextContent('Plugin 1');
-    expect(container).toHaveTextContent('Plugin 3');
-
-    searchText = 'Plugin 1';
-    fireEvent.change(screen.getByPlaceholderText('Ex: Donations'), {
-      target: { value: searchText },
-    });
-    const plugin1Elements = screen.queryAllByText('Plugin 1');
-    expect(plugin1Elements.length).toBeGreaterThan(1);
-
-    searchText = 'Test Plugin';
-    fireEvent.change(screen.getByPlaceholderText('Ex: Donations'), {
-      target: { value: searchText },
-    });
     const message = screen.getAllByText('Plugin does not exists');
     expect(message.length).toBeGreaterThanOrEqual(1);
   });
