@@ -6,7 +6,7 @@ import { askForTalawaApiUrl } from './src/setup/askForTalawaApiUrl/askForTalawaA
 import { checkEnvFile } from './src/setup/checkEnvFile/checkEnvFile';
 import { validateRecaptcha } from './src/setup/validateRecaptcha/validateRecaptcha';
 import { askForCustomPort } from './src/setup/askForCustomPort/askForCustomPort';
-import { askForDocker } from 'setup/askForDocker/askForDocker';
+import { askForDocker } from './src/setup/askForDocker/askForDocker';
 
 // Update the .env file with new values
 const updateEnvFile = (key: string, value: string): void => {

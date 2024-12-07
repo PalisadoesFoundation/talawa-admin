@@ -4,7 +4,7 @@
 
 In order to give everyone a chance to submit a issues reports and contribute to the Talawa project, we have put restrictions in place. This section outlines the guidelines that should be imposed upon issue reports in the Talawa project.
 
-___
+---
 
 ## Table of Contents
 
@@ -19,7 +19,7 @@ ___
 
 <!-- tocstop -->
 
-___
+---
 
 ## Issue Management
 

@@ -28,7 +28,7 @@ The process in easy:
    - A local version of `docs.talawa.io` should automatically launched in your browser at http://localhost:3000/
 1. Add/modify the markdown documents to the `docs/` directory of the `talawa-docs` repository
 1. If adding a file, then you will also need to edit the `sidebars.js` which is used to generate the [docs.talawa.io](https://docs.talawa.io/) menus.
-1. Always monitor the local website in your brower to make sure the changes are acceptable.
+1. Always monitor the local website in your browser to make sure the changes are acceptable.
    - You'll be able to see errors that you can use for troubleshooting in the CLI window you used to launch the local website.
 
 ## Other information

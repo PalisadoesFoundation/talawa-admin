@@ -7,7 +7,7 @@ describe('askForCustomPort', () => {
   test('should return default docker port if user provides no input', async () => {
     jest
       .spyOn(inquirer, 'prompt')
-      .mockResolvedValueOnce({ customPort: '4321' });
+      .mockResolvedValueOnce({ dockerAppPort: '4321' });
 
     const result = await askForDocker();
     expect(result).toBe('4321');
@@ -16,7 +16,7 @@ describe('askForCustomPort', () => {
   test('should return user-provided port', async () => {
     jest
       .spyOn(inquirer, 'prompt')
-      .mockResolvedValueOnce({ customPort: '8080' });
+      .mockResolvedValueOnce({ dockerAppPort: '4321' });
 
     const result = await askForDocker();
     expect(result).toBe('8080');
