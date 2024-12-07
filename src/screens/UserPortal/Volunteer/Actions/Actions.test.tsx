@@ -41,6 +41,17 @@ const debounceWait = async (ms = 300): Promise<void> => {
   });
 };
 
+const expectVitestToBeInTheDocument = (element: HTMLElement): void => {
+  expect(element).toBeInTheDocument();
+};
+
+const expectElementToHaveTextContent = (
+  element: HTMLElement,
+  text: string,
+): void => {
+  expect(element).toHaveTextContent(text);
+};
+
 const renderActions = (link: ApolloLink): RenderResult => {
   return render(
     <MockedProvider addTypename={false} link={link}>
@@ -103,7 +114,7 @@ describe('Testing Actions Screen', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByTestId('paramsError')).toBeInTheDocument();
+      expectVitestToBeInTheDocument(screen.getByTestId('paramsError'));
     });
   });
 
@@ -111,10 +122,10 @@ describe('Testing Actions Screen', () => {
     renderActions(link1);
     await waitFor(async () => {
       const searchInput = await screen.findByTestId('searchBy');
-      expect(searchInput).toBeInTheDocument();
+      expectVitestToBeInTheDocument(searchInput);
 
       const assigneeName = await screen.findAllByTestId('assigneeName');
-      expect(assigneeName[0]).toHaveTextContent('Teresa Bradley');
+      expectElementToHaveTextContent(assigneeName[0], 'Teresa Bradley');
     });
   });
 
@@ -122,30 +133,30 @@ describe('Testing Actions Screen', () => {
     renderActions(link1);
     await waitFor(async () => {
       const searchInput = await screen.findByTestId('searchBy');
-      expect(searchInput).toBeInTheDocument();
+      expectVitestToBeInTheDocument(searchInput);
 
       let sortBtn = await screen.findByTestId('sort');
-      expect(sortBtn).toBeInTheDocument();
+      expectVitestToBeInTheDocument(sortBtn);
 
       // Sort by dueDate_DESC
       fireEvent.click(sortBtn);
       const dueDateDESC = await screen.findByTestId('dueDate_DESC');
-      expect(dueDateDESC).toBeInTheDocument();
+      expectVitestToBeInTheDocument(dueDateDESC);
       fireEvent.click(dueDateDESC);
 
       let assigneeName = await screen.findAllByTestId('assigneeName');
-      expect(assigneeName[0]).toHaveTextContent('Group 1');
+      expectElementToHaveTextContent(assigneeName[0], 'Group 1');
 
       // Sort by dueDate_ASC
       sortBtn = await screen.findByTestId('sort');
-      expect(sortBtn).toBeInTheDocument();
+      expectVitestToBeInTheDocument(sortBtn);
       fireEvent.click(sortBtn);
       const dueDateASC = await screen.findByTestId('dueDate_ASC');
-      expect(dueDateASC).toBeInTheDocument();
+      expectVitestToBeInTheDocument(dueDateASC);
       fireEvent.click(dueDateASC);
 
       assigneeName = await screen.findAllByTestId('assigneeName');
-      expect(assigneeName[0]).toHaveTextContent('Teresa Bradley');
+      expectElementToHaveTextContent(assigneeName[0], 'Teresa Bradley');
     });
   });
 
@@ -153,14 +164,14 @@ describe('Testing Actions Screen', () => {
     renderActions(link1);
     await waitFor(async () => {
       const searchInput = await screen.findByTestId('searchBy');
-      expect(searchInput).toBeInTheDocument();
+      expectVitestToBeInTheDocument(searchInput);
 
       const searchToggle = await screen.findByTestId('searchByToggle');
-      expect(searchToggle).toBeInTheDocument();
+      expectVitestToBeInTheDocument(searchToggle);
       userEvent.click(searchToggle);
 
       const searchByAssignee = await screen.findByTestId('assignee');
-      expect(searchByAssignee).toBeInTheDocument();
+      expectVitestToBeInTheDocument(searchByAssignee);
       userEvent.click(searchByAssignee);
 
       userEvent.type(searchInput, '1');
@@ -169,7 +180,7 @@ describe('Testing Actions Screen', () => {
 
     await waitFor(async () => {
       const assigneeName = await screen.findAllByTestId('assigneeName');
-      expect(assigneeName[0]).toHaveTextContent('Group 1');
+      expectElementToHaveTextContent(assigneeName[0], 'Group 1');
     });
   });
 
@@ -177,14 +188,14 @@ describe('Testing Actions Screen', () => {
     renderActions(link1);
     await waitFor(async () => {
       const searchInput = await screen.findByTestId('searchBy');
-      expect(searchInput).toBeInTheDocument();
+      expectVitestToBeInTheDocument(searchInput);
 
       const searchToggle = await screen.findByTestId('searchByToggle');
-      expect(searchToggle).toBeInTheDocument();
+      expectVitestToBeInTheDocument(searchToggle);
       userEvent.click(searchToggle);
 
       const searchByCategory = await screen.findByTestId('category');
-      expect(searchByCategory).toBeInTheDocument();
+      expectVitestToBeInTheDocument(searchByCategory);
       userEvent.click(searchByCategory);
 
       userEvent.type(searchInput, '1');
@@ -193,7 +204,7 @@ describe('Testing Actions Screen', () => {
 
     await waitFor(() => {
       const assigneeName = screen.getAllByTestId('assigneeName');
-      expect(assigneeName[0]).toHaveTextContent('Teresa Bradley');
+      expectElementToHaveTextContent(assigneeName[0], 'Teresa Bradley');
     });
   });
 
@@ -201,8 +212,8 @@ describe('Testing Actions Screen', () => {
     renderActions(link3);
 
     await waitFor(() => {
-      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
-      expect(screen.getByText(t.noActionItems)).toBeInTheDocument();
+      expectVitestToBeInTheDocument(screen.getByTestId('searchBy'));
+      expectVitestToBeInTheDocument(screen.getByText(t.noActionItems));
     });
   });
 
@@ -210,7 +221,7 @@ describe('Testing Actions Screen', () => {
     renderActions(link2);
 
     await waitFor(() => {
-      expect(screen.getByTestId('errorMsg')).toBeInTheDocument();
+      expectVitestToBeInTheDocument(screen.getByTestId('errorMsg'));
     });
   });
 
@@ -222,7 +233,7 @@ describe('Testing Actions Screen', () => {
 
     await waitFor(async () => {
       const element = await screen.findByText(t.actionItemStatus); // Resolve the promise
-      expect(element).toBeInTheDocument(); // Now assert the resolved element
+      expectVitestToBeInTheDocument(element); // Now assert the resolved element
     });
     userEvent.click(await screen.findByTestId('modalCloseBtn'));
   });
@@ -234,7 +245,7 @@ describe('Testing Actions Screen', () => {
     userEvent.click(viewItemBtn[0]);
 
     await waitFor(() => {
-      expect(screen.getByText(t.actionItemDetails)).toBeInTheDocument();
+      expectVitestToBeInTheDocument(screen.getByText(t.actionItemDetails));
     });
 
     userEvent.click(await screen.findByTestId('modalCloseBtn'));
