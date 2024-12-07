@@ -131,6 +131,10 @@
     "jest/expect-expect": 0,
 
     "react/no-unstable-nested-components": ["error", { "allowAsProps": true }],
+    "jest/no-standalone-expect": [
+      "error",
+      { "additionalTestBlockFunctions": ["waitFor"] }
+    ],
     "react/function-component-definition": [
       0,
       { "namedComponents": "function-declaration" }

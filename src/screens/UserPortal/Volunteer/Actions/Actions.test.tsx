@@ -15,6 +15,7 @@ import Actions from './Actions';
 import type { ApolloLink } from '@apollo/client';
 import { MOCKS, EMPTY_MOCKS, ERROR_MOCKS } from './Actions.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
+import { describe, it, beforeAll, beforeEach, afterAll, vi } from 'vitest';
 
 const { setItem } = useLocalStorage();
 
@@ -64,10 +65,13 @@ const renderActions = (link: ApolloLink): RenderResult => {
 
 describe('Testing Actions Screen', () => {
   beforeAll(() => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: 'orgId' }),
-    }));
+    vi.mock('react-router-dom', async () => {
+      const actual = await vi.importActual('react-router-dom');
+      return {
+        ...actual,
+        useNavigate: vi.fn(() => () => {}),
+      };
+    });
   });
 
   beforeEach(() => {
@@ -75,7 +79,7 @@ describe('Testing Actions Screen', () => {
   });
 
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
@@ -105,81 +109,92 @@ describe('Testing Actions Screen', () => {
 
   it('should render Actions screen', async () => {
     renderActions(link1);
-    const searchInput = await screen.findByTestId('searchBy');
-    expect(searchInput).toBeInTheDocument();
+    await waitFor(async () => {
+      const searchInput = await screen.findByTestId('searchBy');
+      expect(searchInput).toBeInTheDocument();
 
-    const assigneeName = await screen.findAllByTestId('assigneeName');
-    expect(assigneeName[0]).toHaveTextContent('Teresa Bradley');
+      const assigneeName = await screen.findAllByTestId('assigneeName');
+      expect(assigneeName[0]).toHaveTextContent('Teresa Bradley');
+    });
   });
 
   it('Check Sorting Functionality', async () => {
     renderActions(link1);
-    const searchInput = await screen.findByTestId('searchBy');
-    expect(searchInput).toBeInTheDocument();
+    await waitFor(async () => {
+      const searchInput = await screen.findByTestId('searchBy');
+      expect(searchInput).toBeInTheDocument();
 
-    let sortBtn = await screen.findByTestId('sort');
-    expect(sortBtn).toBeInTheDocument();
+      let sortBtn = await screen.findByTestId('sort');
+      expect(sortBtn).toBeInTheDocument();
 
-    // Sort by dueDate_DESC
-    fireEvent.click(sortBtn);
-    const dueDateDESC = await screen.findByTestId('dueDate_DESC');
-    expect(dueDateDESC).toBeInTheDocument();
-    fireEvent.click(dueDateDESC);
+      // Sort by dueDate_DESC
+      fireEvent.click(sortBtn);
+      const dueDateDESC = await screen.findByTestId('dueDate_DESC');
+      expect(dueDateDESC).toBeInTheDocument();
+      fireEvent.click(dueDateDESC);
 
-    let assigneeName = await screen.findAllByTestId('assigneeName');
-    expect(assigneeName[0]).toHaveTextContent('Group 1');
+      let assigneeName = await screen.findAllByTestId('assigneeName');
+      expect(assigneeName[0]).toHaveTextContent('Group 1');
 
-    // Sort by dueDate_ASC
-    sortBtn = await screen.findByTestId('sort');
-    expect(sortBtn).toBeInTheDocument();
-    fireEvent.click(sortBtn);
-    const dueDateASC = await screen.findByTestId('dueDate_ASC');
-    expect(dueDateASC).toBeInTheDocument();
-    fireEvent.click(dueDateASC);
+      // Sort by dueDate_ASC
+      sortBtn = await screen.findByTestId('sort');
+      expect(sortBtn).toBeInTheDocument();
+      fireEvent.click(sortBtn);
+      const dueDateASC = await screen.findByTestId('dueDate_ASC');
+      expect(dueDateASC).toBeInTheDocument();
+      fireEvent.click(dueDateASC);
 
-    assigneeName = await screen.findAllByTestId('assigneeName');
-    expect(assigneeName[0]).toHaveTextContent('Teresa Bradley');
+      assigneeName = await screen.findAllByTestId('assigneeName');
+      expect(assigneeName[0]).toHaveTextContent('Teresa Bradley');
+    });
   });
 
   it('Search by Assignee name', async () => {
     renderActions(link1);
-    const searchInput = await screen.findByTestId('searchBy');
-    expect(searchInput).toBeInTheDocument();
+    await waitFor(async () => {
+      const searchInput = await screen.findByTestId('searchBy');
+      expect(searchInput).toBeInTheDocument();
 
-    const searchToggle = await screen.findByTestId('searchByToggle');
-    expect(searchToggle).toBeInTheDocument();
-    userEvent.click(searchToggle);
+      const searchToggle = await screen.findByTestId('searchByToggle');
+      expect(searchToggle).toBeInTheDocument();
+      userEvent.click(searchToggle);
 
-    const searchByAssignee = await screen.findByTestId('assignee');
-    expect(searchByAssignee).toBeInTheDocument();
-    userEvent.click(searchByAssignee);
+      const searchByAssignee = await screen.findByTestId('assignee');
+      expect(searchByAssignee).toBeInTheDocument();
+      userEvent.click(searchByAssignee);
 
-    userEvent.type(searchInput, '1');
+      userEvent.type(searchInput, '1');
+    });
     await debounceWait();
 
-    const assigneeName = await screen.findAllByTestId('assigneeName');
-    expect(assigneeName[0]).toHaveTextContent('Group 1');
+    await waitFor(async () => {
+      const assigneeName = await screen.findAllByTestId('assigneeName');
+      expect(assigneeName[0]).toHaveTextContent('Group 1');
+    });
   });
 
   it('Search by Category name', async () => {
     renderActions(link1);
-    const searchInput = await screen.findByTestId('searchBy');
-    expect(searchInput).toBeInTheDocument();
+    await waitFor(async () => {
+      const searchInput = await screen.findByTestId('searchBy');
+      expect(searchInput).toBeInTheDocument();
 
-    const searchToggle = await screen.findByTestId('searchByToggle');
-    expect(searchToggle).toBeInTheDocument();
-    userEvent.click(searchToggle);
+      const searchToggle = await screen.findByTestId('searchByToggle');
+      expect(searchToggle).toBeInTheDocument();
+      userEvent.click(searchToggle);
 
-    const searchByCategory = await screen.findByTestId('category');
-    expect(searchByCategory).toBeInTheDocument();
-    userEvent.click(searchByCategory);
+      const searchByCategory = await screen.findByTestId('category');
+      expect(searchByCategory).toBeInTheDocument();
+      userEvent.click(searchByCategory);
 
-    // Search by name on press of ENTER
-    userEvent.type(searchInput, '1');
+      userEvent.type(searchInput, '1');
+    });
     await debounceWait();
 
-    const assigneeName = await screen.findAllByTestId('assigneeName');
-    expect(assigneeName[0]).toHaveTextContent('Teresa Bradley');
+    await waitFor(() => {
+      const assigneeName = screen.getAllByTestId('assigneeName');
+      expect(assigneeName[0]).toHaveTextContent('Teresa Bradley');
+    });
   });
 
   it('should render screen with No Actions', async () => {
@@ -205,7 +220,10 @@ describe('Testing Actions Screen', () => {
     const checkbox = await screen.findAllByTestId('statusCheckbox');
     userEvent.click(checkbox[0]);
 
-    expect(await screen.findByText(t.actionItemStatus)).toBeInTheDocument();
+    await waitFor(async () => {
+      const element = await screen.findByText(t.actionItemStatus); // Resolve the promise
+      expect(element).toBeInTheDocument(); // Now assert the resolved element
+    });
     userEvent.click(await screen.findByTestId('modalCloseBtn'));
   });
 
@@ -215,7 +233,10 @@ describe('Testing Actions Screen', () => {
     const viewItemBtn = await screen.findAllByTestId('viewItemBtn');
     userEvent.click(viewItemBtn[0]);
 
-    expect(await screen.findByText(t.actionItemDetails)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText(t.actionItemDetails)).toBeInTheDocument();
+    });
+
     userEvent.click(await screen.findByTestId('modalCloseBtn'));
   });
 });
