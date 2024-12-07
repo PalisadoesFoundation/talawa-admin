@@ -66,7 +66,13 @@
     "@typescript-eslint/array-type": "error",
     "@typescript-eslint/consistent-type-assertions": "error",
     "@typescript-eslint/consistent-type-imports": "error",
-    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/explicit-function-return-type": [
+      2,
+      {
+        "allowExpressions": true,
+        "allowTypedFunctionExpressions": true
+      }
+    ],
     "camelcase": "off",
     "@typescript-eslint/naming-convention": [
       "error",

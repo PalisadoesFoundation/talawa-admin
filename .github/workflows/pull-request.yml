@@ -46,7 +46,7 @@ jobs:
       - name: Check formatting
         if: steps.changed-files.outputs.only_changed != 'true'
         run: npm run format:check
-
+        
       - name: Run formatting if check fails
         if: failure()
         run: npm run format
@@ -57,10 +57,10 @@ jobs:
 
       - name: Check for linting errors in modified files
         if: steps.changed-files.outputs.only_changed != 'true'
-        env:
+        env: 
           CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-        run: npx eslint "**/*.{js,jsx,ts,tsx}" --ignore-path .eslintignore
-
+        run: npx eslint ${CHANGED_FILES} && python .github/workflows/eslint_disable_check.py
+        
       - name: Check for TSDoc comments
         run: npm run check-tsdoc # Run the TSDoc check script
 
@@ -89,7 +89,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
+      
       - name: Get Changed Unauthorized files
         id: changed-unauth-files
         uses: tj-actions/changed-files@v45
@@ -130,10 +130,10 @@ jobs:
             *.password
             *.secret
             *.credentials
-
+            
       - name: List all changed unauthorized files
         if: steps.changed-unauth-files.outputs.any_changed == 'true' || steps.changed-unauth-files.outputs.any_deleted == 'true'
-        env:
+        env: 
           CHANGED_UNAUTH_FILES: ${{ steps.changed-unauth-files.outputs.all_changed_files }}
         run: |
           for file in ${CHANGED_UNAUTH_FILES}; do
@@ -154,14 +154,14 @@ jobs:
         uses: tj-actions/changed-files@v45
 
       - name: Echo number of changed files
-        env:
+        env: 
           CHANGED_FILES_COUNT: ${{ steps.changed-files.outputs.all_changed_files_count }}
         run: |
           echo "Number of files changed: $CHANGED_FILES_COUNT"
 
       - name: Check if the number of changed files is less than 100
         if: steps.changed-files.outputs.all_changed_files_count > 100
-        env:
+        env: 
           CHANGED_FILES_COUNT: ${{ steps.changed-files.outputs.all_changed_files_count }}
         run: |
           echo "Error: Too many files (greater than 100) changed in the pull request."
@@ -201,11 +201,11 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
-
+      
       - name: Get changed TypeScript files
         id: changed-files
         uses: tj-actions/changed-files@v45
-
+          
       - name: Run Jest Tests
         if: steps.changed-files.outputs.only_changed != 'true'
         env:
@@ -227,8 +227,8 @@ jobs:
           if ! npx lcov-result-merger 'coverage/*/lcov.info' > 'coverage/lcov.info'; then
             echo "Failed to merge coverage reports"
             exit 1
-          fi
-
+          fi     
+      
       - name: TypeScript compilation for changed files
         run: |
           for file in ${{ steps.changed-files.outputs.all_files }}; do
@@ -249,7 +249,7 @@ jobs:
       - name: Test acceptable level of code coverage
         uses: VeryGoodOpenSource/very_good_coverage@v3
         with:
-          path: './coverage/lcov.info'
+          path: "./coverage/lcov.info"
           min_coverage: 0.0
 
   Graphql-Inspector:
@@ -267,15 +267,15 @@ jobs:
 
       - name: resolve dependency
         run: npm install -g @graphql-inspector/cli
-
+      
       - name: Clone API Repository
         run: |
           # Retrieve the complete branch name directly from the GitHub context
           FULL_BRANCH_NAME=${{ github.base_ref }}
           echo "FULL_Branch_NAME: $FULL_BRANCH_NAME"
-
+          
           # Clone the specified repository using the extracted branch name
-          git clone --branch $FULL_BRANCH_NAME https://github.com/PalisadoesFoundation/talawa-api && ls -a
+          git clone --branch $FULL_BRANCH_NAME https://github.com/PalisadoesFoundation/talawa-api && ls -a 
 
       - name: Validate Documents
         run: graphql-inspector validate './src/GraphQl/**/*.ts' './talawa-api/schema.graphql'
