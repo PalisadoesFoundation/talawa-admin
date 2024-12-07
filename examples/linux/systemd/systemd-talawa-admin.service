@@ -3,15 +3,36 @@ Description=Talawa Admin: Web application for enterprise use
 After=network.target
 
 [Service]
-User=dhruv
-Group=dhruv
-WorkingDirectory=/home/dhruv/gsoc/talawa-admin
+# Use a dedicated system user for security
+User=talawa-admin
+Group=talawa-admin
+
+# Set a generic working directory path
+WorkingDirectory=/opt/talawa-admin
+
+# Set environment variables
 Environment=NODE_ENV=production
 Environment=PORT=5173
-ExecStartPre=/bin/bash -c '. "$NVM_DIR/nvm.sh" && npm install'
-ExecStart=/bin/bash -c '. "$NVM_DIR/nvm.sh" && npm run serve'
+
+# Use system-wide Node.js and npm installations
+ExecStartPre=/usr/bin/npm install
+ExecStart=/usr/bin/npm run serve
+
+# Security directives to restrict privileges
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+
+# Resource management directives
+MemoryLimit=1G
+TasksMax=100
+
+# Restart policy
 Restart=on-failure
 RestartSec=10s
+
+# Log output to system journal
 StandardOutput=journal
 StandardError=journal
 
