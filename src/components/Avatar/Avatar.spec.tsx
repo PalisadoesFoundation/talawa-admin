@@ -9,6 +9,7 @@ import Avatar from './Avatar';
  *
  * The tests ensure the `Avatar` component renders correctly with various props.
  * Mocked dependencies are used to isolate the component and verify its behavior.
+ *
  */
 
 vi.mock('state/store', () => ({
