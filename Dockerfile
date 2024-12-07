@@ -16,7 +16,7 @@ FROM nginx:1.27.3-alpine AS production
 
 ENV NODE_ENV=production
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY config/docker/setup/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder /talawa-admin/build /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
