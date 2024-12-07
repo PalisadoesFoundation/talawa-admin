@@ -1,16 +1,14 @@
 import EventListCard from 'components/EventListCard/EventListCard';
 import dayjs from 'dayjs';
+import React, { useState, useEffect, useMemo } from 'react';
 import Button from 'react-bootstrap/Button';
-import React, { useState, useEffect } from 'react';
 import styles from './EventCalendar.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
-import CurrentHourIndicator from 'components/CurrentHourIndicator/CurrentHourIndicator';
 import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 import HolidayCard from '../HolidayCards/HolidayCard';
-import { holidays, hours, months, weekdays } from './constants';
+import { holidays, months, weekdays } from './constants';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
 import YearlyEventCalender from './YearlyEventCalender';
-
 interface InterfaceEventListCardProps {
   userRole?: string;
   key?: string;
@@ -75,7 +73,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   );
   const [expanded, setExpanded] = useState<number>(-1);
   const [windowWidth, setWindowWidth] = useState<number>(window.screen.width);
-
   useEffect(() => {
     function handleResize(): void {
       setWindowWidth(window.screen.width);
@@ -138,7 +135,19 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       setCurrentMonth(currentMonth - 1);
     }
   };
-
+  const filteredHolidays = useMemo(
+    () =>
+      holidays?.filter((holiday) => {
+        try {
+          return dayjs(holiday.date, 'MM-DD').month() === currentMonth;
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (e) {
+          console.error(`Invalid date format for holiday: ${holiday.name}`);
+          return false;
+        }
+      }),
+    [holidays, currentMonth],
+  );
   /**
    * Moves the calendar view to the next month.
    */
@@ -224,7 +233,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         setExpanded(index);
       }
     };
-
     /*istanbul ignore next*/
     const allDayEventsList: JSX.Element[] =
       events
@@ -272,7 +280,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             />
           );
         }) || [];
-
     return (
       <>
         <div className={styles.calendar_hour_block}>
@@ -293,7 +300,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                   ? styles.expand_list_container
                   : styles.list_container
               }
-              style={{ width: 'fit-content' }}
             >
               <div
                 className={
@@ -310,9 +316,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                 (windowWidth <= 700 && allDayEventsList?.length > 0)) && (
                 <button
                   className={styles.btn__more}
-                  onClick={() => {
-                    toggleExpand(-100);
-                  }}
+                  onClick={() => toggleExpand(-100)}
                 >
                   {expanded === -100 ? 'View less' : 'View all'}
                 </button>
@@ -320,112 +324,45 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             </div>
           </div>
         </div>
-        {hours.map((hour, index) => {
-          const timeEventsList: JSX.Element[] =
-            events
-              ?.filter((datas) => {
-                const currDate = new Date(
-                  currentYear,
-                  currentMonth,
-                  currentDate,
-                );
 
-                if (
-                  parseInt(datas.startTime?.slice(0, 2) as string).toString() ==
-                    (index % 24).toString() &&
-                  datas.startDate == dayjs(currDate).format('YYYY-MM-DD')
-                ) {
-                  return datas;
-                }
-              })
-              .map((datas: InterfaceEventListCardProps) => {
-                const attendees: { _id: string }[] = [];
-                datas.attendees?.forEach((attendee: { _id: string }) => {
-                  const r = {
-                    _id: attendee._id,
-                  };
+        <div className={styles.calendar_infocards}>
+          <div className={styles.holidays_card}>
+            <h3 className={styles.card_title}>Holidays</h3>
+            <ul className={styles.card_list}>
+              {filteredHolidays.map((holiday, index) => (
+                <li className={styles.card_list_item} key={index}>
+                  <span className={styles.holiday_date}>
+                    {months[parseInt(holiday.date.slice(0, 2), 10) - 1]}{' '}
+                    {holiday.date.slice(3)}
+                  </span>
+                  <span>{holiday.name}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-                  attendees.push(r);
-                });
-
-                return (
-                  <EventListCard
-                    refetchEvents={refetchEvents}
-                    userRole={userRole}
-                    key={datas._id}
-                    id={datas._id}
-                    eventLocation={datas.location}
-                    eventName={datas.title}
-                    eventDescription={datas.description}
-                    startDate={datas.startDate}
-                    endDate={datas.endDate}
-                    startTime={datas.startTime}
-                    endTime={datas.endTime}
-                    allDay={datas.allDay}
-                    recurring={datas.recurring}
-                    recurrenceRule={datas.recurrenceRule}
-                    isRecurringEventException={datas.isRecurringEventException}
-                    isPublic={datas.isPublic}
-                    isRegisterable={datas.isRegisterable}
-                    registrants={attendees}
-                    creator={datas.creator}
-                  />
-                );
-              }) || [];
-          /*istanbul ignore next*/
-          return (
-            <div key={hour} className={styles.calendar_hour_block}>
-              <div className={styles.calendar_hour_text_container}>
-                <p className={styles.calendar_hour_text}>{`${hour}`}</p>
+          <div className={styles.events_card}>
+            <h3 className={styles.card_title}>Events</h3>
+            <div className={styles.legend}>
+              <div className={styles.listContainer}>
+                <span className={styles.holidayIndicator}></span>
+                <span className={styles.holidayText}>Holidays</span>
               </div>
-              <div className={styles.dummyWidth}></div>
-              <div
-                className={
-                  timeEventsList?.length > 0
-                    ? styles.event_list_parent_current
-                    : styles.event_list_parent
-                }
-              >
-                {index % 24 == new Date().getHours() &&
-                  new Date().getDate() == currentDate && (
-                    <CurrentHourIndicator />
-                  )}
-                <div
-                  className={
-                    expanded === index
-                      ? styles.expand_list_container
-                      : styles.list_container
-                  }
-                  style={{ width: 'fit-content' }}
-                >
-                  <div
-                    className={
-                      expanded === index
-                        ? styles.expand_event_list
-                        : styles.event_list
-                    }
-                  >
-                    {/*istanbul ignore next*/}
-                    {expanded === index
-                      ? timeEventsList
-                      : timeEventsList?.slice(0, 1)}
-                  </div>
-                  {(timeEventsList?.length > 1 ||
-                    (windowWidth <= 700 && timeEventsList?.length > 0)) && (
-                    <button
-                      className={styles.btn__more}
-                      onClick={() => {
-                        toggleExpand(index);
-                      }}
-                    >
-                      {expanded === index ? 'View less' : 'View all'}
-                    </button>
-                  )}
-                </div>
+              <div className={styles.eventsLegend}>
+                <span className={styles.organizationIndicator}></span>
+                <span className={styles.legendText}>
+                  Events Created by Organization
+                </span>
+              </div>
+              <div className={styles.eventsLegend}>
+                <span className={styles.userEvents__color}></span>
+                <span className={styles.legendText}>
+                  Events Created by User
+                </span>
               </div>
             </div>
-          );
-        })}
+          </div>
+        </div>
       </>
     );
   };
@@ -457,22 +394,20 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     return days.map((date, index) => {
       const className = [
         date.getDay() === 0 || date.getDay() === 6 ? styles.day_weekends : '',
-        date.toLocaleDateString() === today.toLocaleDateString() //Styling for today day cell
+        date.toLocaleDateString() === today.toLocaleDateString()
           ? styles.day__today
           : '',
-        date.getMonth() !== currentMonth ? styles.day__outside : '', //Styling for days outside the current month
+        date.getMonth() !== currentMonth ? styles.day__outside : '',
         selectedDate?.getTime() === date.getTime() ? styles.day__selected : '',
         styles.day,
       ].join(' ');
       const toggleExpand = (index: number): void => {
-        /*istanbul ignore next*/
         if (expanded === index) {
           setExpanded(-1);
         } else {
           setExpanded(index);
         }
       };
-      /*istanbul ignore next*/
       const allEventsList: JSX.Element[] =
         events
           ?.filter((datas) => {
@@ -521,6 +456,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         .map((holiday) => {
           return <HolidayCard key={holiday.name} holidayName={holiday.name} />;
         });
+
       return (
         <div
           key={index}
@@ -536,7 +472,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             >
               <div
                 className={
-                  /*istanbul ignore next*/
                   expanded === index
                     ? styles.expand_event_list
                     : styles.event_list
@@ -555,19 +490,14 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
               </div>
               {(allEventsList?.length > 2 ||
                 (windowWidth <= 700 && allEventsList?.length > 0)) && (
-                /*istanbul ignore next*/
                 <button
                   className={styles.btn__more}
                   data-testid="more"
-                  /*istanbul ignore next*/
                   onClick={() => {
                     toggleExpand(index);
                   }}
                 >
-                  {
-                    /*istanbul ignore next*/
-                    expanded === index ? 'View less' : 'View all'
-                  }
+                  {expanded === index ? 'View less' : 'View all'}
                 </button>
               )}
             </div>
@@ -622,7 +552,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       )}
       <div className={`${styles.calendar__scroll} customScroll`}>
         {viewType == ViewType.MONTH ? (
-          <div>
+          <>
             <div className={styles.calendar__weekdays}>
               {weekdays.map((weekday, index) => (
                 <div key={index} className={styles.weekday}>
@@ -631,18 +561,14 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
               ))}
             </div>
             <div className={styles.calendar__days}>{renderDays()}</div>
-          </div>
+          </>
+        ) : viewType == ViewType.YEAR ? (
+          <YearlyEventCalender eventData={eventData} />
         ) : (
-          // <YearlyEventCalender eventData={eventData} />
-          <div>
-            {viewType == ViewType.YEAR ? (
-              <YearlyEventCalender eventData={eventData} />
-            ) : (
-              <div className={styles.calendar__hours}>{renderHours()}</div>
-            )}
-          </div>
+          <div className={styles.calendar__hours}>{renderHours()}</div>
         )}
       </div>
+
       <div>
         {viewType == ViewType.YEAR ? (
           <YearlyEventCalender eventData={eventData} />
