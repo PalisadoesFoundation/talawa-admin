@@ -266,7 +266,7 @@ describe('Testing Advertisement Register Component', () => {
     });
 
     expect(toast.success).toHaveBeenCalledWith(
-      'Advertisement created successfully',
+      'Advertisement created successfully.',
     );
 
     expect(setTimeoutSpy).toHaveBeenCalled();
@@ -396,7 +396,7 @@ describe('Testing Advertisement Register Component', () => {
 
     await waitFor(() => {
       expect(toastErrorSpy).toHaveBeenCalledWith(
-        `An error occurred. Couldn't create advertisement`,
+        `An error occurred. Couldn't create advertisement.`,
       );
     });
 
@@ -480,7 +480,7 @@ describe('Testing Advertisement Register Component', () => {
     });
 
     expect(toast.error).toHaveBeenCalledWith(
-      'End Date should be greater than or equal to Start Date',
+      'End Date should be greater than or equal to Start Date.',
     );
     expect(setTimeoutSpy).toHaveBeenCalled();
   });
@@ -633,7 +633,7 @@ describe('Testing Advertisement Register Component', () => {
     });
 
     expect(toast.error).toHaveBeenCalledWith(
-      'End Date should be greater than or equal to Start Date',
+      'End Date should be greater than or equal to Start Date.',
     );
   });
 
