@@ -255,7 +255,7 @@ jobs:
           echo "FULL_Branch_NAME: $FULL_BRANCH_NAME"
           
           # Clone the specified repository using the extracted branch name
-          git clone --branch $FULL_BRANCH_NAME https://github.com/PalisadoesFoundation/talawa-api && ls -a 
+          git clone --branch "$FULL_BRANCH_NAME" https://github.com/PalisadoesFoundation/talawa-api && ls -a 
 
       - name: Validate Documents
         run: graphql-inspector validate './src/GraphQl/**/*.ts' './talawa-api/schema.graphql'

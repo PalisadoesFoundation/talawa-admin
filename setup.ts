@@ -12,6 +12,9 @@ export async function main(): Promise<void> {
 
   try {
     if (!fs.existsSync('.env')) {
+      if (!fs.existsSync('.env.example')) {
+        throw new Error('.env.example file not found');
+      }
       await fs.promises.open('.env', 'w', 0o666);
       const config = dotenv.parse(await fs.promises.readFile('.env.example'));
       const envContent = Object.entries(config)
@@ -45,12 +48,15 @@ export async function main(): Promise<void> {
 
   if (shouldSetCustomPort) {
     const customPort = await askForCustomPort();
-
-    const port = dotenv.parse(fs.readFileSync('.env')).PORT;
-
-    const data = await fs.promises.readFile('.env', 'utf8');
-    const result = data.replace(`PORT=${port}`, `PORT=${customPort}`);
-    await fs.promises.writeFile('.env', result, 'utf8');
+    try {
+      const data = await fs.promises.readFile('.env', 'utf8');
+      const config = dotenv.parse(data);
+      const result = data.replace(`PORT=${config.PORT}`, `PORT=${customPort}`);
+      await fs.promises.writeFile('.env', result, 'utf8');
+    } catch (error) {
+      console.error('Failed to update port configuration:', error);
+      process.exit(1);
+    }
   }
 
   let shouldSetTalawaApiUrl: boolean;
@@ -117,22 +123,29 @@ export async function main(): Promise<void> {
     default: true,
   });
 
-  if (shouldUseRecaptcha) {
-    const useRecaptcha = dotenv.parse(
-      fs.readFileSync('.env'),
-    ).REACT_APP_USE_RECAPTCHA;
-
+  async function updateEnvFile(
+    key: string,
+    oldValue: string,
+    newValue: string,
+  ): Promise<void> {
     try {
       const data = await fs.promises.readFile('.env', 'utf8');
-      const result = data.replace(
-        `REACT_APP_USE_RECAPTCHA=${useRecaptcha}`,
-        `REACT_APP_USE_RECAPTCHA=yes`,
-      );
+      const result = data.replace(`${key}=${oldValue}`, `${key}=${newValue}`);
       await fs.promises.writeFile('.env', result, 'utf8');
     } catch (error) {
-      console.error('Failed to update ReCAPTCHA configuration:', error);
+      console.error(`Failed to update ${key}:`, error);
       process.exit(1);
     }
+  }
+
+  if (shouldUseRecaptcha) {
+    const data = await fs.promises.readFile('.env', 'utf8');
+    const config = dotenv.parse(data);
+    await updateEnvFile(
+      'REACT_APP_USE_RECAPTCHA',
+      config.REACT_APP_USE_RECAPTCHA,
+      'yes',
+    );
 
     let shouldSetRecaptchaSiteKey: boolean;
     if (process.env.REACT_APP_RECAPTCHA_SITE_KEY) {
@@ -205,4 +218,7 @@ export async function main(): Promise<void> {
   );
 }
 
-main();
+main().catch((error) => {
+  console.error('Setup failed:', error);
+  process.exit(1);
+});

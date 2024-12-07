@@ -2,7 +2,7 @@
 
 :+1::tada: First off, thanks for taking the time to contribute! :tada::+1:
 
-In order to give everyone a chance to submit a issues reports and contribute to the Talawa project, we have put restrictions in place. This section outlines the guidelines that should be imposed upon issue reports in the Talawa project.
+To maintain quality and organization, we have established guidelines for submitting issue reports to the Talawa project. This document outlines these guidelines to help you contribute effectively.
 
 ---
 
