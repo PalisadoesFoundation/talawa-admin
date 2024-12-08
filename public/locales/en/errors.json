@@ -7,5 +7,10 @@
   "emailNotRegistered": "Email not registered",
   "notFoundMsg": "Oops! The Page you requested was not found!",
   "errorOccurredCouldntCreate": "An error occurred. Couldn't create {{entity}}",
-  "errorLoading": "Error occured while loading {{entity}} data"
+  "errorLoading": "Error occured while loading {{entity}} data",
+  "invalidPhoneNumber": "Please enter a valid phone number",
+  "invalidEducationGrade": "Please select a valid education grade",
+  "invalidEmploymentStatus": "Please select a valid employment status",
+  "invalidMaritalStatus": "Please select a valid marital status",
+  "error400": "The submitted information is invalid. Please check your inputs and try again"
 }
