@@ -17,9 +17,9 @@ interface InterfaceAddOnEntryProps {
   description?: string; // Optional props
   createdBy: string;
   component?: string; // Optional props
-  modified?: any; // Optional props
+  modified?: boolean; // Optional props
   uninstalledOrgs: string[];
-  getInstalledPlugins: () => any;
+  getInstalledPlugins: () => void;
 }
 
 /**
@@ -59,6 +59,7 @@ function addOnEntry({
 
   // Getting orgId from URL parameters
   const { orgId: currentOrg } = useParams();
+  // console.log(currentOrg);
   if (!currentOrg) {
     // If orgId is not present in the URL, navigate to the org list page
     return <Navigate to={'/orglist'} />;
@@ -101,7 +102,10 @@ function addOnEntry({
 
   return (
     <>
-      <Card data-testid="AddOnEntry">
+      <Card
+        data-testid="AddOnEntry"
+        style={{ border: '1px solid #31BB6B', borderRadius: '10px' }}
+      >
         {/* {uninstalledOrgs.includes(currentOrg) && (
           <Form.Check
             type="switch"
@@ -114,7 +118,7 @@ function addOnEntry({
           />
         )} */}
         <Card.Body>
-          <Card.Title>{title}</Card.Title>
+          <Card.Title style={{ fontWeight: '800' }}>{title}</Card.Title>
           <Card.Subtitle className="mb-2 text-muted author">
             {createdBy}
           </Card.Subtitle>
@@ -134,7 +138,7 @@ function addOnEntry({
               <Spinner animation="grow" />
             ) : (
               <i
-                className={!isInstalledLocal ? 'fa fa-trash' : 'fa fa-cubes'}
+                className={!isInstalledLocal ? 'fa fa-trash' : 'fa fa-plus'}
               ></i>
             )}
             {/* {installed ? 'Remove' : configurable ? 'Installed' : 'Install'} */}
