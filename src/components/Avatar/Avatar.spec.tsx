@@ -75,8 +75,8 @@ describe('Avatar component', () => {
       <Avatar
         name={testName}
         alt="Dummy Avatar"
-        avatarStyle={testStyle} // Pass custom style
-        dataTestId={testDataTestId} // Pass data-testid
+        avatarStyle={testStyle}
+        dataTestId={testDataTestId}
       />,
     );
 
