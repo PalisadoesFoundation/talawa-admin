@@ -435,7 +435,10 @@ function OrganizationDashboard(): JSX.Element {
                   {t('viewAll')}
                 </Button>
               </div>
-              <Card.Body className={styles.containerBody} style={{ padding: '0px' }}>
+              <Card.Body
+                className={styles.containerBody}
+                style={{ padding: '0px' }}
+              >
                 {rankingsLoading ? (
                   [...Array(3)].map((_, index) => {
                     return <CardItemLoading key={`rankingLoading_${index}`} />;

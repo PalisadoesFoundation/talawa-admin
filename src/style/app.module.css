@@ -588,20 +588,32 @@ hr {
   font-weight: 600;
 }
 
-.containerBody{
+.containerBody {
   min-height: 180px;
   padding-top: 0;
   max-height: 570px;
-  overflow-y: scroll;
+  overflow-y: auto;
   width: 100%;
   max-width: 400px;
   scrollbar-width: thin;
   scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+
+  &::-webkit-scrollbar {
+    width: thin;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
 }
 
 .containerBody .emptyContainer {
   display: flex;
-  height: 180px;
+  min-height: 180px;
   justify-content: center;
   align-items: center;
 }
@@ -610,12 +622,10 @@ hr {
   aspect-ratio: 1;
   border-radius: 50%;
   width: 35px;
-
 }
 
 .cardBody {
   min-height: 180px;
-
 }
 
 .cardBody .textBox {
