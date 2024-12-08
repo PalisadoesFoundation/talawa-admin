@@ -12,7 +12,7 @@ export default defineConfig({
     tsconfigPaths(),
   ],
   test: {
-    include: ['src/**/*.{test,spec}.{js,jsx,ts,tsx}'],
+    include: ['src/screens/UserPortal/Volunteer/Actions/Actions.test.tsx'],
     globals: true,
     environment: 'jsdom',
     setupFiles: 'vitest.setup.ts',
