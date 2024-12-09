@@ -464,11 +464,8 @@
 }
 
 .holidayIndicator {
+  composes: baseIndicator;
   background-color: rgba(0, 0, 0, 0.15);
-  border-radius: 5px;
-  width: 20px;
-  height: 12px;
-  display: inline-block;
 }
 
 .holidayText {
@@ -490,11 +487,8 @@
   --color-text-secondary: rgba(85, 85, 85, 1);
 }
 .organizationIndicator {
+  composes: baseIndicator;
   background-color: rgba(82, 172, 255, 0.5);
-  border-radius: 5px;
-  width: 20px;
-  height: 12px;
-  display: inline-block;
 }
 
 .legendText {
@@ -554,23 +548,6 @@
   padding: 20px;
   background-color: var(--grey-bg-color);
 }
-
-.holidays_card,
-.events_card {
-  flex: 1;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: var(--card-shadow);
-}
-
-.holidays_card {
-  background-color: var(--holiday-card-bg);
-}
-
-.events_card {
-  background-color: white;
-}
-
 .legend {
   display: flex;
   flex-direction: column;
