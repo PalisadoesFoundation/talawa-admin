@@ -72,6 +72,10 @@ const LeaveOrganization = (): JSX.Element => {
   if (orgLoading) return <Spinner animation="border" />;
   if (orgError) return <p>Error: {orgError.message}</p>;
 
+  if (!orgData?.organizations?.length) {
+    return <p>Organization not found</p>;
+  }
+
   const organization = orgData?.organizations[0];
 
   return (
