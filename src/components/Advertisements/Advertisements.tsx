@@ -2,30 +2,16 @@ import React, { useEffect, useState } from 'react';
 import styles from './Advertisements.module.css';
 import { useQuery } from '@apollo/client';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
-import { Col, Row, Tab, Tabs } from 'react-bootstrap';
+import { Button, Col, Form, Row, Tab, Tabs } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import AdvertisementEntry from './core/AdvertisementEntry/AdvertisementEntry';
 import AdvertisementRegister from './core/AdvertisementRegister/AdvertisementRegister';
 import { useParams } from 'react-router-dom';
 import type { InterfaceQueryOrganizationAdvertisementListItem } from 'utils/interfaces';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { Search } from '@mui/icons-material';
 
-/**
- * The `Advertisements` component displays a list of advertisements for a specific organization.
- * It uses a tab-based interface to toggle between active and archived advertisements.
- *
- * The component utilizes the `useQuery` hook from Apollo Client to fetch advertisements data
- * and implements infinite scrolling to load more advertisements as the user scrolls.
- *
- * @example
- * return (
- *   <Advertisements />
- * )
- *
- */
-
-export default function Advertisements(): JSX.Element {
-  // Retrieve the organization ID from URL parameters
+export default function advertisements(): JSX.Element {
   const { orgId: currentOrgId } = useParams();
   // Translation hook for internationalization
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
@@ -43,20 +29,14 @@ export default function Advertisements(): JSX.Element {
     name: string;
     type: 'BANNER' | 'MENU' | 'POPUP';
     mediaUrl: string;
-    endDate: string; // Assuming it's a string in the format 'yyyy-MM-dd'
-    startDate: string; // Assuming it's a string in the format 'yyyy-MM-dd'
+    endDate: string;
+    startDate: string;
   };
 
   // GraphQL query to fetch the list of advertisements
-  const {
-    data: orgAdvertisementListData,
-    refetch,
-  }: {
-    data?: {
-      organizations: InterfaceQueryOrganizationAdvertisementListItem[];
-    };
-    refetch: () => void;
-  } = useQuery(ORGANIZATION_ADVERTISEMENT_LIST, {
+  const { data: orgAdvertisementListData, refetch } = useQuery<{
+    organizations: InterfaceQueryOrganizationAdvertisementListItem[];
+  }>(ORGANIZATION_ADVERTISEMENT_LIST, {
     variables: {
       id: currentOrgId,
       after: after,
@@ -99,19 +79,45 @@ export default function Advertisements(): JSX.Element {
   return (
     <>
       <Row data-testid="advertisements">
-        <Col col={8}>
+        <Col col={8} style={{ backgroundColor: 'white', borderRadius: '20px' }}>
           <div className={styles.justifysp}>
-            {/* Component for registering a new advertisement */}
-            <AdvertisementRegister setAfter={setAfter} />
+            <Col
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '10px',
+              }}
+            >
+              <div className={styles.input}>
+                <Form.Control
+                  type="name"
+                  id="searchname"
+                  className={styles.actioninput}
+                  placeholder={'Search..'}
+                  autoComplete="off"
+                  required
+                  // onChange={(e): void => setSearchText("search")}
+                />
+                <Button
+                  className={`position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center `}
+                >
+                  <Search />
+                </Button>
+              </div>
+              <AdvertisementRegister setAfter={setAfter} />
+            </Col>
 
-            {/* Tabs for active and archived advertisements */}
             <Tabs
               defaultActiveKey="archievedAds"
               id="uncontrolled-tab-example"
-              className="mb-3"
+              className="mt-4"
             >
-              {/* Tab for active advertisements */}
-              <Tab eventKey="activeAds" title={t('activeAds')}>
+              <Tab
+                eventKey="activeAds"
+                title={t('activeAds')}
+                className="pt-4 m-2"
+              >
                 <InfiniteScroll
                   dataLength={advertisements?.length ?? 0}
                   next={loadMoreAdvertisements}
@@ -187,8 +193,6 @@ export default function Advertisements(): JSX.Element {
                   )}
                 </InfiniteScroll>
               </Tab>
-
-              {/* Tab for archived advertisements */}
               <Tab eventKey="archievedAds" title={t('archievedAds')}>
                 <InfiniteScroll
                   dataLength={advertisements?.length ?? 0}
@@ -224,7 +228,7 @@ export default function Advertisements(): JSX.Element {
                       (ad: Ad) => new Date(ad.endDate) < new Date(),
                     ).length !== 0 && (
                       <div className={'w-100 text-center my-4'}>
-                        <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
+                        <h5 className="m-0 ">{t('endOfResults')}</h5>
                       </div>
                     )
                   }
