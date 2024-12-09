@@ -13,20 +13,11 @@ const LeaveOrganization = (): JSX.Element => {
   const userEmail = getItem('Talawa-admin', 'email');
   const userId = getItem('Talawa-admin', 'userId');
 
-  // console.log(`here is email -${userEmail}-`)
-
-  // console.log(`here is user id -${userId}-`)
-
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [verificationStep, setVerificationStep] = useState(false);
-
-  // console.log(`email from input -${email}-`)
-  // const trimmedUserId = JSON.parse(userId)?.trim();
-
-  // console.log(`here is trimmed user id  ${trimmedUserId}`)
 
   const {
     data: orgData,
@@ -58,11 +49,6 @@ const LeaveOrganization = (): JSX.Element => {
   };
 
   const handleVerifyAndLeave = (): void => {
-    // const trimmedEmail = email.trim();
-    // console.log(`here is trimmed email from input  ${trimmedEmail}`)
-    // const trimmedUserEmail = JSON.parse(userEmail)?.trim();
-    // console.log(`here is trimmed email from local storage  ${trimmedUserEmail}`)
-
     if (email === userEmail) {
       handleLeaveOrganization();
     } else {
