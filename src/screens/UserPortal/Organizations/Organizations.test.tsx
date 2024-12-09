@@ -1,7 +1,6 @@
 import { MockedProvider } from '@apollo/react-testing';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
-
 import userEvent from '@testing-library/user-event';
 import {
   USER_CREATED_ORGANIZATIONS,
@@ -16,6 +15,8 @@ import i18nForTest from 'utils/i18nForTest';
 import useLocalStorage from 'utils/useLocalstorage';
 import Organizations from './Organizations';
 import React, { act } from 'react';
+import { vi } from 'vitest'; // Replace jest with vi
+
 const { getItem } = useLocalStorage();
 
 const MOCKS = [
@@ -331,6 +332,11 @@ const resizeWindow = (width: number): void => {
   window.innerWidth = width;
   fireEvent(window, new Event('resize'));
 };
+
+vi.mock('utils/useLocalstorage', () => ({
+  getItem: vi.fn(() => 'mockUserId'),
+}));
+
 
 describe('Testing Organizations Screen [User Portal]', () => {
   test('Screen should be rendered properly', async () => {
