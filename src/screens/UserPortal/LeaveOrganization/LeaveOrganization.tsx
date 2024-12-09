@@ -49,7 +49,7 @@ const LeaveOrganization = (): JSX.Element => {
   };
 
   const handleVerifyAndLeave = (): void => {
-    if (email === userEmail) {
+    if (email.trim().toLowerCase() === userEmail.toLowerCase()) {
       handleLeaveOrganization();
     } else {
       setError('Verification failed: Email does not match.');
