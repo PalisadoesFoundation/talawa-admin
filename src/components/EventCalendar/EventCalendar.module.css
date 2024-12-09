@@ -437,6 +437,11 @@
   width: 40px;
   background: rgba(146, 200, 141, 0.5);
   border-radius: 10px;
+  background-color: rgba(139, 195, 74, 1);
+  border-radius: 5px;
+  width: 20px;
+  height: 12px;
+  display: inline-block;
 }
 
 .baseIndicator {
@@ -489,6 +494,7 @@
   --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   --holiday-card-bg: #f6f2e5;
   --holiday-date-color: #ea7b56;
+  --indicator-spacing: 8px;
 }
 .organizationIndicator {
   composes: baseIndicator;
@@ -551,14 +557,6 @@
   gap: 20px;
   padding: 20px;
   background-color: var(--grey-bg-color);
-}
-
-.userEvents__color {
-  background-color: rgba(139, 195, 74, 1);
-  border-radius: 5px;
-  width: 20px;
-  height: 12px;
-  display: inline-block;
 }
 
 .holidays_card,

@@ -140,14 +140,21 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       holidays?.filter((holiday) => {
         try {
           return dayjs(holiday.date, 'MM-DD').month() === currentMonth;
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (e) {
-          console.error(`Invalid date format for holiday: ${holiday.name}`);
+          if (e instanceof Error) {
+            console.error(
+              `Invalid date format for holiday "${holiday.name}":`,
+              e.message,
+            );
+          } else {
+            console.error(`Unknown error for holiday "${holiday.name}"`);
+          }
           return false;
         }
       }),
     [holidays, currentMonth],
   );
+
   /**
    * Moves the calendar view to the next month.
    */
