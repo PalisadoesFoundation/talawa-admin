@@ -21,11 +21,12 @@ import {
 } from './UpcomingEvents.mocks';
 import { toast } from 'react-toastify';
 import useLocalStorage from 'utils/useLocalstorage';
+import { vi } from 'vitest';
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
@@ -81,10 +82,13 @@ const renderUpcomingEvents = (link: ApolloLink): RenderResult => {
 
 describe('Testing Upcoming Events Screen', () => {
   beforeAll(() => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: 'orgId' }),
-    }));
+    vi.mock('react-router-dom', async () => {
+      const actual = await vi.importActual('react-router-dom');
+      return {
+        ...actual,
+        useParams: () => ({ orgId: 'orgId' }),
+      };
+    });
   });
 
   beforeEach(() => {
@@ -92,7 +96,7 @@ describe('Testing Upcoming Events Screen', () => {
   });
 
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
