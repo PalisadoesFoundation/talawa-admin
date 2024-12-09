@@ -10,8 +10,12 @@ const LeaveOrganization = (): JSX.Element => {
   const navigate = useNavigate();
   const { orgId: organizationId } = useParams();
 
-  const userEmail = getItem('Talawa-admin', '_email');
-  const userId = getItem('Talawa-admin', '_userId');
+  const userEmail = getItem('Talawa-admin', 'email');
+  const userId = getItem('Talawa-admin', 'userId');
+
+  // console.log(`here is email -${userEmail}-`)
+
+  // console.log(`here is user id -${userId}-`)
 
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
@@ -19,7 +23,10 @@ const LeaveOrganization = (): JSX.Element => {
   const [showModal, setShowModal] = useState(false);
   const [verificationStep, setVerificationStep] = useState(false);
 
-  const trimmedUserId = JSON.parse(userId)?.trim();
+  // console.log(`email from input -${email}-`)
+  // const trimmedUserId = JSON.parse(userId)?.trim();
+
+  // console.log(`here is trimmed user id  ${trimmedUserId}`)
 
   const {
     data: orgData,
@@ -46,15 +53,17 @@ const LeaveOrganization = (): JSX.Element => {
     setError('');
     setLoading(true);
     removeMember({
-      variables: { orgid: organizationId, userid: trimmedUserId },
+      variables: { orgid: organizationId, userid: userId },
     });
   };
 
   const handleVerifyAndLeave = (): void => {
-    const trimmedEmail = email.trim();
-    const trimmedUserEmail = JSON.parse(userEmail)?.trim();
+    // const trimmedEmail = email.trim();
+    // console.log(`here is trimmed email from input  ${trimmedEmail}`)
+    // const trimmedUserEmail = JSON.parse(userEmail)?.trim();
+    // console.log(`here is trimmed email from local storage  ${trimmedUserEmail}`)
 
-    if (trimmedEmail === trimmedUserEmail) {
+    if (email === userEmail) {
       handleLeaveOrganization();
     } else {
       setError('Verification failed: Email does not match.');
