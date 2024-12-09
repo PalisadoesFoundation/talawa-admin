@@ -4,21 +4,20 @@ import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { Button, Modal, Form, Spinner, Alert } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router-dom';
-import useLocalStorage from 'utils/useLocalstorage';
+import { getItem } from 'utils/useLocalstorage';
 
-const LeaveOrganization: React.FC = () => {
+const LeaveOrganization = (): JSX.Element => {
   const navigate = useNavigate();
-  const { orgId: organizationId } = useParams<{ orgId: string }>();
+  const { orgId: organizationId } = useParams();
 
-  const { getItem } = useLocalStorage();
-  const userEmail = getItem('Talawa-admin_email') ?? '';
-  const userId = getItem('Talawa-admin_userId') ?? '';
+  const userEmail = getItem('Talawa-admin', '_email');
+  const userId = getItem('Talawa-admin', '_userId');
 
-  const [email, setEmail] = useState<string>('');
-  const [error, setError] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
-  const [showModal, setShowModal] = useState<boolean>(false);
-  const [verificationStep, setVerificationStep] = useState<boolean>(false);
+  const [email, setEmail] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [verificationStep, setVerificationStep] = useState(false);
 
   const trimmedUserId = JSON.parse(userId)?.trim();
 
@@ -113,7 +112,7 @@ const LeaveOrganization: React.FC = () => {
             </>
           ) : (
             <Form
-              onSubmit={(e: React.FormEvent<HTMLFormElement>): void => {
+              onSubmit={(e) => {
                 e.preventDefault();
                 handleVerifyAndLeave();
               }}
