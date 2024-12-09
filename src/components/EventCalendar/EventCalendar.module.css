@@ -477,19 +477,14 @@
   font-size: 14px;
   color: #555555;
 }
-.eventsLegend {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
 :root {
   /* Holiday colors */
   --color-holiday-indicator: rgba(0, 0, 0, 0.15);
   --color-holiday-date: rgba(255, 152, 0, 1);
   --mobile-breakpoint: 700px;
   --small-mobile-breakpoint: 480px;
-  --color-text-primary: rgba(51, 51, 51, 1);
-  --color-text-secondary: rgba(85, 85, 85, 1);
+  --text-color-primary: rgba(51, 51, 51, 1);
+  --text-color-secondary: rgba(85, 85, 85, 1);
   /* Card styles */
   --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   --holiday-card-bg: #f6f2e5;
