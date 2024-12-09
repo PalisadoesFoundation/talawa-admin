@@ -49,7 +49,7 @@ jobs:
         
       - name: Run formatting if check fails
         if: failure()
-        run: npm run format
+        run: npm run format:fix
 
       - name: Check for type errors
         if: steps.changed-files.outputs.only_changed != 'true'
