@@ -43,7 +43,7 @@ const EventDashboardScreen = (): JSX.Element => {
               className={`d-flex flex-row justify-content-between flex-wrap ${styles.gap}`}
             >
               <div style={{ flex: 1 }}>
-                <h1>{t('title')}</h1>
+                <h1>{t('Not title ')}</h1>
               </div>
               <Outlet />
             </div>
