@@ -326,7 +326,11 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         </div>
 
         <div className={styles.calendar_infocards}>
-          <div className={styles.holidays_card}>
+          <div
+            className={styles.holidays_card}
+            role="region"
+            aria-label="Holidays"
+          >
             <h3 className={styles.card_title}>Holidays</h3>
             <ul className={styles.card_list}>
               {filteredHolidays.map((holiday, index) => (
@@ -341,7 +345,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             </ul>
           </div>
 
-          <div className={styles.events_card}>
+          <div className={styles.events_card} role="region" aria-label="Events">
             <h3 className={styles.card_title}>Events</h3>
             <div className={styles.legend}>
               <div className={styles.listContainer}>
