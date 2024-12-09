@@ -74,22 +74,26 @@ describe('Testing OrganizationScreen', () => {
     });
   });
 
-  test('handles drawer toggle correctly', () => {
+  test('handles drawer toggle correctly', async () => {
     renderComponent();
 
     const closeButton = screen.getByTestId('closeMenu');
     fireEvent.click(closeButton);
 
-    // Check for contract class after closing
-    expect(screen.getByTestId('mainpageright')).toHaveClass('_expand_ccl5z_8');
+    // Check for expand class after closing
+    await waitFor(() => {
+      const mainPageRight = screen.getByTestId('mainpageright');
+      expect(mainPageRight).toHaveClass(styles.expand);
+    });
 
     const openButton = screen.getByTestId('openMenu');
     fireEvent.click(openButton);
 
-    // Check for expand class after opening
-    expect(screen.getByTestId('mainpageright')).toHaveClass(
-      '_contract_ccl5z_61',
-    );
+    // Check for contract class after opening
+    await waitFor(() => {
+      const mainPageRight = screen.getByTestId('mainpageright');
+      expect(mainPageRight).toHaveClass(styles.contract);
+    });
   });
 
   test('handles window resize', () => {
