@@ -318,7 +318,7 @@
 }
 
 @media only screen and (max-width: var(--mobile-breakpoint)) {
-  /* --mobile-breakpoint: 768px */
+  /** @breakpoint --mobile-breakpoint: 768px */
   .event_list {
     display: none;
   }
@@ -350,7 +350,7 @@
   flex: 1;
   padding: 20px;
   border-radius: 10px;
-  box-shadow: var(--card-shadow);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
 .holidays_card {
@@ -432,18 +432,6 @@
   border-radius: 10px;
 }
 
-.userEvents__color {
-  height: 15px;
-  width: 40px;
-  background: rgba(146, 200, 141, 0.5);
-  border-radius: 10px;
-  background-color: rgba(139, 195, 74, 1);
-  border-radius: 5px;
-  width: 20px;
-  height: 12px;
-  display: inline-block;
-}
-
 .baseIndicator {
   border-radius: 5px;
   width: 20px;
@@ -474,6 +462,8 @@
 }
 
 :root {
+  /* Color scheme for holiday-related elements */
+  --color-user-event: rgba(139, 195, 74, 1);
   /* Holiday colors */
   --color-holiday-indicator: rgba(0, 0, 0, 0.15);
   --color-holiday-date: rgba(255, 152, 0, 1);
@@ -573,5 +563,11 @@
 
 .userEvents__color {
   composes: baseIndicator;
+  display: inline-block;
   background-color: rgba(139, 195, 74, 1);
+}
+
+.card_list_item:hover {
+  background-color: var(--hover-bg-color);
+  transition: background-color 0.2s ease;
 }
