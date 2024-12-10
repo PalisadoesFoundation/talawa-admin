@@ -23,6 +23,14 @@ import { toast } from 'react-toastify';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
 
+/**
+ * Unit tests for the UpcomingEvents component.
+ *
+ * This file contains tests to verify the functionality and behavior of the UpcomingEvents component
+ * under various scenarios, including successful data fetching, error handling, and user interactions.
+ * Mocked dependencies are used to ensure isolated testing of the component.
+ */
+
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
