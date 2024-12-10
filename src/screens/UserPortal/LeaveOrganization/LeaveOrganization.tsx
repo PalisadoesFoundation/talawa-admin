@@ -9,6 +9,13 @@ import { Button, Modal, Form, Spinner, Alert } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getItem } from 'utils/useLocalstorage';
 
+/**
+ * Component to allow the user to leave an organization.
+ * The user needs to confirm by entering their email.
+ * After confirmation, the member is removed from the organization.
+ *
+ * @returns The LeaveOrganization component.
+ */
 const LeaveOrganization = (): JSX.Element => {
   const navigate = useNavigate();
   const { orgId: organizationId } = useParams();
@@ -22,6 +29,11 @@ const LeaveOrganization = (): JSX.Element => {
   const [showModal, setShowModal] = useState(false);
   const [verificationStep, setVerificationStep] = useState(false);
 
+  /**
+   * Query to fetch the organization data.
+   *
+   * @returns The organization data or loading/error states.
+   */
   const {
     data: orgData,
     loading: orgLoading,
@@ -30,6 +42,9 @@ const LeaveOrganization = (): JSX.Element => {
     variables: { id: organizationId },
   });
 
+  /**
+   * Mutation to remove the member from the organization.
+   */
   const [removeMember] = useMutation(REMOVE_MEMBER_MUTATION, {
     refetchQueries: [
       {
@@ -48,6 +63,10 @@ const LeaveOrganization = (): JSX.Element => {
     },
   });
 
+  /**
+   * Handles the process of leaving the organization.
+   * It triggers the mutation to remove the member.
+   */
   const handleLeaveOrganization = (): void => {
     setError('');
     setLoading(true);
@@ -56,6 +75,12 @@ const LeaveOrganization = (): JSX.Element => {
     });
   };
 
+  /**
+   * Verifies the user's email and triggers the leave process if the email matches.
+   * If the email doesn't match, an error message is set.
+   *
+   * @returns
+   */
   const handleVerifyAndLeave = (): void => {
     if (email.trim().toLowerCase() === userEmail.toLowerCase()) {
       handleLeaveOrganization();
@@ -64,6 +89,13 @@ const LeaveOrganization = (): JSX.Element => {
     }
   };
 
+  /**
+   * Handles the 'Enter' key press event for the email input.
+   * It either moves to the verification step or triggers the leave process.
+   *
+   * @param event - The keyboard event.
+   * @returns
+   */
   const handleKeyPress = (
     event: React.KeyboardEvent<HTMLInputElement>,
   ): void => {
