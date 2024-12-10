@@ -1,27 +1,33 @@
 import React from 'react';
-import { MockedProvider } from '@apollo/react-testing';
-import type { RenderResult } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
-import { vi } from 'vitest';
-import { I18nextProvider } from 'react-i18next';
-import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import { store } from 'state/store';
-import { StaticMockLink } from 'utils/StaticMockLink';
-import i18nForTest from 'utils/i18nForTest';
-import OrgSettings from './OrgSettings';
 import userEvent from '@testing-library/user-event';
-import type { ApolloLink } from '@apollo/client';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { I18nextProvider } from 'react-i18next';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { MockedProvider } from '@apollo/react-testing';
+import { store } from 'state/store';
+import i18nForTest from 'utils/i18nForTest';
+import { StaticMockLink } from 'utils/StaticMockLink';
+import OrgSettings from './OrgSettings';
 import { MOCKS } from './OrgSettings.mocks';
 
 const link1 = new StaticMockLink(MOCKS);
 
-const renderOrganisationSettings = (link: ApolloLink): RenderResult => {
-  return render(
+const renderOrganisationSettings = (link = link1, orgId = 'orgId'): void => {
+  vi.doMock('react-router-dom', async () => {
+    const actual = await vi.importActual('react-router-dom');
+    return {
+      ...actual,
+      useParams: () => ({ orgId }),
+    };
+  });
+
+  render(
     <MockedProvider addTypename={false} link={link}>
-      <MemoryRouter initialEntries={['/orgsetting/orgId']}>
+      <MemoryRouter initialEntries={[`/orgsetting/${orgId}`]}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <I18nextProvider i18n={i18nForTest}>
@@ -29,7 +35,9 @@ const renderOrganisationSettings = (link: ApolloLink): RenderResult => {
                 <Route path="/orgsetting/:orgId" element={<OrgSettings />} />
                 <Route
                   path="/"
-                  element={<div data-testid="paramsError"></div>}
+                  element={
+                    <div data-testid="paramsError">Redirected to Home</div>
+                  }
                 />
               </Routes>
             </I18nextProvider>
@@ -41,20 +49,24 @@ const renderOrganisationSettings = (link: ApolloLink): RenderResult => {
 };
 
 describe('Organisation Settings Page', () => {
-  beforeAll(() => {
-    vi.mock('react-router-dom', () => ({
-      ...vi.importActual('react-router-dom'),
-      useParams: () => ({ orgId: 'orgId' }),
-    }));
-  });
-
-  afterAll(() => {
-    vi.clearAllMocks();
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
+    const useParamsMock = vi.fn(() => ({ orgId: undefined }));
+    vi.doMock('react-router-dom', async () => {
+      const actual = await vi.importActual('react-router-dom');
+      return {
+        ...actual,
+        useParams: useParamsMock,
+      };
+    });
+
+    const { default: OrgSettings } = await import('./OrgSettings');
+
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider addTypename={false}>
         <MemoryRouter initialEntries={['/orgsetting/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -62,7 +74,9 @@ describe('Organisation Settings Page', () => {
                 <Route path="/orgsetting/" element={<OrgSettings />} />
                 <Route
                   path="/"
-                  element={<div data-testid="paramsError"></div>}
+                  element={
+                    <div data-testid="paramsError">Redirected to Home</div>
+                  }
                 />
               </Routes>
             </I18nextProvider>
@@ -70,13 +84,16 @@ describe('Organisation Settings Page', () => {
         </MemoryRouter>
       </MockedProvider>,
     );
+
     await waitFor(() => {
-      expect(screen.getByTestId('paramsError')).toBeInTheDocument();
+      const paramsErrorElement = screen.getByTestId('paramsError');
+      expect(paramsErrorElement).toBeInTheDocument();
+      expect(paramsErrorElement.textContent).toBe('Redirected to Home');
     });
   });
 
-  test('should render the organisation settings page', async () => {
-    renderOrganisationSettings(link1);
+  it('should render the organisation settings page', async () => {
+    renderOrganisationSettings();
 
     await waitFor(() => {
       expect(screen.getByTestId('generalSettings')).toBeInTheDocument();
@@ -87,8 +104,8 @@ describe('Organisation Settings Page', () => {
         screen.getByTestId('agendaItemCategoriesSettings'),
       ).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('generalSettings'));
 
+    userEvent.click(screen.getByTestId('generalSettings'));
     await waitFor(() => {
       expect(screen.getByTestId('generalTab')).toBeInTheDocument();
     });
@@ -102,5 +119,20 @@ describe('Organisation Settings Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('agendaItemCategoriesTab')).toBeInTheDocument();
     });
+  });
+
+  it('should render dropdown for settings tabs', async () => {
+    renderOrganisationSettings();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('settingsDropdownToggle')).toBeInTheDocument();
+    });
+
+    userEvent.click(screen.getByTestId('settingsDropdownToggle'));
+
+    const dropdownItems = screen.getAllByRole('button', {
+      name: /general|actionItemCategories|agendaItemCategories/i,
+    });
+    expect(dropdownItems).toHaveLength(3);
   });
 });
