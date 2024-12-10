@@ -124,6 +124,7 @@ const EventDashboardScreen = (): JSX.Element => {
         } `}
         data-testid="mainpageright"
       >
+        <div>Hello </div>
         <div className="d-flex justify-content-between align-items-center">
           <div style={{ flex: 1 }}>
             <h1>{t('title')}</h1>

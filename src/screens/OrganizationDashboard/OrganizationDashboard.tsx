@@ -247,6 +247,7 @@ function organizationDashboard(): JSX.Element {
                   navigate(eventsLink);
                 }}
               >
+                <div>Helloioioo</div>
                 <DashBoardCard
                   count={eventData?.eventsByOrganizationConnection.length}
                   title={t('events')}
