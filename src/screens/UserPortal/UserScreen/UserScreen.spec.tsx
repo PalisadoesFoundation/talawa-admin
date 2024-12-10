@@ -1,8 +1,19 @@
+/**
+ * This file contains unit tests for the UserScreen component.
+ *
+ * The tests cover:
+ * - Rendering of the correct title based on the location.
+ * - Functionality of the LeftDrawer component.
+ * - Behavior when the orgId is undefined.
+ *
+ * These tests use Vitest for test execution and MockedProvider for mocking GraphQL queries.
+ */
+
 import React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { describe, it, vi, beforeEach, expect } from 'vitest';
 import { MockedProvider } from '@apollo/react-testing';
-import { fireEvent, render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
-import 'jest-location-mock';
 import { Provider } from 'react-redux';
 import { BrowserRouter, useNavigate } from 'react-router-dom';
 import { store } from 'state/store';
@@ -10,15 +21,20 @@ import i18nForTest from 'utils/i18nForTest';
 import UserScreen from './UserScreen';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import '@testing-library/jest-dom';
 
 let mockID: string | undefined = '123';
 let mockLocation: string | undefined = '/user/organization/123';
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({ orgId: mockID }),
-  useLocation: () => ({ pathname: mockLocation }),
-}));
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useParams: () => ({ orgId: mockID }),
+    useLocation: () => ({ pathname: mockLocation }),
+    useNavigate: vi.fn(), // Mock only the necessary parts
+  };
+});
 
 const MOCKS = [
   {
@@ -72,8 +88,13 @@ const clickToggleMenuBtn = (toggleButton: HTMLElement): void => {
   fireEvent.click(toggleButton);
 };
 
-describe('Testing LeftDrawer in OrganizationScreen', () => {
-  test('renders the correct title based on the titleKey for posts', () => {
+describe('UserScreen tests with LeftDrawer functionality', () => {
+  beforeEach(() => {
+    mockID = '123';
+    mockLocation = '/user/organization/123';
+  });
+
+  it('renders the correct title for posts', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -90,7 +111,7 @@ describe('Testing LeftDrawer in OrganizationScreen', () => {
     expect(titleElement).toHaveTextContent('Posts');
   });
 
-  test('renders the correct title based on the titleKey', () => {
+  it('renders the correct title for people', () => {
     mockLocation = '/user/people/123';
 
     render(
@@ -109,7 +130,7 @@ describe('Testing LeftDrawer in OrganizationScreen', () => {
     expect(titleElement).toHaveTextContent('People');
   });
 
-  test('LeftDrawer should toggle correctly based on window size and user interaction', async () => {
+  it('toggles LeftDrawer correctly based on window size and user interaction', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -121,27 +142,30 @@ describe('Testing LeftDrawer in OrganizationScreen', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
+
     const toggleButton = screen.getByTestId('closeMenu') as HTMLElement;
     const icon = toggleButton.querySelector('i');
 
-    // Resize window to a smaller width
+    // Resize to small screen and check toggle state
     resizeWindow(800);
     clickToggleMenuBtn(toggleButton);
     expect(icon).toHaveClass('fa fa-angle-double-left');
 
-    // Resize window back to a larger width
+    // Resize to large screen and check toggle state
     resizeWindow(1000);
     clickToggleMenuBtn(toggleButton);
     expect(icon).toHaveClass('fa fa-angle-double-right');
 
+    // Check state on re-click
     clickToggleMenuBtn(toggleButton);
     expect(icon).toHaveClass('fa fa-angle-double-left');
   });
 
-  test('should be redirected to root when orgId is undefined', async () => {
+  it('redirects to root when orgId is undefined', () => {
     mockID = undefined;
-    const navigate = jest.fn();
-    jest.spyOn({ useNavigate }, 'useNavigate').mockReturnValue(navigate);
+    const navigate = vi.fn();
+    vi.spyOn({ useNavigate }, 'useNavigate').mockReturnValue(navigate);
+
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -153,6 +177,7 @@ describe('Testing LeftDrawer in OrganizationScreen', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
+
     expect(window.location.pathname).toEqual('/');
   });
 });
