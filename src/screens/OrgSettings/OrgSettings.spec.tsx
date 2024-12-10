@@ -19,16 +19,11 @@ const link1 = new StaticMockLink(MOCKS);
 
 const mockRouterParams = (orgId: string | undefined): void => {
   vi.doMock('react-router-dom', async () => {
-    try {
-      const actual = await vi.importActual('react-router-dom');
-      return {
-        ...actual,
-        useParams: () => ({ orgId }),
-      };
-    } catch (error) {
-      console.error('Failed to mock router params:', error);
-      throw error;
-    }
+    const actual = await vi.importActual('react-router-dom');
+    return {
+      ...actual,
+      useParams: () => ({ orgId }),
+    };
   });
 };
 const renderOrganisationSettings = (
