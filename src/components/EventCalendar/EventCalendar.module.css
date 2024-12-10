@@ -481,6 +481,7 @@
   /* Holiday colors */
   --color-holiday-indicator: rgba(0, 0, 0, 0.15);
   --color-holiday-date: rgba(255, 152, 0, 1);
+  /* Breakpoints for responsive design */
   --mobile-breakpoint: 700px;
   --small-mobile-breakpoint: 480px;
   --text-color-primary: rgba(51, 51, 51, 1);
@@ -543,7 +544,6 @@
   font-weight: 500;
   color: var(--holiday-date-color);
 }
-
 .calendar_infocards {
   display: flex;
   flex-direction: row;
@@ -553,7 +553,6 @@
   padding: 20px;
   background-color: var(--grey-bg-color);
 }
-
 .holidays_card,
 .events_card {
   flex: 1;
