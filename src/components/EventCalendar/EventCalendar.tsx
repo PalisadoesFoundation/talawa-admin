@@ -135,25 +135,34 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       setCurrentMonth(currentMonth - 1);
     }
   };
-  const filteredHolidays = useMemo(
-    () =>
-      holidays?.filter((holiday) => {
-        try {
-          return dayjs(holiday.date, 'MM-DD').month() === currentMonth;
-        } catch (e) {
-          if (e instanceof Error) {
-            console.error(
-              `Invalid date format for holiday "${holiday.name}":`,
-              e.message,
-            );
-          } else {
-            console.error(`Unknown error for holiday "${holiday.name}"`);
-          }
-          return false;
+  const filteredHolidays = useMemo(() => {
+    if (!holidays || !Array.isArray(holidays)) {
+      console.error('Invalid holidays array');
+      return [];
+    }
+
+    return holidays.filter((holiday) => {
+      if (!holiday.date) {
+        console.warn(`Holiday "${holiday.name}" has no date specified.`);
+        return false;
+      }
+
+      try {
+        return dayjs(holiday.date, 'MM-DD').month() === currentMonth;
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error(
+            `Invalid date format for holiday "${holiday.name}": ${error.message}`,
+          );
+        } else {
+          console.error(
+            `Unknown error occurred for holiday "${holiday.name}".`,
+          );
         }
-      }),
-    [holidays, currentMonth],
-  );
+        return false;
+      }
+    });
+  }, [holidays, currentMonth]);
 
   /**
    * Moves the calendar view to the next month.
@@ -315,19 +324,29 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                     : styles.event_list_hour
                 }
               >
-                {expanded === -100
-                  ? allDayEventsList
-                  : allDayEventsList?.slice(0, 1)}
+                {Array.isArray(allDayEventsList) &&
+                allDayEventsList.length > 0 ? (
+                  expanded === -100 ? (
+                    allDayEventsList
+                  ) : (
+                    allDayEventsList.slice(0, 1)
+                  )
+                ) : (
+                  <p className={styles.no_events_message}>
+                    No events available
+                  </p>
+                )}
               </div>
-              {(allDayEventsList?.length > 2 ||
-                (windowWidth <= 700 && allDayEventsList?.length > 0)) && (
-                <button
-                  className={styles.btn__more}
-                  onClick={() => toggleExpand(-100)}
-                >
-                  {expanded === -100 ? 'View less' : 'View all'}
-                </button>
-              )}
+              {Array.isArray(allDayEventsList) &&
+                (allDayEventsList.length > 2 ||
+                  (windowWidth <= 700 && allDayEventsList.length > 0)) && (
+                  <button
+                    className={styles.btn__more}
+                    onClick={() => toggleExpand(-100)}
+                  >
+                    {expanded === -100 ? 'View less' : 'View all'}
+                  </button>
+                )}
             </div>
           </div>
         </div>
