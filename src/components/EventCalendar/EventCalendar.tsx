@@ -374,7 +374,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           <div className={styles.events_card} role="region" aria-label="Events">
             <h3 className={styles.card_title}>Events</h3>
             <div className={styles.legend}>
-              <div className={styles.listContainer}>
+              <div className={styles.list_container}>
                 <span className={styles.holidayIndicator}></span>
                 <span className={styles.holidayText}>Holidays</span>
               </div>

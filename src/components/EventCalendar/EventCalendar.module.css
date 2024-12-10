@@ -271,15 +271,6 @@
 .expand_event_list {
   display: block;
 }
-
-.list_container {
-  padding: 5px;
-  width: fit-content;
-  display: flex;
-  align-items: center;
-  gap: var(--indicator-spacing);
-}
-
 .event_list_hour {
   display: flex;
   flex-direction: row;
@@ -449,11 +440,12 @@
   gap: 8px;
 }
 
-.listContainer {
+.list_container {
+  padding: 5px;
   width: fit-content;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--indicator-spacing);
 }
 
 .holidayIndicator {
@@ -488,7 +480,7 @@
   color: #555555;
 }
 @media only screen and (max-width: var(--mobile-breakpoint)) {
-  .listContainer,
+  .list_container,
   .eventsLegend {
     gap: 4px;
   }
@@ -568,6 +560,10 @@
 }
 
 .card_list_item:hover {
+  background-color: var(--hover-bg-color);
+  transition: background-color 0.2s ease;
+}
+.card_list_item:focus-visible {
   background-color: var(--hover-bg-color);
   transition: background-color 0.2s ease;
 }
