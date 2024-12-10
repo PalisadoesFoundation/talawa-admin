@@ -1,3 +1,9 @@
+/**
+ * Unit tests for the AdvertisementRegister component.
+ *
+ * This file contains tests for the AdvertisementRegister component to ensure it behaves as expected
+ * under various scenarios.
+ */
 import React from 'react';
 import {
   render,
