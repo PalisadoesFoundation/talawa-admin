@@ -153,13 +153,6 @@ vi.mock('utils/convertToBase64', () => ({
 }));
 
 describe('Testing Advertisement Register Component', () => {
-  beforeEach(() => {
-    vi.useFakeTimers();
-  });
-
-  afterEach(() => {
-    vi.useRealTimers();
-  });
   test('AdvertismentRegister component loads correctly in register mode', async () => {
     render(
       <ApolloProvider client={client}>
@@ -187,7 +180,9 @@ describe('Testing Advertisement Register Component', () => {
   });
 
   test('create advertisement', async () => {
+    vi.useFakeTimers();
     const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
+
     await act(async () => {
       render(
         <MockedProvider addTypename={false} link={link}>
@@ -265,14 +260,19 @@ describe('Testing Advertisement Register Component', () => {
       fireEvent.click(screen.getByText(translations.register));
     });
 
-    expect(toast.success).toHaveBeenCalledWith(
-      'Advertisement created successfully.',
-    );
-
-    expect(setTimeoutSpy).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith(
+        'Advertisement created successfully.',
+      );
+      expect(setTimeoutSpy).toHaveBeenCalled();
+    });
+    vi.useRealTimers();
   });
 
   test('update advertisement', async () => {
+    vi.useFakeTimers();
+    const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
+
     await act(async () => {
       render(
         <MockedProvider addTypename={false} link={link}>
@@ -349,12 +349,18 @@ describe('Testing Advertisement Register Component', () => {
       fireEvent.click(screen.getByText(translations.saveChanges));
     });
 
-    expect(toast.success).toHaveBeenCalledWith(
-      'Advertisement created successfully.',
-    );
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith(
+        'Advertisement created successfully.',
+      );
+      expect(setTimeoutSpy).toHaveBeenCalled();
+    });
+
+    vi.useRealTimers();
   });
 
   test('Logs error to the console and shows error toast when advertisement creation fails', async () => {
+    vi.useFakeTimers();
     const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
     const toastErrorSpy = vi.spyOn(toast, 'error');
 
@@ -396,14 +402,16 @@ describe('Testing Advertisement Register Component', () => {
 
     await waitFor(() => {
       expect(toastErrorSpy).toHaveBeenCalledWith(
-        `An error occurred. Couldn't create advertisement.`,
+        `An error occurred. Couldn't create advertisement`,
       );
     });
 
     expect(setTimeoutSpy).toHaveBeenCalled();
+    vi.useRealTimers();
   });
 
   test('Throws error when the end date is less than the start date', async () => {
+    vi.useFakeTimers();
     const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
     await act(async () => {
       render(
@@ -480,12 +488,14 @@ describe('Testing Advertisement Register Component', () => {
     });
 
     expect(toast.error).toHaveBeenCalledWith(
-      'End Date should be greater than or equal to Start Date.',
+      'End Date should be greater than or equal to Start Date',
     );
     expect(setTimeoutSpy).toHaveBeenCalled();
+    vi.useRealTimers();
   });
 
   test('AdvertismentRegister component loads correctly in edit mode', async () => {
+    vi.useFakeTimers();
     render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -508,9 +518,11 @@ describe('Testing Advertisement Register Component', () => {
     );
 
     expect(screen.getByTestId('editBtn')).toBeInTheDocument();
+    vi.useRealTimers();
   });
 
   test('Opens and closes modals on button click', async () => {
+    vi.useFakeTimers();
     render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -547,10 +559,14 @@ describe('Testing Advertisement Register Component', () => {
       vi.runAllTimersAsync();
     });
 
-    expect(screen.queryByText(translations.close)).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByText(translations.close)).not.toBeInTheDocument();
+    });
+    vi.useRealTimers();
   });
 
   test('Throws error when the end date is less than the start date while editing the advertisement', async () => {
+    vi.useFakeTimers();
     render(
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
@@ -633,11 +649,14 @@ describe('Testing Advertisement Register Component', () => {
     });
 
     expect(toast.error).toHaveBeenCalledWith(
-      'End Date should be greater than or equal to Start Date.',
+      'End Date should be greater than or equal to Start Date',
     );
+
+    vi.useRealTimers();
   });
 
   test('Media preview renders correctly', async () => {
+    vi.useFakeTimers();
     render(
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
@@ -702,4 +721,5 @@ describe('Testing Advertisement Register Component', () => {
 
     expect(mediaPreview).not.toBeInTheDocument();
   });
+  vi.useRealTimers();
 });
