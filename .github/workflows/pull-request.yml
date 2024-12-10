@@ -101,6 +101,7 @@ jobs:
             .node-version
             .husky/**
             scripts/**
+            src/style/** 
             schema.graphql
             package.json
             tsconfig.json

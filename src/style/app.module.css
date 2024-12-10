@@ -1,3 +1,8 @@
+:root {
+  --high-contrast-text: #494949;
+  --high-contrast-border: #2c2c2c;
+}
+
 .noOutline input {
   outline: none;
 }
@@ -234,7 +239,7 @@
 .editButton {
   background-color: var(--search-button-bg);
   border-color: var(--search-button-border);
-  color: #555555;
+  color: var(--high-contrast-text);
   margin-left: 2;
 }
 
@@ -242,7 +247,7 @@
   margin-bottom: 10px;
   background-color: var(--search-button-bg);
   border-color: var(--grey-bg-color);
-  color: #555555;
+  color: var(--high-contrast-text);
 }
 
 .addButton:hover {
@@ -443,7 +448,7 @@ hr {
   flex-direction: row;
   font-weight: 900;
   font-size: 16px;
-  color: rgb(80, 80, 80);
+  color: var(--high-contrast-text);
 }
 
 .rankings {
@@ -556,6 +561,45 @@ hr {
   flex-direction: column;
 }
 
+.headerBtn {
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 2px;
+}
+
+.settingsContainer {
+  min-height: 100vh;
+}
+
+.settingsBody {
+  min-height: 100vh;
+  margin: 2.5rem 1rem;
+}
+
+.cardHeader {
+  padding: 1.25rem 1rem 1rem 1rem;
+  border-bottom: 1px solid var(--bs-gray-200);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cardHeader .cardTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.cardBody {
+  min-height: 180px;
+}
+
+.cardBody .textBox {
+  margin: 0 0 3rem 0;
+  color: var(--high-contrast-text);
+}
+
+.settingsTabs {
+  display: none;
+}
+
 .pageNotFound {
   position: relative;
   bottom: 20px;
@@ -571,10 +615,12 @@ hr {
   margin-top: 50px;
   font-size: 40px;
 }
+
 .pageNotFound .brand h3 {
   font-weight: 300;
   margin: 10px 0 0 0;
 }
+
 .pageNotFound h1.head {
   font-size: 250px;
   font-weight: 900;
@@ -582,10 +628,12 @@ hr {
   letter-spacing: 25px;
   margin: 10px 0 0 0;
 }
+
 .pageNotFound h1.head span {
   position: relative;
   display: inline-block;
 }
+
 .pageNotFound h1.head span:before,
 .pageNotFound h1.head span:after {
   position: absolute;
@@ -595,9 +643,11 @@ hr {
   background: #fff;
   content: '';
 }
+
 .pageNotFound h1.head span:before {
   left: -55%;
 }
+
 .pageNotFound h1.head span:after {
   right: -55%;
 }
@@ -663,6 +713,18 @@ hr {
   }
   .pageNotFound h1.head span:after {
     right: -30%;
+  }
+}
+
+@media (min-width: 576px) {
+  .settingsDropdown {
+    display: none;
+  }
+}
+
+@media (min-width: 576px) {
+  .settingsTabs {
+    display: block;
   }
 }
 
