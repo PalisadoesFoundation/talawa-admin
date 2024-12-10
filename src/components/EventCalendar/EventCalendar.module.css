@@ -437,6 +437,11 @@
   width: 40px;
   background: rgba(146, 200, 141, 0.5);
   border-radius: 10px;
+  background-color: rgba(139, 195, 74, 1);
+  border-radius: 5px;
+  width: 20px;
+  height: 12px;
+  display: inline-block;
 }
 
 .baseIndicator {
@@ -472,24 +477,19 @@
   font-size: 14px;
   color: #555555;
 }
-.eventsLegend {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
 :root {
   /* Holiday colors */
   --color-holiday-indicator: rgba(0, 0, 0, 0.15);
   --color-holiday-date: rgba(255, 152, 0, 1);
   --mobile-breakpoint: 700px;
-  --small-mobile-breakpoint: 480px; /* Adjust value based on your needs */
-  /* Text colors */
-  --color-text-primary: rgba(51, 51, 51, 1);
-  --color-text-secondary: rgba(85, 85, 85, 1);
+  --small-mobile-breakpoint: 480px;
+  --text-color-primary: rgba(51, 51, 51, 1);
+  --text-color-secondary: rgba(85, 85, 85, 1);
   /* Card styles */
   --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   --holiday-card-bg: #f6f2e5;
   --holiday-date-color: #ea7b56;
+  --indicator-spacing: 8px;
 }
 .organizationIndicator {
   composes: baseIndicator;
@@ -552,14 +552,6 @@
   gap: 20px;
   padding: 20px;
   background-color: var(--grey-bg-color);
-}
-
-.userEvents__color {
-  background-color: rgba(139, 195, 74, 1);
-  border-radius: 5px;
-  width: 20px;
-  height: 12px;
-  display: inline-block;
 }
 
 .holidays_card,
