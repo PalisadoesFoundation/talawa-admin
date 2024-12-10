@@ -67,6 +67,15 @@ const mocks = [
   },
 ];
 
+// Test cleanup hooks for isolation
+beforeEach(() => {
+  jest.clearAllMocks(); // Clear all mocks before each test
+});
+
+afterEach(() => {
+  jest.resetModules(); // Reset modules to ensure no leftover state
+});
+
 describe('LeaveOrganization Component', () => {
   test('renders organization details', async () => {
     render(
