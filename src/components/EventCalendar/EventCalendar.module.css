@@ -473,10 +473,6 @@
   background-color: rgba(0, 0, 0, 0.15);
 }
 
-.holidayText {
-  font-size: 14px;
-  color: #555555;
-}
 :root {
   /* Holiday colors */
   --color-holiday-indicator: rgba(0, 0, 0, 0.15);
