@@ -1,3 +1,14 @@
+/**
+ * This file contains unit tests for the UserScreen component.
+ *
+ * The tests cover:
+ * - Rendering of the correct title based on the location.
+ * - Functionality of the LeftDrawer component.
+ * - Behavior when the orgId is undefined.
+ *
+ * These tests use Vitest for test execution and MockedProvider for mocking GraphQL queries.
+ */
+
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, vi, beforeEach, expect } from 'vitest';
