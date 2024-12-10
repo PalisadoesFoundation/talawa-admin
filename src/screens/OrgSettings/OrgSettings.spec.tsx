@@ -1,3 +1,4 @@
+import type { ReactElement } from 'react';
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
@@ -18,16 +19,24 @@ const link1 = new StaticMockLink(MOCKS);
 
 const mockRouterParams = (orgId: string | undefined): void => {
   vi.doMock('react-router-dom', async () => {
-    const actual = await vi.importActual('react-router-dom');
-    return {
-      ...actual,
-      useParams: () => ({ orgId }),
-    };
+    try {
+      const actual = await vi.importActual('react-router-dom');
+      return {
+        ...actual,
+        useParams: () => ({ orgId }),
+      };
+    } catch (error) {
+      console.error('Failed to mock router params:', error);
+      throw error;
+    }
   });
 };
-const renderOrganisationSettings = (link = link1, orgId = 'orgId'): void => {
+const renderOrganisationSettings = (
+  link = link1,
+  orgId = 'orgId',
+): ReturnType<typeof render> => {
   mockRouterParams(orgId);
-  render(
+  return render(
     <MockedProvider addTypename={false} link={link}>
       <MemoryRouter initialEntries={[`/orgsetting/${orgId}`]}>
         <Provider store={store}>
@@ -55,7 +64,7 @@ describe('Organisation Settings Page', () => {
     vi.unmock('react-router-dom');
   });
 
-  it('should redirect to fallback URL if URL params are undefined', async () => {
+  const SetupRedirectTest = async (): Promise<ReactElement> => {
     const useParamsMock = vi.fn(() => ({ orgId: undefined }));
     vi.doMock('react-router-dom', async () => {
       const actual = await vi.importActual('react-router-dom');
@@ -64,16 +73,19 @@ describe('Organisation Settings Page', () => {
         useParams: useParamsMock,
       };
     });
+    const orgSettingsModule = await import('./OrgSettings');
+    return <orgSettingsModule.default />;
+  };
 
-    const { default: OrgSettings } = await import('./OrgSettings');
-
+  it('should redirect to fallback URL if URL params are undefined', async () => {
+    const OrgSettings = await SetupRedirectTest();
     render(
       <MockedProvider addTypename={false}>
         <MemoryRouter initialEntries={['/orgsetting/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
-                <Route path="/orgsetting/" element={<OrgSettings />} />
+                <Route path="/orgsetting/" element={OrgSettings} />
                 <Route
                   path="/"
                   element={
