@@ -16,11 +16,7 @@ let mockID: string | undefined = '123';
 let mockLocation: string | undefined = '/user/organization/123';
 
 vi.mock('react-router-dom', async () => {
-  const actual =
-    // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-    await vi.importActual<typeof import('react-router-dom')>(
-      'react-router-dom',
-    );
+  const actual = await vi.importActual('react-router-dom');
   return {
     ...actual,
     useParams: () => ({ orgId: mockID }),
