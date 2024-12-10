@@ -16,7 +16,7 @@ import { MOCKS } from './OrgSettings.mocks';
 
 const link1 = new StaticMockLink(MOCKS);
 
-const renderOrganisationSettings = (link = link1, orgId = 'orgId'): void => {
+const mockRouterParams = (orgId: string | undefined): void => {
   vi.doMock('react-router-dom', async () => {
     const actual = await vi.importActual('react-router-dom');
     return {
@@ -24,7 +24,9 @@ const renderOrganisationSettings = (link = link1, orgId = 'orgId'): void => {
       useParams: () => ({ orgId }),
     };
   });
-
+};
+const renderOrganisationSettings = (link = link1, orgId = 'orgId'): void => {
+  mockRouterParams(orgId);
   render(
     <MockedProvider addTypename={false} link={link}>
       <MemoryRouter initialEntries={[`/orgsetting/${orgId}`]}>
@@ -50,7 +52,7 @@ const renderOrganisationSettings = (link = link1, orgId = 'orgId'): void => {
 
 describe('Organisation Settings Page', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.unmock('react-router-dom');
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
@@ -108,6 +110,7 @@ describe('Organisation Settings Page', () => {
     userEvent.click(screen.getByTestId('generalSettings'));
     await waitFor(() => {
       expect(screen.getByTestId('generalTab')).toBeInTheDocument();
+      expect(screen.getByTestId('generalTab')).toBeVisible();
     });
 
     userEvent.click(screen.getByTestId('actionItemCategoriesSettings'));
