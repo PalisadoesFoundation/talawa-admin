@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
-import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
+import {
+  ORGANIZATIONS_LIST,
+  USER_ORGANIZATION_CONNECTION,
+} from 'GraphQl/Queries/Queries';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { Button, Modal, Form, Spinner, Alert } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -28,11 +31,16 @@ const LeaveOrganization = (): JSX.Element => {
   });
 
   const [removeMember] = useMutation(REMOVE_MEMBER_MUTATION, {
+    refetchQueries: [
+      {
+        query: USER_ORGANIZATION_CONNECTION,
+        variables: { id: organizationId },
+      },
+    ],
     onCompleted: () => {
       alert('You have successfully left the organization!');
       setShowModal(false);
       navigate(`/user/organizations`);
-      window.location.reload();
     },
     onError: (err) => {
       setError(err.message);
