@@ -12,10 +12,10 @@ export default defineConfig({
     tsconfigPaths(),
   ],
   test: {
-    include: ['src/**/*.spec.{js,jsx,ts,tsx}'],
+    include: ['src/**/*.{spec,test}.{js,jsx,ts,tsx}'],
     globals: true,
     environment: 'jsdom',
-    setupFiles: 'vitest.setup.ts',
+    setupFiles: ['src/test/setup.ts'],
     coverage: {
       enabled: true,
       provider: 'istanbul',
