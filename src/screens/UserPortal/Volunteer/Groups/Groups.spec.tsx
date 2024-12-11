@@ -15,6 +15,8 @@ import Groups from './Groups';
 import type { ApolloLink } from '@apollo/client';
 import { MOCKS, EMPTY_MOCKS, ERROR_MOCKS } from './Groups.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
+import { vi } from 'vitest';
+import '@testing-library/jest-dom';
 
 const { setItem } = useLocalStorage();
 
@@ -63,10 +65,13 @@ const renderGroups = (link: ApolloLink): RenderResult => {
 
 describe('Testing Groups Screen', () => {
   beforeAll(() => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: 'orgId' }),
-    }));
+    vi.mock('react-router-dom', async () => {
+      const actual = await vi.importActual('react-router-dom');
+      return {
+        ...actual,
+        userParams: () => ({ orgId: 'orgId' }),
+      };
+    });
   });
 
   beforeEach(() => {
@@ -74,7 +79,7 @@ describe('Testing Groups Screen', () => {
   });
 
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
