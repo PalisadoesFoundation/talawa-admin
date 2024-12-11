@@ -26,29 +26,34 @@ import {
   USER_FUND_CAMPAIGNS_ERROR,
 } from './CampaignsMocks';
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
-jest.mock('@mui/x-date-pickers/DateTimePicker', () => {
+
+vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
+  const actual = await vi.importActual(
+    '@mui/x-date-pickers/DesktopDateTimePicker',
+  );
   return {
-    DateTimePicker: jest.requireActual(
-      '@mui/x-date-pickers/DesktopDateTimePicker',
-    ).DesktopDateTimePicker,
+    DateTimePicker: actual.DesktopDateTimePicker,
   };
 });
+
 const { setItem } = useLocalStorage();
 
 const link1 = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(USER_FUND_CAMPAIGNS_ERROR);
 const link3 = new StaticMockLink(EMPTY_MOCKS);
+
 const cTranslations = JSON.parse(
   JSON.stringify(
     i18nForTest.getDataByLanguage('en')?.translation.userCampaigns,
   ),
 );
+
 const pTranslations = JSON.parse(
   JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.pledges),
 );
@@ -85,14 +90,17 @@ describe('Testing User Campaigns Screen', () => {
   });
 
   beforeAll(() => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: 'orgId' }),
-    }));
+    vi.mock('react-router-dom', async () => {
+      const actual = await vi.importActual('react-router-dom');
+      return {
+        ...actual,
+        useParams: vi.fn(() => ({ orgId: 'orgId' })), // Mock `useParams`
+      };
+    });
   });
 
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   afterEach(() => {
@@ -117,16 +125,19 @@ describe('Testing User Campaigns Screen', () => {
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
+    vi.unmock('react-router-dom');
     render(
       <MockedProvider addTypename={false} link={link1}>
-        <MemoryRouter initialEntries={['/user/campaigns/']}>
+        <MemoryRouter initialEntries={['/user/campaigns']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
-                <Route path="/user/campaigns/" element={<Campaigns />} />
+                <Route path="/user/campaigns" element={<Campaigns />} />
                 <Route
                   path="/"
-                  element={<div data-testid="paramsError"></div>}
+                  element={
+                    <div data-testid="paramsError">Error : orgId not found</div>
+                  }
                 />
               </Routes>
             </I18nextProvider>
