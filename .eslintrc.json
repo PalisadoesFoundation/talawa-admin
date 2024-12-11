@@ -129,6 +129,7 @@
     "react/no-this-in-sfc": "error",
 
     "jest/expect-expect": 0,
+
     "react/no-unstable-nested-components": ["error", { "allowAsProps": true }],
     "react/function-component-definition": [
       0,
