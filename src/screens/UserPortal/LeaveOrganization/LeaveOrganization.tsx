@@ -9,13 +9,6 @@ import { Button, Modal, Form, Spinner, Alert } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getItem } from 'utils/useLocalstorage';
 
-/**
- * Component to allow the user to leave an organization.
- * The user needs to confirm by entering their email.
- * After confirmation, the member is removed from the organization.
- *
- * @returns The LeaveOrganization component.
- */
 const LeaveOrganization = (): JSX.Element => {
   const navigate = useNavigate();
   const { orgId: organizationId } = useParams();
@@ -31,8 +24,6 @@ const LeaveOrganization = (): JSX.Element => {
 
   /**
    * Query to fetch the organization data.
-   *
-   * @returns The organization data or loading/error states.
    */
   const {
     data: orgData,
@@ -65,7 +56,6 @@ const LeaveOrganization = (): JSX.Element => {
 
   /**
    * Handles the process of leaving the organization.
-   * It triggers the mutation to remove the member.
    */
   const handleLeaveOrganization = (): void => {
     setError('');
@@ -76,10 +66,7 @@ const LeaveOrganization = (): JSX.Element => {
   };
 
   /**
-   * Verifies the user's email and triggers the leave process if the email matches.
-   * If the email doesn't match, an error message is set.
-   *
-   * @returns
+   * Verifies the user's email before proceeding.
    */
   const handleVerifyAndLeave = (): void => {
     if (email.trim().toLowerCase() === userEmail.toLowerCase()) {
@@ -90,11 +77,7 @@ const LeaveOrganization = (): JSX.Element => {
   };
 
   /**
-   * Handles the 'Enter' key press event for the email input.
-   * It either moves to the verification step or triggers the leave process.
-   *
-   * @param event - The keyboard event.
-   * @returns
+   * Handles the 'Enter' key press.
    */
   const handleKeyPress = (
     event: React.KeyboardEvent<HTMLInputElement>,
@@ -109,8 +92,16 @@ const LeaveOrganization = (): JSX.Element => {
     }
   };
 
-  if (orgLoading) return <Spinner animation="border" />;
-  if (orgError) return <p>Error: {orgError.message}</p>;
+  if (orgLoading) {
+    return (
+      <div className="text-center mt-4" role="status">
+        <Spinner animation="border" />
+        <p>Loading organization details...</p>
+      </div>
+    );
+  }
+  if (orgError)
+    return <Alert variant="danger">Error: {orgError.message}</Alert>;
 
   if (!orgData?.organizations?.length) {
     return <p>Organization not found</p>;
@@ -136,9 +127,12 @@ const LeaveOrganization = (): JSX.Element => {
           setEmail('');
           setError('');
         }}
+        aria-labelledby="leave-organization-modal"
       >
         <Modal.Header closeButton>
-          <Modal.Title>Leave Organization</Modal.Title>
+          <Modal.Title id="leave-organization-modal">
+            Leave Joined Organization
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {!verificationStep ? (
@@ -164,6 +158,7 @@ const LeaveOrganization = (): JSX.Element => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   onKeyDown={handleKeyPress}
+                  aria-label="confirm-email-input"
                 />
               </Form.Group>
               {error && <Alert variant="danger">{error}</Alert>}
@@ -195,8 +190,16 @@ const LeaveOrganization = (): JSX.Element => {
                 variant="danger"
                 disabled={loading}
                 onClick={handleVerifyAndLeave}
+                aria-label="confirm-leave-button"
               >
-                {loading ? <Spinner animation="border" size="sm" /> : 'Confirm'}
+                {loading ? (
+                  <>
+                    <Spinner animation="border" size="sm" role="status" />
+                    {' Loading...'}
+                  </>
+                ) : (
+                  'Confirm'
+                )}
               </Button>
             </>
           )}
