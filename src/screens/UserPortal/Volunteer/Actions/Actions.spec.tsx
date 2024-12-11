@@ -1,3 +1,10 @@
+/**
+ * Unit tests for the Actions component.
+ *
+ * This file contains tests for the Actions component to ensure it behaves as expected
+ * under various scenarios.
+ */
+
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
