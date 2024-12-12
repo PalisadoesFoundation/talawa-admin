@@ -136,7 +136,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     }
   };
   const filteredHolidays = useMemo(() => {
-    if (!holidays || !Array.isArray(holidays)) {
+    if (!Array.isArray(holidays)) {
       console.error('Invalid holidays array');
       return [];
     }
@@ -148,7 +148,8 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       }
 
       try {
-        return dayjs(holiday.date, 'MM-DD').month() === currentMonth;
+        const holidayMonth = dayjs(holiday.date, 'MM-DD', true).month();
+        return holidayMonth === currentMonth;
       } catch (error) {
         if (error instanceof Error) {
           console.error(

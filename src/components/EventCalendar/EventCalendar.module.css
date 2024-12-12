@@ -469,6 +469,8 @@
   --holiday-card-bg: #f6f2e5;
   --holiday-date-color: #ea7b56;
   --indicator-spacing: 8px;
+  /* Interactive states */
+  --hover-bg-color: rgba(0, 0, 0, 0.05);
 }
 .organizationIndicator {
   composes: baseIndicator;
