@@ -287,6 +287,13 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             />
           );
         }) || [];
+
+    const shouldShowViewMore = useMemo(() => {
+      return (
+        allDayEventsList.length > 2 ||
+        (windowWidth <= 700 && allDayEventsList.length > 0)
+      );
+    }, [allDayEventsList.length, windowWidth]);
     return (
       <>
         <div className={styles.calendar_hour_block}>
@@ -333,8 +340,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                   className={styles.btn__more}
                   onClick={() => toggleExpand(-100)}
                 >
-                  {allDayEventsList.length > 2 ||
-                  (windowWidth <= 700 && allDayEventsList.length > 0)
+                  {shouldShowViewMore
                     ? expanded === -100
                       ? 'View less'
                       : 'View all'
