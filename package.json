@@ -155,7 +155,7 @@
     "postcss-modules": "^6.0.0",
     "sass": "^1.80.7",
     "tsx": "^4.19.1",
-    "vite-plugin-svgr": "^4.2.0",
+    "vite-plugin-svgr": "^4.3.0",
     "vitest": "^2.1.5",
     "whatwg-fetch": "^3.6.20"
   },
