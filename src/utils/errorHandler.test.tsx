@@ -35,7 +35,6 @@ describe('Test if errorHandler is working properly', () => {
   it('should call toast.error with the correct message if error message contains this substring "Value is not a valid phone number"', () => {
     const error = new Error('This value is not a valid phone number');
     errorHandler(t, error);
-    console.log(toast.error);
     expect(toast.error).toHaveBeenCalledWith(tErrors('invalidPhoneNumber'));
   });
 
