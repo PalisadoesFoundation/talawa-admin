@@ -47,6 +47,7 @@ const debounceWait = async (ms = 300): Promise<void> => {
     });
   });
 };
+const mockNavigate = vi.fn();
 
 const expectVitestToBeInTheDocument = (element: HTMLElement): void => {
   expect(element).toBeInTheDocument();
@@ -84,10 +85,10 @@ const renderActions = (link: ApolloLink): RenderResult => {
 describe('Testing Actions Screen', () => {
   beforeAll(() => {
     vi.mock('react-router-dom', async () => {
-      const actual = await vi.importActual('react-router-dom');
+      const actual = await vi.importActual('react-router-dom'); // Import the actual implementation
       return {
         ...actual,
-        useNavigate: vi.fn(() => () => {}),
+        useNavigate: () => mockNavigate, // Replace useNavigate with the mock
       };
     });
   });
