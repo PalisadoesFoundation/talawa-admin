@@ -100,7 +100,10 @@ describe('Testing Requests Screen', () => {
             <I18nextProvider i18n={i18n}>
               <Routes>
                 <Route path="/event/" element={<Requests />} />
-                <Route path="/" element={<Requests />} />
+                <Route
+                  path="/"
+                  element={<div data-testid="paramsError"></div>}
+                />
               </Routes>
             </I18nextProvider>
           </Provider>
