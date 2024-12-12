@@ -17,6 +17,9 @@ import { MOCKS } from './OrgSettings.mocks';
 
 const link1 = new StaticMockLink(MOCKS);
 
+/**
+ * Mocks the `useParams` function from `react-router-dom` to simulate URL parameters.
+ */
 const mockRouterParams = (orgId: string | undefined): void => {
   vi.doMock('react-router-dom', async () => {
     const actual = await vi.importActual('react-router-dom');
