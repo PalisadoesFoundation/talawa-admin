@@ -328,16 +328,19 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                   </p>
                 )}
               </div>
-              {Array.isArray(allDayEventsList) &&
-                (allDayEventsList.length > 2 ||
-                  (windowWidth <= 700 && allDayEventsList.length > 0)) && (
-                  <button
-                    className={styles.btn__more}
-                    onClick={() => toggleExpand(-100)}
-                  >
-                    {expanded === -100 ? 'View less' : 'View all'}
-                  </button>
-                )}
+              {Array.isArray(allDayEventsList) && (
+                <button
+                  className={styles.btn__more}
+                  onClick={() => toggleExpand(-100)}
+                >
+                  {allDayEventsList.length > 2 ||
+                  (windowWidth <= 700 && allDayEventsList.length > 0)
+                    ? expanded === -100
+                      ? 'View less'
+                      : 'View all'
+                    : null}
+                </button>
+              )}
             </div>
           </div>
         </div>
