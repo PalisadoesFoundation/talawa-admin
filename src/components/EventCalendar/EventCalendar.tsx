@@ -143,7 +143,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
 
     return holidays.filter((holiday) => {
       if (!holiday.date) {
-        console.warn(`Holiday "${holiday.name}" has no date specified.`);
+        console.error(`Holiday "${holiday.name}" has no date specified.`);
         return false;
       }
 
@@ -151,15 +151,9 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         const holidayMonth = dayjs(holiday.date, 'MM-DD', true).month();
         return holidayMonth === currentMonth;
       } catch (error) {
-        if (error instanceof Error) {
-          console.error(
-            `Invalid date format for holiday "${holiday.name}": ${error.message}`,
-          );
-        } else {
-          console.error(
-            `Unknown error occurred for holiday "${holiday.name}".`,
-          );
-        }
+        console.error(
+          `Error processing holiday "${holiday.name}": ${error instanceof Error ? error.message : 'Unknown error'}`,
+        );
         return false;
       }
     });
