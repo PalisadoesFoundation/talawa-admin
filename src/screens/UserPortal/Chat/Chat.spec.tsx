@@ -21,7 +21,76 @@ import {
 import { MESSAGE_SENT_TO_CHAT } from 'GraphQl/Mutations/OrganizationMutations';
 import { CHATS_LIST, CHAT_BY_ID } from 'GraphQl/Queries/PlugInQueries';
 import useLocalStorage from 'utils/useLocalstorage';
-// import
+
+/**
+# Testing Chat Screen [User Portal]
+
+**Description**:  
+This script contains a suite of tests for the `Chat` component in the User Portal. It validates the rendering, functionality, and responsiveness of the `Chat` screen, including direct and group chat creation, sidebar behavior, and mobile view compatibility.
+
+---
+
+## Global Setup
+- **Mocks**:  
+  - `scrollIntoView`: Prevents errors during testing.  
+  - `matchMedia`: Mocks media query behaviors for responsiveness testing.
+
+---
+
+## Mock Data
+- Combines multiple mock datasets:  
+  - `USER_JOINED_ORG_MOCK`  
+  - `GROUP_CHAT_BY_ID_QUERY_MOCK`  
+  - `MESSAGE_SENT_TO_CHAT_MOCK`  
+  - `CHAT_BY_ID_QUERY_MOCK`  
+  - `CHATS_LIST_MOCK`  
+  - `UserConnectionListMock`  
+
+---
+
+## Test Initialization
+- **Before Each Test**:  
+  - Sets up local storage with a `userId` for testing purposes.  
+
+---
+
+## Test Cases
+
+1. **Rendering of the Chat Screen**  
+   - Ensures the `Chat` screen renders correctly with all required elements.
+
+2. **Selecting a Contact**  
+   - Verifies that a user can select a contact from the contact list.
+
+3. **Creating a New Direct Chat**  
+   - Tests dropdown functionality.  
+   - Validates the creation of a new direct chat and the presence of relevant UI elements.
+
+4. **Creating a New Group Chat**  
+   - Similar to the direct chat test but ensures the group chat creation workflow functions correctly.
+
+5. **Sidebar Functionality**  
+   - Tests the sidebar’s open/close behavior in desktop view.
+
+6. **Responsive Sidebar for Mobile View**  
+   - Simulates screen resizing to mobile dimensions (≤ 820px).  
+   - Ensures the sidebar opens and closes correctly in mobile view.
+
+---
+
+## Helper Functions
+- **`resizeWindow`**: Simulates screen resizing to test responsive behavior.
+
+---
+
+## Libraries and Tools
+- **Testing Framework**: Vitest  
+- **Mocking**: Apollo’s `MockedProvider`  
+- **Routing**: React Router’s `BrowserRouter`  
+- **State Management**: Redux Provider  
+- **Internationalization**: I18next Provider
+*/
+
 const resizeWindow = (width: number): void => {
   window.innerWidth = width;
   fireEvent(window, new Event('resize'));
