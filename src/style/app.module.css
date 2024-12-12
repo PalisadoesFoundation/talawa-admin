@@ -116,14 +116,6 @@
   flex: 1;
 }
 
-.notFound {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
 .inputField {
   margin-top: 10px;
   margin-bottom: 10px;
