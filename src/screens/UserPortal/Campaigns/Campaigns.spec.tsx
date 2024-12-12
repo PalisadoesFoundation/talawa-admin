@@ -20,6 +20,7 @@ import i18nForTest from 'utils/i18nForTest';
 import type { ApolloLink } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
 import Campaigns from './Campaigns';
+import { vi, it, expect, describe } from 'vitest';
 import {
   EMPTY_MOCKS,
   MOCKS,
@@ -128,16 +129,14 @@ describe('Testing User Campaigns Screen', () => {
     vi.unmock('react-router-dom');
     render(
       <MockedProvider addTypename={false} link={link1}>
-        <MemoryRouter initialEntries={['/user/campaigns']}>
+        <MemoryRouter initialEntries={['/user/campaigns/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
-                <Route path="/user/campaigns" element={<Campaigns />} />
+                <Route path="/user/campaigns/" element={<Campaigns />} />
                 <Route
                   path="/"
-                  element={
-                    <div data-testid="paramsError">Error : orgId not found</div>
-                  }
+                  element={<div data-testid="paramsError"></div>}
                 />
               </Routes>
             </I18nextProvider>
