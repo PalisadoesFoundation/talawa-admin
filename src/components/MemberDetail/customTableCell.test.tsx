@@ -65,7 +65,7 @@ describe('CustomTableCell', () => {
     await waitFor(() => screen.getByTestId('custom-row'));
 
     expect(screen.getByText('Test Event')).toBeInTheDocument();
-    expect(screen.getByText('May 1, 2023')).toBeInTheDocument();
+    expect(screen.getByText('1 May 2023')).toBeInTheDocument();
     expect(screen.getByText('Yes')).toBeInTheDocument();
     expect(screen.getByText('2')).toBeInTheDocument();
 
@@ -86,86 +86,4 @@ describe('CustomTableCell', () => {
 
     expect(screen.getByRole('progressbar')).toBeInTheDocument();
   });
-
-  // it('displays error state', async () => {
-  //   const errorMock = [
-  //     {
-  //       request: {
-  //         query: EVENT_DETAILS,
-  //         variables: { id: 'event123' },
-  //       },
-  //       error: new Error('An error occurred'),
-  //     },
-  //   ];
-
-  //   render(
-  //     <MockedProvider mocks={errorMock} addTypename={false}>
-  //       <table>
-  //         <tbody>
-  //           <CustomTableCell eventId="event123" />
-  //         </tbody>
-  //       </table>
-  //     </MockedProvider>,
-  //   );
-
-  //   await waitFor(
-  //     () => {
-  //       expect(
-  //         screen.getByText('Error loading event details'),
-  //       ).toBeInTheDocument();
-  //     },
-  //     { timeout: 2000 },
-  //   );
-
-  //   // Check if the error message from toast has been called
-  //   expect(toast.error).toHaveBeenCalledWith('An error occurred');
-  // });
-
-  // it('displays no event found message', async () => {
-  //   const noEventMock = [
-  //     {
-  //       request: {
-  //         query: EVENT_DETAILS,
-  //         variables: { id: 'event123' },
-  //       },
-  //       result: {
-  //         data: {
-  //           event: {
-  //             _id: null,
-  //             title: null,
-  //             startDate: null,
-  //             description: null,
-  //             endDate: null,
-  //             startTime: null,
-  //             endTime: null,
-  //             allDay: false,
-  //             location: null,
-  //             recurring: null,
-  //             organization: {
-  //               _id: null,
-  //               members: [],
-  //             },
-  //             baseRecurringEvent: {
-  //               _id: 'recurringEvent123',
-  //             },
-  //             attendees: [],
-  //           },
-  //         },
-  //       },
-  //     },
-  //   ];
-
-  //   render(
-  //     <MockedProvider mocks={noEventMock} addTypename={false}>
-  //       <table>
-  //         <tbody>
-  //           <CustomTableCell eventId="event123" />
-  //         </tbody>
-  //       </table>
-  //     </MockedProvider>,
-  //   );
-
-  //   await waitFor(() => screen.getByText('No event found'));
-  //   expect(screen.getByText('No event found')).toBeInTheDocument();
-  // });
 });

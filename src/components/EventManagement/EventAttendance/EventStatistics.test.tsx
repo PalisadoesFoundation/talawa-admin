@@ -106,6 +106,7 @@ const mocks = [
 const mockMemberData = [
   {
     _id: 'user1',
+    time: '09:00',
     firstName: 'John',
     lastName: 'Doe',
     gender: 'MALE',
@@ -129,6 +130,7 @@ const mockMemberData = [
     tagsAssignedWith: {
       edges: [],
     },
+    time: '10:00',
   },
 ];
 

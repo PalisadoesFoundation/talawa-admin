@@ -12,6 +12,7 @@ export interface InterfaceAttendanceStatisticsModalProps {
 
 export interface InterfaceMember {
   createdAt: string;
+  time: string;
   firstName: string;
   lastName: string;
   email: `${string}@${string}.${string}`;
