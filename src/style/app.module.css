@@ -602,7 +602,6 @@ hr {
   }
 }
 
-
 @media (max-width: 1120px) {
   .contract {
     padding-left: calc(250px + 2rem + 1.5rem);
