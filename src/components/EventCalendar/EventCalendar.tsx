@@ -165,9 +165,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     });
   }, [holidays, currentMonth]);
 
-  /**
-   * Moves the calendar view to the next month.
-   */
   const handleNextMonth = (): void => {
     /*istanbul ignore next*/
     if (currentMonth === 11) {
@@ -201,6 +198,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       }
     }
   };
+
   /*istanbul ignore next*/
   const handleNextDate = (): void => {
     /*istanbul ignore next*/
@@ -209,7 +207,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       currentMonth - 1,
       0,
     ).getDate();
-    /*istanbul ignore next*/
     if (currentDate < lastDayOfCurrentMonth) {
       setCurrentDate(currentDate + 1);
     } else {
@@ -224,11 +221,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     }
   };
 
-  /**
-   * Moves the calendar view to today's date.
-   */
   const handleTodayButton = (): void => {
-    /*istanbul ignore next*/
     setCurrentYear(today.getFullYear());
     setCurrentMonth(today.getMonth());
     setCurrentDate(today.getDate());
@@ -241,7 +234,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     '0',
   )}:${String(Math.abs(new Date().getTimezoneOffset()) % 60).padStart(2, '0')}`;
 
-  /*istanbul ignore next*/
   const renderHours = (): JSX.Element => {
     const toggleExpand = (index: number): void => {
       if (expanded === index) {
@@ -250,11 +242,9 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         setExpanded(index);
       }
     };
-    /*istanbul ignore next*/
     const allDayEventsList: JSX.Element[] =
       events
         ?.filter((datas) => {
-          /*istanbul ignore next*/
           const currDate = new Date(currentYear, currentMonth, currentDate);
           if (
             datas.startTime == undefined &&
