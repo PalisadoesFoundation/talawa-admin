@@ -76,7 +76,6 @@
   align-items: center;
   gap: 10px;
   /* Adjust spacing between items */
-  /* margin: 2.5rem 0; */
 }
 
 .btnsContainer .btnsBlock {
@@ -97,7 +96,6 @@
 
 .btnsContainer .input {
   width: 70%;
-  /* position: relative; */
 }
 
 .btnsContainer input {
@@ -584,7 +582,6 @@ hr {
   .btnsContainer .btnsBlock {
     display: block;
     margin-top: 1rem;
-    /* margin-right: 0; */
   }
 
   .btnsContainer .btnsBlock div {
