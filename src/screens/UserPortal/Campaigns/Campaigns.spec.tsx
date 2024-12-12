@@ -27,6 +27,7 @@ import {
   USER_FUND_CAMPAIGNS_ERROR,
 } from './CampaignsMocks';
 
+/* Mocking 'react-toastify` */
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
@@ -34,6 +35,7 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
+/* Mocking `@mui/x-date-pickers/DateTimePicker` */
 vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
   const actual = await vi.importActual(
     '@mui/x-date-pickers/DesktopDateTimePicker',
@@ -45,6 +47,9 @@ vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
 
 const { setItem } = useLocalStorage();
 
+/**
+ * Creates a mocked Apollo link for testing.
+ */
 const link1 = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(USER_FUND_CAMPAIGNS_ERROR);
 const link3 = new StaticMockLink(EMPTY_MOCKS);
@@ -58,6 +63,13 @@ const cTranslations = JSON.parse(
 const pTranslations = JSON.parse(
   JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.pledges),
 );
+
+/*
+ * Renders the `Campaigns` component for testing.
+ *
+ * @param link - The mocked Apollo link used for testing.
+ * @returns The rendered result of the `Campaigns` component.
+ */
 
 const renderCampaigns = (link: ApolloLink): RenderResult => {
   return render(
@@ -85,12 +97,18 @@ const renderCampaigns = (link: ApolloLink): RenderResult => {
   );
 };
 
+/**
+ * Test suite for the User Campaigns screen.
+ */
 describe('Testing User Campaigns Screen', () => {
   beforeEach(() => {
     setItem('userId', 'userId');
   });
 
   beforeAll(() => {
+    /**
+     * Mocks the `useParams` function from `react-router-dom` to simulate URL parameters.
+     */
     vi.mock('react-router-dom', async () => {
       const actual = await vi.importActual('react-router-dom');
       return {
@@ -108,6 +126,9 @@ describe('Testing User Campaigns Screen', () => {
     cleanup();
   });
 
+  /**
+   * Verifies that the User Campaigns screen renders correctly with mock data.
+   */
   it('should render the User Campaigns screen', async () => {
     renderCampaigns(link1);
     await waitFor(() => {
@@ -117,6 +138,9 @@ describe('Testing User Campaigns Screen', () => {
     });
   });
 
+  /**
+   * Ensures the app redirects to the fallback URL if `userId` is null in LocalStorage.
+   */
   it('should redirect to fallback URL if userId is null in LocalStorage', async () => {
     setItem('userId', null);
     renderCampaigns(link1);
@@ -125,8 +149,11 @@ describe('Testing User Campaigns Screen', () => {
     });
   });
 
+  /**
+   * Ensures the app redirects to the fallback URL if URL parameters are undefined.
+   */
   it('should redirect to fallback URL if URL params are undefined', async () => {
-    vi.unmock('react-router-dom');
+    vi.unmock('react-router-dom'); // unmocking to get real behavior from useParams
     render(
       <MockedProvider addTypename={false} link={link1}>
         <MemoryRouter initialEntries={['/user/campaigns/']}>
