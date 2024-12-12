@@ -582,7 +582,6 @@ hr {
   .btnsContainer .btnsBlock {
     display: block;
     margin-top: 1rem;
-    /* margin-right: 0; */
   }
 
   .btnsContainer .btnsBlock div {
