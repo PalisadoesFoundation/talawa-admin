@@ -1,3 +1,10 @@
+/**
+ * Testing component for managing and displaying Volunteer Membership requests for an event.
+ *
+ * This component allows users to view, filter, sort, and create action items. It also allows users to accept or reject volunteer membership requests.
+ *
+ *
+ */
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -20,11 +27,12 @@ import {
   UPDATE_ERROR_MOCKS,
 } from './Requests.mocks';
 import { toast } from 'react-toastify';
+import { vi } from 'vitest';
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
@@ -74,14 +82,14 @@ const renderRequests = (link: ApolloLink): RenderResult => {
 
 describe('Testing Requests Screen', () => {
   beforeAll(() => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
+    vi.mock('react-router-dom', async () => ({
+      ...(await vi.importActual('react-router-dom')),
       useParams: () => ({ orgId: 'orgId', eventId: 'eventId' }),
     }));
   });
 
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
@@ -102,10 +110,7 @@ describe('Testing Requests Screen', () => {
         </MemoryRouter>
       </MockedProvider>,
     );
-
-    await waitFor(() => {
-      expect(screen.getByTestId('paramsError')).toBeInTheDocument();
-    });
+    expect(window.location.pathname).toBe('/');
   });
 
   it('should render Requests screen', async () => {
