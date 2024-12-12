@@ -56,11 +56,41 @@ describe('Test if errorHandler is working properly', () => {
     expect(toast.error).toHaveBeenCalledWith(tErrors('error400'));
   });
 
-  it('should call toast.error with the error message if it is not "Failed to fetch"', () => {
-    const error = new Error('Some other error message');
-    errorHandler(t, error);
+  it('should handle error messages with different cases', () => {
+    errorHandler(t, new Error('VALUE IS NOT A VALID PHONE NUMBER'));
+    expect(toast.error).toHaveBeenCalledWith(tErrors('invalidPhoneNumber'));
 
+    errorHandler(t, new Error('This Value Does Not Exist in "EducationGrade"'));
+    expect(toast.error).toHaveBeenCalledWith(tErrors('invalidEducationGrade'));
+  });
+
+  it('should call toast.error with the error message if it is an instance of error but have not matched any error message patterns', () => {
+    const error = new Error('Bandhan sent an error message');
+    errorHandler(t, error);
     expect(toast.error).toHaveBeenCalledWith(error.message);
+  });
+
+  it('should handle different types for the first parameter while still showing error messages', () => {
+    errorHandler(undefined, new Error('Some error'));
+    expect(toast.error).toHaveBeenCalled();
+
+    errorHandler(null, new Error('Some error'));
+    expect(toast.error).toHaveBeenCalled();
+
+    errorHandler({}, new Error('Some error'));
+    expect(toast.error).toHaveBeenCalled();
+  });
+
+  it('should handle non-null but non-Error objects for the error parameter', () => {
+    errorHandler(t, { message: 'Error message in object' });
+    expect(toast.error).toHaveBeenCalledWith(
+      tErrors('unknownError', { msg: { message: 'Error message in object' } }),
+    );
+
+    errorHandler(t, 'Direct error message');
+    expect(toast.error).toHaveBeenCalledWith(
+      tErrors('unknownError', { msg: 'Direct error message' }),
+    );
   });
 
   it('should call toast.error with the error message if error object is falsy', () => {
