@@ -110,10 +110,7 @@ describe('Testing Requests Screen', () => {
         </MemoryRouter>
       </MockedProvider>,
     );
-
-    await waitFor(() => {
-      expect(window.location.pathname).toBe('/');
-    });
+    expect(window.location.pathname).toBe('/');
   });
 
   it('should render Requests screen', async () => {
