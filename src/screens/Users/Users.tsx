@@ -401,15 +401,23 @@ const Users = (): JSX.Element => {
       usersData &&
       displayedUsers.length === 0 &&
       searchByName.length > 0 ? (
-        <div className={styles.notFound}>
+        <section
+          className={styles.notFound}
+          role="alert"
+          aria-label="No results found"
+        >
           <h4>
             {tCommon('noResultsFoundFor')} &quot;{searchByName}&quot;
           </h4>
-        </div>
+        </section>
       ) : isLoading == false &&
         usersData === undefined &&
         displayedUsers.length === 0 ? (
-        <div className={styles.notFound}>
+        <div
+          className={styles.notFound}
+          role="alert"
+          aria-label="No results found"
+        >
           <h4>{t('noUserFound')}</h4>
         </div>
       ) : (

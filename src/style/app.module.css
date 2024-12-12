@@ -514,11 +514,6 @@ hr {
   outline-offset: -2px;
 }
 
-.listBox {
-  width: 100%;
-  flex: 1;
-}
-
 .listTable {
   width: 100%;
   box-sizing: border-box;
@@ -540,14 +535,6 @@ hr {
   color: #000000;
   border-bottom: 1px solid #dddddd;
   padding: 1.5rem;
-}
-
-.notFound {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
 }
 
 @media (max-width: 1020px) {
