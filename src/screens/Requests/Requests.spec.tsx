@@ -22,12 +22,20 @@ import {
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
 
+/**
+ * Set up `localStorage` stubs for testing.
+ */
+
 vi.stubGlobal('localStorage', {
   getItem: vi.fn(),
   setItem: vi.fn(),
   clear: vi.fn(),
   removeItem: vi.fn(),
 });
+
+/**
+ * Mock `window.location` for testing redirection behavior.
+ */
 
 Object.defineProperty(window, 'location', {
   value: { href: 'http://localhost/', assign: vi.fn(), reload: vi.fn() },
@@ -42,6 +50,14 @@ const link4 = new StaticMockLink(MOCKS2, true);
 const link5 = new StaticMockLink(MOCKS_WITH_ERROR, true);
 const link6 = new StaticMockLink(MOCKS3, true);
 const link7 = new StaticMockLink(MOCKS4, true);
+
+/**
+ * Utility function to wait for a specified amount of time.
+ * Wraps `setTimeout` in an `act` block for testing purposes.
+ *
+ * @param ms - The duration to wait in milliseconds. Default is 100ms.
+ * @returns A promise that resolves after the specified time.
+ */
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
