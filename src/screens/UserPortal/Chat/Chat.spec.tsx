@@ -91,6 +91,10 @@ This script contains a suite of tests for the `Chat` component in the User Porta
 - **Internationalization**: I18next Provider
 */
 
+vi.mock('../../../components/UserPortal/ChatRoom/ChatRoom', () => ({
+  default: () => <div data-testid="mocked-chat-room">Mocked ChatRoom</div>,
+}));
+
 const resizeWindow = (width: number): void => {
   window.innerWidth = width;
   fireEvent(window, new Event('resize'));
@@ -1539,8 +1543,6 @@ const GROUP_CHAT_BY_ID_QUERY_MOCK = [
 ];
 
 describe('Testing Chat Screen [User Portal]', () => {
-  window.HTMLElement.prototype.scrollIntoView = vi.fn();
-
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
     value: vi.fn().mockImplementation((query) => ({
@@ -1567,10 +1569,15 @@ describe('Testing Chat Screen [User Portal]', () => {
     ...UserConnectionListMock,
   ];
 
-  // Optional: Use beforeEach if there are other setups like clearing localStorage
   beforeEach(() => {
-    // Add any setup you need before each test, e.g., reset state
     setItem('userId', '1');
+    vi.clearAllMocks();
+    localStorage.clear();
+    vi.resetModules();
+  });
+
+  afterEach(() => {
+    localStorage.clear();
   });
 
   test('Screen should be rendered properly', async () => {
