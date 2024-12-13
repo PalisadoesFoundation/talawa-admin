@@ -81,7 +81,6 @@
   align-items: center;
   gap: 10px;
   /* Adjust spacing between items */
-  margin: 2.5rem 0;
 }
 
 .btnsContainer .btnsBlock {
@@ -95,13 +94,26 @@
   align-items: center;
 }
 
-.btnsContainer .input {
+.btnsContainer .inputContainer {
   flex: 1;
   position: relative;
 }
 
-.btnsContainer .input button {
+.btnsContainer .input {
+  width: 70%;
+}
+
+.btnsContainer input {
+  outline: 1px solid var(--bs-gray-400);
+}
+
+.btnsContainer .inputContainer button {
   width: 52px;
+}
+
+.listBox {
+  width: 100%;
+  flex: 1;
 }
 
 .inputField {
@@ -499,37 +511,6 @@ hr {
   outline-offset: -2px;
 }
 
-@media (max-width: 520px) {
-  .btnsContainer {
-    margin-bottom: 0;
-  }
-
-  .btnsContainer .btnsBlock {
-    display: block;
-    margin-top: 1rem;
-    margin-right: 0;
-  }
-
-  .btnsContainer .btnsBlock div {
-    flex: 1;
-  }
-
-  .btnsContainer .btnsBlock div[title='Sort organizations'] {
-    margin-right: 0.5rem;
-  }
-
-  .btnsContainer .btnsBlock button {
-    margin-bottom: 1rem;
-    margin-right: 0;
-    width: 100%;
-  }
-}
-
-.listBox {
-  width: 100%;
-  flex: 1;
-}
-
 .listTable {
   width: 100%;
   box-sizing: border-box;
@@ -633,6 +614,31 @@ hr {
 
   .btnsContainer .btnsBlock div button {
     margin-right: 1.5rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .btnsContainer {
+    margin-bottom: 0;
+  }
+
+  .btnsContainer .btnsBlock {
+    display: block;
+    margin-top: 1rem;
+  }
+
+  .btnsContainer .btnsBlock div {
+    flex: 1;
+  }
+
+  .btnsContainer .btnsBlock div[title='Sort organizations'] {
+    margin-right: 0.5rem;
+  }
+
+  .btnsContainer .btnsBlock button {
+    margin-bottom: 1rem;
+    margin-right: 0;
+    width: 100%;
   }
 }
 
