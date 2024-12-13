@@ -637,7 +637,16 @@ hr {
 }
 
 .row .right_portion::-webkit-scrollbar {
-  display: none;
+  width: 8px;
+}
+
+.row .right_portion::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.row .right_portion::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
 }
 
 .row .right_portion .langChangeBtn {
@@ -857,6 +866,16 @@ hr {
 
   .socialIcons {
     margin-bottom: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .talawa_logo {
+    animation: none;
+  }
+
+  .active_tab {
+    animation: none;
   }
 }
 
