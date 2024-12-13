@@ -1,8 +1,6 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { render, screen } from '@testing-library/react';
-import 'jest-localstorage-mock';
-import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -22,6 +20,18 @@ import {
   MOCKS4,
 } from './RequestsMocks';
 import useLocalStorage from 'utils/useLocalstorage';
+import { vi } from 'vitest';
+
+vi.stubGlobal('localStorage', {
+  getItem: vi.fn(),
+  setItem: vi.fn(),
+  clear: vi.fn(),
+  removeItem: vi.fn(),
+});
+
+Object.defineProperty(window, 'location', {
+  value: { href: 'http://localhost/', assign: vi.fn(), reload: vi.fn() },
+});
 
 const { setItem, removeItem } = useLocalStorage();
 
@@ -53,7 +63,6 @@ afterEach(() => {
 
 describe('Testing Requests screen', () => {
   test('Component should be rendered properly', async () => {
-    const loadMoreRequests = jest.fn();
     render(
       <MockedProvider addTypename={false} link={link7}>
         <BrowserRouter>
