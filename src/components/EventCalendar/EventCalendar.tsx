@@ -135,10 +135,10 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       setCurrentMonth(currentMonth - 1);
     }
   };
+
   const filteredHolidays = useMemo(() => {
     if (!Array.isArray(holidays)) {
-      console.error('Invalid holidays array');
-      return [];
+      throw new Error('Invalid holidays array');
     }
 
     return holidays.filter((holiday) => {
@@ -165,7 +165,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   }, [holidays, currentMonth]);
 
   const handleNextMonth = (): void => {
-    /*istanbul ignore next*/
     if (currentMonth === 11) {
       setCurrentMonth(0);
       setCurrentYear(currentYear + 1);
@@ -173,12 +172,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       setCurrentMonth(currentMonth + 1);
     }
   };
-
-  /**
-   * Moves the calendar view to the previous date.
-   */
   const handlePrevDate = (): void => {
-    /*istanbul ignore next*/
     if (currentDate > 1) {
       setCurrentDate(currentDate - 1);
     } else {
@@ -197,10 +191,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       }
     }
   };
-
-  /*istanbul ignore next*/
   const handleNextDate = (): void => {
-    /*istanbul ignore next*/
     const lastDayOfCurrentMonth = new Date(
       currentYear,
       currentMonth - 1,
