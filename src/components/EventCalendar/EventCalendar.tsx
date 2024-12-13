@@ -89,8 +89,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   ): InterfaceEventListCardProps[] => {
     const data: InterfaceEventListCardProps[] = [];
     if (userRole === Role.SUPERADMIN) return eventData;
-    // Hard to test all the cases
-    /* istanbul ignore next */
     if (userRole === Role.ADMIN) {
       eventData?.forEach((event) => {
         if (event.isPublic) data.push(event);
@@ -123,16 +121,11 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     setEvents(data);
   }, [eventData, orgData, userRole, userId]);
 
-  /**
-   * Moves the calendar view to the previous month.
-   */
   const handlePrevMonth = (): void => {
-    /*istanbul ignore next*/
-    if (currentMonth === 0) {
-      setCurrentMonth(11);
+    const isJanuary = currentMonth === 0;
+    setCurrentMonth(isJanuary ? 11 : currentMonth - 1);
+    if (isJanuary) {
       setCurrentYear(currentYear - 1);
-    } else {
-      setCurrentMonth(currentMonth - 1);
     }
   };
 
