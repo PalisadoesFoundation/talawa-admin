@@ -253,14 +253,7 @@ hr {
   height: 25px !important;
   border-radius: 100% !important;
 }
-
 .avatarContainer {
   width: 28px;
   height: 26px;
-}
-
-/* Modal Table (Groups & Assignments) */
-.modalTable {
-  max-height: 220px;
-  overflow-y: auto;
 }
