@@ -12,6 +12,7 @@ export default defineConfig({
       include: ['events'],
     }),
     tsconfigPaths(),
+    svgrPlugin(),
   ],
   test: {
     include: ['src/**/*.spec.{js,jsx,ts,tsx}'],
