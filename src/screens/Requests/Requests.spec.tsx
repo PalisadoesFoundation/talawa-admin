@@ -38,7 +38,15 @@ vi.stubGlobal('localStorage', {
  */
 
 Object.defineProperty(window, 'location', {
-  value: { href: 'http://localhost/', assign: vi.fn(), reload: vi.fn() },
+  value: {
+    href: 'http://localhost/',
+    assign: vi.fn(),
+    reload: vi.fn(),
+    pathname: '/',
+    search: '',
+    hash: '',
+    origin: 'http://localhost',
+  },
 });
 
 const { setItem, removeItem } = useLocalStorage();
