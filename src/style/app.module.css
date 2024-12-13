@@ -70,15 +70,6 @@
   position: relative;
 }
 
-.btnsContainer {
-  display: flex;
-  margin: 2.5rem 0;
-  align-items: center;
-  gap: 10px;
-  /* Adjust spacing between items */
-  margin: 2.5rem 0;
-}
-
 .btnsContainer .btnsBlock {
   display: flex;
 }
@@ -285,11 +276,12 @@
 
 .TableImage {
   object-fit: cover;
-  /* margin-top: px !important; */
   margin-right: 5px;
   width: var(--table-image-size) !important;
   height: var(--table-image-size) !important;
   border-radius: 100% !important;
+  /* width: 25px !important; */
+  /* height: 25px !important; */
 }
 
 .tableHead {
@@ -338,12 +330,6 @@
   flex-direction: column;
 }
 
-.errorIcon {
-  transform: scale(1.5);
-  color: var(--bs-danger);
-  margin-bottom: 1rem;
-}
-
 .subTagsLink {
   color: var(--subtle-blue-grey);
   font-weight: 500;
@@ -382,10 +368,6 @@ input[type='checkbox']:checked + label {
   background-color: var(--subtle-blue-grey) !important;
 }
 
-input[type='radio']:checked + label:hover {
-  color: black !important;
-}
-
 .actionItemsContainer {
   height: 90vh;
 }
@@ -414,13 +396,6 @@ input[type='radio']:checked + label:hover {
   margin-left: 5px;
 }
 
-hr {
-  border: none;
-  height: 1px;
-  background-color: var(--bs-gray-500);
-  margin: 1rem;
-}
-
 .iconContainer {
   display: flex;
   justify-content: flex-end;
@@ -428,14 +403,6 @@ hr {
 
 .icon {
   margin: 1px;
-}
-
-.message {
-  margin-top: 25%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
 }
 
 .preview {
@@ -555,20 +522,6 @@ hr {
   align-items: center;
   flex-direction: column;
 }
-/* Toggle Btn */
-.toggleGroup {
-  width: 50%;
-  min-width: 20rem;
-  margin: 0.5rem 0rem;
-}
-
-.toggleBtn {
-  padding: 0rem;
-  height: 2rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
 .toggleBtn:hover {
   color: #31bb6b !important;
@@ -580,34 +533,6 @@ input[type='radio']:checked + label {
 
 input[type='radio']:checked + label:hover {
   color: black !important;
-}
-
-.actionItemsContainer {
-  height: 90vh;
-}
-
-.actionItemModal {
-  max-width: 80vw;
-  margin-top: 2vh;
-  margin-left: 13vw;
-}
-
-.datediv {
-  display: flex;
-  flex-direction: row;
-}
-
-.datebox {
-  width: 90%;
-  border-radius: 7px;
-  outline: none;
-  box-shadow: none;
-  padding-top: 2px;
-  padding-bottom: 2px;
-  padding-right: 5px;
-  padding-left: 5px;
-  margin-right: 5px;
-  margin-left: 5px;
 }
 
 .dropdownToggle {
@@ -652,28 +577,12 @@ hr {
   margin: 1rem;
 }
 
-.iconContainer {
-  display: flex;
-  justify-content: flex-end;
-}
-.icon {
-  margin: 1px;
-}
-
 .message {
   margin-top: 25%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-}
-
-.preview {
-  display: flex;
-  flex-direction: row;
-  font-weight: 900;
-  font-size: 16px;
-  color: rgb(80, 80, 80);
 }
 
 .removeFilterIcon {
@@ -693,8 +602,13 @@ hr {
 
 /* header (search, filter, dropdown) */
 .btnsContainer {
+  /* margin: 0.5rem 0 1.5rem 0; */
   display: flex;
-  margin: 0.5rem 0 1.5rem 0;
+  margin: 2.5rem 0;
+  align-items: center;
+  gap: 10px;
+  /* Adjust spacing between items */
+  margin: 2.5rem 0;
 }
 
 .btnsContainer .input {
@@ -804,12 +718,6 @@ hr {
   margin-right: 0.5rem;
 }
 
-.TableImage {
-  object-fit: cover;
-  width: 25px !important;
-  height: 25px !important;
-  border-radius: 100% !important;
-}
 .avatarContainer {
   width: 28px;
   height: 26px;
