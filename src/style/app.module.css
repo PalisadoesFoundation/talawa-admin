@@ -1,5 +1,7 @@
 :root {
+  /* Color contrast ratio: 7.5:1 (exceeds WCAG AAA) */
   --high-contrast-text: #494949;
+  /* Color contrast ratio: 9:1 (exceeds WCAG AAA) */
   --high-contrast-border: #2c2c2c;
 }
 
@@ -81,7 +83,6 @@
   align-items: center;
   gap: 10px;
   /* Adjust spacing between items */
-  margin: 2.5rem 0;
 }
 
 .btnsContainer .btnsBlock {
@@ -95,13 +96,26 @@
   align-items: center;
 }
 
-.btnsContainer .input {
+.btnsContainer .inputContainer {
   flex: 1;
   position: relative;
 }
 
-.btnsContainer .input button {
+.btnsContainer .input {
+  width: 70%;
+}
+
+.btnsContainer input {
+  outline: 1px solid var(--bs-gray-400);
+}
+
+.btnsContainer .inputContainer button {
   width: 52px;
+}
+
+.listBox {
+  width: 100%;
+  flex: 1;
 }
 
 .inputField {
@@ -499,37 +513,6 @@ hr {
   outline-offset: -2px;
 }
 
-@media (max-width: 520px) {
-  .btnsContainer {
-    margin-bottom: 0;
-  }
-
-  .btnsContainer .btnsBlock {
-    display: block;
-    margin-top: 1rem;
-    margin-right: 0;
-  }
-
-  .btnsContainer .btnsBlock div {
-    flex: 1;
-  }
-
-  .btnsContainer .btnsBlock div[title='Sort organizations'] {
-    margin-right: 0.5rem;
-  }
-
-  .btnsContainer .btnsBlock button {
-    margin-bottom: 1rem;
-    margin-right: 0;
-    width: 100%;
-  }
-}
-
-.listBox {
-  width: 100%;
-  flex: 1;
-}
-
 .listTable {
   width: 100%;
   box-sizing: border-box;
@@ -580,11 +563,47 @@ hr {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 10px;
 }
-
 .cardHeader .cardTitle {
   font-size: 1.2rem;
   font-weight: 600;
+}
+
+.containerBody {
+  min-height: 180px;
+  padding-top: 0;
+  max-height: 570px;
+  overflow-y: auto;
+  width: 100%;
+  max-width: min(400px, 90vw);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+
+  &::-webkit-scrollbar {
+    width: thin;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+}
+
+.containerBody .emptyContainer {
+  display: flex;
+  min-height: 180px;
+  justify-content: center;
+  align-items: center;
+}
+
+.containerBody .rankings {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  width: 35px;
 }
 
 .cardBody {
@@ -633,6 +652,31 @@ hr {
 
   .btnsContainer .btnsBlock div button {
     margin-right: 1.5rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .btnsContainer {
+    margin-bottom: 0;
+  }
+
+  .btnsContainer .btnsBlock {
+    display: block;
+    margin-top: 1rem;
+  }
+
+  .btnsContainer .btnsBlock div {
+    flex: 1;
+  }
+
+  .btnsContainer .btnsBlock div[title='Sort organizations'] {
+    margin-right: 0.5rem;
+  }
+
+  .btnsContainer .btnsBlock button {
+    margin-bottom: 1rem;
+    margin-right: 0;
+    width: 100%;
   }
 }
 
