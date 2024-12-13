@@ -414,8 +414,10 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     return days.map((date, index) => {
       const className = [
         date.getDay() === 0 || date.getDay() === 6 ? styles.day_weekends : '',
-        `${date.toLocaleDateString() === today.toLocaleDateString() ? styles.day__today : ''}`,
-        `${date.getMonth() !== currentMonth ? styles.day__outside : ''}`,
+        date.toLocaleDateString() === today.toLocaleDateString()
+          ? styles.day__today
+          : '',
+        date.getMonth() !== currentMonth ? styles.day__outside : '',
         selectedDate?.getTime() === date.getTime() ? styles.day__selected : '',
         styles.day,
       ].join(' ');
