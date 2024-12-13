@@ -1,6 +1,6 @@
 import { Button, Form, Modal } from 'react-bootstrap';
 import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
-import styles from '../EventVolunteers.module.css';
+import styles from '../../../style/app.module.css';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
