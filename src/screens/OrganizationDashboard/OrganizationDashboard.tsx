@@ -31,7 +31,7 @@ import type {
   InterfaceQueryOrganizationsListObject,
   InterfaceVolunteerRank,
 } from 'utils/interfaces';
-import styles from '../../../src/style/app.module.css';
+import styles from 'style/app.module.css';
 import { VOLUNTEER_RANKING } from 'GraphQl/Queries/EventVolunteerQueries';
 
 /**
