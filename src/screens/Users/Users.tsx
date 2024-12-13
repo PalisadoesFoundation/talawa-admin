@@ -91,8 +91,16 @@ const Users = (): JSX.Element => {
   }: {
     data?: { users: InterfaceQueryUserListItem[] };
     loading: boolean;
-    fetchMore: any;
-    refetch: any;
+    fetchMore: (options: {
+      variables: Record<string, unknown>;
+      updateQuery: (
+        previousQueryResult: { users: InterfaceQueryUserListItem[] },
+        options: {
+          fetchMoreResult?: { users: InterfaceQueryUserListItem[] };
+        },
+      ) => { users: InterfaceQueryUserListItem[] };
+    }) => void;
+    refetch: (variables?: Record<string, unknown>) => void;
     error?: ApolloError;
   } = useQuery(USER_LIST, {
     variables: {
@@ -171,9 +179,11 @@ const Users = (): JSX.Element => {
     setHasMore(true);
   };
 
-  const handleSearchByEnter = (e: any): void => {
+  const handleSearchByEnter = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ): void => {
     if (e.key === 'Enter') {
-      const { value } = e.target;
+      const { value } = e.target as HTMLInputElement;
       handleSearch(value);
     }
   };
@@ -211,16 +221,16 @@ const Users = (): JSX.Element => {
         {
           fetchMoreResult,
         }: {
-          fetchMoreResult: { users: InterfaceQueryUserListItem[] } | undefined;
+          fetchMoreResult?: { users: InterfaceQueryUserListItem[] };
         },
-      ): { users: InterfaceQueryUserListItem[] } | undefined => {
+      ) => {
         setIsLoadingMore(false);
-        if (!fetchMoreResult) return prev;
+        if (!fetchMoreResult) return prev || { users: [] };
         if (fetchMoreResult.users.length < perPageResult) {
           setHasMore(false);
         }
         return {
-          users: [...(prev?.users || []), ...(fetchMoreResult.users || [])],
+          users: [...(prev?.users || []), ...fetchMoreResult.users],
         };
       },
     });
