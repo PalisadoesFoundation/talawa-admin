@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import styles from './ContriStats.module.css';
+import styles from '../../style/app.module.css';
 
 interface InterfaceContriStatsProps {
   id: string;

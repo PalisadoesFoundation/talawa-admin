@@ -1,6 +1,5 @@
 :root {
-  --dropdown-border-color: #555555;
-  --dropdown-text-color: #555555;
+  --brown-color: #555555;
   --dropdown-hover-color: #eff1f7;
   --grey-bg-color: #eaebef;
   --subtle-blue-grey: #7c9beb;
@@ -25,9 +24,121 @@
   --row-background: var(--bs-white, white);
   --font-size-header: 16px;
 }
+.fonts {
+  color: #707070;
+}
 
-.noOutline input {
-  outline: none;
+.fonts > span {
+  font-weight: 600;
+}
+
+.cards {
+  width: 45%;
+  background: #fcfcfc;
+  margin: 10px 20px;
+  padding: 20px 30px;
+  border-radius: 5px;
+  border: 1px solid #e8e8e8;
+  box-shadow: 0 3px 5px #c9c9c9;
+  margin-right: 40px;
+  color: #737373;
+}
+.cards > h2 {
+  font-size: 19px;
+}
+.cards > h3 {
+  font-size: 17px;
+}
+.cards > p {
+  font-size: 14px;
+  margin-top: -5px;
+  margin-bottom: 7px;
+}
+
+.sidebar {
+  z-index: 0;
+  padding-top: 5px;
+  margin: 0;
+  height: 100%;
+}
+.sidebar:after {
+  background-color: #f7f7f7;
+  position: absolute;
+  width: 2px;
+  height: 600px;
+  top: 10px;
+  left: 94%;
+  display: block;
+}
+.sidebarsticky {
+  padding-left: 45px;
+  margin-top: 7px;
+}
+.sidebarsticky > p {
+  margin-top: -10px;
+}
+
+
+
+.logintitle {
+  color: #707070;
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 30px;
+  padding-bottom: 5px;
+  border-bottom: 3px solid #31bb6b;
+  width: 15%;
+}
+.searchtitle {
+  color: #707070;
+  font-weight: 600;
+  font-size: 18px;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  border-bottom: 3px solid #31bb6b;
+  width: 60%;
+}
+
+.admindetails {
+  display: flex;
+  justify-content: space-between;
+}
+.admindetails > p {
+  margin-top: -12px;
+  margin-right: 30px;
+}
+
+.mainpageright > hr {
+  margin-top: 20px;
+  width: 100%;
+  margin-left: -15px;
+  margin-right: -15px;
+  margin-bottom: 20px;
+}
+.justifysp {
+  display: flex;
+  justify-content: space-between;
+}
+@media screen and (max-width: 575.5px) {
+  .justifysp {
+    padding-left: 55px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+}
+
+.sidebarsticky > input {
+  text-decoration: none;
+  margin-bottom: 50px;
+  border-color: #e8e5e5;
+  width: 80%;
+  border-radius: 7px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 10px;
+  padding-left: 10px;
+  box-shadow: none;
 }
 
 .noOutline:is(:hover, :focus, :active, :focus-visible, .show) {
@@ -64,8 +175,8 @@
 
 .dropdown {
   background-color: white;
-  border: 1px solid var(--dropdown-border-color);
-  color: var(--dropdown-text-color);
+  border: 1px solid var(--brown-color);
+  color: var(--brown-color);
   position: relative;
   display: inline-block;
   margin-top: 10px;
@@ -74,13 +185,13 @@
 
 .dropdown:is(:hover, :focus, :active, :focus-visible, .show) {
   background-color: transparent !important;
-  border: 1px solid var(--dropdown-border-color);
-  color: var(--dropdown-text-color) !important;
+  border: 1px solid var(--brown-color);
+  color: var(--brown-color) !important;
 }
 
 .dropdownItem {
   background-color: white !important;
-  color: var(--dropdown-text-color) !important;
+  color: var(--brown-color) !important;
   border: none !important;
 }
 
@@ -88,7 +199,7 @@
 .dropdownItem:focus,
 .dropdownItem:active {
   background-color: var(--dropdown-hover-color) !important;
-  color: var(--dropdown-text-color) !important;
+  color: var(--brown-color) !important;
   outline: none !important;
   box-shadow: none !important;
 }
@@ -148,13 +259,13 @@
   color: black !important;
   margin-top: 10px;
   margin-left: 5px;
-  border: 1px solid var(--dropdown-border-color);
+  border: 1px solid var(--brown-color);
 }
 
 .createButton:hover {
   background-color: var(--grey-bg-color) !important;
   color: black !important;
-  border: 1px solid var(--dropdown-border-color) !important;
+  border: 1px solid var(--brown-color) !important;
 }
 
 .visuallyHidden {
@@ -217,13 +328,13 @@
 }
 
 .searchIcon {
-  color: var(--dropdown-text-color);
+  color: var(--brown-color);
 }
 
 .infoButton {
   background-color: var(--search-button-bg);
   border-color: var(--search-button-border);
-  color: var(--dropdown-text-color);
+  color: var(--brown-color);
   margin-right: 0.5rem;
   border-radius: 0.25rem;
 }
@@ -249,13 +360,6 @@
   margin-top: 20px;
 }
 
-.mainpageright > hr {
-  margin-top: 10px;
-  width: 100%;
-  margin-left: -15px;
-  margin-right: -15px;
-  margin-bottom: 20px;
-}
 
 .rowBackground {
   background-color: var(--row-background);
