@@ -767,6 +767,10 @@ hr {
   .listBox .itemCard {
     width: 100%;
   }
+
+  .row .left_portion .inner .palisadoes_logo {
+    width: 100%;
+  }
 }
 
 @media (max-width: 1020px) {
@@ -796,10 +800,6 @@ hr {
 @media (max-width: 992px) {
   .row .left_portion {
     padding: 0 2rem;
-  }
-
-  .row .left_portion .inner .palisadoes_logo {
-    width: 100%;
   }
 }
 
@@ -866,6 +866,31 @@ hr {
 
   .socialIcons {
     margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .btnsContainer {
+    margin-bottom: 0;
+  }
+
+  .btnsContainer .btnsBlock {
+    display: block;
+    margin-top: 1rem;
+  }
+
+  .btnsContainer .btnsBlock div {
+    flex: 1;
+  }
+
+  .btnsContainer .btnsBlock div[title='Sort organizations'] {
+    margin-right: 0.5rem;
+  }
+
+  .btnsContainer .btnsBlock button {
+    margin-bottom: 1rem;
+    margin-right: 0;
+    width: 100%;
   }
 }
 
