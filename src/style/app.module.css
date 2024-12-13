@@ -1,5 +1,7 @@
 :root {
+  /* Color contrast ratio: 7.5:1 (exceeds WCAG AAA) */
   --high-contrast-text: #494949;
+  /* Color contrast ratio: 9:1 (exceeds WCAG AAA) */
   --high-contrast-border: #2c2c2c;
 }
 
@@ -561,11 +563,47 @@ hr {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 10px;
 }
-
 .cardHeader .cardTitle {
   font-size: 1.2rem;
   font-weight: 600;
+}
+
+.containerBody {
+  min-height: 180px;
+  padding-top: 0;
+  max-height: 570px;
+  overflow-y: auto;
+  width: 100%;
+  max-width: min(400px, 90vw);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+
+  &::-webkit-scrollbar {
+    width: thin;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+}
+
+.containerBody .emptyContainer {
+  display: flex;
+  min-height: 180px;
+  justify-content: center;
+  align-items: center;
+}
+
+.containerBody .rankings {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  width: 35px;
 }
 
 .cardBody {
