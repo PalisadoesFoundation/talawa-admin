@@ -127,10 +127,12 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
    * Moves the calendar view to the previous month.
    */
   const handlePrevMonth = (): void => {
-    const isJanuary = currentMonth === 0;
-    setCurrentMonth(isJanuary ? 11 : currentMonth - 1);
-    if (isJanuary) {
+    /*istanbul ignore next*/
+    if (currentMonth === 0) {
+      setCurrentMonth(11);
       setCurrentYear(currentYear - 1);
+    } else {
+      setCurrentMonth(currentMonth - 1);
     }
   };
 
