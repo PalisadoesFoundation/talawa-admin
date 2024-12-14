@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import styles from './OrganizationActionItems.module.css';
+import styles from '../../style/app.module.css';
 import { useMutation } from '@apollo/client';
 import { DELETE_ACTION_ITEM_MUTATION } from 'GraphQl/Mutations/ActionItemMutations';
 import { toast } from 'react-toastify';
