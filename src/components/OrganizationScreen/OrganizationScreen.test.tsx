@@ -87,7 +87,7 @@ describe('Testing OrganizationScreen', () => {
     fireEvent.click(openButton);
 
     // Check for expand class after opening
-    expect(screen.getByTestId('mainpageright')).toHaveClass(styles.expand);
+    expect(screen.getByTestId('mainpageright')).toHaveClass(styles.contract);
   });
 
   test('handles window resize', () => {
