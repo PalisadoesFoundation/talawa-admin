@@ -1,3 +1,15 @@
+/**
+ * Tests for the OrganizationVenues component.
+ * These tests include:
+ * - Ensuring the component renders correctly with default props.
+ * - Handling the absence of `orgId` by redirecting to the homepage.
+ * - Fetching and displaying venues via Apollo GraphQL queries.
+ * - Allowing users to search venues by name or description.
+ * - Sorting venues by capacity in ascending or descending order.
+ * - Verifying that long venue names or descriptions are handled gracefully.
+ * - Testing loading states and edge cases for Apollo queries.
+ * - Mocking GraphQL mutations for venue-related actions and validating their behavior.
+ */
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
