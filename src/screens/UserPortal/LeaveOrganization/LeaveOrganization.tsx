@@ -10,27 +10,28 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getItem } from 'utils/useLocalstorage';
 import { toast } from 'react-toastify';
 
+const userEmail = (() => {
+  try {
+    return getItem('Talawa-admin', 'email') ?? '';
+  } catch (e) {
+    console.error('Failed to access localStorage:', e);
+    return '';
+  }
+})();
+const userId = (() => {
+  try {
+    return getItem('Talawa-admin', 'userId') ?? '';
+  } catch (e) {
+    console.error('Failed to access localStorage:', e);
+    return '';
+  }
+})();
+
+export { userEmail, userId };
+
 const LeaveOrganization = (): JSX.Element => {
   const navigate = useNavigate();
   const { orgId: organizationId } = useParams();
-
-  const userEmail = (() => {
-    try {
-      return getItem('Talawa-admin', 'email') ?? '';
-    } catch (e) {
-      console.error('Failed to access localStorage:', e);
-      return '';
-    }
-  })();
-  const userId = (() => {
-    try {
-      return getItem('Talawa-admin', 'userId') ?? '';
-    } catch (e) {
-      console.error('Failed to access localStorage:', e);
-      return '';
-    }
-  })();
-
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -222,7 +223,11 @@ const LeaveOrganization = (): JSX.Element => {
             <>
               <Button
                 variant="secondary"
-                onClick={() => setVerificationStep(false)}
+                onClick={() => {
+                  setVerificationStep(false);
+                  setEmail('');
+                  setError('');
+                }}
               >
                 Back
               </Button>
