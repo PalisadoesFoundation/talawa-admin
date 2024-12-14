@@ -271,7 +271,7 @@ const renderOrganizationVenue = (link: ApolloLink): RenderResult => {
 
 describe('OrganizationVenue with missing orgId', () => {
   beforeAll(() => {
-    vi.mock('react-router-dom', async () => ({
+    vi.doMock('react-router-dom', async () => ({
       ...(await vi.importActual('react-router-dom')),
       useParams: () => ({ orgId: undefined }),
     }));
@@ -298,7 +298,6 @@ describe('OrganizationVenue with missing orgId', () => {
         </MemoryRouter>
       </MockedProvider>,
     );
-
     await waitFor(() => {
       const paramsError = screen.getByTestId('paramsError');
       expect(paramsError).toBeInTheDocument();
@@ -310,7 +309,7 @@ describe('Organisation Venues', () => {
   global.alert = vi.fn();
 
   beforeAll(() => {
-    vi.mock('react-router-dom', async () => ({
+    vi.doMock('react-router-dom', async () => ({
       ...(await vi.importActual('react-router-dom')),
       useParams: () => ({ orgId: 'orgId' }),
     }));
