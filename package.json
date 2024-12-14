@@ -148,6 +148,7 @@
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-react": "^7.37.1",
     "eslint-plugin-tsdoc": "^0.3.0",
+    "globals": "^15.13.0",
     "husky": "^9.1.6",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^27.4.5",
