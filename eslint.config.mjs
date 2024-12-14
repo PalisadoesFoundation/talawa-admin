@@ -37,7 +37,6 @@ export default [{
     "plugin:jest/recommended",
     "plugin:prettier/recommended",
     "plugin:@typescript-eslint/recommended",
-    "eslint-config-prettier",
     "prettier",
 ), {
     plugins: {
