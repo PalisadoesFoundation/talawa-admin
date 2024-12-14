@@ -7,7 +7,6 @@ import {
   act,
   fireEvent,
 } from '@testing-library/react';
-import { vi } from 'vitest';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -18,11 +17,14 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import Users from './Users';
 import { EMPTY_MOCKS, MOCKS, MOCKS2 } from './UsersMocks';
+import useLocalStorage from 'utils/useLocalstorage';
 
 import {
   USER_LIST,
   ORGANIZATION_CONNECTION_LIST,
 } from 'GraphQl/Queries/Queries';
+
+const { setItem, removeItem } = useLocalStorage();
 
 const MOCK_USERS = [
   {
@@ -286,27 +288,15 @@ const link2 = new StaticMockLink(EMPTY_MOCKS, true);
 const link3 = new StaticMockLink(MOCKS2, true);
 const link5 = new StaticMockLink(MOCKS_NEW, true);
 
-const mockLocalStorage = {
-  setItem: vi.fn(),
-  getItem: vi.fn(),
-  removeItem: vi.fn(),
-  clear: vi.fn(),
-};
-
 beforeEach(() => {
-  Object.defineProperty(window, 'localStorage', {
-    value: mockLocalStorage,
-    writable: true,
-  });
-
-  mockLocalStorage.setItem('id', '123');
-  mockLocalStorage.setItem('SuperAdmin', 'true');
-  mockLocalStorage.setItem('FirstName', 'John');
-  mockLocalStorage.setItem(
+  setItem('id', '123');
+  setItem('SuperAdmin', 'true');
+  setItem('FirstName', 'John');
+  setItem(
     'AdminFor',
     JSON.stringify([{ name: 'adi', _id: '1234', image: '' }]),
   );
-  mockLocalStorage.setItem('LastName', 'Doe');
+  setItem('LastName', 'Doe');
 });
 
 afterEach(() => {
@@ -334,11 +324,11 @@ describe('Testing Users screen', () => {
 
   it(`Component should be rendered properly when user is not superAdmin
   and or userId does not exists in localstorage`, async () => {
-    mockLocalStorage.setItem('AdminFor', JSON.stringify(['123']));
-    mockLocalStorage.removeItem('SuperAdmin');
-    mockLocalStorage.setItem('id', '');
+    setItem('AdminFor', JSON.stringify(['123']));
+    removeItem('SuperAdmin');
 
     await waitFor(() => {
+      setItem('id', '');
       render(
         <MockedProvider addTypename={false} link={link}>
           <BrowserRouter>
@@ -354,10 +344,10 @@ describe('Testing Users screen', () => {
   });
 
   it(`Component should be rendered properly when userId does not exists in localstorage`, async () => {
-    mockLocalStorage.removeItem('AdminFor');
-    mockLocalStorage.removeItem('SuperAdmin');
-    mockLocalStorage.removeItem('id');
+    removeItem('AdminFor');
+    removeItem('SuperAdmin');
     await waitFor(() => {
+      removeItem('id');
       render(
         <MockedProvider addTypename={false} link={link}>
           <BrowserRouter>
