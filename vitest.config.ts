@@ -7,7 +7,6 @@ import svgrPlugin from 'vite-plugin-svgr';
 export default defineConfig({
   plugins: [
     react(),
-
     nodePolyfills({
       include: ['events'],
     }),
