@@ -36,8 +36,7 @@ export default {
     '<rootDir>/src',
   ],
   moduleNameMapper: {
-    '\\.module\\.(css|scss|sass)$': 'identity-obj-proxy',
-    '\\.(css|scss|sass)$': '<rootDir>/scripts/__mocks__/styleMock.js',
+    '\\.(css|scss|sass|less)$': 'identity-obj-proxy',
     '^react-native$': 'react-native-web',
     '^@dicebear/core$': '<rootDir>/scripts/__mocks__/@dicebear/core.ts',
     '^@dicebear/collection$':
