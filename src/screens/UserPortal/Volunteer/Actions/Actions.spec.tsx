@@ -139,31 +139,34 @@ describe('Testing Actions Screen', () => {
 
   it('Check Sorting Functionality', async () => {
     renderActions(link1);
-    await waitFor(async () => {
-      const searchInput = await screen.findByTestId('searchBy');
-      expectVitestToBeInTheDocument(searchInput);
 
-      let sortBtn = await screen.findByTestId('sort');
-      expectVitestToBeInTheDocument(sortBtn);
+    const searchInput = await screen.findByTestId('searchBy');
+    expectVitestToBeInTheDocument(searchInput);
 
-      // Sort by dueDate_DESC
-      fireEvent.click(sortBtn);
-      const dueDateDESC = await screen.findByTestId('dueDate_DESC');
-      expectVitestToBeInTheDocument(dueDateDESC);
-      fireEvent.click(dueDateDESC);
+    let sortBtn = await screen.findByTestId('sort');
+    expectVitestToBeInTheDocument(sortBtn);
 
-      let assigneeName = await screen.findAllByTestId('assigneeName');
+    // Sort by dueDate_DESC
+    fireEvent.click(sortBtn);
+    const dueDateDESC = await screen.findByTestId('dueDate_DESC');
+    expectVitestToBeInTheDocument(dueDateDESC);
+    fireEvent.click(dueDateDESC);
+
+    await waitFor(() => {
+      const assigneeName = screen.getAllByTestId('assigneeName');
       expectElementToHaveTextContent(assigneeName[0], 'Group 1');
+    });
 
-      // Sort by dueDate_ASC
-      sortBtn = await screen.findByTestId('sort');
-      expectVitestToBeInTheDocument(sortBtn);
-      fireEvent.click(sortBtn);
-      const dueDateASC = await screen.findByTestId('dueDate_ASC');
-      expectVitestToBeInTheDocument(dueDateASC);
-      fireEvent.click(dueDateASC);
+    // Sort by dueDate_ASC
+    sortBtn = await screen.findByTestId('sort');
+    expectVitestToBeInTheDocument(sortBtn);
+    fireEvent.click(sortBtn);
+    const dueDateASC = await screen.findByTestId('dueDate_ASC');
+    expectVitestToBeInTheDocument(dueDateASC);
+    fireEvent.click(dueDateASC);
 
-      assigneeName = await screen.findAllByTestId('assigneeName');
+    await waitFor(() => {
+      const assigneeName = screen.getAllByTestId('assigneeName');
       expectElementToHaveTextContent(assigneeName[0], 'Teresa Bradley');
     });
   });
