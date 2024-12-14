@@ -91,7 +91,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     userId?: string,
   ): InterfaceEventListCardProps[] => {
     const data: InterfaceEventListCardProps[] = [];
-    if (userRole === 'SUPERADMIN') return eventData;
+    if (userRole === Role.SUPERADMIN) return eventData;
     // Hard to test all the cases
 
     if (userRole === Role.ADMIN) {
