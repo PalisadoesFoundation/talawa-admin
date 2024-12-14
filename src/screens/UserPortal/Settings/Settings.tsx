@@ -91,7 +91,7 @@ export default function settings(): JSX.Element {
    * This function sends a mutation request to update the user details
    * and reloads the page on success.
    */
-  /*istanbul ignore next*/
+
   const handleUpdateUserDetails = async (): Promise<void> => {
     try {
       let updatedUserDetails = { ...userDetails };
@@ -113,7 +113,6 @@ export default function settings(): JSX.Element {
         setItem('name', userFullName);
       }
     } catch (error: unknown) {
-      /*istanbul ignore next*/
       errorHandler(t, error);
     }
   };
@@ -303,9 +302,8 @@ export default function settings(): JSX.Element {
                             role="button"
                             aria-label="Edit profile picture"
                             tabIndex={0}
-                            onKeyDown={
-                              /*istanbul ignore next*/
-                              (e) => e.key === 'Enter' && handleImageUpload()
+                            onKeyDown={(e) =>
+                              e.key === 'Enter' && handleImageUpload()
                             }
                           />
                         </div>
