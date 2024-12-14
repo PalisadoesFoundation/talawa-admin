@@ -10,7 +10,6 @@ import {
 } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 import OrganizationVenues from './OrganizationVenues';
 import { store } from 'state/store';
@@ -19,7 +18,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import { VENUE_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import type { ApolloLink } from '@apollo/client';
 import { DELETE_VENUE_MUTATION } from 'GraphQl/Mutations/VenueMutations';
-
+import { vi } from 'vitest';
 const MOCKS = [
   {
     request: {
@@ -239,11 +238,11 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    warning: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    warning: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
@@ -272,14 +271,14 @@ const renderOrganizationVenue = (link: ApolloLink): RenderResult => {
 
 describe('OrganizationVenue with missing orgId', () => {
   beforeAll(() => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
+    vi.mock('react-router-dom', async () => ({
+      ...(await vi.importActual('react-router-dom')),
       useParams: () => ({ orgId: undefined }),
     }));
   });
 
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
   test('Redirect to /orglist when orgId is falsy/undefined', async () => {
     render(
@@ -308,17 +307,17 @@ describe('OrganizationVenue with missing orgId', () => {
 });
 
 describe('Organisation Venues', () => {
-  global.alert = jest.fn();
+  global.alert = vi.fn();
 
   beforeAll(() => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
+    vi.mock('react-router-dom', async () => ({
+      ...(await vi.importActual('react-router-dom')),
       useParams: () => ({ orgId: 'orgId' }),
     }));
   });
 
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('searches the venue list correctly by Name', async () => {
