@@ -29,9 +29,6 @@ export default defineConfig({
         '**/*.d.ts',
         'src/test/**',
         'vitest.config.ts',
-        'scripts/custom-test-env.js', // Exclude from coverage if necessary
-        'src/setupTests.ts', // Exclude from coverage if necessary
-        'src/utils/i18nForTest.ts', // Exclude from coverage if necessary
         'vitest.setup.ts', // Exclude from coverage if necessary
       ],
       reporter: ['text', 'html', 'text-summary', 'lcov'],
