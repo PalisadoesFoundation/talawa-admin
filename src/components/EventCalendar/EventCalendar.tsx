@@ -363,7 +363,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                   />
                 );
               }) || [];
-          /*istanbul ignore next*/
+
           return (
             <div key={hour} className={styles.calendar_hour_block}>
               <div className={styles.calendar_hour_text_container}>
@@ -396,7 +396,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                         : styles.event_list
                     }
                   >
-                    {/*istanbul ignore next*/}
+                    {}
                     {expanded === index
                       ? timeEventsList
                       : timeEventsList?.slice(0, 1)}
@@ -456,14 +456,13 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         styles.day,
       ].join(' ');
       const toggleExpand = (index: number): void => {
-        /*istanbul ignore next*/
         if (expanded === index) {
           setExpanded(-1);
         } else {
           setExpanded(index);
         }
       };
-      /*istanbul ignore next*/
+
       const allEventsList: JSX.Element[] =
         events
           ?.filter((datas) => {
@@ -527,38 +526,28 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             >
               <div
                 className={
-                  /*istanbul ignore next*/
                   expanded === index
                     ? styles.expand_event_list
                     : styles.event_list
                 }
               >
                 <div>{holidayList}</div>
-                {
-                  /*istanbul ignore next*/
-                  expanded === index
-                    ? allEventsList
-                    : holidayList?.length > 0
-                      ? /*istanbul ignore next*/
-                        allEventsList?.slice(0, 1)
-                      : allEventsList?.slice(0, 2)
-                }
+                {expanded === index
+                  ? allEventsList
+                  : holidayList?.length > 0
+                    ? allEventsList?.slice(0, 1)
+                    : allEventsList?.slice(0, 2)}
               </div>
               {(allEventsList?.length > 2 ||
                 (windowWidth <= 700 && allEventsList?.length > 0)) && (
-                /*istanbul ignore next*/
                 <button
                   className={styles.btn__more}
                   data-testid="more"
-                  /*istanbul ignore next*/
                   onClick={() => {
                     toggleExpand(index);
                   }}
                 >
-                  {
-                    /*istanbul ignore next*/
-                    expanded === index ? 'View less' : 'View all'
-                  }
+                  {expanded === index ? 'View less' : 'View all'}
                 </button>
               )}
             </div>
