@@ -18,17 +18,17 @@ jest.mock('react-router-dom', () => ({
   useParams: jest.fn(),
 }));
 
-// Mock the custom hook
-jest.mock('utils/useLocalstorage', () => {
-  return {
-    getItem: jest.fn((prefix: string, key: string) => {
-      if (prefix === 'Talawa-admin' && key === 'email')
-        return 'test@example.com';
-      if (prefix === 'Talawa-admin' && key === 'userId') return '12345';
-      return null;
-    }),
-  };
-});
+// // Mock the custom hook
+// jest.mock('utils/useLocalstorage', () => {
+//   return {
+//     getItem: jest.fn((prefix: string, key: string) => {
+//       if (prefix === 'Talawa-admin' && key === 'email')
+//         return 'test@example.com';
+//       if (prefix === 'Talawa-admin' && key === 'userId') return '12345';
+//       return null;
+//     }),
+//   };
+// });
 
 // Define mock data
 const mocks = [
@@ -322,17 +322,30 @@ describe('LeaveOrganization Component', () => {
     await screen.findByText('Continue');
     fireEvent.click(screen.getByText('Continue'));
 
-    // Enter incorrect email to trigger the verification failure
-    fireEvent.change(screen.getByPlaceholderText(/Enter your email/i), {
-      target: { value: 'incorrect-email@example.com' },
-    });
-    fireEvent.click(screen.getByText('Confirm'));
+    const targetValues = [
+      {
+        value: 'incorrect-email@example.com',
+        expectedError: 'Verification failed: Email does not match.',
+        description: 'incorrect email error',
+      },
+      {
+        value: '',
+        expectedError:
+          'Unable to process request: Missing required information.',
+        description: 'empty email error',
+      },
+    ];
+    for (const values of targetValues) {
+      // Enter incorrect email to trigger the verification failure
+      fireEvent.change(screen.getByPlaceholderText(/Enter your email/i), {
+        target: { value: values.value },
+      });
+      fireEvent.click(screen.getByText('Confirm'));
 
-    // Check that the error message appears in the modal
-    await waitFor(() => {
-      expect(
-        screen.getByText(/Verification failed: Email does not match/i),
-      ).toBeInTheDocument();
-    });
+      // Check that the error message appears in the modal
+      await waitFor(() => {
+        expect(screen.getByText(values.expectedError)).toBeInTheDocument();
+      });
+    }
   });
 });
