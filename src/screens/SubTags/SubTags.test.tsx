@@ -10,7 +10,6 @@ import {
   waitFor,
   waitForElementToBeRemoved,
 } from '@testing-library/react';
-import { vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
@@ -45,10 +44,10 @@ async function wait(ms = 500): Promise<void> {
   });
 }
 
-vi.mock('react-toastify', () => ({
+jest.mock('react-toastify', () => ({
   toast: {
-    success: vi.fn(),
-    error: vi.fn(),
+    success: jest.fn(),
+    error: jest.fn(),
   },
 }));
 
@@ -108,15 +107,15 @@ const renderSubTags = (link: ApolloLink): RenderResult => {
 
 describe('Organisation Tags Page', () => {
   beforeEach(() => {
-    vi.mock('react-router-dom', async () => ({
-      ...(await vi.importActual('react-router-dom')),
+    jest.mock('react-router-dom', () => ({
+      ...jest.requireActual('react-router-dom'),
       useParams: () => ({ orgId: 'orgId' }),
     }));
     cache.reset();
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    jest.clearAllMocks();
     cleanup();
   });
 
