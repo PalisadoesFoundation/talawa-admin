@@ -638,9 +638,9 @@ hr {
   height: 72px;
   width: 72px;
   transform: rotate(180deg);
+  transform-origin: center;
   position: relative;
   overflow: hidden;
-  display: block;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -653,7 +653,7 @@ hr {
   background-color: var(--bs-primary);
   height: 100%;
   width: 100%;
-  opacity: 0.15;
+  opacity: var(--theme-overlay-opacity, 0.15);
 }
 
 .keyWrapper .keyLogo {
