@@ -366,8 +366,8 @@ function organizationActionItems(): JSX.Element {
   return (
     <div>
       {/* Header with search, filter  and Create Button */}
-      <div className={`${styles.btnsContainer} `}>
-        <div className={`${styles.input} `}>
+      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
+        <div className={`${styles.input} mb-1`}>
           <Form.Control
             type="name"
             placeholder={tCommon('searchBy', {
@@ -387,7 +387,7 @@ function organizationActionItems(): JSX.Element {
             <Search />
           </Button>
         </div>
-        <div className="md:d-flex gap-3 mb-1">
+        <div className="d-flex gap-3 mb-1">
           <div className="d-flex justify-space-between align-items-center gap-3 overflow-y-auto">
             <Dropdown>
               <Dropdown.Toggle
