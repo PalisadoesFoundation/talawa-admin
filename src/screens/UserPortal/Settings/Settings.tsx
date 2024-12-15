@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './Settings.module.css';
 import { Button, Card, Col, Form, Row } from 'react-bootstrap';
@@ -21,6 +21,8 @@ import DeleteUser from 'components/UserProfileSettings/DeleteUser';
 import OtherSettings from 'components/UserProfileSettings/OtherSettings';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
+import { DatePicker } from '@mui/x-date-pickers';
+import dayjs from 'dayjs';
 
 /**
  * The Settings component allows users to view and update their profile settings.
@@ -109,6 +111,7 @@ export default function settings(): JSX.Element {
         setItem('name', userFullName);
       }
     } catch (error: unknown) {
+      /*istanbul ignore next*/
       errorHandler(t, error);
     }
   };
@@ -419,15 +422,36 @@ export default function settings(): JSX.Element {
                       >
                         {t('birthDate')}
                       </Form.Label>
-                      <Form.Control
+                      {/* <Form.Control
                         type="date"
                         id="birthDate"
                         value={userDetails.birthDate}
                         onChange={(e) =>
                           handleFieldChange('birthDate', e.target.value)
                         }
-                        className={`${styles.cardControl}`}
-                      />
+                        className={styles.cardControl}
+                      /> */}
+
+                      <div className={styles.datediv}>
+                        <div>
+                          <DatePicker
+                            label={'Birth Date'}
+                            className={styles.datebox}
+                            value={dayjs(userDetails.birthDate)}
+                            onChange={(newValue) => {
+                              handleFieldChange(
+                                'birthDate',
+                                newValue ? newValue.toISOString() : '',
+                              );
+                            }}
+                            slotProps={{
+                              textField: {
+                                error: false,
+                              },
+                            }}
+                          />
+                        </div>
+                      </div>
                     </Col>
                     <Col lg={4}>
                       <Form.Label
