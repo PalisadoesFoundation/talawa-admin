@@ -329,22 +329,16 @@ jobs:
         run: |
           npm run serve &
           echo $! > .pidfile_dev
+
+      - name: Make health-check.sh executable
+        run: |
+          chmod +x ./github/workflows/scripts/health-check.sh
+
       - name: Check if Development App is running
         run: |
-          timeout=120
-          echo "Starting development health check with ${timeout}s timeout"
-          while ! nc -z localhost 4321 && [ $timeout -gt 0 ]; do
-            sleep 1
-            timeout=$((timeout-1))
-            if [ $((timeout % 10)) -eq 0 ]; then
-              echo "Still waiting for development app to start... ${timeout}s remaining"
-            fi
-          done
-          if [ $timeout -eq 0 ]; then
-            echo "Timeout waiting for development application to start"
-            exit 1
-          fi
+          ./github/workflows/scripts/health-check.sh 4321 120
           echo "Development app started successfully"
+
       - name: Stop Development App
         if: always()
         run: |
@@ -377,29 +371,21 @@ jobs:
           echo "Started Docker container..."
           docker run -d --name talawa-admin-app-container -p 4321:4321 talawa-admin-app
           echo "Docker container started successfully"
+      - name: Make healthcheck.sh executable
+        run: |
+          chmod +x .github/scripts/healthcheck.sh
+
       - name: Check if Talawa Admin App is running
         run: |
-          timeout="${HEALTH_CHECK_TIMEOUT:-120}"
-          echo "Starting health check with ${timeout}s timeout"
-          while ! nc -z localhost 4321 && [ $timeout -gt 0 ]; do
-            sleep 1
-            timeout=$((timeout-1))
-            if [ $((timeout % 10)) -eq 0 ]; then
-              echo "Still waiting for app to start... ${timeout}s remaining"
-            fi
-          done
-          if [ $timeout -eq 0 ]; then
-            echo "Timeout waiting for application to start"
-            echo "Container logs:"
-            docker logs talawa-admin-app-container
-            exit 1
-          fi
+          ./github/scripts/healthcheck.sh 4321 120
           echo "Port check passed, verifying health endpoint..."
+
       - name: Stop Docker Container
         if: always()
         run: |
           docker stop talawa-admin-app-container
           docker rm talawa-admin-app-container
+
 
   Check-Target-Branch:
     if: ${{ github.actor != 'dependabot[bot]' }}
