@@ -284,6 +284,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         (windowWidth <= 700 && allDayEventsList.length > 0)
       );
     }, [allDayEventsList.length, windowWidth]);
+    const NO_EVENTS_MESSAGE = 'No events available';
     return (
       <>
         <div className={styles.calendar_hour_block}>
@@ -321,7 +322,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                   )
                 ) : (
                   <p className={styles.no_events_message}>
-                    No events available
+                    {NO_EVENTS_MESSAGE}
                   </p>
                 )}
               </div>
