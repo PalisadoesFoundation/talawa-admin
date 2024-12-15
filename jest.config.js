@@ -69,7 +69,6 @@ export default {
     'src/components/SecuredRoute/SecuredRoute.tsx',
     'src/reportWebVitals.ts',
     'src/screens/UserPortal/Volunteer/Actions/Actions.test.tsx',
-    'setup.ts',
   ],
   coverageThreshold: {
     global: {
@@ -82,6 +81,7 @@ export default {
     '<rootDir>/build/',
     '<rootDir>/public/',
     '<rootDir>/src/screens/UserPortal/Volunteer/Actions/Actions.test.tsx',
+    'setup.ts',
   ],
   coverageDirectory: './coverage/jest',
   coverageReporters: ['text', 'html', 'text-summary', 'lcov'],
