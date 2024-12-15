@@ -61,8 +61,8 @@ const LeaveOrganization = (): JSX.Element => {
     ],
     onCompleted: () => {
       // Use a toast notification or in-app message
-      toast.success('You have successfully left the organization!');
       setShowModal(false);
+      toast.success('You have successfully left the organization!');
       navigate(`/user/organizations`);
     },
     onError: (err) => {
@@ -148,6 +148,7 @@ const LeaveOrganization = (): JSX.Element => {
 
       <Modal
         show={showModal}
+        modal-testid="modl"
         aria-labelledby="leave-organization-modal"
         onHide={() => {
           setShowModal(false);
