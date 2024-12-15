@@ -7,5 +7,10 @@
   "emailNotRegistered": "邮箱未注册",
   "notFoundMsg": "哎呀！",
   "errorOccurredCouldntCreate": "发生错误。 无法创建{{entity}}",
-  "errorLoading": "加载{{entity}}数据时出错"
+  "errorLoading": "加载{{entity}}数据时出错",
+  "invalidPhoneNumber": "请选择一个有效的电话号码",
+  "invalidEducationGrade": "请选择教育年级",
+  "invalidEmploymentStatus": "请选择有效的就业状况",
+  "invalidMaritalStatus": "请选择有效的婚姻状况",
+  "error400": "响应不成功. 从服务器收到状态代码 400"
 }
