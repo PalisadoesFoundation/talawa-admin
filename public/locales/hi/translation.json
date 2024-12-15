@@ -1405,6 +1405,9 @@
   "userPledges": {
     "title": "मेरी प्रतिज्ञाएँ"
   },
+  "leaveOrganization": {
+    "title": "संगठन छोड़ें"
+  },
   "eventVolunteers": {
     "volunteers": "स्वयंसेवक",
     "volunteer": "स्वयंसेवक",

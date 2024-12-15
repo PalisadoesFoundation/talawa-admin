@@ -20,6 +20,7 @@ const map: InterfaceMapType = {
   campaigns: 'userCampaigns',
   pledges: 'userPledges',
   volunteer: 'userVolunteer',
+  leaveorg: 'leaveOrganization',
 };
 
 /**
