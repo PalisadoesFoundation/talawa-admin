@@ -3,6 +3,8 @@
   --high-contrast-text: #494949;
   /* Color contrast ratio: 9:1 (exceeds WCAG AAA) */
   --high-contrast-border: #2c2c2c;
+  --table-row-bg: #fff;
+  --table-row-alternate-bg: #afffe8;
 }
 
 .noOutline input {
@@ -874,11 +876,11 @@ input[type='radio']:checked + label {
 }
 
 .table-body > .table-row {
-  background-color: #fff !important;
+  background-color: var(--table-row-bg);
 }
 
 .table-body > .table-row:nth-child(2n) {
-  background: #afffe8 !important;
+  background: var(--table-row-alternate-bg);
 }
 
 .eventAgendaItemContainer h2 {
