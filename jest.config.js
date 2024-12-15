@@ -42,7 +42,7 @@ export default {
     '\\.svg\\?react$': '<rootDir>/scripts/__mocks__/fileMock.js',
     '\\.svg$': '<rootDir>/scripts/__mocks__/fileMock.js',
     '^@pdfme/generator$': '<rootDir>/scripts/__mocks__/@pdfme/generator.ts',
-    '\\.(css|scss|sass|less)$': 'identity-obj-proxy'
+    '\\.(css|scss|sass|less)$': 'identity-obj-proxy',
   },
   moduleFileExtensions: [
     'web.js',
