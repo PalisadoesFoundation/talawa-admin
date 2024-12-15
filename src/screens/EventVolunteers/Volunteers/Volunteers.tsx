@@ -20,7 +20,7 @@ import {
 } from '@mui/x-data-grid';
 import { Chip, debounce, Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
-import styles from '../EventVolunteers.module.css';
+import styles from '../../../style/app.module.css';
 import { EVENT_VOLUNTEER_LIST } from 'GraphQl/Queries/EventVolunteerQueries';
 import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
 import VolunteerCreateModal from './VolunteerCreateModal';

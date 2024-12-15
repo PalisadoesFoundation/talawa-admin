@@ -16,7 +16,7 @@ import {
 } from '@mui/x-data-grid';
 import { debounce, Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
-import styles from 'screens/EventVolunteers/EventVolunteers.module.css';
+import styles from '../../../../style/app.module.css';
 import { EVENT_VOLUNTEER_GROUP_LIST } from 'GraphQl/Queries/EventVolunteerQueries';
 import VolunteerGroupViewModal from 'screens/EventVolunteers/VolunteerGroups/VolunteerGroupViewModal';
 import useLocalStorage from 'utils/useLocalstorage';

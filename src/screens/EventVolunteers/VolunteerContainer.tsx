@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router-dom';
-import styles from './EventVolunteers.module.css';
+import styles from '../../style/app.module.css';
 import { HiUserGroup, HiUser } from 'react-icons/hi2';
 import Volunteers from './Volunteers/Volunteers';
 import VolunteerGroups from './VolunteerGroups/VolunteerGroups';
