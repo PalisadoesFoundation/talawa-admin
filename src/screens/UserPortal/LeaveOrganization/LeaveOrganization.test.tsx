@@ -29,7 +29,6 @@ Object.defineProperty(window, 'localStorage', {
 });
 
 // Mock useParams to return a test organization ID
-// const mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useParams: jest.fn(),
@@ -353,15 +352,6 @@ describe('LeaveOrganization Component', () => {
       target: { value: 'test@example.com' },
     });
     fireEvent.click(screen.getByText('Confirm'));
-
-    // Verify successful navigation and toast message
-    // await waitFor(() => {
-    //   expect(toast.success).toHaveBeenCalledWith(
-    //     'You have successfully left the organization!',
-    //   );
-    //   expect(mockNavigate).toHaveBeenCalledWith('/user/organizations');
-    //   expect(screen.findByText('Select an organization')).toBeInTheDocument();
-    // });
   });
 
   test('shows error when email is missing', async () => {
