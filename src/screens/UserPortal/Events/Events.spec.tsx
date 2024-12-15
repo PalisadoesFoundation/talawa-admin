@@ -1,5 +1,5 @@
 import React, { act } from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 
@@ -446,31 +446,39 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    userEvent.click(screen.getByTestId('createEventModalBtn'));
     // MM/DD/YYYY
-    const startDate = new Date().toLocaleDateString();
-    const endDate = new Date().toLocaleDateString();
+    const startDate = '12/15/2024';
+    const endDate = '12/15/2024';
     const startTime = '08:00 AM';
     const endTime = '10:00 AM';
 
-    userEvent.click(screen.getByTestId('createEventModalBtn'));
+    await waitFor(() => {
+      expect(screen.getByLabelText('Start Date')).toBeInTheDocument();
+      expect(screen.getByLabelText('End Date')).toBeInTheDocument();
+    });
 
     expect(endDate).not.toBeNull();
     const endDateDatePicker = screen.getByLabelText('End Date');
     expect(startDate).not.toBeNull();
     const startDateDatePicker = screen.getByLabelText('Start Date');
 
+    const startDateDayjs = dayjs(startDate);
+    const endDateDayjs = dayjs(endDate);
+
     fireEvent.change(startDateDatePicker, {
-      target: { value: startDate },
+      target: { value: startDateDayjs.format('MM/DD/YYYY') },
     });
     fireEvent.change(endDateDatePicker, {
-      target: { value: endDate },
+      target: { value: endDateDayjs.format('MM/DD/YYYY') },
     });
 
-    await wait();
-
-    expect(endDateDatePicker).toHaveValue(endDate);
-    expect(startDateDatePicker).toHaveValue(startDate);
+    await waitFor(() => {
+      expect(startDateDatePicker).toHaveValue(
+        startDateDayjs.format('MM/DD/YYYY'),
+      );
+      expect(endDateDatePicker).toHaveValue(endDateDayjs.format('MM/DD/YYYY'));
+    });
 
     userEvent.click(screen.getByTestId('allDayEventCheck'));
 
