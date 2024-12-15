@@ -20,7 +20,7 @@ import type {
 import AgendaItemsContainer from 'components/AgendaItems/AgendaItemsContainer';
 import AgendaItemsCreateModal from 'components/AgendaItems/AgendaItemsCreateModal';
 
-import styles from './EventAgendaItems.module.css';
+import styles from '../../../style/app.module.css';
 import Loader from 'components/Loader/Loader';
 
 /**
@@ -177,7 +177,7 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
     <div className={styles.eventAgendaItemContainer}>
       <div className={`bg-white rounded-4 my-3`}>
         <div className={`pt-4 mx-4`}>
-          <div className={styles.btnsContainer}>
+          <div className={styles.agendabtnsContainer}>
             <div className=" d-none d-lg-inline flex-grow-1 d-flex align-items-center border bg-light-subtle rounded-3">
               {/* <input
                 type="search"
