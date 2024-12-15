@@ -69,6 +69,7 @@ export default {
     'src/components/SecuredRoute/SecuredRoute.tsx',
     'src/reportWebVitals.ts',
     'src/screens/UserPortal/Volunteer/Actions/Actions.test.tsx',
+    'setup.ts',
   ],
   coverageThreshold: {
     global: {
