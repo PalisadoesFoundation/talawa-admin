@@ -148,7 +148,7 @@ const LeaveOrganization = (): JSX.Element => {
 
       <Modal
         show={showModal}
-        modal-testid="modl"
+        data-testid="leave-organization-modal"
         aria-labelledby="leave-organization-modal"
         onHide={() => {
           setShowModal(false);
