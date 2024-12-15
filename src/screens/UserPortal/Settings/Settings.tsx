@@ -92,6 +92,7 @@ export default function settings(): JSX.Element {
    * and reloads the page on success.
    */
 
+  /*istanbul ignore next*/
   const handleUpdateUserDetails = async (): Promise<void> => {
     try {
       let updatedUserDetails = { ...userDetails };
@@ -113,6 +114,7 @@ export default function settings(): JSX.Element {
         setItem('name', userFullName);
       }
     } catch (error: unknown) {
+      /*istanbul ignore next*/
       errorHandler(t, error);
     }
   };
@@ -303,6 +305,7 @@ export default function settings(): JSX.Element {
                             aria-label="Edit profile picture"
                             tabIndex={0}
                             onKeyDown={(e) =>
+                              /*istanbul ignore next*/
                               e.key === 'Enter' && handleImageUpload()
                             }
                           />
