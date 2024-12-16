@@ -8,8 +8,17 @@ global.fetch = jest.fn();
 
 import { format } from 'util';
 
-global.console.error = function (...args): void {
-  throw new Error(format(...args));
+const jsDomCssError = 'Error: Could not parse CSS stylesheet';
+
+// Override console.error to suppress the CSS parsing error
+global.console.error = (...params) => {
+  // If the error message is related to CSS parsing, suppress it
+  if (params.find((p) => p.toString().includes(jsDomCssError))) {
+    return; // Do nothing for this error
+  }
+
+  // Otherwise, throw an error or log the message
+  throw new Error(format(...params)); // You can choose to throw or log here
 };
 
 global.console.warn = function (...args): void {
