@@ -21,8 +21,9 @@ import DeleteUser from 'components/UserProfileSettings/DeleteUser';
 import OtherSettings from 'components/UserProfileSettings/OtherSettings';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
-import { DatePicker } from '@mui/x-date-pickers';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 /**
  * The Settings component allows users to view and update their profile settings.
@@ -422,34 +423,27 @@ export default function settings(): JSX.Element {
                       >
                         {t('birthDate')}
                       </Form.Label>
-                      {/* <Form.Control
-                        type="date"
-                        id="birthDate"
-                        value={userDetails.birthDate}
-                        onChange={(e) =>
-                          handleFieldChange('birthDate', e.target.value)
-                        }
-                        className={styles.cardControl}
-                      /> */}
 
                       <div className={styles.datediv}>
                         <div>
-                          <DatePicker
-                            label={'Birth Date'}
-                            className={styles.datebox}
-                            value={dayjs(userDetails.birthDate)}
-                            onChange={(newValue) => {
-                              handleFieldChange(
-                                'birthDate',
-                                newValue ? newValue.toISOString() : '',
-                              );
-                            }}
-                            slotProps={{
-                              textField: {
-                                error: false,
-                              },
-                            }}
-                          />
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker
+                              label={'Birth Date'}
+                              className={styles.datebox}
+                              value={dayjs(userDetails.birthDate)}
+                              onChange={(newValue) => {
+                                handleFieldChange(
+                                  'birthDate',
+                                  newValue ? newValue.toISOString() : '',
+                                );
+                              }}
+                              slotProps={{
+                                textField: {
+                                  error: false,
+                                },
+                              }}
+                            />
+                          </LocalizationProvider>
                         </div>
                       </div>
                     </Col>
