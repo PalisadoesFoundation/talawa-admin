@@ -35,3 +35,4 @@ else
   fi
   echo "App started successfully on port ${port}"
 fi
+ 
