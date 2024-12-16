@@ -27,7 +27,6 @@
     "babel-plugin-transform-import-meta": "^2.2.1",
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.6",
-    "customize-cra": "^1.0.0",
     "dayjs": "^1.11.13",
     "dotenv": "^16.4.5",
     "flag-icons": "^7.2.3",
@@ -86,7 +85,7 @@
     "format:check": "prettier --check \"**/*.{ts,tsx,json,scss,css}\"",
     "check-tsdoc": "node .github/workflows/check-tsdoc.js",
     "typecheck": "tsc --project tsconfig.json --noEmit",
-    "prepare": "husky install",
+    "prepare": "[ \"$NODE_ENV\" != \"production\" ] && husky install || exit 0",
     "jest-preview": "jest-preview",
     "update:toc": "node scripts/githooks/update-toc.js",
     "lint-staged": "lint-staged --concurrent false",
@@ -137,7 +136,6 @@
     "@typescript-eslint/parser": "^8.5.0",
     "@vitest/coverage-istanbul": "^2.1.5",
     "babel-jest": "^29.7.0",
-    "cross-env": "^7.0.3",
     "eslint": "^8.49.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.31.0",
@@ -155,9 +153,10 @@
     "postcss-modules": "^6.0.0",
     "sass": "^1.80.7",
     "tsx": "^4.19.1",
-    "vite-plugin-svgr": "^4.2.0",
     "vitest": "^2.1.5",
-    "whatwg-fetch": "^3.6.20"
+    "whatwg-fetch": "^3.6.20",
+    "vite-plugin-svgr": "^4.2.0",
+    "cross-env": "^7.0.3"
   },
   "resolutions": {
     "@apollo/client": "^3.4.0-beta.19",
