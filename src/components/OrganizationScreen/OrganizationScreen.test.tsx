@@ -81,17 +81,19 @@ describe('Testing OrganizationScreen', () => {
     fireEvent.click(closeButton);
 
     // Check for contract class after closing
-    expect(
-      screen.getByTestId('mainpageright').className.includes('expand'),
-    ).toBeTruthy();
+    expect(screen.getByTestId('mainpageright')).toHaveAttribute(
+      'data-expanded',
+      'true',
+    );
 
     const openButton = screen.getByTestId('openMenu');
     fireEvent.click(openButton);
 
     // Check for expand class after opening
-    expect(
-      screen.getByTestId('mainpageright').className.includes('contract'),
-    ).toBeTruthy();
+    expect(screen.getByTestId('mainpageright')).toHaveAttribute(
+      'data-expanded',
+      'false',
+    );
   });
 
   test('handles window resize', () => {
