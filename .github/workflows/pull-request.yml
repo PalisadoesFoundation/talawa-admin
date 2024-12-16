@@ -272,8 +272,14 @@ jobs:
       - name: Clone API Repository
         run: |
           # Retrieve the complete branch name directly from the GitHub context
-          FULL_BRANCH_NAME=${{ github.base_ref || github.head_ref || 'main' }}
+          FULL_BRANCH_NAME=${{ github.base_ref }}
           echo "FULL_Branch_NAME: $FULL_BRANCH_NAME"
+
+          if [[ "$FULL_BRANCH_NAME" == "develop-postgres" ]]; then
+          FULL_BRANCH_NAME="develop"
+          fi
+
+          echo "Using Branch: $FULL_BRANCH_NAME"
           
           # Clone the specified repository using the extracted branch name
           git clone --branch $FULL_BRANCH_NAME https://github.com/PalisadoesFoundation/talawa-api && ls -a 
