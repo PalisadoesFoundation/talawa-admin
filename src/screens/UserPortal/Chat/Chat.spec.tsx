@@ -24,7 +24,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 
 /**
  * Unit tests for the ChatScreen component.
- *
+ * These tests covers all areas
  * Covers:
  * - Rendering of UI elements.
  * - Contact selection functionality.
