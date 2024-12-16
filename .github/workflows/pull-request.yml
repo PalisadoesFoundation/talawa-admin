@@ -272,7 +272,7 @@ jobs:
       - name: Clone API Repository
         run: |
           # Retrieve the complete branch name directly from the GitHub context
-          FULL_BRANCH_NAME=${{ github.base_ref }}
+          FULL_BRANCH_NAME=${{ github.base_ref || github.head_ref || 'main' }}
           echo "FULL_Branch_NAME: $FULL_BRANCH_NAME"
           
           # Clone the specified repository using the extracted branch name
