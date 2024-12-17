@@ -60,7 +60,7 @@ export default [
       },
 
       parser: tsParser,
-      ecmaVersion: 2018,
+      ecmaVersion: 2022,
       sourceType: 'module',
 
       parserOptions: {
@@ -126,7 +126,6 @@ export default [
         {
           selector: 'interface',
           format: ['PascalCase'],
-          prefix: ['Interface', 'TestInterface'],
         },
         {
           selector: ['typeAlias', 'typeLike', 'enum'],
