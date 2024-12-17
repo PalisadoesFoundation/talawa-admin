@@ -780,9 +780,10 @@ input[type='radio']:checked + label {
 
 .TableImages {
   object-fit: cover;
-  width: 25px !important;
-  height: 25px !important;
-  border-radius: 100% !important;
+  width: var(--image-width, 100%);
+  height: var(--image-height, auto);
+  border-radius: 0;
+  margin-right: var(--image-spacing, 8px);
 }
 
 .avatarContainer {
