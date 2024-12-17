@@ -271,14 +271,6 @@
 .expand_event_list {
   display: block;
 }
-
-.list_container {
-  padding: 5px;
-  width: fit-content;
-  display: flex;
-  flex-direction: row;
-}
-
 .event_list_hour {
   display: flex;
   flex-direction: row;
@@ -316,7 +308,8 @@
   flex-grow: 1;
 }
 
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: var(--mobile-breakpoint)) {
+  /** @breakpoint --mobile-breakpoint: 768px */
   .event_list {
     display: none;
   }
@@ -331,7 +324,7 @@
   }
 }
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: var(--small-mobile-breakpoint)) {
   .btn__more {
     font-size: 12px;
   }
@@ -344,7 +337,22 @@
   gap: 10px;
   margin-top: 35px;
 }
+.base_card {
+  flex: 1;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
 
+.holidays_card {
+  composes: base_card;
+  background-color: var(--holiday-card-bg);
+}
+
+.events_card {
+  composes: base_card;
+  background-color: #ffffff;
+}
 .card__holidays {
   background-color: rgba(246, 242, 229, 1);
   display: flex;
@@ -415,9 +423,149 @@
   border-radius: 10px;
 }
 
-.userEvents__color {
-  height: 15px;
-  width: 40px;
-  background: rgba(146, 200, 141, 0.5);
+.baseIndicator {
+  border-radius: 5px;
+  width: 20px;
+  height: 12px;
+  display: inline-block;
+}
+
+.holidayText {
+  font-size: 14px;
+  color: #555555;
+}
+.eventsLegend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.list_container {
+  padding: 5px;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: var(--indicator-spacing);
+}
+
+.holidayIndicator {
+  composes: baseIndicator;
+  background-color: rgba(0, 0, 0, 0.15);
+}
+
+:root {
+  /* Color scheme for holiday-related elements */
+  --color-user-event: rgba(139, 195, 74, 1);
+  /* Holiday colors */
+  --color-holiday-indicator: rgba(0, 0, 0, 0.15);
+  --color-holiday-date: rgba(255, 152, 0, 1);
+  /* Breakpoints for responsive design */
+  --mobile-breakpoint: 700px;
+  --small-mobile-breakpoint: 480px;
+  --text-color-primary: rgba(51, 51, 51, 1);
+  --text-color-secondary: rgba(85, 85, 85, 1);
+  /* Card styles */
+  --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --holiday-card-bg: #f6f2e5;
+  --holiday-date-color: #ea7b56;
+  --indicator-spacing: 8px;
+  /* Interactive states */
+  --hover-bg-color: rgba(0, 0, 0, 0.05);
+}
+.organizationIndicator {
+  composes: baseIndicator;
+  background-color: rgba(82, 172, 255, 0.5);
+}
+
+.legendText {
+  font-size: 14px;
+  color: #555555;
+}
+@media only screen and (max-width: var(--mobile-breakpoint)) {
+  .list_container,
+  .eventsLegend {
+    gap: 4px;
+  }
+
+  .holidayIndicator,
+  .organizationIndicator {
+    width: 16px;
+    height: 10px;
+  }
+
+  .holidayText,
+  .legendText {
+    font-size: 12px;
+  }
+}
+.card_title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-color-primary);
+  margin-bottom: 15px;
+}
+
+.card_list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.card_list_item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: var(--text-color-secondary);
+}
+
+.holiday_date {
+  font-weight: 500;
+  color: var(--holiday-date-color);
+}
+.calendar_infocards {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 20px;
+  background-color: var(--grey-bg-color);
+}
+.holidays_card,
+.events_card {
+  flex: 1;
+  padding: 20px;
   border-radius: 10px;
+  box-shadow: var(--card-shadow);
+}
+
+.holidays_card {
+  background-color: var(--holiday-card-bg);
+}
+
+.events_card {
+  background-color: white;
+}
+
+.legend {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.userEvents__color {
+  composes: baseIndicator;
+  display: inline-block;
+  background-color: rgba(139, 195, 74, 1);
+}
+
+.card_list_item:hover {
+  background-color: var(--hover-bg-color);
+  transition: background-color 0.2s ease;
+}
+.card_list_item:focus-visible {
+  background-color: var(--hover-bg-color);
+  transition: background-color 0.2s ease;
 }
