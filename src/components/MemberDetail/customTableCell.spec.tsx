@@ -4,11 +4,11 @@ import { MockedProvider } from '@apollo/client/testing';
 import { BrowserRouter } from 'react-router-dom';
 import { CustomTableCell } from './customTableCell';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
-
-jest.mock('react-toastify', () => ({
+import { vi } from 'vitest';
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
