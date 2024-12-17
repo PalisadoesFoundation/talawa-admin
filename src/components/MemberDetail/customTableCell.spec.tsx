@@ -4,11 +4,11 @@ import { MockedProvider } from '@apollo/client/testing';
 import { BrowserRouter } from 'react-router-dom';
 import { CustomTableCell } from './customTableCell';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
-
-jest.mock('react-toastify', () => ({
+import { vi } from 'vitest';
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
@@ -65,7 +65,16 @@ describe('CustomTableCell', () => {
     await waitFor(() => screen.getByTestId('custom-row'));
 
     expect(screen.getByText('Test Event')).toBeInTheDocument();
-    expect(screen.getByText('May 1, 2023')).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        new Date('2023-05-01').toLocaleDateString(undefined, {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          timeZone: 'UTC',
+        }),
+      ),
+    ).toBeInTheDocument();
     expect(screen.getByText('Yes')).toBeInTheDocument();
     expect(screen.getByText('2')).toBeInTheDocument();
 

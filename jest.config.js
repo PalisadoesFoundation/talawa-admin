@@ -10,7 +10,8 @@ export default {
     '!**/index.{js,ts}',
     '!**/*.d.ts',
     '!src/test/**',
-    '!vitest.config.ts',],
+    '!vitest.config.ts',
+  ],
   // setupFiles: ['react-app-polyfill/jsdom'],
   setupFiles: ['whatwg-fetch'],
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
@@ -35,6 +36,7 @@ export default {
     '<rootDir>/src',
   ],
   moduleNameMapper: {
+    '\\.(css|less)$': 'identity-obj-proxy',
     '^react-native$': 'react-native-web',
     '^@dicebear/core$': '<rootDir>/scripts/__mocks__/@dicebear/core.ts',
     '^@dicebear/collection$':
