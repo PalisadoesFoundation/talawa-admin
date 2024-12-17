@@ -448,8 +448,8 @@ describe('Testing Events Screen [User Portal]', () => {
 
     userEvent.click(screen.getByTestId('createEventModalBtn'));
     // MM/DD/YYYY
-    const startDate = '12/15/2024';
-    const endDate = '12/15/2024';
+    const startDate = new Date();
+    const endDate = new Date();
     const startTime = '08:00 AM';
     const endTime = '10:00 AM';
 
