@@ -16,7 +16,7 @@ import TableLoader from 'components/TableLoader/TableLoader';
 import UsersTableItem from 'components/UsersTableItem/UsersTableItem';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
-import styles from './Users.module.css';
+import styles from '../../style/app.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { ApolloError } from '@apollo/client';
 /**
@@ -91,8 +91,16 @@ const Users = (): JSX.Element => {
   }: {
     data?: { users: InterfaceQueryUserListItem[] };
     loading: boolean;
-    fetchMore: any;
-    refetch: any;
+    fetchMore: (options: {
+      variables: Record<string, unknown>;
+      updateQuery: (
+        previousQueryResult: { users: InterfaceQueryUserListItem[] },
+        options: {
+          fetchMoreResult?: { users: InterfaceQueryUserListItem[] };
+        },
+      ) => { users: InterfaceQueryUserListItem[] };
+    }) => void;
+    refetch: (variables?: Record<string, unknown>) => void;
     error?: ApolloError;
   } = useQuery(USER_LIST, {
     variables: {
@@ -171,9 +179,11 @@ const Users = (): JSX.Element => {
     setHasMore(true);
   };
 
-  const handleSearchByEnter = (e: any): void => {
+  const handleSearchByEnter = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ): void => {
     if (e.key === 'Enter') {
-      const { value } = e.target;
+      const { value } = e.target as HTMLInputElement;
       handleSearch(value);
     }
   };
@@ -211,16 +221,16 @@ const Users = (): JSX.Element => {
         {
           fetchMoreResult,
         }: {
-          fetchMoreResult: { users: InterfaceQueryUserListItem[] } | undefined;
+          fetchMoreResult?: { users: InterfaceQueryUserListItem[] };
         },
-      ): { users: InterfaceQueryUserListItem[] } | undefined => {
+      ) => {
         setIsLoadingMore(false);
-        if (!fetchMoreResult) return prev;
+        if (!fetchMoreResult) return prev || { users: [] };
         if (fetchMoreResult.users.length < perPageResult) {
           setHasMore(false);
         }
         return {
-          users: [...(prev?.users || []), ...(fetchMoreResult.users || [])],
+          users: [...(prev?.users || []), ...fetchMoreResult.users],
         };
       },
     });
@@ -401,15 +411,23 @@ const Users = (): JSX.Element => {
       usersData &&
       displayedUsers.length === 0 &&
       searchByName.length > 0 ? (
-        <div className={styles.notFound}>
+        <section
+          className={styles.notFound}
+          role="alert"
+          aria-label="No results found"
+        >
           <h4>
             {tCommon('noResultsFoundFor')} &quot;{searchByName}&quot;
           </h4>
-        </div>
+        </section>
       ) : isLoading == false &&
         usersData === undefined &&
         displayedUsers.length === 0 ? (
-        <div className={styles.notFound}>
+        <div
+          className={styles.notFound}
+          role="alert"
+          aria-label="No results found"
+        >
           <h4>{t('noUserFound')}</h4>
         </div>
       ) : (

@@ -20,38 +20,56 @@ import i18nForTest from 'utils/i18nForTest';
 import type { ApolloLink } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
 import Campaigns from './Campaigns';
+import { vi, it, expect, describe } from 'vitest';
 import {
   EMPTY_MOCKS,
   MOCKS,
   USER_FUND_CAMPAIGNS_ERROR,
 } from './CampaignsMocks';
 
-jest.mock('react-toastify', () => ({
+/* Mocking 'react-toastify` */
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
-jest.mock('@mui/x-date-pickers/DateTimePicker', () => {
+
+/* Mocking `@mui/x-date-pickers/DateTimePicker` */
+vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
+  const actual = await vi.importActual(
+    '@mui/x-date-pickers/DesktopDateTimePicker',
+  );
   return {
-    DateTimePicker: jest.requireActual(
-      '@mui/x-date-pickers/DesktopDateTimePicker',
-    ).DesktopDateTimePicker,
+    DateTimePicker: actual.DesktopDateTimePicker,
   };
 });
+
 const { setItem } = useLocalStorage();
 
+/**
+ * Creates a mocked Apollo link for testing.
+ */
 const link1 = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(USER_FUND_CAMPAIGNS_ERROR);
 const link3 = new StaticMockLink(EMPTY_MOCKS);
+
 const cTranslations = JSON.parse(
   JSON.stringify(
     i18nForTest.getDataByLanguage('en')?.translation.userCampaigns,
   ),
 );
+
 const pTranslations = JSON.parse(
   JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.pledges),
 );
+
+/*
+ * Renders the `Campaigns` component for testing.
+ *
+ * @param link - The mocked Apollo link used for testing.
+ * @returns The rendered result of the `Campaigns` component.
+ */
 
 const renderCampaigns = (link: ApolloLink): RenderResult => {
   return render(
@@ -79,26 +97,38 @@ const renderCampaigns = (link: ApolloLink): RenderResult => {
   );
 };
 
+/**
+ * Test suite for the User Campaigns screen.
+ */
 describe('Testing User Campaigns Screen', () => {
   beforeEach(() => {
     setItem('userId', 'userId');
   });
 
   beforeAll(() => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: 'orgId' }),
-    }));
+    /**
+     * Mocks the `useParams` function from `react-router-dom` to simulate URL parameters.
+     */
+    vi.mock('react-router-dom', async () => {
+      const actual = await vi.importActual('react-router-dom');
+      return {
+        ...actual,
+        useParams: vi.fn(() => ({ orgId: 'orgId' })), // Mock `useParams`
+      };
+    });
   });
 
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   afterEach(() => {
     cleanup();
   });
 
+  /**
+   * Verifies that the User Campaigns screen renders correctly with mock data.
+   */
   it('should render the User Campaigns screen', async () => {
     renderCampaigns(link1);
     await waitFor(() => {
@@ -108,6 +138,9 @@ describe('Testing User Campaigns Screen', () => {
     });
   });
 
+  /**
+   * Ensures the app redirects to the fallback URL if `userId` is null in LocalStorage.
+   */
   it('should redirect to fallback URL if userId is null in LocalStorage', async () => {
     setItem('userId', null);
     renderCampaigns(link1);
@@ -116,7 +149,11 @@ describe('Testing User Campaigns Screen', () => {
     });
   });
 
+  /**
+   * Ensures the app redirects to the fallback URL if URL parameters are undefined.
+   */
   it('should redirect to fallback URL if URL params are undefined', async () => {
+    vi.unmock('react-router-dom'); // unmocking to get real behavior from useParams
     render(
       <MockedProvider addTypename={false} link={link1}>
         <MemoryRouter initialEntries={['/user/campaigns/']}>

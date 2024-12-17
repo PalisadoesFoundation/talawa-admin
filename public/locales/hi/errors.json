@@ -7,5 +7,10 @@
   "emailNotRegistered": "ईमेल पंजीकृत नहीं है",
   "notFoundMsg": "उफ़! ",
   "errorOccurredCouldntCreate": "एक त्रुटि हुई। {{entity}} नहीं बना सके",
-  "errorLoading": "{{entity}} डेटा लोड करते समय त्रुटि हुई"
+  "errorLoading": "{{entity}} डेटा लोड करते समय त्रुटि हुई",
+  "invalidPhoneNumber": "कृपया एक मान्य फोन-नंबर दर्ज करे",
+  "invalidEducationGrade": "कृपया एक शिक्षा ग्रेड चुनें",
+  "invalidEmploymentStatus": "कृपया वैध रोजगार स्थिति चुनें",
+  "invalidMaritalStatus": "कृपया वैध वैवाहिक स्थिति चुनें",
+  "error400": "आपकी जानकारी सहेजी नहीं जा सकी। कृपया अपनी प्रविष्टियों की जांच करें और पुनः प्रयास करें।"
 }

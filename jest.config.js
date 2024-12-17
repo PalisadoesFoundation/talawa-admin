@@ -36,6 +36,7 @@ export default {
     '<rootDir>/src',
   ],
   moduleNameMapper: {
+    '\\.(css|scss|sass|less)$': 'identity-obj-proxy',
     '^react-native$': 'react-native-web',
     '^@dicebear/core$': '<rootDir>/scripts/__mocks__/@dicebear/core.ts',
     '^@dicebear/collection$':
@@ -67,6 +68,7 @@ export default {
     'src/components/AddOn/support/services/Render.helper.ts',
     'src/components/SecuredRoute/SecuredRoute.tsx',
     'src/reportWebVitals.ts',
+    'src/screens/UserPortal/Volunteer/Actions/Actions.spec.tsx',
   ],
   coverageThreshold: {
     global: {
@@ -78,6 +80,7 @@ export default {
     '<rootDir>/node_modules/',
     '<rootDir>/build/',
     '<rootDir>/public/',
+    '<rootDir>/src/screens/UserPortal/Volunteer/Actions/Actions.spec.tsx',
   ],
   coverageDirectory: './coverage/jest',
   coverageReporters: ['text', 'html', 'text-summary', 'lcov'],

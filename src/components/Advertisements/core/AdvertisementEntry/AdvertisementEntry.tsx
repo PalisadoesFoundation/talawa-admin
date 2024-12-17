@@ -38,6 +38,7 @@ function AdvertisementEntry({
   startDate = new Date(),
   setAfter,
 }: InterfaceAddOnEntryProps): JSX.Element {
+  console.log(id, type);
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   const { t: tCommon } = useTranslation('common');
 
@@ -98,7 +99,7 @@ function AdvertisementEntry({
       <Row data-testid="AdEntry" xs={1} md={2} className="g-4">
         {Array.from({ length: 1 }).map((_, idx) => (
           <Col key={idx}>
-            <Card>
+            <Card className={styles.card}>
               <div className={styles.dropdownContainer}>
                 <button
                   className={styles.dropdownButton}
@@ -149,10 +150,14 @@ function AdvertisementEntry({
                 />
               )}
               <Card.Body>
-                <Card.Title>{name}</Card.Title>
+                <Card.Title className="t-bold">{name}</Card.Title>
+                <Card.Text data-testid="Ad_end_date">
+                  Starts on {startDate?.toDateString()}
+                </Card.Text>
                 <Card.Text data-testid="Ad_end_date">
                   Ends on {endDate?.toDateString()}
                 </Card.Text>
+
                 <Card.Subtitle className="mb-2 text-muted author">
                   {type}
                 </Card.Subtitle>

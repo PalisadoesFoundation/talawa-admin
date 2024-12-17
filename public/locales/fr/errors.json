@@ -7,5 +7,10 @@
   "emailNotRegistered": "Email non enregistré",
   "notFoundMsg": "Oops! ",
   "errorOccurredCouldntCreate": "Une erreur s'est produite. Impossible de créer {{entity}}",
-  "errorLoading": "Une erreur s'est produite lors du chargement des données {{entity}}"
+  "errorLoading": "Une erreur s'est produite lors du chargement des données {{entity}}",
+  "invalidPhoneNumber": "Veuillez entrer un numéro de téléphone valide",
+  "invalidEducationGrade": "Veuillez sélectionner un niveau d'études valide",
+  "invalidEmploymentStatus": "Veuillez sélectionner un statut d'emploi valide",
+  "invalidMaritalStatus": "Veuillez sélectionner un état matrimonial valide",
+  "error400": "Réponse non réussie. Code d'état 400 reçu du serveur"
 }

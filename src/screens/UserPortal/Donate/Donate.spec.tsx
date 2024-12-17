@@ -1,8 +1,14 @@
+/**
+ * Unit tests for the Donate component.
+ *
+ * This file contains tests for the Donate component to ensure it behaves as expected
+ * under various scenarios.
+ */
 import React, { act } from 'react';
 import { render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
-
+import { vi } from 'vitest';
 import {
   ORGANIZATION_DONATION_CONNECTION_LIST,
   USER_ORGANIZATION_CONNECTION,
@@ -132,35 +138,35 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({ orgId: '' }),
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual('react-router-dom')),
+  useParams: vi.fn(() => ({ orgId: '' })),
 }));
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    error: jest.fn(),
-    success: jest.fn(),
+    error: vi.fn(),
+    success: vi.fn(),
   },
 }));
 
 describe('Testing Donate Screen [User Portal]', () => {
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
-    value: jest.fn().mockImplementation((query) => ({
+    value: vi.fn().mockImplementation((query) => ({
       matches: false,
       media: query,
       onchange: null,
-      addListener: jest.fn(), // Deprecated
-      removeListener: jest.fn(), // Deprecated
-      addEventListener: jest.fn(),
-      removeEventListener: jest.fn(),
-      dispatchEvent: jest.fn(),
+      addListener: vi.fn(), // Deprecated
+      removeListener: vi.fn(), // Deprecated
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
     })),
   });
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('Screen should be rendered properly', async () => {
