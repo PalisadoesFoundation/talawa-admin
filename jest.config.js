@@ -10,7 +10,8 @@ export default {
     '!**/index.{js,ts}',
     '!**/*.d.ts',
     '!src/test/**',
-    '!vitest.config.ts',],
+    '!vitest.config.ts',
+  ],
   // setupFiles: ['react-app-polyfill/jsdom'],
   setupFiles: ['whatwg-fetch'],
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
@@ -43,7 +44,7 @@ export default {
     '\\.svg$': '<rootDir>/scripts/__mocks__/fileMock.js',
     '^@pdfme/generator$': '<rootDir>/scripts/__mocks__/@pdfme/generator.ts',
     '\\.module\\.css$': 'identity-obj-proxy',
-    '\\.(css|less|scss|sass)$': '<rootDir>/__mocks__/styleMock.ts', 
+    '\\.(css|less|scss|sass)$': '<rootDir>/__mocks__/styleMock.ts',
   },
   moduleFileExtensions: [
     'web.js',
