@@ -1,5 +1,5 @@
 import { Button, Modal } from 'react-bootstrap';
-import styles from '../EventVolunteers.module.css';
+import styles from '../../../style/app.module.css';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
