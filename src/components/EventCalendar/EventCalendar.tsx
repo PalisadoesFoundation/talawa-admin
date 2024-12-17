@@ -137,31 +137,16 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   };
 
   const filteredHolidays = useMemo(() => {
-    if (!Array.isArray(holidays)) {
-      throw new Error('Invalid holidays array');
-    }
-
-    return holidays.filter((holiday) => {
-      if (!holiday.date) {
-        console.warn(`Holiday "${holiday.name}" has no date specified.`);
-        return false;
-      }
-
-      try {
-        if (holiday.date) {
+    return Array.isArray(holidays)
+      ? holidays.filter((holiday) => {
+          if (!holiday.date) {
+            console.warn(`Holiday "${holiday.name}" has no date specified.`);
+            return false;
+          }
           const holidayMonth = dayjs(holiday.date, 'MM-DD', true).month();
           return holidayMonth === currentMonth;
-        } else {
-          console.warn(`Holiday "${holiday.name}" has no date specified.`);
-          return false;
-        }
-      } catch (error) {
-        console.error(
-          `Error processing holiday "${holiday.name}": ${error instanceof Error ? error.message : 'Unknown error'}`,
-        );
-        return false;
-      }
-    });
+        })
+      : [];
   }, [holidays, currentMonth]);
 
   const handleNextMonth = (): void => {
@@ -469,10 +454,8 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             );
           }) || [];
 
-      const holidayList: JSX.Element[] = holidays
-        .filter((holiday) => {
-          if (holiday.date == dayjs(date).format('MM-DD')) return holiday;
-        })
+      const holidayList: JSX.Element[] = filteredHolidays
+        .filter((holiday) => holiday.date === dayjs(date).format('MM-DD'))
         .map((holiday) => {
           return <HolidayCard key={holiday.name} holidayName={holiday.name} />;
         });
