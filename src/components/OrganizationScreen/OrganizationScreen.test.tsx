@@ -76,12 +76,9 @@ describe('Testing OrganizationScreen', () => {
 
   test('handles drawer toggle correctly', () => {
     renderComponent();
-    console.log('before close', screen.getByTestId('mainpageright').className);
+
     const closeButton = screen.getByTestId('closeMenu');
     fireEvent.click(closeButton);
-    console.log('after close', screen.getByTestId('mainpageright').className);
-    // Check for contract class after closing
-    console.log('styles', styles.expand);
     expect(screen.getByTestId('mainpageright')).toHaveClass(styles.expand);
 
     const openButton = screen.getByTestId('openMenu');
@@ -93,11 +90,8 @@ describe('Testing OrganizationScreen', () => {
 
   test('handles window resize', () => {
     renderComponent();
-    // console.log('before 800', screen.getByTestId('mainpageright').className);
     window.innerWidth = 800;
     fireEvent(window, new Event('resize'));
-    // console.log('******', screen.getByTestId('mainpageright').className);
-    console.log('styles expanddd', styles.expand);
     expect(screen.getByTestId('mainpageright')).toHaveClass(styles.expand);
   });
 });
