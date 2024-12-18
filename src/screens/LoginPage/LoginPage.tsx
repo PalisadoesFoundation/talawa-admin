@@ -153,7 +153,6 @@ const loginPage = (): JSX.Element => {
       try {
         await fetch(BACKEND_URL as string);
       } catch (error) {
-        /* istanbul ignore next */
         errorHandler(t, error);
       }
     }
@@ -165,7 +164,6 @@ const loginPage = (): JSX.Element => {
     recaptchaToken: string | null,
   ): Promise<boolean | void> => {
     try {
-      /* istanbul ignore next */
       if (REACT_APP_USE_RECAPTCHA !== 'yes') {
         return true;
       }
@@ -177,7 +175,6 @@ const loginPage = (): JSX.Element => {
 
       return data.recaptcha;
     } catch {
-      /* istanbul ignore next */
       toast.error(t('captchaError') as string);
     }
   };
@@ -199,7 +196,7 @@ const loginPage = (): JSX.Element => {
     } = signformState;
 
     const isVerified = await verifyRecaptcha(recaptchaToken);
-    /* istanbul ignore next */
+
     if (!isVerified) {
       toast.error(t('Please_check_the_captcha') as string);
       return;
@@ -242,7 +239,6 @@ const loginPage = (): JSX.Element => {
             },
           });
 
-          /* istanbul ignore next */
           if (signUpData) {
             toast.success(
               t(
@@ -260,7 +256,6 @@ const loginPage = (): JSX.Element => {
             });
           }
         } catch (error) {
-          /* istanbul ignore next */
           errorHandler(t, error);
         }
       } else {
@@ -285,7 +280,7 @@ const loginPage = (): JSX.Element => {
   const loginLink = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     const isVerified = await verifyRecaptcha(recaptchaToken);
-    /* istanbul ignore next */
+
     if (!isVerified) {
       toast.error(t('Please_check_the_captcha') as string);
       return;
@@ -299,7 +294,6 @@ const loginPage = (): JSX.Element => {
         },
       });
 
-      /* istanbul ignore next */
       if (loginData) {
         i18n.changeLanguage(loginData.login.appUserProfile.appLanguageCode);
         const { login } = loginData;
@@ -336,7 +330,6 @@ const loginPage = (): JSX.Element => {
         toast.warn(tErrors('notFound') as string);
       }
     } catch (error) {
-      /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
@@ -494,14 +487,12 @@ const loginPage = (): JSX.Element => {
                       <ReCAPTCHA
                         className="mt-2"
                         sitekey={
-                          /* istanbul ignore next */
                           RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
                         }
                         onChange={handleCaptcha}
                       />
                     </div>
                   ) : (
-                    /* istanbul ignore next */
                     <></>
                   )}
                   <Button
@@ -837,14 +828,12 @@ const loginPage = (): JSX.Element => {
                     <div className="mt-3">
                       <ReCAPTCHA
                         sitekey={
-                          /* istanbul ignore next */
                           RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
                         }
                         onChange={handleCaptcha}
                       />
                     </div>
                   ) : (
-                    /* istanbul ignore next */
                     <></>
                   )}
                   <Button

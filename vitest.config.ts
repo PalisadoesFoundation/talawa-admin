@@ -31,6 +31,7 @@ export default defineConfig({
         '**/*.d.ts',
         'src/test/**',
         'vitest.config.ts',
+        'vitest.setup.ts', // Exclude from coverage if necessary
       ],
       reporter: ['text', 'html', 'text-summary', 'lcov'],
     },
