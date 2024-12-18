@@ -1,10 +1,3 @@
-:root {
-  --status-active-bg: #31bb6a50;
-  --status-pending-bg: #ffd76950;
-  --status-pending-text: #bb952bd0;
-  --status-pending-border: #bb952bd0;
-}
-
 .noOutline input {
   outline: none;
 }
