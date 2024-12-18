@@ -2,11 +2,10 @@ import React from 'react';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
-
 import ContriStats from 'components/ContriStats/ContriStats';
 import OrgContriCards from 'components/OrgContriCards/OrgContriCards';
 import { Form } from 'react-bootstrap';
-import styles from './OrgContribution.module.css';
+import styles from '../../style/app.module.css';
 
 /**
  * The `orgContribution` component displays the contributions to an organization.
@@ -14,7 +13,7 @@ import styles from './OrgContribution.module.css';
  * Additionally, it shows recent contribution statistics and a list of contribution cards.
  *
  */
-function orgContribution(): JSX.Element {
+function OrgContribution(): JSX.Element {
   // Hook to get translation functions and translation text
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgContribution',
@@ -83,4 +82,4 @@ function orgContribution(): JSX.Element {
   );
 }
 
-export default orgContribution;
+export default OrgContribution;
