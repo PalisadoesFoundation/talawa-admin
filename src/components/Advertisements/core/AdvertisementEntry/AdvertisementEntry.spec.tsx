@@ -146,7 +146,7 @@ describe('Testing Advertisement Entry Component', () => {
       <AdvertisementEntry
         id={''}
         setAfter={function (
-          _value: React.SetStateAction<string | null | undefined> ,
+          _value: React.SetStateAction<string | null | undefined>,
         ): void {
           throw new Error('Function not implemented.');
         }}
@@ -188,8 +188,8 @@ describe('Testing Advertisement Entry Component', () => {
         organizationId={mockOrganizationId}
         id={''}
         setAfter={function (
-          _value: React.SetStateAction<string | null | undefined> ,
-          ) : void {
+          _value: React.SetStateAction<string | null | undefined>,
+        ): void {
           throw new Error('Function not implemented.');
         }}
       />,
