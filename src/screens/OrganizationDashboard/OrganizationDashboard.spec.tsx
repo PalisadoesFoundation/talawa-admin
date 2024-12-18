@@ -7,7 +7,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes, useParams } from 'react-router-dom';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
@@ -15,11 +15,25 @@ import OrganizationDashboard from './OrganizationDashboard';
 import type { ApolloLink } from '@apollo/client';
 import { MOCKS, EMPTY_MOCKS, ERROR_MOCKS } from './OrganizationDashboardMocks';
 import { toast } from 'react-toastify';
+import { vi } from 'vitest';
 
-jest.mock('react-toastify', () => ({
+/**
+ * This file contains unit tests for the OrganizationDashboard component.
+ *
+ * The tests cover:
+ * - Behavior when URL parameters are undefined, including redirection to fallback URLs.
+ * - Rendering of key sections, such as dashboard cards, upcoming events, latest posts, membership requests, and volunteer rankings.
+ * - Functionality of user interactions with dashboard elements (e.g., navigation via clicks on cards and buttons).
+ * - Handling of scenarios with empty data or errors in GraphQL responses.
+ * - Integration with mocked GraphQL queries and toast notifications.
+ *
+ * These tests are implemented using Vitest for test execution and MockedProvider for mocking GraphQL queries.
+ */
+
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
@@ -89,28 +103,32 @@ const renderOrganizationDashboard = (link: ApolloLink): RenderResult => {
 
 describe('Testing Organization Dashboard Screen', () => {
   beforeAll(() => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: 'orgId' }),
-    }));
+    vi.mock('react-router-dom', async () => {
+      const originalModule = await vi.importActual('react-router-dom');
+      return {
+        ...originalModule,
+        useParams: vi.fn(),
+      };
+    });
   });
 
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
+    vi.mocked(useParams).mockReturnValue({});
     render(
       <MockedProvider addTypename={false} link={link1}>
         <MemoryRouter initialEntries={['/orgdash/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
               <Routes>
-                <Route path="/orgdash/" element={<OrganizationDashboard />} />
                 <Route
                   path="/"
                   element={<div data-testid="paramsError"></div>}
                 />
+                <Route path="/orgdash/" element={<OrganizationDashboard />} />
               </Routes>
             </I18nextProvider>
           </Provider>
@@ -118,11 +136,15 @@ describe('Testing Organization Dashboard Screen', () => {
       </MockedProvider>,
     );
     await waitFor(() => {
+      expect(window.location.pathname).toBe('/');
+    });
+    await waitFor(() => {
       expect(screen.getByTestId('paramsError')).toBeInTheDocument();
     });
   });
 
   it('should render Organization Dashboard screen', async () => {
+    vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
     renderOrganizationDashboard(link1);
 
     // Dashboard cards
@@ -151,6 +173,7 @@ describe('Testing Organization Dashboard Screen', () => {
   });
 
   it('Click People Card', async () => {
+    vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
     renderOrganizationDashboard(link1);
     const membersBtn = await screen.findByText(t.members);
     expect(membersBtn).toBeInTheDocument();
@@ -162,6 +185,7 @@ describe('Testing Organization Dashboard Screen', () => {
   });
 
   it('Click Admin Card', async () => {
+    vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
     renderOrganizationDashboard(link1);
     const adminsBtn = await screen.findByText(t.admins);
     expect(adminsBtn).toBeInTheDocument();
@@ -169,6 +193,7 @@ describe('Testing Organization Dashboard Screen', () => {
 });
 
 it('Click Post Card', async () => {
+  vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
   renderOrganizationDashboard(link1);
   const postsBtn = await screen.findByText(t.posts);
   expect(postsBtn).toBeInTheDocument();
@@ -180,6 +205,7 @@ it('Click Post Card', async () => {
 });
 
 it('Click Events Card', async () => {
+  vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
   renderOrganizationDashboard(link1);
   const eventsBtn = await screen.findByText(t.events);
   expect(eventsBtn).toBeInTheDocument();
@@ -191,6 +217,7 @@ it('Click Events Card', async () => {
 });
 
 it('Click Blocked Users Card', async () => {
+  vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
   renderOrganizationDashboard(link1);
   const blockedUsersBtn = await screen.findByText(t.blockedUsers);
   expect(blockedUsersBtn).toBeInTheDocument();
@@ -202,6 +229,7 @@ it('Click Blocked Users Card', async () => {
 });
 
 it('Click Requests Card', async () => {
+  vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
   renderOrganizationDashboard(link1);
   const requestsBtn = await screen.findByText(t.requests);
   expect(requestsBtn).toBeInTheDocument();
@@ -213,6 +241,7 @@ it('Click Requests Card', async () => {
 });
 
 it('Click View All Events', async () => {
+  vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
   renderOrganizationDashboard(link1);
   const viewAllBtn = await screen.findAllByText(t.viewAll);
   expect(viewAllBtn[0]).toBeInTheDocument();
@@ -224,6 +253,7 @@ it('Click View All Events', async () => {
 });
 
 it('Click View All Posts', async () => {
+  vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
   renderOrganizationDashboard(link1);
   const viewAllBtn = await screen.findAllByText(t.viewAll);
   expect(viewAllBtn[1]).toBeInTheDocument();
@@ -235,6 +265,7 @@ it('Click View All Posts', async () => {
 });
 
 it('Click View All Requests', async () => {
+  vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
   renderOrganizationDashboard(link1);
   const viewAllBtn = await screen.findAllByText(t.viewAll);
   expect(viewAllBtn[2]).toBeInTheDocument();
@@ -246,6 +277,7 @@ it('Click View All Requests', async () => {
 });
 
 it('Click View All Leaderboard', async () => {
+  vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
   renderOrganizationDashboard(link1);
   const viewAllBtn = await screen.findAllByText(t.viewAll);
   expect(viewAllBtn[3]).toBeInTheDocument();
@@ -257,6 +289,7 @@ it('Click View All Leaderboard', async () => {
 });
 
 it('should render Organization Dashboard screen with empty data', async () => {
+  vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
   renderOrganizationDashboard(link3);
 
   await waitFor(() => {
@@ -268,6 +301,7 @@ it('should render Organization Dashboard screen with empty data', async () => {
 });
 
 it('should redirectt to / if error occurs', async () => {
+  vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
   renderOrganizationDashboard(link2);
 
   await waitFor(() => {
