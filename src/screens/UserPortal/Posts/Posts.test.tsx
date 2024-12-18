@@ -1,4 +1,5 @@
 import React, { act } from 'react';
+import type { RenderResult } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { render, screen, waitFor, within } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
@@ -17,7 +18,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { DELETE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { vi } from 'vitest';
 
-const { setItem } = useLocalStorage();
+//const { setItem } = useLocalStorage();
 
 vi.mock('react-toastify', () => ({
   toast: {
@@ -217,7 +218,7 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-const renderHomeScreen = () =>
+const renderHomeScreen = (): RenderResult =>
   render(
     <MockedProvider addTypename={false} link={link}>
       <MemoryRouter initialEntries={['/user/organization/orgId']}>
