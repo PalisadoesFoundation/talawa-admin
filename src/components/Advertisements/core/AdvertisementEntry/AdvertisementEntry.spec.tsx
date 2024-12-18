@@ -145,9 +145,8 @@ describe('Testing Advertisement Entry Component', () => {
     render(
       <AdvertisementEntry
         id={''}
-        setAfter={function () // _value: React.SetStateAction<string | null | undefined>,
+        setAfter={function ()  _value: React.SetStateAction<string | null | undefined>,
         : void {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           throw new Error('Function not implemented.');
         }}
       />,
@@ -187,9 +186,8 @@ describe('Testing Advertisement Entry Component', () => {
         startDate={mockStartDate}
         organizationId={mockOrganizationId}
         id={''}
-        setAfter={function () // _value: React.SetStateAction<string | null | undefined>,
+        setAfter={function ()  _value: React.SetStateAction<string | null | undefined>,
         : void {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           throw new Error('Function not implemented.');
         }}
       />,
