@@ -1,3 +1,10 @@
+:root {
+  --status-active-bg: #31bb6a50;
+  --status-pending-bg: #ffd76950;
+  --status-pending-text: #bb952bd0;
+  --status-pending-border: #bb952bd0;
+}
+
 .noOutline input {
   outline: none;
 }
@@ -618,11 +625,11 @@ hr {
 #requestsRadio,
 #groupsRadio,
 .toggleBtn:hover {
-  color: #31bb6b !important;
+  color: var(--brand-primary) !important;
 }
 
 input[type='radio']:checked + label {
-  background-color: #31bb6a50 !important;
+  background-color: var(--brand-primary-light) !important;
 }
 
 .dropdownToggle {
@@ -635,8 +642,7 @@ input[type='radio']:checked + label {
 }
 
 .greenregbtn {
-  margin: 1rem 0 0;
-  margin-top: 15px;
+  margin-top: 1rem;
   border: 1px solid var(--bs-gray-300);
   box-shadow: 0 2px 2px var(--bs-gray-300);
   padding: 10px 10px;
@@ -651,7 +657,6 @@ input[type='radio']:checked + label {
   transition:
     transform 0.2s,
     box-shadow 0.2s;
-  width: 100%;
 }
 
 .removeFilterIcon {
@@ -697,14 +702,14 @@ input[type='radio']:checked + label {
   -webkit-text-fill-color: black !important;
 }
 
-.inputFields {
+.inputField {
   margin-top: 10px;
   margin-bottom: 10px;
   background-color: white;
-  box-shadow: 0 1px 1px #31bb6b;
+  box-shadow: 0 1px 1px var(--brand-primary);
 }
 
-.inputFields > button {
+.inputField > button {
   padding-top: 10px;
   padding-bottom: 10px;
 }
@@ -738,13 +743,13 @@ input[type='radio']:checked + label {
 }
 
 .active {
-  background-color: #31bb6a50 !important;
+  background-color: var(--status-active-bg);
 }
 
 .pending {
-  background-color: #ffd76950 !important;
-  color: #bb952bd0 !important;
-  border-color: #bb952bd0 !important;
+  background-color: var(--status-pending-bg);
+  color: var(--status-pending-text);
+  border-color: var(--status-pending-border);
 }
 
 /* Modals */
