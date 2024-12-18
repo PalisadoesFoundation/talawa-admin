@@ -2,6 +2,7 @@ import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
+import type { Params } from 'react-router-dom';
 import { BrowserRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
@@ -13,7 +14,7 @@ import {
   USERS_CONNECTION_LIST,
   USER_LIST_FOR_TABLE,
 } from 'GraphQl/Queries/Queries';
-import 'jest-location-mock';
+// import 'jest-location-mock';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import {
@@ -21,6 +22,29 @@ import {
   SIGNUP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import type { TestMock } from './MockDataTypes';
+import { vi } from 'vitest';
+
+/**
+ * Mock window.location for testing redirection behavior.
+ */
+
+Object.defineProperty(window, 'location', {
+  value: {
+    href: 'http://localhost/',
+    assign: vi.fn((url) => {
+      const urlObj = new URL(url, 'http://localhost');
+      window.location.href = urlObj.href;
+      window.location.pathname = urlObj.pathname;
+      window.location.search = urlObj.search;
+      window.location.hash = urlObj.hash;
+    }),
+    reload: vi.fn(),
+    pathname: '/',
+    search: '',
+    hash: '',
+    origin: 'http://localhost',
+  },
+});
 
 const createMemberMock = (
   orgId = '',
@@ -596,14 +620,18 @@ async function wait(ms = 2): Promise<void> {
   });
 }
 const linkURL = 'orgid';
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({ orgId: linkURL }),
-}));
+
+vi.mock('react-router-dom', async () => {
+  const actualDom = await vi.importActual('react-router-dom');
+  return {
+    ...actualDom,
+    useParams: (): Readonly<Params<string>> => ({ orgId: linkURL }),
+  };
+});
 
 // TODO - REMOVE THE NEXT LINE IT IS TO SUPPRESS THE ERROR
 // FOR THE FIRST TEST WHICH CAME OUT OF NOWHERE
-console.error = jest.fn();
+console.error = vi.fn();
 
 describe('Organization People Page', () => {
   const searchData = {
@@ -683,7 +711,7 @@ describe('Organization People Page', () => {
       },
     ]);
 
-    expect(window.location).toBeAt('/orgpeople/orgid');
+    expect(window.location.href).toBe('http://localhost/orgpeople/orgid');
   });
 
   test('It is necessary to query the correct mock data.', async () => {
@@ -705,7 +733,7 @@ describe('Organization People Page', () => {
 
     await wait();
 
-    expect(window.location).toBeAt('/orgpeople/orgid');
+    expect(window.location.href).toBe('http://localhost/orgpeople/orgid');
   });
 
   test('Testing MEMBERS list', async () => {
@@ -753,7 +781,7 @@ describe('Organization People Page', () => {
     );
 
     await wait();
-    expect(window.location).toBeAt('/orgpeople/orgid');
+    expect(window.location.href).toBe('http://localhost/orgpeople/orgid');
   });
 
   test('Testing MEMBERS list with filters', async () => {
@@ -792,7 +820,7 @@ describe('Organization People Page', () => {
     await wait();
     expect(findtext).toBeInTheDocument();
     await wait();
-    expect(window.location).toBeAt('/orgpeople/orgid');
+    expect(window.location.href).toBe('http://localhost/orgpeople/orgid');
   });
 
   test('Testing ADMIN LIST', async () => {
@@ -855,7 +883,7 @@ describe('Organization People Page', () => {
 
     // Wait for any asynchronous operations to complete
     await wait();
-    expect(window.location).toBeAt('/orgpeople/orgid');
+    expect(window.location.href).toBe('http://localhost/orgpeople/orgid');
   });
 
   test('Testing ADMIN list with filters', async () => {
@@ -905,7 +933,7 @@ describe('Organization People Page', () => {
 
     // Ensure that the name is still present after filtering
     await wait();
-    expect(window.location).toBeAt('/orgpeople/orgid');
+    expect(window.location.href).toBe('http://localhost/orgpeople/orgid');
   });
 
   test('Testing add existing user modal', async () => {
@@ -1256,7 +1284,9 @@ describe('Organization People Page', () => {
     const btn = screen.getByTestId('searchbtn');
     userEvent.click(btn);
     await wait();
-    expect(window.location).toBeAt('/orgpeople/6401ff65ce8e8406b8f07af1');
+    expect(window.location.href).toBe(
+      'http://localhost/orgpeople/6401ff65ce8e8406b8f07af1',
+    );
   });
 
   test('Testing USERS list with filters', async () => {
@@ -1289,7 +1319,9 @@ describe('Organization People Page', () => {
     const btn = screen.getByTestId('searchbtn');
     userEvent.click(btn);
     await wait();
-    expect(window.location).toBeAt('/orgpeople/6401ff65ce8e8406b8f07af2');
+    expect(window.location.href).toBe(
+      'http://localhost/orgpeople/6401ff65ce8e8406b8f07af2',
+    );
   });
 
   test('Add Member component renders', async () => {
@@ -1378,7 +1410,7 @@ describe('Organization People Page', () => {
     );
 
     await wait();
-    expect(window.location).toBeAt('/orgpeople/orgid');
+    expect(window.location.href).toBe('http://localhost/orgpeople/orgid');
     expect(screen.queryByText(/Nothing Found !!/i)).toBeInTheDocument();
   });
 });
