@@ -21,6 +21,7 @@ import MemberDetail, { getLanguageName, prettyDate } from './MemberDetail';
 import { MOCKS1, MOCKS2, MOCKS3 } from './MemberDetailMocks';
 import type { ApolloLink } from '@apollo/client';
 import { toast } from 'react-toastify';
+import { vi } from 'vitest';
 
 const link1 = new StaticMockLink(MOCKS1, true);
 const link2 = new StaticMockLink(MOCKS2, true);
@@ -44,19 +45,26 @@ const translations = {
   ),
 };
 
-jest.mock('@mui/x-date-pickers/DateTimePicker', () => {
+vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
+  const actual = await vi.importActual(
+    '@mui/x-date-pickers/DesktopDateTimePicker',
+  );
   return {
-    DateTimePicker: jest.requireActual(
-      '@mui/x-date-pickers/DesktopDateTimePicker',
-    ).DesktopDateTimePicker,
+    DateTimePicker: actual.DesktopDateTimePicker,
   };
 });
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
+}));
+
+vi.mock('@dicebear/core', () => ({
+  createAvatar: vi.fn(() => ({
+    toDataUri: vi.fn(() => 'mocked-data-uri'),
+  })),
 }));
 
 const props = {
@@ -87,10 +95,10 @@ const renderMemberDetailScreen = (link: ApolloLink): RenderResult => {
 };
 
 describe('MemberDetail', () => {
-  global.alert = jest.fn();
+  global.alert = vi.fn();
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     cleanup();
   });
 
@@ -115,7 +123,7 @@ describe('MemberDetail', () => {
 
   test('prettyDate function should work properly', () => {
     // If the date is provided
-    const datePretty = jest.fn(prettyDate);
+    const datePretty = vi.fn(prettyDate);
     expect(datePretty('2023-02-18T09:22:27.969Z')).toBe(
       prettyDate('2023-02-18T09:22:27.969Z'),
     );
@@ -124,7 +132,7 @@ describe('MemberDetail', () => {
   });
 
   test('getLanguageName function should work properly', () => {
-    const getLangName = jest.fn(getLanguageName);
+    const getLangName = vi.fn(getLanguageName);
     // If the language code is provided
     expect(getLangName('en')).toBe('English');
     // If the language code is not provided
@@ -229,7 +237,7 @@ describe('MemberDetail', () => {
 
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
 
-    const dicebearUrl = `mocked-data-uri`;
+    const dicebearUrl = 'mocked-data-uri';
 
     const userImage = await screen.findByTestId('userImageAbsent');
     expect(userImage).toBeInTheDocument();
