@@ -18,8 +18,6 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { DELETE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { vi } from 'vitest';
 
-//const { setItem } = useLocalStorage();
-
 vi.mock('react-toastify', () => ({
   toast: {
     error: vi.fn(),
@@ -322,6 +320,14 @@ describe('Testing Home Screen: User Portal', () => {
     await waitFor(() => {
       expect(screen.getByText('New Post Title')).toBeInTheDocument();
     });
+  });
+
+  test('Check if multiple pinned posts are sorted correctly', async () => {
+    renderHomeScreen();
+    await wait();
+    const postsContainer = screen.getByTestId('postsContainer');
+    const pinnedPosts = within(postsContainer).getAllByTestId(/^pinnedPost-/);
+    expect(pinnedPosts[0]).toHaveTextContent('Most recent pinned post');
   });
 
   test('Check if pagination works', async () => {
