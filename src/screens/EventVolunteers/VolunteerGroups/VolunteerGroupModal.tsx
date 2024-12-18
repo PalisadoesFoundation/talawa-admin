@@ -5,7 +5,7 @@ import type {
   InterfaceUserInfo,
   InterfaceVolunteerGroupInfo,
 } from 'utils/interfaces';
-import styles from '../EventVolunteers.module.css';
+import styles from '../../../style/app.module.css';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';

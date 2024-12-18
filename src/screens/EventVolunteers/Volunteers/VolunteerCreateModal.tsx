@@ -1,7 +1,7 @@
 import type { ChangeEvent } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import type { InterfaceUserInfo } from 'utils/interfaces';
-import styles from '../EventVolunteers.module.css';
+import styles from '../../../style/app.module.css';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
