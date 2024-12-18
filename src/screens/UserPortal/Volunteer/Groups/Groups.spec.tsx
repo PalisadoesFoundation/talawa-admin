@@ -84,7 +84,7 @@ describe('Testing Groups Screen', () => {
       const actual = await vi.importActual('react-router-dom');
       return {
         ...actual,
-        userParams: () => ({ orgId: 'orgId' }),
+        useParams: () => ({ orgId: 'orgId' }),
       };
     });
   });
