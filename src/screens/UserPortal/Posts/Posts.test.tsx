@@ -18,7 +18,6 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { DELETE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { vi } from 'vitest';
 
-
 vi.mock('react-toastify', () => ({
   toast: {
     error: vi.fn(),
@@ -342,4 +341,3 @@ describe('Testing Home Screen: User Portal', () => {
     });
   });
 });
-
