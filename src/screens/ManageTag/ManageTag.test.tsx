@@ -290,7 +290,9 @@ describe('Organisation Tags Page', () => {
     userEvent.click(screen.getByTestId('unassignTagModalSubmitBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.successfullyUnassigned);
+      expect(toast.success).toHaveBeenCalledWith(
+        translations.successfullyUnassigned,
+      );
     });
   });
 });

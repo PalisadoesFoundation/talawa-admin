@@ -129,7 +129,7 @@ describe('Organisation Dashboard Page', () => {
     userEvent.click(viewEventsBtn);
     userEvent.click(viewPostsBtn);
     fireEvent.click(viewMSBtn);
-    expect(toast.success).toBeCalledWith('Coming soon!');
+    expect(toast.success).toHaveBeenCalledWith('Coming soon!');
 
     expect(
       screen.getByText(/No membership requests present/i),

@@ -1,4 +1,6 @@
 import React, { act } from 'react';
+import '@testing-library/jest-dom';
+import { describe, test, expect, vi } from 'vitest';
 import {
   ApolloClient,
   ApolloLink,
@@ -8,12 +10,13 @@ import {
 } from '@apollo/client';
 import { MockedProvider } from '@apollo/client/testing';
 import { fireEvent, render, screen } from '@testing-library/react';
-import 'jest-location-mock';
 
 import type { DocumentNode, NormalizedCacheObject } from '@apollo/client';
 import userEvent from '@testing-library/user-event';
-import { BACKEND_URL } from 'Constant/constant';
-import { ADD_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
+import { BACKEND_URL } from '../../Constant/constant';
+
+import { ADD_ADVERTISEMENT_MUTATION } from '../../GraphQl/Mutations/mutations';
+
 import {
   ORGANIZATIONS_LIST,
   ORGANIZATION_ADVERTISEMENT_LIST,
@@ -50,18 +53,33 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   link: ApolloLink.from([httpLink]),
 });
 
-jest.mock('components/AddOn/support/services/Plugin.helper', () => ({
+vi.mock('components/AddOn/support/services/Plugin.helper', () => ({
   __esModule: true,
-  default: jest.fn().mockImplementation(() => ({
-    fetchInstalled: jest.fn().mockResolvedValue([]),
-    fetchStore: jest.fn().mockResolvedValue([]),
+  default: vi.fn().mockImplementation(() => ({
+    fetchInstalled: vi.fn().mockResolvedValue([]),
+    fetchStore: vi.fn().mockResolvedValue([]),
   })),
 }));
+
+// let mockID: string | undefined = '1';
+// vi.mock('react-router-dom', () => ({
+//   ...vi.importActual('react-router-dom'),
+//   useParams: () => ({ orgId: mockID }),
+// }));
 let mockID: string | undefined = '1';
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({ orgId: mockID }),
-}));
+vi.mock(
+  'react-router-dom',
+  async (importOriginal: () => Promise<typeof import('react-router-dom')>) => {
+    const actual = await importOriginal();
+    return {
+      ...actual,
+      useParams: () => ({ orgId: mockID }),
+      BrowserRouter: ({ children }: { children: React.ReactNode }) => (
+        <div>{children}</div>
+      ),
+    };
+  },
+);
 
 const today = new Date();
 const tomorrow = today;
