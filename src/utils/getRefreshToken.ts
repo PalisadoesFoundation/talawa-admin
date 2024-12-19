@@ -14,7 +14,7 @@ export async function refreshToken(): Promise<boolean> {
   const { getItem, setItem } = useLocalStorage();
 
   const refreshToken = getItem('refreshToken');
-  /* istanbul ignore next */
+
   try {
     const { data } = await client.mutate({
       mutation: REFRESH_TOKEN_MUTATION,
