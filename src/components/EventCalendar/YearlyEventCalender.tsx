@@ -46,11 +46,11 @@ interface InterfaceCalendarProps {
   viewType?: ViewType;
 }
 
-enum Status {
-  ACTIVE = 'ACTIVE',
-  BLOCKED = 'BLOCKED',
-  DELETED = 'DELETED',
-}
+// enum Status {
+//   ACTIVE = 'ACTIVE',
+//   BLOCKED = 'BLOCKED',
+//   DELETED = 'DELETED',
+// }
 
 /**
  * Enum for different user roles.
@@ -63,13 +63,13 @@ enum Role {
 
 /**
  * Interface for event attendees.
- */
-interface InterfaceIEventAttendees {
-  userId: string;
-  user?: string;
-  status?: Status;
-  createdAt?: Date;
-}
+//  */
+// interface InterfaceIEventAttendees {
+//   userId: string;
+//   user?: string;
+//   status?: Status;
+//   createdAt?: Date;
+// }
 
 /**
  * Interface for organization list.
@@ -177,7 +177,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
    * Navigates to the previous year.
    */
   const handlePrevYear = (): void => {
-    /*istanbul ignore next*/
     setCurrentYear(currentYear - 1);
   };
 
@@ -185,7 +184,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
    * Navigates to the next year.
    */
   const handleNextYear = (): void => {
-    /*istanbul ignore next*/
     setCurrentYear(currentYear + 1);
   };
 
@@ -239,7 +237,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           return dayjs(event.startDate).isSame(date, 'day');
         });
 
-        /*istanbul ignore next*/
         const renderedEvents =
           eventsForCurrentDate?.map((datas: InterfaceEventListCardProps) => {
             const attendees: { _id: string }[] = [];
@@ -276,7 +273,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             );
           }) || [];
 
-        /*istanbul ignore next*/
         const toggleExpand = (index: string): void => {
           if (expandedY === index) {
             setExpandedY(null);
@@ -285,7 +281,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           }
         };
 
-        /*istanbul ignore next*/
         return (
           <div
             key={`${monthInx}-${dayIndex}`}

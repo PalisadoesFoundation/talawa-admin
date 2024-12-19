@@ -216,11 +216,15 @@ describe('Testing Organisation Action Item Categories', () => {
     const searchInput = await screen.findByTestId('searchByName');
     expect(searchInput).toBeInTheDocument();
 
-    userEvent.type(searchInput, 'Category 1');
-    userEvent.type(searchInput, '{enter}');
+    // Simulate typing and pressing ENTER
+    userEvent.type(searchInput, 'Category 1{enter}');
+
+    // Wait for the filtering to complete
     await waitFor(() => {
-      expect(screen.getByText('Category 1')).toBeInTheDocument();
-      expect(screen.queryByText('Category 2')).toBeNull();
+      // Assert only "Category 1" is visible
+      const categories = screen.getAllByTestId('categoryName');
+      expect(categories).toHaveLength(1);
+      expect(categories[0]).toHaveTextContent('Category 1');
     });
   });
 

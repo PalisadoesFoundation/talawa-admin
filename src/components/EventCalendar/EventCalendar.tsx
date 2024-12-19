@@ -93,7 +93,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     const data: InterfaceEventListCardProps[] = [];
     if (userRole === Role.SUPERADMIN) return eventData;
     // Hard to test all the cases
-    /* istanbul ignore next */
+
     if (userRole === Role.ADMIN) {
       eventData?.forEach((event) => {
         if (event.isPublic) data.push(event);
@@ -130,7 +130,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
    * Moves the calendar view to the previous month.
    */
   const handlePrevMonth = (): void => {
-    /*istanbul ignore next*/
     if (currentMonth === 0) {
       setCurrentMonth(11);
       setCurrentYear(currentYear - 1);
@@ -143,7 +142,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
    * Moves the calendar view to the next month.
    */
   const handleNextMonth = (): void => {
-    /*istanbul ignore next*/
     if (currentMonth === 11) {
       setCurrentMonth(0);
       setCurrentYear(currentYear + 1);
@@ -156,7 +154,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
    * Moves the calendar view to the previous date.
    */
   const handlePrevDate = (): void => {
-    /*istanbul ignore next*/
     if (currentDate > 1) {
       setCurrentDate(currentDate - 1);
     } else {
@@ -175,15 +172,13 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       }
     }
   };
-  /*istanbul ignore next*/
+
   const handleNextDate = (): void => {
-    /*istanbul ignore next*/
     const lastDayOfCurrentMonth = new Date(
       currentYear,
       currentMonth - 1,
       0,
     ).getDate();
-    /*istanbul ignore next*/
     if (currentDate < lastDayOfCurrentMonth) {
       setCurrentDate(currentDate + 1);
     } else {
@@ -202,7 +197,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
    * Moves the calendar view to today's date.
    */
   const handleTodayButton = (): void => {
-    /*istanbul ignore next*/
     setCurrentYear(today.getFullYear());
     setCurrentMonth(today.getMonth());
     setCurrentDate(today.getDate());
@@ -215,7 +209,6 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     '0',
   )}:${String(Math.abs(new Date().getTimezoneOffset()) % 60).padStart(2, '0')}`;
 
-  /*istanbul ignore next*/
   const renderHours = (): JSX.Element => {
     const toggleExpand = (index: number): void => {
       if (expanded === index) {
@@ -225,11 +218,9 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       }
     };
 
-    /*istanbul ignore next*/
     const allDayEventsList: JSX.Element[] =
       events
         ?.filter((datas) => {
-          /*istanbul ignore next*/
           const currDate = new Date(currentYear, currentMonth, currentDate);
           if (
             datas.startTime == undefined &&
@@ -372,7 +363,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                   />
                 );
               }) || [];
-          /*istanbul ignore next*/
+
           return (
             <div key={hour} className={styles.calendar_hour_block}>
               <div className={styles.calendar_hour_text_container}>
@@ -405,7 +396,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                         : styles.event_list
                     }
                   >
-                    {/*istanbul ignore next*/}
+                    {}
                     {expanded === index
                       ? timeEventsList
                       : timeEventsList?.slice(0, 1)}
@@ -465,14 +456,13 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         styles.day,
       ].join(' ');
       const toggleExpand = (index: number): void => {
-        /*istanbul ignore next*/
         if (expanded === index) {
           setExpanded(-1);
         } else {
           setExpanded(index);
         }
       };
-      /*istanbul ignore next*/
+
       const allEventsList: JSX.Element[] =
         events
           ?.filter((datas) => {
@@ -536,38 +526,28 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             >
               <div
                 className={
-                  /*istanbul ignore next*/
                   expanded === index
                     ? styles.expand_event_list
                     : styles.event_list
                 }
               >
                 <div>{holidayList}</div>
-                {
-                  /*istanbul ignore next*/
-                  expanded === index
-                    ? allEventsList
-                    : holidayList?.length > 0
-                      ? /*istanbul ignore next*/
-                        allEventsList?.slice(0, 1)
-                      : allEventsList?.slice(0, 2)
-                }
+                {expanded === index
+                  ? allEventsList
+                  : holidayList?.length > 0
+                    ? allEventsList?.slice(0, 1)
+                    : allEventsList?.slice(0, 2)}
               </div>
               {(allEventsList?.length > 2 ||
                 (windowWidth <= 700 && allEventsList?.length > 0)) && (
-                /*istanbul ignore next*/
                 <button
                   className={styles.btn__more}
                   data-testid="more"
-                  /*istanbul ignore next*/
                   onClick={() => {
                     toggleExpand(index);
                   }}
                 >
-                  {
-                    /*istanbul ignore next*/
-                    expanded === index ? 'View less' : 'View all'
-                  }
+                  {expanded === index ? 'View less' : 'View all'}
                 </button>
               )}
             </div>
