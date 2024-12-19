@@ -15,6 +15,8 @@ import Groups from './Groups';
 import type { ApolloLink } from '@apollo/client';
 import { MOCKS, EMPTY_MOCKS, ERROR_MOCKS } from './Groups.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
+import { vi } from 'vitest';
+import '@testing-library/jest-dom';
 
 const { setItem } = useLocalStorage();
 
@@ -31,6 +33,13 @@ const t = {
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
 };
 
+/**
+ * Introduces a delay for the specified duration.
+ * This is primarily used to simulate debounce behavior in tests.
+ * @param ms - The duration to delay in milliseconds. Defaults to 300ms.
+ * @returns A Promise that resolves after the specified duration.
+ */
+
 const debounceWait = async (ms = 300): Promise<void> => {
   await act(() => {
     return new Promise((resolve) => {
@@ -39,6 +48,11 @@ const debounceWait = async (ms = 300): Promise<void> => {
   });
 };
 
+/**
+ * Renders the Groups component using a specific Apollo link.
+ * @param link - The ApolloLink instance to use for mocking GraphQL requests.
+ * @returns The rendered component wrapped in test utilities.
+ */
 const renderGroups = (link: ApolloLink): RenderResult => {
   return render(
     <MockedProvider addTypename={false} link={link}>
@@ -61,12 +75,18 @@ const renderGroups = (link: ApolloLink): RenderResult => {
   );
 };
 
+/**
+ * Describes the testing suite for the Groups screen.
+ */
 describe('Testing Groups Screen', () => {
   beforeAll(() => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: 'orgId' }),
-    }));
+    vi.mock('react-router-dom', async () => {
+      const actual = await vi.importActual('react-router-dom');
+      return {
+        ...actual,
+        useParams: () => ({ orgId: 'orgId' }),
+      };
+    });
   });
 
   beforeEach(() => {
@@ -74,9 +94,13 @@ describe('Testing Groups Screen', () => {
   });
 
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
+  /**
+   * Tests redirection to the fallback URL when required URL parameters are missing.
+   * Ensures the "paramsError" element is displayed.
+   */
   it('should redirect to fallback URL if URL params are undefined', async () => {
     setItem('userId', null);
     render(
@@ -102,12 +126,18 @@ describe('Testing Groups Screen', () => {
     });
   });
 
+  /**
+   * Checks if the Groups screen renders correctly with the expected elements.
+   */
   it('should render Groups screen', async () => {
     renderGroups(link1);
     const searchInput = await screen.findByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
   });
 
+  /**
+   * Verifies the sorting functionality of the Groups screen.
+   */
   it('Check Sorting Functionality', async () => {
     renderGroups(link1);
     const searchInput = await screen.findByTestId('searchBy');
@@ -137,6 +167,9 @@ describe('Testing Groups Screen', () => {
     expect(groupName[0]).toHaveTextContent('Group 2');
   });
 
+  /**
+   * Verifies the search by group functionality of the Groups screen.
+   */
   it('Search by Groups', async () => {
     renderGroups(link1);
     const searchInput = await screen.findByTestId('searchBy');
@@ -157,6 +190,9 @@ describe('Testing Groups Screen', () => {
     expect(groupName[0]).toHaveTextContent('Group 1');
   });
 
+  /**
+   * Verifies the search by leader functionality of the Groups screen.
+   */
   it('Search by Leader', async () => {
     renderGroups(link1);
     const searchInput = await screen.findByTestId('searchBy');
@@ -178,6 +214,9 @@ describe('Testing Groups Screen', () => {
     expect(groupName[0]).toHaveTextContent('Group 1');
   });
 
+  /**
+   * Verifies the behavior when there are no groups to display.
+   */
   it('should render screen with No Groups', async () => {
     renderGroups(link3);
 
@@ -187,6 +226,9 @@ describe('Testing Groups Screen', () => {
     });
   });
 
+  /**
+   * Verifies the error handling when there is an issue fetching groups data.
+   */
   it('Error while fetching groups data', async () => {
     renderGroups(link2);
 
@@ -195,6 +237,9 @@ describe('Testing Groups Screen', () => {
     });
   });
 
+  /**
+   * Verifies the functionality of opening and closing the ViewModal.
+   */
   it('Open and close ViewModal', async () => {
     renderGroups(link1);
 
@@ -205,6 +250,9 @@ describe('Testing Groups Screen', () => {
     userEvent.click(await screen.findByTestId('volunteerViewModalCloseBtn'));
   });
 
+  /**
+   * Verifies the functionality of opening and closing the GroupModal.
+   */
   it('Open and close GroupModal', async () => {
     renderGroups(link1);
 
