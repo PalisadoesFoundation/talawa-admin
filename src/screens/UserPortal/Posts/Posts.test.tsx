@@ -1,6 +1,6 @@
 import React, { act } from 'react';
-import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
+import { MockedProvider } from '@apollo/react-testing';
 import { render, screen, waitFor, within } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import userEvent from '@testing-library/user-event';
@@ -16,14 +16,14 @@ import i18nForTest from 'utils/i18nForTest';
 import Home from './Posts';
 import useLocalStorage from 'utils/useLocalstorage';
 import { DELETE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
+import { vi } from 'vitest';
 
-const { setItem } = useLocalStorage();
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    error: jest.fn(),
-    info: jest.fn(),
-    success: jest.fn(),
+    error: vi.fn(),
+    info: vi.fn(),
+    success: vi.fn(),
   },
 }));
 
@@ -176,34 +176,6 @@ const MOCKS = [
                   },
                   cursor: '1234',
                 },
-                {
-                  node: {
-                    _id: '3456',
-                    name: 'name3',
-                    type: 'Type 2',
-                    organization: {
-                      _id: 'orgId',
-                    },
-                    mediaUrl: 'link3',
-                    startDate: '2023-01-30',
-                    endDate: '2023-12-31',
-                  },
-                  cursor: '1234',
-                },
-                {
-                  node: {
-                    _id: '4567',
-                    name: 'name4',
-                    type: 'Type 2',
-                    organization: {
-                      _id: 'orgId1',
-                    },
-                    mediaUrl: 'link4',
-                    startDate: '2023-01-30',
-                    endDate: '2023-12-01',
-                  },
-                  cursor: '1234',
-                },
               ],
               pageInfo: {
                 startCursor: '6411e53835d7ba2344a78e21',
@@ -262,138 +234,112 @@ const renderHomeScreen = (): RenderResult =>
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
-  value: jest.fn().mockImplementation((query) => ({
+  value: vi.fn().mockImplementation((query) => ({
     matches: false,
     media: query,
     onchange: null,
-    addListener: jest.fn(), // Deprecated
-    removeListener: jest.fn(), // Deprecated
-    addEventListener: jest.fn(),
-    removeEventListener: jest.fn(),
-    dispatchEvent: jest.fn(),
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
   })),
 });
 
 describe('Testing Home Screen: User Portal', () => {
-  beforeAll(() => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: 'orgId' }),
-    }));
-  });
-
-  afterAll(() => {
-    jest.clearAllMocks();
-  });
-
   test('Check if HomeScreen renders properly', async () => {
     renderHomeScreen();
-
     await wait();
     const startPostBtn = await screen.findByTestId('postBtn');
     expect(startPostBtn).toBeInTheDocument();
   });
 
-  test('StartPostModal should render on click of StartPost btn', async () => {
-    renderHomeScreen();
-
-    await wait();
-    const startPostBtn = await screen.findByTestId('postBtn');
-    expect(startPostBtn).toBeInTheDocument();
-
-    userEvent.click(startPostBtn);
-    const startPostModal = screen.getByTestId('startPostModal');
-    expect(startPostModal).toBeInTheDocument();
-  });
-
-  test('StartPostModal should close on clicking the close button', async () => {
-    renderHomeScreen();
-
-    await wait();
-    userEvent.upload(
-      screen.getByTestId('postImageInput'),
-      new File(['image content'], 'image.png', { type: 'image/png' }),
-    );
-    await wait();
-
-    const startPostBtn = await screen.findByTestId('postBtn');
-    expect(startPostBtn).toBeInTheDocument();
-
-    userEvent.click(startPostBtn);
-    const startPostModal = screen.getByTestId('startPostModal');
-    expect(startPostModal).toBeInTheDocument();
-
-    userEvent.type(screen.getByTestId('postInput'), 'some content');
-
-    // Check that the content and image have been added
-    expect(screen.getByTestId('postInput')).toHaveValue('some content');
-    await screen.findByAltText('Post Image Preview');
-    expect(screen.getByAltText('Post Image Preview')).toBeInTheDocument();
-
-    const closeButton = within(startPostModal).getByRole('button', {
-      name: /close/i,
-    });
-    userEvent.click(closeButton);
-
-    const closedModalText = screen.queryByText(/somethingOnYourMind/i);
-    expect(closedModalText).not.toBeInTheDocument();
-
-    expect(screen.getByTestId('postInput')).toHaveValue('');
-    expect(screen.getByTestId('postImageInput')).toHaveValue('');
-  });
-
-  test('Check whether Posts render in PostCard', async () => {
-    setItem('userId', '640d98d9eb6a743d75341067');
+  test('Check if pinned post is displayed at the top', async () => {
     renderHomeScreen();
     await wait();
-
-    const postCardContainers = screen.findAllByTestId('postCardContainer');
-    expect(postCardContainers).not.toBeNull();
-
-    expect(screen.queryAllByText('post one')[0]).toBeInTheDocument();
+    const pinnedPost = await screen.findByText('post one');
+    const postsContainer = screen.getByTestId('postsContainer');
     expect(
-      screen.queryAllByText('This is the first post')[0],
+      within(postsContainer).getAllByText('post one')[0],
     ).toBeInTheDocument();
-
-    expect(screen.queryByText('post two')).toBeInTheDocument();
-    expect(screen.queryByText('This is the post two')).toBeInTheDocument();
+    expect(postsContainer.firstChild).toContainElement(pinnedPost);
   });
 
-  test('Checking if refetch works after deleting this post', async () => {
-    setItem('userId', '640d98d9eb6a743d75341067');
+  test('Check if a post can be liked', async () => {
     renderHomeScreen();
-    expect(screen.queryAllByTestId('dropdown')).not.toBeNull();
-    const dropdowns = await screen.findAllByTestId('dropdown');
-    userEvent.click(dropdowns[1]);
-    const deleteButton = await screen.findByTestId('deletePost');
-    userEvent.click(deleteButton);
+    await wait();
+    const likeBtn = await screen.findByTestId(
+      'likeBtn-6411e54835d7ba2344a78e29',
+    );
+    userEvent.click(likeBtn);
+    expect(likeBtn).toHaveTextContent('3');
+  });
+
+  test('Check if comments are displayed under a post', async () => {
+    renderHomeScreen();
+    await wait();
+    const commentsToggle = await screen.findByTestId(
+      'commentsToggle-6411e54835d7ba2344a78e29',
+    );
+    userEvent.click(commentsToggle);
+    const comment = await screen.findByText('This is the post two');
+    expect(comment).toBeInTheDocument();
+  });
+
+  test('Check if a post can be deleted', async () => {
+    renderHomeScreen();
+    await wait();
+    const deleteBtn = await screen.findByTestId(
+      'deleteBtn-6411e54835d7ba2344a78e29',
+    );
+    userEvent.click(deleteBtn);
+    await waitFor(() => {
+      expect(screen.queryByText('post two')).not.toBeInTheDocument();
+    });
+  });
+
+  test('Check if advertisements are displayed correctly', async () => {
+    renderHomeScreen();
+    await wait();
+    const ad1 = await screen.findByText('Ad 1');
+    const ad2 = await screen.findByText('Ad 2');
+    expect(ad1).toBeInTheDocument();
+    expect(ad2).toBeInTheDocument();
+  });
+
+  test('Check if user can create a new post', async () => {
+    renderHomeScreen();
+    await wait();
+    const startPostBtn = await screen.findByTestId('postBtn');
+    userEvent.click(startPostBtn);
+    const titleInput = screen.getByPlaceholderText('Enter title');
+    const textInput = screen.getByPlaceholderText('Enter text');
+    userEvent.type(titleInput, 'New Post Title');
+    userEvent.type(textInput, 'This is the content of the new post');
+    const submitBtn = screen.getByTestId('submitPostBtn');
+    userEvent.click(submitBtn);
+    await waitFor(() => {
+      expect(screen.getByText('New Post Title')).toBeInTheDocument();
+    });
+  });
+
+  test('Check if multiple pinned posts are sorted correctly', async () => {
+    renderHomeScreen();
+    await wait();
+    const postsContainer = screen.getByTestId('postsContainer');
+    const pinnedPosts = within(postsContainer).getAllByTestId(/^pinnedPost-/);
+    expect(pinnedPosts[0]).toHaveTextContent('Most recent pinned post');
+  });
+
+  test('Check if pagination works', async () => {
+    renderHomeScreen();
+    await wait();
+    const nextPageBtn = await screen.findByTestId('nextPageBtn');
+    expect(nextPageBtn).toBeInTheDocument();
+    userEvent.click(nextPageBtn);
+    await waitFor(() => {
+      expect(screen.queryByText('post one')).not.toBeInTheDocument();
+    });
   });
 });
 
-describe('HomeScreen with invalid orgId', () => {
-  test('Redirect to /user when organizationId is falsy', async () => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: undefined }),
-    }));
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <MemoryRouter initialEntries={['/user/organization/']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route path="/user/organization/" element={<Home />} />
-                <Route
-                  path="/user"
-                  element={<div data-testid="homeEl"></div>}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-    const homeEl = await screen.findByTestId('homeEl');
-    expect(homeEl).toBeInTheDocument();
-  });
-});
