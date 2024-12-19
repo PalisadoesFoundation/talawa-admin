@@ -1,7 +1,7 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, waitFor, within } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import userEvent from '@testing-library/user-event';
 import {
@@ -395,5 +395,8 @@ describe('HomeScreen with invalid orgId', () => {
     );
     const homeEl = await screen.findByTestId('homeEl');
     expect(homeEl).toBeInTheDocument();
+
+    const postCardContainers = screen.queryAllByTestId('postCardContainer');
+    expect(postCardContainers).toHaveLength(0);
   });
 });
