@@ -21,11 +21,12 @@ import { toast } from 'react-toastify';
 import { MOCKS, MOCKS_ERROR } from './OrganizationFundsMocks';
 import type { InterfaceFundModal } from './FundModal';
 import FundModal from './FundModal';
+import { vi } from 'vitest';
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
@@ -38,7 +39,7 @@ const translations = JSON.parse(
 const fundProps: InterfaceFundModal[] = [
   {
     isOpen: true,
-    hide: jest.fn(),
+    hide: vi.fn(),
     fund: {
       _id: 'fundId',
       name: 'Fund 1',
@@ -54,13 +55,13 @@ const fundProps: InterfaceFundModal[] = [
         lastName: 'Doe',
       },
     },
-    refetchFunds: jest.fn(),
+    refetchFunds: vi.fn(),
     orgId: 'orgId',
     mode: 'create',
   },
   {
     isOpen: true,
-    hide: jest.fn(),
+    hide: vi.fn(),
     fund: {
       _id: 'fundId',
       name: 'Fund 1',
@@ -76,7 +77,7 @@ const fundProps: InterfaceFundModal[] = [
         lastName: 'Doe',
       },
     },
-    refetchFunds: jest.fn(),
+    refetchFunds: vi.fn(),
     orgId: 'orgId',
     mode: 'edit',
   },
