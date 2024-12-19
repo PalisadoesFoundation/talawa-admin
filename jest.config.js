@@ -80,7 +80,6 @@ export default {
     '<rootDir>/node_modules/',
     '<rootDir>/build/',
     '<rootDir>/public/',
-    '<rootDir>/src/screens/UserPortal/Volunteer/Actions/Actions.spec.tsx',
   ],
   coverageDirectory: './coverage/jest',
   coverageReporters: ['text', 'html', 'text-summary', 'lcov'],
