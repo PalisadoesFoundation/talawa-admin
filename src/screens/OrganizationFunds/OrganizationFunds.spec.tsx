@@ -79,9 +79,6 @@ describe('OrganizationFunds Screen =>', () => {
 
   afterEach(() => {
     vi.clearAllMocks();
-  });
-
-  afterEach(() => {
     cleanup();
   });
 
