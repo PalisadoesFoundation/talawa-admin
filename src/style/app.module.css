@@ -428,6 +428,116 @@ hr {
   color: var(--bs-primary) !important;
 }
 
+.pageNotFound {
+  position: relative;
+  bottom: 20px;
+}
+
+.pageNotFound h3 {
+  font-family: 'Roboto', sans-serif;
+  font-weight: normal;
+  letter-spacing: 1px;
+}
+
+.pageNotFound .brand span {
+  margin-top: 50px;
+  font-size: 40px;
+}
+.pageNotFound .brand h3 {
+  font-weight: 300;
+  margin: 10px 0 0 0;
+}
+.pageNotFound h1.head {
+  font-size: 250px;
+  font-weight: 900;
+  color: #31bb6b;
+  letter-spacing: 25px;
+  margin: 10px 0 0 0;
+}
+.pageNotFound h1.head span {
+  position: relative;
+  display: inline-block;
+}
+.pageNotFound h1.head span:before,
+.pageNotFound h1.head span:after {
+  position: absolute;
+  top: 50%;
+  width: 50%;
+  height: 1px;
+  background: #fff;
+  content: '';
+}
+.pageNotFound h1.head span:before {
+  left: -55%;
+}
+.pageNotFound h1.head span:after {
+  right: -55%;
+}
+
+@media (max-width: 1024px) {
+  .pageNotFound h1.head {
+    font-size: 200px;
+    letter-spacing: 25px;
+  }
+}
+
+@media (max-width: 768px) {
+  .pageNotFound h1.head {
+    font-size: 150px;
+    letter-spacing: 25px;
+  }
+}
+
+@media (max-width: 640px) {
+  .pageNotFound h1.head {
+    font-size: 150px;
+    letter-spacing: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .pageNotFound .brand h3 {
+    font-size: 20px;
+  }
+  .pageNotFound h1.head {
+    font-size: 130px;
+    letter-spacing: 0;
+  }
+  .pageNotFound h1.head span:before,
+  .pageNotFound h1.head span:after {
+    width: 40%;
+  }
+  .pageNotFound h1.head span:before {
+    left: -45%;
+  }
+  .pageNotFound h1.head span:after {
+    right: -45%;
+  }
+  .pageNotFound p {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 320px) {
+  .pageNotFound .brand h3 {
+    font-size: 16px;
+  }
+  .pageNotFound h1.head {
+    font-size: 100px;
+    letter-spacing: 0;
+  }
+  .pageNotFound h1.head span:before,
+  .pageNotFound h1.head span:after {
+    width: 25%;
+  }
+  .pageNotFound h1.head span:before {
+    left: -30%;
+  }
+  .pageNotFound h1.head span:after {
+    right: -30%;
+  }
+}
+
 @media (max-width: 520px) {
   .btnsContainer {
     margin-bottom: 0;
