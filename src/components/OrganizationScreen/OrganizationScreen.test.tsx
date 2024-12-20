@@ -81,6 +81,7 @@ describe('Testing OrganizationScreen', () => {
     fireEvent.click(closeButton);
 
     expect(screen.getByTestId('mainpageright')).toHaveClass(styles.expand);
+
     const openButton = screen.getByTestId('openMenu');
     fireEvent.click(openButton);
 
