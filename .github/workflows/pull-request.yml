@@ -332,11 +332,11 @@ jobs:
 
       - name: Make health-check.sh executable
         run: |
-          chmod +x ./github/workflows/scripts/health-check.sh
+          chmod +x ./github/workflows/scripts/healthcheck.sh
 
       - name: Check if Development App is running
         run: |
-          ./github/workflows/scripts/health-check.sh 4321 120
+          ./github/workflows/scripts/healthcheck.sh 4321 120
           echo "Development app started successfully"
 
       - name: Stop Development App
@@ -373,11 +373,11 @@ jobs:
           echo "Docker container started successfully"
       - name: Make healthcheck.sh executable
         run: |
-          chmod +x .github/scripts/healthcheck.sh
+          chmod +x .github/workflows/scripts/healthcheck.sh
 
       - name: Check if Talawa Admin App is running
         run: |
-          ./github/scripts/healthcheck.sh 4321 120
+          ./github/workflows/scripts/healthcheck.sh 4321 120
           echo "Port check passed, verifying health endpoint..."
 
       - name: Stop Docker Container
