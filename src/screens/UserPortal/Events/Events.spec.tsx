@@ -1,5 +1,5 @@
 import React, { act } from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 
@@ -19,35 +19,51 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ThemeProvider } from 'react-bootstrap';
 import { createTheme } from '@mui/material';
 import useLocalStorage from 'utils/useLocalstorage';
+import { vi } from 'vitest';
 
-const { setItem, getItem } = useLocalStorage();
+/**
+ * Unit tests for the Events component.
+ *
+ * This file contains tests to verify the functionality and behavior of the Events component
+ * under various scenarios, including successful event creation, date/time picker handling,
+ * calendar view toggling, and error handling. Mocked dependencies are used to ensure isolated testing.
+ */
 
-jest.mock('react-toastify', () => ({
+const { setItem } = useLocalStorage();
+
+vi.mock('react-toastify', () => ({
   toast: {
-    error: jest.fn(),
-    info: jest.fn(),
-    success: jest.fn(),
+    error: vi.fn(),
+    info: vi.fn(),
+    success: vi.fn(),
   },
 }));
 
-jest.mock('@mui/x-date-pickers/DatePicker', () => {
+vi.mock('@mui/x-date-pickers/DatePicker', async () => {
+  const desktopDatePickerModule = await vi.importActual(
+    '@mui/x-date-pickers/DesktopDatePicker',
+  );
   return {
-    DatePicker: jest.requireActual('@mui/x-date-pickers/DesktopDatePicker')
-      .DesktopDatePicker,
+    DatePicker: desktopDatePickerModule.DesktopDatePicker,
   };
 });
 
-jest.mock('@mui/x-date-pickers/TimePicker', () => {
+vi.mock('@mui/x-date-pickers/TimePicker', async () => {
+  const timePickerModule = await vi.importActual(
+    '@mui/x-date-pickers/DesktopTimePicker',
+  );
   return {
-    TimePicker: jest.requireActual('@mui/x-date-pickers/DesktopTimePicker')
-      .DesktopTimePicker,
+    TimePicker: timePickerModule.DesktopTimePicker,
   };
 });
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({ orgId: '' }),
-}));
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useParams: () => ({ orgId: '' }),
+  };
+});
 
 const theme = createTheme({
   palette: {
@@ -252,19 +268,19 @@ async function wait(ms = 100): Promise<void> {
 describe('Testing Events Screen [User Portal]', () => {
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
-    value: jest.fn().mockImplementation((query) => ({
+    value: vi.fn().mockImplementation((query) => ({
       matches: false,
       media: query,
       onchange: null,
-      addListener: jest.fn(), // Deprecated
-      removeListener: jest.fn(), // Deprecated
-      addEventListener: jest.fn(),
-      removeEventListener: jest.fn(),
-      dispatchEvent: jest.fn(),
+      addListener: vi.fn(), // Deprecated
+      removeListener: vi.fn(), // Deprecated
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
     })),
   });
 
-  test('Screen should be rendered properly', async () => {
+  it('Screen should be rendered properly', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -283,7 +299,7 @@ describe('Testing Events Screen [User Portal]', () => {
     await wait();
   });
 
-  test('Create event works as expected when event is not an all day event.', async () => {
+  it('Create event works as expected when event is not an all day event.', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -341,7 +357,7 @@ describe('Testing Events Screen [User Portal]', () => {
     );
   });
 
-  test('Create event works as expected when event is an all day event.', async () => {
+  it('Create event works as expected when event is an all day event.', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -384,7 +400,7 @@ describe('Testing Events Screen [User Portal]', () => {
     );
   });
 
-  test('Switch to calendar view works as expected.', async () => {
+  it('Switch to calendar view works as expected.', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -413,7 +429,7 @@ describe('Testing Events Screen [User Portal]', () => {
     expect(screen.getByText('Sun')).toBeInTheDocument();
   });
 
-  test('Testing DatePicker and TimePicker', async () => {
+  it('Testing DatePicker and TimePicker', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -430,31 +446,39 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
-    const startDate = '03/23/2024';
-    const endDate = '04/23/2024';
-    const startTime = '02:00 PM';
-    const endTime = '06:00 PM';
-
     userEvent.click(screen.getByTestId('createEventModalBtn'));
+    // MM/DD/YYYY
+    const startDate = new Date();
+    const endDate = new Date();
+    const startTime = '08:00 AM';
+    const endTime = '10:00 AM';
+
+    await waitFor(() => {
+      expect(screen.getByLabelText('Start Date')).toBeInTheDocument();
+      expect(screen.getByLabelText('End Date')).toBeInTheDocument();
+    });
 
     expect(endDate).not.toBeNull();
     const endDateDatePicker = screen.getByLabelText('End Date');
     expect(startDate).not.toBeNull();
     const startDateDatePicker = screen.getByLabelText('Start Date');
 
+    const startDateDayjs = dayjs(startDate);
+    const endDateDayjs = dayjs(endDate);
+
     fireEvent.change(startDateDatePicker, {
-      target: { value: startDate },
+      target: { value: startDateDayjs.format('MM/DD/YYYY') },
     });
     fireEvent.change(endDateDatePicker, {
-      target: { value: endDate },
+      target: { value: endDateDayjs.format('MM/DD/YYYY') },
     });
 
-    await wait();
-
-    expect(endDateDatePicker).toHaveValue(endDate);
-    expect(startDateDatePicker).toHaveValue(startDate);
+    await waitFor(() => {
+      expect(startDateDatePicker).toHaveValue(
+        startDateDayjs.format('MM/DD/YYYY'),
+      );
+      expect(endDateDatePicker).toHaveValue(endDateDayjs.format('MM/DD/YYYY'));
+    });
 
     userEvent.click(screen.getByTestId('allDayEventCheck'));
 
@@ -475,7 +499,7 @@ describe('Testing Events Screen [User Portal]', () => {
     expect(startTimePicker).toHaveValue(startTime);
   });
 
-  test('EndDate null', async () => {
+  it('EndDate null', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
