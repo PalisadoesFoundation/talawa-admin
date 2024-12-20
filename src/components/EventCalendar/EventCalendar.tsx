@@ -176,6 +176,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
       }
     }
   };
+
   const handleNextDate = (): void => {
     const lastDayOfCurrentMonth = new Date(
       currentYear,
@@ -217,6 +218,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         setExpanded(index);
       }
     };
+
     const allDayEventsList: JSX.Element[] =
       events
         ?.filter((datas) => {
@@ -413,6 +415,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           setExpanded(index);
         }
       };
+
       const allEventsList: JSX.Element[] =
         events
           ?.filter((datas) => {
