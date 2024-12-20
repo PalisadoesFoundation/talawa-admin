@@ -43,8 +43,8 @@ export default {
     '\\.svg\\?react$': '<rootDir>/scripts/__mocks__/fileMock.js',
     '\\.svg$': '<rootDir>/scripts/__mocks__/fileMock.js',
     '^@pdfme/generator$': '<rootDir>/scripts/__mocks__/@pdfme/generator.ts',
-    '\\.module\\.css$': 'identity-obj-proxy',
-    '\\.(css|less|scss|sass)$': '<rootDir>/__mocks__/styleMock.ts',
+    '\\.module\\.css$': 'identity-obj-proxy', // mocking css module
+    '\\.(css|less|scss|sass)$': '<rootDir>/__mocks__/styleMock.ts', // mocking css
   },
   moduleFileExtensions: [
     'web.js',
