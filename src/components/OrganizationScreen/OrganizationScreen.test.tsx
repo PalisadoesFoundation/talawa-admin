@@ -80,15 +80,12 @@ describe('Testing OrganizationScreen', () => {
     const closeButton = screen.getByTestId('closeMenu');
     fireEvent.click(closeButton);
 
-    // Check for a class indicating the drawer is contracted (use stringContaining in the class)
-    const mainPageElement = screen.getByTestId('mainpageright');
-    expect(mainPageElement.className).toMatch('_expand'); // Simply check if _expand exists
-
+    expect(screen.getByTestId('mainpageright')).toHaveClass(styles.expand);
     const openButton = screen.getByTestId('openMenu');
     fireEvent.click(openButton);
 
-    // Check for a class indicating the drawer is expanded
-    expect(mainPageElement.className).toMatch('_contract');
+    // Check for expand class after opening
+    expect(screen.getByTestId('mainpageright')).toHaveClass(styles.contract);
   });
 
   test('handles window resize', () => {
