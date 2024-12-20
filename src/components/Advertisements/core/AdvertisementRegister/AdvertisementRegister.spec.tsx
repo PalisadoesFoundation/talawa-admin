@@ -1,5 +1,17 @@
-import React, { act } from 'react';
-import { render, fireEvent, waitFor, screen } from '@testing-library/react';
+/**
+ * Unit tests for the AdvertisementRegister component.
+ *
+ * This file contains tests for the AdvertisementRegister component to ensure it behaves as expected
+ * under various scenarios.
+ */
+import React from 'react';
+import {
+  render,
+  fireEvent,
+  waitFor,
+  screen,
+  act,
+} from '@testing-library/react';
 
 import {
   ApolloClient,
@@ -22,17 +34,17 @@ import i18n from 'utils/i18nForTest';
 import { toast } from 'react-toastify';
 import { ADD_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import userEvent from '@testing-library/user-event';
 import useLocalStorage from 'utils/useLocalstorage';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
+import { vi } from 'vitest';
 
 const { getItem } = useLocalStorage();
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
@@ -135,13 +147,20 @@ const translations = {
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
 };
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual('react-router-dom')),
   useParams: () => ({ orgId: '1' }),
 }));
+
+vi.mock('utils/convertToBase64', () => ({
+  default: vi
+    .fn()
+    .mockResolvedValue('data:image/png;base64,mockedBase64String'),
+}));
+
 describe('Testing Advertisement Register Component', () => {
   test('AdvertismentRegister component loads correctly in register mode', async () => {
-    const { getByText } = render(
+    render(
       <ApolloProvider client={client}>
         <Provider store={store}>
           <BrowserRouter>
@@ -153,21 +172,22 @@ describe('Testing Advertisement Register Component', () => {
                 nameEdit="Advert1"
                 orgIdEdit="1"
                 advertisementMediaEdit=""
-                setAfter={jest.fn()}
+                setAfter={vi.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
       </ApolloProvider>,
     );
-    await waitFor(() => {
-      expect(getByText(translations.createAdvertisement)).toBeInTheDocument();
-    });
+
+    expect(
+      screen.getByText(translations.createAdvertisement),
+    ).toBeInTheDocument();
   });
 
   test('create advertisement', async () => {
-    jest.useFakeTimers();
-    const setTimeoutSpy = jest.spyOn(global, 'setTimeout');
+    vi.useFakeTimers();
+    const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
 
     await act(async () => {
       render(
@@ -182,7 +202,7 @@ describe('Testing Advertisement Register Component', () => {
                   nameEdit="Ad1"
                   orgIdEdit="1"
                   advertisementMediaEdit=""
-                  setAfter={jest.fn()}
+                  setAfter={vi.fn()}
                 />
               </I18nextProvider>
             </BrowserRouter>
@@ -217,9 +237,7 @@ describe('Testing Advertisement Register Component', () => {
       });
     });
 
-    await waitFor(() => {
-      expect(screen.getByTestId('mediaPreview')).toBeInTheDocument();
-    });
+    expect(screen.getByTestId('mediaPreview')).toBeInTheDocument();
 
     await act(async () => {
       fireEvent.change(screen.getByLabelText(translations.Rtype), {
@@ -254,12 +272,12 @@ describe('Testing Advertisement Register Component', () => {
       );
       expect(setTimeoutSpy).toHaveBeenCalled();
     });
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   test('update advertisement', async () => {
-    jest.useFakeTimers();
-    const setTimeoutSpy = jest.spyOn(global, 'setTimeout');
+    vi.useFakeTimers();
+    const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
 
     await act(async () => {
       render(
@@ -274,7 +292,7 @@ describe('Testing Advertisement Register Component', () => {
                   nameEdit="Ad1"
                   orgIdEdit="1"
                   advertisementMediaEdit=""
-                  setAfter={jest.fn()}
+                  setAfter={vi.fn()}
                   formStatus="edit"
                 />
               </I18nextProvider>
@@ -284,9 +302,7 @@ describe('Testing Advertisement Register Component', () => {
       );
     });
 
-    await waitFor(() => {
-      expect(screen.getByText(translations.edit)).toBeInTheDocument();
-    });
+    expect(screen.getByText(translations.edit)).toBeInTheDocument();
 
     await act(async () => {
       fireEvent.click(screen.getByText(translations.edit));
@@ -346,13 +362,13 @@ describe('Testing Advertisement Register Component', () => {
       expect(setTimeoutSpy).toHaveBeenCalled();
     });
 
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   test('Logs error to the console and shows error toast when advertisement creation fails', async () => {
-    jest.useFakeTimers();
-    const setTimeoutSpy = jest.spyOn(global, 'setTimeout');
-    const toastErrorSpy = jest.spyOn(toast, 'error');
+    vi.useFakeTimers();
+    const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
+    const toastErrorSpy = vi.spyOn(toast, 'error');
 
     await act(async () => {
       render(
@@ -367,7 +383,7 @@ describe('Testing Advertisement Register Component', () => {
                   nameEdit="Ad1"
                   orgIdEdit="1"
                   advertisementMediaEdit=""
-                  setAfter={jest.fn()}
+                  setAfter={vi.fn()}
                 />
               </I18nextProvider>
             </BrowserRouter>
@@ -397,83 +413,95 @@ describe('Testing Advertisement Register Component', () => {
     });
 
     expect(setTimeoutSpy).toHaveBeenCalled();
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   test('Throws error when the end date is less than the start date', async () => {
-    jest.useFakeTimers();
-    const setTimeoutSpy = jest.spyOn(global, 'setTimeout');
-    const { getByText, queryByText, getByLabelText } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18n}>
-              <AdvertisementRegister
-                endDateEdit={new Date()}
-                startDateEdit={new Date()}
-                typeEdit="BANNER"
-                nameEdit="Ad1"
-                orgIdEdit="1"
-                advertisementMediaEdit=""
-                setAfter={jest.fn()}
-              />
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
+    vi.useFakeTimers();
+    const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <Provider store={store}>
+            <BrowserRouter>
+              <I18nextProvider i18n={i18n}>
+                <AdvertisementRegister
+                  endDateEdit={new Date()}
+                  startDateEdit={new Date()}
+                  typeEdit="BANNER"
+                  nameEdit="Ad1"
+                  orgIdEdit="1"
+                  advertisementMediaEdit=""
+                  setAfter={vi.fn()}
+                />
+              </I18nextProvider>
+            </BrowserRouter>
+          </Provider>
+        </MockedProvider>,
+      );
+    });
+
+    expect(
+      screen.getByText(translations.createAdvertisement),
+    ).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.click(screen.getByText(translations.createAdvertisement));
+    });
+
+    expect(screen.queryByText(translations.addNew)).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(translations.Rname), {
+        target: { value: 'Ad1' },
+      });
+
+      const mediaFile = new File(['media content'], 'test.png', {
+        type: 'image/png',
+      });
+
+      fireEvent.change(screen.getByLabelText(translations.Rmedia), {
+        target: {
+          files: [mediaFile],
+        },
+      });
+    });
+
+    expect(screen.getByTestId('mediaPreview')).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(translations.Rtype), {
+        target: { value: 'BANNER' },
+      });
+      fireEvent.change(screen.getByLabelText(translations.RstartDate), {
+        target: { value: '2023-01-01' },
+      });
+      fireEvent.change(screen.getByLabelText(translations.RendDate), {
+        target: { value: '2022-02-01' },
+      });
+    });
+
+    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('BANNER');
+    expect(screen.getByLabelText(translations.RstartDate)).toHaveValue(
+      '2023-01-01',
+    );
+    expect(screen.getByLabelText(translations.RendDate)).toHaveValue(
+      '2022-02-01',
     );
 
-    expect(getByText(translations.createAdvertisement)).toBeInTheDocument();
-
-    fireEvent.click(getByText(translations.createAdvertisement));
-    expect(queryByText(translations.addNew)).toBeInTheDocument();
-
-    fireEvent.change(getByLabelText(translations.Rname), {
-      target: { value: 'Ad1' },
-    });
-    expect(getByLabelText(translations.Rname)).toHaveValue('Ad1');
-
-    const mediaFile = new File(['media content'], 'test.png', {
-      type: 'image/png',
+    await act(async () => {
+      fireEvent.click(screen.getByText(translations.register));
     });
 
-    const mediaInput = getByLabelText(translations.Rmedia);
-    fireEvent.change(mediaInput, {
-      target: {
-        files: [mediaFile],
-      },
-    });
-
-    const mediaPreview = await screen.findByTestId('mediaPreview');
-    expect(mediaPreview).toBeInTheDocument();
-
-    fireEvent.change(getByLabelText(translations.Rtype), {
-      target: { value: 'BANNER' },
-    });
-    expect(getByLabelText(translations.Rtype)).toHaveValue('BANNER');
-
-    fireEvent.change(getByLabelText(translations.RstartDate), {
-      target: { value: '2023-01-01' },
-    });
-    expect(getByLabelText(translations.RstartDate)).toHaveValue('2023-01-01');
-
-    fireEvent.change(getByLabelText(translations.RendDate), {
-      target: { value: '2022-02-01' },
-    });
-    expect(getByLabelText(translations.RendDate)).toHaveValue('2022-02-01');
-
-    await waitFor(() => {
-      fireEvent.click(getByText(translations.register));
-    });
     expect(toast.error).toHaveBeenCalledWith(
       'End Date should be greater than or equal to Start Date',
     );
     expect(setTimeoutSpy).toHaveBeenCalled();
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   test('AdvertismentRegister component loads correctly in edit mode', async () => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
     render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -487,22 +515,21 @@ describe('Testing Advertisement Register Component', () => {
                 orgIdEdit="1"
                 advertisementMediaEdit="google.com"
                 formStatus="edit"
-                setAfter={jest.fn()}
+                setAfter={vi.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
       </ApolloProvider>,
     );
-    await waitFor(() => {
-      expect(screen.getByTestId('editBtn')).toBeInTheDocument();
-    });
-    jest.useRealTimers();
+
+    expect(screen.getByTestId('editBtn')).toBeInTheDocument();
+    vi.useRealTimers();
   });
 
   test('Opens and closes modals on button click', async () => {
-    jest.useFakeTimers();
-    const { getByText, queryByText } = render(
+    vi.useFakeTimers();
+    render(
       <ApolloProvider client={client}>
         <Provider store={store}>
           <BrowserRouter>
@@ -514,27 +541,39 @@ describe('Testing Advertisement Register Component', () => {
                 nameEdit="Advert1"
                 orgIdEdit="1"
                 advertisementMediaEdit=""
-                setAfter={jest.fn()}
+                setAfter={vi.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
       </ApolloProvider>,
     );
-    fireEvent.click(getByText(translations.createAdvertisement));
-    await waitFor(() => {
-      expect(queryByText(translations.addNew)).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.click(screen.getByText(translations.createAdvertisement));
     });
-    fireEvent.click(getByText(translations.close));
-    await waitFor(() => {
-      expect(queryByText(translations.close)).not.toBeInTheDocument();
+
+    expect(screen.queryByText(translations.addNew)).toBeInTheDocument();
+
+    const closeButton = screen.getByText(translations.close);
+
+    await act(async () => {
+      fireEvent.click(closeButton);
     });
-    jest.useRealTimers();
+
+    await waitFor(async () => {
+      vi.runAllTimersAsync();
+    });
+
+    await waitFor(() => {
+      expect(screen.queryByText(translations.close)).not.toBeInTheDocument();
+    });
+    vi.useRealTimers();
   });
 
   test('Throws error when the end date is less than the start date while editing the advertisement', async () => {
-    jest.useFakeTimers();
-    const { getByText, getByLabelText, queryByText } = render(
+    vi.useFakeTimers();
+    render(
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
           <BrowserRouter>
@@ -548,7 +587,7 @@ describe('Testing Advertisement Register Component', () => {
                   nameEdit="Advert1"
                   orgIdEdit="1"
                   advertisementMediaEdit="google.com"
-                  setAfter={jest.fn()}
+                  setAfter={vi.fn()}
                 />
               }
             </I18nextProvider>
@@ -557,85 +596,136 @@ describe('Testing Advertisement Register Component', () => {
       </MockedProvider>,
     );
 
-    fireEvent.click(getByText(translations.edit));
-    expect(queryByText(translations.editAdvertisement)).toBeInTheDocument();
-    fireEvent.change(getByLabelText(translations.Rname), {
-      target: { value: 'Test Advertisement' },
+    await act(async () => {
+      fireEvent.click(screen.getByText(translations.edit));
     });
-    expect(getByLabelText(translations.Rname)).toHaveValue(
+    expect(
+      screen.getByText(translations.editAdvertisement),
+    ).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(translations.Rname), {
+        target: { value: 'Test Advertisement' },
+      });
+    });
+
+    expect(screen.getByLabelText(translations.Rname)).toHaveValue(
       'Test Advertisement',
     );
 
-    const mediaFile = new File(['video content'], 'test.mp4', {
-      type: 'video/mp4',
+    const mediaFile = new File(['media content'], 'test.png', {
+      type: 'image/png',
     });
-    const mediaInput = screen.getByTestId('advertisementMedia');
-    userEvent.upload(mediaInput, mediaFile);
 
-    const mediaPreview = await screen.findByTestId('mediaPreview');
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(translations.Rmedia), {
+        target: {
+          files: [mediaFile],
+        },
+      });
+    });
+
+    const mediaPreview = screen.getByTestId('mediaPreview');
     expect(mediaPreview).toBeInTheDocument();
 
-    fireEvent.change(getByLabelText(translations.Rtype), {
-      target: { value: 'BANNER' },
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(translations.Rtype), {
+        target: { value: 'BANNER' },
+      });
+      fireEvent.change(screen.getByLabelText(translations.RstartDate), {
+        target: { value: '2023-02-02' },
+      });
+      fireEvent.change(screen.getByLabelText(translations.RendDate), {
+        target: { value: '2023-01-01' },
+      });
     });
-    expect(getByLabelText(translations.Rtype)).toHaveValue('BANNER');
 
-    fireEvent.change(getByLabelText(translations.RstartDate), {
-      target: { value: '2023-02-02' },
-    });
-    expect(getByLabelText(translations.RstartDate)).toHaveValue('2023-02-02');
+    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('BANNER');
 
-    fireEvent.change(getByLabelText(translations.RendDate), {
-      target: { value: '2023-01-01' },
-    });
-    expect(getByLabelText(translations.RendDate)).toHaveValue('2023-01-01');
+    expect(screen.getByLabelText(translations.RstartDate)).toHaveValue(
+      '2023-02-02',
+    );
 
-    fireEvent.click(getByText(translations.saveChanges));
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(
-        'End Date should be greater than or equal to Start Date',
-      );
+    expect(screen.getByLabelText(translations.RendDate)).toHaveValue(
+      '2023-01-01',
+    );
+
+    await act(async () => {
+      fireEvent.click(screen.getByText(translations.saveChanges));
     });
-    jest.useRealTimers();
+
+    expect(toast.error).toHaveBeenCalledWith(
+      'End Date should be greater than or equal to Start Date',
+    );
+
+    vi.useRealTimers();
   });
 
   test('Media preview renders correctly', async () => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
     render(
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
-              <AdvertisementRegister
-                endDateEdit={new Date()}
-                startDateEdit={new Date()}
-                typeEdit="BANNER"
-                nameEdit="Advert1"
-                orgIdEdit="1"
-                advertisementMediaEdit="test.mp4"
-                setAfter={jest.fn()}
-              />
+              {
+                <AdvertisementRegister
+                  formStatus="edit"
+                  endDateEdit={new Date()}
+                  startDateEdit={new Date()}
+                  typeEdit="BANNER"
+                  nameEdit="Advert1"
+                  orgIdEdit="1"
+                  advertisementMediaEdit="google.com"
+                  setAfter={vi.fn()}
+                />
+              }
             </I18nextProvider>
           </BrowserRouter>
         </Provider>
       </MockedProvider>,
     );
 
-    fireEvent.click(screen.getByText(translations.createAdvertisement));
-    await screen.findByText(translations.addNew);
-
-    const mediaFile = new File(['video content'], 'test.mp4', {
-      type: 'video/mp4',
+    await act(async () => {
+      fireEvent.click(screen.getByText(translations.edit));
     });
-    const mediaInput = screen.getByTestId('advertisementMedia');
-    userEvent.upload(mediaInput, mediaFile);
 
-    const mediaPreview = await screen.findByTestId('mediaPreview');
+    expect(
+      screen.getByText(translations.editAdvertisement),
+    ).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(translations.Rname), {
+        target: { value: 'Test Advertisement' },
+      });
+    });
+
+    expect(screen.getByLabelText(translations.Rname)).toHaveValue(
+      'Test Advertisement',
+    );
+
+    const mediaFile = new File(['media content'], 'test.png', {
+      type: 'image/png',
+    });
+
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(translations.Rmedia), {
+        target: {
+          files: [mediaFile],
+        },
+      });
+    });
+
+    const mediaPreview = screen.getByTestId('mediaPreview');
     expect(mediaPreview).toBeInTheDocument();
 
-    const closeButton = await screen.findByTestId('closePreview');
-    fireEvent.click(closeButton);
+    const closeButton = screen.getByTestId('closePreview');
+
+    await act(async () => {
+      fireEvent.click(closeButton);
+    });
+
     expect(mediaPreview).not.toBeInTheDocument();
   });
-  jest.useRealTimers();
+  vi.useRealTimers();
 });
