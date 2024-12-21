@@ -19,7 +19,7 @@ fi
 
 port="$1"
 timeout="${2:-120}"
-TEMP_FILES=""
+declare -a TEMP_FILES=()
 
 # Function to check if the app is running
 check_health() {
@@ -54,15 +54,15 @@ cleanup() {
     local exit_code="${1:-1}"
     local cleanup_failed=0
     # Kill any background processes started by this script
-    if !jobs -p | xargs -r kill 2>/dev/null; then
+    if ! jobs -p | xargs -r kill 2>/dev/null; then
         echo "Warning: Failed to kill some background processes"
         cleanup_failed=1
     fi
     # Remove any temporary files if created
         if [ ${#TEMP_FILES[@]} -gt 0 ]; then
             if ! rm -f "${TEMP_FILES[@]}" 2>/dev/null; then
-            echo "Warning: Failed to remove some temporary files"
-            cleanup_failed=1
+                echo "Warning: Failed to remove some temporary files"
+                cleanup_failed=1
         fi
     fi
     
@@ -86,7 +86,7 @@ handle_timeout() {
 # Check if the script is running inside Docker container
 if [ -f /.dockerenv ]; then
     echo "Running inside Docker container"
-    check_health || handle_timeout
+    check_health "${port}" "${timeout}" || handle_timeout
 else
     echo "Running outside Docker container"
     check_health || handle_timeout
