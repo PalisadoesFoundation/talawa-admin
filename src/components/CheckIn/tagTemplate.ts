@@ -4,7 +4,7 @@ export const tagTemplate: Template = {
   "schemas": [
     [
       {
-        "name": "name",
+        "name": "xyz",
         "type": "text",
         "position": { x: 14.91, y: 27.03 },
         "width": 58.55,
