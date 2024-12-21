@@ -304,22 +304,15 @@ jobs:
         run: |
           npm run preview &
           echo $! > .pidfile_prod
+
+      - name: Make health-check.sh executable
+        run: |
+          chmod +x .github/workflows/scripts/healthcheck.sh
+
       - name: Check if Production App is running
         run: |
-          timeout=120
-          echo "Starting production health check with ${timeout}s timeout"
-          while ! nc -z localhost 4173 && [ $timeout -gt 0 ]; do
-            sleep 1
-            timeout=$((timeout-1))
-            if [ $((timeout % 10)) -eq 0 ]; then
-              echo "Still waiting for production app to start... ${timeout}s remaining"
-            fi
-          done
-          if [ $timeout -eq 0 ]; then
-            echo "Timeout waiting for production application to start"
-            exit 1
-          fi
-          echo "Production app started successfully"
+            .github/workflows/scripts/healthcheck.sh 4321 120
+            echo "Production app started successfully"
       - name: Stop Production App
         run: |
           if [ -f .pidfile_prod ]; then

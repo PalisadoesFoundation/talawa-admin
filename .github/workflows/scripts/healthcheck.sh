@@ -59,8 +59,5 @@ if [ -f /.dockerenv ]; then
     check_health || handle_timeout
 else
     echo "Running outside Docker container"
-    check_health || {
-        echo "Timeout waiting for application to start"
-        exit 1
-    }
+    check_health || handle_timeout
 fi
