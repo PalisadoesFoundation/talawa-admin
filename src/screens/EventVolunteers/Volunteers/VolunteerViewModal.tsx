@@ -1,6 +1,6 @@
 import { Button, Form, Modal } from 'react-bootstrap';
 import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
-import styles from '../EventVolunteers.module.css';
+import styles from '../../../style/app.module.css';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -83,14 +83,14 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
                           src={user.image}
                           alt="Volunteer"
                           data-testid="volunteer_image"
-                          className={styles.TableImage}
+                          className={styles.TableImages}
                         />
                       ) : (
                         <div className={styles.avatarContainer}>
                           <Avatar
                             key={user._id + '1'}
                             containerStyle={styles.imageContainer}
-                            avatarStyle={styles.TableImage}
+                            avatarStyle={styles.TableImages}
                             dataTestId="volunteer_avatar"
                             name={user.firstName + ' ' + user.lastName}
                             alt={user.firstName + ' ' + user.lastName}
