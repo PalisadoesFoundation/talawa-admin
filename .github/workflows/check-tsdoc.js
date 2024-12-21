@@ -23,6 +23,7 @@ async function findTsxFiles(dir) {
       } else if (
         filePath.endsWith('.tsx') &&
         !filePath.endsWith('.test.tsx') &&
+        !filePath.endsWith('.spec.tsx') &&
         !filesToSkip.includes(path.relative(dir, filePath))
       ) {
         results.push(filePath);
