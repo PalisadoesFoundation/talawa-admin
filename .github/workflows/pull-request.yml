@@ -311,7 +311,7 @@ jobs:
 
       - name: Check if Production App is running
         run: |
-            .github/workflows/scripts/healthcheck.sh 4321 120
+            .github/workflows/scripts/healthcheck.sh 4173 120
             echo "Production app started successfully"
       - name: Stop Production App
         run: |
