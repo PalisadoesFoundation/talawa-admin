@@ -111,6 +111,7 @@
 
 .btnsContainer .btnsBlock {
   display: flex;
+  width: max-content;
 }
 
 .btnsContainer .btnsBlock button {
@@ -123,6 +124,12 @@
 .btnsContainer .inputContainer {
   flex: 1;
   position: relative;
+  max-width: 60%;
+  justify-content: space-between;
+}
+
+.btnsContainer input {
+  outline: 1px solid var(--bs-gray-400);
 }
 
 .btnsContainer .input {
@@ -352,6 +359,7 @@
 
 .rowBackground {
   background-color: var(--row-background);
+  max-height: 120px;
 }
 
 .tableHeader {
@@ -410,6 +418,20 @@
 .tagsBreadCrumbs {
   color: var(--bs-gray);
   cursor: pointer;
+}
+
+.manageTagScrollableDiv {
+  scrollbar-width: thin;
+  scrollbar-color: var(--bs-gray-400) var(--bs-white);
+
+  max-height: calc(100vh - 18rem);
+  overflow: auto;
+}
+
+.tagsBreadCrumbs:hover {
+  color: var(--bs-blue);
+  font-weight: 600;
+  text-decoration: underline;
 }
 
 .orgUserTagsScrollableDiv {
