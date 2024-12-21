@@ -17,8 +17,8 @@
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name           | Type     |
+| :------------- | :------- |
 | `languageCode` | `string` |
 
 #### Returns
@@ -29,7 +29,7 @@
 
 [src/components/ChangeLanguageDropdown/ChangeLanguageDropDown.tsx:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/ChangeLanguageDropdown/ChangeLanguageDropDown.tsx#L13)
 
-___
+---
 
 ### default
 
@@ -37,8 +37,8 @@ ___
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name    | Type                                   |
+| :------ | :------------------------------------- |
 | `props` | `InterfaceChangeLanguageDropDownProps` |
 
 #### Returns

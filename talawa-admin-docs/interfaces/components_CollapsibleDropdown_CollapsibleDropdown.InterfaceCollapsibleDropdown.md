@@ -21,7 +21,7 @@
 
 [src/components/CollapsibleDropdown/CollapsibleDropdown.tsx:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/CollapsibleDropdown/CollapsibleDropdown.tsx#L9)
 
-___
+---
 
 ### target
 

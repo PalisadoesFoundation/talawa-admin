@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
 
-import styles from '../../style/app.module.css'
+import styles from '../../style/app.module.css';
 import Logo from 'assets/images/talawa-logo-600x600.png';
 
 /**

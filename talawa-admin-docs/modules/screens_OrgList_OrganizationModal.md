@@ -12,20 +12,20 @@
 
 ### default
 
-▸ **default**(`props`, `context?`): ``null`` \| `ReactElement`\<`any`, `any`\>
+▸ **default**(`props`, `context?`): `null` \| `ReactElement`\<`any`, `any`\>
 
 Represents the organization modal component.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `props` | `PropsWithChildren`\<`InterfaceOrganizationModalProps`\> |
-| `context?` | `any` |
+| Name       | Type                                                     |
+| :--------- | :------------------------------------------------------- |
+| `props`    | `PropsWithChildren`\<`InterfaceOrganizationModalProps`\> |
+| `context?` | `any`                                                    |
 
 #### Returns
 
-``null`` \| `ReactElement`\<`any`, `any`\>
+`null` \| `ReactElement`\<`any`, `any`\>
 
 #### Defined in
 

@@ -16,13 +16,13 @@
 
 ### hideDrawer
 
-• **hideDrawer**: ``null`` \| `boolean`
+• **hideDrawer**: `null` \| `boolean`
 
 #### Defined in
 
 [src/components/LeftDrawer/LeftDrawer.tsx:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/LeftDrawer/LeftDrawer.tsx#L16)
 
-___
+---
 
 ### screenName
 
@@ -32,11 +32,11 @@ ___
 
 [src/components/LeftDrawer/LeftDrawer.tsx:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/LeftDrawer/LeftDrawer.tsx#L18)
 
-___
+---
 
 ### setHideDrawer
 
-• **setHideDrawer**: `Dispatch`\<`SetStateAction`\<``null`` \| `boolean`\>\>
+• **setHideDrawer**: `Dispatch`\<`SetStateAction`\<`null` \| `boolean`\>\>
 
 #### Defined in
 

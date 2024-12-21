@@ -22,7 +22,7 @@
 
 [src/components/CheckIn/types.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/CheckIn/types.ts#L47)
 
-___
+---
 
 ### id
 
@@ -32,7 +32,7 @@ ___
 
 [src/components/CheckIn/types.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/CheckIn/types.ts#L46)
 
-___
+---
 
 ### userName
 

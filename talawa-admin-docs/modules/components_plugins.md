@@ -15,7 +15,7 @@
 
 Renames and re-exports [default](components_plugins_DummyPlugin_DummyPlugin.md#default)
 
-___
+---
 
 ### DummyPlugin2
 

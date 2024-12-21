@@ -15,17 +15,17 @@
 
 ### DAY
 
-• **DAY** = ``"Day"``
+• **DAY** = `"Day"`
 
 #### Defined in
 
 [src/components/EventCalendar/EventCalendar.tsx:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/EventCalendar/EventCalendar.tsx#L46)
 
-___
+---
 
 ### MONTH
 
-• **MONTH** = ``"Month"``
+• **MONTH** = `"Month"`
 
 #### Defined in
 

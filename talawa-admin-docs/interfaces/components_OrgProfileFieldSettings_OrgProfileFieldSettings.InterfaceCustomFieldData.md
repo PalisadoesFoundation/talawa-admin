@@ -21,7 +21,7 @@
 
 [src/components/OrgProfileFieldSettings/OrgProfileFieldSettings.tsx:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/12d9229/src/components/OrgProfileFieldSettings/OrgProfileFieldSettings.tsx#L18)
 
-___
+---
 
 ### type
 
