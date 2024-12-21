@@ -7,8 +7,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import type { Params } from 'react-router-dom';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes, useParams } from 'react-router-dom';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
@@ -68,10 +67,7 @@ describe('Testing Volunteers Screen', () => {
       const actualDom = await vi.importActual('react-router-dom');
       return {
         ...actualDom,
-        useParams: (): Readonly<Params<string>> => ({
-          orgId: 'orgId',
-          eventId: 'eventId',
-        }),
+        useParams: vi.fn(),
       };
     });
   });
@@ -81,6 +77,7 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
+    vi.mocked(useParams).mockReturnValue({ orgId: '', eventId: '' });
     render(
       <MockedProvider addTypename={false} link={link1}>
         <MemoryRouter initialEntries={['/event/']}>
@@ -99,16 +96,27 @@ describe('Testing Volunteers Screen', () => {
       </MockedProvider>,
     );
 
-    expect(window.location.pathname).toBe('/');
+    await waitFor(() => {
+      expect(screen.getByTestId('paramsError')).toBeInTheDocument();
+    });
   });
 
   it('should render Volunteers screen', async () => {
+    vi.mocked(useParams).mockReturnValue({
+      orgId: 'orgId',
+      eventId: 'eventId',
+    });
+
     renderVolunteers(link1);
     const searchInput = await screen.findByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
   });
 
   it('Check Sorting Functionality', async () => {
+    vi.mocked(useParams).mockReturnValue({
+      orgId: 'orgId',
+      eventId: 'eventId',
+    });
     renderVolunteers(link1);
     const searchInput = await screen.findByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
@@ -142,6 +150,10 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('Filter Volunteers by status (All)', async () => {
+    vi.mocked(useParams).mockReturnValue({
+      orgId: 'orgId',
+      eventId: 'eventId',
+    });
     renderVolunteers(link1);
 
     const filterBtn = await screen.findByTestId('filter');
@@ -159,6 +171,10 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('Filter Volunteers by status (Pending)', async () => {
+    vi.mocked(useParams).mockReturnValue({
+      orgId: 'orgId',
+      eventId: 'eventId',
+    });
     renderVolunteers(link1);
 
     const filterBtn = await screen.findByTestId('filter');
@@ -176,6 +192,10 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('Filter Volunteers by status (Accepted)', async () => {
+    vi.mocked(useParams).mockReturnValue({
+      orgId: 'orgId',
+      eventId: 'eventId',
+    });
     renderVolunteers(link1);
 
     const filterBtn = await screen.findByTestId('filter');
@@ -193,6 +213,10 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('Search', async () => {
+    vi.mocked(useParams).mockReturnValue({
+      orgId: 'orgId',
+      eventId: 'eventId',
+    });
     renderVolunteers(link1);
     const searchInput = await screen.findByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
@@ -205,6 +229,10 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('should render screen with No Volunteers', async () => {
+    vi.mocked(useParams).mockReturnValue({
+      orgId: 'orgId',
+      eventId: 'eventId',
+    });
     renderVolunteers(link3);
 
     await waitFor(() => {
@@ -214,6 +242,10 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('Error while fetching volunteers data', async () => {
+    vi.mocked(useParams).mockReturnValue({
+      orgId: 'orgId',
+      eventId: 'eventId',
+    });
     renderVolunteers(link2);
 
     await waitFor(() => {
@@ -222,6 +254,10 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('Open and close Volunteer Modal (View)', async () => {
+    vi.mocked(useParams).mockReturnValue({
+      orgId: 'orgId',
+      eventId: 'eventId',
+    });
     renderVolunteers(link1);
 
     const viewItemBtn = await screen.findAllByTestId('viewItemBtn');
@@ -232,6 +268,10 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('Open and Close Volunteer Modal (Delete)', async () => {
+    vi.mocked(useParams).mockReturnValue({
+      orgId: 'orgId',
+      eventId: 'eventId',
+    });
     renderVolunteers(link1);
 
     const deleteItemBtn = await screen.findAllByTestId('deleteItemBtn');
@@ -242,6 +282,10 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('Open and close Volunteer Modal (Create)', async () => {
+    vi.mocked(useParams).mockReturnValue({
+      orgId: 'orgId',
+      eventId: 'eventId',
+    });
     renderVolunteers(link1);
 
     const addVolunteerBtn = await screen.findByTestId('addVolunteerBtn');
