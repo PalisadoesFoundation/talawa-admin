@@ -105,6 +105,7 @@ const renderFundModal = (
 describe('PledgeModal', () => {
   afterEach(() => {
     cleanup();
+    vi.clearAllMocks();
   });
 
   it('should populate form fields with correct values in edit mode', async () => {
@@ -182,6 +183,37 @@ describe('PledgeModal', () => {
       expect(toast.success).toHaveBeenCalledWith(translations.fundCreated);
       expect(fundProps[0].refetchFunds).toHaveBeenCalled();
       expect(fundProps[0].hide).toHaveBeenCalled();
+    });
+  });
+
+  it('should not update the fund when no fields are changed', async () => {
+    renderFundModal(link1, fundProps[1]);
+
+    // Simulate no change to the fields
+    const fundNameInput = screen.getByLabelText(translations.fundName);
+    fireEvent.change(fundNameInput, { target: { value: 'Fund 1' } });
+
+    const fundIdInput = screen.getByLabelText(translations.fundId);
+    fireEvent.change(fundIdInput, { target: { value: '1111' } });
+
+    const taxDeductibleSwitch = screen.getByTestId('setTaxDeductibleSwitch');
+    fireEvent.click(taxDeductibleSwitch);
+    fireEvent.click(taxDeductibleSwitch);
+
+    const defaultSwitch = screen.getByTestId('setDefaultSwitch');
+    fireEvent.click(defaultSwitch);
+    fireEvent.click(defaultSwitch);
+
+    const archivedSwitch = screen.getByTestId('archivedSwitch');
+    fireEvent.click(archivedSwitch);
+    fireEvent.click(archivedSwitch);
+
+    fireEvent.click(screen.getByTestId('createFundFormSubmitBtn'));
+
+    await waitFor(() => {
+      expect(toast.success).not.toHaveBeenCalled();
+      expect(fundProps[1].refetchFunds).not.toHaveBeenCalled();
+      expect(fundProps[1].hide).not.toHaveBeenCalled();
     });
   });
 
