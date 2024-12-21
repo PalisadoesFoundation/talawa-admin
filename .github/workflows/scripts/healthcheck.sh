@@ -43,6 +43,16 @@ check_health() {
 }
 # Default container name, can be overridden by environment variable
 CONTAINER_NAME="${CONTAINER_NAME:-talawa-admin-app-container}"
+# Cleanup function
+cleanup() {
+    echo "Cleaning up..."
+    # Add any necessary cleanup commands here
+    exit "${1:-1}"
+}
+
+# Set up signal handling
+trap 'cleanup' SIGINT SIGTERM
+
 # Function to handle timeout
 handle_timeout() {
     echo "Timeout waiting for application to start"
@@ -50,7 +60,7 @@ handle_timeout() {
         echo "Container logs:"
         docker logs "${CONTAINER_NAME}" 2>/dev/null || echo "Failed to retrieve container logs"
     fi
-    exit 1
+    cleanup 1
 }
 
 # Check if the script is running inside Docker container
