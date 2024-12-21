@@ -12,19 +12,40 @@ import userEvent from '@testing-library/user-event';
 import { MOCKS } from './Volunteers/Volunteers.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { LocalizationProvider } from '@mui/x-date-pickers';
+import { describe, it, beforeEach, expect, vi } from 'vitest';
+
+/**
+ * Unit tests for the `VolunteerContainer` component.
+ *
+ * The tests ensure the `VolunteerContainer` component renders correctly with various routes and URL parameters.
+ * Mocked dependencies are used to isolate the component and verify its behavior.
+ *
+ */
 
 const link1 = new StaticMockLink(MOCKS);
 
-const renderVolunteerContainer = (): RenderResult => {
+const mockedUseParams = vi.fn();
+
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useParams: () => mockedUseParams(),
+  };
+});
+
+const renderVolunteerContainer = (
+  initialPath = '/org/orgId/event/eventId',
+): RenderResult => {
   return render(
     <MockedProvider addTypename={false} link={link1}>
-      <MemoryRouter initialEntries={['/event/orgId/eventId']}>
+      <MemoryRouter initialEntries={[initialPath]}>
         <Provider store={store}>
           <LocalizationProvider>
             <I18nextProvider i18n={i18n}>
               <Routes>
                 <Route
-                  path="/event/:orgId/:eventId"
+                  path="/org/:orgId/event/:eventId"
                   element={<VolunteerContainer />}
                 />
                 <Route
@@ -41,54 +62,37 @@ const renderVolunteerContainer = (): RenderResult => {
 };
 
 describe('Testing Volunteer Container', () => {
-  beforeAll(() => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: 'orgId', eventId: 'eventId' }),
-    }));
-  });
-
-  afterAll(() => {
-    jest.clearAllMocks();
+  beforeEach(() => {
+    vi.clearAllMocks();
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link1}>
-        <MemoryRouter initialEntries={['/event/']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18n}>
-              <Routes>
-                <Route path="/event/" element={<VolunteerContainer />} />
-                <Route
-                  path="/"
-                  element={<div data-testid="paramsError"></div>}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    mockedUseParams.mockReturnValue({});
+
+    renderVolunteerContainer('/');
 
     await waitFor(() => {
       expect(screen.getByTestId('paramsError')).toBeInTheDocument();
     });
   });
 
-  test('Testing Volunteer Container Screen -> Toggle screens', async () => {
+  it('Testing Volunteer Container Screen -> Toggle screens', async () => {
+    mockedUseParams.mockReturnValue({ orgId: 'orgId', eventId: 'eventId' });
+
     renderVolunteerContainer();
 
     const groupRadio = await screen.findByTestId('groupsRadio');
-    expect(groupRadio).toBeInTheDocument();
-    userEvent.click(groupRadio);
-
     const requestsRadio = await screen.findByTestId('requestsRadio');
-    expect(requestsRadio).toBeInTheDocument();
-    userEvent.click(requestsRadio);
-
     const individualRadio = await screen.findByTestId('individualRadio');
+
+    expect(groupRadio).toBeInTheDocument();
+    expect(requestsRadio).toBeInTheDocument();
     expect(individualRadio).toBeInTheDocument();
-    userEvent.click(individualRadio);
+
+    await waitFor(async () => {
+      await userEvent.click(groupRadio);
+      await userEvent.click(requestsRadio);
+      await userEvent.click(individualRadio);
+    });
   });
 });
