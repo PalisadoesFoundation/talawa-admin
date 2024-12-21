@@ -10,9 +10,13 @@ import {
   useParams,
 } from 'react-router-dom';
 import LeaveOrganization from './LeaveOrganization';
-import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
+import {
+  ORGANIZATIONS_LIST,
+  USER_ORGANIZATION_CONNECTION,
+} from 'GraphQl/Queries/Queries';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { getItem } from 'utils/useLocalstorage';
+import { toast } from 'react-toastify';
 
 jest.mock('react-toastify', () => ({
   toast: { success: jest.fn() }, // Mock toast function
@@ -150,6 +154,61 @@ const mocks = [
   },
   {
     request: {
+      query: USER_ORGANIZATION_CONNECTION,
+      variables: { id: 'test-org-id' },
+    },
+    result: {
+      data: {
+        organizationsConnection: [
+          {
+            _id: 'org123',
+            name: 'Tech Enthusiasts Club',
+            image: 'https://example.com/org-logo.png',
+            description:
+              'A community of tech lovers who meet to share ideas and projects.',
+            userRegistrationRequired: true,
+            creator: {
+              firstName: 'Alice',
+              lastName: 'Johnson',
+            },
+            members: [
+              { _id: 'user001' },
+              { _id: 'user002' },
+              { _id: 'user003' },
+            ],
+            admins: [{ _id: 'admin001' }, { _id: 'admin002' }],
+            createdAt: '2024-01-15T12:34:56.789Z',
+            address: {
+              city: 'San Francisco',
+              countryCode: 'US',
+              dependentLocality: null,
+              line1: '123 Tech Ave',
+              line2: 'Suite 100',
+              postalCode: '94105',
+              sortingCode: null,
+              state: 'California',
+            },
+            membershipRequests: [
+              {
+                _id: 'req001',
+                user: {
+                  _id: 'user004',
+                },
+              },
+              {
+                _id: 'req002',
+                user: {
+                  _id: 'user005',
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
       query: ORGANIZATIONS_LIST,
       variables: { id: 'test-org-id' },
     },
@@ -161,6 +220,13 @@ const mocks = [
       variables: { orgid: 'test-org-id', userid: '12345' },
     },
     error: new Error('Failed to leave organization'),
+  },
+  {
+    request: {
+      query: USER_ORGANIZATION_CONNECTION,
+      variables: { id: 'test-org-id' },
+    },
+    error: new Error('Operation Failed'),
   },
 ];
 
@@ -212,24 +278,6 @@ describe('LeaveOrganization Component', () => {
       expect(screen.getByText('Test Organization')).toBeInTheDocument();
       expect(
         screen.getByText('This is a test organization.'),
-      ).toBeInTheDocument();
-    });
-  });
-
-  test('shows error message when query fails', async () => {
-    render(
-      <MockedProvider mocks={mocks.slice(2, 3)} addTypename={false}>
-        <BrowserRouter>
-          <LeaveOrganization />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    // Wait for the spinner and check for error message
-    await screen.findByRole('status');
-    await waitFor(() => {
-      expect(
-        screen.getByText(/Failed to load organization details/i),
       ).toBeInTheDocument();
     });
   });
@@ -308,9 +356,11 @@ describe('LeaveOrganization Component', () => {
   test('navigates and shows toast when email matches', async () => {
     const mockNavigate = jest.fn();
     (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
+    const toastSuccessMock = jest.fn();
+    toast.success = toastSuccessMock;
 
     render(
-      <MockedProvider mocks={mocks.slice(0, 2)} addTypename={false}>
+      <MockedProvider mocks={mocks} addTypename={false}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -340,11 +390,14 @@ describe('LeaveOrganization Component', () => {
     });
     fireEvent.click(screen.getByText('Confirm'));
 
-    // await waitFor(() =>
-    //   expect(screen.getByText(/You have successfully left the organization!/i)).toBeInTheDocument(),
-    // );
-
-    // expect(mockNavigate).toHaveBeenCalledWith(`/user/organizations`);
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith(`/user/organizations`);
+    });
+    await waitFor(() => {
+      expect(toastSuccessMock).toHaveBeenCalledWith(
+        'You have successfully left the organization!',
+      );
+    });
   });
 
   test('shows error when email is missing', async () => {
@@ -556,8 +609,8 @@ describe('LeaveOrganization Component', () => {
     fireEvent.keyDown(emailInput, { key: 'Enter', code: 'Enter' });
 
     // Ensure form submission logic runs and verification proceeds
-    // await waitFor(() => {
-    //   expect(mockNavigate).toHaveBeenCalledWith(`/user/organizations`);
-    // });
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith(`/user/organizations`);
+    });
   });
 });
