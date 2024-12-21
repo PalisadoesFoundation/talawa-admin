@@ -32,4 +32,4 @@ jestPreviewConfigure({
   autoPreview: true,
 });
 
-jest.setTimeout(20000);
+jest.setTimeout(15000);
