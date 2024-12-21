@@ -21,13 +21,23 @@ import {
 } from './Invitations.mocks';
 import { toast } from 'react-toastify';
 import useLocalStorage from 'utils/useLocalstorage';
+import { vi, expect } from 'vitest';
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
+
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useParams: () => ({ orgId: 'orgId' }),
+    useNavigate: vi.fn(),
+  };
+});
 
 const { setItem } = useLocalStorage();
 
@@ -79,19 +89,12 @@ const renderInvitations = (link: ApolloLink): RenderResult => {
 };
 
 describe('Testing Invvitations Screen', () => {
-  beforeAll(() => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: 'orgId' }),
-    }));
-  });
-
   beforeEach(() => {
     setItem('userId', 'userId');
   });
 
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
