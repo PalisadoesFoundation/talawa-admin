@@ -63,7 +63,7 @@ enum Role {
 
 /**
  * Interface for event attendees.
- */
+//  */
 // interface InterfaceIEventAttendees {
 //   userId: string;
 //   user?: string;
