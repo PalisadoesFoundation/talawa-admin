@@ -49,7 +49,7 @@ function orgList(): JSX.Element {
   function closeDialogModal(): void {
     setdialogModalIsOpen(false);
   }
-  const toggleDialogModal = /* istanbul ignore next */ (): void =>
+  const toggleDialogModal = (): void =>
     setdialogModalIsOpen(!dialogModalisOpen);
   document.title = t('title');
 
@@ -148,7 +148,6 @@ function orgList(): JSX.Element {
     setIsLoading(loading && isLoadingMore);
   }, [loading]);
 
-  /* istanbul ignore next */
   const isAdminForCurrentOrg = (
     currentOrg: InterfaceOrgConnectionInfoType,
   ): boolean => {
@@ -205,7 +204,6 @@ function orgList(): JSX.Element {
         },
       });
 
-      /* istanbul ignore next */
       if (data) {
         toast.success('Congratulation the Organization is created');
         refetchOrgs();
@@ -230,17 +228,14 @@ function orgList(): JSX.Element {
         toggleModal();
       }
     } catch (error: unknown) {
-      /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
 
-  /* istanbul ignore next */
   if (errorList || errorUser) {
     window.location.assign('/');
   }
 
-  /* istanbul ignore next */
   const resetAllParams = (): void => {
     refetchOrgs({
       filter: '',
@@ -252,7 +247,6 @@ function orgList(): JSX.Element {
     sethasMore(true);
   };
 
-  /* istanbul ignore next */
   const handleSearch = (value: string): void => {
     setSearchByName(value);
     if (value === '') {
@@ -280,7 +274,7 @@ function orgList(): JSX.Element {
     const inputValue = inputElement?.value || '';
     handleSearch(inputValue);
   };
-  /* istanbul ignore next */
+
   const loadMoreOrganizations = (): void => {
     console.log('loadMoreOrganizations');
     setIsLoadingMore(true);
@@ -414,9 +408,7 @@ function orgList(): JSX.Element {
         </div>
       ) : !isLoading &&
         orgsData?.organizationsConnection.length == 0 &&
-        /* istanbul ignore next */
         searchByName.length > 0 ? (
-        /* istanbul ignore next */
         <div className={styles.notFound} data-testid="noResultFound">
           <h4 className="m-0">
             {tCommon('noResultsFoundFor')} &quot;{searchByName}&quot;

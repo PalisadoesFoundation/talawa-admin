@@ -1,27 +1,55 @@
 import React from 'react';
 import {
-  act,
-  fireEvent,
   render,
+  fireEvent,
   screen,
   waitFor,
+  act,
 } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
+import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { expect, describe, test, vi } from 'vitest';
+import { store } from 'state/store';
+import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
-
+import Chat from './Chat';
 import {
   USERS_CONNECTION_LIST,
   USER_JOINED_ORGANIZATIONS,
 } from 'GraphQl/Queries/Queries';
-import { BrowserRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { store } from 'state/store';
-import i18nForTest from 'utils/i18nForTest';
-import Chat from './Chat';
-import useLocalStorage from 'utils/useLocalstorage';
 import { MESSAGE_SENT_TO_CHAT } from 'GraphQl/Mutations/OrganizationMutations';
 import { CHATS_LIST, CHAT_BY_ID } from 'GraphQl/Queries/PlugInQueries';
+import useLocalStorage from 'utils/useLocalstorage';
 
+/**
+ * Unit tests for the ChatScreen component.
+ * These tests covers all areas
+ * Covers:
+ * - Rendering of UI elements.
+ * - Contact selection functionality.
+ * - Direct and group chat creation workflows.
+ * - Sidebar behavior in desktop and mobile views.
+ *
+ * Uses Vitest for testing and Apollo MockedProvider for mocking GraphQL queries.
+ */
+
+vi.mock('../../../components/UserPortal/ChatRoom/ChatRoom', () => ({
+  default: () => <div data-testid="mocked-chat-room">Mocked ChatRoom</div>,
+}));
+
+const resizeWindow = (width: number): void => {
+  window.innerWidth = width;
+  fireEvent(window, new Event('resize'));
+};
+
+async function wait(ms = 100): Promise<void> {
+  await act(() => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  });
+}
 const { setItem } = useLocalStorage();
 
 const USER_JOINED_ORG_MOCK = [
@@ -1457,47 +1485,45 @@ const GROUP_CHAT_BY_ID_QUERY_MOCK = [
   },
 ];
 
-const resizeWindow = (width: number): void => {
-  window.innerWidth = width;
-  fireEvent(window, new Event('resize'));
-};
-
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
-
 describe('Testing Chat Screen [User Portal]', () => {
-  window.HTMLElement.prototype.scrollIntoView = jest.fn();
-
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
-    value: jest.fn().mockImplementation((query) => ({
+    value: vi.fn().mockImplementation((query) => ({
       matches: false,
       media: query,
       onchange: null,
-      addListener: jest.fn(), // Deprecated
-      removeListener: jest.fn(), // Deprecated
-      addEventListener: jest.fn(),
-      removeEventListener: jest.fn(),
-      dispatchEvent: jest.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
     })),
   });
 
-  test('Screen should be rendered properly', async () => {
-    const mock = [
-      ...USER_JOINED_ORG_MOCK,
-      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
-      ...MESSAGE_SENT_TO_CHAT_MOCK,
-      ...UserConnectionListMock,
-      ...CHAT_BY_ID_QUERY_MOCK,
-      ...CHATS_LIST_MOCK,
-      ...UserConnectionListMock,
-    ];
+  // Define mock data outside of tests to reuse
+  const mock = [
+    ...USER_JOINED_ORG_MOCK,
+    ...GROUP_CHAT_BY_ID_QUERY_MOCK,
+    ...MESSAGE_SENT_TO_CHAT_MOCK,
+    ...MESSAGE_SENT_TO_CHAT_MOCK,
+    ...UserConnectionListMock,
+    ...CHAT_BY_ID_QUERY_MOCK,
+    ...CHATS_LIST_MOCK,
+    ...UserConnectionListMock,
+  ];
 
+  beforeEach(() => {
+    setItem('userId', '1');
+    vi.clearAllMocks();
+    localStorage.clear();
+    vi.resetModules();
+  });
+
+  afterEach(() => {
+    localStorage.clear();
+  });
+
+  test('Screen should be rendered properly', async () => {
     render(
       <MockedProvider addTypename={false} mocks={mock}>
         <BrowserRouter>
@@ -1512,18 +1538,7 @@ describe('Testing Chat Screen [User Portal]', () => {
     await wait();
   });
 
-  test('User is able to select a contact', async () => {
-    const mock = [
-      ...USER_JOINED_ORG_MOCK,
-      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
-      ...MESSAGE_SENT_TO_CHAT_MOCK,
-      ...MESSAGE_SENT_TO_CHAT_MOCK,
-      ...UserConnectionListMock,
-      ...CHAT_BY_ID_QUERY_MOCK,
-      ...CHATS_LIST_MOCK,
-      ...UserConnectionListMock,
-    ];
-
+  it('User is able to select a contact', async () => {
     render(
       <MockedProvider addTypename={false} mocks={mock}>
         <BrowserRouter>
@@ -1537,24 +1552,13 @@ describe('Testing Chat Screen [User Portal]', () => {
     );
 
     await wait();
-
     expect(await screen.findByText('Messages')).toBeInTheDocument();
-
     expect(
       await screen.findByTestId('contactCardContainer'),
     ).toBeInTheDocument();
   });
 
   test('create new direct chat', async () => {
-    const mock = [
-      ...USER_JOINED_ORG_MOCK,
-      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
-      ...MESSAGE_SENT_TO_CHAT_MOCK,
-      ...MESSAGE_SENT_TO_CHAT_MOCK,
-      ...CHAT_BY_ID_QUERY_MOCK,
-      ...CHATS_LIST_MOCK,
-      ...UserConnectionListMock,
-    ];
     render(
       <MockedProvider addTypename={false} mocks={mock}>
         <BrowserRouter>
@@ -1572,6 +1576,7 @@ describe('Testing Chat Screen [User Portal]', () => {
     const dropdown = await screen.findByTestId('dropdown');
     expect(dropdown).toBeInTheDocument();
     fireEvent.click(dropdown);
+
     const newDirectChatBtn = await screen.findByTestId('newDirectChat');
     expect(newDirectChatBtn).toBeInTheDocument();
     fireEvent.click(newDirectChatBtn);
@@ -1586,16 +1591,6 @@ describe('Testing Chat Screen [User Portal]', () => {
   });
 
   test('create new group chat', async () => {
-    const mock = [
-      ...USER_JOINED_ORG_MOCK,
-      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
-      ...MESSAGE_SENT_TO_CHAT_MOCK,
-      ...UserConnectionListMock,
-      ...MESSAGE_SENT_TO_CHAT_MOCK,
-      ...CHAT_BY_ID_QUERY_MOCK,
-      ...CHATS_LIST_MOCK,
-      ...UserConnectionListMock,
-    ];
     render(
       <MockedProvider addTypename={false} mocks={mock}>
         <BrowserRouter>
@@ -1618,6 +1613,7 @@ describe('Testing Chat Screen [User Portal]', () => {
     expect(newGroupChatBtn).toBeInTheDocument();
 
     fireEvent.click(newGroupChatBtn);
+
     const closeButton = screen.getByRole('button', { name: /close/i });
     expect(closeButton).toBeInTheDocument();
 
@@ -1625,18 +1621,6 @@ describe('Testing Chat Screen [User Portal]', () => {
   });
 
   test('sidebar', async () => {
-    const mock = [
-      ...USER_JOINED_ORG_MOCK,
-      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
-      ...MESSAGE_SENT_TO_CHAT_MOCK,
-      ...UserConnectionListMock,
-      ...MESSAGE_SENT_TO_CHAT_MOCK,
-      ...CHAT_BY_ID_QUERY_MOCK,
-      ...CHATS_LIST_MOCK,
-      ...UserConnectionListMock,
-    ];
-    setItem('userId', '1');
-
     render(
       <MockedProvider addTypename={false} mocks={mock}>
         <BrowserRouter>
@@ -1661,18 +1645,9 @@ describe('Testing Chat Screen [User Portal]', () => {
   });
 
   test('Testing sidebar when the screen size is less than or equal to 820px', async () => {
-    setItem('userId', '1');
-    const mock = [
-      ...USER_JOINED_ORG_MOCK,
-      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
-      ...MESSAGE_SENT_TO_CHAT_MOCK,
-      ...UserConnectionListMock,
-      ...MESSAGE_SENT_TO_CHAT_MOCK,
-      ...CHAT_BY_ID_QUERY_MOCK,
-      ...CHATS_LIST_MOCK,
-      ...UserConnectionListMock,
-    ];
+    // Resize window for mobile view (<= 820px)
     resizeWindow(800);
+
     render(
       <MockedProvider addTypename={false} mocks={mock}>
         <BrowserRouter>
@@ -1684,12 +1659,17 @@ describe('Testing Chat Screen [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await wait();
-    expect(screen.getByText('My Organizations')).toBeInTheDocument();
-    expect(screen.getByText('Talawa User Portal')).toBeInTheDocument();
 
-    expect(await screen.findByTestId('openMenu')).toBeInTheDocument();
-    fireEvent.click(screen.getByTestId('openMenu'));
-    expect(await screen.findByTestId('closeMenu')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('My Organizations')).toBeInTheDocument();
+      expect(screen.getByText('Talawa User Portal')).toBeInTheDocument();
+    });
+
+    const openMenuBtn = await screen.findByTestId('openMenu');
+    expect(openMenuBtn).toBeInTheDocument();
+    fireEvent.click(openMenuBtn);
+
+    const closeMenuBtn = await screen.findByTestId('closeMenu');
+    expect(closeMenuBtn).toBeInTheDocument();
   });
 });
