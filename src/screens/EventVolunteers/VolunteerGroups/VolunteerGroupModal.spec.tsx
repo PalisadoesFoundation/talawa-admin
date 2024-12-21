@@ -22,11 +22,18 @@ import { toast } from 'react-toastify';
 import type { InterfaceVolunteerGroupModal } from './VolunteerGroupModal';
 import GroupModal from './VolunteerGroupModal';
 import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
 
-jest.mock('react-toastify', () => ({
+/**
+ * Mock implementation of the `react-toastify` module.
+ * Mocks the `toast` object with `success` and `error` methods to allow testing
+ * without triggering actual toast notifications.
+ */
+
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
@@ -45,19 +52,19 @@ const t = {
 const itemProps: InterfaceVolunteerGroupModal[] = [
   {
     isOpen: true,
-    hide: jest.fn(),
+    hide: vi.fn(),
     eventId: 'eventId',
     orgId: 'orgId',
-    refetchGroups: jest.fn(),
+    refetchGroups: vi.fn(),
     mode: 'create',
     group: null,
   },
   {
     isOpen: true,
-    hide: jest.fn(),
+    hide: vi.fn(),
     eventId: 'eventId',
     orgId: 'orgId',
-    refetchGroups: jest.fn(),
+    refetchGroups: vi.fn(),
     mode: 'edit',
     group: {
       _id: 'groupId',
@@ -96,10 +103,10 @@ const itemProps: InterfaceVolunteerGroupModal[] = [
   },
   {
     isOpen: true,
-    hide: jest.fn(),
+    hide: vi.fn(),
     eventId: 'eventId',
     orgId: 'orgId',
-    refetchGroups: jest.fn(),
+    refetchGroups: vi.fn(),
     mode: 'edit',
     group: {
       _id: 'groupId',
