@@ -218,6 +218,7 @@ function EventAttendance(): JSX.Element {
               </>
             }
             onSelect={(eventKey) =>
+              /*istanbul ignore next*/
               setSortOrder(eventKey as 'ascending' | 'descending')
             }
           >

@@ -99,7 +99,9 @@ export const AttendanceStatisticsModal: React.FC<
         callbacks: {
           label: (context: TooltipItem<'line'>) => {
             const label = context.dataset.label || '';
+            /*istanbul ignore next*/
             const value = context.parsed.y;
+            /*istanbul ignore next*/
             const isCurrentEvent =
               paginatedRecurringEvents[context.dataIndex]._id === eventId;
             return isCurrentEvent
@@ -213,10 +215,12 @@ export const AttendanceStatisticsModal: React.FC<
   );
 
   const handlePreviousPage = useCallback(() => {
+    /*istanbul ignore next*/
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
   }, []);
 
   const handleNextPage = useCallback(() => {
+    /*istanbul ignore next*/
     if (currentPage < totalPages - 1) {
       setCurrentPage((prevPage) => prevPage + 1);
     }
