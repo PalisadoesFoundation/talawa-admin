@@ -7,7 +7,7 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-if ! [[ "$1" =~ ^[0-9]+$ ]] || [ "$1" -lt 1 ] || [ "$1" -gt 65535 ]; then
+if ! [[ "$1" =~ ^[0-9]+$ ]] || [ "$1" -lt 1 ] || [ "$1" -gt 65535 ]; then 
     echo "Error: Invalid port number. Must be between 1 and 65535"
     exit 1
 fi
