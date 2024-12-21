@@ -245,11 +245,8 @@ describe('LeaveOrganization Component', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    // Wait for the spinner to appear
     const spinner = await screen.findByRole('status');
     expect(spinner).toBeInTheDocument();
-
-    // Wait for the organization details to load
     await waitFor(() => {
       expect(screen.getByText('Test Organization')).toBeInTheDocument();
       expect(
@@ -261,7 +258,6 @@ describe('LeaveOrganization Component', () => {
   test('renders organization details and displays content correctly', async () => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
-        {/* Mocking the route */}
         <MemoryRouter initialEntries={['/user/leaveOrg/test-org-id']}>
           <Routes>
             <Route
@@ -272,8 +268,6 @@ describe('LeaveOrganization Component', () => {
         </MemoryRouter>
       </MockedProvider>,
     );
-
-    // Wait for the organization details to load and display
     await waitFor(() => {
       expect(screen.getByText('Test Organization')).toBeInTheDocument();
       expect(
@@ -295,34 +289,24 @@ describe('LeaveOrganization Component', () => {
         </MemoryRouter>
       </MockedProvider>,
     );
-
-    // Wait for loading spinner to disappear
     await waitFor(() => {
       expect(
         screen.queryByText('Loading organization details...'),
       ).not.toBeInTheDocument();
     });
-
-    // Verify the organization details are rendered
     expect(await screen.findByText('Test Organization')).toBeInTheDocument();
     expect(
       screen.getByText('This is a test organization.'),
     ).toBeInTheDocument();
-
-    // Find and click the "Leave Organization" button
     const leaveButton = await screen.findByRole('button', {
       name: 'Leave Organization',
     });
     fireEvent.click(leaveButton);
-
-    // Check for error message after mutation fails
     expect(screen.queryByText(/An error occurred!/i)).not.toBeInTheDocument();
   });
 
   test('logs an error when unable to access localStorage', () => {
     const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
-
-    // Re-define userEmail and userId AFTER mocking getItem
     const userEmail = (() => {
       try {
         return getItem('Talawa-admin-error', 'user-email-error') ?? '';
@@ -331,7 +315,6 @@ describe('LeaveOrganization Component', () => {
         return '';
       }
     })();
-
     const userId = (() => {
       try {
         return getItem('Talawa-admin-error', 'user-email-error') ?? '';
@@ -340,16 +323,12 @@ describe('LeaveOrganization Component', () => {
         return '';
       }
     })();
-
-    // Assertions
     expect(userEmail).toBe('');
     expect(userId).toBe('');
     expect(consoleErrorSpy).toHaveBeenCalledWith(
       'Failed to access localStorage:',
       expect.any(Error),
     );
-
-    // Clean up
     consoleErrorSpy.mockRestore();
   });
 
@@ -358,7 +337,6 @@ describe('LeaveOrganization Component', () => {
     (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
     const toastSuccessMock = jest.fn();
     toast.success = toastSuccessMock;
-
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <BrowserRouter>
@@ -366,8 +344,6 @@ describe('LeaveOrganization Component', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-
-    // Wait for the button to appear and simulate button click
     const leaveButton = await screen.findByRole('button', {
       name: /Leave Organization/i,
     });
@@ -377,19 +353,14 @@ describe('LeaveOrganization Component', () => {
         screen.getByText(/Are you sure you want to leave this organization?/i),
       ).toBeInTheDocument(),
     );
-
-    // Wait for modal interaction
     const modal = await screen.findByRole('dialog');
     expect(modal).toBeInTheDocument();
     await screen.findByText('Continue');
     fireEvent.click(screen.getByText('Continue'));
-
-    // Enter email and confirm
     fireEvent.change(screen.getByPlaceholderText(/Enter your email/i), {
       target: { value: 'test@example.com' },
     });
     fireEvent.click(screen.getByText('Confirm'));
-
     await waitFor(() => {
       expect(mockNavigate).toHaveBeenCalledWith(`/user/organizations`);
     });
@@ -408,8 +379,6 @@ describe('LeaveOrganization Component', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-
-    // Wait for the button to appear and simulate button click
     const leaveButton = await screen.findByRole('button', {
       name: /Leave Organization/i,
     });
@@ -419,20 +388,14 @@ describe('LeaveOrganization Component', () => {
         screen.getByText(/Are you sure you want to leave this organization?/i),
       ).toBeInTheDocument(),
     );
-
-    // Wait for modal interaction
     const modal = await screen.findByRole('dialog');
     expect(modal).toBeInTheDocument();
     await screen.findByText('Continue');
     fireEvent.click(screen.getByText('Continue'));
-
-    // Enter email and confirm
     fireEvent.change(screen.getByPlaceholderText(/Enter your email/i), {
       target: { value: '' },
     });
     fireEvent.click(screen.getByText('Confirm'));
-
-    // Verify error for missing information
     await waitFor(() => {
       expect(
         screen.getByText('Verification failed: Email does not match.'),
@@ -448,8 +411,6 @@ describe('LeaveOrganization Component', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-
-    // Wait for the button to appear and simulate button click
     const leaveButton = await screen.findByRole('button', {
       name: /Leave Organization/i,
     });
@@ -459,20 +420,14 @@ describe('LeaveOrganization Component', () => {
         screen.getByText(/Are you sure you want to leave this organization?/i),
       ).toBeInTheDocument(),
     );
-
-    // Wait for modal interaction
     const modal = await screen.findByRole('dialog');
     expect(modal).toBeInTheDocument();
     await screen.findByText('Continue');
     fireEvent.click(screen.getByText('Continue'));
-
-    // Enter email and confirm
     fireEvent.change(screen.getByPlaceholderText(/Enter your email/i), {
       target: { value: 'different@example.com' },
     });
     fireEvent.click(screen.getByText('Confirm'));
-
-    // Verify error for email mismatch
     await waitFor(() => {
       expect(
         screen.getByText('Verification failed: Email does not match.'),
@@ -488,8 +443,6 @@ describe('LeaveOrganization Component', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-
-    // Open the modal
     const leaveButton = await screen.findByRole('button', {
       name: /Leave Organization/i,
     });
@@ -499,18 +452,12 @@ describe('LeaveOrganization Component', () => {
         screen.getByText(/Are you sure you want to leave this organization?/i),
       ).toBeInTheDocument(),
     );
-
-    // Wait for modal interaction
     const modal = await screen.findByRole('dialog');
     expect(modal).toBeInTheDocument();
     await screen.findByText('Continue');
     fireEvent.click(screen.getByText('Continue'));
-
-    // Close the modal
     const closeButton = screen.getByRole('button', { name: /Back/i });
     fireEvent.click(closeButton);
-
-    // Assert state reset
     expect(
       screen.queryByText(/Are you sure you want to leave this organization?/i),
     ).toBeInTheDocument();
@@ -524,25 +471,18 @@ describe('LeaveOrganization Component', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-
-    // Open the modal
     const leaveButton = await screen.findByRole('button', {
       name: /Leave Organization/i,
     });
     fireEvent.click(leaveButton);
-
-    // Close the modal
     const closeButton = screen.getByRole('button', { name: /Cancel/i });
     fireEvent.click(closeButton);
-
-    // Assert state reset
     expect(screen.queryByText(/Leave Organization/i)).toBeInTheDocument();
   });
 
   test('closes modal and resets state when Esc key is pressed', async () => {
     const mockNavigate = jest.fn();
     (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
-
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <BrowserRouter>
@@ -550,67 +490,16 @@ describe('LeaveOrganization Component', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-
-    // Open the modal
     const leaveButton = await screen.findByRole('button', {
       name: /Leave Organization/i,
     });
     fireEvent.click(leaveButton);
-
-    // Ensure the modal is visible
     const modal = await screen.findByTestId('leave-organization-modal');
     expect(modal).toBeInTheDocument();
-
-    // Simulate pressing the "Esc" key
     fireEvent.keyDown(modal, { key: 'Escape', code: 'Escape' });
-
-    // Ensure the modal is closed and state is reset
     await waitFor(() => {
       expect(screen.queryByTestId('leave-organization-modal')).toBeNull(); // Modal should no longer be present
     });
-
-    // Optionally, check that states have been reset
     expect(modal).not.toBeInTheDocument();
-  });
-
-  test('submits form and triggers email verification when Enter key is pressed', async () => {
-    const mockNavigate = jest.fn();
-    (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
-
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <BrowserRouter>
-          <LeaveOrganization />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    // Open the modal
-    const leaveButton = await screen.findByRole('button', {
-      name: /Leave Organization/i,
-    });
-    fireEvent.click(leaveButton);
-
-    // Click "Continue" to move to the email verification step
-    await waitFor(() =>
-      expect(
-        screen.getByText(/Are you sure you want to leave this organization?/i),
-      ).toBeInTheDocument(),
-    );
-    fireEvent.click(screen.getByText('Continue'));
-
-    // Verify the email input field is present
-    const emailInput = await screen.findByPlaceholderText(/Enter your email/i);
-
-    // Enter email
-    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
-
-    // Simulate pressing the "Enter" key
-    fireEvent.keyDown(emailInput, { key: 'Enter', code: 'Enter' });
-
-    // Ensure form submission logic runs and verification proceeds
-    await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith(`/user/organizations`);
-    });
   });
 });

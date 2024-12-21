@@ -172,17 +172,7 @@ const LeaveOrganization = (): JSX.Element => {
               </p>
             </>
           ) : (
-            <Form
-              onSubmit={(e) => {
-                e.preventDefault();
-                if (!email.trim()) {
-                  setError('Please enter your email address.');
-                  return;
-                }
-                handleVerifyAndLeave();
-              }}
-              noValidate
-            >
+            <Form>
               <Form.Group>
                 <Form.Label htmlFor="confirm-email">
                   Enter your email to confirm:
