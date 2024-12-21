@@ -146,7 +146,6 @@ const OrganizationScreen = (): JSX.Element => {
               : styles.contract
         } `}
         data-testid="mainpageright"
-        data-expanded={hideDrawer === null ? '' : hideDrawer ? 'true' : 'false'}
       >
         <div className="d-flex justify-content-between align-items-center">
           <div style={{ flex: 1 }}>
