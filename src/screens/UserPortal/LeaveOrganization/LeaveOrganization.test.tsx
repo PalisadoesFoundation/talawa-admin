@@ -42,6 +42,8 @@ jest.mock('utils/useLocalstorage', () => {
       if (prefix === 'Talawa-admin' && key === 'email')
         return 'test@example.com';
       if (prefix === 'Talawa-admin' && key === 'userId') return '12345';
+      if (prefix === 'Talawa-admin-error' && key === 'user-email-error')
+        throw new Error();
       return null;
     }),
   };
@@ -271,15 +273,11 @@ describe('LeaveOrganization Component', () => {
 
   test('logs an error when unable to access localStorage', () => {
     const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
-    const mockedGetItem = getItem as jest.Mock;
-    mockedGetItem.mockImplementation(() => {
-      throw new Error('Failed to access localStorage');
-    });
 
     // Re-define userEmail and userId AFTER mocking getItem
     const userEmail = (() => {
       try {
-        return getItem('Talawa-admin', 'email') ?? '';
+        return getItem('Talawa-admin-error', 'user-email-error') ?? '';
       } catch (e) {
         console.error('Failed to access localStorage:', e);
         return '';
@@ -288,7 +286,7 @@ describe('LeaveOrganization Component', () => {
 
     const userId = (() => {
       try {
-        return getItem('Talawa-admin', 'userId') ?? '';
+        return getItem('Talawa-admin-error', 'user-email-error') ?? '';
       } catch (e) {
         console.error('Failed to access localStorage:', e);
         return '';
@@ -310,17 +308,6 @@ describe('LeaveOrganization Component', () => {
   test('navigates and shows toast when email matches', async () => {
     const mockNavigate = jest.fn();
     (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
-
-    jest.mock('utils/useLocalstorage', () => {
-      return {
-        getItem: jest.fn((prefix: string, key: string) => {
-          if (prefix === 'Talawa-admin' && key === 'email')
-            return 'test@example.com';
-          if (prefix === 'Talawa-admin' && key === 'userId') return '12345';
-          return null;
-        }),
-      };
-    });
 
     render(
       <MockedProvider mocks={mocks.slice(0, 2)} addTypename={false}>
@@ -355,16 +342,6 @@ describe('LeaveOrganization Component', () => {
   });
 
   test('shows error when email is missing', async () => {
-    jest.mock('utils/useLocalstorage', () => {
-      return {
-        getItem: jest.fn((prefix: string, key: string) => {
-          if (prefix === 'Talawa-admin' && key === 'email') return '';
-          if (prefix === 'Talawa-admin' && key === 'userId') return '12345';
-          return null;
-        }),
-      };
-    });
-
     render(
       <MockedProvider mocks={mocks.slice(0, 2)} addTypename={false}>
         <BrowserRouter>
@@ -405,17 +382,6 @@ describe('LeaveOrganization Component', () => {
   });
 
   test('shows error when email does not match', async () => {
-    jest.mock('utils/useLocalstorage', () => {
-      return {
-        getItem: jest.fn((prefix: string, key: string) => {
-          if (prefix === 'Talawa-admin' && key === 'email')
-            return 'different@example.com';
-          if (prefix === 'Talawa-admin' && key === 'userId') return '12345';
-          return null;
-        }),
-      };
-    });
-
     render(
       <MockedProvider mocks={mocks.slice(0, 2)} addTypename={false}>
         <BrowserRouter>
