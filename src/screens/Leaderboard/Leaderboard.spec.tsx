@@ -7,13 +7,34 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes, useParams } from 'react-router-dom';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import Leaderboard from './Leaderboard';
 import type { ApolloLink } from '@apollo/client';
 import { MOCKS, EMPTY_MOCKS, ERROR_MOCKS } from './Leaderboard.mocks';
+import { vi } from 'vitest';
+
+/**
+ * Unit tests for the Leaderboard component.
+ *
+ * This file verifies the Leaderboard's functionality in scenarios like URL handling, sorting, filtering,
+ * user interactions, and error states. Mocked dependencies and Apollo links ensure isolated testing
+ * of Redux, React Router, and internationalization integration.
+ *
+ * Key tests include:
+ * - Redirecting when parameters are missing.
+ * - Rendering with mock data, empty states, and errors.
+ * - Sorting and filtering for various timeframes.
+ * - Searching volunteers and navigating to the Member screen.
+ * - Handling errors during data fetching.
+ *
+ * Mock setups:
+ * - StaticMockLink for GraphQL responses.
+ * - Mocked `useParams` for route parameters.
+ * - Redux store and i18n for consistent state and translations.
+ */
 
 const link1 = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(ERROR_MOCKS);
@@ -62,17 +83,21 @@ const renderLeaderboard = (link: ApolloLink): RenderResult => {
 
 describe('Testing Leaderboard Screen', () => {
   beforeAll(() => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: 'orgId' }),
-    }));
+    vi.mock('react-router-dom', async () => {
+      const originalModule = await vi.importActual('react-router-dom');
+      return {
+        ...originalModule,
+        useParams: vi.fn(),
+      };
+    });
   });
 
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
+    vi.mocked(useParams).mockReturnValue({ orgId: '' });
     render(
       <MockedProvider addTypename={false} link={link1}>
         <MemoryRouter initialEntries={['/leaderboard/']}>
@@ -96,6 +121,7 @@ describe('Testing Leaderboard Screen', () => {
   });
 
   it('should render Leaderboard screen', async () => {
+    vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
     renderLeaderboard(link1);
 
     await waitFor(() => {
@@ -104,6 +130,7 @@ describe('Testing Leaderboard Screen', () => {
   });
 
   it('Check Sorting Functionality', async () => {
+    vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
     renderLeaderboard(link1);
 
     await waitFor(() => {
@@ -134,6 +161,7 @@ describe('Testing Leaderboard Screen', () => {
   });
 
   it('Check Timeframe filter Functionality (All Time)', async () => {
+    vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
     renderLeaderboard(link1);
 
     await waitFor(() => {
@@ -154,6 +182,7 @@ describe('Testing Leaderboard Screen', () => {
   });
 
   it('Check Timeframe filter Functionality (Weekly)', async () => {
+    vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
     renderLeaderboard(link1);
 
     await waitFor(() => {
@@ -176,6 +205,7 @@ describe('Testing Leaderboard Screen', () => {
   });
 
   it('Check Timeframe filter Functionality (Monthly)', async () => {
+    vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
     renderLeaderboard(link1);
 
     await waitFor(() => {
@@ -196,6 +226,7 @@ describe('Testing Leaderboard Screen', () => {
   });
 
   it('Check Timeframe filter Functionality (Yearly)', async () => {
+    vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
     renderLeaderboard(link1);
 
     await waitFor(() => {
@@ -216,6 +247,7 @@ describe('Testing Leaderboard Screen', () => {
   });
 
   it('Search Volunteers', async () => {
+    vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
     renderLeaderboard(link1);
 
     const searchInput = await screen.findByTestId('searchBy');
@@ -232,6 +264,7 @@ describe('Testing Leaderboard Screen', () => {
   });
 
   it('OnClick of Member navigate to Member Screen', async () => {
+    vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
     renderLeaderboard(link1);
 
     const searchInput = await screen.findByTestId('searchBy');
@@ -246,6 +279,7 @@ describe('Testing Leaderboard Screen', () => {
   });
 
   it('should render Leaderboard screen with No Volunteers', async () => {
+    vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
     renderLeaderboard(link3);
 
     await waitFor(() => {
@@ -255,6 +289,7 @@ describe('Testing Leaderboard Screen', () => {
   });
 
   it('Error while fetching volunteer data', async () => {
+    vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
     renderLeaderboard(link2);
 
     await waitFor(() => {
