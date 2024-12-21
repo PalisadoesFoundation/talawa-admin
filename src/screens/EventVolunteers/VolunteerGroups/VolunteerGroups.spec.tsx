@@ -79,9 +79,13 @@ describe('Testing VolunteerGroups Screen', () => {
     vi.clearAllMocks();
   });
 
+  const mockRouteParams = (orgId = 'orgId', eventId = 'eventId'): void => {
+    vi.mocked(useParams).mockReturnValue({ orgId, eventId });
+  };
+
   it('should redirect to fallback URL if URL params are undefined', async () => {
     /**  Mocking the useParams hook to return undefined parameters */
-    vi.mocked(useParams).mockReturnValue({ orgId: '', eventId: '' });
+    mockRouteParams('', '');
     render(
       <MockedProvider addTypename={false} link={link1}>
         <MemoryRouter initialEntries={['/event/']}>
@@ -106,20 +110,14 @@ describe('Testing VolunteerGroups Screen', () => {
   });
 
   it('should render Groups screen', async () => {
-    vi.mocked(useParams).mockReturnValue({
-      orgId: 'orgId',
-      eventId: 'eventId',
-    });
+    mockRouteParams();
     renderVolunteerGroups(link1);
     const searchInput = await screen.findByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
   });
 
   it('Check Sorting Functionality', async () => {
-    vi.mocked(useParams).mockReturnValue({
-      orgId: 'orgId',
-      eventId: 'eventId',
-    });
+    mockRouteParams();
     renderVolunteerGroups(link1);
     const searchInput = await screen.findByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
@@ -149,10 +147,7 @@ describe('Testing VolunteerGroups Screen', () => {
   });
 
   it('Search by Groups', async () => {
-    vi.mocked(useParams).mockReturnValue({
-      orgId: 'orgId',
-      eventId: 'eventId',
-    });
+    mockRouteParams();
     renderVolunteerGroups(link1);
     const searchInput = await screen.findByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
@@ -173,10 +168,7 @@ describe('Testing VolunteerGroups Screen', () => {
   });
 
   it('Search by Leader', async () => {
-    vi.mocked(useParams).mockReturnValue({
-      orgId: 'orgId',
-      eventId: 'eventId',
-    });
+    mockRouteParams();
     renderVolunteerGroups(link1);
     const searchInput = await screen.findByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
@@ -198,10 +190,7 @@ describe('Testing VolunteerGroups Screen', () => {
   });
 
   it('should render screen with No Groups', async () => {
-    vi.mocked(useParams).mockReturnValue({
-      orgId: 'orgId',
-      eventId: 'eventId',
-    });
+    mockRouteParams();
     renderVolunteerGroups(link3);
 
     await waitFor(() => {
@@ -211,10 +200,7 @@ describe('Testing VolunteerGroups Screen', () => {
   });
 
   it('Error while fetching groups data', async () => {
-    vi.mocked(useParams).mockReturnValue({
-      orgId: 'orgId',
-      eventId: 'eventId',
-    });
+    mockRouteParams();
     renderVolunteerGroups(link2);
 
     await waitFor(() => {
@@ -223,10 +209,7 @@ describe('Testing VolunteerGroups Screen', () => {
   });
 
   it('Open and close ViewModal', async () => {
-    vi.mocked(useParams).mockReturnValue({
-      orgId: 'orgId',
-      eventId: 'eventId',
-    });
+    mockRouteParams();
     renderVolunteerGroups(link1);
 
     const viewGroupBtn = await screen.findAllByTestId('viewGroupBtn');
@@ -237,10 +220,7 @@ describe('Testing VolunteerGroups Screen', () => {
   });
 
   it('Open and Close Delete Modal', async () => {
-    vi.mocked(useParams).mockReturnValue({
-      orgId: 'orgId',
-      eventId: 'eventId',
-    });
+    mockRouteParams();
     renderVolunteerGroups(link1);
 
     const deleteGroupBtn = await screen.findAllByTestId('deleteGroupBtn');
@@ -251,10 +231,7 @@ describe('Testing VolunteerGroups Screen', () => {
   });
 
   it('Open and close GroupModal (Edit)', async () => {
-    vi.mocked(useParams).mockReturnValue({
-      orgId: 'orgId',
-      eventId: 'eventId',
-    });
+    mockRouteParams();
     renderVolunteerGroups(link1);
 
     const editGroupBtn = await screen.findAllByTestId('editGroupBtn');
@@ -265,10 +242,7 @@ describe('Testing VolunteerGroups Screen', () => {
   });
 
   it('Open and close GroupModal (Create)', async () => {
-    vi.mocked(useParams).mockReturnValue({
-      orgId: 'orgId',
-      eventId: 'eventId',
-    });
+    mockRouteParams();
     renderVolunteerGroups(link1);
 
     const createGroupBtn = await screen.findByTestId('createGroupBtn');
