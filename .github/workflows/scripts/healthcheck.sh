@@ -7,7 +7,7 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-if [ ! -z "$2" ] && (! [[ "$2" =~ ^[0-9]+$ ]] || [ "$2" -lt 1 ]); then
+if ! [[ "$1" =~ ^[0-9]+$ ]] || [ "$1" -lt 1 ] || [ "$1" -gt 65535 ]; then
     echo "Error: Invalid port number. Must be between 1 and 65535"
     exit 1
 fi
@@ -41,13 +41,14 @@ check_health() {
     fi
     return $status
 }
-
+# Default container name, can be overridden by environment variable
+CONTAINER_NAME="${CONTAINER_NAME:-talawa-admin-app-container}"
 # Function to handle timeout
 handle_timeout() {
     echo "Timeout waiting for application to start"
     if [ -f /.dockerenv ]; then
         echo "Container logs:"
-        docker logs talawa-admin-app-container 2>/dev/null || echo "Failed to retrieve container logs"
+        docker logs "${CONTAINER_NAME}" 2>/dev/null || echo "Failed to retrieve container logs"
     fi
     exit 1
 }
