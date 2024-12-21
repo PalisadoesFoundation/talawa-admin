@@ -1407,6 +1407,9 @@
   "userPledges": {
     "title": "Mis Promesas"
   },
+  "leaveOrganization": {
+    "title": "Dejar la organización"
+  },
   "eventVolunteers": {
     "volunteers": "Voluntarios",
     "volunteer": "Voluntario",
