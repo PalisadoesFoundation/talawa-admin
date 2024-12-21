@@ -119,9 +119,8 @@ export const AttendanceStatisticsModal: React.FC<
           try {
             const eventDate = new Date(event.startDate);
             if (Number.isNaN(eventDate.getTime())) {
-              /*istanbul ignore next*/
               console.error(`Invalid date for event: ${event._id}`);
-              /*istanbul ignore next*/
+
               return 'Invalid date';
             }
             return eventDate.toLocaleDateString('en-US', {
@@ -129,12 +128,11 @@ export const AttendanceStatisticsModal: React.FC<
               day: 'numeric',
             });
           } catch (error) {
-            /*istanbul ignore next*/
             console.error(
               `Error formatting date for event: ${event._id}`,
               error,
             );
-            /*istanbul ignore next*/
+
             return 'Invalid date';
           }
         })();
@@ -325,7 +323,6 @@ export const AttendanceStatisticsModal: React.FC<
     exportToCSV(data, `${selectedCategory.toLowerCase()}_demographics.csv`);
   }, [selectedCategory, categoryLabels, categoryData]);
 
-  /*istanbul ignore next*/
   const handleExport = (eventKey: string | null): void => {
     switch (eventKey) {
       case 'trends':
