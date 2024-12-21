@@ -42,7 +42,7 @@ jobs:
 
       - name: Get changed TypeScript files
         id: changed-files
-        uses: tj-actions/changed-files@v41
+        uses: tj-actions/changed-files@v40
       
       - name: Check formatting
         if: steps.changed-files.outputs.only_changed != 'true'
@@ -88,7 +88,7 @@ jobs:
       
       - name: Get Changed Unauthorized files
         id: changed-unauth-files
-        uses: tj-actions/changed-files@v41
+        uses: tj-actions/changed-files@v40
         with:
           files: |
             .github/**
@@ -130,7 +130,7 @@ jobs:
 
       - name: Get changed files
         id: changed-files
-        uses: tj-actions/changed-files@v41
+        uses: tj-actions/changed-files@v40
 
       - name: Echo number of changed files
         env: 
@@ -183,12 +183,32 @@ jobs:
       
       - name: Get changed TypeScript files
         id: changed-files
-        uses: tj-actions/changed-files@v41
-          
-      - name: Run tests
+        
+
+        uses: tj-actions/changed-files@v40
+
+      - name: Run Jest Tests
         if: steps.changed-files.outputs.only_changed != 'true'
-        run: npm run test -- --watchAll=false --coverage       
+        env:
+          NODE_V8_COVERAGE: './coverage/jest'
+        run: |
+          npm run test -- --watchAll=false --coverage
+          
+      - name: Run Vitest Tests
+        if: steps.changed-files.outputs.only_changed != 'true'
+        env:
+          NODE_V8_COVERAGE: './coverage/vitest'
+        run: |
+          npm run test:vitest:coverage   
       
+      - name: Merge Coverage Reports
+        if: steps.changed-files.outputs.only_changed != 'true'
+        run: |
+            mkdir -p coverage
+            if ! npx lcov-result-merger 'coverage/*/lcov.info' > 'coverage/lcov.info'; then
+              echo "Failed to merge coverage reports"
+              exit 1
+            fi     
       - name: TypeScript compilation for changed files
         run: |
           for file in ${{ steps.changed-files.outputs.all_files }}; do
@@ -197,14 +217,14 @@ jobs:
             fi
           done
         
-      - name: Present and Upload coverage to Codecov as ${{env.CODECOV_UNIQUE_NAME}}
+      - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true
-          fail_ci_if_error: false
+          files: './coverage/lcov.info'
           name: '${{env.CODECOV_UNIQUE_NAME}}'
-
+          fail_ci_if_error: false
       - name: Test acceptable level of code coverage
         uses: VeryGoodOpenSource/very_good_coverage@v2
         with:
@@ -234,7 +254,6 @@ jobs:
           
           # Clone the specified repository using the extracted branch name
           git clone --branch $FULL_BRANCH_NAME https://github.com/PalisadoesFoundation/talawa-api && ls -a 
-
       - name: Validate Documents
         run: graphql-inspector validate './src/GraphQl/**/*.ts' './talawa-api/schema.graphql'
 

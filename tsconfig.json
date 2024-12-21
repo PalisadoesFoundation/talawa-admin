@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "types": ["vite/client", "vite-plugin-svgr/client", "node"],
-    "baseUrl": "src",
+    "baseUrl": "src",  // Ensures all imports are relative to src
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
@@ -16,7 +16,13 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "paths": {
+      "GraphQl/*": ["src/GraphQl/*"],
+      "Components/*": ["src/components/*"],
+      "Utilities/*": ["src/utils/*"]  // Adjust or add based on other folders you might have
+    }
   },
-  "include": ["src", "src/App.tsx", "setup.ts"]
+  "include": ["src", "src/App.tsx", "setup.ts"],
+  "exclude": ["node_modules", "dist", "vitest.config.ts"]
 }

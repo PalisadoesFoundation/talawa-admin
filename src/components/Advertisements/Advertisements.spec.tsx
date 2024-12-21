@@ -1,4 +1,7 @@
 import React, { act } from 'react';
+import { describe, test, expect, vi } from 'vitest';
+import '@testing-library/jest-dom';
+
 import {
   ApolloClient,
   ApolloLink,
@@ -7,25 +10,31 @@ import {
   InMemoryCache,
 } from '@apollo/client';
 import { MockedProvider } from '@apollo/client/testing';
+import '@testing-library/jest-dom'
 import { fireEvent, render, screen } from '@testing-library/react';
-import 'jest-location-mock';
 
 import type { DocumentNode, NormalizedCacheObject } from '@apollo/client';
 import userEvent from '@testing-library/user-event';
 import { BACKEND_URL } from 'Constant/constant';
-import { ADD_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
+
+
+
+import { ADD_ADVERTISEMENT_MUTATION } from '../../GraphQl/Mutations/mutations';
 import {
   ORGANIZATIONS_LIST,
   ORGANIZATION_ADVERTISEMENT_LIST,
   PLUGIN_GET,
-} from 'GraphQl/Queries/Queries';
+} from '../../GraphQl/Queries/Queries';
+
 import { I18nextProvider } from 'react-i18next';
+
+
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import { store } from 'state/store';
-import i18nForTest from 'utils/i18nForTest';
-import useLocalStorage from 'utils/useLocalstorage';
+import { store } from '../../state/store';
+import i18nForTest from '../../utils/i18nForTest';
+import useLocalStorage from '../../utils/useLocalstorage';
 import Advertisement from './Advertisements';
 
 const { getItem } = useLocalStorage();
@@ -50,18 +59,22 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   link: ApolloLink.from([httpLink]),
 });
 
-jest.mock('components/AddOn/support/services/Plugin.helper', () => ({
+vi.mock('components/AddOn/support/services/Plugin.helper', () => ({
   __esModule: true,
-  default: jest.fn().mockImplementation(() => ({
-    fetchInstalled: jest.fn().mockResolvedValue([]),
-    fetchStore: jest.fn().mockResolvedValue([]),
+  default: vi.fn().mockImplementation(() => ({
+    fetchInstalled: vi.fn().mockResolvedValue([]),
+    fetchStore: vi.fn().mockResolvedValue([]),
   })),
 }));
 let mockID: string | undefined = '1';
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({ orgId: mockID }),
-}));
+
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useParams: () => ({ orgId: mockID }),
+  };
+});
 
 const today = new Date();
 const tomorrow = today;
