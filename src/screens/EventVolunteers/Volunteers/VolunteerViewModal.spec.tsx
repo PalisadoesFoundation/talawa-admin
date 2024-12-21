@@ -10,6 +10,7 @@ import { store } from 'state/store';
 import i18n from 'utils/i18nForTest';
 import type { InterfaceVolunteerViewModal } from './VolunteerViewModal';
 import VolunteerViewModal from './VolunteerViewModal';
+import { vi } from 'vitest';
 
 const t = {
   ...JSON.parse(
@@ -24,7 +25,7 @@ const t = {
 const itemProps: InterfaceVolunteerViewModal[] = [
   {
     isOpen: true,
-    hide: jest.fn(),
+    hide: vi.fn(),
     volunteer: {
       _id: 'volunteerId1',
       hasAccepted: true,
@@ -51,7 +52,7 @@ const itemProps: InterfaceVolunteerViewModal[] = [
   },
   {
     isOpen: true,
-    hide: jest.fn(),
+    hide: vi.fn(),
     volunteer: {
       _id: 'volunteerId2',
       hasAccepted: false,
