@@ -360,10 +360,11 @@ describe('LeaveOrganization Component', () => {
     expect(modal).toBeInTheDocument();
     await screen.findByText('Continue');
     fireEvent.click(screen.getByText('Continue'));
-    fireEvent.change(screen.getByPlaceholderText(/Enter your email/i), {
+    const emailInput = screen.getByPlaceholderText(/Enter your email/i);
+    fireEvent.change(emailInput, {
       target: { value: 'test@example.com' },
     });
-    fireEvent.click(screen.getByText('Confirm'));
+    fireEvent.keyDown(emailInput, { key: 'Enter', code: 'Enter' });
     await waitFor(() => {
       expect(mockNavigate).toHaveBeenCalledWith(`/user/organizations`);
     });
