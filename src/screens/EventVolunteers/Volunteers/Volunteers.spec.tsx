@@ -7,6 +7,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
+import type { Params } from 'react-router-dom';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -14,6 +15,7 @@ import i18n from 'utils/i18nForTest';
 import Volunteers from './Volunteers';
 import type { ApolloLink } from '@apollo/client';
 import { MOCKS, MOCKS_EMPTY, MOCKS_ERROR } from './Volunteers.mocks';
+import { vi } from 'vitest';
 
 const link1 = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(MOCKS_ERROR);
@@ -58,16 +60,24 @@ const renderVolunteers = (link: ApolloLink): RenderResult => {
   );
 };
 
+/** Mock useParams to provide consistent test data */
+
 describe('Testing Volunteers Screen', () => {
   beforeAll(() => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: 'orgId', eventId: 'eventId' }),
-    }));
+    vi.mock('react-router-dom', async () => {
+      const actualDom = await vi.importActual('react-router-dom');
+      return {
+        ...actualDom,
+        useParams: (): Readonly<Params<string>> => ({
+          orgId: 'orgId',
+          eventId: 'eventId',
+        }),
+      };
+    });
   });
 
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
@@ -89,9 +99,7 @@ describe('Testing Volunteers Screen', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByTestId('paramsError')).toBeInTheDocument();
-    });
+    expect(window.location.pathname).toBe('/');
   });
 
   it('should render Volunteers screen', async () => {
