@@ -23,12 +23,14 @@ TEMP_FILES=""
 
 # Function to check if the app is running
 check_health() {
+    local port=$1
+    local timeout=$2
     if ! command -v nc >/dev/null 2>&1; then
         echo "Error: netcat (nc) is not installed"
-        exit 1
+        return 2
     fi
 
-    local status=1
+    local status=3
     while ! nc -z localhost "${port}" && [ "${timeout}" -gt 0 ]; do
         sleep 1
         timeout=$((timeout - 1))
@@ -49,11 +51,23 @@ CONTAINER_NAME="${CONTAINER_NAME:-talawa-admin-app-container}"
 # Cleanup function
 cleanup() {
     echo "Cleaning up..."
+    local exit_code="${1:-1}"
+    local cleanup_failed=0
     # Kill any background processes started by this script
-    jobs -p | xargs -r kill
+    if !jobs -p | xargs -r kill 2>/dev/null; then
+        echo "Warning: Failed to kill some background processes"
+        cleanup_failed=1
+    fi
     # Remove any temporary files if created
-    [ -n "${TEMP_FILES}" ] && rm -f ${TEMP_FILES}
-    exit "${1:-1}"
+        if [ ${#TEMP_FILES[@]} -gt 0 ]; then
+            if ! rm -f "${TEMP_FILES[@]}" 2>/dev/null; then
+            echo "Warning: Failed to remove some temporary files"
+            cleanup_failed=1
+        fi
+    fi
+    
+    [ $cleanup_failed -eq 1 ] && exit_code=1
+    exit $exit_code
 }
 
 # Set up signal handling
