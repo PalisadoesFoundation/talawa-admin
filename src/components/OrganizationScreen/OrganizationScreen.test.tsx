@@ -90,10 +90,8 @@ describe('Testing OrganizationScreen', () => {
 
   test('handles window resize', () => {
     renderComponent();
-
     window.innerWidth = 800;
     fireEvent(window, new Event('resize'));
-
     expect(screen.getByTestId('mainpageright')).toHaveClass(styles.expand);
   });
 });
