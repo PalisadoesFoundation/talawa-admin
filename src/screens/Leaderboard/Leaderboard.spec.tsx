@@ -16,6 +16,26 @@ import type { ApolloLink } from '@apollo/client';
 import { MOCKS, EMPTY_MOCKS, ERROR_MOCKS } from './Leaderboard.mocks';
 import { vi } from 'vitest';
 
+/**
+ * Unit tests for the Leaderboard component.
+ *
+ * This file verifies the Leaderboard's functionality in scenarios like URL handling, sorting, filtering,
+ * user interactions, and error states. Mocked dependencies and Apollo links ensure isolated testing
+ * of Redux, React Router, and internationalization integration.
+ *
+ * Key tests include:
+ * - Redirecting when parameters are missing.
+ * - Rendering with mock data, empty states, and errors.
+ * - Sorting and filtering for various timeframes.
+ * - Searching volunteers and navigating to the Member screen.
+ * - Handling errors during data fetching.
+ *
+ * Mock setups:
+ * - StaticMockLink for GraphQL responses.
+ * - Mocked `useParams` for route parameters.
+ * - Redux store and i18n for consistent state and translations.
+ */
+
 const link1 = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(ERROR_MOCKS);
 const link3 = new StaticMockLink(EMPTY_MOCKS);
