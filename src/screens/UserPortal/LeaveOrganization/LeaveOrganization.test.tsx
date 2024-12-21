@@ -207,6 +207,9 @@ const mocks = [
       },
     },
   },
+];
+
+const errorMocks = [
   {
     request: {
       query: ORGANIZATIONS_LIST,
@@ -501,5 +504,15 @@ describe('LeaveOrganization Component', () => {
       expect(screen.queryByTestId('leave-organization-modal')).toBeNull(); // Modal should no longer be present
     });
     expect(modal).not.toBeInTheDocument();
+  });
+
+  test('displays an error alert when query fails', async () => {
+    render(
+      <MockedProvider mocks={errorMocks} addTypename={false}>
+        <LeaveOrganization />
+      </MockedProvider>,
+    );
+    const errorAlert = await screen.findByRole('alert');
+    expect(errorAlert).toHaveTextContent(/Error:/i);
   });
 });
