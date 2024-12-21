@@ -7,7 +7,7 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-if ! [[ "$1" =~ ^[0-9]+$ ]] || [ "$1" -lt 1 ] || [ "$1" -gt 65535 ]; then
+if [ ! -z "$2" ] && (! [[ "$2" =~ ^[0-9]+$ ]] || [ "$2" -lt 1 ]); then
     echo "Error: Invalid port number. Must be between 1 and 65535"
     exit 1
 fi
@@ -22,38 +22,44 @@ timeout="${2:-120}"
 
 # Function to check if the app is running
 check_health() {
-  if ! command -v nc >/dev/null 2>&1; then
-    echo "Error: netcat (nc) is not installed"
-    exit 1
-  fi
+    if ! command -v nc >/dev/null 2>&1; then
+        echo "Error: netcat (nc) is not installed"
+        exit 1
+    fi
+
+    local status=1
     while ! nc -z localhost "${port}" && [ "${timeout}" -gt 0 ]; do
         sleep 1
-        timeout=$((timeout-1))
+        timeout=$((timeout - 1))
         if [ $((timeout % 10)) -eq 0 ]; then
-            echo "Still waiting for app to start... ${timeout}s remaining"
+            echo "Still waiting for app to start on port ${port}... ${timeout}s remaining"
         fi
     done
+
+    if nc -z localhost "${port}" >/dev/null 2>&1; then
+        status=0
+    fi
+    return $status
+}
+
+# Function to handle timeout
+handle_timeout() {
+    echo "Timeout waiting for application to start"
+    if [ -f /.dockerenv ]; then
+        echo "Container logs:"
+        docker logs talawa-admin-app-container 2>/dev/null || echo "Failed to retrieve container logs"
+    fi
+    exit 1
 }
 
 # Check if the script is running inside Docker container
 if [ -f /.dockerenv ]; then
     echo "Running inside Docker container"
-    check_health
-
-    if [ "${timeout}" -eq 0 ]; then
-        echo "Timeout waiting for application to start"
-        echo "Container logs:"
-        docker logs talawa-admin-app-container
-        exit 1
-    fi
-    echo "Port check passed, verifying health endpoint..."
+    check_health || handle_timeout
 else
     echo "Running outside Docker container"
-    check_health
-
-    if [ "${timeout}" -eq 0 ]; then
+    check_health || {
         echo "Timeout waiting for application to start"
         exit 1
-    fi
-    echo "App started successfully on port ${port}"
+    }
 fi
