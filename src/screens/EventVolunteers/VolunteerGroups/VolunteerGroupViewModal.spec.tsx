@@ -11,6 +11,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18n from 'utils/i18nForTest';
 import type { InterfaceVolunteerGroupViewModal } from './VolunteerGroupViewModal';
 import VolunteerGroupViewModal from './VolunteerGroupViewModal';
+import { vi } from 'vitest';
 
 const t = {
   ...JSON.parse(
@@ -25,7 +26,7 @@ const t = {
 const itemProps: InterfaceVolunteerGroupViewModal[] = [
   {
     isOpen: true,
-    hide: jest.fn(),
+    hide: vi.fn(),
     group: {
       _id: 'groupId',
       name: 'Group 1',
@@ -63,7 +64,7 @@ const itemProps: InterfaceVolunteerGroupViewModal[] = [
   },
   {
     isOpen: true,
-    hide: jest.fn(),
+    hide: vi.fn(),
     group: {
       _id: 'groupId',
       name: 'Group 1',
