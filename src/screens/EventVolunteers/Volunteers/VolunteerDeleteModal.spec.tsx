@@ -15,11 +15,18 @@ import { toast } from 'react-toastify';
 import type { InterfaceDeleteVolunteerModal } from './VolunteerDeleteModal';
 import VolunteerDeleteModal from './VolunteerDeleteModal';
 import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
 
-jest.mock('react-toastify', () => ({
+/**
+ * Mock implementation of the `react-toastify` module.
+ * Mocks the `toast` object with `success` and `error` methods to allow testing
+ * without triggering actual toast notifications.
+ */
+
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
@@ -38,8 +45,8 @@ const t = {
 const itemProps: InterfaceDeleteVolunteerModal[] = [
   {
     isOpen: true,
-    hide: jest.fn(),
-    refetchVolunteers: jest.fn(),
+    hide: vi.fn(),
+    refetchVolunteers: vi.fn(),
     volunteer: {
       _id: 'volunteerId1',
       hasAccepted: true,
