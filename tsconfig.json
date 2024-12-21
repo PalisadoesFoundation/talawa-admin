@@ -18,9 +18,9 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "paths": {
-      "GraphQl/*": ["src/GraphQl/*"],
-      "Components/*": ["src/components/*"],
-      "Utilities/*": ["src/utils/*"]  // Adjust or add based on other folders you might have
+      "GraphQl/*": ["GraphQl/*"],
+      "Components/*": ["components/*"],
+      "Utilities/*": ["utils/*"]  // Adjust or add based on other folders you might have
     }
   },
   "include": ["src", "src/App.tsx", "setup.ts"],
