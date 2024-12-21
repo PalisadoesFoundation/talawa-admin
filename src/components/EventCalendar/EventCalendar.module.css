@@ -513,7 +513,6 @@
 
 .card_list_item {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
   font-size: 14px;
@@ -522,6 +521,7 @@
 
 .holiday_date {
   font-weight: 500;
+  margin-right: 10px;
   color: var(--holiday-date-color);
 }
 
