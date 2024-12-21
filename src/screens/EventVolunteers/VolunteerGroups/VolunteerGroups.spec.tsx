@@ -80,6 +80,7 @@ describe('Testing VolunteerGroups Screen', () => {
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
+    /**  Mocking the useParams hook to return undefined parameters */
     vi.mocked(useParams).mockReturnValue({ orgId: '', eventId: '' });
     render(
       <MockedProvider addTypename={false} link={link1}>
