@@ -21,10 +21,17 @@ port="$1"
 timeout="${2:-120}"
 declare -a TEMP_FILES=()
 
+# Debugging: Print port and timeout values
+echo "Port: ${port}, Timeout: ${timeout}"
+
 # Function to check if the app is running
 check_health() {
     local port=$1
     local timeout=$2
+
+    # Debugging: Print the received arguments
+    echo "Checking health for port: ${port}, Timeout: ${timeout}"
+
     if ! command -v nc >/dev/null 2>&1; then
         echo "Error: netcat (nc) is not installed"
         return 2
@@ -59,10 +66,10 @@ cleanup() {
         cleanup_failed=1
     fi
     # Remove any temporary files if created
-        if [ ${#TEMP_FILES[@]} -gt 0 ]; then
-            if ! rm -f "${TEMP_FILES[@]}" 2>/dev/null; then
-                echo "Warning: Failed to remove some temporary files"
-                cleanup_failed=1
+    if [ "${#TEMP_FILES[@]}" -gt 0 ]; then
+        if ! rm -f "${TEMP_FILES[@]}" 2>/dev/null; then
+            echo "Warning: Failed to remove some temporary files"
+            cleanup_failed=1
         fi
     fi
     
@@ -89,5 +96,5 @@ if [ -f /.dockerenv ]; then
     check_health "${port}" "${timeout}" || handle_timeout
 else
     echo "Running outside Docker container"
-    check_health || handle_timeout
+    check_health "${port}" "${timeout}" || handle_timeout
 fi
