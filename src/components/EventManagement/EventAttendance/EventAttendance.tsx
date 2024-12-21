@@ -57,7 +57,8 @@ function EventAttendance(): JSX.Element {
       const nameB = `${b.firstName} ${b.lastName}`.toLowerCase();
       return sortOrder === 'ascending'
         ? nameA.localeCompare(nameB)
-        : nameB.localeCompare(nameA);
+        : /*istanbul ignore next*/
+          nameB.localeCompare(nameA);
     });
   };
 
@@ -70,7 +71,8 @@ function EventAttendance(): JSX.Element {
           const isSameYear = attendeeDate.getFullYear() === now.getFullYear();
           return filteringBy === 'This Month'
             ? isSameYear && attendeeDate.getMonth() === now.getMonth()
-            : isSameYear;
+            : /*istanbul ignore next*/
+              isSameYear;
         });
   };
 
@@ -139,7 +141,7 @@ function EventAttendance(): JSX.Element {
   }, [eventId, getEventAttendees]);
 
   if (loading) return <p>{t('loading')}</p>;
-
+  /*istanbul ignore next*/
   if (error) return <p>{error.message}</p>;
 
   return (

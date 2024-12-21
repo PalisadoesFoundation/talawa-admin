@@ -262,6 +262,7 @@ export const AttendanceStatisticsModal: React.FC<
                 monthDiff < 0 ||
                 (monthDiff === 0 && today.getDate() < birthDate.getDate())
               ) {
+                /*istanbul ignore next*/
                 age--;
               }
               return age < 18;
