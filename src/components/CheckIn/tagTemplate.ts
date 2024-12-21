@@ -1,6 +1,10 @@
 import { Template } from '@pdfme/common';
 
-export const tagTemplate: Template = {
+type ExtendedSchema = {
+  name? : string;
+}
+
+export const tagTemplate: Template & ExtendedSchema = {
   "schemas": [
     [
       {
