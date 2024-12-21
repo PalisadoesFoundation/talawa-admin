@@ -9,7 +9,7 @@ import {
 } from '@apollo/client';
 import type { NormalizedCacheObject } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
-import AdvertisementEntry from './core/AdvertisementEntry/AdvertisementEntry';
+import AdvertisementEntry from '/AdvertisementEntry';
 import AdvertisementRegister from './core/AdvertisementRegister/AdvertisementRegister';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
