@@ -19,6 +19,7 @@ fi
 
 port="$1"
 timeout="${2:-120}"
+TEMP_FILES=""
 
 # Function to check if the app is running
 check_health() {
@@ -41,17 +42,22 @@ check_health() {
     fi
     return $status
 }
+
 # Default container name, can be overridden by environment variable
 CONTAINER_NAME="${CONTAINER_NAME:-talawa-admin-app-container}"
+
 # Cleanup function
 cleanup() {
     echo "Cleaning up..."
-    # Add any necessary cleanup commands here
+    # Kill any background processes started by this script
+    jobs -p | xargs -r kill
+    # Remove any temporary files if created
+    [ -n "${TEMP_FILES}" ] && rm -f ${TEMP_FILES}
     exit "${1:-1}"
 }
 
 # Set up signal handling
-trap 'cleanup' SIGINT SIGTERM
+trap 'cleanup' SIGINT SIGTERM SIGHUP EXIT
 
 # Function to handle timeout
 handle_timeout() {
