@@ -78,6 +78,8 @@ def check_eslint(directories):
             )
             sys.exit(1)
         for root, _, files in os.walk(directory):
+            if "node_modules" in root:
+                continue
             for file_name in files:
                 if (
                     file_name.endswith(".tsx")
