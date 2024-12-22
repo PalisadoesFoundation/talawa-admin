@@ -200,7 +200,10 @@ const fundCampaignPledge = (): JSX.Element => {
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
         <div className={styles.message} data-testid="errorMsg">
-          <WarningAmberRounded className={styles.errorIconPledge} fontSize="large" />
+          <WarningAmberRounded
+            className={styles.errorIconPledge}
+            fontSize="large"
+          />
           <h6 className="fw-bold text-danger text-center">
             {tErrors('errorLoading', { entity: 'Pledges' })}
             <br />
