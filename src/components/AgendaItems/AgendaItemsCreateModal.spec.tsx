@@ -20,6 +20,9 @@ import AgendaItemsCreateModal from './AgendaItemsCreateModal';
 import { toast } from 'react-toastify';
 import convertToBase64 from 'utils/convertToBase64';
 
+import '@testing-library/jest-dom';
+import { describe, test, expect, vi } from 'vitest';
+
 const mockFormState = {
   title: 'Test Title',
   description: 'Test Description',
@@ -28,9 +31,9 @@ const mockFormState = {
   urls: ['https://example.com'],
   agendaItemCategoryIds: ['category'],
 };
-const mockHideCreateModal = jest.fn();
-const mockSetFormState = jest.fn();
-const mockCreateAgendaItemHandler = jest.fn();
+const mockHideCreateModal = vi.fn();
+const mockSetFormState = vi.fn();
+const mockCreateAgendaItemHandler = vi.fn();
 const mockT = (key: string): string => key;
 const mockAgendaItemCategories = [
   {
@@ -64,14 +67,14 @@ const mockAgendaItemCategories = [
     },
   },
 ];
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
-jest.mock('utils/convertToBase64');
-const mockedConvertToBase64 = convertToBase64 as jest.MockedFunction<
+vi.mock('utils/convertToBase64');
+const mockedConvertToBase64 = convertToBase64 as vi.MockedFunction<
   typeof convertToBase64
 >;
 
