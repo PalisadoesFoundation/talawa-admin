@@ -96,85 +96,65 @@ describe('CustomTableCell', () => {
     expect(screen.getByRole('progressbar')).toBeInTheDocument();
   });
 
-  // it('displays error state', async () => {
-  //   const errorMock = [
-  //     {
-  //       request: {
-  //         query: EVENT_DETAILS,
-  //         variables: { id: 'event123' },
-  //       },
-  //       error: new Error('An error occurred'),
-  //     },
-  //   ];
+  it('displays error state', async () => {
+    const errorMock = [
+      {
+        request: {
+          query: EVENT_DETAILS,
+          variables: { id: 'event123' },
+        },
+        error: new Error('An error occurred'),
+      },
+    ];
 
-  //   render(
-  //     <MockedProvider mocks={errorMock} addTypename={false}>
-  //       <table>
-  //         <tbody>
-  //           <CustomTableCell eventId="event123" />
-  //         </tbody>
-  //       </table>
-  //     </MockedProvider>,
-  //   );
+    render(
+      <MockedProvider mocks={errorMock} addTypename={false}>
+        <table>
+          <tbody>
+            <CustomTableCell eventId="event123" />
+          </tbody>
+        </table>
+      </MockedProvider>,
+    );
 
-  //   await waitFor(
-  //     () => {
-  //       expect(
-  //         screen.getByText('Error loading event details'),
-  //       ).toBeInTheDocument();
-  //     },
-  //     { timeout: 2000 },
-  //   );
+    await waitFor(() => {
+      expect(
+        screen.getByText(
+          'Unable to load event details. Please try again later.',
+        ),
+      ).toBeInTheDocument();
+    });
+  });
 
-  //   // Check if the error message from toast has been called
-  //   expect(toast.error).toHaveBeenCalledWith('An error occurred');
-  // });
+  it('displays no event found message', async () => {
+    const noEventMock = [
+      {
+        request: {
+          query: EVENT_DETAILS,
+          variables: { id: 'event123' },
+        },
+        result: {
+          data: {
+            event: null,
+          },
+        },
+      },
+    ];
 
-  // it('displays no event found message', async () => {
-  //   const noEventMock = [
-  //     {
-  //       request: {
-  //         query: EVENT_DETAILS,
-  //         variables: { id: 'event123' },
-  //       },
-  //       result: {
-  //         data: {
-  //           event: {
-  //             _id: null,
-  //             title: null,
-  //             startDate: null,
-  //             description: null,
-  //             endDate: null,
-  //             startTime: null,
-  //             endTime: null,
-  //             allDay: false,
-  //             location: null,
-  //             recurring: null,
-  //             organization: {
-  //               _id: null,
-  //               members: [],
-  //             },
-  //             baseRecurringEvent: {
-  //               _id: 'recurringEvent123',
-  //             },
-  //             attendees: [],
-  //           },
-  //         },
-  //       },
-  //     },
-  //   ];
+    render(
+      <MockedProvider mocks={noEventMock} addTypename={false}>
+        <table>
+          <tbody>
+            <CustomTableCell eventId="event123" />
+          </tbody>
+        </table>
+      </MockedProvider>,
+    );
 
-  //   render(
-  //     <MockedProvider mocks={noEventMock} addTypename={false}>
-  //       <table>
-  //         <tbody>
-  //           <CustomTableCell eventId="event123" />
-  //         </tbody>
-  //       </table>
-  //     </MockedProvider>,
-  //   );
-
-  //   await waitFor(() => screen.getByText('No event found'));
-  //   expect(screen.getByText('No event found')).toBeInTheDocument();
-  // });
+    await waitFor(() => {
+      expect(
+        screen.getByText('Event not found or has been deleted'),
+      ).toBeInTheDocument();
+    });
+  });
 });
