@@ -371,6 +371,7 @@
 .rowBackground {
   background-color: var(--row-background);
   max-height: 120px;
+  overflow-y: auto;
 }
 
 .tableHeader {
@@ -749,23 +750,11 @@ hr {
   }
 }
 
-.btnsContainer .btnsBlock {
-  display: flex;
-  width: max-content;
-}
-
 .btnsContainer .btnsBlock button {
   margin-left: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.btnsContainer .input {
-  flex: 1;
-  position: relative;
-  max-width: 60%;
-  justify-content: space-between;
 }
 
 .btnsContainer input {
@@ -836,11 +825,6 @@ hr {
   background-color: var(--bs-primary-text-emphasis);
   color: var(--bs-white);
   font-size: 1rem;
-}
-.rowBackground {
-  background-color: var(--bs-white);
-  max-height: 120px;
-  overflow-y: auto;
 }
 
 .subTagsLink {
