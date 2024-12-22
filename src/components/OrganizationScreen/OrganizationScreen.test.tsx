@@ -85,16 +85,13 @@ describe('Testing OrganizationScreen', () => {
     const openButton = screen.getByTestId('openMenu');
     fireEvent.click(openButton);
 
-    // Check for expand class after opening
     expect(screen.getByTestId('mainpageright')).toHaveClass(styles.contract);
   });
 
   test('handles window resize', () => {
     renderComponent();
-
     window.innerWidth = 800;
     fireEvent(window, new Event('resize'));
-
     expect(screen.getByTestId('mainpageright')).toHaveClass(styles.expand);
   });
 });
