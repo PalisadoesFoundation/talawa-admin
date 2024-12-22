@@ -391,8 +391,8 @@ function organizationActionItems(): JSX.Element {
             <Search />
           </Button>
         </div>
-        <div className="md:d-flex gap-3 mb-1 overflow-auto">
-          <div className="d-flex justify-space-between align-items-center gap-3 overflow-y-auto">
+        <div className="md:d-flex gap-3 mb-1">
+          <div className="d-flex justify-space-between align-items-baseline gap-3">
             <Dropdown>
               <Dropdown.Toggle
                 variant="success"
@@ -474,8 +474,6 @@ function organizationActionItems(): JSX.Element {
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
-          </div>
-          <div>
             <Button
               variant="success"
               onClick={() => handleModalClick(null, ModalState.SAME)}
