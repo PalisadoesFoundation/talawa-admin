@@ -27,12 +27,11 @@ import '@testing-library/jest-dom';
 const { getItem } = useLocalStorage();
 
 const httpLink = new HttpLink({
-  uri: BACKEND_URL,
-  headers: {
-    authorization: 'Bearer ' + getItem('token') || '',
-  },
-});
-
+    uri: BACKEND_URL,
+    headers: {
+      authorization: 'Bearer ' + getItem('token') || '',
+    },
+  });
 const translations = JSON.parse(
   JSON.stringify(
     i18nForTest.getDataByLanguage('en')?.translation?.advertisement ?? null,
@@ -166,7 +165,9 @@ describe('Testing Advertisement Entry Component', () => {
 
     // Check that the component renders with default `startDate`
     const defaultStartDate = new Date().toDateString();
-    expect(screen.getByText(`Ends on ${defaultStartDate}`)).toBeInTheDocument(); //fix text "Ends on"?
+    expect(
+      screen.getByText(`Ends on ${defaultStartDate}`),
+    ).toBeInTheDocument(); //fix text "Ends on"?
   });
 
   it('should correctly override default props when values are provided', () => {
@@ -195,7 +196,11 @@ describe('Testing Advertisement Entry Component', () => {
 
     // Check that the component renders with provided values
     expect(getByText(mockName)).toBeInTheDocument();
-    // Add more checks based on how each prop affects rendering
+    expect(getByText(mockType)).toBeInTheDocument();
+    expect(screen.getByTestId('media')).toHaveAttribute('src', mockMediaUrl);
+    expect(
+      getByText(`Ends on ${mockEndDate.toDateString()}`),
+    ).toBeInTheDocument();
   });
 
   it('should open and close the dropdown when options button is clicked', () => {
@@ -321,6 +326,70 @@ describe('Testing Advertisement Entry Component', () => {
       },
     });
   });
+
+  // it('Shows error toast on failed update', async () => {
+  //   const updateAdByIdMock = vi
+  //     .fn()
+  //     .mockRejectedValue(new Error('Update failed'));
+  //   mockUseMutation.mockReturnValue([updateAdByIdMock]);
+
+  //   render(
+  //     <ApolloProvider client={client}>
+  //       <Provider store={store}>
+  //         <BrowserRouter>
+  //           <I18nextProvider i18n={i18nForTest}>
+  //             <AdvertisementEntry
+  //               endDate={new Date()}
+  //               startDate={new Date()}
+  //               type="POPUP"
+  //               name="Advert1"
+  //               organizationId="1"
+  //               mediaUrl=""
+  //               id="1"
+  //               setAfter={vi.fn()}
+  //             />
+  //           </I18nextProvider>
+  //         </BrowserRouter>
+  //       </Provider>
+  //     </ApolloProvider>,
+  //   );
+
+  //   const optionsButton = screen.getByTestId('moreiconbtn');
+  //   fireEvent.click(optionsButton);
+  //   fireEvent.click(screen.getByTestId('editBtn'));
+
+  //   fireEvent.change(screen.getByLabelText('Enter name of Advertisement'), {
+  //     target: { value: 'Updated Advertisement' },
+  //   });
+
+  //   fireEvent.change(screen.getByLabelText(translations.Rtype), {
+  //     target: { value: 'BANNER' },
+  //   });
+
+  //   fireEvent.change(screen.getByLabelText(translations.RstartDate), {
+  //     target: { value: dayjs().add(1, 'day').format('YYYY-MM-DD') },
+  //   });
+
+  //   fireEvent.change(screen.getByLabelText(translations.RendDate), {
+  //     target: { value: dayjs().add(2, 'days').format('YYYY-MM-DD') },
+  //   }); 
+
+  //   fireEvent.click(screen.getByTestId('addonupdate'));
+
+  //   await waitFor(() => {
+  //     expect(screen.getByText('Update failed')).toBeInTheDocument();
+  //   }, { timeout: 3000 });
+
+  //   expect(updateAdByIdMock).toHaveBeenCalledWith({
+  //     variables: {
+  //       id: '1',
+  //       name: 'Updated Advertisement',
+  //       type: 'BANNER',
+  //       startDate: dayjs().add(1, 'day').format('YYYY-MM-DD'),
+  //       endDate: dayjs().add(2, 'days').format('YYYY-MM-DD'),
+  //     },
+  //   });
+  // });
 
   it('Simulating if the mutation doesnt have data variable while updating', async () => {
     const updateAdByIdMock = vi.fn().mockResolvedValue({
