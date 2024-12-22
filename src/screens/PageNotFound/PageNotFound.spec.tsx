@@ -8,7 +8,7 @@ import { store } from 'state/store';
 import PageNotFound from './PageNotFound';
 import i18nForTest from 'utils/i18nForTest';
 import useLocalStorage from 'utils/useLocalstorage';
-
+import { test, expect, describe } from 'vitest';
 const { setItem } = useLocalStorage();
 
 describe('Testing Page not found component', () => {
