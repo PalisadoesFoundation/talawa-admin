@@ -1,6 +1,4 @@
 import React, { act } from 'react';
-import { describe, test, expect, vi } from 'vitest';
-
 import {
   ApolloClient,
   ApolloLink,
@@ -9,28 +7,25 @@ import {
   InMemoryCache,
 } from '@apollo/client';
 import { MockedProvider } from '@apollo/client/testing';
-
 import { fireEvent, render, screen } from '@testing-library/react';
+import 'jest-location-mock';
 
 import type { DocumentNode, NormalizedCacheObject } from '@apollo/client';
 import userEvent from '@testing-library/user-event';
 import { BACKEND_URL } from 'Constant/constant';
-
-import { ADD_ADVERTISEMENT_MUTATION } from '../../GraphQl/Mutations/mutations';
+import { ADD_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import {
   ORGANIZATIONS_LIST,
   ORGANIZATION_ADVERTISEMENT_LIST,
   PLUGIN_GET,
-} from '../../GraphQl/Queries/Queries';
-
+} from 'GraphQl/Queries/Queries';
 import { I18nextProvider } from 'react-i18next';
-
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import { store } from '../../state/store';
-import i18nForTest from '../../utils/i18nForTest';
-import useLocalStorage from '../../utils/useLocalstorage';
+import { store } from 'state/store';
+import i18nForTest from 'utils/i18nForTest';
+import useLocalStorage from 'utils/useLocalstorage';
 import Advertisement from './Advertisements';
 
 const { getItem } = useLocalStorage();
@@ -55,22 +50,18 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   link: ApolloLink.from([httpLink]),
 });
 
-vi.mock('components/AddOn/support/services/Plugin.helper', () => ({
+jest.mock('components/AddOn/support/services/Plugin.helper', () => ({
   __esModule: true,
-  default: vi.fn().mockImplementation(() => ({
-    fetchInstalled: vi.fn().mockResolvedValue([]),
-    fetchStore: vi.fn().mockResolvedValue([]),
+  default: jest.fn().mockImplementation(() => ({
+    fetchInstalled: jest.fn().mockResolvedValue([]),
+    fetchStore: jest.fn().mockResolvedValue([]),
   })),
 }));
 let mockID: string | undefined = '1';
-
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
-  return {
-    ...actual,
-    useParams: () => ({ orgId: mockID }),
-  };
-});
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({ orgId: mockID }),
+}));
 
 const today = new Date();
 const tomorrow = today;
@@ -475,16 +466,18 @@ describe('Testing Advertisement Component', () => {
       /\b(?:Sun|Mon|Tue|Wed|Thu|Fri|Sat)\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2})\s+(\d{4})\b/,
     );
     let dateObject = new Date();
+
     if (dateMatch) {
       const monthName = dateMatch[1];
       const day = parseInt(dateMatch[2], 10);
       const year = parseInt(dateMatch[3], 10);
+
       const monthIndex =
         'JanFebMarAprMayJunJulAugSepOctNovDec'.indexOf(monthName) / 3;
 
       dateObject = new Date(year, monthIndex, day);
     }
-    console.log(dateObject);
+
     expect(dateObject.getTime()).toBeLessThan(new Date().getTime());
   });
 
