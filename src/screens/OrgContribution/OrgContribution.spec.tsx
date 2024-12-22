@@ -25,6 +25,7 @@ describe('Organisation Contribution Page', () => {
       },
       writable: true,
     });
+
     window.location.assign('/orglist');
 
     const { container } = render(
