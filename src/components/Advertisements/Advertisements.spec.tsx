@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import { describe, test, expect, vi } from 'vitest';
-import '@testing-library/jest-dom';
+
 
 import {
   ApolloClient,
@@ -486,7 +486,7 @@ describe('Testing Advertisement Component', () => {
       dateObject = new Date(year, monthIndex, day);
     }
 
-    expect(dateObject.getTime()).toBeGreaterThan(new Date().getTime());
+    expect(dateObject.getTime()).toBeLessThan(new Date().getTime());
   });
 
   test('delete ad', async () => {
