@@ -136,7 +136,6 @@ def main():
         SystemExit: If an error occurs during execution.
     """
     args = arg_parser_resolver()
-    print(f"Checking directories: {args.directory}")
     # Check eslint in the specified directory
     eslint_found = check_eslint(args.directory)
 
