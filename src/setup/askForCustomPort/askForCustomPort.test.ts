@@ -10,7 +10,7 @@ describe('askForCustomPort', () => {
       .mockResolvedValueOnce({ customPort: '4321' });
 
     const result = await askForCustomPort();
-    expect(result).toBe('4321');
+    expect(result).toBe(4321);
   });
 
   test('should return user-provided port', async () => {
@@ -19,6 +19,6 @@ describe('askForCustomPort', () => {
       .mockResolvedValueOnce({ customPort: '8080' });
 
     const result = await askForCustomPort();
-    expect(result).toBe('8080');
+    expect(result).toBe(8080);
   });
 });
