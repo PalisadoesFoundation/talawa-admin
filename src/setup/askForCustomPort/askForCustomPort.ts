@@ -10,7 +10,7 @@ export async function askForCustomPort(): Promise<number> {
       default: '4321',
       validate: (input) => {
         const port = Number(input);
-        if (isNaN(port) || port <= 0 || port > 65535) {
+        if (Number.isNaN(port) || port <= 0 || port > 65535) {
           return 'Please enter a valid port number between 1 and 65535.';
         }
         return true;
