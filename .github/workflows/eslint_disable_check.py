@@ -4,13 +4,12 @@
 
 Methodology:
 
-    Recursively analyzes TypeScript files in the 'src' directory and its subdirectories
-    as well as 'setup.ts' files to ensure they do not contain eslint-disable statements.
+    Recursively analyzes TypeScript files in the specified directory
+    to ensure they do not contain eslint-disable statements.
 
     This script enforces code quality practices in the project.
 
 NOTE:
-
     This script complies with our python3 coding and documentation standards.
     It complies with:
 
@@ -18,6 +17,7 @@ NOTE:
         2) Pydocstyle
         3) Pycodestyle
         4) Flake8
+        5) Python Black
 
 """
 
@@ -25,6 +25,7 @@ import os
 import re
 import argparse
 import sys
+
 
 def has_eslint_disable(file_path):
     """
@@ -36,42 +37,70 @@ def has_eslint_disable(file_path):
     Returns:
         bool: True if eslint-disable statement is found, False otherwise.
     """
-    eslint_disable_pattern = re.compile(r'//\s*eslint-disable(?:-next-line|-line)?', re.IGNORECASE)
-    
+    eslint_disable_pattern = re.compile(
+        r"""\/\/\s*eslint-disable(?:-next-line
+        |-line)?[^\n]*|\/\*\s*eslint-disable[^\*]*\*\/""",
+        re.IGNORECASE,
+    )
+
     try:
-        with open(file_path, 'r', encoding='utf-8') as file:
+        with open(file_path, "r", encoding="utf-8") as file:
             content = file.read()
             return bool(eslint_disable_pattern.search(content))
-    except Exception as e:
+    except FileNotFoundError:
+        print(f"File not found: {file_path}")
+        return False
+    except PermissionError:
+        print(f"Permission denied: {file_path}")
+        return False
+    except (IOError, OSError) as e:
         print(f"Error reading file {file_path}: {e}")
         return False
 
-def check_eslint(directory):
+
+def check_eslint(directories):
     """
-    Recursively check TypeScript files for eslint-disable statements in the 'src' directory.
+    Recursively check TypeScript files for eslint-disable statements.
 
     Args:
-        directory (str): Path to the directory.
+        directories (list): List of directories.
 
     Returns:
         bool: True if eslint-disable statement is found, False otherwise.
     """
     eslint_found = False
 
-    for root, dirs, files in os.walk(os.path.join(directory, 'src')):
-        for file_name in files:
-            if file_name.endswith('.tsx') and not file_name.endswith('.test.tsx'):
-                file_path = os.path.join(root, file_name)
-                if has_eslint_disable(file_path):
-                    print(f'File {file_path} contains eslint-disable statement.')
-                    eslint_found = True
+    for directory in directories:
+        if not os.path.exists(directory):
+            print(
+                f"""Error: The specified directory '{directory}' does not
+                exist."""
+            )
+            sys.exit(1)
+        for root, _, files in os.walk(directory):
+            for file_name in files:
+                if (
+                    file_name.endswith(".tsx")
+                    and not file_name.endswith(".test.tsx")
+                   ):
+                    file_path = os.path.join(root, file_name)
+                    if has_eslint_disable(file_path):
+                        print(
+                            f"""File {file_path} contains eslint-disable
+                              statement."""
+                        )
+                        eslint_found = True
 
-    setup_path = os.path.join(directory, 'setup.ts')
-    if os.path.exists(setup_path) and has_eslint_disable(setup_path):
-        print(f'Setup file {setup_path} contains eslint-disable statement.')
-        eslint_found = True
+        setup_path = os.path.join(directory, "setup.ts")
+        if os.path.exists(setup_path) and has_eslint_disable(setup_path):
+            print(
+                f"""Setup file {setup_path} contains eslint-disable
+                statement."""
+            )
+            eslint_found = True
 
     return eslint_found
+
 
 def arg_parser_resolver():
     """Resolve the CLI arguments provided by the user.
@@ -83,10 +112,13 @@ def arg_parser_resolver():
     parser.add_argument(
         "--directory",
         type=str,
-        default=os.getcwd(),
-        help="Path to the directory to check (default: current directory)"
+        nargs="+",
+        default=[os.getcwd()],
+        help="""One or more directories to check for eslint disable
+        statements (default: current directory).""",
     )
     return parser.parse_args()
+
 
 def main():
     """
@@ -104,11 +136,7 @@ def main():
         SystemExit: If an error occurs during execution.
     """
     args = arg_parser_resolver()
-
-    if not os.path.exists(args.directory):
-        print(f"Error: The specified directory '{args.directory}' does not exist.")
-        sys.exit(1)
-
+    print(f"Checking directories: {args.directory}")
     # Check eslint in the specified directory
     eslint_found = check_eslint(args.directory)
 
@@ -117,6 +145,7 @@ def main():
         sys.exit(1)
 
     print("ESLint-disable check completed successfully.")
+
 
 if __name__ == "__main__":
     main()
