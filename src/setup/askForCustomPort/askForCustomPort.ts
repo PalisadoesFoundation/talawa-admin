@@ -8,10 +8,23 @@ export function validatePort(input: string): string | true {
   return true;
 }
 
-export async function askForCustomPort(): Promise<number> {
-  let validPort: number | null = null;
+export async function reservedPortWarning(port: number): Promise<boolean> {
+  const { confirmPort } = await inquirer.prompt<{ confirmPort: boolean }>([
+    {
+      type: 'confirm',
+      name: 'confirmPort',
+      message: `Port ${port} is a reserved port. Are you sure you want to use it?`,
+      default: false,
+    },
+  ]);
 
-  while (validPort === null) {
+  return confirmPort;
+}
+
+export async function askForCustomPort(): Promise<number> {
+  let MAX_ATTEMPTS = 5;
+
+  while (MAX_ATTEMPTS--) {
     const { customPort } = await inquirer.prompt<{ customPort: string }>([
       {
         type: 'input',
@@ -23,11 +36,19 @@ export async function askForCustomPort(): Promise<number> {
       },
     ]);
 
-    validPort = Number(customPort);
-    if (Number.isNaN(validPort) || validPort <= 0 || validPort > 65535) {
-      validPort = null;
+    if (customPort && validatePort(customPort) === true) {
+      if (Number(customPort) >= 1024) {
+        return Number(customPort);
+      }
+
+      if (
+        Number(customPort) < 1024 &&
+        (await reservedPortWarning(Number(customPort)))
+      ) {
+        return Number(customPort);
+      }
     }
   }
-
-  return validPort;
+  console.log('\nMaximum attempts reached. Using default port 4321.');
+  return 4321;
 }
