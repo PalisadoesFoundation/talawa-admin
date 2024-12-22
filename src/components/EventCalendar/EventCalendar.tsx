@@ -139,7 +139,9 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     return Array.isArray(holidays)
       ? holidays.filter((holiday) => {
           if (!holiday.date) {
-            console.warn(`Holiday "${holiday.name}" has no date specified.`);
+            if (process.env.NODE_ENV !== 'test') {
+              console.warn(`Holiday "${holiday.name}" has no date specified.`);
+            }
             return false;
           }
           const holidayMonth = dayjs(holiday.date, 'MM-DD', true).month();
@@ -270,6 +272,11 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         (windowWidth <= 700 && allDayEventsList.length > 0)
       );
     }, [allDayEventsList.length, windowWidth]);
+
+    const handleExpandClick: () => void = () => {
+      toggleExpand(-100);
+    };
+
     return (
       <>
         <div className={styles.calendar_hour_block}>
@@ -314,7 +321,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
               {Array.isArray(allDayEventsList) && (
                 <button
                   className={styles.btn__more}
-                  onClick={() => toggleExpand(-100)}
+                  onClick={handleExpandClick}
                 >
                   {shouldShowViewMore
                     ? expanded === -100
