@@ -13,6 +13,19 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { checkInQueryMock } from './mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 
+/**
+ * This file contains unit tests for the CheckInWrapper component.
+ *
+ * The tests cover:
+ * - Rendering and behavior of the modal component.
+ * - Functionality of the button to open and close the modal.
+ * - Integration with mocked GraphQL queries for testing Apollo Client.
+ *
+ * Purpose:
+ * These tests ensure that the CheckInWrapper component behaves as expected
+ * when opening and closing modals, and correctly integrates with its dependencies.
+ */
+
 const link = new StaticMockLink(checkInQueryMock, true);
 
 describe('Testing CheckIn Wrapper', () => {
@@ -20,7 +33,7 @@ describe('Testing CheckIn Wrapper', () => {
     eventId: 'event123',
   };
 
-  test('The button to open and close the modal should work properly', async () => {
+  it('The button to open and close the modal should work properly', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>

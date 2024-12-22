@@ -3,7 +3,13 @@ import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import type { RenderResult } from '@testing-library/react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  act,
+} from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -16,11 +22,12 @@ import { toast } from 'react-toastify';
 import ItemDeleteModal, {
   type InterfaceItemDeleteModalProps,
 } from './ItemDeleteModal';
+import { vi } from 'vitest';
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
@@ -34,8 +41,8 @@ const t = JSON.parse(
 
 const itemProps: InterfaceItemDeleteModalProps = {
   isOpen: true,
-  hide: jest.fn(),
-  actionItemsRefetch: jest.fn(),
+  hide: vi.fn(),
+  actionItemsRefetch: vi.fn(),
   actionItem: {
     _id: 'actionItemId1',
     assignee: null,
@@ -102,7 +109,9 @@ describe('Testing ItemDeleteModal', () => {
     renderItemDeleteModal(link1, itemProps);
     expect(screen.getByTestId('deleteyesbtn')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByTestId('deleteyesbtn'));
+    await act(() => {
+      fireEvent.click(screen.getByTestId('deleteyesbtn'));
+    });
 
     await waitFor(() => {
       expect(itemProps.actionItemsRefetch).toHaveBeenCalled();
