@@ -4,6 +4,10 @@ import { askForCustomPort, validatePort } from './askForCustomPort';
 jest.mock('inquirer');
 
 describe('askForCustomPort', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe('basic port validation', () => {
     test('should return default port if user provides no input', async () => {
       jest
