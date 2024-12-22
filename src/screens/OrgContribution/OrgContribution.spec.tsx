@@ -36,11 +36,10 @@ describe('Organisation Contribution Page', () => {
 
     expect(container.textContent).not.toBe('Loading data...');
     await wait();
-
     expect(container.textContent).toMatch('Filter by Name');
     expect(container.textContent).toMatch('Filter by Trans. ID');
     expect(container.textContent).toMatch('Recent Stats');
-    expect(container.textContent).toMatch('Contribution'); 
+    expect(container.textContent).toMatch('Contribution');
     expect(window.location).toBeAt('/orglist');
   });
 });
