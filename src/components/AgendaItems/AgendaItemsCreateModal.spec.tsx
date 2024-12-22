@@ -12,6 +12,8 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
+import '@testing-library/jest-dom';
+import { describe, test, expect, vi } from 'vitest';
 
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -28,9 +30,9 @@ const mockFormState = {
   urls: ['https://example.com'],
   agendaItemCategoryIds: ['category'],
 };
-const mockHideCreateModal = jest.fn();
-const mockSetFormState = jest.fn();
-const mockCreateAgendaItemHandler = jest.fn();
+const mockHideCreateModal = vi.fn();
+const mockSetFormState = vi.fn();
+const mockCreateAgendaItemHandler = vi.fn();
 const mockT = (key: string): string => key;
 const mockAgendaItemCategories = [
   {
@@ -64,14 +66,14 @@ const mockAgendaItemCategories = [
     },
   },
 ];
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
-jest.mock('utils/convertToBase64');
-const mockedConvertToBase64 = convertToBase64 as jest.MockedFunction<
+vi.mock('utils/convertToBase64');
+const mockedConvertToBase64 = convertToBase64 as vi.MockedFunction<
   typeof convertToBase64
 >;
 
