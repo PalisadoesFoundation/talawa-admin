@@ -27,11 +27,11 @@ import '@testing-library/jest-dom';
 const { getItem } = useLocalStorage();
 
 const httpLink = new HttpLink({
-    uri: BACKEND_URL,
-    headers: {
-      authorization: 'Bearer ' + getItem('token') || '',
-    },
-  });
+  uri: BACKEND_URL,
+  headers: {
+    authorization: 'Bearer ' + getItem('token') || '',
+  },
+});
 const translations = JSON.parse(
   JSON.stringify(
     i18nForTest.getDataByLanguage('en')?.translation?.advertisement ?? null,
@@ -165,9 +165,7 @@ describe('Testing Advertisement Entry Component', () => {
 
     // Check that the component renders with default `startDate`
     const defaultStartDate = new Date().toDateString();
-    expect(
-      screen.getByText(`Ends on ${defaultStartDate}`),
-    ).toBeInTheDocument(); //fix text "Ends on"?
+    expect(screen.getByText(`Ends on ${defaultStartDate}`)).toBeInTheDocument(); //fix text "Ends on"?
   });
 
   it('should correctly override default props when values are provided', () => {
@@ -372,7 +370,7 @@ describe('Testing Advertisement Entry Component', () => {
 
   //   fireEvent.change(screen.getByLabelText(translations.RendDate), {
   //     target: { value: dayjs().add(2, 'days').format('YYYY-MM-DD') },
-  //   }); 
+  //   });
 
   //   fireEvent.click(screen.getByTestId('addonupdate'));
 
