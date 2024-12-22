@@ -207,7 +207,7 @@ const fundCampaignPledge = (): JSX.Element => {
           <h6 className="fw-bold text-danger text-center">
             {tErrors('errorLoading', { entity: 'Pledges' })}
             <br />
-            {pledgeError.messagePledge}
+            {pledgeError.message}
           </h6>
         </div>
       </div>
