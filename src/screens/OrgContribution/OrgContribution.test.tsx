@@ -41,6 +41,6 @@ describe('Organisation Contribution Page', () => {
     expect(container.textContent).toMatch('Filter by Trans. ID');
     expect(container.textContent).toMatch('Recent Stats');
     expect(container.textContent).toMatch('Contribution');
-    expect(window.location).toBeAt('/orglist');  
+    expect(window.location).toBeAt('/orglist');
   });
 });
