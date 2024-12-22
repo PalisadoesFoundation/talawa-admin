@@ -9,7 +9,7 @@ import { Button, Dropdown, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router-dom';
 import { currencySymbols } from 'utils/currency';
-import styles from './FundCampaignPledge.module.css';
+import styles from '../../style/app.module.css';
 import PledgeDeleteModal from './PledgeDeleteModal';
 import PledgeModal from './PledgeModal';
 import { Breadcrumbs, Link, Stack, Typography } from '@mui/material';
@@ -200,11 +200,11 @@ const fundCampaignPledge = (): JSX.Element => {
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
         <div className={styles.message} data-testid="errorMsg">
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded className={styles.errorIconPledge} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
             {tErrors('errorLoading', { entity: 'Pledges' })}
             <br />
-            {pledgeError.message}
+            {pledgeError.messagePledge}
           </h6>
         </div>
       </div>
@@ -219,7 +219,7 @@ const fundCampaignPledge = (): JSX.Element => {
       minWidth: 50,
       align: 'left',
       headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaderPledge}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
         return (
@@ -233,14 +233,14 @@ const fundCampaignPledge = (): JSX.Element => {
                       src={user.image}
                       alt="pledge"
                       data-testid={`image${index + 1}`}
-                      className={styles.TableImage}
+                      className={styles.TableImagePledge}
                     />
                   ) : (
                     <div className={styles.avatarContainer}>
                       <Avatar
                         key={user._id + '1'}
                         containerStyle={styles.imageContainer}
-                        avatarStyle={styles.TableImage}
+                        avatarStyle={styles.TableImagePledge}
                         name={user.firstName + ' ' + user.lastName}
                         alt={user.firstName + ' ' + user.lastName}
                       />
@@ -272,7 +272,7 @@ const fundCampaignPledge = (): JSX.Element => {
       minWidth: 150,
       align: 'center',
       headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaderPledge}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
         return dayjs(params.row.startDate).format('DD/MM/YYYY');
@@ -284,7 +284,7 @@ const fundCampaignPledge = (): JSX.Element => {
       minWidth: 150,
       align: 'center',
       headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaderPledge}`,
       flex: 1,
       sortable: false,
       renderCell: (params: GridCellParams) => {
@@ -298,7 +298,7 @@ const fundCampaignPledge = (): JSX.Element => {
       minWidth: 100,
       align: 'center',
       headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaderPledge}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
         return (
@@ -323,7 +323,7 @@ const fundCampaignPledge = (): JSX.Element => {
       minWidth: 100,
       align: 'center',
       headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaderPledge}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
         return (
@@ -348,7 +348,7 @@ const fundCampaignPledge = (): JSX.Element => {
       minWidth: 100,
       align: 'center',
       headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaderPledge}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
         return (
@@ -419,27 +419,27 @@ const fundCampaignPledge = (): JSX.Element => {
         <div className={styles.progressContainer}>
           <div className="d-flex justify-content-center">
             <div
-              className={`btn-group ${styles.toggleGroup}`}
+              className={`btn-group ${styles.toggleGroupPledge}`}
               role="group"
               aria-label="Toggle between Pledged and Raised amounts"
             >
               <input
-                type="radio"
-                className={`btn-check ${styles.toggleBtn}`}
+                type="radioPledge"
+                className={`btn-check ${styles.toggleBtnPledge}`}
                 name="btnradio"
                 id="pledgedRadio"
                 checked={progressIndicator === 'pledged'}
                 onChange={() => setProgressIndicator('pledged')}
               />
               <label
-                className={`btn btn-outline-primary ${styles.toggleBtn}`}
+                className={`btn btn-outline-primary ${styles.toggleBtnPledge}`}
                 htmlFor="pledgedRadio"
               >
                 {t('pledgedAmount')}
               </label>
 
               <input
-                type="radio"
+                type="radioPledge"
                 className={`btn-check`}
                 name="btnradio"
                 id="raisedRadio"
@@ -447,7 +447,7 @@ const fundCampaignPledge = (): JSX.Element => {
                 checked={progressIndicator === 'raised'}
               />
               <label
-                className={`btn btn-outline-primary ${styles.toggleBtn}`}
+                className={`btn btn-outline-primary ${styles.toggleBtnPledge}`}
                 htmlFor="raisedRadio"
               >
                 {t('raisedAmount')}
@@ -470,14 +470,14 @@ const fundCampaignPledge = (): JSX.Element => {
           </div>
         </div>
       </div>
-      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-        <div className={`${styles.input} mb-1`}>
+      <div className={`${styles.btnsContainerPledge} gap-4 flex-wrap`}>
+        <div className={`${styles.inputPledge} mb-1`}>
           <Form.Control
             type="name"
             placeholder={t('searchPledger')}
             autoComplete="off"
             required
-            className={styles.inputField}
+            className={styles.inputFieldPledge}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             data-testid="searchPledger"
@@ -496,7 +496,7 @@ const fundCampaignPledge = (): JSX.Element => {
               <Dropdown.Toggle
                 variant="success"
                 id="dropdown-basic"
-                className={styles.dropdown}
+                className={styles.dropdownPledge}
                 data-testid="filter"
               >
                 <Sort className={'me-1'} />
@@ -557,7 +557,7 @@ const fundCampaignPledge = (): JSX.Element => {
           ),
         }}
         sx={dataGridStyle}
-        getRowClassName={() => `${styles.rowBackground}`}
+        getRowClassName={() => `${styles.rowBackgroundPledge}`}
         autoHeight
         rowHeight={65}
         rows={pledges.map((pledge) => ({
@@ -607,14 +607,14 @@ const fundCampaignPledge = (): JSX.Element => {
                 src={user.image}
                 alt="pledger"
                 data-testid={`extraImage${index + 1}`}
-                className={styles.TableImage}
+                className={styles.TableImagePledge}
               />
             ) : (
               <div className={styles.avatarContainer}>
                 <Avatar
                   key={user._id + '1'}
                   containerStyle={styles.imageContainer}
-                  avatarStyle={styles.TableImage}
+                  avatarStyle={styles.TableImagePledge}
                   name={user.firstName + ' ' + user.lastName}
                   alt={user.firstName + ' ' + user.lastName}
                   dataTestId={`extraAvatar${index + 1}`}
