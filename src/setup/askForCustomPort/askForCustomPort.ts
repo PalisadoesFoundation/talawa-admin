@@ -1,8 +1,16 @@
 import inquirer from 'inquirer';
 
-export function validatePort(input: string): string | true {
+const DEFAULT_PORT = 4321;
+const MAX_RETRY_ATTEMPTS = 5;
+
+export function validatePort(input: string): string | boolean {
   const port = Number(input);
-  if (Number.isNaN(port) || port <= 0 || port > 65535) {
+  if (
+    Number.isNaN(port) ||
+    !Number.isInteger(port) ||
+    port <= 0 ||
+    port > 65535
+  ) {
     return 'Please enter a valid port number between 1 and 65535.';
   }
   return true;
@@ -22,16 +30,15 @@ export async function reservedPortWarning(port: number): Promise<boolean> {
 }
 
 export async function askForCustomPort(): Promise<number> {
-  let MAX_ATTEMPTS = 5;
+  let remainingAttempts = MAX_RETRY_ATTEMPTS;
 
-  while (MAX_ATTEMPTS--) {
+  while (remainingAttempts--) {
     const { customPort } = await inquirer.prompt<{ customPort: string }>([
       {
         type: 'input',
         name: 'customPort',
-        message:
-          'Enter custom port for development server (leave blank for default 4321):',
-        default: '4321',
+        message: `Enter custom port for development server (leave blank for default ${DEFAULT_PORT}):`,
+        default: DEFAULT_PORT.toString(),
         validate: validatePort,
       },
     ]);
@@ -49,6 +56,8 @@ export async function askForCustomPort(): Promise<number> {
       }
     }
   }
-  console.log('\nMaximum attempts reached. Using default port 4321.');
-  return 4321;
+  console.log(
+    `\nMaximum attempts reached. Using default port ${DEFAULT_PORT}.`,
+  );
+  return DEFAULT_PORT;
 }
