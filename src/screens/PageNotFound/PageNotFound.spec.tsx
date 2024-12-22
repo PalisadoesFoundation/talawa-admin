@@ -8,7 +8,7 @@ import { store } from 'state/store';
 import PageNotFound from './PageNotFound';
 import i18nForTest from 'utils/i18nForTest';
 import useLocalStorage from 'utils/useLocalstorage';
-import { test, expect, describe } from 'vitest';
+import { it, expect, describe } from 'vitest';
 const { setItem } = useLocalStorage();
 
 describe('Testing Page not found component', () => {
@@ -32,7 +32,7 @@ describe('Testing Page not found component', () => {
     expect(screen.getByText(/Back to Home/i)).toBeInTheDocument();
   });
 
-  test('Component should be rendered properly for ADMIN or SUPERADMIN', () => {
+  it('should render properly for ADMIN or SUPERADMIN', () => {
     setItem('AdminFor', [
       {
         _id: '6537904485008f171cf29924',
