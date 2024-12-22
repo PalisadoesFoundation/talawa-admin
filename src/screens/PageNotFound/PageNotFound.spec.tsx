@@ -12,7 +12,7 @@ import { test, expect, describe } from 'vitest';
 const { setItem } = useLocalStorage();
 
 describe('Testing Page not found component', () => {
-  test('Component should be rendered properly for User', () => {
+  it('should render component properly for User', () => {
     //setItem('AdminFor', undefined);
     render(
       <BrowserRouter>
@@ -24,12 +24,12 @@ describe('Testing Page not found component', () => {
       </BrowserRouter>,
     );
 
-    expect(screen.getByText(/Talawa User/i)).toBeTruthy();
-    expect(screen.getByText(/404/i)).toBeTruthy();
+    expect(screen.getByText(/Talawa User/i)).toBeInTheDocument();
+    expect(screen.getByText(/404/i)).toBeInTheDocument();
     expect(
       screen.getByText(/Oops! The Page you requested was not found!/i),
-    ).toBeTruthy();
-    expect(screen.getByText(/Back to Home/i)).toBeTruthy();
+    ).toBeInTheDocument();
+    expect(screen.getByText(/Back to Home/i)).toBeInTheDocument();
   });
 
   test('Component should be rendered properly for ADMIN or SUPERADMIN', () => {
@@ -49,11 +49,11 @@ describe('Testing Page not found component', () => {
       </BrowserRouter>,
     );
 
-    expect(screen.getByText(/Talawa Admin Portal/i)).toBeTruthy();
-    expect(screen.getByText(/404/i)).toBeTruthy();
+    expect(screen.getByText(/Talawa Admin Portal/i)).toBeInTheDocument();
+    expect(screen.getByText(/404/i)).toBeInTheDocument();
     expect(
       screen.getByText(/Oops! The Page you requested was not found!/i),
-    ).toBeTruthy();
-    expect(screen.getByText(/Back to Home/i)).toBeTruthy();
+    ).toBeInTheDocument();
+    expect(screen.getByText(/Back to Home/i)).toBeInTheDocument();
   });
 });
