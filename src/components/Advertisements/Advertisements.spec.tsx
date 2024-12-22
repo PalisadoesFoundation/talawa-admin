@@ -1,7 +1,6 @@
 import React, { act } from 'react';
 import { describe, test, expect, vi } from 'vitest';
 
-
 import {
   ApolloClient,
   ApolloLink,
