@@ -22,11 +22,18 @@ import { toast } from 'react-toastify';
 import type { InterfaceVolunteerCreateModal } from './VolunteerCreateModal';
 import VolunteerCreateModal from './VolunteerCreateModal';
 import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
 
-jest.mock('react-toastify', () => ({
+/**
+ * Mock implementation of the `react-toastify` module.
+ * Mocks the `toast` object with `success` and `error` methods to allow testing
+ * without triggering actual toast notifications.
+ */
+
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
@@ -45,10 +52,10 @@ const t = {
 const itemProps: InterfaceVolunteerCreateModal[] = [
   {
     isOpen: true,
-    hide: jest.fn(),
+    hide: vi.fn(),
     eventId: 'eventId',
     orgId: 'orgId',
-    refetchVolunteers: jest.fn(),
+    refetchVolunteers: vi.fn(),
   },
 ];
 
