@@ -1,7 +1,7 @@
 import React from 'react';
-import { fireEvent, render, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
-import { CheckInModal } from './CheckInModal';
+import { CheckInWrapper } from './CheckInWrapper';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
@@ -13,24 +13,35 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { checkInQueryMock } from './mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 
+/**
+ * This file contains unit tests for the CheckInWrapper component.
+ *
+ * The tests cover:
+ * - Rendering and behavior of the modal component.
+ * - Functionality of the button to open and close the modal.
+ * - Integration with mocked GraphQL queries for testing Apollo Client.
+ *
+ * Purpose:
+ * These tests ensure that the CheckInWrapper component behaves as expected
+ * when opening and closing modals, and correctly integrates with its dependencies.
+ */
+
 const link = new StaticMockLink(checkInQueryMock, true);
 
-describe('Testing Check In Attendees Modal', () => {
+describe('Testing CheckIn Wrapper', () => {
   const props = {
-    show: true,
     eventId: 'event123',
-    handleClose: jest.fn(),
   };
 
-  test('The modal should be rendered, and all the fetched users should be shown properly and user filtering should work', async () => {
-    const { queryByText, queryByLabelText } = render(
+  it('The button to open and close the modal should work properly', async () => {
+    render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
                 <ToastContainer />
-                <CheckInModal {...props} />
+                <CheckInWrapper {...props} />
               </I18nextProvider>
             </Provider>
           </LocalizationProvider>
@@ -38,21 +49,20 @@ describe('Testing Check In Attendees Modal', () => {
       </MockedProvider>,
     );
 
+    // Open the modal
+    fireEvent.click(screen.getByLabelText('checkInRegistrants') as Element);
+
     await waitFor(() =>
-      expect(queryByText('Event Check In Management')).toBeInTheDocument(),
+      expect(screen.queryByTestId('modal-title')).toBeInTheDocument(),
     );
 
-    await waitFor(() => expect(queryByText('John Doe')).toBeInTheDocument());
-    await waitFor(() => expect(queryByText('John2 Doe2')).toBeInTheDocument());
+    //  Close the modal
+    const closebtn = screen.getByLabelText('Close');
 
-    // Tetst filtering of users
-    fireEvent.change(queryByLabelText('Search Attendees') as Element, {
-      target: { value: 'John Doe' },
-    });
+    fireEvent.click(closebtn as Element);
 
-    await waitFor(() => expect(queryByText('John Doe')).toBeInTheDocument());
     await waitFor(() =>
-      expect(queryByText('John2 Doe2')).not.toBeInTheDocument(),
+      expect(screen.queryByTestId('modal-title')).not.toBeInTheDocument(),
     );
   });
 });

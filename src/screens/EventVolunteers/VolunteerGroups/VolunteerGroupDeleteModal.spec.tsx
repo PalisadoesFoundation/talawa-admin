@@ -8,18 +8,26 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18n from 'utils/i18nForTest';
-import { MOCKS, MOCKS_ERROR } from './Volunteers.mocks';
+import { MOCKS, MOCKS_ERROR } from './VolunteerGroups.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
-import type { InterfaceDeleteVolunteerModal } from './VolunteerDeleteModal';
-import VolunteerDeleteModal from './VolunteerDeleteModal';
+import type { InterfaceDeleteVolunteerGroupModal } from './VolunteerGroupDeleteModal';
+import VolunteerGroupDeleteModal from './VolunteerGroupDeleteModal';
 import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
 
-jest.mock('react-toastify', () => ({
+/**
+ * Mock implementation of the `react-toastify` module.
+ * Mocks the `toast` object with `success` and `error` methods to allow testing
+ * without triggering actual toast notifications.
+ */
+
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
@@ -35,48 +43,59 @@ const t = {
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
 };
 
-const itemProps: InterfaceDeleteVolunteerModal[] = [
+const itemProps: InterfaceDeleteVolunteerGroupModal[] = [
   {
     isOpen: true,
-    hide: jest.fn(),
-    refetchVolunteers: jest.fn(),
-    volunteer: {
-      _id: 'volunteerId1',
-      hasAccepted: true,
-      hoursVolunteered: 10,
-      user: {
-        _id: 'userId1',
-        firstName: 'Teresa',
-        lastName: 'Bradley',
+    hide: vi.fn(),
+    refetchGroups: vi.fn(),
+    group: {
+      _id: 'groupId',
+      name: 'Group 1',
+      description: 'desc',
+      volunteersRequired: null,
+      createdAt: '2024-10-25T16:16:32.978Z',
+      creator: {
+        _id: 'creatorId1',
+        firstName: 'Wilt',
+        lastName: 'Shepherd',
         image: null,
       },
-      assignments: [],
-      groups: [
+      leader: {
+        _id: 'userId',
+        firstName: 'Teresa',
+        lastName: 'Bradley',
+        image: 'img-url',
+      },
+      volunteers: [
         {
-          _id: 'groupId1',
-          name: 'group1',
-          volunteers: [
-            {
-              _id: 'volunteerId1',
-            },
-          ],
+          _id: 'volunteerId1',
+          user: {
+            _id: 'userId',
+            firstName: 'Teresa',
+            lastName: 'Bradley',
+            image: null,
+          },
         },
       ],
+      assignments: [],
+      event: {
+        _id: 'eventId',
+      },
     },
   },
 ];
 
-const renderVolunteerDeleteModal = (
+const renderGroupDeleteModal = (
   link: ApolloLink,
-  props: InterfaceDeleteVolunteerModal,
+  props: InterfaceDeleteVolunteerGroupModal,
 ): RenderResult => {
   return render(
     <MockedProvider link={link} addTypename={false}>
       <Provider store={store}>
         <BrowserRouter>
-          <LocalizationProvider>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
             <I18nextProvider i18n={i18n}>
-              <VolunteerDeleteModal {...props} />
+              <VolunteerGroupDeleteModal {...props} />
             </I18nextProvider>
           </LocalizationProvider>
         </BrowserRouter>
@@ -85,25 +104,25 @@ const renderVolunteerDeleteModal = (
   );
 };
 
-describe('Testing Volunteer Delete Modal', () => {
-  it('Delete Volunteer', async () => {
-    renderVolunteerDeleteModal(link1, itemProps[0]);
-    expect(screen.getByText(t.removeVolunteer)).toBeInTheDocument();
+describe('Testing Group Delete Modal', () => {
+  it('Delete Group', async () => {
+    renderGroupDeleteModal(link1, itemProps[0]);
+    expect(screen.getByText(t.deleteGroup)).toBeInTheDocument();
 
     const yesBtn = screen.getByTestId('deleteyesbtn');
     expect(yesBtn).toBeInTheDocument();
     userEvent.click(yesBtn);
 
     await waitFor(() => {
-      expect(itemProps[0].refetchVolunteers).toHaveBeenCalled();
+      expect(itemProps[0].refetchGroups).toHaveBeenCalled();
       expect(itemProps[0].hide).toHaveBeenCalled();
-      expect(toast.success).toHaveBeenCalledWith(t.volunteerRemoved);
+      expect(toast.success).toHaveBeenCalledWith(t.volunteerGroupDeleted);
     });
   });
 
   it('Close Delete Modal', async () => {
-    renderVolunteerDeleteModal(link1, itemProps[0]);
-    expect(screen.getByText(t.removeVolunteer)).toBeInTheDocument();
+    renderGroupDeleteModal(link1, itemProps[0]);
+    expect(screen.getByText(t.deleteGroup)).toBeInTheDocument();
 
     const noBtn = screen.getByTestId('deletenobtn');
     expect(noBtn).toBeInTheDocument();
@@ -114,9 +133,9 @@ describe('Testing Volunteer Delete Modal', () => {
     });
   });
 
-  it('Delete Volunteer -> Error', async () => {
-    renderVolunteerDeleteModal(link2, itemProps[0]);
-    expect(screen.getByText(t.removeVolunteer)).toBeInTheDocument();
+  it('Delete Group -> Error', async () => {
+    renderGroupDeleteModal(link2, itemProps[0]);
+    expect(screen.getByText(t.deleteGroup)).toBeInTheDocument();
 
     const yesBtn = screen.getByTestId('deleteyesbtn');
     expect(yesBtn).toBeInTheDocument();

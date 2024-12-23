@@ -2,7 +2,6 @@ import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
-import 'jest-location-mock';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
@@ -11,10 +10,10 @@ import OrganizationScreen from './OrganizationScreen';
 import { ORGANIZATION_EVENT_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import styles from './OrganizationScreen.module.css';
-
+import { vi } from 'vitest';
 const mockID: string | undefined = '123';
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual('react-router-dom')),
   useParams: () => ({ orgId: mockID }),
   useMatch: () => ({ params: { eventId: 'event123', orgId: '123' } }),
 }));
@@ -91,10 +90,8 @@ describe('Testing OrganizationScreen', () => {
 
   test('handles window resize', () => {
     renderComponent();
-
     window.innerWidth = 800;
     fireEvent(window, new Event('resize'));
-
     expect(screen.getByTestId('mainpageright')).toHaveClass(styles.expand);
   });
 });

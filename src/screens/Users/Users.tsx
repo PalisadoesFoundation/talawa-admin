@@ -70,6 +70,7 @@ const Users = (): JSX.Element => {
   const { getItem } = useLocalStorage();
 
   const perPageResult = 12;
+  const tableLoaderRowLength = 4;
   const [isLoading, setIsLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -432,67 +433,66 @@ const Users = (): JSX.Element => {
         </div>
       ) : (
         <div className={styles.listBox}>
-          {isLoading ? (
-            <TableLoader headerTitles={headerTitles} noOfRows={perPageResult} />
-          ) : (
-            <InfiniteScroll
-              dataLength={
-                /* istanbul ignore next */
-                displayedUsers.length ?? 0
-              }
-              next={loadMoreUsers}
-              loader={
-                <TableLoader
-                  noOfCols={headerTitles.length}
-                  noOfRows={perPageResult}
-                />
-              }
-              hasMore={hasMore}
-              className={styles.listBox}
-              data-testid="users-list"
-              endMessage={
-                <div className={'w-100 text-center my-4'}>
-                  <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
-                </div>
-              }
-            >
-              <Table className="mb-0" responsive>
-                <thead>
-                  <tr>
-                    {headerTitles.map((title: string, index: number) => {
-                      return (
-                        <th key={index} scope="col">
-                          {title}
-                        </th>
-                      );
-                    })}
-                  </tr>
-                </thead>
-                <tbody>
-                  {usersData &&
-                    displayedUsers.map(
-                      (user: InterfaceQueryUserListItem, index: number) => {
-                        return (
-                          <UsersTableItem
-                            key={user.user._id}
-                            index={index}
-                            resetAndRefetch={resetAndRefetch}
-                            user={user}
-                            loggedInUserId={
-                              loggedInUserId ? loggedInUserId : ''
-                            }
-                          />
-                        );
-                      },
-                    )}
-                </tbody>
-              </Table>
-            </InfiniteScroll>
+          {isLoading && (
+            <TableLoader
+              noOfCols={headerTitles.length}
+              noOfRows={perPageResult}
+            />
           )}
+          <InfiniteScroll
+            dataLength={
+              /* istanbul ignore next */
+              displayedUsers.length ?? 0
+            }
+            next={loadMoreUsers}
+            loader={
+              <TableLoader
+                noOfCols={headerTitles.length}
+                noOfRows={tableLoaderRowLength}
+              />
+            }
+            hasMore={hasMore}
+            className={styles.listBox}
+            data-testid="users-list"
+            endMessage={
+              <div className={'w-100 text-center my-4'}>
+                <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
+              </div>
+            }
+          >
+            <Table className="mb-0" responsive>
+              <thead>
+                <tr>
+                  {headerTitles.map((title: string, index: number) => {
+                    return (
+                      <th key={index} scope="col">
+                        {title}
+                      </th>
+                    );
+                  })}
+                </tr>
+              </thead>
+              <tbody>
+                {usersData &&
+                  displayedUsers.map(
+                    (user: InterfaceQueryUserListItem, index: number) => {
+                      return (
+                        <UsersTableItem
+                          key={user.user._id}
+                          index={index}
+                          resetAndRefetch={resetAndRefetch}
+                          user={user}
+                          loggedInUserId={loggedInUserId ? loggedInUserId : ''}
+                        />
+                      );
+                    },
+                  )}
+              </tbody>
+            </Table>
+          </InfiniteScroll>
         </div>
       )}
     </>
   );
 };
-
 export default Users;

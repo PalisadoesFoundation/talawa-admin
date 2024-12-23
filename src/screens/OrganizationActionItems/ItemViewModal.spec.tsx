@@ -18,11 +18,12 @@ import type {
   InterfaceUserInfo,
   InterfaceVolunteerGroupInfo,
 } from 'utils/interfaces';
+import { vi } from 'vitest';
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
@@ -86,7 +87,7 @@ const actionItemCategory = {
 const itemProps: InterfaceViewModalProps[] = [
   {
     isOpen: true,
-    hide: jest.fn(),
+    hide: vi.fn(),
     item: {
       _id: 'actionItemId1',
       assignee: createAssignee(assigneeWithoutImage),
@@ -108,7 +109,7 @@ const itemProps: InterfaceViewModalProps[] = [
   },
   {
     isOpen: true,
-    hide: jest.fn(),
+    hide: vi.fn(),
     item: {
       _id: 'actionItemId2',
       assignee: createAssignee(assigneeWithImage),
@@ -130,7 +131,7 @@ const itemProps: InterfaceViewModalProps[] = [
   },
   {
     isOpen: true,
-    hide: jest.fn(),
+    hide: vi.fn(),
     item: {
       _id: 'actionItemId2',
       assignee: null,
@@ -152,7 +153,7 @@ const itemProps: InterfaceViewModalProps[] = [
   },
   {
     isOpen: true,
-    hide: jest.fn(),
+    hide: vi.fn(),
     item: {
       _id: 'actionItemId2',
       assignee: null,
@@ -174,7 +175,7 @@ const itemProps: InterfaceViewModalProps[] = [
   },
   {
     isOpen: true,
-    hide: jest.fn(),
+    hide: vi.fn(),
     item: {
       _id: 'actionItemId2',
       assignee: null,
