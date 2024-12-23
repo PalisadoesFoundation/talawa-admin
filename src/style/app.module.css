@@ -667,10 +667,10 @@ hr {
 
 .dropdownPledge {
   background-color: white;
-  border: 1px solid #31bb6b;
+  border: 1px solid var(--bs-primary);
   position: relative;
   display: inline-block;
-  color: #31bb6b;
+  color: var(--bs-primary);
 }
 
 .rowBackgroundPledge {
@@ -680,8 +680,8 @@ hr {
 
 .TableImagePledge {
   object-fit: cover;
-  width: 25px !important;
-  height: 25px !important;
+  width: calc(var(--table-image-size) / 2) !important;
+  height: calc(var(--table-image-size) / 2) !important;
   border-radius: 100% !important;
 }
 
