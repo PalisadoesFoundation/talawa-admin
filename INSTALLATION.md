@@ -63,15 +63,12 @@ First you need a local copy of `talawa-admin`. Run the following command in the 
       ![Image of user's clone](public/markdown/images/install2.png)
 
    1. Clone the repository to your local computer (replacing the values in `{{}}`):
-
       ```bash
       $ git clone https://github.com/{{YOUR GITHUB USERNAME}}/talawa-admin.git
       cd talawa-admin
       git checkout develop
       ```
-
       - **Note:** Make sure to check out the `develop` branch
-
    1. You now have a local copy of the code files. For more detailed instructions on contributing code, and managing the versions of this repository with `git`, checkout our [CONTRIBUTING.md](./CONTRIBUTING.md) file.
 
 4. **Talawa Administrators:**
@@ -79,7 +76,7 @@ First you need a local copy of `talawa-admin`. Run the following command in the 
    1. Clone the repository to your local computer using this command:
 
       ```bash
-      git clone https://github.com/PalisadoesFoundation/talawa-admin.git
+      $ git clone https://github.com/PalisadoesFoundation/talawa-admin.git
       ```
 
 ## Install node.js
@@ -89,7 +86,7 @@ Best way to install and manage `node.js` is making use of node version managers.
 Follow these steps to install the `node.js` packages in Windows, Linux and MacOS.
 
 1. For Windows:
-   1. first install `node.js` from their website at <https://nodejs.org>
+   1. first install `node.js` from their website at https://nodejs.org
       1. When installing, don't click the option to install the `necessary tools`. These are not needed in our case.
    2. then install [fnm](https://github.com/Schniz/fnm). Please read all the steps in this section first.
       1. All the commands listed on this page will need to be run in a Windows terminal session in the `talawa-admin` directory.
@@ -144,9 +141,9 @@ The prerequisites are now installed. The next step will be to get the app up and
 
 If you prefer to use Docker, you can install the app using the following command:
 
-1. Create a `.env` file as described in the Configuration section
+1.  Create a `.env` file as described in the Configuration section
 
-2. Build the Docker Image:
+2.  Build the Docker Image:
 
 Run the following command to build the Docker image:
 
@@ -158,31 +155,11 @@ docker build -t talawa-admin .
 
 After the build is complete, run the Docker container using this command:
 
-For Linux/MacOS
 ```bash
-docker run -d \
-  --name talawa-admin \
-  -p 4321:4321 \
-  -v $(pwd)/.env:/app/.env \
-  talawa-admin
-
+docker run -p 4321:4321 talawa-admin
 ```bash
-
-For Windows
-docker run -d `
-  --name talawa-admin `
-  -p 4321:4321 `
-  -v ${PWD}\.env:/app/.env `
-  talawa-admin
-
 
 The application will be accessible at `http://localhost:4321`
-
-4. Managing the container:
-
-To stop the container:
-```bash
-docker stop talawa-admin
 
 # Configuration
 
@@ -228,7 +205,7 @@ Add the endpoint for accessing talawa-api graphql service to the variable named 
 
 ```
 
-REACT_APP_TALAWA_URL="<http://API-IP-ADRESS:4000/graphql/>"
+REACT_APP_TALAWA_URL="http://API-IP-ADRESS:4000/graphql/"
 
 ```
 
@@ -236,7 +213,7 @@ If you are a software developer working on your local system, then the URL would
 
 ```
 
-REACT_APP_TALAWA_URL="<http://localhost:4000/graphql/>"
+REACT_APP_TALAWA_URL="http://localhost:4000/graphql/"
 
 ```
 
@@ -244,7 +221,7 @@ If you are trying to access Talawa Admin from a remote host with the API URL con
 
 ```
 
-REACT_APP_TALAWA_URL="<http://YOUR-REMOTE-ADDRESS:4000/graphql/>"
+REACT_APP_TALAWA_URL="http://YOUR-REMOTE-ADDRESS:4000/graphql/"
 
 ```
 
@@ -320,7 +297,7 @@ By default `talawa-admin` runs on port `4321` on your system's localhost. It is 
 
 ```
 
-<http://localhost:4321/>
+http://localhost:4321/
 
 ```
 
@@ -328,7 +305,7 @@ If you have specified a custom port number in your `.env` file, Talawa-Admin wil
 
 ```
 
-<http://localhost:${{customPort}}/>
+http://localhost:${{customPort}}/
 
 ```
 

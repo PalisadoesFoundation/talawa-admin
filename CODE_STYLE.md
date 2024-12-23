@@ -45,7 +45,7 @@ code style should not be changed and must be followed.
 
 ## Code Style and Naming Conventions
 
-- All React components *must* be written in PascalCase, with their file names, and associated CSS modules being written in PascalCase
+- All React components _must_ be written in PascalCase, with their file names, and associated CSS modules being written in PascalCase
 
 - All other files may follow the camelCase naming convention
 
@@ -118,7 +118,7 @@ export default BasicExample;
 
 ## Test and Code Linting
 
-Unit tests must be written for *all* code submissions to the repository,
+Unit tests must be written for _all_ code submissions to the repository,
 the code submitted must also be linted ESLint and formatted with Prettier.
 
 ## Folder/Directory Structure
@@ -138,7 +138,7 @@ the code submitted must also be linted ESLint and formatted with Prettier.
   - `_variables.scss` - Partial Sass file for variables
   - `app.scss` - Main Sass file for the app, imports all other partial Sass files
 
-`components`  - The directory for base components that will be used in the various views/screens
+`components` - The directory for base components that will be used in the various views/screens
 
 `Constant` - This houses all of the constants used in the project
 
@@ -167,7 +167,7 @@ Imports should be grouped in the following order:
 - Local imports
 
 If there is more than one import from a single library, they should be grouped together
-  
+
 Example - If there is single import from a library, both ways will work
 
 ```
@@ -190,37 +190,40 @@ Follow this [link](https://getbootstrap.com/docs/5.3/customize/sass/) to learn h
 **File Structure**
 
 - `src/assets/scss/components/{'{partialFile}'}.scss` - where the {'{partialFile}'} are the following files
-  - **_accordion.scss**
-  - **_alert.scss**
-  - **_badge.scss**
-  - **_breadcrumb.scss**
-  - **_buttons.scss**
-  - **_card.scss**
-  - **_carousel.scss**
-  - **_close.scss**
-  - **_dropdown.scss**
-  - **_list-group.scss**
-  - **_modal.scss**
-  - **_nav.scss**
-  - **_navbar.scss**
-  - **_offcanvas.scss**
-  - **_pagination.scss**
-  - **_placeholder.scss**
-  - **_progress.scss**
-  - **_spinners.scss**
+
+  - **\_accordion.scss**
+  - **\_alert.scss**
+  - **\_badge.scss**
+  - **\_breadcrumb.scss**
+  - **\_buttons.scss**
+  - **\_card.scss**
+  - **\_carousel.scss**
+  - **\_close.scss**
+  - **\_dropdown.scss**
+  - **\_list-group.scss**
+  - **\_modal.scss**
+  - **\_nav.scss**
+  - **\_navbar.scss**
+  - **\_offcanvas.scss**
+  - **\_pagination.scss**
+  - **\_placeholder.scss**
+  - **\_progress.scss**
+  - **\_spinners.scss**
 
 - `src/assets/scss/content/{'{partialFile}'}.scss` - where the {'{partialFile}'} are the following files
-  - **_table.scss**
-  - **_typography.scss**
+
+  - **\_table.scss**
+  - **\_typography.scss**
 
 - `src/assets/scss/forms/{'{partialFile}'}.scss` - where the {'{partialFile}'} are the following files
-  - **_check-radios.scss**
-  - **_floating-label.scss**
-  - **_form-control.scss**
-  - **_input-group.scss**
-  - **_range.scss**
-  - **_select.scss**
-  - **_validation.scss**
+
+  - **\_check-radios.scss**
+  - **\_floating-label.scss**
+  - **\_form-control.scss**
+  - **\_input-group.scss**
+  - **\_range.scss**
+  - **\_select.scss**
+  - **\_validation.scss**
 
 - `src/assets/scss/_utilities.scss` - The utility API is a Sass-based tool to generate utility classes.
 - `src/assets/scss/_variables.scss` - This file contains all the Sass variables used in the project

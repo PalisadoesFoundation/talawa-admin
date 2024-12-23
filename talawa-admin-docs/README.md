@@ -15,11 +15,11 @@ Talawa is a modular open source project to manage group activities of both non-p
 
 Core features include:
 
-1. Membership management
-2. Groups management
-3. Event registrations
-4. Recurring meetings
-5. Facilities registrations
+1.  Membership management
+2.  Groups management
+3.  Event registrations
+4.  Recurring meetings
+5.  Facilities registrations
 
 `talawa` is based on the original `quito` code created by the [Palisadoes Foundation][pfd] as part of its annual Calico Challenge program. Calico provides paid summer internships for Jamaican university students to work on selected open source projects. They are mentored by software professionals and receive stipends based on the completion of predefined milestones. Calico was started in 2015. Visit [The Palisadoes Foundation's website](http://www.palisadoes.org/) for more details on its origin and activities.
 

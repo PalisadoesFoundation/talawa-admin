@@ -1,12 +1,13 @@
+import type { QuestionCollection } from 'inquirer';
 import inquirer from 'inquirer';
 
 export const askForDocker = async (): Promise<string> => {
-  const answers = await inquirer.prompt([
+  const questions: QuestionCollection = [
     {
       type: 'input',
       name: 'dockerAppPort',
       message: 'Enter the port to expose Docker (default: 4321):',
-      default: 4321,
+      default: '4321', // Default should be a string since `input` returns string values
       validate: (input: string) => {
         const port = Number(input);
         if (isNaN(port) || port < 1024 || port > 65535) {
@@ -15,7 +16,8 @@ export const askForDocker = async (): Promise<string> => {
         return true;
       },
     },
-  ]);
+  ];
 
+  const answers = await inquirer.prompt(questions);
   return answers.dockerAppPort;
 };
