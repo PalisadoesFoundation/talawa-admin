@@ -18,6 +18,7 @@ describe('Testing Routes reducer', () => {
         { name: 'Donate', url: 'user/donate/undefined' },
         { name: 'Campaigns', url: 'user/campaigns/undefined' },
         { name: 'My Pledges', url: 'user/pledges/undefined' },
+        { name: 'Leave Organization', url: 'user/leaveorg/undefined' },
       ],
       components: [
         {
@@ -44,6 +45,11 @@ describe('Testing Routes reducer', () => {
           component: 'Campaigns',
         },
         { name: 'My Pledges', comp_id: 'pledges', component: 'Pledges' },
+        {
+          name: 'Leave Organization',
+          comp_id: 'leaveorg',
+          component: 'LeaveOrganization',
+        },
       ],
     });
   });
@@ -64,6 +70,7 @@ describe('Testing Routes reducer', () => {
         { name: 'Donate', url: 'user/donate/orgId' },
         { name: 'Campaigns', url: 'user/campaigns/orgId' },
         { name: 'My Pledges', url: 'user/pledges/orgId' },
+        { name: 'Leave Organization', url: 'user/leaveorg/orgId' },
       ],
       components: [
         {
@@ -90,6 +97,11 @@ describe('Testing Routes reducer', () => {
           component: 'Campaigns',
         },
         { name: 'My Pledges', comp_id: 'pledges', component: 'Pledges' },
+        {
+          name: 'Leave Organization',
+          comp_id: 'leaveorg',
+          component: 'LeaveOrganization',
+        },
       ],
     });
   });
