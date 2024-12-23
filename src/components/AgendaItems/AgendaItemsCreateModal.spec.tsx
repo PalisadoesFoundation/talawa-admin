@@ -74,9 +74,8 @@ vi.mock('react-toastify', () => ({
   },
 }));
 vi.mock('utils/convertToBase64');
-const mockedConvertToBase64 = convertToBase64 as import('vitest').MockedFunction<
-  typeof convertToBase64
->;
+const mockedConvertToBase64 =
+  convertToBase64 as import('vitest').MockedFunction<typeof convertToBase64>;
 
 describe('AgendaItemsCreateModal', () => {
   test('renders modal correctly', () => {
