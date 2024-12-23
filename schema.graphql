@@ -508,6 +508,7 @@ type Chat {
   updatedAt: DateTime!
   users: [User!]!
   admins: [User]
+  unseenMessagesByUsers: JSON
   lastMessageId: String
 }
 
