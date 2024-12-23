@@ -671,8 +671,10 @@ const loginPage = (): JSX.Element => {
                           </p>
                         )
                       ) : null}
-
-                      {!isInputFocused &&
+                      {/*
+                      The below code only runs if the input field is not focused and the password length is greater than 0 and less than 6.
+                       */}
+                      {/* {!isInputFocused &&
                         signformState.signPassword.length > 0 &&
                         signformState.signPassword.length < 6 && (
                           <div
@@ -684,7 +686,7 @@ const loginPage = (): JSX.Element => {
                             </span>
                             {t('atleast_6_char_long')}
                           </div>
-                        )}
+                        )} */}
                       {isInputFocused && (
                         <p
                           className={`form-text ${
