@@ -93,7 +93,8 @@ function SubTags(): JSX.Element {
           fetchMoreResult?: { getChildTags: InterfaceQueryUserTagChildTags };
         },
       ) => {
-        if (!fetchMoreResult) /* istanbul ignore next */ return prevResult;
+        /* istanbul ignore next -- @preserve */
+        if (!fetchMoreResult) return prevResult;
 
         return {
           getChildTags: {
@@ -126,7 +127,7 @@ function SubTags(): JSX.Element {
         },
       });
 
-      /* istanbul ignore next */
+      /* istanbul ignore next -- @preserve */
       if (data) {
         toast.success(t('tagCreationSuccess') as string);
         subTagsRefetch();
@@ -134,7 +135,7 @@ function SubTags(): JSX.Element {
         setAddSubTagModalIsOpen(false);
       }
     } catch (error: unknown) {
-      /* istanbul ignore next */
+      /* istanbul ignore next -- @preserve */
       if (error instanceof Error) {
         toast.error(error.message);
       }
@@ -155,8 +156,8 @@ function SubTags(): JSX.Element {
   }
 
   const subTagsList =
-    subTagsData?.getChildTags.childTags.edges.map((edge) => edge.node) ??
-    /* istanbul ignore next */ [];
+    /* istanbul ignore next -- @preserve */
+    subTagsData?.getChildTags.childTags.edges.map((edge) => edge.node) ?? [];
 
   const parentTagName = subTagsData?.getChildTags.name;
 
@@ -394,7 +395,7 @@ function SubTags(): JSX.Element {
                   next={loadMoreSubTags}
                   hasMore={
                     subTagsData?.getChildTags.childTags.pageInfo.hasNextPage ??
-                    /* istanbul ignore next */
+                    /* istanbul ignore next -- @preserve */
                     false
                   }
                   loader={<InfiniteScrollLoader />}
@@ -406,15 +407,16 @@ function SubTags(): JSX.Element {
                     hideFooter={true}
                     getRowId={(row) => row.id}
                     slots={{
-                      noRowsOverlay: /* istanbul ignore next */ () => (
-                        <Stack
-                          height="100%"
-                          alignItems="center"
-                          justifyContent="center"
-                        >
-                          {t('noTagsFound')}
-                        </Stack>
-                      ),
+                      noRowsOverlay:
+                        /* istanbul ignore next -- @preserve */ () => (
+                          <Stack
+                            height="100%"
+                            alignItems="center"
+                            justifyContent="center"
+                          >
+                            {t('noTagsFound')}
+                          </Stack>
+                        ),
                     }}
                     sx={dataGridStyle}
                     getRowClassName={() => `${styles.rowBackground}`}
