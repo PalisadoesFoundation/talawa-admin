@@ -13,24 +13,9 @@ This document provides instructions on how to set up and start a running instanc
   - [Install node.js](#install-nodejs)
   - [Install TypeScript](#install-typescript)
   - [Install Required Packages](#install-required-packages)
-- [Configuration](#configuration)
-  - [Creating .env file](#creating-env-file)
-  - [Setting up PORT in .env file](#setting-up-port-in-env-file)
-  - [Setting up REACT_APP_TALAWA_URL in .env file](#setting-up-react_app_talawa_url-in-env-file)
-  - [Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file](#setting-up-react_app_recaptcha_site_key-in-env-file)
-  - [Setting up Compiletime and Runtime logs](#setting-up-compiletime-and-runtime-logs)
-- [Post Configuration Steps](#post-configuration-steps)
-  - [Running Talawa-Admin](#running-talawa-admin)
-  - [Accessing Talawa-Admin](#accessing-talawa-admin)
-  - [Talawa-Admin Registration](#talawa-admin-registration)
-  - [Talawa-Admin Login](#talawa-admin-login)
-- [Testing](#testing)
-  - [Running tests](#running-tests)
-  - [Debugging tests](#debugging-tests)
-  - [Linting code files](#linting-code-files)
-  - [Husky for Git Hooks](#husky-for-git-hooks)
-      - [pre-commit hook](#pre-commit-hook)
-      - [post-merge hook](#post-merge-hook)
+- [Installation using Docker](#installation-using-docker)
+  - [Prerequisites](#prerequisites-1)
+    - [Development Setup](#development-setup)
 
 <!-- tocstop -->
 
@@ -65,31 +50,34 @@ First you need a local copy of `talawa-admin`. Run the following command in the 
 
 1. On your computer, navigate to the folder where you want to setup the repository.
 2. Open a `cmd` (Windows) or `terminal` (Linux or MacOS) session in this folder.
-    1. An easy way to do this is to right-click and choose appropriate option based on your OS.
+   1. An easy way to do this is to right-click and choose appropriate option based on your OS.
 3. **For Our Open Source Contributor Software Developers:**
-    1. Next, we'll fork and clone the `talawa-admin` repository.
-    1. In your web browser, navigate to [https://github.com/PalisadoesFoundation/talawa-admin/](https://github.com/PalisadoesFoundation/talawa-admin/) and click on the `fork` button. It is placed on the right corner opposite the repository name `PalisadoesFoundation/talawa-admin`.
 
-       ![Image with fork](public/markdown/images/install1.png)
+   1. Next, we'll fork and clone the `talawa-admin` repository.
+   1. In your web browser, navigate to [https://github.com/PalisadoesFoundation/talawa-admin/](https://github.com/PalisadoesFoundation/talawa-admin/) and click on the `fork` button. It is placed on the right corner opposite the repository name `PalisadoesFoundation/talawa-admin`.
 
-    2. You should now see `talawa-admin` under your repositories. It will be marked as forked from `PalisadoesFoundation/talawa-admin`
+      ![Image with fork](public/markdown/images/install1.png)
 
-       ![Image of user's clone](public/markdown/images/install2.png)
+   1. You should now see `talawa-admin` under your repositories. It will be marked as forked from `PalisadoesFoundation/talawa-admin`
 
-    3. Clone the repository to your local computer (replacing the values in `{{}}`):
-        ```bash
-        $ git clone https://github.com/{{YOUR GITHUB USERNAME}}/talawa-admin.git
-        cd talawa-admin
-        git checkout develop
-        ```
-        - **Note:** Make sure to check out the `develop` branch
-    4. You now have a local copy of the code files. For more detailed instructions on contributing code, and managing the versions of this repository with `git`, checkout our [CONTRIBUTING.md](./CONTRIBUTING.md) file.
+      ![Image of user's clone](public/markdown/images/install2.png)
+
+   1. Clone the repository to your local computer (replacing the values in `{{}}`):
+      ```bash
+      $ git clone https://github.com/{{YOUR GITHUB USERNAME}}/talawa-admin.git
+      cd talawa-admin
+      git checkout develop
+      ```
+      - **Note:** Make sure to check out the `develop` branch
+   1. You now have a local copy of the code files. For more detailed instructions on contributing code, and managing the versions of this repository with `git`, checkout our [CONTRIBUTING.md](./CONTRIBUTING.md) file.
+
 4. **Talawa Administrators:**
-      1. Clone the repository to your local computer using this command:
 
-          ```bash
-          $ git clone https://github.com/PalisadoesFoundation/talawa-admin.git
-          ```
+   1. Clone the repository to your local computer using this command:
+
+      ```bash
+      $ git clone https://github.com/PalisadoesFoundation/talawa-admin.git
+      ```
 
 ## Install node.js
 
@@ -98,26 +86,26 @@ Best way to install and manage `node.js` is making use of node version managers.
 Follow these steps to install the `node.js` packages in Windows, Linux and MacOS.
 
 1. For Windows:
-    1. first install `node.js` from their website at https://nodejs.org
-        1. When installing, don't click the option to install the `necessary tools`. These are not needed in our case. 
-    2. then install [fnm](https://github.com/Schniz/fnm). Please read all the steps in this section first.
-        1. All the commands listed on this page will need to be run in a Windows terminal session in the `talawa-admin` directory.
-        2. Install `fnm` using the `winget` option listed on the page.
-        3. Setup `fnm` to automatically set the version of `node.js` to the version required for the repository using these steps:
-            1. First, refer to the `fnm` web page's section on `Shell Setup` recommendations.
-            2. Open a `Windows PowerShell` terminal window
-            3. Run the recommended `Windows PowerShell` command to open `notepad`.
-            4. Paste the recommended string into `notepad`
-            5. Save the document.
-            6. Exit `notepad`
-            7. Exit PowerShell
-            8. This will ensure that you are always using the correct version of `node.js`
+   1. first install `node.js` from their website at https://nodejs.org
+      1. When installing, don't click the option to install the `necessary tools`. These are not needed in our case.
+   2. then install [fnm](https://github.com/Schniz/fnm). Please read all the steps in this section first.
+      1. All the commands listed on this page will need to be run in a Windows terminal session in the `talawa-admin` directory.
+      2. Install `fnm` using the `winget` option listed on the page.
+      3. Setup `fnm` to automatically set the version of `node.js` to the version required for the repository using these steps:
+         1. First, refer to the `fnm` web page's section on `Shell Setup` recommendations.
+         2. Open a `Windows PowerShell` terminal window
+         3. Run the recommended `Windows PowerShell` command to open `notepad`.
+         4. Paste the recommended string into `notepad`
+         5. Save the document.
+         6. Exit `notepad`
+         7. Exit PowerShell
+         8. This will ensure that you are always using the correct version of `node.js`
 2. For Linux and MacOS, use the terminal window.
    1. install `node.js`
    2. then install `fnm`
-         1. Refer to the installation page's section on the `Shell Setup` recommendations.
-         2. Run the respective recommended commands to setup your node environment
-         3. This will ensure that you are always using the correct version of `node.js`
+      1. Refer to the installation page's section on the `Shell Setup` recommendations.
+      2. Run the respective recommended commands to setup your node environment
+      3. This will ensure that you are always using the correct version of `node.js`
 
 ## Install TypeScript
 
@@ -141,15 +129,47 @@ npm install
 
 The prerequisites are now installed. The next step will be to get the app up and running.
 
+# Installation using Docker
+
+## Prerequisites
+
+1. Install Docker on your system:
+   - [Docker Desktop for Windows/Mac](https://www.docker.com/products/docker-desktop)
+   - [Docker Engine for Linux](https://docs.docker.com/engine/install/)
+
+### Development Setup
+
+If you prefer to use Docker, you can install the app using the following command:
+
+1.  Create a `.env` file as described in the Configuration section
+
+2.  Build the Docker Image:
+
+Run the following command to build the Docker image:
+
+````bash
+docker build -t talawa-admin .
+```bash
+
+3.  Run the Docker container:
+
+After the build is complete, run the Docker container using this command:
+
+```bash
+docker run -p 4321:4321 talawa-admin
+```bash
+
+The application will be accessible at `http://localhost:4321`
+
 # Configuration
 
 It's important to configure Talawa-Admin. Here's how to do it.
 
 You can use our interactive setup script for the configuration. Use the following command for the same.
 
-```
+```bash
 npm run setup
-```
+```bash
 
 All the options in "setup" can be done manually as well and here's how to do it. - [Creating .env file](#creating-env-file)
 
@@ -157,20 +177,23 @@ All the options in "setup" can be done manually as well and here's how to do it.
 
 A file named .env is required in the root directory of talawa-admin for storing environment variables used at runtime. It is not a part of the repo and you will have to create it. For a sample of `.env` file there is a file named `.env.example` in the root directory. Create a new `.env` file by copying the contents of the `.env.example` into `.env` file. Use this command:
 
-```
+````
+
 cp .env.example .env
+
 ```
 
 This `.env` file must be populated with the following environment variables for `talawa-admin` to work:
 
-| Variable                     | Description                                       |
-| ---------------------------- | ------------------------------------------------- |
-| PORT                         | Custom port for Talawa-Admin development purposes |
-| REACT_APP_TALAWA_URL         | URL endpoint for talawa-api graphql service       |
-| REACT_APP_USE_RECAPTCHA      | Whether you want to use reCAPTCHA or not          |
-| REACT_APP_RECAPTCHA_SITE_KEY | Site key for authentication using reCAPTCHA       |
+| Variable                        | Description                                       |
+| ------------------------------- | ------------------------------------------------- |
+| PORT                            | Custom port for Talawa-Admin development purposes |
+| REACT_APP_TALAWA_URL            | URL endpoint for talawa-api graphql service       |
+| REACT_APP_BACKEND_WEBSOCKET_URL | URL endpoint for websocket end point              |
+| REACT_APP_USE_RECAPTCHA         | Whether you want to use reCAPTCHA or not          |
+| REACT_APP_RECAPTCHA_SITE_KEY    | Site key for authentication using reCAPTCHA       |
 
-Follow the instructions from the sections [Setting up PORT in .env file](#setting-up-port-in-env-file), [Setting up REACT_APP_TALAWA_URL in .env file](#setting-up-REACT_APP_TALAWA_URL-in-env-file), [Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file](#setting-up-REACT_APP_RECAPTCHA_SITE_KEY-in-env-file) and [Setting up Compiletime and Runtime logs](#setting-up-compiletime-and-runtime-logs) to set up these environment variables.
+Follow the instructions from the sections [Setting up PORT in .env file](#setting-up-port-in-env-file), [Setting up REACT_APP_TALAWA_URL in .env file](#setting-up-REACT_APP_TALAWA_URL-in-env-file), [Setting up REACT_APP_BACKEND_WEBSOCKET_URL in .env file](#setting-up-react_app_backend_websocket_url-in-env-file), [Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file](#setting-up-REACT_APP_RECAPTCHA_SITE_KEY-in-env-file) and [Setting up Compiletime and Runtime logs](#setting-up-compiletime-and-runtime-logs) to set up these environment variables.
 
 ## Setting up PORT in .env file
 
@@ -181,22 +204,54 @@ Add a custom port number for Talawa-Admin development purposes to the variable n
 Add the endpoint for accessing talawa-api graphql service to the variable named `REACT_APP_TALAWA_URL` in the `.env` file.
 
 ```
+
 REACT_APP_TALAWA_URL="http://API-IP-ADRESS:4000/graphql/"
+
 ```
 
 If you are a software developer working on your local system, then the URL would be:
 
 ```
+
 REACT_APP_TALAWA_URL="http://localhost:4000/graphql/"
+
 ```
 
 If you are trying to access Talawa Admin from a remote host with the API URL containing "localhost", You will have to change the API URL to
 
 ```
+
 REACT_APP_TALAWA_URL="http://YOUR-REMOTE-ADDRESS:4000/graphql/"
+
 ```
 
-For additional details, please refer  the `How to Access the Talawa-API URL` section in the INSTALLATION.md file found in the [Talawa-API repo](https://github.com/PalisadoesFoundation/talawa-api).
+## Setting up REACT_APP_BACKEND_WEBSOCKET_URL in .env file
+
+The endpoint for accessing talawa-api WebSocket graphql service for handling subscriptions is automatically added to the variable named `REACT_APP_BACKEND_WEBSOCKET_URL` in the `.env` file.
+
+```
+
+REACT_APP_BACKEND_WEBSOCKET_URL="ws://API-IP-ADRESS:4000/graphql/"
+
+```
+
+If you are a software developer working on your local system, then the URL would be:
+
+```
+
+REACT_APP_BACKEND_WEBSOCKET_URL="ws://localhost:4000/graphql/"
+
+```
+
+If you are trying to access Talawa Admin from a remote host with the API URL containing "localhost", You will have to change the API URL to
+
+```
+
+REACT_APP_BACKEND_WEBSOCKET_URL="ws://YOUR-REMOTE-ADDRESS:4000/graphql/"
+
+```
+
+For additional details, please refer the `How to Access the Talawa-API URL` section in the INSTALLATION.md file found in the [Talawa-API repo](https://github.com/PalisadoesFoundation/talawa-api).
 
 ## Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file
 
@@ -213,7 +268,9 @@ If you want to setup Google reCAPTCHA now, you may refer to the `RECAPTCHA` sect
 Copy/paste this `reCAPTCHA site key` to the variable named `REACT_APP_RECAPTCHA_SITE_KEY` in `.env` file.
 
 ```
+
 REACT_APP_RECAPTCHA_SITE_KEY="this_is_the_recaptcha_key"
+
 ```
 
 ## Setting up Compiletime and Runtime logs
@@ -229,7 +286,9 @@ It's now time to start Talawa-Admin and get it running
 Run the following command to start `talawa-admin` development server:
 
 ```
+
 npm run serve
+
 ```
 
 ## Accessing Talawa-Admin
@@ -237,13 +296,17 @@ npm run serve
 By default `talawa-admin` runs on port `4321` on your system's localhost. It is available on the following endpoint:
 
 ```
+
 http://localhost:4321/
+
 ```
 
 If you have specified a custom port number in your `.env` file, Talawa-Admin will run on the following endpoint:
 
 ```
+
 http://localhost:${{customPort}}/
+
 ```
 
 Replace `${{customPort}}` with the actual custom port number you have configured in your `.env` file.
@@ -265,7 +328,9 @@ It is important to test our code. If you are a contributor, please follow these 
 You can run the tests for `talawa-admin` using this command:
 
 ```
+
 npm run test
+
 ```
 
 ## Debugging tests
@@ -273,8 +338,10 @@ npm run test
 You can see the output of failing tests in broswer by running `jest-preview` package before running your tests
 
 ```
+
 npm run jest-preview
 npm run test
+
 ```
 
 You don't need to re-run the `npm run jest-preview` command each time, simply run the `npm run test` command if the Jest Preview server is already running in the background, it'll automatically detect any failing tests and show the preview at `http://localhost:3336` as shown in this screenshot -
@@ -286,7 +353,9 @@ You don't need to re-run the `npm run jest-preview` command each time, simply ru
 You can lint your code files using this command:
 
 ```
+
 npm run lint:fix
+
 ```
 
 ## Husky for Git Hooks
@@ -310,3 +379,4 @@ If you don't want this hook to run, you can manually opt out of this using the `
         git pull --no-verify
 
 <br/>
+```

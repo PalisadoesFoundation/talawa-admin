@@ -185,7 +185,9 @@ describe('Testing Agenda Categories Component', () => {
     userEvent.click(screen.getByTestId('createAgendaCategoryFormSubmitBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.agendaCategoryCreated);
+      expect(toast.success).toHaveBeenCalledWith(
+        translations.agendaCategoryCreated,
+      );
     });
   });
 

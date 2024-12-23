@@ -1,9 +1,10 @@
-import { UNASSIGN_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import {
-  USER_TAG_ANCESTORS,
-  USER_TAGS_ASSIGNED_MEMBERS,
-  USER_TAGS_MEMBERS_TO_ASSIGN_TO,
-} from 'GraphQl/Queries/userTagQueries';
+  REMOVE_USER_TAG,
+  UNASSIGN_USER_TAG,
+  UPDATE_USER_TAG,
+} from 'GraphQl/Mutations/TagMutations';
+import { USER_TAGS_ASSIGNED_MEMBERS } from 'GraphQl/Queries/userTagQueries';
+import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 
 export const MOCKS = [
   {
@@ -11,192 +12,19 @@ export const MOCKS = [
       query: USER_TAGS_ASSIGNED_MEMBERS,
       variables: {
         id: '1',
-        after: null,
-        before: null,
-        first: 5,
-        last: null,
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: {
+          firstName: { starts_with: '' },
+          lastName: { starts_with: '' },
+        },
+        sortedBy: { id: 'DESCENDING' },
       },
     },
     result: {
       data: {
-        getUserTag: {
+        getAssignedUsers: {
           name: 'tag1',
           usersAssignedTo: {
-            edges: [
-              {
-                node: {
-                  _id: '1',
-                  firstName: 'member',
-                  lastName: '1',
-                },
-                cursor: '1',
-              },
-              {
-                node: {
-                  _id: '2',
-                  firstName: 'member',
-                  lastName: '2',
-                },
-                cursor: '2',
-              },
-              {
-                node: {
-                  _id: '3',
-                  firstName: 'member',
-                  lastName: '3',
-                },
-                cursor: '3',
-              },
-              {
-                node: {
-                  _id: '4',
-                  firstName: 'member',
-                  lastName: '4',
-                },
-                cursor: '4',
-              },
-              {
-                node: {
-                  _id: '5',
-                  firstName: 'member',
-                  lastName: '5',
-                },
-                cursor: '5',
-              },
-            ],
-            pageInfo: {
-              startCursor: '1',
-              endCursor: '5',
-              hasNextPage: true,
-              hasPreviousPage: false,
-            },
-            totalCount: 6,
-          },
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_TAGS_ASSIGNED_MEMBERS,
-      variables: {
-        id: '1',
-        after: '5',
-        before: null,
-        first: 5,
-        last: null,
-      },
-    },
-    result: {
-      data: {
-        getUserTag: {
-          name: 'tag1',
-          usersAssignedTo: {
-            edges: [
-              {
-                node: {
-                  _id: '6',
-                  firstName: 'member',
-                  lastName: '6',
-                },
-                cursor: '6',
-              },
-            ],
-            pageInfo: {
-              startCursor: '6',
-              endCursor: '6',
-              hasNextPage: false,
-              hasPreviousPage: true,
-            },
-            totalCount: 6,
-          },
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_TAGS_ASSIGNED_MEMBERS,
-      variables: {
-        id: '1',
-        after: null,
-        before: '6',
-        first: null,
-        last: 5,
-      },
-    },
-    result: {
-      data: {
-        getUserTag: {
-          name: 'tag1',
-          usersAssignedTo: {
-            edges: [
-              {
-                node: {
-                  _id: '1',
-                  firstName: 'member',
-                  lastName: '1',
-                },
-                cursor: '1',
-              },
-              {
-                node: {
-                  _id: '2',
-                  firstName: 'member',
-                  lastName: '2',
-                },
-                cursor: '2',
-              },
-              {
-                node: {
-                  _id: '3',
-                  firstName: 'member',
-                  lastName: '3',
-                },
-                cursor: '3',
-              },
-              {
-                node: {
-                  _id: '4',
-                  firstName: 'member',
-                  lastName: '4',
-                },
-                cursor: '4',
-              },
-              {
-                node: {
-                  _id: '5',
-                  firstName: 'member',
-                  lastName: '5',
-                },
-                cursor: '5',
-              },
-            ],
-            pageInfo: {
-              startCursor: '1',
-              endCursor: '5',
-              hasNextPage: true,
-              hasPreviousPage: false,
-            },
-            totalCount: 6,
-          },
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_TAGS_MEMBERS_TO_ASSIGN_TO,
-      variables: {
-        id: '1',
-        first: 7,
-      },
-    },
-    result: {
-      data: {
-        getUserTag: {
-          name: 'tag1',
-          usersToAssignTo: {
             edges: [
               {
                 node: {
@@ -254,34 +82,189 @@ export const MOCKS = [
                 },
                 cursor: '7',
               },
+              {
+                node: {
+                  _id: '8',
+                  firstName: 'member',
+                  lastName: '8',
+                },
+                cursor: '8',
+              },
+              {
+                node: {
+                  _id: '9',
+                  firstName: 'member',
+                  lastName: '9',
+                },
+                cursor: '9',
+              },
+              {
+                node: {
+                  _id: '10',
+                  firstName: 'member',
+                  lastName: '10',
+                },
+                cursor: '10',
+              },
             ],
             pageInfo: {
               startCursor: '1',
-              endCursor: '7',
+              endCursor: '10',
               hasNextPage: true,
               hasPreviousPage: false,
             },
-            totalCount: 10,
+            totalCount: 12,
           },
+          ancestorTags: [],
         },
       },
     },
   },
   {
     request: {
-      query: USER_TAG_ANCESTORS,
+      query: USER_TAGS_ASSIGNED_MEMBERS,
       variables: {
         id: '1',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        after: '10',
+        where: {
+          firstName: { starts_with: '' },
+          lastName: { starts_with: '' },
+        },
+        sortedBy: { id: 'DESCENDING' },
       },
     },
     result: {
       data: {
-        getUserTagAncestors: [
-          {
-            _id: '1',
-            name: 'tag1',
+        getAssignedUsers: {
+          name: 'tag1',
+          usersAssignedTo: {
+            edges: [
+              {
+                node: {
+                  _id: '11',
+                  firstName: 'member',
+                  lastName: '11',
+                },
+                cursor: '11',
+              },
+              {
+                node: {
+                  _id: '12',
+                  firstName: 'member',
+                  lastName: '12',
+                },
+                cursor: '12',
+              },
+            ],
+            pageInfo: {
+              startCursor: '11',
+              endCursor: '12',
+              hasNextPage: false,
+              hasPreviousPage: true,
+            },
+            totalCount: 12,
           },
-        ],
+          ancestorTags: [],
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: USER_TAGS_ASSIGNED_MEMBERS,
+      variables: {
+        id: '1',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: {
+          firstName: { starts_with: 'assigned' },
+          lastName: { starts_with: 'user' },
+        },
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    result: {
+      data: {
+        getAssignedUsers: {
+          name: 'tag1',
+          usersAssignedTo: {
+            edges: [
+              {
+                node: {
+                  _id: '1',
+                  firstName: 'assigned',
+                  lastName: 'user1',
+                },
+                cursor: '1',
+              },
+              {
+                node: {
+                  _id: '2',
+                  firstName: 'assigned',
+                  lastName: 'user2',
+                },
+                cursor: '2',
+              },
+            ],
+            pageInfo: {
+              startCursor: '1',
+              endCursor: '2',
+              hasNextPage: false,
+              hasPreviousPage: false,
+            },
+            totalCount: 2,
+          },
+          ancestorTags: [],
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: USER_TAGS_ASSIGNED_MEMBERS,
+      variables: {
+        id: '1',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: {
+          firstName: { starts_with: 'assigned' },
+          lastName: { starts_with: 'user' },
+        },
+        sortedBy: { id: 'ASCENDING' },
+      },
+    },
+    result: {
+      data: {
+        getAssignedUsers: {
+          name: 'tag1',
+          usersAssignedTo: {
+            edges: [
+              {
+                node: {
+                  _id: '2',
+                  firstName: 'assigned',
+                  lastName: 'user2',
+                },
+                cursor: '2',
+              },
+              {
+                node: {
+                  _id: '1',
+                  firstName: 'assigned',
+                  lastName: 'user1',
+                },
+                cursor: '1',
+              },
+            ],
+            pageInfo: {
+              startCursor: '2',
+              endCursor: '1',
+              hasNextPage: false,
+              hasPreviousPage: false,
+            },
+            totalCount: 2,
+          },
+          ancestorTags: [],
+        },
       },
     },
   },
@@ -301,6 +284,37 @@ export const MOCKS = [
       },
     },
   },
+  {
+    request: {
+      query: UPDATE_USER_TAG,
+      variables: {
+        tagId: '1',
+        name: 'tag 1 edited',
+      },
+    },
+    result: {
+      data: {
+        updateUserTag: {
+          _id: '1',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: REMOVE_USER_TAG,
+      variables: {
+        id: '1',
+      },
+    },
+    result: {
+      data: {
+        removeUserTag: {
+          _id: '1',
+        },
+      },
+    },
+  },
 ];
 
 export const MOCKS_ERROR_ASSIGNED_MEMBERS = [
@@ -309,64 +323,12 @@ export const MOCKS_ERROR_ASSIGNED_MEMBERS = [
       query: USER_TAGS_ASSIGNED_MEMBERS,
       variables: {
         id: '1',
-        after: null,
-        before: null,
-        first: 5,
-        last: null,
-      },
-    },
-    error: new Error('Mock Graphql Error'),
-  },
-  {
-    request: {
-      query: USER_TAG_ANCESTORS,
-      variables: {
-        id: '1',
-      },
-    },
-    result: {
-      data: {
-        getUserTagAncestors: [],
-      },
-    },
-  },
-];
-
-export const MOCKS_ERROR_TAG_ANCESTORS = [
-  {
-    request: {
-      query: USER_TAGS_ASSIGNED_MEMBERS,
-      variables: {
-        id: '1',
-        after: null,
-        before: null,
-        first: 5,
-        last: null,
-      },
-    },
-    result: {
-      data: {
-        getUserTag: {
-          name: 'tag1',
-          usersAssignedTo: {
-            edges: [],
-            pageInfo: {
-              startCursor: '1',
-              endCursor: '5',
-              hasNextPage: true,
-              hasPreviousPage: false,
-            },
-            totalCount: 6,
-          },
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: {
+          firstName: { starts_with: '' },
+          lastName: { starts_with: '' },
         },
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_TAG_ANCESTORS,
-      variables: {
-        id: '1',
+        sortedBy: { id: 'DESCENDING' },
       },
     },
     error: new Error('Mock Graphql Error'),

@@ -14,7 +14,7 @@ import { BLOCK_PAGE_MEMBER_LIST } from 'GraphQl/Queries/Queries';
 import TableLoader from 'components/TableLoader/TableLoader';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
-import styles from './BlockUser.module.css';
+import styles from '../../style/app.module.css';
 import { useParams } from 'react-router-dom';
 
 interface InterfaceMember {
@@ -189,9 +189,9 @@ const Requests = (): JSX.Element => {
     <>
       <div>
         {/* Buttons Container */}
-        <div className={styles.btnsContainer}>
-          <div className={styles.inputContainer}>
-            <div className={styles.input}>
+        <div className={styles.btnsContainerBlockAndUnblock}>
+          <div className={styles.inputContainerBlockAndUnblock}>
+            <div className={styles.inputBlockAndUnblock}>
               <Form.Control
                 type="name"
                 id="searchBlockedUsers"
@@ -210,7 +210,7 @@ const Requests = (): JSX.Element => {
               />
               <Button
                 tabIndex={-1}
-                className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+                className={styles.search}
                 onClick={handleSearchByBtnClick}
                 data-testid="searchBtn"
               >
@@ -218,17 +218,22 @@ const Requests = (): JSX.Element => {
               </Button>
             </div>
           </div>
-          <div className={styles.btnsBlock}>
+          <div className={styles.btnsBlockBlockAndUnblock}>
             <div className={styles.largeBtnsWrapper}>
               {/* Dropdown for filtering members */}
               <Dropdown aria-expanded="false" title="Sort organizations">
-                <Dropdown.Toggle variant="success" data-testid="userFilter">
+                <Dropdown.Toggle
+                  variant="success"
+                  data-testid="userFilter"
+                  className={`${styles.createButton} mt-2`}
+                >
                   <SortIcon className={'me-1'} />
                   {showBlockedMembers ? t('blockedUsers') : t('allMembers')}
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item
                     active={!showBlockedMembers}
+                    className={styles.dropdownItem}
                     data-testid="showMembers"
                     onClick={(): void => setShowBlockedMembers(false)}
                   >
@@ -236,6 +241,7 @@ const Requests = (): JSX.Element => {
                   </Dropdown.Item>
                   <Dropdown.Item
                     active={showBlockedMembers}
+                    className={styles.dropdownItem}
                     data-testid="showBlockedMembers"
                     onClick={(): void => setShowBlockedMembers(true)}
                   >
@@ -245,7 +251,11 @@ const Requests = (): JSX.Element => {
               </Dropdown>
               {/* Dropdown for sorting by name */}
               <Dropdown aria-expanded="false">
-                <Dropdown.Toggle variant="success" data-testid="nameFilter">
+                <Dropdown.Toggle
+                  variant="success"
+                  data-testid="nameFilter"
+                  className={`${styles.createButton} mt-2`}
+                >
                   <SortIcon className={'me-1'} />
                   {searchByFirstName
                     ? t('searchByFirstName')
@@ -255,12 +265,14 @@ const Requests = (): JSX.Element => {
                   <Dropdown.Item
                     active={searchByFirstName}
                     data-testid="searchByFirstName"
+                    className={styles.dropdownItem}
                     onClick={(): void => setSearchByFirstName(true)}
                   >
                     {t('searchByFirstName')}
                   </Dropdown.Item>
                   <Dropdown.Item
                     active={!searchByFirstName}
+                    className={styles.dropdownItem}
                     data-testid="searchByLastName"
                     onClick={(): void => setSearchByFirstName(false)}
                   >
@@ -289,7 +301,11 @@ const Requests = (): JSX.Element => {
             {loadingMembers ? (
               <TableLoader headerTitles={headerTitles} noOfRows={10} />
             ) : (
-              <Table responsive data-testid="userList">
+              <Table
+                responsive
+                data-testid="userList"
+                className={styles.custom_table}
+              >
                 <thead>
                   <tr>
                     {headerTitles.map((title: string, index: number) => {
@@ -315,6 +331,7 @@ const Requests = (): JSX.Element => {
                             <Button
                               variant="danger"
                               size="sm"
+                              className={styles.closeButton}
                               onClick={async (): Promise<void> => {
                                 await handleUnBlockUser(user._id);
                               }}
@@ -326,6 +343,7 @@ const Requests = (): JSX.Element => {
                             <Button
                               variant="success"
                               size="sm"
+                              className={styles.addButton}
                               onClick={async (): Promise<void> => {
                                 await handleBlockUser(user._id);
                               }}

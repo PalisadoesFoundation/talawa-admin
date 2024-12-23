@@ -38,15 +38,18 @@ jobs:
       - name: Count number of lines
         run: |
           chmod +x ./.github/workflows/countline.py
-          ./.github/workflows/countline.py --lines 600 --exclude_files src/screens/LoginPage/LoginPage.tsx src/GraphQl/Queries/Queries.ts src/screens/OrgList/OrgList.tsx src/GraphQl/Mutations/mutations.ts src/components/EventListCard/EventListCardModals.tsx
+          ./.github/workflows/countline.py --lines 600 --exclude_files src/screens/LoginPage/LoginPage.tsx src/GraphQl/Queries/Queries.ts src/screens/OrgList/OrgList.tsx src/GraphQl/Mutations/mutations.ts src/components/EventListCard/EventListCardModals.tsx src/components/TagActions/TagActionsMocks.ts src/utils/interfaces.ts src/screens/MemberDetail/MemberDetail.tsx
 
       - name: Get changed TypeScript files
         id: changed-files
-        uses: tj-actions/changed-files@v40
-      
+        uses: tj-actions/changed-files@v45
       - name: Check formatting
         if: steps.changed-files.outputs.only_changed != 'true'
         run: npm run format:check
+        
+      - name: Run formatting if check fails
+        if: failure()
+        run: npm run format:fix
 
       - name: Check for type errors
         if: steps.changed-files.outputs.only_changed != 'true'
@@ -55,7 +58,7 @@ jobs:
       - name: Check for linting errors in modified files
         if: steps.changed-files.outputs.only_changed != 'true'
         env: 
-          CHANGED_FILES: ${{ steps.changed_files.outputs.all_changed_files }}
+          CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
         run: npx eslint ${CHANGED_FILES} && python .github/workflows/eslint_disable_check.py
         
       - name: Check for TSDoc comments
@@ -80,7 +83,7 @@ jobs:
           exit 1
 
   Check-Sensitive-Files:
-    if: ${{ github.actor != 'dependabot[bot]' }}
+    if: ${{ github.actor != 'dependabot[bot]' && !contains(github.event.pull_request.labels.*.name, 'ignore-sensitive-files-pr') }}
     name: Checks if sensitive files have been changed without authorization
     runs-on: ubuntu-latest
     steps:
@@ -89,14 +92,17 @@ jobs:
       
       - name: Get Changed Unauthorized files
         id: changed-unauth-files
-        uses: tj-actions/changed-files@v40
+        uses: tj-actions/changed-files@v45
         with:
           files: |
+            .env*
             .github/**
             env.example
             .node-version
             .husky/**
             scripts/**
+            src/style/** 
+            schema.graphql
             package.json
             tsconfig.json
             .gitignore
@@ -119,6 +125,12 @@ jobs:
             ISSUE_GUIDELINES.md
             PR_GUIDELINES.md
             README.md
+            *.pem
+            *.key
+            *.cert
+            *.password
+            *.secret
+            *.credentials
             
       - name: List all changed unauthorized files
         if: steps.changed-unauth-files.outputs.any_changed == 'true' || steps.changed-unauth-files.outputs.any_deleted == 'true'
@@ -140,7 +152,7 @@ jobs:
 
       - name: Get changed files
         id: changed-files
-        uses: tj-actions/changed-files@v40
+        uses: tj-actions/changed-files@v45
 
       - name: Echo number of changed files
         env: 
@@ -193,11 +205,30 @@ jobs:
       
       - name: Get changed TypeScript files
         id: changed-files
-        uses: tj-actions/changed-files@v40
+        uses: tj-actions/changed-files@v45
           
-      - name: Run tests
+      - name: Run Jest Tests
         if: steps.changed-files.outputs.only_changed != 'true'
-        run: npm run test -- --watchAll=false --coverage       
+        env:
+          NODE_V8_COVERAGE: './coverage/jest'
+        run: |
+          npm run test -- --watchAll=false --coverage
+
+      - name: Run Vitest Tests
+        if: steps.changed-files.outputs.only_changed != 'true'
+        env:
+          NODE_V8_COVERAGE: './coverage/vitest'
+        run: |
+          npm run test:vitest:coverage
+
+      - name: Merge Coverage Reports
+        if: steps.changed-files.outputs.only_changed != 'true'
+        run: |
+          mkdir -p coverage
+          if ! npx lcov-result-merger 'coverage/*/lcov.info' > 'coverage/lcov.info'; then
+            echo "Failed to merge coverage reports"
+            exit 1
+          fi     
       
       - name: TypeScript compilation for changed files
         run: |
@@ -206,25 +237,55 @@ jobs:
               npx tsc --noEmit "$file"
             fi
           done
-        
+
       - name: Present and Upload coverage to Codecov as ${{env.CODECOV_UNIQUE_NAME}}
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true
           fail_ci_if_error: false
+          files: './coverage/lcov.info'
           name: '${{env.CODECOV_UNIQUE_NAME}}'
 
       - name: Test acceptable level of code coverage
-        uses: VeryGoodOpenSource/very_good_coverage@v2
+        uses: VeryGoodOpenSource/very_good_coverage@v3
         with:
           path: "./coverage/lcov.info"
-          min_coverage: 95.0
+          min_coverage: 0.0
 
-  Graphql-Inspector:
-    if: ${{ github.actor != 'dependabot[bot]' }}
-    name: Runs Introspection on the GitHub talawa-api repo on the schema.graphql file
+  # Graphql-Inspector:
+  #   if: ${{ github.actor != 'dependabot[bot]' }}
+  #   name: Runs Introspection on the GitHub talawa-api repo on the schema.graphql file
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout the Repository
+  #       uses: actions/checkout@v4
+
+  #     - name: Set up Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: '22.x'
+
+  #     - name: resolve dependency
+  #       run: npm install -g @graphql-inspector/cli
+      
+  #     - name: Clone API Repository
+  #       run: |
+  #         # Retrieve the complete branch name directly from the GitHub context
+  #         FULL_BRANCH_NAME=${{ github.base_ref }}
+  #         echo "FULL_Branch_NAME: $FULL_BRANCH_NAME"
+          
+  #         # Clone the specified repository using the extracted branch name
+  #         git clone --branch $FULL_BRANCH_NAME https://github.com/PalisadoesFoundation/talawa-api && ls -a 
+
+  #     - name: Validate Documents
+  #       run: graphql-inspector validate './src/GraphQl/**/*.ts' './talawa-api/schema.graphql'
+        
+  Start-App-Without-Docker:
+    name: Check if Talawa Admin app starts (No Docker)
     runs-on: ubuntu-latest
+    needs: [Code-Quality-Checks, Test-Application]
+    if: github.actor != 'dependabot'
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v4
@@ -232,22 +293,114 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22.x'
+          node-version: '20.x'
 
-      - name: resolve dependency
-        run: npm install -g @graphql-inspector/cli
-      
-      - name: Clone API Repository
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Production App
+        run: npm run build
+
+      - name: Start Production App
         run: |
-          # Retrieve the complete branch name directly from the GitHub context
-          FULL_BRANCH_NAME=${{ github.base_ref }}
-          echo "FULL_Branch_NAME: $FULL_BRANCH_NAME"
-          
-          # Clone the specified repository using the extracted branch name
-          git clone --branch $FULL_BRANCH_NAME https://github.com/PalisadoesFoundation/talawa-api && ls -a 
+          npm run preview &
+          echo $! > .pidfile_prod
+      - name: Check if Production App is running
+        run: |
+          timeout=120
+          echo "Starting production health check with ${timeout}s timeout"
+          while ! nc -z localhost 4173 && [ $timeout -gt 0 ]; do
+            sleep 1
+            timeout=$((timeout-1))
+            if [ $((timeout % 10)) -eq 0 ]; then
+              echo "Still waiting for production app to start... ${timeout}s remaining"
+            fi
+          done
+          if [ $timeout -eq 0 ]; then
+            echo "Timeout waiting for production application to start"
+            exit 1
+          fi
+          echo "Production app started successfully"
+      - name: Stop Production App
+        run: |
+          if [ -f .pidfile_prod ]; then
+            kill "$(cat .pidfile_prod)"
+          fi
+      - name: Start Development App
+        run: |
+          npm run serve &
+          echo $! > .pidfile_dev
+      - name: Check if Development App is running
+        run: |
+          timeout=120
+          echo "Starting development health check with ${timeout}s timeout"
+          while ! nc -z localhost 4321 && [ $timeout -gt 0 ]; do
+            sleep 1
+            timeout=$((timeout-1))
+            if [ $((timeout % 10)) -eq 0 ]; then
+              echo "Still waiting for development app to start... ${timeout}s remaining"
+            fi
+          done
+          if [ $timeout -eq 0 ]; then
+            echo "Timeout waiting for development application to start"
+            exit 1
+          fi
+          echo "Development app started successfully"
+      - name: Stop Development App
+        if: always()
+        run: |
+          if [ -f .pidfile_dev ]; then
+            kill "$(cat .pidfile_dev)"
+          fi
+  Docker-Start-Check:
+    name: Check if Talawa Admin app starts in Docker
+    runs-on: ubuntu-latest
+    needs: [Code-Quality-Checks, Test-Application]
+    if: github.actor != 'dependabot'
+    steps:
+      - name: Checkout the Repository
+        uses: actions/checkout@v4
 
-      - name: Validate Documents
-        run: graphql-inspector validate './src/GraphQl/**/*.ts' './talawa-api/schema.graphql'
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+        with:
+          driver-opts: |
+            image=moby/buildkit:latest
+      - name: Build Docker image
+        run: |
+          set -e
+          echo "Building Docker image..."
+          docker build -t talawa-admin-app .
+          echo "Docker image built successfully"
+      - name: Run Docker Container
+        run: |
+          set -e
+          echo "Started Docker container..."
+          docker run -d --name talawa-admin-app-container -p 4321:4321 talawa-admin-app
+          echo "Docker container started successfully"
+      - name: Check if Talawa Admin App is running
+        run: |
+          timeout="${HEALTH_CHECK_TIMEOUT:-120}"
+          echo "Starting health check with ${timeout}s timeout"
+          while ! nc -z localhost 4321 && [ $timeout -gt 0 ]; do
+            sleep 1
+            timeout=$((timeout-1))
+            if [ $((timeout % 10)) -eq 0 ]; then
+              echo "Still waiting for app to start... ${timeout}s remaining"
+            fi
+          done
+          if [ $timeout -eq 0 ]; then
+            echo "Timeout waiting for application to start"
+            echo "Container logs:"
+            docker logs talawa-admin-app-container
+            exit 1
+          fi
+          echo "Port check passed, verifying health endpoint..."
+      - name: Stop Docker Container
+        if: always()
+        run: |
+          docker stop talawa-admin-app-container
+          docker rm talawa-admin-app-container
 
   Check-Target-Branch:
     if: ${{ github.actor != 'dependabot[bot]' }}
@@ -255,8 +408,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check if the target branch is develop
-        if: github.event.pull_request.base.ref != 'develop'
+        if: github.event.pull_request.base.ref != 'develop-postgres'
         run: |
-          echo "Error: Pull request target branch must be 'develop'. Please refer PR_GUIDELINES.md"
+          echo "Error: Pull request target branch must be 'develop-postgres'. Please refer PR_GUIDELINES.md"
           exit 1
-

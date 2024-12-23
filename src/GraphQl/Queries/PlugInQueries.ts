@@ -99,14 +99,59 @@ export const ORGANIZATION_EVENTS_CONNECTION = gql`
   }
 `;
 
-/**
- * GraphQL query to retrieve a list of direct chats based on user ID.
- *
- * @param id - The ID of the user for which direct chats are being retrieved.
- * @returns The list of direct chats associated with the user, including details such as ID, creator, messages, organization, and participating users.
- */
+export const USER_EVENTS_VOLUNTEER = gql`
+  query UserEventsVolunteer(
+    $organization_id: ID!
+    $title_contains: String
+    $location_contains: String
+    $first: Int
+    $skip: Int
+    $upcomingOnly: Boolean
+  ) {
+    eventsByOrganizationConnection(
+      where: {
+        organization_id: $organization_id
+        title_contains: $title_contains
+        location_contains: $location_contains
+      }
+      first: $first
+      skip: $skip
+      upcomingOnly: $upcomingOnly
+    ) {
+      _id
+      title
+      startDate
+      endDate
+      location
+      startTime
+      endTime
+      allDay
+      recurring
+      volunteerGroups {
+        _id
+        name
+        volunteersRequired
+        description
+        volunteers {
+          _id
+        }
+      }
+      volunteers {
+        _id
+        user {
+          _id
+        }
+      }
+    }
+  }
+`;
 
-// directChatsMessagesByChatID(id: ID!): [DirectChatMessage]
+/**
+ * GraphQL query to retrieve a list of chats based on user ID.
+ *
+ * @param id - The ID of the user for which chats are being retrieved.
+ * @returns The list of chats associated with the user, including details such as ID, creator, messages, organization, and participating users.
+ */
 
 export const CHAT_BY_ID = gql`
   query chatById($id: ID!) {

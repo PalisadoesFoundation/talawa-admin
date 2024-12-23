@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import styles from './OrganizationVenues.module.css';
+import styles from '../../style/app.module.css';
 import { errorHandler } from 'utils/errorHandler';
 import { useMutation, useQuery } from '@apollo/client';
 import Col from 'react-bootstrap/Col';
@@ -147,7 +147,7 @@ function organizationVenues(): JSX.Element {
           <Form.Control
             type="name"
             id="searchByName"
-            className="bg-white"
+            className={styles.inputField}
             placeholder={t('searchBy') + ' ' + tCommon(searchBy)}
             data-testid="searchBy"
             autoComplete="off"
@@ -155,25 +155,21 @@ function organizationVenues(): JSX.Element {
             value={searchTerm}
             onChange={handleSearchChange}
           />
-          <Button
-            tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
-            data-testid="searchBtn"
-          >
+          <Button className={styles.searchButton} data-testid="searchBtn">
             <Search />
           </Button>
         </div>
         <div className="d-flex gap-3 flex-wrap ">
-          <div className="d-flex gap-3 justify-content-between flex-fill">
+          <div className="d-flex gap-3 justify-content-between ">
             <Dropdown
               aria-expanded="false"
               title="SearchBy"
               data-tesid="searchByToggle"
-              className="flex-fill"
             >
               <Dropdown.Toggle
                 data-testid="searchByDrpdwn"
                 variant="outline-success"
+                className={styles.dropdown}
               >
                 <Sort className={'me-1'} />
                 {t('searchBy')}
@@ -205,11 +201,11 @@ function organizationVenues(): JSX.Element {
               aria-expanded="false"
               title="Sort Venues"
               data-testid="sort"
-              className="flex-fill"
             >
               <Dropdown.Toggle
                 variant="outline-success"
                 data-testid="sortVenues"
+                className={styles.dropdown}
               >
                 <Sort className={'me-1'} />
                 {t('sort')}
@@ -232,7 +228,7 @@ function organizationVenues(): JSX.Element {
           </div>
           <Button
             variant="success"
-            className="ml-3 flex-fill"
+            className={styles.dropdown}
             onClick={showCreateVenueModal}
             data-testid="createVenueBtn"
           >

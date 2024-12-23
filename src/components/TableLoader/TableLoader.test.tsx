@@ -73,6 +73,6 @@ describe('Testing Loader component', () => {
           <TableLoader {...props} />
         </BrowserRouter>,
       );
-    }).toThrowError();
+    }).toThrow();
   });
 });

@@ -214,25 +214,6 @@ type DeletePayload {
   success: Boolean!
 }
 
-type DirectChat {
-  _id: ID!
-  createdAt: DateTime!
-  creator: User
-  messages: [DirectChatMessage]
-  updatedAt: DateTime!
-  users: [User!]!
-}
-
-type DirectChatMessage {
-  _id: ID!
-  createdAt: DateTime!
-  directChatMessageBelongsTo: DirectChat!
-  messageContent: String!
-  receiver: User!
-  sender: User!
-  updatedAt: DateTime!
-}
-
 type Donation {
   _id: ID!
   amount: Float!
@@ -470,26 +451,6 @@ type Group {
   updatedAt: DateTime!
 }
 
-type GroupChat {
-  _id: ID!
-  title: String!
-  createdAt: DateTime!
-  creator: User
-  messages: [GroupChatMessage]
-  organization: Organization!
-  updatedAt: DateTime!
-  users: [User!]!
-}
-
-type GroupChatMessage {
-  _id: ID!
-  createdAt: DateTime!
-  groupChatMessageBelongsTo: GroupChat!
-  messageContent: String!
-  sender: User!
-  updatedAt: DateTime!
-}
-
 type InvalidCursor implements FieldError {
   message: String!
   path: [String!]!
@@ -578,31 +539,6 @@ type MembershipRequest {
   user: User!
 }
 
-type Message {
-  _id: ID!
-  createdAt: DateTime!
-  creator: User
-  imageUrl: URL
-  text: String!
-  updatedAt: DateTime!
-  videoUrl: URL
-}
-
-type MessageChat {
-  _id: ID!
-  createdAt: DateTime!
-  languageBarrier: Boolean
-  message: String!
-  receiver: User!
-  sender: User!
-  updatedAt: DateTime!
-}
-
-input MessageChatInput {
-  message: String!
-  receiver: ID!
-}
-
 type MinimumLengthError implements FieldError {
   limit: Int!
   message: String!
@@ -658,10 +594,8 @@ type Mutation {
     organizationId: ID!
   ): UserCustomData!
   addUserImage(file: String!): User!
-  addUserToGroupChat(chatId: ID!, userId: ID!): GroupChat!
   addUserToUserFamily(familyId: ID!, userId: ID!): UserFamily!
   adminRemoveEvent(eventId: ID!): Event!
-  adminRemoveGroup(groupId: ID!): GroupChat!
   assignUserTag(input: ToggleUserTagAssignInput!): User
   blockPluginCreationBySuperadmin(
     blockUser: Boolean!
@@ -705,7 +639,6 @@ type Mutation {
   ): Event!
   createEventVolunteer(data: EventVolunteerInput!): EventVolunteer!
   createMember(input: UserAndOrganizationInput!): Organization!
-  createMessageChat(data: MessageChatInput!): MessageChat!
   createOrganization(data: OrganizationInput, file: String): Organization!
   createPlugin(
     pluginCreatedBy: String!
@@ -740,11 +673,9 @@ type Mutation {
   removeAdmin(data: UserAndOrganizationInput!): AppUserProfile!
   removeAdvertisement(id: ID!): Advertisement
   removeComment(id: ID!): Comment
-  removeDirectChat(chatId: ID!, organizationId: ID!): DirectChat!
   removeEvent(id: ID!): Event!
   removeEventAttendee(data: EventAttendeeInput!): User!
   removeEventVolunteer(id: ID!): EventVolunteer!
-  removeGroupChat(chatId: ID!): GroupChat!
   removeMember(data: UserAndOrganizationInput!): Organization!
   removeOrganization(id: ID!): UserData!
   removeOrganizationCustomField(
@@ -756,7 +687,6 @@ type Mutation {
   removeSampleOrganization: Boolean!
   removeUserCustomData(organizationId: ID!): UserCustomData!
   removeUserFamily(familyId: ID!): UserFamily!
-  removeUserFromGroupChat(chatId: ID!, userId: ID!): GroupChat!
   removeUserFromUserFamily(familyId: ID!, userId: ID!): UserFamily!
   removeUserImage: User!
   removeUserTag(id: ID!): UserTag
@@ -1086,12 +1016,8 @@ type Query {
   customFieldsByOrganization(id: ID!): [OrganizationCustomField]
   chatById(id: ID!): Chat!
   chatsByUserId(id: ID!): [Chat]
-  directChatsByUserID(id: ID!): [DirectChat]
-  directChatsMessagesByChatID(id: ID!): [DirectChatMessage]
-  directChatById(id: ID!): DirectChat
-  groupChatById(id: ID!): DirectChat
-  groupChatsByUserId(id: ID!): [GroupChat]
   event(id: ID!): Event
+  eventsAttendedByUser(id: ID, orderBy: EventOrderByInput): [Event]
   eventVolunteersByEvent(id: ID!): [EventVolunteer]
   eventsByOrganization(id: ID, orderBy: EventOrderByInput): [Event]
   eventsByOrganizationConnection(
@@ -1132,6 +1058,7 @@ type Query {
     where: UserWhereInput
   ): UserConnection!
   plugin(orgId: ID!): [Plugin]
+  getRecurringEvents(baseRecurringEventId: ID!): [Event]
   post(id: ID!): Post
   postsByOrganization(id: ID!, orderBy: PostOrderByInput): [Post]
   postsByOrganizationConnection(
@@ -1185,10 +1112,7 @@ enum Status {
 }
 
 type Subscription {
-  directMessageChat: MessageChat
   messageSentToChat(userId: ID!): ChatMessage
-  messageSentToDirectChat(userId: ID!): DirectChatMessage
-  messageSentToGroupChat(userId: ID!): GroupChatMessage
   onPluginUpdate: Plugin
 }
 
@@ -1387,6 +1311,7 @@ type User {
   phone: UserPhone
   pluginCreationAllowed: Boolean!
   registeredEvents: [Event]
+  eventsAttended: [Event]
   tagsAssignedWith(
     after: String
     before: String
@@ -1580,17 +1505,6 @@ enum WeekDays {
   TH
   TU
   WE
-}
-
-input createChatInput {
-  organizationId: ID
-  userIds: [ID!]!
-}
-
-input createGroupChatInput {
-  organizationId: ID!
-  title: String!
-  userIds: [ID!]!
 }
 
 type Venue {

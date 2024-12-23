@@ -2,7 +2,7 @@ import React, { type FC, type FormEvent, useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { FormControl, TextField } from '@mui/material';
-import styles from './OrganizationActionItems.module.css';
+import styles from '../../style/app.module.css';
 import { useMutation } from '@apollo/client';
 import { UPDATE_ACTION_ITEM_MUTATION } from 'GraphQl/Mutations/ActionItemMutations';
 import { toast } from 'react-toastify';
@@ -12,7 +12,7 @@ export interface InterfaceItemUpdateStatusModalProps {
   isOpen: boolean;
   hide: () => void;
   actionItemsRefetch: () => void;
-  actionItem: InterfaceActionItemInfo | null;
+  actionItem: InterfaceActionItemInfo;
 }
 
 const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
@@ -26,11 +26,17 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
   });
   const { t: tCommon } = useTranslation('common');
 
-  const [isCompleted, setIsCompleted] = useState<boolean>(
-    actionItem?.isCompleted ?? false,
-  );
+  const {
+    _id,
+    isCompleted,
+    assignee,
+    assigneeGroup,
+    assigneeUser,
+    assigneeType,
+  } = actionItem;
+
   const [postCompletionNotes, setPostCompletionNotes] = useState<string>(
-    actionItem?.postCompletionNotes ?? '',
+    actionItem.postCompletionNotes ?? '',
   );
 
   /**
@@ -51,8 +57,14 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
     try {
       await updateActionItem({
         variables: {
-          actionItemId: actionItem?._id,
-          assigneeId: actionItem?.assignee?._id,
+          actionItemId: _id,
+          assigneeId:
+            assigneeType === 'EventVolunteer'
+              ? assignee?._id
+              : assigneeType === 'EventVolunteerGroup'
+                ? assigneeGroup?._id
+                : assigneeUser?._id,
+          assigneeType,
           postCompletionNotes: isCompleted ? '' : postCompletionNotes,
           isCompleted: !isCompleted,
         },
@@ -67,10 +79,7 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
   };
 
   useEffect(() => {
-    if (actionItem) {
-      setIsCompleted(actionItem?.isCompleted);
-      setPostCompletionNotes(actionItem?.postCompletionNotes ?? '');
-    }
+    setPostCompletionNotes(actionItem.postCompletionNotes ?? '');
   }, [actionItem]);
 
   return (
@@ -80,7 +89,7 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
         <Button
           variant="danger"
           onClick={hide}
-          className={styles.modalCloseBtn}
+          className={styles.closeButton}
           data-testid="modalCloseBtn"
         >
           <i className="fa fa-times"></i>
@@ -114,7 +123,7 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
           ) : (
             <Button
               type="submit"
-              className={styles.greenregbtn}
+              className={styles.addButton}
               data-testid="createBtn"
             >
               {t('markCompletion')}

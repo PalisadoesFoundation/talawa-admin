@@ -153,7 +153,6 @@ const loginPage = (): JSX.Element => {
       try {
         await fetch(BACKEND_URL as string);
       } catch (error) {
-        /* istanbul ignore next */
         errorHandler(t, error);
       }
     }
@@ -165,7 +164,6 @@ const loginPage = (): JSX.Element => {
     recaptchaToken: string | null,
   ): Promise<boolean | void> => {
     try {
-      /* istanbul ignore next */
       if (REACT_APP_USE_RECAPTCHA !== 'yes') {
         return true;
       }
@@ -176,8 +174,7 @@ const loginPage = (): JSX.Element => {
       });
 
       return data.recaptcha;
-    } catch (error) {
-      /* istanbul ignore next */
+    } catch {
       toast.error(t('captchaError') as string);
     }
   };
@@ -199,13 +196,16 @@ const loginPage = (): JSX.Element => {
     } = signformState;
 
     const isVerified = await verifyRecaptcha(recaptchaToken);
-    /* istanbul ignore next */
+
     if (!isVerified) {
       toast.error(t('Please_check_the_captcha') as string);
       return;
     }
-    const isValidatedString = (value: string): boolean =>
-      /^[a-zA-Z]+$/.test(value);
+
+    const isValidName = (value: string): boolean => {
+      // Allow letters, spaces, and hyphens, but not consecutive spaces or hyphens
+      return /^[a-zA-Z]+(?:[-\s][a-zA-Z]+)*$/.test(value.trim());
+    };
 
     const validatePassword = (password: string): boolean => {
       const lengthCheck = new RegExp('^.{6,}$');
@@ -219,10 +219,10 @@ const loginPage = (): JSX.Element => {
     };
 
     if (
-      isValidatedString(signfirstName) &&
-      isValidatedString(signlastName) &&
-      signfirstName.length > 1 &&
-      signlastName.length > 1 &&
+      isValidName(signfirstName) &&
+      isValidName(signlastName) &&
+      signfirstName.trim().length > 1 &&
+      signlastName.trim().length > 1 &&
       signEmail.length >= 8 &&
       signPassword.length > 1 &&
       validatePassword(signPassword)
@@ -239,7 +239,6 @@ const loginPage = (): JSX.Element => {
             },
           });
 
-          /* istanbul ignore next */
           if (signUpData) {
             toast.success(
               t(
@@ -257,17 +256,16 @@ const loginPage = (): JSX.Element => {
             });
           }
         } catch (error) {
-          /* istanbul ignore next */
           errorHandler(t, error);
         }
       } else {
         toast.warn(t('passwordMismatches') as string);
       }
     } else {
-      if (!isValidatedString(signfirstName)) {
+      if (!isValidName(signfirstName)) {
         toast.warn(t('firstName_invalid') as string);
       }
-      if (!isValidatedString(signlastName)) {
+      if (!isValidName(signlastName)) {
         toast.warn(t('lastName_invalid') as string);
       }
       if (!validatePassword(signPassword)) {
@@ -282,7 +280,7 @@ const loginPage = (): JSX.Element => {
   const loginLink = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     const isVerified = await verifyRecaptcha(recaptchaToken);
-    /* istanbul ignore next */
+
     if (!isVerified) {
       toast.error(t('Please_check_the_captcha') as string);
       return;
@@ -296,7 +294,6 @@ const loginPage = (): JSX.Element => {
         },
       });
 
-      /* istanbul ignore next */
       if (loginData) {
         i18n.changeLanguage(loginData.login.appUserProfile.appLanguageCode);
         const { login } = loginData;
@@ -333,7 +330,6 @@ const loginPage = (): JSX.Element => {
         toast.warn(tErrors('notFound') as string);
       }
     } catch (error) {
-      /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
@@ -441,10 +437,7 @@ const loginPage = (): JSX.Element => {
                       autoComplete="username"
                       data-testid="loginEmail"
                     />
-                    <Button
-                      tabIndex={-1}
-                      className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
-                    >
+                    <Button tabIndex={-1} className={styles.email_button}>
                       <EmailOutlinedIcon />
                     </Button>
                   </div>
@@ -471,7 +464,7 @@ const loginPage = (): JSX.Element => {
                     <Button
                       onClick={togglePassword}
                       data-testid="showLoginPassword"
-                      className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+                      className={styles.email_button}
                     >
                       {showPassword ? (
                         <i className="fas fa-eye"></i>
@@ -494,20 +487,18 @@ const loginPage = (): JSX.Element => {
                       <ReCAPTCHA
                         className="mt-2"
                         sitekey={
-                          /* istanbul ignore next */
                           RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
                         }
                         onChange={handleCaptcha}
                       />
                     </div>
                   ) : (
-                    /* istanbul ignore next */
                     <></>
                   )}
                   <Button
                     disabled={loginLoading}
                     type="submit"
-                    className="mt-3 mb-3 w-100"
+                    className={styles.login_btn}
                     value="Login"
                     data-testid="loginBtn"
                   >
@@ -520,7 +511,7 @@ const loginPage = (): JSX.Element => {
                   <Button
                     variant="outline-secondary"
                     value="Register"
-                    className="mt-3 mb-3 w-100"
+                    className={styles.reg_btn}
                     data-testid="goToRegisterPortion"
                     onClick={(): void => {
                       setShowTab('REGISTER');
@@ -837,14 +828,12 @@ const loginPage = (): JSX.Element => {
                     <div className="mt-3">
                       <ReCAPTCHA
                         sitekey={
-                          /* istanbul ignore next */
                           RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
                         }
                         onChange={handleCaptcha}
                       />
                     </div>
                   ) : (
-                    /* istanbul ignore next */
                     <></>
                   )}
                   <Button

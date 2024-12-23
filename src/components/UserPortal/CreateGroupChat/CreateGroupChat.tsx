@@ -65,18 +65,13 @@ export default function CreateGroupChat({
   createGroupChatModalisOpen,
   chatsListRefetch,
 }: InterfaceCreateGroupChatProps): JSX.Element {
+  const userId: string | null = getItem('userId');
   const { t } = useTranslation('translation', {
     keyPrefix: 'userChat',
   });
 
-  const userId: string | null = getItem('userId');
-
   const [createChat] = useMutation(CREATE_CHAT);
 
-  // const [organizations, setOrganizations] = useState([]);
-  // const [selectedOrganization, setSelectedOrganization] = useState(
-  //   organizations[0]?._id,
-  // );
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [userIds, setUserIds] = useState<string[]>([]);
@@ -90,9 +85,6 @@ export default function CreateGroupChat({
   const toggleAddUserModal = /* istanbul ignore next */ (): void =>
     setAddUserModalisOpen(!addUserModalisOpen);
 
-  // const handleChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
-  //   setSelectedOrganization(event.target.value as string);
-  // };
   const { orgId: currentOrg } = useParams();
 
   function reset(): void {

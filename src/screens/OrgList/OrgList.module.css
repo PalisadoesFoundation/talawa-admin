@@ -20,15 +20,15 @@
 .pluginStoreBtn {
   width: 100%;
   background-color: white;
-  color: #31bb6b;
-  border: 0.5px solid #31bb6b;
+  color: #555555;
+  border: 0.5px solid #555555;
 }
 
 .pluginStoreBtn:hover,
 .pluginStoreBtn:focus {
   background-color: #dfe1e2 !important;
-  color: #31bb6b !important;
-  border-color: #31bb6b !important;
+  color: #555555 !important;
+  border-color: #555555 !important;
 }
 
 .line::before {
@@ -65,6 +65,7 @@
   background: var(--bs-white);
   color: var(--bs-secondary);
 }
+
 .sampleOrgSection {
   display: grid;
   grid-template-columns: repeat(1, 1fr);

@@ -24,6 +24,9 @@ export const CHECK_AUTH = gql`
         state
         countryCode
       }
+      eventsAttended {
+        _id
+      }
     }
   }
 `;
@@ -274,6 +277,10 @@ export const EVENT_DETAILS = gql`
       endTime
       allDay
       location
+      recurring
+      baseRecurringEvent {
+        _id
+      }
       organization {
         _id
         members {
@@ -289,6 +296,20 @@ export const EVENT_DETAILS = gql`
   }
 `;
 
+export const RECURRING_EVENTS = gql`
+  query RecurringEvents($baseRecurringEventId: ID!) {
+    getRecurringEvents(baseRecurringEventId: $baseRecurringEventId) {
+      _id
+      startDate
+      title
+      attendees {
+        _id
+        gender
+      }
+    }
+  }
+`;
+
 export const EVENT_ATTENDEES = gql`
   query Event($id: ID!) {
     event(id: $id) {
@@ -296,6 +317,12 @@ export const EVENT_ATTENDEES = gql`
         _id
         firstName
         lastName
+        createdAt
+        gender
+        birthDate
+        eventsAttended {
+          _id
+        }
       }
     }
   }
@@ -483,10 +510,19 @@ export const USER_ORGANIZATION_LIST = gql`
 
 // To take the details of a user
 export const USER_DETAILS = gql`
-  query User($id: ID!) {
+  query User(
+    $id: ID!
+    $after: String
+    $before: String
+    $first: PositiveInt
+    $last: PositiveInt
+  ) {
     user(id: $id) {
       user {
         _id
+        eventsAttended {
+          _id
+        }
         joinedOrganizations {
           _id
         }
@@ -508,6 +544,29 @@ export const USER_DETAILS = gql`
           countryCode
           city
           state
+        }
+        tagsAssignedWith(
+          after: $after
+          before: $before
+          first: $first
+          last: $last
+        ) {
+          edges {
+            node {
+              _id
+              name
+              parentTag {
+                _id
+              }
+            }
+          }
+          pageInfo {
+            startCursor
+            endCursor
+            hasNextPage
+            hasPreviousPage
+          }
+          totalCount
         }
         registeredEvents {
           _id
@@ -587,6 +646,17 @@ export const ORGANIZATION_EVENT_CONNECTION_LIST = gql`
       endTime
       allDay
       recurring
+      attendees {
+        _id
+        createdAt
+        firstName
+        lastName
+        gender
+        eventsAttended {
+          _id
+          endDate
+        }
+      }
       recurrenceRule {
         recurrenceStartDate
         recurrenceEndDate

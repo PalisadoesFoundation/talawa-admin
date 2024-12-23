@@ -19,14 +19,14 @@ import type {
   InterfaceActionItemInfo,
   InterfaceActionItemList,
 } from 'utils/interfaces';
-import styles from './OrganizationActionItems.module.css';
+import styles from '../../style/app.module.css';
 import Loader from 'components/Loader/Loader';
 import {
   DataGrid,
   type GridCellParams,
   type GridColDef,
 } from '@mui/x-data-grid';
-import { Chip, Stack } from '@mui/material';
+import { Chip, debounce, Stack } from '@mui/material';
 import ItemViewModal from './ItemViewModal';
 import ItemModal from './ItemModal';
 import ItemDeleteModal from './ItemDeleteModal';
@@ -45,27 +45,6 @@ enum ModalState {
   VIEW = 'view',
   STATUS = 'status',
 }
-
-const dataGridStyle = {
-  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-    outline: 'none !important',
-  },
-  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-    outline: 'none',
-  },
-  '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-root': {
-    borderRadius: '0.5rem',
-  },
-  '& .MuiDataGrid-main': {
-    borderRadius: '0.5rem',
-  },
-};
 
 /**
  * Component for managing and displaying action items within an organization.
@@ -157,6 +136,11 @@ function organizationActionItems(): JSX.Element {
     [actionItemsData],
   );
 
+  const debouncedSearch = useMemo(
+    () => debounce((value: string) => setSearchTerm(value), 300),
+    [],
+  );
+
   if (actionItemsLoading) {
     return <Loader size="xl" />;
   }
@@ -167,8 +151,6 @@ function organizationActionItems(): JSX.Element {
         <WarningAmberRounded className={styles.icon} fontSize="large" />
         <h6 className="fw-bold text-danger text-center">
           {tErrors('errorLoading', { entity: 'Action Items' })}
-          <br />
-          {`${actionItemsError.message}`}
         </h6>
       </div>
     );
@@ -185,32 +167,58 @@ function organizationActionItems(): JSX.Element {
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        const { _id, firstName, lastName, image } = params.row.assignee;
+        const { _id, firstName, lastName, image } =
+          params.row.assigneeUser || params.row.assignee?.user || {};
+
         return (
-          <div
-            className="d-flex fw-bold align-items-center ms-2"
-            data-testid="assigneeName"
-          >
-            {image ? (
-              <img
-                src={image}
-                alt="Assignee"
-                data-testid={`image${_id + 1}`}
-                className={styles.TableImage}
-              />
+          <>
+            {params.row.assigneeType !== 'EventVolunteerGroup' ? (
+              <>
+                <div
+                  className="d-flex fw-bold align-items-center ms-2"
+                  data-testid="assigneeName"
+                >
+                  {image ? (
+                    <img
+                      src={image}
+                      alt="Assignee"
+                      data-testid={`image${_id + 1}`}
+                      className={styles.TableImage}
+                    />
+                  ) : (
+                    <div className={styles.avatarContainer}>
+                      <Avatar
+                        key={_id + '1'}
+                        containerStyle={styles.imageContainer}
+                        avatarStyle={styles.TableImage}
+                        name={firstName + ' ' + lastName}
+                        alt={firstName + ' ' + lastName}
+                      />
+                    </div>
+                  )}
+                  {firstName + ' ' + lastName}
+                </div>
+              </>
             ) : (
-              <div className={styles.avatarContainer}>
-                <Avatar
-                  key={_id + '1'}
-                  containerStyle={styles.imageContainer}
-                  avatarStyle={styles.TableImage}
-                  name={firstName + ' ' + lastName}
-                  alt={firstName + ' ' + lastName}
-                />
-              </div>
+              <>
+                <div
+                  className="d-flex fw-bold align-items-center ms-2"
+                  data-testid="assigneeName"
+                >
+                  <div className={styles.avatarContainer}>
+                    <Avatar
+                      key={_id + '1'}
+                      containerStyle={styles.imageContainer}
+                      avatarStyle={styles.TableImage}
+                      name={params.row.assigneeGroup?.name as string}
+                      alt={'assigneeGroup_avatar'}
+                    />
+                  </div>
+                  {params.row.assigneeGroup?.name as string}
+                </div>
+              </>
             )}
-            {params.row.assignee.firstName + ' ' + params.row.assignee.lastName}
-          </div>
+          </>
         );
       },
     },
@@ -255,8 +263,8 @@ function organizationActionItems(): JSX.Element {
       },
     },
     {
-      field: 'allotedHours',
-      headerName: 'Alloted Hours',
+      field: 'allottedHours',
+      headerName: 'Allotted Hours',
       align: 'center',
       headerAlign: 'center',
       sortable: false,
@@ -264,7 +272,9 @@ function organizationActionItems(): JSX.Element {
       flex: 1,
       renderCell: (params: GridCellParams) => {
         return (
-          <div data-testid="allotedHours">{params.row.allotedHours ?? '-'}</div>
+          <div data-testid="allottedHours">
+            {params.row.allottedHours ?? '-'}
+          </div>
         );
       },
     },
@@ -297,10 +307,10 @@ function organizationActionItems(): JSX.Element {
         return (
           <>
             <Button
-              variant="success"
+              // variant="success"
               size="sm"
               style={{ minWidth: '32px' }}
-              className="me-2 rounded"
+              className={styles.infoButton}
               data-testid={`viewItemBtn${params.row.id}`}
               onClick={() => handleModalClick(params.row, ModalState.VIEW)}
             >
@@ -309,7 +319,7 @@ function organizationActionItems(): JSX.Element {
             <Button
               variant="success"
               size="sm"
-              className="me-2 rounded"
+              className={styles.infoButton}
               data-testid={`editItemBtn${params.row.id}`}
               onClick={() => handleModalClick(params.row, ModalState.SAME)}
             >
@@ -318,7 +328,7 @@ function organizationActionItems(): JSX.Element {
             <Button
               size="sm"
               variant="danger"
-              className="rounded"
+              className={styles.actionItemDeleteButton}
               data-testid={`deleteItemBtn${params.row.id}`}
               onClick={() => handleModalClick(params.row, ModalState.DELETE)}
             >
@@ -343,6 +353,7 @@ function organizationActionItems(): JSX.Element {
             <Form.Check
               type="checkbox"
               data-testid={`statusCheckbox${params.row.id}`}
+              className={styles.checkboxButton}
               checked={params.row.isCompleted}
               onChange={() => handleModalClick(params.row, ModalState.STATUS)}
             />
@@ -353,10 +364,10 @@ function organizationActionItems(): JSX.Element {
   ];
 
   return (
-    <div className="mt-3">
+    <div>
       {/* Header with search, filter  and Create Button */}
-      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-        <div className={`${styles.input} mb-1`}>
+      <div className={`${styles.btnsContainer} `}>
+        <div className={`${styles.input} `}>
           <Form.Control
             type="name"
             placeholder={tCommon('searchBy', {
@@ -366,28 +377,18 @@ function organizationActionItems(): JSX.Element {
             required
             className={styles.inputField}
             value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-            onKeyUp={(e) => {
-              if (e.key === 'Enter') {
-                setSearchTerm(searchValue);
-              } else if (e.key === 'Backspace' && searchValue === '') {
-                setSearchTerm('');
-              }
+            onChange={(e) => {
+              setSearchValue(e.target.value);
+              debouncedSearch(e.target.value);
             }}
             data-testid="searchBy"
           />
-          <Button
-            tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center`}
-            onClick={() => setSearchTerm(searchValue)}
-            style={{ marginBottom: '10px' }}
-            data-testid="searchBtn"
-          >
+          <Button className={styles.searchButton} data-testid="searchBtn">
             <Search />
           </Button>
         </div>
-        <div className="d-flex gap-3 mb-1">
-          <div className="d-flex justify-space-between align-items-center gap-3">
+        <div className="md:d-flex gap-3 mb-1">
+          <div className="d-flex justify-space-between align-items-center gap-3 overflow-y-auto">
             <Dropdown>
               <Dropdown.Toggle
                 variant="success"
@@ -474,7 +475,7 @@ function organizationActionItems(): JSX.Element {
             <Button
               variant="success"
               onClick={() => handleModalClick(null, ModalState.SAME)}
-              style={{ marginTop: '11px' }}
+              className={styles.createButton}
               data-testid="createActionItemBtn"
             >
               <i className={'fa fa-plus me-2'} />
@@ -497,7 +498,29 @@ function organizationActionItems(): JSX.Element {
             </Stack>
           ),
         }}
-        sx={dataGridStyle}
+        sx={{
+          borderRadius: '20px',
+          backgroundColor: 'EAEBEF)',
+          '& .MuiDataGrid-row': {
+            backgroundColor: '#eff1f7',
+            '&:focus-within': {
+              // outline: '2px solid #000',
+              outlineOffset: '-2px',
+            },
+          },
+          '& .MuiDataGrid-row:hover': {
+            backgroundColor: '#EAEBEF',
+            boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
+          },
+          '& .MuiDataGrid-row.Mui-hovered': {
+            backgroundColor: '#EAEBEF',
+            boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
+          },
+          '& .MuiDataGrid-cell:focus': {
+            // outline: '2px solid #000',
+            // outlineOffset: '-2px',
+          },
+        }}
         getRowClassName={() => `${styles.rowBackground}`}
         autoHeight
         rowHeight={65}
@@ -514,32 +537,35 @@ function organizationActionItems(): JSX.Element {
         isOpen={modalState[ModalState.SAME]}
         hide={() => closeModal(ModalState.SAME)}
         orgId={orgId}
+        eventId={eventId}
         actionItemsRefetch={actionItemsRefetch}
         actionItem={actionItem}
         editMode={modalMode === 'edit'}
       />
 
-      <ItemDeleteModal
-        isOpen={modalState[ModalState.DELETE]}
-        hide={() => closeModal(ModalState.DELETE)}
-        actionItem={actionItem}
-        actionItemsRefetch={actionItemsRefetch}
-      />
-
-      <ItemUpdateStatusModal
-        actionItem={actionItem}
-        isOpen={modalState[ModalState.STATUS]}
-        hide={() => closeModal(ModalState.STATUS)}
-        actionItemsRefetch={actionItemsRefetch}
-      />
-
       {/* View Modal */}
       {actionItem && (
-        <ItemViewModal
-          isOpen={modalState[ModalState.VIEW]}
-          hide={() => closeModal(ModalState.VIEW)}
-          item={actionItem}
-        />
+        <>
+          <ItemViewModal
+            isOpen={modalState[ModalState.VIEW]}
+            hide={() => closeModal(ModalState.VIEW)}
+            item={actionItem}
+          />
+
+          <ItemUpdateStatusModal
+            actionItem={actionItem}
+            isOpen={modalState[ModalState.STATUS]}
+            hide={() => closeModal(ModalState.STATUS)}
+            actionItemsRefetch={actionItemsRefetch}
+          />
+
+          <ItemDeleteModal
+            isOpen={modalState[ModalState.DELETE]}
+            hide={() => closeModal(ModalState.DELETE)}
+            actionItem={actionItem}
+            actionItemsRefetch={actionItemsRefetch}
+          />
+        </>
       )}
     </div>
   );

@@ -286,6 +286,7 @@ function organizationEvents(): JSX.Element {
           <Button
             variant="danger"
             onClick={hideCreateEventModal}
+            className={styles.closeButton}
             data-testid="createEventModalCloseBtn"
           >
             <i className="fa fa-times"></i>
@@ -504,7 +505,7 @@ function organizationEvents(): JSX.Element {
 
             <Button
               type="submit"
-              className={styles.greenregbtn}
+              className={styles.createButton}
               value="createevent"
               data-testid="createEventBtn"
             >

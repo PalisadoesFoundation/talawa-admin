@@ -1,0 +1,25 @@
+node_modules
+npm-debug.log
+Dockerfile
+.git
+.gitignore
+.env
+.env.*
+dist
+coverage
+.nyc_output
+*.md
+.github
+tests
+__tests__
+*.test.*
+*.spec.*
+# Development files
+*.log
+*.lock
+.DS_Store
+.idea
+.vscode
+# Build artifacts
+build
+out
