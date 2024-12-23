@@ -623,23 +623,21 @@ hr {
 }
 
 .greenregbtnPledge {
-  margin: 1rem 0 0;
   margin-top: 15px;
-  border: 1px solid #e8e5e5;
+  border: 1px solid var(--bs-gray-300);
   box-shadow: 0 2px 2px #e8e5e5;
   padding: 10px 10px;
   border-radius: 5px;
-  background-color: #31bb6b;
+  background-color: var(--bs-primary);
   width: 100%;
   font-size: 16px;
-  color: white;
+  color: var(--bs-white);
   outline: none;
   font-weight: 600;
   cursor: pointer;
   transition:
     transform 0.2s,
     box-shadow 0.2s;
-  width: 100%;
 }
 
 .btnsContainerPledge {
@@ -701,7 +699,7 @@ hr {
   gap: 0.25rem;
   padding: 0.25rem 0.45rem;
   border-radius: 0.35rem;
-  background-color: #31bb6b33;
+  background-color: var(--bs-primary-rgb, 49, 187, 107, 0.2);
   height: 2.2rem;
   margin-top: 0.75rem;
 }
