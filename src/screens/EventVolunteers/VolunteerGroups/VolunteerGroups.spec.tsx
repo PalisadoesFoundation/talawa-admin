@@ -7,13 +7,14 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes, useParams } from 'react-router-dom';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import VolunteerGroups from './VolunteerGroups';
 import type { ApolloLink } from '@apollo/client';
 import { MOCKS, MOCKS_EMPTY, MOCKS_ERROR } from './VolunteerGroups.mocks';
+import { vi } from 'vitest';
 
 const link1 = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(MOCKS_ERROR);
@@ -61,19 +62,30 @@ const renderVolunteerGroups = (link: ApolloLink): RenderResult => {
   );
 };
 
+/** Mock useParams to provide consistent test data */
+
 describe('Testing VolunteerGroups Screen', () => {
   beforeAll(() => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: 'orgId', eventId: 'eventId' }),
-    }));
+    vi.mock('react-router-dom', async () => {
+      const actualDom = await vi.importActual('react-router-dom');
+      return {
+        ...actualDom,
+        useParams: vi.fn(),
+      };
+    });
   });
 
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
+  const mockRouteParams = (orgId = 'orgId', eventId = 'eventId'): void => {
+    vi.mocked(useParams).mockReturnValue({ orgId, eventId });
+  };
+
   it('should redirect to fallback URL if URL params are undefined', async () => {
+    /**  Mocking the useParams hook to return undefined parameters */
+    mockRouteParams('', '');
     render(
       <MockedProvider addTypename={false} link={link1}>
         <MemoryRouter initialEntries={['/event/']}>
@@ -98,12 +110,14 @@ describe('Testing VolunteerGroups Screen', () => {
   });
 
   it('should render Groups screen', async () => {
+    mockRouteParams();
     renderVolunteerGroups(link1);
     const searchInput = await screen.findByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
   });
 
   it('Check Sorting Functionality', async () => {
+    mockRouteParams();
     renderVolunteerGroups(link1);
     const searchInput = await screen.findByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
@@ -133,6 +147,7 @@ describe('Testing VolunteerGroups Screen', () => {
   });
 
   it('Search by Groups', async () => {
+    mockRouteParams();
     renderVolunteerGroups(link1);
     const searchInput = await screen.findByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
@@ -153,6 +168,7 @@ describe('Testing VolunteerGroups Screen', () => {
   });
 
   it('Search by Leader', async () => {
+    mockRouteParams();
     renderVolunteerGroups(link1);
     const searchInput = await screen.findByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
@@ -174,6 +190,7 @@ describe('Testing VolunteerGroups Screen', () => {
   });
 
   it('should render screen with No Groups', async () => {
+    mockRouteParams();
     renderVolunteerGroups(link3);
 
     await waitFor(() => {
@@ -183,6 +200,7 @@ describe('Testing VolunteerGroups Screen', () => {
   });
 
   it('Error while fetching groups data', async () => {
+    mockRouteParams();
     renderVolunteerGroups(link2);
 
     await waitFor(() => {
@@ -191,6 +209,7 @@ describe('Testing VolunteerGroups Screen', () => {
   });
 
   it('Open and close ViewModal', async () => {
+    mockRouteParams();
     renderVolunteerGroups(link1);
 
     const viewGroupBtn = await screen.findAllByTestId('viewGroupBtn');
@@ -201,6 +220,7 @@ describe('Testing VolunteerGroups Screen', () => {
   });
 
   it('Open and Close Delete Modal', async () => {
+    mockRouteParams();
     renderVolunteerGroups(link1);
 
     const deleteGroupBtn = await screen.findAllByTestId('deleteGroupBtn');
@@ -211,6 +231,7 @@ describe('Testing VolunteerGroups Screen', () => {
   });
 
   it('Open and close GroupModal (Edit)', async () => {
+    mockRouteParams();
     renderVolunteerGroups(link1);
 
     const editGroupBtn = await screen.findAllByTestId('editGroupBtn');
@@ -221,6 +242,7 @@ describe('Testing VolunteerGroups Screen', () => {
   });
 
   it('Open and close GroupModal (Create)', async () => {
+    mockRouteParams();
     renderVolunteerGroups(link1);
 
     const createGroupBtn = await screen.findByTestId('createGroupBtn');
