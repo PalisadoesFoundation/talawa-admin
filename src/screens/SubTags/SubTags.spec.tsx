@@ -11,7 +11,6 @@ import {
   waitForElementToBeRemoved,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
@@ -22,6 +21,8 @@ import i18n from 'utils/i18nForTest';
 import SubTags from './SubTags';
 import { MOCKS, MOCKS_ERROR_SUB_TAGS } from './SubTagsMocks';
 import { InMemoryCache, type ApolloLink } from '@apollo/client';
+import { vi, beforeEach, afterEach, expect, it } from 'vitest';
+import '@testing-library/jest-dom/vitest';
 
 const translations = {
   ...JSON.parse(
@@ -44,10 +45,10 @@ async function wait(ms = 500): Promise<void> {
   });
 }
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
@@ -78,10 +79,13 @@ const cache = new InMemoryCache({
   },
 });
 
-const renderSubTags = (link: ApolloLink): RenderResult => {
+const renderSubTags = (
+  link: ApolloLink,
+  initialRoute = '/orgtags/123/subTags/1',
+): RenderResult => {
   return render(
     <MockedProvider cache={cache} addTypename={false} link={link}>
-      <MemoryRouter initialEntries={['/orgtags/123/subTags/1']}>
+      <MemoryRouter initialEntries={[initialRoute]}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
             <Routes>
@@ -107,19 +111,18 @@ const renderSubTags = (link: ApolloLink): RenderResult => {
 
 describe('Organisation Tags Page', () => {
   beforeEach(() => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: 'orgId' }),
+    vi.mock('react-router-dom', async () => ({
+      ...(await vi.importActual('react-router-dom')),
     }));
     cache.reset();
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     cleanup();
   });
 
-  test('Component loads correctly', async () => {
+  it('Component loads correctly', async () => {
     const { getByText } = renderSubTags(link);
 
     await wait();
@@ -129,7 +132,7 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  test('render error component on unsuccessful subtags query', async () => {
+  it('render error component on unsuccessful subtags query', async () => {
     const { queryByText } = renderSubTags(link2);
 
     await wait();
@@ -139,7 +142,7 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  test('opens and closes the create tag modal', async () => {
+  it('opens and closes the create tag modal', async () => {
     renderSubTags(link);
 
     await wait();
@@ -161,7 +164,7 @@ describe('Organisation Tags Page', () => {
     );
   });
 
-  test('navigates to manage tag screen after clicking manage tag option', async () => {
+  it('navigates to manage tag screen after clicking manage tag option', async () => {
     renderSubTags(link);
 
     await wait();
@@ -176,7 +179,7 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  test('navigates to sub tags screen after clicking on a tag', async () => {
+  it('navigates to sub tags screen after clicking on a tag', async () => {
     renderSubTags(link);
 
     await wait();
@@ -191,7 +194,7 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  test('navigates to the different sub tag screen screen after clicking a tag in the breadcrumbs', async () => {
+  it('navigates to the different sub tag screen screen after clicking a tag in the breadcrumbs', async () => {
     renderSubTags(link);
 
     await wait();
@@ -206,7 +209,7 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  test('navigates to organization tags screen screen after clicking tha all tags option in the breadcrumbs', async () => {
+  it('navigates to organization tags screen screen after clicking tha all tags option in the breadcrumbs', async () => {
     renderSubTags(link);
 
     await wait();
@@ -221,7 +224,7 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  test('navigates to manage tags screen for the current tag after clicking tha manageCurrentTag button', async () => {
+  it('navigates to manage tags screen for the current tag after clicking tha manageCurrentTag button', async () => {
     renderSubTags(link);
 
     await wait();
@@ -236,7 +239,7 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  test('searchs for tags where the name matches the provided search input', async () => {
+  it('searchs for tags where the name matches the provided search input', async () => {
     renderSubTags(link);
 
     await wait();
@@ -257,7 +260,7 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  test('fetches the tags by the sort order, i.e. latest or oldest first', async () => {
+  it('fetches the tags by the sort order, i.e. latest or oldest first', async () => {
     renderSubTags(link);
 
     await wait();
@@ -314,7 +317,7 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  test('Fetches more sub tags with infinite scroll', async () => {
+  it('Fetches more sub tags with infinite scroll', async () => {
     const { getByText } = renderSubTags(link);
 
     await wait();
@@ -343,7 +346,7 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  test('adds a new sub tag to the current tag', async () => {
+  it('adds a new sub tag to the current tag', async () => {
     renderSubTags(link);
 
     await wait();
@@ -358,12 +361,42 @@ describe('Organisation Tags Page', () => {
       'subTag 12',
     );
 
+    await waitFor(() => {
+      expect(screen.getByTestId('addSubTagSubmitBtn')).toBeInTheDocument();
+    });
+
     userEvent.click(screen.getByTestId('addSubTagSubmitBtn'));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(
         translations.tagCreationSuccess,
       );
+    });
+  });
+
+  it('Adding a subtag with invalid OrgID, error notification should appear', async () => {
+    renderSubTags(link, '/orgtags/invalid_orgID/subTags/1');
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('addSubTagBtn'));
+
+    userEvent.type(
+      screen.getByPlaceholderText(translations.tagNamePlaceholder),
+      'subTag 12',
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('addSubTagSubmitBtn')).toBeInTheDocument();
+    });
+
+    userEvent.click(screen.getByTestId('addSubTagSubmitBtn'));
+
+    await waitFor(() => {
+      expect(toast.error).toBeCalled();
     });
   });
 });
