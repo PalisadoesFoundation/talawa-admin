@@ -31,7 +31,7 @@ import type {
   InterfaceQueryOrganizationsListObject,
   InterfaceVolunteerRank,
 } from 'utils/interfaces';
-import styles from './OrganizationDashboard.module.css';
+import styles from 'style/app.module.css';
 import { VOLUNTEER_RANKING } from 'GraphQl/Queries/EventVolunteerQueries';
 
 /**
@@ -41,7 +41,7 @@ import { VOLUNTEER_RANKING } from 'GraphQl/Queries/EventVolunteerQueries';
  *
  * @returns The rendered component.
  */
-function organizationDashboard(): JSX.Element {
+function OrganizationDashboard(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'dashboard' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
@@ -299,7 +299,7 @@ function organizationDashboard(): JSX.Element {
                     {t('viewAll')}
                   </Button>
                 </div>
-                <Card.Body className={styles.cardBody}>
+                <Card.Body className={styles.containerBody}>
                   {loadingEvent ? (
                     [...Array(4)].map((_, index) => {
                       return <CardItemLoading key={`eventLoading_${index}`} />;
@@ -341,7 +341,7 @@ function organizationDashboard(): JSX.Element {
                     {t('viewAll')}
                   </Button>
                 </div>
-                <Card.Body className={styles.cardBody}>
+                <Card.Body className={styles.containerBody}>
                   {loadingPost ? (
                     [...Array(4)].map((_, index) => {
                       return <CardItemLoading key={`postLoading_${index}`} />;
@@ -392,7 +392,7 @@ function organizationDashboard(): JSX.Element {
                 </Button>
               </div>
               <Card.Body
-                className={styles.cardBody}
+                className={styles.containerBody}
                 style={{ height: '150px' }}
               >
                 {loadingOrgData ? (
@@ -435,7 +435,10 @@ function organizationDashboard(): JSX.Element {
                   {t('viewAll')}
                 </Button>
               </div>
-              <Card.Body className={styles.cardBody} style={{ padding: '0px' }}>
+              <Card.Body
+                className={styles.containerBody}
+                style={{ padding: '0px' }}
+              >
                 {rankingsLoading ? (
                   [...Array(3)].map((_, index) => {
                     return <CardItemLoading key={`rankingLoading_${index}`} />;
@@ -483,4 +486,4 @@ function organizationDashboard(): JSX.Element {
   );
 }
 
-export default organizationDashboard;
+export default OrganizationDashboard;

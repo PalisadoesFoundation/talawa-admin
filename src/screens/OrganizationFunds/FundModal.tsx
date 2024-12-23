@@ -139,7 +139,9 @@ const FundModal: React.FC<InterfaceFundModal> = ({
       if (isDefault != fund?.isDefault) {
         updatedFields.isDefault = isDefault;
       }
-
+      if (Object.keys(updatedFields).length === 0) {
+        return;
+      }
       await updateFund({
         variables: {
           id: fund?._id,
@@ -157,9 +159,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
       hide();
       toast.success(t('fundUpdated') as string);
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
+      toast.error((error as Error).message);
     }
   };
 
