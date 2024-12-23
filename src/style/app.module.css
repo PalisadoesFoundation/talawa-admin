@@ -622,25 +622,17 @@ hr {
   margin-left: 13vw;
 }
 
-.modalCloseBtn {
-  width: 40px;
-  height: 40px;
-  padding: 1rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.greenregbtn {
+.greenregbtnPledge {
   margin: 1rem 0 0;
   margin-top: 15px;
-  border: 1px solid var(--bs-gray-300);
+  border: 1px solid #e8e5e5;
   box-shadow: 0 2px 2px #e8e5e5;
   padding: 10px 10px;
   border-radius: 5px;
-  background-color: var(--bs-primary);
+  background-color: #31bb6b;
   width: 100%;
   font-size: 16px;
-  color: var(--bs-white);
+  color: white;
   outline: none;
   font-weight: 600;
   cursor: pointer;
@@ -648,12 +640,6 @@ hr {
     transform 0.2s,
     box-shadow 0.2s;
   width: 100%;
-}
-
-.errorIconPledge {
-  transform: scale(1.5);
-  color: var(--bs-danger);
-  margin-bottom: 1rem;
 }
 
 .btnsContainerPledge {
@@ -689,12 +675,6 @@ hr {
   color: #31bb6b;
 }
 
-.tableHeaderPledge {
-  background-color: var(--bs-primary);
-  color: var(--bs-white);
-  font-size: 1rem;
-}
-
 .rowBackgroundPledge {
   background-color: var(--bs-white);
   max-height: 120px;
@@ -707,12 +687,7 @@ hr {
   border-radius: 100% !important;
 }
 
-.avatarContainer {
-  width: 28px;
-  height: 26px;
-}
-
-.imageContainer {
+.imageContainerPledge {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -856,14 +831,6 @@ hr {
 
 .toggleBtnPledge:hover {
   color: #31bb6b !important;
-}
-
-input[type='radioPledge']:checked + label {
-  background-color: #31bb6a50 !important;
-}
-
-input[type='radioPledge']:checked + label:hover {
-  color: black !important;
 }
 
 @media (max-width: 1024px) {

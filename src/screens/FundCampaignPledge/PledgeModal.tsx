@@ -343,7 +343,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           {/* Button to submit the pledge form */}
           <Button
             type="submit"
-            className={styles.greenregbtn}
+            className={styles.greenregbtnPledge}
             data-testid="submitPledgeBtn"
           >
             {t(mode === 'edit' ? 'updatePledge' : 'createPledge')}
