@@ -21,12 +21,13 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
 import type { InterfaceItemModalProps } from './ItemModal';
 import ItemModal from './ItemModal';
+import { vi } from 'vitest';
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
-    warning: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
   },
 }));
 
@@ -45,28 +46,28 @@ const t = {
 const itemProps: InterfaceItemModalProps[] = [
   {
     isOpen: true,
-    hide: jest.fn(),
+    hide: vi.fn(),
     orgId: 'orgId',
     eventId: undefined,
-    actionItemsRefetch: jest.fn(),
+    actionItemsRefetch: vi.fn(),
     editMode: false,
     actionItem: null,
   },
   {
     isOpen: true,
-    hide: jest.fn(),
+    hide: vi.fn(),
     orgId: 'orgId',
     eventId: 'eventId',
-    actionItemsRefetch: jest.fn(),
+    actionItemsRefetch: vi.fn(),
     editMode: false,
     actionItem: null,
   },
   {
     isOpen: true,
-    hide: jest.fn(),
+    hide: vi.fn(),
     orgId: 'orgId',
     eventId: undefined,
-    actionItemsRefetch: jest.fn(),
+    actionItemsRefetch: vi.fn(),
     editMode: true,
     actionItem: {
       _id: 'actionItemId1',
@@ -106,10 +107,10 @@ const itemProps: InterfaceItemModalProps[] = [
   },
   {
     isOpen: true,
-    hide: jest.fn(),
+    hide: vi.fn(),
     orgId: 'orgId',
     eventId: undefined,
-    actionItemsRefetch: jest.fn(),
+    actionItemsRefetch: vi.fn(),
     editMode: true,
     actionItem: {
       _id: 'actionItemId2',
@@ -149,10 +150,10 @@ const itemProps: InterfaceItemModalProps[] = [
   },
   {
     isOpen: true,
-    hide: jest.fn(),
+    hide: vi.fn(),
     orgId: 'orgId',
     eventId: 'eventId',
-    actionItemsRefetch: jest.fn(),
+    actionItemsRefetch: vi.fn(),
     editMode: true,
     actionItem: {
       _id: 'actionItemId2',
@@ -202,10 +203,10 @@ const itemProps: InterfaceItemModalProps[] = [
   },
   {
     isOpen: true,
-    hide: jest.fn(),
+    hide: vi.fn(),
     orgId: 'orgId',
     eventId: 'eventId',
-    actionItemsRefetch: jest.fn(),
+    actionItemsRefetch: vi.fn(),
     editMode: true,
     actionItem: {
       _id: 'actionItemId2',

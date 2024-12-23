@@ -16,11 +16,12 @@ import { toast } from 'react-toastify';
 import ItemUpdateStatusModal, {
   type InterfaceItemUpdateStatusModalProps,
 } from './ItemUpdateStatusModal';
+import { vi } from 'vitest';
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
@@ -35,8 +36,8 @@ const t = JSON.parse(
 const itemProps: InterfaceItemUpdateStatusModalProps[] = [
   {
     isOpen: true,
-    hide: jest.fn(),
-    actionItemsRefetch: jest.fn(),
+    hide: vi.fn(),
+    actionItemsRefetch: vi.fn(),
     actionItem: {
       _id: 'actionItemId1',
       assignee: null,
@@ -75,8 +76,8 @@ const itemProps: InterfaceItemUpdateStatusModalProps[] = [
   },
   {
     isOpen: true,
-    hide: jest.fn(),
-    actionItemsRefetch: jest.fn(),
+    hide: vi.fn(),
+    actionItemsRefetch: vi.fn(),
     actionItem: {
       _id: 'actionItemId1',
       assignee: null,
@@ -148,8 +149,8 @@ const itemProps: InterfaceItemUpdateStatusModalProps[] = [
   },
   {
     isOpen: true,
-    hide: jest.fn(),
-    actionItemsRefetch: jest.fn(),
+    hide: vi.fn(),
+    actionItemsRefetch: vi.fn(),
     actionItem: {
       _id: 'actionItemId1',
       assignee: {
