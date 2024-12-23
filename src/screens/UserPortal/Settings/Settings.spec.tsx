@@ -1,5 +1,6 @@
-import React, { act } from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import React from 'react';
+import { describe, expect, beforeAll, vi } from 'vitest';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -119,31 +120,27 @@ const resizeWindow = (width: number): void => {
 
 async function wait(ms = 100): Promise<void> {
   await act(async () => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
+    vi.advanceTimersByTime(ms);
   });
 }
 
 describe('Testing Settings Screen [User Portal]', () => {
-  // Mock implementation of matchMedia
   beforeAll(() => {
+    vi.useFakeTimers();
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
-      value: jest.fn().mockImplementation((query) => ({
+      value: vi.fn().mockImplementation((query) => ({
         matches: false,
         media: query,
         onchange: null,
-        addListener: jest.fn(), // Deprecated
-        removeListener: jest.fn(), // Deprecated
-        addEventListener: jest.fn(),
-        removeEventListener: jest.fn(),
-        dispatchEvent: jest.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
       })),
     });
   });
 
-  test('Screen should be rendered properly', async () => {
+  it('Screen should be rendered properly', async () => {
     await act(async () => {
       render(
         <MockedProvider addTypename={false} link={link}>
@@ -163,7 +160,7 @@ describe('Testing Settings Screen [User Portal]', () => {
     expect(screen.queryAllByText('Settings')).not.toBe([]);
   });
 
-  test('input works properly', async () => {
+  it('input works properly', async () => {
     await act(async () => {
       render(
         <MockedProvider addTypename={false} link={link}>
@@ -220,7 +217,7 @@ describe('Testing Settings Screen [User Portal]', () => {
     expect(screen.getByTestId('profile-picture')).toBeInTheDocument();
   });
 
-  test('resetChangesBtn works properly', async () => {
+  it('resetChangesBtn works properly', async () => {
     await act(async () => {
       render(
         <MockedProvider addTypename={false} link={link1}>
@@ -253,7 +250,7 @@ describe('Testing Settings Screen [User Portal]', () => {
     expect(screen.getByLabelText('Birth Date')).toHaveValue('2024-03-01');
   });
 
-  test('resetChangesBtn works properly when the details are empty', async () => {
+  it('resetChangesBtn works properly when the details are empty', async () => {
     await act(async () => {
       render(
         <MockedProvider addTypename={false} link={link2}>
@@ -286,7 +283,7 @@ describe('Testing Settings Screen [User Portal]', () => {
     expect(screen.getByLabelText('Birth Date')).toHaveValue('');
   });
 
-  test('sidebar', async () => {
+  it('sidebar', async () => {
     await act(async () => {
       render(
         <MockedProvider addTypename={false} link={link2}>
@@ -311,7 +308,7 @@ describe('Testing Settings Screen [User Portal]', () => {
     act(() => openMenuBtn.click());
   });
 
-  test('Testing sidebar when the screen size is less than or equal to 820px', async () => {
+  it('Testing sidebar when the screen size is less than or equal to 820px', async () => {
     resizeWindow(800);
     await act(async () => {
       render(
@@ -328,7 +325,6 @@ describe('Testing Settings Screen [User Portal]', () => {
     });
 
     await wait();
-
     screen.debug();
 
     const openMenuBtn = screen.queryByTestId('openMenu');
@@ -348,7 +344,7 @@ describe('Testing Settings Screen [User Portal]', () => {
     }
   });
 
-  test('renders events attended card correctly', async () => {
+  it('renders events attended card correctly', async () => {
     render(
       <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
@@ -368,7 +364,7 @@ describe('Testing Settings Screen [User Portal]', () => {
     expect(screen.getByText('No Events Attended')).toBeInTheDocument();
   });
 
-  test('renders events attended card correctly with events', async () => {
+  it('renders events attended card correctly with events', async () => {
     const mockEventsAttended = [
       { _id: '1', title: 'Event 1' },
       { _id: '2', title: 'Event 2' },
