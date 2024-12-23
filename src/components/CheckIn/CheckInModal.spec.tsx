@@ -12,6 +12,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { checkInQueryMock } from './mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import { vi } from 'vitest';
 
 const link = new StaticMockLink(checkInQueryMock, true);
 
@@ -19,8 +20,13 @@ describe('Testing Check In Attendees Modal', () => {
   const props = {
     show: true,
     eventId: 'event123',
-    handleClose: jest.fn(),
+    handleClose: vi.fn(),
   };
+
+  /**
+   * Test case for rendering the CheckInModal component and verifying functionality.
+   * It checks that the modal renders fetched users and verifies the filtering mechanism.
+   */
 
   test('The modal should be rendered, and all the fetched users should be shown properly and user filtering should work', async () => {
     const { queryByText, queryByLabelText } = render(
