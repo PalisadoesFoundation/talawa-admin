@@ -91,6 +91,7 @@ export default function settings(): JSX.Element {
    * This function sends a mutation request to update the user details
    * and reloads the page on success.
    */
+
   /*istanbul ignore next*/
   const handleUpdateUserDetails = async (): Promise<void> => {
     try {

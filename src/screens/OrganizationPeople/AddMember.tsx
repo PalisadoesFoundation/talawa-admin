@@ -76,6 +76,9 @@ function AddMember(): JSX.Element {
   function openAddUserModal(): void {
     setAddUserModalIsOpen(true);
   }
+  useEffect(() => {
+    setUserName('');
+  }, [addUserModalisOpen]);
 
   const toggleDialogModal = (): void =>
     setAddUserModalIsOpen(!addUserModalisOpen);
