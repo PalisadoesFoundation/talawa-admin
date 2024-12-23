@@ -22,7 +22,6 @@ import ManageTag from './ManageTag';
 import { MOCKS, MOCKS_ERROR_ASSIGNED_MEMBERS } from './ManageTagMocks';
 import { type ApolloLink } from '@apollo/client';
 import { vi, beforeEach, afterEach, expect, it } from 'vitest';
-import '@testing-library/jest-dom/vitest';
 
 const translations = {
   ...JSON.parse(
