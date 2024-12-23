@@ -709,7 +709,7 @@ hr {
   max-height: 120px;
 }
 
-.tableHeaders {
+.tableHeader {
   background-color: var(--bs-primary);
   color: var(--bs-white);
   font-size: 1rem;
