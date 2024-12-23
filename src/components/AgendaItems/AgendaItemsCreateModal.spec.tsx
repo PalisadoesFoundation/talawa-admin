@@ -20,7 +20,6 @@ import AgendaItemsCreateModal from './AgendaItemsCreateModal';
 import { toast } from 'react-toastify';
 import convertToBase64 from 'utils/convertToBase64';
 import type { MockedFunction } from 'vitest';
-
 import { describe, test, expect, vi } from 'vitest';
 
 const mockFormState = {
