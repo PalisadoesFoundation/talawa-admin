@@ -22,7 +22,6 @@ import SubTags from './SubTags';
 import { MOCKS, MOCKS_ERROR_SUB_TAGS } from './SubTagsMocks';
 import { InMemoryCache, type ApolloLink } from '@apollo/client';
 import { vi, beforeEach, afterEach, expect, it } from 'vitest';
-import '@testing-library/jest-dom/vitest';
 
 const translations = {
   ...JSON.parse(
