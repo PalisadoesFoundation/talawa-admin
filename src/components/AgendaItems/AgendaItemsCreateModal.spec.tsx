@@ -19,6 +19,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import AgendaItemsCreateModal from './AgendaItemsCreateModal';
 import { toast } from 'react-toastify';
 import convertToBase64 from 'utils/convertToBase64';
+import type { MockedFunction } from 'vitest';
 
 import '@testing-library/jest-dom';
 import { describe, test, expect, vi } from 'vitest';
@@ -74,8 +75,9 @@ vi.mock('react-toastify', () => ({
   },
 }));
 vi.mock('utils/convertToBase64');
-const mockedConvertToBase64 =
-  convertToBase64 as import('vitest').MockedFunction<typeof convertToBase64>;
+const mockedConvertToBase64 = convertToBase64 as MockedFunction<
+  typeof convertToBase64
+>;
 
 describe('AgendaItemsCreateModal', () => {
   test('renders modal correctly', () => {
