@@ -21,7 +21,6 @@ import { toast } from 'react-toastify';
 import convertToBase64 from 'utils/convertToBase64';
 import type { MockedFunction } from 'vitest';
 
-import '@testing-library/jest-dom';
 import { describe, test, expect, vi } from 'vitest';
 
 const mockFormState = {
