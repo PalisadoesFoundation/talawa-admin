@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import styles from './ContriStats.module.css';
+import styles from '../../style/app.module.css';
 
 interface InterfaceContriStatsProps {
   id: string;
@@ -13,11 +13,17 @@ interface InterfaceContriStatsProps {
 /**
  * A component that displays contribution statistics.
  *
- * @param props - The properties passed to the component, including `recentAmount`, `highestAmount`, and `totalAmount`.
+ * @param recentAmount - The most recent contribution amount.
+ * @param highestAmount - The highest contribution amount.
+ * @param totalAmount - The total contribution amount.
  *
  * @returns JSX.Element - The rendered component displaying the contribution stats.
  */
-function ContriStats(props: InterfaceContriStatsProps): JSX.Element {
+function ContriStats({
+  recentAmount,
+  highestAmount,
+  totalAmount,
+}: InterfaceContriStatsProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'contriStats',
   });
@@ -25,15 +31,16 @@ function ContriStats(props: InterfaceContriStatsProps): JSX.Element {
   return (
     <>
       <p className={styles.fonts}>
-        {t('recentContribution')}: $&nbsp;<span>{props.recentAmount}</span>
+        {t('recentContribution')}: $&nbsp;<span>{recentAmount}</span>
       </p>
       <p className={styles.fonts}>
-        {t('highestContribution')}: $&nbsp;<span>{props.highestAmount}</span>
+        {t('highestContribution')}: $&nbsp;<span>{highestAmount}</span>
       </p>
       <p className={styles.fonts}>
-        {t('totalContribution')}: $&nbsp;<span>{props.totalAmount}</span>
+        {t('totalContribution')}: $&nbsp;<span>{totalAmount}</span>
       </p>
     </>
   );
 }
+
 export default ContriStats;

@@ -1,7 +1,7 @@
 import inquirer from 'inquirer';
 
 export async function askForTalawaApiUrl(): Promise<string> {
-  const { endpoint } = await inquirer.prompt([
+  const { endpoint } = await inquirer.prompt<{ endpoint: string }>([
     {
       type: 'input',
       name: 'endpoint',
