@@ -3,7 +3,13 @@ import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import type { RenderResult } from '@testing-library/react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -93,8 +99,9 @@ describe('Testing Groups Screen', () => {
     setItem('userId', 'userId');
   });
 
-  afterAll(() => {
-    vi.clearAllMocks();
+  afterEach(() => {
+    vi.resetAllMocks();
+    cleanup(); // from @testing-library/react
   });
 
   /**
@@ -133,6 +140,11 @@ describe('Testing Groups Screen', () => {
     renderGroups(link1);
     const searchInput = await screen.findByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
+    // Verify other critical UI elements
+    expect(await screen.findByTestId('sort')).toBeInTheDocument();
+    expect(await screen.findByTestId('searchByToggle')).toBeInTheDocument();
+    const groupElements = await screen.findAllByTestId('groupName');
+    expect(groupElements.length).toBeGreaterThan(0);
   });
 
   /**
