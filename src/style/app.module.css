@@ -81,6 +81,7 @@
 
 .btnsContainer .btnsBlock {
   display: flex;
+  width: max-content;
 }
 
 .btnsContainer .btnsBlock button {
@@ -88,11 +89,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.btnsContainer .input {
-  flex: 1;
-  position: relative;
 }
 
 .btnsContainer .input button {
@@ -612,4 +608,40 @@ hr {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
+}
+
+.btnsContainer .input {
+  flex: 1;
+  position: relative;
+  max-width: 60%;
+  justify-content: space-between;
+}
+
+.btnsContainer input {
+  outline: 1px solid var(--bs-gray-400);
+}
+
+.tableHeaders {
+  background-color: var(--bs-primary);
+  color: var(--bs-white);
+  font-size: 1rem;
+}
+
+.rowBackgrounds {
+  background-color: var(--bs-white);
+  max-height: 120px;
+}
+
+.tagsBreadCrumbs:hover {
+  color: var(--bs-blue);
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.manageTagScrollableDiv {
+  scrollbar-width: thin;
+  scrollbar-color: var(--bs-gray-400) var(--bs-white);
+
+  max-height: calc(100vh - 18rem);
+  overflow: auto;
 }
