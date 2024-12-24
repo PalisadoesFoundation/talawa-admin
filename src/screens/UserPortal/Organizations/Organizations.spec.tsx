@@ -358,6 +358,7 @@ describe('Testing Organizations Screen [User Portal]', () => {
     );
 
     await wait();
+    expect(screen.getByText('My Organizations')).toBeInTheDocument();
   });
 
   /**
