@@ -13,6 +13,7 @@
   --search-button-bg: #a8c7fa;
   --search-button-border: #555555;
   --table-image-size: 50px;
+  --table-image-small-size: 25px;
   --table-head-bg: var(
     --bs-primary,
     blue
@@ -242,6 +243,13 @@
   border-radius: 100% !important;
 }
 
+.TableImageSmall {
+  object-fit: cover;
+  width: var(--table-image-small-size);
+  height: var(--table-image-small-size);
+  border-radius: 100%;
+}
+
 .tableHead {
   color: var(--table-head-color);
   border-radius: var(--table-head-radius) !important;
@@ -426,6 +434,18 @@ hr {
 
 .toggleBtn:hover {
   color: var(--bs-primary) !important;
+}
+
+.avatarContainer {
+  width: 28px;
+  height: 26px;
+}
+
+.imageContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.5rem;
 }
 
 @media (max-width: 520px) {
