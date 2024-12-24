@@ -772,6 +772,17 @@
     "loading": "Loading...",
     "noAttendees": "Attendees not Found"
   },
+  "eventRegistrant": {
+    "sort": "Sort",
+    "allRegistrants": "All Registrants",
+    "eventRegistrantsTable": "Event Registrants Table",
+    "serialNumber": "Serial Number",
+    "registrant": "Registrant",
+    "registeredAt": "Registered At",
+    "createdAt": "Created At",
+    "addRegistrant": "Add Registrant",
+    "noRegistrantsFound": "No Registrants Found."
+  },
   "onSpotAttendee": {
     "title": "On-spot Attendee",
     "enterFirstName": "Enter First Name",
