@@ -1,15 +1,20 @@
 import fs from 'fs';
+import { vi } from 'vitest';
 import inquirer from 'inquirer';
 import { askForTalawaApiUrl } from './askForTalawaApiUrl';
 
-jest.mock('fs');
-jest.mock('inquirer', () => ({
-  prompt: jest.fn(),
-}));
+vi.mock('fs');
+vi.mock('inquirer', async () => {
+  const actual = await vi.importActual('inquirer');
+  return {
+    ...actual,
+    prompt: vi.fn(),
+  };
+});
 
 describe('WebSocket URL Configuration', () => {
   beforeEach(() => {
-    jest.resetAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should convert http URL to ws WebSocket URL', async () => {
@@ -27,12 +32,12 @@ describe('WebSocket URL Configuration', () => {
   });
 
   test('should retain default WebSocket URL if no new endpoint is provided', async () => {
-    jest
-      .spyOn(inquirer, 'prompt')
-      .mockResolvedValueOnce({ endpoint: 'http://localhost:4000/graphql/' });
+    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
+      endpoint: 'http://localhost:4000/graphql/',
+    });
     await askForTalawaApiUrl();
 
-    const writeFileSyncSpy = jest.spyOn(fs, 'writeFileSync');
+    const writeFileSyncSpy = vi.spyOn(fs, 'writeFileSync');
     expect(writeFileSyncSpy).not.toHaveBeenCalled();
   });
 });
