@@ -1416,6 +1416,9 @@
   "userPledges": {
     "title": "My Pledges"
   },
+  "leaveOrganization": {
+    "title": "Leave Organization"
+  },
   "eventVolunteers": {
     "volunteers": "Volunteers",
     "volunteer": "Volunteer",
