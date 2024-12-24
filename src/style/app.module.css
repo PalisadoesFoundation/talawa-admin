@@ -14,6 +14,11 @@
   --table-image-size: 50px;
   --bs-primary: #0056b3;
   --bs-white: #fff --table-head-bg: var(--bs-primary, blue); /* Assuming var(--bs-primary) is defined elsewhere */
+  --table-head-bg: var(
+    --bs-primary,
+    blue
+  ); /* Assuming var(--bs-primary) is defined elsewhere */
+
   --table-head-color: white;
   --table-header-color: var(--bs-greyish-black, black);
   --table-head-radius: 20px;
@@ -905,7 +910,6 @@ hr {
     right: -30%;
   }
 }
-
 @media (max-width: 520px) {
   .btnsContainer {
     margin-bottom: 0;
@@ -987,7 +991,6 @@ hr {
     transform: rotate(360deg);
   }
 }
-
 .btnsContainer .input {
   flex: 1;
   position: relative;
@@ -1041,7 +1044,7 @@ hr {
 }
 
 .tableHeaders {
-  background-color: var(--bs-primary);
+  background-color: var(--bs-primary-text-emphasis);
   color: var(--bs-white);
   font-size: 1rem;
 }

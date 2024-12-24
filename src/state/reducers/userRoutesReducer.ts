@@ -63,6 +63,11 @@ const components: ComponentType[] = [
     component: 'Campaigns',
   },
   { name: 'My Pledges', comp_id: 'pledges', component: 'Pledges' },
+  {
+    name: 'Leave Organization',
+    comp_id: 'leaveorg',
+    component: 'LeaveOrganization',
+  },
 ];
 
 const generateRoutes = (

@@ -8,7 +8,7 @@ import type {
   InterfacePledgeInfo,
   InterfaceUserInfo,
 } from 'utils/interfaces';
-import styles from './FundCampaignPledge.module.css';
+import styles from '../../style/app.module.css';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
@@ -228,7 +228,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           <Form.Group className="d-flex mb-3 w-100">
             <Autocomplete
               multiple
-              className={`${styles.noOutline} w-100`}
+              className={`${styles.noOutlinePledge} w-100`}
               limitTags={2}
               data-testid="pledgerSelect"
               options={pledgers}
@@ -258,7 +258,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               format="DD/MM/YYYY"
               label={tCommon('startDate')}
               value={dayjs(pledgeStartDate)}
-              className={styles.noOutline}
+              className={styles.noOutlinePledge}
               onChange={(date: Dayjs | null): void => {
                 if (date) {
                   setFormState({
@@ -280,7 +280,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
             <DatePicker
               format="DD/MM/YYYY"
               label={tCommon('endDate')}
-              className={styles.noOutline}
+              className={styles.noOutlinePledge}
               value={dayjs(pledgeEndDate)}
               onChange={(date: Dayjs | null): void => {
                 if (date) {
@@ -327,7 +327,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               <TextField
                 label={t('amount')}
                 variant="outlined"
-                className={styles.noOutline}
+                className={styles.noOutlinePledge}
                 value={pledgeAmount}
                 onChange={(e) => {
                   if (parseInt(e.target.value) > 0) {
@@ -343,7 +343,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           {/* Button to submit the pledge form */}
           <Button
             type="submit"
-            className={styles.greenregbtn}
+            className={styles.greenregbtnPledge}
             data-testid="submitPledgeBtn"
           >
             {t(mode === 'edit' ? 'updatePledge' : 'createPledge')}

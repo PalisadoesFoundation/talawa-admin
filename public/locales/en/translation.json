@@ -923,7 +923,7 @@
     "register": "register"
   },
   "addOnStore": {
-    "title": "Add On Store",
+    "title": "Plugin Store",
     "searchName": "Ex: Donations",
     "search": "Search",
     "enable": "Enabled",
@@ -1227,7 +1227,7 @@
     "RstartDate": "Select Start Date",
     "RendDate": "Select End Date",
     "RClose": "Close the window",
-    "addNew": "Create new advertisement",
+    "addNew": "Create",
     "EXname": "Ex. Cookie Shop",
     "EXlink": "Ex. http://yourwebsite.com/photo",
     "createAdvertisement": "Create Advertisement",
@@ -1404,6 +1404,9 @@
   },
   "userPledges": {
     "title": "My Pledges"
+  },
+  "leaveOrganization": {
+    "title": "Leave Organization"
   },
   "eventVolunteers": {
     "volunteers": "Volunteers",
