@@ -18,6 +18,10 @@ import Organizations from './Organizations';
 import React, { act } from 'react';
 const { getItem } = useLocalStorage();
 
+/**
+ * Mock data for GraphQL queries.
+ */
+
 const MOCKS = [
   {
     request: {
@@ -317,6 +321,10 @@ const MOCKS = [
   },
 ];
 
+/**
+ * Custom Mock Link for handling static GraphQL mocks.
+ */
+
 const link = new StaticMockLink(MOCKS, true);
 
 async function wait(ms = 100): Promise<void> {
@@ -333,6 +341,9 @@ const resizeWindow = (width: number): void => {
 };
 
 describe('Testing Organizations Screen [User Portal]', () => {
+  /**
+   * Test to ensure the screen is rendered properly.
+   */
   test('Screen should be rendered properly', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -347,7 +358,12 @@ describe('Testing Organizations Screen [User Portal]', () => {
     );
 
     await wait();
+    expect(screen.getByText('My Organizations')).toBeInTheDocument();
   });
+
+  /**
+   * Test to check if the search functionality works as expected.
+   */
 
   test('Search works properly', async () => {
     render(
@@ -374,6 +390,10 @@ describe('Testing Organizations Screen [User Portal]', () => {
     await wait();
   });
 
+  /**
+   * Test to verify the mode change to joined organizations.
+   */
+
   test('Mode is changed to joined organizations', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -397,6 +417,10 @@ describe('Testing Organizations Screen [User Portal]', () => {
     expect(screen.queryAllByText('joinedOrganization')).not.toBe([]);
   });
 
+  /**
+   * Test case to ensure the mode can be changed to display created organizations.
+   */
+
   test('Mode is changed to created organizations', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -419,6 +443,10 @@ describe('Testing Organizations Screen [User Portal]', () => {
 
     expect(screen.queryAllByText('createdOrganization')).not.toBe([]);
   });
+
+  /**
+   * Test case to check if the "Join Now" button renders correctly on the page.
+   */
 
   test('Join Now button render correctly', async () => {
     render(
@@ -462,6 +490,10 @@ describe('Testing Organizations Screen [User Portal]', () => {
 
     expect(screen.queryAllByText('createdOrganization')).not.toBe([]);
   });
+
+  /**
+   * Test case to ensure the sidebar is functional, including opening and closing actions.
+   */
 
   test('Testing Sidebar', async () => {
     render(
