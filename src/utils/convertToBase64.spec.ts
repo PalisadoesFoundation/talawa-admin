@@ -15,6 +15,7 @@ describe('convertToBase64', () => {
   });
 
   it('should handle errors thrown by FileReader', async () => {
+    // Arrange
     const file = new File(['hello'], 'hello.txt', { type: 'text/plain' });
     const mockFileReader = vi
       .spyOn(global, 'FileReader')
@@ -22,7 +23,10 @@ describe('convertToBase64', () => {
         throw new Error('Test error');
       });
 
+    // Act
     const result = await convertToBase64(file);
+
+    // Assert
     expect(mockFileReader).toHaveBeenCalledTimes(1);
     expect(mockFileReader).toHaveBeenCalledWith();
     expect(result).toBe('');
