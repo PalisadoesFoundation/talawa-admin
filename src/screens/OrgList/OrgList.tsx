@@ -27,6 +27,7 @@ import type {
   InterfaceUserType,
 } from 'utils/interfaces';
 import useLocalStorage from 'utils/useLocalstorage';
+// import styles from '../../style/app.module.css';
 import styles from '../../style/app.module.css';
 import OrganizationModal from './OrganizationModal';
 
@@ -38,7 +39,6 @@ function orgList(): JSX.Element {
 
   function openDialogModal(redirectOrgId: string): void {
     setDialogRedirectOrgId(redirectOrgId);
-    // console.log(redirectOrgId, dialogRedirectOrgId);
     setdialogModalIsOpen(true);
   }
 
@@ -344,7 +344,7 @@ function orgList(): JSX.Element {
           />
           <Button
             tabIndex={-1}
-            className={styles.search}
+            className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
             onClick={handleSearchByBtnClick}
             data-testid="searchBtn"
           >
@@ -359,7 +359,7 @@ function orgList(): JSX.Element {
               data-testid="sort"
             >
               <Dropdown.Toggle
-                className={styles.dropdown}
+                // className={styles.dropdown}
                 variant={
                   sortingState.option === '' ? 'outline-success' : 'success'
                 }
@@ -526,7 +526,7 @@ function orgList(): JSX.Element {
       {/* Plugin Notification Modal after Org is Created */}
       <Modal show={dialogModalisOpen} onHide={toggleDialogModal}>
         <Modal.Header
-          className={styles.createButton}
+          className={`bg-primary`}
           closeButton
           data-testid="pluginNotificationHeader"
         >
@@ -543,7 +543,7 @@ function orgList(): JSX.Element {
 
               <div className={styles.pluginStoreBtnContainer}>
                 <Link
-                  className={`btn  ${styles.pluginStoreBtn}`}
+                  className={`btn  btn-primary ${styles.pluginStoreBtn}`}
                   data-testid="goToStore"
                   to={`orgstore/id=${dialogRedirectOrgId}`}
                 >
