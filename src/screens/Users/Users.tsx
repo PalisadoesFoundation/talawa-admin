@@ -77,15 +77,19 @@ const Users = (): JSX.Element => {
   const [searchByName, setSearchByName] = useState('');
   const [sortingOption, setSortingOption] = useState('newest');
   const [filteringOption, setFilteringOption] = useState('cancel');
+  const [loadUnqUsers, setLoadUnqUsers] = useState(0);
   const userType = getItem('SuperAdmin')
     ? 'SUPERADMIN'
     : getItem('AdminFor')
       ? 'ADMIN'
       : 'USER';
   const loggedInUserId = getItem('id');
+  const [usersData, setUsersData] = useState<
+    { users: InterfaceQueryUserListItem[] } | undefined
+  >(undefined);
 
   const {
-    data: usersData,
+    data,
     loading: loading,
     fetchMore,
     refetch: refetchUsers,
@@ -114,6 +118,12 @@ const Users = (): JSX.Element => {
     notifyOnNetworkStatusChange: true,
   });
 
+  useEffect(() => {
+    if (data) {
+      setUsersData(data);
+    }
+  }, [data, isLoading]);
+
   const { data: dataOrgs } = useQuery(ORGANIZATION_CONNECTION_LIST);
   const [displayedUsers, setDisplayedUsers] = useState(usersData?.users || []);
 
@@ -122,15 +132,13 @@ const Users = (): JSX.Element => {
     if (!usersData) {
       return;
     }
-    if (usersData && usersData.users) {
-      // console.log(sortingOption)
-      let newDisplayedUsers = sortUsers(usersData.users, sortingOption);
-      newDisplayedUsers = filterUsers(newDisplayedUsers, filteringOption);
-      setDisplayedUsers(newDisplayedUsers);
-      if (newDisplayedUsers.length < perPageResult) {
-        setHasMore(false);
-      }
+
+    if (usersData.users.length < perPageResult) {
+      setHasMore(false);
     }
+    let newDisplayedUsers = sortUsers(usersData.users, sortingOption);
+    newDisplayedUsers = filterUsers(newDisplayedUsers, filteringOption);
+    setDisplayedUsers(newDisplayedUsers);
   }, [usersData, sortingOption, filteringOption]);
 
   // To clear the search when the component is unmounted
@@ -166,6 +174,12 @@ const Users = (): JSX.Element => {
       setIsLoading(false);
     }
   }, [loading]);
+
+  useEffect(() => {
+    if (loadUnqUsers > 0) {
+      loadMoreUsers(displayedUsers.length, loadUnqUsers);
+    }
+  }, [displayedUsers]);
 
   const handleSearch = (value: string): void => {
     setSearchByName(value);
@@ -209,11 +223,12 @@ const Users = (): JSX.Element => {
     setHasMore(true);
   };
   /* istanbul ignore next */
-  const loadMoreUsers = (): void => {
+  const loadMoreUsers = (skipValue: number, limitVal: number): void => {
     setIsLoadingMore(true);
     fetchMore({
       variables: {
-        skip: displayedUsers.length || 0,
+        first: limitVal + 2 * perPageResult || perPageResult,
+        skip: skipValue - perPageResult >= 0 ? skipValue - perPageResult : 0,
         filter: searchByName,
         order: sortingOption === 'newest' ? 'createdAt_DESC' : 'createdAt_ASC',
       },
@@ -227,14 +242,25 @@ const Users = (): JSX.Element => {
       ) => {
         setIsLoadingMore(false);
         if (!fetchMoreResult) return prev || { users: [] };
-        if (fetchMoreResult.users.length < perPageResult) {
-          setHasMore(false);
-        }
+
         const mergedUsers = [...(prev?.users || []), ...fetchMoreResult.users];
 
         const uniqueUsers = Array.from(
           new Map(mergedUsers.map((user) => [user.user._id, user])).values(),
         );
+        if (uniqueUsers.length < mergedUsers.length) {
+          setLoadUnqUsers(mergedUsers.length - uniqueUsers.length);
+        } else setLoadUnqUsers(0);
+
+        if (prev?.users) {
+          if (uniqueUsers.length - prev?.users.length < perPageResult) {
+            setHasMore(false);
+          }
+        } else {
+          if (uniqueUsers.length < perPageResult) {
+            setHasMore(false);
+          }
+        }
 
         return { users: uniqueUsers };
       },
@@ -247,7 +273,6 @@ const Users = (): JSX.Element => {
     }
     setHasMore(true);
     setSortingOption(option);
-    setDisplayedUsers([]);
   };
 
   const sortUsers = (
@@ -276,7 +301,6 @@ const Users = (): JSX.Element => {
     if (option === filteringOption) {
       return;
     }
-    setDisplayedUsers([]);
     setFilteringOption(option);
     setHasMore(true);
   };
@@ -362,13 +386,17 @@ const Users = (): JSX.Element => {
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item
-                  onClick={(): void => handleSorting('newest')}
+                  onClick={(): void => {
+                    handleSorting('newest');
+                  }}
                   data-testid="newest"
                 >
                   {t('Newest')}
                 </Dropdown.Item>
                 <Dropdown.Item
-                  onClick={(): void => handleSorting('oldest')}
+                  onClick={(): void => {
+                    handleSorting('oldest');
+                  }}
                   data-testid="oldest"
                 >
                   {t('Oldest')}
@@ -454,7 +482,9 @@ const Users = (): JSX.Element => {
               /* istanbul ignore next */
               displayedUsers.length ?? 0
             }
-            next={loadMoreUsers}
+            next={() => {
+              loadMoreUsers(displayedUsers.length, perPageResult);
+            }}
             loader={
               <TableLoader
                 noOfCols={headerTitles.length}

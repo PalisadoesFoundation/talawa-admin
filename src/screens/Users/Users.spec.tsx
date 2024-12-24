@@ -1,8 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { act, fireEvent, render, screen } from '@testing-library/react';
-import 'jest-localstorage-mock';
-import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -14,6 +12,7 @@ import i18nForTest from 'utils/i18nForTest';
 import Users from './Users';
 import { EMPTY_MOCKS, MOCKS, MOCKS2 } from './UsersMocks';
 import useLocalStorage from 'utils/useLocalstorage';
+import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest';
 
 import {
   USER_LIST,
@@ -301,11 +300,11 @@ beforeEach(() => {
 
 afterEach(() => {
   localStorage.clear();
-  jest.clearAllMocks();
+  vi.restoreAllMocks();
 });
 
 describe('Testing Users screen', () => {
-  test('Component should be rendered properly', async () => {
+  it('Component should be rendered properly', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -322,7 +321,7 @@ describe('Testing Users screen', () => {
     expect(screen.getByTestId('testcomp')).toBeInTheDocument();
   });
 
-  test(`Component should be rendered properly when user is not superAdmin
+  it(`Component should be rendered properly when user is not superAdmin
   and or userId does not exists in localstorage`, async () => {
     setItem('AdminFor', ['123']);
     removeItem('SuperAdmin');
@@ -342,7 +341,7 @@ describe('Testing Users screen', () => {
     await wait();
   });
 
-  test(`Component should be rendered properly when userId does not exists in localstorage`, async () => {
+  it(`Component should be rendered properly when userId does not exists in localstorage`, async () => {
     removeItem('AdminFor');
     removeItem('SuperAdmin');
     await wait();
@@ -361,7 +360,7 @@ describe('Testing Users screen', () => {
     await wait();
   });
 
-  test('Component should be rendered properly when user is superAdmin', async () => {
+  it('Component should be rendered properly when user is superAdmin', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -377,7 +376,7 @@ describe('Testing Users screen', () => {
     await wait();
   });
 
-  test('Testing seach by name functionality', async () => {
+  it('Testing seach by name functionality', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -416,7 +415,7 @@ describe('Testing Users screen', () => {
     await wait();
   });
 
-  test('testing search not found', async () => {
+  it('testing search not found', async () => {
     await act(async () => {
       render(
         <MockedProvider addTypename={false} link={link2}>
@@ -446,7 +445,7 @@ describe('Testing Users screen', () => {
     expect(screen.queryByText(/No User Found/i)).toBeInTheDocument();
   });
 
-  test('Testing User data is not present', async () => {
+  it('Testing User data is not present', async () => {
     render(
       <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
@@ -463,7 +462,7 @@ describe('Testing Users screen', () => {
     expect(screen.getByText(/No User Found/i)).toBeTruthy();
   });
 
-  test('Should render warning alert when there are no organizations', async () => {
+  it('Should render warning alert when there are no organizations', async () => {
     const { container } = render(
       <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
@@ -483,7 +482,7 @@ describe('Testing Users screen', () => {
     );
   });
 
-  test('Should not render warning alert when there are organizations present', async () => {
+  it('Should not render warning alert when there are organizations present', async () => {
     const { container } = render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -504,7 +503,7 @@ describe('Testing Users screen', () => {
     );
   });
 
-  test('Testing filter functionality', async () => {
+  it('Testing filter functionality', async () => {
     await act(async () => {
       render(
         <MockedProvider addTypename={false} link={link}>
@@ -577,7 +576,7 @@ describe('Testing Users screen', () => {
     expect(searchInput).toBeInTheDocument();
   });
 
-  test('check for rerendering', async () => {
+  it('check for rerendering', async () => {
     const { rerender } = render(
       <MockedProvider addTypename={false} link={link3}>
         <BrowserRouter>
@@ -607,7 +606,7 @@ describe('Testing Users screen', () => {
     await wait();
   });
 
-  test('should set hasMore to false if users length is less than perPageResult', async () => {
+  it('should set hasMore to false if users length is less than perPageResult', async () => {
     const link = new StaticMockLink(EMPTY_MOCKS, true);
 
     render(
@@ -629,7 +628,7 @@ describe('Testing Users screen', () => {
     expect(screen.getByText(/No User Found/i)).toBeInTheDocument();
   });
 
-  test('should filter users correctly', async () => {
+  it('should filter users correctly', async () => {
     await act(async () => {
       render(
         <MockedProvider link={link5} addTypename={false}>
@@ -658,7 +657,7 @@ describe('Testing Users screen', () => {
       fireEvent.click(filterAdmin);
     });
 
-    await wait();
+    // await wait();
     expect(screen.getByText('Jane Doe')).toBeInTheDocument();
 
     await act(async () => {
@@ -671,7 +670,7 @@ describe('Testing Users screen', () => {
       fireEvent.click(filterSuperAdmin);
     });
 
-    await wait();
+    // await wait();
     expect(screen.getByText('John Doe')).toBeInTheDocument();
 
     await act(async () => {
@@ -683,7 +682,7 @@ describe('Testing Users screen', () => {
       fireEvent.click(filterUser);
     });
 
-    await wait();
+    // await wait();
     expect(screen.getByText('Jack Smith')).toBeInTheDocument();
 
     await act(async () => {
@@ -696,13 +695,13 @@ describe('Testing Users screen', () => {
       fireEvent.click(filterCancel);
     });
 
-    await wait();
+    // await wait();
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(screen.getByText('Jane Doe')).toBeInTheDocument();
     expect(screen.getByText('Jack Smith')).toBeInTheDocument();
   });
 
-  test('Users should be sorted in newest order correctly', async () => {
+  it('Users should be sorted in newest order correctly', async () => {
     await act(async () => {
       render(
         <MockedProvider link={link5} addTypename={false}>
@@ -739,7 +738,7 @@ describe('Testing Users screen', () => {
     expect(displayedUsers[2]).toHaveTextContent('John Doe');
   });
 
-  test('Check if pressing enter key triggers search', async () => {
+  it('Check if pressing enter key triggers search', async () => {
     await act(async () => {
       render(
         <MockedProvider link={link5} addTypename={false}>
@@ -763,5 +762,160 @@ describe('Testing Users screen', () => {
     await act(async () => {
       userEvent.type(searchInput, '{enter}');
     });
+  });
+
+  it('Users should be sorted in oldest order correctly', async () => {
+    await act(async () => {
+      render(
+        <MockedProvider link={link5} addTypename={false}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <ToastContainer />
+                <Users />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+    await wait();
+
+    const inputText = screen.getByTestId('sortUsers');
+
+    await act(async () => {
+      fireEvent.click(inputText);
+    });
+
+    const toggleTite = screen.getByTestId('oldest');
+
+    await act(async () => {
+      fireEvent.click(toggleTite);
+    });
+
+    // Verify the users are sorted by oldest
+
+    const displayedUsers = screen.getAllByRole('row');
+    await wait();
+    expect(displayedUsers[1]).toHaveTextContent('Jack Smith');
+    expect(displayedUsers[2]).toHaveTextContent('John Doe');
+  });
+
+  it('Role filter should not update if selected role is already selected', async () => {
+    await act(async () => {
+      render(
+        <MockedProvider link={link5} addTypename={false}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <ToastContainer />
+                <Users />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+    await wait();
+
+    const filterButton = screen.getByTestId('filterUsers');
+
+    await act(async () => {
+      fireEvent.click(filterButton);
+    });
+
+    const filterAdmin = screen.getByTestId('admin');
+
+    await act(async () => {
+      fireEvent.click(filterAdmin);
+    });
+
+    // await wait();
+    expect(screen.getByText('Jane Doe')).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.click(filterAdmin);
+    });
+
+    // await wait();
+    expect(screen.getByText('Jane Doe')).toBeInTheDocument();
+  });
+
+  it('Sort filter should not update if selected sort is already selected', async () => {
+    await act(async () => {
+      render(
+        <MockedProvider link={link5} addTypename={false}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <ToastContainer />
+                <Users />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+    await wait();
+
+    const inputText = screen.getByTestId('sortUsers');
+
+    await act(async () => {
+      fireEvent.click(inputText);
+    });
+
+    const toggleTite = screen.getByTestId('newest');
+
+    await act(async () => {
+      fireEvent.click(toggleTite);
+    });
+
+    // Verify the users are sorted by newest
+
+    const displayedUsers = screen.getAllByRole('row');
+    await wait();
+    expect(displayedUsers[1]).toHaveTextContent('Jane Doe');
+    expect(displayedUsers[2]).toHaveTextContent('John Doe');
+
+    await act(async () => {
+      fireEvent.click(inputText);
+    });
+
+    const toggleTite2 = screen.getByTestId('newest');
+
+    await act(async () => {
+      fireEvent.click(toggleTite2);
+    });
+
+    // Verify the users are sorted by newest
+
+    const displayedUsers2 = screen.getAllByRole('row');
+    await wait();
+    expect(displayedUsers2[1]).toHaveTextContent('Jane Doe');
+    expect(displayedUsers2[2]).toHaveTextContent('John Doe');
+  });
+
+  it('Reset and Refetch function should work when we search an empty string', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link5}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Users />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    const searchBtn = screen.getByTestId('searchButton');
+    const search1 = '';
+    userEvent.type(screen.getByTestId(/searchByName/i), search1);
+    userEvent.click(searchBtn);
+    await wait();
+    expect(screen.queryByText(/Jane Doe/i)).toBeInTheDocument();
+    expect(screen.queryByText(/John Doe/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Jack Smith/i)).toBeInTheDocument();
   });
 });
