@@ -284,9 +284,9 @@ function orgPost(): JSX.Element {
   return (
     <>
       <Row className={styles.head}>
-        <div className={styles.mainpageright}>
-          <div className={styles.btnsContainer}>
-            <div className={styles.input}>
+        <div className={styles.mainpagerightOrgPost}>
+          <div className={styles.btnsContainerOrgPost}>
+            <div className={styles.inputOrgPost}>
               <Form.Control
                 type="text"
                 id="posttitle"
@@ -301,7 +301,7 @@ function orgPost(): JSX.Element {
                 <Search />
               </Button>
             </div>
-            <div className={styles.btnsBlock}>
+            <div className={styles.btnsBlockOrgPost}>
               <div className="d-flex">
                 <Dropdown
                   aria-expanded="false"
@@ -497,7 +497,7 @@ function orgPost(): JSX.Element {
             />
 
             {postformState.addMedia && file && (
-              <div className={styles.preview} data-testid="mediaPreview">
+              <div className={styles.previewOrgPost} data-testid="mediaPreview">
                 {/* Display preview for both image and video */}
                 {file.type.startsWith('image') ? (
                   <img
@@ -512,7 +512,7 @@ function orgPost(): JSX.Element {
                   </video>
                 )}
                 <button
-                  className={styles.closeButton}
+                  className={styles.closeButtonOrgPost}
                   onClick={(): void => {
                     setPostFormState({
                       ...postformState,
@@ -551,7 +551,7 @@ function orgPost(): JSX.Element {
           <Modal.Footer>
             <Button
               variant="secondary"
-              className={styles.closeButton}
+              className={styles.closeButtonOrgPost}
               onClick={(): void => hideInviteModal()}
               data-testid="closeOrganizationModal"
             >
@@ -561,7 +561,7 @@ function orgPost(): JSX.Element {
               type="submit"
               value="invite"
               data-testid="createPostBtn"
-              className={`${styles.addButton} mt-2`}
+              className={`${styles.addButtonOrgPost} mt-2`}
             >
               {t('addPost')}
             </Button>
