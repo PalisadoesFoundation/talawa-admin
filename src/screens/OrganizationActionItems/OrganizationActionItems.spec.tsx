@@ -65,6 +65,7 @@ describe('Testing Organization Action Items Screen', () => {
 
   afterAll(() => {
     vi.clearAllMocks();
+    vi.clearAllTimers();
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
