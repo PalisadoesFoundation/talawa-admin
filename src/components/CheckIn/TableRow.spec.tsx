@@ -11,10 +11,15 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { MockedProvider } from '@apollo/react-testing';
 import { checkInMutationSuccess, checkInMutationUnsuccess } from './mocks';
+import { vi } from 'vitest';
+
+/**
+ * Test suite for the `TableRow` component, focusing on the CheckIn table functionality.
+ */
 
 describe('Testing Table Row for CheckIn Table', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('If the user is not checked in, button to check in should be displayed, and the user should be able to check in successfully', async () => {
@@ -26,7 +31,7 @@ describe('Testing Table Row for CheckIn Table', () => {
         checkIn: null,
         eventId: `event123`,
       },
-      refetch: jest.fn(),
+      refetch: vi.fn(),
     };
 
     const { findByText } = render(
@@ -63,7 +68,7 @@ describe('Testing Table Row for CheckIn Table', () => {
         },
         eventId: 'event123',
       },
-      refetch: jest.fn(),
+      refetch: vi.fn(),
     };
 
     const { findByText } = render(
@@ -81,8 +86,8 @@ describe('Testing Table Row for CheckIn Table', () => {
       </BrowserRouter>,
     );
 
-    global.URL.createObjectURL = jest.fn(() => 'mockURL');
-    global.window.open = jest.fn();
+    global.URL.createObjectURL = vi.fn(() => 'mockURL');
+    global.window.open = vi.fn();
 
     expect(await findByText('Checked In')).toBeInTheDocument();
     expect(await findByText('Download Tag')).toBeInTheDocument();
@@ -93,7 +98,7 @@ describe('Testing Table Row for CheckIn Table', () => {
     expect(await findByText('PDF generated successfully!')).toBeInTheDocument();
 
     // Cleanup mocks
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('Upon failing of check in mutation, the appropriate error message should be shown', async () => {
@@ -105,7 +110,7 @@ describe('Testing Table Row for CheckIn Table', () => {
         checkIn: null,
         eventId: `event123`,
       },
-      refetch: jest.fn(),
+      refetch: vi.fn(),
     };
 
     const { findByText } = render(
@@ -143,7 +148,7 @@ describe('Testing Table Row for CheckIn Table', () => {
         },
         eventId: `event123`,
       },
-      refetch: jest.fn(),
+      refetch: vi.fn(),
     };
 
     const { findByText } = render(
@@ -162,8 +167,8 @@ describe('Testing Table Row for CheckIn Table', () => {
     );
 
     // Mocking the PDF generation function to throw an error
-    global.URL.createObjectURL = jest.fn(() => 'mockURL');
-    global.window.open = jest.fn();
+    global.URL.createObjectURL = vi.fn(() => 'mockURL');
+    global.window.open = vi.fn();
 
     fireEvent.click(await findByText('Download Tag'));
 
