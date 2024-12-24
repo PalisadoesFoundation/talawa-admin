@@ -1405,6 +1405,9 @@
   "userPledges": {
     "title": "我的承诺"
   },
+  "leaveOrganization": {
+    "title": "离开组织"
+  },
   "eventVolunteers": {
     "volunteers": "志愿者",
     "volunteer": "志愿者",

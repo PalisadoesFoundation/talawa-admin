@@ -132,7 +132,8 @@ function ManageTag(): JSX.Element {
           };
         },
       ) => {
-        if (!fetchMoreResult) /* istanbul ignore next */ return prevResult;
+        /* istanbul ignore next -- @preserve */
+        if (!fetchMoreResult) return prevResult;
 
         return {
           getAssignedUsers: {
@@ -174,7 +175,7 @@ function ManageTag(): JSX.Element {
       toggleUnassignUserTagModal();
       toast.success(t('successfullyUnassigned') as string);
     } catch (error: unknown) {
-      /* istanbul ignore next */
+      /* istanbul ignore next -- @preserve */
       if (error instanceof Error) {
         toast.error(error.message);
       }
@@ -209,13 +210,14 @@ function ManageTag(): JSX.Element {
         },
       });
 
+      /* istanbul ignore else -- @preserve */
       if (data) {
         toast.success(t('tagUpdationSuccess'));
         userTagAssignedMembersRefetch();
         setEditUserTagModalIsOpen(false);
       }
     } catch (error: unknown) {
-      /* istanbul ignore next */
+      /* istanbul ignore next -- @preserve */
       if (error instanceof Error) {
         toast.error(error.message);
       }
@@ -235,7 +237,7 @@ function ManageTag(): JSX.Element {
       toggleRemoveUserTagModal();
       toast.success(t('tagRemovalSuccess') as string);
     } catch (error: unknown) {
-      /* istanbul ignore next */
+      /* istanbul ignore next -- @preserve */
       if (error instanceof Error) {
         toast.error(error.message);
       }
@@ -258,7 +260,7 @@ function ManageTag(): JSX.Element {
   const userTagAssignedMembers =
     userTagAssignedMembersData?.getAssignedUsers.usersAssignedTo.edges.map(
       (edge) => edge.node,
-    ) ?? /* istanbul ignore next */ [];
+    ) ?? /* istanbul ignore next -- @preserve */ [];
 
   // get the ancestorTags array and push the current tag in it
   // used for the tag breadcrumbs
@@ -452,7 +454,7 @@ function ManageTag(): JSX.Element {
                     >
                       {tag.name}
                       {orgUserTagAncestors.length - 1 !== index && (
-                        /* istanbul ignore next */
+                        /* istanbul ignore next -- @preserve */
                         <i className={'mx-2 fa fa-caret-right'} />
                       )}
                     </div>
@@ -469,7 +471,7 @@ function ManageTag(): JSX.Element {
                     hasMore={
                       userTagAssignedMembersData?.getAssignedUsers
                         .usersAssignedTo.pageInfo.hasNextPage ??
-                      /* istanbul ignore next */ false
+                      /* istanbul ignore next -- @preserve */ false
                     }
                     loader={<InfiniteScrollLoader />}
                     scrollableTarget="manageTagScrollableDiv"
@@ -480,15 +482,16 @@ function ManageTag(): JSX.Element {
                       hideFooter={true}
                       getRowId={(row) => row.id}
                       slots={{
-                        noRowsOverlay: /* istanbul ignore next */ () => (
-                          <Stack
-                            height="100%"
-                            alignItems="center"
-                            justifyContent="center"
-                          >
-                            {t('noAssignedMembersFound')}
-                          </Stack>
-                        ),
+                        noRowsOverlay:
+                          /* istanbul ignore next -- @preserve */ () => (
+                            <Stack
+                              height="100%"
+                              alignItems="center"
+                              justifyContent="center"
+                            >
+                              {t('noAssignedMembersFound')}
+                            </Stack>
+                          ),
                       }}
                       sx={dataGridStyle}
                       getRowClassName={() => `${styles.rowBackgrounds}`}
