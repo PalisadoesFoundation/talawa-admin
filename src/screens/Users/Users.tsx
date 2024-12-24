@@ -227,7 +227,7 @@ const Users = (): JSX.Element => {
     setIsLoadingMore(true);
     fetchMore({
       variables: {
-        first: limitVal + 2 * perPageResult || perPageResult,
+        first: limitVal + perPageResult || perPageResult,
         skip: skipValue - perPageResult >= 0 ? skipValue - perPageResult : 0,
         filter: searchByName,
         order: sortingOption === 'newest' ? 'createdAt_DESC' : 'createdAt_ASC',

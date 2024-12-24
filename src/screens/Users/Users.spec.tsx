@@ -278,10 +278,927 @@ const MOCKS_NEW = [
   },
 ];
 
+const MOCK_USERS2 = [
+  ...MOCK_USERS,
+  {
+    user: {
+      _id: 'user4',
+      firstName: 'Emma',
+      lastName: 'Johnson',
+      image: null,
+      email: 'emma@example.com',
+      createdAt: '2023-04-22T04:53:17.742+00:00',
+      registeredEvents: [],
+      membershipRequests: [],
+      organizationsBlockedBy: [
+        {
+          _id: 'xyz',
+          name: 'ABC',
+          image: null,
+          address: {
+            city: 'Kingston',
+            countryCode: 'JM',
+            dependentLocality: 'Sample Dependent Locality',
+            line1: '123 Jamaica Street',
+            line2: 'Apartment 456',
+            postalCode: 'JM12345',
+            sortingCode: 'ABC-123',
+            state: 'Kingston Parish',
+          },
+          createdAt: '19/06/2022',
+          creator: {
+            _id: '123',
+            firstName: 'Jack',
+            lastName: 'Smith',
+            image: null,
+            email: 'jack@example.com',
+            createdAt: '19/06/2022',
+          },
+        },
+      ],
+      joinedOrganizations: [
+        {
+          _id: 'abc',
+          name: 'Joined Organization 1',
+          image: null,
+          address: {
+            city: 'Kingston',
+            countryCode: 'JM',
+            dependentLocality: 'Sample Dependent Locality',
+            line1: '123 Jamaica Street',
+            line2: 'Apartment 456',
+            postalCode: 'JM12345',
+            sortingCode: 'ABC-123',
+            state: 'Kingston Parish',
+          },
+          createdAt: '19/06/2022',
+          creator: {
+            _id: '123',
+            firstName: 'Jack',
+            lastName: 'Smith',
+            image: null,
+            email: 'jack@example.com',
+            createdAt: '19/06/2022',
+          },
+        },
+      ],
+    },
+    appUserProfile: {
+      _id: 'user4',
+      adminFor: [],
+      isSuperAdmin: false,
+      createdOrganizations: [],
+      createdEvents: [],
+      eventAdmin: [],
+    },
+  },
+  {
+    user: {
+      _id: 'user5',
+      firstName: 'Liam',
+      lastName: 'Smith',
+      image: null,
+      email: 'liam@example.com',
+      createdAt: '2023-04-23T04:53:17.742+00:00',
+      registeredEvents: [],
+      membershipRequests: [],
+      organizationsBlockedBy: [
+        {
+          _id: 'xyz',
+          name: 'ABC',
+          image: null,
+          address: {
+            city: 'Kingston',
+            countryCode: 'JM',
+            dependentLocality: 'Sample Dependent Locality',
+            line1: '123 Jamaica Street',
+            line2: 'Apartment 456',
+            postalCode: 'JM12345',
+            sortingCode: 'ABC-123',
+            state: 'Kingston Parish',
+          },
+          createdAt: '19/06/2022',
+          creator: {
+            _id: '123',
+            firstName: 'Jack',
+            lastName: 'Smith',
+            image: null,
+            email: 'jack@example.com',
+            createdAt: '19/06/2022',
+          },
+        },
+      ],
+      joinedOrganizations: [
+        {
+          _id: 'abc',
+          name: 'Joined Organization 1',
+          image: null,
+          address: {
+            city: 'Kingston',
+            countryCode: 'JM',
+            dependentLocality: 'Sample Dependent Locality',
+            line1: '123 Jamaica Street',
+            line2: 'Apartment 456',
+            postalCode: 'JM12345',
+            sortingCode: 'ABC-123',
+            state: 'Kingston Parish',
+          },
+          createdAt: '19/06/2022',
+          creator: {
+            _id: '123',
+            firstName: 'Jack',
+            lastName: 'Smith',
+            image: null,
+            email: 'jack@example.com',
+            createdAt: '19/06/2022',
+          },
+        },
+      ],
+    },
+    appUserProfile: {
+      _id: 'user5',
+      adminFor: [],
+      isSuperAdmin: false,
+      createdOrganizations: [],
+      createdEvents: [],
+      eventAdmin: [],
+    },
+  },
+  {
+    user: {
+      _id: 'user6',
+      firstName: 'Olivia',
+      lastName: 'Brown',
+      image: null,
+      email: 'olivia@example.com',
+      createdAt: '2023-04-24T04:53:17.742+00:00',
+      registeredEvents: [],
+      membershipRequests: [],
+      organizationsBlockedBy: [
+        {
+          _id: 'xyz',
+          name: 'ABC',
+          image: null,
+          address: {
+            city: 'Kingston',
+            countryCode: 'JM',
+            dependentLocality: 'Sample Dependent Locality',
+            line1: '123 Jamaica Street',
+            line2: 'Apartment 456',
+            postalCode: 'JM12345',
+            sortingCode: 'ABC-123',
+            state: 'Kingston Parish',
+          },
+          createdAt: '19/06/2022',
+          creator: {
+            _id: '123',
+            firstName: 'Jack',
+            lastName: 'Smith',
+            image: null,
+            email: 'jack@example.com',
+            createdAt: '19/06/2022',
+          },
+        },
+      ],
+      joinedOrganizations: [
+        {
+          _id: 'abc',
+          name: 'Joined Organization 1',
+          image: null,
+          address: {
+            city: 'Kingston',
+            countryCode: 'JM',
+            dependentLocality: 'Sample Dependent Locality',
+            line1: '123 Jamaica Street',
+            line2: 'Apartment 456',
+            postalCode: 'JM12345',
+            sortingCode: 'ABC-123',
+            state: 'Kingston Parish',
+          },
+          createdAt: '19/06/2022',
+          creator: {
+            _id: '123',
+            firstName: 'Jack',
+            lastName: 'Smith',
+            image: null,
+            email: 'jack@example.com',
+            createdAt: '19/06/2022',
+          },
+        },
+      ],
+    },
+    appUserProfile: {
+      _id: 'user6',
+      adminFor: [],
+      isSuperAdmin: false,
+      createdOrganizations: [],
+      createdEvents: [],
+      eventAdmin: [],
+    },
+  },
+  {
+    user: {
+      _id: 'user7',
+      firstName: 'Noah',
+      lastName: 'Williams',
+      image: null,
+      email: 'noah@example.com',
+      createdAt: '2023-04-25T04:53:17.742+00:00',
+      registeredEvents: [],
+      membershipRequests: [],
+      organizationsBlockedBy: [
+        {
+          _id: 'xyz',
+          name: 'ABC',
+          image: null,
+          address: {
+            city: 'Kingston',
+            countryCode: 'JM',
+            dependentLocality: 'Sample Dependent Locality',
+            line1: '123 Jamaica Street',
+            line2: 'Apartment 456',
+            postalCode: 'JM12345',
+            sortingCode: 'ABC-123',
+            state: 'Kingston Parish',
+          },
+          createdAt: '19/06/2022',
+          creator: {
+            _id: '123',
+            firstName: 'Jack',
+            lastName: 'Smith',
+            image: null,
+            email: 'jack@example.com',
+            createdAt: '19/06/2022',
+          },
+        },
+      ],
+      joinedOrganizations: [
+        {
+          _id: 'abc',
+          name: 'Joined Organization 1',
+          image: null,
+          address: {
+            city: 'Kingston',
+            countryCode: 'JM',
+            dependentLocality: 'Sample Dependent Locality',
+            line1: '123 Jamaica Street',
+            line2: 'Apartment 456',
+            postalCode: 'JM12345',
+            sortingCode: 'ABC-123',
+            state: 'Kingston Parish',
+          },
+          createdAt: '19/06/2022',
+          creator: {
+            _id: '123',
+            firstName: 'Jack',
+            lastName: 'Smith',
+            image: null,
+            email: 'jack@example.com',
+            createdAt: '19/06/2022',
+          },
+        },
+      ],
+    },
+    appUserProfile: {
+      _id: 'user7',
+      adminFor: [],
+      isSuperAdmin: false,
+      createdOrganizations: [],
+      createdEvents: [],
+      eventAdmin: [],
+    },
+  },
+  {
+    user: {
+      _id: 'user8',
+      firstName: 'Ava',
+      lastName: 'Jones',
+      image: null,
+      email: 'ava@example.com',
+      createdAt: '2023-04-26T04:53:17.742+00:00',
+      registeredEvents: [],
+      membershipRequests: [],
+      organizationsBlockedBy: [
+        {
+          _id: 'xyz',
+          name: 'ABC',
+          image: null,
+          address: {
+            city: 'Kingston',
+            countryCode: 'JM',
+            dependentLocality: 'Sample Dependent Locality',
+            line1: '123 Jamaica Street',
+            line2: 'Apartment 456',
+            postalCode: 'JM12345',
+            sortingCode: 'ABC-123',
+            state: 'Kingston Parish',
+          },
+          createdAt: '19/06/2022',
+          creator: {
+            _id: '123',
+            firstName: 'Jack',
+            lastName: 'Smith',
+            image: null,
+            email: 'jack@example.com',
+            createdAt: '19/06/2022',
+          },
+        },
+      ],
+      joinedOrganizations: [
+        {
+          _id: 'abc',
+          name: 'Joined Organization 1',
+          image: null,
+          address: {
+            city: 'Kingston',
+            countryCode: 'JM',
+            dependentLocality: 'Sample Dependent Locality',
+            line1: '123 Jamaica Street',
+            line2: 'Apartment 456',
+            postalCode: 'JM12345',
+            sortingCode: 'ABC-123',
+            state: 'Kingston Parish',
+          },
+          createdAt: '19/06/2022',
+          creator: {
+            _id: '123',
+            firstName: 'Jack',
+            lastName: 'Smith',
+            image: null,
+            email: 'jack@example.com',
+            createdAt: '19/06/2022',
+          },
+        },
+      ],
+    },
+    appUserProfile: {
+      _id: 'user8',
+      adminFor: [],
+      isSuperAdmin: false,
+      createdOrganizations: [],
+      createdEvents: [],
+      eventAdmin: [],
+    },
+  },
+  {
+    user: {
+      _id: 'user9',
+      firstName: 'Ethan',
+      lastName: 'Garcia',
+      image: null,
+      email: 'ethan@example.com',
+      createdAt: '2023-04-27T04:53:17.742+00:00',
+      registeredEvents: [],
+      membershipRequests: [],
+      organizationsBlockedBy: [
+        {
+          _id: 'xyz',
+          name: 'ABC',
+          image: null,
+          address: {
+            city: 'Kingston',
+            countryCode: 'JM',
+            dependentLocality: 'Sample Dependent Locality',
+            line1: '123 Jamaica Street',
+            line2: 'Apartment 456',
+            postalCode: 'JM12345',
+            sortingCode: 'ABC-123',
+            state: 'Kingston Parish',
+          },
+          createdAt: '19/06/2022',
+          creator: {
+            _id: '123',
+            firstName: 'Jack',
+            lastName: 'Smith',
+            image: null,
+            email: 'jack@example.com',
+            createdAt: '19/06/2022',
+          },
+        },
+      ],
+      joinedOrganizations: [
+        {
+          _id: 'abc',
+          name: 'Joined Organization 1',
+          image: null,
+          address: {
+            city: 'Kingston',
+            countryCode: 'JM',
+            dependentLocality: 'Sample Dependent Locality',
+            line1: '123 Jamaica Street',
+            line2: 'Apartment 456',
+            postalCode: 'JM12345',
+            sortingCode: 'ABC-123',
+            state: 'Kingston Parish',
+          },
+          createdAt: '19/06/2022',
+          creator: {
+            _id: '123',
+            firstName: 'Jack',
+            lastName: 'Smith',
+            image: null,
+            email: 'jack@example.com',
+            createdAt: '19/06/2022',
+          },
+        },
+      ],
+    },
+    appUserProfile: {
+      _id: 'user9',
+      adminFor: [],
+      isSuperAdmin: false,
+      createdOrganizations: [],
+      createdEvents: [],
+      eventAdmin: [],
+    },
+  },
+  {
+    user: {
+      _id: 'user10',
+      firstName: 'Sophia',
+      lastName: 'Martinez',
+      image: null,
+      email: 'sophia@example.com',
+      createdAt: '2023-04-28T04:53:17.742+00:00',
+      registeredEvents: [],
+      membershipRequests: [],
+      organizationsBlockedBy: [
+        {
+          _id: 'xyz',
+          name: 'ABC',
+          image: null,
+          address: {
+            city: 'Kingston',
+            countryCode: 'JM',
+            dependentLocality: 'Sample Dependent Locality',
+            line1: '123 Jamaica Street',
+            line2: 'Apartment 456',
+            postalCode: 'JM12345',
+            sortingCode: 'ABC-123',
+            state: 'Kingston Parish',
+          },
+          createdAt: '19/06/2022',
+          creator: {
+            _id: '123',
+            firstName: 'Jack',
+            lastName: 'Smith',
+            image: null,
+            email: 'jack@example.com',
+            createdAt: '19/06/2022',
+          },
+        },
+      ],
+      joinedOrganizations: [
+        {
+          _id: 'abc',
+          name: 'Joined Organization 1',
+          image: null,
+          address: {
+            city: 'Kingston',
+            countryCode: 'JM',
+            dependentLocality: 'Sample Dependent Locality',
+            line1: '123 Jamaica Street',
+            line2: 'Apartment 456',
+            postalCode: 'JM12345',
+            sortingCode: 'ABC-123',
+            state: 'Kingston Parish',
+          },
+          createdAt: '19/06/2022',
+          creator: {
+            _id: '123',
+            firstName: 'Jack',
+            lastName: 'Smith',
+            image: null,
+            email: 'jack@example.com',
+            createdAt: '19/06/2022',
+          },
+        },
+      ],
+    },
+    appUserProfile: {
+      _id: 'user10',
+      adminFor: [],
+      isSuperAdmin: false,
+      createdOrganizations: [],
+      createdEvents: [],
+      eventAdmin: [],
+    },
+  },
+  {
+    user: {
+      _id: 'user11',
+      firstName: 'Mason',
+      lastName: 'Davis',
+      image: null,
+      email: 'mason@example.com',
+      createdAt: '2023-04-29T04:53:17.742+00:00',
+      registeredEvents: [],
+      membershipRequests: [],
+      organizationsBlockedBy: [
+        {
+          _id: 'xyz',
+          name: 'ABC',
+          image: null,
+          address: {
+            city: 'Kingston',
+            countryCode: 'JM',
+            dependentLocality: 'Sample Dependent Locality',
+            line1: '123 Jamaica Street',
+            line2: 'Apartment 456',
+            postalCode: 'JM12345',
+            sortingCode: 'ABC-123',
+            state: 'Kingston Parish',
+          },
+          createdAt: '19/06/2022',
+          creator: {
+            _id: '123',
+            firstName: 'Jack',
+            lastName: 'Smith',
+            image: null,
+            email: 'jack@example.com',
+            createdAt: '19/06/2022',
+          },
+        },
+      ],
+      joinedOrganizations: [
+        {
+          _id: 'abc',
+          name: 'Joined Organization 1',
+          image: null,
+          address: {
+            city: 'Kingston',
+            countryCode: 'JM',
+            dependentLocality: 'Sample Dependent Locality',
+            line1: '123 Jamaica Street',
+            line2: 'Apartment 456',
+            postalCode: 'JM12345',
+            sortingCode: 'ABC-123',
+            state: 'Kingston Parish',
+          },
+          createdAt: '19/06/2022',
+          creator: {
+            _id: '123',
+            firstName: 'Jack',
+            lastName: 'Smith',
+            image: null,
+            email: 'jack@example.com',
+            createdAt: '19/06/2022',
+          },
+        },
+      ],
+    },
+    appUserProfile: {
+      _id: 'user11',
+      adminFor: [],
+      isSuperAdmin: false,
+      createdOrganizations: [],
+      createdEvents: [],
+      eventAdmin: [],
+    },
+  },
+  {
+    user: {
+      _id: 'user12',
+      firstName: 'Isabella',
+      lastName: 'Rodriguez',
+      image: null,
+      email: 'isabella@example.com',
+      createdAt: '2023-04-30T04:53:17.742+00:00',
+      registeredEvents: [],
+      membershipRequests: [],
+      organizationsBlockedBy: [
+        {
+          _id: 'xyz',
+          name: 'ABC',
+          image: null,
+          address: {
+            city: 'Kingston',
+            countryCode: 'JM',
+            dependentLocality: 'Sample Dependent Locality',
+            line1: '123 Jamaica Street',
+            line2: 'Apartment 456',
+            postalCode: 'JM12345',
+            sortingCode: 'ABC-123',
+            state: 'Kingston Parish',
+          },
+          createdAt: '19/06/2022',
+          creator: {
+            _id: '123',
+            firstName: 'Jack',
+            lastName: 'Smith',
+            image: null,
+            email: 'jack@example.com',
+            createdAt: '19/06/2022',
+          },
+        },
+      ],
+      joinedOrganizations: [
+        {
+          _id: 'abc',
+          name: 'Joined Organization 1',
+          image: null,
+          address: {
+            city: 'Kingston',
+            countryCode: 'JM',
+            dependentLocality: 'Sample Dependent Locality',
+            line1: '123 Jamaica Street',
+            line2: 'Apartment 456',
+            postalCode: 'JM12345',
+            sortingCode: 'ABC-123',
+            state: 'Kingston Parish',
+          },
+          createdAt: '19/06/2022',
+          creator: {
+            _id: '123',
+            firstName: 'Jack',
+            lastName: 'Smith',
+            image: null,
+            email: 'jack@example.com',
+            createdAt: '19/06/2022',
+          },
+        },
+      ],
+    },
+    appUserProfile: {
+      _id: 'user12',
+      adminFor: [],
+      isSuperAdmin: false,
+      createdOrganizations: [],
+      createdEvents: [],
+      eventAdmin: [],
+    },
+  },
+  {
+    user: {
+      _id: 'user13',
+      firstName: 'Logan',
+      lastName: 'Wilson',
+      image: null,
+      email: 'logan@example.com',
+      createdAt: '2023-04-08T04:53:17.742+00:00',
+      registeredEvents: [],
+      membershipRequests: [],
+      organizationsBlockedBy: [
+        {
+          _id: 'xyz',
+          name: 'ABC',
+          image: null,
+          address: {
+            city: 'Kingston',
+            countryCode: 'JM',
+            dependentLocality: 'Sample Dependent Locality',
+            line1: '123 Jamaica Street',
+            line2: 'Apartment 456',
+            postalCode: 'JM12345',
+            sortingCode: 'ABC-123',
+            state: 'Kingston Parish',
+          },
+          createdAt: '19/06/2022',
+          creator: {
+            _id: '123',
+            firstName: 'Jack',
+            lastName: 'Smith',
+            image: null,
+            email: 'jack@example.com',
+            createdAt: '19/06/2022',
+          },
+        },
+      ],
+      joinedOrganizations: [
+        {
+          _id: 'abc',
+          name: 'Joined Organization 1',
+          image: null,
+          address: {
+            city: 'Kingston',
+            countryCode: 'JM',
+            dependentLocality: 'Sample Dependent Locality',
+            line1: '123 Jamaica Street',
+            line2: 'Apartment 456',
+            postalCode: 'JM12345',
+            sortingCode: 'ABC-123',
+            state: 'Kingston Parish',
+          },
+          createdAt: '19/06/2022',
+          creator: {
+            _id: '123',
+            firstName: 'Jack',
+            lastName: 'Smith',
+            image: null,
+            email: 'jack@example.com',
+            createdAt: '19/06/2022',
+          },
+        },
+      ],
+    },
+    appUserProfile: {
+      _id: 'user13',
+      adminFor: [],
+      isSuperAdmin: false,
+      createdOrganizations: [],
+      createdEvents: [],
+      eventAdmin: [],
+    },
+  },
+  {
+    user: {
+      _id: 'user14',
+      firstName: 'Mia',
+      lastName: 'Anderson',
+      image: null,
+      email: 'mia@example.com',
+      createdAt: '2023-04-07T04:53:17.742+00:00',
+      registeredEvents: [],
+      membershipRequests: [],
+      organizationsBlockedBy: [
+        {
+          _id: 'xyz',
+          name: 'ABC',
+          image: null,
+          address: {
+            city: 'Kingston',
+            countryCode: 'JM',
+            dependentLocality: 'Sample Dependent Locality',
+            line1: '123 Jamaica Street',
+            line2: 'Apartment 456',
+            postalCode: 'JM12345',
+            sortingCode: 'ABC-123',
+            state: 'Kingston Parish',
+          },
+          createdAt: '19/06/2022',
+          creator: {
+            _id: '123',
+            firstName: 'Jack',
+            lastName: 'Smith',
+            image: null,
+            email: 'jack@example.com',
+            createdAt: '19/06/2022',
+          },
+        },
+      ],
+      joinedOrganizations: [
+        {
+          _id: 'abc',
+          name: 'Joined Organization 1',
+          image: null,
+          address: {
+            city: 'Kingston',
+            countryCode: 'JM',
+            dependentLocality: 'Sample Dependent Locality',
+            line1: '123 Jamaica Street',
+            line2: 'Apartment 456',
+            postalCode: 'JM12345',
+            sortingCode: 'ABC-123',
+            state: 'Kingston Parish',
+          },
+          createdAt: '19/06/2022',
+          creator: {
+            _id: '123',
+            firstName: 'Jack',
+            lastName: 'Smith',
+            image: null,
+            email: 'jack@example.com',
+            createdAt: '19/06/2022',
+          },
+        },
+      ],
+    },
+    appUserProfile: {
+      _id: 'user14',
+      adminFor: [],
+      isSuperAdmin: false,
+      createdOrganizations: [],
+      createdEvents: [],
+      eventAdmin: [],
+    },
+  },
+  {
+    user: {
+      _id: 'user15',
+      firstName: 'Lucas',
+      lastName: 'Thomas',
+      image: null,
+      email: 'lucas@example.com',
+      createdAt: '2023-04-05T04:53:17.742+00:00',
+      registeredEvents: [],
+      membershipRequests: [],
+      organizationsBlockedBy: [
+        {
+          _id: 'xyz',
+          name: 'ABC',
+          image: null,
+          address: {
+            city: 'Kingston',
+            countryCode: 'JM',
+            dependentLocality: 'Sample Dependent Locality',
+            line1: '123 Jamaica Street',
+            line2: 'Apartment 456',
+            postalCode: 'JM12345',
+            sortingCode: 'ABC-123',
+            state: 'Kingston Parish',
+          },
+          createdAt: '19/06/2022',
+          creator: {
+            _id: '123',
+            firstName: 'Jack',
+            lastName: 'Smith',
+            image: null,
+            email: 'jack@example.com',
+            createdAt: '19/06/2022',
+          },
+        },
+      ],
+      joinedOrganizations: [
+        {
+          _id: 'abc',
+          name: 'Joined Organization 1',
+          image: null,
+          address: {
+            city: 'Kingston',
+            countryCode: 'JM',
+            dependentLocality: 'Sample Dependent Locality',
+            line1: '123 Jamaica Street',
+            line2: 'Apartment 456',
+            postalCode: 'JM12345',
+            sortingCode: 'ABC-123',
+            state: 'Kingston Parish',
+          },
+          createdAt: '19/06/2022',
+          creator: {
+            _id: '123',
+            firstName: 'Jack',
+            lastName: 'Smith',
+            image: null,
+            email: 'jack@example.com',
+            createdAt: '19/06/2022',
+          },
+        },
+      ],
+    },
+    appUserProfile: {
+      _id: 'user15',
+      adminFor: [],
+      isSuperAdmin: false,
+      createdOrganizations: [],
+      createdEvents: [],
+      eventAdmin: [],
+    },
+  },
+];
+
+const MOCKS_NEW2 = [
+  {
+    request: {
+      query: USER_LIST,
+      variables: {
+        first: 12,
+        skip: 0,
+        firstName_contains: '',
+        lastName_contains: '',
+        order: 'createdAt_DESC',
+      },
+    },
+    result: {
+      data: {
+        users: MOCK_USERS2.slice(0, 12),
+      },
+    },
+  },
+  {
+    request: {
+      query: ORGANIZATION_CONNECTION_LIST,
+    },
+    result: {
+      data: {
+        organizationsConnection: [],
+      },
+    },
+  },
+  {
+    request: {
+      query: USER_LIST,
+      variables: {
+        first: 24,
+        skip: 0,
+        firstName_contains: '',
+        lastName_contains: '',
+        order: 'createdAt_DESC',
+        filter: '',
+      },
+    },
+    result: {
+      data: {
+        users: MOCK_USERS2.slice(12, 15),
+      },
+    },
+  },
+];
+
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(EMPTY_MOCKS, true);
 const link3 = new StaticMockLink(MOCKS2, true);
 const link5 = new StaticMockLink(MOCKS_NEW, true);
+const link6 = new StaticMockLink(MOCKS_NEW2, true);
 
 async function wait(ms = 1000): Promise<void> {
   await act(() => {
@@ -917,5 +1834,38 @@ describe('Testing Users screen', () => {
     expect(screen.queryByText(/Jane Doe/i)).toBeInTheDocument();
     expect(screen.queryByText(/John Doe/i)).toBeInTheDocument();
     expect(screen.queryByText(/Jack Smith/i)).toBeInTheDocument();
+  });
+
+  it('Users should be loaded on scroll using loadmoreusers function', async () => {
+    const { container } = render(
+      <MockedProvider addTypename={false} link={link6}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Users />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    const users = container
+      .getElementsByTagName('tbody')[0]
+      .querySelectorAll('tr');
+    console.log(users, users.length);
+    expect(users.length).toBe(12);
+
+    await act(async () => {
+      fireEvent.scroll(window, { target: { scrollY: 1000 } });
+    });
+
+    await wait();
+
+    const users2 = container
+      .getElementsByTagName('tbody')[0]
+      .querySelectorAll('tr');
+    console.log(users2, users2.length);
+    expect(users2.length).toBe(15);
   });
 });
