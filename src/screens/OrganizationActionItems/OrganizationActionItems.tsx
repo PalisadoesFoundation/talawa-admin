@@ -366,7 +366,7 @@ function organizationActionItems(): JSX.Element {
   return (
     <div>
       {/* Header with search, filter  and Create Button */}
-      <div className={`${styles.btnsContainer} `}>
+      <div className={`${styles.btnsContainer} gap-3 flex-wrap`}>
         <div className={`${styles.input} `}>
           <Form.Control
             type="name"
@@ -387,8 +387,8 @@ function organizationActionItems(): JSX.Element {
             <Search />
           </Button>
         </div>
-        <div className="md:d-flex gap-3 mb-1">
-          <div className="d-flex justify-space-between align-items-center gap-3 overflow-y-auto">
+        <div className="d-flex gap-3 flex-wrap ">
+          <div className="d-flex gap-3 justify-content-between">
             <Dropdown>
               <Dropdown.Toggle
                 variant="success"
