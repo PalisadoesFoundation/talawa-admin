@@ -16,7 +16,7 @@ import {
 } from '@mui/x-data-grid';
 import { debounce, Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
-import styles from '../EventVolunteers.module.css';
+import styles from '../../../style/app.module.css';
 import { EVENT_VOLUNTEER_GROUP_LIST } from 'GraphQl/Queries/EventVolunteerQueries';
 import VolunteerGroupModal from './VolunteerGroupModal';
 import VolunteerGroupDeleteModal from './VolunteerGroupDeleteModal';
@@ -161,7 +161,7 @@ function volunteerGroups(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaders}`,
       renderCell: (params: GridCellParams) => {
         return (
           <div
@@ -181,7 +181,7 @@ function volunteerGroups(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaders}`,
       renderCell: (params: GridCellParams) => {
         const { _id, firstName, lastName, image } = params.row.leader;
         return (
@@ -194,14 +194,14 @@ function volunteerGroups(): JSX.Element {
                 src={image}
                 alt="Assignee"
                 data-testid={`image${_id + 1}`}
-                className={styles.TableImage}
+                className={styles.TableImages}
               />
             ) : (
               <div className={styles.avatarContainer}>
                 <Avatar
                   key={_id + '1'}
                   containerStyle={styles.imageContainer}
-                  avatarStyle={styles.TableImage}
+                  avatarStyle={styles.TableImages}
                   name={firstName + ' ' + lastName}
                   alt={firstName + ' ' + lastName}
                 />
@@ -219,7 +219,7 @@ function volunteerGroups(): JSX.Element {
       align: 'center',
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaders}`,
       renderCell: (params: GridCellParams) => {
         return (
           <div className="d-flex justify-content-center fw-bold">
@@ -235,7 +235,7 @@ function volunteerGroups(): JSX.Element {
       align: 'center',
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaders}`,
       renderCell: (params: GridCellParams) => {
         return (
           <div className="d-flex justify-content-center fw-bold">
@@ -252,7 +252,7 @@ function volunteerGroups(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaders}`,
       renderCell: (params: GridCellParams) => {
         return (
           <>
@@ -293,7 +293,7 @@ function volunteerGroups(): JSX.Element {
   return (
     <div>
       {/* Header with search, filter  and Create Button */}
-      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
+      <div className={`${styles.btnsContainer} btncon gap-4 flex-wrap`}>
         <div className={`${styles.input} mb-1`}>
           <Form.Control
             type="name"
@@ -302,7 +302,7 @@ function volunteerGroups(): JSX.Element {
             })}
             autoComplete="off"
             required
-            className={styles.inputField}
+            className={styles.inputFields}
             value={searchValue}
             onChange={(e) => {
               setSearchValue(e.target.value);
@@ -325,7 +325,7 @@ function volunteerGroups(): JSX.Element {
               <Dropdown.Toggle
                 variant="success"
                 id="dropdown-basic"
-                className={styles.dropdown}
+                className={styles.dropdowns}
                 data-testid="searchByToggle"
               >
                 <Sort className={'me-1'} />
@@ -350,7 +350,7 @@ function volunteerGroups(): JSX.Element {
               <Dropdown.Toggle
                 variant="success"
                 id="dropdown-basic"
-                className={styles.dropdown}
+                className={styles.dropdowns}
                 data-testid="sort"
               >
                 <Sort className={'me-1'} />
@@ -400,7 +400,7 @@ function volunteerGroups(): JSX.Element {
           ),
         }}
         sx={dataGridStyle}
-        getRowClassName={() => `${styles.rowBackground}`}
+        getRowClassName={() => `${styles.rowBackgrounds}`}
         autoHeight
         rowHeight={65}
         rows={groups.map((group, index) => ({
