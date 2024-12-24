@@ -79,13 +79,13 @@ describe('Testing OrganizationScreen', () => {
     const closeButton = screen.getByTestId('closeMenu');
     fireEvent.click(closeButton);
 
-    // Check for contract class after closing
+    // Check for expand class after closing
     expect(screen.getByTestId('mainpageright')).toHaveClass(styles.expand);
 
     const openButton = screen.getByTestId('openMenu');
     fireEvent.click(openButton);
 
-    // Check for expand class after opening
+    // Check for contract class after opening
     expect(screen.getByTestId('mainpageright')).toHaveClass(styles.contract);
   });
 
