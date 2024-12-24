@@ -97,17 +97,15 @@ export const AttendanceStatisticsModal: React.FC<
     plugins: {
       tooltip: {
         callbacks: {
-          label:
-            /*istanbul ignore next*/
-            (context: TooltipItem<'line'>) => {
-              const label = context.dataset.label || '';
-              const value = context.parsed.y;
-              const isCurrentEvent =
-                paginatedRecurringEvents[context.dataIndex]._id === eventId;
-              return isCurrentEvent
-                ? `${label}: ${value} (Current Event)`
-                : `${label}: ${value}`;
-            },
+          label: (context: TooltipItem<'line'>) => {
+            const label = context.dataset.label || '';
+            const value = context.parsed.y;
+            const isCurrentEvent =
+              paginatedRecurringEvents[context.dataIndex]._id === eventId;
+            return isCurrentEvent
+              ? `${label}: ${value} (Current Event)`
+              : `${label}: ${value}`;
+          },
         },
       },
     },
@@ -214,23 +212,15 @@ export const AttendanceStatisticsModal: React.FC<
     [eventLabels, attendeeCounts, maleCounts, femaleCounts, otherCounts],
   );
 
-  const handlePreviousPage = useCallback(
-    /*istanbul ignore next*/
-    () => {
-      setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
-    },
-    [],
-  );
+  const handlePreviousPage = useCallback(() => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
+  }, []);
 
-  const handleNextPage = useCallback(
-    /*istanbul ignore next*/
-    () => {
-      if (currentPage < totalPages - 1) {
-        setCurrentPage((prevPage) => prevPage + 1);
-      }
-    },
-    [currentPage, totalPages],
-  );
+  const handleNextPage = useCallback(() => {
+    if (currentPage < totalPages - 1) {
+      setCurrentPage((prevPage) => prevPage + 1);
+    }
+  }, [currentPage, totalPages]);
 
   const handleDateChange = useCallback((date: Date | null) => {
     if (date) {
@@ -268,7 +258,6 @@ export const AttendanceStatisticsModal: React.FC<
                 monthDiff < 0 ||
                 (monthDiff === 0 && today.getDate() < birthDate.getDate())
               ) {
-                /*istanbul ignore next*/
                 age--;
               }
               return age < 18;

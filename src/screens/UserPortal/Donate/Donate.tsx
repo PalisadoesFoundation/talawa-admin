@@ -97,7 +97,6 @@ export default function donate(): JSX.Element {
 
   const [donate] = useMutation(DONATE_TO_ORGANIZATION);
 
-  /* istanbul ignore next */
   const handleChangePage = (
     _event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number,
@@ -105,7 +104,6 @@ export default function donate(): JSX.Element {
     setPage(newPage);
   };
 
-  /* istanbul ignore next */
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
@@ -164,7 +162,6 @@ export default function donate(): JSX.Element {
       refetch();
       toast.success(t(`success`) as string);
     } catch (error: unknown) {
-      /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
@@ -270,8 +267,7 @@ export default function donate(): JSX.Element {
                             page * rowsPerPage,
                             page * rowsPerPage + rowsPerPage,
                           )
-                        : /* istanbul ignore next */
-                          donations
+                        : donations
                       ).map((donation: InterfaceDonation, index) => {
                         const cardProps: InterfaceDonationCardProps = {
                           name: donation.nameOfUser,
@@ -297,10 +293,7 @@ export default function donate(): JSX.Element {
                 <tbody>
                   <tr>
                     <PaginationList
-                      count={
-                        /* istanbul ignore next */
-                        donations ? donations.length : 0
-                      }
+                      count={donations ? donations.length : 0}
                       rowsPerPage={rowsPerPage}
                       page={page}
                       onPageChange={handleChangePage}

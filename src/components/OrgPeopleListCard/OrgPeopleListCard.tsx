@@ -56,7 +56,7 @@ function orgPeopleListCard(
         },
       });
       // If the mutation is successful, show a success message and reload the page
-      /* istanbul ignore next */
+
       if (data) {
         toast.success(t('memberRemoved') as string);
         setTimeout(() => {
@@ -64,7 +64,6 @@ function orgPeopleListCard(
         }, 2000);
       }
     } catch (error: unknown) {
-      /* istanbul ignore next */
       errorHandler(t, error);
     }
   };

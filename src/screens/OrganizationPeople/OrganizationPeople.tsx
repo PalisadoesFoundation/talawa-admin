@@ -125,7 +125,6 @@ function organizationPeople(): JSX.Element {
     }
   }, [state, adminData]);
 
-  /* istanbul ignore next */
   if (memberError || usersError || adminError) {
     const error = memberError ?? usersError ?? adminError;
     toast.error(error?.message);
@@ -140,7 +139,7 @@ function organizationPeople(): JSX.Element {
 
   const handleFullNameSearchChange = (e: React.FormEvent): void => {
     e.preventDefault();
-    /* istanbul ignore next */
+
     const [firstName, lastName] = userName.split(' ');
     const newFilterData = {
       firstName_contains: firstName || '',

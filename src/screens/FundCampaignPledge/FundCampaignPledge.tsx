@@ -389,10 +389,7 @@ const fundCampaignPledge = (): JSX.Element => {
           underline="hover"
           color="inherit"
           component="button"
-          onClick={
-            /* istanbul ignore next */
-            () => history.go(-2)
-          }
+          onClick={() => history.go(-2)}
         >
           {fundName}
         </Link>
@@ -400,10 +397,7 @@ const fundCampaignPledge = (): JSX.Element => {
           underline="hover"
           color="inherit"
           component="button"
-          onClick={
-            /* istanbul ignore next */
-            () => history.back()
-          }
+          onClick={() => history.back()}
         >
           {campaignInfo?.name}
         </Link>

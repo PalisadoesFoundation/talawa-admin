@@ -95,7 +95,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     }
   };
 
-  /*istanbul ignore next*/
   const handleEditIconClick = (): void => {
     fileInputRef.current?.click();
   };
@@ -143,19 +142,16 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const tagsAssigned =
     userData?.user?.tagsAssignedWith.edges.map(
       (edge: { node: InterfaceTagData; cursor: string }) => edge.node,
-    ) ?? /* istanbul ignore next */ [];
+    ) ?? [];
 
   const loadMoreAssignedTags = (): void => {
     fetchMoreAssignedTags({
       variables: {
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        after:
-          user?.user?.user?.tagsAssignedWith?.pageInfo?.endCursor ??
-          /* istanbul ignore next */
-          null,
+        after: user?.user?.user?.tagsAssignedWith?.pageInfo?.endCursor ?? null,
       },
       updateQuery: (prevResult, { fetchMoreResult }) => {
-        if (!fetchMoreResult) /* istanbul ignore next */ return prevResult;
+        if (!fetchMoreResult) return prevResult;
 
         return {
           user: {
@@ -193,7 +189,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       toggleUnassignUserTagModal();
       toast.success(t('successfullyUnassigned'));
     } catch (error: unknown) {
-      /* istanbul ignore next */
       if (error instanceof Error) {
         toast.error(error.message);
       }
@@ -211,7 +206,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ): Promise<void> => {
     const { name, value } = e.target;
-    /*istanbul ignore next*/
+
     if (
       name === 'photo' &&
       'files' in e.target &&
@@ -251,7 +246,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
             ...formState,
           },
         });
-        /* istanbul ignore next */
+
         if (data) {
           setisUpdated(false);
           if (getItem('id') === currentUrl) {
@@ -268,14 +263,12 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         }
       }
     } catch (error: unknown) {
-      /* istanbul ignore next */
       if (error instanceof Error) {
         errorHandler(t, error);
       }
     }
   };
   const resetChanges = (): void => {
-    /*istanbul ignore next*/
     setFormState({
       firstName: userData?.user?.firstName || '',
       lastName: userData?.user?.lastName || '',
@@ -351,9 +344,8 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                       role="button"
                       aria-label="Edit profile picture"
                       tabIndex={0}
-                      onKeyDown={
-                        /*istanbul ignore next*/
-                        (e) => e.key === 'Enter' && handleEditIconClick()
+                      onKeyDown={(e) =>
+                        e.key === 'Enter' && handleEditIconClick()
                       }
                     />
                   </div>
@@ -633,7 +625,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   next={loadMoreAssignedTags}
                   hasMore={
                     userData?.user?.tagsAssignedWith.pageInfo.hasNextPage ??
-                    /* istanbul ignore next */
                     false
                   }
                   loader={<InfiniteScrollLoader />}

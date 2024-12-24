@@ -210,12 +210,9 @@ function OrganizationDashboard(): JSX.Element {
                 sm={4}
                 role="button"
                 className="mb-4"
-                onClick={
-                  /*istanbul ignore next*/
-                  (): void => {
-                    navigate(peopleLink);
-                  }
-                }
+                onClick={(): void => {
+                  navigate(peopleLink);
+                }}
               >
                 <DashBoardCard
                   count={data?.organizations[0].admins?.length}
@@ -347,12 +344,10 @@ function OrganizationDashboard(): JSX.Element {
                       return <CardItemLoading key={`postLoading_${index}`} />;
                     })
                   ) : postData?.organizations[0].posts.totalCount == 0 ? (
-                    /* eslint-disable */
                     <div className={styles.emptyContainer}>
                       <h6>{t('noPostsPresent')}</h6>
                     </div>
                   ) : (
-                    /* eslint-enable */
                     postData?.organizations[0].posts.edges
                       .slice(0, 5)
                       .map((edge) => {

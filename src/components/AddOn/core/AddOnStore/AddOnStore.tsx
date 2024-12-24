@@ -52,7 +52,6 @@ function addOnStore(): JSX.Element {
   /**
    * Fetches store plugins and updates the Redux store with the plugin data.
    */
-  /* istanbul ignore next */
   const getStorePlugins = async (): Promise<void> => {
     let plugins = await new PluginHelper().fetchStore();
     const installIds = (await new PluginHelper().fetchInstalled()).map(
@@ -68,7 +67,6 @@ function addOnStore(): JSX.Element {
   /**
    * Sets the list of installed plugins in the component's state.
    */
-  /* istanbul ignore next */
   const getInstalledPlugins: () => void = () => {
     setDataList(data?.getPlugins ?? []);
   };
@@ -80,7 +78,6 @@ function addOnStore(): JSX.Element {
    */
   const updateSelectedTab = (tab: string): void => {
     setIsStore(tab === 'available');
-    /* istanbul ignore next */
     if (tab === 'available') {
       getStorePlugins();
     } else {
@@ -111,7 +108,6 @@ function addOnStore(): JSX.Element {
   };
 
   // Show a loader while the data is being fetched
-  /* istanbul ignore next */
   if (loading) {
     return (
       <>
@@ -157,12 +153,10 @@ function addOnStore(): JSX.Element {
           </div>
           {!isStore && (
             <Dropdown
-              onSelect={
-                /* istanbul ignore next */
-                (e) =>
-                  filterChange(
-                    e as unknown as React.ChangeEvent<HTMLSelectElement>,
-                  )
+              onSelect={(e) =>
+                filterChange(
+                  e as unknown as React.ChangeEvent<HTMLSelectElement>,
+                )
               }
             >
               <Dropdown.Toggle

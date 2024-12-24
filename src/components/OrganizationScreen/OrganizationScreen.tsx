@@ -51,7 +51,6 @@ const OrganizationScreen = (): JSX.Element => {
 
   // If no organization ID is found, navigate back to the home page
   if (!orgId) {
-    /*istanbul ignore next*/
     return <Navigate to={'/'} replace />;
   }
 
@@ -78,7 +77,7 @@ const OrganizationScreen = (): JSX.Element => {
       const event = eventsData.eventsByOrganization.find(
         (e: InterfaceEvent) => e._id === eventId,
       );
-      /*istanbul ignore next*/
+
       if (!event) {
         console.warn(`Event with id ${eventId} not found`);
         setEventName(null);

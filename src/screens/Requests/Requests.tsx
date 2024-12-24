@@ -180,7 +180,7 @@ const Requests = (): JSX.Element => {
   /**
    * Loads more requests when scrolling to the bottom of the page.
    */
-  /* istanbul ignore next */
+
   const loadMoreRequests = (): void => {
     setIsLoadingMore(true);
     fetchMore({

@@ -78,7 +78,6 @@ function organizationVenues(): JSX.Element {
       });
       venueRefetch();
     } catch (error) {
-      /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
@@ -128,7 +127,7 @@ function organizationVenues(): JSX.Element {
   };
 
   // Error handling for venue data fetch
-  /* istanbul ignore next */
+
   if (venueError) {
     errorHandler(t, venueError);
   }

@@ -140,7 +140,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     const data: InterfaceEventListCardProps[] = [];
     if (userRole === Role.SUPERADMIN) return eventData;
     // Hard to test all the cases
-    /* istanbul ignore next */
+
     if (userRole === Role.ADMIN) {
       eventData?.forEach((event) => {
         if (event.isPublic) data.push(event);

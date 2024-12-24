@@ -79,7 +79,7 @@ export default function people(): JSX.Element {
    * Handles page change in pagination.
    *
    */
-  /* istanbul ignore next */
+
   const handleChangePage = (
     _event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number,
@@ -91,7 +91,7 @@ export default function people(): JSX.Element {
    * Handles change in the number of rows per page.
    *
    */
-  /* istanbul ignore next */
+
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
@@ -143,7 +143,7 @@ export default function people(): JSX.Element {
   /**
    * Updates the list of members based on the selected filter mode.
    */
-  /* istanbul ignore next */
+
   useEffect(() => {
     if (mode == 0) {
       if (data) {
@@ -233,8 +233,7 @@ export default function people(): JSX.Element {
                           page * rowsPerPage,
                           page * rowsPerPage + rowsPerPage,
                         )
-                      : /* istanbul ignore next */
-                        members
+                      : members
                     ).map((member: InterfaceMember, index) => {
                       const name = `${member.firstName} ${member.lastName}`;
 
@@ -258,10 +257,7 @@ export default function people(): JSX.Element {
               <tbody>
                 <tr>
                   <PaginationList
-                    count={
-                      /* istanbul ignore next */
-                      members ? members.length : 0
-                    }
+                    count={members ? members.length : 0}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}

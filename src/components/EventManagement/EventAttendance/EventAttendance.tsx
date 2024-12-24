@@ -57,8 +57,7 @@ function EventAttendance(): JSX.Element {
       const nameB = `${b.firstName} ${b.lastName}`.toLowerCase();
       return sortOrder === 'ascending'
         ? nameA.localeCompare(nameB)
-        : /*istanbul ignore next*/
-          nameB.localeCompare(nameA);
+        : nameB.localeCompare(nameA);
     });
   };
 
@@ -71,8 +70,7 @@ function EventAttendance(): JSX.Element {
           const isSameYear = attendeeDate.getFullYear() === now.getFullYear();
           return filteringBy === 'This Month'
             ? isSameYear && attendeeDate.getMonth() === now.getMonth()
-            : /*istanbul ignore next*/
-              isSameYear;
+            : isSameYear;
         });
   };
 
@@ -141,7 +139,7 @@ function EventAttendance(): JSX.Element {
   }, [eventId, getEventAttendees]);
 
   if (loading) return <p>{t('loading')}</p>;
-  /*istanbul ignore next*/
+
   if (error) return <p>{error.message}</p>;
 
   return (
@@ -219,9 +217,8 @@ function EventAttendance(): JSX.Element {
                 <span className="ms-2">Sort</span>
               </>
             }
-            onSelect={
-              /*istanbul ignore next*/
-              (eventKey) => setSortOrder(eventKey as 'ascending' | 'descending')
+            onSelect={(eventKey) =>
+              setSortOrder(eventKey as 'ascending' | 'descending')
             }
           >
             <Dropdown.Item eventKey="ascending">Ascending</Dropdown.Item>
@@ -340,8 +337,7 @@ function EventAttendance(): JSX.Element {
                         <span className={styles.eventsAttended}>
                           {member.eventsAttended
                             ? member.eventsAttended.length
-                            : /*istanbul ignore next*/
-                              '0'}
+                            : '0'}
                         </span>
                       </TableCell>
                     </Tooltip>
@@ -350,9 +346,7 @@ function EventAttendance(): JSX.Element {
                       data-testid={`attendee-task-assigned-${index}`}
                     >
                       {member.tagsAssignedWith ? (
-                        /*istanbul ignore next*/
                         member.tagsAssignedWith.edges.map(
-                          /*istanbul ignore next*/
                           (
                             edge: { node: { name: string } },
                             tagIndex: number,

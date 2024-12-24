@@ -120,7 +120,6 @@ export default function events(): JSX.Element {
         },
       });
 
-      /* istanbul ignore next */
       if (createEventData) {
         toast.success(t('eventCreated') as string);
         refetch();
@@ -134,7 +133,6 @@ export default function events(): JSX.Element {
       }
       setCreateEventmodalisOpen(false);
     } catch (error: unknown) {
-      /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
@@ -144,7 +142,7 @@ export default function events(): JSX.Element {
    *
    * @returns Void.
    */
-  /* istanbul ignore next */
+
   const toggleCreateEventModal = (): void =>
     setCreateEventmodalisOpen(!createEventModal);
 
@@ -185,7 +183,7 @@ export default function events(): JSX.Element {
   };
 
   // Update the list of events when the data from the query changes
-  /* istanbul ignore next */
+
   React.useEffect(() => {
     if (data) {
       setEvents(data.eventsByOrganizationConnection);
@@ -197,7 +195,7 @@ export default function events(): JSX.Element {
    *
    * @returns Void.
    */
-  /* istanbul ignore next */
+
   const showInviteModal = (): void => {
     setCreateEventmodalisOpen(true);
   };
@@ -208,9 +206,8 @@ export default function events(): JSX.Element {
    * @param item - The view type to set, or null to reset.
    * @returns Void.
    */
-  /* istanbul ignore next */
+
   const handleChangeView = (item: string | null): void => {
-    /*istanbul ignore next*/
     if (item) {
       setViewType(item as ViewType);
     }
