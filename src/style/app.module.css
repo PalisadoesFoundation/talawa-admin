@@ -13,7 +13,8 @@
   --search-button-border: #555555;
   --table-image-size: 50px;
   --bs-primary: #0056b3;
-  --bs-white: #fff --table-head-bg: var(--bs-primary, blue); /* Assuming var(--bs-primary) is defined elsewhere */
+  --bs-white: #fff;
+  --table-head-bg: var(--bs-primary, blue);
   --table-head-bg: var(
     --bs-primary,
     blue
