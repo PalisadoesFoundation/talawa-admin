@@ -24,6 +24,7 @@ export const MOCKS = [
       query: ACTION_ITEM_LIST,
       variables: {
         organizationId: 'orgId',
+        eventId: 'eventId',
         orderBy: null,
         where: {
           assigneeName: '',
@@ -47,6 +48,7 @@ export const MOCKS = [
       query: ACTION_ITEM_LIST,
       variables: {
         organizationId: 'orgId',
+        eventId: 'eventId',
         orderBy: null,
         where: {
           categoryName: '',
@@ -64,6 +66,7 @@ export const MOCKS = [
       query: ACTION_ITEM_LIST,
       variables: {
         organizationId: 'orgId',
+        eventId: 'eventId',
         orderBy: 'dueDate_ASC',
         where: {
           assigneeName: '',
@@ -81,6 +84,7 @@ export const MOCKS = [
       query: ACTION_ITEM_LIST,
       variables: {
         organizationId: 'orgId',
+        eventId: 'eventId',
         orderBy: 'dueDate_DESC',
         where: {
           assigneeName: '',
@@ -98,6 +102,7 @@ export const MOCKS = [
       query: ACTION_ITEM_LIST,
       variables: {
         organizationId: 'orgId',
+        eventId: 'eventId',
         orderBy: null,
         where: {
           assigneeName: '',
@@ -116,6 +121,7 @@ export const MOCKS = [
       query: ACTION_ITEM_LIST,
       variables: {
         organizationId: 'orgId',
+        eventId: 'eventId',
         orderBy: null,
         where: {
           assigneeName: '',
@@ -134,6 +140,7 @@ export const MOCKS = [
       query: ACTION_ITEM_LIST,
       variables: {
         organizationId: 'orgId',
+        eventId: 'eventId',
         orderBy: null,
         where: {
           assigneeName: 'John',
@@ -151,6 +158,7 @@ export const MOCKS = [
       query: ACTION_ITEM_LIST,
       variables: {
         organizationId: 'orgId',
+        eventId: 'eventId',
         orderBy: null,
         where: {
           categoryName: 'Category 1',
@@ -407,6 +415,7 @@ export const MOCKS_ERROR = [
       query: ACTION_ITEM_LIST,
       variables: {
         organizationId: 'orgId',
+        eventId: 'eventId',
         orderBy: null,
         where: {
           assigneeName: '',
@@ -474,6 +483,7 @@ export const MOCKS_EMPTY = [
       query: ACTION_ITEM_LIST,
       variables: {
         organizationId: 'orgId',
+        eventId: 'eventId',
         orderBy: null,
         where: {
           assigneeName: '',
