@@ -1,3 +1,4 @@
+import { describe, it, expect, vi } from 'vitest';
 import convertToBase64 from './convertToBase64';
 
 describe('convertToBase64', () => {
@@ -14,20 +15,17 @@ describe('convertToBase64', () => {
   });
 
   it('should handle errors thrown by FileReader', async () => {
-    // Arrange
     const file = new File(['hello'], 'hello.txt', { type: 'text/plain' });
-    const mockFileReader = jest
+    const mockFileReader = vi
       .spyOn(global, 'FileReader')
       .mockImplementationOnce(() => {
         throw new Error('Test error');
       });
 
-    // Act
     const result = await convertToBase64(file);
-
-    // Assert
     expect(mockFileReader).toHaveBeenCalledTimes(1);
     expect(mockFileReader).toHaveBeenCalledWith();
     expect(result).toBe('');
+    mockFileReader.mockRestore();
   });
 });
