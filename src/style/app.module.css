@@ -457,15 +457,6 @@
   position: sticky;
 }
 
-/* .checkboxButton{
-    background-color: transparent;
-  }
-  
-  .checkboxButton:checked{
-    background-color: var(--subtle-blue-grey);
-    color:white
-  } */
-
 input[type='checkbox']:checked + label {
   background-color: var(--subtle-blue-grey) !important;
 }
