@@ -1082,6 +1082,17 @@
     "loading": "Chargement...",
     "noAttendees": "Aucun participant trouvé"
   },
+  "eventRegistrant": {
+    "sort": "Trier",
+    "allRegistrants": "Tous les inscrits",
+    "eventRegistrantsTable": "Table des inscrits à l'événement",
+    "serialNumber": "Numéro de série",
+    "registrant": "Inscrit",
+    "registeredAt": "Enregistré le",
+    "createdAt": "Créé le",
+    "addRegistrant": "Ajouter un inscrit",
+    "noRegistrantsFound": "Aucun inscrit trouvé."
+  },
   "onSpotAttendee": {
     "title": "Participant sur place",
     "enterFirstName": "Entrez le prénom",
