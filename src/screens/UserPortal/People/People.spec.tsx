@@ -13,6 +13,19 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import People from './People';
 import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
+
+/**
+ * This file contains unit tests for the People component.
+ *
+ * The tests cover:
+ * - Proper rendering of the People screen and its elements.
+ * - Functionality of the search input and search button.
+ * - Correct behavior when switching between member and admin modes.
+ * - Integration with mocked GraphQL queries for testing data fetching.
+ *
+ * These tests use Vitest for test execution, MockedProvider for mocking GraphQL queries, and react-testing-library for rendering and interactions.
+ */
 
 const MOCKS = [
   {
@@ -113,27 +126,30 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({ orgId: '' }),
-}));
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useParams: () => ({ orgId: '' }),
+  };
+});
 
 describe('Testing People Screen [User Portal]', () => {
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
-    value: jest.fn().mockImplementation((query) => ({
+    value: vi.fn().mockImplementation((query) => ({
       matches: false,
       media: query,
       onchange: null,
-      addListener: jest.fn(), // Deprecated
-      removeListener: jest.fn(), // Deprecated
-      addEventListener: jest.fn(),
-      removeEventListener: jest.fn(),
-      dispatchEvent: jest.fn(),
+      addListener: vi.fn(), // Deprecated
+      removeListener: vi.fn(), // Deprecated
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
     })),
   });
 
-  test('Screen should be rendered properly', async () => {
+  it('Screen should be rendered properly', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -151,7 +167,7 @@ describe('Testing People Screen [User Portal]', () => {
     expect(screen.queryAllByText('Noble Mittal')).not.toBe([]);
   });
 
-  test('Search works properly by pressing enter', async () => {
+  it('Search works properly by pressing enter', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -173,7 +189,7 @@ describe('Testing People Screen [User Portal]', () => {
     expect(screen.queryByText('Noble Mittal')).not.toBeInTheDocument();
   });
 
-  test('Search works properly by clicking search Btn', async () => {
+  it('Search works properly by clicking search Btn', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -199,7 +215,7 @@ describe('Testing People Screen [User Portal]', () => {
     expect(screen.queryByText('Noble Mittal')).not.toBeInTheDocument();
   });
 
-  test('Mode is changed to Admins', async () => {
+  it('Mode is changed to Admins', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>

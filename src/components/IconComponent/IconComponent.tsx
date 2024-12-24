@@ -19,6 +19,7 @@ import PostsIcon from 'assets/svgs/posts.svg?react';
 import SettingsIcon from 'assets/svgs/settings.svg?react';
 import VenueIcon from 'assets/svgs/venues.svg?react';
 import RequestsIcon from 'assets/svgs/requests.svg?react';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { MdOutlineVolunteerActivism } from 'react-icons/md';
 
 import React from 'react';
@@ -131,6 +132,13 @@ const iconComponent = (props: InterfaceIconComponent): JSX.Element => {
       return (
         <ContactPageOutlined
           data-testid="Icon-Component-My-Pledges"
+          stroke={props.fill}
+        />
+      );
+    case 'Leave Organization':
+      return (
+        <ExitToAppIcon
+          data-testid="Icon-Component-Leave-Organization"
           stroke={props.fill}
         />
       );
