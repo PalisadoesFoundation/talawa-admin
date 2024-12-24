@@ -827,14 +827,15 @@ input[type='radio']:checked + label {
 }
 .eventContainer {
   display: flex;
-  align-items: start;
+  align-items: flex-start;
+  gap: var(--event-container-gap, 10px);
 }
 
 .eventDetailsBox {
   position: relative;
   box-sizing: border-box;
   background: #ffffff;
-  width: 66%;
+  flex: 2;
   padding: 0.3rem;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
@@ -871,7 +872,7 @@ input[type='radio']:checked + label {
   justify-content: space-between;
   padding: 15px;
   padding-bottom: 0px;
-  width: 33%;
+  flex: 1;
 
   box-sizing: border-box;
   background: #ffffff;
@@ -879,7 +880,6 @@ input[type='radio']:checked + label {
   border-radius: 20px;
   margin-bottom: 0;
   margin-top: 20px;
-  margin-left: 10px;
 }
 
 .startTime,
@@ -933,12 +933,11 @@ input[type='radio']:checked + label {
   position: relative;
 }
 .customcell {
-  background-color: #31bb6b !important;
-  color: white !important;
-  font-size: medium !important;
-  font-weight: 500 !important;
-  padding-top: 10px !important;
-  padding-bottom: 10px !important;
+  background-color: #31bb6b;
+  color: white;
+  font-size: medium;
+  font-weight: 500;
+  padding-block: 10px;
 }
 
 .eventsAttended,
