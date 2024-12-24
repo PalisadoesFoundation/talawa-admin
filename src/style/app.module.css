@@ -434,11 +434,6 @@
   visibility: visible;
 }
 
-.tagsBreadCrumbs {
-  color: var(--bs-gray);
-  cursor: pointer;
-}
-
 .manageTagScrollableDiv {
   scrollbar-width: thin;
   scrollbar-color: var(--bs-gray-400) var(--bs-white);
@@ -461,15 +456,6 @@
   overflow: auto;
   position: sticky;
 }
-
-/* .checkboxButton{
-  background-color: transparent;
-}
-
-.checkboxButton:checked{
-  background-color: var(--subtle-blue-grey);
-  color:white
-} */
 
 input[type='checkbox']:checked + label {
   background-color: var(--subtle-blue-grey) !important;
@@ -1015,67 +1001,41 @@ hr {
   }
 }
 
+.list_box {
+  height: auto;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.inputFields {
+  box-shadow: 0 1px 1px #31bb6b;
+}
+
+.fundName {
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.modalHeader {
+  border: none;
+  padding-bottom: 0;
+}
+
+.label {
+  color: var(--bs-emphasis-color);
+}
+
+.fundModal {
+  max-width: 80vw;
+  margin-top: 2vh;
+  margin-left: 13vw;
+}
+
 .btnsContainer .btnsBlock button {
   margin-left: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.btnsContainer input {
-  outline: 1px solid var(--bs-gray-400);
-}
-
-.btnsContainer .input button {
-  width: 52px;
-}
-
-@media (max-width: 1020px) {
-  .btnsContainer {
-    flex-direction: column;
-    margin: 1.5rem 0;
-  }
-
-  .btnsContainer .btnsBlock {
-    margin: 1.5rem 0 0 0;
-    justify-content: space-between;
-  }
-
-  .btnsContainer .btnsBlock button {
-    margin: 0;
-  }
-
-  .btnsContainer .btnsBlock div button {
-    margin-right: 1.5rem;
-  }
-}
-
-/* For mobile devices  */
-
-@media (max-width: 520px) {
-  .btnsContainer {
-    margin-bottom: 0;
-  }
-
-  .btnsContainer .btnsBlock {
-    display: block;
-    margin-top: 1rem;
-    margin-right: 0;
-  }
-
-  .btnsContainer .btnsBlock div {
-    flex: 1;
-  }
-
-  .btnsContainer .btnsBlock div[title='Sort organizations'] {
-    margin-right: 0.5rem;
-  }
-
-  .btnsContainer .btnsBlock button {
-    margin-bottom: 1rem;
-    margin-right: 0;
-    width: 100%;
-  }
 }
 
 .errorMessage {
@@ -1086,7 +1046,7 @@ hr {
   flex-direction: column;
 }
 
-.tableHeader {
+.tableHeaders {
   background-color: var(--bs-primary-text-emphasis);
   color: var(--bs-white);
   font-size: 1rem;
@@ -1105,10 +1065,6 @@ hr {
     overflow: hidden;
     visibility: hidden;
   }
-}
-
-.subTagsLink i {
-  visibility: hidden;
 }
 
 .tagsBreadCrumbs {
@@ -1176,6 +1132,25 @@ input[type='radio']:checked + label {
   transition:
     transform 0.2s,
     box-shadow 0.2s;
+  width: 100%;
+}
+
+.manageBtn {
+  margin: 1rem 0 0;
+  margin-top: 15px;
+  border: 1px solid #e8e5e5;
+  box-shadow: 0 2px 2px #e8e5e5;
+  padding: 10px 10px;
+  border-radius: 5px;
+  font-size: 16px;
+  color: white;
+  outline: none;
+  font-weight: 600;
+  cursor: pointer;
+  width: 45%;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 
 .removeFilterIcon {
@@ -1222,16 +1197,8 @@ input[type='radio']:checked + label {
   opacity: 1;
 }
 
-.inputField {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  background-color: white;
+.inputFields {
   box-shadow: 0 1px 1px var(--brand-primary);
-}
-
-.inputField > button {
-  padding-top: 10px;
-  padding-bottom: 10px;
 }
 
 .dropdowns {
@@ -1246,12 +1213,6 @@ input[type='radio']:checked + label {
 .rowBackgrounds {
   background-color: var(--bs-white);
   max-height: 120px;
-}
-
-.tableHeaders {
-  background-color: var(--bs-primary);
-  color: var(--bs-white);
-  font-size: 1rem;
 }
 
 .chipIcon {
