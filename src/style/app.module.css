@@ -1307,8 +1307,8 @@ input[type='radio']:checked + label {
 .pluginStoreBtn {
   width: 100%;
   background-color: white;
-  color: #555555;
-  border: 0.5px solid #555555;
+  color: var(--brown-color);
+  border: 0.5px solid var(--brown-color);
 }
 .searchButtonOrgList {
   position: absolute;
@@ -1323,22 +1323,9 @@ input[type='radio']:checked + label {
 
 .pluginStoreBtn:hover,
 .pluginStoreBtn:focus {
-  background-color: #dfe1e2 !important;
-  color: #555555 !important;
-  border-color: #555555 !important;
-}
-
-.line::before {
-  content: '';
-  display: inline-block;
-  width: 100px;
-  border-top: 1px solid #000;
-  margin: 0 10px;
-  left: 0;
-}
-
-.line::after {
-  right: 0;
+  background-color: var(--dropdown-hover-color) !important;
+  color: var(--brown-color) !important;
+  border-color: var(--brown-color) !important;
 }
 
 .flexContainer {
@@ -1351,7 +1338,7 @@ input[type='radio']:checked + label {
 .orText {
   display: block;
   position: absolute;
-  top: calc(-0.7rem + 0.5rem);
+  top: -0.2rem;
   left: calc(50% - 2.6rem);
   margin: 0 auto;
   padding: 0.5rem 2rem;
@@ -1383,7 +1370,7 @@ input[type='radio']:checked + label {
 }
 
 .sampleModalTitle {
-  background-color: green;
+  background-color: var(--bs-primary);
 }
 
 .btnsContainerOrgList .btnsBlockOrgList button {
