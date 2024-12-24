@@ -12,6 +12,7 @@
   --search-button-bg: #a8c7fa;
   --search-button-border: #555555;
   --table-image-size: 50px;
+  --table-image-small-size: 25px;
   --bs-primary: #0056b3;
   --bs-white: #fff;
   --table-head-bg: var(--bs-primary, blue);
@@ -1594,6 +1595,26 @@ form > input {
   }
 }
 
+/* * Refortoring css for Leaderboard */
+
+.TableImageSmall {
+  object-fit: cover;
+  width: var(--table-image-small-size);
+  height: var(--table-image-small-size);
+  border-radius: 100%;
+}
+
+.avatarContainer {
+  width: 28px;
+  height: 26px;
+}
+
+.imageContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.5rem;
+}
 /* CSS Refactor for OrgPost */
 
 .btnsContainerOrgPost {
