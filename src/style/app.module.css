@@ -1307,6 +1307,16 @@ input[type='radio']:checked + label {
   color: #555555;
   border: 0.5px solid #555555;
 }
+.searchButtonOrgList {
+  position: absolute;
+  z-index: 10;
+  bottom: 0;
+  inset-inline-end: 0px;
+  height: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 .pluginStoreBtn:hover,
 .pluginStoreBtn:focus {

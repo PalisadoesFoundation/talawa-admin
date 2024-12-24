@@ -2,7 +2,6 @@ import React from 'react';
 import { Modal, Form, Row, Col, Button } from 'react-bootstrap';
 import convertToBase64 from 'utils/convertToBase64';
 import type { ChangeEvent } from 'react';
-// import styles from './OrgList.module.css';
 import styles from '../../style/app.module.css';
 import type { InterfaceAddress } from 'utils/interfaces';
 import { countryOptions } from 'utils/formEnumFields';

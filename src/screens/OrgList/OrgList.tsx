@@ -330,7 +330,7 @@ function orgList(): JSX.Element {
   return (
     <>
       {/* Buttons Container */}
-      <div className={styles.btnsContainer}>
+      <div className={styles.btnsContainerOrgList}>
         <div className={styles.input}>
           <Form.Control
             type="name"
@@ -344,14 +344,15 @@ function orgList(): JSX.Element {
           />
           <Button
             tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+            // className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+            className={styles.searchButtonOrgList}
             onClick={handleSearchByBtnClick}
             data-testid="searchBtn"
           >
             <Search />
           </Button>
         </div>
-        <div className={styles.btnsBlock}>
+        <div className={styles.btnsBlockOrgList}>
           <div className="d-flex">
             <Dropdown
               aria-expanded="false"
@@ -422,7 +423,7 @@ function orgList(): JSX.Element {
             loader={
               <>
                 {[...Array(perPageResult)].map((_, index) => (
-                  <div key={index} className={styles.itemCard}>
+                  <div key={index} className={styles.itemCardOrgList}>
                     <div className={styles.loadingWrapper}>
                       <div className={styles.innerContainer}>
                         <div
@@ -442,7 +443,7 @@ function orgList(): JSX.Element {
               </>
             }
             hasMore={hasMore}
-            className={styles.listBox}
+            className={styles.listBoxOrgList}
             data-testid="organizations-list"
             endMessage={
               <div className={'w-100 text-center my-4'}>
@@ -454,7 +455,7 @@ function orgList(): JSX.Element {
               ? orgsData?.organizationsConnection.map(
                   (item: InterfaceOrgConnectionInfoType) => {
                     return (
-                      <div key={item._id} className={styles.itemCard}>
+                      <div key={item._id} className={styles.itemCardOrgList}>
                         <OrgListCard data={item} />
                       </div>
                     );
@@ -466,7 +467,7 @@ function orgList(): JSX.Element {
                   (item: InterfaceOrgConnectionInfoType) => {
                     if (isAdminForCurrentOrg(item)) {
                       return (
-                        <div key={item._id} className={styles.itemCard}>
+                        <div key={item._id} className={styles.itemCardOrgList}>
                           <OrgListCard data={item} />
                         </div>
                       );
@@ -477,7 +478,7 @@ function orgList(): JSX.Element {
           {isLoading && (
             <>
               {[...Array(perPageResult)].map((_, index) => (
-                <div key={index} className={styles.itemCard}>
+                <div key={index} className={styles.itemCardOrgList}>
                   <div className={styles.loadingWrapper}>
                     <div className={styles.innerContainer}>
                       <div
