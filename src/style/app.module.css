@@ -23,6 +23,9 @@
   --tablerow-bg-color: #eff1f7;
   --row-background: var(--bs-white, white);
   --font-size-header: 16px;
+  --breakpoint-mobile: 520px;
+  --breakpoint-tablet: 768px;
+  --breakpoint-desktop: 1020px;
 }
 .fonts {
   color: #707070;
@@ -942,16 +945,22 @@ input[type='radio']:checked + label {
 
 .eventsAttended,
 .membername {
-  color: blue;
+  color: var(--link-color, #0052cc);
 }
 .actionBtn {
   /* color:#39a440 !important; */
   background-color: #ffffff !important;
+  outline: none;
 }
 .actionBtn:hover,
 .actionBtn:focus,
 .actionBtn:active {
   color: #39a440 !important;
+}
+
+.actionBtn:focus-visible {
+  outline: 2px solid #39a440;
+  outline-offset: 2px;
 }
 
 .table-body > .table-row {
@@ -971,7 +980,7 @@ input[type='radio']:checked + label {
   gap: 10px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: var(--breakpoint-tablet)) {
   .btnsContainer {
     margin-bottom: 0;
     display: flex;
