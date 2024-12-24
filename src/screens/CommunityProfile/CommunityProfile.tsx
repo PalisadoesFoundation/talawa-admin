@@ -18,7 +18,7 @@ import {
   SlackLogo,
 } from 'assets/svgs/social-icons';
 import convertToBase64 from 'utils/convertToBase64';
-import styles from './CommunityProfile.module.css';
+import styles from '../../style/app.module.css';
 import { errorHandler } from 'utils/errorHandler';
 import UpdateSession from '../../components/UpdateSession/UpdateSession';
 
@@ -90,7 +90,7 @@ const CommunityProfile = (): JSX.Element => {
   React.useEffect(() => {
     const preLoginData: PreLoginImageryDataType | undefined =
       data?.getCommunityData;
-    preLoginData &&
+    if (preLoginData) {
       setProfileVariable({
         name: preLoginData.name ?? '',
         websiteLink: preLoginData.websiteLink ?? '',
@@ -104,6 +104,7 @@ const CommunityProfile = (): JSX.Element => {
         reddit: preLoginData.socialMediaUrls.reddit ?? '',
         slack: preLoginData.socialMediaUrls.slack ?? '',
       });
+    }
   }, [data]);
 
   /**
