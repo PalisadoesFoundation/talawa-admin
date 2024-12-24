@@ -1,3 +1,5 @@
+// SKIP_LOCALSTORAGE_CHECK
+
 import {
   getStorageKey,
   getItem,
@@ -5,6 +7,7 @@ import {
   removeItem,
   useLocalStorage,
 } from './useLocalstorage';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 describe('Storage Helper Functions', () => {
   beforeEach(() => {
@@ -95,7 +98,7 @@ describe('Storage Helper Functions', () => {
     const storageHelper = useLocalStorage(customPrefix);
     const key = 'testKey';
 
-    const spyGetStorageKey = jest.spyOn(storageHelper, 'getStorageKey');
+    const spyGetStorageKey = vi.spyOn(storageHelper, 'getStorageKey');
     storageHelper.getStorageKey(key);
 
     expect(spyGetStorageKey).toHaveBeenCalledWith(key);
@@ -106,7 +109,7 @@ describe('Storage Helper Functions', () => {
     const storageHelper = useLocalStorage(customPrefix);
     const key = 'testKey';
 
-    const spyGetItem = jest.spyOn(storageHelper, 'getItem');
+    const spyGetItem = vi.spyOn(storageHelper, 'getItem');
     storageHelper.getItem(key);
 
     expect(spyGetItem).toHaveBeenCalledWith(key);
@@ -118,7 +121,7 @@ describe('Storage Helper Functions', () => {
     const key = 'testKey';
     const value = 'data';
 
-    const spySetItem = jest.spyOn(storageHelper, 'setItem');
+    const spySetItem = vi.spyOn(storageHelper, 'setItem');
     storageHelper.setItem(key, value);
 
     expect(spySetItem).toHaveBeenCalledWith(key, value);
@@ -129,7 +132,7 @@ describe('Storage Helper Functions', () => {
     const storageHelper = useLocalStorage(customPrefix);
     const key = 'testKey';
 
-    const spyRemoveItem = jest.spyOn(storageHelper, 'removeItem');
+    const spyRemoveItem = vi.spyOn(storageHelper, 'removeItem');
     storageHelper.removeItem(key);
 
     expect(spyRemoveItem).toHaveBeenCalledWith(key);
