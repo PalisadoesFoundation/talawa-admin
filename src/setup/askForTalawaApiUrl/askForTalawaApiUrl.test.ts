@@ -30,17 +30,9 @@ describe('askForTalawaApiUrl', () => {
   });
 
   test('should return the default endpoint when the user does not enter anything', async () => {
-    const mockPrompt = jest
-      .spyOn(inquirer, 'prompt')
-      .mockImplementation(async (questions: any) => {
-        const answers: Record<string, string | undefined> = {};
-        questions.forEach(
-          (question: { name: string | number; default: any }) => {
-            answers[question.name] = question.default;
-          },
-        );
-        return answers;
-      });
+    const mockPrompt = jest.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
+      endpoint: 'http://localhost:4000/graphql/',
+    });
 
     const result = await askForTalawaApiUrl();
 
