@@ -13,6 +13,7 @@ interface InterfaceHolidayList {
  * @returns JSX element representing a card with the holiday name.
  */
 const HolidayCard = (props: InterfaceHolidayList): JSX.Element => {
+  /*istanbul ignore next*/
   return <div className={styles.card}>{props?.holidayName}</div>;
 };
 

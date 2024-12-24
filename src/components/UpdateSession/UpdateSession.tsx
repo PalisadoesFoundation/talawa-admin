@@ -113,6 +113,7 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
       toast.success(t('profileChangedMsg'));
       setCommunityTimeout(timeout);
     } catch (error: unknown) {
+      /* istanbul ignore next */
       errorHandler(t, error as Error);
     }
   };

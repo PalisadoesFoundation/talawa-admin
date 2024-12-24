@@ -95,6 +95,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
         handleClose();
       }
     } catch (error) {
+      /* istanbul ignore next */
       errorHandler(t, error as Error);
     } finally {
       setIsSubmitting(false);

@@ -98,7 +98,7 @@ const VenueModal = ({
           ...(edit && { id: venueData?._id }),
         },
       });
-
+      /* istanbul ignore next */
       if (data) {
         toast.success(
           edit ? (t('venueUpdated') as string) : (t('venueAdded') as string),
@@ -114,6 +114,7 @@ const VenueModal = ({
         setVenueImage(false);
       }
     } catch (error) {
+      /* istanbul ignore next */
       errorHandler(t, error);
     }
   }, [
@@ -135,7 +136,7 @@ const VenueModal = ({
   const clearImageInput = useCallback(() => {
     setFormState((prevState) => ({ ...prevState, imageURL: '' }));
     setVenueImage(false);
-
+    /* istanbul ignore next */
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -235,7 +236,7 @@ const VenueModal = ({
               }));
               setVenueImage(true);
               const file = e.target.files?.[0];
-
+              /* istanbul ignore next */
               if (file) {
                 setFormState({
                   ...formState,

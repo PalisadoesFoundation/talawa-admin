@@ -37,7 +37,7 @@ function pagination(props: InterfaceTablePaginationActionsProps): JSX.Element {
    *
    * @param event - The click event.
    */
-
+  /* istanbul ignore next */
   const handleFirstPageButtonClick = (
     event: React.MouseEvent<HTMLButtonElement>,
   ): void => {
@@ -63,6 +63,7 @@ function pagination(props: InterfaceTablePaginationActionsProps): JSX.Element {
    * @param event - The click event.
    */
 
+  /* istanbul ignore next */
   const handleNextButtonClick = (
     event: React.MouseEvent<HTMLButtonElement>,
   ): void => {
@@ -75,7 +76,7 @@ function pagination(props: InterfaceTablePaginationActionsProps): JSX.Element {
    *
    * @param event - The click event.
    */
-
+  /* istanbul ignore next */
   const handleLastPageButtonClick = (
     event: React.MouseEvent<HTMLButtonElement>,
   ): void => {

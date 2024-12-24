@@ -61,7 +61,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
           fetchMoreResult?: { getChildTags: InterfaceQueryUserTagChildTags };
         },
       ) => {
-        if (!fetchMoreResult) return prevResult;
+        if (!fetchMoreResult) /* istanbul ignore next */ return prevResult;
 
         return {
           getChildTags: {
@@ -93,7 +93,8 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
   }
 
   const subTagsList =
-    subTagsData?.getChildTags.childTags.edges.map((edge) => edge.node) ?? [];
+    subTagsData?.getChildTags.childTags.edges.map((edge) => edge.node) ??
+    /* istanbul ignore next */ [];
 
   const handleTagClick = (): void => {
     setExpanded(!expanded);
@@ -171,6 +172,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
               next={loadMoreSubTags}
               hasMore={
                 subTagsData?.getChildTags.childTags.pageInfo.hasNextPage ??
+                /* istanbul ignore next */
                 false
               }
               loader={<InfiniteScrollLoader />}

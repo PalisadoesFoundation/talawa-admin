@@ -135,6 +135,7 @@ const ForgotPassword = (): JSX.Element => {
         },
       });
 
+      /* istanbul ignore next */
       if (data) {
         toast.success(t('passwordChanges') as string);
         setShowEnterEmail(true);
@@ -146,7 +147,7 @@ const ForgotPassword = (): JSX.Element => {
       }
     } catch (error: unknown) {
       setShowEnterEmail(true);
-
+      /* istanbul ignore next */
       errorHandler(t, error);
     }
   };

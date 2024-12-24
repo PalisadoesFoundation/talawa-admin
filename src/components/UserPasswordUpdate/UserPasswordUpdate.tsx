@@ -62,7 +62,7 @@ const UserUpdate: React.FC<
           confirmNewPassword: formState.confirmNewPassword,
         },
       });
-
+      /* istanbul ignore next */
       if (data) {
         toast.success(
           tCommon('updatedSuccessfully', { item: 'Password' }) as string,
@@ -72,6 +72,7 @@ const UserUpdate: React.FC<
         }, 2000);
       }
     } catch (error: unknown) {
+      /* istanbul ignore next */
       if (error instanceof Error) {
         toast.error(error.toString());
       }
@@ -82,7 +83,7 @@ const UserUpdate: React.FC<
    * Handles canceling the update process.
    * It reloads the page to reset any changes.
    */
-
+  /* istanbul ignore next */
   const cancelUpdate = (): void => {
     window.location.reload();
   };

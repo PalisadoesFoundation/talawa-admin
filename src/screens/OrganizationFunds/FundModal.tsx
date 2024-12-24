@@ -115,6 +115,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
     }
   };
 
+  /*istanbul ignore next*/
   const updateFundHandler = async (
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {

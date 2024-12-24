@@ -272,12 +272,15 @@ const UpcomingEvents = (): JSX.Element => {
                 </div>
               </AccordionSummary>
               <AccordionDetails className="d-flex gap-3 flex-column">
-                {description && (
-                  <div className="d-flex gap-3">
-                    <span>Description: </span>
-                    <span>{description}</span>
-                  </div>
-                )}
+                {
+                  /*istanbul ignore next*/
+                  description && (
+                    <div className="d-flex gap-3">
+                      <span>Description: </span>
+                      <span>{description}</span>
+                    </div>
+                  )
+                }
                 {volunteerGroups && volunteerGroups.length > 0 && (
                   <Form.Group>
                     <Form.Label

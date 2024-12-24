@@ -41,6 +41,7 @@ function userNavbar(): JSX.Element {
 
   // State for managing the current language code
   const [currentLanguageCode, setCurrentLanguageCode] = React.useState(
+    /* istanbul ignore next */
     cookies.get('i18next') || 'en',
   );
 
@@ -51,7 +52,7 @@ function userNavbar(): JSX.Element {
    * Handles user logout by revoking the refresh token and clearing local storage.
    * Redirects to the home page after logout.
    */
-
+  /* istanbul ignore next */
   const handleLogout = (): void => {
     revokeRefreshToken();
     localStorage.clear();

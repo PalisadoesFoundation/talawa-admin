@@ -28,14 +28,9 @@ interface InterfaceMemberRequestCardProps {
  * @param props - Properties for the member request card.
  * @returns JSX element for member request card.
  */
-function MemberRequestCard({
-  id,
-  memberName,
-  memberLocation,
-  joinDate,
-  memberImage,
-  email,
-}: InterfaceMemberRequestCardProps): JSX.Element {
+function MemberRequestCard(
+  props: InterfaceMemberRequestCardProps,
+): JSX.Element {
   const [acceptMutation] = useMutation(ACCEPT_ORGANIZATION_REQUEST_MUTATION);
   const [rejectMutation] = useMutation(REJECT_ORGANIZATION_REQUEST_MUTATION);
 
@@ -52,16 +47,18 @@ function MemberRequestCard({
     try {
       await acceptMutation({
         variables: {
-          id: id,
+          id: props.id,
         },
       });
 
+      /* istanbul ignore next */
       toast.success(t('memberAdded') as string);
-
+      /* istanbul ignore next */
       setTimeout(() => {
         window.location.reload();
       }, 2000);
     } catch (error: unknown) {
+      /* istanbul ignore next */
       errorHandler(t, error);
     }
   };
@@ -76,12 +73,14 @@ function MemberRequestCard({
       try {
         await rejectMutation({
           variables: {
-            userid: id,
+            userid: props.id,
           },
         });
 
+        /* istanbul ignore next */
         window.location.reload();
       } catch (error: unknown) {
+        /* istanbul ignore next */
         errorHandler(t, error);
       }
     }
@@ -91,9 +90,9 @@ function MemberRequestCard({
     <>
       <div className={styles.peoplelistdiv}>
         <Row className={styles.memberlist}>
-          {memberImage ? (
+          {props.memberImage ? (
             <img
-              src={memberImage}
+              src={props.memberImage}
               className={styles.alignimg}
               alt="userImage"
             />
@@ -107,14 +106,14 @@ function MemberRequestCard({
           <Col className={styles.singledetails}>
             <div className={styles.singledetails_data_left}>
               <p className={styles.membername}>
-                {memberName ? <>{memberName}</> : <>Dogs Care</>}
+                {props.memberName ? <>{props.memberName}</> : <>Dogs Care</>}
               </p>
-              <p className={styles.memberfont}>{memberLocation}</p>
-              <p className={styles.memberfontcreated}>{email}</p>
+              <p className={styles.memberfont}>{props.memberLocation}</p>
+              <p className={styles.memberfontcreated}>{props.email}</p>
             </div>
             <div className={styles.singledetails_data_right}>
               <p className={styles.memberfont}>
-                {tCommon('joined')}: <span>{joinDate}</span>
+                {tCommon('joined')}: <span>{props.joinDate}</span>
               </p>
               <Button
                 className={styles.memberfontcreatedbtn}

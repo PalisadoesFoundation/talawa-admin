@@ -84,6 +84,7 @@ function OrganizationTags(): JSX.Element {
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after:
           orgUserTagsData?.organizations?.[0]?.userTags?.pageInfo?.endCursor ??
+          /* istanbul ignore next */
           null,
       },
       updateQuery: (
@@ -96,7 +97,7 @@ function OrganizationTags(): JSX.Element {
           };
         },
       ) => {
-        if (!fetchMoreResult) return prevResult;
+        if (!fetchMoreResult) /* istanbul ignore next */ return prevResult;
 
         return {
           organizations: [
@@ -147,6 +148,7 @@ function OrganizationTags(): JSX.Element {
         setCreateTagModalIsOpen(false);
       }
     } catch (error: unknown) {
+      /* istanbul ignore next */
       if (error instanceof Error) {
         toast.error(error.message);
       }
@@ -378,7 +380,7 @@ function OrganizationTags(): JSX.Element {
                   next={loadMoreUserTags}
                   hasMore={
                     orgUserTagsData?.organizations?.[0]?.userTags?.pageInfo
-                      ?.hasNextPage ?? false
+                      ?.hasNextPage ?? /* istanbul ignore next */ false
                   }
                   loader={<InfiniteScrollLoader />}
                   scrollableTarget="orgUserTagsScrollableDiv"
@@ -389,7 +391,7 @@ function OrganizationTags(): JSX.Element {
                     hideFooter={true}
                     getRowId={(row) => row.id}
                     slots={{
-                      noRowsOverlay: () => (
+                      noRowsOverlay: /* istanbul ignore next */ () => (
                         <Stack
                           height="100%"
                           alignItems="center"

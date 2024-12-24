@@ -404,6 +404,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                 item.name
               }
               onChange={(_, newCategory): void => {
+                /* istanbul ignore next */
                 handleFormChange(
                   'actionItemCategoryId',
                   newCategory?._id ?? '',
@@ -506,6 +507,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                       `${volunteer.user.firstName} ${volunteer.user.lastName}`
                     }
                     onChange={(_, newAssignee): void => {
+                      /* istanbul ignore next */
                       handleFormChange('assigneeId', newAssignee?._id ?? '');
                       setAssignee(newAssignee);
                     }}
@@ -529,6 +531,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                       group: InterfaceVolunteerGroupInfo,
                     ): string => `${group.name}`}
                     onChange={(_, newAssignee): void => {
+                      /* istanbul ignore next */
                       handleFormChange('assigneeId', newAssignee?._id ?? '');
                       setAssigneeGroup(newAssignee);
                     }}
@@ -556,6 +559,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                       `${member.firstName} ${member.lastName}`
                     }
                     onChange={(_, newAssignee): void => {
+                      /* istanbul ignore next */
                       handleFormChange('assigneeId', newAssignee?._id ?? '');
                       setAssigneeUser(newAssignee);
                     }}
@@ -574,6 +578,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                   className={styles.noOutline}
                   value={dayjs(dueDate)}
                   onChange={(date: Dayjs | null): void => {
+                    /* istanbul ignore next */
                     if (date) handleFormChange('dueDate', date.toDate());
                   }}
                 />

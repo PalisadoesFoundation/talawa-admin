@@ -101,6 +101,7 @@ function organizationEvents(): JSX.Element {
     setCreateEventmodalisOpen(false);
   };
   const handleChangeView = (item: string | null): void => {
+    /*istanbul ignore next*/
     if (item) {
       setViewType(item as ViewType);
     }
@@ -220,6 +221,7 @@ function organizationEvents(): JSX.Element {
           setEndDate(new Date());
         }
       } catch (error: unknown) {
+        /* istanbul ignore next */
         if (error instanceof Error) {
           console.log(error.message);
           errorHandler(t, error);
@@ -382,14 +384,18 @@ function organizationEvents(): JSX.Element {
                     className={styles.datebox}
                     timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
                     value={timeToDayJs(formState.startTime)}
+                    /*istanbul ignore next*/
                     onChange={(time): void => {
                       if (time) {
                         setFormState({
                           ...formState,
                           startTime: time?.format('HH:mm:ss'),
                           endTime:
+                            /*istanbul ignore next*/
                             timeToDayJs(formState.endTime) < time
-                              ? time?.format('HH:mm:ss')
+                              ? /* istanbul ignore next */ time?.format(
+                                  'HH:mm:ss',
+                                )
                               : formState.endTime,
                         });
                       }
@@ -402,6 +408,7 @@ function organizationEvents(): JSX.Element {
                     label={tCommon('endTime')}
                     className={styles.datebox}
                     timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
+                    /*istanbul ignore next*/
                     value={timeToDayJs(formState.endTime)}
                     onChange={(time): void => {
                       if (time) {

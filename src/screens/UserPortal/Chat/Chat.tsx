@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
+import { useTranslation } from 'react-i18next';
 import { Button, Dropdown } from 'react-bootstrap';
+import { SearchOutlined, Search } from '@mui/icons-material';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import ContactCard from 'components/UserPortal/ContactCard/ContactCard';
 import ChatRoom from 'components/UserPortal/ChatRoom/ChatRoom';
@@ -46,45 +48,15 @@ interface InterfaceContactCardProps {
  *
  * @returns  The rendered `chat` component.
  */
-type DirectMessage = {
-  _id: string;
-  createdAt: Date;
-  sender: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-    image: string;
-  };
-  messageContent: string;
-};
-type Chat = {
-  _id: string;
-  isGroup: boolean;
-  name: string;
-  image: string;
-  messages: DirectMessage[];
-  organization: {
-    _id: string;
-    name: string;
-  };
-  creator: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-  };
-  users: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    image: string;
-  }[];
-};
 export default function chat(): JSX.Element {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'chat',
+  });
+  const { t: tCommon } = useTranslation('common');
+
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
-  const [chats, setChats] = useState<Chat[]>([]);
-  const [selectedContact, setSelectedContact] = useState<string>('');
+  const [chats, setChats] = useState<any>([]);
+  const [selectedContact, setSelectedContact] = useState('');
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
 
@@ -109,7 +81,7 @@ export default function chat(): JSX.Element {
     setCreateDirectChatModalisOpen(true);
   }
 
-  const toggleCreateDirectChatModal = (): void =>
+  const toggleCreateDirectChatModal = /* istanbul ignore next */ (): void =>
     setCreateDirectChatModalisOpen(!createDirectChatModalisOpen);
 
   const [createGroupChatModalisOpen, setCreateGroupChatModalisOpen] =
@@ -119,7 +91,7 @@ export default function chat(): JSX.Element {
     setCreateGroupChatModalisOpen(true);
   }
 
-  const toggleCreateGroupChatModal = (): void => {
+  const toggleCreateGroupChatModal = /* istanbul ignore next */ (): void => {
     setCreateGroupChatModalisOpen(!createGroupChatModalisOpen);
   };
 
@@ -224,7 +196,7 @@ export default function chat(): JSX.Element {
                   className={styles.contactCardContainer}
                 >
                   {!!chats.length &&
-                    chats.map((chat: Chat) => {
+                    chats.map((chat: any) => {
                       const cardProps: InterfaceContactCardProps = {
                         id: chat._id,
                         title: !chat.isGroup

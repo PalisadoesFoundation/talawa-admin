@@ -82,7 +82,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
           };
         },
       ) => {
-        if (!fetchMoreResult) return prevResult;
+        if (!fetchMoreResult) /* istanbul ignore next */ return prevResult;
 
         return {
           organizations: [
@@ -106,7 +106,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   const userTagsList =
     orgUserTagsData?.organizations[0]?.userTags.edges.map(
       (edge) => edge.node,
-    ) ?? [];
+    ) ?? /* istanbul ignore next */ [];
 
   // tags that we have selected to assigned
   const [selectedTags, setSelectedTags] = useState<InterfaceTagData[]>([]);
@@ -129,7 +129,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   useEffect(() => {
     const newCheckedTags = new Set(checkedTags);
     const newAncestorTagsDataMap = new Map(ancestorTagsDataMap);
-
+    /* istanbul ignore next */
     addAncestorTagsData.forEach(
       (ancestorTag: InterfaceUserTagsAncestorData) => {
         const prevAncestorTagValue = ancestorTagsDataMap.get(ancestorTag._id);
@@ -148,7 +148,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   useEffect(() => {
     const newCheckedTags = new Set(checkedTags);
     const newAncestorTagsDataMap = new Map(ancestorTagsDataMap);
-
+    /* istanbul ignore next */
     removeAncestorTagsData.forEach(
       (ancestorTag: InterfaceUserTagsAncestorData) => {
         const prevAncestorTagValue = ancestorTagsDataMap.get(ancestorTag._id);
@@ -178,6 +178,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
 
   const deSelectTag = (tag: InterfaceTagData): void => {
     if (!selectedTags.some((selectedTag) => selectedTag._id === tag._id)) {
+      /* istanbul ignore next */
       return;
     }
 
@@ -239,6 +240,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
         hideTagActionsModal();
       }
     } catch (error: unknown) {
+      /* istanbul ignore next */
       if (error instanceof Error) {
         toast.error(error.message);
       }

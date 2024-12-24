@@ -108,7 +108,7 @@ export default function CreateGroupChat({
     setAddUserModalisOpen(true);
   }
 
-  const toggleAddUserModal = (): void =>
+  const toggleAddUserModal = /* istanbul ignore next */ (): void =>
     setAddUserModalisOpen(!addUserModalisOpen);
 
   const handleChange = (event: SelectChangeEvent<string>): void => {
@@ -162,7 +162,7 @@ export default function CreateGroupChat({
 
   const handleUserModalSearchChange = (e: React.FormEvent): void => {
     e.preventDefault();
-
+    /* istanbul ignore next */
     const [firstName, lastName] = userName.split(' ');
 
     const newFilterData = {

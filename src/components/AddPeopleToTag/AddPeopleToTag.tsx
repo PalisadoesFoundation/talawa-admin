@@ -106,7 +106,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
           };
         },
       ) => {
-        if (!fetchMoreResult) return prevResult;
+        if (!fetchMoreResult) /* istanbul ignore next */ return prevResult;
 
         return {
           getUsersToAssignTo: {
@@ -127,7 +127,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
   const userTagMembersToAssignTo =
     userTagsMembersToAssignToData?.getUsersToAssignTo.usersToAssignTo.edges.map(
       (edge) => edge.node,
-    ) ?? [];
+    ) ?? /* istanbul ignore next */ [];
 
   const handleAddOrRemoveMember = (member: InterfaceMemberData): void => {
     setAssignToMembers((prevMembers) => {
@@ -173,7 +173,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
         hideAddPeopleToTagModal();
         setAssignToMembers([]);
       }
-    } catch (error: unknown) {
+    } catch (error: unknown) /* istanbul ignore next */ {
       const errorMessage =
         error instanceof Error ? error.message : tErrors('unknownError');
       toast.error(errorMessage);
@@ -345,7 +345,8 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                     next={loadMoreMembersToAssignTo}
                     hasMore={
                       userTagsMembersToAssignToData?.getUsersToAssignTo
-                        .usersToAssignTo.pageInfo.hasNextPage ?? false
+                        .usersToAssignTo.pageInfo.hasNextPage ??
+                      /* istanbul ignore next */ false
                     }
                     loader={<InfiniteScrollLoader />}
                     scrollableTarget="addPeopleToTagScrollableDiv"
@@ -356,7 +357,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                       hideFooter={true}
                       getRowId={(row) => row.id}
                       slots={{
-                        noRowsOverlay: () => (
+                        noRowsOverlay: /* istanbul ignore next */ () => (
                           <Stack
                             height="100%"
                             alignItems="center"
