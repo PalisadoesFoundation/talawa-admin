@@ -22,7 +22,6 @@ import type { ApolloLink } from '@apollo/client';
 import { MOCKS, EMPTY_MOCKS, ERROR_MOCKS } from './Groups.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
-import '@testing-library/jest-dom';
 
 const { setItem } = useLocalStorage();
 
