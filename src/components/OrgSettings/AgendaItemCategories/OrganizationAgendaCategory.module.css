@@ -13,16 +13,32 @@
   gap: 10px;
 }
 
-.btnsContainer .btnsBlock {
-  display: flex;
-  gap: 10px;
+.btnsContainer .input {
+  /* Styling for the input field */
+  flex: 1;
+  min-width: 18rem;
+  position: relative;
 }
 
-.btnsContainer button {
-  display: flex;
-  align-items: center;
+.btnsContainer input {
+  /* Styling for the input border */
+  outline: 1px solid var(--bs-gray-400);
 }
 
+.btnsContainer .input button {
+  /* Styling for the button in the input field */
+  width: 52px;
+}
+
+.inputField {
+  background-color: white;
+  box-shadow: 0 1px 1px #31bb6b;
+}
+
+.inputField > button {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
 .container {
   min-height: 100vh;
 }
