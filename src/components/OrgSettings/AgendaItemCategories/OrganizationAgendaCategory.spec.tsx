@@ -7,14 +7,13 @@ import {
   waitForElementToBeRemoved,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import 'jest-localstorage-mock';
 import { MockedProvider } from '@apollo/client/testing';
-import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import i18n from 'utils/i18nForTest';
 import { toast } from 'react-toastify';
+import { vi } from 'vitest';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
@@ -28,15 +27,15 @@ import {
 } from './OrganizationAgendaCategoryErrorMocks';
 import { MOCKS } from './OrganizationAgendaCategoryMocks';
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual('react-router-dom')),
   useParams: () => ({ orgId: '123' }),
 }));
 
@@ -88,6 +87,21 @@ describe('Testing Agenda Categories Component', () => {
     await waitFor(() => {
       expect(getByText(translations.createAgendaCategory)).toBeInTheDocument();
     });
+  });
+  test('displays loading state', async () => {
+    const { getByTestId } = render(
+      <MockedProvider mocks={[]} addTypename={false}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18n}>
+              {<OrganizationAgendaCategory orgId="123" />}
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    expect(getByTestId('spinner-wrapper')).toBeInTheDocument();
   });
 
   test('render error component on unsuccessful agenda category list query', async () => {
@@ -191,47 +205,47 @@ describe('Testing Agenda Categories Component', () => {
     });
   });
 
-  // test('toasts error on unsuccessful creation', async () => {
-  //   render(
-  //     <MockedProvider addTypename={false} link={link3}>
-  //       <Provider store={store}>
-  //         <BrowserRouter>
-  //           <LocalizationProvider dateAdapter={AdapterDayjs}>
-  //             <I18nextProvider i18n={i18n}>
-  //               {<OrganizationAgendaCategory />}
-  //             </I18nextProvider>
-  //           </LocalizationProvider>
-  //         </BrowserRouter>
-  //       </Provider>
-  //     </MockedProvider>,
-  //   );
+  test('toasts error on unsuccessful creation', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link3}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <I18nextProvider i18n={i18n}>
+                {<OrganizationAgendaCategory orgId="123" />}
+              </I18nextProvider>
+            </LocalizationProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
 
-  //   await wait();
+    await wait();
 
-  //   await waitFor(() => {
-  //     expect(screen.getByTestId('createAgendaCategoryBtn')).toBeInTheDocument();
-  //   });
-  //   userEvent.click(screen.getByTestId('createAgendaCategoryBtn'));
+    await waitFor(() => {
+      expect(screen.getByTestId('createAgendaCategoryBtn')).toBeInTheDocument();
+    });
+    userEvent.click(screen.getByTestId('createAgendaCategoryBtn'));
 
-  //   await waitFor(() => {
-  //     return expect(
-  //       screen.findByTestId('createAgendaCategoryModalCloseBtn'),
-  //     ).resolves.toBeInTheDocument();
-  //   });
+    await waitFor(() => {
+      return expect(
+        screen.findByTestId('createAgendaCategoryModalCloseBtn'),
+      ).resolves.toBeInTheDocument();
+    });
 
-  //   userEvent.type(
-  //     screen.getByPlaceholderText(translations.name),
-  //     formData.name,
-  //   );
+    userEvent.type(
+      screen.getByPlaceholderText(translations.name),
+      formData.name,
+    );
 
-  //   userEvent.type(
-  //     screen.getByPlaceholderText(translations.description),
-  //     formData.description,
-  //   );
-  //   userEvent.click(screen.getByTestId('createAgendaCategoryFormSubmitBtn'));
+    userEvent.type(
+      screen.getByPlaceholderText(translations.description),
+      formData.description,
+    );
+    userEvent.click(screen.getByTestId('createAgendaCategoryFormSubmitBtn'));
 
-  //   await waitFor(() => {
-  //     expect(toast.error).toBeCalledWith();
-  //   });
-  // });
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
+    });
+  });
 });
