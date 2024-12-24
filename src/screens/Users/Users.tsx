@@ -252,12 +252,9 @@ const Users = (): JSX.Element => {
           setLoadUnqUsers(mergedUsers.length - uniqueUsers.length);
         } else setLoadUnqUsers(0);
 
+        // Load more users will always run after the initial request, hence prev is not going to be undefined
         if (prev?.users) {
           if (uniqueUsers.length - prev?.users.length < perPageResult) {
-            setHasMore(false);
-          }
-        } else {
-          if (uniqueUsers.length < perPageResult) {
             setHasMore(false);
           }
         }
