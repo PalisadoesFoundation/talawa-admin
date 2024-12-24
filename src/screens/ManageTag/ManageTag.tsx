@@ -292,7 +292,7 @@ function ManageTag(): JSX.Element {
       minWidth: 100,
       align: 'center',
       headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaders}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
         return <div>{params.row.id}</div>;
@@ -304,7 +304,7 @@ function ManageTag(): JSX.Element {
       flex: 2,
       minWidth: 100,
       sortable: false,
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaders}`,
       renderCell: (params: GridCellParams) => {
         return (
           <div data-testid="memberName">
@@ -321,7 +321,7 @@ function ManageTag(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeaders}`,
       renderCell: (params: GridCellParams) => {
         return (
           <div>
@@ -494,7 +494,7 @@ function ManageTag(): JSX.Element {
                           ),
                       }}
                       sx={dataGridStyle}
-                      getRowClassName={() => `${styles.rowBackground}`}
+                      getRowClassName={() => `${styles.rowBackgrounds}`}
                       autoHeight
                       rowHeight={65}
                       rows={userTagAssignedMembers?.map(
