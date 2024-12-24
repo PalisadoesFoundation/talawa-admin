@@ -388,7 +388,7 @@ function organizationActionItems(): JSX.Element {
           </Button>
         </div>
         <div className="md:d-flex gap-3 mb-1">
-          <div className="d-flex justify-space-between align-items-center gap-3 overflow-y-auto">
+          <div className="d-flex justify-space-between align-items-center gap-3 overflow-visible">
             <Dropdown>
               <Dropdown.Toggle
                 variant="success"
