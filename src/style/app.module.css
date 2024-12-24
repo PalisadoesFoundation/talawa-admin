@@ -976,12 +976,12 @@ input[type='radio']:checked + label {
     margin-bottom: 0;
     display: flex;
     flex-direction: column;
+    position: relative;
   }
 
   .createAgendaItemButton {
-    position: absolute;
-    top: 1rem;
-    right: 2rem;
+    margin-left: auto;
+    margin-bottom: 1rem;
   }
 }
 @media (max-width: 1020px) {
