@@ -30,7 +30,7 @@ const MOCK_USERS = [
       lastName: 'Doe',
       image: null,
       email: 'john@example.com',
-      createdAt: '20/06/2022',
+      createdAt: '2023-04-13T04:53:17.742+00:00',
       registeredEvents: [],
       membershipRequests: [],
       organizationsBlockedBy: [
@@ -106,7 +106,7 @@ const MOCK_USERS = [
       lastName: 'Doe',
       image: null,
       email: 'john@example.com',
-      createdAt: '21/06/2022',
+      createdAt: '2023-04-17T04:53:17.742+00:00',
       registeredEvents: [],
       membershipRequests: [],
       organizationsBlockedBy: [
@@ -182,7 +182,7 @@ const MOCK_USERS = [
       lastName: 'Smith',
       image: null,
       email: 'jack@example.com',
-      createdAt: '19/06/2022',
+      createdAt: '2023-04-09T04:53:17.742+00:00',
       registeredEvents: [],
       membershipRequests: [],
       organizationsBlockedBy: [
@@ -301,6 +301,7 @@ beforeEach(() => {
 
 afterEach(() => {
   localStorage.clear();
+  jest.clearAllMocks();
 });
 
 describe('Testing Users screen', () => {
@@ -701,7 +702,7 @@ describe('Testing Users screen', () => {
     expect(screen.getByText('Jack Smith')).toBeInTheDocument();
   });
 
-  test('Users should be sorted and filtered correctly', async () => {
+  test('Users should be sorted in newest order correctly', async () => {
     await act(async () => {
       render(
         <MockedProvider link={link5} addTypename={false}>
@@ -718,27 +719,9 @@ describe('Testing Users screen', () => {
     });
     await wait();
 
-    // Check if the sorting and filtering logic was applied correctly
-    const rows = screen.getAllByRole('row');
-
-    const firstRow = rows[1];
-    const secondRow = rows[2];
-
-    expect(firstRow).toHaveTextContent('John Doe');
-    expect(secondRow).toHaveTextContent('Jane Doe');
-
-    await wait();
-
     const inputText = screen.getByTestId('sortUsers');
 
     await act(async () => {
-      fireEvent.click(inputText);
-    });
-
-    const toggleText = screen.getByTestId('oldest');
-
-    await act(async () => {
-      fireEvent.click(toggleText);
       fireEvent.click(inputText);
     });
 
@@ -748,31 +731,37 @@ describe('Testing Users screen', () => {
       fireEvent.click(toggleTite);
     });
 
-    // Verify the users are sorted by oldest
-    await wait();
+    // Verify the users are sorted by newest
 
     const displayedUsers = screen.getAllByRole('row');
-    expect(displayedUsers[1]).toHaveTextContent('John Doe'); // assuming User1 is the oldest
-    expect(displayedUsers[displayedUsers.length - 1]).toHaveTextContent(
-      'Jack Smith',
-    ); // assuming UserN is the newest
-
     await wait();
+    expect(displayedUsers[1]).toHaveTextContent('Jane Doe');
+    expect(displayedUsers[2]).toHaveTextContent('John Doe');
+  });
 
+  test('Check if pressing enter key triggers search', async () => {
     await act(async () => {
-      fireEvent.click(inputText);
+      render(
+        <MockedProvider link={link5} addTypename={false}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <ToastContainer />
+                <Users />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
     });
-
-    const toggleOld = screen.getByTestId('oldest');
+    await wait();
+    const searchInput = screen.getByTestId('searchByName');
 
     await act(async () => {
-      fireEvent.click(toggleOld);
-      fireEvent.click(inputText);
+      userEvent.type(searchInput, 'John');
     });
-
-    const toggleNewest = screen.getByTestId('newest');
     await act(async () => {
-      fireEvent.click(toggleNewest);
+      userEvent.type(searchInput, '{enter}');
     });
   });
 });

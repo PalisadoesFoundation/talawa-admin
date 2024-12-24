@@ -122,13 +122,14 @@ const Users = (): JSX.Element => {
     if (!usersData) {
       return;
     }
-    if (usersData.users.length < perPageResult) {
-      setHasMore(false);
-    }
     if (usersData && usersData.users) {
+      // console.log(sortingOption)
       let newDisplayedUsers = sortUsers(usersData.users, sortingOption);
       newDisplayedUsers = filterUsers(newDisplayedUsers, filteringOption);
       setDisplayedUsers(newDisplayedUsers);
+      if (newDisplayedUsers.length < perPageResult) {
+        setHasMore(false);
+      }
     }
   }, [usersData, sortingOption, filteringOption]);
 
@@ -212,8 +213,7 @@ const Users = (): JSX.Element => {
     setIsLoadingMore(true);
     fetchMore({
       variables: {
-        skip: usersData?.users.length || 0,
-        userType: 'ADMIN',
+        skip: displayedUsers.length || 0,
         filter: searchByName,
         order: sortingOption === 'newest' ? 'createdAt_DESC' : 'createdAt_ASC',
       },
@@ -230,17 +230,24 @@ const Users = (): JSX.Element => {
         if (fetchMoreResult.users.length < perPageResult) {
           setHasMore(false);
         }
-        return {
-          users: [...(prev?.users || []), ...fetchMoreResult.users],
-        };
+        const mergedUsers = [...(prev?.users || []), ...fetchMoreResult.users];
+
+        const uniqueUsers = Array.from(
+          new Map(mergedUsers.map((user) => [user.user._id, user])).values(),
+        );
+
+        return { users: uniqueUsers };
       },
     });
   };
 
   const handleSorting = (option: string): void => {
-    setDisplayedUsers([]);
+    if (option === sortingOption) {
+      return;
+    }
     setHasMore(true);
     setSortingOption(option);
+    setDisplayedUsers([]);
   };
 
   const sortUsers = (
@@ -256,19 +263,22 @@ const Users = (): JSX.Element => {
           new Date(a.user.createdAt).getTime(),
       );
       return sortedUsers;
-    } else {
-      sortedUsers.sort(
-        (a, b) =>
-          new Date(a.user.createdAt).getTime() -
-          new Date(b.user.createdAt).getTime(),
-      );
-      return sortedUsers;
     }
+    sortedUsers.sort(
+      (a, b) =>
+        new Date(a.user.createdAt).getTime() -
+        new Date(b.user.createdAt).getTime(),
+    );
+    return sortedUsers;
   };
 
   const handleFiltering = (option: string): void => {
+    if (option === filteringOption) {
+      return;
+    }
     setDisplayedUsers([]);
     setFilteringOption(option);
+    setHasMore(true);
   };
 
   const filterUsers = (
