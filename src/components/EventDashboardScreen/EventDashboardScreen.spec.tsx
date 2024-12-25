@@ -1,8 +1,8 @@
 import React from 'react';
+import { describe, it, expect, vi } from 'vitest';
 import { MockedProvider } from '@apollo/react-testing';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
-import 'jest-location-mock';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
@@ -11,27 +11,32 @@ import EventDashboardScreen from './EventDashboardScreen';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import useLocalStorage from 'utils/useLocalstorage';
+
 const { setItem } = useLocalStorage();
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
-  value: jest.fn().mockImplementation((query) => ({
+  value: vi.fn().mockImplementation((query) => ({
     matches: false,
     media: query,
     onchange: null,
-    addListener: jest.fn(), // Deprecated
-    removeListener: jest.fn(), // Deprecated
-    addEventListener: jest.fn(),
-    removeEventListener: jest.fn(),
-    dispatchEvent: jest.fn(),
+    addListener: vi.fn(), // Deprecated
+    removeListener: vi.fn(), // Deprecated
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
   })),
 });
 
 let mockID: string | undefined = '123';
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({ orgId: mockID }),
-}));
+
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useParams: () => ({ orgId: mockID }),
+  };
+});
 
 const MOCKS = [
   {
@@ -86,7 +91,7 @@ const clickToggleMenuBtn = (toggleButton: HTMLElement): void => {
 };
 
 describe('Testing LeftDrawer in OrganizationScreen', () => {
-  test('should be redirected to / if IsLoggedIn is false', async () => {
+  it('should be redirected to / if IsLoggedIn is false', async () => {
     setItem('IsLoggedIn', false);
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -101,7 +106,7 @@ describe('Testing LeftDrawer in OrganizationScreen', () => {
     );
     expect(window.location.pathname).toEqual('/');
   });
-  test('should be redirected to / if ss is false', async () => {
+  it('should be redirected to / if ss is false', async () => {
     setItem('IsLoggedIn', true);
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -115,7 +120,7 @@ describe('Testing LeftDrawer in OrganizationScreen', () => {
       </MockedProvider>,
     );
   });
-  test('Testing LeftDrawer in page functionality', async () => {
+  it('Testing LeftDrawer in page functionality', async () => {
     setItem('IsLoggedIn', true);
     setItem('AdminFor', [
       { _id: '6637904485008f171cf29924', __typename: 'Organization' },
@@ -148,7 +153,7 @@ describe('Testing LeftDrawer in OrganizationScreen', () => {
     expect(icon).toHaveClass('fa fa-angle-double-right');
   });
 
-  test('should be redirected to / if orgId is undefined', async () => {
+  it('should be redirected to / if orgId is undefined', async () => {
     mockID = undefined;
     render(
       <MockedProvider addTypename={false} link={link}>
