@@ -200,8 +200,11 @@ jobs:
           python-version: 3.9
       
       - name: Run Python script
+        if: steps.changed-files.outputs.only_changed != 'true'
+        env: 
+          CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
         run: |
-          python .github/workflows/code_coverage_disable_check.py
+          python .github/workflows/code_coverage_disable_check.py --directory ${CHANGED_FILES}
 
   Test-Application:
     name: Test Application
