@@ -449,6 +449,7 @@ export default function settings(): JSX.Element {
                           handleFieldChange('birthDate', e.target.value)
                         }
                         className={`${styles.cardControl}`}
+                        max={new Date().toISOString().split('T')[0]}
                       />
                     </Col>
                   </Row>
