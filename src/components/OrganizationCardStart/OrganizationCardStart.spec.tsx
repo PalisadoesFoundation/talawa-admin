@@ -1,9 +1,10 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import OrganizationCardStart from './OrganizationCardStart';
+import { describe, expect } from 'vitest';
 
 describe('Testing the Organization Cards', () => {
-  test('should render props and text elements test for the page component', () => {
+  it('should render props and text elements test for the page component', () => {
     const props = {
       id: '123',
       image: 'https://via.placeholder.com/80',
@@ -15,7 +16,7 @@ describe('Testing the Organization Cards', () => {
     expect(screen.getByText(props.name)).toBeInTheDocument();
   });
 
-  test('Should render text elements when props value is not passed', () => {
+  it('Should render text elements when props value is not passed', () => {
     const props = {
       id: '123',
       image: '',
