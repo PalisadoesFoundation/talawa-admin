@@ -11,7 +11,6 @@ import {
   waitForElementToBeRemoved,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
@@ -22,6 +21,7 @@ import i18n from 'utils/i18nForTest';
 import ManageTag from './ManageTag';
 import { MOCKS, MOCKS_ERROR_ASSIGNED_MEMBERS } from './ManageTagMocks';
 import { type ApolloLink } from '@apollo/client';
+import { vi, beforeEach, afterEach, expect, it } from 'vitest';
 
 const translations = {
   ...JSON.parse(
@@ -42,21 +42,21 @@ async function wait(ms = 500): Promise<void> {
   });
 }
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    info: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    info: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
 /* eslint-disable @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports */
-jest.mock('../../components/AddPeopleToTag/AddPeopleToTag', () => {
-  return require('./ManageTagMockComponents/MockAddPeopleToTag').default;
+vi.mock('../../components/AddPeopleToTag/AddPeopleToTag', async () => {
+  return await import('./ManageTagMockComponents/MockAddPeopleToTag');
 });
 
-jest.mock('../../components/TagActions/TagActions', () => {
-  return require('./ManageTagMockComponents/MockTagActions').default;
+vi.mock('../../components/TagActions/TagActions', async () => {
+  return await import('./ManageTagMockComponents/MockTagActions');
 });
 /* eslint-enable @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports */
 
@@ -93,18 +93,17 @@ const renderManageTag = (link: ApolloLink): RenderResult => {
 
 describe('Manage Tag Page', () => {
   beforeEach(() => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: 'orgId' }),
+    vi.mock('react-router-dom', async () => ({
+      ...(await vi.importActual('react-router-dom')),
     }));
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     cleanup();
   });
 
-  test('Component loads correctly', async () => {
+  it('Component loads correctly', async () => {
     const { getByText } = renderManageTag(link);
 
     await wait();
@@ -114,7 +113,7 @@ describe('Manage Tag Page', () => {
     });
   });
 
-  test('renders error component on unsuccessful userTag assigned members query', async () => {
+  it('renders error component on unsuccessful userTag assigned members query', async () => {
     const { queryByText } = renderManageTag(link2);
 
     await wait();
@@ -124,7 +123,7 @@ describe('Manage Tag Page', () => {
     });
   });
 
-  test('opens and closes the add people to tag modal', async () => {
+  it('opens and closes the add people to tag modal', async () => {
     renderManageTag(link);
 
     await waitFor(() => {
@@ -146,7 +145,7 @@ describe('Manage Tag Page', () => {
     });
   });
 
-  test('opens and closes the unassign tag modal', async () => {
+  it('opens and closes the unassign tag modal', async () => {
     renderManageTag(link);
 
     await wait();
@@ -168,7 +167,7 @@ describe('Manage Tag Page', () => {
     );
   });
 
-  test('opens and closes the assignToTags modal', async () => {
+  it('opens and closes the assignToTags modal', async () => {
     renderManageTag(link);
 
     // Wait for the assignToTags button to be present
@@ -193,7 +192,7 @@ describe('Manage Tag Page', () => {
     });
   });
 
-  test('opens and closes the removeFromTags modal', async () => {
+  it('opens and closes the removeFromTags modal', async () => {
     renderManageTag(link);
 
     // Wait for the removeFromTags button to be present
@@ -218,7 +217,7 @@ describe('Manage Tag Page', () => {
     });
   });
 
-  test('opens and closes the edit tag modal', async () => {
+  it('opens and closes the edit tag modal', async () => {
     renderManageTag(link);
 
     await wait();
@@ -240,7 +239,7 @@ describe('Manage Tag Page', () => {
     );
   });
 
-  test('opens and closes the remove tag modal', async () => {
+  it('opens and closes the remove tag modal', async () => {
     renderManageTag(link);
 
     await wait();
@@ -262,7 +261,7 @@ describe('Manage Tag Page', () => {
     );
   });
 
-  test("navigates to the member's profile after clicking the view option", async () => {
+  it("navigates to the member's profile after clicking the view option", async () => {
     renderManageTag(link);
 
     await wait();
@@ -277,7 +276,7 @@ describe('Manage Tag Page', () => {
     });
   });
 
-  test('navigates to the subTags screen after clicking the subTags option', async () => {
+  it('navigates to the subTags screen after clicking the subTags option', async () => {
     renderManageTag(link);
 
     await wait();
@@ -292,7 +291,7 @@ describe('Manage Tag Page', () => {
     });
   });
 
-  test('navigates to the manageTag screen after clicking a tag in the breadcrumbs', async () => {
+  it('navigates to the manageTag screen after clicking a tag in the breadcrumbs', async () => {
     renderManageTag(link);
 
     await wait();
@@ -309,7 +308,7 @@ describe('Manage Tag Page', () => {
     });
   });
 
-  test('navigates to organization tags screen screen after clicking tha all tags option in the breadcrumbs', async () => {
+  it('navigates to organization tags screen screen after clicking tha all tags option in the breadcrumbs', async () => {
     renderManageTag(link);
 
     await wait();
@@ -324,7 +323,7 @@ describe('Manage Tag Page', () => {
     });
   });
 
-  test('searchs for tags where the name matches the provided search input', async () => {
+  it('searchs for tags where the name matches the provided search input', async () => {
     renderManageTag(link);
 
     await wait();
@@ -345,7 +344,7 @@ describe('Manage Tag Page', () => {
     });
   });
 
-  test('fetches the tags by the sort order, i.e. latest or oldest first', async () => {
+  it('fetches the tags by the sort order, i.e. latest or oldest first', async () => {
     renderManageTag(link);
 
     await wait();
@@ -402,7 +401,7 @@ describe('Manage Tag Page', () => {
     });
   });
 
-  test('Fetches more assigned members with infinite scroll', async () => {
+  it('Fetches more assigned members with infinite scroll', async () => {
     const { getByText } = renderManageTag(link);
 
     await wait();
@@ -433,7 +432,7 @@ describe('Manage Tag Page', () => {
     });
   });
 
-  test('unassigns a tag from a member', async () => {
+  it('unassigns a tag from a member', async () => {
     renderManageTag(link);
 
     await wait();
@@ -452,7 +451,7 @@ describe('Manage Tag Page', () => {
     });
   });
 
-  test('successfully edits the tag name', async () => {
+  it('successfully edits the tag name', async () => {
     renderManageTag(link);
 
     await wait();
@@ -482,7 +481,7 @@ describe('Manage Tag Page', () => {
     });
   });
 
-  test('successfully removes the tag and redirects to orgTags page', async () => {
+  it('successfully removes the tag and redirects to orgTags page', async () => {
     renderManageTag(link);
 
     await wait();

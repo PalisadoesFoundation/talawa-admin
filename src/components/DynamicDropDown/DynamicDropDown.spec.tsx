@@ -11,11 +11,12 @@ import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import userEvent from '@testing-library/user-event';
+import { vi, expect, it } from 'vitest';
 
 describe('DynamicDropDown component', () => {
-  test('renders and handles selection correctly', async () => {
+  it('renders and handles selection correctly', async () => {
     const formData = { fieldName: 'value2' };
-    const setFormData = jest.fn();
+    const setFormData = vi.fn();
 
     render(
       <BrowserRouter>
@@ -60,10 +61,10 @@ describe('DynamicDropDown component', () => {
       expect(dropdownButton).toHaveTextContent('Label 2');
     });
   });
-  test('calls custom handleChange function when provided', async () => {
+  it('calls custom handleChange function when provided', async () => {
     const formData = { fieldName: 'value1' };
-    const setFormData = jest.fn();
-    const customHandleChange = jest.fn();
+    const setFormData = vi.fn();
+    const customHandleChange = vi.fn();
 
     render(
       <BrowserRouter>
@@ -103,9 +104,9 @@ describe('DynamicDropDown component', () => {
     );
     expect(setFormData).not.toHaveBeenCalled();
   });
-  test('handles keyboard navigation correctly', async () => {
+  it('handles keyboard navigation correctly', async () => {
     const formData = { fieldName: 'value1' };
-    const setFormData = jest.fn();
+    const setFormData = vi.fn();
 
     render(
       <BrowserRouter>
