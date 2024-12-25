@@ -4,20 +4,23 @@ import Loader from './Loader';
 import { describe, it, expect } from 'vitest';
 
 describe('Testing Loader component', () => {
-  it('should render the component properly', () => {
+  it('Component should be rendered properly', () => {
     render(<Loader />);
+
     expect(screen.getByTestId('spinner-wrapper')).toBeInTheDocument();
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
   });
 
-  it('should render the component with custom sizes', () => {
+  it('Component should render on custom sizes', () => {
     render(<Loader size="sm" />);
+
     expect(screen.getByTestId('spinner-wrapper')).toBeInTheDocument();
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
   });
 
-  it('should render the component with large size', () => {
+  it('Component should render with large size', () => {
     render(<Loader size="lg" />);
+
     expect(screen.getByTestId('spinner-wrapper')).toBeInTheDocument();
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
   });
