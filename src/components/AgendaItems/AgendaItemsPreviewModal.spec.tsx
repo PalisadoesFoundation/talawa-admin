@@ -11,6 +11,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import AgendaItemsPreviewModal from './AgendaItemsPreviewModal';
+import { describe, test, expect, vi } from 'vitest';
 
 const mockFormState = {
   title: 'Test Title',
@@ -44,10 +45,10 @@ describe('AgendaItemsPreviewModal', () => {
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <AgendaItemsPreviewModal
                   agendaItemPreviewModalIsOpen
-                  hidePreviewModal={jest.fn()}
+                  hidePreviewModal={vi.fn()}
                   formState={mockFormState}
-                  showUpdateModal={jest.fn()}
-                  toggleDeleteModal={jest.fn()}
+                  showUpdateModal={vi.fn()}
+                  toggleDeleteModal={vi.fn()}
                   t={mockT}
                 />
               </LocalizationProvider>

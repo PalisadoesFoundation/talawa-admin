@@ -3,6 +3,7 @@ import type { Operation, FetchResult } from '@apollo/client/core';
 import { Observable } from '@apollo/client/core';
 import { gql } from '@apollo/client';
 import type { DocumentNode } from 'graphql';
+import { describe, it, expect, vi } from 'vitest';
 
 const DUMMY_QUERY: DocumentNode = gql`
   query GetDummyData {
@@ -19,12 +20,12 @@ describe('Date Time Middleware Tests', () => {
         query: DUMMY_QUERY,
         operationName: 'GetDummyData',
         variables: { startDate: '2023-09-01', startTime: '12:00:00' },
-        getContext: jest.fn(() => ({})),
-        setContext: jest.fn(),
+        getContext: vi.fn(() => ({})),
+        setContext: vi.fn(),
         extensions: {},
       };
 
-      const forward = jest.fn(
+      const forward = vi.fn(
         (op) =>
           new Observable<FetchResult>((observer) => {
             expect(op.variables['startDate']).toBe('2023-09-01');
@@ -55,12 +56,12 @@ describe('Date Time Middleware Tests', () => {
         query: DUMMY_QUERY,
         operationName: 'GetDummyData',
         variables: {},
-        getContext: jest.fn(() => ({})),
-        setContext: jest.fn(),
+        getContext: vi.fn(() => ({})),
+        setContext: vi.fn(),
         extensions: {},
       };
 
-      const forward = jest.fn(
+      const forward = vi.fn(
         () =>
           new Observable<FetchResult>((observer) => {
             observer.next(testResponse);
@@ -98,12 +99,12 @@ describe('Date Time Middleware Tests', () => {
         query: DUMMY_QUERY,
         operationName: 'GetDummyData',
         variables: { startDate: 'not-a-date', startTime: '25:99:99' },
-        getContext: jest.fn(() => ({})),
-        setContext: jest.fn(),
+        getContext: vi.fn(() => ({})),
+        setContext: vi.fn(),
         extensions: {},
       };
 
-      const forward = jest.fn(
+      const forward = vi.fn(
         (op) =>
           new Observable<FetchResult>((observer) => {
             expect(op.variables['startDate']).toBe('not-a-date');
@@ -130,12 +131,12 @@ describe('Date Time Middleware Tests', () => {
         query: DUMMY_QUERY,
         operationName: 'GetDummyData',
         variables: {},
-        getContext: jest.fn(() => ({})),
-        setContext: jest.fn(),
+        getContext: vi.fn(() => ({})),
+        setContext: vi.fn(),
         extensions: {},
       };
 
-      const forward = jest.fn(
+      const forward = vi.fn(
         () =>
           new Observable<FetchResult>((observer) => {
             observer.next(testResponse);
@@ -188,12 +189,12 @@ describe('Date Time Middleware Tests', () => {
             },
           },
         },
-        getContext: jest.fn(() => ({})),
-        setContext: jest.fn(),
+        getContext: vi.fn(() => ({})),
+        setContext: vi.fn(),
         extensions: {},
       };
 
-      const forward = jest.fn(
+      const forward = vi.fn(
         (op) =>
           new Observable<FetchResult>((observer) => {
             expect(op.variables.event.startDate).toBe('2023-10-01');
