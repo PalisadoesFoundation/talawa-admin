@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import {
   updateInstalled,
   installPlugin,
@@ -10,7 +11,7 @@ describe('Testing rc/state/action-creators/index.ts', () => {
     const temp = updateInstalled('testPlug');
     expect(typeof temp).toBe('function');
     //stubbing the childfunction to check execution
-    const childFunction = jest.fn();
+    const childFunction = vi.fn();
     temp(childFunction);
     expect(childFunction).toHaveBeenCalled();
   });
@@ -20,7 +21,7 @@ describe('Testing rc/state/action-creators/index.ts', () => {
     const temp = installPlugin('testPlug');
     expect(typeof temp).toBe('function');
     //stubbing the childfunction to check execution
-    const childFunction = jest.fn();
+    const childFunction = vi.fn();
     temp(childFunction);
     expect(childFunction).toHaveBeenCalled();
   });
@@ -30,7 +31,7 @@ describe('Testing rc/state/action-creators/index.ts', () => {
     const temp = removePlugin('testPlug');
     expect(typeof temp).toBe('function');
     //stubbing the childfunction to check execution
-    const childFunction = jest.fn();
+    const childFunction = vi.fn();
     temp(childFunction);
     expect(childFunction).toHaveBeenCalled();
   });
@@ -40,7 +41,7 @@ describe('Testing rc/state/action-creators/index.ts', () => {
     const temp = updatePluginLinks('testPlug');
     expect(typeof temp).toBe('function');
     //stubbing the childfunction to check execution
-    const childFunction = jest.fn();
+    const childFunction = vi.fn();
     temp(childFunction);
     expect(childFunction).toHaveBeenCalled();
   });
