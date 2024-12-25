@@ -2,8 +2,18 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import OrganizationCard from './OrganizationCard';
 
+/**
+ * This file contains unit tests for the `OrganizationCard` component.
+ *
+ * The tests cover:
+ * - Rendering the component with all provided props and verifying the correct display of text elements.
+ * - Ensuring the component handles cases where certain props (like image) are not provided.
+ *
+ * These tests utilize the React Testing Library for rendering and querying DOM elements.
+ */
+
 describe('Testing the Organization Card', () => {
-  test('should render props and text elements test for the page component', () => {
+  it('should render props and text elements test for the page component', () => {
     const props = {
       id: '123',
       image: 'https://via.placeholder.com/80',
@@ -20,7 +30,7 @@ describe('Testing the Organization Card', () => {
     expect(screen.getByText(props.lastName)).toBeInTheDocument();
   });
 
-  test('Should render text elements when props value is not passed', () => {
+  it('Should render text elements when props value is not passed', () => {
     const props = {
       id: '123',
       image: '',
