@@ -11,6 +11,7 @@ import {
 import MemberRequestCard from './MemberRequestCard';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import { describe, vi, expect } from 'vitest';
 
 const MOCKS = [
   {
@@ -65,7 +66,7 @@ describe('Testing Member Request Card', () => {
     email: 'johndoe@gmail.com',
   };
 
-  global.alert = jest.fn();
+  global.alert = vi.fn();
 
   it('should render props and text elements test for the page component', async () => {
     global.confirm = (): boolean => true;
