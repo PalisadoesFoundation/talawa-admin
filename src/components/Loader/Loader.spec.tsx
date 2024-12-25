@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import Loader from './Loader';
-import {describe,it} from 'vitest';
+import { describe, it } from 'vitest';
 
 describe('Testing Loader component', () => {
   it('Component should be rendered properly', () => {
