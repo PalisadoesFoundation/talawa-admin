@@ -10,7 +10,6 @@ import { MockedProvider } from '@apollo/react-testing';
 import OrgPostCard from './OrgPostCard';
 import { I18nextProvider } from 'react-i18next';
 import userEvent from '@testing-library/user-event';
-import 'jest-localstorage-mock';
 import {
   DELETE_POST_MUTATION,
   UPDATE_POST_MUTATION,
@@ -21,6 +20,36 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import convertToBase64 from 'utils/convertToBase64';
 import { BrowserRouter } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
+import { vi } from 'vitest';
+
+/**
+ * Unit tests for the OrgPostCard component, which displays organization posts with various interactions.
+ *
+ * These tests verify:
+ * - Basic rendering and display functionality:
+ *   - Proper rendering of post content (title, text, images, videos)
+ *   - "Read more" toggle button behavior
+ *   - Image and video display handling
+ *   - Fallback behavior when media is missing
+ *
+ * - Modal interactions:
+ *   - Opening/closing primary modal on post click
+ *   - Secondary modal functionality for edit/delete operations
+ *   - Form validation in edit modal
+ *   - Media upload handling in edit modal
+ *
+ * - Post management operations:
+ *   - Creating and updating posts
+ *   - Deleting posts
+ *   - Pinning/unpinning posts
+ *   - Error handling for failed operations
+ *
+ * - Media handling:
+ *   - Image upload and preview
+ *   - Video upload and preview
+ *   - Auto-play behavior on hover
+ *   - Clearing uploaded media
+ */
 
 const { setItem } = useLocalStorage();
 
@@ -71,19 +100,23 @@ const MOCKS = [
     },
   },
 ];
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
   },
 }));
-jest.mock('i18next-browser-languagedetector', () => ({
-  init: jest.fn(),
-  type: 'languageDetector',
-  detect: jest.fn(() => 'en'),
-  cacheUserLanguage: jest.fn(),
-}));
+vi.mock('i18next-browser-languagedetector', () => {
+  return {
+    default: {
+      init: vi.fn(),
+      type: 'languageDetector',
+      detect: vi.fn(() => 'en'),
+      cacheUserLanguage: vi.fn(),
+    },
+  };
+});
 const link = new StaticMockLink(MOCKS, true);
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -99,7 +132,7 @@ describe('Testing Organization Post Card', () => {
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: {
-        reload: jest.fn(),
+        reload: vi.fn(),
       },
     });
   });
@@ -122,20 +155,16 @@ describe('Testing Organization Post Card', () => {
     pinned: false,
   };
 
-  jest.mock('react-toastify', () => ({
+  vi.mock('react-toastify', () => ({
     toast: {
-      success: jest.fn(),
-      warn: jest.fn(),
-      error: jest.fn(),
+      success: vi.fn(),
+      warn: vi.fn(),
+      error: vi.fn(),
     },
   }));
-  jest.mock('react', () => ({
-    ...jest.requireActual('react'),
-    useRef: jest.fn(),
-  }));
-  global.alert = jest.fn();
+  global.alert = vi.fn();
 
-  test('Opens post on image click', () => {
+  it('Opens post on image click', () => {
     const { getByTestId, getByAltText } = render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
@@ -149,7 +178,7 @@ describe('Testing Organization Post Card', () => {
     expect(getByTestId('card-title')).toBeInTheDocument();
     expect(getByAltText('image')).toBeInTheDocument();
   });
-  test('renders with default props', () => {
+  it('renders with default props', () => {
     const { getByAltText, getByTestId } = render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
@@ -161,7 +190,7 @@ describe('Testing Organization Post Card', () => {
     expect(getByTestId('card-title')).toBeInTheDocument();
     expect(getByAltText('image')).toBeInTheDocument();
   });
-  test('toggles "Read more" button', () => {
+  it('toggles "Read more" button', () => {
     const { getByTestId } = render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
@@ -176,7 +205,7 @@ describe('Testing Organization Post Card', () => {
     fireEvent.click(toggleButton);
     expect(toggleButton).toHaveTextContent('Read more');
   });
-  test('opens and closes edit modal', async () => {
+  it('opens and closes edit modal', async () => {
     setItem('id', '123');
 
     render(
@@ -196,7 +225,7 @@ describe('Testing Organization Post Card', () => {
     userEvent.click(createOrgBtn);
     userEvent.click(screen.getByTestId('closeOrganizationModal'));
   });
-  test('Should render text elements when props value is not passed', async () => {
+  it('Should render text elements when props value is not passed', async () => {
     global.confirm = (): boolean => false;
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -209,7 +238,7 @@ describe('Testing Organization Post Card', () => {
     userEvent.click(screen.getByAltText('image'));
     expect(screen.getByAltText('Post Image')).toBeInTheDocument();
   });
-  test('Testing post updating after post is updated', async () => {
+  it('Testing post updating after post is updated', async () => {
     const { getByTestId } = render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
@@ -265,7 +294,7 @@ describe('Testing Organization Post Card', () => {
       await waitFor(() => {
         convertToBase64(file); // Replace with the expected base64-encoded image
       });
-      document.getElementById = jest.fn(() => input);
+      document.getElementById = vi.fn(() => input);
       const clearImageButton = getByTestId('closeimage');
       fireEvent.click(clearImageButton);
     }
@@ -278,7 +307,7 @@ describe('Testing Organization Post Card', () => {
       { timeout: 2500 },
     );
   });
-  test('Testing post updating functionality fail case', async () => {
+  it('Testing post updating functionality fail case', async () => {
     const props2 = {
       id: '',
       postID: '123',
@@ -343,7 +372,7 @@ describe('Testing Organization Post Card', () => {
       await waitFor(() => {
         convertToBase64(file); // Replace with the expected base64-encoded image
       });
-      document.getElementById = jest.fn(() => input);
+      document.getElementById = vi.fn(() => input);
       const clearImageButton = getByTestId('closeimage');
       fireEvent.click(clearImageButton);
     }
@@ -356,7 +385,7 @@ describe('Testing Organization Post Card', () => {
       { timeout: 2500 },
     );
   });
-  test('Testing pin post functionality', async () => {
+  it('Testing pin post functionality', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
@@ -378,7 +407,7 @@ describe('Testing Organization Post Card', () => {
       { timeout: 3000 },
     );
   });
-  test('Testing pin post functionality fail case', async () => {
+  it('Testing pin post functionality fail case', async () => {
     const props2 = {
       id: '',
       postID: '123',
@@ -403,7 +432,7 @@ describe('Testing Organization Post Card', () => {
     userEvent.click(screen.getByTestId('moreiconbtn'));
     userEvent.click(screen.getByTestId('pinpostBtn'));
   });
-  test('Testing post delete functionality', async () => {
+  it('Testing post delete functionality', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -429,7 +458,7 @@ describe('Testing Organization Post Card', () => {
       { timeout: 3000 },
     );
   });
-  test('Testing post delete functionality fail case', async () => {
+  it('Testing post delete functionality fail case', async () => {
     const props2 = {
       id: '',
       postID: '123',
@@ -458,7 +487,7 @@ describe('Testing Organization Post Card', () => {
     userEvent.click(screen.getByTestId('deletePostModalBtn'));
     fireEvent.click(screen.getByTestId('deletePostBtn'));
   });
-  test('Testing close functionality of primary modal', async () => {
+  it('Testing close functionality of primary modal', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
@@ -475,7 +504,7 @@ describe('Testing Organization Post Card', () => {
     //Primary Modal is closed
     expect(screen.queryByTestId('moreiconbtn')).not.toBeInTheDocument();
   });
-  test('Testing close functionality of secondary modal', async () => {
+  it('Testing close functionality of secondary modal', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
@@ -496,7 +525,7 @@ describe('Testing Organization Post Card', () => {
     expect(screen.queryByTestId('pinpostBtn')).not.toBeInTheDocument();
     expect(screen.queryByTestId('closebtn')).not.toBeInTheDocument();
   });
-  test('renders without "Read more" button when postInfo length is less than or equal to 43', () => {
+  it('renders without "Read more" button when postInfo length is less than or equal to 43', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
@@ -506,7 +535,7 @@ describe('Testing Organization Post Card', () => {
     );
     expect(screen.queryByTestId('toggleBtn')).not.toBeInTheDocument();
   });
-  test('renders with "Read more" button when postInfo length is more than 43', () => {
+  it('renders with "Read more" button when postInfo length is more than 43', () => {
     const props2 = {
       id: '12',
       postID: '123',
@@ -529,7 +558,7 @@ describe('Testing Organization Post Card', () => {
 
     expect(screen.getByTestId('toggleBtn')).toBeInTheDocument();
   });
-  test('updates state variables correctly when handleEditModal is called', () => {
+  it('updates state variables correctly when handleEditModal is called', () => {
     const link2 = new StaticMockLink(MOCKS, true);
     render(
       <MockedProvider link={link2} addTypename={false}>
@@ -555,7 +584,7 @@ describe('Testing Organization Post Card', () => {
     expect(screen.queryByTestId('pinpostBtn')).not.toBeInTheDocument();
     expect(screen.queryByTestId('closebtn')).not.toBeInTheDocument();
   });
-  test('updates state variables correctly when handleDeleteModal is called', () => {
+  it('updates state variables correctly when handleDeleteModal is called', () => {
     const link2 = new StaticMockLink(MOCKS, true);
     render(
       <MockedProvider link={link2} addTypename={false}>
@@ -581,7 +610,7 @@ describe('Testing Organization Post Card', () => {
     expect(screen.queryByTestId('pinpostBtn')).not.toBeInTheDocument();
     expect(screen.queryByTestId('closebtn')).not.toBeInTheDocument();
   });
-  test('clears postvideo state and resets file input value', async () => {
+  it('clears postvideo state and resets file input value', async () => {
     const { getByTestId } = render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
@@ -615,7 +644,7 @@ describe('Testing Organization Post Card', () => {
       userEvent.click(screen.getByTestId('closePreview'));
     }
   });
-  test('clears postimage state and resets file input value', async () => {
+  it('clears postimage state and resets file input value', async () => {
     const { getByTestId } = render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
@@ -647,12 +676,12 @@ describe('Testing Organization Post Card', () => {
       await waitFor(() => {
         convertToBase64(file); // Replace with the expected base64-encoded image
       });
-      document.getElementById = jest.fn(() => input);
+      document.getElementById = vi.fn(() => input);
       const clearImageButton = getByTestId('closeimage');
       fireEvent.click(clearImageButton);
     }
   });
-  test('clears postitle state and resets file input value', async () => {
+  it('clears postitle state and resets file input value', async () => {
     const { getByTestId } = render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
@@ -677,7 +706,7 @@ describe('Testing Organization Post Card', () => {
     expect(screen.getByTestId('closeOrganizationModal')).toBeInTheDocument();
     expect(screen.getByTestId('updatePostBtn')).toBeInTheDocument();
   });
-  test('clears postinfo state and resets file input value', async () => {
+  it('clears postinfo state and resets file input value', async () => {
     const { getByTestId } = render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
@@ -702,7 +731,7 @@ describe('Testing Organization Post Card', () => {
     expect(screen.getByTestId('closeOrganizationModal')).toBeInTheDocument();
     expect(screen.getByTestId('updatePostBtn')).toBeInTheDocument();
   });
-  test('Testing create organization modal', async () => {
+  it('Testing create organization modal', async () => {
     setItem('id', '123');
 
     render(
@@ -724,7 +753,7 @@ describe('Testing Organization Post Card', () => {
     userEvent.click(createOrgBtn);
     userEvent.click(screen.getByTestId('closeOrganizationModal'));
   });
-  test('should toggle post pin when pin button is clicked', async () => {
+  it('should toggle post pin when pin button is clicked', async () => {
     const { getByTestId } = render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
@@ -744,6 +773,12 @@ describe('Testing Organization Post Card', () => {
     });
   });
   test('testing video play and pause on mouse enter and leave events', async () => {
+    const playMock = vi.fn();
+    const pauseMock = vi.fn();
+
+    HTMLMediaElement.prototype.play = playMock;
+    HTMLMediaElement.prototype.pause = pauseMock;
+
     const { getByTestId } = render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
@@ -754,16 +789,14 @@ describe('Testing Organization Post Card', () => {
 
     const card = getByTestId('cardVid');
 
-    HTMLVideoElement.prototype.play = jest.fn();
-    HTMLVideoElement.prototype.pause = jest.fn();
-
     fireEvent.mouseEnter(card);
-    expect(HTMLVideoElement.prototype.play).toHaveBeenCalled();
+    expect(playMock).toHaveBeenCalledTimes(1);
 
     fireEvent.mouseLeave(card);
-    expect(HTMLVideoElement.prototype.pause).toHaveBeenCalled();
+    expect(pauseMock).toHaveBeenCalledTimes(1);
   });
-  test('for rendering when no image and no video is available', async () => {
+
+  it('for rendering when no image and no video is available', async () => {
     const props2 = {
       id: '',
       postID: '123',
