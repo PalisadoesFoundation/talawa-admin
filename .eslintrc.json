@@ -8,6 +8,7 @@
   "extends": [
     "plugin:react/recommended",
     "eslint:recommended",
+    "plugin:jest/recommended",
     "plugin:prettier/recommended",
     "plugin:@typescript-eslint/recommended",
     "eslint-config-prettier",
@@ -29,6 +30,7 @@
   "plugins": [
     "react",
     "@typescript-eslint",
+    "jest",
     "import",
     "eslint-plugin-tsdoc",
     "prettier"
@@ -125,6 +127,8 @@
 
     "react/jsx-equals-spacing": ["warn", "never"],
     "react/no-this-in-sfc": "error",
+
+    "jest/expect-expect": 0,
 
     "react/no-unstable-nested-components": ["error", { "allowAsProps": true }],
     "react/function-component-definition": [
