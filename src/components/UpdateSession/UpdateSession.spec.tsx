@@ -1,16 +1,7 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/client/testing';
-import {
-  render,
-  screen,
-  act,
-  within,
-  fireEvent,
-  waitFor,
-} from '@testing-library/react';
+import { render, screen, act, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import 'jest-localstorage-mock';
-import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -19,6 +10,18 @@ import i18n from 'utils/i18nForTest';
 import { GET_COMMUNITY_SESSION_TIMEOUT_DATA } from 'GraphQl/Queries/Queries';
 import { UPDATE_SESSION_TIMEOUT } from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
+import { vi } from 'vitest';
+/**
+ * This file contains unit tests for the `UpdateSession` component.
+ *
+ * The tests cover:
+ * - Proper rendering of the component with different scenarios, including mock data, null values, and error states.
+ * - Handling user interactions with the slider, such as setting minimum, maximum, and intermediate values.
+ * - Ensuring callbacks (e.g., `onValueChange`) are triggered correctly based on user input.
+ * - Simulating GraphQL query and mutation operations using mocked data to verify correct behavior in successful and error cases.
+ * - Testing edge cases, including null community data, invalid input values, and API errors, ensuring the component handles them gracefully.
+ * - Verifying proper integration of internationalization, routing, and toast notifications for success or error messages.
+ */
 
 const MOCKS = [
   {
@@ -66,31 +69,29 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
-jest.mock('utils/errorHandler', () => ({
-  errorHandler: jest.fn(),
+vi.mock('utils/errorHandler', () => ({
+  errorHandler: vi.fn(),
 }));
 
 describe('Testing UpdateTimeout Component', () => {
-  let consoleWarnSpy: jest.SpyInstance;
-
   beforeEach(() => {
-    consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
-  test('Should handle minimum slider value correctly', async () => {
-    const mockOnValueChange = jest.fn();
+  it('Should handle minimum slider value correctly', async () => {
+    const mockOnValueChange = vi.fn();
 
     render(
       <MockedProvider>
@@ -109,8 +110,8 @@ describe('Testing UpdateTimeout Component', () => {
     expect(mockOnValueChange).toHaveBeenCalledWith(15); // Adjust based on slider min value
   });
 
-  test('Should handle maximum slider value correctly', async () => {
-    const mockOnValueChange = jest.fn();
+  it('Should handle maximum slider value correctly', async () => {
+    const mockOnValueChange = vi.fn();
 
     render(
       <MockedProvider>
@@ -129,8 +130,8 @@ describe('Testing UpdateTimeout Component', () => {
     expect(mockOnValueChange).toHaveBeenCalledWith(60); // Adjust based on slider max value
   });
 
-  test('Should not update value if an invalid value is passed', async () => {
-    const mockOnValueChange = jest.fn();
+  it('Should not update value if an invalid value is passed', async () => {
+    const mockOnValueChange = vi.fn();
 
     render(
       <MockedProvider>
@@ -150,8 +151,8 @@ describe('Testing UpdateTimeout Component', () => {
     expect(mockOnValueChange).not.toHaveBeenCalled();
   });
 
-  test('Should update slider value on user interaction', async () => {
-    const mockOnValueChange = jest.fn();
+  it('Should update slider value on user interaction', async () => {
+    const mockOnValueChange = vi.fn();
 
     render(
       <MockedProvider>
@@ -169,7 +170,7 @@ describe('Testing UpdateTimeout Component', () => {
     expect(mockOnValueChange).toHaveBeenCalledWith(expect.any(Number)); // Adjust as needed
   });
 
-  test('Components should render properly', async () => {
+  it('Components should render properly', async () => {
     render(
       <MockedProvider mocks={MOCKS} addTypename={false}>
         <BrowserRouter>
@@ -203,7 +204,7 @@ describe('Testing UpdateTimeout Component', () => {
     expect(screen.getByRole('button', { name: /Update/i })).toBeInTheDocument();
   });
 
-  test('Should update session timeout', async () => {
+  it('Should update session timeout', async () => {
     render(
       <MockedProvider mocks={MOCKS} addTypename={false}>
         <BrowserRouter>
@@ -228,7 +229,7 @@ describe('Testing UpdateTimeout Component', () => {
     );
   });
 
-  test('Should handle query errors', async () => {
+  it('Should handle query errors', async () => {
     const errorMocks = [
       {
         request: {
@@ -253,7 +254,7 @@ describe('Testing UpdateTimeout Component', () => {
     expect(errorHandler).toHaveBeenCalled();
   });
 
-  test('Should handle update errors', async () => {
+  it('Should handle update errors', async () => {
     const errorMocks = [
       {
         request: {
@@ -306,7 +307,7 @@ describe('Testing UpdateTimeout Component', () => {
     expect(errorHandler).toHaveBeenCalled();
   });
 
-  test('Should handle null community object gracefully', async () => {
+  it('Should handle null community object gracefully', async () => {
     render(
       <MockedProvider mocks={[MOCKS[1]]} addTypename={false}>
         <BrowserRouter>
