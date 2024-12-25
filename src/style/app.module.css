@@ -18,8 +18,8 @@
   --table-head-bg: var(--bs-primary, blue);
   --table-head-bg: var(
     --bs-primary,
-    blue --loader-size: 10em; --loader-border-width: 1.1em; --loader-color:
-      #febc59;
+    blue --loader-size: 10em; --loader-border-width: 1.1em;
+      --loader-color: #febc59;
   ); /* Assuming var(--bs-primary) is defined elsewhere */
 
   --table-head-color: white;
