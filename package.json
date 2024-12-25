@@ -156,7 +156,7 @@
     "sass": "^1.80.7",
     "tsx": "^4.19.1",
     "vite-plugin-svgr": "^4.2.0",
-    "vitest": "^2.1.8",
+    "vitest": "^2.1.5",
     "whatwg-fetch": "^3.6.20"
   },
   "resolutions": {
