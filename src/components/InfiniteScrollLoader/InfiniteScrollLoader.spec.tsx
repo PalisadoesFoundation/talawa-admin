@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import InfiniteScrollLoader from './InfiniteScrollLoader';
+import { describe, test, expect, vi } from 'vitest';
 
 describe('Testing InfiniteScrollLoader component', () => {
   test('Component should be rendered properly', () => {
