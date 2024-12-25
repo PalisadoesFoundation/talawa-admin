@@ -1,6 +1,5 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import '@testing-library/jest-dom'; // Add this import
 import { describe, it, expect } from 'vitest';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -22,7 +21,7 @@ describe('Testing MainContent component', () => {
       </BrowserRouter>,
     );
 
-    expect(getByTestId('mainContentCheck')).toBeInTheDocument();
-    expect(getByText(props.children)).toBeInTheDocument();
+    expect(getByTestId('mainContentCheck')).not.toBeNull();
+    expect(getByText(props.children)).not.toBeNull();
   });
 });
