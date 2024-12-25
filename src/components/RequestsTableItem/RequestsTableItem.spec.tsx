@@ -11,6 +11,7 @@ import { BrowserRouter } from 'react-router-dom';
 const link = new StaticMockLink(MOCKS, true);
 import useLocalStorage from 'utils/useLocalstorage';
 import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
 
 const { setItem } = useLocalStorage();
 
@@ -21,13 +22,13 @@ async function wait(ms = 100): Promise<void> {
     });
   });
 }
-const resetAndRefetchMock = jest.fn();
+const resetAndRefetchMock = vi.fn();
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
-    warning: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
   },
 }));
 
@@ -37,17 +38,17 @@ beforeEach(() => {
 
 afterEach(() => {
   localStorage.clear();
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 describe('Testing User Table Item', () => {
-  console.error = jest.fn((message) => {
+  console.error = vi.fn((message) => {
     if (message.includes('validateDOMNesting')) {
       return;
     }
     console.warn(message);
   });
-  test('Should render props and text elements test for the page component', async () => {
+  it('Should render props and text elements it for the page component', async () => {
     const props: {
       request: InterfaceRequestsListItem;
       index: number;
@@ -81,7 +82,7 @@ describe('Testing User Table Item', () => {
     expect(screen.getByText(/john@example.com/i)).toBeInTheDocument();
   });
 
-  test('Accept MembershipRequest Button works properly', async () => {
+  it('Accept MembershipRequest Button works properly', async () => {
     const props: {
       request: InterfaceRequestsListItem;
       index: number;
@@ -113,7 +114,39 @@ describe('Testing User Table Item', () => {
     userEvent.click(screen.getByTestId('acceptMembershipRequestBtn123'));
   });
 
-  test('Reject MembershipRequest Button works properly', async () => {
+  it('Accept MembershipRequest handles error', async () => {
+    const props: {
+      request: InterfaceRequestsListItem;
+      index: number;
+      resetAndRefetch: () => void;
+    } = {
+      request: {
+        _id: '1',
+        user: {
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'john@example.com',
+        },
+      },
+      index: 1,
+      resetAndRefetch: resetAndRefetchMock,
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <RequestsTableItem {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    userEvent.click(screen.getByTestId('acceptMembershipRequestBtn1'));
+  });
+
+  it('Reject MembershipRequest Button works properly', async () => {
     const props: {
       request: InterfaceRequestsListItem;
       index: number;
@@ -143,5 +176,37 @@ describe('Testing User Table Item', () => {
 
     await wait();
     userEvent.click(screen.getByTestId('rejectMembershipRequestBtn123'));
+  });
+
+  it('Reject MembershipRequest handles error', async () => {
+    const props: {
+      request: InterfaceRequestsListItem;
+      index: number;
+      resetAndRefetch: () => void;
+    } = {
+      request: {
+        _id: '1',
+        user: {
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'john@example.com',
+        },
+      },
+      index: 1,
+      resetAndRefetch: resetAndRefetchMock,
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <RequestsTableItem {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    userEvent.click(screen.getByTestId('rejectMembershipRequestBtn1'));
   });
 });
