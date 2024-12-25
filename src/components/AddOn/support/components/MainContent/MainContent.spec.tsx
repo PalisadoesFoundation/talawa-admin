@@ -1,5 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
+import { describe, it, expect } from 'vitest';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
@@ -11,7 +12,7 @@ describe('Testing MainContent component', () => {
     children: 'This is a dummy text',
   };
 
-  test('should render props and children for the Main Content', () => {
+  it('should render props and children for the Main Content', () => {
     const { getByTestId, getByText } = render(
       <BrowserRouter>
         <Provider store={store}>
@@ -20,7 +21,7 @@ describe('Testing MainContent component', () => {
       </BrowserRouter>,
     );
 
-    expect(getByTestId('mainContentCheck')).toBeInTheDocument();
-    expect(getByText(props.children)).toBeInTheDocument();
+    expect(getByTestId('mainContentCheck')).not.toBeNull();
+    expect(getByText(props.children)).not.toBeNull();
   });
 });
