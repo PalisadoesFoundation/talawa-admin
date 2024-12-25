@@ -6,6 +6,7 @@ import { I18nextProvider } from 'react-i18next';
 import LoginPortalToggle from './LoginPortalToggle';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
+import { describe, test, vi } from 'vitest';
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -17,7 +18,7 @@ async function wait(ms = 100): Promise<void> {
 
 describe('Testing LoginPortalToggle component', () => {
   test('Component Should be rendered properly', async () => {
-    const mockOnToggle = jest.fn();
+    const mockOnToggle = vi.fn();
     render(
       <BrowserRouter>
         <Provider store={store}>
