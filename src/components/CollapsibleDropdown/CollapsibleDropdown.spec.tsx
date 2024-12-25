@@ -8,21 +8,33 @@ import { store } from 'state/store';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
+import { describe, expect, test, vi, afterEach } from 'vitest';
+import type { Location } from '@remix-run/router';
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useLocation: () => ({
-    pathname: '/orgstore',
-    state: {},
-    key: '',
-    search: '',
-    hash: '',
-  }),
-}));
+afterEach(() => {
+  vi.resetModules();
+});
+
+const currentLocation: Location = {
+  pathname: '/orgstore',
+  state: {},
+  key: '',
+  search: '',
+  hash: '',
+};
+
+vi.mock('react-router-dom', async (importOriginal) => {
+  const mod = (await importOriginal()) as object;
+
+  return {
+    ...mod,
+    useLocation: () => currentLocation,
+  };
+});
 
 const props: InterfaceCollapsibleDropdown = {
   showDropdown: true,
-  setShowDropdown: jest.fn(),
+  setShowDropdown: vi.fn(),
   target: {
     name: 'DropDown Category',
     url: undefined,

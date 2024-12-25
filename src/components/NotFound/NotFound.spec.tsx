@@ -1,9 +1,9 @@
 import React from 'react';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
-
 import { render, screen } from '@testing-library/react';
 import NotFound from './NotFound';
+import { expect, it, describe } from 'vitest';
 
 describe('Tesing the NotFound Component', () => {
   it('renders the component with the correct title for posts', () => {

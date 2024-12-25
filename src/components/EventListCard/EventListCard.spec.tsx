@@ -17,16 +17,17 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import useLocalStorage from 'utils/useLocalstorage';
 import { props } from './EventListCardProps';
 import { ERROR_MOCKS, MOCKS } from './EventListCardMocks';
+import { vi, beforeAll, afterAll, expect, it } from 'vitest';
 
 const { setItem } = useLocalStorage();
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(ERROR_MOCKS, true);
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
@@ -101,18 +102,17 @@ describe('Testing Event List Card', () => {
   };
 
   beforeAll(() => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: 'orgId' }),
+    vi.mock('react-router-dom', async () => ({
+      ...(await vi.importActual('react-router-dom')),
     }));
   });
 
   afterAll(() => {
     localStorage.clear();
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
-  test('Testing for event modal', async () => {
+  it('Testing for event modal', async () => {
     renderEventListCard(props[1]);
 
     userEvent.click(screen.getByTestId('card'));
@@ -129,7 +129,7 @@ describe('Testing Event List Card', () => {
     });
   });
 
-  test('Should navigate to "/" if orgId is not defined', async () => {
+  it('Should navigate to "/" if orgId is not defined', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18n}>
@@ -163,7 +163,7 @@ describe('Testing Event List Card', () => {
     });
   });
 
-  test('Should render default text if event details are null', async () => {
+  it('Should render default text if event details are null', async () => {
     renderEventListCard(props[0]);
 
     await waitFor(() => {
@@ -171,7 +171,7 @@ describe('Testing Event List Card', () => {
     });
   });
 
-  test('should render props and text elements test for the screen', async () => {
+  it('should render props and text elements test for the screen', async () => {
     renderEventListCard(props[1]);
 
     expect(screen.getByText(props[1].eventName)).toBeInTheDocument();
@@ -198,7 +198,7 @@ describe('Testing Event List Card', () => {
     });
   });
 
-  test('Should render truncated event name when length is more than 100', async () => {
+  it('Should render truncated event name when length is more than 100', async () => {
     const longEventName = 'a'.repeat(101);
     renderEventListCard({ ...props[1], eventName: longEventName });
 
@@ -221,7 +221,7 @@ describe('Testing Event List Card', () => {
     });
   });
 
-  test('Should render full event name when length is less than or equal to 100', async () => {
+  it('Should render full event name when length is less than or equal to 100', async () => {
     const shortEventName = 'a'.repeat(100);
     renderEventListCard({ ...props[1], eventName: shortEventName });
 
@@ -242,7 +242,7 @@ describe('Testing Event List Card', () => {
     });
   });
 
-  test('Should render truncated event description when length is more than 256', async () => {
+  it('Should render truncated event description when length is more than 256', async () => {
     const longEventDescription = 'a'.repeat(257);
 
     renderEventListCard({
@@ -268,7 +268,7 @@ describe('Testing Event List Card', () => {
     });
   });
 
-  test('Should render full event description when length is less than or equal to 256', async () => {
+  it('Should render full event description when length is less than or equal to 256', async () => {
     const shortEventDescription = 'a'.repeat(256);
 
     renderEventListCard({
@@ -294,7 +294,7 @@ describe('Testing Event List Card', () => {
     });
   });
 
-  test('Should navigate to event dashboard when clicked (For Admin)', async () => {
+  it('Should navigate to event dashboard when clicked (For Admin)', async () => {
     renderEventListCard(props[1]);
 
     userEvent.click(screen.getByTestId('card'));
@@ -311,7 +311,7 @@ describe('Testing Event List Card', () => {
     });
   });
 
-  test('Should navigate to event dashboard when clicked (For User)', async () => {
+  it('Should navigate to event dashboard when clicked (For User)', async () => {
     setItem('userId', '123');
     renderEventListCard(props[2]);
 
@@ -329,7 +329,7 @@ describe('Testing Event List Card', () => {
     });
   });
 
-  test('Should update a non-recurring event', async () => {
+  it('Should update a non-recurring event', async () => {
     renderEventListCard(props[1]);
 
     userEvent.click(screen.getByTestId('card'));
@@ -372,7 +372,7 @@ describe('Testing Event List Card', () => {
     });
   });
 
-  test('Should update a non all day non-recurring event', async () => {
+  it('Should update a non all day non-recurring event', async () => {
     renderEventListCard(props[1]);
 
     userEvent.click(screen.getByTestId('card'));
@@ -425,7 +425,7 @@ describe('Testing Event List Card', () => {
     });
   });
 
-  test('should update a single event to be recurring', async () => {
+  it('should update a single event to be recurring', async () => {
     renderEventListCard(props[1]);
 
     userEvent.click(screen.getByTestId('card'));
@@ -469,7 +469,7 @@ describe('Testing Event List Card', () => {
     });
   });
 
-  test('should show different update options for a recurring event based on different conditions', async () => {
+  it('should show different update options for a recurring event based on different conditions', async () => {
     renderEventListCard(props[5]);
 
     userEvent.click(screen.getByTestId('card'));
@@ -595,7 +595,7 @@ describe('Testing Event List Card', () => {
     });
   });
 
-  test('should show recurrenceRule as changed if the recurrence weekdays have changed', async () => {
+  it('should show recurrenceRule as changed if the recurrence weekdays have changed', async () => {
     renderEventListCard(props[4]);
 
     userEvent.click(screen.getByTestId('card'));
@@ -656,7 +656,7 @@ describe('Testing Event List Card', () => {
     });
   });
 
-  test('should update all instances of a recurring event', async () => {
+  it('should update all instances of a recurring event', async () => {
     renderEventListCard(props[6]);
 
     userEvent.click(screen.getByTestId('card'));
@@ -706,7 +706,7 @@ describe('Testing Event List Card', () => {
     });
   });
 
-  test('should update thisAndFollowingInstances of a recurring event', async () => {
+  it('should update thisAndFollowingInstances of a recurring event', async () => {
     renderEventListCard(props[5]);
 
     userEvent.click(screen.getByTestId('card'));
@@ -772,7 +772,7 @@ describe('Testing Event List Card', () => {
     });
   });
 
-  test('should render the delete modal', async () => {
+  it('should render the delete modal', async () => {
     renderEventListCard(props[1]);
 
     userEvent.click(screen.getByTestId('card'));
@@ -807,7 +807,7 @@ describe('Testing Event List Card', () => {
     });
   });
 
-  test('should call the delete event mutation when the "Yes" button is clicked', async () => {
+  it('should call the delete event mutation when the "Yes" button is clicked', async () => {
     renderEventListCard(props[1]);
 
     userEvent.click(screen.getByTestId('card'));
@@ -833,7 +833,7 @@ describe('Testing Event List Card', () => {
     });
   });
 
-  test('select different delete options on recurring events & then delete the recurring event', async () => {
+  it('select different delete options on recurring events & then delete the recurring event', async () => {
     renderEventListCard(props[4]);
 
     await wait();
@@ -873,7 +873,7 @@ describe('Testing Event List Card', () => {
     });
   });
 
-  test('should show an error toast when the delete event mutation fails', async () => {
+  it('should show an error toast when the delete event mutation fails', async () => {
     // Destructure key from props[1] and pass it separately to avoid spreading it
     const { key, ...otherProps } = props[1];
     render(
@@ -908,7 +908,7 @@ describe('Testing Event List Card', () => {
     });
   });
 
-  test('handle register should work properly', async () => {
+  it('handle register should work properly', async () => {
     setItem('userId', '456');
 
     renderEventListCard(props[2]);
@@ -933,7 +933,7 @@ describe('Testing Event List Card', () => {
     });
   });
 
-  test('should show already registered text when the user is registered for an event', async () => {
+  it('should show already registered text when the user is registered for an event', async () => {
     renderEventListCard(props[3]);
 
     userEvent.click(screen.getByTestId('card'));

@@ -5,9 +5,10 @@ import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
+import { describe, it, expect } from 'vitest';
 
 describe('UserProfile component', () => {
-  test('renders user profile details correctly', () => {
+  it('renders user profile details correctly', () => {
     const userDetails = {
       firstName: 'Christopher',
       lastName: 'Doe',
