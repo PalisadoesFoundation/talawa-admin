@@ -60,8 +60,8 @@ const traverseAndConvertDates = (
         );
         const convertedDateTime = convertFn(combinedDateTime);
         const { date, time } = splitFn(convertedDateTime);
-        obj[dateField] = date;
-        obj[timeField] = time;
+        obj[dateField] = date; // Restore the original date field
+        obj[timeField] = time; // Restore the original time field
       }
     });
 
@@ -75,7 +75,7 @@ const traverseAndConvertDates = (
         value as Record<string, unknown>,
         convertFn,
         splitFn,
-      );
+      ); // Recursive call for nested objects/arrays
     }
   });
 };
