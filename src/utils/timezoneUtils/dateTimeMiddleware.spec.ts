@@ -107,8 +107,8 @@ describe('Date Time Middleware Tests', () => {
       const forward = vi.fn(
         (op) =>
           new Observable<FetchResult>((observer) => {
-            expect(op.variables['startDate']).toBe('Invalid Date');
-            expect(op.variables['startTime']).toBe('Invalid Date');
+            expect(op.variables['startDate']).toBe('not-a-date');
+            expect(op.variables['startTime']).toBe('25:99:99');
             observer.complete();
           }),
       );
