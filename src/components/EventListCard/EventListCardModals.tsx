@@ -292,7 +292,6 @@ function EventListCardModals({
         }
       }
     } catch (error: unknown) {
-      /* istanbul ignore next -- @preserve */
       errorHandler(t, error);
     }
   };
@@ -322,7 +321,6 @@ function EventListCardModals({
         },
       });
 
-      /* istanbul ignore else -- @preserve */
       if (data) {
         toast.success(t('eventDeleted') as string);
         setEventDeleteModalIsOpen(false);
@@ -363,7 +361,6 @@ function EventListCardModals({
           hideViewModal();
         }
       } catch (error: unknown) {
-        /* istanbul ignore next -- @preserve */
         errorHandler(t, error);
       }
     }
@@ -492,9 +489,7 @@ function EventListCardModals({
                           recurrenceStartDate: date?.toDate(),
                           weekDays: [Days[date?.toDate().getDay()]],
                           weekDayOccurenceInMonth: weekDayOccurenceInMonth
-                            ? /* istanbul ignore next */ getWeekDayOccurenceInMonth(
-                                date?.toDate(),
-                              )
+                            ? getWeekDayOccurenceInMonth(date?.toDate())
                             : undefined,
                         });
                       }
@@ -508,7 +503,6 @@ function EventListCardModals({
                   className={styles.datebox}
                   value={dayjs(eventEndDate)}
                   onChange={(date: Dayjs | null): void => {
-                    /* istanbul ignore else -- @preserve */
                     if (date) {
                       setEventEndDate(date?.toDate());
                     }
@@ -533,8 +527,7 @@ function EventListCardModals({
                           endTime:
                             timeToDayJs(formState.endTime) < time
                               ? time?.format('HH:mm:ss')
-                              : /* istanbul ignore next */
-                                formState.endTime,
+                              : formState.endTime,
                         });
                       }
                     }}
