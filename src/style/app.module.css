@@ -154,6 +154,7 @@
 }
 
 .closeButton {
+  margin-bottom: 10px;
   color: var(--delete-button-color);
   margin-right: 5px;
   background-color: var(--delete-button-bg);
