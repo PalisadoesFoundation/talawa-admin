@@ -6,7 +6,7 @@ import { I18nextProvider } from 'react-i18next';
 import LoginPortalToggle from './LoginPortalToggle';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
-import { describe, test, expect, vi } from 'vitest';
+import { describe, test, vi } from 'vitest';
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
