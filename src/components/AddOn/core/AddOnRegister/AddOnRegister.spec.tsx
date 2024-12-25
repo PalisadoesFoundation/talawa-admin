@@ -20,6 +20,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
 import { toast } from 'react-toastify';
 import useLocalStorage from 'utils/useLocalstorage';
+import { vi } from 'vitest';
 
 const { getItem } = useLocalStorage();
 
@@ -74,26 +75,30 @@ const pluginData = {
   pluginDesc: 'Test Description',
 };
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
+    success: vi.fn(),
   },
 }));
 
-const mockNavigate = jest.fn();
+const mockNavigate = vi.fn();
 let mockId: string | undefined = 'id';
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({ orgId: mockId }),
-  useNavigate: () => mockNavigate,
-}));
+
+vi.mock('react-router-dom', async () => {
+  const actual = await import('react-router-dom');
+  return {
+    ...actual,
+    useParams: () => ({ orgId: mockId }),
+    useNavigate: () => mockNavigate,
+  };
+});
 
 describe('Testing AddOnRegister', () => {
   const props = {
     id: '6234d8bf6ud937ddk70ecc5c9',
   };
 
-  test('should render modal and take info to add plugin for registered organization', async () => {
+  it('should render modal and take info to add plugin for registered organization', async () => {
     await act(async () => {
       render(
         <ApolloProvider client={client}>
@@ -127,7 +132,7 @@ describe('Testing AddOnRegister', () => {
     );
   });
 
-  test('Expect toast.success to be called on successful plugin addition', async () => {
+  it('Expect toast.success to be called on successful plugin addition', async () => {
     await act(async () => {
       render(
         <MockedProvider addTypename={false} mocks={mocks}>
@@ -158,7 +163,7 @@ describe('Testing AddOnRegister', () => {
     expect(toast.success).toHaveBeenCalledWith('Plugin added Successfully');
   });
 
-  test('Expect the window to reload after successful plugin addition', async () => {
+  it('Expect the window to reload after successful plugin addition', async () => {
     await act(async () => {
       render(
         <MockedProvider addTypename={false} mocks={mocks}>
@@ -189,7 +194,7 @@ describe('Testing AddOnRegister', () => {
     expect(mockNavigate).toHaveBeenCalledWith(0);
   });
 
-  test('should be redirected to /orglist if orgId is undefined', async () => {
+  it('should be redirected to /orglist if orgId is undefined', async () => {
     mockId = undefined;
     render(
       <ApolloProvider client={client}>
