@@ -38,7 +38,7 @@
     "i18next": "^23.15.1",
     "i18next-browser-languagedetector": "^8.0.0",
     "i18next-http-backend": "^2.6.1",
-    "inquirer": "^11.0.2",
+    "inquirer": "^12.3.0",
     "js-cookie": "^3.0.1",
     "lcov-result-merger": "^5.0.1",
     "markdown-toc": "^1.2.0",
