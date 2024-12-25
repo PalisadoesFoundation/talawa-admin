@@ -6,6 +6,7 @@ import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import type { NormalizedCacheObject } from '@apollo/client';
 import i18nForTest from 'utils/i18nForTest';
 import { BACKEND_URL } from 'Constant/constant';
+import { describe, test, expect, vi } from 'vitest';
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
