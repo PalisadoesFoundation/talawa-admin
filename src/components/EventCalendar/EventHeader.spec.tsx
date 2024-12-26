@@ -4,11 +4,20 @@ import EventHeader from './EventHeader';
 import { ViewType } from '../../screens/OrganizationEvents/OrganizationEvents';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
+import { vi } from 'vitest';
 
 describe('EventHeader Component', () => {
   const viewType = ViewType.MONTH;
-  const handleChangeView = jest.fn();
-  const showInviteModal = jest.fn();
+
+  /**
+   * Mock function to handle view type changes.
+   */
+  const handleChangeView = vi.fn();
+
+  /**
+   * Mock function to handle the display of the invite modal.
+   */
+  const showInviteModal = vi.fn();
 
   it('renders correctly', () => {
     const { getByTestId } = render(

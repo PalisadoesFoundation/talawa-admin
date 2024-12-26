@@ -8,9 +8,7 @@ import {
   fireEvent,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import 'jest-localstorage-mock';
 import { MockedProvider } from '@apollo/client/testing';
-import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -25,14 +23,15 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import AgendaCategoryContainer from './AgendaCategoryContainer';
 import { props, props2 } from './AgendaCategoryContainerProps';
 import { MOCKS, MOCKS_ERROR_MUTATIONS } from './AgendaCategoryContainerMocks';
+import { vi, describe, test, expect } from 'vitest';
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR_MUTATIONS, true);
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 

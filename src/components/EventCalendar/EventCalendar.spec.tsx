@@ -13,6 +13,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { weekdays, months } from './constants';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { vi } from 'vitest';
 
 const eventData = [
   {
@@ -122,7 +123,7 @@ describe('Calendar', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should render the current month and year', () => {
