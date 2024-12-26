@@ -21,6 +21,15 @@ import {
 import ChatRoom from './ChatRoom';
 import { useLocalStorage } from 'utils/useLocalstorage';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import { vi } from 'vitest';
+
+/**
+ * Unit tests for the ChatRoom component
+ *
+ * Tests cover component rendering, message functionality (sending/replying),
+ * user interactions, GraphQL integration, and provider integrations
+ * (Router, Redux, i18n) for both direct and group chats.
+ */
 
 const { setItem } = useLocalStorage();
 
@@ -1188,9 +1197,9 @@ const SEND_MESSAGE_TO_CHAT_MOCK = [
 ];
 
 describe('Testing Chatroom Component [User Portal]', () => {
-  window.HTMLElement.prototype.scrollIntoView = jest.fn();
+  window.HTMLElement.prototype.scrollIntoView = vi.fn();
 
-  test('Chat room should display fallback content if no chat is active', async () => {
+  it('Chat room should display fallback content if no chat is active', async () => {
     const mocks = [
       ...MESSAGE_SENT_TO_CHAT_MOCK,
       ...CHAT_BY_ID_QUERY_MOCK,
@@ -1212,7 +1221,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
     expect(await screen.findByTestId('noChatSelected')).toBeInTheDocument();
   });
 
-  test('Selected contact is direct chat', async () => {
+  it('Selected contact is direct chat', async () => {
     const link = new MockSubscriptionLink();
     const mocks = [
       ...MESSAGE_SENT_TO_CHAT_MOCK,
@@ -1234,7 +1243,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
     await wait();
   });
 
-  test('send message direct chat', async () => {
+  it('send message direct chat', async () => {
     setItem('userId', '2');
     const mocks = [
       ...MESSAGE_SENT_TO_CHAT_MOCK,
@@ -1319,7 +1328,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
     await wait(400);
   });
 
-  test('send message direct chat when userId is different', async () => {
+  it('send message direct chat when userId is different', async () => {
     setItem('userId', '8');
     const mocks = [
       ...GROUP_CHAT_BY_ID_QUERY_MOCK,
@@ -1404,7 +1413,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
     await wait(400);
   });
 
-  test('Selected contact is group chat', async () => {
+  it('Selected contact is group chat', async () => {
     const mocks = [
       ...MESSAGE_SENT_TO_CHAT_MOCK,
       ...CHAT_BY_ID_QUERY_MOCK,
@@ -1425,7 +1434,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
     await wait();
   });
 
-  test('send message group chat', async () => {
+  it('send message group chat', async () => {
     const mocks = [
       ...MESSAGE_SENT_TO_CHAT_MOCK,
       ...CHAT_BY_ID_QUERY_MOCK,
@@ -1505,7 +1514,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
     await wait(500);
   });
 
-  test('reply to message', async () => {
+  it('reply to message', async () => {
     const mocks = [
       ...MESSAGE_SENT_TO_CHAT_MOCK,
       ...CHAT_BY_ID_QUERY_MOCK,
