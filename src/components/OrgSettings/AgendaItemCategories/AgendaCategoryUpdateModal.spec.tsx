@@ -7,24 +7,36 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
-
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-
 import AgendaCategoryUpdateModal from './AgendaCategoryUpdateModal';
+import { vi } from 'vitest';
+
+/**
+ * Unit tests for `AgendaCategoryUpdateModal`:
+ *
+ * - **Rendering**: Verifies key elements (e.g., text, buttons) render correctly.
+ * - **Close Button**: Ensures `hideUpdateModal` is called on close.
+ * - **Form Inputs**: Confirms `setFormState` updates with new `name` and `description`.
+ * - **Submission**: Checks `updateAgendaCategoryHandler` triggers on submit.
+ * - **Integration**: Validates compatibility with Redux, routing, i18n, and MUI date-picker.
+ * - **Mocks**: Ensures handlers (`setFormState`, `hideUpdateModal`, `updateAgendaCategoryHandler`) are called with correct arguments.
+ *
+ * This suite ensures component reliability and behavior consistency.
+ */
 
 const mockFormState = {
   name: 'Test Name',
   description: 'Test Description',
   createdBy: 'Test User',
 };
-const mockHideUpdateModal = jest.fn();
-const mockSetFormState = jest.fn();
-const mockUpdateAgendaCategoryHandler = jest.fn();
+const mockHideUpdateModal = vi.fn();
+const mockSetFormState = vi.fn();
+const mockUpdateAgendaCategoryHandler = vi.fn();
 const mockT = (key: string): string => key;
 
 describe('AgendaCategoryUpdateModal', () => {
-  test('renders modal correctly', () => {
+  it('renders modal correctly', () => {
     render(
       <MockedProvider addTypename={false}>
         <Provider store={store}>
@@ -53,7 +65,7 @@ describe('AgendaCategoryUpdateModal', () => {
     ).toBeInTheDocument();
   });
 
-  test('calls hideUpdateModal when close button is clicked', () => {
+  it('calls hideUpdateModal when close button is clicked', () => {
     render(
       <MockedProvider addTypename={false}>
         <Provider store={store}>
@@ -79,7 +91,7 @@ describe('AgendaCategoryUpdateModal', () => {
     expect(mockHideUpdateModal).toHaveBeenCalledTimes(1);
   });
 
-  test('tests the condition for formState.name and formState.description', () => {
+  it('tests the condition for formState.name and formState.description', () => {
     const mockFormState = {
       name: 'Test Name',
       description: 'Test Description',
@@ -123,7 +135,7 @@ describe('AgendaCategoryUpdateModal', () => {
     });
   });
 
-  test('calls updateAgendaCategoryHandler when form is submitted', () => {
+  it('calls updateAgendaCategoryHandler when form is submitted', () => {
     render(
       <MockedProvider addTypename={false}>
         <Provider store={store}>

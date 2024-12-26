@@ -11,6 +11,18 @@ import {
   MOCKS_ERROR_ORGLIST,
   MOCKS_ERROR_UPDATE_ORGLIST,
 } from './OrgUpdateMocks';
+import { vi } from 'vitest';
+
+/**
+ * Unit Tests for `OrgUpdate` Component
+ *
+ * - Rendering Component with Props: Verifies if labels and input fields are correctly rendered based on mock data.
+ * - Updating Organization: Ensures the form updates with new data and saves changes correctly.
+ * - Error Handling: Verifies error messages when organization cannot be found or updated.
+ * - Toast on Error: Verifies that an error toast is shown when the update fails.
+ * - Form Field Values: Ensures form values are correctly displayed and updated.
+ * - GraphQL Mock Responses: Mocks GraphQL responses for success and error scenarios.
+ */
 
 const link = new StaticMockLink(MOCKS, true);
 
@@ -45,9 +57,9 @@ describe('Testing Organization Update', () => {
     isVisible: true,
   };
 
-  global.alert = jest.fn();
+  global.alert = vi.fn();
 
-  test('should render props and text elements test for the page component along with mock data', async () => {
+  it('should render props and text elements test for the page component along with mock data', async () => {
     act(() => {
       render(
         <MockedProvider addTypename={false} link={link}>
@@ -95,7 +107,7 @@ describe('Testing Organization Update', () => {
     expect(isVisible).not.toBeChecked();
   });
 
-  test('Should Update organization properly', async () => {
+  it('Should Update organization properly', async () => {
     await act(async () => {
       render(
         <MockedProvider addTypename={false} link={link}>
@@ -168,7 +180,7 @@ describe('Testing Organization Update', () => {
     expect(isVisible).toBeChecked();
   });
 
-  test('Should render error occured text when Organization Could not be found', async () => {
+  it('Should render error occured text when Organization Could not be found', async () => {
     act(() => {
       render(
         <MockedProvider addTypename={false} mocks={MOCKS_ERROR_ORGLIST}>
@@ -182,7 +194,7 @@ describe('Testing Organization Update', () => {
     expect(screen.getByText(/Mock Graphql Error/i)).toBeInTheDocument();
   });
 
-  test('Should show error occured toast when Organization could not be updated', async () => {
+  it('Should show error occured toast when Organization could not be updated', async () => {
     await act(async () => {
       render(
         <MockedProvider addTypename={false} mocks={MOCKS_ERROR_UPDATE_ORGLIST}>

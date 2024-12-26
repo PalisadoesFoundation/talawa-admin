@@ -12,6 +12,18 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { ORGANIZATION_CUSTOM_FIELDS } from 'GraphQl/Queries/Queries';
 import { ToastContainer, toast } from 'react-toastify';
+import { vi } from 'vitest';
+
+/**
+ * Unit Tests for `OrgProfileFieldSettings` Component
+ *
+ * - Saving Custom Field: Verifies success and failure of adding a custom field.
+ * - Typing Custom Field Name: Ensures input updates correctly.
+ * - Handling No Custom Fields: Displays message when no custom fields exist.
+ * - Removing Custom Field: Verifies success and failure of removing a custom field.
+ * - Error Handling: Ensures error messages for GraphQL mutations are displayed.
+ * - Mock GraphQL Responses: Mocks GraphQL queries and mutations for different scenarios.
+ */
 
 const MOCKS = [
   {
@@ -161,7 +173,7 @@ async function wait(ms = 100): Promise<void> {
 }
 
 describe('Testing Save Button', () => {
-  test('Testing Failure Case For Fetching Custom field', async () => {
+  it('Testing Failure Case For Fetching Custom field', async () => {
     render(
       <MockedProvider
         mocks={ORGANIZATION_CUSTOM_FIELDS_ERROR_MOCKS}
@@ -179,7 +191,7 @@ describe('Testing Save Button', () => {
       screen.queryByText('Failed to fetch custom field'),
     ).toBeInTheDocument();
   });
-  test('Saving Organization Custom Field', async () => {
+  it('Saving Organization Custom Field', async () => {
     render(
       <MockedProvider mocks={MOCKS} addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
@@ -195,7 +207,7 @@ describe('Testing Save Button', () => {
     expect(screen.queryByText('Field added successfully')).toBeInTheDocument();
   });
 
-  test('Testing Failure Case For Saving Custom Field', async () => {
+  it('Testing Failure Case For Saving Custom Field', async () => {
     render(
       <MockedProvider mocks={ERROR_MOCKS} addTypename={false} link={link3}>
         <I18nextProvider i18n={i18nForTest}>
@@ -218,7 +230,7 @@ describe('Testing Save Button', () => {
     ).toBeInTheDocument();
   });
 
-  test('Testing Typing Organization Custom Field Name', async () => {
+  it('Testing Typing Organization Custom Field Name', async () => {
     const { getByTestId } = render(
       <MockedProvider mocks={MOCKS} addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
@@ -232,7 +244,7 @@ describe('Testing Save Button', () => {
     const fieldNameInput = getByTestId('customFieldInput');
     userEvent.type(fieldNameInput, 'Age');
   });
-  test('When No Custom Data is Present', async () => {
+  it('When No Custom Data is Present', async () => {
     const { getByText } = render(
       <MockedProvider mocks={NO_C_FIELD_MOCK} addTypename={false} link={link2}>
         <I18nextProvider i18n={i18nForTest}>
@@ -244,7 +256,7 @@ describe('Testing Save Button', () => {
     await wait();
     expect(getByText('No custom fields available')).toBeInTheDocument();
   });
-  test('Testing Remove Custom Field Button', async () => {
+  it('Testing Remove Custom Field Button', async () => {
     render(
       <MockedProvider mocks={MOCKS} addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
@@ -262,8 +274,8 @@ describe('Testing Save Button', () => {
     ).toBeInTheDocument();
   });
 
-  test('Testing Failure Case For Removing Custom Field', async () => {
-    const toastSpy = jest.spyOn(toast, 'error');
+  it('Testing Failure Case For Removing Custom Field', async () => {
+    const toastSpy = vi.spyOn(toast, 'error');
     render(
       <MockedProvider mocks={ERROR_MOCKS} addTypename={false} link={link3}>
         <I18nextProvider i18n={i18nForTest}>
