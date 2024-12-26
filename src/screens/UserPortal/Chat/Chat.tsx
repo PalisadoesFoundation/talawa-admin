@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
-import { useTranslation } from 'react-i18next';
 import { Button, Dropdown } from 'react-bootstrap';
-import { SearchOutlined, Search } from '@mui/icons-material';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import ContactCard from 'components/UserPortal/ContactCard/ContactCard';
 import ChatRoom from 'components/UserPortal/ChatRoom/ChatRoom';
 import useLocalStorage from 'utils/useLocalstorage';
 import NewChat from 'assets/svgs/newChat.svg?react';
-import styles from './Chat.module.css';
+import styles from '../../../style/app.module.css';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import { CHATS_LIST } from 'GraphQl/Queries/PlugInQueries';
 import CreateGroupChat from '../../../components/UserPortal/CreateGroupChat/CreateGroupChat';
@@ -22,6 +20,21 @@ interface InterfaceContactCardProps {
   setSelectedContact: React.Dispatch<React.SetStateAction<string>>;
   isGroup: boolean;
 }
+
+interface InterfaceChat {
+  _id: string;
+  isGroup: boolean;
+  name: string;
+  users: InterfaceUser[];
+}
+
+interface InterfaceUser {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  image: string;
+}
+
 /**
  * The `chat` component provides a user interface for interacting with contacts and chat rooms within an organization.
  * It features a contact list with search functionality and displays the chat room for the selected contact.
@@ -46,16 +59,11 @@ interface InterfaceContactCardProps {
  * - Renders a chat room component for the selected contact.
  * - Displays a loading indicator while contact data is being fetched.
  *
- * @returns  The rendered `chat` component.
+ * @returns The rendered `chat` component.
  */
 export default function chat(): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'chat',
-  });
-  const { t: tCommon } = useTranslation('common');
-
   const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
-  const [chats, setChats] = useState<any>([]);
+  const [chats, setChats] = useState<InterfaceChat[]>([]);
   const [selectedContact, setSelectedContact] = useState('');
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
@@ -105,28 +113,11 @@ export default function chat(): JSX.Element {
     },
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (chatsListData) {
       setChats(chatsListData.chatsByUserId);
     }
   }, [chatsListData]);
-
-  // const handleSearch = (value: string): void => {
-  //   setFilterName(value);
-
-  //   contactRefetch();
-  // };
-  // const handleSearchByEnter = (e: any): void => {
-  //   if (e.key === 'Enter') {
-  //     const { value } = e.target;
-  //     handleSearch(value);
-  //   }
-  // };
-  // const handleSearchByBtnClick = (): void => {
-  //   const value =
-  //     (document.getElementById('searchChats') as HTMLInputElement)?.value || '';
-  //   handleSearch(value);
-  // };
 
   return (
     <>
@@ -196,7 +187,7 @@ export default function chat(): JSX.Element {
                   className={styles.contactCardContainer}
                 >
                   {!!chats.length &&
-                    chats.map((chat: any) => {
+                    chats.map((chat) => {
                       const cardProps: InterfaceContactCardProps = {
                         id: chat._id,
                         title: !chat.isGroup
@@ -205,10 +196,8 @@ export default function chat(): JSX.Element {
                             : `${chat.users[0]?.firstName} ${chat.users[0]?.lastName}`
                           : chat.name,
                         image: chat.isGroup
-                          ? userId
-                            ? chat.users[1]?.image
-                            : chat.users[0]?.image
-                          : chat.image,
+                          ? chat.users[1]?.image
+                          : chat.users[0]?.image,
                         setSelectedContact,
                         selectedContact,
                         isGroup: chat.isGroup,
