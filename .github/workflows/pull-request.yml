@@ -178,6 +178,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v45
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -185,7 +189,7 @@ jobs:
 
       - name: Run Python script
         run: |
-          python .github/workflows/eslint_disable_check.py
+          python .github/workflows/eslint_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
 
   Check-Code-Coverage-Disable:
     name: Check for code coverage disable
@@ -198,36 +202,6 @@ jobs:
         id: changed-files
         uses: tj-actions/changed-files@v45
 
-      - name: Identify nearest changed directories
-        id: nearest_dirs
-        run: |
-          # Initialize an empty array to store the nearest directories
-          declare -a nearest_dirs=()
-
-          # Get the absolute path of the repository root (where the script is running)
-          repo_root=$(pwd)
-
-          # Loop through each changed file to extract the nearest directory
-          for file in ${{ steps.changed-files.outputs.all_changed_files }}
-          do
-            # Get the directory from the file path
-            folder=$(dirname "$file")
-
-            # Get the full absolute path of the folder by combining repo_root with the folder
-            full_path="$repo_root/$folder"
-
-            # Add the folder to the nearest_dirs array if not already present
-            if [[ ! " ${nearest_dirs[@]} " =~ " $full_path " ]]; then
-              nearest_dirs+=("$full_path")
-            fi
-          done
-
-          # Output the nearest changed directories
-          echo "Nearest changed directories: ${nearest_dirs[@]}"
-
-          # Set the nearest directories as a GitHub environment variable (comma-separated for easy use in other steps)
-          echo "NEAREST_DIRS=${nearest_dirs[@]}" >> $GITHUB_ENV
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -235,8 +209,7 @@ jobs:
 
       - name: Run Python script
         run: |
-          # Access the nearest_dirs environment variable
-          python .github/workflows/code_coverage_disable_check.py --directory $NEAREST_DIRS
+          python .github/workflows/code_coverage_disable_check.py 
 
   Test-Application:
     name: Test Application
