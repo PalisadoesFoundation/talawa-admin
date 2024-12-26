@@ -1,11 +1,9 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { render, screen, waitFor } from '@testing-library/react';
-import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-
 import {
   DELETE_ORGANIZATION_MUTATION,
   REMOVE_SAMPLE_ORGANIZATION_MUTATION,
@@ -17,6 +15,24 @@ import DeleteOrg from './DeleteOrg';
 import { ToastContainer, toast } from 'react-toastify';
 import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
 import useLocalStorage from 'utils/useLocalstorage';
+import { vi } from 'vitest';
+
+/**
+ * Unit Tests for `DeleteOrg` Component
+ *
+ * - **Toggle Modal**: Verifies the ability to open and close the delete organization modal for both sample and non-sample organizations.
+ * - **Delete Organization**:
+ *   - Simulates deleting a non-sample organization and ensures the correct GraphQL mutation is triggered.
+ *   - Confirms navigation occurs after a sample organization is deleted.
+ * - **Error Handling**:
+ *   - Handles errors from `DELETE_ORGANIZATION_MUTATION` and `IS_SAMPLE_ORGANIZATION_QUERY`.
+ *   - Verifies `toast.error` is called with appropriate error messages when mutations fail.
+ * - **Mocks**:
+ *   - Mocks GraphQL queries and mutations using `StaticMockLink` for different success and error scenarios.
+ *   - Uses `useParams` to simulate URL parameters (`orgId`).
+ *   - Mocks `useNavigate` to check navigation after successful deletion.
+ * - **Toast Notifications**: Ensures `toast.success` or `toast.error` is triggered based on success or failure of actions.
+ */
 
 const { setItem } = useLocalStorage();
 
@@ -98,13 +114,16 @@ const MOCKS_WITH_ERROR = [
   },
 ];
 
-const mockNavgatePush = jest.fn();
+const mockNavgatePush = vi.fn();
 let mockURL = '123';
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({ orgId: mockURL }),
-  useNavigate: () => mockNavgatePush,
-}));
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useParams: () => ({ orgId: mockURL }),
+    useNavigate: () => mockNavgatePush,
+  };
+});
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_WITH_ERROR, true);
@@ -114,7 +133,7 @@ afterEach(() => {
 });
 
 describe('Delete Organization Component', () => {
-  test('should be able to Toggle Delete Organization Modal', async () => {
+  it('should be able to Toggle Delete Organization Modal', async () => {
     mockURL = '456';
     setItem('SuperAdmin', true);
     await act(async () => {
@@ -143,7 +162,7 @@ describe('Delete Organization Component', () => {
     });
   });
 
-  test('should be able to Toggle Delete Organization Modal When Organization is Sample Organization', async () => {
+  it('should be able to Toggle Delete Organization Modal When Organization is Sample Organization', async () => {
     mockURL = '123';
     setItem('SuperAdmin', true);
     await act(async () => {
@@ -173,7 +192,7 @@ describe('Delete Organization Component', () => {
     });
   });
 
-  test('Delete organization functionality should work properly', async () => {
+  it('Delete organization functionality should work properly', async () => {
     mockURL = '456';
     setItem('SuperAdmin', true);
     await act(async () => {
@@ -201,7 +220,7 @@ describe('Delete Organization Component', () => {
     });
   });
 
-  test('Delete organization functionality should work properly for sample org', async () => {
+  it('Delete organization functionality should work properly for sample org', async () => {
     mockURL = '123';
     setItem('SuperAdmin', true);
     await act(async () => {
@@ -234,10 +253,10 @@ describe('Delete Organization Component', () => {
     expect(mockNavgatePush).toHaveBeenCalledWith('/orglist');
   });
 
-  test('Error handling for IS_SAMPLE_ORGANIZATION_QUERY mock', async () => {
+  it('Error handling for IS_SAMPLE_ORGANIZATION_QUERY mock', async () => {
     mockURL = '123';
     setItem('SuperAdmin', true);
-    jest.spyOn(toast, 'error');
+    vi.spyOn(toast, 'error');
     await act(async () => {
       render(
         <MockedProvider addTypename={false} link={link2}>
@@ -270,10 +289,10 @@ describe('Delete Organization Component', () => {
     });
   });
 
-  test('Error handling for DELETE_ORGANIZATION_MUTATION mock', async () => {
+  it('Error handling for DELETE_ORGANIZATION_MUTATION mock', async () => {
     mockURL = '456';
     setItem('SuperAdmin', true);
-    jest.spyOn(toast, 'error');
+    vi.spyOn(toast, 'error');
 
     await act(async () => {
       render(

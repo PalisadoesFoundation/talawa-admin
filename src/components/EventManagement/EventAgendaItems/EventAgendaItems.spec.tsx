@@ -7,9 +7,7 @@ import {
   waitForElementToBeRemoved,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import 'jest-localstorage-mock';
 import { MockedProvider } from '@apollo/client/testing';
-import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -17,11 +15,10 @@ import i18n from 'utils/i18nForTest';
 // import { toast } from 'react-toastify';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
-
 import EventAgendaItems from './EventAgendaItems';
+import { vi, describe, expect, it, beforeEach } from 'vitest';
 
 import {
   MOCKS,
@@ -29,21 +26,20 @@ import {
   // MOCKS_ERROR_MUTATION,
 } from './EventAgendaItemsMocks';
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({ eventId: '123' }),
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual('react-router-dom')),
 }));
 
 //temporarily fixes react-beautiful-dnd droppable method's depreciation error
 //needs to be fixed in React 19
-jest.spyOn(console, 'error').mockImplementation((message) => {
+vi.spyOn(console, 'error').mockImplementation((message) => {
   if (message.includes('Support for defaultProps will be removed')) {
     return;
   }
@@ -78,8 +74,18 @@ describe('Testing Agenda Items Components', () => {
     attachments: [],
     urls: [],
   };
-  test('Component loads correctly', async () => {
-    window.location.assign('/event/111/123');
+
+  beforeEach(() => {
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: {
+        reload: vi.fn(),
+        href: 'https://localhost:4321/event/111/123',
+      },
+    });
+  });
+
+  it('Component loads correctly', async () => {
     const { getByText } = render(
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
@@ -99,8 +105,7 @@ describe('Testing Agenda Items Components', () => {
     });
   });
 
-  test('render error component on unsuccessful agenda item query', async () => {
-    window.location.assign('/event/111/123');
+  it('render error component on unsuccessful agenda item query', async () => {
     const { queryByText } = render(
       <MockedProvider addTypename={false} link={link2}>
         <Provider store={store}>
@@ -122,8 +127,7 @@ describe('Testing Agenda Items Components', () => {
     });
   });
 
-  test('opens and closes the create agenda item modal', async () => {
-    window.location.assign('/event/111/123');
+  it('opens and closes the create agenda item modal', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
@@ -156,8 +160,7 @@ describe('Testing Agenda Items Components', () => {
       screen.queryByTestId('createAgendaItemModalCloseBtn'),
     );
   });
-  test('creates new agenda item', async () => {
-    window.location.assign('/event/111/123');
+  it('creates new agenda item', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>

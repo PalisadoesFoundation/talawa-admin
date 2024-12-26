@@ -7,6 +7,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import { formatDate } from 'utils/dateFormatter';
+import { describe, expect, it } from 'vitest';
 
 const mockEvent = {
   _id: 'event123',
@@ -51,7 +52,7 @@ describe('Testing AttendedEventList', () => {
     eventId: 'event123',
   };
 
-  test('Component renders and displays event details correctly', async () => {
+  it('Component renders and displays event details correctly', async () => {
     const { queryByText, queryByTitle } = render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <BrowserRouter>
@@ -71,7 +72,7 @@ describe('Testing AttendedEventList', () => {
     });
   });
 
-  test('Component handles error state gracefully', async () => {
+  it('Component handles error state gracefully', async () => {
     const errorMock = [
       {
         request: {
@@ -99,7 +100,7 @@ describe('Testing AttendedEventList', () => {
     });
   });
 
-  test('Component renders link with correct URL', async () => {
+  it('Component renders link with correct URL', async () => {
     const { container } = render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <BrowserRouter>
