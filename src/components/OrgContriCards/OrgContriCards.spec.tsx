@@ -7,7 +7,7 @@ import { I18nextProvider } from 'react-i18next';
 import OrgContriCards from './OrgContriCards';
 import i18nForTest from 'utils/i18nForTest';
 import { BACKEND_URL } from 'Constant/constant';
-
+import { describe, expect } from 'vitest';
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
   uri: BACKEND_URL,
