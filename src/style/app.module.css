@@ -1,7 +1,7 @@
 :root {
-  --brown-color: #333333;
+  --brown-color: #555555;
   --dropdown-hover-color: #eff1f7;
-  --grey-bg-color: #b0b0b0;
+  --grey-bg-color: #eaebef;
   --subtle-blue-grey: #7c9beb;
   --subtle-blue-grey-hover: #5f7e91;
   --modal-width: 670px;
@@ -9,7 +9,7 @@
   --input-shadow-color: #dddddd;
   --delete-button-bg: #f8d6dc;
   --delete-button-color: #ff4d4f;
-  --search-button-bg: #0071e3;
+  --search-button-bg: #a8c7fa;
   --search-button-border: #555555;
   --table-image-size: 50px;
   --table-image-small-size: 25px;
@@ -193,13 +193,13 @@
 }
 
 .dropdown:is(:hover, :focus, :active, :focus-visible, .show) {
-  background-color: var(--dropdown-hover-color, #e0e0e0);
+  background-color: transparent !important;
   border: 1px solid var(--brown-color);
   color: var(--brown-color) !important;
 }
 
 .dropdown:is(:focus, :focus-visible) {
-  outline: 2px solid var(--highlight-color, #0071e3);
+  outline: 2px solid var(--highlight-color, #a8c7fa);
 }
 
 .dropdownItem {
@@ -210,7 +210,7 @@
 
 .dropdownItem:focus,
 .dropdownItem:hover {
-  outline: 2px solid var(--highlight-color, #0071e3);
+  outline: 2px solid var(--highlight-color, #a8c7fa);
 }
 
 .dropdownItem:hover,
@@ -219,7 +219,7 @@
   background-color: var(--dropdown-hover-color, #e0e0e0) !important;
   color: var(--brown-color) !important;
   outline: none !important;
-  box-shadow: 0 0 4px var(--highlight-color, #0071e3);
+  box-shadow: 0 0 4px var(--highlight-color, #a8c7fa);
 }
 
 .input {
@@ -349,8 +349,8 @@
 }
 
 .searchButton:hover {
-  background-color: var(--search-button-hover-bg, #005bb5);
-  border-color: var(--search-button-hover-border, #333333);
+  background-color: var(--search-button-hover-bg, #286fe0);
+  border-color: var(--search-button-border);
 }
 
 .searchButton:active {
@@ -364,7 +364,7 @@
 }
 
 .addButton:hover {
-  background-color: #005bb5;
+  background-color: #286fe0;
   border-color: var(--search-button-border);
 }
 
