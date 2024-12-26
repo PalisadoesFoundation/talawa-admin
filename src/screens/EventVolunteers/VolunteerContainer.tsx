@@ -34,7 +34,7 @@ function volunteerContainer(): JSX.Element {
   return (
     <div>
       <div className="mt-2 mb-4 d-flex justify-content-between">
-        <span className={styles.titlemodal}>
+        <span className={styles.titlemodal} data-testid="dataTypeTitle">
           {t(
             `${dataType === 'group' ? 'volunteerGroups' : dataType === 'individual' ? 'volunteers' : 'requests'}`,
           )}

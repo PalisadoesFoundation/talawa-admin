@@ -20,7 +20,6 @@ import { describe, it, beforeEach, expect, vi } from 'vitest';
  * The tests ensure the `VolunteerContainer` component renders correctly with various routes and URL parameters.
  * Mocked dependencies are used to isolate the component and verify its behavior.
  * all tests are covered
- *
  */
 
 const link1 = new StaticMockLink(MOCKS);
@@ -36,7 +35,7 @@ vi.mock('react-router-dom', async () => {
 });
 
 const renderVolunteerContainer = (
-  initialPath = '/org/orgId/event/eventId',
+  initialPath = '/event/orgId/eventId',
 ): RenderResult => {
   return render(
     <MockedProvider addTypename={false} link={link1}>
@@ -46,7 +45,7 @@ const renderVolunteerContainer = (
             <I18nextProvider i18n={i18n}>
               <Routes>
                 <Route
-                  path="/org/:orgId/event/:eventId"
+                  path="/event/:orgId/:eventId"
                   element={<VolunteerContainer />}
                 />
                 <Route
