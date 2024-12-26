@@ -1729,13 +1729,552 @@ input[type='radio']:checked + label:hover {
 .listBoxOrgList .itemCardOrgList {
   width: 50%;
 }
-
 .notFound {
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+}
+
+.mainpage {
+  display: flex;
+  flex-direction: row;
+}
+
+.editIcon {
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  cursor: pointer;
+}
+
+.selectWrapper {
+  position: relative;
+}
+
+.selectWithChevron {
+  appearance: none;
+  padding-right: 30px;
+}
+
+.selectWrapper::after {
+  content: '\25BC';
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.sidebarstickyMemberDetail {
+  padding: 0 2rem;
+  text-overflow: ellipsis;
+  /* overflow-x: hidden; */
+}
+
+.sidebarstickyMemberDetail > p {
+  margin-top: -10px;
+}
+
+.navitem {
+  padding-left: 27%;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  cursor: pointer;
+}
+
+.searchtitleMemberDetail {
+  color: #707070;
+  font-weight: 600;
+  font-size: 18px;
+  margin-top: 60px;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  border-bottom: 3px solid #eaebef;
+  width: 60%;
+}
+
+.contact {
+  width: 100%;
+}
+
+.sidebarstickyMemberDetail > input {
+  text-decoration: none;
+  margin-bottom: 50px;
+  border-color: #e8e5e5;
+  width: 80%;
+  border-radius: 7px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 10px;
+  padding-left: 10px;
+  box-shadow: none;
+}
+
+.logintitleMemberDetail {
+  color: #707070;
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 30px;
+  padding-bottom: 5px;
+  border-bottom: 3px solid #eaebef;
+  width: 30%;
+}
+
+.logintitleadmin {
+  color: #707070;
+  font-weight: 600;
+  font-size: 20px;
+  margin-top: 50px;
+  margin-bottom: 40px;
+  padding-bottom: 5px;
+  border-bottom: 3px solid #eaebef;
+  width: 60%;
+}
+
+.cardBodyMemberDetail {
+  height: 35vh;
+  overflow-y: scroll;
+}
+
+.justifyspMemberDetail {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  /* gap : 2px; */
+}
+
+.flexclm {
+  display: flex;
+  flex-direction: column;
+}
+
+.btngroup {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+@media screen and (max-width: 1200px) {
+  .justifyspMemberDetail {
+    padding-left: 55px;
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  .mainpageright {
+    width: 100%;
+  }
+
+  .invitebtn {
+    position: relative;
+    right: 15px;
+  }
+}
+
+.invitebtn {
+  border: 1px solid #e8e5e5;
+  box-shadow: 0 2px 2px #e8e5e5;
+  border-radius: 5px;
+  font-size: 16px;
+  height: 60%;
+  color: white;
+  outline: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+  background-color: #eaebef;
+  margin-right: 13px;
+}
+
+.flexdir {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border: none;
+}
+
+.form_wrapper {
+  margin-top: 27px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  padding: 40px 30px;
+  background: #ffffff;
+  border-color: #e8e5e5;
+  border-width: 5px;
+  border-radius: 10px;
+  max-height: 86vh;
+  overflow: auto;
+}
+
+.form_wrapper form {
+  display: flex;
+  align-items: left;
+  justify-content: left;
+  flex-direction: column;
+}
+
+.titlemodalMemberDetail {
+  color: #707070;
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  border-bottom: 3px solid #eaebef;
+  width: 65%;
+}
+
+.checkboxdiv > label {
+  margin-right: 50px;
+}
+
+.checkboxdiv > label > input {
+  margin-left: 10px;
+}
+
+.orgphoto {
+  margin-top: 5px;
+}
+
+.orgphoto > input {
+  margin-top: 10px;
+  cursor: pointer;
+  margin-bottom: 5px;
+}
+
+.cancel > i {
+  margin-top: 5px;
+  transform: scale(1.2);
+  cursor: pointer;
+  color: #707070;
+}
+
+.greenregbtnMemberDetail {
+  margin: 1rem 0 0;
+  margin-top: 10px;
+  border: 1px solid #e8e5e5;
+  box-shadow: 0 2px 2px #e8e5e5;
+  padding: 10px 10px;
+  border-radius: 5px;
+  background-color: #eaebef;
+  font-size: 16px;
+  color: white;
+  outline: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.whiteregbtn {
+  margin: 1rem 0 0;
+  margin-right: 2px;
+  margin-top: 10px;
+  border: 1px solid #eaebef;
+  padding: 10px 10px;
+  border-radius: 5px;
+  background-color: white;
+  font-size: 16px;
+  color: #707070;
+  outline: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+@-webkit-keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+.list_boxMemberDetail {
+  height: 70vh;
+  overflow-y: auto;
+  width: auto;
+  padding-right: 50px;
+}
+
+.dispflex {
+  display: flex;
+}
+
+.dispflex > input {
+  width: 20%;
+  border: none;
+  box-shadow: none;
+  margin-top: 5px;
+}
+
+.checkboxdivMemberDetail {
+  display: flex;
+}
+
+.checkboxdivMemberDetail > div {
+  width: 50%;
+}
+
+@media only screen and (max-width: 600px) {
+  .sidebar {
+    position: relative;
+    bottom: 18px;
+  }
+
+  .invitebtn {
+    width: 135px;
+    position: relative;
+    right: 10px;
+  }
+
+  .form_wrapper {
+    width: 90%;
+  }
+
+  .searchtitleMemberDetail {
+    margin-top: 30px;
+  }
+}
+
+/* User page */
+
+.memberfontcreatedbtn {
+  border-radius: 7px;
+  border-color: #e8e5e5;
+  background-color: #eaebef;
+  color: white;
+  box-shadow: none;
+  height: 2.5rem;
+  width: max-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.userImage {
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+@media only screen and (max-width: 1200px) {
+  .userImage {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+.activeBtn {
+  width: 100%;
+  display: flex;
+  color: #fff;
+  border: 1px solid #000;
+  background-color: #eaebef;
+  transition: 0.5s;
+}
+
+.activeBtn:hover {
+  color: #fff;
+  background: #23864c;
+  transition: 0.5s;
+}
+
+.inactiveBtn {
+  width: 100%;
+  display: flex;
+  color: #707070;
+  border: 1px solid #31bb6a60;
+  background-color: #fff;
+  transition: 0.5s;
+}
+
+.inactiveBtn:hover {
+  color: #fff;
+  background: #eaebef;
+  transition: 0.5s;
+}
+
+.sidebarstickyMemberDetail > button {
+  display: flex;
+  align-items: center;
+  text-align: start;
+  padding: 0 1.5rem;
+  height: 3.25rem;
+  margin: 0 0 1.5rem 0;
+  font-weight: bold;
+  border-radius: 50px;
+}
+
+.bgFill {
+  height: 2rem;
+  width: 2rem;
+  border-radius: 50%;
+  margin-right: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.activeBtn .bgFill {
+  background-color: #fff;
+}
+
+.activeBtn i {
+  color: #707070;
+}
+
+.inactiveBtn .bgFill {
+  background-color: #eaebef;
+}
+
+.inactiveBtn:hover .bgFill {
+  background-color: #fff;
+}
+
+.inactiveBtn i {
+  color: #fff;
+}
+
+.inactiveBtn:hover i {
+  color: #707070;
+}
+
+.topRadius {
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+.titlenameMemberDetail {
+  font-weight: 600;
+  font-size: 25px;
+  padding: 15px;
+  padding-bottom: 0px;
+  width: 50%;
+}
+
+.toporglocMemberDetail {
+  font-size: 16px;
+  padding: 15px;
+  padding-bottom: 0px;
+}
+
+.toporglocMemberDetail span {
+  color: #737373;
+}
+
+.inputColor {
+  background: #f1f3f6;
+}
+
+.cardHeaderMemberDetail {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.width60 {
+  width: 60%;
+}
+
+.maxWidth40 {
+  max-width: 40%;
+}
+.maxWidth50 {
+  max-width: 50%;
+}
+
+.allRound {
+  border-radius: 16px;
+}
+
+.WidthFit {
+  width: fit-content;
+}
+
+.dateboxMemberDetail {
+  border-radius: 7px;
+  border-color: #e8e5e5;
+  outline: none;
+  box-shadow: none;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-right: 5px;
+  padding-left: 5px;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+.dateboxMemberDetail > div > input {
+  padding: 0.5rem 0 0.5rem 0.5rem !important; /* top, right, bottom, left */
+  background-color: #f1f3f6;
+  border-radius: var(--bs-border-radius) !important;
+  border: none !important;
+}
+
+.dateboxMemberDetail > div > div {
+  margin-left: 0px !important;
+}
+
+.dateboxMemberDetail > div > fieldset {
+  border: none !important;
+  /* background-color: #f1f3f6; */
+  border-radius: var(--bs-border-radius) !important;
+}
+
+.dateboxMemberDetail > div {
+  margin: 0.5rem !important;
+  background-color: #f1f3f6;
+}
+
+input::file-selector-button {
+  background-color: black;
+  color: white;
+}
+
+.Outline {
+  outline: 1px solid var(--bs-gray-400);
+}
+
+.tagLink {
+  font-weight: 600;
+  color: var(--bs-gray-700);
+  cursor: pointer;
+}
+
+.tagLink:hover {
+  font-weight: 800;
+  color: var(--bs-blue);
+  text-decoration: underline;
 }
 
 @media (max-width: 1440px) {
