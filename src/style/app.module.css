@@ -38,17 +38,6 @@
   font-weight: 600;
 }
 
-.cards {
-  width: 45%;
-  background: #fcfcfc;
-  margin: 10px 20px;
-  padding: 20px 30px;
-  border-radius: 5px;
-  border: 1px solid #e8e8e8;
-  box-shadow: 0 3px 5px #c9c9c9;
-  margin-right: 40px;
-  color: #737373;
-}
 .cards > h2 {
   font-size: 19px;
 }
@@ -59,6 +48,43 @@
   font-size: 14px;
   margin-top: -5px;
   margin-bottom: 7px;
+}
+
+.cards:hover {
+  filter: brightness(0.8);
+}
+.cards:hover::before {
+  opacity: 0.5;
+}
+
+.cards:hover::after {
+  opacity: 1;
+  mix-blend-mode: normal;
+}
+
+.cards:last-child:nth-last-child(odd) {
+  grid-column: auto / span 2;
+}
+
+.cards:first-child:nth-last-child(even),
+.cards:first-child:nth-last-child(even) ~ .box {
+  grid-column: auto / span 1;
+}
+
+.capacityLabel {
+  background-color: #31bb6b !important;
+  color: white;
+  height: 22.19px;
+  font-size: 12px;
+  font-weight: bolder;
+  padding: 0.1rem 0.3rem;
+  border-radius: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.capacityLabel svg {
+  margin-bottom: 3px;
 }
 
 .sidebar {
