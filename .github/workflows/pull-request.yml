@@ -201,32 +201,32 @@ jobs:
       - name: Identify nearest changed directories
         id: nearest_dirs
         run: |
-          # Initialize an empty string to store the nearest directories
-          nearest_dirs=""
+          # Initialize an empty array to store the nearest directories
+          declare -a nearest_dirs=()
 
+          # Get the absolute path of the repository root (where the script is running)
           repo_root=$(pwd)
 
           # Loop through each changed file to extract the nearest directory
-          for file in ${{ steps.changed-files.outputs.all_changed_files }}
+          for file in ${{ steps.changed-files.outputs.files }}
           do
-            # Get the full directory from the file path
+            # Get the directory from the file path
             folder=$(dirname "$file")
+
+            # Get the full absolute path of the folder by combining repo_root with the folder
             full_path="$repo_root/$folder"
-            # Add the folder to the nearest_dirs string if not already present
-            if [[ ! " $nearest_dirs " =~ " $full_path " ]]; then
-              if [ -z "$nearest_dirs" ]; then
-                nearest_dirs="$full_path"
-              else
-                nearest_dirs="$nearest_dirs,$full_path"
-              fi
+
+            # Add the folder to the nearest_dirs array if not already present
+            if [[ ! " ${nearest_dirs[@]} " =~ " $full_path " ]]; then
+              nearest_dirs+=("$full_path")
             fi
           done
-          
-          # Output the nearest changed directories
-          echo "Nearest changed directories: $nearest_dirs"
 
-          # Set the nearest directories as a GitHub environment variable
-          echo "NEAREST_DIRS=$nearest_dirs" >> $GITHUB_ENV
+          # Output the nearest changed directories
+          echo "Nearest changed directories: ${nearest_dirs[@]}"
+
+          # Set the nearest directories as a GitHub environment variable (comma-separated for easy use in other steps)
+          echo "NEAREST_DIRS=${nearest_dirs[@]}" >> $GITHUB_ENV
 
       - name: Set up Python
         uses: actions/setup-python@v5
