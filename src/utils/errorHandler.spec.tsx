@@ -2,10 +2,11 @@ type TFunction = (key: string, options?: Record<string, unknown>) => string;
 
 import { errorHandler } from './errorHandler';
 import { toast } from 'react-toastify';
+import { describe, it, expect, vi } from 'vitest';
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    error: jest.fn(),
+    error: vi.fn(),
   },
 }));
 
@@ -22,7 +23,7 @@ describe('Test if errorHandler is working properly', () => {
   };
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should call toast.error with the correct message if error message is "Failed to fetch"', async () => {

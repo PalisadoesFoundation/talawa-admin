@@ -8,6 +8,7 @@ import availableFieldTypes from 'utils/fieldTypes';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import type { InterfaceCustomFieldData } from 'utils/interfaces';
+import { describe, it, expect } from 'vitest';
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -18,7 +19,7 @@ async function wait(ms = 100): Promise<void> {
 }
 
 describe('Testing Custom Field Dropdown', () => {
-  test('Component Should be rendered properly', async () => {
+  it('Component Should be rendered properly', async () => {
     const customFieldData = {
       type: 'Number',
       name: 'Age',
@@ -26,11 +27,10 @@ describe('Testing Custom Field Dropdown', () => {
 
     const setCustomFieldData: Dispatch<
       SetStateAction<InterfaceCustomFieldData>
-    > = (val) => {
-      {
-        val;
-      }
+    > = () => {
+      // Intentionally left blank for testing purposes
     };
+
     const props = {
       customFieldData: customFieldData as InterfaceCustomFieldData,
       setCustomFieldData: setCustomFieldData,
