@@ -8,9 +8,7 @@ import {
   fireEvent,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-// import 'jest-localstorage-mock';
 import { MockedProvider } from '@apollo/client/testing';
-// import 'jest-location-mock';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
