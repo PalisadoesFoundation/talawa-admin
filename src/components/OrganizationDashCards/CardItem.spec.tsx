@@ -36,7 +36,6 @@ describe('Testing the Organization Card', () => {
         email: 'johndoe@example.com',
         firstName: 'John',
         lastName: 'Doe',
-        __typename: 'User',
         _id: '1',
       },
     };
